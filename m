@@ -2,58 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10535A9E98
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36EC5A9EA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbiIASHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        id S233889AbiIASHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233277AbiIASGu (ORCPT
+        with ESMTP id S234101AbiIASHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:06:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B331114E;
-        Thu,  1 Sep 2022 11:06:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2951061456;
-        Thu,  1 Sep 2022 18:06:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA638C433D6;
-        Thu,  1 Sep 2022 18:06:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662055608;
-        bh=dx+lbNdZhrbcSwJy0QSUk/lhfZMvh0A57p9uFTmJk8U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CN399PbRaB4h4fOuo/mP+ZJlQs4+eg5E6oM/kEo5LjYIqb3F0LrrpJM09OblTL9sl
-         twDItFo5WWfzH5JkAwkJLB+eXX2n0GufLvK2ceWKnBvCM7uKfy3cItK2Drs0xKcoeL
-         1RMJzUWGI5nzSM8eDEMjui8wdcqHaQZGPnqBJ13Si/KKy4VJ9CjXery9Vr3FX2Ivot
-         kfzAPNdN7QHJkRUEdFt1ZWQ1T/pDJ6sHsHSEFdWGdyC6dm1j6k6MCwSPAkCYRQQtXQ
-         7RKQlLKJh8fi88xp+C8SsToLORLvM+LDAnyNKhC6vRkafN+OK6BAG4SRG5I3p5jfhL
-         fHHl6G0+oLXzw==
-Date:   Thu, 1 Sep 2022 11:06:46 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Justin Stitt <jstitt007@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>
-Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang; take 2
-Message-ID: <YxD0tg4O1Y6MqP0X@dev-arch.thelio-3990X>
-References: <CAHk-=wiW_LjFRE9wFMj-j2gp9=u8jqrMVZtT3n4-oJWtQ6E0iQ@mail.gmail.com>
- <20220901175913.2183047-1-ndesaulniers@google.com>
+        Thu, 1 Sep 2022 14:07:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288FF20BC6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 11:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662055636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W2tBVosZJdi+ecAm8FBwm9AwoZE5y1iiOsRB8iRR70c=;
+        b=SxZehDUGNvWOcRw4mThs0RTT6NgLBcTX1lhi2QJ8eJw1DGSaocoXoL8ZB5gljIu839iZ3v
+        EnzffbWg2TazdgQxuSUKQfVBee+W511C49DpODj1+e0PsyhpZUC2HUTk65GzAwTsZWPO+8
+        BHR5PkOluy418Hx0gSnqJzIoiQS+iFo=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-447-3HtCxW3YOEORE_Sec57-mg-1; Thu, 01 Sep 2022 14:07:15 -0400
+X-MC-Unique: 3HtCxW3YOEORE_Sec57-mg-1
+Received: by mail-qv1-f72.google.com with SMTP id u4-20020a0c8dc4000000b00498f6359b6dso9737375qvb.17
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 11:07:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=W2tBVosZJdi+ecAm8FBwm9AwoZE5y1iiOsRB8iRR70c=;
+        b=UIiHWSaMaWn/DGDHeK7Q1ksYIqf0LsOmbQ0LZBcqOuB2y1J0BFzY4lZwtnISBVd9qI
+         2sXhSUvbAPPT5RhBDmC6c/BsT9b9gyL+Eii7IgJaYfVBN4Dq30xLqC4Orpj74GP5lWrs
+         /pfDk/ukL9m29jHMyl0nJd/jvpZz9/C0KbOf6snyWR3PKqak8xPD2jGygm8/DWSTTrsr
+         hjwua4W4HWufiBxuLuarZJHfSuBwrgjRwLSvGC2CxIe6fVPEDx6DThGhrx0Cs0PKoxaj
+         t1rwvATgJYq+uxUSlAHq/OUbHnIJ9HPQkkDp1Byhgfn781aevg2fUbI0q9zr029YvM/c
+         C3eg==
+X-Gm-Message-State: ACgBeo3rDjt0stHz/suaDzFVFVVkUVMVgqT7nk9is9CpSMZ5oirZLBDG
+        KC6P2C/RJJtLlptL2St0448RED7cH43f9+PgAzqqSRkHfBjV+A2hMIKut871yGnFdHAt4yYBMNR
+        cU/pLctr5CEU2804lQ5mmQtut
+X-Received: by 2002:ad4:5cc5:0:b0:499:2b4:8909 with SMTP id iu5-20020ad45cc5000000b0049902b48909mr19239750qvb.127.1662055634550;
+        Thu, 01 Sep 2022 11:07:14 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5mUIP4VOZzlWTTQeu7Bx6rwimn4BcdAW+eSzUnzv3npqB0SZ5VHxR2LwhMMlFuX5IQwIJUrQ==
+X-Received: by 2002:ad4:5cc5:0:b0:499:2b4:8909 with SMTP id iu5-20020ad45cc5000000b0049902b48909mr19239725qvb.127.1662055634367;
+        Thu, 01 Sep 2022 11:07:14 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id i7-20020ae9ee07000000b006a6ab259261sm12287379qkg.29.2022.09.01.11.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 11:07:13 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 14:07:12 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sasha Levin <sasha.levin@oracle.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jerome Marchand <jmarchan@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
+Message-ID: <YxD00K1lv151X/eq@xz-m1.local>
+References: <20220901072119.37588-1-david@redhat.com>
+ <YxDdycTur733hMgt@xz-m1.local>
+ <fa0bb4b1-3edd-eb5a-7ad6-dff785d88d8f@redhat.com>
+ <YxDghv54uHYMGCfG@xz-m1.local>
+ <c9dc3f22-4a72-9b9d-7a74-ad77fe4f3b6e@redhat.com>
+ <CAHbLzkpdUMq2fMxqx-NgSZ2VLBU5RGqSpJRWH6eRrYymErAbaw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220901175913.2183047-1-ndesaulniers@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAHbLzkpdUMq2fMxqx-NgSZ2VLBU5RGqSpJRWH6eRrYymErAbaw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,75 +90,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:59:13AM -0700, Nick Desaulniers wrote:
-> -Wformat was recently re-enabled for builds with clang, then quickly
-> re-disabled, due to concerns stemming from the frequency of default
-> argument promotion related warning instances.
-> 
-> commit 258fafcd0683 ("Makefile.extrawarn: re-enable -Wformat for clang")
-> commit 21f9c8a13bb2 ("Revert "Makefile.extrawarn: re-enable -Wformat for clang"")
-> 
-> ISO WG14 has ratified N2562 to address default argument promotion
-> explicitly for printf, as part of the upcoming ISO C2X standard.
-> 
-> The behavior of clang was changed in clang-16 to not warn for the cited
-> cases in all language modes.
-> 
-> Add a version check, so that users of clang-16 now get the full effect
-> of -Wformat. For older clang versions, re-enable flags under the
-> -Wformat group that way users still get some useful checks related to
-> format strings, without noisy default argument promotion warnings. I
-> intentionally omitted -Wformat-y2k and -Wformat-security from being
-> re-enabled, which are also part of -Wformat in clang-16.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Link: https://github.com/llvm/llvm-project/issues/57102
-> Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2562.pdf
-> Suggested-by: Justin Stitt <jstitt007@gmail.com>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Youngmin Nam <youngmin.nam@samsung.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+On Thu, Sep 01, 2022 at 10:50:48AM -0700, Yang Shi wrote:
+> Yeah, because THP collapse does copy the data before clearing pte. If
+> we want to remove pmdp_collapse_flush() by just clearing pmd, we
+> should clear *AND* flush pte before copying the data IIRC.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Yes tlb flush is still needed.  IIUC the generic pmdp_collapse_flush() will
+still be working (with the pte level flushing there) but it should just
+start to work for all archs, so potentially we could drop the arch-specific
+pmdp_collapse_flush()s, mostly the ppc impl.
 
-> ---
-> Linus, I figured I'd send this to you to see whether you'd prefer to
-> apply it, or let it "ride the trains" up through the kbuild tree? I do
-> have another series I'm working on to improve the compiler version
-> checks
-> <https://lore.kernel.org/llvm/20220831184408.2778264-4-ndesaulniers@google.com/>
-> where I can/will improve the checks used here, but I'm also interested in
-> having something that might backport cleanly to stable.
-> 
->  scripts/Makefile.extrawarn | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 0621c39a3955..6ae482158bc4 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -47,7 +47,19 @@ else
->  
->  ifdef CONFIG_CC_IS_CLANG
->  KBUILD_CFLAGS += -Wno-initializer-overrides
-> +# Clang before clang-16 would warn on default argument promotions.
-> +ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -lt 160000 ] && echo y),y)
-> +# Disable -Wformat
->  KBUILD_CFLAGS += -Wno-format
-> +# Then re-enable flags that were part of the -Wformat group that aren't
-> +# problematic.
-> +KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
-> +KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
-> +# Requires clang-12+.
-> +ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -ge 120000 ] && echo y),y)
-> +KBUILD_CFLAGS += -Wformat-insufficient-args
-> +endif
-> +endif
->  KBUILD_CFLAGS += -Wno-sign-compare
->  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
->  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
-> 
-> base-commit: 2880e1a175b9f31798f9d9482ee49187f61b5539
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+This also reminded me that the s390 version of pmdp_collapse_flush() is a
+bit weird, since it doesn't even have the tlb flush there.  I feel like
+it's broken but I can't really tell whether something I've overlooked.
+Worth an eye on.
+
+-- 
+Peter Xu
+

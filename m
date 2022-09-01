@@ -2,196 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBFE5AA308
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6625AA309
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235353AbiIAW3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S235325AbiIAW3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235557AbiIAW3F (ORCPT
+        with ESMTP id S233931AbiIAW3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:29:05 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6828083BC3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:27:11 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id q15so143471pfn.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 15:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Lo7nlr4ngh+9J4kFVHJNG61HSBnAKEXajh28lyOmbuQ=;
-        b=LKowKo28eGkwfw5+o6KUV/8v86qC+HRML8ipAx9y1Tvp6Yn4pjIpRwG6NPISoNGGpL
-         CBuoJzMvq1++2aTlnBrIj5b6mB1NbcBo3kHciadOGPxs42cKkVEypdkq+tyqDgW9zqYn
-         qV/+Hku/vHcqYzDiPbIrzowhYjKuWZDUuFoLJAOKFsNHYHWgQ+evMxseMkT0pX8VsV8S
-         OVsQHtt0lZa4/k4qe90CXJ3BtuFWOcBezvS4Lfbv2sJr878ozn2sndhtfv3rTVA65yPw
-         2G4trdn5dcmzkCF8i06w0B4ZTJ09bCqz7vHJlthhSeIAs493Z8G71dyWhEZhszpaYetl
-         ug2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Lo7nlr4ngh+9J4kFVHJNG61HSBnAKEXajh28lyOmbuQ=;
-        b=SDIuYxgOEY1Zxd4knZnkJQWz8GFg8m4otAMLaBZ873G3FAabCKRMOQtdIBVexoX78M
-         rrtZvnXt1hn1xXZNu5twguHB3DzpLNgNaGWvAACvUR6+ugIDKdkyXFonOOAQKf9M2NAc
-         I8FX8S4m7mEcgjp4wVn37TeE/S++Pir4wkHySaYsdGpiaPjcNaLw79nl6sPe7cLP0fTG
-         fhHGyuxxgjetJqPDwOyfAEOz2rMXG6zO4xQ2MCLlXZDDGIbDPW36dZzjeuorpGDaBylc
-         Gh/zed49ySqJt6pGzYqmMc3nHrwY/8vuy4SXh314Bbfk2kuG/2Lbijsn/uW386uq4GmR
-         oiwA==
-X-Gm-Message-State: ACgBeo0swQgr8QAQEaldwRS4Qxi53Q+3eQqU4yNJfaeQWf2tqnDhu0tE
-        2jezMEoSIkOnUypK64iniQ4=
-X-Google-Smtp-Source: AA6agR7+/t+ApeGA/lwoDZbioFjKzHBNd4dPLG/4QJjwOWxP23ckzXzZ6g1CYM+FOF4LbevEGKEK9A==
-X-Received: by 2002:a05:6a00:2918:b0:536:3967:5d08 with SMTP id cg24-20020a056a00291800b0053639675d08mr33083798pfb.68.1662071230457;
-        Thu, 01 Sep 2022 15:27:10 -0700 (PDT)
-Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id u10-20020a17090341ca00b0016b81679c1fsm68494ple.216.2022.09.01.15.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 15:27:09 -0700 (PDT)
-From:   Yang Shi <shy828301@gmail.com>
-To:     david@redhat.com, peterx@redhat.com,
-        kirill.shutemov@linux.intel.com, jhubbard@nvidia.com,
-        jgg@nvidia.com, hughd@google.com, akpm@linux-foundation.org
-Cc:     shy828301@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: gup: fix the fast GUP race against THP collapse
-Date:   Thu,  1 Sep 2022 15:27:07 -0700
-Message-Id: <20220901222707.477402-1-shy828301@gmail.com>
-X-Mailer: git-send-email 2.26.3
+        Thu, 1 Sep 2022 18:29:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770426143;
+        Thu,  1 Sep 2022 15:27:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1140662013;
+        Thu,  1 Sep 2022 22:27:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F63AC433C1;
+        Thu,  1 Sep 2022 22:27:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662071247;
+        bh=X4NhP5h1BDo+HeLevPQhixM9pF9whQkJf1DYX/W3TM0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vg6A7fUAWqIW295veEQ27KxkQ9spNuxgvwTsvydQwe35fitLyCn/tuwn4cCoWlwlo
+         etQbRVUY5h1rLMeNJ8uXmaEyZDZzeMO+5PFEr5oFOS+M4Isx0F+EXv2GhMSKEhYu9e
+         +xSSz0vSziEL+EMjemIqhs1643fFnhJOfE40WPfAwqfmtWeeA57cX/IfSYboqpPiNY
+         DZECTdBatRaoHmadejYYbalIPk1E/gY+43CFQafkNBPwgNDpVeWjtUf9z4Cl2N+60J
+         gCS/hQPPqDco9l6vxCJAfzaOVrLanVe68uAtzQd3rkZ8f4wk1KWNL80TDmdJ05Or+i
+         vjM8fgXBJtN5A==
+Date:   Fri, 2 Sep 2022 01:27:22 +0300
+From:   "jarkko@kernel.org" <jarkko@kernel.org>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "haitao.huang@linux.intel.com" <haitao.huang@linux.intel.com>,
+        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>
+Subject: Re: [PATCH 1/6] x86/sgx: Do not consider unsanitized pages an error
+Message-ID: <YxExyuA/+ptl0Y4G@kernel.org>
+References: <Yw7EX5GCrEaLzpHV@kernel.org>
+ <d07577c3f0b4b3fff0ce470c56f91fb634653703.camel@intel.com>
+ <Yw7LJa7eRG+WZ0wv@kernel.org>
+ <c3c085d69311ed759bff5bb325a2c182d423f91f.camel@intel.com>
+ <Yw7OEh7QP8tb7BR1@kernel.org>
+ <a91f65ad5c392b6e34f07bc6d3f35c89a76a98db.camel@intel.com>
+ <op.1rrt4aecwjvjmi@hhuan26-mobl1.mshome.net>
+ <Yw+oR3FKlwbeOl6I@kernel.org>
+ <ea61a9ee-96dc-4f23-9de3-34e033391abc@intel.com>
+ <94993d90b0b3c59fae61427cf0cc78dd10c381bb.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94993d90b0b3c59fae61427cf0cc78dd10c381bb.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
-introduce a general RCU get_user_pages_fast()"), a TLB flush is no longer
-sufficient to handle concurrent GUP-fast in all cases, it only handles
-traditional IPI-based GUP-fast correctly.  On architectures that send
-an IPI broadcast on TLB flush, it works as expected.  But on the
-architectures that do not use IPI to broadcast TLB flush, it may have
-the below race:
+On Wed, Aug 31, 2022 at 08:42:59PM +0000, Huang, Kai wrote:
+> On Wed, 2022-08-31 at 11:35 -0700, Dave Hansen wrote:
+> > Jarkko, Kai and Haitao,
+> > 
+> > Can you three please start trimming your replies?  You don't need to and
+> > should not quote the entirety of your messages every time you reply.
+> > 
+> > On 8/31/22 11:28, jarkko@kernel.org wrote:
+> > > > Will it cause racing if we expose dev nodes to user space before
+> > > > ksgxd is started and sensitization done?
+> > > I'll to explain this.
+> > > 
+> > > So the point is to fix the issue at hand, and fix it locally.
+> > > 
+> > > Changing initialization order is simply out of context. It's
+> > > not really an argument for or against changing it
+> > > 
+> > > We are fixing sanitization here, and only that with zero
+> > > side-effects to any other semantics.
+> > > 
+> > > It's dictated by the development process [*] but more
+> > > importantly it's also just plain common sense.
+> > 
+> > Kai, I think your suggestion is reasonable.  You make a good point about
+> > not needing ksgxd for vepc.
+> > 
+> > *But*, I think it's a bit too much for a bugfix that's headed to
+> > -stable.  I'm concerned that it will have unintended side effects,
+> > *especially* when there's a working, tested alternative.
+> 
+> Agreed. Thanks Dave/Jarkko.
 
-   CPU A                                          CPU B
-THP collapse                                     fast GUP
-                                              gup_pmd_range() <-- see valid pmd
-                                                  gup_pte_range() <-- work on pte
-pmdp_collapse_flush() <-- clear pmd and flush
-__collapse_huge_page_isolate()
-    check page pinned <-- before GUP bump refcount
-                                                      pin the page
-                                                      check PTE <-- no change
-__collapse_huge_page_copy()
-    copy data to huge page
-    ptep_clear()
-install huge pmd for the huge page
-                                                      return the stale page
-discard the stale page
+Please do a patch. It's a very reasonable suggestion when
+considered out of context of this bug.
 
-The race could be fixed by checking whether PMD is changed or not after
-taking the page pin in fast GUP, just like what it does for PTE.  If the
-PMD is changed it means there may be parallel THP collapse, so GUP
-should back off.
+If you go really rigid with this, the compilation process
+should not compile in sanitization process in the case when
+only vepc is enabled. It's useless functionality in that
+case.
 
-Also update the stale comment about serializing against fast GUP in
-khugepaged.
-
-Fixes: 2667f50e8b81 ("mm: introduce a general RCU get_user_pages_fast()")
-Signed-off-by: Yang Shi <shy828301@gmail.com>
----
- mm/gup.c        | 30 ++++++++++++++++++++++++------
- mm/khugepaged.c | 10 ++++++----
- 2 files changed, 30 insertions(+), 10 deletions(-)
-
-diff --git a/mm/gup.c b/mm/gup.c
-index f3fc1f08d90c..4365b2811269 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int *nr, int nr_start,
- }
- 
- #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
--static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
--			 unsigned int flags, struct page **pages, int *nr)
-+static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
-+			 unsigned long end, unsigned int flags,
-+			 struct page **pages, int *nr)
- {
- 	struct dev_pagemap *pgmap = NULL;
- 	int nr_start = *nr, ret = 0;
-@@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
- 			goto pte_unmap;
- 		}
- 
--		if (unlikely(pte_val(pte) != pte_val(*ptep))) {
-+		/*
-+		 * THP collapse conceptually does:
-+		 *   1. Clear and flush PMD
-+		 *   2. Check the base page refcount
-+		 *   3. Copy data to huge page
-+		 *   4. Clear PTE
-+		 *   5. Discard the base page
-+		 *
-+		 * So fast GUP may race with THP collapse then pin and
-+		 * return an old page since TLB flush is no longer sufficient
-+		 * to serialize against fast GUP.
-+		 *
-+		 * Check PMD, if it is changed just back off since it
-+		 * means there may be parallel THP collapse.
-+		 */
-+		if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
-+		    unlikely(pte_val(pte) != pte_val(*ptep))) {
- 			gup_put_folio(folio, 1, flags);
- 			goto pte_unmap;
- 		}
-@@ -2470,8 +2487,9 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
-  * get_user_pages_fast_only implementation that can pin pages. Thus it's still
-  * useful to have gup_huge_pmd even if we can't operate on ptes.
-  */
--static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
--			 unsigned int flags, struct page **pages, int *nr)
-+static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
-+			 unsigned long end, unsigned int flags,
-+			 struct page **pages, int *nr)
- {
- 	return 0;
- }
-@@ -2791,7 +2809,7 @@ static int gup_pmd_range(pud_t *pudp, pud_t pud, unsigned long addr, unsigned lo
- 			if (!gup_huge_pd(__hugepd(pmd_val(pmd)), addr,
- 					 PMD_SHIFT, next, flags, pages, nr))
- 				return 0;
--		} else if (!gup_pte_range(pmd, addr, next, flags, pages, nr))
-+		} else if (!gup_pte_range(pmd, pmdp, addr, next, flags, pages, nr))
- 			return 0;
- 	} while (pmdp++, addr = next, addr != end);
- 
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 2d74cf01f694..518b49095db3 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -1049,10 +1049,12 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
- 
- 	pmd_ptl = pmd_lock(mm, pmd); /* probably unnecessary */
- 	/*
--	 * After this gup_fast can't run anymore. This also removes
--	 * any huge TLB entry from the CPU so we won't allow
--	 * huge and small TLB entries for the same virtual address
--	 * to avoid the risk of CPU bugs in that area.
-+	 * This removes any huge TLB entry from the CPU so we won't allow
-+	 * huge and small TLB entries for the same virtual address to
-+	 * avoid the risk of CPU bugs in that area.
-+	 *
-+	 * Parallel fast GUP is fine since fast GUP will back off when
-+	 * it detects PMD is changed.
- 	 */
- 	_pmd = pmdp_collapse_flush(vma, address, pmd);
- 	spin_unlock(pmd_ptl);
--- 
-2.26.3
-
+BR, Jarkko

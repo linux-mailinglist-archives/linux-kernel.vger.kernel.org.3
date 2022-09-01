@@ -2,141 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682EB5A91FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D234B5A9200
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234173AbiIAIVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S234195AbiIAIVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbiIAIVO (ORCPT
+        with ESMTP id S234149AbiIAIVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:21:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680FB5F98A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:20:20 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oTfQw-0000UY-BP; Thu, 01 Sep 2022 10:20:18 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oTfQv-0001tg-Ct; Thu, 01 Sep 2022 10:20:17 +0200
-Date:   Thu, 1 Sep 2022 10:20:17 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sascha Hauer <kernel@pengutronix.de>
-Subject: Re: [PATCH v2 1/2] gpio: Add gpio latch driver
-Message-ID: <20220901082017.GP24324@pengutronix.de>
-References: <20220831055811.1936613-1-s.hauer@pengutronix.de>
- <20220831055811.1936613-2-s.hauer@pengutronix.de>
- <CAHp75Vd6LCv1wcxV58Q3Pa=eBRdEK6XusbfeDQtm8+R0hAAyWg@mail.gmail.com>
+        Thu, 1 Sep 2022 04:21:16 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383B2AD997;
+        Thu,  1 Sep 2022 01:20:40 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id i67so7886978vkb.2;
+        Thu, 01 Sep 2022 01:20:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=LGnLFW6yPESHX+DAC4jzdLUcy7kE4ClWL1XfjHPmqqA=;
+        b=QwHelFVXzfmM4/EysT5tZOAf8LTkUs1vC+WzbOiLSd6cfKqbV1b+Z1iS7P1cqVK4VK
+         05iPjC8ldpsIAHbcek332F4BOebdOxw2s69XHe0H5CoRmAXOUQzVb9KeTI4PH1Yhy33c
+         0D0jcj+ONGknboXbkyvJoMweMqnsvkAQ79Y+TdbYoFMTEWcV4+nty2kb0pdJqBuvdOxr
+         Mn8G68YcW0Jfciw+c2PkCX9MC85FPUUsqQJwWu2qANDpN8qYXZNNb7m/02bmTXCves1r
+         8wM8iOSpDJ2W9hi3vE5EFHE+KWEC5E5eYfFI7F9TMhvVZCM61sLeezagrLIftTifbZLA
+         R4Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=LGnLFW6yPESHX+DAC4jzdLUcy7kE4ClWL1XfjHPmqqA=;
+        b=qOz5fR1Ky1sM+/uUQPKoMZYEWNJomAVV87OL2JSf13IRlL42u1JyBpGTsbpOHfFvTL
+         D/lRqkP04COvU++9e8eLdDS7twB1XDFW7eKvXc5bOw2leKCq74eNcpSekHs8APtrt+5w
+         IOge29JLPNWm5Xk/CNT53NpApVSqy/dL1lZj7O4tpNbxck4vVyyHmEGWMAMFQcmW+Ov8
+         Dqb/ZtgUWkLHdXNLIq4XMvQk8CW9G3RRcrLmU7CHF0hKC879dXzgl4oI5P6zD0waWxde
+         3/lDRrnOlHV9HwMgCI2kLetRqaU9lNWXtmNu0d17IpXVwbUSPxQ/XJMm+A9GxmfVv6YK
+         0qDw==
+X-Gm-Message-State: ACgBeo0YZ4l2ZGFFMxn0qYqY1vi8FE9A+AhcVaH5GZzgTrnAfurUM76w
+        T5zJynu0vPsmDaSXo+OgRcoOEEbpW/XnKnyndVY=
+X-Google-Smtp-Source: AA6agR4FO9JoeFxtHWua0hNC49l8PA/DNsBd9h4keicBNDZCmaRAhWIyDhSpOGnLRQ0GI9as5iQYPtm1sPCxXm7PNMQ=
+X-Received: by 2002:a1f:19cf:0:b0:375:6144:dc41 with SMTP id
+ 198-20020a1f19cf000000b003756144dc41mr8092825vkz.3.1662020439493; Thu, 01 Sep
+ 2022 01:20:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vd6LCv1wcxV58Q3Pa=eBRdEK6XusbfeDQtm8+R0hAAyWg@mail.gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220830152858.14866-1-cgzones@googlemail.com>
+ <20220830152858.14866-2-cgzones@googlemail.com> <Yw/eEufm/QpKg5Pq@ZenIV>
+In-Reply-To: <Yw/eEufm/QpKg5Pq@ZenIV>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Thu, 1 Sep 2022 11:20:28 +0300
+Message-ID: <CAOQ4uxgp3_6KKSCvQvwGXq4WmkndcvzsBnk7QqQZvBZGF-6yZQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] fs/xattr: add *at family syscalls
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 11:50:47PM +0300, Andy Shevchenko wrote:
-> On Wed, Aug 31, 2022 at 9:02 AM Sascha Hauer <s.hauer@pengutronix.de> wrote:
+On Thu, Sep 1, 2022 at 2:10 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> [linux-arch Cc'd for ABI-related stuff]
+>
+> On Tue, Aug 30, 2022 at 05:28:39PM +0200, Christian G=C3=B6ttsche wrote:
+> > Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
+> > removexattrat() to enable extended attribute operations via file
+> > descriptors.  This can be used from userspace to avoid race conditions,
+> > especially on security related extended attributes, like SELinux labels
+> > ("security.selinux") via setfiles(8).
 > >
-> > This driver implements a GPIO multiplexer based on latches connected to
-> > other GPIOs. A set of data GPIOs is connected to the data input of
-> > multiple latches. The clock input of each latch is driven by another
-> > set of GPIOs. With two 8-bit latches 10 GPIOs can be multiplexed into
-> > 16 GPIOs. GPOs might be a better term as in fact the multiplexed pins
-> > are output only.
-> 
-> I'm still unsure it shouldn't be a part of the (not yet in upstream)
-> driver that I have mentioned before. But let's leave this apart right
-> now.
+> > Use the do_{name}at() pattern from fs/open.c.
+> > Use a single flag parameter for extended attribute flags (currently
+> > XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
+> > syscall arguments in setxattrat().
+>
+>         I've no problems with the patchset aside of the flags part;
+> however, note that XATTR_CREATE and XATTR_REPLACE are actually exposed
+> to the network - the values are passed to nfsd by clients.
+> See nfsd4_decode_setxattr() and
+>         BUILD_BUG_ON(XATTR_CREATE !=3D SETXATTR4_CREATE);
+>         BUILD_BUG_ON(XATTR_REPLACE !=3D SETXATTR4_REPLACE);
+> in encode_setxattr() on the client side.
+>
+>         Makes me really nervous about constraints like that.  Sure,
+> AT_... flags you are using are in the second octet and these are in
+> the lowest one, but...
 
-I don't see how this could be done. The before mentioned driver depends
-on a gpio-mux which is a binary decoder. This doesn't have a
-correspondence in this driver.
+In this context, I would like to point at
 
-> 
-> ...
-> 
-> > +#include <linux/err.h>
-> > +#include <linux/module.h>
-> 
-> > +#include <linux/of_device.h>
-> 
-> Why?
-> It seems you misplaced it instead of mod_devicetable.h.
+AT_EACCESS
+AT_REMOVEDIR
 
-Ok.
+Which are using the same namespace as the AT_ flags but define
+a flag in a "private section" of that namespace for faccessat() and
+for unlinkat().
+unlinkat() does not technically support any of the generic AT_ flags,
+but the sycall name does suggest that it is the same namespace.
 
-> 
-> > +#include <linux/gpio/driver.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/gpio/consumer.h>
-> 
-> Keep above sorted?
-> 
-> ...
-> 
-> > +       struct mutex mutex;
-> > +       spinlock_t spinlock;
-> 
-> Checkpatch usually complains if locks are not commented. Looking at
-> the below code, why it's not an (anonymous) union?
+At the risk of getting shouted at, I propose that we retroactively
+formalize this practice and also define
+AT_XATTR_* and AT_RENAME_* constants
+with the accompanied BUILD_BUG_ON()
+and document above the AT_ definitions that the lowest 10 bits
+are reserved as private namespace for the specific syscall.
 
-checkpatch only complains here when given a --subjective. Anyway,
-commenting it is a good thing, and a union can be used here.
+There are also the AT_STATX_*SYNC* flags that could fall
+into the category of syscall private namespace, but those flags could
+actually be made more generic as there are other syscalls that may
+benefit from supporting them.
 
-> 
-> ...
-> 
-> > +       if (val)
-> > +               priv->shadow[latch] |= BIT(offset % priv->n_pins);
-> > +       else
-> > +               priv->shadow[latch] &= ~BIT(offset % priv->n_pins);
-> 
-> I believe shadow should be defined as unsigned long * and hence normal
-> bit operations can be applied. For example here is assign_bit().
+linkat() is one example that comes to mind.
+Similar suggestions have been posted in the past:
+https://lore.kernel.org/linux-fsdevel/20190527172655.9287-1-amir73il@gmail.=
+com/
+https://lore.kernel.org/linux-fsdevel/CAOQ4uxit0KYiShpEXt8b8SvN8bWWp3Ky929b=
++UWNDozTCUeTxg@mail.gmail.com/
 
-Good point.
-
-> > +static const struct of_device_id gpio_latch_ids[] = {
-> > +       {
-> > +               .compatible     = "gpio-latch",
-> > +       }, {
-> > +               /* sentinel */
-> > +       }
-> 
-> You may compress this to the 2 LoCs.
-
-I usually prefer not doing that as it means that we have to reformat it
-once we initialize other fields as well, like here for example .data.
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Thanks,
+Amir.

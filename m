@@ -2,146 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF3D5AA1C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 23:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D645B5AA1CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 23:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbiIAVy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 17:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51070 "EHLO
+        id S233027AbiIAV4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 17:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234101AbiIAVyv (ORCPT
+        with ESMTP id S229584AbiIAV4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 17:54:51 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2DA2A7;
-        Thu,  1 Sep 2022 14:54:47 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 17:54:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662069286;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cwEaHM2MLzWFSTyYX5D3U7h9xVWN0G5HRpYdRjufwn0=;
-        b=Twh7nBps+XmX0981JwFQK7PMJW17CAHEz4A60UGJ6tfnVJLg6TZy5G0xn6V03JWw5jzP+B
-        3RE93gZ+MZBUwxCNryz2EldJWBau/or+sfFVuw+2kP1flYXFxRkrg7pE3b74SSfBEB2oWB
-        lummEMiyswsHuVB+uMrViWPiyxSgtyk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
-        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
-        changbin.du@intel.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
-        cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
-        42.hyeyoo@gmail.com, glider@google.com, elver@google.com,
-        dvyukov@google.com, shakeelb@google.com, songmuchun@bytedance.com,
-        arnd@arndb.de, jbaron@akamai.com, rientjes@google.com,
-        minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 27/30] Code tagging based latency tracking
-Message-ID: <20220901215438.gy3bgqa4ghhm6ztm@moria.home.lan>
-References: <20220830214919.53220-1-surenb@google.com>
- <20220830214919.53220-28-surenb@google.com>
- <20220901173844.36e1683c@gandalf.local.home>
+        Thu, 1 Sep 2022 17:56:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2CF7FF91;
+        Thu,  1 Sep 2022 14:56:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52162B82939;
+        Thu,  1 Sep 2022 21:56:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8A4C433D6;
+        Thu,  1 Sep 2022 21:56:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662069396;
+        bh=0wt/52J4FbJ8eNgXiAKoCribVUnlksdr70dElnnbvcU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B+INDQ6JNSyDEyeh/5cdv4oOVHlYrWLxZK3lu354yz5bD4ZcT8s7OJMugRFgQzO7o
+         owDpBq2I/U1xXilTTowbEAet6uBDQW/BqH+P+IMguKaxX1n0UYoDGfqFcl55B2KDAc
+         jWhh9lYTtnX9G64yuVIOSOwIW3dliOmlbK9wab1yZaIMsLkbCX8IKmmc1FqMdD3I5K
+         uDfFwWAsNUMOvJLL4oR+2//AU9jd5wD312LXcwGegQbLSff2uiF4vHhoIODaR3eXbO
+         FHyIhoKEI1bOhM+Z7M87bT/P0x26Bk7yF/Oep0gmODCo0OEZWJ6NPeE0jEGiiRVU3Z
+         ZulckpbSbLbXQ==
+Date:   Fri, 2 Sep 2022 00:56:31 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     linux-sgx@vger.kernel.org,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, stable@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] x86/sgx: Do not consider unsanitized pages an
+ error
+Message-ID: <YxEqj8/+VXlaIT4m@kernel.org>
+References: <20220831173829.126661-1-jarkko@kernel.org>
+ <20220831173829.126661-3-jarkko@kernel.org>
+ <24906e57-461f-6c94-9e78-0d8507df01bb@intel.com>
+ <YxEp8Ji+ukLBoNE+@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220901173844.36e1683c@gandalf.local.home>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YxEp8Ji+ukLBoNE+@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 05:38:44PM -0400, Steven Rostedt wrote:
-> On Tue, 30 Aug 2022 14:49:16 -0700
-> Suren Baghdasaryan <surenb@google.com> wrote:
-> 
-> > From: Kent Overstreet <kent.overstreet@linux.dev>
+On Fri, Sep 02, 2022 at 12:53:55AM +0300, Jarkko Sakkinen wrote:
+> On Wed, Aug 31, 2022 at 01:39:53PM -0700, Reinette Chatre wrote:
+> > Hi Jarkko,
 > > 
-> > This adds the ability to easily instrument code for measuring latency.
-> > To use, add the following to calls to your code, at the start and end of
-> > the event you wish to measure:
+> > On 8/31/2022 10:38 AM, Jarkko Sakkinen wrote:
+> > > In sgx_init(), if misc_register() fails or misc_register() succeeds but
+> > > neither sgx_drv_init() nor sgx_vepc_init() succeeds, then ksgxd will be
+> > > prematurely stopped. This may leave some unsanitized pages, which does
+> > > not matter, because SGX will be disabled for the whole power cycle.
+> > > 
+> > > This triggers WARN_ON() because sgx_dirty_page_list ends up being
+> > > non-empty, and dumps the call stack:
+> > > 
+> > > [    0.268103] sgx: EPC section 0x40200000-0x45f7ffff
+> > > [    0.268591] ------------[ cut here ]------------
+> > > [    0.268592] WARNING: CPU: 6 PID: 83 at
+> > > arch/x86/kernel/cpu/sgx/main.c:401 ksgxd+0x1b7/0x1d0
+> > > [    0.268598] Modules linked in:
+> > > [    0.268600] CPU: 6 PID: 83 Comm: ksgxd Not tainted 6.0.0-rc2 #382
+> > > [    0.268603] Hardware name: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0
+> > > 07/06/2022
+> > > [    0.268604] RIP: 0010:ksgxd+0x1b7/0x1d0
+> > > [    0.268607] Code: ff e9 f2 fe ff ff 48 89 df e8 75 07 0e 00 84 c0 0f
+> > > 84 c3 fe ff ff 31 ff e8 e6 07 0e 00 84 c0 0f 85 94 fe ff ff e9 af fe ff
+> > > ff <0f> 0b e9 7f fe ff ff e8 dd 9c 95 00 66 66 2e 0f 1f 84 00 00 00 00
+> > > [    0.268608] RSP: 0000:ffffb6c7404f3ed8 EFLAGS: 00010287
+> > > [    0.268610] RAX: ffffb6c740431a10 RBX: ffff8dcd8117b400 RCX:
+> > > 0000000000000000
+> > > [    0.268612] RDX: 0000000080000000 RSI: ffffb6c7404319d0 RDI:
+> > > 00000000ffffffff
+> > > [    0.268613] RBP: ffff8dcd820a4d80 R08: ffff8dcd820a4180 R09:
+> > > ffff8dcd820a4180
+> > > [    0.268614] R10: 0000000000000000 R11: 0000000000000006 R12:
+> > > ffffb6c74006bce0
+> > > [    0.268615] R13: ffff8dcd80e63880 R14: ffffffffa8a60f10 R15:
+> > > 0000000000000000
+> > > [    0.268616] FS:  0000000000000000(0000) GS:ffff8dcf25580000(0000)
+> > > knlGS:0000000000000000
+> > > [    0.268617] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > [    0.268619] CR2: 0000000000000000 CR3: 0000000213410001 CR4:
+> > > 00000000003706e0
+> > > [    0.268620] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
+> > > 0000000000000000
+> > > [    0.268621] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
+> > > 0000000000000400
+> > > [    0.268622] Call Trace:
+> > > [    0.268624]  <TASK>
+> > > [    0.268627]  ? _raw_spin_lock_irqsave+0x24/0x60
+> > > [    0.268632]  ? _raw_spin_unlock_irqrestore+0x23/0x40
+> > > [    0.268634]  ? __kthread_parkme+0x36/0x90
+> > > [    0.268637]  kthread+0xe5/0x110
+> > > [    0.268639]  ? kthread_complete_and_exit+0x20/0x20
+> > > [    0.268642]  ret_from_fork+0x1f/0x30
+> > > [    0.268647]  </TASK>
+> > > [    0.268648] ---[ end trace 0000000000000000 ]---
+> > > 
 > > 
-> >   code_tag_time_stats_start(start_time);
-> >   code_tag_time_stats_finish(start_time);
+> > Are you still planning to trim this?
+> > 
+> > > Ultimately this can crash the kernel, if the following is set:
+> > > 
+> > > 	/proc/sys/kernel/panic_on_warn
+> > > 
+> > > In premature stop, print nothing, as the number is by practical means a
+> > > random number. Otherwise, it is an indicator of a bug in the driver, and
+> > > therefore print the number of unsanitized pages with pr_err().
+> > 
+> > I think that "print the number of unsanitized pages with pr_err()" 
+> > contradicts the patch subject of "Do not consider unsanitized pages
+> > an error".
+> > 
+> > ...
+> > 
+> > > @@ -388,17 +393,40 @@ void sgx_reclaim_direct(void)
+> > >  
+> > >  static int ksgxd(void *p)
+> > >  {
+> > > +	long ret;
+> > > +
+> > >  	set_freezable();
+> > >  
+> > >  	/*
+> > >  	 * Sanitize pages in order to recover from kexec(). The 2nd pass is
+> > >  	 * required for SECS pages, whose child pages blocked EREMOVE.
+> > >  	 */
+> > > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
+> > > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
+> > > +	ret = __sgx_sanitize_pages(&sgx_dirty_page_list);
+> > > +	if (ret == -ECANCELED)
+> > > +		/* kthread stopped */
+> > > +		return 0;
+> > >  
+> > > -	/* sanity check: */
+> > > -	WARN_ON(!list_empty(&sgx_dirty_page_list));
+> > > +	ret = __sgx_sanitize_pages(&sgx_dirty_page_list);
+> > > +	switch (ret) {
+> > > +	case 0:
+> > > +		/* success, no unsanitized pages */
+> > > +		break;
+> > > +
+> > > +	case -ECANCELED:
+> > > +		/* kthread stopped */
+> > > +		return 0;
+> > > +
+> > > +	default:
+> > > +		/*
+> > > +		 * Never expected to happen in a working driver. If it happens
+> > > +		 * the bug is expected to be in the sanitization process, but
+> > > +		 * successfully sanitized pages are still valid and driver can
+> > > +		 * be used and most importantly debugged without issues. To put
+> > > +		 * short, the global state of kernel is not corrupted so no
+> > > +		 * reason to do any more complicated rollback.
+> > > +		 */
+> > > +		pr_err("%ld unsanitized pages\n", ret);
+> > > +	}
+> > >  
+> > >  	while (!kthread_should_stop()) {
+> > >  		if (try_to_freeze())
+> > 
+> > 
+> > I think I am missing something here. A lot of logic is added here but I
+> > do not see why it is necessary.  ksgxd() knows via kthread_should_stop() if
+> > the reclaimer was canceled. I am thus wondering, could the above not be
+> > simplified to something similar to V1:
+> > 
+> > @@ -388,6 +393,8 @@ void sgx_reclaim_direct(void)
+> >  
+> >  static int ksgxd(void *p)
+> >  {
+> > +	unsigned long left_dirty;
+> > +
+> >  	set_freezable();
+> >  
+> >  	/*
+> > @@ -395,10 +402,10 @@ static int ksgxd(void *p)
+> >  	 * required for SECS pages, whose child pages blocked EREMOVE.
+> >  	 */
+> >  	__sgx_sanitize_pages(&sgx_dirty_page_list);
 > 
-> So you need to modify the code to see what you want?
-
-Figuring out the _correct_ place to measure is often a significant amount of the
-total effort.
-
-Having done so once, why not annotate that in the source code?
-
-> For function length you could just do something like this:
+> IMHO, would make sense also to have here:
 > 
->  # cd /sys/kernel/tracing
->  # echo __skb_wait_for_more_packets > set_ftrace_filter
->  # echo 1 > function_profile_enabled
->  # cat trace_stat/function*
->   Function                               Hit    Time            Avg             s^2
->   --------                               ---    ----            ---             ---
->   __skb_wait_for_more_packets              1    0.000 us        0.000 us        0.000 us    
->   Function                               Hit    Time            Avg             s^2
->   --------                               ---    ----            ---             ---
->   __skb_wait_for_more_packets              1    74.813 us       74.813 us       0.000 us    
->   Function                               Hit    Time            Avg             s^2
->   --------                               ---    ----            ---             ---
->   Function                               Hit    Time            Avg             s^2
->   --------                               ---    ----            ---             ---
+>         if (!kthread_should_stop())
+>                 return 0;
 > 
-> The above is for a 4 CPU machine. The s^2 is the square of the standard
-> deviation (makes not having to do divisions while it runs).
+> > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
+> >  
+> > -	/* sanity check: */
+> > -	WARN_ON(!list_empty(&sgx_dirty_page_list));
+> > +	left_dirty = __sgx_sanitize_pages(&sgx_dirty_page_list);
+> > +	if (left_dirty && !kthread_should_stop())
+> > +		pr_err("%lu unsanitized pages\n", left_dirty);
 > 
-> But if you are looking for latency between two events (which can be kprobes
-> too, where you do not need to rebuild your kernel):
+> That would be incorrect, if the function returned
+> because of kthread stopped.
 > 
-> From: https://man.archlinux.org/man/sqlhist.1.en
-> which comes in: https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
->   if not already installed on your distro.
+> If you do the check here you already have a window
+> where kthread could have been stopped anyhow.
 > 
->  # sqlhist -e -n wakeup_lat 'select end.next_comm as comm,start.pid,start.prio,(end.TIMESTAMP_USECS - start.TIMESTAMP_USECS) as delta from sched_waking as start join sched_switch as end on start.pid = end.next_pid where start.prio < 100'
+> So even this would be less correct:
 > 
-> The above creates a synthetic event called "wakeup_lat" that joins two
-> events (sched_waking and sched_switch) when the pid field of sched_waking
-> matches the next_pid field of sched_switch. When there is a match, it will
-> trigger the wakeup_lat event only if the prio of the sched_waking event is
-> less than 100 (which in the kernel means any real-time task). The
-> wakeup_lat event will record the next_comm (as comm field), the pid of
-> woken task and the time delta in microseconds between the two events.
+>         if (kthreas_should_stop()) {
+>                 return 0;
+>         }  else if (left_dirty) {
+>                 pr_err("%lu unsanitized pages\n", left_dirty);
+>         }
+> 
+> So in the end you end as complicated and less correct
+> fix. This all is explained in the commit message.
+> 
+> If you unconditionally print error, you don't have
+> a meaning for the number of unsanitized pags.
 
-So this looks like it's gotten better since I last looked, but it's still not
-there yet.
+If you add my long comment explaining the error case, the SLOC
+size is almost the same. That takes most space in my patch.
 
-Part of the problem is that the tracepoints themselves are in the wrong place:
-your end event is when a task is woken up, but that means spurious wakeups will
-cause one wait_event() call to be reported as multiple smaller waits, not one
-long wait - oops, now I can't actually find the thing that's causing my
-multi-second delay.
-
-Also, in your example you don't have it broken out by callsite. That would be
-the first thing I'd need for any real world debugging.
-
-So, it looks like tracing has made some progress over the past 10 years, but
-for debugging latency issues it's still not there yet in general. I will
-definitely remember function latency tracing the next time I'm doing performance
-work, but I expect that to be far too heavy to enable on a live server.
-
-This thing is only a couple hundred lines of code though, so perhaps tracing
-shouldn't be the only tool in our toolbox :)
+BR, Jarkko

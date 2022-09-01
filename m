@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AD65A959A
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3BC5A959B
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbiIALVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S234317AbiIALVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234247AbiIALVI (ORCPT
+        with ESMTP id S234234AbiIALVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Sep 2022 07:21:08 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6416125B90
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:21:04 -0700 (PDT)
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MJJVz6G9fz681Zh;
-        Thu,  1 Sep 2022 19:20:27 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C87C125B92
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:21:07 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MJJVv5Wkcz67Nl1;
+        Thu,  1 Sep 2022 19:20:23 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 13:21:02 +0200
+ 15.1.2375.31; Thu, 1 Sep 2022 13:21:05 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 1 Sep 2022 12:21:00 +0100
+ 15.1.2375.24; Thu, 1 Sep 2022 12:21:02 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <xuwei5@hisilicon.com>
 CC:     <andriy.shevchenko@linux.intel.com>, <linuxarm@huawei.com>,
         <rafael.j.wysocki@intel.com>, <linux-kernel@vger.kernel.org>,
         <soc@kernel.org>, <yangyingliang@huawei.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH 1/5] bus: hisi_lpc: Don't dereference fwnode handle
-Date:   Thu, 1 Sep 2022 19:14:27 +0800
-Message-ID: <1662030871-182688-2-git-send-email-john.garry@huawei.com>
+Subject: [PATCH 2/5] bus: hisi_lpc: Use devm_platform_ioremap_resource
+Date:   Thu, 1 Sep 2022 19:14:28 +0800
+Message-ID: <1662030871-182688-3-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1662030871-182688-1-git-send-email-john.garry@huawei.com>
 References: <1662030871-182688-1-git-send-email-john.garry@huawei.com>
@@ -55,70 +55,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Use dev_fwnode() and acpi_fwnode_handle() instead of dereferencing
-an fwnode handle directly, which is a better coding practice.
-
-While at it, reuse fwnode instead of ACPI_COMPANION().
+The struct resource is not used for anything else, so we can simplify
+the code a bit by using the helper function.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/bus/hisi_lpc.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/bus/hisi_lpc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/bus/hisi_lpc.c b/drivers/bus/hisi_lpc.c
-index 2e564803e786..6d432a07cbba 100644
+index 6d432a07cbba..03d4d96ff794 100644
 --- a/drivers/bus/hisi_lpc.c
 +++ b/drivers/bus/hisi_lpc.c
-@@ -347,7 +347,7 @@ static int hisi_lpc_acpi_xlat_io_res(struct acpi_device *adev,
- 	unsigned long sys_port;
- 	resource_size_t len = resource_size(res);
- 
--	sys_port = logic_pio_trans_hwaddr(&host->fwnode, res->start, len);
-+	sys_port = logic_pio_trans_hwaddr(acpi_fwnode_handle(host), res->start, len);
- 	if (sys_port == ~0UL)
- 		return -EFAULT;
- 
-@@ -615,7 +615,6 @@ static void hisi_lpc_acpi_remove(struct device *hostdev)
- static int hisi_lpc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct acpi_device *acpi_device = ACPI_COMPANION(dev);
+@@ -618,7 +618,6 @@ static int hisi_lpc_probe(struct platform_device *pdev)
  	struct logic_pio_hwaddr *range;
  	struct hisi_lpc_dev *lpcdev;
  	resource_size_t io_end;
-@@ -637,7 +636,7 @@ static int hisi_lpc_probe(struct platform_device *pdev)
- 	if (!range)
- 		return -ENOMEM;
+-	struct resource *res;
+ 	int ret;
  
--	range->fwnode = dev->fwnode;
-+	range->fwnode = dev_fwnode(dev);
- 	range->flags = LOGIC_PIO_INDIRECT;
- 	range->size = PIO_INDIRECT_SIZE;
- 	range->hostdata = lpcdev;
-@@ -651,7 +650,7 @@ static int hisi_lpc_probe(struct platform_device *pdev)
- 	}
+ 	lpcdev = devm_kzalloc(dev, sizeof(*lpcdev), GFP_KERNEL);
+@@ -627,8 +626,7 @@ static int hisi_lpc_probe(struct platform_device *pdev)
  
- 	/* register the LPC host PIO resources */
--	if (acpi_device)
-+	if (is_acpi_device_node(range->fwnode))
- 		ret = hisi_lpc_acpi_probe(dev);
- 	else
- 		ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
-@@ -672,11 +671,10 @@ static int hisi_lpc_probe(struct platform_device *pdev)
- static int hisi_lpc_remove(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct acpi_device *acpi_device = ACPI_COMPANION(dev);
- 	struct hisi_lpc_dev *lpcdev = dev_get_drvdata(dev);
- 	struct logic_pio_hwaddr *range = lpcdev->io_host;
+ 	spin_lock_init(&lpcdev->cycle_lock);
  
--	if (acpi_device)
-+	if (is_acpi_device_node(range->fwnode))
- 		hisi_lpc_acpi_remove(dev);
- 	else
- 		of_platform_depopulate(dev);
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	lpcdev->membase = devm_ioremap_resource(dev, res);
++	lpcdev->membase = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(lpcdev->membase))
+ 		return PTR_ERR(lpcdev->membase);
+ 
 -- 
 2.35.3
 

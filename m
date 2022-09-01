@@ -2,99 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7417E5A90B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD675A90D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233992AbiIAHmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
+        id S234129AbiIAHnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233178AbiIAHma (ORCPT
+        with ESMTP id S233593AbiIAHnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:42:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5D51090AC;
-        Thu,  1 Sep 2022 00:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3R95H7o4Ps0Xt8Fb2RGRK8ftexUpMSTfRccKzarlwv8=; b=Eg80MMaySfuaV1ldmooclI5Nle
-        IN65bkkyoGAXjGnjvZ9Dz97arRuZEhWCpPPCP1gw1nVSAW07lMYUIubOMxvASCB4vmoiTLGUvHrLv
-        mnlyZtBunER3vltL8aBUMSfY4OGfxQTUnrR0dVTN+q9nK3Ed9aJ7y3lLrPOxju5X4dgv8lB4Rw2/S
-        M4qKtJDbH/5MyAfn5zL3v6Z2qbXeFnlVENhNiHvxEi1N3ly1LlBYvlGl7CCxhftPsoPtvO9AoJQWv
-        yv5KTzNibXIV76seLfOwEBNoqddr2AJkeDRRPmkEtfLxUWCG6NSjcEJWY7wpS3gtx9W2q+ItfapFU
-        +bbvPyyg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTeqK-005qQi-Us; Thu, 01 Sep 2022 07:42:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 447DF3004C7;
-        Thu,  1 Sep 2022 09:42:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 344DD2B871FC3; Thu,  1 Sep 2022 09:42:27 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 09:42:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxBiY5hDUSE4ZqKM@hirez.programming.kicks-ass.net>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
- <20220831155941.q5umplytbx6offku@moria.home.lan>
- <YxBZv1pZ6N2vwcP3@hirez.programming.kicks-ass.net>
+        Thu, 1 Sep 2022 03:43:08 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7358125BB4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:43:06 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id j9-20020a17090a3e0900b001fd9568b117so1716899pjc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:43:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=xAasCrPyDcJjNZEv/g1ZViJ/obKRI3obPhi8OuWR/Jg=;
+        b=fTQzVN2+a+Qmud5WL/Hkyqm4dpv+bd0N/1hRwrASuIUQ/9dV5WH0AyeQ+shXU/3C70
+         C5L98tomT5S4qR8eUdya9eEH2+7GhhLAC6Z2r9l7EAk5kmdavbx5VXxKhYw0DtMYb9lh
+         y+Ccr0qtQJDj1sJebYGpQV7l1qj4bMFLSUEMrMcuB45js1fxldKtTxv00Udx9P+2krPk
+         yB4crUqo2OhwKOqjckLMjf2bRxsd8zf9freqzuhk0Lfi3ERHz6gmfEdxl5oqqt1cnAzq
+         4aE+4nTrco/e1sKWleF24HR1JiEsKxipXAmN/+aIfV5FIoEkw3yf+8laRNiEm+y/3TaP
+         MaiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xAasCrPyDcJjNZEv/g1ZViJ/obKRI3obPhi8OuWR/Jg=;
+        b=6gmlak7ITIqvTAJyBO4e4kl8G/Ztl8FXeLqEoylJeVe+ub60+0Fe8utsQjIhfKwe4O
+         ORhto2c8i2PvWVOzQcMVD6mfz9QOFuNfj+8XZw4d0HVbokSAVQb7t2MGZEQ+EfJrTri8
+         a7CsYzIrJANej+bzBgvc8Vj9Hn/6iwdYjnAFZWs5BKutLOxL141/1q+cgCZqadtJ2tmr
+         R4CQxHB/j9O+kSMaT9FJsA2d0tmqqDtlVpJ4HTwovIyRpCRQqEkNC/faWDpe7Kla/HB2
+         GdE6FUOp91r0eQy4p13JT6lmcbkebXt985nhepDWEx5MD37f+mSkHwBDd+DEkAh/G5LQ
+         KPuQ==
+X-Gm-Message-State: ACgBeo1d3BhBAP9DR+0E8qKuXh8ffJmYQnOPqKqAY33tWD2MBc1k/b0x
+        e3yJ0VTAEKEoyb68iyH9hfi4IkFBc8Y4ZXeqxBpUzLgunrSnbw==
+X-Google-Smtp-Source: AA6agR51xRKfsuWzY7TjERjWz9bBX6piO4b74yFoMwPCvR8u0J7qUSxcNyUHR07wO2nUzAieCaeTmJ9wR4tmzNizLgQ=
+X-Received: by 2002:a17:902:d505:b0:175:5313:2a3f with SMTP id
+ b5-20020a170902d50500b0017553132a3fmr3939626plg.70.1662018186293; Thu, 01 Sep
+ 2022 00:43:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxBZv1pZ6N2vwcP3@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220830100700.344594-1-sudeep.holla@arm.com> <20220830100700.344594-2-sudeep.holla@arm.com>
+In-Reply-To: <20220830100700.344594-2-sudeep.holla@arm.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 1 Sep 2022 09:42:55 +0200
+Message-ID: <CAHUa44E8q27hy2i+sckuWd5GahGg=QxgLUWLAMQwCrxhUGNrNQ@mail.gmail.com>
+Subject: Re: [PATCH 1/9] firmware: arm_ffa: Add pointer to the ffa_dev_ops in
+ struct ffa_dev
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Marc Bonnici <marc.bonnici@arm.com>,
+        Achin Gupta <achin.gupta@arm.com>,
+        Valentin Laurent <valentin.laurent@trustonic.com>,
+        Lukas Hanel <lukas.hanel@trustonic.com>,
+        Coboy Chen <coboy.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:05:36AM +0200, Peter Zijlstra wrote:
-> On Wed, Aug 31, 2022 at 11:59:41AM -0400, Kent Overstreet wrote:
-> 
-> > Also, ftrace can drop events. Not really ideal if under system load your memory
-> > accounting numbers start to drift.
-> 
-> You could attach custom handlers to tracepoints. If you were to replace
-> these unconditional code hooks of yours with tracepoints then you could
-> conditionally (say at boot) register custom handlers that do the
-> accounting you want.
-> 
-> Nobody is mandating you use the ftrace ringbuffer to consume tracepoints.
-> Many people these days attach eBPF scripts to them and do whatever they
-> want.
+On Tue, Aug 30, 2022 at 12:07 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> Currently ffa_dev_ops_get() is the way to fetch the ffa_dev_ops pointer.
+> It checks if the ffa_dev structure pointer is valid before returning the
+> ffa_dev_ops pointer.
+>
+> Instead, the pointer can be made part of the ffa_dev structure and since
+> the core driver is incharge of creating ffa_device for each identified
+> partition, there is no need to check for the validity explicitly if the
+> pointer is embedded in the structure.
+>
+> Add the pointer to the ffa_dev_ops in the ffa_dev structure itself and
+> initialise the same as part of creation of the device.
+>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/firmware/arm_ffa/bus.c    | 4 +++-
+>  drivers/firmware/arm_ffa/driver.c | 2 +-
+>  include/linux/arm_ffa.h           | 7 +++++--
+>  3 files changed, 9 insertions(+), 4 deletions(-)
 
-Look at kernel/trace/blktrace.c for a fine in-kernel !BFP example of this.
+Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+
+>
+> diff --git a/drivers/firmware/arm_ffa/bus.c b/drivers/firmware/arm_ffa/bus.c
+> index 641a91819088..69328041fbc3 100644
+> --- a/drivers/firmware/arm_ffa/bus.c
+> +++ b/drivers/firmware/arm_ffa/bus.c
+> @@ -167,7 +167,8 @@ bool ffa_device_is_valid(struct ffa_device *ffa_dev)
+>         return valid;
+>  }
+>
+> -struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id)
+> +struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
+> +                                      const struct ffa_dev_ops *ops)
+>  {
+>         int ret;
+>         struct device *dev;
+> @@ -183,6 +184,7 @@ struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id)
+>         dev_set_name(&ffa_dev->dev, "arm-ffa-%04x", vm_id);
+>
+>         ffa_dev->vm_id = vm_id;
+> +       ffa_dev->ops = ops;
+>         uuid_copy(&ffa_dev->uuid, uuid);
+>
+>         ret = device_register(&ffa_dev->dev);
+> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+> index ec731e9e942b..213665e5ad0e 100644
+> --- a/drivers/firmware/arm_ffa/driver.c
+> +++ b/drivers/firmware/arm_ffa/driver.c
+> @@ -688,7 +688,7 @@ static void ffa_setup_partitions(void)
+>                  * as part of the discovery API, we need to pass the
+>                  * discovered UUID here instead.
+>                  */
+> -               ffa_dev = ffa_device_register(&uuid_null, tpbuf->id);
+> +               ffa_dev = ffa_device_register(&uuid_null, tpbuf->id, &ffa_ops);
+>                 if (!ffa_dev) {
+>                         pr_err("%s: failed to register partition ID 0x%x\n",
+>                                __func__, tpbuf->id);
+> diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
+> index e5c76c1ef9ed..91b47e42b73d 100644
+> --- a/include/linux/arm_ffa.h
+> +++ b/include/linux/arm_ffa.h
+> @@ -17,6 +17,7 @@ struct ffa_device {
+>         bool mode_32bit;
+>         uuid_t uuid;
+>         struct device dev;
+> +       const struct ffa_dev_ops *ops;
+>  };
+>
+>  #define to_ffa_dev(d) container_of(d, struct ffa_device, dev)
+> @@ -47,7 +48,8 @@ static inline void *ffa_dev_get_drvdata(struct ffa_device *fdev)
+>  }
+>
+>  #if IS_REACHABLE(CONFIG_ARM_FFA_TRANSPORT)
+> -struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id);
+> +struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
+> +                                      const struct ffa_dev_ops *ops);
+>  void ffa_device_unregister(struct ffa_device *ffa_dev);
+>  int ffa_driver_register(struct ffa_driver *driver, struct module *owner,
+>                         const char *mod_name);
+> @@ -57,7 +59,8 @@ const struct ffa_dev_ops *ffa_dev_ops_get(struct ffa_device *dev);
+>
+>  #else
+>  static inline
+> -struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id)
+> +struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
+> +                                      const struct ffa_dev_ops *ops)
+>  {
+>         return NULL;
+>  }
+> --
+> 2.37.2
+>

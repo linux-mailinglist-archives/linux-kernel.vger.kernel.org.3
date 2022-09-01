@@ -2,55 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056995A8A70
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF185A8A61
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiIABQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 21:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S232286AbiIABOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 21:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbiIABQW (ORCPT
+        with ESMTP id S232007AbiIABN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 21:16:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D7ADFB7A;
-        Wed, 31 Aug 2022 18:16:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11F64B823CD;
-        Thu,  1 Sep 2022 01:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4E4DC433C1;
-        Thu,  1 Sep 2022 01:16:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661994972;
-        bh=Bp9MG1Ufb7Tzj1XyXFNI9+qa4E+OkXzO9lRH/DnXEkM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Eww2IZWYJK0KQ89Rl0O4KNo0FuXOCDYQNFCTGaxaQiQ1wYDytuOBRMb51k/jbBOsI
-         +nNx8n9sO2bz6btRBxbQQA10qxOSDfv+olBWPVRtO8gK+wdH+rcM5AuyJvKnkNBgXY
-         n9FPXJxHgSdol014iSwZs1r9x83O0HNZlQ1dUsLV1fjyXrKUCbeuHSRON/tN2Kd7Py
-         NEhd6tpNL/YwCazqi66bl05FH4cgPZX4deDYNGVX5bBZx962dRwsgspsWMW13+S4B4
-         qZeFntY1S9N2qy3AMjVsBAFVp71qg+RGo39+WUXJzAUoC3H/DCcNzRPL4LAEvHwfGR
-         rFiT6Yt2gV2cg==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 31 Aug 2022 21:13:56 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806C612EC6C;
+        Wed, 31 Aug 2022 18:13:55 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MJ2ys3kPhz1N7jG;
+        Thu,  1 Sep 2022 09:10:13 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 1 Sep
+ 2022 09:13:52 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v2] net/sched: cls_api: remove redundant 0 check in tcf_qevent_init()
+Date:   Thu, 1 Sep 2022 09:16:17 +0800
+Message-ID: <20220901011617.14105-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220719093316.37253-1-angelogioacchino.delregno@collabora.com>
-References: <20220719093316.37253-1-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH] clk: mediatek: mt8195-infra_ao: Set pwrmcu clocks as critical
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        wenst@chromium.org, chun-jie.chen@mediatek.com,
-        miles.chen@mediatek.com, rex-bc.chen@mediatek.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, mturquette@baylibre.com
-Date:   Wed, 31 Aug 2022 18:16:10 -0700
-User-Agent: alot/0.10
-Message-Id: <20220901011612.C4E4DC433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,22 +48,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting AngeloGioacchino Del Regno (2022-07-19 02:33:16)
-> The pwrmcu is responsible for power management and idle states in SSPM:
-> on older SoCs this was managed in Linux drivers like sspm/mcupm/eemgpu
-> but, at least on MT8195, this functionality was transferred to the ATF
-> firmware.
-> For this reason, turning off the pwrmcu related clocks from the kernel
-> will lead to unability to resume the platform after suspend and other
-> currently unknown PM related side-effects.
->=20
-> Set the PWRMCU and PWRMCU_BUS_H clocks as critical to prevent the
-> kernel from turning them off, fixing the aforementioned issue.
->=20
-> Fixes: e2edf59dec0b ("clk: mediatek: Add MT8195 infrastructure clock supp=
-ort")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
+tcf_qevent_parse_block_index() never returns a zero block_index.
+Therefore, it is unnecessary to check the value of block_index in
+tcf_qevent_init().
 
-Applied to clk-next
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ net/sched/cls_api.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 1ebab4b11262..5d0d57dc5cb7 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -3629,9 +3629,6 @@ int tcf_qevent_init(struct tcf_qevent *qe, struct Qdisc *sch,
+ 	if (err)
+ 		return err;
+ 
+-	if (!block_index)
+-		return 0;
+-
+ 	qe->info.binder_type = binder_type;
+ 	qe->info.chain_head_change = tcf_chain_head_change_dflt;
+ 	qe->info.chain_head_change_priv = &qe->filter_chain;
+-- 
+2.17.1
+

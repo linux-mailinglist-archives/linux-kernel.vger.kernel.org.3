@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD035A9F14
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAD35A9F22
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234571AbiIASeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
+        id S234627AbiIASeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234245AbiIASeG (ORCPT
+        with ESMTP id S234379AbiIASeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Sep 2022 14:34:06 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578407EFD9;
-        Thu,  1 Sep 2022 11:33:57 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id b9so10871qka.2;
-        Thu, 01 Sep 2022 11:33:57 -0700 (PDT)
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7477F0B8;
+        Thu,  1 Sep 2022 11:33:59 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id kh8so14137329qvb.1;
+        Thu, 01 Sep 2022 11:33:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Tv2a7wU2lhgN97bYzJfah37NqTdtlxQ5678kEaFGvZM=;
-        b=F4sesasecjX/JIjBPB1nFlGezzl2EeRQ8PgoBgGj3g4d6Ns1fXzIk41ieUigoQ+yjT
-         0uFYW0xf/DD7010ylr5FjsS0DHRTt0g9rGc7hL90W5t9Welnd3LBoB25th+9/3oIYE0G
-         sC5Ssv8s0j1vMM1VASi2/yVOZ5U+HHy6j2Ji8RM9k1O/DueagTExMiqdtnESMfTTO3xe
-         UTUjFxEZJ0ecmo+4nnv2/HuDfWjdvhzFkMudTqcPZNnn5xpgDshWi0CNWZmkXrr8oXcR
-         ZXH4vXPeTqEpK99/4uvTo5ZOoRkn171FhULAPIIOL0kxJOPOsQeNM8m8jt6fRLw+Bzrp
-         ohtQ==
+        bh=YdtFHMRN/r3oFnRnKHqmURrUXOCIm7+fBetlO5pq8CQ=;
+        b=aYl2vS9Ns3ibcHpoQzkVFaSyDdfB74G2pc8Qt2Rgft0RsKbbUfjvN3KItqiyHfJFD4
+         VyklUZv0B3CvrVu7HmIHVwUXrMBpJYTpP5lgyDXzn6R+tkVP79LIyS7VTx0xa8QHpMjP
+         SRh9bQF6I7009IdtMq6mC5sDlJEnsFy1bh03T4zyFx+8u/FmNy4WKN/Cf7vZrR229/9W
+         Vw7uj5NnqwGTbdvRLAQO1o6Z1QQr4AufLiw+uAOfNvcxDHqconDrxnJ3LrSV3w+QOkb0
+         gUTCOD6CtPgqZG7riUcfkKP05frv06g7CT8WUKF9CaRRu2G2j4L2xqbWZJkJtIX8sDMv
+         G/jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Tv2a7wU2lhgN97bYzJfah37NqTdtlxQ5678kEaFGvZM=;
-        b=nApxgRrcT95dzxCzZGw/j1USa2awSlaP+j7jnq/LC7J40pqWBeLWv72hhoVuignOQn
-         7qBQ3E+m14ZKyxJi6ZHt2d4NRiR9A9zkk8W0E3dd3j4NJ5UnpSp5csNTtt+stFZVaibI
-         V2E0mFnBa25kewt3qkjVO9q7dmT8Nxv0QDoMDcjw0qE5zh2CALeAPJq96ewdFX1OqxgL
-         ZfmoDB56Kvw87JNZJ5wJazTJONRAZQIcH0Z6vsXFys1jDD0QjDs6TS3YRh6lmVPM1gtc
-         DQO8GufPnvAYXSq1q5iBdBr25m3ze33xScPcKikqtPn3QwW1KOKpIEUz+G0lohlwXRZM
-         BGpw==
-X-Gm-Message-State: ACgBeo3hrzJm/9oyLuzqeA8XMAmhXquBcLwQ7pVbNKMdXSEMwwjF6AJY
-        fjcqv4X1oheNd6gavAeMJmk=
-X-Google-Smtp-Source: AA6agR7f87gfbRhIG1C0yYL3bG7qyjKY2RU+B86kNZIwcfhp5tMMsI2JVVyb5GHrZ2AsPNa+rWfgIg==
-X-Received: by 2002:a05:620a:2890:b0:6bc:6ecd:2c4a with SMTP id j16-20020a05620a289000b006bc6ecd2c4amr20912427qkp.603.1662057235658;
-        Thu, 01 Sep 2022 11:33:55 -0700 (PDT)
+        bh=YdtFHMRN/r3oFnRnKHqmURrUXOCIm7+fBetlO5pq8CQ=;
+        b=VqDLX3zLFMJYMKloRCheg8inXAGyG++OQoyEU35axonNHfF70xwPMwnFsBIfUA5Q6h
+         RPf+lZW8DYYQYPaw8WOshU96k0PpM3YuTIqUQJ89bTAeC0vB0tLrGDt7MKG95zwBw2Kd
+         TL3J71t/MHNaXE9zFueFcaKP9gq2oXmQwFTSUsoLRuQBS90G6+WEjmRBPthklzLesylx
+         52rpbTxpnpj91etglZekwTKQmH7n8fbvyQvzYG7YR0snODPp8//UlrIAHwdHmw+v571p
+         HtY2+13lN0RFdddGeCkQxU99kLcnm5njxH249K+7o20voDIyUnwDItGqtqXXREod8uQU
+         lk9Q==
+X-Gm-Message-State: ACgBeo1sg9tiKqwjf+/SQpKJMQt3XmAarnFYgsTjSiaFJy/oyblAVA3S
+        MvLXGsTCXOPKiDCBCedA2Zc=
+X-Google-Smtp-Source: AA6agR46lSqIFUvCtXJ/+X5Skmn0JT1a5CDHDpxEmseppesoKd0bDCqvDlzsSi1tHr2dSLZ/blK6Lw==
+X-Received: by 2002:a05:6214:2489:b0:498:f243:b9a3 with SMTP id gi9-20020a056214248900b00498f243b9a3mr25402269qvb.19.1662057237556;
+        Thu, 01 Sep 2022 11:33:57 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id u20-20020ac87514000000b00342e86b3bdasm10563343qtq.12.2022.09.01.11.33.53
+        by smtp.gmail.com with ESMTPSA id u20-20020ac87514000000b00342e86b3bdasm10563343qtq.12.2022.09.01.11.33.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 11:33:54 -0700 (PDT)
+        Thu, 01 Sep 2022 11:33:56 -0700 (PDT)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-imx@nxp.com
@@ -63,10 +63,10 @@ Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         clin@suse.com, giulio.benetti@benettiengineering.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 04/10] dt-bindings: serial: fsl-lpuart: add i.MXRT1170 compatible
-Date:   Thu,  1 Sep 2022 14:33:37 -0400
-Message-Id: <20220901183343.3188903-5-Mr.Bossman075@gmail.com>
+        linux-gpio@vger.kernel.org
+Subject: [PATCH v6 05/10] ARM: mach-imx: Add support for i.MXRT1170
+Date:   Thu,  1 Sep 2022 14:33:38 -0400
+Message-Id: <20220901183343.3188903-6-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
 References: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
@@ -82,40 +82,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MXRT1170 compatible string to Documentation.
+Add "fsl,imxrt1170" to imxrt_compat
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
 V1 -> V2:
- - New commit to fix dtbs_check
+ - Nothing done
 V2 -> V3:
  - Nothing done
 V3 -> V4:
- - Fix rebase artifact
+ - Nothing done
 V4 -> V5:
  - Nothing done
 V5 -> V6:
  - Nothing done
 ---
- Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm/mach-imx/mach-imxrt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-index 30eaa62e1aed..2c2f3c97a125 100644
---- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-+++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-@@ -32,6 +32,9 @@ properties:
-               - fsl,imx8qm-lpuart
-               - fsl,imx8dxl-lpuart
-           - const: fsl,imx8qxp-lpuart
-+      - items:
-+          - const: fsl,imxrt1170-lpuart
-+          - const: fsl,imxrt1050-lpuart
+diff --git a/arch/arm/mach-imx/mach-imxrt.c b/arch/arm/mach-imx/mach-imxrt.c
+index 2063a3059c84..0070214feb42 100644
+--- a/arch/arm/mach-imx/mach-imxrt.c
++++ b/arch/arm/mach-imx/mach-imxrt.c
+@@ -10,6 +10,7 @@
  
-   reg:
-     maxItems: 1
+ static const char *const imxrt_compat[] __initconst = {
+ 	"fsl,imxrt1050",
++	"fsl,imxrt1170",
+ 	NULL
+ };
+ 
 -- 
 2.36.1
 

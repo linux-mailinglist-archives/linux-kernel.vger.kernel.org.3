@@ -2,103 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE215A8B78
+	by mail.lfdr.de (Postfix) with ESMTP id C79FE5A8B79
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232728AbiIAC2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 22:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        id S232808AbiIAC3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 22:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiIAC2Z (ORCPT
+        with ESMTP id S232465AbiIAC3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 22:28:25 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D8010B947
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:28:23 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8DBFA2C01B3;
-        Thu,  1 Sep 2022 02:28:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1661999297;
-        bh=kmCIylDm8Txm7onwtOZtWlrF/8ha8Og8/TRGivzIpGg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=btcu/qdVAZ1Zb5cxjJElT/UHJeJaAJ2Epa9gD3K71VP6DmOr1NHHGDzpebNwM+RuQ
-         BzpGF+D4xmewPkeu+wIRBD1eBeM0fgU2SsmIGFKuFJvuD9ZSJrKo/TsrzOf/r4A2jg
-         g8ukDtF9RGB/COZorI1QWBD0pilHAARNrs9/hTGLv3cdZxEByUWe0XSv4G9/v+eCJV
-         HdoFBv/6tVa8O8l7DqOjxLG42gmd9UVaKBsfaCrWnyrechwhLIwT+Kmz4NxSaCZudv
-         VHpuZaS4u5bp8Boc7+wB1GwSYtZ2MndMyLmoJZRVQ1p95X1W9ekqDNHgtfXVA6S6xB
-         htsLRwf9pH/EA==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B631018c10000>; Thu, 01 Sep 2022 14:28:17 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 61DF413ECC4;
-        Thu,  1 Sep 2022 14:28:17 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 5EBC92A0098; Thu,  1 Sep 2022 14:28:17 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregory.clement@bootlin.com, vadym.kochan@plvision.eu
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH] arm64: dts: marvell: 98dx25xx: use correct property for i2c gpios
-Date:   Thu,  1 Sep 2022 14:28:08 +1200
-Message-Id: <20220901022808.691198-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.37.2
+        Wed, 31 Aug 2022 22:29:38 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A7710B967
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1661999377; x=1693535377;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AmAbtgwvf10cQiM7/CdK9N2i6a9/rk3f8YXqb8N5pFo=;
+  b=rZXQdsIegvmL/e1t0qdA0dMxqwZxlIwvqfpmMeXGtFM73fuRtqG6GP/r
+   QFJsL0Cle643fxtKZQEXDagkxv5Y1pWr2tGy3wYOj+SOzGd6tqaRV1vUB
+   OwlyLSy7rTTAoRhJK+xp87RH06c2taHGlMlVjIbYx5CHD1suh9r3q0Cz5
+   7b2WVuz7M2n2G/ydBETA9x+GqIQ5bfHwIySoX1ri1U4jiY6Xjhuh9cAax
+   43EU+hOEyJ9fsypH8ol9dE2z/UEW4RTMspfNAfV/GWzIMp5nKAIKN1tHQ
+   74apAae9QQyltTTL9KWcHAUB2bP7JbgdEJWIufKfRRbnpv1Soc0gtVT31
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,279,1654531200"; 
+   d="scan'208";a="322292690"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 01 Sep 2022 10:29:34 +0800
+IronPort-SDR: /l/GKtqo4DV7FEFP39rVVV59z4Wnv9vddXwoxRQRqbNd6x1wuLt969h+fjlkjYs1Mg0Mxqrgs0
+ UqF+zFiPUieX7UEkRIk2d4+Qq4XuKIxwKUA4m26UTHZbbYrsLh5e67Pd7OucCrsKloE7+yrhHc
+ GYqpBDBnOlvZRO69YLYmAEM4G/cAm5hGV1nylzj1k9PXPTAKzt7YaF0w4N14Eoj6gn/FaZAFM5
+ QtbGiinXKGI21vK+H+q0MfRJr71xl1ga1a3cvON8wSYLkL5ukrUsoXFfesQW+/Yox4XxEgLZ05
+ Y4/SMDSv7dmzOlDCj2V7ZOKK
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Aug 2022 18:50:03 -0700
+IronPort-SDR: 7chTr04vTzUYIan+ddSPxBjAzdL75R12ze3ZwJkph4hpHPQUUTANgp3fk/LrRYyMi9UNepxv5e
+ bVfalTXIZntB/EWumUdSLDzZA048FVXLJPFQEzBLlrAmKRO+iKmUXeys9hrm6dlWdbNNjemh0Q
+ CUJlMCcsgp7qTeytPkMwO1ohMDsR+rEP6eeuNklutLnQgTN9W5L+nCQAiQyTwi1qyJBILvEN6F
+ OEBVXjJGijgJQGZH1io59J08nHxLJvmpzNCxtWIJkh5AxOLnGxSR8tYCSfcHDG9KUstPi8dSAC
+ mVo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Aug 2022 19:29:35 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MJ4kP74Nlz1RvTp
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:29:33 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1661999373; x=1664591374; bh=AmAbtgwvf10cQiM7/CdK9N2i6a9/rk3f8YX
+        qb8N5pFo=; b=Mz5wRbcJtzaU52xyP+271zksFtmgPwaTj9PY3o2+USGg6JYXYsC
+        +4asGD2yhJexB3onnuvbjLyeb/SWM5zqCW0YsUoxjEJfHgTlGKxGUOn6IpKKdUmx
+        vZucAPdR0ZT/B4xMG/VPyR1lbO2k2gv4CyDQ3l11pEm01oZjPyB89Am9PenI5Z0R
+        nEo9kBxVIrRuF9UdV4PK8yVs2iQ4dgqU/jI765siK8wmAQIycQdCDNQ8kqclwoD0
+        Rk3SjZQf989tjeg4HT/xSt7dkq0xEzH9r6yd99JA8tbkhhnwEFGx02PH7E14kTqh
+        T/03iMnBb+bsaXMcVWIsDZX4xXlvuYkgbHw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vxjmvswvxzIC for <linux-kernel@vger.kernel.org>;
+        Wed, 31 Aug 2022 19:29:33 -0700 (PDT)
+Received: from [10.225.163.56] (unknown [10.225.163.56])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MJ4kM478Gz1RvLy;
+        Wed, 31 Aug 2022 19:29:31 -0700 (PDT)
+Message-ID: <8c61be8b-61dc-5b90-43a4-bed15d6a6b8d@opensource.wdc.com>
+Date:   Thu, 1 Sep 2022 11:29:30 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=eJVtc0h1 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=xOM3xZuef0cA:10 a=yZng4R7sKkkHLZP_EocA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3] scsi: csiostor: convert sysfs snprintf to sysfs_emit
+Content-Language: en-US
+To:     Xuezhi Zhang <zhangxuezhi3@gmail.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, bvanassche@acm.org,
+        johannes.thumshirn@wdc.com, himanshu.madhani@oracle.com,
+        zhangxuezhi1@coolpad.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220901015130.419307-1-zhangxuezhi3@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220901015130.419307-1-zhangxuezhi3@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the correct names for scl-gpios and sda-gpios so that the generic
-i2c recovery code will find them. While we're here set the
-GPIO_OPEN_DRAIN flag on the gpios.
+On 9/1/22 10:51, Xuezhi Zhang wrote:
+> From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+> 
+> Follow the advice of the Documentation/filesystems/sysfs.rst
+> and show() should only use sysfs_emit() or sysfs_emit_at()
+> when formatting the value to be returned to user space.
+> 
+> Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 
-Fixes: b795fadfc46b ("arm64: dts: marvell: Add Armada 98DX2530 SoC and RD=
--AC5X board")
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Looks OK.
 
-diff --git a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi b/arch/arm64/b=
-oot/dts/marvell/ac5-98dx25xx.dtsi
-index 80b44c7df56a..881bf948d1df 100644
---- a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
-+++ b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
-@@ -117,8 +117,8 @@ i2c0: i2c@11000{
- 				pinctrl-names =3D "default", "gpio";
- 				pinctrl-0 =3D <&i2c0_pins>;
- 				pinctrl-1 =3D <&i2c0_gpio>;
--				scl_gpio =3D <&gpio0 26 GPIO_ACTIVE_HIGH>;
--				sda_gpio =3D <&gpio0 27 GPIO_ACTIVE_HIGH>;
-+				scl-gpios =3D <&gpio0 26 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+				sda-gpios =3D <&gpio0 27 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 				status =3D "disabled";
- 			};
-=20
-@@ -136,8 +136,8 @@ i2c1: i2c@11100{
- 				pinctrl-names =3D "default", "gpio";
- 				pinctrl-0 =3D <&i2c1_pins>;
- 				pinctrl-1 =3D <&i2c1_gpio>;
--				scl_gpio =3D <&gpio0 20 GPIO_ACTIVE_HIGH>;
--				sda_gpio =3D <&gpio0 21 GPIO_ACTIVE_HIGH>;
-+				scl-gpios =3D <&gpio0 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+				sda-gpios =3D <&gpio0 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 				status =3D "disabled";
- 			};
-=20
---=20
-2.37.2
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
+> ---
+> v2: delete 'else' and extra space.
+> v3: delete extra configs in patch v2
+>     and use a new changelog.
+> ---
+>  drivers/scsi/csiostor/csio_scsi.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
+> index 9aafe0002ab1..05e1a63e00c3 100644
+> --- a/drivers/scsi/csiostor/csio_scsi.c
+> +++ b/drivers/scsi/csiostor/csio_scsi.c
+> @@ -1366,9 +1366,9 @@ csio_show_hw_state(struct device *dev,
+>  	struct csio_hw *hw = csio_lnode_to_hw(ln);
+>  
+>  	if (csio_is_hw_ready(hw))
+> -		return snprintf(buf, PAGE_SIZE, "ready\n");
+> -	else
+> -		return snprintf(buf, PAGE_SIZE, "not ready\n");
+> +		return sysfs_emit(buf, "ready\n");
+> +
+> +	return sysfs_emit(buf, "not ready\n");
+>  }
+>  
+>  /* Device reset */
+> @@ -1430,7 +1430,7 @@ csio_show_dbg_level(struct device *dev,
+>  {
+>  	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%x\n", ln->params.log_level);
+> +	return sysfs_emit(buf, "%x\n", ln->params.log_level);
+>  }
+>  
+>  /* Store debug level */
+> @@ -1476,7 +1476,7 @@ csio_show_num_reg_rnodes(struct device *dev,
+>  {
+>  	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%d\n", ln->num_reg_rnodes);
+> +	return sysfs_emit(buf, "%d\n", ln->num_reg_rnodes);
+>  }
+>  
+>  static DEVICE_ATTR(num_reg_rnodes, S_IRUGO, csio_show_num_reg_rnodes, NULL);
+
+-- 
+Damien Le Moal
+Western Digital Research
 

@@ -2,119 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0EA5A9571
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6F15A957A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbiIALI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
+        id S233111AbiIALLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbiIALIz (ORCPT
+        with ESMTP id S232629AbiIALLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 07:08:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9261321E8;
-        Thu,  1 Sep 2022 04:08:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2995161D76;
-        Thu,  1 Sep 2022 11:08:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1E29C433C1;
-        Thu,  1 Sep 2022 11:08:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662030533;
-        bh=GO5OWJyxvsNjXdz5eXwP4/4lg3DYoGMjM+O2CwFsH7M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hf1MkGxfopSkLoYKyPfD0bOwVW4DvkvgULW5uBZRxcNaH5CfrxD6u95w3YyUfUOPx
-         cjqA1lU+cYsX2olFRE+jHT8gkYOVG1BTcRgp4ei6pxztB32L115JGtsZ8BSkhhgtAN
-         d8i6yXyIQ9/n195E+ExTOUkKFqCAcKPK0aHQM6HU=
-Date:   Thu, 1 Sep 2022 13:08:50 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Stefan Roese <sr@denx.de>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Ben Greear <greearb@candelatech.com>, bjorn@helgaas.com,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Yao Hongbo <yaohongbo@linux.alibaba.com>,
-        Naveen Naidu <naveennaidu479@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        linux-wireless@vger.kernel.org
-Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
- get_port_device_capability()
-Message-ID: <YxCSwtfrEcuJKBoS@kroah.com>
-References: <20220830221159.GA132418@bhelgaas>
- <cdcf3377-c3fe-f22b-6f43-8ae8cb889da3@denx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cdcf3377-c3fe-f22b-6f43-8ae8cb889da3@denx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 1 Sep 2022 07:11:16 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E37511AFA2;
+        Thu,  1 Sep 2022 04:11:14 -0700 (PDT)
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx72tEkxBj+LgOAA--.61423S2;
+        Thu, 01 Sep 2022 19:11:02 +0800 (CST)
+From:   Youling Tang <tangyouling@loongson.cn>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Xuerui Wang <kernel@xen0n.name>, Xi Ruoyao <xry111@xry111.site>
+Subject: [PATCH] mksysmap: Fix the mismatch of 'L0' symbols in System.map
+Date:   Thu,  1 Sep 2022 19:10:59 +0800
+Message-Id: <1662030659-21558-1-git-send-email-tangyouling@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Cx72tEkxBj+LgOAA--.61423S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF4fZw13KFW8Ar1rJF13Arb_yoWDJFbE9a
+        1IqFn5GrW8Zrn0yr18Zr4YvFykWayayayrAryxJr1Sqw1DGrWfGFyDKasYqFnxAF109r47
+        J39rZrnYkrn29jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbFxYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2Iq
+        xVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r
+        106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AK
+        xVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7
+        xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_
+        Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jO-B_UUUUU=
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 07:52:00AM +0200, Stefan Roese wrote:
-> On 31.08.22 00:11, Bjorn Helgaas wrote:
-> > [+cc Gregory, linux-wireless for iwlwifi issue]
-> > 
-> > On Tue, Aug 30, 2022 at 01:47:48PM -0700, Ben Greear wrote:
-> > > On 8/23/22 11:41 PM, Greg Kroah-Hartman wrote:
-> > > > On Tue, Aug 23, 2022 at 07:20:14AM -0500, Bjorn Helgaas wrote:
-> > > > > On Tue, Aug 23, 2022, 6:35 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > > wrote:
-> > > > > 
-> > > > > > From: Stefan Roese <sr@denx.de>
-> > > > > > 
-> > > > > > [ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
-> > > > > > 
-> > > > > 
-> > > > > There's an open regression related to this commit:
-> > > > > 
-> > > > > https://bugzilla.kernel.org/show_bug.cgi?id=216373
-> > > > 
-> > > > This is already in the following released stable kernels:
-> > > > 	5.10.137 5.15.61 5.18.18 5.19.2
-> > > > 
-> > > > I'll go drop it from the 4.19 and 5.4 queues, but when this gets
-> > > > resolved in Linus's tree, make sure there's a cc: stable on the fix so
-> > > > that we know to backport it to the above branches as well.  Or at the
-> > > > least, a "Fixes:" tag.
-> > > 
-> > > This is still in 5.19.5.  We saw some funny iwlwifi crashes in 5.19.3+
-> > > that we did not see in 5.19.0+.  I just bisected the scary looking
-> > > AER errors to this patch, though I do not know for certain if it
-> > > causes the iwlwifi related crashes yet.
-> > > 
-> > > In general, from reading the commit msg, this patch doesn't seem to
-> > > be a great candidate for stable in general.  Does it fix some
-> > > important problem?
-> > 
-> > I agree, I don't think this is a good candidate for stable.  It has
-> > already exposed latent amdgpu issues and we'll likely find more.  It's
-> > good to find and fix these things, but I'd rather do it in -rc than in
-> > stable kernels.
-> 
-> I also agree. It was not my intention to have this patch added to
-> the stable branches. Frankly I missed intervening when seeing the
-> mails about the integration into stable a few weeks ago.
+When System.map was generated, the kernel used mksysmap to filter the
+kernel symbols, we need to filter "L0" symbols in LoongArch architecture.
 
-It was maked with a Fixes: tag, which makes it ripe for backporting,
-especially as it is written as "this fixes this problem".
+$ cat System.map | grep L0
+9000000000221540 t L0
 
-Anyway, I've now reverted it from the stable trees. Hopefully you all
-get this figured out so that 6.0 doesn't have the same issue.
+The L0 symbol exists in System.map, but not in .tmp_System.map. When
+"cmp -s System.map .tmp_System.map" will show "Inconsistent kallsyms
+data" error message in link-vmlinux.sh script.
 
-thanks,
+Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+---
+ scripts/mksysmap | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-greg k-h
+diff --git a/scripts/mksysmap b/scripts/mksysmap
+index 9aa23d15862a..ad8bbc52267d 100755
+--- a/scripts/mksysmap
++++ b/scripts/mksysmap
+@@ -41,4 +41,4 @@
+ # so we just ignore them to let readprofile continue to work.
+ # (At least sparc64 has __crc_ in the middle).
+ 
+-$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)' > $2
++$NM -n $1 | grep -v '\( [aNUw] \)\|\(__crc_\)\|\( \$[adt]\)\|\( \.L\)\|\( L0\)' > $2
+-- 
+2.36.1
+

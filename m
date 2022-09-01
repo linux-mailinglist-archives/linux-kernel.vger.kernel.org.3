@@ -2,205 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003465A9615
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393F15A961E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbiIALxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S232757AbiIAL7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiIALxf (ORCPT
+        with ESMTP id S232176AbiIAL7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 07:53:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3F14B499
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:53:35 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oTil8-0001z1-W1; Thu, 01 Sep 2022 13:53:22 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oTil6-0004PT-J1; Thu, 01 Sep 2022 13:53:20 +0200
-Date:   Thu, 1 Sep 2022 13:53:20 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v3 2/3] iio: adc: tsc2046: add vref support
-Message-ID: <20220901115320.GD2479@pengutronix.de>
-References: <20220901041146.3652287-1-o.rempel@pengutronix.de>
- <20220901041146.3652287-2-o.rempel@pengutronix.de>
- <20220901124549.00002287@huawei.com>
+        Thu, 1 Sep 2022 07:59:19 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022F710DB;
+        Thu,  1 Sep 2022 04:59:16 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id j14so13707237lfu.4;
+        Thu, 01 Sep 2022 04:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date;
+        bh=40zYa817WiYSxmkmnaNfAHCBlLNPSiOlFf7sX4yoJeY=;
+        b=T/EwlpB3rUFtrQv+/vpPYHHm7dpjqJzOF6Z6f4Gv5jqeXBxbp4M+HCCYHQ6OYmYtMR
+         wM7S6P/Tb3AgWTYWxpNFSkEEzdDRt3KWZr1H+dhcnsIao96u9ICE0u8Q8KCDE5oT5z6c
+         uylDs6v4/OCsUvrIhDuRWTsLstEUydlLXAGQxaaz1P+qb+h6PyCw23U1iPlWMaHZSCWd
+         cZ1unMz/5re6lMtOr68EqCj61XlzG24baRrjJemgEvTwWK8mv5uaR+18ybepEy8xw0Uw
+         xmsh4EXw/PlbNxA5OyK2Ye02K+4bmiVFAhmbB7EkpAwpBQNa/FQPGE7ZuDuYBBeOGU/n
+         i2XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=40zYa817WiYSxmkmnaNfAHCBlLNPSiOlFf7sX4yoJeY=;
+        b=UgaMudbhhjxjs3xFeNkN7+TNbaygd5iJZRsedmkXUfknQ5HCF8dEP4ceLtTBJ686IR
+         onIQEqiuypqoqQs08pzU4jmzemTgZ3nEDVIMw5LYnoZooJhUWysc5+74SDlKgamdFnjU
+         nXAQqgCcfiExEKqBM7LO+5z1gGqIeek1nO2qlvPzeH5/54zhl1g3p/R3EBYVE7kEqNla
+         OZD91tgYwdKEGtrkej3cXPXc/HrmpbhH8eg+yq3m+LLHrXj8hSNzKZ8KvEUnTLaAI5LG
+         anGxAEgzAxawkIPUAqMJMsKbiqf4FjECWuMjMjPI8Q0VsgpYQIuYc82+RWTyu6P8NoUG
+         sLxQ==
+X-Gm-Message-State: ACgBeo2R8vPoMp+sOoVQPQs8D1BVm9aSj8mu2ZIetVMUp9oWl4E8pIHM
+        jaOn47Dj0qXDBDkZk+Qtuss=
+X-Google-Smtp-Source: AA6agR4iR/Yl/YnCJelF2gPpHtDHWFrtwzT65hUeeSTtAjxHpwt5arYO7w0vJ0s5ETpDRvEMMmifcg==
+X-Received: by 2002:a05:6512:1524:b0:485:b21c:6015 with SMTP id bq36-20020a056512152400b00485b21c6015mr11381879lfb.611.1662033554181;
+        Thu, 01 Sep 2022 04:59:14 -0700 (PDT)
+Received: from pc636 (host-217-213-139-238.mobileonline.telia.com. [217.213.139.238])
+        by smtp.gmail.com with ESMTPSA id p5-20020a2e9a85000000b0025e4c49969fsm1577526lji.98.2022.09.01.04.59.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 04:59:13 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 1 Sep 2022 13:59:10 +0200
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rcu <rcu@vger.kernel.org>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
+ fixes
+Message-ID: <YxCejoKH8dGIeW22@pc636>
+References: <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
+ <20220829194622.GA58291@lothringen>
+ <CAEXW_YS593n8Gget+REaD-c8vT8Ht_AzOY0kXA_uc674LOyvVw@mail.gmail.com>
+ <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220830105324.GA71266@lothringen>
+ <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220830160316.GC71266@lothringen>
+ <20220830162244.GA73392@lothringen>
+ <Yw4+g/0yEf7fpHrh@pc636>
+ <20220901112947.GA105556@lothringen>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220901124549.00002287@huawei.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220901112947.GA105556@lothringen>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 12:45:49PM +0100, Jonathan Cameron wrote:
-> On Thu, 1 Sep 2022 06:11:45 +0200
-> Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> 
-> > If VREF pin is attached, we should use external VREF source instead of
-> > the internal. Otherwise we will get wrong measurements on some of channel
-> > types.
+On Thu, Sep 01, 2022 at 01:29:47PM +0200, Frederic Weisbecker wrote:
+> On Tue, Aug 30, 2022 at 06:44:51PM +0200, Uladzislau Rezki wrote:
+> > Hello, Frederic.
 > > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Hi Oleksij,
+> > > 
+> > > Although who knows, may be some periodic file operation while idle are specific
+> > > to Android. I'll try to trace lazy callbacks while idle and the number of grace
+> > > periods associated.
+> > > 
+> > > 
+> > Everything related to lazy call-backs is about not waking "nocb"
+> > kthreads in order to offload one or i should say few callbacks
+> > because it is more or less useless. Currently if incoming callback
+> > is the only one, it will kick a GP whereas a GP will kick nocb_kthread
+> > to offload.
 > 
-> I'm not sure why I didn't review this patch in v1...
+> Not sure this is only about not waking "nocb" kthreads. The grace period
+> kthread is also awaken in !NOCB and has quite some work to do. And there,
+> having a server expands the issue because you may have a lot of CPUs's extended
+> quiescent states to check.
 > 
-> Anyhow, some comments below.
-> 
-> Jonathan
-> 
-> > ---
-> >  drivers/iio/adc/ti-tsc2046.c | 64 +++++++++++++++++++++++++++++++-----
-> >  1 file changed, 55 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
-> > index 0d9436a69cbfb..bbc8b4137b0b1 100644
-> > --- a/drivers/iio/adc/ti-tsc2046.c
-> > +++ b/drivers/iio/adc/ti-tsc2046.c
-> > @@ -8,6 +8,7 @@
-> >  #include <linux/bitfield.h>
-> >  #include <linux/delay.h>
-> >  #include <linux/module.h>
-> > +#include <linux/regulator/consumer.h>
-> >  #include <linux/spi/spi.h>
-> >  
-> >  #include <asm/unaligned.h>
-> > @@ -175,6 +176,9 @@ struct tsc2046_adc_priv {
-> >  	u32 time_per_bit_ns;
-> >  
-> >  	struct tsc2046_adc_ch_cfg ch_cfg[TI_TSC2046_MAX_CHAN];
-> > +	bool use_internal_vref;
-> > +	unsigned int vref_mv;
-> > +	struct regulator *vref_reg;
-> >  };
-> >  
-> >  #define TI_TSC2046_V_CHAN(index, bits, name)			\
-> > @@ -252,7 +256,9 @@ static u8 tsc2046_adc_get_cmd(struct tsc2046_adc_priv *priv, int ch_idx,
-> >  	case TI_TSC2046_ADDR_AUX:
-> >  	case TI_TSC2046_ADDR_VBAT:
-> >  	case TI_TSC2046_ADDR_TEMP0:
-> > -		pd |= TI_TSC2046_SER | TI_TSC2046_PD1_VREF_ON;
-> > +		pd |= TI_TSC2046_SER;
-> > +		if (priv->use_internal_vref)
-> > +			pd |= TI_TSC2046_PD1_VREF_ON;
-> >  	}
-> >  
-> >  	return TI_TSC2046_START | FIELD_PREP(TI_TSC2046_ADDR, ch_idx) | pd;
-> > @@ -468,7 +474,7 @@ static int tsc2046_adc_read_raw(struct iio_dev *indio_dev,
-> >  		 * So, it is better to use external voltage-divider driver
-> >  		 * instead, which is calculating complete chain.
-> >  		 */
-> > -		*val = TI_TSC2046_INT_VREF;
-> > +		*val = priv->vref_mv;
-> >  		*val2 = chan->scan_type.realbits;
-> >  		return IIO_VAL_FRACTIONAL_LOG2;
-> >  	}
-> > @@ -781,22 +787,42 @@ static int tsc2046_adc_probe(struct spi_device *spi)
-> >  	indio_dev->num_channels = dcfg->num_channels;
-> >  	indio_dev->info = &tsc2046_adc_info;
-> >  
-> > +	priv->vref_reg = devm_regulator_get_optional(&spi->dev, "vref");
-> > +	if (!IS_ERR(priv->vref_reg)) {
-> > +		ret = regulator_enable(priv->vref_reg);
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		ret = regulator_get_voltage(priv->vref_reg);
-> > +		if (ret < 0)
-> > +			goto err_regulator_disable;
-> 
-> Whilst regulators voltages of references rarely change at runtime
-> they are allowed to, so it is logically better to query the
-> voltage at the point of use. Requests for scale should be
-> rare (unless there is a consumer that keeps querying this?)
-> so the slightly overhead there
-> shouldn't matter.
+I mean here the following combination: NOCB + call_rcu_lazy() tandem.
+The !NOCB is not about power save, IMHO. Because it implies callbacks
+to be processed on CPUs they are landed.
 
-The voltage scale is related to actual adc measurements. If it variates,
-we will have different scale of challenges.
+In this scenario you can not let the EAS scheduler to find a more
+efficient CPU for further handling.
 
-> > +
-> > +		priv->vref_mv = ret / 1000;
-> > +		priv->use_internal_vref = false;
-> > +	} else {
-> > +		/* Use internal reference */
-> > +		priv->vref_mv = TI_TSC2046_INT_VREF;
-> > +		priv->use_internal_vref = true;
-> > +	}
-> > +
-> >  	tsc2046_adc_parse_fwnode(priv);
-> >  
-> >  	ret = tsc2046_adc_setup_spi_msg(priv);
-> >  	if (ret)
-> > -		return ret;
-> > +		goto err_regulator_disable;
-> >  
-> >  	mutex_init(&priv->slock);
-> >  
-> >  	ret = devm_request_irq(dev, spi->irq, &tsc2046_adc_irq,
-> >  			       IRQF_NO_AUTOEN, indio_dev->name, indio_dev);
-> >  	if (ret)
-> > -		return ret;
-> > +		goto err_regulator_disable;
-> >  
-> >  	trig = devm_iio_trigger_alloc(dev, "touchscreen-%s", indio_dev->name);
-> > -	if (!trig)
-> > -		return -ENOMEM;
-> > +	if (!trig) {
-> > +		ret = -ENOMEM;
-> > +		goto err_regulator_disable;
-> > +	}
-> >  
-> >  	priv->trig = trig;
-> >  	iio_trigger_set_drvdata(trig, indio_dev);
-> > @@ -811,20 +837,39 @@ static int tsc2046_adc_probe(struct spi_device *spi)
-> >  	ret = devm_iio_trigger_register(dev, trig);
-> >  	if (ret) {
-> >  		dev_err(dev, "failed to register trigger\n");
-> > -		return ret;
-> > +		goto err_regulator_disable;
+>
+> Also in !NOCB, pending callbacks retain the timer tick of a CPU (see
+> rcu_needs_cpu()), and cpuidle relies on the tick to be stopped before
+> allowing the CPU into low power mode. So a lazy callback may delay a CPU from
+> entering into low power mode for a few milliseconds.
 > 
-> Please don't mix devm and non devm calls. It makes it much harder to reason about
-> the correctness of ordering.
-> Use devm_add_action_or_reset() to register a callback to disable the
-> vref regulator.
-> 
-> Alternative is back out the devm_ based registration of everything after
-> the regulator enable.
+> And I can observe those retained ticks on my idle box.
+>
+Maybe !NOCB is more about performance. But i have no clue about
+workloads and if such workloads exist nowadays.
 
-ok.
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+--
+Uladzislau Rezki

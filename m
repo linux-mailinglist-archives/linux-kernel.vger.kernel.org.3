@@ -2,144 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102D15A92C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE34D5A92DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233507AbiIAJM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S232008AbiIAJOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233053AbiIAJMW (ORCPT
+        with ESMTP id S230064AbiIAJOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:12:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC06110D8A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:12:22 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662023540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kaRumsH3KDmkPnek0I9ClyHltDQl827/GSI2YJ5tGmk=;
-        b=UMaLYHKJYk7R0Y8kbntlx28LDmUpMYh6Im3Bftl4gjEQBTpMoLzrwLCy0mgE41F72kvM8W
-        0JcaF+RNRxkygEQvcQCOb+a5lzUum4ZR3SwyCx+nJzoAxF2pE8iCecKLsb5ScCMyxc49H8
-        Updrr2/BSgHUGoQx6jcZq+sqWpvohuvarXhWstR9Xl0F0042eHdL/61XaG/dU525vNqyXU
-        zXe5C2rXMllqWtMxszk4DI5GvoZUXXPNU3ShV9+bgA/zBQZb5KauvxdNSvGVvW5lXDHADU
-        z7V/2LFOFiN8MtpIMgB2PkA3mW7oNVR0uwvwlkN/WJpWKmk8/uOlUzTB3FqNcg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662023540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kaRumsH3KDmkPnek0I9ClyHltDQl827/GSI2YJ5tGmk=;
-        b=z0qgClFFWJ0+UUaCJLAVasOOCjJjZx02ljJShf+ooWSzp3OoVUqiVtiK8Xc40jCR63GvSW
-        Qz1CF+qoidhmrTAA==
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     gwml@vger.gnuweeb.org, kernel-team@fb.com, w@lwt.eu,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH rcu 1/2] torture: Optionally flush printk() buffers
- before powering off
-In-Reply-To: <20220831182148.2698489-2-paulmck@kernel.org>
-References: <20220831182113.GA2697286@paulmck-ThinkPad-P17-Gen-1>
- <20220831182148.2698489-2-paulmck@kernel.org>
-Date:   Thu, 01 Sep 2022 11:18:20 +0206
-Message-ID: <87tu5rfogb.fsf@jogness.linutronix.de>
+        Thu, 1 Sep 2022 05:14:50 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06DBE3E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:14:46 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id l65so6552262pfl.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=8IfSzmiZsdcI+yTlyegdVCWD8HBiubsP99qV9h/WaOE=;
+        b=oKUXlv1k93rL8Wdi6dst3eAny2sPjwk2pbkMsPp6JFi82eEJ13427I4sOlDxfHnwcd
+         Yot6mfKnMfPPU3xQ7c9mXU4rmLwK88f+llZd+GzS416l8SRvayXtl8hVgSLyfK6GPPj8
+         IBYxiLcdPCn5lGADFotgAtnjTbZ9l+vYlb1mJb/Vwohwc5dzlS2H8F83WLMzTh6qwIby
+         SaSQEeRQPN454NA6s55CpLfDC0JOaxWAaw/9Rf3NLFpJ6hBAor+w3uFUiA1P/SQDhhSN
+         vf3lcSYF2Q3k68+LNWyR4VMV0DHJazMNS+JTnM98FqD87z7gBLF9G3HwJvihAKvbaohn
+         mVnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=8IfSzmiZsdcI+yTlyegdVCWD8HBiubsP99qV9h/WaOE=;
+        b=pd3IdW+sookxTooPQJG0nKqDEkdfeSlSZMG367isohNk67i3MK9StEntElVBQEc9jq
+         8+fsFU/fQPTj9JxjefjGzMSEowJa11JAEcKIoq32IJcWAPKdFpoe4Tx3Vo6Az0DovtJ3
+         UjgPzj0MwxXzx81sp34c6CBSQhQ4Ando75D3XAEuiyVgPj7+tiVq91YjQZ+U7lBF3dQ1
+         QbqmMC8DVbg/hlCnNwrzFjWY1U6GeQkbvHYWCFS0T2d7i/SWddQXjL0ThCitoKrDfhll
+         ZXoRP75GLaPLrcqh7GiKWrftIhritSqaKqmRnal0yfMlTyJZiNCZnkyJTjub2+ZfAlLO
+         0Diw==
+X-Gm-Message-State: ACgBeo0GvEFPniMBLHvKjE8yevPXrSSjIXfDtTjgG+gryQipFBnrewPK
+        ddhKF7nfnEQDg0kgNj0bs+fwAcRk9xgbDQ==
+X-Google-Smtp-Source: AA6agR5JdtulPYC5gnKEs0/xqMCuO8UrTGslnk605DAPI/be289eKpXZEgsbGneRj343/4hOBWNj5w==
+X-Received: by 2002:a62:5ac6:0:b0:537:f0fa:4ae1 with SMTP id o189-20020a625ac6000000b00537f0fa4ae1mr24499964pfb.70.1662023686133;
+        Thu, 01 Sep 2022 02:14:46 -0700 (PDT)
+Received: from liang-Predator-PH517-52.. (60-250-232-247.hinet-ip.hinet.net. [60.250.232.247])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902e54c00b0016efad0a63csm13553284plf.100.2022.09.01.02.14.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 02:14:45 -0700 (PDT)
+From:   Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     mka@chromium.org, dianders@chromium.org,
+        Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH 0/2] Add a new board device tree named 'evoker' for herobrine variant.
+Date:   Thu,  1 Sep 2022 17:12:51 +0800
+Message-Id: <20220901091253.93333-1-sheng-liang.pan@quanta.corp-partner.google.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added CC the rest of the printk folks since this would be the first use
-of pr_flush() outside of the printk subsystem. And it is a controversial
-usage, since it is used to work around potential (future) bugs in
-printk.
+This patch add the initial dts file for new board 'evoker'.
 
-On 2022-08-31, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> The rcutorture test suite produces quite a bit of console output at
-> the end of a test.  This means that the new-in-2022 printk() kthreads
-> are likely to be in the process of flushing output at the time of the
-> torture_shutdown() function's call to kernel_power_off().  Normally,
-> rcutorture relies on printk() to flush any pending output upon shutdown,
-> the better to detect bugs in this area, for example, the one introduced
-> by 8e274732115f ("printk: extend console_lock for per-console locking").
-> However, once such a bug is detected and reported, it is necessary to
-> test the rest of the system, without noise from the already-reported bug.
+Changes in v2:
+- document sc7280 and evoker board
 
-Since the printk kthread implementation has been reverted, this is no
-longer an issue. When a kthread implementation is re-introduced, this
-issue will need to have been considered and handled.
 
-IMHO this patch is premature at this time and hopefully will never
-become necessary (in the form of a bug workaround).
+Sheng-Liang Pan (2):
+  arm64: dts: qcom: sc7280: Add device tree for herobrine evoker
+  dt-bindings: arm: qcom: document sc7280 and evoker board
 
-> This commit therefore adds a torture.printk_shutdown_bug_workaround
-> kernel parameter, which causes torture_shutdown() to invoke pr_flush(),
-> and print an informative message on the console, immediately before
-> invoking kernel_power_off().  When this kernel parameter is not specified,
-> it is up to printk() to flush its own buffers.
->
-> Suggested-by: John Ogness <john.ogness@linutronix.de>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 6 ++++++
->  kernel/torture.c                                | 7 +++++++
->  2 files changed, 13 insertions(+)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index d7f30902fda02..ba1b8776aab83 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6143,6 +6143,12 @@
->  			are running concurrently, especially on systems
->  			with rotating-rust storage.
->  
-> +	torture.printk_shutdown_bug_workaround= [KNL]
-> +			Execute pr_flush(1000, true) just before invoking
-> +			kernel_power_off() to work around any bugs that
-> +			might prevent printk() from flushing its buffers
-> +			at shutdown time.
-> +
->  	torture.verbose_sleep_frequency= [KNL]
->  			Specifies how many verbose printk()s should be
->  			emitted between each sleep.  The default of zero
-> diff --git a/kernel/torture.c b/kernel/torture.c
-> index 789aeb0e1159c..7cd2016b02076 100644
-> --- a/kernel/torture.c
-> +++ b/kernel/torture.c
-> @@ -48,6 +48,9 @@ module_param(disable_onoff_at_boot, bool, 0444);
->  static bool ftrace_dump_at_shutdown;
->  module_param(ftrace_dump_at_shutdown, bool, 0444);
->  
-> +static bool printk_shutdown_bug_workaround;
-> +module_param(printk_shutdown_bug_workaround, bool, 0444);
-> +
->  static int verbose_sleep_frequency;
->  module_param(verbose_sleep_frequency, int, 0444);
->  
-> @@ -651,6 +654,10 @@ static int torture_shutdown(void *arg)
->  		VERBOSE_TOROUT_STRING("No torture_shutdown_hook(), skipping.");
->  	if (ftrace_dump_at_shutdown)
->  		rcu_ftrace_dump(DUMP_ALL);
-> +	if (printk_shutdown_bug_workaround) {
-> +		pr_info("%s: Flushing printk() buffers at power-down time.\n", __func__);
-> +		pr_flush(1000, true);
-> +	}
->  	kernel_power_off();	/* Shut down the system. */
->  	return 0;
->  }
-> -- 
-> 2.31.1.189.g2e36527f23
+ .../devicetree/bindings/arm/qcom.yaml         |   5 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../dts/qcom/sc7280-herobrine-evoker-r0.dts   | 333 ++++++++++++++++++
+ 3 files changed, 339 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
 
-John Ogness
+-- 
+2.34.1
+

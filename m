@@ -2,99 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2F45AA3A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDE95AA3A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbiIAXVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 19:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S234397AbiIAXWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 19:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbiIAXVN (ORCPT
+        with ESMTP id S233222AbiIAXV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 19:21:13 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEC69F0CD
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:21:12 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c2so261953plo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 16:21:12 -0700 (PDT)
+        Thu, 1 Sep 2022 19:21:59 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9899F19B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:21:58 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id t184so927213yba.4
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 16:21:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=4WHDLqttfF+EoF52mCrZf4boyFiM0BT/dfZZLnC9DCY=;
-        b=lB8ojeh/+EaeLl+eJ9d1FhOJI7q7heqy4wGRR0YXouOvwILiz4PbKEeVrF7s/Cwwu+
-         rRkYnl5tzoLnPRSGQRJaSLd6r5u1wsfjNtAqH4865nL0lqIDtJT3cb6NASp4PSts7cfk
-         7DAyXA3I6HNgJVhQY9dc+QiUvTUZf860wXaPSzQJjvvdnvJjWKTbPvzaFnvcgGIpoEHC
-         MFsWxfAdBfCddPZUR66GOhR/FHeJ1gfAzFYE4iyvLAM+nu2dxq8MoBKYPXVsbNoKsPAW
-         bG+4Yj4olQmGOKD7HQasEv+0lWENnFJrw4kJ6kzlmmizUNCUeowM9Uw++CyC0NuU6165
-         8tzg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=TioOqS04vLMS9dH6wDVg3ppqoyZpw4Z0vjZr4LO/zFY=;
+        b=k1eQ5hiUMMNou7qBsVIMH8lkkFwkk+vgtWYh7f5ywTcVo9hlj63v9Ohlnl7I4aVQn2
+         GKNc7kz9DNkTzlzJbs7rNIACNJQpgSFtXp8ekBVwDboxc58Q20On8g/7Ml1oAOUn3Ce3
+         IJSbUJRUZjtXcBEog461xSrYM2HF3AP0QXjTmMrynLxxaUM0Lx3J39/DOYaC4rORcZFC
+         Ml9yPqd6Al8pgH5yjdE3x7J31KSa7Vqb3x9q5k1HdwNRFhURAjgmW5h3DEC9e1sDnxzz
+         uX3CPfe0M1qBUQSu4yJNm4/ICa2gO5smYoiREDCRbhjpvjuH1N0756ewgER3fFa+YmzK
+         VKXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4WHDLqttfF+EoF52mCrZf4boyFiM0BT/dfZZLnC9DCY=;
-        b=dK6B+bsnwdaiheu+hg0z4vpBn7yNfqLMHaZxpwx3cgud7zk7UKHzbT7Rn3poMLbgoL
-         UXthjp4tpYvJRkcIVjXWta0PmOgkFyM/WW5lmiVmqoWYMjFftF+Jai5Zw/z7WxvIyDN4
-         +m03xEDjGC4hNkfmml6nFfqdRrFvEw72JIH2aFxzYuLesdKagvw3vnJNhhUyJSCGg0WC
-         ly2TscQSLQ/RDdKnB2anYFV8VUs2wZZusP7XpFI1+9g10dVND0kIrLz9r2PzCKaBMS8l
-         9UBK8QtD+6g+DrnM1k2kwfqHzg1Ct0uQmw3ldXhwvShsbQjudAsr6Z1FZE9jWwEb6Hgr
-         jvZw==
-X-Gm-Message-State: ACgBeo30bxs2BN2XF6MTXQsJdKAzS99LFKrEZDWimFj0NEWnqppCJWGA
-        wPQOd3RfbQzf8515SuT6qTJHKQ==
-X-Google-Smtp-Source: AA6agR7CeHu7YH7JW/sDAsmMwzaor5vIm3hXXsQc316o6UKgIUwL4xz/ML8U96xZVGMTQlcLegLqKg==
-X-Received: by 2002:a17:902:8c93:b0:172:bb10:214c with SMTP id t19-20020a1709028c9300b00172bb10214cmr33027929plo.135.1662074471777;
-        Thu, 01 Sep 2022 16:21:11 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m3-20020a63f603000000b0041a6638b357sm69851pgh.72.2022.09.01.16.21.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 16:21:11 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 23:21:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>, vkuznets@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: fix memoryleak in kvm_init()
-Message-ID: <YxE+Y1ZDaPgChrrS@google.com>
-References: <20220823063414.59778-1-linmiaohe@huawei.com>
- <Yw6C+tBZrbP5IX+e@google.com>
- <5f15a3a0-446f-59a4-6bef-8be0e5630f5b@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=TioOqS04vLMS9dH6wDVg3ppqoyZpw4Z0vjZr4LO/zFY=;
+        b=20Z8T6y6iugLsT9ksimCM10c6AgC89LTxCUyiXV/a0P7ez0p11+Qw6P+LyaPQmW1nd
+         KIFI1+o8JKN+k3iB3FD7PJBlX6edzXTC6r8+Y5z/Dhch9Nr9/S5A3fsV7qUbDXXyJtNu
+         t8juKLIkQTlmaNPbyO6hCYrvV0kuzOXlJuGy4q+6sowv+grbDeQj7Efgfd7zVMRE4sFc
+         i7dePGBYlAPHh+TAoKi9WJrNfOjtXXxelrWhBhGquFKKAYstuMfZhhmCmWYZlfItadtE
+         w58Q4+poDr+RCf2R49SDRzB8jjUWtVe8R68n/KVQk35AX8Ack0J6JNNY+aIhQDKCa/k+
+         zGow==
+X-Gm-Message-State: ACgBeo0AGDXAamAD9AoRwqeqRQdCkyDKBrK/yBa/yXhf8TaRL3SrOTjK
+        kfw2xHEVvuR2FfCGKgZXLPTU9u53V/sAzA2/vNjktg==
+X-Google-Smtp-Source: AA6agR6y3U6pHOb5dcv1vqPpmeMeTXf4aKWp13NuMCnIdt+fRCs4NW7hjbDbEqzFwTS6U1UfXZMpdc29w/Hx7SeWCQk=
+X-Received: by 2002:a05:6902:1366:b0:691:4335:455b with SMTP id
+ bt6-20020a056902136600b006914335455bmr20426685ybb.282.1662074518009; Thu, 01
+ Sep 2022 16:21:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5f15a3a0-446f-59a4-6bef-8be0e5630f5b@redhat.com>
+References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-5-surenb@google.com>
+ <20220901202409.e2fqegqghlijkzey@moria.home.lan> <20220901205144.66ilifzaxr5p4xi3@revolver>
+In-Reply-To: <20220901205144.66ilifzaxr5p4xi3@revolver>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 1 Sep 2022 16:21:47 -0700
+Message-ID: <CAJuCfpEJLNDOj6bANM+cX61c12Xw7O0XbhN9rqzkqYEa8PBBuA@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND 04/28] mm: move mmap_lock assert function definitions
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "michel@lespinasse.org" <michel@lespinasse.org>,
+        "jglisse@google.com" <jglisse@google.com>,
+        "mhocko@suse.com" <mhocko@suse.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ldufour@linux.ibm.com" <ldufour@linux.ibm.com>,
+        "laurent.dufour@fr.ibm.com" <laurent.dufour@fr.ibm.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "hughd@google.com" <hughd@google.com>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "joelaf@google.com" <joelaf@google.com>,
+        "minchan@google.com" <minchan@google.com>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022, Paolo Bonzini wrote:
-> On 8/30/22 23:36, Sean Christopherson wrote:
-> > On Tue, Aug 23, 2022, Miaohe Lin wrote:
-> > > When alloc_cpumask_var_node() fails for a certain cpu, there might be some
-> > > allocated cpumasks for percpu cpu_kick_mask. We should free these cpumasks
-> > > or memoryleak will occur.
-> > > 
-> > > Fixes: baff59ccdc65 ("KVM: Pre-allocate cpumasks for kvm_make_all_cpus_request_except()")
-> > > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+On Thu, Sep 1, 2022 at 1:51 PM Liam Howlett <liam.howlett@oracle.com> wrote:
+>
+> * Kent Overstreet <kent.overstreet@linux.dev> [220901 16:24]:
+> > On Thu, Sep 01, 2022 at 10:34:52AM -0700, Suren Baghdasaryan wrote:
+> > > Move mmap_lock assert function definitions up so that they can be used
+> > > by other mmap_lock routines.
+> > >
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 > > > ---
-> > 
-> > Pushed to branch `for_paolo/6.1` at:
-> > 
-> >      https://github.com/sean-jc/linux.git
-> > 
-> > Unless you hear otherwise, it will make its way to kvm/queue "soon".
-> > 
-> > Note, the commit IDs are not guaranteed to be stable.
-> 
-> Hmm, I was going to merge these memory leak fixes for 6.0, but no big deal
-> since they're mostly theoretical anyway.
+> > >  include/linux/mmap_lock.h | 24 ++++++++++++------------
+> > >  1 file changed, 12 insertions(+), 12 deletions(-)
+> > >
+> > > diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
+> > > index 96e113e23d04..e49ba91bb1f0 100644
+> > > --- a/include/linux/mmap_lock.h
+> > > +++ b/include/linux/mmap_lock.h
+> > > @@ -60,6 +60,18 @@ static inline void __mmap_lock_trace_released(struct mm_struct *mm, bool write)
+> > >
+> > >  #endif /* CONFIG_TRACING */
+> > >
+> > > +static inline void mmap_assert_locked(struct mm_struct *mm)
+> > > +{
+> > > +   lockdep_assert_held(&mm->mmap_lock);
+> > > +   VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
+> >
+> > These look redundant to me - maybe there's a reason the VM developers want both,
+> > but I would drop the VM_BUG_ON() and just keep the lockdep_assert_held(), since
+> > that's the standard way to write that assertion.
+>
+> I think this is because the VM_BUG_ON_MM() will give you a lot more
+> information and BUG_ON().
+>
+> lockdep_assert_held() does not return a value and is a WARN_ON().
+>
+> So they are partially redundant.
 
-Take them, I wasn't sure and was anticipating possibly dropping them anyways.  I
-can easily adjust, and was deliberately a little greedy for these technically-a-bug
-memory leaks so that we would't miss them by thinking the other would grab 'em.
+Yeah and I do not intend to change the existing functionality in this
+patchset. If needed we can post a separate patch removing the
+redundancy but from my experience debugging this code, VM_BUG_ON_MM
+reports were very useful.
+
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

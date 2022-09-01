@@ -2,83 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8217E5A9C58
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36D15A9C56
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbiIAP6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S234745AbiIAP6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiIAP6S (ORCPT
+        with ESMTP id S234768AbiIAP6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:58:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0D482FB1
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:58:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 1 Sep 2022 11:58:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0338E0EA;
+        Thu,  1 Sep 2022 08:58:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC8E61F2F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:58:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D60C433C1;
-        Thu,  1 Sep 2022 15:58:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662047896;
-        bh=j9IiE+cBGM6l+xNAPKSMRgz3GaWODjr55a3hhGAhTOM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CjUBi8VVLZMQzzaILq62zqKIfDixy86GV7wrbEC5HRKz7L9m1Uoc7tcTD8g10b4ES
-         4CDQ+5VwKku9L2cwMhRnP764cPDtZZfvZZHUPBDThZhCLkAfOzjiF6nTGJH86t6xdx
-         hocDdyjmrglO/fb2uCgNnB/nL/zPkD6lfLRq6wN8=
-Date:   Thu, 1 Sep 2022 17:58:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] debugfs: Only clobber mode/uid/gid on remount if
- asked
-Message-ID: <YxDWlgulBijTzj3y@kroah.com>
-References: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 84A7E22B10;
+        Thu,  1 Sep 2022 15:58:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662047919; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ZHzkmvovrbUUNg7omW+A+uLbWs5jnT10RXVkkl6wFY=;
+        b=p/HoZKGQ+Chf8aIZwmQEIpDzJkxuKlTPTzJLwChS5aMHA/ud76xS+P4Pk8KzIcoW+5/3Eb
+        AeK/HYfcVwN5y+svRwYg23MnrmWilnjsmT2vy7Tu/e69J2Og2bFhLCM7z0oy4eGa9LhCt/
+        DiwPnrcUrzS6SeDOb1Pux/BZHMN2hkA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662047919;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ZHzkmvovrbUUNg7omW+A+uLbWs5jnT10RXVkkl6wFY=;
+        b=9ZRLqgMKoOF3e0PR9VpKkxfW/7/iQpv6TftC2aYuMTvDhiE8g67tMvprr0Hqx4cACz6+I6
+        bI5hmGqJGZE9OfBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6E2AC13A89;
+        Thu,  1 Sep 2022 15:58:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YhzfGq/WEGO1BwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 01 Sep 2022 15:58:39 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E78B9A067C; Thu,  1 Sep 2022 17:58:38 +0200 (CEST)
+Date:   Thu, 1 Sep 2022 17:58:38 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Zhang Yi <yi.zhang@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cluster-devel@redhat.com,
+        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, jack@suse.cz, tytso@mit.edu,
+        akpm@linux-foundation.org, axboe@kernel.dk,
+        viro@zeniv.linux.org.uk, rpeterso@redhat.com, agruenba@redhat.com,
+        almaz.alexandrovich@paragon-software.com, mark@fasheh.com,
+        dushistov@mail.ru, hch@infradead.org, chengzhihao1@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v2 10/14] udf: replace ll_rw_block()
+Message-ID: <20220901155838.24kdcxwaduc4c7pr@quack3>
+References: <20220901133505.2510834-1-yi.zhang@huawei.com>
+ <20220901133505.2510834-11-yi.zhang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220901133505.2510834-11-yi.zhang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 05:44:16PM -0700, Brian Norris wrote:
-> Users may have explicitly configured their debugfs permissions; we
-> shouldn't overwrite those just because a second mount appeared.
-
-What userspace mounts debugfs twice?
-
-> Only clobber if the options were provided at mount time.
+On Thu 01-09-22 21:35:01, Zhang Yi wrote:
+> ll_rw_block() is not safe for the sync read path because it cannot
+> guarantee that submitting read IO if the buffer has been locked. We
+> could get false positive EIO after wait_on_buffer() if the buffer has
+> been locked by others. So stop using ll_rw_block(). We also switch to
+> new bh_readahead_batch() helper for the buffer array readahead path.
 > 
->   # Don't change /sys/kernel/debug/ permissions.
->   mount -t debugfs none /mnt/foo
-> 
->   # Change /sys/kernel/debug/ mode and uid, but not gid.
->   mount -t debugfs -o uid=bar,mode=0750 none /mnt/baz
+> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
 
-So what happens today with this change?  Without it?
+Looks good to me.
 
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
+								Honza
+
 > ---
-> I'm open to writing an LTP test case for this, if that seems like a good
-> idea.
-
-If it's really needed, again, why would debugfs be ever mounted more
-than once?
-
-thanks,
-
-greg k-h
+>  fs/udf/dir.c       | 2 +-
+>  fs/udf/directory.c | 2 +-
+>  fs/udf/inode.c     | 8 +-------
+>  3 files changed, 3 insertions(+), 9 deletions(-)
+> 
+> diff --git a/fs/udf/dir.c b/fs/udf/dir.c
+> index cad3772f9dbe..be640f4b2f2c 100644
+> --- a/fs/udf/dir.c
+> +++ b/fs/udf/dir.c
+> @@ -130,7 +130,7 @@ static int udf_readdir(struct file *file, struct dir_context *ctx)
+>  					brelse(tmp);
+>  			}
+>  			if (num) {
+> -				ll_rw_block(REQ_OP_READ | REQ_RAHEAD, num, bha);
+> +				bh_readahead_batch(num, bha, REQ_RAHEAD);
+>  				for (i = 0; i < num; i++)
+>  					brelse(bha[i]);
+>  			}
+> diff --git a/fs/udf/directory.c b/fs/udf/directory.c
+> index a2adf6293093..16bcf2c6b8b3 100644
+> --- a/fs/udf/directory.c
+> +++ b/fs/udf/directory.c
+> @@ -89,7 +89,7 @@ struct fileIdentDesc *udf_fileident_read(struct inode *dir, loff_t *nf_pos,
+>  					brelse(tmp);
+>  			}
+>  			if (num) {
+> -				ll_rw_block(REQ_OP_READ | REQ_RAHEAD, num, bha);
+> +				bh_readahead_batch(num, bha, REQ_RAHEAD);
+>  				for (i = 0; i < num; i++)
+>  					brelse(bha[i]);
+>  			}
+> diff --git a/fs/udf/inode.c b/fs/udf/inode.c
+> index 8d06daed549f..dce6ae9ae306 100644
+> --- a/fs/udf/inode.c
+> +++ b/fs/udf/inode.c
+> @@ -1211,13 +1211,7 @@ struct buffer_head *udf_bread(struct inode *inode, udf_pblk_t block,
+>  	if (!bh)
+>  		return NULL;
+>  
+> -	if (buffer_uptodate(bh))
+> -		return bh;
+> -
+> -	ll_rw_block(REQ_OP_READ, 1, &bh);
+> -
+> -	wait_on_buffer(bh);
+> -	if (buffer_uptodate(bh))
+> +	if (bh_read(bh, 0) >= 0)
+>  		return bh;
+>  
+>  	brelse(bh);
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

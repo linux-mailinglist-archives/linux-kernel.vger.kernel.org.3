@@ -2,255 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332605A8F75
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FE85A8F7A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233681AbiIAHNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
+        id S233711AbiIAHNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbiIAHM6 (ORCPT
+        with ESMTP id S233608AbiIAHM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:12:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C81E1900;
-        Thu,  1 Sep 2022 00:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662016351; x=1693552351;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sQhyHL6hS35prQrSkgLt3XWGUVDUcJl3AOmgN1aiDzY=;
-  b=VotLmbBsMCsrt+Q6+51auHFcy4D04AbUhSCR+mgrHlfszkoHlH6N0ugu
-   mSm32IRzrBIo69hnECfdlH1I/O/h/clLWrZiAeODoWo+Hwue8izNF/0+i
-   ejs71WQ6WZOBv/S7iafI2Ck0QRicFElpOdJM//tz1sGO5UV8IvX1i98HX
-   Ooqn5x1c+19TkcqSGhXEch+ioVaoYXF+2uYabDIOg3uf5+7LGR+fpc5Nz
-   4e3z9npldEi6sCN0Yy5shElIfiYkYYOl8uyxevCijboUCCdxoxCpIvNIC
-   lVtkMPNZm+u/BgkXt+kyFhoku6fsoD0AZsdZwXaPlrzptMwwVs0lQdFFQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="294376961"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="294376961"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 00:12:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="612385810"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga002.jf.intel.com with ESMTP; 01 Sep 2022 00:12:24 -0700
-Date:   Thu, 1 Sep 2022 15:12:23 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: Re: [PATCH v8 039/103] KVM: x86/tdp_mmu: Init role member of struct
- kvm_mmu_page at allocation
-Message-ID: <20220901071223.djud2czl3owgris4@yy-desk-7060>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <0a8fa20533048189106f9d0f100acf59602bb502.1659854790.git.isaku.yamahata@intel.com>
+        Thu, 1 Sep 2022 03:12:59 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411BD1243E5
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:12:40 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id h13-20020a17090a648d00b001fdb9003787so1647298pjj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=+62vKKdOWU4HT/68CsGjJSAqpptlLd13iGzU1vu3Cho=;
+        b=V9rAXkNWBAOv6EFqhEXBr6Um74ZiqRFJ0j7+N3/0N6Vjv0gRctwhEFd2eS7oEB59sp
+         S1rNHYRJZjvuTq+ob2GNcyMxv3K2ycg2GRaKq+Uyf60Ws5WKxM4dybETDycKY/uBKSOL
+         v8/7yvIqDQbSii/iNXNEjGNRMK23OZL4ps8os=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=+62vKKdOWU4HT/68CsGjJSAqpptlLd13iGzU1vu3Cho=;
+        b=YgFNOmYOw7qDziz3/H272jVUZSI2HNM+51vAtX7sNgkYRkk8tzkxvuq7Pz7ShHT2qN
+         EctPDZ/6bG7HQPpkDQrR731SrHymA1XVnATiwuV70y2WZPdz8+hliYY0d/ts7GXiAT64
+         RsLT27ckcPnvJOnt6IDNwybQ0miSvFfz3uRYIi2U5NQNJ2K0LBXYVobzbwrwFyP6YdEq
+         9srIV/tJenzf4qrfXWS3PeEPmgBSWhIJJ+PuC3uGBgYA0dAdO5RTAFFwYYOt9M0UdGTb
+         gHIITe28WBWnvf+BEvYj7indJFNAWRezfWg5rGLZQzcnMXX6QEvez+Xx4oT26w2NdeCC
+         BJzg==
+X-Gm-Message-State: ACgBeo3m0VSF0hU4IICsFCeUc93w3mMCx/79ropHasQXRNa5AJZCAMlA
+        PeZC4m7NZPSz4PkeoLjPT+fUEw==
+X-Google-Smtp-Source: AA6agR6lqSNmsXlecqs5/BwPbM7JHXhyGGcmWLul0aYun+6avfFe7U/OISjle+0r0+66NJ33d60+cQ==
+X-Received: by 2002:a17:903:1c4:b0:175:2c12:6e46 with SMTP id e4-20020a17090301c400b001752c126e46mr9984143plh.145.1662016359696;
+        Thu, 01 Sep 2022 00:12:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h9-20020a170902680900b0015e8d4eb26esm12881885plk.184.2022.09.01.00.12.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 00:12:38 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 00:12:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] netlink: Bounds-check struct nlmsgerr creation
+Message-ID: <202209010012.777DAE2@keescook>
+References: <20220901064858.1417126-1-keescook@chromium.org>
+ <5aad4860-b1c3-d78f-583d-26281626a49@netfilter.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a8fa20533048189106f9d0f100acf59602bb502.1659854790.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <5aad4860-b1c3-d78f-583d-26281626a49@netfilter.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 07, 2022 at 03:01:24PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> Refactor tdp_mmu_alloc_sp() and tdp_mmu_init_sp and eliminate
-> tdp_mmu_init_child_sp().  Currently tdp_mmu_init_sp() (or
-> tdp_mmu_init_child_sp()) sets kvm_mmu_page.role after tdp_mmu_alloc_sp()
-> allocating struct kvm_mmu_page and its page table page.  This patch makes
-> tdp_mmu_alloc_sp() initialize kvm_mmu_page.role instead of
-> tdp_mmu_init_sp().
->
-> To handle private page tables, argument of is_private needs to be passed
-> down.  Given that already page level is passed down, it would be cumbersome
-> to add one more parameter about sp. Instead replace the level argument with
-> union kvm_mmu_page_role.  Thus the number of argument won't be increased
-> and more info about sp can be passed down.
+On Thu, Sep 01, 2022 at 09:06:03AM +0200, Jozsef Kadlecsik wrote:
+> Hi,
+> 
+> On Wed, 31 Aug 2022, Kees Cook wrote:
+> 
+> > For 32-bit systems, it might be possible to wrap lnmsgerr content
+> > lengths beyond SIZE_MAX. Explicitly test for all overflows, and mark the
+> > memcpy() as being unable to internally diagnose overflows.
+> > 
+> > This also excludes netlink from the coming runtime bounds check on
+> > memcpy(), since it's an unusual case of open-coded sizing and
+> > allocation. Avoid this future run-time warning:
+> > 
+> >   memcpy: detected field-spanning write (size 32) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
+> > 
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+> > Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
+> > Cc: Florian Westphal <fw@strlen.de>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: syzbot <syzkaller@googlegroups.com>
+> > Cc: netfilter-devel@vger.kernel.org
+> > Cc: coreteam@netfilter.org
+> > Cc: netdev@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > v2: Rebased to -next
+> > v1: https://lore.kernel.org/lkml/20220901030610.1121299-3-keescook@chromium.org
+> > ---
+> >  net/netlink/af_netlink.c | 81 +++++++++++++++++++++++++---------------
+> >  1 file changed, 51 insertions(+), 30 deletions(-)
+> 
+> Could you add back the net/netfilter/ipset/ip_set_core.c part? Thanks!
 
-Please update the description, no level argument is replaced in this
-patch.
+*face palm* Yes, thank you. v3 on the way.
 
->
-> For private sp, secure page table will be also allocated in addition to
-> struct kvm_mmu_page and page table (spt member).  The allocation functions
-> (tdp_mmu_alloc_sp() and __tdp_mmu_alloc_sp_for_split()) need to know if the
-> allocation is for the conventional page table or private page table.  Pass
-> union kvm_mmu_role to those functions and initialize role member of struct
-> kvm_mmu_page.
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/mmu/tdp_iter.h | 12 ++++++++++
->  arch/x86/kvm/mmu/tdp_mmu.c  | 45 +++++++++++++++++--------------------
->  2 files changed, 32 insertions(+), 25 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
-> index f0af385c56e0..9e56a5b1024c 100644
-> --- a/arch/x86/kvm/mmu/tdp_iter.h
-> +++ b/arch/x86/kvm/mmu/tdp_iter.h
-> @@ -115,4 +115,16 @@ void tdp_iter_start(struct tdp_iter *iter, struct kvm_mmu_page *root,
->  void tdp_iter_next(struct tdp_iter *iter);
->  void tdp_iter_restart(struct tdp_iter *iter);
->
-> +static inline union kvm_mmu_page_role tdp_iter_child_role(struct tdp_iter *iter)
-> +{
-> +	union kvm_mmu_page_role child_role;
-> +	struct kvm_mmu_page *parent_sp;
-> +
-> +	parent_sp = sptep_to_sp(rcu_dereference(iter->sptep));
-> +
-> +	child_role = parent_sp->role;
-> +	child_role.level--;
-> +	return child_role;
-> +}
-> +
->  #endif /* __KVM_X86_MMU_TDP_ITER_H */
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 90b468a3a1a2..ce69535754ff 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -271,22 +271,28 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
->  		    kvm_mmu_page_as_id(_root) != _as_id) {		\
->  		} else
->
-> -static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
-> +static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu,
-> +					     union kvm_mmu_page_role role)
->  {
->  	struct kvm_mmu_page *sp;
->
->  	sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
->  	sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
-> +	sp->role = role;
->
->  	return sp;
->  }
->
->  static void tdp_mmu_init_sp(struct kvm_mmu_page *sp, tdp_ptep_t sptep,
-> -			    gfn_t gfn, union kvm_mmu_page_role role)
-> +			    gfn_t gfn)
->  {
->  	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
->
-> -	sp->role = role;
-> +	/*
-> +	 * role must be set before calling this function.  At least role.level
-> +	 * is not 0 (PG_LEVEL_NONE).
-> +	 */
-> +	WARN_ON(!sp->role.word);
->  	sp->gfn = gfn;
->  	sp->ptep = sptep;
->  	sp->tdp_mmu_page = true;
-> @@ -294,20 +300,6 @@ static void tdp_mmu_init_sp(struct kvm_mmu_page *sp, tdp_ptep_t sptep,
->  	trace_kvm_mmu_get_page(sp, true);
->  }
->
-> -static void tdp_mmu_init_child_sp(struct kvm_mmu_page *child_sp,
-> -				  struct tdp_iter *iter)
-> -{
-> -	struct kvm_mmu_page *parent_sp;
-> -	union kvm_mmu_page_role role;
-> -
-> -	parent_sp = sptep_to_sp(rcu_dereference(iter->sptep));
-> -
-> -	role = parent_sp->role;
-> -	role.level--;
-> -
-> -	tdp_mmu_init_sp(child_sp, iter->sptep, iter->gfn, role);
-> -}
-> -
->  hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu)
->  {
->  	union kvm_mmu_page_role role = vcpu->arch.mmu->root_role;
-> @@ -326,8 +318,8 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu)
->  			goto out;
->  	}
->
-> -	root = tdp_mmu_alloc_sp(vcpu);
-> -	tdp_mmu_init_sp(root, NULL, 0, role);
-> +	root = tdp_mmu_alloc_sp(vcpu, role);
-> +	tdp_mmu_init_sp(root, NULL, 0);
->
->  	refcount_set(&root->tdp_mmu_root_count, 1);
->
-> @@ -1154,8 +1146,8 @@ static int tdp_mmu_populate_nonleaf(
->  	WARN_ON(is_shadow_present_pte(iter->old_spte));
->  	WARN_ON(is_removed_spte(iter->old_spte));
->
-> -	sp = tdp_mmu_alloc_sp(vcpu);
-> -	tdp_mmu_init_child_sp(sp, iter);
-> +	sp = tdp_mmu_alloc_sp(vcpu, tdp_iter_child_role(iter));
-> +	tdp_mmu_init_sp(sp, iter->sptep, iter->gfn);
->
->  	ret = tdp_mmu_link_sp(vcpu->kvm, iter, sp, account_nx, true);
->  	if (ret)
-> @@ -1423,7 +1415,8 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
->  	return spte_set;
->  }
->
-> -static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
-> +static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(
-> +	gfp_t gfp, union kvm_mmu_page_role role)
->  {
->  	struct kvm_mmu_page *sp;
->
-> @@ -1433,6 +1426,7 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
->  	if (!sp)
->  		return NULL;
->
-> +	sp->role = role;
->  	sp->spt = (void *)__get_free_page(gfp);
->  	if (!sp->spt) {
->  		kmem_cache_free(mmu_page_header_cache, sp);
-> @@ -1446,6 +1440,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->  						       struct tdp_iter *iter,
->  						       bool shared)
->  {
-> +	union kvm_mmu_page_role role = tdp_iter_child_role(iter);
->  	struct kvm_mmu_page *sp;
->
->  	/*
-> @@ -1457,7 +1452,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->  	 * If this allocation fails we drop the lock and retry with reclaim
->  	 * allowed.
->  	 */
-> -	sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
-> +	sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT, role);
->  	if (sp)
->  		return sp;
->
-> @@ -1469,7 +1464,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->  		write_unlock(&kvm->mmu_lock);
->
->  	iter->yielded = true;
-> -	sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
-> +	sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT, role);
->
->  	if (shared)
->  		read_lock(&kvm->mmu_lock);
-> @@ -1488,7 +1483,7 @@ static int tdp_mmu_split_huge_page(struct kvm *kvm, struct tdp_iter *iter,
->  	const int level = iter->level;
->  	int ret, i;
->
-> -	tdp_mmu_init_child_sp(sp, iter);
-> +	tdp_mmu_init_sp(sp, iter->sptep, iter->gfn);
->
->  	/*
->  	 * No need for atomics when writing to sp->spt since the page table has
-> --
-> 2.25.1
->
+-- 
+Kees Cook

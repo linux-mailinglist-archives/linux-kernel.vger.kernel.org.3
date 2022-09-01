@@ -2,82 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A895AA0B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F475AA0B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234842AbiIAUKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 16:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
+        id S234867AbiIAULJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 16:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiIAUKW (ORCPT
+        with ESMTP id S234858AbiIAUK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 16:10:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C6F286FE;
-        Thu,  1 Sep 2022 13:10:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 688A961C2F;
-        Thu,  1 Sep 2022 20:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE1BC433D7;
-        Thu,  1 Sep 2022 20:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662063017;
-        bh=rq8nBVfudyWwGfUgkKprANMLSWkU10YJR0ZDIuz8TRU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u3Y/noazjS5GAFdYfsRFFEkZwZ8AnKI0Dc8X0WNDBxPMfrxQNS3ZYckce6u1sns8o
-         jcI3+3RTnk0OO4rwp0F4pV7XTFYyVp8pfbWcvzNHqHoVfWszQspbrHc2/EHdpU0+re
-         3x5vDKUpqGsqE8Oc1lw+N8eDn/HCZfoy6AWKZDV2hf2YZKZpJx7zlwLHaAEPJqF52y
-         1qpRLj4TE8sk7SjVEGbXo87tuROyK1MMPTevS49CuaSVukrr7x/cawdMD3DJ5kIcc/
-         B4MrekhTErUK1ma1zSjdxKNvK5BMK230PhJuKZPimiXSwSdPemiwTM3G5MOEMJubb0
-         bO4kNpQ1BUFog==
-Date:   Thu, 1 Sep 2022 13:10:16 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     wei.fang@nxp.com, davem@davemloft.net, edumazet@google.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: fec: add pm_qos support on imx6q platform
-Message-ID: <20220901131016.74a9a730@kernel.org>
-In-Reply-To: <703b0c990f4c7b7db8496cb397fdc6dbccdc1c67.camel@redhat.com>
-References: <20220830070148.2021947-1-wei.fang@nxp.com>
-        <703b0c990f4c7b7db8496cb397fdc6dbccdc1c67.camel@redhat.com>
+        Thu, 1 Sep 2022 16:10:58 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FA969F7C;
+        Thu,  1 Sep 2022 13:10:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662063057; x=1693599057;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yh2FNOyc0UXHkef9LUAUICcRZEZhVKgffrZApOd/DcY=;
+  b=RPQBc0RgwmPUGD5Bw2y1m2YBSlAyLvwB0aBrS8GhB9zgKKHSWzMeIrF/
+   J4LrUYZ+y2FnB1EKLUXuRc1p1QSLaTjbg/QTwlIeYWrCBnwApUyHyGz9d
+   yuxq3llC0/NK/6O3MfbQDAdTHrYxUFruuLomFEKAFZYoi8W/3CIjl3m0U
+   F1KGySRCfuk1ql2+0LzudJqYUQOS7wEtKi+OvV1Z+1ueH4Oc8aaCQlB6l
+   Emm6ELmYDeCCh1p1h2qmGFj0ifJ0wcLDx4p7uSE7phDs1PB9kvmDE8RTU
+   y/j1RuAY1LHZJvOxvBMdfCnpdIaX7mGEGGYishBb1y4Hm8PYkRusI4Ru8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="296600811"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="296600811"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 13:10:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="645828086"
+Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 01 Sep 2022 13:10:54 -0700
+Received: from kbuild by b138c9e8658c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oTqWb-0000jN-36;
+        Thu, 01 Sep 2022 20:10:53 +0000
+Date:   Fri, 2 Sep 2022 04:10:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ciprian Regus <ciprian.regus@analog.com>, jic23@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ciprian Regus <ciprian.regus@analog.com>
+Subject: Re: [PATCH v2 4/5] drivers: iio: adc: LTC2499 support
+Message-ID: <202209020413.akDnDcLc-lkp@intel.com>
+References: <20220901121700.1325733-4-ciprian.regus@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901121700.1325733-4-ciprian.regus@analog.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Sep 2022 09:17:37 +0200 Paolo Abeni wrote:
-> On Tue, 2022-08-30 at 15:01 +0800, wei.fang@nxp.com wrote:
-> > From: Wei Fang <wei.fang@nxp.com>
-> > 
-> > There is a very low probability that tx timeout will occur during
-> > suspend and resume stress test on imx6q platform. So we add pm_qos
-> > support to prevent system from entering low level idles which may
-> > affect the transmission of tx.
-> > 
-> > Signed-off-by: Wei Fang <wei.fang@nxp.com>  
-> 
-> Since this IMHO causes a significal behavior change I suggest to target
-> the net-next tree, does that fit you?
-> 
-> Additionally, it would be great if you could provide in the changelog
-> the references to the relevant platform documentation and (even rough)
-> power consumption delta estimates.
+Hi Ciprian,
 
-It's a tricky one, we don't want older kernels to potentially hang
-either.
+Thank you for the patch! Yet something to improve:
 
-IIRC Florian did some WoL extensions for BRCM, maybe he has the right
-experience.
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on robh/for-next linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Florian, what would you recommend? net or net-next?
+url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Regus/dt-bindings-iio-adc-Add-docs-for-LTC2499/20220901-202115
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220902/202209020413.akDnDcLc-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/08ff9ae09bfde86fc512e13a4ea2af894e4aa442
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ciprian-Regus/dt-bindings-iio-adc-Add-docs-for-LTC2499/20220901-202115
+        git checkout 08ff9ae09bfde86fc512e13a4ea2af894e4aa442
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iio/adc/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/iio/adc/ltc2497.c:60:12: error: implicit declaration of function 'get_unaligned_be24' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           *val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)
+                                   ^
+   drivers/iio/adc/ltc2497.c:122:4: error: field designator 'name' does not refer to any field in type 'const struct ltc2497_chip_info'
+                   .name = NULL,
+                    ^
+   drivers/iio/adc/ltc2497.c:126:4: error: field designator 'name' does not refer to any field in type 'const struct ltc2497_chip_info'
+                   .name = "ltc2499",
+                    ^
+   3 errors generated.
+
+
+vim +/get_unaligned_be24 +60 drivers/iio/adc/ltc2497.c
+
+    34	
+    35	static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
+    36					      u8 address, int *val)
+    37	{
+    38		struct ltc2497_driverdata *st =
+    39			container_of(ddata, struct ltc2497_driverdata, common_ddata);
+    40		int ret;
+    41	
+    42		if (val) {
+    43			if (st->recv_size == 3)
+    44				ret = i2c_master_recv(st->client, (char *)&st->data.d8, st->recv_size);
+    45			else
+    46				ret = i2c_master_recv(st->client, (char *)&st->data.d32, st->recv_size);
+    47	
+    48			if (ret < 0) {
+    49				dev_err(&st->client->dev, "i2c_master_recv failed\n");
+    50				return ret;
+    51			}
+    52	
+    53			/*
+    54			 * The data format is 16/24 bit 2s complement, but with an upper sign bit on the
+    55			 * resolution + 1 position, which is set for positive values only. Given this
+    56			 * bit's value, subtracting BIT(resolution + 1) from the ADC's result is
+    57			 * equivalent to a sign extension.
+    58			 */
+    59			if (st->recv_size == 3) {
+  > 60				*val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)
+    61					- BIT(ddata->chip_info->resolution + 1);
+    62			} else {
+    63				*val = (be32_to_cpu(st->data.d32) >> st->sub_lsb)
+    64					- BIT(ddata->chip_info->resolution + 1);
+    65			}
+    66		}
+    67	
+    68		ret = i2c_smbus_write_byte(st->client,
+    69					   LTC2497_ENABLE | address);
+    70		if (ret)
+    71			dev_err(&st->client->dev, "i2c transfer failed: %pe\n",
+    72				ERR_PTR(ret));
+    73		return ret;
+    74	}
+    75	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,152 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE9E5AA2AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6525AA2AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234344AbiIAWOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S233686AbiIAWOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235342AbiIAWOT (ORCPT
+        with ESMTP id S235124AbiIAWOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:14:19 -0400
-X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Sep 2022 15:14:12 PDT
-Received: from omta033.useast.a.cloudfilter.net (omta033.useast.a.cloudfilter.net [44.202.169.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA6E1088
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:14:12 -0700 (PDT)
-Received: from eig-obgw-5018a.ext.cloudfilter.net ([10.0.29.204])
-        by cmsmtp with ESMTP
-        id TfCuoqVreh3t8TsQToF1EM; Thu, 01 Sep 2022 22:12:41 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTP
-        id TsQRonhtHJaa0TsQSoOvqS; Thu, 01 Sep 2022 22:12:40 +0000
-X-Authority-Analysis: v=2.4 cv=Ko5eZEaN c=1 sm=1 tr=0 ts=63112e58
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=72JPPVIfIzSNxL7kpSG7Lw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=xOM3xZuef0cA:10
- a=wYkD_t78qR0A:10 a=jYsEJFciAAAA:8 a=VnNF1IyMAAAA:8 a=yPCof4ZbAAAA:8
- a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=6onvJrg5vSmBz42BuywA:9 a=QEXdDO2ut3YA:10
- a=cMfT0svooCsP4Al2A5dO:22 a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Q6ukgrEbB6qAjtGfaPyoouWhUSMHIGJkP/IXfkGbr5w=; b=pRlfgfuF4uCfH/UwxDBWg0lzyX
-        fuCKYgsk010mLwphdLD37+hTdNSyiB3ZOZz6e799RDGlTB04az1h7QpVGAxhHbOfI9hkA37PBRgJ5
-        RLj1N5jpiia6Q/4ef10sTfFpjh9EOcUZubOUb6tlCXDpHFnXhN1jOcCkxv4/8+w4FyomqM2G5tDg2
-        WnIMb/6A5ULDqkR0aJFFK4TSo1Q9xnu4eq2aFVqEP9aS53ECidTcWeNM07igJvbedJ2W+Dpzh2IUM
-        Zo9S77CfRiCrVl/Hvcll2OHNXyhLDNTgEHzPaYyRSXZHFAB+0O+JKr0ghrdrgEfjwEXfb09K3lwoM
-        PqeGZ1JA==;
-Received: from 51-171-241-192-dynamic.agg2.bbh.bbh-prp.eircom.net ([51.171.241.192]:47140 helo=[192.168.1.33])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1oTsQQ-002xVq-U0;
-        Thu, 01 Sep 2022 17:12:39 -0500
-Message-ID: <0255091d-e3df-7a4a-fa4c-7f9ae7226c73@embeddedor.com>
-Date:   Thu, 1 Sep 2022 23:12:30 +0100
+        Thu, 1 Sep 2022 18:14:07 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9ECDF9
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662070443; x=1693606443;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LpPyp6BfRy58FmkvY7Nxfga8i6Jk/8JmjLUbUJvocEY=;
+  b=Dv5rc/MSORC4eHKpckzV68AyYh6VkHteLkuNkHN1r8KfYpk/rDFuCyrK
+   pHgXOIJ2ymBdvDrUJDLjozQdBxxGbBW2nftwZR2DrrVv/43jXSMb4wnW0
+   zmBkrA7ChKZeXAByMtM+2tO9EXpY90KPsza7FfOShNHZUgTYs11sTkAtl
+   CoxcmZy3vFHhGPtQc5Q4SJltlB/kdJ0s6P8l0oqDUK7GZr2MwWStmYN+K
+   dWws1ZX79o7NHFG172AJyQo5LcpsuvfuvUmFIdRy48W2/qIWJCVw1zUAh
+   8aWvN87tVjUl96IjRgk6UYkdZH1G64VuuRQW6j2xm8089vAkywI6Cm+AP
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="275585425"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="275585425"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 15:14:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="941038277"
+Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Sep 2022 15:14:01 -0700
+Received: from kbuild by b138c9e8658c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oTsRl-0000pz-0h;
+        Thu, 01 Sep 2022 22:14:01 +0000
+Date:   Fri, 2 Sep 2022 06:13:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [char-misc:char-misc-testing 20/24]
+ drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c:87:52: error:
+ 'PCI_IRQ_ALL_TYPES' undeclared
+Message-ID: <202209020641.mPiacQEP-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] esas2r: Use flex array destination for memcpy()
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Bradley Grove <linuxdrivers@attotech.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220901205729.2260982-1-keescook@chromium.org>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20220901205729.2260982-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 51.171.241.192
-X-Source-L: No
-X-Exim-ID: 1oTsQQ-002xVq-U0
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 51-171-241-192-dynamic.agg2.bbh.bbh-prp.eircom.net ([192.168.1.33]) [51.171.241.192]:47140
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfAHMpXUOxK1ap8j4yodqeCHBRjrl1ZFM/nhPG+WYNov/svcNWEjSCH5SEKLRex0BSqT3H9zfL+m+PBY9B6msKLSmgZzL3tD8NUTXQ+LUC7V7YSE9NIkh
- cpUELTAd3Gt8hTbvmV/X7oi4wM4YqjMMll8A46W1GJs24d9MaLp7YKzE5vEdu8AAQ96tESNZp0kNImgFahZfy+iovxEO5X9FosKcROa7JKA5NAq4piCZqMeK
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-testing
+head:   51ea3f9e9017b47c15b37a200d8e81e36a169b70
+commit: 3f359bf61b6f65be474fbcdf557cd412f19d0f1d [20/24] misc: microchip: pci1xxxx: load auxiliary bus driver for the PIO function in the multi-function endpoint of pci1xxxx device.
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220902/202209020641.mPiacQEP-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=3f359bf61b6f65be474fbcdf557cd412f19d0f1d
+        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
+        git fetch --no-tags char-misc char-misc-testing
+        git checkout 3f359bf61b6f65be474fbcdf557cd412f19d0f1d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/misc/mchp_pci1xxxx/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c: In function 'gp_aux_bus_probe':
+>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c:87:52: error: 'PCI_IRQ_ALL_TYPES' undeclared (first use in this function)
+      87 |         retval = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
+         |                                                    ^~~~~~~~~~~~~~~~~
+   drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c:87:52: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c: At top level:
+>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c:162:1: warning: data definition has no type or storage class
+     162 | module_pci_driver(pci1xxxx_gp_driver);
+         | ^~~~~~~~~~~~~~~~~
+>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c:162:1: error: type defaults to 'int' in declaration of 'module_pci_driver' [-Werror=implicit-int]
+>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c:162:1: warning: parameter names (without types) in function declaration
+   drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c:155:26: warning: 'pci1xxxx_gp_driver' defined but not used [-Wunused-variable]
+     155 | static struct pci_driver pci1xxxx_gp_driver = {
+         |                          ^~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-On 9/1/22 15:57, Kees Cook wrote:
-> In preparation for FORTIFY_SOURCE performing run-time destination buffer
-> bounds checking for memcpy(), specify the destination output buffer
-> explicitly, instead of asking memcpy() to write past the end of what
-> looked like a fixed-size object. Silences future run-time warning:
-> 
->    memcpy: detected field-spanning write (size 80) of single field "trc + 1" (size 64)
-> 
-> There is no binary code output differences from this change.
-> 
-> Cc: Bradley Grove <linuxdrivers@attotech.com>
-> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: linux-scsi@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+vim +/PCI_IRQ_ALL_TYPES +87 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+    31	
+    32	static int gp_aux_bus_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+    33	{
+    34		struct aux_bus_device *aux_bus;
+    35		int retval;
+    36	
+    37		retval = pcim_enable_device(pdev);
+    38		if (retval)
+    39			return retval;
+    40	
+    41		aux_bus = kzalloc(sizeof(*aux_bus), GFP_KERNEL);
+    42		if (!aux_bus)
+    43			return -ENOMEM;
+    44	
+    45		aux_bus->aux_device_wrapper[0] = kzalloc(sizeof(*aux_bus->aux_device_wrapper[0]),
+    46							 GFP_KERNEL);
+    47		if (!aux_bus->aux_device_wrapper[0])
+    48			return -ENOMEM;
+    49	
+    50		retval = ida_alloc(&gp_client_ida, GFP_KERNEL);
+    51		if (retval < 0)
+    52			goto err_ida_alloc_0;
+    53	
+    54		aux_bus->aux_device_wrapper[0]->aux_dev.name = aux_dev_otp_e2p_name;
+    55		aux_bus->aux_device_wrapper[0]->aux_dev.dev.parent = &pdev->dev;
+    56		aux_bus->aux_device_wrapper[0]->aux_dev.dev.release = gp_auxiliary_device_release;
+    57		aux_bus->aux_device_wrapper[0]->aux_dev.id = retval;
+    58	
+    59		aux_bus->aux_device_wrapper[0]->gp_aux_data.region_start = pci_resource_start(pdev, 0);
+    60		aux_bus->aux_device_wrapper[0]->gp_aux_data.region_length = pci_resource_end(pdev, 0);
+    61	
+    62		retval = auxiliary_device_init(&aux_bus->aux_device_wrapper[0]->aux_dev);
+    63		if (retval < 0)
+    64			goto err_aux_dev_init_0;
+    65	
+    66		retval = auxiliary_device_add(&aux_bus->aux_device_wrapper[0]->aux_dev);
+    67		if (retval)
+    68			goto err_aux_dev_add_0;
+    69	
+    70		aux_bus->aux_device_wrapper[1] = kzalloc(sizeof(*aux_bus->aux_device_wrapper[1]),
+    71							 GFP_KERNEL);
+    72		if (!aux_bus->aux_device_wrapper[1])
+    73			return -ENOMEM;
+    74	
+    75		retval = ida_alloc(&gp_client_ida, GFP_KERNEL);
+    76		if (retval < 0)
+    77			goto err_ida_alloc_1;
+    78	
+    79		aux_bus->aux_device_wrapper[1]->aux_dev.name = aux_dev_gpio_name;
+    80		aux_bus->aux_device_wrapper[1]->aux_dev.dev.parent = &pdev->dev;
+    81		aux_bus->aux_device_wrapper[1]->aux_dev.dev.release = gp_auxiliary_device_release;
+    82		aux_bus->aux_device_wrapper[1]->aux_dev.id = retval;
+    83	
+    84		aux_bus->aux_device_wrapper[1]->gp_aux_data.region_start = pci_resource_start(pdev, 0);
+    85		aux_bus->aux_device_wrapper[1]->gp_aux_data.region_length = pci_resource_end(pdev, 0);
+    86	
+  > 87		retval = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
+    88	
+    89		if (retval < 0)
+    90			return retval;
+    91	
+    92		pdev->irq = pci_irq_vector(pdev, 0);
+    93		if (pdev->irq < 0)
+    94			return retval;
+    95	
+    96		aux_bus->aux_device_wrapper[1]->gp_aux_data.irq_num = pdev->irq;
+    97	
+    98		retval = auxiliary_device_init(&aux_bus->aux_device_wrapper[1]->aux_dev);
+    99		if (retval < 0)
+   100			goto err_aux_dev_init_1;
+   101	
+   102		retval = auxiliary_device_add(&aux_bus->aux_device_wrapper[1]->aux_dev);
+   103		if (retval)
+   104			goto err_aux_dev_add_1;
+   105	
+   106		pci_set_drvdata(pdev, aux_bus);
+   107		pci_set_master(pdev);
+   108	
+   109		return 0;
+   110	
+   111	err_aux_dev_add_1:
+   112		auxiliary_device_uninit(&aux_bus->aux_device_wrapper[1]->aux_dev);
+   113	
+   114	err_aux_dev_init_1:
+   115		ida_free(&gp_client_ida, aux_bus->aux_device_wrapper[1]->aux_dev.id);
+   116	
+   117	err_ida_alloc_1:
+   118		kfree(aux_bus->aux_device_wrapper[1]);
+   119	
+   120	err_aux_dev_add_0:
+   121		auxiliary_device_uninit(&aux_bus->aux_device_wrapper[0]->aux_dev);
+   122	
+   123	err_aux_dev_init_0:
+   124		ida_free(&gp_client_ida, aux_bus->aux_device_wrapper[0]->aux_dev.id);
+   125	
+   126	err_ida_alloc_0:
+   127		kfree(aux_bus->aux_device_wrapper[0]);
+   128	
+   129		return retval;
+   130	}
+   131	
+   132	static void gp_aux_bus_remove(struct pci_dev *pdev)
+   133	{
+   134		struct aux_bus_device *aux_bus = pci_get_drvdata(pdev);
+   135	
+   136		auxiliary_device_delete(&aux_bus->aux_device_wrapper[0]->aux_dev);
+   137		auxiliary_device_uninit(&aux_bus->aux_device_wrapper[0]->aux_dev);
+   138		auxiliary_device_delete(&aux_bus->aux_device_wrapper[1]->aux_dev);
+   139		auxiliary_device_uninit(&aux_bus->aux_device_wrapper[1]->aux_dev);
+   140		kfree(aux_bus);
+   141		pci_disable_device(pdev);
+   142	}
+   143	
+   144	static const struct pci_device_id pci1xxxx_tbl[] = {
+   145		{ PCI_DEVICE(0x1055, 0xA005) },
+   146		{ PCI_DEVICE(0x1055, 0xA015) },
+   147		{ PCI_DEVICE(0x1055, 0xA025) },
+   148		{ PCI_DEVICE(0x1055, 0xA035) },
+   149		{ PCI_DEVICE(0x1055, 0xA045) },
+   150		{ PCI_DEVICE(0x1055, 0xA055) },
+   151		{0,}
+   152	};
+   153	MODULE_DEVICE_TABLE(pci, pci1xxxx_tbl);
+   154	
+   155	static struct pci_driver pci1xxxx_gp_driver = {
+   156		.name = "PCI1xxxxGP",
+   157		.id_table = pci1xxxx_tbl,
+   158		.probe = gp_aux_bus_probe,
+   159		.remove = gp_aux_bus_remove,
+   160	};
+   161	
+ > 162	module_pci_driver(pci1xxxx_gp_driver);
+   163	
 
-Thanks
---
-Gustavo
-
-> ---
->   drivers/scsi/esas2r/atioctl.h      | 1 +
->   drivers/scsi/esas2r/esas2r_ioctl.c | 3 +--
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/esas2r/atioctl.h b/drivers/scsi/esas2r/atioctl.h
-> index ff2ad9b38575..dd3437412ffc 100644
-> --- a/drivers/scsi/esas2r/atioctl.h
-> +++ b/drivers/scsi/esas2r/atioctl.h
-> @@ -831,6 +831,7 @@ struct __packed atto_hba_trace {
->   	u32 total_length;
->   	u32 trace_mask;
->   	u8 reserved2[48];
-> +	u8 contents[];
->   };
->   
->   #define ATTO_FUNC_SCSI_PASS_THRU     0x04
-> diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esas2r_ioctl.c
-> index 08f4e43c7d9e..e003d923acbf 100644
-> --- a/drivers/scsi/esas2r/esas2r_ioctl.c
-> +++ b/drivers/scsi/esas2r/esas2r_ioctl.c
-> @@ -947,10 +947,9 @@ static int hba_ioctl_callback(struct esas2r_adapter *a,
->   					break;
->   				}
->   
-> -				memcpy(trc + 1,
-> +				memcpy(trc->contents,
->   				       a->fw_coredump_buff + offset,
->   				       len);
-> -
->   				hi->data_length = len;
->   			} else if (trc->trace_func == ATTO_TRC_TF_RESET) {
->   				memset(a->fw_coredump_buff, 0,
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

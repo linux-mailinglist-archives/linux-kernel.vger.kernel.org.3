@@ -2,126 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE415A9DE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8A35A9DEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234264AbiIARSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
+        id S233979AbiIARVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233562AbiIARSP (ORCPT
+        with ESMTP id S230136AbiIARVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:18:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB27B696E6;
-        Thu,  1 Sep 2022 10:18:14 -0700 (PDT)
-Received: from [IPv6:2a00:23c6:c311:3401:5d1b:508b:29e6:6ca1] (unknown [IPv6:2a00:23c6:c311:3401:5d1b:508b:29e6:6ca1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: martyn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 622EC660036C;
-        Thu,  1 Sep 2022 18:18:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662052692;
-        bh=3PaggCDPBN6H9AVbZT2VWeKSAv/gx6GQM5tXy01Z52Q=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=iL4nT3xtq3cb08IzKBPevAKs9C5StwebRErLIJDZmkd1Bp54xcX/FXN7OobDwhjUv
-         wVEklYIkv9keoWG0edhHcihaZdtxfQRhenCth7FCCGHTpfIBzvU45i+1Ti73PsJrTI
-         Slt5g/bGcbdtugBU+4ph4NGJI+72obzw9B36afxbVMbOXi5TTy9YTCMHG+dRpAdrLe
-         vG9HLDsJvW+sHalBNLSXzW4MVeyQ1QTDNL5MiCA28Kr0UH9uV9rN3CIYIC4hhHlnlx
-         TonOUPWP3/gXQg6q2UpvWDynEp9Nx/z3Du9FXjau3EqycHk9n4JUzeTU8UtvJW8uFQ
-         3w7IZ6H5Lw3AA==
-Message-ID: <ff085325437dbe1bd5397b40ecfe4697c5658f33.camel@collabora.com>
-Subject: Re: [PATCH 5/5] gpio: pca953x: Add support for PCAL6534 and
- compatible
-From:   Martyn Welch <martyn.welch@collabora.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Thu, 01 Sep 2022 18:18:10 +0100
-In-Reply-To: <CAHp75VfZmmDGJJ5wxM8-pbqo+npOSZrPtyJnQhuGadLUYod=3A@mail.gmail.com>
-References: <20220829133923.1114555-1-martyn.welch@collabora.com>
-         <20220829133923.1114555-5-martyn.welch@collabora.com>
-         <CAHp75VfZmmDGJJ5wxM8-pbqo+npOSZrPtyJnQhuGadLUYod=3A@mail.gmail.com>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4-1+b1 
+        Thu, 1 Sep 2022 13:21:33 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980CD5A3DB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:21:32 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id e18so15960497edj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=GdKSrjYfMkwK9rUKg3FKiVa8IZKeoeUMaRJ6T28HaBQ=;
+        b=Yw5T74k57lHXMjiqqC3YAyoxM8dkwdEtHHADOFOHEXWGvqT6pa4lJ9OInlJsqPoo08
+         Porv/pR8ZvOvlgAxZErz3x+wB8GvAu0fq2CpPZk6oeTWEAcwRtiqNYnCcpRtyVSGtbfF
+         zA8G7HXpLN10qQTp6JYC8y+9TK+beIZAP/NMhS+HrHb1Ko7bbnR77viZsMUO3fhN+XZv
+         2836L8+Lq7SSqQpAEjItvhqGNFgBsRmxpeiDTX3LbsPjSP1MppAvkAPbEsfy4e5Nye9D
+         Gzn2hT8rk1fXzRI6OojWGIlLMo5dvRGjdSSnuhwsvOpC+eE9JKOyfVszRK/BmVEbeyQV
+         I9FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=GdKSrjYfMkwK9rUKg3FKiVa8IZKeoeUMaRJ6T28HaBQ=;
+        b=16OMfDvvFCRXHH0WU8im8c7vEWgoi1Xg4RF+OMc2t11ijOxMTUnLVESkCl8CYlJBO2
+         hsTCcpHk7XXuxZexE0pEPoS0zlMFL/R5BWj+hQ4XtjqfBE1i2xoN1ewvDVuUsqQTIZ89
+         36kTIDXz9PvQ1xH2z0FdPvVzMjF1W7puXcGiY2StymIQYcgFIAzndL++YxYEWwNaSEsI
+         RTOaw0amLJXmXu60IpcBwD3xxsCOqa7Bpp2rKV9h5Fexmb8/GEzdEjXrZDYz1fxSsoeN
+         Yk9enFXOJK0yPsoWs7tsEuir4jhzhoZhibp6/Czz8LQXMKKHuXY2LYnEoBt+mTKDI5YX
+         Odnw==
+X-Gm-Message-State: ACgBeo0Ia8MZC5xvTXUktHTyEyTPid7NAtCrEcWViXq2tJrMLYB2qsVb
+        0UcBkxd43CJnJZ5znM1ocZY=
+X-Google-Smtp-Source: AA6agR7GgF9V4riY+CvNwpp4tsyE9Mo/MUaLpZkeZ7ENpwX0eCU6Hclub33HqW/SRLLIBQ8szB9CMg==
+X-Received: by 2002:aa7:dcd6:0:b0:448:bddd:d562 with SMTP id w22-20020aa7dcd6000000b00448bdddd562mr12506696edu.365.1662052891022;
+        Thu, 01 Sep 2022 10:21:31 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb63.dynamic.kabel-deutschland.de. [95.90.187.99])
+        by smtp.gmail.com with ESMTPSA id r16-20020a170906705000b00732e3d94f4fsm8645992ejj.124.2022.09.01.10.21.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 10:21:30 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] staging: r8188eu: remove mlme_osdep.h
+Date:   Thu,  1 Sep 2022 19:21:20 +0200
+Message-Id: <20220901172120.8485-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIyLTA5LTAxIGF0IDAwOjAyICswMzAwLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6
-Cj4gT24gTW9uLCBBdWcgMjksIDIwMjIgYXQgNDo1MiBQTSBNYXJ0eW4gV2VsY2gKPiA8bWFydHlu
-LndlbGNoQGNvbGxhYm9yYS5jb20+IHdyb3RlOgo+ID4gCj4gPiBBZGQgc3VwcG9ydCBmb3IgdGhl
-IE5YUCBQQ0FMNjUzNCBhbmQgRGlvZGVzIEluYy4gUEk0SU9FNVY2NTM0US4KPiA+IFRoZXNlCj4g
-PiBkZXZpY2VzLCB3aGljaCBoYXZlIGlkZW50aWNhbCByZWdpc3RlciBsYXlvdXRzIGFuZCBmZWF0
-dXJlcywgYXJlCj4gPiBicm9hZGx5IGEKPiA+IDM0LWJpdCB2ZXJzaW9uIG9mIHRoZSBQQ0FMNjUy
-NC4KPiA+IAo+ID4gSG93ZXZlciwgd2hpbHN0IHRoZSByZWdpc3RlcnMgYXJlIGJyb2FkbHkgd2hh
-dCB5b3UnZCBleHBlY3QgZm9yIGEKPiA+IDM0LWJpdAo+ID4gdmVyc2lvbiBvZiB0aGUgUENBTDY1
-MjQsIHRoZSBzcGFjaW5nIG9mIHRoZSByZWdpc3RlcnMgaGFzIGJlZW4KPiA+IGNvbXBhY3RlZC4g
-VGhpcyBoYXMgdGhlIHVuZm9ydHVuYXRlIGVmZmVjdCBvZiBicmVha2luZyB0aGUgYml0Cj4gPiBz
-aGlmdAo+ID4gYmFzZWQgbWVjaGFuaXNtIHRoYXQgaXMgZW1wbG95ZWQgdG8gd29yayBvdXQgcmVn
-aXN0ZXIgbG9jYXRpb25zCj4gPiB1c2VkIGJ5Cj4gPiB0aGUgb3RoZXIgY2hpcHMgc3VwcG9ydGVk
-IGJ5IHRoaXMgZHJpdmVyLCByZXN1bHRpbmcgaW4gc3BlY2lhbAo+ID4gaGFuZGxpbmcKPiA+IG5l
-ZWRpbmcgdG8gYmUgaW50cm9kdWNlZCBpbiBwY2E5NTN4X3JlY2FsY19hZGRyKCkgYW5kCj4gPiBw
-Y2E5NTN4X2NoZWNrX3JlZ2lzdGVyKCkuCj4gCj4gVGhpcyBzdGlsbCBuZWVkcyBhbiBhbHRlcm5h
-dGl2ZSBkZWVwIHJldmlldy4gSSdsbCBkbyBteSBiZXN0IHRvIGdldAo+IGludG8gaXQgc29vbmVy
-IHRoYW4gbGF0ZXIuCj4gCgpUaGFua3MgbXVjaCBhcHByZWNpYXRlZC4KCi4uLgoKPiA+IMKgc3Rh
-dGljIHU4IHBjYTk1M3hfcmVjYWxjX2FkZHIoc3RydWN0IHBjYTk1M3hfY2hpcCAqY2hpcCwgaW50
-IHJlZywKPiA+IGludCBvZmYpCj4gPiDCoHsKPiA+IC3CoMKgwqDCoMKgwqAgaW50IGJhbmtfc2hp
-ZnQgPSBwY2E5NTN4X2Jhbmtfc2hpZnQoY2hpcCk7Cj4gPiAtwqDCoMKgwqDCoMKgIGludCBhZGRy
-ID0gKHJlZyAmIFBDQUxfR1BJT19NQVNLKSA8PCBiYW5rX3NoaWZ0Owo+ID4gLcKgwqDCoMKgwqDC
-oCBpbnQgcGluY3RybCA9IChyZWcgJiBQQ0FMX1BJTkNUUkxfTUFTSykgPDwgMTsKPiA+IC3CoMKg
-wqDCoMKgwqAgdTggcmVnYWRkciA9IHBpbmN0cmwgfCBhZGRyIHwgKG9mZiAvIEJBTktfU1opOwo+
-ID4gK8KgwqDCoMKgwqDCoCBpbnQgYWRkcjsKPiA+ICvCoMKgwqDCoMKgwqAgaW50IHBpbmN0cmw7
-Cj4gPiArwqDCoMKgwqDCoMKgIHU4IHJlZ2FkZHI7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgIGlm
-IChQQ0FfQ0hJUF9UWVBFKGNoaXAtPmRyaXZlcl9kYXRhKSA9PSBQQ0FMNjUzWF9UWVBFKSB7Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiBUaGUgUENBTDY1MzQgYW5kIGNvbXBh
-dGlibGUgY2hpcHMgaGF2ZSBhbHRlcmVkCj4gPiBiYW5rIGFsaWdubWVudCB0aGF0IGRvZXNuJ3QK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBmaXQgd2l0aGluIHRoZSBiaXQg
-c2hpZnRpbmcgc2NoZW1lIHVzZWQgZm9yCj4gPiBvdGhlciBkZXZpY2VzLgo+ID4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgYWRkciA9IChyZWcgJiBQQ0FMX0dQSU9fTUFTSykgKiBOQkFOSyhjaGlwKTsKPiA+ICsKPiA+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN3aXRjaCAocmVnKSB7Cj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjYXNlIFBDQUw5NTNYX09VVF9TVFJFTkdUSDoKPiA+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgUENBTDk1M1hfSU5fTEFUQ0g6Cj4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjYXNlIFBDQUw5NTNYX1BVTExfRU46Cj4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjYXNlIFBDQUw5NTNYX1BVTExfU0VMOgo+ID4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2FzZSBQQ0FMOTUzWF9JTlRfTUFTSzoKPiA+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgUENBTDk1M1hfSU5UX1NUQVQ6Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjYXNlIFBDQUw5NTNYX09VVF9DT05GOgo+
-ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBpbmN0cmwg
-PSAoKHJlZyAmIFBDQUxfUElOQ1RSTF9NQVNLKSA+PiAxKQo+ID4gKyAweDIwOwo+ID4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ID4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2FzZSBQQ0FMNjUyNF9JTlRfRURHRToKPiA+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgUENBTDY1MjRfSU5UX0NMUjoKPiA+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgUENBTDY1MjRfSU5fU1RBVFVTOgo+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2FzZSBQQ0FMNjUyNF9PVVRfSU5EQ09ORjoKPiA+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgUENBTDY1MjRfREVCT1VOQ0U6Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGluY3RybCA9
-ICgocmVnICYgUENBTF9QSU5DVFJMX01BU0spID4+IDEpCj4gPiArIDB4MWM7Cj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7Cj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB9Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCByZWdhZGRyID0gcGluY3RybCArIGFkZHIgKyAob2ZmIC8gQkFOS19TWik7Cj4gPiArwqDCoMKg
-wqDCoMKgIH0gZWxzZSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbnQgYmFu
-a19zaGlmdCA9IHBjYTk1M3hfYmFua19zaGlmdChjaGlwKTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIGFkZHIgPSAocmVnICYgUENBTF9HUElPX01BU0spIDw8IGJhbmtf
-c2hpZnQ7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwaW5jdHJsID0gKHJlZyAm
-IFBDQUxfUElOQ1RSTF9NQVNLKSA8PCAxOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgcmVnYWRkciA9IHBpbmN0cmwgfCBhZGRyIHwgKG9mZiAvIEJBTktfU1opOwo+ID4gK8KgwqDC
-oMKgwqDCoCB9Cj4gCj4gTG9va2luZyBhdCBhbGwgdGhlc2UsIHdoeSBub3QgYWRkIHRoZSBjYWxs
-YmFja3MgZm9yIHJlY2FsY19hZGRyIGFuZAo+IGNoZWNrX3JlZyBhbmQgYXNzaWduIHRoZW0gaW4g
-dGhlIC0+cHJvYmUoKT8KPiAKClllYWgsIHRoYXQgc291bmRzIGxpa2UgYSBnb29kIHBsYW4uIEkn
-bGwgbG9vayBpbnRvIGRvaW5nIHRoYXQuCgpNYXJ0eW4K
+The function indicate_wx_scan_complete_event() is declared multiple
+times. That is not needed. Remove redundant declarations to clean up
+the driver code and remove the now empty header mlme_osdep.h.
+
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_cmd.c       |  1 -
+ drivers/staging/r8188eu/core/rtw_ioctl_set.c |  2 --
+ drivers/staging/r8188eu/core/rtw_mlme.c      |  1 -
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c  |  1 -
+ drivers/staging/r8188eu/core/rtw_recv.c      |  1 -
+ drivers/staging/r8188eu/core/rtw_sta_mgt.c   |  1 -
+ drivers/staging/r8188eu/hal/rtl8188e_cmd.c   |  1 -
+ drivers/staging/r8188eu/include/hal_intf.h   |  1 -
+ drivers/staging/r8188eu/include/mlme_osdep.h | 12 ------------
+ drivers/staging/r8188eu/include/rtw_mlme.h   |  1 -
+ 10 files changed, 22 deletions(-)
+ delete mode 100644 drivers/staging/r8188eu/include/mlme_osdep.h
+
+diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+index 5b6a891b5d67..d690337ea74b 100644
+--- a/drivers/staging/r8188eu/core/rtw_cmd.c
++++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+@@ -6,7 +6,6 @@
+ #include "../include/osdep_service.h"
+ #include "../include/drv_types.h"
+ #include "../include/recv_osdep.h"
+-#include "../include/mlme_osdep.h"
+ #include "../include/rtw_br_ext.h"
+ #include "../include/rtw_mlme_ext.h"
+ #include "../include/rtl8188e_dm.h"
+diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+index 17f6bcbeebf4..d859f2d8a0c8 100644
+--- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
++++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+@@ -11,8 +11,6 @@
+ #include "../include/usb_osintf.h"
+ #include "../include/usb_ops.h"
+ 
+-extern void indicate_wx_scan_complete_event(struct adapter *padapter);
+-
+ u8 rtw_do_join(struct adapter *padapter)
+ {
+ 	struct list_head *plist, *phead;
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index 8f21d34a317f..d2ea2659d58e 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -7,7 +7,6 @@
+ #include "../include/drv_types.h"
+ #include "../include/recv_osdep.h"
+ #include "../include/hal_intf.h"
+-#include "../include/mlme_osdep.h"
+ #include "../include/sta_info.h"
+ #include "../include/wifi.h"
+ #include "../include/wlan_bssdef.h"
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index 893dac30e8e6..86906a726941 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -9,7 +9,6 @@
+ #include "../include/wifi.h"
+ #include "../include/rtw_mlme_ext.h"
+ #include "../include/wlan_bssdef.h"
+-#include "../include/mlme_osdep.h"
+ #include "../include/recv_osdep.h"
+ #include "../include/rtl8188e_xmit.h"
+ #include "../include/rtl8188e_dm.h"
+diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+index ee3817c3e1fd..353c7468367a 100644
+--- a/drivers/staging/r8188eu/core/rtw_recv.c
++++ b/drivers/staging/r8188eu/core/rtw_recv.c
+@@ -7,7 +7,6 @@
+ #include "../include/osdep_service.h"
+ #include "../include/drv_types.h"
+ #include "../include/recv_osdep.h"
+-#include "../include/mlme_osdep.h"
+ #include "../include/usb_ops.h"
+ #include "../include/wifi.h"
+ #include "../include/rtl8188e_recv.h"
+diff --git a/drivers/staging/r8188eu/core/rtw_sta_mgt.c b/drivers/staging/r8188eu/core/rtw_sta_mgt.c
+index 2d61cc9169c8..b5dd28a10e5b 100644
+--- a/drivers/staging/r8188eu/core/rtw_sta_mgt.c
++++ b/drivers/staging/r8188eu/core/rtw_sta_mgt.c
+@@ -6,7 +6,6 @@
+ #include "../include/osdep_service.h"
+ #include "../include/drv_types.h"
+ #include "../include/recv_osdep.h"
+-#include "../include/mlme_osdep.h"
+ #include "../include/sta_info.h"
+ 
+ static void _rtw_init_stainfo(struct sta_info *psta)
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
+index b01ee1695fee..a7ac9f62459f 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
+@@ -6,7 +6,6 @@
+ #include "../include/osdep_service.h"
+ #include "../include/drv_types.h"
+ #include "../include/recv_osdep.h"
+-#include "../include/mlme_osdep.h"
+ #include "../include/rtw_ioctl_set.h"
+ 
+ #include "../include/rtl8188e_hal.h"
+diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
+index fd8e792958ce..ac6e3f95c5b7 100644
+--- a/drivers/staging/r8188eu/include/hal_intf.h
++++ b/drivers/staging/r8188eu/include/hal_intf.h
+@@ -39,7 +39,6 @@ void rtw_hal_update_ra_mask(struct adapter *padapter, u32 mac_id, u8 level);
+ void	rtw_hal_clone_data(struct adapter *dst_adapt,
+ 			   struct adapter *src_adapt);
+ 
+-void indicate_wx_scan_complete_event(struct adapter *padapter);
+ u8 rtw_do_join(struct adapter *padapter);
+ 
+ #endif /* __HAL_INTF_H__ */
+diff --git a/drivers/staging/r8188eu/include/mlme_osdep.h b/drivers/staging/r8188eu/include/mlme_osdep.h
+deleted file mode 100644
+index 1fa66c5e3c9c..000000000000
+--- a/drivers/staging/r8188eu/include/mlme_osdep.h
++++ /dev/null
+@@ -1,12 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+-/* Copyright(c) 2007 - 2011 Realtek Corporation. */
+-
+-#ifndef	__MLME_OSDEP_H_
+-#define __MLME_OSDEP_H_
+-
+-#include "osdep_service.h"
+-#include "drv_types.h"
+-
+-void indicate_wx_scan_complete_event(struct adapter *padapter);
+-
+-#endif	/* _MLME_OSDEP_H_ */
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
+index d827ea7d841b..5dc2fe74b7b7 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme.h
+@@ -5,7 +5,6 @@
+ #define __RTW_MLME_H_
+ 
+ #include "osdep_service.h"
+-#include "mlme_osdep.h"
+ #include "drv_types.h"
+ #include "wlan_bssdef.h"
+ 
+-- 
+2.37.2
 

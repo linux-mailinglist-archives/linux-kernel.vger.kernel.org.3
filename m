@@ -2,171 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB415A9711
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524C95A971D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbiIAMmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S233239AbiIAMpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiIAMmh (ORCPT
+        with ESMTP id S232864AbiIAMpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:42:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BB4B7B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662036155;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oB0yOMjNHR7bzvopXfI0uoDdxW9Xzf1HMM5Tkq/E2+Q=;
-        b=WbqjEjmIrEa2YG3QR4QrjMynz7dy8WATp6QHCaTrMaoxYGpk1k4z1T5+Yk9WUYGKIBRuvs
-        9QFUPq+9OJqIc2GikuPnByx0FPs3lD3jnydtiUFC0Gdf1UNg8VfNAcjRuU9yvzIGEIysAS
-        lr1abbLpuQy5ZJ6qBCRLECwzQuoTD8I=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-350-us8Ddf-bP0O01B5BWQ25yg-1; Thu, 01 Sep 2022 08:42:32 -0400
-X-MC-Unique: us8Ddf-bP0O01B5BWQ25yg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7AAD32932489;
-        Thu,  1 Sep 2022 12:42:31 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.32.220])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B39901415125;
-        Thu,  1 Sep 2022 12:42:30 +0000 (UTC)
-Date:   Thu, 1 Sep 2022 08:42:29 -0400
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Song Liu <song@kernel.org>, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jpoimboe@kernel.org,
-        jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, x86@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v5] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <YxCotV69C14hntYh@redhat.com>
-References: <20220830185313.76402-1-song@kernel.org>
- <Yw+4xxiONngOTqin@redhat.com>
- <875yi8uju3.fsf@mpe.ellerman.id.au>
- <YxAc87dTmclHGCUy@redhat.com>
- <8735dbvk4p.fsf@mpe.ellerman.id.au>
+        Thu, 1 Sep 2022 08:45:35 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E724057F;
+        Thu,  1 Sep 2022 05:45:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dWXvbdLo8TxywiR3Up/eW3hk0S54iNfPuWDPJQ/6FTgtoID8vk/tQvuVxyyEa+4GYuyq4jXQRMojUV5K2XlbZkXQrD3Zl4GmnGHo04FKEBGT5MTdAQL0xFMvXQxrWxXyhjNuTP6QNWYZ1FfmI6BYK0QmL34/8bwEy32NRf87fR3J6paQcvC03p9DqxkwQW/bfiWyu9VFp6GRyW/Yi4KdGiFBEuC/Obwl5ZS7QPtv5oqZMbfFt7ehq5Ly6hPmuqkT4gxaJiOuuXu2xnQskfoFQKTycDSAOC9v5MlPOCNswfkRXFmpNBGkSP4nXpBHULpeCb7iQW0RlbcI0oAdQIJcSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CFL06KRN554GfEzkQpj1AnLhdBFhRPpdTc3a216pat0=;
+ b=F/OG5O2WstA3Xb8xYgLgdxBQq2HZA3BEks+v1NbbxARbZct2lEx5ImcnHye0aYAnnEvwHrAGA+izbEJntefLbqNUjI7IB8zDwQmJLGzHziRmS0fJLnLBZtcFwzr14kfiMS1cOyGDH4nTQLcdU/51B2at0emQY09up8iTlDEmJDyMLj2wutPjzC+08nCqeT9vfutJisty+hAWvIJMy0GVHfG60zPgS3yelQGSCT8dlX3ph5hQSGSD1eS4S9Yl74RCexoaGeQId69k8f+Z2FWe/WRwjSo3agvL5ERC69BR5QSr/7gwa9Lzj7XmDT69jS7xlYclFcmj0nGQpu57yy7duw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CFL06KRN554GfEzkQpj1AnLhdBFhRPpdTc3a216pat0=;
+ b=svoLxMCGL8tGs7zc8urXDdX3Ckx/ZFY35OyJytsezjMHBeGZui5yn+MVCkdb7+86nLYbqMc4ad/LHEUffDN/dFuMPgteM8C+zUC434qgOhry0E526Fz0rJsWYnhSbEATyvW6lQ7TisW8eErzFWB4pl1f2/UhnaA02qeaGQBLqZw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY5PR12MB6323.namprd12.prod.outlook.com (2603:10b6:930:20::11)
+ by BL0PR12MB5009.namprd12.prod.outlook.com (2603:10b6:208:1c2::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
+ 2022 12:45:32 +0000
+Received: from CY5PR12MB6323.namprd12.prod.outlook.com
+ ([fe80::40e5:d623:4a03:af0b]) by CY5PR12MB6323.namprd12.prod.outlook.com
+ ([fe80::40e5:d623:4a03:af0b%3]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
+ 12:45:32 +0000
+Message-ID: <a599f0da-3d9b-a37f-af7c-aa1310ed77e1@amd.com>
+Date:   Thu, 1 Sep 2022 18:15:01 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCHv4 1/8] x86/cpu: Add CPUID feature bit for VNMI
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mlevitsk@redhat.com,
+        mail@maciej.szmigiero.name
+References: <20220829100850.1474-1-santosh.shukla@amd.com>
+ <20220829100850.1474-2-santosh.shukla@amd.com>
+ <CALMp9eTrz2SkK=CjTSc9NdHvP4qsP+UWukFadbqv+BA+KdtMMg@mail.gmail.com>
+From:   "Shukla, Santosh" <santosh.shukla@amd.com>
+In-Reply-To: <CALMp9eTrz2SkK=CjTSc9NdHvP4qsP+UWukFadbqv+BA+KdtMMg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0098.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::13) To CY5PR12MB6323.namprd12.prod.outlook.com
+ (2603:10b6:930:20::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8735dbvk4p.fsf@mpe.ellerman.id.au>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 18815fa6-5b0d-4eb3-44b7-08da8c17db1b
+X-MS-TrafficTypeDiagnostic: BL0PR12MB5009:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: E+qp0YIzAqRHl78bUOZWWpJomQc+d1wAwoeQCVWvznq+RQoFsDifz3APijyKKetiC51rYdkyaaaL0LfYgAQY5E2/4BN98Q3+jwVBJSCQhA4J6Rz4MXpujcuWkpX33hMQRddMAv4hD9H4o+1x4WAhktDiybuy79bTB0jeya1w1mPJUq43df+WLmbkbfuE3PYlymkg/5bpuMj/5khP6gVKmMedFdJ4W7C+IQX3ilt25xxYQuqPkV3dj5e8RUy8Sql0PULpgnzOdhxXC+1WCnDwS33Kks/IeGDK9M+oVin4AxSUSDSd0RgI1jPn6oMfg208K2u4s2M556VSQ4xfnfxEqLtf+NEglQQM+CMrsuhSqVdLQ0EXClL/vmhv+dsbVly/hoTd7S3clig08qTLJrmrarclOQ4nR6K113LP6orEq2M5Pnb3k1vBta1LJlWidJltQK88HmA1AyS1e43M2rejKyhx2bRP7YO02iC220IlZ/O2R9YYuq9+9pUp73anliHQHcrFFwnN48Rmu0k73Xh79XPRtfh8BWWDwQrmCgmc7G2+GbBf1ZsLztjj7WEef1SJtPQJR9dkWLIoa4EU2smWlrw9y7WsFO5OX98+QmnlJtVo/BhpD9yB+R7h79zSfw/vAqNhMK7BJqiKyE8VmuGV8tXxdKEAnn4X31Rw4joxVFjMdGEBon003ZRrDmctUMElaxEJyO5PVqfjHXxaVGcMaH/5sGrZKzFmE0Rp8f+lnLej2sQ8KPyK7lqtjFfCVc5/eQV3uxvprZ8swkY/MU2y4CONJxHrBwx55mCkKUJRwm0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6323.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(366004)(376002)(39860400002)(396003)(83380400001)(2906002)(26005)(6512007)(2616005)(86362001)(4326008)(8676002)(31696002)(186003)(66556008)(66476007)(66946007)(36756003)(6486002)(478600001)(38100700002)(8936002)(41300700001)(6916009)(6666004)(5660300002)(31686004)(54906003)(55236004)(6506007)(53546011)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UklDZDRpblhXSWE2MUhNSFdCQlJaUmVseDFYUmpqQm9xamxxR3VqYVRTQUcr?=
+ =?utf-8?B?VW15Z0xvSEJNL2R6SGIvWlJENi9OYWRBNU05UGtYRE0xa0NTZG5vOW5RSTZj?=
+ =?utf-8?B?UTRBQVhKSk5UcksxR0swWDVmTTExSTQ4RDRFMDR3WkdsUVljNDdyTzZLS2xi?=
+ =?utf-8?B?TkhSNkVYTjFhWkpQbmZ5Nzl5Z3VGaWpHWlVEZ3NkemwxTmxvNE0xTzlEUEVT?=
+ =?utf-8?B?R0o4L1oxN3NMbW1IVWNaeStvUCt2L1hUYmU0SjJiTEk5cFhFMFRyOXByT2d1?=
+ =?utf-8?B?N0F4ZUhMK29ka0tkRUJNNDVGOWRDVG5pRzNCMWJhZExEQUJqd0xlcUlVdXE0?=
+ =?utf-8?B?VGhENHdmUWtUSHIvcWtRNFh6RDZTMFh1U0xsOWVFTWR6RlZUUjZnMStaeWRu?=
+ =?utf-8?B?QUdLWlRHd2dXdkdkcTY2alRuNElFRDMwR3dkY3dYMUc4NHYxaGRzS0xMZWFH?=
+ =?utf-8?B?ZmFwZlNTY01ORnRpUXpNRHB6NDN1cjZLbzROUlZlQ3B2YS9pOTBSNUZTRzAy?=
+ =?utf-8?B?SGxKV2tnU3RXSzZTRFVHVUcydm9RMjV3ZDh2eEVDblpNTEZsaS9EMVdnWDM3?=
+ =?utf-8?B?dm40UGFCbDRTWTBxMnA5TCtpeTJaOE5HWThqTVZRWGt2T0Z5ODBBbytqeFhD?=
+ =?utf-8?B?SmlSY3NaNENJdUZTZTBNMnlIZ2RoM0xTdVdRMkEvMmxXRVlVeUJUVStPL0pT?=
+ =?utf-8?B?NXM1a2J0VUhBNmswcXFUOVIxbXVyQmJ0Q2dJMlJCdjFHUFduMmUyTy9SQWtl?=
+ =?utf-8?B?eVR0M0FBT2JxaGk1VTdqenZWTVVva2JSeWd5U3RHck8wS25zb0RJRk5tZVB6?=
+ =?utf-8?B?K0xkRnRIazI2MHpSTkg1L3Q5K1VQRmVrVHRvMnU0QkloYjRlZitBZ2FBR1hH?=
+ =?utf-8?B?L29hM2xjUnhsaVUyZjl6cS8zY2E4bjk5bnhFNVhoaGhybUdEUk1EMlAzSFlq?=
+ =?utf-8?B?K3JZUzZxWVRNWWZnNERFRVdCYVVtVHRLSmltY3JJaEwwV1paYzg0ZHU3NUUy?=
+ =?utf-8?B?S0J0QVBtdXNheXh6LzI2QWU2RTdsV0JXeS9uMVgvRHMxd0VTZ1lXQWErWkh4?=
+ =?utf-8?B?aC9xQ3VURjJUaklqZHJTdXA1a3k4MGxVWUFHOGlyNFJnTE1uOWxFaDFjVWNk?=
+ =?utf-8?B?SVBER1NRUlBiQVd2RDduL09OdDBHcXhrYmpaaE1HOGNmaGJjZmpkdTVtSVds?=
+ =?utf-8?B?MHpMSjMvc3NrSUl1d3BUQWxQeW9zMnhnd0Z0NU4yMndxNE0zSVAvcFdKUHIw?=
+ =?utf-8?B?dmUzekNWUzFrRllUbkhpaUVxQmNNbnRFN3VBMVJPd1E3azgycFUwQndyRy9D?=
+ =?utf-8?B?RkNFbUdCN2hDbStqLzV2NWRZZXRzNVNvSUhYVWxBbWFWSXZocjI3UkgxZlJO?=
+ =?utf-8?B?dUswb24rZGJUZFdGOW9oU1VJVWhNVnN1TytyZDVnVzVnMENGSXJmZDQ3VEJw?=
+ =?utf-8?B?N01yVGdSQ3E0d094YW9VTjZVNE9UZHIyV2hjTzVrQTRwM2JIZmEzZm5DeGRh?=
+ =?utf-8?B?L1U3WFdLV0VqQjI4aTh1RjRFMUU4OG1DRXAvdFI4SUNWQkE5UnUzSjEyWk8x?=
+ =?utf-8?B?b0xPVEQzRm5oKzBQbXVjc0xtR25iTDlJbm1lcHV2b3dRaGhNblA5ZTdoa2VG?=
+ =?utf-8?B?QzNYcFNVVVMzVmE5QzlsdjdlU1RvOGtPcVNnVm55QTIvK0ZiV21HSFF3N3Jh?=
+ =?utf-8?B?RlpadGREZGRsK3lPaG4yb2VLdFZBQVVHVG9KSHMzY0FJbEo0UDJBQm9OaE16?=
+ =?utf-8?B?QWhhekwrNGhEUEY0MktJVC9WZHlCRGNTcEQ3R3ByMDdGK250UlFDRGJuamRk?=
+ =?utf-8?B?aWlHME9sTTNkRzJwaVpZeHJ6ZGFRUXdaVDBhbG5tRFVZcCtya2ZHbUo3UEtE?=
+ =?utf-8?B?OThHTks5ZGZ0QTY2OGpJVzc1d0ZjU05GNEp6UWM1aElwSnpvbis5NDB5K3U4?=
+ =?utf-8?B?b0IrOEtRcGlKSUJMcjBUcUJTa0dETTFKUU1kNW16TjlBWHhwTkY4YWdPanFH?=
+ =?utf-8?B?amhzeUFnN3JQTlRXVmFPWU9rVXhmYnVYV2Z1VHJKUHpxUWJRb2xKc0pxQVFx?=
+ =?utf-8?B?aEZVT0JEQXpvaUx5TkMvMGlQY0NmWkxzRzFlalo3TlRjK3Y0QXVNZWNoZXpu?=
+ =?utf-8?Q?NUGzLauQCDy3Ji9RiB4H1xVJS?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18815fa6-5b0d-4eb3-44b7-08da8c17db1b
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6323.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 12:45:31.9948
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6gZSjnn7zdicrmrBs9zj8q9CCzoLYqE98WLsx81u0ijqdfiWl7+UAO/C9Va3EuCcY9ClvDNPS9gt7Hi7zC3i3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5009
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 01:39:02PM +1000, Michael Ellerman wrote:
-> Joe Lawrence <joe.lawrence@redhat.com> writes:
-> > On Thu, Sep 01, 2022 at 08:30:44AM +1000, Michael Ellerman wrote:
-> >> Joe Lawrence <joe.lawrence@redhat.com> writes:
-> ...
-> >
-> > Hi Michael,
-> >
-> > While we're on the topic of klp-relocations and Power, I saw a similar
-> > access problem when writing (late) relocations into
-> > .data..ro_after_init.  I'm not entirely convinced this should be allowed
-> > (ie, is it really read-only after .init or ???), but it seems that other
-> > arches currently allow it ...
+Hi Jim,
+
+On 9/1/2022 5:12 AM, Jim Mattson wrote:
+> On Mon, Aug 29, 2022 at 3:09 AM Santosh Shukla <santosh.shukla@amd.com> wrote:
+>>
+>> VNMI feature allows the hypervisor to inject NMI into the guest w/o
+>> using Event injection mechanism, The benefit of using VNMI over the
+>> event Injection that does not require tracking the Guest's NMI state and
+>> intercepting the IRET for the NMI completion. VNMI achieves that by
+>> exposing 3 capability bits in VMCB intr_cntrl which helps with
+>> virtualizing NMI injection and NMI_Masking.
+>>
+>> The presence of this feature is indicated via the CPUID function
+>> 0x8000000A_EDX[25].
+>>
+>> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+>> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+>> ---
+>>  arch/x86/include/asm/cpufeatures.h | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+>> index ef4775c6db01..33e3603be09e 100644
+>> --- a/arch/x86/include/asm/cpufeatures.h
+>> +++ b/arch/x86/include/asm/cpufeatures.h
+>> @@ -356,6 +356,7 @@
+>>  #define X86_FEATURE_VGIF               (15*32+16) /* Virtual GIF */
+>>  #define X86_FEATURE_X2AVIC             (15*32+18) /* Virtual x2apic */
+>>  #define X86_FEATURE_V_SPEC_CTRL                (15*32+20) /* Virtual SPEC_CTRL */
+>> +#define X86_FEATURE_V_NMI              (15*32+25) /* Virtual NMI */
+>>  #define X86_FEATURE_SVME_ADDR_CHK      (15*32+28) /* "" SVME addr check */
 > 
-> I guess that's because we didn't properly fix apply_relocate_add() in
-> https://github.com/linuxppc/issues/issues/375 ?
+> Why is it "V_NMI," but "VGIF"?
 > 
-> If other arches allow it then we don't want to be the odd one out :)
-> 
-> So I guess we need to implement it.
-> 
+I guess you are asking why I chose V_NMI and not VNMI, right?
+if so then there are two reasons for going with V_NMI - IP bits are named in order
+V_NMI, V_NMI_MASK, and V_NMI_ENABLE style and also Intel already using VNMI (X86_FEATURE_VNMI)
 
-FWIW, I think it this particular relocation is pretty rare, we haven't
-seen it in real patches nor do we have a kpatch test that generates it.
-I only hit a crash as I was trying to write a more exhaustive test for
-the klp-convert implementation.
+Thanks,
+Santosh
 
-> > ===== TEST: klp-convert data relocations (late module patching) =====
-> > % modprobe test_klp_convert_data
-> > livepatch: enabling patch 'test_klp_convert_data'
-> > livepatch: 'test_klp_convert_data': starting patching transition
-> > livepatch: 'test_klp_convert_data': patching complete
-> > % modprobe test_klp_convert_mod
-> > ...
-> > module_64: Applying ADD relocate section 54 to 20
-> > module_64: RELOC at 000000008482d02a: 38-type as .klp.sym.test_klp_convert_mod.static_ro_after_init,0 (0xc0080000016d0084) + 0
-> > BUG: Unable to handle kernel data access on write at 0xc0080000021d0000
-> > Faulting instruction address: 0xc000000000055f14
-> > Oops: Kernel access of bad area, sig: 11 [#1]
-> > LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
-> > Modules linked in: test_klp_convert_mod(+) test_klp_convert_data(K) bonding rfkill tls pseries_rng drm fuse drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod [last unloaded: test_klp_convert_mod]
-> > CPU: 0 PID: 17089 Comm: modprobe Kdump: loaded Tainted: G              K   5.19.0+ #1
-> > NIP:  c000000000055f14 LR: c00000000021ef28 CTR: c000000000055f14
-> > REGS: c0000000387af5a0 TRAP: 0300   Tainted: G              K    (5.19.0+)
-> > MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 88228444  XER: 00000000
-> > CFAR: c000000000055e04 DAR: c0080000021d0000 DSISR: 42000000 IRQMASK: 0
-> > GPR00: c00000000021ef28 c0000000387af840 c000000002a68a00 c0000000088b3000
-> > GPR04: c008000002230084 0000000000000026 0000000000000036 c0080000021e0480
-> > GPR08: 000000007c426214 c000000000055f14 c000000000055e08 0000000000000d80
-> > GPR12: c00000000021d9b0 c000000002d90000 c0000000088b3000 c0080000021f0810
-> > GPR16: c0080000021c0638 c0000000088b3d80 00000000ffffffff c000000001181e38
-> > GPR20: c0000000029dc088 c0080000021e0480 c0080000021f0870 aaaaaaaaaaaaaaab
-> > GPR24: c0000000088b3c40 c0080000021d0000 c0080000021f0000 0000000000000000
-> > GPR28: c0080000021d0000 0000000000000000 c0080000021c0638 0000000000000810
-> > NIP [c000000000055f14] apply_relocate_add+0x474/0x9e0
-> > LR [c00000000021ef28] klp_apply_section_relocs+0x208/0x2d0
-> > Call Trace:
-> > [c0000000387af840] [c0000000387af920] 0xc0000000387af920 (unreliable)
-> > [c0000000387af940] [c00000000021ef28] klp_apply_section_relocs+0x208/0x2d0
-> > [c0000000387afa30] [c00000000021f080] klp_init_object_loaded+0x90/0x1e0
-> > [c0000000387afac0] [c0000000002200ac] klp_module_coming+0x3dc/0x5c0
-> > [c0000000387afb70] [c000000000231414] load_module+0xf64/0x13a0
-> > [c0000000387afc90] [c000000000231b8c] __do_sys_finit_module+0xdc/0x180
-> > [c0000000387afdb0] [c00000000002f004] system_call_exception+0x164/0x340
-> > [c0000000387afe10] [c00000000000be68] system_call_vectored_common+0xe8/0x278
-> > --- interrupt: 3000 at 0x7fffb6af4710
-> > NIP:  00007fffb6af4710 LR: 0000000000000000 CTR: 0000000000000000
-> > REGS: c0000000387afe80 TRAP: 3000   Tainted: G              K    (5.19.0+)
-> > MSR:  800000000000f033 <SF,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 48224244  XER: 00000000
-> > IRQMASK: 0
-> > GPR00: 0000000000000161 00007fffe06f5550 00007fffb6bf7200 0000000000000005
-> > GPR04: 0000000105f36ca0 0000000000000000 0000000000000005 0000000000000000
-> > GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> > GPR12: 0000000000000000 00007fffb738c540 0000000000000020 0000000000000000
-> > GPR16: 0000010024d31de0 0000000000000000 0000000105f37d50 0000010024d302f8
-> > GPR20: 0000000000000001 0000000000000908 0000010024d32020 0000010024d319b0
-> > GPR24: 0000000000000000 0000000000000000 0000010024d32040 0000010024d303f0
-> > GPR28: 0000010024d31e00 0000000105f36ca0 0000000000040000 0000010024d319b0
-> > NIP [00007fffb6af4710] 0x7fffb6af4710
-> > LR [0000000000000000] 0x0
-> > --- interrupt: 3000
-> > Instruction dump:
-> > 0000061c 0000061c 0000061c 0000061c 0000061c 0000061c 0000061c 0000061c
-> > 00000288 00000248 60000000 7c992050 <7c9ce92a> 60000000 60000000 e9310020
-> > ---[ end trace 0000000000000000 ]---
-> >
-> > $ readelf --wide --sections lib/livepatch/test_klp_convert_data.ko | grep -e '\[20\]' -e '\[54\]'
-> > [20]  .data..ro_after_init                                 PROGBITS  0000000000000000  001a58  000008  00  WA  0   0   8
-> > [54]  .klp.rela.test_klp_convert_mod..data..ro_after_init  RELA      0000000000000000  0426e8  000018  18  Ao  49  20  8
-> >
-> > I can push a branch up to github if you'd like to try it yourself.
-> 
-> That would help thanks.
-> 
-
-This branch should do it:
-
-https://github.com/joe-lawrence/klp-convert-tree/tree/klp-convert-v7-devel
-
-Boot that and then run tools/testing/selftests/livepatch/test-livepatch.sh
-
--- Joe
-
+> Reviewed-by: Jim Mattson <jmattson@google.com>

@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CBF5A90B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7417E5A90B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiIAHmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S233992AbiIAHmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233459AbiIAHm2 (ORCPT
+        with ESMTP id S233178AbiIAHma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:42:28 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D59511E81E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:42:26 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id q16so16982958ljp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=cSbZMlghmZTJCz/NzUNbAO/3CZuwbgB1TQgsZKvyg6M=;
-        b=kKOB1Ro/ejRalllRIdJwEKe81afPB8P+svSN1ww1UjcrYzkH7Rbfn1IQz/r86YRkl6
-         klmXRIX17gl2jouz4DrcQizXzteIFY9J7c8Q+VPg74INdbkc3Sztn4s3BEblfbG/HC29
-         m0lyhgG71M1LXa1wvRKansWorANLE0R4Yalc6FLx/2MUyX8p6ZRfCuW9AhndvanoYYFM
-         6JFhU2F5MhJvbOnFIhFPJd19dePPGwkmujJ5mZljyvJYAABE+O4UrYabZZuxNj2z4Vv1
-         Ds1XxiMZc7MF+tFr9+EJVkzBxoDXChOefMZXFs3WeT6hFy7/ircI/ZFh/B6QKXxWz9Ou
-         jdXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=cSbZMlghmZTJCz/NzUNbAO/3CZuwbgB1TQgsZKvyg6M=;
-        b=4iQHiTT/m9eQG9yX9JzKKthVAUIjY017SoyL95JXuASf44R/f1ynP5KRXuG0YjTLdm
-         8J+6V1Bj99vRfIsJVSVwny6c+GDm2ja2mE6sZBxj4wgEfDIjTWgitIqpZ6CNQNiTHgyd
-         +agVNxRRZawdGOrBHtaT9CGozcdfsx28jbOhTIoShRTnXgkL7o93GWraKxg649x7qifl
-         XPAwNJx2DYAwciqN8J4Pwopwo1ofkAmY1E5BQFo/K1jT/qoyTL+5O5sTElHjjRM+cyVO
-         SRPWBjU+tEWPMDYQQpf3scwDjcLt8DhJixS7PxUbL78jaU41YKRyMliDkHtzlIAXaEBi
-         gx5g==
-X-Gm-Message-State: ACgBeo25ohhiVgPvENR2rsyVxoaFXOWvh/PZoKb21Nd+ZiW7yfn1Hwu5
-        SGR97JEy4pVCarnSCWop9RalfQ==
-X-Google-Smtp-Source: AA6agR7IP+6m6NN8YIfX3c6qFByfvqwUyb5rMomNaP+FrpGxQtOQVXuP3cEQzAYRkUZJbWvoDv6VTg==
-X-Received: by 2002:a2e:8856:0:b0:268:1810:63b4 with SMTP id z22-20020a2e8856000000b00268181063b4mr2995375ljj.453.1662018144714;
-        Thu, 01 Sep 2022 00:42:24 -0700 (PDT)
-Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id a30-20020a195f5e000000b00492efa461aasm407752lfj.204.2022.09.01.00.42.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 00:42:24 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: i2c: qcom,i2c-cci: specify SM8450 CCI clocks
-Date:   Thu,  1 Sep 2022 10:42:18 +0300
-Message-Id: <20220901074218.21108-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 1 Sep 2022 03:42:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5D51090AC;
+        Thu,  1 Sep 2022 00:42:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3R95H7o4Ps0Xt8Fb2RGRK8ftexUpMSTfRccKzarlwv8=; b=Eg80MMaySfuaV1ldmooclI5Nle
+        IN65bkkyoGAXjGnjvZ9Dz97arRuZEhWCpPPCP1gw1nVSAW07lMYUIubOMxvASCB4vmoiTLGUvHrLv
+        mnlyZtBunER3vltL8aBUMSfY4OGfxQTUnrR0dVTN+q9nK3Ed9aJ7y3lLrPOxju5X4dgv8lB4Rw2/S
+        M4qKtJDbH/5MyAfn5zL3v6Z2qbXeFnlVENhNiHvxEi1N3ly1LlBYvlGl7CCxhftPsoPtvO9AoJQWv
+        yv5KTzNibXIV76seLfOwEBNoqddr2AJkeDRRPmkEtfLxUWCG6NSjcEJWY7wpS3gtx9W2q+ItfapFU
+        +bbvPyyg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oTeqK-005qQi-Us; Thu, 01 Sep 2022 07:42:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 447DF3004C7;
+        Thu,  1 Sep 2022 09:42:27 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 344DD2B871FC3; Thu,  1 Sep 2022 09:42:27 +0200 (CEST)
+Date:   Thu, 1 Sep 2022 09:42:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Mel Gorman <mgorman@suse.de>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
+        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
+        kaleshsingh@google.com, kernel-team@android.com,
+        linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <YxBiY5hDUSE4ZqKM@hirez.programming.kicks-ass.net>
+References: <20220830214919.53220-1-surenb@google.com>
+ <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
+ <20220831101948.f3etturccmp5ovkl@suse.de>
+ <20220831155941.q5umplytbx6offku@moria.home.lan>
+ <YxBZv1pZ6N2vwcP3@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxBZv1pZ6N2vwcP3@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document clocks for SM8450 Camera Control Interface I2C controller.
+On Thu, Sep 01, 2022 at 09:05:36AM +0200, Peter Zijlstra wrote:
+> On Wed, Aug 31, 2022 at 11:59:41AM -0400, Kent Overstreet wrote:
+> 
+> > Also, ftrace can drop events. Not really ideal if under system load your memory
+> > accounting numbers start to drift.
+> 
+> You could attach custom handlers to tracepoints. If you were to replace
+> these unconditional code hooks of yours with tracepoints then you could
+> conditionally (say at boot) register custom handlers that do the
+> accounting you want.
+> 
+> Nobody is mandating you use the ftrace ringbuffer to consume tracepoints.
+> Many people these days attach eBPF scripts to them and do whatever they
+> want.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
----
-
-Based on:
-1. https://lore.kernel.org/all/20220901073504.3077363-1-vladimir.zapolskiy@linaro.org/
----
- Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-index 90c9e401229e..e51a85848d6e 100644
---- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-@@ -126,6 +126,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,sm8250-cci
-+              - qcom,sm8450-cci
-     then:
-       properties:
-         clocks:
--- 
-2.34.1
-
+Look at kernel/trace/blktrace.c for a fine in-kernel !BFP example of this.

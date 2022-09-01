@@ -2,247 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB26C5A9EAE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48A85A9EB8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiIASMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S233101AbiIASNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232879AbiIASLv (ORCPT
+        with ESMTP id S229781AbiIASNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:11:51 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8737346224
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 11:11:48 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:58536)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oTofK-004l2w-Pc; Thu, 01 Sep 2022 12:11:46 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:52540 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oTofI-007jjP-92; Thu, 01 Sep 2022 12:11:46 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Andrei Vagin <avagin@gmail.com>
-Cc:     Florian Weimer <fweimer@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Kees Cook <keescook@chromium.org>,
-        Alexey Izbyshev <izbyshev@ispras.ru>
-References: <YxAq2jYvGG8QOypu@gmail.com>
-Date:   Thu, 01 Sep 2022 13:11:37 -0500
-In-Reply-To: <YxAq2jYvGG8QOypu@gmail.com> (Andrei Vagin's message of "Wed, 31
-        Aug 2022 20:45:30 -0700")
-Message-ID: <87czcfhsme.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 1 Sep 2022 14:13:15 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23E2474D8;
+        Thu,  1 Sep 2022 11:13:12 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 476A56CD;
+        Thu,  1 Sep 2022 20:13:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662055990;
+        bh=w3cnA7QpTZH9H6rGUREb2H83enbsbvl5uMVJxERt/tg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rhnRqGz9TFyiYKIK2CaTWyN0MB8FLWTcnXcmfyvXrsZD0YnkrGc5EGUKCUnENitbn
+         0Q1Z/815H54UeYyOvzJu2p6uq8X72wHo+nqgpahotmtHu7OcAqVBhXVR6Ceorq7nRH
+         az8Kw0vX0PQjO85K3rRbbE5B4O0v8rDUbfHMKO1s=
+Date:   Thu, 1 Sep 2022 21:12:58 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 1/6] dt-bindings: media: Add Allwinner A31 ISP
+ bindings documentation
+Message-ID: <YxD2Kvrs+RjnPOnn@pendragon.ideasonboard.com>
+References: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
+ <20220826184144.605605-2-paul.kocialkowski@bootlin.com>
+ <Ywk3W6pTOOlzLYVn@pendragon.ideasonboard.com>
+ <YxDJtYgW/NYLw77u@aptenodytes>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oTofI-007jjP-92;;;mid=<87czcfhsme.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX196iNn/InHNKd5AI4rcl44jt3Uv1L2Og/Q=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YxDJtYgW/NYLw77u@aptenodytes>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Andrei Vagin <avagin@gmail.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1939 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 10 (0.5%), b_tie_ro: 8 (0.4%), parse: 1.25 (0.1%),
-         extract_message_metadata: 6 (0.3%), get_uri_detail_list: 3.4 (0.2%),
-        tests_pri_-1000: 3.0 (0.2%), tests_pri_-950: 1.29 (0.1%),
-        tests_pri_-900: 1.06 (0.1%), tests_pri_-90: 290 (15.0%), check_bayes:
-        287 (14.8%), b_tokenize: 12 (0.6%), b_tok_get_all: 11 (0.6%),
-        b_comp_prob: 3.8 (0.2%), b_tok_touch_all: 256 (13.2%), b_finish: 0.88
-        (0.0%), tests_pri_0: 1600 (82.5%), check_dkim_signature: 0.73 (0.0%),
-        check_dkim_adsp: 2.4 (0.1%), poll_dns_idle: 0.71 (0.0%), tests_pri_10:
-        4.1 (0.2%), tests_pri_500: 13 (0.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: Potentially undesirable interactions between vfork() and time
- namespaces
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrei Vagin <avagin@gmail.com> writes:
+Hi Paul,
 
-> On Tue, Aug 30, 2022 at 6:18 PM Andrei Vagin <avagin@gmail.com> wrote:
->>On Tue, Aug 30, 2022 at 10:49:43PM +0300, Alexey Izbyshev wrote:
-> <snip>
->>> @@ -1030,6 +1033,10 @@ static int exec_mmap(struct mm_struct *mm)
->>>         tsk->mm->vmacache_seqnum = 0;
->>>         vmacache_flush(tsk);
->>>         task_unlock(tsk);
->>> +
->>> +       if (vfork)
->>> +               timens_on_fork(tsk->nsproxy, tsk);
->>> +
->>> 
->>> Similarly, even after a normal vfork(), time namespace switch could be
->>> silently skipped if the parent dies before "tsk->vfork_done" is read. Again,
->>> I don't know whether anybody cares, but this behavior seems non-obvious and
->>> probably unintended to me.
->> This is the more interesting case. I will try to find out how we can
->> handle it properly.
->
-> It might not be a good idea to use vfork_done in this case. Let's
-> think about what we have and what we want to change. We don't want to
-> allow switching timens if a process mm is used by someone else. But we
-> forgot to handle execve that creates a new mm, and we can't change this
-> behavior right now because it can affect current users. Right?
+On Thu, Sep 01, 2022 at 05:03:17PM +0200, Paul Kocialkowski wrote:
+> On Sat 27 Aug 22, 00:12, Laurent Pinchart wrote:
+> > On Fri, Aug 26, 2022 at 08:41:39PM +0200, Paul Kocialkowski wrote:
+> > > This introduces YAML bindings documentation for the Allwinner A31 Image
+> > > Signal Processor (ISP).
+> > > 
+> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > >  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
+> > >  1 file changed, 97 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > new file mode 100644
+> > > index 000000000000..2fda6e05e16c
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > @@ -0,0 +1,97 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
+> > > +
+> > > +maintainers:
+> > > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - allwinner,sun6i-a31-isp
+> > > +      - allwinner,sun8i-v3s-isp
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: Bus Clock
+> > > +      - description: Module Clock
+> > > +      - description: DRAM Clock
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: bus
+> > > +      - const: mod
+> > > +      - const: ram
+> > > +
+> > > +  resets:
+> > > +    maxItems: 1
+> > > +
+> > > +  ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +
+> > > +    properties:
+> > > +      port@0:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: CSI0 input port
+> > > +
+> > > +      port@1:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: CSI1 input port
+> > > +
+> > > +    anyOf:
+> > > +      - required:
+> > > +          - port@0
+> > > +      - required:
+> > > +          - port@1
+> > 
+> > I'd still like to see all ports that exist in the hardware being
+> > mandatory. I assume at least one of the A31 and V3s has two connected
+> > ports in the SoC or you wouldn't declare them both here :-)
+> 
+> Some SoCs (e.g. A83T) only have one CSI controller so we can't require both.
+> This could be a decision based on the compatible but my personal opinion is
+> that it's not really worth making this binding so complex.
+> 
+> We can always informally enforce that all possible links should be present
+> when merging changes to the soc dts.
+> 
+> What do you think?
 
-What we can't changes are things that will break existing programs.  If
-existing programs don't care we can change the behavior of the kernel.
+It makes the binding more complex, but it allows catching issues in an
+automated way instead of relying on reviews. Lowering the review burden
+is something I usually welcome :-) It's probably less of an issue here
+as this is all about the SoC integration, not about board files, so I
+won't insist too strongly even if I prefer bindings that are more
+descriptive.
 
-> So maybe the best choice, in this case, is to change behavior by adding
-> a new control that enables it. The first interface that comes to my mind
-> is to introduce a new ioctl for a namespace file descriptor. Here is a
-> draft patch below that should help to understand what I mean.
+> > Apart from that, this looks good.
+> > 
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - interrupts
+> > > +  - clocks
+> > > +  - clock-names
+> > > +  - resets
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
+> > > +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
+> > > +
+> > > +    isp: isp@1cb8000 {
+> > > +        compatible = "allwinner,sun8i-v3s-isp";
+> > > +        reg = <0x01cb8000 0x1000>;
+> > > +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> > > +        clocks = <&ccu CLK_BUS_CSI>,
+> > > +             <&ccu CLK_CSI1_SCLK>,
+> > > +             <&ccu CLK_DRAM_CSI>;
+> > > +        clock-names = "bus", "mod", "ram";
+> > > +        resets = <&ccu RST_BUS_CSI>;
+> > > +
+> > > +        ports {
+> > > +            #address-cells = <1>;
+> > > +            #size-cells = <0>;
+> > > +
+> > > +            port@0 {
+> > > +                reg = <0>;
+> > > +
+> > > +                isp_in_csi0: endpoint {
+> > > +                    remote-endpoint = <&csi0_out_isp>;
+> > > +                };
+> > > +            };
+> > > +        };
+> > > +    };
+> > > +
+> > > +...
 
-I don't think adding a new control works, because programs that are
-calling vfork or posix_spawn today will stop working.
+-- 
+Regards,
 
-We should recognize that basing things off of CLONE_VFORK was a bad idea
-as CLONE_VFORK is all about waiting for the created task to exec or
-exit, and really has nothing to do with creating a new mm.
-
-Instead I think the rule should be that a new time namespaces is
-installed as soon as we have a new mm.
-
-That will be a behavioral change if the time ns is unshared and then the
-program exec's instead of forking children, but I suspect it is the
-proper behavior all the same, and that existing userspace won't care.
-Especially since all of the vfork_done work is new behavior as
-of v6.0-rc1.
-
-Ugh.  I just spotted another bug.  The function timens_on_fork as
-written is not safe to call without first creating a fresh copy
-of the nsproxy, and we don't do that during exec.  Because nsproxy
-is shared between tasks and processes updating the values needs to
-create a new nsproxy or other tasks/processes can be affected.
-Not hard to handle just something that needs to be addressed.
-
-Say something like this:
-
-diff --git a/fs/exec.c b/fs/exec.c
-index 9a5ca7b82bfc..8a6947e631dd 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -979,12 +979,10 @@ static int exec_mmap(struct mm_struct *mm)
- {
- 	struct task_struct *tsk;
- 	struct mm_struct *old_mm, *active_mm;
--	bool vfork;
- 	int ret;
- 
- 	/* Notify parent that we're no longer interested in the old VM */
- 	tsk = current;
--	vfork = !!tsk->vfork_done;
- 	old_mm = current->mm;
- 	exec_mm_release(tsk, old_mm);
- 	if (old_mm)
-@@ -1030,9 +1028,6 @@ static int exec_mmap(struct mm_struct *mm)
- 	vmacache_flush(tsk);
- 	task_unlock(tsk);
- 
--	if (vfork)
--		timens_on_fork(tsk->nsproxy, tsk);
--
- 	if (old_mm) {
- 		mmap_read_unlock(old_mm);
- 		BUG_ON(active_mm != old_mm);
-@@ -1303,6 +1298,10 @@ int begin_new_exec(struct linux_binprm * bprm)
- 
- 	bprm->mm = NULL;
- 
-+	retval = exec_task_namespaces();
-+	if (retval)
-+		goto out_unlock;
-+
- #ifdef CONFIG_POSIX_TIMERS
- 	spin_lock_irq(&me->sighand->siglock);
- 	posix_cpu_timers_exit(me);
-diff --git a/include/linux/nsproxy.h b/include/linux/nsproxy.h
-index cdb171efc7cb..fee881cded01 100644
---- a/include/linux/nsproxy.h
-+++ b/include/linux/nsproxy.h
-@@ -94,6 +94,7 @@ static inline struct cred *nsset_cred(struct nsset *set)
- int copy_namespaces(unsigned long flags, struct task_struct *tsk);
- void exit_task_namespaces(struct task_struct *tsk);
- void switch_task_namespaces(struct task_struct *tsk, struct nsproxy *new);
-+int exec_task_namespaces(void);
- void free_nsproxy(struct nsproxy *ns);
- int unshare_nsproxy_namespaces(unsigned long, struct nsproxy **,
- 	struct cred *, struct fs_struct *);
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 90c85b17bf69..b4a799d9c50f 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2043,18 +2043,6 @@ static __latent_entropy struct task_struct *copy_process(
- 			return ERR_PTR(-EINVAL);
- 	}
- 
--	/*
--	 * If the new process will be in a different time namespace
--	 * do not allow it to share VM or a thread group with the forking task.
--	 *
--	 * On vfork, the child process enters the target time namespace only
--	 * after exec.
--	 */
--	if ((clone_flags & (CLONE_VM | CLONE_VFORK)) == CLONE_VM) {
--		if (nsp->time_ns != nsp->time_ns_for_children)
--			return ERR_PTR(-EINVAL);
--	}
--
- 	if (clone_flags & CLONE_PIDFD) {
- 		/*
- 		 * - CLONE_DETACHED is blocked so that we can potentially
-diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
-index b4cbb406bc28..b6647846fe42 100644
---- a/kernel/nsproxy.c
-+++ b/kernel/nsproxy.c
-@@ -255,6 +255,24 @@ void exit_task_namespaces(struct task_struct *p)
- 	switch_task_namespaces(p, NULL);
- }
- 
-+int exec_task_namespaces(void)
-+{
-+	struct task_struct *tsk = current;
-+	struct nsproxy *new;
-+
-+	if (tsk->nsproxy->time_ns_for_children == tsk->nsproxy->time_ns)
-+		return 0;
-+
-+	new = create_new_namespaces(0, tsk, current_user_ns(), tsk->fs);
-+	if (IS_ERR(new))
-+		return PTR_ERR(new);
-+
-+	timens_on_fork(new, tsk);
-+	switch_task_namespaces(tsk, new);
-+	return 0;
-+}
-+
-+
- static int check_setns_flags(unsigned long flags)
- {
- 	if (!flags || (flags & ~(CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC |
-
-
-
-To keep things from being too confusing it probably makes sense to
-rename the nsproxy variable from time_ns_for_children to
-time_ns_for_new_mm.  Likewise timens_on_fork can be renamed
-timens_on_new_mm.
-
-But that would be follow up work.
-
-How does the above change sound to folks?
-
-Eric
+Laurent Pinchart

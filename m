@@ -2,101 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2CD5A9523
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66C75A952D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234218AbiIAKyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S232494AbiIAK5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234190AbiIAKyi (ORCPT
+        with ESMTP id S234279AbiIAK4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:54:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D01130A12
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:54:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEF81B825B2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:54:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B80C433C1;
-        Thu,  1 Sep 2022 10:54:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662029670;
-        bh=3yd6ra6HeRbyp75OC+9QeS3r0P/aVZwXcQT0DOYQW/8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gO27tA/NvMCyftcMv/ycmh1rfMdMU/8TJIGvcF0k+tZn2xzciubBUbXGtEyrp3SkR
-         VWhoaMVDsJn+MQLy/RRNf2C5BE+tUHuu1GoL8YiBb9zZ3TPjGUbad3Vco5tB6waqt9
-         SOsR6TIzA5Or6YRva3rcjbTMsm9WVSZLh8rbGcbpStlDGXKFHJDPUMGRX79eberaRg
-         mhj9m+kBC1OsPU4AkfhEuH8dtoUGPgePG3mCLiW9o9ayfX0pn8/R21/drjRJFd95jU
-         6pdL6vhvsP+3ZGGxchD3dVHj5mETS9waNIE+Sam694W61mMOs0OiVcBlxbJJiXKiNj
-         V4GiPQ+PRFirA==
-Date:   Thu, 1 Sep 2022 11:54:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lee Steve <steve.lee.analog@gmail.com>
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        krzk@kernel.org, ryans.lee@analog.com
-Subject: Re: [PATCH] ASoC: max98390: Remove unnecessary amp on/off conrtol
-Message-ID: <YxCPYbPsEyZmuHOI@sirena.org.uk>
-References: <20220826023504.6183-1-steve.lee.analog@gmail.com>
- <Yw+OCnOgYUOWdIEx@sirena.org.uk>
- <CA+Fz0PZStYOZhNpRQCCVKxaDmPPq_PwvWrxfWbq=sBNKrZzzNg@mail.gmail.com>
+        Thu, 1 Sep 2022 06:56:33 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1031A7AB4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662029782; x=1693565782;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hh0ffIFHrLlRK7AiUQRXNzhh91yRv5pISOTFI2E3mDM=;
+  b=AmZuWamqk4IguQmC/dMW69W+D5usF3ztXieFQgqfiF8nm8KX+iDEc/E2
+   v360u+wMC2gioHPPnX0a4pe+ZSn1wk5OtX/ElYfWLJTYOF/gb9fSk3oNm
+   YkBUdAZxThUgdxkY7FC9hdW85eMggMoNwSgurrmQCtaqkuOFh2PJfDpX/
+   AEnFyCf3lL2moYF9VKJnvnkYlclp34/aAYjMti1u3o2e1PH/gZkI+GdaT
+   v4/69GmEpe2knYGKq3fBJLIh69HFCIjM9KI8fD/64sIUwe/XwSgXMW0hb
+   /8hiINcATRbV5mUFAvtwzucyr2XfsfNiyufXEr0fqjgYgbXLG6W+wkq6b
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="321830773"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="321830773"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 03:56:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="788199946"
+Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 01 Sep 2022 03:56:21 -0700
+Received: from kbuild by b138c9e8658c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oThrw-0000Bh-23;
+        Thu, 01 Sep 2022 10:56:20 +0000
+Date:   Thu, 01 Sep 2022 18:56:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 5515d21c6817bc27b0b13c61edf22b09b58bc647
+Message-ID: <63108fc2./qWNiUSWHmCzl6bs%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Cck+RFJ0eKZVFr+e"
-Content-Disposition: inline
-In-Reply-To: <CA+Fz0PZStYOZhNpRQCCVKxaDmPPq_PwvWrxfWbq=sBNKrZzzNg@mail.gmail.com>
-X-Cookie: This bag is recyclable.
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 5515d21c6817bc27b0b13c61edf22b09b58bc647  x86/cpu: Add CPU model numbers for Meteor Lake
 
---Cck+RFJ0eKZVFr+e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+elapsed time: 790m
 
-On Thu, Sep 01, 2022 at 02:57:19PM +0900, Lee Steve wrote:
-> On Thu, Sep 1, 2022 at 1:36 AM Mark Brown <broonie@kernel.org> wrote:
+configs tested: 65
+configs skipped: 82
 
-> > I can't see anything which ensures that this is the case?  Should there
-> > be a check which returns an error if the output is not enabled, or
-> > should the function check the current state and preserve it at the end?
-> > I can see that this would fix problems with it being disabled when
-> > callibrating.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->  As your comment, this can fix amp being disabled when calibrating.
-> And this also fix the case that music play right after calibration.
-> Actually, calibration process should start mute playback before
-> trigger this function.
-> AMP disable/enable control in calibration function can break sync with
-> userspace enable/disable control.
+gcc tested configs:
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                                defconfig
+x86_64                        randconfig-a013
+um                           x86_64_defconfig
+um                             i386_defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a011
+x86_64                           rhel-8.3-kvm
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
+x86_64                        randconfig-a015
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+powerpc                      pcm030_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                     rainier_defconfig
+arm                      jornada720_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                          randconfig-c001
+mips                      loongson3_defconfig
+sh                          r7780mp_defconfig
+parisc64                            defconfig
+sh                           se7705_defconfig
+sh                          lboxre2_defconfig
 
-Right, so that sounds like there should be something which checks the
-current state and doesn't start callibration unless the device is in a
-sensible state.
+clang tested configs:
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220831
+hexagon              randconfig-r041-20220831
+arm                        vexpress_defconfig
+x86_64                        randconfig-k001
 
---Cck+RFJ0eKZVFr+e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMQj2AACgkQJNaLcl1U
-h9DP7wf9GATVAcXHSK80KY9ZOA+wsUyGyhrWjapV4h1Cs8h62KfnYLN+9v64Qkfj
-j1pfKF+FSvEmfd7UglMjhIxPLvpY6nkBrprGFxGonBKJkPN/B6eQXpHJropn0hgU
-zSgyVWNexi/JQCdRZlzGKq2eZasgSUr30XbmTo+IS0+ZOVjnYpbOu6bQgWw7Xcpb
-CiwCyQympPrbatTJjcksnqpxIILphXddI854GV+6JDro0Ff+sVwh/Wy9KlpmJTmO
-zQ3UeW/1ikooxqlk1nuAXmUQbwF71zaF4MBXfwih1ZOiuRCRUqHOSatHwXQDyfjY
-iXLCGJBx6yVVMbRp0emPUWNdN3Vu/A==
-=O3of
------END PGP SIGNATURE-----
-
---Cck+RFJ0eKZVFr+e--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,119 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171B25A94B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869155A94AB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232666AbiIAKcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S234170AbiIAKcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234181AbiIAKcs (ORCPT
+        with ESMTP id S232666AbiIAKcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:32:48 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141F212206F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:32:44 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id k22so17396240ljg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ZXVAap/RQrEllx7GHmHFEmTUCY+2JbnwMtDeiKRHfQ8=;
-        b=Dhp+UYVqpfFeh+jDqzEIVKnoKF7JxN/03AsLCTOUMgF8GcAn6Ch3lv7LeqCPXQKl+w
-         mnc7afdTf2olu/Dsh7tqSXvjEofGX/mfpNqZlPHUtutvzz+oOQQEHqxXi8KaEHRdTios
-         D2olRqF2FvB2dZtP2+ZAuWQIKpYYqv3RWn2ILqHvhQoJK+SiOLyVC8LpGt2zi+GN4cgD
-         BuJRqt794voF/gu2V68Qq88X7FxsK+u0VUAnJfOfrI2JjbX2gSTzBpNBqQq5Q8d5nuaA
-         5WKRSjE9z1bBCVukE+iSE/s5V+duh/l7eW03rRDCG1+dEZ2QlkM6WzSw85o48R4/8o+M
-         Y5vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ZXVAap/RQrEllx7GHmHFEmTUCY+2JbnwMtDeiKRHfQ8=;
-        b=isnA9KlivcfaTWedUDfVdVrBrODDgfcf2Fom/pEG005KiPD+36modkvwhIUMQwZfSX
-         w2TgT0d2CMWO0uZvtqTRejpfeCjUrU9MMKW+3boDELeY4OdNxZBuXhmXqZA+RAGQ0kav
-         aWdMCP0C7tNj26vfOqTYyB+cJxb6/WYjmRsHpe8uiFwmHna0gxVG4Ib1DPx4XBcWMAX2
-         T//Uy9y/0iEt7Ei8EGOtT+17nwJwVyaG4uS76aHMJT0vgFjE1L7cXAZJQybpQuAX23rz
-         TIB6zTejsW4T7ASjNcU1pvFSigFUwMvUfcFd7Xh9R+VGmMhapUl+youDvzAA1hZ4tnjS
-         yH9Q==
-X-Gm-Message-State: ACgBeo2hoOQqtNUWZUndcKWTu1Angeka30SEwvdNIujXjqe82hWqnAsY
-        hgW/WB4mXfTBcBMhlGwyIL82wIlkZ4vToyMSbjZm8Q==
-X-Google-Smtp-Source: AA6agR7mNmum3u12wn3ZgEHjcazZ/nYXQByxwmYoXxhjxe9BEdBb/1ct3OBV5/pl3brFfdAY/MsAgwYyy+RX0B+CEP8=
-X-Received: by 2002:a2e:9799:0:b0:261:e51d:8576 with SMTP id
- y25-20020a2e9799000000b00261e51d8576mr10441111lji.367.1662028362375; Thu, 01
- Sep 2022 03:32:42 -0700 (PDT)
+        Thu, 1 Sep 2022 06:32:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB2512204F;
+        Thu,  1 Sep 2022 03:32:18 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A0CEA6601DF7;
+        Thu,  1 Sep 2022 11:32:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662028337;
+        bh=TzpDrl8aXnnF1e6jwiJCsiOD00pZJii9Kr+EB7ormQE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iTqWZoDS3yvgnt+jDw5Qc5NchAtI2im7o+mTfK8C6XSsFjd7qsITKhYmIyd+NA9ov
+         7GaKfswPrjdZfi6wLkAIs542bKH2o4JPwyL+zt5lfgLgbTGIu1puZRN0rExw/FqnVA
+         h34K/IyizJVRxOmo66uipkYL8TYz02/6YiMTD8u8oebvommu1l9iBcx84MglmSPBcf
+         K9hOBwTkB/mTI6zMRKhrKFieVg7ZW2yqHEzxYDoJah00DYpYp125eulNdq4tB6exZn
+         oTQXfJQ6w8HfyaxHpso/olsozh2iyFx20xHsHKTeiAFml65UEXz9XwKCudVt/5ktiV
+         7yliHyLci4y7A==
+Message-ID: <9b82849e-516b-c798-994e-6bc8945c4831@collabora.com>
+Date:   Thu, 1 Sep 2022 12:32:14 +0200
 MIME-Version: 1.0
-References: <20220831214314.7794-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220831214314.7794-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 1 Sep 2022 12:32:05 +0200
-Message-ID: <CAPDyKFpsQwB97qqR6otk6VuyWF3fk+o9qh3tbxrme8B_oENnuQ@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: mmc: renesas,sdhi: Add iommus property
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 2/4] dt-bindings: arm: mediatek: Add new bindings of
+ MediaTek frequency hopping
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>
+References: <20220831124850.7748-1-johnson.wang@mediatek.com>
+ <20220831124850.7748-3-johnson.wang@mediatek.com>
+ <b1296c37-5283-81f7-1939-7ea20e1f4d0d@linaro.org>
+ <1fae0c47-fff9-89e9-c849-536d167d741d@collabora.com>
+ <38910de5-89ad-e7a1-261f-18b51c8e7877@linaro.org>
+ <955f7200-9d08-0d21-2d1a-5ccbd0f3a8af@collabora.com>
+ <93d5de8e-31b2-4412-3348-7ba1903cde84@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <93d5de8e-31b2-4412-3348-7ba1903cde84@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 Aug 2022 at 23:43, Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> The SDHI blocks on Renesas R-Car and RZ/G2 SoCs make use of IOMMU.
->
-> This patch fixes the below dtbs_check warnings:
-> arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h-ex-idk-1110wr.dtb: mmc@ee100000: Unevaluated properties are not allowed ('iommus' was unexpected)
->         From schema: Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Il 01/09/22 12:30, Krzysztof Kozlowski ha scritto:
+> On 01/09/2022 13:22, AngeloGioacchino Del Regno wrote:
+>>> That's simply not a proper
+>>> hardware description, so again:
+>>>
+>>> 1. If this is separate device (as you indicated), then it needs
+>>> expressing the dependencies and uses of other device resources.
+>>
+>> Agreed. In this case, what about...
+>>
+>> mediatek,hopping-ssc-percents = <&provider CLK_SOMEPLL 3>;
+>>
+>> or would it be better to specify the clocks in a separated property?
+>>
+>> clocks = <&provider CLK_SOMEPLL>, <&provider CLK_SOME_OTHER_PLL>;
+>> mediatek,hopping-ssc-percents = <3>, <5>;
+>>
+> 
+> I propose the last one - using standard clocks property and a matching
+> table.
+> 
 
-Applied for next, thanks!
+Right. I like the last one a bit better, as well.
 
-Kind regards
-Uffe
+Thanks for the advices!
+Angelo
 
-
-> ---
-> v1->v2
-> * Moved the iommus property after dma-names
-> * Updated commit message
-> * Included RB tag from Geert
->
-> v1: https://lore.kernel.org/lkml/20220829214256.5583-1-prabhakar.mahadev-lad.rj@bp.renesas.com/T/
-> ---
->  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
-> index 3ea94d842c33..79dcd5f16a42 100644
-> --- a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
-> @@ -89,6 +89,9 @@ properties:
->          - tx
->          - rx
->
-> +  iommus:
-> +    maxItems: 1
-> +
->    power-domains:
->      maxItems: 1
->
-> --
-> 2.25.1
->

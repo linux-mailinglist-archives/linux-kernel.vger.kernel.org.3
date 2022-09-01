@@ -2,142 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9685A9D85
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5855A9D8E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234554AbiIAQwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S234510AbiIAQyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiIAQwn (ORCPT
+        with ESMTP id S234784AbiIAQxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:52:43 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7452C979F5;
-        Thu,  1 Sep 2022 09:52:42 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id w88-20020a17090a6be100b001fbb0f0b013so3238972pjj.5;
-        Thu, 01 Sep 2022 09:52:42 -0700 (PDT)
+        Thu, 1 Sep 2022 12:53:44 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8709498C86
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:53:42 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id r4so23368533edi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:53:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=EyYzuAJICZEJkeXJX1j7tTOYHHP3WGLUevJ1ub5HhfA=;
-        b=bJYn0c4dA5o6LdUBFOu/jowBMOlO1js31IW99n1CfFxdw/+1+TLvhTiuB1Qhv7Mo9y
-         WRums3uISzLpDmLGIn23q+DxIrCeQa1xSNKNlHo+VFq417Slm+uxi4y+hGuFYaj05Jug
-         yylzuj47la/WnOnr64saKhbbW2MkmcMaPhXFSdAs3YIlCZkrdn2sKVBt7OFO5US37ShH
-         5ZqJp9tXHLvU9e6YGH6mCqgzDbeb6TCY+MTLLn0oWO/pjw1E/dXgiO4dNBdup3W4O3hz
-         dQLNmbBonzIA4BhH5zUNDf4xqi7ZCMD3DkqzsIMizLfYy15YPzXFUKW9PthwwU3qB8ot
-         sR1w==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Utwb8GsJ5vvsHM/8ip4meWVPitKeqc5FGHGRSAfVV1w=;
+        b=uuVU7Qb42ctTfJWZO3i/M1EEOb/t50IiLitHlYcYPqXB7Gn3xj8XYN6XUsanpJg2x8
+         D0wcHWl2TQOkRbNEQO6vErb2UHK4FGfZP4FHbIKiAD0nZOpJG7laRyNm0j4PgcojrDKY
+         DiLLA7+KYZfpzxh3tcEHBxzNg1d3mIiPu+JAkvfg2rMHJ9BUjTgG+2hWxYYabAk26Jfp
+         DMniZkCg9c8JGKFQvZ83biVv0rZAO4ENk1r/8ZNAxYEry8r8RS04sk1bgdKXeO2zQS/x
+         Eg+Z+TgX4tK+nd2Q8+mFFFS6mkedtRxaxcCy22i1A8nFjOcWwX+gaPIzXBkdqUf5A38o
+         Gpjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=EyYzuAJICZEJkeXJX1j7tTOYHHP3WGLUevJ1ub5HhfA=;
-        b=ryQbcJCN1odW/kaLn7TjaO3RsijW5YFnbjDDCTTFp5UAqzo7yv9wrw2cceXEZCrc4u
-         6lueAJZ6xJNPCYz/sS8IQXIZhpkniXx1+ZD/RXBgz9Aas+gbLTfwuhkmP2OthbmSr28y
-         btmCPHLwLSlamE5NuGOcLpe6aAeRpz0YQTFvnTM05ViDfhOWWAGMMzyiXSlzCanq0Dkq
-         lqVkkEeEnjmxTxT3za+AtYckNog38BW7BBp9Z7K9YK0C+kazpv7s1xQgPzbsoskBRcuE
-         BIhUeXMBZ7XE1ElLRTew67LoHEU+cs5IdgA/OF2x2YnSVE4rblq4u0cgNrCJCsJxvAVG
-         fYvQ==
-X-Gm-Message-State: ACgBeo0pbo8MlG8JgddtrwVhGXCENwoAeoVL8vMnRMVoP4lTXuksJFfT
-        Tzbm03J163+k/JfLS48p198=
-X-Google-Smtp-Source: AA6agR67jmgSj2wsMKqv5E1HqgxQ3iSX+z5Id4efYN9RgT1LfhGxXwSgcEzKspAbxSmw7jMWpykDWQ==
-X-Received: by 2002:a17:903:244f:b0:175:34d6:97a8 with SMTP id l15-20020a170903244f00b0017534d697a8mr11727714pls.100.1662051161743;
-        Thu, 01 Sep 2022 09:52:41 -0700 (PDT)
-Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id s3-20020a170902ea0300b00174c5fb500dsm9301380plg.116.2022.09.01.09.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 09:52:41 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 09:52:40 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "Gao, Chao" <chao.gao@intel.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v2 05/19] KVM: Rename and move CPUHP_AP_KVM_STARTING to
- ONLINE section
-Message-ID: <20220901165240.GG2711697@ls.amr.corp.intel.com>
-References: <cover.1661860550.git.isaku.yamahata@intel.com>
- <d2c8815a56be1712e189ddcbea16c8b6cbc53e4a.1661860550.git.isaku.yamahata@intel.com>
- <YxBOoWckyP1wvzMZ@gao-cwp>
- <933858c97f69bcf6fb00ea5dcb2ec9fa368eced3.camel@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Utwb8GsJ5vvsHM/8ip4meWVPitKeqc5FGHGRSAfVV1w=;
+        b=R069wKUOopZY1pRSv6qQmXgxu5rHqdSC7DAQL8COtOtamIm/6J9braTIGerL/G2FRd
+         GkPQI7joDhKvtC9wQrHCiq9u5Ahx/VfyNksZcZ/4vtdF+L6hYuOIKye/f8y9QfXko6Bn
+         F2x7W7sjRiYs5Rmu7k+2EoZHmOSCWChaIhZNw3mMq0akjeOlPsLNH3Sm2HiCqPsn7haY
+         KW3exkGffnxY1CjnFCq2VpeEuanOb8Yk8kI67m5T2+bDy6isfL+7rVsFkQWZU86q7zhy
+         HOrX0jySlLSqjeWm8soPl7jJJ9bSQLpQIWTB3OOzgCHMFAwy2luX8DV0B9bG6BKhocbH
+         bW1g==
+X-Gm-Message-State: ACgBeo2C9fZ5f/Y2t4AJ2f0/JpD3zHQRjtb2uNVVewmPJdsFOGFcd9ql
+        jBrmXAZ7ocrdXIcbuhi40nvcWNMpdMjUSAmZku7vNA==
+X-Google-Smtp-Source: AA6agR45bngCQB/O3nd8cwlu63JO4zrVqmKjTWp+JWEZlCfacAqcPmpOQjDaXmcnIvtxZi2/S+7XjXZbpQpcxHRwemY=
+X-Received: by 2002:a05:6402:538f:b0:444:c17b:1665 with SMTP id
+ ew15-20020a056402538f00b00444c17b1665mr29843511edb.98.1662051221046; Thu, 01
+ Sep 2022 09:53:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <933858c97f69bcf6fb00ea5dcb2ec9fa368eced3.camel@intel.com>
+References: <20220816114414.4092-1-yangyicong@huawei.com> <86bfaabc-43e3-bcfb-faf9-74a0d79ab2ec@huawei.com>
+In-Reply-To: <86bfaabc-43e3-bcfb-faf9-74a0d79ab2ec@huawei.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 1 Sep 2022 10:53:29 -0600
+Message-ID: <CANLsYkwqXQxBCYAHhd4Txv+AZVKgeX+C4kE0b1t3aytTthjNtQ@mail.gmail.com>
+Subject: Re: [PATCH v12 0/5] Add driver support for HiSilicon PCIe Tune and
+ Trace device
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     alexander.shishkin@linux.intel.com, peterz@infradead.org,
+        corbet@lwn.net, gregkh@linuxfoundation.org,
+        yangyicong@hisilicon.com, helgaas@kernel.org,
+        lorenzo.pieralisi@arm.com, suzuki.poulose@arm.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-doc@vger.kernel.org, prime.zeng@huawei.com,
+        liuqi115@huawei.com, zhangshaokun@hisilicon.com,
+        linuxarm@huawei.com, bagasdotme@gmail.com, john.garry@huawei.com,
+        jonathan.cameron@huawei.com, leo.yan@linaro.org,
+        james.clark@arm.com, robin.murphy@arm.com, will@kernel.org,
+        acme@kernel.org, mark.rutland@arm.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:58:04AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
+On Tue, 30 Aug 2022 at 04:59, Yicong Yang <yangyicong@huawei.com> wrote:
+>
+> A gentle ping for this...
+>
 
-> On Thu, 2022-09-01 at 14:18 +0800, Gao, Chao wrote:
-> > On Tue, Aug 30, 2022 at 05:01:20AM -0700, isaku.yamahata@intel.com wrote:
-> > > From: Chao Gao <chao.gao@intel.com>
-> > > 
-> > > The CPU STARTING section doesn't allow callbacks to fail. Move KVM's
-> > > hotplug callback to ONLINE section so that it can abort onlining a CPU in
-> > > certain cases to avoid potentially breaking VMs running on existing CPUs.
-> > > For example, when kvm fails to enable hardware virtualization on the
-> > > hotplugged CPU.
-> > > 
-> > > Place KVM's hotplug state before CPUHP_AP_SCHED_WAIT_EMPTY as it ensures
-> > > when offlining a CPU, all user tasks and non-pinned kernel tasks have left
-> > > the CPU, i.e. there cannot be a vCPU task around. So, it is safe for KVM's
-> > > CPU offline callback to disable hardware virtualization at that point.
-> > > Likewise, KVM's online callback can enable hardware virtualization before
-> > > any vCPU task gets a chance to run on hotplugged CPUs.
-> > > 
-> > > KVM's CPU hotplug callbacks are renamed as well.
-> > > 
-> > > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> > > Signed-off-by: Chao Gao <chao.gao@intel.com>
-> > 
-> > Isaku, your signed-off-by is missing.
-> > 
-> > > Link: https://lore.kernel.org/r/20220216031528.92558-6-chao.gao@intel.com
-> > > ---
-> > > include/linux/cpuhotplug.h |  2 +-
-> > > virt/kvm/kvm_main.c        | 30 ++++++++++++++++++++++--------
-> > > 2 files changed, 23 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-> > > index f61447913db9..7972bd63e0cb 100644
-> > > --- a/include/linux/cpuhotplug.h
-> > > +++ b/include/linux/cpuhotplug.h
-> > > @@ -185,7 +185,6 @@ enum cpuhp_state {
-> > > 	CPUHP_AP_CSKY_TIMER_STARTING,
-> > > 	CPUHP_AP_TI_GP_TIMER_STARTING,
-> > > 	CPUHP_AP_HYPERV_TIMER_STARTING,
-> > > -	CPUHP_AP_KVM_STARTING,
-> > > 	CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
-> > > 	CPUHP_AP_KVM_ARM_VGIC_STARTING,
-> > > 	CPUHP_AP_KVM_ARM_TIMER_STARTING,
-> > 
-> > The movement of CPUHP_AP_KVM_STARTING changes the ordering between
-> > CPUHP_AP_KVM_STARTING and CPUHP_AP_KVM_ARM_* above [1]. We need
-> > the patch [2] from Marc to avoid breaking ARM.
-> > 
-> > [1] https://lore.kernel.org/lkml/87sfsq4xy8.wl-maz@kernel.org/
-> > [2] https://lore.kernel.org/lkml/20220216031528.92558-5-chao.gao@intel.com/
-> 
-> How about Isaku just to take your series directly (+his SoB) and add additional
-> patches?
+I will look at this set next week.
 
-Ok will do.  Although I hoped to slim it down, I've ended up to take most of it.
-four out of six.  Now why not two more.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+> Thanks.
+>
+> On 2022/8/16 19:44, Yicong Yang wrote:
+> > From: Yicong Yang <yangyicong@hisilicon.com>
+> >
+> > HiSilicon PCIe tune and trace device (PTT) is a PCIe Root Complex integrated
+> > Endpoint (RCiEP) device, providing the capability to dynamically monitor and
+> > tune the PCIe traffic (tune), and trace the TLP headers (trace).
+> >
+> > PTT tune is designed for monitoring and adjusting PCIe link parameters. We provide
+> > several parameters of the PCIe link. Through the driver, user can adjust the value
+> > of certain parameter to affect the PCIe link for the purpose of enhancing the
+> > performance in certian situation.
+> >
+> > PTT trace is designed for dumping the TLP headers to the memory, which can be
+> > used to analyze the transactions and usage condition of the PCIe Link. Users
+> > can choose filters to trace headers, by either requester ID, or those downstream
+> > of a set of Root Ports on the same core of the PTT device. It's also supported
+> > to trace the headers of certain type and of certain direction.
+> >
+> > The driver registers a PMU device for each PTT device. The trace can be used
+> > through `perf record` and the traced headers can be decoded by `perf report`.
+> > The tune can be used through the sysfs attributes of related PMU device. See
+> > the documentation for the detailed usage.
+> >
+> > This patchset adds an initial driver support for the PTT device. The userspace
+> > perf tool support will be sent in a separate patchset.
+> >
+> > Change since v11:
+> > - Drop WARN_ON() for irq_set_affinity() failure per Greg
+> > - Split out userspace perf support patches according to the comments
+> > Link: https://lore.kernel.org/lkml/20220721130116.43366-1-yangyicong@huawei.com/
+> >
+> > Change since v10:
+> > - Use title case in the documentation
+> > - Add RB from Bagas, thanks.
+> > Link: https://lore.kernel.org/lkml/20220714092710.53486-1-yangyicong@hisilicon.com/
+> >
+> > Change since v9:
+> > - Add sysfs ABI description documentation
+> > - Remove the controversial available_{root_port, requester}_filters sysfs file
+> > - Shorten 2 tune sysfs attributes name and add some comments
+> > - Move hisi_ptt_process_auxtrace_info() to Patch 6.
+> > - Add RB from Leo and Ack-by from Mathieu, thanks!
+> > Link: https://lore.kernel.org/lkml/20220606115555.41103-1-yangyicong@hisilicon.com/
+> >
+> > Change since v8:
+> > - Cleanups and one minor fix from Jonathan and John, thanks
+> > Link: https://lore.kernel.org/lkml/20220516125223.32012-1-yangyicong@hisilicon.com/
+> >
+> > Change since v7:
+> > - Configure the DMA in probe rather than in runtime. Also use devres to manage
+> >   PMU device as we have no order problem now
+> > - Refactor the config validation function per John and Leo
+> > - Use a spinlock hisi_ptt::pmu_lock instead of mutex to serialize the perf process
+> >   in pmu::start as it's in atomic context
+> > - Only commit the traced data when stop, per Leo and James
+> > - Drop the filter dynamically updating patch from this series to simply the review
+> >   of the driver. That patch will be send separately.
+> > - add a cpumask sysfs attribute and handle the cpu hotplug events, follow the
+> >   uncore PMU convention
+> > - Other cleanups and fixes, both in driver and perf tool
+> > Link: https://lore.kernel.org/lkml/20220407125841.3678-1-yangyicong@hisilicon.com/
+> >
+> > Change since v6:
+> > - Fix W=1 errors reported by lkp test, thanks
+> >
+> > Change since v5:
+> > - Squash the PMU patch into PATCH 2 suggested by John
+> > - refine the commit message of PATCH 1 and some comments
+> > Link: https://lore.kernel.org/lkml/20220308084930.5142-1-yangyicong@hisilicon.com/
+> >
+> > Change since v4:
+> > Address the comments from Jonathan, John and Ma Ca, thanks.
+> > - Use devm* also for allocating the DMA buffers
+> > - Remove the IRQ handler stub in Patch 2
+> > - Make functions waiting for hardware state return boolean
+> > - Manual remove the PMU device as it should be removed first
+> > - Modifier the orders in probe and removal to make them matched well
+> > - Make available {directions,type,format} array const and non-global
+> > - Using the right filter list in filters show and well protect the
+> >   list with mutex
+> > - Record the trace status with a boolean @started rather than enum
+> > - Optimize the process of finding the PTT devices of the perf-tool
+> > Link: https://lore.kernel.org/linux-pci/20220221084307.33712-1-yangyicong@hisilicon.com/
+> >
+> > Change since v3:
+> > Address the comments from Jonathan and John, thanks.
+> > - drop members in the common struct which can be get on the fly
+> > - reduce buffer struct and organize the buffers with array instead of list
+> > - reduce the DMA reset wait time to avoid long time busy loop
+> > - split the available_filters sysfs attribute into two files, for root port
+> >   and requester respectively. Update the documentation accordingly
+> > - make IOMMU mapping check earlier in probe to avoid race condition. Also
+> >   make IOMMU quirk patch prior to driver in the series
+> > - Cleanups and typos fixes from John and Jonathan
+> > Link: https://lore.kernel.org/linux-pci/20220124131118.17887-1-yangyicong@hisilicon.com/
+> >
+> > Change since v2:
+> > - address the comments from Mathieu, thanks.
+> >   - rename the directory to ptt to match the function of the device
+> >   - spinoff the declarations to a separate header
+> >   - split the trace function to several patches
+> >   - some other comments.
+> > - make default smmu domain type of PTT device to identity
+> >   Drop the RMR as it's not recommended and use an iommu_def_domain_type
+> >   quirk to passthrough the device DMA as suggested by Robin.
+> > Link: https://lore.kernel.org/linux-pci/20211116090625.53702-1-yangyicong@hisilicon.com/
+> >
+> > Change since v1:
+> > - switch the user interface of trace to perf from debugfs
+> > - switch the user interface of tune to sysfs from debugfs
+> > - add perf tool support to start trace and decode the trace data
+> > - address the comments of documentation from Bjorn
+> > - add RMR[1] support of the device as trace works in RMR mode or
+> >   direct DMA mode. RMR support is achieved by common APIs rather
+> >   than the APIs implemented in [1].
+> > Link: https://lore.kernel.org/lkml/1618654631-42454-1-git-send-email-yangyicong@hisilicon.com/
+> > [1] https://lore.kernel.org/linux-acpi/20210805080724.480-1-shameerali.kolothum.thodi@huawei.com/
+> >
+> > Yicong Yang (5):
+> >   iommu/arm-smmu-v3: Make default domain type of HiSilicon PTT device to
+> >     identity
+> >   hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe
+> >     Tune and Trace device
+> >   hwtracing: hisi_ptt: Add tune function support for HiSilicon PCIe Tune
+> >     and Trace device
+> >   docs: trace: Add HiSilicon PTT device driver documentation
+> >   MAINTAINERS: Add maintainer for HiSilicon PTT driver
+> >
+> >  .../ABI/testing/sysfs-devices-hisi_ptt        |   61 +
+> >  Documentation/trace/hisi-ptt.rst              |  298 +++++
+> >  Documentation/trace/index.rst                 |    1 +
+> >  MAINTAINERS                                   |    8 +
+> >  drivers/Makefile                              |    1 +
+> >  drivers/hwtracing/Kconfig                     |    2 +
+> >  drivers/hwtracing/ptt/Kconfig                 |   12 +
+> >  drivers/hwtracing/ptt/Makefile                |    2 +
+> >  drivers/hwtracing/ptt/hisi_ptt.c              | 1047 +++++++++++++++++
+> >  drivers/hwtracing/ptt/hisi_ptt.h              |  200 ++++
+> >  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |   21 +
+> >  11 files changed, 1653 insertions(+)
+> >  create mode 100644 Documentation/ABI/testing/sysfs-devices-hisi_ptt
+> >  create mode 100644 Documentation/trace/hisi-ptt.rst
+> >  create mode 100644 drivers/hwtracing/ptt/Kconfig
+> >  create mode 100644 drivers/hwtracing/ptt/Makefile
+> >  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.c
+> >  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.h
+> >

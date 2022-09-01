@@ -2,115 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4BB85A8A52
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE695A8A56
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiIABLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 21:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
+        id S231873AbiIABLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 21:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiIABLH (ORCPT
+        with ESMTP id S230436AbiIABLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 21:11:07 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABE2DB7D6
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 18:11:04 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id n17-20020a05600c501100b003a84bf9b68bso530613wmr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 18:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=U5H4yHvZ8EpKf3hoE+C92drJbmtSiBYMR1LeKV8jCr4=;
-        b=UUtjR+LJwDgtIwyb/GuaN+b+/DHKUPy1eYWlkTCQkI60M7xlDKrz9W08J7CSvqbxYW
-         3gRc2ZKdsY6xvAojbs6sRCnFK86TfIynkU8OAz2k6YQPGOFhfZdybwYw5viQLsoZdbv8
-         MVWr5ap0wbGfg2eaQHqInIetntLqy6oc9asMQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=U5H4yHvZ8EpKf3hoE+C92drJbmtSiBYMR1LeKV8jCr4=;
-        b=r5JsYHEdTk1hejlFesXusF+fjIXijLpdQl0SjupfNEVKnvQQw6K9F4O1QJvOrOM9Cg
-         K+T9fJF1GA4a5UYWymk4pUWYT/egHFnLyEMkD6BaqJXfWDVGGOZu2p//qJl/CUtTvtqX
-         xh4TRlgTY21h1mhz7uiDjuv9VA0fn6rfhrZiCij5ZbBY07sis2uxyPIN9bnRgLU4WO55
-         P1kQREPKIEQUywiWJ5UiwDeDynkQQwV3dhR23Q9QUGOhpEJkAuyWfvTy2NgHBZFw7Mtv
-         h3B5XI8OEX3DhjwAahj0+EVgKLqXr71CLxWa6FOhvzG3V7PleNq+UsEp5aX+nWGu4w6q
-         XPGQ==
-X-Gm-Message-State: ACgBeo0etFo5hzkHC5JRrHdC020hdKCVUp03Tyo30mzrwHvaeiBvyg0e
-        oYdKxmU7UR+eOzfJbo8UCOC21WXJTpey+WC56+DvrA==
-X-Google-Smtp-Source: AA6agR6xZ6HG8INPrFI8X7DCRIiq/fwfey7iZ6P5uMwQSLiO37iSm+fuF9trN+iEkGT9Pj6XUeeRG5dHSVwKF9Qni84=
-X-Received: by 2002:a7b:ce09:0:b0:3a6:6561:d9d5 with SMTP id
- m9-20020a7bce09000000b003a66561d9d5mr3464083wmc.62.1661994663135; Wed, 31 Aug
- 2022 18:11:03 -0700 (PDT)
+        Wed, 31 Aug 2022 21:11:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D957DB7D6;
+        Wed, 31 Aug 2022 18:11:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MJ2zp4792z4x3w;
+        Thu,  1 Sep 2022 11:11:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661994663;
+        bh=bdwYw6Lw4PZEUz1P6wwyQRjfONTNQqkdi9285wuidR4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pMPqUX9lcpfkOKeVnUk2iNQKJAcx8Tcn3fvNgPZj9MLfG6xHcfE6RB4QSPeNE2zOD
+         snD7l6anTEuKX2X/78FbfwGUIRE/fYGuxlrMEKvfnRfpj3qvIxnVznk5+l+26EdfkY
+         Bi8okEiU8ovQCpcJTIzLXY8vXbzVH6IaDLNmDNaDyey2w3UAUCXmF1Faed0J8G5CaN
+         wCiO5sMcWbeUYpcZtMS7dhfX70dL4YpNiType01t+fIt1xV6MLaX0k3YReMxAWI1Ly
+         2SPJ/i9ntkTxjkuPLx/5RfbkMTy2vCeeWdbojtgKXdtatgyFiWjTeCSPrS9t1iurJh
+         nAEbfhxDrTirQ==
+Date:   Thu, 1 Sep 2022 11:11:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        David Miller <davem@davemloft.net>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Daniel =?UTF-8?B?TcO8bGxlcg==?= <deso@posteo.net>,
+        Hou Tao <houtao1@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with the net tree
+Message-ID: <20220901111101.32e9026c@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220831013359.1807905-1-jwerner@chromium.org>
- <20220831013359.1807905-4-jwerner@chromium.org> <983c1224-8174-3534-a276-d1ab1f9968a4@linaro.org>
-In-Reply-To: <983c1224-8174-3534-a276-d1ab1f9968a4@linaro.org>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Wed, 31 Aug 2022 18:10:51 -0700
-Message-ID: <CAODwPW_70kdn4XTCs_vhbWwjEXS8E8zC9MTa6-szb5SayvcSag@mail.gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: memory: Add jedec,lpddr4 and
- jedec,lpddr5 bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Jian-Jia Su <jjsu@google.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/vaLzHlUr1ypekTRcD5RedOW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
-> > index 0c7d2feafd77c8..e1182e75ca1a3f 100644
-> > --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
-> > +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
-> > @@ -53,9 +53,13 @@ properties:
-> >        - 512
-> >        - 1024
-> >        - 2048
-> > +      - 3072
-> >        - 4096
-> > +      - 6144
-> >        - 8192
-> > +      - 12288
-> >        - 16384
-> > +      - 24576
-> >        - 32768
->
-> Either you limit now LPDDR2 and LPDDR3 to old values or instead add this
-> bigger list to LPDDR4 and LPDDR5 (if it works that way).
+--Sig_/vaLzHlUr1ypekTRcD5RedOW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The problem is that each spec has its own set of valid values, e.g.
-LPDDR3 only defines 4GB, 8GB, 16GB and 32GB, and then LPDDR4 inserted
-the 6GB, 12GB and 24GB options in between there. I don't think there's
-a way to exactly describe the valid values for each version without
-having a whole separate enum list for each. Do you think checking for
-that is important enough to be worth having all that extra duplication
-between the schemas? I don't think it adds that much (e.g. a value for
-an individual memory part can still be wrong even if it is one of the
-valid values for that type, so how much use is this validation
-anyway?), but I can split it out if you want to.
+Hi all,
 
-> > +  serial-id:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> > +    description:
-> > +      Serial IDs read from Mode Registers 47 through 54. One byte per uint32
-> > +      cell (i.e. <MR47 MR48 MR49 MR50 MR51 MR52 MR53 MR54>).
-> > +    minItems: 8
->
-> No need for minItems.
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-Can you explain why? I'm okay with taking these out, but it is a real
-constraint so I'm not sure why we shouldn't be describing it here?
-(The serial ID always has exactly 8 bytes, an ID with less than 8
-would not be valid and probably a typo.)
+  tools/testing/selftests/bpf/DENYLIST.s390x
+
+between commit:
+
+  27e23836ce22 ("selftests/bpf: Add lru_bug to s390x deny list")
+
+from the net tree and commit:
+
+  1c636b6277a2 ("selftests/bpf: Add test cases for htab update")
+
+from the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/bpf/DENYLIST.s390x
+index 5cadfbdadf36,ba02b559ca68..000000000000
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@@ -65,4 -65,7 +65,8 @@@ send_signa
+  select_reuseport                         # intermittently fails on new s3=
+90x setup
+  xdp_synproxy                             # JIT does not support calling k=
+ernel function                                (kfunc)
+  unpriv_bpf_disabled                      # fentry
+ +lru_bug                                  # prog 'printk': failed to auto-=
+attach: -524
++ setget_sockopt                           # attach unexpected error: -524 =
+                                              (trampoline)
++ cb_refs                                  # expected error message unexpec=
+ted error: -524                               (trampoline)
++ cgroup_hierarchical_stats                # JIT does not support calling k=
+ernel function                                (kfunc)
++ htab_update                              # failed to attach: ERROR: strer=
+ror_r(-524)=3D22                                (trampoline)
+
+--Sig_/vaLzHlUr1ypekTRcD5RedOW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMQBqUACgkQAVBC80lX
+0Gz2pgf+Mp4AM6eo9MWGQGAQYpar1mLyZbRwh6n+bRv675VRkUX2df5LwXvEvNSM
+D+0C2J9E9kdeFOvljgvElyB7veTsJhKe7XYsxhdiugEAXDCP9jPipTSjUbw3N9/t
+0lVYQ7p1aL4AUCo1+BYjjn4zY04aod5vsmAZ/hSweoTmHwnSPWWfyYEr73GlrKQZ
+vTK9owY59ux+ffoEA8dQDzvMkqSjCARLEVOAZW8e8dQK8W5yqtc4+Xw/2sUyZdHU
+VjMqXThUHOKLuFqsulRafkcr2482jBuPEeCFgBXxMTZ46uRUEn0rhfSyPrBoqNoA
+0O0rCTRCapNpLMM8jCEWNuTdXkWJWw==
+=eWu3
+-----END PGP SIGNATURE-----
+
+--Sig_/vaLzHlUr1ypekTRcD5RedOW--

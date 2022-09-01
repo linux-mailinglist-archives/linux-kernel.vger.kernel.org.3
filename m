@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180195A89C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D695A89CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbiIAAZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 20:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        id S230056AbiIAA2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 20:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbiIAAYz (ORCPT
+        with ESMTP id S229638AbiIAA22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 20:24:55 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AEF140B2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 17:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1661991892; x=1693527892;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ooxA17H90r4EJBbz/H4WAry0ZgcsiZQD5fz0PPvFxIs=;
-  b=Zk6zsIemNK4swmKCBtUfsMk6K/pOTvrXiYB4v7brXi+o2coM6DBm7z9d
-   KEo6v+VV5nUqm3PpugsljV9a/l+ppmRblSFs8MECjyy4IggVRUE6n4wVA
-   9Cw+d5wrczzJsMSkicgXcyRFV43jC20mImZmGtbVfAyNvRoU0uMwp7YPi
-   nIzbse3fRvnhSPw9cjmtqR/Cq5bLSDA+f7SqhPljJMd8VuhbOkDYxQFH4
-   RdVbqv2FqTXk5/MiojHD8T+wXNY0uVmNs5SJBvSmBztYh0bdme9rEDNwn
-   v5b3WGLxxy3MXYQXKsZmXDU4+QsE9Qc2qZd5uFjRSGM6Ao8SmBjFRYJD3
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,279,1654531200"; 
-   d="scan'208";a="210170853"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Sep 2022 08:24:50 +0800
-IronPort-SDR: h9VoCIT0I5D5WFHcbBBWFpyUXrwQL1zSd0ZIfHftmvpHyf1lJblJN08cBFgR7aCArlZTMT7UyK
- hUZYnFAMco7BWfushG3+dRcd5C3kugGKasdmgY1myrvOjI9FAIyHnrdQAxaKFKEYUkmelFeQdR
- nMb+4b8yeqmX/BRW79+y4lBq3Hk4tgEAwZSAtU6FMpooOz8ujxNWTuc/Km114UYX0RyH1dgFyA
- VrBKyUx9MVMgInV42mOPkIVA+vNVVKBBWyJEuP5P8PnfNAj4Ldfnm+s1qxX+RxGTP0VgD/ErRr
- MYIuFYPs3JynbQdH5gLBuslT
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Aug 2022 16:45:20 -0700
-IronPort-SDR: esf0nDOP0DcThfqZTGnSOywtwd0a0/VbgCiUcIbIhCMNPc8/Jj6jXwQfoBGF8FZau2OkXUZtre
- CS+I9ruBhldui7TqwCq6JC2WQytdLTMOUUtCJe5PHxcMoeBzEAAN8bJlzmDCpph+VMacuALdvB
- Ygtv2/WtG+tntpAi8/zlQg8G/xN7WFQc3NP8/r6fzxPpSSgOBTGuGqgjocDxlFG5ULWK70tUSA
- 220pteM2tu8AkDwxIReJVTe0YDWXIX5r9aTbzMN3LIHYJVMGwLJZSTTjxYQDor1MPjeq9F4sN1
- cr0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Aug 2022 17:24:51 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MJ1yW0k3Xz1RvTp
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 17:24:51 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1661991890; x=1664583891; bh=ooxA17H90r4EJBbz/H4WAry0ZgcsiZQD5fz
-        0PPvFxIs=; b=sm28BkyJoQu2n/DP7jG1tYAQzBzENRq2rbMtWbMtT9u0tjKbVHg
-        xZ0mNNRQgboxwzmIzm7RRWP1g9+xKjxDd5KI0XG8Ic6qs1daIZeT9y8PLK+e2C1H
-        EGhZKRQhg7dNBJvNaY+5uSNjYqHbuZYBXv9gLY+zFy8WP3ngddfinR0uKCugEgZH
-        giVD5RjYgCPlVFgdQz9YYHd2BAhQPFRrfmcEcDrZcmNZiJleFFy5N1gzeWnFDHbT
-        6I4IbHFwYp/5NorqHFZr+H2tVysbxYBBEzU0V+3MYU3ermRweU/QxGUXbL6VTRmk
-        JGkjBp1qMVXesiHFCmn3cz3WXFyA4sEQHIQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id AsLfOZW8arkC for <linux-kernel@vger.kernel.org>;
-        Wed, 31 Aug 2022 17:24:50 -0700 (PDT)
-Received: from [10.225.163.56] (unknown [10.225.163.56])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MJ1yT0sCjz1RvLy;
-        Wed, 31 Aug 2022 17:24:48 -0700 (PDT)
-Message-ID: <a4a486b3-7acc-090f-d9c5-bac7a2239482@opensource.wdc.com>
-Date:   Thu, 1 Sep 2022 09:24:48 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] scsi: megaraid: convert sysfs snprintf to sysfs_emit
-Content-Language: en-US
-To:     Xuezhi Zhang <zhangxuezhi3@gmail.com>, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-References: <20220831140325.396295-1-zhangxuezhi3@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220831140325.396295-1-zhangxuezhi3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 31 Aug 2022 20:28:28 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215CB1037C1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 17:28:24 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220901002817epoutp02e30bfeb838066f27079d11fbc7f73d1a~QlQHUpMHT0728107281epoutp02G
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:28:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220901002817epoutp02e30bfeb838066f27079d11fbc7f73d1a~QlQHUpMHT0728107281epoutp02G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1661992097;
+        bh=ArRzi/HQUaHkCfhJYBQkVmRhBXhrtrwh+XW/veC3mG4=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=Mu2418+AQl2EMjglZvCrcgKgo0LYQDgMdiP6k3rGIJTtJVmuIxSAqTWFyZLr/XH/Q
+         4E5cJqU3Unuy01Ud2c2w0tRsGea/zKHuahEVHqeDNXK4kiHRHz3Nx04hqMxiR5oIHO
+         siXUqOFMQ7q6+TncOq8D1nktZ61YYy8VuQqYHDW4=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220901002816epcas2p358e8e500eefb7d431c0d0956250b2b71~QlQGP9ezl0583105831epcas2p3T;
+        Thu,  1 Sep 2022 00:28:16 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4MJ22R6XG3z4x9Pt; Thu,  1 Sep
+        2022 00:28:15 +0000 (GMT)
+X-AuditID: b6c32a47-465ff70000003d30-5f-630ffc9f179c
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8A.66.15664.F9CFF036; Thu,  1 Sep 2022 09:28:15 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH] drivers/nvme/host: Fix namespace duplication check rule
+Reply-To: sungup.moon@samsung.com
+Sender: Sungup Moon <sungup.moon@samsung.com>
+From:   Sungup Moon <sungup.moon@samsung.com>
+To:     "kbusch@kernel.org" <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
+        "sagi@grimberg.me" <sagi@grimberg.me>
+CC:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sungup Moon <sungup.moon@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220901002815epcms2p6ae137d9de49bef5764f19c0fa7f3536e@epcms2p6>
+Date:   Thu, 01 Sep 2022 09:28:15 +0900
+X-CMS-MailID: 20220901002815epcms2p6ae137d9de49bef5764f19c0fa7f3536e
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmhe78P/zJBu+/GVn0b+lisfi/5xib
+        xdSbWxkt5h96x2qxcvVRJovHk5qYLKYeVbeYdOgao8XlXXPYLOYve8puse71exaLi0e7WS3u
+        fnrJatG97Q+jxdFDU9kd+D0mNr9j9zh/byOLx6ZVnWwem5fUe+y+2cDm0bdlFaPH501yAexR
+        2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QGcrKZQl
+        5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgrMC/SKE3OLS/PS9fJSS6wMDQyMTIEKE7Iz
+        9sz+z1KwSrhixaUtLA2Mz/i7GDk5JARMJL7MmsrUxcjFISSwg1Hi75yzQA4HB6+AoMTfHcIg
+        NcICHhIvgb4FsYUEFCX+PutjhIjrSqz5P4UZxGYT0Ja4d+Yt2BwRgT5Gib7v51lBHGaB9YwS
+        ty4sY4bYxisxo/0pC4QtLbF9+VZGCFtD4seyXqgaUYmbq9+yw9jvj82HqhGRaL13FqpGUOLB
+        z91QcUmJpyc/QMXzJdp+L2IDWSwh0MEocf7hESaIhLnEn5fXwYbyCvhKrL35AOwIFgFVia75
+        a6EOcpE4fOEl2FBmAXmJ7W/nMINCgllAU2L9Ln0QU0JAWeLILRaICj6JjsN/2WHe2jHvCdQm
+        VYmLE3rYYF5cOa+BEaLVQ+LeWSNIGAZKrJ3Rxj6BUWEWIqRnIVk7C2HtAkbmVYxiqQXFuemp
+        xUYFxvDITc7P3cQITsFa7jsYZ7z9oHeIkYmD8RCjBAezkgjv93M8yUK8KYmVValF+fFFpTmp
+        xYcYTYEensgsJZqcD8wCeSXxhiaWBiZmZobmRqYG5krivC7ajMlCAumJJanZqakFqUUwfUwc
+        nFINTF1fH0/7sMliU+08rukO89g79rxWlF25ZNPaS04i2VafTOexum7JP1o5S8tPOMPib8bT
+        4G+/NpromC04c+tLx9G+afOt3e3+rV5UrmX9tOFUesDRBetL7skHsbErzXxgeiFncl5j55ws
+        Tn6dPIeALcvcHAQue1xOmGiU9KHlOvOjQ8+3rJCOK5mafXr5sr2as0Vebf1519Kt7EX62/rq
+        sF3TLyaKlx/P6cyw/52lpfg6zch9o1Z+jcLy6EAvvspF2b+9jii2Hb/Cu/9Vo7TekmMR0xJz
+        914w0Y3cFhfW+McuoOqJzx4ORvfEvKuBC7juV8y9/pzz0LHZ+cvDd3iev8Jz/TBjJft5tY8M
+        YT1aq5RYijMSDbWYi4oTAdWYkmlKBAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220901002815epcms2p6ae137d9de49bef5764f19c0fa7f3536e
+References: <CGME20220901002815epcms2p6ae137d9de49bef5764f19c0fa7f3536e@epcms2p6>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -101,45 +95,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/22 23:03, Xuezhi Zhang wrote:
-> From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> 
-> Fix up all sysfs show entries to use sysfs_emit
-> 
-> Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+Some NVMe device, use EUI64 and NGUID, has fixed value EUI64 on a
+sub-system because of the bit size of ID. Current kernel check the
+all IDs should have unique value in a sub-system and globally.
+However, if an namespace has duplicate IDs (not all) in a sub-system,
+current kernel raise "duplicate IDs in subsystem for nsid" error. But
+NVMe Specification defines the namespace unique identifier like this:
 
-Looks OK.
+When creating a namespace, the controller shall indicate a globally
+unique value in one or more of the following:
+a) the EUI64 field;
+b) the NGUID field; or
+c) a Namespace Identification Descriptor with the Namespace Identifier
+Type field set to 3h
+(reference: 7.11 Unique Identifier; NVM Express 1.4c spec)
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+So, I suggest the modified nvme_subsys_check_duplicate_ids function
+checking uniqueness from all IDS to one more IDs.
 
-> ---
->  drivers/scsi/megaraid/megaraid_mbox.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
-> index 157c3bdb50be..132de68c14e9 100644
-> --- a/drivers/scsi/megaraid/megaraid_mbox.c
-> +++ b/drivers/scsi/megaraid/megaraid_mbox.c
-> @@ -3979,7 +3979,7 @@ megaraid_mbox_app_hndl_show(struct device *dev, struct device_attribute *attr, c
->  
->  	app_hndl = mraid_mm_adapter_app_handle(adapter->unique_id);
->  
-> -	return snprintf(buf, 8, "%u\n", app_hndl);
-> +	return sysfs_emit(buf, "%u\n", app_hndl);
->  }
->  
->  
-> @@ -4048,7 +4048,7 @@ megaraid_mbox_ld_show(struct device *dev, struct device_attribute *attr, char *b
->  		}
->  	}
->  
-> -	return snprintf(buf, 36, "%d %d %d %d\n", scsi_id, logical_drv,
-> +	return sysfs_emit(buf, "%d %d %d %d\n", scsi_id, logical_drv,
->  			ldid_map, app_hndl);
->  }
->  
+Signed-off-by: Sungup Moon <sungup.moon@samsung.com>
+---
+ drivers/nvme/host/core.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index af367b22871b..15f4071fce9d 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -3902,24 +3902,35 @@ static struct nvme_ns_head *nvme_find_ns_head(struct nvme_ctrl *ctrl,
+ 	return NULL;
+ }
+ 
++#define IDS_EQUAL(A, B) (memcmp(&(A), &(B), sizeof(A)) == 0)
++
+ static int nvme_subsys_check_duplicate_ids(struct nvme_subsystem *subsys,
+ 		struct nvme_ns_ids *ids)
+ {
+ 	bool has_uuid = !uuid_is_null(&ids->uuid);
+ 	bool has_nguid = memchr_inv(ids->nguid, 0, sizeof(ids->nguid));
+ 	bool has_eui64 = memchr_inv(ids->eui64, 0, sizeof(ids->eui64));
++	bool duplicated;
+ 	struct nvme_ns_head *h;
+ 
+ 	lockdep_assert_held(&subsys->lock);
+ 
+ 	list_for_each_entry(h, &subsys->nsheads, entry) {
+-		if (has_uuid && uuid_equal(&ids->uuid, &h->ids.uuid))
+-			return -EINVAL;
+-		if (has_nguid &&
+-		    memcmp(&ids->nguid, &h->ids.nguid, sizeof(ids->nguid)) == 0)
+-			return -EINVAL;
+-		if (has_eui64 &&
+-		    memcmp(&ids->eui64, &h->ids.eui64, sizeof(ids->eui64)) == 0)
++		duplicated = false;
++
++		if (has_uuid)
++			duplicated = duplicated &&
++				uuid_equal(&ids->uuid, &h->ids.uuid);
++
++		if (has_nguid)
++			duplicated = duplicated &&
++				IDS_EQUAL(ids->nguid, h->ids.nguid);
++
++		if (has_eui64)
++			duplicated = duplicated &&
++				IDS_EQUAL(ids->eui64, h->ids.eui64);
++
++		if (duplicated)
+ 			return -EINVAL;
+ 	}
+ 
 -- 
-Damien Le Moal
-Western Digital Research
+2.34.1
 

@@ -2,106 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693555A92F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56325A92F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiIAJSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
+        id S233509AbiIAJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiIAJSC (ORCPT
+        with ESMTP id S233913AbiIAJSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:18:02 -0400
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27A9E11EB43
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:18:00 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAAnL6_BeBBj7WEDAA--.2690S2;
-        Thu, 01 Sep 2022 17:17:54 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org
-Cc:     hdegoede@redhat.com, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2 1/2] virt: vbox: Add check for device_create_file
-Date:   Thu,  1 Sep 2022 17:17:52 +0800
-Message-Id: <20220901091752.3474095-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAAnL6_BeBBj7WEDAA--.2690S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFWxGw13uryUAr4UXr17GFg_yoW8Aw4Upa
-        n3Ga43t3yrWw4jgw47Aa4qva45urWxJ3yxZrWxGw1FgrnxArsYvFWkGFyUArZ5JFZ5GF48
-        Xw1UtrWrCayUuF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyK14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-        0EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
-        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5WlkUUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 1 Sep 2022 05:18:18 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0A2121431;
+        Thu,  1 Sep 2022 02:18:17 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id 72so16915617pfx.9;
+        Thu, 01 Sep 2022 02:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc;
+        bh=EHj+UQ7Tu6usfmBtBbDH78MoNwVO7qgjOcn++ecvlvY=;
+        b=aMwYpy2KmhETBuSWfDOMI/KUwUdaiz66ylUoOKLq/yZ8fmJ+Ul7XISdXpYSPdOs5aZ
+         hZtBfzrZqXVL7x14Wk9CnFzHh2iORZE3AZbAV2KF9NTQVMQ9Tq/p/uMR1sOCGRSFPQ66
+         ZxgiRXFlzY376dnus4ZOMl/YJ6CvYDbuGf/ya2l4+ggklFsSC0Csoz5MNHaAIpsXzACZ
+         F72/kjARU9SXz10euMoRn8wBl8jW+cmz05VTepLee1r5K7llYtEnoNJ4X/sBptiPyqUb
+         ULchk4Bw0rjEzTOAKJ7oVVnRzfDmJhGmI8RAHAHgkISeioj2Zms3zL+ab3biVreZPpj7
+         NCBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
+        bh=EHj+UQ7Tu6usfmBtBbDH78MoNwVO7qgjOcn++ecvlvY=;
+        b=h7PjYcJ6i+uqbFxxsZN3oO9cHM7hoRHHtSYoeF4meKQvyeaZCFTnsKgcfBfzog/Vbk
+         LG7WPLYgM91cmfB33wHZfyFY3MNKoxQYO7d3QbpaONr/S6tAjbJ6hhwGcbQsbcBVCWWm
+         ODCVTTBnGAVn4ErvWtqNrfMCKAuCxAiPi7Ff+fz/p+VgrrMjikM7/01A1FCCOPFFbBff
+         c2UbwfycjzxZvw/vmjcKuVnuGEQlUCI0UHfRLSX0SgVjZK6t50LvZ4rmVVOccEmTl1BI
+         m6xo3/8qM3FMiXrA2RgIf88pkryrQi1cjDOQn57eEmHX8gLLMaXn5rGO8TI9CiUcXLMW
+         qEHg==
+X-Gm-Message-State: ACgBeo2paTpH31Dc8vv2GLtsUF7cvn1cJuw0nhvWbwtoEyh8nguHSnRM
+        ldK751/gKvknrkEqWOoVj8I=
+X-Google-Smtp-Source: AA6agR76OOzHcAQSPNDhPXO6cgJytqnQSy7k6ZWl7/3QSAmuwkzg82qYETdDuikHUMV5zDmsOuUM4g==
+X-Received: by 2002:a05:6a00:850:b0:536:341b:99b7 with SMTP id q16-20020a056a00085000b00536341b99b7mr30073896pfk.47.1662023896175;
+        Thu, 01 Sep 2022 02:18:16 -0700 (PDT)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id bg8-20020a056a02010800b0042a5e8486a1sm4782830pgb.42.2022.09.01.02.18.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 01 Sep 2022 02:18:15 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v14 07/14] mm: multi-gen LRU: exploit locality in rmap
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <20220815071332.627393-8-yuzhao@google.com>
+Date:   Thu, 1 Sep 2022 02:18:10 -0700
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, X86 ML <x86@kernel.org>,
+        page-reclaim@google.com, Barry Song <baohua@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?utf-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0F7CF2A7-F671-4196-B8FD-F35E9556391B@gmail.com>
+References: <20220815071332.627393-1-yuzhao@google.com>
+ <20220815071332.627393-8-yuzhao@google.com>
+To:     Yu Zhao <yuzhao@google.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As device_create_file() can return error number,
-it should be better to check the return value and
-deal with the exception.
-Moreover, this driver should be using an attribute group.
 
-Fixes: 0ba002bc4393 ("virt: Add vboxguest driver for Virtual Box Guest integration")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Change log:
 
-v1 -> v2:
+> On Aug 15, 2022, at 12:13 AM, Yu Zhao <yuzhao@google.com> wrote:
+>=20
+> Searching the rmap for PTEs mapping each page on an LRU list (to test
+> and clear the accessed bit) can be expensive because pages from
+> different VMAs (PA space) are not cache friendly to the rmap (VA
+> space). For workloads mostly using mapped pages, searching the rmap
+> can incur the highest CPU cost in the reclaim path.
 
-1. Use gdev->dev instead of dev.
-2. Remove file when creation failed.
----
- drivers/virt/vboxguest/vboxguest_linux.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Impressive work. Sorry if my feedback is not timely.
 
-diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
-index 4ccfd30c2a30..2fb9a6d91b53 100644
---- a/drivers/virt/vboxguest/vboxguest_linux.c
-+++ b/drivers/virt/vboxguest/vboxguest_linux.c
-@@ -390,8 +390,13 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	}
- 
- 	pci_set_drvdata(pci, gdev);
--	device_create_file(dev, &dev_attr_host_version);
--	device_create_file(dev, &dev_attr_host_features);
-+
-+	ret = device_create_file(gdev->dev, &dev_attr_host_features);
-+	if (ret)
-+		goto err_unregister_misc_device_user;
-+	ret = device_create_file(gdev->dev, &dev_attr_host_version);
-+	if (ret)
-+		goto err_remove_file_features;
- 
- 	vbg_info("vboxguest: misc device minor %d, IRQ %d, I/O port %x, MMIO at %pap (size %pap)\n",
- 		 gdev->misc_device.minor, pci->irq, gdev->io_port,
-@@ -399,6 +404,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 
- 	return 0;
- 
-+err_remove_file_features:
-+	device_remove_file(gdev->dev, &dev_attr_host_features);
- err_unregister_misc_device_user:
- 	misc_deregister(&gdev->misc_device_user);
- err_unregister_misc_device:
--- 
-2.25.1
+Just one minor point for thought, that can be left for a later cleanup.
+
+>=20
+> +	for (i =3D 0, addr =3D start; addr !=3D end; i++, addr +=3D =
+PAGE_SIZE) {
+> +		unsigned long pfn;
+> +
+> +		pfn =3D get_pte_pfn(pte[i], pvmw->vma, addr);
+> +		if (pfn =3D=3D -1)
+> +			continue;
+> +
+> +		if (!pte_young(pte[i]))
+> +			continue;
+> +
+> +		folio =3D get_pfn_folio(pfn, memcg, pgdat);
+> +		if (!folio)
+> +			continue;
+> +
+> +		if (!ptep_test_and_clear_young(pvmw->vma, addr, pte + =
+i))
+> +			continue;
+> +
+
+You have already checked that the PTE is old (not young), so this check
+seems redundant. I do not see a way in which the access-bit can be =
+cleared
+since you hold the ptl. IOW, there is no need for the =E2=80=9Cif" and =
+=E2=80=9Ccontinue".
+
+Makes me also wonder whether having a separate ptep_clear_young() can
+slightly help, since anyhow the access-bit is more of an estimation,
+and having a separate ptep_clear_young() can enable optimizations.
+
+On x86, for instance, if the PTE is dirty, we may be able to clear the
+access-bit without an atomic operation, which should be faster.
 

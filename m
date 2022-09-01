@@ -2,99 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086855A9EE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E7E5A9EE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbiIASWm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Sep 2022 14:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S233374AbiIAS2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbiIASWj (ORCPT
+        with ESMTP id S231589AbiIAS2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:22:39 -0400
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267127C1F6;
-        Thu,  1 Sep 2022 11:22:38 -0700 (PDT)
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id 944CC140976;
-        Thu,  1 Sep 2022 18:22:36 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 088A260018;
-        Thu,  1 Sep 2022 18:22:34 +0000 (UTC)
-Message-ID: <b028cf83798fd562f5d1b992d2651d53e21acaa2.camel@perches.com>
-Subject: Re: [RFC PATCH v1] checkpatch: Handle FILE pointer type
-From:   Joe Perches <joe@perches.com>
-To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Andy Whitcroft <apw@canonical.com>
-Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jerome Forissier <jerome.forissier@linaro.org>
-Date:   Thu, 01 Sep 2022 14:22:33 -0400
-In-Reply-To: <4f958a0c7c0aa2fce613371348477c002aa58e90.camel@perches.com>
-References: <20220901145948.1456353-1-mic@digikod.net>
-         <4f958a0c7c0aa2fce613371348477c002aa58e90.camel@perches.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 1 Sep 2022 14:28:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A117CB55;
+        Thu,  1 Sep 2022 11:28:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 228C860B9A;
+        Thu,  1 Sep 2022 18:28:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B196C433C1;
+        Thu,  1 Sep 2022 18:28:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662056887;
+        bh=YWgybhhjcjU5jUOQFDqICzPZy3pdwcYT9rfQcigKjhM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T+LR2BL+97bJ7sMyH3KChJOTCU4OlNi+VkQ37FcDiIAB/QrMhPoRTUoF58W0czxyA
+         bXiRHVhZna3yuZ9VL9khBxhItNHXqy7mRitSQ0quS9wRQ6G8Zao8aAz9JwCyPLy8ps
+         f5owrifXe/RGWBAbwt9egDeSRmjeLGhXifeXoweJca0fxB8RIwr7Ilth6Nx0dyDxCR
+         pEr4oYC6Ry4O8oyL3OeFS4GOPF0JgIaSGVaQ7ADN1RNPGIgnz6a4KvKgw2s9Dn1knV
+         vcE0jZNrOQ++AjGF2+THrho+GJdbsweJhft3ikr9kGFe1kYyNDPC99lA7FTXYyuvCF
+         B533uhhbUZkig==
+Date:   Thu, 1 Sep 2022 20:28:04 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rcu <rcu@vger.kernel.org>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
+ fixes
+Message-ID: <20220901182804.GA108007@lothringen>
+References: <20220830105324.GA71266@lothringen>
+ <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220830160316.GC71266@lothringen>
+ <20220830162244.GA73392@lothringen>
+ <20220830164634.GC6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220831152658.GA89704@lothringen>
+ <20220901143907.GU6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220901145819.GB105556@lothringen>
+ <0e8687de-bf45-5de6-c2f1-be6084991921@joelfernandes.org>
+ <20220901164928.GZ6159@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 088A260018
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901164928.GZ6159@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: aabajss4g3getbegx3b3irk4mhjrigwe
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/ZVDONQtBCY6C8xUN1pjZq3eaTFxSEfyg=
-X-HE-Tag: 1662056554-387444
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-01 at 11:49 -0400, Joe Perches wrote:
-> On Thu, 2022-09-01 at 16:59 +0200, Mickaël Salaün wrote:
-> > When using a "FILE *" type, checkpatch considers this an error.  Fix
-> > this by explicitly defining "FILE" as a common type.
-> []
-> > Another error may be throw when we use FIXTURE_{DATA,VARIANT}() structs,
-> > as defined in kselftest_harness.h .
-> []
-> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> []
-> > @@ -576,10 +576,17 @@ our $typeKernelTypedefs = qr{(?x:
-> >  	(?:__)?(?:u|s|be|le)(?:8|16|32|64)|
-> >  	atomic_t
-> >  )};
-> > +our $typeStdioTypedefs = qr{(?x:
-> > +	FILE
-> > +)};
+On Thu, Sep 01, 2022 at 09:49:28AM -0700, Paul E. McKenney wrote:
+> > On 9/1/2022 10:58 AM, Frederic Weisbecker wrote:
+> > > On Thu, Sep 01, 2022 at 07:39:07AM -0700, Paul E. McKenney wrote:
+> > >> On Wed, Aug 31, 2022 at 05:26:58PM +0200, Frederic Weisbecker wrote:
+> > >>> On Tue, Aug 30, 2022 at 09:46:34AM -0700, Paul E. McKenney wrote:
+> > >>>>> Although who knows, may be some periodic file operation while idle are specific
+> > >>>>> to Android. I'll try to trace lazy callbacks while idle and the number of grace
+> > >>>>> periods associated.
+> > >>>>
+> > >>>> Sounds like a good start.
+> > >>>>
+> > >>>> And yes, we don't need to show that the whole !NOCB world needs this,
+> > >>>> just some significant portion of it.  But we do need some decent evidence.
+> > >>>> After all, it is all too easy to do a whole lot of work and find that
+> > >>>> the expected benefits fail to materialize.
+> > >>>
+> > >>> So here is some quick test. I made a patch that replaces Joel's 1st patch
+> > >>> with an implementation of call_rcu_lazy() that queues lazy callbacks
+> > >>> through the regular call_rcu() way but it counts them in a lazy_count.
+> > >>>
+> > >>> Upon idle entry it reports whether the tick is retained solely by lazy
+> > >>> callbacks or not.
+> > >>>
+> > >>> I get periodic and frequent results on my idle test box, something must be
+> > >>> opening/closing some file periodically perhaps.
+> > >>>
+> > >>> Anyway the thing can be tested with this branch:
+> > >>>
+> > >>> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+> > >>> 	rcu/lazy-trace
+> > >>>
+> > >>> Excerpt:
+> > >>>
+> > >>>           <idle>-0       [007] d..1.   414.226966: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+> > >>>           <idle>-0       [007] d..1.   414.228271: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+> > >>>           <idle>-0       [007] d..1.   414.232269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+> > >>>           <idle>-0       [007] d..1.   414.236269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+> > >>
+> > >> Just to make sure that I understand, at this point, there is only the
+> > >> one lazy callback (and no non-lazy callbacks) on this CPU, and that
+> > >> CPU is therefore keeping the tick on only for the benefit of that one
+> > >> lazy callback.  And for the above four traces, this is likely the same
+> > >> lazy callback.
+> > >>
+> > >> Did I get it right, or is there something else going on?
+> > > 
+> > > Exactly that!
 > 
-> I'm fine with this.
-> 
-> > +# our $typeKselftestHarnessTypedefs = qr{(?x:
-> > +# 	FIXTURE_(?:DATA|VARIANT)\($Ident\)
-> > +# )};
-> 
-> But not this.  Random userspace typedefs should likely
-> be kept in some local version of checkpatch.
-> 
-> Or maybe add a command line option like --additional_typedefs=<file>.
+> Are these callbacks confined to the RCU_NEXT_READY_TAIL and RCU_NEXT_TAIL
+> segments, which are the ones that could (in theory) buffer callbacks
+> without having started a grace period?  Or is it all the callbacks
+> regardless of segment?
 
-Oops.  I forgot it already exists:
+Ah good point!
 
-  --typedefsfile             Read additional types from this file
+So I just excluded when those segments have callbacks and I now only get
+two tick retains every two seconds:
 
-commit 75ad8c575a5ad105e2afc2051c68abceb9c65431
-Author: Jerome Forissier <jerome.forissier@linaro.org>
-Date:   Mon May 8 15:56:00 2017 -0700
-
-    checkpatch: add --typedefsfile
-    
-    When using checkpatch on out-of-tree code, it may occur that some
-    project-specific types are used, which will cause spurious warnings.
-    Add the --typedefsfile option as a way to extend the known types and
-    deal with this issue.
-
+          <idle>-0       [007] d..1.  1111.893649: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1111.967575: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1113.895470: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1115.669446: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1115.898144: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1117.202833: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1117.900521: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1119.903327: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1120.766864: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1121.909182: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1122.441927: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1123.908911: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1125.868505: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1125.910898: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1127.682837: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1127.913719: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1129.916740: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1130.967052: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1131.919256: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1132.957163: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [000] d..1.  1133.630082: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1133.923053: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1135.927054: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1136.067679: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1137.652294: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1137.932546: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1138.200768: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1139.932573: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1141.167489: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1141.935232: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1143.440538: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+          <idle>-0       [007] d..1.  1143.938560: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle

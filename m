@@ -2,148 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D085AA311
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5B45AA31A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235391AbiIAWaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
+        id S234938AbiIAWcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235317AbiIAW3a (ORCPT
+        with ESMTP id S233057AbiIAWcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:29:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843872CDEB;
-        Thu,  1 Sep 2022 15:28:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14AEBB82967;
-        Thu,  1 Sep 2022 22:23:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 409D2C433C1;
-        Thu,  1 Sep 2022 22:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662070983;
-        bh=w57zJjChMCAF0tiCRRkMgdO5xn4agumfjbmYJSkZIB4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xl4wDJOO4pUO6SG9nTu5QZuqmYJb+F+A9EOr86gy/hpROglt1BkB64OgAS8GFxLj/
-         MHh7emmj3U89uJ3uUIZ/+WO+7ztZSlKIvZeXomrdDww4HjKegcRhFgeF8HgFutSB5J
-         9ekdknVe7ozu78vaI7DaGrvTGdTAcNjGRNjf032sexu6PgfoiKIhPDHHFEwwLguvs1
-         mT8kkhLPuI1QeChJS0m2VGNVMGPEaSsm109oCtwe9GebIEGNGtszsd77QqPpdUXeL5
-         LLZc+VaBdqLsqijaEQz3ljy7dXmp3wWOcngEh2mrc/hZXxlXFsCmOKIdQSiYp6+DPv
-         87ojfTFOrwB1w==
-Date:   Fri, 2 Sep 2022 01:22:59 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/6] selftests/sgx: Add SGX selftest
- augment_via_eaccept_long
-Message-ID: <YxEwwzXOsCliznQJ@kernel.org>
-References: <20220831173829.126661-1-jarkko@kernel.org>
- <20220831173829.126661-5-jarkko@kernel.org>
- <d2b76530-82a2-6ac1-32ea-696e653d767d@intel.com>
+        Thu, 1 Sep 2022 18:32:33 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FFC1092
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:32:32 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id c3so334330vsc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 15:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=H6ognOyqgR63Qc5uxwtLsdJe5XquKuPnICVqa9a8AKs=;
+        b=Yjx+TGhJgVa88DDNYKa0fjVNTMlJaMO/tyUZU6y3og+6nYzwev4neOE97zwDXbETHB
+         fF8xoIuqF5Tvstqbf0dU8zyUh2QMzGkB6U6gEOucvqJ/Oies13jEAaSE2lmhVxwnLR/D
+         bAW/WmZGGvKCxuD3kEv5YwNQilRT+kwbX7WTSn74VQayUDRZcOF4cfE2AEVwO90bCsTK
+         A5/53sGWlHQ6U3RTWPd5dUpH7BdUy9SM+IbMOlPIzsVeFYdpRlsfMPlplnQM0wH/e3lZ
+         BrgbmP5weBThNZuaevXlt9J7GkkCohcjr0ngBG3AWCQOOmt1ZxtrV0Nqf3q/E0MU9443
+         opuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=H6ognOyqgR63Qc5uxwtLsdJe5XquKuPnICVqa9a8AKs=;
+        b=noHhDdM/r2ah98N4DpRU31FDLb2i2BfBQojXAz1wp/F3ZrrCENKuerHTuL+9Bdx9Kc
+         XO1EFK4Vk9IC/IgBuJbdl1DOdMMPGfVQRsOxNmeGV8CZO9QA3A+cl0qx+CFvWofm91Bg
+         OPvoyys69JQQaXDBD4Z/8DckrYjtMwI55pa0YWSF+/pTax8zX8z3Gcq/q0tLRNS7KgGo
+         AGM5Hin9u7CGbmyNjZDI6aY57jfjQVLGNQNsEr++XseHb9Mp9C4MPYKXonVrtIzHveWG
+         mItajogwuMQUtkU5LobDk8XIL5uIlGATGQ5m+HdJlMVDOXZyWscRCKNEN9jzmtPXqh/8
+         GgeQ==
+X-Gm-Message-State: ACgBeo25hQhnA4B9zw4CXLPB9kjyQP4E9wkJt4PRw+nevH9iKj7BXqiC
+        ZycIMCRsnnXDIPuchr+Sa9mQzJ/l3Ym7bWJ6Rj+eUGKhHKjJgBVv
+X-Google-Smtp-Source: AA6agR6m2BFDhZF8xc/TQvHE5/JD07yIzmeqHx3EbH+37ZwhGDqt/hrDf3heDlbAYgGk5SNZLDBr4+9lbVnFAuVS9Xg=
+X-Received: by 2002:a17:903:41c6:b0:174:3acf:8294 with SMTP id
+ u6-20020a17090341c600b001743acf8294mr32176674ple.118.1662071024760; Thu, 01
+ Sep 2022 15:23:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d2b76530-82a2-6ac1-32ea-696e653d767d@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 1 Sep 2022 15:23:33 -0700
+Message-ID: <CAJ+vNU1Za2CPGVX3q4HKufsxbL5zRrk1B5CWFpKritetrTs4dA@mail.gmail.com>
+Subject: BD71847 clk driver disables clk-32k-out causing RTC/WDT failure
+To:     linux-clk <linux-clk@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 01:07:35PM -0700, Reinette Chatre wrote:
-> Hi Jarkko,
-> 
-> On 8/31/2022 10:38 AM, Jarkko Sakkinen wrote:
-> > From: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> > 
-> > Add a new test case which is same as augment_via_eaccept but adds a
-> > larger number of EPC pages to stress test EAUG via EACCEPT.
-> > 
-> > Signed-off-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> > Co-developed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> > v3:
-> > - Addressed Reinette's feedback:
-> >   https://lore.kernel.org/linux-sgx/bd5285dd-d6dd-8a46-fca9-728db5e2f369@intel.com/
-> > v2:
-> > - Addressed Reinette's feedback:
-> >   https://lore.kernel.org/linux-sgx/24bd8e42-ff4e-0090-d9e1-cd81e4807f21@intel.com/
-> > ---
-> >  tools/testing/selftests/sgx/load.c |   5 +-
-> >  tools/testing/selftests/sgx/main.c | 143 +++++++++++++++++++++++++----
-> >  tools/testing/selftests/sgx/main.h |   3 +-
-> 
-> Is this test passing on your system? This version is missing the change to
-> mrenclave_ecreate() that causes SGX_IOC_ENCLAVE_INIT to fail when I try it out.
+Greetings,
 
-I *did* get a pass in my test machine. Hmm... I'll check if
-the kernel tree was out-of-sync, which could be the reason.
+I've found that the bd71847 clk driver (CONFIG_COMMON_CLK_BD718XX
+drivers/clk/clk-bd718x7.c) disables clk-32k-out (the BD71847 C32K_OUT
+pin) which is connected IMX8MM RTC_XTALI which ends up disabling the
+IMX RTC as well as the IMX WDOG functionality.
 
-I do not compile kernel on that machine but have the kernel
-tree for running selftests. So there is a possiblity for
-a human error. Thanks for pointing this out.
+You can see this with:
+# cat /sys/kernel/debug/clk/clk-32k-out/clk_rate
+32768
+# cat /sys/kernel/debug/clk/clk-32k-out/clk_enable_count
+0
+# cat /sys/class/rtc/rtc0/name
+snvs_rtc 30370000.snvs:snvs-rtc-lp
+# cat /sys/class/rtc/rtc0/time
+00:00:03
+^^^ time never changes
 
-> 
-> >  3 files changed, 130 insertions(+), 21 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
-> > index 94bdeac1cf04..47b2786d6a77 100644
-> > --- a/tools/testing/selftests/sgx/load.c
-> > +++ b/tools/testing/selftests/sgx/load.c
-> > @@ -171,7 +171,8 @@ uint64_t encl_get_entry(struct encl *encl, const char *symbol)
-> >  	return 0;
-> >  }
-> >  
-> > -bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
-> > +bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
-> > +	       unsigned long edmm_size)
-> >  {
-> >  	const char device_path[] = "/dev/sgx_enclave";
-> >  	struct encl_segment *seg;
-> > @@ -300,7 +301,7 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
-> >  
-> >  	encl->src_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
-> >  
-> > -	for (encl->encl_size = 4096; encl->encl_size < encl->src_size; )
-> > +	for (encl->encl_size = 4096; encl->encl_size < encl->src_size + edmm_size;)
-> >  		encl->encl_size <<= 1;
-> >  
-> >  	return true;
-> > diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> > index 9820b3809c69..c5aa9f323745 100644
-> > --- a/tools/testing/selftests/sgx/main.c
-> > +++ b/tools/testing/selftests/sgx/main.c
-> > @@ -23,6 +23,10 @@
-> >  
-> >  static const uint64_t MAGIC = 0x1122334455667788ULL;
-> >  static const uint64_t MAGIC2 = 0x8877665544332211ULL;
-> > +/* Message-ID: <DM8PR11MB55912A7F47A84EC9913A6352F6999@DM8PR11MB5591.namprd11.prod.outlook.com> */
-> > +static const uint64_t EDMM_SIZE_LONG = 8L * 1024L * 1024L * 1024L;
-> > +static const uint64_t TIMEOUT_LONG = 900; /* seconds */
-> > +
-> 
-> Apologies if my feedback was vague - I actually think that the comments in V1 added
-> valuable information, it was just the variation in formatting that was distracting.
+This happens via clk_unprepare_unused() as nothing is flagging the
+clk-32k-out as being used. What should be added to the device-tree to
+signify that this clk is indeed necessary and should not be disabled?
 
-IMHO message ID is pretty good reference. Can you
-propose how would you redo it to minimize the number
-of iterations in the series?
+Best Regards,
 
-> Reinette
-
-BR, Jarkko
+Tim

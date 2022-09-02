@@ -2,85 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8095ABA09
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24785ABA0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiIBVaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 17:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        id S230501AbiIBVai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 17:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiIBVaC (ORCPT
+        with ESMTP id S230521AbiIBVab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 17:30:02 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F825A15C;
-        Fri,  2 Sep 2022 14:30:02 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-11eb44f520dso7852175fac.10;
-        Fri, 02 Sep 2022 14:30:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=gOAzsL9bsAt7jlkpt+vaf6xyvNBMEcyrbnj+YjtEFYc=;
-        b=5fDAY4x2dMqzPEgQUedR8J7stknjQuZ70tT/QFejKOgrcfOCeiWTTaGNVc19filzOq
-         ctpYMN8D5bXF8/zBD6aEsr9d5PGJ+vyQzGNsOKxpDLN6++FvlMX1NJdvrpTX4QVMCt8T
-         Sw+J3GRV85TU9H6ornGH/WqREHzhUsKJ4LX6yw6hTVzwM1rHa//YhQ1ockzkxX0LO/nA
-         sS7GMLAKs+aweWxHm+Uwbes4snTgN74xzvQAWzZgZ1dtMj3o32uEzZJrGSSeGwxz8rOf
-         g3zgwpDzikUfx+l5KEELPH4kY/cBRK22XyzfnunyGfsxmD4CM3vNSACPtatsXzAxKkWT
-         VZkQ==
-X-Gm-Message-State: ACgBeo2ti5+ghXwAoYZhEkSekCRsrP9FnFQ8DRP5vewHwBIAPPZ7HG80
-        JU7kTePiA1oNzH6OwhFq/A==
-X-Google-Smtp-Source: AA6agR5FyIT3medZqlb0ztfVLiAWmg0Ir31ztuO4VBzvFV7cYnSkWqB9g9H+Fvmqw+fsq/JV6Chk/Q==
-X-Received: by 2002:a05:6870:b3aa:b0:11f:5995:8e2e with SMTP id w42-20020a056870b3aa00b0011f59958e2emr3398439oap.204.1662154201303;
-        Fri, 02 Sep 2022 14:30:01 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r33-20020a05687108a100b0011e37fb5493sm1684953oaq.30.2022.09.02.14.30.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 14:30:00 -0700 (PDT)
-Received: (nullmailer pid 447636 invoked by uid 1000);
-        Fri, 02 Sep 2022 21:29:59 -0000
-Date:   Fri, 2 Sep 2022 16:29:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, Loic Poulain <loic.poulain@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-i2c@vger.kernel.org,
-        Robert Foss <robert.foss@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH] dt-bindings: i2c: qcom,i2c-cci: specify SM8450 CCI clocks
-Message-ID: <20220902212959.GA447603-robh@kernel.org>
-References: <20220901074218.21108-1-krzysztof.kozlowski@linaro.org>
+        Fri, 2 Sep 2022 17:30:31 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3540FE398C;
+        Fri,  2 Sep 2022 14:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662154228; x=1693690228;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=KOTH4JPhMsOiAZR2ZzLX0VQD5TijJ7XjKW80Z9C78Wc=;
+  b=R+t6FRkH9dcQKaBeYJiB56k1Zah3bdu92MDIkfXaQBBtqj2fXnnIIptw
+   anlT1K5JHTYDLB0/cFJQlkmFFX8h7wZdBwURsJqKK2i2T91EEWen4+wnZ
+   v2bWoPQPHpB18c7UK+VlfFj8Nsw7hM78LUZIOXHQCROYgRwFyxIfMcQB/
+   Zs7sYnLsj8fwFwYiCdO5agvbbbSwSPcjWeVU2IrDVSTSs8rcCOpX2Jko8
+   NlMnVHQBQxxhCLWZgyQqaC3eipDzaKCYMIiDsKC4d3FJo5z1zazNpzWAm
+   TsGZ1PEeLuSPCqSyq+XqKYL9z8IGhWDYowEzRoT5boZVdVF4TNvxF8TfN
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="111997240"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Sep 2022 14:30:28 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 2 Sep 2022 14:30:23 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 2 Sep 2022 14:30:21 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jerry Ray <jerry.ray@microchip.com>
+Subject: [PATCH v2 1/2] net: dsa: LAN9303: Add early read to sync
+Date:   Fri, 2 Sep 2022 16:30:20 -0500
+Message-ID: <20220902213021.23151-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901074218.21108-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Sep 2022 10:42:18 +0300, Krzysztof Kozlowski wrote:
-> Document clocks for SM8450 Camera Control Interface I2C controller.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Based on:
-> 1. https://lore.kernel.org/all/20220901073504.3077363-1-vladimir.zapolskiy@linaro.org/
-> ---
->  Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Add initial BYTE_ORDER read to sync the 32-bit accesses over the 16-bit
+mdio bus to improve driver robustness.
 
-Acked-by: Rob Herring <robh@kernel.org>
+The lan9303 expects two mdio read transactions back-to-back to read a
+32-bit register. The first read transaction causes the other half of the
+32-bit register to get latched.  The subsequent read returns the latched
+second half of the 32-bit read. The BYTE_ORDER register is an exception to
+this rule. As it is a constant value, there is no need to latch the second
+half. We read this register first in case there were reads during the boot
+loader process that might have occurred prior to this driver taking over
+ownership of accessing this device.
+
+This patch has been tested on the SAMA5D3-EDS with a LAN9303 RMII daughter
+card.
+
+Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+---
+ drivers/net/dsa/lan9303-core.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
+index e03ff1f267bb..9d5302001abf 100644
+--- a/drivers/net/dsa/lan9303-core.c
++++ b/drivers/net/dsa/lan9303-core.c
+@@ -32,6 +32,7 @@
+ #define LAN9303_INT_EN 0x17
+ # define LAN9303_INT_EN_PHY_INT2_EN BIT(27)
+ # define LAN9303_INT_EN_PHY_INT1_EN BIT(26)
++#define LAN9303_BYTE_ORDER 0x19
+ #define LAN9303_HW_CFG 0x1D
+ # define LAN9303_HW_CFG_READY BIT(27)
+ # define LAN9303_HW_CFG_AMDX_EN_PORT2 BIT(26)
+@@ -851,10 +852,6 @@ static int lan9303_check_device(struct lan9303 *chip)
+ 	if (ret) {
+ 		dev_err(chip->dev, "failed to read chip revision register: %d\n",
+ 			ret);
+-		if (!chip->reset_gpio) {
+-			dev_dbg(chip->dev,
+-				"hint: maybe failed due to missing reset GPIO\n");
+-		}
+ 		return ret;
+ 	}
+ 
+@@ -1349,6 +1346,7 @@ static int lan9303_probe_reset_gpio(struct lan9303 *chip,
+ int lan9303_probe(struct lan9303 *chip, struct device_node *np)
+ {
+ 	int ret;
++	u32 reg;
+ 
+ 	mutex_init(&chip->indirect_mutex);
+ 	mutex_init(&chip->alr_mutex);
+@@ -1359,6 +1357,19 @@ int lan9303_probe(struct lan9303 *chip, struct device_node *np)
+ 
+ 	lan9303_handle_reset(chip);
+ 
++	/* First read to the device.  This is a Dummy read to ensure MDIO */
++	/* access is in 32-bit sync. */
++	ret = lan9303_read(chip->regmap, LAN9303_BYTE_ORDER, &reg);
++	if (ret) {
++		dev_err(chip->dev, "failed to access the device: %d\n",
++			ret);
++		if (!chip->reset_gpio) {
++			dev_dbg(chip->dev,
++				"hint: maybe failed due to missing reset GPIO\n");
++		}
++		return ret;
++	}
++
+ 	ret = lan9303_check_device(chip);
+ 	if (ret)
+ 		return ret;
+-- 
+2.17.1
+

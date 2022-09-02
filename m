@@ -2,79 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D665AAAE2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260695AAAD1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235586AbiIBJGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
+        id S235942AbiIBJD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235555AbiIBJFn (ORCPT
+        with ESMTP id S235223AbiIBJDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:05:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F64940556
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:05:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0D286111F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 09:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832E0C433C1;
-        Fri,  2 Sep 2022 09:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662109537;
-        bh=vxRLf6HfrjpAiqrqIrgsiApd7SWvqgd8XNi/3rbw2CU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ib24uYNzY3DTEMzcQFgQn62rCuVAmOMQNJHpDj4Jvt/DC+XuRkCaJg09X+PxFkFx1
-         Iizzso5lCU9121xRD6ixloQorWfFCTynt1jjHbXJsrt8Ls9o0FeWA4RqKH7Xl+p/WL
-         4xpbBIUCKwbSJy+v4LsW0z5gwoj+ZKDZ0l848Oik=
-Date:   Fri, 2 Sep 2022 11:05:34 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     cgel.zte@gmail.com, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        straube.linux@gmail.com, martin@kaiser.cx, lu.fengchang@zte.com.cn,
-        makvihas@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Zeal-Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] Driver: r8188eu: Remove the unneeded result
- variable Return 0 instead of storing it in another redundant variable.
-Message-ID: <YxHHXgdSLRSKtCyR@kroah.com>
-References: <20220902032628.316333-1-lu.fengchang@zte.com.cn>
- <20220902085446.GN2071@kadam>
+        Fri, 2 Sep 2022 05:03:23 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4587A1D19;
+        Fri,  2 Sep 2022 02:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662109401; x=1693645401;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PjiMaqOiXtXbGzUpzVo9H2Dd8g2N0f0rVIBAjHIDQGA=;
+  b=E4375lV7v5aEjfaq4B3VayAVpltVObOpY2KkvIy1+T+q/wuTKMie+xOG
+   GXBZC4z/cy208K0QpNAnXu7rcu1WbScZFWFA06OA3L94n95kvecLg7ISU
+   LxUhuNtbncmXDhQiAtvSEPmrYISLvW7069g7epQcG9Emv0CEhkdPOWiq5
+   gz/OTiTJNlFU+mE47WvkRw9c80aEKZ/WdhAObSBYO2eA2B0pLIRU21U3K
+   T97M8QFSf654TKAcv+xHPcoEWLZ4JidqSoPi5IszJYO9HlUBY0t1xkIfM
+   Q+bk2a4kWAFqeEpOWaOxsU4O/ePgWIVglXauApagBYIkX06vtwwnP8Sv9
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="296721082"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="296721082"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 02:03:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="941218617"
+Received: from liuzhao-optiplex-7080.sh.intel.com ([10.239.160.132])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2022 02:03:17 -0700
+From:   Zhao Liu <zhao1.liu@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+Subject: [PATCH] KVM: SVM: Replace kmap_atomic() with kmap_local_page()
+Date:   Fri,  2 Sep 2022 17:08:11 +0800
+Message-Id: <20220902090811.2430228-1-zhao1.liu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902085446.GN2071@kadam>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 11:54:46AM +0300, Dan Carpenter wrote:
-> On Fri, Sep 02, 2022 at 03:26:28AM +0000, cgel.zte@gmail.com wrote:
-> > From: lufengchang <lu.fengchang@zte.com.cn>
-> > 
-> > Reported-by: Zeal-Robot <zealci@zte.com.cn>
-> > Signed-off-by: lufengchang <lu.fengchang@zte.com.cn>
-> > ---
-> 
-> There is a lot wrong with the format of this patch.
-> 1) The subsystem prefix
-> 2) The blank line after the subject
-> 3) Line wrapping at 75 chars
-> 4) Your name is not capitalized
-> 5) Greg doesn't like Zeal-Robot tags.
+From: Zhao Liu <zhao1.liu@intel.com>
 
-I don't mind the tags, what I mind is that the users of this tool are
-not following what is documented in
-Documentation/process/researcher-guidelines.rst when using it.
+The use of kmap_atomic() is being deprecated in favor of
+kmap_local_page()[1].
 
-thanks,
+In arch/x86/kvm/svm/sev.c, the function sev_clflush_pages() doesn't
+need to disable pagefaults and preemption in kmap_atomic(). It can
+simply use kmap_local_page() / kunmap_local() that can instead do the
+mapping / unmapping regardless of the context.
 
-greg k-h
+With kmap_local_page(), the mapping is per thread, CPU local and not
+globally visible. Therefore, sev_clflush_pages() is a function where
+the use of kmap_local_page() in place of kmap_atomic() is correctly
+suited.
+
+Convert the calls of kmap_atomic() / kunmap_atomic() to
+kmap_local_page() / kunmap_local().
+
+[1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+---
+Suggested by credits.
+        Ira: Referred to his task document and review comments.
+        Fabio: Referred to his boiler plate commit message.
+---
+ arch/x86/kvm/svm/sev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 28064060413a..12747c7bda4e 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -465,9 +465,9 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
+ 		return;
+ 
+ 	for (i = 0; i < npages; i++) {
+-		page_virtual = kmap_atomic(pages[i]);
++		page_virtual = kmap_local_page(pages[i]);
+ 		clflush_cache_range(page_virtual, PAGE_SIZE);
+-		kunmap_atomic(page_virtual);
++		kunmap_local(page_virtual);
+ 		cond_resched();
+ 	}
+ }
+-- 
+2.34.1
+

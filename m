@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7255AAFA1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4010D5AB210
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237330AbiIBMlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S237618AbiIBNt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237397AbiIBMjc (ORCPT
+        with ESMTP id S236960AbiIBNti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:39:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CDB7C76C;
-        Fri,  2 Sep 2022 05:30:36 -0700 (PDT)
+        Fri, 2 Sep 2022 09:49:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE66132ED1;
+        Fri,  2 Sep 2022 06:24:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30E336212E;
-        Fri,  2 Sep 2022 12:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272C9C433D6;
-        Fri,  2 Sep 2022 12:30:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B8FAFCE2E6B;
+        Fri,  2 Sep 2022 12:36:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F0E9C433D7;
+        Fri,  2 Sep 2022 12:36:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121835;
-        bh=PJ4n2Ynoe2lpOEHUzv4oHIsdzC957qPGEF5GuR+O/gA=;
+        s=korg; t=1662122164;
+        bh=coAGS/lQZ4tcWZ/q1MpitTrR7Gs3ITON93+C3oPxELQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kEVWENrG8KWev6UTBjEGUa5F1AGgBREDm/pXdfTPl9sTEyuCYGweE4kAFfnWdyQrn
-         8OO9HhLMDQ5asOL/sgZn0yzWRAPvgnsN4O+GDNSu+hw1nP/sFSE01BooHsFv5K2Jbc
-         RXgzCN6K6DBkRrs4t4/ki/OcU1p4pcXLpRq78NAo=
+        b=rkjwAbHZnY+N4yP5OsHcb1XHsYBTdwP7WnF3gdruhk6ciOt8jEy4rgMJSSPzcO93i
+         FSrtWkAQoi5xenWeGzVg5tOm8MFN+LG+3ChpiQ6+VSrnP9ajag0aMIpf6Ld8bqDZWw
+         39C9zZh4BorOW1fChQSTis9/iG6SGVVypSbS1prU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 5.4 60/77] bpf: Dont redirect packets with invalid pkt_len
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 33/72] ASoC: sh: rz-ssi: Improve error handling in rz_ssi_probe() error path
 Date:   Fri,  2 Sep 2022 14:19:09 +0200
-Message-Id: <20220902121405.667104333@linuxfoundation.org>
+Message-Id: <20220902121405.883050423@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-References: <20220902121403.569927325@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,70 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengchao Shao <shaozhengchao@huawei.com>
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-commit fd1894224407c484f652ad456e1ce423e89bb3eb upstream.
+[ Upstream commit c75ed9f54ce8d349fee557f2b471a4d637ed2a6b ]
 
-Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
-skbs, that is, the flow->head is null.
-The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
-run a bpf prog which redirects empty skbs.
-So we should determine whether the length of the packet modified by bpf
-prog or others like bpf_prog_test is valid before forwarding it directly.
+We usually do cleanup in reverse order of init. Currently in case of
+error rz_ssi_release_dma_channels() done in the reverse order. This
+patch improves error handling in rz_ssi_probe() error path.
 
-LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
-LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
+While at it, use "goto cleanup" style to reduce code duplication.
 
-Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
-Link: https://lore.kernel.org/r/20220715115559.139691-1-shaozhengchao@huawei.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Link: https://lore.kernel.org/r/20220728092612.38858-1-biju.das.jz@bp.renesas.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/skbuff.h |    8 ++++++++
- net/bpf/test_run.c     |    3 +++
- net/core/dev.c         |    1 +
- 3 files changed, 12 insertions(+)
+ sound/soc/sh/rz-ssi.c | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -2201,6 +2201,14 @@ static inline void skb_set_tail_pointer(
+diff --git a/sound/soc/sh/rz-ssi.c b/sound/soc/sh/rz-ssi.c
+index e392de7a262ef..3d74acffec11f 100644
+--- a/sound/soc/sh/rz-ssi.c
++++ b/sound/soc/sh/rz-ssi.c
+@@ -1016,32 +1016,36 @@ static int rz_ssi_probe(struct platform_device *pdev)
  
- #endif /* NET_SKBUFF_DATA_USES_OFFSET */
+ 	ssi->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+ 	if (IS_ERR(ssi->rstc)) {
+-		rz_ssi_release_dma_channels(ssi);
+-		return PTR_ERR(ssi->rstc);
++		ret = PTR_ERR(ssi->rstc);
++		goto err_reset;
+ 	}
  
-+static inline void skb_assert_len(struct sk_buff *skb)
-+{
-+#ifdef CONFIG_DEBUG_NET
-+	if (WARN_ONCE(!skb->len, "%s\n", __func__))
-+		DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
-+#endif /* CONFIG_DEBUG_NET */
-+}
+ 	reset_control_deassert(ssi->rstc);
+ 	pm_runtime_enable(&pdev->dev);
+ 	ret = pm_runtime_resume_and_get(&pdev->dev);
+ 	if (ret < 0) {
+-		rz_ssi_release_dma_channels(ssi);
+-		pm_runtime_disable(ssi->dev);
+-		reset_control_assert(ssi->rstc);
+-		return dev_err_probe(ssi->dev, ret, "pm_runtime_resume_and_get failed\n");
++		dev_err(&pdev->dev, "pm_runtime_resume_and_get failed\n");
++		goto err_pm;
+ 	}
+ 
+ 	ret = devm_snd_soc_register_component(&pdev->dev, &rz_ssi_soc_component,
+ 					      rz_ssi_soc_dai,
+ 					      ARRAY_SIZE(rz_ssi_soc_dai));
+ 	if (ret < 0) {
+-		rz_ssi_release_dma_channels(ssi);
+-
+-		pm_runtime_put(ssi->dev);
+-		pm_runtime_disable(ssi->dev);
+-		reset_control_assert(ssi->rstc);
+ 		dev_err(&pdev->dev, "failed to register snd component\n");
++		goto err_snd_soc;
+ 	}
+ 
++	return 0;
 +
- /*
-  *	Add data to an sk_buff
-  */
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -200,6 +200,9 @@ static int convert___skb_to_skb(struct s
- {
- 	struct qdisc_skb_cb *cb = (struct qdisc_skb_cb *)skb->cb;
- 
-+	if (!skb->len)
-+		return -EINVAL;
++err_snd_soc:
++	pm_runtime_put(ssi->dev);
++err_pm:
++	pm_runtime_disable(ssi->dev);
++	reset_control_assert(ssi->rstc);
++err_reset:
++	rz_ssi_release_dma_channels(ssi);
 +
- 	if (!__skb)
- 		return 0;
+ 	return ret;
+ }
  
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3712,6 +3712,7 @@ static int __dev_queue_xmit(struct sk_bu
- 	bool again = false;
- 
- 	skb_reset_mac_header(skb);
-+	skb_assert_len(skb);
- 
- 	if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_SCHED_TSTAMP))
- 		__skb_tstamp_tx(skb, NULL, skb->sk, SCM_TSTAMP_SCHED);
+-- 
+2.35.1
+
 
 

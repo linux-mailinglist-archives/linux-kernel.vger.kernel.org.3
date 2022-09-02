@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F275AB0FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395C25AB10E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238491AbiIBNBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S238636AbiIBNCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238112AbiIBM7c (ORCPT
+        with ESMTP id S238584AbiIBNBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:59:32 -0400
+        Fri, 2 Sep 2022 09:01:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96012FC33A;
-        Fri,  2 Sep 2022 05:40:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53F01090A1;
+        Fri,  2 Sep 2022 05:41:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B041E6217E;
-        Fri,  2 Sep 2022 12:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8EDFC433C1;
-        Fri,  2 Sep 2022 12:39:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1D506215D;
+        Fri,  2 Sep 2022 12:39:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E54C433C1;
+        Fri,  2 Sep 2022 12:39:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122361;
-        bh=lVgdqr38Jt4ri3oENA3ZbW/QQK5tDQxvfQtgt9PHjxc=;
+        s=korg; t=1662122370;
+        bh=I48YNY8iGTo0l+25pl0NUHm3d2fzxBhUGKALZNO7RzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WKWbpZ4D+zPT0fJc6AcDqAbE1v4bbekjhWPGbIz+r88rOzDG1pBrAlN2U7k+9HQcU
-         5/hS54Dcg05s9RD8hnVBtcTXRspaHKgba5k6DXlLaSI8mEvXxrIU6Re84DWJisrhqi
-         LkUQFlK8UftjheEclqPi3JTmZytsYXkJ4VW6OLdI=
+        b=T5VS9g8Gu3cHdA2d91bTxqvuizPUdVvWCjWZN7VOMlWaNws/1sZojXuZ9Cw8wsAt8
+         xN6BqtU3fOW53jnjwnUpcVDmz4MuRvUv2urGs67ZTaL5wZ323UA8T446/DqgJQxgrd
+         2ri9kC4ljF3yi/jKk6EY6G+bLQe7U7rT6zfk3DDI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
+        stable@vger.kernel.org, Aric Cyr <Aric.Cyr@amd.com>,
+        Brian Chang <Brian.Chang@amd.com>,
+        Ilya Bakoulin <Ilya.Bakoulin@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 23/37] s390/hypfs: avoid error message under KVM
-Date:   Fri,  2 Sep 2022 14:19:45 +0200
-Message-Id: <20220902121359.902181760@linuxfoundation.org>
+Subject: [PATCH 5.10 25/37] drm/amd/display: Fix pixel clock programming
+Date:   Fri,  2 Sep 2022 14:19:47 +0200
+Message-Id: <20220902121359.959351226@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902121359.177846782@linuxfoundation.org>
 References: <20220902121359.177846782@linuxfoundation.org>
@@ -57,58 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Ilya Bakoulin <Ilya.Bakoulin@amd.com>
 
-[ Upstream commit 7b6670b03641ac308aaa6fa2e6f964ac993b5ea3 ]
+[ Upstream commit 04fb918bf421b299feaee1006e82921d7d381f18 ]
 
-When booting under KVM the following error messages are issued:
+[Why]
+Some pixel clock values could cause HDMI TMDS SSCPs to be misaligned
+between different HDMI lanes when using YCbCr420 10-bit pixel format.
 
-hypfs.7f5705: The hardware system does not support hypfs
-hypfs.7a79f0: Initialization of hypfs failed with rc=-61
+BIOS functions for transmitter/encoder control take pixel clock in kHz
+increments, whereas the function for setting the pixel clock is in 100Hz
+increments. Setting pixel clock to a value that is not on a kHz boundary
+will cause the issue.
 
-Demote the severity of first message from "error" to "info" and issue
-the second message only in other error cases.
+[How]
+Round pixel clock down to nearest kHz in 10/12-bpc cases.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
-Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220620094534.18967-1-jgross@suse.com
-[arch/s390/hypfs/hypfs_diag.c changed description]
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Reviewed-by: Aric Cyr <Aric.Cyr@amd.com>
+Acked-by: Brian Chang <Brian.Chang@amd.com>
+Signed-off-by: Ilya Bakoulin <Ilya.Bakoulin@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/hypfs/hypfs_diag.c | 2 +-
- arch/s390/hypfs/inode.c      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/s390/hypfs/hypfs_diag.c b/arch/s390/hypfs/hypfs_diag.c
-index f0bc4dc3e9bf0..6511d15ace45e 100644
---- a/arch/s390/hypfs/hypfs_diag.c
-+++ b/arch/s390/hypfs/hypfs_diag.c
-@@ -437,7 +437,7 @@ __init int hypfs_diag_init(void)
- 	int rc;
- 
- 	if (diag204_probe()) {
--		pr_err("The hardware system does not support hypfs\n");
-+		pr_info("The hardware system does not support hypfs\n");
- 		return -ENODATA;
- 	}
- 
-diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
-index 5c97f48cea91d..ee919bfc81867 100644
---- a/arch/s390/hypfs/inode.c
-+++ b/arch/s390/hypfs/inode.c
-@@ -496,9 +496,9 @@ static int __init hypfs_init(void)
- 	hypfs_vm_exit();
- fail_hypfs_diag_exit:
- 	hypfs_diag_exit();
-+	pr_err("Initialization of hypfs failed with rc=%i\n", rc);
- fail_dbfs_exit:
- 	hypfs_dbfs_exit();
--	pr_err("Initialization of hypfs failed with rc=%i\n", rc);
- 	return rc;
- }
- device_initcall(hypfs_init)
+diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c b/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
+index bae3a146b2cc2..89cc852cb27c5 100644
+--- a/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
++++ b/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
+@@ -546,9 +546,11 @@ static void dce112_get_pix_clk_dividers_helper (
+ 		switch (pix_clk_params->color_depth) {
+ 		case COLOR_DEPTH_101010:
+ 			actual_pixel_clock_100hz = (actual_pixel_clock_100hz * 5) >> 2;
++			actual_pixel_clock_100hz -= actual_pixel_clock_100hz % 10;
+ 			break;
+ 		case COLOR_DEPTH_121212:
+ 			actual_pixel_clock_100hz = (actual_pixel_clock_100hz * 6) >> 2;
++			actual_pixel_clock_100hz -= actual_pixel_clock_100hz % 10;
+ 			break;
+ 		case COLOR_DEPTH_161616:
+ 			actual_pixel_clock_100hz = actual_pixel_clock_100hz * 2;
 -- 
 2.35.1
 

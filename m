@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AB65AAEDF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501C85AAF66
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236385AbiIBMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
+        id S237043AbiIBMhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236663AbiIBMaD (ORCPT
+        with ESMTP id S236502AbiIBMgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:30:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055DCD5984;
-        Fri,  2 Sep 2022 05:25:59 -0700 (PDT)
+        Fri, 2 Sep 2022 08:36:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84C1E42C7;
+        Fri,  2 Sep 2022 05:29:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1059BB82AA3;
-        Fri,  2 Sep 2022 12:25:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 592A4C433C1;
-        Fri,  2 Sep 2022 12:25:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB718B82A9B;
+        Fri,  2 Sep 2022 12:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2AE2C433B5;
+        Fri,  2 Sep 2022 12:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121545;
-        bh=44j/0QGKbnCXOQkwSh+zBTtcYgPKScXSQtuBhIR6w2k=;
+        s=korg; t=1662121757;
+        bh=Bs2CQBsnUjpIZ+XxHHFSiRhfkB928kkGSKMck2e8gws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xXb9o31k/NdvNg67PVrrVa0jnzupOlxZwAghd6rl9/rtivP2ZVrFLSPXINvkQRHDs
-         8jFEDc2Hvj4kaDF7GIcRC72zDllHbEU/xrlmI6brvC249EhH70p1yprhoSHqo1Qv5n
-         H5YVYB3OI3ZFHdeG6ErIcXNInUbIEdYU0yMz/6VQ=
+        b=K3j3IgD1kKVWm2WE1xMlpJp7t/UoCnTyVE3LyLmUtYIImTcovHGhQKRWAFFKze3Jl
+         PQ3qrbKeUGVelThdnauWqVr7EDhsheRiASKpDjCFZucGhP2n5LOO8cgqA9SqDheazO
+         9TZVPmQu2N60ADZdJOfXPLFBM+H913ssFSuLtZMU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jing Leng <jleng@ambarella.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <n.schier@avm.de>
-Subject: [PATCH 4.19 43/56] kbuild: Fix include path in scripts/Makefile.modpost
+        stable@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.4 54/77] HID: steam: Prevent NULL pointer dereference in steam_{recv,send}_report
 Date:   Fri,  2 Sep 2022 14:19:03 +0200
-Message-Id: <20220902121401.870740913@linuxfoundation.org>
+Message-Id: <20220902121405.472911966@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+From: Lee Jones <lee.jones@linaro.org>
 
-commit 23a0cb8e3225122496bfa79172005c587c2d64bf upstream.
+commit cd11d1a6114bd4bc6450ae59f6e110ec47362126 upstream.
 
-When building an external module, if users don't need to separate the
-compilation output and source code, they run the following command:
-"make -C $(LINUX_SRC_DIR) M=$(PWD)". At this point, "$(KBUILD_EXTMOD)"
-and "$(src)" are the same.
+It is possible for a malicious device to forgo submitting a Feature
+Report.  The HID Steam driver presently makes no prevision for this
+and de-references the 'struct hid_report' pointer obtained from the
+HID devices without first checking its validity.  Let's change that.
 
-If they need to separate them, they run "make -C $(KERNEL_SRC_DIR)
-O=$(KERNEL_OUT_DIR) M=$(OUT_DIR) src=$(PWD)". Before running the
-command, they need to copy "Kbuild" or "Makefile" to "$(OUT_DIR)" to
-prevent compilation failure.
-
-So the kernel should change the included path to avoid the copy operation.
-
-Signed-off-by: Jing Leng <jleng@ambarella.com>
-[masahiro: I do not think "M=$(OUT_DIR) src=$(PWD)" is the official way,
-but this patch is a nice clean up anyway.]
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-[nsc: updated context for v4.19]
-Signed-off-by: Nicolas Schier <n.schier@avm.de>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: linux-input@vger.kernel.org
+Fixes: c164d6abf3841 ("HID: add driver for Valve Steam Controller")
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/Makefile.modpost |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/hid/hid-steam.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/scripts/Makefile.modpost
-+++ b/scripts/Makefile.modpost
-@@ -51,8 +51,7 @@ obj := $(KBUILD_EXTMOD)
- src := $(obj)
+--- a/drivers/hid/hid-steam.c
++++ b/drivers/hid/hid-steam.c
+@@ -134,6 +134,11 @@ static int steam_recv_report(struct stea
+ 	int ret;
  
- # Include the module's Makefile to find KBUILD_EXTRA_SYMBOLS
--include $(if $(wildcard $(KBUILD_EXTMOD)/Kbuild), \
--             $(KBUILD_EXTMOD)/Kbuild, $(KBUILD_EXTMOD)/Makefile)
-+include $(if $(wildcard $(src)/Kbuild), $(src)/Kbuild, $(src)/Makefile)
- endif
+ 	r = steam->hdev->report_enum[HID_FEATURE_REPORT].report_id_hash[0];
++	if (!r) {
++		hid_err(steam->hdev, "No HID_FEATURE_REPORT submitted -  nothing to read\n");
++		return -EINVAL;
++	}
++
+ 	if (hid_report_len(r) < 64)
+ 		return -EINVAL;
  
- include scripts/Makefile.lib
+@@ -165,6 +170,11 @@ static int steam_send_report(struct stea
+ 	int ret;
+ 
+ 	r = steam->hdev->report_enum[HID_FEATURE_REPORT].report_id_hash[0];
++	if (!r) {
++		hid_err(steam->hdev, "No HID_FEATURE_REPORT submitted -  nothing to read\n");
++		return -EINVAL;
++	}
++
+ 	if (hid_report_len(r) < 64)
+ 		return -EINVAL;
+ 
 
 

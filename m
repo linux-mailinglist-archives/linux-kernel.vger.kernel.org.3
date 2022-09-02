@@ -2,59 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA885ABB0E
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE305ABB19
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbiIBXLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 19:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
+        id S229694AbiIBXR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 19:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiIBXLc (ORCPT
+        with ESMTP id S229490AbiIBXR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 19:11:32 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D1BF47D3
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 16:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662160290; x=1693696290;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Bs2N+4jA8VNqEDPs2v0c4mrKLHEnEKpC+6QMV8EQT10=;
-  b=BEiOWHwLNkJzIjlJ3A8lHCugiUKik97d8RFXL8L3q0n3XQTTIZgxQn+j
-   gZLLzEfDO12SadFp50wr7MBGOl1V1HSf07nQorVlfdg/fcypM1QWLgBkI
-   YvoNwHHV8zLMMuDB9hwclAAc+W56jOed3aQQfguDPXzG3Lqou0smjeBuK
-   8RabGqAe2GO+zG2W/p5G3Ti+ftE+C0W0BWoDBxHcAp3t4NNOx4LZpszcu
-   rw3hGUSIzYrsfSFRrhohsQomPAhwjXtAjcRh1+F2TbnBu6lKBjzk7zd2W
-   tj9FhhsCjAhlxKfWguOlBx+dEnOFzxc17axDySqg/oVrJorNmbw1uVIZU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="294845751"
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="294845751"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:11:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="941459673"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2022 16:11:29 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUFou-0000ix-22;
-        Fri, 02 Sep 2022 23:11:28 +0000
-Date:   Sat, 3 Sep 2022 07:11:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matt Flax <flatmax@flatmax.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [broonie-misc:asoc-6.1 3/80] sound/soc/codecs/src4xxx-i2c.c:28:34:
- warning: unused variable 'src4xxx_of_match'
-Message-ID: <202209030710.XtZRjxNg-lkp@intel.com>
+        Fri, 2 Sep 2022 19:17:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE68F9969;
+        Fri,  2 Sep 2022 16:17:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B6EDB82E01;
+        Fri,  2 Sep 2022 23:17:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E001AC433C1;
+        Fri,  2 Sep 2022 23:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662160642;
+        bh=ERg2TOZN4AaUjdAMP7nDz5p+LX6W9sfrRqCNVo8lkv8=;
+        h=Date:From:To:Subject:From;
+        b=AWZ56CzXcVo7rc7Regu2miBQIRJICbRWfZlSkB0V5Y3huCqB7WuYWjbZIUBk3W9gE
+         dq5J7UIDoaIFLBs2K3qOfDCEA8FOB4EyKRFRsJ+fiBczD1bayPuks0PB6YUXq3ikRT
+         cp+dzQHWsU2l9CbMJBIqPXxp9Jy/wfjcSrbBkyHU4KAa6CYAVIPspabIo28Hc8X21i
+         QSTw9fobr9ah21sC06v5mR9Awti7AE24G81EmgqPEa6yVQGaY9VxXk7m8dMp2csLmb
+         6kOSl7JWvd6yfAvm+uN48CH9O6MtsHQXWP7dcfirgQcEFHQZ+isqIRVlgHVW1ULYd3
+         xpUfW/iPepVbw==
+Date:   Sat, 3 Sep 2022 00:17:18 +0100
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Cc: linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org, ;
+Illegal-Object: Syntax error in To: address found on vger.kernel.org:
+        To:     ;
+                        ^-missing semicolon to end mail group, extraneous tokens in mailbox, missing end of mailbox
+Subject: [PATCH][next] mm/memremap: Replace zero-length array with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <YxKO/jY1x0xTpl4r@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,48 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matt,
+Zero-length arrays are deprecated and we are moving towards adopting
+C99 flexible-array members, instead. So, replace zero-length array
+declaration in struct dev_pagemap with the new DECLARE_FLEX_ARRAY()
+helper macro.
 
-FYI, the error/warning still remains.
+This helper allows for a flexible-array member in a union.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git asoc-6.1
-head:   376be51caf8871419bbcbb755e1e615d30dc3153
-commit: 4e6bedd3c396014ba70de2b4c9995c8e024e82b3 [3/80] ASoC: codecs: add support for the TI SRC4392 codec
-config: hexagon-randconfig-r045-20220903 (https://download.01.org/0day-ci/archive/20220903/202209030710.XtZRjxNg-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=4e6bedd3c396014ba70de2b4c9995c8e024e82b3
-        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
-        git fetch --no-tags broonie-misc asoc-6.1
-        git checkout 4e6bedd3c396014ba70de2b4c9995c8e024e82b3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
+Also, this addresses multiple warnings reported when building
+with Clang-15 and -Wzero-length-array.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Link: https://github.com/KSPP/linux/issues/193
+Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ include/linux/memremap.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
-
->> sound/soc/codecs/src4xxx-i2c.c:28:34: warning: unused variable 'src4xxx_of_match' [-Wunused-const-variable]
-   static const struct of_device_id src4xxx_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/src4xxx_of_match +28 sound/soc/codecs/src4xxx-i2c.c
-
-    27	
-  > 28	static const struct of_device_id src4xxx_of_match[] = {
-    29		{ .compatible = "ti,src4392", },
-    30		{ }
-    31	};
-    32	MODULE_DEVICE_TABLE(of, src4xxx_of_match);
-    33	
-    34	
-
+diff --git a/include/linux/memremap.h b/include/linux/memremap.h
+index c3b4cc84877b..ad3c38840194 100644
+--- a/include/linux/memremap.h
++++ b/include/linux/memremap.h
+@@ -135,7 +135,7 @@ struct dev_pagemap {
+ 	int nr_range;
+ 	union {
+ 		struct range range;
+-		struct range ranges[0];
++		DECLARE_FLEX_ARRAY(struct range, ranges);
+ 	};
+ };
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

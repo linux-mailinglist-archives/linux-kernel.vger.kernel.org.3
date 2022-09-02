@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9B45AAEB7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E361B5AAF65
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236450AbiIBM2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S236975AbiIBMhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235829AbiIBM1d (ORCPT
+        with ESMTP id S237034AbiIBMgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:27:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5539DD743;
-        Fri,  2 Sep 2022 05:24:09 -0700 (PDT)
+        Fri, 2 Sep 2022 08:36:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86259D5E90;
+        Fri,  2 Sep 2022 05:29:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CE8AB82A91;
-        Fri,  2 Sep 2022 12:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B22EC433D7;
-        Fri,  2 Sep 2022 12:23:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB13AB82A71;
+        Fri,  2 Sep 2022 12:29:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A54C433D6;
+        Fri,  2 Sep 2022 12:29:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121397;
-        bh=X2kyHRGmPFA4IG7DMX7lJ498RS9kJ6XcbHqpncdeLrk=;
+        s=korg; t=1662121741;
+        bh=8pl/xxUZx0RNJID+u/1oHv09CR39OevBrabcZIHbLFw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZQ9kEfMu7pUEKUbPr2XJr+iLy9uJHs9jsMiC5kbi3ZLTuTYgZz40jnfhWDZxsEXai
-         LlIwKpcPz5EfF7CEX9lOcJBQvqKh+x1Vp1AAr9zhamQBbDmCCtEZ4t30FOAAnFJkQn
-         ATDFMOGwO2DB02SYN8ibchlMMSHMxHvfx5eXqNpU=
+        b=AJiyt8Jwo5ZLS6UPftya8VAP69JmVU9c0mlTK2hkdyP+BWd6bBiI7ePp3cWFKli8v
+         B0GZ0XttE2BJzmlEHdftNjrvsd2x2ITwVrB0H3P4usPsP4N3dCzzZf+AYA2TnFEq6W
+         VqJP1BmBZHe3rMz0Rzq47/zYOghZkzzhNPPqNTL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Letu Ren <fantasquex@gmail.com>, Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.14 35/42] fbdev: fb_pm2fb: Avoid potential divide by zero error
+        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH 5.4 50/77] s390/mm: do not trigger write fault when vma does not allow VM_WRITE
 Date:   Fri,  2 Sep 2022 14:18:59 +0200
-Message-Id: <20220902121359.998704160@linuxfoundation.org>
+Message-Id: <20220902121405.298833488@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Letu Ren <fantasquex@gmail.com>
+From: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
 
-commit 19f953e7435644b81332dd632ba1b2d80b1e37af upstream.
+commit 41ac42f137080bc230b5882e3c88c392ab7f2d32 upstream.
 
-In `do_fb_ioctl()` of fbmem.c, if cmd is FBIOPUT_VSCREENINFO, var will be
-copied from user, then go through `fb_set_var()` and
-`info->fbops->fb_check_var()` which could may be `pm2fb_check_var()`.
-Along the path, `var->pixclock` won't be modified. This function checks
-whether reciprocal of `var->pixclock` is too high. If `var->pixclock` is
-zero, there will be a divide by zero error. So, it is necessary to check
-whether denominator is zero to avoid crash. As this bug is found by
-Syzkaller, logs are listed below.
+For non-protection pXd_none() page faults in do_dat_exception(), we
+call do_exception() with access == (VM_READ | VM_WRITE | VM_EXEC).
+In do_exception(), vma->vm_flags is checked against that before
+calling handle_mm_fault().
 
-divide error in pm2fb_check_var
-Call Trace:
- <TASK>
- fb_set_var+0x367/0xeb0 drivers/video/fbdev/core/fbmem.c:1015
- do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
- fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
+Since commit 92f842eac7ee3 ("[S390] store indication fault optimization"),
+we call handle_mm_fault() with FAULT_FLAG_WRITE, when recognizing that
+it was a write access. However, the vma flags check is still only
+checking against (VM_READ | VM_WRITE | VM_EXEC), and therefore also
+calling handle_mm_fault() with FAULT_FLAG_WRITE in cases where the vma
+does not allow VM_WRITE.
 
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Letu Ren <fantasquex@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fix this by changing access check in do_exception() to VM_WRITE only,
+when recognizing write access.
+
+Link: https://lkml.kernel.org/r/20220811103435.188481-3-david@redhat.com
+Fixes: 92f842eac7ee3 ("[S390] store indication fault optimization")
+Cc: <stable@vger.kernel.org>
+Reported-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/pm2fb.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ arch/s390/mm/fault.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/video/fbdev/pm2fb.c
-+++ b/drivers/video/fbdev/pm2fb.c
-@@ -614,6 +614,11 @@ static int pm2fb_check_var(struct fb_var
- 		return -EINVAL;
- 	}
+--- a/arch/s390/mm/fault.c
++++ b/arch/s390/mm/fault.c
+@@ -432,7 +432,9 @@ static inline vm_fault_t do_exception(st
+ 	flags = FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
+ 	if (user_mode(regs))
+ 		flags |= FAULT_FLAG_USER;
+-	if (access == VM_WRITE || (trans_exc_code & store_indication) == 0x400)
++	if ((trans_exc_code & store_indication) == 0x400)
++		access = VM_WRITE;
++	if (access == VM_WRITE)
+ 		flags |= FAULT_FLAG_WRITE;
+ 	down_read(&mm->mmap_sem);
  
-+	if (!var->pixclock) {
-+		DPRINTK("pixclock is zero\n");
-+		return -EINVAL;
-+	}
-+
- 	if (PICOS2KHZ(var->pixclock) > PM2_MAX_PIXCLOCK) {
- 		DPRINTK("pixclock too high (%ldKHz)\n",
- 			PICOS2KHZ(var->pixclock));
 
 

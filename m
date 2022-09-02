@@ -2,350 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901505AA4FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029585AA500
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235180AbiIBBVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 21:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        id S235184AbiIBBWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 21:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiIBBVj (ORCPT
+        with ESMTP id S232186AbiIBBWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 21:21:39 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD11575CEE;
-        Thu,  1 Sep 2022 18:21:36 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MJg7X2tlCzKKCP;
-        Fri,  2 Sep 2022 09:19:52 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgBH53CdWhFjFZD_AA--.63067S3;
-        Fri, 02 Sep 2022 09:21:34 +0800 (CST)
-Subject: Re: [PATCH -next 2/3] md/raid10: convert resync_lock to use seqlock
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
- <20220829131502.165356-3-yukuai1@huaweicloud.com>
- <04128618-962f-fd4e-64a9-09ecf7f83776@deltatee.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b87d0e03-ea92-4e79-f304-7d4c1cbf3fbf@huaweicloud.com>
-Date:   Fri, 2 Sep 2022 09:21:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 1 Sep 2022 21:22:13 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E2C75CEE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:22:12 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id u9so952005ejy.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 18:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4ekojsMMqY2Pm05Rphb53MHYNyMEIvQwOJ3eVma3ANU=;
+        b=DpE5ySnBVoMrzA8BE5ubvWKgQjB1eCXTMacZXixvZozSowwvy8FN2PZfmG+otQ9CV+
+         OAf7gWgQnbp0SDJ8le0Tw3/xbHELKX/g6NcRgiey2LlnnGRPV8o72Hletv2uMsURQa3y
+         rYwiT+BKPC/m9v1v6RZ+woAz1ofjW1p559y30t9akOy+/w6kSRD/GjPxNyEJYOavDCXm
+         Ov7Rry9VHU3af8eC6+7+fZ4KGjQKLl2Lfxxs539lVqvhtCJwZ02M3joaNM9ui5UyjxH6
+         VZnGPJ57zgHXiSdTX+2G4gMUAn1J8TCA2aAybDOArbH04LzR44QuRDzQNQY3k4V5rrOO
+         Lcyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4ekojsMMqY2Pm05Rphb53MHYNyMEIvQwOJ3eVma3ANU=;
+        b=Zvsng7w1OJ5sanpziYg2J6ijWZdhGuLr9DX7HAdURQkWdzZL/EaqrQJo9eqCVQv0NG
+         Cc6IgBE8ADQA/pQvNYzIxTigIJRyFWtX8YxOawum/flIoXoo/cgvJFBFpSFsZuT97AEr
+         m66bdyz+y3Hmxyjw/7Fu/LD9KFzoeKTgAh96gkMo7meNloPlM9SbVdy7CLgOOen6ea9/
+         VaCoY/7frda+QdtlSeZlcCmmEgOX6jVlYymKewzw7OYlOMJjR/SzTJ6Zoy68RGkpsqC6
+         6FFpT4JUJDk9ySBICbr3VsJgOEpiyzkD8l2379aNuLkvBTz4x+JGQCc6tEH7QLYZb7mS
+         6NGg==
+X-Gm-Message-State: ACgBeo3k6s+sZw3G93b+QTkqx+S4n1k+bIjcxqTFHy0CBY5PR0hxgQkQ
+        B4XjpnPhgKNyipQcWYFohIf5ZlUhaZPsJ86+AE1dpmbF0+s=
+X-Google-Smtp-Source: AA6agR7W3a5Sl/Lf3q0qup8swxm27nDGIzxM98seBuNVPpdZiEoOzNDOaGns8RakN4dBbM2m+TBvcVlsmwdczcFz+XY=
+X-Received: by 2002:a17:906:8462:b0:741:6003:71e4 with SMTP id
+ hx2-20020a170906846200b00741600371e4mr17739965ejc.170.1662081730591; Thu, 01
+ Sep 2022 18:22:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <04128618-962f-fd4e-64a9-09ecf7f83776@deltatee.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH53CdWhFjFZD_AA--.63067S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw45XF43KFWrtw43AFW3GFg_yoWfXFykp3
-        93Ka4ayr4UJ34jvw4xtF129FW8Gay5Aw17Ar97Ww1xXF1qvwsIy3WUtr18uryUuryfZF9r
-        WFyDGFZ8u3WkXa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAGsJ_4w=NKr-NOg2TLycx=ka1OpzmzC2dpq0Z1EUXaXDMM8uVQ@mail.gmail.com>
+ <20220901221114.81601-1-sj@kernel.org>
+In-Reply-To: <20220901221114.81601-1-sj@kernel.org>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Fri, 2 Sep 2022 13:21:59 +1200
+Message-ID: <CAGsJ_4zw7eiDT5WXOhxNSH5154pRYhTx00JZrnNP=cSqNStyjw@mail.gmail.com>
+Subject: Re: [PATCH 7/8] mm/damon: introduce DAMON-based LRU-lists Sorting
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, damon@lists.linux.dev,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Sep 2, 2022 at 10:11 AM SeongJae Park <sj@kernel.org> wrote:
+>
+> On Fri, 2 Sep 2022 09:40:10 +1200 Barry Song <21cnbao@gmail.com> wrote:
+>
+> > On Fri, Sep 2, 2022 at 5:11 AM SeongJae Park <sj@kernel.org> wrote:
+> > >
+> > > Hi Barry,
+> > >
+> > >
+> > > On Thu, 1 Sep 2022 14:21:21 +1200 Barry Song <21cnbao@gmail.com> wrote:
+> > >
+> > > > On Thu, Sep 1, 2022 at 2:03 PM Barry Song <21cnbao@gmail.com> wrote:
+> > > > >
+> > > > > On Tue, Jun 14, 2022 at 10:01 AM SeongJae Park <sj@kernel.org> wrote:
+> > > > > >
+> > > > > > Users can do data access-aware LRU-lists sorting using 'LRU_PRIO' and
+> > > > > > 'LRU_DEPRIO' DAMOS actions.  However, finding best parameters including
+> > > > > > the hotness/coldness thresholds, CPU quota, and watermarks could be
+> > > > > > challenging for some users.  To make the scheme easy to be used without
+> > > > > > complex tuning for common situations, this commit implements a static
+> > > > > > kernel module called 'DAMON_LRU_SORT' using the 'LRU_PRIO' and
+> > > > > > 'LRU_DEPRIO' DAMOS actions.
+> > > > > >
+> > > > > > It proactively sorts LRU-lists using DAMON with conservatively chosen
+> > > > > > default values of the parameters.  That is, the module under its default
+> > > > > > parameters will make no harm for common situations but provide some
+> > > > > > level of efficiency improvements for systems having clear hot/cold
+> > > > > > access pattern under a level of memory pressure while consuming only a
+> > > > > > limited small portion of CPU time.
+> > > > >
+> > > >
+> > > > Hi SeongJae,
+> > > > While I believe DAMON pro-active reclamation and LRU-SORT can benefit the system
+> > > > by either swapping out cold pages earlier and sorting LRU lists before
+> > > > system has high
+> > > > memory pressure, I am still not convinced the improvement really comes from the
+> > > > identification of cold and hot pages by DAMON.
+> > > >
+> > > > My guess is that even if we randomly pick some regions in memory and do the same
+> > > > thing in the kernel, we can also see the improvement.
+> > > >
+> > > > As we actually depend on two facts to benefit from DAMON
+> > > > 1. locality
+> > > > while virtual address might have some locality, physical address seems
+> > > > not. for example,
+> > > > address A might be mapped by facebook, address A + 4096 could be
+> > > > mapped by youtube.
+> > > > There is nothing which can stop contiguous physical addresses from
+> > > > being mapped by
+> > > > completely irrelevant applications. so regions based on paddr seems pointless.
+> > > >
+> > > > 2. accuration
+> > > > As I have reported it is very hard for damon to accurately track
+> > > > virtual address since
+> > > > virtual space is so huge:
+> > > > https://lore.kernel.org/lkml/CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com/
+> > > > I believe it is also true for paddr since paddr has much worse
+> > > > locality than vaddr.
+> > > > so we probably need a lot of regions, ideally, one region for each page.
+> > > >
+> > > > To me, it seems neither of these two facts are true.  So I am more
+> > > > willing to believe
+> > > > that the benefits come from areas  picked randomly.
+> > > >
+> > > > Am I missing something?
+> > >
+> > > Thank you for the questions.
+> > >
+> > > As you mentioned, DAMON assumes spatial and temporal locality, to trade
+> > > accuracy for lower overhead[1].  That is, DAMON believes some memory regions
+> > > would have pages that accessed in similar frequency for similar time duration.
+> > > Therefore if the access pattern of the system is really chaotic, that is, if
+> > > every adjacent page have very different access frequency or the access
+> > > frequency changes very frequently, DAMON's accuracy would be bad.  But, would
+> > > such access pattern really common in the real world?  Given the Pareto
+> > > principle[2], I think that's not always true.  After all, many of kernel
+> > > mechanisms including the pseudo-LRU-based reclamation and the readahead assumes
+> > > some locality and makes good effect.
+> >
+> > + yu zhao
+> >
+> > I do believe we have some locality in virtual addresses as they are in
+> > the same application.
+> > that is why we can "exploit locality in rmap" here:
+> > https://lore.kernel.org/linux-mm/20220815071332.627393-8-yuzhao@google.com/
+> >
+> > But for paddr, i doubt it is true as processes use page faults to get
+> > pages from buddy
+> > mainly in low order like zero.
+>
+> Well, what I can tell for now is that it would depend on the specific system
+> and workload, but I found some production systems that have such kind of
+> physical address space locality.
 
-在 2022/09/02 2:41, Logan Gunthorpe 写道:
-> Hi,
-> 
-> On 2022-08-29 07:15, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Currently, wait_barrier() will hold 'resync_lock' to read 'conf->barrier',
->> and io can't be dispatched until 'barrier' is dropped.
->>
->> Since holding the 'barrier' is not common, convert 'resync_lock' to use
->> seqlock so that holding lock can be avoided in fast path.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> 
-> I've found some lockdep issues starting with this patch in md-next while
-> running mdadm tests (specifically 00raid10 when run about 10 times in a
-> row).
-> 
-> I've seen a couple different lock dep errors. The first seems to be
-> reproducible on this patch, then it possibly changes to the second on
-> subsequent patches. Not sure exactly.
-> 
+yep. I guess for mmu-less systems, spatial locality is more likely to be true.
+for mmu system, workload using 2MB or 1GB THP will show some locality in
+physical address as well. but THP_SWP will swap them as a whole, so it
+seems locality inside a THP doesn't help? as we are not splitting sub pages
+of THP for reclamation?
 
-Thanks for the test,
+>
+> >
+> > >
+> > > If your system has too low locality and therefore DAMON doesn't provide good
+> > > enough accuracy, you could increase the accuracy by setting the upperbound of
+> > > the monitoring overhead higher.  For DAMOS schemes like DAMON_RECLAIM or
+> > > DAMON_LRU_SORT, you could also increase the minimum age of the target access
+> > > pattern.  If the access pattern is really chaotic, DAMON wouldn't show the
+> > > regions having the specific access pattern for long time.  Actually, definition
+> > > of the age and use of it means you believe the system's access pattern is not
+> > > that chaotic but has at least temporal locality.
+> > >
+> > > It's true that DAMON doesn't monitor access pattern in page granularity, and
+> > > therefore it could report some cold pages as hot, and vice versa.  However, I'd
+> > > say the benefit of making right decision for huge number of pages outweighs the
+> > > risk of making wrong decision for few pages in many cases.
+> > >
+> > > After all, it shows some benefit on my test environments and some production
+> > > systems.  I haven't compared that against random pageout or random lru sorting,
+> > > though.
+> > >
+> > > Nevertheless, DAMON has so many rooms for improvement, including the accuracy.
+> > > I want to improve the accuracy while keeping the overhead low.  Also, I know
+> > > that there are people who willing to do page-granularity monitoring though it
+> > > could incur high monitoring overhead.  As a part of the DAMON accuracy
+> > > improvement plan, to use that as a comparison target, and to convince such
+> > > people, I added the page granularity monitoring feature of DAMON to my todo
+> > > list.  I haven't had a time for prioritizing that yet, though, as I haven't
+> > > heard some clear voice of users for that.  I hope the DAMON Beer/Coffee/Tea
+> > > Chat Series to be a place to hear such voices.
+> >
+> > is it possible for us to leverage the idea from  "mm: multi-gen LRU:
+> > support page table walks"
+> >
+> > https://lore.kernel.org/linux-mm/20220815071332.627393-9-yuzhao@google.com/
+> >
+> > we pro-actively scan the virtual address space of those processes
+> > which have been really
+> > executed then get LRU sorted earlier?
+>
+> I didn't read MGLRU patchset thoroughly, but, maybe?
+>
 
-I think this is false positive because of the special usage here,
+Yes, please read MGLRU, SeongJae. I find some ideas in MGLRU are
+really good. we might
+leverage those to improve DAMON as well :-)
 
-for example, in raise_barrier():
+>
+> Thanks,
+> SJ
+>
+> >
+> > >
+> > > [1] https://docs.kernel.org/mm/damon/design.html#address-space-independent-core-mechanisms
+> > > [2] https://en.wikipedia.org/wiki/Pareto_principle
+> > >
+> > >
+> > > Thanks,
+> > > SJ
+> >
 
-write_seqlock_irq
-  spin_lock_irq();
-   lock_acquire
-  do_write_seqcount_begin
-   seqcount_acquire
-
-  wait_event_lock_irq_cmd
-   spin_unlock_irq -> lock is released while seqcount is still hold
-		     if other context hold the lock again, lockdep
-		     will trigger warning.
-   ...
-   spin_lock_irq
-
-write_sequnlock_irq
-
-Functionality should be ok, I'll try to find a way to prevent such
-warning.
-
-Thanks,
-Kuai
-> I haven't dug into it too deeply, but hopefully it can be fixed easily.
-> 
-> Logan
-> 
-> --
-> 
-> 
->      ================================
->      WARNING: inconsistent lock state
->      6.0.0-rc2-eid-vmlocalyes-dbg-00023-gfd68041d2fd2 #2604 Not tainted
->      --------------------------------
->      inconsistent {IN-SOFTIRQ-W} -> {SOFTIRQ-ON-W} usage.
->      fsck.ext3/1695 [HC0[0]:SC0[0]:HE0:SE1] takes:
->      ffff8881049b0120 (&____s->seqcount#10){+.?.}-{0:0}, at:
-> raid10_read_request+0x21f/0x760
-> 		(raid10.c:1134)
-> 
->      {IN-SOFTIRQ-W} state was registered at:
->        lock_acquire+0x183/0x440
->        lower_barrier+0x5e/0xd0
->        end_sync_request+0x178/0x180
->        end_sync_write+0x193/0x380
->        bio_endio+0x346/0x3a0
->        blk_update_request+0x1eb/0x7c0
->        blk_mq_end_request+0x30/0x50
->        lo_complete_rq+0xb7/0x100
->        blk_complete_reqs+0x77/0x90
->        blk_done_softirq+0x38/0x40
->        __do_softirq+0x10c/0x650
->        run_ksoftirqd+0x48/0x80
->        smpboot_thread_fn+0x302/0x400
->        kthread+0x18c/0x1c0
->        ret_from_fork+0x1f/0x30
-> 
->      irq event stamp: 8930
->      hardirqs last  enabled at (8929): [<ffffffff96df8351>]
-> _raw_spin_unlock_irqrestore+0x31/0x60
->      hardirqs last disabled at (8930): [<ffffffff96df7fc5>]
-> _raw_spin_lock_irq+0x75/0x90
->      softirqs last  enabled at (6768): [<ffffffff9554970e>]
-> __irq_exit_rcu+0xfe/0x150
->      softirqs last disabled at (6757): [<ffffffff9554970e>]
-> __irq_exit_rcu+0xfe/0x150
-> 
->      other info that might help us debug this:
->       Possible unsafe locking scenario:
-> 
->             CPU0
->             ----
->        lock(&____s->seqcount#10);
->        <Interrupt>
->          lock(&____s->seqcount#10);
-> 
->       *** DEADLOCK ***
-> 
->      2 locks held by fsck.ext3/1695:
->       #0: ffff8881007d0930 (mapping.invalidate_lock#2){++++}-{3:3}, at:
-> page_cache_ra_unbounded+0xaf/0x250
->       #1: ffff8881049b0120 (&____s->seqcount#10){+.?.}-{0:0}, at:
-> raid10_read_request+0x21f/0x760
-> 
->      stack backtrace:
->      CPU: 0 PID: 1695 Comm: fsck.ext3 Not tainted
-> 6.0.0-rc2-eid-vmlocalyes-dbg-00023-gfd68041d2fd2 #2604
->      Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2
-> 04/01/2014
->      Call Trace:
->       <TASK>
->       dump_stack_lvl+0x5a/0x74
->       dump_stack+0x10/0x12
->       print_usage_bug.part.0+0x233/0x246
->       mark_lock.part.0.cold+0x73/0x14f
->       mark_held_locks+0x71/0xa0
->       lockdep_hardirqs_on_prepare+0x158/0x230
->       trace_hardirqs_on+0x34/0x100
->       _raw_spin_unlock_irq+0x28/0x60
->       wait_barrier+0x4a6/0x720
->           raid10.c:1004
->       raid10_read_request+0x21f/0x760
->       raid10_make_request+0x2d6/0x2160
->       md_handle_request+0x3f3/0x5b0
->       md_submit_bio+0xd9/0x120
->       __submit_bio+0x9d/0x100
->       submit_bio_noacct_nocheck+0x1fd/0x470
->       submit_bio_noacct+0x4c2/0xbb0
->       submit_bio+0x3f/0xf0
->       mpage_readahead+0x323/0x3b0
->       blkdev_readahead+0x15/0x20
->       read_pages+0x136/0x7a0
->       page_cache_ra_unbounded+0x18d/0x250
->       page_cache_ra_order+0x2c9/0x400
->       ondemand_readahead+0x320/0x730
->       page_cache_sync_ra+0xa6/0xb0
->       filemap_get_pages+0x1eb/0xc00
->       filemap_read+0x1f1/0x770
->       blkdev_read_iter+0x164/0x310
->       vfs_read+0x467/0x5a0
->       __x64_sys_pread64+0x122/0x160
->       do_syscall_64+0x35/0x80
->       entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> 
-> --
-> 
->      ======================================================
->      WARNING: possible circular locking dependency detected
->      6.0.0-rc2-eid-vmlocalyes-dbg-00027-gcd6aa5181bbb #2600 Not tainted
->      ------------------------------------------------------
->      systemd-udevd/292 is trying to acquire lock:
->      ffff88817b644170 (&(&conf->resync_lock)->lock){....}-{2:2}, at:
-> wait_barrier+0x4fe/0x770
-> 
->      but task is already holding lock:
->      ffff88817b644120 (&____s->seqcount#11){+.+.}-{0:0}, at:
-> raid10_read_request+0x21f/0x760
-> 			raid10.c:1140  wait_barrier()
-> 			raid10.c:1204  regular_request_wait()
-> 
-> 
-> 
->      which lock already depends on the new lock.
-> 
-> 
->      the existing dependency chain (in reverse order) is:
-> 
->      -> #1 (&____s->seqcount#11){+.+.}-{0:0}:
->             raise_barrier+0xe0/0x300
-> 		raid10.c:940 write_seqlock_irq()
->             raid10_sync_request+0x629/0x4750
-> 		raid10.c:3689 raise_barrire()
->             md_do_sync.cold+0x8ec/0x1491
->             md_thread+0x19d/0x2d0
->             kthread+0x18c/0x1c0
->             ret_from_fork+0x1f/0x30
-> 
->      -> #0 (&(&conf->resync_lock)->lock){....}-{2:2}:
->             __lock_acquire+0x1cb4/0x3170
->             lock_acquire+0x183/0x440
->             _raw_spin_lock_irq+0x4d/0x90
->             wait_barrier+0x4fe/0x770
->             raid10_read_request+0x21f/0x760
-> 		raid10.c:1140  wait_barrier()
-> 		raid10.c:1204  regular_request_wait()
->             raid10_make_request+0x2d6/0x2190
->             md_handle_request+0x3f3/0x5b0
->             md_submit_bio+0xd9/0x120
->             __submit_bio+0x9d/0x100
->             submit_bio_noacct_nocheck+0x1fd/0x470
->             submit_bio_noacct+0x4c2/0xbb0
->             submit_bio+0x3f/0xf0
->             submit_bh_wbc+0x270/0x2a0
->             block_read_full_folio+0x37c/0x580
->             blkdev_read_folio+0x18/0x20
->             filemap_read_folio+0x3f/0x110
->             do_read_cache_folio+0x13b/0x2c0
->             read_cache_folio+0x42/0x50
->             read_part_sector+0x74/0x1c0
->             read_lba+0x176/0x2a0
->             efi_partition+0x1ce/0xdd0
->             bdev_disk_changed+0x2e7/0x6a0
->             blkdev_get_whole+0xd2/0x140
->             blkdev_get_by_dev.part.0+0x37f/0x570
->             blkdev_get_by_dev+0x51/0x60
->             disk_scan_partitions+0xad/0xf0
->             blkdev_common_ioctl+0x3f3/0xdf0
->             blkdev_ioctl+0x1e1/0x450
->             __x64_sys_ioctl+0xc0/0x100
->             do_syscall_64+0x35/0x80
->             entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> 
->      other info that might help us debug this:
-> 
->       Possible unsafe locking scenario:
-> 
->             CPU0                    CPU1
->             ----                    ----
->        lock(&____s->seqcount#11);
->                                     lock(&(&conf->resync_lock)->lock);
->                                     lock(&____s->seqcount#11);
->        lock(&(&conf->resync_lock)->lock);
-> 
->       *** DEADLOCK ***
-> 
->      2 locks held by systemd-udevd/292:
->       #0: ffff88817a532528 (&disk->open_mutex){+.+.}-{3:3}, at:
-> blkdev_get_by_dev.part.0+0x180/0x570
->       #1: ffff88817b644120 (&____s->seqcount#11){+.+.}-{0:0}, at:
-> raid10_read_request+0x21f/0x760
-> 
->      stack backtrace:
->      CPU: 3 PID: 292 Comm: systemd-udevd Not tainted
-> 6.0.0-rc2-eid-vmlocalyes-dbg-00027-gcd6aa5181bbb #2600
->      Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2
-> 04/01/2014
->      Call Trace:
->       <TASK>
->       dump_stack_lvl+0x5a/0x74
->       dump_stack+0x10/0x12
->       print_circular_bug.cold+0x146/0x14b
->       check_noncircular+0x1ff/0x250
->       __lock_acquire+0x1cb4/0x3170
->       lock_acquire+0x183/0x440
->       _raw_spin_lock_irq+0x4d/0x90
->       wait_barrier+0x4fe/0x770
->       raid10_read_request+0x21f/0x760
->       raid10_make_request+0x2d6/0x2190
->       md_handle_request+0x3f3/0x5b0
->       md_submit_bio+0xd9/0x120
->       __submit_bio+0x9d/0x100
->       submit_bio_noacct_nocheck+0x1fd/0x470
->       submit_bio_noacct+0x4c2/0xbb0
->       submit_bio+0x3f/0xf0
->       submit_bh_wbc+0x270/0x2a0
->       block_read_full_folio+0x37c/0x580
->       blkdev_read_folio+0x18/0x20
->       filemap_read_folio+0x3f/0x110
->       do_read_cache_folio+0x13b/0x2c0
->       read_cache_folio+0x42/0x50
->       read_part_sector+0x74/0x1c0
->       read_lba+0x176/0x2a0
->       efi_partition+0x1ce/0xdd0
->       bdev_disk_changed+0x2e7/0x6a0
->       blkdev_get_whole+0xd2/0x140
->       blkdev_get_by_dev.part.0+0x37f/0x570
->       blkdev_get_by_dev+0x51/0x60
->       disk_scan_partitions+0xad/0xf0
->       blkdev_common_ioctl+0x3f3/0xdf0
->       blkdev_ioctl+0x1e1/0x450
->       __x64_sys_ioctl+0xc0/0x100
->       do_syscall_64+0x35/0x80
-> .
-> 
-
+Thanks
+Barry

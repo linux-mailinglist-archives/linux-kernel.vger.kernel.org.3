@@ -2,669 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB185AAC76
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD555AAC97
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235715AbiIBKdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S235944AbiIBKgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235769AbiIBKcp (ORCPT
+        with ESMTP id S235640AbiIBKgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:32:45 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D52AEDBE;
-        Fri,  2 Sep 2022 03:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662114764; x=1693650764;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/9/pu0lhiplmWsSlMqe1UIGGSTTU+Giege5G6bEuxm4=;
-  b=H3sYP0pn4CkW3y2IaHH46FSUr8iOJV9dR61xs7pTkQrIOBJpkophWL8z
-   RcIRBVt3eFJ0VkySS8xSrhDDFLBwZjhbo6zFQZT6dNVzE9ZDiKl+LdqHH
-   FyfkZ5Xp51rSkaTTs1wSpraNdVlhJsqGicIakKtZdLcIKTol3dtAF09z4
-   IPgysA97uTJVV1FJmGwLi5fIYO6boKnS5g3t9MLhZTD4+n06yRLMYFx0i
-   Ac3SHuoJJa6FInbSoDI6GVTjzXQUadrqW/mD/k1NLJSpcRIMz/GjYUf1z
-   kVWl80gu4QncuICCiv7ZjT9ligmUmKonboELlw9ouc7S7CuwvGlRIxfnh
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="178772975"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Sep 2022 03:32:43 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 2 Sep 2022 03:32:42 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Fri, 2 Sep 2022 03:32:37 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Woojung Huh <woojung.huh@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        Tristram Ha <Tristram.Ha@microchip.com>
-Subject: [Patch net-next 3/3] net: dsa: microchip: lan937x: add interrupt support for port phy link
-Date:   Fri, 2 Sep 2022 16:02:10 +0530
-Message-ID: <20220902103210.10743-4-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220902103210.10743-1-arun.ramadoss@microchip.com>
-References: <20220902103210.10743-1-arun.ramadoss@microchip.com>
+        Fri, 2 Sep 2022 06:36:39 -0400
+Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC02BD2AE;
+        Fri,  2 Sep 2022 03:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1662114996; i=@fujitsu.com;
+        bh=5IDXemfHxETHCWqCLUiIKux1ffJ8/B2RvV4DalAoB1U=;
+        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=oXBgAJelAtuWWE+9v0Dulxr9fwsWZ+RComPS5JUXjWDfM65xoQlEbfiyisDR8VpnY
+         37sTl4NhadrCRdjPzdjfkJ1yKLBXcpDmn7gLdjsoKsPAcoE2PxjQQ3Cae8DK8sXZEA
+         7YxcFTHtWqIlTRX3J1+bvwkurUgsdvXddPkw0PpXVUfttpAIw3NS9MQEzOZ+ROZBmc
+         Im9vB3WzfXP5MFBJHou/xKVMygn2cPSsCBq12FYdOrZjPthewikg+A+AqkpQZ5bpjQ
+         M+hWHAvMK8EIT40I94/1H7GVw+XDJm151+UUTypfrmOPGLm44bMhu2q+6PibGmqHT5
+         B+smEyLg4gqGQ==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRWlGSWpSXmKPExsViZ8ORqLvyjmC
+  ywcWJehbTp15gtNhy7B6jxeUnfBanJyxistj9+iabxZ69J1ksLu+aw2Zxb81/Votdf3awW6z8
+  8YfVgcvj1CIJj80rtDwW73nJ5LFpVSebx6ZPk9g9Xmyeyejx8ektFo/Pm+QCOKJYM/OS8isSW
+  DNOrLAquMBRcW5fTAPjD7YuRi4OIYEtjBJ/urtYIJzlTBJLL5xlgnD2MEp8fd3A2MXIycEmoC
+  NxYcFfVpCEiMAkRoljN24ygySYBcol9m+8wQZiCwt4SrT232UFsVkEVCQWPDvKAmLzCrhI3Pn
+  4HywuIaAgMeXhe7BeTgF7iUXnfzOB2EICdhLfj81jgqgXlDg58wkLxHwJiYMvXgDVcwD1KknM
+  7I6HGFMh0Tj9EBOErSZx9dwm5gmMgrOQdM9C0r2AkWkVo3VSUWZ6RkluYmaOrqGBga6hoamus
+  ZGuoYWlXmKVbqJeaqlueWpxia6RXmJ5sV5qcbFecWVuck6KXl5qySZGYHSlFCvs3cF4eeVPvU
+  OMkhxMSqK8ibcEk4X4kvJTKjMSizPii0pzUosPMcpwcChJ8PKD5ASLUtNTK9Iyc4CRDpOW4OB
+  REuENA0nzFhck5hZnpkOkTjHqcqxtOLCXWYglLz8vVUqc9wVIkQBIUUZpHtwIWNK5xCgrJczL
+  yMDAIMRTkFqUm1mCKv+KUZyDUUmY9xnIFJ7MvBK4Ta+AjmACOmL6TH6QI0oSEVJSDUxhmXF88
+  6IMt6208/x64fYyT+mtJ0TmH4po9fy2aLIyr3bZ9ptn5+/pjqh+mNb1kLXK3uxVq3nC/meXON
+  gOzjKa0BShu33F353cL7lLXYNPtqp9mDzxwflLUxbnVibXpt3VyA7m89zh93tp967f7iu/L/t
+  bpaN51mfxhyObdRzdFx83bOx/X243QeSlyouLbEG7Ly6Y1Se8xCGlylfAjrP4Mfs8r+xTHztZ
+  7nVeb7qQqP6n333DnF8W+yNXKXkujVkV+GChjLby37shwb/azuutunfdv4+9/AK/ocyXMNc9M
+  jP7nmfMctAXtVF9od2xn6eFict05sw5j7Oy++eqantu/PJA3u/4e7/rxefPuUsqsRRnJBpqMR
+  cVJwIAr4PfWrUDAAA=
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-20.tower-548.messagelabs.com!1662114985!2086!1
+X-Originating-IP: [62.60.8.97]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.87.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 22685 invoked from network); 2 Sep 2022 10:36:25 -0000
+Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
+  by server-20.tower-548.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 2 Sep 2022 10:36:25 -0000
+Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 5D1FC1001A1;
+        Fri,  2 Sep 2022 11:36:25 +0100 (BST)
+Received: from R01UKEXCASM121.r01.fujitsu.local (R01UKEXCASM121 [10.183.43.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id 4DFA21001A0;
+        Fri,  2 Sep 2022 11:36:25 +0100 (BST)
+Received: from localhost.localdomain (10.167.225.141) by
+ R01UKEXCASM121.r01.fujitsu.local (10.183.43.173) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Fri, 2 Sep 2022 11:36:21 +0100
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>
+Subject: [PATCH v8 0/3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Date:   Fri, 2 Sep 2022 10:35:58 +0000
+Message-ID: <1662114961-66-1-git-send-email-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
+References: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM121.r01.fujitsu.local (10.183.43.173)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables the interrupts for internal phy link detection for
-LAN937x. The interrupt enable bits are active low. There is global
-interrupt mask for each port. And each port has the individual interrupt
-mask for TAS. QCI, SGMII, PTP, PHY and ACL.
-The first level of interrupt domain is registered for global port
-interrupt and second level of interrupt domain for the individual port
-interrupts. The phy interrupt is enabled in the lan937x_mdio_register
-function. Interrupt from which port is raised will be detected based on
-the interrupt host data.
+Changes since v7:
+  1. Add P1 to fix calculation mistake
+  2. Add P2 to move drop_pagecache_sb() to super.c for xfs to use
+  3. P3: Add invalidate all mappings after sync.
+  4. P3: Set offset&len to be start&length of device when it is to be removed.
+  5. Rebase on 6.0-rc3 + Darrick's patch[1] + Dan's patch[2].
 
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
- drivers/net/dsa/microchip/ksz_common.c   |  10 +
- drivers/net/dsa/microchip/ksz_common.h   |  14 +
- drivers/net/dsa/microchip/ksz_spi.c      |   2 +
- drivers/net/dsa/microchip/lan937x.h      |   1 +
- drivers/net/dsa/microchip/lan937x_main.c | 364 ++++++++++++++++++++++-
- drivers/net/dsa/microchip/lan937x_reg.h  |  12 +
- 6 files changed, 399 insertions(+), 4 deletions(-)
+Changes since v6:
+  1. Rebase on 6.0-rc2 and Darrick's patch[1].
 
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index 63b9faa89393..ec2896a23834 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -205,6 +205,7 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
- 
- static const struct ksz_dev_ops lan937x_dev_ops = {
- 	.setup = lan937x_setup,
-+	.teardown = lan937x_teardown,
- 	.get_port_addr = ksz9477_get_port_addr,
- 	.cfg_port_member = ksz9477_cfg_port_member,
- 	.flush_dyn_mac_table = ksz9477_flush_dyn_mac_table,
-@@ -1444,6 +1445,14 @@ static int ksz_setup(struct dsa_switch *ds)
- 	return 0;
- }
- 
-+static void ksz_teardown(struct dsa_switch *ds)
-+{
-+	struct ksz_device *dev = ds->priv;
-+
-+	if (dev->dev_ops->teardown)
-+		dev->dev_ops->teardown(ds);
-+}
-+
- static void port_r_cnt(struct ksz_device *dev, int port)
- {
- 	struct ksz_port_mib *mib = &dev->ports[port].mib;
-@@ -2193,6 +2202,7 @@ static const struct dsa_switch_ops ksz_switch_ops = {
- 	.get_tag_protocol	= ksz_get_tag_protocol,
- 	.get_phy_flags		= ksz_get_phy_flags,
- 	.setup			= ksz_setup,
-+	.teardown		= ksz_teardown,
- 	.phy_read		= ksz_phy_read16,
- 	.phy_write		= ksz_phy_write16,
- 	.phylink_get_caps	= ksz_phylink_get_caps,
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index 3fa3e4731d58..35346b39ce54 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -13,6 +13,7 @@
- #include <linux/phy.h>
- #include <linux/regmap.h>
- #include <net/dsa.h>
-+#include <linux/irq.h>
- 
- #define KSZ_MAX_NUM_PORTS 8
- 
-@@ -68,6 +69,14 @@ struct ksz_chip_data {
- 	const struct regmap_access_table *rd_table;
- };
- 
-+struct ksz_irq {
-+	u16 masked;
-+	struct irq_chip chip;
-+	struct irq_domain *domain;
-+	int nirqs;
-+	char name[16];
-+};
-+
- struct ksz_port {
- 	bool remove_tag;		/* Remove Tag flag set, for ksz8795 only */
- 	bool learning;
-@@ -86,6 +95,7 @@ struct ksz_port {
- 	u32 rgmii_tx_val;
- 	u32 rgmii_rx_val;
- 	struct ksz_device *ksz_dev;
-+	struct ksz_irq pirq;
- 	u8 num;
- };
- 
-@@ -104,6 +114,7 @@ struct ksz_device {
- 	struct regmap *regmap[3];
- 
- 	void *priv;
-+	int irq;
- 
- 	struct gpio_desc *reset_gpio;	/* Optional reset GPIO */
- 
-@@ -124,6 +135,8 @@ struct ksz_device {
- 	u16 mirror_rx;
- 	u16 mirror_tx;
- 	u16 port_mask;
-+	struct mutex lock_irq;		/* IRQ Access */
-+	struct ksz_irq girq;
- };
- 
- /* List of supported models */
-@@ -260,6 +273,7 @@ struct alu_struct {
- 
- struct ksz_dev_ops {
- 	int (*setup)(struct dsa_switch *ds);
-+	void (*teardown)(struct dsa_switch *ds);
- 	u32 (*get_port_addr)(int port, int offset);
- 	void (*cfg_port_member)(struct ksz_device *dev, int port, u8 member);
- 	void (*flush_dyn_mac_table)(struct ksz_device *dev, int port);
-diff --git a/drivers/net/dsa/microchip/ksz_spi.c b/drivers/net/dsa/microchip/ksz_spi.c
-index 44c2d9912406..126ed1c986a9 100644
---- a/drivers/net/dsa/microchip/ksz_spi.c
-+++ b/drivers/net/dsa/microchip/ksz_spi.c
-@@ -88,6 +88,8 @@ static int ksz_spi_probe(struct spi_device *spi)
- 	if (ret)
- 		return ret;
- 
-+	dev->irq = spi->irq;
-+
- 	ret = ksz_switch_register(dev);
- 
- 	/* Main DSA driver may not be started yet. */
-diff --git a/drivers/net/dsa/microchip/lan937x.h b/drivers/net/dsa/microchip/lan937x.h
-index 5d78d034a62f..1b7f077946f3 100644
---- a/drivers/net/dsa/microchip/lan937x.h
-+++ b/drivers/net/dsa/microchip/lan937x.h
-@@ -8,6 +8,7 @@
- 
- int lan937x_reset_switch(struct ksz_device *dev);
- int lan937x_setup(struct dsa_switch *ds);
-+void lan937x_teardown(struct dsa_switch *ds);
- void lan937x_port_setup(struct ksz_device *dev, int port, bool cpu_port);
- void lan937x_config_cpu_port(struct dsa_switch *ds);
- int lan937x_switch_init(struct ksz_device *dev);
-diff --git a/drivers/net/dsa/microchip/lan937x_main.c b/drivers/net/dsa/microchip/lan937x_main.c
-index 0466c4d0b10c..4867aa62dd4c 100644
---- a/drivers/net/dsa/microchip/lan937x_main.c
-+++ b/drivers/net/dsa/microchip/lan937x_main.c
-@@ -10,6 +10,8 @@
- #include <linux/of_mdio.h>
- #include <linux/if_bridge.h>
- #include <linux/if_vlan.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
- #include <linux/math.h>
- #include <net/dsa.h>
- #include <net/switchdev.h>
-@@ -18,6 +20,8 @@
- #include "ksz_common.h"
- #include "lan937x.h"
- 
-+#define LAN937x_PNIRQS 6
-+
- static int lan937x_cfg(struct ksz_device *dev, u32 addr, u8 bits, bool set)
- {
- 	return regmap_update_bits(dev->regmap[0], addr, bits, set ? bits : 0);
-@@ -165,6 +169,45 @@ static int lan937x_sw_mdio_write(struct mii_bus *bus, int addr, int regnum,
- 	return lan937x_internal_phy_write(dev, addr, regnum, val);
- }
- 
-+static int lan937x_irq_phy_setup(struct ksz_device *dev)
-+{
-+	struct dsa_switch *ds = dev->ds;
-+	int phy, err_phy;
-+	int irq;
-+	int ret;
-+
-+	for (phy = 0; phy < KSZ_MAX_NUM_PORTS; phy++) {
-+		if (BIT(phy) & ds->phys_mii_mask) {
-+			irq = irq_find_mapping(dev->ports[phy].pirq.domain,
-+					       PORT_SRC_PHY_INT);
-+			if (irq < 0) {
-+				ret = irq;
-+				goto out;
-+			}
-+			ds->slave_mii_bus->irq[phy] = irq;
-+		}
-+	}
-+	return 0;
-+out:
-+	err_phy = phy;
-+
-+	for (phy = 0; phy < err_phy; phy++)
-+		if (BIT(phy) & ds->phys_mii_mask)
-+			irq_dispose_mapping(ds->slave_mii_bus->irq[phy]);
-+
-+	return ret;
-+}
-+
-+static void lan937x_irq_phy_free(struct ksz_device *dev)
-+{
-+	struct dsa_switch *ds = dev->ds;
-+	int phy;
-+
-+	for (phy = 0; phy < KSZ_MAX_NUM_PORTS; phy++)
-+		if (BIT(phy) & ds->phys_mii_mask)
-+			irq_dispose_mapping(ds->slave_mii_bus->irq[phy]);
-+}
-+
- static int lan937x_mdio_register(struct ksz_device *dev)
- {
- 	struct dsa_switch *ds = dev->ds;
-@@ -194,10 +237,15 @@ static int lan937x_mdio_register(struct ksz_device *dev)
- 
- 	ds->slave_mii_bus = bus;
- 
-+	ret = lan937x_irq_phy_setup(dev);
-+	if (ret)
-+		return ret;
-+
- 	ret = devm_of_mdiobus_register(ds->dev, bus, mdio_np);
- 	if (ret) {
- 		dev_err(ds->dev, "unable to register MDIO bus %s\n",
- 			bus->id);
-+		lan937x_irq_phy_free(dev);
- 	}
- 
- 	of_node_put(mdio_np);
-@@ -387,9 +435,289 @@ void lan937x_setup_rgmii_delay(struct ksz_device *dev, int port)
- 	}
- }
- 
-+int lan937x_switch_init(struct ksz_device *dev)
-+{
-+	dev->port_mask = (1 << dev->info->port_cnt) - 1;
-+
-+	return 0;
-+}
-+
-+static void lan937x_girq_mask(struct irq_data *d)
-+{
-+	struct ksz_device *dev = irq_data_get_irq_chip_data(d);
-+	unsigned int n = d->hwirq;
-+
-+	dev->girq.masked |= (1 << n);
-+}
-+
-+static void lan937x_girq_unmask(struct irq_data *d)
-+{
-+	struct ksz_device *dev = irq_data_get_irq_chip_data(d);
-+	unsigned int n = d->hwirq;
-+
-+	dev->girq.masked &= ~(1 << n);
-+}
-+
-+static void lan937x_girq_bus_lock(struct irq_data *d)
-+{
-+	struct ksz_device *dev = irq_data_get_irq_chip_data(d);
-+
-+	mutex_lock(&dev->lock_irq);
-+}
-+
-+static void lan937x_girq_bus_sync_unlock(struct irq_data *d)
-+{
-+	struct ksz_device *dev = irq_data_get_irq_chip_data(d);
-+	int ret;
-+
-+	ret = ksz_write32(dev, REG_SW_PORT_INT_MASK__4, dev->girq.masked);
-+	if (ret)
-+		dev_err(dev->dev, "failed to change IRQ mask\n");
-+
-+	mutex_unlock(&dev->lock_irq);
-+}
-+
-+static const struct irq_chip lan937x_girq_chip = {
-+	.name			= "lan937x-global",
-+	.irq_mask		= lan937x_girq_mask,
-+	.irq_unmask		= lan937x_girq_unmask,
-+	.irq_bus_lock		= lan937x_girq_bus_lock,
-+	.irq_bus_sync_unlock	= lan937x_girq_bus_sync_unlock,
-+};
-+
-+static int lan937x_girq_domain_map(struct irq_domain *d,
-+				   unsigned int irq, irq_hw_number_t hwirq)
-+{
-+	struct ksz_device *dev = d->host_data;
-+
-+	irq_set_chip_data(irq, d->host_data);
-+	irq_set_chip_and_handler(irq, &dev->girq.chip, handle_level_irq);
-+	irq_set_noprobe(irq);
-+
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops lan937x_girq_domain_ops = {
-+	.map	= lan937x_girq_domain_map,
-+	.xlate	= irq_domain_xlate_twocell,
-+};
-+
-+static void lan937x_girq_free(struct ksz_device *dev)
-+{
-+	int irq, virq;
-+
-+	free_irq(dev->irq, dev);
-+
-+	for (irq = 0; irq < dev->girq.nirqs; irq++) {
-+		virq = irq_find_mapping(dev->girq.domain, irq);
-+		irq_dispose_mapping(virq);
-+	}
-+
-+	irq_domain_remove(dev->girq.domain);
-+}
-+
-+static irqreturn_t lan937x_girq_thread_fn(int irq, void *dev_id)
-+{
-+	struct ksz_device *dev = dev_id;
-+	unsigned int nhandled = 0;
-+	unsigned int sub_irq;
-+	unsigned int n;
-+	u32 data;
-+	int ret;
-+
-+	/* Read global interrupt status register */
-+	ret = ksz_read32(dev, REG_SW_PORT_INT_STATUS__4, &data);
-+	if (ret)
-+		goto out;
-+
-+	for (n = 0; n < dev->girq.nirqs; ++n) {
-+		if (data & (1 << n)) {
-+			sub_irq = irq_find_mapping(dev->girq.domain, n);
-+			handle_nested_irq(sub_irq);
-+			++nhandled;
-+		}
-+	}
-+out:
-+	return (nhandled > 0 ? IRQ_HANDLED : IRQ_NONE);
-+}
-+
-+static int lan937x_girq_setup(struct ksz_device *dev)
-+{
-+	int ret, irq;
-+
-+	dev->girq.nirqs = dev->info->port_cnt;
-+	dev->girq.domain = irq_domain_add_simple(NULL, dev->girq.nirqs, 0,
-+						 &lan937x_girq_domain_ops, dev);
-+	if (!dev->girq.domain)
-+		return -ENOMEM;
-+
-+	for (irq = 0; irq < dev->girq.nirqs; irq++)
-+		irq_create_mapping(dev->girq.domain, irq);
-+
-+	dev->girq.chip = lan937x_girq_chip;
-+	dev->girq.masked = ~0;
-+
-+	ret = request_threaded_irq(dev->irq, NULL, lan937x_girq_thread_fn,
-+				   IRQF_ONESHOT | IRQF_TRIGGER_FALLING,
-+				   dev_name(dev->dev), dev);
-+	if (ret)
-+		goto out;
-+
-+	return 0;
-+
-+out:
-+	lan937x_girq_free(dev);
-+
-+	return ret;
-+}
-+
-+static void lan937x_pirq_mask(struct irq_data *d)
-+{
-+	struct ksz_port *port = irq_data_get_irq_chip_data(d);
-+	unsigned int n = d->hwirq;
-+
-+	port->pirq.masked |= (1 << n);
-+}
-+
-+static void lan937x_pirq_unmask(struct irq_data *d)
-+{
-+	struct ksz_port *port = irq_data_get_irq_chip_data(d);
-+	unsigned int n = d->hwirq;
-+
-+	port->pirq.masked &= ~(1 << n);
-+}
-+
-+static void lan937x_pirq_bus_lock(struct irq_data *d)
-+{
-+	struct ksz_port *port = irq_data_get_irq_chip_data(d);
-+	struct ksz_device *dev = port->ksz_dev;
-+
-+	mutex_lock(&dev->lock_irq);
-+}
-+
-+static void lan937x_pirq_bus_sync_unlock(struct irq_data *d)
-+{
-+	struct ksz_port *port = irq_data_get_irq_chip_data(d);
-+	struct ksz_device *dev = port->ksz_dev;
-+
-+	ksz_pwrite8(dev, port->num, REG_PORT_INT_MASK, port->pirq.masked);
-+	mutex_unlock(&dev->lock_irq);
-+}
-+
-+static const struct irq_chip lan937x_pirq_chip = {
-+	.name			= "lan937x-port",
-+	.irq_mask		= lan937x_pirq_mask,
-+	.irq_unmask		= lan937x_pirq_unmask,
-+	.irq_bus_lock		= lan937x_pirq_bus_lock,
-+	.irq_bus_sync_unlock	= lan937x_pirq_bus_sync_unlock,
-+};
-+
-+static int lan937x_pirq_domain_map(struct irq_domain *d, unsigned int irq,
-+				   irq_hw_number_t hwirq)
-+{
-+	struct ksz_port *port = d->host_data;
-+
-+	irq_set_chip_data(irq, d->host_data);
-+	irq_set_chip_and_handler(irq, &port->pirq.chip, handle_level_irq);
-+	irq_set_noprobe(irq);
-+
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops lan937x_pirq_domain_ops = {
-+	.map	= lan937x_pirq_domain_map,
-+	.xlate	= irq_domain_xlate_twocell,
-+};
-+
-+static void lan937x_pirq_free(struct ksz_device *dev, u8 p)
-+{
-+	struct ksz_port *port = &dev->ports[p];
-+	int irq, virq;
-+	int irq_num;
-+
-+	irq_num = irq_find_mapping(dev->girq.domain, p);
-+	if (irq_num < 0)
-+		return;
-+
-+	free_irq(irq_num, port);
-+
-+	for (irq = 0; irq < port->pirq.nirqs; irq++) {
-+		virq = irq_find_mapping(port->pirq.domain, irq);
-+		irq_dispose_mapping(virq);
-+	}
-+
-+	irq_domain_remove(port->pirq.domain);
-+}
-+
-+static irqreturn_t lan937x_pirq_thread_fn(int irq, void *dev_id)
-+{
-+	struct ksz_port *port = dev_id;
-+	unsigned int nhandled = 0;
-+	struct ksz_device *dev;
-+	unsigned int sub_irq;
-+	unsigned int n;
-+	u8 data;
-+
-+	dev = port->ksz_dev;
-+
-+	/* Read port interrupt status register */
-+	ksz_pread8(dev, port->num, REG_PORT_INT_STATUS, &data);
-+
-+	for (n = 0; n < port->pirq.nirqs; ++n) {
-+		if (data & (1 << n)) {
-+			sub_irq = irq_find_mapping(port->pirq.domain, n);
-+			handle_nested_irq(sub_irq);
-+			++nhandled;
-+		}
-+	}
-+
-+	return (nhandled > 0 ? IRQ_HANDLED : IRQ_NONE);
-+}
-+
-+static int lan937x_pirq_setup(struct ksz_device *dev, u8 p)
-+{
-+	struct ksz_port *port = &dev->ports[p];
-+	int ret, irq;
-+	int irq_num;
-+
-+	port->pirq.nirqs = LAN937x_PNIRQS;
-+	port->pirq.domain = irq_domain_add_simple(dev->dev->of_node,
-+						  port->pirq.nirqs, 0,
-+						  &lan937x_pirq_domain_ops,
-+						  port);
-+	if (!port->pirq.domain)
-+		return -ENOMEM;
-+
-+	for (irq = 0; irq < port->pirq.nirqs; irq++)
-+		irq_create_mapping(port->pirq.domain, irq);
-+
-+	port->pirq.chip = lan937x_pirq_chip;
-+	port->pirq.masked = ~0;
-+
-+	irq_num = irq_find_mapping(dev->girq.domain, p);
-+	if (irq_num < 0)
-+		return irq_num;
-+
-+	snprintf(port->pirq.name, sizeof(port->pirq.name), "port_irq-%d", p);
-+
-+	ret = request_threaded_irq(irq_num, NULL, lan937x_pirq_thread_fn,
-+				   IRQF_ONESHOT | IRQF_TRIGGER_FALLING,
-+				   port->pirq.name, port);
-+	if (ret)
-+		goto out;
-+
-+	return 0;
-+
-+out:
-+	lan937x_pirq_free(dev, p);
-+
-+	return ret;
-+}
-+
- int lan937x_setup(struct dsa_switch *ds)
- {
- 	struct ksz_device *dev = ds->priv;
-+	struct dsa_port *dp;
- 	int ret;
- 
- 	/* enable Indirect Access from SPI to the VPHY registers */
-@@ -399,10 +727,22 @@ int lan937x_setup(struct dsa_switch *ds)
- 		return ret;
- 	}
- 
-+	if (dev->irq > 0) {
-+		ret = lan937x_girq_setup(dev);
-+		if (ret)
-+			return ret;
-+
-+		dsa_switch_for_each_user_port(dp, dev->ds) {
-+			ret = lan937x_pirq_setup(dev, dp->index);
-+			if (ret)
-+				goto out_girq;
-+		}
-+	}
-+
- 	ret = lan937x_mdio_register(dev);
- 	if (ret < 0) {
- 		dev_err(dev->dev, "failed to register the mdio");
--		return ret;
-+		goto out_pirq;
- 	}
- 
- 	/* The VLAN aware is a global setting. Mixed vlan
-@@ -428,13 +768,29 @@ int lan937x_setup(struct dsa_switch *ds)
- 		    (SW_CLK125_ENB | SW_CLK25_ENB), true);
- 
- 	return 0;
-+
-+out_pirq:
-+	if (dev->irq > 0)
-+		dsa_switch_for_each_user_port(dp, dev->ds)
-+			lan937x_pirq_free(dev, dp->index);
-+out_girq:
-+	if (dev->irq > 0)
-+		lan937x_girq_free(dev);
-+
-+	return ret;
- }
- 
--int lan937x_switch_init(struct ksz_device *dev)
-+void lan937x_teardown(struct dsa_switch *ds)
- {
--	dev->port_mask = (1 << dev->info->port_cnt) - 1;
-+	struct ksz_device *dev = ds->priv;
-+	struct dsa_port *dp;
- 
--	return 0;
-+	if (dev->irq > 0) {
-+		dsa_switch_for_each_user_port(dp, dev->ds)
-+			lan937x_pirq_free(dev, dp->index);
-+
-+		lan937x_girq_free(dev);
-+	}
- }
- 
- void lan937x_switch_exit(struct ksz_device *dev)
-diff --git a/drivers/net/dsa/microchip/lan937x_reg.h b/drivers/net/dsa/microchip/lan937x_reg.h
-index ba4adaddb3ec..a3c669d86e51 100644
---- a/drivers/net/dsa/microchip/lan937x_reg.h
-+++ b/drivers/net/dsa/microchip/lan937x_reg.h
-@@ -118,6 +118,18 @@
- /* Port Registers */
- 
- /* 0 - Operation */
-+#define REG_PORT_INT_STATUS		0x001B
-+#define REG_PORT_INT_MASK		0x001F
-+
-+#define PORT_TAS_INT			BIT(5)
-+#define PORT_QCI_INT			BIT(4)
-+#define PORT_SGMII_INT			BIT(3)
-+#define PORT_PTP_INT			BIT(2)
-+#define PORT_PHY_INT			BIT(1)
-+#define PORT_ACL_INT			BIT(0)
-+
-+#define PORT_SRC_PHY_INT		1
-+
- #define REG_PORT_CTRL_0			0x0020
- 
- #define PORT_MAC_LOOPBACK		BIT(7)
+[1]: https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
+[2]: https://lore.kernel.org/linux-xfs/166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com/
+
+Shiyang Ruan (3):
+  xfs: fix the calculation of length and end
+  fs: move drop_pagecache_sb() for others to use
+  mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+
+ drivers/dax/super.c         |  3 ++-
+ fs/drop_caches.c            | 33 ---------------------------------
+ fs/super.c                  | 34 ++++++++++++++++++++++++++++++++++
+ fs/xfs/xfs_notify_failure.c | 31 +++++++++++++++++++++++++++----
+ include/linux/fs.h          |  1 +
+ include/linux/mm.h          |  1 +
+ 6 files changed, 65 insertions(+), 38 deletions(-)
+
 -- 
-2.36.1
+2.37.2
 

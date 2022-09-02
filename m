@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509F85ABAAE
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46375ABAB4
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiIBWKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 18:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S229605AbiIBWNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 18:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiIBWKV (ORCPT
+        with ESMTP id S229650AbiIBWNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 18:10:21 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29F86B148
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=Du4EboxIuNrkWsTrUXb2UIbbsv61yWb6aY5D8GRpJMg=; b=nVzMrBhmKPTZnNqwUf4hxZJKrl
-        xF2R1cmFH5cNL12dwATCtJD7hzhMQUj6+xKB+BWTpih+0aA1jKyeOFlNmfH764xBQC8BriyZY6MZ7
-        EJ490yE+YQDpchwWhIjeethhg5Y7jkgAoo+MPxcHJxp11OBNnEvlMEAsC0bNpyBlPvXZ7lTLHMbtR
-        vJ1yMnLBzLEs1uOLANW7x44EsGhZPMl4+C7mPnZhw4/t65dQq49suUwaL6fP0geSoyq0aFPxxXzca
-        12ZWaKk6PmoAnpDhmabUYJAZ1rppNWXwWwA+pOMc8b6jJBal386qd2iRDhkkAxNAAzhf/HZ99maCP
-        KCZWrkJQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oUErh-00Bt8k-Ij; Fri, 02 Sep 2022 22:10:17 +0000
-Message-ID: <8a8822a1-327d-84b9-549a-f11009a15b4f@infradead.org>
-Date:   Fri, 2 Sep 2022 15:10:17 -0700
+        Fri, 2 Sep 2022 18:13:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD36CF54BB;
+        Fri,  2 Sep 2022 15:13:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67DB861E11;
+        Fri,  2 Sep 2022 22:13:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96031C433D6;
+        Fri,  2 Sep 2022 22:13:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662156821;
+        bh=AvGreharmcJ+vogcHFdK+UJeGQXyBTbk5vH6FPFTCcc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=bNQY3+0sUZ6jnVPVe10HsxFTQXmRDJbWjSpR7paBbqrKe75zYIopT2iqDXxh3dKVM
+         ebltIMrTkO9DNqAyyoy33lDSusEclzJ2lr9WAb5sUDdLQIojMe0bDAQ/urlKUih4aU
+         mPbpm5WLw9FnWjetKvVMThN+LHHy8i64UlzTQiOwrfaxKNU+xq8MGBh6R3LonpTFza
+         fIRQIaH64mcp7+3KA+2+kIXmRDAo0XEiXP1DzcGA/9uFXnTZ/QOuo6yHR3BuiVCH4f
+         AkqZKk+3BX9vXCfbbmdJxjWshUJFPgZtOpQk/pdepxPiCt/iVvAaWSq/UmaI67moUL
+         uShulioYN/cFQ==
+Date:   Fri, 2 Sep 2022 17:13:40 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Will McVicker <willmcvicker@google.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Sajid Dalvi <sdalvi@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] PCI/PM: Switch D3Hot delay to also use usleep_range
+Message-ID: <20220902221340.GA379310@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: amd iommu configuration
-To:     Steven J Abner <pheonix.sja@att.net>, linux-kernel@vger.kernel.org
-References: <KONJHR.T3DS4EBAXDVX1.ref@att.net> <KONJHR.T3DS4EBAXDVX1@att.net>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <KONJHR.T3DS4EBAXDVX1@att.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817230821.47048-1-willmcvicker@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,59 +55,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 17, 2022 at 11:08:21PM +0000, Will McVicker wrote:
+> From: Sajid Dalvi <sdalvi@google.com>
+> 
+> Since the PCI spec requires a 10ms D3Hot delay (defined by
+> PCI_PM_D3HOT_WAIT) and a few of the PCI quirks update the D3Hot delay up
+> to 120ms, let's add support for both usleep_range and msleep based on
+> the delay time to improve the delay accuracy.
+> 
+> This patch is based off of a commit from Sajid Dalvi <sdalvi@google.com>
+> in the Pixel 6 kernel tree [1]. Testing on a Pixel 6, found that the
+> 10ms delay for the Exynos PCIe device was on average delaying for 19ms
+> when the spec requires 10ms. Switching from msleep to uslseep_range
+> therefore decreases the resume time on a Pixel 6 on average by 9ms.
 
+Add the "PCIe r6.0, sec 5.9" spec reference for the 10ms delay for
+transitions to or from D3hot.
 
-On 9/1/22 11:36, Steven J Abner wrote:
-> Hi
-> Building a kernel tailored for AMD 2400g on ASRock B450 using 5.18.12 as base.
-> I stumbled across an odd situation and which lacked Kconfig info and lead to oddity.
-> /drivers/iommu/amd/Kconfig states 'config AMD_IOMMU_V2' is 'tristate' but unlike many
-> other tristate configures doesn't mention that module name is 'iommu_v2.ko' and loading should be done by adding to modules-load.d.
-> 
-> The oddity is that by loading as module is as follows (differences):
-> 
-> builtin iommu_v2 version dmesg:
-> amdgpu: HMM registered 2048MB device memory
-> amdgpu: Topology: Add APU node [0x0:0x0]
-> amdgpu: Topology: Add APU node [0x15dd:0x1002]
-> AMD-Vi: AMD IOMMUv2 loaded and initialized
-> kfd kfd: amdgpu: added device 1002:15dd
-> kfd kfd: amdgpu: Allocated 3969056 bytes on gart
-> memmap_init_zone_device initialised 524288 pages in 0ms
-> 
-> module not loaded due to missing iommu.conf dmesg:
-> amdgpu: CRAT table disabled by module option
-> amdgpu: Topology: Add CPU node
-> amdgpu: Virtual CRAT table created for CPU
-> kfd kfd: amdgpu: GC IP 090100 not supported in kfd
-> 
-> module load through iommu.conf dmesg:
-> amdgpu: CRAT table disabled by module option
-> amdgpu: Topology: Add CPU node
-> amdgpu: Virtual CRAT table created for CPU
-> AMD-Vi: AMD IOMMUv2 loaded and initialized
-> kfd kfd: amdgpu: GC IP 090100 not supported in kfd
-> 
-> Note, only difference on witk/without iommu.conf is:
-> AMD-Vi: AMD IOMMUv2 loaded and initialized
-> 
-> So does this mean missing features by not having builtin?
-> If not, should Kconfig have hint about module and loading?
-> 
-> Steve
-> 
-> I wish to be personally CC'ed the answers/comments posted to the list
-> in response to my posting, please:) Not a list member.
+s/D3Hot/D3hot/ to match other usage (at least in Linux; the spec does
+use "D3Hot")
 
-Hi,
-Please try these email addresses:
+s/uslseep_range/usleep_range/
 
-AMD IOMMU (AMD-VI)
-M:	Joerg Roedel <joro@8bytes.org>
-R:	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-L:	iommu@lists.linux.dev
+Add "()" after function names.
 
-Thanks.
+In the subject, "Switch ... to *also* use usleep_range": what does the
+"also" mean?  It sounds like it's referring to some other place where
+we also use usleep_range()?
 
--- 
-~Randy
+> [1] https://android.googlesource.com/kernel/gs/+/18a8cad68d8e6d50f339a716a18295e6d987cee3
+> 
+> Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+> Signed-off-by: Will McVicker <willmcvicker@google.com>
+> ---
+>  drivers/pci/pci.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+> 
+> v3:
+>  * Use DIV_ROUND_CLOSEST instead of bit manipulation.
+>  * Minor refactor to use max() where relavant.
+> 
+> v2:
+>  * Update to use 20-25% upper bound
+>  * Update to use usleep_range() for <=20ms, else use msleep()
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 95bc329e74c0..cfa8386314f2 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -66,13 +66,19 @@ struct pci_pme_device {
+>  
+>  static void pci_dev_d3_sleep(struct pci_dev *dev)
+>  {
+> -	unsigned int delay = dev->d3hot_delay;
+> +	unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
+>  
+> -	if (delay < pci_pm_d3hot_delay)
+> -		delay = pci_pm_d3hot_delay;
+> +	if (delay_ms) {
+> +		if (delay_ms <= 20) {
+> +			/* Use a 20% upper bound with 1ms minimum */
+> +			unsigned int upper = max(DIV_ROUND_CLOSEST(delay_ms, 5), 1U);
+>  
+> -	if (delay)
+> -		msleep(delay);
+> +			usleep_range(delay_ms * USEC_PER_MSEC,
+> +				     (delay_ms + upper) * USEC_PER_MSEC);
+> +		} else {
+> +			msleep(delay_ms);
+
+I hate the fact that we have to check for those ancient Intel chips at
+all, but having to read through the usleep_range() vs msleep() thing
+is just painful.  
+
+fsleep() would be much simpler, but I am sympathetic that the fsleep()
+range of 10-20ms probably wouldn't get the benefit you want.
+
+I wish Documentation/timers/timers-howto.rst included a reason why we
+should use msleep() instead of usleep_range() for longer sleeps.  Is
+there a reason not to do this:
+
+   static void pci_dev_d3_sleep(struct pci_dev *dev)
+   {
+        unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
+        unsigned int upper;
+
+        if (delay_ms) {
+                /* 20% upper bound, 1ms minimum */
+                upper = max(DIV_ROUND_CLOSEST(delay_ms, 5), 1U)
+                usleep_range(delay_ms * USEC_PER_MSEC,
+                             (delay_ms + upper) * USEC_PER_MSEC);
+        }
+   }
+
+Since the Intel quirk is for 120ms, a 20% upper bound would make the
+range 120-144ms.  Would that be a problem?  Those chips are ancient;
+the list is untouched since it was added in 2006.  The point of
+usleep_range() is to allow the scheduler to coalesce the wakeup with
+other events, so it seems unlikely we'd ever wait the whole 144ms.  I
+vote for optimizing the readability over sleep/resume time for
+already-broken chips.
+
+Bjorn

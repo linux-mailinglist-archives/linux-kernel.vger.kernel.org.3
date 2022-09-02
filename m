@@ -2,127 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36B65AAE03
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407CE5AADFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235676AbiIBMCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S235730AbiIBMCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235637AbiIBMCN (ORCPT
+        with ESMTP id S235679AbiIBMCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:02:13 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FC3B1B88
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:02:10 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220902120207euoutp02683ffdb8e3e16c1b4d48d1e8cf6f1601~RCXMI2lVT0099900999euoutp02W
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 12:02:07 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220902120207euoutp02683ffdb8e3e16c1b4d48d1e8cf6f1601~RCXMI2lVT0099900999euoutp02W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1662120127;
-        bh=jiI5Em5yN7LXCzd4BU0QPHZ2+BpULve8s7MVTfLpnpk=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=CD9DpNIQSQKNTw/2R7CunR6t1+/v4Xwggx+98RtRQ7nOHRwlvPoBAeCh8ti0FMQP5
-         sRMBiuACDRXtWvRZ7v4PuZcz7CtKfGxyceo0xeUmsij+L4aFy2l9UKpKJk4vkaX3BY
-         WM6i9SZJWgJQSj/+NGVjU9eXjUGBPqB6nwmny4aw=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220902120206eucas1p2718c2f0ddf87452f3dd1bf6349e92563~RCXLpFLBu3079630796eucas1p2Y;
-        Fri,  2 Sep 2022 12:02:06 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 0A.52.07817.EB0F1136; Fri,  2
-        Sep 2022 13:02:06 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220902120206eucas1p1bff06c1bc60d068c2807bad75ce342f2~RCXLHFq-_3031230312eucas1p1R;
-        Fri,  2 Sep 2022 12:02:06 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220902120206eusmtrp2bce39382a0e300c0c835ba79a2b355f1~RCXLGKl2C0333103331eusmtrp2D;
-        Fri,  2 Sep 2022 12:02:06 +0000 (GMT)
-X-AuditID: cbfec7f4-8abff70000011e89-78-6311f0bee919
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id D5.24.07473.DB0F1136; Fri,  2
-        Sep 2022 13:02:05 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220902120205eusmtip11c33df1e1d97a92b6e98a09492ea4d42~RCXK7TqlI3188931889eusmtip1z;
-        Fri,  2 Sep 2022 12:02:05 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.27) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Fri, 2 Sep 2022 13:02:04 +0100
-Message-ID: <96f90e1d-aa0f-1c76-bfc9-a87e978ad655@samsung.com>
-Date:   Fri, 2 Sep 2022 14:02:02 +0200
+        Fri, 2 Sep 2022 08:02:20 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98634C0B4D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:02:18 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id c66so1649648pfc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 05:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=W8RjYI+n37ofAo9LBQEiCCEo6ndS1LkvyfXGybqsT9Q=;
+        b=KJAXAw3+eV100jVcXnx/LqY4g085qYcLfMEFb+CqK4NNPBI9F8q01WkRiTpC9xcqhF
+         /4FkKnilu36QUVvPSMq5xoJPqh+oM/ajx5O1Ooz3frF0it9D7UMt8os//kh3KVKuZVb/
+         DPPYiXpugkbyENhGTY+/WPxqKyt1jcv2zujzHIJxdB0ew1X0zrJZfMTGT15i+87M0po6
+         0/QMZTGU+ePDJ2R+Ec9/I+/IE6Qsct4tdfUfCSODRxCfpDSAWo9ais93dWCx9G+uqlln
+         0sE9qiRD9Lz9bZ0YZbv1M1UDvvLW735W+u2JopGKR2Y65g0jVSPYyBMRqlC2d3FYstWU
+         49Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=W8RjYI+n37ofAo9LBQEiCCEo6ndS1LkvyfXGybqsT9Q=;
+        b=GFH05FlccnKen59bGxBUh3Kg2iCvEBacKg7VP9MgeSLBYon9PoYNSaUz9BHHKFw4Bk
+         khWGoc7+pEaT+RXEGVIx9IStYY3cxodIW8EptKDLGU40/RWHdtFPQYlUMQAUy46SAXef
+         NbNGJ1nrZJWWw64h4Jsbe11u2KhuL/OgFqzAgJJiBg01iFi8ygEOc+MNw7ckCpHpYzo7
+         KTZaVxkuYNgeNdaqAmXAZamAlViD3V5MDADYPzm6bLBT9vZYinXiHDnlLuWY3CVQCGMt
+         op2Q4T1SUMty2fQ/WTtwJcVWaTlY3q/39O6lAAj9Ce9tznjZO0Y8v6phk9we5c//WUrI
+         Nv/Q==
+X-Gm-Message-State: ACgBeo0fdSkQkTk78Aeiz3PJ8UQxta2E3MzaCuhGOOTh5wYbgngYwDPz
+        OkC1un0f/LHPdU1WyZcSizIZ1Q==
+X-Google-Smtp-Source: AA6agR6oz8BXj0U20tJpMgDuL2EJ/favK/h81yeCR3znK+DwDUa+f211F9QgLE7hKWaq2wOql0pxmg==
+X-Received: by 2002:aa7:92d8:0:b0:537:acbf:5e85 with SMTP id k24-20020aa792d8000000b00537acbf5e85mr35570681pfa.61.1662120138036;
+        Fri, 02 Sep 2022 05:02:18 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id v65-20020a622f44000000b00539aa7f0b53sm1557339pfv.104.2022.09.02.05.02.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 05:02:17 -0700 (PDT)
+Message-ID: <3a41b9fc-05f1-3f56-ecd0-70b9a2912a31@kernel.dk>
+Date:   Fri, 2 Sep 2022 06:02:12 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.11.0
-Subject: Re: [PATCH v12 12/13] dm: introduce DM_EMULATED_ZONES target type
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
 Content-Language: en-US
-To:     Mike Snitzer <snitzer@redhat.com>
-CC:     <agk@redhat.com>, <snitzer@kernel.org>, <axboe@kernel.dk>,
-        <damien.lemoal@opensource.wdc.com>, <hch@lst.de>,
-        <pankydev8@gmail.com>, <Johannes.Thumshirn@wdc.com>,
-        <linux-block@vger.kernel.org>, <dm-devel@redhat.com>,
-        <hare@suse.de>, <jaegeuk@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <matias.bjorling@wdc.com>,
-        <gost.dev@samsung.com>, <bvanassche@acm.org>,
-        <linux-nvme@lists.infradead.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <YxFOS8fq8AeE5mkf@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>, dave@stgolabs.net,
+        Matthew Wilcox <willy@infradead.org>, liam.howlett@oracle.com,
+        void@manifault.com, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, Linux-MM <linux-mm@kvack.org>,
+        iommu@lists.linux.dev, kasan-dev@googlegroups.com,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
+ <20220831101948.f3etturccmp5ovkl@suse.de> <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+ <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <CAJD7tkaev9B=UDYj2RL6pz-1454J8tv4gEr9y-2dnCksoLK0bw@mail.gmail.com>
+ <YxExz+c1k3nbQMh4@P9FQF9L96D.corp.robot.car>
+ <20220901223720.e4gudprscjtwltif@moria.home.lan>
+ <YxE4BXw5i+BkxxD8@P9FQF9L96D.corp.robot.car>
+ <20220902001747.qqsv2lzkuycffuqe@moria.home.lan>
+ <YxFWrka+Wx0FfLXU@P9FQF9L96D.lan>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YxFWrka+Wx0FfLXU@P9FQF9L96D.lan>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.27]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrIKsWRmVeSWpSXmKPExsWy7djP87r7PggmG5zfIWux/tQxZovVd/vZ
-        LKZ9+Mls8fvseWaLve9ms1rsWTSJyWLl6qNMFk/Wz2K2+Nt1j8li7y1ti8u75rBZzF/2lN1i
-        QttXZos1N5+yWJy4JW3RtvEro4OAx+Ur3h47Z91l97h8ttRj06pONo/NS+o9dt9sYPPY2Xqf
-        1eP9vqtAodPVHp83yXm0H+hmCuCO4rJJSc3JLEst0rdL4Mr4saeNraCHs2JaS2ED4zr2LkZO
-        DgkBE4klK2ezdDFycQgJrGCUmHhnCVhCSOALo8STAzIQ9mdGid6t/DANm/69ZYVoWM4oMfXM
-        PEYIB6io8fpydghnJ6PEwcctrCAtvAJ2Ert3dLGA2CwCKhJrL79ngYgLSpyc+QTMFhWIlFiz
-        +yzYamEBL4m5H/4ygdjMAuISt57MB7I5OEQEVCVuTXMBmc8sMJ1Z4tWMRewgcTYBLYnGTrBW
-        TiDz+54dLBCtmhKt23+zQ9jyEtvfzmGG+EBJ4uSylUwQdq3E2mNnoEHxiFPiwr4yCNtFYtOD
-        ZkYIW1ji1fEtUDUyEv93zofqrZZ4euM3M8g9EgItjBL9O9ezgdwjIWAt0XcmB6LGUeLm2+3s
-        EGE+iRtvBSHO4ZOYtG068wRG1VlIATELycOzkHwwC8kHCxhZVjGKp5YW56anFhvlpZbrFSfm
-        Fpfmpesl5+duYgSmwtP/jn/Zwbj81Ue9Q4xMHIyHGCU4mJVEeKceFkgW4k1JrKxKLcqPLyrN
-        SS0+xCjNwaIkzpucuSFRSCA9sSQ1OzW1ILUIJsvEwSnVwOQScp/VeVXdxNqYvoCJjb51KnO8
-        dndrTl2j9+xA2FbXhedvNGst3yDjvNFX4RdjzgOd3k6dI9zc8zwSszKVVzallzxv4jpmKf1X
-        2eTZ7lShDbODAm6fzKnhOTsl6fj7CLZb6YLKvPcWt6dE38/aaapx8PGnG/4zC7/0pEjbvdpY
-        uEhPd5/9hitMrC5KP7NW9vwP/Sdq+y5oruvh0EdyWtuCJ+pxlluEq55zWxJy4+2DSPW5wUyd
-        BmXm5/hF7+x7dde9k63a8deEy/m95jpXiv8UHzu2wbMlQu9h14fLRctO+Oc/KjvX873hSmKP
-        9LkVWzhYjvWVfShsLdwe+Zj17/3FXQEXPt89tu3Tq9VytkosxRmJhlrMRcWJACswvdv0AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOKsWRmVeSWpSXmKPExsVy+t/xu7p7PwgmGyxqsrZYf+oYs8Xqu/1s
-        FtM+/GS2+H32PLPF3nezWS32LJrEZLFy9VEmiyfrZzFb/O26x2Sx95a2xeVdc9gs5i97ym4x
-        oe0rs8Wam09ZLE7ckrZo2/iV0UHA4/IVb4+ds+6ye1w+W+qxaVUnm8fmJfUeu282sHnsbL3P
-        6vF+31Wg0Olqj8+b5DzaD3QzBXBH6dkU5ZeWpCpk5BeX2CpFG1oY6RlaWugZmVjqGRqbx1oZ
-        mSrp29mkpOZklqUW6dsl6GX82NPGVtDDWTGtpbCBcR17FyMnh4SAicSmf29ZQWwhgaWMEgff
-        6UHEZSQ+XfkIVSMs8edaF1sXIxdQzUdGiY9tZ1khnJ2MEoumb2QCqeIVsJPYvaOLBcRmEVCR
-        WHv5PQtEXFDi5MwnYLaoQKTEw2VNYPXCAl4Scz/8BbOZBcQlbj2ZD2RzcIgIqErcmuYCMp9Z
-        YDqzxKsZi9ghrrvHKLH3RxFIDZuAlkRjJ1iYE8j8vmcHC8QYTYnW7b/ZIWx5ie1v5zBDPKAk
-        cXLZSiYIu1bi1f3djBMYRWchuW4WkitmIRk1C8moBYwsqxhFUkuLc9Nziw31ihNzi0vz0vWS
-        83M3MQJTyLZjPzfvYJz36qPeIUYmDsZDjBIczEoivFMPCyQL8aYkVlalFuXHF5XmpBYfYjQF
-        BtFEZinR5HxgEssriTc0MzA1NDGzNDC1NDNWEuf1LOhIFBJITyxJzU5NLUgtgulj4uCUamCy
-        aLXrmNTIfD896G5c0iXX/0Y24n48L2QOm1wMfGCiZBu26uhTBtvQE18/TpcXtC9wFHj7W/2F
-        aUsX69tVTfOlNEPkKnvcu3b+TnaIef06bPoO6bP/rjnLfJ1wnO3+wu9zZr0yUUnl0l5b3RLx
-        513cjllVh8PZFk3I2DhnyaLutveXK61Pv0yPW3L98JGKvLP22fOtS/P91vbH5Lbejgg/n/6W
-        i0VW/Yy8u5ZLo+nM02GKhvs13bZ7lVWVHT2W6LXyY/tcbh+DY7vOGMy8+CJwy/SoN2FNM0ND
-        K/5EPXCv/ZRx8+Lj56sfSF+rV7jO/XbGcusUJtOvBzimqXRvs/18r/K+ou1fhlsv3kXb93Yr
-        sRRnJBpqMRcVJwIAHouRhqoDAAA=
-X-CMS-MailID: 20220902120206eucas1p1bff06c1bc60d068c2807bad75ce342f2
-X-Msg-Generator: CA
-X-RootMTR: 20220823121914eucas1p2f4445066c23cdae4fca80f7b0268815b
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220823121914eucas1p2f4445066c23cdae4fca80f7b0268815b
-References: <20220823121859.163903-1-p.raghav@samsung.com>
-        <CGME20220823121914eucas1p2f4445066c23cdae4fca80f7b0268815b@eucas1p2.samsung.com>
-        <20220823121859.163903-13-p.raghav@samsung.com>
-        <YxFOS8fq8AeE5mkf@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,33 +112,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-02 02:28, Mike Snitzer wrote:
-> On Tue, Aug 23 2022 at  8:18P -0400,
-> Pankaj Raghav <p.raghav@samsung.com> wrote:
-> 
->> Introduce a new target type DM_EMULATED_ZONES for targets with
->> a different number of sectors per zone (aka zone size) than the underlying
->> device zone size.
+On 9/1/22 7:04 PM, Roman Gushchin wrote:
+> On Thu, Sep 01, 2022 at 08:17:47PM -0400, Kent Overstreet wrote:
+>> On Thu, Sep 01, 2022 at 03:53:57PM -0700, Roman Gushchin wrote:
+>>> I'd suggest to run something like iperf on a fast hardware. And maybe some
+>>> io_uring stuff too. These are two places which were historically most sensitive
+>>> to the (kernel) memory accounting speed.
 >>
->> This target type is introduced as the existing zoned targets assume
->> that the target and the underlying device have the same zone size.
->> The new target: dm-po2zone will use this new target
->> type as it emulates the zone boundary that is different from the
->> underlying zoned device.
+>> I'm getting wildly inconsistent results with iperf.
 >>
->> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
->> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+>> io_uring-echo-server and rust_echo_bench gets me:
+>> Benchmarking: 127.0.0.1:12345
+>> 50 clients, running 512 bytes, 60 sec.
+>>
+>> Without alloc tagging:	120547 request/sec
+>> With:			116748 request/sec
+>>
+>> https://github.com/frevib/io_uring-echo-server
+>> https://github.com/haraldh/rust_echo_bench
+>>
+>> How's that look to you? Close enough? :)
 > 
-> This patch's use of "target type" jargon isn't valid. 
+> Yes, this looks good (a bit too good).
 > 
-> Please say "target feature flag" and rename DM_EMULATED_ZONES to
-> DM_TARGET_EMULATED_ZONES in the subject and header.
-> Good catch. I will fix it up for the next version.
-> But, with those fixed:
-> 
-> Signed-off-by: Mike Snitzer <snitzer@kernel.org>
-> 
-You mean <Reviewed-By> ? :)
-> (fyi, I'll review patch 13, the dm-po2zone target, tomorrow)
-> 
-Thanks.
+> I'm not that familiar with io_uring, Jens and Pavel should have a better idea
+> what and how to run (I know they've workarounded the kernel memory accounting
+> because of the performance in the past, this is why I suspect it might be an
+> issue here as well).
+
+io_uring isn't alloc+free intensive on a per request basis anymore, it
+would not be a good benchmark if the goal is to check for regressions in
+that area.
+
+-- 
+Jens Axboe

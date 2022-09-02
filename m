@@ -2,153 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2C15AB75C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58055AB760
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235848AbiIBRTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 13:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S236174AbiIBRVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 13:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiIBRTE (ORCPT
+        with ESMTP id S235728AbiIBRVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 13:19:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3EF105B5F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 10:19:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 990BEB82CC8
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 17:19:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A75C433D7;
-        Fri,  2 Sep 2022 17:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662139140;
-        bh=Taglg9igKY1YjGpYeZOws0enqFqxTZUqboD0GC5T7us=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=sjtlAfuKa+CYfLJsKmnLNEL0t4RRclQO3+I6WemSL+3MYgEFFk1Cc43Mla8Wl/xYW
-         mg3zIy4sBfKku8jFIZJwJHsJMwpXWRRBUsOUx4CtRLZ1O9grhxlo9b/IJXtOxLkvJO
-         SFKDJ6+Ka013SHiSF8LFWzjHtlQ2eL6F5wGa8LUX12jX3W6H6OgZOy+zzbv8loyJNg
-         55uTYDA4tcWyVPvamvq14J5Y280pF621yusMCglO6tZc51/YQe/kKSFIdb/BrD+ihl
-         xaxEet6DhTFrAwRfaHdHLbhyygWc8EsoDKxKCTpDHrR6kJwLdYaCHCNfUHVnn9eASv
-         mdp0y90MHj2dA==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 848BD27C0054;
-        Fri,  2 Sep 2022 13:18:58 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Fri, 02 Sep 2022 13:18:58 -0400
-X-ME-Sender: <xms:ATsSY4e6oGQkdydZFgZxGEHgv2lQrFmpMIcDhnzPDDvqrRy9Ii8Jfg>
-    <xme:ATsSY6PRbo47siw0o145mWD5TWWba3fK4PyHaaksn70HqtyUXuoqyb7HfwJUT8pmk
-    FazGnKtad-ZBF4Yx1I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeltddguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehnugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqne
-    cuggftrfgrthhtvghrnhepffdvtdekfeeileejiedvfffhieegfefhfeefvdethfevffef
-    ieelfedtlefggefhnecuffhomhgrihhnpehunhguvggrughlhidrohhrghenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhguhidomhgvshhm
-    thhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeehieefvddqvdeifeduieeitd
-    ekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugidrlhhuthhordhush
-X-ME-Proxy: <xmx:ATsSY5gMLMlRrxFDDbeM-78MlztDtNFl98rfKU_GrlejpXlF_wqV4Q>
-    <xmx:ATsSY99YFezecg_kukLYsSPe66YwfaEbDWir5ADphsMKX5EfwSuesg>
-    <xmx:ATsSY0v1xj645zMrsa-Ce8tNSxWRrxC0ulMaEcwHZP6gP3XWJ4v44Q>
-    <xmx:AjsSY2JY7CTzWzTNkALtJrxlMA8Z66yzFI_QlG_RU9T8JtT8ZgSACQ>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B7CB731A0062; Fri,  2 Sep 2022 13:18:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <ec3cb7fb-8161-487e-ba6e-5d260b88af80@www.fastmail.com>
-In-Reply-To: <a96082e1-96ad-e92b-a5d0-d239123d943e@intel.com>
-References: <202208221331.71C50A6F@keescook>
- <a5df4929-24aa-79bf-c5d0-98efbf323132@intel.com>
- <CAEAAPHa3g0QwU=DZ2zVCqTCSh-+n2TtVKrQ07LvpwDjQ-F09gA@mail.gmail.com>
- <b4f0dca5-1d15-67f7-4600-9a0a91e9d0bd@intel.com>
- <26078f2a-67be-4aa1-bbb2-dcd1168c9d12@www.fastmail.com>
- <CAEAAPHae8Lr3KfqfLpK3w5F3MPFoG4HJLxX3cMgbKpmQ_jp6Og@mail.gmail.com>
- <c36eb441-e93e-4beb-bdf2-1e6285f7a187@www.fastmail.com>
- <CAEAAPHYTUYdtBLn4RsmNXMeaT8OvQ_k+Vy4uYdy_aSnaW79fcQ@mail.gmail.com>
- <a96082e1-96ad-e92b-a5d0-d239123d943e@intel.com>
-Date:   Fri, 02 Sep 2022 10:18:36 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Dave Hansen" <dave.hansen@intel.com>,
-        =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>
-Cc:     "Kees Cook" <keescook@chromium.org>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Jann Horn" <jannh@google.com>
-Subject: Re: PKU usage improvements for threads
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 2 Sep 2022 13:21:01 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8762D4F7B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 10:21:00 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id x23so2483727pll.7
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 10:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=iQbV94zcvm+miEj7HiKM+Lf+C2RI4FnBWdsgliuH+qI=;
+        b=ArtbJSIjssgo6PSuE0VUvEGuZfZVxwOQvS63KtYr4bkZzK+d/nnhmqXO7YT56/R6Rg
+         lFfbIL304JlWQ/kZms8CddAoygsd2P8g1kTnvLvZQuCfc82nO0rNuWcmOcO8bXUP6NeO
+         sf65kXICgQ7cn4PuGjMwidQf9Rw4ge8c53Cbr7n1S1e8IwzyF8EKF5VGKGLMHihfv5AK
+         oshKS0JRNzA4vmLjyfo7HIVjSJndBTOkyswmF5O3Br8v2kTcY8yzo9YeLZ5f8s/yRyVk
+         JRinTZA+1UhDb8EaMZJnlYfvbMUOCQuODz1+xS5fFa40QMug19rFxzc78G2u+qB7Bthu
+         mKIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=iQbV94zcvm+miEj7HiKM+Lf+C2RI4FnBWdsgliuH+qI=;
+        b=VnNOyhKfHDn1qmopViByFCd4Yrhjlal+dgyAyBA3e37Khz4kbqUoKrIJZpUIDnN0n7
+         0w4JchIGoGzgPqRyIWphkQRJfv4KwOWjGiG2Pg5b0RmIvDpOjDknzxaWFnuxEDrluhRm
+         zE3o39yienc/mW8TDSFBu6W4IrsT63ajpVhjc+E0a91bMnCa4oLesHtG00NwRQ8As8If
+         SsAwe3PZC0LNc/bwpaTL01dMDnCgF8Hnb9AEJuN5VpL3awwvZ8KJaT89yxEiJu99W1Ly
+         zo905f84BVXfSGkk6VobCARvU4ow4P0XAtMWeRAIV0o7Eb+1agSEjDJ7LCZZRiRi/1qT
+         FHWA==
+X-Gm-Message-State: ACgBeo3NU+bQts+oOVBzV9z1jWj5G8P7rwm+5FtaoUuFJQETNjuQDYat
+        1m1feAdD5y5RumP9uN6kNjc=
+X-Google-Smtp-Source: AA6agR5YgYe8v48cg9VcdiYh6UwpYqzgBmOwNuY+6Rv7JAuD2W8ZkgXYvsCV90pF32VMdSMecw//Ng==
+X-Received: by 2002:a17:902:bd05:b0:172:ae77:1eea with SMTP id p5-20020a170902bd0500b00172ae771eeamr36296865pls.158.1662139260174;
+        Fri, 02 Sep 2022 10:21:00 -0700 (PDT)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id z15-20020a170903018f00b00172a670607asm1909648plg.300.2022.09.02.10.20.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 10:20:59 -0700 (PDT)
+Date:   Fri, 2 Sep 2022 10:20:57 -0700
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Alexey Izbyshev <izbyshev@ispras.ru>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: Potentially undesirable interactions between vfork() and time
+ namespaces
+Message-ID: <YxI7ec9S1CB0sDju@gmail.com>
+References: <YxAq2jYvGG8QOypu@gmail.com>
+ <87czcfhsme.fsf@email.froward.int.ebiederm.org>
+ <YxIr15QTmYb4Uojq@gmail.com>
+ <b14a9802e171b3148c62f6193d08fa92@ispras.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <b14a9802e171b3148c62f6193d08fa92@ispras.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Sep 02, 2022 at 07:39:28PM +0300, Alexey Izbyshev wrote:
 
+<snip>
 
-On Thu, Aug 25, 2022, at 7:36 AM, Dave Hansen wrote:
-> On 8/25/22 05:30, Stephen R=C3=B6ttger wrote:
->>>> We were also thinking about if this should be a more generic featur=
-e instead of
->>>> being tied to pkeys. I.e. the doc above has an alternative proposal=
- to introduce
->>>> something like a memory seal/unseal syscall.
->>>> I was personally leaning towards using pkeys for this for a few rea=
-sons:
->>>> * intuitively it would make sense to me to extend PKEY_DISABLE_ACCE=
-SS
->>>>   to also mean disable all changes to the memory, not just the data.
->>> It would make some sense, but we can't do it with the existing
->>> PKEY_DISABLE_ACCESS ABI.  It would surely break existing users if th=
-ey
->>> couldn't munmap() memory that was PKEY_DISABLE_ACCESS.
->> Our thought was that this could be opt-in with a prctl().
+> > > @@ -2043,18 +2043,6 @@ static __latent_entropy struct task_struct
+> > > *copy_process(
+> > >  			return ERR_PTR(-EINVAL);
+> > >  	}
+> > > 
+> > > -	/*
+> > > -	 * If the new process will be in a different time namespace
+> > > -	 * do not allow it to share VM or a thread group with the forking
+> > > task.
+> > > -	 *
+> > > -	 * On vfork, the child process enters the target time namespace only
+> > > -	 * after exec.
+> > > -	 */
+> > > -	if ((clone_flags & (CLONE_VM | CLONE_VFORK)) == CLONE_VM) {
+> > > -		if (nsp->time_ns != nsp->time_ns_for_children)
+> > > -			return ERR_PTR(-EINVAL);
+> > > -	}
+> > 
+> > pls don't remove this part. It was one of the concerns that vfork
+> > doesn't work after unshare(CLONE_NEWTIME), but it is one of the standard
+> > ways of creating a new process. For example, posix_spawn uses it.
+> > 
+> What do you mean? On the contrary, removing this restriction of the original
+> time namespace implementation allows vfork(), pthread_create() and the like,
+> solving the issue with posix_spawn() as well.
+>
 
-I know Linux never copies other OSes, but OpenBSD is considering this:
+Sorry, I was not woken up completely and decided that it just reverted
+the change that allows vfork. Now, I see that it removes this
+restriction completely. So it looks good to me.
 
-https://undeadly.org/cgi?action=3Darticle;sid=3D20220902100648
-
-If it works well, we could implement it.
-
->
-> So, today, you have this:
->
-> 	foo =3D malloc(PAGE_SIZE);
-> 	pkey_mprotect(foo, PAGE_SIZE, READ|WRITE, pkey=3D1);
-> 	munmap(foo); // <-- works fine
-> 	mmap(hint=3Dfoo, ...); // now attacker controls &foo
->
-> Which is problematic.  What you want instead is something like this:
->
-> 	prctl(PR_ARCH_NO_MUNMAP_ON_PKEY); // or whatever
-> 	foo =3D malloc(PAGE_SIZE);
-> 	pkey_mprotect(foo, PAGE_SIZE, READ|WRITE, pkey=3D1);
-> 	wrpkru(PKEY_DISABLE_ACCESS<<pkey*2);
-> 	munmap(foo); // returns -EPERM (or whatever)
->
-> Which requires the kernel to check when it's modifying a VMA (like the
-> munmap() above) to see if PKRU _currently_ permits access to the VMA's
-> contents.  If not, the kernel should refuse to modify the VMA.
->
-> Like I said, I don't think this is _insane_, but I can see it breaking
-> perfectly innocent things.  For instance, an app that today does a
-> free() if pkey-assigned memory might work perfectly fine for a long ti=
-me
-> since that memory is rarely unmapped.  But, the minute that malloc()
-> decides it needs to zap the memory, *malloc()* will fail.
->
-> I also wonder how far these semantics would go.  Would madvise() work =
-on
-> these access-denied VMAs?
->
-> My gut says that we don't want to mix up pkey semantics with this new
-> mechanism.
+Thanks,
+Andrei.

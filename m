@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BCA5AA665
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946495AA662
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235284AbiIBDbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S235271AbiIBDbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbiIBDas (ORCPT
+        with ESMTP id S235272AbiIBDa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:30:48 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBAFA6C3F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:30:46 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id bh13so862567pgb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 20:30:46 -0700 (PDT)
+        Thu, 1 Sep 2022 23:30:59 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA90AB4E2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:30:50 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id x80so905597pgx.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 20:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=zDuc296oUyLkm2+WK0v0ZsSxZqcMqtpAHljnuoWPZ4o=;
-        b=GodpOnWLNVhpIHJgD0RmFJp/hNptRqUZa/mfcL8Ji9F1pvt1Fjdvge6jvEXHfwVY3n
-         vBL6A62ionXTyVoOxurTgNsG6MtSFFFnGWoKm9pK7C7UhRtxhVr6QbwQBC0kJ4ed6VoU
-         zVF2MqNWrtd+mGXPbOAE3VIrqzYvKetPXP73csSaN/O1JvEsWW1wiqtXlt09ZrtrvBT8
-         N7rVS1LNVF0KZn2EkNdQq/GRkVwqra3J/StMJoJF+CK+ZjyBljHOuQjsTKOtZHF+4LIX
-         5MoU7H4RKX/4OpZCKVt9sybEy3XeJa9w1E233CTe62wIb8SptcjQFrCUUhdp8v/+lUGA
-         kDNA==
+        bh=bU6YnT1Irux43rCckY/H05qvHpPtKNrJfyRkmbVSwCs=;
+        b=h3R0jvspSPn+1MQbGOiwZ0tHVKQQCjxn7QWi+ObgwPcxfKaAphi2IhwbS4xi9w5aag
+         7q5KGbh4nyHzHOZdObaSa01WF0TcUkTb9dfyTVAKSLEgMLmtZZ0VfY1fj3Ebc80BgRDr
+         VGfpHjUvY4vPDg1vL1xjPoHan10RUOCw4pp6Jj7Xqk66j5Vo8e+mVpXSdIdgJboMeeGY
+         iKR6yvKC28hzyi7QSKKJOldPwjmfXfQ9xgpqFkCPCSurQQrA1p4VwiplsODCDTMsHJHF
+         RS6AXzyyTKXl+BfK6TZXenJRrsoIS1kFp8ATyOfAsU6/Q+pb2Ee+bV1q6X55n2D7MZ7d
+         D1hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=zDuc296oUyLkm2+WK0v0ZsSxZqcMqtpAHljnuoWPZ4o=;
-        b=HfIduPr8g5G39yInKbdrPGcQ/aH2aPzxjNlx2YwA+W/ZlTPl/uQoHxZG9Yb98+YyKr
-         fnz9daT4V+2P4NcS1S7P8tYq6+a9gZH1JgN83AJ1oVxWUl0mMgBOoCwVHcYaG6uyY0cA
-         nbN/1WkJgx7vHRsg4LnylcD83MM3GH24fpWM5xsJFsYGnw9QTO0bckC2nj7ezSASHxkP
-         sZe1ZQGz4zbcLcuK64otma5hjVQb3HwgfgqEUGP2rcQ6N400hfpUYVjsy5hCps0AjHrz
-         De02V8jrFIfbOaYbV0nsAuy3Ics/pDMApAJiJ77iS1xjkBrg238DrIdR789QSTUGucAG
-         Rqfw==
-X-Gm-Message-State: ACgBeo2tWcZUqhWFjhXoScuvd5XlghB0+Jn4VZAwfJ/eH4TSF6tQ6Pba
-        tE8U0ykrpTkmS9EvOaGbvdMc2w==
-X-Google-Smtp-Source: AA6agR4uSFoLEMoNN/mV5oV/edgn2lPw7ZrdLzp9SJOs8qwR+wHxA2SIgDpnzMdf8Z8RKPcGpW7n9Q==
-X-Received: by 2002:a65:6a49:0:b0:42c:299d:b0aa with SMTP id o9-20020a656a49000000b0042c299db0aamr19189675pgu.54.1662089445740;
-        Thu, 01 Sep 2022 20:30:45 -0700 (PDT)
+        bh=bU6YnT1Irux43rCckY/H05qvHpPtKNrJfyRkmbVSwCs=;
+        b=IdbKykidWLs2lkm//5YSw30HGl/BHAYRCMG9lUN/bk/dP5Uf8VJ/RAGW9Zs7POKqWK
+         1Htd5B5Gk0JJENTBn6OhZmCuoFka5SCYtPvGvDWBNOFc5+ywfpKfpoZRIYBfyVaUpLs5
+         Mb025uLkqtAY51NWbGrVNtpoCZlGg3kSWc/x8wmDYe21KOSCHbSqP1Pin5PFB8WSh+oH
+         msi4cvvbiHjQmyQOQIJ6SoEyvd9g3N/IJi548lhalpK/gFYTkLO2Pf7dNtXbxMw4crKU
+         7ZDxrGWKW6PlBMCFtwb8eDkS0oAo6nC8TEwBcNKIu3mJgioBw/TrlXIsSpQyVqSgqw5o
+         GEVQ==
+X-Gm-Message-State: ACgBeo0CY5MK+bU+uTA4qvsVn2fZidKp+ToDxbtB7G2pz3u34ZfBKr/W
+        kCWfu+lo1kGoHCAelY8KiksFEzgZlkPuoT4h
+X-Google-Smtp-Source: AA6agR7OL40MnIvkF/dXwxXs8QNqh7/8v/IqsmfSKkPQqwVfCp3AxyuXbWs4TEWSNxmNTDTHdMLt6A==
+X-Received: by 2002:a63:e307:0:b0:42f:f6b2:177f with SMTP id f7-20020a63e307000000b0042ff6b2177fmr12341199pgh.370.1662089449758;
+        Thu, 01 Sep 2022 20:30:49 -0700 (PDT)
 Received: from localhost.localdomain ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id w21-20020a634915000000b0042a93b625d4sm325680pga.27.2022.09.01.20.30.41
+        by smtp.gmail.com with ESMTPSA id w21-20020a634915000000b0042a93b625d4sm325680pga.27.2022.09.01.20.30.46
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 01 Sep 2022 20:30:45 -0700 (PDT)
+        Thu, 01 Sep 2022 20:30:49 -0700 (PDT)
 From:   Abel Wu <wuyun.abel@bytedance.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Mel Gorman <mgorman@suse.de>,
@@ -57,9 +57,9 @@ Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
         Yicong Yang <yangyicong@huawei.com>,
         linux-kernel@vger.kernel.org, Abel Wu <wuyun.abel@bytedance.com>,
         Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH v3 2/5] sched/fair: avoid double search on same cpu
-Date:   Fri,  2 Sep 2022 11:30:29 +0800
-Message-Id: <20220902033032.79846-2-wuyun.abel@bytedance.com>
+Subject: [PATCH v3 3/5] sched/fair: remove useless check in select_idle_core
+Date:   Fri,  2 Sep 2022 11:30:30 +0800
+Message-Id: <20220902033032.79846-3-wuyun.abel@bytedance.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220902033032.79846-1-wuyun.abel@bytedance.com>
 References: <20220902033032.79846-1-wuyun.abel@bytedance.com>
@@ -74,30 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The prev cpu is checked at the beginning of SIS, and it's unlikely
-to be idle before the second check in select_idle_smt(). So we'd
-better focus on its SMT siblings.
+The function only gets called when sds->has_idle_cores is true
+which can be possible only when sched_smt_present is enabled.
+This change also aligns select_idle_core with select_idle_smt
+that the caller do the check if necessary.
 
 Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
-Reviewed-by: Josh Don <joshdon@google.com>
 Acked-by: Mel Gorman <mgorman@techsingularity.net>
 ---
- kernel/sched/fair.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/sched/fair.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 9657c7de5f57..1ad79aaaaf93 100644
+index 1ad79aaaaf93..03ce65068333 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -6355,6 +6355,8 @@ static int select_idle_smt(struct task_struct *p, int target)
+@@ -6321,9 +6321,6 @@ static int select_idle_core(struct task_struct *p, int core, struct cpumask *cpu
+ 	bool idle = true;
  	int cpu;
  
- 	for_each_cpu_and(cpu, cpu_smt_mask(target), p->cpus_ptr) {
-+		if (cpu == target)
-+			continue;
- 		if (available_idle_cpu(cpu) || sched_idle_cpu(cpu))
- 			return cpu;
- 	}
+-	if (!static_branch_likely(&sched_smt_present))
+-		return __select_idle_cpu(core, p);
+-
+ 	for_each_cpu(cpu, cpu_smt_mask(core)) {
+ 		if (!available_idle_cpu(cpu)) {
+ 			idle = false;
 -- 
 2.31.1
 

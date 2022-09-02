@@ -2,241 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3675AA837
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C225AA84F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235526AbiIBGny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 02:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
+        id S235525AbiIBGt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 02:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiIBGnq (ORCPT
+        with ESMTP id S235351AbiIBGtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 02:43:46 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B181BBBA57
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 23:43:44 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MJpDx0h74z1N7ln;
-        Fri,  2 Sep 2022 14:40:01 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 2 Sep 2022 14:43:42 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 2 Sep 2022 14:43:42 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
-CC:     Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        <linux-kernel@vger.kernel.org>, "Vlastimil Babka" <vbabka@suse.cz>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH 2/2] mm: add pageblock_aligned() macro
-Date:   Fri, 2 Sep 2022 14:47:51 +0800
-Message-ID: <20220902064751.17890-2-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
-References: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
+        Fri, 2 Sep 2022 02:49:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577CCBCC08
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 23:49:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662101363;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gn1/pFkVAm17ZLauzUxMQF2RNXwPzrIq/JD90gpJ8rE=;
+        b=gpCQsZWBfsMo8GGn9ORFk6PaW7FVk9j/+Q9JF5dfOb1CenXW7naTckuCSwgJ3XdUnHltzk
+        jkIKItc15OFhgRpapz+6N1AVvEkpK8VkasFMP6Bf3/aK2yQlygBw0bF+sm5RIeTr+DI3mf
+        tXGtEuIH7fEKiyepkXJjtt5qDj3pTB8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-500-MaXFBhZ8PlWh_OmAS3UQhw-1; Fri, 02 Sep 2022 02:49:22 -0400
+X-MC-Unique: MaXFBhZ8PlWh_OmAS3UQhw-1
+Received: by mail-wr1-f71.google.com with SMTP id h3-20020adfa4c3000000b002266f5ef273so99049wrb.14
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 23:49:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=Gn1/pFkVAm17ZLauzUxMQF2RNXwPzrIq/JD90gpJ8rE=;
+        b=0bZ+sJceBACwywxKdEWGtZPP7C2Lhy4tTiaYuUAMKl0iseYnxG82FvgySCCa0Z7AdJ
+         pvdz4lO6MQDg9lZ4BYFV6LKeolU2n3aunlvxurJdCAIYZH8E+wafnei4FsmqCTV5iPSl
+         u61K4jXkek57BuN2FwsrGGe47k6PqHnFCYOM7ok5oBKTauL3d3NnLeRfm1WWloIX/32s
+         GQbuLdxq+fl0bVW3PRa6Dtj+B2rtOPXuvYAPfghOPu5ESznSwredVVZHe6gz2ASy26ct
+         7MWet+IBs9AIdGAcc6tcaZDK9P8fpj4DtQjgoNuRO1GGD+yyW+qL1hNHn4ZbLr9AYKPa
+         BUEQ==
+X-Gm-Message-State: ACgBeo0OqVtGQ44/BM4HaHXmJBEN2Lfm6InVbYcBehac+RaLRgoaB1Tq
+        +vKExhXqI0zysmc6deCVz+UH1HBWot+36sH9FXsqkJx08Fdcp18WcvK5f9JlIJhdDWstKywNBDN
+        RKwDeEMtJMscF0fJc8EGoPG/k
+X-Received: by 2002:a05:6000:817:b0:226:3d89:ebb4 with SMTP id bt23-20020a056000081700b002263d89ebb4mr17030585wrb.699.1662101361045;
+        Thu, 01 Sep 2022 23:49:21 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6On1hWE9c9E9R4xYZDbPw8MSd6lWCiA5BI3pDap4N3u8UFtfr1D4s/X8k/SOFVxoKi18Qhbg==
+X-Received: by 2002:a05:6000:817:b0:226:3d89:ebb4 with SMTP id bt23-20020a056000081700b002263d89ebb4mr17030567wrb.699.1662101360797;
+        Thu, 01 Sep 2022 23:49:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c714:4800:2077:1bf6:40e7:2833? (p200300cbc714480020771bf640e72833.dip0.t-ipconnect.de. [2003:cb:c714:4800:2077:1bf6:40e7:2833])
+        by smtp.gmail.com with ESMTPSA id g13-20020a05600c4ecd00b003a4c6e67f01sm9088534wmq.6.2022.09.01.23.49.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 23:49:20 -0700 (PDT)
+Message-ID: <093bae05-419d-737d-73f0-6de59b39b34a@redhat.com>
+Date:   Fri, 2 Sep 2022 08:49:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>
+References: <20220901083559.67446-1-david@redhat.com>
+ <20220901153512.a59e9e584fb00a350788f56e@linux-foundation.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1] mm: fix PageAnonExclusive clearing racing with
+ concurrent RCU GUP-fast
+In-Reply-To: <20220901153512.a59e9e584fb00a350788f56e@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pageblock_aligned() and use it to simplify code.
+On 02.09.22 00:35, Andrew Morton wrote:
+> On Thu,  1 Sep 2022 10:35:59 +0200 David Hildenbrand <david@redhat.com> wrote:
+> 
+>> The possible issues due to reordering are of theoretical nature so far
+>> and attempts to reproduce the race failed.
+>>
+>> Especially the "no PTE change" case isn't the common case, because we'd
+>> need an exclusive anonymous page that's mapped R/O and the PTE is clean
+>> in KSM code -- and using KSM with page pinning isn't extremely common.
+>> Further, the clear+TLB flush we used for now implies a memory barrier.
+>> So the problematic missing part should be the missing memory barrier
+>> after pinning but before checking if the PTE changed.
+> 
+> Obscure bug, large and tricky patch.  Is a -stable backport really
+> justifiable?
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- include/linux/pageblock-flags.h |  1 +
- mm/compaction.c                 |  8 ++++----
- mm/memory_hotplug.c             |  6 ++----
- mm/page_alloc.c                 | 17 +++++++----------
- mm/page_isolation.c             |  2 +-
- 5 files changed, 15 insertions(+), 19 deletions(-)
+Fair question, was asking myself the same. As you're wondering about the
+same, I don't think so. Let's drop it.
 
-diff --git a/include/linux/pageblock-flags.h b/include/linux/pageblock-flags.h
-index ef2e17e312ae..e0b980268442 100644
---- a/include/linux/pageblock-flags.h
-+++ b/include/linux/pageblock-flags.h
-@@ -53,6 +53,7 @@ extern unsigned int pageblock_order;
- #endif /* CONFIG_HUGETLB_PAGE */
- 
- #define pageblock_nr_pages	(1UL << pageblock_order)
-+#define pageblock_aligned(pfn)	IS_ALIGNED((unsigned long)(pfn), pageblock_nr_pages)
- #define pageblock_start_pfn(pfn)	round_down(pfn, pageblock_nr_pages)
- #define pageblock_end_pfn(pfn)		ALIGN((pfn + 1), pageblock_nr_pages)
- 
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 65bef5f78897..c4e4453187a2 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -402,7 +402,7 @@ static bool test_and_set_skip(struct compact_control *cc, struct page *page,
- 	if (cc->ignore_skip_hint)
- 		return false;
- 
--	if (!IS_ALIGNED(pfn, pageblock_nr_pages))
-+	if (!pageblock_aligned(pfn))
- 		return false;
- 
- 	skip = get_pageblock_skip(page);
-@@ -884,7 +884,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
- 		 * COMPACT_CLUSTER_MAX at a time so the second call must
- 		 * not falsely conclude that the block should be skipped.
- 		 */
--		if (!valid_page && IS_ALIGNED(low_pfn, pageblock_nr_pages)) {
-+		if (!valid_page && pageblock_aligned(low_pfn)) {
- 			if (!isolation_suitable(cc, page)) {
- 				low_pfn = end_pfn;
- 				page = NULL;
-@@ -1936,7 +1936,7 @@ static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
- 		 * before making it "skip" so other compaction instances do
- 		 * not scan the same block.
- 		 */
--		if (IS_ALIGNED(low_pfn, pageblock_nr_pages) &&
-+		if (pageblock_aligned(low_pfn) &&
- 		    !fast_find_block && !isolation_suitable(cc, page))
- 			continue;
- 
-@@ -2122,7 +2122,7 @@ static enum compact_result __compact_finished(struct compact_control *cc)
- 	 * migration source is unmovable/reclaimable but it's not worth
- 	 * special casing.
- 	 */
--	if (!IS_ALIGNED(cc->migrate_pfn, pageblock_nr_pages))
-+	if (!pageblock_aligned(cc->migrate_pfn))
- 		return COMPACT_CONTINUE;
- 
- 	/* Direct compactor: Is a suitable page free? */
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 9ae1f98548b1..fd40f7e9f176 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1085,8 +1085,7 @@ int __ref online_pages(unsigned long pfn, unsigned long nr_pages,
- 	 * of the physical memory space for vmemmaps. That space is pageblock
- 	 * aligned.
- 	 */
--	if (WARN_ON_ONCE(!nr_pages ||
--			 !IS_ALIGNED(pfn, pageblock_nr_pages) ||
-+	if (WARN_ON_ONCE(!nr_pages || !pageblock_aligned(pfn) ||
- 			 !IS_ALIGNED(pfn + nr_pages, PAGES_PER_SECTION)))
- 		return -EINVAL;
- 
-@@ -1806,8 +1805,7 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
- 	 * of the physical memory space for vmemmaps. That space is pageblock
- 	 * aligned.
- 	 */
--	if (WARN_ON_ONCE(!nr_pages ||
--			 !IS_ALIGNED(start_pfn, pageblock_nr_pages) ||
-+	if (WARN_ON_ONCE(!nr_pages || !pageblock_aligned(start_pfn) ||
- 			 !IS_ALIGNED(start_pfn + nr_pages, PAGES_PER_SECTION)))
- 		return -EINVAL;
- 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 93339cc61f92..d030c20a6081 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1892,15 +1892,14 @@ static void __init deferred_free_range(unsigned long pfn,
- 	page = pfn_to_page(pfn);
- 
- 	/* Free a large naturally-aligned chunk if possible */
--	if (nr_pages == pageblock_nr_pages &&
--	    (pfn & (pageblock_nr_pages - 1)) == 0) {
-+	if (nr_pages == pageblock_nr_pages && pageblock_aligned(pfn)) {
- 		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
- 		__free_pages_core(page, pageblock_order);
- 		return;
- 	}
- 
- 	for (i = 0; i < nr_pages; i++, page++, pfn++) {
--		if ((pfn & (pageblock_nr_pages - 1)) == 0)
-+		if (pageblock_aligned(pfn))
- 			set_pageblock_migratetype(page, MIGRATE_MOVABLE);
- 		__free_pages_core(page, 0);
- 	}
-@@ -1928,7 +1927,7 @@ static inline void __init pgdat_init_report_one_done(void)
-  */
- static inline bool __init deferred_pfn_valid(unsigned long pfn)
- {
--	if (!(pfn & (pageblock_nr_pages - 1)) && !pfn_valid(pfn))
-+	if (!pageblock_aligned(pfn) && !pfn_valid(pfn))
- 		return false;
- 	return true;
- }
-@@ -1940,14 +1939,13 @@ static inline bool __init deferred_pfn_valid(unsigned long pfn)
- static void __init deferred_free_pages(unsigned long pfn,
- 				       unsigned long end_pfn)
- {
--	unsigned long nr_pgmask = pageblock_nr_pages - 1;
- 	unsigned long nr_free = 0;
- 
- 	for (; pfn < end_pfn; pfn++) {
- 		if (!deferred_pfn_valid(pfn)) {
- 			deferred_free_range(pfn - nr_free, nr_free);
- 			nr_free = 0;
--		} else if (!(pfn & nr_pgmask)) {
-+		} else if (!pageblock_aligned(pfn)) {
- 			deferred_free_range(pfn - nr_free, nr_free);
- 			nr_free = 1;
- 		} else {
-@@ -1967,7 +1965,6 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
- 						 unsigned long pfn,
- 						 unsigned long end_pfn)
- {
--	unsigned long nr_pgmask = pageblock_nr_pages - 1;
- 	int nid = zone_to_nid(zone);
- 	unsigned long nr_pages = 0;
- 	int zid = zone_idx(zone);
-@@ -1977,7 +1974,7 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
- 		if (!deferred_pfn_valid(pfn)) {
- 			page = NULL;
- 			continue;
--		} else if (!page || !(pfn & nr_pgmask)) {
-+		} else if (!page || !pageblock_aligned(pfn)) {
- 			page = pfn_to_page(pfn);
- 		} else {
- 			page++;
-@@ -6759,7 +6756,7 @@ void __meminit memmap_init_range(unsigned long size, int nid, unsigned long zone
- 		 * such that unmovable allocations won't be scattered all
- 		 * over the place during system boot.
- 		 */
--		if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
-+		if (pageblock_aligned(pfn)) {
- 			set_pageblock_migratetype(page, migratetype);
- 			cond_resched();
- 		}
-@@ -6802,7 +6799,7 @@ static void __ref __init_zone_device_page(struct page *page, unsigned long pfn,
- 	 * Please note that MEMINIT_HOTPLUG path doesn't clear memmap
- 	 * because this is done early in section_activate()
- 	 */
--	if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
-+	if (pageblock_aligned(pfn)) {
- 		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
- 		cond_resched();
- 	}
-diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-index f2df4ad53cd6..13cc00598677 100644
---- a/mm/page_isolation.c
-+++ b/mm/page_isolation.c
-@@ -311,7 +311,7 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
- 	struct zone *zone;
- 	int ret;
- 
--	VM_BUG_ON(!IS_ALIGNED(boundary_pfn, pageblock_nr_pages));
-+	VM_BUG_ON(!pageblock_aligned(boundary_pfn));
- 
- 	if (isolate_before)
- 		isolate_pageblock = boundary_pfn - pageblock_nr_pages;
+Out of the CONFIG_HAVE_FAST_GUP supporting architectures primarily only
+the 32bit architectures can even lose the PageAnonExclusive during
+swapout (until we make them all preserve it in the swp PTE), the other
+ones already support preserve it.
+
+So unless fork() would be involved at the wrong time as well,  x86-64,
+s390x, aarch64, ppc64 book3s ... wouldn't even have a real issue with
+this race.
+
+(note that the actual code changes are small -- but yes, I think
+linux-stable rules always consider the full patch LOC)
+
 -- 
-2.35.3
+Thanks,
+
+David / dhildenb
 

@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D565AB585
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846AB5AB58D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbiIBPnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
+        id S236737AbiIBPox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237283AbiIBPml (ORCPT
+        with ESMTP id S236362AbiIBPo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:42:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28315192B9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:31:08 -0700 (PDT)
+        Fri, 2 Sep 2022 11:44:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634D6B1D8;
+        Fri,  2 Sep 2022 08:32:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28AFB61F77
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:31:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 181A7C433C1;
-        Fri,  2 Sep 2022 15:31:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662132666;
-        bh=tM2eqJiYPWb7lcDlwLvfUFbp8YVcivmRe6MBD8X0j9g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aBN6WO/bLRRNCIVKtVUyMoM9TEXwzyiFubgMpi38oO8WsKNRIbtpesLELG1lIetbx
-         DUNOM6TTR9lsXPxt5vhEr7UdquUAfkyJ7hU+VPjQA1FXSgsI6h+BR4P9KvYe3cZ7pq
-         IxIEXN3FH/VL5KL1k1Gfgrkr+KdnKAtfqSDp2QZA=
-Date:   Fri, 2 Sep 2022 17:31:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>
-Subject: [GIT PULL] Driver core fixes for 6.0-rc4
-Message-ID: <YxIht+ev+gXsF6ZD@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8938B82C7A;
+        Fri,  2 Sep 2022 15:32:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9A7C433C1;
+        Fri,  2 Sep 2022 15:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662132754;
+        bh=TMf3BdVjVegUTft/oEa9DfSLI5AQyabpvORb5mYeuGs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eiM20zqheXI9sFvq5bgtdWwDfp4rt6e0mQSxFwywe8XpgD7Y3g9HtJWbfPksR2CzN
+         mDZyJtOPhHhcZyTSat9lGgf1gHm0fVPMR2GJJwXuEXSn8UXMu7UZAzmGtDegHD7NB1
+         QiOQajBMDlB4RhnU5MIxTKdddgZIkNLoBsgXnBrpPXrQHSr3g72p1O2vjEmAP1ZwOz
+         DuWGDaLwnI4YeYcYXz06N495w84STz6dGowwLhiU8Sr85AZ0Eqy3AiLvkiJMJOYbLr
+         I/AVQcjE4WSRfZ3lom/1jChAzLHcXTSgdOXCAbieMPxxBerMeTpirUGz2JQv3CFouK
+         QMACQUMkcUHYw==
+Date:   Fri, 2 Sep 2022 21:02:29 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Vincent Shih <vincent.sunplus@gmail.com>
+Cc:     kishon@ti.com, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com
+Subject: Re: [PATCH v5 0/2] Add USB2.0 phy driver for Sunplus SP7021
+Message-ID: <YxIiDfNWnT7vfKb6@matsya>
+References: <1658717052-26142-1-git-send-email-vincent.sunplus@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1658717052-26142-1-git-send-email-vincent.sunplus@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,60 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+On 25-07-22, 10:44, Vincent Shih wrote:
+> This is a patch series for USB2.0 phy driver for Sunplus SP7021 SoC.
+> 
+> Sunplus SP7021 is an ARM Coretex A7 (4 cores) based SoC. It integrates
+> many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+> etc.) into a single chip. It is designed for industrial control.
 
-  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
+Applied, thanks
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-6.0-rc4
-
-for you to fetch changes up to 789bba82f63c3e81dce426ba457fc7905b30ac6e:
-
-  firmware_loader: Fix memory leak in firmware upload (2022-09-01 17:47:27 +0200)
-
-----------------------------------------------------------------
-Driver core fixes for 6.0-rc4
-
-Here are some small driver core fixes for some oft-reported problems in
-6.0-rc1.  They include:
-  - a bunch of reverts to handle driver_deferred_probe_check_state()
-    problems that were part of the 6.0-rc1 merge.
-  - firmware_loader bugfixes now that the code is being properly tested
-    and used by others
-  - arch_topology fix
-  - deferred driver probe bugfix to solve a long-suffering amba bus
-    problem that many people have reported.
-
-All of these have been in linux-next for a while with no reported
-problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Florian Fainelli (1):
-      arch_topology: Silence early cacheinfo errors when non-existent
-
-Isaac J. Manjarres (1):
-      driver core: Don't probe devices after bus_type.match() probe deferral
-
-Russ Weight (2):
-      firmware_loader: Fix use-after-free during unregister
-      firmware_loader: Fix memory leak in firmware upload
-
-Saravana Kannan (4):
-      Revert "driver core: Delete driver_deferred_probe_check_state()"
-      Revert "net: mdio: Delete usage of driver_deferred_probe_check_state()"
-      Revert "PM: domains: Delete usage of driver_deferred_probe_check_state()"
-      Revert "iommu/of: Delete usage of driver_deferred_probe_check_state()"
-
- drivers/base/arch_topology.c                |  2 +-
- drivers/base/dd.c                           | 40 +++++++++++++++++++++++++++++
- drivers/base/firmware_loader/sysfs.c        |  7 +++--
- drivers/base/firmware_loader/sysfs.h        |  5 ++++
- drivers/base/firmware_loader/sysfs_upload.c | 12 ++++++++-
- drivers/base/power/domain.c                 |  2 +-
- drivers/iommu/of_iommu.c                    |  2 +-
- drivers/net/mdio/fwnode_mdio.c              |  4 ++-
- include/linux/device/driver.h               |  1 +
- 9 files changed, 66 insertions(+), 9 deletions(-)
+-- 
+~Vinod

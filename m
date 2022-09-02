@@ -2,52 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0385AB8A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 20:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1B05AB8A9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 21:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiIBS6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 14:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S229669AbiIBTAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 15:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiIBS6m (ORCPT
+        with ESMTP id S230201AbiIBTAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 14:58:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFB1F32DC
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 11:58:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39A3061FC7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 18:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61534C433D6;
-        Fri,  2 Sep 2022 18:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1662145120;
-        bh=I7EvjmBEJ+PK5VGQFpQlLdq2iNrwiITdaZk9IZZnYao=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OP/lQQRO8c9wuvCWYQaoubDsk/jEGHP0zZ229BSegYVU791zGFlwUiZy08YW30rvb
-         W8UnxZmh8PWs/dR9SiPM46i7jDQTALOpnSQSFNcm1vaKPE667YbiWrr2jDPatZpMJV
-         BGTKtC1fSdKotpwFSIPqt8DFxBEMKjKmTTHpO/yI=
-Date:   Fri, 2 Sep 2022 11:58:39 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [Resend RFC PATCH] mm: introduce __GFP_TRACKLEAK to track
- in-kernel allocation
-Message-Id: <20220902115839.1e3fafd159e42d4e7dae90af@linux-foundation.org>
-In-Reply-To: <1662116347-17649-1-git-send-email-zhaoyang.huang@unisoc.com>
-References: <1662116347-17649-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 2 Sep 2022 15:00:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9479325293
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 11:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662145173;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H80XyH2N7aCchJ9N825/YoSYVLsh+URbySgK/RUDEoA=;
+        b=ITuD0jBsoT/3a3aUcIL+CIXTfXnJ4MnMwN5teK3Rtraw2ZKr84EgOY1E+51IXW+HW7bjak
+        lOgDPuOmGxVAYMFdeeMTEnklUxeDiR77olix2nfICPNGtz8DLBT6YPVj6zeG00LYMlQs3I
+        PnHArMxJad0qavqccahEjY5sw/2HPLg=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-226-U-nYhJvEO3SV5CfYNfR-DQ-1; Fri, 02 Sep 2022 14:59:32 -0400
+X-MC-Unique: U-nYhJvEO3SV5CfYNfR-DQ-1
+Received: by mail-qt1-f197.google.com with SMTP id y12-20020ac8708c000000b00342f1bb8428so2189684qto.5
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 11:59:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=H80XyH2N7aCchJ9N825/YoSYVLsh+URbySgK/RUDEoA=;
+        b=2Ysk68EwHXktCkF3o8MoI2OEwjdO43Ybz+7a1u3ZG9hIyzRV325k0eeYK2GnihHa/9
+         YVjYUEZej/A3GvK/2YyeNpWDZcIYf3hmzWkPD8dU+m0T9M3HQRpRr7/dC85CGEuOoPDk
+         DGpfRZWPyRORfXOSwq3PAg5odQz+YEjqTeG+aY787WeQgwegt2Mf569iLp6JXqDHkbCy
+         u6C2Kq/U7shSvKeuDwbNkcsa34GZvvBd1YrhAlcKyRV5HWGDn5D6TkmJSr6Nc2a9aZV1
+         oRdTH/FF45c/WwIpwMuGn73vjOyJZ2TCE5XtEAS5BBbOmaFCuqXerxV4Xn13rlLAjyA7
+         RY2A==
+X-Gm-Message-State: ACgBeo3+BR4VECaOwMpEuKLgL/A7c9MOu5QFicXUlMMbss9J7Oga11rR
+        FosyunRbwZMpvZFmjHsDPbqnOaElNohxFzFcUBznBZuYKUBsGOX1joRkyvIqVMefFRBCQiXyQ0E
+        Eip4BAKoBBa5BZ+8iyVBOYi9c
+X-Received: by 2002:ac8:5f4e:0:b0:345:45d:3701 with SMTP id y14-20020ac85f4e000000b00345045d3701mr26282885qta.139.1662145172318;
+        Fri, 02 Sep 2022 11:59:32 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR41hWF9IJZjwNXKlnh3T9+X9HUpRDCKbeZtCv0S7Oyvg6g28jlT1XsqH8jQWmRStgRETdOKLA==
+X-Received: by 2002:ac8:5f4e:0:b0:345:45d:3701 with SMTP id y14-20020ac85f4e000000b00345045d3701mr26282859qta.139.1662145171991;
+        Fri, 02 Sep 2022 11:59:31 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::48])
+        by smtp.gmail.com with ESMTPSA id d3-20020a05620a166300b006b5c061844fsm1805812qko.49.2022.09.02.11.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 11:59:31 -0700 (PDT)
+Date:   Fri, 2 Sep 2022 13:59:29 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/6] arm64: dts: qcom: Fix broken regulator spec on
+ RPMH boards
+Message-ID: <20220902185929.neoizjcrmxuxgqaw@halaneylaptop>
+References: <20220829164952.2672848-1-dianders@chromium.org>
+ <Yw8EE/ESDUnIRf8P@hovoldconsulting.com>
+ <CAD=FV=VJz2hjvsUhsjBPt9nmm3X62oTdAqMeSFABYJietPPzWw@mail.gmail.com>
+ <20220831190018.3dexkam3efdcfysf@halaneylaptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831190018.3dexkam3efdcfysf@halaneylaptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,113 +94,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc willy for page-flags changes.
-
-On Fri, 2 Sep 2022 18:59:07 +0800 "zhaoyang.huang" <zhaoyang.huang@unisoc.com> wrote:
-
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Wed, Aug 31, 2022 at 02:00:18PM -0500, Andrew Halaney wrote:
+> On Wed, Aug 31, 2022 at 07:52:52AM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Tue, Aug 30, 2022 at 11:47 PM Johan Hovold <johan@kernel.org> wrote:
+> > >
+> > > On Mon, Aug 29, 2022 at 09:49:46AM -0700, Douglas Anderson wrote:
+> > > > Prior to commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
+> > > > get_optimum_mode(), not set_load()") several boards were able to
+> > > > change their regulator mode even though they had nothing listed in
+> > > > "regulator-allowed-modes". After that commit (and fixes [1]) we'll be
+> > > > stuck at the initial mode. Discussion of this (again, see [1]) has
+> > > > resulted in the decision that the old dts files were wrong and should
+> > > > be fixed to fully restore old functionality.
+> > > >
+> > > > This series attempts to fix everyone. I've kept each board in a
+> > > > separate patch to make stable / backports work easier.
+> > >
+> > > Should you also update the bindings so that this can be caught during
+> > > devicetree validation? That is, to always require
+> > > "regulator-allowed-modes" when "regulator-allow-set-load" is specified.
+> >
+> > Yeah, it's probably a good idea. I'm happy to review a patch that does
+> > that. I'm already quite a few patches deep of submitting random
+> > cleanups because someone mentioned it in a code review. ;-) That's
+> > actually how I got in this mess to begin with. The RPMH change was in
+> > response to a request in a different code review. ...and that came
+> > about in a code review that was posted in response to a comment about
+> > how awkward setting regulator loads was... Need to get back to my day
+> > job.
 > 
-> Kthread and drivers could fetch memory via alloc_pages directly which make them
-> hard to debug when leaking. Solve this by introducing __GFP_TRACELEAK and reuse
-> kmemleak mechanism which unified most of kernel cosuming pages into kmemleak.
+> I can take a stab at this during the week here I hope.. I owe Doug for
+> the slew of patches and have wanted to peek at how all the dt-binding
+> validation stuff works anyways.
 > 
-> ...
->
 
-cc wi
-> index 2d2ccae..081ab54 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -68,6 +68,7 @@
->  #else
->  #define ___GFP_NOLOCKDEP	0
->  #endif
-> +#define ___GFP_TRACKLEAK	0x10000000u
->  /* If the above are modified, __GFP_BITS_SHIFT may need updating */
->  
->  /*
-> @@ -259,12 +260,13 @@
->  #define __GFP_SKIP_ZERO ((__force gfp_t)___GFP_SKIP_ZERO)
->  #define __GFP_SKIP_KASAN_UNPOISON ((__force gfp_t)___GFP_SKIP_KASAN_UNPOISON)
->  #define __GFP_SKIP_KASAN_POISON   ((__force gfp_t)___GFP_SKIP_KASAN_POISON)
-> +#define __GFP_TRACKLEAK   ((__force gfp_t)___GFP_TRACKLEAK)
->  
->  /* Disable lockdep for GFP context tracking */
->  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
->  
->  /* Room for N __GFP_FOO bits */
-> -#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
-> +#define __GFP_BITS_SHIFT (28 + IS_ENABLED(CONFIG_LOCKDEP))
->  #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
->  
->  /**
-> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> index e66f7aa..ef0f814 100644
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -942,6 +942,7 @@ static inline bool is_page_hwpoison(struct page *page)
->  #define PG_offline	0x00000100
->  #define PG_table	0x00000200
->  #define PG_guard	0x00000400
-> +#define PG_trackleak	0x00000800
->  
->  #define PageType(page, flag)						\
->  	((page->page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
-> @@ -1012,6 +1013,8 @@ static inline int page_has_type(struct page *page)
->   */
->  PAGE_TYPE_OPS(Guard, guard)
->  
-> +PAGE_TYPE_OPS(Trackleak, trackleak)
+Here's my attempt after a couple hours of banging the head on the wall:
 
-We'd want this to evaluate to zero at compile time if
-CONFIG_HAVE_DEBUG_KMEMLEAK=n
+    https://lore.kernel.org/all/20220902185148.635292-1-ahalaney@redhat.com/
 
->  extern bool is_free_buddy_page(struct page *page);
->  
->  PAGEFLAG(Isolated, isolated, PF_ANY);
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> index 422f28f..a182f5d 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-> @@ -1471,7 +1471,7 @@ static void kmemleak_scan(void)
->  			if (page_zone(page) != zone)
->  				continue;
->  			/* only scan if page is in use */
-> -			if (page_count(page) == 0 || PageReserved(page))
-> +			if (page_count(page) == 0)
+Thanks,
+Andrew
 
-Please changelog this alteration.
-
->  				continue;
->  			scan_block(page, page + 1, NULL);
->  			if (!(pfn & 63))
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index e008a3d..d8995c6 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1361,6 +1361,8 @@ static __always_inline bool free_pages_prepare(struct page *page,
->  		page->mapping = NULL;
->  	if (memcg_kmem_enabled() && PageMemcgKmem(page))
->  		__memcg_kmem_uncharge_page(page, order);
-> +	if (PageTrackleak(page))
-> +		kmemleak_free(page);
->  	if (check_free)
->  		bad += check_free_page(page);
->  	if (bad)
-> @@ -5444,6 +5446,10 @@ struct page *__alloc_pages(gfp_t gfp, unsigned int order, int preferred_nid,
->  		__free_pages(page, order);
->  		page = NULL;
->  	}
-> +	if (gfp & __GFP_TRACKLEAK) {
-
-And we'd want __GFP_TRACKLEAK to evaluate to zero at compile time if
-CONFIG_HAVE_DEBUG_KMEMLEAK=n.
-
-> +		kmemleak_alloc(page_address(page), PAGE_SIZE << order, 1, gfp & ~__GFP_TRACKLEAK);
-> +		__SetPageTrackleak(page);
-> +	}
->  
->  	trace_mm_page_alloc(page, order, alloc_gfp, ac.migratetype);
->  
-> -- 
-> 1.9.1

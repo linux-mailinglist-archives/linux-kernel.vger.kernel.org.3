@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590E15AB00A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F96F5AAEFA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237684AbiIBMrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S236784AbiIBMcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237614AbiIBMrU (ORCPT
+        with ESMTP id S236675AbiIBMbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:47:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C7FF1B68;
-        Fri,  2 Sep 2022 05:34:22 -0700 (PDT)
+        Fri, 2 Sep 2022 08:31:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35104DD75A;
+        Fri,  2 Sep 2022 05:26:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9640621C5;
-        Fri,  2 Sep 2022 12:32:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4B9CC433D6;
-        Fri,  2 Sep 2022 12:32:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5201B82AB6;
+        Fri,  2 Sep 2022 12:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFB0C433D6;
+        Fri,  2 Sep 2022 12:26:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121968;
-        bh=Bs2CQBsnUjpIZ+XxHHFSiRhfkB928kkGSKMck2e8gws=;
+        s=korg; t=1662121595;
+        bh=7APQlxl+5Xdd2RpaXOxtTlui/y4z1tADJAtSHRII6MU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2S7f3DLAcGIv/TbAkH8hmjUJtkK4Db4EdFarO78GYsnrHDzOoQ+0t54Lfv1TAnY5h
-         m7DoUKjgHtFy36be93UiiEMqmd2ljIG5e7fB6hNPqLvIgEPWnkZnPi5mc4Dbm9nmRz
-         TnfkRiEBxoeEY5OadduRKnL1YcUz8oZYffTYCDPs=
+        b=2Wxr9kJyvQfhnAxluiPzIwz4pfCRCwjgKtg8Z2W1IXNv7GBDR5UsTR243dm6iTBSM
+         KvOMdbBO42U8HGWJNWqygpGb0FFzcgYkZOnerl4/O/eR9Egy6ZacqzUfhtKCiT7Ree
+         8rTGWd2b941yRLXrqLPRsWBia7z8gX6so6/FgO5Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 5.15 27/73] HID: steam: Prevent NULL pointer dereference in steam_{recv,send}_report
+        stable@vger.kernel.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Siddh Raman Pant <code@siddh.me>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com
+Subject: [PATCH 4.19 31/56] loop: Check for overflow while configuring loop
 Date:   Fri,  2 Sep 2022 14:18:51 +0200
-Message-Id: <20220902121405.336885912@linuxfoundation.org>
+Message-Id: <20220902121401.341355341@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
+References: <20220902121400.219861128@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lee Jones <lee.jones@linaro.org>
+From: Siddh Raman Pant <code@siddh.me>
 
-commit cd11d1a6114bd4bc6450ae59f6e110ec47362126 upstream.
+commit c490a0b5a4f36da3918181a8acdc6991d967c5f3 upstream.
 
-It is possible for a malicious device to forgo submitting a Feature
-Report.  The HID Steam driver presently makes no prevision for this
-and de-references the 'struct hid_report' pointer obtained from the
-HID devices without first checking its validity.  Let's change that.
+The userspace can configure a loop using an ioctl call, wherein
+a configuration of type loop_config is passed (see lo_ioctl()'s
+case on line 1550 of drivers/block/loop.c). This proceeds to call
+loop_configure() which in turn calls loop_set_status_from_info()
+(see line 1050 of loop.c), passing &config->info which is of type
+loop_info64*. This function then sets the appropriate values, like
+the offset.
 
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: linux-input@vger.kernel.org
-Fixes: c164d6abf3841 ("HID: add driver for Valve Steam Controller")
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+loop_device has lo_offset of type loff_t (see line 52 of loop.c),
+which is typdef-chained to long long, whereas loop_info64 has
+lo_offset of type __u64 (see line 56 of include/uapi/linux/loop.h).
+
+The function directly copies offset from info to the device as
+follows (See line 980 of loop.c):
+	lo->lo_offset = info->lo_offset;
+
+This results in an overflow, which triggers a warning in iomap_iter()
+due to a call to iomap_iter_done() which has:
+	WARN_ON_ONCE(iter->iomap.offset > iter->pos);
+
+Thus, check for negative value during loop_set_status_from_info().
+
+Bug report: https://syzkaller.appspot.com/bug?id=c620fe14aac810396d3c3edc9ad73848bf69a29e
+
+Reported-and-tested-by: syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com
+Cc: stable@vger.kernel.org
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Signed-off-by: Siddh Raman Pant <code@siddh.me>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220823160810.181275-1-code@siddh.me
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-steam.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/block/loop.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/hid/hid-steam.c
-+++ b/drivers/hid/hid-steam.c
-@@ -134,6 +134,11 @@ static int steam_recv_report(struct stea
- 	int ret;
- 
- 	r = steam->hdev->report_enum[HID_FEATURE_REPORT].report_id_hash[0];
-+	if (!r) {
-+		hid_err(steam->hdev, "No HID_FEATURE_REPORT submitted -  nothing to read\n");
-+		return -EINVAL;
-+	}
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -1351,6 +1351,11 @@ loop_get_status(struct loop_device *lo,
+ 	info->lo_number = lo->lo_number;
+ 	info->lo_offset = lo->lo_offset;
+ 	info->lo_sizelimit = lo->lo_sizelimit;
 +
- 	if (hid_report_len(r) < 64)
- 		return -EINVAL;
- 
-@@ -165,6 +170,11 @@ static int steam_send_report(struct stea
- 	int ret;
- 
- 	r = steam->hdev->report_enum[HID_FEATURE_REPORT].report_id_hash[0];
-+	if (!r) {
-+		hid_err(steam->hdev, "No HID_FEATURE_REPORT submitted -  nothing to read\n");
-+		return -EINVAL;
-+	}
++	/* loff_t vars have been assigned __u64 */
++	if (lo->lo_offset < 0 || lo->lo_sizelimit < 0)
++		return -EOVERFLOW;
 +
- 	if (hid_report_len(r) < 64)
- 		return -EINVAL;
- 
+ 	info->lo_flags = lo->lo_flags;
+ 	memcpy(info->lo_file_name, lo->lo_file_name, LO_NAME_SIZE);
+ 	memcpy(info->lo_crypt_name, lo->lo_crypt_name, LO_NAME_SIZE);
 
 

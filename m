@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3A85AB39C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2D65AB389
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235498AbiIBObl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
+        id S236553AbiIBOaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236922AbiIBO1u (ORCPT
+        with ESMTP id S236073AbiIBO1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:27:50 -0400
+        Fri, 2 Sep 2022 10:27:36 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EB71581AB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0E915819A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=PsjEG4knouG+JCTeWWUmbwqU2xySdGfCmOMQNnMDy2Q=; b=Qp0mGFPB5LdN/pvzWYro8eZiFO
-        XbgukPSiOl0q748pBt3ft2uufZuUlM1flnG0aeMXGUW7ytO5p3fzrGUthTKCFoffSLynfCCdge9Ic
-        BV79/DDm+L7JuJ2BRknNrkveODlgdGCOvxcpQwiGwG3oUG8kLtx9nyswqJolT+VVNJhKchML++ZpZ
-        Ne2Xgteamj/DhtICsa+h8tD4BdCaMLXMxrokswI0ui9Gf6fPT3BLXSODHFAxnIXF4N6w8GtSSWfWq
-        V5KetR9+Ze/YgG3A3B3qEvonpxxz5ZzgnNK1i9u2NXo+SL8bhG8lABpAWkyAJW/IWu+NW7VWuZws3
-        EAjLMQTQ==;
+        bh=r5OPPEtUvAvLyUEDLHTlEmYZN5yu2Cagrk4lN594PZw=; b=CNKtqKEmTRaxaCbcPO/1CnSG5I
+        5QjZRVGU8i3S5h81rqix3d3g7X5g9GYEeztNMoO2AmNHzFxL+PtEJy+8M+7Hrd5VJQaqegkL4uL7f
+        zVtjbVs4mKr9d+gWNodwDZLGceZZ9KU7zCzbO6gswvNIJBGVbrE7wrDwI8uLHE973x/19NeloiCW3
+        coPEeGHcT2NlP24lx2sXDb1GafHl7lUflXmTBQvWZOllHeo0udvM546M2Kfy7XaFvdhSDMh7N6j+6
+        zKWqBUC3Wkn1Ypv548p99sQPx6MS6r0D6QHJ5a2Gk8SdH2NRmEO1+C7CwKozktq1bdfjfhwxaWQX4
+        Z2sEebLg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oU77P-0074UO-8H; Fri, 02 Sep 2022 13:53:59 +0000
+        id 1oU77O-0074UF-EX; Fri, 02 Sep 2022 13:54:01 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3C9C7302D59;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3CF49302D72;
         Fri,  2 Sep 2022 15:53:54 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 5DA2C2B8EFB54; Fri,  2 Sep 2022 15:53:53 +0200 (CEST)
-Message-ID: <20220902130951.029167377@infradead.org>
+        id 650602B8EFB56; Fri,  2 Sep 2022 15:53:53 +0200 (CEST)
+Message-ID: <20220902130951.135184445@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 02 Sep 2022 15:07:10 +0200
+Date:   Fri, 02 Sep 2022 15:07:11 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v2 45/59] x86/modules: Add call patching
+Subject: [PATCH v2 46/59] x86/returnthunk: Allow different return thunks
 References: <20220902130625.217071627@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -73,110 +73,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Peter Zijlstra <peterz@infradead.org>
 
-As for the builtins create call thunks and patch the call sites to call the
-thunk on Intel SKL CPUs for retbleed mitigation.
+In preparation for call depth tracking on Intel SKL CPUs, make it possible
+to patch in a SKL specific return thunk.
 
-Note, that module init functions are ignored for sake of simplicity because
-loading modules is not something which is done in high frequent loops and
-the attacker has not really a handle on when this happens in order to
-launch a matching attack. The depth tracking will still work for calls into
-the builtins and because the call is not accounted it will underflow faster
-and overstuff, but that's mitigated by the saturating counter and the side
-effect is only temporary.
-
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/alternative.h |    5 +++++
- arch/x86/kernel/callthunks.c       |   19 +++++++++++++++++++
- arch/x86/kernel/module.c           |   20 +++++++++++++++++++-
- 3 files changed, 43 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/nospec-branch.h |    6 ++++++
+ arch/x86/kernel/alternative.c        |   19 ++++++++++++++-----
+ arch/x86/kernel/ftrace.c             |    2 +-
+ arch/x86/kernel/static_call.c        |    2 +-
+ arch/x86/net/bpf_jit_comp.c          |    2 +-
+ 5 files changed, 23 insertions(+), 8 deletions(-)
 
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -89,8 +89,13 @@ struct callthunk_sites {
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -198,6 +198,12 @@ extern void __x86_return_thunk(void);
+ extern void zen_untrain_ret(void);
+ extern void entry_ibpb(void);
  
- #ifdef CONFIG_CALL_THUNKS
- extern void callthunks_patch_builtin_calls(void);
-+extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
-+					  struct module *mod);
- #else
- static __always_inline void callthunks_patch_builtin_calls(void) {}
-+static __always_inline void
-+callthunks_patch_module_calls(struct callthunk_sites *sites,
-+			      struct module *mod) {}
- #endif
++#ifdef CONFIG_CALL_THUNKS
++extern void (*x86_return_thunk)(void);
++#else
++#define x86_return_thunk	(&__x86_return_thunk)
++#endif
++
+ #ifdef CONFIG_RETPOLINE
  
- #ifdef CONFIG_SMP
---- a/arch/x86/kernel/callthunks.c
-+++ b/arch/x86/kernel/callthunks.c
-@@ -249,3 +249,22 @@ void __init callthunks_patch_builtin_cal
- 	thunks_initialized = true;
- 	mutex_unlock(&text_mutex);
+ #define GEN(reg) \
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -509,6 +509,11 @@ void __init_or_module noinline apply_ret
  }
-+
-+#ifdef CONFIG_MODULES
-+void noinline callthunks_patch_module_calls(struct callthunk_sites *cs,
-+					    struct module *mod)
-+{
-+	struct core_text ct = {
-+		.base = (unsigned long)mod->core_layout.base,
-+		.end  = (unsigned long)mod->core_layout.base + mod->core_layout.size,
-+		.name = mod->name,
-+	};
-+
-+	if (!thunks_initialized)
-+		return;
-+
-+	mutex_lock(&text_mutex);
-+	callthunks_setup(cs, &ct);
-+	mutex_unlock(&text_mutex);
-+}
-+#endif /* CONFIG_MODULES */
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -254,7 +254,8 @@ int module_finalize(const Elf_Ehdr *hdr,
- {
- 	const Elf_Shdr *s, *text = NULL, *alt = NULL, *locks = NULL,
- 		*para = NULL, *orc = NULL, *orc_ip = NULL,
--		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL;
-+		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL,
-+		*calls = NULL;
- 	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
  
- 	for (s = sechdrs; s < sechdrs + hdr->e_shnum; s++) {
-@@ -274,6 +275,8 @@ int module_finalize(const Elf_Ehdr *hdr,
- 			retpolines = s;
- 		if (!strcmp(".return_sites", secstrings + s->sh_name))
- 			returns = s;
-+		if (!strcmp(".call_sites", secstrings + s->sh_name))
-+			calls = s;
- 		if (!strcmp(".ibt_endbr_seal", secstrings + s->sh_name))
- 			ibt_endbr = s;
- 	}
-@@ -299,6 +302,21 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		void *aseg = (void *)alt->sh_addr;
- 		apply_alternatives(aseg, aseg + alt->sh_size);
- 	}
-+	if (calls || para) {
-+		struct callthunk_sites cs = {};
+ #ifdef CONFIG_RETHUNK
 +
-+		if (calls) {
-+			cs.call_start = (void *)calls->sh_addr;
-+			cs.call_end = (void *)calls->sh_addr + calls->sh_size;
-+		}
++#ifdef CONFIG_CALL_THUNKS
++void (*x86_return_thunk)(void) __ro_after_init = &__x86_return_thunk;
++#endif
 +
-+		if (para) {
-+			cs.pv_start = (void *)para->sh_addr;
-+			cs.pv_end = (void *)para->sh_addr + para->sh_size;
-+		}
+ /*
+  * Rewrite the compiler generated return thunk tail-calls.
+  *
+@@ -524,14 +529,18 @@ static int patch_return(void *addr, stru
+ {
+ 	int i = 0;
+ 
+-	if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
+-		return -1;
+-
+-	bytes[i++] = RET_INSN_OPCODE;
++	if (cpu_feature_enabled(X86_FEATURE_RETHUNK)) {
++		if (x86_return_thunk == __x86_return_thunk)
++			return -1;
 +
-+		callthunks_patch_module_calls(&cs, me);
++		i = JMP32_INSN_SIZE;
++		__text_gen_insn(bytes, JMP32_INSN_OPCODE, addr, x86_return_thunk, i);
++	} else {
++		bytes[i++] = RET_INSN_OPCODE;
 +	}
- 	if (ibt_endbr) {
- 		void *iseg = (void *)ibt_endbr->sh_addr;
- 		apply_ibt_endbr(iseg, iseg + ibt_endbr->sh_size);
+ 
+ 	for (; i < insn->length;)
+ 		bytes[i++] = INT3_INSN_OPCODE;
+-
+ 	return i;
+ }
+ 
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -359,7 +359,7 @@ create_trampoline(struct ftrace_ops *ops
+ 
+ 	ip = trampoline + size;
+ 	if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
+-		__text_gen_insn(ip, JMP32_INSN_OPCODE, ip, &__x86_return_thunk, JMP32_INSN_SIZE);
++		__text_gen_insn(ip, JMP32_INSN_OPCODE, ip, x86_return_thunk, JMP32_INSN_SIZE);
+ 	else
+ 		memcpy(ip, retq, sizeof(retq));
+ 
+--- a/arch/x86/kernel/static_call.c
++++ b/arch/x86/kernel/static_call.c
+@@ -52,7 +52,7 @@ static void __ref __static_call_transfor
+ 
+ 	case RET:
+ 		if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
+-			code = text_gen_insn(JMP32_INSN_OPCODE, insn, &__x86_return_thunk);
++			code = text_gen_insn(JMP32_INSN_OPCODE, insn, x86_return_thunk);
+ 		else
+ 			code = &retinsn;
+ 		break;
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -430,7 +430,7 @@ static void emit_return(u8 **pprog, u8 *
+ 	u8 *prog = *pprog;
+ 
+ 	if (cpu_feature_enabled(X86_FEATURE_RETHUNK)) {
+-		emit_jump(&prog, &__x86_return_thunk, ip);
++		emit_jump(&prog, x86_return_thunk, ip);
+ 	} else {
+ 		EMIT1(0xC3);		/* ret */
+ 		if (IS_ENABLED(CONFIG_SLS))
 
 

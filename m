@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8735AAF04
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859785AAECF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236668AbiIBMcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S236651AbiIBMaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236348AbiIBMbg (ORCPT
+        with ESMTP id S236604AbiIBM2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:31:36 -0400
+        Fri, 2 Sep 2022 08:28:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E96E1AA7;
-        Fri,  2 Sep 2022 05:27:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248551EAF2;
+        Fri,  2 Sep 2022 05:24:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3768F62160;
-        Fri,  2 Sep 2022 12:24:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40129C433D7;
-        Fri,  2 Sep 2022 12:24:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6456F620F0;
+        Fri,  2 Sep 2022 12:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5915DC433C1;
+        Fri,  2 Sep 2022 12:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121495;
-        bh=SfDnnxcHDQZpfD0TOvB4kyeiIIMRuzDICLdXVxb9aYg=;
+        s=korg; t=1662121498;
+        bh=t1+9ZyLredsBU/XEAMtgk9KW8FhRU65i9SlYct5eK7E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U6Xg6a0KK3Ap8hqIR89qCjCKp3ZH1Kvel5E0z4r14jnFfVO2joDup/OEZZnfHPmz7
-         zGSjO1Dl5MfJpnTXTJW0oOPIOwcpgbnVPeoXLsc9Dzi0tlDW4h2CUv5bxx0tXwkMn9
-         y0/A4fsfU5xC5i4owcyVGRIzAPQ4/1Gxa0K3FZ8Y=
+        b=1Jy5wuOhWfAbWJjZTD5e1+oYi7KmxI1lTJielDye2/atqTzGPiDakwWu6v/j8B2ZZ
+         FGQ6g9wVrSW8lON67u49+C2uPkUqux78bKSF4sDTqQyMNumPiiFSq/uUYIkmwUGYjn
+         6eyvN7zcbP1Z663ksVkJcQdIHYiGXSYJ2kTQZyog=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.19 03/56] kernel/sys_ni: add compat entry for fadvise64_64
-Date:   Fri,  2 Sep 2022 14:18:23 +0200
-Message-Id: <20220902121400.328447126@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 4.19 04/56] pinctrl: amd: Dont save/restore interrupt status and wake status bits
+Date:   Fri,  2 Sep 2022 14:18:24 +0200
+Message-Id: <20220902121400.358080677@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
 References: <20220902121400.219861128@linuxfoundation.org>
@@ -59,46 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
 
-commit a8faed3a02eeb75857a3b5d660fa80fe79db77a3 upstream.
+commit b8c824a869f220c6b46df724f85794349bafbf23 upstream.
 
-When CONFIG_ADVISE_SYSCALLS is not set/enabled and CONFIG_COMPAT is
-set/enabled, the riscv compat_syscall_table references
-'compat_sys_fadvise64_64', which is not defined:
+Saving/restoring interrupt and wake status bits across suspend can
+cause the suspend to fail if an IRQ is serviced across the
+suspend cycle.
 
-riscv64-linux-ld: arch/riscv/kernel/compat_syscall_table.o:(.rodata+0x6f8):
-undefined reference to `compat_sys_fadvise64_64'
-
-Add 'fadvise64_64' to kernel/sys_ni.c as a conditional COMPAT function so
-that when CONFIG_ADVISE_SYSCALLS is not set, there is a fallback function
-available.
-
-Link: https://lkml.kernel.org/r/20220807220934.5689-1-rdunlap@infradead.org
-Fixes: d3ac21cacc24 ("mm: Support compiling out madvise and fadvise")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Cc: Josh Triplett <josh@joshtriplett.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Albert Ou <aou@eecs.berkeley.edu>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Fixes: 79d2c8bede2c ("pinctrl/amd: save pin registers over suspend/resume")
+Link: https://lore.kernel.org/r/20220613064127.220416-3-Basavaraj.Natikar@amd.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/sys_ni.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/pinctrl/pinctrl-amd.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---- a/kernel/sys_ni.c
-+++ b/kernel/sys_ni.c
-@@ -257,6 +257,7 @@ COND_SYSCALL_COMPAT(keyctl);
+--- a/drivers/pinctrl/pinctrl-amd.c
++++ b/drivers/pinctrl/pinctrl-amd.c
+@@ -798,6 +798,7 @@ static int amd_gpio_suspend(struct devic
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct amd_gpio *gpio_dev = platform_get_drvdata(pdev);
+ 	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
++	unsigned long flags;
+ 	int i;
  
- /* mm/fadvise.c */
- COND_SYSCALL(fadvise64_64);
-+COND_SYSCALL_COMPAT(fadvise64_64);
+ 	for (i = 0; i < desc->npins; i++) {
+@@ -806,7 +807,9 @@ static int amd_gpio_suspend(struct devic
+ 		if (!amd_gpio_should_save(gpio_dev, pin))
+ 			continue;
  
- /* mm/, CONFIG_MMU only */
- COND_SYSCALL(swapon);
+-		gpio_dev->saved_regs[i] = readl(gpio_dev->base + pin*4);
++		raw_spin_lock_irqsave(&gpio_dev->lock, flags);
++		gpio_dev->saved_regs[i] = readl(gpio_dev->base + pin * 4) & ~PIN_IRQ_PENDING;
++		raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+ 	}
+ 
+ 	return 0;
+@@ -817,6 +820,7 @@ static int amd_gpio_resume(struct device
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct amd_gpio *gpio_dev = platform_get_drvdata(pdev);
+ 	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
++	unsigned long flags;
+ 	int i;
+ 
+ 	for (i = 0; i < desc->npins; i++) {
+@@ -825,7 +829,10 @@ static int amd_gpio_resume(struct device
+ 		if (!amd_gpio_should_save(gpio_dev, pin))
+ 			continue;
+ 
+-		writel(gpio_dev->saved_regs[i], gpio_dev->base + pin*4);
++		raw_spin_lock_irqsave(&gpio_dev->lock, flags);
++		gpio_dev->saved_regs[i] |= readl(gpio_dev->base + pin * 4) & PIN_IRQ_PENDING;
++		writel(gpio_dev->saved_regs[i], gpio_dev->base + pin * 4);
++		raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+ 	}
+ 
+ 	return 0;
 
 

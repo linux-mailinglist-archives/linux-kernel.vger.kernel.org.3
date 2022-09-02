@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20015AAE80
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BC75AAE56
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbiIBMY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
+        id S235673AbiIBMVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236137AbiIBMXp (ORCPT
+        with ESMTP id S235631AbiIBMVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:23:45 -0400
+        Fri, 2 Sep 2022 08:21:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C21DA3DA;
-        Fri,  2 Sep 2022 05:22:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73053422F9;
+        Fri,  2 Sep 2022 05:20:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97073B82A8F;
-        Fri,  2 Sep 2022 12:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5BA5C433C1;
-        Fri,  2 Sep 2022 12:22:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F351B82A8F;
+        Fri,  2 Sep 2022 12:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 744F8C433D6;
+        Fri,  2 Sep 2022 12:20:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121330;
-        bh=UaZrfu1nQDE2wLZiRHbDalvvme+/Dm9wfmw5w5Ili/E=;
+        s=korg; t=1662121227;
+        bh=AIEknmOfKkXVC+4GIuxKJQWEsOndGqgmkeZKzfxZG0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RUu1xN7wYr+adKAdq0+xnnlYdzE5BD077Y1kQSaR8j23Ocx8vA634urVaSetjv8H3
-         gK3JjYKdujWvmkZn/kiOwF010BBOYPVdZasVMCtN5ldEErswV+Dn79gmu4VdyFbDgy
-         71cYxGojo864ikj+J1VSyhjRrUJFxDIuAy32Q8Bg=
+        b=sbrmJn45UlO3L5NUL7wHw6dctQCQoUHdozH/GaZE+6yE7EeNLkKH+wWaTf9Va8+zX
+         4lWkomIWsn5Hpknz+u1wEFccvrR+Mdw304UAjaPlBkEG89+giatWl8//XBUARPW4Xw
+         dd4esO1I+NEtB6JCNtfW0Ff4hocsyCRQW9h9Y0Xs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 15/42] net: Fix a data-race around sysctl_net_busy_poll.
+        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
+        Filipe Manana <fdmanana@suse.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 4.9 13/31] btrfs: check if root is readonly while setting security xattr
 Date:   Fri,  2 Sep 2022 14:18:39 +0200
-Message-Id: <20220902121359.342587822@linuxfoundation.org>
+Message-Id: <20220902121357.243832041@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
+In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
+References: <20220902121356.732130937@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,36 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Goldwyn Rodrigues <rgoldwyn@suse.de>
 
-[ Upstream commit c42b7cddea47503411bfb5f2f93a4154aaffa2d9 ]
+commit b51111271b0352aa596c5ae8faf06939e91b3b68 upstream.
 
-While reading sysctl_net_busy_poll, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+For a filesystem which has btrfs read-only property set to true, all
+write operations including xattr should be denied. However, security
+xattr can still be changed even if btrfs ro property is true.
 
-Fixes: 060212928670 ("net: add low latency socket poll")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This happens because xattr_permission() does not have any restrictions
+on security.*, system.*  and in some cases trusted.* from VFS and
+the decision is left to the underlying filesystem. See comments in
+xattr_permission() for more details.
+
+This patch checks if the root is read-only before performing the set
+xattr operation.
+
+Testcase:
+
+  DEV=/dev/vdb
+  MNT=/mnt
+
+  mkfs.btrfs -f $DEV
+  mount $DEV $MNT
+  echo "file one" > $MNT/f1
+
+  setfattr -n "security.one" -v 2 $MNT/f1
+  btrfs property set /mnt ro true
+
+  setfattr -n "security.one" -v 1 $MNT/f1
+
+  umount $MNT
+
+CC: stable@vger.kernel.org # 4.9+
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/busy_poll.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/xattr.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
-index 5dd22b740f9ce..4a9fc96317a9e 100644
---- a/include/net/busy_poll.h
-+++ b/include/net/busy_poll.h
-@@ -43,7 +43,7 @@ extern unsigned int sysctl_net_busy_poll __read_mostly;
- 
- static inline bool net_busy_loop_on(void)
+--- a/fs/btrfs/xattr.c
++++ b/fs/btrfs/xattr.c
+@@ -375,6 +375,9 @@ static int btrfs_xattr_handler_get(const
+ 				   struct dentry *unused, struct inode *inode,
+ 				   const char *name, void *buffer, size_t size)
  {
--	return sysctl_net_busy_poll;
-+	return READ_ONCE(sysctl_net_busy_poll);
++	if (btrfs_root_readonly(BTRFS_I(inode)->root))
++		return -EROFS;
++
+ 	name = xattr_full_name(handler, name);
+ 	return __btrfs_getxattr(inode, name, buffer, size);
  }
- 
- static inline bool sk_can_busy_loop(const struct sock *sk)
--- 
-2.35.1
-
 
 

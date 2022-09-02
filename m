@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EE45AB075
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1365AB174
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237838AbiIBMyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
+        id S237090AbiIBNdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237971AbiIBMxA (ORCPT
+        with ESMTP id S236605AbiIBNcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:53:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CD5F8FF5;
-        Fri,  2 Sep 2022 05:37:47 -0700 (PDT)
+        Fri, 2 Sep 2022 09:32:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8231166F1;
+        Fri,  2 Sep 2022 06:11:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8CA6621BE;
-        Fri,  2 Sep 2022 12:36:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD90FC433C1;
-        Fri,  2 Sep 2022 12:36:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFC66B82AA0;
+        Fri,  2 Sep 2022 12:34:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F66EC433D7;
+        Fri,  2 Sep 2022 12:34:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122210;
-        bh=wbSiZ0CLZonH7ncXPFcG0OikktRRtS3l6RAKoUdrON8=;
+        s=korg; t=1662122084;
+        bh=y6yjcDAQIF/vTOtSaLQE2XI/MgtWHSZ9+6YQP0ofuCg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KHvTZir5VaxRhkWzdIvZI+KuB3UX5IdO8GCZpY1ILfvs/YIExyPOSpQD3oymBOUkv
-         XXzkOAYJbMlDe2r7uuvKGPnhUauqxE9/vJ63bXlayFg7R9Z2sqeBj+uyLyuFMo+1qz
-         aHGIsG9N9b/MxMzd6BVVo5sKXhaurOfWVPb8USXA=
+        b=nhZef+Wh69GKqbD+xm55mmdxeCdUr7YkdKFG9YGyTMzv7W3FcIgBee2QmfwDKvS9l
+         o0r6VdAN7qehtaZnFVeZyYFqJzUbhIUzY80OwVzP0H194sSDbywLVZva2lBzoTy4R9
+         qikSbQnIF7tCSLVhFv6AlbhlSFR0enpVGEA+kZo8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Li Qiong <liqiong@nfschina.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
+        Hyunchul Lee <hyc.lee@gmail.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 47/72] net: lan966x: fix checking for return value of platform_get_irq_byname()
+Subject: [PATCH 5.15 59/73] ksmbd: dont remove dos attribute xattr on O_TRUNC open
 Date:   Fri,  2 Sep 2022 14:19:23 +0200
-Message-Id: <20220902121406.313441704@linuxfoundation.org>
+Message-Id: <20220902121406.369495113@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Qiong <liqiong@nfschina.com>
+From: Namjae Jeon <linkinjeon@kernel.org>
 
-[ Upstream commit 40b4ac880e21d917da7f3752332fa57564a4c202 ]
+[ Upstream commit 17661ecf6a64eb11ae7f1108fe88686388b2acd5 ]
 
-The platform_get_irq_byname() returns non-zero IRQ number
-or negative error number. "if (irq)" always true, chang it
-to "if (irq > 0)"
+When smb client open file in ksmbd share with O_TRUNC, dos attribute
+xattr is removed as well as data in file. This cause the FSCTL_SET_SPARSE
+request from the client fails because ksmbd can't update the dos attribute
+after setting ATTR_SPARSE_FILE. And this patch fix xfstests generic/469
+test also.
 
-Signed-off-by: Li Qiong <liqiong@nfschina.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Reviewed-by: Hyunchul Lee <hyc.lee@gmail.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ fs/ksmbd/smb2pdu.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 1d6e3b641b2e6..d928b75f37803 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -710,7 +710,7 @@ static void lan966x_cleanup_ports(struct lan966x *lan966x)
- 	disable_irq(lan966x->xtr_irq);
- 	lan966x->xtr_irq = -ENXIO;
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index 824f17a101a9e..55ee639703ff0 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -2319,15 +2319,15 @@ static int smb2_remove_smb_xattrs(struct path *path)
+ 			name += strlen(name) + 1) {
+ 		ksmbd_debug(SMB, "%s, len %zd\n", name, strlen(name));
  
--	if (lan966x->ana_irq) {
-+	if (lan966x->ana_irq > 0) {
- 		disable_irq(lan966x->ana_irq);
- 		lan966x->ana_irq = -ENXIO;
+-		if (strncmp(name, XATTR_USER_PREFIX, XATTR_USER_PREFIX_LEN) &&
+-		    strncmp(&name[XATTR_USER_PREFIX_LEN], DOS_ATTRIBUTE_PREFIX,
+-			    DOS_ATTRIBUTE_PREFIX_LEN) &&
+-		    strncmp(&name[XATTR_USER_PREFIX_LEN], STREAM_PREFIX, STREAM_PREFIX_LEN))
+-			continue;
+-
+-		err = ksmbd_vfs_remove_xattr(user_ns, path->dentry, name);
+-		if (err)
+-			ksmbd_debug(SMB, "remove xattr failed : %s\n", name);
++		if (!strncmp(name, XATTR_USER_PREFIX, XATTR_USER_PREFIX_LEN) &&
++		    !strncmp(&name[XATTR_USER_PREFIX_LEN], STREAM_PREFIX,
++			     STREAM_PREFIX_LEN)) {
++			err = ksmbd_vfs_remove_xattr(user_ns, path->dentry,
++						     name);
++			if (err)
++				ksmbd_debug(SMB, "remove xattr failed : %s\n",
++					    name);
++		}
  	}
-@@ -718,10 +718,10 @@ static void lan966x_cleanup_ports(struct lan966x *lan966x)
- 	if (lan966x->fdma)
- 		devm_free_irq(lan966x->dev, lan966x->fdma_irq, lan966x);
- 
--	if (lan966x->ptp_irq)
-+	if (lan966x->ptp_irq > 0)
- 		devm_free_irq(lan966x->dev, lan966x->ptp_irq, lan966x);
- 
--	if (lan966x->ptp_ext_irq)
-+	if (lan966x->ptp_ext_irq > 0)
- 		devm_free_irq(lan966x->dev, lan966x->ptp_ext_irq, lan966x);
- }
- 
-@@ -1049,7 +1049,7 @@ static int lan966x_probe(struct platform_device *pdev)
- 	}
- 
- 	lan966x->ana_irq = platform_get_irq_byname(pdev, "ana");
--	if (lan966x->ana_irq) {
-+	if (lan966x->ana_irq > 0) {
- 		err = devm_request_threaded_irq(&pdev->dev, lan966x->ana_irq, NULL,
- 						lan966x_ana_irq_handler, IRQF_ONESHOT,
- 						"ana irq", lan966x);
+ out:
+ 	kvfree(xattr_list);
 -- 
 2.35.1
 

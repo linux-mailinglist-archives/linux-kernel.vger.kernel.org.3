@@ -2,309 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6CA5AA693
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D6B5AA690
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235324AbiIBDsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
+        id S235381AbiIBDsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiIBDr6 (ORCPT
+        with ESMTP id S235086AbiIBDsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:47:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89126173C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662090475; x=1693626475;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7sucorTp1vQIxnnFSXOKgTXhFMZm2gZwRa+wCAfZt3g=;
-  b=S1znl32uWl2wqDSg8rLkqYoJJLDfRVT8G6rBHOgYOlEXm/v4lVttk7jc
-   uwWm/uiWYTNg4NvkNXyCvQJpI/LoUbWPh8Zn+TfOksdRQqzkDrJgVClsV
-   eXK202RShHqVg8/zehc5OGR7TlXdAe5KMWpnjv/s//NenNejfjx05cEt4
-   +dKrMX4aCaU4ZrPE7Ws9j5H0BlqwQ03kbXLusJULKNpsUML0jdqhQCnFn
-   8J3z4BCweFhmbAt2y8FFYz79oSMvUZGBYXvhNqAXEciKXLmzr3iZnYgjx
-   ttF5CtwGhwaG2zH0EjhwrOOvRK63SoaqMyK5aqzhoMh5U29lUpBRKrxWw
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="276287550"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="276287550"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 20:47:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="589881735"
-Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 01 Sep 2022 20:47:53 -0700
-Received: from kbuild by fccc941c3034 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTxeq-00005t-2X;
-        Fri, 02 Sep 2022 03:47:52 +0000
-Date:   Fri, 2 Sep 2022 11:47:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srivatsa Vaddagiri <vatsa@codeaurora.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Chris Redpath <chris.redpath@arm.com>
-Subject: [jsarha:topic/cros-sof-v4.14-rebase 1458/9999]
- include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no
- member named 'my_q'
-Message-ID: <202209021116.DszurHSD-lkp@intel.com>
+        Thu, 1 Sep 2022 23:48:08 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4597198590
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:48:06 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id c66so686046pfc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 20:48:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=hcraQuo3t4d4QrFau8j8qQ9DHHwXRsW4oFyIv4CPr0M=;
+        b=3fno8THLVlG0GX9ntut3pD0E8LZambLAMn6wFPkGNJWKh5C0doM2JyQB8jhj22obB3
+         xvS+IYfwcx/a0omB3oH/Sqi0V3qhUhRfFHJ93TVOMnfxC+1pYMNb21yEIuyioBEgcspB
+         zbniO60dzuP96M2jg9rB1/r7z6D0qM220UAoxMPmvi1/sqYNg+AGlDmtK6wwtzOnsgwY
+         U9uZkCojQnDuM9K5LerbslI9erbS4twa8qknhmdGic7uLFGRyDTBIgmuk7giBrJ/w3HI
+         Oq8vS6LV4UnXToUjBCM9MQbsXXDpPEgJoFgni4imes372r323INEcvorUDRlhjOjxfQb
+         jmHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=hcraQuo3t4d4QrFau8j8qQ9DHHwXRsW4oFyIv4CPr0M=;
+        b=A4wEsIhGIBHx7k4f4hqthhYvs9S8qydEaniE3THw/ywh0j0JsK54HtNcZ5WawJC9ea
+         R1xcOvkhUm0MmuF35lrEayCaXr8k2GmwtCWFzciE94dhecgFcQSpkQKNQVdW2rDAMVAj
+         mqzeRUB9u353XfNInPJ7B9ErJddDEue0qN8nSler/gIOSXK+uVb7Gmg/3WKrgq1xGenL
+         o8HyExMIuJaMgnY/0Qv+/NiqAa5vBqHDqpgRJ/7q8skrL1M6nNyoWRNqvAeYSTA0DeSa
+         kvLHu6IkqcF8f9pOCPeTcjiFJmWNnAOUP8KDLkcp39PpDPQM91/EcPRrSMWK9KKFOch9
+         5pVA==
+X-Gm-Message-State: ACgBeo3CaJIi4FoeIF0ahTEj2TQ7JJwI5uqTkiBNv/Z4V3U/pXC0aR7H
+        PPzY1kfH+qd7O7F+QOVTG0wCqA==
+X-Google-Smtp-Source: AA6agR7dRYABhSvA/oWYU4UmpifJnz+WUVXp4AetGrnCOvoV4+bRVCAIaRJfQYdTVb77CGwYqnng9A==
+X-Received: by 2002:a63:41c5:0:b0:42c:6b7f:6d95 with SMTP id o188-20020a6341c5000000b0042c6b7f6d95mr15717008pga.175.1662090485261;
+        Thu, 01 Sep 2022 20:48:05 -0700 (PDT)
+Received: from C02G705SMD6V.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id w8-20020a170902e88800b0016c4546fbf9sm376152plg.128.2022.09.01.20.48.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 20:48:04 -0700 (PDT)
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
+        huyue2@coolpad.com, Jia Zhu <zhujia.zj@bytedance.com>
+Subject: [PATCH V1 0/5] Introduce erofs shared domain
+Date:   Fri,  2 Sep 2022 11:47:43 +0800
+Message-Id: <20220902034748.60868-1-zhujia.zj@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.14-rebase
-head:   18a233f3f676a98dde00947535d99ab1a54da340
-commit: 77f68474fcca7a861a745c4dc1ffd488d17797a5 [1458/9999] ANDROID: sched: Introduce Window Assisted Load Tracking (WALT)
-config: sparc64-randconfig-c042-20220901 (https://download.01.org/0day-ci/archive/20220902/202209021116.DszurHSD-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 7.5.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/77f68474fcca7a861a745c4dc1ffd488d17797a5
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.14-rebase
-        git checkout 77f68474fcca7a861a745c4dc1ffd488d17797a5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash arch/sparc/mm/ kernel/sched/
+Changes since RFC:
+1. Fix the macro CONFIG_EROFS_FS_ONDEMAND misuse in
+   erofs_fc_parse_param().
+2. Move the code in domain.c to fscache.c
+3. Remove the definition of anon_inode_fs_type and just use erofs
+   filesystem type to init pseudo mnt.
+4. Use mutex lock for erofs_domain_list.
+5. Unregister the cookies before kill_sb() to avoid inode busy when
+   umount erofs.
+6. Remove useless declaration of domain_get/put in internal.h
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[Kernel Patchset]
+===============
+Git tree:
+	https://github.com/userzj/linux.git zhujia/shared-domain-v1
+Git web:
+	https://github.com/userzj/linux/tree/zhujia/shared-domain-v1
 
-All errors (new ones prefixed by >>):
+[Background]
+============
+In ondemand read mode, we use individual volume to present an erofs
+mountpoint, cookies to present bootstrap and data blobs.
 
-   arch/sparc/mm/init_64.c: In function 'setup_hugepagesz':
-   arch/sparc/mm/init_64.c:368:17: error: variable 'hv_pgsz_idx' set but not used [-Werror=unused-but-set-variable]
-     unsigned short hv_pgsz_idx;
-                    ^~~~~~~~~~~
-   arch/sparc/mm/init_64.c: At top level:
->> arch/sparc/mm/init_64.c:2685:6: error: no previous declaration for 'vmemmap_free' [-Werror=missing-declarations]
-    void vmemmap_free(unsigned long start, unsigned long end)
-         ^~~~~~~~~~~~
-   cc1: all warnings being treated as errors
---
-   In file included from include/linux/cpuset.h:13:0,
-                    from kernel/sched/core.c:14:
-   include/linux/sched/topology.h:196:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
-    const struct sched_group_energy * const(*sched_domain_energy_f)(int cpu);
-    ^~~~~
-   In file included from kernel/sched/core.c:36:0:
-   kernel/sched/sched.h:1127:34: warning: duplicate 'const' declaration specifier [-Wduplicate-decl-specifier]
-     const struct sched_group_energy const *sge;
-                                     ^~~~~
-   In file included from include/trace/define_trace.h:96:0,
-                    from include/trace/events/sched.h:1171,
-                    from kernel/sched/core.c:41:
-   include/trace/events/sched.h: In function 'trace_event_raw_event_sched_load_se':
->> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
-      if (!se->my_q) {
-             ^
-   include/trace/trace_events.h:719:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     { assign; }       \
-       ^~~~~~
-   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
-            PARAMS(assign),         \
-            ^~~~~~
-   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
-    TRACE_EVENT(sched_load_se,
-    ^~~~~~~~~~~
-   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
-     TP_fast_assign(
-     ^~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-                          ^~~~~~~~~~
-   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
-      if (!se->my_q) {
-      ^~
->> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
-      if (!se->my_q) {
-             ^
-   include/trace/trace_events.h:719:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     { assign; }       \
-       ^~~~~~
-   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
-            PARAMS(assign),         \
-            ^~~~~~
-   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
-    TRACE_EVENT(sched_load_se,
-    ^~~~~~~~~~~
-   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
-     TP_fast_assign(
-     ^~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-                          ^~~~~~~~~~
-   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
-      if (!se->my_q) {
-      ^~
->> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
-      if (!se->my_q) {
-             ^
-   include/trace/trace_events.h:719:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     { assign; }       \
-       ^~~~~~
-   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
-            PARAMS(assign),         \
-            ^~~~~~
-   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
-    TRACE_EVENT(sched_load_se,
-    ^~~~~~~~~~~
-   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
-     TP_fast_assign(
-     ^~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-                          ^~~~~~~~~~
-   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
-      if (!se->my_q) {
-      ^~
-   In file included from include/trace/define_trace.h:97:0,
-                    from include/trace/events/sched.h:1171,
-                    from kernel/sched/core.c:41:
-   include/trace/events/sched.h: In function 'perf_trace_sched_load_se':
->> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
-      if (!se->my_q) {
-             ^
-   include/trace/perf.h:66:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     { assign; }       \
-       ^~~~~~
-   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
-            PARAMS(assign),         \
-            ^~~~~~
-   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
-    TRACE_EVENT(sched_load_se,
-    ^~~~~~~~~~~
-   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
-     TP_fast_assign(
-     ^~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-                          ^~~~~~~~~~
-   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
-      if (!se->my_q) {
-      ^~
->> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
-      if (!se->my_q) {
-             ^
-   include/trace/perf.h:66:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     { assign; }       \
-       ^~~~~~
-   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
-            PARAMS(assign),         \
-            ^~~~~~
-   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
-    TRACE_EVENT(sched_load_se,
-    ^~~~~~~~~~~
-   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
-     TP_fast_assign(
-     ^~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-                          ^~~~~~~~~~
-   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
-      if (!se->my_q) {
-      ^~
->> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
-      if (!se->my_q) {
-             ^
-   include/trace/perf.h:66:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     { assign; }       \
-       ^~~~~~
-   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
-            PARAMS(assign),         \
-            ^~~~~~
-   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
-    TRACE_EVENT(sched_load_se,
-    ^~~~~~~~~~~
-   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
-     TP_fast_assign(
-     ^~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-                          ^~~~~~~~~~
-   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
-      if (!se->my_q) {
-      ^~
-   kernel/sched/core.c: At top level:
-   kernel/sched/core.c:1303:5: warning: no previous declaration for 'migrate_swap' [-Wmissing-declarations]
-    int migrate_swap(struct task_struct *cur, struct task_struct *p)
-        ^~~~~~~~~~~~
-   kernel/sched/core.c:1599:6: warning: no previous declaration for 'sched_set_stop_task' [-Wmissing-declarations]
-    void sched_set_stop_task(int cpu, struct task_struct *stop)
-         ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:3657:35: warning: no previous declaration for 'preempt_schedule_irq' [-Wmissing-declarations]
-    asmlinkage __visible void __sched preempt_schedule_irq(void)
-                                      ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c: In function 'sched_init':
-   kernel/sched/core.c:5858:32: warning: variable 'ptr' set but not used [-Wunused-but-set-variable]
-     unsigned long alloc_size = 0, ptr;
-                                   ^~~
+In which case, since cookies can't be shared between fscache volumes,
+even if the data blobs between different mountpoints are exactly same,
+they can't be shared.
 
+[Introduction]
+==============
+Here we introduce erofs shared domain to resolve above mentioned case.
+Several erofs filesystems can belong to one domain, and data blobs can
+be shared among these erofs filesystems of same domain.
 
-vim +778 include/trace/events/sched.h
+[Usage]
+Users could specify 'domain_id' mount option to create or join into a
+domain which reuses the same cookies(blobs).
 
-   746	
-   747		TP_PROTO(struct sched_entity *se),
-   748	
-   749		TP_ARGS(se),
-   750	
-   751		TP_STRUCT__entry(
-   752			__field(	int,		cpu			      )
-   753			__dynamic_array(char,		path,
-   754			  __trace_sched_path(__trace_sched_group_cfs_rq(se), NULL, 0) )
-   755			__array(	char,		comm,	TASK_COMM_LEN	      )
-   756			__field(	pid_t,		pid			      )
-   757			__field(	unsigned long,	load			      )
-   758			__field(	unsigned long,	util			      )
-   759			__field(	unsigned long,	util_pelt		      )
-   760			__field(	unsigned long,	util_walt		      )
-   761		),
-   762	
-   763		TP_fast_assign(
-   764			struct cfs_rq *gcfs_rq = __trace_sched_group_cfs_rq(se);
-   765			struct task_struct *p = gcfs_rq ? NULL
-   766					    : container_of(se, struct task_struct, se);
-   767	
-   768			__entry->cpu = __trace_sched_cpu(gcfs_rq, se);
-   769			__trace_sched_path(gcfs_rq, __get_dynamic_array(path),
-   770					   __get_dynamic_array_len(path));
-   771			memcpy(__entry->comm, p ? p->comm : "(null)", TASK_COMM_LEN);
-   772			__entry->pid = p ? p->pid : -1;
-   773			__entry->load = se->avg.load_avg;
-   774			__entry->util = se->avg.util_avg;
-   775			__entry->util_pelt  = __entry->util;
-   776			__entry->util_walt  = 0;
-   777	#ifdef CONFIG_SCHED_WALT
- > 778			if (!se->my_q) {
-   779				struct task_struct *p = container_of(se, struct task_struct, se);
-   780				__entry->util_walt = p->ravg.demand;
-   781				do_div(__entry->util_walt, walt_ravg_window >> SCHED_CAPACITY_SHIFT);
-   782				if (!walt_disabled && sysctl_sched_use_walt_task_util)
-   783					__entry->util = __entry->util_walt;
-   784			}
-   785	#endif
-   786		),
-   787	
-   788		TP_printk("cpu=%d path=%s comm=%s pid=%d load=%lu util=%lu util_pelt=%lu util_walt=%lu",
-   789			  __entry->cpu, __get_str(path), __entry->comm,
-   790			  __entry->pid, __entry->load, __entry->util,
-   791			  __entry->util_pelt, __entry->util_walt)
-   792	);
-   793	
+[Design]
+========
+1. Use pseudo mnt to manage domain's lifecycle.
+2. Use a linked list to maintain & traverse domains.
+3. Use pseudo sb to create anonymous inode for recording cookie's info
+   and manage cookies lifecycle.
+
+[Flow Path]
+===========
+1. User specify a new 'domain_id' in mount option.
+   1.1 Traverse domain list, compare domain_id with existing domain.[Miss]
+   1.2 Create a new domain(volume), add it to domain list.
+   1.3 Traverse pseudo sb's inode list, compare cookie name with
+       existing cookies.[Miss]
+   1.4 Alloc new anonymous inodes and cookies.
+
+2. User specify an existing 'domain_id' in mount option and the data
+   blob is existed in domain.
+   2.1 Traverse domain list, compare domain_id with existing domain.[Hit]
+   2.2 Reuse the domain and increase its refcnt.
+   2.3 Traverse pseudo sb's inode list, compare cookie name with
+   	   existing cookies.[Hit]
+   2.4 Reuse the cookie and increase its refcnt.
+
+[Test]
+======
+Git web:
+	https://github.com/userzj/demand-read-cachefilesd/tree/shared-domain
+More test cases will be added to:
+	https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/log/?h=experimental-tests-fscache 
+
+RFC: https://lore.kernel.org/all/YxAlO%2FDHDrIAafR2@B-P7TQMD6M-0146.local/
+
+Jia Zhu (5):
+  erofs: add 'domain_id' mount option for on-demand read sementics
+  erofs: introduce fscache-based domain
+  erofs: add 'domain_id' prefix when register sysfs
+  erofs: remove duplicated unregister_cookie
+  erofs: support fscache based shared domain
+
+ fs/erofs/fscache.c  | 169 +++++++++++++++++++++++++++++++++++++++++++-
+ fs/erofs/internal.h |  33 ++++++++-
+ fs/erofs/super.c    |  94 ++++++++++++++++++------
+ fs/erofs/sysfs.c    |  11 ++-
+ 4 files changed, 281 insertions(+), 26 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.20.1
+

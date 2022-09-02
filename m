@@ -2,89 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946A55AB3C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC59F5AB3E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236387AbiIBOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S237022AbiIBOnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235685AbiIBOfi (ORCPT
+        with ESMTP id S236995AbiIBOnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:35:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8963168A32;
-        Fri,  2 Sep 2022 06:56:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B12B62178;
-        Fri,  2 Sep 2022 12:38:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 152A3C433D6;
-        Fri,  2 Sep 2022 12:37:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122280;
-        bh=S1ziajJp7xs/vpXYFoVk59BE8C1BfxDdOtGKt2qmjSE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oaqKIHDoHHkLZVKZiJs822v4OBOv+dxuu0O09aPtDKaKuZtAQgOZIiC4CTqsUBXnm
-         I9Ua6/gLAcs36iQybOa4nqLWlX3VTzVuInEO5ymE9wVeEFH+AF/hTTvVFk7QWDm2Ei
-         j7lJQasaUo6uHnq7tnNFjXiXTUCSpq2DsvWOPr9Y=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.19 70/72] net/af_packet: check len when min_header_len equals to 0
-Date:   Fri,  2 Sep 2022 14:19:46 +0200
-Message-Id: <20220902121407.097023450@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
-User-Agent: quilt/0.67
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Fri, 2 Sep 2022 10:43:09 -0400
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7B77159A7C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:04:14 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 282CeGbE005773;
+        Fri, 2 Sep 2022 07:40:16 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 282CeEKR005772;
+        Fri, 2 Sep 2022 07:40:14 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Fri, 2 Sep 2022 07:40:14 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Tom Rix <trix@redhat.com>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] powerpc/math_emu/efp: Include module.h
+Message-ID: <20220902124014.GM25951@gate.crashing.org>
+References: <20220831152014.3501664-1-nathan@kernel.org> <efd56f3e-bc8c-5da5-559d-e0bc6b21fa5b@csgroup.eu> <20220901194705.GI25951@gate.crashing.org> <ae2ee2d8-ec0a-d0ab-2c5a-b9a8c7579093@csgroup.eu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ae2ee2d8-ec0a-d0ab-2c5a-b9a8c7579093@csgroup.eu>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengchao Shao <shaozhengchao@huawei.com>
+On Fri, Sep 02, 2022 at 08:43:49AM +0000, Christophe Leroy wrote:
+> Le 01/09/2022 à 21:47, Segher Boessenkool a écrit :
+> > On Thu, Sep 01, 2022 at 05:41:33AM +0000, Christophe Leroy wrote:
+> >> I think it would be worth a GCC bug report.
+> > 
+> > We need a stand-alone testcase for this.  When you have created one, at
+> > least 98% of the time you discover the bug is in user code after all.
+> > 
+> > Which is a very good thing, it means the problem can be fixed simpler,
+> > cheaper, and a lot faster :-)
+> 
+> Easy to reproduce with a .c file that has a single line:
+> 
+> non_existing_macro(xxx);
 
-commit dc633700f00f726e027846a318c5ffeb8deaaeda upstream.
+That was fast (and cheap and simple) :-)
 
-User can use AF_PACKET socket to send packets with the length of 0.
-When min_header_len equals to 0, packet_snd will call __dev_queue_xmit
-to send packets, and sock->type can be any type.
+> Apparently that's due to the -w option in arch/powerpc/math_emu/Makefile:
+> 
+> 	ccflags-y = -w
+> 
+> Was introduced by commit d2b194ed8208 ("powerpc/math-emu: Use kernel 
+> generic math-emu code")
+> 
+> If I understand correctly it means 'ignore all warnings'. Then it seems 
+> CLANG doesn't honor that request.
 
-Reported-by: syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com
-Fixes: fd1894224407 ("bpf: Don't redirect packets with invalid pkt_len")
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- net/packet/af_packet.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+'-w'
+     Inhibit all warning messages.
 
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -3037,8 +3037,8 @@ static int packet_snd(struct socket *soc
- 	if (err)
- 		goto out_free;
- 
--	if (sock->type == SOCK_RAW &&
--	    !dev_validate_header(dev, skb->data, len)) {
-+	if ((sock->type == SOCK_RAW &&
-+	     !dev_validate_header(dev, skb->data, len)) || !skb->len) {
- 		err = -EINVAL;
- 		goto out_free;
- 	}
+GCC's initial commit has this already (1992).
 
 
+Segher

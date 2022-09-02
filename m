@@ -2,86 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E065AA945
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139405AA94D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbiIBH63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 03:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
+        id S235634AbiIBH7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 03:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235608AbiIBH6P (ORCPT
+        with ESMTP id S235475AbiIBH7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 03:58:15 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82A3BD164
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 00:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662105488; x=1693641488;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=U+sckmWxu/dh7LzjzffyvQqItsRKsl7L7Kdq5ogbtnY=;
-  b=cQpgePs6DjCrtKVvKbsaFfqR/9OSObLdjwDxXeZSvvnKVp5QqJI2tjeA
-   dlZIRmeTdcyaZh27Hz2zubx0QKpmTcgliW5C2RGlKTWqunVCFVlUq5E1B
-   KhsS8sT2s/eqZ1ogERWZQwtdQ3yvqqW1hrfY/vktgVM3PjoZY1FhWc/bC
-   PTCz4AhDtICNNZ6o7UXLLG0kCzyclllj7fPGsW3Lpi7dz0HwfTfOA5PiN
-   FlP3LZRf6PkrNhM5jM4XwyFIwNupnFFxUgo/vakd32IkS7g5wKQuqs4Nv
-   Wa5O8KPn7f+07cw2lhEc9kj5ZtuZpz3m+WYeTrn3bvUqVb3cWBtOI+7JE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="276328292"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="276328292"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 00:58:07 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="589983425"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 00:58:02 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Wei Xu <weixugc@google.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>,
-        Greg Thelen <gthelen@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
- sysfs
-In-Reply-To: <CAAPL-u_UoAQ9koo892sG-Tx4bi4xDRe9PUtjmFSsn90uU-n31g@mail.gmail.com>
-        (Wei Xu's message of "Fri, 2 Sep 2022 00:02:05 -0700")
-References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
-        <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <ad19e105-9290-922d-59e6-e6813a30f5f0@linux.ibm.com>
-        <87pmgezkhp.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
-        <d91beb53-e940-e02a-f9ca-3326bf914da7@linux.ibm.com>
-        <87fshaz63h.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <698120ce-d4df-3d13-dea9-a8f5c298783c@linux.ibm.com>
-        <87bkryz4nh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <2b4ddc45-74ae-27df-d973-6724f61f4e18@linux.ibm.com>
-        <877d2mz3c1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <45488760-02b5-115b-c16d-5219303f2f33@linux.ibm.com>
-        <CAAPL-u_UoAQ9koo892sG-Tx4bi4xDRe9PUtjmFSsn90uU-n31g@mail.gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Fri, 02 Sep 2022 15:57:53 +0800
-Message-ID: <871qsuyzr2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Fri, 2 Sep 2022 03:59:07 -0400
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09143BD4D8;
+        Fri,  2 Sep 2022 00:58:56 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAC3v8e+txFjFSWEAA--.4811S2;
+        Fri, 02 Sep 2022 15:58:54 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] USB: serial: ftdi_sio: Convert to use dev_groups
+Date:   Fri,  2 Sep 2022 15:58:53 +0800
+Message-Id: <20220902075853.3931834-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAC3v8e+txFjFSWEAA--.4811S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtF1xCr48Kr48ur1xGr1xKrg_yoW7uF4UpF
+        WrtrZ7trWDJF43Jr4FkFs8Jrn8CwsYyrZIg39rXw4Fga15Aw1SqFyxA3Z5try3JFykKFyS
+        qws2grZ0kF47JFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF4l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU4UDLUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,118 +55,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei Xu <weixugc@google.com> writes:
+The driver core supports the ability to handle the creation and removal
+of device-specific sysfs files in a race-free manner. Moreover, it can
+guarantee the success of creation. Therefore, it should be better to
+move the definition of ftdi_sio_device to the end, remove
+create_sysfs_attrs and remove_sysfs_attrs, and convert to use dev_groups.
 
-> On Thu, Sep 1, 2022 at 11:44 PM Aneesh Kumar K V
-> <aneesh.kumar@linux.ibm.com> wrote:
->>
->> On 9/2/22 12:10 PM, Huang, Ying wrote:
->> > Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->> >
->> >> On 9/2/22 11:42 AM, Huang, Ying wrote:
->> >>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->> >>>
->> >>>> On 9/2/22 11:10 AM, Huang, Ying wrote:
->> >>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->> >>>>>
->> >>>>>> On 9/2/22 10:39 AM, Wei Xu wrote:
->> >>>>>>> On Thu, Sep 1, 2022 at 5:33 PM Huang, Ying <ying.huang@intel.com> wrote:
->> >>>>>>>>
->> >>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->> >>>>>>>>
->> >>>>>>>>> On 9/1/22 12:31 PM, Huang, Ying wrote:
->> >>>>>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->> >>>>>>>>>>
->> >>>>>>>>>>> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
->> >>>>>>>>>>> related details can be found. All allocated memory tiers will be listed
->> >>>>>>>>>>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
->> >>>>>>>>>>>
->> >>>>>>>>>>> The nodes which are part of a specific memory tier can be listed via
->> >>>>>>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
->> >>>>>>>>>>
->> >>>>>>>>>> I think "memory_tier" is a better subsystem/bus name than
->> >>>>>>>>>> memory_tiering.  Because we have a set of memory_tierN devices inside.
->> >>>>>>>>>> "memory_tier" sounds more natural.  I know this is subjective, just my
->> >>>>>>>>>> preference.
->> >>>>>>>>>>
->> >>>>>>
->> >>>>>>
->> >>>>>> I missed replying to this earlier. I will keep memory_tiering as subsystem name in v4
->> >>>>>> because we would want it to a susbsystem where all memory tiering related details can be found
->> >>>>>> including memory type in the future. This is as per discussion
->> >>>>>>
->> >>>>>> https://lore.kernel.org/linux-mm/CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com
->> >>>>>
->> >>>>> I don't think that it's a good idea to mix 2 types of devices in one
->> >>>>> subsystem (bus).  If my understanding were correct, that breaks the
->> >>>>> driver core convention.
->> >>>>>
->> >>>>
->> >>>> All these are virtual devices .I am not sure i follow what you mean by 2 types of devices.
->> >>>> memory_tiering is a subsystem that represents all the details w.r.t memory tiering. It shows
->> >>>> details of memory tiers and can possibly contain details of different memory types .
->> >>>
->> >>> IMHO, memory_tier and memory_type are 2 kind of devices.  They have
->> >>> almost totally different attributes (sysfs file).  So, we should create
->> >>> 2 buses for them.  Each has its own attribute group.  "virtual" itself
->> >>> isn't a subsystem.
->> >>
->> >> Considering both the details are related to memory tiering, wouldn't it be much simpler we consolidate
->> >> them within the same subdirectory? I am still not clear why you are suggesting they need to be in different
->> >> sysfs hierarchy.  It doesn't break any driver core convention as you mentioned earlier.
->> >>
->> >> /sys/devices/virtual/memory_tiering/memory_tierN
->> >> /sys/devices/virtual/memory_tiering/memory_typeN
->> >
->> > I think we should add
->> >
->> >  /sys/devices/virtual/memory_tier/memory_tierN
->> >  /sys/devices/virtual/memory_type/memory_typeN
->> >
->>
->> I am trying to find if there is a technical reason to do the same?
->>
->> > I don't think this is complex.  Devices of same bus/subsystem should
->> > have mostly same attributes.  This is my understanding of driver core
->> > convention.
->> >
->>
->> I was not looking at this from code complexity point. Instead of having multiple directories
->> with details w.r.t memory tiering, I was looking at consolidating the details
->> within the directory /sys/devices/virtual/memory_tiering. (similar to all virtual devices
->> are consolidated within /sys/devics/virtual/).
->>
->> -aneesh
->
-> Here is an example of /sys/bus/nd/devices (I know it is not under
-> /sys/devices/virtual, but it can still serve as a reference):
->
-> ls -1 /sys/bus/nd/devices
->
-> namespace2.0
-> namespace3.0
-> ndbus0
-> nmem0
-> nmem1
-> region0
-> region1
-> region2
-> region3
->
-> So I think it is not unreasonable if we want to group memory tiering
-> related interfaces within a single top directory.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-Thanks for pointing this out.  My original understanding of driver core
-isn't correct.
+v1 -> v2:
 
-But I still think it's better to separate instead of mixing memory_tier
-and memory_type.  Per my understanding, memory_type shows information
-(abstract distance, latency, bandwidth, etc.) of memory types (and
-nodes), it can be useful even without memory tiers.  That is, memory
-types describes the physical characteristics, while memory tier reflects
-the policy.
+1. Change the title.
+2. Switch to use an attribute group.
+---
+ drivers/usb/serial/ftdi_sio.c | 124 ++++++++++++----------------------
+ 1 file changed, 42 insertions(+), 82 deletions(-)
 
-Just my 2 cents.
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index d5a3986dfee7..41d8bfb02322 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1108,41 +1108,6 @@ static u32 ftdi_232bm_baud_to_divisor(int baud);
+ static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
+ static u32 ftdi_2232h_baud_to_divisor(int baud);
+ 
+-static struct usb_serial_driver ftdi_sio_device = {
+-	.driver = {
+-		.owner =	THIS_MODULE,
+-		.name =		"ftdi_sio",
+-	},
+-	.description =		"FTDI USB Serial Device",
+-	.id_table =		id_table_combined,
+-	.num_ports =		1,
+-	.bulk_in_size =		512,
+-	.bulk_out_size =	256,
+-	.probe =		ftdi_sio_probe,
+-	.port_probe =		ftdi_sio_port_probe,
+-	.port_remove =		ftdi_sio_port_remove,
+-	.open =			ftdi_open,
+-	.dtr_rts =		ftdi_dtr_rts,
+-	.throttle =		usb_serial_generic_throttle,
+-	.unthrottle =		usb_serial_generic_unthrottle,
+-	.process_read_urb =	ftdi_process_read_urb,
+-	.prepare_write_buffer =	ftdi_prepare_write_buffer,
+-	.tiocmget =		ftdi_tiocmget,
+-	.tiocmset =		ftdi_tiocmset,
+-	.tiocmiwait =		usb_serial_generic_tiocmiwait,
+-	.get_icount =           usb_serial_generic_get_icount,
+-	.ioctl =		ftdi_ioctl,
+-	.get_serial =		get_serial_info,
+-	.set_serial =		set_serial_info,
+-	.set_termios =		ftdi_set_termios,
+-	.break_ctl =		ftdi_break_ctl,
+-	.tx_empty =		ftdi_tx_empty,
+-};
+-
+-static struct usb_serial_driver * const serial_drivers[] = {
+-	&ftdi_sio_device, NULL
+-};
+-
+ 
+ #define WDR_TIMEOUT 5000 /* default urb timeout */
+ #define WDR_SHORT_TIMEOUT 1000	/* shorter urb timeout */
+@@ -1729,50 +1694,12 @@ static ssize_t event_char_store(struct device *dev,
+ }
+ static DEVICE_ATTR_WO(event_char);
+ 
+-static int create_sysfs_attrs(struct usb_serial_port *port)
+-{
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-	int retval = 0;
+-
+-	/* XXX I've no idea if the original SIO supports the event_char
+-	 * sysfs parameter, so I'm playing it safe.  */
+-	if (priv->chip_type != SIO) {
+-		dev_dbg(&port->dev, "sysfs attributes for %s\n", ftdi_chip_name[priv->chip_type]);
+-		retval = device_create_file(&port->dev, &dev_attr_event_char);
+-		if ((!retval) &&
+-		    (priv->chip_type == FT232BM ||
+-		     priv->chip_type == FT2232C ||
+-		     priv->chip_type == FT232RL ||
+-		     priv->chip_type == FT2232H ||
+-		     priv->chip_type == FT4232H ||
+-		     priv->chip_type == FT232H ||
+-		     priv->chip_type == FTX)) {
+-			retval = device_create_file(&port->dev,
+-						    &dev_attr_latency_timer);
+-		}
+-	}
+-	return retval;
+-}
+-
+-static void remove_sysfs_attrs(struct usb_serial_port *port)
+-{
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-
+-	/* XXX see create_sysfs_attrs */
+-	if (priv->chip_type != SIO) {
+-		device_remove_file(&port->dev, &dev_attr_event_char);
+-		if (priv->chip_type == FT232BM ||
+-		    priv->chip_type == FT2232C ||
+-		    priv->chip_type == FT232RL ||
+-		    priv->chip_type == FT2232H ||
+-		    priv->chip_type == FT4232H ||
+-		    priv->chip_type == FT232H ||
+-		    priv->chip_type == FTX) {
+-			device_remove_file(&port->dev, &dev_attr_latency_timer);
+-		}
+-	}
+-
+-}
++static struct attribute *ftdi_sio_attrs[] = {
++	&dev_attr_event_char.attr,
++	&dev_attr_latency_timer.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(ftdi_sio);
+ 
+ #ifdef CONFIG_GPIOLIB
+ 
+@@ -2251,7 +2178,6 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ 	if (read_latency_timer(port) < 0)
+ 		priv->latency = 16;
+ 	write_latency_timer(port);
+-	create_sysfs_attrs(port);
+ 
+ 	result = ftdi_gpio_init(port);
+ 	if (result < 0) {
+@@ -2377,8 +2303,6 @@ static void ftdi_sio_port_remove(struct usb_serial_port *port)
+ 
+ 	ftdi_gpio_remove(port);
+ 
+-	remove_sysfs_attrs(port);
+-
+ 	kfree(priv);
+ }
+ 
+@@ -2915,6 +2839,42 @@ static int ftdi_ioctl(struct tty_struct *tty,
+ 	return -ENOIOCTLCMD;
+ }
+ 
++static struct usb_serial_driver ftdi_sio_device = {
++	.driver = {
++		.owner =	THIS_MODULE,
++		.name =		"ftdi_sio",
++		.dev_groups =	ftdi_sio_groups,
++	},
++	.description =		"FTDI USB Serial Device",
++	.id_table =		id_table_combined,
++	.num_ports =		1,
++	.bulk_in_size =		512,
++	.bulk_out_size =	256,
++	.probe =		ftdi_sio_probe,
++	.port_probe =		ftdi_sio_port_probe,
++	.port_remove =		ftdi_sio_port_remove,
++	.open =			ftdi_open,
++	.dtr_rts =		ftdi_dtr_rts,
++	.throttle =		usb_serial_generic_throttle,
++	.unthrottle =		usb_serial_generic_unthrottle,
++	.process_read_urb =	ftdi_process_read_urb,
++	.prepare_write_buffer =	ftdi_prepare_write_buffer,
++	.tiocmget =		ftdi_tiocmget,
++	.tiocmset =		ftdi_tiocmset,
++	.tiocmiwait =		usb_serial_generic_tiocmiwait,
++	.get_icount =           usb_serial_generic_get_icount,
++	.ioctl =		ftdi_ioctl,
++	.get_serial =		get_serial_info,
++	.set_serial =		set_serial_info,
++	.set_termios =		ftdi_set_termios,
++	.break_ctl =		ftdi_break_ctl,
++	.tx_empty =		ftdi_tx_empty,
++};
++
++static struct usb_serial_driver * const serial_drivers[] = {
++	&ftdi_sio_device, NULL
++};
++
+ module_usb_serial_driver(serial_drivers, id_table_combined);
+ 
+ MODULE_AUTHOR(DRIVER_AUTHOR);
+-- 
+2.25.1
 
-Best Regards,
-Huang, Ying

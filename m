@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A605AB253
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1941B5AB254
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236362AbiIBN4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S237032AbiIBN4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238570AbiIBNzT (ORCPT
+        with ESMTP id S238568AbiIBNzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Sep 2022 09:55:19 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F357EEC6B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:29:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CE5922539
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:29:29 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE1081595;
-        Fri,  2 Sep 2022 05:41:00 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0B8715A1;
+        Fri,  2 Sep 2022 05:41:03 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6259D3F766;
-        Fri,  2 Sep 2022 05:40:53 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 74F763F766;
+        Fri,  2 Sep 2022 05:40:56 -0700 (PDT)
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         op-tee@lists.trustedfirmware.org
@@ -31,9 +31,9 @@ Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Valentin Laurent <valentin.laurent@trustonic.com>,
         Lukas Hanel <lukas.hanel@trustonic.com>,
         Coboy Chen <coboy.chen@mediatek.com>
-Subject: [PATCH v2 08/10] firmware: arm_ffa: Add v1.1 get_partition_info support
-Date:   Fri,  2 Sep 2022 13:40:30 +0100
-Message-Id: <20220902124032.788488-9-sudeep.holla@arm.com>
+Subject: [PATCH v2 10/10] firmware: arm_ffa: Split up ffa_ops into info, message and memory operations
+Date:   Fri,  2 Sep 2022 13:40:32 +0100
+Message-Id: <20220902124032.788488-11-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902124032.788488-1-sudeep.holla@arm.com>
 References: <20220902124032.788488-1-sudeep.holla@arm.com>
@@ -48,126 +48,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FF-A v1.1 adds support to discovery the UUIDs of the partitions that was
-missing in v1.0 and which the driver workarounds by using UUIDs supplied
-by the ffa_drivers.
+In preparation to make memory operations accessible for a non
+ffa_driver/device, it is better to split the ffa_ops into different
+categories of operations: info, message and memory. The info and memory
+are ffa_device independent and can be used without any associated
+ffa_device from a non ffa_driver.
 
-Add the v1.1 get_partition_info support and disable the workaround if
-the detected FF-A version is greater than v1.0.
+However, we don't export these info and memory APIs yet without the user.
+The first users of these APIs can export them.
 
+Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
 Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- drivers/firmware/arm_ffa/driver.c | 42 +++++++++++++++++++++++++------
- include/linux/arm_ffa.h           |  1 +
- 2 files changed, 35 insertions(+), 8 deletions(-)
+ drivers/firmware/arm_ffa/driver.c | 16 +++++++++++++--
+ drivers/tee/optee/ffa_abi.c       | 33 +++++++++++++++++--------------
+ include/linux/arm_ffa.h           | 14 ++++++++++++-
+ 3 files changed, 45 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-index 2532e0f16cc9..dd6ab2f81580 100644
+index dbbe15592173..639ae3911387 100644
 --- a/drivers/firmware/arm_ffa/driver.c
 +++ b/drivers/firmware/arm_ffa/driver.c
-@@ -264,18 +264,24 @@ static int ffa_rxtx_unmap(u16 vm_id)
- 	return 0;
+@@ -690,16 +690,28 @@ static int ffa_memory_lend(struct ffa_mem_ops_args *args)
+ 	return ffa_memory_ops(FFA_MEM_LEND, args);
  }
  
-+#define PARTITION_INFO_GET_RETURN_COUNT_ONLY	BIT(0)
+-static const struct ffa_ops ffa_ops = {
++static const struct ffa_info_ops ffa_drv_info_ops = {
+ 	.api_version_get = ffa_api_version_get,
+ 	.partition_info_get = ffa_partition_info_get,
++};
 +
- /* buffer must be sizeof(struct ffa_partition_info) * num_partitions */
- static int
- __ffa_partition_info_get(u32 uuid0, u32 uuid1, u32 uuid2, u32 uuid3,
- 			 struct ffa_partition_info *buffer, int num_partitions)
- {
--	int count;
-+	int idx, count, flags = 0, size;
- 	ffa_value_t partition_info;
- 
-+	if (!buffer || !num_partitions) /* Just get the count for now */
-+		flags = PARTITION_INFO_GET_RETURN_COUNT_ONLY;
++static const struct ffa_msg_ops ffa_drv_msg_ops = {
+ 	.mode_32bit_set = ffa_mode_32bit_set,
+ 	.sync_send_receive = ffa_sync_send_receive,
++};
 +
- 	mutex_lock(&drv_info->rx_lock);
- 	invoke_ffa_fn((ffa_value_t){
- 		      .a0 = FFA_PARTITION_INFO_GET,
- 		      .a1 = uuid0, .a2 = uuid1, .a3 = uuid2, .a4 = uuid3,
-+		      .a5 = flags,
- 		      }, &partition_info);
++static const struct ffa_mem_ops ffa_drv_mem_ops = {
+ 	.memory_reclaim = ffa_memory_reclaim,
+ 	.memory_share = ffa_memory_share,
+ 	.memory_lend = ffa_memory_lend,
+ };
  
- 	if (partition_info.a0 == FFA_ERROR) {
-@@ -285,8 +291,18 @@ __ffa_partition_info_get(u32 uuid0, u32 uuid1, u32 uuid2, u32 uuid3,
- 
- 	count = partition_info.a2;
- 
-+	if (drv_info->version > FFA_VERSION_1_0) {
-+		size = partition_info.a3;
-+		if (size > sizeof(*buffer))
-+			size = sizeof(*buffer);
-+	} else {
-+		size = 8; /* FFA_VERSION_1_0 lacks size in the response */
-+	}
++static const struct ffa_ops ffa_drv_ops = {
++	.info_ops = &ffa_drv_info_ops,
++	.msg_ops = &ffa_drv_msg_ops,
++	.mem_ops = &ffa_drv_mem_ops,
++};
 +
- 	if (buffer && count <= num_partitions)
--		memcpy(buffer, drv_info->rx_buffer, sizeof(*buffer) * count);
-+		for (idx = 0; idx < count; idx++)
-+			memcpy(buffer + idx, drv_info->rx_buffer + idx * size,
-+			       size);
- 
- 	ffa_rx_release();
- 
-@@ -681,6 +697,14 @@ void ffa_device_match_uuid(struct ffa_device *ffa_dev, const uuid_t *uuid)
- 	int count, idx;
- 	struct ffa_partition_info *pbuf, *tpbuf;
- 
-+	/*
-+	 * FF-A v1.1 provides UUID for each partition as part of the discovery
-+	 * API, the discovered UUID must be populated in the device's UUID and
-+	 * there is no need to copy the same from the driver table.
-+	 */
-+	if (drv_info->version > FFA_VERSION_1_0)
-+		return;
-+
- 	count = ffa_partition_probe(uuid, &pbuf);
- 	if (count <= 0)
- 		return;
-@@ -694,6 +718,7 @@ void ffa_device_match_uuid(struct ffa_device *ffa_dev, const uuid_t *uuid)
- static void ffa_setup_partitions(void)
+ void ffa_device_match_uuid(struct ffa_device *ffa_dev, const uuid_t *uuid)
  {
  	int count, idx;
-+	uuid_t uuid;
- 	struct ffa_device *ffa_dev;
- 	struct ffa_partition_info *pbuf, *tpbuf;
- 
-@@ -704,14 +729,15 @@ static void ffa_setup_partitions(void)
- 	}
- 
- 	for (idx = 0, tpbuf = pbuf; idx < count; idx++, tpbuf++) {
--		/* Note that the &uuid_null parameter will require
-+		import_uuid(&uuid, (u8 *)tpbuf->uuid);
-+
-+		/* Note that if the UUID will be uuid_null, that will require
- 		 * ffa_device_match() to find the UUID of this partition id
--		 * with help of ffa_device_match_uuid(). Once the FF-A spec
--		 * is updated to provide correct UUID here for each partition
--		 * as part of the discovery API, we need to pass the
--		 * discovered UUID here instead.
-+		 * with help of ffa_device_match_uuid(). FF-A v1.1 and above
-+		 * provides UUID here for each partition as part of the
-+		 * discovery API and the same is passed.
+@@ -745,7 +757,7 @@ static void ffa_setup_partitions(void)
+ 		 * provides UUID here for each partition as part of the
+ 		 * discovery API and the same is passed.
  		 */
--		ffa_dev = ffa_device_register(&uuid_null, tpbuf->id, &ffa_ops);
-+		ffa_dev = ffa_device_register(&uuid, tpbuf->id, &ffa_ops);
+-		ffa_dev = ffa_device_register(&uuid, tpbuf->id, &ffa_ops);
++		ffa_dev = ffa_device_register(&uuid, tpbuf->id, &ffa_drv_ops);
  		if (!ffa_dev) {
  			pr_err("%s: failed to register partition ID 0x%x\n",
  			       __func__, tpbuf->id);
+diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+index 2ce5b87dfb27..0828240f27e6 100644
+--- a/drivers/tee/optee/ffa_abi.c
++++ b/drivers/tee/optee/ffa_abi.c
+@@ -272,7 +272,7 @@ static int optee_ffa_shm_register(struct tee_context *ctx, struct tee_shm *shm,
+ {
+ 	struct optee *optee = tee_get_drvdata(ctx->teedev);
+ 	struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
+-	const struct ffa_ops *ffa_ops = ffa_dev->ops;
++	const struct ffa_mem_ops *mem_ops = ffa_dev->ops->mem_ops;
+ 	struct ffa_mem_region_attributes mem_attr = {
+ 		.receiver = ffa_dev->vm_id,
+ 		.attrs = FFA_MEM_RW,
+@@ -294,14 +294,14 @@ static int optee_ffa_shm_register(struct tee_context *ctx, struct tee_shm *shm,
+ 	if (rc)
+ 		return rc;
+ 	args.sg = sgt.sgl;
+-	rc = ffa_ops->memory_share(&args);
++	rc = mem_ops->memory_share(&args);
+ 	sg_free_table(&sgt);
+ 	if (rc)
+ 		return rc;
+ 
+ 	rc = optee_shm_add_ffa_handle(optee, shm, args.g_handle);
+ 	if (rc) {
+-		ffa_ops->memory_reclaim(args.g_handle, 0);
++		mem_ops->memory_reclaim(args.g_handle, 0);
+ 		return rc;
+ 	}
+ 
+@@ -315,7 +315,8 @@ static int optee_ffa_shm_unregister(struct tee_context *ctx,
+ {
+ 	struct optee *optee = tee_get_drvdata(ctx->teedev);
+ 	struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
+-	const struct ffa_ops *ffa_ops = ffa_dev->ops;
++	const struct ffa_msg_ops *msg_ops = ffa_dev->ops->msg_ops;
++	const struct ffa_mem_ops *mem_ops = ffa_dev->ops->mem_ops;
+ 	u64 global_handle = shm->sec_world_id;
+ 	struct ffa_send_direct_data data = {
+ 		.data0 = OPTEE_FFA_UNREGISTER_SHM,
+@@ -327,11 +328,11 @@ static int optee_ffa_shm_unregister(struct tee_context *ctx,
+ 	optee_shm_rem_ffa_handle(optee, global_handle);
+ 	shm->sec_world_id = 0;
+ 
+-	rc = ffa_ops->sync_send_receive(ffa_dev, &data);
++	rc = msg_ops->sync_send_receive(ffa_dev, &data);
+ 	if (rc)
+ 		pr_err("Unregister SHM id 0x%llx rc %d\n", global_handle, rc);
+ 
+-	rc = ffa_ops->memory_reclaim(global_handle, 0);
++	rc = mem_ops->memory_reclaim(global_handle, 0);
+ 	if (rc)
+ 		pr_err("mem_reclaim: 0x%llx %d", global_handle, rc);
+ 
+@@ -342,7 +343,7 @@ static int optee_ffa_shm_unregister_supp(struct tee_context *ctx,
+ 					 struct tee_shm *shm)
+ {
+ 	struct optee *optee = tee_get_drvdata(ctx->teedev);
+-	const struct ffa_ops *ffa_ops = optee->ffa.ffa_dev->ops;
++	const struct ffa_mem_ops *mem_ops;
+ 	u64 global_handle = shm->sec_world_id;
+ 	int rc;
+ 
+@@ -353,7 +354,8 @@ static int optee_ffa_shm_unregister_supp(struct tee_context *ctx,
+ 	 */
+ 
+ 	optee_shm_rem_ffa_handle(optee, global_handle);
+-	rc = ffa_ops->memory_reclaim(global_handle, 0);
++	mem_ops = optee->ffa.ffa_dev->ops->mem_ops;
++	rc = mem_ops->memory_reclaim(global_handle, 0);
+ 	if (rc)
+ 		pr_err("mem_reclaim: 0x%llx %d", global_handle, rc);
+ 
+@@ -530,7 +532,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
+ {
+ 	struct optee *optee = tee_get_drvdata(ctx->teedev);
+ 	struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
+-	const struct ffa_ops *ffa_ops = ffa_dev->ops;
++	const struct ffa_msg_ops *msg_ops = ffa_dev->ops->msg_ops;
+ 	struct optee_call_waiter w;
+ 	u32 cmd = data->data0;
+ 	u32 w4 = data->data1;
+@@ -541,7 +543,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
+ 	/* Initialize waiter */
+ 	optee_cq_wait_init(&optee->call_queue, &w);
+ 	while (true) {
+-		rc = ffa_ops->sync_send_receive(ffa_dev, data);
++		rc = msg_ops->sync_send_receive(ffa_dev, data);
+ 		if (rc)
+ 			goto done;
+ 
+@@ -576,7 +578,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
+ 		 * OP-TEE has returned with a RPC request.
+ 		 *
+ 		 * Note that data->data4 (passed in register w7) is already
+-		 * filled in by ffa_ops->sync_send_receive() returning
++		 * filled in by ffa_mem_ops->sync_send_receive() returning
+ 		 * above.
+ 		 */
+ 		cond_resched();
+@@ -654,12 +656,13 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
+ static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
+ 					const struct ffa_ops *ops)
+ {
++	const struct ffa_msg_ops *msg_ops = ops->msg_ops;
+ 	struct ffa_send_direct_data data = { OPTEE_FFA_GET_API_VERSION };
+ 	int rc;
+ 
+-	ops->mode_32bit_set(ffa_dev);
++	msg_ops->mode_32bit_set(ffa_dev);
+ 
+-	rc = ops->sync_send_receive(ffa_dev, &data);
++	rc = msg_ops->sync_send_receive(ffa_dev, &data);
+ 	if (rc) {
+ 		pr_err("Unexpected error %d\n", rc);
+ 		return false;
+@@ -672,7 +675,7 @@ static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
+ 	}
+ 
+ 	data = (struct ffa_send_direct_data){ OPTEE_FFA_GET_OS_VERSION };
+-	rc = ops->sync_send_receive(ffa_dev, &data);
++	rc = msg_ops->sync_send_receive(ffa_dev, &data);
+ 	if (rc) {
+ 		pr_err("Unexpected error %d\n", rc);
+ 		return false;
+@@ -694,7 +697,7 @@ static bool optee_ffa_exchange_caps(struct ffa_device *ffa_dev,
+ 	struct ffa_send_direct_data data = { OPTEE_FFA_EXCHANGE_CAPABILITIES };
+ 	int rc;
+ 
+-	rc = ops->sync_send_receive(ffa_dev, &data);
++	rc = ops->msg_ops->sync_send_receive(ffa_dev, &data);
+ 	if (rc) {
+ 		pr_err("Unexpected error %d", rc);
+ 		return false;
 diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
-index 4c4b06783035..09567ffd1f49 100644
+index 5964b6104996..5f02d2e6b9d9 100644
 --- a/include/linux/arm_ffa.h
 +++ b/include/linux/arm_ffa.h
-@@ -107,6 +107,7 @@ struct ffa_partition_info {
- /* partition can send and receive indirect messages. */
- #define FFA_PARTITION_INDIRECT_MSG	BIT(2)
- 	u32 properties;
-+	u32 uuid[4];
+@@ -257,16 +257,28 @@ struct ffa_mem_ops_args {
+ 	struct ffa_mem_region_attributes *attrs;
  };
  
- /* For use with FFA_MSG_SEND_DIRECT_{REQ,RESP} which pass data via registers */
+-struct ffa_ops {
++struct ffa_info_ops {
+ 	u32 (*api_version_get)(void);
+ 	int (*partition_info_get)(const char *uuid_str,
+ 				  struct ffa_partition_info *buffer);
++};
++
++struct ffa_msg_ops {
+ 	void (*mode_32bit_set)(struct ffa_device *dev);
+ 	int (*sync_send_receive)(struct ffa_device *dev,
+ 				 struct ffa_send_direct_data *data);
++};
++
++struct ffa_mem_ops {
+ 	int (*memory_reclaim)(u64 g_handle, u32 flags);
+ 	int (*memory_share)(struct ffa_mem_ops_args *args);
+ 	int (*memory_lend)(struct ffa_mem_ops_args *args);
+ };
+ 
++struct ffa_ops {
++	const struct ffa_info_ops *info_ops;
++	const struct ffa_msg_ops *msg_ops;
++	const struct ffa_mem_ops *mem_ops;
++};
++
+ #endif /* _LINUX_ARM_FFA_H */
 -- 
 2.37.3
 

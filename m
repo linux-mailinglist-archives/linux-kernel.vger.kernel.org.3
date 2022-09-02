@@ -2,125 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F286F5AA4B0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D385AA4B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbiIBAyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 20:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        id S234603AbiIBAyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 20:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiIBAyN (ORCPT
+        with ESMTP id S232705AbiIBAyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 20:54:13 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9618585FDA
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 17:54:12 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id o123so616632vsc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 17:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Z4jZhw7mGJwuXQjUPY9DDPjI76uAYRiiTmD0/hJHRkM=;
-        b=nIyyFwXzkH01PkquT1Rue1bNSrCVjD98245QZcpk8KOScszIgLbylNpaBS6YJIdqKU
-         FsL0wilrkLm1cskXgcVpKf7/PMkTTrsk9DFvWcoOl3UfIKORtrfnWAWZ0B+MsB3vxnP5
-         tf5cUegvBBAOZxP2g18E3tNH/y4vZLj9oYlPH9WBzF2/7Yw7C9FUHrCVkglCA+CCgF2G
-         hpoOhk382Kck/l5yOtaVuEQ3LnbDeKIVssUmtras+Tb/lOdozkc2HlH7gT1Q10K7vZeV
-         L7T850wzHs2FGE4KMnUpzLlZUQ/w0A9I07zJ/41S7rBnyTiWpCeh4wpiV+90LuQLXQwB
-         ufIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Z4jZhw7mGJwuXQjUPY9DDPjI76uAYRiiTmD0/hJHRkM=;
-        b=wF5vAgjiHoednxoGBSRzVI0Pxxhm6H6xpX2bvxLl/O4XpMBC5NEkQiEjxaPb7OnCYG
-         Dyhb+aAtgkWvsZVxQaawLa6cAWf1mv/I1ju5lpA+v5xnsBX5UBLCe6Z5aFVv/GCWfypm
-         PeFEyVcDqOhyKqbEDcH3V7OY/h4jg7hONsMQ0lyeLBiuPy6Ag/2hSQm3PcB4bM9xrt6x
-         YT6sNzpS00yV3+CRXtB+qI+GtCt9A0uI38nts+0VCFSH05vkfMNPINaEdFSP8YsBRaXY
-         46rC0QMKiloWKk0B8+o+c0oR3cstlF81JZU152zbNrr8GI59zXw1P6NfTan54dSmZHTs
-         8sMg==
-X-Gm-Message-State: ACgBeo1CsVfm/2B0yeX3kTHp51gPulhmwwBmWF/1tiDb2w7iC913Dx+h
-        JKEMeVxQ+j1cbqEdVrz8AdXgo4xYL9yfUyXtwhW7hg==
-X-Google-Smtp-Source: AA6agR4eK/rvBWvQKYqMgWclKa76PDOzLtRuN2u8uCKDsbgPEogq6bx3tt/nJSUP7wDE9TpWE+18IrBrRutIk5cRqlE=
-X-Received: by 2002:a67:d313:0:b0:390:ee9f:610a with SMTP id
- a19-20020a67d313000000b00390ee9f610amr6689227vsj.17.1662080051630; Thu, 01
- Sep 2022 17:54:11 -0700 (PDT)
+        Thu, 1 Sep 2022 20:54:31 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B2583BCD
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 17:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662080070; x=1693616070;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=L3mRRBK1ngAjAxHn3yh88wqZwNaBV7sRHz6khPlLV7w=;
+  b=GFfToSkhAhrqM5XgTygrbHE5+bh5w+gJ1CzHcIUDmCiAgLBAif/SnkC9
+   8n5stv4ZIs6ubF2Si6v1jwMC8uVGXjtqMXq0kk/5B42VKtSS+/62Ls3xZ
+   Qubucn2BSGAKpRtbpSEi/V9JEsf1xi+GvJZv6YBvMd2/dG9yQGoSz0sWb
+   8H/9gBAbHBbx4/6t02NxF11v7Kn1OJNpWt2PccAbWG0OkdQPqSHHwSzLJ
+   7C9lUgU9GlGRw/B9Myjw93tR72NSwJ1AiubMLIzWgotPkkBYHDg9ewx3k
+   I/c3VZZbnNmbHoPP8xnDYj+aBAxcV5WjPtrDaTC4V2r12zA5DBLvGhWAI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="296646885"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="296646885"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 17:54:19 -0700
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="642650565"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.211.18]) ([10.254.211.18])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 17:54:16 -0700
+Subject: Re: [kbuild-all] Re: powerpc-linux-objdump: Warning: Unrecognized
+ form: 0x23
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kernel test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+References: <202208311414.4OPuYS9K-lkp@intel.com>
+ <Yw+A+0BY26l0AC5j@dev-arch.thelio-3990X>
+ <b0b8fecd-4041-d04e-9a11-2c7947e5d5a0@intel.com>
+ <YxAS9NBjBI/vi0XK@dev-arch.thelio-3990X>
+ <8d2c3aef-aa4f-1f4d-dc89-622554ffda31@intel.com>
+ <9d77cb93-2eff-d87d-6554-1636d5e7d5ec@csgroup.eu>
+ <0acfb209-a792-a47b-0261-9fb29824e4b9@intel.com>
+ <YxDj6v5p+wHop0Wm@dev-arch.thelio-3990X>
+ <CAKwvOdmzuupyAMhy-jT3O=-PT36T01N4SXkCPz6Cv0CPsxkK3Q@mail.gmail.com>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <4c6da74c-4dc1-796c-5f22-bdd075b23c2b@intel.com>
+Date:   Fri, 2 Sep 2022 08:54:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20220829195805.1.Ic8eabc8ed89a07c3d52726dd017539069faac6c4@changeid>
-In-Reply-To: <20220829195805.1.Ic8eabc8ed89a07c3d52726dd017539069faac6c4@changeid>
-From:   Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Date:   Thu, 1 Sep 2022 17:54:00 -0700
-Message-ID: <CAN61AdcHDEB=nG7sti8uiqv534P1N21VCx+XuqnkVUOjeoADkg@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: Call shutdown for HCI_USER_CHANNEL
-To:     linux-bluetooth@vger.kernel.org
-Cc:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAKwvOdmzuupyAMhy-jT3O=-PT36T01N4SXkCPz6Cv0CPsxkK3Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please avoid merging.
-
-After additional testing, I've found a problem with btusb->shutdown
-not working for Intel controllers.
-
-btusb_shutdown_intel uses __hci_sync_cmd(...) to send the command and
-the command complete will not get captured because it is using hci
-user channel. We'll need a more invasive change to remove the
-userchannel flag during close so that the stack can properly clean up.
 
 
-On Mon, Aug 29, 2022 at 7:58 PM Abhishek Pandit-Subedi
-<abhishekpandit@google.com> wrote:
->
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->
-> Some drivers depend on shutdown being called for proper operation.
-> There's no reason to restrict this from being called when using
-> HCI_USER_CHANNEL.
->
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> ---
-> This is easy to reproduce on QCA6174-A, which uses the hci_qca driver.
-> Simply open the socket, bind as userchannel and close again. It will
-> succeed the first time and fail the second time (because shutdown wasn't
-> called). A similar bug also occurs with btmtksdio (using MT7921).
->
-> Question for maintainers: What is a driver supposed to be doing during
-> shutdown? We should add some documentation to `struct hci_dev` to
-> clarify.
->
->
->  net/bluetooth/hci_sync.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index e08c0503027d..be78fd708f16 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -4680,7 +4680,6 @@ int hci_dev_close_sync(struct hci_dev *hdev)
->         }
->
->         if (!hci_dev_test_flag(hdev, HCI_UNREGISTER) &&
-> -           !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
->             test_bit(HCI_UP, &hdev->flags)) {
->                 /* Execute vendor specific shutdown routine */
->                 if (hdev->shutdown)
-> --
-> 2.37.2.672.g94769d06f0-goog
->
+On 9/2/2022 1:04 AM, Nick Desaulniers wrote:
+> On Thu, Sep 1, 2022 at 9:55 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> On Thu, Sep 01, 2022 at 01:52:42PM +0800, Chen, Rong A wrote:
+>>>
+>>>
+>>> On 9/1/2022 1:45 PM, Christophe Leroy wrote:
+>>>>
+>>>>
+>>>> Le 01/09/2022 à 06:59, Chen, Rong A a écrit :
+>>>>>
+>>>>>
+>>>>> On 9/1/2022 10:03 AM, Nathan Chancellor wrote:
+>>>>>> Hi Rong,
+>>>>>>
+>>>>>> On Thu, Sep 01, 2022 at 09:15:58AM +0800, Chen, Rong A wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 8/31/2022 11:40 PM, Nathan Chancellor wrote:
+>>>>>>>> On Wed, Aug 31, 2022 at 02:52:36PM +0800, kernel test robot wrote:
+>>>>>>>>> tree:
+>>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>>>>>>> master
+>>>>>>>>> head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
+>>>>>>>>> commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug:
+>>>>>>>>> make DEBUG_INFO selectable from a choice
+>>>>>>>>> date:   5 months ago
+>>>>>>>>> config: powerpc-buildonly-randconfig-r003-20220830
+>>>>>>>>> (https://download.01.org/0day-ci/archive/20220831/202208311414.4OPuYS9K-lkp@intel.com/config)
+>>>>>>>>> compiler: clang version 16.0.0
+>>>>>>>>> (https://github.com/llvm/llvm-project
+>>>>>>>>> c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+>>>>>>>>> reproduce (this is a W=1 build):
+>>>>>>>>>             wget
+>>>>>>>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>>>>>>>             chmod +x ~/bin/make.cross
+>>>>>>>>>             # install powerpc cross compiling tool for clang build
+>>>>>>>>>             # apt-get install binutils-powerpc-linux-gnu
+>>>>>>>>>             #
+>>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+>>>>>>>>>             git remote add linus
+>>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>>>>>>>             git fetch --no-tags linus master
+>>>>>>>>>             git checkout f9b3cd24578401e7a392974b3353277286e49cee
+>>>>>>>>>             # save the config file
+>>>>>>>>>             mkdir build_dir && cp config build_dir/.config
+>>>>>>>>>             COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
+>>>>>>>>> make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+>>>>>>>>>
+>>>>>>>>> If you fix the issue, kindly add following tag where applicable
+>>>>>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>>>>>>
+>>>>>>>>> All warnings (new ones prefixed by >>):
+>>>>>>>>>
+>>>>>>>>>>> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
+>>>>>>>>
+>>>>>>>> Given this is clang 16.0.0 with
+>>>>>>>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y, which uses DWARF5 by
+>>>>>>>> default instead of DWARF4, it looks like older binutils not
+>>>>>>>> understanding DWARF5. What version of binutils is being used by the
+>>>>>>>> bot?
+>>>>>>>
+>>>>>>> Hi Nathan,
+>>>>>>>
+>>>>>>> We're using binutils v2.38.90.20220713-2
+>>>>>>>
+>>>>>>> ||/ Name           Version            Architecture Description
+>>>>>>> +++-==============-==================-============-==========================================
+>>>>>>> ii  binutils       2.38.90.20220713-2 amd64        GNU assembler,
+>>>>>>> linker and binary utilities
+>>>>>>
+>>>>>> Thanks for chiming in! This looks like the output of 'dpkg -l', right? I
+>>>>>
+>>>>> Hi Nathan,
+>>>>>
+>>>>> oh, yes, I misunderstood, it's not related to this package.
+>>>>>
+>>>>>> noticed on second glance that the tuple for the objdump warning above is
+>>>>>> 'powerpc-linux-', which leads me to believe that a kernel.org toolchain
+>>>>>> (or a self compiled one) is being used. I would expect the tuple to be
+>>>>>> 'powerpc-linux-gnu-' if Debian's package was being used. Is that
+>>>>>> possible?
+>>>>>
+>>>>> you are right, we used a self-compiled toolchain, we'll try the binutils
+>>>>> from debian package.
+>>>>
+>>>> Can you first tell us the version you are using ?
+>>>>
+>>>>      powerpc-linux-objdump -v
+>>>>
+>>>> That will tell you the version.
+>>>
+>>> Hi Christophe,
+>>>
+>>> the version is v2.38:
+>>>
+>>> $ ./powerpc-linux-objdump -v
+>>> GNU objdump (GNU Binutils) 2.38
+>>> Copyright (C) 2022 Free Software Foundation, Inc.
+>>> This program is free software; you may redistribute it under the terms of
+>>> the GNU General Public License version 3 or (at your option) any later
+>>> version.
+>>> This program has absolutely no warranty.
+>>
+>> Thanks! I did some research and it seems like this warning is expected
+>> with binutils older than 2.39. The warning appears to come from
+>> read_and_display_attr_value() in binutils/dwarf.c. 0x22 and 0x23 are
+>> DW_FORM_loclistx and DW_FORM_rnglistx, which were only recently
+>> supported in that function.
+>>
+>> https://sourceware.org/bugzilla/show_bug.cgi?id=28981
+>> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=19c26da69d68d5d863f37c06ad73ab6292d02ffa
+>>
+>> That change shipped in binutils 2.39. I am not really sure how we should
+>> work around this in the kernel, other than maybe requiring binutils
+>> 2.39+ for CONFIG_DEBUG_INFO_DWARF5. Unfortunately, that will not fix
+>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT when DWARF5 is the default
+>> version...
+> 
+> I've been working on a series that will encode the default implicit
+> dwarf version based on compiler version check. Maybe that can be
+> extended/reused here once that lands?
+> https://lore.kernel.org/llvm/20220831184408.2778264-1-ndesaulniers@google.com/
+> Series needs revision, but it's on the right track.
+> 
+>> Alternatively, switching to llvm-objdump for clang builds
+>> would help :) I am not aware of any issues that would affect that switch
+>> for PowerPC:
+>>
+>> https://github.com/ClangBuiltLinux/linux/labels/%5BTOOL%5D%20llvm-objdump
+> 
+> Oh, is 0day doing `make CC=clang` rather than `make LLVM=1`?  Rong,
+> any chance we get 0day folks to test LLVM=1 for more architectures?
+> Ideally we'd test both, preferably LLVM=1 if we had to choose.
+
+Hi Nick,
+
+Thanks for your advice, yes, we are doing `make CC=clang`, we'll plan it 
+recently.
+
+Best Regards,
+Rong Chen
+
+> 
+>>
+>> Cheers,
+>> Nathan
+> 
+> 
+> 

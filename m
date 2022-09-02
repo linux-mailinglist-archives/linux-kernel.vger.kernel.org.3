@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0FF5ABB0C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA885ABB0E
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiIBXK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 19:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S231223AbiIBXLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 19:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiIBXK4 (ORCPT
+        with ESMTP id S229484AbiIBXLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 19:10:56 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF145F72DE
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 16:10:55 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id p18so3244257plr.8
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 16:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=YdCqUFWhsJ7rqN+FajMNNwdjukjkfYe/PA1MS40hUx4=;
-        b=JzR4Xjn409JlT+JRW3hNdc49L7FPD+h6IH4EuebW+xEZzdPT0/eQacO0YI5JI5/DQb
-         tXHa0hF1KIIqDa1yJZRxGZHv+madhxwpakV3O3dTTe8Dc5VnVLyRCL/ZRU/jCW3zyXCS
-         JivIDw58Q1ItuPjyWuax7FezjRbsUSFIPPT5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=YdCqUFWhsJ7rqN+FajMNNwdjukjkfYe/PA1MS40hUx4=;
-        b=JPj3mRDy+f2XoEl13a8IZiKE3OQdhOlkc76k56D7Mjpz8GpNVNN81I+qNs7Obhe8Vb
-         MZh8sIEHYLpkoa/IxCRG0zDIJy5dIClG808y9YmBvkw+OyJ/dyNfs/lLfL9D4ZzEG6UZ
-         qPF2nn6aBUXlqrzPeQ9AMRVTZeg5niSK8ZUuLW6L0Il4t3xW/mucp/AlXwELvU2D3M6e
-         YDCdN7hHYgwgmqhyGFXvUONz6jfv3YwTTRa6C/iGvjh6TA0h1+Htym1bxf/HskPdHhjZ
-         jJDFNydugOn5fZxH5F6WDsoJDa3nmxiO74t8xItCba6AuWhDOIfqlMDP3DfGvT/7GAG7
-         n1Xg==
-X-Gm-Message-State: ACgBeo0obLY3QG4zXTIFEtq4n8hW7fMh31lVYhVdkOf9gJdl3TdgMLV0
-        LNqx41K28J73qO8liBUKyJHJdw==
-X-Google-Smtp-Source: AA6agR4RcLmbgoajEqMQuDbsBprE4hAPXzi4uym+QkXwfTgGZCCDJC3LZv+pyFcWwtceq2RVUvKhng==
-X-Received: by 2002:a17:90b:1189:b0:1f5:1311:cd89 with SMTP id gk9-20020a17090b118900b001f51311cd89mr7131290pjb.181.1662160255516;
-        Fri, 02 Sep 2022 16:10:55 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f7-20020a170902ce8700b0016bedcced2fsm2213538plg.35.2022.09.02.16.10.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 16:10:54 -0700 (PDT)
-Date:   Fri, 2 Sep 2022 16:10:53 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: Re: [PATCH] entry: Remove has_signal comment of
- arch_do_signal_or_restart() prototype
-Message-ID: <202209021610.80DCFC7A@keescook>
-References: <1662090106-5545-1-git-send-email-yangtiezhu@loongson.cn>
+        Fri, 2 Sep 2022 19:11:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D1BF47D3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 16:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662160290; x=1693696290;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Bs2N+4jA8VNqEDPs2v0c4mrKLHEnEKpC+6QMV8EQT10=;
+  b=BEiOWHwLNkJzIjlJ3A8lHCugiUKik97d8RFXL8L3q0n3XQTTIZgxQn+j
+   gZLLzEfDO12SadFp50wr7MBGOl1V1HSf07nQorVlfdg/fcypM1QWLgBkI
+   YvoNwHHV8zLMMuDB9hwclAAc+W56jOed3aQQfguDPXzG3Lqou0smjeBuK
+   8RabGqAe2GO+zG2W/p5G3Ti+ftE+C0W0BWoDBxHcAp3t4NNOx4LZpszcu
+   rw3hGUSIzYrsfSFRrhohsQomPAhwjXtAjcRh1+F2TbnBu6lKBjzk7zd2W
+   tj9FhhsCjAhlxKfWguOlBx+dEnOFzxc17axDySqg/oVrJorNmbw1uVIZU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="294845751"
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="294845751"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:11:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="941459673"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2022 16:11:29 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUFou-0000ix-22;
+        Fri, 02 Sep 2022 23:11:28 +0000
+Date:   Sat, 3 Sep 2022 07:11:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Matt Flax <flatmax@flatmax.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [broonie-misc:asoc-6.1 3/80] sound/soc/codecs/src4xxx-i2c.c:28:34:
+ warning: unused variable 'src4xxx_of_match'
+Message-ID: <202209030710.XtZRjxNg-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1662090106-5545-1-git-send-email-yangtiezhu@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,15 +62,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 11:41:46AM +0800, Tiezhu Yang wrote:
-> The argument has_signal of arch_do_signal_or_restart() has been removed
-> in commit 8ba62d37949e ("task_work: Call tracehook_notify_signal from
-> get_signal on all architectures"), let us remove the related comment.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Hi Matt,
 
-Fixes: 8ba62d37949e ("task_work: Call tracehook_notify_signal from get_signal on all architectures")
-Reviewed-by: Kees Cook <keescook@chromium.org>
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git asoc-6.1
+head:   376be51caf8871419bbcbb755e1e615d30dc3153
+commit: 4e6bedd3c396014ba70de2b4c9995c8e024e82b3 [3/80] ASoC: codecs: add support for the TI SRC4392 codec
+config: hexagon-randconfig-r045-20220903 (https://download.01.org/0day-ci/archive/20220903/202209030710.XtZRjxNg-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=4e6bedd3c396014ba70de2b4c9995c8e024e82b3
+        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
+        git fetch --no-tags broonie-misc asoc-6.1
+        git checkout 4e6bedd3c396014ba70de2b4c9995c8e024e82b3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/src4xxx-i2c.c:28:34: warning: unused variable 'src4xxx_of_match' [-Wunused-const-variable]
+   static const struct of_device_id src4xxx_of_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/src4xxx_of_match +28 sound/soc/codecs/src4xxx-i2c.c
+
+    27	
+  > 28	static const struct of_device_id src4xxx_of_match[] = {
+    29		{ .compatible = "ti,src4392", },
+    30		{ }
+    31	};
+    32	MODULE_DEVICE_TABLE(of, src4xxx_of_match);
+    33	
+    34	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp

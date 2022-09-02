@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA8A5AAF3A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23785AB058
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236890AbiIBMe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        id S237964AbiIBMww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236920AbiIBMdn (ORCPT
+        with ESMTP id S237811AbiIBMvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:33:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DD3E341D;
-        Fri,  2 Sep 2022 05:28:02 -0700 (PDT)
+        Fri, 2 Sep 2022 08:51:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A08EF8EED;
+        Fri,  2 Sep 2022 05:37:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E63F6212F;
-        Fri,  2 Sep 2022 12:25:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392F2C433D7;
-        Fri,  2 Sep 2022 12:25:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1BAEB82ADF;
+        Fri,  2 Sep 2022 12:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E453C433B5;
+        Fri,  2 Sep 2022 12:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121533;
-        bh=8Lz+pmGCiHcrZq+DOgArrV7Lud6twmDPeiu7WWmVb6w=;
+        s=korg; t=1662122157;
+        bh=mf1teGMEOWSgwfn7Vz5ipwIsBvF8fMKbCe1bwBIL/fU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ktJIQ7q8skg4t3zDNEt5R6SIWpU/X37wDC3AdFLf3+AMZlwSf5FL3HveOP0YGSVTP
-         J3fUlCkn0bhSxSSSlXjJOFrtXp2bURrEsSemSipXLFexYzesHcZJzwNahhyqwhPw4y
-         GESZbfe09gjz0uZiaOWIGwBinbFAxhKT2S0Jy53U=
+        b=nECcDZLZ1JwFbf3cKYxLOHaZPCkD0vCnR9oV60ImdUU+W4k3gCP5dIIngLU45Sglj
+         +Fxd2dN4WJHKQJ5HY4LufSJOOXbyZi/FuBy/wzQFdrHk3FgQfCqHSZoylRJ/DO+kwi
+         sER/pRKOq+l4IaZa4JGpYbY2bFaIUTQ4WhNNYBfs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.19 39/56] bpf: Fix the off-by-two error in range markings
+        stable@vger.kernel.org, Aditya Garg <gargaditya08@live.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.19 23/72] HID: Add Apple Touchbar on T2 Macs in hid_have_special_driver list
 Date:   Fri,  2 Sep 2022 14:18:59 +0200
-Message-Id: <20220902121401.690194719@linuxfoundation.org>
+Message-Id: <20220902121405.549386554@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,156 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@nvidia.com>
+From: Aditya Garg <gargaditya08@live.com>
 
-commit 2fa7d94afc1afbb4d702760c058dc2d7ed30f226 upstream.
+commit 750ec977288d96e9a11424e3507ede097af732c4 upstream.
 
-The first commit cited below attempts to fix the off-by-one error that
-appeared in some comparisons with an open range. Due to this error,
-arithmetically equivalent pieces of code could get different verdicts
-from the verifier, for example (pseudocode):
+The touchbar on Apple T2 Macs has 2 modes, one that shows the function
+keys and other that shows the media controls. The user can use the fn
+key on his keyboard to switch between the 2 modes.
 
-  // 1. Passes the verifier:
-  if (data + 8 > data_end)
-      return early
-  read *(u64 *)data, i.e. [data; data+7]
+On Linux, if people were using an external keyboard or mouse, the
+touchbar failed to change modes on pressing the fn key with the following
+in dmesg :-
 
-  // 2. Rejected by the verifier (should still pass):
-  if (data + 7 >= data_end)
-      return early
-  read *(u64 *)data, i.e. [data; data+7]
+[   10.661445] apple-ib-als 0003:05AC:8262.0001: : USB HID v1.01 Device [Apple Inc. Ambient Light Sensor] on usb-bce-vhci-3/input0
+[   11.830992] apple-ib-touchbar 0003:05AC:8302.0007: input: USB HID v1.01 Keyboard [Apple Inc. Touch Bar Display] on usb-bce-vhci-6/input0
+[   12.139407] apple-ib-touchbar 0003:05AC:8102.0008: : USB HID v1.01 Device [Apple Inc. Touch Bar Backlight] on usb-bce-vhci-7/input0
+[   12.211824] apple-ib-touchbar 0003:05AC:8102.0009: : USB HID v1.01 Device [Apple Inc. Touch Bar Backlight] on usb-bce-vhci-7/input1
+[   14.219759] apple-ib-touchbar 0003:05AC:8302.0007: tb: Failed to set touch bar mode to 2 (-110)
+[   24.395670] apple-ib-touchbar 0003:05AC:8302.0007: tb: Failed to set touch bar mode to 2 (-110)
+[   34.635791] apple-ib-touchbar 0003:05AC:8302.0007: tb: Failed to set touch bar mode to 2 (-110)
+[  269.579233] apple-ib-touchbar 0003:05AC:8302.0007: tb: Failed to set touch bar mode to 1 (-110)
 
-The attempted fix, however, shifts the range by one in a wrong
-direction, so the bug not only remains, but also such piece of code
-starts failing in the verifier:
+Add the USB IDs of the touchbar found in T2 Macs to HID have special
+driver list to fix the issue.
 
-  // 3. Rejected by the verifier, but the check is stricter than in #1.
-  if (data + 8 >= data_end)
-      return early
-  read *(u64 *)data, i.e. [data; data+7]
-
-The change performed by that fix converted an off-by-one bug into
-off-by-two. The second commit cited below added the BPF selftests
-written to ensure than code chunks like #3 are rejected, however,
-they should be accepted.
-
-This commit fixes the off-by-two error by adjusting new_range in the
-right direction and fixes the tests by changing the range into the
-one that should actually fail.
-
-Fixes: fb2a311a31d3 ("bpf: fix off by one for range markings with L{T, E} patterns")
-Fixes: b37242c773b2 ("bpf: add test cases to bpf selftests to cover all access tests")
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20211130181607.593149-1-maximmi@nvidia.com
-[OP: cherry-pick selftest changes only]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/bpf/test_verifier.c |   32 ++++++++++++++--------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ drivers/hid/hid-ids.h    |    2 ++
+ drivers/hid/hid-quirks.c |    2 ++
+ 2 files changed, 4 insertions(+)
 
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -9108,10 +9108,10 @@ static struct bpf_test tests[] = {
- 			BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
- 				    offsetof(struct xdp_md, data_end)),
- 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 6),
- 			BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_1, 1),
- 			BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -6),
- 			BPF_MOV64_IMM(BPF_REG_0, 0),
- 			BPF_EXIT_INSN(),
- 		},
-@@ -9166,10 +9166,10 @@ static struct bpf_test tests[] = {
- 			BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
- 				    offsetof(struct xdp_md, data_end)),
- 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 6),
- 			BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_3, 1),
- 			BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -6),
- 			BPF_MOV64_IMM(BPF_REG_0, 0),
- 			BPF_EXIT_INSN(),
- 		},
-@@ -9279,9 +9279,9 @@ static struct bpf_test tests[] = {
- 			BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
- 				    offsetof(struct xdp_md, data_end)),
- 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 6),
- 			BPF_JMP_REG(BPF_JGE, BPF_REG_1, BPF_REG_3, 1),
--			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -6),
- 			BPF_MOV64_IMM(BPF_REG_0, 0),
- 			BPF_EXIT_INSN(),
- 		},
-@@ -9451,9 +9451,9 @@ static struct bpf_test tests[] = {
- 			BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
- 				    offsetof(struct xdp_md, data_end)),
- 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 6),
- 			BPF_JMP_REG(BPF_JLE, BPF_REG_3, BPF_REG_1, 1),
--			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -6),
- 			BPF_MOV64_IMM(BPF_REG_0, 0),
- 			BPF_EXIT_INSN(),
- 		},
-@@ -9564,10 +9564,10 @@ static struct bpf_test tests[] = {
- 			BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
- 				    offsetof(struct xdp_md, data)),
- 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 6),
- 			BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_1, 1),
- 			BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -6),
- 			BPF_MOV64_IMM(BPF_REG_0, 0),
- 			BPF_EXIT_INSN(),
- 		},
-@@ -9622,10 +9622,10 @@ static struct bpf_test tests[] = {
- 			BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
- 				    offsetof(struct xdp_md, data)),
- 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 6),
- 			BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_3, 1),
- 			BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -6),
- 			BPF_MOV64_IMM(BPF_REG_0, 0),
- 			BPF_EXIT_INSN(),
- 		},
-@@ -9735,9 +9735,9 @@ static struct bpf_test tests[] = {
- 			BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
- 				    offsetof(struct xdp_md, data)),
- 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 6),
- 			BPF_JMP_REG(BPF_JGE, BPF_REG_1, BPF_REG_3, 1),
--			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -6),
- 			BPF_MOV64_IMM(BPF_REG_0, 0),
- 			BPF_EXIT_INSN(),
- 		},
-@@ -9907,9 +9907,9 @@ static struct bpf_test tests[] = {
- 			BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
- 				    offsetof(struct xdp_md, data)),
- 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+			BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 6),
- 			BPF_JMP_REG(BPF_JLE, BPF_REG_3, BPF_REG_1, 1),
--			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -6),
- 			BPF_MOV64_IMM(BPF_REG_0, 0),
- 			BPF_EXIT_INSN(),
- 		},
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -185,6 +185,8 @@
+ #define USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021   0x029c
+ #define USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021   0x029a
+ #define USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_NUMPAD_2021   0x029f
++#define USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT 0x8102
++#define USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY 0x8302
+ 
+ #define USB_VENDOR_ID_ASUS		0x0486
+ #define USB_DEVICE_ID_ASUS_T91MT	0x0185
+--- a/drivers/hid/hid-quirks.c
++++ b/drivers/hid/hid-quirks.c
+@@ -314,6 +314,8 @@ static const struct hid_device_id hid_ha
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY) },
+ #endif
+ #if IS_ENABLED(CONFIG_HID_APPLEIR)
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL) },
 
 

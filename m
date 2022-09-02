@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580E85AB5A9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361AD5AB5AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236903AbiIBPt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S236256AbiIBPuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236388AbiIBPtC (ORCPT
+        with ESMTP id S237362AbiIBPts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:49:02 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6F7DA3CA;
-        Fri,  2 Sep 2022 08:39:32 -0700 (PDT)
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oU8kv-000AgN-B3; Fri, 02 Sep 2022 17:38:53 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oU8ku-00094m-Nl; Fri, 02 Sep 2022 17:38:52 +0200
-Subject: Re: [PATCH] bpf: added the account of BPF running time
-To:     Yunhui Cui <cuiyunhui@bytedance.com>, corbet@lwn.net,
-        ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
-        david@redhat.com, mail@christoph.anton.mitterer.name,
-        ccross@google.com, vincent.whitchurch@axis.com,
-        paul.gortmaker@windriver.com, peterz@infradead.org,
-        edumazet@google.com, joshdon@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, bpf@vger.kernel.org
-References: <20220902101217.1419-1-cuiyunhui@bytedance.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <a16957b9-9247-55f6-eb5e-f9f1c2de7580@iogearbox.net>
-Date:   Fri, 2 Sep 2022 17:38:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 2 Sep 2022 11:49:48 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B375247D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:40:11 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z8so3209086edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 08:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ZZViECBQIPeE26/U6PwpBaWGPbv4WEHDCGVI4qLmJb4=;
+        b=Hng+Qdrwf6aoRL5qjOrDdX9dneBrnXK9dEZGpGEBFIBlyH39qCfY8ZchTBiQ96Q0QZ
+         mo1ow8E2D91zJz9YHExUeoBbqrfgZfUkW/zpThocnMs6/uZURRu3lnitylvOlee0a2YS
+         lKyPusHcdynwJfmX3iErtGSVR6WZ0pz0wERuQ+gOVoitU+TXKIMwyvIXxJ6kk3/xB1YN
+         jVYY2LL5WiN4duAlJTouZHUSOGLWZAnS3r024F5fHcDu6W/sH2j8IaYiIBvia+Jl5ABU
+         AzAcOSRqtsQoQZ3ygVlgucKeGyZsGK/jQqOSKFjZ+4s4BXtjIAoDokHMGxn5B73siZhJ
+         rs6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZZViECBQIPeE26/U6PwpBaWGPbv4WEHDCGVI4qLmJb4=;
+        b=LUXm7FU0P/FdI/VsPF3txJLcKWNh0gofhTRTg4Fv9iMqDdAsOEitQ+/nJEignSJCw+
+         J8oMNB/KLxYmRepskW49JS+kXMzqH3GaVcD9nAPS87Y8TVVfYDxQRVupXx92TbE/BlNv
+         Ttqf6TUnZL1cw8hroXcRGNxQ/AULz0PoJVxrFaKUgQk7ZWh6IeMXMbcQN/PC/QE09oJg
+         0f+1B04Mu46i2XFpEbzDX3kfj6s8YJa8PRbeXDeUse5bFDn8J3Cx2ItPjmDy8VU5zx2v
+         sIYddoJhuNbQUz5/3XrPw43+qw/Qe0pvhxOGcsHav3ez38B5VqWsgjUGa0X6XHDHLPvV
+         Q2tQ==
+X-Gm-Message-State: ACgBeo2WZLD07LO16T+fMyS8GAABVO/Zrh7pVzE5YA5Ikilp+ZiXawjk
+        +x2SvkKbFKntF3trozEVDscz/YdTW/vWsoDLlUJv4A==
+X-Google-Smtp-Source: AA6agR4xxlZQqkE3iOmxpnuJDnHFAJqpyc3JD/HdUdWEisfmE3Z6rtHXdERjcLrMLI5v9gj6USv11x2Cp3VoRzACFOg=
+X-Received: by 2002:a05:6402:3227:b0:448:706c:185d with SMTP id
+ g39-20020a056402322700b00448706c185dmr20812932eda.357.1662133205628; Fri, 02
+ Sep 2022 08:40:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220902101217.1419-1-cuiyunhui@bytedance.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26646/Fri Sep  2 09:55:25 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220830233129.30610-1-samitolvanen@google.com>
+ <YxEh+pLyOyPalW1u@dev-arch.thelio-3990X> <CABCJKucP5nXGiCTTCEPUGYo5Z9A9qaQkJ6_kXTOfw-o-=TYH0g@mail.gmail.com>
+ <YxG2DUEBnIpAMKF2@hirez.programming.kicks-ass.net>
+In-Reply-To: <YxG2DUEBnIpAMKF2@hirez.programming.kicks-ass.net>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Fri, 2 Sep 2022 08:39:29 -0700
+Message-ID: <CABCJKudRywi7FgNOb8V7vmS39k59fbO1D3dwfmMZmBpApRX5eQ@mail.gmail.com>
+Subject: Re: [PATCH v4 00/21] KCFI support
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,82 +81,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/2/22 12:12 PM, Yunhui Cui wrote:
-[...]
-> index a5f21dc3c432..9cb072f9e32b 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -565,6 +565,12 @@ struct sk_filter {
->   	struct bpf_prog	*prog;
->   };
->   
-> +struct bpf_account {
-> +	u64_stats_t nsecs;
-> +	struct u64_stats_sync syncp;
-> +};
-> +DECLARE_PER_CPU(struct bpf_account, bpftime);
-> +
->   DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
->   
->   typedef unsigned int (*bpf_dispatcher_fn)(const void *ctx,
-> @@ -577,12 +583,14 @@ static __always_inline u32 __bpf_prog_run(const struct bpf_prog *prog,
->   					  bpf_dispatcher_fn dfunc)
->   {
->   	u32 ret;
-> +	struct bpf_account *bact;
-> +	unsigned long flags;
-> +	u64 start = 0;
->   
->   	cant_migrate();
-> +	start = sched_clock();
->   	if (static_branch_unlikely(&bpf_stats_enabled_key)) {
->   		struct bpf_prog_stats *stats;
-> -		u64 start = sched_clock();
-> -		unsigned long flags;
->   
->   		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
->   		stats = this_cpu_ptr(prog->stats);
-> @@ -593,6 +601,11 @@ static __always_inline u32 __bpf_prog_run(const struct bpf_prog *prog,
->   	} else {
->   		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
->   	}
-> +	bact = this_cpu_ptr(&bpftime);
-> +	flags = u64_stats_update_begin_irqsave(&bact->syncp);
-> +	u64_stats_add(&bact->nsecs, sched_clock() - start);
-> +	u64_stats_update_end_irqrestore(&bact->syncp, flags);
-> +
->   	return ret;
+On Fri, Sep 2, 2022 at 12:51 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Sep 01, 2022 at 05:33:29PM -0700, Sami Tolvanen wrote:
+>
+> > > I do see a few new objtool warnings as well:
+> > >
+> > > vmlinux.o: warning: objtool: apply_relocate_add+0x34: relocation to !ENDBR: memcpy+0x0
+> > > vmlinux.o: warning: objtool: ___ksymtab+__memcpy+0x0: data relocation to !ENDBR: memcpy+0x0
+> > > vmlinux.o: warning: objtool: ___ksymtab+memcpy+0x0: data relocation to !ENDBR: memcpy+0x0
+> >
+> > That's interesting. I can only reproduce this warning with
+> > allmodconfig+LTO, even though the relocation exists in all builds (the
+> > code makes an indirect call to memcpy) and memcpy (aliased to
+> > __memcpy) doesn't start with endbr. I'll have to take a closer look at
+> > why this warning only appears with LTO.
+>
+> From just looking at the patches I'd say patch #19 breaks it. IIRC you
+> forgot to make the SYM_TYPED_FUNC things emit ENDBR.
+>
+> Look at how x86/asm/linkage.h is overriding SYM_FUNC_START*().
 
-The overhead this adds unconditionally is no-go. Have you tried using/improving:
+Yes, that's the reason, I'll fix this next week. I was mostly
+wondering why I'm not getting this warning with my other test configs,
+but it looks like IBT isn't enabled by default.
 
-commit 47c09d6a9f6794caface4ad50930460b82d7c670
-Author: Song Liu <songliubraving@fb.com>
-Date:   Mon Mar 9 10:32:15 2020 -0700
-
-     bpftool: Introduce "prog profile" command
-
-     With fentry/fexit programs, it is possible to profile BPF program with
-     hardware counters. Introduce bpftool "prog profile", which measures key
-     metrics of a BPF program.
-
-     bpftool prog profile command creates per-cpu perf events. Then it attaches
-     fentry/fexit programs to the target BPF program. The fentry program saves
-     perf event value to a map. The fexit program reads the perf event again,
-     and calculates the difference, which is the instructions/cycles used by
-     the target program.
-
-     Example input and output:
-
-       ./bpftool prog profile id 337 duration 3 cycles instructions llc_misses
-
-             4228 run_cnt
-          3403698 cycles                                              (84.08%)
-          3525294 instructions   #  1.04 insn per cycle               (84.05%)
-               13 llc_misses     #  3.69 LLC misses per million isns  (83.50%)
-
-     This command measures cycles and instructions for BPF program with id
-     337 for 3 seconds. The program has triggered 4228 times. The rest of the
-     output is similar to perf-stat. [...]
-
-Thanks,
-Daniel
+Sami

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3B05AAE61
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243CE5AAF73
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236162AbiIBMWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S236583AbiIBMi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235912AbiIBMVP (ORCPT
+        with ESMTP id S237084AbiIBMhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:21:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F937D798;
-        Fri,  2 Sep 2022 05:20:54 -0700 (PDT)
+        Fri, 2 Sep 2022 08:37:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2050A10FF;
+        Fri,  2 Sep 2022 05:29:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D580DB82A8F;
-        Fri,  2 Sep 2022 12:20:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D2BC433D6;
-        Fri,  2 Sep 2022 12:20:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D9076211C;
+        Fri,  2 Sep 2022 12:23:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E96C433D7;
+        Fri,  2 Sep 2022 12:23:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121251;
-        bh=vZCk4txwF/aCxzpP/iO0kid2gcsE12OeCX2/T3fqKCk=;
+        s=korg; t=1662121402;
+        bh=c38qPjBlwIU12u9Uk9yjYbiD99ZrXmEcOmC9gitduTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RmgrWIM7OMypxP5WGl7V2EJ0jmDGamSxtq6SxtU4Jn+egNrVnZt5hibZZE+A0WvBh
-         WR01xc54/XLMeh/sDgfnzEaKfZy2ay6oSxgcFw0tVbSaTDkcaQofgJ52IHo1zHRMvJ
-         6oEgNE/UEpfHBnfB6ZkZ4nsjJS+3ddyvSeceKflo=
+        b=fqttkCobkVthfNQpMlcz/MgOtRr3YoPpZVHIsbyHxM29Q45QXdxtrIb5TU1iJdcbE
+         mICdr+t5XhsHvOMBUj4oaif9YxwFROyX/hPTY68BSQ6DtE38oQNrOhsBOdnDzzOn06
+         G0I6t/63niYKsJ3pVOd7BuUWCKA387TVk91KscNA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Mahesh Bandewar <maheshb@google.com>,
+        Sainath Grandhi <sainath.grandhi@intel.com>,
+        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 06/31] netfilter: nft_payload: report ERANGE for too long offset and length
+Subject: [PATCH 4.14 08/42] net: ipvtap - add __init/__exit annotations to module init/exit funcs
 Date:   Fri,  2 Sep 2022 14:18:32 +0200
-Message-Id: <20220902121356.981865358@linuxfoundation.org>
+Message-Id: <20220902121359.087699818@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
-References: <20220902121356.732130937@linuxfoundation.org>
+In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
+References: <20220902121358.773776406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Maciej Żenczykowski <maze@google.com>
 
-[ Upstream commit 94254f990c07e9ddf1634e0b727fab821c3b5bf9 ]
+[ Upstream commit 4b2e3a17e9f279325712b79fb01d1493f9e3e005 ]
 
-Instead of offset and length are truncation to u8, report ERANGE.
+Looks to have been left out in an oversight.
 
-Fixes: 96518518cc41 ("netfilter: add nftables")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Mahesh Bandewar <maheshb@google.com>
+Cc: Sainath Grandhi <sainath.grandhi@intel.com>
+Fixes: 235a9d89da97 ('ipvtap: IP-VLAN based tap driver')
+Signed-off-by: Maciej Żenczykowski <maze@google.com>
+Link: https://lore.kernel.org/r/20220821130808.12143-1-zenczykowski@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_payload.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/net/ipvlan/ipvtap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/netfilter/nft_payload.c b/net/netfilter/nft_payload.c
-index f73d47b3ffb72..82bcd14fbcb3d 100644
---- a/net/netfilter/nft_payload.c
-+++ b/net/netfilter/nft_payload.c
-@@ -287,6 +287,7 @@ nft_payload_select_ops(const struct nft_ctx *ctx,
+diff --git a/drivers/net/ipvlan/ipvtap.c b/drivers/net/ipvlan/ipvtap.c
+index 0bcc07f346c3e..2e517e30c5ac1 100644
+--- a/drivers/net/ipvlan/ipvtap.c
++++ b/drivers/net/ipvlan/ipvtap.c
+@@ -193,7 +193,7 @@ static struct notifier_block ipvtap_notifier_block __read_mostly = {
+ 	.notifier_call	= ipvtap_device_event,
+ };
+ 
+-static int ipvtap_init(void)
++static int __init ipvtap_init(void)
  {
- 	enum nft_payload_bases base;
- 	unsigned int offset, len;
-+	int err;
+ 	int err;
  
- 	if (tb[NFTA_PAYLOAD_BASE] == NULL ||
- 	    tb[NFTA_PAYLOAD_OFFSET] == NULL ||
-@@ -312,8 +313,13 @@ nft_payload_select_ops(const struct nft_ctx *ctx,
- 	if (tb[NFTA_PAYLOAD_DREG] == NULL)
- 		return ERR_PTR(-EINVAL);
+@@ -227,7 +227,7 @@ static int ipvtap_init(void)
+ }
+ module_init(ipvtap_init);
  
--	offset = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_OFFSET]));
--	len    = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_LEN]));
-+	err = nft_parse_u32_check(tb[NFTA_PAYLOAD_OFFSET], U8_MAX, &offset);
-+	if (err < 0)
-+		return ERR_PTR(err);
-+
-+	err = nft_parse_u32_check(tb[NFTA_PAYLOAD_LEN], U8_MAX, &len);
-+	if (err < 0)
-+		return ERR_PTR(err);
- 
- 	if (len <= 4 && is_power_of_2(len) && IS_ALIGNED(offset, len) &&
- 	    base != NFT_PAYLOAD_LL_HEADER)
+-static void ipvtap_exit(void)
++static void __exit ipvtap_exit(void)
+ {
+ 	rtnl_link_unregister(&ipvtap_link_ops);
+ 	unregister_netdevice_notifier(&ipvtap_notifier_block);
 -- 
 2.35.1
 

@@ -2,108 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354C85AB6C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F515AB6C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235995AbiIBQoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 12:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S236534AbiIBQp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 12:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236145AbiIBQoG (ORCPT
+        with ESMTP id S235835AbiIBQp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 12:44:06 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7C5F72E0
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 09:44:05 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id kk26so4952372ejc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 09:44:05 -0700 (PDT)
+        Fri, 2 Sep 2022 12:45:26 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A782FD51;
+        Fri,  2 Sep 2022 09:45:25 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id f14so2212674qkm.0;
+        Fri, 02 Sep 2022 09:45:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=VmUnMpMx9FCpdgOfRQX0qdDo5Ev0z9Y827Nqgg69gqA=;
-        b=C9WaGds13KebfDZBCKtuewhv6eHNZKasIwrABJm8q88TgSSillzYLfRXxuIkeWJ+EE
-         ATXb5NU2GQZXcTPBfK0lU7BTe8a0OK1fE8MMAFockFtrlxQjFA7bjr1tHm+FWl1M0jfB
-         bsQB3zJpW2YyG0sGyLHuO2fvRrTjl9vsriR8c=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=29oZcoY2q46tLwUZQFlwRfSOAvKJ/1ARLsojbCZzUIE=;
+        b=ZUskE6+2avARgePDn3wyMZKTjzJgc6lCmVbVSJcUXMQuXyMmA50n/YqlwvYYFYglBP
+         9Qt8M7lmFQQiBaBjSPXPfzTcHt5V0HveD1rU7erMMedLCDD6SzuslxqAkI8scOaqF8ZS
+         3m3XdzWVN9hqxy/XSAuqml5TMpqNrJQJTKaWDNHqyYFvMRhBR0zyxiwtNWh0oekMP4CE
+         h1tN3K0QTMK7lTGryeEKFW2ktOyXYpRbb4bJFZ1BbV05e/adQyoO7zQvESrK+4l83hT+
+         N7iZqPXKBjSnLUqRpuL3nch3N1HAfVn6SRjFv4qcdtcVFwiSzFgEac2FKjsjukyouV1E
+         Ve1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=VmUnMpMx9FCpdgOfRQX0qdDo5Ev0z9Y827Nqgg69gqA=;
-        b=HqX9V2cxctlZ58d+nBg1Chl5zXOXQ8gd32z0eEq3spS7Wb+3ZoyJkUQjICiwr0f3Fz
-         6s2RrB4KZ6JinaRI66cGIFBh3RFWcbNo1HHkpOS9pzqpU/okNHCoTEeprTge/0cZunAO
-         Q/Ks5o30dKa/6iN0O0Y5cO59d9AsE3qHsKllxUVk8AI+dhJplyt3IlYmYxWvB2jYrv2G
-         Kwev4dvSSXjMWulKGhPRWo3e129Crr8aoF7GMdHCnuU7GIDFnnUoRuqrHMjzom1RnrWb
-         M78GoA+lC4lS8deekCHWfGd5M6xRHIdyecOfExeSIrRd39E6Hl9qZok6m7de+oTtp4Dt
-         86wA==
-X-Gm-Message-State: ACgBeo0bYQC0cbwF1suGj6b5Ph/Pzt0citZIAHeu5nGrZrC6ma7uLnh2
-        cmCfnQjUHG02aVz9Nw2t5F/tMeTTidh7fjD/
-X-Google-Smtp-Source: AA6agR481b+7l4ai4nfWxuekmNFsH8/bGVLtLNz8GWpPRz6BkxmLl7uCtU92GhHPDxiVK7DalTxYJg==
-X-Received: by 2002:a17:907:9693:b0:73d:cc84:deb with SMTP id hd19-20020a170907969300b0073dcc840debmr27666238ejc.552.1662137043405;
-        Fri, 02 Sep 2022 09:44:03 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id f17-20020a1709067f9100b0073a62f3b447sm1508351ejr.44.2022.09.02.09.44.02
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=29oZcoY2q46tLwUZQFlwRfSOAvKJ/1ARLsojbCZzUIE=;
+        b=p1ktmVIn2BYERAKl6chrw9HJx/oc2EXZgFzKugboMtpjWXgRSHHc1Nl3GVQLOYjUAm
+         lDVXWD/9fii+k2y0PnQJwCGAUrfk0ovnIqQfWkfeqA5QfR0f8wDSwwfVR8hfIiwMInNh
+         D/Rx51wud4apn+HxynNewt/BBTltEKGYM5Mm377rcjVuDWjp87wnoiPz+7HWs7hORPyw
+         g4rkKefv2L81eXGlrZPozGFP7rO2H/eH54PlbVD9ik278JmzveN7Jac+rHK92/rj3cim
+         zsXmoXaqzzX7wHpGGmXHGtV0RMISZ/REBVpZFYWrKPqY3DiLPnsR9fr7HIWpAzPXKGT6
+         rKCw==
+X-Gm-Message-State: ACgBeo0mdiQ9MO1HFzoCjmgUR5HbEUOoD3J0gYcsosmXUeZIQRNfR8rf
+        5oM8/N+F7jcVAd0JqVTxoU2IHckPJRA=
+X-Google-Smtp-Source: AA6agR5xxB2RpH6Y3YWpALTdAUEGu1Hhp+5pBoEY9ywcGNWg77Sc3DFw1HNPISVB8w/E3BbCptS8+Q==
+X-Received: by 2002:a05:620a:198a:b0:6be:73ae:bbc2 with SMTP id bm10-20020a05620a198a00b006be73aebbc2mr22412053qkb.394.1662137124729;
+        Fri, 02 Sep 2022 09:45:24 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id k18-20020ac81412000000b003445b83de67sm1277705qtj.3.2022.09.02.09.45.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 09:44:02 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id c7so3000483wrp.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 09:44:02 -0700 (PDT)
-X-Received: by 2002:a5d:4052:0:b0:225:8b55:67fd with SMTP id
- w18-20020a5d4052000000b002258b5567fdmr17701419wrp.281.1662137041789; Fri, 02
- Sep 2022 09:44:01 -0700 (PDT)
+        Fri, 02 Sep 2022 09:45:23 -0700 (PDT)
+Message-ID: <df379546-8439-cd18-b882-181542c28882@gmail.com>
+Date:   Fri, 2 Sep 2022 09:45:21 -0700
 MIME-Version: 1.0
-References: <20220902130625.217071627@infradead.org> <20220902130950.205726504@infradead.org>
-In-Reply-To: <20220902130950.205726504@infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Sep 2022 09:43:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
-Message-ID: <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
-Subject: Re: [PATCH v2 37/59] x86/putuser: Provide room for padding
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 4.9 00/31] 4.9.327-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220902121356.732130937@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So I don't hate this patch and it's probably good for consistency, but
-I really think that the retbleed tracking could perhaps be improved to
-let this be all unnecessary.
 
-The whole return stack depth counting is already not 100% exact, and I
-think we could just make the rule be that we don't track leaf
-functions.
 
-Why? It's just a off-by-one in the already not exact tracking. And -
-perhaps equally importantly - leaf functions are very very common
-dynamically, and I suspect it's trivial to see them.
+On 9/2/2022 5:18 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.327 release.
+> There are 31 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.327-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Yes, yes, you could make objtool even smarter and actually do some
-kind of function flow graph thing (and I think some people were
-talking about that with the whole ret counting long long ago), but the
-leaf function thing is the really simple low-hanging fruit case of
-that.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-            Linus
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

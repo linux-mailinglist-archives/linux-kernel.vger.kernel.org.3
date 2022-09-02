@@ -2,102 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992405AB659
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC455AB65B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237034AbiIBQPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 12:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S237130AbiIBQQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 12:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237021AbiIBQPC (ORCPT
+        with ESMTP id S236686AbiIBQQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 12:15:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1060A117AE6
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 09:11:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70F13B82C7D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 16:11:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3679C433D6;
-        Fri,  2 Sep 2022 16:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662135110;
-        bh=Z+r+C0wXesNeSLz5e3UJqk59d7HBkCsYfjmU8Ig94Nc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GkQbfUn6XOZBr8nDbP6jSghq2ziGVbFCURz1EP8SImFQb0gGum6nav+0oCXZD7ca4
-         BiYWRgLJZyzHWkTYBOiZte3KsKNZWIaY7JHIgPbUTs39A/svAaTh534v3gZNz3dTpU
-         qcNBiQKyrHWmUFRJXjg5x06pHGiz0vbgXZLq03Kp8fpdRNRmnY1JlsRjNcipWw8zvC
-         ZlboecCfQFKHa5Mo57dBxwMIfOMQb8sbBwobndKOSFII3YyfG4RmjA95dFR3ekTbnC
-         ZDAck3yQCQmVYQ1lyvVjRxls+MRvckUZzmxlE5Lo1Iu6oo7fzaAQkCK9gn9I6CLAVJ
-         Moit4HTADimIA==
-Date:   Fri, 2 Sep 2022 09:11:48 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 2/2] powerpc/math-emu: Remove -w build flag and fix
- warnings
-Message-ID: <YxIrRJz3+fkzogay@dev-arch.thelio-3990X>
-References: <a7384eafc6a27aea15bdc9e8f9a12aac593fccb7.1662113301.git.christophe.leroy@csgroup.eu>
- <35c86b7ca823954c6cd593acc3690dc3748da9b1.1662113301.git.christophe.leroy@csgroup.eu>
- <YxIjM/jdLajq4dFk@dev-arch.thelio-3990X>
- <20220902155954.GP25951@gate.crashing.org>
+        Fri, 2 Sep 2022 12:16:25 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0C6DEA79;
+        Fri,  2 Sep 2022 09:13:07 -0700 (PDT)
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6C9D7FF803;
+        Fri,  2 Sep 2022 16:13:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1662135185;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vg0Ow2Wlxy45PIHiHnVEioKxms+Qp0llN/7M0XoKma4=;
+        b=i/F5clX8UD2+J57eHw7iWb0WYy6CA3pXxKlAfipwJYwDFBh3vM8/0WT2jbYS+WZgTePEq1
+        EXPrbe/wbT1sMVqAxilaRNK0vh2Mu6I8gNn3nyV6Xev07BP/mAtLZLkP+mCHM0gnDHTAyG
+        fER59lTWN+bHLjeYV25/5tc1/1wNegZqXzIeO8A1xdKJ0vqi8AQgUa9fxWOJbXMTi/ktYV
+        ecfKG64wrsfjIbZkjBzx5R197yDc0PirSu3ejh0Rp8pqOMKNj5r8t4cR+7jYFyTQXvK7z2
+        qXOI4m/9Kvv+mlP36E1QNVv/YIBfKRqvn7T1mgRKRO8meczb+CusIIVmsBJEuw==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
+        kostap@marvell.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 10/10] arm64: dts: marvell: add support for Methode eDPU
+In-Reply-To: <87ler1er7z.fsf@BL-laptop>
+References: <20220516124828.45144-1-robert.marko@sartura.hr>
+ <20220516124828.45144-10-robert.marko@sartura.hr>
+ <CA+HBbNF2R--984SdB0v42GMQOwAx4pTEz_FHifTtebN05ELU-Q@mail.gmail.com>
+ <87mtbm5gaf.fsf@BL-laptop>
+ <CA+HBbNG13dspUspWMrT=LWpCnMCZ-r-K8zR4RaoLf8HxhzStSQ@mail.gmail.com>
+ <87ler1er7z.fsf@BL-laptop>
+Date:   Fri, 02 Sep 2022 18:13:04 +0200
+Message-ID: <87czcdeovj.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902155954.GP25951@gate.crashing.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 10:59:54AM -0500, Segher Boessenkool wrote:
-> On Fri, Sep 02, 2022 at 08:37:23AM -0700, Nathan Chancellor wrote:
-> > On Fri, Sep 02, 2022 at 12:08:55PM +0200, Christophe Leroy wrote:
-> > > This should have been detected by gcc at build time, but due to
-> > > '-w' flag it went undetected.
-> > > 
-> > > Removing that flag leads to many warnings hence errors.
-> 
-> > Thanks for figuring out what was going on here! I took this patch for a
-> > spin with clang and it has a few more errors around
-> > -Wimplicit-fallthrough:
-> 
-> Maybe add -Wno-implicit-fallthrough?  This code is a copy from outside
-> the kernel, no one has ever wanted to maintain it, if nothing else (the
-> more politically correct formulation is "we cannot as easily pick up
-> improvements from upstream if we modify stuff").
+Gregory CLEMENT <gregory.clement@bootlin.com> writes:
 
-Sure, we could do something like this if you preferred:
+> Robert Marko <robert.marko@sartura.hr> writes:
+>
+>> On Tue, Aug 30, 2022 at 9:42 AM Gregory CLEMENT
+>> <gregory.clement@bootlin.com> wrote:
+>>>
+>>> Robert Marko <robert.marko@sartura.hr> writes:
+>>>
+>>> > On Mon, May 16, 2022 at 2:48 PM Robert Marko <robert.marko@sartura.hr> wrote:
+>>> >>
+>>> >> Methode eDPU is an Armada 3720 powered board based on the Methode uDPU.
+>>> >>
+>>> >> They feature the same CPU, RAM, and storage as well as the form factor.
+>>> >>
+>>> >> However, eDPU only has one SFP slot plus a copper G.hn port.
+>>> >>
+>>> >> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+>>> >> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> >> ---
+>>> >> Changes in v2:
+>>> >> * Make the DTS split a separate commit
+>>> >> ---
+>>> >>  arch/arm64/boot/dts/marvell/Makefile             |  1 +
+>>> >>  arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts | 14 ++++++++++++++
+>>> >>  2 files changed, 15 insertions(+)
+>>> >>  create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+>>> >>
+>>> >> diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/marvell/Makefile
+>>> >> index 1c794cdcb8e6..104d7d7e8215 100644
+>>> >> --- a/arch/arm64/boot/dts/marvell/Makefile
+>>> >> +++ b/arch/arm64/boot/dts/marvell/Makefile
+>>> >> @@ -1,6 +1,7 @@
+>>> >>  # SPDX-License-Identifier: GPL-2.0
+>>> >>  # Mvebu SoC Family
+>>> >>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-db.dtb
+>>> >> +dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-eDPU.dtb
+>>> >>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin.dtb
+>>> >>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-emmc.dtb
+>>> >>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-ultra.dtb
+>>> >> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+>>> >> new file mode 100644
+>>> >> index 000000000000..57fc698e55d0
+>>> >> --- /dev/null
+>>> >> +++ b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+>>> >> @@ -0,0 +1,14 @@
+>>> >> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>>> >> +
+>>> >> +/dts-v1/;
+>>> >> +
+>>> >> +#include "armada-3720-uDPU.dtsi"
+>>> >> +
+>>> >> +/ {
+>>> >> +       model = "Methode eDPU Board";
+>>> >> +       compatible = "methode,edpu", "marvell,armada3720", "marvell,armada3710";
+>>> >> +};
+>>> >> +
+>>> >> +&eth0 {
+>>> >> +       phy-mode = "2500base-x";
+>>> >> +};
+>>> >> --
+>>> >> 2.36.1
+>>> >>
+>>> >
+>>> > Hi Gregory,
+>>> Hello Roberto,
+>>>
+>>> > Is there something else that I can improve in the series?
+>>>
+>>> Sorry for having missed this series. At first view it seems OK, I am
+>>> going to have a closer look this week.
+>>
+>> Thanks, that sounds good.
+>
+> Hello,
+>
+> could you send again patch 8, I managed to apply all the other ones
+> excepting this one.
 
-diff --git a/arch/powerpc/math-emu/Makefile b/arch/powerpc/math-emu/Makefile
-index 26fef2e5672e..ed775747a2a5 100644
---- a/arch/powerpc/math-emu/Makefile
-+++ b/arch/powerpc/math-emu/Makefile
-@@ -16,3 +16,7 @@ obj-$(CONFIG_SPE)		+= math_efp.o
- 
- CFLAGS_fabs.o = -fno-builtin-fabs
- CFLAGS_math.o = -fno-builtin-fabs
-+
-+ifdef CONFIG_CC_IS_CLANG
-+ccflags-remove-y := $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
-+endif
+Finally I managed to sort it out, all the series is applied on mvebu/dt64
 
-At the same time, I see other modifications to these files that appear
-to be for the kernel only so I suspect that this is already in the "we
-cannot as easily pick up improvements from upstream" category,
-regardless of that diff. No strong opinion from me, although I see
-Christophe already included my suggestion in the most recent series:
+Thanks,
 
-https://lore.kernel.org/2663961738a46073713786d4efeb53100ca156e7.1662134272.git.christophe.leroy@csgroup.eu/
+Gregory
+>
+>
+>>
+>> Regards,
+>> Robert
+>>>
+>>> Gregory
+>>>
+>>>
+>>> >
+>>> > Regards,
+>>> > Robert
+>>> >
+>>> > --
+>>> > Robert Marko
+>>> > Staff Embedded Linux Engineer
+>>> > Sartura Ltd.
+>>> > Lendavska ulica 16a
+>>> > 10000 Zagreb, Croatia
+>>> > Email: robert.marko@sartura.hr
+>>> > Web: www.sartura.hr
+>>>
+>>> --
+>>> Gregory Clement, Bootlin
+>>> Embedded Linux and Kernel engineering
+>>> http://bootlin.com
+>>
+>>
+>>
+>> -- 
+>> Robert Marko
+>> Staff Embedded Linux Engineer
+>> Sartura Ltd.
+>> Lendavska ulica 16a
+>> 10000 Zagreb, Croatia
+>> Email: robert.marko@sartura.hr
+>> Web: www.sartura.hr
+>
+> -- 
+> Gregory Clement, Bootlin
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
-Cheers,
-Nathan
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com

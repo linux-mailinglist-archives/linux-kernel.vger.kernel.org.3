@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F13B5AAFF9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B1B5AAEF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237431AbiIBMqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
+        id S236600AbiIBMcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237534AbiIBMoA (ORCPT
+        with ESMTP id S236655AbiIBMbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:44:00 -0400
+        Fri, 2 Sep 2022 08:31:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1363E1AB7;
-        Fri,  2 Sep 2022 05:32:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41D8E0FFE;
+        Fri,  2 Sep 2022 05:26:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6194DB829E8;
-        Fri,  2 Sep 2022 12:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98DFBC433D7;
-        Fri,  2 Sep 2022 12:32:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4661B82AB5;
+        Fri,  2 Sep 2022 12:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C23C433C1;
+        Fri,  2 Sep 2022 12:25:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121962;
-        bh=57v22oWKlBJNCWurriBwjO5ps+GiYL40nKe2KYU6GkM=;
+        s=korg; t=1662121560;
+        bh=ggkzR7fXpZd66zV4XncdCKBI8YV+okgrGR8z07c89yk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wSlY5kIvIoAt5yZpFsPIZnWkj4v8shheciT/Ta+XHmG06o+YEt79l+UpbXMiAAPbU
-         IEg71KECvnxib4aH2wJF9GbM7IQQHGteQTJ+hQ6CYIWTcbA/AqhV8oU2Bm06ZQDw7/
-         ZYw6FV0ZrXvglmizVCGREcgHTGbyQQKRxA0c4V6Q=
+        b=kViYBqXRSjsb06YPXM5nFaEPBzW+TladWtty8qi1PtPIoaSExMnYvdaYfciC9zS5w
+         WXx4bpIHFK8h/fOvlEGPvwhvfKN22VT0jn6jQqnhVkgG+PFde1mwcbHifB9IaXccxg
+         w1C1T5alpOTw3kMOKH6UxlfqarydY0JqOAfzO17Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 43/73] mmc: sdhci-of-dwcmshc: add reset call back for rockchip Socs
+        stable@vger.kernel.org,
+        syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com,
+        Karthik Alapati <mail@karthek.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 4.19 47/56] HID: hidraw: fix memory leak in hidraw_release()
 Date:   Fri,  2 Sep 2022 14:19:07 +0200
-Message-Id: <20220902121405.860443029@linuxfoundation.org>
+Message-Id: <20220902121402.039710520@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
+References: <20220902121400.219861128@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,93 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+From: Karthik Alapati <mail@karthek.com>
 
-[ Upstream commit 70f832206fe72e9998b46363e8e59e89b0b757bc ]
+commit a5623a203cffe2d2b84d2f6c989d9017db1856af upstream.
 
-The reset function build in the SDHCI will not reset the logic
-circuit related to the tuning function, which may cause data
-reading errors. Resetting the complete SDHCI controller through
-the reset controller fixes the issue.
+Free the buffered reports before deleting the list entry.
 
-Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-[rebase, use optional variant of reset getter]
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Link: https://lore.kernel.org/r/20220504213251.264819-10-sebastian.reichel@collabora.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+BUG: memory leak
+unreferenced object 0xffff88810e72f180 (size 32):
+  comm "softirq", pid 0, jiffies 4294945143 (age 16.080s)
+  hex dump (first 32 bytes):
+    64 f3 c6 6a d1 88 07 04 00 00 00 00 00 00 00 00  d..j............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814ac6c3>] kmemdup+0x23/0x50 mm/util.c:128
+    [<ffffffff8357c1d2>] kmemdup include/linux/fortify-string.h:440 [inline]
+    [<ffffffff8357c1d2>] hidraw_report_event+0xa2/0x150 drivers/hid/hidraw.c:521
+    [<ffffffff8356ddad>] hid_report_raw_event+0x27d/0x740 drivers/hid/hid-core.c:1992
+    [<ffffffff8356e41e>] hid_input_report+0x1ae/0x270 drivers/hid/hid-core.c:2065
+    [<ffffffff835f0d3f>] hid_irq_in+0x1ff/0x250 drivers/hid/usbhid/hid-core.c:284
+    [<ffffffff82d3c7f9>] __usb_hcd_giveback_urb+0xf9/0x230 drivers/usb/core/hcd.c:1670
+    [<ffffffff82d3cc26>] usb_hcd_giveback_urb+0x1b6/0x1d0 drivers/usb/core/hcd.c:1747
+    [<ffffffff82ef1e14>] dummy_timer+0x8e4/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
+    [<ffffffff812f50a8>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1474
+    [<ffffffff812f5586>] expire_timers kernel/time/timer.c:1519 [inline]
+    [<ffffffff812f5586>] __run_timers.part.0+0x316/0x430 kernel/time/timer.c:1790
+    [<ffffffff812f56e4>] __run_timers kernel/time/timer.c:1768 [inline]
+    [<ffffffff812f56e4>] run_timer_softirq+0x44/0x90 kernel/time/timer.c:1803
+    [<ffffffff848000e6>] __do_softirq+0xe6/0x2ea kernel/softirq.c:571
+    [<ffffffff81246db0>] invoke_softirq kernel/softirq.c:445 [inline]
+    [<ffffffff81246db0>] __irq_exit_rcu kernel/softirq.c:650 [inline]
+    [<ffffffff81246db0>] irq_exit_rcu+0xc0/0x110 kernel/softirq.c:662
+    [<ffffffff84574f02>] sysvec_apic_timer_interrupt+0xa2/0xd0 arch/x86/kernel/apic/apic.c:1106
+    [<ffffffff84600c8b>] asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
+    [<ffffffff8458a070>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
+    [<ffffffff8458a070>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
+    [<ffffffff8458a070>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
+    [<ffffffff8458a070>] acpi_idle_do_entry+0xc0/0xd0 drivers/acpi/processor_idle.c:554
+
+Link: https://syzkaller.appspot.com/bug?id=19a04b43c75ed1092021010419b5e560a8172c4f
+Reported-by: syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com
+Signed-off-by: Karthik Alapati <mail@karthek.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/sdhci-of-dwcmshc.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ drivers/hid/hidraw.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-index bac874ab0b33a..3a1b5ba364051 100644
---- a/drivers/mmc/host/sdhci-of-dwcmshc.c
-+++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-+#include <linux/reset.h>
- #include <linux/sizes.h>
+--- a/drivers/hid/hidraw.c
++++ b/drivers/hid/hidraw.c
+@@ -354,10 +354,13 @@ static int hidraw_release(struct inode *
+ 	unsigned int minor = iminor(inode);
+ 	struct hidraw_list *list = file->private_data;
+ 	unsigned long flags;
++	int i;
  
- #include "sdhci-pltfm.h"
-@@ -63,6 +64,7 @@
- struct rk3568_priv {
- 	/* Rockchip specified optional clocks */
- 	struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
-+	struct reset_control *reset;
- 	u8 txclk_tapnum;
- };
+ 	mutex_lock(&minors_lock);
  
-@@ -255,6 +257,21 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
- 	sdhci_writel(host, extra, DWCMSHC_EMMC_DLL_STRBIN);
- }
- 
-+static void rk35xx_sdhci_reset(struct sdhci_host *host, u8 mask)
-+{
-+	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-+	struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
-+	struct rk35xx_priv *priv = dwc_priv->priv;
-+
-+	if (mask & SDHCI_RESET_ALL && priv->reset) {
-+		reset_control_assert(priv->reset);
-+		udelay(1);
-+		reset_control_deassert(priv->reset);
-+	}
-+
-+	sdhci_reset(host, mask);
-+}
-+
- static const struct sdhci_ops sdhci_dwcmshc_ops = {
- 	.set_clock		= sdhci_set_clock,
- 	.set_bus_width		= sdhci_set_bus_width,
-@@ -269,7 +286,7 @@ static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
- 	.set_bus_width		= sdhci_set_bus_width,
- 	.set_uhs_signaling	= dwcmshc_set_uhs_signaling,
- 	.get_max_clock		= sdhci_pltfm_clk_get_max_clock,
--	.reset			= sdhci_reset,
-+	.reset			= rk35xx_sdhci_reset,
- 	.adma_write_desc	= dwcmshc_adma_write_desc,
- };
- 
-@@ -292,6 +309,13 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
- 	int err;
- 	struct rk3568_priv *priv = dwc_priv->priv;
- 
-+	priv->reset = devm_reset_control_array_get_optional_exclusive(mmc_dev(host->mmc));
-+	if (IS_ERR(priv->reset)) {
-+		err = PTR_ERR(priv->reset);
-+		dev_err(mmc_dev(host->mmc), "failed to get reset control %d\n", err);
-+		return err;
-+	}
-+
- 	priv->rockchip_clks[0].id = "axi";
- 	priv->rockchip_clks[1].id = "block";
- 	priv->rockchip_clks[2].id = "timer";
--- 
-2.35.1
-
+ 	spin_lock_irqsave(&hidraw_table[minor]->list_lock, flags);
++	for (i = list->tail; i < list->head; i++)
++		kfree(list->buffer[i].value);
+ 	list_del(&list->node);
+ 	spin_unlock_irqrestore(&hidraw_table[minor]->list_lock, flags);
+ 	kfree(list);
 
 

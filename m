@@ -2,203 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DB15AA67E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6CA5AA693
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbiIBDoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S235324AbiIBDsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbiIBDoe (ORCPT
+        with ESMTP id S229514AbiIBDr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:44:34 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA0DB14F7;
-        Thu,  1 Sep 2022 20:44:33 -0700 (PDT)
+        Thu, 1 Sep 2022 23:47:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89126173C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:47:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662090273; x=1693626273;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=C/gK5CFl0zxoiSXqQYpADl/S8LUXR/EcUXhp0MfF+OQ=;
-  b=AT6QpP4ZYC4DSyzjoaLKhoX22woAvMmH6J/WYstX7y2xowho7fyOMRvl
-   AQFO9VuxeVXRTnHMI7zG1yfcUoqSGBDJ1O1WlgkPAvgCQ82ZqFm/QwIR1
-   gEKcwfzfEUavVgNOMkaczfBlwicu1HlRFSGX/C7krkSdHIEgqje2ojpGl
-   emxScfOBwUHgdKv9wVPhl5bzFOnhPvrmuth5Pa+ZaFLiGZ0Gr8qUVuc6J
-   zRnpfeOXuHmYZE5HrMQTztmGDZn/wE21SeqJz8CQ5vc9zrPo+RESdpu01
-   hiKry+odZkeQD/Wlzk3wkoVLVrjnDdZUxSIPJhzgefFTSGHbkIbBjsuGi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="359844931"
+  t=1662090475; x=1693626475;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7sucorTp1vQIxnnFSXOKgTXhFMZm2gZwRa+wCAfZt3g=;
+  b=S1znl32uWl2wqDSg8rLkqYoJJLDfRVT8G6rBHOgYOlEXm/v4lVttk7jc
+   uwWm/uiWYTNg4NvkNXyCvQJpI/LoUbWPh8Zn+TfOksdRQqzkDrJgVClsV
+   eXK202RShHqVg8/zehc5OGR7TlXdAe5KMWpnjv/s//NenNejfjx05cEt4
+   +dKrMX4aCaU4ZrPE7Ws9j5H0BlqwQ03kbXLusJULKNpsUML0jdqhQCnFn
+   8J3z4BCweFhmbAt2y8FFYz79oSMvUZGBYXvhNqAXEciKXLmzr3iZnYgjx
+   ttF5CtwGhwaG2zH0EjhwrOOvRK63SoaqMyK5aqzhoMh5U29lUpBRKrxWw
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="276287550"
 X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="359844931"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 20:44:33 -0700
+   d="scan'208";a="276287550"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 20:47:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="642733272"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga008.jf.intel.com with ESMTP; 01 Sep 2022 20:44:32 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 20:44:32 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 1 Sep 2022 20:44:32 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 1 Sep 2022 20:44:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cFlNcHT/2tE7a47UFnQfkrYBrOOAq8SlEyUOWuNwTcPUUF3HTzxrkpn+UaYQrv9xP83KHMASRXU6LKt7gpgYZOp85yZz9cINNiz6lnvyCOgZo3dQAswaPJ8JNlkeAmQLLTL7C/YM4iaCV2kcg1xPP/aacXJHSvNWO1VQAPF1m1aCJ0gkKKTIaEpX1nLRu+UNq+ILZTGTcxbry0V6qWhylCv4NyFUAF7GZPj9dQfTWD5b1xcGyz30K9z1pXEZCZ7du2PTZmZYZtAaq+w6UaEKP1JQQT0l0kElFs/c4h3Qyaj24sw8hSd4w4OUIGwPXTx5nd2qXew+8t74/u+u7Jb+0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0L0jxtXcp4vWP65Kt09I+k5f4f3FYkO+MOrbg+WmkTY=;
- b=F5/o3h6EeyUFy2ZIWXvjYlPsUxHu3dSFitguIDVtzzQsqcvlBXZsWA2Itni0XJe31KR0qVhSIhurjNwAA+ks887wVfwMLhggseQ9ib7MNkWk+YMzngTUqOg7h+UV9HnC14c6hquiMBQqIstLWSsq1Q5y6C0P+6kUB4ZyggI4u74XBTD84XLPmxUE9hqLBINONeAsXAKTItZuQDxIu5m3f3snibYf07ZB8LSb6kIImd/heDmrrmtdCRWjju2qvA+Gq8udKerU7+6c70mjNjsM2KbxrXk3LVfeL+hBLNorlFkS4JTrPeI6EQ/+D9vhdvdPtH9O4HHvvYq2i3lSJvtHIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
- by DM4PR11MB5280.namprd11.prod.outlook.com (2603:10b6:5:38b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Fri, 2 Sep
- 2022 03:44:31 +0000
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::ddb:2488:14dd:3751]) by PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::ddb:2488:14dd:3751%7]) with mapi id 15.20.5588.011; Fri, 2 Sep 2022
- 03:44:30 +0000
-Message-ID: <8b484c6e-915c-a7f6-d2a7-cf80ff67b63e@intel.com>
-Date:   Fri, 2 Sep 2022 11:44:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 00/15] Introduce Architectural LBR for vPMU
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220831223438.413090-1-weijiang.yang@intel.com>
- <YxDAa6sV1CUyGpoN@google.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <YxDAa6sV1CUyGpoN@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SGBP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::27)
- To PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
+   d="scan'208";a="589881735"
+Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Sep 2022 20:47:53 -0700
+Received: from kbuild by fccc941c3034 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oTxeq-00005t-2X;
+        Fri, 02 Sep 2022 03:47:52 +0000
+Date:   Fri, 2 Sep 2022 11:47:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Srivatsa Vaddagiri <vatsa@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Chris Redpath <chris.redpath@arm.com>
+Subject: [jsarha:topic/cros-sof-v4.14-rebase 1458/9999]
+ include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no
+ member named 'my_q'
+Message-ID: <202209021116.DszurHSD-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c6d1d236-f4c2-4d92-3959-08da8c957170
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5280:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KhsbSFiyndULBuzUtUagP1Wd9jQ619rwoIXbymczgyCo3UAcdF9rFqXRGaIdYE5rHfLKrsNbUNlHEXYmfvJeHvZlIHOefrPCFH3rd5UkHnbOJcVNifqJj9oOVGf6Y1QvuLrcZ0kf8YModB9+QZpo6+wF4wLa0Rv+Pf70KyFbaAZCI4i/sTsuI1xATSpyr65N5IrKymfzOD/DvV9ra2X+E3v7cv3OuEJiSbMUmjuOxiobps4DPdnQYtBpb7y8gdbuU7wBcGbxblFsEEHCiiMD94RtzEipOacMdZexRcQ4v2NMfUclNIDTMzddy53D/kUislqLESHcwwa5IhFOxywiEijVPJMY+k4HsVoYj0RLXxCTiQ0Oj2i6SROeu5eptTXkiuubD4RDiz1489/pp5WlZLe6TjSAtxaq0TsGCWnF3a9gB0/Clf58IO49yIDGmCd8fT7AzZ9pxymvsDPj0Bx28Pm1Elc3guQrSXMomZBISer/xjmKCpWZST/QocxiJTlPph/Jw2t5bDcqztwF3i2uY85LWIB3bqU7klyvnAECABnZd6QR/bLhZb1prw8uUwIhrDRkqAKlZv+AFNpWN15f910T+ftW72tauR4cQ8OA7pWeWAA7b0ifMh7Cs0HoNdjiVPprkwONpLx/D5noYtB2uk+0H+sZ+gHbhhzlgw94v6tv+CdkLn4/2w+bCDXfVoWHxQQIKULwx3D2IRNI3/E9ola/rlzyw2Bc5qNnfYYJE8Nvy0EwftS8tx0ZQdkYoql5ucjsCknd6pha1vNDugCq0Yyof+KS9m+PGc+UBPcGmxU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(136003)(346002)(396003)(366004)(83380400001)(82960400001)(31696002)(38100700002)(66946007)(66556008)(66476007)(8676002)(4326008)(54906003)(316002)(6916009)(2906002)(8936002)(5660300002)(6506007)(53546011)(6512007)(26005)(186003)(2616005)(41300700001)(6666004)(478600001)(6486002)(86362001)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QXpkaERSQ1YreGJqcFZZVUlzamNFNDdDdlNScTRlTFcwaGw4SExwWXdhakFC?=
- =?utf-8?B?ay9aM0RrZnAxd2Vaa0dlT3M3T2cyZXZkbGxuQXY0cUNNTHlKSnhkWjM2MHF5?=
- =?utf-8?B?WThmQzBzOThKc0JxenZPWnZMS3l3SUFzSC9pVENISDcyWjZYMzZMUWhTUVI2?=
- =?utf-8?B?eHBaeUJvVmEzN1NQUzVVbFBUeWFqSzFFVG1LQWwyL3FEK1hhekpPL2xIN0xl?=
- =?utf-8?B?SDVmbndrTVpyYmhtMjRHUERRNTVPcGw4UDBjQ1JhWmVGaUpPaGFGdlNGWVJ0?=
- =?utf-8?B?bFJtQXgvRlJBcVZvaG5GN2ZnWUZ6ejRpVmpmdnVtd0R6aWQ1NnNyVnN4NFJs?=
- =?utf-8?B?cnZmU0FQTGdNQ2psNmNzTmtRcG5QRmRHMXBDTGhBNUJTZmVGdzBZMFFUM3Ba?=
- =?utf-8?B?UmRTU0Y0RXlGRnliVlR0U25RSHRmQ0ZuUlJVRWNnZXdtUXlnSzI0eHVSSkNB?=
- =?utf-8?B?djBRQzU4eFp6UGF0ZEQrSG9qTWk3c1ZsSlNFc1grSzk3aFlhZ0tCODBEMEFm?=
- =?utf-8?B?aHVPNGhvQVdnVjZTVmhSY0ZCRDNBNEdlR25iMUFkTStiMTcxc01uVnRyMFI0?=
- =?utf-8?B?bFlTWmNZL1dRNVp5MHZtbm1GdVlMa0JBbHJXRkxGb2FUeTl2Z0pKLzM3S2hD?=
- =?utf-8?B?SzZTUGV2VEY2MTcrQ0NrN0ZqRkVkbVgrTmhqMzBQV2x3ZTBXbCtoZmRRR25W?=
- =?utf-8?B?M1FtMFNHVTE0YnJEenFXVlZPN2xKWGhyVDlCWEF4VVA1ZHdSUjRHWUtWcXp2?=
- =?utf-8?B?Mm02TFlXNUt1bFI3Mmt3N25xYStLS1Vpdmw5cWZJMHl4Y1B5aGpnWm8xQTZV?=
- =?utf-8?B?ZXVCdkZDWVlucUttK0owVGt3VXJQUWd4TGNVY0FCRFRURVpvU0lYdEQ5NHM0?=
- =?utf-8?B?TEZBOWFJNWIweUdVVC9KbXJQemRqZC9tVDhJTzY3clpRYWQyNmYvYUFiOS81?=
- =?utf-8?B?L1gxdjYrNFREaXFYc09HR0J1bU8veTZKTnpDM2I5UlRoZlM1QWxrWmI2bXlo?=
- =?utf-8?B?aTBFTUw3aWhlalg1VDNUcEFPTWIyOVJmRWVBdURINGRIZGxKa3RuUVJpNjZk?=
- =?utf-8?B?dFdjZnpwYjdqWHA0RTFoelNNS28zUHhVTnFKWGR0VjNRZnhWK3VmWjdGcm1t?=
- =?utf-8?B?TDcvTzZIRUMzRStDVXBmWENGZ1R3ZG9YeFlLZWdqdzlCNmRhcFRuUndzRkY3?=
- =?utf-8?B?d0ZCN2JDMjVyN1VTZk82UGtHM2x6MjRkUHc5TjZkak1mN0dIS0dTbXF6YVFy?=
- =?utf-8?B?RytFblg3WTVPcGlTcGk0U1NIYnU3ektGWDEwdnIwcGFFS2NrRW9CY2dwM2JD?=
- =?utf-8?B?cFBDQ0xCYjdyZHdTVmh0azhleXJtWDk5Qk9SalMwQm5QNVhaVjhoSi9SbVQ1?=
- =?utf-8?B?aDRWd3FUWEhDbnVTMjNsZkZtQUt3VkpWQ2xoMjBiUHR6YityUDNOajc5NUQ1?=
- =?utf-8?B?MWt4aUo3a1cwM2VGOHVja1JHQjRVZG55eVo4T0pqdUpOL3ZCb3B5ck55d1A0?=
- =?utf-8?B?Zzh6bHZoY0oycnFnN0tsbGxRa2xqYlNRNmxVMWpKVnFkVnIxekFva0N3NnNp?=
- =?utf-8?B?Q0d2d1NxOTAwVTBmOWg2TkNLSlRjTzlrRTg4YTJ0c0xycmNsYm1WRzVRK2Iv?=
- =?utf-8?B?Y2ZPVW5TWTZ1dzc0L0U4bHhoMG9ZTmtHWm0xMWZoL251M3c2ekR5NnN6QUFU?=
- =?utf-8?B?OWFYUGtqcDA2bm01TmQ0SkRxVFVHbUlad1hqbWVlOUF0NGp4bjJvbzB1T2Z6?=
- =?utf-8?B?T29jc1V0V292WmtTYnJwdmJTeVdRMElUdllvdDBscGJvc2ZNZU1YMU1XUStZ?=
- =?utf-8?B?dEErcG1xWVl1cDdWQ1VDUklTQ0JXWDdhRTBCNHpvNTdyaUFMSjRtREZmRlVU?=
- =?utf-8?B?VVh0Q2VJQXBNeXV1cVZxamUxb1hpRzV3eURwTm41dEZUdk42S2NlZFZHditZ?=
- =?utf-8?B?dmJ6aERzRlA4U2gzN0VvUStmQlgvWGM1Qzd0MmxKS0dEUk5lcG93Y09LME1u?=
- =?utf-8?B?cnNIZlBqSGxMbFBvU3NGc0JpUkNMNU10WklJaUxBdFV3bE5mYUY2NWxTbk82?=
- =?utf-8?B?dWc5RzZRdk1SRjc2YzVqUmN5M3c1Q1dpM1pUdE1KK2xycTNGOGVJNk9ueW1m?=
- =?utf-8?B?OGVuWXp3d3NVV1ljd3dIZzlURHZoTzZIOE9DMGp1MjNFZWd5Mm1GWGhZeHZS?=
- =?utf-8?B?bFE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6d1d236-f4c2-4d92-3959-08da8c957170
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4965.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2022 03:44:30.8479
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VeaGlqOJCSckTiJS0+XlL0k3aSlqvp52KY/02D8wn3mtLprln5ISSPdYoHQ78iImeqi3UZiFW/O5EFc5PtmZnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5280
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/jsarha/linux topic/cros-sof-v4.14-rebase
+head:   18a233f3f676a98dde00947535d99ab1a54da340
+commit: 77f68474fcca7a861a745c4dc1ffd488d17797a5 [1458/9999] ANDROID: sched: Introduce Window Assisted Load Tracking (WALT)
+config: sparc64-randconfig-c042-20220901 (https://download.01.org/0day-ci/archive/20220902/202209021116.DszurHSD-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 7.5.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jsarha/linux/commit/77f68474fcca7a861a745c4dc1ffd488d17797a5
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/cros-sof-v4.14-rebase
+        git checkout 77f68474fcca7a861a745c4dc1ffd488d17797a5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash arch/sparc/mm/ kernel/sched/
 
-On 9/1/2022 10:23 PM, Sean Christopherson wrote:
-> On Wed, Aug 31, 2022, Yang Weijiang wrote:
->> The old patch series was queued in KVM/queue for a while and finally
->> moved to below branch after Paolo's refactor. This new patch set is
->> built on top of Paolo's work + some fixes, it's tested on legacy platform
-> Please elaborate on what was broken, i.e. why this was de-queued, as well as on
-> what was fixed an dhow.  That will help bring me up to speed and expedite review.
-Thanks Sean!
-The de-queued reason I read from community is, the PEBS and Arch-LBR 
-patches broke
-selftest/KUTs due to host-initiated 0 writes to PMU msrs. Paolo tried to 
-fix it but you
-didn't agree on the solution. Plus your comments below:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/sparc/mm/init_64.c: In function 'setup_hugepagesz':
+   arch/sparc/mm/init_64.c:368:17: error: variable 'hv_pgsz_idx' set but not used [-Werror=unused-but-set-variable]
+     unsigned short hv_pgsz_idx;
+                    ^~~~~~~~~~~
+   arch/sparc/mm/init_64.c: At top level:
+>> arch/sparc/mm/init_64.c:2685:6: error: no previous declaration for 'vmemmap_free' [-Werror=missing-declarations]
+    void vmemmap_free(unsigned long start, unsigned long end)
+         ^~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+   In file included from include/linux/cpuset.h:13:0,
+                    from kernel/sched/core.c:14:
+   include/linux/sched/topology.h:196:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+    const struct sched_group_energy * const(*sched_domain_energy_f)(int cpu);
+    ^~~~~
+   In file included from kernel/sched/core.c:36:0:
+   kernel/sched/sched.h:1127:34: warning: duplicate 'const' declaration specifier [-Wduplicate-decl-specifier]
+     const struct sched_group_energy const *sge;
+                                     ^~~~~
+   In file included from include/trace/define_trace.h:96:0,
+                    from include/trace/events/sched.h:1171,
+                    from kernel/sched/core.c:41:
+   include/trace/events/sched.h: In function 'trace_event_raw_event_sched_load_se':
+>> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
+      if (!se->my_q) {
+             ^
+   include/trace/trace_events.h:719:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
+     { assign; }       \
+       ^~~~~~
+   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
+            PARAMS(assign),         \
+            ^~~~~~
+   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
+    TRACE_EVENT(sched_load_se,
+    ^~~~~~~~~~~
+   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
+     TP_fast_assign(
+     ^~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
+    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
+                          ^~~~~~~~~~
+   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
+      if (!se->my_q) {
+      ^~
+>> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
+      if (!se->my_q) {
+             ^
+   include/trace/trace_events.h:719:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
+     { assign; }       \
+       ^~~~~~
+   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
+            PARAMS(assign),         \
+            ^~~~~~
+   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
+    TRACE_EVENT(sched_load_se,
+    ^~~~~~~~~~~
+   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
+     TP_fast_assign(
+     ^~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
+    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
+                          ^~~~~~~~~~
+   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
+      if (!se->my_q) {
+      ^~
+>> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
+      if (!se->my_q) {
+             ^
+   include/trace/trace_events.h:719:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
+     { assign; }       \
+       ^~~~~~
+   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
+            PARAMS(assign),         \
+            ^~~~~~
+   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
+    TRACE_EVENT(sched_load_se,
+    ^~~~~~~~~~~
+   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
+     TP_fast_assign(
+     ^~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
+    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
+                          ^~~~~~~~~~
+   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
+      if (!se->my_q) {
+      ^~
+   In file included from include/trace/define_trace.h:97:0,
+                    from include/trace/events/sched.h:1171,
+                    from kernel/sched/core.c:41:
+   include/trace/events/sched.h: In function 'perf_trace_sched_load_se':
+>> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
+      if (!se->my_q) {
+             ^
+   include/trace/perf.h:66:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
+     { assign; }       \
+       ^~~~~~
+   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
+            PARAMS(assign),         \
+            ^~~~~~
+   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
+    TRACE_EVENT(sched_load_se,
+    ^~~~~~~~~~~
+   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
+     TP_fast_assign(
+     ^~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
+    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
+                          ^~~~~~~~~~
+   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
+      if (!se->my_q) {
+      ^~
+>> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
+      if (!se->my_q) {
+             ^
+   include/trace/perf.h:66:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
+     { assign; }       \
+       ^~~~~~
+   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
+            PARAMS(assign),         \
+            ^~~~~~
+   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
+    TRACE_EVENT(sched_load_se,
+    ^~~~~~~~~~~
+   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
+     TP_fast_assign(
+     ^~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
+    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
+                          ^~~~~~~~~~
+   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
+      if (!se->my_q) {
+      ^~
+>> include/trace/events/sched.h:778:10: error: 'struct sched_entity' has no member named 'my_q'
+      if (!se->my_q) {
+             ^
+   include/trace/perf.h:66:4: note: in definition of macro 'DECLARE_EVENT_CLASS'
+     { assign; }       \
+       ^~~~~~
+   include/trace/trace_events.h:78:9: note: in expansion of macro 'PARAMS'
+            PARAMS(assign),         \
+            ^~~~~~
+   include/trace/events/sched.h:745:1: note: in expansion of macro 'TRACE_EVENT'
+    TRACE_EVENT(sched_load_se,
+    ^~~~~~~~~~~
+   include/trace/events/sched.h:763:2: note: in expansion of macro 'TP_fast_assign'
+     TP_fast_assign(
+     ^~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
+    #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
+                          ^~~~~~~~~~
+   include/trace/events/sched.h:778:3: note: in expansion of macro 'if'
+      if (!se->my_q) {
+      ^~
+   kernel/sched/core.c: At top level:
+   kernel/sched/core.c:1303:5: warning: no previous declaration for 'migrate_swap' [-Wmissing-declarations]
+    int migrate_swap(struct task_struct *cur, struct task_struct *p)
+        ^~~~~~~~~~~~
+   kernel/sched/core.c:1599:6: warning: no previous declaration for 'sched_set_stop_task' [-Wmissing-declarations]
+    void sched_set_stop_task(int cpu, struct task_struct *stop)
+         ^~~~~~~~~~~~~~~~~~~
+   kernel/sched/core.c:3657:35: warning: no previous declaration for 'preempt_schedule_irq' [-Wmissing-declarations]
+    asmlinkage __visible void __sched preempt_schedule_irq(void)
+                                      ^~~~~~~~~~~~~~~~~~~~
+   kernel/sched/core.c: In function 'sched_init':
+   kernel/sched/core.c:5858:32: warning: variable 'ptr' set but not used [-Wunused-but-set-variable]
+     unsigned long alloc_size = 0, ptr;
+                                   ^~~
 
 
-On 6/1/2022 4:54 PM, Paolo Bonzini wrote:
- > On 5/31/22 20:37, Sean Christopherson wrote:
- >> Can we just punt this out of kvm/queue until its been properly reviewed?
- > Yes, I agree.  I have started making some changes and pushed the
- > result to kvm/arch-lbr-for-weijiang.
+vim +778 include/trace/events/sched.h
 
-What are fixed in this series:
+   746	
+   747		TP_PROTO(struct sched_entity *se),
+   748	
+   749		TP_ARGS(se),
+   750	
+   751		TP_STRUCT__entry(
+   752			__field(	int,		cpu			      )
+   753			__dynamic_array(char,		path,
+   754			  __trace_sched_path(__trace_sched_group_cfs_rq(se), NULL, 0) )
+   755			__array(	char,		comm,	TASK_COMM_LEN	      )
+   756			__field(	pid_t,		pid			      )
+   757			__field(	unsigned long,	load			      )
+   758			__field(	unsigned long,	util			      )
+   759			__field(	unsigned long,	util_pelt		      )
+   760			__field(	unsigned long,	util_walt		      )
+   761		),
+   762	
+   763		TP_fast_assign(
+   764			struct cfs_rq *gcfs_rq = __trace_sched_group_cfs_rq(se);
+   765			struct task_struct *p = gcfs_rq ? NULL
+   766					    : container_of(se, struct task_struct, se);
+   767	
+   768			__entry->cpu = __trace_sched_cpu(gcfs_rq, se);
+   769			__trace_sched_path(gcfs_rq, __get_dynamic_array(path),
+   770					   __get_dynamic_array_len(path));
+   771			memcpy(__entry->comm, p ? p->comm : "(null)", TASK_COMM_LEN);
+   772			__entry->pid = p ? p->pid : -1;
+   773			__entry->load = se->avg.load_avg;
+   774			__entry->util = se->avg.util_avg;
+   775			__entry->util_pelt  = __entry->util;
+   776			__entry->util_walt  = 0;
+   777	#ifdef CONFIG_SCHED_WALT
+ > 778			if (!se->my_q) {
+   779				struct task_struct *p = container_of(se, struct task_struct, se);
+   780				__entry->util_walt = p->ravg.demand;
+   781				do_div(__entry->util_walt, walt_ravg_window >> SCHED_CAPACITY_SHIFT);
+   782				if (!walt_disabled && sysctl_sched_use_walt_task_util)
+   783					__entry->util = __entry->util_walt;
+   784			}
+   785	#endif
+   786		),
+   787	
+   788		TP_printk("cpu=%d path=%s comm=%s pid=%d load=%lu util=%lu util_pelt=%lu util_walt=%lu",
+   789			  __entry->cpu, __get_str(path), __entry->comm,
+   790			  __entry->pid, __entry->load, __entry->util,
+   791			  __entry->util_pelt, __entry->util_walt)
+   792	);
+   793	
 
-1.  An missing of -1: if ((entry->eax & 0xff) != (1 << (depth_bit - 1)))
-
-2.  Removed exit bit check in  cpu_has_vmx_arch_lbr(void), moved it to 
-setup_vmcs_config().
-
-3.  A redundant check kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) in 
-kvm_check_cpuid().
-
-4.  KUT/selftest failures due to lack of MSR_ARCH_LBR_CTL and 
-MSR_ARCH_LBR_DEPTH in kvm_set_msr_common() before validate pmu msrs.
-
-5.  Calltrace in L1 when L1 tried to vmcs_write64(GUEST_IA32_LBR_CTL, 0) 
-in vmx_vcpu_reset(), use cpu_has_vmx_arch_lbr() instead.
-
-6.  Removed VM_ENTRY_LOAD_IA32_LBR_CTL and VM_EXIT_CLEAR_IA32_LBR_CTL 
-from exec_control in nested case.
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

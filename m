@@ -2,501 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EDA5AB975
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7585AB973
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiIBU0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 16:26:34 -0400
+        id S230299AbiIBU0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 16:26:17 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiIBU0Q (ORCPT
+        with ESMTP id S229837AbiIBUZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 16:26:16 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CD16BD47
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tzbu7sLuKXzdICR1gMr0lrJCZCH1MKqo5IZYOohdmUo=; b=Thlrue0+8MvOnBs97u1tOohoeS
-        RAzAWHs2tMyYgV2OlNxwwX9EDl/1YO45k4sCEw8gzjBxYqbKM/oDxjJilee8qSjVvNpyUFHJ7CpFi
-        GalFKbLzsjuqf5w4yLHcxp15LZthl7HQBsRVs/r8uNVKgVZ98k7qQlXdMVFH0ojVzWkjddlEVpnh9
-        G41jXgfO7hNxlxI93H0KfwtW7KdxjJC4roEpBiSOHM9dy/87NvL2Hi6S8oybY6rsSWpKGwneClECv
-        ISgm42NI2yJWN7qgbGaCTG9xvbnqih3lLSju5EiufG3CwCj8WK+NsQ7qqzPs/D+g9SOkQqjSTjwrK
-        xRLUqGwQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oUDDD-008kpg-6A; Fri, 02 Sep 2022 20:24:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A6F4E300244;
-        Fri,  2 Sep 2022 22:24:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8B4F82B907AB4; Fri,  2 Sep 2022 22:24:20 +0200 (CEST)
-Date:   Fri, 2 Sep 2022 22:24:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v2 37/59] x86/putuser: Provide room for padding
-Message-ID: <YxJmdG9Ug7euJdZS@hirez.programming.kicks-ass.net>
-References: <20220902130625.217071627@infradead.org>
- <20220902130950.205726504@infradead.org>
- <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
- <YxI3Zf5drSHAkBL3@hirez.programming.kicks-ass.net>
+        Fri, 2 Sep 2022 16:25:49 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA11847BBB;
+        Fri,  2 Sep 2022 13:24:55 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id d18-20020a9d72d2000000b0063934f06268so2238899otk.0;
+        Fri, 02 Sep 2022 13:24:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=vG1MH2rrlY6mMv1XGgUJJpIJquW5QeziZABMxlN3xC4=;
+        b=I0nKsuEwuAGcito5pqYih3dFJ5Ir4r8ka6a1mV2xfW7/dxqyEX39vyCMX4DfgVvUHY
+         k0AuHNnpkBxAGDGGSc+X7A2caZUb3wA71mMnINkPmIHko0yyZbHaA9SerVwr/+LzhsPp
+         OsQnWMoeu0XiWaQeK6PftBEHrAlQBJEo3eDGgjRqG8G/UCn9ldZwML9Njz+MRfLxZctV
+         5mZ3j79Iv212xUCl4uMYDwsL+1X5AwfSjFBlWTphSGvzXucdkvOTW/cpDOno5RADfW6b
+         DTtNs3pMmWzI7JOglolRoLcUxaxCEkgA3CGK2fTarIYwHoBB8SAvsJNOFpCHfdbBY3MZ
+         t3HA==
+X-Gm-Message-State: ACgBeo2LfNxkih5ZKQngMpidnlXFwh1k2QuCzMBAT0tld9IvKUCdjVYI
+        X0nDNmG7hwfazll0duR2PA==
+X-Google-Smtp-Source: AA6agR7j18abGexrPaOq6Gma7XiT7wWZCvt7uenJRmbxJXX/gI5+T+rjmp1NK+HLW70suMrOSEvcyQ==
+X-Received: by 2002:a9d:6853:0:b0:639:2702:bad9 with SMTP id c19-20020a9d6853000000b006392702bad9mr15414876oto.88.1662150294939;
+        Fri, 02 Sep 2022 13:24:54 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h16-20020a4abb90000000b0044584998c9asm1000814oop.38.2022.09.02.13.24.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 13:24:54 -0700 (PDT)
+Received: (nullmailer pid 354649 invoked by uid 1000);
+        Fri, 02 Sep 2022 20:24:53 -0000
+Date:   Fri, 2 Sep 2022 15:24:53 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Jian-Jia Su <jjsu@google.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/4] dt-bindings: memory: Add jedec,lpddr4 and
+ jedec,lpddr5 bindings
+Message-ID: <20220902202453.GA338977-robh@kernel.org>
+References: <20220831013359.1807905-1-jwerner@chromium.org>
+ <20220831013359.1807905-4-jwerner@chromium.org>
+ <983c1224-8174-3534-a276-d1ab1f9968a4@linaro.org>
+ <CAODwPW_70kdn4XTCs_vhbWwjEXS8E8zC9MTa6-szb5SayvcSag@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxI3Zf5drSHAkBL3@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAODwPW_70kdn4XTCs_vhbWwjEXS8E8zC9MTa6-szb5SayvcSag@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 07:03:33PM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 02, 2022 at 09:43:45AM -0700, Linus Torvalds wrote:
-> > So I don't hate this patch and it's probably good for consistency, but
-> > I really think that the retbleed tracking could perhaps be improved to
-> > let this be all unnecessary.
-> > 
-> > The whole return stack depth counting is already not 100% exact, and I
-> > think we could just make the rule be that we don't track leaf
-> > functions.
-> > 
-> > Why? It's just a off-by-one in the already not exact tracking. And -
-> > perhaps equally importantly - leaf functions are very very common
-> > dynamically, and I suspect it's trivial to see them.
-> > 
-> > Yes, yes, you could make objtool even smarter and actually do some
-> > kind of function flow graph thing (and I think some people were
-> > talking about that with the whole ret counting long long ago), but the
-> > leaf function thing is the really simple low-hanging fruit case of
-> > that.
+On Wed, Aug 31, 2022 at 06:10:51PM -0700, Julius Werner wrote:
+> > > diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+> > > index 0c7d2feafd77c8..e1182e75ca1a3f 100644
+> > > --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+> > > +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+> > > @@ -53,9 +53,13 @@ properties:
+> > >        - 512
+> > >        - 1024
+> > >        - 2048
+> > > +      - 3072
+> > >        - 4096
+> > > +      - 6144
+> > >        - 8192
+> > > +      - 12288
+> > >        - 16384
+> > > +      - 24576
+> > >        - 32768
+> >
+> > Either you limit now LPDDR2 and LPDDR3 to old values or instead add this
+> > bigger list to LPDDR4 and LPDDR5 (if it works that way).
 > 
-> So I did the leaf thing a few weeks ago, and at the time the perf gains
-> where not worth the complexity.
+> The problem is that each spec has its own set of valid values, e.g.
+> LPDDR3 only defines 4GB, 8GB, 16GB and 32GB, and then LPDDR4 inserted
+> the 6GB, 12GB and 24GB options in between there. I don't think there's
+> a way to exactly describe the valid values for each version without
+> having a whole separate enum list for each. Do you think checking for
+> that is important enough to be worth having all that extra duplication
+> between the schemas? I don't think it adds that much (e.g. a value for
+> an individual memory part can still be wrong even if it is one of the
+> valid values for that type, so how much use is this validation
+> anyway?), but I can split it out if you want to.
+
+I tend to agree with you that it isn't worth the complexity.
+
+
+> > > +  serial-id:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > > +    description:
+> > > +      Serial IDs read from Mode Registers 47 through 54. One byte per uint32
+> > > +      cell (i.e. <MR47 MR48 MR49 MR50 MR51 MR52 MR53 MR54>).
+> > > +    minItems: 8
+> >
+> > No need for minItems.
 > 
-> I can try again :-)
+> Can you explain why? I'm okay with taking these out, but it is a real
+> constraint so I'm not sure why we shouldn't be describing it here?
+> (The serial ID always has exactly 8 bytes, an ID with less than 8
+> would not be valid and probably a typo.)
 
-The below (mashup of a handful of patches) is the best I could come up
-with in a hurry.
+Because if minItems is not specified, then it defaults to same as 
+maxItems value. This is a departure from json-schema, but we almost 
+always need a fixed number here and I didn't want to be specifying 
+minItems/maxItems everywhere. We really need a 'numItems' or something.
 
-Specifically, the approach taken is that instead of the 10 byte sarq for
-accounting a leaf has a 10 byte NOP in front of it. When this 'leaf'-nop
-is found, the return thunk is also not used and a regular 'ret'
-instruction is patched in.
-
-Direct calls to leaf functions are unmodified; they still go to +0.
-
-However, indirect call will unconditionally jump to -10. These will then
-either hit the sarq or the fancy nop
-
-Seems to boot in kvm (defconfig+kvm_guest.config)
-
-That is; the thing you complained about isn't actually 'fixed', leaf
-functions still need their padding.
-
-If this patch makes you feel warm and fuzzy, I can clean it up,
-otherwise I would suggest getting the stuff we have merged before adding
-even more things on top.
-
-I'll see if I get time to clean up the alignment thing this weekend,
-otherwise it'll have to wait till next week or so.
-
----
- arch/x86/include/asm/alternative.h  |    7 ++
- arch/x86/kernel/alternative.c       |   11 ++++
- arch/x86/kernel/callthunks.c        |   51 +++++++++++++++++++
- arch/x86/kernel/cpu/bugs.c          |    2 
- arch/x86/kernel/module.c            |    8 ++-
- arch/x86/kernel/vmlinux.lds.S       |    7 ++
- arch/x86/lib/retpoline.S            |   11 +---
- tools/objtool/check.c               |   95 ++++++++++++++++++++++++++++++++++++
- tools/objtool/include/objtool/elf.h |    2 
- 9 files changed, 186 insertions(+), 8 deletions(-)
-
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -94,6 +94,8 @@ extern void callthunks_patch_module_call
- extern void *callthunks_translate_call_dest(void *dest);
- extern bool is_callthunk(void *addr);
- extern int x86_call_depth_emit_accounting(u8 **pprog, void *func);
-+extern void apply_leafs(s32 *start, s32 *end);
-+extern bool is_leaf_function(void *addr);
- #else
- static __always_inline void callthunks_patch_builtin_calls(void) {}
- static __always_inline void
-@@ -112,6 +114,11 @@ static __always_inline int x86_call_dept
- {
- 	return 0;
- }
-+static __always_inline void apply_leafs(s32 *start, s32 *end) {}
-+static __always_inline bool is_leaf_function(void *addr)
-+{
-+	return false;
-+}
- #endif
- 
- #ifdef CONFIG_SMP
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -114,6 +114,7 @@ static void __init_or_module add_nops(vo
- 	}
- }
- 
-+extern s32 __leaf_sites[], __leaf_sites_end[];
- extern s32 __retpoline_sites[], __retpoline_sites_end[];
- extern s32 __return_sites[], __return_sites_end[];
- extern s32 __ibt_endbr_seal[], __ibt_endbr_seal_end[];
-@@ -586,9 +587,14 @@ static int patch_return(void *addr, stru
- 		if (x86_return_thunk == __x86_return_thunk)
- 			return -1;
- 
-+		if (x86_return_thunk == __x86_return_skl &&
-+		    is_leaf_function(addr))
-+			goto plain_ret;
-+
- 		i = JMP32_INSN_SIZE;
- 		__text_gen_insn(bytes, JMP32_INSN_OPCODE, addr, x86_return_thunk, i);
- 	} else {
-+plain_ret:
- 		bytes[i++] = RET_INSN_OPCODE;
- 	}
- 
-@@ -988,6 +994,11 @@ void __init alternative_instructions(voi
- 	apply_paravirt(__parainstructions, __parainstructions_end);
- 
- 	/*
-+	 * Mark the leaf sites; this affects apply_returns() and callthunks_patch*().
-+	 */
-+	apply_leafs(__leaf_sites, __leaf_sites_end);
-+
-+	/*
- 	 * Rewrite the retpolines, must be done before alternatives since
- 	 * those can rewrite the retpoline thunks.
- 	 */
---- a/arch/x86/kernel/callthunks.c
-+++ b/arch/x86/kernel/callthunks.c
-@@ -181,6 +181,54 @@ static const u8 nops[] = {
- 	0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
- };
- 
-+/*
-+ * 10 byte nop that spells 'leaf' in the immediate.
-+ */
-+static const u8 leaf_nop[] = {            /* 'l',  'e',  'a',  'f' */
-+	0x2e, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x6c, 0x65, 0x61, 0x66,
-+};
-+
-+void __init_or_module noinline apply_leafs(s32 *start, s32 *end)
-+{
-+	u8 buffer[16];
-+	s32 *s;
-+
-+	for (s = start; s < end; s++) {
-+		void *addr = (void *)s + *s;
-+
-+		if (skip_addr(addr))
-+			continue;
-+
-+		if (copy_from_kernel_nofault(buffer, addr-10, 10))
-+			continue;
-+
-+		/* already patched */
-+		if (!memcmp(buffer, leaf_nop, 10))
-+			continue;
-+
-+		if (memcmp(buffer, nops, 10)) {
-+			pr_warn("Not NOPs: %pS %px %*ph\n", addr, addr, 10, addr);
-+			continue;
-+		}
-+
-+		text_poke_early(addr-10, leaf_nop, 10);
-+	}
-+}
-+
-+bool is_leaf_function(void *addr)
-+{
-+	unsigned long size, offset;
-+	u8 buffer[10];
-+
-+	if (kallsyms_lookup_size_offset((unsigned long)addr, &size, &offset))
-+		addr -= offset;
-+
-+	if (copy_from_kernel_nofault(buffer, addr-10, 10))
-+		return false;
-+
-+	return memcmp(buffer, leaf_nop, 10) == 0;
-+}
-+
- static __init_or_module void *patch_dest(void *dest, bool direct)
- {
- 	unsigned int tsize = SKL_TMPL_SIZE;
-@@ -190,6 +238,9 @@ static __init_or_module void *patch_dest
- 	if (!bcmp(pad, skl_call_thunk_template, tsize))
- 		return pad;
- 
-+	if (!bcmp(pad, leaf_nop, tsize))
-+		return dest;
-+
- 	/* Ensure there are nops */
- 	if (bcmp(pad, nops, tsize)) {
- 		pr_warn_once("Invalid padding area for %pS\n", dest);
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -838,6 +838,8 @@ static int __init retbleed_parse_cmdline
- 			retbleed_cmd = RETBLEED_CMD_STUFF;
- 		} else if (!strcmp(str, "nosmt")) {
- 			retbleed_nosmt = true;
-+		} else if (!strcmp(str, "force")) {
-+			setup_force_cpu_bug(X86_BUG_RETBLEED);
- 		} else {
- 			pr_err("Ignoring unknown retbleed option (%s).", str);
- 		}
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -253,7 +253,7 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		    struct module *me)
- {
- 	const Elf_Shdr *s, *text = NULL, *alt = NULL, *locks = NULL,
--		*para = NULL, *orc = NULL, *orc_ip = NULL,
-+		*para = NULL, *orc = NULL, *orc_ip = NULL, *leafs = NULL,
- 		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL,
- 		*calls = NULL;
- 	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
-@@ -271,6 +271,8 @@ int module_finalize(const Elf_Ehdr *hdr,
- 			orc = s;
- 		if (!strcmp(".orc_unwind_ip", secstrings + s->sh_name))
- 			orc_ip = s;
-+		if (!strcmp(".leaf_sites", secstrings + s->sh_name))
-+			leafs = s;
- 		if (!strcmp(".retpoline_sites", secstrings + s->sh_name))
- 			retpolines = s;
- 		if (!strcmp(".return_sites", secstrings + s->sh_name))
-@@ -289,6 +291,10 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		void *pseg = (void *)para->sh_addr;
- 		apply_paravirt(pseg, pseg + para->sh_size);
- 	}
-+	if (leafs) {
-+		void *rseg = (void *)leafs->sh_addr;
-+		apply_leafs(rseg, rseg + leafs->sh_size);
-+	}
- 	if (retpolines) {
- 		void *rseg = (void *)retpolines->sh_addr;
- 		apply_retpolines(rseg, rseg + retpolines->sh_size);
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -298,6 +298,13 @@ SECTIONS
- 		*(.call_sites)
- 		__call_sites_end = .;
- 	}
-+
-+	. = ALIGN(8);
-+	.leaf_sites : AT(ADDR(.leaf_sites) - LOAD_OFFSET) {
-+		__leaf_sites = .;
-+		*(.leaf_sites)
-+		__leaf_sites_end = .;
-+	}
- #endif
- 
- #ifdef CONFIG_X86_KERNEL_IBT
---- a/arch/x86/lib/retpoline.S
-+++ b/arch/x86/lib/retpoline.S
-@@ -77,9 +77,9 @@ SYM_CODE_END(__x86_indirect_thunk_array)
- SYM_INNER_LABEL(__x86_indirect_call_thunk_\reg, SYM_L_GLOBAL)
- 	UNWIND_HINT_EMPTY
- 	ANNOTATE_NOENDBR
--
--	CALL_DEPTH_ACCOUNT
--	POLINE \reg
-+	sub	$10, %\reg
-+	POLINE	\reg
-+	add	$10, %\reg
- 	ANNOTATE_UNRET_SAFE
- 	ret
- 	int3
-@@ -216,10 +216,7 @@ SYM_FUNC_START(__x86_return_skl)
- 1:
- 	CALL_THUNKS_DEBUG_INC_STUFFS
- 	.rept	16
--	ANNOTATE_INTRA_FUNCTION_CALL
--	call	2f
--	int3
--2:
-+	__FILL_RETURN_SLOT
- 	.endr
- 	add	$(8*16), %rsp
- 
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -945,6 +945,74 @@ static int create_direct_call_sections(s
- 	return 0;
- }
- 
-+static int create_leaf_sites_sections(struct objtool_file *file)
-+{
-+	struct section *sec, *s;
-+	struct symbol *sym;
-+	unsigned int *loc;
-+	int idx;
-+
-+	sec = find_section_by_name(file->elf, ".leaf_sites");
-+	if (sec) {
-+		INIT_LIST_HEAD(&file->call_list);
-+		WARN("file already has .leaf_sites section, skipping");
-+		return 0;
-+	}
-+
-+	idx = 0;
-+	for_each_sec(file, s) {
-+		if (!s->text || s->init)
-+			continue;
-+
-+		list_for_each_entry(sym, &s->symbol_list, list) {
-+			if (sym->pfunc != sym)
-+				continue;
-+
-+			if (sym->static_call_tramp)
-+				continue;
-+
-+			if (!sym->leaf)
-+				continue;
-+
-+			idx++;
-+		}
-+	}
-+
-+	sec = elf_create_section(file->elf, ".leaf_sites", 0, sizeof(unsigned int), idx);
-+	if (!sec)
-+		return -1;
-+
-+	idx = 0;
-+	for_each_sec(file, s) {
-+		if (!s->text || s->init)
-+			continue;
-+
-+		list_for_each_entry(sym, &s->symbol_list, list) {
-+			if (sym->pfunc != sym)
-+				continue;
-+
-+			if (sym->static_call_tramp)
-+				continue;
-+
-+			if (!sym->leaf)
-+				continue;
-+
-+			loc = (unsigned int *)sec->data->d_buf + idx;
-+			memset(loc, 0, sizeof(unsigned int));
-+
-+			if (elf_add_reloc_to_insn(file->elf, sec,
-+						  idx * sizeof(unsigned int),
-+						  R_X86_64_PC32,
-+						  s, sym->offset))
-+				return -1;
-+
-+			idx++;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- /*
-  * Warnings shouldn't be reported for ignored functions.
-  */
-@@ -2362,6 +2430,9 @@ static int classify_symbols(struct objto
- 			if (!strcmp(func->name, "__fentry__"))
- 				func->fentry = true;
- 
-+			if (!strcmp(func->name, "__stack_chk_fail"))
-+				func->stack_chk = true;
-+
- 			if (is_profiling_func(func->name))
- 				func->profiling_func = true;
- 		}
-@@ -2492,6 +2563,16 @@ static bool is_fentry_call(struct instru
- 	return false;
- }
- 
-+static bool is_stack_chk_call(struct instruction *insn)
-+{
-+	if (insn->type == INSN_CALL &&
-+	    insn->call_dest &&
-+	    insn->call_dest->stack_chk)
-+		return true;
-+
-+	return false;
-+}
-+
- static bool has_modified_stack_frame(struct instruction *insn, struct insn_state *state)
- {
- 	struct cfi_state *cfi = &state->cfi;
-@@ -3269,6 +3350,9 @@ static int validate_call(struct objtool_
- 			 struct instruction *insn,
- 			 struct insn_state *state)
- {
-+	if (insn->func && !is_fentry_call(insn) && !is_stack_chk_call(insn))
-+		insn->func->leaf = 0;
-+
- 	if (state->noinstr && state->instr <= 0 &&
- 	    !noinstr_call_dest(file, insn, insn->call_dest)) {
- 		WARN_FUNC("call to %s() leaves .noinstr.text section",
-@@ -3973,6 +4057,12 @@ static int validate_section(struct objto
- 		init_insn_state(file, &state, sec);
- 		set_func_state(&state.cfi);
- 
-+		/*
-+		 * Asumme it is a leaf function; will be cleared for any CALL
-+		 * encountered while validating the branches.
-+		 */
-+		func->leaf = 1;
-+
- 		warnings += validate_symbol(file, sec, func, &state);
- 	}
- 
-@@ -4358,6 +4448,11 @@ int check(struct objtool_file *file)
- 		if (ret < 0)
- 			goto out;
- 		warnings += ret;
-+
-+		ret = create_leaf_sites_sections(file);
-+		if (ret < 0)
-+			goto out;
-+		warnings += ret;
- 	}
- 
- 	if (opts.rethunk) {
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -61,6 +61,8 @@ struct symbol {
- 	u8 return_thunk      : 1;
- 	u8 fentry            : 1;
- 	u8 profiling_func    : 1;
-+	u8 leaf	             : 1;
-+	u8 stack_chk         : 1;
- 	struct list_head pv_target;
- };
- 
+Rob 

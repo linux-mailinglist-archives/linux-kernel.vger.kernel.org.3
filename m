@@ -2,112 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220EB5AA4DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1151A5AA4DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234732AbiIBBHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 21:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        id S234445AbiIBBMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 21:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbiIBBHt (ORCPT
+        with ESMTP id S231357AbiIBBMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 21:07:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F436C12B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:07:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A44861AA6
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:07:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90354C43470
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662080867;
-        bh=YGW06h42fog0+829pIdqqfbbxG5/bSPM5IarAA8Qg4Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=goPsjt9899ORTuqLLkog1synbcfRjehQYCiugCW4nLaM1EV6HU0+oYY/4uDwnRcl8
-         xWTV/9Ta9+eQJ/qmK3SCstibOAnexccPfKfCoiKLu+Nr+1VFvOElFT7q2bkpjDSZDB
-         dZxQIEKwUPAZDzdBji2Jh803TKzH9mFcrEQKLHxA3dkCJpTVyWG7HyowSedQ33YJIe
-         AGcYUog1piTixJzlR1dtwTdcaAqFE0SunInOP4nHkQc5xU8xXCdBeptCAdgIM3GpQ2
-         YjoimfAofZEYlMaqNZr8k94rGHcuqFBAkOm3fTpJJvKfr8HJqp/7n5LgDqLaUbukRC
-         wTdUxr4BdV/UQ==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-11eab59db71so1346088fac.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 18:07:47 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2oClnjUVc7rFeG6f6lTyftR3WskOdzrwgFaVcfC1QfYV4dyJMl
-        ymov1veG/zeTKIJ7hfJ9kuHlNnKPCZ223GWGONs=
-X-Google-Smtp-Source: AA6agR4Ocs9kP9xBS2wmYYMgKp46ESJNJgZQyzz/kLfwkEqbvIlyV+tofNOYNy9gfS/+9/H3rD1//vbYWh8e8wc+wg4=
-X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
- ba22-20020a056870c59600b001016409ae62mr1043596oab.112.1662080866791; Thu, 01
- Sep 2022 18:07:46 -0700 (PDT)
+        Thu, 1 Sep 2022 21:12:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176F5A061D;
+        Thu,  1 Sep 2022 18:12:35 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MJft00HCTzYcmw;
+        Fri,  2 Sep 2022 09:08:08 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 2 Sep 2022 09:12:20 +0800
+Subject: Re: [PATCH next-next 0/2] net: vlan: two small refactors to make code
+ more concise
+To:     Paolo Abeni <pabeni@redhat.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <morbo@google.com>,
+        <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+References: <cover.1661916732.git.william.xuanziyang@huawei.com>
+ <306bd3cb986764e60f7ac21809ab68094b2e3325.camel@redhat.com>
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Message-ID: <74d89f90-c717-2a72-b16b-812c1af1d6d2@huawei.com>
+Date:   Fri, 2 Sep 2022 09:12:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20220901222744.2210215-1-heiko@sntech.de>
-In-Reply-To: <20220901222744.2210215-1-heiko@sntech.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 2 Sep 2022 09:07:34 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRnhN37C3pd6FYKX8KEVUQHm5PzWTf6Urxe4kwVW5hg7Q@mail.gmail.com>
-Message-ID: <CAJF2gTRnhN37C3pd6FYKX8KEVUQHm5PzWTf6Urxe4kwVW5hg7Q@mail.gmail.com>
-Subject: Re: [PATCH 1/4] riscv: cleanup svpbmt cpufeature probing
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, conor.dooley@microchip.com,
-        apatel@ventanamicro.com, atishp@rivosinc.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <306bd3cb986764e60f7ac21809ab68094b2e3325.camel@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
-
-On Fri, Sep 2, 2022 at 6:28 AM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> This can also do without the ifdef and use IS_ENABLED instead and
-> for better readability, getting rid of that switch also seems
-> waranted.
->
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/kernel/cpufeature.c | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 553d755483ed..764ea220161f 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -253,16 +253,13 @@ void __init riscv_fill_hwcap(void)
->  #ifdef CONFIG_RISCV_ALTERNATIVE
->  static bool __init_or_module cpufeature_probe_svpbmt(unsigned int stage)
->  {
-> -#ifdef CONFIG_RISCV_ISA_SVPBMT
-> -       switch (stage) {
-> -       case RISCV_ALTERNATIVES_EARLY_BOOT:
-> +       if (!IS_ENABLED(CONFIG_RISCV_ISA_SVPBMT))
->                 return false;
-> -       default:
-> -               return riscv_isa_extension_available(NULL, SVPBMT);
-> -       }
-> -#endif
->
-> -       return false;
-> +       if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> +               return false;
-> +
-> +       return riscv_isa_extension_available(NULL, SVPBMT);
->  }
->
->  static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
-> --
-> 2.35.1
->
 
 
--- 
-Best Regards
- Guo Ren
+在 2022/9/1 21:28, Paolo Abeni 写道:
+> Hello,
+> 
+> On Wed, 2022-08-31 at 12:09 +0800, Ziyang Xuan wrote:
+>> Give two small refactors to make code more concise.
+>>
+>> Ziyang Xuan (2):
+>>   net: vlan: remove unnecessary err variable in vlan_init_net()
+>>   net: vlan: reduce indentation level in __vlan_find_dev_deep_rcu()
+>>
+>>  net/8021q/vlan.c      |  5 +----
+>>  net/8021q/vlan_core.c | 22 +++++++++-------------
+>>  2 files changed, 10 insertions(+), 17 deletions(-)
+> 
+> The patches look correct to me, but I think is better to defer this
+> kind of nun-functional refactors to some work actually doing new stuff,
+> to avoid unneeded noise.
+> 
+> Note that I merged a few other clean-up recently, but e.g. they at
+> least formally removed some unneeded branch.
+> 
+> Sorry, I'm not going to apply this series.
+
+No problem, I will try to dig deeper.
+
+> 
+> Cheers,
+> 
+> Paolo
+> 
+> .
+> 

@@ -2,92 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0212D5AB7F7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 20:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510325AB7FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 20:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234742AbiIBSF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 14:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S229512AbiIBSJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 14:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235787AbiIBSCW (ORCPT
+        with ESMTP id S229583AbiIBSJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 14:02:22 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410F9FC300
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 11:02:20 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id u9so5393500ejy.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 11:02:19 -0700 (PDT)
+        Fri, 2 Sep 2022 14:09:52 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9174FE355
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 11:03:23 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id b142so2247082iof.10
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 11:03:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=QKpkWBalvPcb442osnnmCYBtgf+3QmIQOcwDZjeT1XA=;
-        b=dsa1YI4NznjoRJXq3MFUUdbE1YgDGmKLbc0hUoxfmfACIE2so67f0eRAppF+OuzxZd
-         4vUsNBd4F7DnG8k2LcpqE8jT5oGli0nX7iEPux7+C5OHWMcBpfk1mk80If8HMYfmI2BO
-         BDvMUw1V7EBKxmpPu1bNs+fUqiKtQAu7LKGz4=
+        bh=DsSYyvFRX7OXTQcg53ZJE+LnyNTxlorHM7slCEXW1is=;
+        b=s49s0x8Ap3YZB8Nrgbh1MSaxaMzcT1YE9yzG4odKqHlffOpfQVqq/hUsP1TUKeRGJu
+         QRVO7pNCfKVJo7u0MvpvsqS9M9gsQH53ZIyBJT7Afz7N92Tr6RFIIeLVoKLWGB1Vvbmv
+         /v6VMZrnnX0C5PbrAYGI+ME5XeEoy8hdNqfZjMc6kN9SwutOVQdQaOefZalIqjwGWgb/
+         tb9eEhxr8IDSLO7C5T9xgeAR59Ilnzo1PAbjQLdy2bLHiyeMQ85AuCV7Pu4kiCF92+eV
+         1FcyjOi7DtqyQozwRRjXiWNRSOrN057Fj1lzJobm015Kc/y47DMkuwoqOLBzADB2PQsb
+         1obg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=QKpkWBalvPcb442osnnmCYBtgf+3QmIQOcwDZjeT1XA=;
-        b=WVbog1IbuJOA3DvbkZpQPim+rXUuEXvFvpuJIC4OoW6PU8FmYK12hSZSBnN6vTyB/r
-         h0gE4yzEYHrUZX6UqZqQ0+eIlKGUaXAOqlC4fZGEgX49Rkrqx2EfwSd32uT4znXjXFa9
-         SM9BCiyBERMAC/fAtiZHQ+1npWq1j0jOww5cB6+HgdiG95WmWFYl5yoeVhU8Hdm3sOCS
-         N4FUvl5SdkTLyeh5dIzALT8RmLzxryh53a/aJ5V772jKmIHNeZ+FohBfxROkGIaZFwtE
-         ucOtnvALixSAJS9JyxARH8Nazbv7V73WvS7MlM7R/VFQouTOXiPjfRkR7NNV+ecFRrmH
-         wMQg==
-X-Gm-Message-State: ACgBeo0RJ4rZCgX5r716z+OMLSMrVFlmvN3G0n2Jak7gAab9k8hMrOzu
-        0ejZV3nvrRRTjvRiMow34SdYoZmTPADT9EisNaU=
-X-Google-Smtp-Source: AA6agR5IB+G+i9/zhLxm9SFc6bH2aMmmtF5BkEpuMBVtwNTpnYUcT/jwM+ScWKZ+L6q0+H5is0KLDQ==
-X-Received: by 2002:a17:907:728d:b0:73d:693c:738 with SMTP id dt13-20020a170907728d00b0073d693c0738mr27838061ejc.134.1662141737871;
-        Fri, 02 Sep 2022 11:02:17 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id la8-20020a170907780800b00741383c1c5bsm1548022ejc.196.2022.09.02.11.02.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 11:02:17 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so1849824wms.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 11:02:16 -0700 (PDT)
-X-Received: by 2002:a05:600c:657:b0:3a5:e4e6:ee24 with SMTP id
- p23-20020a05600c065700b003a5e4e6ee24mr3569551wmm.68.1662141736590; Fri, 02
- Sep 2022 11:02:16 -0700 (PDT)
+        bh=DsSYyvFRX7OXTQcg53ZJE+LnyNTxlorHM7slCEXW1is=;
+        b=wP5+V/I75afLYdmnHHHlyAcble4WYr42xogg004FCSEix32QXGcLneQnVs7hm9sH6T
+         0dz7izS2KiQYOmJXvJENogaIrV/aWjy3vbeRPyq/9IzGW9ogtvv9BD0t9Hc8AgNMAjJT
+         DnGS81/xlu7E7IrWcZYIZeIcPURZSvYRrWTXVCzGjdw4U+djqsG8NfKTIYM9ooVYblgv
+         L1DPAm8PqoswcfQsDUsmCBQk/84zayk/EXhfG8mSbGoEPlG/1lAuuIOhoR51ETv5hcfH
+         fFib4gKawigXlZCh2dJFPBRV6BjknTaPNY6g7nzEzYzcN8GL86oNZf/gBRXWSyoMRdCv
+         RWIQ==
+X-Gm-Message-State: ACgBeo2mePQqGFTgsgBC8CU2fuL7PFW3jibREhAvaRlBwZLy0jmImvOX
+        P1b+esAQ1pIZrg9vXvvH40fRr8APxwFB24Yjw9/hmA==
+X-Google-Smtp-Source: AA6agR7KFZlUy2pvfIV3UweeLdnL2W9zoROxivfRRaX8xm4LeDOW1Axpu3vJAjTM1oWttoJXdRXvxik2dVQ/xnaxZAM=
+X-Received: by 2002:a05:6638:2042:b0:346:e51a:da4e with SMTP id
+ t2-20020a056638204200b00346e51ada4emr20421153jaj.164.1662141803111; Fri, 02
+ Sep 2022 11:03:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <YxIht+ev+gXsF6ZD@kroah.com>
-In-Reply-To: <YxIht+ev+gXsF6ZD@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Sep 2022 11:02:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whnNO4T9PHNC1DT35sROGNK_geKL0Q_EjZH=0sLoACPHw@mail.gmail.com>
-Message-ID: <CAHk-=whnNO4T9PHNC1DT35sROGNK_geKL0Q_EjZH=0sLoACPHw@mail.gmail.com>
-Subject: Re: [GIT PULL] Driver core fixes for 6.0-rc4
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>
+References: <20220902130625.217071627@infradead.org> <20220902130948.643735860@infradead.org>
+In-Reply-To: <20220902130948.643735860@infradead.org>
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 2 Sep 2022 20:02:46 +0200
+Message-ID: <CAG48ez07c2ThydovaHtBZ+u137eaXdEut4J-zycvPn7io4MySw@mail.gmail.com>
+Subject: Re: [PATCH v2 22/59] x86: Put hot per CPU variables into a struct
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juergen Gross <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Eric Dumazet <edumazet@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 8:31 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Fri, Sep 2, 2022 at 3:54 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-6.0-rc4
+> The layout of per-cpu variables is at the mercy of the compiler. This
+> can lead to random performance fluctuations from build to build.
+>
+> Create a structure to hold some of the hottest per-cpu variables,
+> starting with current_task.
+[...]
+> -DECLARE_PER_CPU(struct task_struct *, current_task);
+> +struct pcpu_hot {
+> +       union {
+> +               struct {
+> +                       struct task_struct      *current_task;
+> +               };
+> +               u8      pad[64];
+> +       };
+> +};
 
-Entirely unrelated to this pull request, but since the diffstat made
-that "drivers/base/dd.c" file stand out, I tried to look at what the
-history of that odd name is.
-
-And it's not obvious to me.
-
-Very strange filename. Should it perhaps be named "device.c" or
-"probe.c" or something more descriptive?
-
-Not a huge deal, more of a passing thought inspired by that diffstat.
-
-               Linus
+fixed_percpu_data::stack_canary is probably also a fairly hot per-cpu
+variable on distro kernels with CONFIG_STACKPROTECTOR_STRONG (which
+e.g. Debian enables), so perhaps it'd make sense to reuse
+fixed_percpu_data as the struct for hot percpu variables? But I don't
+have any numbers to actually back up that idea.

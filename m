@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5E65AB411
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63505AB42C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237154AbiIBOtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S236435AbiIBOvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236431AbiIBOtE (ORCPT
+        with ESMTP id S236811AbiIBOvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:49:04 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED4AA59AF;
-        Fri,  2 Sep 2022 07:10:27 -0700 (PDT)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6C826C0019;
-        Fri,  2 Sep 2022 14:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1662127826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=foJpWALHT8diJKC3gFfZMbMqoru/vx4Wr7PWfEagvV4=;
-        b=PHSLSiuqG5UA4f2xzslzfJoJD9vCTjbkRTmN71HPkQjM7uegoDXSjNqjJadcvC8H/8LxGy
-        82pNAgcEX0WCuAMdRdKt4L9Q/vwKSlqxBhsTZ9MJP0o0pfcqGD3fRFt7850zT+IbONqFmz
-        jFvVrIhfVJntZR3kIKUWjbfcZQF7rdNeRwNBbrDIWRIhyAK10m7Ll6+Z4dlzYgBf8c164r
-        VC+2n2q75COyGLINhfVmB4sC9sxDCtKvFkcFoQh916YysJuESEYN3Cp2/mwQHfmZXGRDE0
-        cewI6BoCb+2yGzNtzbrr3Ki36kTgHAvf6k7s3g0mBiagroJ/ZDKCXmOxdIZkVQ==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] ARM: dts: armada-xp: align SPI node name with dtschema
-In-Reply-To: <20220810111122.281184-1-krzysztof.kozlowski@linaro.org>
-References: <20220810111122.281184-1-krzysztof.kozlowski@linaro.org>
-Date:   Fri, 02 Sep 2022 16:10:25 +0200
-Message-ID: <8735d9g94e.fsf@BL-laptop>
+        Fri, 2 Sep 2022 10:51:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 518D0C7422;
+        Fri,  2 Sep 2022 07:13:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C223D6E;
+        Fri,  2 Sep 2022 07:13:24 -0700 (PDT)
+Received: from [10.57.15.84] (unknown [10.57.15.84])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D7AF3F766;
+        Fri,  2 Sep 2022 07:13:14 -0700 (PDT)
+Message-ID: <6813a737-736d-7e15-a44f-d800ed9248be@arm.com>
+Date:   Fri, 2 Sep 2022 15:12:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH] perf vendor events: Add missing Neoverse V1 events
+To:     John Garry <john.garry@huawei.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220901151804.294823-1-nick.forrington@arm.com>
+ <c17d8229-6029-3fd6-1ce5-f406962eae8f@huawei.com>
+From:   Nick Forrington <nick.forrington@arm.com>
+In-Reply-To: <c17d8229-6029-3fd6-1ce5-f406962eae8f@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
-
-> The node names should be generic and DT schema expects certain pattern.
+On 02/09/2022 09:04, John Garry wrote:
+> On 01/09/2022 16:18, Nick Forrington wrote:
+>> Based on updated data from:
+>> https://github.com/ARM-software/data/blob/master/pmu/neoverse-v1.json
+>>
+>> which is based on PMU event descriptions from the Arm Neoverse V1
+>> Technical Reference Manual.
+>>
+>> This adds the following missing events:
+>> ASE_INST_SPEC
+>> SVE_INST_SPEC
+>> SVE_PRED_SPEC
+>> SVE_PRED_EMPTY_SPEC
+>> SVE_PRED_FULL_SPEC
+>> SVE_PRED_PARTIAL_SPEC
+>> SVE_LDFF_SPEC
+>> SVE_LDFF_FAULT_SPEC
+>> FP_SCALE_OPS_SPEC
+>> FP_FIXED_OPS_SPEC
+>>
+>> It also moves REMOTE_ACCESS from other.json to memory.json.
 >
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Any specific reason why? I see that neoverse n2 and a76-n1 still use 
+> "other" json for REMOTE_ACCESS. Nicer to be consistent.
 
-Applied on mvebu/dt
+Thanks John, I agree on consistency.
 
-Thanks,
+I think memory is a better categorisation (for all CPUs), and this is 
+consistent with what I submitted for various Cortex CPUs a while back.
 
-Gregory
-> ---
->  arch/arm/boot/dts/armada-xp-lenovo-ix4-300d.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I'd be happy to remove the REMOTE_ACCESS change here and update (or not) 
+REMOTE_ACCESS for Neoverse separately.
+
 >
-> diff --git a/arch/arm/boot/dts/armada-xp-lenovo-ix4-300d.dts b/arch/arm/boot/dts/armada-xp-lenovo-ix4-300d.dts
-> index 87dcb502f72d..0dad95ea26c2 100644
-> --- a/arch/arm/boot/dts/armada-xp-lenovo-ix4-300d.dts
-> +++ b/arch/arm/boot/dts/armada-xp-lenovo-ix4-300d.dts
-> @@ -164,7 +164,7 @@ scroll-button {
->  		};
->  	};
->  
-> -	spi3 {
-> +	spi-3 {
->  		compatible = "spi-gpio";
->  		status = "okay";
->  		gpio-sck = <&gpio0 25 GPIO_ACTIVE_LOW>;
-> -- 
-> 2.34.1
+>>
+>> Signed-off-by: Nick Forrington<nick.forrington@arm.com>
+>> ---
 >
-
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+> Apart from above:
+> Reviewed-by: John Garry <john.garry@huawei.com>
+Thanks, Nick

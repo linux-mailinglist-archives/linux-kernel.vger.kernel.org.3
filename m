@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBC55AAC16
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411F25AAC18
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235971AbiIBKJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S236008AbiIBKJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235177AbiIBKJD (ORCPT
+        with ESMTP id S235821AbiIBKJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:09:03 -0400
+        Fri, 2 Sep 2022 06:09:04 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 833F0C7F83
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 03:09:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CA319F1B4
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 03:09:02 -0700 (PDT)
 Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_2s31hFjz8APAA--.65103S3;
-        Fri, 02 Sep 2022 18:08:56 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_2s31hFjz8APAA--.65103S4;
+        Fri, 02 Sep 2022 18:08:57 +0800 (CST)
 From:   Youling Tang <tangyouling@loongson.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
         Xuerui Wang <kernel@xen0n.name>,
         Xi Ruoyao <xry111@xry111.site>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 1/3] LoongArch: tools: Add relocs tool support
-Date:   Fri,  2 Sep 2022 18:08:53 +0800
-Message-Id: <1662113335-14282-2-git-send-email-tangyouling@loongson.cn>
+Subject: [PATCH 2/3] LoongArch: Add support for kernel relocation
+Date:   Fri,  2 Sep 2022 18:08:54 +0800
+Message-Id: <1662113335-14282-3-git-send-email-tangyouling@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
 References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
-X-CM-TRANSID: AQAAf8Dx_2s31hFjz8APAA--.65103S3
-X-Coremail-Antispam: 1UD129KBjvAXoWfXF1fKr1xtFWrJF1DGFyDKFg_yoW8ZFyxCo
-        W2yFs8Gr18Cw42yr4kJwn7WFZ7WFsrKrWrA34YvrZxGa42yr1Ygrykur1ag393ArZY93s3
-        Wr92g395Cr1Utr95n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUYX7k0a2IF6w4kM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
+X-CM-TRANSID: AQAAf8Dx_2s31hFjz8APAA--.65103S4
+X-Coremail-Antispam: 1UD129KBjvAXoWfGry8CFWfWFW3Gr4ftr4Dtwb_yoW8JF4rAo
+        W8ZF95Kw18Wr4UCr45A3s8Kay5Xrs2krWUZrWIyw43WFnrA3W7WrykK3WYyry3Gw4kKrW8
+        u343XwsxAas7JFn3n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUO87k0a2IF6w4kM7kC6x804xWl14x267AKxVW5JVWrJwAFc2x0
         x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87
-        I2jVAFwI0_Jr4l82xGYIkIc2x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY
+        I2jVAFwI0_Jryl82xGYIkIc2x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY
         1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20x
         vEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280
         aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
         Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S
         6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8twCF04k20xvY0x
-        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
-        CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07br6wZUUUUU=
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02
+        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+        1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+        4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07b2
+        F4iUUUUU=
 X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -57,775 +58,452 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This tool is based on the arch/mips/boot/tools/relocs tool.
+arch/loongarch/kernel/relocate.c contains the functions necessary to
+relocate the kernel elsewhere in memory
 
-It parses the relocations present in the vmlinux elf file, building a
-table of relocations that will be necessary to run the kernel from an
-address other than its link address. This table is inserted into the
-vmlinux elf, in the .data.relocs section. The table is subsequently used
-by the code in arch/loongarch/kernel/relocate.c (added later) to relocate
-the kernel.
+The kernel makes a copy of itself at the new address. It uses the
+relocation table inserted by the relocs tool to fix symbol references
+within the new image.
+
+If copy/relocation is successful then the entry point of the new kernel
+is returned, otherwise fall back to starting the kernel in place.
 
 Signed-off-by: Youling Tang <tangyouling@loongson.cn>
 ---
- arch/loongarch/boot/.gitignore          |   1 +
- arch/loongarch/boot/tools/Makefile      |   8 +
- arch/loongarch/boot/tools/relocs.c      | 544 ++++++++++++++++++++++++
- arch/loongarch/boot/tools/relocs.h      |  55 +++
- arch/loongarch/boot/tools/relocs_64.c   |  18 +
- arch/loongarch/boot/tools/relocs_main.c |  82 ++++
- 6 files changed, 708 insertions(+)
- create mode 100644 arch/loongarch/boot/tools/Makefile
- create mode 100644 arch/loongarch/boot/tools/relocs.c
- create mode 100644 arch/loongarch/boot/tools/relocs.h
- create mode 100644 arch/loongarch/boot/tools/relocs_64.c
- create mode 100644 arch/loongarch/boot/tools/relocs_main.c
+ arch/loongarch/Kconfig              |  29 ++++
+ arch/loongarch/Makefile             |   7 +
+ arch/loongarch/Makefile.postlink    |  33 +++++
+ arch/loongarch/kernel/Makefile      |   2 +
+ arch/loongarch/kernel/head.S        |  17 +++
+ arch/loongarch/kernel/relocate.c    | 214 ++++++++++++++++++++++++++++
+ arch/loongarch/kernel/vmlinux.lds.S |  25 ++++
+ 7 files changed, 327 insertions(+)
+ create mode 100644 arch/loongarch/Makefile.postlink
+ create mode 100644 arch/loongarch/kernel/relocate.c
 
-diff --git a/arch/loongarch/boot/.gitignore b/arch/loongarch/boot/.gitignore
-index 49423ee96ef3..4a1c06836627 100644
---- a/arch/loongarch/boot/.gitignore
-+++ b/arch/loongarch/boot/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- vmlinux*
-+relocs
-diff --git a/arch/loongarch/boot/tools/Makefile b/arch/loongarch/boot/tools/Makefile
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 0721b4b2207a..271221d6036d 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -47,6 +47,7 @@ config LOONGARCH
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_HUGETLBFS
+ 	select ARCH_SUPPORTS_NUMA_BALANCING
++	select SYS_SUPPORTS_RELOCATABLE
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_CMPXCHG_LOCKREF
+ 	select ARCH_USE_QUEUED_RWLOCKS
+@@ -207,6 +208,11 @@ config SCHED_OMIT_FRAME_POINTER
+ config AS_HAS_EXPLICIT_RELOCS
+ 	def_bool $(as-instr,x:pcalau12i \$t0$(comma)%pc_hi20(x))
+ 
++config SYS_SUPPORTS_RELOCATABLE
++	bool
++	help
++	  Selected if the platform supports relocating the kernel.
++
+ menu "Kernel type and options"
+ 
+ source "kernel/Kconfig.hz"
+@@ -420,6 +426,29 @@ config ARCH_IOREMAP
+ 	  protection support. However, you can enable LoongArch DMW-based
+ 	  ioremap() for better performance.
+ 
++config RELOCATABLE
++	bool "Relocatable kernel"
++	depends on SYS_SUPPORTS_RELOCATABLE
++	help
++	  This builds a kernel image that retains relocation information
++	  so it can be loaded someplace besides the default 1MB.
++
++config RELOCATION_TABLE_SIZE
++	hex "Relocation table size"
++	depends on RELOCATABLE
++	range 0x0 0x01000000
++	default "0x00100000"
++	help
++	  A table of relocation data will be appended to the kernel binary
++	  and parsed at boot to fix up the relocated kernel.
++
++	  This option allows the amount of space reserved for the table to be
++	  adjusted, although the default of 1Mb should be ok in most cases.
++
++	  The build will fail and a valid size suggested if this is too small.
++
++	  If unsure, leave at the default value.
++
+ config SECCOMP
+ 	bool "Enable seccomp to safely compute untrusted bytecode"
+ 	depends on PROC_FS
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index 92c4a52c4c3e..01773114960e 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -62,12 +62,19 @@ KBUILD_AFLAGS_MODULE		+= -Wa,-mla-global-with-abs
+ KBUILD_CFLAGS_MODULE		+= -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
+ endif
+ 
++ifeq ($(CONFIG_RELOCATABLE),y)
++LDFLAGS_vmlinux			+= --emit-relocs
++endif
++
+ cflags-y += -ffreestanding
+ cflags-y += $(call cc-option, -mno-check-zero-division)
+ 
+ load-y		= 0x9000000000200000
+ bootvars-y	= VMLINUX_LOAD_ADDRESS=$(load-y)
+ 
++archscripts: scripts_basic
++	$(Q)$(MAKE) $(build)=arch/loongarch/boot/tools relocs
++
+ drivers-$(CONFIG_PCI)		+= arch/loongarch/pci/
+ 
+ KBUILD_AFLAGS	+= $(cflags-y)
+diff --git a/arch/loongarch/Makefile.postlink b/arch/loongarch/Makefile.postlink
 new file mode 100644
-index 000000000000..3a5fba2231c3
+index 000000000000..2b3576d26cb6
 --- /dev/null
-+++ b/arch/loongarch/boot/tools/Makefile
-@@ -0,0 +1,8 @@
++++ b/arch/loongarch/Makefile.postlink
+@@ -0,0 +1,33 @@
 +# SPDX-License-Identifier: GPL-2.0
-+
-+hostprogs	+= relocs
-+relocs-objs	+= relocs_64.o
-+relocs-objs	+= relocs_main.o
-+PHONY += relocs
-+relocs: $(obj)/relocs
-+	@:
-diff --git a/arch/loongarch/boot/tools/relocs.c b/arch/loongarch/boot/tools/relocs.c
-new file mode 100644
-index 000000000000..73963142b798
---- /dev/null
-+++ b/arch/loongarch/boot/tools/relocs.c
-@@ -0,0 +1,544 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* This is included from relocs_64.c */
-+
-+#define ElfW(type)		_ElfW(ELF_BITS, type)
-+#define _ElfW(bits, type)	__ElfW(bits, type)
-+#define __ElfW(bits, type)	Elf##bits##_##type
-+
-+#define Elf_Addr		ElfW(Addr)
-+#define Elf_Ehdr		ElfW(Ehdr)
-+#define Elf_Phdr		ElfW(Phdr)
-+#define Elf_Shdr		ElfW(Shdr)
-+#define Elf_Sym			ElfW(Sym)
-+
-+static Elf_Ehdr ehdr;
-+
-+struct relocs {
-+	uint32_t	*offset;
-+	unsigned long	count;
-+	unsigned long	size;
-+};
-+
-+static struct relocs relocs;
-+
-+struct section {
-+	Elf_Shdr       shdr;
-+	struct section *link;
-+	Elf_Sym        *symtab;
-+	Elf_Rel        *reltab;
-+	char           *strtab;
-+	long           shdr_offset;
-+};
-+static struct section *secs;
-+
-+static const char *rel_type(unsigned int type)
-+{
-+	static const char * const type_name[] = {
-+#define REL_TYPE(X)[X] = #X
-+		REL_TYPE(R_LARCH_NONE),
-+		REL_TYPE(R_LARCH_32),
-+		REL_TYPE(R_LARCH_64),
-+		REL_TYPE(R_LARCH_MARK_LA),
-+		REL_TYPE(R_LARCH_SOP_PUSH_PCREL),
-+		REL_TYPE(R_LARCH_SOP_PUSH_ABSOLUTE),
-+		REL_TYPE(R_LARCH_SOP_PUSH_PLT_PCREL),
-+		REL_TYPE(R_LARCH_SOP_SUB),
-+		REL_TYPE(R_LARCH_SOP_SL),
-+		REL_TYPE(R_LARCH_SOP_SR),
-+		REL_TYPE(R_LARCH_SOP_AND),
-+		REL_TYPE(R_LARCH_SOP_POP_32_U_10_12),
-+		REL_TYPE(R_LARCH_SOP_POP_32_S_10_12),
-+		REL_TYPE(R_LARCH_SOP_POP_32_S_10_16_S2),
-+		REL_TYPE(R_LARCH_SOP_POP_32_S_5_20),
-+		REL_TYPE(R_LARCH_SOP_POP_32_S_0_5_10_16_S2),
-+		REL_TYPE(R_LARCH_SOP_POP_32_S_0_10_10_16_S2),
-+		REL_TYPE(R_LARCH_ADD32),
-+		REL_TYPE(R_LARCH_ADD64),
-+		REL_TYPE(R_LARCH_SUB32),
-+		REL_TYPE(R_LARCH_SUB64),
-+		REL_TYPE(R_LARCH_B26),
-+		REL_TYPE(R_LARCH_ABS_HI20),
-+		REL_TYPE(R_LARCH_ABS_LO12),
-+		REL_TYPE(R_LARCH_ABS64_LO20),
-+		REL_TYPE(R_LARCH_ABS64_HI12),
-+		REL_TYPE(R_LARCH_PCALA_HI20),
-+		REL_TYPE(R_LARCH_PCALA_LO12),
-+		REL_TYPE(R_LARCH_GOT_PC_HI20),
-+		REL_TYPE(R_LARCH_GOT_PC_LO12),
-+#undef REL_TYPE
-+	};
-+	const char *name = "unknown type rel type name";
-+
-+	if (type < ARRAY_SIZE(type_name) && type_name[type])
-+		name = type_name[type];
-+	return name;
-+}
-+
-+static const char *sec_name(unsigned int shndx)
-+{
-+	const char *sec_strtab;
-+	const char *name;
-+
-+	sec_strtab = secs[ehdr.e_shstrndx].strtab;
-+	if (shndx < ehdr.e_shnum)
-+		name = sec_strtab + secs[shndx].shdr.sh_name;
-+	else if (shndx == SHN_ABS)
-+		name = "ABSOLUTE";
-+	else if (shndx == SHN_COMMON)
-+		name = "COMMON";
-+	else
-+		name = "<noname>";
-+	return name;
-+}
-+
-+static struct section *sec_lookup(const char *secname)
-+{
-+	int i;
-+
-+	for (i = 0; i < ehdr.e_shnum; i++)
-+		if (strcmp(secname, sec_name(i)) == 0)
-+			return &secs[i];
-+
-+	return NULL;
-+}
-+
-+static const char *sym_name(const char *sym_strtab, Elf_Sym *sym)
-+{
-+	const char *name;
-+
-+	if (sym->st_name)
-+		name = sym_strtab + sym->st_name;
-+	else
-+		name = sec_name(sym->st_shndx);
-+	return name;
-+}
-+
-+static void read_ehdr(FILE *fp)
-+{
-+	if (fread(&ehdr, sizeof(ehdr), 1, fp) != 1)
-+		die("Cannot read ELF header: %s\n", strerror(errno));
-+
-+	if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) != 0)
-+		die("No ELF magic\n");
-+
-+	if (ehdr.e_ident[EI_CLASS] != ELF_CLASS)
-+		die("Not a %d bit executable\n", ELF_BITS);
-+
-+	if (ehdr.e_ident[EI_DATA] != ELFDATA2LSB)
-+		die("Not a ELF Little Endianness\n");
-+
-+	if (ehdr.e_ident[EI_VERSION] != EV_CURRENT)
-+		die("Unknown ELF version\n");
-+
-+	if ((ehdr.e_type != ET_EXEC) && (ehdr.e_type != ET_DYN))
-+		die("Unsupported ELF header type\n");
-+
-+	if (ehdr.e_machine != ELF_MACHINE)
-+		die("Not for %s\n", ELF_MACHINE_NAME);
-+
-+	if (ehdr.e_version != EV_CURRENT)
-+		die("Unknown ELF version\n");
-+
-+	if (ehdr.e_ehsize != sizeof(Elf_Ehdr))
-+		die("Bad Elf header size\n");
-+
-+	if (ehdr.e_phentsize != sizeof(Elf_Phdr))
-+		die("Bad program header entry\n");
-+
-+	if (ehdr.e_shentsize != sizeof(Elf_Shdr))
-+		die("Bad section header entry\n");
-+
-+	if (ehdr.e_shstrndx >= ehdr.e_shnum)
-+		die("String table index out of bounds\n");
-+}
-+
-+static void read_shdrs(FILE *fp)
-+{
-+	int i;
-+
-+	secs = calloc(ehdr.e_shnum, sizeof(struct section));
-+	if (!secs)
-+		die("Unable to allocate %d section headers\n", ehdr.e_shnum);
-+
-+	if (fseek(fp, ehdr.e_shoff, SEEK_SET) < 0)
-+		die("Seek to %d failed: %s\n", ehdr.e_shoff, strerror(errno));
-+
-+	for (i = 0; i < ehdr.e_shnum; i++) {
-+		struct section *sec = &secs[i];
-+
-+		sec->shdr_offset = ftell(fp);
-+		if (fread(&sec->shdr, sizeof(Elf_Shdr), 1, fp) != 1)
-+			die("Cannot read ELF section headers %d/%d: %s\n",
-+			    i, ehdr.e_shnum, strerror(errno));
-+
-+		if (sec->shdr.sh_link < ehdr.e_shnum)
-+			sec->link = &secs[sec->shdr.sh_link];
-+	}
-+}
-+
-+static void read_strtabs(FILE *fp)
-+{
-+	int i;
-+
-+	for (i = 0; i < ehdr.e_shnum; i++) {
-+		struct section *sec = &secs[i];
-+
-+		if (sec->shdr.sh_type != SHT_STRTAB)
-+			continue;
-+
-+		sec->strtab = malloc(sec->shdr.sh_size);
-+		if (!sec->strtab)
-+			die("malloc of %d bytes for strtab failed\n",
-+			    sec->shdr.sh_size);
-+
-+		if (fseek(fp, sec->shdr.sh_offset, SEEK_SET) < 0)
-+			die("Seek to %d failed: %s\n",
-+			    sec->shdr.sh_offset, strerror(errno));
-+
-+		if (fread(sec->strtab, 1, sec->shdr.sh_size, fp) !=
-+		    sec->shdr.sh_size)
-+			die("Cannot read symbol table: %s\n", strerror(errno));
-+	}
-+}
-+
-+static void read_symtabs(FILE *fp)
-+{
-+	int i;
-+
-+	for (i = 0; i < ehdr.e_shnum; i++) {
-+		struct section *sec = &secs[i];
-+
-+		if (sec->shdr.sh_type != SHT_SYMTAB)
-+			continue;
-+
-+		sec->symtab = malloc(sec->shdr.sh_size);
-+		if (!sec->symtab)
-+			die("malloc of %d bytes for symtab failed\n",
-+			    sec->shdr.sh_size);
-+
-+		if (fseek(fp, sec->shdr.sh_offset, SEEK_SET) < 0)
-+			die("Seek to %d failed: %s\n",
-+			    sec->shdr.sh_offset, strerror(errno));
-+
-+		if (fread(sec->symtab, 1, sec->shdr.sh_size, fp) !=
-+		    sec->shdr.sh_size)
-+			die("Cannot read symbol table: %s\n", strerror(errno));
-+	}
-+}
-+
-+static void read_relocs(FILE *fp)
-+{
-+	static unsigned long base;
-+	int i, j;
-+
-+	if (!base) {
-+		struct section *sec = sec_lookup(".text");
-+
-+		if (!sec)
-+			die("Could not find .text section\n");
-+
-+		base = sec->shdr.sh_addr;
-+	}
-+
-+	for (i = 0; i < ehdr.e_shnum; i++) {
-+		struct section *sec = &secs[i];
-+
-+		if (sec->shdr.sh_type != SHT_REL_TYPE)
-+			continue;
-+
-+		sec->reltab = malloc(sec->shdr.sh_size);
-+		if (!sec->reltab)
-+			die("malloc of %d bytes for relocs failed\n",
-+			    sec->shdr.sh_size);
-+
-+		if (fseek(fp, sec->shdr.sh_offset, SEEK_SET) < 0)
-+			die("Seek to %d failed: %s\n",
-+			    sec->shdr.sh_offset, strerror(errno));
-+
-+		if (fread(sec->reltab, 1, sec->shdr.sh_size, fp) !=
-+		    sec->shdr.sh_size)
-+			die("Cannot read symbol table: %s\n", strerror(errno));
-+
-+		for (j = 0; j < sec->shdr.sh_size/sizeof(Elf_Rel); j++) {
-+			Elf_Rel *rel = &sec->reltab[j];
-+
-+			/* Set offset into kernel image */
-+			rel->r_offset -= base;
-+		}
-+	}
-+}
-+
-+static void remove_relocs(FILE *fp)
-+{
-+	int i;
-+	Elf_Shdr shdr;
-+
-+	for (i = 0; i < ehdr.e_shnum; i++) {
-+		struct section *sec = &secs[i];
-+
-+		if (sec->shdr.sh_type != SHT_REL_TYPE)
-+			continue;
-+
-+		if (fseek(fp, sec->shdr_offset, SEEK_SET) < 0)
-+			die("Seek to %d failed: %s\n",
-+			    sec->shdr_offset, strerror(errno));
-+
-+		if (fread(&shdr, sizeof(shdr), 1, fp) != 1)
-+			die("Cannot read ELF section headers %d/%d: %s\n",
-+			    i, ehdr.e_shnum, strerror(errno));
-+
-+		/* Set relocation section size to 0, effectively removing it.
-+		 * This is necessary due to lack of support for relocations
-+		 * in objcopy when creating 32bit elf from 64bit elf.
-+		 */
-+		shdr.sh_size = 0;
-+
-+		if (fseek(fp, sec->shdr_offset, SEEK_SET) < 0)
-+			die("Seek to %d failed: %s\n",
-+			    sec->shdr_offset, strerror(errno));
-+
-+		if (fwrite(&shdr, sizeof(shdr), 1, fp) != 1)
-+			die("Cannot write ELF section headers %d/%d: %s\n",
-+			    i, ehdr.e_shnum, strerror(errno));
-+	}
-+}
-+
-+static void add_reloc(struct relocs *r, uint32_t offset, unsigned int type)
-+{
-+	/* Relocation representation in binary table:
-+	 * |31    28|27                       0|
-+	 * |  Type  |  offset from _stext >> 2 |
++#
++# Insert relocations into vmlinux
++
++PHONY := __archpost
++__archpost:
++
++-include include/config/auto.conf
++include scripts/Kbuild.include
++
++CMD_RELOCS = arch/loongarch/boot/tools/relocs --keep
++quiet_cmd_relocs = RELOCS  $@
++      cmd_relocs = $(CMD_RELOCS) $@
++
++# `@true` prevents complaint when there is nothing to be done
++
++vmlinux: FORCE
++	@true
++ifeq ($(CONFIG_RELOCATABLE),y)
++	$(call if_changed,relocs)
++endif
++
++%.ko: FORCE
++	@true
++
++clean:
++	@true
++
++PHONY += FORCE clean
++
++FORCE:
++
++.PHONY: $(PHONY)
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index 7225916dd378..2998b7d4555d 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -17,6 +17,8 @@ obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
+ obj-$(CONFIG_MODULES)		+= module.o module-sections.o
+ obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
+ 
++obj-$(CONFIG_RELOCATABLE)	+= relocate.o
++
+ obj-$(CONFIG_PROC_FS)		+= proc.o
+ 
+ obj-$(CONFIG_SMP)		+= smp.o
+diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+index eb3f641d5915..74b83e357d49 100644
+--- a/arch/loongarch/kernel/head.S
++++ b/arch/loongarch/kernel/head.S
+@@ -79,8 +79,25 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
+ 	PTR_ADD		sp, sp, tp
+ 	set_saved_sp	sp, t0, t1
+ 	PTR_ADDI	sp, sp, -4 * SZREG	# init stack pointer
++#ifdef CONFIG_RELOCATABLE
++	/* Copy kernel and apply the relocations */
++	bl		relocate_kernel
+ 
++	/* Repoint the sp into the new kernel image */
++	PTR_LI		sp, (_THREAD_SIZE - 32 - PT_SIZE)
++	PTR_ADD		sp, sp, tp
++	set_saved_sp	sp, t0, t1
++	PTR_ADDI	sp, sp, -4 * SZREG      # init stack pointer
++
++	/*
++	 * relocate_kernel returns the entry point either
++	 * in the relocated kernel or the original if for
++	 * some reason relocation failed.
 +	 */
-+	offset >>= 2;
-+	if (offset > 0x0FFFFFFF)
-+		die("Kernel image exceeds maximum size for relocation!\n");
++	jr		a0
++#else
+ 	bl		start_kernel
++#endif
+ 
+ SYM_CODE_END(kernel_entry)
+ 
+diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
+new file mode 100644
+index 000000000000..492c833322a4
+--- /dev/null
++++ b/arch/loongarch/kernel/relocate.c
+@@ -0,0 +1,214 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Support for Kernel relocation at boot time
++ *
++ * Copyright (C) 2022 Loongson Technology Corporation Limited
++ *
++ * Derived from MIPS:
++ * Copyright (C) 2015, Imagination Technologies Ltd.
++ */
 +
-+	offset = (offset & 0x0FFFFFFF) | ((type & 0xF) << 28);
++#include <linux/elf.h>
++#include <linux/kernel.h>
++#include <linux/start_kernel.h>
++#include <linux/printk.h>
++#include <linux/panic_notifier.h>
++#include <asm/bootinfo.h>
++#include <asm/inst.h>
++#include <asm/sections.h>
 +
-+	if (r->count == r->size) {
-+		unsigned long newsize = r->size + 50000;
-+		void *mem = realloc(r->offset, newsize * sizeof(r->offset[0]));
++#define RELOCATED(x) ((void *)((long)x + offset))
 +
-+		if (!mem)
-+			die("realloc failed\n");
++extern u32 __start_relocation[];	/* Start relocation table */
++extern u32 __stop_relocation[];		/* End relocation table */
 +
-+		r->offset = mem;
-+		r->size = newsize;
-+	}
-+	r->offset[r->count++] = offset;
-+}
++extern long __start___ex_table[];	/* Start exception table */
++extern long __stop___ex_table[];	/* End exception table */
 +
-+static void walk_relocs(int (*process)(struct section *sec, Elf_Rel *rel,
-+			Elf_Sym *sym, const char *symname))
++extern long __start_got[];		/* Start GOT table */
++extern long __stop_got[];		/* End GOT table */
++
++static void __init apply_r_loongarch_64_rel(u32 *loc_new, long offset)
 +{
-+	int i;
-+
-+	/* Walk through the relocations */
-+	for (i = 0; i < ehdr.e_shnum; i++) {
-+		char *sym_strtab;
-+		Elf_Sym *sh_symtab;
-+		struct section *sec_applies, *sec_symtab;
-+		int j;
-+		struct section *sec = &secs[i];
-+
-+		if (sec->shdr.sh_type != SHT_REL_TYPE)
-+			continue;
-+
-+		sec_symtab  = sec->link;
-+		sec_applies = &secs[sec->shdr.sh_info];
-+		if (!(sec_applies->shdr.sh_flags & SHF_ALLOC))
-+			continue;
-+
-+		sh_symtab = sec_symtab->symtab;
-+		sym_strtab = sec_symtab->link->strtab;
-+		for (j = 0; j < sec->shdr.sh_size/sizeof(Elf_Rel); j++) {
-+			Elf_Rel *rel = &sec->reltab[j];
-+			Elf_Sym *sym = &sh_symtab[ELF_R_SYM(rel->r_info)];
-+			const char *symname = sym_name(sym_strtab, sym);
-+
-+			process(sec, rel, sym, symname);
-+		}
-+	}
-+}
-+
-+static int type2int[] = {
-+	[R_LARCH_64]		= 1,
-+	[R_LARCH_MARK_LA]	= 2,
-+};
-+
-+static int do_reloc(struct section *sec, Elf_Rel *rel, Elf_Sym *sym,
-+		      const char *symname)
-+{
-+	unsigned int r_type = ELF_R_TYPE(rel->r_info);
-+	unsigned int bind = ELF_ST_BIND(sym->st_info);
-+
-+	if ((bind == STB_WEAK) && (sym->st_value == 0)) {
-+		/* Don't relocate weak symbols without a target */
-+		return 0;
-+	}
-+
-+	switch (r_type) {
-+	case R_LARCH_NONE:
-+	case R_LARCH_32:
-+	case R_LARCH_SOP_PUSH_PCREL:
-+	case R_LARCH_SOP_PUSH_ABSOLUTE:
-+	case R_LARCH_SOP_PUSH_PLT_PCREL:
-+	case R_LARCH_SOP_SUB:
-+	case R_LARCH_SOP_SL:
-+	case R_LARCH_SOP_SR:
-+	case R_LARCH_SOP_AND:
-+	case R_LARCH_SOP_POP_32_U_10_12:
-+	case R_LARCH_SOP_POP_32_S_10_12:
-+	case R_LARCH_SOP_POP_32_S_10_16_S2:
-+	case R_LARCH_SOP_POP_32_S_5_20:
-+	case R_LARCH_SOP_POP_32_S_0_5_10_16_S2:
-+	case R_LARCH_SOP_POP_32_S_0_10_10_16_S2:
-+	case R_LARCH_ADD32:
-+	case R_LARCH_ADD64:
-+	case R_LARCH_SUB32:
-+	case R_LARCH_SUB64:
-+	case R_LARCH_B26:
-+	case R_LARCH_ABS_HI20:
-+	case R_LARCH_ABS_LO12:
-+	case R_LARCH_ABS64_LO20:
-+	case R_LARCH_ABS64_HI12:
-+	case R_LARCH_PCALA_HI20:
-+	case R_LARCH_PCALA_LO12:
-+	case R_LARCH_GOT_PC_HI20:
-+	case R_LARCH_GOT_PC_LO12:
-+		break;
-+
-+	case R_LARCH_64:
-+	case R_LARCH_MARK_LA:
-+		add_reloc(&relocs, rel->r_offset, type2int[r_type]);
-+		break;
-+
-+	default:
-+		die("Unsupported relocation type: %s (%d)\n", rel_type(r_type), r_type);
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int write_reloc_as_bin(uint32_t v, FILE *f)
-+{
-+	return fwrite(&v, 4, 1, f);
-+}
-+
-+static int write_reloc_as_text(uint32_t v, FILE *f)
-+{
-+	int res;
-+
-+	res = fprintf(f, "\t.long 0x%08"PRIx32"\n", v);
-+	if (res < 0)
-+		return res;
-+	else
-+		return sizeof(uint32_t);
-+}
-+
-+static void emit_relocs(int as_text, int as_bin, FILE *outf)
-+{
-+	int i;
-+	int (*write_reloc)(uint32_t, FILE *) = write_reloc_as_bin;
-+	int size = 0;
-+	int size_reserved;
-+	struct section *sec_reloc;
-+
-+	sec_reloc = sec_lookup(".data.reloc");
-+	if (!sec_reloc)
-+		die("Could not find relocation section\n");
-+
-+	size_reserved = sec_reloc->shdr.sh_size;
-+
-+	/* Collect up the relocations */
-+	walk_relocs(do_reloc);
-+
-+	/* Print the relocations */
-+	if (as_text) {
-+		/* Print the relocations in a form suitable that
-+		 * gas will like.
-+		 */
-+		printf(".section \".data.reloc\",\"a\"\n");
-+		printf(".balign 4\n");
-+		/* Output text to stdout */
-+		write_reloc = write_reloc_as_text;
-+		outf = stdout;
-+	} else if (as_bin) {
-+		/* Output raw binary to stdout */
-+		outf = stdout;
-+	} else {
-+		/* Seek to offset of the relocation section.
-+		 * Each relocation is then written into the
-+		 * vmlinux kernel image.
-+		 */
-+		if (fseek(outf, sec_reloc->shdr.sh_offset, SEEK_SET) < 0) {
-+			die("Seek to %d failed: %s\n",
-+				sec_reloc->shdr.sh_offset, strerror(errno));
-+		}
-+	}
-+
-+	for (i = 0; i < relocs.count; i++)
-+		size += write_reloc(relocs.offset[i], outf);
-+
-+	/* Print a stop, but only if we've actually written some relocs */
-+	if (size)
-+		size += write_reloc(0, outf);
-+
-+	if (size > size_reserved)
-+		/* Die, but suggest a value for CONFIG_RELOCATION_TABLE_SIZE
-+		 * which will fix this problem and allow a bit of headroom
-+		 * if more kernel features are enabled
-+		 */
-+		die("Relocations overflow available space!\n"
-+		    "Please adjust CONFIG_RELOCATION_TABLE_SIZE "
-+		    "to at least 0x%08x\n", (size + 0x1000) & ~0xFFF);
++	*(u64 *)loc_new += offset;
 +}
 +
 +/*
-+ * As an aid to debugging problems with different linkers
-+ * print summary information about the relocs.
-+ * Since different linkers tend to emit the sections in
-+ * different orders we use the section names in the output.
++ * The details about la.abs r1, imm64
++ *
++ * lu12i.w $r1, 0
++ * ori     $r1, $r1, 0
++ * lu32i.d $r1, 0
++ * lu52i.d $r1, $r1, 0
++ *
++ * LoongArch use lu12i.w, ori, lu32i.d, lu52i.d to load a 64bit imm.
++ * lu12i.w load bit31~bit12, ori load bit11~bit0,
++ * lu32i.d load bit51~bit32, lu52i.d load bit63~bit52
 + */
-+static int do_reloc_info(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
-+				const char *symname)
++
++static void __init apply_r_loongarch_la_rel(u32 *loc_new, long offset)
 +{
-+	printf("%-16s  0x%08x  %-35s  %-40s  %-16s\n",
-+		sec_name(sec->shdr.sh_info),
-+		(unsigned int)rel->r_offset,
-+		rel_type(ELF_R_TYPE(rel->r_info)),
-+		symname,
-+		sec_name(sym->st_shndx));
++	unsigned long long dest;
++	union loongarch_instruction *ori, *lu12iw, *lu32id, *lu52id;
++
++	ori = (union loongarch_instruction *)&loc_new[1];
++	lu12iw = (union loongarch_instruction *)&loc_new[0];
++	lu32id = (union loongarch_instruction *)&loc_new[2];
++	lu52id = (union loongarch_instruction *)&loc_new[3];
++
++	dest = ori->reg2i12_format.immediate & 0xfff;
++	dest |= (lu12iw->reg1i20_format.immediate & 0xfffff) << 12;
++	dest |= ((u64)lu32id->reg1i20_format.immediate & 0xfffff) << 32;
++	dest |= ((u64)lu52id->reg2i12_format.immediate & 0xfff) << 52;
++	dest += offset;
++
++	ori->reg2i12_format.immediate = dest & 0xfff;
++	lu12iw->reg1i20_format.immediate = (dest >> 12) & 0xfffff;
++	lu32id->reg1i20_format.immediate = (dest >> 32) & 0xfffff;
++	lu52id->reg2i12_format.immediate = (dest >> 52) & 0xfff;
++}
++
++static int __init reloc_handler(u32 type, u32 *loc_new, long offset)
++{
++	switch (type) {
++	case 1:
++		apply_r_loongarch_64_rel(loc_new, offset);
++		break;
++	case 2:
++		apply_r_loongarch_la_rel(loc_new, offset);
++		break;
++	default:
++		pr_err("Unhandled relocation type %d\n", type);
++		return -ENOEXEC;
++	}
++
++	return 0;
++
++}
++
++static int __init do_relocations(void *kbase_new, long offset, u32 *rstart, u32 *rend)
++{
++	u32 *r;
++	u32 *loc_new;
++	int type;
++	int res;
++
++	/* r->offset is relative to _stext instead of _text */
++	kbase_new = (void *)((u64)kbase_new + (u64)_stext - (u64)_text);
++
++	for (r = rstart; r < rend; r++) {
++		/* Sentinel for last relocation */
++		if (*r == 0)
++			break;
++
++		type = (*r >> 28) & 0xf;
++		loc_new = (void *)(kbase_new + ((*r & 0x0fffffff) << 2));
++
++		res = reloc_handler(type, loc_new, offset);
++		if (res)
++			return res;
++
++	}
++
 +	return 0;
 +}
 +
-+static void print_reloc_info(void)
++/*
++ * The exception table is filled in by the relocs tool after vmlinux is linked.
++ * It must be relocated separately since there will not be any relocation
++ * information for it filled in by the linker.
++ */
++static void __init relocate_exception_table(long offset)
 +{
-+	printf("%-16s  %-10s  %-35s  %-40s  %-16s\n",
-+		"reloc section",
-+		"offset",
-+		"reloc type",
-+		"symbol",
-+		"symbol section");
-+	walk_relocs(do_reloc_info);
-+}
++#ifdef CONFIG_BUILDTIME_TABLE_SORT
++	unsigned long *etable_start, *etable_end, *e;
 +
-+# define process process_64
++	etable_start = RELOCATED((unsigned long)__start___ex_table
++			- (unsigned long)_text + VMLINUX_LOAD_ADDRESS);
++	etable_end = RELOCATED((unsigned long)__stop___ex_table
++			- (unsigned long)_text + VMLINUX_LOAD_ADDRESS);
 +
-+void process(FILE *fp, int as_text, int as_bin,
-+	     int show_reloc_info, int keep_relocs)
-+{
-+	read_ehdr(fp);
-+	read_shdrs(fp);
-+	read_strtabs(fp);
-+	read_symtabs(fp);
-+	read_relocs(fp);
-+	if (show_reloc_info) {
-+		print_reloc_info();
-+		return;
-+	}
-+	emit_relocs(as_text, as_bin, fp);
-+	if (!keep_relocs)
-+		remove_relocs(fp);
-+}
-diff --git a/arch/loongarch/boot/tools/relocs.h b/arch/loongarch/boot/tools/relocs.h
-new file mode 100644
-index 000000000000..e11a391fdfea
---- /dev/null
-+++ b/arch/loongarch/boot/tools/relocs.h
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef RELOCS_H
-+#define RELOCS_H
-+
-+#include <stdio.h>
-+#include <stdarg.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <inttypes.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <unistd.h>
-+#include <elf.h>
-+
-+#ifndef EM_LOONGARCH
-+#define EM_LOONGARCH	258
++	for (e = etable_start; e < etable_end; e++)
++		*e += offset;
 +#endif
-+#define R_LARCH_NONE				0
-+#define R_LARCH_32				1
-+#define R_LARCH_64				2
-+#define R_LARCH_MARK_LA				20
-+#define R_LARCH_SOP_PUSH_PCREL			22
-+#define R_LARCH_SOP_PUSH_ABSOLUTE		23
-+#define R_LARCH_SOP_PUSH_PLT_PCREL		29
-+#define R_LARCH_SOP_SUB				32
-+#define R_LARCH_SOP_SL				33
-+#define R_LARCH_SOP_SR				34
-+#define R_LARCH_SOP_AND				36
-+#define R_LARCH_SOP_POP_32_U_10_12		39
-+#define R_LARCH_SOP_POP_32_S_10_12		40
-+#define R_LARCH_SOP_POP_32_S_10_16_S2		42
-+#define R_LARCH_SOP_POP_32_S_5_20		43
-+#define R_LARCH_SOP_POP_32_S_0_5_10_16_S2	44
-+#define R_LARCH_SOP_POP_32_S_0_10_10_16_S2	45
-+#define R_LARCH_ADD32				50
-+#define R_LARCH_ADD64				51
-+#define R_LARCH_SUB32				55
-+#define R_LARCH_SUB64				56
-+#define R_LARCH_B26				66
-+#define R_LARCH_ABS_HI20			67
-+#define R_LARCH_ABS_LO12			68
-+#define R_LARCH_ABS64_LO20			69
-+#define R_LARCH_ABS64_HI12			70
-+#define R_LARCH_PCALA_HI20			71
-+#define R_LARCH_PCALA_LO12			72
-+#define R_LARCH_GOT_PC_HI20			75
-+#define R_LARCH_GOT_PC_LO12			76
-+
-+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-+
-+void die(char *fmt, ...);
-+void process_64(FILE *fp, int as_text, int as_bin,
-+		int show_reloc_info, int keep_relocs);
-+
-+#endif /* RELOCS_H */
-diff --git a/arch/loongarch/boot/tools/relocs_64.c b/arch/loongarch/boot/tools/relocs_64.c
-new file mode 100644
-index 000000000000..1024133af8ec
---- /dev/null
-+++ b/arch/loongarch/boot/tools/relocs_64.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "relocs.h"
-+
-+#define ELF_BITS 64
-+
-+#define ELF_MACHINE             EM_LOONGARCH
-+#define ELF_MACHINE_NAME        "LOONGARCH64"
-+#define SHT_REL_TYPE            SHT_RELA
-+#define Elf_Rel                 Elf64_Rela
-+
-+#define ELF_CLASS               ELFCLASS64
-+#define ELF_R_SYM(val)          ELF64_R_SYM(val)
-+#define ELF_R_TYPE(val)         ELF64_R_TYPE(val)
-+#define ELF_ST_TYPE(o)          ELF64_ST_TYPE(o)
-+#define ELF_ST_BIND(o)          ELF64_ST_BIND(o)
-+#define ELF_ST_VISIBILITY(o)    ELF64_ST_VISIBILITY(o)
-+
-+#include "relocs.c"
-diff --git a/arch/loongarch/boot/tools/relocs_main.c b/arch/loongarch/boot/tools/relocs_main.c
-new file mode 100644
-index 000000000000..03d23aec38fa
---- /dev/null
-+++ b/arch/loongarch/boot/tools/relocs_main.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <stdio.h>
-+#include <stdint.h>
-+#include <stdarg.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <endian.h>
-+#include <elf.h>
-+
-+#include "relocs.h"
-+
-+void die(char *fmt, ...)
-+{
-+	va_list ap;
-+
-+	va_start(ap, fmt);
-+	vfprintf(stderr, fmt, ap);
-+	va_end(ap);
-+	exit(1);
 +}
 +
-+static void usage(void)
++static void __init relocate_got_table(long offset)
 +{
-+	die("relocs [--reloc-info|--text|--bin|--keep] vmlinux\n");
++	unsigned long *got_start, *got_end, *got;
++
++	got_start = RELOCATED((unsigned long)__start_got
++			- (unsigned long)_text + VMLINUX_LOAD_ADDRESS);
++	got_end = RELOCATED((unsigned long)__stop_got
++			- (unsigned long)_text + VMLINUX_LOAD_ADDRESS);
++
++	for (got = got_start + 1; got < got_end; got++)
++		*got += offset;
 +}
 +
-+int main(int argc, char **argv)
++/*
++ * Choose a new address for the kernel, for now we'll hard
++ * code the destination.
++ */
++static inline void __init *determine_relocation_address(void)
 +{
-+	int show_reloc_info, as_text, as_bin, keep_relocs;
-+	const char *fname;
-+	FILE *fp;
-+	int i;
-+	unsigned char e_ident[EI_NIDENT];
++	return (void *)(CACHE_BASE + 0x02000000);
++}
 +
-+	show_reloc_info = 0;
-+	as_text = 0;
-+	as_bin = 0;
-+	keep_relocs = 0;
-+	fname = NULL;
-+	for (i = 1; i < argc; i++) {
-+		char *arg = argv[i];
-+
-+		if (*arg == '-') {
-+			if (strcmp(arg, "--reloc-info") == 0) {
-+				show_reloc_info = 1;
-+				continue;
-+			}
-+			if (strcmp(arg, "--text") == 0) {
-+				as_text = 1;
-+				continue;
-+			}
-+			if (strcmp(arg, "--bin") == 0) {
-+				as_bin = 1;
-+				continue;
-+			}
-+			if (strcmp(arg, "--keep") == 0) {
-+				keep_relocs = 1;
-+				continue;
-+			}
-+		} else if (!fname) {
-+			fname = arg;
-+			continue;
-+		}
-+		usage();
++static inline int __init relocation_addr_valid(void *loc_new)
++{
++	if ((unsigned long)loc_new & 0x0000ffff) {
++		/* Inappropriately aligned new location */
++		return 0;
 +	}
-+	if (!fname)
-+		usage();
-+
-+	fp = fopen(fname, "r+");
-+	if (!fp)
-+		die("Cannot open %s: %s\n", fname, strerror(errno));
-+
-+	if (fread(&e_ident, 1, EI_NIDENT, fp) != EI_NIDENT)
-+		die("Cannot read %s: %s", fname, strerror(errno));
-+
-+	rewind(fp);
-+	process_64(fp, as_text,  as_bin, show_reloc_info, keep_relocs);
-+	fclose(fp);
-+	return 0;
++	if ((unsigned long)loc_new < (unsigned long)_end) {
++		/* New location overlaps original kernel */
++		return 0;
++	}
++	return 1;
 +}
++
++void *__init relocate_kernel(void)
++{
++	void *loc_new;
++	unsigned long kernel_length;
++	long offset = 0;
++	int res = 1;
++	/* Default to original kernel entry point */
++	void *kernel_entry = start_kernel;
++
++	kernel_length = (long)(_end) - (long)(_text);
++
++	loc_new = determine_relocation_address();
++
++	/* Sanity check relocation address */
++	if (relocation_addr_valid(loc_new))
++		offset = (unsigned long)loc_new - (unsigned long)(_text);
++
++	if (offset) {
++		/* Copy the kernel to it's new location */
++		memcpy(loc_new, _text, kernel_length);
++
++		/* Sync the caches ready for execution of new kernel */
++		__asm__ __volatile__ (
++			"ibar 0 \t\n"
++			"dbar 0 \t\n");
++
++		/* Perform relocations on the new kernel */
++		res = do_relocations(loc_new, offset, __start_relocation,
++			       __stop_relocation);
++		if (res < 0)
++			goto out;
++
++		relocate_exception_table(offset);
++		relocate_got_table(offset);
++
++		/* The current thread is now within the relocated image */
++		__current_thread_info = RELOCATED(__current_thread_info);
++
++		/* Return the new kernel's entry point */
++		kernel_entry = RELOCATED(start_kernel);
++	}
++out:
++	return kernel_entry;
++}
+diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
+index e5890bec2bf6..512bf699c877 100644
+--- a/arch/loongarch/kernel/vmlinux.lds.S
++++ b/arch/loongarch/kernel/vmlinux.lds.S
+@@ -55,6 +55,12 @@ SECTIONS
+ 
+ 	EXCEPTION_TABLE(16)
+ 
++	.got : {
++		__start_got = .;
++		*(.got)		/* Global offset table */
++		__stop_got = .;
++	}
++
+ 	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+ 	__init_begin = .;
+ 	__inittext_begin = .;
+@@ -80,6 +86,25 @@ SECTIONS
+ 
+ 	.rela.dyn : ALIGN(8) { *(.rela.dyn) *(.rela*) }
+ 
++#ifdef CONFIG_RELOCATABLE
++	. = ALIGN(4);
++	.data.reloc : {
++		__start_relocation = .;
++		/*
++		 * Space for relocation table
++		 * This needs to be filled so that the
++		 * relocs tool can overwrite the content.
++		 * An invalid value is left at the start of the
++		 * section to abort relocation if the table
++		 * has not been filled in.
++		*/
++		LONG(0xFFFFFFFF);
++		FILL(0);
++		. += CONFIG_RELOCATION_TABLE_SIZE - 4;
++		__stop_relocation = .;
++	}
++#endif
++
+ 	.init.bss : {
+ 		*(.init.bss)
+ 	}
 -- 
 2.36.1
 

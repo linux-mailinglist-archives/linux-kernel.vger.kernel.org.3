@@ -2,199 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CF55AB4E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 519E75AB4E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbiIBPTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S236458AbiIBPTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbiIBPSt (ORCPT
+        with ESMTP id S236778AbiIBPSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:18:49 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8403147EB0;
-        Fri,  2 Sep 2022 07:51:52 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id jy14so1559103qvb.12;
-        Fri, 02 Sep 2022 07:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=CtCUtbyEWpfB5jQ909qB3n/ir4ZwsxY4gByY85AERlg=;
-        b=gPEEKL/tgOHnlyna/FNpmm347tjxzmF1a1IeVz42B6gF2Ujmh40FnFgpR8lzbZowW9
-         phZ5nq5VsyIZ2/mNdOIcqoZSh/WMD7qCfadrBWinnlIjAKGb3meAVAf8jJhQ9IeeH1tI
-         BCyP4+jmuWPI0/AiE3Wk+8xyuzuY1i2fhmGMFevw3w1cVGxmgrucmBxg8lLlhLTxW05c
-         Cdtga+tU25YiC8g24iGNZ4Iv++3FrpmMxybtKtHrj+//3W1GedmPYACqJYmihpZI2cK7
-         +l4PWWotJuCCMZtdXzvT7cSJs7JuWDjAyinnoDgA4R0r2YV0Ez96OC6ey0lJhBDdGwIR
-         5yqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CtCUtbyEWpfB5jQ909qB3n/ir4ZwsxY4gByY85AERlg=;
-        b=PGPmqRflLlaLsyXy2Y1kyiuglR/WHTN8ZTrWYi1UUlgIniciOeTwnX9mTw6F0LnJcg
-         xvpDCWME6+j0/eQcWTsGfYhDKhnLllxg6yDQiE4xAV89zGjIqTY+dZ35yCl3Z7MAaJ/m
-         vB7/xU8gmmVCCgQ4hWdoz3R112Wnmo68ckqpZqCoRvUZ8DNdrD3pewiQLtEKJRmn24I7
-         /UbLYlQMkKmoHKdLacc/lyThFLYIiHm/D6FUoEy7K4cIea+cJ3qT2XtnMlbMg8748lyC
-         Iyz84xjmy7xBXEHanbMjFrk5aQudnIIogJqP+Pw6VT7kpgannS7jSofWLj98PiJ03pAr
-         TBhw==
-X-Gm-Message-State: ACgBeo1WyICsXosJRhoHXptihLuUDo0EW54hE57NBb1VvaEfKsB23MbO
-        Mub1y5Em+q255+tcIsO6D9PbRfnxtQFkNyAW6EI=
-X-Google-Smtp-Source: AA6agR7nJZO8ZswNlfltRIaeZ+DlNe0yYud3zZb6aTqIBYFpFDbIHe3ZrOAOLBr+6LqOY4mMXWntX61heZvB8ZT1cbg=
-X-Received: by 2002:a05:6214:27ca:b0:499:95f:6379 with SMTP id
- ge10-20020a05621427ca00b00499095f6379mr20131343qvb.82.1662130310778; Fri, 02
- Sep 2022 07:51:50 -0700 (PDT)
+        Fri, 2 Sep 2022 11:18:46 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15223845B;
+        Fri,  2 Sep 2022 07:51:45 -0700 (PDT)
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F38F51BF218;
+        Fri,  2 Sep 2022 14:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1662130304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xclzXnMYmVfvBNVyfFnKWw9O2ZLmh2rrfaJFl9XWajc=;
+        b=pAvxH9rh1NPVqP6/k/KyNjguhfKVfrq/eIsFKdJbtsXXSjPWWPYI5oqg9ug2BXruXSSL32
+        P1LLyQOSckSihX8Uac2e9mPEVMs093uOg7zRF/B/0D17hTG2ATx/mpLbuO7L1PNOMWsXRu
+        drKoOYKZUtSN31CurNlfs7kjRJkridCFYtL+VaoaTl17ID3m+bWEeVYgzfPDGSNQ1DGMdf
+        d1KhMV7el5VIDxlDtfDm7iX1jveolzZkxlE/dpLYaEpob4DeihnTK4EqarsJilVPM6ohSA
+        jH/qlMRkw58QYofHFyIr7DzqITS4mcCabYAQ7dJqBxihuKcTRZg44iju0Cwrvw==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Marek =?utf-8?Q?Beh?= =?utf-8?Q?=C3=BAn?= <kabel@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/10] ARM: dts: mvebu: Add definitions for PCIe
+ legacy INTx interrupts
+In-Reply-To: <20220817165034.ymmha6swsi5iju27@pali>
+References: <20220712164108.30262-1-kabel@kernel.org>
+ <20220817165034.ymmha6swsi5iju27@pali>
+Date:   Fri, 02 Sep 2022 16:51:41 +0200
+Message-ID: <87r10tesn6.fsf@BL-laptop>
 MIME-Version: 1.0
-References: <20220902124354.630826-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220902124354.630826-1-horatiu.vultur@microchip.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 2 Sep 2022 17:51:14 +0300
-Message-ID: <CAHp75Ve7EkE3q3_nOvT_KLmpmnXzMw179nbOxYEYzUeLY0QRnw@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: ocelot: Fix interrupt controller
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 3:40 PM Horatiu Vultur
-<horatiu.vultur@microchip.com> wrote:
+Hello,
+
+> Hello! What is state of these patches? I see no response for more than
+> month.
+
+Actually I didn't received the second version of the series, but I
+manged to find it in lore and so I applied it on mvebu/dt
+
+Thanks,
+
+Gregory
+
+
 >
-> When an external device generated a level based interrupt then the
-> interrupt controller could miss the interrupt. The reason is that the
-> interrupt controller can detect only link changes.
->
-> In the following example, if there is a PHY that generates an interrupt
-> then the following would be happen. The GPIO detected that the interrupt
+> On Tuesday 12 July 2022 18:40:58 Marek Beh=C3=BAn wrote:
+>> As suggested by Gregory [1] (although he suggested it only for armada
+>> 380), add definitions for PCIe legacy INTx interrupts into every DTS
+>> file used by the pci-mvebu.c controller driver.
+>>=20
+>> It was tested on 88F6820 (A385) and 88F6281 (Kirkwood) SoCs.
+>>=20
+>> [1] https://lore.kernel.org/linux-arm-kernel/87wnhxjxlq.fsf@BL-laptop/
+>>=20
+>> Changes since v1:
+>> - dropped armada-385 patch, which was already applied
+>> - added commit messages
+>>=20
+>> Pali Roh=C3=A1r (10):
+>>   ARM: dts: kirkwood: Add definitions for PCIe legacy INTx interrupts
+>>   ARM: dts: dove: Add definitions for PCIe legacy INTx interrupts
+>>   ARM: dts: armada-370.dtsi: Add definitions for PCIe legacy INTx
+>>     interrupts
+>>   ARM: dts: armada-xp-98dx3236.dtsi: Add definitions for PCIe legacy
+>>     INTx interrupts
+>>   ARM: dts: armada-xp-mv78230.dtsi: Add definitions for PCIe legacy INTx
+>>     interrupts
+>>   ARM: dts: armada-xp-mv78260.dtsi: Add definitions for PCIe legacy INTx
+>>     interrupts
+>>   ARM: dts: armada-xp-mv78460.dtsi: Add definitions for PCIe legacy INTx
+>>     interrupts
+>>   ARM: dts: armada-375.dtsi: Add definitions for PCIe legacy INTx
+>>     interrupts
+>>   ARM: dts: armada-380.dtsi: Add definitions for PCIe legacy INTx
+>>     interrupts
+>>   ARM: dts: armada-39x.dtsi: Add definitions for PCIe legacy INTx
+>>     interrupts
+>>=20
+>>  arch/arm/boot/dts/armada-370.dtsi         |  28 ++++-
+>>  arch/arm/boot/dts/armada-375.dtsi         |  28 ++++-
+>>  arch/arm/boot/dts/armada-380.dtsi         |  42 ++++++-
+>>  arch/arm/boot/dts/armada-39x.dtsi         |  56 +++++++--
+>>  arch/arm/boot/dts/armada-xp-98dx3236.dtsi |  14 ++-
+>>  arch/arm/boot/dts/armada-xp-mv78230.dtsi  |  70 +++++++++--
+>>  arch/arm/boot/dts/armada-xp-mv78260.dtsi  | 126 ++++++++++++++++---
+>>  arch/arm/boot/dts/armada-xp-mv78460.dtsi  | 140 ++++++++++++++++++----
+>>  arch/arm/boot/dts/dove.dtsi               |  28 ++++-
+>>  arch/arm/boot/dts/kirkwood-6192.dtsi      |  14 ++-
+>>  arch/arm/boot/dts/kirkwood-6281.dtsi      |  14 ++-
+>>  arch/arm/boot/dts/kirkwood-6282.dtsi      |  28 ++++-
+>>  arch/arm/boot/dts/kirkwood-98dx4122.dtsi  |  14 ++-
+>>  13 files changed, 516 insertions(+), 86 deletions(-)
+>>=20
+>> --=20
+>> 2.35.1
+>>=20
 
-would happen
-
-> line changed, and then the 'ocelot_irq_handler' will be called. Here it
-> detects which GPIO line seen the change and for that will call the
-> following:
-> 1. irq_mask
-> 2. phy interrupt routine
-> 3. irq_eoi
-> 4. irq_unmask
->
-> And this works fine for simple cases, but if the PHY generates many
-> interrupts, for example when doing PTP timestamping, then the following
-> could happen. Again the function 'ocelot_irq_handler' will be called
-> and then from here the following could happen:
-> 1. irq_mask
-> 2. phy interrupt routine
-> 3. irq_eoi
-> 4. irq_unmask
->
-> Right before step 3(irq_eoi), the PHY will generate another interrupt.
-> Now the interrupt controller will acknowledge the change in the
-> interrupt line. So we miss the interrupt.
->
-> A solution will be to use 'handle_level_irq' instead of
-> 'handle_fasteoi_irq', because for this will change routine order of
-> handling the interrupt.
-> 1. irq_mask
-> 2. irq_ack
-> 3. phy interrupt routine
-> 4. irq_unmask
->
-> And now if the PHY will generate a new interrupt before irq_unmask, the
-> interrupt controller will detect this because it already acknowledge the
-> change in interrupt line at step 2(irq_ack).
->
-> But this is not the full solution because there is another issue. In
-> case there are 2 PHYs that shared the interrupt line. For example phy1
-
-share
-
-> generates an interruot, then the following can happen:
-
-interrupt
-
-> 1.irq_mask
-> 2.irq_ack
-> 3.phy0 interrupt routine
-> 4.phy1 interrupt routine
-> 5.irq_unmask
->
-> In case phy0 will generate an interrupt while clearing the interrupt
-> source in phy1, then the interrupt line will be kept down by phy0. So
-> the interrupt controller will not see any changes in the interrupt line.
-> The solution here is to update 'irq_unmask' such that it can detect if
-> the interrupt line is still active or not. And if it is active then call
-> again the procedure to clear the interrupts. But we don't want to do it
-> every time, only if we know that the interrupt controller have not seen
-> already that the interrupt line has changed.
->
-> While at this, add support also for IRQ_TYPE_LEVEL_LOW.
-
-...
-
-> +       /*
-> +        * It is enough to read only one action because the trigger level is the
-> +        * same for all of them.
-> +        */
-
-Hmm... this is interesting. How is the hardware supposed to work if
-the user asks for two contradictory levels for two different IRQs?
-
-...
-
-> +       /*
-> +        * Check if the interrupt controller has seen any changes in the
-> +        * interrupt line
-
-Missed period.
-
-> +        */
-
-...
-
-> +       /*
-> +        * In case the interrupt line is still active and the interrupt
-> +        * controller has not seen any changes in the interrupt line, then it
-> +        * means that there happen another interrupt while the line was active.
-> +        * So we missed that one, so we need to kick again the interrupt handler
-> +        */
-
-Ditto.
-
-...
-
-> +               struct ocelot_irq_work *work = kmalloc(sizeof(*work), GFP_ATOMIC);
-
-It's more visible what's going on if you split this to definition and
-assignment and move assignment closer to its first user.
-
-> +               if (!work)
-> +                       return;
-
-...
-
->         type &= IRQ_TYPE_SENSE_MASK;
-
-This seems redundant, see below.
-
-
-> -       if (!(type & (IRQ_TYPE_EDGE_BOTH | IRQ_TYPE_LEVEL_HIGH)))
-> +       if (type == IRQ_TYPE_NONE)
->                 return -EINVAL;
-
-Is it ever possible? IIRC the IRQ chip code, the set->type won't be
-called at all in such a case. Also type is already limited to the
-sense mask, no?
-
--- 
-With Best Regards,
-Andy Shevchenko
+--=20
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com

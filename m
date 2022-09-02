@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98825ABB7F
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE305ABB7E
 	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiIBX6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 19:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S230376AbiIBX7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 19:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIBX6t (ORCPT
+        with ESMTP id S230269AbiIBX72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 19:58:49 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C82ED024
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 16:58:48 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id w18so2922838qki.8
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 16:58:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=OLpWEjAueAliO4tspjAqBu7T8qnoqOml+2IkcaXQv7U=;
-        b=vxuCgJWKwuKgkzkruaZYbPLfIziJaojRQlWtBoy8T+90AFmxCVzW00pcvFQvsmWQvp
-         mh0TSgG/gE8DpcHBqX9+F21wfoQQUkqCwbN+wwI8VLghHIXn8uyVJIZByRS4rM83MRdm
-         LWDmDEPNi4Nwr/LBK8KQMzclQ8KlqkFQq4lb8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=OLpWEjAueAliO4tspjAqBu7T8qnoqOml+2IkcaXQv7U=;
-        b=QZWV8LrDRUpJ851h1NejGyk28yi89A7zt7Qw1iRwXUC0qKw6po+HBBwNYp8Bby4+Ae
-         QmxGIpL20YM2PkkUEMBla0SvVLHqZd7Qei9Utb56rnoGyHNsHJS6Pas/EAzFNUJAUYVi
-         BmjfyOfnWevjuNBAL4xiKf1Jrl3zuD9mTvKrX7ON6UDde6PuAW1yDW+hoiDqd7XH/KL4
-         /MjyLOdQ7sCCh0jt43uN/0IybkTukKKD8KlQleTGKjRFnF8ofeMLoIR5gt2RuuFBw8xj
-         RzV/foE6jYJdazwnLueaHmsbsXlQPPda4W/jq1y+FAxFzaJh+9oRIKyvqJ6Y+5VqqZg1
-         CeVQ==
-X-Gm-Message-State: ACgBeo2hpwyXESPRKX6Y1sKb5rzF/LTyxqGrGo5oezjdqnt4D0PLdzAJ
-        o6KTxG70ha1bSuRzBPrNNk46XA==
-X-Google-Smtp-Source: AA6agR7z4UZ213YpInA8vfnSFPuIGJep8rvlb/udAMR979v+ERa/LCu/syzJxSdTitqBuko9tR9H9Q==
-X-Received: by 2002:a05:620a:400c:b0:6a6:f8e6:92cc with SMTP id h12-20020a05620a400c00b006a6f8e692ccmr25813321qko.561.1662163127471;
-        Fri, 02 Sep 2022 16:58:47 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id a9-20020ac844a9000000b0034305a91aaesm1756221qto.83.2022.09.02.16.58.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 16:58:47 -0700 (PDT)
-Message-ID: <d24157f4-924c-7113-75ac-ed691191584f@joelfernandes.org>
-Date:   Fri, 2 Sep 2022 19:58:42 -0400
+        Fri, 2 Sep 2022 19:59:28 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECA4D6C;
+        Fri,  2 Sep 2022 16:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662163162; x=1693699162;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5SVxLeD0zbhXVLOjfZ0foEn8yzE1j75Wp+4aNHotkMc=;
+  b=JcIExIGMVxLupvu02WX9awW+PP9dGT/rJZ8RmqS05sDf8eFaQHp6iKuY
+   MtlDKr/oOvhzC5ehHD7ADC++OqpBJnDuc4nb4wTCOyYnk5Z5fY8HVJo7I
+   KvU9WFpwHc3X5VSrBc68rPsdI9AzjgFLP7dVq2FZFoQs54/OzcZ4EyOe7
+   PbNcRSDMEA1KBBceWiJqJjuG8Ci9rqZXacxztQV1tT9Ea78R09fO8vq25
+   eyZkaydFKAcd0i1XaFSKorU57p4XBNTr8SN6VsQ1Xo4VfahuK+sLppIEc
+   d+HdHRDkk+lD03LvKwiSWqqbXwz7RWXu0bP7ME57SdkJq/MkwVbj+N4hd
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="279125482"
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="279125482"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:59:21 -0700
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="755423027"
+Received: from cgoff-mobl1.amr.corp.intel.com (HELO [10.209.53.13]) ([10.209.53.13])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:59:21 -0700
+Message-ID: <02dd4594-8055-cf14-8c62-ae8080b1caca@linux.intel.com>
+Date:   Fri, 2 Sep 2022 16:59:20 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v5 04/18] rcu: Fix late wakeup when flush of bypass cblist
- happens
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 3/3] PCI/PM: Always disable PTM for all devices during
+ suspend
 Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org, boqun.feng@gmail.com
-References: <20220901221720.1105021-1-joel@joelfernandes.org>
- <20220901221720.1105021-5-joel@joelfernandes.org>
- <20220902113500.GA113405@lothringen>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220902113500.GA113405@lothringen>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+References: <20220902233543.390890-1-helgaas@kernel.org>
+ <20220902233543.390890-4-helgaas@kernel.org>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220902233543.390890-4-helgaas@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,109 +73,155 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 9/2/2022 7:35 AM, Frederic Weisbecker wrote:
-> On Thu, Sep 01, 2022 at 10:17:06PM +0000, Joel Fernandes (Google) wrote:
->> When the bypass cblist gets too big or its timeout has occurred, it is
->> flushed into the main cblist. However, the bypass timer is still running
->> and the behavior is that it would eventually expire and wake the GP
->> thread.
->>
->> Since we are going to use the bypass cblist for lazy CBs, do the wakeup
->> soon as the flush happens. Otherwise, the lazy-timer will go off much
->> later and the now-non-lazy cblist CBs can get stranded for the duration
->> of the timer.
->>
->> This is a good thing to do anyway (regardless of this series), since it
->> makes the behavior consistent with behavior of other code paths where queueing
->> something into the ->cblist makes the GP kthread in a non-sleeping state
->> quickly.
->>
->> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->> ---
->>  kernel/rcu/tree_nocb.h | 8 +++++++-
->>  1 file changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
->> index 0a5f0ef41484..31068dd31315 100644
->> --- a/kernel/rcu/tree_nocb.h
->> +++ b/kernel/rcu/tree_nocb.h
->> @@ -447,7 +447,13 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->>  			rcu_advance_cbs_nowake(rdp->mynode, rdp);
->>  			rdp->nocb_gp_adv_time = j;
->>  		}
->> -		rcu_nocb_unlock_irqrestore(rdp, flags);
->> +
->> +		// The flush succeeded and we moved CBs into the ->cblist.
->> +		// However, the bypass timer might still be running. Wakeup the
->> +		// GP thread by calling a helper with was_all_done set so that
->> +		// wake up happens (needed if main CB list was empty before).
->> +		__call_rcu_nocb_wake(rdp, true, flags)
->> +
+On 9/2/22 4:35 PM, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Ok so there are two different changes here:
+> We want to disable PTM on Root Ports because that allows some chips, e.g.,
+> Intel mobile chips since Coffee Lake, to enter a lower-power PM state.
 > 
-> 1) wake up nocb_gp as we just flushed the bypass list. Indeed if the regular
->    callback list was empty before flushing, we rather want to immediately wake
->    up nocb_gp instead of waiting for the bypass timer to process them.
+> That means we also have to disable PTM on downstream devices.  PCIe r6.0,
+> sec 2.2.8, recommends that functions support generation of messages in
+> non-D0 states, so we have to assume Switch Upstream Ports or Endpoints may
+> send PTM Requests while in D1, D2, and D3hot.  A PTM message received by a
+> Downstream Port (including a Root Port) with PTM disabled must be treated
+> as an Unsupported Request (sec 6.21.3).
 > 
-> 2) wake up nocb_gp unconditionally (ie: even if the regular queue was not empty
->    before bypass flushing) so that nocb_gp_wait() is forced through another loop
->    starting with cancelling the bypass timer (I suggest you put such explanation
->    in the comment btw because that process may not be obvious for mortals).
+> PTM was previously disabled only for Root Ports, and it was disabled in
+> pci_prepare_to_sleep(), which is not called at all if a driver supports
+> legacy PM or does its own state saving.
 > 
-> The change 1) looks like a good idea to me.
+> Instead, disable PTM early in pci_pm_suspend() and pci_pm_runtime_suspend()
+> so we do it in all cases.
 > 
-> The change 2) has unclear motivation. It forces nocb_gp_wait() through another
-> costly loop even though the timer might have been cancelled into some near
-> future, eventually avoiding that extra costly loop. Also it abuses the
-> was_alldone stuff and we may get rcu_nocb_wake with incoherent meanings
-> (WakeEmpty/WakeEmptyIsDeferred) when it's actually not empty.
+> Previously PTM was disabled *after* saving device state, so the state
+> restore on resume automatically re-enabled it.  Since we now disable PTM
+> *before* saving state, we must explicitly re-enable it.
+> 
+> Here's a sample of errors that occur when PTM is disabled only on the Root
+> Port.  With this topology:
+> 
+>   0000:00:1d.0 Root Port            to [bus 08-71]
+>   0000:08:00.0 Switch Upstream Port to [bus 09-71]
+> 
+> Kai-Heng reported errors like this:
+> 
+>   pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+>   pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+>   pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+>   pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+>   pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
+> 
+> Decoding TLP header 0x34...... (0011 0100b) and 0x08000052:
+> 
+>   Fmt                         001b  4 DW header, no data
+>   Type                     1 0100b  Msg (Local - Terminate at Receiver)
+>   Requester ID  0x0800              Bus 08 Devfn 00.0
+>   Message Code    0x52  0101 0010b  PTM Request
+> 
+> The 00:1d.0 Root Port logged an Unsupported Request error when it received
+> a PTM Request with Requester ID 08:00.0.
+> 
+> Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save power")
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216210
+> Based-on: https://lore.kernel.org/r/20220706123244.18056-1-kai.heng.feng@canonical.com
+> Based-on-patch-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/pci/pci-driver.c | 14 ++++++++++++++
+>  drivers/pci/pci.c        | 20 --------------------
+>  2 files changed, 14 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 2815922ac525..115febaa7e0b 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -772,6 +772,12 @@ static int pci_pm_suspend(struct device *dev)
+>  	struct pci_dev *pci_dev = to_pci_dev(dev);
+>  	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+>  
+> +	/*
+> +	 * Disabling PTM allows some systems, e.g., Intel mobile chips
+> +	 * since Coffee Lake, to enter a lower-power PM state.
+> +	 */
+> +	pci_disable_ptm(pci_dev);
 
-Yes #2 can be optimized as follows I think on top of this patch, good point:
-=============
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index ee5924ba2f3b..24aabd723abd 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -514,12 +514,13 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp,
-struct rcu_head *rhp,
-            ncbs >= qhimark) {
-                rcu_nocb_lock(rdp);
+I think you can use "if (pci_dev->ptm_enabled)" check for pci_disable_ptm()
+as well. This will avoid unnecessary checks in pci_disable_ptm().
 
-+               *was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
-+
-                rcu_cblist_set_flush(&rdp->nocb_bypass,
-                                lazy ? BIT(CB_DEBUG_BYPASS_LAZY_FLUSHED) :
-BIT(CB_DEBUG_BYPASS_FLUSHED),
-                                (j - READ_ONCE(cb_debug_jiffies_first)));
+> +
+>  	pci_dev->skip_bus_pm = false;
+>  
+>  	if (pci_has_legacy_pm_support(pci_dev))
+> @@ -982,6 +988,9 @@ static int pci_pm_resume(struct device *dev)
+>  	if (pci_dev->state_saved)
+>  		pci_restore_standard_config(pci_dev);
+>  
+> +	if (pci_dev->ptm_enabled)
+> +		pci_enable_ptm(pci_dev, NULL);
+> +
+>  	if (pci_has_legacy_pm_support(pci_dev))
+>  		return pci_legacy_resume(dev);
+>  
+> @@ -1269,6 +1278,8 @@ static int pci_pm_runtime_suspend(struct device *dev)
+>  	pci_power_t prev = pci_dev->current_state;
+>  	int error;
+>  
+> +	pci_disable_ptm(pci_dev);
+> +
+>  	/*
+>  	 * If pci_dev->driver is not set (unbound), we leave the device in D0,
+>  	 * but it may go to D3cold when the bridge above it runtime suspends.
+> @@ -1331,6 +1342,9 @@ static int pci_pm_runtime_resume(struct device *dev)
+>  	 */
+>  	pci_pm_default_resume_early(pci_dev);
+>  
+> +	if (pci_dev->ptm_enabled)
+> +		pci_enable_ptm(pci_dev, NULL);
+> +
+>  	if (!pci_dev->driver)
+>  		return 0;
+>  
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 95bc329e74c0..b0e2968c8cca 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2706,16 +2706,6 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
+>  	if (target_state == PCI_POWER_ERROR)
+>  		return -EIO;
+>  
+> -	/*
+> -	 * There are systems (for example, Intel mobile chips since Coffee
+> -	 * Lake) where the power drawn while suspended can be significantly
+> -	 * reduced by disabling PTM on PCIe root ports as this allows the
+> -	 * port to enter a lower-power PM state and the SoC to reach a
+> -	 * lower-power idle state as a whole.
+> -	 */
+> -	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -		pci_disable_ptm(dev);
+> -
+>  	pci_enable_wake(dev, target_state, wakeup);
+>  
+>  	error = pci_set_power_state(dev, target_state);
+> @@ -2764,16 +2754,6 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
+>  	if (target_state == PCI_POWER_ERROR)
+>  		return -EIO;
+>  
+> -	/*
+> -	 * There are systems (for example, Intel mobile chips since Coffee
+> -	 * Lake) where the power drawn while suspended can be significantly
+> -	 * reduced by disabling PTM on PCIe root ports as this allows the
+> -	 * port to enter a lower-power PM state and the SoC to reach a
+> -	 * lower-power idle state as a whole.
+> -	 */
+> -	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -		pci_disable_ptm(dev);
+> -
+>  	__pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
+>  
+>  	error = pci_set_power_state(dev, target_state);
 
-                if (!rcu_nocb_flush_bypass(rdp, rhp, j, lazy, false)) {
--                       *was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
-                        if (*was_alldone)
-                                trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
-                                                    TPS("FirstQ"));
-@@ -537,7 +538,7 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct
-rcu_head *rhp,
-                // However, the bypass timer might still be running. Wakeup the
-                // GP thread by calling a helper with was_all_done set so that
-                // wake up happens (needed if main CB list was empty before).
--               __call_rcu_nocb_wake(rdp, true, flags)
-+               __call_rcu_nocb_wake(rdp, *was_all_done, flags)
-
-                return true; // Callback already enqueued.
-        }
-=============
-
-> So you may need to clarify the purpose. And I would suggest to make two patches
-> here.
-I guess this change only #2 is no longer a concern? And splitting is not needed
-then as it is only #1.
-
-Thanks,
-
- - Joel
-
-
-
-
-
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

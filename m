@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8295E5AAFBF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD24B5AAF43
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236385AbiIBMo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S236927AbiIBMfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237369AbiIBMmo (ORCPT
+        with ESMTP id S236957AbiIBMdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:42:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DA8E094E;
-        Fri,  2 Sep 2022 05:32:00 -0700 (PDT)
+        Fri, 2 Sep 2022 08:33:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DBFE395D;
+        Fri,  2 Sep 2022 05:28:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1137DB82A94;
-        Fri,  2 Sep 2022 12:31:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71DADC433D6;
-        Fri,  2 Sep 2022 12:31:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8772062160;
+        Fri,  2 Sep 2022 12:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6473EC433D7;
+        Fri,  2 Sep 2022 12:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121882;
-        bh=+OwaWvDm6s13idP12RWK5sAQ7wn0qKFIK/qWMx36jbg=;
+        s=korg; t=1662121687;
+        bh=RiliGPSZwKdFTnul30LcNjErRFxYycneIXzWkkJauHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TcX/Gn+DpruwKOjiewPLaO9pTOLxr2DypsSOaHSiCu1ZOS2OJkjVku0hPm9yef3M8
-         I+oYHhz1aCrZEk8t/2VK3IURG13Y8inQC8pMFaRk3LfJY4YrBfrIUJqGw2i5oyuItm
-         m0GP+B79xeQd9UiYBov5jxA1Ij7R6ugMr47PN280=
+        b=fGTKDkDe/2a07v4r8vFl3Z2ZKWGUiRi0BX2EcSM+53H5DwMNqGrA5v6UojIhvmhIr
+         tXiBhrm795DF7wih5wTOb5KvBALQ5pbd2tSFZl2UygaIx66ML9EWHL2RRX9p7qIBqU
+         v7fxB+1oOvE24wr5GXof7jSod1/z6mpdOqHRMAeM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH 5.15 18/73] io_uring: Remove unused function req_ref_put
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 33/77] net: Fix a data-race around netdev_budget_usecs.
 Date:   Fri,  2 Sep 2022 14:18:42 +0200
-Message-Id: <20220902121405.058275058@linuxfoundation.org>
+Message-Id: <20220902121404.739072097@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,41 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ upstream commmit c84b8a3fef663933007e885535591b9d30bdc860 ]
+[ Upstream commit fa45d484c52c73f79db2c23b0cdfc6c6455093ad ]
 
-Fix the following clang warnings:
+While reading netdev_budget_usecs, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-fs/io_uring.c:1195:20: warning: unused function 'req_ref_put'
-[-Wunused-function].
-
-Fixes: aa43477b0402 ("io_uring: poll rework")
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Link: https://lore.kernel.org/r/20220113162005.3011-1-jiapeng.chong@linux.alibaba.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[pavel: backport]
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7acf8a1e8a28 ("Replace 2 jiffies with sysctl netdev_budget_usecs to enable softirq tuning")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c |    6 ------
- 1 file changed, 6 deletions(-)
+ net/core/dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -1155,12 +1155,6 @@ static inline bool req_ref_put_and_test(
- 	return atomic_dec_and_test(&req->refs);
- }
- 
--static inline void req_ref_put(struct io_kiocb *req)
--{
--	WARN_ON_ONCE(!(req->flags & REQ_F_REFCOUNT));
--	WARN_ON_ONCE(req_ref_put_and_test(req));
--}
--
- static inline void req_ref_get(struct io_kiocb *req)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 7c19e672dde84..25b4fe06fbb4e 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -6393,7 +6393,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
  {
- 	WARN_ON_ONCE(!(req->flags & REQ_F_REFCOUNT));
+ 	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
+ 	unsigned long time_limit = jiffies +
+-		usecs_to_jiffies(netdev_budget_usecs);
++		usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
+ 	int budget = READ_ONCE(netdev_budget);
+ 	LIST_HEAD(list);
+ 	LIST_HEAD(repoll);
+-- 
+2.35.1
+
 
 

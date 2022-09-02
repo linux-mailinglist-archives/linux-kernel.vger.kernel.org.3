@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEA85AAADF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4D05AAAD6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbiIBJFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S235988AbiIBJEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236088AbiIBJE5 (ORCPT
+        with ESMTP id S235676AbiIBJEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:04:57 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F91C1057F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:04:56 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id x5so970602qtv.9
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:04:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=A0lRx9LcG2f6vdkkySTxdBxFyRczSLUlrhv0k8CVfMQ=;
-        b=PqG6a4MKk2roT2Ce/PJEt8kCVddWYbqLQh141ATH+SE8SYCKK/ZFS9/OCHdfbfSgP8
-         mQREKuMuSelAb6SBLEEu74TKUjSBBmwZ8WjygarTrIA/KvHYGyMp8a2J70T92Jg3Pcrb
-         kcjEtRkQqjOXCQllUJDzs4CbTXcsIuMEFmKFSormg00PlTnX1F1InK7vkFbhfO4twbjw
-         wX8s3+vO/eXcBlAlq1ZPFwMRXYokbFEoLvKUt2HuPvjJ+iL9BHtDGUWj4Z7VTMBrr1UC
-         L7HTZSBcu84jPm1mYMiEOrw0O3Q0JaNpk4QrVKItYAbCjz/FlYGhDCg+mGNEqLY5iH3A
-         0oww==
+        Fri, 2 Sep 2022 05:04:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6656EA61CC
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662109471;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=paxwFROiQn9wOtjKP9jQhB8HGgVytBOJmG9Pfk5FrI8=;
+        b=Ym7QC7urelg04VilciKN2ySDVCwsYyn3c0r5pboX/r4+eY8jp/RjOJJ5xfsD39EeZ0Ai2v
+        xWpbBg5NBgFyJstmDyhwZMg/0VYc/Ss47IbkoyCgK5G8sgzryAbe6Qavhiw0XhLWT41fD3
+        CDuw8yfn/WcrIeeqYf1n7jrkqneshsQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-319-mfPD1UO0MDmeXy6N3EmjQw-1; Fri, 02 Sep 2022 05:04:30 -0400
+X-MC-Unique: mfPD1UO0MDmeXy6N3EmjQw-1
+Received: by mail-wm1-f72.google.com with SMTP id j19-20020a05600c1c1300b003ab73e4c45dso282339wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:04:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=A0lRx9LcG2f6vdkkySTxdBxFyRczSLUlrhv0k8CVfMQ=;
-        b=OddTsxKWlZVwlZaO+UZXNq+LjKgLLjZ3zuicp5+w+OoOS2izx1kwHTgPTBj0UWRm8G
-         tfmVxgoWAOaV7mK5FQGLCoqemHkYfRzYMfdmifrin+ZchRwtAwrRSsr0iGndI2tTUVRn
-         jOHmqAbccRbHCBJNNEab21PnDB3YYi5T/UzxwFF86g4UBE78fT1bLgUE1LQcp08Fsn/c
-         Fnb+r4T1XhOdLegskFhWmvBMzd8eTkvHa9Pg4z+rKzC7xemI0yYEMNcwdSHJ+CsC5Fol
-         ySOieGgd74HA0nBZLlEKp8v7nI4uAIpx07hnsrFVBiTd6czJNAhhwJfGVlHFguTmgZLt
-         08gg==
-X-Gm-Message-State: ACgBeo1FRElTGUwwAKhDbdmi8VEr+asNP0A9KTTybwEhcoTAepfbru/v
-        GPhcHlnQNkvdddayCyPatMIAQOTqMRqHANL1iks=
-X-Google-Smtp-Source: AA6agR7C4/X8eo8OV4IEGqRGWP09L1le/kpVLIzKikXVS/h8SIICiTqB0VGNInh/3lWYFp6j5asmpgMaMlwtPWel10o=
-X-Received: by 2002:ac8:7dd0:0:b0:344:afc1:b11d with SMTP id
- c16-20020ac87dd0000000b00344afc1b11dmr26659521qte.195.1662109495202; Fri, 02
- Sep 2022 02:04:55 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=paxwFROiQn9wOtjKP9jQhB8HGgVytBOJmG9Pfk5FrI8=;
+        b=uTiFso8/+XuL3Hua7eBcGFE/5xKJJIl1ynVp+Ww1SEIwciECZVZTuOOSRvBCdb4oa6
+         ggp/XKt2iM78mPxrUS7eV+bwFIO4ExSfp5x71yQWyH2qjs3F1HCOdADES3eVAxZc+nt0
+         9cqC6YoUIMpLwSsqnZAJZ6XBJAnpf9e2YULlEaC3apLmNOThLZcjk0tsffoP3GLjIUQH
+         vobd+vmAMGxi4iml5wP9F2WFyP40yRbpPE453uY1fWA3NY6gJyS+iQNieqA5371sw9k9
+         GHPvhHyHYjxn+4QQdDffswBt5rTOKXEPjGEGJX6D6mRFwiEai9E/qn6WMrFJfkiZbwvo
+         HqOw==
+X-Gm-Message-State: ACgBeo3OFB7H3Dn1XJaxgjlMgeWHjwrnQS1J8H/8YN2YR1ohlmVuDB/J
+        wRwMYj7fB+e9d39sU5J4yAhUMrc1sAr/E645TtAKrQHmfkG6wRbf3ymxElO6JRKPT5p8gaK2E86
+        39eDf3yx5TIM/+fB517jS7qMh
+X-Received: by 2002:a5d:47a8:0:b0:226:f124:ad74 with SMTP id 8-20020a5d47a8000000b00226f124ad74mr5404359wrb.18.1662109469324;
+        Fri, 02 Sep 2022 02:04:29 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7o0F14ZjvEQ5J/Rss8luacwzgiVxFd0EhKqD9UZ3nWybxgIF5Tgqi1IhueaMgSHkye0kMBjw==
+X-Received: by 2002:a5d:47a8:0:b0:226:f124:ad74 with SMTP id 8-20020a5d47a8000000b00226f124ad74mr5404340wrb.18.1662109469068;
+        Fri, 02 Sep 2022 02:04:29 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c714:4800:2077:1bf6:40e7:2833? (p200300cbc714480020771bf640e72833.dip0.t-ipconnect.de. [2003:cb:c714:4800:2077:1bf6:40e7:2833])
+        by smtp.gmail.com with ESMTPSA id x13-20020a1c7c0d000000b003a5ca627333sm7456722wmc.8.2022.09.02.02.04.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 02:04:28 -0700 (PDT)
+Message-ID: <2e7945e5-b0b0-bc44-c5eb-48d67532f78f@redhat.com>
+Date:   Fri, 2 Sep 2022 11:04:27 +0200
 MIME-Version: 1.0
-References: <20220901175022.334824-1-cezary.rojewski@intel.com>
- <20220901175022.334824-2-cezary.rojewski@intel.com> <CAHp75VfO7_ASHGdpkcb1dwvhyHPT31eYuAkCm2q7B+2WmtZC4g@mail.gmail.com>
- <e8a06f76-9414-6391-0582-667cf817dbcc@intel.com>
-In-Reply-To: <e8a06f76-9414-6391-0582-667cf817dbcc@intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 2 Sep 2022 12:04:19 +0300
-Message-ID: <CAHp75VdCwJMSzVD0_tniFOwshR-5mJqgwL58=aV99XFXgK5Obw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] lib/string_helpers: Introduce tokenize_user_input()
-To:     Cezary Rojewski <cezary.rojewski@intel.com>
-Cc:     ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        amadeuszx.slawinski@linux.intel.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/2] mm: add pageblock_aligned() macro
+Content-Language: en-US
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>
+References: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
+ <20220902064751.17890-2-wangkefeng.wang@huawei.com>
+ <e0405abb-d1ea-977b-6d16-859a56bf3027@redhat.com>
+ <79d05f57-8b3a-2450-43bf-f45de53a8c8e@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <79d05f57-8b3a-2450-43bf-f45de53a8c8e@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,34 +87,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 10:46 AM Cezary Rojewski
-<cezary.rojewski@intel.com> wrote:
-> On 2022-09-01 9:34 PM, Andy Shevchenko wrote:
-> > On Thu, Sep 1, 2022 at 8:40 PM Cezary Rojewski
-> > <cezary.rojewski@intel.com> wrote:
+On 02.09.22 11:02, Kefeng Wang wrote:
+> 
+> On 2022/9/2 16:42, David Hildenbrand wrote:
+>> On 02.09.22 08:47, Kefeng Wang wrote:
+>>> Add pageblock_aligned() and use it to simplify code.
+>>>
+>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>>> ---
+>> [...]
+>>
+>>> -	unsigned long nr_pgmask = pageblock_nr_pages - 1;
+>>>  	int nid = zone_to_nid(zone);
+>>>  	unsigned long nr_pages = 0;
+>>>  	int zid = zone_idx(zone);
+>>> @@ -1977,7 +1974,7 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
+>>>  		if (!deferred_pfn_valid(pfn)) {
+>>>  			page = NULL;
+>>>  			continue;
+>>> -		} else if (!page || !(pfn & nr_pgmask)) {
+>> I didn't sleep too well this night and am tired, please tell me why I'm
+>> wrong :)
+> Wish you have a good reset :)
 
-...
+Thanks, the headache isn't helping :D
 
-> >> +int tokenize_user_input(const char __user *from, size_t count, int **tkns);
-> >
-> > Not sure how I can deduct from the name what function is actually
-> > doing. Suggested new name: int_array_parse_user().
-> >
-> > int int_array_parse_user(const char __user *from, size_t count, int **array);
-> >
-> > (Note that we have _user suffix for many APIs in the kernel that does
-> > interact with user space memory)
->
-> That's why I've added '_user_' in the middle! Anyway, I guess the
-> expectation is that it's a suffix - precisely at the end of the name.
->
-> Could we reorder it a bit: "parse_int_array_user"?
+>> "pfn & (pageblock_nr_pages - 1)" is true if the pageblock is not aligned
+>>
+>> E.g., pfn = 1, pageblock_nr_pages = 512
+>>
+>> pfn & (pageblock_nr_pages - 1)
+>> -> 1 & (512 - 1)
+>> -> 1 & 511
+>> -> true
+>>
+>> "!(pfn & (pageblock_nr_pages - 1))" is true if the pageblock is aligned
+>> -> !(true)
+>> -> false
+>>
+>>
+>> However, "!pageblock_aligned(1)" = true
+>>
+>>
+>>> +		} else if (!page || !pageblock_aligned(pfn)) {
+> 
+> pageblock_aligned(pfn) IS_ALIGNED((unsigned long)(pfn), pageblock_nr_pages)
+> 
+> #define IS_ALIGNED(x, a) (((x) & ((typeof(x))(a) - 1)) == 0) (((pfn) &
+> (pageblock_nr_pages - 1)) == 0) -> ((1 & 512 -1) == 0) -> ((1 & 511) ==
+> 0) -> ((511) == 0) -> false
+> right ? 
 
-Most of the exported functions that have 'parse' word, have it after
-namespace, but in this case there is no dedicated namespace and it
-also will be in alignment with parse_options_str. That said, go for
-it.
+yes ... and inverting that would give you "true", which is not what we want?
+
+
+Again, sorry if I'm wrong ...
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+
+David / dhildenb
+

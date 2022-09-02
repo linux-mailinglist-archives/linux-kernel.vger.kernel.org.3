@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9505AB5AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71A95AB5B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237380AbiIBPvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
+        id S237434AbiIBPwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236944AbiIBPvV (ORCPT
+        with ESMTP id S237318AbiIBPwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:51:21 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C701256C8;
-        Fri,  2 Sep 2022 08:41:40 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c2so2247551plo.3;
-        Fri, 02 Sep 2022 08:41:40 -0700 (PDT)
+        Fri, 2 Sep 2022 11:52:03 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1BB51434
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:43:19 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id c9so3676423ybf.5
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 08:43:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=NiT6lwsOByBDjSrBtI0DMU29yH7RUQLqoFz0N6lVba0=;
-        b=U5paxHln5/ZTK1CfbqzZUbKDM0GC86vgBafxovbbjPTfBCZraQiYNuN+rYCmr4Xhzl
-         /jPGpdeAhkXfmoMEpcNq6M4wB73lypethirnOJm+cnA2xwkcLUOrAcj0LjDbY1R1cZ/V
-         NJ9fVFtkO+hzCGcg7/J7qxjxPorwr91n2niH79P+bxOgzlMi0iWxHWpDDdvsGkqpWyqQ
-         po09vjDVu506gACM33TkPNXzHHqeKZroi/Vgwg370T/cF96KirwAuqMxa4eg6qWrgmzq
-         Lnyz+CQUzSeKHAWafUMBRE4RggPmHzGG0quBPxOO+S0rYUm4izpTgGLexZP15f8lh85H
-         Cb7w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=muJcJek/qJin6SE1cDfVZCiOzJRrsAG0GRyTkhFku90=;
+        b=dMZrKujoZPQ3uZWpAJdfytQXosFVeKJQV3yxnJq9YF1KnKWaIgDDM7an4Wk92yRYCH
+         qxjU6Ah3m6yKtfX+NY8WKqj501LGdxTBUTMVhINfxjxLRkMid+EC/Z835bL4gp8NDx8s
+         gxQJJDdkv21Bu1/kvOsSxlCWHGt8+bSm2WbW7E3+la+l63WcSUotJNyqJbqb1U8aguRu
+         Aa43HyjPqwvA7LXIsbQabqLNX+1h6FTGIoQu8p4MQXte8nZxSkZwc6zvpE4bLQaHqRHZ
+         0su3aIXcHh/sWcncF3xwBxk3SpXtZ2NVRTpSbgXNcITC2HMxXZ3fCJRKSroWFXsNp58G
+         TzEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=NiT6lwsOByBDjSrBtI0DMU29yH7RUQLqoFz0N6lVba0=;
-        b=l8wxAmkgGErOh62qfNVlEtVSYkUbcCrXk8oKAM5/TDVXfAhcZRdLyqunUOAbNfbwCl
-         NEWjAast6sJPYfGeld0V9bjpFWmAN60BuvgFK97+WCwM1M1aOVH1j67tiR23n/VnfCwW
-         zV8haTRUAaoQAkJ71qJ6k3VHzy0kHk2Qxk09UI7eD7aYcD+b0ktIzQjjoL3L46Rjww1M
-         gGNKiRbU7YiWBtXgjWmLPNck8ovf3X4e26S9inQ3He/ze5NXngjaIU0BZjFfMvihKqNq
-         qYA989bggVDrKWaVBTibYCS0AzIf5i/Z6RC/48b5CQiCpTWk1zl+PNVy4lq9zy5QhEmS
-         7w2w==
-X-Gm-Message-State: ACgBeo15AlXcDYhz6DhAROoR24/XWMS/ofiWPIZ+/eVtwbnundrL2DQ6
-        qHGWg5fcgo5PfwX+kxajXUg=
-X-Google-Smtp-Source: AA6agR51EZwj1x3zMbt1Si9gQXPeS+1CVbvRmC2LuM6zVZtL0ZB+4CiMIcc1Yoluz0Q82ZZU7adoiA==
-X-Received: by 2002:a17:90b:278a:b0:1fd:c2bf:81f5 with SMTP id pw10-20020a17090b278a00b001fdc2bf81f5mr5429737pjb.81.1662133297509;
-        Fri, 02 Sep 2022 08:41:37 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b20-20020aa79514000000b005327281cb8dsm2016547pfp.97.2022.09.02.08.41.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 08:41:37 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: zhang.songyi@zte.com.cn
-To:     dsterba@suse.com
-Cc:     clm@fb.com, josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhang songyi <zhang.songyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] btrfs: Remove the unneeded result variables
-Date:   Fri,  2 Sep 2022 15:40:29 +0000
-Message-Id: <20220902154029.321284-1-zhang.songyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=muJcJek/qJin6SE1cDfVZCiOzJRrsAG0GRyTkhFku90=;
+        b=jYDdXRTGTMthy5Ed2guL4jQKPOhvdhT3A4b6k+X/+4x+AEs7i0d1Q2vT6oxepTKKQv
+         eoqMwuFipkAhsr2ptbTaAhwHdOFaCxzVEa7Xe/OoWARQxNHcO4S+rFZaE7PuHk3Ly91E
+         dUVA7RDALicN9FKgd1Ed99yKpnDGG1HjKwyvjU3MaS0H9yQTi2BL6+ofZ6vKF4cuQ8kB
+         wW8poODpX+N+cU4j7sZ9TMi33ItKzXuuse+rxKrMXJHQBfhA/qTLejSu8LDAbUDLkaut
+         Bem7l5jW7XgItuJ7F0bml+SrIlEcY0BOyEea4Bbfp0SP/C2xgyVAoJLTPgOBk6mTCwHa
+         qS+w==
+X-Gm-Message-State: ACgBeo1QcT3EiSO4TmHdqqm7o6WVGA/ch3ZhfIWFZkaZdysL4gE5DcwG
+        L9fxutXy4H06MfmOOFsSUJLBy4gHJrUiiZH+IrRLyw==
+X-Google-Smtp-Source: AA6agR5MmXuMTNv1P8Cq6QstY0NKPRJD8m+pPpYYIzBgEq7zfb2wZ7HJXqf9nogxbJWKKf1kci05awDxUB4LkMhuYIE=
+X-Received: by 2002:a25:415:0:b0:696:814:7c77 with SMTP id 21-20020a250415000000b0069608147c77mr23564025ybe.36.1662133398148;
+ Fri, 02 Sep 2022 08:43:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220902141715.1038615-1-imagedong@tencent.com>
+In-Reply-To: <20220902141715.1038615-1-imagedong@tencent.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 2 Sep 2022 08:43:07 -0700
+Message-ID: <CANn89iK7Mm4aPpr1-VM5OgicuHrHjo9nm9P9bYgOKKH9yczFzg@mail.gmail.com>
+Subject: Re: [PATCH net-next v2] net: skb: export skb drop reaons to user by TRACE_DEFINE_ENUM
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        Hao Peng <flyingpeng@tencent.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>, robh@kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,66 +78,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+On Fri, Sep 2, 2022 at 7:18 AM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> As Eric reported, the 'reason' field is not presented when trace the
+> kfree_skb event by perf:
+>
+> $ perf record -e skb:kfree_skb -a sleep 10
+> $ perf script
+>   ip_defrag 14605 [021]   221.614303:   skb:kfree_skb:
+>   skbaddr=0xffff9d2851242700 protocol=34525 location=0xffffffffa39346b1
+>   reason:
+>
+> The cause seems to be passing kernel address directly to TP_printk(),
+> which is not right. As the enum 'skb_drop_reason' is not exported to
+> user space through TRACE_DEFINE_ENUM(), perf can't get the drop reason
+> string from the 'reason' field, which is a number.
+>
+> Therefore, we introduce the macro DEFINE_DROP_REASON(), which is used
+> to define the trace enum by TRACE_DEFINE_ENUM(). With the help of
+> DEFINE_DROP_REASON(), now we can remove the auto-generate that we
+> introduced in the commit ec43908dd556
+> ("net: skb: use auto-generation to convert skb drop reason to string"),
+> and define the string array 'drop_reasons'.
+>
+> Hmmmm...now we come back to the situation that have to maintain drop
+> reasons in both enum skb_drop_reason and DEFINE_DROP_REASON. But they
+> are both in dropreason.h, which makes it easier.
+>
+> After this commit, now the format of kfree_skb is like this:
+>
+> $ cat /tracing/events/skb/kfree_skb/format
+> name: kfree_skb
+> ID: 1524
+> format:
+>         field:unsigned short common_type;       offset:0;       size:2; signed:0;
+>         field:unsigned char common_flags;       offset:2;       size:1; signed:0;
+>         field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
+>         field:int common_pid;   offset:4;       size:4; signed:1;
+>
+>         field:void * skbaddr;   offset:8;       size:8; signed:0;
+>         field:void * location;  offset:16;      size:8; signed:0;
+>         field:unsigned short protocol;  offset:24;      size:2; signed:0;
+>         field:enum skb_drop_reason reason;      offset:28;      size:4; signed:0;
+>
+> print fmt: "skbaddr=%p protocol=%u location=%p reason: %s", REC->skbaddr, REC->protocol, REC->location, __print_symbolic(REC->reason, { 1, "NOT_SPECIFIED" }, { 2, "NO_SOCKET" } ......
+>
+> Reported-by: Eric Dumazet <edumazet@google.com>
 
-Return the sysfs_emit() and iterate_object_props() directly instead of
-redundant variables.
+Note that I also provided the sha1 of the faulty patch.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- fs/btrfs/props.c |  5 +----
- fs/btrfs/sysfs.c | 10 ++--------
- 2 files changed, 3 insertions(+), 12 deletions(-)
+You should add a corresponding Fixes: tag, to help both humans and bots.
 
-diff --git a/fs/btrfs/props.c b/fs/btrfs/props.c
-index a2ec8ecae8de..055a631276ce 100644
---- a/fs/btrfs/props.c
-+++ b/fs/btrfs/props.c
-@@ -270,11 +270,8 @@ int btrfs_load_inode_props(struct inode *inode, struct btrfs_path *path)
- {
- 	struct btrfs_root *root = BTRFS_I(inode)->root;
- 	u64 ino = btrfs_ino(BTRFS_I(inode));
--	int ret;
--
--	ret = iterate_object_props(root, path, ino, inode_prop_iterator, inode);
- 
--	return ret;
-+	return iterate_object_props(root, path, ino, inode_prop_iterator, inode);
- }
- 
- static int prop_compression_validate(const struct btrfs_inode *inode,
-diff --git a/fs/btrfs/sysfs.c b/fs/btrfs/sysfs.c
-index 41f191682ad1..6268dade57d7 100644
---- a/fs/btrfs/sysfs.c
-+++ b/fs/btrfs/sysfs.c
-@@ -839,11 +839,8 @@ static ssize_t btrfs_sinfo_bg_reclaim_threshold_show(struct kobject *kobj,
- 						     char *buf)
- {
- 	struct btrfs_space_info *space_info = to_space_info(kobj);
--	ssize_t ret;
--
--	ret = sysfs_emit(buf, "%d\n", READ_ONCE(space_info->bg_reclaim_threshold));
- 
--	return ret;
-+	return sysfs_emit(buf, "%d\n", READ_ONCE(space_info->bg_reclaim_threshold));
- }
- 
- static ssize_t btrfs_sinfo_bg_reclaim_threshold_store(struct kobject *kobj,
-@@ -1205,11 +1202,8 @@ static ssize_t btrfs_bg_reclaim_threshold_show(struct kobject *kobj,
- 					       char *buf)
- {
- 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
--	ssize_t ret;
--
--	ret = sysfs_emit(buf, "%d\n", READ_ONCE(fs_info->bg_reclaim_threshold));
- 
--	return ret;
-+	return sysfs_emit(buf, "%d\n", READ_ONCE(fs_info->bg_reclaim_threshold));
- }
- 
- static ssize_t btrfs_bg_reclaim_threshold_store(struct kobject *kobj,
--- 
-2.15.2
+This would also hint that this patch should target net tree, not net-next ?
 
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+> v2:
+> - undef FN/FNe after use it (Jakub Kicinski)
 
+I would love some feedback from Steven :)

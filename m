@@ -2,186 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8EA5AA724
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA2F5AA729
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiIBFPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 01:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        id S232681AbiIBFRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 01:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiIBFPU (ORCPT
+        with ESMTP id S231544AbiIBFRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 01:15:20 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F371EEE9
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 22:15:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662095717; x=1693631717;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=adnEXD0tkhnpUb2vVIUHy9ABTJXPeGcyJ1wC7h/5gBM=;
-  b=NmXNHYdsbrxnPTY3tmxUQSy/A74G4h1e1/k2POr338dXPnEwsLksMF6E
-   8AsKxwdXLYH0AfuqqeXsH5bBWcOMnTCm5lrC/+bD+9Tfj1OWXTdNNUcdu
-   AgQssfeNQaYsBXO3rJ8Myuwn6OLzdqNt5vQWcqz+fIQ776aYzXgdU9NQ9
-   lcHFiap3Tgmy/GNFzanJvTikYBlMLfgx+EfqAKFNjyQsiANvToYudlkUq
-   pVNUA4fzs/d1eKifQwO/eGf6RaUEIRjv5zI2AvWBzYjHPF7HVqRkZZnww
-   0y+2ksFXd6GRwT3Oen7pVfCykpVYajfXHed4eZBsWAplo0OCVQC8OPPeG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="297179083"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="297179083"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 22:15:17 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="941152563"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 22:15:13 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Wei Xu <weixugc@google.com>
-Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>,
-        Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
- sysfs
-In-Reply-To: <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
-        (Wei Xu's message of "Thu, 1 Sep 2022 22:09:13 -0700")
-References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
-        <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <ad19e105-9290-922d-59e6-e6813a30f5f0@linux.ibm.com>
-        <87pmgezkhp.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Fri, 02 Sep 2022 13:15:04 +0800
-Message-ID: <87k06mz7af.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Fri, 2 Sep 2022 01:17:02 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1821BA5718;
+        Thu,  1 Sep 2022 22:17:02 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id e18so1232636edj.3;
+        Thu, 01 Sep 2022 22:17:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=XeKu+qTJ04LpGfaU8mzpIsHanK2YeKifc8Qw+NqHOGk=;
+        b=r5yHQ/ydwTv4eudqPNOtiD49jxD0DwlBLHBRNGr9LcLwm0SAVw3vAfnOtb6A0idTia
+         t3ET0t5c33T4hYto7tMkWoPkDXwKiidw5o38brsYT3yuwNjJZgGjbmYJ6izhTBfIqn1f
+         n6YnBbc4EhcSDEBKvXcAa7xGE4pLhOfBHgzZq38GtDPvi4rzDJEYGzZ3fDg2cjfbQHpe
+         hiRGfi9RDE/gE+SlWChdZyPa9zJn2Ylxgf8QOv0D8vcAKN90unuE/ju6WFrOZPeWUbL7
+         ywrbbmxeUt7dgqORCE/S8YjSFoBVZqWV7t5eSgHG0/+2EdTcwvBRoL/AoSeNjilZWpM7
+         uVSQ==
+X-Gm-Message-State: ACgBeo1rJ7OM3IBL1BFr6DRGeXAPMn3CQgvpIwgduV+gFhbrar3KvNGZ
+        ue2z7UqBoMZx9V8iGWKE+gzLHnGpoMc=
+X-Google-Smtp-Source: AA6agR7zcRg1xtZQaSnEH5F7HoYUUNKhyTlJAuQTNpdO15sPCXwdKygzQKisrhYBDfp/TZEJYLbI9g==
+X-Received: by 2002:a05:6402:1f02:b0:445:f674:eac0 with SMTP id b2-20020a0564021f0200b00445f674eac0mr30456039edb.370.1662095820497;
+        Thu, 01 Sep 2022 22:17:00 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id kz16-20020a17090777d000b0073c8d4c9f38sm655960ejc.177.2022.09.01.22.16.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 22:16:59 -0700 (PDT)
+Message-ID: <e122fe60-484b-fd50-d166-4a21e08d4775@kernel.org>
+Date:   Fri, 2 Sep 2022 07:16:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 1/3] tty: serial: introduce transmit helper generators
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220901110657.3305-1-jslaby@suse.cz>
+ <20220901110657.3305-2-jslaby@suse.cz> <YxCkqmz32qMAZAPh@kroah.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <YxCkqmz32qMAZAPh@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei Xu <weixugc@google.com> writes:
+On 01. 09. 22, 14:25, Greg KH wrote:
+> Much nicer, but:
+> 
+>> +#define __DEFINE_UART_PORT_TX_HELPER(name, port, ch, tx_ready, put_char,  \
+>> +		tx_done, for_test, for_post, ...)			  \
+> 
+> Do you really need "port" and "ch" as part of this macro?  You always
+> set that to the same thing in your patches, so is it really needed?
 
-> On Thu, Sep 1, 2022 at 5:33 PM Huang, Ying <ying.huang@intel.com> wrote:
->>
->> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>
->> > On 9/1/22 12:31 PM, Huang, Ying wrote:
->> >> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->> >>
->> >>> This patch adds /sys/devices/virtual/memory_tiering/ where all memor=
-y tier
->> >>> related details can be found. All allocated memory tiers will be lis=
-ted
->> >>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
->> >>>
->> >>> The nodes which are part of a specific memory tier can be listed via
->> >>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
->> >>
->> >> I think "memory_tier" is a better subsystem/bus name than
->> >> memory_tiering.  Because we have a set of memory_tierN devices inside.
->> >> "memory_tier" sounds more natural.  I know this is subjective, just my
->> >> preference.
->> >>
->> >>>
->> >>> A directory hierarchy looks like
->> >>> :/sys/devices/virtual/memory_tiering$ tree memory_tier4/
->> >>> memory_tier4/
->> >>> =E2=94=9C=E2=94=80=E2=94=80 nodes
->> >>> =E2=94=9C=E2=94=80=E2=94=80 subsystem -> ../../../../bus/memory_tier=
-ing
->> >>> =E2=94=94=E2=94=80=E2=94=80 uevent
->> >>>
->> >>> All toptier nodes are listed via
->> >>> /sys/devices/virtual/memory_tiering/toptier_nodes
->> >>>
->> >>> :/sys/devices/virtual/memory_tiering$ cat toptier_nodes
->> >>> 0,2
->> >>> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
->> >>> 0,2
->> >>
->> >> I don't think that it is a good idea to show toptier information in u=
-ser
->> >> space interface.  Because it is just a in kernel implementation
->> >> details.  Now, we only promote pages from !toptier to toptier.  But
->> >> there may be multiple memory tiers in toptier and !toptier, we may
->> >> change the implementation in the future.  For example, we may promote
->> >> pages from DRAM to HBM in the future.
->> >>
->> >
->> >
->> > In the case you describe above and others, we will always have a list =
-of
->> > NUMA nodes from which memory promotion is not done.
->> > /sys/devices/virtual/memory_tiering/toptier_nodes shows that list.
->>
->> I don't think we will need that interface if we don't restrict promotion
->> in the future.  For example, he can just check the memory tier with
->> smallest number.
->>
->> TBH, I don't know why do we need that interface.  What is it for?  We
->> don't want to expose unnecessary information to restrict our in kernel
->> implementation in the future.
->>
->> So, please remove that interface at least before we discussing it
->> thoroughly.
->
-> I have asked for this interface to allow the userspace to query a list
-> of top-tier nodes as the targets of userspace-driven promotions.  The
-> idea is that demotion can gradually go down tier by tier, but we
-> promote hot pages directly to the top-tier and bypass the immediate
-> tiers.
->
-> Certainly, this can be viewed as a policy choice.
+Not really, just to make obvious that those are the names that can be 
+used in tx_ready, put_char... I can remove it, if you prefer, of course.
 
-Yes.  It's possible for us to change this in the future.
+thanks,
+-- 
+js
+suse labs
 
-> Given that now we have a clearly defined memory tier hierarchy in
-> sysfs and the toptier_nodes content can be constructed from this
-> memory tier hierarchy and other information from the node sysfs
-> interfaces, I am fine if we want to remove toptier_nodes and keep the
-> current memory tier sysfs interfaces to the minimal.
-
-Thanks!
-
-Best Regards,
-Huang, Ying
-
->> >> Do we need a way to show the default memory tier in sysfs?  That is, =
-the
->> >> memory tier that the DRAM nodes belong to.
->> >>
->> >
->> > I will hold adding that until we have support for modifying memory tie=
-r details from
->> > userspace. That is when userspace would want to know about the default=
- memory tier.
->> >
->> > For now, the user interface is a simpler hierarchy of memory tiers, it=
-'s associated
->> > nodes and the list of nodes from which promotion is not done.
->>
->> OK.
->>
->> Best Regards,
->> Huang, Ying

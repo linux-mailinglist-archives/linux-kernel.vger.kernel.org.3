@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B3A5AB712
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DFF5AB70F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236221AbiIBRBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 13:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S236914AbiIBRCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 13:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236145AbiIBRBu (ORCPT
+        with ESMTP id S236876AbiIBRBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 13:01:50 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0118DDA3EA
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 10:01:48 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 145so2487456pfw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 10:01:48 -0700 (PDT)
+        Fri, 2 Sep 2022 13:01:54 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0213DB7CE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 10:01:52 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q63so2441044pga.9
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 10:01:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Vm/PQtsMRdh7Pbw/4p9noQ+tg28yZ0+v0kEq1eCWKD4=;
-        b=CkXXcHNS74QYdJ9e1NnZgnh3uVejOIINykzPJi6+1fXrDGrv0jJSyOFb5qRUcW5/iL
-         EY2dLxMXAVSd9HWxKc1w6YMzC31Bvkow3RstUPN8fDd1eqBgYHg1lL0WnsUbBLufx0/2
-         8I8XoHAsYff0k2alAeR9BpU5rmLJwJUWEKcHq7pxnDJxxDOL9FgRojBBa9CuIgr21tNU
-         W3b0LLhfi6kiQxAa3zn/Wqyjs3qJhiZSokdva/fpwv+riege1Q8b0rnjdC4qaZdX+afX
-         o8QEjn68saj7tA5h+i7UryiRBvSHJMQ7Qhnt/OEnZUQLoy6WtEzQKo/ycSV5C9ZcG3uO
-         7sTg==
+        bh=Su+dsdcpKuRfup/BhsX87oNpiePy7DEXUs63rjehEaY=;
+        b=KLnVSWtomAnhLo0pq73SJeNRBQSDLJfIaRsTg8uiS86qckEByuYJw47yP+v7Q9idYT
+         WvPcg0sXMfREPwpm1xMsb/lHOB27NnFgCjH2L5EIt7ZPMlmHPBkhHyadMWMQ232o0zwa
+         K4xosfpalFGdEE40Vi+FxEzYiBqaVSf8H5rzV8MSq392MnGA8J0FFRcdZDUP96MYUbu1
+         8+gt4P/0sMNbDR1tw7EUGBHIwViGboRQpsIBDcsAfMK/Dp4gVRMoH87Mf5DVnBpNdF7q
+         FBWGx8KwOiSXe/inpkpCqcqeXLMJrJgeXDzFMvQ1NWoqKYloz9dViFMddNWY6RbLh5ew
+         5oAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Vm/PQtsMRdh7Pbw/4p9noQ+tg28yZ0+v0kEq1eCWKD4=;
-        b=MJGj/YyzMfeXvp0x9j+EguY9yJ8G3U9toZym14CICHomQVNy97doN7tLO9N/EpqzfY
-         PZFkwcN94iPNmtQxgTQxiwJ3qElyFwFhWUQ1nW0qlGGWLG3zy9amM8ElzTtTq7thmb9Q
-         G7ZrXxr9COWqc3GgxMpg6PQ9Wrhyyb05PBKAEj678Xf4EQE7xx+NA4XWsFjv2+Le0PLm
-         wqtBBO8nsS4PqD+Hgy7PYjVBgJACR/KOp1eBxxdGLUea4ODGq743VH/dftvfiYysQ6My
-         b20TghYUGryhfygDolUdSKtdooA2BJf8S+Zj/wNnpTWKaLtXZKG6a7fkM7YSrQ+rvEA3
-         0vbA==
-X-Gm-Message-State: ACgBeo3/AtEK/3uLJxVwjtebr0gzYnQYprHiuybAVrrVRDFFluJBGrM0
-        Sml/Eys8irAajuinW4bzap4Etg==
-X-Google-Smtp-Source: AA6agR4XTOArH8T6f1P6llgRGm5gyZO4n41IcmSaVSLCUa7S2QZEh/HuEaSl6Wg82L2tiR2gYRy8wA==
-X-Received: by 2002:a05:6a00:b43:b0:52f:59dc:93 with SMTP id p3-20020a056a000b4300b0052f59dc0093mr37082459pfo.26.1662138108131;
-        Fri, 02 Sep 2022 10:01:48 -0700 (PDT)
+        bh=Su+dsdcpKuRfup/BhsX87oNpiePy7DEXUs63rjehEaY=;
+        b=8AmgrahqZ7UIGdC5yI3WyU7gX7BWa3ePo9AngHnNHEGwBprAnX92+zyEHEu58iIgP0
+         iUO1GUTe9HlCkDNYDrq0+UZAe/kfq0ynAQSYH9/u8ERhOSeb26fZTuU1VVyQXxgzxQ/I
+         PUWssOXlcY4DQKbIctJPNWdtuCKUi3cTxRWEzeC2iwSdpjPB3tamJszxc3bvMQzjDZRP
+         WZtckvBwbT7tLODQh+cXTecQ+LHxbaoiLa/2sta3xQCHb0t3GqCTX4WKlhNsCJEwz3dy
+         pmE2la5J29oAZTorRLfJn83xoI4ZmnEsmP8L+Ljz6NLPjDRXe3py33b2nTpasmovvO9i
+         Zhaw==
+X-Gm-Message-State: ACgBeo16Kw9Y1GqwxxiRXq3dfdfKBZlpVVTBLv3l4cVCkvREh45YDkN3
+        E5c5Sv13ebOWKYqaTO9nUbzfDw==
+X-Google-Smtp-Source: AA6agR6Ave9zbkVSjlZNRhdmS8luMf/rm3AkYoo0a9S+xrfdpphbvbioMvCY+PLiiQasurVI/Ov7tA==
+X-Received: by 2002:a05:6a00:88a:b0:53a:b7a0:ea3a with SMTP id q10-20020a056a00088a00b0053ab7a0ea3amr14504597pfj.21.1662138111845;
+        Fri, 02 Sep 2022 10:01:51 -0700 (PDT)
 Received: from anup-ubuntu64-vm.. ([171.76.83.155])
-        by smtp.gmail.com with ESMTPSA id w10-20020a65534a000000b0043014f9a4c9sm1638800pgr.93.2022.09.02.10.01.44
+        by smtp.gmail.com with ESMTPSA id w10-20020a65534a000000b0043014f9a4c9sm1638800pgr.93.2022.09.02.10.01.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 10:01:47 -0700 (PDT)
+        Fri, 02 Sep 2022 10:01:51 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Atish Patra <atishp@atishpatra.org>
@@ -56,12 +56,10 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH 1/3] RISC-V: Probe Svinval extension form ISA string
-Date:   Fri,  2 Sep 2022 22:31:29 +0530
-Message-Id: <20220902170131.32334-2-apatel@ventanamicro.com>
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH 2/3] RISC-V: KVM: Use Svinval for local TLB maintenance when available
+Date:   Fri,  2 Sep 2022 22:31:30 +0530
+Message-Id: <20220902170131.32334-3-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220902170131.32334-1-apatel@ventanamicro.com>
 References: <20220902170131.32334-1-apatel@ventanamicro.com>
@@ -69,7 +67,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,72 +75,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mayuresh Chitale <mchitale@ventanamicro.com>
+We should prefer HINVAL.GVMA and HINVAL.VVMA instruction for local TLB
+maintenance when underlying host supports Svinval extension.
 
-Just like other ISA extensions, we allow callers/users to detect the
-presence of Svinval extension from ISA string.
-
-Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- arch/riscv/include/asm/hwcap.h | 4 ++++
- arch/riscv/kernel/cpu.c        | 1 +
- arch/riscv/kernel/cpufeature.c | 1 +
- 3 files changed, 6 insertions(+)
+ arch/riscv/include/asm/insn-def.h | 20 +++++++++++
+ arch/riscv/kvm/tlb.c              | 60 ++++++++++++++++++++++++-------
+ 2 files changed, 68 insertions(+), 12 deletions(-)
 
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index 6f59ec64175e..b22525290073 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -58,6 +58,7 @@ enum riscv_isa_ext_id {
- 	RISCV_ISA_EXT_ZICBOM,
- 	RISCV_ISA_EXT_ZIHINTPAUSE,
- 	RISCV_ISA_EXT_SSTC,
-+	RISCV_ISA_EXT_SVINVAL,
- 	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
- };
+diff --git a/arch/riscv/include/asm/insn-def.h b/arch/riscv/include/asm/insn-def.h
+index 8fe9036efb68..246a627d16ee 100644
+--- a/arch/riscv/include/asm/insn-def.h
++++ b/arch/riscv/include/asm/insn-def.h
+@@ -110,4 +110,24 @@
+ 	__ASM_STR(.error "hlv.d requires 64-bit support")
+ #endif
  
-@@ -69,6 +70,7 @@ enum riscv_isa_ext_id {
- enum riscv_isa_ext_key {
- 	RISCV_ISA_EXT_KEY_FPU,		/* For 'F' and 'D' */
- 	RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
-+	RISCV_ISA_EXT_KEY_SVINVAL,
- 	RISCV_ISA_EXT_KEY_MAX,
- };
++#define SINVAL_VMA(vaddr, asid)					\
++	INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(11),		\
++	       __RD(0), RS1(vaddr), RS2(asid))
++
++#define SFENCE_W_INVAL()					\
++	INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(12),		\
++	       __RD(0), __RS1(0), __RS2(0))
++
++#define SFENCE_INVAL_IR()					\
++	INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(12),		\
++	       __RD(0), __RS1(0), __RS2(1))
++
++#define HINVAL_VVMA(vaddr, asid)				\
++	INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(19),		\
++	       __RD(0), RS1(vaddr), RS2(asid))
++
++#define HINVAL_GVMA(gaddr, vmid)				\
++	INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(51),		\
++	       __RD(0), RS1(gaddr), RS2(vmid))
++
+ #endif /* __ASM_INSN_DEF_H */
+diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
+index 1ce3394b3acf..309d79b3e5cd 100644
+--- a/arch/riscv/kvm/tlb.c
++++ b/arch/riscv/kvm/tlb.c
+@@ -12,8 +12,12 @@
+ #include <linux/kvm_host.h>
+ #include <asm/cacheflush.h>
+ #include <asm/csr.h>
++#include <asm/hwcap.h>
+ #include <asm/insn-def.h>
  
-@@ -90,6 +92,8 @@ static __always_inline int riscv_isa_ext2key(int num)
- 		return RISCV_ISA_EXT_KEY_FPU;
- 	case RISCV_ISA_EXT_ZIHINTPAUSE:
- 		return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
-+	case RISCV_ISA_EXT_SVINVAL:
-+		return RISCV_ISA_EXT_KEY_SVINVAL;
- 	default:
- 		return -EINVAL;
++#define has_svinval()	\
++	static_branch_unlikely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_SVINVAL])
++
+ void kvm_riscv_local_hfence_gvma_vmid_gpa(unsigned long vmid,
+ 					  gpa_t gpa, gpa_t gpsz,
+ 					  unsigned long order)
+@@ -25,9 +29,17 @@ void kvm_riscv_local_hfence_gvma_vmid_gpa(unsigned long vmid,
+ 		return;
  	}
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index 0be8a2403212..7d1cd653ca02 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -96,6 +96,7 @@ static struct riscv_isa_ext_data isa_ext_arr[] = {
- 	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
- 	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
- 	__RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
-+	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
- 	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
- };
  
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index 3b5583db9d80..9774f1271f93 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -204,6 +204,7 @@ void __init riscv_fill_hwcap(void)
- 				SET_ISA_EXT_MAP("zicbom", RISCV_ISA_EXT_ZICBOM);
- 				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
- 				SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
-+				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
- 			}
- #undef SET_ISA_EXT_MAP
- 		}
+-	for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order))
+-		asm volatile (HFENCE_GVMA(%0, %1)
+-		: : "r" (pos >> 2), "r" (vmid) : "memory");
++	if (has_svinval()) {
++		asm volatile (SFENCE_W_INVAL() ::: "memory");
++		for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order))
++			asm volatile (HINVAL_GVMA(%0, %1)
++			: : "r" (pos >> 2), "r" (vmid) : "memory");
++		asm volatile (SFENCE_INVAL_IR() ::: "memory");
++	} else {
++		for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order))
++			asm volatile (HFENCE_GVMA(%0, %1)
++			: : "r" (pos >> 2), "r" (vmid) : "memory");
++	}
+ }
+ 
+ void kvm_riscv_local_hfence_gvma_vmid_all(unsigned long vmid)
+@@ -45,9 +57,17 @@ void kvm_riscv_local_hfence_gvma_gpa(gpa_t gpa, gpa_t gpsz,
+ 		return;
+ 	}
+ 
+-	for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order))
+-		asm volatile(HFENCE_GVMA(%0, zero)
+-		: : "r" (pos >> 2) : "memory");
++	if (has_svinval()) {
++		asm volatile (SFENCE_W_INVAL() ::: "memory");
++		for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order))
++			asm volatile(HINVAL_GVMA(%0, zero)
++			: : "r" (pos >> 2) : "memory");
++		asm volatile (SFENCE_INVAL_IR() ::: "memory");
++	} else {
++		for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order))
++			asm volatile(HFENCE_GVMA(%0, zero)
++			: : "r" (pos >> 2) : "memory");
++	}
+ }
+ 
+ void kvm_riscv_local_hfence_gvma_all(void)
+@@ -70,9 +90,17 @@ void kvm_riscv_local_hfence_vvma_asid_gva(unsigned long vmid,
+ 
+ 	hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
+ 
+-	for (pos = gva; pos < (gva + gvsz); pos += BIT(order))
+-		asm volatile(HFENCE_VVMA(%0, %1)
+-		: : "r" (pos), "r" (asid) : "memory");
++	if (has_svinval()) {
++		asm volatile (SFENCE_W_INVAL() ::: "memory");
++		for (pos = gva; pos < (gva + gvsz); pos += BIT(order))
++			asm volatile(HINVAL_VVMA(%0, %1)
++			: : "r" (pos), "r" (asid) : "memory");
++		asm volatile (SFENCE_INVAL_IR() ::: "memory");
++	} else {
++		for (pos = gva; pos < (gva + gvsz); pos += BIT(order))
++			asm volatile(HFENCE_VVMA(%0, %1)
++			: : "r" (pos), "r" (asid) : "memory");
++	}
+ 
+ 	csr_write(CSR_HGATP, hgatp);
+ }
+@@ -102,9 +130,17 @@ void kvm_riscv_local_hfence_vvma_gva(unsigned long vmid,
+ 
+ 	hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
+ 
+-	for (pos = gva; pos < (gva + gvsz); pos += BIT(order))
+-		asm volatile(HFENCE_VVMA(%0, zero)
+-		: : "r" (pos) : "memory");
++	if (has_svinval()) {
++		asm volatile (SFENCE_W_INVAL() ::: "memory");
++		for (pos = gva; pos < (gva + gvsz); pos += BIT(order))
++			asm volatile(HINVAL_VVMA(%0, zero)
++			: : "r" (pos) : "memory");
++		asm volatile (SFENCE_INVAL_IR() ::: "memory");
++	} else {
++		for (pos = gva; pos < (gva + gvsz); pos += BIT(order))
++			asm volatile(HFENCE_VVMA(%0, zero)
++			: : "r" (pos) : "memory");
++	}
+ 
+ 	csr_write(CSR_HGATP, hgatp);
+ }
 -- 
 2.34.1
 

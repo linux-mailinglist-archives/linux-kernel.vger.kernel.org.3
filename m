@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DC55AB014
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E511B5AB08B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237462AbiIBMsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S238223AbiIBMz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237596AbiIBMsL (ORCPT
+        with ESMTP id S238059AbiIBMxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:48:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CF2F23C2;
-        Fri,  2 Sep 2022 05:34:43 -0700 (PDT)
+        Fri, 2 Sep 2022 08:53:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991DBDF4E9;
+        Fri,  2 Sep 2022 05:38:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97A0B621AD;
-        Fri,  2 Sep 2022 12:32:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7528BC433D7;
-        Fri,  2 Sep 2022 12:32:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03DF4B82AC1;
+        Fri,  2 Sep 2022 12:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 229FBC433D6;
+        Fri,  2 Sep 2022 12:37:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121956;
-        bh=FltnmrbUJl4Kk01iRhvVTQ+ruxZmvAigpAopAE70PwY=;
+        s=korg; t=1662122248;
+        bh=57v22oWKlBJNCWurriBwjO5ps+GiYL40nKe2KYU6GkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TJIbfbuDPJYXF2Fy2hfko2XyqHDTD8k36wh/Z8/gGRqnm51OjelOO+mlfLyVq1fuW
-         orwqIHGFKfdQFCFlF2JNcGOj4WH1yovXTJKMSq4a6lqfrxGr2+fVylpz51HoyjAWdu
-         mCh4SyBZJV1wR4dO8lZggbgZicKglCUYTJg7Tquc=
+        b=hfdlv0DnCdov4ZDvSLzT6deg9Dii6bpuGI5ygX8SbjXwoY1U1FRrZ/YtCdt+W6jeB
+         2SFXMgKYcpcOaNRWcwmLujvPcKfLYg5AAiwFzgR+LPsLWLcknr+qPQhKO8OKwDan8t
+         V/sIpOYPpi75FyHOwHKpSPyY7D3HDwqPwclt1omM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chris Wilson <chris.p.wilson@intel.com>,
-        Fei Yang <fei.yang@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        stable@vger.kernel.org, Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 41/73] drm/i915/gt: Skip TLB invalidations once wedged
+Subject: [PATCH 5.19 29/72] mmc: sdhci-of-dwcmshc: add reset call back for rockchip Socs
 Date:   Fri,  2 Sep 2022 14:19:05 +0200
-Message-Id: <20220902121405.797844124@linuxfoundation.org>
+Message-Id: <20220902121405.750003506@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,50 +57,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris.p.wilson@intel.com>
+From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
 
-[ Upstream commit e5a95c83ed1492c0f442b448b20c90c8faaf702b ]
+[ Upstream commit 70f832206fe72e9998b46363e8e59e89b0b757bc ]
 
-Skip all further TLB invalidations once the device is wedged and
-had been reset, as, on such cases, it can no longer process instructions
-on the GPU and the user no longer has access to the TLB's in each engine.
+The reset function build in the SDHCI will not reset the logic
+circuit related to the tuning function, which may cause data
+reading errors. Resetting the complete SDHCI controller through
+the reset controller fixes the issue.
 
-So, an attempt to do a TLB cache invalidation will produce a timeout.
-
-That helps to reduce the performance regression introduced by TLB
-invalidate logic.
-
-Cc: stable@vger.kernel.org
-Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
-Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-Cc: Fei Yang <fei.yang@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Andi Shyti <andi.shyti@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/5aa86564b9ec5fe7fe605c1dd7de76855401ed73.1658924372.git.mchehab@kernel.org
-(cherry picked from commit be0366f168033374a93e4c43fdaa1a90ab905184)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+[rebase, use optional variant of reset getter]
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Link: https://lore.kernel.org/r/20220504213251.264819-10-sebastian.reichel@collabora.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/gt/intel_gt.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/mmc/host/sdhci-of-dwcmshc.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-index 3a76000d15bfd..ed8ad3b263959 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-@@ -949,6 +949,9 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
- 	if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
- 		return;
+diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+index bac874ab0b33a..3a1b5ba364051 100644
+--- a/drivers/mmc/host/sdhci-of-dwcmshc.c
++++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/reset.h>
+ #include <linux/sizes.h>
  
-+	if (intel_gt_is_wedged(gt))
-+		return;
+ #include "sdhci-pltfm.h"
+@@ -63,6 +64,7 @@
+ struct rk3568_priv {
+ 	/* Rockchip specified optional clocks */
+ 	struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
++	struct reset_control *reset;
+ 	u8 txclk_tapnum;
+ };
+ 
+@@ -255,6 +257,21 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
+ 	sdhci_writel(host, extra, DWCMSHC_EMMC_DLL_STRBIN);
+ }
+ 
++static void rk35xx_sdhci_reset(struct sdhci_host *host, u8 mask)
++{
++	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
++	struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
++	struct rk35xx_priv *priv = dwc_priv->priv;
 +
- 	if (GRAPHICS_VER(i915) == 12) {
- 		regs = gen12_regs;
- 		num = ARRAY_SIZE(gen12_regs);
++	if (mask & SDHCI_RESET_ALL && priv->reset) {
++		reset_control_assert(priv->reset);
++		udelay(1);
++		reset_control_deassert(priv->reset);
++	}
++
++	sdhci_reset(host, mask);
++}
++
+ static const struct sdhci_ops sdhci_dwcmshc_ops = {
+ 	.set_clock		= sdhci_set_clock,
+ 	.set_bus_width		= sdhci_set_bus_width,
+@@ -269,7 +286,7 @@ static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
+ 	.set_bus_width		= sdhci_set_bus_width,
+ 	.set_uhs_signaling	= dwcmshc_set_uhs_signaling,
+ 	.get_max_clock		= sdhci_pltfm_clk_get_max_clock,
+-	.reset			= sdhci_reset,
++	.reset			= rk35xx_sdhci_reset,
+ 	.adma_write_desc	= dwcmshc_adma_write_desc,
+ };
+ 
+@@ -292,6 +309,13 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
+ 	int err;
+ 	struct rk3568_priv *priv = dwc_priv->priv;
+ 
++	priv->reset = devm_reset_control_array_get_optional_exclusive(mmc_dev(host->mmc));
++	if (IS_ERR(priv->reset)) {
++		err = PTR_ERR(priv->reset);
++		dev_err(mmc_dev(host->mmc), "failed to get reset control %d\n", err);
++		return err;
++	}
++
+ 	priv->rockchip_clks[0].id = "axi";
+ 	priv->rockchip_clks[1].id = "block";
+ 	priv->rockchip_clks[2].id = "timer";
 -- 
 2.35.1
 

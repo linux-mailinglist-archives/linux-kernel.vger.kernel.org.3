@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6504B5AAFF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C615AAFFB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237465AbiIBMqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
+        id S237183AbiIBMq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237498AbiIBMnr (ORCPT
+        with ESMTP id S236652AbiIBMpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:43:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94461E86BA;
-        Fri,  2 Sep 2022 05:32:36 -0700 (PDT)
+        Fri, 2 Sep 2022 08:45:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772C6E1A80;
+        Fri,  2 Sep 2022 05:33:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CE56620E1;
-        Fri,  2 Sep 2022 12:30:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B60C433C1;
-        Fri,  2 Sep 2022 12:30:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25D3B620DF;
+        Fri,  2 Sep 2022 12:33:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6E6C433D6;
+        Fri,  2 Sep 2022 12:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121801;
-        bh=h9Omd5d/MFc2Q3U8UrgU16es4Zq80YP3MfGWfzDOvkk=;
+        s=korg; t=1662122008;
+        bh=YAswBaI54FmrGFv/3FgYV6pl5yuiVekOIL5Memp56VQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dRaEsTj+msdUe/LW381pD0uNMUdvTpFAfMqpmu7LNKzVLAhU4Q+Ada95zveWF6hHA
-         rDFDDyQfdiwyFYPuoZ4BCNnddtYTjppyVo04TC1HsNVta1Hz3+JKZwqN31+QgOqbae
-         Duj378V70XSog+/EW+ajESF61x0Spsff9HzUZmHc=
+        b=e3EF7LpBRWLSh2jdaPmJSBf3WaV8pJjvqXZ5pxFEsGr1g05G1bQGr3lCa3nMkwbgs
+         0i3JNuzuXUjlMhXfK/lgFK6d5ahuRDYOZfhMaoTKZFr8RjvmpEt7D63c8YxDlKjx9g
+         cQxXLzMAx8DsxqhrSe7animCvVaymmT1WbQ0iIck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Florian Westphal <fw@strlen.de>,
+        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
+        Hyunchul Lee <hyc.lee@gmail.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 70/77] netfilter: conntrack: NF_CONNTRACK_PROCFS should no longer default to y
-Date:   Fri,  2 Sep 2022 14:19:19 +0200
-Message-Id: <20220902121406.003382579@linuxfoundation.org>
+Subject: [PATCH 5.15 56/73] ksmbd: return STATUS_BAD_NETWORK_NAME error status if share is not configured
+Date:   Fri,  2 Sep 2022 14:19:20 +0200
+Message-Id: <20220902121406.278968570@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-References: <20220902121403.569927325@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert@linux-m68k.org>
+From: Namjae Jeon <linkinjeon@kernel.org>
 
-[ Upstream commit aa5762c34213aba7a72dc58e70601370805fa794 ]
+[ Upstream commit fe54833dc8d97ef387e86f7c80537d51c503ca75 ]
 
-NF_CONNTRACK_PROCFS was marked obsolete in commit 54b07dca68557b09
-("netfilter: provide config option to disable ancient procfs parts") in
-v3.3.
+If share is not configured in smb.conf, smb2 tree connect should return
+STATUS_BAD_NETWORK_NAME instead of STATUS_BAD_NETWORK_PATH.
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Reviewed-by: Hyunchul Lee <hyc.lee@gmail.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ fs/ksmbd/mgmt/tree_connect.c | 2 +-
+ fs/ksmbd/smb2pdu.c           | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/net/netfilter/Kconfig b/net/netfilter/Kconfig
-index ef72819d9d315..d569915da003c 100644
---- a/net/netfilter/Kconfig
-+++ b/net/netfilter/Kconfig
-@@ -118,7 +118,6 @@ config NF_CONNTRACK_ZONES
- 
- config NF_CONNTRACK_PROCFS
- 	bool "Supply CT list in procfs (OBSOLETE)"
--	default y
- 	depends on PROC_FS
- 	---help---
- 	This option enables for the list of known conntrack entries
+diff --git a/fs/ksmbd/mgmt/tree_connect.c b/fs/ksmbd/mgmt/tree_connect.c
+index 0d28e723a28c7..940385c6a9135 100644
+--- a/fs/ksmbd/mgmt/tree_connect.c
++++ b/fs/ksmbd/mgmt/tree_connect.c
+@@ -18,7 +18,7 @@
+ struct ksmbd_tree_conn_status
+ ksmbd_tree_conn_connect(struct ksmbd_session *sess, char *share_name)
+ {
+-	struct ksmbd_tree_conn_status status = {-EINVAL, NULL};
++	struct ksmbd_tree_conn_status status = {-ENOENT, NULL};
+ 	struct ksmbd_tree_connect_response *resp = NULL;
+ 	struct ksmbd_share_config *sc;
+ 	struct ksmbd_tree_connect *tree_conn = NULL;
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index 28b5d20c8766e..824f17a101a9e 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -1932,8 +1932,9 @@ int smb2_tree_connect(struct ksmbd_work *work)
+ 		rsp->hdr.Status = STATUS_SUCCESS;
+ 		rc = 0;
+ 		break;
++	case -ENOENT:
+ 	case KSMBD_TREE_CONN_STATUS_NO_SHARE:
+-		rsp->hdr.Status = STATUS_BAD_NETWORK_PATH;
++		rsp->hdr.Status = STATUS_BAD_NETWORK_NAME;
+ 		break;
+ 	case -ENOMEM:
+ 	case KSMBD_TREE_CONN_STATUS_NOMEM:
 -- 
 2.35.1
 

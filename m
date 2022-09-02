@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD7C5AB368
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3A35AB3C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235738AbiIBO1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        id S236898AbiIBOgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237000AbiIBO0d (ORCPT
+        with ESMTP id S236600AbiIBOfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:26:33 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F316112EFF
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:53:55 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 92-20020a9d0be5000000b0063946111607so1463847oth.10
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 06:53:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TRNEPv/fVZBL+J+K0gbUvPbd/wP8B+12JIvN/V7uTcU=;
-        b=JJEiY1nRuKPAHexQSBWa1G1+D1zLBXZhFgMaAb2sUdoGvIO/vi/5FZjf3cbuXhRuS2
-         UCd9crNd+fUPxT9Fi7I5uObbhL0ex1QkxUU9j4jxgfQiBVy2PaiKUvTB8sXRu9fFVAah
-         KYM7x34v7hcl+UNTbsGMMKlRHV6XMoOvcb2TZQoY8bOAxvWLeI1qeyQgMq8zgOMAaF6b
-         PJe80p9cyT6qYpurA6bBVX9NENNzT/0xn0CRy3P8K3yed0vYzDunlyEfxOh5r2PDPQVM
-         kVGFJ5mDJrgi755A+/6bpL+HDjZYfesebLyl9SLaz24zvcnbRvbh+mKy9sapsSxqkoFV
-         IMJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TRNEPv/fVZBL+J+K0gbUvPbd/wP8B+12JIvN/V7uTcU=;
-        b=QK20ox9qI+HCVH7ed7t5dzfhW+YC34/K7ot0GZY9BZbCMBgL/xrSJ5wb/pZov+OptU
-         JjW1OfvPiZP6NNx/yP4q+2ayEEuHEAsPId/P8fGxcnXUfh6XlDSh5p742qtKwxvIdwFb
-         cZMt7A9bqnYwGl6QsaMYU/cFFAEORE/6fU1FJRy3kuVTh8qT7o7dHUoLSwNerNIfTpSM
-         W3bp24hWsBp848JQTRQ2Q6XvZkyvdWiFyZjgFP1t/PpQtGQpV/WWzG9vccwB5KjJyfsh
-         dqlX/xlJsfYnQWpJ4NM/1OVEw9clJkBEkr8rqEKgqhypC/Oqhe3DxS82bA8b1Y4M+bI3
-         frww==
-X-Gm-Message-State: ACgBeo24cdx1s1pMI2YLzg6C4PKEKnqOonEoTJu45P65GCGE/xd08odJ
-        SyuJNsLnQ3moL8dLdHLK4NV5uvLeIIShGtkJ6HiDrg==
-X-Google-Smtp-Source: AA6agR6zb53YPcXo5kDN/63AZ67C60d0NARcZzDg39E8JP0pQszvgj2ovZPGPXkptzTrSV8v0tYkxi9MEbsv38BvS44=
-X-Received: by 2002:a05:6830:2a17:b0:636:f7fc:98bb with SMTP id
- y23-20020a0568302a1700b00636f7fc98bbmr14890114otu.223.1662126833447; Fri, 02
- Sep 2022 06:53:53 -0700 (PDT)
+        Fri, 2 Sep 2022 10:35:50 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DCE16B1F0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662127007; x=1693663007;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=0C4Mrc8p7r2/pndSczNhemjcNNdk967OJeL9PozTUO8=;
+  b=I7qnQz2hmBlQA08T7qylaNvtzYO1wGF6Z4PI9lV6d3exfjSpGnHS1Xf3
+   qefTRUnN8jcJPaLsBYDU7KWezIVohPLabdq2dwNuBl/mG2BDIGxZ3NYOJ
+   mqkquJQKfxVvBKkfd21XkEloJMAEgSojLh2g4tDNwaepo6cOoVtakXUJT
+   t/3Jz3FDhMjL1+WSRnXktJSmjfPSF6wCrJ30MX4jwAgkH1kSUOuEShEkD
+   Qh1kO/R7bBJ8EUVD7JvM9jbkSn1sv/JQqxeEK6rX7S4Is5G7KqXZqH7Zq
+   lCYQklzItDc0X3dy9N/JYdkLAIHHgXYjQz23Uq9MPTeTdmYfgG+VvyQsY
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="294723887"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="294723887"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 06:56:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="674362317"
+Received: from svandene-mobl.ger.corp.intel.com (HELO localhost) ([10.252.55.245])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 06:56:41 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        =?utf-8?Q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 2/2] drm/tests: Change "igt_" prefix to "test_drm_"
+In-Reply-To: <20220902133828.ufwp6bgzd37yu6bv@nostramo.hardline.pl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220901124210.591994-1-mairacanal@riseup.net>
+ <20220901124210.591994-2-mairacanal@riseup.net>
+ <20220901125530.b56s4zisnkfuigvc@houat>
+ <04aeba53-793c-3196-3137-915f0640dc2a@riseup.net>
+ <87h71qfbi9.fsf@intel.com> <20220902123400.5ljgc7z6zw34d64m@houat>
+ <87mtbidj3b.fsf@intel.com>
+ <20220902133828.ufwp6bgzd37yu6bv@nostramo.hardline.pl>
+Date:   Fri, 02 Sep 2022 16:56:30 +0300
+Message-ID: <87bkrxev75.fsf@intel.com>
 MIME-Version: 1.0
-References: <20220902112446.29858-1-shaozhengchao@huawei.com> <20220902112446.29858-2-shaozhengchao@huawei.com>
-In-Reply-To: <20220902112446.29858-2-shaozhengchao@huawei.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 2 Sep 2022 09:53:42 -0400
-Message-ID: <CAM0EoMnxxA5y2W22aMXF+QRqckbkGm9eJoEnu-CaKhgWMM7kdA@mail.gmail.com>
-Subject: Re: [PATCH net-next 01/22] net: sched: act_api: implement generic
- walker and search for tc action
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, martin.lau@linux.dev, daniel@iogearbox.net,
-        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +77,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 7:22 AM Zhengchao Shao <shaozhengchao@huawei.com> wrote:
->
-> Being able to get tc_action_net by using net_id stored in tc_action_ops
-> and execute the generic walk/search function, add __tcf_generic_walker()
-> and __tcf_idr_search() helpers.
->
+On Fri, 02 Sep 2022, Micha=C5=82 Winiarski <michal.winiarski@intel.com> wro=
+te:
+> Having said that - I do believe that igt_* prefix don't belong here
+> (which is why I'm progressively trying to get rid of in the patches
+> that refactor some of the tests).
 
-These are nice cleanups.
-Can you please run all tdc tests for all changes you are making to
-the tc subsystem? Maybe do a kindness and add more tests.
+Just clarifying that I'm not trying to defend igt_ prefix at all, and I
+agree we should get rid of it.
 
-Just small  opinions below. Otherwise you can add my ACK.
+BR,
+Jani.
 
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> ---
->  include/net/act_api.h |  1 +
->  net/sched/act_api.c   | 48 +++++++++++++++++++++++++++++++++++++------
->  2 files changed, 43 insertions(+), 6 deletions(-)
->
-> diff --git a/include/net/act_api.h b/include/net/act_api.h
-> index 9cf6870b526e..a79d6e58519e 100644
-\
-
-> @@ -926,7 +945,8 @@ int tcf_register_action(struct tc_action_ops *act,
->         struct tc_action_ops *a;
->         int ret;
->
-> -       if (!act->act || !act->dump || !act->init || !act->walk || !act->lookup)
-> +       if (!act->act || !act->dump || !act->init ||
-> +           (!act->net_id && (!act->walk || !act->lookup)))
-
-I can understand net_id, but why && (!act->walk || !act->lookup) ?
-Assumedly they are now optional, no?
-
-
-> +       if (ops->walk) {
-> +               err = ops->walk(net, skb, &dcb, RTM_DELACTION, ops, extack);
-> +       } else {
-> +               err = __tcf_generic_walker(net, skb, &dcb, RTM_DELACTION, ops, extack);
-> +       }
-
-Bikeshed mod: those braces.
-
-cheers,
-jamal
+--=20
+Jani Nikula, Intel Open Source Graphics Center

@@ -2,84 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AFF5AB877
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 20:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22E55AB87D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 20:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiIBSnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 14:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S230058AbiIBSna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 14:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiIBSnJ (ORCPT
+        with ESMTP id S229991AbiIBSn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 14:43:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E231144DB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 11:43:07 -0700 (PDT)
+        Fri, 2 Sep 2022 14:43:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C331144D5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 11:43:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662144186;
+        s=mimecast20190719; t=1662144206;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2ohTeF4+cvF8PKkr4lYOWbH1b2UayUkG4FJ3FZMJwY0=;
-        b=L2TSwXM77c7FKmq1huyxY6eOoV8zZXw4z8d0wwZfCZktNUG6q81DYa59MGdzFbaqUdj1Bb
-        41wZJXxphclCn0vSTf6pCqg2iRxr0rV3EU5BqEAzezZVF00AmQJvSVEsT0jYwMjawR6neF
-        mhtU1O8JIMCNbSMuwsqD0ZIifuJO4ug=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=7Ygx506LgmFK7L1KUAyuf5pe5qs+tRV+yvCiaInsACw=;
+        b=JweQv4mpthRJ2JK5IxWu6Q4Bryn/BdJdJ6hqGWAxsCv1dByAzWBiqyoj/i/8wd2gci7cFN
+        k932ZiUodqlmlz8pCe0jgoaP/RiTPvHkRrD37MQvUBSQoqupLyaeiz7cXSmERwkwDxZtb2
+        4K8e8mblY0PDhcrvjMXs2NzkV8UW1F4=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-556-yj4AEEuyNgiv9v2QjluVZw-1; Fri, 02 Sep 2022 14:43:05 -0400
-X-MC-Unique: yj4AEEuyNgiv9v2QjluVZw-1
-Received: by mail-io1-f69.google.com with SMTP id b16-20020a5d8950000000b006891a850acfso1803094iot.19
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 11:43:05 -0700 (PDT)
+ us-mta-645-ysAg3YasO1q1Lropbt5w_A-1; Fri, 02 Sep 2022 14:43:25 -0400
+X-MC-Unique: ysAg3YasO1q1Lropbt5w_A-1
+Received: by mail-qt1-f199.google.com with SMTP id ff27-20020a05622a4d9b00b0034306b77c08so2156139qtb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 11:43:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=2ohTeF4+cvF8PKkr4lYOWbH1b2UayUkG4FJ3FZMJwY0=;
-        b=R7eb/AHu6cSnuBbiC6hxzU6ztjWfPrhNKccrV5JSougYRwG8q7cA4T+JsXL6D6dnJZ
-         fanUaS44IiSf0TcI+/6aD9yNGyutYfZfznth9MuOF6EEFenpTGAqN2SrdrJ8pDtaG/7X
-         r8r8CHWN5mpItXSKVoZBZ8/cclaI4+juYyqtAGFMYK5yUCta0AwAoJEF/DOY0JKmpfgc
-         yB+QLibKZTUaFdCOdEwVeQX4kdDOb7GE2wP4DNjVnXc6ZbKhordCemJbo/a9YklS+pMV
-         1fKqjjXLXtyWEeJMDxVMqYAcOme63tTUDrh9jsQvbnWjdK7Upq0Ijozo1KgDHekT6ytl
-         qE6w==
-X-Gm-Message-State: ACgBeo3PDQ6P5oW1pi529qTypu9vUfZm1WlP5+LC8GXOa2kI7BFCASvp
-        OAlu1lIsgPfdOJ54XSo2RvU6Fee1g71TZhSnkoGJ62cVl1qxwQvfRdEi797brAn8alxWGhmbOrr
-        5OekHqAq+sgNM2NFMU77+O0oL
-X-Received: by 2002:a5d:8b47:0:b0:689:a436:81d2 with SMTP id c7-20020a5d8b47000000b00689a43681d2mr17433527iot.138.1662144185062;
-        Fri, 02 Sep 2022 11:43:05 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5c8tYFnpO88dkPGbcmTL6O4ouPV+XYGlcQvH3lOAZzQUG+Sde454M/r0vL2MBGLi157knPaQ==
-X-Received: by 2002:a5d:8b47:0:b0:689:a436:81d2 with SMTP id c7-20020a5d8b47000000b00689a43681d2mr17433520iot.138.1662144184825;
-        Fri, 02 Sep 2022 11:43:04 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id x6-20020a056602160600b0067b7a057ee8sm1126680iow.25.2022.09.02.11.43.04
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=7Ygx506LgmFK7L1KUAyuf5pe5qs+tRV+yvCiaInsACw=;
+        b=63UOlUcyOkqWuvanEeVHG0/PfzUSO3hWinRzk9VEnUUEF80x5IKdpwwYHLm9DR1h4x
+         EMQuMGUkoW7JaDQcK9w2tA9kXIiO6loy4gxrjkeT2SvrutRrdRjlc96xCFsvwoGrOmX1
+         1skoXZdi+dgHCUJY4bJU1NjUmhzTsYfUvQ6xnnAz8lWxmsw/PK0gElhIm9QqJt9716ID
+         XO1/ncs9zdieu4SIOwbAW9zZrq0JSoejMZ5BwtusCzP670pDFOKLGhiwbgtz928v2yYU
+         CPhAx4nqQq4OZfQ0L7tG2x11lu/Mx1wwphGBHHA0hTbFLgtSdzVVEjewWHkADCl/64HE
+         S/Zw==
+X-Gm-Message-State: ACgBeo1tnDxmJ57W6GGm7JiVpd4shgO2e9w2zDF0EhYUg3k6TIIYIezN
+        Qpb/6r4zI5OwhEZb5bWL6a/+l71lAfwx7zhSS2sLdJEII6Dy2mBEn3jkE8TWIB7k93JdS2YVdRK
+        U2cs+nJQ6vPVrR3fX//HxQyg=
+X-Received: by 2002:a05:6214:c8f:b0:499:21eb:ba3b with SMTP id r15-20020a0562140c8f00b0049921ebba3bmr11683328qvr.97.1662144204602;
+        Fri, 02 Sep 2022 11:43:24 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7K6nBjFNlybScTP7Kemi+J2G3yUcqV9Mva+4TXiBdaw+VSNZOrU4SppDL6kJQ3vHr68+qN5A==
+X-Received: by 2002:a05:6214:c8f:b0:499:21eb:ba3b with SMTP id r15-20020a0562140c8f00b0049921ebba3bmr11683298qvr.97.1662144204338;
+        Fri, 02 Sep 2022 11:43:24 -0700 (PDT)
+Received: from localhost (pool-68-160-173-162.bstnma.fios.verizon.net. [68.160.173.162])
+        by smtp.gmail.com with ESMTPSA id c4-20020ac84e04000000b00344f936bfc0sm1406919qtw.33.2022.09.02.11.43.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 11:43:04 -0700 (PDT)
-Date:   Fri, 2 Sep 2022 12:42:34 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v7 0/5] vfio/pci: power management changes
-Message-ID: <20220902124234.472737cd.alex.williamson@redhat.com>
-In-Reply-To: <20220829114850.4341-1-abhsahu@nvidia.com>
-References: <20220829114850.4341-1-abhsahu@nvidia.com>
-Organization: Red Hat
+        Fri, 02 Sep 2022 11:43:23 -0700 (PDT)
+Date:   Fri, 2 Sep 2022 14:43:22 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Pankaj Raghav <p.raghav@samsung.com>
+Cc:     agk@redhat.com, snitzer@kernel.org, axboe@kernel.dk,
+        damien.lemoal@opensource.wdc.com, hch@lst.de, pankydev8@gmail.com,
+        Johannes.Thumshirn@wdc.com, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, hare@suse.de, jaegeuk@kernel.org,
+        linux-kernel@vger.kernel.org, matias.bjorling@wdc.com,
+        gost.dev@samsung.com, bvanassche@acm.org,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH v12 12/13] dm: introduce DM_EMULATED_ZONES target type
+Message-ID: <YxJOyq8Pf2vIExFf@redhat.com>
+References: <20220823121859.163903-1-p.raghav@samsung.com>
+ <CGME20220823121914eucas1p2f4445066c23cdae4fca80f7b0268815b@eucas1p2.samsung.com>
+ <20220823121859.163903-13-p.raghav@samsung.com>
+ <YxFOS8fq8AeE5mkf@redhat.com>
+ <96f90e1d-aa0f-1c76-bfc9-a87e978ad655@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <96f90e1d-aa0f-1c76-bfc9-a87e978ad655@samsung.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,57 +85,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Aug 2022 17:18:45 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
+On Fri, Sep 02 2022 at  8:02P -0400,
+Pankaj Raghav <p.raghav@samsung.com> wrote:
 
-> This is part 2 for the vfio-pci driver power management support.
-> Part 1 of this patch series was related to adding D3cold support
-> when there is no user of the VFIO device and has already merged in the
-> mainline kernel. If we enable the runtime power management for
-> vfio-pci device in the guest OS, then the device is being runtime
-> suspended (for linux guest OS) and the PCI device will be put into
-> D3hot state (in function vfio_pm_config_write()). If the D3cold
-> state can be used instead of D3hot, then it will help in saving
-> maximum power. The D3cold state can't be possible with native
-> PCI PM. It requires interaction with platform firmware which is
-> system-specific. To go into low power states (Including D3cold),
-> the runtime PM framework can be used which internally interacts
-> with PCI and platform firmware and puts the device into the
-> lowest possible D-States.
-> 
-> This patch series adds the support to engage runtime power management
-> initiated by the user. Since D3cold state can't be achieved by writing
-> PCI standard PM config registers, so new device features have been
-> added in DEVICE_FEATURE IOCTL for low power entry and exit related
-> handling. For the PCI device, this low power state will be D3cold
-> (if the platform supports the D3cold state). The hypervisors can implement
-> virtual ACPI methods to make the integration with guest OS.
-> For example, in guest Linux OS if PCI device ACPI node has
-> _PR3 and _PR0 power resources with _ON/_OFF method, then guest
-> Linux OS makes the _OFF call during D3cold transition and
-> then _ON during D0 transition. The hypervisor can tap these virtual
-> ACPI calls and then do the low power related IOCTL.
-> 
-> The entry device feature has two variants. These two variants are mainly
-> to support the different behaviour for the low power entry.
-> If there is any access for the VFIO device on the host side, then the
-> device will be moved out of the low power state without the user's
-> guest driver involvement. Some devices (for example NVIDIA VGA or
-> 3D controller) require the user's guest driver involvement for
-> each low-power entry. In the first variant, the host can move the
-> device into low power without any guest driver involvement while
-> in the second variant, the host will send a notification to user
-> through eventfd and then user guest driver needs to move the device
-> into low power. The hypervisor can implement the virtual PME
-> support to notify the guest OS. Please refer
-> https://lore.kernel.org/lkml/20220701110814.7310-7-abhsahu@nvidia.com/
-> where initially this virtual PME was implemented in the vfio-pci driver
-> itself, but later-on, it has been decided that hypervisor can implement
-> this.
-> 
-> * Changes in v7
+> On 2022-09-02 02:28, Mike Snitzer wrote:
+> > On Tue, Aug 23 2022 at  8:18P -0400,
+> > Pankaj Raghav <p.raghav@samsung.com> wrote:
+> > 
+> >> Introduce a new target type DM_EMULATED_ZONES for targets with
+> >> a different number of sectors per zone (aka zone size) than the underlying
+> >> device zone size.
+> >>
+> >> This target type is introduced as the existing zoned targets assume
+> >> that the target and the underlying device have the same zone size.
+> >> The new target: dm-po2zone will use this new target
+> >> type as it emulates the zone boundary that is different from the
+> >> underlying zoned device.
+> >>
+> >> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> >> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> > 
+> > This patch's use of "target type" jargon isn't valid. 
+> > 
+> > Please say "target feature flag" and rename DM_EMULATED_ZONES to
+> > DM_TARGET_EMULATED_ZONES in the subject and header.
+> > Good catch. I will fix it up for the next version.
+> > But, with those fixed:
+> > 
+> > Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+> > 
+> You mean <Reviewed-By> ? :)
 
-Applied to vfio next branch for v6.1.  Thanks,
-
-Alex
+Ah, yes Reviewed-By, force of habit ;)
 

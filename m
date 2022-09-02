@@ -2,160 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0495B5AADE6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0085AADEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235019AbiIBLwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 07:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S235392AbiIBL5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 07:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbiIBLwg (ORCPT
+        with ESMTP id S231752AbiIBL5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 07:52:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E37B81CE
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 04:52:35 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oU5Dr-0004Hs-Bp; Fri, 02 Sep 2022 13:52:31 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oU5Do-0002nP-O3; Fri, 02 Sep 2022 13:52:28 +0200
-Date:   Fri, 2 Sep 2022 13:52:28 +0200
-From:   Sascha Hauer <sha@pengutronix.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, kernel@pengutronix.de
-Subject: Re: [PATCH rcu 04/32] rcu-tasks: Drive synchronous grace periods
- from calling task
-Message-ID: <20220902115228.GV24324@pengutronix.de>
-References: <20220620225402.GA3842369@paulmck-ThinkPad-P17-Gen-1>
- <20220620225411.3842519-4-paulmck@kernel.org>
- <20220901103625.GA1658@pengutronix.de>
- <20220901172725.GC6159@paulmck-ThinkPad-P17-Gen-1>
- <20220901173304.GA2280413@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 2 Sep 2022 07:57:44 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5040BB5320;
+        Fri,  2 Sep 2022 04:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662119857; x=1693655857;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=KlswOCY6KEHfUH91nws9fplHn4EYXJNK11klaoPcq7k=;
+  b=lXTp/usxycbb3rYdj+ydM9+7g7hnT3pWMvk9UGI4fD2Om5NkhcS2FrQj
+   ljea9Szou3Q55JFa3zm0e53y3WvTC9ucDhLuws6Eyi7hQrkT+aAhtyVLC
+   KIWwqkTZoWnrwJqxmmhSarj/jr7tsObvjWSL2dOgV2taf1WBLTr3VBB3P
+   FSVH8vmycbHe5nFurrs53CHY1yX/Jm7To8ED/4LfRtqfY2RnnB/BYJIhW
+   MdmauuY7/Est7I10hY41AgOZhAjjS+XKl1eisMdh6OA0cAvZEYke7vnwC
+   NwhC7z+90aMAexsgAIUioTMizLSL3w7bh3ORPS2MOb7Xf5bLqYzb7U1BZ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="172125010"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Sep 2022 04:57:36 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 2 Sep 2022 04:57:35 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Fri, 2 Sep 2022 04:57:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bnP7nrIpEW+wL+H/OTvTSEz1qsbLVrfGNR+Y84vCQqxaqjrqiKdZolIEsuicVkOQykauW7AS2l+GE4aJS2f3jND6+N+am1uPWcZYcCPMG1XghS8KQdC6tUn5ZcHZ2OTkAtnILixRrkkcfMHrvFvOrP5iCWbRx5Lbueycaw+WmtlgTEj3vfOjCK7x6ity1mojZQOomO/xtfZNazjfTQbwUcxPVEG9jHx9NvqAUT3WvqSVZR5nncPVv5TImXrec4NQychOsalpQ1onioGf1bGnBd6N7ba/9MtmkspuJidmMrXBHo+XEjEXPCgSVnozKf6jmQE7TnBmTvo44v/cS6AwRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oNNSftqNKPMRjlLXE0DQmx1PTrwla3VhKoHeqa0anA8=;
+ b=ioWWxOgBzhJ8Cf9P8PHt2dJyEplCgeenHswhpXtP3/zv9CdWmyxsDEG/KZ4xe9SZWxDHdWX2LBQja5F8kxbWXrtfCUfju/mGYXuVVlRoR/zR3N4W4t7mjP5YetLnHwn9bEQRaUf9Vmo6MXb/tN4IV2VA2AwJHw3DYZGAg/8IJZ0Pn9TdufcWeFOfKb7vDfEQivoQX1xyVZQrfyJJMZGNqAyyRS8s6eSpDUmsAXgAf1iuGxJMhetno9sz64/dBZ2OfX7lg/HBiB4Kyiekgih08VdGAS0LKE8fOcdDTMs/I1iW6zTffYWti6cFPt8fKKl2+MzQpp5Dv8cka0dS11kLvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oNNSftqNKPMRjlLXE0DQmx1PTrwla3VhKoHeqa0anA8=;
+ b=DuAQdYF4VEIGTaRT0wbsgRPrnJUPfXOqb8F0vImyBQFSiMT9KeCQa4zfV9mK76KfayBS3J7k1o7LTtVgnc2JGZZbLt3qqwGgmblqJy2cXtXBuPIv6JoVS6A9OcR/5N/M9InGIXhzYdfYKpjRJ0wuACtSV+9h9VtJhpwYXIOWveY=
+Received: from BN8PR11MB3668.namprd11.prod.outlook.com (2603:10b6:408:81::24)
+ by MN2PR11MB4711.namprd11.prod.outlook.com (2603:10b6:208:24e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Fri, 2 Sep
+ 2022 11:57:25 +0000
+Received: from BN8PR11MB3668.namprd11.prod.outlook.com
+ ([fe80::3198:2077:56c7:1780]) by BN8PR11MB3668.namprd11.prod.outlook.com
+ ([fe80::3198:2077:56c7:1780%4]) with mapi id 15.20.5588.014; Fri, 2 Sep 2022
+ 11:57:25 +0000
+From:   <Kumaravel.Thiagarajan@microchip.com>
+To:     <ilpo.jarvinen@linux.intel.com>
+CC:     <andy.shevchenko@gmail.com>, <gregkh@linuxfoundation.org>,
+        <jirislaby@kernel.org>, <u.kleine-koenig@pengutronix.de>,
+        <johan@kernel.org>, <wander@redhat.com>,
+        <etremblay@distech-controls.com>, <macro@orcam.me.uk>,
+        <geert+renesas@glider.be>, <jk@ozlabs.org>,
+        <phil.edworthy@renesas.com>, <lukas@wunner.de>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>
+Subject: RE: [PATCH v1 tty-next 1/2] 8250: microchip: pci1xxxx: Add driver for
+ the quad-uart function in the multi-function endpoint of pci1xxxx device.
+Thread-Topic: [PATCH v1 tty-next 1/2] 8250: microchip: pci1xxxx: Add driver
+ for the quad-uart function in the multi-function endpoint of pci1xxxx device.
+Thread-Index: AQHYvKpRU4W9kTjyqEqLC8EMyu3nVa3Ki2PAgAAMcgCAAWi3gA==
+Date:   Fri, 2 Sep 2022 11:57:24 +0000
+Message-ID: <BN8PR11MB3668FA6A2247710ED7DEF16EE97A9@BN8PR11MB3668.namprd11.prod.outlook.com>
+References: <20220830180054.1998296-1-kumaravel.thiagarajan@microchip.com>
+ <20220830180054.1998296-2-kumaravel.thiagarajan@microchip.com>
+ <CAHp75VfraADCTmZATWTSsYtC5uk5bc=WDVVm0jtUVO90xdFd9g@mail.gmail.com>
+ <BN8PR11MB3668BAC07D493EE02AEAEB14E97B9@BN8PR11MB3668.namprd11.prod.outlook.com>
+ <63f48d1-f716-5040-c8d1-486087bd1c5e@linux.intel.com>
+In-Reply-To: <63f48d1-f716-5040-c8d1-486087bd1c5e@linux.intel.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f331f5d4-7a8a-4941-5c39-08da8cda4d1c
+x-ms-traffictypediagnostic: MN2PR11MB4711:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8Lrof20yif2uZdC9Sulh0PKu+jwLmiq2ag2oNtfFxN0nPljfdJiKnwDMrsEE7MSU9ZvKvaN8BhPDcd3wP/WLzp0dx17OjNufHSg2b/fVB2hORiRPqbmLQEYiq1LRcc6lSaYFb/2RSsxrZhj1k5GVtStrl4sAFEAnJQncPnLM4gPS0ukVvP0fj041INXn1/+WajEs6CxnNFDTVy1OoAS5zM5+ALHiGB0mQjuOs1LHcrKZ00gbVBP/A+hiwGECy51HQY9M+gXa4c1GUzq4K8zeuW4MiAwPFPkc8E/9AMClEr5LUu0xQqSV1gBNy1X+A0EMhEOUO0Rf6yMvU5UTusarpxm8tKa/SdNr5T0fQ2GSMEx7RyuQseltwsQNuDIHSlO6PHXnHwJYVy8ZYX0emjqkfW4QerhmXTt3S1zjZ8YtY6vHtC2gOk1YlulAhObPvu16gToM5eCup4df2JckYOyEawyTda2XpAAgAVzP25h8g9mPO6Z99e+/kGupf5lcN7aqEUdVQYPdVvWc4+3SO44777m9U8hUIlhaqJBahHf07TPUl5WXsxIB0WQIpVtx3OwBa/aAE+nutzBG15fnMZe1TFNrMRfyxWlF0YVnaO8XF92gedvJQlD4z6CUyCy0eNH1P5eUdh+4yAx43v47juAmbl5dWOzUSRu9ol3qKbsj2CdD8p3bAw/SwhDGrqmtrgy8HDWE8LrTlBiNo6fgYUuE6EuiwDD/xNXGrbyaxSOdkruDw1stRGWGemnreylzvbBtLzF/+hnFJ21HsAW+DoG/RNhYT4cJJwYDIDmr1y98zwa31lSytyXWgN2uIFmbCZirGINEIcRY7AzSqux+U0sXzQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR11MB3668.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(396003)(376002)(366004)(136003)(39860400002)(478600001)(66476007)(107886003)(41300700001)(6506007)(71200400001)(26005)(54906003)(9686003)(53546011)(55016003)(2906002)(66446008)(7696005)(38070700005)(86362001)(6916009)(316002)(33656002)(40140700001)(64756008)(122000001)(38100700002)(186003)(66556008)(66946007)(8936002)(7416002)(5660300002)(4326008)(76116006)(52536014)(8676002)(83380400001)(32563001)(473944003)(414714003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?pwmB11ZCVJgD7J5hFEepFeXzsHcs6zJTnY9EVcAc7I5f+kMakl2Jyi9B/D?=
+ =?iso-8859-1?Q?rRKK8Y1L89zaS1o1XFz5lcWLljxXdgSLRV16RSE8pUu21kOag6WauQk0cF?=
+ =?iso-8859-1?Q?OtNuYYQmbVISIXrE0Z5FTUTfv9B6w8HbR45LFDsbQL3nMJG+pRnSM9ecNq?=
+ =?iso-8859-1?Q?VRG448IpW4dJ7FUNrcKTwHJZA+LNUcOlYGJcrdYAa8WtrMQTCOQ5fXpVrs?=
+ =?iso-8859-1?Q?pOwD/P0wmBE0s6BDKIJn8O9vVLI9444fZL+Wkf+Z+6YCzCxYiGEZJJcg4C?=
+ =?iso-8859-1?Q?m/gyFS+60dU4xIiwC1V7c3UJyE6EGjx7U+Q8Q6LEeEmqQC6JvT0Z0ODoHe?=
+ =?iso-8859-1?Q?EoOWZ6e09kDFeYZZx9R+bUXYhGq/hrHoOMz9aeRmTVAMuIiMSp6NVwVaRA?=
+ =?iso-8859-1?Q?BYWgEnf5UuOeq6/3bH7HJyNh6szRtItuiHE2JuppQaZzf4OBUlY1xBY/Zc?=
+ =?iso-8859-1?Q?/4CKMPQYIWmj7oPbi2ynbcYOHxsKfEI3SjebfL8MPFJd4KQm835Q+vAYE+?=
+ =?iso-8859-1?Q?MBDW89V1Kp92wxdtTrsPJx53BLQ0IDLIle2NspXzYVvQlMHs8yqHLI+kka?=
+ =?iso-8859-1?Q?loJiwgt5bz4eItt6IS4+aeUyzgslj4E7jb9uuzmmHAGWLa36ueaNrMpLcB?=
+ =?iso-8859-1?Q?5CjUX1KtHIITZmwadGM1k8K0/QnZcsTXxkSzra6wbBLatfewfnZqxaIYO1?=
+ =?iso-8859-1?Q?Azd5F3b9E0bQ58MBJ9RpUHBI1mO1/YIy1y3+NoZ+6v+IrRJ+yqXyf39Lew?=
+ =?iso-8859-1?Q?JwA1wK2uNfgE6NEHzmEQ/cH0ndIqG9PL8mnx+k9hgvkW3L4vEQH+Cn4Bdt?=
+ =?iso-8859-1?Q?psocqu9KhUpBym3yrIQaQJsSxFdMtMTrA2I0s7mbLZj3/5AIbDj9eBHZxh?=
+ =?iso-8859-1?Q?GYvQdn3xcDsYs+r9hgVQgHZw2APJElDt4ClBI5yLraKw66he1/IvqjJG/i?=
+ =?iso-8859-1?Q?yFAD3nnirFmDYDATP84jmuBEVzSWCw3CaihLdCiVk8YJmXDP44KQVNAUs1?=
+ =?iso-8859-1?Q?HqUC+BmuajiKf94Pbo1vpouddt4PsLAxB2J4+5tziWZJDDTuFx0dhQSkV7?=
+ =?iso-8859-1?Q?Md2sR+C97id5r5bHJ08qFNJp6lqt8D6R8luxT++jwj1CWEVuaHT7sIUE7f?=
+ =?iso-8859-1?Q?wGD7J5wwgT0uoyBjuIysgBwaT1TloUcf8tAMRRSX8L6vM6Lzr1/G9nIWKu?=
+ =?iso-8859-1?Q?YNhZloJ+r0/mYzBAQdNcl1kdlOyX5YtiiqEv7n1XlLngmXOWyOabxzyolP?=
+ =?iso-8859-1?Q?uOfy67QlW6RyNJCz4FU3/eTW4fruydoAvdVIy/fTiF6Bj5mdatnLpX+ZGz?=
+ =?iso-8859-1?Q?XpNZ2Ti2YAgwEyc7tNLut4/xpNRfMEJfu9vxkjDaERMnjGiuQW09qHFgbf?=
+ =?iso-8859-1?Q?EA0QmPb44XLnBL+oUiYRgZkn+g8L54gR/xdudBg/0tbfD1+nP7aLfHpOGw?=
+ =?iso-8859-1?Q?O+Qsa9Z0tnXYHVPtvQCPskg/lZ29wYpcqsEOKmzVlUJ43y19rv3984iGrX?=
+ =?iso-8859-1?Q?L+bXm9ckyITovlqIFtPHLYTENke+8V9S+gape+3uam5iWarBJn1eGTviNZ?=
+ =?iso-8859-1?Q?G9EEeVgqk+mTwInDEen5hrqKqegv0DF0nZhrNSsKXqn7dN6araX6RDxYNK?=
+ =?iso-8859-1?Q?KPoMb9RBY5PhsNY/yKBQwQIsYm1z2aORHeS0ggctcgfeeOQIedaRYOYraH?=
+ =?iso-8859-1?Q?SF/70/M/MWHsRYUISSo=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901173304.GA2280413@paulmck-ThinkPad-P17-Gen-1>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR11MB3668.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f331f5d4-7a8a-4941-5c39-08da8cda4d1c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2022 11:57:25.0184
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: a2uV9/h7qaA2PKcm8AQ2ayR2J1K+SlF6oR8g4rU0CenPmZv6BTqrTSrAhOyjOv+YqlSkYMfK19VwarAWge5XWk4/w261JcA6MogG7jaewJobLpR5lRABjw4G88YOVzgv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4711
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:33:04AM -0700, Paul E. McKenney wrote:
-> On Thu, Sep 01, 2022 at 10:27:25AM -0700, Paul E. McKenney wrote:
-> > On Thu, Sep 01, 2022 at 12:36:25PM +0200, Sascha Hauer wrote:
-> > > Hi Paul,
-> > > 
-> > > On Mon, Jun 20, 2022 at 03:53:43PM -0700, Paul E. McKenney wrote:
-> > > > This commit causes synchronous grace periods to be driven from the task
-> > > > invoking synchronize_rcu_*(), allowing these functions to be invoked from
-> > > > the mid-boot dead zone extending from when the scheduler was initialized
-> > > > to to point that the various RCU tasks grace-period kthreads are spawned.
-> > > > This change will allow the self-tests to run in a consistent manner.
-> > > > 
-> > > > Reported-by: Matthew Wilcox <willy@infradead.org>
-> > > > Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > 
-> > > This commit (appeared in mainline as 4a8cc433b8bf) breaks booting my
-> > > ARMv7 based i.MX6ul board when CONFIG_PROVE_RCU is enabled. Reverting
-> > > this patch on v6.0-rc3 makes my board boot again. See below for a boot
-> > > log. The last message is "Running RCU-tasks wait API self tests", after
-> > > that the board hangs. Any idea what goes wrong here?
-> > 
-> > New one on me!
-> > 
-> > Is it possible to get a stack trace of the hang, perhaps via
-> > one form or another of sysrq-T?  Such a stack trace would likely
-> > include synchronize_rcu_tasks(), synchronize_rcu_tasks_rude(), or
-> > synchronize_rcu_tasks_trace() followed by synchronize_rcu_tasks_generic(),
-> > rcu_tasks_one_gp(), and one of rcu_tasks_wait_gp(),
-> > rcu_tasks_rude_wait_gp(), or rcu_tasks_wait_gp().
-> 
-> If there is no chance of sysrq-T, kernel debuggers, kernel crash
-> dumps, or any other source of the stack trace, please decorate the
-> code path with printk() or similar and let me know where it goes.
-> Under normal circumstances, this code path is not sensitive to performance
-> perturbations of the printk() persuasion.
+> -----Original Message-----
+> From: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+> Sent: Thursday, September 1, 2022 7:12 PM
+> To: Kumaravel Thiagarajan - I21417 <Kumaravel.Thiagarajan@microchip.com>
+> Cc: andy.shevchenko@gmail.com; Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org>; Jiri Slaby <jirislaby@kernel.org>; u.kleine=
+-
+> koenig@pengutronix.de; johan@kernel.org; wander@redhat.com;
+> etremblay@distech-controls.com; macro@orcam.me.uk;
+> geert+renesas@glider.be; jk@ozlabs.org; phil.edworthy@renesas.com;
+> Lukas Wunner <lukas@wunner.de>; LKML <linux-kernel@vger.kernel.org>;
+> linux-serial <linux-serial@vger.kernel.org>; UNGLinuxDriver
+> <UNGLinuxDriver@microchip.com>
+> Subject: RE: [PATCH v1 tty-next 1/2] 8250: microchip: pci1xxxx: Add drive=
+r for
+> the quad-uart function in the multi-function endpoint of pci1xxxx device.
+>=20
+>=20
+> On Thu, 1 Sep 2022, Kumaravel.Thiagarajan@microchip.com wrote:
+>=20
+> > > > +       const unsigned int standard_baud_list[] =3D {50, 75, 110, 1=
+34, 150,
+> 300,
+> > > > +                                               600, 1200, 1800, 20=
+00, 2400, 3600,
+> > > > +                                               4800, 7200, 9600, 1=
+9200, 38400, 57600,
+> > > > +                                               115200, 125000, 136=
+400, 150000, 166700,
+> > > > +                                               187500, 214300, 250=
+000, 300000, 375000,
+> > > > +                                               500000, 750000,
+> > > > + 1000000, 1500000};
+> > >
+> > > Why?!
+> >
+> > The standard baud rates are handled within serial8250_do_set_termios
+> > which is invoked from within mchp_pci1xxxx_set_termios in first place.
+> > Hence if it matches with any of the standard baudrates, it can return
+> > immediately.
+>=20
+> Care to explain why the baudrates in your table don't match those in
+> tty_baudrate.c? ...It makes no sense to me that you call these "standard
+> baud rates".
+The baudrates in my table are from our legacy UART IP and these baudrates c=
+an be
+generated by the hardware by updating UART_DLL & UART_DLM alone as done by =
+the
+serial8250_do_set_termios.
+I noticed that some of the baud rates in tty_baudrate.c arenot listed in th=
+is table
+but will still be handled by the mchp_pci1xxxx_set_termios.
+I can rename standard_baud_list to simply baud_list. Please let me know.
 
-Some unrelated bug I was searching for made me turn on early console
-output with the "earlycon" parameter. It turned out that when I remove
-this parameter then my board boots fine.
+Thank You.
 
-I then realized that even with earlycon enabled my board boots fine
-when I remove the call to
-
-	pr_info("Running RCU-tasks wait API self tests\n");
-
-Given that I am not sure how useful it is to add more printk. I did that
-anyway like this:
-
-> static void rcu_tasks_one_gp(struct rcu_tasks *rtp, bool midboot)
-> {
-> 	int needgpcb;
-> 
-> 	printk("%s: mutex_lock... midboot: %d\n", __func__, midboot);
-> 	mutex_lock(&rtp->tasks_gp_mutex);
-> 	printk("%s: mutex_locked midboot: %d\n", __func__, midboot);
-> 
-> 	// If there were none, wait a bit and start over.
-> 	if (unlikely(midboot)) {
-> 		needgpcb = 0x2;
-> 	} else {
-> 		printk("%s: set_tasks_gp_state(RTGS_WAIT_CBS)...\n", __func__);
-> 		set_tasks_gp_state(rtp, RTGS_WAIT_CBS);
-> 		printk("%s: rcuwait_wait_event...\n", __func__);
-> 		rcuwait_wait_event(&rtp->cbs_wait,
-> 				   (needgpcb = rcu_tasks_need_gpcb(rtp)),
-> 				   TASK_IDLE);
->		printk("%s: rcuwait_wait_event done\n", __func__);
-> 	}
->
-
-What I see then is:
-
-[    0.156362] synchronize_rcu_tasks_generic: rcu_tasks_one_gp....
-[    0.162087] rcu_tasks_one_gp: mutex_lock... midboot: 1
-[    0.167386] rcu_tasks_one_gp: mutex_lock... midboot: 0
-[    0.172489] rcu_tasks_one_gp: mutex_locked midboot: 0
-[    0.177535] rcu_tasks_one_gp: set_tasks_gp_state(RTGS_WAIT_CBS)...
-[    0.183525] rcu_tasks_one_gp: rcuwait_wait_event...
-
-Here the board hangs. After some time I get:
-
-[  254.493010] random: crng init done
-
-But that's it.
-
-> 
-> > At this point in the boot sequence, there is only one online CPU,
-> > correct?
-
-Yes, it's a single core system.
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Regards,
+Kumaravel

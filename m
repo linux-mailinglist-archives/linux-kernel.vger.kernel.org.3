@@ -2,121 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AFC5AA577
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFD95AA57D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbiIBCH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 22:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S233383AbiIBCMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 22:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiIBCHy (ORCPT
+        with ESMTP id S230313AbiIBCMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 22:07:54 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8A88A7C2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 19:07:52 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220902020750epoutp04d4e2a8799bbc48defb20c6b93914805b~Q6QUR35Vn2863228632epoutp04t
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:07:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220902020750epoutp04d4e2a8799bbc48defb20c6b93914805b~Q6QUR35Vn2863228632epoutp04t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1662084470;
-        bh=V64k7xax5ayn4PWfzCTIBNIiNKnQQCH5pxYzaTK3OEI=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=R1F703ziT6nabFiHAudF+qP0jfd+YRttq+RpxpZ3jL/Xy6Kjr4t3AtIfFYk7NlHHl
-         22/V7LkRaIF7yRlCnOy0gFuQM6yUwS67fm2Fb8VFSZPBpoiteWsA3r/o7lIJtgAFKq
-         lT9S0Nueuuc4idtHmFu3Em4Bk/ZSj+uB/5txJcBo=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220902020750epcas2p2f3b3abe15649078f3ab58be82e046319~Q6QT5ssS80236002360epcas2p2m;
-        Fri,  2 Sep 2022 02:07:50 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.88]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4MJhBs5ZqKz4x9Pt; Fri,  2 Sep
-        2022 02:07:49 +0000 (GMT)
-X-AuditID: b6c32a46-2a89ea8000018104-41-6311657546f1
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1E.85.33028.57561136; Fri,  2 Sep 2022 11:07:49 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v1] f2fs: fix typo
-Reply-To: yonggil.song@samsung.com
-Sender: Yonggil Song <yonggil.song@samsung.com>
-From:   Yonggil Song <yonggil.song@samsung.com>
-To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Yonggil Song <yonggil.song@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220902020749epcms2p1772fc0bf54778e95a38819f107e33c2f@epcms2p1>
-Date:   Fri, 02 Sep 2022 11:07:49 +0900
-X-CMS-MailID: 20220902020749epcms2p1772fc0bf54778e95a38819f107e33c2f
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBKsWRmVeSWpSXmKPExsWy7bCmmW5pqmCyQddvIYvTU88yWbw8pGnx
-        ZP0sZotLi9wtLu+aw2Yx9fwRJgc2j02rOtk8di/4zOTRt2UVo8fnTXIBLFHZNhmpiSmpRQqp
-        ecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlAq5UUyhJzSoFCAYnFxUr6
-        djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWleel6eaklVoYGBkamQIUJ2Rnrvk9gKVjFWnG7
-        5xtjA+Nsli5GTg4JAROJU1fusHUxcnEICexglJg9+Q5zFyMHB6+AoMTfHcIgprCAkkTHU0aQ
-        ciEg89qBXrBWYQF9ic2Ll7GD2GwCuhJ/NywHs0UEXjFKnFktCmIzC2hLbJx9lgliFa/EjPan
-        UGulJbYv38oIYWtI/FjWywxhi0rcXP2WHcZ+f2w+VI2IROu9s1A1ghIPfu6GiktKLDp0Hmp+
-        vsTfFdfZIOwaia0NbVBxfYlrHRvB9vIK+Eq8WNQENodFQFXixMqdUPUuEutOX2CDuFleYvvb
-        OeBQYBbQlFi/Sx/ElBBQljhyiwXmk4aNv9nR2cwCfBIdh//CxXfMewJ1gZrE5k2bWSFsGYkL
-        j9sYJzAqzUIE8ywke2ch7F3AyLyKUSy1oDg3PbXYqMAIHrPJ+bmbGMFJUMttB+OUtx/0DjEy
-        cTAeYpTgYFYS4Z16WCBZiDclsbIqtSg/vqg0J7X4EKMp0McTmaVEk/OBaTivJN7QxNLAxMzM
-        0NzI1MBcSZzXRZsxWUggPbEkNTs1tSC1CKaPiYNTqoGp28zCZ6uAnd7hJ822k7lZO2cvDJsd
-        evxh9+HGaNd5VZzZD655HthRtOCNjb5Rjsi9E+7Lun+bZTk62DU1dVz9X3zz1QrVfpd9vvqe
-        tVNn3K2YGtvFfujokpvfOfY6PZ7CsTP7bObNpbZC+2e7XD27xdO/+LbzFI279xdbXu1v8jqh
-        knHFvH7a/sWnXE/daX4xbcW7kCdnZ0nMmn5v1yO1vLYPrt4XEnfGe7yLK/QwdPKOiF88JUx+
-        goRA5/+iqwvXibIz7Zoze1vt3ezKD4IKWjP0arbfcPQ55BwtvLdi0fGA26umlnupLPp3qKeJ
-        hSv4uhDPluw/6g8nBBR+/G/gOH/PyqKoCQYFDuz+8hMylViKMxINtZiLihMBK8ukSAsEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220902020749epcms2p1772fc0bf54778e95a38819f107e33c2f
-References: <CGME20220902020749epcms2p1772fc0bf54778e95a38819f107e33c2f@epcms2p1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Sep 2022 22:12:21 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2E5A5C44;
+        Thu,  1 Sep 2022 19:12:21 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 6-20020a9d0106000000b0063963134d04so580457otu.3;
+        Thu, 01 Sep 2022 19:12:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=T7qq37umgy6ILkKn2p66Hov6G9QBZKLlte3WFGWCXUk=;
+        b=kShF43PTGAVnO6M2WEQ62vKFE2hZjX+s0ksKCv0m3dl5S8SK7Jz1dRr/0kRRo3QShN
+         9L7CO1GKaelow0O6Kp+3Mw8xsVjH31dgo5hQmyxrJyIlDgpDYWSXa+81rZilAv92uPYJ
+         RCtoQ1coMkX3Vl7RBFTbjcBa57Gx6nSqBbvGSVvELhOJGjb0rkx7gKQ9myot+5Rxys3Q
+         EygA98Q2JyxZCSOlssAY58hjIJ2ial7vtoiTgTypn+qbbpmcqL0dDCmOA9KXllk+QlZN
+         fTBm+SFVDHWLmw6DEDN0JxBfx2wxEgeSfKa8aa7Fb3Gu6n5p27Szv/DCTM1uKxpV2SZh
+         F1Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=T7qq37umgy6ILkKn2p66Hov6G9QBZKLlte3WFGWCXUk=;
+        b=Tuz5o2iBla/iL9g1lkYdrR4f0ASnB0Vl7WShoDTNge0m24KxTmBaf4XNxtKAeczZ/Z
+         h+4MmvLtNPx4Rw7+uVbgd4YaJYihjfWSSDEa/Wv50lcEGYR/T8DAA6PQ/EkxFjQG7Fa0
+         QDvsMBUa2xwM1LeCW79tTAs3ESneKZfR96rAytI/fDcQBq+kUv8H3nwPRzW6IwzAkh3n
+         hiQ5CKWBYU3h9Cv6TQD8cTVYIYuxrEeIIy5q4rqYAMKhzuiyr4vsn8WpAyaQcbrnJnPU
+         kEzcZNP9bmUsFG3x4ZWkZSH5O1PH+maJaB5w4kyLLbQWXsEVeqqtOj6M3W0LYru9eoXN
+         HEYA==
+X-Gm-Message-State: ACgBeo1+pU/9KtSiPjaVxQQsyYPi1jlhtqRutyFgPy2ODkSoZjLCt7qJ
+        IeElLhV1aWj8NWnVf/kxY40=
+X-Google-Smtp-Source: AA6agR6iWK5m7HDr3+E8mKvzZRfJotVF8JW4zDXRnMAg4Z9wqwnLCN5eXp2jwPO3KSVC3xbefMevEg==
+X-Received: by 2002:a05:6830:1544:b0:63b:2c65:9081 with SMTP id l4-20020a056830154400b0063b2c659081mr9134823otp.193.1662084740432;
+        Thu, 01 Sep 2022 19:12:20 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id 97-20020a9d036a000000b006371af665c5sm418990otv.56.2022.09.01.19.12.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 19:12:20 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 19:10:09 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        NeilBrown <neilb@suse.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Russell King <linux@armlinux.org.uk>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 08/10] headers/deps: mm: Split <linux/gfp_types.h> out of
+ <linux/gfp.h>
+Message-ID: <YxFmAcrDkFuIsuOu@yury-laptop>
+References: <20220706174253.4175492-1-yury.norov@gmail.com>
+ <20220706174253.4175492-9-yury.norov@gmail.com>
+ <YxEZYUCA0b8Cd1/S@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxEZYUCA0b8Cd1/S@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 01, 2022 at 09:43:13PM +0100, Matthew Wilcox wrote:
+> On Wed, Jul 06, 2022 at 10:42:51AM -0700, Yury Norov wrote:
+> > From: Ingo Molnar <mingo@kernel.org>
+> > 
+> > This is a much smaller header.
+> > 
+> > Signed-off-by: Ingo Molnar <mingo@kernel.org>
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > ---
+> >  include/linux/gfp.h       | 345 +------------------------------------
+> >  include/linux/gfp_types.h | 348 ++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 350 insertions(+), 343 deletions(-)
+> 
+> You move a lot of kernel-doc.  Where do you change the rst files?
 
-Fix typo in f2fs.h
-Detected by Jaeyoon Choi
+Ingo - nowhere. So I did it in the next patch:
 
-Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
----
- fs/f2fs/f2fs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index eddfd35eadb6..661096be59d1 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -274,7 +274,7 @@ enum {
- 	ORPHAN_INO,		/* for orphan ino list */
- 	APPEND_INO,		/* for append ino list */
- 	UPDATE_INO,		/* for update ino list */
--	TRANS_DIR_INO,		/* for trasactions dir ino list */
-+	TRANS_DIR_INO,		/* for transactions dir ino list */
- 	FLUSH_INO,		/* for multiple device flushing */
- 	MAX_INO_ENTRY,		/* max. list */
- };
--- 
-2.34.1
-
+7343f2b0db4961d ("headers/deps: mm: align MANITAINERS and Docs with new
+gfp.h structure")

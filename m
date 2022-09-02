@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E9F5AABDF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1765AABDD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235846AbiIBJxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
+        id S235696AbiIBJxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235723AbiIBJwm (ORCPT
+        with ESMTP id S235708AbiIBJwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Sep 2022 05:52:42 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7A6C6FC8
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:52:38 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c59so1934119edf.10
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1F5CD530
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:52:39 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id y64so1982117ede.2
         for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=6Aqp2CnBk1QACLxggfiOgjUbjEfen+S7yS/YB9rrdMM=;
-        b=bt439Yd79hZlUveKtb7EfEGN54BN2p9KzmbAr83gDhkEHXHidd+tMd2dUK0XyylgDc
-         b+jbQv8c/JmCYdQp1riLZykWpOjJXIUl02RdM+zyVwaIwXst7BoPKVTPAcmpGQE5ZC1s
-         wRWptBOL69ItcMY4XChm0ej03A7uU6t7pY3k9j/HLSwJ8H+9XrQnArkTepMH3XKFGIsW
-         YxSsXmsrL+LUrUeDsIY1XniFuovduJX5su8XeTA7igmyZsgOhNYpyUqiabhk8UeTacNN
-         AQDQFqXLOyV9rmTYZmgA9khqH5LcUbDYxsiz43fgyaIGaiZhkhZv/qbZLsGu9Qh/bIq4
-         jL8g==
+        bh=h3mhTe/mjeUDsRieRFZcGAvsQDavOcg5RIWTE5zQGmg=;
+        b=P3QdD0gpQHruFVJqMa7Wzvc+n78eFD5RH+hz7cX3l6rx08EFj3fZWG05QZDc1tCA/N
+         tqRdJWwx9/9Udq2YSEbOvUobkWiLQKGhoYbefcfJgEmpjeV9ek/f5nzNCNIuFcWsdw51
+         Ika/mTSR3k7lfAFgRUqyy2B5HPmcfTULxXoqQS/NkaFvT+8l4UV9I7Ng0DThuyouyMlc
+         Arx2cZJHg3/LlIUbqyiSVtXlDLR8rYB6EsX6QqtdMJ1bN6lC4F+BnlMZGDBG4oq4Nohi
+         LHM1zFvigxswzvXcx8rs+phoLDRdUZapoyRSXylO3L9ErPNxHpr/1M16YSrV5JgztBsJ
+         CQ5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=6Aqp2CnBk1QACLxggfiOgjUbjEfen+S7yS/YB9rrdMM=;
-        b=kxQe+IPcOfBadL6Zskkjna8bW3Sh6OJxQ+nU7WZi01zPN/q1sYeO3zehZttiwNfjxI
-         Qc9UOE+T1iO32qSESe51UeXkXUu25dIhwuISuZldSUXbnJbdy4SSgjktsWrrp437YGpL
-         Xouyh8graCgAD3xPnpBdv7AncHEYUuDX7/7Qfl0LBu2Shp/ZmMjXHgNFa+7Ay74DfcaR
-         P99G01JWBWXRCOPZcqQvug9S16GuM9KNrpFrpTwAisgVZaG7t9qTmVdpD9I+ps5ek1Cp
-         z7PNaXtHNKexcbj17bHFyHwc89ebndaDWdbxtzFNoKxWEb/P56n0zidy/qhKPDicEbqz
-         eIGQ==
-X-Gm-Message-State: ACgBeo12SgWOzSIlIkoR2+TYiyui778CQhmpNyk/PL2BWM8F3aCe4jWW
-        2bOEOYhPloeT9+0x+X5Dl3R1ioYagJJL8A==
-X-Google-Smtp-Source: AA6agR5eIcQO/SIZCdZKTaAjLVkFC4wgK+jKQhq0Ks6CTQSo4vsoFPVqbSuPlQ1a4Efc0ET4FKSHYQ==
-X-Received: by 2002:a05:6402:26c6:b0:448:6812:7355 with SMTP id x6-20020a05640226c600b0044868127355mr20746614edd.385.1662112356946;
-        Fri, 02 Sep 2022 02:52:36 -0700 (PDT)
+        bh=h3mhTe/mjeUDsRieRFZcGAvsQDavOcg5RIWTE5zQGmg=;
+        b=342QWxUlkPfncoLrSP1fTJuncWDs+nsc2y8PO/wWfgwqesdusbt9rTuqJqOumYxcL7
+         cutFz+fPGcRcR5k7KTmoiYL9QsE0Dh54t+Q+Mfnp4CwpyVgItyLR7/x512vSk/yCXL6Y
+         i/vloerSn8ss4cu/9whbc0mG0hYUoINRlUTBwfR0A2BqIzgxRZiJmfrzVG+/W8jPGdtG
+         IWuV6aaFP5N+7BBdrjGI7DgZCVc4Kf7DyDjbBAs43KskvckJ1DIeYBUZKNHiWI0rCP+n
+         CADsng8FlSYP0ajYLiUnIzVhlFCIUYH1ISU2CnpRKzDfD2zM83w/ekNmLykw3Epgnaoy
+         wRow==
+X-Gm-Message-State: ACgBeo3aeHgs1U90pjPlnbQG2nM32MIZFnBhaaWx9BxUoTeglrmBGOUG
+        iyQTnJqaqggQ4T6r9w8GVKE=
+X-Google-Smtp-Source: AA6agR6XamPgDiGUEGLE9DLDhapoNvBAlbipZ3p2jb95dD0vAa9TTvWkK8BfBpaom1LZMB0xKqqtig==
+X-Received: by 2002:a05:6402:428a:b0:42e:8f7e:1638 with SMTP id g10-20020a056402428a00b0042e8f7e1638mr32624816edc.228.1662112357639;
+        Fri, 02 Sep 2022 02:52:37 -0700 (PDT)
 Received: from localhost.localdomain (ip-217-105-46-83.ip.prioritytelecom.net. [217.105.46.83])
-        by smtp.gmail.com with ESMTPSA id h6-20020a170906828600b0073d6234ceebsm959601ejx.160.2022.09.02.02.52.36
+        by smtp.gmail.com with ESMTPSA id h6-20020a170906828600b0073d6234ceebsm959601ejx.160.2022.09.02.02.52.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 02:52:36 -0700 (PDT)
+        Fri, 02 Sep 2022 02:52:37 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     Larry.Finger@lwfinger.net, gregkh@linuxfoundation.org,
         hdegoede@redhat.com
 Cc:     namcaov@gmail.com, linux-kernel@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 04/10] staging: rtl8723bs: delete rtw_odm.c and rtw_odm.h
-Date:   Fri,  2 Sep 2022 11:51:54 +0200
-Message-Id: <6870109ce0c51b4ab91ec370d8b2285dc635e5fe.1662111798.git.namcaov@gmail.com>
+Subject: [PATCH 05/10] staging: rtl8723bs: remove odm_PauseDIG
+Date:   Fri,  2 Sep 2022 11:51:55 +0200
+Message-Id: <274e8338398d915327d353f713b2d47e48f92ba9.1662111798.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1662111798.git.namcaov@gmail.com>
 References: <cover.1662111798.git.namcaov@gmail.com>
@@ -72,195 +72,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove rtw_odm.c and rtw_odm.h because the content of these files
-is not used.
+Remove function odm_PauseDIG because it is not used.
 
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/rtl8723bs/Makefile            |   1 -
- drivers/staging/rtl8723bs/core/rtw_odm.c      | 116 ------------------
- drivers/staging/rtl8723bs/include/drv_types.h |   1 -
- drivers/staging/rtl8723bs/include/rtw_odm.h   |  24 ----
- 4 files changed, 142 deletions(-)
- delete mode 100644 drivers/staging/rtl8723bs/core/rtw_odm.c
- delete mode 100644 drivers/staging/rtl8723bs/include/rtw_odm.h
+ drivers/staging/rtl8723bs/hal/odm_DIG.c | 57 -------------------------
+ drivers/staging/rtl8723bs/hal/odm_DIG.h |  2 -
+ 2 files changed, 59 deletions(-)
 
-diff --git a/drivers/staging/rtl8723bs/Makefile b/drivers/staging/rtl8723bs/Makefile
-index bc7ff1dd14f9..590bde02058c 100644
---- a/drivers/staging/rtl8723bs/Makefile
-+++ b/drivers/staging/rtl8723bs/Makefile
-@@ -10,7 +10,6 @@ r8723bs-y = \
- 		core/rtw_ieee80211.o \
- 		core/rtw_mlme.o \
- 		core/rtw_mlme_ext.o \
--		core/rtw_odm.o \
- 		core/rtw_pwrctrl.o \
- 		core/rtw_recv.o \
- 		core/rtw_rf.o \
-diff --git a/drivers/staging/rtl8723bs/core/rtw_odm.c b/drivers/staging/rtl8723bs/core/rtw_odm.c
-deleted file mode 100644
-index 47fd2ee9bb9f..000000000000
---- a/drivers/staging/rtl8723bs/core/rtw_odm.c
-+++ /dev/null
-@@ -1,116 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/******************************************************************************
-- *
-- * Copyright(c) 2013 Realtek Corporation. All rights reserved.
-- *
-- ******************************************************************************/
--
--#include <drv_types.h>
--#include <rtw_debug.h>
--#include <rtw_odm.h>
--#include <hal_data.h>
--
--#define RTW_ODM_COMP_MAX 32
--
--static const char * const odm_ability_str[] = {
--	/* BIT0 */"ODM_BB_DIG",
--	/* BIT1 */"ODM_BB_RA_MASK",
--	/* BIT2 */"ODM_BB_DYNAMIC_TXPWR",
--	/* BIT3 */"ODM_BB_FA_CNT",
--	/* BIT4 */"ODM_BB_RSSI_MONITOR",
--	/* BIT5 */"ODM_BB_CCK_PD",
--	/* BIT6 */"ODM_BB_ANT_DIV",
--	/* BIT7 */"ODM_BB_PWR_SAVE",
--	/* BIT8 */"ODM_BB_PWR_TRAIN",
--	/* BIT9 */"ODM_BB_RATE_ADAPTIVE",
--	/* BIT10 */"ODM_BB_PATH_DIV",
--	/* BIT11 */"ODM_BB_PSD",
--	/* BIT12 */"ODM_BB_RXHP",
--	/* BIT13 */"ODM_BB_ADAPTIVITY",
--	/* BIT14 */"ODM_BB_DYNAMIC_ATC",
--	/* BIT15 */NULL,
--	/* BIT16 */"ODM_MAC_EDCA_TURBO",
--	/* BIT17 */"ODM_MAC_EARLY_MODE",
--	/* BIT18 */NULL,
--	/* BIT19 */NULL,
--	/* BIT20 */NULL,
--	/* BIT21 */NULL,
--	/* BIT22 */NULL,
--	/* BIT23 */NULL,
--	/* BIT24 */"ODM_RF_TX_PWR_TRACK",
--	/* BIT25 */"ODM_RF_RX_GAIN_TRACK",
--	/* BIT26 */"ODM_RF_CALIBRATION",
--};
--
--#define RTW_ODM_ABILITY_MAX 27
--
--static const char * const odm_dbg_level_str[] = {
--	NULL,
--	"ODM_DBG_OFF",
--	"ODM_DBG_SERIOUS",
--	"ODM_DBG_WARNING",
--	"ODM_DBG_LOUD",
--	"ODM_DBG_TRACE",
--};
--
--#define RTW_ODM_DBG_LEVEL_NUM 6
--
--void rtw_odm_dbg_level_msg(void *sel, struct adapter *adapter)
+diff --git a/drivers/staging/rtl8723bs/hal/odm_DIG.c b/drivers/staging/rtl8723bs/hal/odm_DIG.c
+index 7e92c373cddb..07edf74ccfe5 100644
+--- a/drivers/staging/rtl8723bs/hal/odm_DIG.c
++++ b/drivers/staging/rtl8723bs/hal/odm_DIG.c
+@@ -309,63 +309,6 @@ void ODM_Write_DIG(void *pDM_VOID, u8 CurrentIGI)
+ 
+ }
+ 
+-void odm_PauseDIG(
+-	void *pDM_VOID,
+-	enum ODM_Pause_DIG_TYPE PauseType,
+-	u8 IGIValue
+-)
 -{
--	u32 dbg_level;
--	int i;
+-	struct dm_odm_t *pDM_Odm = (struct dm_odm_t *)pDM_VOID;
+-	struct dig_t *pDM_DigTable = &pDM_Odm->DM_DigTable;
+-	static bool bPaused;
 -
--	rtw_hal_get_def_var(adapter, HW_DEF_ODM_DBG_LEVEL, &dbg_level);
--	netdev_dbg(adapter->pnetdev, "odm.DebugLevel = %u\n", dbg_level);
--	for (i = 0; i < RTW_ODM_DBG_LEVEL_NUM; i++) {
--		if (odm_dbg_level_str[i])
--			netdev_dbg(adapter->pnetdev, "%u %s\n", i,
--				   odm_dbg_level_str[i]);
+-	if (
+-		(pDM_Odm->SupportAbility & ODM_BB_ADAPTIVITY) &&
+-		pDM_Odm->TxHangFlg == true
+-	) {
+-		return;
+-	}
+-
+-	if (
+-		!bPaused && (!(pDM_Odm->SupportAbility & ODM_BB_DIG) ||
+-		!(pDM_Odm->SupportAbility & ODM_BB_FA_CNT))
+-	){
+-		return;
+-	}
+-
+-	switch (PauseType) {
+-	/* 1 Pause DIG */
+-	case ODM_PAUSE_DIG:
+-		/* 2 Disable DIG */
+-		ODM_CmnInfoUpdate(pDM_Odm, ODM_CMNINFO_ABILITY, pDM_Odm->SupportAbility & (~ODM_BB_DIG));
+-
+-		/* 2 Backup IGI value */
+-		if (!bPaused) {
+-			pDM_DigTable->IGIBackup = pDM_DigTable->CurIGValue;
+-			bPaused = true;
+-		}
+-
+-		/* 2 Write new IGI value */
+-		ODM_Write_DIG(pDM_Odm, IGIValue);
+-		break;
+-
+-	/* 1 Resume DIG */
+-	case ODM_RESUME_DIG:
+-		if (bPaused) {
+-			/* 2 Write backup IGI value */
+-			ODM_Write_DIG(pDM_Odm, pDM_DigTable->IGIBackup);
+-			bPaused = false;
+-
+-			/* 2 Enable DIG */
+-			ODM_CmnInfoUpdate(pDM_Odm, ODM_CMNINFO_ABILITY, pDM_Odm->SupportAbility | ODM_BB_DIG);
+-		}
+-		break;
+-
+-	default:
+-		break;
 -	}
 -}
 -
--inline void rtw_odm_dbg_level_set(struct adapter *adapter, u32 level)
--{
--	rtw_hal_set_def_var(adapter, HW_DEF_ODM_DBG_LEVEL, &level);
--}
--
--void rtw_odm_ability_msg(void *sel, struct adapter *adapter)
--{
--	u32 ability = 0;
--	int i;
--
--	rtw_hal_get_hwreg(adapter, HW_VAR_DM_FLAG, (u8 *)&ability);
--	netdev_dbg(adapter->pnetdev, "odm.SupportAbility = 0x%08x\n", ability);
--	for (i = 0; i < RTW_ODM_ABILITY_MAX; i++) {
--		if (odm_ability_str[i])
--			netdev_dbg(adapter->pnetdev, "%cBIT%-2d %s\n",
--				   (BIT0 << i) & ability ? '+' : ' ', i,
--				   odm_ability_str[i]);
--	}
--}
--
--void rtw_odm_adaptivity_parm_set(struct adapter *adapter, s8 TH_L2H_ini,
--				 s8 TH_EDCCA_HL_diff, s8 IGI_Base,
--				 bool ForceEDCCA, u8 AdapEn_RSSI,
--				 u8 IGI_LowerBound)
--{
--	struct hal_com_data *pHalData = GET_HAL_DATA(adapter);
--	struct dm_odm_t *odm = &pHalData->odmpriv;
--
--	odm->TH_L2H_ini = TH_L2H_ini;
--	odm->TH_EDCCA_HL_diff = TH_EDCCA_HL_diff;
--	odm->IGI_Base = IGI_Base;
--	odm->ForceEDCCA = ForceEDCCA;
--	odm->AdapEn_RSSI = AdapEn_RSSI;
--	odm->IGI_LowerBound = IGI_LowerBound;
--}
--
--void rtw_odm_get_perpkt_rssi(void *sel, struct adapter *adapter)
--{
--	struct hal_com_data *hal_data = GET_HAL_DATA(adapter);
--	struct dm_odm_t *odm = &hal_data->odmpriv;
--
--	netdev_dbg(adapter->pnetdev,
--		   "RxRate = %s, RSSI_A = %d(%%), RSSI_B = %d(%%)\n",
--		   HDATA_RATE(odm->RxRate), odm->RSSI_A, odm->RSSI_B);
--}
-diff --git a/drivers/staging/rtl8723bs/include/drv_types.h b/drivers/staging/rtl8723bs/include/drv_types.h
-index bb4650f0b297..82159e1c7f9b 100644
---- a/drivers/staging/rtl8723bs/include/drv_types.h
-+++ b/drivers/staging/rtl8723bs/include/drv_types.h
-@@ -50,7 +50,6 @@
- #include <rtw_mlme_ext.h>
- #include <rtw_ap.h>
- #include <rtw_version.h>
--#include <rtw_odm.h>
+ bool odm_DigAbort(void *pDM_VOID)
+ {
+ 	struct dm_odm_t *pDM_Odm = (struct dm_odm_t *)pDM_VOID;
+diff --git a/drivers/staging/rtl8723bs/hal/odm_DIG.h b/drivers/staging/rtl8723bs/hal/odm_DIG.h
+index 88cfd542df16..a5b041101c89 100644
+--- a/drivers/staging/rtl8723bs/hal/odm_DIG.h
++++ b/drivers/staging/rtl8723bs/hal/odm_DIG.h
+@@ -141,8 +141,6 @@ void odm_Adaptivity(void *pDM_VOID, u8 IGI);
  
- #include "ioctl_cfg80211.h"
+ void ODM_Write_DIG(void *pDM_VOID, u8 CurrentIGI);
  
-diff --git a/drivers/staging/rtl8723bs/include/rtw_odm.h b/drivers/staging/rtl8723bs/include/rtw_odm.h
-deleted file mode 100644
-index 6a431c121285..000000000000
---- a/drivers/staging/rtl8723bs/include/rtw_odm.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/******************************************************************************
-- *
-- * Copyright(c) 2013 Realtek Corporation. All rights reserved.
-- *
-- ******************************************************************************/
--#ifndef __RTW_ODM_H__
--#define __RTW_ODM_H__
+-void odm_PauseDIG(void *pDM_VOID, enum ODM_Pause_DIG_TYPE PauseType, u8 IGIValue);
 -
--#include <drv_types.h>
--
--/*
--* This file provides utilities/wrappers for rtw driver to use ODM
--*/
--
--void rtw_odm_dbg_level_msg(void *sel, struct adapter *adapter);
--void rtw_odm_dbg_level_set(struct adapter *adapter, u32 level);
--
--void rtw_odm_ability_msg(void *sel, struct adapter *adapter);
--
--void rtw_odm_adaptivity_parm_set(struct adapter *adapter, s8 TH_L2H_ini, s8 TH_EDCCA_HL_diff,
--	s8 IGI_Base, bool ForceEDCCA, u8 AdapEn_RSSI, u8 IGI_LowerBound);
--void rtw_odm_get_perpkt_rssi(void *sel, struct adapter *adapter);
--#endif /*  __RTW_ODM_H__ */
+ void odm_DIGInit(void *pDM_VOID);
+ 
+ void odm_DIG(void *pDM_VOID);
 -- 
 2.25.1
 

@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED73C5AB796
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B6D5AB79F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbiIBRc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 13:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S236814AbiIBRhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 13:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbiIBRc5 (ORCPT
+        with ESMTP id S232815AbiIBRha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 13:32:57 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8201F63D2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 10:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZvPsgCeBrb7LWKubupD95PymNZTXgE+09rpNPKxSDsQ=; b=a1BCGo9k8KoOfgDYOLcmYlWFRs
-        cQiL3DIDFiNJbCRcrM7r27xu5inS1bKUEulFYS/R+kVUbVeO8NtMFriLHH1IEjd/0y83dXXsNfP4i
-        zEOapOx3Hj1RK7IdHz2ZBB9BUZrD7OyWmB6ZjIZeXDEsgAMj2uCZZXpGqENi2RtjlwJv0SnEwhYc3
-        5xIetADZmOeNpIXU5x7+lHjIazPpaIYIZoGigNdHxS1vsnBSrRh2uJOKn9aHZ5sZ73/ynFUgoQaGa
-        wkDE+B7aryhfG/nUdFclUf2EvfRK2w212fR3dzakwYoNISjx2oZZSai/sVn8Hch98VXW4i4SFgETk
-        YxwVLk/Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oUAWr-007Cpr-El; Fri, 02 Sep 2022 17:32:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2E9643002A3;
-        Fri,  2 Sep 2022 19:32:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 15F9E2B9048DE; Fri,  2 Sep 2022 19:32:27 +0200 (CEST)
-Date:   Fri, 2 Sep 2022 19:32:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v2 08/59] x86/build: Ensure proper function alignment
-Message-ID: <YxI+K8Y+f/FHSQCU@hirez.programming.kicks-ass.net>
-References: <20220902130625.217071627@infradead.org>
- <20220902130947.190618587@infradead.org>
- <CAHk-=whdvPcHmH5eG+FUrbQw1e-05n__EWobMqbxcCTP7dtZAg@mail.gmail.com>
+        Fri, 2 Sep 2022 13:37:30 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723D3D34E9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 10:37:29 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11e9a7135easo6414448fac.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 10:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=yIW23Q2C4Gr83MEV8yMj6oMsmguEejDKJ2Nl6VMech4=;
+        b=MPgjrCpJkdAg2pjrvgO0Lc9MxKf+fy9/WwEjLeTQcGhDHnPIYgtp+eXLwehzaiwWW5
+         +x9Men1Iov8SAxCK/2PvgMd2Rok615f+dtNOPL0bmpCaOj+yRM9N28VdIQQB+EQjAYsD
+         W/ERNigRQ8UFvl9jB/7SbPN3g+u2xfJqF/xX26AYwiUydsShrC9I+FYULuH+l46Kq9R7
+         RWGamMsgFauNZqpCUJAy9tvme9mH+Q/fCJNWs7K6ps0FaAHF9Nn5EaNHWobqPjNHrjFZ
+         aAuhSWW5eNRQ+73OJnQH37CYvEeMuThgaNtpNcAxziBd36IRGVNWwGfJAlukzKV0hU9R
+         VwHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=yIW23Q2C4Gr83MEV8yMj6oMsmguEejDKJ2Nl6VMech4=;
+        b=MsrkUd0r+Tof/SAUTmcaGM9ETrVVpS9Adt2VuswdcGLWHDfJrMnU8IQwOtXKsCwDNy
+         zTLiVLUsthFoN1eXnm2WDrzau1E35Y296XSTyDtexcUZFmIoCsosddKFkBCxbBbPwX90
+         4ufe0KwjAFBkm5EHCRDCleFzy9Ts2jP+8OpF9nsiElClq9/cwSbykB16QKlszEyq1Z1P
+         D+PluDAZomt+xgj5T0+cSywffLVg91tc1+inyxnz+dcdFwW/2XW06u3D7daibuKTR1go
+         DECCM7faDwZHm13f4VHT7ercFIihOM33u+ft8oOl5itGy1O3kyNjZn19so5mq/iYgpa8
+         JNYg==
+X-Gm-Message-State: ACgBeo3MCx0okNEICOMe1w5a6DovnuMs7g24uJCpTTwZnL850iyJDEoR
+        z0yF1bdnRvG5lg6i1F5hS0rM1bTdcL0=
+X-Google-Smtp-Source: AA6agR6f86rk8GQUC7HkidMkM8Bdt/Wd+jnPEKyPDfOnFCmshMGzFj0OMICvSGHb3co+5Yw9h6nb5g==
+X-Received: by 2002:a05:6870:c695:b0:101:fe5c:4759 with SMTP id cv21-20020a056870c69500b00101fe5c4759mr2887500oab.49.1662140248010;
+        Fri, 02 Sep 2022 10:37:28 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id r16-20020a056830419000b00636cc9926dbsm1274727otu.40.2022.09.02.10.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 10:37:27 -0700 (PDT)
+Date:   Fri, 2 Sep 2022 10:35:16 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH RFC] x86/apic: skip cpu slot reservation logic on boot in
+ case of NR_CPUS == 1
+Message-ID: <YxI+1OjkpFz1mE8L@yury-laptop>
+References: <20220902164211.1425982-1-yury.norov@gmail.com>
+ <8722acbe-c668-5b05-c030-565f8c42068c@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whdvPcHmH5eG+FUrbQw1e-05n__EWobMqbxcCTP7dtZAg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <8722acbe-c668-5b05-c030-565f8c42068c@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 09:51:17AM -0700, Linus Torvalds wrote:
-> On Fri, Sep 2, 2022 at 6:55 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > --- a/arch/x86/include/asm/linkage.h
-> > +++ b/arch/x86/include/asm/linkage.h
-> > @@ -14,9 +14,10 @@
-> >
-> >  #ifdef __ASSEMBLY__
-> >
-> > -#if defined(CONFIG_X86_64) || defined(CONFIG_X86_ALIGNMENT_16)
-> > -#define __ALIGN                .p2align 4, 0x90
-> > -#define __ALIGN_STR    __stringify(__ALIGN)
-> > +#if CONFIG_FUNCTION_ALIGNMENT == 16
-> > +#define __ALIGN                        .p2align 4, 0x90
-> > +#define __ALIGN_STR            __stringify(__ALIGN)
-> > +#define FUNCTION_ALIGNMENT     16
-> >  #endif
+On Fri, Sep 02, 2022 at 10:14:51AM -0700, Dave Hansen wrote:
+> On 9/2/22 09:42, Yury Norov wrote:
+> > This is RFC because I'm not sure that this is not a false positive from
+> > smatch. If NR_CPUS is 1, and the condition is always true, it's simply
+> > optimized out by a compiler, and nothing wrong happens, except maybe a
+> > couple of checks on boot.
 > 
-> Ugh.
+> I think it's a reasonable warning, but it's also not something we need
+> to hack around.  We can surely only land in here with
+> boot_cpu_detected==true if NR_CPUS==1, so the rest of the expression is
+> moot.
 > 
-> Why is this conditional on that alignment being 16?
+> I don't think it's worth adding the #ifdef.
 
-There is a DEBUG case that increases the thing to 32.
+Thanks Dave. Then I'll add a comment and move my series as-is.
+
+Thanks,
+Yury

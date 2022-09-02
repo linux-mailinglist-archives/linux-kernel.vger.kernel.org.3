@@ -2,275 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263BA5AB642
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6765AB643
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236619AbiIBQLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 12:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
+        id S237528AbiIBQLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 12:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236876AbiIBQK7 (ORCPT
+        with ESMTP id S236761AbiIBQLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 12:10:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4199BC2D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 09:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662134689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Fri, 2 Sep 2022 12:11:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354FE474C3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 09:05:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0A2001FD29;
+        Fri,  2 Sep 2022 16:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662134706; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=b7lqNySzCCFKs1rBOZn2sTmct94D5vPhBMUJV2w257s=;
-        b=LVZi6FHNZ7AGszCJwtdfXmXzQwTcEHfs4J7bBYpiDUOhc4M7S9Zalef2Irr2+LB2BL8Ak/
-        yUjnvVA+6oKqUemMGg4akggb9HcmZDOwZn0x8lQj67IufwiIfM3qBWfRmJHOo6CemZ5E7d
-        OyJ1cYiQuDyXeSLhz5Ue675HKVrQ3do=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-106-eW19C_XfMMm5BuQv0m-_yA-1; Fri, 02 Sep 2022 12:04:47 -0400
-X-MC-Unique: eW19C_XfMMm5BuQv0m-_yA-1
-Received: by mail-qt1-f200.google.com with SMTP id fv24-20020a05622a4a1800b003445e593889so1860698qtb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 09:04:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=b7lqNySzCCFKs1rBOZn2sTmct94D5vPhBMUJV2w257s=;
-        b=Vm2zYaFPuYRP11dALeYPfKDjPvMqoKg0T0aUgjdu8cnie9AlzoE1Y6mZ84exW4KuHe
-         87R/HeH3nYc4uHxwMOpLcH3GuWTzh96atq8cLxubjU9SlXAzi24V0WYbR5G6IYyYgp7e
-         McPnz9vhi9Wyz1fwGBTUDLzkP5L2ErKUF/qoY8W844+c5GSyTttvT5rw80Mipkxw8ypu
-         3HQs8ciF2po20ZKEs5UVo86LfP2KQ3EoEpdf5wmRscaoF5NIbnm3OGVrD9dtOc3yjy95
-         kuj5/eoQTt/L9zSFPhmXEUPkfWTDQDd6amZxA9bIk8LuJVKOwpLukAoow4kspuCNkxqG
-         G58A==
-X-Gm-Message-State: ACgBeo3XFedY4dvxfJY+JeI/fMrTIamyAoOHUsnwiiYmLF7hH+UQfRO5
-        WJErnSXnvuLjrtyqWTVwOuOYslxQtjU0ly4keDdSg8ZUzhoxOK6J8i7KsSEWb4LklB5tkZRx27V
-        w1nSTQ45uzhYk7t0buggEhIk9
-X-Received: by 2002:a05:6214:2581:b0:499:91e:2fb with SMTP id fq1-20020a056214258100b00499091e02fbmr20463484qvb.59.1662134685883;
-        Fri, 02 Sep 2022 09:04:45 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5v7W3/V5OdsrUeqBFUBmVMFuKZdNcjdVA6NXpXEIIjPTpBr116Ubu7Y5k+BkFqD5ZivafUrQ==
-X-Received: by 2002:a05:6214:2581:b0:499:91e:2fb with SMTP id fq1-20020a056214258100b00499091e02fbmr20463432qvb.59.1662134685452;
-        Fri, 02 Sep 2022 09:04:45 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id q190-20020ae9dcc7000000b006a5d2eb58b2sm1612070qkf.33.2022.09.02.09.04.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 09:04:44 -0700 (PDT)
-Date:   Fri, 2 Sep 2022 12:04:43 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     david@redhat.com, kirill.shutemov@linux.intel.com,
-        jhubbard@nvidia.com, jgg@nvidia.com, hughd@google.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
-Message-ID: <YxIpm6YH/q20zozZ@xz-m1.local>
-References: <20220901222707.477402-1-shy828301@gmail.com>
- <YxE/vuQlWJCJMuG2@xz-m1.local>
- <CAHbLzkqjZ_UhUbJ_f9Br7WCAgQvjrm5bMPRsKYvaFc2bzSuzrw@mail.gmail.com>
- <YxIofPiI8jvGzcjC@xz-m1.local>
+        bh=joTR8qfjqAfodo09bAqbI7din/cD411BxLLo9KKbVlY=;
+        b=BN6HiEeZfWEg3N2usH+xNC5y0ctWslPR5QLPPjXEgRghf3jlxB8KjbVIopEB0XPtCKPYNh
+        TJU9yausM8WOOBNX0V7ZOV662manWlaoBtr5g7K4LryGMRoLuZ1uVvNvq0dpgm/oepmYMr
+        SjayV8uk0Fr20PxLR2dNCTyK5AQLj5o=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6E6981330E;
+        Fri,  2 Sep 2022 16:05:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YCTSGLEpEmNSQwAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 02 Sep 2022 16:05:05 +0000
+Message-ID: <72fdfc26-470b-75e3-cfc4-ffce0045b458@suse.com>
+Date:   Fri, 2 Sep 2022 18:05:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YxIofPiI8jvGzcjC@xz-m1.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 01/59] x86/paravirt: Ensure proper alignment
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Eric Dumazet <edumazet@google.com>
+References: <20220902130625.217071627@infradead.org>
+ <20220902130946.457567054@infradead.org>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220902130946.457567054@infradead.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------cHQ6nx80DIBVTT99esfI2Gg8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 11:59:56AM -0400, Peter Xu wrote:
-> On Thu, Sep 01, 2022 at 04:50:45PM -0700, Yang Shi wrote:
-> > On Thu, Sep 1, 2022 at 4:26 PM Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > Hi, Yang,
-> > >
-> > > On Thu, Sep 01, 2022 at 03:27:07PM -0700, Yang Shi wrote:
-> > > > Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
-> > > > introduce a general RCU get_user_pages_fast()"), a TLB flush is no longer
-> > > > sufficient to handle concurrent GUP-fast in all cases, it only handles
-> > > > traditional IPI-based GUP-fast correctly.
-> > >
-> > > If TLB flush (or, IPI broadcasts) used to work to protect against gup-fast,
-> > > I'm kind of confused why it's not sufficient even if with RCU gup?  Isn't
-> > > that'll keep working as long as interrupt disabled (which current fast-gup
-> > > will still do)?
-> > 
-> > Actually the wording was copied from David's commit log for his
-> > PageAnonExclusive fix. My understanding is the IPI broadcast still
-> > works, but it may not be supported by all architectures and not
-> > preferred anymore. So we should avoid depending on IPI broadcast IIUC.
-> > 
-> > >
-> > > IIUC the issue is you suspect not all archs correctly implemented
-> > > pmdp_collapse_flush(), or am I wrong?
-> > 
-> > This is a possible fix, please see below for details.
-> > 
-> > >
-> > > > On architectures that send
-> > > > an IPI broadcast on TLB flush, it works as expected.  But on the
-> > > > architectures that do not use IPI to broadcast TLB flush, it may have
-> > > > the below race:
-> > > >
-> > > >    CPU A                                          CPU B
-> > > > THP collapse                                     fast GUP
-> > > >                                               gup_pmd_range() <-- see valid pmd
-> > > >                                                   gup_pte_range() <-- work on pte
-> > > > pmdp_collapse_flush() <-- clear pmd and flush
-> > > > __collapse_huge_page_isolate()
-> > > >     check page pinned <-- before GUP bump refcount
-> > > >                                                       pin the page
-> > > >                                                       check PTE <-- no change
-> > > > __collapse_huge_page_copy()
-> > > >     copy data to huge page
-> > > >     ptep_clear()
-> > > > install huge pmd for the huge page
-> > > >                                                       return the stale page
-> > > > discard the stale page
-> > > >
-> > > > The race could be fixed by checking whether PMD is changed or not after
-> > > > taking the page pin in fast GUP, just like what it does for PTE.  If the
-> > > > PMD is changed it means there may be parallel THP collapse, so GUP
-> > > > should back off.
-> > >
-> > > Could the race also be fixed by impl pmdp_collapse_flush() correctly for
-> > > the archs that are missing? Do you know which arch(s) is broken with it?
-> > 
-> > Yes, and this was suggested by me in the first place, but per the
-> > suggestion from John and David, this is not the preferred way. I think
-> > it is because:
-> > 
-> > Firstly, using IPI to serialize against fast GUP is not recommended
-> > anymore since fast GUP does check PTE then back off so we should avoid
-> > it.
-> > Secondly, if checking PMD then backing off could solve the problem,
-> > why do we still need broadcast IPI? It doesn't sound performant.
-> > 
-> > >
-> > > It's just not clear to me whether this patch is an optimization or a fix,
-> > > if it's a fix whether the IPI broadcast in ppc pmdp_collapse_flush() would
-> > > still be needed.
-> > 
-> > It is a fix and the fix will make IPI broadcast not useful anymore.
-> 
-> How about another patch to remove the ppc impl too?  Then it can be a two
-> patches series.
-> 
-> So that ppc developers can be copied and maybe it helps to have the ppc
-> people looking at current approach too.
-> 
-> Then the last piece of it is the s390 pmdp_collapse_flush().  I'm wondering
-> whether generic pmdp_collapse_flush() would be good enough, since the only
-> addition comparing to the s390 one will be flush_tlb_range() (which is a
-> further __tlb_flush_mm_lazy).  David may have some thoughts.
-> 
-> The patch itself looks good to me, one trivial nit below.
-> 
-> > 
-> > >
-> > > Thanks,
-> > >
-> > > >
-> > > > Also update the stale comment about serializing against fast GUP in
-> > > > khugepaged.
-> > > >
-> > > > Fixes: 2667f50e8b81 ("mm: introduce a general RCU get_user_pages_fast()")
-> > > > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > > > ---
-> > > >  mm/gup.c        | 30 ++++++++++++++++++++++++------
-> > > >  mm/khugepaged.c | 10 ++++++----
-> > > >  2 files changed, 30 insertions(+), 10 deletions(-)
-> > > >
-> > > > diff --git a/mm/gup.c b/mm/gup.c
-> > > > index f3fc1f08d90c..4365b2811269 100644
-> > > > --- a/mm/gup.c
-> > > > +++ b/mm/gup.c
-> > > > @@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int *nr, int nr_start,
-> > > >  }
-> > > >
-> > > >  #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
-> > > > -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
-> > > > -                      unsigned int flags, struct page **pages, int *nr)
-> > > > +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
-> > > > +                      unsigned long end, unsigned int flags,
-> > > > +                      struct page **pages, int *nr)
-> > > >  {
-> > > >       struct dev_pagemap *pgmap = NULL;
-> > > >       int nr_start = *nr, ret = 0;
-> > > > @@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
-> > > >                       goto pte_unmap;
-> > > >               }
-> > > >
-> > > > -             if (unlikely(pte_val(pte) != pte_val(*ptep))) {
-> > > > +             /*
-> > > > +              * THP collapse conceptually does:
-> > > > +              *   1. Clear and flush PMD
-> > > > +              *   2. Check the base page refcount
-> > > > +              *   3. Copy data to huge page
-> > > > +              *   4. Clear PTE
-> > > > +              *   5. Discard the base page
-> > > > +              *
-> > > > +              * So fast GUP may race with THP collapse then pin and
-> > > > +              * return an old page since TLB flush is no longer sufficient
-> > > > +              * to serialize against fast GUP.
-> > > > +              *
-> > > > +              * Check PMD, if it is changed just back off since it
-> > > > +              * means there may be parallel THP collapse.
-> 
-> Would you mind rewording this comment a bit?  I feel it a bit weird to
-> suddenly mention about thp collapse especially its details.
-> 
-> Maybe some statement on the whole history of why check pte, and in what
-> case pmd check is needed (where the thp collapse example can be moved to,
-> imho)?
-> 
-> One of my attempt for reference..
-> 
-> 		/*
-> 		 * Fast-gup relies on pte change detection to avoid
-> 		 * concurrent pgtable operations.
-> 		 *
-> 		 * To pin the page, fast-gup needs to do below in order:
-> 		 * (1) pin the page (by prefetching pte), then (2) check
-> 		 * pte not changed.
-> 		 *
-> 		 * For the rest of pgtable operations where pgtable updates
-> 		 * can be racy with fast-gup, we need to do (1) clear pte,
-> 		 * then (2) check whether page is pinned.
-> 		 *
-> 		 * Above will work for all pte-level operations, including
-> 		 * thp split.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------cHQ6nx80DIBVTT99esfI2Gg8
+Content-Type: multipart/mixed; boundary="------------PG3h0UJHf0suwc8jxpCx4sWe";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Tim Chen <tim.c.chen@linux.intel.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Andrew Cooper <Andrew.Cooper3@citrix.com>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Johannes Wikner <kwikner@ethz.ch>,
+ Alyssa Milburn <alyssa.milburn@linux.intel.com>, Jann Horn
+ <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+ Joao Moreira <joao.moreira@intel.com>,
+ Joseph Nuzman <joseph.nuzman@intel.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ K Prateek Nayak <kprateek.nayak@amd.com>, Eric Dumazet <edumazet@google.com>
+Message-ID: <72fdfc26-470b-75e3-cfc4-ffce0045b458@suse.com>
+Subject: Re: [PATCH v2 01/59] x86/paravirt: Ensure proper alignment
+References: <20220902130625.217071627@infradead.org>
+ <20220902130946.457567054@infradead.org>
+In-Reply-To: <20220902130946.457567054@infradead.org>
 
-Here a slight amendment could be:
+--------------PG3h0UJHf0suwc8jxpCx4sWe
+Content-Type: multipart/mixed; boundary="------------0KwzoNt0R5DBcJ5Vj7U8cHFY"
 
-		 * Above will work for all pte-level operations, including
-		 * thp split, which applies the same logic but only done
-		 * all above in the pmd level rather than pte level.
+--------------0KwzoNt0R5DBcJ5Vj7U8cHFY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-To be clearer.
+T24gMDIuMDkuMjIgMTU6MDYsIFBldGVyIFppamxzdHJhIHdyb3RlOg0KPiBGcm9tOiBUaG9t
+YXMgR2xlaXhuZXIgPHRnbHhAbGludXRyb25peC5kZT4NCj4gDQo+IFRoZSBlbnRyaWVzIGlu
+IHRoZSAucGFyYWluc3RyIHNlY3Rpb25zIGFyZSA4IGJ5dGUgYWxpZ25lZCBhbmQgdGhlDQo+
+IGNvcnJlc3BvbmRpbmcgQyBzdHJ1Y3QgbWFrZXMgdGhlIGFycmF5IG9mZnNldCAxNiBieXRl
+cy4NCj4gDQo+IFRob3VnaCB0aGUgcHVzaGVkIGVudHJpZXMgYXJlIG9ubHkgdXNpbmcgMTIg
+Ynl0ZXMuIC5wYXJhaW5zdHJfZW5kIGlzDQo+IHRoZXJlZm9yZSA0IGJ5dGVzIHNob3J0Lg0K
+PiANCj4gVGhhdCB3b3JrcyBieSBjaGFuY2UgYmVjYXVzZSBpdCdzIG9ubHkgdXNlZCBpbiBh
+IGxvb3A6DQo+IA0KPiAgICAgICBmb3IgKHAgPSBzdGFydDsgcCA8IGVuZDsgcCsrKQ0KPiAN
+Cj4gQnV0IHRoaXMgZmFsbHMgZmxhdCB3aGVuIGNhbGN1bGF0aW5nIHRoZSBudW1iZXIgb2Yg
+ZWxlbWVudHM6DQo+IA0KPiAgICAgIG4gPSBlbmQgLSBzdGFydA0KPiANCj4gVGhhdCdzIG9i
+dmlvdXNseSBvZmYgYnkgb25lLg0KPiANCj4gRW5zdXJlIHRoYXQgdGhlIGdhcCBpcyBmaWxs
+ZWQgYW5kIHRoZSBsYXN0IGVudHJ5IGlzIG9jY3VweWluZyAxNiBieXRlcy4NCj4gDQo+IENj
+OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IFRo
+b21hcyBHbGVpeG5lciA8dGdseEBsaW51dHJvbml4LmRlPg0KPiBTaWduZWQtb2ZmLWJ5OiBQ
+ZXRlciBaaWpsc3RyYSAoSW50ZWwpIDxwZXRlcnpAaW5mcmFkZWFkLm9yZz4NCg0KUmV2aWV3
+ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVyZ2VuDQo=
 
-> 		 *
-> 		 * For thp collapse, it's a bit more complicated because
-> 		 * with RCU pgtable free fast-gup can be walking a pgtable
-> 		 * page that is being freed (so pte is still valid but pmd
-> 		 * can be cleared already).  To avoid race in such
-> 		 * condition, we need to also check pmd here to make sure
-> 		 * pmd doesn't change (corresponds to pmdp_collapse_flush()
-> 		 * in the thp collide code path).
-> 		 */
-> 
-> If you agree with the comment change, feel free to add:
-> 
-> Acked-by: Peter Xu <peterx@redhat.com>
-> 
-> Thanks,
-> 
-> -- 
-> Peter Xu
+--------------0KwzoNt0R5DBcJ5Vj7U8cHFY
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Peter Xu
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------0KwzoNt0R5DBcJ5Vj7U8cHFY--
+
+--------------PG3h0UJHf0suwc8jxpCx4sWe--
+
+--------------cHQ6nx80DIBVTT99esfI2Gg8
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMSKbEFAwAAAAAACgkQsN6d1ii/Ey/x
+Twf+MPDKMp+PGlyFbRm0A3sKwpQ9CSydynr5WTg0/wDIJObjqHc8F0LbmOWoDxMbibIB6r8nz9zQ
+igpPHEerEny6WD+G/8HflM6Uy7lB68sfwm0ZUM9NM4J2dzGSoD7ztcnwgM1X+McT7h8XOIojqkXP
+QbyjaCInBJHiz/QXBD+kql/VHsN+JHpLFkutAmMFF2F1S1FnOXEIjrXTVVE3UnaEkiElQvo+HEIT
++K7F98RQYuuHZWQItQn28NnnJwK31cOX3Ym9RpoGAOlsS6L4jE3NPvw9A/PreYYelXdj+6WxM2cC
+3US5DRhOxgAaZToiIhIWLyWz+JDCQ/Q4nUbwlDP+BQ==
+=Wvdr
+-----END PGP SIGNATURE-----
+
+--------------cHQ6nx80DIBVTT99esfI2Gg8--

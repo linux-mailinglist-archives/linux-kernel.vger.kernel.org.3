@@ -2,98 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7F35AAC38
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0105AAC53
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiIBKTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S235136AbiIBKYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbiIBKTP (ORCPT
+        with ESMTP id S235774AbiIBKYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:19:15 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46043BD0B4;
-        Fri,  2 Sep 2022 03:19:14 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oU3ku-000Kds-Rx; Fri, 02 Sep 2022 20:18:33 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Sep 2022 18:18:32 +0800
-Date:   Fri, 2 Sep 2022 18:18:32 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Jack Wang <jinpu.wang@ionos.com>
-Cc:     linux-crypto@vger.kernel.org,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Peng Wu <wupeng58@huawei.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] crypto: allwinner: Fix dma_map_sg error check
-Message-ID: <YxHYeCSwfAEgMngX@gondor.apana.org.au>
-References: <20220825072421.29020-1-jinpu.wang@ionos.com>
- <20220825072421.29020-6-jinpu.wang@ionos.com>
+        Fri, 2 Sep 2022 06:24:00 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906EEA59BB;
+        Fri,  2 Sep 2022 03:23:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662114239; x=1693650239;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Hmx1025FThlE9cx1UE6O8SOkWc9A3kuNYU7VIFp8RZU=;
+  b=XR6Jo7eI3TzsF+IKEmbfQSCLKck4Va6LEtBgyhUMbLFoNshpbJiSwMP9
+   VFkNlhMpCdVqqXxekXgm8ThCF0Aq09DU/ZkxlNOEEG5TWyptfRBUM1j8N
+   E/6zGz+F4umYT+B2GSKud+KLz03kNp6WNpXKkDdP9SFATzzms3Py4IZ3o
+   UiCrMvyUnkIFRfRHSBR5n8AvJQTZp2wurRSD83Gg04mId+CCSORv87rAB
+   zXBf+jLuVvGyMVf64L2MwIyqVVhFmXnCAxxbdDKkqiizgX91MmqAV4BmW
+   wh4fEtGVdAbGvk2M0/LfQbwSz/DnUVEurh7Csmm6g8GV0cKx/EuPq0xka
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="322109916"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="322109916"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 03:23:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="608943940"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 02 Sep 2022 03:23:46 -0700
+Date:   Fri, 2 Sep 2022 18:19:05 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220902101905.GA1712673@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <CA+EHjTy6NF=BkCqK0vhXLdtKZMahp55JUMSfxN96-NT3YiMXYQ@mail.gmail.com>
+ <20220829151756.GB1586678@chaop.bj.intel.com>
+ <CA+EHjTxgKJ=9UP=DWtNsSgD2FtvBMYrUbcS=9h5j8Tmk57WqxQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=gb2312
 Content-Disposition: inline
-In-Reply-To: <20220825072421.29020-6-jinpu.wang@ionos.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+EHjTxgKJ=9UP=DWtNsSgD2FtvBMYrUbcS=9h5j8Tmk57WqxQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 09:24:20AM +0200, Jack Wang wrote:
-> dma_map_sg return 0 on error.
+On Wed, Aug 31, 2022 at 10:12:12AM +0100, Fuad Tabba wrote:
+> > > Moreover, something which was discussed here before [3], is the
+> > > ability to share in-place. For pKVM/arm64, the conversion between
+> > > shared and private involves only changes to the stage-2 page tables,
+> > > which are controlled by the hypervisor. Android supports this in-place
+> > > conversion already, and I think that the cost of copying for many
+> > > use-cases that would involve large amounts of data would be big. We
+> > > will measure the relative costs in due course, but in the meantime
+> > > we¡¯re nervous about adopting a new user ABI which doesn¡¯t appear to
+> > > cater for in-place conversion; having just the fd would simplify that
+> > > somewhat
+> >
+> > I understand there is difficulty to achieve that with the current
+> > private_fd + userspace_addr (they basically in two separate fds), but is
+> > it possible for pKVM to extend this? Brainstorming for example, pKVM can
+> > ignore userspace_addr and only use private_fd to cover both shared and
+> > private memory, or pKVM introduce new KVM memslot flag?
 > 
-> Cc: Corentin Labbe <clabbe.montjoie@gmail.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Samuel Holland <samuel@sholland.org>
-> Cc: Dan Carpenter <dan.carpenter@oracle.com>
-> Cc: Minghao Chi <chi.minghao@zte.com.cn>
-> Cc: Peng Wu <wupeng58@huawei.com>
-> Cc: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-sunxi@lists.linux.dev
-> Cc: linux-kernel@vger.kernel.org
-> Fixes: 06f751b61329 ("crypto: allwinner - Add sun8i-ce Crypto Engine")
-> Fixes: d9b45418a917 ("crypto: sun8i-ss - support hash algorithms")
-> Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
-> ---
->  drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c | 6 +++---
->  drivers/crypto/allwinner/sun8i-ce/sun8i-ce-hash.c   | 2 +-
->  drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c | 4 ++--
->  drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c   | 2 +-
->  4 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-> index 74b4e910a38d..be7f46faef7e 100644
-> --- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-> +++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-> @@ -208,7 +208,7 @@ static int sun8i_ce_cipher_prepare(struct crypto_engine *engine, void *async_req
->  
->  	if (areq->src == areq->dst) {
->  		nr_sgs = dma_map_sg(ce->dev, areq->src, ns, DMA_BIDIRECTIONAL);
-> -		if (nr_sgs <= 0 || nr_sgs > MAX_SG) {
-> +		if (!nr_sgs || nr_sgs > MAX_SG) {
+> It's not that there's anything blocking pKVM from doing that. It's
+> that the disconnect of using a memory address for the shared memory,
+> and a file descriptor for the private memory doesn't really make sense
+> for pKVM. I see how it makes sense for TDX and the Intel-specific
+> implementation. It just seems that this is baking in an
+> implementation-specific aspect as a part of the KVM general api, and
+> the worry is that this might have some unintended consequences in the
+> future.
 
-This is also less robust than the original code and I'll be
-reverting it.
+It's true this API originates from supporting TDX and probably other
+similar confidential computing(CC) technologies. But if we ever get
+chance to make it more common to cover more usages like pKVM, I would
+also like to. The challenge on this point is pKVM diverges a lot from CC
+usages, putting both shared and private memory in the same fd
+complicates CC usages. If two things are different enough, I'm also
+thinking implementation-specific may not be that bad.
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Chao

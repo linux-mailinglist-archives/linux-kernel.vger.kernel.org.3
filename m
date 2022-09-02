@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AF75AAF0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8935AAE69
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbiIBMdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
+        id S236232AbiIBMXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236702AbiIBMcF (ORCPT
+        with ESMTP id S235984AbiIBMVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:32:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75E8E1934;
-        Fri,  2 Sep 2022 05:27:23 -0700 (PDT)
+        Fri, 2 Sep 2022 08:21:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF17C6E8C;
+        Fri,  2 Sep 2022 05:21:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A10EB82AA2;
-        Fri,  2 Sep 2022 12:25:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868D0C433D7;
-        Fri,  2 Sep 2022 12:25:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBA3B620E6;
+        Fri,  2 Sep 2022 12:21:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4B9C43140;
+        Fri,  2 Sep 2022 12:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121524;
-        bh=datHgiSjND2VmkLLoF7eduR5OnhuevfGSmxmRwUU9Jg=;
+        s=korg; t=1662121279;
+        bh=0QXl4JqaFq4iPz9u4o3OB7ub7UpUJipo4GZ/K8OT0eM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sCUSvf4kzN5e+Tj84nq2/X2zb5mdjSEoHAlZcrh2D/vTkLiZakf3mzwzvxECs2AHp
-         nJv2ODDrhDT5DBV9yOo3bNETSOa3vxq3SbAiKTIHvCQVJsKGeojTplKnd77jikU/Wa
-         KM27q+3hw2DEYuJS3OnhWNLvmRt6Urz0URCS++dE=
+        b=tqlo0brOng6HJAro3Y2OrAYDOWOlObDJ7P6+gbs0EUbVxoIUIAfdlQ4EILWekNuR0
+         ZmiPckaJDLsbcUaqX3MjnioEpJRUxFvKSapfrYFIXg0RyXUdFCuLDPWWeZYFPUhJql
+         F1lGMTE9ulMe+0VFy4h4vySe5PQOvWLPidnIKOPQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 4.19 36/56] scsi: storvsc: Remove WQ_MEM_RECLAIM from storvsc_error_wq
+        stable@vger.kernel.org, stable@kernel.org,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.9 30/31] mm/rmap: Fix anon_vma->degree ambiguity leading to double-reuse
 Date:   Fri,  2 Sep 2022 14:18:56 +0200
-Message-Id: <20220902121401.554898954@linuxfoundation.org>
+Message-Id: <20220902121357.839647776@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
+References: <20220902121356.732130937@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +56,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com>
+From: Jann Horn <jannh@google.com>
 
-commit d957e7ffb2c72410bcc1a514153a46719255a5da upstream.
+commit 2555283eb40df89945557273121e9393ef9b542b upstream.
 
-storvsc_error_wq workqueue should not be marked as WQ_MEM_RECLAIM as it
-doesn't need to make forward progress under memory pressure.  Marking this
-workqueue as WQ_MEM_RECLAIM may cause deadlock while flushing a
-non-WQ_MEM_RECLAIM workqueue.  In the current state it causes the following
-warning:
+anon_vma->degree tracks the combined number of child anon_vmas and VMAs
+that use the anon_vma as their ->anon_vma.
 
-[   14.506347] ------------[ cut here ]------------
-[   14.506354] workqueue: WQ_MEM_RECLAIM storvsc_error_wq_0:storvsc_remove_lun is flushing !WQ_MEM_RECLAIM events_freezable_power_:disk_events_workfn
-[   14.506360] WARNING: CPU: 0 PID: 8 at <-snip->kernel/workqueue.c:2623 check_flush_dependency+0xb5/0x130
-[   14.506390] CPU: 0 PID: 8 Comm: kworker/u4:0 Not tainted 5.4.0-1086-azure #91~18.04.1-Ubuntu
-[   14.506391] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022
-[   14.506393] Workqueue: storvsc_error_wq_0 storvsc_remove_lun
-[   14.506395] RIP: 0010:check_flush_dependency+0xb5/0x130
-		<-snip->
-[   14.506408] Call Trace:
-[   14.506412]  __flush_work+0xf1/0x1c0
-[   14.506414]  __cancel_work_timer+0x12f/0x1b0
-[   14.506417]  ? kernfs_put+0xf0/0x190
-[   14.506418]  cancel_delayed_work_sync+0x13/0x20
-[   14.506420]  disk_block_events+0x78/0x80
-[   14.506421]  del_gendisk+0x3d/0x2f0
-[   14.506423]  sr_remove+0x28/0x70
-[   14.506427]  device_release_driver_internal+0xef/0x1c0
-[   14.506428]  device_release_driver+0x12/0x20
-[   14.506429]  bus_remove_device+0xe1/0x150
-[   14.506431]  device_del+0x167/0x380
-[   14.506432]  __scsi_remove_device+0x11d/0x150
-[   14.506433]  scsi_remove_device+0x26/0x40
-[   14.506434]  storvsc_remove_lun+0x40/0x60
-[   14.506436]  process_one_work+0x209/0x400
-[   14.506437]  worker_thread+0x34/0x400
-[   14.506439]  kthread+0x121/0x140
-[   14.506440]  ? process_one_work+0x400/0x400
-[   14.506441]  ? kthread_park+0x90/0x90
-[   14.506443]  ret_from_fork+0x35/0x40
-[   14.506445] ---[ end trace 2d9633159fdc6ee7 ]---
+anon_vma_clone() then assumes that for any anon_vma attached to
+src->anon_vma_chain other than src->anon_vma, it is impossible for it to
+be a leaf node of the VMA tree, meaning that for such VMAs ->degree is
+elevated by 1 because of a child anon_vma, meaning that if ->degree
+equals 1 there are no VMAs that use the anon_vma as their ->anon_vma.
 
-Link: https://lore.kernel.org/r/1659628534-17539-1-git-send-email-ssengar@linux.microsoft.com
-Fixes: 436ad9413353 ("scsi: storvsc: Allow only one remove lun work item to be issued per lun")
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+This assumption is wrong because the ->degree optimization leads to leaf
+nodes being abandoned on anon_vma_clone() - an existing anon_vma is
+reused and no new parent-child relationship is created.  So it is
+possible to reuse an anon_vma for one VMA while it is still tied to
+another VMA.
+
+This is an issue because is_mergeable_anon_vma() and its callers assume
+that if two VMAs have the same ->anon_vma, the list of anon_vmas
+attached to the VMAs is guaranteed to be the same.  When this assumption
+is violated, vma_merge() can merge pages into a VMA that is not attached
+to the corresponding anon_vma, leading to dangling page->mapping
+pointers that will be dereferenced during rmap walks.
+
+Fix it by separately tracking the number of child anon_vmas and the
+number of VMAs using the anon_vma as their ->anon_vma.
+
+Fixes: 7a3ef208e662 ("mm: prevent endless growth of anon_vma hierarchy")
+Cc: stable@kernel.org
+Acked-by: Michal Hocko <mhocko@suse.com>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+[manually fixed up different indentation in stable]
+Signed-off-by: Jann Horn <jannh@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/storvsc_drv.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/rmap.h |    7 +++++--
+ mm/rmap.c            |   31 +++++++++++++++++--------------
+ 2 files changed, 22 insertions(+), 16 deletions(-)
 
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -1858,7 +1858,7 @@ static int storvsc_probe(struct hv_devic
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -37,12 +37,15 @@ struct anon_vma {
+ 	atomic_t refcount;
+ 
+ 	/*
+-	 * Count of child anon_vmas and VMAs which points to this anon_vma.
++	 * Count of child anon_vmas. Equals to the count of all anon_vmas that
++	 * have ->parent pointing to this one, including itself.
+ 	 *
+ 	 * This counter is used for making decision about reusing anon_vma
+ 	 * instead of forking new one. See comments in function anon_vma_clone.
  	 */
- 	host_dev->handle_error_wq =
- 			alloc_ordered_workqueue("storvsc_error_wq_%d",
--						WQ_MEM_RECLAIM,
-+						0,
- 						host->host_no);
- 	if (!host_dev->handle_error_wq)
- 		goto err_out2;
+-	unsigned degree;
++	unsigned long num_children;
++	/* Count of VMAs whose ->anon_vma pointer points to this object. */
++	unsigned long num_active_vmas;
+ 
+ 	struct anon_vma *parent;	/* Parent of this anon_vma */
+ 
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -78,7 +78,8 @@ static inline struct anon_vma *anon_vma_
+ 	anon_vma = kmem_cache_alloc(anon_vma_cachep, GFP_KERNEL);
+ 	if (anon_vma) {
+ 		atomic_set(&anon_vma->refcount, 1);
+-		anon_vma->degree = 1;	/* Reference for first vma */
++		anon_vma->num_children = 0;
++		anon_vma->num_active_vmas = 0;
+ 		anon_vma->parent = anon_vma;
+ 		/*
+ 		 * Initialise the anon_vma root to point to itself. If called
+@@ -187,6 +188,7 @@ int anon_vma_prepare(struct vm_area_stru
+ 			anon_vma = anon_vma_alloc();
+ 			if (unlikely(!anon_vma))
+ 				goto out_enomem_free_avc;
++			anon_vma->num_children++; /* self-parent link for new root */
+ 			allocated = anon_vma;
+ 		}
+ 
+@@ -196,8 +198,7 @@ int anon_vma_prepare(struct vm_area_stru
+ 		if (likely(!vma->anon_vma)) {
+ 			vma->anon_vma = anon_vma;
+ 			anon_vma_chain_link(vma, avc, anon_vma);
+-			/* vma reference or self-parent link for new root */
+-			anon_vma->degree++;
++			anon_vma->num_active_vmas++;
+ 			allocated = NULL;
+ 			avc = NULL;
+ 		}
+@@ -276,19 +277,19 @@ int anon_vma_clone(struct vm_area_struct
+ 		anon_vma_chain_link(dst, avc, anon_vma);
+ 
+ 		/*
+-		 * Reuse existing anon_vma if its degree lower than two,
+-		 * that means it has no vma and only one anon_vma child.
++		 * Reuse existing anon_vma if it has no vma and only one
++		 * anon_vma child.
+ 		 *
+-		 * Do not chose parent anon_vma, otherwise first child
+-		 * will always reuse it. Root anon_vma is never reused:
++		 * Root anon_vma is never reused:
+ 		 * it has self-parent reference and at least one child.
+ 		 */
+-		if (!dst->anon_vma && anon_vma != src->anon_vma &&
+-				anon_vma->degree < 2)
++		if (!dst->anon_vma &&
++		    anon_vma->num_children < 2 &&
++		    anon_vma->num_active_vmas == 0)
+ 			dst->anon_vma = anon_vma;
+ 	}
+ 	if (dst->anon_vma)
+-		dst->anon_vma->degree++;
++		dst->anon_vma->num_active_vmas++;
+ 	unlock_anon_vma_root(root);
+ 	return 0;
+ 
+@@ -338,6 +339,7 @@ int anon_vma_fork(struct vm_area_struct
+ 	anon_vma = anon_vma_alloc();
+ 	if (!anon_vma)
+ 		goto out_error;
++	anon_vma->num_active_vmas++;
+ 	avc = anon_vma_chain_alloc(GFP_KERNEL);
+ 	if (!avc)
+ 		goto out_error_free_anon_vma;
+@@ -358,7 +360,7 @@ int anon_vma_fork(struct vm_area_struct
+ 	vma->anon_vma = anon_vma;
+ 	anon_vma_lock_write(anon_vma);
+ 	anon_vma_chain_link(vma, avc, anon_vma);
+-	anon_vma->parent->degree++;
++	anon_vma->parent->num_children++;
+ 	anon_vma_unlock_write(anon_vma);
+ 
+ 	return 0;
+@@ -390,7 +392,7 @@ void unlink_anon_vmas(struct vm_area_str
+ 		 * to free them outside the lock.
+ 		 */
+ 		if (RB_EMPTY_ROOT(&anon_vma->rb_root)) {
+-			anon_vma->parent->degree--;
++			anon_vma->parent->num_children--;
+ 			continue;
+ 		}
+ 
+@@ -398,7 +400,7 @@ void unlink_anon_vmas(struct vm_area_str
+ 		anon_vma_chain_free(avc);
+ 	}
+ 	if (vma->anon_vma)
+-		vma->anon_vma->degree--;
++		vma->anon_vma->num_active_vmas--;
+ 	unlock_anon_vma_root(root);
+ 
+ 	/*
+@@ -409,7 +411,8 @@ void unlink_anon_vmas(struct vm_area_str
+ 	list_for_each_entry_safe(avc, next, &vma->anon_vma_chain, same_vma) {
+ 		struct anon_vma *anon_vma = avc->anon_vma;
+ 
+-		VM_WARN_ON(anon_vma->degree);
++		VM_WARN_ON(anon_vma->num_children);
++		VM_WARN_ON(anon_vma->num_active_vmas);
+ 		put_anon_vma(anon_vma);
+ 
+ 		list_del(&avc->same_vma);
 
 

@@ -2,107 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8495AB72A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD3A5AB72C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbiIBRHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 13:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S236420AbiIBRH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 13:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiIBRHc (ORCPT
+        with ESMTP id S233264AbiIBRHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 13:07:32 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2867C1BEA9;
-        Fri,  2 Sep 2022 10:07:32 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id x5so1938433qtv.9;
-        Fri, 02 Sep 2022 10:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=m4EPxjWBFRmumP1Ktw5mgebEJ5Np/Pz2BxFkNM4nyMI=;
-        b=OBktR1HYmcBKnWREU0l1kqjaZwnywMAMGZlQyXzjuB4Mq/JEUHp3C/SSPy21PYnrt3
-         AEjVDYgmV3a33605b4NQcPPabfPq+Hydu9Vj8h0BtAC8voBm8OREJIWdxu58fYTL3d+V
-         0U7VjlYkKF+as7Jp/pkkNHvqcUAxKul3p7VFv8a7jAqHkl/SIVliKtptkU3Pj+YzfFdr
-         Hhpv4z5vYvqL0EixBI2nQ285ZJ4fCWiu6RfSOIjy42UMXOiPW2turiST2nPjKm5dApca
-         tkkxu1uWhOudncDzBlZGb7CHc3+cQHy5N5k5yFr+1oNbYTOG5i777IjxwzXrARm1sqUY
-         2/Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=m4EPxjWBFRmumP1Ktw5mgebEJ5Np/Pz2BxFkNM4nyMI=;
-        b=HGdjt3iRNjTF6ishWo/jARCnQfZnUdB0BleBZGN9EB2nEKdVW2fNtIGUsMwP4XM7ib
-         ikSa1jY0/E9NYHx2fu3lFlx/v0EjMn7RoCoOtOJ5v115DzygpA5HcF7eP2OofSPNhhhG
-         YT63aSarz552TKfUWbPPpVQVSrOSihjOm8tqQqfp9Y/ldrxwkl3oc+aWoolbuHG9zRf9
-         U9AAxmMbmOQvzUYPh9JVzn9cKH90hbeH+kJpKlnsZu5StmEE0LN4FHUcJ9PlzoIrgEqy
-         axnuh+pZdFqsDG/wI9tRR+egRqIjjsfgxTxf4/ek1iRznJ8auE56gWdvFpMzUK1/2zO4
-         gUiw==
-X-Gm-Message-State: ACgBeo2svdrHYkqlShW6yh4J9PwXE2UDAW1szpLGuwh863eRyIZj+BDS
-        0A8zlEwOGX6Z/jU7JXZw8q4=
-X-Google-Smtp-Source: AA6agR4aNalAA/xlccc86wGslGAgCVrnDguKp+IKt2N3xAqzN5NhKadnDl2DebzdoLwJNVDrHeZr2Q==
-X-Received: by 2002:ac8:7d4a:0:b0:344:6f12:1543 with SMTP id h10-20020ac87d4a000000b003446f121543mr28996394qtb.426.1662138451228;
-        Fri, 02 Sep 2022 10:07:31 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id dt46-20020a05620a47ae00b006a793bde241sm1854867qkb.63.2022.09.02.10.07.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 10:07:30 -0700 (PDT)
-Message-ID: <278eeeb0-5324-8808-cb5e-1ffd70fe8f34@gmail.com>
-Date:   Fri, 2 Sep 2022 10:07:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 5.4 00/77] 5.4.212-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fri, 2 Sep 2022 13:07:52 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6640C110D85
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 10:07:50 -0700 (PDT)
+Received: (qmail 278413 invoked by uid 1000); 2 Sep 2022 13:07:49 -0400
+Date:   Fri, 2 Sep 2022 13:07:49 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Ray Chi <raychi@google.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        mathias.nyman@linux.intel.com,
+        Albert Wang <albertccwang@google.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Puma Hsu <pumahsu@google.com>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220902121403.569927325@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [Patch v2] usb: core: stop USB enumeration if too many retries
+Message-ID: <YxI4ZViLkZOjN/Bh@rowland.harvard.edu>
+References: <20220902091535.3572333-1-raychi@google.com>
+ <YxIX+jqWFfwAWYot@rowland.harvard.edu>
+ <CAPBYUsApTYex027qBe-=EyUxDHb8MMQscX+2jqZ98zXxN-0tHA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPBYUsApTYex027qBe-=EyUxDHb8MMQscX+2jqZ98zXxN-0tHA@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/2/2022 5:18 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.212 release.
-> There are 77 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sat, Sep 03, 2022 at 12:08:04AM +0800, Ray Chi wrote:
+> On Fri, Sep 2, 2022 at 10:49 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Fri, Sep 02, 2022 at 05:15:35PM +0800, Ray Chi wrote:
+> > > If a broken accessory connected to a USB host, usbcore might
+> > > keep doing enumeration retries and it will take a long time to
+> > > cause system unstable.
+> > >
+> > > This patch provides a quirk to specific USB ports of the hub to
+> > > stop USB enumeration if needed.
+> >
+> > This seems very awkward.  Why not have a quirk that prevents USB
+> > enumeration completely, instead of after some number of retries?  After
+> > all, if the port is connected to a broken accessory, there's no reason
+> > to try enumerating it even once.
+> >
+> > For that matter, have you tried using the existing "disabled" port
+> > attribute instead of adding a new quirk?  Does it already solve your
+> > problem?
+> >
 > 
-> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.212-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Since we don't know if the connected accessory is normal or broken, doing port
+> initialization is necessary.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+I don't understand.  If you don't know whether the accessory is broken, 
+how do you know whether to set the quirk?
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+On the other hand, if you always set the quirk even before you know 
+whether the accessory is broken, why make it a quirk at all?  Why not 
+make it the normal behavior of the driver?
+
+> > > +              * Some USB hosts can't take a long time to keep doing enumeration
+> > > +              * retry. After doing half of the retries, we would turn off the port
+> > > +              * power to stop enumeration if the quirk is set.
+> >
+> > What made you decide that half of the retries was the right place to
+> > stop?  Why not do all the retries?
+> 
+> Since some normal devices will be timeout in the first attempt, I set
+> the condition to half
+> of the retries. All the retries will take 12*timeout seconds. It is
+> too long so that a watchdog
+> timeout problem may happen.
+
+Why not set CONFIG_USB_FEW_INIT_RETRIES instead?
+
+> > If the quirk prevented enumeration completely then this function
+> > wouldn't be needed.
+> 
+> The enumeration is still needed as above.
+> 
+> >
+> > > +
+> > >  /* Check if a port is power on */
+> > >  int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
+> > >  {
+> > > @@ -4855,6 +4879,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+> > >                                       buf->bMaxPacketSize0;
+> > >                       kfree(buf);
+> > >
+> > > +                     if (r < 0 && (port_dev->quirks & USB_PORT_QUIRK_STOP_ENUM)) {
+> >
+> > How come this line tests the quirk but doesn't call
+> > hub_port_stop_enumerate()?
+> 
+> Since the quirk is used to stop enumeration and reduce the total time.
+> If the port has the quirk, I think the port doesn't need to do
+> set_address after the port gets
+> failures in the new scheme. It will add 2 attempts * timeout (defined
+> in hc_driver) seconds.
+
+I still can't tell what you're trying to accomplish.  You need to do a 
+much better job of explaining the point of this.  For instance, you 
+might describe in detail a situation where the quirk is needed, 
+explaining what sort of behavior of the system would lead you to set the 
+quirk, and why.
+
+Alan Stern

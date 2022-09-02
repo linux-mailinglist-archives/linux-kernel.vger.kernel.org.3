@@ -2,55 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E605AAF52
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92655AB04B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236856AbiIBMgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
+        id S237910AbiIBMwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236897AbiIBMe7 (ORCPT
+        with ESMTP id S237826AbiIBMvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:34:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E63DDA9D;
-        Fri,  2 Sep 2022 05:28:26 -0700 (PDT)
+        Fri, 2 Sep 2022 08:51:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496D728E18;
+        Fri,  2 Sep 2022 05:36:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4714262169;
-        Fri,  2 Sep 2022 12:26:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 227A5C433C1;
-        Fri,  2 Sep 2022 12:26:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0AD2B82ADB;
+        Fri,  2 Sep 2022 12:35:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 244E8C433D7;
+        Fri,  2 Sep 2022 12:35:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121604;
-        bh=fR9sprY+XFhzju+GknKGQWVKeO5tDoaSoCfhx3r0z8U=;
+        s=korg; t=1662122116;
+        bh=8jsAPtMGlsuCzuAVGPD8M+SQwAdaH1zWjwoBq7n6LIg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mo8TKiymtqD0rUNMi9oV2g/amlSlFBQzopyutxudK8aG4Jp9j+DrY6/ah700ACbwS
-         StSIj2d2lL3XRRLTNV4fsfe5qBnMnwExuw6zQY6TrXjhThUPgFxiyaRBAukabQJOMt
-         xuFh7rBNjVXS41gv5iPI9YGQbzZEbNeiSkP7wP7M=
+        b=sFYovwuXFT2Mww6y7WXDZ122cgY3qeRjK/d1yDO+KrDYkSj2lwMtLkFKnrXkvO4CD
+         ZL8rcoxayIfT+Zep+0cXIKjq2BXnjiB5reh3+qw7ZKaTTvBc3snq7uACMtgkC5Vz19
+         FVtq1X4OqWKwCDNAmhsgjdwk9edCWJAQnW1ozrQ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Cyrill Gorcunov <gorcunov@openvz.org>,
-        Pavel Emelyanov <xemul@parallels.com>,
-        Jamie Liu <jamieliu@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.19 34/56] mm/hugetlb: fix hugetlb not supporting softdirty tracking
+        stable@vger.kernel.org, stable@kernel.org,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.19 18/72] mm/rmap: Fix anon_vma->degree ambiguity leading to double-reuse
 Date:   Fri,  2 Sep 2022 14:18:54 +0200
-Message-Id: <20220902121401.463956465@linuxfoundation.org>
+Message-Id: <20220902121405.380066168@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -65,163 +56,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Hildenbrand <david@redhat.com>
+From: Jann Horn <jannh@google.com>
 
-commit f96f7a40874d7c746680c0b9f57cef2262ae551f upstream.
+commit 2555283eb40df89945557273121e9393ef9b542b upstream.
 
-Patch series "mm/hugetlb: fix write-fault handling for shared mappings", v2.
+anon_vma->degree tracks the combined number of child anon_vmas and VMAs
+that use the anon_vma as their ->anon_vma.
 
-I observed that hugetlb does not support/expect write-faults in shared
-mappings that would have to map the R/O-mapped page writable -- and I
-found two case where we could currently get such faults and would
-erroneously map an anon page into a shared mapping.
+anon_vma_clone() then assumes that for any anon_vma attached to
+src->anon_vma_chain other than src->anon_vma, it is impossible for it to
+be a leaf node of the VMA tree, meaning that for such VMAs ->degree is
+elevated by 1 because of a child anon_vma, meaning that if ->degree
+equals 1 there are no VMAs that use the anon_vma as their ->anon_vma.
 
-Reproducers part of the patches.
+This assumption is wrong because the ->degree optimization leads to leaf
+nodes being abandoned on anon_vma_clone() - an existing anon_vma is
+reused and no new parent-child relationship is created.  So it is
+possible to reuse an anon_vma for one VMA while it is still tied to
+another VMA.
 
-I propose to backport both fixes to stable trees.  The first fix needs a
-small adjustment.
+This is an issue because is_mergeable_anon_vma() and its callers assume
+that if two VMAs have the same ->anon_vma, the list of anon_vmas
+attached to the VMAs is guaranteed to be the same.  When this assumption
+is violated, vma_merge() can merge pages into a VMA that is not attached
+to the corresponding anon_vma, leading to dangling page->mapping
+pointers that will be dereferenced during rmap walks.
 
+Fix it by separately tracking the number of child anon_vmas and the
+number of VMAs using the anon_vma as their ->anon_vma.
 
-This patch (of 2):
-
-Staring at hugetlb_wp(), one might wonder where all the logic for shared
-mappings is when stumbling over a write-protected page in a shared
-mapping.  In fact, there is none, and so far we thought we could get away
-with that because e.g., mprotect() should always do the right thing and
-map all pages directly writable.
-
-Looks like we were wrong:
-
---------------------------------------------------------------------------
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <fcntl.h>
- #include <unistd.h>
- #include <errno.h>
- #include <sys/mman.h>
-
- #define HUGETLB_SIZE (2 * 1024 * 1024u)
-
- static void clear_softdirty(void)
- {
-         int fd = open("/proc/self/clear_refs", O_WRONLY);
-         const char *ctrl = "4";
-         int ret;
-
-         if (fd < 0) {
-                 fprintf(stderr, "open(clear_refs) failed\n");
-                 exit(1);
-         }
-         ret = write(fd, ctrl, strlen(ctrl));
-         if (ret != strlen(ctrl)) {
-                 fprintf(stderr, "write(clear_refs) failed\n");
-                 exit(1);
-         }
-         close(fd);
- }
-
- int main(int argc, char **argv)
- {
-         char *map;
-         int fd;
-
-         fd = open("/dev/hugepages/tmp", O_RDWR | O_CREAT);
-         if (!fd) {
-                 fprintf(stderr, "open() failed\n");
-                 return -errno;
-         }
-         if (ftruncate(fd, HUGETLB_SIZE)) {
-                 fprintf(stderr, "ftruncate() failed\n");
-                 return -errno;
-         }
-
-         map = mmap(NULL, HUGETLB_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-         if (map == MAP_FAILED) {
-                 fprintf(stderr, "mmap() failed\n");
-                 return -errno;
-         }
-
-         *map = 0;
-
-         if (mprotect(map, HUGETLB_SIZE, PROT_READ)) {
-                 fprintf(stderr, "mmprotect() failed\n");
-                 return -errno;
-         }
-
-         clear_softdirty();
-
-         if (mprotect(map, HUGETLB_SIZE, PROT_READ|PROT_WRITE)) {
-                 fprintf(stderr, "mmprotect() failed\n");
-                 return -errno;
-         }
-
-         *map = 0;
-
-         return 0;
- }
---------------------------------------------------------------------------
-
-Above test fails with SIGBUS when there is only a single free hugetlb page.
- # echo 1 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
- # ./test
- Bus error (core dumped)
-
-And worse, with sufficient free hugetlb pages it will map an anonymous page
-into a shared mapping, for example, messing up accounting during unmap
-and breaking MAP_SHARED semantics:
- # echo 2 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
- # ./test
- # cat /proc/meminfo | grep HugePages_
- HugePages_Total:       2
- HugePages_Free:        1
- HugePages_Rsvd:    18446744073709551615
- HugePages_Surp:        0
-
-Reason in this particular case is that vma_wants_writenotify() will
-return "true", removing VM_SHARED in vma_set_page_prot() to map pages
-write-protected. Let's teach vma_wants_writenotify() that hugetlb does not
-support softdirty tracking.
-
-Link: https://lkml.kernel.org/r/20220811103435.188481-1-david@redhat.com
-Link: https://lkml.kernel.org/r/20220811103435.188481-2-david@redhat.com
-Fixes: 64e455079e1b ("mm: softdirty: enable write notifications on VMAs after VM_SOFTDIRTY cleared")
-Signed-off-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Peter Feiner <pfeiner@google.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Cyrill Gorcunov <gorcunov@openvz.org>
-Cc: Pavel Emelyanov <xemul@parallels.com>
-Cc: Jamie Liu <jamieliu@google.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Muchun Song <songmuchun@bytedance.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: <stable@vger.kernel.org>	[3.18+]
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
+Fixes: 7a3ef208e662 ("mm: prevent endless growth of anon_vma hierarchy")
+Cc: stable@kernel.org
+Acked-by: Michal Hocko <mhocko@suse.com>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mmap.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ include/linux/rmap.h |    7 +++++--
+ mm/rmap.c            |   29 ++++++++++++++++-------------
+ 2 files changed, 21 insertions(+), 15 deletions(-)
 
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1640,8 +1640,12 @@ int vma_wants_writenotify(struct vm_area
- 	    pgprot_val(vm_pgprot_modify(vm_page_prot, vm_flags)))
- 		return 0;
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -41,12 +41,15 @@ struct anon_vma {
+ 	atomic_t refcount;
  
--	/* Do we need to track softdirty? */
--	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY))
-+	/*
-+	 * Do we need to track softdirty? hugetlb does not support softdirty
-+	 * tracking yet.
-+	 */
-+	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY) &&
-+	    !is_vm_hugetlb_page(vma))
- 		return 1;
+ 	/*
+-	 * Count of child anon_vmas and VMAs which points to this anon_vma.
++	 * Count of child anon_vmas. Equals to the count of all anon_vmas that
++	 * have ->parent pointing to this one, including itself.
+ 	 *
+ 	 * This counter is used for making decision about reusing anon_vma
+ 	 * instead of forking new one. See comments in function anon_vma_clone.
+ 	 */
+-	unsigned degree;
++	unsigned long num_children;
++	/* Count of VMAs whose ->anon_vma pointer points to this object. */
++	unsigned long num_active_vmas;
  
- 	/* Specialty mapping? */
+ 	struct anon_vma *parent;	/* Parent of this anon_vma */
+ 
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -93,7 +93,8 @@ static inline struct anon_vma *anon_vma_
+ 	anon_vma = kmem_cache_alloc(anon_vma_cachep, GFP_KERNEL);
+ 	if (anon_vma) {
+ 		atomic_set(&anon_vma->refcount, 1);
+-		anon_vma->degree = 1;	/* Reference for first vma */
++		anon_vma->num_children = 0;
++		anon_vma->num_active_vmas = 0;
+ 		anon_vma->parent = anon_vma;
+ 		/*
+ 		 * Initialise the anon_vma root to point to itself. If called
+@@ -201,6 +202,7 @@ int __anon_vma_prepare(struct vm_area_st
+ 		anon_vma = anon_vma_alloc();
+ 		if (unlikely(!anon_vma))
+ 			goto out_enomem_free_avc;
++		anon_vma->num_children++; /* self-parent link for new root */
+ 		allocated = anon_vma;
+ 	}
+ 
+@@ -210,8 +212,7 @@ int __anon_vma_prepare(struct vm_area_st
+ 	if (likely(!vma->anon_vma)) {
+ 		vma->anon_vma = anon_vma;
+ 		anon_vma_chain_link(vma, avc, anon_vma);
+-		/* vma reference or self-parent link for new root */
+-		anon_vma->degree++;
++		anon_vma->num_active_vmas++;
+ 		allocated = NULL;
+ 		avc = NULL;
+ 	}
+@@ -296,19 +297,19 @@ int anon_vma_clone(struct vm_area_struct
+ 		anon_vma_chain_link(dst, avc, anon_vma);
+ 
+ 		/*
+-		 * Reuse existing anon_vma if its degree lower than two,
+-		 * that means it has no vma and only one anon_vma child.
++		 * Reuse existing anon_vma if it has no vma and only one
++		 * anon_vma child.
+ 		 *
+-		 * Do not choose parent anon_vma, otherwise first child
+-		 * will always reuse it. Root anon_vma is never reused:
++		 * Root anon_vma is never reused:
+ 		 * it has self-parent reference and at least one child.
+ 		 */
+ 		if (!dst->anon_vma && src->anon_vma &&
+-		    anon_vma != src->anon_vma && anon_vma->degree < 2)
++		    anon_vma->num_children < 2 &&
++		    anon_vma->num_active_vmas == 0)
+ 			dst->anon_vma = anon_vma;
+ 	}
+ 	if (dst->anon_vma)
+-		dst->anon_vma->degree++;
++		dst->anon_vma->num_active_vmas++;
+ 	unlock_anon_vma_root(root);
+ 	return 0;
+ 
+@@ -358,6 +359,7 @@ int anon_vma_fork(struct vm_area_struct
+ 	anon_vma = anon_vma_alloc();
+ 	if (!anon_vma)
+ 		goto out_error;
++	anon_vma->num_active_vmas++;
+ 	avc = anon_vma_chain_alloc(GFP_KERNEL);
+ 	if (!avc)
+ 		goto out_error_free_anon_vma;
+@@ -378,7 +380,7 @@ int anon_vma_fork(struct vm_area_struct
+ 	vma->anon_vma = anon_vma;
+ 	anon_vma_lock_write(anon_vma);
+ 	anon_vma_chain_link(vma, avc, anon_vma);
+-	anon_vma->parent->degree++;
++	anon_vma->parent->num_children++;
+ 	anon_vma_unlock_write(anon_vma);
+ 
+ 	return 0;
+@@ -410,7 +412,7 @@ void unlink_anon_vmas(struct vm_area_str
+ 		 * to free them outside the lock.
+ 		 */
+ 		if (RB_EMPTY_ROOT(&anon_vma->rb_root.rb_root)) {
+-			anon_vma->parent->degree--;
++			anon_vma->parent->num_children--;
+ 			continue;
+ 		}
+ 
+@@ -418,7 +420,7 @@ void unlink_anon_vmas(struct vm_area_str
+ 		anon_vma_chain_free(avc);
+ 	}
+ 	if (vma->anon_vma) {
+-		vma->anon_vma->degree--;
++		vma->anon_vma->num_active_vmas--;
+ 
+ 		/*
+ 		 * vma would still be needed after unlink, and anon_vma will be prepared
+@@ -436,7 +438,8 @@ void unlink_anon_vmas(struct vm_area_str
+ 	list_for_each_entry_safe(avc, next, &vma->anon_vma_chain, same_vma) {
+ 		struct anon_vma *anon_vma = avc->anon_vma;
+ 
+-		VM_WARN_ON(anon_vma->degree);
++		VM_WARN_ON(anon_vma->num_children);
++		VM_WARN_ON(anon_vma->num_active_vmas);
+ 		put_anon_vma(anon_vma);
+ 
+ 		list_del(&avc->same_vma);
 
 

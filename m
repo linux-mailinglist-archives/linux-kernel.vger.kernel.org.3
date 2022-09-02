@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34425AAEA1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CE25AAFA5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236346AbiIBM03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S237227AbiIBMli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236400AbiIBMZv (ORCPT
+        with ESMTP id S237356AbiIBMjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:25:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D351BDB7C8;
-        Fri,  2 Sep 2022 05:23:19 -0700 (PDT)
+        Fri, 2 Sep 2022 08:39:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1723BA1A74;
+        Fri,  2 Sep 2022 05:30:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D1A9B82A90;
-        Fri,  2 Sep 2022 12:22:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637A0C433C1;
-        Fri,  2 Sep 2022 12:22:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFAEDB82AA3;
+        Fri,  2 Sep 2022 12:28:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2774AC433C1;
+        Fri,  2 Sep 2022 12:28:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121372;
-        bh=vaSaG99LV0kyYcx8pVsd4ThRLsnqyd65JG3prdiW6NM=;
+        s=korg; t=1662121720;
+        bh=GuzXSFrL/EBvMxMZXb2JOrr+YkM+uKtUf0mRfOOrHEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oYJ1EBhQ/NdhbJbweXpTjWU7SoiZSAP0lbaaCF37WaIbWLcCaXVld1nRfzA4kBbB0
-         3XsxGC60T6FKvzqcgaqzaQ8Mdjx+LGe7OQ540qBeU7hFey6xCw7DGEKND6lFZ/Moq/
-         9vIWStPAvCXk91J5P22EjQHZe3nCo3Gwgj61R8os=
+        b=AYt9DSztylV8zpd6cZcWTc9OA83VCViHYcmxlI9GcgT2We4eqsrW9SJwsDAHGevQ5
+         LfYlrLzUEiantoueES1HYgOiqXvyoMcqy0K6qgWmt7P2gRKnw07ySlGxfnkVYz75x9
+         NZzqKvnDPLTYKgUkmQ2Qo9g0VI/V1CiavvwA4dZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
+        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
         Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH 4.14 28/42] s390/mm: do not trigger write fault when vma does not allow VM_WRITE
+Subject: [PATCH 5.4 43/77] s390: fix double free of GS and RI CBs on fork() failure
 Date:   Fri,  2 Sep 2022 14:18:52 +0200
-Message-Id: <20220902121359.771415560@linuxfoundation.org>
+Message-Id: <20220902121405.088058691@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+From: Brian Foster <bfoster@redhat.com>
 
-commit 41ac42f137080bc230b5882e3c88c392ab7f2d32 upstream.
+commit 13cccafe0edcd03bf1c841de8ab8a1c8e34f77d9 upstream.
 
-For non-protection pXd_none() page faults in do_dat_exception(), we
-call do_exception() with access == (VM_READ | VM_WRITE | VM_EXEC).
-In do_exception(), vma->vm_flags is checked against that before
-calling handle_mm_fault().
+The pointers for guarded storage and runtime instrumentation control
+blocks are stored in the thread_struct of the associated task. These
+pointers are initially copied on fork() via arch_dup_task_struct()
+and then cleared via copy_thread() before fork() returns. If fork()
+happens to fail after the initial task dup and before copy_thread(),
+the newly allocated task and associated thread_struct memory are
+freed via free_task() -> arch_release_task_struct(). This results in
+a double free of the guarded storage and runtime info structs
+because the fields in the failed task still refer to memory
+associated with the source task.
 
-Since commit 92f842eac7ee3 ("[S390] store indication fault optimization"),
-we call handle_mm_fault() with FAULT_FLAG_WRITE, when recognizing that
-it was a write access. However, the vma flags check is still only
-checking against (VM_READ | VM_WRITE | VM_EXEC), and therefore also
-calling handle_mm_fault() with FAULT_FLAG_WRITE in cases where the vma
-does not allow VM_WRITE.
+This problem can manifest as a BUG_ON() in set_freepointer() (with
+CONFIG_SLAB_FREELIST_HARDENED enabled) or KASAN splat (if enabled)
+when running trinity syscall fuzz tests on s390x. To avoid this
+problem, clear the associated pointer fields in
+arch_dup_task_struct() immediately after the new task is copied.
+Note that the RI flag is still cleared in copy_thread() because it
+resides in thread stack memory and that is where stack info is
+copied.
 
-Fix this by changing access check in do_exception() to VM_WRITE only,
-when recognizing write access.
-
-Link: https://lkml.kernel.org/r/20220811103435.188481-3-david@redhat.com
-Fixes: 92f842eac7ee3 ("[S390] store indication fault optimization")
-Cc: <stable@vger.kernel.org>
-Reported-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Brian Foster <bfoster@redhat.com>
+Fixes: 8d9047f8b967c ("s390/runtime instrumentation: simplify task exit handling")
+Fixes: 7b83c6297d2fc ("s390/guarded storage: simplify task exit handling")
+Cc: <stable@vger.kernel.org> # 4.15
+Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
 Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220816155407.537372-1-bfoster@redhat.com
 Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/mm/fault.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/s390/kernel/process.c |   22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
---- a/arch/s390/mm/fault.c
-+++ b/arch/s390/mm/fault.c
-@@ -433,7 +433,9 @@ static inline int do_exception(struct pt
- 	flags = FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
- 	if (user_mode(regs))
- 		flags |= FAULT_FLAG_USER;
--	if (access == VM_WRITE || (trans_exc_code & store_indication) == 0x400)
-+	if ((trans_exc_code & store_indication) == 0x400)
-+		access = VM_WRITE;
-+	if (access == VM_WRITE)
- 		flags |= FAULT_FLAG_WRITE;
- 	down_read(&mm->mmap_sem);
+--- a/arch/s390/kernel/process.c
++++ b/arch/s390/kernel/process.c
+@@ -76,6 +76,18 @@ int arch_dup_task_struct(struct task_str
  
+ 	memcpy(dst, src, arch_task_struct_size);
+ 	dst->thread.fpu.regs = dst->thread.fpu.fprs;
++
++	/*
++	 * Don't transfer over the runtime instrumentation or the guarded
++	 * storage control block pointers. These fields are cleared here instead
++	 * of in copy_thread() to avoid premature freeing of associated memory
++	 * on fork() failure. Wait to clear the RI flag because ->stack still
++	 * refers to the source thread.
++	 */
++	dst->thread.ri_cb = NULL;
++	dst->thread.gs_cb = NULL;
++	dst->thread.gs_bc_cb = NULL;
++
+ 	return 0;
+ }
+ 
+@@ -133,13 +145,11 @@ int copy_thread_tls(unsigned long clone_
+ 	frame->childregs.flags = 0;
+ 	if (new_stackp)
+ 		frame->childregs.gprs[15] = new_stackp;
+-
+-	/* Don't copy runtime instrumentation info */
+-	p->thread.ri_cb = NULL;
++	/*
++	 * Clear the runtime instrumentation flag after the above childregs
++	 * copy. The CB pointer was already cleared in arch_dup_task_struct().
++	 */
+ 	frame->childregs.psw.mask &= ~PSW_MASK_RI;
+-	/* Don't copy guarded storage control block */
+-	p->thread.gs_cb = NULL;
+-	p->thread.gs_bc_cb = NULL;
+ 
+ 	/* Set a new TLS ?  */
+ 	if (clone_flags & CLONE_SETTLS) {
 
 

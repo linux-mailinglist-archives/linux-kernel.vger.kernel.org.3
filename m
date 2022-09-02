@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4E95AB2DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBAB5AB2EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238906AbiIBOEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S238867AbiIBOF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239129AbiIBOEF (ORCPT
+        with ESMTP id S238859AbiIBOFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:04:05 -0400
+        Fri, 2 Sep 2022 10:05:30 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34FE148D08
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:33:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE221135B81
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:33:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125580;
+        s=mimecast20190719; t=1662125616;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=46mxyRINAwXH1hQbHvRS6x0ECDUnr04nQdzD2pI2obU=;
-        b=WcrA3oTBI+MPUe++Izs84+ZRZdsh8rstXZ5nplvdqBPHCANBy2FNJQfG8olmLyfKWFJsWX
-        XGlY07+9rU5N34+nmUscoRnsh9C+vA3mwYVkGvF/b1mAzJFGawA5iZjxnvPF93HhaOPWFx
-        ZH1V6tscz62nwg8utwvZJccfgN5TQck=
+        bh=mUIlNK2rA96IyytNgoYJrxTqfnhDywitiW4OmrkZv8o=;
+        b=Ejf32v0Ty60IiwnZQ6uMtNzfekWm3VT1RGcttwzO239oB6viHIPS95wtBljD7A1tkEPGVx
+        b07TI9mu83nmVdfN7jiIsJ33Zp6GfAts3vk8w699O8wzTakuiuebeY8+ajT0sfHWl9eFiV
+        Pd+BX/W1Zjg8XDVg2nmGC3L0KwiroSM=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-DAMr-CBTN7ePSwB02vo_dQ-1; Fri, 02 Sep 2022 09:29:49 -0400
-X-MC-Unique: DAMr-CBTN7ePSwB02vo_dQ-1
+ us-mta-9-stroSBnfPZqidsLKrjg2kA-1; Fri, 02 Sep 2022 09:30:20 -0400
+X-MC-Unique: stroSBnfPZqidsLKrjg2kA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CABF18A64EB;
-        Fri,  2 Sep 2022 13:29:48 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3CDB2823F1E;
+        Fri,  2 Sep 2022 13:30:19 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3486D492C3B;
-        Fri,  2 Sep 2022 13:29:45 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A3EB492C3B;
+        Fri,  2 Sep 2022 13:30:15 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 01/23] selftests/bpf: regroup and declare similar kfuncs selftests in an array
-Date:   Fri,  2 Sep 2022 15:29:16 +0200
-Message-Id: <20220902132938.2409206-2-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 09/23] HID: export hid_report_type to uapi
+Date:   Fri,  2 Sep 2022 15:29:24 +0200
+Message-Id: <20220902132938.2409206-10-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -66,7 +66,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,134 +74,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to tools/testing/selftests/bpf/prog_tests/dynptr.c:
-we declare an array of tests that we run one by one in a for loop.
+When we are dealing with eBPF, we need to have access to the report type.
+Currently our implementation differs from the USB standard, making it
+impossible for users to know the exact value besides hardcoding it
+themselves.
 
-Followup patches will add more similar-ish tests, so avoid a lot of copy
-paste by grouping the declaration in an array.
+And instead of a blank define, convert it as an enum.
 
-To be able to call bpf_object__find_program_by_name(), we need to use
-plain libbpf calls, and not light skeletons. So also change the Makefile
-to not generate light skeletons.
+Note that we need to also do change in the ll_driver API, but given
+that this will have a wider impact outside of this tree, we leave this
+as a TODO for the future.
 
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-new in v10
----
- tools/testing/selftests/bpf/Makefile          |  2 +-
- .../selftests/bpf/prog_tests/kfunc_call.c     | 56 +++++++++++++------
- 2 files changed, 39 insertions(+), 19 deletions(-)
+no changes in v10
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index eecad99f1735..b19b0b35aec8 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -351,7 +351,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- 		test_subskeleton.skel.h test_subskeleton_lib.skel.h	\
- 		test_usdt.skel.h
+no changes in v9
+
+no changes in v8
+
+no changes in v7
+
+changes in v6:
+- add missing change for hid_hw_raw_request()
+
+new in v5
+---
+ drivers/hid/hid-core.c   | 13 +++++++------
+ include/linux/hid.h      | 24 ++++++++----------------
+ include/uapi/linux/hid.h | 12 ++++++++++++
+ 3 files changed, 27 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index a00dd43db8bf..ab98754522d9 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -55,7 +55,7 @@ MODULE_PARM_DESC(ignore_special_drivers, "Ignore any special drivers and handle
+  */
  
--LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
-+LSKELS := fentry_test.c fexit_test.c fexit_sleep.c \
- 	test_ringbuf.c atomics.c trace_printk.c trace_vprintk.c \
- 	map_ptr_kern.c core_kern.c core_kern_overflow.c
- # Generate both light skeleton and libbpf skeleton for these
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index eede7c304f86..21e347f46c93 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -2,16 +2,28 @@
- /* Copyright (c) 2021 Facebook */
- #include <test_progs.h>
- #include <network_helpers.h>
--#include "kfunc_call_test.lskel.h"
-+#include "kfunc_call_test.skel.h"
- #include "kfunc_call_test_subprog.skel.h"
- #include "kfunc_call_test_subprog.lskel.h"
- #include "kfunc_call_destructive.skel.h"
- 
- #include "cap_helpers.h"
- 
--static void test_main(void)
-+struct kfunc_test_params {
-+	const char *prog_name;
-+	int retval;
-+};
-+
-+static struct kfunc_test_params kfunc_tests[] = {
-+	{"kfunc_call_test1", 12},
-+	{"kfunc_call_test2", 3},
-+	{"kfunc_call_test_ref_btf_id", 0},
-+};
-+
-+static void verify_success(struct kfunc_test_params *param)
+ struct hid_report *hid_register_report(struct hid_device *device,
+-				       unsigned int type, unsigned int id,
++				       enum hid_report_type type, unsigned int id,
+ 				       unsigned int application)
  {
--	struct kfunc_call_test_lskel *skel;
-+	struct kfunc_call_test *skel;
-+	struct bpf_program *prog;
- 	int prog_fd, err;
- 	LIBBPF_OPTS(bpf_test_run_opts, topts,
- 		.data_in = &pkt_v4,
-@@ -19,26 +31,35 @@ static void test_main(void)
- 		.repeat = 1,
- 	);
+ 	struct hid_report_enum *report_enum = device->report_enum + type;
+@@ -967,7 +967,7 @@ static const char * const hid_report_names[] = {
+  * parsing.
+  */
+ struct hid_report *hid_validate_values(struct hid_device *hid,
+-				       unsigned int type, unsigned int id,
++				       enum hid_report_type type, unsigned int id,
+ 				       unsigned int field_index,
+ 				       unsigned int report_counts)
+ {
+@@ -1954,8 +1954,8 @@ int __hid_request(struct hid_device *hid, struct hid_report *report,
+ }
+ EXPORT_SYMBOL_GPL(__hid_request);
  
--	skel = kfunc_call_test_lskel__open_and_load();
-+	skel = kfunc_call_test__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "skel"))
- 		return;
+-int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
+-		int interrupt)
++int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
++			 int interrupt)
+ {
+ 	struct hid_report_enum *report_enum = hid->report_enum + type;
+ 	struct hid_report *report;
+@@ -2019,7 +2019,8 @@ EXPORT_SYMBOL_GPL(hid_report_raw_event);
+  *
+  * This is data entry for lower layers.
+  */
+-int hid_input_report(struct hid_device *hid, int type, u8 *data, u32 size, int interrupt)
++int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
++		     int interrupt)
+ {
+ 	struct hid_report_enum *report_enum;
+ 	struct hid_driver *hdrv;
+@@ -2377,7 +2378,7 @@ EXPORT_SYMBOL_GPL(hid_hw_request);
+  */
+ int hid_hw_raw_request(struct hid_device *hdev,
+ 		       unsigned char reportnum, __u8 *buf,
+-		       size_t len, unsigned char rtype, int reqtype)
++		       size_t len, enum hid_report_type rtype, int reqtype)
+ {
+ 	if (len < 1 || len > HID_MAX_BUFFER_SIZE || !buf)
+ 		return -EINVAL;
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index a43dd17bc78f..b1a33dbbc78e 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -314,15 +314,6 @@ struct hid_item {
+ #define HID_BAT_ABSOLUTESTATEOFCHARGE	0x00850065
  
--	prog_fd = skel->progs.kfunc_call_test1.prog_fd;
--	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "bpf_prog_test_run(test1)");
--	ASSERT_EQ(topts.retval, 12, "test1-retval");
-+	prog = bpf_object__find_program_by_name(skel->obj, param->prog_name);
-+	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-+		goto cleanup;
+ #define HID_VD_ASUS_CUSTOM_MEDIA_KEYS	0xff310076
+-/*
+- * HID report types --- Ouch! HID spec says 1 2 3!
+- */
+-
+-#define HID_INPUT_REPORT	0
+-#define HID_OUTPUT_REPORT	1
+-#define HID_FEATURE_REPORT	2
+-
+-#define HID_REPORT_TYPES	3
  
--	prog_fd = skel->progs.kfunc_call_test2.prog_fd;
-+	prog_fd = bpf_program__fd(prog);
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "bpf_prog_test_run(test2)");
--	ASSERT_EQ(topts.retval, 3, "test2-retval");
-+	if (!ASSERT_OK(err, param->prog_name))
-+		goto cleanup;
+ /*
+  * HID connect requests
+@@ -509,7 +500,7 @@ struct hid_report {
+ 	struct list_head hidinput_list;
+ 	struct list_head field_entry_list;		/* ordered list of input fields */
+ 	unsigned int id;				/* id of this report */
+-	unsigned int type;				/* report type */
++	enum hid_report_type type;			/* report type */
+ 	unsigned int application;			/* application usage for this report */
+ 	struct hid_field *field[HID_MAX_FIELDS];	/* fields of the report */
+ 	struct hid_field_entry *field_entries;		/* allocated memory of input field_entry */
+@@ -926,7 +917,8 @@ extern int hidinput_connect(struct hid_device *hid, unsigned int force);
+ extern void hidinput_disconnect(struct hid_device *);
  
--	prog_fd = skel->progs.kfunc_call_test_ref_btf_id.prog_fd;
--	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "bpf_prog_test_run(test_ref_btf_id)");
--	ASSERT_EQ(topts.retval, 0, "test_ref_btf_id-retval");
-+	ASSERT_EQ(topts.retval, param->retval, "retval");
-+
-+cleanup:
-+	kfunc_call_test__destroy(skel);
-+}
-+
-+static void test_main(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(kfunc_tests); i++) {
-+		if (!test__start_subtest(kfunc_tests[i].prog_name))
-+			continue;
+ int hid_set_field(struct hid_field *, unsigned, __s32);
+-int hid_input_report(struct hid_device *, int type, u8 *, u32, int);
++int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
++		     int interrupt);
+ struct hid_field *hidinput_get_led_field(struct hid_device *hid);
+ unsigned int hidinput_count_leds(struct hid_device *hid);
+ __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code);
+@@ -935,11 +927,11 @@ int __hid_request(struct hid_device *hid, struct hid_report *rep, int reqtype);
+ u8 *hid_alloc_report_buf(struct hid_report *report, gfp_t flags);
+ struct hid_device *hid_allocate_device(void);
+ struct hid_report *hid_register_report(struct hid_device *device,
+-				       unsigned int type, unsigned int id,
++				       enum hid_report_type type, unsigned int id,
+ 				       unsigned int application);
+ int hid_parse_report(struct hid_device *hid, __u8 *start, unsigned size);
+ struct hid_report *hid_validate_values(struct hid_device *hid,
+-				       unsigned int type, unsigned int id,
++				       enum hid_report_type type, unsigned int id,
+ 				       unsigned int field_index,
+ 				       unsigned int report_counts);
  
--	kfunc_call_test_lskel__destroy(skel);
-+		verify_success(&kfunc_tests[i]);
-+	}
+@@ -1111,7 +1103,7 @@ void hid_hw_request(struct hid_device *hdev,
+ 		    struct hid_report *report, int reqtype);
+ int hid_hw_raw_request(struct hid_device *hdev,
+ 		       unsigned char reportnum, __u8 *buf,
+-		       size_t len, unsigned char rtype, int reqtype);
++		       size_t len, enum hid_report_type rtype, int reqtype);
+ int hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len);
+ 
+ /**
+@@ -1184,8 +1176,8 @@ static inline u32 hid_report_len(struct hid_report *report)
+ 	return DIV_ROUND_UP(report->size, 8) + (report->id > 0);
  }
  
- static void test_subprog(void)
-@@ -121,8 +142,7 @@ static void test_destructive(void)
+-int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
+-		int interrupt);
++int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
++			 int interrupt);
  
- void test_kfunc_call(void)
- {
--	if (test__start_subtest("main"))
--		test_main();
-+	test_main();
+ /* HID quirks API */
+ unsigned long hid_lookup_quirk(const struct hid_device *hdev);
+diff --git a/include/uapi/linux/hid.h b/include/uapi/linux/hid.h
+index b34492a87a8a..b25b0bacaff2 100644
+--- a/include/uapi/linux/hid.h
++++ b/include/uapi/linux/hid.h
+@@ -42,6 +42,18 @@
+ #define USB_INTERFACE_PROTOCOL_KEYBOARD	1
+ #define USB_INTERFACE_PROTOCOL_MOUSE	2
  
- 	if (test__start_subtest("subprog"))
- 		test_subprog();
++/*
++ * HID report types --- Ouch! HID spec says 1 2 3!
++ */
++
++enum hid_report_type {
++	HID_INPUT_REPORT		= 0,
++	HID_OUTPUT_REPORT		= 1,
++	HID_FEATURE_REPORT		= 2,
++
++	HID_REPORT_TYPES,
++};
++
+ /*
+  * HID class requests
+  */
 -- 
 2.36.1
 

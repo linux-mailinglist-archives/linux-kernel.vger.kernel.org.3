@@ -2,91 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A4D5AA57E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B625AA5B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbiIBCNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 22:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
+        id S235383AbiIBCX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 22:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiIBCNR (ORCPT
+        with ESMTP id S235297AbiIBCXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 22:13:17 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5054FA61D1;
-        Thu,  1 Sep 2022 19:13:16 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso4214798pjk.0;
-        Thu, 01 Sep 2022 19:13:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=qYL6s/9Aeo2GE4x5J9H3W9gBgDC4mxOsIuVqqCG9Ifc=;
-        b=iqbWpX6axi4zrwgEuCpxATOxKDKiXl4xk/YOtHomHlekDTmI5RA20Ik/HAEy0TErsi
-         A+YZ4xF7UJTdndCxJVAoaxN7KYsqkX72U5cblFlCHPgq7AhXYIoj5S5xtMB98cASGFut
-         wy2qtnXtUPAJtKjTeis4faqZndPM5U4HO2RrQRkCoVHn4T+Rbu+qgP+UJCq9weIOQITp
-         2719TcyYSDD8LKCRgZOtFS7XwVyyo0ClvQmDLidDL0fSJ8XSq/ilz9s6jByun8O1BRbs
-         wkYHC2pe03xJbrSVqqCtjj5QpwNkHQBwIwkmdhUOPA8/l+BufJImgCyDI5lL2Au4AiVH
-         iXmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=qYL6s/9Aeo2GE4x5J9H3W9gBgDC4mxOsIuVqqCG9Ifc=;
-        b=pZkUTH455QhwA064327LI7oNDo3Qzth7Ogd6wXLJvte/ikiIv6rFS8gc9XskxRyep8
-         8iCdF6bEYpTI1AMdT/ZpsFMTcHf7mr6CRd7bapRMV4UKE5jQSl6gF2W57Zdjwbilit8a
-         brJYS7Q1dl8teGJ0GgLlzYFS8qcw/Lu6KTS8bBoL0PPFkYPyhSihJBJCz/H0sR9tYMOx
-         GuLZTNTyZS9PPEleASAWwo7OC/T1ohrMj18yuaDtVbcruyoErFqux/47gdx1TbnZfAW+
-         fgh/KUMa1R0AVYGOrUwwshhAZ9yIjdUAjMIWkDglIOWElYangNsGKPDM21QSNUZfRX2r
-         5nTw==
-X-Gm-Message-State: ACgBeo1yL5K3T86CNxq6JSdaT5liL9lSaKdUin8YDJObl02p/kdg4V6U
-        afeb10SenQB6w/Pn2WHXLagrHQRPInS8vtx5AJw=
-X-Google-Smtp-Source: AA6agR4SvYXFJR86zhxiAvZ2E9aA1jtrSB2etUHJ+zppF5LlPRxN9Ydu32iiiw2ecXmihjJAuJDuRm4aOuVeiGVoW2g=
-X-Received: by 2002:a17:902:d4c4:b0:173:1206:cee7 with SMTP id
- o4-20020a170902d4c400b001731206cee7mr32821374plg.142.1662084795764; Thu, 01
- Sep 2022 19:13:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220901152339.471045-1-imagedong@tencent.com> <20220901141257.07131439@kernel.org>
-In-Reply-To: <20220901141257.07131439@kernel.org>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 2 Sep 2022 10:13:04 +0800
-Message-ID: <CADxym3bjafYdX0X8B+KFbKrgH0Cm5Th9F6V8SEi+KZJa95keaw@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: skb: export skb drop reaons to user by TRACE_DEFINE_ENUM
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     edumazet@google.com, davem@davemloft.net, pabeni@redhat.com,
-        rostedt@goodmis.org, mingo@redhat.com, imagedong@tencent.com,
-        dsahern@kernel.org, flyingpeng@tencent.com,
-        dongli.zhang@oracle.com, robh@kernel.org, asml.silence@gmail.com,
-        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Sep 2022 22:23:02 -0400
+X-Greylist: delayed 373 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Sep 2022 19:22:12 PDT
+Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [176.9.242.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47128AD9A7;
+        Thu,  1 Sep 2022 19:22:11 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id 2E0BE10029E5D;
+        Fri,  2 Sep 2022 04:15:54 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id C678D60EB3DC;
+        Fri,  2 Sep 2022 04:15:53 +0200 (CEST)
+X-Mailbox-Line: From a6030c5943ccd2965261a92320b1ae1adb909116 Mon Sep 17 00:00:00 2001
+Message-Id: <a6030c5943ccd2965261a92320b1ae1adb909116.1662084833.git.lukas@wunner.de>
+In-Reply-To: <202209020412.Ts31BZrs-lkp@intel.com>
+References: <202209020412.Ts31BZrs-lkp@intel.com>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Fri, 2 Sep 2022 04:15:55 +0200
+Subject: [PATCH] ACPI / property: Silence missing-declarations warning in
+ apple.c
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 5:12 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu,  1 Sep 2022 23:23:39 +0800 menglong8.dong@gmail.com wrote:
-> > +#undef FN
-> > +#define FN(reason) [SKB_DROP_REASON_##reason] = #reason,
-> > +const char * const drop_reasons[] = {
-> > +     DEFINE_DROP_REASON(FN, FN)
-> > +};
->
-> The undef looks a little backwards, no? We don't want to pollute all
-> users of skbuff.h with a FN define.
->
-> #define FN....
-> /* use it */
-> #undef FN
+Silence an annoying message emitted for W=1 builds:
 
-Okay, Thanks! I'll wait a moment to see if there are other comments
-before sending the next version.
+drivers/acpi/x86/apple.c:30:6: warning: no previous declaration for 'acpi_extract_apple_properties' [-Wmissing-declarations]
 
-Menglong Dong
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+---
+ drivers/acpi/x86/apple.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/acpi/x86/apple.c b/drivers/acpi/x86/apple.c
+index c285c91a5e9c..8812ecd03d55 100644
+--- a/drivers/acpi/x86/apple.c
++++ b/drivers/acpi/x86/apple.c
+@@ -8,6 +8,7 @@
+ #include <linux/bitmap.h>
+ #include <linux/platform_data/x86/apple.h>
+ #include <linux/uuid.h>
++#include "../internal.h"
+ 
+ /* Apple _DSM device properties GUID */
+ static const guid_t apple_prp_guid =
+-- 
+2.36.1
+

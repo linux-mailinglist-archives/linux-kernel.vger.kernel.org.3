@@ -2,227 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C1B5AB3E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539875AB3E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236683AbiIBOnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S236829AbiIBOoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237087AbiIBOnV (ORCPT
+        with ESMTP id S237259AbiIBOnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:43:21 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42061306DB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:04:31 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-11f0fa892aeso4901778fac.7
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 07:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=jIBNSs6rCdRbAOJ9teFT4Fa6Go/jLzDgKCj8WaZAwnE=;
-        b=U8lzxY0La7Ryyn+89TY3W4YJJ8+Qglm91u53fh+r9mWOSL7H4cjD/kzZMoMuJv1Nxl
-         uIP1Hm73Rh4a0VGLhFXCgK5uxT8CGWC7Xbc1C0Cw7h2OJNPq/gmRkW25sz5hsMEQ70CV
-         lAxlfvDAmHECaSRBAbYnL48o7LzKCpjIz9IRru3DhmJ9jjopPjUdE1YUibGHm+ZDEwlN
-         hJ5GnAHeGaXoV7gZx2nheEGMCcSYXB45vQNaVaAhMHcMZ514BS9YVMdS+DvvGi9j0QWo
-         VnyAkGgS5T1KIWU3fsKLNnfcZcsW4JtcR0pZXk/Ftcb+iqdT/v/OiTrUsnLET1Y//JgT
-         ON1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=jIBNSs6rCdRbAOJ9teFT4Fa6Go/jLzDgKCj8WaZAwnE=;
-        b=qc/rWXcktntIW9xyVh1VHxSHc4wPLImryYuXzvHtBvNLaQ0xhHE6pe/EjmfkI8gswo
-         JXCsspScQrZrJK06JJoflXyzWR6QQpZgOvxSyxgkUwIHSFvT2zCiNgb8DdAbU7mpMX9b
-         ru5K0udOeuEeSNsyvEUJITYq+rVUsWePB8qE2BeGU5rGAllhtHZTrW6uutUEcz3QD9NS
-         H1ECHLLNIVrNJl2m1K9c7Q3VhHgef9imZWujJeFyVKVZtaEkFmSstctC6C+TdNnXErB/
-         Bkbb+9YoVpeQleolLawMs6RsgYLP3fBmrpltBKBSVIUcBOim8BvxhpEKMW8JiuWhjlYr
-         5xAw==
-X-Gm-Message-State: ACgBeo0nbGt2mxhtCB5tMl+CTE7Xf40N2yXGKhtLgNPNkwfGWj4pyeiO
-        Joy9fBthje9S1oypG6ME8SO2ihoPagzj42OrMrNDng==
-X-Google-Smtp-Source: AA6agR6p0s7s90tmpd903kZy/GHcgaYZ9iZQBMhOKJ59MgpASAzcegVkj930C4T2jWUObCZOA+gBI4p00FV4w56pE4M=
-X-Received: by 2002:a05:6870:d393:b0:11f:4eb6:705e with SMTP id
- k19-20020a056870d39300b0011f4eb6705emr2357099oag.106.1662127406444; Fri, 02
- Sep 2022 07:03:26 -0700 (PDT)
+        Fri, 2 Sep 2022 10:43:46 -0400
+Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1303F1C3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:04:55 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MK05G58gxzMprrk;
+        Fri,  2 Sep 2022 16:04:02 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MK05G3jFtzlh8lB;
+        Fri,  2 Sep 2022 16:04:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1662127442;
+        bh=DKeH0QBhZBlZkVXCcVJahDvxYW92XszACrnYqFmxnYI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EfJsWgTdzJFSh17SfLFoir/JpoLnCCHypKF5q5vYRUWLag1uuwBUDqyzwmBKlvKbU
+         7WhguAmFg22688d5doyLVZAVTCIiZS9O/OvLuSmWVRZ5f5PYkT7e0KieoYF2L2a0Fy
+         Bq6k8krMNSE2EA6IRZLaxMxyARdmWodzwwcqAlHM=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, stable@vger.kernel.org
+Subject: [GIT PULL] Landlock fix for v6.0
+Date:   Fri,  2 Sep 2022 16:04:00 +0200
+Message-Id: <20220902140400.1617323-1-mic@digikod.net>
 MIME-Version: 1.0
-References: <20220902112446.29858-1-shaozhengchao@huawei.com> <20220902112446.29858-23-shaozhengchao@huawei.com>
-In-Reply-To: <20220902112446.29858-23-shaozhengchao@huawei.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 2 Sep 2022 10:03:15 -0400
-Message-ID: <CAM0EoMnbSAgjxxyUuP2C-YZVDL-ydQJex=Xc_ZMzL5P9SHv9FQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 22/22] net: sched: act: remove redundant code in act_api
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, martin.lau@linux.dev, daniel@iogearbox.net,
-        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 7:22 AM Zhengchao Shao <shaozhengchao@huawei.com> wrote:
->
-> Based on previous patches of this patchset, the walk and lookup hooks in
-> the tc_action_ops structure are no longer used, and redundant code logic
-> branches should be removed. tcf_generic_walker() and tcf_idr_search() are
-> also used only in the act_api.c, change them to static.
->
+Hi Linus,
 
-All the rest look good.
-It is possible to have extra computation for a lookup/walk depending on the
-action complexity. That was the point of those APIs; however, we could argue
-that if a user shows up with those demands then we'll add them then.
-If you want to remove the callbacks, why not do them in the first patch?
+This change fixes a mis-handling of the LANDLOCK_ACCESS_FS_REFER right
+when multiple rulesets/domains are stacked. The expected behaviour was
+that an additional ruleset can only restrict the set of permitted
+operations, but in this particular case, it was potentially possible to
+re-gain the LANDLOCK_ACCESS_FS_REFER right.
 
-cheers,
-jamal
+Please pull this Landlock fix for v6.0-rc4 .  These changes merged
+cleanly with your tree, and have been successfully tested in the latest
+linux-next releases for a week.  This should be backported to v5.19 .
 
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> ---
->  include/net/act_api.h | 10 ----------
->  net/sched/act_api.c   | 42 ++++++++++++------------------------------
->  2 files changed, 12 insertions(+), 40 deletions(-)
->
-> diff --git a/include/net/act_api.h b/include/net/act_api.h
-> index a79d6e58519e..ebd84ef06b5b 100644
-> --- a/include/net/act_api.h
-> +++ b/include/net/act_api.h
-> @@ -118,15 +118,10 @@ struct tc_action_ops {
->                        struct tcf_result *); /* called under RCU BH lock*/
->         int     (*dump)(struct sk_buff *, struct tc_action *, int, int);
->         void    (*cleanup)(struct tc_action *);
-> -       int     (*lookup)(struct net *net, struct tc_action **a, u32 index);
->         int     (*init)(struct net *net, struct nlattr *nla,
->                         struct nlattr *est, struct tc_action **act,
->                         struct tcf_proto *tp,
->                         u32 flags, struct netlink_ext_ack *extack);
-> -       int     (*walk)(struct net *, struct sk_buff *,
-> -                       struct netlink_callback *, int,
-> -                       const struct tc_action_ops *,
-> -                       struct netlink_ext_ack *);
->         void    (*stats_update)(struct tc_action *, u64, u64, u64, u64, bool);
->         size_t  (*get_fill_size)(const struct tc_action *act);
->         struct net_device *(*get_dev)(const struct tc_action *a,
-> @@ -178,11 +173,6 @@ static inline void tc_action_net_exit(struct list_head *net_list,
->         rtnl_unlock();
->  }
->
-> -int tcf_generic_walker(struct tc_action_net *tn, struct sk_buff *skb,
-> -                      struct netlink_callback *cb, int type,
-> -                      const struct tc_action_ops *ops,
-> -                      struct netlink_ext_ack *extack);
-> -int tcf_idr_search(struct tc_action_net *tn, struct tc_action **a, u32 index);
->  int tcf_idr_create(struct tc_action_net *tn, u32 index, struct nlattr *est,
->                    struct tc_action **a, const struct tc_action_ops *ops,
->                    int bind, bool cpustats, u32 flags);
-> diff --git a/net/sched/act_api.c b/net/sched/act_api.c
-> index 7063d2004199..2d26aec25e3a 100644
-> --- a/net/sched/act_api.c
-> +++ b/net/sched/act_api.c
-> @@ -636,10 +636,10 @@ static int tcf_del_walker(struct tcf_idrinfo *idrinfo, struct sk_buff *skb,
->         return ret;
->  }
->
-> -int tcf_generic_walker(struct tc_action_net *tn, struct sk_buff *skb,
-> -                      struct netlink_callback *cb, int type,
-> -                      const struct tc_action_ops *ops,
-> -                      struct netlink_ext_ack *extack)
-> +static int tcf_generic_walker(struct tc_action_net *tn, struct sk_buff *skb,
-> +                             struct netlink_callback *cb, int type,
-> +                             const struct tc_action_ops *ops,
-> +                             struct netlink_ext_ack *extack)
->  {
->         struct tcf_idrinfo *idrinfo = tn->idrinfo;
->
-> @@ -653,9 +653,8 @@ int tcf_generic_walker(struct tc_action_net *tn, struct sk_buff *skb,
->                 return -EINVAL;
->         }
->  }
-> -EXPORT_SYMBOL(tcf_generic_walker);
->
-> -int tcf_idr_search(struct tc_action_net *tn, struct tc_action **a, u32 index)
-> +static int tcf_idr_search(struct tc_action_net *tn, struct tc_action **a, u32 index)
->  {
->         struct tcf_idrinfo *idrinfo = tn->idrinfo;
->         struct tc_action *p;
-> @@ -674,7 +673,6 @@ int tcf_idr_search(struct tc_action_net *tn, struct tc_action **a, u32 index)
->         }
->         return false;
->  }
-> -EXPORT_SYMBOL(tcf_idr_search);
->
->  static int __tcf_generic_walker(struct net *net, struct sk_buff *skb,
->                                 struct netlink_callback *cb, int type,
-> @@ -945,8 +943,7 @@ int tcf_register_action(struct tc_action_ops *act,
->         struct tc_action_ops *a;
->         int ret;
->
-> -       if (!act->act || !act->dump || !act->init ||
-> -           (!act->net_id && (!act->walk || !act->lookup)))
-> +       if (!act->act || !act->dump || !act->init || !act->net_id)
->                 return -EINVAL;
->
->         /* We have to register pernet ops before making the action ops visible,
-> @@ -1658,16 +1655,10 @@ static struct tc_action *tcf_action_get_1(struct net *net, struct nlattr *nla,
->                 goto err_out;
->         }
->         err = -ENOENT;
-> -       if (ops->lookup) {
-> -               if (ops->lookup(net, &a, index) == 0) {
-> -                       NL_SET_ERR_MSG(extack, "TC action with specified index not found");
-> -                       goto err_mod;
-> -               }
-> -       } else {
-> -               if (__tcf_idr_search(net, ops, &a, index) == 0) {
-> -                       NL_SET_ERR_MSG(extack, "TC action with specified index not found");
-> -                       goto err_mod;
-> -               }
-> +
-> +       if (__tcf_idr_search(net, ops, &a, index) == 0) {
-> +               NL_SET_ERR_MSG(extack, "TC action with specified index not found");
-> +               goto err_mod;
->         }
->
->         module_put(ops->owner);
-> @@ -1730,12 +1721,7 @@ static int tca_action_flush(struct net *net, struct nlattr *nla,
->                 goto out_module_put;
->         }
->
-> -       if (ops->walk) {
-> -               err = ops->walk(net, skb, &dcb, RTM_DELACTION, ops, extack);
-> -       } else {
-> -               err = __tcf_generic_walker(net, skb, &dcb, RTM_DELACTION, ops, extack);
-> -       }
-> -
-> +       err = __tcf_generic_walker(net, skb, &dcb, RTM_DELACTION, ops, extack);
->         if (err <= 0) {
->                 nla_nest_cancel(skb, nest);
->                 goto out_module_put;
-> @@ -2153,11 +2139,7 @@ static int tc_dump_action(struct sk_buff *skb, struct netlink_callback *cb)
->         if (nest == NULL)
->                 goto out_module_put;
->
-> -       if (a_o->walk)
-> -               ret = a_o->walk(net, skb, cb, RTM_GETACTION, a_o, NULL);
-> -       else
-> -               ret = __tcf_generic_walker(net, skb, cb, RTM_GETACTION, a_o, NULL);
-> -
-> +       ret = __tcf_generic_walker(net, skb, cb, RTM_GETACTION, a_o, NULL);
->         if (ret < 0)
->                 goto out_module_put;
->
-> --
-> 2.17.1
->
+Regards,
+ Mickaël
+
+--
+The following changes since commit 3d7cb6b04c3f3115719235cc6866b10326de34cd:
+
+  Linux 5.19 (2022-07-31 14:03:01 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-6.0-rc4
+
+for you to fetch changes up to 55e55920bbe3ccf516022c51f5527e7d026b8f1d:
+
+  landlock: Fix file reparenting without explicit LANDLOCK_ACCESS_FS_REFER (2022-09-02 15:29:08 +0200)
+
+----------------------------------------------------------------
+Landlock fix for v6.0-rc4
+
+----------------------------------------------------------------
+Mickaël Salaün (1):
+      landlock: Fix file reparenting without explicit LANDLOCK_ACCESS_FS_REFER
+
+ security/landlock/fs.c                     |  48 ++++-----
+ tools/testing/selftests/landlock/fs_test.c | 155 +++++++++++++++++++++++++++--
+ 2 files changed, 170 insertions(+), 33 deletions(-)

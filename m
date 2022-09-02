@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CFC5AB124
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8335AB122
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238552AbiIBNEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
+        id S238650AbiIBNFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238396AbiIBNDK (ORCPT
+        with ESMTP id S238723AbiIBNDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:03:10 -0400
+        Fri, 2 Sep 2022 09:03:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9044810F093;
-        Fri,  2 Sep 2022 05:41:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D95110F080;
+        Fri,  2 Sep 2022 05:42:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5829E62133;
-        Fri,  2 Sep 2022 12:25:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E95EC433D7;
-        Fri,  2 Sep 2022 12:25:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3819F6211C;
+        Fri,  2 Sep 2022 12:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E06FC433D6;
+        Fri,  2 Sep 2022 12:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121539;
-        bh=gkz6s2RIEKzRZ+614VP7yBempYAr+jNb4MNz4wJKp28=;
+        s=korg; t=1662121943;
+        bh=QXhlD+e++6kgBMShPi6oO6OcUkdZpztpCjKg39eR83k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xYSs6w1CbWg05GEPaip2rfePar7XVifphSk5nabcUq7oyXeKOIxQp6pf9LGHPmUic
-         oGFJ68YpevHzLtDo8+pmKDVYl+iPG4jRQH9Cyv0WRUWb+Fg48HWzB4HLvsMw3HolQf
-         BVqf78NdbHGd/pfB+oXha8tX8bRu2fIimQ+gIgAs=
+        b=CzIP9wI8ajNBR1PwPlQd9BoYN+vOKJUxkADcx7j8iEJ4LqJGjJxpUOAJu8Q1L178K
+         p/woON2/fN98iJXq0oT/co1vGFTLnrVh9eFDipadOIn7KmxKRHriBA7PXuK+tf1x1i
+         WHgjDYrfMyePt+kne4DIv0cFMV/QEqT432hD1kbM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH 4.19 41/56] s390/mm: do not trigger write fault when vma does not allow VM_WRITE
+        stable@vger.kernel.org, Steev Klimaszewski <steev@kali.org>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.15 37/73] HID: add Lenovo Yoga C630 battery quirk
 Date:   Fri,  2 Sep 2022 14:19:01 +0200
-Message-Id: <20220902121401.780910897@linuxfoundation.org>
+Message-Id: <20220902121405.661670249@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+From: Steev Klimaszewski <steev@kali.org>
 
-commit 41ac42f137080bc230b5882e3c88c392ab7f2d32 upstream.
+commit 3a47fa7b14c7d9613909a844aba27f99d3c58634 upstream.
 
-For non-protection pXd_none() page faults in do_dat_exception(), we
-call do_exception() with access == (VM_READ | VM_WRITE | VM_EXEC).
-In do_exception(), vma->vm_flags is checked against that before
-calling handle_mm_fault().
+Similar to the Surface Go devices, the Elantech touchscreen/digitizer in
+the Lenovo Yoga C630 mistakenly reports the battery of the stylus, and
+always reports an empty battery.
 
-Since commit 92f842eac7ee3 ("[S390] store indication fault optimization"),
-we call handle_mm_fault() with FAULT_FLAG_WRITE, when recognizing that
-it was a write access. However, the vma flags check is still only
-checking against (VM_READ | VM_WRITE | VM_EXEC), and therefore also
-calling handle_mm_fault() with FAULT_FLAG_WRITE in cases where the vma
-does not allow VM_WRITE.
+Apply the HID_BATTERY_QUIRK_IGNORE quirk to ignore this battery and
+prevent the erroneous low battery warnings.
 
-Fix this by changing access check in do_exception() to VM_WRITE only,
-when recognizing write access.
-
-Link: https://lkml.kernel.org/r/20220811103435.188481-3-david@redhat.com
-Fixes: 92f842eac7ee3 ("[S390] store indication fault optimization")
-Cc: <stable@vger.kernel.org>
-Reported-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Signed-off-by: Steev Klimaszewski <steev@kali.org>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/mm/fault.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/hid/hid-ids.h   |    1 +
+ drivers/hid/hid-input.c |    2 ++
+ 2 files changed, 3 insertions(+)
 
---- a/arch/s390/mm/fault.c
-+++ b/arch/s390/mm/fault.c
-@@ -455,7 +455,9 @@ static inline vm_fault_t do_exception(st
- 	flags = FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
- 	if (user_mode(regs))
- 		flags |= FAULT_FLAG_USER;
--	if (access == VM_WRITE || (trans_exc_code & store_indication) == 0x400)
-+	if ((trans_exc_code & store_indication) == 0x400)
-+		access = VM_WRITE;
-+	if (access == VM_WRITE)
- 		flags |= FAULT_FLAG_WRITE;
- 	down_read(&mm->mmap_sem);
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -399,6 +399,7 @@
+ #define USB_DEVICE_ID_ASUS_UX550_TOUCHSCREEN	0x2706
+ #define I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREEN	0x261A
+ #define I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCREEN	0x2A1C
++#define I2C_DEVICE_ID_LENOVO_YOGA_C630_TOUCHSCREEN	0x279F
+ 
+ #define USB_VENDOR_ID_ELECOM		0x056e
+ #define USB_DEVICE_ID_ELECOM_BM084	0x0061
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -335,6 +335,8 @@ static const struct hid_device_id hid_ba
+ 	  HID_BATTERY_QUIRK_IGNORE },
+ 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCREEN),
+ 	  HID_BATTERY_QUIRK_IGNORE },
++	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_LENOVO_YOGA_C630_TOUCHSCREEN),
++	  HID_BATTERY_QUIRK_IGNORE },
+ 	{}
+ };
  
 
 

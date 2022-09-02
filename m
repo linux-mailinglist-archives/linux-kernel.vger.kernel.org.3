@@ -2,122 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2682D5AB9AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D57B5AB9B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiIBU4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 16:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
+        id S230357AbiIBU4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 16:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiIBU4A (ORCPT
+        with ESMTP id S229811AbiIBU4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 16:56:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634BB4456E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662152158;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OzsHZ9MjnMZzdfiMHihwjai0c/sGHU3kdcnYVuqUnh0=;
-        b=O+OpSKpfOH+wiNUemWL0l86QcafhzSNMsDq5qNww24J/Bu3RNaGRDBoDY6rqYO6L/jKgoy
-        5RLtzZWmbpE83EvOdKtB0FUoFXLikiuYnQQvIUwXr6ItsnZUyjMHpugtfRECbF8eamcls5
-        teELEG5TCObJnf9kk3cSYrrYPnHy5nQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-378-AZGk1fJ-OX2-UwDFUhpjrw-1; Fri, 02 Sep 2022 16:55:53 -0400
-X-MC-Unique: AZGk1fJ-OX2-UwDFUhpjrw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0788C85A589;
-        Fri,  2 Sep 2022 20:55:53 +0000 (UTC)
-Received: from [10.22.10.219] (unknown [10.22.10.219])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B65FF112131E;
-        Fri,  2 Sep 2022 20:55:52 +0000 (UTC)
-Message-ID: <8c33f989-8870-08c6-db12-521de634b34e@redhat.com>
-Date:   Fri, 2 Sep 2022 16:55:52 -0400
+        Fri, 2 Sep 2022 16:56:45 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF892DABBA
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:56:43 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id b196so2935527pga.7
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 13:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=NkWBtoQgaFgitib08Hogz597NWzZXTmetYtlLX3bjJM=;
+        b=BuT9IDve2TGSeyV2xVrLtW1biKQx/mFIgbGZypdATS1Z7uDnehqhR3zvfRFwE85N2l
+         geqNC5btX4GgaZhP8ikwsupUe67WhX8d6hDyKdw4uS9NunFY0rcsPCP2ffiqH8jSx3yb
+         iJ+hq0Yo6Va/+sDjrKL6o2Vt9gNtqFRmK+zEo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=NkWBtoQgaFgitib08Hogz597NWzZXTmetYtlLX3bjJM=;
+        b=6imfaHiMPdINv9Iyv7ARx6PLdwlQii/ufQDrXD9+tIzf+osLbXp76GqLjvublBFq8+
+         e4WJDRVtqSsUuwSX5B+pam+xXKzdxpmJLl1I1UEv8dw37SoATkUFE8k6lFUZRyHkXf4S
+         4BsxNLQmPm07Mei32eO6hsmh5y6mEY9EDUAXZ1I3cDb56uVOsiG0zw1XT//IvDTMRi3G
+         OShZLIwhC/sUo3MifZxdYDqI48Mzf0GpVVF0ONaZKuKSQuJ0YBqUekEtc89IW4Q7datL
+         9zCzzj4U88X7I4oZdEnKC4cQ7ZM/v3ERFX8UhOQad8tXdHJTc5Qm5qnSjVbPZ3JKGUSP
+         LjIA==
+X-Gm-Message-State: ACgBeo1Ts/2TqO5tW9KXTssFBzVW0dR9jzip9JydK2EL/BE/29DIpCjH
+        BkExPF23hCMfzHiOjgFY34JEKkI01jN7wg==
+X-Google-Smtp-Source: AA6agR7UPfToOXkX6y0bP59PLNMacjH+/Eg/CEcBCC0g8WRpn5gE1sHE+FxsKJfPgd77J60smN7UPQ==
+X-Received: by 2002:a62:1ac1:0:b0:535:87d:d63f with SMTP id a184-20020a621ac1000000b00535087dd63fmr38496405pfa.74.1662152203362;
+        Fri, 02 Sep 2022 13:56:43 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u3-20020a170902e80300b0016c57657977sm2086294plg.41.2022.09.02.13.56.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 13:56:42 -0700 (PDT)
+Date:   Fri, 2 Sep 2022 13:56:41 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Len Baker <len.baker@gmx.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] string: Introduce strtomem() and strtomem_pad()
+Message-ID: <202209021352.549A5D5@keescook>
+References: <20220901190952.2229696-1-keescook@chromium.org>
+ <88e8b096-aa04-2447-cb21-a83b5e57e963@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] locking/rwsem: Disable preemption while trying for rwsem
- lock
-Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com
-Cc:     linux-kernel@vger.kernel.org,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-References: <1662028090-26495-1-git-send-email-quic_mojha@quicinc.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <1662028090-26495-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <88e8b096-aa04-2447-cb21-a83b5e57e963@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Sep 02, 2022 at 08:53:34AM +0700, Bagas Sanjaya wrote:
+> On 9/2/22 02:09, Kees Cook wrote:
+> > One of the "legitimate" uses of strncpy() is copying a NUL-terminated
+> > string into a fixed-size non-NUL-terminated character array. To avoid
+> > the weaknesses and ambiguity of intent when using strncpy(), provide
+> > replacement functions that explicitly distinguish between trailing
+> > padding and not, and require the destination buffer size be discoverable
+> > by the compiler.
+> >> For example:
+> > 
+> > struct obj {
+> > 	int foo;
+> > 	char small[4] __nonstring;
+> > 	char big[8] __nonstring;
+> > 	int bar;
+> > };
+> > 
+> > struct obj p;
+> > 
+> > /* This will truncate to 4 chars with no trailing NUL */
+> > strncpy(p.small, "hello", sizeof(p.small));
+> > /* p.small contains 'h', 'e', 'l', 'l' */
+> > 
+> > /* This will NUL pad to 8 chars. */
+> > strncpy(p.big, "hello", sizeof(p.big));
+> > /* p.big contains 'h', 'e', 'l', 'l', 'o', '\0', '\0', '\0' */
+> > 
+> > When the "__nonstring" attributes are missing, the intent of the
+> > programmer becomes ambiguous for whether the lack of a trailing NUL
+> > in the p.small copy is a bug. Additionally, it's not clear whether
+> > the trailing padding in the p.big copy is _needed_. Both cases
+> > become unambiguous with:
+> > 
+> > strtomem(p.small, "hello");
+> > strtomem_pad(p.big, "hello", 0);
+> > 
+> > See also https://github.com/KSPP/linux/issues/90
+> > 
+> 
+> Should'nt strscpy() do the job?
 
-On 9/1/22 06:28, Mukesh Ojha wrote:
-> From: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
->
-> Make the region inside the rwsem_write_trylock non preemptible.
->
-> We observe RT task is hogging CPU when trying to acquire rwsem lock
-> which was acquired by a kworker task but before the rwsem owner was set.
->
-> Here is the scenario:
-> 1. CFS task (affined to a particular CPU) takes rwsem lock.
->
-> 2. CFS task gets preempted by a RT task before setting owner.
->
-> 3. RT task (FIFO) is trying to acquire the lock, but spinning until
-> RT throttling happens for the lock as the lock was taken by CFS task.
+strscpy() will always NUL-terminate. If someone is moving a
+NUL-terminated string to a fixed-length buffer (that is _not_
+NUL-terminated), using strscpy() will force the final byte to be 0x00,
+which will likely be a regression. For example:
 
-Note that the spinning is likely caused by the following code in 
-rwsem_down_write_slowpath():
+struct wifi_driver {
+	...
+	char essid[8];
+	...
+};
 
-1163                 /*
-1164                  * After setting the handoff bit and failing to acquire
-1165                  * the lock, attempt to spin on owner to accelerate 
-lock
-1166                  * transfer. If the previous owner is a on-cpu 
-writer and it
-1167                  * has just released the lock, OWNER_NULL will be 
-returned.
-1168                  * In this case, we attempt to acquire the lock again
-1169                  * without sleeping.
-1170                  */
-1171                 if (waiter.handoff_set) {
-1172                         enum owner_state owner_state;
-1173
-1174                         preempt_disable();
-1175                         owner_state = rwsem_spin_on_owner(sem);
-1176                         preempt_enable();
-1177
-1178                         if (owner_state == OWNER_NULL)
-1179                                 goto trylock_again;
-1180                 }
+struct wifi_driver fw;
 
-rwsem_optimistic_spin() limits RT task one additional attempt if 
-OWNER_NULL is returned. There is no such limitation in this loop. So an 
-alternative will be to put a limit on the number of times an OWNER_NULL 
-return values will be allowed to continue spinning without sleeping. 
-That put the burden on the slowpath instead of in the fastpath.
+char *essed = "12345678";
 
-Other than the slight overhead in the fastpath, the patch should work too.
+strncpy(fw.essid, essid, sizeof(fw.essid));
 
-Acked-by: Waiman Long <longman@redhat.com>
+	fw.essid will contain: 1 2 3 4 5 6 7 8
 
-Cheers,
-Longman
+strscpy(fw.essid, essid, sizeof(fw.essid)):
 
+	fw.essid will contain: 1 2 3 4 5 6 7 '\0'
+
+
+-- 
+Kees Cook

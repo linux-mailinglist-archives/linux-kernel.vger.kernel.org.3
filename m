@@ -2,280 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1941B5AB254
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444595AB1F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237032AbiIBN4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
+        id S237319AbiIBNpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238568AbiIBNzT (ORCPT
+        with ESMTP id S236986AbiIBNpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:55:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CE5922539
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:29:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0B8715A1;
-        Fri,  2 Sep 2022 05:41:03 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 74F763F766;
-        Fri,  2 Sep 2022 05:40:56 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Bonnici <marc.bonnici@arm.com>,
-        Achin Gupta <achin.gupta@arm.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Valentin Laurent <valentin.laurent@trustonic.com>,
-        Lukas Hanel <lukas.hanel@trustonic.com>,
-        Coboy Chen <coboy.chen@mediatek.com>
-Subject: [PATCH v2 10/10] firmware: arm_ffa: Split up ffa_ops into info, message and memory operations
-Date:   Fri,  2 Sep 2022 13:40:32 +0100
-Message-Id: <20220902124032.788488-11-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902124032.788488-1-sudeep.holla@arm.com>
-References: <20220902124032.788488-1-sudeep.holla@arm.com>
+        Fri, 2 Sep 2022 09:45:18 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566C612D515;
+        Fri,  2 Sep 2022 06:21:19 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MJyHb0wlzz9slp;
+        Fri,  2 Sep 2022 14:42:51 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id t6fBFsb4UbyX; Fri,  2 Sep 2022 14:42:51 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJyHS0zPBz9sls;
+        Fri,  2 Sep 2022 14:42:44 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0C99A8B78C;
+        Fri,  2 Sep 2022 14:42:44 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id TIqipSHIuhEZ; Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.39])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CDF5D8B78D;
+        Fri,  2 Sep 2022 14:42:42 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 282CgYdb2141515
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 2 Sep 2022 14:42:34 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 282CgY0K2141514;
+        Fri, 2 Sep 2022 14:42:34 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Davide Ciminaghi <ciminaghi@gnudd.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v2 5/9] gpiolib: Get rid of ARCH_NR_GPIOS
+Date:   Fri,  2 Sep 2022 14:42:05 +0200
+Message-Id: <97011204619556ecb3d8c9aaff2b58c28790fe8a.1662116601.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <cover.1662116601.git.christophe.leroy@csgroup.eu>
+References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662122527; l=5608; s=20211009; h=from:subject:message-id; bh=627tvaA946/n4BKkAs3Ap6n2Spr0bzlnkVDrEw1Weh4=; b=oK8L6x4YO0/Tfv1rrveqxWyPzUigpLkkcs3kpG/V0GCD1hH9rQwWg26uIXH5pm4hEOPy17HUWSCs RlrtLGZNAGwtNu+GH+gFces0cecHaH5Rk0+Fg/FbRiFpz6clOxDG
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation to make memory operations accessible for a non
-ffa_driver/device, it is better to split the ffa_ops into different
-categories of operations: info, message and memory. The info and memory
-are ffa_device independent and can be used without any associated
-ffa_device from a non ffa_driver.
+Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
+there is no limitation on the number of GPIOs that can be allocated
+in the system since the allocation is fully dynamic.
 
-However, we don't export these info and memory APIs yet without the user.
-The first users of these APIs can export them.
+ARCH_NR_GPIOS is today only used in order to provide downwards
+gpiobase allocation from that value, while static allocation is
+performed upwards from 0. However that has the disadvantage of
+limiting the number of GPIOs that can be registered in the system.
 
-Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+To overcome this limitation without requiring each and every
+platform to provide its 'best-guess' maximum number, rework the
+allocation to allocate upwards, allowing approx 2 millions of
+GPIOs.
+
+In order to still allow static allocation for legacy drivers, define
+GPIO_DYNAMIC_BASE with the value 512 as the start for dynamic
+allocation. The 512 value is chosen because it is the end of
+the current default range so all current static allocations are
+expected to be below that value. Of course that's just a rough
+estimate based on the default value, but assuming static
+allocations come first, even if there are more static allocations
+it should fit under the 512 value.
+
+In the future, it is expected that all static allocations go away
+and then dynamic allocation will be patched to start at 0.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/firmware/arm_ffa/driver.c | 16 +++++++++++++--
- drivers/tee/optee/ffa_abi.c       | 33 +++++++++++++++++--------------
- include/linux/arm_ffa.h           | 14 ++++++++++++-
- 3 files changed, 45 insertions(+), 18 deletions(-)
+v2: Enhanced commit description and change from 256 to 512.
+---
+ arch/arm/include/asm/gpio.h |  1 -
+ drivers/gpio/gpiolib.c      | 10 +++----
+ include/asm-generic/gpio.h  | 55 ++++++++++++++-----------------------
+ 3 files changed, 26 insertions(+), 40 deletions(-)
 
-diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-index dbbe15592173..639ae3911387 100644
---- a/drivers/firmware/arm_ffa/driver.c
-+++ b/drivers/firmware/arm_ffa/driver.c
-@@ -690,16 +690,28 @@ static int ffa_memory_lend(struct ffa_mem_ops_args *args)
- 	return ffa_memory_ops(FFA_MEM_LEND, args);
- }
+diff --git a/arch/arm/include/asm/gpio.h b/arch/arm/include/asm/gpio.h
+index f3bb8a2bf788..4ebbb58f06ea 100644
+--- a/arch/arm/include/asm/gpio.h
++++ b/arch/arm/include/asm/gpio.h
+@@ -2,7 +2,6 @@
+ #ifndef _ARCH_ARM_GPIO_H
+ #define _ARCH_ARM_GPIO_H
  
--static const struct ffa_ops ffa_ops = {
-+static const struct ffa_info_ops ffa_drv_info_ops = {
- 	.api_version_get = ffa_api_version_get,
- 	.partition_info_get = ffa_partition_info_get,
-+};
-+
-+static const struct ffa_msg_ops ffa_drv_msg_ops = {
- 	.mode_32bit_set = ffa_mode_32bit_set,
- 	.sync_send_receive = ffa_sync_send_receive,
-+};
-+
-+static const struct ffa_mem_ops ffa_drv_mem_ops = {
- 	.memory_reclaim = ffa_memory_reclaim,
- 	.memory_share = ffa_memory_share,
- 	.memory_lend = ffa_memory_lend,
- };
+-/* Note: this may rely upon the value of ARCH_NR_GPIOS set in mach/gpio.h */
+ #include <asm-generic/gpio.h>
  
-+static const struct ffa_ops ffa_drv_ops = {
-+	.info_ops = &ffa_drv_info_ops,
-+	.msg_ops = &ffa_drv_msg_ops,
-+	.mem_ops = &ffa_drv_mem_ops,
-+};
-+
- void ffa_device_match_uuid(struct ffa_device *ffa_dev, const uuid_t *uuid)
+ /* The trivial gpiolib dispatchers */
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 4e2fcb7b0a01..1846f24971e3 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -183,14 +183,14 @@ EXPORT_SYMBOL_GPL(gpiod_to_chip);
+ static int gpiochip_find_base(int ngpio)
  {
- 	int count, idx;
-@@ -745,7 +757,7 @@ static void ffa_setup_partitions(void)
- 		 * provides UUID here for each partition as part of the
- 		 * discovery API and the same is passed.
- 		 */
--		ffa_dev = ffa_device_register(&uuid, tpbuf->id, &ffa_ops);
-+		ffa_dev = ffa_device_register(&uuid, tpbuf->id, &ffa_drv_ops);
- 		if (!ffa_dev) {
- 			pr_err("%s: failed to register partition ID 0x%x\n",
- 			       __func__, tpbuf->id);
-diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-index 2ce5b87dfb27..0828240f27e6 100644
---- a/drivers/tee/optee/ffa_abi.c
-+++ b/drivers/tee/optee/ffa_abi.c
-@@ -272,7 +272,7 @@ static int optee_ffa_shm_register(struct tee_context *ctx, struct tee_shm *shm,
- {
- 	struct optee *optee = tee_get_drvdata(ctx->teedev);
- 	struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
--	const struct ffa_ops *ffa_ops = ffa_dev->ops;
-+	const struct ffa_mem_ops *mem_ops = ffa_dev->ops->mem_ops;
- 	struct ffa_mem_region_attributes mem_attr = {
- 		.receiver = ffa_dev->vm_id,
- 		.attrs = FFA_MEM_RW,
-@@ -294,14 +294,14 @@ static int optee_ffa_shm_register(struct tee_context *ctx, struct tee_shm *shm,
- 	if (rc)
- 		return rc;
- 	args.sg = sgt.sgl;
--	rc = ffa_ops->memory_share(&args);
-+	rc = mem_ops->memory_share(&args);
- 	sg_free_table(&sgt);
- 	if (rc)
- 		return rc;
+ 	struct gpio_device *gdev;
+-	int base = ARCH_NR_GPIOS - ngpio;
++	int base = GPIO_DYNAMIC_BASE;
  
- 	rc = optee_shm_add_ffa_handle(optee, shm, args.g_handle);
- 	if (rc) {
--		ffa_ops->memory_reclaim(args.g_handle, 0);
-+		mem_ops->memory_reclaim(args.g_handle, 0);
- 		return rc;
+-	list_for_each_entry_reverse(gdev, &gpio_devices, list) {
++	list_for_each_entry(gdev, &gpio_devices, list) {
+ 		/* found a free space? */
+-		if (gdev->base + gdev->ngpio <= base)
++		if (gdev->base >= base + ngpio)
+ 			break;
+-		/* nope, check the space right before the chip */
+-		base = gdev->base - ngpio;
++		/* nope, check the space right after the chip */
++		base = gdev->base + gdev->ngpio;
  	}
  
-@@ -315,7 +315,8 @@ static int optee_ffa_shm_unregister(struct tee_context *ctx,
- {
- 	struct optee *optee = tee_get_drvdata(ctx->teedev);
- 	struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
--	const struct ffa_ops *ffa_ops = ffa_dev->ops;
-+	const struct ffa_msg_ops *msg_ops = ffa_dev->ops->msg_ops;
-+	const struct ffa_mem_ops *mem_ops = ffa_dev->ops->mem_ops;
- 	u64 global_handle = shm->sec_world_id;
- 	struct ffa_send_direct_data data = {
- 		.data0 = OPTEE_FFA_UNREGISTER_SHM,
-@@ -327,11 +328,11 @@ static int optee_ffa_shm_unregister(struct tee_context *ctx,
- 	optee_shm_rem_ffa_handle(optee, global_handle);
- 	shm->sec_world_id = 0;
+ 	if (gpio_is_valid(base)) {
+diff --git a/include/asm-generic/gpio.h b/include/asm-generic/gpio.h
+index aea9aee1f3e9..a7752cf152ce 100644
+--- a/include/asm-generic/gpio.h
++++ b/include/asm-generic/gpio.h
+@@ -11,40 +11,18 @@
+ #include <linux/gpio/driver.h>
+ #include <linux/gpio/consumer.h>
  
--	rc = ffa_ops->sync_send_receive(ffa_dev, &data);
-+	rc = msg_ops->sync_send_receive(ffa_dev, &data);
- 	if (rc)
- 		pr_err("Unregister SHM id 0x%llx rc %d\n", global_handle, rc);
+-/* Platforms may implement their GPIO interface with library code,
++/*
++ * Platforms may implement their GPIO interface with library code,
+  * at a small performance cost for non-inlined operations and some
+  * extra memory (for code and for per-GPIO table entries).
+- *
+- * While the GPIO programming interface defines valid GPIO numbers
+- * to be in the range 0..MAX_INT, this library restricts them to the
+- * smaller range 0..ARCH_NR_GPIOS-1.
+- *
+- * ARCH_NR_GPIOS is somewhat arbitrary; it usually reflects the sum of
+- * builtin/SoC GPIOs plus a number of GPIOs on expanders; the latter is
+- * actually an estimate of a board-specific value.
+  */
  
--	rc = ffa_ops->memory_reclaim(global_handle, 0);
-+	rc = mem_ops->memory_reclaim(global_handle, 0);
- 	if (rc)
- 		pr_err("mem_reclaim: 0x%llx %d", global_handle, rc);
+-#ifndef ARCH_NR_GPIOS
+-#if defined(CONFIG_ARCH_NR_GPIO) && CONFIG_ARCH_NR_GPIO > 0
+-#define ARCH_NR_GPIOS CONFIG_ARCH_NR_GPIO
+-#else
+-#define ARCH_NR_GPIOS		512
+-#endif
+-#endif
+-
+ /*
+- * "valid" GPIO numbers are nonnegative and may be passed to
+- * setup routines like gpio_request().  only some valid numbers
+- * can successfully be requested and used.
+- *
+- * Invalid GPIO numbers are useful for indicating no-such-GPIO in
+- * platform data and other tables.
++ * At the end we want all GPIOs to be dynamically allocated from 0.
++ * However, some legacy drivers still perform fixed allocation.
++ * Until they are all fixed, leave 0-512 space for them.
+  */
+-
+-static inline bool gpio_is_valid(int number)
+-{
+-	return number >= 0 && number < ARCH_NR_GPIOS;
+-}
++#define GPIO_DYNAMIC_BASE	512
  
-@@ -342,7 +343,7 @@ static int optee_ffa_shm_unregister_supp(struct tee_context *ctx,
- 					 struct tee_shm *shm)
- {
- 	struct optee *optee = tee_get_drvdata(ctx->teedev);
--	const struct ffa_ops *ffa_ops = optee->ffa.ffa_dev->ops;
-+	const struct ffa_mem_ops *mem_ops;
- 	u64 global_handle = shm->sec_world_id;
- 	int rc;
+ struct device;
+ struct gpio;
+@@ -140,12 +118,6 @@ static inline void gpio_unexport(unsigned gpio)
  
-@@ -353,7 +354,8 @@ static int optee_ffa_shm_unregister_supp(struct tee_context *ctx,
- 	 */
+ #include <linux/kernel.h>
  
- 	optee_shm_rem_ffa_handle(optee, global_handle);
--	rc = ffa_ops->memory_reclaim(global_handle, 0);
-+	mem_ops = optee->ffa.ffa_dev->ops->mem_ops;
-+	rc = mem_ops->memory_reclaim(global_handle, 0);
- 	if (rc)
- 		pr_err("mem_reclaim: 0x%llx %d", global_handle, rc);
+-static inline bool gpio_is_valid(int number)
+-{
+-	/* only non-negative numbers are valid */
+-	return number >= 0;
+-}
+-
+ /* platforms that don't directly support access to GPIOs through I2C, SPI,
+  * or other blocking infrastructure can use these wrappers.
+  */
+@@ -169,4 +141,19 @@ static inline void gpio_set_value_cansleep(unsigned gpio, int value)
  
-@@ -530,7 +532,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
- {
- 	struct optee *optee = tee_get_drvdata(ctx->teedev);
- 	struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
--	const struct ffa_ops *ffa_ops = ffa_dev->ops;
-+	const struct ffa_msg_ops *msg_ops = ffa_dev->ops->msg_ops;
- 	struct optee_call_waiter w;
- 	u32 cmd = data->data0;
- 	u32 w4 = data->data1;
-@@ -541,7 +543,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
- 	/* Initialize waiter */
- 	optee_cq_wait_init(&optee->call_queue, &w);
- 	while (true) {
--		rc = ffa_ops->sync_send_receive(ffa_dev, data);
-+		rc = msg_ops->sync_send_receive(ffa_dev, data);
- 		if (rc)
- 			goto done;
+ #endif /* !CONFIG_GPIOLIB */
  
-@@ -576,7 +578,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
- 		 * OP-TEE has returned with a RPC request.
- 		 *
- 		 * Note that data->data4 (passed in register w7) is already
--		 * filled in by ffa_ops->sync_send_receive() returning
-+		 * filled in by ffa_mem_ops->sync_send_receive() returning
- 		 * above.
- 		 */
- 		cond_resched();
-@@ -654,12 +656,13 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
- static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
- 					const struct ffa_ops *ops)
- {
-+	const struct ffa_msg_ops *msg_ops = ops->msg_ops;
- 	struct ffa_send_direct_data data = { OPTEE_FFA_GET_API_VERSION };
- 	int rc;
- 
--	ops->mode_32bit_set(ffa_dev);
-+	msg_ops->mode_32bit_set(ffa_dev);
- 
--	rc = ops->sync_send_receive(ffa_dev, &data);
-+	rc = msg_ops->sync_send_receive(ffa_dev, &data);
- 	if (rc) {
- 		pr_err("Unexpected error %d\n", rc);
- 		return false;
-@@ -672,7 +675,7 @@ static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
- 	}
- 
- 	data = (struct ffa_send_direct_data){ OPTEE_FFA_GET_OS_VERSION };
--	rc = ops->sync_send_receive(ffa_dev, &data);
-+	rc = msg_ops->sync_send_receive(ffa_dev, &data);
- 	if (rc) {
- 		pr_err("Unexpected error %d\n", rc);
- 		return false;
-@@ -694,7 +697,7 @@ static bool optee_ffa_exchange_caps(struct ffa_device *ffa_dev,
- 	struct ffa_send_direct_data data = { OPTEE_FFA_EXCHANGE_CAPABILITIES };
- 	int rc;
- 
--	rc = ops->sync_send_receive(ffa_dev, &data);
-+	rc = ops->msg_ops->sync_send_receive(ffa_dev, &data);
- 	if (rc) {
- 		pr_err("Unexpected error %d", rc);
- 		return false;
-diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
-index 5964b6104996..5f02d2e6b9d9 100644
---- a/include/linux/arm_ffa.h
-+++ b/include/linux/arm_ffa.h
-@@ -257,16 +257,28 @@ struct ffa_mem_ops_args {
- 	struct ffa_mem_region_attributes *attrs;
- };
- 
--struct ffa_ops {
-+struct ffa_info_ops {
- 	u32 (*api_version_get)(void);
- 	int (*partition_info_get)(const char *uuid_str,
- 				  struct ffa_partition_info *buffer);
-+};
++/*
++ * "valid" GPIO numbers are nonnegative and may be passed to
++ * setup routines like gpio_request().  only some valid numbers
++ * can successfully be requested and used.
++ *
++ * Invalid GPIO numbers are useful for indicating no-such-GPIO in
++ * platform data and other tables.
++ */
 +
-+struct ffa_msg_ops {
- 	void (*mode_32bit_set)(struct ffa_device *dev);
- 	int (*sync_send_receive)(struct ffa_device *dev,
- 				 struct ffa_send_direct_data *data);
-+};
++static inline bool gpio_is_valid(int number)
++{
++	/* only non-negative numbers are valid */
++	return number >= 0;
++}
 +
-+struct ffa_mem_ops {
- 	int (*memory_reclaim)(u64 g_handle, u32 flags);
- 	int (*memory_share)(struct ffa_mem_ops_args *args);
- 	int (*memory_lend)(struct ffa_mem_ops_args *args);
- };
- 
-+struct ffa_ops {
-+	const struct ffa_info_ops *info_ops;
-+	const struct ffa_msg_ops *msg_ops;
-+	const struct ffa_mem_ops *mem_ops;
-+};
-+
- #endif /* _LINUX_ARM_FFA_H */
+ #endif /* _ASM_GENERIC_GPIO_H */
 -- 
-2.37.3
+2.37.1
 

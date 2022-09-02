@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68DB5AAF08
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1115AB062
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236753AbiIBMc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        id S237998AbiIBMxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236594AbiIBMb0 (ORCPT
+        with ESMTP id S236398AbiIBMwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:31:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BB3E115C;
-        Fri,  2 Sep 2022 05:26:49 -0700 (PDT)
+        Fri, 2 Sep 2022 08:52:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5A75C9CE;
+        Fri,  2 Sep 2022 05:37:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECD40B82AB3;
-        Fri,  2 Sep 2022 12:26:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44462C433D6;
-        Fri,  2 Sep 2022 12:26:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3622FB82A71;
+        Fri,  2 Sep 2022 12:36:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68DCBC433C1;
+        Fri,  2 Sep 2022 12:36:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121580;
-        bh=Hj38pyWanDvKQObSmn2HNMLU/27HD7DpIs7cUPJS0/M=;
+        s=korg; t=1662122179;
+        bh=V3FkCwM9i+GoSL/R/1gavDi9ac9+8/zlCT8RN7PV1BA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=slGGRvcRiQ1ce2qZOjkTYWcSAIuJ3KigTox6BGaASvqndXD9LzJCmuTgcAb0O+4C3
-         Yhcu9mjxAoCcz+ClA8SqXSrigo8HtRf05dBnbLgnunfA7JzoqQSwKTv+fuqaloG2g1
-         m1dKh4avFhxuhYgGrkeou3RVHmhXd/wj11qcqt1M=
+        b=OsdJUfyo17IzaeVidKDeFfptxkMNu3tgtx6KSL6bjTUZvA2LHYA5y6LpKj91OX79H
+         K4e+b9AGmGhHHllZIlPKRdQcnu2L5XwvS3rotqBCV60fRDCfnd/H+uDEzb730oMwfH
+         HFX5d8EhxqdoxkMYqpB8Y+zAFsFz6hrU5Ygd1Cs8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Florian Westphal <fw@strlen.de>,
+        stable@vger.kernel.org, Josip Pavic <Josip.Pavic@amd.com>,
+        Jun Lei <Jun.Lei@amd.com>, Alex Hung <alex.hung@amd.com>,
+        Aric Cyr <aric.cyr@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 54/56] netfilter: conntrack: NF_CONNTRACK_PROCFS should no longer default to y
+Subject: [PATCH 5.19 38/72] drm/amd/display: Avoid MPC infinite loop
 Date:   Fri,  2 Sep 2022 14:19:14 +0200
-Message-Id: <20220902121402.335598665@linuxfoundation.org>
+Message-Id: <20220902121406.033457164@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +58,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert@linux-m68k.org>
+From: Josip Pavic <Josip.Pavic@amd.com>
 
-[ Upstream commit aa5762c34213aba7a72dc58e70601370805fa794 ]
+[ Upstream commit 8de297dc046c180651c0500f8611663ae1c3828a ]
 
-NF_CONNTRACK_PROCFS was marked obsolete in commit 54b07dca68557b09
-("netfilter: provide config option to disable ancient procfs parts") in
-v3.3.
+[why]
+In some cases MPC tree bottom pipe ends up point to itself.  This causes
+iterating from top to bottom to hang the system in an infinite loop.
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+[how]
+When looping to next MPC bottom pipe, check that the pointer is not same
+as current to avoid infinite loop.
+
+Reviewed-by: Josip Pavic <Josip.Pavic@amd.com>
+Reviewed-by: Jun Lei <Jun.Lei@amd.com>
+Acked-by: Alex Hung <alex.hung@amd.com>
+Signed-off-by: Aric Cyr <aric.cyr@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_mpc.c | 6 ++++++
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_mpc.c | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/net/netfilter/Kconfig b/net/netfilter/Kconfig
-index 56cddadb65d0c..92e0514f624fa 100644
---- a/net/netfilter/Kconfig
-+++ b/net/netfilter/Kconfig
-@@ -117,7 +117,6 @@ config NF_CONNTRACK_ZONES
- 
- config NF_CONNTRACK_PROCFS
- 	bool "Supply CT list in procfs (OBSOLETE)"
--	default y
- 	depends on PROC_FS
- 	---help---
- 	This option enables for the list of known conntrack entries
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_mpc.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_mpc.c
+index 11019c2c62ccb..8192f1967e924 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_mpc.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_mpc.c
+@@ -126,6 +126,12 @@ struct mpcc *mpc1_get_mpcc_for_dpp(struct mpc_tree *tree, int dpp_id)
+ 	while (tmp_mpcc != NULL) {
+ 		if (tmp_mpcc->dpp_id == dpp_id)
+ 			return tmp_mpcc;
++
++		/* avoid circular linked list */
++		ASSERT(tmp_mpcc != tmp_mpcc->mpcc_bot);
++		if (tmp_mpcc == tmp_mpcc->mpcc_bot)
++			break;
++
+ 		tmp_mpcc = tmp_mpcc->mpcc_bot;
+ 	}
+ 	return NULL;
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_mpc.c b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_mpc.c
+index 15734db0cdea4..f3c311d093197 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_mpc.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_mpc.c
+@@ -531,6 +531,12 @@ static struct mpcc *mpc2_get_mpcc_for_dpp(struct mpc_tree *tree, int dpp_id)
+ 	while (tmp_mpcc != NULL) {
+ 		if (tmp_mpcc->dpp_id == 0xf || tmp_mpcc->dpp_id == dpp_id)
+ 			return tmp_mpcc;
++
++		/* avoid circular linked list */
++		ASSERT(tmp_mpcc != tmp_mpcc->mpcc_bot);
++		if (tmp_mpcc == tmp_mpcc->mpcc_bot)
++			break;
++
+ 		tmp_mpcc = tmp_mpcc->mpcc_bot;
+ 	}
+ 	return NULL;
 -- 
 2.35.1
 

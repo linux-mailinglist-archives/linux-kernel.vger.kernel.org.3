@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288FC5AB377
+	by mail.lfdr.de (Postfix) with ESMTP id B867C5AB379
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237481AbiIBO2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S236045AbiIBO26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236200AbiIBO1M (ORCPT
+        with ESMTP id S236470AbiIBO11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:27:12 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697BF141A36
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:20 -0700 (PDT)
+        Fri, 2 Sep 2022 10:27:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198DF145C40
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=PFfW8V4/jVOWAwq+y9cqQUX13nMDKmYOZG3YIHdvifE=; b=Ttg6g5Xhu9XRQ3qFnHxWqKZC3T
-        YPDo/4B/2G996i3BKIZSXY64Fy+VTc1Hs0JqsaRqjzDSqiXxbbFb8Gax+ujuqlvkunKeFAbcbhRYx
-        adYq4+gVOEbwvmA+jGvezQ7vC0wTE6qnHi+USA3mlQmDUWtSgxd1ZzRO0LoI4Je31naIWCs5Pw54+
-        PA0LyO9wWuHXi3x9qYaBSbO2c5eRxSCs21wlBWuv39op2aogHjgoU2yOv0CQzkavExRNMfwvDabZe
-        aM2eHkacnFlYiPONOWk6S92jaQuPNHxAvXV/UCdlWmLMT4ttiHYhdxr/3wKE8/lOYWXvB4d77/rhB
-        /0RCUM1Q==;
+        bh=3pHERFsmuK61/aX42Un1sPpA4i778m0NUaKcblu/jsE=; b=MiQrGmnSSmUN+m3AY8XVrIIMxA
+        Ij4T3rSxtjKMDZBHu+f20DFMXl61hxKfBVmxDXHQ1yqV0hvL6YL6tM9eHnGYvW4S564sPN5gD0K5+
+        HGfmoRt7l9LXJx8RN+LpCVbQbAfDOCKoT68U2FP7lpcJfzANHAjiHhRO46G4IXIM9qqC1R8jyNV5b
+        799JT+RF1RFpU+ZU6gCUc0Dj2jgrhsqzMZASKaipMxT+Zufr8oeI3oVBtyYsjldqBZ+rcdZTU5icv
+        lcbC/ePpgr2rY7I8DXLE0ozcUhWTYwrTOr8JM6xrU3CJvSdApR5wpFS1UuBsjW0yOY7tDYIG2n2+U
+        uNySeT+w==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oU77M-008g8D-DD; Fri, 02 Sep 2022 13:53:57 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oU77N-0074TK-KB; Fri, 02 Sep 2022 13:53:57 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 27D11301D53;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 26CE7301D1E;
         Fri,  2 Sep 2022 15:53:54 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id BC2BB2B8EF7F0; Fri,  2 Sep 2022 15:53:52 +0200 (CEST)
-Message-ID: <20220902130949.060211705@infradead.org>
+        id C4A3F2B8EF7F1; Fri,  2 Sep 2022 15:53:52 +0200 (CEST)
+Message-ID: <20220902130949.166343269@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 02 Sep 2022 15:06:51 +0200
+Date:   Fri, 02 Sep 2022 15:06:52 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v2 26/59] x86/percpu: Move irq_stack variables next to current_task
+Subject: [PATCH v2 27/59] x86/softirq: Move softirq pending next to current task
 References: <20220902130625.217071627@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,233 +75,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Further extend struct pcpu_hot with the hard and soft irq stack
-pointers.
+Another hot variable which is strict per CPU and benefits from
+being in the same cache line.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/current.h   |    6 ++++++
- arch/x86/include/asm/irq_stack.h |   12 ++++++------
- arch/x86/include/asm/processor.h |    4 ----
- arch/x86/kernel/cpu/common.c     |    3 ---
- arch/x86/kernel/dumpstack_32.c   |    4 ++--
- arch/x86/kernel/dumpstack_64.c   |    2 +-
- arch/x86/kernel/irq_32.c         |   13 +++++--------
- arch/x86/kernel/irq_64.c         |    6 +++---
- arch/x86/kernel/process_64.c     |    2 +-
- 9 files changed, 24 insertions(+), 28 deletions(-)
+ arch/x86/include/asm/current.h |    1 +
+ arch/x86/include/asm/hardirq.h |    3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
 --- a/arch/x86/include/asm/current.h
 +++ b/arch/x86/include/asm/current.h
-@@ -18,6 +18,12 @@ struct pcpu_hot {
- 			int			preempt_count;
+@@ -19,6 +19,7 @@ struct pcpu_hot {
  			int			cpu_number;
  			unsigned long		top_of_stack;
-+			void			*hardirq_stack_ptr;
-+#ifdef CONFIG_X86_64
-+			bool			hardirq_stack_inuse;
-+#else
-+			void			*softirq_stack_ptr;
-+#endif
- 		};
- 		u8	pad[64];
- 	};
---- a/arch/x86/include/asm/irq_stack.h
-+++ b/arch/x86/include/asm/irq_stack.h
-@@ -116,7 +116,7 @@
- 	ASM_CALL_ARG2
- 
- #define call_on_irqstack(func, asm_call, argconstr...)			\
--	call_on_stack(__this_cpu_read(hardirq_stack_ptr),		\
-+	call_on_stack(__this_cpu_read(pcpu_hot.hardirq_stack_ptr),	\
- 		      func, asm_call, argconstr)
- 
- /* Macros to assert type correctness for run_*_on_irqstack macros */
-@@ -135,7 +135,7 @@
- 	 * User mode entry and interrupt on the irq stack do not	\
- 	 * switch stacks. If from user mode the task stack is empty.	\
- 	 */								\
--	if (user_mode(regs) || __this_cpu_read(hardirq_stack_inuse)) {	\
-+	if (user_mode(regs) || __this_cpu_read(pcpu_hot.hardirq_stack_inuse)) { \
- 		irq_enter_rcu();					\
- 		func(c_args);						\
- 		irq_exit_rcu();						\
-@@ -146,9 +146,9 @@
- 		 * places. Invoke the stack switch macro with the call	\
- 		 * sequence which matches the above direct invocation.	\
- 		 */							\
--		__this_cpu_write(hardirq_stack_inuse, true);		\
-+		__this_cpu_write(pcpu_hot.hardirq_stack_inuse, true);	\
- 		call_on_irqstack(func, asm_call, constr);		\
--		__this_cpu_write(hardirq_stack_inuse, false);		\
-+		__this_cpu_write(pcpu_hot.hardirq_stack_inuse, false);	\
- 	}								\
- }
- 
-@@ -212,9 +212,9 @@
-  */
- #define do_softirq_own_stack()						\
- {									\
--	__this_cpu_write(hardirq_stack_inuse, true);			\
-+	__this_cpu_write(pcpu_hot.hardirq_stack_inuse, true);		\
- 	call_on_irqstack(__do_softirq, ASM_CALL_ARG0);			\
--	__this_cpu_write(hardirq_stack_inuse, false);			\
-+	__this_cpu_write(pcpu_hot.hardirq_stack_inuse, false);		\
- }
- 
- #endif
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -448,8 +448,6 @@ static inline unsigned long cpu_kernelmo
- 	return (unsigned long)per_cpu(fixed_percpu_data.gs_base, cpu);
- }
- 
--DECLARE_PER_CPU(void *, hardirq_stack_ptr);
--DECLARE_PER_CPU(bool, hardirq_stack_inuse);
- extern asmlinkage void ignore_sysret(void);
- 
- /* Save actual FS/GS selectors and bases to current->thread */
-@@ -458,8 +456,6 @@ void current_save_fsgs(void);
- #ifdef CONFIG_STACKPROTECTOR
- DECLARE_PER_CPU(unsigned long, __stack_chk_guard);
- #endif
--DECLARE_PER_CPU(struct irq_stack *, hardirq_stack_ptr);
--DECLARE_PER_CPU(struct irq_stack *, softirq_stack_ptr);
- #endif	/* !X86_64 */
- 
- struct perf_event;
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2012,9 +2012,6 @@ DEFINE_PER_CPU_FIRST(struct fixed_percpu
- 		     fixed_percpu_data) __aligned(PAGE_SIZE) __visible;
- EXPORT_PER_CPU_SYMBOL_GPL(fixed_percpu_data);
- 
--DEFINE_PER_CPU(void *, hardirq_stack_ptr);
--DEFINE_PER_CPU(bool, hardirq_stack_inuse);
--
- static void wrmsrl_cstar(unsigned long val)
- {
- 	/*
---- a/arch/x86/kernel/dumpstack_32.c
-+++ b/arch/x86/kernel/dumpstack_32.c
-@@ -37,7 +37,7 @@ const char *stack_type_name(enum stack_t
- 
- static bool in_hardirq_stack(unsigned long *stack, struct stack_info *info)
- {
--	unsigned long *begin = (unsigned long *)this_cpu_read(hardirq_stack_ptr);
-+	unsigned long *begin = (unsigned long *)this_cpu_read(pcpu_hot.hardirq_stack_ptr);
- 	unsigned long *end   = begin + (THREAD_SIZE / sizeof(long));
- 
- 	/*
-@@ -62,7 +62,7 @@ static bool in_hardirq_stack(unsigned lo
- 
- static bool in_softirq_stack(unsigned long *stack, struct stack_info *info)
- {
--	unsigned long *begin = (unsigned long *)this_cpu_read(softirq_stack_ptr);
-+	unsigned long *begin = (unsigned long *)this_cpu_read(pcpu_hot.softirq_stack_ptr);
- 	unsigned long *end   = begin + (THREAD_SIZE / sizeof(long));
- 
- 	/*
---- a/arch/x86/kernel/dumpstack_64.c
-+++ b/arch/x86/kernel/dumpstack_64.c
-@@ -134,7 +134,7 @@ static __always_inline bool in_exception
- 
- static __always_inline bool in_irq_stack(unsigned long *stack, struct stack_info *info)
- {
--	unsigned long *end = (unsigned long *)this_cpu_read(hardirq_stack_ptr);
-+	unsigned long *end = (unsigned long *)this_cpu_read(pcpu_hot.hardirq_stack_ptr);
- 	unsigned long *begin;
- 
- 	/*
---- a/arch/x86/kernel/irq_32.c
-+++ b/arch/x86/kernel/irq_32.c
-@@ -52,9 +52,6 @@ static inline int check_stack_overflow(v
- static inline void print_stack_overflow(void) { }
- #endif
- 
--DEFINE_PER_CPU(struct irq_stack *, hardirq_stack_ptr);
--DEFINE_PER_CPU(struct irq_stack *, softirq_stack_ptr);
--
- static void call_on_stack(void *func, void *stack)
- {
- 	asm volatile("xchgl	%%ebx,%%esp	\n"
-@@ -77,7 +74,7 @@ static inline int execute_on_irq_stack(i
- 	u32 *isp, *prev_esp, arg1;
- 
- 	curstk = (struct irq_stack *) current_stack();
--	irqstk = __this_cpu_read(hardirq_stack_ptr);
-+	irqstk = __this_cpu_read(pcpu_hot.hardirq_stack_ptr);
- 
- 	/*
- 	 * this is where we switch to the IRQ stack. However, if we are
-@@ -115,7 +112,7 @@ int irq_init_percpu_irqstack(unsigned in
- 	int node = cpu_to_node(cpu);
- 	struct page *ph, *ps;
- 
--	if (per_cpu(hardirq_stack_ptr, cpu))
-+	if (per_cpu(pcpu_hot.hardirq_stack_ptr, cpu))
- 		return 0;
- 
- 	ph = alloc_pages_node(node, THREADINFO_GFP, THREAD_SIZE_ORDER);
-@@ -127,8 +124,8 @@ int irq_init_percpu_irqstack(unsigned in
- 		return -ENOMEM;
- 	}
- 
--	per_cpu(hardirq_stack_ptr, cpu) = page_address(ph);
--	per_cpu(softirq_stack_ptr, cpu) = page_address(ps);
-+	per_cpu(pcpu_hot.hardirq_stack_ptr, cpu) = page_address(ph);
-+	per_cpu(pcpu_hot.softirq_stack_ptr, cpu) = page_address(ps);
- 	return 0;
- }
- 
-@@ -138,7 +135,7 @@ void do_softirq_own_stack(void)
- 	struct irq_stack *irqstk;
- 	u32 *isp, *prev_esp;
- 
--	irqstk = __this_cpu_read(softirq_stack_ptr);
-+	irqstk = __this_cpu_read(pcpu_hot.softirq_stack_ptr);
- 
- 	/* build the stack frame on the softirq stack */
- 	isp = (u32 *) ((char *)irqstk + sizeof(*irqstk));
---- a/arch/x86/kernel/irq_64.c
-+++ b/arch/x86/kernel/irq_64.c
-@@ -50,7 +50,7 @@ static int map_irq_stack(unsigned int cp
- 		return -ENOMEM;
- 
- 	/* Store actual TOS to avoid adjustment in the hotpath */
--	per_cpu(hardirq_stack_ptr, cpu) = va + IRQ_STACK_SIZE - 8;
-+	per_cpu(pcpu_hot.hardirq_stack_ptr, cpu) = va + IRQ_STACK_SIZE - 8;
- 	return 0;
- }
+ 			void			*hardirq_stack_ptr;
++			u16			softirq_pending;
+ #ifdef CONFIG_X86_64
+ 			bool			hardirq_stack_inuse;
  #else
-@@ -63,14 +63,14 @@ static int map_irq_stack(unsigned int cp
- 	void *va = per_cpu_ptr(&irq_stack_backing_store, cpu);
+--- a/arch/x86/include/asm/hardirq.h
++++ b/arch/x86/include/asm/hardirq.h
+@@ -3,9 +3,9 @@
+ #define _ASM_X86_HARDIRQ_H
  
- 	/* Store actual TOS to avoid adjustment in the hotpath */
--	per_cpu(hardirq_stack_ptr, cpu) = va + IRQ_STACK_SIZE - 8;
-+	per_cpu(pcpu_hot.hardirq_stack_ptr, cpu) = va + IRQ_STACK_SIZE - 8;
- 	return 0;
- }
+ #include <linux/threads.h>
++#include <asm/current.h>
+ 
+ typedef struct {
+-	u16	     __softirq_pending;
+ #if IS_ENABLED(CONFIG_KVM_INTEL)
+ 	u8	     kvm_cpu_l1tf_flush_l1d;
  #endif
+@@ -60,6 +60,7 @@ extern u64 arch_irq_stat_cpu(unsigned in
+ extern u64 arch_irq_stat(void);
+ #define arch_irq_stat		arch_irq_stat
  
- int irq_init_percpu_irqstack(unsigned int cpu)
- {
--	if (per_cpu(hardirq_stack_ptr, cpu))
-+	if (per_cpu(pcpu_hot.hardirq_stack_ptr, cpu))
- 		return 0;
- 	return map_irq_stack(cpu);
- }
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -562,7 +562,7 @@ void compat_start_thread(struct pt_regs
- 	int cpu = smp_processor_id();
++#define local_softirq_pending_ref       pcpu_hot.softirq_pending
  
- 	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ENTRY) &&
--		     this_cpu_read(hardirq_stack_inuse));
-+		     this_cpu_read(pcpu_hot.hardirq_stack_inuse));
- 
- 	if (!test_thread_flag(TIF_NEED_FPU_LOAD))
- 		switch_fpu_prepare(prev_fpu, cpu);
+ #if IS_ENABLED(CONFIG_KVM_INTEL)
+ static inline void kvm_set_cpu_l1tf_flush_l1d(void)
 
 

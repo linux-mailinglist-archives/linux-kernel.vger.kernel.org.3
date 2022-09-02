@@ -2,91 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B285AB27D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B01D5AB214
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236927AbiIBN72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
+        id S238162AbiIBNvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236722AbiIBN5f (ORCPT
+        with ESMTP id S238149AbiIBNus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:57:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA06D6B9A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:31:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4756E620A5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:30:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49C8DC433D6;
-        Fri,  2 Sep 2022 13:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662125433;
-        bh=EhfAqx7+9bqHRSvR8s0IzuAeBJ94yTCCtgQttzyRyrM=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=T8egBlM44VGvdGuf/AABYh9pMmfSkUlbBA6v8xFzS4UMIm9lwLlsnqdYsKnkar+P8
-         u4xqYuAy76I4ZfYqoUyjPDSS86C8eDGGvxGkl2u03chFR5kcgxxKDxDJPYqVxHmSDY
-         4xAEWIUqShXzMtnOirb7oAdiZbcFuKOG/iJjsgdCXYizHIQ+wQDCuOg2u5j/sJRbC3
-         G5JXnSbKNgh8p6EAzeuZHeAuCd/Gt8WAVqXIq4cSDDRCJinJlJvTdvsAAx24mJqgtY
-         1LojI21lxF/gG/a+hf0DfcylydAiR1Q2pgZdAN75WRl5nk/XB+Y5j3E9xwZVMb+VPT
-         6frM37yANPD5A==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        kuninori.morimoto.gx@renesas.com
-Cc:     perex@perex.cz, alsa-devel@alsa-project.org, tiwai@suse.com,
-        lgirdwood@gmail.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20220902013030.3691266-1-jiasheng@iscas.ac.cn>
-References: <20220902013030.3691266-1-jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH v2] ASoC: rsnd: Add check for rsnd_mod_power_on
-Message-Id: <166212543201.44289.12872080973862311815.b4-ty@kernel.org>
-Date:   Fri, 02 Sep 2022 14:30:32 +0100
+        Fri, 2 Sep 2022 09:50:48 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEDF4504B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:25:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662125124; x=1693661124;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+HasZQGD/dK7/z/ep2cvAoa6qEef3JudFUKpRtdWqMg=;
+  b=Qz579+DETtn0Vw9lB9jKZwdRS6D3TLmTm9KZGdLQAbFvEPRjbja5/g0q
+   CtV0f8BYqA41yD7Wiy6MTa+bheY58fp26sVkgraUYPd4fTzK8XysA1prk
+   /HbEImHHKwBQ1BY8rc5gbxFQAI4XG0FwtUcCvI0T7ElRuQjdd+qFjCGHh
+   FH5qwrpvryysuTrR7KGez4Bcs2A+X6S987d5i6SidMUtoHRCfH23UPvFx
+   dtOZyVWOTnFixPzLtWDdpIq2ORTnirzn6fnFmJUVtGtaVBM3FgzsKCOCD
+   MxTzImiS2e8A+u9u4RC7ZD4g3wBsmUYeoyRcXLxOUUz1nzP8yssKcGHRT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="278994222"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="278994222"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 06:23:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="674352535"
+Received: from crojewsk-ctrl.igk.intel.com ([10.102.9.28])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Sep 2022 06:23:06 -0700
+From:   Cezary Rojewski <cezary.rojewski@intel.com>
+To:     alsa-devel@alsa-project.org, broonie@kernel.org
+Cc:     tiwai@suse.com, perex@perex.cz,
+        amadeuszx.slawinski@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, hdegoede@redhat.com,
+        lgirdwood@gmail.com, kai.vehmanen@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
+        yung-chuan.liao@linux.intel.com, willy@infradead.org,
+        linux-kernel@vger.kernel.org, andy@kernel.org,
+        intel-poland@eclists.intel.com, andy.shevchenko@gmail.com,
+        Cezary Rojewski <cezary.rojewski@intel.com>
+Subject: [PATCH v5 0/2] lib/string_helpers: Introduce parse_int_array_user()
+Date:   Fri,  2 Sep 2022 15:32:54 +0200
+Message-Id: <20220902133256.789165-1-cezary.rojewski@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-7d1a0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Sep 2022 09:30:30 +0800, Jiasheng Jiang wrote:
-> As rsnd_mod_power_on() can return negative numbers,
-> it should be better to check the return value and
-> deal with the exception.
-> 
-> 
+Continuation of recent upstream discussion [1] regarding user string
+tokenization.
 
-Applied to
+First, parse_int_array_user() is introduced to allow for splitting
+specified user string into a sequence of integers. Makes use of
+get_options() internally so the parsing logic is not duplicated.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+With that done, redundant parts of the sound driver are removed.
 
-Thanks!
+Originally similar functionality was added for the SOF sound driver. As
+more users are on the horizon, it is desirable to update existing
+string_helpers code and provide a unified solution.
 
-[1/1] ASoC: rsnd: Add check for rsnd_mod_power_on
-      commit: 376be51caf8871419bbcbb755e1e615d30dc3153
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Changes in v5:
+- fixed kernel doc for parse_int_array_user()
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Changes in v4:
+- renamed the function to parse_int_array_user()
+- at the name several local variable names have been reworded to match
+  the above
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Changes in v3:
+- relocated tokenize_user_input() implementation to string_helpers as
+  requested by Matthew
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Changes in v2:
+- reused get_options() so no parsing logic is duplicated
+- simplified __user variant with help of memdup_user_nul()
+  Both suggested by Andy, thanks for thorough review
 
-Thanks,
-Mark
+
+[1]: https://lore.kernel.org/alsa-devel/20220707091301.1282291-1-cezary.rojewski@intel.com/
+
+
+Cezary Rojewski (2):
+  lib/string_helpers: Introduce parse_int_array_user()
+  ASoC: SOF: Remove strsplit_u32() and tokenize_input()
+
+ include/linux/string_helpers.h    |   2 +
+ lib/string_helpers.c              |  44 +++++++++++++
+ sound/soc/sof/sof-client-probes.c | 104 ++++++------------------------
+ 3 files changed, 64 insertions(+), 86 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4125AB751
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2225AB755
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236790AbiIBRPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 13:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
+        id S236690AbiIBRQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 13:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236194AbiIBROy (ORCPT
+        with ESMTP id S235633AbiIBRQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 13:14:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D51633E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 10:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662138892; x=1693674892;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ociHViEeSxi0I99NX7uRA7W9reDW4aCMRYbLEzzPzUY=;
-  b=la+g/tp3cotrn0B8WH9gZlsdAX+YMwiyyufYamuT4fSs0MUVdP3HV2zV
-   8h3a5/fj4l1v22gaIFV+xm1WKRnAoTl/+nenKOtzDIGZxGdCiawGDhJBH
-   s49vStqVF5dSJRT8OpsfXb9sJwja7fHomRYphb/myr/KOki65ep0HVXrR
-   50spGI3sbACMA4EPk7lwG4A+5HydW6LtAgXBMsgJ+j83+aG7822eXJRQi
-   NnP8t+RNJF3FMQG47zqjrpgE4thlbAbS+GX6AiUfSwTTvl929Yawa0q6o
-   el9Vv32vy2rUi3WduaJ2z73khAUcGPQobiiQ1SUKQut01dQFiW6Ei8rR8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="357741673"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="357741673"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 10:14:52 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="642986590"
-Received: from tanjeffr-mobl1.amr.corp.intel.com (HELO [10.212.156.60]) ([10.212.156.60])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 10:14:51 -0700
-Message-ID: <8722acbe-c668-5b05-c030-565f8c42068c@intel.com>
-Date:   Fri, 2 Sep 2022 10:14:51 -0700
+        Fri, 2 Sep 2022 13:16:17 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C1DE39AF;
+        Fri,  2 Sep 2022 10:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:MIME-Version:Message-Id:Date:Cc:To:From
+        :references:content-disposition:in-reply-to;
+        bh=49sOK8rTAQ4C6g4afuJZ0iDVLIkKGyM8k5dbP5h4iQM=; b=IaDL6DUTJYPDdvwWPLpZ4VUAFx
+        juyS13S9v2gknLyjXta+ALYV0DQaiVkMy/1GUR7CvUP0un+5GhLLCwvS5yqTsEmLKB6/3yIyCbgLd
+        Sea/Kt5VBa2XTvOpTmQorokOW/EcNoKI0wLkwIxdWv8TXBjWUfE1KaomY1GEAVwwsEYMzXjSiB+Y/
+        a73jVBDfreYUpz9ov2Z6HQV7xqiz8LwdkALi/Q8EHjEZItL1a9rgj5JKhspyWoPCokmt9zWIA9c5q
+        FiEiKG1FMLN3mQq06BtxU+JualpZ5SgrrNDxwTnOiYvj4wi27ikJtynXBpdFPfyRFGYdbSvRcxSW1
+        ndW7c63Q==;
+Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
+        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1oUAH8-00Ejne-GW; Fri, 02 Sep 2022 11:16:15 -0600
+Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1oUAH6-00065r-Pe; Fri, 02 Sep 2022 11:16:12 -0600
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>,
+        Logan Gunthorpe <logang@deltatee.com>
+Date:   Fri,  2 Sep 2022 11:16:07 -0600
+Message-Id: <20220902171609.23376-1-logang@deltatee.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH RFC] x86/apic: skip cpu slot reservation logic on boot in
- case of NR_CPUS == 1
-Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-References: <20220902164211.1425982-1-yury.norov@gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220902164211.1425982-1-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 172.16.1.31
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, guoqing.jiang@linux.dev, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com, logang@deltatee.com
+X-SA-Exim-Mail-From: gunthorp@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH 0/2] Couple more bug fixes from recent commits
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/2/22 09:42, Yury Norov wrote:
-> This is RFC because I'm not sure that this is not a false positive from
-> smatch. If NR_CPUS is 1, and the condition is always true, it's simply
-> optimized out by a compiler, and nothing wrong happens, except maybe a
-> couple of checks on boot.
+Hey,
 
-I think it's a reasonable warning, but it's also not something we need
-to hack around.  We can surely only land in here with
-boot_cpu_detected==true if NR_CPUS==1, so the rest of the expression is
-moot.
+We've managed to track down some hard to hit bugs that were introduced
+in two relatively recent commits. The fixes are both one liners.
 
-I don't think it's worth adding the #ifdef.
+Thanks,
+
+Logan
+
+--
+
+David Sloan (1):
+  md/raid5: Remove unnecessary bio_put() in raid5_read_one_chunk()
+
+Logan Gunthorpe (1):
+  md: Remove extra mddev_get() in md_seq_start()
+
+ drivers/md/md.c    | 1 -
+ drivers/md/raid5.c | 1 -
+ 2 files changed, 2 deletions(-)
+
+
+base-commit: 526bd69b9d330eed1db59b2cf6a7d18caf866847
+--
+2.30.2

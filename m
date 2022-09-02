@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCAB5AAF39
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6BF5AAE5D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiIBMep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
+        id S236120AbiIBMWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236906AbiIBMdk (ORCPT
+        with ESMTP id S235811AbiIBMVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:33:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D971E2C7F;
-        Fri,  2 Sep 2022 05:27:58 -0700 (PDT)
+        Fri, 2 Sep 2022 08:21:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A851E5F126;
+        Fri,  2 Sep 2022 05:20:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59BCEB82AA0;
-        Fri,  2 Sep 2022 12:25:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9E98C43147;
-        Fri,  2 Sep 2022 12:25:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4006E620E6;
+        Fri,  2 Sep 2022 12:20:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF5EC433C1;
+        Fri,  2 Sep 2022 12:20:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121514;
-        bh=cEOSxIkhPxHPhgS3+t2zXHHNCY+G6nsSHojFvwoKxpg=;
+        s=korg; t=1662121242;
+        bh=yjFbBlaMaiW1xyHU4qJxXDx2fbTonaU5u23wM7iThqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IGQVsJkyC0mc4nBaD2xHn6yo6qwbTE1oUue9t7AzyRyRaaVEw+71uXlWL8HIL0FCI
-         1fLOnK1hZX9SrrL4xpI0W4iN960Go+xUqaEt4lTBe/DpT65ETJwK1YJ11x6F/2BQV6
-         dyAXzpH4HPri72d5hooy/Geppaowb++XDERbQEY0=
+        b=1QO10Ysz98stHZCAWoFD9yL01dBiz8wHxBu/cdrCwpnJQRCAxR/NPzuXfqHjrAQuv
+         +rfB/0F9bTaxzSeDN75VRIyRiO8b/5Uhz4+Zb/BdPW3ybE/lzJWys8mBIntjKdj0wu
+         gqBi65WytJoDm1IPc6AfZi3Q4VRpP2nxyU10DnoU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
+        stable@vger.kernel.org, Abhishek Shah <abhishek.shah@columbia.edu>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 09/56] xfrm: fix refcount leak in __xfrm_policy_check()
+Subject: [PATCH 4.9 03/31] af_key: Do not call xfrm_probe_algs in parallel
 Date:   Fri,  2 Sep 2022 14:18:29 +0200
-Message-Id: <20220902121400.507395085@linuxfoundation.org>
+Message-Id: <20220902121356.874120507@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
+References: <20220902121356.732130937@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Xiong <xiongx18@fudan.edu.cn>
+From: Herbert Xu <herbert@gondor.apana.org.au>
 
-[ Upstream commit 9c9cb23e00ddf45679b21b4dacc11d1ae7961ebe ]
+[ Upstream commit ba953a9d89a00c078b85f4b190bc1dde66fe16b5 ]
 
-The issue happens on an error path in __xfrm_policy_check(). When the
-fetching process of the object `pols[1]` fails, the function simply
-returns 0, forgetting to decrement the reference count of `pols[0]`,
-which is incremented earlier by either xfrm_sk_policy_lookup() or
-xfrm_policy_lookup(). This may result in memory leaks.
+When namespace support was added to xfrm/afkey, it caused the
+previously single-threaded call to xfrm_probe_algs to become
+multi-threaded.  This is buggy and needs to be fixed with a mutex.
 
-Fix it by decreasing the reference count of `pols[0]` in that path.
-
-Fixes: 134b0fc544ba ("IPsec: propagate security module errors up from flow_cache_lookup")
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
+Fixes: 283bc9f35bbb ("xfrm: Namespacify xfrm state/policy locks")
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_policy.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/key/af_key.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-index 3582f77bab6a8..1cd21a8c4deac 100644
---- a/net/xfrm/xfrm_policy.c
-+++ b/net/xfrm/xfrm_policy.c
-@@ -2403,6 +2403,7 @@ int __xfrm_policy_check(struct sock *sk, int dir, struct sk_buff *skb,
- 		if (pols[1]) {
- 			if (IS_ERR(pols[1])) {
- 				XFRM_INC_STATS(net, LINUX_MIB_XFRMINPOLERROR);
-+				xfrm_pol_put(pols[0]);
- 				return 0;
- 			}
- 			pols[1]->curlft.use_time = ktime_get_real_seconds();
+diff --git a/net/key/af_key.c b/net/key/af_key.c
+index 0737fc7b7ebdb..88d4a3a02ab72 100644
+--- a/net/key/af_key.c
++++ b/net/key/af_key.c
+@@ -1724,9 +1724,12 @@ static int pfkey_register(struct sock *sk, struct sk_buff *skb, const struct sad
+ 		pfk->registered |= (1<<hdr->sadb_msg_satype);
+ 	}
+ 
++	mutex_lock(&pfkey_mutex);
+ 	xfrm_probe_algs();
+ 
+ 	supp_skb = compose_sadb_supported(hdr, GFP_KERNEL | __GFP_ZERO);
++	mutex_unlock(&pfkey_mutex);
++
+ 	if (!supp_skb) {
+ 		if (hdr->sadb_msg_satype != SADB_SATYPE_UNSPEC)
+ 			pfk->registered &= ~(1<<hdr->sadb_msg_satype);
 -- 
 2.35.1
 

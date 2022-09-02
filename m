@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750C25AB187
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4238E5AB0E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbiIBNgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S238521AbiIBNAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237164AbiIBNfp (ORCPT
+        with ESMTP id S238559AbiIBM7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:35:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48E72B273;
-        Fri,  2 Sep 2022 06:15:04 -0700 (PDT)
+        Fri, 2 Sep 2022 08:59:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873E86566D;
+        Fri,  2 Sep 2022 05:40:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 436C8621D6;
-        Fri,  2 Sep 2022 12:34:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4169CC433D7;
-        Fri,  2 Sep 2022 12:34:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51B07B82AA3;
+        Fri,  2 Sep 2022 12:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A44C433D6;
+        Fri,  2 Sep 2022 12:31:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122087;
-        bh=Tkld2hdUhq4Rk9Ykapn2qM+q61m0Rq78GrQiEInBD68=;
+        s=korg; t=1662121870;
+        bh=rzOgIZZWdpCTyq64HY1ag4uSWjHGb9DsGx3w7MOT8DM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SY5pNXNMoT93dqK98Pw7wywaYCPIctvJXDAyw8bYLzJ9MjR2zPrKVlk0wRvjK/Un6
-         WYiri5yENeZnAX8tMCFsWbmRlUjtd/rqp07Ot+ebpxVMiZB3EFSLE8lz28RTdXKC1Q
-         6vZXY9hhaYAdrlSGVja9CmkslQKQli6stp6pHIlA=
+        b=kA1i3TDQAy5+XSNV/0PNL9X6G/LGHJTYuSvD47fRmaUM3UJyy0ZsELuCFMQKr8tb7
+         BjZUAwc0pCiYApPF78EYA3WxuVR9V5PG5+t41PyNxI9IOCLxbnNs1kH0A8lIc+RD0d
+         ew6JgA0r6fNZK3qYvK4/BmKmxKSHg3clYfkqCsF0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 5.19 01/72] drm/vc4: hdmi: Rework power up
-Date:   Fri,  2 Sep 2022 14:18:37 +0200
-Message-Id: <20220902121404.816237715@linuxfoundation.org>
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 14/73] io_uring: move common poll bits
+Date:   Fri,  2 Sep 2022 14:18:38 +0200
+Message-Id: <20220902121404.906439146@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,75 +54,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-commit 258e483a4d5e97a6a8caa74381ddc1f395ac1c71 upstream.
+[ upstream commmit 5641897a5e8fb8abeb07e89c71a788d3db3ec75e ]
 
-The current code tries to handle the case where CONFIG_PM isn't selected
-by first calling our runtime_resume implementation and then properly
-report the power state to the runtime_pm core.
+Move some poll helpers/etc up, we'll need them there shortly
 
-This allows to have a functionning device even if pm_runtime_get_*
-functions are nops.
-
-However, the device power state if CONFIG_PM is enabled is
-RPM_SUSPENDED, and thus our vc4_hdmi_write() and vc4_hdmi_read() calls
-in the runtime_pm hooks will now report a warning since the device might
-not be properly powered.
-
-Even more so, we need CONFIG_PM enabled since the previous RaspberryPi
-have a power domain that needs to be powered up for the HDMI controller
-to be usable.
-
-The previous patch has created a dependency on CONFIG_PM, now we can
-just assume it's there and only call pm_runtime_resume_and_get() to make
-sure our device is powered in bind.
-
-Link: https://lore.kernel.org/r/20220629123510.1915022-39-maxime@cerno.tech
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-(cherry picked from commit 53565c28e6af2cef6bbf438c34250135e3564459)
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Cc: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/6c5c3dba24c86aad5cd389a54a8c7412e6a0621d.1639605189.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+[pavel: backport]
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c |   15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ fs/io_uring.c |   74 +++++++++++++++++++++++++++++-----------------------------
+ 1 file changed, 37 insertions(+), 37 deletions(-)
 
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -2992,17 +2992,15 @@ static int vc4_hdmi_bind(struct device *
- 			vc4_hdmi->disable_4kp60 = true;
- 	}
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -5318,6 +5318,43 @@ struct io_poll_table {
+ 	int error;
+ };
  
-+	pm_runtime_enable(dev);
++static struct io_poll_iocb *io_poll_get_double(struct io_kiocb *req)
++{
++	/* pure poll stashes this in ->async_data, poll driven retry elsewhere */
++	if (req->opcode == IORING_OP_POLL_ADD)
++		return req->async_data;
++	return req->apoll->double_poll;
++}
 +
- 	/*
--	 * We need to have the device powered up at this point to call
--	 * our reset hook and for the CEC init.
-+	 *  We need to have the device powered up at this point to call
-+	 *  our reset hook and for the CEC init.
- 	 */
--	ret = vc4_hdmi_runtime_resume(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret)
--		goto err_put_ddc;
--
--	pm_runtime_get_noresume(dev);
--	pm_runtime_set_active(dev);
--	pm_runtime_enable(dev);
-+		goto err_disable_runtime_pm;
++static struct io_poll_iocb *io_poll_get_single(struct io_kiocb *req)
++{
++	if (req->opcode == IORING_OP_POLL_ADD)
++		return &req->poll;
++	return &req->apoll->poll;
++}
++
++static void io_poll_req_insert(struct io_kiocb *req)
++{
++	struct io_ring_ctx *ctx = req->ctx;
++	struct hlist_head *list;
++
++	list = &ctx->cancel_hash[hash_long(req->user_data, ctx->cancel_hash_bits)];
++	hlist_add_head(&req->hash_node, list);
++}
++
++static void io_init_poll_iocb(struct io_poll_iocb *poll, __poll_t events,
++			      wait_queue_func_t wake_func)
++{
++	poll->head = NULL;
++	poll->done = false;
++	poll->canceled = false;
++#define IO_POLL_UNMASK	(EPOLLERR|EPOLLHUP|EPOLLNVAL|EPOLLRDHUP)
++	/* mask in events that we always want/need */
++	poll->events = events | IO_POLL_UNMASK;
++	INIT_LIST_HEAD(&poll->wait.entry);
++	init_waitqueue_func_entry(&poll->wait, wake_func);
++}
++
+ static int __io_async_wake(struct io_kiocb *req, struct io_poll_iocb *poll,
+ 			   __poll_t mask, io_req_tw_func_t func)
+ {
+@@ -5366,21 +5403,6 @@ static bool io_poll_rewait(struct io_kio
+ 	return false;
+ }
  
- 	if ((of_device_is_compatible(dev->of_node, "brcm,bcm2711-hdmi0") ||
- 	     of_device_is_compatible(dev->of_node, "brcm,bcm2711-hdmi1")) &&
-@@ -3048,6 +3046,7 @@ err_destroy_conn:
- err_destroy_encoder:
- 	drm_encoder_cleanup(encoder);
- 	pm_runtime_put_sync(dev);
-+err_disable_runtime_pm:
- 	pm_runtime_disable(dev);
- err_put_ddc:
- 	put_device(&vc4_hdmi->ddc->dev);
+-static struct io_poll_iocb *io_poll_get_double(struct io_kiocb *req)
+-{
+-	/* pure poll stashes this in ->async_data, poll driven retry elsewhere */
+-	if (req->opcode == IORING_OP_POLL_ADD)
+-		return req->async_data;
+-	return req->apoll->double_poll;
+-}
+-
+-static struct io_poll_iocb *io_poll_get_single(struct io_kiocb *req)
+-{
+-	if (req->opcode == IORING_OP_POLL_ADD)
+-		return &req->poll;
+-	return &req->apoll->poll;
+-}
+-
+ static void io_poll_remove_double(struct io_kiocb *req)
+ 	__must_hold(&req->ctx->completion_lock)
+ {
+@@ -5505,19 +5527,6 @@ static int io_poll_double_wake(struct wa
+ 	return 1;
+ }
+ 
+-static void io_init_poll_iocb(struct io_poll_iocb *poll, __poll_t events,
+-			      wait_queue_func_t wake_func)
+-{
+-	poll->head = NULL;
+-	poll->done = false;
+-	poll->canceled = false;
+-#define IO_POLL_UNMASK	(EPOLLERR|EPOLLHUP|EPOLLNVAL|EPOLLRDHUP)
+-	/* mask in events that we always want/need */
+-	poll->events = events | IO_POLL_UNMASK;
+-	INIT_LIST_HEAD(&poll->wait.entry);
+-	init_waitqueue_func_entry(&poll->wait, wake_func);
+-}
+-
+ static void __io_queue_proc(struct io_poll_iocb *poll, struct io_poll_table *pt,
+ 			    struct wait_queue_head *head,
+ 			    struct io_poll_iocb **poll_ptr)
+@@ -5612,15 +5621,6 @@ static int io_async_wake(struct wait_que
+ 	return __io_async_wake(req, poll, key_to_poll(key), io_async_task_func);
+ }
+ 
+-static void io_poll_req_insert(struct io_kiocb *req)
+-{
+-	struct io_ring_ctx *ctx = req->ctx;
+-	struct hlist_head *list;
+-
+-	list = &ctx->cancel_hash[hash_long(req->user_data, ctx->cancel_hash_bits)];
+-	hlist_add_head(&req->hash_node, list);
+-}
+-
+ static __poll_t __io_arm_poll_handler(struct io_kiocb *req,
+ 				      struct io_poll_iocb *poll,
+ 				      struct io_poll_table *ipt, __poll_t mask,
 
 

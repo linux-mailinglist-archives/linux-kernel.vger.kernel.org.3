@@ -2,67 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6065AB1C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDF75AB178
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236820AbiIBNkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S237303AbiIBNeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237544AbiIBNjX (ORCPT
+        with ESMTP id S236314AbiIBNdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:39:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8284D15C7B2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:17:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1784E62049
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:10:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8696C433D7;
-        Fri,  2 Sep 2022 13:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662124223;
-        bh=gyQWuNAPc+74rM0aS1MSJ4QJ6RbXShDyHWLyEiqRoQU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CQKn+VJGtrWnpB6WqDuCC3FzieeagB+gNRGChxvz9oDHXXmx2mDyYRnP3ZpCGjJUE
-         hl7HBTss0CYdoTojxOhXu5oOiQljkG7Ke505YsbMeEwg8Vji18MsaotJ9qLIt/nOCC
-         QNKvcStOo+s3Syd2kweL/NO710tSkB+KG4AQs0tk=
-Date:   Fri, 2 Sep 2022 15:10:20 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deuc her <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Xinhui.Pan@amd.com
-Cc:     linux-kernel@vger.kernel.org, Leo Li <sunpeng.li@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Wayne Lin <Wayne.Lin@amd.com>,
-        hersen wu <hersenxs.wu@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Thelford Williams <tdwilliamsiv@gmail.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Yongzhi Liu <lyz_cs@pku.edu.cn>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Bhanuprakash Modem <bhanuprakash.modem@intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/amd/display: fix memory leak when using
- debugfs_lookup()
-Message-ID: <YxIAvHOK7uNum9VI@kroah.com>
-References: <20220902130105.139138-1-gregkh@linuxfoundation.org>
+        Fri, 2 Sep 2022 09:33:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348FE3FA38
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:13:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662124312;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=10S2baNmGpvfbB3rWC8TV3GU8jc51um5+NmqwLplTxA=;
+        b=OaqsduRmC/k7/up3Y+Yxz1BiXMJqaV0IAPC22l2AwBITcWSC+CZXfo7LhGCbDGmcEgvBXk
+        +13oFwN5C3XFgOuP3AHB4BibB6DAMIRuH77cZQkVYGUTn9qB8Pb1jNKAc1r8dCCEV/mUsC
+        CYb97maX0COEjHQJIGernbkIE8nwR5w=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-498-VNNnkzr-Npy__uScprD9lA-1; Fri, 02 Sep 2022 09:11:50 -0400
+X-MC-Unique: VNNnkzr-Npy__uScprD9lA-1
+Received: by mail-pj1-f70.google.com with SMTP id z8-20020a17090a014800b001fac4204c7eso1120685pje.8
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 06:11:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=10S2baNmGpvfbB3rWC8TV3GU8jc51um5+NmqwLplTxA=;
+        b=iyB57GtLm77O5Lgg0ouUC/Hl6Pg93OK8DOAW1PvZF+1hxOQRdJqoAxKUXy773FP/Wq
+         2X91eh4mtJZ53Gtzq3FNrQHuGHlWoYSZpBt3GK/yd6OMt4KqyBy1PnSTm4Qg6iZGmsMF
+         FUOkzobW3a5iJqAOEV3jEK5aQgnwVbXgNDHLzXoLSzGRZp1jozAN8sRwUHCXEB6BAQYJ
+         ovLs8JhRgRWRbYYy4ySEmjgQQ/KyZ8rJMxIUSNfi0r4nW6K8sx99xV7ufGqO2TITtE0e
+         hw9CtxLOLYfcs+44RWe3gpHtL92OX0s1HQokyLQLA04sAGWdiRL6MnzSGhBk7lDK+NCr
+         nEjA==
+X-Gm-Message-State: ACgBeo1AiuFptLGJnZNCY+Gt3jHqZIGa1ywpCCwln2PO6nc2zNXu3V79
+        2+4UwaOeqXiBuM0X/p7mT1QNWfeFIAXSRcRjXvvs1LlBCtKFvsPjdSxRK9DNdQdboTVz9hBHg27
+        yPU2Hb0QBnXvq8JhYFzCNPBtuhVuS7SbV312zceNA
+X-Received: by 2002:a17:902:b58a:b0:16e:f91a:486b with SMTP id a10-20020a170902b58a00b0016ef91a486bmr36558498pls.119.1662124309712;
+        Fri, 02 Sep 2022 06:11:49 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR72EpfhkEK4ko7qYW4nPa0blgG/78lQfqmeZeVLgOOiuWSw4Fu8+YGj6zLNMt/u79Hm3xPofVjqghC/L9D7cM4=
+X-Received: by 2002:a17:902:b58a:b0:16e:f91a:486b with SMTP id
+ a10-20020a170902b58a00b0016ef91a486bmr36558475pls.119.1662124309461; Fri, 02
+ Sep 2022 06:11:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220902130105.139138-1-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
+ <20220824134055.1328882-2-benjamin.tissoires@redhat.com> <CAADnVQKgkFpLh_URJn6qCiAONteA1dwZHd6=4cZn15g1JCAPag@mail.gmail.com>
+ <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
+ <CAO-hwJLd9wXx+ppccBYPKZDymO0sk++Nt2E3-R97PY7LbfJfTg@mail.gmail.com>
+ <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com>
+ <CAO-hwJK9uHTWCg3_6jrPF6UKiamkNfj=cuH5mHauoLX+0udV9w@mail.gmail.com>
+ <CAADnVQLuL045Sxdvh8kfcNkmD55+Wz8fHU3RtH+oQyOgePU5Pw@mail.gmail.com>
+ <CAO-hwJJJJRtoq2uTXRKCck6QSH8SFDSTpHmvTyOieczY7bdm8g@mail.gmail.com> <CAP01T77SJyiDxv0A++_mNw7JZ-Mzh4B1FAM6zLiP6n75MNY0uQ@mail.gmail.com>
+In-Reply-To: <CAP01T77SJyiDxv0A++_mNw7JZ-Mzh4B1FAM6zLiP6n75MNY0uQ@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 2 Sep 2022 15:11:38 +0200
+Message-ID: <CAO-hwJLbbB0Abw3d4pJPnYTAzQNdtgBTpuNz4zVUTFXCbZEEbQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 01/23] bpf/verifier: allow all functions to
+ read user provided context
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,39 +98,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 03:01:05PM +0200, Greg Kroah-Hartman wrote:
-> When calling debugfs_lookup() the result must have dput() called on it,
-> otherwise the memory will leak over time.  Fix this up by properly
-> calling dput().
-> 
-> Cc: Harry Wentland <harry.wentland@amd.com>
-> Cc: Leo Li <sunpeng.li@amd.com>
-> Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Wayne Lin <Wayne.Lin@amd.com>
-> Cc: hersen wu <hersenxs.wu@amd.com>
-> Cc: Wenjing Liu <wenjing.liu@amd.com>
-> Cc: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-> Cc: Thelford Williams <tdwilliamsiv@gmail.com>
-> Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
-> Cc: Yongzhi Liu <lyz_cs@pku.edu.cn>
-> Cc: Mikita Lipski <mikita.lipski@amd.com>
-> Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> Cc: Bhanuprakash Modem <bhanuprakash.modem@intel.com>
-> Cc: Sean Paul <seanpaul@chromium.org>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
+On Fri, Sep 2, 2022 at 5:50 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+> On Thu, 1 Sept 2022 at 18:48, Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > [...]
+> > If the above is correct, then yes, it would make sense to me to have 2
+> > distinct functions: one to check for the args types only (does the
+> > function definition in the problem matches BTF), and one to check for
+> > its use.
+> > Behind the scenes, btf_check_subprog_arg_match() calls
+> > btf_check_func_arg_match() which is the one function with entangled
+> > arguments type checking and actually assessing that the values
+> > provided are correct.
+> >
+> > I can try to split that  btf_check_func_arg_match() into 2 distinct
+> > functions, though I am not sure I'll get it right.
+>
+> FYI, I've already split them into separate functions in my tree
+> because it had become super ugly at this point with all the new
+> support and I refactored it to add the linked list helpers support
+> using kfuncs (which requires some special handling for the args), so I
+> think you can just leave it with a "processing_call" check in for your
+> series for now.
+>
 
-Despite a zillion cc: items, I forgot to cc: stable on this.  Can the
-maintainer add that here, or do you all want me to resend it with that
-item added?
+great, thanks a lot.
+Actually, writing the patch today with the "processing_call" was
+really easy now that I have turned the problem in my head a lot
+yesterday.
 
-thanks,
+I am about to send v10 with the reviews addressed.
 
-greg k-h
+Cheers,
+Benjamin
+

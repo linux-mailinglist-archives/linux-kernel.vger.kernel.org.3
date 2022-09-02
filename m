@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAE05AAC17
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BDA5AAC1F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbiIBKJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S235847AbiIBKLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235625AbiIBKJE (ORCPT
+        with ESMTP id S235995AbiIBKKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:09:04 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FD9EC6E86
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 03:09:02 -0700 (PDT)
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_2s31hFjz8APAA--.65103S5;
-        Fri, 02 Sep 2022 18:08:58 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Xuerui Wang <kernel@xen0n.name>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 3/3] LoongArch: Add support for kernel address space layout randomization (KASLR)
-Date:   Fri,  2 Sep 2022 18:08:55 +0800
-Message-Id: <1662113335-14282-4-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
-References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
-X-CM-TRANSID: AQAAf8Dx_2s31hFjz8APAA--.65103S5
-X-Coremail-Antispam: 1UD129KBjvJXoW3XFyxJr1kJF15uw13CF4fAFb_yoW3WFy7pF
-        ZrAw4DGr4xAr1xGrsrX34Dury5Cws7G347WFZrK348ZFsFqF18Zaykur9FqFy8t39Yqr4a
-        vFZ8JFy29w4UAaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUP2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUWwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv
-        6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-        02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE
-        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4DMxAIw28IcxkI7V
-        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8C
-        rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtw
-        CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr
-        0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUYbI
-        D7UUUUU==
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Fri, 2 Sep 2022 06:10:34 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B9FD34F2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 03:09:33 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MJttP1r2Dz9sqv;
+        Fri,  2 Sep 2022 12:09:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yn87RgKV0LbJ; Fri,  2 Sep 2022 12:09:17 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJttN1j3Zz9sr0;
+        Fri,  2 Sep 2022 12:09:16 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 28D768B764;
+        Fri,  2 Sep 2022 12:09:16 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id JjTPTkpSm95V; Fri,  2 Sep 2022 12:09:16 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.39])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D4CCD8B786;
+        Fri,  2 Sep 2022 12:09:15 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 282A92WJ2127999
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 2 Sep 2022 12:09:02 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 282A92Wt2127998;
+        Fri, 2 Sep 2022 12:09:02 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2 2/2] powerpc/math-emu: Remove -w build flag and fix warnings
+Date:   Fri,  2 Sep 2022 12:08:55 +0200
+Message-Id: <35c86b7ca823954c6cd593acc3690dc3748da9b1.1662113301.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <a7384eafc6a27aea15bdc9e8f9a12aac593fccb7.1662113301.git.christophe.leroy@csgroup.eu>
+References: <a7384eafc6a27aea15bdc9e8f9a12aac593fccb7.1662113301.git.christophe.leroy@csgroup.eu>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662113333; l=9512; s=20211009; h=from:subject:message-id; bh=uIW+Vpni5U4dvK8k+EDD1ExI5h7T57uVbSCxSNXzCuw=; b=oGo6UIY+c6Mk9kvYvCxtkL/WXY5LqUT4529NqLD7dpeOhnqbZjVMivVuPcNNLr+KfQowmTxcrirn vLk7mNMcB8n88xz+jUDjIO/O/wvSVMsim+rLfmCKVEtf2ue/A/kP
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,257 +68,319 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for relocating the kernel to a random address.
+As reported by Nathan, the module_init() macro was not taken into
+account because the header was missing. That means spe_mathemu_init()
+was never called.
 
-Entropy is derived from the banner, which will change every build and
-random_get_entropy() which should provide additional runtime entropy.
+This should have been detected by gcc at build time, but due to
+'-w' flag it went undetected.
 
-The kernel is relocated by up to RANDOMIZE_BASE_MAX_OFFSET bytes from
-its link address. Because relocation happens so early in the kernel boot,
-the amount of physical memory has not yet been determined. This means
-the only way to limit relocation within the available memory is via
-Kconfig. Limit the maximum value of RANDOMIZE_BASE_MAX_OFFSET to
-256M(0x10000000) because our memory layout has many holes.
+Removing that flag leads to many warnings hence errors.
 
-KERNELOFFSET (kaslr_offset) is added to vmcoreinfo in the future, for
-crash --kaslr support.
+Fix those warnings then remove the -w flag.
 
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/loongarch/Kconfig            |  22 ++++++
- arch/loongarch/include/asm/page.h |   6 ++
- arch/loongarch/kernel/relocate.c  | 114 ++++++++++++++++++++++++++++++
- arch/loongarch/kernel/setup.c     |   3 +
- 4 files changed, 145 insertions(+)
+ arch/powerpc/math-emu/Makefile   |  2 --
+ arch/powerpc/math-emu/math.c     | 18 +++++-----
+ arch/powerpc/math-emu/math_efp.c | 57 +++++++++++++++++---------------
+ 3 files changed, 39 insertions(+), 38 deletions(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 271221d6036d..e2588ab281bc 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -449,6 +449,28 @@ config RELOCATION_TABLE_SIZE
+diff --git a/arch/powerpc/math-emu/Makefile b/arch/powerpc/math-emu/Makefile
+index a8794032f15f..26fef2e5672e 100644
+--- a/arch/powerpc/math-emu/Makefile
++++ b/arch/powerpc/math-emu/Makefile
+@@ -16,5 +16,3 @@ obj-$(CONFIG_SPE)		+= math_efp.o
  
- 	  If unsure, leave at the default value.
+ CFLAGS_fabs.o = -fno-builtin-fabs
+ CFLAGS_math.o = -fno-builtin-fabs
+-
+-ccflags-y = -w
+diff --git a/arch/powerpc/math-emu/math.c b/arch/powerpc/math-emu/math.c
+index 36761bd00f38..936a9a149037 100644
+--- a/arch/powerpc/math-emu/math.c
++++ b/arch/powerpc/math-emu/math.c
+@@ -24,9 +24,9 @@ FLOATFUNC(mtfsf);
+ FLOATFUNC(mtfsfi);
  
-+config RANDOMIZE_BASE
-+	bool "Randomize the address of the kernel image (KASLR)"
-+	depends on RELOCATABLE
-+	help
-+	   Randomizes the physical and virtual address at which the
-+	   kernel image is loaded, as a security feature that
-+	   deters exploit attempts relying on knowledge of the location
-+	   of kernel internals.
-+
-+	   The kernel will be offset by up to RANDOMIZE_BASE_MAX_OFFSET.
-+
-+	   If unsure, say N.
-+
-+config RANDOMIZE_BASE_MAX_OFFSET
-+	hex "Maximum KASLR offset" if EXPERT
-+	depends on RANDOMIZE_BASE
-+	range 0x0 0x10000000 if 64BIT
-+	default "0x01000000"
-+	help
-+	  When KASLR is active, this provides the maximum offset that will
-+	  be applied to the kernel image.
-+
- config SECCOMP
- 	bool "Enable seccomp to safely compute untrusted bytecode"
- 	depends on PROC_FS
-diff --git a/arch/loongarch/include/asm/page.h b/arch/loongarch/include/asm/page.h
-index 53f284a96182..6dda0d6271ca 100644
---- a/arch/loongarch/include/asm/page.h
-+++ b/arch/loongarch/include/asm/page.h
-@@ -106,6 +106,12 @@ extern int __virt_addr_valid(volatile void *kaddr);
- 	 ((current->personality & READ_IMPLIES_EXEC) ? VM_EXEC : 0) | \
- 	 VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC)
+ #ifdef CONFIG_MATH_EMULATION_HW_UNIMPLEMENTED
+-#undef FLOATFUNC(x)
++#undef FLOATFUNC
+ #define FLOATFUNC(x)	static inline int x(void *op1, void *op2, void *op3, \
+-						 void *op4) { }
++						 void *op4) { return 0; }
+ #endif
  
-+extern unsigned long __kaslr_offset;
-+static inline unsigned long kaslr_offset(void)
-+{
-+	return __kaslr_offset;
-+}
-+
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
+ FLOATFUNC(fadd);
+@@ -396,28 +396,28 @@ do_mathemu(struct pt_regs *regs)
  
-diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
-index 492c833322a4..58e28b8f5d12 100644
---- a/arch/loongarch/kernel/relocate.c
-+++ b/arch/loongarch/kernel/relocate.c
-@@ -11,9 +11,11 @@
- #include <linux/elf.h>
- #include <linux/kernel.h>
- #include <linux/start_kernel.h>
-+#include <linux/of_fdt.h>
- #include <linux/printk.h>
- #include <linux/panic_notifier.h>
- #include <asm/bootinfo.h>
-+#include <asm/early_ioremap.h>
- #include <asm/inst.h>
- #include <asm/sections.h>
+ 	case XCR:
+ 		op0 = (void *)&regs->ccr;
+-		op1 = (void *)((insn >> 23) & 0x7);
++		op1 = (void *)(long)((insn >> 23) & 0x7);
+ 		op2 = (void *)&current->thread.TS_FPR((insn >> 16) & 0x1f);
+ 		op3 = (void *)&current->thread.TS_FPR((insn >> 11) & 0x1f);
+ 		break;
  
-@@ -146,6 +148,70 @@ static void __init relocate_got_table(long offset)
- 		*got += offset;
- }
+ 	case XCRL:
+ 		op0 = (void *)&regs->ccr;
+-		op1 = (void *)((insn >> 23) & 0x7);
+-		op2 = (void *)((insn >> 18) & 0x7);
++		op1 = (void *)(long)((insn >> 23) & 0x7);
++		op2 = (void *)(long)((insn >> 18) & 0x7);
+ 		break;
  
-+#ifdef CONFIG_RANDOMIZE_BASE
-+
-+static inline __init unsigned long rotate_xor(unsigned long hash,
-+					      const void *area, size_t size)
-+{
-+	size_t i;
-+	unsigned long *ptr = (unsigned long *)area;
-+
-+	for (i = 0; i < size / sizeof(hash); i++) {
-+		/* Rotate by odd number of bits and XOR. */
-+		hash = (hash << ((sizeof(hash) * 8) - 7)) | (hash >> 7);
-+		hash ^= ptr[i];
-+	}
-+
-+	return hash;
-+}
-+
-+static inline __init unsigned long get_random_boot(void)
-+{
-+	unsigned long entropy = random_get_entropy();
-+	unsigned long hash = 0;
-+
-+	/* Attempt to create a simple but unpredictable starting entropy. */
-+	hash = rotate_xor(hash, linux_banner, strlen(linux_banner));
-+
-+	/* Add in any runtime entropy we can get */
-+	hash = rotate_xor(hash, &entropy, sizeof(entropy));
-+
-+	return hash;
-+}
-+
-+static inline __init bool kaslr_disabled(void)
-+{
-+	char *str;
-+
-+	str = strstr(boot_command_line, "nokaslr");
-+	if (str == boot_command_line || (str > boot_command_line && *(str - 1) == ' '))
-+		return true;
-+
-+	return false;
-+}
-+
-+/* Choose a new address for the kernel */
-+static inline void __init *determine_relocation_address(void)
-+{
-+	unsigned long kernel_length;
-+	void *dest = _text;
-+	unsigned long offset;
-+
-+	if (kaslr_disabled())
-+		return dest;
-+
-+	kernel_length = (long)_end - (long)_text;
-+
-+	offset = get_random_boot() << 16;
-+	offset &= (CONFIG_RANDOMIZE_BASE_MAX_OFFSET - 1);
-+	if (offset < kernel_length)
-+		offset += ALIGN(kernel_length, 0xffff);
-+
-+	return RELOCATED(dest);
-+}
-+
-+#else
-+
- /*
-  * Choose a new address for the kernel, for now we'll hard
-  * code the destination.
-@@ -155,6 +221,8 @@ static inline void __init *determine_relocation_address(void)
- 	return (void *)(CACHE_BASE + 0x02000000);
- }
+ 	case XCRB:
+-		op0 = (void *)((insn >> 21) & 0x1f);
++		op0 = (void *)(long)((insn >> 21) & 0x1f);
+ 		break;
  
-+#endif
-+
- static inline int __init relocation_addr_valid(void *loc_new)
- {
- 	if ((unsigned long)loc_new & 0x0000ffff) {
-@@ -168,6 +236,13 @@ static inline int __init relocation_addr_valid(void *loc_new)
- 	return 1;
- }
+ 	case XCRI:
+-		op0 = (void *)((insn >> 23) & 0x7);
+-		op1 = (void *)((insn >> 12) & 0xf);
++		op0 = (void *)(long)((insn >> 23) & 0x7);
++		op1 = (void *)(long)((insn >> 12) & 0xf);
+ 		break;
  
-+static inline void __init update_kaslr_offset(unsigned long *addr, long offset)
-+{
-+	unsigned long *new_addr = (unsigned long *)RELOCATED(addr);
-+
-+	*new_addr = (unsigned long)offset;
-+}
-+
- void *__init relocate_kernel(void)
- {
- 	void *loc_new;
-@@ -177,6 +252,9 @@ void *__init relocate_kernel(void)
- 	/* Default to original kernel entry point */
- 	void *kernel_entry = start_kernel;
+ 	case XFLB:
+-		op0 = (void *)((insn >> 17) & 0xff);
++		op0 = (void *)(long)((insn >> 17) & 0xff);
+ 		op1 = (void *)&current->thread.TS_FPR((insn >> 11) & 0x1f);
+ 		break;
  
-+	/* Boot command line was passed in FDT */
-+	early_init_dt_scan(early_ioremap(fw_arg1, SZ_64K));
-+
- 	kernel_length = (long)(_end) - (long)(_text);
+diff --git a/arch/powerpc/math-emu/math_efp.c b/arch/powerpc/math-emu/math_efp.c
+index aa3bb8da1cb9..f01e3475f689 100644
+--- a/arch/powerpc/math-emu/math_efp.c
++++ b/arch/powerpc/math-emu/math_efp.c
+@@ -219,6 +219,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 		case AB:
+ 		case XCR:
+ 			FP_UNPACK_SP(SA, va.wp + 1);
++			fallthrough;
+ 		case XB:
+ 			FP_UNPACK_SP(SB, vb.wp + 1);
+ 			break;
+@@ -227,8 +228,8 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 			break;
+ 		}
  
- 	loc_new = determine_relocation_address();
-@@ -208,7 +286,43 @@ void *__init relocate_kernel(void)
+-		pr_debug("SA: %ld %08lx %ld (%ld)\n", SA_s, SA_f, SA_e, SA_c);
+-		pr_debug("SB: %ld %08lx %ld (%ld)\n", SB_s, SB_f, SB_e, SB_c);
++		pr_debug("SA: %d %08x %d (%d)\n", SA_s, SA_f, SA_e, SA_c);
++		pr_debug("SB: %d %08x %d (%d)\n", SB_s, SB_f, SB_e, SB_c);
  
- 		/* Return the new kernel's entry point */
- 		kernel_entry = RELOCATED(start_kernel);
-+
-+		/* Error may occur before, so keep it at last */
-+		update_kaslr_offset(&__kaslr_offset, offset);
- 	}
- out:
- 	return kernel_entry;
- }
-+
-+/*
-+ * Show relocation information on panic.
-+ */
-+static void show_kernel_relocation(const char *level)
-+{
-+	if (__kaslr_offset > 0) {
-+		printk(level);
-+		pr_cont("Kernel relocated offset @ 0x%lx\n", __kaslr_offset);
-+		pr_cont(" .text @ 0x%lx\n", (unsigned long)&_text);
-+		pr_cont(" .data @ 0x%lx\n", (unsigned long)&_sdata);
-+		pr_cont(" .bss  @ 0x%lx\n", (unsigned long)&__bss_start);
-+	}
-+}
-+
-+static int kernel_location_notifier_fn(struct notifier_block *self,
-+				       unsigned long v, void *p)
-+{
-+	show_kernel_relocation(KERN_EMERG);
-+	return NOTIFY_DONE;
-+}
-+
-+static struct notifier_block kernel_location_notifier = {
-+	.notifier_call = kernel_location_notifier_fn
-+};
-+
-+static int __init register_kernel_offset_dumper(void)
-+{
-+	atomic_notifier_chain_register(&panic_notifier_list,
-+				       &kernel_location_notifier);
-+	return 0;
-+}
-+__initcall(register_kernel_offset_dumper);
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-index 058c232c11e8..a176d7973ac7 100644
---- a/arch/loongarch/kernel/setup.c
-+++ b/arch/loongarch/kernel/setup.c
-@@ -73,6 +73,9 @@ static struct resource code_resource = { .name = "Kernel code", };
- static struct resource data_resource = { .name = "Kernel data", };
- static struct resource bss_resource  = { .name = "Kernel bss", };
+ 		switch (func) {
+ 		case EFSABS:
+@@ -279,7 +280,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 			} else {
+ 				SB_e += (func == EFSCTSF ? 31 : 32);
+ 				FP_TO_INT_ROUND_S(vc.wp[1], SB, 32,
+-						(func == EFSCTSF));
++						(func == EFSCTSF) ? 1 : 0);
+ 			}
+ 			goto update_regs;
  
-+unsigned long __kaslr_offset __ro_after_init;
-+EXPORT_SYMBOL(__kaslr_offset);
-+
- const char *get_system_type(void)
- {
- 	return "generic-loongson-machine";
+@@ -288,7 +289,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 			FP_CLEAR_EXCEPTIONS;
+ 			FP_UNPACK_DP(DB, vb.dp);
+ 
+-			pr_debug("DB: %ld %08lx %08lx %ld (%ld)\n",
++			pr_debug("DB: %d %08x %08x %d (%d)\n",
+ 					DB_s, DB_f1, DB_f0, DB_e, DB_c);
+ 
+ 			FP_CONV(S, D, 1, 2, SR, DB);
+@@ -302,7 +303,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 				FP_SET_EXCEPTION(FP_EX_INVALID);
+ 			} else {
+ 				FP_TO_INT_ROUND_S(vc.wp[1], SB, 32,
+-						((func & 0x3) != 0));
++						((func & 0x3) != 0) ? 1 : 0);
+ 			}
+ 			goto update_regs;
+ 
+@@ -313,7 +314,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 				FP_SET_EXCEPTION(FP_EX_INVALID);
+ 			} else {
+ 				FP_TO_INT_S(vc.wp[1], SB, 32,
+-						((func & 0x3) != 0));
++						((func & 0x3) != 0) ? 1 : 0);
+ 			}
+ 			goto update_regs;
+ 
+@@ -323,7 +324,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 		break;
+ 
+ pack_s:
+-		pr_debug("SR: %ld %08lx %ld (%ld)\n", SR_s, SR_f, SR_e, SR_c);
++		pr_debug("SR: %d %08x %d (%d)\n", SR_s, SR_f, SR_e, SR_c);
+ 
+ 		FP_PACK_SP(vc.wp + 1, SR);
+ 		goto update_regs;
+@@ -347,6 +348,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 		case AB:
+ 		case XCR:
+ 			FP_UNPACK_DP(DA, va.dp);
++			fallthrough;
+ 		case XB:
+ 			FP_UNPACK_DP(DB, vb.dp);
+ 			break;
+@@ -355,9 +357,9 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 			break;
+ 		}
+ 
+-		pr_debug("DA: %ld %08lx %08lx %ld (%ld)\n",
++		pr_debug("DA: %d %08x %08x %d (%d)\n",
+ 				DA_s, DA_f1, DA_f0, DA_e, DA_c);
+-		pr_debug("DB: %ld %08lx %08lx %ld (%ld)\n",
++		pr_debug("DB: %d %08x %08x %d (%d)\n",
+ 				DB_s, DB_f1, DB_f0, DB_e, DB_c);
+ 
+ 		switch (func) {
+@@ -409,7 +411,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 			} else {
+ 				DB_e += (func == EFDCTSF ? 31 : 32);
+ 				FP_TO_INT_ROUND_D(vc.wp[1], DB, 32,
+-						(func == EFDCTSF));
++						(func == EFDCTSF) ? 1 : 0);
+ 			}
+ 			goto update_regs;
+ 
+@@ -418,7 +420,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 			FP_CLEAR_EXCEPTIONS;
+ 			FP_UNPACK_SP(SB, vb.wp + 1);
+ 
+-			pr_debug("SB: %ld %08lx %ld (%ld)\n",
++			pr_debug("SB: %d %08x %d (%d)\n",
+ 					SB_s, SB_f, SB_e, SB_c);
+ 
+ 			FP_CONV(D, S, 2, 1, DR, SB);
+@@ -432,7 +434,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 				FP_SET_EXCEPTION(FP_EX_INVALID);
+ 			} else {
+ 				FP_TO_INT_D(vc.dp[0], DB, 64,
+-						((func & 0x1) == 0));
++						((func & 0x1) == 0) ? 1 : 0);
+ 			}
+ 			goto update_regs;
+ 
+@@ -443,7 +445,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 				FP_SET_EXCEPTION(FP_EX_INVALID);
+ 			} else {
+ 				FP_TO_INT_ROUND_D(vc.wp[1], DB, 32,
+-						((func & 0x3) != 0));
++						((func & 0x3) != 0) ? 1 : 0);
+ 			}
+ 			goto update_regs;
+ 
+@@ -454,7 +456,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 				FP_SET_EXCEPTION(FP_EX_INVALID);
+ 			} else {
+ 				FP_TO_INT_D(vc.wp[1], DB, 32,
+-						((func & 0x3) != 0));
++						((func & 0x3) != 0) ? 1 : 0);
+ 			}
+ 			goto update_regs;
+ 
+@@ -464,7 +466,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 		break;
+ 
+ pack_d:
+-		pr_debug("DR: %ld %08lx %08lx %ld (%ld)\n",
++		pr_debug("DR: %d %08x %08x %d (%d)\n",
+ 				DR_s, DR_f1, DR_f0, DR_e, DR_c);
+ 
+ 		FP_PACK_DP(vc.dp, DR);
+@@ -493,6 +495,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 		case XCR:
+ 			FP_UNPACK_SP(SA0, va.wp);
+ 			FP_UNPACK_SP(SA1, va.wp + 1);
++			fallthrough;
+ 		case XB:
+ 			FP_UNPACK_SP(SB0, vb.wp);
+ 			FP_UNPACK_SP(SB1, vb.wp + 1);
+@@ -503,13 +506,13 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 			break;
+ 		}
+ 
+-		pr_debug("SA0: %ld %08lx %ld (%ld)\n",
++		pr_debug("SA0: %d %08x %d (%d)\n",
+ 				SA0_s, SA0_f, SA0_e, SA0_c);
+-		pr_debug("SA1: %ld %08lx %ld (%ld)\n",
++		pr_debug("SA1: %d %08x %d (%d)\n",
+ 				SA1_s, SA1_f, SA1_e, SA1_c);
+-		pr_debug("SB0: %ld %08lx %ld (%ld)\n",
++		pr_debug("SB0: %d %08x %d (%d)\n",
+ 				SB0_s, SB0_f, SB0_e, SB0_c);
+-		pr_debug("SB1: %ld %08lx %ld (%ld)\n",
++		pr_debug("SB1: %d %08x %d (%d)\n",
+ 				SB1_s, SB1_f, SB1_e, SB1_c);
+ 
+ 		switch (func) {
+@@ -568,7 +571,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 			} else {
+ 				SB0_e += (func == EVFSCTSF ? 31 : 32);
+ 				FP_TO_INT_ROUND_S(vc.wp[0], SB0, 32,
+-						(func == EVFSCTSF));
++						(func == EVFSCTSF) ? 1 : 0);
+ 			}
+ 			if (SB1_c == FP_CLS_NAN) {
+ 				vc.wp[1] = 0;
+@@ -576,7 +579,7 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 			} else {
+ 				SB1_e += (func == EVFSCTSF ? 31 : 32);
+ 				FP_TO_INT_ROUND_S(vc.wp[1], SB1, 32,
+-						(func == EVFSCTSF));
++						(func == EVFSCTSF) ? 1 : 0);
+ 			}
+ 			goto update_regs;
+ 
+@@ -587,14 +590,14 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 				FP_SET_EXCEPTION(FP_EX_INVALID);
+ 			} else {
+ 				FP_TO_INT_ROUND_S(vc.wp[0], SB0, 32,
+-						((func & 0x3) != 0));
++						((func & 0x3) != 0) ? 1 : 0);
+ 			}
+ 			if (SB1_c == FP_CLS_NAN) {
+ 				vc.wp[1] = 0;
+ 				FP_SET_EXCEPTION(FP_EX_INVALID);
+ 			} else {
+ 				FP_TO_INT_ROUND_S(vc.wp[1], SB1, 32,
+-						((func & 0x3) != 0));
++						((func & 0x3) != 0) ? 1 : 0);
+ 			}
+ 			goto update_regs;
+ 
+@@ -605,14 +608,14 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 				FP_SET_EXCEPTION(FP_EX_INVALID);
+ 			} else {
+ 				FP_TO_INT_S(vc.wp[0], SB0, 32,
+-						((func & 0x3) != 0));
++						((func & 0x3) != 0) ? 1 : 0);
+ 			}
+ 			if (SB1_c == FP_CLS_NAN) {
+ 				vc.wp[1] = 0;
+ 				FP_SET_EXCEPTION(FP_EX_INVALID);
+ 			} else {
+ 				FP_TO_INT_S(vc.wp[1], SB1, 32,
+-						((func & 0x3) != 0));
++						((func & 0x3) != 0) ? 1 : 0);
+ 			}
+ 			goto update_regs;
+ 
+@@ -622,9 +625,9 @@ int do_spe_mathemu(struct pt_regs *regs)
+ 		break;
+ 
+ pack_vs:
+-		pr_debug("SR0: %ld %08lx %ld (%ld)\n",
++		pr_debug("SR0: %d %08x %d (%d)\n",
+ 				SR0_s, SR0_f, SR0_e, SR0_c);
+-		pr_debug("SR1: %ld %08lx %ld (%ld)\n",
++		pr_debug("SR1: %d %08x %d (%d)\n",
+ 				SR1_s, SR1_f, SR1_e, SR1_c);
+ 
+ 		FP_PACK_SP(vc.wp, SR0);
 -- 
-2.36.1
+2.37.1
 

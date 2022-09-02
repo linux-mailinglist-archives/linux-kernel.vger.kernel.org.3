@@ -2,161 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845EA5AB723
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8495AB72A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiIBRFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 13:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S234778AbiIBRHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 13:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236291AbiIBRE5 (ORCPT
+        with ESMTP id S233264AbiIBRHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 13:04:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD2115A11;
-        Fri,  2 Sep 2022 10:04:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D571621AE;
-        Fri,  2 Sep 2022 17:04:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE77C433C1;
-        Fri,  2 Sep 2022 17:04:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662138291;
-        bh=lAxIv2QfUf2l3nKsqdu22JAcrnIgJ48N3jh5vnIFQzc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=PRpPlEAS+vV10WkjFd2TH3iPGH/W+xDWHqXVC9AXUx6z6Y1sDQ3leqzZAC3t60T7l
-         uqeZ/8qorvgJhSS1r8iQqv1WAersSU+3+BYJLz3uP0Ni+YHlTM6qI3dcoxiZLbIOSM
-         iftOWO8qkp2Sg2Hrs6v3wS6MqdwqRlEJAUQ/NBQZQsXGIAKEstjDuhOAvM+PJjQuB+
-         9cL8+MU9v8qi1FSVt3biWE7zzO2Yxv+qLsBb85UAD9wFcAvzvAn92+Fxjs44/unia9
-         L1yjEHFmn1+j/5k6ovZp0Wd2hjaV+FowWP154owJUEYyK6M6Yj3T/G3MoVIH/CmW+l
-         Y9MvqPRcxOZ7A==
-Date:   Fri, 2 Sep 2022 12:04:49 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     a.fatoum@pengutronix.de, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, vkoul@kernel.org,
-        marcel.ziswiler@toradex.com, kishon@ti.com,
-        linux-phy@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: Re: [PATCH v2] phy: freescale: imx8m-pcie: Fix the wrong order of
- phy_init() and phy_power_on()
-Message-ID: <20220902170449.GA354728@bhelgaas>
+        Fri, 2 Sep 2022 13:07:32 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2867C1BEA9;
+        Fri,  2 Sep 2022 10:07:32 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id x5so1938433qtv.9;
+        Fri, 02 Sep 2022 10:07:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=m4EPxjWBFRmumP1Ktw5mgebEJ5Np/Pz2BxFkNM4nyMI=;
+        b=OBktR1HYmcBKnWREU0l1kqjaZwnywMAMGZlQyXzjuB4Mq/JEUHp3C/SSPy21PYnrt3
+         AEjVDYgmV3a33605b4NQcPPabfPq+Hydu9Vj8h0BtAC8voBm8OREJIWdxu58fYTL3d+V
+         0U7VjlYkKF+as7Jp/pkkNHvqcUAxKul3p7VFv8a7jAqHkl/SIVliKtptkU3Pj+YzfFdr
+         Hhpv4z5vYvqL0EixBI2nQ285ZJ4fCWiu6RfSOIjy42UMXOiPW2turiST2nPjKm5dApca
+         tkkxu1uWhOudncDzBlZGb7CHc3+cQHy5N5k5yFr+1oNbYTOG5i777IjxwzXrARm1sqUY
+         2/Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=m4EPxjWBFRmumP1Ktw5mgebEJ5Np/Pz2BxFkNM4nyMI=;
+        b=HGdjt3iRNjTF6ishWo/jARCnQfZnUdB0BleBZGN9EB2nEKdVW2fNtIGUsMwP4XM7ib
+         ikSa1jY0/E9NYHx2fu3lFlx/v0EjMn7RoCoOtOJ5v115DzygpA5HcF7eP2OofSPNhhhG
+         YT63aSarz552TKfUWbPPpVQVSrOSihjOm8tqQqfp9Y/ldrxwkl3oc+aWoolbuHG9zRf9
+         U9AAxmMbmOQvzUYPh9JVzn9cKH90hbeH+kJpKlnsZu5StmEE0LN4FHUcJ9PlzoIrgEqy
+         axnuh+pZdFqsDG/wI9tRR+egRqIjjsfgxTxf4/ek1iRznJ8auE56gWdvFpMzUK1/2zO4
+         gUiw==
+X-Gm-Message-State: ACgBeo2svdrHYkqlShW6yh4J9PwXE2UDAW1szpLGuwh863eRyIZj+BDS
+        0A8zlEwOGX6Z/jU7JXZw8q4=
+X-Google-Smtp-Source: AA6agR4aNalAA/xlccc86wGslGAgCVrnDguKp+IKt2N3xAqzN5NhKadnDl2DebzdoLwJNVDrHeZr2Q==
+X-Received: by 2002:ac8:7d4a:0:b0:344:6f12:1543 with SMTP id h10-20020ac87d4a000000b003446f121543mr28996394qtb.426.1662138451228;
+        Fri, 02 Sep 2022 10:07:31 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id dt46-20020a05620a47ae00b006a793bde241sm1854867qkb.63.2022.09.02.10.07.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 10:07:30 -0700 (PDT)
+Message-ID: <278eeeb0-5324-8808-cb5e-1ffd70fe8f34@gmail.com>
+Date:   Fri, 2 Sep 2022 10:07:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1661928956-12727-1-git-send-email-hongxing.zhu@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 5.4 00/77] 5.4.212-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220902121403.569927325@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 02:55:56PM +0800, Richard Zhu wrote:
-> Refer to phy_core driver, phy_init() must be called before phy_power_on().
-> Fix the wrong order of phy_init() and phy_power_on() here.
 
-> Squash the changes into one patch to avoid the possible bi-section hole.
 
-Avoiding bisection holes goes without saying, so I don't think we need
-to even mention it ;)
-
-> Fixes: 1aa97b002258 ("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-
-I propose merging this via PCI, since I suspect pci-imx6.c is more
-active than phy-fsl-imx8m-pcie.c.
-
-Vinod, if you agree, I'm sure Lorenzo will look for your ack.
-
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c      | 6 +++---
->  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 8 ++++----
->  2 files changed, 7 insertions(+), 7 deletions(-)
+On 9/2/2022 5:18 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.212 release.
+> There are 77 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 6e5debdbc55b..b5f0de455a7b 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -935,7 +935,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
->  	}
->  
->  	if (imx6_pcie->phy) {
-> -		ret = phy_power_on(imx6_pcie->phy);
-> +		ret = phy_init(imx6_pcie->phy);
->  		if (ret) {
->  			dev_err(dev, "pcie PHY power up failed\n");
->  			goto err_clk_disable;
-> @@ -949,7 +949,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
->  	}
->  
->  	if (imx6_pcie->phy) {
-> -		ret = phy_init(imx6_pcie->phy);
-> +		ret = phy_power_on(imx6_pcie->phy);
->  		if (ret) {
->  			dev_err(dev, "waiting for PHY ready timeout!\n");
->  			goto err_phy_off;
-> @@ -961,7 +961,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
->  
->  err_phy_off:
->  	if (imx6_pcie->phy)
-> -		phy_power_off(imx6_pcie->phy);
-> +		phy_exit(imx6_pcie->phy);
->  err_clk_disable:
->  	imx6_pcie_clk_disable(imx6_pcie);
->  err_reg_disable:
-> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> index ad7d2edfc414..c93286483b42 100644
-> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> @@ -59,7 +59,7 @@ struct imx8_pcie_phy {
->  	bool			clkreq_unused;
->  };
->  
-> -static int imx8_pcie_phy_init(struct phy *phy)
-> +static int imx8_pcie_phy_power_on(struct phy *phy)
->  {
->  	int ret;
->  	u32 val, pad_mode;
-> @@ -137,14 +137,14 @@ static int imx8_pcie_phy_init(struct phy *phy)
->  	return ret;
->  }
->  
-> -static int imx8_pcie_phy_power_on(struct phy *phy)
-> +static int imx8_pcie_phy_init(struct phy *phy)
->  {
->  	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
->  
->  	return clk_prepare_enable(imx8_phy->clk);
->  }
->  
-> -static int imx8_pcie_phy_power_off(struct phy *phy)
-> +static int imx8_pcie_phy_exit(struct phy *phy)
->  {
->  	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
->  
-> @@ -155,8 +155,8 @@ static int imx8_pcie_phy_power_off(struct phy *phy)
->  
->  static const struct phy_ops imx8_pcie_phy_ops = {
->  	.init		= imx8_pcie_phy_init,
-> +	.exit		= imx8_pcie_phy_exit,
->  	.power_on	= imx8_pcie_phy_power_on,
-> -	.power_off	= imx8_pcie_phy_power_off,
->  	.owner		= THIS_MODULE,
->  };
->  
-> -- 
-> 2.25.1
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
 > 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.212-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> -- 
-> linux-phy mailing list
-> linux-phy@lists.infradead.org
-> https://lists.infradead.org/mailman/listinfo/linux-phy
+> thanks,
+> 
+> greg k-h
+
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

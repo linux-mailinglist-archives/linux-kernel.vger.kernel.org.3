@@ -2,281 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22A45AABF7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCAB75AABFA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbiIBKBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S235270AbiIBKBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235564AbiIBKBO (ORCPT
+        with ESMTP id S235581AbiIBKBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Sep 2022 06:01:14 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CDD64A130
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 03:00:22 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.2.9.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx9OEm1BFjjL4PAA--.1120S2;
-        Fri, 02 Sep 2022 18:00:06 +0800 (CST)
-From:   Mao Bibo <maobibo@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Bibo Mao <maobibo@loongson.cn>
-Subject: [PATCH v3] LoongArch: Add safer signal handler for TLS access
-Date:   Fri,  2 Sep 2022 17:59:58 +0800
-Message-Id: <20220902095958.3875126-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E005A148;
+        Fri,  2 Sep 2022 03:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662112836; x=1693648836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z8Mgib2QatymcoG6hN4+y5eGn6bdmJ5yNpC/dUxkJo4=;
+  b=AQjzhRnl2aG82uFSNNRo+e4d8zTE1fOq6vv1D2wIoB8E27qYLkN7P9p8
+   YrGikrHC+nhAG04qTCbTdBksBySb8OtHRvi+NWURielimeArATjJ3UEic
+   HkasJb5KHhP3Q9JUg6FDObOTeYIjn/klrbt3L0QV42Y+/rcK0RWCy41UA
+   l0eRVngyktPC/asdy9E4w+YeK4gZHH136O8IN8OczwpU5u+K9oB+PbRF/
+   NGuwfMJB7K1blb0KpvaydaPBifdyBPk9rOWT9twT0fzcgLklgYC6ZiPaU
+   AfOKXSVvt6xRlEN8Sj4SaG1kmtT9RnZdyCh44YAXNido9rzYZFG970h1n
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="293525082"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="293525082"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 03:00:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="702090042"
+Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Sep 2022 03:00:34 -0700
+Received: from kbuild by fccc941c3034 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oU3TV-0000UN-2s;
+        Fri, 02 Sep 2022 10:00:33 +0000
+Date:   Fri, 2 Sep 2022 18:00:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     hezhongkun <hezhongkun.hzk@bytedance.com>, tj@kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org
+Cc:     kbuild-all@lists.01.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhongkun He <hezhongkun.hzk@bytedance.com>
+Subject: Re: [PATCH] cgroup/cpuset: Add a new isolated mems.policy type.
+Message-ID: <202209021748.qgRnQldF-lkp@intel.com>
+References: <20220902063303.1057-1-hezhongkun.hzk@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx9OEm1BFjjL4PAA--.1120S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtF1ruw18Ww4ftr4UuryrtFb_yoWxCw15pF
-        98Cr1qyrZ0kw1kAr9Fva4DuryrJwn7Gw429FZIka43Aa12qa1rXryv9a4DZF1Yyw4ku3W0
-        qFZ0qrn3ta1qqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902063303.1057-1-hezhongkun.hzk@bytedance.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LoongArch uses general purpose register R2 as thread pointer(TP)
-register, signal hanlder also uses TP register to access variables
-in TLS area, such as errno and variable in TLS.
+Hi hezhongkun,
 
-If GPR R2 is modified with wrong value, signal handler still uses
-the wrong TP register, so signal hanlder is insafe to access TLS
-variable.
+Thank you for the patch! Yet something to improve:
 
-This patch adds one arch specific syscall set_thread_area, and
-restore previoud TP value before signal handler, so that signal
-handler is safe to access TLS variable.
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on linus/master v6.0-rc3 next-20220901]
+[cannot apply to tj-cgroup/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It passes to run with the following test case.
-=======8<======
- #define _GNU_SOURCE
- #include <stdio.h>
- #include <stdlib.h>
- #include <unistd.h>
- #include <string.h>
- #include <sys/syscall.h>
- #include <sys/types.h>
- #include <signal.h>
- #include <pthread.h>
- #include <asm/ucontext.h>
- #include <asm/sigcontext.h>
+url:    https://github.com/intel-lab-lkp/linux/commits/hezhongkun/cgroup-cpuset-Add-a-new-isolated-mems-policy-type/20220902-143512
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 53aa930dc4bae6aa269951bd37103083145d6691
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220902/202209021748.qgRnQldF-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7b7fbf5ae59ebc703a8d545fabd305563c0f42f6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review hezhongkun/cgroup-cpuset-Add-a-new-isolated-mems-policy-type/20220902-143512
+        git checkout 7b7fbf5ae59ebc703a8d545fabd305563c0f42f6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/
 
- #define ILL_INSN ".word 0x000001f0"
-static inline long test_sigill(unsigned long fid)
-{
-        register long ret __asm__("$r4");
-        register unsigned long fun __asm__("$r4") = fid;
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-        __asm__ __volatile__("move $r2, $r0 \r\n");
-        __asm__ __volatile__(
-                        ILL_INSN
-                        : "=r" (ret)
-                        : "r" (fun)
-                        : "memory"
-                        );
+All errors (new ones prefixed by >>):
 
-        return ret;
-}
+   In file included from include/linux/sched.h:22,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/node.h:18,
+                    from include/linux/cpu.h:17,
+                    from kernel/cgroup/cpuset.c:25:
+   kernel/cgroup/cpuset.c: In function 'update_nodemasks_hier':
+>> kernel/cgroup/cpuset.c:1867:54: error: 'struct mempolicy' has no member named 'w'
+    1867 |                                         cp->mempolicy->w.user_nodemask);
+         |                                                      ^~
+   include/linux/nodemask.h:163:56: note: in definition of macro 'nodes_and'
+     163 |                         __nodes_and(&(dst), &(src1), &(src2), MAX_NUMNODES)
+         |                                                        ^~~~
+   kernel/cgroup/cpuset.c: In function 'cpuset_change_task_cs_mpol':
+>> kernel/cgroup/cpuset.c:2477:12: error: 'struct task_struct' has no member named 'il_prev'
+    2477 |         tsk->il_prev = 0;
+         |            ^~
+   kernel/cgroup/cpuset.c: In function 'cpuset_mpol_write':
+   kernel/cgroup/cpuset.c:2525:63: error: 'struct mempolicy' has no member named 'w'
+    2525 |                 nodes_and(cs_allowed, cs->effective_mems, mpol->w.user_nodemask);
+         |                                                               ^~
+   include/linux/nodemask.h:163:56: note: in definition of macro 'nodes_and'
+     163 |                         __nodes_and(&(dst), &(src1), &(src2), MAX_NUMNODES)
+         |                                                        ^~~~
+   kernel/cgroup/cpuset.c: In function 'cpuset_mpol_show':
+>> kernel/cgroup/cpuset.c:2558:26: error: 'struct mempolicy' has no member named 'mode'
+    2558 |         if (!mpol || mpol->mode == MPOL_DEFAULT)
+         |                          ^~
+>> kernel/cgroup/cpuset.c:2561:9: error: implicit declaration of function 'mpol_to_str' [-Werror=implicit-function-declaration]
+    2561 |         mpol_to_str(buffer, sizeof(buffer), mpol);
+         |         ^~~~~~~~~~~
+   kernel/cgroup/cpuset.c: In function 'cpuset_css_alloc':
+>> kernel/cgroup/cpuset.c:2981:15: error: implicit declaration of function 'mpol_dup'; did you mean 'mpol_put'? [-Werror=implicit-function-declaration]
+    2981 |         new = mpol_dup(pcs->mempolicy);
+         |               ^~~~~~~~
+         |               mpol_put
+   kernel/cgroup/cpuset.c:2981:13: warning: assignment to 'struct mempolicy *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    2981 |         new = mpol_dup(pcs->mempolicy);
+         |             ^
+   cc1: some warnings being treated as errors
 
-static void set_sigill_handler(void (*fn) (int, siginfo_t *, void *))
-{
-        struct sigaction sa;
-        memset(&sa, 0, sizeof(struct sigaction));
 
-        sa.sa_sigaction = fn;
-        sa.sa_flags = SA_SIGINFO;
-        sigemptyset(&sa.sa_mask);
-        if (sigaction(SIGILL, &sa, 0) != 0) {
-                perror("sigaction");
-        }
-}
+vim +1867 kernel/cgroup/cpuset.c
 
-void catch_sig(int sig, siginfo_t *si, void *vuc)
-{
-        struct ucontext *uc = vuc;
-        register unsigned long tls  __asm__("$r2");
+  1821	
+  1822	/*
+  1823	 * update_nodemasks_hier - Update effective nodemasks and tasks in the subtree
+  1824	 * @cs: the cpuset to consider
+  1825	 * @new_mems: a temp variable for calculating new effective_mems
+  1826	 *
+  1827	 * When configured nodemask is changed, the effective nodemasks of this cpuset
+  1828	 * and all its descendants need to be updated.
+  1829	 *
+  1830	 * On legacy hierarchy, effective_mems will be the same with mems_allowed.
+  1831	 *
+  1832	 * Called with cpuset_rwsem held
+  1833	 */
+  1834	static void update_nodemasks_hier(struct cpuset *cs, nodemask_t *new_mems)
+  1835	{
+  1836		struct cpuset *cp;
+  1837		struct cgroup_subsys_state *pos_css;
+  1838		nodemask_t cs_allowed;
+  1839	
+  1840		rcu_read_lock();
+  1841		cpuset_for_each_descendant_pre(cp, pos_css, cs) {
+  1842			struct cpuset *parent = parent_cs(cp);
+  1843	
+  1844			nodes_and(*new_mems, cp->mems_allowed, parent->effective_mems);
+  1845	
+  1846			/*
+  1847			 * If it becomes empty, inherit the effective mask of the
+  1848			 * parent, which is guaranteed to have some MEMs.
+  1849			 */
+  1850			if (is_in_v2_mode() && nodes_empty(*new_mems))
+  1851				*new_mems = parent->effective_mems;
+  1852	
+  1853			/* Skip the whole subtree if the nodemask remains the same. */
+  1854			if (nodes_equal(*new_mems, cp->effective_mems)) {
+  1855				pos_css = css_rightmost_descendant(pos_css);
+  1856				continue;
+  1857			}
+  1858	
+  1859			if (!css_tryget_online(&cp->css))
+  1860				continue;
+  1861			rcu_read_unlock();
+  1862	
+  1863			spin_lock_irq(&callback_lock);
+  1864	
+  1865			if (cp->mempolicy)
+  1866				nodes_and(cs_allowed, *new_mems,
+> 1867						cp->mempolicy->w.user_nodemask);
+  1868			mpol_rebind_policy(cp->mempolicy, &cs_allowed);
+  1869			cp->effective_mems = *new_mems;
+  1870			spin_unlock_irq(&callback_lock);
+  1871	
+  1872			WARN_ON(!is_in_v2_mode() &&
+  1873				!nodes_equal(cp->mems_allowed, cp->effective_mems));
+  1874	
+  1875			update_tasks_nodemask(cp);
+  1876	
+  1877			rcu_read_lock();
+  1878			css_put(&cp->css);
+  1879		}
+  1880		rcu_read_unlock();
+  1881	}
+  1882	
 
-        uc->uc_mcontext.sc_pc +=4;
-        uc->uc_mcontext.sc_regs[2] = tls;
-        printf("catched signal %d\n", sig);
-}
-
-void *print_message_function( void *ptr )
-{
-        char *message;
-        message = (char *) ptr;
-        printf("%s \n", message);
-        test_sigill(1);
-}
-
-void pthread_test(void)
-{
-        pthread_t thread1, thread2;
-        char *message1 = "Thread 1";
-        char *message2 = "Thread 2";
-        int  iret1, iret2;
-
-        iret1 = pthread_create( &thread1, NULL, print_message_function,
-				(void*) message1);
-        iret2 = pthread_create( &thread2, NULL, print_message_function,
-				(void*) message2);
-        pthread_join( thread1, NULL);
-        pthread_join( thread2, NULL);
-        printf("Thread 1 returns: %d\n",iret1);
-        printf("Thread 2 returns: %d\n",iret2);
-        exit(0);
-}
-
-void exec_test(void) {
-        test_sigill(1);
-}
-
-void main() {
-        register unsigned long tls  __asm__("$r2");
-        int val;
-
-        val = syscall(244, tls);
-        set_sigill_handler(&catch_sig);
-        pthread_test();
-        //exec_test();
-        return;
-}
-=======8<======
-
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
-v2->v3:
- - Use current_thread_info rather than task_thread_info(current)
-v1->v2:
- - Clear TP value in clone function if CLONE_SETTLS is not set
----
- arch/loongarch/include/asm/unistd.h      |  1 +
- arch/loongarch/include/uapi/asm/unistd.h |  2 ++
- arch/loongarch/kernel/process.c          | 10 +++++++++-
- arch/loongarch/kernel/signal.c           |  5 +++++
- arch/loongarch/kernel/syscall.c          |  9 +++++++++
- 5 files changed, 26 insertions(+), 1 deletion(-)
-
-diff --git a/arch/loongarch/include/asm/unistd.h b/arch/loongarch/include/asm/unistd.h
-index cfddb0116a8c..1581624f0115 100644
---- a/arch/loongarch/include/asm/unistd.h
-+++ b/arch/loongarch/include/asm/unistd.h
-@@ -9,3 +9,4 @@
- #include <uapi/asm/unistd.h>
- 
- #define NR_syscalls (__NR_syscalls)
-+__SYSCALL(__NR_set_thread_area, sys_set_thread_area)
-diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
-index b344b1f91715..ceb8c4cec505 100644
---- a/arch/loongarch/include/uapi/asm/unistd.h
-+++ b/arch/loongarch/include/uapi/asm/unistd.h
-@@ -4,3 +4,5 @@
- #define __ARCH_WANT_SYS_CLONE3
- 
- #include <asm-generic/unistd.h>
-+
-+#define __NR_set_thread_area	(__NR_arch_specific_syscall + 0)
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index 660492f064e7..488bbe2e8c99 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -88,6 +88,7 @@ void start_thread(struct pt_regs *regs, unsigned long pc, unsigned long sp)
- 	clear_used_math();
- 	regs->csr_era = pc;
- 	regs->regs[3] = sp;
-+	current_thread_info()->tp_value = 0;
- }
- 
- void exit_thread(struct task_struct *tsk)
-@@ -152,6 +153,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 		childregs->csr_crmd = p->thread.csr_crmd;
- 		childregs->csr_prmd = p->thread.csr_prmd;
- 		childregs->csr_ecfg = p->thread.csr_ecfg;
-+		task_thread_info(p)->tp_value = 0;
- 		return 0;
- 	}
- 
-@@ -176,8 +178,14 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	clear_tsk_thread_flag(p, TIF_LSX_CTX_LIVE);
- 	clear_tsk_thread_flag(p, TIF_LASX_CTX_LIVE);
- 
--	if (clone_flags & CLONE_SETTLS)
-+	/*
-+	 * record tls val for cloned threads
-+	 * clear it for forked process
-+	 */
-+	if (clone_flags & CLONE_SETTLS) {
- 		childregs->regs[2] = tls;
-+		task_thread_info(p)->tp_value = tls;
-+	}
- 
- 	return 0;
- }
-diff --git a/arch/loongarch/kernel/signal.c b/arch/loongarch/kernel/signal.c
-index 7f4889df4a17..2d88630e2a05 100644
---- a/arch/loongarch/kernel/signal.c
-+++ b/arch/loongarch/kernel/signal.c
-@@ -480,6 +480,9 @@ static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
- 	 *
- 	 * c0_era point to the signal handler, $r3 (sp) points to
- 	 * the struct rt_sigframe.
-+	 *
-+	 * Use recorded TP to signal handler if exists since $r2 may be
-+	 * corrupted already.
- 	 */
- 	regs->regs[4] = ksig->sig;
- 	regs->regs[5] = (unsigned long) &frame->rs_info;
-@@ -487,6 +490,8 @@ static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
- 	regs->regs[3] = (unsigned long) frame;
- 	regs->regs[1] = (unsigned long) sig_return;
- 	regs->csr_era = (unsigned long) ksig->ka.sa.sa_handler;
-+	if (current_thread_info()->tp_value)
-+		regs->regs[2] = current_thread_info()->tp_value;
- 
- 	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
- 	       current->comm, current->pid,
-diff --git a/arch/loongarch/kernel/syscall.c b/arch/loongarch/kernel/syscall.c
-index 3fc4211db989..330d2aeadc02 100644
---- a/arch/loongarch/kernel/syscall.c
-+++ b/arch/loongarch/kernel/syscall.c
-@@ -29,6 +29,15 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len, unsigned long,
- 	return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset >> PAGE_SHIFT);
- }
- 
-+SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
-+{
-+	struct pt_regs     *regs = current_pt_regs();
-+
-+	regs->regs[2] = addr;
-+	current_thread_info()->tp_value  = addr;
-+	return 0;
-+}
-+
- void *sys_call_table[__NR_syscalls] = {
- 	[0 ... __NR_syscalls - 1] = sys_ni_syscall,
- #include <asm/unistd.h>
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

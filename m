@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CE25AB3D0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBA65AB3CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236882AbiIBOkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S236665AbiIBOjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237108AbiIBOit (ORCPT
+        with ESMTP id S237171AbiIBOiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:38:49 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6DA1583D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:59:18 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id s3-20020a17090a5d0300b001fb3ac54a03so1084638pji.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 06:59:18 -0700 (PDT)
+        Fri, 2 Sep 2022 10:38:52 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E538117AFA
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:59:29 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id nl16-20020a17090b385000b001fff2445007so1438144pjb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 06:59:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=oN5uSrVstmrmpjZNjpC0MkyDD5rjW/MPwKNf9i5pnNc=;
-        b=o+Lsa+2foF5sCCgfrc7ezOOg1N50QrhT6WR0lKZS9r+zxfU/D9FKMVuxEAEXxEHUkX
-         4023LM4orS+Xa6f0wcOXSpNRjc9RF5Z1aA99E5sLPYAlDlL4ZWTENpnQLxLJYD96Sgii
-         GMakGniU5YUfOGTTc9o2Alam/Ni9ZdjP330b7KPOL/vX5FFjxu3kopt0hAgo3o6QNjzA
-         yqpx1XnMXGvJotFbkxsZljt4moyhknjjCPcLjs8P3pwvvlrA2xJ9Y/yAMxYH2vtUFk4Q
-         r1DwI+/lqaZjN5nRXgdegS+0uqD+/iJG8FBSvLybqDyWYUfPrSd7NBDMvmpUQEf420KA
-         km1g==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=RPXDfWA9lujW4kEczkgobkXTxjOaAFXj4VbLJ20aew8=;
+        b=olN4CjCDEFV5NOihx8i3dCWSibdH/KaTQyVs2xZJvX8jKBvagU79f1BB/rHwSbiwPQ
+         ORtoa9a8SwQzdoChP+nnPHCGrhwqYAWYoCe7J2pjjgu6klMpX0HC3HX0ib4u6I6faFZH
+         8OeHboT1hQicRvIm7GHAElHw9msjds64LKD9YTwU4l9jFFMjTExoTZx+CvOAPPI9xaUz
+         YM3eoHKmaP2sm3neTPHOb1BQkV+0A1hWYOEJuGtW7yquvI2ynsIfXVFfl+aTWtDvD8KT
+         kz5OBzOLWNHIuEv7AjupTMyKe1JPytfb8SiLORy87bSJqiGAlhm9HQavuFeesgjhphhK
+         xjcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=oN5uSrVstmrmpjZNjpC0MkyDD5rjW/MPwKNf9i5pnNc=;
-        b=HimLXc9Alpx+R8yP38DuqQBcAEkY/yYomWSjKu59rYUO5HweJ1J6r1yUa6zDtUssjK
-         KvflPJrnmsmjzgQdQ7yW3gVzNJGjHQdmVlfI9HHWQv8fC8eIot09TWd1TWAwoscOlivG
-         vFz39vY4UaaUWF320DyAluIgx2hYCzKdcNmslPFcw81bsY9uoXCpW27J0tRIaJwwTh0q
-         dCQdzGxPiwsErDC+hrOxJHtzdRV7YZFqfptUhvY6GNAKSX8tTgvsV7V09pTQKM0j/reD
-         HnMbrFfr1kROTFGrqSVl+K0TLhxgBtFRI7p6ZF9i75BoxF6dVww/kKz3Jx7PMUCUo3U7
-         tLWw==
-X-Gm-Message-State: ACgBeo0BOxg6fC8H6CVJmnZ+b+dCJy45gMlZuJ6RBxq6fKsts9TtJNNv
-        uTluh6NhF+zCFHwXBfxh3TKuxCMSnWAfIFHaLw==
-X-Google-Smtp-Source: AA6agR54EWg2sgqmKFoaPLZA7WYfFsWIYBZkRNebscj7qllbI0jp4jyOkQdEH2hM+LuA89xIf+dP/XSfCqclvkGGPA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=RPXDfWA9lujW4kEczkgobkXTxjOaAFXj4VbLJ20aew8=;
+        b=1cPMLBMG4hXAYjzXynQ851Ylqwhlki8pR/C9g+YqUNeUAOfILvpPsiVYunEYHLW1xO
+         O0z9qhGUxyN1P0lXCxB2Ds+PrNMFf6G7hBumuIClIgzKsqBEe4252u/clBo2ZqCTZXIS
+         No5u6fmQ8nC0ujgQRMcQ+0lOS8Ry77PI3Ww8at/sb/hyk5he2lh2aCZR2hUM5+Y/bEg7
+         BnM0kPDQ+Jtoji0xb0ltSxIWIBlA+Ttn/14kNYwHUNcqDS/iaOnr7KQZAilqvo2YfMFo
+         A3JTkHjyo0uEcrVsUk6WIBeL1cwttTEjnp0sXmm5tMntEd0fsfoHDAJRIEAFlPJFkdR6
+         I8Zg==
+X-Gm-Message-State: ACgBeo2aCDAtWAuxqTcN8OW/ezJ+Q30lDlD9Et6TX7X0dkaEFBfi8suo
+        4EjOO/J+MMrr4mFnZae+yz/2aYga2gRaCL7uTg==
+X-Google-Smtp-Source: AA6agR7GOuwYdW7G/rJgHcUOwe0bDiVXi5gvEBS5447akvD65w9vvuw9+0ka0PNgEuZI7Fx49wJViUzOzxrtisUUnQ==
 X-Received: from varshat.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:a35])
- (user=teratipally job=sendgmr) by 2002:a05:6a00:2db:b0:537:f78b:222e with
- SMTP id b27-20020a056a0002db00b00537f78b222emr30233530pft.35.1662127158481;
- Fri, 02 Sep 2022 06:59:18 -0700 (PDT)
-Date:   Fri,  2 Sep 2022 13:59:11 +0000
+ (user=teratipally job=sendgmr) by 2002:a17:902:ebc8:b0:172:549d:e392 with
+ SMTP id p8-20020a170902ebc800b00172549de392mr35733329plg.141.1662127168060;
+ Fri, 02 Sep 2022 06:59:28 -0700 (PDT)
+Date:   Fri,  2 Sep 2022 13:59:12 +0000
+In-Reply-To: <20220902135912.816188-1-teratipally@google.com>
 Mime-Version: 1.0
+References: <20220902135912.816188-1-teratipally@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220902135912.816188-1-teratipally@google.com>
-Subject: Request to cherry-pick 20401d1058f3f841f35a594ac2fc1293710e55b9 to
- v5.10 and v5.4
+Message-ID: <20220902135912.816188-2-teratipally@google.com>
+Subject: [PATCH] ipc: replace costly bailout check in sysvipc_find_ipc()
 From:   Varsha Teratipally <teratipally@google.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Manfred Spraul <manfred@colorfullife.com>,
@@ -59,25 +60,94 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
 Cc:     Davidlohr Bueso <dbueso@suse.de>,
         Rafael Aquini <aquini@redhat.com>,
         Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Waiman Long <llong@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+From: Rafael Aquini <aquini@redhat.com>
 
-Commit 20401d1058f3f841f35a594ac2fc1293710e55b9("ipc: replace costly
-bailout check in sysvipc_find_ipc()" fixes a high cve and optimizes the
-costly loop by adding a checkpoint, which I think might be a good
-candidate for the stable branches
+sysvipc_find_ipc() was left with a costly way to check if the offset
+position fed to it is bigger than the total number of IPC IDs in use.  So
+much so that the time it takes to iterate over /proc/sysvipc/* files grows
+exponentially for a custom benchmark that creates "N" SYSV shm segments
+and then times the read of /proc/sysvipc/shm (milliseconds):
 
-Let me know what you think
+    12 msecs to read   1024 segs from /proc/sysvipc/shm
+    18 msecs to read   2048 segs from /proc/sysvipc/shm
+    65 msecs to read   4096 segs from /proc/sysvipc/shm
+   325 msecs to read   8192 segs from /proc/sysvipc/shm
+  1303 msecs to read  16384 segs from /proc/sysvipc/shm
+  5182 msecs to read  32768 segs from /proc/sysvipc/shm
 
+The root problem lies with the loop that computes the total amount of ids
+in use to check if the "pos" feeded to sysvipc_find_ipc() grew bigger than
+"ids->in_use".  That is a quite inneficient way to get to the maximum
+index in the id lookup table, specially when that value is already
+provided by struct ipc_ids.max_idx.
+
+This patch follows up on the optimization introduced via commit
+15df03c879836 ("sysvipc: make get_maxid O(1) again") and gets rid of the
+aforementioned costly loop replacing it by a simpler checkpoint based on
+ipc_get_maxidx() returned value, which allows for a smooth linear increase
+in time complexity for the same custom benchmark:
+
+     2 msecs to read   1024 segs from /proc/sysvipc/shm
+     2 msecs to read   2048 segs from /proc/sysvipc/shm
+     4 msecs to read   4096 segs from /proc/sysvipc/shm
+     9 msecs to read   8192 segs from /proc/sysvipc/shm
+    19 msecs to read  16384 segs from /proc/sysvipc/shm
+    39 msecs to read  32768 segs from /proc/sysvipc/shm
+
+Link: https://lkml.kernel.org/r/20210809203554.1562989-1-aquini@redhat.com
+Signed-off-by: Rafael Aquini <aquini@redhat.com>
+Acked-by: Davidlohr Bueso <dbueso@suse.de>
+Acked-by: Manfred Spraul <manfred@colorfullife.com>
+Cc: Waiman Long <llong@redhat.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+---
+ ipc/util.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/ipc/util.c b/ipc/util.c
+index 0027e47626b7..d48d8cfa1f3f 100644
+--- a/ipc/util.c
++++ b/ipc/util.c
+@@ -788,21 +788,13 @@ struct pid_namespace *ipc_seq_pid_ns(struct seq_file *s)
+ static struct kern_ipc_perm *sysvipc_find_ipc(struct ipc_ids *ids, loff_t pos,
+ 					      loff_t *new_pos)
+ {
+-	struct kern_ipc_perm *ipc;
+-	int total, id;
+-
+-	total = 0;
+-	for (id = 0; id < pos && total < ids->in_use; id++) {
+-		ipc = idr_find(&ids->ipcs_idr, id);
+-		if (ipc != NULL)
+-			total++;
+-	}
++	struct kern_ipc_perm *ipc = NULL;
++	int max_idx = ipc_get_maxidx(ids);
+ 
+-	ipc = NULL;
+-	if (total >= ids->in_use)
++	if (max_idx == -1 || pos > max_idx)
+ 		goto out;
+ 
+-	for (; pos < ipc_mni; pos++) {
++	for (; pos <= max_idx; pos++) {
+ 		ipc = idr_find(&ids->ipcs_idr, pos);
+ 		if (ipc != NULL) {
+ 			rcu_read_lock();
+--
 

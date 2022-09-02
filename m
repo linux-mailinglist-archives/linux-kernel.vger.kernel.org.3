@@ -2,72 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB395AB9BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C5F5AB9D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbiIBVCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 17:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
+        id S231157AbiIBVDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 17:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIBVCb (ORCPT
+        with ESMTP id S230513AbiIBVCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 17:02:31 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068B6BD742
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:02:29 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id h78so2614377iof.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 14:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Sg94S1ohGjSO+2FVqvQ4ZE3HnavccZA0F79TKZotqVs=;
-        b=o9qQ43NUmTFDtsWINhDRhOkVGXDvg/H28BHjXIDDAEPud8d9lSZEHUA9LlfLcwHDva
-         dDJrZm3qqB7nsHYvewhltyadSReDKbLEevaB19KsVU52naGDx6JOHOJbQoZRzgZSIefV
-         Mjh8BpDYLeeU7W+p+wCeM3NkaxlEUjad5u5Y3KDzZjrW9rc3n4EkJOcAgM3qWWCco72i
-         nK+I1s6KAqk9x+sVXzB7SYmj6Jr+vuF3BFsPwSrc4l0Tl8vi5J0aGvw4SSXChJvldh9L
-         SWd3rTClLlqPJ08BIsCVeKPVQ8STXdNwTyxLN4xcn/gUFRdqFD7JOoY9w3LZqYgsvmId
-         3jpA==
+        Fri, 2 Sep 2022 17:02:43 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6714FEA17E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:02:32 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id o2-20020a056e0214c200b002eb8acbd27cso2629649ilk.22
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 14:02:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Sg94S1ohGjSO+2FVqvQ4ZE3HnavccZA0F79TKZotqVs=;
-        b=hfjEv5At7i5aSOrpiknPBixiELReQk0SHjeKpdtsdB2AfkRnizpLyaCfWVetVPUdKP
-         CUFUO1cnhUIflhBDtjkuRleJmbLy0f/ko6UFDkJyoVAYU7DMMIQs9Xeg8X6t34By8vw7
-         /XKZ0ueCK1e+yH5ATOYDnT4Cwy74epNHfYyf5bVdU5sUBn6vwVlfJ527tkDj+CLaMmRr
-         mKt2RJ/RS/dwwqzw/62aFNwMzNxKGKgd88jQ3OLReCY+Jw0M52tANNpc43jjOJz3Hy8y
-         az878jRoEg5Rc+iLXb1ZGUQ90E0IxYT+pSWTF3mMF2X95nVdBI/cpFhA34cf9Ski9gPP
-         TdPg==
-X-Gm-Message-State: ACgBeo2p2LhaXHzMI+NGfLblA0bes+tHVyQ/DhVaZ4Ok8ksVDt1LLu/E
-        PfGblaWUEehqvtTAe7jsUnUw4w==
-X-Google-Smtp-Source: AA6agR4bipgwhYJcj70+tEd37INbaqRP3sa2haOjLbdU0WafJ0IULWIhc59GMUjKLG7TzCpXBhBeFQ==
-X-Received: by 2002:a05:6638:2613:b0:346:e2c5:aa4e with SMTP id m19-20020a056638261300b00346e2c5aa4emr20374986jat.160.1662152548689;
-        Fri, 02 Sep 2022 14:02:28 -0700 (PDT)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id i7-20020a0566022c8700b00689e718d971sm1259208iow.51.2022.09.02.14.02.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 14:02:28 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 6/6] net: ipa: verify a few more IDs
-Date:   Fri,  2 Sep 2022 16:02:18 -0500
-Message-Id: <20220902210218.745873-7-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220902210218.745873-1-elder@linaro.org>
-References: <20220902210218.745873-1-elder@linaro.org>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=tjXPIVUa530Ib5lpdoYK8WIQSiEveJdJfuoCQgSxgqE=;
+        b=iHrReif8jpKTSotgS3D31eZIk5Xmpw9LZEuMlrZb6uDH00nt33uv5J9kOrIpcXTQhK
+         vE2coWDMe2GsxowQKhzY2k59QnkMqUxqbVImBJnulhvIhT8n+1Kh44dIiuR9T51RHUES
+         +D4tICukcq5aN+7RbwaRIYXq3iwiqQMHRInOrUvK6vNQIbyAVR7F7khKha4jMoJFbrXu
+         mEXT65F6ZtYOm5DgrwMwBKxP4iGEjOqfm//4OrxRWZiOUdudaeV4HsxZLE3/Zv7KR+eB
+         5AJWmz03tfCS/sjOyPcwJQ4NOsa8O+2iqtCt+97f95ZrNRsvxdIIEk5sEQwThMZmuo1y
+         8bcw==
+X-Gm-Message-State: ACgBeo002wfoJ2S+BgU3KwRk8Hos5RKP/E42d+2xU5sHJOMqrUwa6a01
+        xhMxfDmy0zE89TWTiapiIxsNGxClnXhhqctFwQ5FDPGCqxCV
+X-Google-Smtp-Source: AA6agR6eV7qr9Lc76oYaiU3wkpsgPRUThCL+SvlcwlzZNM6d6bT2L9r99E9sFztEYbU4438+GCtLY3NxySyGqld+3S6f61doTMVV
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:ca4e:0:b0:2ee:bf22:630f with SMTP id
+ q14-20020a92ca4e000000b002eebf22630fmr2663381ilo.287.1662152551115; Fri, 02
+ Sep 2022 14:02:31 -0700 (PDT)
+Date:   Fri, 02 Sep 2022 14:02:31 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005f372b05e7b80c2e@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in mem_cgroup_track_foreign_dirty_slowpath
+From:   syzbot <syzbot+66ad6d47392c3113957e@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, songmuchun@bytedance.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,98 +57,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The completed transaction list is used in gsi_channel_trans_complete()
-to return the next transaction in completed state.
+Hello,
 
-Add some temporary checks to verify the transaction indicated by the
-completed ID matches the one first in this list.
+syzbot found the following issue on:
 
-Similarly, we use the pending and completed transaction lists when
-cancelling pending transactions in gsi_channel_trans_cancel_pending().
+HEAD commit:    85413d1e802e Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=108cec3b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=57b9bfeca947ab90
+dashboard link: https://syzkaller.appspot.com/bug?extid=66ad6d47392c3113957e
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a3b1e5080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16dead7d080000
 
-Add temporary checks there to verify the transactions indicated by
-IDs match those tracked by these lists.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+66ad6d47392c3113957e@syzkaller.appspotmail.com
 
-Signed-off-by: Alex Elder <elder@linaro.org>
+Unable to handle kernel paging request at virtual address 00000000000012e8
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000011163c000
+[00000000000012e8] pgd=080000011204a003, p4d=080000011204a003, pud=080000011068f003, pmd=0000000000000000
+Internal error: Oops: 96000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 926 Comm: syz-executor308 Not tainted 6.0.0-rc3-syzkaller-16800-g85413d1e802e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+pstate: 204000c5 (nzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : mem_cgroup_track_foreign_dirty_slowpath+0x3c/0x1e4 mm/memcontrol.c:4595
+lr : mem_cgroup_track_foreign_dirty_slowpath+0x38/0x1e4 mm/memcontrol.c:4586
+sp : ffff800016c9ba80
+x29: ffff800016c9ba80 x28: ffff0000d12cb500 x27: 0c00000000000001
+x26: 0000000000000001 x25: ffff0000c017b000 x24: 0000000000000100
+x23: ffff80000d379000 x22: 00000001000233ce x21: fffffc0003463000
+x20: ffff0000c3849060 x19: 0000000000000000 x18: 000000000000013a
+x17: ffff80000c04d6bc x16: ffff80000dbb8658 x15: ffff0000d12cb500
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000d12cb500
+x11: ff808000095ecd98 x10: 0000000000000000 x9 : 0000000000000000
+x8 : ffff0000c3849000 x7 : ffff80000856f3a4 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000000 x3 : 0000000000000002
+x2 : 0000000000000010 x1 : ffff80000cb90d29 x0 : 0000000000000001
+Call trace:
+ mem_cgroup_track_foreign_dirty_slowpath+0x3c/0x1e4
+ mem_cgroup_track_foreign_dirty include/linux/memcontrol.h:1663 [inline]
+ folio_account_dirtied+0x430/0x650 mm/page-writeback.c:2575
+ __folio_mark_dirty+0xbc/0x180 mm/page-writeback.c:2615
+ block_dirty_folio+0x10c/0x1ec fs/buffer.c:640
+ folio_mark_dirty+0xbc/0x208 mm/page-writeback.c:2748
+ filemap_page_mkwrite+0x26c/0x5dc mm/filemap.c:3418
+ do_page_mkwrite+0x74/0x288 mm/memory.c:2971
+ wp_page_shared+0x8c/0x4e4 mm/memory.c:3316
+ do_wp_page+0x86c/0x110c mm/memory.c:3466
+ handle_pte_fault mm/memory.c:4929 [inline]
+ __handle_mm_fault mm/memory.c:5053 [inline]
+ handle_mm_fault+0x878/0xa40 mm/memory.c:5151
+ __do_page_fault arch/arm64/mm/fault.c:502 [inline]
+ do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:602
+ do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:818
+ el0_da+0x70/0x16c arch/arm64/kernel/entry-common.c:502
+ el0t_64_sync_handler+0xcc/0xf0 arch/arm64/kernel/entry-common.c:645
+ el0t_64_sync+0x18c/0x190
+Code: aa1503e0 aa1403e1 9400006c f9400288 (f9497669) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	aa1503e0 	mov	x0, x21
+   4:	aa1403e1 	mov	x1, x20
+   8:	9400006c 	bl	0x1b8
+   c:	f9400288 	ldr	x8, [x20]
+* 10:	f9497669 	ldr	x9, [x19, #4840] <-- trapping instruction
+
+
 ---
- drivers/net/ipa/gsi_trans.c | 46 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 43 insertions(+), 3 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
-index b4a6f2b563566..05ab4d052c68b 100644
---- a/drivers/net/ipa/gsi_trans.c
-+++ b/drivers/net/ipa/gsi_trans.c
-@@ -237,8 +237,24 @@ gsi_channel_trans_mapped(struct gsi_channel *channel, u32 index)
- /* Return the oldest completed transaction for a channel (or null) */
- struct gsi_trans *gsi_channel_trans_complete(struct gsi_channel *channel)
- {
--	return list_first_entry_or_null(&channel->trans_info.complete,
--					struct gsi_trans, links);
-+	struct gsi_trans_info *trans_info = &channel->trans_info;
-+	u16 trans_id = trans_info->completed_id;
-+	struct gsi_trans *trans;
-+
-+	trans = list_first_entry_or_null(&trans_info->complete,
-+					 struct gsi_trans, links);
-+
-+	if (!trans) {
-+		WARN_ON(trans_id != trans_info->pending_id);
-+		return NULL;
-+	}
-+
-+	if (!WARN_ON(trans_id == trans_info->pending_id)) {
-+		trans_id %= channel->tre_count;
-+		WARN_ON(trans != &trans_info->trans[trans_id]);
-+	}
-+
-+	return trans;
- }
- 
- /* Move a transaction from the allocated list to the committed list */
-@@ -690,6 +706,8 @@ void gsi_channel_trans_cancel_pending(struct gsi_channel *channel)
- {
- 	struct gsi_trans_info *trans_info = &channel->trans_info;
- 	struct gsi_trans *trans;
-+	struct gsi_trans *first;
-+	struct gsi_trans *last;
- 	bool cancelled;
- 
- 	/* channel->gsi->mutex is held by caller */
-@@ -701,11 +719,33 @@ void gsi_channel_trans_cancel_pending(struct gsi_channel *channel)
- 
- 	list_splice_tail_init(&trans_info->pending, &trans_info->complete);
- 
-+	first = list_first_entry_or_null(&trans_info->complete,
-+					 struct gsi_trans, links);
-+	last = list_last_entry_or_null(&trans_info->complete,
-+				       struct gsi_trans, links);
-+
- 	spin_unlock_bh(&trans_info->spinlock);
- 
-+	/* All pending transactions are now completed */
-+	WARN_ON(cancelled != (trans_info->pending_id !=
-+				trans_info->committed_id));
-+
-+	trans_info->pending_id = trans_info->committed_id;
-+
- 	/* Schedule NAPI polling to complete the cancelled transactions */
--	if (cancelled)
-+	if (cancelled) {
-+		u16 trans_id;
-+
- 		napi_schedule(&channel->napi);
-+
-+		trans_id = trans_info->completed_id;
-+		trans = &trans_info->trans[trans_id % channel->tre_count];
-+		WARN_ON(trans != first);
-+
-+		trans_id = trans_info->pending_id - 1;
-+		trans = &trans_info->trans[trans_id % channel->tre_count];
-+		WARN_ON(trans != last);
-+	}
- }
- 
- /* Issue a command to read a single byte from a channel */
--- 
-2.34.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

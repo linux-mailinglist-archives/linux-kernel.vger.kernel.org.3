@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8475AB0B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391D15AB118
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238149AbiIBM4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S238570AbiIBNDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238233AbiIBMyI (ORCPT
+        with ESMTP id S238556AbiIBNCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:54:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090F0D9D;
-        Fri,  2 Sep 2022 05:38:44 -0700 (PDT)
+        Fri, 2 Sep 2022 09:02:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B647F10DE5E;
+        Fri,  2 Sep 2022 05:41:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8D3662181;
-        Fri,  2 Sep 2022 12:38:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E1D2C433C1;
-        Fri,  2 Sep 2022 12:38:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1C87621D7;
+        Fri,  2 Sep 2022 12:34:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE08C433D7;
+        Fri,  2 Sep 2022 12:34:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122300;
-        bh=oMTC32BuVSAw4PAlLwY406UsI1M/nTgKc6MBfnXNkKQ=;
+        s=korg; t=1662122053;
+        bh=LxmUgb6DHu/nEN9Ip8AAMCJvj0MtM154amp6n9cA3RQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u6D4h+GHTJSRFUCl27KJXT9YNm0G2k0ILu/vQ6c/Ut3zA06aMRBAZLx0hoBLP2Msk
-         gp257EojnvXghi3R1mnpaOH5VlMQczQR47BPYcufoVB1BkrEAF7ExE/Qx3s8fcno0K
-         Qqj14/gsl2qnHe3Ggu+LA59ZaaUmDd/gBEWpRXvc=
+        b=DXlDhQFkpQYrxcFZj+0ENpDUhEtmry/1n7c6tBTscAJ4gn7f3ksxokrUlg0BiRRSA
+         0A5P+PDVXAjSw7f1LwAavifajzSApCx2O08mk/DUhqV50hhTMLpIeebI1CidvM2UFS
+         bQby0Ickpg2cMDWMVysPM7y8NMhAaAza+id0aU5Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shane Xiao <shane.xiao@amd.com>,
-        Aaron Liu <aaron.liu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 60/72] drm/amdgpu: Add secure display TA load for Renoir
+        stable@vger.kernel.org,
+        syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 72/73] net/af_packet: check len when min_header_len equals to 0
 Date:   Fri,  2 Sep 2022 14:19:36 +0200
-Message-Id: <20220902121406.750858595@linuxfoundation.org>
+Message-Id: <20220902121406.775375295@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shane Xiao <shane.xiao@amd.com>
+From: Zhengchao Shao <shaozhengchao@huawei.com>
 
-[ Upstream commit e42dfa66d59240afbdd8d4b47b87486db39504aa ]
+commit dc633700f00f726e027846a318c5ffeb8deaaeda upstream.
 
-Add secure display TA load for Renoir
+User can use AF_PACKET socket to send packets with the length of 0.
+When min_header_len equals to 0, packet_snd will call __dev_queue_xmit
+to send packets, and sock->type can be any type.
 
-Signed-off-by: Shane Xiao <shane.xiao@amd.com>
-Reviewed-by: Aaron Liu <aaron.liu@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com
+Fixes: fd1894224407 ("bpf: Don't redirect packets with invalid pkt_len")
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/psp_v12_0.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ net/packet/af_packet.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c b/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-index a2588200ea580..0b2ac418e4ac4 100644
---- a/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-@@ -101,6 +101,16 @@ static int psp_v12_0_init_microcode(struct psp_context *psp)
- 		adev->psp.dtm_context.context.bin_desc.start_addr =
- 			(uint8_t *)adev->psp.hdcp_context.context.bin_desc.start_addr +
- 			le32_to_cpu(ta_hdr->dtm.offset_bytes);
-+
-+		if (adev->apu_flags & AMD_APU_IS_RENOIR) {
-+			adev->psp.securedisplay_context.context.bin_desc.fw_version =
-+				le32_to_cpu(ta_hdr->securedisplay.fw_version);
-+			adev->psp.securedisplay_context.context.bin_desc.size_bytes =
-+				le32_to_cpu(ta_hdr->securedisplay.size_bytes);
-+			adev->psp.securedisplay_context.context.bin_desc.start_addr =
-+				(uint8_t *)adev->psp.hdcp_context.context.bin_desc.start_addr +
-+				le32_to_cpu(ta_hdr->securedisplay.offset_bytes);
-+		}
- 	}
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -2989,8 +2989,8 @@ static int packet_snd(struct socket *soc
+ 	if (err)
+ 		goto out_free;
  
- 	return 0;
--- 
-2.35.1
-
+-	if (sock->type == SOCK_RAW &&
+-	    !dev_validate_header(dev, skb->data, len)) {
++	if ((sock->type == SOCK_RAW &&
++	     !dev_validate_header(dev, skb->data, len)) || !skb->len) {
+ 		err = -EINVAL;
+ 		goto out_free;
+ 	}
 
 

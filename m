@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F515AB6C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F235AB6C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236534AbiIBQp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 12:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
+        id S232619AbiIBQqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 12:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235835AbiIBQp0 (ORCPT
+        with ESMTP id S231889AbiIBQp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 12:45:26 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A782FD51;
-        Fri,  2 Sep 2022 09:45:25 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id f14so2212674qkm.0;
-        Fri, 02 Sep 2022 09:45:25 -0700 (PDT)
+        Fri, 2 Sep 2022 12:45:59 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8E257894
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 09:45:58 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id q3so2555824pjg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 09:45:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=29oZcoY2q46tLwUZQFlwRfSOAvKJ/1ARLsojbCZzUIE=;
-        b=ZUskE6+2avARgePDn3wyMZKTjzJgc6lCmVbVSJcUXMQuXyMmA50n/YqlwvYYFYglBP
-         9Qt8M7lmFQQiBaBjSPXPfzTcHt5V0HveD1rU7erMMedLCDD6SzuslxqAkI8scOaqF8ZS
-         3m3XdzWVN9hqxy/XSAuqml5TMpqNrJQJTKaWDNHqyYFvMRhBR0zyxiwtNWh0oekMP4CE
-         h1tN3K0QTMK7lTGryeEKFW2ktOyXYpRbb4bJFZ1BbV05e/adQyoO7zQvESrK+4l83hT+
-         N7iZqPXKBjSnLUqRpuL3nch3N1HAfVn6SRjFv4qcdtcVFwiSzFgEac2FKjsjukyouV1E
-         Ve1Q==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=6Bn341OZdaO1Ajjvul1ciSQkpdi2HXa6yajc+wV7KF0=;
+        b=UuOUdc1lrwse1WuqW0nbs5Enufm53BNTljAMITm/SOp3cTseM4drqiEWGUT6Ap+4uR
+         3qoM7aCRNpmGXnc02t3bwILRhmyfwOz4tZthXvlUeXpx1ECGr7OS3RKfaXjxReHvx5ZU
+         CbZcAdAYjrk8beZYak1peIWRdGKdhQ5f/gpNcf0T04O6TYbQNESS1hJXVpEziNmH+8sn
+         f1CnQKS/uz74k2uwRzDegUpDTSVvk+VUOZFRieJRYwXh1OlJ67ptHxr0G7plbS8S394q
+         twQiPkYadduhLtmHaN5p4FcQUssaqPT9ngxmx5gfOMh4cVKyF+PJmQOAtWmgt5YTQvCw
+         2kyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=29oZcoY2q46tLwUZQFlwRfSOAvKJ/1ARLsojbCZzUIE=;
-        b=p1ktmVIn2BYERAKl6chrw9HJx/oc2EXZgFzKugboMtpjWXgRSHHc1Nl3GVQLOYjUAm
-         lDVXWD/9fii+k2y0PnQJwCGAUrfk0ovnIqQfWkfeqA5QfR0f8wDSwwfVR8hfIiwMInNh
-         D/Rx51wud4apn+HxynNewt/BBTltEKGYM5Mm377rcjVuDWjp87wnoiPz+7HWs7hORPyw
-         g4rkKefv2L81eXGlrZPozGFP7rO2H/eH54PlbVD9ik278JmzveN7Jac+rHK92/rj3cim
-         zsXmoXaqzzX7wHpGGmXHGtV0RMISZ/REBVpZFYWrKPqY3DiLPnsR9fr7HIWpAzPXKGT6
-         rKCw==
-X-Gm-Message-State: ACgBeo0mdiQ9MO1HFzoCjmgUR5HbEUOoD3J0gYcsosmXUeZIQRNfR8rf
-        5oM8/N+F7jcVAd0JqVTxoU2IHckPJRA=
-X-Google-Smtp-Source: AA6agR5xxB2RpH6Y3YWpALTdAUEGu1Hhp+5pBoEY9ywcGNWg77Sc3DFw1HNPISVB8w/E3BbCptS8+Q==
-X-Received: by 2002:a05:620a:198a:b0:6be:73ae:bbc2 with SMTP id bm10-20020a05620a198a00b006be73aebbc2mr22412053qkb.394.1662137124729;
-        Fri, 02 Sep 2022 09:45:24 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id k18-20020ac81412000000b003445b83de67sm1277705qtj.3.2022.09.02.09.45.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 09:45:23 -0700 (PDT)
-Message-ID: <df379546-8439-cd18-b882-181542c28882@gmail.com>
-Date:   Fri, 2 Sep 2022 09:45:21 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6Bn341OZdaO1Ajjvul1ciSQkpdi2HXa6yajc+wV7KF0=;
+        b=5g0w59QTxBJyQeY3Cv8ef+bIN0Dj3ZvRfy/5tZLkNbcfUrTME9vtx3TxIzpJ8CmTME
+         BGOpW9t5h+CdVc8rMRSxayjIgkJYWmXTvq/WEzPTmoXYMVeajDZkNm8r754vQYX1e//i
+         ZBycIGNw6qGf3i3ybo3+BwWt78Wg3KLQQULbXtx1w/ZsB57svdKWMaYvuYPcFsY+F90D
+         3ujRnVfwhL1UxiYUnWq1tsRCJ/l8JMf9UiTbcAtJiyki7ubqzDPpi8vP3y0PcuuP50+m
+         ugSo1HK8En78+gNpIjPfXnO2R0YlwklUvYxl8TF+w7ioogX178w4QzGSuTMbfALq75oh
+         wQMQ==
+X-Gm-Message-State: ACgBeo18ySqEe5upv0VTxZka8Dr0DNhdH3svV6nXlhFgE6LCp+PQd95u
+        89autetUDxgmo2Y6/gmKakKbzdydgaOzK7oc1m8=
+X-Google-Smtp-Source: AA6agR5ea0NY94qclq1WPIQgFvItSSRmJdBaFn/nLRmCSHqulCNh3s89fQEtSSzn6RIIyJbg1AXa/rTbDVrcRwMBDBA=
+X-Received: by 2002:a17:90b:4a4c:b0:1fe:24ac:2bb3 with SMTP id
+ lb12-20020a17090b4a4c00b001fe24ac2bb3mr5772326pjb.79.1662137158046; Fri, 02
+ Sep 2022 09:45:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 4.9 00/31] 4.9.327-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220902121356.732130937@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220831052734.3423079-1-song@kernel.org> <20220831160111.a6e7d17785ca21ce7c43981c@linux-foundation.org>
+ <CAPhsuW4SGguyoFKpN8S=jFCWfLiDM-f5QwV7UPwkQ=LjQEXaNg@mail.gmail.com>
+ <CA+KHdyUDGkUBtnAcvu+NB=S7chp_1N3XviTkkMoP-8LrLJQgbg@mail.gmail.com> <YxF69izHufARLKqA@MiWiFi-R3L-srv>
+In-Reply-To: <YxF69izHufARLKqA@MiWiFi-R3L-srv>
+From:   Uladzislau Rezki <urezki@gmail.com>
+Date:   Fri, 2 Sep 2022 18:45:47 +0200
+Message-ID: <CA+KHdyWijMSuNaT4vQ-tqyrJC_GxL++rDj-s1WZMkDi=8m3p1A@mail.gmail.com>
+Subject: Re: [PATCH] mm/vmalloc: Extend find_vmap_lowest_match_check with
+ extra arguments
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Song Liu <song@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,30 +72,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > Even without this patch, the debug path would work correctly. The
+> > difference is just only in
+> > whether roots are hardcoded or passed over function paramter.
+>
+> Calling find_vmap_lowest_match() inside find_vmap_lowest_match_check()
+> will fail compilation because the function interface has been changed.
+>
+Ah. That makes sense, though the commit message has to reflect it.
+So it is only about compilation error if debug is ON.
 
-
-On 9/2/2022 5:18 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.327 release.
-> There are 31 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.327-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Florian
+Uladzislau Rezki

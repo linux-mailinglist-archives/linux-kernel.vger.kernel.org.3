@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE01E5AAF82
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239B45AB170
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237032AbiIBMkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S237032AbiIBNdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236947AbiIBMiR (ORCPT
+        with ESMTP id S236576AbiIBNch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:38:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A52D65E6;
-        Fri,  2 Sep 2022 05:30:00 -0700 (PDT)
+        Fri, 2 Sep 2022 09:32:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF4111B605;
+        Fri,  2 Sep 2022 06:11:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 111B462160;
-        Fri,  2 Sep 2022 12:28:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19934C433C1;
-        Fri,  2 Sep 2022 12:28:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98AFBB82AD5;
+        Fri,  2 Sep 2022 12:35:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC67C433D6;
+        Fri,  2 Sep 2022 12:35:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121723;
-        bh=j/8XAWMQ7PlP+5WrROnEfX7lfhQhIwUDBWAojUg3vvM=;
+        s=korg; t=1662122113;
+        bh=aPKFJmxk4ZvRsdW5e6kiQ6asp9b+m3LYnX4sZA3272A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bce+ex7L1Isuslx8Z5x0OKXBF8m02AmNP+lbK0/sIMcnvNLZX+f/oVfO9FadtgbEm
-         Bkt+/tdt8ADZc/1+EEgIdCExc3MSiRSNtWJJnhg51a2XGOC4PZqB2tkKDk1cb19/Lo
-         G0mz4nxDjtPvMib5chsCUMoBXgemLyydD/3Lmo8A=
+        b=cfrewgwXtMq0o23Wb+i4ypYR+zN40xyrrbSSCjBL7NQsm1BLvtVRj8rshRk9gWnzm
+         wpdwHHcUB+hQqORDPmT3ddQg30nsXYPQMXmuVPx5fzDy+EUPRhU57lS+BKKuFYIXYD
+         7RyJmObJ7JfuqH5pSkW+vi5eYxD+M91uIdmnTXWw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeremy Linton <Jeremy.Linton@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Riwen Lu <luriwen@kylinos.cn>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.4 44/77] ACPI: processor: Remove freq Qos request for all CPUs
+        stable@vger.kernel.org,
+        syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.19 17/72] bpf: Dont redirect packets with invalid pkt_len
 Date:   Fri,  2 Sep 2022 14:18:53 +0200
-Message-Id: <20220902121405.116990661@linuxfoundation.org>
+Message-Id: <20220902121405.351517438@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-References: <20220902121403.569927325@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Riwen Lu <luriwen@kylinos.cn>
+From: Zhengchao Shao <shaozhengchao@huawei.com>
 
-commit 36527b9d882362567ceb4eea8666813280f30e6f upstream.
+commit fd1894224407c484f652ad456e1ce423e89bb3eb upstream.
 
-The freq Qos request would be removed repeatedly if the cpufreq policy
-relates to more than one CPU. Then, it would cause the "called for unknown
-object" warning.
+Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
+skbs, that is, the flow->head is null.
+The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
+run a bpf prog which redirects empty skbs.
+So we should determine whether the length of the packet modified by bpf
+prog or others like bpf_prog_test is valid before forwarding it directly.
 
-Remove the freq Qos request for each CPU relates to the cpufreq policy,
-instead of removing repeatedly for the last CPU of it.
+LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
+LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
 
-Fixes: a1bb46c36ce3 ("ACPI: processor: Add QoS requests for all CPUs")
-Reported-by: Jeremy Linton <Jeremy.Linton@arm.com>
-Tested-by: Jeremy Linton <jeremy.linton@arm.com>
-Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-Cc: 5.4+ <stable@vger.kernel.org> # 5.4+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
+Link: https://lore.kernel.org/r/20220715115559.139691-1-shaozhengchao@huawei.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/processor_thermal.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/skbuff.h |    8 ++++++++
+ net/bpf/test_run.c     |    3 +++
+ net/core/dev.c         |    1 +
+ 3 files changed, 12 insertions(+)
 
---- a/drivers/acpi/processor_thermal.c
-+++ b/drivers/acpi/processor_thermal.c
-@@ -150,7 +150,7 @@ void acpi_thermal_cpufreq_exit(struct cp
- 	unsigned int cpu;
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -2624,6 +2624,14 @@ static inline void skb_set_tail_pointer(
  
- 	for_each_cpu(cpu, policy->related_cpus) {
--		struct acpi_processor *pr = per_cpu(processors, policy->cpu);
-+		struct acpi_processor *pr = per_cpu(processors, cpu);
+ #endif /* NET_SKBUFF_DATA_USES_OFFSET */
  
- 		if (pr)
- 			freq_qos_remove_request(&pr->thermal_req);
++static inline void skb_assert_len(struct sk_buff *skb)
++{
++#ifdef CONFIG_DEBUG_NET
++	if (WARN_ONCE(!skb->len, "%s\n", __func__))
++		DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
++#endif /* CONFIG_DEBUG_NET */
++}
++
+ /*
+  *	Add data to an sk_buff
+  */
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -955,6 +955,9 @@ static int convert___skb_to_skb(struct s
+ {
+ 	struct qdisc_skb_cb *cb = (struct qdisc_skb_cb *)skb->cb;
+ 
++	if (!skb->len)
++		return -EINVAL;
++
+ 	if (!__skb)
+ 		return 0;
+ 
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4168,6 +4168,7 @@ int __dev_queue_xmit(struct sk_buff *skb
+ 	bool again = false;
+ 
+ 	skb_reset_mac_header(skb);
++	skb_assert_len(skb);
+ 
+ 	if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_SCHED_TSTAMP))
+ 		__skb_tstamp_tx(skb, NULL, NULL, skb->sk, SCM_TSTAMP_SCHED);
 
 

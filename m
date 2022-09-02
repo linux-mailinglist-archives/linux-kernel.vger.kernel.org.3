@@ -2,176 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0275C5AABA5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6880D5AABAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235735AbiIBJky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S235711AbiIBJmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235713AbiIBJkr (ORCPT
+        with ESMTP id S233481AbiIBJmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:40:47 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B2A4B0E2;
-        Fri,  2 Sep 2022 02:40:40 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id q9so1492027pgq.6;
-        Fri, 02 Sep 2022 02:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=/4LAk3uTqvGQpwYXBuhG1O0peoQCPq2AEefysQGjQRc=;
-        b=Z4fnFlP1wtCpjXllLl6jdpM/pCUu9ci9DggZdfkCuauBRFh1Y263ufXYDQZQMANDn8
-         kC35C59KmhP5CwnNtONqnPugRozMbRmwARB5UQ2g72YsCIQDKf/RJ6rxDz2nDMJ2b2ZK
-         JctO9PRxPUSxgdxSczBQBoxZA3zn5yxq6rEhdy0Kf5q9+tWE09D/hXgrIZ6bTHwMsJmn
-         akgZwR75KdWbnZVIM1HSNOGE8KZQMVJLDkAPtWV04keyCXtExq+Y3BtbqngHNOnrZ7yK
-         mhPaBmHpJHlYyr+2ap3RaC6ZaFnVaFzMO54KQL5cGkdoNBbSalLRzIvbVAkRZTpIXApa
-         B4DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/4LAk3uTqvGQpwYXBuhG1O0peoQCPq2AEefysQGjQRc=;
-        b=TWObqLmGtJvUsdOLl0Q9j6a7tdxUkiKa/41V7XytkVtnJWUYzupBT6w7sHdEIa50Sf
-         AEKQ/WRpjDGgql4Ug4Ny+f0V/dv4pCZrPeoQL1irJlqf0AnxArTIBOwEZDlBupBuoflT
-         /k5Hc6TYo0OBqKO524o0rf8Jh5PserZS9zv22zuHYIeZ7lTIzteHq1aEt24P2v2hdgfA
-         uOSiEty3mJ7HwEqimSn7aK2rvYbBExYcZeG2WrHFfP47euIacfX3x04787On/H16KEM/
-         Uo1Xk83FyO7EXcCQVr620b4zW5FwX8WW+wsLCY+u4NaiWD/zPcsxNgeCjxFfdmI/JS8J
-         YqOw==
-X-Gm-Message-State: ACgBeo0zlTPuq+iy0v0szDwXkLWFrX03PBW9qyCqn19NMrTGEo2SzW9o
-        dsHwatbJv5UHnZlLSh3iEYhTuhsIXsMWXA==
-X-Google-Smtp-Source: AA6agR4Y9ZK1wGth99O7SoOfPgUpB07dnpWDUmvla7Hk0xFf9GkZl4lGar44W/B1O9rhiELk/71UvA==
-X-Received: by 2002:a63:1726:0:b0:41d:b30:46d4 with SMTP id x38-20020a631726000000b0041d0b3046d4mr29870171pgl.27.1662111639261;
-        Fri, 02 Sep 2022 02:40:39 -0700 (PDT)
-Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
-        by smtp.gmail.com with ESMTPSA id z14-20020a655a4e000000b0041d9e78de05sm971855pgs.73.2022.09.02.02.40.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 02:40:39 -0700 (PDT)
-From:   Szuying Chen <chensiying21@gmail.com>
-To:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
-        mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
-        Richard_Hsu@asmedia.com.tw
-Subject: [PATCH v8 3/3] thunderbolt: To extend ASMedia NVM formats.
-Date:   Fri,  2 Sep 2022 17:40:10 +0800
-Message-Id: <20220902094010.2170-4-chensiying21@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220902094010.2170-1-chensiying21@gmail.com>
-References: <20220902094010.2170-1-chensiying21@gmail.com>
+        Fri, 2 Sep 2022 05:42:02 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF45A4E63F;
+        Fri,  2 Sep 2022 02:41:51 -0700 (PDT)
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 2829fccx032021;
+        Fri, 2 Sep 2022 18:41:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2829fccx032021
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662111698;
+        bh=Yu6q9CiU0SZ2y8yEyENS2Mjn2VsQqrhZ4sv/qS7Inu0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hOOYme3dsSbItMMKrdyZPuaHh6lUsJm1eOOS/YSxV1DlV2iWaXMvCnlVaeZjvJGxO
+         4IVPvp8aEt27DScP+ufYRROYrYUYvuS5CeZqMirCNkVwfLaaJwTKIpYV1+fZPXj8t3
+         eS0qw5WoKem4psdSrT+xbf5HNdBztvtpBWp3f7+ZSJO8sL/n1Cstwbw4oQOQjy/v1F
+         ALZbLPFxBUtP4MXFDZl6363DWIc/V1JZsrUKB/qomVZduB3pzzWEYRdSVCdMu/39qp
+         Sf0qC0EbaMEIQCvoL2SQXyaYbM07sNMpI6+6qO0oyzyHk9aLBYJFwppkUi+yC1ieWt
+         tQIexKjHpnzbw==
+X-Nifty-SrcIP: [209.85.160.43]
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-11edd61a9edso3429979fac.5;
+        Fri, 02 Sep 2022 02:41:38 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2ZRBMhDomXY8t1TLqYc4AY973EwgygwZXbuc9T17Xd4Ww5d8TB
+        vouwQ9E/vKmMwA0M0GNxZ3BhouvqifJGzjTN3XM=
+X-Google-Smtp-Source: AA6agR4ucDwaCckZtMQtGkNmHwmMUQc6ZBkNxdQoU8K+chnV99uRpH70hKQYOGpqiQ0Wz/ZmZkBPbN/ucVX8p61BtG8=
+X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
+ ek38-20020a056870f62600b0010da798f3aamr1712772oab.194.1662111697432; Fri, 02
+ Sep 2022 02:41:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220828024003.28873-1-masahiroy@kernel.org> <20220828024003.28873-6-masahiroy@kernel.org>
+In-Reply-To: <20220828024003.28873-6-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 2 Sep 2022 18:41:01 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQsw2u4AYKg74GYaz3n4gvbTdF3dn9OUYWxCGXGjP5sQA@mail.gmail.com>
+Message-ID: <CAK7LNAQsw2u4AYKg74GYaz3n4gvbTdF3dn9OUYWxCGXGjP5sQA@mail.gmail.com>
+Subject: Re: [PATCH 05/15] kbuild: build init/built-in.a just once
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+On Sun, Aug 28, 2022 at 11:40 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 
-The patch add ASMedia NVM formats.
 
-Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
----
-v7->v8: Fix the no_nvm_upgrade bit setting on suggestion by Mika.
+> --- a/init/Makefile
+> +++ b/init/Makefile
+> @@ -19,20 +19,47 @@ mounts-y                    := do_mounts.o
+>  mounts-$(CONFIG_BLK_DEV_RAM)   += do_mounts_rd.o
+>  mounts-$(CONFIG_BLK_DEV_INITRD)        += do_mounts_initrd.o
+>
+> -# dependencies on generated files need to be listed explicitly
+> -$(obj)/version.o: include/generated/compile.h
+> +#
+> +# UTS_VERSION
+> +#
+> +
+> +smp-flag-$(CONFIG_SMP)                 := SMP
+> +preempt-flag-$(CONFIG_PREEMPT_BUILD)   := PREEMPT
+> +preempt-flag-$(CONFIG_PREEMPT_DYNAMIC) := PREEMPT_DYNAMIC
+> +preempt-flag-$(CONFIG_PREEMPT_RT)      := PREEMPT_RT
+> +
+> +build-version = $(or $(KBUILD_BUILD_VERSION), $(build-version-auto))
+> +build-timestamp = $(or $(KBUILD_BUILD_TIMESTAMP), $(build-timestamp-auto))
+> +
+> +# Maximum length of UTS_VERSION is 64 chars
+> +filechk_uts_version = \
+> +       utsver=$$(echo '$(pound)'"$(build-version)" $(smp-flag-y) $(preempt-flag-y) "$(build-timestamp)" | cut -b -64); \
+> +       echo '$(pound)'define UTS_VERSION \""$${utsver}"\"
+> +
+> +#
+> +# Build version.c with temporary UTS_VERSION
+> +#
+> +
+> +$(obj)/utsversion-tmp.h: FORCE
+> +       $(call filechk,uts_version)
 
- drivers/thunderbolt/nvm.c | 40 +++++++++++++++++++++++++++++++++++++++
- drivers/thunderbolt/tb.c  |  2 +-
- 2 files changed, 41 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
-index 878d705bd0cb..8393d82dd108 100644
---- a/drivers/thunderbolt/nvm.c
-+++ b/drivers/thunderbolt/nvm.c
-@@ -12,9 +12,16 @@
+I missed to clean up init/utsversion-tmp.h.
 
- #include "tb.h"
+I patched like follows, and also added it to init/.gitignore.
 
-+/* ID of Router */
-+#define ROUTER_VENDOR_ID_ASMEDIA 0x174c
+
+
+
+diff --git a/init/Makefile b/init/Makefile
+index 63f53d210cad..ba90eb817185 100644
+--- a/init/Makefile
++++ b/init/Makefile
+@@ -43,6 +43,8 @@ filechk_uts_version = \
+ $(obj)/utsversion-tmp.h: FORCE
+        $(call filechk,uts_version)
+
++clean-files += utsversion-tmp.h
 +
- /* Switch NVM support */
- #define NVM_CSS		0x10
+ $(obj)/version.o: include/generated/compile.h $(obj)/utsversion-tmp.h
+ CFLAGS_version.o := -include $(obj)/utsversion-tmp.h
 
-+/* ASMedia specific NVM offsets */
-+#define ASMEDIA_NVM_DATE	0x1c
-+#define ASMEDIA_NVM_VERSION	0x28
-+
- static DEFINE_IDA(nvm_ida);
 
- /**
-@@ -120,11 +127,43 @@ static int intel_nvm_validate(struct tb_switch *sw)
- 	return 0;
- }
 
-+static int asmedia_nvm_version(struct tb_switch *sw)
-+{
-+	struct tb_nvm *nvm = sw->nvm;
-+	u32 val;
-+	int ret;
-+
-+	/* ASMedia get version and date format is xxxxxx.xxxxxx */
-+	ret = nvm_read(sw, ASMEDIA_NVM_VERSION, &val, sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	nvm->major = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
-+
-+	ret = nvm_read(sw, ASMEDIA_NVM_DATE, &val, sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	nvm->minor = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
-+
-+	/*
-+	 * Asmedia NVM size fixed on 512K. We currently have no plan
-+	 * to increase size in the future.
-+	 */
-+	nvm->nvm_size = SZ_512K;
-+
-+	return 0;
-+}
-+
- static const struct tb_nvm_vendor_ops intel_switch_nvm_ops = {
- 	.read_version = intel_nvm_version,
- 	.validate = intel_nvm_validate,
- };
 
-+static const struct tb_nvm_vendor_ops asmedia_switch_nvm_ops = {
-+	.read_version = asmedia_nvm_version,
-+};
-+
- struct switch_nvm_vendor {
- 	u16 vendor;
- 	const struct tb_nvm_vendor_ops *vops;
-@@ -133,6 +172,7 @@ struct switch_nvm_vendor {
- static const struct switch_nvm_vendor switch_nvm_vendors[] = {
- 	{ PCI_VENDOR_ID_INTEL, &intel_switch_nvm_ops },
- 	{ 0x8087, &intel_switch_nvm_ops },
-+	{ ROUTER_VENDOR_ID_ASMEDIA, &asmedia_switch_nvm_ops },
- };
 
- /**
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 9853f6c7e81d..55faa1b5f815 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1417,7 +1417,7 @@ static int tb_start(struct tb *tb)
- 	 * mode that is not available so disable firmware upgrade of the
- 	 * root switch.
- 	 */
--	tb->root_switch->no_nvm_upgrade = true;
-+	tb->root_switch->no_nvm_upgrade = !tb_switch_is_usb4(tb->root_switch);
- 	/* All USB4 routers support runtime PM */
- 	tb->root_switch->rpm = tb_switch_is_usb4(tb->root_switch);
 
---
-2.34.1
 
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,119 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DC45AB6A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294B05AB6B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236195AbiIBQfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 12:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S236396AbiIBQhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 12:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiIBQfm (ORCPT
+        with ESMTP id S234554AbiIBQhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 12:35:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D22757224;
-        Fri,  2 Sep 2022 09:35:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6E0F62163;
-        Fri,  2 Sep 2022 16:35:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C82C43143;
-        Fri,  2 Sep 2022 16:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662136539;
-        bh=CyXZslGC6xMHuFvaJ2y8P9mcnKdxUher6ZDcEysyZM4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=inHkQYqQd1Ylei3Vn2o0zDzCCdpJmBllYZqgx68F0KRYC5ul6UDxGh8YL0SPmdepT
-         4G+uxFTXEf2tk85OGXqEdFHSoDi7t4Mmb/pj3TQGwBtt3TkObWNZ5dhFRFnrSe0bt0
-         KMhVBrb59aMHbzGTfrU598mUFdLmIg7/ld97347efEMtMmumS2bqdQYYZ5sAa/aXvz
-         nFt2pFp2zeQE73RiGGfSujrRIVBebk9xUcQieOaFsTeI1OyrfSXEAe46DZ8g+B/afW
-         AY1adak0OO0Fuwu8WDVvdV7PxfXhgWUav/bF7VwngeIt3unuWmwOu1I57933qRH0tO
-         8MxOseUWXJ9vg==
-Received: by mail-vk1-f171.google.com with SMTP id t82so1225353vkb.6;
-        Fri, 02 Sep 2022 09:35:39 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0EdQyeQR1YDU6vVQBJZqnk1X6+69mAwG+Ix1FgMLIMemcTrvlt
-        k8W4f6FfEvHvKId2n6KH1MIZworTKI1jf/xheQ==
-X-Google-Smtp-Source: AA6agR7dwq63N6NQLKD/7IAKcnFBWx79Ln0WNBprwZv5blc/HPzGPu7Vyie82utDNhAe8IsODz3wLIsUaG4BPhD83bI=
-X-Received: by 2002:a1f:d241:0:b0:398:3e25:d2dd with SMTP id
- j62-20020a1fd241000000b003983e25d2ddmr1223vkg.15.1662136538025; Fri, 02 Sep
- 2022 09:35:38 -0700 (PDT)
+        Fri, 2 Sep 2022 12:37:12 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D9A32B84;
+        Fri,  2 Sep 2022 09:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=V6hJKWK+ULYfDR0vxEt9RZQDPKAk9LpJfzJUF8zaBdM=; b=AY7RDjKS66W1tsRQE2bcTFzYmX
+        2t1Ownj12//mKYm7PZt/xYm/ibLMofaZ931XxjV6flUwOMt5h75DAm9ALCn53aFoEFoqtGTjnVbZ2
+        s3/MEu20PuCS4ANXj2BTJX2RpGU4gNR/gGXroa3+ehuSNpxYVsAiGyLw4Ms48uQevaL4M4U/ZL6bK
+        PDn1HS//AKomAmxIXxa9ulfesXi50FwqRSmMiG05eEWi6M+ayWUxd5EeX5fQk8GYkX5HZmSfhF0st
+        y4sZVD4xjsC0l1Zaar98QrVPBBl6lzysq7k7n/nYPPW3Je6Yxa1H7GL0ny0IuV8l9XPm96N9A2Isd
+        HaTLVVrQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34072)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oU9f1-0007mF-48; Fri, 02 Sep 2022 17:36:51 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oU9eu-0004ZJ-HC; Fri, 02 Sep 2022 17:36:44 +0100
+Date:   Fri, 2 Sep 2022 17:36:44 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Alexander 'lynxis' Couzens <lynxis@fe80.eu>
+Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Daniel Golle <daniel@makrotopia.org>
+Subject: Re: [PATCH 3/4] net: mediatek: sgmii: mtk_pcs_setup_mode_an: don't
+ rely on register defaults
+Message-ID: <YxIxHHyl4cuHH68J@shell.armlinux.org.uk>
+References: <20220820224538.59489-1-lynxis@fe80.eu>
+ <20220820224538.59489-4-lynxis@fe80.eu>
+ <YwTyLwRnQ+eTXeDr@shell.armlinux.org.uk>
+ <20220902174710.54a1d317@javelin>
 MIME-Version: 1.0
-References: <20220822155130.2491006-1-Frank.Li@nxp.com> <20220822155130.2491006-4-Frank.Li@nxp.com>
- <20220825212130.GA1705214-robh@kernel.org> <PAXPR04MB9186201A03037BA7DC74D52B88729@PAXPR04MB9186.eurprd04.prod.outlook.com>
- <871qt2x38f.wl-maz@kernel.org> <PAXPR04MB918607281F6389092924EE6488759@PAXPR04MB9186.eurprd04.prod.outlook.com>
- <87zgfqvfvv.wl-maz@kernel.org>
-In-Reply-To: <87zgfqvfvv.wl-maz@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 2 Sep 2022 11:35:26 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+3hSni_b4mCMrAVHiV2d5u=0zithZFK1mKT4d3GAag_A@mail.gmail.com>
-Message-ID: <CAL_Jsq+3hSni_b4mCMrAVHiV2d5u=0zithZFK1mKT4d3GAag_A@mail.gmail.com>
-Subject: Re: [EXT] Re: [PATCH v7 3/4] dt-bindings: irqchip: imx mu work as msi controller
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Frank Li <frank.li@nxp.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
-        "lznuaa@gmail.com" <lznuaa@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902174710.54a1d317@javelin>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 4:44 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Fri, 26 Aug 2022 19:59:44 +0100,
-> Frank Li <frank.li@nxp.com> wrote:
-> >
-> > > And I stand by my initial request. "a" doesn't convey any sort of
-> > > useful information. Why not "I" and "II", while we're at it? Or
-> > > something even funkier?
-> >
-> > MU spec use term "a" and "b",  user have to map "I" an "II" to
-> > "a" and "b" when read MU spec and code. it is not straightforward.
-> >
-> > I quote a part of spec.
-> > " The MU is connected as a peripheral under the Peripheral bus on both sides-on
-> > the Processor A-side, the Processor A Peripheral Bus, and on the Processor B side,
-> > the Processor B Peripheral Bus."
-> >
-> > Rob Herring and Marc Zynginer:
-> > I can change to any name, which you agree both.
-> >
-> > Some options:
-> > 1. "a", "b"
-> > 2. "a-side", "b-side"
-> > 3. "a-facing", "b-facing"
-> > 4. "I", "II"
->
-> Use the wording indicated in the spec: "processor-a-side", and
-> "processor-b-side". This is what I asked the first place.
+On Fri, Sep 02, 2022 at 05:47:10PM +0200, Alexander 'lynxis' Couzens wrote:
+> On Tue, 23 Aug 2022 16:28:47 +0100
+> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+> 
+> > On Sun, Aug 21, 2022 at 12:45:37AM +0200, Alexander Couzens wrote:
+> > > Ensure autonegotiation is enabled.
+> > > 
+> > > Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
+> > > ---
+> > >  drivers/net/ethernet/mediatek/mtk_sgmii.c | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c
+> > > b/drivers/net/ethernet/mediatek/mtk_sgmii.c index
+> > > 782812434367..aa69baf1a42f 100644 ---
+> > > a/drivers/net/ethernet/mediatek/mtk_sgmii.c +++
+> > > b/drivers/net/ethernet/mediatek/mtk_sgmii.c @@ -32,12 +32,13 @@
+> > > static int mtk_pcs_setup_mode_an(struct mtk_pcs *mpcs)
+> > > regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER,
+> > > SGMII_LINK_TIMER_DEFAULT); 
+> > > +	/* disable remote fault & enable auto neg */
+> > >  	regmap_read(mpcs->regmap, SGMSYS_SGMII_MODE, &val);
+> > > -	val |= SGMII_REMOTE_FAULT_DIS;
+> > > +	val |= SGMII_REMOTE_FAULT_DIS | SGMII_SPEED_DUPLEX_AN;  
+> > 
+> > Does SGMII_SPEED_DUPLEX_AN need to be cleared in
+> > mtk_pcs_setup_mode_force(), so mtk_pcs_link_up() can force the
+> > duplex setting for base-X protocols?
+> > 
+> 
+> Yes SGMII_SPEED_DUPLEX_AN needs to be cleared to have FORCE_DUPLEX
+> working. But mtk_pcs_setup_mode_force() is clearing it implicit by
+> 
+> val &= SGMII_DUPLEX_FULL & ~SGMII_IF_MODE_MASK
 
-I would pick 2 (or nothing), but whatever... As long as there aren't spaces.
+It would make the code more reasonable to spell out what is included
+in SGMII_IF_MODE_MASK. It's:
 
-Rob
+#define SGMII_SPEED_DUPLEX_AN           BIT(1)
+#define SGMII_SPEED_MASK                GENMASK(3, 2)
+#define SGMII_DUPLEX_FULL               BIT(4)
+#define SGMII_IF_MODE_BIT5              BIT(5)
+
+I'm guessing no one knows what SGMII_IF_MODE_BIT0 and
+SGMII_IF_MODE_BIT5 actually do - and as neither seem to be used in
+the code, the definitions are redundant.
+
+> because it's included in the SGMII_IF_MODE_MASK.
+> I also don't understand why it's forcing it in the
+> mtk_pcs_link_up().
+
+Please note that I've forgotten the contents of these patches, so
+these comments may not be entirely accurate...
+
+A lot of the code in the driver is quite weird, so when I converted it
+to phylink_pcs, I tried to keep the decision making the same as in the
+original code. It would help readability if the decision making was
+cleaned up - so similar tests in mtk_pcs_link_up() and
+mtk_pcs_config().
+
+By that, I mean - if the test in mtk_pcs_link_up() is for 802.3z modes,
+then shouldn't the test in mtk_pcs_config() also be using the same?
+From what I understand from mtk_eth_soc.c as it originally stood, the
+PCS driver is only used for SGMII, 1000base-X and 2500base-X.
+
+The SGMII duplex setting is changed in mtk_pcs_link_up() only for 802.3z
+modes - in other words, 1000base-X and 2500base-X.
+
+When mtk_pcs_config() is called for 1000base-X and 2500base-X, it calls
+mtk_pcs_setup_mode_force(). This clears SGMII_AN_ENABLE, disabling
+autonegotiation, and forcing 1000Mbps. Presumably, this PCS as the code
+was originally written is only capable of SGMII negotiation.
+
+It looks to me like the original code does not support autonegotiation
+on 802.3z interface modes.
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

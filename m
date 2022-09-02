@@ -2,98 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E689F5AA917
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E995AA91B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbiIBHvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 03:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S234788AbiIBHwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 03:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbiIBHvI (ORCPT
+        with ESMTP id S235297AbiIBHwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 03:51:08 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A56569F50;
-        Fri,  2 Sep 2022 00:51:07 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id u1-20020a17090a410100b001fff314d14fso1372975pjf.5;
-        Fri, 02 Sep 2022 00:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=l7PysdDE7wN+ye8WRTKSRcfMHgYlvrUlNtFAwiTdfkc=;
-        b=MSeXIxsWfHMOPCblIr986Y0cCuP9gohYjJX8CZpxJOj+F/Qdm13qgTB/AjfPZMageB
-         5iKcHihidqHEK3RxY/s/LXyUmETkKkkDhr3uQfjm3mhShonwTMJ7BmqDv3wxWobVgZDl
-         dYNq8+SrHrFN6ZErkysqCJNbw37QycEasVoMOoaRsPn6OWRmxImcdBUB5Jbc0Mt8Fluy
-         SsGube0vuJdG27vF5l1g1sGP3Ca+AJAUEOvL+IciEDPkd9alb2sWMWGGHDwoHLpn8IEt
-         f6gkb5/s7mGLrW1JnwT1MUrws8Xa6IyKIa+FEaU/T8UE/lo9QwDvb1JS8M7bTd+iFG1U
-         YnHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=l7PysdDE7wN+ye8WRTKSRcfMHgYlvrUlNtFAwiTdfkc=;
-        b=IwCPn7uNHdJOc4xcKfEVhwGR7qK+nIfpgxrAVM/3dbduDdiLs+fon00mr5/vfsRQpt
-         tWpZXeN2kLn3Tpcmi8wOkIwLW9VaC+1XOLoR64hYo2cVxQrZpPxnQDOQMht9EF/LOJmN
-         KOBS8JRw8UBS6dspnW++WN5yEjl4kdEIAP68ci3EDQ3dfgxaVO9+0cDvAfNREp2+fAkc
-         QA9jMRLtyregHZNDx9HZVD0gFOfhRk8QT2QJXnVUTfbJZic0N+Ix7Y7ClldgmgjTggvO
-         wxe/qVww5PccBdeNPjBvHo3nlYrJtDkLV7rUY3AHsO+D3a/fP6haF1smKaYgOAvmQPcz
-         6WmA==
-X-Gm-Message-State: ACgBeo0r1MynZkAAYT4+2HD7Huz2gPmPpXlCME/z1TJyjRrGnEj+hwlM
-        imuZOUhM6CoJrikEU2l/cZfOYKaMNOM2jQ==
-X-Google-Smtp-Source: AA6agR4vsKeAwluDf0MR9ibQbnCUn+oeddwtCawAP9LGB2Ll3wWNF7w6acCv2BDoKD6LvXwB07ftiw==
-X-Received: by 2002:a17:903:41c6:b0:16e:fb38:e2c7 with SMTP id u6-20020a17090341c600b0016efb38e2c7mr34737565ple.75.1662105066815;
-        Fri, 02 Sep 2022 00:51:06 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id l10-20020a170903120a00b0016ef87334aesm911341plh.162.2022.09.02.00.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 00:51:06 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] arch/x86/kernel/acpi: check the return value of mp_find_ioapic()
-Date:   Fri,  2 Sep 2022 00:50:53 -0700
-Message-Id: <20220902075053.2212595-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 2 Sep 2022 03:52:01 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4B0B5A5E;
+        Fri,  2 Sep 2022 00:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3wmDkHV8HYzOWhuknNT6kESrRfuVs+ZalyBRjyshycQ=; b=QOPYTLQQBdugxke0Jed5tVajAz
+        BHPcuU41BYkmsix8MMuJUralRZ3s0p+44/b3ai+cSnTWEw1Gx9mur7o9Ms2j7PzjxJ5QyvBrAMeDf
+        Fh9w3eCylClGKxuqaLtvAqJVbHRnqdJvQh4KRWzc6wmrt/ax6BPlHpLRLsy1myKQcs4xt5HljQDIK
+        gvaG6z+LHA3AMZR6TKAaSx90YNElwX3eF0tLzTjKjjTma64WahqyKGk9Sgm25QgMVqbgq6FG6iUMk
+        SdmCWero8BR0uy5sSyKM3rpnQAREjnY5thyFMsYtsOy9p30NuzvO/v3UOcRnsGSN8q3waHtImiccj
+        vnyGe4yA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oU1So-008cEY-St; Fri, 02 Sep 2022 07:51:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2F7BB30010B;
+        Fri,  2 Sep 2022 09:51:42 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E75CB2B852D7E; Fri,  2 Sep 2022 09:51:41 +0200 (CEST)
+Date:   Fri, 2 Sep 2022 09:51:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v4 00/21] KCFI support
+Message-ID: <YxG2DUEBnIpAMKF2@hirez.programming.kicks-ass.net>
+References: <20220830233129.30610-1-samitolvanen@google.com>
+ <YxEh+pLyOyPalW1u@dev-arch.thelio-3990X>
+ <CABCJKucP5nXGiCTTCEPUGYo5Z9A9qaQkJ6_kXTOfw-o-=TYH0g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKucP5nXGiCTTCEPUGYo5Z9A9qaQkJ6_kXTOfw-o-=TYH0g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the return value of mp_find_ioapic(), which could be -1. Since
-ioapic will be used as index in mpc_ioapic_id(), we should check the
-return value ioapic here.
+On Thu, Sep 01, 2022 at 05:33:29PM -0700, Sami Tolvanen wrote:
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- arch/x86/kernel/acpi/boot.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> > I do see a few new objtool warnings as well:
+> >
+> > vmlinux.o: warning: objtool: apply_relocate_add+0x34: relocation to !ENDBR: memcpy+0x0
+> > vmlinux.o: warning: objtool: ___ksymtab+__memcpy+0x0: data relocation to !ENDBR: memcpy+0x0
+> > vmlinux.o: warning: objtool: ___ksymtab+memcpy+0x0: data relocation to !ENDBR: memcpy+0x0
+> 
+> That's interesting. I can only reproduce this warning with
+> allmodconfig+LTO, even though the relocation exists in all builds (the
+> code makes an indirect call to memcpy) and memcpy (aliased to
+> __memcpy) doesn't start with endbr. I'll have to take a closer look at
+> why this warning only appears with LTO.
 
-diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-index 907cc98b1938..687111adfb90 100644
---- a/arch/x86/kernel/acpi/boot.c
-+++ b/arch/x86/kernel/acpi/boot.c
-@@ -463,6 +463,10 @@ static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
- 	mp_irq.srcbus = number;
- 	mp_irq.srcbusirq = (((devfn >> 3) & 0x1f) << 2) | ((pin - 1) & 3);
- 	ioapic = mp_find_ioapic(gsi);
-+	if (ioapic < 0) {
-+		pr_warn("Failed to find ioapic for gsi : %u\n", gsi);
-+		return;
-+	}
- 	mp_irq.dstapic = mpc_ioapic_id(ioapic);
- 	mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
- 
--- 
-2.25.1
+From just looking at the patches I'd say patch #19 breaks it. IIRC you
+forgot to make the SYM_TYPED_FUNC things emit ENDBR.
 
+Look at how x86/asm/linkage.h is overriding SYM_FUNC_START*().
+
+You might have the same bug vs ARM64 BTI, they do the same thing.

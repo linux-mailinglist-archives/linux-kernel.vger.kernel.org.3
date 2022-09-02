@@ -2,55 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173BB5AAA99
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CB15AAA9F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235926AbiIBIt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 04:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S236087AbiIBIva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 04:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235920AbiIBIth (ORCPT
+        with ESMTP id S236107AbiIBIvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 04:49:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F742C126;
-        Fri,  2 Sep 2022 01:49:35 -0700 (PDT)
-Date:   Fri, 02 Sep 2022 08:49:32 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662108573;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=tHqU9xje3UYKAZiz5EQdq8SX17fpHeWdaNN84FIbl6I=;
-        b=AWy7iMjUGRYqeZdzv+fH+DtbdxUSUJN82ZcfndIu5k6qjGqRuWaFzT4PfKEpfyNNa1iQl3
-        p5ZaSoF2KRM3u7EIm499OvI/Q/SmbewWR3qmGcOhvJ7skOSn1txau0+hzctLSQrBVjYP1m
-        /+NmjS79qr04jIqRntLyYMrGSreg+7p3MREN6Tm/yAeURv2c/VRdYKbkvlCrHGe8P6j1Hk
-        Wvre/YDuU/b3G0yWbiHcUzbnAl2I8pvXUk+0EIE38lpKgqWRs9/v4nzb+7DqYxzFZmwGJi
-        Cw9cNAMRqoK3m3KqXMD/3DOk6THl7TUBQ150DddZObbp2XL9OTbOPejEptdGYA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662108573;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=tHqU9xje3UYKAZiz5EQdq8SX17fpHeWdaNN84FIbl6I=;
-        b=ElZYt6KtukhCPO0J779Iq1L4zwQNAmkSv/+lx/7GrNApFCML+/w153WfxCGLVtKn7uS4Xk
-        zusGfJH8oQ7gCxCg==
-From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/defconfig: Refresh the defconfigs
-Cc:     Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Fri, 2 Sep 2022 04:51:13 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D857B1D6;
+        Fri,  2 Sep 2022 01:50:33 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id nc14so2486295ejc.4;
+        Fri, 02 Sep 2022 01:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=1i7j/swt16X4UVbcDcaXz040PkNBu1+BieE4zMZT53M=;
+        b=R7m0JXjIGgvtEMkwEzdKz/sEvLuNbFj0OElMpeGlnRSJe0a0zDy/n8DwmFtuJeOqPE
+         n51SJqi9JZ11It7JZBV3m0HZjRWAPkZc9Bp7IBPC8Iwct65MAk8Mch9CZKLsnd5bNIGT
+         SHtpV/k2fC5kZ5KVOVbQydAbm9R3EhE/9/tO1oMumWtHbQ3qo0HOfpHGHQrgtf6GWTgL
+         /gtPKGfgCfgbfUx6XaIc8C7YeQhlL+uYHZ0nbudsyt4kPNF9ysvmcCE8ESSfh1VsiHIj
+         YpqDYur4SqoLXO/p/5iUXB1CJxe/FaYRWLWa/SALL4WKyAW0NCKFnCrA99jZQUb1QPdg
+         f7VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=1i7j/swt16X4UVbcDcaXz040PkNBu1+BieE4zMZT53M=;
+        b=I7WV7GVJS+FT7B7SKszEc/G2gcAwlxe2cVygUe1JforMGmzAVzjE314ERRK9xuOQUy
+         gxRq6K3cue+j1skvA9jFcKdk20FIIkhclnhlqguTC8X2UxW1Gg1eF2rZMJ+6LXLMZX25
+         Gez0b68VPVoDg5Lpom4qQ2aWxF7t+ODkCeKjSyNYkrDROgyo8jsrKEB3MBmhwbcngoe+
+         HXHY2INTddfpk2jJFJzfuro7KRKCPBFGqcbMrZd0f66N1lQ5VtJaOti+NnTBHCvoFCAY
+         6Swnarhuyt70pPgQ062RJUJgO8gUpL+vN8KfA2LWYkx/2KWtMTrpnUoXGJ5+j1xx63VE
+         YjAQ==
+X-Gm-Message-State: ACgBeo2L+v/egHf1pvcU9fi3CstAmioZjUtkpL8kkrDorBiyAVNTsxEK
+        CNR2DTfggOojUz12rWGIbVY=
+X-Google-Smtp-Source: AA6agR6MLwDBwdlGP1Bjq9Oj0xDdHx8qYK872NibXhNrSObgImW/WO16U9G8PdeOG2u66dkUJYt3hQ==
+X-Received: by 2002:a17:907:a049:b0:73d:c6c9:5263 with SMTP id gz9-20020a170907a04900b0073dc6c95263mr26015814ejc.563.1662108631627;
+        Fri, 02 Sep 2022 01:50:31 -0700 (PDT)
+Received: from gmail.com (1F2EF751.nat.pool.telekom.hu. [31.46.247.81])
+        by smtp.gmail.com with ESMTPSA id cb26-20020a0564020b7a00b0043d1a9f6e4asm1016225edb.9.2022.09.02.01.50.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 01:50:30 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Fri, 2 Sep 2022 10:50:28 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH] x86/config: Make the x86 defconfigs a bit more usable
+Message-ID: <YxHD1MkulyL3yB9y@gmail.com>
+References: <YjhdcJB4FaLfsoyO@gmail.com>
+ <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
+ <YjpLiKRUIB4TGJm0@zn.tnic>
+ <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
+ <YjsCpoRK7W4l6tSh@zn.tnic>
+ <CAHk-=wi9pLxm+dXoCaiGO+f0EbhyfAR_L510vD0c2=hj6rbMXg@mail.gmail.com>
+ <YjwsUT/6PkRPjnHE@gmail.com>
+ <YjySjys3QZAWFlfo@dev-arch.thelio-3990X>
+ <YkC08gKqJOUM7CA8@gmail.com>
+ <YkHXQTKImf7Wr+Sk@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Message-ID: <166210857267.401.17949589519631648315.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkHXQTKImf7Wr+Sk@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,95 +92,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     81290934eafd19ad1799526ed63ce9d92df6294c
-Gitweb:        https://git.kernel.org/tip/81290934eafd19ad1799526ed63ce9d92df6294c
-Author:        Ingo Molnar <mingo@kernel.org>
-AuthorDate:    Fri, 02 Sep 2022 10:37:53 +02:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Fri, 02 Sep 2022 10:37:53 +02:00
+* Nathan Chancellor <nathan@kernel.org> wrote:
 
-x86/defconfig: Refresh the defconfigs
+> On Sun, Mar 27, 2022 at 09:03:14PM +0200, Ingo Molnar wrote:
+> > Yeah, good catch! ...
+> > 
+> > I use defconfigs by explicitly adding in the architecture:
+> > 
+> >   kepler:~/tip> make ARCH=i386 defconfig
+> > 
+> >   kepler:~/tip> kconfig-arch
+> >   i386
+> > 
+> > ... so never I noticed this bug.
+> 
+> Ah, good point!
+> 
+> > I fixed this in the latest version (attached).
+> > 
+> > Arguably 'make ARCH=i386 savedefconfig' should preserve this, so that 
+> > refreshing defconfigs on bi-arch architectures is idempotent, but that's no 
+> > excuse to regress the existing defconfig behavior.
+> 
+> Hmmm, I thought that it would, but I think the behavior of savedefconfig
+> is actually correct with regards to how it handles CONFIG_64BIT in the
+> presence of an explicit ARCH value, based on how CONFIG_64BIT is
+> defined:
+> 
+> config 64BIT
+> 	bool "64-bit kernel" if "$(ARCH)" = "x86"
+> 	default "$(ARCH)" != "i386"
+> 	help
+> 	  Say yes to build a 64-bit kernel - formerly known as x86_64
+> 	  Say no to build a 32-bit kernel - formerly known as i386
+> 
+> As the default is no when ARCH == i386 and there is no prompt in that
+> situation, "# CONFIG_64BIT is not set" gets dropped, as that is the
+> default. Using savedefconfig without the ARCH variable would do the
+> right thing.
+> 
+> I tried playing around with these Kconfig symbols to see if I could get
+> something that would work for savedefconfig with or without ARCH, but I
+> could not really come up with anything. I did not try super hard though,
+> it might still be possible.
 
-Just go through a 'make savedefconfig' cycle to pick up fresh Kconfig
-details, no change in settings, just reordering of some entries.
+Unfortunately, even without the ARCH=i386 'make savedefconfig' doesn't seem 
+to be doing the right thing & is dropping the '# CONFIG_64BIT is not set' 
+line:
 
-( This makes followup changes generated via 'make savedefconfig'
-  contain less noise. )
+ kepler:~/tip> make ARCH=i386 defconfig
+ *** Default configuration is based on 'i386_defconfig'
+ #
+ # configuration written to .config
+ #
+ kepler:~/tip> make savedefconfig
+ kepler:~/tip> diff -up arch/x86/configs/i386_defconfig defconfig
+ --- arch/x86/configs/i386_defconfig	2022-09-02 10:45:43.117430882 +0200
+ +++ defconfig	2022-09-02 10:46:56.663864901 +0200
+ @@ -282,4 +282,3 @@ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
+  CONFIG_EARLY_PRINTK_DBGP=y
+  CONFIG_DEBUG_BOOT_PARAMS=y
+  CONFIG_UNWINDER_FRAME_POINTER=y
+ -# CONFIG_64BIT is not set
+ kepler:~/tip> 
 
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
----
- arch/x86/configs/i386_defconfig   | 5 +++--
- arch/x86/configs/x86_64_defconfig | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+This is annoying in that every time I modify the i386 defconfig and use 
+'make savedefconfig', I have to manually revert that change ...
 
-diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
-index 7207219..a292489 100644
---- a/arch/x86/configs/i386_defconfig
-+++ b/arch/x86/configs/i386_defconfig
-@@ -27,7 +27,6 @@ CONFIG_CGROUP_MISC=y
- CONFIG_CGROUP_DEBUG=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_KALLSYMS_ALL=y
--# CONFIG_COMPAT_BRK is not set
- CONFIG_PROFILING=y
- CONFIG_SMP=y
- CONFIG_HYPERVISOR_GUEST=y
-@@ -44,6 +43,7 @@ CONFIG_EFI_STUB=y
- CONFIG_HZ_1000=y
- CONFIG_KEXEC=y
- CONFIG_CRASH_DUMP=y
-+# CONFIG_RETHUNK is not set
- CONFIG_HIBERNATION=y
- CONFIG_PM_DEBUG=y
- CONFIG_PM_TRACE_RTC=y
-@@ -62,6 +62,7 @@ CONFIG_BLK_CGROUP_IOLATENCY=y
- CONFIG_BLK_CGROUP_IOCOST=y
- CONFIG_BLK_CGROUP_IOPRIO=y
- CONFIG_BINFMT_MISC=y
-+# CONFIG_COMPAT_BRK is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-@@ -269,9 +270,9 @@ CONFIG_SECURITY_SELINUX=y
- CONFIG_SECURITY_SELINUX_BOOTPARAM=y
- CONFIG_SECURITY_SELINUX_DISABLE=y
- CONFIG_PRINTK_TIME=y
-+CONFIG_DEBUG_KERNEL=y
- CONFIG_FRAME_WARN=1024
- CONFIG_MAGIC_SYSRQ=y
--CONFIG_DEBUG_KERNEL=y
- CONFIG_DEBUG_STACK_USAGE=y
- # CONFIG_SCHED_DEBUG is not set
- CONFIG_SCHEDSTATS=y
-diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
-index 5ce67b7..2a7333b 100644
---- a/arch/x86/configs/x86_64_defconfig
-+++ b/arch/x86/configs/x86_64_defconfig
-@@ -26,7 +26,6 @@ CONFIG_CGROUP_MISC=y
- CONFIG_CGROUP_DEBUG=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_KALLSYMS_ALL=y
--# CONFIG_COMPAT_BRK is not set
- CONFIG_PROFILING=y
- CONFIG_SMP=y
- CONFIG_HYPERVISOR_GUEST=y
-@@ -62,6 +61,7 @@ CONFIG_BLK_CGROUP_IOLATENCY=y
- CONFIG_BLK_CGROUP_IOCOST=y
- CONFIG_BLK_CGROUP_IOPRIO=y
- CONFIG_BINFMT_MISC=y
-+# CONFIG_COMPAT_BRK is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-@@ -267,8 +267,8 @@ CONFIG_SECURITY_SELINUX=y
- CONFIG_SECURITY_SELINUX_BOOTPARAM=y
- CONFIG_SECURITY_SELINUX_DISABLE=y
- CONFIG_PRINTK_TIME=y
--CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_KERNEL=y
-+CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_STACK_USAGE=y
- # CONFIG_SCHED_DEBUG is not set
- CONFIG_SCHEDSTATS=y
+This reduces the usability of 'make savedefconfig' quite a bit.
+
+Maybe Masahiro-san can tell me how I'm doing this wrong?
+
+Thanks,
+
+	Ingo

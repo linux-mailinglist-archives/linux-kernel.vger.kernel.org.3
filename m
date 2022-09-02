@@ -2,162 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A805AAA01
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DAB5AAA17
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235380AbiIBIcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 04:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
+        id S235502AbiIBIcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 04:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbiIBIcI (ORCPT
+        with ESMTP id S235751AbiIBIcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 04:32:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43149C0BEC
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:32:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662107526;
+        Fri, 2 Sep 2022 04:32:20 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966D9C0E6B;
+        Fri,  2 Sep 2022 01:32:18 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1E480C000F;
+        Fri,  2 Sep 2022 08:32:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1662107536;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gVEKJqfyqM62jNy2YKZYtKZ/hwivLO59J+dFY7QJczE=;
-        b=CqdvbEbJMQ/ub4UN6v25deew6xPkmLNuT55fThWFq5yrLEpt0Py5hXOB8A2ohjZ2V1Y+4x
-        pV03QfDqMnYsGSxvaijoNo5qFJtIvMIdUmqL1j5MwiM7Q0Gu3uIfGjiIp4xVfC8Ea5jKvm
-        ecoDPu3ZubZNb84QAR/wr2B7+BKvgaw=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-120-DkTVzXBlPMmKL3EANJsAnQ-1; Fri, 02 Sep 2022 04:32:04 -0400
-X-MC-Unique: DkTVzXBlPMmKL3EANJsAnQ-1
-Received: by mail-wr1-f72.google.com with SMTP id o3-20020adfa103000000b0022514e8e99bso139726wro.19
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 01:32:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=gVEKJqfyqM62jNy2YKZYtKZ/hwivLO59J+dFY7QJczE=;
-        b=VgNQpcDZ4jY+NEwIX88KDDQtAQ+VLqdLfYGFaBBS9RvEdaVr/zWM8ohaTYQRhwLVIT
-         tDMhujSpr7o2g+HV4zQNvQ9Furbh8IYjbgPoHdou7kIZr+VaEki96EUsyph2c6/vpbMx
-         LDfPd75xth0LyhAWsInB/reK2bJ/rlFc+9khlJaraRMdyZOfLq9pF7YYqLoOlRiRaAq7
-         mz7xb71JjgqRClr9OMzR+t3vbqVxUjAcLnKKLwvivyTnim3U+qnlssZmCwCV0Ex8ttul
-         SsYVEJ9fp0vVaHx4vIUg4yRXYLBz+HwZYBFo1tK+k/YhKU3QQwzs2s51jBaIfv/OXQF0
-         CwDQ==
-X-Gm-Message-State: ACgBeo3TOQC6q/gX5ci1riTcnUBRUwht1XNQ7U3zxkj2A7j24RVGlNgG
-        hpKXypxJgVhuWe4XoWW2ijEqU1QJ9LXt6rhtQwOh9eppLec5iceQVqQbep1BqdTKhijGNT7I3cC
-        bmOpHcrBLIh9mgkWZTbGwbZHW
-X-Received: by 2002:a5d:698e:0:b0:225:72d1:94c with SMTP id g14-20020a5d698e000000b0022572d1094cmr16086324wru.381.1662107523258;
-        Fri, 02 Sep 2022 01:32:03 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5cFRb/7wBrcvC2/EphgIHs2moSm/UDzURbuodmKzpv+CYxxWeH1D9/0odvgXjQ2vg0XprTkg==
-X-Received: by 2002:a5d:698e:0:b0:225:72d1:94c with SMTP id g14-20020a5d698e000000b0022572d1094cmr16086302wru.381.1662107522919;
-        Fri, 02 Sep 2022 01:32:02 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c714:4800:2077:1bf6:40e7:2833? (p200300cbc714480020771bf640e72833.dip0.t-ipconnect.de. [2003:cb:c714:4800:2077:1bf6:40e7:2833])
-        by smtp.gmail.com with ESMTPSA id z10-20020adfdf8a000000b002255eebf785sm921167wrl.89.2022.09.02.01.32.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 01:32:02 -0700 (PDT)
-Message-ID: <d71160d1-5a41-eae0-6405-898fe0a28696@redhat.com>
-Date:   Fri, 2 Sep 2022 10:32:01 +0200
+        bh=st453AmwDb95Bji64nfhOQz6CCq98Qgm+eXPi/RKIPE=;
+        b=MKZ0QJyQLCIq8tfjsP03U31cxSgEAtC+yxqZ2C1n6QvPkoC8buESRTl5u9FuBL/+P2+n13
+        COL68KDPdvOVKSOUJOruzPhG2kmrQH75jUH6VCVdCU14rsVKGY7eN1wjfP918mTqKHMpsZ
+        ovP+rCjmsv+S6QGCweFtm1laPy1K+5oMfzjMst/CAGP8g6ksxzIi5CjcPDre1MWAV5YCL5
+        uqUHUykKeZQOf7guCgwDhsHuW3Y2kFZsEbORboJqGS7NZZ/ekp5EUp8M+9QED5godRiGkF
+        iFNdriliSALgGpvVb987BN26zcb5aVy2dScIn6lxKQXWsywnH44e9kdRmVx49A==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH net-next v4 2/5] net: altera: tse: cosmetic change to use reverse xmas tree ordering
+Date:   Fri,  2 Sep 2022 10:32:02 +0200
+Message-Id: <20220902083205.483438-3-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220902083205.483438-1-maxime.chevallier@bootlin.com>
+References: <20220902083205.483438-1-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lpivarc@redhat.com" <lpivarc@redhat.com>,
-        "Liu, Jingqi" <jingqi.liu@intel.com>,
-        "Lu, Baolu" <baolu.lu@intel.com>
-References: <166182871735.3518559.8884121293045337358.stgit@omen>
- <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] vfio/type1: Unpin zero pages
-In-Reply-To: <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.09.22 10:24, Tian, Kevin wrote:
-> Hi, Alex,
-> 
->> From: Alex Williamson <alex.williamson@redhat.com>
->> Sent: Tuesday, August 30, 2022 11:06 AM
->>
->> There's currently a reference count leak on the zero page.  We increment
->> the reference via pin_user_pages_remote(), but the page is later handled
->> as an invalid/reserved page, therefore it's not accounted against the
->> user and not unpinned by our put_pfn().
->>
->> Introducing special zero page handling in put_pfn() would resolve the
->> leak, but without accounting of the zero page, a single user could
->> still create enough mappings to generate a reference count overflow.
->>
->> The zero page is always resident, so for our purposes there's no reason
->> to keep it pinned.  Therefore, add a loop to walk pages returned from
->> pin_user_pages_remote() and unpin any zero pages.
->>
-> 
-> We found an interesting issue on zero page and wonder whether we
-> should instead find a way to not use zero page in vfio pinning path.
-> 
-> The observation - the 'pc.bios' region (0xfffc0000) is always mapped
-> RO to zero page in the IOMMU page table even after the mapping in
-> the CPU page table has been changed after Qemu loads the guest
-> bios image into that region (which is mmap'ed as RW).
-> 
-> In reality this may not cause real problem as I don't expect any sane
-> usage would want to DMA read from the bios region. This is probably
-> the reason why nobody ever notes it.
-> 
-> But in concept it is incorrect.
-> 
-> Fixing Qemu to update/setup the VFIO mapping after loading the bios
-> image could mitigate this problem. But we never document such ABI
-> restriction on RO mappings and in concept the pinning semantics
-> should apply to all paths (RO in DMA and RW in CPU) which the
-> application uses to access the pinned memory hence the sequence
-> shouldn't matter from user p.o.v
-> 
-> And old Qemu/VMM still have this issue.
-> 
-> Having a notifier to implicitly fix the IOMMU mapping within the
-> kernel violates the semantics of pinning, and makes vfio page
-> accounting even more tricky.
-> 
-> So I wonder instead of continuing to fix trickiness around the zero
-> page whether it is a better idea to pursue allocating a normal
-> page from the beginning for pinned RO mappings?
+Make the driver code cleaner through a strictly cosmetic change, using
+he reverse xmas tree variable declaration ordering.
 
-That's precisely what I am working. For example, that's required to get
-rid of FOLL_FORCE|FOLL_WRITE for taking a R/O pin as done by RDMA:
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+---
+V2->V3 : Reword commit message
+V2->V3 : No changes
+V1->V2 : No changes
 
-See
-https://lore.kernel.org/all/5593cbb7-eb29-82f0-490e-dd72ceafff9b@redhat.com/
-for some more details.
+ .../net/ethernet/altera/altera_tse_ethtool.c  |  2 +-
+ drivers/net/ethernet/altera/altera_tse_main.c | 43 ++++++++++---------
+ 2 files changed, 23 insertions(+), 22 deletions(-)
 
-
-The concerns I discussed with Peter and Alex offline for VFIO is that we
-might end up charging more anon pages with that change to the MEMLOCK
-limit of the user and might degrade existing setups.
-
-I do wonder if that's a real issue, though. One approach would be to
-warn the VFIO users and allow for slightly exceeding the MEMLOCK limit
-for a while. Of course, that only works if we assume that such pinned
-zeropages are only extremely rarely longterm-pinned for a single VM
-instance by VFIO.
-
+diff --git a/drivers/net/ethernet/altera/altera_tse_ethtool.c b/drivers/net/ethernet/altera/altera_tse_ethtool.c
+index 3081e5874ac5..f0b11a278644 100644
+--- a/drivers/net/ethernet/altera/altera_tse_ethtool.c
++++ b/drivers/net/ethernet/altera/altera_tse_ethtool.c
+@@ -199,9 +199,9 @@ static int tse_reglen(struct net_device *dev)
+ static void tse_get_regs(struct net_device *dev, struct ethtool_regs *regs,
+ 			 void *regbuf)
+ {
+-	int i;
+ 	struct altera_tse_private *priv = netdev_priv(dev);
+ 	u32 *buf = regbuf;
++	int i;
+ 
+ 	/* Set version to a known value, so ethtool knows
+ 	 * how to do any special formatting of this data.
+diff --git a/drivers/net/ethernet/altera/altera_tse_main.c b/drivers/net/ethernet/altera/altera_tse_main.c
+index 8c5828582c21..930afc9ec833 100644
+--- a/drivers/net/ethernet/altera/altera_tse_main.c
++++ b/drivers/net/ethernet/altera/altera_tse_main.c
+@@ -141,10 +141,10 @@ static int altera_tse_mdio_write(struct mii_bus *bus, int mii_id, int regnum,
+ static int altera_tse_mdio_create(struct net_device *dev, unsigned int id)
+ {
+ 	struct altera_tse_private *priv = netdev_priv(dev);
+-	int ret;
+ 	struct device_node *mdio_node = NULL;
+-	struct mii_bus *mdio = NULL;
+ 	struct device_node *child_node = NULL;
++	struct mii_bus *mdio = NULL;
++	int ret;
+ 
+ 	for_each_child_of_node(priv->device->of_node, child_node) {
+ 		if (of_device_is_compatible(child_node, "altr,tse-mdio")) {
+@@ -236,8 +236,8 @@ static int tse_init_rx_buffer(struct altera_tse_private *priv,
+ static void tse_free_rx_buffer(struct altera_tse_private *priv,
+ 			       struct tse_buffer *rxbuffer)
+ {
+-	struct sk_buff *skb = rxbuffer->skb;
+ 	dma_addr_t dma_addr = rxbuffer->dma_addr;
++	struct sk_buff *skb = rxbuffer->skb;
+ 
+ 	if (skb != NULL) {
+ 		if (dma_addr)
+@@ -358,6 +358,7 @@ static inline void tse_rx_vlan(struct net_device *dev, struct sk_buff *skb)
+ {
+ 	struct ethhdr *eth_hdr;
+ 	u16 vid;
++
+ 	if ((dev->features & NETIF_F_HW_VLAN_CTAG_RX) &&
+ 	    !__vlan_get_tag(skb, &vid)) {
+ 		eth_hdr = (struct ethhdr *)skb->data;
+@@ -371,10 +372,10 @@ static inline void tse_rx_vlan(struct net_device *dev, struct sk_buff *skb)
+  */
+ static int tse_rx(struct altera_tse_private *priv, int limit)
+ {
+-	unsigned int count = 0;
++	unsigned int entry = priv->rx_cons % priv->rx_ring_size;
+ 	unsigned int next_entry;
++	unsigned int count = 0;
+ 	struct sk_buff *skb;
+-	unsigned int entry = priv->rx_cons % priv->rx_ring_size;
+ 	u32 rxstatus;
+ 	u16 pktlength;
+ 	u16 pktstatus;
+@@ -448,10 +449,10 @@ static int tse_rx(struct altera_tse_private *priv, int limit)
+ static int tse_tx_complete(struct altera_tse_private *priv)
+ {
+ 	unsigned int txsize = priv->tx_ring_size;
+-	u32 ready;
+-	unsigned int entry;
+ 	struct tse_buffer *tx_buff;
++	unsigned int entry;
+ 	int txcomplete = 0;
++	u32 ready;
+ 
+ 	spin_lock(&priv->tx_lock);
+ 
+@@ -497,8 +498,8 @@ static int tse_poll(struct napi_struct *napi, int budget)
+ {
+ 	struct altera_tse_private *priv =
+ 			container_of(napi, struct altera_tse_private, napi);
+-	int rxcomplete = 0;
+ 	unsigned long int flags;
++	int rxcomplete = 0;
+ 
+ 	tse_tx_complete(priv);
+ 
+@@ -561,13 +562,13 @@ static irqreturn_t altera_isr(int irq, void *dev_id)
+ static netdev_tx_t tse_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct altera_tse_private *priv = netdev_priv(dev);
++	unsigned int nopaged_len = skb_headlen(skb);
+ 	unsigned int txsize = priv->tx_ring_size;
+-	unsigned int entry;
+-	struct tse_buffer *buffer = NULL;
+ 	int nfrags = skb_shinfo(skb)->nr_frags;
+-	unsigned int nopaged_len = skb_headlen(skb);
++	struct tse_buffer *buffer = NULL;
+ 	netdev_tx_t ret = NETDEV_TX_OK;
+ 	dma_addr_t dma_addr;
++	unsigned int entry;
+ 
+ 	spin_lock_bh(&priv->tx_lock);
+ 
+@@ -696,8 +697,8 @@ static void altera_tse_adjust_link(struct net_device *dev)
+ static struct phy_device *connect_local_phy(struct net_device *dev)
+ {
+ 	struct altera_tse_private *priv = netdev_priv(dev);
+-	struct phy_device *phydev = NULL;
+ 	char phy_id_fmt[MII_BUS_ID_SIZE + 3];
++	struct phy_device *phydev = NULL;
+ 
+ 	if (priv->phy_addr != POLL_PHY) {
+ 		snprintf(phy_id_fmt, MII_BUS_ID_SIZE + 3, PHY_ID_FMT,
+@@ -773,8 +774,8 @@ static int altera_tse_phy_get_addr_mdio_create(struct net_device *dev)
+ static int init_phy(struct net_device *dev)
+ {
+ 	struct altera_tse_private *priv = netdev_priv(dev);
+-	struct phy_device *phydev;
+ 	struct device_node *phynode;
++	struct phy_device *phydev;
+ 	bool fixed_link = false;
+ 	int rc = 0;
+ 
+@@ -1012,8 +1013,8 @@ static int tse_change_mtu(struct net_device *dev, int new_mtu)
+ static void altera_tse_set_mcfilter(struct net_device *dev)
+ {
+ 	struct altera_tse_private *priv = netdev_priv(dev);
+-	int i;
+ 	struct netdev_hw_addr *ha;
++	int i;
+ 
+ 	/* clear the hash filter */
+ 	for (i = 0; i < 64; i++)
+@@ -1152,9 +1153,9 @@ static int init_sgmii_pcs(struct net_device *dev)
+ static int tse_open(struct net_device *dev)
+ {
+ 	struct altera_tse_private *priv = netdev_priv(dev);
++	unsigned long flags;
+ 	int ret = 0;
+ 	int i;
+-	unsigned long int flags;
+ 
+ 	/* Reset and configure TSE MAC and probe associated PHY */
+ 	ret = priv->dmaops->init_dma(priv);
+@@ -1265,8 +1266,8 @@ static int tse_open(struct net_device *dev)
+ static int tse_shutdown(struct net_device *dev)
+ {
+ 	struct altera_tse_private *priv = netdev_priv(dev);
+-	int ret;
+ 	unsigned long int flags;
++	int ret;
+ 
+ 	/* Stop the PHY */
+ 	if (dev->phydev)
+@@ -1320,8 +1321,8 @@ static struct net_device_ops altera_tse_netdev_ops = {
+ static int request_and_map(struct platform_device *pdev, const char *name,
+ 			   struct resource **res, void __iomem **ptr)
+ {
+-	struct resource *region;
+ 	struct device *device = &pdev->dev;
++	struct resource *region;
+ 
+ 	*res = platform_get_resource_byname(pdev, IORESOURCE_MEM, name);
+ 	if (*res == NULL) {
+@@ -1350,13 +1351,13 @@ static int request_and_map(struct platform_device *pdev, const char *name,
+  */
+ static int altera_tse_probe(struct platform_device *pdev)
+ {
+-	struct net_device *ndev;
+-	int ret = -ENODEV;
++	const struct of_device_id *of_id = NULL;
++	struct altera_tse_private *priv;
+ 	struct resource *control_port;
+ 	struct resource *dma_res;
+-	struct altera_tse_private *priv;
++	struct net_device *ndev;
+ 	void __iomem *descmap;
+-	const struct of_device_id *of_id = NULL;
++	int ret = -ENODEV;
+ 
+ 	ndev = alloc_etherdev(sizeof(struct altera_tse_private));
+ 	if (!ndev) {
 -- 
-Thanks,
-
-David / dhildenb
+2.37.2
 

@@ -2,312 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D545AAA3D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 212DA5AAA44
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235673AbiIBIit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 04:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
+        id S235814AbiIBIkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 04:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235814AbiIBIii (ORCPT
+        with ESMTP id S235787AbiIBIkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 04:38:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9357C12750
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:38:37 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oU2Bw-0002Mx-GA; Fri, 02 Sep 2022 10:38:20 +0200
-Message-ID: <0aae7d19a079e4631fc7b823d99ffbef30cfb4d2.camel@pengutronix.de>
-Subject: Re: [PATCH v6 6/7] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY
- support
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, p.zabel@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, vkoul@kernel.org,
-        alexander.stein@ew.tq-group.com, marex@denx.de,
-        richard.leitner@linux.dev
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Date:   Fri, 02 Sep 2022 10:38:19 +0200
-In-Reply-To: <1662004960-14071-7-git-send-email-hongxing.zhu@nxp.com>
-References: <1662004960-14071-1-git-send-email-hongxing.zhu@nxp.com>
-         <1662004960-14071-7-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 2 Sep 2022 04:40:43 -0400
+Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD9C7DF63;
+        Fri,  2 Sep 2022 01:40:40 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
+        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 59BF94D;
+        Fri,  2 Sep 2022 10:40:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1662108035;
+        bh=lVQfbswmYqI5C4vhW2BWNdNZzmgVe3OvE0e0UJV9l+4=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+        b=k68D/ZUge+BObfQr5wLNhD/sYvpy4yYPqSf1sACQNTXcjpoEqfiuLGxwYAljrGZyT
+         5kB469jiQGAUJK9oerqmsc4H4y60HzgL0WQqigV1xsEzyHA06eIHgkscQRkXs52v98
+         rJ0lLpeAcXa5edi7IdMaJwfDMv6apJNZi/XV7an/mcSGqsnDULNw4Ie9tbmzuwmLPw
+         6YNJIrAmVmnrhYXOGL9ijmTRT5E9GnFqvG/eXGEQmhiULsBmDlJ5WSW9IKKjJmz3as
+         cigZ9TNqGtXPmQPF3Pbu1JOZUf3o1XrnYpV47wQ1pwS+V06eT4VBoveDe/iayBH3pB
+         tKCPoGyNT03HQ==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 543211A9A; Fri,  2 Sep 2022 10:40:35 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 250FC1A99;
+        Fri,  2 Sep 2022 10:40:35 +0200 (CEST)
+Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 2074A1A98;
+        Fri,  2 Sep 2022 10:40:35 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 1BE934A041F; Fri,  2 Sep 2022 10:40:35 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 973774A02B0;
+        Fri,  2 Sep 2022 10:40:34 +0200 (CEST)
+        (Extended-Queue-bit xtech_aa@fff.in.tum.de)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] tools/memory-model: Weaken ctrl dependency definition in
+ explanation.txt
+From:   =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
+In-Reply-To: <Yw+cm+awhfi6IUHr@rowland.harvard.edu>
+Date:   Fri, 2 Sep 2022 10:40:34 +0200
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <EE1FA3DC-5A38-45EC-97AB-44B19C1C7707@in.tum.de>
+References: <20220830204446.3590197-1-paul.heidekrueger@in.tum.de>
+ <663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org>
+ <98f2b194-1fe6-3cd8-36cf-da017c35198f@joelfernandes.org>
+ <Yw7AEx1w6oWn86cm@rowland.harvard.edu>
+ <935D3930-C369-4B0E-ACDC-5BFDFA85AA72@in.tum.de>
+ <Yw+cm+awhfi6IUHr@rowland.harvard.edu>
+To:     Alan Stern <stern@rowland.harvard.edu>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 01.09.2022 um 12:02 +0800 schrieb Richard Zhu:
-> Add i.MX8MP PCIe PHY support.
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> Tested-by: Marek Vasut <marex@denx.de>
-> Tested-by: Richard Leitner <richard.leitner@skidata.com>
-> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 143 ++++++++++++++-------
->  1 file changed, 96 insertions(+), 47 deletions(-)
-> 
-> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> index ad7d2edfc414..c937d429ea8b 100644
-> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> @@ -11,6 +11,9 @@
->  #include <linux/mfd/syscon.h>
->  #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
->  #include <linux/module.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_device.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> @@ -31,12 +34,10 @@
->  #define IMX8MM_PCIE_PHY_CMN_REG065	0x194
->  #define  ANA_AUX_RX_TERM		(BIT(7) | BIT(4))
->  #define  ANA_AUX_TX_LVL			GENMASK(3, 0)
-> -#define IMX8MM_PCIE_PHY_CMN_REG75	0x1D4
-> -#define  PCIE_PHY_CMN_REG75_PLL_DONE	0x3
-> +#define IMX8MM_PCIE_PHY_CMN_REG075	0x1D4
-> +#define  ANA_PLL_DONE			0x3
->  #define PCIE_PHY_TRSV_REG5		0x414
-> -#define  PCIE_PHY_TRSV_REG5_GEN1_DEEMP	0x2D
->  #define PCIE_PHY_TRSV_REG6		0x418
-> -#define  PCIE_PHY_TRSV_REG6_GEN2_DEEMP	0xF
->  
->  #define IMX8MM_GPR_PCIE_REF_CLK_SEL	GENMASK(25, 24)
->  #define IMX8MM_GPR_PCIE_REF_CLK_PLL	FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x3)
-> @@ -47,16 +48,28 @@
->  #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
->  #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
->  
-> +enum imx8_pcie_phy_type {
-> +	IMX8MM,
-> +	IMX8MP,
-> +};
-> +
-> +struct imx8_pcie_phy_drvdata {
-> +	enum	imx8_pcie_phy_type variant;
-> +	char	gpr[128];
+On 31. Aug 2022, at 19:38, Alan Stern <stern@rowland.harvard.edu> wrote:
 
-The static allocation is excessive and wastes a lot of memory. Just
-make this a
-const char *gpr;
+> On Wed, Aug 31, 2022 at 06:42:05PM +0200, Paul Heidekr=C3=BCger wrote:
+>> On 31. Aug 2022, at 03:57, Alan Stern <stern@rowland.harvard.edu> =
+wrote:
+>>=20
+>>> On Tue, Aug 30, 2022 at 05:12:33PM -0400, Joel Fernandes wrote:
+>>>> On 8/30/2022 5:08 PM, Joel Fernandes wrote:
+>>>>> On 8/30/2022 4:44 PM, Paul Heidekr=C3=BCger wrote:
+>>>>>> The current informal control dependency definition in =
+explanation.txt is
+>>>>>> too broad and, as dicsussed, needs to be updated.
+>>>>>>=20
+>>>>>> Consider the following example:
+>>>>>>=20
+>>>>>>> if(READ_ONCE(x))
+>>>>>>> 	return 42;
+>>>>>>>=20
+>>>>>>> 	WRITE_ONCE(y, 42);
+>>>>>>>=20
+>>>>>>> 	return 21;
+>>>>>>=20
+>>>>>> The read event determines whether the write event will be =
+executed "at
+>>>>>> all" - as per the current definition - but the formal LKMM does =
+not
+>>>>>> recognize this as a control dependency.
+>>>>>>=20
+>>>>>> Introduce a new defintion which includes the requirement for the =
+second
+>>>>>> memory access event to syntactically lie within the arm of a =
+non-loop
+>>>>>> conditional.
+>>>>>>=20
+>>>>>> Link: =
+https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.=
+tum.de/
+>>>>>> Cc: Marco Elver <elver@google.com>
+>>>>>> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+>>>>>> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+>>>>>> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+>>>>>> Cc: Martin Fink <martin.fink@in.tum.de>
+>>>>>> Signed-off-by: Paul Heidekr=C3=BCger =
+<paul.heidekrueger@in.tum.de>
+>>>>>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+>>>>>> ---
+>>>>>>=20
+>>>>>> @Alan:
+>>>>>>=20
+>>>>>> Since I got it wrong the last time, I'm adding you as a =
+co-developer after my
+>>>>>> SOB. I'm sorry if this creates extra work on your side due to you =
+having to
+>>>>>> resubmit the patch now with your SOB if I understand correctly, =
+but since it's
+>>>>>> based on your wording from the other thread, I definitely wanted =
+to give you
+>>>>>> credit.
+>>>>>>=20
+>>>>>> tools/memory-model/Documentation/explanation.txt | 7 ++++---
+>>>>>> 1 file changed, 4 insertions(+), 3 deletions(-)
+>>>>>>=20
+>>>>>> diff --git a/tools/memory-model/Documentation/explanation.txt =
+b/tools/memory-model/Documentation/explanation.txt
+>>>>>> index ee819a402b69..0bca50cac5f4 100644
+>>>>>> --- a/tools/memory-model/Documentation/explanation.txt
+>>>>>> +++ b/tools/memory-model/Documentation/explanation.txt
+>>>>>> @@ -464,9 +464,10 @@ to address dependencies, since the address =
+of a location accessed
+>>>>>> through a pointer will depend on the value read earlier from that
+>>>>>> pointer.
+>>>>>>=20
+>>>>>> -Finally, a read event and another memory access event are linked =
+by a
+>>>>>> -control dependency if the value obtained by the read affects =
+whether
+>>>>>> -the second event is executed at all.  Simple example:
+>>>>>> +Finally, a read event X and another memory access event Y are =
+linked by
+>>>>>> +a control dependency if Y syntactically lies within an arm of an =
+if,
+>>>>>> +else or switch statement and the condition guarding Y is either =
+data or
+>>>>>> +address-dependent on X.  Simple example:
+>>=20
+>> Thank you both for commenting!
+>>=20
+>>> "if, else or switch" should be just "if or switch".  In C there is =
+no=20
+>>> such thing as an "else" statement; an "else" clause is merely part =
+of=20
+>>> an "if" statement.  In fact, maybe "body" would be more appropriate =
+than=20
+>>> "arm", because "switch" statements don't have arms -- they have =
+cases.
+>>=20
+>> Right. What do you think of "branch"? "Body" to me suggests that =
+there's
+>> only one and therefore that the else clause isn't included.
+>>=20
+>> Would it be fair to say that switch statements have branches? I guess
+>> because switch statements are a convenient way of writing goto's, =
+i.e.
+>> jumps, it's a stretch and basically the same as saying "arm"?
+>>=20
+>> Maybe we can avoid the arm / case clash by just having a definition =
+for if
+>> statements and appending something like "similarly for switch =
+statements"?
+>=20
+> That sounds good.
+>=20
+>>>>> 'conditioning guarding Y' sounds confusing to me as it implies to =
+me that the
+>>>>> condition's evaluation depends on Y. I much prefer Alan's wording =
+from the
+>>>>> linked post saying something like 'the branch condition is data or =
+address
+>>>>> dependent on X, and Y lies in one of the arms'.
+>>>>>=20
+>>>>> I have to ask though, why doesn't this imply that the second =
+instruction never
+>>>>> executes at all? I believe that would break the MP-pattern if it =
+were not true.
+>>>>=20
+>>>> About my last statement, I believe your patch does not disagree =
+with the
+>>>> correctness of the earlier text but just wants to improve it. If =
+that's case
+>>>> then that's fine.
+>>>=20
+>>> The biggest difference between the original text and Paul's =
+suggested=20
+>>> update is that the new text makes clear that Y has to lie within the=20=
 
-> +};
-> +
->  struct imx8_pcie_phy {
->  	void __iomem		*base;
->  	struct clk		*clk;
->  	struct phy		*phy;
->  	struct regmap		*iomuxc_gpr;
->  	struct reset_control	*reset;
-> +	struct reset_control	*perst;
->  	u32			refclk_pad_mode;
->  	u32			tx_deemph_gen1;
->  	u32			tx_deemph_gen2;
->  	bool			clkreq_unused;
-> +	const struct imx8_pcie_phy_drvdata	*drvdata;
->  };
->  
->  static int imx8_pcie_phy_init(struct phy *phy)
-> @@ -68,31 +81,20 @@ static int imx8_pcie_phy_init(struct phy *phy)
->  	reset_control_assert(imx8_phy->reset);
->  
->  	pad_mode = imx8_phy->refclk_pad_mode;
-> -	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
-> -			   imx8_phy->clkreq_unused ?
-> -			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_AUX_EN,
-> -			   IMX8MM_GPR_PCIE_AUX_EN);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_SSC_EN, 0);
-> -
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
-> -			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
-> -			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> -			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
-> -	usleep_range(100, 200);
-> -
-> -	/* Do the PHY common block reset */
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_CMN_RST,
-> -			   IMX8MM_GPR_PCIE_CMN_RST);
-> -	usleep_range(200, 500);
-> +	switch (imx8_phy->drvdata->variant) {
-> +	case IMX8MM:
-> +		/* Tune PHY de-emphasis setting to pass PCIe compliance. */
-> +		if (imx8_phy->tx_deemph_gen1)
-> +			writel(imx8_phy->tx_deemph_gen1,
-> +			       imx8_phy->base + PCIE_PHY_TRSV_REG5);
-> +		if (imx8_phy->tx_deemph_gen2)
-> +			writel(imx8_phy->tx_deemph_gen2,
-> +			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
-> +		break;
-> +	case IMX8MP:
-> +		reset_control_assert(imx8_phy->perst);
-> +		break;
-> +	}
->  
->  	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
->  	    pad_mode == IMX8_PCIE_REFCLK_PAD_UNUSED) {
-> @@ -120,20 +122,44 @@ static int imx8_pcie_phy_init(struct phy *phy)
->  		       imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG065);
->  	}
->  
-> -	/* Tune PHY de-emphasis setting to pass PCIe compliance. */
-> -	if (imx8_phy->tx_deemph_gen1)
-> -		writel(imx8_phy->tx_deemph_gen1,
-> -		       imx8_phy->base + PCIE_PHY_TRSV_REG5);
-> -	if (imx8_phy->tx_deemph_gen2)
-> -		writel(imx8_phy->tx_deemph_gen2,
-> -		       imx8_phy->base + PCIE_PHY_TRSV_REG6);
-> +	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
-> +			   imx8_phy->clkreq_unused ?
-> +			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_AUX_EN,
-> +			   IMX8MM_GPR_PCIE_AUX_EN);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_SSC_EN, 0);
-> +
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
-> +			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
-> +			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> +			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
-> +	usleep_range(100, 200);
-> +
-> +	/* Do the PHY common block reset */
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_CMN_RST,
-> +			   IMX8MM_GPR_PCIE_CMN_RST);
->  
-> -	reset_control_deassert(imx8_phy->reset);
-> +	switch (imx8_phy->drvdata->variant) {
-> +	case IMX8MP:
-> +		reset_control_deassert(imx8_phy->perst);
-> +		fallthrough;
-> +	case IMX8MM:
-> +		reset_control_deassert(imx8_phy->reset);
-> +		usleep_range(200, 500);
-> +		break;
-> +	}
->  
->  	/* Polling to check the phy is ready or not. */
-> -	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG75,
-> -				 val, val == PCIE_PHY_CMN_REG75_PLL_DONE,
-> -				 10, 20000);
-> +	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG075,
-> +				 val, val == ANA_PLL_DONE, 10, 20000);
->  	return ret;
->  }
->  
-> @@ -160,6 +186,25 @@ static const struct phy_ops imx8_pcie_phy_ops = {
->  	.owner		= THIS_MODULE,
->  };
->  
-> +static const struct imx8_pcie_phy_drvdata drvdata[] = {
-> +	[IMX8MM] = {
-> +		.variant = IMX8MM,
-> +		.gpr = "fsl,imx8mm-iomuxc-gpr",
-> +	},
-> +
-> +	[IMX8MP] = {
-> +		.variant = IMX8MP,
-> +		.gpr = "fsl,imx8mp-iomuxc-gpr",
-> +	},
-> +};
-> +
-> +static const struct of_device_id imx8_pcie_phy_of_match[] = {
-> +	{.compatible = "fsl,imx8mm-pcie-phy", .data = &drvdata[IMX8MM], },
-> +	{.compatible = "fsl,imx8mp-pcie-phy", .data = &drvdata[IMX8MP], },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
-> +
->  static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  {
->  	struct phy_provider *phy_provider;
-> @@ -172,6 +217,8 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  	if (!imx8_phy)
->  		return -ENOMEM;
->  
-> +	imx8_phy->drvdata = of_device_get_match_data(dev);
-> +
->  	/* get PHY refclk pad mode */
->  	of_property_read_u32(np, "fsl,refclk-pad-mode",
->  			     &imx8_phy->refclk_pad_mode);
-> @@ -197,7 +244,7 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  
->  	/* Grab GPR config register range */
->  	imx8_phy->iomuxc_gpr =
-> -		 syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
-> +		 syscon_regmap_lookup_by_compatible(imx8_phy->drvdata->gpr);
->  	if (IS_ERR(imx8_phy->iomuxc_gpr)) {
->  		dev_err(dev, "unable to find iomuxc registers\n");
->  		return PTR_ERR(imx8_phy->iomuxc_gpr);
-> @@ -208,6 +255,14 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  		dev_err(dev, "Failed to get PCIEPHY reset control\n");
->  		return PTR_ERR(imx8_phy->reset);
->  	}
+>>> body of the "if" or "switch" statement.  If Y follows the end of the=20=
 
-Missing newline.
+>>> if/else, as in the example at the top of this email, then it does =
+have=20
+>>> not a control dependency on X (at least, not via that if/else), even=20=
 
-Regards,
-Lucas
+>>> though the value read by X does determine whether or not Y will =
+execute.
+>>>=20
+>>> [It has to be said that this illustrates a big weakness of the LKMM: =
+It=20
+>>> isn't cognizant of "goto"s or "return"s.  This naturally derives =
+from=20
+>>> limitations of the herd tool, but the situation could be improved.  =
+So=20
+>>> for instance, I don't think it would cause trouble to say that in:
+>>>=20
+>>> 	if (READ_ONCE(x) =3D=3D 0)
+>>> 		return;
+>>> 	WRITE_ONCE(y, 5);
+>>>=20
+>>> there really is a control dependence from x to y, even though the=20
+>>> WRITE_ONCE is outside the body of the "if" statement.  Certainly the=20=
 
-> +	if (imx8_phy->drvdata->variant == IMX8MP) {
-> +		imx8_phy->perst =
-> +			devm_reset_control_get_exclusive(dev, "perst");
-> +		if (IS_ERR(imx8_phy->perst)) {
-> +			dev_err(dev, "Failed to get PCIE PHY PERST control\n");
-> +			return PTR_ERR(imx8_phy->perst);
-> +		}
-> +	}
->  
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	imx8_phy->base = devm_ioremap_resource(dev, res);
-> @@ -225,12 +280,6 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  	return PTR_ERR_OR_ZERO(phy_provider);
->  }
->  
-> -static const struct of_device_id imx8_pcie_phy_of_match[] = {
-> -	{.compatible = "fsl,imx8mm-pcie-phy",},
-> -	{ },
-> -};
-> -MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
-> -
->  static struct platform_driver imx8_pcie_phy_driver = {
->  	.probe	= imx8_pcie_phy_probe,
->  	.driver = {
+>>> compiler can't reorder the write before the read.  But AFAIK there's =
+no=20
+>>> way to include a "return" statement in a litmus test for herd.  Or a=20=
+
+>>> subroutine definition, for that matter.]
+>>>=20
+>>> I agree that "condition guarding Y" is somewhat awkward.  "the=20
+>>> condition of the if (or the expression of the switch)" might be =
+better,=20
+>>> even though it is somewhat awkward as well.  At least it's more=20
+>>> explicit.
+>>=20
+>> Maybe we can reuse the wording from the data and address dependency
+>> definition here and say "affects"?
+>>=20
+>> Putting it all together:
+>>=20
+>>> Finally, a read event X and another memory access event Y are linked =
+by a
+>>> control dependency if Y syntactically lies within a branch of an if =
+or
+>>> switch statement and X affects the evaluation of that statement's
+>>> condition via a data or address dependency.
+>>=20
+>> Alternatively without the arm / case clash:
+>>=20
+>>> Finally, a read event X and another memory access event Y are linked =
+by a
+>>> control dependency if Y syntactically lies within an arm of an if
+>>> statement and X affects the evaluation of the if condition via a =
+data or
+>>> address dependency.  Similarly for switch statements.
+>>=20
+>> What do you think?
+>=20
+> I like the second one.  How about combining the last two sentences? =20=
+
+>=20
+> 	... via a data or address dependency (or similarly for a switch=20=
+
+> 	statement).
+
+Yes, sounds good!
+
+> Now I suppose someone will pipe up and ask about the conditional=20
+> expressions in "for", "while" and "do" statements...  :-)
+
+Happy to have obliged :-)
+=
+https://lore.kernel.org/all/20F4C097-24B4-416B-95EE-AC11F5952B44@in.tum.de=
+/
+
+Do you think the text should explicitly address control dependencies in =
+the
+context of loops as well? If yes, would it be a separate patch, or would =
+it
+make sense to combine it with this one?
+
+Many thanks,
+Paul
 
 

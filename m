@@ -2,80 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFD95AA57D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A4D5AA57E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbiIBCMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 22:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S233668AbiIBCNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 22:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiIBCMV (ORCPT
+        with ESMTP id S230313AbiIBCNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 22:12:21 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2E5A5C44;
-        Thu,  1 Sep 2022 19:12:21 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 6-20020a9d0106000000b0063963134d04so580457otu.3;
-        Thu, 01 Sep 2022 19:12:21 -0700 (PDT)
+        Thu, 1 Sep 2022 22:13:17 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5054FA61D1;
+        Thu,  1 Sep 2022 19:13:16 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso4214798pjk.0;
+        Thu, 01 Sep 2022 19:13:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=T7qq37umgy6ILkKn2p66Hov6G9QBZKLlte3WFGWCXUk=;
-        b=kShF43PTGAVnO6M2WEQ62vKFE2hZjX+s0ksKCv0m3dl5S8SK7Jz1dRr/0kRRo3QShN
-         9L7CO1GKaelow0O6Kp+3Mw8xsVjH31dgo5hQmyxrJyIlDgpDYWSXa+81rZilAv92uPYJ
-         RCtoQ1coMkX3Vl7RBFTbjcBa57Gx6nSqBbvGSVvELhOJGjb0rkx7gKQ9myot+5Rxys3Q
-         EygA98Q2JyxZCSOlssAY58hjIJ2ial7vtoiTgTypn+qbbpmcqL0dDCmOA9KXllk+QlZN
-         fTBm+SFVDHWLmw6DEDN0JxBfx2wxEgeSfKa8aa7Fb3Gu6n5p27Szv/DCTM1uKxpV2SZh
-         F1Jg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=qYL6s/9Aeo2GE4x5J9H3W9gBgDC4mxOsIuVqqCG9Ifc=;
+        b=iqbWpX6axi4zrwgEuCpxATOxKDKiXl4xk/YOtHomHlekDTmI5RA20Ik/HAEy0TErsi
+         A+YZ4xF7UJTdndCxJVAoaxN7KYsqkX72U5cblFlCHPgq7AhXYIoj5S5xtMB98cASGFut
+         wy2qtnXtUPAJtKjTeis4faqZndPM5U4HO2RrQRkCoVHn4T+Rbu+qgP+UJCq9weIOQITp
+         2719TcyYSDD8LKCRgZOtFS7XwVyyo0ClvQmDLidDL0fSJ8XSq/ilz9s6jByun8O1BRbs
+         wkYHC2pe03xJbrSVqqCtjj5QpwNkHQBwIwkmdhUOPA8/l+BufJImgCyDI5lL2Au4AiVH
+         iXmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=T7qq37umgy6ILkKn2p66Hov6G9QBZKLlte3WFGWCXUk=;
-        b=Tuz5o2iBla/iL9g1lkYdrR4f0ASnB0Vl7WShoDTNge0m24KxTmBaf4XNxtKAeczZ/Z
-         h+4MmvLtNPx4Rw7+uVbgd4YaJYihjfWSSDEa/Wv50lcEGYR/T8DAA6PQ/EkxFjQG7Fa0
-         QDvsMBUa2xwM1LeCW79tTAs3ESneKZfR96rAytI/fDcQBq+kUv8H3nwPRzW6IwzAkh3n
-         hiQ5CKWBYU3h9Cv6TQD8cTVYIYuxrEeIIy5q4rqYAMKhzuiyr4vsn8WpAyaQcbrnJnPU
-         kEzcZNP9bmUsFG3x4ZWkZSH5O1PH+maJaB5w4kyLLbQWXsEVeqqtOj6M3W0LYru9eoXN
-         HEYA==
-X-Gm-Message-State: ACgBeo1+pU/9KtSiPjaVxQQsyYPi1jlhtqRutyFgPy2ODkSoZjLCt7qJ
-        IeElLhV1aWj8NWnVf/kxY40=
-X-Google-Smtp-Source: AA6agR6iWK5m7HDr3+E8mKvzZRfJotVF8JW4zDXRnMAg4Z9wqwnLCN5eXp2jwPO3KSVC3xbefMevEg==
-X-Received: by 2002:a05:6830:1544:b0:63b:2c65:9081 with SMTP id l4-20020a056830154400b0063b2c659081mr9134823otp.193.1662084740432;
-        Thu, 01 Sep 2022 19:12:20 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id 97-20020a9d036a000000b006371af665c5sm418990otv.56.2022.09.01.19.12.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 19:12:20 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 19:10:09 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        NeilBrown <neilb@suse.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 08/10] headers/deps: mm: Split <linux/gfp_types.h> out of
- <linux/gfp.h>
-Message-ID: <YxFmAcrDkFuIsuOu@yury-laptop>
-References: <20220706174253.4175492-1-yury.norov@gmail.com>
- <20220706174253.4175492-9-yury.norov@gmail.com>
- <YxEZYUCA0b8Cd1/S@casper.infradead.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=qYL6s/9Aeo2GE4x5J9H3W9gBgDC4mxOsIuVqqCG9Ifc=;
+        b=pZkUTH455QhwA064327LI7oNDo3Qzth7Ogd6wXLJvte/ikiIv6rFS8gc9XskxRyep8
+         8iCdF6bEYpTI1AMdT/ZpsFMTcHf7mr6CRd7bapRMV4UKE5jQSl6gF2W57Zdjwbilit8a
+         brJYS7Q1dl8teGJ0GgLlzYFS8qcw/Lu6KTS8bBoL0PPFkYPyhSihJBJCz/H0sR9tYMOx
+         GuLZTNTyZS9PPEleASAWwo7OC/T1ohrMj18yuaDtVbcruyoErFqux/47gdx1TbnZfAW+
+         fgh/KUMa1R0AVYGOrUwwshhAZ9yIjdUAjMIWkDglIOWElYangNsGKPDM21QSNUZfRX2r
+         5nTw==
+X-Gm-Message-State: ACgBeo1yL5K3T86CNxq6JSdaT5liL9lSaKdUin8YDJObl02p/kdg4V6U
+        afeb10SenQB6w/Pn2WHXLagrHQRPInS8vtx5AJw=
+X-Google-Smtp-Source: AA6agR4SvYXFJR86zhxiAvZ2E9aA1jtrSB2etUHJ+zppF5LlPRxN9Ydu32iiiw2ecXmihjJAuJDuRm4aOuVeiGVoW2g=
+X-Received: by 2002:a17:902:d4c4:b0:173:1206:cee7 with SMTP id
+ o4-20020a170902d4c400b001731206cee7mr32821374plg.142.1662084795764; Thu, 01
+ Sep 2022 19:13:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxEZYUCA0b8Cd1/S@casper.infradead.org>
+References: <20220901152339.471045-1-imagedong@tencent.com> <20220901141257.07131439@kernel.org>
+In-Reply-To: <20220901141257.07131439@kernel.org>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 2 Sep 2022 10:13:04 +0800
+Message-ID: <CADxym3bjafYdX0X8B+KFbKrgH0Cm5Th9F6V8SEi+KZJa95keaw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: skb: export skb drop reaons to user by TRACE_DEFINE_ENUM
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     edumazet@google.com, davem@davemloft.net, pabeni@redhat.com,
+        rostedt@goodmis.org, mingo@redhat.com, imagedong@tencent.com,
+        dsahern@kernel.org, flyingpeng@tencent.com,
+        dongli.zhang@oracle.com, robh@kernel.org, asml.silence@gmail.com,
+        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -86,22 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:43:13PM +0100, Matthew Wilcox wrote:
-> On Wed, Jul 06, 2022 at 10:42:51AM -0700, Yury Norov wrote:
-> > From: Ingo Molnar <mingo@kernel.org>
-> > 
-> > This is a much smaller header.
-> > 
-> > Signed-off-by: Ingo Molnar <mingo@kernel.org>
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  include/linux/gfp.h       | 345 +------------------------------------
-> >  include/linux/gfp_types.h | 348 ++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 350 insertions(+), 343 deletions(-)
-> 
-> You move a lot of kernel-doc.  Where do you change the rst files?
+On Fri, Sep 2, 2022 at 5:12 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Thu,  1 Sep 2022 23:23:39 +0800 menglong8.dong@gmail.com wrote:
+> > +#undef FN
+> > +#define FN(reason) [SKB_DROP_REASON_##reason] = #reason,
+> > +const char * const drop_reasons[] = {
+> > +     DEFINE_DROP_REASON(FN, FN)
+> > +};
+>
+> The undef looks a little backwards, no? We don't want to pollute all
+> users of skbuff.h with a FN define.
+>
+> #define FN....
+> /* use it */
+> #undef FN
 
-Ingo - nowhere. So I did it in the next patch:
+Okay, Thanks! I'll wait a moment to see if there are other comments
+before sending the next version.
 
-7343f2b0db4961d ("headers/deps: mm: align MANITAINERS and Docs with new
-gfp.h structure")
+Menglong Dong

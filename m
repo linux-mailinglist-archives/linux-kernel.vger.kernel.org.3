@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B875AAFEB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9B45AAEB7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237634AbiIBMpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S236450AbiIBM2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237453AbiIBMnl (ORCPT
+        with ESMTP id S235829AbiIBM1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:43:41 -0400
+        Fri, 2 Sep 2022 08:27:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74FFEC4E9;
-        Fri,  2 Sep 2022 05:32:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5539DD743;
+        Fri,  2 Sep 2022 05:24:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B729EB82A94;
-        Fri,  2 Sep 2022 12:32:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C31FC433D7;
-        Fri,  2 Sep 2022 12:32:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CE8AB82A91;
+        Fri,  2 Sep 2022 12:23:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B22EC433D7;
+        Fri,  2 Sep 2022 12:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121937;
-        bh=JnS4R41g1EDQM5cJKDxo7Wnpup4SqjxxJmoRcYUjADc=;
+        s=korg; t=1662121397;
+        bh=X2kyHRGmPFA4IG7DMX7lJ498RS9kJ6XcbHqpncdeLrk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KTJpCgtZsm/Dyk5xS+N5AiSPy2mZtSrUXJMbP66SE3MZebvrtRecHF3MtRFbT0sbE
-         bBqdZsAx3q4ldR8YE6OeoYsBz1BHqyLo7heGoEc6SaEl5y5C80k4v6Jekvo0+azYog
-         8qYw+XxzEswjStW7lLsOIoYVeYjwBXzyIDhOonNM=
+        b=ZQ9kEfMu7pUEKUbPr2XJr+iLy9uJHs9jsMiC5kbi3ZLTuTYgZz40jnfhWDZxsEXai
+         LlIwKpcPz5EfF7CEX9lOcJBQvqKh+x1Vp1AAr9zhamQBbDmCCtEZ4t30FOAAnFJkQn
+         ATDFMOGwO2DB02SYN8ibchlMMSHMxHvfx5eXqNpU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 35/73] mm/rmap: Fix anon_vma->degree ambiguity leading to double-reuse
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Letu Ren <fantasquex@gmail.com>, Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.14 35/42] fbdev: fb_pm2fb: Avoid potential divide by zero error
 Date:   Fri,  2 Sep 2022 14:18:59 +0200
-Message-Id: <20220902121405.599778788@linuxfoundation.org>
+Message-Id: <20220902121359.998704160@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
+References: <20220902121358.773776406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,167 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Letu Ren <fantasquex@gmail.com>
 
-commit 2555283eb40df89945557273121e9393ef9b542b upstream.
+commit 19f953e7435644b81332dd632ba1b2d80b1e37af upstream.
 
-anon_vma->degree tracks the combined number of child anon_vmas and VMAs
-that use the anon_vma as their ->anon_vma.
+In `do_fb_ioctl()` of fbmem.c, if cmd is FBIOPUT_VSCREENINFO, var will be
+copied from user, then go through `fb_set_var()` and
+`info->fbops->fb_check_var()` which could may be `pm2fb_check_var()`.
+Along the path, `var->pixclock` won't be modified. This function checks
+whether reciprocal of `var->pixclock` is too high. If `var->pixclock` is
+zero, there will be a divide by zero error. So, it is necessary to check
+whether denominator is zero to avoid crash. As this bug is found by
+Syzkaller, logs are listed below.
 
-anon_vma_clone() then assumes that for any anon_vma attached to
-src->anon_vma_chain other than src->anon_vma, it is impossible for it to
-be a leaf node of the VMA tree, meaning that for such VMAs ->degree is
-elevated by 1 because of a child anon_vma, meaning that if ->degree
-equals 1 there are no VMAs that use the anon_vma as their ->anon_vma.
+divide error in pm2fb_check_var
+Call Trace:
+ <TASK>
+ fb_set_var+0x367/0xeb0 drivers/video/fbdev/core/fbmem.c:1015
+ do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
+ fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
 
-This assumption is wrong because the ->degree optimization leads to leaf
-nodes being abandoned on anon_vma_clone() - an existing anon_vma is
-reused and no new parent-child relationship is created.  So it is
-possible to reuse an anon_vma for one VMA while it is still tied to
-another VMA.
-
-This is an issue because is_mergeable_anon_vma() and its callers assume
-that if two VMAs have the same ->anon_vma, the list of anon_vmas
-attached to the VMAs is guaranteed to be the same.  When this assumption
-is violated, vma_merge() can merge pages into a VMA that is not attached
-to the corresponding anon_vma, leading to dangling page->mapping
-pointers that will be dereferenced during rmap walks.
-
-Fix it by separately tracking the number of child anon_vmas and the
-number of VMAs using the anon_vma as their ->anon_vma.
-
-Fixes: 7a3ef208e662 ("mm: prevent endless growth of anon_vma hierarchy")
-Cc: stable@kernel.org
-Acked-by: Michal Hocko <mhocko@suse.com>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Letu Ren <fantasquex@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/rmap.h |    7 +++++--
- mm/rmap.c            |   29 ++++++++++++++++-------------
- 2 files changed, 21 insertions(+), 15 deletions(-)
+ drivers/video/fbdev/pm2fb.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/include/linux/rmap.h
-+++ b/include/linux/rmap.h
-@@ -39,12 +39,15 @@ struct anon_vma {
- 	atomic_t refcount;
- 
- 	/*
--	 * Count of child anon_vmas and VMAs which points to this anon_vma.
-+	 * Count of child anon_vmas. Equals to the count of all anon_vmas that
-+	 * have ->parent pointing to this one, including itself.
- 	 *
- 	 * This counter is used for making decision about reusing anon_vma
- 	 * instead of forking new one. See comments in function anon_vma_clone.
- 	 */
--	unsigned degree;
-+	unsigned long num_children;
-+	/* Count of VMAs whose ->anon_vma pointer points to this object. */
-+	unsigned long num_active_vmas;
- 
- 	struct anon_vma *parent;	/* Parent of this anon_vma */
- 
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -90,7 +90,8 @@ static inline struct anon_vma *anon_vma_
- 	anon_vma = kmem_cache_alloc(anon_vma_cachep, GFP_KERNEL);
- 	if (anon_vma) {
- 		atomic_set(&anon_vma->refcount, 1);
--		anon_vma->degree = 1;	/* Reference for first vma */
-+		anon_vma->num_children = 0;
-+		anon_vma->num_active_vmas = 0;
- 		anon_vma->parent = anon_vma;
- 		/*
- 		 * Initialise the anon_vma root to point to itself. If called
-@@ -198,6 +199,7 @@ int __anon_vma_prepare(struct vm_area_st
- 		anon_vma = anon_vma_alloc();
- 		if (unlikely(!anon_vma))
- 			goto out_enomem_free_avc;
-+		anon_vma->num_children++; /* self-parent link for new root */
- 		allocated = anon_vma;
+--- a/drivers/video/fbdev/pm2fb.c
++++ b/drivers/video/fbdev/pm2fb.c
+@@ -614,6 +614,11 @@ static int pm2fb_check_var(struct fb_var
+ 		return -EINVAL;
  	}
  
-@@ -207,8 +209,7 @@ int __anon_vma_prepare(struct vm_area_st
- 	if (likely(!vma->anon_vma)) {
- 		vma->anon_vma = anon_vma;
- 		anon_vma_chain_link(vma, avc, anon_vma);
--		/* vma reference or self-parent link for new root */
--		anon_vma->degree++;
-+		anon_vma->num_active_vmas++;
- 		allocated = NULL;
- 		avc = NULL;
- 	}
-@@ -293,19 +294,19 @@ int anon_vma_clone(struct vm_area_struct
- 		anon_vma_chain_link(dst, avc, anon_vma);
- 
- 		/*
--		 * Reuse existing anon_vma if its degree lower than two,
--		 * that means it has no vma and only one anon_vma child.
-+		 * Reuse existing anon_vma if it has no vma and only one
-+		 * anon_vma child.
- 		 *
--		 * Do not chose parent anon_vma, otherwise first child
--		 * will always reuse it. Root anon_vma is never reused:
-+		 * Root anon_vma is never reused:
- 		 * it has self-parent reference and at least one child.
- 		 */
- 		if (!dst->anon_vma && src->anon_vma &&
--		    anon_vma != src->anon_vma && anon_vma->degree < 2)
-+		    anon_vma->num_children < 2 &&
-+		    anon_vma->num_active_vmas == 0)
- 			dst->anon_vma = anon_vma;
- 	}
- 	if (dst->anon_vma)
--		dst->anon_vma->degree++;
-+		dst->anon_vma->num_active_vmas++;
- 	unlock_anon_vma_root(root);
- 	return 0;
- 
-@@ -355,6 +356,7 @@ int anon_vma_fork(struct vm_area_struct
- 	anon_vma = anon_vma_alloc();
- 	if (!anon_vma)
- 		goto out_error;
-+	anon_vma->num_active_vmas++;
- 	avc = anon_vma_chain_alloc(GFP_KERNEL);
- 	if (!avc)
- 		goto out_error_free_anon_vma;
-@@ -375,7 +377,7 @@ int anon_vma_fork(struct vm_area_struct
- 	vma->anon_vma = anon_vma;
- 	anon_vma_lock_write(anon_vma);
- 	anon_vma_chain_link(vma, avc, anon_vma);
--	anon_vma->parent->degree++;
-+	anon_vma->parent->num_children++;
- 	anon_vma_unlock_write(anon_vma);
- 
- 	return 0;
-@@ -407,7 +409,7 @@ void unlink_anon_vmas(struct vm_area_str
- 		 * to free them outside the lock.
- 		 */
- 		if (RB_EMPTY_ROOT(&anon_vma->rb_root.rb_root)) {
--			anon_vma->parent->degree--;
-+			anon_vma->parent->num_children--;
- 			continue;
- 		}
- 
-@@ -415,7 +417,7 @@ void unlink_anon_vmas(struct vm_area_str
- 		anon_vma_chain_free(avc);
- 	}
- 	if (vma->anon_vma) {
--		vma->anon_vma->degree--;
-+		vma->anon_vma->num_active_vmas--;
- 
- 		/*
- 		 * vma would still be needed after unlink, and anon_vma will be prepared
-@@ -433,7 +435,8 @@ void unlink_anon_vmas(struct vm_area_str
- 	list_for_each_entry_safe(avc, next, &vma->anon_vma_chain, same_vma) {
- 		struct anon_vma *anon_vma = avc->anon_vma;
- 
--		VM_WARN_ON(anon_vma->degree);
-+		VM_WARN_ON(anon_vma->num_children);
-+		VM_WARN_ON(anon_vma->num_active_vmas);
- 		put_anon_vma(anon_vma);
- 
- 		list_del(&avc->same_vma);
++	if (!var->pixclock) {
++		DPRINTK("pixclock is zero\n");
++		return -EINVAL;
++	}
++
+ 	if (PICOS2KHZ(var->pixclock) > PM2_MAX_PIXCLOCK) {
+ 		DPRINTK("pixclock too high (%ldKHz)\n",
+ 			PICOS2KHZ(var->pixclock));
 
 

@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5075AA8BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCC65AA8BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbiIBHbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 03:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S234641AbiIBHb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 03:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiIBHbC (ORCPT
+        with ESMTP id S229514AbiIBHb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 03:31:02 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39829AFB2;
-        Fri,  2 Sep 2022 00:31:00 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id u9-20020a17090a1f0900b001fde6477464so4699663pja.4;
-        Fri, 02 Sep 2022 00:31:00 -0700 (PDT)
+        Fri, 2 Sep 2022 03:31:56 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C2D11A2D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 00:31:53 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id 199so1116242pfz.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 00:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=otQ8hHJCbd4mIOyYrBE6xrrNXinh9eOjKzRA60c/oYE=;
-        b=XN0dQyhR+ApCIk1hP+qHX//4vn/ePtcWzh5jgq81LbY1nrxTyKx1ksEnAkk9oe14sA
-         R+NNsU/hGHKPLDCQ+02ymsuA4+MFfY2OKNO5Tde8QTSM4Hpm5gorpDko5WoF+JsgeauD
-         nsq2mw8zbLfHCsJr0C8iqhgLAq1DVb1KzPLs4cv4rilR9FUfYBXrqRtZXYriu/O3N+eC
-         VvhmpP0SuHGlcKdld7SV5DRUA5M0ot5oacWqwoVvFFFg5Gi3qlG8Y01RNk7XTOlD0S7s
-         /Vm0+zBpHQx9WiK7MMNbQQDF92640tMS7emfaKGVHfBpDKT9n1fKIcuiT8+LxndQVL9j
-         qf3Q==
+        bh=P0R9Y+4dB3fRcttMdLXdxOe5yLYU2jvdRFUhiOX93Zg=;
+        b=k5q1QbmCXfOYOV8VpYKWG61L3L9sU/bLkPdBZgWYlNidsibXAya40hV9tS883X2ZZN
+         3kA0r8itsawEx8lVa1Yiq+AF03dd8RXpnVKL+OJMnGX/67GF0t2vrbMc4NDTU9LsIe3K
+         7KV+hHa58XkhAOveOujHuYCOW2xIuToJkIWYY01/e9e/cFNsHRbz+GwDRcBVwKM49oA5
+         k0Gt9mkOplHQyvGc3Syua+gD3nu0tb1xo8D4g73HuOTigBgdCnoVHCPQ5hKaDQk57Wjq
+         vzrlDO4b6bIH5qSFT+SvcY6HasUNeGeiGxhYOxo5eYIYS0kyMjt+3JwhbBBPGjdxtRQe
+         ShZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=otQ8hHJCbd4mIOyYrBE6xrrNXinh9eOjKzRA60c/oYE=;
-        b=qROBGhpsXGGzc38wvzlNOvBopgYwol1HUdml6v2AFdJXVelCSCasMqF8kJD//FXhDW
-         z3zl2ZhXJhDZNQZ9PeGgQR+yOVwmn6Uy5NhQQHwA8eqxbHxH9gneHD36feAZkRyJmY/L
-         Ehlfjf0VffQv/HBgFlgYqpHvZGD3tnFCsaUBd+dDuocUARxLwEyXSzfZlzQ60CbAbcxU
-         u4zQ9yasizJK32vcOTRMTydpPiH2uavYPFLsO/hmMfOv5yKUnB+hYy+D2ZW2jIA43KaN
-         l59DLqTRj80TMVI7RAV5tYD7LSCk8YA2O+EUFVuLN1SDn0Bc9/toc+5VRh7SEGtPh1Bn
-         +xgw==
-X-Gm-Message-State: ACgBeo2DhItmt7VicnGGdjLkheAqPQpcDd20+6leqxa6HuQ+XntmwnkW
-        VRuCBT99Hoe49JqkiHewdv8=
-X-Google-Smtp-Source: AA6agR7frwvs4z2Xkd/cDUv8GhGmoyWx3SbAYicBTSYaAPmO5qpNaPu0PYo4CMFbrUNVJaCX/fDt6w==
-X-Received: by 2002:a17:902:ef50:b0:170:9f15:b998 with SMTP id e16-20020a170902ef5000b001709f15b998mr34703564plx.102.1662103860438;
-        Fri, 02 Sep 2022 00:31:00 -0700 (PDT)
+        bh=P0R9Y+4dB3fRcttMdLXdxOe5yLYU2jvdRFUhiOX93Zg=;
+        b=lISHx+rAKJdxo7/87maMUdDaiIeazWgeONGHrhNId/kAIOJ0ymvzj2LokPMVvNZ2bR
+         UvA7SDBwGi057pztIvxLuQ+0XqwVOM4MUEdCu8PtdCc+DMEMDfnJjXaXvtH7J2VuXR6l
+         9Eh+jTdGWHuc1XYWq2tA4kpLg1mug9bCbpu1PXsnORw+C4KDnG1cADI9NHFTfFFg24ZH
+         PFOnAszy/5NfVkVUklTEm2lcHgOilcHhWDq+5bKyX7D18dCd4BEGaJ0FImnMM2kEYVmm
+         SpT87toucnEbwVmP/oipFzKIFUO5PXTkoKCUATdBoxhBNoZLuCOiEmvcUTNCkKdhatmC
+         gSew==
+X-Gm-Message-State: ACgBeo3WvkGceoUkmQWymUFc4HewLAVsgy8/93ZFXGxHj++vNnDFCV4R
+        KjGQwxXZE9Fx7BsJfr719G0g7VUgNII=
+X-Google-Smtp-Source: AA6agR4kjmE6UsN8xdYrbeqJT8QfxOodjebOdNs9GfnxcZXzmeDl2dIJ56PNgzA65XAn+2GX2uuwcg==
+X-Received: by 2002:a05:6a00:3406:b0:535:f76f:c971 with SMTP id cn6-20020a056a00340600b00535f76fc971mr35291353pfb.5.1662103913057;
+        Fri, 02 Sep 2022 00:31:53 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170903110d00b0016d72804664sm862528plh.205.2022.09.02.00.30.58
+        by smtp.gmail.com with ESMTPSA id e18-20020a656892000000b0041d6cda2d60sm738183pgt.66.2022.09.02.00.31.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 00:31:00 -0700 (PDT)
+        Fri, 02 Sep 2022 00:31:52 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     herbert@gondor.apana.org.au
-Cc:     leitao@debian.org, nayna@linux.ibm.com, pfsmorigo@gmail.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         ye xingchen <ye.xingchen@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] crypto: nx - Remove the unneeded result variable
-Date:   Fri,  2 Sep 2022 07:30:55 +0000
-Message-Id: <20220902073055.319464-1-ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] drm/radeon/ci_dpm: Remove the unneeded result variable
+Date:   Fri,  2 Sep 2022 07:31:48 +0000
+Message-Id: <20220902073148.319536-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,37 +74,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Return the value set_msg_len() directly instead of storing it in another
-redundant variable.
+Return the value ci_load_smc_ucode() directly instead of storing it in
+another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/crypto/nx/nx-aes-ccm.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/gpu/drm/radeon/ci_dpm.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/crypto/nx/nx-aes-ccm.c b/drivers/crypto/nx/nx-aes-ccm.c
-index 3793885f928d..c843f4c6f684 100644
---- a/drivers/crypto/nx/nx-aes-ccm.c
-+++ b/drivers/crypto/nx/nx-aes-ccm.c
-@@ -134,7 +134,6 @@ static int generate_b0(u8 *iv, unsigned int assoclen, unsigned int authsize,
- 		       unsigned int cryptlen, u8 *b0)
+diff --git a/drivers/gpu/drm/radeon/ci_dpm.c b/drivers/gpu/drm/radeon/ci_dpm.c
+index ac006bed4743..8ef25ab305ae 100644
+--- a/drivers/gpu/drm/radeon/ci_dpm.c
++++ b/drivers/gpu/drm/radeon/ci_dpm.c
+@@ -2056,7 +2056,7 @@ static void ci_clear_vc(struct radeon_device *rdev)
+ static int ci_upload_firmware(struct radeon_device *rdev)
  {
- 	unsigned int l, lp, m = authsize;
--	int rc;
+ 	struct ci_power_info *pi = ci_get_pi(rdev);
+-	int i, ret;
++	int i;
  
- 	memcpy(b0, iv, 16);
+ 	for (i = 0; i < rdev->usec_timeout; i++) {
+ 		if (RREG32_SMC(RCU_UC_EVENTS) & BOOT_SEQ_DONE)
+@@ -2067,9 +2067,7 @@ static int ci_upload_firmware(struct radeon_device *rdev)
+ 	ci_stop_smc_clock(rdev);
+ 	ci_reset_smc(rdev);
  
-@@ -148,9 +147,7 @@ static int generate_b0(u8 *iv, unsigned int assoclen, unsigned int authsize,
- 	if (assoclen)
- 		*b0 |= 64;
- 
--	rc = set_msg_len(b0 + 16 - l, cryptlen, l);
+-	ret = ci_load_smc_ucode(rdev, pi->sram_end);
 -
--	return rc;
-+	return set_msg_len(b0 + 16 - l, cryptlen, l);
+-	return ret;
++	return ci_load_smc_ucode(rdev, pi->sram_end);
+ 
  }
  
- static int generate_pat(u8                   *iv,
 -- 
 2.25.1

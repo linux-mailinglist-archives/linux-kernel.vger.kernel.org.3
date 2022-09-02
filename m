@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA445ABABF
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA5E5ABAC4
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiIBWSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 18:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
+        id S230465AbiIBWUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 18:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiIBWSI (ORCPT
+        with ESMTP id S229630AbiIBWUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 18:18:08 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB961BD10D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:18:07 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id z2so4427717edc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 15:18:07 -0700 (PDT)
+        Fri, 2 Sep 2022 18:20:07 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74586527E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:20:05 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id lx1so6381742ejb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 15:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=HpxkiE/rVFlomk7mcFdG7tTVTXis1x8OYXXnEOdixck=;
-        b=sNUWaqdd13oguTLoGAm+2mJSFjGuXPrQsZYidBhDKc/a7ZiL914yaOs6ivNAzRt8kt
-         ThnDLOjK7qzifJ+xMM1zEmNR3HrRRY3f1kH3XSAoV4VgAWJftAOKwF44PToqA561zDrs
-         l2sFlo26RW0fL7ohETfS7Fiv8F3yGM1AglYGSln/33vqrSHVRSfjisKFYgNOuMPiQe10
-         irT9I6XpGJzFJGVbt2zCVgPzg+0S6KHY2EOaTgZj6vjCcY7r7Zvglx8aa8EiDkpB+myM
-         uPdsCFmxLBkg8UfcpGl4v1s4FzXEfW9NXnNadrFV1E1WQzIckQF/GQXiLmnawzupmros
-         RHGA==
+        bh=MnthNxIiFeaOCUSOEozywdNetMkLAmt+YGycE0QV4QM=;
+        b=NfXhAeOjDbvXltWBSu37ZF/YA3RYAZaaGHMDc1F2/Dysb/I13Qzon5Xh9xqzY9gk7u
+         BakD0wloYQbP1+LabGCwbdoA4AS2EXA+weFBzebpHBpzQ8V/b2lCntgfsfQBusodLwrt
+         TMFMmRD8U6LSGYaX1sZ3z4LaV7tfj2MKGoWoyNJLhiQ/Jy+uRm0kTpLmLa5xY9wntnsK
+         /eQbetP61njkSrUJybrFWqp+CnGbWclTH1EqOe9aI+Z7FTneOVHDRWqm1dAJuJPKpsdZ
+         FAvKsgxrKX0JqZR2NQG4BoM36lh7bX9RrZ+VPBez9gNtDcYCKZ1TeRTXytnCSZjjhvB0
+         f1jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=HpxkiE/rVFlomk7mcFdG7tTVTXis1x8OYXXnEOdixck=;
-        b=vdAbI4cUMDWZ8A71U9ZdxbvGC46a2NBMFtfU8BTq3CiZ2OBjUfCaZFHdZ9gDfSVTdN
-         N5SGANThB74iv48y7gIW4s7D2KUlV6hvEwUn+ELVlQYH4A/ruS+ZnSI8zDvvLPJ24EzX
-         9LXlqiUYPBUppIaMhbhgKNgIw1mwJaixasYpHHiL6vI4s10fPXVYtvLJcgB6bwhTox3J
-         nv4h6bWJRmD0ErFVK/j29cqzMqcgpc3KtZn9KnA+IuztrMpMG/H5rg+LHHMm1YgRvpDq
-         SxSLBEqEiZMSHaaQ+ycDG1UhjfEK7EqKEjavtE8PEs96lvy3L5Z+kk/cRXd54XHmBSG2
-         G+Fw==
-X-Gm-Message-State: ACgBeo0vbKzxqcXrkkgLGSP7EozDcJabBRc3fYw3oLmzoeD5WxOB4d5D
-        5yk0kh/5xRjENjDrnNEsx7x3lADetOsWuGFmtCBlkHu03aM=
-X-Google-Smtp-Source: AA6agR7gx7SWF6iioajuC2kzWbvgag4v4M6Wj8SiTTynJ7CJ1hFTpicL6hCmGvt6sR+w6BLqsQpAyq9Hat89QHlr0NM=
-X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id
- ew4-20020a056402538400b004316d84b451mr34269265edb.46.1662157086243; Fri, 02
- Sep 2022 15:18:06 -0700 (PDT)
+        bh=MnthNxIiFeaOCUSOEozywdNetMkLAmt+YGycE0QV4QM=;
+        b=ONGcH/VLp5HYc9xwprMTzTovEsdNyRyWOnxqQ73S2tzvUx7T8pn8vyYyRGZrgnUC06
+         1j5zqQw8avN43KYN9KYn/Zsj79LRZJJKhCeXTy3Izlwwy82oY7lj9Ni7PV0YzfIZdrRB
+         A+5kRaKX41V748eGKsdOFW26KkMfyej+JM6/pV3yFcoAOKP3DOGXhvTqHp1iHKHROm7V
+         9/ANT5S8wEAMNnEGGcwVCwr/ZS9ptc0wFVBmMQrz1ImIVLlZ/rvteJ097qmoZOFeceyF
+         A7bfdUw+li0GlUZ9m1f3/K87nZllE+hUjp0TMKGXp7mc53n69se2C7sue51cw8hHPaIT
+         Jdmg==
+X-Gm-Message-State: ACgBeo286P3Ur2ujJkdg6fBNhNLZELnKYBnPdJ02Il60Ci7RCqzoMO8K
+        cWJaBX4xDlyAu6+nbbazSUzHrM7l3XtdFehgqv0zwA==
+X-Google-Smtp-Source: AA6agR4iRgKtyOZNhp11XLNwwluig/zcoqFih0licH++8iY0fBbsO8qKVZh8mZRl9lWXjgFGrMdJ/Rm9O2NUbut4tqY=
+X-Received: by 2002:a17:907:6293:b0:73d:b27b:e594 with SMTP id
+ nd19-20020a170907629300b0073db27be594mr29165863ejc.526.1662157204499; Fri, 02
+ Sep 2022 15:20:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220830175850.44770-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220830175850.44770-1-andriy.shevchenko@linux.intel.com>
+References: <20220831135636.3176406-1-claudiu.beznea@microchip.com>
+In-Reply-To: <20220831135636.3176406-1-claudiu.beznea@microchip.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 3 Sep 2022 00:17:55 +0200
-Message-ID: <CACRpkday-0zhppj1V6Hp097hZGxaAOxZ=Xbsn_+93TQW_6mC_Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] pinctrl: mcp23s08: Drop assignment of default
- number of OF cells
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sat, 3 Sep 2022 00:19:53 +0200
+Message-ID: <CACRpkdbz7YmThCa2-q2XWrvN3diB_TR+dntL2YTGXCsmaYP-wA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] pinctrl: at91: cleanups
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        ludovic.desroches@microchip.com, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -66,15 +68,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 7:58 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Wed, Aug 31, 2022 at 3:54 PM Claudiu Beznea
+<claudiu.beznea@microchip.com> wrote:
 
-> The GPIO library code will assign default value for number of OF
-> cells, no need to repeat this in the driver.
+> Machine specific PM code was calling gpio driver specific code to enable
+> wakeup interrupts. Moved this code to the pinctrl-at91 driver as close
+> as possible to the moment machine specific code is executed (in .noirq
+> member of struct dev_pm_ops). The code has been tested on sama5d2_xplained,
+> sama5d3_xplained, sam9x60ek, sama7g5ek.
 >
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Along with it added 2 cleanups.
 
-Patch applied!
+Patches applied!
 
 Yours,
 Linus Walleij

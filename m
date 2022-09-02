@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD315AB6C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354C85AB6C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbiIBQoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 12:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
+        id S235995AbiIBQoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 12:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236504AbiIBQo1 (ORCPT
+        with ESMTP id S236145AbiIBQoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 12:44:27 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE92F826E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 09:44:26 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-11eab59db71so5980976fac.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 09:44:26 -0700 (PDT)
+        Fri, 2 Sep 2022 12:44:06 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7C5F72E0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 09:44:05 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id kk26so4952372ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 09:44:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=jlxUk3azGy/EzfPrVt/ZaELMrYWactKPSNiRuIa74ck=;
-        b=Xp4Qc4d3GxGOeTK6v7NtSdUReBaopEPOMaWHpXj/uzu9JQK/jpmpI3SJeoYxsGYKsp
-         qy95k4AD+TVU2j0IUxwCtaykKPkBI3nXvOv+IOBCmx++fiU2GgNyufogGlww0mlyuIqh
-         x2Z0L/jqra5Cs/BXT0bLYZMl+OsHGN0wy7mGdbiGmiwR1XCiVUzVb5YoIMA0EmjwZlS4
-         Ug9hIJegIX20zNzYRiVRKMNbiIR8cQ7qDxFOjxRKLOhxdYkYThpi8F1r0bMV1MRjPWgw
-         eQKTT8XmSupthtYOcAu3hXQt/0IFIrzZ79q2GrBWiaWsTQbwk2d/o3yuIdstpIGiQuZ3
-         d19A==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=VmUnMpMx9FCpdgOfRQX0qdDo5Ev0z9Y827Nqgg69gqA=;
+        b=C9WaGds13KebfDZBCKtuewhv6eHNZKasIwrABJm8q88TgSSillzYLfRXxuIkeWJ+EE
+         ATXb5NU2GQZXcTPBfK0lU7BTe8a0OK1fE8MMAFockFtrlxQjFA7bjr1tHm+FWl1M0jfB
+         bsQB3zJpW2YyG0sGyLHuO2fvRrTjl9vsriR8c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=jlxUk3azGy/EzfPrVt/ZaELMrYWactKPSNiRuIa74ck=;
-        b=t7gBjTk/wW+aO7R2MYDXhd7VJvDTdv0i9GNavdxPYGPKt4VrCb+IkVr4GWnjLj2V4n
-         jdr/0ixLdkHe2tYFEkG6a/4rOpW37Wrm6cBOzQNsJ+xmq7peXMbge9ohoXwArUvNC1ZA
-         VZ4PqDDn6RIFGZn4gF0lzYKjXnMOtIrahbnhP0CtfSlw0lpfboTpV3QEpcHokgKpEEjq
-         3uJrp+rY3LltkuqWUHvAeAcFKpWBMSV3QavhF+kTthZX+xHHQTb98O5yRKSx3hfTtbFR
-         xqwdRproBXujP6qXT6iIGTWJwkCj/6eeRiSsvxFoZh442COXTDXX0viRzvWJuFXYtLGa
-         eANQ==
-X-Gm-Message-State: ACgBeo34bHNGwS4Mml2SGaQck4olFQp351S0aH8l7r0mPe3+yowOU20K
-        w9EIhmCkiB8UQLH1J8Fw5sA=
-X-Google-Smtp-Source: AA6agR4AkPjdTiVT1q1D8S+9i814inn8vtV7CADNh/TTbo4jKHbm/tpSC2wT76G9/4UJNSH3Wr7gLA==
-X-Received: by 2002:a05:6808:124f:b0:345:775b:d5bf with SMTP id o15-20020a056808124f00b00345775bd5bfmr2238049oiv.217.1662137065376;
-        Fri, 02 Sep 2022 09:44:25 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id y12-20020a4a980c000000b0044afd53b102sm811860ooi.36.2022.09.02.09.44.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 09:44:25 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH RFC] x86/apic: skip cpu slot reservation logic on boot in case of NR_CPUS == 1
-Date:   Fri,  2 Sep 2022 09:42:11 -0700
-Message-Id: <20220902164211.1425982-1-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=VmUnMpMx9FCpdgOfRQX0qdDo5Ev0z9Y827Nqgg69gqA=;
+        b=HqX9V2cxctlZ58d+nBg1Chl5zXOXQ8gd32z0eEq3spS7Wb+3ZoyJkUQjICiwr0f3Fz
+         6s2RrB4KZ6JinaRI66cGIFBh3RFWcbNo1HHkpOS9pzqpU/okNHCoTEeprTge/0cZunAO
+         Q/Ks5o30dKa/6iN0O0Y5cO59d9AsE3qHsKllxUVk8AI+dhJplyt3IlYmYxWvB2jYrv2G
+         Kwev4dvSSXjMWulKGhPRWo3e129Crr8aoF7GMdHCnuU7GIDFnnUoRuqrHMjzom1RnrWb
+         M78GoA+lC4lS8deekCHWfGd5M6xRHIdyecOfExeSIrRd39E6Hl9qZok6m7de+oTtp4Dt
+         86wA==
+X-Gm-Message-State: ACgBeo0bYQC0cbwF1suGj6b5Ph/Pzt0citZIAHeu5nGrZrC6ma7uLnh2
+        cmCfnQjUHG02aVz9Nw2t5F/tMeTTidh7fjD/
+X-Google-Smtp-Source: AA6agR481b+7l4ai4nfWxuekmNFsH8/bGVLtLNz8GWpPRz6BkxmLl7uCtU92GhHPDxiVK7DalTxYJg==
+X-Received: by 2002:a17:907:9693:b0:73d:cc84:deb with SMTP id hd19-20020a170907969300b0073dcc840debmr27666238ejc.552.1662137043405;
+        Fri, 02 Sep 2022 09:44:03 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id f17-20020a1709067f9100b0073a62f3b447sm1508351ejr.44.2022.09.02.09.44.02
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 09:44:02 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id c7so3000483wrp.11
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 09:44:02 -0700 (PDT)
+X-Received: by 2002:a5d:4052:0:b0:225:8b55:67fd with SMTP id
+ w18-20020a5d4052000000b002258b5567fdmr17701419wrp.281.1662137041789; Fri, 02
+ Sep 2022 09:44:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <20220902130625.217071627@infradead.org> <20220902130950.205726504@infradead.org>
+In-Reply-To: <20220902130950.205726504@infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 2 Sep 2022 09:43:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
+Message-ID: <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
+Subject: Re: [PATCH v2 37/59] x86/putuser: Provide room for padding
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juergen Gross <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-generic_processor_info() ensures that there's always a room for boot-cpu
-in phys_cpu_present_map. This logic is unneeded when there's a single CPU
-in the system, and it makes smatch warning when aliasing nr_cpu_ids to
-NR_CPUS in this patch:
+So I don't hate this patch and it's probably good for consistency, but
+I really think that the retbleed tracking could perhaps be improved to
+let this be all unnecessary.
 
-https://www.spinics.net/lists/kernel/msg4493525.html
+The whole return stack depth counting is already not 100% exact, and I
+think we could just make the rule be that we don't track leaf
+functions.
 
-smatch warnings:
-arch/x86/kernel/apic/apic.c:2437 generic_processor_info() warn: always true condition '(num_processors >= (1) - 1) =>
-+(0-u32max >= 0)'
+Why? It's just a off-by-one in the already not exact tracking. And -
+perhaps equally importantly - leaf functions are very very common
+dynamically, and I suspect it's trivial to see them.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
-This is RFC because I'm not sure that this is not a false positive from
-smatch. If NR_CPUS is 1, and the condition is always true, it's simply
-optimized out by a compiler, and nothing wrong happens, except maybe a
-couple of checks on boot.
+Yes, yes, you could make objtool even smarter and actually do some
+kind of function flow graph thing (and I think some people were
+talking about that with the whole ret counting long long ago), but the
+leaf function thing is the really simple low-hanging fruit case of
+that.
 
- arch/x86/kernel/apic/apic.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index 6d303d1d276c..6a43faaea5ac 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -2430,6 +2430,7 @@ int generic_processor_info(int apicid, int version)
- 		return -ENODEV;
- 	}
- 
-+#if NR_CPUS > 1
- 	/*
- 	 * If boot cpu has not been detected yet, then only allow upto
- 	 * nr_cpu_ids - 1 processors and keep one slot free for boot cpu
-@@ -2445,6 +2446,7 @@ int generic_processor_info(int apicid, int version)
- 		disabled_cpus++;
- 		return -ENODEV;
- 	}
-+#endif
- 
- 	if (num_processors >= nr_cpu_ids) {
- 		int thiscpu = max + disabled_cpus;
--- 
-2.34.1
-
+            Linus

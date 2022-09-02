@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F350F5AAD3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380195AAD4B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236062AbiIBLMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 07:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S234776AbiIBLTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 07:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236045AbiIBLL7 (ORCPT
+        with ESMTP id S232699AbiIBLTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 07:11:59 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5A1CEB1B;
-        Fri,  2 Sep 2022 04:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662117096; x=1693653096;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UDTJXTdSb4+Qwcn0yisNuqnbyrqohrF1M6uvyun7ndw=;
-  b=NWM446OmVjsvezPWPPkzES6UylZcVS3D5yoeNXZnGbeWJA3mfACtG56c
-   ewWNqMEh5w6yLHf9EY2kd12GhIFf1x5SPI7SGcRxGhXDuV/yncU/wapfK
-   MHcIr+u5IhSyLBgxfR9wBiKmyovjtj8eqSmce4bkpUgFAyBSmjZF1T9om
-   6v7whwzO5mVtYtsI+tU54kPQv8RrqJ57ldPBNakG1HI9cg5tYKgyrPOcI
-   JBK+jIfZKVnQN6QF5lWO2uHUZlaI/uHCiUFpfXBlCvh6kcYP5XtBzigzF
-   1KrqDoPxECMBU25Sei4cs1Askyg15kxSjkKumHizuthNHl5qPwteLYvNc
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="111908933"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Sep 2022 04:11:34 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 2 Sep 2022 04:11:34 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Fri, 2 Sep 2022 04:11:32 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <linux@armlinux.org.uk>,
-        <UNGLinuxDriver@microchip.com>, <maxime.chevallier@bootlin.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v2] net: lan966x: Extend lan966x with RGMII support
-Date:   Fri, 2 Sep 2022 13:15:48 +0200
-Message-ID: <20220902111548.614525-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
+        Fri, 2 Sep 2022 07:19:31 -0400
+X-Greylist: delayed 8079 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Sep 2022 04:19:29 PDT
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E23C5790
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 04:19:29 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MJwRM65DLzMqHNX;
+        Fri,  2 Sep 2022 13:19:27 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MJwRM3wNRz14M;
+        Fri,  2 Sep 2022 13:19:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1662117567;
+        bh=wrXe8tHJ2UTJkif+PtnwYC1aVb7oXwurlcuWuM9Xqto=;
+        h=From:To:Cc:Subject:Date:From;
+        b=E4at8mYVC88+pzrWe1N+zAeX+4Q3k69MWep6fFn9EjP8ZtbfJYLaC0GmeyIoD6q6e
+         naawFvOXMQUddwwcSY19BMa/Fk176n374yvbP2BD7ckLjJxD/dRt+xyQc9wN6DA+Io
+         2yiY/pYPeO9+l4AN6xw5XTrYaC1tl8gIWZobHM0o=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2] checkpatch: Handle FILE pointer type
+Date:   Fri,  2 Sep 2022 13:19:23 +0200
+Message-Id: <20220902111923.1488671-1-mic@digikod.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend lan966x with RGMII support. The MAC supports all RGMII_* modes.
+When using a "FILE *" type, checkpatch considers this an error:
+  ERROR: need consistent spacing around '*' (ctx:WxV)
+  #32: FILE: f.c:8:
+  +static void a(FILE *const b)
+                      ^
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
-v1->v2:
-- use phy_interface_set_rgmii instead of setting each individual
-  variant
----
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c    | 1 +
- drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c | 3 +++
- 2 files changed, 4 insertions(+)
+Fix this by explicitly defining "FILE" as a common type.  This is useful for
+user space patches.
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 1d6e3b641b2e..d838f6b9e2a6 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -770,6 +770,7 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
- 	port->phylink_config.mac_capabilities = MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
- 		MAC_10 | MAC_100 | MAC_1000FD | MAC_2500FD;
+With this patch, we now get:
+   <E> <E> <_>WS( )
+   <E> <E> <_>IDENT(static)
+   <E> <V> <_>WS( )
+   <E> <V> <_>DECLARE(void )
+   <E> <T> <_>FUNC(a)
+   <E> <V> <V>PAREN('(')
+   <EV> <N> <_>DECLARE(FILE *const )
+   <EV> <T> <_>IDENT(b)
+   <EV> <V> <_>PAREN(')') -> V
+   <E> <V> <_>WS(
+  )
+  32 > . static void a(FILE *const b)
+  32 > EEVVVVVVVTTTTTVNTTTTTTTTTTTTVVV
+  32 >  ______________________________
+
+Cc: Andy Whitcroft <apw@canonical.com>
+Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
+Cc: Joe Perches <joe@perches.com>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20220902111923.1488671-1-mic@digikod.net
+---
+
+Changes since v1:
+https://lore.kernel.org/r/20220901145948.1456353-1-mic@digikod.net
+* Remove the FIXTURE_{DATA,VARIANT}() comments.
+* Improve commit description.
+---
+ scripts/checkpatch.pl | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 79e759aac543..e2175102a354 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -576,10 +576,14 @@ our $typeKernelTypedefs = qr{(?x:
+ 	(?:__)?(?:u|s|be|le)(?:8|16|32|64)|
+ 	atomic_t
+ )};
++our $typeStdioTypedefs = qr{(?x:
++	FILE
++)};
+ our $typeTypedefs = qr{(?x:
+ 	$typeC99Typedefs\b|
+ 	$typeOtherOSTypedefs\b|
+-	$typeKernelTypedefs\b
++	$typeKernelTypedefs\b|
++	$typeStdioTypedefs\b
+ )};
  
-+	phy_interface_set_rgmii(port->phylink_config.supported_interfaces);
- 	__set_bit(PHY_INTERFACE_MODE_MII,
- 		  port->phylink_config.supported_interfaces);
- 	__set_bit(PHY_INTERFACE_MODE_GMII,
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-index 38a7e95d69b4..fb6aee509656 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-@@ -59,6 +59,9 @@ static void lan966x_phylink_mac_link_up(struct phylink_config *config,
- 	port_config->pause |= tx_pause ? MLO_PAUSE_TX : 0;
- 	port_config->pause |= rx_pause ? MLO_PAUSE_RX : 0;
- 
-+	if (phy_interface_mode_is_rgmii(interface))
-+		phy_set_speed(port->serdes, speed);
-+
- 	lan966x_port_config_up(port);
- }
- 
+ our $zero_initializer = qr{(?:(?:0[xX])?0+$Int_type?|NULL|false)\b};
+
+base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
 -- 
-2.33.0
+2.37.2
 

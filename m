@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AA45AB12B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1F65AAF70
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbiIBNGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S237128AbiIBMiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238644AbiIBNE5 (ORCPT
+        with ESMTP id S237048AbiIBMhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:04:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883BF1123B5;
-        Fri,  2 Sep 2022 05:43:22 -0700 (PDT)
+        Fri, 2 Sep 2022 08:37:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3585D196;
+        Fri,  2 Sep 2022 05:29:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 225BC6215A;
-        Fri,  2 Sep 2022 12:35:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D059C433D6;
-        Fri,  2 Sep 2022 12:35:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 932E0B82A9A;
+        Fri,  2 Sep 2022 12:23:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB62AC433C1;
+        Fri,  2 Sep 2022 12:23:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122129;
-        bh=IC0Xcmb1kumLQWLiI4eJziIM3Bb2aDtDDQkA3g87UtU=;
+        s=korg; t=1662121387;
+        bh=6gPjV9rlOUbTsXIzcLSSToBwAPpGY0Nzgw13d+QBlOI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xbC8GQra80jAdf+wJ2iZS0FbMAJu01/GGlGEG5kKC4XY2irQWR+aPXStBi/Bujxyy
-         uNDAlYWI84koikYFjl07UgUHTS9/hd7kQw4s87BhfiSObDfuBgUFKtEPizqcsiy0sq
-         AjkcaTIWVNR5hu4JqCGCnVwAvC+PjcVIs8uNyg5E=
+        b=AJlSrDYKFXmKPk7bfDG1VCJkMBOeE5CjzX9uSEB7tY4OV5a2ZaHsGaarVSDfMQCDJ
+         Ia1vVnes1RrdR1540AhjmePEahOhL+Bzn3leb3qrHS7ldvaSY/qIGAn+BbS9Ptqomv
+         PvfSgX2YFvKqWIdihoNkFM44pFNUNf3jNybGTwck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steev Klimaszewski <steev@kali.org>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 5.19 21/72] HID: add Lenovo Yoga C630 battery quirk
+        stable@vger.kernel.org,
+        syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 4.14 33/42] media: pvrusb2: fix memory leak in pvr_probe
 Date:   Fri,  2 Sep 2022 14:18:57 +0200
-Message-Id: <20220902121405.483023351@linuxfoundation.org>
+Message-Id: <20220902121359.933312834@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
+References: <20220902121358.773776406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steev Klimaszewski <steev@kali.org>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-commit 3a47fa7b14c7d9613909a844aba27f99d3c58634 upstream.
+commit 945a9a8e448b65bec055d37eba58f711b39f66f0 upstream.
 
-Similar to the Surface Go devices, the Elantech touchscreen/digitizer in
-the Lenovo Yoga C630 mistakenly reports the battery of the stylus, and
-always reports an empty battery.
+The error handling code in pvr2_hdw_create forgets to unregister the
+v4l2 device. When pvr2_hdw_create returns back to pvr2_context_create,
+it calls pvr2_context_destroy to destroy context, but mp->hdw is NULL,
+which leads to that pvr2_hdw_destroy directly returns.
 
-Apply the HID_BATTERY_QUIRK_IGNORE quirk to ignore this battery and
-prevent the erroneous low battery warnings.
+Fix this by adding v4l2_device_unregister to decrease the refcount of
+usb interface.
 
-Signed-off-by: Steev Klimaszewski <steev@kali.org>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Reported-by: syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-ids.h   |    1 +
- drivers/hid/hid-input.c |    2 ++
- 2 files changed, 3 insertions(+)
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -414,6 +414,7 @@
- #define USB_DEVICE_ID_ASUS_UX550_TOUCHSCREEN	0x2706
- #define I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREEN	0x261A
- #define I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCREEN	0x2A1C
-+#define I2C_DEVICE_ID_LENOVO_YOGA_C630_TOUCHSCREEN	0x279F
- 
- #define USB_VENDOR_ID_ELECOM		0x056e
- #define USB_DEVICE_ID_ELECOM_BM084	0x0061
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -383,6 +383,8 @@ static const struct hid_device_id hid_ba
- 	  HID_BATTERY_QUIRK_IGNORE },
- 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCREEN),
- 	  HID_BATTERY_QUIRK_IGNORE },
-+	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_LENOVO_YOGA_C630_TOUCHSCREEN),
-+	  HID_BATTERY_QUIRK_IGNORE },
- 	{}
- };
- 
+--- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+@@ -2604,6 +2604,7 @@ struct pvr2_hdw *pvr2_hdw_create(struct
+ 		del_timer_sync(&hdw->encoder_run_timer);
+ 		del_timer_sync(&hdw->encoder_wait_timer);
+ 		flush_work(&hdw->workpoll);
++		v4l2_device_unregister(&hdw->v4l2_dev);
+ 		usb_free_urb(hdw->ctl_read_urb);
+ 		usb_free_urb(hdw->ctl_write_urb);
+ 		kfree(hdw->ctl_read_buffer);
 
 

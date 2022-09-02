@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E495AAE76
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95E35AB043
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236253AbiIBMXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S237894AbiIBMwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236201AbiIBMWn (ORCPT
+        with ESMTP id S236137AbiIBMvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:22:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B33FD5E88;
-        Fri,  2 Sep 2022 05:21:47 -0700 (PDT)
+        Fri, 2 Sep 2022 08:51:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505F5F826C;
+        Fri,  2 Sep 2022 05:36:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB04F620C5;
-        Fri,  2 Sep 2022 12:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07DDEC433C1;
-        Fri,  2 Sep 2022 12:21:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1178AB82ACD;
+        Fri,  2 Sep 2022 12:35:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B88CC433D6;
+        Fri,  2 Sep 2022 12:35:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121297;
-        bh=ggkzR7fXpZd66zV4XncdCKBI8YV+okgrGR8z07c89yk=;
+        s=korg; t=1662122106;
+        bh=Uk4hLiPJocqiO6tbAqBSSCacJn6LjD8UNbJhRkRruFM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ss8vjLUQSGodLcIZgP1SaS4jeLIY6QMKK4e41oOO5DQ7TiLzY8fPTBbFOF8M1vuqn
-         ItLBYhpHD2P4/hWl3Hoxej/DeITI/eRYVJpLBzgJPx2HVWDQKK/+FYUX7Y8+INtQLU
-         6qnmQlfT4pdqC0Y58ouHSsXAfSN9CBOtk+DC/1Ek=
+        b=mgOhocRfLFDENL3l2CU/RcjtHIldn+oyUSnpoff+Tcl+/6cBKNe2UvA2Tn7UNzYSc
+         6FbyrZ0bKCmRRAP8BFXt/nWGipPAGeF13cKsukp3Fm0DOazOyW0HxZ6F7NINU41MvX
+         E5P47FGnXPlE9o9ctO6uFlfdZbqk+C0aBAK2g3FY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com,
-        Karthik Alapati <mail@karthek.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 4.9 24/31] HID: hidraw: fix memory leak in hidraw_release()
-Date:   Fri,  2 Sep 2022 14:18:50 +0200
-Message-Id: <20220902121357.642923635@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Letu Ren <fantasquex@gmail.com>, Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.19 15/72] fbdev: fb_pm2fb: Avoid potential divide by zero error
+Date:   Fri,  2 Sep 2022 14:18:51 +0200
+Message-Id: <20220902121405.285931536@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
-References: <20220902121356.732130937@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,68 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karthik Alapati <mail@karthek.com>
+From: Letu Ren <fantasquex@gmail.com>
 
-commit a5623a203cffe2d2b84d2f6c989d9017db1856af upstream.
+commit 19f953e7435644b81332dd632ba1b2d80b1e37af upstream.
 
-Free the buffered reports before deleting the list entry.
+In `do_fb_ioctl()` of fbmem.c, if cmd is FBIOPUT_VSCREENINFO, var will be
+copied from user, then go through `fb_set_var()` and
+`info->fbops->fb_check_var()` which could may be `pm2fb_check_var()`.
+Along the path, `var->pixclock` won't be modified. This function checks
+whether reciprocal of `var->pixclock` is too high. If `var->pixclock` is
+zero, there will be a divide by zero error. So, it is necessary to check
+whether denominator is zero to avoid crash. As this bug is found by
+Syzkaller, logs are listed below.
 
-BUG: memory leak
-unreferenced object 0xffff88810e72f180 (size 32):
-  comm "softirq", pid 0, jiffies 4294945143 (age 16.080s)
-  hex dump (first 32 bytes):
-    64 f3 c6 6a d1 88 07 04 00 00 00 00 00 00 00 00  d..j............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814ac6c3>] kmemdup+0x23/0x50 mm/util.c:128
-    [<ffffffff8357c1d2>] kmemdup include/linux/fortify-string.h:440 [inline]
-    [<ffffffff8357c1d2>] hidraw_report_event+0xa2/0x150 drivers/hid/hidraw.c:521
-    [<ffffffff8356ddad>] hid_report_raw_event+0x27d/0x740 drivers/hid/hid-core.c:1992
-    [<ffffffff8356e41e>] hid_input_report+0x1ae/0x270 drivers/hid/hid-core.c:2065
-    [<ffffffff835f0d3f>] hid_irq_in+0x1ff/0x250 drivers/hid/usbhid/hid-core.c:284
-    [<ffffffff82d3c7f9>] __usb_hcd_giveback_urb+0xf9/0x230 drivers/usb/core/hcd.c:1670
-    [<ffffffff82d3cc26>] usb_hcd_giveback_urb+0x1b6/0x1d0 drivers/usb/core/hcd.c:1747
-    [<ffffffff82ef1e14>] dummy_timer+0x8e4/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
-    [<ffffffff812f50a8>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1474
-    [<ffffffff812f5586>] expire_timers kernel/time/timer.c:1519 [inline]
-    [<ffffffff812f5586>] __run_timers.part.0+0x316/0x430 kernel/time/timer.c:1790
-    [<ffffffff812f56e4>] __run_timers kernel/time/timer.c:1768 [inline]
-    [<ffffffff812f56e4>] run_timer_softirq+0x44/0x90 kernel/time/timer.c:1803
-    [<ffffffff848000e6>] __do_softirq+0xe6/0x2ea kernel/softirq.c:571
-    [<ffffffff81246db0>] invoke_softirq kernel/softirq.c:445 [inline]
-    [<ffffffff81246db0>] __irq_exit_rcu kernel/softirq.c:650 [inline]
-    [<ffffffff81246db0>] irq_exit_rcu+0xc0/0x110 kernel/softirq.c:662
-    [<ffffffff84574f02>] sysvec_apic_timer_interrupt+0xa2/0xd0 arch/x86/kernel/apic/apic.c:1106
-    [<ffffffff84600c8b>] asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
-    [<ffffffff8458a070>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
-    [<ffffffff8458a070>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
-    [<ffffffff8458a070>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
-    [<ffffffff8458a070>] acpi_idle_do_entry+0xc0/0xd0 drivers/acpi/processor_idle.c:554
+divide error in pm2fb_check_var
+Call Trace:
+ <TASK>
+ fb_set_var+0x367/0xeb0 drivers/video/fbdev/core/fbmem.c:1015
+ do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
+ fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
 
-Link: https://syzkaller.appspot.com/bug?id=19a04b43c75ed1092021010419b5e560a8172c4f
-Reported-by: syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com
-Signed-off-by: Karthik Alapati <mail@karthek.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Letu Ren <fantasquex@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hidraw.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/video/fbdev/pm2fb.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/hid/hidraw.c
-+++ b/drivers/hid/hidraw.c
-@@ -354,10 +354,13 @@ static int hidraw_release(struct inode *
- 	unsigned int minor = iminor(inode);
- 	struct hidraw_list *list = file->private_data;
- 	unsigned long flags;
-+	int i;
+--- a/drivers/video/fbdev/pm2fb.c
++++ b/drivers/video/fbdev/pm2fb.c
+@@ -617,6 +617,11 @@ static int pm2fb_check_var(struct fb_var
+ 		return -EINVAL;
+ 	}
  
- 	mutex_lock(&minors_lock);
- 
- 	spin_lock_irqsave(&hidraw_table[minor]->list_lock, flags);
-+	for (i = list->tail; i < list->head; i++)
-+		kfree(list->buffer[i].value);
- 	list_del(&list->node);
- 	spin_unlock_irqrestore(&hidraw_table[minor]->list_lock, flags);
- 	kfree(list);
++	if (!var->pixclock) {
++		DPRINTK("pixclock is zero\n");
++		return -EINVAL;
++	}
++
+ 	if (PICOS2KHZ(var->pixclock) > PM2_MAX_PIXCLOCK) {
+ 		DPRINTK("pixclock too high (%ldKHz)\n",
+ 			PICOS2KHZ(var->pixclock));
 
 

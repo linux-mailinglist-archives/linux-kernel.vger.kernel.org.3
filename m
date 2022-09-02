@@ -2,100 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBC45AADE4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0495B5AADE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235392AbiIBLvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 07:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S235019AbiIBLwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 07:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiIBLve (ORCPT
+        with ESMTP id S231752AbiIBLwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 07:51:34 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4DCADCCB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 04:51:33 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id f9so1185252qvw.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 04:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=K9aCivmd3pOhXO+7wSe24RMSLcWBP61HE/hhO1yg1yw=;
-        b=bXoImPOcuWuXjV2xpTZoF36s6qrArrxsqvHkFEhtk9ix2itPeTjgiOPtY2bLsWkmrl
-         6Ufo05is8hgxJ4o1pUDbQOh5MOdZs16G4VHlyA2EE3EgcGCY62/VTdaTipBDaOGkzRL+
-         5/Cos5QTsMzQ1BFZxgKXXTRR6KqMQVphfpoxb6MSsVj8fjH7Hu9LsJA1ThamJYSk8zn+
-         UPnqj5KHr7XNQuoBOuPbUNMCDbua5+UGygOq45BhVtOZhT4JAdy4FCxCTpilgM+M1BYX
-         JWNxu3Bn/HoTVeUz0T7ovDA7+uphgRSTnUqlnTVmYU0ZHrRf2vqLvZcUV0dI0m5Qyccd
-         0BcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=K9aCivmd3pOhXO+7wSe24RMSLcWBP61HE/hhO1yg1yw=;
-        b=HCdRp7diZyBUKwuZTHARUBHh/bQhTBaKkSsYGfg++Z8sczfJNGwJPvyN+QEd2n0eAT
-         xUs7eO4PSWRsLaZqfkxmYhwxoZ4keS4ArKokV64bMMpX4i7v0sXfzXnMVFsQTN/UdApG
-         WGzERZaqX9umUtfiJ6Af98klFlWKnrGoaVIanVrn9Qrhaa6JgOBM0xxT+EiSMRXR2/pl
-         rGz9BOQYIQMl40vvvtAVHpXoLDEly58v21V2BNKNTVRSKnp1Fx7tHkErV+9OThgDkWii
-         vQ7Zp+yr2HRgvV6vzzaBxflIuPKWolqP7gJ5sPaW8dWXTSegvDGVn/BJA24stSxnR0yT
-         WwNw==
-X-Gm-Message-State: ACgBeo0LiBkVJ0yXr2dJNW9OnzOveSQFLyr3mVUJRoYCDB3euKjrW3OL
-        oNrk4bZ+hLGbF6oFjgq3wCnmTeG7dCf2r49RbHA=
-X-Google-Smtp-Source: AA6agR5wUzmFtRyDoFJJQcjATTZILhwgyHP/SqhcTuHn2kkIrWiMADvPJ0CS6kInuf7cSS3wB6GCKj71y1aUyV7dbck=
-X-Received: by 2002:a05:6214:240f:b0:497:5626:d378 with SMTP id
- fv15-20020a056214240f00b004975626d378mr28679789qvb.46.1662119492930; Fri, 02
- Sep 2022 04:51:32 -0700 (PDT)
+        Fri, 2 Sep 2022 07:52:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E37B81CE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 04:52:35 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oU5Dr-0004Hs-Bp; Fri, 02 Sep 2022 13:52:31 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oU5Do-0002nP-O3; Fri, 02 Sep 2022 13:52:28 +0200
+Date:   Fri, 2 Sep 2022 13:52:28 +0200
+From:   Sascha Hauer <sha@pengutronix.de>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>, kernel@pengutronix.de
+Subject: Re: [PATCH rcu 04/32] rcu-tasks: Drive synchronous grace periods
+ from calling task
+Message-ID: <20220902115228.GV24324@pengutronix.de>
+References: <20220620225402.GA3842369@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225411.3842519-4-paulmck@kernel.org>
+ <20220901103625.GA1658@pengutronix.de>
+ <20220901172725.GC6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220901173304.GA2280413@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Received: by 2002:a05:6214:519d:0:0:0:0 with HTTP; Fri, 2 Sep 2022 04:51:32
- -0700 (PDT)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidkekeli1001@gmail.com>
-Date:   Fri, 2 Sep 2022 11:51:32 +0000
-Message-ID: <CA+f86QkD5fZt0X_JtdS=KBpx+m+goAL+Z9fG5kOyQpjYnGjNFg@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4991]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f30 listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidkekeli1001[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidkekeli1001[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901173304.GA2280413@paulmck-ThinkPad-P17-Gen-1>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Best Regard,Mr.Abraham,
+On Thu, Sep 01, 2022 at 10:33:04AM -0700, Paul E. McKenney wrote:
+> On Thu, Sep 01, 2022 at 10:27:25AM -0700, Paul E. McKenney wrote:
+> > On Thu, Sep 01, 2022 at 12:36:25PM +0200, Sascha Hauer wrote:
+> > > Hi Paul,
+> > > 
+> > > On Mon, Jun 20, 2022 at 03:53:43PM -0700, Paul E. McKenney wrote:
+> > > > This commit causes synchronous grace periods to be driven from the task
+> > > > invoking synchronize_rcu_*(), allowing these functions to be invoked from
+> > > > the mid-boot dead zone extending from when the scheduler was initialized
+> > > > to to point that the various RCU tasks grace-period kthreads are spawned.
+> > > > This change will allow the self-tests to run in a consistent manner.
+> > > > 
+> > > > Reported-by: Matthew Wilcox <willy@infradead.org>
+> > > > Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > 
+> > > This commit (appeared in mainline as 4a8cc433b8bf) breaks booting my
+> > > ARMv7 based i.MX6ul board when CONFIG_PROVE_RCU is enabled. Reverting
+> > > this patch on v6.0-rc3 makes my board boot again. See below for a boot
+> > > log. The last message is "Running RCU-tasks wait API self tests", after
+> > > that the board hangs. Any idea what goes wrong here?
+> > 
+> > New one on me!
+> > 
+> > Is it possible to get a stack trace of the hang, perhaps via
+> > one form or another of sysrq-T?  Such a stack trace would likely
+> > include synchronize_rcu_tasks(), synchronize_rcu_tasks_rude(), or
+> > synchronize_rcu_tasks_trace() followed by synchronize_rcu_tasks_generic(),
+> > rcu_tasks_one_gp(), and one of rcu_tasks_wait_gp(),
+> > rcu_tasks_rude_wait_gp(), or rcu_tasks_wait_gp().
+> 
+> If there is no chance of sysrq-T, kernel debuggers, kernel crash
+> dumps, or any other source of the stack trace, please decorate the
+> code path with printk() or similar and let me know where it goes.
+> Under normal circumstances, this code path is not sensitive to performance
+> perturbations of the printk() persuasion.
+
+Some unrelated bug I was searching for made me turn on early console
+output with the "earlycon" parameter. It turned out that when I remove
+this parameter then my board boots fine.
+
+I then realized that even with earlycon enabled my board boots fine
+when I remove the call to
+
+	pr_info("Running RCU-tasks wait API self tests\n");
+
+Given that I am not sure how useful it is to add more printk. I did that
+anyway like this:
+
+> static void rcu_tasks_one_gp(struct rcu_tasks *rtp, bool midboot)
+> {
+> 	int needgpcb;
+> 
+> 	printk("%s: mutex_lock... midboot: %d\n", __func__, midboot);
+> 	mutex_lock(&rtp->tasks_gp_mutex);
+> 	printk("%s: mutex_locked midboot: %d\n", __func__, midboot);
+> 
+> 	// If there were none, wait a bit and start over.
+> 	if (unlikely(midboot)) {
+> 		needgpcb = 0x2;
+> 	} else {
+> 		printk("%s: set_tasks_gp_state(RTGS_WAIT_CBS)...\n", __func__);
+> 		set_tasks_gp_state(rtp, RTGS_WAIT_CBS);
+> 		printk("%s: rcuwait_wait_event...\n", __func__);
+> 		rcuwait_wait_event(&rtp->cbs_wait,
+> 				   (needgpcb = rcu_tasks_need_gpcb(rtp)),
+> 				   TASK_IDLE);
+>		printk("%s: rcuwait_wait_event done\n", __func__);
+> 	}
+>
+
+What I see then is:
+
+[    0.156362] synchronize_rcu_tasks_generic: rcu_tasks_one_gp....
+[    0.162087] rcu_tasks_one_gp: mutex_lock... midboot: 1
+[    0.167386] rcu_tasks_one_gp: mutex_lock... midboot: 0
+[    0.172489] rcu_tasks_one_gp: mutex_locked midboot: 0
+[    0.177535] rcu_tasks_one_gp: set_tasks_gp_state(RTGS_WAIT_CBS)...
+[    0.183525] rcu_tasks_one_gp: rcuwait_wait_event...
+
+Here the board hangs. After some time I get:
+
+[  254.493010] random: crng init done
+
+But that's it.
+
+> 
+> > At this point in the boot sequence, there is only one online CPU,
+> > correct?
+
+Yes, it's a single core system.
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

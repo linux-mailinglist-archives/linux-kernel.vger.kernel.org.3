@@ -2,44 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58895AB10D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24295AB128
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238647AbiIBNCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S238683AbiIBNFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238601AbiIBNB6 (ORCPT
+        with ESMTP id S238807AbiIBND5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:01:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8CA104027
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:41:11 -0700 (PDT)
+        Fri, 2 Sep 2022 09:03:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ADD110DB9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:42:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20573B82A91
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 12:40:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ADB6C433D6;
-        Fri,  2 Sep 2022 12:40:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AA72620FE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 12:40:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F9CC433D6;
+        Fri,  2 Sep 2022 12:40:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122438;
-        bh=A2Z5hlr5zPyl5jXDn7iq6yX1GykxvGvwElUodK4rM74=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ar8YkYokNLtnccj4Hn+FuicqnVIjdSapI63XpX7OpxKcJAsRHQL1fVt+wZYKwPfOF
-         qyAGAs+ISByrgHHqvgUho5p/oyErRa8pD115EPK8z6pJUoKEaPeyHAEYlmMTO2SBNv
-         oNAFXiG7NOZQIcvm8M3L+XwuLf8qd88CXhJZ4vcA=
+        s=korg; t=1662122435;
+        bh=ctIlZ1dKIFN9a2uUzSrDB28SEGv6Sp4lWkDy3XCto0w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AbDGYx1cptX/p+QnlbRkFjpPXXiTtLWw9RBdJTbnUq0hWb7QTFTywE62cFjT7uSmq
+         LOeVmMKXNE0jW4jVL4yxLlUTewwjkFN/Vb+HoOmA8BYNyCZUjNBnUdO4zfxUo1gB2E
+         rSDv2gpNPw/7QeUj0BJao+YTfYQzb1r+/LziEM8Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kuyo Chang <kuyo.chang@mediatek.com>,
-        stable <stable@kernel.org>
-Subject: [PATCH 1/2] debugfs: add debugfs_lookup_and_remove()
-Date:   Fri,  2 Sep 2022 14:31:06 +0200
-Message-Id: <20220902123107.109274-1-gregkh@linuxfoundation.org>
+        Major Chen <major.chen@samsung.com>,
+        stable <stable@kernel.org>, Kuyo Chang <kuyo.chang@mediatek.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [PATCH 2/2] sched/debug: fix dentry leak in update_sched_domain_debugfs
+Date:   Fri,  2 Sep 2022 14:31:07 +0200
+Message-Id: <20220902123107.109274-2-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220902123107.109274-1-gregkh@linuxfoundation.org>
+References: <20220902123107.109274-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2759; i=gregkh@linuxfoundation.org; h=from:subject; bh=A2Z5hlr5zPyl5jXDn7iq6yX1GykxvGvwElUodK4rM74=; b=owGbwMvMwCRo6H6F97bub03G02pJDMmC39vePdxQ+P7U/eMJF6Q6s36W/K2beozt9qxZ7M96ksp6 dvirdMSyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBE5sYxLJi772ddWeTtwjV3L2m9a3 Kf/mytTBXDfOd7ZZ4vuY7tWlV4QHDjFlfHeaHPJgIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1566; i=gregkh@linuxfoundation.org; h=from:subject; bh=ctIlZ1dKIFN9a2uUzSrDB28SEGv6Sp4lWkDy3XCto0w=; b=owGbwMvMwCRo6H6F97bub03G02pJDMmC37v3ZIT9uCl0cz3v37W3pOTZOqJfaDlZTWEwYlKTfr3Y vVSxI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACaicIhhfs3vuZsdNp57vv4730HrpG tK2c7Z+Qzzq8sL7i7UvbymaMWM+YdOzmI/PY/rPgA=
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -52,79 +64,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a very common pattern of using
-debugfs_remove(debufs_lookup(..)) which results in a dentry leak of the
-dentry that was looked up.  Instead of having to open-code the correct
-pattern of calling dput() on the dentry, create
-debugfs_lookup_and_remove() to handle this pattern automatically and
-properly without any memory leaks.
+Kuyo reports that the pattern of using debugfs_remove(debugfs_lookup())
+leaks a dentry and with a hotplug stress test, the machine eventually
+runs out of memory.
 
+Fix this up by using the newly created debugfs_lookup_and_remove() call
+instead which properly handles the dentry reference counting logic.
+
+Cc: Major Chen <major.chen@samsung.com>
+Cc: stable <stable@kernel.org>
 Reported-by: Kuyo Chang <kuyo.chang@mediatek.com>
 Tested-by: Kuyo Chang <kuyo.chang@mediatek.com>
-Cc: stable <stable@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Valentin Schneider <vschneid@redhat.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/debugfs/inode.c      | 22 ++++++++++++++++++++++
- include/linux/debugfs.h |  6 ++++++
- 2 files changed, 28 insertions(+)
+ kernel/sched/debug.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
-index 3dcf0b8b4e93..87ccd6280a9b 100644
---- a/fs/debugfs/inode.c
-+++ b/fs/debugfs/inode.c
-@@ -744,6 +744,28 @@ void debugfs_remove(struct dentry *dentry)
- }
- EXPORT_SYMBOL_GPL(debugfs_remove);
+diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+index bb3d63bdf4ae..667876da8382 100644
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -416,7 +416,7 @@ void update_sched_domain_debugfs(void)
+ 		char buf[32];
  
-+/**
-+ * debugfs_lookup_and_remove - lookup a directory or file and recursively remove it
-+ * @name: a pointer to a string containing the name of the item to look up.
-+ * @parent: a pointer to the parent dentry of the item.
-+ *
-+ * This is the equlivant of doing something like
-+ * debugfs_remove(debugfs_lookup(..)) but with the proper reference counting
-+ * handled for the directory being looked up.
-+ */
-+void debugfs_lookup_and_remove(const char *name, struct dentry *parent)
-+{
-+	struct dentry *dentry;
-+
-+	dentry = debugfs_lookup(name, parent);
-+	if (IS_ERR_OR_NULL(dentry))
-+		return;
-+
-+	debugfs_remove(dentry);
-+	dput(dentry);
-+}
-+EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
-+
- /**
-  * debugfs_rename - rename a file/directory in the debugfs filesystem
-  * @old_dir: a pointer to the parent dentry for the renamed object. This
-diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
-index c869f1e73d75..f60674692d36 100644
---- a/include/linux/debugfs.h
-+++ b/include/linux/debugfs.h
-@@ -91,6 +91,8 @@ struct dentry *debugfs_create_automount(const char *name,
- void debugfs_remove(struct dentry *dentry);
- #define debugfs_remove_recursive debugfs_remove
+ 		snprintf(buf, sizeof(buf), "cpu%d", cpu);
+-		debugfs_remove(debugfs_lookup(buf, sd_dentry));
++		debugfs_lookup_and_remove(buf, sd_dentry);
+ 		d_cpu = debugfs_create_dir(buf, sd_dentry);
  
-+void debugfs_lookup_and_remove(const char *name, struct dentry *parent);
-+
- const struct file_operations *debugfs_real_fops(const struct file *filp);
- 
- int debugfs_file_get(struct dentry *dentry);
-@@ -225,6 +227,10 @@ static inline void debugfs_remove(struct dentry *dentry)
- static inline void debugfs_remove_recursive(struct dentry *dentry)
- { }
- 
-+static inline void debugfs_lookup_and_remove(const char *name,
-+					     struct dentry *parent)
-+{ }
-+
- const struct file_operations *debugfs_real_fops(const struct file *filp);
- 
- static inline int debugfs_file_get(struct dentry *dentry)
+ 		i = 0;
 -- 
 2.37.3
 

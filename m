@@ -2,234 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D385AA4B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697DA5AA4B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbiIBAyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 20:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
+        id S234544AbiIBA4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 20:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiIBAyb (ORCPT
+        with ESMTP id S231357AbiIBA4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 20:54:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B2583BCD
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 17:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662080070; x=1693616070;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=L3mRRBK1ngAjAxHn3yh88wqZwNaBV7sRHz6khPlLV7w=;
-  b=GFfToSkhAhrqM5XgTygrbHE5+bh5w+gJ1CzHcIUDmCiAgLBAif/SnkC9
-   8n5stv4ZIs6ubF2Si6v1jwMC8uVGXjtqMXq0kk/5B42VKtSS+/62Ls3xZ
-   Qubucn2BSGAKpRtbpSEi/V9JEsf1xi+GvJZv6YBvMd2/dG9yQGoSz0sWb
-   8H/9gBAbHBbx4/6t02NxF11v7Kn1OJNpWt2PccAbWG0OkdQPqSHHwSzLJ
-   7C9lUgU9GlGRw/B9Myjw93tR72NSwJ1AiubMLIzWgotPkkBYHDg9ewx3k
-   I/c3VZZbnNmbHoPP8xnDYj+aBAxcV5WjPtrDaTC4V2r12zA5DBLvGhWAI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="296646885"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="296646885"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 17:54:19 -0700
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="642650565"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.211.18]) ([10.254.211.18])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 17:54:16 -0700
-Subject: Re: [kbuild-all] Re: powerpc-linux-objdump: Warning: Unrecognized
- form: 0x23
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        kernel test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-References: <202208311414.4OPuYS9K-lkp@intel.com>
- <Yw+A+0BY26l0AC5j@dev-arch.thelio-3990X>
- <b0b8fecd-4041-d04e-9a11-2c7947e5d5a0@intel.com>
- <YxAS9NBjBI/vi0XK@dev-arch.thelio-3990X>
- <8d2c3aef-aa4f-1f4d-dc89-622554ffda31@intel.com>
- <9d77cb93-2eff-d87d-6554-1636d5e7d5ec@csgroup.eu>
- <0acfb209-a792-a47b-0261-9fb29824e4b9@intel.com>
- <YxDj6v5p+wHop0Wm@dev-arch.thelio-3990X>
- <CAKwvOdmzuupyAMhy-jT3O=-PT36T01N4SXkCPz6Cv0CPsxkK3Q@mail.gmail.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <4c6da74c-4dc1-796c-5f22-bdd075b23c2b@intel.com>
-Date:   Fri, 2 Sep 2022 08:54:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Thu, 1 Sep 2022 20:56:19 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FE55F9B6;
+        Thu,  1 Sep 2022 17:56:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=vVnYtZTJIhjbiBT/O5D4BbKrgrt19+JwsWC0KXjleUU=; b=CLXseuYcpgPHWuuGOVPmAi8OPk
+        ltw6b4xvveVazKwxBcwiGM7K895pcyYvDbNuzHTnKxixBnT7uWZe/cZMKsEIv25ZuP0FYY9r5w+iP
+        bC1zFE3zwxCzRaDJAYdEgIquSVPTaC4pB3AKhGL+k/nt//XxMJ039We8/5GMbWO30TfKl4NDrtSG1
+        lYD9ztMHqYQPkA1Ifa4OtrfquimctWBOw6z3a3msKmSVOV6dwbnNfGOaE/QYZBdoWQBd+hSfHVH8t
+        qCWPQG0uER9doEY9iY7++/IwX/ljUK1AyS2PFfKyrq9PzmAZKi9NZYSw9mhyoCKIabAiUjG2AEVhv
+        Hv/Ivurg==;
+Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1oTuyf-00E1It-1U; Thu, 01 Sep 2022 18:56:10 -0600
+Message-ID: <cd0170a7-86ab-ebb3-0aed-93b2e18be432@deltatee.com>
+Date:   Thu, 1 Sep 2022 18:56:06 -0600
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdmzuupyAMhy-jT3O=-PT36T01N4SXkCPz6Cv0CPsxkK3Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-CA
+To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com
+References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
+ <20220829131502.165356-3-yukuai1@huaweicloud.com>
+ <04128618-962f-fd4e-64a9-09ecf7f83776@deltatee.com>
+ <917c01c1-1e2b-66f9-69f1-ed706b7ffc8f@linux.dev>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <917c01c1-1e2b-66f9-69f1-ed706b7ffc8f@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 24.64.144.200
+X-SA-Exim-Rcpt-To: guoqing.jiang@linux.dev, yukuai1@huaweicloud.com, song@kernel.org, linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org, yukuai3@huawei.com, yi.zhang@huawei.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH -next 2/3] md/raid10: convert resync_lock to use seqlock
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 9/2/2022 1:04 AM, Nick Desaulniers wrote:
-> On Thu, Sep 1, 2022 at 9:55 AM Nathan Chancellor <nathan@kernel.org> wrote:
->>
->> On Thu, Sep 01, 2022 at 01:52:42PM +0800, Chen, Rong A wrote:
->>>
->>>
->>> On 9/1/2022 1:45 PM, Christophe Leroy wrote:
->>>>
->>>>
->>>> Le 01/09/2022 à 06:59, Chen, Rong A a écrit :
->>>>>
->>>>>
->>>>> On 9/1/2022 10:03 AM, Nathan Chancellor wrote:
->>>>>> Hi Rong,
->>>>>>
->>>>>> On Thu, Sep 01, 2022 at 09:15:58AM +0800, Chen, Rong A wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 8/31/2022 11:40 PM, Nathan Chancellor wrote:
->>>>>>>> On Wed, Aug 31, 2022 at 02:52:36PM +0800, kernel test robot wrote:
->>>>>>>>> tree:
->>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>>>>>>> master
->>>>>>>>> head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
->>>>>>>>> commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug:
->>>>>>>>> make DEBUG_INFO selectable from a choice
->>>>>>>>> date:   5 months ago
->>>>>>>>> config: powerpc-buildonly-randconfig-r003-20220830
->>>>>>>>> (https://download.01.org/0day-ci/archive/20220831/202208311414.4OPuYS9K-lkp@intel.com/config)
->>>>>>>>> compiler: clang version 16.0.0
->>>>>>>>> (https://github.com/llvm/llvm-project
->>>>>>>>> c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
->>>>>>>>> reproduce (this is a W=1 build):
->>>>>>>>>             wget
->>>>>>>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>>>>>>>             chmod +x ~/bin/make.cross
->>>>>>>>>             # install powerpc cross compiling tool for clang build
->>>>>>>>>             # apt-get install binutils-powerpc-linux-gnu
->>>>>>>>>             #
->>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
->>>>>>>>>             git remote add linus
->>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>>>>>>>             git fetch --no-tags linus master
->>>>>>>>>             git checkout f9b3cd24578401e7a392974b3353277286e49cee
->>>>>>>>>             # save the config file
->>>>>>>>>             mkdir build_dir && cp config build_dir/.config
->>>>>>>>>             COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
->>>>>>>>> make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
->>>>>>>>>
->>>>>>>>> If you fix the issue, kindly add following tag where applicable
->>>>>>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>>>>>>
->>>>>>>>> All warnings (new ones prefixed by >>):
->>>>>>>>>
->>>>>>>>>>> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
->>>>>>>>
->>>>>>>> Given this is clang 16.0.0 with
->>>>>>>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y, which uses DWARF5 by
->>>>>>>> default instead of DWARF4, it looks like older binutils not
->>>>>>>> understanding DWARF5. What version of binutils is being used by the
->>>>>>>> bot?
->>>>>>>
->>>>>>> Hi Nathan,
->>>>>>>
->>>>>>> We're using binutils v2.38.90.20220713-2
->>>>>>>
->>>>>>> ||/ Name           Version            Architecture Description
->>>>>>> +++-==============-==================-============-==========================================
->>>>>>> ii  binutils       2.38.90.20220713-2 amd64        GNU assembler,
->>>>>>> linker and binary utilities
->>>>>>
->>>>>> Thanks for chiming in! This looks like the output of 'dpkg -l', right? I
->>>>>
->>>>> Hi Nathan,
->>>>>
->>>>> oh, yes, I misunderstood, it's not related to this package.
->>>>>
->>>>>> noticed on second glance that the tuple for the objdump warning above is
->>>>>> 'powerpc-linux-', which leads me to believe that a kernel.org toolchain
->>>>>> (or a self compiled one) is being used. I would expect the tuple to be
->>>>>> 'powerpc-linux-gnu-' if Debian's package was being used. Is that
->>>>>> possible?
->>>>>
->>>>> you are right, we used a self-compiled toolchain, we'll try the binutils
->>>>> from debian package.
->>>>
->>>> Can you first tell us the version you are using ?
->>>>
->>>>      powerpc-linux-objdump -v
->>>>
->>>> That will tell you the version.
->>>
->>> Hi Christophe,
->>>
->>> the version is v2.38:
->>>
->>> $ ./powerpc-linux-objdump -v
->>> GNU objdump (GNU Binutils) 2.38
->>> Copyright (C) 2022 Free Software Foundation, Inc.
->>> This program is free software; you may redistribute it under the terms of
->>> the GNU General Public License version 3 or (at your option) any later
->>> version.
->>> This program has absolutely no warranty.
->>
->> Thanks! I did some research and it seems like this warning is expected
->> with binutils older than 2.39. The warning appears to come from
->> read_and_display_attr_value() in binutils/dwarf.c. 0x22 and 0x23 are
->> DW_FORM_loclistx and DW_FORM_rnglistx, which were only recently
->> supported in that function.
->>
->> https://sourceware.org/bugzilla/show_bug.cgi?id=28981
->> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=19c26da69d68d5d863f37c06ad73ab6292d02ffa
->>
->> That change shipped in binutils 2.39. I am not really sure how we should
->> work around this in the kernel, other than maybe requiring binutils
->> 2.39+ for CONFIG_DEBUG_INFO_DWARF5. Unfortunately, that will not fix
->> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT when DWARF5 is the default
->> version...
+On 2022-09-01 18:49, Guoqing Jiang wrote:
 > 
-> I've been working on a series that will encode the default implicit
-> dwarf version based on compiler version check. Maybe that can be
-> extended/reused here once that lands?
-> https://lore.kernel.org/llvm/20220831184408.2778264-1-ndesaulniers@google.com/
-> Series needs revision, but it's on the right track.
 > 
->> Alternatively, switching to llvm-objdump for clang builds
->> would help :) I am not aware of any issues that would affect that switch
->> for PowerPC:
+> On 9/2/22 2:41 AM, Logan Gunthorpe wrote:
+>> Hi,
 >>
->> https://github.com/ClangBuiltLinux/linux/labels/%5BTOOL%5D%20llvm-objdump
+>> On 2022-08-29 07:15, Yu Kuai wrote:
+>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>
+>>> Currently, wait_barrier() will hold 'resync_lock' to read
+>>> 'conf->barrier',
+>>> and io can't be dispatched until 'barrier' is dropped.
+>>>
+>>> Since holding the 'barrier' is not common, convert 'resync_lock' to use
+>>> seqlock so that holding lock can be avoided in fast path.
+>>>
+>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> I've found some lockdep issues starting with this patch in md-next while
+>> running mdadm tests (specifically 00raid10 when run about 10 times in a
+>> row).
+>>
+>> I've seen a couple different lock dep errors. The first seems to be
+>> reproducible on this patch, then it possibly changes to the second on
+>> subsequent patches. Not sure exactly.
 > 
-> Oh, is 0day doing `make CC=clang` rather than `make LLVM=1`?  Rong,
-> any chance we get 0day folks to test LLVM=1 for more architectures?
-> Ideally we'd test both, preferably LLVM=1 if we had to choose.
+> That's why I said "try mdadm test suites too to avoid regression." ...
 
-Hi Nick,
+You may have to run it multiple times, a single run tends not to catch
+all errors. I had to loop the noted test 10 times to be sure I hit this
+every time when I did the simple bisect.
 
-Thanks for your advice, yes, we are doing `make CC=clang`, we'll plan it 
-recently.
+And ensure that all the debug options are on when you run it (take a
+look at the Kernel Hacking section in menuconfig). You won't hit this
+bug without at least CONFIG_PROVE_LOCKING=y.
 
-Best Regards,
-Rong Chen
+Logan
 
-> 
->>
->> Cheers,
->> Nathan
-> 
-> 
-> 

@@ -2,131 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCD15AA7DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE125AA7E4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235444AbiIBGMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 02:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S233383AbiIBGPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 02:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235413AbiIBGML (ORCPT
+        with ESMTP id S233121AbiIBGPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 02:12:11 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E2BB9F93
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 23:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662099130; x=1693635130;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=V1LrsReCOZOn0uyOPVtRtxNfCUOuD4F2LfutTySDfRs=;
-  b=EJOeJqIJLj8PExMTwWibw9O/Kxu3U2Qvnl6Do19+0jaqi0Qs3o0eUnqJ
-   euPM3TF6MqiiSAp8pvyS3PzIM8GvX04Ut7dsxVvX22ZZoNF/S+nYS2ggX
-   fvC0u56sJ4V94DOZEMWy+RIvM+u45TWGwnF/XOSIqC9Bf3fnVkaJVFqDG
-   DbjYoWsMbIupkuQkkN6Xi1ZT3d1syMPCXa3LB/Ihn/KjXbB0drlvDXA+5
-   F6WgNQWLJ8RO0TUG7Qp3l27vitKl0lsANeOancCh+KJU+D33kUPxsn6sc
-   lDRI0sL7GJdx9SaSfSonJgicpDiYWQ9DM+hoB9cy1EXi12A1dGwKUlK4j
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="296686273"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="296686273"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 23:12:09 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="563850475"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 23:12:04 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     Wei Xu <weixugc@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>,
-        Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
- sysfs
-References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
-        <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <ad19e105-9290-922d-59e6-e6813a30f5f0@linux.ibm.com>
-        <87pmgezkhp.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
-        <d91beb53-e940-e02a-f9ca-3326bf914da7@linux.ibm.com>
-        <87fshaz63h.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <698120ce-d4df-3d13-dea9-a8f5c298783c@linux.ibm.com>
-Date:   Fri, 02 Sep 2022 14:12:02 +0800
-In-Reply-To: <698120ce-d4df-3d13-dea9-a8f5c298783c@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Fri, 2 Sep 2022 11:16:14 +0530")
-Message-ID: <87bkryz4nh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 2 Sep 2022 02:15:11 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB7A22B04;
+        Thu,  1 Sep 2022 23:15:10 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id u22so877055plq.12;
+        Thu, 01 Sep 2022 23:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=CiDlBhpuMBNmAQC1ai9qNlSZhkcYYAFSX1KVGVWvAXc=;
+        b=BrGayX5fEW9Pzlt9Mkjk1PdC6cW/e5APqL0VkpQRvBFQJi+wQEjUk7cBFrNfH3nz6O
+         9U6OCVZb++rj7hu6vr9IYUcUaWT+MvMtloeACbYShuid3z1scJHiEVfqcuPBMagIFByg
+         5a9T9nRxf8Tmixa9AGfgaOfPwCTOvLdaHw3v99g8tBfHn0dAeQTrwVyjOJzXxyR0XjN8
+         M5llx3msZwK2RUTf6tZfRqKl0IYpXgAp9Mjl/s6eF5B+YngcfbQzsivYBxtFResn+s2C
+         CgEI0gDtia1cwKoXJSrjd6NuVCL9Ko1EcALt2f8tsPfPnldeoTO5+4aRahBxyh5PfFsB
+         4qjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=CiDlBhpuMBNmAQC1ai9qNlSZhkcYYAFSX1KVGVWvAXc=;
+        b=ObqpUUZQNO8wbYSndrqA+wQpzL7j5ewfISA36Yjo/z+F8bRqb7PxDZV05xPYpt1Ehv
+         UYOF6QdthR2JJEA8YrBlYZbBSMnWRstVB28In63G6X90HvDbcwgFd0Q3KVNyJaIn4iJ2
+         JzZPyBVQUIbuLUjDqShNsNsCa8pNNVz8NZo1dv2Ugr1iVNYeXr2IG4R8A3kO+HDDWVHw
+         5vwY9s4vkK5U75VYHaSDoiegZYLpdBtZZjbOxfJHK73J/r7sZg5Mk3YCfEvhm9Hg2Noe
+         /vnfv/8gnpCSpV5QP9A8/RTnbdoq/dws10Fb2KaDG363uyyHDggzNd5P9zSjSCTn7El7
+         9d3g==
+X-Gm-Message-State: ACgBeo0+GQW3Hf1Y+nldL3AmzLfbCCl9/8FbBYxYVD69uPtrWoEh7kPr
+        VKOz4w1AMyg26Sgtx72y4M8=
+X-Google-Smtp-Source: AA6agR66OfWP0uR8EuBwMN6Iknfi0DZCDEdFpTv2UhT9XEhJEBM/qAtGCTwzfdZamS/hFbs9IZF3Rg==
+X-Received: by 2002:a17:90b:1c8e:b0:1f7:5250:7b44 with SMTP id oo14-20020a17090b1c8e00b001f752507b44mr3150524pjb.212.1662099309457;
+        Thu, 01 Sep 2022 23:15:09 -0700 (PDT)
+Received: from harry-home.bne.opengear.com (115-64-237-221.tpgi.com.au. [115.64.237.221])
+        by smtp.gmail.com with ESMTPSA id l4-20020a622504000000b00537eacc8fa6sm736018pfl.40.2022.09.01.23.15.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 23:15:09 -0700 (PDT)
+From:   Qingtao Cao <qingtao.cao.au@gmail.com>
+X-Google-Original-From: Qingtao Cao <qingtao.cao@digi.com>
+To:     andy.shevchenko@gmail.com
+Cc:     Qingtao Cao <qingtao.cao@digi.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [v3 PATCH 1/1] gpio: exar: access MPIO registers on cascaded chips
+Date:   Fri,  2 Sep 2022 16:14:34 +1000
+Message-Id: <20220902061434.46995-1-qingtao.cao@digi.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+When EXAR xr17v35x chips are cascaded in order to access the MPIO registers
+(part of the Device Configuration Registers) of the secondary chips, an offset
+needs to be applied based on the number of primary chip's UART channels.
 
-> On 9/2/22 11:10 AM, Huang, Ying wrote:
->> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->> 
->>> On 9/2/22 10:39 AM, Wei Xu wrote:
->>>> On Thu, Sep 1, 2022 at 5:33 PM Huang, Ying <ying.huang@intel.com> wrote:
->>>>>
->>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>>
->>>>>> On 9/1/22 12:31 PM, Huang, Ying wrote:
->>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>
->>>>>>>> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
->>>>>>>> related details can be found. All allocated memory tiers will be listed
->>>>>>>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
->>>>>>>>
->>>>>>>> The nodes which are part of a specific memory tier can be listed via
->>>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
->>>>>>>
->>>>>>> I think "memory_tier" is a better subsystem/bus name than
->>>>>>> memory_tiering.  Because we have a set of memory_tierN devices inside.
->>>>>>> "memory_tier" sounds more natural.  I know this is subjective, just my
->>>>>>> preference.
->>>>>>>
->>>
->>>
->>> I missed replying to this earlier. I will keep memory_tiering as subsystem name in v4 
->>> because we would want it to a susbsystem where all memory tiering related details can be found
->>> including memory type in the future. This is as per discussion 
->>>
->>> https://lore.kernel.org/linux-mm/CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com
->> 
->> I don't think that it's a good idea to mix 2 types of devices in one
->> subsystem (bus).  If my understanding were correct, that breaks the
->> driver core convention.
->> 
->
-> All these are virtual devices .I am not sure i follow what you mean by 2 types of devices.
-> memory_tiering is a subsystem that represents all the details w.r.t memory tiering. It shows
-> details of memory tiers and can possibly contain details of different memory types .
+Signed-off-by: Qingtao Cao <qingtao.cao@digi.com>
+---
+ drivers/gpio/gpio-exar.c | 40 +++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 35 insertions(+), 5 deletions(-)
 
-IMHO, memory_tier and memory_type are 2 kind of devices.  They have
-almost totally different attributes (sysfs file).  So, we should create
-2 buses for them.  Each has its own attribute group.  "virtual" itself
-isn't a subsystem.
+diff --git a/drivers/gpio/gpio-exar.c b/drivers/gpio/gpio-exar.c
+index d37de78247a6..482f678c893e 100644
+--- a/drivers/gpio/gpio-exar.c
++++ b/drivers/gpio/gpio-exar.c
+@@ -21,6 +21,12 @@
+ #define EXAR_OFFSET_MPIOLVL_HI 0x96
+ #define EXAR_OFFSET_MPIOSEL_HI 0x99
+ 
++/*
++ * The Device Configuration and UART Configuration Registers
++ * for each UART channel take 1KB of memory address space.
++ */
++#define EXAR_UART_CHANNEL_SIZE 0x400
++
+ #define DRIVER_NAME "gpio_exar"
+ 
+ static DEFINE_IDA(ida_index);
+@@ -31,26 +37,39 @@ struct exar_gpio_chip {
+ 	int index;
+ 	char name[20];
+ 	unsigned int first_pin;
++	/*
++	 * The offset to the cascaded device's (if existing)
++	 * Device Configuration Registers.
++	 */
++	unsigned int cascaded_offset;
+ };
+ 
+ static unsigned int
+ exar_offset_to_sel_addr(struct exar_gpio_chip *exar_gpio, unsigned int offset)
+ {
+-	return (offset + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOSEL_HI
+-						   : EXAR_OFFSET_MPIOSEL_LO;
++	unsigned int pin = exar_gpio->first_pin + (offset % 16);
++	unsigned int cascaded = offset / 16;
++	unsigned int addr = pin / 8 ? EXAR_OFFSET_MPIOSEL_HI : EXAR_OFFSET_MPIOSEL_LO;
++
++	return addr + (cascaded ? exar_gpio->cascaded_offset : 0);
+ }
+ 
+ static unsigned int
+ exar_offset_to_lvl_addr(struct exar_gpio_chip *exar_gpio, unsigned int offset)
+ {
+-	return (offset + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOLVL_HI
+-						   : EXAR_OFFSET_MPIOLVL_LO;
++	unsigned int pin = exar_gpio->first_pin + (offset % 16);
++	unsigned int cascaded = offset / 16;
++	unsigned int addr = pin / 8 ? EXAR_OFFSET_MPIOLVL_HI : EXAR_OFFSET_MPIOLVL_LO;
++
++	return addr + (cascaded ? exar_gpio->cascaded_offset : 0);
+ }
+ 
+ static unsigned int
+ exar_offset_to_bit(struct exar_gpio_chip *exar_gpio, unsigned int offset)
+ {
+-	return (offset + exar_gpio->first_pin) % 8;
++	unsigned int pin = exar_gpio->first_pin + (offset % 16);
++
++	return pin % 8;
+ }
+ 
+ static int exar_get_direction(struct gpio_chip *chip, unsigned int offset)
+@@ -153,6 +172,17 @@ static int gpio_exar_probe(struct platform_device *pdev)
+ 	if (!exar_gpio)
+ 		return -ENOMEM;
+ 
++	/*
++	 * If cascaded, secondary xr17v354 or xr17v358 have the same amount
++	 * of MPIOs as their primaries and the last 4 bits of the primary's
++	 * PCI Device ID is the number of its UART channels.
++	 */
++	if (pcidev->device & GENMASK(15, 12)) {
++		ngpios += ngpios;
++		exar_gpio->cascaded_offset = (pcidev->device & GENMASK(3, 0)) *
++				EXAR_UART_CHANNEL_SIZE;
++	}
++
+ 	/*
+ 	 * We don't need to check the return values of mmio regmap operations (unless
+ 	 * the regmap has a clock attached which is not the case here).
+-- 
+2.34.1
 
-Best Regards,
-Huang, Ying

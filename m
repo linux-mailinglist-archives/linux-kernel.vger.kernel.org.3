@@ -2,147 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407CE5AADFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9725AAE08
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbiIBMCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
+        id S235761AbiIBMDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235679AbiIBMCU (ORCPT
+        with ESMTP id S235822AbiIBMDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:02:20 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98634C0B4D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:02:18 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id c66so1649648pfc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 05:02:18 -0700 (PDT)
+        Fri, 2 Sep 2022 08:03:13 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FAEC7BB5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:03:09 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id bp20so1543582wrb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 05:03:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        d=tessares.net; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=W8RjYI+n37ofAo9LBQEiCCEo6ndS1LkvyfXGybqsT9Q=;
-        b=KJAXAw3+eV100jVcXnx/LqY4g085qYcLfMEFb+CqK4NNPBI9F8q01WkRiTpC9xcqhF
-         /4FkKnilu36QUVvPSMq5xoJPqh+oM/ajx5O1Ooz3frF0it9D7UMt8os//kh3KVKuZVb/
-         DPPYiXpugkbyENhGTY+/WPxqKyt1jcv2zujzHIJxdB0ew1X0zrJZfMTGT15i+87M0po6
-         0/QMZTGU+ePDJ2R+Ec9/I+/IE6Qsct4tdfUfCSODRxCfpDSAWo9ais93dWCx9G+uqlln
-         0sE9qiRD9Lz9bZ0YZbv1M1UDvvLW735W+u2JopGKR2Y65g0jVSPYyBMRqlC2d3FYstWU
-         49Eg==
+        bh=QD0f458hOs+Yc5mX36c226dEAIGqQyTyl2jnPRNMycE=;
+        b=Nhb1ahfA74o2s885SBr3+p7hcg6A5trn06OdOOEsjKKjFz3xUQjTC+3l3BPw4x4Qki
+         98tFbxCk29ZzNK7mwS9hdQLBXJ2U0PXMZ5YRU8SPhG0NBqBWxaUaS2FNC5qauktJkfRo
+         9rZdTHGIQ0cizhHhmN3DsASDHBBg2+6yta30EzY18XTF2GzhyvwTT5WtHS4pUXNOokWM
+         smV7YZ+D6cPPo9D1W/B0l/nDLsvOJ9pu2LT2+CSwck8KGk/8IsyKQWUrmcdEhVm+kqjm
+         6yIn4isWEbDRvmS5iiZ93glHw6Qy+ZKUoLeE6TwLCCFch0cQkdmvcpJL0LY/GNtpb4EI
+         zZtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=W8RjYI+n37ofAo9LBQEiCCEo6ndS1LkvyfXGybqsT9Q=;
-        b=GFH05FlccnKen59bGxBUh3Kg2iCvEBacKg7VP9MgeSLBYon9PoYNSaUz9BHHKFw4Bk
-         khWGoc7+pEaT+RXEGVIx9IStYY3cxodIW8EptKDLGU40/RWHdtFPQYlUMQAUy46SAXef
-         NbNGJ1nrZJWWw64h4Jsbe11u2KhuL/OgFqzAgJJiBg01iFi8ygEOc+MNw7ckCpHpYzo7
-         KTZaVxkuYNgeNdaqAmXAZamAlViD3V5MDADYPzm6bLBT9vZYinXiHDnlLuWY3CVQCGMt
-         op2Q4T1SUMty2fQ/WTtwJcVWaTlY3q/39O6lAAj9Ce9tznjZO0Y8v6phk9we5c//WUrI
-         Nv/Q==
-X-Gm-Message-State: ACgBeo0fdSkQkTk78Aeiz3PJ8UQxta2E3MzaCuhGOOTh5wYbgngYwDPz
-        OkC1un0f/LHPdU1WyZcSizIZ1Q==
-X-Google-Smtp-Source: AA6agR6oz8BXj0U20tJpMgDuL2EJ/favK/h81yeCR3znK+DwDUa+f211F9QgLE7hKWaq2wOql0pxmg==
-X-Received: by 2002:aa7:92d8:0:b0:537:acbf:5e85 with SMTP id k24-20020aa792d8000000b00537acbf5e85mr35570681pfa.61.1662120138036;
-        Fri, 02 Sep 2022 05:02:18 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id v65-20020a622f44000000b00539aa7f0b53sm1557339pfv.104.2022.09.02.05.02.13
+        bh=QD0f458hOs+Yc5mX36c226dEAIGqQyTyl2jnPRNMycE=;
+        b=kw4ArhQKPXrVRcVipqLf1AumlzGnadWY5BklOH8k2r34/b+AwyiPo83jL3Axr4PWTo
+         ZdUb8HLuA2/cSMzxNUT4wNA70T/+Op9Yrl2l4B33V7Ns2f4WIoT+2YrdkTaJyy4hkak6
+         cnABaE+fpYO8SiQCZmUebnHd5HkASSMiA3TVuN0giVQdGeXIvobB7zsSB33+k6sPqTBz
+         APyYGEKjv3tq2x5BfVEa41Cn1Jkul4ZCxxA+uCz5qbMBo7qnl1rWOOWW4Sg6ilzqm+uR
+         lebDLCYGtmMg/2CkM5begqOOdWAy+RA3ltNyhHJ23LXbH2uqRV3TqhWpsfJ9XTlcs/GT
+         EupA==
+X-Gm-Message-State: ACgBeo1Cm1UWsnKtomR6nBXYonwV7OQu1BIbndLzvU0b2Zce5ppD6LrQ
+        pk6q04OXOpBv3U5mz82nDumOOQ==
+X-Google-Smtp-Source: AA6agR6NBs+WZRiv1NUV1OsVl1k+nVX/H7sz5z2SKboCwbDVO74A7WpVLMgN0Co/JBUiwBZUjdmenA==
+X-Received: by 2002:a05:6000:799:b0:226:e3e9:e482 with SMTP id bu25-20020a056000079900b00226e3e9e482mr10057791wrb.219.1662120188014;
+        Fri, 02 Sep 2022 05:03:08 -0700 (PDT)
+Received: from [10.44.2.26] (84-199-106-91.ifiber.telenet-ops.be. [84.199.106.91])
+        by smtp.gmail.com with ESMTPSA id s8-20020a1cf208000000b003a83fda1dc5sm1894953wmc.44.2022.09.02.05.03.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 05:02:17 -0700 (PDT)
-Message-ID: <3a41b9fc-05f1-3f56-ecd0-70b9a2912a31@kernel.dk>
-Date:   Fri, 2 Sep 2022 06:02:12 -0600
+        Fri, 02 Sep 2022 05:03:06 -0700 (PDT)
+Message-ID: <695db55b-959c-0165-b35d-338ba36fa0e4@tessares.net>
+Date:   Fri, 2 Sep 2022 14:03:04 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>, dave@stgolabs.net,
-        Matthew Wilcox <willy@infradead.org>, liam.howlett@oracle.com,
-        void@manifault.com, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, Linux-MM <linux-mm@kvack.org>,
-        iommu@lists.linux.dev, kasan-dev@googlegroups.com,
-        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de> <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
- <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <CAJD7tkaev9B=UDYj2RL6pz-1454J8tv4gEr9y-2dnCksoLK0bw@mail.gmail.com>
- <YxExz+c1k3nbQMh4@P9FQF9L96D.corp.robot.car>
- <20220901223720.e4gudprscjtwltif@moria.home.lan>
- <YxE4BXw5i+BkxxD8@P9FQF9L96D.corp.robot.car>
- <20220902001747.qqsv2lzkuycffuqe@moria.home.lan>
- <YxFWrka+Wx0FfLXU@P9FQF9L96D.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YxFWrka+Wx0FfLXU@P9FQF9L96D.lan>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] selftests: net: sort .gitignore file
+Content-Language: en-GB
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220829184748.1535580-1-axelrasmussen@google.com>
+ <fe9280ff-50b3-805a-07ef-0227cbec13e8@tessares.net>
+ <20220901130529.2f364617@kernel.org>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220901130529.2f364617@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/1/22 7:04 PM, Roman Gushchin wrote:
-> On Thu, Sep 01, 2022 at 08:17:47PM -0400, Kent Overstreet wrote:
->> On Thu, Sep 01, 2022 at 03:53:57PM -0700, Roman Gushchin wrote:
->>> I'd suggest to run something like iperf on a fast hardware. And maybe some
->>> io_uring stuff too. These are two places which were historically most sensitive
->>> to the (kernel) memory accounting speed.
->>
->> I'm getting wildly inconsistent results with iperf.
->>
->> io_uring-echo-server and rust_echo_bench gets me:
->> Benchmarking: 127.0.0.1:12345
->> 50 clients, running 512 bytes, 60 sec.
->>
->> Without alloc tagging:	120547 request/sec
->> With:			116748 request/sec
->>
->> https://github.com/frevib/io_uring-echo-server
->> https://github.com/haraldh/rust_echo_bench
->>
->> How's that look to you? Close enough? :)
-> 
-> Yes, this looks good (a bit too good).
-> 
-> I'm not that familiar with io_uring, Jens and Pavel should have a better idea
-> what and how to run (I know they've workarounded the kernel memory accounting
-> because of the performance in the past, this is why I suspect it might be an
-> issue here as well).
+Hi Jakub,
 
-io_uring isn't alloc+free intensive on a per request basis anymore, it
-would not be a good benchmark if the goal is to check for regressions in
-that area.
+On 01/09/2022 22:05, Jakub Kicinski wrote:
+> On Thu, 1 Sep 2022 12:15:02 +0200 Matthieu Baerts wrote:
+>> Hello,
+>>
+>> On 29/08/2022 20:47, Axel Rasmussen wrote:
+>>> This is the result of `sort tools/testing/selftests/net/.gitignore`, but
+>>> preserving the comment at the top.  
+>>
+>> FYI, we got a small conflict (as expected by Jakub) when merging -net in
+>> net-next in the MPTCP tree due to this patch applied in -net:
+>>
+>>   5a3a59981027 ("selftests: net: sort .gitignore file")
+>>
+>> and these ones from net-next:
+>>
+>>   c35ecb95c448 ("selftests/net: Add test for timing a bind request to a
+>> port with a populated bhash entry")
+>>   1be9ac87a75a ("selftests/net: Add sk_bind_sendto_listen and
+>> sk_connect_zero_addr")
+>>
+>> The conflict has been resolved on our side[1] and the resolution we
+>> suggest is attached to this email: new entries have been added in the
+>> list respecting the alphabetical order.
+> 
+> Yup, that was my plan as well. Apologies for the trouble, I thought
+> since the conflict will only exist for a day I'd be the only one
+> suffering.
 
+That's alright, it was not difficult to resolve :)
+
+We do the sync everyday around 6AM UTC time:
+
+
+https://github.com/multipath-tcp/mptcp_net-next/actions/workflows/update-tg-tree.yml
+
+If you prefer and if we have issues on a Thursday, we can also wait for
+the next day before looking at these conflicts and report them.
+
+> I think we should also sort the Makefile FWIW.
+> Perhaps it's better done during the merge window.
+
+Indeed, that would make sense to do them at this period but I also
+understand such clean-up are useful to reduce conflicts later.
+
+Such conflicts created by the clean-up are also easy to resolve so no
+need to worry to much I think.
+
+>> I'm sharing this thinking it can help others but if it only creates
+>> noise, please tell me! :-)
+> 
+>> [1] https://github.com/multipath-tcp/mptcp_net-next/commit/4151695b70b6
+> 
+> It is useful, thanks!
+
+I'm glad it is! (Sharing them is also useful for us to avoid diverging
+our tree from net and net-next if the conflicts are resolved differently
+:) )
+
+Cheers,
+Matt
 -- 
-Jens Axboe
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

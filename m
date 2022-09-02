@@ -2,183 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064B75AA975
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4CB5AA984
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbiIBIHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 04:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S235690AbiIBIIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 04:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235614AbiIBIHs (ORCPT
+        with ESMTP id S235671AbiIBIId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 04:07:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4031CB5E5F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662106065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jkCqqIO8foYTlUIWanTYmb1eD9F9iDyE1IcUyDBWeec=;
-        b=O6vdiwk95cjdtthpSa3Ukwam/jKluX8X2RaJaBxJujB5n9SjEK8973/2HhfVZ9Sih0R06Q
-        GmNi5qaaaVbhNLVQRaI5voBgDTNZvYBYzTTJRhiqBGl2HGS8JsYqTu/xhr/VD+gTJPshw6
-        jiqDzSUDMxeaW1MV+NKh042hX8XWDvw=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-370-40ccyVOXNmWkKRLMF7Qq5g-1; Fri, 02 Sep 2022 04:07:44 -0400
-X-MC-Unique: 40ccyVOXNmWkKRLMF7Qq5g-1
-Received: by mail-ed1-f69.google.com with SMTP id p4-20020a056402500400b00447e8b6f62bso890302eda.17
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 01:07:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=jkCqqIO8foYTlUIWanTYmb1eD9F9iDyE1IcUyDBWeec=;
-        b=M+LwImHr0rY4+vvb2z/jO29xCppJxUpwmHB7XFOkf/9w5GOB9xeHu1gD3UZtKSzjU+
-         0EK+MtQUZs5xTNoNPSIm0RcaubG8fWFDsC4ShjBNJoma183HOmjnqjXr39/ZfmNLOtUw
-         dIwef2EVN7rHs1Vtx7MQphqCJXvVPVqMdjhsGKL4jff3hZgY17PsH4ahFvAsK22wQIh+
-         TM7TOQUQZimOHCGrB5w8+r6ox5LVsOP+jI2YFJuP0szaqAdfpdJA9uEEdhiopt0PWViY
-         7jt50iP2fsRS+U4W0/1g3ykTMTM9Q2vbhh27YNNq3AzlJPkfiR2zNcK4UswQoFrMXZ+w
-         zW9Q==
-X-Gm-Message-State: ACgBeo2giQcaf64n+JHC9whxyH+DDD/w43uxaL4KABPTV9jqjKk4XGYU
-        +DHard7HREAusRL/lzKJVFdqGprhlWd7E1UamRo14JWONRQcDBDcHwNfJx8hgr5SkQyxMb/j/5m
-        1Eo+oXU4iSnmGHEvDuGe5z99N
-X-Received: by 2002:a17:907:c0f:b0:741:9525:23d6 with SMTP id ga15-20020a1709070c0f00b00741952523d6mr16448790ejc.277.1662106062840;
-        Fri, 02 Sep 2022 01:07:42 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4yiYTHzK+gzUo9zoqd/CH/evovZNWSJQnB5hGXo9T+dVDAD70xJ3OfQlaE7vw9o+Y8pgJXBQ==
-X-Received: by 2002:a17:907:c0f:b0:741:9525:23d6 with SMTP id ga15-20020a1709070c0f00b00741952523d6mr16448773ejc.277.1662106062622;
-        Fri, 02 Sep 2022 01:07:42 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id gz28-20020a170907a05c00b0072b92daef1csm848895ejc.146.2022.09.02.01.07.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 01:07:41 -0700 (PDT)
-Message-ID: <3df6405a-924a-b0e6-c879-05b9151011e3@redhat.com>
-Date:   Fri, 2 Sep 2022 10:07:41 +0200
+        Fri, 2 Sep 2022 04:08:33 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7C2BD4FF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:08:25 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 27D515C01E1;
+        Fri,  2 Sep 2022 04:08:22 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 02 Sep 2022 04:08:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1662106102; x=1662192502; bh=oXx8G2C70O
+        6z7Y/AAZDRV0BkSeYx27XRk/1S/V+785o=; b=AoNigvqd/+Gl1lrbqAJj3zRlf4
+        Uz+mv5mzgXm5dv6SnTveWgJEojTFNdY3TgmnvZO0vUzy9ewsXpJ2SHyfVA7L6xG2
+        9uXzBJh8xCZItDt5VMInEky88lFLt+kCHzZtW/dhkoUTmVFkJKllnNWbw4BODecl
+        BORICHIGuoWFWHYavNu89rTZMAMjuljt0KD9bHABb8ijEVdoQ6haqi97J56RbQJe
+        4FNRn59X/EjKlmqM4B5pYidgzaAfoIrpfYOMg3DGeJaKnwKDJTgM2JSh4Z4B0WTx
+        zUJaIekrZltZVUMU6Vqu+FB3NjFbgnMZ6C2dUe7eP6ZGpfqos72XhhgHuIAg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1662106102; x=1662192502; bh=oXx8G2C70O6z7Y/AAZDRV0BkSeYx
+        27XRk/1S/V+785o=; b=zmrjfZ1MPWS1YUuIsqTqNX9e/+ow093v35x8nLRMtfi9
+        HrhCV5/rXKAvyeq3PHNHQOU5PKk0Phmf5Riv57CfRsW4N3SoKrKXE12HbZemqUeR
+        U22nz+9tSQvL+CkhKnBpqyDSIVS50nT4/sHCjjo5ZAXrErYGXhEXVhJyaOuG4QKd
+        FHMDHaDloo8M4WcxG0BcOcqgJaMUOt42WhjOsAhBG3lOe7ogA0U/4yqyQZGp8i3e
+        7OsDc61NmPFUkeg904NEVEZJI35US9Hx4E9Rkbnu1Eeg5E7GPmL+4HSUS6Uj+Gjp
+        6k5puXHIc7J/PYpe9ftSiusdabk4CahrCcdjljQNuA==
+X-ME-Sender: <xms:9bkRY7Gvvk_fjYmLfEx9LpWNeCw-dVkoRKCu052gjNKz4oYGH1suRw>
+    <xme:9bkRY4XwKwOhreqFx_QK-ACNNceJvifIm7tpNmG6sbSJY7e0_BgHC5OXlUpAYP3Hx
+    NBPM5HxPJOIAoJpiK8>
+X-ME-Received: <xmr:9bkRY9I-ydv9qTMuOheMvOdcRUY2Bpmbg_AVBrb9np8sn2wFAxP2QCoR4w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeltddgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeljeeugfegveetleevkeetffegudevieetieeugeeugeeivddtjeejvdef
+    feetgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:9bkRY5HXm61F4PcxLNK5m3rQg8z2teZN-HZOQWzL1Y2mZJC5Gp6npA>
+    <xmx:9bkRYxXT9qIjLUEkWBe6eJb-wlNSxIy3FF3Kl2TTcu1Zlgw8ikPM1Q>
+    <xmx:9bkRY0Na_3KoCTFKeDnS_NrgD3qAjgw5AiV4tQr85JIsexiy3hNQdQ>
+    <xmx:9rkRY4MXrD0wx5qHwdfAbxRIyLEgoNzehIkf2gd_q0YkGZ_c3AvKTg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 2 Sep 2022 04:08:20 -0400 (EDT)
+Date:   Fri, 2 Sep 2022 10:08:17 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>
+Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        michal.winiarski@intel.com,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 2/2] drm/tests: Change "igt_" prefix to "test_drm_"
+Message-ID: <20220902080817.is2dqqe5sxxhj6qo@houat>
+References: <20220901124210.591994-1-mairacanal@riseup.net>
+ <20220901124210.591994-2-mairacanal@riseup.net>
+ <20220901125530.b56s4zisnkfuigvc@houat>
+ <04aeba53-793c-3196-3137-915f0640dc2a@riseup.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] platform/x86: wmi: Allow duplicate GUIDs for drivers
- that use struct wmi_driver
-Content-Language: en-US
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20220829201500.6341-1-mario.limonciello@amd.com>
- <CAHp75Vc3v4a6=ZJnOYYFGHEomExxopuUy8axDL=M2tbxHqtXqQ@mail.gmail.com>
- <MN0PR12MB6101441AA29CE815DCAD26AEE27B9@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <MN0PR12MB6101441AA29CE815DCAD26AEE27B9@MN0PR12MB6101.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="76a7tdldm3qyyhst"
+Content-Disposition: inline
+In-Reply-To: <04aeba53-793c-3196-3137-915f0640dc2a@riseup.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 9/1/22 23:39, Limonciello, Mario wrote:
-> [Public]
-> 
-> 
-> 
->> -----Original Message-----
->> From: Andy Shevchenko <andy.shevchenko@gmail.com>
->> Sent: Thursday, September 1, 2022 12:17
->> To: Limonciello, Mario <Mario.Limonciello@amd.com>
->> Cc: Hans de Goede <hdegoede@redhat.com>; Mark Gross
->> <markgross@kernel.org>; Platform Driver <platform-driver-
->> x86@vger.kernel.org>; Linux Kernel Mailing List <linux-
->> kernel@vger.kernel.org>
->> Subject: Re: [PATCH v2] platform/x86: wmi: Allow duplicate GUIDs for drivers
->> that use struct wmi_driver
->>
->> On Mon, Aug 29, 2022 at 11:20 PM Mario Limonciello
->> <mario.limonciello@amd.com> wrote:
->>>
->>> The WMI subsystem in the kernel currently tracks WMI devices by
->>> a GUID string not by ACPI device.  The GUID used by the `wmi-bmof`
->>> module however is available from many devices on nearly every machine.
->>>
->>> This originally was though to be a bug, but as it happens on most
->>
->> thought
->>
->>> machines it is a design mistake.  It has been fixed by tying an ACPI
->>> device to the driver with struct wmi_driver. So drivers that have
->>> moved over to struct wmi_driver can actually support multiple
->>> instantiations of a GUID without any problem.
->>>
->>> Add an allow list into wmi.c for GUIDs that the drivers that are known
->>> to use struct wmi_driver.  The list is populated with `wmi-bmof` right
->>> now. The additional instances of that in sysfs with be suffixed with -%d
->>
->> ...
->>
->>> +/* allow duplicate GUIDs as these device drivers use struct wmi_driver */
->>> +static const char * const allow_duplicates[] = {
->>> +       "05901221-D566-11D1-B2F0-00A0C9062910", /* wmi-bmof */
->>> +       NULL,
->>
->> No comma for the terminator.
->>
->>> +};
->>
->> ...
->>
->>> +static int guid_count(const guid_t *guid)
->>> +{
->>> +       struct wmi_block *wblock;
->>> +       int count = 0;
->>> +
->>> +       list_for_each_entry(wblock, &wmi_block_list, list) {
->>> +               if (guid_equal(&wblock->gblock.guid, guid))
->>> +                       count++;
->>> +       }
->>> +
->>> +       return count;
->>> +}
->>
->> I haven't deeply checked the code, but this kind of approach is
->> fragile and proven to be error prone as shown in practice. The
->> scenario is (again, not sure if it's possible, need a comment in the
->> code if it's not possible) removing an entry from the list in the
->> middle and trying to add it again. you will see the duplicate count
->> values. That's why in the general case we use IDA or similar
->> approaches.
-> 
-> It shouldn't be possible to add/remove from the list, they're fixed
-> lists that were parsed from _WDG.
-> 
-> Hans - since you already took this into your review queue, can you
-> land fixes for the 3 things Andy pointed out before it goes to -next
-> or do you want me to do a manual follow up for them?
+--76a7tdldm3qyyhst
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I can do a local fix and squash it into the original commit.
+On Thu, Sep 01, 2022 at 07:33:18PM -0300, Ma=EDra Canal wrote:
+> Hi Maxime,
+>=20
+> On 9/1/22 09:55, Maxime Ripard wrote:
+> > Hi,
+> >=20
+> > On Thu, Sep 01, 2022 at 09:42:10AM -0300, Ma=EDra Canal wrote:
+> >> With the introduction of KUnit, IGT is no longer the only option to run
+> >> the DRM unit tests, as the tests can be run through kunit-tool or on
+> >> real hardware with CONFIG_KUNIT.
+> >>
+> >> Therefore, remove the "igt_" prefix from the tests and replace it with
+> >> the "test_drm_" prefix, making the tests' names independent from the t=
+ool
+> >> used.
+> >>
+> >> Signed-off-by: Ma=EDra Canal <mairacanal@riseup.net>
+> >>
+> >> ---
+> >> v1 -> v2: https://lore.kernel.org/dri-devel/20220830211603.191734-1-ma=
+iracanal@riseup.net/
+> >> - Change "drm_" prefix to "test_drm_", as "drm_" can be a bit confusin=
+g (Jani Nikula).
+> >=20
+> > I appreciate it's a bit of a bikeshed but I disagree with this. The
+> > majority of the kunit tests already out there start with the framework
+> > name, including *all* the examples in the kunit doc. Plus, it's fairly
+> > obvious that it's a test, kunit is only about running tests in the first
+> > place.
+>=20
+> Would it be better to keep it as "drm_"?
+>=20
+> Currently, I don't think it is appropriate to hold the "igt_" prefix, as
+> the tests are not IGT exclusive, but I don't have a strong opinion on
+> using the "drm_" or the "test_drm" prefixes.
 
-> 1) Spelling error in commit message
-> 2) Remove comma on terminator
+Yes, using drm as our prefix everywhere seems like a good idea :)
 
-Ack, will fix.
+Maxime
 
-> 3) Add a comment why guid_count is safe (if you agree with me it is)
+--76a7tdldm3qyyhst
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I agree it is safe.
+-----BEGIN PGP SIGNATURE-----
 
-Can you suggest some wording for the comment please ?
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxG58QAKCRDj7w1vZxhR
+xT6yAQDBwt2ucJpi8xbfOexsSn0IwtFEfMVmlzrn0/gz/emVbgEAwWwWnzbG5bKB
+w4pOcdJqPCvfrvxmbjUcFF/2yU3CAwg=
+=4LKf
+-----END PGP SIGNATURE-----
 
-Regards,
-
-Hans
-
+--76a7tdldm3qyyhst--

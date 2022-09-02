@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3755AB336
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977315AB2E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236462AbiIBORq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S238630AbiIBOEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238455AbiIBORK (ORCPT
+        with ESMTP id S237998AbiIBOEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:17:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA18743632
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:43:14 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oU6Ue-0007Vb-Q6; Fri, 02 Sep 2022 15:13:56 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oU6Ub-003VMu-FG; Fri, 02 Sep 2022 15:13:55 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oU6Uc-006elW-Ep; Fri, 02 Sep 2022 15:13:54 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v4 3/3] iio: adc: tsc2046: silent spi_device_id warning
-Date:   Fri,  2 Sep 2022 15:13:52 +0200
-Message-Id: <20220902131352.1586599-3-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220902131352.1586599-1-o.rempel@pengutronix.de>
-References: <20220902131352.1586599-1-o.rempel@pengutronix.de>
+        Fri, 2 Sep 2022 10:04:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167FE148D0D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662125581;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lzxLFwuf/sIbhXE8ylkRHPZIoLPKTHRY8OYjNIVtYi0=;
+        b=dKTtuU73LE9QabtI9poltqK4gNXZAtYVGhX04maWrqy4GmDDofTzBgNGoierpaR2/lqzvJ
+        wOu3YgTnDo3v/Av5+acBqs7zVeh3gN8HlBRNqIzkymcZcL4gjmhvGrneNuKcFRBtxwfpMv
+        3hgG8McQdcCG9IVMVYBOqR+xCB1voqc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-326-rU2S2oHGPvalT-aTdDn89g-1; Fri, 02 Sep 2022 09:29:45 -0400
+X-MC-Unique: rU2S2oHGPvalT-aTdDn89g-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ECC3E1C05AC2;
+        Fri,  2 Sep 2022 13:29:44 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.193.218])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F39D492C3B;
+        Fri,  2 Sep 2022 13:29:41 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 00/23] Introduce eBPF support for HID devices
+Date:   Fri,  2 Sep 2022 15:29:15 +0200
+Message-Id: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,60 +71,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add spi_device_id to silent following kernel runtime warning:
-"SPI driver tsc2046 has no spi_device_id for ti,tsc2046e-adc".
+Hi,
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
-changes v4:
-- add Reviewed-by: Andy Shevchenko
-changes v3:
-- add missing point
-- remove unneeded blank line
-- assignment id at the definition line
-changes v2:
-- attach actual driver_data
-- use spi_get_device_id fallback
----
- drivers/iio/adc/ti-tsc2046.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+here comes the v10 of the HID-BPF series.
 
-diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
-index 5f92754e066be..49680f312a5bf 100644
---- a/drivers/iio/adc/ti-tsc2046.c
-+++ b/drivers/iio/adc/ti-tsc2046.c
-@@ -802,6 +802,11 @@ static int tsc2046_adc_probe(struct spi_device *spi)
- 	}
- 
- 	dcfg = device_get_match_data(dev);
-+	if (!dcfg) {
-+		const struct spi_device_id *id = spi_get_device_id(spi);
-+
-+		dcfg = (const struct tsc2046_adc_dcfg *)id->driver_data;
-+	}
- 	if (!dcfg)
- 		return -EINVAL;
- 
-@@ -883,11 +888,18 @@ static const struct of_device_id ads7950_of_table[] = {
- };
- MODULE_DEVICE_TABLE(of, ads7950_of_table);
- 
-+static const struct spi_device_id tsc2046_adc_spi_ids[] = {
-+	{ "tsc2046e-adc", (unsigned long)&tsc2046_adc_dcfg_tsc2046e },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(spi, tsc2046_adc_spi_ids);
-+
- static struct spi_driver tsc2046_adc_driver = {
- 	.driver = {
- 		.name = "tsc2046",
- 		.of_match_table = ads7950_of_table,
- 	},
-+	.id_table = tsc2046_adc_spi_ids,
- 	.probe = tsc2046_adc_probe,
- };
- module_spi_driver(tsc2046_adc_driver);
+Again, for a full explanation of HID-BPF, please refer to the last patch
+in this series (23/23).
+
+Hopefully we are getting closer to merging the bpf-core changes that
+are pre-requesite of the HID work.
+
+This revision of the series focused on those bpf-core changes with
+a hopefully proper way of fixing access to ctx pointers, and a few more
+selftests to cover those changes.
+
+Once those bpf changes are in, the HID changes are pretty much self
+consistent, which is a good thing, but I still wonder how we are going
+to merge the selftests. I'd rather have the selftests in the bpf tree to
+prevent any regression on bpf-core changes, but that might require some
+coordination between the HID and bpf trees.
+
+Anyway, let's hope we are getting closer to the end of those revisions :)
+
+Cheers,
+Benjamin
+
+
+Benjamin Tissoires (23):
+  selftests/bpf: regroup and declare similar kfuncs selftests in an
+    array
+  bpf: split btf_check_subprog_arg_match in two
+  bpf/verifier: allow all functions to read user provided context
+  selftests/bpf: add test for accessing ctx from syscall program type
+  bpf/btf: bump BTF_KFUNC_SET_MAX_CNT
+  bpf/verifier: allow kfunc to return an allocated mem
+  selftests/bpf: Add tests for kfunc returning a memory pointer
+  HID: core: store the unique system identifier in hid_device
+  HID: export hid_report_type to uapi
+  HID: convert defines of HID class requests into a proper enum
+  HID: Kconfig: split HID support and hid-core compilation
+  HID: initial BPF implementation
+  selftests/bpf: add tests for the HID-bpf initial implementation
+  HID: bpf: allocate data memory for device_event BPF programs
+  selftests/bpf/hid: add test to change the report size
+  HID: bpf: introduce hid_hw_request()
+  selftests/bpf: add tests for bpf_hid_hw_request
+  HID: bpf: allow to change the report descriptor
+  selftests/bpf: add report descriptor fixup tests
+  selftests/bpf: Add a test for BPF_F_INSERT_HEAD
+  samples/bpf: HID: add new hid_mouse example
+  samples/bpf: HID: add Surface Dial example
+  Documentation: add HID-BPF docs
+
+ Documentation/hid/hid-bpf.rst                 | 513 +++++++++
+ Documentation/hid/index.rst                   |   1 +
+ drivers/Makefile                              |   2 +-
+ drivers/hid/Kconfig                           |  20 +-
+ drivers/hid/Makefile                          |   2 +
+ drivers/hid/bpf/Kconfig                       |  17 +
+ drivers/hid/bpf/Makefile                      |  11 +
+ drivers/hid/bpf/entrypoints/Makefile          |  93 ++
+ drivers/hid/bpf/entrypoints/README            |   4 +
+ drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  66 ++
+ .../hid/bpf/entrypoints/entrypoints.lskel.h   | 682 ++++++++++++
+ drivers/hid/bpf/hid_bpf_dispatch.c            | 526 ++++++++++
+ drivers/hid/bpf/hid_bpf_dispatch.h            |  28 +
+ drivers/hid/bpf/hid_bpf_jmp_table.c           | 577 ++++++++++
+ drivers/hid/hid-core.c                        |  49 +-
+ include/linux/bpf.h                           |  11 +-
+ include/linux/bpf_verifier.h                  |   2 +
+ include/linux/btf.h                           |  10 +
+ include/linux/hid.h                           |  38 +-
+ include/linux/hid_bpf.h                       | 148 +++
+ include/uapi/linux/hid.h                      |  26 +-
+ include/uapi/linux/hid_bpf.h                  |  25 +
+ kernel/bpf/btf.c                              | 149 ++-
+ kernel/bpf/verifier.c                         |  66 +-
+ net/bpf/test_run.c                            |  37 +
+ samples/bpf/.gitignore                        |   2 +
+ samples/bpf/Makefile                          |  27 +
+ samples/bpf/hid_mouse.bpf.c                   | 134 +++
+ samples/bpf/hid_mouse.c                       | 161 +++
+ samples/bpf/hid_surface_dial.bpf.c            | 161 +++
+ samples/bpf/hid_surface_dial.c                | 232 ++++
+ tools/include/uapi/linux/hid.h                |  62 ++
+ tools/include/uapi/linux/hid_bpf.h            |  25 +
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ tools/testing/selftests/bpf/config            |   3 +
+ tools/testing/selftests/bpf/prog_tests/hid.c  | 990 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/kfunc_call.c     | 182 +++-
+ tools/testing/selftests/bpf/progs/hid.c       | 206 ++++
+ .../selftests/bpf/progs/kfunc_call_fail.c     | 160 +++
+ .../selftests/bpf/progs/kfunc_call_test.c     |  71 ++
+ 40 files changed, 5416 insertions(+), 105 deletions(-)
+ create mode 100644 Documentation/hid/hid-bpf.rst
+ create mode 100644 drivers/hid/bpf/Kconfig
+ create mode 100644 drivers/hid/bpf/Makefile
+ create mode 100644 drivers/hid/bpf/entrypoints/Makefile
+ create mode 100644 drivers/hid/bpf/entrypoints/README
+ create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.bpf.c
+ create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.lskel.h
+ create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.c
+ create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.h
+ create mode 100644 drivers/hid/bpf/hid_bpf_jmp_table.c
+ create mode 100644 include/linux/hid_bpf.h
+ create mode 100644 include/uapi/linux/hid_bpf.h
+ create mode 100644 samples/bpf/hid_mouse.bpf.c
+ create mode 100644 samples/bpf/hid_mouse.c
+ create mode 100644 samples/bpf/hid_surface_dial.bpf.c
+ create mode 100644 samples/bpf/hid_surface_dial.c
+ create mode 100644 tools/include/uapi/linux/hid.h
+ create mode 100644 tools/include/uapi/linux/hid_bpf.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/hid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+
 -- 
-2.30.2
+2.36.1
 

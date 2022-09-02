@@ -2,77 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABA05AA755
+	by mail.lfdr.de (Postfix) with ESMTP id 7323D5AA754
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbiIBFk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 01:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S235180AbiIBFl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 01:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbiIBFk4 (ORCPT
+        with ESMTP id S234042AbiIBFlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 01:40:56 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B104DF20
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 22:40:55 -0700 (PDT)
+        Fri, 2 Sep 2022 01:41:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35E58C037;
+        Thu,  1 Sep 2022 22:41:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662097255; x=1693633255;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=BfQPvi3TdP7Kz3uTSqeZ22PJmFXw1j3AImJ2haLhM+M=;
-  b=SkjrMU1girL5ueuxN5MVFuowP10zW7nmm/sGLabKsM1ZyCLztV2TI7jJ
-   Ue0AlFcsd0ZHrZOCr5yFflt/7ajV+8wO6iJ6WkmK2RkHP2s49Isp44dDP
-   ew/hGrVrwTyMmm646QFCq/yRbEaxuTuGXIlJ2OW/x64YSpwS57Hgwvqxu
-   AbqOCB0d6YO2xyPJrtlJjPX8jZxyQprbdC8ujYQmJ+QvI8b3Fb+ITHdWU
-   O234Iz7DH4E01zvDeqUMCy4I8cnofM9i6c5PQm3lxDv66kAD5AicuVdKg
-   9AKaNYIv6VwD1y+GePQYvFczqqmvwTVcw7lnuc65KTnfrUxVP8QRII7GJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="276300832"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662097282; x=1693633282;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=TzTw7jVdoabmpPwY/+fCwAY9hfWjQHp6u0HVV+052qY=;
+  b=aRV5mF6vYUZdAcQEi0/kdgWNG6bptVgBPtrxG7l4T2H6VImjzZJ/cps/
+   avXgzzb1WAoXOizjqpvKbtm3CXJHAKrMToYx4Xh2ilpRXr7vSSIk7fdzF
+   1lKGt/XFE50IKefn9sEM7YdEIsXbqay4/AO6YGCLg2diK84X47SrZBi9/
+   XP1k13pwjKfjgUHxrAH3PxhPff95bpkeVNvWJQa3v/vrzcx4xIPP/k6C8
+   Bu+IsvpHoCR0tCIIi9DYgHUfzdjFNwPSweTO+a2xHIbnE5Cc5cC7R7pi0
+   Obgqy111F2fnD6zod9e4r75RqjitT8+L94Pb1h1/iglfflKfyX5QkveTc
+   A==;
 X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="276300832"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 22:40:55 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="941158445"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 22:40:51 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     Wei Xu <weixugc@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>,
-        Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
- sysfs
-References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
-        <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <ad19e105-9290-922d-59e6-e6813a30f5f0@linux.ibm.com>
-        <87pmgezkhp.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
-        <d91beb53-e940-e02a-f9ca-3326bf914da7@linux.ibm.com>
-Date:   Fri, 02 Sep 2022 13:40:50 +0800
-In-Reply-To: <d91beb53-e940-e02a-f9ca-3326bf914da7@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Fri, 2 Sep 2022 10:53:40 +0530")
-Message-ID: <87fshaz63h.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="178746502"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Sep 2022 22:41:20 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 1 Sep 2022 22:41:19 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Thu, 1 Sep 2022 22:41:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I4sCwoIgje0td0uEZKYL+j/smLUS9eLreHGnJ+DbJvKj+ev/zsiijve+Ts1IC6UE7sqnQouTXI9IFpzF+U+zXy6QwKga1J5rmM7dZ6OGG53zEo/IbHRC8mW+yUju7h4h6Ync9bGxDDZuTtwEzewdJJ9mfui+xMSLQ0Hz+PBIw8G+iRZyUgREhUiDHow3HCU+FuvrPpgm+HxeuVkPKbSf0UjUMxWRY5Zs5XXAhFUtQMbgjmOFKmMMzmEK4HrQQfLJeBSLkzHnD+62A/aWF+LrUCgD+O/roPoAJd0+iS9M39SHzSgtzP9W0gZyji9ImSdHzCY7oZLnLIlxOMnLJvBNuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TzTw7jVdoabmpPwY/+fCwAY9hfWjQHp6u0HVV+052qY=;
+ b=dSHyqWZae6S3J0/cSq/9bQLzN2Cj7Hl2xQsgILXpU6a120QbxVTdv2a2r9mrbNHl30UR0nn6cyKWse/BYbZwYdSqV5ZHbQzC2bPRVLzMLZ4YcDIcsoUguLsEqlNaZgfRWs/fxBsDJevQlu9TJG9KTJVjqv3S1KAWX5Z3zvkX+jU/hiGYQJzB/9TArwZHGmOrErVu2/z/vB3FDAz19Adsch5TKoUvQTyFLkRdTIKeBqlEntrAXm8HwmwXOf3H3oyv1KADnbUjiIwYnmi/KFvY1YMUYxwef4QR6KBFNguvOmXHJDxxLWjn6UBIZ7z7lcJs5PBLaq90+i3tlIMsU7vjPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TzTw7jVdoabmpPwY/+fCwAY9hfWjQHp6u0HVV+052qY=;
+ b=MxNVaM2X+lpze5p2G1CYdGg9KlRQuPOpvCerPQMNLqQQzKlVLlK5ibzfBN8XMZyHPf8+HDUvqAkRJh+fexFrU10RWa4qBYQP4EcJQO5JjDQiQfXUVVNHx6Kr4DUBzRXgR8Oa2wNK0I/VypKPOr59NL1E8vB7OAJtRMbbfxfsN0o=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by DM6PR11MB4577.namprd11.prod.outlook.com (2603:10b6:5:2a1::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Fri, 2 Sep
+ 2022 05:41:18 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009%3]) with mapi id 15.20.5588.010; Fri, 2 Sep 2022
+ 05:41:18 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <cristian.ciocaltea@collabora.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <michael.zhu@starfivetech.com>, <drew@beagleboard.org>,
+        <kernel@esmil.dk>
+CC:     <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
+Subject: Re: [PATCH 1/3] dt-bindings: riscv: starfive: Add StarFive VisionFive
+ V1 board
+Thread-Topic: [PATCH 1/3] dt-bindings: riscv: starfive: Add StarFive
+ VisionFive V1 board
+Thread-Index: AQHYvlReYzhKr+GYqkG/LxjAgTXzD63LoJWA
+Date:   Fri, 2 Sep 2022 05:41:18 +0000
+Message-ID: <e5c57ddd-91ff-a2be-439a-5b82fbcf2506@microchip.com>
+References: <20220901224253.2353071-1-cristian.ciocaltea@collabora.com>
+ <20220901224253.2353071-2-cristian.ciocaltea@collabora.com>
+In-Reply-To: <20220901224253.2353071-2-cristian.ciocaltea@collabora.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 17da20c4-0935-4918-248f-08da8ca5c222
+x-ms-traffictypediagnostic: DM6PR11MB4577:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GzGme02MCLhWG4k6JYPqFWgLo3LAVDnj/HhNuwLym3+/4YJb3Tau7zlh5MAiR7eGZfgtmUSg7bS7bQVSTOcYvQKsRluA9Yt6N23iKU0OjcSQex/G8znNCLqTA5POxRoRjZilGZcNVFIItcPZg80Ur9nabfLdsF5FSbA5YDQpjMtP+GLo6AMuEiy7KPFJQe0evyucbymQ5CJuYYRFFmYztbTeKpKv15p8ryI0hEeoeeYgvJefo19b6AS8anV/jhvcnU+mhpnSfLOmz1Mwvg+1iHb0O5uSYYykZ7gK5RAWmE8c6qbvcS+o0mzZbcZgi2gVMv0mTuOiVwTRHjGty9yBek8wybVoll9MN5iAj+AusF/K5pZV+Li0m1TJBKz70oWlHlhRtdvJy+ZIdjNNatwVmCnIHyaCe8A1s+I8bFp/EsYP6qBBBPHNwb+V7O3suLoMHsEguD24hYDwCiXE8DRflP+C8A7wvhacN1tRVclLdTjO8sCcO9RdODo3og/7TcYQfVWQEXP2o5L7IpIpF+Ylyw4jMCXgI7bJ/JroH0ICSz91QXEH2qD2GdKKV7cR/dkJdhyM5/ewfeU+eUWmVzTVAltk7cE5xY5lK+m9fWwUu22TPnLhcsgH3Ut3AhQAA7KepI1MEuERAe4LlE/zDH7TepzIj4cjFqTD8ONw4+RiI/XrdoZM6qSfQJQj4RhGRwE1ejPidhzAfm872UEbFej9hApZeI/Ami1TdX/d22cc+q8mukNrhCA8KL8/c9HX2zRv0k25ZFwxwIEGPbAn9zXKqxz1TByeMQLMzpwrWWfMtI68Fco15Cxax4AKvE8VCAAut/UDZExmKM5/YUoSrlle4NAdNAF0hFVi0mZy8BAY99+pXPYWI+S9ZiytVRxXyrzV6wassbSZ6/W4T8uiyJZU9Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(39860400002)(346002)(396003)(376002)(136003)(2906002)(186003)(36756003)(7416002)(26005)(31686004)(6512007)(2616005)(38070700005)(66556008)(66946007)(91956017)(66476007)(8676002)(66446008)(64756008)(4326008)(76116006)(5660300002)(8936002)(86362001)(31696002)(316002)(54906003)(966005)(6486002)(110136005)(41300700001)(53546011)(6506007)(122000001)(478600001)(38100700002)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QU44UXNoN3VPelh0Wk9TREQxejFjUGc2dGplSXpETkV1dGpUVDB1TW82OXN2?=
+ =?utf-8?B?OHVscTMvam9TcmdnUWZYbzhRZkwwMW5zSS9UY3QzMEVwVEtMOHpGbVpoRVhk?=
+ =?utf-8?B?Ym9hR0tETzNjSFU5WEtZdXAzQVJTS3Z1cFRzMG5DTUxtajZ1Z0lNRTNJYW5y?=
+ =?utf-8?B?c0dwemxLcWcyVkZZekRvUkFzZkx2bUQxOFBWNEdjVXFlZWdDU1lpSkJQUmNr?=
+ =?utf-8?B?bnJNVlJ6a0xnU3NLQXNuR3g4ZklrVnhhbnpDS2Rqc2xyU0ZPejhEeFc0RDQ0?=
+ =?utf-8?B?RjZvb2pQMW11a3JsUFRjb3ZWOHhUcFY2MVBHREsyMTlwcDBuMlN3TGZabmJl?=
+ =?utf-8?B?bXY4WUV3U0IvSXZqWitGeE05NDNoYXQ3M3VteGoxMnhSWmVDUkRjQ2VuTllq?=
+ =?utf-8?B?TVhWOWRjbndvS1M5OXVpQ0FROGRRY2ltMGVjNzRlSzNTcjVZbkNqTE1tS29m?=
+ =?utf-8?B?Y3hKcnlRRDBrRElPazZvOTRBQ1lwcndqUWpxak5VT0JubFpNcTR6UXdFejU5?=
+ =?utf-8?B?TDVOMG9JNHJRUCt5ZDBmMmI2T3VIRUxjaFJyWFUwWGM5eGdRbTJPOGpTa082?=
+ =?utf-8?B?bVhJV01KbnJmVTlnTElzV0R2dG1EYlNGU0lyN2JHK3lzNlRZYlpKVHZPMUVs?=
+ =?utf-8?B?Smk1NUtNMVB5d2pYVWYvUFE4VlFkWXJDajJwQXJDVzBhOXJDS3J3aU13cWtD?=
+ =?utf-8?B?VVJ1WDZVRzM5T294eVVUTXdSbjMrdlBvSjBQMGc3M3ZHY3dHZkNsTWtsRW9r?=
+ =?utf-8?B?U0FNWG9ad0FEbGhsNkhTcXJjNlBTQUsxVzBvSHYxbENmdlpmU2U0ZzJYWTBV?=
+ =?utf-8?B?VW1oNlpoK2swWERkSDlCaFhyZ09na3R6dThodjM5UjkxckwwVndwNXRhb3Ni?=
+ =?utf-8?B?NnYvNnNrbjZJL0xrR3NjQ1NhN2s3YmNaeHA0NncwTm04cFYwYlJjTlZTc1p4?=
+ =?utf-8?B?UWswTUdwV1ovOG1sb2RPTFZaNjRtcGxMd1JDTmhHZVAzWExIWGhKQytHUWVO?=
+ =?utf-8?B?WHNpWU44a3Q4YnJGbHRwcnNzYi9oSVdJRGsyL2pSYldJenE1ZTVwOWY1bDRo?=
+ =?utf-8?B?emVVb201U1pUR3dOWUhpMlB3U3U5UXVESjdiYy9NYUJMRkR3SEVRSUl1QWJM?=
+ =?utf-8?B?Tkt6NDg4SmVnUFM4VnBlTmxwRGtnT0x1MEdIWGtjQXA2cityUVJwcEdseDJQ?=
+ =?utf-8?B?U2hBZTZRWjJuK0xjcDJuSDVkZEpZREpqZVFCbjVWYjI0Qk1iY1FJMW9uZEdI?=
+ =?utf-8?B?cEpZcU5RbTkxUFl1VE9KVGhZUnN0YnpVbUN6Y0VYMmF5aUU4a1VydzFYdkFu?=
+ =?utf-8?B?d1lpYS9JZGpxRHo5eGZmUHNsS1hTbzRiSkdyNUk3eGNWVVhlcU5obzI1RGgr?=
+ =?utf-8?B?M1hXNjQ2UEJhcDcwclg5bEE4YUJlWkk0UGhTeG9oZ0g5MmRCS1RqMGdCakhn?=
+ =?utf-8?B?RU9IaFZ1WXJaQlNLTUdPRWxEUFVLSzJlOXl5d3g3Zzh4OXAvcWNTdWZjYzJY?=
+ =?utf-8?B?NUlDbHViZk40dWtlWWR5bHJ2Wk1ZWG1yUUxETk5wYVV4ZlY5NUxxdml5SWZS?=
+ =?utf-8?B?RnJxVnBGUlZlL0taR2pYQk5Jb2xjOTAzRlBmSVlRd2k4d3VUcHlhbmdGMmRy?=
+ =?utf-8?B?YjBvbE84Wlh3VzlXV2JybXNoa0lkV2ZTWUk0QTB4S2lBZlZMelVmdEQvRDR2?=
+ =?utf-8?B?RnB4eDlSTTFnaEhZZUlqUVpnZnRWa2VHUWFNbUE0Z08ydjFpYisvd01Eb0RS?=
+ =?utf-8?B?RzJUajlmU2JsSWE3ZDVqV0tBSkZzeHZnc1YrdFNQVERJNExLcWF1T3drQzV1?=
+ =?utf-8?B?UzBTa0wwV2ErZDBxNVdmOFBieUhxekRvbS9zN2RabVI3U2hvQ09vRXhlOThE?=
+ =?utf-8?B?VXdDNEVjT0lOWTNQT0JTRXNXNWtCY1ZKNUN1N0VaUG94cDgwWGVYT0hRYm1C?=
+ =?utf-8?B?R01FNUoxdXgxSmlwRXprYjRTM3U5SWlFbHVIcE0xdVl1R2pyVWhjUElBL2Ew?=
+ =?utf-8?B?dFBJcFNvK3hLZCtoK0pPRHo5NkM0aXZsZzBUWk1iaXQ4SnV4QlNuc0swSEVl?=
+ =?utf-8?B?Q2tKR1FHR1A4bHdSRHVDM3lrbjlCZU5KYVBxVDA0YlYzUUxoYjAzUWdlOTRC?=
+ =?utf-8?Q?sBt7EI1qZ8tqDeQK3Rl0Ca8rt?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EC25E10228677C479E0C59A59638E733@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17da20c4-0935-4918-248f-08da8ca5c222
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2022 05:41:18.0544
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nWHzrxjf4xb79I0qJnAwn5sfneyvUnHYd8BbE66LD0TIPbotF50IB6pB4K8K20G9uHHr9Q9IQus87mv3QzZypw3n1FRDJ7coQ8f4tWs2HGo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4577
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,106 +161,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
-
-> On 9/2/22 10:39 AM, Wei Xu wrote:
->> On Thu, Sep 1, 2022 at 5:33 PM Huang, Ying <ying.huang@intel.com> wrote:
->>>
->>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>
->>>> On 9/1/22 12:31 PM, Huang, Ying wrote:
->>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>>>
->>>>>> This patch adds /sys/devices/virtual/memory_tiering/ where all memor=
-y tier
->>>>>> related details can be found. All allocated memory tiers will be lis=
-ted
->>>>>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
->>>>>>
->>>>>> The nodes which are part of a specific memory tier can be listed via
->>>>>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
->>>>>
->>>>> I think "memory_tier" is a better subsystem/bus name than
->>>>> memory_tiering.  Because we have a set of memory_tierN devices inside.
->>>>> "memory_tier" sounds more natural.  I know this is subjective, just my
->>>>> preference.
->>>>>
->
->
-> I missed replying to this earlier. I will keep memory_tiering as subsyste=
-m name in v4=20
-> because we would want it to a susbsystem where all memory tiering related=
- details can be found
-> including memory type in the future. This is as per discussion=20
->
-> https://lore.kernel.org/linux-mm/CAAPL-u9TKbHGztAF=3Dr-io3gkX7gorUunS2Ufs=
-tudCWuihrA=3D0g@mail.gmail.com
-
-I don't think that it's a good idea to mix 2 types of devices in one
-subsystem (bus).  If my understanding were correct, that breaks the
-driver core convention.
-
->>>>>>
->>>>>> A directory hierarchy looks like
->>>>>> :/sys/devices/virtual/memory_tiering$ tree memory_tier4/
->>>>>> memory_tier4/
->>>>>> =E2=94=9C=E2=94=80=E2=94=80 nodes
->>>>>> =E2=94=9C=E2=94=80=E2=94=80 subsystem -> ../../../../bus/memory_tier=
-ing
->>>>>> =E2=94=94=E2=94=80=E2=94=80 uevent
->>>>>>
->>>>>> All toptier nodes are listed via
->>>>>> /sys/devices/virtual/memory_tiering/toptier_nodes
->>>>>>
->>>>>> :/sys/devices/virtual/memory_tiering$ cat toptier_nodes
->>>>>> 0,2
->>>>>> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
->>>>>> 0,2
->>>>>
->>>>> I don't think that it is a good idea to show toptier information in u=
-ser
->>>>> space interface.  Because it is just a in kernel implementation
->>>>> details.  Now, we only promote pages from !toptier to toptier.  But
->>>>> there may be multiple memory tiers in toptier and !toptier, we may
->>>>> change the implementation in the future.  For example, we may promote
->>>>> pages from DRAM to HBM in the future.
->>>>>
->>>>
->>>>
->>>> In the case you describe above and others, we will always have a list =
-of
->>>> NUMA nodes from which memory promotion is not done.
->>>> /sys/devices/virtual/memory_tiering/toptier_nodes shows that list.
->>>
->>> I don't think we will need that interface if we don't restrict promotion
->>> in the future.  For example, he can just check the memory tier with
->>> smallest number.
->>>
->>> TBH, I don't know why do we need that interface.  What is it for?  We
->>> don't want to expose unnecessary information to restrict our in kernel
->>> implementation in the future.
->>>
->>> So, please remove that interface at least before we discussing it
->>> thoroughly.
->>=20
->> I have asked for this interface to allow the userspace to query a list
->> of top-tier nodes as the targets of userspace-driven promotions.  The
->> idea is that demotion can gradually go down tier by tier, but we
->> promote hot pages directly to the top-tier and bypass the immediate
->> tiers.
->>=20
->> Certainly, this can be viewed as a policy choice.  Given that now we
->> have a clearly defined memory tier hierarchy in sysfs and the
->> toptier_nodes content can be constructed from this memory tier
->> hierarchy and other information from the node sysfs interfaces, I am
->> fine if we want to remove toptier_nodes and keep the current memory
->> tier sysfs interfaces to the minimal.
->>
->
->
-> Ok I can do a v4 with toptier_nodes dropped.
-
-Thanks!
-
-Best Regards,
-Huang, Ying
+SGV5IENyaXN0aWFuLA0KDQpPbiAwMS8wOS8yMDIyIDIzOjQyLCBDcmlzdGlhbiBDaW9jYWx0ZWEg
+d3JvdGU6DQo+IFtZb3UgZG9uJ3Qgb2Z0ZW4gZ2V0IGVtYWlsIGZyb20gY3Jpc3RpYW4uY2lvY2Fs
+dGVhQGNvbGxhYm9yYS5jb20uIExlYXJuIHdoeSB0aGlzIGlzIGltcG9ydGFudCBhdCBodHRwczov
+L2FrYS5tcy9MZWFybkFib3V0U2VuZGVySWRlbnRpZmljYXRpb24gXQ0KPiANCj4gRVhURVJOQUwg
+RU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Ug
+a25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBEb2N1bWVudCB0aGUgY29tcGF0aWJsZXMg
+Zm9yIFN0YXJGaXZlIFZpc2lvbkZpdmUgVjEgU0JDIFsxXS4NCj4gVGhlIGJvYXJkIGlzIGJhc2Vk
+IG9uIHRoZSBTdGFyRml2ZSBKSDcxMDAgU29DLg0KPiANCj4gWzFdIGh0dHBzOi8vZ2l0aHViLmNv
+bS9zdGFyZml2ZS10ZWNoL1Zpc2lvbkZpdmUNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IENyaXN0aWFu
+IENpb2NhbHRlYSA8Y3Jpc3RpYW4uY2lvY2FsdGVhQGNvbGxhYm9yYS5jb20+DQo+IC0tLQ0KPiAg
+RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Jpc2N2L3N0YXJmaXZlLnlhbWwgfCAz
+ICsrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdp
+dCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9yaXNjdi9zdGFyZml2ZS55YW1s
+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Jpc2N2L3N0YXJmaXZlLnlhbWwN
+Cj4gaW5kZXggNWIzNjI0M2ZkNjc0Li45Yzk0OGIzNzljOGYgMTAwNjQ0DQo+IC0tLSBhL0RvY3Vt
+ZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9yaXNjdi9zdGFyZml2ZS55YW1sDQo+ICsrKyBi
+L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9yaXNjdi9zdGFyZml2ZS55YW1sDQo+
+IEBAIC0yMSw2ICsyMSw5IEBAIHByb3BlcnRpZXM6DQo+ICAgICAgICAtIGl0ZW1zOg0KPiAgICAg
+ICAgICAgIC0gY29uc3Q6IGJlYWdsZSxiZWFnbGV2LXN0YXJsaWdodC1qaDcxMDAtcjANCg0KQ2Fu
+IHlvdSB1c2UgYW4gZW51bSBoZXJlIHBsZWFzZT8NCg0KPiAgICAgICAgICAgIC0gY29uc3Q6IHN0
+YXJmaXZlLGpoNzEwMA0KPiArICAgICAgLSBpdGVtczoNCj4gKyAgICAgICAgICAtIGNvbnN0OiBz
+dGFyZml2ZSx2aXNpb25maXZlLXYxDQo+ICsgICAgICAgICAgLSBjb25zdDogc3RhcmZpdmUsamg3
+MTAwDQo+IA0KPiAgYWRkaXRpb25hbFByb3BlcnRpZXM6IHRydWUNCj4gDQo+IC0tDQo+IDIuMzcu
+Mg0KPiANCj4gDQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fDQo+IGxpbnV4LXJpc2N2IG1haWxpbmcgbGlzdA0KPiBsaW51eC1yaXNjdkBsaXN0cy5pbmZy
+YWRlYWQub3JnDQo+IGh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8v
+bGludXgtcmlzY3YNCg0K

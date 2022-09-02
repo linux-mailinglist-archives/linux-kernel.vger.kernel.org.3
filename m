@@ -2,124 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF915AABE5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D17F5AABEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235950AbiIBJxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S235814AbiIBJyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233014AbiIBJwo (ORCPT
+        with ESMTP id S235901AbiIBJxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:52:44 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15B83CBF4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:52:42 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t5so1922243edc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:52:42 -0700 (PDT)
+        Fri, 2 Sep 2022 05:53:44 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C17E82D19;
+        Fri,  2 Sep 2022 02:53:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=B/LkNIri/1WQtL+Q7NWsRVHWzRnp/SVBkeL4p3lzvpc=;
-        b=UmGoUW84f46bOOkqLOrVsz1cuIelpw1AyuKVUsSLOuGDx49DKX2HTCfP9L3NRQfAtw
-         nWG0XzxJysDol1nrBVzg11l8wvAsKib0aopEWwPNEvFS+L7bNykbDBdbqcoyACogYaaR
-         5Z8+AkYIgYRjGpKDfW7FNOBNoSPhvl6FSyYiY/8bZmVtZDGc7Onnk+YCyqLGNTUIuMNs
-         4q2bqwgIz8vXZt+C9m4aa8IQIvpIRbDamSqp+1YzTg0fsfQsw+0cJlTHzMkqNkm5+OvH
-         j6zfwlRhigMXrNSgFHON5TrRBgkUEV4KZ7Df0se4QhFJT7s+SCfpi8B6B+dnvn3Pbsi+
-         FenQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=B/LkNIri/1WQtL+Q7NWsRVHWzRnp/SVBkeL4p3lzvpc=;
-        b=XxmaqTK7FWhKvZhrZgiv7ZIvI8uVqeFaGDNfGUY5rsUgrWcS0T35Ayv/qU5uhnPTKl
-         AphXNb0J3oy7qGDBb6dJ6K9qHPYIMy0ucrlHcByetu5dzTRiFNTDjgiPRonmZCYphPH2
-         LufTz6v1+UweJryCWHONpNY65kYN9xv1+SNRzt4/6JL72vVJXfoC4nq6vW46Jojoxs5n
-         mfXq76ob3udrt0gydBwSBx6Ft+sAKrz4lWvt3f+95sVQXlECDoJPTyjDRZKsEFdeDq3Q
-         BohpuiioGLAl6WjXSMIzJ8KeatpuzKR1OBCEuDPi7SVM2N6mDXMDrcs/+eIOu3Thba/H
-         jSuQ==
-X-Gm-Message-State: ACgBeo2t9Farwdyqt94EeWBuiX8NC20K1izCSth6rUUU4d44lkKdhNEs
-        Ud6FN/5dbRe2YFf4amrB9ZhSQx15jus5WA==
-X-Google-Smtp-Source: AA6agR40Enx2VtA1BLjCCmzHZy2HEipEPMqS4wC6H84sCs4J8CSggN68CqgbJCTcJcSaTw52twxEIQ==
-X-Received: by 2002:a05:6402:f1d:b0:44a:ec16:df56 with SMTP id i29-20020a0564020f1d00b0044aec16df56mr5793191eda.74.1662112361386;
-        Fri, 02 Sep 2022 02:52:41 -0700 (PDT)
-Received: from localhost.localdomain (ip-217-105-46-83.ip.prioritytelecom.net. [217.105.46.83])
-        by smtp.gmail.com with ESMTPSA id h6-20020a170906828600b0073d6234ceebsm959601ejx.160.2022.09.02.02.52.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 02:52:41 -0700 (PDT)
-From:   Nam Cao <namcaov@gmail.com>
-To:     Larry.Finger@lwfinger.net, gregkh@linuxfoundation.org,
-        hdegoede@redhat.com
-Cc:     namcaov@gmail.com, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH 10/10] staging: rtl8723bs: remove rtw_is_wps_ie
-Date:   Fri,  2 Sep 2022 11:52:00 +0200
-Message-Id: <69f128559008c94e29eab511a92964810688288e.1662111799.git.namcaov@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1662111798.git.namcaov@gmail.com>
-References: <cover.1662111798.git.namcaov@gmail.com>
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1662112422; x=1693648422;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RYkyDTlCTvMrlOLx7kj+NLb70k5rmvCjtCTCfEk9Kmg=;
+  b=Rs4DN1ao4A5zAJOp4/ga33eur9LYSt/+aOu7rSU/FVEltgPXLZgmZHJ2
+   sqFSwUmvy9fohozDpV3lbNSvFUBD5X5Frlp92xiWzRHhyD7+qPRUESJVY
+   HqrnWwH2KlPS0FDNfMei320H6+E9xk8+9pIiTxiUaN6bG9TN7AV3dAnYA
+   I=;
+X-IronPort-AV: E=Sophos;i="5.93,283,1654560000"; 
+   d="scan'208";a="255514482"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 09:53:26 +0000
+Received: from EX13D08EUB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com (Postfix) with ESMTPS id E124945026;
+        Fri,  2 Sep 2022 09:53:25 +0000 (UTC)
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D08EUB002.ant.amazon.com (10.43.166.232) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Fri, 2 Sep 2022 09:53:25 +0000
+Received: from dev-dsk-ptyadav-1c-613f0921.eu-west-1.amazon.com (10.15.8.155)
+ by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP Server id
+ 15.0.1497.38 via Frontend Transport; Fri, 2 Sep 2022 09:53:23 +0000
+Received: by dev-dsk-ptyadav-1c-613f0921.eu-west-1.amazon.com (Postfix, from userid 23027615)
+        id 65C212599D; Fri,  2 Sep 2022 09:53:22 +0000 (UTC)
+Date:   Fri, 2 Sep 2022 09:53:22 +0000
+From:   Pratyush Yadav <ptyadav@amazon.de>
+To:     SeongJae Park <sj@kernel.org>
+CC:     <jgross@suse.com>, <roger.pau@citrix.com>,
+        <marmarek@invisiblethingslab.com>, <mheyne@amazon.de>,
+        <xen-devel@lists.xenproject.org>, <axboe@kernel.dk>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] xen-blkback: Advertise feature-persistent as user
+ requested
+Message-ID: <20220902095207.y3whbc5mw4hyqphg@yadavpratyush.com>
+References: <20220831165824.94815-1-sj@kernel.org>
+ <20220831165824.94815-2-sj@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220831165824.94815-2-sj@kernel.org>
+X-Spam-Status: No, score=-14.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove function rtw_is_wps_ie because it is not used.
+On 31/08/22 04:58PM, SeongJae Park wrote:
+> The advertisement of the persistent grants feature (writing
+> 'feature-persistent' to xenbus) should mean not the decision for using
+> the feature but only the availability of the feature.  However, commit
+> aac8a70db24b ("xen-blkback: add a parameter for disabling of persistent
+> grants") made a field of blkback, which was a place for saving only the
+> negotiation result, to be used for yet another purpose: caching of the
+> 'feature_persistent' parameter value.  As a result, the advertisement,
+> which should follow only the parameter value, becomes inconsistent.
+> 
+> This commit fixes the misuse of the semantic by making blkback saves the
+> parameter value in a separate place and advertises the support based on
+> only the saved value.
+> 
+> Fixes: aac8a70db24b ("xen-blkback: add a parameter for disabling of persistent grants")
+> Cc: <stable@vger.kernel.org> # 5.10.x
+> Suggested-by: Juergen Gross <jgross@suse.com>
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+> ---
+>  drivers/block/xen-blkback/common.h | 3 +++
+>  drivers/block/xen-blkback/xenbus.c | 6 ++++--
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/block/xen-blkback/common.h b/drivers/block/xen-blkback/common.h
+> index bda5c815e441..a28473470e66 100644
+> --- a/drivers/block/xen-blkback/common.h
+> +++ b/drivers/block/xen-blkback/common.h
+> @@ -226,6 +226,9 @@ struct xen_vbd {
+>         sector_t                size;
+>         unsigned int            flush_support:1;
+>         unsigned int            discard_secure:1;
+> +       /* Connect-time cached feature_persistent parameter value */
+> +       unsigned int            feature_gnt_persistent_parm:1;
 
-Signed-off-by: Nam Cao <namcaov@gmail.com>
----
- drivers/staging/rtl8723bs/core/rtw_ieee80211.c | 17 -----------------
- drivers/staging/rtl8723bs/include/ieee80211.h  |  1 -
- 2 files changed, 18 deletions(-)
+Continuing over from the previous version:
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_ieee80211.c b/drivers/staging/rtl8723bs/core/rtw_ieee80211.c
-index 68e41d99679d..3d8a64f69448 100644
---- a/drivers/staging/rtl8723bs/core/rtw_ieee80211.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_ieee80211.c
-@@ -634,23 +634,6 @@ void rtw_get_sec_ie(u8 *in_ie, uint in_len, u8 *rsn_ie, u16 *rsn_len, u8 *wpa_ie
- 	}
- }
- 
--u8 rtw_is_wps_ie(u8 *ie_ptr, uint *wps_ielen)
--{
--	u8 match = false;
--	u8 eid, wps_oui[4] = {0x0, 0x50, 0xf2, 0x04};
--
--	if (!ie_ptr)
--		return match;
--
--	eid = ie_ptr[0];
--
--	if ((eid == WLAN_EID_VENDOR_SPECIFIC) && (!memcmp(&ie_ptr[2], wps_oui, 4))) {
--		*wps_ielen = ie_ptr[1]+2;
--		match = true;
--	}
--	return match;
--}
--
- /**
-  * rtw_get_wps_ie - Search WPS IE from a series of IEs
-  * @in_ie: Address of IEs to search
-diff --git a/drivers/staging/rtl8723bs/include/ieee80211.h b/drivers/staging/rtl8723bs/include/ieee80211.h
-index 1e627dc0044d..9041d8dc5fb1 100644
---- a/drivers/staging/rtl8723bs/include/ieee80211.h
-+++ b/drivers/staging/rtl8723bs/include/ieee80211.h
-@@ -746,7 +746,6 @@ int rtw_parse_wpa2_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwi
- 
- void rtw_get_sec_ie(u8 *in_ie, uint in_len, u8 *rsn_ie, u16 *rsn_len, u8 *wpa_ie, u16 *wpa_len);
- 
--u8 rtw_is_wps_ie(u8 *ie_ptr, uint *wps_ielen);
- u8 *rtw_get_wps_ie(u8 *in_ie, uint in_len, u8 *wps_ie, uint *wps_ielen);
- u8 *rtw_get_wps_attr(u8 *wps_ie, uint wps_ielen, u16 target_attr_id, u8 *buf_attr, u32 *len_attr);
- u8 *rtw_get_wps_attr_content(u8 *wps_ie, uint wps_ielen, u16 target_attr_id, u8 *buf_content, uint *len_content);
+> > If feature_gnt_persistent_parm is always going to be equal to 
+> > feature_persistent, then why introduce it at all? Why not just use 
+> > feature_persistent directly? This way you avoid adding an extra flag 
+> > whose purpose is not immediately clear, and you also avoid all the 
+> > mess with setting this flag at the right time.
+>
+> Mainly because the parameter should read twice (once for 
+> advertisement, and once later just before the negotitation, for 
+> checking if we advertised or not), and the user might change the 
+> parameter value between the two reads.
+>
+> For the detailed available sequence of the race, you could refer to the 
+> prior conversation[1].
+>
+> [1] https://lore.kernel.org/linux-block/20200922111259.GJ19254@Air-de-Roger/
+
+Okay, I see. Thanks for the pointer. But still, I think it would be 
+better to not maintain two copies of the value. How about doing:
+
+	blkif->vbd.feature_gnt_persistent =
+		xenbus_read_unsigned(dev->nodename, "feature-persistent", 0) &&
+		xenbus_read_unsigned(dev->otherend, "feature-persistent", 0);
+
+This makes it quite clear that we only enable persistent grants if 
+_both_ ends support it. We can do the same for blkfront.
+
+> +       /* Persistent grants feature negotiation result */
+>         unsigned int            feature_gnt_persistent:1;
+>         unsigned int            overflow_max_grants:1;
+>  };
+> diff --git a/drivers/block/xen-blkback/xenbus.c b/drivers/block/xen-blkback/xenbus.c
+> index ee7ad2fb432d..c0227dfa4688 100644
+> --- a/drivers/block/xen-blkback/xenbus.c
+> +++ b/drivers/block/xen-blkback/xenbus.c
+> @@ -907,7 +907,7 @@ static void connect(struct backend_info *be)
+>         xen_blkbk_barrier(xbt, be, be->blkif->vbd.flush_support);
+> 
+>         err = xenbus_printf(xbt, dev->nodename, "feature-persistent", "%u",
+> -                       be->blkif->vbd.feature_gnt_persistent);
+> +                       be->blkif->vbd.feature_gnt_persistent_parm);
+>         if (err) {
+>                 xenbus_dev_fatal(dev, err, "writing %s/feature-persistent",
+>                                  dev->nodename);
+> @@ -1085,7 +1085,9 @@ static int connect_ring(struct backend_info *be)
+>                 return -ENOSYS;
+>         }
+> 
+> -       blkif->vbd.feature_gnt_persistent = feature_persistent &&
+> +       blkif->vbd.feature_gnt_persistent_parm = feature_persistent;
+> +       blkif->vbd.feature_gnt_persistent =
+> +               blkif->vbd.feature_gnt_persistent_parm &&
+>                 xenbus_read_unsigned(dev->otherend, "feature-persistent", 0);
+> 
+>         blkif->vbd.overflow_max_grants = 0;
+> --
+> 2.25.1
+> 
+
 -- 
-2.25.1
-
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879

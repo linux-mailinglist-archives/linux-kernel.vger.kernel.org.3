@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE1A5AAE5C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E6E5AAEB5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236105AbiIBMWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S236137AbiIBM2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235903AbiIBMVP (ORCPT
+        with ESMTP id S236438AbiIBM1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:21:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA7E7CA92;
-        Fri,  2 Sep 2022 05:20:51 -0700 (PDT)
+        Fri, 2 Sep 2022 08:27:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC83D759A;
+        Fri,  2 Sep 2022 05:24:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB394B82A90;
-        Fri,  2 Sep 2022 12:20:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30489C433B5;
-        Fri,  2 Sep 2022 12:20:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDA9062134;
+        Fri,  2 Sep 2022 12:23:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EB2C433D7;
+        Fri,  2 Sep 2022 12:23:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121248;
-        bh=ZMWaJo5CykCTwhf8tVV/9lOdC2N4HDzR9rVeLsNOKRA=;
+        s=korg; t=1662121390;
+        bh=OKUUuTE70vUQ4v37IPdl4Glv/J2Tg1L7wt7BzbNJ8+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j4f1YyJfwpvb2E8h0YHYa3/qtgvkXrhzQZ2XSeffbQubbf7wYwwoHLu6nusXLdqCh
-         zSaZ+Vhx2En+X0e+6eD8Qmrkg9gigtrigeKuPlbNqYQsGZ1t0v28hb5CTgvKeae9H+
-         C2Dp2/55WDmpTGqCtDIB7RRTTihvILLSsbq1/XGs=
+        b=ulaF7kT1ys1+mW3NB38BkIZmqe99oKvJKgMwLV/4tZye9XVrpuDhl5FxoCJ2boLzR
+         U4OdMQiuEHiFqOj/3bjY6EmiOB968VcQifGhuT7I0XqI852AwmqZF4oPidTaWSR99Y
+         QHoT6wq8MqejMz4BUFehEVKefBv3DHaV9PKFkkNQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,19 +36,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jay Vosburgh <jay.vosburgh@canonical.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 05/31] bonding: 802.3ad: fix no transmission of LACPDUs
+Subject: [PATCH 4.14 07/42] bonding: 802.3ad: fix no transmission of LACPDUs
 Date:   Fri,  2 Sep 2022 14:18:31 +0200
-Message-Id: <20220902121356.952773780@linuxfoundation.org>
+Message-Id: <20220902121359.052898095@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
-References: <20220902121356.732130937@linuxfoundation.org>
+In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
+References: <20220902121358.773776406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,10 +135,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 16 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index 8ec0671f97113..7ba724ecef302 100644
+index b3eaef31b7673..a6bb7e915f74f 100644
 --- a/drivers/net/bonding/bond_3ad.c
 +++ b/drivers/net/bonding/bond_3ad.c
-@@ -1941,30 +1941,24 @@ void bond_3ad_initiate_agg_selection(struct bonding *bond, int timeout)
+@@ -1977,30 +1977,24 @@ void bond_3ad_initiate_agg_selection(struct bonding *bond, int timeout)
   */
  void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution)
  {

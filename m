@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6C15AB8D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 21:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6565AB8D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 21:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbiIBTVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 15:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S230284AbiIBTXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 15:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiIBTVF (ORCPT
+        with ESMTP id S229775AbiIBTXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 15:21:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD85DF0A8;
-        Fri,  2 Sep 2022 12:21:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B37A62297;
-        Fri,  2 Sep 2022 19:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7387AC433D6;
-        Fri,  2 Sep 2022 19:21:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662146464;
-        bh=K8BGjhy+0YQS+LACFDgvDPfLnu+2CbH/clQ8DkWsJbM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=liWMEdemKbFpZWLY/soRCTkD8UO2XGe0QeJetOISEetc0v98PVvDajeNoq7ml1jtL
-         TQ+LPmnLeQmBit3DL51TAzW1HGGYBLDEJxyXZVqi2bY8JwPX9ZnTUiWAuNkKXVPeZm
-         yE1fmE5e3dzD6LB9NdVkEm+O5BcJFsAD+0/jCS2L8PwERe8YrrOi23gQHF7wAdA8d7
-         QSFVlHjaPCQ5RY+a/z7KRibnDOApgBUXO2VFppUyUYegGDn/cQXpx3SeCCX+FT7rsX
-         jTg4MFgiQK5Lp8BL+1sxLs1Pm0tKJTR69X8mJUKenl8rybXvXip+d+F5Z6MyDmPRb4
-         TIc/jSM+3/m+Q==
-Date:   Fri, 2 Sep 2022 22:20:58 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, stable@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] x86/sgx: Do not consider unsanitized pages an
- error
-Message-ID: <YxJXmuxTeKtDN9qu@kernel.org>
-References: <20220831173829.126661-3-jarkko@kernel.org>
- <24906e57-461f-6c94-9e78-0d8507df01bb@intel.com>
- <YxEp8Ji+ukLBoNE+@kernel.org>
- <84b8eb06-7b77-675f-5bc8-292fe27dd2f5@intel.com>
- <YxFGykqMb+TD4L4l@kernel.org>
- <YxIEm4uHVvUY/rv6@kernel.org>
- <YxInD1m7rEnQ/yxW@kernel.org>
- <b418161b-2613-4bb9-9269-b4995de65794@intel.com>
- <YxIvr33xgjCbW6qu@kernel.org>
- <8d66f94f-9981-1456-9040-066e35c7ba1f@intel.com>
+        Fri, 2 Sep 2022 15:23:00 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1623FC317;
+        Fri,  2 Sep 2022 12:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662146579; x=1693682579;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=OlL16i5b1kNL0TnK8DyRJZcYY0XJwfD9vewL7IITYp8=;
+  b=1PUnq4Z6iNNyBRNtQXfZpJtW9zxogD34YD6PQ07XJZHiiQqNa0dsjF56
+   aiXqisDd2B4rHMPELZyIJKfjecy1xrChzhW+mFu1kzlmvCy9Gv3I950+e
+   cIVRkV2wYEG/YRM1t3tlXCNflxjggu7hz0wLJUnRifqX3/SMlzINDEt4S
+   aGy+tEgDQjPKC2Lt4E9F5pEuKU7eemV/Boz49VZoX3W2dxvc5REFY/1TN
+   w1lzab1SFNhz0AYBZnMV3AGxIl0sCIYo1TkRuXMFmLS9ZC/Z9jDOjKDXj
+   +80YMlL83ScPE6rXgwvcNPYxYqnjpnOeNRsmXm0zZKQgP4/JdAA1MXW2N
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="172196137"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Sep 2022 12:22:39 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 2 Sep 2022 12:22:38 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 2 Sep 2022 12:22:36 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Jerry Ray" <jerry.ray@microchip.com>
+Subject: [PATCH v6 1/2] ARM: dts: at91: Adding documentation for SAMA5D3-EDS
+Date:   Fri, 2 Sep 2022 14:22:35 -0500
+Message-ID: <20220902192236.14862-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d66f94f-9981-1456-9040-066e35c7ba1f@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,50 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 10:38:34AM -0700, Reinette Chatre wrote:
-> Hi Jarkko,
-> 
-> On 9/2/2022 9:30 AM, Jarkko Sakkinen wrote:
-> > On Fri, Sep 02, 2022 at 09:08:23AM -0700, Reinette Chatre wrote:
-> >> Hi Jarkko,
-> >>
-> >> On 9/2/2022 8:53 AM, Jarkko Sakkinen wrote:
-> >>> On Fri, Sep 02, 2022 at 04:26:51PM +0300, Jarkko Sakkinen wrote:
-> >>>> +	if (ret)
-> >>>> +		pr_err("%ld unsanitized pages\n", left_dirty);
-> >>>
-> >>> Yeah, I know, should be 'left_dirty'. I just quickly drafted
-> >>> the patch for the email.
-> >>>
-> >>
-> >> No problem - you did mention that it was an informal patch.
-> >>
-> >> (btw ... also watch out for the long local parameter returned
-> >> as an unsigned long and the signed vs unsigned printing
-> >> format string.) I also continue to recommend that you trim
-> > 
-> > Point taken.
-> > 
-> >> that backtrace ... this patch is heading to x86 area where
-> >> this is required.
-> > 
-> > Should I just cut the whole stack trace, and leave the
-> > part before it?
-> 
-> The trace is printed because of a WARN_ON() in the code.
-> I do not think there is anything very helpful in that trace.
-> I think the only helpful parts are the WARN itself that includes
-> the line number and then information on which kernel it was
-> encountered on.
-> 
-> How about something like (please note the FIXME within):
-> 
-> "
-> Paul reported the following WARN while running kernel vFIXME:
->   WARNING: CPU: 6 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:401 ksgxd+0x1b7/0x1d0
+Adding the SAMA5D3-EDS board from Microchip into the atmel AT91 board
+description yaml file.
 
-Yeah, this is a great idea, the use of WARN() is the whole point.
-Thank you.
+Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+---
+v5->v6:
+ - No code change - patch prefix naming modified to match with others.
+v4->v5:
+ - No change
+v3->v4:
+ - No change
+v2->v3:
+ - No change
+v1->v2:
+ - Added Device Tree documentation for Microchip SAMA5D3-EDS board
+---
+ Documentation/devicetree/bindings/arm/atmel-at91.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-BR, Jarkko
+diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+index 2b7848bb7769..c7f067e13d20 100644
+--- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
++++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+@@ -139,6 +139,13 @@ properties:
+           - const: atmel,at91sam9g20
+           - const: atmel,at91sam9
+ 
++      - description: Microchip SAMA5D3 Ethernet Development System Board
++        items:
++          - const: microchip,sama5d3-eds
++          - const: atmel,sama5d36
++          - const: atmel,sama5d3
++          - const: atmel,sama5
++
+       - items:
+           - enum:
+               - atmel,sama5d31
+-- 
+2.17.1
 

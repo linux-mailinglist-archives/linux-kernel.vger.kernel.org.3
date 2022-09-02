@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265CB5AAEEA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C662B5AB081
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236685AbiIBMbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        id S238206AbiIBMzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236430AbiIBMbK (ORCPT
+        with ESMTP id S238053AbiIBMxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:31:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B33D4778;
-        Fri,  2 Sep 2022 05:26:42 -0700 (PDT)
+        Fri, 2 Sep 2022 08:53:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2122FAC5C;
+        Fri,  2 Sep 2022 05:38:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 457CFB829B6;
-        Fri,  2 Sep 2022 12:24:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E6BEC433C1;
-        Fri,  2 Sep 2022 12:24:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E94E3621AD;
+        Fri,  2 Sep 2022 12:35:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF27AC43140;
+        Fri,  2 Sep 2022 12:35:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121478;
-        bh=W7P9K7FzgMUNUKNsBnmBsRhOguERmdhPslUkvp9BVQs=;
+        s=korg; t=1662122139;
+        bh=Tcnr0M/+JklF6IJ1Gko6tigbWpUs6RoHLcVvYm7plkg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x8TQL3ah3G8pxgBRKUuAYimZmJzELApyIQWUdEma+E+s4bCgIGGHGuVVooboM+oIV
-         svImbDota7HWOhsgp7r1M6lWGigmEV76tsBwh+MiRUv5qh4MVhHgI0o/zi40QfCtox
-         DSNcbEbph82UW60xKqe3Eg0adilzKwa+AZi5Gm4I=
+        b=pJhCwAM1uCTevyy2LEfnjos0qiZz58eKkkj8CKiqaczma1Ij0QuJWtZzdMxRayzBq
+         U2qgqDlBRyLpc/Y0dq04AchU2+RuIwAXTvQXU2+tdILWR5QYEJCg3F8UiO9DRZQO0D
+         hllW0fH42pr1mw8c4TdZvRe4WYy4ZVJZsapX40ms=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 20/56] net: Fix data-races around netdev_tstamp_prequeue.
-Date:   Fri,  2 Sep 2022 14:18:40 +0200
-Message-Id: <20220902121400.882884721@linuxfoundation.org>
+        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 5.19 05/72] docs: kerneldoc-preamble: Test xeCJK.sty before loading
+Date:   Fri,  2 Sep 2022 14:18:41 +0200
+Message-Id: <20220902121404.960927228@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Akira Yokosawa <akiyks@gmail.com>
 
-[ Upstream commit 61adf447e38664447526698872e21c04623afb8e ]
+commit cee7db1b0239468b22c295cf04a8c40c34ecd35a upstream.
 
-While reading netdev_tstamp_prequeue, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its readers.
+On distros whose texlive packaging is fine-grained, texlive-xecjk
+can be installed/removed independently of other texlive packages.
+Conditionally loading xeCJK depending only on the existence of the
+"Noto Sans CJK SC" font might end up in xelatex error of
+"xeCJK.sty not found!".
 
-Fixes: 3b098e2d7c69 ("net: Consistent skb timestamping")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Improve the situation by testing existence of xeCJK.sty before
+loading it.
+
+This is useful on RHEL 9 and its clone distros where texlive-xecjk
+doesn't work at the moment due to a missing dependency [1].
+"make pdfdocs" for non-CJK contents should work after removing
+texlive-xecjk.
+
+Link: [1] https://bugzilla.redhat.com/show_bug.cgi?id=2086254
+Fixes: 398f7abdcb7e ("docs: pdfdocs: Pull LaTeX preamble part out of conf.py")
+Cc: stable@vger.kernel.org # v5.18+
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Link: https://lore.kernel.org/r/c24c2a87-70b2-5342-bcc9-de467940466e@gmail.com
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/dev.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ Documentation/sphinx/kerneldoc-preamble.sty | 22 +++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 6ee4390863fbe..d5bef2bb0b7c8 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4474,7 +4474,7 @@ static int netif_rx_internal(struct sk_buff *skb)
- {
- 	int ret;
+diff --git a/Documentation/sphinx/kerneldoc-preamble.sty b/Documentation/sphinx/kerneldoc-preamble.sty
+index 2a29cbe51396..9707e033c8c4 100644
+--- a/Documentation/sphinx/kerneldoc-preamble.sty
++++ b/Documentation/sphinx/kerneldoc-preamble.sty
+@@ -70,8 +70,16 @@
  
--	net_timestamp_check(netdev_tstamp_prequeue, skb);
-+	net_timestamp_check(READ_ONCE(netdev_tstamp_prequeue), skb);
+ % Translations have Asian (CJK) characters which are only displayed if
+ % xeCJK is used
++\usepackage{ifthen}
++\newboolean{enablecjk}
++\setboolean{enablecjk}{false}
+ \IfFontExistsTF{Noto Sans CJK SC}{
+-    % Load xeCJK when CJK font is available
++    \IfFileExists{xeCJK.sty}{
++	\setboolean{enablecjk}{true}
++    }{}
++}{}
++\ifthenelse{\boolean{enablecjk}}{
++    % Load xeCJK when both the Noto Sans CJK font and xeCJK.sty are available.
+     \usepackage{xeCJK}
+     % Noto CJK fonts don't provide slant shape. [AutoFakeSlant] permits
+     % its emulation.
+@@ -196,7 +204,7 @@
+     % Inactivate CJK after tableofcontents
+     \apptocmd{\sphinxtableofcontents}{\kerneldocCJKoff}{}{}
+     \xeCJKsetup{CJKspace = true}% For inter-phrase space of Korean TOC
+-}{ % No CJK font found
++}{ % Don't enable CJK
+     % Custom macros to on/off CJK and switch CJK fonts (Dummy)
+     \newcommand{\kerneldocCJKon}{}
+     \newcommand{\kerneldocCJKoff}{}
+@@ -204,14 +212,16 @@
+     %% and ignore the argument (#1) in their definitions, whole contents of
+     %% CJK chapters can be ignored.
+     \newcommand{\kerneldocBeginSC}[1]{%
+-	%% Put a note on missing CJK fonts in place of zh_CN translation.
+-	\begin{sphinxadmonition}{note}{Note on missing fonts:}
++	%% Put a note on missing CJK fonts or the xecjk package in place of
++	%% zh_CN translation.
++	\begin{sphinxadmonition}{note}{Note on missing fonts and a package:}
+ 	    Translations of Simplified Chinese (zh\_CN), Traditional Chinese
+ 	    (zh\_TW), Korean (ko\_KR), and Japanese (ja\_JP) were skipped
+-	    due to the lack of suitable font families.
++	    due to the lack of suitable font families and/or the texlive-xecjk
++	    package.
  
- 	trace_netif_rx(skb);
- 
-@@ -4794,7 +4794,7 @@ static int __netif_receive_skb_core(struct sk_buff **pskb, bool pfmemalloc,
- 	int ret = NET_RX_DROP;
- 	__be16 type;
- 
--	net_timestamp_check(!netdev_tstamp_prequeue, skb);
-+	net_timestamp_check(!READ_ONCE(netdev_tstamp_prequeue), skb);
- 
- 	trace_netif_receive_skb(skb);
- 
-@@ -5146,7 +5146,7 @@ static int netif_receive_skb_internal(struct sk_buff *skb)
- {
- 	int ret;
- 
--	net_timestamp_check(netdev_tstamp_prequeue, skb);
-+	net_timestamp_check(READ_ONCE(netdev_tstamp_prequeue), skb);
- 
- 	if (skb_defer_rx_timestamp(skb))
- 		return NET_RX_SUCCESS;
-@@ -5176,7 +5176,7 @@ static void netif_receive_skb_list_internal(struct list_head *head)
- 
- 	INIT_LIST_HEAD(&sublist);
- 	list_for_each_entry_safe(skb, next, head, list) {
--		net_timestamp_check(netdev_tstamp_prequeue, skb);
-+		net_timestamp_check(READ_ONCE(netdev_tstamp_prequeue), skb);
- 		skb_list_del_init(skb);
- 		if (!skb_defer_rx_timestamp(skb))
- 			list_add_tail(&skb->list, &sublist);
+ 	    If you want them, please install ``Noto Sans CJK'' font families
+-	    by following instructions from
++	    along with the texlive-xecjk package by following instructions from
+ 	    \sphinxcode{./scripts/sphinx-pre-install}.
+ 	    Having optional ``Noto Serif CJK'' font families will improve
+ 	    the looks of those translations.
 -- 
-2.35.1
+2.37.2
 
 
 

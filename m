@@ -2,341 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23035AA82F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B165AA83C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbiIBGmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 02:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        id S235517AbiIBGqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 02:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235497AbiIBGl4 (ORCPT
+        with ESMTP id S235432AbiIBGp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 02:41:56 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B3A71BCE;
-        Thu,  1 Sep 2022 23:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662100916; x=1693636916;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NX1eyNaQr4+ALgShy2RcwVdH16jqwIgGKyV7rd+hiNk=;
-  b=j9dvIli9uvjDIeAo9rtRhnA3wPIiaNsMSeXS3Z76PIN+bDrLM/JNRXoD
-   9g9iIvEAGFhIz5ZOFharoNxbEeMYzsIQbpInoLQMvJYxkZ2b6FlXiNA2V
-   3wUv8r6DclL1W8Js81szO//By5vX4bDbTJjrBHRRh/0dYHanX6ZxsaLV/
-   bARa7EDzU0qeqKxyZp8bCTocVt+8cltKRs6yt04cSO9KC0BW22VG9MEbD
-   /tO3oOZzCCxa2SDilGRYvKGo72risxbgx9U/JYr0CwWO9VxVQQUgBrTI6
-   agnKcesG/sSIrud7IdTPp9mzn+GeQoxXyCfoKuifRsZlsNFOGQrxA4alf
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="178752440"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Sep 2022 23:41:55 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 1 Sep 2022 23:41:53 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 1 Sep 2022 23:41:52 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <UNGLinuxDriver@microchip.com>,
-        "Horatiu Vultur" <horatiu.vultur@microchip.com>
-Subject: [PATCH v5 2/2] nvmem: lan9662-otp: add support
-Date:   Fri, 2 Sep 2022 08:45:40 +0200
-Message-ID: <20220902064540.484967-3-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220902064540.484967-1-horatiu.vultur@microchip.com>
-References: <20220902064540.484967-1-horatiu.vultur@microchip.com>
+        Fri, 2 Sep 2022 02:45:57 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14EA55086;
+        Thu,  1 Sep 2022 23:45:55 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-11ee4649dfcso2694215fac.1;
+        Thu, 01 Sep 2022 23:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=rlXP+ocmg89sPZ1bmKzKz6efUiniZ6ZzHPfVaxpHFX8=;
+        b=bFDx2kpvIwFj2ETSs5V8rxmCxcuVafyTeks+fjbRKyY3gDd6rsmHOAIRc4LNLBG3gK
+         I/4h3od74fQQPcWj8GvdiC4ku0mhPAOXTMz2v/a0AiLq9i0NNzzMcGYZUJg5xqwyFQFE
+         D9jDC2oBtW/6YIqI9T4ATQH0JfcTebRUHzjDbwXGVzlFXi6wXpUIc3lued7CaHxZIn6b
+         H+0neOtXD5vRvG5bwdr++c4CXWG9Y4aCpZI3kamnVTSNBK94fFbZJltbk4rGtzU22pFt
+         2x19sJiVleWQOIIhcILfCK8/lXMJgtca8D7YFqTfwIodS0pEJ8AT6QnMY8/m0jp5p4Hq
+         5yXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=rlXP+ocmg89sPZ1bmKzKz6efUiniZ6ZzHPfVaxpHFX8=;
+        b=TF6t3jj13LBME0jE6T702Gyq4N2eq5IIzP0rI8+YEYCKEjVl5B0pRApfFdjFxAhvFk
+         PvODYh8ewVaKDRARruidw6T01/K7JaXGjcG1o0YbrwM/4DQyISBdr6uI2QhxagljuAxT
+         QXKZvSNEwEbdU7xLhxrZsy6w0cY6wzgKNtEAFLD0YVOnMt5jpzOf9S6Gt/yfmQa0ks7W
+         m5Izxt53boQq+B56CXOIZIFir7ZGdXIJJDBQXZy4Wu1e++f3UaqaqWmLmAklyHeFFIjh
+         fyD6QQRv64MI+HGwdTYdd5OPM/WRSps+FAb36wcSoVnt3BuvHEavWBFTo1TNpjoxyyNo
+         7mMw==
+X-Gm-Message-State: ACgBeo2jyB4eibySrFrud766EI9s2UA1zFXZ63rKeROk8RFJ9j74apqU
+        mhcX46HRw3qHbEi/yK2YKZs4HnhZGLWsuSF5AH2HrEQW
+X-Google-Smtp-Source: AA6agR6Zo3evGR+2YXy5LUCwkmPx1++5D42OI6vkf9XghwQ5PzCIbbI0vxi1/UdIxcokwVS0YYnUS0I+YVMlPuEqX3c=
+X-Received: by 2002:a54:488e:0:b0:344:cafe:fba1 with SMTP id
+ r14-20020a54488e000000b00344cafefba1mr1237782oic.237.1662101155108; Thu, 01
+ Sep 2022 23:45:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAL57YxZNutUVxBtvbVWKMw-V2kqeVB5kTQ5BFdJmN=mdPq8Q8Q@mail.gmail.com>
+In-Reply-To: <CAL57YxZNutUVxBtvbVWKMw-V2kqeVB5kTQ5BFdJmN=mdPq8Q8Q@mail.gmail.com>
+From:   nyanpasu <nyanpasu256@gmail.com>
+Date:   Thu, 1 Sep 2022 23:45:43 -0700
+Message-ID: <CAL57YxbXsr=utsoi3vN-MkDz62Q37vVGWLZxGatk=hvPNLGB+A@mail.gmail.com>
+Subject: Re: Bug: Elan v3 touchpad's reported size is half of actual touch coordinates
+To:     linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for OTP controller available on LAN9662. The OTPC controls
-the access to a non-volatile memory. The size of the memory is 8KB.
-The OTPC can access the memory based on an offset.
-Implement both the read and the write functionality.
+This bug has not been resolved, and is reappearing on my system with
+each kernel update, requiring that I rebuild and reinstall the kernel
+module. Can a fix be implemented?
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/nvmem/Kconfig        |   8 ++
- drivers/nvmem/Makefile       |   2 +
- drivers/nvmem/lan9662-otpc.c | 222 +++++++++++++++++++++++++++++++++++
- 3 files changed, 232 insertions(+)
- create mode 100644 drivers/nvmem/lan9662-otpc.c
-
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 967d0084800e..9399445a2f4c 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -84,6 +84,14 @@ config NVMEM_LPC18XX_OTP
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called nvmem_lpc18xx_otp.
- 
-+config NVMEM_LAN9662_OTPC
-+	tristate "Microchip LAN9662 OTP controller support"
-+	depends on SOC_LAN966 || COMPILE_TEST
-+	depends on HAS_IOMEM
-+	help
-+	  This driver enables the OTP controller available on Microchip LAN9662
-+	  SoCs. It controls the access to the OTP memory connected to it.
-+
- config NVMEM_MXS_OCOTP
- 	tristate "Freescale MXS On-Chip OTP Memory Support"
- 	depends on ARCH_MXS || COMPILE_TEST
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index 00e136a0a123..e1baface2c53 100644
---- a/drivers/nvmem/Makefile
-+++ b/drivers/nvmem/Makefile
-@@ -21,6 +21,8 @@ obj-$(CONFIG_NVMEM_LPC18XX_EEPROM)	+= nvmem_lpc18xx_eeprom.o
- nvmem_lpc18xx_eeprom-y	:= lpc18xx_eeprom.o
- obj-$(CONFIG_NVMEM_LPC18XX_OTP)	+= nvmem_lpc18xx_otp.o
- nvmem_lpc18xx_otp-y		:= lpc18xx_otp.o
-+obj-$(CONFIG_NVMEM_LAN9662_OTPC)	+= nvmem-lan9662-otpc.o
-+nvmem-lan9662-otpc-y		:= lan9662-otpc.o
- obj-$(CONFIG_NVMEM_MXS_OCOTP)	+= nvmem-mxs-ocotp.o
- nvmem-mxs-ocotp-y		:= mxs-ocotp.o
- obj-$(CONFIG_NVMEM_NINTENDO_OTP)	+= nvmem-nintendo-otp.o
-diff --git a/drivers/nvmem/lan9662-otpc.c b/drivers/nvmem/lan9662-otpc.c
-new file mode 100644
-index 000000000000..f6732fd216d8
---- /dev/null
-+++ b/drivers/nvmem/lan9662-otpc.c
-@@ -0,0 +1,222 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/iopoll.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-provider.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+#define OTP_OTP_PWR_DN(t)			(t + 0x00)
-+#define OTP_OTP_PWR_DN_OTP_PWRDN_N		BIT(0)
-+#define OTP_OTP_ADDR_HI(t)			(t + 0x04)
-+#define OTP_OTP_ADDR_LO(t)			(t + 0x08)
-+#define OTP_OTP_PRGM_DATA(t)			(t + 0x10)
-+#define OTP_OTP_PRGM_MODE(t)			(t + 0x14)
-+#define OTP_OTP_PRGM_MODE_OTP_PGM_MODE_BYTE	BIT(0)
-+#define OTP_OTP_RD_DATA(t)			(t + 0x18)
-+#define OTP_OTP_FUNC_CMD(t)			(t + 0x20)
-+#define OTP_OTP_FUNC_CMD_OTP_PROGRAM		BIT(1)
-+#define OTP_OTP_FUNC_CMD_OTP_READ		BIT(0)
-+#define OTP_OTP_CMD_GO(t)			(t + 0x28)
-+#define OTP_OTP_CMD_GO_OTP_GO			BIT(0)
-+#define OTP_OTP_PASS_FAIL(t)			(t + 0x2c)
-+#define OTP_OTP_PASS_FAIL_OTP_READ_PROHIBITED	BIT(3)
-+#define OTP_OTP_PASS_FAIL_OTP_WRITE_PROHIBITED	BIT(2)
-+#define OTP_OTP_PASS_FAIL_OTP_FAIL		BIT(0)
-+#define OTP_OTP_STATUS(t)			(t + 0x30)
-+#define OTP_OTP_STATUS_OTP_CPUMPEN		BIT(1)
-+#define OTP_OTP_STATUS_OTP_BUSY			BIT(0)
-+
-+#define OTP_MEM_SIZE 8192
-+#define OTP_SLEEP_US 10
-+#define OTP_TIMEOUT_US 500000
-+
-+struct lan9662_otp {
-+	struct device *dev;
-+	void __iomem *base;
-+};
-+
-+static bool lan9662_otp_wait_flag_clear(void __iomem *reg, u32 flag)
-+{
-+	u32 val;
-+
-+	return readl_poll_timeout(reg, val, !(val & flag),
-+				  OTP_SLEEP_US, OTP_TIMEOUT_US);
-+}
-+
-+static int lan9662_otp_power(struct lan9662_otp *otp, bool up)
-+{
-+	void __iomem *pwrdn = OTP_OTP_PWR_DN(otp->base);
-+
-+	if (up) {
-+		writel(readl(pwrdn) & ~OTP_OTP_PWR_DN_OTP_PWRDN_N, pwrdn);
-+		if (lan9662_otp_wait_flag_clear(OTP_OTP_STATUS(otp->base),
-+						OTP_OTP_STATUS_OTP_CPUMPEN))
-+			return -ETIMEDOUT;
-+	} else {
-+		writel(readl(pwrdn) | OTP_OTP_PWR_DN_OTP_PWRDN_N, pwrdn);
-+	}
-+
-+	return 0;
-+}
-+
-+static int lan9662_otp_execute(struct lan9662_otp *otp)
-+{
-+	if (lan9662_otp_wait_flag_clear(OTP_OTP_CMD_GO(otp->base),
-+					OTP_OTP_CMD_GO_OTP_GO))
-+		return -ETIMEDOUT;
-+
-+	if (lan9662_otp_wait_flag_clear(OTP_OTP_STATUS(otp->base),
-+					OTP_OTP_STATUS_OTP_BUSY))
-+		return -ETIMEDOUT;
-+
-+	return 0;
-+}
-+
-+static void lan9662_otp_set_address(struct lan9662_otp *otp, u32 offset)
-+{
-+	writel(0xff & (offset >> 8), OTP_OTP_ADDR_HI(otp->base));
-+	writel(0xff & offset, OTP_OTP_ADDR_LO(otp->base));
-+}
-+
-+static int lan9662_otp_read_byte(struct lan9662_otp *otp, u32 offset, u8 *dst)
-+{
-+	u32 pass;
-+	int rc;
-+
-+	lan9662_otp_set_address(otp, offset);
-+	writel(OTP_OTP_FUNC_CMD_OTP_READ, OTP_OTP_FUNC_CMD(otp->base));
-+	writel(OTP_OTP_CMD_GO_OTP_GO, OTP_OTP_CMD_GO(otp->base));
-+	rc = lan9662_otp_execute(otp);
-+	if (!rc) {
-+		pass = readl(OTP_OTP_PASS_FAIL(otp->base));
-+		if (pass & OTP_OTP_PASS_FAIL_OTP_READ_PROHIBITED)
-+			return -EACCES;
-+		*dst = (u8) readl(OTP_OTP_RD_DATA(otp->base));
-+	}
-+	return rc;
-+}
-+
-+static int lan9662_otp_write_byte(struct lan9662_otp *otp, u32 offset, u8 data)
-+{
-+	u32 pass;
-+	int rc;
-+
-+	lan9662_otp_set_address(otp, offset);
-+	writel(OTP_OTP_PRGM_MODE_OTP_PGM_MODE_BYTE, OTP_OTP_PRGM_MODE(otp->base));
-+	writel(data, OTP_OTP_PRGM_DATA(otp->base));
-+	writel(OTP_OTP_FUNC_CMD_OTP_PROGRAM, OTP_OTP_FUNC_CMD(otp->base));
-+	writel(OTP_OTP_CMD_GO_OTP_GO, OTP_OTP_CMD_GO(otp->base));
-+
-+	rc = lan9662_otp_execute(otp);
-+	if (!rc) {
-+		pass = readl(OTP_OTP_PASS_FAIL(otp->base));
-+		if (pass & OTP_OTP_PASS_FAIL_OTP_WRITE_PROHIBITED)
-+			return -EACCES;
-+		if (pass & OTP_OTP_PASS_FAIL_OTP_FAIL)
-+			return -EIO;
-+	}
-+	return rc;
-+}
-+
-+static int lan9662_otp_read(void *context, unsigned int offset,
-+			    void *_val, size_t bytes)
-+{
-+	struct lan9662_otp *otp = context;
-+	u8 *val = _val;
-+	uint8_t data;
-+	int i, rc = 0;
-+
-+	lan9662_otp_power(otp, true);
-+	for (i = 0; i < bytes; i++) {
-+		rc = lan9662_otp_read_byte(otp, offset + i, &data);
-+		if (rc < 0)
-+			break;
-+		*val++ = data;
-+	}
-+	lan9662_otp_power(otp, false);
-+
-+	return rc;
-+}
-+
-+static int lan9662_otp_write(void *context, unsigned int offset,
-+			     void *_val, size_t bytes)
-+{
-+	struct lan9662_otp *otp = context;
-+	u8 *val = _val;
-+	u8 data, newdata;
-+	int i, rc = 0;
-+
-+	lan9662_otp_power(otp, true);
-+	for (i = 0; i < bytes; i++) {
-+		/* Skip zero bytes */
-+		if (val[i]) {
-+			rc = lan9662_otp_read_byte(otp, offset + i, &data);
-+			if (rc < 0)
-+				break;
-+
-+			newdata = data | val[i];
-+			if (newdata == data)
-+				continue;
-+
-+			rc = lan9662_otp_write_byte(otp, offset + i,
-+						      newdata);
-+			if (rc < 0)
-+				break;
-+		}
-+	}
-+	lan9662_otp_power(otp, false);
-+
-+	return rc;
-+}
-+
-+static struct nvmem_config otp_config = {
-+	.name = "lan9662-otp",
-+	.stride = 1,
-+	.word_size = 1,
-+	.reg_read = lan9662_otp_read,
-+	.reg_write = lan9662_otp_write,
-+	.size = OTP_MEM_SIZE,
-+};
-+
-+static int lan9662_otp_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct nvmem_device *nvmem;
-+	struct lan9662_otp *otp;
-+
-+	otp = devm_kzalloc(&pdev->dev, sizeof(*otp), GFP_KERNEL);
-+	if (!otp)
-+		return -ENOMEM;
-+
-+	otp->dev = dev;
-+	otp->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(otp->base))
-+		return PTR_ERR(otp->base);
-+
-+	otp_config.priv = otp;
-+	otp_config.dev = dev;
-+
-+	nvmem = devm_nvmem_register(dev, &otp_config);
-+
-+	return PTR_ERR_OR_ZERO(nvmem);
-+}
-+
-+static const struct of_device_id lan9662_otp_match[] = {
-+	{ .compatible = "microchip,lan9662-otp", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, lan9662_otp_match);
-+
-+static struct platform_driver lan9662_otp_driver = {
-+	.probe = lan9662_otp_probe,
-+	.driver = {
-+		.name = "lan9662-otp",
-+		.of_match_table = lan9662_otp_match,
-+	},
-+};
-+module_platform_driver(lan9662_otp_driver);
-+
-+MODULE_AUTHOR("Horatiu Vultur <horatiu.vultur@microchip.com>");
-+MODULE_DESCRIPTION("lan9662 OTP driver");
-+MODULE_LICENSE("GPL");
--- 
-2.33.0
-
+On Mon, Jul 18, 2022 at 2:34 PM nyanpasu <nyanpasu256@gmail.com> wrote:
+>
+> I noticed that on Linux 5.18.11, on my laptop (Dell Inspiron 15R SE
+> 7520) with an Elan v3 touchpad (dmesg says "with firmware version
+> 0x450f02"), the reported size of my touchpad (in userspace by calling
+> mtdev_configure() and libevdev_get_abs_maximum(), in kernel space
+> elantech_device_info::x_max/y_max, either way 1470 by 700) is half
+> that of the actual touch range (2940 by 1400), and the upper half of
+> my touchpad reports negative values. As a result, with the Synaptics
+> X11 driver set to edge scrolling mode, the entire right half of my
+> touchpad has x-values past evdev's reported maximum size, and acts as
+> a giant scrollbar!
+>
+> The bug arises due to an error in drivers/input/mouse/elantech.c
+> (which has been unchanged since 2021, in both torvalds and
+> dtor/input).
+>
+> In this file, elantech_init_ps2() first calls
+> elantech_query_info(struct psmouse *psmouse, struct
+> elantech_device_info *info), which calls elantech_set_properties() to
+> initialize info->hw_version = 3, then on version 3 touchpads requests
+> ETP_FW_ID_QUERY to initialize info->x_max and y_max.
+>
+> Afterwards, elantech_init_ps2() calls elantech_setup_ps2(struct
+> psmouse *psmouse, struct elantech_device_info *info), which calls
+> elantech_set_absolute_mode(struct psmouse *psmouse), which if
+> (etd->info.set_hw_resolution) (true on my machine), writes 0x0b to
+> etd->reg_10 and sends it to the hardware.
+>
+> The problem is that elantech_setup_ps2() ->
+> elantech_set_absolute_mode() sets up absolute mode and doubles the
+> hardware resolution (doubling the hardware's maximum reported x/y
+> coordinates and its response to ETP_FW_ID_QUERY), *after*
+> elantech_query_info() fetches the touchpad coordinate system size
+> using ETP_FW_ID_QUERY, which gets cached and reported to userspace
+> through ioctl(fd, EVIOCGABS(ABS_X/Y), ...). So the touchpad size
+> reported to userspace (and used to subtract vertical coordinates from)
+> is half the maximum position of actual touches.
+>
+> I've considered and implemented multiple possible fixes to this issue.
+>
+> The easiest solution (or hack) is for elantech_set_absolute_mode() to
+> first write reg_10 to hardware, then if (etd->info.set_hw_resolution)
+> is true, call elantech_query_info() a second time. However this
+> re-requests device firmware version etc. and rewrites state, which I
+> dislike because it could theoretically change fields in
+> elantech_device_info you didn't mean to.
+>
+> You can't enable absolute mode first before calling
+> elantech_query_info(), because elantech_query_info() is responsible
+> for probing hardware and identifying if it's v3, and
+> elantech_set_absolute_mode() depends on it.
+>
+> You *could* make elantech_query_info() only query the hardware version
+> before returning, then enable absolute mode before calling a new
+> function to identify the touchpad size. I did not take this approach
+> because I didn't know how much code to move from elantech_query_info()
+> into a new function called after elantech_set_absolute_mode()
+> (everything up to ETP_ICBODY_QUERY probably not, ETP_FW_ID_QUERY
+> definitely should be, and probably elantech_get_resolution_v4's
+> ETP_RESOLUTION_QUERY for consistency). I think it's safe to move only
+> "query range information" and possibly "check for the middle button:
+> DMI matching or new v4 firmwares", and elantech_get_resolution_v4()
+> (for consistency), to after elantech_set_absolute_mode(). However,
+> this change affects the order of hardware commands on all hardware
+> (not just the v3 Elan I have), and I cannot verify it works on other
+> Elan touchpads.
+>
+> The most surgical fix I could think of (minimizing changes to behavior
+> from the current Linux driver), is fetching *only* ETP_FW_ID_QUERY
+> (touchpad size) a second time after elantech_set_absolute_mode()
+> enables absolute mode and double-size mode. I have a local clone of
+> Linux, which I edited to split out the ETP_FW_ID_QUERY request into a
+> helper function elantech_query_range_v3(), which gets called by
+> elantech_query_info() before boosting resolution, and by
+> elantech_set_absolute_mode() after/if it boosts resolution. I built
+> drivers/input/mouse and installed the resulting psmouse.ko, which
+> fixes the bug (the touchpad size reported to userspace is 2940 by
+> 1400, matching the range of touch events) and fixes edge scrolling.
+> Should I submit this patch (alongside patches removing
+> elantech_data::y_max/width which are redundant with
+> elantech_data::info.y_max/width) or not?
+>
+> However I do not know how the Windows Dell/Elan v3 driver (or other
+> hardware versions' drivers) initialize the touchpad and driver,
+> specifically what order it sends various queries. I only have an Elan
+> v3 touchpad (no other Elan hardware/driver pairs, just Alps and
+> Synaptics) to study, do not have a logic analyzer to read the commands
+> off the wire (though perhaps I could rig one up fast enough for PS/2
+> using a Pi's GPIO pins), and have not tried decompiling that driver in
+> Ghidra (which may not be clean-room safe, but I don't know if the
+> current driver is clean-room or not, since elantech.rst mentions
+> "name[s] given in the Dell-provided driver"). Is it critical to match
+> the Windows driver's command order, or can we use any order that
+> works?
+>
+> (Out of curiosity, given that PS/2 runs at <20 KHz and the Elan driver
+> is written with blocking calls, is mouse processing code run in a
+> dedicated kernel thread to avoid blocking other kernel tasks? I'm not
+> an experienced kernel developer but a drive-by contributor, so I don't
+> quite know how kernel concurrency works.)
+>
+> (Note I'm not subscribed to linux-input or linux-kernel, please CC me
+> in replies.)

@@ -2,228 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6E05AB4DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1E05AB4DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236138AbiIBPRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S235853AbiIBPSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbiIBPQm (ORCPT
+        with ESMTP id S236446AbiIBPRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:16:42 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 25C87578B9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:49:32 -0700 (PDT)
-Received: (qmail 273620 invoked by uid 1000); 2 Sep 2022 10:49:30 -0400
-Date:   Fri, 2 Sep 2022 10:49:30 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ray Chi <raychi@google.com>
-Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
-        albertccwang@google.com, badhri@google.com, pumahsu@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch v2] usb: core: stop USB enumeration if too many retries
-Message-ID: <YxIX+jqWFfwAWYot@rowland.harvard.edu>
-References: <20220902091535.3572333-1-raychi@google.com>
+        Fri, 2 Sep 2022 11:17:54 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36005A61C1;
+        Fri,  2 Sep 2022 07:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662130231; x=1693666231;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IfcmcDyZGedEV2F81LC74u+mbSHwKTFMejAo0aMOmFk=;
+  b=mj98jTD9NDVUknPCke903QAUVjR/5p1g609LZ5eVuG3jrnMKWuKrhjs1
+   QLSOHPqw4iGF76HgTnFvwvmLpgrrXQR7iV5IhgpjoyoEjClX+B0J4/GCe
+   NyfFXTjG0BAgaOtNTDlYStQNco12VryVvG87pNWp8mO8Iqj5nAR2nHH+J
+   tpyIdUYV59VcRsbGZAiSDuv9SFskuUBwvonGV1IfZv2LUGuyXLHnViajm
+   0aWBI+W0E0SGitGgZ5nEoSq70HYJYZSxy1EnvHkiSPZL1X1R1Kv1TuEPs
+   CC5407yXHjG8RRqk7PpugvbZ/6lfHBMyfwm0C/jC7vy0cyCNYGyRmXtfW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="282981858"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="282981858"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:50:30 -0700
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="642930461"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.42.34])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:50:27 -0700
+Message-ID: <2fd9b620-e9a8-9cd9-1b4a-6b13d829b2ae@intel.com>
+Date:   Fri, 2 Sep 2022 17:50:22 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902091535.3572333-1-raychi@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: perf top -p broken for multithreaded processes since 5.19
+Content-Language: en-US
+To:     =?UTF-8?B?VG9tw6HFoSBUcm5rYQ==?= <trnka@scm.com>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <10137382.nUPlyArG6x@mintaka.ncbr.muni.cz>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <10137382.nUPlyArG6x@mintaka.ncbr.muni.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 05:15:35PM +0800, Ray Chi wrote:
-> If a broken accessory connected to a USB host, usbcore might
-> keep doing enumeration retries and it will take a long time to
-> cause system unstable.
+On 2/09/22 17:46, Tomáš Trnka wrote:
+> Hello,
 > 
-> This patch provides a quirk to specific USB ports of the hub to
-> stop USB enumeration if needed.
+> A bug in perf v5.19 and newer completely breaks monitoring multithreaded
+> processes using "perf top -p". The tool fails to start with "Failed to mmap
+> with 22 (Invalid argument)". It still seems to work fine on single-threaded
+> processes. "perf record" is also unaffected.
 
-This seems very awkward.  Why not have a quirk that prevents USB 
-enumeration completely, instead of after some number of retries?  After 
-all, if the port is connected to a broken accessory, there's no reason 
-to try enumerating it even once.
+It has been reported here:
 
-For that matter, have you tried using the existing "disabled" port 
-attribute instead of adding a new quirk?  Does it already solve your 
-problem?
-
-> 
-> Signed-off-by: Ray Chi <raychi@google.com>
-> ---
-> Changes since v1:
->  - remove usb_hub_set_port_power()
->  - add a variable ignore_connect into struct port_dev
->  - modify hub_port_stop_enumerate() and set ignore_connect in
->    this function
->  - avoid calling hub_port_connect_change() in port_event()
-> ---
->  drivers/usb/core/hub.c | 40 ++++++++++++++++++++++++++++++++++++++++
->  drivers/usb/core/hub.h |  2 ++
->  include/linux/usb.h    |  3 +++
->  3 files changed, 45 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 2633acde7ac1..7f34ee8bb81e 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -3081,6 +3081,30 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
->  	return status;
->  }
->  
-> +/* Stop enumerate if the port met errors and quirk is set */
-> +static bool hub_port_stop_enumerate(struct usb_hub *hub, int port1, int retries)
-> +{
-> +	struct usb_port *port_dev = hub->ports[port1 - 1];
-> +
-> +	if (port_dev->quirks & USB_PORT_QUIRK_STOP_ENUM) {
-> +		if (port_dev->ignore_connect)
-> +			return true;
-> +
-> +		if (retries < (PORT_INIT_TRIES - 1) / 2)
-> +			return false;
-> +
-> +		/*
-> +		 * Some USB hosts can't take a long time to keep doing enumeration
-> +		 * retry. After doing half of the retries, we would turn off the port
-> +		 * power to stop enumeration if the quirk is set.
-
-What made you decide that half of the retries was the right place to 
-stop?  Why not do all the retries?
-
-> +		 */
-> +		port_dev->ignore_connect = true;
-> +	} else
-> +		port_dev->ignore_connect = false;
-> +
-> +	return port_dev->ignore_connect;
-> +}
-
-If the quirk prevented enumeration completely then this function 
-wouldn't be needed.
-
-> +
->  /* Check if a port is power on */
->  int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
->  {
-> @@ -4855,6 +4879,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
->  					buf->bMaxPacketSize0;
->  			kfree(buf);
->  
-> +			if (r < 0 && (port_dev->quirks & USB_PORT_QUIRK_STOP_ENUM)) {
-
-How come this line tests the quirk but doesn't call 
-hub_port_stop_enumerate()?
-
-> +				retval = r;
-> +				goto fail;
-> +			}
-> +
->  			retval = hub_port_reset(hub, port1, udev, delay, false);
->  			if (retval < 0)		/* error or disconnect */
->  				goto fail;
-> @@ -5387,6 +5416,9 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
->  		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
->  			break;
->  
-> +		if (hub_port_stop_enumerate(hub, port1, i))
-> +			break;
-> +
->  		/* When halfway through our retry count, power-cycle the port */
->  		if (i == (PORT_INIT_TRIES - 1) / 2) {
->  			dev_info(&port_dev->dev, "attempt power cycle\n");
-> @@ -5550,6 +5582,9 @@ static void port_event(struct usb_hub *hub, int port1)
->  	if (usb_hub_port_status(hub, port1, &portstatus, &portchange) < 0)
->  		return;
->  
-> +	if (hub_port_stop_enumerate(hub, port1, 0))
-> +		return;
-
-This test is in the wrong place.  It should go right next to the check 
-for pm_runtime_active(&port_dev->dev); even though the port isn't being 
-used we still want to turn off the port-change bits in the port status.
-
-> +
->  	if (portchange & USB_PORT_STAT_C_CONNECTION) {
->  		usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_CONNECTION);
->  		connect_change = 1;
-> @@ -5934,6 +5969,9 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
->  		ret = hub_port_init(parent_hub, udev, port1, i);
->  		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
->  			break;
-> +
-> +		if (hub_port_stop_enumerate(parent_hub, port1, i))
-> +			goto stop_enumerate;
-
-Also this -- the purpose is to avoid calling hub_port_init() for ports 
-with the quirk, so this test belongs before the call to hub_port_init(), 
-not after.
-
->  	}
->  	mutex_unlock(hcd->address0_mutex);
->  
-> @@ -6022,6 +6060,8 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
->  	udev->bos = bos;
->  	return 0;
->  
-> +stop_enumerate:
-> +	mutex_unlock(hcd->address0_mutex);
->  re_enumerate:
->  	usb_release_bos_descriptor(udev);
->  	udev->bos = bos;
-> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-> index b2925856b4cb..f0aa718f4c7f 100644
-> --- a/drivers/usb/core/hub.h
-> +++ b/drivers/usb/core/hub.h
-> @@ -90,6 +90,7 @@ struct usb_hub {
->   * @is_superspeed cache super-speed status
->   * @usb3_lpm_u1_permit: whether USB3 U1 LPM is permitted.
->   * @usb3_lpm_u2_permit: whether USB3 U2 LPM is permitted.
-> + * @ignore_connect: ignore the connection or not
->   */
->  struct usb_port {
->  	struct usb_device *child;
-> @@ -103,6 +104,7 @@ struct usb_port {
->  	u32 over_current_count;
->  	u8 portnum;
->  	u32 quirks;
-> +	bool ignore_connect;
-
-This should be a bitfield like the following entries.  It's okay to make 
-it a bool rather than unsigned int.  But you may find that you don't 
-need this field at all.
-
->  	unsigned int is_superspeed:1;
->  	unsigned int usb3_lpm_u1_permit:1;
->  	unsigned int usb3_lpm_u2_permit:1;
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index f7a9914fc97f..fc0fef58c706 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -490,6 +490,9 @@ enum usb_port_connect_type {
->  /* Decrease TRSTRCY to 10ms during device enumeration. */
->  #define USB_PORT_QUIRK_FAST_ENUM	BIT(1)
->  
-> +/* Stop the enumeration for the given port if there are too many failures*/
-> +#define USB_PORT_QUIRK_STOP_ENUM	BIT(2)
-
-When you define a new port quirk, you have to document it in the 
-/sys/bus/usb/devices/.../<hub_interface>/port<X>/quirks section of 
-Documentation/ABI/testing/sysfs-bus-usb.
-
-Alan Stern
-
-> +
->  /*
->   * USB 2.0 Link Power Management (LPM) parameters.
->   */
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+	https://bugzilla.kernel.org/show_bug.cgi?id=216441

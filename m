@@ -2,280 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765BA5AA4AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E37F5AA4AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234159AbiIBAv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 20:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S232697AbiIBAx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 20:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbiIBAv0 (ORCPT
+        with ESMTP id S229514AbiIBAx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 20:51:26 -0400
-Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2526B15C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 17:51:24 -0700 (PDT)
-Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-11e9a7135easo1357858fac.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 17:51:24 -0700 (PDT)
+        Thu, 1 Sep 2022 20:53:27 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AFA83BCD
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 17:53:25 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id h22so453956qtu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 17:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=ziepe.ca; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=nidOMS6ikafcmd9pBlqU3bVEl1XH1VyVGzzAC2C9Drs=;
-        b=k3orlCEHu7ura1UozpYR299BPulolHBmOzbioaImR6n8VwGin/mSKOG1N8Orwonodu
-         OhWT9UQrWEcP1XTKIC/kBmut2eZdvty3jmdhqBXuLM9wLYlZfvCizKwAyiKjiXbFKkt+
-         M1DxCpc3VU38bthL40HpvjjdOzuerW/JYmI1dHNAloHKxXv+Bshnoun+6qHTxGCXaSg8
-         NQ+my720nLhQOuoXCaB0PJCYju1rnzixgQHL2lZOJBeopNJfWHcf42YMUHk+DEwtya07
-         f3iVXD0se1ESPdrba3+hjHjMFKj2jLHVe7SExNtM3y4lR9zS9e7eCK8cSDYgwb+SSRMx
-         oZhg==
+        bh=u+7+TnV01SHPbF6UVGlm2Ykk0/U6Y0CJ+7dDhE5GAE0=;
+        b=bEm8LLmlWGwrswIOAf0RpgSber8J8AXLqy4LBVNFqo6RsyvQtc7U3iXlCaD2QTdXoT
+         iZYWSt3eSKIo3Sen8vYNHq6LomL75YBgcazzs7w0ALNqQgM561TlIW7x9z83RUpAwMby
+         UElddzeW2GO8rxmHGTb0OHgcEMYhahlrcIQHbpOfrfnIEczd4xvypqzaWdylVRh4Fy+e
+         qb5lyTAeoMpqH/CIOgvB6mxrbJ5BYYJcyVeNeSx0Udf9gWGFdREc8vQNau2UYpFiwDdi
+         kUJpminfexcOARZCfXHmqXcrDZ9sxPhrMxixJzofn7mktt0i78dUHUS14fAfG2S6tncT
+         FwpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nidOMS6ikafcmd9pBlqU3bVEl1XH1VyVGzzAC2C9Drs=;
-        b=JWm/R9vgIKtPwJfC1RL7U629s1TYMYQP0CXSESQDOHYmzMIQJdSwNct/kmNX/4iUzZ
-         4Dht+cZjynsDNAfsVi4UAf2BY/kcd8TJg+ZLEqCKgSCBgYZzBKNhZjKGTuDPGVh1Sixo
-         oew6xxfYTf2CEK/fN8lUiZW1vT4+y5qJyQmstkqxXQ9CnYlaKrNBJ9g2e0WjEOu9d+qq
-         R7lZ2RdQ0UE/LOauBben0TmiN1Gk6f41uwBMPSlEiZHnCO17WWTdlfo7HrctC4fxZBE6
-         lvWwDKv/y2nrGckCzJx5+LRY/TDxkc+MQFxSOdAAQ7ozPon7DWh0N+a5+LCdb2vCP393
-         tzOQ==
-X-Gm-Message-State: ACgBeo0uCLhC9CXlI/4MbXe0UQpYyeTflezEUemheNKOwmLRVdBMcmUC
-        c0sgi11c/cjeuIWgDwWscI0Srjxwjm8=
-X-Google-Smtp-Source: AA6agR5mEG+Nc8HMuk9D7LE0x/cMbVOOBaRfwNnxoczcpbhV1BIeix4t4v4T8Te1FAcBpw9FzW8MOg==
-X-Received: by 2002:aca:a9d3:0:b0:347:cf89:e6a2 with SMTP id s202-20020acaa9d3000000b00347cf89e6a2mr857488oie.101.1662079883818;
-        Thu, 01 Sep 2022 17:51:23 -0700 (PDT)
-Received: from sophie (static-198-54-128-70.cust.tzulo.com. [198.54.128.70])
-        by smtp.gmail.com with ESMTPSA id o186-20020aca41c3000000b00344afa2b08bsm354439oia.26.2022.09.01.17.51.23
+        bh=u+7+TnV01SHPbF6UVGlm2Ykk0/U6Y0CJ+7dDhE5GAE0=;
+        b=D+O9cMUl+zBdLMt++vCd3hpheNWHm098YIIqsOwQOHPBvm2yGbdOUrEUD9jnTj0tcy
+         vZt0xNLVMflhTEob8yLgzkZD/3LhKbsfvL7OsBtckqknwQFe369DLbHFjwZEjOUADiym
+         joSZs1KXz/CUwfpbIImAL/M7AnZG0cIPXTqRaBMhR6XN10PeeAcosY4y646SHm5B+YYZ
+         GiL2AjvoJCMkqdgZVf2NNW4/Y034PycQwlpJhf19u0snxUnhY48sYK5pYFtdzabwkbzt
+         C7TAeIdGxnKyEjXd1AfXxFDcyjNtSy5TtW5rgPuKZYXMkMH2AZUFti6N7XZpftnEfbAl
+         qEDw==
+X-Gm-Message-State: ACgBeo28DcQnIFhj1P/+X+T1QXTC0HPyQUMPY3JGe8pEN+IUe5c6Edao
+        D5YGCZSNgvwXsrLlzMjqoVmarg==
+X-Google-Smtp-Source: AA6agR4dwtzTdAHIzltDHpdytx/lRWxKqN4J+ZPQ9+886AHgqDmICkyM5JQuV3I/C4VGfsaWpF7bhA==
+X-Received: by 2002:a05:622a:100d:b0:344:6577:db0 with SMTP id d13-20020a05622a100d00b0034465770db0mr25902160qte.17.1662080005020;
+        Thu, 01 Sep 2022 17:53:25 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id k8-20020a05620a414800b006bb366779a4sm425922qko.6.2022.09.01.17.53.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 17:51:23 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 19:51:21 -0500
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v3 2/4] memblock tests: add top-down NUMA tests for
- memblock_alloc_try_nid*
-Message-ID: <20220902005121.GC18733@sophie>
-References: <cover.1661578435.git.remckee0@gmail.com>
- <d46ba668a9f3ba369f3402f107730b9629c01417.1661578435.git.remckee0@gmail.com>
- <YxB0fh+YaVMq+AF+@kernel.org>
+        Thu, 01 Sep 2022 17:53:23 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oTuvz-005VLm-6J;
+        Thu, 01 Sep 2022 21:53:23 -0300
+Date:   Thu, 1 Sep 2022 21:53:23 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lpivarc@redhat.com
+Subject: Re: [PATCH] vfio/type1: Unpin zero pages
+Message-ID: <YxFUA1N3athK8iDh@ziepe.ca>
+References: <166182871735.3518559.8884121293045337358.stgit@omen>
+ <39145649-c378-d027-8856-81b4f09050fc@redhat.com>
+ <20220830091110.3f6d1737.alex.williamson@redhat.com>
+ <e1747d53-a02d-ca32-cdc4-702315da57df@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxB0fh+YaVMq+AF+@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e1747d53-a02d-ca32-cdc4-702315da57df@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 11:59:42AM +0300, Mike Rapoport wrote:
-> On Sat, Aug 27, 2022 at 12:53:00AM -0500, Rebecca Mckeever wrote:
-> > Add tests for memblock_alloc_try_nid() and memblock_alloc_try_nid_raw()
-> > where the simulated physical memory is set up with multiple NUMA nodes.
-> > Additionally, all of these tests set nid != NUMA_NO_NODE. These tests are
-> > run with a top-down allocation direction.
-> > 
-> > The tested scenarios are:
-> > 
-> > Range unrestricted:
-> > - region can be allocated in the specific node requested:
-> >       + there are no previously reserved regions
-> >       + the requested node is partially reserved but has enough space
-> > - the specific node requested cannot accommodate the request, but the
-> >   region can be allocated in a different node:
-> >       + there are no previously reserved regions, but node is too small
-> >       + the requested node is fully reserved
-> >       + the requested node is partially reserved and does not have
-> >         enough space
-> > 
-> > Range restricted:
-> > - region can be allocated in the specific node requested after dropping
-> >   min_addr:
-> >       + range partially overlaps with two different nodes, where the first
-> >         node is the requested node
-> >       + range partially overlaps with two different nodes, where the
-> >         requested node ends before min_addr
-> > - region cannot be allocated in the specific node requested, but it can be
-> >   allocated in the requested range:
-> >       + range overlaps with multiple nodes along node boundaries, and the
-> >         requested node ends before min_addr
-> >       + range overlaps with multiple nodes along node boundaries, and the
-> >         requested node starts after max_addr
-> > - region cannot be allocated in the specific node requested, but it can be
-> >   allocated after dropping min_addr:
-> >       + range partially overlaps with two different nodes, where the
-> >         second node is the requested node
-> > 
-> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> > ---
-> >  tools/testing/memblock/tests/alloc_nid_api.c | 702 ++++++++++++++++++-
-> >  tools/testing/memblock/tests/alloc_nid_api.h |  16 +
-> >  tools/testing/memblock/tests/common.h        |  18 +
-> >  3 files changed, 725 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/tools/testing/memblock/tests/alloc_nid_api.c b/tools/testing/memblock/tests/alloc_nid_api.c
-> > index 32b3c1594fdd..e5ef93ea1ce5 100644
-> > --- a/tools/testing/memblock/tests/alloc_nid_api.c
-> > +++ b/tools/testing/memblock/tests/alloc_nid_api.c
-> > @@ -1094,7 +1094,7 @@ static int alloc_try_nid_bottom_up_cap_min_check(void)
-> >  	return 0;
-> >  }
-> >  
-> > -/* Test case wrappers */
-> > +/* Test case wrappers for range tests */
-> >  static int alloc_try_nid_simple_check(void)
-> >  {
-> >  	test_print("\tRunning %s...\n", __func__);
-> > @@ -1226,17 +1226,10 @@ static int alloc_try_nid_low_max_check(void)
-> >  	return 0;
-> >  }
-> >  
-> > -static int memblock_alloc_nid_checks_internal(int flags)
-> > +static int memblock_alloc_nid_range_checks(void)
-> >  {
-> > -	const char *func = get_memblock_alloc_try_nid_name(flags);
-> > -
-> > -	alloc_nid_test_flags = flags;
-> > -	prefix_reset();
-> > -	prefix_push(func);
-> > -	test_print("Running %s tests...\n", func);
-> > -
-> > -	reset_memblock_attributes();
-> > -	dummy_physical_memory_init();
-> > +	test_print("Running %s range tests...\n",
-> > +		   get_memblock_alloc_try_nid_name(alloc_nid_test_flags));
-> >  
-> >  	alloc_try_nid_simple_check();
-> >  	alloc_try_nid_misaligned_check();
-> > @@ -1253,6 +1246,693 @@ static int memblock_alloc_nid_checks_internal(int flags)
-> >  	alloc_try_nid_reserved_all_check();
-> >  	alloc_try_nid_low_max_check();
-> >  
-> > +	return 0;
-> > +}
-> > +
-> > +/*
-> > + * A test that tries to allocate a memory region in a specific NUMA node that
-> > + * has enough memory to allocate a region of the requested size.
-> > + * Expect to allocate an aligned region at the end of the requested node.
-> > + */
-> > +static int alloc_try_nid_top_down_numa_simple_check(void)
-> > +{
-> > +	int nid_req = 3;
-> > +	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
-> > +	struct memblock_region *req_node = &memblock.memory.regions[nid_req];
-> > +	void *allocated_ptr = NULL;
-> > +
-> > +	PREFIX_PUSH();
-> > +
-> > +	phys_addr_t size;
-> > +	phys_addr_t min_addr;
-> > +	phys_addr_t max_addr;
-> > +
-> > +	setup_numa_memblock();
-> > +
-> > +	ASSERT_LE(SZ_4, req_node->size);
-> > +	size = req_node->size / SZ_4;
-> > +	min_addr = memblock_start_of_DRAM();
-> > +	max_addr = memblock_end_of_DRAM();
-> > +
-> > +	allocated_ptr = run_memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-> > +						   min_addr, max_addr, nid_req);
-> > +
-> > +	ASSERT_NE(allocated_ptr, NULL);
-> > +	assert_mem_content(allocated_ptr, size, alloc_nid_test_flags);
-> > +
-> > +	ASSERT_EQ(new_rgn->size, size);
-> > +	ASSERT_EQ(new_rgn->base, region_end(req_node) - size);
-> > +	ASSERT_LE(req_node->base, new_rgn->base);
-> > +
-> > +	ASSERT_EQ(memblock.reserved.cnt, 1);
-> > +	ASSERT_EQ(memblock.reserved.total_size, size);
-> > +
-> > +	test_pass_pop();
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/*
-> > + * A test that tries to allocate a memory region in a specific NUMA node that
-> > + * does not have enough memory to allocate a region of the requested size:
-> > + *
-> > + *  |   +-----+          +------------------+     |
-> > + *  |   | req |          |     expected     |     |
-> > + *  +---+-----+----------+------------------+-----+
-> > + *
-> > + *  |                             +---------+     |
-> > + *  |                             |   rgn   |     |
-> > + *  +-----------------------------+---------+-----+
-> > + *
-> > + * Expect to allocate an aligned region at the end of the last node that has
-> > + * enough memory (in this case, nid = 6) after falling back to NUMA_NO_NODE.
-> > + */
-> > +static int alloc_try_nid_top_down_numa_small_node_check(void)
-> > +{
-> > +	int nid_req = 1;
-> > +	int nid_exp = 6;
-> > +	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
-> > +	struct memblock_region *exp_node = &memblock.memory.regions[nid_exp];
-> 
-> AFAIU, having required and expected nodes here means very tight relation
-> between the NUMA layout used by setup_numa_memblock() and the test cases. 
-> 
-> I believe it would be clearer and less error prone if the relation were
-> more explicit. 
-> 
-I agree.
+On Tue, Aug 30, 2022 at 05:43:43PM +0200, David Hildenbrand wrote:
 
-> Can't say I have a great ideas how to achieve this, but maybe its worth
-> passing NUMA layout to setup_numa_memblock() every time, or setting the
-> requested and expected nid based on the NUMA layout, or maybe something
-> smarted than either of these.
+> I think one approach is mmap'ing a devdax device. To test without actual
+> NVDIMM hardware, there are ways to simulate it even on bare metal using
+> the "memmap=" kernel parameter.
 > 
-I like the first option. I'll pass the NUMA layout if I can't think of a
-better idea.
-
-> > +	void *allocated_ptr = NULL;
-> > +
-> > +	PREFIX_PUSH();
-> > +
-> > +	phys_addr_t size;
-> > +	phys_addr_t min_addr;
-> > +	phys_addr_t max_addr;
-> > +
-> > +	setup_numa_memblock();
-> > +
-> > +	size = SZ_2K * MEM_FACTOR;
-> > +	min_addr = memblock_start_of_DRAM();
-> > +	max_addr = memblock_end_of_DRAM();
-> > +
-> > +	allocated_ptr = run_memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-> > +						   min_addr, max_addr, nid_req);
-> > +
-> > +	ASSERT_NE(allocated_ptr, NULL);
-> > +	assert_mem_content(allocated_ptr, size, alloc_nid_test_flags);
-> > +
-> > +	ASSERT_EQ(new_rgn->size, size);
-> > +	ASSERT_EQ(new_rgn->base, region_end(exp_node) - size);
-> > +	ASSERT_LE(exp_node->base, new_rgn->base);
-> > +
-> > +	ASSERT_EQ(memblock.reserved.cnt, 1);
-> > +	ASSERT_EQ(memblock.reserved.total_size, size);
-> > +
-> > +	test_pass_pop();
-> > +
-> > +	return 0;
-> > +}
-> > +
+> https://nvdimm.wiki.kernel.org/
 > 
-> -- 
-> Sincerely yours,
-> Mike.
+> Alternatively, you can use an emulated nvdimm device under QEMU -- but
+> then you'd have to run VFIO inside the VM. I know (that you know) that
+> there are ways to get that working, but it certainly requires more effort :)
+> 
+> ... let me know if you need any tips&tricks.
 
-Thanks,
-Rebecca
+currently pin_user_pages will not return ZONE_DEVICE pages anyhow, so
+it is not relevant to this snippet
+
+You might seem them on that follow_pfn flow though :\
+
+Jason

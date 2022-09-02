@@ -2,492 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DDD5AA815
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F055AA81B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbiIBGdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 02:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S235258AbiIBGg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 02:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235316AbiIBGdh (ORCPT
+        with ESMTP id S231266AbiIBGg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 02:33:37 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EC8B3B37
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 23:33:34 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso4641588pjk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 23:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=HCiTauuCcfQSR4cj9cXuiI251GNqp/r0FL2ugDYZ9rA=;
-        b=wXk5O/vmU/DA19mMQCsT2jFNI/AGj5o8yohGXqeqQoNpDm0VkMQZsVY1cWFoOAvnZb
-         ofQAvFVRJBJWxCFUYYUrlWal6bBbZk6K9Gu1VnwkJRQRqkIe4l5LjK9bqzxKvAZYQkwf
-         wrLEA9nRatvjMz7GhjzOaE5EXkfeLtHwr6LPi848PmKZS3AuEr9gt+cfuWcbgvuD3XSh
-         huqetCO2rwrkMz1m1qabmZ2MGGpRbZEIBooGruzVtYot+V0TROI/pMobwNVnLKIGfv4d
-         g3jEhZiYs32uQXIDTOgg/11WZGVip5CAVXoJ1LalrUChXBpx5c6ccrpKdBLO/FAWHt/M
-         Queg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=HCiTauuCcfQSR4cj9cXuiI251GNqp/r0FL2ugDYZ9rA=;
-        b=lUJIWxrpR4O47Z9/sjCSGsMojtvDAiQwv4AweyxngYSgbQIvkr+zZo8qBnsmOoWzwa
-         vSYj8b2agmkIh1NE2k0fsfMp51gFl8xU6ku6qDqmTch2axXnt8sYumOhoGsJgWl7ejB0
-         vdpw6DfhP3W5khZMljjf5TS53vra8vuGwd46duPsV2PmvM5zyuvUFRgut/VeejrqRuc2
-         cRWfPvY9iTTlB2vpeGY6rXvucReB+S7eWOHUUGJ/CnYAxeTUPzHmiAL7H8Qbvi2w3/h8
-         XJlboTt3EntE+4FYmradvd3Jy5dAes8Kc9ctZ9Vq0LhBT8zf4EKlrgiDOfZy60/In4Gq
-         VNKA==
-X-Gm-Message-State: ACgBeo0meJSLpUo7LbMUL22kX6v+3vzW4qEI+3ad7G1B7yR3ZukWJf/9
-        k0GcF1Tv7P7IYoh6LynZkjc9PjNhQ/J7iG0M
-X-Google-Smtp-Source: AA6agR4uxVcBa3svkv4kidJ+HSlVIP3fbRT9ZJqf0pkryTCU3eJhs2pxQyOrbuZLkv4C0twkgcxTZw==
-X-Received: by 2002:a17:90a:bc02:b0:1fd:8333:7a72 with SMTP id w2-20020a17090abc0200b001fd83337a72mr3208891pjr.51.1662100413696;
-        Thu, 01 Sep 2022 23:33:33 -0700 (PDT)
-Received: from R911R1VA-1UT.inc.bytedance.com ([220.243.131.6])
-        by smtp.gmail.com with ESMTPSA id a12-20020a170902710c00b0016ee4b0bd60sm717575pll.166.2022.09.01.23.33.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 23:33:33 -0700 (PDT)
-From:   hezhongkun <hezhongkun.hzk@bytedance.com>
-To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhongkun He <hezhongkun.hzk@bytedance.com>
-Subject: [PATCH] cgroup/cpuset: Add a new isolated mems.policy type.
-Date:   Fri,  2 Sep 2022 14:33:03 +0800
-Message-Id: <20220902063303.1057-1-hezhongkun.hzk@bytedance.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 2 Sep 2022 02:36:56 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F9D1A1A42;
+        Thu,  1 Sep 2022 23:36:53 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxFeJ5pBFjqpsPAA--.2392S2;
+        Fri, 02 Sep 2022 14:36:46 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Patchwork Bot <patchwork-bot@kernel.org>
+Cc:     zhuyinbo@loongson.cn
+Subject: [PATCH v4] usb: ohci-platform: fix usb disconnect issue after s4
+Date:   Fri,  2 Sep 2022 14:36:39 +0800
+Message-Id: <20220902063639.17875-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8AxFeJ5pBFjqpsPAA--.2392S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFW3KrWDtFyDZFyrArW7XFb_yoW5tw4UpF
+        4UJFWftr48GF42g3y7AwnrZFWrCwsag3y7K34UKwnF9a90q3s8JF4jyFy0yFnxXry7Jw1k
+        tF4jyFWUCF4UZrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhongkun He <hezhongkun.hzk@bytedance.com>
+The ohci retaining bogus hardware states cause usb disconnect devices
+connected before hibernation(s4), this issue occur when ohci-platform
+driver build as a module and the built-in ohci-platform driver will
+re probe and re enumerate the devices, so there will be no such problem.
 
-Mempolicy is difficult to use because it is set in-process
-via a system call. We want to make it easier to use mempolicy
-in cpuset, and  we can control low-priority cgroups to
-allocate memory in specified nodes. So this patch want to
-adds the mempolicy interface in cpuset.
+Avoid retaining bogus hardware states during resume-from-hibernation.
+Previously we had reset the hardware as part of preparing to reinstate
+the snapshot image. But we can do better now with the new PM framework,
+since we know exactly which resume operations are from hibernation.
 
-The mempolicy priority of cpuset is lower than the task.
-The order of getting the policy is:
-	1) vma mempolicy
-	2) task->mempolicy
-	3) cpuset->mempolicy
-	4) default policy.
+According to the commit 'cd1965db054e ("USB: ohci: move ohci_pci_{
+suspend,resume} to ohci-hcd.c")' and commit '6ec4beb5c701 ("USB: new
+flag for resume-from-hibernation")', the flag "hibernated" is for
+resume-from-hibernation and it should be true when usb resume from disk.
 
-cpuset's policy is owned by itself, but descendants will
-get the default mempolicy from parent.
+When this flag "hibernated" is set, the drivers will reset the hardware
+to get rid of any existing state and make sure resume from hibernation
+re-enumerates everything for ohci.
 
-How to use the mempolicy interface:
-	echo prefer:2 > /sys/fs/cgroup/zz/cpuset.mems.policy
-	echo bind:1-3 > /sys/fs/cgroup/zz/cpuset.mems.policy
-        echo interleave:0,1,2,3 >/sys/fs/cgroup/zz/cpuset.mems.policy
-Show the policy:
-	cat /sys/fs/cgroup/zz/cpuset.mems.policy
-		prefer:2
-	cat /sys/fs/cgroup/zz/cpuset.mems.policy
-		bind:1-3
-	cat /sys/fs/cgroup/zz/cpuset.mems.policy
-		interleave:0-3
-Clear the policy:
-	echo default > /sys/fs/cgroup/zz/cpuset.mems.policy
-
-Signed-off-by: Zhongkun He <hezhongkun.hzk@bytedance.com>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 ---
- include/linux/mempolicy.h |   4 +
- include/linux/sched.h     |   2 +
- kernel/cgroup/cpuset.c    | 154 +++++++++++++++++++++++++++++++++++++-
- kernel/fork.c             |   1 +
- mm/mempolicy.c            |  28 +++++--
- 5 files changed, 180 insertions(+), 9 deletions(-)
+Change in v4:
+		Add explain what this disconnect issue is.
 
-diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
-index 668389b4b53d..5e54dd8576e4 100644
---- a/include/linux/mempolicy.h
-+++ b/include/linux/mempolicy.h
-@@ -142,6 +142,7 @@ extern void numa_default_policy(void);
- extern void numa_policy_init(void);
- extern void mpol_rebind_task(struct task_struct *tsk, const nodemask_t *new);
- extern void mpol_rebind_mm(struct mm_struct *mm, nodemask_t *new);
-+extern void mpol_rebind_policy(struct mempolicy *pol, const nodemask_t *newmask);
- 
- extern int huge_node(struct vm_area_struct *vma,
- 				unsigned long addr, gfp_t gfp_flags,
-@@ -252,6 +253,9 @@ static inline void mpol_rebind_task(struct task_struct *tsk,
- static inline void mpol_rebind_mm(struct mm_struct *mm, nodemask_t *new)
- {
- }
-+static inline void mpol_rebind_policy(struct mempolicy *pol, const nodemask_t *newmask)
-+{
-+}
- 
- static inline int huge_node(struct vm_area_struct *vma,
- 				unsigned long addr, gfp_t gfp_flags,
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index e7b2f8a5c711..c79fc82ac9fe 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1200,6 +1200,8 @@ struct task_struct {
- 	u64				acct_timexpd;
- #endif
- #ifdef CONFIG_CPUSETS
-+	/* cpuset memory policy */
-+	struct mempolicy		*cs_mpol;
- 	/* Protected by ->alloc_lock: */
- 	nodemask_t			mems_allowed;
- 	/* Sequence number to catch updates: */
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 1f3a55297f39..d624393a0d7e 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -118,6 +118,9 @@ struct cpuset {
- 	cpumask_var_t effective_cpus;
- 	nodemask_t effective_mems;
- 
-+	/*cpuset mem policy */
-+	struct mempolicy *mempolicy;
-+
- 	/*
- 	 * CPUs allocated to child sub-partitions (default hierarchy only)
- 	 * - CPUs granted by the parent = effective_cpus U subparts_cpus
-@@ -378,6 +381,8 @@ static void cpuset_hotplug_workfn(struct work_struct *work);
- static DECLARE_WORK(cpuset_hotplug_work, cpuset_hotplug_workfn);
- 
- static DECLARE_WAIT_QUEUE_HEAD(cpuset_attach_wq);
-+static void cpuset_change_task_cs_mpol(struct task_struct *tsk,
-+		struct mempolicy *mpol);
- 
- static inline void check_insane_mems_config(nodemask_t *nodes)
- {
-@@ -570,7 +575,10 @@ static struct cpuset *alloc_trial_cpuset(struct cpuset *cs)
- 	if (!trial)
- 		return NULL;
- 
-+	mpol_get(trial->mempolicy);
-+
- 	if (alloc_cpumasks(trial, NULL)) {
-+		mpol_put(trial->mempolicy);
- 		kfree(trial);
- 		return NULL;
- 	}
-@@ -587,6 +595,10 @@ static struct cpuset *alloc_trial_cpuset(struct cpuset *cs)
- static inline void free_cpuset(struct cpuset *cs)
- {
- 	free_cpumasks(cs, NULL);
-+
-+	if (cs->mempolicy)
-+		mpol_put(cs->mempolicy);
-+
- 	kfree(cs);
+ drivers/usb/host/ohci-platform.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+index 0adae6265127..822a0f927e62 100644
+--- a/drivers/usb/host/ohci-platform.c
++++ b/drivers/usb/host/ohci-platform.c
+@@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
+ 	return ret;
  }
  
-@@ -1823,6 +1835,7 @@ static void update_nodemasks_hier(struct cpuset *cs, nodemask_t *new_mems)
+-static int ohci_platform_resume(struct device *dev)
++static int ohci_platform_resume_common(struct device *dev, bool hibernated)
  {
- 	struct cpuset *cp;
- 	struct cgroup_subsys_state *pos_css;
-+	nodemask_t cs_allowed;
- 
- 	rcu_read_lock();
- 	cpuset_for_each_descendant_pre(cp, pos_css, cs) {
-@@ -1848,6 +1861,11 @@ static void update_nodemasks_hier(struct cpuset *cs, nodemask_t *new_mems)
- 		rcu_read_unlock();
- 
- 		spin_lock_irq(&callback_lock);
-+
-+		if (cp->mempolicy)
-+			nodes_and(cs_allowed, *new_mems,
-+					cp->mempolicy->w.user_nodemask);
-+		mpol_rebind_policy(cp->mempolicy, &cs_allowed);
- 		cp->effective_mems = *new_mems;
- 		spin_unlock_irq(&callback_lock);
- 
-@@ -2304,7 +2322,8 @@ static void cpuset_attach(struct cgroup_taskset *tset)
- 		 * fail.  TODO: have a better way to handle failure here
- 		 */
- 		WARN_ON_ONCE(set_cpus_allowed_ptr(task, cpus_attach));
--
-+		/*update the cpuset mempolicy to task*/
-+		cpuset_change_task_cs_mpol(task, cs->mempolicy);
- 		cpuset_change_task_nodemask(task, &cpuset_attach_nodemask_to);
- 		cpuset_update_task_spread_flag(cs, task);
- 	}
-@@ -2441,6 +2460,112 @@ static int cpuset_write_s64(struct cgroup_subsys_state *css, struct cftype *cft,
- 	return retval;
- }
- 
-+/*update cpuset policy for task*/
-+static void cpuset_change_task_cs_mpol(struct task_struct *tsk,
-+		struct mempolicy *mpol)
-+{
-+	struct mempolicy *old = NULL;
-+
-+	task_lock(tsk);
-+	local_irq_disable();
-+	write_seqcount_begin(&tsk->mems_allowed_seq);
-+
-+	old = tsk->cs_mpol;
-+	tsk->cs_mpol = mpol;
-+	mpol_get(mpol);
-+	tsk->il_prev = 0;
-+
-+	write_seqcount_end(&tsk->mems_allowed_seq);
-+	local_irq_enable();
-+	task_unlock(tsk);
-+	mpol_put(old);
-+}
-+
-+static void update_tasks_cs_mpol(struct cpuset *cs)
-+{
-+	struct css_task_iter it;
-+	struct task_struct *task;
-+
-+	css_task_iter_start(&cs->css, 0, &it);
-+
-+	while ((task = css_task_iter_next(&it)))
-+		cpuset_change_task_cs_mpol(task, cs->mempolicy);
-+	css_task_iter_end(&it);
-+}
-+
-+/* change cpuset mempolicy */
-+static ssize_t cpuset_mpol_write(struct kernfs_open_file *of,
-+		char *buf, size_t nbytes, loff_t off)
-+{
-+	struct mempolicy *mpol, *old = NULL;
-+	struct cpuset *cs = css_cs(of_css(of));
-+	nodemask_t cs_allowed;
-+	int err = -ENODEV;
-+
-+	css_get(&cs->css);
-+	kernfs_break_active_protection(of->kn);
-+	percpu_down_write(&cpuset_rwsem);
-+
-+	if (!is_cpuset_online(cs))
-+		goto out_unlock;
-+
-+	buf = strstrip(buf);
-+	err = mpol_parse_str(buf, &mpol);
-+
-+	if (err) {
-+		err = -EINVAL;
-+		goto out_unlock;
-+	}
-+
-+	spin_lock_irq(&callback_lock);
-+	old = cs->mempolicy;
-+
-+	if (mpol) {
-+		nodes_and(cs_allowed, cs->effective_mems, mpol->w.user_nodemask);
-+		mpol_rebind_policy(mpol, &cs_allowed);
-+		cs->mempolicy = mpol;
-+	}
-+	spin_unlock_irq(&callback_lock);
-+
-+	update_tasks_cs_mpol(cs);
-+
-+out_unlock:
-+	percpu_up_write(&cpuset_rwsem);
-+	kernfs_unbreak_active_protection(of->kn);
-+	css_put(&cs->css);
-+
-+	if (old) {
-+	/*Wait for outstanding programs to complete.*/
-+		synchronize_rcu();
-+		mpol_put(old);
-+	}
-+	return err ?: nbytes;
-+}
-+
-+/*show cpuset mempolicy*/
-+static int cpuset_mpol_show(struct seq_file *seq, void *v)
-+{
-+	char buffer[64];
-+	int ret = 0;
-+	struct mempolicy *mpol;
-+	struct cpuset *cs = css_cs(seq_css(seq));
-+
-+	memset(buffer, 0, sizeof(buffer));
-+	spin_lock_irq(&callback_lock);
-+	mpol = cs->mempolicy;
-+
-+	if (!mpol || mpol->mode == MPOL_DEFAULT)
-+		goto out_unlock;
-+
-+	mpol_to_str(buffer, sizeof(buffer), mpol);
-+	seq_printf(seq, buffer);
-+	seq_putc(seq, '\n');
-+
-+out_unlock:
-+	spin_unlock_irq(&callback_lock);
-+	return ret;
-+}
-+
- /*
-  * Common handling for a write to a "cpus" or "mems" file.
-  */
-@@ -2679,6 +2804,13 @@ static struct cftype legacy_files[] = {
- 		.private = FILE_EFFECTIVE_MEMLIST,
- 	},
- 
-+	{
-+		.name = "mems_policy",
-+		.flags = CFTYPE_NOT_ON_ROOT,
-+		.seq_show = cpuset_mpol_show,
-+		.write = cpuset_mpol_write,
-+	},
-+
- 	{
- 		.name = "cpu_exclusive",
- 		.read_u64 = cpuset_read_u64,
-@@ -2787,6 +2919,13 @@ static struct cftype dfl_files[] = {
- 		.private = FILE_EFFECTIVE_MEMLIST,
- 	},
- 
-+	{
-+		.name = "mems.policy",
-+		.flags = CFTYPE_NOT_ON_ROOT,
-+		.seq_show = cpuset_mpol_show,
-+		.write = cpuset_mpol_write,
-+	},
-+
- 	{
- 		.name = "cpus.partition",
- 		.seq_show = sched_partition_show,
-@@ -2815,7 +2954,8 @@ static struct cftype dfl_files[] = {
- static struct cgroup_subsys_state *
- cpuset_css_alloc(struct cgroup_subsys_state *parent_css)
- {
--	struct cpuset *cs;
-+	struct cpuset *cs, *pcs = css_cs(parent_css);
-+	struct mempolicy *new;
- 
- 	if (!parent_css)
- 		return &top_cpuset.css;
-@@ -2835,6 +2975,16 @@ cpuset_css_alloc(struct cgroup_subsys_state *parent_css)
- 	fmeter_init(&cs->fmeter);
- 	cs->relax_domain_level = -1;
- 
-+	/*Inherit mempolicy from parent.*/
-+	spin_lock_irq(&callback_lock);
-+	new = mpol_dup(pcs->mempolicy);
-+
-+	if (IS_ERR(new))
-+		new = NULL;
-+
-+	cs->mempolicy = new;
-+	spin_unlock_irq(&callback_lock);
-+
- 	/* Set CS_MEMORY_MIGRATE for default hierarchy */
- 	if (cgroup_subsys_on_dfl(cpuset_cgrp_subsys))
- 		__set_bit(CS_MEMORY_MIGRATE, &cs->flags);
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 90c85b17bf69..3f695449e2a5 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2190,6 +2190,7 @@ static __latent_entropy struct task_struct *copy_process(
- 		p->mempolicy = NULL;
- 		goto bad_fork_cleanup_delayacct;
- 	}
-+	mpol_get(p->cs_mpol); /*ref cpuset mempolicy*/
- #endif
- #ifdef CONFIG_CPUSETS
- 	p->cpuset_mem_spread_rotor = NUMA_NO_NODE;
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index b73d3248d976..4cf54cf60244 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -158,9 +158,15 @@ int numa_map_to_online_node(int node)
- }
- EXPORT_SYMBOL_GPL(numa_map_to_online_node);
- 
-+static inline struct mempolicy *task_or_cs_mpol(struct task_struct *p)
-+{
-+	return p->mempolicy ?
-+		p->mempolicy : p->cs_mpol;
-+}
-+
- struct mempolicy *get_task_policy(struct task_struct *p)
- {
--	struct mempolicy *pol = p->mempolicy;
-+	struct mempolicy *pol = task_or_cs_mpol(p);
- 	int node;
- 
- 	if (pol)
-@@ -349,7 +355,7 @@ static void mpol_rebind_preferred(struct mempolicy *pol,
-  * policies are protected by task->mems_allowed_seq to prevent a premature
-  * OOM/allocation failure due to parallel nodemask modification.
-  */
--static void mpol_rebind_policy(struct mempolicy *pol, const nodemask_t *newmask)
-+void mpol_rebind_policy(struct mempolicy *pol, const nodemask_t *newmask)
- {
- 	if (!pol || pol->mode == MPOL_LOCAL)
- 		return;
-@@ -1878,9 +1884,11 @@ static unsigned interleave_nodes(struct mempolicy *policy)
- 	struct task_struct *me = current;
- 
- 	next = next_node_in(me->il_prev, policy->nodes);
--	if (next < MAX_NUMNODES)
-+	if (next < MAX_NUMNODES) {
- 		me->il_prev = next;
--	return next;
-+		return next;
-+	} else
-+		return numa_node_id();
- }
- 
- /*
-@@ -1895,7 +1903,7 @@ unsigned int mempolicy_slab_node(void)
- 	if (!in_task())
- 		return node;
- 
--	policy = current->mempolicy;
-+	policy = task_or_cs_mpol(current);
- 	if (!policy)
- 		return node;
- 
-@@ -2043,7 +2051,7 @@ bool init_nodemask_of_mempolicy(nodemask_t *mask)
- 		return false;
- 
- 	task_lock(current);
--	mempolicy = current->mempolicy;
-+	mempolicy = task_or_cs_mpol(current);
- 	switch (mempolicy->mode) {
- 	case MPOL_PREFERRED:
- 	case MPOL_PREFERRED_MANY:
-@@ -2633,13 +2641,16 @@ int mpol_misplaced(struct page *page, struct vm_area_struct *vma, unsigned long
-  */
- void mpol_put_task_policy(struct task_struct *task)
- {
--	struct mempolicy *pol;
-+	struct mempolicy *pol, *cs_pol;
- 
- 	task_lock(task);
- 	pol = task->mempolicy;
-+	cs_pol = task->cs_mpol;
-+	task->cs_mpol = NULL;
- 	task->mempolicy = NULL;
- 	task_unlock(task);
- 	mpol_put(pol);
-+	mpol_put(cs_pol);
- }
- 
- static void sp_delete(struct shared_policy *sp, struct sp_node *n)
-@@ -3054,6 +3065,9 @@ int mpol_parse_str(char *str, struct mempolicy **mpol)
- 			mode_flags |= MPOL_F_RELATIVE_NODES;
- 		else
- 			goto out;
-+	} else {
-+		/*use static mode_flags in default*/
-+		mode_flags |= MPOL_F_STATIC_NODES;
+ 	struct usb_hcd *hcd = dev_get_drvdata(dev);
+ 	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
+@@ -301,7 +301,7 @@ static int ohci_platform_resume(struct device *dev)
+ 			return err;
  	}
  
- 	new = mpol_new(mode, mode_flags, &nodes);
+-	ohci_resume(hcd, false);
++	ohci_resume(hcd, hibernated);
+ 
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_set_active(dev);
+@@ -309,6 +309,16 @@ static int ohci_platform_resume(struct device *dev)
+ 
+ 	return 0;
+ }
++
++static int ohci_platform_resume(struct device *dev)
++{
++	return ohci_platform_resume_common(dev, false);
++}
++
++static int ohci_platform_restore(struct device *dev)
++{
++	return ohci_platform_resume_common(dev, true);
++}
+ #endif /* CONFIG_PM_SLEEP */
+ 
+ static const struct of_device_id ohci_platform_ids[] = {
+@@ -325,8 +335,16 @@ static const struct platform_device_id ohci_platform_table[] = {
+ };
+ MODULE_DEVICE_TABLE(platform, ohci_platform_table);
+ 
+-static SIMPLE_DEV_PM_OPS(ohci_platform_pm_ops, ohci_platform_suspend,
+-	ohci_platform_resume);
++#ifdef CONFIG_PM_SLEEP
++static const struct dev_pm_ops ohci_platform_pm_ops = {
++	.suspend = ohci_platform_suspend,
++	.resume = ohci_platform_resume,
++	.freeze = ohci_platform_suspend,
++	.thaw = ohci_platform_resume,
++	.poweroff = ohci_platform_suspend,
++	.restore = ohci_platform_restore,
++};
++#endif
+ 
+ static struct platform_driver ohci_platform_driver = {
+ 	.id_table	= ohci_platform_table,
+@@ -335,7 +353,9 @@ static struct platform_driver ohci_platform_driver = {
+ 	.shutdown	= usb_hcd_platform_shutdown,
+ 	.driver		= {
+ 		.name	= "ohci-platform",
++#ifdef CONFIG_PM_SLEEP
+ 		.pm	= &ohci_platform_pm_ops,
++#endif
+ 		.of_match_table = ohci_platform_ids,
+ 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	}
 -- 
-2.25.1
+2.31.1
 

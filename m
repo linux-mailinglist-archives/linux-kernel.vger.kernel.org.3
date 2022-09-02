@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29365AAEB2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B875AAFEB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbiIBM1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
+        id S237634AbiIBMpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236431AbiIBM12 (ORCPT
+        with ESMTP id S237453AbiIBMnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:27:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726DBDA3CE;
-        Fri,  2 Sep 2022 05:24:14 -0700 (PDT)
+        Fri, 2 Sep 2022 08:43:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74FFEC4E9;
+        Fri,  2 Sep 2022 05:32:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B8A2620E6;
-        Fri,  2 Sep 2022 12:23:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30498C433C1;
-        Fri,  2 Sep 2022 12:23:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B729EB82A94;
+        Fri,  2 Sep 2022 12:32:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C31FC433D7;
+        Fri,  2 Sep 2022 12:32:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121393;
-        bh=ggkzR7fXpZd66zV4XncdCKBI8YV+okgrGR8z07c89yk=;
+        s=korg; t=1662121937;
+        bh=JnS4R41g1EDQM5cJKDxo7Wnpup4SqjxxJmoRcYUjADc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q5vyUS4vqCaoOJulRyWWWC+pgCFduTaufkDcIf7rRoBAA5oU/VP/6hbnnBCbUCd48
-         wSdcwury+SitAR13BWH/JDuIiJ89008FwK9WxtClPlII23ANSRmMzJyPdjkS4mtx0P
-         fGFEkfEI8VV6oWCN/mKc0NfqNgO8JjJxKxxIyvpM=
+        b=KTJpCgtZsm/Dyk5xS+N5AiSPy2mZtSrUXJMbP66SE3MZebvrtRecHF3MtRFbT0sbE
+         bBqdZsAx3q4ldR8YE6OeoYsBz1BHqyLo7heGoEc6SaEl5y5C80k4v6Jekvo0+azYog
+         8qYw+XxzEswjStW7lLsOIoYVeYjwBXzyIDhOonNM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com,
-        Karthik Alapati <mail@karthek.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 4.14 34/42] HID: hidraw: fix memory leak in hidraw_release()
-Date:   Fri,  2 Sep 2022 14:18:58 +0200
-Message-Id: <20220902121359.966089852@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 35/73] mm/rmap: Fix anon_vma->degree ambiguity leading to double-reuse
+Date:   Fri,  2 Sep 2022 14:18:59 +0200
+Message-Id: <20220902121405.599778788@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,68 +56,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karthik Alapati <mail@karthek.com>
+From: Jann Horn <jannh@google.com>
 
-commit a5623a203cffe2d2b84d2f6c989d9017db1856af upstream.
+commit 2555283eb40df89945557273121e9393ef9b542b upstream.
 
-Free the buffered reports before deleting the list entry.
+anon_vma->degree tracks the combined number of child anon_vmas and VMAs
+that use the anon_vma as their ->anon_vma.
 
-BUG: memory leak
-unreferenced object 0xffff88810e72f180 (size 32):
-  comm "softirq", pid 0, jiffies 4294945143 (age 16.080s)
-  hex dump (first 32 bytes):
-    64 f3 c6 6a d1 88 07 04 00 00 00 00 00 00 00 00  d..j............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814ac6c3>] kmemdup+0x23/0x50 mm/util.c:128
-    [<ffffffff8357c1d2>] kmemdup include/linux/fortify-string.h:440 [inline]
-    [<ffffffff8357c1d2>] hidraw_report_event+0xa2/0x150 drivers/hid/hidraw.c:521
-    [<ffffffff8356ddad>] hid_report_raw_event+0x27d/0x740 drivers/hid/hid-core.c:1992
-    [<ffffffff8356e41e>] hid_input_report+0x1ae/0x270 drivers/hid/hid-core.c:2065
-    [<ffffffff835f0d3f>] hid_irq_in+0x1ff/0x250 drivers/hid/usbhid/hid-core.c:284
-    [<ffffffff82d3c7f9>] __usb_hcd_giveback_urb+0xf9/0x230 drivers/usb/core/hcd.c:1670
-    [<ffffffff82d3cc26>] usb_hcd_giveback_urb+0x1b6/0x1d0 drivers/usb/core/hcd.c:1747
-    [<ffffffff82ef1e14>] dummy_timer+0x8e4/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
-    [<ffffffff812f50a8>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1474
-    [<ffffffff812f5586>] expire_timers kernel/time/timer.c:1519 [inline]
-    [<ffffffff812f5586>] __run_timers.part.0+0x316/0x430 kernel/time/timer.c:1790
-    [<ffffffff812f56e4>] __run_timers kernel/time/timer.c:1768 [inline]
-    [<ffffffff812f56e4>] run_timer_softirq+0x44/0x90 kernel/time/timer.c:1803
-    [<ffffffff848000e6>] __do_softirq+0xe6/0x2ea kernel/softirq.c:571
-    [<ffffffff81246db0>] invoke_softirq kernel/softirq.c:445 [inline]
-    [<ffffffff81246db0>] __irq_exit_rcu kernel/softirq.c:650 [inline]
-    [<ffffffff81246db0>] irq_exit_rcu+0xc0/0x110 kernel/softirq.c:662
-    [<ffffffff84574f02>] sysvec_apic_timer_interrupt+0xa2/0xd0 arch/x86/kernel/apic/apic.c:1106
-    [<ffffffff84600c8b>] asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
-    [<ffffffff8458a070>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
-    [<ffffffff8458a070>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
-    [<ffffffff8458a070>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
-    [<ffffffff8458a070>] acpi_idle_do_entry+0xc0/0xd0 drivers/acpi/processor_idle.c:554
+anon_vma_clone() then assumes that for any anon_vma attached to
+src->anon_vma_chain other than src->anon_vma, it is impossible for it to
+be a leaf node of the VMA tree, meaning that for such VMAs ->degree is
+elevated by 1 because of a child anon_vma, meaning that if ->degree
+equals 1 there are no VMAs that use the anon_vma as their ->anon_vma.
 
-Link: https://syzkaller.appspot.com/bug?id=19a04b43c75ed1092021010419b5e560a8172c4f
-Reported-by: syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com
-Signed-off-by: Karthik Alapati <mail@karthek.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+This assumption is wrong because the ->degree optimization leads to leaf
+nodes being abandoned on anon_vma_clone() - an existing anon_vma is
+reused and no new parent-child relationship is created.  So it is
+possible to reuse an anon_vma for one VMA while it is still tied to
+another VMA.
+
+This is an issue because is_mergeable_anon_vma() and its callers assume
+that if two VMAs have the same ->anon_vma, the list of anon_vmas
+attached to the VMAs is guaranteed to be the same.  When this assumption
+is violated, vma_merge() can merge pages into a VMA that is not attached
+to the corresponding anon_vma, leading to dangling page->mapping
+pointers that will be dereferenced during rmap walks.
+
+Fix it by separately tracking the number of child anon_vmas and the
+number of VMAs using the anon_vma as their ->anon_vma.
+
+Fixes: 7a3ef208e662 ("mm: prevent endless growth of anon_vma hierarchy")
+Cc: stable@kernel.org
+Acked-by: Michal Hocko <mhocko@suse.com>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hidraw.c |    3 +++
- 1 file changed, 3 insertions(+)
+ include/linux/rmap.h |    7 +++++--
+ mm/rmap.c            |   29 ++++++++++++++++-------------
+ 2 files changed, 21 insertions(+), 15 deletions(-)
 
---- a/drivers/hid/hidraw.c
-+++ b/drivers/hid/hidraw.c
-@@ -354,10 +354,13 @@ static int hidraw_release(struct inode *
- 	unsigned int minor = iminor(inode);
- 	struct hidraw_list *list = file->private_data;
- 	unsigned long flags;
-+	int i;
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -39,12 +39,15 @@ struct anon_vma {
+ 	atomic_t refcount;
  
- 	mutex_lock(&minors_lock);
+ 	/*
+-	 * Count of child anon_vmas and VMAs which points to this anon_vma.
++	 * Count of child anon_vmas. Equals to the count of all anon_vmas that
++	 * have ->parent pointing to this one, including itself.
+ 	 *
+ 	 * This counter is used for making decision about reusing anon_vma
+ 	 * instead of forking new one. See comments in function anon_vma_clone.
+ 	 */
+-	unsigned degree;
++	unsigned long num_children;
++	/* Count of VMAs whose ->anon_vma pointer points to this object. */
++	unsigned long num_active_vmas;
  
- 	spin_lock_irqsave(&hidraw_table[minor]->list_lock, flags);
-+	for (i = list->tail; i < list->head; i++)
-+		kfree(list->buffer[i].value);
- 	list_del(&list->node);
- 	spin_unlock_irqrestore(&hidraw_table[minor]->list_lock, flags);
- 	kfree(list);
+ 	struct anon_vma *parent;	/* Parent of this anon_vma */
+ 
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -90,7 +90,8 @@ static inline struct anon_vma *anon_vma_
+ 	anon_vma = kmem_cache_alloc(anon_vma_cachep, GFP_KERNEL);
+ 	if (anon_vma) {
+ 		atomic_set(&anon_vma->refcount, 1);
+-		anon_vma->degree = 1;	/* Reference for first vma */
++		anon_vma->num_children = 0;
++		anon_vma->num_active_vmas = 0;
+ 		anon_vma->parent = anon_vma;
+ 		/*
+ 		 * Initialise the anon_vma root to point to itself. If called
+@@ -198,6 +199,7 @@ int __anon_vma_prepare(struct vm_area_st
+ 		anon_vma = anon_vma_alloc();
+ 		if (unlikely(!anon_vma))
+ 			goto out_enomem_free_avc;
++		anon_vma->num_children++; /* self-parent link for new root */
+ 		allocated = anon_vma;
+ 	}
+ 
+@@ -207,8 +209,7 @@ int __anon_vma_prepare(struct vm_area_st
+ 	if (likely(!vma->anon_vma)) {
+ 		vma->anon_vma = anon_vma;
+ 		anon_vma_chain_link(vma, avc, anon_vma);
+-		/* vma reference or self-parent link for new root */
+-		anon_vma->degree++;
++		anon_vma->num_active_vmas++;
+ 		allocated = NULL;
+ 		avc = NULL;
+ 	}
+@@ -293,19 +294,19 @@ int anon_vma_clone(struct vm_area_struct
+ 		anon_vma_chain_link(dst, avc, anon_vma);
+ 
+ 		/*
+-		 * Reuse existing anon_vma if its degree lower than two,
+-		 * that means it has no vma and only one anon_vma child.
++		 * Reuse existing anon_vma if it has no vma and only one
++		 * anon_vma child.
+ 		 *
+-		 * Do not chose parent anon_vma, otherwise first child
+-		 * will always reuse it. Root anon_vma is never reused:
++		 * Root anon_vma is never reused:
+ 		 * it has self-parent reference and at least one child.
+ 		 */
+ 		if (!dst->anon_vma && src->anon_vma &&
+-		    anon_vma != src->anon_vma && anon_vma->degree < 2)
++		    anon_vma->num_children < 2 &&
++		    anon_vma->num_active_vmas == 0)
+ 			dst->anon_vma = anon_vma;
+ 	}
+ 	if (dst->anon_vma)
+-		dst->anon_vma->degree++;
++		dst->anon_vma->num_active_vmas++;
+ 	unlock_anon_vma_root(root);
+ 	return 0;
+ 
+@@ -355,6 +356,7 @@ int anon_vma_fork(struct vm_area_struct
+ 	anon_vma = anon_vma_alloc();
+ 	if (!anon_vma)
+ 		goto out_error;
++	anon_vma->num_active_vmas++;
+ 	avc = anon_vma_chain_alloc(GFP_KERNEL);
+ 	if (!avc)
+ 		goto out_error_free_anon_vma;
+@@ -375,7 +377,7 @@ int anon_vma_fork(struct vm_area_struct
+ 	vma->anon_vma = anon_vma;
+ 	anon_vma_lock_write(anon_vma);
+ 	anon_vma_chain_link(vma, avc, anon_vma);
+-	anon_vma->parent->degree++;
++	anon_vma->parent->num_children++;
+ 	anon_vma_unlock_write(anon_vma);
+ 
+ 	return 0;
+@@ -407,7 +409,7 @@ void unlink_anon_vmas(struct vm_area_str
+ 		 * to free them outside the lock.
+ 		 */
+ 		if (RB_EMPTY_ROOT(&anon_vma->rb_root.rb_root)) {
+-			anon_vma->parent->degree--;
++			anon_vma->parent->num_children--;
+ 			continue;
+ 		}
+ 
+@@ -415,7 +417,7 @@ void unlink_anon_vmas(struct vm_area_str
+ 		anon_vma_chain_free(avc);
+ 	}
+ 	if (vma->anon_vma) {
+-		vma->anon_vma->degree--;
++		vma->anon_vma->num_active_vmas--;
+ 
+ 		/*
+ 		 * vma would still be needed after unlink, and anon_vma will be prepared
+@@ -433,7 +435,8 @@ void unlink_anon_vmas(struct vm_area_str
+ 	list_for_each_entry_safe(avc, next, &vma->anon_vma_chain, same_vma) {
+ 		struct anon_vma *anon_vma = avc->anon_vma;
+ 
+-		VM_WARN_ON(anon_vma->degree);
++		VM_WARN_ON(anon_vma->num_children);
++		VM_WARN_ON(anon_vma->num_active_vmas);
+ 		put_anon_vma(anon_vma);
+ 
+ 		list_del(&avc->same_vma);
 
 

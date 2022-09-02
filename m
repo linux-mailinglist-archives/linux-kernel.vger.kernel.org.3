@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4978A5AB18B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF315AAF4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236065AbiIBNgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S236894AbiIBMgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236576AbiIBNgF (ORCPT
+        with ESMTP id S236761AbiIBMeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:36:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB091CFC2;
-        Fri,  2 Sep 2022 06:15:21 -0700 (PDT)
+        Fri, 2 Sep 2022 08:34:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9F6E39A5;
+        Fri,  2 Sep 2022 05:28:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB035621ED;
-        Fri,  2 Sep 2022 12:35:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1537C433D7;
-        Fri,  2 Sep 2022 12:35:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7644862180;
+        Fri,  2 Sep 2022 12:28:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B49C433D6;
+        Fri,  2 Sep 2022 12:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122145;
-        bh=W639fYXNBMvTaEK/415DIIqTQm17Loa2KJIsjP3wMS0=;
+        s=korg; t=1662121689;
+        bh=bHz25WY47fF99xCkNTtdyucgM4/0bYVDXbB1OFIFlLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CPGCMahOPVNuaP3i3f4z8Pzy1I9c6sPE4v0wh7rEN8f1kH/FW1YMgzO/df5VHNFeW
-         8NXEI86LkxOBQsft8MTid33Meoknw1TSybDkg6vLMiCwD/Oz4pPn3TMvFK3zRG5TkA
-         JoRY/ZZVBvBGjaJ0FDpCzTB78otNV40IWDI3jGfE=
+        b=EwKObwL7PUvgGbf9YX+KI6IQmfPT1UOP91LRS7v6vckWxiWfhazxdw8jeVEgcYkSf
+         SUKU7XVdpgieoQR5LRvWFT6oflDRMKd0ggOjmOdoewJcAIEBRRWwgkaEYAZRyvR0lA
+         xyRUyUy+/cYgBQ9oUZ9nyrwmOpI9tWKvAJ2ohLBY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 5.19 07/72] Bluetooth: L2CAP: Fix build errors in some archs
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 34/77] net: Fix a data-race around sysctl_somaxconn.
 Date:   Fri,  2 Sep 2022 14:18:43 +0200
-Message-Id: <20220902121405.027946732@linuxfoundation.org>
+Message-Id: <20220902121404.772034607@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit b840304fb46cdf7012722f456bce06f151b3e81b upstream.
+[ Upstream commit 3c9ba81d72047f2e81bb535d42856517b613aba7 ]
 
-This attempts to fix the follow errors:
+While reading sysctl_somaxconn, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-In function 'memcmp',
-    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
-    inlined from 'l2cap_global_chan_by_psm' at
-    net/bluetooth/l2cap_core.c:2003:15:
-./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp'
-specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
-   44 | #define __underlying_memcmp     __builtin_memcmp
-      |                                 ^
-./include/linux/fortify-string.h:420:16: note: in expansion of macro
-'__underlying_memcmp'
-  420 |         return __underlying_memcmp(p, q, size);
-      |                ^~~~~~~~~~~~~~~~~~~
-In function 'memcmp',
-    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
-    inlined from 'l2cap_global_chan_by_psm' at
-    net/bluetooth/l2cap_core.c:2004:15:
-./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp'
-specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
-   44 | #define __underlying_memcmp     __builtin_memcmp
-      |                                 ^
-./include/linux/fortify-string.h:420:16: note: in expansion of macro
-'__underlying_memcmp'
-  420 |         return __underlying_memcmp(p, q, size);
-      |                ^~~~~~~~~~~~~~~~~~~
-
-Fixes: 332f1795ca20 ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression")
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/l2cap_core.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ net/socket.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -1991,11 +1991,11 @@ static struct l2cap_chan *l2cap_global_c
- 			src_match = !bacmp(&c->src, src);
- 			dst_match = !bacmp(&c->dst, dst);
- 			if (src_match && dst_match) {
--				c = l2cap_chan_hold_unless_zero(c);
--				if (c) {
--					read_unlock(&chan_list_lock);
--					return c;
--				}
-+				if (!l2cap_chan_hold_unless_zero(c))
-+					continue;
-+
-+				read_unlock(&chan_list_lock);
-+				return c;
- 			}
+diff --git a/net/socket.c b/net/socket.c
+index 94358566c9d10..02feaf5bd84a3 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -1661,7 +1661,7 @@ int __sys_listen(int fd, int backlog)
  
- 			/* Closest match */
+ 	sock = sockfd_lookup_light(fd, &err, &fput_needed);
+ 	if (sock) {
+-		somaxconn = sock_net(sock->sk)->core.sysctl_somaxconn;
++		somaxconn = READ_ONCE(sock_net(sock->sk)->core.sysctl_somaxconn);
+ 		if ((unsigned int)backlog > somaxconn)
+ 			backlog = somaxconn;
+ 
+-- 
+2.35.1
+
 
 

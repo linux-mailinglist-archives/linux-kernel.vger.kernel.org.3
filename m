@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609C35AB03C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E0A5AAEE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236450AbiIBMvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
+        id S236522AbiIBMbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237777AbiIBMum (ORCPT
+        with ESMTP id S236287AbiIBMaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:50:42 -0400
+        Fri, 2 Sep 2022 08:30:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4FBF5CE8;
-        Fri,  2 Sep 2022 05:36:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5A6DFB4F;
+        Fri,  2 Sep 2022 05:26:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA02CB82AAC;
-        Fri,  2 Sep 2022 12:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0002BC433C1;
-        Fri,  2 Sep 2022 12:25:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5F94B82A93;
+        Fri,  2 Sep 2022 12:23:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED5B1C433D7;
+        Fri,  2 Sep 2022 12:23:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121557;
-        bh=xkYuqx3KLa0XCdCrelZKq/YQPOXAWHnoGd327J82GBY=;
+        s=korg; t=1662121436;
+        bh=2UKLF3KgzUGUMQjH0LyH0mhDriRRyZ5EqXbokM/8s8g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SmRgRH1apztUlKBu97XnaFwdS55I+tZ+syoXpPWaUQVRXMUZQbjmHC9vy+5ww8FZ7
-         ibolI4C0U2GlIYRtN7TqfL1WNP2RWJMUqy1vi0wPRXVm1MTwPqBLbgpJIL1QRt3GDD
-         9gBpfy9YcjMzSsZ+TXBVh5HmzZplttLjS/HBUp5w=
+        b=1NS7oPuu3dIHe0gBiTzepqMhlhq2DbUmxDkPLCJS1XiEcdOkL0dDdlo/dFfhVEWec
+         xxlwZcRJN/AYhoZSD6mLwbqrW13Hyf4vIdih06o9pbOGYOdtbZLnqklNEBDMWVB/J6
+         7VRSxognrSKAqUjHqqfGgp4ylo9EMuzLKIPVslno=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 4.19 46/56] media: pvrusb2: fix memory leak in pvr_probe
+        stable@vger.kernel.org, "Denis V. Lunev" <den@openvz.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 42/42] net: neigh: dont call kfree_skb() under spin_lock_irqsave()
 Date:   Fri,  2 Sep 2022 14:19:06 +0200
-Message-Id: <20220902121401.999055471@linuxfoundation.org>
+Message-Id: <20220902121400.202901677@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
+References: <20220902121358.773776406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 945a9a8e448b65bec055d37eba58f711b39f66f0 upstream.
+commit d5485d9dd24e1d04e5509916515260186eb1455c upstream.
 
-The error handling code in pvr2_hdw_create forgets to unregister the
-v4l2 device. When pvr2_hdw_create returns back to pvr2_context_create,
-it calls pvr2_context_destroy to destroy context, but mp->hdw is NULL,
-which leads to that pvr2_hdw_destroy directly returns.
+It is not allowed to call kfree_skb() from hardware interrupt
+context or with interrupts being disabled. So add all skb to
+a tmp list, then free them after spin_unlock_irqrestore() at
+once.
 
-Fix this by adding v4l2_device_unregister to decrease the refcount of
-usb interface.
-
-Reported-by: syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 66ba215cb513 ("neigh: fix possible DoS due to net iface start/stop loop")
+Suggested-by: Denis V. Lunev <den@openvz.org>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/core/neighbour.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -2602,6 +2602,7 @@ struct pvr2_hdw *pvr2_hdw_create(struct
- 		del_timer_sync(&hdw->encoder_run_timer);
- 		del_timer_sync(&hdw->encoder_wait_timer);
- 		flush_work(&hdw->workpoll);
-+		v4l2_device_unregister(&hdw->v4l2_dev);
- 		usb_free_urb(hdw->ctl_read_urb);
- 		usb_free_urb(hdw->ctl_write_urb);
- 		kfree(hdw->ctl_read_buffer);
+--- a/net/core/neighbour.c
++++ b/net/core/neighbour.c
+@@ -224,21 +224,27 @@ static int neigh_del_timer(struct neighb
+ 
+ static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
+ {
++	struct sk_buff_head tmp;
+ 	unsigned long flags;
+ 	struct sk_buff *skb;
+ 
++	skb_queue_head_init(&tmp);
+ 	spin_lock_irqsave(&list->lock, flags);
+ 	skb = skb_peek(list);
+ 	while (skb != NULL) {
+ 		struct sk_buff *skb_next = skb_peek_next(skb, list);
+ 		if (net == NULL || net_eq(dev_net(skb->dev), net)) {
+ 			__skb_unlink(skb, list);
+-			dev_put(skb->dev);
+-			kfree_skb(skb);
++			__skb_queue_tail(&tmp, skb);
+ 		}
+ 		skb = skb_next;
+ 	}
+ 	spin_unlock_irqrestore(&list->lock, flags);
++
++	while ((skb = __skb_dequeue(&tmp))) {
++		dev_put(skb->dev);
++		kfree_skb(skb);
++	}
+ }
+ 
+ static void neigh_flush_dev(struct neigh_table *tbl, struct net_device *dev)
 
 

@@ -2,77 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C8A5AAB6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DB95AAB7A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235332AbiIBJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
+        id S235548AbiIBJbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235568AbiIBJac (ORCPT
+        with ESMTP id S235543AbiIBJbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:30:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389302C67D;
-        Fri,  2 Sep 2022 02:30:22 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CF738342A7;
-        Fri,  2 Sep 2022 09:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662111020; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rd3pA8qgIDU8b5TFfRtTYXB5vFvZyeLlgLZGMf5H4xA=;
-        b=GFigYEkmlXk35LHz5yFJR9FZflvsV06MWtczzY6e4BHvfMKWxhaTDECJrMkGR97r1/XxSf
-        tDAb5fcR0XnKs5NgRKD/14Db53Z9BeBaARjhbGSEaa9ZFDEmtE35t1esbi3mAXSasOXmCP
-        NFFgAdnVZzKcvsy6FlA6Grj7SezicZM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662111020;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rd3pA8qgIDU8b5TFfRtTYXB5vFvZyeLlgLZGMf5H4xA=;
-        b=GqkxwC7jobr70fRwxJZncNc5CZwwtb3n21oJMDKEf3Y4GNsnWOYENYgnKr4gLLh4Fm5sWe
-        nxfQ0pJQWzxSVuBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A543413328;
-        Fri,  2 Sep 2022 09:30:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ORWWJyzNEWNsFAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 02 Sep 2022 09:30:20 +0000
-Message-ID: <75ad3ed3-7dcd-474c-472c-ca32c1734281@suse.cz>
-Date:   Fri, 2 Sep 2022 11:30:20 +0200
+        Fri, 2 Sep 2022 05:31:33 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABD5C0B5E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:31:30 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id d5so905527wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=1gh2cH8+/vu9+O44Ntzb/QjlvRTOJYihF+Y3Qm1SXrI=;
+        b=X4/4Zk55Ukbyir5IW5L08w5Q+fBtLNiG6CONxZPYH5OrhlCyRaaYThfUPWsbJipvYT
+         swTNjLlHybyUWC/dfqbdAW5Ah7r6Ymh4/g/oVrerD+13326oWvDv3zz6rydOMv/zNWXn
+         LtHud4zBf5xTIhynm9koMjOkNsLG74eqnxnm8RKGFRPGx7mBVVLJnC9rPLFS1X7yRHuD
+         1yX57RVfuS/GckEUMvFGVsy+Mf5mTMSC+0BUZDK65PEfhodItsbyEKzD56Ku/yT7NOR6
+         3oT1E3kXSyaBiSKfL1ykhnf13PQkgJjtaV8uIpotOq7DBSYoGzbS6ubAJ3YQ7hxyMo0X
+         wobw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1gh2cH8+/vu9+O44Ntzb/QjlvRTOJYihF+Y3Qm1SXrI=;
+        b=KDVisJSMBh5O1cCakcEDUqrfgrkqdDLCxFRV+EdMN9KwrzHXdVq5W/u55GU3Vio3jA
+         8SzpOnp1cb1vqND86m+LpE7UMOytcrrc9V36t9D4YeLsbWzrMXPrQJdcqM3gCK4V7bbl
+         4vSZ8q+RL474kNbMmZR3SiPLxareToVIsPqFhxQ1PP6qRG8N/2+/CvtgVHRgIFtybINm
+         NqHmuFHReuwxZUJH0yNWU2FvBqXOCGiZK8uo0W7fzCvaImHiOWE5E3Ktf/YjDigLbNSJ
+         JVJJ9ISnU/Ufd1PZOr2E/subSTy1z6TB2Rjj8ZDhKqYkalpGbCb6OdhDEBFeYZC+OCfn
+         RrgA==
+X-Gm-Message-State: ACgBeo1kK68gBg46vWv76hlYnHwJQr4owQORet6T784nYSENsGjmTYr6
+        B45q0sWqROKJIDaAIBtWjKCcYw==
+X-Google-Smtp-Source: AA6agR7RmSVyjAeQGFw3MIw2xrxrUVQiVxAzEY6jcgGsEMR0UnpBnCqr/mnb1uGpwjcB9GCyqvs1tA==
+X-Received: by 2002:a1c:7703:0:b0:3a5:aefa:68e3 with SMTP id t3-20020a1c7703000000b003a5aefa68e3mr2239820wmi.158.1662111089219;
+        Fri, 02 Sep 2022 02:31:29 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id g40-20020a05600c4ca800b003a4f1385f0asm1537794wmp.24.2022.09.02.02.31.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 02:31:28 -0700 (PDT)
+Message-ID: <c22a8724-4a1c-dcc5-816d-32faedf6dee2@linaro.org>
+Date:   Fri, 2 Sep 2022 10:31:24 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v5 02/18] mm/sl[au]b: rearrange struct slab fields to
- allow larger rcu_head
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 11/21] misc: fastrpc: Prepare to dynamic dma-buf
+ locking specification
 Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        urezki@gmail.com, neeraj.iitr10@gmail.com, frederic@kernel.org,
-        paulmck@kernel.org, rostedt@goodmis.org, vineeth@bitbyteword.org,
-        boqun.feng@gmail.com, Hyeonggon Yoo <42.hyeyoo@gmail.com>
-References: <20220901221720.1105021-1-joel@joelfernandes.org>
- <20220901221720.1105021-3-joel@joelfernandes.org>
- <e84c90f2-d76f-83d4-d40b-403f894eda33@suse.cz>
-In-Reply-To: <e84c90f2-d76f-83d4-d40b-403f894eda33@suse.cz>
-Content-Type: text/plain; charset=UTF-8
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        Qiang Yu <yuq825@gmail.com>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
+ <20220831153757.97381-12-dmitry.osipenko@collabora.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220831153757.97381-12-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,57 +118,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/2/22 11:26, Vlastimil Babka wrote:
-> On 9/2/22 00:17, Joel Fernandes (Google) wrote:
->> From: Vlastimil Babka <vbabka@suse.cz>
->> 
->> Joel reports [1] that increasing the rcu_head size for debugging
->> purposes used to work before struct slab was split from struct page, but
->> now runs into the various SLAB_MATCH() sanity checks of the layout.
->> 
->> This is because the rcu_head in struct page is in union with large
->> sub-structures and has space to grow without exceeding their size, while
->> in struct slab (for SLAB and SLUB) it's in union only with a list_head.
->> 
->> On closer inspection (and after the previous patch) we can put all
->> fields except slab_cache to a union with rcu_head, as slab_cache is
->> sufficient for the rcu freeing callbacks to work and the rest can be
->> overwritten by rcu_head without causing issues.
->> 
->> This is only somewhat complicated by the need to keep SLUB's
->> freelist+counters aligned for cmpxchg_double. As a result the fields
->> need to be reordered so that slab_cache is first (after page flags) and
->> the union with rcu_head follows. For consistency, do that for SLAB as
->> well, although not necessary there.
->> 
->> As a result, the rcu_head field in struct page and struct slab is no
->> longer at the same offset, but that doesn't matter as there is no
->> casting that would rely on that in the slab freeing callbacks, so we can
->> just drop the respective SLAB_MATCH() check.
->> 
->> Also we need to update the SLAB_MATCH() for compound_head to reflect the
->> new ordering.
->> 
->> While at it, also add a static_assert to check the alignment needed for
->> cmpxchg_double so mistakes are found sooner than a runtime GPF.
->> 
->> [1] https://lore.kernel.org/all/85afd876-d8bb-0804-b2c5-48ed3055e702@joelfernandes.org/
->> 
->> Reported-by: Joel Fernandes <joel@joelfernandes.org>
->> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+
+
+On 31/08/2022 16:37, Dmitry Osipenko wrote:
+> Prepare fastrpc to the common dynamic dma-buf locking convention by
+> starting to use the unlocked versions of dma-buf API functions.
 > 
-> I've added patches 01 and 02 to slab tree for -next exposure before Joel's
-> full series posting, but it should be also ok if rcu tree carries them with
-> the whole patchset. I can then drop them from slab tree (there are no
-> dependencies with other stuff there) so we don't introduce duplicite commits
-> needlessly, just give me a heads up.
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
 
-Ah but in that case please apply the reviews from my posting [1]
+LGTM,
 
-patch 1:
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Incase you plan to take it via another tree.
 
-patch 2
-Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[1] https://lore.kernel.org/all/20220826090912.11292-1-vbabka@suse.cz/
+
+--srini
+>   drivers/misc/fastrpc.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> index 93ebd174d848..6fcfb2e9f7a7 100644
+> --- a/drivers/misc/fastrpc.c
+> +++ b/drivers/misc/fastrpc.c
+> @@ -310,8 +310,8 @@ static void fastrpc_free_map(struct kref *ref)
+>   				return;
+>   			}
+>   		}
+> -		dma_buf_unmap_attachment(map->attach, map->table,
+> -					 DMA_BIDIRECTIONAL);
+> +		dma_buf_unmap_attachment_unlocked(map->attach, map->table,
+> +						  DMA_BIDIRECTIONAL);
+>   		dma_buf_detach(map->buf, map->attach);
+>   		dma_buf_put(map->buf);
+>   	}
+> @@ -726,7 +726,7 @@ static int fastrpc_map_create(struct fastrpc_user *fl, int fd,
+>   		goto attach_err;
+>   	}
+>   
+> -	map->table = dma_buf_map_attachment(map->attach, DMA_BIDIRECTIONAL);
+> +	map->table = dma_buf_map_attachment_unlocked(map->attach, DMA_BIDIRECTIONAL);
+>   	if (IS_ERR(map->table)) {
+>   		err = PTR_ERR(map->table);
+>   		goto map_err;

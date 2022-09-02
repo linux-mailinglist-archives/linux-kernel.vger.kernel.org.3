@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C475AB1BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00DC5AAF2F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236265AbiIBNi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        id S236874AbiIBMei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237542AbiIBNh7 (ORCPT
+        with ESMTP id S236879AbiIBMdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:37:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2A0125B81;
-        Fri,  2 Sep 2022 06:16:32 -0700 (PDT)
+        Fri, 2 Sep 2022 08:33:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CE0E193D;
+        Fri,  2 Sep 2022 05:27:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E114621E3;
-        Fri,  2 Sep 2022 12:34:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C9A9C433D7;
-        Fri,  2 Sep 2022 12:34:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC9CD6211D;
+        Fri,  2 Sep 2022 12:25:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30FEC433C1;
+        Fri,  2 Sep 2022 12:25:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122094;
-        bh=xIwGVScQaB9wNQuwUy6UEhNULReYG68Iz9QNMVFlI5Q=;
+        s=korg; t=1662121520;
+        bh=E63Stpnr3yidX6/oPg6+aQlRal9zM08EPfNrXFXspmo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xP5Rsd4f5bnyctrj7SsA85/GUiaAxiOlRmvPwjWys6D5iqvZunNrM6JQklIXfOyeu
-         n6CoXy1hqnY8ZWy2KM+efzfN+/slaa5ugqJR3gAZJXQ0NDA4TJbKrKWIj+HrqK7oDB
-         Ror4lL1ripmBGZ2Ad9Ky1YClriA70qygx5LN3xUs=
+        b=x2TsJ2AhxK/Is7YP6qoH+zY8hUA4z1hgSDoOn94/SniSY5NqybyAvWDfmKsVJ6Pm/
+         BjZ9H0QVmgW96hqmNMASEr8IlVenA0r8iFORanxaLniZvPnaQwiymskS44u1Rs+XDp
+         HXIzQKj1RNELgDDS5Cxf8UUdbaLTExBUbQbgJxk0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.19 11/72] media: pvrusb2: fix memory leak in pvr_probe
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 27/56] net: Fix a data-race around sysctl_somaxconn.
 Date:   Fri,  2 Sep 2022 14:18:47 +0200
-Message-Id: <20220902121405.169501601@linuxfoundation.org>
+Message-Id: <20220902121401.166047129@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
+References: <20220902121400.219861128@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit 945a9a8e448b65bec055d37eba58f711b39f66f0 upstream.
+[ Upstream commit 3c9ba81d72047f2e81bb535d42856517b613aba7 ]
 
-The error handling code in pvr2_hdw_create forgets to unregister the
-v4l2 device. When pvr2_hdw_create returns back to pvr2_context_create,
-it calls pvr2_context_destroy to destroy context, but mp->hdw is NULL,
-which leads to that pvr2_hdw_destroy directly returns.
+While reading sysctl_somaxconn, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fix this by adding v4l2_device_unregister to decrease the refcount of
-usb interface.
-
-Reported-by: syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/socket.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -2610,6 +2610,7 @@ struct pvr2_hdw *pvr2_hdw_create(struct
- 		del_timer_sync(&hdw->encoder_run_timer);
- 		del_timer_sync(&hdw->encoder_wait_timer);
- 		flush_work(&hdw->workpoll);
-+		v4l2_device_unregister(&hdw->v4l2_dev);
- 		usb_free_urb(hdw->ctl_read_urb);
- 		usb_free_urb(hdw->ctl_write_urb);
- 		kfree(hdw->ctl_read_buffer);
+diff --git a/net/socket.c b/net/socket.c
+index e5cc9f2b981ed..a5167f03c31db 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -1619,7 +1619,7 @@ int __sys_listen(int fd, int backlog)
+ 
+ 	sock = sockfd_lookup_light(fd, &err, &fput_needed);
+ 	if (sock) {
+-		somaxconn = sock_net(sock->sk)->core.sysctl_somaxconn;
++		somaxconn = READ_ONCE(sock_net(sock->sk)->core.sysctl_somaxconn);
+ 		if ((unsigned int)backlog > somaxconn)
+ 			backlog = somaxconn;
+ 
+-- 
+2.35.1
+
 
 

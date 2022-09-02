@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4715AB011
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AB65AAEDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237544AbiIBMsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S236385AbiIBMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237518AbiIBMsD (ORCPT
+        with ESMTP id S236663AbiIBMaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:48:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91B0F2430;
-        Fri,  2 Sep 2022 05:34:37 -0700 (PDT)
+        Fri, 2 Sep 2022 08:30:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055DCD5984;
+        Fri,  2 Sep 2022 05:25:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A24C9621AF;
-        Fri,  2 Sep 2022 12:32:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5320C433D6;
-        Fri,  2 Sep 2022 12:32:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1059BB82AA3;
+        Fri,  2 Sep 2022 12:25:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 592A4C433C1;
+        Fri,  2 Sep 2022 12:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121950;
-        bh=qoyw/ywdNO6sZyo1tUQ3AoaTQwR0eePql9n0oiR6GcI=;
+        s=korg; t=1662121545;
+        bh=44j/0QGKbnCXOQkwSh+zBTtcYgPKScXSQtuBhIR6w2k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tjSCePsB+G6UUZ6fv8prV0bPPcJpCqB2jZNwSmcn7/HNEWhYHxXUUNTK898jDrfD9
-         BHnTJGBYx6tnQlKNw3npqk6TUKmTAG1vSbTAs5KjeqhW/4TEMkChxPFw9s1s5Pe2nR
-         rFjFRQ0GUmsqNduEax5d0H7HKfIS6Odwihzq2FW0=
+        b=xXb9o31k/NdvNg67PVrrVa0jnzupOlxZwAghd6rl9/rtivP2ZVrFLSPXINvkQRHDs
+         8jFEDc2Hvj4kaDF7GIcRC72zDllHbEU/xrlmI6brvC249EhH70p1yprhoSHqo1Qv5n
+         H5YVYB3OI3ZFHdeG6ErIcXNInUbIEdYU0yMz/6VQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Kilmer <srjek2@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 5.15 39/73] HID: asus: ROG NKey: Ignore portion of 0x5a report
+        stable@vger.kernel.org, Jing Leng <jleng@ambarella.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <n.schier@avm.de>
+Subject: [PATCH 4.19 43/56] kbuild: Fix include path in scripts/Makefile.modpost
 Date:   Fri,  2 Sep 2022 14:19:03 +0200
-Message-Id: <20220902121405.718984071@linuxfoundation.org>
+Message-Id: <20220902121401.870740913@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
+References: <20220902121400.219861128@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Kilmer <srjek2@gmail.com>
+From: Jing Leng <jleng@ambarella.com>
 
-commit 1c0cc9d11c665020cbeb80e660fb8929164407f4 upstream.
+commit 23a0cb8e3225122496bfa79172005c587c2d64bf upstream.
 
-On an Asus G513QY, of the 5 bytes in a 0x5a report, only the first byte
-is a meaningful keycode. The other bytes are zeroed out or hold garbage
-from the last packet sent to the keyboard.
+When building an external module, if users don't need to separate the
+compilation output and source code, they run the following command:
+"make -C $(LINUX_SRC_DIR) M=$(PWD)". At this point, "$(KBUILD_EXTMOD)"
+and "$(src)" are the same.
 
-This patch fixes up the report descriptor for this event so that the
-general hid code will only process 1 byte for keycodes, avoiding
-spurious key events and unmapped Asus vendor usagepage code warnings.
+If they need to separate them, they run "make -C $(KERNEL_SRC_DIR)
+O=$(KERNEL_OUT_DIR) M=$(OUT_DIR) src=$(PWD)". Before running the
+command, they need to copy "Kbuild" or "Makefile" to "$(OUT_DIR)" to
+prevent compilation failure.
 
-Signed-off-by: Josh Kilmer <srjek2@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+So the kernel should change the included path to avoid the copy operation.
+
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+[masahiro: I do not think "M=$(OUT_DIR) src=$(PWD)" is the official way,
+but this patch is a nice clean up anyway.]
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+[nsc: updated context for v4.19]
+Signed-off-by: Nicolas Schier <n.schier@avm.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-asus.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ scripts/Makefile.modpost |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/hid/hid-asus.c
-+++ b/drivers/hid/hid-asus.c
-@@ -1212,6 +1212,13 @@ static __u8 *asus_report_fixup(struct hi
- 		rdesc = new_rdesc;
- 	}
+--- a/scripts/Makefile.modpost
++++ b/scripts/Makefile.modpost
+@@ -51,8 +51,7 @@ obj := $(KBUILD_EXTMOD)
+ src := $(obj)
  
-+	if (drvdata->quirks & QUIRK_ROG_NKEY_KEYBOARD &&
-+			*rsize == 331 && rdesc[190] == 0x85 && rdesc[191] == 0x5a &&
-+			rdesc[204] == 0x95 && rdesc[205] == 0x05) {
-+		hid_info(hdev, "Fixing up Asus N-KEY keyb report descriptor\n");
-+		rdesc[205] = 0x01;
-+	}
-+
- 	return rdesc;
- }
+ # Include the module's Makefile to find KBUILD_EXTRA_SYMBOLS
+-include $(if $(wildcard $(KBUILD_EXTMOD)/Kbuild), \
+-             $(KBUILD_EXTMOD)/Kbuild, $(KBUILD_EXTMOD)/Makefile)
++include $(if $(wildcard $(src)/Kbuild), $(src)/Kbuild, $(src)/Makefile)
+ endif
  
+ include scripts/Makefile.lib
 
 

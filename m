@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA76F5AA63C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A6F5AA648
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbiIBDUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S235175AbiIBDVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234641AbiIBDU3 (ORCPT
+        with ESMTP id S229804AbiIBDUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:20:29 -0400
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13B9313F91
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:20:06 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowABXX0tjdhFjm_xwAA--.15986S2;
-        Fri, 02 Sep 2022 11:20:04 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] USB: serial: ftdi_sio: Add check for create_sysfs_attrs
-Date:   Fri,  2 Sep 2022 11:20:02 +0800
-Message-Id: <20220902032002.3859368-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Sep 2022 23:20:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424C62DD;
+        Thu,  1 Sep 2022 20:20:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F28A9B82980;
+        Fri,  2 Sep 2022 03:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1C0DC433C1;
+        Fri,  2 Sep 2022 03:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662088836;
+        bh=YCJr9iHj+jHwZFgouCTxuRVFKnFA7bJfiUzOTkjxtlU=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=dYSc+wLxPM3Yxq6Tepm+O2b5CE0LnE/uLcuB3UF7dpSrUCNiaq1IjDnAKB3j5h6Od
+         kde0sBLDinZONd4n/Gd2VmnhXEUL8d2coEnSIqCEye2PPPhtpgvRy+JClBsqQ5yD3B
+         uF2QlkmbEr714wxnl/dzRNK95n5BZunlBWJ+bDTJq8br8+Lj1hMlfXwxko4d4Xb7Bv
+         KU5pvdluBstPOvjtNT2SFQYC1zrftKAuMoQhgjnz07Rke5QZcpPvFNtRCcM0XhRDpN
+         kw7U7gYdianibdtrotsZJbh/dB2Tb3elNYjYf+AQxjaD/1vJmD6XhP2IC+uISPj2Mj
+         zhsHiqcmU66AQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Luca Coelho <luciano.coelho@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] iwlwifi: calib: Refactor iwl_calib_result usage for clarity
+References: <20220901204558.2256458-1-keescook@chromium.org>
+Date:   Fri, 02 Sep 2022 06:20:26 +0300
+In-Reply-To: <20220901204558.2256458-1-keescook@chromium.org> (Kees Cook's
+        message of "Thu, 1 Sep 2022 13:45:58 -0700")
+Message-ID: <87ilm6ea2t.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABXX0tjdhFjm_xwAA--.15986S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFy5GrW3JFWkurWUur48JFb_yoWfCFXE9w
-        1UWFsxXryYkFyfJwn2k3yrArWYgws5ZF48uF12gFyfta4DJFZxXrs2v39xGr4UXr4kAr9x
-        Cwn8ua4xAay0gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4kFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUjhL8DU
-        UUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,33 +64,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As create_sysfs_attrs() can return error number,
-it should be better to check the return value and
-deal with the exception.
+Kees Cook <keescook@chromium.org> writes:
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/usb/serial/ftdi_sio.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> In preparation for FORTIFY_SOURCE performing run-time destination buffer
+> bounds checking for memcpy(), refactor the use of struct iwl_calib_result:
+>
+> - Have struct iwl_calib_result contain struct iwl_calib_cmd since
+>   functions expect to operate on the "data" flex array in "cmd", which
+>   follows the "hdr" member.
+> - Switch argument passing around to use struct iwl_calib_cmd instead of
+>   struct iwl_calib_hdr to prepare functions to see the "data" member.
+> - Change iwl_calib_set()'s "len" argument to a size_t since it is always
+>   unsigned and is normally receiving the output of sizeof().
+> - Add an explicit length sanity check in iwl_calib_set().
+> - Adjust the memcpy() to avoid copying across the now visible composite
+>   flex array structure.
+>
+> This avoids the future run-time warning:
+>
+>   memcpy: detected field-spanning write (size 8) of single field "&res->hdr" (size 4)
+>
+> Cc: Luca Coelho <luciano.coelho@intel.com>
+> Cc: Kalle Valo <kvalo@codeaurora.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Johannes Berg <johannes.berg@intel.com>
+> Cc: linux-wireless@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Reported-by: Andy Lavr <andy.lavr@gmail.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index d5a3986dfee7..c28f894430a5 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -2251,7 +2251,11 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
- 	if (read_latency_timer(port) < 0)
- 		priv->latency = 16;
- 	write_latency_timer(port);
--	create_sysfs_attrs(port);
-+	result = create_sysfs_attrs(port);
-+	if (result) {
-+		remove_sysfs_attrs(port);
-+		return result;
-+	}
- 
- 	result = ftdi_gpio_init(port);
- 	if (result < 0) {
+Gregory, as this fixes a future warning can I take this directly to
+wireless-next?
+
 -- 
-2.25.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

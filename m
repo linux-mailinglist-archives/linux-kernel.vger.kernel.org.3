@@ -2,71 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E575AB977
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC105AB979
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiIBUaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 16:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S229774AbiIBUeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 16:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiIBUaT (ORCPT
+        with ESMTP id S229504AbiIBUeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 16:30:19 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A7C63F24;
-        Fri,  2 Sep 2022 13:30:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=6jN31VgQCCRw0E2mRT8jomR23ac2A5p7CJG0IlzW8UU=; b=Y/50yDLE6u8Ow435onwJCh+W40
-        P/1T+18ej3hVxzr+xXrhq90lL9CBKEo6IacYzj51L8O5Z4xCyfy6SGViQnQH2RTPJPAfDDEvQKLY3
-        TDFdgIC/hdFwI+FfrpkdKwRci+sHnB2cfZnc4nS+fltjA9eomaCRzDqhTEQpaySjQnQE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oUDIZ-00FR3g-JQ; Fri, 02 Sep 2022 22:29:55 +0200
-Date:   Fri, 2 Sep 2022 22:29:55 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jerry.Ray@microchip.com
-Cc:     vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
+        Fri, 2 Sep 2022 16:34:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B38E286C0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662150843;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bzVIoDE74/+VAO67vvsLdiWzQ40qTEUZOmIctAhfkOk=;
+        b=TcIL50UkR7BmKcPPGMYej3lXf0p+ESWijIkWiDlGSTDAoqhhNCVYrtOXzsZU1SxpE2MJPf
+        /jif/Zk/h3JiThRgX35D4QCrZi31+vE4yTtVxcBoJGTAkNq9lvHH+m2ryDqMGvOi/gRZQr
+        uEmfuYT4wUAx5+0O8me9o+NexZddtR4=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-633-U_b6EKfmOXiRKzfsvhTX8A-1; Fri, 02 Sep 2022 16:34:02 -0400
+X-MC-Unique: U_b6EKfmOXiRKzfsvhTX8A-1
+Received: by mail-qt1-f198.google.com with SMTP id e30-20020ac8011e000000b00342f61e67aeso2386966qtg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 13:34:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=bzVIoDE74/+VAO67vvsLdiWzQ40qTEUZOmIctAhfkOk=;
+        b=8CUax2hwpxzECC5BVcwLfFxid3eyuzhD7Wmqq7TSPu4hRe1t2h0o5669N2p+njqUyX
+         lFKyhew5ELlOYNRcr4knKORQWYnPvM0DInxOSEtftvt6c3hCCaIIFQOZiQb0ci/FdEk3
+         oSiMjZYIVjOw/o/qLZARjKdPVG2kYVXywgtTQT2LPT91n1k79WalwI8Sr9i19LKJC0ZH
+         YbYOj7Jnx0WUEQIemEDrO2RkYbwtnvKnkmamD0j8A/K+7HN79ZiMt4TABhBzsSGZBvpO
+         m+zNNSP1x2GGd5PZCX75KZumc7+gAN4Okqw4rYVZ1rx/LkmP+2e5I4C4erG7KQJkpnnq
+         5dAg==
+X-Gm-Message-State: ACgBeo1HEBDwgKQ4CNFmGCKLHkCSNW38fPSm21j5AnvTanHu/P5kXwS7
+        QWuH8ePu80iKvrX1JpwMThkywM/Ytyn5YtGtXX7UxcZ5ZlDPzBg+r3StFN2dWsJw9JlAsgtOPd0
+        PziAag3FP6z749OTvs1D+/7S/
+X-Received: by 2002:a05:6214:f21:b0:498:fada:9416 with SMTP id iw1-20020a0562140f2100b00498fada9416mr27426238qvb.84.1662150841653;
+        Fri, 02 Sep 2022 13:34:01 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR66IV/RH+gSIrgn9dSAl9c65XLtxRKXEx/Lv53pYBTVoUka8qJRbitW0RQzp8Z/YjcuFDziUA==
+X-Received: by 2002:a05:6214:f21:b0:498:fada:9416 with SMTP id iw1-20020a0562140f2100b00498fada9416mr27426220qvb.84.1662150841464;
+        Fri, 02 Sep 2022 13:34:01 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id f22-20020ac87f16000000b0034456277e3asm1664849qtk.89.2022.09.02.13.34.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 13:34:00 -0700 (PDT)
+Date:   Fri, 2 Sep 2022 16:33:59 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     david@redhat.com, kirill.shutemov@linux.intel.com,
+        jhubbard@nvidia.com, jgg@nvidia.com, hughd@google.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] net: dsa: LAN9303: Add basic support for LAN9354
-Message-ID: <YxJnw40yGUFGYopB@lunn.ch>
-References: <20220829180037.31078-1-jerry.ray@microchip.com>
- <20220829180037.31078-2-jerry.ray@microchip.com>
- <Yw0RfRXGZKl+ZwOi@lunn.ch>
- <MWHPR11MB16938C27CC03D84BA2194DC3EF7A9@MWHPR11MB1693.namprd11.prod.outlook.com>
+Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
+Message-ID: <YxJot6JbFl0HnXq3@xz-m1.local>
+References: <20220901222707.477402-1-shy828301@gmail.com>
+ <YxE/vuQlWJCJMuG2@xz-m1.local>
+ <CAHbLzkqjZ_UhUbJ_f9Br7WCAgQvjrm5bMPRsKYvaFc2bzSuzrw@mail.gmail.com>
+ <YxIofPiI8jvGzcjC@xz-m1.local>
+ <CAHbLzkqGdnwY4P8jKQR0ojm6QV6b3dBi5pwrC1UJ4dqi3EqS4w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <MWHPR11MB16938C27CC03D84BA2194DC3EF7A9@MWHPR11MB1693.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHbLzkqGdnwY4P8jKQR0ojm6QV6b3dBi5pwrC1UJ4dqi3EqS4w@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >Please validate that what you find on the board actually is what the compatible says it should be. If you don't validate it, there will be some DT blobs that have the wrong value, but probe fine. But then you cannot actually make use of the compatible string in the driver to do something different between the 9303 and the 9354 because some boards have the wrong compatible....
-
-Please configure your mail client to stop corrupting emails. My reply
-definitely did not have lines this long.
-
-> >
-> >     Andrew
-> >
+On Fri, Sep 02, 2022 at 10:45:20AM -0700, Yang Shi wrote:
+> > How about another patch to remove the ppc impl too?  Then it can be a two
+> > patches series.
 > 
+> BTW, I don't think we could remove the ppc implementation since it is
+> different from the generic pmdp_collapse_flush(), particularly for the
+> hash part IIUC.
+> 
+> The generic version calls flush_tlb_range() -> hash__flush_tlb_range()
+> for hash, but the hash call is actually no-op. The ppc version calls
+> hash__pmdp_collapse_flush() -> flush_tlb_pmd_range(), which does
+> something useful.
 
-> At this time, the driver is meant to support both devices equally.  In the future, I will be adding content that only applies to the LAN9354.  That is when I'm planning to add .data to the .compatible entries.
+One thing I found interesting (and also a bit confused..) is that the ppc
+code used the name flush_tlb_pmd_range() to "flush tlb range in pte level",
+which is kind of against the tlb API design..
 
-Which makes it even more important to validate the compatible against
-what is actually on the board. As i said, in its current state, people
-are going to get it wrong, and your .data won't work, since it will be
-for a different chip to which is actually on the board.
+The generic tlb API has a very close function called flush_pmd_tlb_range()
+which is only used to do pmd-level flushing, while here the ppc version of
+flush_tlb_pmd_range() is actually flush_tlb_range() in the generic API.
 
-    Andrew
+Agreed that it may worth having a look from ppc developers.
+
+-- 
+Peter Xu
+

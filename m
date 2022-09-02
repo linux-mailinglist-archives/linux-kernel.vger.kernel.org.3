@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF525AB088
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C395AB0DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238089AbiIBMzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S238357AbiIBM7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238116AbiIBMxv (ORCPT
+        with ESMTP id S238098AbiIBM63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:53:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4C5FAC75;
-        Fri,  2 Sep 2022 05:38:23 -0700 (PDT)
+        Fri, 2 Sep 2022 08:58:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF24447B80;
+        Fri,  2 Sep 2022 05:39:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 865B9B82AD7;
-        Fri,  2 Sep 2022 12:37:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DF8C433D6;
-        Fri,  2 Sep 2022 12:37:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B22F62192;
+        Fri,  2 Sep 2022 12:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37965C433D7;
+        Fri,  2 Sep 2022 12:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122255;
-        bh=offp41GCZkSMjK/menYUEckaRbWIdkOoLjZE3dJk2QQ=;
+        s=korg; t=1662121829;
+        bh=4xJJOHqLzP7spsbVN3XdLsPg6PaX12EVx7PC1XKrqDs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D969sbdjz2kYDxvB78BoiiwBGhe4q4ksIE9136v9PIqb6XAA6kXSVT8CHXA7KcrXq
-         parCqHpHi9ft8VqA4ScCHAnMOx+CHM1Oih6PsrLwZvMjd7KAB6OXxCH3qWlO7PqSu8
-         MX6rgB9EC3hoD1Ws9hBsWaSCWujpyUbtA9RT/MUQ=
+        b=kVxiYBWM8EJJQ2rCJ5GtNIfvE9yMUsEJG/JiwZQsGez8cvdFatFqj6dxs0fbsh+d9
+         1MXS2ZMqk365EgjcojosOyFnxw0XmqOLSxnjBBpSpqiuj0DP8ncSY609sGzniwDbzL
+         rCgSC+8P+WkPbhnO4AIdSocdG8Qyr8d4MK5QgBcA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Woods <davwoods@nvidia.com>,
-        Liming Sun <limings@nvidia.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 31/72] mmc: sdhci-of-dwcmshc: Re-enable support for the BlueField-3 SoC
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Letu Ren <fantasquex@gmail.com>, Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.4 58/77] fbdev: fb_pm2fb: Avoid potential divide by zero error
 Date:   Fri,  2 Sep 2022 14:19:07 +0200
-Message-Id: <20220902121405.816702291@linuxfoundation.org>
+Message-Id: <20220902121405.610362813@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,73 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liming Sun <limings@nvidia.com>
+From: Letu Ren <fantasquex@gmail.com>
 
-[ Upstream commit a0753ef66c34c1739580219dca664eda648164b7 ]
+commit 19f953e7435644b81332dd632ba1b2d80b1e37af upstream.
 
-The commit 08f3dff799d4 (mmc: sdhci-of-dwcmshc: add rockchip platform
-support") introduces the use of_device_get_match_data() to check for some
-chips. Unfortunately, it also breaks the BlueField-3 FW, which uses ACPI.
+In `do_fb_ioctl()` of fbmem.c, if cmd is FBIOPUT_VSCREENINFO, var will be
+copied from user, then go through `fb_set_var()` and
+`info->fbops->fb_check_var()` which could may be `pm2fb_check_var()`.
+Along the path, `var->pixclock` won't be modified. This function checks
+whether reciprocal of `var->pixclock` is too high. If `var->pixclock` is
+zero, there will be a divide by zero error. So, it is necessary to check
+whether denominator is zero to avoid crash. As this bug is found by
+Syzkaller, logs are listed below.
 
-To fix the problem, let's add the ACPI match data and the corresponding
-quirks to re-enable the support for the BlueField-3 SoC.
+divide error in pm2fb_check_var
+Call Trace:
+ <TASK>
+ fb_set_var+0x367/0xeb0 drivers/video/fbdev/core/fbmem.c:1015
+ do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
+ fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
 
-Reviewed-by: David Woods <davwoods@nvidia.com>
-Signed-off-by: Liming Sun <limings@nvidia.com>
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-Fixes: 08f3dff799d4 ("mmc: sdhci-of-dwcmshc: add rockchip platform support")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220809173742.178440-1-limings@nvidia.com
-[Ulf: Clarified the commit message a bit]
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Letu Ren <fantasquex@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/sdhci-of-dwcmshc.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/video/fbdev/pm2fb.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-index f5fd88c7adef1..335c88fd849c4 100644
---- a/drivers/mmc/host/sdhci-of-dwcmshc.c
-+++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-@@ -296,6 +296,15 @@ static const struct sdhci_pltfm_data sdhci_dwcmshc_pdata = {
- 	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
- };
+--- a/drivers/video/fbdev/pm2fb.c
++++ b/drivers/video/fbdev/pm2fb.c
+@@ -616,6 +616,11 @@ static int pm2fb_check_var(struct fb_var
+ 		return -EINVAL;
+ 	}
  
-+#ifdef CONFIG_ACPI
-+static const struct sdhci_pltfm_data sdhci_dwcmshc_bf3_pdata = {
-+	.ops = &sdhci_dwcmshc_ops,
-+	.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN,
-+	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
-+		   SDHCI_QUIRK2_ACMD23_BROKEN,
-+};
-+#endif
++	if (!var->pixclock) {
++		DPRINTK("pixclock is zero\n");
++		return -EINVAL;
++	}
 +
- static const struct sdhci_pltfm_data sdhci_dwcmshc_rk35xx_pdata = {
- 	.ops = &sdhci_dwcmshc_rk35xx_ops,
- 	.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN |
-@@ -360,7 +369,10 @@ MODULE_DEVICE_TABLE(of, sdhci_dwcmshc_dt_ids);
- 
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id sdhci_dwcmshc_acpi_ids[] = {
--	{ .id = "MLNXBF30" },
-+	{
-+		.id = "MLNXBF30",
-+		.driver_data = (kernel_ulong_t)&sdhci_dwcmshc_bf3_pdata,
-+	},
- 	{}
- };
- #endif
-@@ -376,7 +388,7 @@ static int dwcmshc_probe(struct platform_device *pdev)
- 	int err;
- 	u32 extra;
- 
--	pltfm_data = of_device_get_match_data(&pdev->dev);
-+	pltfm_data = device_get_match_data(&pdev->dev);
- 	if (!pltfm_data) {
- 		dev_err(&pdev->dev, "Error: No device match data found\n");
- 		return -ENODEV;
--- 
-2.35.1
-
+ 	if (PICOS2KHZ(var->pixclock) > PM2_MAX_PIXCLOCK) {
+ 		DPRINTK("pixclock too high (%ldKHz)\n",
+ 			PICOS2KHZ(var->pixclock));
 
 

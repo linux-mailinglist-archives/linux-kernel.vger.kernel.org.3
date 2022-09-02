@@ -2,115 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35875AA7E9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F077B5AA7EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235467AbiIBGQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 02:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
+        id S235470AbiIBGQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 02:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235465AbiIBGQV (ORCPT
+        with ESMTP id S235474AbiIBGQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 02:16:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A888E0CE;
-        Thu,  1 Sep 2022 23:16:20 -0700 (PDT)
-Date:   Fri, 02 Sep 2022 06:16:16 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662099378;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yh5nbofxKXDkqZCw/xR+TdYjF6z3LSisPjX1xlymmF0=;
-        b=yr/ratrtsf8EDswM9qS0PGolYp4Atn2sNTcTcpCobWNqtBUE74pQ4skmoBvjD/YYCrlARL
-        ej7QSgq6waWLrStYBCxpSH4nXSbZj1phr0tXItN+uu5uCMCk6sXLRgUA+iP120WiFa4Nzp
-        XF++HVx74UI5wQ5NUdruzJBxcd8Nv1/ayNoAejxPaVpZsZgj/fAT9Sd+WPThU5xoLX/yRp
-        Se4HEy0nokcjVFgucCGcMmgrpSExZcDlD+ZEBGUl+U3Ej9kfv9mx4XAzb8VRe7mDMlhcHb
-        IyqeZ6oUnZNVgTPhMNO0YwCDaoz1MdXT1aujOpB9CY7w18vgDrM1GCKbYjgNjA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662099378;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yh5nbofxKXDkqZCw/xR+TdYjF6z3LSisPjX1xlymmF0=;
-        b=hi5+w0JHOCaR643UN4rj1mc44DFnesXEUZ1Ugwl1ibW45EHcEcpkkfZVO1ZrRyTROdW/Ey
-        ePKUBfqdg0PDbRCw==
-From:   "tip-bot2 for Ashok Raj" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode: Print previous version of
- microcode after reload
-Cc:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220829181030.722891-1-ashok.raj@intel.com>
-References: <20220829181030.722891-1-ashok.raj@intel.com>
+        Fri, 2 Sep 2022 02:16:41 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93492915C4;
+        Thu,  1 Sep 2022 23:16:40 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id t5so1299976edc.11;
+        Thu, 01 Sep 2022 23:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=aiWzycCBoIbbruOADleMkCk4b+tj8c7FcfdTIbVcXyE=;
+        b=gXbBJGQnKr/0+Kwbk9Pv0NByprxnRUodstMYhyuMmyfTySZ8jRGcj5PRr2i4XmkRp2
+         zRvLX6RNK3bu5TBdptCrAyNdHut4CYD5JxU0MCSxH5hkm5gq6707jKq1Z4B+7/9P1hcM
+         iFsuH8Prp9lnC9DLLfotwX+jNTbmQuxjIW1KgXKVWpSLCPO0VoXbDCeipJY8JZJRBpgv
+         hxtdYXQZQYxqQePUWnikGSEcD2ZRp9XSSJjjVEO8IBtw5L/7YqlXmNDWYxXLh7Eq28uE
+         r/RwwG9BDzWVv5S6UY9utfHi8h3fWXMLISU2EW3kYL864OQsTg5s7wBQPG//hInEEKkT
+         BnJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=aiWzycCBoIbbruOADleMkCk4b+tj8c7FcfdTIbVcXyE=;
+        b=2/vSCeGxuXobB1rWqiqrlDBIhG0R+R8mpAD4QqFsXOg1dEyb97sns0vP9NObUa6n2N
+         CcR1LIHWjGZbkMxonT3RHom+skNvC1+vU5HhH6avID+GmYJTP4Y4cqhP622xuYaUaKTC
+         GVxVMOj/1XcrDMERJ6+3qZoHr0CpStp9aQmCrCu42sQoQehfwi0CiTuvmem7w7TNJQpM
+         z5Osh1sX5U/N+J7x87llugwfG9DvqUtjhlpWmxsTCXRWSsv30+WCLy8Xp8wYXy4vhDtY
+         o6aYDkEosQ18hOV64412abaO44TFPKQTwF6ee4MOyH4Y+iCyP4/waaftmlhFmybNR3fV
+         S+Uw==
+X-Gm-Message-State: ACgBeo115f/lek5Htq8XX9R6BOoUT3enP367NJ+oTKfRF6ZKpxrvCqqs
+        w9EBcCKVl7ZL/rKfUx5cw4x3s2C4gESLACWxtBE=
+X-Google-Smtp-Source: AA6agR7ffwCW0E/pGXEIeZCbLWCZa03s3qO/DMl52Zz0jW7ILT8w0hg410F8D96hAnOQk/HPn7gjJ3p/1TCpAEKoFPE=
+X-Received: by 2002:a05:6402:1215:b0:448:1431:465e with SMTP id
+ c21-20020a056402121500b004481431465emr24048836edw.395.1662099398839; Thu, 01
+ Sep 2022 23:16:38 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <166209937647.401.14402365682473849794.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220830022238.28379-1-milkfafa@gmail.com> <20220830022238.28379-3-milkfafa@gmail.com>
+ <a3a93acc-434e-4a94-6ba6-6a71f2da8736@linaro.org>
+In-Reply-To: <a3a93acc-434e-4a94-6ba6-6a71f2da8736@linaro.org>
+From:   Kun-Fa Lin <milkfafa@gmail.com>
+Date:   Fri, 2 Sep 2022 14:16:27 +0800
+Message-ID: <CADnNmFqpNxdHTY619MgnSxPbMHw9s9C71GOxKAphWf_xwDGnXw@mail.gmail.com>
+Subject: Re: [PATCH v14 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
+ memory controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>, rric@kernel.org,
+        James Morse <james.morse@arm.com>, tony.luck@intel.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>,
+        CS20 KWLiu <KWLIU@nuvoton.com>, YSCHU@nuvoton.com,
+        JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        Marvin Lin <kflin@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/microcode branch of tip:
+Hi Krzysztof,
 
-Commit-ID:     7fce8d6eccbc31a561d07c79f359ad09f0424347
-Gitweb:        https://git.kernel.org/tip/7fce8d6eccbc31a561d07c79f359ad09f0424347
-Author:        Ashok Raj <ashok.raj@intel.com>
-AuthorDate:    Mon, 29 Aug 2022 18:10:30 
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 02 Sep 2022 08:01:58 +02:00
+> > +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> > @@ -0,0 +1,54 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
+>
+> This should be in memory-controllers directory.
 
-x86/microcode: Print previous version of microcode after reload
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Nuvoton NPCM Memory Controller Device Tree Bindings
+>
+> s/Device Tree Bindings//
 
-Print both old and new versions of microcode after a reload is complete
-because knowing the previous microcode version is sometimes important
-from a debugging perspective.
+Thanks for the review. Next version will move YAML to
+memory-controllers directory and remove "Device Tree Bindings".
 
-  [ bp: Massage commit message. ]
-
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/r/20220829181030.722891-1-ashok.raj@intel.com
----
- arch/x86/kernel/cpu/microcode/core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index ad57e0e..6a41cee 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -491,7 +491,7 @@ wait_for_siblings:
-  */
- static int microcode_reload_late(void)
- {
--	int ret;
-+	int old = boot_cpu_data.microcode, ret;
- 
- 	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
- 	pr_err("You should switch to early loading, if possible.\n");
-@@ -503,7 +503,8 @@ static int microcode_reload_late(void)
- 	if (ret == 0)
- 		microcode_check();
- 
--	pr_info("Reload completed, microcode revision: 0x%x\n", boot_cpu_data.microcode);
-+	pr_info("Reload completed, microcode revision: 0x%x -> 0x%x\n",
-+		old, boot_cpu_data.microcode);
- 
- 	return ret;
- }
+Regards,
+Marvin

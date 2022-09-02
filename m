@@ -2,168 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1298B5AB9AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2682D5AB9AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiIBUz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 16:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S230193AbiIBU4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 16:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbiIBUzv (ORCPT
+        with ESMTP id S229980AbiIBU4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 16:55:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100E053028
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:55:22 -0700 (PDT)
+        Fri, 2 Sep 2022 16:56:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634BB4456E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662152122;
+        s=mimecast20190719; t=1662152158;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=e/i1xNela7arfufOlEWSIrFxi0oQo+ouwTHhQRBJeIY=;
-        b=QmNeXyOhkMEj57sXm1+1Xg6S/er5x7DfqkrGw96NAyF+R1dub3ZyQ3R7r0GEWgiBlYhTr0
-        riJ+WpA+HUGbHlx4G00kOxZq91k2h155bFsMK+a3qmvlnLQt5CTODdhY1D39mUO+hgLR53
-        Vwvx0nIfO+9kHSPxeT0rvJ7e9q1KjZo=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-5-xfRqN5hZMWSiWRItXumH3A-1; Fri, 02 Sep 2022 16:55:21 -0400
-X-MC-Unique: xfRqN5hZMWSiWRItXumH3A-1
-Received: by mail-qk1-f199.google.com with SMTP id l15-20020a05620a28cf00b006b46997c070so2872349qkp.20
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 13:55:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=e/i1xNela7arfufOlEWSIrFxi0oQo+ouwTHhQRBJeIY=;
-        b=kqOCs+pPA+T4mAZqOF42IC7BATT+okTiI8XVCqfb6b0PFkb/UyaQOW7u7kN5DVvHUK
-         xP9i4JTxbA276FewHIgQ6FZ0wQ11uUiOfYtVXELcFS6LGIGTGdyR2WkMzt21xAPifMoH
-         ZQpkmW+AhQUg+/vwdnbADd8crfBFOgLcbcIRZ32fnLyxuVa+X0FFf8Xlk5n95ajRkl7R
-         1aD3KSdD6gemz710Qa2c6OJKtQtWU4tIEeffXh1L0gEW2uXX3ZVu+1g87Ph/isKYhu6g
-         4rae6DPsmKGNzy2sDRjGoo6wJlL3jHyMtNxbRoBB69bWyU8fiyMr5/B1abOxQXq3FM0x
-         hjfg==
-X-Gm-Message-State: ACgBeo3+hztNyy29EBpKh0cDaSXWveTIc2GJ0OtjrjpqpTR9nYvaMzTr
-        AOuK/EC/4fDloJv+rHbRFtsQQ3u8chgjSKOGAVuS79a/tPi4rPWlk/77I7u0ih7dNKbeRQz64fK
-        ClEJa7lZPzghaKTGKsBl5oIU=
-X-Received: by 2002:ac8:574f:0:b0:344:5a94:28fc with SMTP id 15-20020ac8574f000000b003445a9428fcmr30044836qtx.670.1662152120816;
-        Fri, 02 Sep 2022 13:55:20 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7htZ5gZN01TeQlX/VJoxT2IaqgKvr8JeqKIGVMnyaeNem7TxDPPSJJMlag+j644UTpDAvlmQ==
-X-Received: by 2002:ac8:574f:0:b0:344:5a94:28fc with SMTP id 15-20020ac8574f000000b003445a9428fcmr30044821qtx.670.1662152120587;
-        Fri, 02 Sep 2022 13:55:20 -0700 (PDT)
-Received: from localhost (pool-68-160-173-162.bstnma.fios.verizon.net. [68.160.173.162])
-        by smtp.gmail.com with ESMTPSA id fw10-20020a05622a4a8a00b0034361fb2f75sm1584123qtb.22.2022.09.02.13.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 13:55:19 -0700 (PDT)
-Date:   Fri, 2 Sep 2022 16:55:18 -0400
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     agk@redhat.com, snitzer@kernel.org, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, hch@lst.de,
-        Damien Le Moal <damien.lemoal@wdc.com>, bvanassche@acm.org,
-        pankydev8@gmail.com,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        gost.dev@samsung.com, jaegeuk@kernel.org, matias.bjorling@wdc.com
-Subject: Re: [PATCH v12 13/13] dm: add power-of-2 target for zoned devices
- with non power-of-2 zone sizes
-Message-ID: <YxJttvB2Z5I58SQ5@redhat.com>
-References: <20220823121859.163903-1-p.raghav@samsung.com>
- <CGME20220823121915eucas1p10296d6a2ab00de5e73791a7d6b8e39de@eucas1p1.samsung.com>
- <20220823121859.163903-14-p.raghav@samsung.com>
+        bh=OzsHZ9MjnMZzdfiMHihwjai0c/sGHU3kdcnYVuqUnh0=;
+        b=O+OpSKpfOH+wiNUemWL0l86QcafhzSNMsDq5qNww24J/Bu3RNaGRDBoDY6rqYO6L/jKgoy
+        5RLtzZWmbpE83EvOdKtB0FUoFXLikiuYnQQvIUwXr6ItsnZUyjMHpugtfRECbF8eamcls5
+        teELEG5TCObJnf9kk3cSYrrYPnHy5nQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-378-AZGk1fJ-OX2-UwDFUhpjrw-1; Fri, 02 Sep 2022 16:55:53 -0400
+X-MC-Unique: AZGk1fJ-OX2-UwDFUhpjrw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0788C85A589;
+        Fri,  2 Sep 2022 20:55:53 +0000 (UTC)
+Received: from [10.22.10.219] (unknown [10.22.10.219])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B65FF112131E;
+        Fri,  2 Sep 2022 20:55:52 +0000 (UTC)
+Message-ID: <8c33f989-8870-08c6-db12-521de634b34e@redhat.com>
+Date:   Fri, 2 Sep 2022 16:55:52 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823121859.163903-14-p.raghav@samsung.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] locking/rwsem: Disable preemption while trying for rwsem
+ lock
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, peterz@infradead.org,
+        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org,
+        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+References: <1662028090-26495-1-git-send-email-quic_mojha@quicinc.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <1662028090-26495-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23 2022 at  8:18P -0400,
-Pankaj Raghav <p.raghav@samsung.com> wrote:
 
-> Only zoned devices with power-of-2(po2) number of sectors per zone(zone
-> size) were supported in linux but now non power-of-2(npo2) zone sizes
-> support has been added to the block layer.
-> 
-> Filesystems such as F2FS and btrfs have support for zoned devices with
-> po2 zone size assumption. Before adding native support for npo2 zone
-> sizes, it was suggested to create a dm target for npo2 zone size device to
-> appear as a po2 zone size target so that file systems can initially
-> work without any explicit changes by using this target.
-> 
-> The design of this target is very simple: remap the device zone size to
-> the zone capacity and change the zone size to be the nearest power of 2
-> value.
-> 
-> For e.g., a device with a zone size/capacity of 3M will have an equivalent
-> target layout as follows:
-> 
-> Device layout :-
-> zone capacity = 3M
-> zone size = 3M
-> 
-> |--------------|-------------|
-> 0             3M            6M
-> 
-> Target layout :-
-> zone capacity=3M
-> zone size = 4M
-> 
-> |--------------|---|--------------|---|
-> 0             3M  4M             7M  8M
-> 
-> The area between target's zone capacity and zone size will be emulated
-> in the target.
-> The read IOs that fall in the emulated gap area will return 0 filled
-> bio and all the other IOs in that area will result in an error.
-> If a read IO span across the emulated area boundary, then the IOs are
-> split across them. All other IO operations that span across the emulated
-> area boundary will result in an error.
-> 
-> The target can be easily created as follows:
-> dmsetup create <label> --table '0 <size_sects> po2zone /dev/nvme<id>'
-> 
-> Note that the target does not support partial mapping of the underlying
-> device.
-> 
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> Suggested-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-> Suggested-by: Damien Le Moal <damien.lemoal@wdc.com>
-> Suggested-by: Hannes Reinecke <hare@suse.de>
+On 9/1/22 06:28, Mukesh Ojha wrote:
+> From: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+>
+> Make the region inside the rwsem_write_trylock non preemptible.
+>
+> We observe RT task is hogging CPU when trying to acquire rwsem lock
+> which was acquired by a kworker task but before the rwsem owner was set.
+>
+> Here is the scenario:
+> 1. CFS task (affined to a particular CPU) takes rwsem lock.
+>
+> 2. CFS task gets preempted by a RT task before setting owner.
+>
+> 3. RT task (FIFO) is trying to acquire the lock, but spinning until
+> RT throttling happens for the lock as the lock was taken by CFS task.
 
+Note that the spinning is likely caused by the following code in 
+rwsem_down_write_slowpath():
 
-This target needs more review from those who Suggested-by it.
+1163                 /*
+1164                  * After setting the handoff bit and failing to acquire
+1165                  * the lock, attempt to spin on owner to accelerate 
+lock
+1166                  * transfer. If the previous owner is a on-cpu 
+writer and it
+1167                  * has just released the lock, OWNER_NULL will be 
+returned.
+1168                  * In this case, we attempt to acquire the lock again
+1169                  * without sleeping.
+1170                  */
+1171                 if (waiter.handoff_set) {
+1172                         enum owner_state owner_state;
+1173
+1174                         preempt_disable();
+1175                         owner_state = rwsem_spin_on_owner(sem);
+1176                         preempt_enable();
+1177
+1178                         if (owner_state == OWNER_NULL)
+1179                                 goto trylock_again;
+1180                 }
 
-And the header and docs needs to address:
+rwsem_optimistic_spin() limits RT task one additional attempt if 
+OWNER_NULL is returned. There is no such limitation in this loop. So an 
+alternative will be to put a limit on the number of times an OWNER_NULL 
+return values will be allowed to continue spinning without sleeping. 
+That put the burden on the slowpath instead of in the fastpath.
 
-1) why is a partial mapping of the underlying device disallowed?
-2) why is it assumed all IO is read-only? (talk to me and others like
-   we don't know the inherent limitations of this class of zoned hw)
+Other than the slight overhead in the fastpath, the patch should work too.
 
-On a code level:
-1) are you certain you're properly failing all writes?
-   - are writes allowed to the "zone capacity area" but _not_
-     allowed to the "emulated zone area"? (if yes, _please document_). 
-2) yes, you absolutely need to implement the .status target_type hook
-   (for both STATUS and TABLE).
-3) really not loving the nested return (of DM_MAPIO_SUBMITTED or
-   DM_MAPIO_REMAPPED) from methods called from dm_po2z_map().  Would
-   prefer to not have to do a depth-first search to see where and when
-   dm_po2z_map() returns a DM_MAPIO_XXX unless there is a solid
-   justification for it.  To me it just obfuscates the DM interface a
-   bit too much. 
+Acked-by: Waiman Long <longman@redhat.com>
 
-Otherwise, pretty clean code and nothing weird going on.
-
-I look forward to seeing your next (final?) revision of this patchset.
-
-Thanks,
-Mike
+Cheers,
+Longman
 

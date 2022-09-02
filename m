@@ -2,122 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA255AB6DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2075AB6E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 18:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235705AbiIBQvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 12:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S236612AbiIBQxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 12:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235593AbiIBQvn (ORCPT
+        with ESMTP id S236265AbiIBQxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 12:51:43 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CABC106D9D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 09:51:37 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id s11so3412033edd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 09:51:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=CIuVjsJFs/1+sf+Cg+FMFftnB4n0/AkG3KNU3Ey0ETU=;
-        b=eVZa+U/4lGIRtCWran8xhlisYjslgrH9X99Va98wep5cXSM2kOQtctY94/UKvuZ28G
-         9//46c+63SVmePLmZj7oabn9iCeFyftXVMtqNu6oA/nDv0lI0E/SHG7RfBq9sY/UV0ex
-         562giTCMbkSy8wKo9/bK9MDmb1hcU2IK/xYLw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CIuVjsJFs/1+sf+Cg+FMFftnB4n0/AkG3KNU3Ey0ETU=;
-        b=gkYK/0bCOybL0Gv30dLbOs1Ql+Yrsv74sPbKX04jxQtREfeYWjoXvlggwiZLI9jpEy
-         t2j42AJvZimlRgAFe6OKjofOsvkm1m9oo4++HjUwfuaXm/KSuriZjiTlX6NDtoeP4p9L
-         GViEsaxI8BMMeeAdB/Z09sOyE6MzwfLw1NfEiG4BCdTD6TkKJHJaJicZxiEe9QRG1eAe
-         ij6gcIzUjTIPrGA/cSZzkd+eU2QbZs5nPg5wKDrWbtXndhnH4ZSHEQmRFL8WQirlOgWW
-         5BWLO7Q7RiDOQ8DnHdy7HZn0L6oeoF8ocERmfAOOaMDMDE3vmISR6p7MXzGm95qhnpu9
-         cxgQ==
-X-Gm-Message-State: ACgBeo1yBJiyGbe5bYo55EQyxzfWg3GFsa5GZTIKaHciGaJsUphHatqi
-        Mi8XtH7fL0bcwOxuPOOiws42uE1hbl7DMjTEyd4=
-X-Google-Smtp-Source: AA6agR6qzf1cXKCkkWLYIx3/2INCUwuLiItBsM3xvmt8LWgzATJpU4EJnfdtOcf/lJhE9YMmoNJHxA==
-X-Received: by 2002:a05:6402:240a:b0:446:39d9:95d7 with SMTP id t10-20020a056402240a00b0044639d995d7mr34341531eda.253.1662137495411;
-        Fri, 02 Sep 2022 09:51:35 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id o27-20020a17090611db00b0072eddcc807fsm1486917eja.155.2022.09.02.09.51.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 09:51:34 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id v16so3040607wrm.8
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 09:51:33 -0700 (PDT)
-X-Received: by 2002:adf:e60b:0:b0:225:877e:176c with SMTP id
- p11-20020adfe60b000000b00225877e176cmr18213258wrm.193.1662137493486; Fri, 02
- Sep 2022 09:51:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220902130625.217071627@infradead.org> <20220902130947.190618587@infradead.org>
-In-Reply-To: <20220902130947.190618587@infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Sep 2022 09:51:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whdvPcHmH5eG+FUrbQw1e-05n__EWobMqbxcCTP7dtZAg@mail.gmail.com>
-Message-ID: <CAHk-=whdvPcHmH5eG+FUrbQw1e-05n__EWobMqbxcCTP7dtZAg@mail.gmail.com>
-Subject: Re: [PATCH v2 08/59] x86/build: Ensure proper function alignment
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 2 Sep 2022 12:53:34 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F0C109520;
+        Fri,  2 Sep 2022 09:53:33 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1A4575C0098;
+        Fri,  2 Sep 2022 12:53:33 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Fri, 02 Sep 2022 12:53:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        colorremedies.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1662137613; x=
+        1662224013; bh=6qA7lebsNoe0qaVBnLzE2yT/XJd2sQGK0XBPJNKv/Yw=; b=R
+        xVZNXHhzt0puvbLyE74kkQojDQ6606NuOmpXNUfDcAuYJXojglnpBsoqvR+EF5JY
+        TD8R9hLB54s1Iu0F4tSFJkUPoPwul1TBCN7g2Bvci5K5w2ryMnR+ZXPA7MHnLD1p
+        SnSHvY67/nQ7HTEc4jqnbIFb2IZ1AtMJ/CUzWeDJJVFcM0kKwsrSZB6u+tIMI0W+
+        WEGvofwCAUMuBEvpix4emT/2Ay3f22iZ4NaMCFXnM7dYmRi4o1AqhTQghdOBodvz
+        91YIEDXrU1sHxWFnBYU2PdPnWrMFwiovVz6vlVLfRIC4s4zartQgoWh43OPSB9Vb
+        sEYIA49IY2/fVyZP1v9yQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1662137613; x=1662224013; bh=6qA7lebsNoe0qaVBnLzE2yT/XJd2
+        sQGK0XBPJNKv/Yw=; b=y/v5sBx1o5vTLrrrv61Gjsn2XKPMwdezDpEhws2B3kNh
+        WAtiRUOb94sJ+78+igrFGQwEtVnn0bOn+OQ09cucpEikR+xBtE7UHesz3RQgunv3
+        QFbfZ6Q7ccpHhON/qwkjyTf6kia3SohZg8y8zaNbpZuyVBomkIvGETnuQiWBxTtf
+        DmuFw+LsGfkKNVkwBLAhvzJNLaWTcUSsBVVZo6TPTUvzp2LzIo8FJA4xLpFGxhud
+        OSzYr3mCNnfPp4WNl+Rtr6Q+H0rRbv9nwl3WaDr9U/HQhRfm9SXMBKA7h1IvqS4m
+        AxlcJme9w2vSaZ62TkoIXpjBKqLoBIMYVgAg5rO14g==
+X-ME-Sender: <xms:DDUSY8dA8g3XXog0_9F1_EMugWcFLU-f3b5bV0gta4BS5xrG1STsOg>
+    <xme:DDUSY-N6wifJZfplB7aqW1NojTTNKvo4Ht3cFCmSFZUamVP3VMmjkNTawjEyjTDHt
+    xFoN_7xz7jPOcXkMRU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeltddguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdev
+    hhhrihhsucfouhhrphhhhidfuceolhhishhtshestgholhhorhhrvghmvgguihgvshdrtg
+    homheqnecuggftrfgrthhtvghrnhepgfdvueektdefgfefgfdtleffvdeileetgfefuddt
+    ffelueeiveeiveekhedtheeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheplhhishhtshestgholhhorhhrvghmvgguihgvshdrtghomh
+X-ME-Proxy: <xmx:DDUSY9ic2sLq_d63iiVOJ4ugHQEmX-_2aQ7mcleWR4UdRMUoBa5ILw>
+    <xmx:DDUSYx9EAoygpWJ4TIAAnKD9U3VX6rl6INLrJuIEnyUSGnVT7XF1Vg>
+    <xmx:DDUSY4ufApFGEpaTRKuh3EJHCUcym536CyCPqZeXawTZUBZ0gQEkZQ>
+    <xmx:DTUSY6KqPCwzhdpbGyIkEyprtpSE5WV8E_X6YpLtK7Ec6Ee3m0BGNw>
+Feedback-ID: i06494636:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id F3EE41700082; Fri,  2 Sep 2022 12:53:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <a8bf11e4-8d2f-4fe8-9d6d-533c7b19db8d@www.fastmail.com>
+In-Reply-To: <297cbb87-87aa-2e1d-1fc3-8e96c241f28f@huaweicloud.com>
+References: <Yv0KmT8UYos2/4SX@T590>
+ <35f0d608-7448-4276-8922-19a23d8f9049@www.fastmail.com>
+ <Yv2P0zyoVvz35w/m@T590>
+ <568465de-5c3b-4d94-a74b-5b83ce2f942f@www.fastmail.com>
+ <Yv2w+Tuhw1RAoXI5@T590>
+ <9f2f608a-cd5f-4736-9e6d-07ccc2eca12c@www.fastmail.com>
+ <a817431f-276f-4aab-9ff8-c3e397494339@www.fastmail.com>
+ <5426d0f9-6539-477d-8feb-2b49136b960f@www.fastmail.com>
+ <Yv3NIQlDL0T3lstU@T590>
+ <0f731b0a-fbd5-4e7b-a3df-0ed63360c1e0@www.fastmail.com>
+ <YwCGlyDMhWubqKoL@T590>
+ <297cbb87-87aa-2e1d-1fc3-8e96c241f28f@huaweicloud.com>
+Date:   Fri, 02 Sep 2022 12:53:10 -0400
+From:   "Chris Murphy" <lists@colorremedies.com>
+To:     "Yu Kuai" <yukuai1@huaweicloud.com>,
+        "Ming Lei" <ming.lei@redhat.com>, "Jan Kara" <jack@suse.cz>
+Cc:     "Nikolay Borisov" <nborisov@suse.com>,
+        "Jens Axboe" <axboe@kernel.dk>,
+        "Paolo Valente" <paolo.valente@linaro.org>,
+        "Btrfs BTRFS" <linux-btrfs@vger.kernel.org>,
+        Linux-RAID <linux-raid@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Josef Bacik" <josef@toxicpanda.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: stalling IO regression since linux 5.12, through 5.18
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 6:55 AM Peter Zijlstra <peterz@infradead.org> wrote:
+
+
+On Thu, Sep 1, 2022, at 3:02 AM, Yu Kuai wrote:
+> Hi, Chris
+
+
+>> Also follows another patch merged to v5.18 and it fixes io stall too, feel free to test it:
+>> 
+>> 8f5fea65b06d blk-mq: avoid extending delays of active hctx from blk_mq_delay_run_hw_queues
 >
-> --- a/arch/x86/include/asm/linkage.h
-> +++ b/arch/x86/include/asm/linkage.h
-> @@ -14,9 +14,10 @@
->
->  #ifdef __ASSEMBLY__
->
-> -#if defined(CONFIG_X86_64) || defined(CONFIG_X86_ALIGNMENT_16)
-> -#define __ALIGN                .p2align 4, 0x90
-> -#define __ALIGN_STR    __stringify(__ALIGN)
-> +#if CONFIG_FUNCTION_ALIGNMENT == 16
-> +#define __ALIGN                        .p2align 4, 0x90
-> +#define __ALIGN_STR            __stringify(__ALIGN)
-> +#define FUNCTION_ALIGNMENT     16
->  #endif
+> Have you tried this patch?
 
-Ugh.
+The problem happens on 5.18 series kernels. But takes longer. Once I regain access to this setup, I can try to reproduce on 5.18 and 5.19, and provide block debugfs logs. 
 
-Why is this conditional on that alignment being 16?
 
-Is it purely because the CONFIG variable was mis-designed, and is the
-number of bytes, instead of being the shift? If so, just fix that, and
-then do an unconditional
-
-  #define __ALIGN                        .p2align
-CONFIG_FUNCTION_ALIGNMENT_SHIFT, 0x90
-  #define __ALIGN_STR            __stringify(__ALIGN)
-
-(leave the asm-generic one conditional, since then the condition makes
-sense - it's arch-specific).
-
-           Linus
+-- 
+Chris Murphy

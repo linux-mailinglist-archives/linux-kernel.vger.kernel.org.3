@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70ED05AB1C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8874A5AB0AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236992AbiIBNjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
+        id S238141AbiIBM4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237061AbiIBNiR (ORCPT
+        with ESMTP id S238189AbiIBMyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:38:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9230C1226AD;
-        Fri,  2 Sep 2022 06:16:34 -0700 (PDT)
+        Fri, 2 Sep 2022 08:54:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C95FB0DF;
+        Fri,  2 Sep 2022 05:38:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75D986215E;
-        Fri,  2 Sep 2022 12:37:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 724FCC433D6;
-        Fri,  2 Sep 2022 12:37:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEB8662190;
+        Fri,  2 Sep 2022 12:37:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5391C433C1;
+        Fri,  2 Sep 2022 12:37:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122270;
-        bh=W/hCCGMRJtF8xsK0tuoONMZHrC5Wq/Yn910uP7Ky5DM=;
+        s=korg; t=1662122274;
+        bh=OcfyeE3fbS7IKNlI13n5GlUJOEXKlKESfM6h74E8J5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kUpCn/Pcy2GUOKZj0OMGyF+CtXJh1NAW8ovBNVuDl6nxkmDZ09QPAQzyUNafP9Y8e
-         8EUm+Vy3x3SLNrkhuigyUk9hsu7uYP+3KQfOjIpdsLv6ybmAIrXsZUXe/ipWsZf0CW
-         DfaRSGhqUaOVZjMj+0MuV4dd0fL25BL1V7w73mPg=
+        b=bu3zpcl1nax5wazQoxI5/gf/Ap5Z9r8d6es/DLp/jHVOBRciXFAcQfIvoGYv9LrLe
+         hB7TFb5rm8w7ccR0c+u8vjIb9pYAy2Kp8VSRqk9YeMdPfK44LiToi130dd6by7hnlv
+         BOhLQzt7EHcek459AEtevqMcyVjmASRuAMEjGEiw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
+        Josef Bacik <josef@toxicpanda.com>,
         David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 67/72] btrfs: fix lockdep splat with reloc root extent buffers
-Date:   Fri,  2 Sep 2022 14:19:43 +0200
-Message-Id: <20220902121406.985360633@linuxfoundation.org>
+Subject: [PATCH 5.19 68/72] btrfs: tree-checker: check for overlapping extent items
+Date:   Fri,  2 Sep 2022 14:19:44 +0200
+Message-Id: <20220902121407.032552411@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
 References: <20220902121404.772492078@linuxfoundation.org>
@@ -57,365 +58,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-[ Upstream commit b40130b23ca4a08c5785d5a3559805916bddba3c ]
+[ Upstream commit 899b7f69f244e539ea5df1b4d756046337de44a5 ]
 
-We have been hitting the following lockdep splat with btrfs/187 recently
+We're seeing a weird problem in production where we have overlapping
+extent items in the extent tree.  It's unclear where these are coming
+from, and in debugging we realized there's no check in the tree checker
+for this sort of problem.  Add a check to the tree-checker to make sure
+that the extents do not overlap each other.
 
-  WARNING: possible circular locking dependency detected
-  5.19.0-rc8+ #775 Not tainted
-  ------------------------------------------------------
-  btrfs/752500 is trying to acquire lock:
-  ffff97e1875a97b8 (btrfs-treloc-02#2){+.+.}-{3:3}, at: __btrfs_tree_lock+0x24/0x110
-
-  but task is already holding lock:
-  ffff97e1875a9278 (btrfs-tree-01/1){+.+.}-{3:3}, at: __btrfs_tree_lock+0x24/0x110
-
-  which lock already depends on the new lock.
-
-  the existing dependency chain (in reverse order) is:
-
-  -> #2 (btrfs-tree-01/1){+.+.}-{3:3}:
-	 down_write_nested+0x41/0x80
-	 __btrfs_tree_lock+0x24/0x110
-	 btrfs_init_new_buffer+0x7d/0x2c0
-	 btrfs_alloc_tree_block+0x120/0x3b0
-	 __btrfs_cow_block+0x136/0x600
-	 btrfs_cow_block+0x10b/0x230
-	 btrfs_search_slot+0x53b/0xb70
-	 btrfs_lookup_inode+0x2a/0xa0
-	 __btrfs_update_delayed_inode+0x5f/0x280
-	 btrfs_async_run_delayed_root+0x24c/0x290
-	 btrfs_work_helper+0xf2/0x3e0
-	 process_one_work+0x271/0x590
-	 worker_thread+0x52/0x3b0
-	 kthread+0xf0/0x120
-	 ret_from_fork+0x1f/0x30
-
-  -> #1 (btrfs-tree-01){++++}-{3:3}:
-	 down_write_nested+0x41/0x80
-	 __btrfs_tree_lock+0x24/0x110
-	 btrfs_search_slot+0x3c3/0xb70
-	 do_relocation+0x10c/0x6b0
-	 relocate_tree_blocks+0x317/0x6d0
-	 relocate_block_group+0x1f1/0x560
-	 btrfs_relocate_block_group+0x23e/0x400
-	 btrfs_relocate_chunk+0x4c/0x140
-	 btrfs_balance+0x755/0xe40
-	 btrfs_ioctl+0x1ea2/0x2c90
-	 __x64_sys_ioctl+0x88/0xc0
-	 do_syscall_64+0x38/0x90
-	 entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-  -> #0 (btrfs-treloc-02#2){+.+.}-{3:3}:
-	 __lock_acquire+0x1122/0x1e10
-	 lock_acquire+0xc2/0x2d0
-	 down_write_nested+0x41/0x80
-	 __btrfs_tree_lock+0x24/0x110
-	 btrfs_lock_root_node+0x31/0x50
-	 btrfs_search_slot+0x1cb/0xb70
-	 replace_path+0x541/0x9f0
-	 merge_reloc_root+0x1d6/0x610
-	 merge_reloc_roots+0xe2/0x260
-	 relocate_block_group+0x2c8/0x560
-	 btrfs_relocate_block_group+0x23e/0x400
-	 btrfs_relocate_chunk+0x4c/0x140
-	 btrfs_balance+0x755/0xe40
-	 btrfs_ioctl+0x1ea2/0x2c90
-	 __x64_sys_ioctl+0x88/0xc0
-	 do_syscall_64+0x38/0x90
-	 entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-  other info that might help us debug this:
-
-  Chain exists of:
-    btrfs-treloc-02#2 --> btrfs-tree-01 --> btrfs-tree-01/1
-
-   Possible unsafe locking scenario:
-
-	 CPU0                    CPU1
-	 ----                    ----
-    lock(btrfs-tree-01/1);
-				 lock(btrfs-tree-01);
-				 lock(btrfs-tree-01/1);
-    lock(btrfs-treloc-02#2);
-
-   *** DEADLOCK ***
-
-  7 locks held by btrfs/752500:
-   #0: ffff97e292fdf460 (sb_writers#12){.+.+}-{0:0}, at: btrfs_ioctl+0x208/0x2c90
-   #1: ffff97e284c02050 (&fs_info->reclaim_bgs_lock){+.+.}-{3:3}, at: btrfs_balance+0x55f/0xe40
-   #2: ffff97e284c00878 (&fs_info->cleaner_mutex){+.+.}-{3:3}, at: btrfs_relocate_block_group+0x236/0x400
-   #3: ffff97e292fdf650 (sb_internal#2){.+.+}-{0:0}, at: merge_reloc_root+0xef/0x610
-   #4: ffff97e284c02378 (btrfs_trans_num_writers){++++}-{0:0}, at: join_transaction+0x1a8/0x5a0
-   #5: ffff97e284c023a0 (btrfs_trans_num_extwriters){++++}-{0:0}, at: join_transaction+0x1a8/0x5a0
-   #6: ffff97e1875a9278 (btrfs-tree-01/1){+.+.}-{3:3}, at: __btrfs_tree_lock+0x24/0x110
-
-  stack backtrace:
-  CPU: 1 PID: 752500 Comm: btrfs Not tainted 5.19.0-rc8+ #775
-  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-2.fc32 04/01/2014
-  Call Trace:
-
-   dump_stack_lvl+0x56/0x73
-   check_noncircular+0xd6/0x100
-   ? lock_is_held_type+0xe2/0x140
-   __lock_acquire+0x1122/0x1e10
-   lock_acquire+0xc2/0x2d0
-   ? __btrfs_tree_lock+0x24/0x110
-   down_write_nested+0x41/0x80
-   ? __btrfs_tree_lock+0x24/0x110
-   __btrfs_tree_lock+0x24/0x110
-   btrfs_lock_root_node+0x31/0x50
-   btrfs_search_slot+0x1cb/0xb70
-   ? lock_release+0x137/0x2d0
-   ? _raw_spin_unlock+0x29/0x50
-   ? release_extent_buffer+0x128/0x180
-   replace_path+0x541/0x9f0
-   merge_reloc_root+0x1d6/0x610
-   merge_reloc_roots+0xe2/0x260
-   relocate_block_group+0x2c8/0x560
-   btrfs_relocate_block_group+0x23e/0x400
-   btrfs_relocate_chunk+0x4c/0x140
-   btrfs_balance+0x755/0xe40
-   btrfs_ioctl+0x1ea2/0x2c90
-   ? lock_is_held_type+0xe2/0x140
-   ? lock_is_held_type+0xe2/0x140
-   ? __x64_sys_ioctl+0x88/0xc0
-   __x64_sys_ioctl+0x88/0xc0
-   do_syscall_64+0x38/0x90
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-This isn't necessarily new, it's just tricky to hit in practice.  There
-are two competing things going on here.  With relocation we create a
-snapshot of every fs tree with a reloc tree.  Any extent buffers that
-get initialized here are initialized with the reloc root lockdep key.
-However since it is a snapshot, any blocks that are currently in cache
-that originally belonged to the fs tree will have the normal tree
-lockdep key set.  This creates the lock dependency of
-
-  reloc tree -> normal tree
-
-for the extent buffer locking during the first phase of the relocation
-as we walk down the reloc root to relocate blocks.
-
-However this is problematic because the final phase of the relocation is
-merging the reloc root into the original fs root.  This involves
-searching down to any keys that exist in the original fs root and then
-swapping the relocated block and the original fs root block.  We have to
-search down to the fs root first, and then go search the reloc root for
-the block we need to replace.  This creates the dependency of
-
-  normal tree -> reloc tree
-
-which is why lockdep complains.
-
-Additionally even if we were to fix this particular mismatch with a
-different nesting for the merge case, we're still slotting in a block
-that has a owner of the reloc root objectid into a normal tree, so that
-block will have its lockdep key set to the tree reloc root, and create a
-lockdep splat later on when we wander into that block from the fs root.
-
-Unfortunately the only solution here is to make sure we do not set the
-lockdep key to the reloc tree lockdep key normally, and then reset any
-blocks we wander into from the reloc root when we're doing the merged.
-
-This solves the problem of having mixed tree reloc keys intermixed with
-normal tree keys, and then allows us to make sure in the merge case we
-maintain the lock order of
-
-  normal tree -> reloc tree
-
-We handle this by setting a bit on the reloc root when we do the search
-for the block we want to relocate, and any block we search into or COW
-at that point gets set to the reloc tree key.  This works correctly
-because we only ever COW down to the parent node, so we aren't resetting
-the key for the block we're linking into the fs root.
-
-With this patch we no longer have the lockdep splat in btrfs/187.
-
+Reviewed-by: Qu Wenruo <wqu@suse.com>
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Reviewed-by: David Sterba <dsterba@suse.com>
 Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/ctree.c       |  3 +++
- fs/btrfs/ctree.h       |  2 ++
- fs/btrfs/extent-tree.c | 18 +++++++++++++++++-
- fs/btrfs/extent_io.c   | 11 ++++++++++-
- fs/btrfs/locking.c     | 11 +++++++++++
- fs/btrfs/locking.h     |  5 +++++
- fs/btrfs/relocation.c  |  2 ++
- 7 files changed, 50 insertions(+), 2 deletions(-)
+ fs/btrfs/tree-checker.c |   25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/fs/btrfs/ctree.c b/fs/btrfs/ctree.c
-index 6e556031a8f3a..ebfa35fe1c38b 100644
---- a/fs/btrfs/ctree.c
-+++ b/fs/btrfs/ctree.c
-@@ -2075,6 +2075,9 @@ int btrfs_search_slot(struct btrfs_trans_handle *trans, struct btrfs_root *root,
+--- a/fs/btrfs/tree-checker.c
++++ b/fs/btrfs/tree-checker.c
+@@ -1233,7 +1233,8 @@ static void extent_err(const struct exte
+ }
  
- 		if (!p->skip_locking) {
- 			level = btrfs_header_level(b);
-+
-+			btrfs_maybe_reset_lockdep_class(root, b);
-+
- 			if (level <= write_lock_level) {
- 				btrfs_tree_lock(b);
- 				p->locks[level] = BTRFS_WRITE_LOCK;
-diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-index 7d3ca3ea0bcec..4d8acd7e63eb5 100644
---- a/fs/btrfs/ctree.h
-+++ b/fs/btrfs/ctree.h
-@@ -1146,6 +1146,8 @@ enum {
- 	BTRFS_ROOT_ORPHAN_CLEANUP,
- 	/* This root has a drop operation that was started previously. */
- 	BTRFS_ROOT_UNFINISHED_DROP,
-+	/* This reloc root needs to have its buffers lockdep class reset. */
-+	BTRFS_ROOT_RESET_LOCKDEP_CLASS,
- };
- 
- static inline void btrfs_wake_unfinished_drop(struct btrfs_fs_info *fs_info)
-diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
-index ced3fc76063f1..92f3f5ed8bf1e 100644
---- a/fs/btrfs/extent-tree.c
-+++ b/fs/btrfs/extent-tree.c
-@@ -4871,6 +4871,7 @@ btrfs_init_new_buffer(struct btrfs_trans_handle *trans, struct btrfs_root *root,
+ static int check_extent_item(struct extent_buffer *leaf,
+-			     struct btrfs_key *key, int slot)
++			     struct btrfs_key *key, int slot,
++			     struct btrfs_key *prev_key)
  {
- 	struct btrfs_fs_info *fs_info = root->fs_info;
- 	struct extent_buffer *buf;
-+	u64 lockdep_owner = owner;
- 
- 	buf = btrfs_find_create_tree_block(fs_info, bytenr, owner, level);
- 	if (IS_ERR(buf))
-@@ -4889,12 +4890,27 @@ btrfs_init_new_buffer(struct btrfs_trans_handle *trans, struct btrfs_root *root,
- 		return ERR_PTR(-EUCLEAN);
+ 	struct btrfs_fs_info *fs_info = leaf->fs_info;
+ 	struct btrfs_extent_item *ei;
+@@ -1453,6 +1454,26 @@ static int check_extent_item(struct exte
+ 			   total_refs, inline_refs);
+ 		return -EUCLEAN;
  	}
- 
-+	/*
-+	 * The reloc trees are just snapshots, so we need them to appear to be
-+	 * just like any other fs tree WRT lockdep.
-+	 *
-+	 * The exception however is in replace_path() in relocation, where we
-+	 * hold the lock on the original fs root and then search for the reloc
-+	 * root.  At that point we need to make sure any reloc root buffers are
-+	 * set to the BTRFS_TREE_RELOC_OBJECTID lockdep class in order to make
-+	 * lockdep happy.
-+	 */
-+	if (lockdep_owner == BTRFS_TREE_RELOC_OBJECTID &&
-+	    !test_bit(BTRFS_ROOT_RESET_LOCKDEP_CLASS, &root->state))
-+		lockdep_owner = BTRFS_FS_TREE_OBJECTID;
 +
- 	/*
- 	 * This needs to stay, because we could allocate a freed block from an
- 	 * old tree into a new tree, so we need to make sure this new block is
- 	 * set to the appropriate level and owner.
- 	 */
--	btrfs_set_buffer_lockdep_class(owner, buf, level);
-+	btrfs_set_buffer_lockdep_class(lockdep_owner, buf, level);
++	if ((prev_key->type == BTRFS_EXTENT_ITEM_KEY) ||
++	    (prev_key->type == BTRFS_METADATA_ITEM_KEY)) {
++		u64 prev_end = prev_key->objectid;
 +
- 	__btrfs_tree_lock(buf, nest);
- 	btrfs_clean_tree_block(buf);
- 	clear_bit(EXTENT_BUFFER_STALE, &buf->bflags);
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index cda25018ebd74..5785ed241f6f8 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -6228,6 +6228,7 @@ struct extent_buffer *alloc_extent_buffer(struct btrfs_fs_info *fs_info,
- 	struct extent_buffer *exists = NULL;
- 	struct page *p;
- 	struct address_space *mapping = fs_info->btree_inode->i_mapping;
-+	u64 lockdep_owner = owner_root;
- 	int uptodate = 1;
- 	int ret;
- 
-@@ -6252,7 +6253,15 @@ struct extent_buffer *alloc_extent_buffer(struct btrfs_fs_info *fs_info,
- 	eb = __alloc_extent_buffer(fs_info, start, len);
- 	if (!eb)
- 		return ERR_PTR(-ENOMEM);
--	btrfs_set_buffer_lockdep_class(owner_root, eb, level);
++		if (prev_key->type == BTRFS_METADATA_ITEM_KEY)
++			prev_end += fs_info->nodesize;
++		else
++			prev_end += prev_key->offset;
 +
-+	/*
-+	 * The reloc trees are just snapshots, so we need them to appear to be
-+	 * just like any other fs tree WRT lockdep.
-+	 */
-+	if (lockdep_owner == BTRFS_TREE_RELOC_OBJECTID)
-+		lockdep_owner = BTRFS_FS_TREE_OBJECTID;
++		if (unlikely(prev_end > key->objectid)) {
++			extent_err(leaf, slot,
++	"previous extent [%llu %u %llu] overlaps current extent [%llu %u %llu]",
++				   prev_key->objectid, prev_key->type,
++				   prev_key->offset, key->objectid, key->type,
++				   key->offset);
++			return -EUCLEAN;
++		}
++	}
 +
-+	btrfs_set_buffer_lockdep_class(lockdep_owner, eb, level);
- 
- 	num_pages = num_extent_pages(eb);
- 	for (i = 0; i < num_pages; i++, index++) {
-diff --git a/fs/btrfs/locking.c b/fs/btrfs/locking.c
-index 5747c63929df7..9063072b399bd 100644
---- a/fs/btrfs/locking.c
-+++ b/fs/btrfs/locking.c
-@@ -91,6 +91,13 @@ void btrfs_set_buffer_lockdep_class(u64 objectid, struct extent_buffer *eb, int
- 	lockdep_set_class_and_name(&eb->lock, &ks->keys[level], ks->names[level]);
+ 	return 0;
  }
  
-+void btrfs_maybe_reset_lockdep_class(struct btrfs_root *root, struct extent_buffer *eb)
-+{
-+	if (test_bit(BTRFS_ROOT_RESET_LOCKDEP_CLASS, &root->state))
-+		btrfs_set_buffer_lockdep_class(root->root_key.objectid,
-+					       eb, btrfs_header_level(eb));
-+}
-+
- #endif
- 
- /*
-@@ -244,6 +251,8 @@ struct extent_buffer *btrfs_lock_root_node(struct btrfs_root *root)
- 
- 	while (1) {
- 		eb = btrfs_root_node(root);
-+
-+		btrfs_maybe_reset_lockdep_class(root, eb);
- 		btrfs_tree_lock(eb);
- 		if (eb == root->node)
- 			break;
-@@ -265,6 +274,8 @@ struct extent_buffer *btrfs_read_lock_root_node(struct btrfs_root *root)
- 
- 	while (1) {
- 		eb = btrfs_root_node(root);
-+
-+		btrfs_maybe_reset_lockdep_class(root, eb);
- 		btrfs_tree_read_lock(eb);
- 		if (eb == root->node)
- 			break;
-diff --git a/fs/btrfs/locking.h b/fs/btrfs/locking.h
-index b21372cab8409..ab268be09bb54 100644
---- a/fs/btrfs/locking.h
-+++ b/fs/btrfs/locking.h
-@@ -133,11 +133,16 @@ void btrfs_drew_read_unlock(struct btrfs_drew_lock *lock);
- 
- #ifdef CONFIG_DEBUG_LOCK_ALLOC
- void btrfs_set_buffer_lockdep_class(u64 objectid, struct extent_buffer *eb, int level);
-+void btrfs_maybe_reset_lockdep_class(struct btrfs_root *root, struct extent_buffer *eb);
- #else
- static inline void btrfs_set_buffer_lockdep_class(u64 objectid,
- 					struct extent_buffer *eb, int level)
- {
- }
-+static inline void btrfs_maybe_reset_lockdep_class(struct btrfs_root *root,
-+						   struct extent_buffer *eb)
-+{
-+}
- #endif
- 
- #endif
-diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
-index 33411baf5c7a3..45c02aba2492b 100644
---- a/fs/btrfs/relocation.c
-+++ b/fs/btrfs/relocation.c
-@@ -1326,7 +1326,9 @@ int replace_path(struct btrfs_trans_handle *trans, struct reloc_control *rc,
- 		btrfs_release_path(path);
- 
- 		path->lowest_level = level;
-+		set_bit(BTRFS_ROOT_RESET_LOCKDEP_CLASS, &src->state);
- 		ret = btrfs_search_slot(trans, src, &key, path, 0, 1);
-+		clear_bit(BTRFS_ROOT_RESET_LOCKDEP_CLASS, &src->state);
- 		path->lowest_level = 0;
- 		if (ret) {
- 			if (ret > 0)
--- 
-2.35.1
-
+@@ -1621,7 +1642,7 @@ static int check_leaf_item(struct extent
+ 		break;
+ 	case BTRFS_EXTENT_ITEM_KEY:
+ 	case BTRFS_METADATA_ITEM_KEY:
+-		ret = check_extent_item(leaf, key, slot);
++		ret = check_extent_item(leaf, key, slot, prev_key);
+ 		break;
+ 	case BTRFS_TREE_BLOCK_REF_KEY:
+ 	case BTRFS_SHARED_DATA_REF_KEY:
 
 

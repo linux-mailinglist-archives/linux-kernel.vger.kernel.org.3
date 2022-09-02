@@ -2,56 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7025AA50E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0875AA510
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235019AbiIBB3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 21:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
+        id S235233AbiIBB3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 21:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234693AbiIBB3F (ORCPT
+        with ESMTP id S235184AbiIBB3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 21:29:05 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3461479605;
-        Thu,  1 Sep 2022 18:29:03 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MJgHz6Y4vzHnZW;
-        Fri,  2 Sep 2022 09:27:11 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 2 Sep 2022 09:29:00 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 2 Sep 2022 09:29:00 +0800
-Subject: Re: [PATCH] livepatch: Move error print out of lock protection in
- klp_enable_patch()
-To:     Petr Mladek <pmladek@suse.com>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220901022706.813-1-thunder.leizhen@huawei.com>
- <YxC/L+fKInPWJPdy@alley>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <c1f6c6ec-2681-8d7a-506a-4da72a963ce8@huawei.com>
-Date:   Fri, 2 Sep 2022 09:28:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 1 Sep 2022 21:29:40 -0400
+Received: from out199-17.us.a.mail.aliyun.com (out199-17.us.a.mail.aliyun.com [47.90.199.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B112A6C21
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:29:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VO3hyue_1662082171;
+Received: from 30.97.48.41(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VO3hyue_1662082171)
+          by smtp.aliyun-inc.com;
+          Fri, 02 Sep 2022 09:29:32 +0800
+Message-ID: <46ab4086-8a7f-7c20-c326-72a863b77fbb@linux.alibaba.com>
+Date:   Fri, 2 Sep 2022 09:29:44 +0800
 MIME-Version: 1.0
-In-Reply-To: <YxC/L+fKInPWJPdy@alley>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3] mm/hugetlb: fix races when looking up a CONT-PTE/PMD
+ size hugetlb page
+To:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org
+Cc:     songmuchun@bytedance.com, david@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <635f43bdd85ac2615a58405da82b4d33c6e5eb05.1662017562.git.baolin.wang@linux.alibaba.com>
+ <YxEevpqBy2rIjcrO@monkey>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <YxEevpqBy2rIjcrO@monkey>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,76 +47,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/9/1 22:18, Petr Mladek wrote:
-> On Thu 2022-09-01 10:27:06, Zhen Lei wrote:
->> The patch->mod is not a protected object of mutex_lock(&klp_mutex). Since
->> it's in the error handling branch, it might not be helpful to reduce lock
->> conflicts, but it can reduce some code size.
+On 9/2/2022 5:06 AM, Mike Kravetz wrote:
+> On 09/01/22 18:41, Baolin Wang wrote:
+>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+>> hugetlb, which means it can support not only PMD/PUD size hugetlb
+>> (2M and 1G), but also CONT-PTE/PMD size(64K and 32M) if a 4K page size
+>> specified.
 >>
->> Before:
->>    text    data     bss     dec     hex filename
->>   10330     464       8   10802    2a32 kernel/livepatch/core.o
+>> So when looking up a CONT-PTE size hugetlb page by follow_page(), it
+>> will use pte_offset_map_lock() to get the pte entry lock for the CONT-PTE
+>> size hugetlb in follow_page_pte(). However this pte entry lock is incorrect
+>> for the CONT-PTE size hugetlb, since we should use huge_pte_lock() to
+>> get the correct lock, which is mm->page_table_lock.
 >>
->> After:
->>    text    data     bss     dec     hex filename
->>   10307     464       8   10779    2a1b kernel/livepatch/core.o
-> 
-> Please, is this part of some longterm effort to reduce the size of
-> the kernel? Or is this just some random observation?
-> 
-> 
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> That means the pte entry of the CONT-PTE size hugetlb under current
+>> pte lock is unstable in follow_page_pte(), we can continue to migrate
+>> or poison the pte entry of the CONT-PTE size hugetlb, which can cause
+>> some potential race issues, even though they are under the 'pte lock'.
+>>
+>> For example, suppose thread A is trying to look up a CONT-PTE size
+>> hugetlb page by move_pages() syscall under the lock, however antoher
+>> thread B can migrate the CONT-PTE hugetlb page at the same time, which
+>> will cause thread A to get an incorrect page, if thread A also wants to
+>> do page migration, then data inconsistency error occurs.
+>>
+>> Moreover we have the same issue for CONT-PMD size hugetlb in
+>> follow_huge_pmd().
+>>
+>> To fix above issues, rename the follow_huge_pmd() as follow_huge_pmd_pte()
+>> to handle PMD and PTE level size hugetlb, which uses huge_pte_lock() to
+>> get the correct pte entry lock to make the pte entry stable.
+>>
+>> Cc: <stable@vger.kernel.org>
+>> Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 >> ---
->>  kernel/livepatch/core.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> Changes from v2:
+>>   - Combine PMD and PTE level hugetlb handling into one function.
+>>   - Drop unnecessary patches.
+>>   - Update the commit message.
+> 
+> Baolin, were you able to at least exercise the new code paths?  Especially the
+> path for CONT_PTE.  Code looks fine to me.
+
+Yes, I've tested CONT-PTE, CONT-PMD and PMD size hugetlb with 
+move_pages() syscall, all works well and the lock is expected.
+
+> 
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> 
+> It is a little hackish, but this is only for backports.  So, I think it is OK.
+> We may want to point out that code cleanup and simplification is going upstream
+> that will address these issues in a more elegant manner.
+> 
 >>
->> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
->> index 42f7e716d56bf72..cb7abc821a50584 100644
->> --- a/kernel/livepatch/core.c
->> +++ b/kernel/livepatch/core.c
->> @@ -1041,9 +1041,9 @@ int klp_enable_patch(struct klp_patch *patch)
->>  	mutex_lock(&klp_mutex);
->>  
->>  	if (!klp_is_patch_compatible(patch)) {
->> +		mutex_unlock(&klp_mutex);
->>  		pr_err("Livepatch patch (%s) is not compatible with the already installed livepatches.\n",
->>  			patch->mod->name);
->> -		mutex_unlock(&klp_mutex);
+>> Mike, please fold this patch into your series. Thanks.
 > 
-> I do not see how this change could reliably reduce the code size.
+> If I understand Andrew, this can go in as a separate patch for backport to
+> address potential bugs.  I will provide a cleanup/simplification that will
+> remove this going forward.
 > 
-> As Joe wrote, it looks like a random effect that is specific to a
-> particular compiler version, compilation options, and architecture.
-> 
-> I am against these kind of random microptimizations. It is just a call
-> for problems. If you move printk() outside of a lock, you need to make
-> sure that the information is not racy.
+> Andrew also asked for a Fixes tag.
+> Support for CONT_PMD/_PTE was added with bb9dd3df8ee9 "arm64: hugetlb: refactor
+> find_num_contig()".  Patch series "Support for contiguous pte hugepages", v4.
+> However, I do not believe these code paths were executed until migration
+> support was added with 5480280d3f2d "arm64/mm: enable HugeTLB migration for
+> contiguous bit HugeTLB pages"
+> I would go with 5480280d3f2d.
 
-OK.
-
-	mutex_lock(&klp_mutex);
-        if (!klp_is_patch_compatible(patch)) {
-                mutex_unlock(&klp_mutex);
-			<--------- Do you mean the incompatible patches maybe disabled at this point?
-                pr_err("Livepatch patch (%s) ...\n", patch->mod->name);
-                return -EINVAL;
-        }
-
-> 
-> It might be safe in this particular case. But it is a bad practice.
-> It adds an extra work. It is error-prone with questionable gain.
-> 
-> I am sorry but I NACK this patch. There must be better ways to
-
-OK
-
-> reduce the kernel binary size.
-> 
-> Best Regards,
-> Petr
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+Make sense. And I saw Andrew has helped to add a Fixes tag with your 
+suggestion. Thanks Mike and Andrew.

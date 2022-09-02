@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5765AAD00
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7BB5AAD08
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbiIBLBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 07:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S235820AbiIBLCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 07:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235653AbiIBLBO (ORCPT
+        with ESMTP id S235653AbiIBLCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 07:01:14 -0400
+        Fri, 2 Sep 2022 07:02:04 -0400
 Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D895872B74;
-        Fri,  2 Sep 2022 04:01:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E13A2DA6;
+        Fri,  2 Sep 2022 04:02:03 -0700 (PDT)
 Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
         by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oU4QA-000LNs-QS; Fri, 02 Sep 2022 21:01:11 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Sep 2022 19:01:10 +0800
-Date:   Fri, 2 Sep 2022 19:01:10 +0800
+        id 1oU4Qu-000LQ8-9Y; Fri, 02 Sep 2022 21:01:57 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Sep 2022 19:01:56 +0800
+Date:   Fri, 2 Sep 2022 19:01:56 +0800
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wangjianli@cdjrlc.com
-Subject: Re: [PATCH] crypto/bcm: fix repeated words in comments
-Message-ID: <YxHidoYML6W8hn4p@gondor.apana.org.au>
+To:     Weili Qian <qianweili@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        wangzhou1@hisilicon.com, liulongfang@huawei.com
+Subject: Re: [PATCH] crypto: hisilicon/qm - check mailbox operation result
+Message-ID: <YxHipFTkX7clG0gO@gondor.apana.org.au>
+References: <20220827102657.8478-1-qianweili@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220823135730.697-1-wangjianli@cdjrlc.com>
-X-Newsgroups: apana.lists.os.linux.cryptoapi,apana.lists.os.linux.kernel
+In-Reply-To: <20220827102657.8478-1-qianweili@huawei.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -40,13 +40,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wangjianli <wangjianli@cdjrlc.com> wrote:
-> Delete the redundant word 'in'.
+On Sat, Aug 27, 2022 at 06:26:57PM +0800, Weili Qian wrote:
+> After the mailbox operation is complete, the result may be unsuccessful.
+> It needs to check the status bits of the mailbox register,
+> if it fails, -EIO is returned.
 > 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> Signed-off-by: Weili Qian <qianweili@huawei.com>
 > ---
-> drivers/crypto/bcm/cipher.h | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/crypto/hisilicon/qm.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
 
 Patch applied.  Thanks.
 -- 

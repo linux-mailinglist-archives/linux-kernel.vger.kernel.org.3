@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0188F5AAFA3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9195AAFE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237274AbiIBMlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S237618AbiIBMpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237376AbiIBMj2 (ORCPT
+        with ESMTP id S237428AbiIBMnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:39:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74224F18B;
-        Fri,  2 Sep 2022 05:30:23 -0700 (PDT)
+        Fri, 2 Sep 2022 08:43:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CAEEA882;
+        Fri,  2 Sep 2022 05:32:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 519B6B82A94;
-        Fri,  2 Sep 2022 12:24:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55EDC433D7;
-        Fri,  2 Sep 2022 12:24:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2457B82AC9;
+        Fri,  2 Sep 2022 12:32:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A26BC4347C;
+        Fri,  2 Sep 2022 12:32:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121445;
-        bh=/VDCL4G/4TRirA5rtUC6oqi0nj8UgZ7kSRGpE9fezhQ=;
+        s=korg; t=1662121921;
+        bh=K07g13l32rClJcNoxbLcDmonK4zHo/OsvyUnY5GNgG8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gQKjTZntKXijCPQVgAF+5dERStJcpmmUjnRCOwF16WgrSiKrLJ6i5EFVCfn5PRl+2
-         iK04zlV6tHsO1wUuEU+zqkQuPDivvi1aRc0t4hYa4EfDBASgUVjRRQ73K2SeEQUO8r
-         E7lWhytpO+9WZjYa7DCQeytwjaxkKSgshpyvoCKM=
+        b=f6pgUYJZrSFKYp2Xw3kmWaAmHyXVkWNwx2utBm3esCBN0IOlG7tHRudY6PgtGQBGY
+         1S95xZPM3ZJmNL2r1rGUtC0UYfCTeu2KKQiDN2qxuCt1NAjnM2N97eFgqKiqwWHtuL
+         drZFLwBuQvfXiHirYmv9PNXMJrGOa1+ZFYMHL67Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abhishek Shah <abhishek.shah@columbia.edu>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 10/56] af_key: Do not call xfrm_probe_algs in parallel
-Date:   Fri,  2 Sep 2022 14:18:30 +0200
-Message-Id: <20220902121400.535624692@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.15 07/73] crypto: lib - remove unneeded selection of XOR_BLOCKS
+Date:   Fri,  2 Sep 2022 14:18:31 +0200
+Message-Id: <20220902121404.687586651@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herbert Xu <herbert@gondor.apana.org.au>
+From: Eric Biggers <ebiggers@google.com>
 
-[ Upstream commit ba953a9d89a00c078b85f4b190bc1dde66fe16b5 ]
+commit 874b301985ef2f89b8b592ad255e03fb6fbfe605 upstream.
 
-When namespace support was added to xfrm/afkey, it caused the
-previously single-threaded call to xfrm_probe_algs to become
-multi-threaded.  This is buggy and needs to be fixed with a mutex.
+CRYPTO_LIB_CHACHA_GENERIC doesn't need to select XOR_BLOCKS.  It perhaps
+was thought that it's needed for __crypto_xor, but that's not the case.
 
-Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
-Fixes: 283bc9f35bbb ("xfrm: Namespacify xfrm state/policy locks")
+Enabling XOR_BLOCKS is problematic because the XOR_BLOCKS code runs a
+benchmark when it is initialized.  That causes a boot time regression on
+systems that didn't have it enabled before.
+
+Therefore, remove this unnecessary and problematic selection.
+
+Fixes: e56e18985596 ("lib/crypto: add prompts back to crypto libraries")
+Cc: stable@vger.kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/key/af_key.c | 3 +++
- 1 file changed, 3 insertions(+)
+ lib/crypto/Kconfig |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index af67e0d265c05..337c6bc8211ed 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -1707,9 +1707,12 @@ static int pfkey_register(struct sock *sk, struct sk_buff *skb, const struct sad
- 		pfk->registered |= (1<<hdr->sadb_msg_satype);
- 	}
+--- a/lib/crypto/Kconfig
++++ b/lib/crypto/Kconfig
+@@ -33,7 +33,6 @@ config CRYPTO_ARCH_HAVE_LIB_CHACHA
  
-+	mutex_lock(&pfkey_mutex);
- 	xfrm_probe_algs();
- 
- 	supp_skb = compose_sadb_supported(hdr, GFP_KERNEL | __GFP_ZERO);
-+	mutex_unlock(&pfkey_mutex);
-+
- 	if (!supp_skb) {
- 		if (hdr->sadb_msg_satype != SADB_SATYPE_UNSPEC)
- 			pfk->registered &= ~(1<<hdr->sadb_msg_satype);
--- 
-2.35.1
-
+ config CRYPTO_LIB_CHACHA_GENERIC
+ 	tristate
+-	select XOR_BLOCKS
+ 	help
+ 	  This symbol can be depended upon by arch implementations of the
+ 	  ChaCha library interface that require the generic code as a
 
 

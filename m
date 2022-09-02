@@ -2,99 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EC75AB71D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845EA5AB723
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 19:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236869AbiIBREM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 13:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S229621AbiIBRFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 13:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbiIBREJ (ORCPT
+        with ESMTP id S236291AbiIBRE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 13:04:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D77E39A6
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 10:04:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fkYUhUmO0S6kugiT2LYg3f4F80JAO7Aqk3FfxeycZyQ=; b=RzAY0ghN61ZZD0c8eB30uj84hN
-        qVcUB7UYAlN8LNn4TaKxa3nt6eqc+NAgtE0rG2fIL73ziPN4OgNMqTZekcpyBpxIqv3KgRKgSBcGE
-        kRyK087cbDkvCx1UxwKjpt6PGUCzRA1BAzZiRURz+Q5L4vK0m/ST0hpjXXwmznifxHioeK4S6NJt/
-        sKi3WfcqpPGolK6AX4onCc4GLsmQV+iEFh1hdB6/GJlO/Rqj6F44mX2MICIPbIJpxvoLkycWcdeFk
-        vGIwCT35fApWpVt6aIFNL5fleP2cc3CuIts1tL3JLMowMbdbzzqigdKd8uUpmeqYC3SYXxOeiwnbF
-        nYxqB1AA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oUA4v-007Bhf-32; Fri, 02 Sep 2022 17:03:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F0B8D3002A3;
-        Fri,  2 Sep 2022 19:03:33 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DEA002022A4CD; Fri,  2 Sep 2022 19:03:33 +0200 (CEST)
-Date:   Fri, 2 Sep 2022 19:03:33 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v2 37/59] x86/putuser: Provide room for padding
-Message-ID: <YxI3Zf5drSHAkBL3@hirez.programming.kicks-ass.net>
-References: <20220902130625.217071627@infradead.org>
- <20220902130950.205726504@infradead.org>
- <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
+        Fri, 2 Sep 2022 13:04:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD2115A11;
+        Fri,  2 Sep 2022 10:04:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D571621AE;
+        Fri,  2 Sep 2022 17:04:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE77C433C1;
+        Fri,  2 Sep 2022 17:04:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662138291;
+        bh=lAxIv2QfUf2l3nKsqdu22JAcrnIgJ48N3jh5vnIFQzc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=PRpPlEAS+vV10WkjFd2TH3iPGH/W+xDWHqXVC9AXUx6z6Y1sDQ3leqzZAC3t60T7l
+         uqeZ/8qorvgJhSS1r8iQqv1WAersSU+3+BYJLz3uP0Ni+YHlTM6qI3dcoxiZLbIOSM
+         iftOWO8qkp2Sg2Hrs6v3wS6MqdwqRlEJAUQ/NBQZQsXGIAKEstjDuhOAvM+PJjQuB+
+         9cL8+MU9v8qi1FSVt3biWE7zzO2Yxv+qLsBb85UAD9wFcAvzvAn92+Fxjs44/unia9
+         L1yjEHFmn1+j/5k6ovZp0Wd2hjaV+FowWP154owJUEYyK6M6Yj3T/G3MoVIH/CmW+l
+         Y9MvqPRcxOZ7A==
+Date:   Fri, 2 Sep 2022 12:04:49 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     a.fatoum@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, vkoul@kernel.org,
+        marcel.ziswiler@toradex.com, kishon@ti.com,
+        linux-phy@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: Re: [PATCH v2] phy: freescale: imx8m-pcie: Fix the wrong order of
+ phy_init() and phy_power_on()
+Message-ID: <20220902170449.GA354728@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1661928956-12727-1-git-send-email-hongxing.zhu@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 09:43:45AM -0700, Linus Torvalds wrote:
-> So I don't hate this patch and it's probably good for consistency, but
-> I really think that the retbleed tracking could perhaps be improved to
-> let this be all unnecessary.
-> 
-> The whole return stack depth counting is already not 100% exact, and I
-> think we could just make the rule be that we don't track leaf
-> functions.
-> 
-> Why? It's just a off-by-one in the already not exact tracking. And -
-> perhaps equally importantly - leaf functions are very very common
-> dynamically, and I suspect it's trivial to see them.
-> 
-> Yes, yes, you could make objtool even smarter and actually do some
-> kind of function flow graph thing (and I think some people were
-> talking about that with the whole ret counting long long ago), but the
-> leaf function thing is the really simple low-hanging fruit case of
-> that.
+On Wed, Aug 31, 2022 at 02:55:56PM +0800, Richard Zhu wrote:
+> Refer to phy_core driver, phy_init() must be called before phy_power_on().
+> Fix the wrong order of phy_init() and phy_power_on() here.
 
-So I did the leaf thing a few weeks ago, and at the time the perf gains
-where not worth the complexity.
+> Squash the changes into one patch to avoid the possible bi-section hole.
 
-I can try again :-)
+Avoiding bisection holes goes without saying, so I don't think we need
+to even mention it ;)
+
+> Fixes: 1aa97b002258 ("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+
+I propose merging this via PCI, since I suspect pci-imx6.c is more
+active than phy-fsl-imx8m-pcie.c.
+
+Vinod, if you agree, I'm sure Lorenzo will look for your ack.
+
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c      | 6 +++---
+>  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 8 ++++----
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 6e5debdbc55b..b5f0de455a7b 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -935,7 +935,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+>  	}
+>  
+>  	if (imx6_pcie->phy) {
+> -		ret = phy_power_on(imx6_pcie->phy);
+> +		ret = phy_init(imx6_pcie->phy);
+>  		if (ret) {
+>  			dev_err(dev, "pcie PHY power up failed\n");
+>  			goto err_clk_disable;
+> @@ -949,7 +949,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+>  	}
+>  
+>  	if (imx6_pcie->phy) {
+> -		ret = phy_init(imx6_pcie->phy);
+> +		ret = phy_power_on(imx6_pcie->phy);
+>  		if (ret) {
+>  			dev_err(dev, "waiting for PHY ready timeout!\n");
+>  			goto err_phy_off;
+> @@ -961,7 +961,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+>  
+>  err_phy_off:
+>  	if (imx6_pcie->phy)
+> -		phy_power_off(imx6_pcie->phy);
+> +		phy_exit(imx6_pcie->phy);
+>  err_clk_disable:
+>  	imx6_pcie_clk_disable(imx6_pcie);
+>  err_reg_disable:
+> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> index ad7d2edfc414..c93286483b42 100644
+> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> @@ -59,7 +59,7 @@ struct imx8_pcie_phy {
+>  	bool			clkreq_unused;
+>  };
+>  
+> -static int imx8_pcie_phy_init(struct phy *phy)
+> +static int imx8_pcie_phy_power_on(struct phy *phy)
+>  {
+>  	int ret;
+>  	u32 val, pad_mode;
+> @@ -137,14 +137,14 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  	return ret;
+>  }
+>  
+> -static int imx8_pcie_phy_power_on(struct phy *phy)
+> +static int imx8_pcie_phy_init(struct phy *phy)
+>  {
+>  	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
+>  
+>  	return clk_prepare_enable(imx8_phy->clk);
+>  }
+>  
+> -static int imx8_pcie_phy_power_off(struct phy *phy)
+> +static int imx8_pcie_phy_exit(struct phy *phy)
+>  {
+>  	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
+>  
+> @@ -155,8 +155,8 @@ static int imx8_pcie_phy_power_off(struct phy *phy)
+>  
+>  static const struct phy_ops imx8_pcie_phy_ops = {
+>  	.init		= imx8_pcie_phy_init,
+> +	.exit		= imx8_pcie_phy_exit,
+>  	.power_on	= imx8_pcie_phy_power_on,
+> -	.power_off	= imx8_pcie_phy_power_off,
+>  	.owner		= THIS_MODULE,
+>  };
+>  
+> -- 
+> 2.25.1
+> 
+> 
+> -- 
+> linux-phy mailing list
+> linux-phy@lists.infradead.org
+> https://lists.infradead.org/mailman/listinfo/linux-phy

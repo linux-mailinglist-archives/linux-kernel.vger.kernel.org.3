@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5145AB221
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F32455AAF96
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238143AbiIBNwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S237215AbiIBMkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238108AbiIBNvd (ORCPT
+        with ESMTP id S237177AbiIBMim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:51:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B6110F96F;
-        Fri,  2 Sep 2022 06:26:08 -0700 (PDT)
+        Fri, 2 Sep 2022 08:38:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A35F32EE2;
+        Fri,  2 Sep 2022 05:30:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28C5AB82A96;
-        Fri,  2 Sep 2022 12:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C981C433D6;
-        Fri,  2 Sep 2022 12:31:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED79862192;
+        Fri,  2 Sep 2022 12:29:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA119C433C1;
+        Fri,  2 Sep 2022 12:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121867;
-        bh=oBwYNBQG2bD4bY5vsoYIcoQiEwSXUi5hobMsxKpEJ7c=;
+        s=korg; t=1662121770;
+        bh=FufMUVUaQh+PDh29tlw9bNgetLwgT2UPVsGlg+Vo9Jk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fDVl8yEiKy3nK84/M1iqe9kN/DrSSCuK/bLJ3p8rBUfoHVm4YdJoUAiuGmls+yqvE
-         R7hL3F5lQ7icQ72bkBoywGVXXyiaO7qCo2X0oo6gluSp4R9TrMbR0grcvS0UQMDQHh
-         7PaK2gPEL6Z1offDxePHTQIpvPW1LUnYb5HWigFA=
+        b=qK8r1vH/U8TlQCH0Ar9MeVidJCO/LVGAkqh1n+wBg1Cz1JOwhqNv0htF9cb5EBPG7
+         DjJYFEOmXfmjBUTbLiXR73K6hKiBwS13RLR+/ZrktTnMl9JesbNcvznFs7E3Tag0gu
+         6+caHst0t3DEVuTS5pSnzO9lJE4VmdohPi6Je4uw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 13/73] io_uring: refactor poll update
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 28/77] ratelimit: Fix data-races in ___ratelimit().
 Date:   Fri,  2 Sep 2022 14:18:37 +0200
-Message-Id: <20220902121404.867208559@linuxfoundation.org>
+Message-Id: <20220902121404.582894486@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,112 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ upstream commmit 2bbb146d96f4b45e17d6aeede300796bc1a96d68 ]
+[ Upstream commit 6bae8ceb90ba76cdba39496db936164fa672b9be ]
 
-Clean up io_poll_update() and unify cancellation paths for remove and
-update.
+While reading rs->interval and rs->burst, they can be changed
+concurrently via sysctl (e.g. net_ratelimit_state).  Thus, we
+need to add READ_ONCE() to their readers.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/5937138b6265a1285220e2fab1b28132c1d73ce3.1639605189.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[pavel: backport]
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c |   62 ++++++++++++++++++++++++----------------------------------
- 1 file changed, 26 insertions(+), 36 deletions(-)
+ lib/ratelimit.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5931,61 +5931,51 @@ static int io_poll_update(struct io_kioc
- 	struct io_ring_ctx *ctx = req->ctx;
- 	struct io_kiocb *preq;
- 	bool completing;
--	int ret;
-+	int ret2, ret = 0;
+diff --git a/lib/ratelimit.c b/lib/ratelimit.c
+index e01a93f46f833..ce945c17980b9 100644
+--- a/lib/ratelimit.c
++++ b/lib/ratelimit.c
+@@ -26,10 +26,16 @@
+  */
+ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+ {
++	/* Paired with WRITE_ONCE() in .proc_handler().
++	 * Changing two values seperately could be inconsistent
++	 * and some message could be lost.  (See: net_ratelimit_state).
++	 */
++	int interval = READ_ONCE(rs->interval);
++	int burst = READ_ONCE(rs->burst);
+ 	unsigned long flags;
+ 	int ret;
  
- 	spin_lock(&ctx->completion_lock);
- 	preq = io_poll_find(ctx, req->poll_update.old_user_data, true);
- 	if (!preq) {
- 		ret = -ENOENT;
--		goto err;
--	}
--
--	if (!req->poll_update.update_events && !req->poll_update.update_user_data) {
--		completing = true;
--		ret = io_poll_remove_one(preq) ? 0 : -EALREADY;
--		goto err;
-+fail:
-+		spin_unlock(&ctx->completion_lock);
-+		goto out;
- 	}
--
-+	io_poll_remove_double(preq);
+-	if (!rs->interval)
++	if (!interval)
+ 		return 1;
+ 
  	/*
- 	 * Don't allow racy completion with singleshot, as we cannot safely
- 	 * update those. For multishot, if we're racing with completion, just
- 	 * let completion re-add it.
- 	 */
--	io_poll_remove_double(preq);
- 	completing = !__io_poll_remove_one(preq, &preq->poll, false);
- 	if (completing && (preq->poll.events & EPOLLONESHOT)) {
- 		ret = -EALREADY;
--		goto err;
--	}
--	/* we now have a detached poll request. reissue. */
--	ret = 0;
--err:
--	if (ret < 0) {
--		spin_unlock(&ctx->completion_lock);
--		req_set_fail(req);
--		io_req_complete(req, ret);
--		return 0;
--	}
--	/* only mask one event flags, keep behavior flags */
--	if (req->poll_update.update_events) {
--		preq->poll.events &= ~0xffff;
--		preq->poll.events |= req->poll_update.events & 0xffff;
--		preq->poll.events |= IO_POLL_UNMASK;
-+		goto fail;
+@@ -44,7 +50,7 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+ 	if (!rs->begin)
+ 		rs->begin = jiffies;
+ 
+-	if (time_is_before_jiffies(rs->begin + rs->interval)) {
++	if (time_is_before_jiffies(rs->begin + interval)) {
+ 		if (rs->missed) {
+ 			if (!(rs->flags & RATELIMIT_MSG_ON_RELEASE)) {
+ 				printk_deferred(KERN_WARNING
+@@ -56,7 +62,7 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+ 		rs->begin   = jiffies;
+ 		rs->printed = 0;
  	}
--	if (req->poll_update.update_user_data)
--		preq->user_data = req->poll_update.new_user_data;
- 	spin_unlock(&ctx->completion_lock);
- 
-+	if (req->poll_update.update_events || req->poll_update.update_user_data) {
-+		/* only mask one event flags, keep behavior flags */
-+		if (req->poll_update.update_events) {
-+			preq->poll.events &= ~0xffff;
-+			preq->poll.events |= req->poll_update.events & 0xffff;
-+			preq->poll.events |= IO_POLL_UNMASK;
-+		}
-+		if (req->poll_update.update_user_data)
-+			preq->user_data = req->poll_update.new_user_data;
-+
-+		ret2 = io_poll_add(preq, issue_flags);
-+		/* successfully updated, don't complete poll request */
-+		if (!ret2)
-+			goto out;
-+	}
-+	req_set_fail(preq);
-+	io_req_complete(preq, -ECANCELED);
-+out:
-+	if (ret < 0)
-+		req_set_fail(req);
- 	/* complete update request, we're done with it */
- 	io_req_complete(req, ret);
--
--	if (!completing) {
--		ret = io_poll_add(preq, issue_flags);
--		if (ret < 0) {
--			req_set_fail(preq);
--			io_req_complete(preq, ret);
--		}
--	}
- 	return 0;
- }
- 
+-	if (rs->burst && rs->burst > rs->printed) {
++	if (burst && burst > rs->printed) {
+ 		rs->printed++;
+ 		ret = 1;
+ 	} else {
+-- 
+2.35.1
+
 
 

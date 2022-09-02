@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8035A5AB181
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91C05AAEB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237251AbiIBNfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S236514AbiIBM2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237195AbiIBNfF (ORCPT
+        with ESMTP id S236383AbiIBM1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:35:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7CC1BEBB;
-        Fri,  2 Sep 2022 06:14:53 -0700 (PDT)
+        Fri, 2 Sep 2022 08:27:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D90D7CF1;
+        Fri,  2 Sep 2022 05:24:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F17D620F0;
-        Fri,  2 Sep 2022 12:25:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34028C433C1;
-        Fri,  2 Sep 2022 12:25:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FDF6B82A97;
+        Fri,  2 Sep 2022 12:23:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A48C433D7;
+        Fri,  2 Sep 2022 12:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121536;
-        bh=YEmcEhJq0gC3Xnkobi5cu7by8WhghkDbLfoLK2HmuWY=;
+        s=korg; t=1662121399;
+        bh=7h0GD3SvejhhciElKW9rLNTlQ1OIIuiq9z4znmvgxcA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gdxkUKCeyugkyHwo7dRMU5VfISuVOCgis+xeFKSVGAKAwIEoLwdEIe8VPM3wu4F7t
-         U1s//CU0GpLaJ9JDYZggqsZarxUf+AtyYTNX6jOFELWMK4tAOntrQ+aQBbNeXKgz5+
-         pebDxuNpoCrIic7+inJNQi3DnSrApO72M70zm0fA=
+        b=X1JvVJMMdvG5U3oI+aJfgaUc6Bez6lzt4jDvrJFcoOFTiFwb1ml5bEpns/TLdtcVt
+         sCyYJzwltrnyC1P+/pMOifRuTItESeaV2/adaIcrD4pJT3EwB74KI7FuVLy55WUujx
+         25s1eFuJzxlayoWxk18my0l1hAvq4PkbI8kf8XKw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.19 40/56] selftests/bpf: Fix test_align verifier log patterns
+        stable@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Yang Jihong <yangjihong1@huawei.com>
+Subject: [PATCH 4.14 36/42] ftrace: Fix NULL pointer dereference in is_ftrace_trampoline when ftrace is dead
 Date:   Fri,  2 Sep 2022 14:19:00 +0200
-Message-Id: <20220902121401.731270908@linuxfoundation.org>
+Message-Id: <20220902121400.026741766@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
+References: <20220902121358.773776406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,117 +54,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislav Fomichev <sdf@google.com>
+From: Yang Jihong <yangjihong1@huawei.com>
 
-commit 5366d2269139ba8eb6a906d73a0819947e3e4e0a upstream.
+commit c3b0f72e805f0801f05fa2aa52011c4bfc694c44 upstream.
 
-Commit 294f2fc6da27 ("bpf: Verifer, adjust_scalar_min_max_vals to always
-call update_reg_bounds()") changed the way verifier logs some of its state,
-adjust the test_align accordingly. Where possible, I tried to not copy-paste
-the entire log line and resorted to dropping the last closing brace instead.
+ftrace_startup does not remove ops from ftrace_ops_list when
+ftrace_startup_enable fails:
 
-Fixes: 294f2fc6da27 ("bpf: Verifer, adjust_scalar_min_max_vals to always call update_reg_bounds()")
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20200515194904.229296-1-sdf@google.com
-[OP: adjust for 4.19 selftests, apply only the relevant diffs]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+register_ftrace_function
+  ftrace_startup
+    __register_ftrace_function
+      ...
+      add_ftrace_ops(&ftrace_ops_list, ops)
+      ...
+    ...
+    ftrace_startup_enable // if ftrace failed to modify, ftrace_disabled is set to 1
+    ...
+  return 0 // ops is in the ftrace_ops_list.
+
+When ftrace_disabled = 1, unregister_ftrace_function simply returns without doing anything:
+unregister_ftrace_function
+  ftrace_shutdown
+    if (unlikely(ftrace_disabled))
+            return -ENODEV;  // return here, __unregister_ftrace_function is not executed,
+                             // as a result, ops is still in the ftrace_ops_list
+    __unregister_ftrace_function
+    ...
+
+If ops is dynamically allocated, it will be free later, in this case,
+is_ftrace_trampoline accesses NULL pointer:
+
+is_ftrace_trampoline
+  ftrace_ops_trampoline
+    do_for_each_ftrace_op(op, ftrace_ops_list) // OOPS! op may be NULL!
+
+Syzkaller reports as follows:
+[ 1203.506103] BUG: kernel NULL pointer dereference, address: 000000000000010b
+[ 1203.508039] #PF: supervisor read access in kernel mode
+[ 1203.508798] #PF: error_code(0x0000) - not-present page
+[ 1203.509558] PGD 800000011660b067 P4D 800000011660b067 PUD 130fb8067 PMD 0
+[ 1203.510560] Oops: 0000 [#1] SMP KASAN PTI
+[ 1203.511189] CPU: 6 PID: 29532 Comm: syz-executor.2 Tainted: G    B   W         5.10.0 #8
+[ 1203.512324] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+[ 1203.513895] RIP: 0010:is_ftrace_trampoline+0x26/0xb0
+[ 1203.514644] Code: ff eb d3 90 41 55 41 54 49 89 fc 55 53 e8 f2 00 fd ff 48 8b 1d 3b 35 5d 03 e8 e6 00 fd ff 48 8d bb 90 00 00 00 e8 2a 81 26 00 <48> 8b ab 90 00 00 00 48 85 ed 74 1d e8 c9 00 fd ff 48 8d bb 98 00
+[ 1203.518838] RSP: 0018:ffffc900012cf960 EFLAGS: 00010246
+[ 1203.520092] RAX: 0000000000000000 RBX: 000000000000007b RCX: ffffffff8a331866
+[ 1203.521469] RDX: 0000000000000000 RSI: 0000000000000008 RDI: 000000000000010b
+[ 1203.522583] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8df18b07
+[ 1203.523550] R10: fffffbfff1be3160 R11: 0000000000000001 R12: 0000000000478399
+[ 1203.524596] R13: 0000000000000000 R14: ffff888145088000 R15: 0000000000000008
+[ 1203.525634] FS:  00007f429f5f4700(0000) GS:ffff8881daf00000(0000) knlGS:0000000000000000
+[ 1203.526801] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1203.527626] CR2: 000000000000010b CR3: 0000000170e1e001 CR4: 00000000003706e0
+[ 1203.528611] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1203.529605] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+Therefore, when ftrace_startup_enable fails, we need to rollback registration
+process and remove ops from ftrace_ops_list.
+
+Link: https://lkml.kernel.org/r/20220818032659.56209-1-yangjihong1@huawei.com
+
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/bpf/test_align.c |   27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ kernel/trace/ftrace.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/tools/testing/selftests/bpf/test_align.c
-+++ b/tools/testing/selftests/bpf/test_align.c
-@@ -359,15 +359,15 @@ static struct bpf_align_test tests[] = {
- 			 * is still (4n), fixed offset is not changed.
- 			 * Also, we create a new reg->id.
- 			 */
--			{29, "R5_w=pkt(id=4,off=18,r=0,umax_value=2040,var_off=(0x0; 0x7fc))"},
-+			{29, "R5_w=pkt(id=4,off=18,r=0,umax_value=2040,var_off=(0x0; 0x7fc)"},
- 			/* At the time the word size load is performed from R5,
- 			 * its total fixed offset is NET_IP_ALIGN + reg->off (18)
- 			 * which is 20.  Then the variable offset is (4n), so
- 			 * the total offset is 4-byte aligned and meets the
- 			 * load's requirements.
- 			 */
--			{33, "R4=pkt(id=4,off=22,r=22,umax_value=2040,var_off=(0x0; 0x7fc))"},
--			{33, "R5=pkt(id=4,off=18,r=22,umax_value=2040,var_off=(0x0; 0x7fc))"},
-+			{33, "R4=pkt(id=4,off=22,r=22,umax_value=2040,var_off=(0x0; 0x7fc)"},
-+			{33, "R5=pkt(id=4,off=18,r=22,umax_value=2040,var_off=(0x0; 0x7fc)"},
- 		},
- 	},
- 	{
-@@ -410,15 +410,15 @@ static struct bpf_align_test tests[] = {
- 			/* Adding 14 makes R6 be (4n+2) */
- 			{9, "R6_w=inv(id=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc))"},
- 			/* Packet pointer has (4n+2) offset */
--			{11, "R5_w=pkt(id=1,off=0,r=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc))"},
--			{13, "R4=pkt(id=1,off=4,r=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc))"},
-+			{11, "R5_w=pkt(id=1,off=0,r=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc)"},
-+			{13, "R4=pkt(id=1,off=4,r=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc)"},
- 			/* At the time the word size load is performed from R5,
- 			 * its total fixed offset is NET_IP_ALIGN + reg->off (0)
- 			 * which is 2.  Then the variable offset is (4n+2), so
- 			 * the total offset is 4-byte aligned and meets the
- 			 * load's requirements.
- 			 */
--			{15, "R5=pkt(id=1,off=0,r=4,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc))"},
-+			{15, "R5=pkt(id=1,off=0,r=4,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc)"},
- 			/* Newly read value in R6 was shifted left by 2, so has
- 			 * known alignment of 4.
- 			 */
-@@ -426,15 +426,15 @@ static struct bpf_align_test tests[] = {
- 			/* Added (4n) to packet pointer's (4n+2) var_off, giving
- 			 * another (4n+2).
- 			 */
--			{19, "R5_w=pkt(id=2,off=0,r=0,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc))"},
--			{21, "R4=pkt(id=2,off=4,r=0,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc))"},
-+			{19, "R5_w=pkt(id=2,off=0,r=0,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc)"},
-+			{21, "R4=pkt(id=2,off=4,r=0,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc)"},
- 			/* At the time the word size load is performed from R5,
- 			 * its total fixed offset is NET_IP_ALIGN + reg->off (0)
- 			 * which is 2.  Then the variable offset is (4n+2), so
- 			 * the total offset is 4-byte aligned and meets the
- 			 * load's requirements.
- 			 */
--			{23, "R5=pkt(id=2,off=0,r=4,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc))"},
-+			{23, "R5=pkt(id=2,off=0,r=4,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc)"},
- 		},
- 	},
- 	{
-@@ -469,11 +469,11 @@ static struct bpf_align_test tests[] = {
- 		.matches = {
- 			{4, "R5_w=pkt_end(id=0,off=0,imm=0)"},
- 			/* (ptr - ptr) << 2 == unknown, (4n) */
--			{6, "R5_w=inv(id=0,smax_value=9223372036854775804,umax_value=18446744073709551612,var_off=(0x0; 0xfffffffffffffffc))"},
-+			{6, "R5_w=inv(id=0,smax_value=9223372036854775804,umax_value=18446744073709551612,var_off=(0x0; 0xfffffffffffffffc)"},
- 			/* (4n) + 14 == (4n+2).  We blow our bounds, because
- 			 * the add could overflow.
- 			 */
--			{7, "R5=inv(id=0,var_off=(0x2; 0xfffffffffffffffc))"},
-+			{7, "R5=inv(id=0,smin_value=-9223372036854775806,smax_value=9223372036854775806,umin_value=2,umax_value=18446744073709551614,var_off=(0x2; 0xfffffffffffffffc)"},
- 			/* Checked s>=0 */
- 			{9, "R5=inv(id=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
- 			/* packet pointer + nonnegative (4n+2) */
-@@ -528,7 +528,7 @@ static struct bpf_align_test tests[] = {
- 			/* New unknown value in R7 is (4n) */
- 			{11, "R7_w=inv(id=0,umax_value=1020,var_off=(0x0; 0x3fc))"},
- 			/* Subtracting it from R6 blows our unsigned bounds */
--			{12, "R6=inv(id=0,smin_value=-1006,smax_value=1034,var_off=(0x2; 0xfffffffffffffffc))"},
-+			{12, "R6=inv(id=0,smin_value=-1006,smax_value=1034,umin_value=2,umax_value=18446744073709551614,var_off=(0x2; 0xfffffffffffffffc)"},
- 			/* Checked s>= 0 */
- 			{14, "R6=inv(id=0,umin_value=2,umax_value=1034,var_off=(0x2; 0x7fc))"},
- 			/* At the time the word size load is performed from R5,
-@@ -537,7 +537,8 @@ static struct bpf_align_test tests[] = {
- 			 * the total offset is 4-byte aligned and meets the
- 			 * load's requirements.
- 			 */
--			{20, "R5=pkt(id=1,off=0,r=4,umin_value=2,umax_value=1034,var_off=(0x2; 0x7fc))"},
-+			{20, "R5=pkt(id=1,off=0,r=4,umin_value=2,umax_value=1034,var_off=(0x2; 0x7fc)"},
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -2818,6 +2818,16 @@ static int ftrace_startup(struct ftrace_
+ 
+ 	ftrace_startup_enable(command);
+ 
++	/*
++	 * If ftrace is in an undefined state, we just remove ops from list
++	 * to prevent the NULL pointer, instead of totally rolling it back and
++	 * free trampoline, because those actions could cause further damage.
++	 */
++	if (unlikely(ftrace_disabled)) {
++		__unregister_ftrace_function(ops);
++		return -ENODEV;
++	}
 +
- 		},
- 	},
- 	{
+ 	ops->flags &= ~FTRACE_OPS_FL_ADDING;
+ 
+ 	return 0;
 
 

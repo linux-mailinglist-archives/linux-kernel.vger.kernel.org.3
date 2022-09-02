@@ -2,185 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD585AB8B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 21:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7A95AB8B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 21:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiIBTG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 15:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
+        id S230234AbiIBTJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 15:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiIBTGX (ORCPT
+        with ESMTP id S230207AbiIBTJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 15:06:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BECCC0BE6
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 12:06:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E50DB82D6B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 19:06:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A96AC433D7;
-        Fri,  2 Sep 2022 19:06:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662145579;
-        bh=k5wsC2EtA2qPdI2VARsKQScfF7UKJPtHLB+KhAUijSU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SltpM44bF4EWEqGNxpLsa5nIijpVpuQpEjnSwVeBxnnB3rYIVHPAedLLhkHsvePub
-         S7sLqD8q5fRmK58WrN825uY7e0c5e9bOK4wPkt9PxNJC5hF+9mjlf9XP53pUWxCU9E
-         LfALBBgrFrVNjral1F7yJQ932wRDIJ1KhM1DlSIgtApksQYd0lL5WA7cXJlIGBLSyd
-         7F6tY7b+AUIWMV0g1smcamqZt3CLa57qaJMsy1w8DHuplQmBnmoGqWqRzRJOO0CFbK
-         pJs/VB91bfrHKUfVJ/asVUzGy8AUaEkssbKFtP1iLep6HxZ/OkVY7+HOdVEkIdG9/d
-         m2LCsfHUUWP8w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B9175404A1; Fri,  2 Sep 2022 16:06:16 -0300 (-03)
-Date:   Fri, 2 Sep 2022 16:06:16 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/5] perf intel-pt: Support itrace option flag d+e to log
- on error
-Message-ID: <YxJUKLJwOjH3MNqs@kernel.org>
-References: <20220901110032.9226-1-adrian.hunter@intel.com>
- <20220901110032.9226-6-adrian.hunter@intel.com>
- <dadd6179-4867-211a-ad6e-30fcd66a8e0a@linux.intel.com>
- <1a7aaa51-1858-bb59-834c-7e8f6a58bc39@intel.com>
- <CAM9d7chiutXEZfpQbayJ3bgraLZ_YFGC15yDn7sQBT4asdEfjA@mail.gmail.com>
- <bf500303-394a-4806-361a-7cc559d80e98@intel.com>
+        Fri, 2 Sep 2022 15:09:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4608F5487
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 12:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rt1IDSAN9BZj4OEF4fsbjLaelycXAqdJZzz/2U/Ag+w=; b=ESSENRcRRT17uYUWzdUXATM1ct
+        L9Y6WhP9Yro8ie1M8YOVqJBE59nZSquxxxGMIvTCAy3zq8OWTZAiBOOY3ZYR5zoi6y1SXRD3aFk3e
+        tlpdeQgK1xWwkXVogHH863mExAoCL12QWyb89/ytRuHPUBQdcG/qw2izLl73Kx7e0kmNMA/DpmXtm
+        2il6oiVaXffbeF8WEWfIvOBhSX7QAPD64dUsXlbwCM54e0mSpw9/rBmpEtiHX+nW0l3fRViUwR0iH
+        /NYD5IxuDOno0d33/Cz7xlBS8v6qVLIkYWvDCJROj7RvmTNjGAkOm1/21XASJ88hN8gDCPot5a/Vq
+        crbazAvg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oUC28-007HGB-Ak; Fri, 02 Sep 2022 19:08:52 +0000
+Date:   Fri, 2 Sep 2022 20:08:52 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Subject: Re: [Resend RFC PATCH] mm: introduce __GFP_TRACKLEAK to track
+ in-kernel allocation
+Message-ID: <YxJUxDn5v2MqmjKM@casper.infradead.org>
+References: <1662116347-17649-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <20220902115839.1e3fafd159e42d4e7dae90af@linux-foundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bf500303-394a-4806-361a-7cc559d80e98@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220902115839.1e3fafd159e42d4e7dae90af@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Sep 02, 2022 at 03:01:01PM +0300, Adrian Hunter escreveu:
-> On 2/09/22 04:34, Namhyung Kim wrote:
-> > On Thu, Sep 1, 2022 at 9:29 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>
-> >> On 1/09/22 17:31, Andi Kleen wrote:
-> >>>
-> >>> On 9/1/2022 4:00 AM, Adrian Hunter wrote:
-> > 
-> > [SNIP]
-> >>>> +
-> >>>> +static void log_buf__dump(struct log_buf *b)
-> >>>> +{
-> >>>> +    if (!b->buf)
-> >>>> +        return;
-> >>>> +
-> >>>> +    fflush(f);
-> >>>> +    fprintf(b->backend, "Dumping debug log buffer (first line may be sliced)\n");
-> >>>
-> >>>
-> >>> Should be easy to skip the first line, no?
-> >>
-> >> Not as easy as typing " (first line may be sliced)" ;-)
-> >>
-> >> Still not sure it is worth having the extra complication, but here
-> >> is the change as a separate patch:
-> >>
-> >> From: Adrian Hunter <adrian.hunter@intel.com>
-> >> Date: Thu, 1 Sep 2022 19:01:33 +0300
-> >> Subject: [PATCH] perf intel-pt: Remove first line of log dumped on error
-> >>
-> >> Instead of printing "(first line may be sliced)", always remove the
-> >> first line of the debug log when dumping on error.
-> >>
-> >> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> >> ---
-> >>  .../perf/util/intel-pt-decoder/intel-pt-log.c | 27 ++++++++++++++++---
-> >>  1 file changed, 24 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/tools/perf/util/intel-pt-decoder/intel-pt-log.c b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
-> >> index ea96dcae187a7..6cc465d1f7a9e 100644
-> >> --- a/tools/perf/util/intel-pt-decoder/intel-pt-log.c
-> >> +++ b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
-> >> @@ -143,16 +143,37 @@ static FILE *log_buf__open(struct log_buf *b, FILE *backend, unsigned int sz)
-> >>         return file;
-> >>  }
-> >>
-> >> +static bool remove_first_line(const char **p, size_t *n)
-> >> +{
-> >> +       for (; *n && **p != '\n'; ++*p, --*n)
-> >> +               ;
-> >> +       if (*n) {
-> >> +               *p += 1;
-> >> +               *n -= 1;
-> >> +               return true;
-> >> +       }
-> >> +       return false;
-> >> +}
-> >> +
-> >> +static void write_lines(const char *p, size_t n, FILE *fp, bool *remove_first)
-> >> +{
-> >> +       if (*remove_first)
-> >> +               *remove_first = !remove_first_line(&p, &n);
-> >> +       fwrite(p, n, 1, fp);
-> >> +}
-> >> +
-> >>  static void log_buf__dump(struct log_buf *b)
-> >>  {
-> >> +       bool remove_first = true;
-> > 
-> > Isn't it only required when the buf is wrapped?
+On Fri, Sep 02, 2022 at 11:58:39AM -0700, Andrew Morton wrote:
+> Cc willy for page-flags changes.
+
+Thanks.  This is probably OK.  The biggest problem is that it won't
+work for drivers which allocate memory and then map it to userspace.
+If they try, they'll get a nice splat, but it may limit the usefulness
+of this option.  We should probably document that limitation in this
+patch.
+
+> On Fri, 2 Sep 2022 18:59:07 +0800 "zhaoyang.huang" <zhaoyang.huang@unisoc.com> wrote:
+> > +++ b/mm/page_alloc.c
+> > @@ -1361,6 +1361,8 @@ static __always_inline bool free_pages_prepare(struct page *page,
+> >  		page->mapping = NULL;
+> >  	if (memcg_kmem_enabled() && PageMemcgKmem(page))
+> >  		__memcg_kmem_uncharge_page(page, order);
+> > +	if (PageTrackleak(page))
+> > +		kmemleak_free(page);
+
+Don't we also need to __ClearPageTrackleak()?
+
+> > +	if (gfp & __GFP_TRACKLEAK) {
 > 
-> Very true! Thanks for spotting that!
+> And we'd want __GFP_TRACKLEAK to evaluate to zero at compile time if
+> CONFIG_HAVE_DEBUG_KMEMLEAK=n.
 > 
-> I will send a new version.
+> > +		kmemleak_alloc(page_address(page), PAGE_SIZE << order, 1, gfp & ~__GFP_TRACKLEAK);
+> > +		__SetPageTrackleak(page);
+> > +	}
 
-Ok, I'll remove the one I've been testing, please fix the problems below, found with several compilers/distros:
+We only set this on the first page we allocate.  I think there's a
+problem for multi-page, non-compound allocations, no?  Particularly
+when you consider the problem fixed in e320d3012d25.
 
-The 'struct log_buf' definition is coming after its usage on a static variable,
-please move the variable to after the definition.
-
-  80    56.88 ubuntu:22.10                  : FAIL gcc version 11.3.0 (Ubuntu 11.3.0-5ubuntu1) 
-    util/intel-pt-decoder/intel-pt-log.c:30:23: error: tentative definition of variable with internal linkage has incomplete non-array type 'struct log_buf' [-Werror,-Wtentative-definition-incomplete-type]
-    static struct log_buf log_buf;
-                          ^
-    util/intel-pt-decoder/intel-pt-log.c:30:15: note: forward declaration of 'struct log_buf'
-    static struct log_buf log_buf;
-                  ^
-    1 error generated.
-    error: unknown warning option '-Wno-format-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
-    make[4]: *** [/git/perf-6.0.0-rc3/tools/build/Makefile.build:139: intel-pt-decoder] Error 2
-    make[3]: *** [/git/perf-6.0.0-rc3/tools/build/Makefile.build:139: util] Error 2
-
-
-This one also appeared in some builds, just as a warning:
-
-dlfilters/dlfilter-show-cycles.c: In function 'print_vals':
-dlfilters/dlfilter-show-cycles.c:101:16: warning: format '%llu' expects argument of type 'long long unsigned int', but argument 2 has type '__u64' {aka 'long unsigned int'} [-Wformat=]
-  101 |   printf("%10llu %10llu ", cycles, delta);
-      |           ~~~~~^           ~~~~~~
-      |                |           |
-      |                |           __u64 {aka long unsigned int}
-      |                long long unsigned int
-      |           %10lu
-dlfilters/dlfilter-show-cycles.c:101:23: warning: format '%llu' expects argument of type 'long long unsigned int', but argument 3 has type '__u64' {aka 'long unsigned int'} [-Wformat=]
-  101 |   printf("%10llu %10llu ", cycles, delta);
-      |                  ~~~~~^            ~~~~~
-      |                       |            |
-      |                       |            __u64 {aka long unsigned int}
-      |                       long long unsigned int
-      |                  %10lu
-dlfilters/dlfilter-show-cycles.c:103:16: warning: format '%llu' expects argument of type 'long long unsigned int', but argument 2 has type '__u64' {aka 'long unsigned int'} [-Wformat=]
-  103 |   printf("%10llu %10s ", cycles, "");
-      |           ~~~~~^         ~~~~~~
-      |                |         |
-      |                |         __u64 {aka long unsigned int}
-      |                long long unsigned int
-      |           %10lu
-
-
+I'm not opposed to this tracking, it just needs a bit more thought and
+awareness of some of the corner cases of the VM.  A few test cases would
+be nice; they could demonstrate that this works for both compound and
+non-compound high-order allocations.

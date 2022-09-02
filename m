@@ -2,141 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DE85AB970
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1EDA5AB975
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiIBUYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 16:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S230018AbiIBU0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 16:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiIBUYd (ORCPT
+        with ESMTP id S230026AbiIBU0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 16:24:33 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE888AE7F;
-        Fri,  2 Sep 2022 13:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662150268; x=1693686268;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=nkVa+16eMSYeqPoPfRZV+s2AaexWLNOgRvZusEbiZKY=;
-  b=xiTMRhK6u9A7ZY3F9IZlF/B9OBu+nDjSmZmM0wVdIIVoAv+9hph+DDJ6
-   R+7Hr5or9qYz/n8TgJJtEECoD1EIpuS4tQR76ip+UxGO5a+9KpBhDBaws
-   h2beyUzLmZDuC/aCIHJTUS9LbWT/sh4s4KiYjMic+sW5IUgAIfs0Tovv5
-   eW5lTdbUgeYy2BXAb7bnS3GeWSbgHdBshMr9g5IeoLSczNE+dDmVYJIgF
-   ldfnTlEVoV1zfx0maagce598iUSwXtfFFgBnGcvGBQR5JXC49mGkVoDkZ
-   HdBHpO1EHfrA9x3idlIZL76Qmu4Jwl4UlkO6p0JBhDl0jzMbUIaTIxEp7
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="178990148"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Sep 2022 13:24:23 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 2 Sep 2022 13:24:23 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Fri, 2 Sep 2022 13:24:23 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iH7DBS4Gn+8clTb0+tMjwOPKzcXUN7Sm0EyD9rR5rd0NzXjpdSUehZ0/21RVHE5MT2doJ05bHFXqzRamfGkfLxYudeUyMINrsQ78wAlUj0RfwBuTwBBlR30w+EgK5YLFZ9QF1B+yqROlaJUyz9PfZmGFyJtGTQEhRxijnBFA+O8rLLe5SMwxrofwpDqmAdVAcAT7oJmGJbKikd/EG9wYEN7XJyk8ktBj4I4hdTfVP1B29Otlxx13TJrIduocINRC0zkd84I2OL/y+82jPvwiOSU+Tpgl1/P/ft4CotMU5mw4GgQqDqmAX7zgx9BvptZo+6HtC3hyc3I/egKfoREIyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=81ECfSNGDQvddE/lWAJuKc5w3EpjGvAssZRrkLA41GA=;
- b=ZQUSJhdqjeztkPxcrk8qzEpfrnbcdWLJLayPMv6B1m+U8fGfNvPi2qskDcYiE/ZvxfuZdOhRds+TJBXt0RXKpC0OzZ+1gM0fB96dTufnvlVX01kCic2YbHqBwD2Vyd3Rn2z/5t2Ck0X1NbDdvjBPQWMMLCgO0OjIaSWPMoKSJe5iIwePXU1/A8yUreTH1qxvZwT83iJOoviB0msrvJDNpfCx1hMvetSAVaqk21nDlmcjbV9GEf7wZwrEKk4g7ccKgO3ygCErBJgcN1SigbY21eGVfQLPLmCcvstKZEOmoxNw0R1pb8GproZOfH3SNiSIZ3Vw/QRSB3xMtG40E1cz0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=81ECfSNGDQvddE/lWAJuKc5w3EpjGvAssZRrkLA41GA=;
- b=SWBORKe5Sv2iTmHqQnq+9k+RDxBhOF2jyX2LC2btrZ6gbkEE6aHFv0lwAnMIF4y1Pt3YgMeZOLlPkPjiIaKc+5d8l6/cqfA98LYcxmyPEqgCzPYR7avkEUb5J3eGuckawj82oKifa5tZpL28/1JsGXTyP1WlNXlC1Qki1wpow08=
-Received: from MWHPR11MB1693.namprd11.prod.outlook.com (2603:10b6:300:2b::21)
- by BY5PR11MB4274.namprd11.prod.outlook.com (2603:10b6:a03:1c1::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Fri, 2 Sep
- 2022 20:24:20 +0000
-Received: from MWHPR11MB1693.namprd11.prod.outlook.com
- ([fe80::ccae:ffc6:d9f5:8535]) by MWHPR11MB1693.namprd11.prod.outlook.com
- ([fe80::ccae:ffc6:d9f5:8535%9]) with mapi id 15.20.5588.011; Fri, 2 Sep 2022
- 20:24:19 +0000
-From:   <Jerry.Ray@microchip.com>
-To:     <andrew@lunn.ch>
-CC:     <vivien.didelot@gmail.com>, <f.fainelli@gmail.com>,
-        <olteanv@gmail.com>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/2] net: dsa: LAN9303: Add basic support for LAN9354
-Thread-Topic: [PATCH 2/2] net: dsa: LAN9303: Add basic support for LAN9354
-Thread-Index: AQHYu9FcWcp1m2N/pU+7PwCEJwtzQq3GQbAAgAZaRHA=
-Date:   Fri, 2 Sep 2022 20:24:19 +0000
-Message-ID: <MWHPR11MB169358E09B6F24D8E582CB09EF7A9@MWHPR11MB1693.namprd11.prod.outlook.com>
-References: <20220829180037.31078-1-jerry.ray@microchip.com>
- <20220829180037.31078-2-jerry.ray@microchip.com> <Yw0R7u1qV9tLSCnu@lunn.ch>
-In-Reply-To: <Yw0R7u1qV9tLSCnu@lunn.ch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fb1ffc76-bb15-4bdf-6d1a-08da8d211dbd
-x-ms-traffictypediagnostic: BY5PR11MB4274:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 75WK8VrY/xis2w60JBsVWZVWRyvNI3a+P+grQQfuNFuiahMSNfOLkHfp9+iraDf8UrE9y112e40BPuD+3TJmM+iylsBV+7D8tQ/yGN7eEtw+gBfjD+OTCweee5hlkh1lIRcCl7qU82Lp7bafLsgX10Fn2EUXG+I3GAoqw13u2dYLxXLfNSr6/RpvsojccXmaNL9wSs2QTvvjfjm7PnJJi1W/KqxA1Sl0cSPfXF7fPWjLX9g88jyzYAmpEOrF7s4OXQdafWcbsvEzvEhm5SPaNmW3ov0eVJRBTwZHHijpxZrtpY/J5qQFNEomxSyquRhHi3dGhdzTIhTQIkRVC605/vEQDmc0iWy8Fx0GX/78gi4tEB0aOKFb1kbWAlaoo7sczpTWolVRB4CJouLWTMHBrTh3oU3pYJG/aA2BY4UNE2v3MUFJmdIq4KGxwWUTiNAcDEMkxO4N/JWkAeXDO5aC3/XnOgzK2z1eKcbdfHVbsmwK5isibcz39qUuDBm+D397DYulL7FOiLso2Hs/xNqQnNaILQEqgNCCFpKvETOI+VMD2GTol3COZTUPy/JX7UA41m9x5l9vLbJATOOVlxKUZhUvKZB7Rs+9R8b52s4Y2D4QEpF0ACOThU1Uw6vO4wAwkVrN8frLjKquMn2jgHRRl9o4KYUYDbBnBXqFIyaUsiou6mSPloekQGbhNuB05BW3ljpjHzW2rMlL8Nv2i7L6fBgSD9t5A39CTsu65ryHkRX2YuyoveD7d7UnvktU7NPfhJxs0ba0kP4vl87jydSEeQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1693.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(376002)(346002)(39860400002)(136003)(86362001)(41300700001)(122000001)(33656002)(6506007)(26005)(7696005)(9686003)(186003)(38100700002)(66946007)(55016003)(66556008)(71200400001)(64756008)(66446008)(66476007)(76116006)(316002)(4326008)(7416002)(38070700005)(8676002)(54906003)(5660300002)(478600001)(6916009)(2906002)(4744005)(8936002)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XLRm7EyqLdY921MiwtNq8ve2bf2CsiL/O6Iem6M+oBFgLr4sD730fBP9w0ft?=
- =?us-ascii?Q?wvD+wQooveAUuegHocCnE2HkCj7F572yrTAHk5+PBIfcTTpEl4+kjIIvZ66r?=
- =?us-ascii?Q?x22s6aSxeTOY88AprbuI/U5mmdWbw0LB2dvaMXT1d02cQYNho0jSRwpqK3p2?=
- =?us-ascii?Q?4QWsaIYMKX2y0fYyVYG/ARdaVQ/SRhAtIX0OidN5jFd6fYGhPZrkBRlXIPtD?=
- =?us-ascii?Q?URlaPhJfiddbfNFOhFJ/Y+85gZLglCVcT4KVrF9si24DdkbAM4m0ZAl6lUrQ?=
- =?us-ascii?Q?hGRha+6C6zDhtuSzvRvjiMbpopuvMtNrmBJ1mK7jTgrcaSIsfmFrCjHKUcd8?=
- =?us-ascii?Q?zowPp+QTcCwjUz9Bo4qRchhiwHSg+caqv0n0AOpGk4POIcu20Fvh/PPMM8kA?=
- =?us-ascii?Q?BuXhk2GgwXYI4mPv1RGUfjpf9CpYLIlhzVhuqldcFW2NGz+yVmNYAy8OBDcz?=
- =?us-ascii?Q?x6KLIWeKK+4EUCtHjeQA5mM3AFirSgyuML2MYpBcZ4PLgEMeaD0jAnEWwpL9?=
- =?us-ascii?Q?Fg0yDefaAjXCZYREK8LGDoKW1sPFBenQ75ZvcC2yAnzQefGwd9/x5tcbm5Tf?=
- =?us-ascii?Q?Gtf9+YJd+yZh4TNQPuEgfH7l3zTj76d0qqY1gf/I0zJ64ZwfOG6nGZxrLQEy?=
- =?us-ascii?Q?7fbepIa94FGj9Me0/dnFI2AIE0+7MyORlbvwqWj+BOadHSZTUb8z7iLB8MuL?=
- =?us-ascii?Q?OJvH+MmeG8txvCYa1Ya5hjBwcaNylO5xyTXoM45fm1IHdw3+P8uJFnCgI+/n?=
- =?us-ascii?Q?pxSVxTM+7zk9Y57qtCG0utLb5W+ZbUotzx4UHeLd8X8jul7W59OuwxvNeKuC?=
- =?us-ascii?Q?jV6/yhNZ+w1XUkajwMm+R37E3ASCj7Tv5fCVNu8zfdGJwrSbZkmsWYLt6XCv?=
- =?us-ascii?Q?0RT4W1smonGgkh7l1bLxj/SyM5Cu8Qq1F79VABIhK3lzK/k0OkfARh79ieOy?=
- =?us-ascii?Q?pWKgp0JD/SlnviFtFZq0tMYspZ89dRBKf/7ngNsScmrZWmauA9T73EHhnssE?=
- =?us-ascii?Q?eNMCsY8503vsUsbbT9F+4dPYK2h0xheFpZp3y5hc+B+zDKH45DX6lMvefUra?=
- =?us-ascii?Q?z+blQVpUoQJvhVS7+Q41nDomJWPufWGmoTJwHPvx0EoyLRCx+vsRBTYuTyEX?=
- =?us-ascii?Q?8XJlxL/xeDS3LUvGg8WiNXmTGcqgeCC8cRXrrgzXCQQJiPKJhrebKPwzzpWt?=
- =?us-ascii?Q?uoXVtvWKiEe4x6iBZgI/4z13N7NzZgmEYpp47EeO2MMrcvUQTcfsFc4wE9Q8?=
- =?us-ascii?Q?Iv1x6B8BeV0hQRoPxY+qHHb8VRThtVNKBjiMSIUwxl8oDTVww93V/thv0sbG?=
- =?us-ascii?Q?NvX7fxh9a4adHObM7SUz9g1cT5lR5q6/9IY7prqxZ1NGpDO3o0O5pjdx0quR?=
- =?us-ascii?Q?WLCtlZWqlqZJoRXRcuHPkZN3dO6cxWJmvy4wJ4Q9WjeQnO4z9tEmi273Twpw?=
- =?us-ascii?Q?N2lYLn07yXDdVtpIkM8crCkoiHHs0zknaqZzaVdffOcyhyQwEpnpQw1kMyhN?=
- =?us-ascii?Q?yCTtxtDXGvwtWMuf8oO2Md0R4N2Eu4E1pcB6CcfVhF7RRtuZtIiBFSlFQqq3?=
- =?us-ascii?Q?rB5hn+OIUATWE0SLZCXO7QTzPGZfS65rv8rlkwdO?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 2 Sep 2022 16:26:16 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CD16BD47
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tzbu7sLuKXzdICR1gMr0lrJCZCH1MKqo5IZYOohdmUo=; b=Thlrue0+8MvOnBs97u1tOohoeS
+        RAzAWHs2tMyYgV2OlNxwwX9EDl/1YO45k4sCEw8gzjBxYqbKM/oDxjJilee8qSjVvNpyUFHJ7CpFi
+        GalFKbLzsjuqf5w4yLHcxp15LZthl7HQBsRVs/r8uNVKgVZ98k7qQlXdMVFH0ojVzWkjddlEVpnh9
+        G41jXgfO7hNxlxI93H0KfwtW7KdxjJC4roEpBiSOHM9dy/87NvL2Hi6S8oybY6rsSWpKGwneClECv
+        ISgm42NI2yJWN7qgbGaCTG9xvbnqih3lLSju5EiufG3CwCj8WK+NsQ7qqzPs/D+g9SOkQqjSTjwrK
+        xRLUqGwQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oUDDD-008kpg-6A; Fri, 02 Sep 2022 20:24:23 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A6F4E300244;
+        Fri,  2 Sep 2022 22:24:20 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8B4F82B907AB4; Fri,  2 Sep 2022 22:24:20 +0200 (CEST)
+Date:   Fri, 2 Sep 2022 22:24:20 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juergen Gross <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v2 37/59] x86/putuser: Provide room for padding
+Message-ID: <YxJmdG9Ug7euJdZS@hirez.programming.kicks-ass.net>
+References: <20220902130625.217071627@infradead.org>
+ <20220902130950.205726504@infradead.org>
+ <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
+ <YxI3Zf5drSHAkBL3@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1693.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb1ffc76-bb15-4bdf-6d1a-08da8d211dbd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2022 20:24:19.8268
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EEGUyhceaiHHipkdu9B1xUjCGv2z4ZdwlzhtJ3NY5JHel42bi/Gtk6f1h2B2g9ukwFy+4MO5mibjUBoxzYoczA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4274
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxI3Zf5drSHAkBL3@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -144,20 +76,427 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>  static const struct of_device_id lan9303_mdio_of_match[] =3D {
->>       { .compatible =3D "smsc,lan9303-mdio" },
->> +     { .compatible =3D "microchip,lan9354-mdio" },
->>       { /* sentinel */ },
->
->Please add this compatible to
->Documentation/devicetree/bindings/net/dsa/lan9303.txt. Better still, pleas=
-e convert it to YAML.
->
->       Andrew
->
+On Fri, Sep 02, 2022 at 07:03:33PM +0200, Peter Zijlstra wrote:
+> On Fri, Sep 02, 2022 at 09:43:45AM -0700, Linus Torvalds wrote:
+> > So I don't hate this patch and it's probably good for consistency, but
+> > I really think that the retbleed tracking could perhaps be improved to
+> > let this be all unnecessary.
+> > 
+> > The whole return stack depth counting is already not 100% exact, and I
+> > think we could just make the rule be that we don't track leaf
+> > functions.
+> > 
+> > Why? It's just a off-by-one in the already not exact tracking. And -
+> > perhaps equally importantly - leaf functions are very very common
+> > dynamically, and I suspect it's trivial to see them.
+> > 
+> > Yes, yes, you could make objtool even smarter and actually do some
+> > kind of function flow graph thing (and I think some people were
+> > talking about that with the whole ret counting long long ago), but the
+> > leaf function thing is the really simple low-hanging fruit case of
+> > that.
+> 
+> So I did the leaf thing a few weeks ago, and at the time the perf gains
+> where not worth the complexity.
+> 
+> I can try again :-)
 
-I was planning the conversion to YAML as a separate patch as I didn't want =
-to delay this one.
+The below (mashup of a handful of patches) is the best I could come up
+with in a hurry.
 
-Jerry.
+Specifically, the approach taken is that instead of the 10 byte sarq for
+accounting a leaf has a 10 byte NOP in front of it. When this 'leaf'-nop
+is found, the return thunk is also not used and a regular 'ret'
+instruction is patched in.
 
+Direct calls to leaf functions are unmodified; they still go to +0.
+
+However, indirect call will unconditionally jump to -10. These will then
+either hit the sarq or the fancy nop
+
+Seems to boot in kvm (defconfig+kvm_guest.config)
+
+That is; the thing you complained about isn't actually 'fixed', leaf
+functions still need their padding.
+
+If this patch makes you feel warm and fuzzy, I can clean it up,
+otherwise I would suggest getting the stuff we have merged before adding
+even more things on top.
+
+I'll see if I get time to clean up the alignment thing this weekend,
+otherwise it'll have to wait till next week or so.
+
+---
+ arch/x86/include/asm/alternative.h  |    7 ++
+ arch/x86/kernel/alternative.c       |   11 ++++
+ arch/x86/kernel/callthunks.c        |   51 +++++++++++++++++++
+ arch/x86/kernel/cpu/bugs.c          |    2 
+ arch/x86/kernel/module.c            |    8 ++-
+ arch/x86/kernel/vmlinux.lds.S       |    7 ++
+ arch/x86/lib/retpoline.S            |   11 +---
+ tools/objtool/check.c               |   95 ++++++++++++++++++++++++++++++++++++
+ tools/objtool/include/objtool/elf.h |    2 
+ 9 files changed, 186 insertions(+), 8 deletions(-)
+
+--- a/arch/x86/include/asm/alternative.h
++++ b/arch/x86/include/asm/alternative.h
+@@ -94,6 +94,8 @@ extern void callthunks_patch_module_call
+ extern void *callthunks_translate_call_dest(void *dest);
+ extern bool is_callthunk(void *addr);
+ extern int x86_call_depth_emit_accounting(u8 **pprog, void *func);
++extern void apply_leafs(s32 *start, s32 *end);
++extern bool is_leaf_function(void *addr);
+ #else
+ static __always_inline void callthunks_patch_builtin_calls(void) {}
+ static __always_inline void
+@@ -112,6 +114,11 @@ static __always_inline int x86_call_dept
+ {
+ 	return 0;
+ }
++static __always_inline void apply_leafs(s32 *start, s32 *end) {}
++static __always_inline bool is_leaf_function(void *addr)
++{
++	return false;
++}
+ #endif
+ 
+ #ifdef CONFIG_SMP
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -114,6 +114,7 @@ static void __init_or_module add_nops(vo
+ 	}
+ }
+ 
++extern s32 __leaf_sites[], __leaf_sites_end[];
+ extern s32 __retpoline_sites[], __retpoline_sites_end[];
+ extern s32 __return_sites[], __return_sites_end[];
+ extern s32 __ibt_endbr_seal[], __ibt_endbr_seal_end[];
+@@ -586,9 +587,14 @@ static int patch_return(void *addr, stru
+ 		if (x86_return_thunk == __x86_return_thunk)
+ 			return -1;
+ 
++		if (x86_return_thunk == __x86_return_skl &&
++		    is_leaf_function(addr))
++			goto plain_ret;
++
+ 		i = JMP32_INSN_SIZE;
+ 		__text_gen_insn(bytes, JMP32_INSN_OPCODE, addr, x86_return_thunk, i);
+ 	} else {
++plain_ret:
+ 		bytes[i++] = RET_INSN_OPCODE;
+ 	}
+ 
+@@ -988,6 +994,11 @@ void __init alternative_instructions(voi
+ 	apply_paravirt(__parainstructions, __parainstructions_end);
+ 
+ 	/*
++	 * Mark the leaf sites; this affects apply_returns() and callthunks_patch*().
++	 */
++	apply_leafs(__leaf_sites, __leaf_sites_end);
++
++	/*
+ 	 * Rewrite the retpolines, must be done before alternatives since
+ 	 * those can rewrite the retpoline thunks.
+ 	 */
+--- a/arch/x86/kernel/callthunks.c
++++ b/arch/x86/kernel/callthunks.c
+@@ -181,6 +181,54 @@ static const u8 nops[] = {
+ 	0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+ };
+ 
++/*
++ * 10 byte nop that spells 'leaf' in the immediate.
++ */
++static const u8 leaf_nop[] = {            /* 'l',  'e',  'a',  'f' */
++	0x2e, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x6c, 0x65, 0x61, 0x66,
++};
++
++void __init_or_module noinline apply_leafs(s32 *start, s32 *end)
++{
++	u8 buffer[16];
++	s32 *s;
++
++	for (s = start; s < end; s++) {
++		void *addr = (void *)s + *s;
++
++		if (skip_addr(addr))
++			continue;
++
++		if (copy_from_kernel_nofault(buffer, addr-10, 10))
++			continue;
++
++		/* already patched */
++		if (!memcmp(buffer, leaf_nop, 10))
++			continue;
++
++		if (memcmp(buffer, nops, 10)) {
++			pr_warn("Not NOPs: %pS %px %*ph\n", addr, addr, 10, addr);
++			continue;
++		}
++
++		text_poke_early(addr-10, leaf_nop, 10);
++	}
++}
++
++bool is_leaf_function(void *addr)
++{
++	unsigned long size, offset;
++	u8 buffer[10];
++
++	if (kallsyms_lookup_size_offset((unsigned long)addr, &size, &offset))
++		addr -= offset;
++
++	if (copy_from_kernel_nofault(buffer, addr-10, 10))
++		return false;
++
++	return memcmp(buffer, leaf_nop, 10) == 0;
++}
++
+ static __init_or_module void *patch_dest(void *dest, bool direct)
+ {
+ 	unsigned int tsize = SKL_TMPL_SIZE;
+@@ -190,6 +238,9 @@ static __init_or_module void *patch_dest
+ 	if (!bcmp(pad, skl_call_thunk_template, tsize))
+ 		return pad;
+ 
++	if (!bcmp(pad, leaf_nop, tsize))
++		return dest;
++
+ 	/* Ensure there are nops */
+ 	if (bcmp(pad, nops, tsize)) {
+ 		pr_warn_once("Invalid padding area for %pS\n", dest);
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -838,6 +838,8 @@ static int __init retbleed_parse_cmdline
+ 			retbleed_cmd = RETBLEED_CMD_STUFF;
+ 		} else if (!strcmp(str, "nosmt")) {
+ 			retbleed_nosmt = true;
++		} else if (!strcmp(str, "force")) {
++			setup_force_cpu_bug(X86_BUG_RETBLEED);
+ 		} else {
+ 			pr_err("Ignoring unknown retbleed option (%s).", str);
+ 		}
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -253,7 +253,7 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		    struct module *me)
+ {
+ 	const Elf_Shdr *s, *text = NULL, *alt = NULL, *locks = NULL,
+-		*para = NULL, *orc = NULL, *orc_ip = NULL,
++		*para = NULL, *orc = NULL, *orc_ip = NULL, *leafs = NULL,
+ 		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL,
+ 		*calls = NULL;
+ 	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+@@ -271,6 +271,8 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 			orc = s;
+ 		if (!strcmp(".orc_unwind_ip", secstrings + s->sh_name))
+ 			orc_ip = s;
++		if (!strcmp(".leaf_sites", secstrings + s->sh_name))
++			leafs = s;
+ 		if (!strcmp(".retpoline_sites", secstrings + s->sh_name))
+ 			retpolines = s;
+ 		if (!strcmp(".return_sites", secstrings + s->sh_name))
+@@ -289,6 +291,10 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		void *pseg = (void *)para->sh_addr;
+ 		apply_paravirt(pseg, pseg + para->sh_size);
+ 	}
++	if (leafs) {
++		void *rseg = (void *)leafs->sh_addr;
++		apply_leafs(rseg, rseg + leafs->sh_size);
++	}
+ 	if (retpolines) {
+ 		void *rseg = (void *)retpolines->sh_addr;
+ 		apply_retpolines(rseg, rseg + retpolines->sh_size);
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -298,6 +298,13 @@ SECTIONS
+ 		*(.call_sites)
+ 		__call_sites_end = .;
+ 	}
++
++	. = ALIGN(8);
++	.leaf_sites : AT(ADDR(.leaf_sites) - LOAD_OFFSET) {
++		__leaf_sites = .;
++		*(.leaf_sites)
++		__leaf_sites_end = .;
++	}
+ #endif
+ 
+ #ifdef CONFIG_X86_KERNEL_IBT
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -77,9 +77,9 @@ SYM_CODE_END(__x86_indirect_thunk_array)
+ SYM_INNER_LABEL(__x86_indirect_call_thunk_\reg, SYM_L_GLOBAL)
+ 	UNWIND_HINT_EMPTY
+ 	ANNOTATE_NOENDBR
+-
+-	CALL_DEPTH_ACCOUNT
+-	POLINE \reg
++	sub	$10, %\reg
++	POLINE	\reg
++	add	$10, %\reg
+ 	ANNOTATE_UNRET_SAFE
+ 	ret
+ 	int3
+@@ -216,10 +216,7 @@ SYM_FUNC_START(__x86_return_skl)
+ 1:
+ 	CALL_THUNKS_DEBUG_INC_STUFFS
+ 	.rept	16
+-	ANNOTATE_INTRA_FUNCTION_CALL
+-	call	2f
+-	int3
+-2:
++	__FILL_RETURN_SLOT
+ 	.endr
+ 	add	$(8*16), %rsp
+ 
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -945,6 +945,74 @@ static int create_direct_call_sections(s
+ 	return 0;
+ }
+ 
++static int create_leaf_sites_sections(struct objtool_file *file)
++{
++	struct section *sec, *s;
++	struct symbol *sym;
++	unsigned int *loc;
++	int idx;
++
++	sec = find_section_by_name(file->elf, ".leaf_sites");
++	if (sec) {
++		INIT_LIST_HEAD(&file->call_list);
++		WARN("file already has .leaf_sites section, skipping");
++		return 0;
++	}
++
++	idx = 0;
++	for_each_sec(file, s) {
++		if (!s->text || s->init)
++			continue;
++
++		list_for_each_entry(sym, &s->symbol_list, list) {
++			if (sym->pfunc != sym)
++				continue;
++
++			if (sym->static_call_tramp)
++				continue;
++
++			if (!sym->leaf)
++				continue;
++
++			idx++;
++		}
++	}
++
++	sec = elf_create_section(file->elf, ".leaf_sites", 0, sizeof(unsigned int), idx);
++	if (!sec)
++		return -1;
++
++	idx = 0;
++	for_each_sec(file, s) {
++		if (!s->text || s->init)
++			continue;
++
++		list_for_each_entry(sym, &s->symbol_list, list) {
++			if (sym->pfunc != sym)
++				continue;
++
++			if (sym->static_call_tramp)
++				continue;
++
++			if (!sym->leaf)
++				continue;
++
++			loc = (unsigned int *)sec->data->d_buf + idx;
++			memset(loc, 0, sizeof(unsigned int));
++
++			if (elf_add_reloc_to_insn(file->elf, sec,
++						  idx * sizeof(unsigned int),
++						  R_X86_64_PC32,
++						  s, sym->offset))
++				return -1;
++
++			idx++;
++		}
++	}
++
++	return 0;
++}
++
+ /*
+  * Warnings shouldn't be reported for ignored functions.
+  */
+@@ -2362,6 +2430,9 @@ static int classify_symbols(struct objto
+ 			if (!strcmp(func->name, "__fentry__"))
+ 				func->fentry = true;
+ 
++			if (!strcmp(func->name, "__stack_chk_fail"))
++				func->stack_chk = true;
++
+ 			if (is_profiling_func(func->name))
+ 				func->profiling_func = true;
+ 		}
+@@ -2492,6 +2563,16 @@ static bool is_fentry_call(struct instru
+ 	return false;
+ }
+ 
++static bool is_stack_chk_call(struct instruction *insn)
++{
++	if (insn->type == INSN_CALL &&
++	    insn->call_dest &&
++	    insn->call_dest->stack_chk)
++		return true;
++
++	return false;
++}
++
+ static bool has_modified_stack_frame(struct instruction *insn, struct insn_state *state)
+ {
+ 	struct cfi_state *cfi = &state->cfi;
+@@ -3269,6 +3350,9 @@ static int validate_call(struct objtool_
+ 			 struct instruction *insn,
+ 			 struct insn_state *state)
+ {
++	if (insn->func && !is_fentry_call(insn) && !is_stack_chk_call(insn))
++		insn->func->leaf = 0;
++
+ 	if (state->noinstr && state->instr <= 0 &&
+ 	    !noinstr_call_dest(file, insn, insn->call_dest)) {
+ 		WARN_FUNC("call to %s() leaves .noinstr.text section",
+@@ -3973,6 +4057,12 @@ static int validate_section(struct objto
+ 		init_insn_state(file, &state, sec);
+ 		set_func_state(&state.cfi);
+ 
++		/*
++		 * Asumme it is a leaf function; will be cleared for any CALL
++		 * encountered while validating the branches.
++		 */
++		func->leaf = 1;
++
+ 		warnings += validate_symbol(file, sec, func, &state);
+ 	}
+ 
+@@ -4358,6 +4448,11 @@ int check(struct objtool_file *file)
+ 		if (ret < 0)
+ 			goto out;
+ 		warnings += ret;
++
++		ret = create_leaf_sites_sections(file);
++		if (ret < 0)
++			goto out;
++		warnings += ret;
+ 	}
+ 
+ 	if (opts.rethunk) {
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -61,6 +61,8 @@ struct symbol {
+ 	u8 return_thunk      : 1;
+ 	u8 fentry            : 1;
+ 	u8 profiling_func    : 1;
++	u8 leaf	             : 1;
++	u8 stack_chk         : 1;
+ 	struct list_head pv_target;
+ };
+ 

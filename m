@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2037E5AB3B7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186D45AB3C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236809AbiIBOdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
+        id S236569AbiIBOgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237072AbiIBOav (ORCPT
+        with ESMTP id S236297AbiIBOfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:30:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96392201A4;
-        Fri,  2 Sep 2022 06:55:19 -0700 (PDT)
+        Fri, 2 Sep 2022 10:35:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8444167476;
+        Fri,  2 Sep 2022 06:56:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74FA4B82AAC;
-        Fri,  2 Sep 2022 12:39:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9DEEC433D6;
-        Fri,  2 Sep 2022 12:38:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A95596217F;
+        Fri,  2 Sep 2022 12:39:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF2AAC433C1;
+        Fri,  2 Sep 2022 12:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122339;
-        bh=grrOAlYIZGyqwrMbbVHIL1tatlu+W0H81mTS44QmifQ=;
+        s=korg; t=1662122364;
+        bh=fnN0EiVZn6o6LF1pXzUjmt8WAUMjyGbBmYQqntl8lKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x4j+pr9lj3Yfi8s83ixAKCgJNvqnhYeBJYPxRivY8nzH7NVYonq16nv78Zn5pe+hc
-         fZf2jyH96iy9GuNZFA593plCxMf5dWiJyXh6TviValFNr+7agDIPgl/ZWUCLuwFrhr
-         J6nUrRgcCmA/dW/Wd5HBfYzosdQ8/dJZDB38u+Bw=
+        b=gW3V/2b09SnWKas4isj5lqtEzNbhWOxe8U+piQHLxpID5F5HGWmWClIohL8v2YIze
+         PasliXceOpDdMmDSAlcWCBi9WL4ArF80jHBUxgYlKGFArYez03Mpuk+/KFQZW989Df
+         8DwVKQEtY003flM3Q1Rv7ARB2rwGEHjKbgyT5pvk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 5.10 16/37] bpf: Dont redirect packets with invalid pkt_len
-Date:   Fri,  2 Sep 2022 14:19:38 +0200
-Message-Id: <20220902121359.686245488@linuxfoundation.org>
+        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 24/37] drm/amd/pm: add missing ->fini_microcode interface for Sienna Cichlid
+Date:   Fri,  2 Sep 2022 14:19:46 +0200
+Message-Id: <20220902121359.932334412@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902121359.177846782@linuxfoundation.org>
 References: <20220902121359.177846782@linuxfoundation.org>
@@ -57,70 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengchao Shao <shaozhengchao@huawei.com>
+From: Evan Quan <evan.quan@amd.com>
 
-commit fd1894224407c484f652ad456e1ce423e89bb3eb upstream.
+[ Upstream commit 0a2d922a5618377cdf8fa476351362733ef55342 ]
 
-Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
-skbs, that is, the flow->head is null.
-The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
-run a bpf prog which redirects empty skbs.
-So we should determine whether the length of the packet modified by bpf
-prog or others like bpf_prog_test is valid before forwarding it directly.
+To avoid any potential memory leak.
 
-LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
-LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
-
-Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
-Link: https://lore.kernel.org/r/20220715115559.139691-1-shaozhengchao@huawei.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Evan Quan <evan.quan@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/skbuff.h |    8 ++++++++
- net/bpf/test_run.c     |    3 +++
- net/core/dev.c         |    1 +
- 3 files changed, 12 insertions(+)
+ drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -2222,6 +2222,14 @@ static inline void skb_set_tail_pointer(
- 
- #endif /* NET_SKBUFF_DATA_USES_OFFSET */
- 
-+static inline void skb_assert_len(struct sk_buff *skb)
-+{
-+#ifdef CONFIG_DEBUG_NET
-+	if (WARN_ONCE(!skb->len, "%s\n", __func__))
-+		DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
-+#endif /* CONFIG_DEBUG_NET */
-+}
-+
- /*
-  *	Add data to an sk_buff
-  */
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -441,6 +441,9 @@ static int convert___skb_to_skb(struct s
- {
- 	struct qdisc_skb_cb *cb = (struct qdisc_skb_cb *)skb->cb;
- 
-+	if (!skb->len)
-+		return -EINVAL;
-+
- 	if (!__skb)
- 		return 0;
- 
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4097,6 +4097,7 @@ static int __dev_queue_xmit(struct sk_bu
- 	bool again = false;
- 
- 	skb_reset_mac_header(skb);
-+	skb_assert_len(skb);
- 
- 	if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_SCHED_TSTAMP))
- 		__skb_tstamp_tx(skb, NULL, skb->sk, SCM_TSTAMP_SCHED);
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
+index 8556c229ff598..49d7fa1d08427 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
+@@ -2759,6 +2759,7 @@ static const struct pptable_funcs sienna_cichlid_ppt_funcs = {
+ 	.dump_pptable = sienna_cichlid_dump_pptable,
+ 	.init_microcode = smu_v11_0_init_microcode,
+ 	.load_microcode = smu_v11_0_load_microcode,
++	.fini_microcode = smu_v11_0_fini_microcode,
+ 	.init_smc_tables = sienna_cichlid_init_smc_tables,
+ 	.fini_smc_tables = smu_v11_0_fini_smc_tables,
+ 	.init_power = smu_v11_0_init_power,
+-- 
+2.35.1
+
 
 

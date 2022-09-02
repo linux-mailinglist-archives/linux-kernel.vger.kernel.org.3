@@ -2,224 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E2D5AA833
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17575AA838
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbiIBGmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 02:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S235376AbiIBGpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 02:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiIBGme (ORCPT
+        with ESMTP id S233557AbiIBGpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 02:42:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7BCB14EB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 23:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662100952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zd920y5kuntN3Fe3mBbgf2SnydeE5HI0Dhy/WeAHKqc=;
-        b=HRTkpIjYchWn9p2jMyW6p5aUwz0QDdUtnVopmASqQQ8e4q0bCdAoKEe1lJV7mwByQ5XRmc
-        ZxM4wBPJJE5wlicpwqtiLMUKl8DKVkEHU1qhGWUL/TCQinVDfqEI6k70q+szIVYRS0z/DB
-        Lr/K922esSxvNfRu5rdi/grGsCMmv0o=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-399-Kr0q0gJYNVOTGHmxirlHNw-1; Fri, 02 Sep 2022 02:42:30 -0400
-X-MC-Unique: Kr0q0gJYNVOTGHmxirlHNw-1
-Received: by mail-wm1-f70.google.com with SMTP id c5-20020a7bc005000000b003a63a3570f2so272896wmb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 23:42:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=zd920y5kuntN3Fe3mBbgf2SnydeE5HI0Dhy/WeAHKqc=;
-        b=XxDcpPKtYBKYnYV9/YRFRUKTgi/IYbCq2yGCoBujSBZwMSn6OAqv7hs3WFjUfZOlRu
-         KVBC5UXczAGUf+eGBOIt6TK3T1GViHU4OkL7A5NTiFWh0Co9vh01QzO+PWI1V9kjqRYB
-         kbeuYG2v0ymVnlLmvoxVWixi9rp0MCS/iRZSmWkmJd0GobAehgVe7DPioTCe0+X7aBhb
-         IgekRycqLb4DddM8sIJVuK/72yEdi3a25C3uYcqbbLF2ZFt5AvGEwJXTQikL7hiGpmVE
-         o6X7pqfJ21UgYIua8IHsRoR4lLscLOWb3wp83D7TYO5WznZrUEzc04dMxOxFfpMOmATv
-         TO9A==
-X-Gm-Message-State: ACgBeo03wPywPAwrcL/O5JFtdJtReYgnWL8cZuPVsSwTjeFkif66nGb+
-        ak0xZt6STNwI+r0O5iN4PZjpvd3PeUA3Y0zCHuYrWra6eZ1Kn4976T9/pltNQMHMrMgA+vgNC1Z
-        LmNNuCVUb6jLykqft41Dogkxj
-X-Received: by 2002:a05:600c:4ec9:b0:3a5:a567:137f with SMTP id g9-20020a05600c4ec900b003a5a567137fmr1673996wmq.46.1662100949462;
-        Thu, 01 Sep 2022 23:42:29 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7NOLu61wFcCZ0OBX41IN7InJbnGYlfsBwf1Tz6mQhGc6CVw6ILI/UTYKBvLA+1ocvRUh+E6w==
-X-Received: by 2002:a05:600c:4ec9:b0:3a5:a567:137f with SMTP id g9-20020a05600c4ec900b003a5a567137fmr1673979wmq.46.1662100949183;
-        Thu, 01 Sep 2022 23:42:29 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c714:4800:2077:1bf6:40e7:2833? (p200300cbc714480020771bf640e72833.dip0.t-ipconnect.de. [2003:cb:c714:4800:2077:1bf6:40e7:2833])
-        by smtp.gmail.com with ESMTPSA id v3-20020a5d6103000000b002252cb35184sm747022wrt.25.2022.09.01.23.42.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 23:42:28 -0700 (PDT)
-Message-ID: <e0b2593f-d259-3db8-d742-705c0a9a8f84@redhat.com>
-Date:   Fri, 2 Sep 2022 08:42:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
+        Fri, 2 Sep 2022 02:45:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572751010
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 23:45:00 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2826gWN4015477;
+        Fri, 2 Sep 2022 06:44:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=oXfhblV9Gn509Y6lsGhV9mLyu7HT0FI0E4q3AT34Jts=;
+ b=r2je0uCUUgYTQcWTwSYN70/0y+ay8pqVL2pV4dBVbTTd82Hxl4liJKoSFRoSIdMaTfV9
+ Drmjr+ChhfjS/8oIyk1TYe2bkRRKyHpEzrHzQ16BOmG6m+TpGQeBVmahzj9jXLdvFmRJ
+ GNLKHNQeRB7q7p6LvEhL2tYpsgSUYxQncEMt3l6Qr5A+jcJCQdg+lsj0zcP4+qMWrikZ
+ ZWJPVjfC2O/hBI2H2XS0CW3ABOSHySMjmNqsITnWFji8Y+SnlsCMRk43upJn7eUm7qvQ
+ KaiNS4iB+7XYLTFm5+FANdCl8dwy/arp7EsqDf1DF31WEDKBK2XwDuI3qp38jx/4fQbN WQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jbcsu8215-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Sep 2022 06:44:44 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2826hYGC018244;
+        Fri, 2 Sep 2022 06:44:44 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jbcsu81ye-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Sep 2022 06:44:43 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2826aBFV005974;
+        Fri, 2 Sep 2022 06:44:41 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3j7aw8wp5h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Sep 2022 06:44:41 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2826j1ED40436108
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 2 Sep 2022 06:45:01 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DA9F04C04A;
+        Fri,  2 Sep 2022 06:44:38 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0BECA4C040;
+        Fri,  2 Sep 2022 06:44:33 +0000 (GMT)
+Received: from [9.43.64.219] (unknown [9.43.64.219])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  2 Sep 2022 06:44:32 +0000 (GMT)
+Message-ID: <45488760-02b5-115b-c16d-5219303f2f33@linux.ibm.com>
+Date:   Fri, 2 Sep 2022 12:14:31 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
+ sysfs
 Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>, peterx@redhat.com,
-        kirill.shutemov@linux.intel.com, jhubbard@nvidia.com,
-        jgg@nvidia.com, hughd@google.com, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220901222707.477402-1-shy828301@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220901222707.477402-1-shy828301@gmail.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Wei Xu <weixugc@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>,
+        Greg Thelen <gthelen@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
+ <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <ad19e105-9290-922d-59e6-e6813a30f5f0@linux.ibm.com>
+ <87pmgezkhp.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
+ <d91beb53-e940-e02a-f9ca-3326bf914da7@linux.ibm.com>
+ <87fshaz63h.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <698120ce-d4df-3d13-dea9-a8f5c298783c@linux.ibm.com>
+ <87bkryz4nh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <2b4ddc45-74ae-27df-d973-6724f61f4e18@linux.ibm.com>
+ <877d2mz3c1.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <877d2mz3c1.fsf@yhuang6-desk2.ccr.corp.intel.com>
 Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: id3h1xHQI30Uq9IFIfXdbOVYH4Nu8qtS
+X-Proofpoint-GUID: Vy__WMwFUcpmib_RCUdVcQyq-Vg3vas3
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 impostorscore=0 clxscore=1015
+ phishscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209020029
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.09.22 00:27, Yang Shi wrote:
-> Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
-> introduce a general RCU get_user_pages_fast()"), a TLB flush is no longer
-> sufficient to handle concurrent GUP-fast in all cases, it only handles
-> traditional IPI-based GUP-fast correctly.  On architectures that send
-> an IPI broadcast on TLB flush, it works as expected.  But on the
-> architectures that do not use IPI to broadcast TLB flush, it may have
-> the below race:
+On 9/2/22 12:10 PM, Huang, Ying wrote:
+> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 > 
->    CPU A                                          CPU B
-> THP collapse                                     fast GUP
->                                               gup_pmd_range() <-- see valid pmd
->                                                   gup_pte_range() <-- work on pte
-> pmdp_collapse_flush() <-- clear pmd and flush
-> __collapse_huge_page_isolate()
->     check page pinned <-- before GUP bump refcount
->                                                       pin the page
->                                                       check PTE <-- no change
-> __collapse_huge_page_copy()
->     copy data to huge page
->     ptep_clear()
-> install huge pmd for the huge page
->                                                       return the stale page
-> discard the stale page
+>> On 9/2/22 11:42 AM, Huang, Ying wrote:
+>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>>
+>>>> On 9/2/22 11:10 AM, Huang, Ying wrote:
+>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>>>>
+>>>>>> On 9/2/22 10:39 AM, Wei Xu wrote:
+>>>>>>> On Thu, Sep 1, 2022 at 5:33 PM Huang, Ying <ying.huang@intel.com> wrote:
+>>>>>>>>
+>>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>>>>>>>
+>>>>>>>>> On 9/1/22 12:31 PM, Huang, Ying wrote:
+>>>>>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>>>>>>>>>
+>>>>>>>>>>> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
+>>>>>>>>>>> related details can be found. All allocated memory tiers will be listed
+>>>>>>>>>>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
+>>>>>>>>>>>
+>>>>>>>>>>> The nodes which are part of a specific memory tier can be listed via
+>>>>>>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
+>>>>>>>>>>
+>>>>>>>>>> I think "memory_tier" is a better subsystem/bus name than
+>>>>>>>>>> memory_tiering.  Because we have a set of memory_tierN devices inside.
+>>>>>>>>>> "memory_tier" sounds more natural.  I know this is subjective, just my
+>>>>>>>>>> preference.
+>>>>>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> I missed replying to this earlier. I will keep memory_tiering as subsystem name in v4 
+>>>>>> because we would want it to a susbsystem where all memory tiering related details can be found
+>>>>>> including memory type in the future. This is as per discussion 
+>>>>>>
+>>>>>> https://lore.kernel.org/linux-mm/CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com
+>>>>>
+>>>>> I don't think that it's a good idea to mix 2 types of devices in one
+>>>>> subsystem (bus).  If my understanding were correct, that breaks the
+>>>>> driver core convention.
+>>>>>
+>>>>
+>>>> All these are virtual devices .I am not sure i follow what you mean by 2 types of devices.
+>>>> memory_tiering is a subsystem that represents all the details w.r.t memory tiering. It shows
+>>>> details of memory tiers and can possibly contain details of different memory types .
+>>>
+>>> IMHO, memory_tier and memory_type are 2 kind of devices.  They have
+>>> almost totally different attributes (sysfs file).  So, we should create
+>>> 2 buses for them.  Each has its own attribute group.  "virtual" itself
+>>> isn't a subsystem.
+>>
+>> Considering both the details are related to memory tiering, wouldn't it be much simpler we consolidate
+>> them within the same subdirectory? I am still not clear why you are suggesting they need to be in different
+>> sysfs hierarchy.  It doesn't break any driver core convention as you mentioned earlier. 
+>>
+>> /sys/devices/virtual/memory_tiering/memory_tierN
+>> /sys/devices/virtual/memory_tiering/memory_typeN
 > 
-> The race could be fixed by checking whether PMD is changed or not after
-> taking the page pin in fast GUP, just like what it does for PTE.  If the
-> PMD is changed it means there may be parallel THP collapse, so GUP
-> should back off.
+> I think we should add
 > 
-> Also update the stale comment about serializing against fast GUP in
-> khugepaged.
+>  /sys/devices/virtual/memory_tier/memory_tierN
+>  /sys/devices/virtual/memory_type/memory_typeN
 > 
-> Fixes: 2667f50e8b81 ("mm: introduce a general RCU get_user_pages_fast()")
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
-> ---
->  mm/gup.c        | 30 ++++++++++++++++++++++++------
->  mm/khugepaged.c | 10 ++++++----
->  2 files changed, 30 insertions(+), 10 deletions(-)
+
+I am trying to find if there is a technical reason to do the same? 
+
+> I don't think this is complex.  Devices of same bus/subsystem should
+> have mostly same attributes.  This is my understanding of driver core
+> convention.
 > 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index f3fc1f08d90c..4365b2811269 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int *nr, int nr_start,
->  }
->  
->  #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
-> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
-> -			 unsigned int flags, struct page **pages, int *nr)
-> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
-> +			 unsigned long end, unsigned int flags,
-> +			 struct page **pages, int *nr)
->  {
->  	struct dev_pagemap *pgmap = NULL;
->  	int nr_start = *nr, ret = 0;
-> @@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->  			goto pte_unmap;
->  		}
->  
-> -		if (unlikely(pte_val(pte) != pte_val(*ptep))) {
-> +		/*
-> +		 * THP collapse conceptually does:
-> +		 *   1. Clear and flush PMD
-> +		 *   2. Check the base page refcount
-> +		 *   3. Copy data to huge page
-> +		 *   4. Clear PTE
-> +		 *   5. Discard the base page
-> +		 *
-> +		 * So fast GUP may race with THP collapse then pin and
-> +		 * return an old page since TLB flush is no longer sufficient
-> +		 * to serialize against fast GUP.
-> +		 *
-> +		 * Check PMD, if it is changed just back off since it
-> +		 * means there may be parallel THP collapse.
-> +		 */
-> +		if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
-> +		    unlikely(pte_val(pte) != pte_val(*ptep))) {
->  			gup_put_folio(folio, 1, flags);
->  			goto pte_unmap;
->  		}
-> @@ -2470,8 +2487,9 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->   * get_user_pages_fast_only implementation that can pin pages. Thus it's still
->   * useful to have gup_huge_pmd even if we can't operate on ptes.
->   */
-> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
-> -			 unsigned int flags, struct page **pages, int *nr)
-> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
-> +			 unsigned long end, unsigned int flags,
-> +			 struct page **pages, int *nr)
->  {
->  	return 0;
->  }
-> @@ -2791,7 +2809,7 @@ static int gup_pmd_range(pud_t *pudp, pud_t pud, unsigned long addr, unsigned lo
->  			if (!gup_huge_pd(__hugepd(pmd_val(pmd)), addr,
->  					 PMD_SHIFT, next, flags, pages, nr))
->  				return 0;
-> -		} else if (!gup_pte_range(pmd, addr, next, flags, pages, nr))
-> +		} else if (!gup_pte_range(pmd, pmdp, addr, next, flags, pages, nr))
->  			return 0;
->  	} while (pmdp++, addr = next, addr != end);
->  
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 2d74cf01f694..518b49095db3 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1049,10 +1049,12 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
->  
->  	pmd_ptl = pmd_lock(mm, pmd); /* probably unnecessary */
->  	/*
-> -	 * After this gup_fast can't run anymore. This also removes
-> -	 * any huge TLB entry from the CPU so we won't allow
-> -	 * huge and small TLB entries for the same virtual address
-> -	 * to avoid the risk of CPU bugs in that area.
-> +	 * This removes any huge TLB entry from the CPU so we won't allow
-> +	 * huge and small TLB entries for the same virtual address to
-> +	 * avoid the risk of CPU bugs in that area.
-> +	 *
-> +	 * Parallel fast GUP is fine since fast GUP will back off when
-> +	 * it detects PMD is changed.
->  	 */
->  	_pmd = pmdp_collapse_flush(vma, address, pmd);
->  	spin_unlock(pmd_ptl);
 
+I was not looking at this from code complexity point. Instead of having multiple directories
+with details w.r.t memory tiering, I was looking at consolidating the details
+within the directory /sys/devices/virtual/memory_tiering. (similar to all virtual devices
+are consolidated within /sys/devics/virtual/).
 
-As long as pmdp_collapse_flush() implies a full memory barrier (which I
-think it does), this should work as expected.
-
-Hopefully someone with experience on RCU GUP-fast (Jason, John?  :) )
-can double-check.
-
-To me this sound sane.
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
+-aneesh
 

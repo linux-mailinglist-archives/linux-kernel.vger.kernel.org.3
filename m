@@ -2,168 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3ACE5AA8CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9800F5AA8CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiIBHfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 03:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        id S235313AbiIBHgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 03:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiIBHfg (ORCPT
+        with ESMTP id S235106AbiIBHgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 03:35:36 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB776402E9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 00:35:34 -0700 (PDT)
-Received: by mail-qt1-f176.google.com with SMTP id y18so875118qtv.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 00:35:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=I0BzN+oySEF5bQ4YY03gLnpAlLeJEFGcm1NmTucRGdY=;
-        b=2s26t0DUHDfTe1mB/QFM+EbIDrmRCx2xfNAHZmF63LH8oUhTiJ483E8UfBXj7OptzE
-         S6RCSalMnX8Ja+8wAc50WCp4eALmigGMwxuemFOVRORMEacfeJ//28xt0SiwsjFIaVR/
-         0gQsIMs/7/7Sby1yWSV5tMmIutIaqvR5sDmoyYjtWk995vdNLVRWwHElmp8GoRI6BXVp
-         d5sYlXPVLXQkyYAPDQ+FMw5vOhBmY7fOwRNuKjewrCJ5ZJSyOUtuXjobVUPr0xOOAOby
-         eaWM73VKdPtbohRnROdmaR/BCt+yD/nK54hdhdjsOPy7JbZXhV+Pce7A4/jb0MIQiONq
-         qlWw==
-X-Gm-Message-State: ACgBeo0G3r31vwlR2SCyVpNiti1bdMMGxyfZ4ZOsdyOJSGPTsBqdHnLC
-        5kZnuchNUgRKz5jkdXTv+fRhAkkYap2OiQ==
-X-Google-Smtp-Source: AA6agR4XRkECRnOEGczGKpLD94roBsXc9ZRA4h33H3T2DszlPnHTf8Vz9CRTH0T414gER22xMQQRyA==
-X-Received: by 2002:ac8:7f0f:0:b0:344:2fd8:8a66 with SMTP id f15-20020ac87f0f000000b003442fd88a66mr27228944qtk.98.1662104133473;
-        Fri, 02 Sep 2022 00:35:33 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id l2-20020ac87242000000b0034455ff76ddsm626013qtp.34.2022.09.02.00.35.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 00:35:32 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-33da3a391d8so8934227b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 00:35:31 -0700 (PDT)
-X-Received: by 2002:a81:750b:0:b0:341:10ef:2c37 with SMTP id
- q11-20020a81750b000000b0034110ef2c37mr20502429ywc.316.1662104131692; Fri, 02
- Sep 2022 00:35:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-9-459522d653a7@cerno.tech> <30a9d7cd-d9ff-3177-ac6c-e7c1f966d89a@gmail.com>
-In-Reply-To: <30a9d7cd-d9ff-3177-ac6c-e7c1f966d89a@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 2 Sep 2022 09:35:20 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU_yfr1ybNM9Dyk6n34Cqv5WJv1wZxQ_ZGJ_T8JCOeB2g@mail.gmail.com>
-Message-ID: <CAMuHMdU_yfr1ybNM9Dyk6n34Cqv5WJv1wZxQ_ZGJ_T8JCOeB2g@mail.gmail.com>
-Subject: Re: [PATCH v2 09/41] drm/connector: Add TV standard property
-To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nouveau Dev <nouveau@lists.freedesktop.org>,
-        linux-sunxi@lists.linux.dev
+        Fri, 2 Sep 2022 03:36:17 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9A173936
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 00:36:15 -0700 (PDT)
+X-UUID: 0b791b22c77543b5aa3b9007d68feb08-20220902
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=MKnahaSKrI6WvwaZwqW0QGG7nZFlz8nonlFILVxsxDo=;
+        b=TGKeJ1khyfx6Vf/Q1GqkbtXR0Nd8GvPudPjanKtTTKsCJWWHSEmZ9J/WRIQbjG5eJR0mgkw9jOO3tdumx4dg9BdjR/lUCSwbUVkRf7NxvDlLScDyQMVl3hgGUNEJAFR2+95uVyi0q1LBY3bu8NlD2oU2lgVagilDsuWwq5LfzIc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:8ec7cba2-7fad-48a0-b974-320b4abf7049,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:84eae18,CLOUDID:2a0d6456-e800-47dc-8adf-0c936acf4f1b,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0b791b22c77543b5aa3b9007d68feb08-20220902
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <kuyo.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 810578858; Fri, 02 Sep 2022 15:36:10 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 2 Sep 2022 15:36:09 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 2 Sep 2022 15:36:09 +0800
+Message-ID: <f14e71182ebf1520aeede06afb44af49ec6128a0.camel@mediatek.com>
+Subject: Re: [PATCH 1/1] sched/debug: fix dentry leak in
+ update_sched_domain_debugfs
+From:   Kuyo Chang <kuyo.chang@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <major.chen@samsung.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        "Mel Gorman" <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <wsd_upstream@mediatek.com>, <hongfei.tang@samsung.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 2 Sep 2022 15:36:08 +0800
+In-Reply-To: <YxGpp/+lWSzwpVLZ@kroah.com>
+References: <20220902031518.1116-1-kuyo.chang@mediatek.com>
+         <YxGUBzp9C7kcNgps@kroah.com>
+         <5ce45c874d6a05ca69abed3961d413c4a4360e79.camel@mediatek.com>
+         <YxGpp/+lWSzwpVLZ@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mateusz,
+On Fri, 2022-09-02 at 08:58 +0200, Greg Kroah-Hartman wrote:
+> On Fri, Sep 02, 2022 at 02:40:59PM +0800, Kuyo Chang wrote:
+> > On Fri, 2022-09-02 at 07:26 +0200, Greg Kroah-Hartman wrote:
+> > > On Fri, Sep 02, 2022 at 11:15:15AM +0800, Kuyo Chang wrote:
+> > > > From: kuyo chang <kuyo.chang@mediatek.com>
+> > > > 
+> > > > [Syndrome]
+> > > > Lowmemorykiller triggered while doing hotplug stress test as
+> > > > below
+> > > > cmd:
+> > > > echo [0/1] > /sys/devices/system/cpu/cpu${index}/online
+> > > > 
+> > > > Rootcause:
+> > > > Call trace of the slab owner & usage as below after hotplug
+> > > > stress
+> > > > test(4hr).
+> > > > There exists dentry leak at update_sched_domain_debugfs.
+> > > > 
+> > > > Total size : 322000KB
+> > > > <prep_new_page+44>:
+> > > > <get_page_from_freelist+672>:
+> > > > <__alloc_pages+304>:
+> > > > <allocate_slab+144>:
+> > > > <___slab_alloc+404>:
+> > > > <__slab_alloc+60>:
+> > > > <kmem_cache_alloc+1204>:
+> > > > <alloc_inode+100>:
+> > > > <new_inode+40>:
+> > > > <__debugfs_create_file+172>:
+> > > > <update_sched_domain_debugfs+824>:
+> > > > <partition_sched_domains_locked+1292>:
+> > > > <rebuild_sched_domains_locked+576>:
+> > > > <cpuset_hotplug_workfn+1052>:
+> > > > <process_one_work+584>:
+> > > > <worker_thread+1008>:
+> > > > 
+> > > > [Solution]
+> > > > Provided by Major Chen <major.chen@samsung.com> as below link.
+> > > > 
+> > 
+> > 
+https://lore.kernel.org/lkml/20220711030341epcms5p173848e98b13c09eb2fcdf2fd7287526a@epcms5p1/
+> > > > update_sched_domain_debugfs() uses debugfs_lookup() to find
+> > > > wanted
+> > > > dentry(which has
+> > > > been created by debugfs_create_dir() before), but not call
+> > > > dput()
+> > > > to return this dentry
+> > > > back. This result in dentry leak even debugfs_remove() is
+> > > > called.
+> > > > 
+> > > > [Test result]
+> > > > Using below commands to check inode_cache & dentry leak.
+> > > > cat /proc/slabinfo | grep -w inode_cache
+> > > > cat /proc/slabinfo | grep -w dentry
+> > > > 
+> > > > With the patch, the inode_cache & dentry stays consistent
+> > > > so the lowmemorykiller will not triggered anymore.
+> > > > 
+> > > > Fixes: 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to
+> > > > debugfs")
+> > > > 
+> > > > Signed-off-by: Major Chen <major.chen@samsung.com>
+> > > > Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
+> > > > Tested-by: kuyo chang <kuyo.chang@mediatek.com>
+> > > > 
+> > > > ---
+> > > >  kernel/sched/debug.c | 7 +++++--
+> > > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+> > > > index bb3d63bdf4ae..4ffea2dc01da 100644
+> > > > --- a/kernel/sched/debug.c
+> > > > +++ b/kernel/sched/debug.c
+> > > > @@ -412,11 +412,14 @@ void update_sched_domain_debugfs(void)
+> > > >  
+> > > >  	for_each_cpu(cpu, sd_sysctl_cpus) {
+> > > >  		struct sched_domain *sd;
+> > > > -		struct dentry *d_cpu;
+> > > > +		struct dentry *d_cpu, *d_lookup;
+> > > >  		char buf[32];
+> > > >  
+> > > >  		snprintf(buf, sizeof(buf), "cpu%d", cpu);
+> > > > -		debugfs_remove(debugfs_lookup(buf, sd_dentry));
+> > > > +		d_lookup = debugfs_lookup(buf, sd_dentry);
+> > > > +		debugfs_remove(d_lookup);
+> > > > +		if (!IS_ERR_OR_NULL(d_lookup))
+> > > > +			dput(d_lookup);
+> > > 
+> > > That's odd, and means that something else is removing this file
+> > > right
+> > > after we looked it up?  Is there a missing lock here that should
+> > > be
+> > > used
+> > > instead?
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > 
+> > 
+> > While doing cpu hotlug, the cpu_active_mask is changed, 
+> > so it need to update_sched_domain_debugfs.
+> > 
+> > The original design is to recreate sd_dentry, so it doing
+> > debugfs_remove and then debugfs_create_dir.
+> > However, by debugfs_lookup function usage.
+> > The returned dentry must be passed to dput() when it is no longer
+> > needed to avoid dentry leak.
+> 
+> Eeeek, nice find!  I've been adding this pattern:
+> 	debugfs_remove(debugfs_lookup(...));
+> all over the place, and as you point out, that's wrong!
+> 
+> It's as if I didn't even read the documentation I wrote.
+> 
+> {sigh}
+> 
+> Ok, as this is going to be a very common pattern, how about we
+> create:
+> 	debugfs_lookup_and_remove()
+> function that does the above logic all in one place and then we don't
+> have to put that logic everywhere in the kernel.  My goal is for
+> users
+> of debugfs to never have to worry about anything about 'struct
+> dentry'
+> at all, and I really failed that goal here in a major way.
+> 
+> I can work on that this afternoon after I get some other things done,
+> unless you want to do it now?
+> 
+> Again, very nice find, thank you for this.
+> 
 
-On Fri, Sep 2, 2022 at 12:00 AM Mateusz Kwiatkowski <kfyatek@gmail.com> wrote:
-> W dniu 29.08.2022 o 15:11, Maxime Ripard pisze:
-> > The TV mode property has been around for a while now to select and get the
-> > current TV mode output on an analog TV connector.
-> >
-> > Despite that property name being generic, its content isn't and has been
-> > driver-specific which makes it hard to build any generic behaviour on top
-> > of it, both in kernel and user-space.
-> >
-> > Let's create a new bitmask tv norm property, that can contain any of the
-> > analog TV standards currently supported by kernel drivers. Each driver can
-> > then pass in a bitmask of the modes it supports.
->
-> This is not a bitmask property anymore, you've just changed it to an enum.
-> The commit message is now misleading.
->
-> > +static const struct drm_prop_enum_list drm_tv_mode_enum_list[] = {
-> > +    { DRM_MODE_TV_MODE_NTSC_443, "NTSC-443" },
-> > +    { DRM_MODE_TV_MODE_NTSC_J, "NTSC-J" },
-> > +    { DRM_MODE_TV_MODE_NTSC_M, "NTSC-M" },
-> > +    { DRM_MODE_TV_MODE_PAL_60, "PAL-60" },
-> > +    { DRM_MODE_TV_MODE_PAL_B, "PAL-B" },
-> > +    { DRM_MODE_TV_MODE_PAL_D, "PAL-D" },
-> > +    { DRM_MODE_TV_MODE_PAL_G, "PAL-G" },
-> > +    { DRM_MODE_TV_MODE_PAL_H, "PAL-H" },
-> > +    { DRM_MODE_TV_MODE_PAL_I, "PAL-I" },
-> > +    { DRM_MODE_TV_MODE_PAL_M, "PAL-M" },
-> > +    { DRM_MODE_TV_MODE_PAL_N, "PAL-N" },
-> > +    { DRM_MODE_TV_MODE_PAL_NC, "PAL-Nc" },
-> > +    { DRM_MODE_TV_MODE_SECAM_60, "SECAM-60" },
-> > +    { DRM_MODE_TV_MODE_SECAM_B, "SECAM-B" },
-> > +    { DRM_MODE_TV_MODE_SECAM_D, "SECAM-D" },
-> > +    { DRM_MODE_TV_MODE_SECAM_G, "SECAM-G" },
-> > +    { DRM_MODE_TV_MODE_SECAM_K, "SECAM-K" },
-> > +    { DRM_MODE_TV_MODE_SECAM_K1, "SECAM-K1" },
-> > +    { DRM_MODE_TV_MODE_SECAM_L, "SECAM-L" },
-> > +};
->
-> I did not comment on it the last time, but this list looks a little bit random.
->
-> Compared to the standards defined by V4L2, you also define SECAM-60 (a good
-> thing to define, because why not), but don't define PAL-B1, PAL-D1, PAL-K,
-> SECAM-H, SECAM-LC (whatever that is - probably just another name for SECAM-L,
-> see my comment about PAL-Nc below), or NTSC-M-KR (a Korean variant of NTSC).
->
-> Like I mentioned previously, I'm personally not a fan of including all those
-> CCIR/ITU system variants, as they don't mean any difference to the output unless
-> there is an RF modulator involved. But I get it that they have already been used
-> and regressing probably wouldn't be a very good idea. But in that case keeping
-> it consistent with the set of values used by V4L2 would be wise, I think.
+Thanks for your kindly support !
+Please help to add debugfs_lookup_and_remove() and then we can use
+this api to fix this denrty leak issue.
 
-Exactly. Anything outputting RGB (e.g. through a SCART or VGA connector)
-doesn't care about the color subcarrier or modulator parts.  Likewise,
-anything outputting CVBS doesn't care about the modulator part.
 
-Perhaps "generic" variants of NSTC and PAL/SECAM should be added, which
-would really just mean 525/60 resp. 625/50.
+> greg k-h
 
-Alternatively, the tv_mode field could be split in two parts (either
-two separate fields, or bitwise), to maintain a clear separation between
-lines/fields versus color encoding and RF modulation (with zero for the
-latter meaning a generic version)? That would also keep the door open
-for TV_MODE_405_50, TV_MODE_819_50, TV_MODE_750_50, TV_MODE_750_60, ...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A54D5AAEE4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2A15AAE42
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236615AbiIBMbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
+        id S235990AbiIBMVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiIBMaw (ORCPT
+        with ESMTP id S235877AbiIBMVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:30:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1816ED6327;
-        Fri,  2 Sep 2022 05:26:10 -0700 (PDT)
+        Fri, 2 Sep 2022 08:21:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81673C159;
+        Fri,  2 Sep 2022 05:20:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B08306215E;
-        Fri,  2 Sep 2022 12:24:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3255C4347C;
-        Fri,  2 Sep 2022 12:24:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63679620C5;
+        Fri,  2 Sep 2022 12:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A77EC433C1;
+        Fri,  2 Sep 2022 12:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121466;
-        bh=XwbvCBuKWs1pUPEvLzPzAd/1J26EpwfkKxzyqqfmeQg=;
+        s=korg; t=1662121221;
+        bh=ehXEKIgpyo2pSGUzFyaSoLNWJBLVOk7DMOiMXqXX/WQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bTt32Ht0GiSxss757xWRr9P9VpfT+tsP3JRpI7EwUjuumBI/F2JPMLmU3HhhlL/e4
-         S5ByOUchuG+5eBHV8O+gq7zRwLEd4wJauGPUnejI2L8QxeiYbb6ArqUD95f+TrfkeE
-         8IkYff3b1UknygSkcrlxUaMc9gkC2D90aMeNaD+0=
+        b=0330HgO42X72CSr4nH8pkU7A9k+SdAmNKAZfAt/3zUaYT3GagKawLojuel6cZTh3Y
+         LlRCMo4wA3RNw3ug9m2Px4vnRJLTMdcKKbzDa4t3pFY7LsfGTKIaJCySJ1iQ8kMsgd
+         TpezG9J8Sm6EKDbhZXfsycsiULN5m4HvVN/M78p0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 17/56] netfilter: nft_osf: restrict osf to ipv4, ipv6 and inet families
+Subject: [PATCH 4.9 11/31] net: Fix a data-race around sysctl_somaxconn.
 Date:   Fri,  2 Sep 2022 14:18:37 +0200
-Message-Id: <20220902121400.776804908@linuxfoundation.org>
+Message-Id: <20220902121357.167948574@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
+References: <20220902121356.732130937@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 5f3b7aae14a706d0d7da9f9e39def52ff5fc3d39 ]
+[ Upstream commit 3c9ba81d72047f2e81bb535d42856517b613aba7 ]
 
-As it was originally intended, restrict extension to supported families.
+While reading sysctl_somaxconn, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: b96af92d6eaf ("netfilter: nf_tables: implement Passive OS fingerprint module in nft_osf")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_osf.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ net/socket.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nft_osf.c b/net/netfilter/nft_osf.c
-index e259454b6a643..4fac2d9a4b885 100644
---- a/net/netfilter/nft_osf.c
-+++ b/net/netfilter/nft_osf.c
-@@ -81,9 +81,21 @@ static int nft_osf_validate(const struct nft_ctx *ctx,
- 			    const struct nft_expr *expr,
- 			    const struct nft_data **data)
- {
--	return nft_chain_validate_hooks(ctx->chain, (1 << NF_INET_LOCAL_IN) |
--						    (1 << NF_INET_PRE_ROUTING) |
--						    (1 << NF_INET_FORWARD));
-+	unsigned int hooks;
-+
-+	switch (ctx->family) {
-+	case NFPROTO_IPV4:
-+	case NFPROTO_IPV6:
-+	case NFPROTO_INET:
-+		hooks = (1 << NF_INET_LOCAL_IN) |
-+			(1 << NF_INET_PRE_ROUTING) |
-+			(1 << NF_INET_FORWARD);
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return nft_chain_validate_hooks(ctx->chain, hooks);
- }
+diff --git a/net/socket.c b/net/socket.c
+index ab64ae80ca2cd..6f1abcba0e360 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -1403,7 +1403,7 @@ SYSCALL_DEFINE2(listen, int, fd, int, backlog)
  
- static struct nft_expr_type nft_osf_type;
+ 	sock = sockfd_lookup_light(fd, &err, &fput_needed);
+ 	if (sock) {
+-		somaxconn = sock_net(sock->sk)->core.sysctl_somaxconn;
++		somaxconn = READ_ONCE(sock_net(sock->sk)->core.sysctl_somaxconn);
+ 		if ((unsigned int)backlog > somaxconn)
+ 			backlog = somaxconn;
+ 
 -- 
 2.35.1
 

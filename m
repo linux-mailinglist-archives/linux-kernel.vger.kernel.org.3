@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73E15ABB79
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98825ABB7F
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiIBX5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 19:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S230224AbiIBX6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 19:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIBX5e (ORCPT
+        with ESMTP id S229436AbiIBX6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 19:57:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1645DDDA9A;
-        Fri,  2 Sep 2022 16:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662163054; x=1693699054;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6gAaOCMk8Z/d7uqTVGe/Hinra8KYs7C0oQAPXXXj8lU=;
-  b=gURNjs14S8CgizsiKBgWglSv3CYHiRxv2Fvrzez6u/05JoXUYfc92lAc
-   W7HPQ7ZwqshWG7pe3FD/4ED05asKvNuQZdy1nHKwDI7f+EYBnzDlp6eKj
-   wwOquQ8dQd3gn6uEqMnbumWMGPVObdvZh3GnTuBUfZxhvoOhV86m8Ru5G
-   +Jc89a7/0EtrUn8Bj4RrCNZxbcwRZSPogGzm8Z0X9arJNz5cwGHvYRfed
-   bQxEwjJZp5nCPKswi4F39QIqY7IdVZhj+MNuQZ6JgkvCauUzwNV6cyqNs
-   AIB3HjC1arbBfP7bPameCxK6crzWo4aU9xs9aCKhjW7dpTdeqdFvOpWIX
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="357824977"
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="357824977"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:57:33 -0700
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="755422714"
-Received: from cgoff-mobl1.amr.corp.intel.com (HELO [10.209.53.13]) ([10.209.53.13])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:57:33 -0700
-Message-ID: <17c2cba5-fcb3-1e02-b488-65f4dafe6367@linux.intel.com>
-Date:   Fri, 2 Sep 2022 16:57:32 -0700
+        Fri, 2 Sep 2022 19:58:49 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C82ED024
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 16:58:48 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id w18so2922838qki.8
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 16:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=OLpWEjAueAliO4tspjAqBu7T8qnoqOml+2IkcaXQv7U=;
+        b=vxuCgJWKwuKgkzkruaZYbPLfIziJaojRQlWtBoy8T+90AFmxCVzW00pcvFQvsmWQvp
+         mh0TSgG/gE8DpcHBqX9+F21wfoQQUkqCwbN+wwI8VLghHIXn8uyVJIZByRS4rM83MRdm
+         LWDmDEPNi4Nwr/LBK8KQMzclQ8KlqkFQq4lb8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=OLpWEjAueAliO4tspjAqBu7T8qnoqOml+2IkcaXQv7U=;
+        b=QZWV8LrDRUpJ851h1NejGyk28yi89A7zt7Qw1iRwXUC0qKw6po+HBBwNYp8Bby4+Ae
+         QmxGIpL20YM2PkkUEMBla0SvVLHqZd7Qei9Utb56rnoGyHNsHJS6Pas/EAzFNUJAUYVi
+         BmjfyOfnWevjuNBAL4xiKf1Jrl3zuD9mTvKrX7ON6UDde6PuAW1yDW+hoiDqd7XH/KL4
+         /MjyLOdQ7sCCh0jt43uN/0IybkTukKKD8KlQleTGKjRFnF8ofeMLoIR5gt2RuuFBw8xj
+         RzV/foE6jYJdazwnLueaHmsbsXlQPPda4W/jq1y+FAxFzaJh+9oRIKyvqJ6Y+5VqqZg1
+         CeVQ==
+X-Gm-Message-State: ACgBeo2hpwyXESPRKX6Y1sKb5rzF/LTyxqGrGo5oezjdqnt4D0PLdzAJ
+        o6KTxG70ha1bSuRzBPrNNk46XA==
+X-Google-Smtp-Source: AA6agR7z4UZ213YpInA8vfnSFPuIGJep8rvlb/udAMR979v+ERa/LCu/syzJxSdTitqBuko9tR9H9Q==
+X-Received: by 2002:a05:620a:400c:b0:6a6:f8e6:92cc with SMTP id h12-20020a05620a400c00b006a6f8e692ccmr25813321qko.561.1662163127471;
+        Fri, 02 Sep 2022 16:58:47 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id a9-20020ac844a9000000b0034305a91aaesm1756221qto.83.2022.09.02.16.58.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 16:58:47 -0700 (PDT)
+Message-ID: <d24157f4-924c-7113-75ac-ed691191584f@joelfernandes.org>
+Date:   Fri, 2 Sep 2022 19:58:42 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/3] PCI/PTM: Preserve PTM Root Select
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v5 04/18] rcu: Fix late wakeup when flush of bypass cblist
+ happens
 Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Koba Ko <koba.ko@canonical.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "David E . Box" <david.e.box@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-References: <20220902233543.390890-1-helgaas@kernel.org>
- <20220902233543.390890-2-helgaas@kernel.org>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20220902233543.390890-2-helgaas@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org, boqun.feng@gmail.com
+References: <20220901221720.1105021-1-joel@joelfernandes.org>
+ <20220901221720.1105021-5-joel@joelfernandes.org>
+ <20220902113500.GA113405@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <20220902113500.GA113405@lothringen>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,44 +77,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 9/2/22 4:35 PM, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> When disabling PTM, there's no need to clear the Root Select bit.  We
-> disable PTM during suspend, and we want to re-enable it during resume.
-> Clearing Root Select here makes re-enabling more complicated.
-> 
-> Per PCIe r6.0, sec 7.9.15.3, "When set, if the PTM Enable bit is also Set,
-> this Time Source is the PTM Root," so if PTM Enable is cleared, the value
-> of Root Select should be irrelevant.
-> 
-> Preserve Root Select to simplify re-enabling PTM.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: David E. Box <david.e.box@linux.intel.com>
-> ---
 
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-
->  drivers/pci/pcie/ptm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 9/2/2022 7:35 AM, Frederic Weisbecker wrote:
+> On Thu, Sep 01, 2022 at 10:17:06PM +0000, Joel Fernandes (Google) wrote:
+>> When the bypass cblist gets too big or its timeout has occurred, it is
+>> flushed into the main cblist. However, the bypass timer is still running
+>> and the behavior is that it would eventually expire and wake the GP
+>> thread.
+>>
+>> Since we are going to use the bypass cblist for lazy CBs, do the wakeup
+>> soon as the flush happens. Otherwise, the lazy-timer will go off much
+>> later and the now-non-lazy cblist CBs can get stranded for the duration
+>> of the timer.
+>>
+>> This is a good thing to do anyway (regardless of this series), since it
+>> makes the behavior consistent with behavior of other code paths where queueing
+>> something into the ->cblist makes the GP kthread in a non-sleeping state
+>> quickly.
+>>
+>> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+>> ---
+>>  kernel/rcu/tree_nocb.h | 8 +++++++-
+>>  1 file changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+>> index 0a5f0ef41484..31068dd31315 100644
+>> --- a/kernel/rcu/tree_nocb.h
+>> +++ b/kernel/rcu/tree_nocb.h
+>> @@ -447,7 +447,13 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>>  			rcu_advance_cbs_nowake(rdp->mynode, rdp);
+>>  			rdp->nocb_gp_adv_time = j;
+>>  		}
+>> -		rcu_nocb_unlock_irqrestore(rdp, flags);
+>> +
+>> +		// The flush succeeded and we moved CBs into the ->cblist.
+>> +		// However, the bypass timer might still be running. Wakeup the
+>> +		// GP thread by calling a helper with was_all_done set so that
+>> +		// wake up happens (needed if main CB list was empty before).
+>> +		__call_rcu_nocb_wake(rdp, true, flags)
+>> +
 > 
-> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-> index 368a254e3124..b6a417247ce3 100644
-> --- a/drivers/pci/pcie/ptm.c
-> +++ b/drivers/pci/pcie/ptm.c
-> @@ -42,7 +42,7 @@ void pci_disable_ptm(struct pci_dev *dev)
->  		return;
->  
->  	pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
-> -	ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
-> +	ctrl &= ~PCI_PTM_CTRL_ENABLE;
->  	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
->  }
->  
+> Ok so there are two different changes here:
+> 
+> 1) wake up nocb_gp as we just flushed the bypass list. Indeed if the regular
+>    callback list was empty before flushing, we rather want to immediately wake
+>    up nocb_gp instead of waiting for the bypass timer to process them.
+> 
+> 2) wake up nocb_gp unconditionally (ie: even if the regular queue was not empty
+>    before bypass flushing) so that nocb_gp_wait() is forced through another loop
+>    starting with cancelling the bypass timer (I suggest you put such explanation
+>    in the comment btw because that process may not be obvious for mortals).
+> 
+> The change 1) looks like a good idea to me.
+> 
+> The change 2) has unclear motivation. It forces nocb_gp_wait() through another
+> costly loop even though the timer might have been cancelled into some near
+> future, eventually avoiding that extra costly loop. Also it abuses the
+> was_alldone stuff and we may get rcu_nocb_wake with incoherent meanings
+> (WakeEmpty/WakeEmptyIsDeferred) when it's actually not empty.
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Yes #2 can be optimized as follows I think on top of this patch, good point:
+=============
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index ee5924ba2f3b..24aabd723abd 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -514,12 +514,13 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp,
+struct rcu_head *rhp,
+            ncbs >= qhimark) {
+                rcu_nocb_lock(rdp);
+
++               *was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
++
+                rcu_cblist_set_flush(&rdp->nocb_bypass,
+                                lazy ? BIT(CB_DEBUG_BYPASS_LAZY_FLUSHED) :
+BIT(CB_DEBUG_BYPASS_FLUSHED),
+                                (j - READ_ONCE(cb_debug_jiffies_first)));
+
+                if (!rcu_nocb_flush_bypass(rdp, rhp, j, lazy, false)) {
+-                       *was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
+                        if (*was_alldone)
+                                trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
+                                                    TPS("FirstQ"));
+@@ -537,7 +538,7 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct
+rcu_head *rhp,
+                // However, the bypass timer might still be running. Wakeup the
+                // GP thread by calling a helper with was_all_done set so that
+                // wake up happens (needed if main CB list was empty before).
+-               __call_rcu_nocb_wake(rdp, true, flags)
++               __call_rcu_nocb_wake(rdp, *was_all_done, flags)
+
+                return true; // Callback already enqueued.
+        }
+=============
+
+> So you may need to clarify the purpose. And I would suggest to make two patches
+> here.
+I guess this change only #2 is no longer a concern? And splitting is not needed
+then as it is only #1.
+
+Thanks,
+
+ - Joel
+
+
+
+
+

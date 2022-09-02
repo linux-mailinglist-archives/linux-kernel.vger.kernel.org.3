@@ -2,123 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0709F5AA616
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA675AA614
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiIBCzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 22:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
+        id S234737AbiIBC4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 22:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbiIBCy7 (ORCPT
+        with ESMTP id S232291AbiIBC4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 22:54:59 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA76B62FA;
-        Thu,  1 Sep 2022 19:54:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662087294; x=1693623294;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9V5Af5NNhmEKlxmFRt2MBjjPZeFM+QzghrlRJN9oHkU=;
-  b=YYyqsqfFSjDw7aLVvGd28oEE+qwe9w0vURr18g5iJKbYnwVMNHiXd2cp
-   1JIwed+8I4bQRiy3NKe/YbeEZQeSCxgb068hnQc1kkY2w1EJeZPoLCIYR
-   RFQW5HOc0j4vMhIwBBq7pYsO/7HgHVfUqG/YJa3bxmMqG4IHnCKKnEwCA
-   VT9npGCJx/nL47JrL8dIHMGssUGyZ28+sEb8N4RVF4uzM17bAB2j+uU5Z
-   LRvyW0qKLXCKG2e2HRzCKkyCljRwUwmUi8PdxaLISxvt+IfN5dzcWjB5T
-   FwnRPx5DRcbcppCb3RmlvGmSZRTvHEtLC/crHV4svh6aWBYwSp93Sqm1F
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="382178262"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="382178262"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 19:54:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="589844411"
-Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 01 Sep 2022 19:54:49 -0700
-Received: from kbuild by fccc941c3034 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTwpU-00003L-1E;
-        Fri, 02 Sep 2022 02:54:48 +0000
-Date:   Fri, 2 Sep 2022 10:54:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [PATCH v4 1/5] perf/x86/core: Remove unnecessary stubs provided
- for KVM-only helpers
-Message-ID: <202209021001.ubosxpCd-lkp@intel.com>
-References: <20220901173258.925729-2-seanjc@google.com>
+        Thu, 1 Sep 2022 22:56:04 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40744055D;
+        Thu,  1 Sep 2022 19:56:02 -0700 (PDT)
+X-UUID: 2b3cadce884e4bcf8f16a137ebccec15-20220902
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=oLNGlCRUkI7WrIyYgZdRutE3RCvGTE+Yyyht7nl8QoM=;
+        b=Hl/27i9aiGprfachLfClDJVGEBaUfD/QmFmhOVsoGyT9VKsZkM56TGpbSioSn2Cs2kAMwqeLzZ9mi566OqO6BtiePOip0X/UlaTYIj3yMXGq+QmGlIRysQ6qr0Vf2ekNXnrAqsOZyECtm75gDXnbYpiSKjWKQDgoOya7VBKLg0Q=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:86a3920d-ea40-4d27-9909-185b469a346d,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release
+        _Ham,ACTION:release,TS:-5
+X-CID-META: VersionHash:84eae18,CLOUDID:189a64d0-20bd-4e5e-ace8-00692b7ab380,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2b3cadce884e4bcf8f16a137ebccec15-20220902
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1541283790; Fri, 02 Sep 2022 10:55:56 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 2 Sep 2022 10:55:55 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 2 Sep 2022 10:55:55 +0800
+Message-ID: <e213e9d8ef900db665fee08b484181e1d47c5171.camel@mediatek.com>
+Subject: Re: linux-next: Tree for Sep 1 (Kconfig for VIDEO_MEDIATEK_VPU)
+From:   moudy ho <moudy.ho@mediatek.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Date:   Fri, 2 Sep 2022 10:55:55 +0800
+In-Reply-To: <f19684d4-9ef0-6308-8245-73c9a4511e67@infradead.org>
+References: <20220901171832.78d88aed@canb.auug.org.au>
+         <f19684d4-9ef0-6308-8245-73c9a4511e67@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901173258.925729-2-seanjc@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Hi Randy,
 
-I love your patch! Perhaps something to improve:
+Thanks for your efforts on this matter, the warning is due to not
+setting V4L_MEM2MEM_DRIVERS on defconfig which the VIDEO_MEDIATEK_VPU
+depends.
+Could I send a patch to add a V4L_MEM2MEM_DRIVERS selection in MDP3
+Kconfig to avoid this warning?
 
-[auto build test WARNING on 372d07084593dc7a399bf9bee815711b1fb1bcf2]
+Regards,
+Moudy
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Christopherson/KVM-x86-Intel-LBR-related-perf-cleanups/20220902-013352
-base:   372d07084593dc7a399bf9bee815711b1fb1bcf2
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220902/202209021001.ubosxpCd-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b1f1d2f5eb44253f5d059757c03e7fd413b2e306
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sean-Christopherson/KVM-x86-Intel-LBR-related-perf-cleanups/20220902-013352
-        git checkout b1f1d2f5eb44253f5d059757c03e7fd413b2e306
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/events/
+On Thu, 2022-09-01 at 13:38 -0700, Randy Dunlap wrote:
+> 
+> On 9/1/22 00:18, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > News: there will be no linux-next releases tomorrow or on Monday.
+> > 
+> > Changes since 20220831:
+> > 
+> 
+> on i386 or x86_64:
+> 
+> WARNING: unmet direct dependencies detected for VIDEO_MEDIATEK_VPU
+>   Depends on [n]: MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y]
+> && MEDIA_PLATFORM_DRIVERS [=y] && V4L_MEM2MEM_DRIVERS [=n] &&
+> VIDEO_DEV [=y] && (ARCH_MEDIATEK || COMPILE_TEST [=y])
+>   Selected by [y]:
+>   - VIDEO_MEDIATEK_MDP3 [=y] && MEDIA_SUPPORT [=y] &&
+> MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] &&
+> (MTK_IOMMU [=n] || COMPILE_TEST [=y]) && VIDEO_DEV [=y] &&
+> (ARCH_MEDIATEK || COMPILE_TEST [=y]) && HAS_DMA [=y] && REMOTEPROC
+> [=y]
+> 
+> 
+> 
+> Full x86_64 randconfig file is attached.
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/events/core.c:696:31: warning: no previous prototype for function 'perf_guest_get_msrs' [-Wmissing-prototypes]
-   struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr, void *data)
-                                 ^
-   arch/x86/events/core.c:696:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr, void *data)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/perf_guest_get_msrs +696 arch/x86/events/core.c
-
-f87ad35d37fa54 arch/x86/kernel/cpu/perf_counter.c Jaswinder Singh Rajput 2009-02-27  695  
-39a4d779546a99 arch/x86/events/core.c             Like Xu                2022-04-11 @696  struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr, void *data)
-abd562df94d19d arch/x86/events/core.c             Like Xu                2021-01-25  697  {
-39a4d779546a99 arch/x86/events/core.c             Like Xu                2022-04-11  698  	return static_call(x86_pmu_guest_get_msrs)(nr, data);
-abd562df94d19d arch/x86/events/core.c             Like Xu                2021-01-25  699  }
-abd562df94d19d arch/x86/events/core.c             Like Xu                2021-01-25  700  EXPORT_SYMBOL_GPL(perf_guest_get_msrs);
-abd562df94d19d arch/x86/events/core.c             Like Xu                2021-01-25  701  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

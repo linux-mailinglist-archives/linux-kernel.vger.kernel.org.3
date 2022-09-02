@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6800E5AB4BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3DD5AB4B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236751AbiIBPM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        id S236037AbiIBPJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236221AbiIBPMB (ORCPT
+        with ESMTP id S236131AbiIBPJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:12:01 -0400
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED8B716EECF;
-        Fri,  2 Sep 2022 07:41:56 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowADn70tLFBJj3kOoAA--.21300S2;
-        Fri, 02 Sep 2022 22:33:47 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH v3] USB: serial: ftdi_sio: Convert to use dev_groups
-Date:   Fri,  2 Sep 2022 22:33:46 +0800
-Message-Id: <20220902143346.4120012-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 2 Sep 2022 11:09:31 -0400
+Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E04D158F33
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:39:01 -0700 (PDT)
+Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-03.nifty.com with ESMTP id 282EZapm032456
+        for <linux-kernel@vger.kernel.org>; Fri, 2 Sep 2022 23:35:36 +0900
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 282EZ7d1004313
+        for <linux-kernel@vger.kernel.org>; Fri, 2 Sep 2022 23:35:07 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 282EZ7d1004313
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662129308;
+        bh=GUDCkmsH6figZ+L4dA6Fdq0YrnToibMGL5SHkTP3Kdo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dcXNIG1py8Ycw9y9V1btG05NMbTro5w541fbAHrEbe/aBiq3wg355s+IsKu/CdR7b
+         MXDfJ6t1gxAHWzh6mJ4ETDSLTFelF2ocY0CzRwJoGtSJ8Q+J7NWR1Vv5bCxGh1MLpK
+         l505EOGEBFW0GGcbBQa5TUsLzPrD7ETGJjoV/65Vk5V6DV3+txDWJggIrcaQfUg4FF
+         BnCR49LVvXIscvFMelf5r+6awaA9FzdWpKBZQrNgU/pA5uRthQEXczFtKBha0peMhg
+         kUNDnMNvNp7IorbsUtmAyA9A7Ny+ehBTVee6InppP5P4ueDSXkKJDZGSiAeYRjK/pU
+         SwHZpA7aNjHdw==
+X-Nifty-SrcIP: [209.85.160.47]
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-12243fcaa67so5110959fac.8
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 07:35:07 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2WCeEmm7iTVSOvQj8Hqn16S3enZK8QvXO3TY35t+5gNnT8forQ
+        6AJgAnk66BbvfbjYUYw+4q5cwNuWC3RVAurrKlo=
+X-Google-Smtp-Source: AA6agR7JHM3XDWVljTbD+mc16Wy5/EZgJE+Ic1P2coqLV4oc9+w24bGS08NdQnk56TbdWqMbWIOgaX31Flxh7lFtgEc=
+X-Received: by 2002:a05:6808:1189:b0:33a:34b3:6788 with SMTP id
+ j9-20020a056808118900b0033a34b36788mr2007654oil.194.1662129306631; Fri, 02
+ Sep 2022 07:35:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowADn70tLFBJj3kOoAA--.21300S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr47Zry8ZryDur1UWF13twb_yoW8AF4fpF
-        sxGay3KF4ktFnxXw4a9r4UX34rtw4kKrWfG3yIy34rW3Z8J3srKFW5ta48WF1rAry8G3W2
-        qFsavr90kr4rArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xryl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUxDGnUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <165442136963.152751.14259048792272164569.tglx@xen13> <CAHk-=wgjTMQgiKzBZTmb=uWGDEQxDdyF1+qxBkODYciuNsmwnw@mail.gmail.com>
+In-Reply-To: <CAHk-=wgjTMQgiKzBZTmb=uWGDEQxDdyF1+qxBkODYciuNsmwnw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 2 Sep 2022 23:34:30 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASL3tZ_NwNmCaovQdBaKvQf1HrFRsSMw3zrCB63wC9yKA@mail.gmail.com>
+Message-ID: <CAK7LNASL3tZ_NwNmCaovQdBaKvQf1HrFRsSMw3zrCB63wC9yKA@mail.gmail.com>
+Subject: Re: [GIT pull] objtool/urgent for v5.19-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 05:56:13PM +0800, Greg KH wrote:
->>  drivers/usb/serial/ftdi_sio.c | 101 +++++++++++++++++-----------------
->>  1 file changed, 51 insertions(+), 50 deletions(-)
->> 
->> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
->> index d5a3986dfee7..479c3a5caaf8 100644
->> --- a/drivers/usb/serial/ftdi_sio.c
->> +++ b/drivers/usb/serial/ftdi_sio.c
->> @@ -1107,11 +1107,40 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base);
->>  static u32 ftdi_232bm_baud_to_divisor(int baud);
->>  static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
->>  static u32 ftdi_2232h_baud_to_divisor(int baud);
->> +static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
->> +					 struct attribute *attr, int idx);
->> +static ssize_t latency_timer_store(struct device *dev,
->> +				   struct device_attribute *attr,
->> +				   const char *valbuf, size_t count);
->> +static ssize_t event_char_store(struct device *dev,
->> +	struct device_attribute *attr, const char *valbuf, size_t count);
->> +static ssize_t latency_timer_show(struct device *dev,
->> +				  struct device_attribute *attr, char *buf);
->> +
-> 
-> Please work with the code so that you do not have to pre-define these
-> functions.  It should be possible.  Worst case, you pre-define the
-> structure for the driver, that should be it.
+Hi Linus,
 
-Without pre-definition of the functions, compilation errors will occur,
-such as 'ftdi_sio_attr_is_visible' undeclared here.
-I have no idea why they are not necessary.
-Please explain in detail.
+On Mon, Jun 6, 2022 at 2:14 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Sun, Jun 5, 2022 at 2:30 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> >
+> > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> > index 06400504150b..6a663b27b286 100644
+> > --- a/scripts/Makefile.build
+> > +++ b/scripts/Makefile.build
+> > @@ -218,7 +218,7 @@ objtool_args =                                                              \
+> >         $(if $(CONFIG_SLS), --sls)                                      \
+> >         $(if $(CONFIG_STACK_VALIDATION), --stackval)                    \
+> >         $(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)          \
+> > -       --uaccess                                                       \
+> > +       $(if $(CONFIG_HAVE_UACCESS_VALIDATION), --uaccess)              \
+> >         $(if $(linked-object), --link)                                  \
+> >         $(if $(part-of-module), --module)                               \
+> >         $(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
+>
+> Since this clashed with the Kbuild cleanups I just merged, I looked at
+> it and threw up in my mouth a little.
+>
+> Not a new problem, but can we do something like that attached, perhaps?
+>
+> Untested, but looks trivially obvious. FamousLastWords(tm).
+>
+>                   Linus
 
-> And again, have you tested this change?
+A nice idea.
 
-Every time I change the code, I recomplie it and check whether there are
-errors.
-Are there any other tests I need to do?
+I also cleaned up scripts/Makefile.vmlinux_o in a similar way,
+and submitted a patch.
 
-Thanks,
-Jiang
+https://lore.kernel.org/lkml/20220902130846.654526-1-masahiroy@kernel.org/T/#u
 
+I will send it in the next MW.
+
+
+--
+Best Regards
+Masahiro Yamada

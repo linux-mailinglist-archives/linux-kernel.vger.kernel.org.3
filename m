@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995AF5AB1FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BDD5AAFD1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238089AbiIBNrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
+        id S237440AbiIBMow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237912AbiIBNrM (ORCPT
+        with ESMTP id S236453AbiIBMmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:47:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7224B32EC6;
-        Fri,  2 Sep 2022 06:22:24 -0700 (PDT)
+        Fri, 2 Sep 2022 08:42:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84672E097B;
+        Fri,  2 Sep 2022 05:32:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EBE96216A;
-        Fri,  2 Sep 2022 12:25:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB6FC433C1;
-        Fri,  2 Sep 2022 12:25:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 964B4B82ACA;
+        Fri,  2 Sep 2022 12:31:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94D5CC433B5;
+        Fri,  2 Sep 2022 12:31:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121504;
-        bh=Inn3o6JVhGcukmNOS9fSen8gB0FBNvdYR/bcr9er3v0=;
+        s=korg; t=1662121889;
+        bh=Yf0GyPVtGLFY7mUBC87iG8NI72I00Kg6i/hzhR2+838=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wcgek9BKxxMnYX8/2XfQkdhSz3pmKHuG5CnJC33nPN3ZQX6zCQUKgtjYAWwStEME7
-         wYWCDpVDb4X+mp8qcqW4EIT5qNBj0nDsbn3RKl4Bwz9Hp8PTlvPmIuPCVz9s3PUU4P
-         e7bLC7oNiBLncr/slFrfDMukf11RDlKBe3iNWG6M=
+        b=DyRNAILHuuJREQxD6u6QcMV1oqa7TFjgAFLPsCmLW+NfHCR/6kfPxiukBcjSg1dUL
+         z0oTfnEexVDazK9527d0jRyDRH0xHkLVUj/Uv9Ga8vmidsIRSh63RUf9Yp9sHCNDEj
+         SruqKX4SBsVZaViD+NR99HHoV+6aBFnM17BfGurY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "srivatsab@vmware.com, srivatsa@csail.mit.edu, akaher@vmware.com,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, sturlapati@vmware.com,
-        bordoloih@vmware.com, keerthanak@vmware.com, Ankit Jain" 
-        <ankitja@vmware.com>, Lucas Stach <l.stach@pengutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ankit Jain <ankitja@vmware.com>
-Subject: [PATCH 4.19 06/56] sched/deadline: Fix stale throttling on de-/boosted tasks
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH 5.15 02/73] drm/bridge: Add stubs for devm_drm_of_get_bridge when OF is disabled
 Date:   Fri,  2 Sep 2022 14:18:26 +0200
-Message-Id: <20220902121400.419941755@linuxfoundation.org>
+Message-Id: <20220902121404.517094115@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,62 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit 46fcc4b00c3cca8adb9b7c9afdd499f64e427135 upstream.
+commit 59050d783848d9b62e9d8fb6ce0cd00771c2bf87 upstream.
 
-When a boosted task gets throttled, what normally happens is that it's
-immediately enqueued again with ENQUEUE_REPLENISH, which replenishes the
-runtime and clears the dl_throttled flag. There is a special case however:
-if the throttling happened on sched-out and the task has been deboosted in
-the meantime, the replenish is skipped as the task will return to its
-normal scheduling class. This leaves the task with the dl_throttled flag
-set.
+If CONFIG_OF is disabled, devm_drm_of_get_bridge won't be compiled in
+and drivers using that function will fail to build.
 
-Now if the task gets boosted up to the deadline scheduling class again
-while it is sleeping, it's still in the throttled state. The normal wakeup
-however will enqueue the task with ENQUEUE_REPLENISH not set, so we don't
-actually place it on the rq. Thus we end up with a task that is runnable,
-but not actually on the rq and neither a immediate replenishment happens,
-nor is the replenishment timer set up, so the task is stuck in
-forever-throttled limbo.
+Add an inline stub so that we can still build-test those cases.
 
-Clear the dl_throttled flag before dropping back to the normal scheduling
-class to fix this issue.
-
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Juri Lelli <juri.lelli@redhat.com>
-Link: https://lkml.kernel.org/r/20200831110719.2126930-1-l.stach@pengutronix.de
-[Ankit: Regenerated the patch for v4.19.y]
-Signed-off-by: Ankit Jain <ankitja@vmware.com>
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Link: https://patchwork.freedesktop.org/patch/msgid/20210928181333.1176840-1-maxime@cerno.tech
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/sched/deadline.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ include/drm/drm_bridge.h |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -1507,12 +1507,15 @@ static void enqueue_task_dl(struct rq *r
- 		}
- 	} else if (!dl_prio(p->normal_prio)) {
- 		/*
--		 * Special case in which we have a !SCHED_DEADLINE task
--		 * that is going to be deboosted, but exceeds its
--		 * runtime while doing so. No point in replenishing
--		 * it, as it's going to return back to its original
--		 * scheduling class after this.
-+		 * Special case in which we have a !SCHED_DEADLINE task that is going
-+		 * to be deboosted, but exceeds its runtime while doing so. No point in
-+		 * replenishing it, as it's going to return back to its original
-+		 * scheduling class after this. If it has been throttled, we need to
-+		 * clear the flag, otherwise the task may wake up as throttled after
-+		 * being boosted again with no means to replenish the runtime and clear
-+		 * the throttle.
- 		 */
-+		p->dl.dl_throttled = 0;
- 		BUG_ON(!p->dl.dl_boosted || flags != ENQUEUE_REPLENISH);
- 		return;
- 	}
+--- a/include/drm/drm_bridge.h
++++ b/include/drm/drm_bridge.h
+@@ -911,9 +911,20 @@ struct drm_bridge *devm_drm_panel_bridge
+ struct drm_bridge *devm_drm_panel_bridge_add_typed(struct device *dev,
+ 						   struct drm_panel *panel,
+ 						   u32 connector_type);
++struct drm_connector *drm_panel_bridge_connector(struct drm_bridge *bridge);
++#endif
++
++#if defined(CONFIG_OF) && defined(CONFIG_DRM_PANEL_BRIDGE)
+ struct drm_bridge *devm_drm_of_get_bridge(struct device *dev, struct device_node *node,
+ 					  u32 port, u32 endpoint);
+-struct drm_connector *drm_panel_bridge_connector(struct drm_bridge *bridge);
++#else
++static inline struct drm_bridge *devm_drm_of_get_bridge(struct device *dev,
++							struct device_node *node,
++							u32 port,
++							u32 endpoint)
++{
++	return ERR_PTR(-ENODEV);
++}
+ #endif
+ 
+ #endif
 
 

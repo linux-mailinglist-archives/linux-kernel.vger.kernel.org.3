@@ -2,178 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602495AB167
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF945AB255
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236994AbiIBN3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
+        id S236934AbiIBN4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236121AbiIBN3N (ORCPT
+        with ESMTP id S235862AbiIBNzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:29:13 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537AEEEC59
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:08:20 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id E4371320090C;
-        Fri,  2 Sep 2022 08:34:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 02 Sep 2022 08:34:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1662122046; x=1662208446; bh=69wBoD2FcW
-        S+VJub/o1SXKNMgpIXHt/jaTIMdQTQNes=; b=XHrR1ZCQoQmpvRT/cPY/9LcNB5
-        HbYvLIIwbwJ3I8tAiCkQeqeD6ac4sQxkWFElK4/2M96NO42Hn11H07JT/QFVXr8z
-        kjDkscAYB/o/TxBPAsTcp+fBpWSD/X1HfCWtH3LgmeNzI7tSVefpoYfjRXCfJCN8
-        yDK2T/6mdgHaynbM6eZ0TXnzYtHqgCrJqnqkHxz6vRRzIfyplybtYLDBG8aDYvI8
-        pUTzvXG+HUMzuuTVOYAws1tvn7az6LV1uZdaFlVENwuar4NRxgqpiKmI7/ofJtsr
-        Hdv3DLT5DJHI3FWooBjmEE43LrvAwr5PqO+XYyjq6nrmo8PliVuHhkTGbZeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1662122046; x=1662208446; bh=69wBoD2FcWS+VJub/o1SXKNMgpIX
-        Ht/jaTIMdQTQNes=; b=CWTAamlIdomT+2ReqO+SVhE0ewgiqv4yZ5OnRNWDwcWE
-        X+8+FemvxwpBtL7ywc/vsmj75bkH8tMuLI15yvL0uqDa8/So7C9tjphjJ/4HlESX
-        RkAKKO07mO5oNGEPr+G1FKsJtliCuhZBW17aBw6gamPUMJa4F5P8KkwPf2pftijZ
-        tM8Ih6E6wiVykyxgp/vBxmhEmr46bOVdJLJz9AILj7bmhvZ6mZNL/15uUiLHO1R5
-        DPcjpytHi9i6NFcJNfHaInErfSGLL/eKd+sTtPv0iRCd2PPKhcBWEvzZZwiLL0tE
-        hNsr1L3frvU1jNbOHl3IQ4yXzpfKT0mAiv3hF74pBA==
-X-ME-Sender: <xms:PfgRYzY0V9T6oHAQHYFq_qp488C0-vJwmhaKBtvMkoo--Pptnv3k_Q>
-    <xme:PfgRYybbx_9WsuS45POrQj46N9ZoIAtv9JfUFyFTQm_BgBUoYbTjEDmtfPAPI5y6s
-    JmtzIX7xj6wM1L5yjY>
-X-ME-Received: <xmr:PfgRY1_LZGkpshpvDD9gA_AiArZJHnu4dD16PaWXHxuc2vSX2-Ev4UR0Zw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeltddgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeljeeugfegveetleevkeetffegudevieetieeugeeugeeivddtjeejvdef
-    feetgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:PfgRY5pdGZEc6150lT0Pj62iRT2PDLE_CEy5Zbw-1_46mEj43zL5Cw>
-    <xmx:PfgRY-r6IKQCQHWo131B_1vTIKy_IvK3_85AfmrLwbBg9l0FlI2bqQ>
-    <xmx:PfgRY_StF0AYljou5s-fvHd8GAt3KYRXn70kCZ7iTDDTXUGXH1UBaQ>
-    <xmx:PvgRYzjM24CXnQqyMUH2ejZ8atEu4eK32NXN-shDmoLTZ3mzmTN61g>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Sep 2022 08:34:04 -0400 (EDT)
-Date:   Fri, 2 Sep 2022 14:34:00 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        Arthur Grillo <arthur.grillo@usp.br>,
-        michal.winiarski@intel.com,
-        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 2/2] drm/tests: Change "igt_" prefix to "test_drm_"
-Message-ID: <20220902123400.5ljgc7z6zw34d64m@houat>
-References: <20220901124210.591994-1-mairacanal@riseup.net>
- <20220901124210.591994-2-mairacanal@riseup.net>
- <20220901125530.b56s4zisnkfuigvc@houat>
- <04aeba53-793c-3196-3137-915f0640dc2a@riseup.net>
- <87h71qfbi9.fsf@intel.com>
+        Fri, 2 Sep 2022 09:55:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C75752633
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:29:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2231ED1;
+        Fri,  2 Sep 2022 05:40:49 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 66B523F766;
+        Fri,  2 Sep 2022 05:40:42 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Bonnici <marc.bonnici@arm.com>,
+        Achin Gupta <achin.gupta@arm.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Valentin Laurent <valentin.laurent@trustonic.com>,
+        Lukas Hanel <lukas.hanel@trustonic.com>,
+        Coboy Chen <coboy.chen@mediatek.com>
+Subject: [PATCH v2 01/10] firmware: arm_ffa: Add pointer to the ffa_dev_ops in struct ffa_dev
+Date:   Fri,  2 Sep 2022 13:40:23 +0100
+Message-Id: <20220902124032.788488-2-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220902124032.788488-1-sudeep.holla@arm.com>
+References: <20220902124032.788488-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="je6h4ueg2vhmqv2d"
-Content-Disposition: inline
-In-Reply-To: <87h71qfbi9.fsf@intel.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently ffa_dev_ops_get() is the way to fetch the ffa_dev_ops pointer.
+It checks if the ffa_dev structure pointer is valid before returning the
+ffa_dev_ops pointer.
 
---je6h4ueg2vhmqv2d
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Instead, the pointer can be made part of the ffa_dev structure and since
+the core driver is incharge of creating ffa_device for each identified
+partition, there is no need to check for the validity explicitly if the
+pointer is embedded in the structure.
 
-On Fri, Sep 02, 2022 at 11:04:14AM +0300, Jani Nikula wrote:
-> On Thu, 01 Sep 2022, Ma=EDra Canal <mairacanal@riseup.net> wrote:
-> > Hi Maxime,
-> >
-> > On 9/1/22 09:55, Maxime Ripard wrote:
-> >> Hi,
-> >>=20
-> >> On Thu, Sep 01, 2022 at 09:42:10AM -0300, Ma=EDra Canal wrote:
-> >>> With the introduction of KUnit, IGT is no longer the only option to r=
-un
-> >>> the DRM unit tests, as the tests can be run through kunit-tool or on
-> >>> real hardware with CONFIG_KUNIT.
-> >>>
-> >>> Therefore, remove the "igt_" prefix from the tests and replace it with
-> >>> the "test_drm_" prefix, making the tests' names independent from the =
-tool
-> >>> used.
-> >>>
-> >>> Signed-off-by: Ma=EDra Canal <mairacanal@riseup.net>
-> >>>
-> >>> ---
-> >>> v1 -> v2: https://lore.kernel.org/dri-devel/20220830211603.191734-1-m=
-airacanal@riseup.net/
-> >>> - Change "drm_" prefix to "test_drm_", as "drm_" can be a bit confusi=
-ng (Jani Nikula).
-> >>=20
-> >> I appreciate it's a bit of a bikeshed but I disagree with this. The
-> >> majority of the kunit tests already out there start with the framework
-> >> name, including *all* the examples in the kunit doc. Plus, it's fairly
-> >> obvious that it's a test, kunit is only about running tests in the fir=
-st
-> >> place.
-> >
-> > Would it be better to keep it as "drm_"?
->=20
-> That's not "keeping". That's renaming igt to drm.
+Add the pointer to the ffa_dev_ops in the ffa_dev structure itself and
+initialise the same as part of creation of the device.
 
-Well, there's like half the tests that are prefixed with drm, the other
-with igt, so it's both really
+Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/firmware/arm_ffa/bus.c    | 4 +++-
+ drivers/firmware/arm_ffa/driver.c | 2 +-
+ include/linux/arm_ffa.h           | 7 +++++--
+ 3 files changed, 9 insertions(+), 4 deletions(-)
 
-> > Currently, I don't think it is appropriate to hold the "igt_" prefix, as
-> > the tests are not IGT exclusive, but I don't have a strong opinion on
-> > using the "drm_" or the "test_drm" prefixes.
->=20
-> I repeat my stance that "drm_" alone is confusing.
+diff --git a/drivers/firmware/arm_ffa/bus.c b/drivers/firmware/arm_ffa/bus.c
+index 641a91819088..69328041fbc3 100644
+--- a/drivers/firmware/arm_ffa/bus.c
++++ b/drivers/firmware/arm_ffa/bus.c
+@@ -167,7 +167,8 @@ bool ffa_device_is_valid(struct ffa_device *ffa_dev)
+ 	return valid;
+ }
+ 
+-struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id)
++struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
++				       const struct ffa_dev_ops *ops)
+ {
+ 	int ret;
+ 	struct device *dev;
+@@ -183,6 +184,7 @@ struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id)
+ 	dev_set_name(&ffa_dev->dev, "arm-ffa-%04x", vm_id);
+ 
+ 	ffa_dev->vm_id = vm_id;
++	ffa_dev->ops = ops;
+ 	uuid_copy(&ffa_dev->uuid, uuid);
+ 
+ 	ret = device_register(&ffa_dev->dev);
+diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+index ec731e9e942b..213665e5ad0e 100644
+--- a/drivers/firmware/arm_ffa/driver.c
++++ b/drivers/firmware/arm_ffa/driver.c
+@@ -688,7 +688,7 @@ static void ffa_setup_partitions(void)
+ 		 * as part of the discovery API, we need to pass the
+ 		 * discovered UUID here instead.
+ 		 */
+-		ffa_dev = ffa_device_register(&uuid_null, tpbuf->id);
++		ffa_dev = ffa_device_register(&uuid_null, tpbuf->id, &ffa_ops);
+ 		if (!ffa_dev) {
+ 			pr_err("%s: failed to register partition ID 0x%x\n",
+ 			       __func__, tpbuf->id);
+diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
+index e5c76c1ef9ed..91b47e42b73d 100644
+--- a/include/linux/arm_ffa.h
++++ b/include/linux/arm_ffa.h
+@@ -17,6 +17,7 @@ struct ffa_device {
+ 	bool mode_32bit;
+ 	uuid_t uuid;
+ 	struct device dev;
++	const struct ffa_dev_ops *ops;
+ };
+ 
+ #define to_ffa_dev(d) container_of(d, struct ffa_device, dev)
+@@ -47,7 +48,8 @@ static inline void *ffa_dev_get_drvdata(struct ffa_device *fdev)
+ }
+ 
+ #if IS_REACHABLE(CONFIG_ARM_FFA_TRANSPORT)
+-struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id);
++struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
++				       const struct ffa_dev_ops *ops);
+ void ffa_device_unregister(struct ffa_device *ffa_dev);
+ int ffa_driver_register(struct ffa_driver *driver, struct module *owner,
+ 			const char *mod_name);
+@@ -57,7 +59,8 @@ const struct ffa_dev_ops *ffa_dev_ops_get(struct ffa_device *dev);
+ 
+ #else
+ static inline
+-struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id)
++struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
++				       const struct ffa_dev_ops *ops)
+ {
+ 	return NULL;
+ }
+-- 
+2.37.3
 
-What are you confusing it with?
-
-> For the reason alone that it pollutes the code tagging tools, mixing
-> actual drm_ types and functions with unit test functions.
-
-I don't get it, I'm sorry. All these functions are static and not part
-of any API, so I can't see how it would pollute a code tagging tool. Or
-at least, not more than any driver does.
-
-And we're part of a larger project here, it's about consistency with the
-rest of the ecosystem.
-
-Maxime
-
---je6h4ueg2vhmqv2d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxH4OAAKCRDj7w1vZxhR
-xcnGAQDfG15wrc3ceeKSo7qsOykhYDbwylJuO4xitBZoirs0ZgD/ecLkzhEgtAOv
-b++wHEVZEq7FPSdzWgIwHQIiRnLixgA=
-=zFJ3
------END PGP SIGNATURE-----
-
---je6h4ueg2vhmqv2d--

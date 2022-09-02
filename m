@@ -2,181 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103A75AA70C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 06:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B155AA71A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiIBEga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 00:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S232670AbiIBEtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 00:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235261AbiIBEgW (ORCPT
+        with ESMTP id S229554AbiIBEtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 00:36:22 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB618B2742;
-        Thu,  1 Sep 2022 21:36:18 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2821QlQE003688;
-        Fri, 2 Sep 2022 04:36:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=EMrm9+nxvkldQmjZ7UJoxgDmauu9Gk07cjL7aDDRcWY=;
- b=FpcvL9SAUR4dwRhYEW84uA8qJcUvgaVj+hNs7E0hx4db7esGzKYsiUefG7/XQlmwXwas
- r1UVlstGhkdjuXMPMak4gIsYkJVuofbK8nxyntfL5hh6GFoiD3wmVF1jhTyUzbAATHvv
- YhBOvgJM7NVALkon8q22yVqbm0m8izckS20E1DPgZSUys0JCF2QSrF5vpJCKwrduZPz/
- xA9HfUBWMOVLV1IFTuNbFNlfbnagJ5LU/LoEBmBsPh9VX3fIG1LNCm+Vjp7WCjfc6pd1
- xILXGsfwKcuXVmE1XAHxzC8j+8WW5fXa+gPjzUrFP3pKB9JR3ZWwmLxGlSv3nduNEz+Z sw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jb5k90pxr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Sep 2022 04:36:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2824aBsV016673
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 2 Sep 2022 04:36:12 GMT
-Received: from blr-ubuntu-173.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 1 Sep 2022 21:36:09 -0700
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-To:     <krzysztof.kozlowski@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
-        <robh+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: [PATCH v2 4/4] arm64: dts: qcom: sc7280: Add cpu and llcc BWMON
-Date:   Fri, 2 Sep 2022 10:05:11 +0530
-Message-ID: <20220902043511.17130-5-quic_rjendra@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220902043511.17130-1-quic_rjendra@quicinc.com>
-References: <20220902043511.17130-1-quic_rjendra@quicinc.com>
+        Fri, 2 Sep 2022 00:49:05 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91197B2746
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 21:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662094144; x=1693630144;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uWWeTrRXwjpOrChuGrhJNnY+K0/3p8HKfIFEywc8td8=;
+  b=G+hJLXTbb24RCdJKYnfQtSA6eBgaAew37siGUiDyCOWAyfyVsxKfsTNG
+   M8RijBCD9g56oJslQ0hGgqS4W0K6Crskg9Oa0dRraEmc39iEhN1OSB3C4
+   C6qHwIVAJqASNb0tS+cvJha2Llx+XFJxafZmtxkDdkQR0SY1byFfVA5+v
+   e6HkAuwqexPvX86h7rQXfRlkuS3kBCZTTixM4ntx8TEywcniERuy/DKjM
+   uS6yKgU+vvKLC7ZeWSXzGrPqbG9Z+1dqUp63DPbXruZ5Ct6LDCzOQgFhF
+   n0+VaVdPp6xBQMw91TsIOAVuI7iqW4b6jxJ7/kMQ5NrHspluxP/meCdSR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="293470181"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="293470181"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 21:49:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="645960524"
+Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 01 Sep 2022 21:48:59 -0700
+Received: from kbuild by fccc941c3034 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oTybz-00009b-0G;
+        Fri, 02 Sep 2022 04:48:59 +0000
+Date:   Fri, 2 Sep 2022 12:48:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muchun Song <songmuchun@bytedance.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org, osalvador@suse.de, david@redhat.com,
+        ying.huang@intel.com, aneesh.kumar@linux.ibm.com,
+        rientjes@google.com
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] mm: hugetlb: eliminate memory-less nodes handling
+Message-ID: <202209021255.1ChhyCsl-lkp@intel.com>
+References: <20220901083023.42319-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -G5lfprJ8nk2dx0MnqYktw8iQMtoOvTm
-X-Proofpoint-GUID: -G5lfprJ8nk2dx0MnqYktw8iQMtoOvTm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- mlxlogscore=883 malwarescore=0 spamscore=0 adultscore=0 lowpriorityscore=0
- bulkscore=0 clxscore=1015 mlxscore=0 priorityscore=1501 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209020020
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901083023.42319-1-songmuchun@bytedance.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add cpu and llcc BWMON nodes and their corresponding
-OPP tables for sc7280 SoC.
+Hi Muchun,
 
-Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-v2: no change
+I love your patch! Yet something to improve:
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 76 ++++++++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+[auto build test ERROR on akpm-mm/mm-everything]
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 13d7f267b289..a839ba968d13 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -3275,6 +3275,82 @@
- 			};
- 		};
- 
-+		pmu@9091000 {
-+			compatible = "qcom,sc7280-llcc-bwmon";
-+			reg = <0 0x9091000 0 0x1000>;
-+
-+			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3>;
-+
-+			operating-points-v2 = <&llcc_bwmon_opp_table>;
-+
-+			llcc_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <800000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <1804000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <2188000>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <3072000>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <4068000>;
-+				};
-+				opp-5 {
-+					opp-peak-kBps = <6220000>;
-+				};
-+				opp-6 {
-+					opp-peak-kBps = <6832000>;
-+				};
-+				opp-7 {
-+					opp-peak-kBps = <8532000>;
-+				};
-+			};
-+		};
-+
-+		pmu@90b6000 {
-+			compatible = "qcom,sc7280-cpu-bwmon", "qcom,msm8998-bwmon";
-+			reg = <0 0x090b6400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <2400000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <4800000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <7456000>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <9600000>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <12896000>;
-+				};
-+				opp-5 {
-+					opp-peak-kBps = <14928000>;
-+				};
-+				opp-6 {
-+					opp-peak-kBps = <17056000>;
-+				};
-+			};
-+		};
-+
- 		dc_noc: interconnect@90e0000 {
- 			reg = <0 0x090e0000 0 0x5080>;
- 			compatible = "qcom,sc7280-dc-noc";
+url:    https://github.com/intel-lab-lkp/linux/commits/Muchun-Song/mm-hugetlb-eliminate-memory-less-nodes-handling/20220901-163132
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: loongarch-buildonly-randconfig-r004-20220901 (https://download.01.org/0day-ci/archive/20220902/202209021255.1ChhyCsl-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8e3d203cb06be81565d117b3f6d5e279a833174c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muchun-Song/mm-hugetlb-eliminate-memory-less-nodes-handling/20220901-163132
+        git checkout 8e3d203cb06be81565d117b3f6d5e279a833174c
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 ARCH=loongarch 
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/base/node.c: In function 'register_node':
+>> drivers/base/node.c:614:17: error: implicit declaration of function 'hugetlb_register_node'; did you mean 'unregister_node'? [-Werror=implicit-function-declaration]
+     614 |                 hugetlb_register_node(node);
+         |                 ^~~~~~~~~~~~~~~~~~~~~
+         |                 unregister_node
+   drivers/base/node.c: In function 'unregister_node':
+>> drivers/base/node.c:630:9: error: implicit declaration of function 'hugetlb_unregister_node'; did you mean 'unregister_node'? [-Werror=implicit-function-declaration]
+     630 |         hugetlb_unregister_node(node);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+         |         unregister_node
+   cc1: some warnings being treated as errors
+
+
+vim +614 drivers/base/node.c
+
+   594	
+   595	/*
+   596	 * register_node - Setup a sysfs device for a node.
+   597	 * @num - Node number to use when creating the device.
+   598	 *
+   599	 * Initialize and register the node device.
+   600	 */
+   601	static int register_node(struct node *node, int num)
+   602	{
+   603		int error;
+   604	
+   605		node->dev.id = num;
+   606		node->dev.bus = &node_subsys;
+   607		node->dev.release = node_device_release;
+   608		node->dev.groups = node_dev_groups;
+   609		error = device_register(&node->dev);
+   610	
+   611		if (error) {
+   612			put_device(&node->dev);
+   613		} else {
+ > 614			hugetlb_register_node(node);
+   615			compaction_register_node(node);
+   616		}
+   617	
+   618		return error;
+   619	}
+   620	
+   621	/**
+   622	 * unregister_node - unregister a node device
+   623	 * @node: node going away
+   624	 *
+   625	 * Unregisters a node device @node.  All the devices on the node must be
+   626	 * unregistered before calling this function.
+   627	 */
+   628	void unregister_node(struct node *node)
+   629	{
+ > 630		hugetlb_unregister_node(node);
+   631		compaction_unregister_node(node);
+   632		node_remove_accesses(node);
+   633		node_remove_caches(node);
+   634		device_unregister(&node->dev);
+   635	}
+   636	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,179 +2,523 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A98E5AA438
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518BE5AA445
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiIBAT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 20:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S233715AbiIBAWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 20:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233577AbiIBATy (ORCPT
+        with ESMTP id S230091AbiIBAWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 20:19:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E7A3891
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 17:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662077991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dO2Mn5n5WZ/MoIF+K7eeDvmnGSBHo08xkcQ+P3b4bKQ=;
-        b=OdrEFSSLjxcA3x3TNPFIqhu1g1YyQPk8argzLbuW2lofAtVHbahEgP7RZu4G4Eiwu2YGj0
-        vbDHcJntDhUp320HB+cZ+dUD0gO2ctKTHZmMlh3zkzNrijkMHF7qAhMhPF9y30xVeyTE9E
-        ltEBTUYzopBoLssnGL3OoUXtADuViQs=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-9-y1Ta2XPNM8OM8YaeDIK8Gg-1; Thu, 01 Sep 2022 20:19:49 -0400
-X-MC-Unique: y1Ta2XPNM8OM8YaeDIK8Gg-1
-Received: by mail-ej1-f69.google.com with SMTP id gs35-20020a1709072d2300b00730e14fd76eso166077ejc.15
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 17:19:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=dO2Mn5n5WZ/MoIF+K7eeDvmnGSBHo08xkcQ+P3b4bKQ=;
-        b=eP19wSEgpofpgtRTafpY65JJOjODNvDhRo0EAMInaziiwlUE08OUkEjaYr5eaNfs4G
-         QvqB2i1dwnU0jDSjnpKeVoIKkV21cPwW8QoD3c5TYWboaoswz4YA5RVVVYeklywpNbU9
-         BWrhGGYKD+ehkqSrDA5a4tgGjENTxudPQ7eQ1lop+3OgGauEZ3H+U6nikW7y5JmcLQjS
-         qTdwqcqZqysoPN8gYY5D04SLz/I5F+7OxyRNlH0j2I2nzwvlShGhhNrnwPvRHoOAR51g
-         JMCHbcLZDDsWXiQ4demu/yOYhwafneKWWvXfWS1SYJO9ROmux+Fu3pup6OhpRq+Ez0Uz
-         uYFQ==
-X-Gm-Message-State: ACgBeo18w3NAEnsre8Shec2ku7IKNWautyXKXLw2tm0dOgUAgDo7ha1R
-        dEM2TQ7f7UXEHVUT+9p1SYu6D7LkEENvneHQFFQKe5XN9t1psAKdqqxY6vXGB4DX16EGuin8/ro
-        F7DOV7EdvxJQz1Gd20ebswrrM
-X-Received: by 2002:a17:906:4795:b0:73d:d6e8:52a7 with SMTP id cw21-20020a170906479500b0073dd6e852a7mr23729560ejc.59.1662077988838;
-        Thu, 01 Sep 2022 17:19:48 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR71etqoXM4HGXVz/MwtlqW3T8BbNkFPT5a/e9qOoDZWnrG77GI6lD81PpRdFOR9EqVhGDa/oA==
-X-Received: by 2002:a17:906:4795:b0:73d:d6e8:52a7 with SMTP id cw21-20020a170906479500b0073dd6e852a7mr23729550ejc.59.1662077988617;
-        Thu, 01 Sep 2022 17:19:48 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id lb14-20020a170907784e00b00741a0c3f4cdsm352041ejc.189.2022.09.01.17.19.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 17:19:48 -0700 (PDT)
-Message-ID: <44a42d03-4dd1-3f1c-3a60-7c2a6a7d417a@redhat.com>
-Date:   Fri, 2 Sep 2022 02:19:46 +0200
+        Thu, 1 Sep 2022 20:22:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D026F260;
+        Thu,  1 Sep 2022 17:22:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5F40B82966;
+        Fri,  2 Sep 2022 00:22:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C920C433D6;
+        Fri,  2 Sep 2022 00:22:40 +0000 (UTC)
+Date:   Thu, 1 Sep 2022 20:23:11 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
+        cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
+        42.hyeyoo@gmail.com, glider@google.com, elver@google.com,
+        dvyukov@google.com, shakeelb@google.com, songmuchun@bytedance.com,
+        arnd@arndb.de, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 27/30] Code tagging based latency tracking
+Message-ID: <20220901202311.546a53b5@gandalf.local.home>
+In-Reply-To: <20220901225515.ogg7pyljmfzezamr@moria.home.lan>
+References: <20220830214919.53220-1-surenb@google.com>
+        <20220830214919.53220-28-surenb@google.com>
+        <20220901173844.36e1683c@gandalf.local.home>
+        <20220901215438.gy3bgqa4ghhm6ztm@moria.home.lan>
+        <20220901183430.120311ce@gandalf.local.home>
+        <20220901225515.ogg7pyljmfzezamr@moria.home.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, corbet@lwn.net,
-        james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
-        shuah@kernel.org, seanjc@google.com, drjones@redhat.com,
-        dmatlack@google.com, bgardon@google.com, ricarkol@google.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-2-gshan@redhat.com> <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org> <YwTn2r6FLCx9mAU7@google.com>
- <87a67uwve8.wl-maz@kernel.org>
- <99364855-b4e9-8a69-e1ca-ed09d103e4c8@redhat.com>
- <874jxzvxak.wl-maz@kernel.org> <Yw4hyEAyivKT35vQ@xz-m1.local>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-In-Reply-To: <Yw4hyEAyivKT35vQ@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/30/22 16:42, Peter Xu wrote:
-> Marc,
+On Thu, 1 Sep 2022 18:55:15 -0400
+Kent Overstreet <kent.overstreet@linux.dev> wrote:
+
+> On Thu, Sep 01, 2022 at 06:34:30PM -0400, Steven Rostedt wrote:
+> > On Thu, 1 Sep 2022 17:54:38 -0400
+> > Kent Overstreet <kent.overstreet@linux.dev> wrote:  
+> > > 
+> > > So this looks like it's gotten better since I last looked, but it's still not
+> > > there yet.
+> > > 
+> > > Part of the problem is that the tracepoints themselves are in the wrong place:
+> > > your end event is when a task is woken up, but that means spurious wakeups will  
+> > 
+> > The end event is when a task is scheduled onto the CPU. The start event is
+> > the first time it is woken up.  
 > 
-> I thought we won't hit this as long as we properly take care of other
-> orderings of (a) gfn push, and (b) gfn collect, but after a second thought
-> I think it's indeed logically possible that with a reversed ordering here
-> we can be reading some garbage gfn before (a) happens butt also read the
-> valid flag after (b).
+> Yeah, that's not what I want. You're just tracing latency due to having more
+> processes runnable than CPUs.
 > 
-> It seems we must have all the barriers correctly applied always.  If that's
-> correct, do you perhaps mean something like this to just add the last piece
-> of barrier?
+> I don't care about that for debugging, though! I specifically want latency at
+> the wait_event() level, and related - every time a process blocked _on some
+> condition_, until that condition became true. Not until some random, potentially
+> spurious wakeup.
 
-Okay, so I thought about it some more and it's quite tricky.
+Ideally this would be better if we could pass the stack trace from one
+event to the next, but that wouldn't be too hard to implement. It just
+needs to be done.
 
-Strictly speaking, the synchronization is just between userspace and 
-kernel. The fact that the actual producer of dirty pages is in another 
-CPU is a red herring, because reset only cares about harvested pages.
+But anyway:
 
-In other words, the dirty page ring is essentially two ring buffers in 
-one and we only care about the "harvested ring", not the "produced ring".
+ # echo 'p:wait prepare_to_wait_event' > /sys/kernel/tracing/kprobe_events
 
-On the other hand, it may happen that userspace has set more RESET flags 
-while the ioctl is ongoing:
+// created an event on prepare_to_wait_event as that's usually called just
+// before wait event.
+
+ # sqlhist -e -n wait_sched 'select start.common_pid as pid,(end.TIMESTAMP_USECS - start.TIMESTAMP_USECS) as delta from wait as start join sched_switch as end on start.common_pid = end.prev_pid where end.prev_state & 3'
+
+// Create a "wait_sched" event that traces the time between the
+// prepare_to_wait_event call and the scheduler. Only trigger it if the
+// schedule happens in the interruptible or uninterruptible states.
+
+ # sqlhist -e -n wake_sched 'select start.pid,(end.TIMESTAMP_USECS - start.TIMESTAMP_USECS) as delta2 from wait_sched as start join sched_switch as end on start.pid = end.next_pid where start.delta < 50'
+
+// Now attach the wait_event to the sched_switch where the task gets
+// scheduled back in. But we are only going to care if the delta between
+// the prepare_to_wait_event and the schedule is less that 50us. This is a
+// hack to just care about where a prepare_to_wait_event was done just before
+// scheduling out.
+
+ # echo 'hist:keys=pid,delta2.buckets=10:sort=delta2' > /sys/kernel/tracing/events/synthetic/wake_sched/trigger
+
+// Now we are going to look at the deltas that the task was sleeping for an
+// event. But this just gives pids and deltas.
+
+ # echo 'hist:keys=pid,stacktrace if delta < 50' >> /sys/kernel/tracing/events/synthetic/wait_sched/trigger
+
+// And this is to get the backtraces of where the task was. This is because
+// the stack trace is not available at the schedule in, because the
+// sched_switch can only give the stack trace of when a task schedules out.
+// Again, this is somewhat a hack.
+
+ # cat /sys/kernel/tracing/events/synthetic/wake_sched/hist
+# event histogram
+#
+# trigger info: hist:keys=pid,delta2.buckets=10:vals=hitcount:sort=delta2.buckets=10:size=2048 [active]
+#
+
+{ pid:       2114, delta2: ~ 10-19 } hitcount:          1
+{ pid:       1389, delta2: ~ 160-169 } hitcount:          1
+{ pid:       1389, delta2: ~ 660-669 } hitcount:          1
+{ pid:       1389, delta2: ~ 1020-1029 } hitcount:          1
+{ pid:       1189, delta2: ~ 500020-500029 } hitcount:          1
+{ pid:       1189, delta2: ~ 500030-500039 } hitcount:          1
+{ pid:       1195, delta2: ~ 500030-500039 } hitcount:          2
+{ pid:       1189, delta2: ~ 500040-500049 } hitcount:         10
+{ pid:       1193, delta2: ~ 500040-500049 } hitcount:          3
+{ pid:       1197, delta2: ~ 500040-500049 } hitcount:          3
+{ pid:       1195, delta2: ~ 500040-500049 } hitcount:          9
+{ pid:       1190, delta2: ~ 500050-500059 } hitcount:         55
+{ pid:       1197, delta2: ~ 500050-500059 } hitcount:         51
+{ pid:       1191, delta2: ~ 500050-500059 } hitcount:         61
+{ pid:       1198, delta2: ~ 500050-500059 } hitcount:         56
+{ pid:       1195, delta2: ~ 500050-500059 } hitcount:         48
+{ pid:       1192, delta2: ~ 500050-500059 } hitcount:         54
+{ pid:       1194, delta2: ~ 500050-500059 } hitcount:         50
+{ pid:       1196, delta2: ~ 500050-500059 } hitcount:         57
+{ pid:       1189, delta2: ~ 500050-500059 } hitcount:         48
+{ pid:       1193, delta2: ~ 500050-500059 } hitcount:         52
+{ pid:       1194, delta2: ~ 500060-500069 } hitcount:         12
+{ pid:       1191, delta2: ~ 500060-500069 } hitcount:          2
+{ pid:       1190, delta2: ~ 500060-500069 } hitcount:          7
+{ pid:       1198, delta2: ~ 500060-500069 } hitcount:          9
+{ pid:       1193, delta2: ~ 500060-500069 } hitcount:          6
+{ pid:       1196, delta2: ~ 500060-500069 } hitcount:          5
+{ pid:       1192, delta2: ~ 500060-500069 } hitcount:          9
+{ pid:       1197, delta2: ~ 500060-500069 } hitcount:          9
+{ pid:       1195, delta2: ~ 500060-500069 } hitcount:          6
+{ pid:       1189, delta2: ~ 500060-500069 } hitcount:          6
+{ pid:       1198, delta2: ~ 500070-500079 } hitcount:          1
+{ pid:       1192, delta2: ~ 500070-500079 } hitcount:          2
+{ pid:       1193, delta2: ~ 500070-500079 } hitcount:          3
+{ pid:       1194, delta2: ~ 500070-500079 } hitcount:          2
+{ pid:       1191, delta2: ~ 500070-500079 } hitcount:          3
+{ pid:       1190, delta2: ~ 500070-500079 } hitcount:          1
+{ pid:       1196, delta2: ~ 500070-500079 } hitcount:          1
+{ pid:       1193, delta2: ~ 500080-500089 } hitcount:          1
+{ pid:       1192, delta2: ~ 500080-500089 } hitcount:          1
+{ pid:       1196, delta2: ~ 500080-500089 } hitcount:          2
+{ pid:       1194, delta2: ~ 500090-500099 } hitcount:          1
+{ pid:       1197, delta2: ~ 500090-500099 } hitcount:          1
+{ pid:       1193, delta2: ~ 500090-500099 } hitcount:          1
+{ pid:         61, delta2: ~ 503910-503919 } hitcount:          1
+{ pid:         61, delta2: ~ 503920-503929 } hitcount:          1
+{ pid:         61, delta2: ~ 503930-503939 } hitcount:          1
+{ pid:         61, delta2: ~ 503960-503969 } hitcount:         15
+{ pid:         61, delta2: ~ 503970-503979 } hitcount:         18
+{ pid:         61, delta2: ~ 503980-503989 } hitcount:         20
+{ pid:         61, delta2: ~ 504010-504019 } hitcount:          2
+{ pid:         61, delta2: ~ 504020-504029 } hitcount:          1
+{ pid:         61, delta2: ~ 504030-504039 } hitcount:          2
+{ pid:         58, delta2: ~ 43409960-43409969 } hitcount:          1
+
+Totals:
+    Hits: 718
+    Entries: 54
+    Dropped: 0
+
+The above is useless without the following:
+
+# cat /sys/kernel/tracing/events/synthetic/wait_sched/hist 
+# event histogram
+#
+# trigger info: hist:keys=pid:vals=hitcount:__arg_1618_2=pid,__arg_1618_3=common_timestamp.usecs:sort=hitcount:size=2048:clock=global if delta < 10 [active]
+#
+
+{ pid:        612 } hitcount:          1
+{ pid:        889 } hitcount:          2
+{ pid:       1389 } hitcount:          3
+{ pid:         58 } hitcount:          3
+{ pid:       2096 } hitcount:          5
+{ pid:         61 } hitcount:        145
+{ pid:       1196 } hitcount:        151
+{ pid:       1190 } hitcount:        151
+{ pid:       1198 } hitcount:        153
+{ pid:       1197 } hitcount:        153
+{ pid:       1195 } hitcount:        153
+{ pid:       1194 } hitcount:        153
+{ pid:       1191 } hitcount:        153
+{ pid:       1192 } hitcount:        153
+{ pid:       1189 } hitcount:        153
+{ pid:       1193 } hitcount:        153
+
+Totals:
+    Hits: 1685
+    Entries: 16
+    Dropped: 0
 
 
-     CPU0                     CPU1               CPU2
-                                                 fill gfn0
-                                                 store-rel flags for gfn0
-                                                 fill gfn1
-                                                 store-rel flags for gfn1
-     load-acq flags for gfn0
-     set RESET for gfn0
-     load-acq flags for gfn1
-     set RESET for gfn1
-     do ioctl! ----------->
-                              ioctl(RESET_RINGS)
-                                                 fill gfn2
-                                                 store-rel flags for gfn2
-     load-acq flags for gfn2
-     set RESET for gfn2
-                              process gfn0
-                              process gfn1
-                              process gfn2
-     do ioctl!
-     etc.
+# event histogram
+#
+# trigger info: hist:keys=pid,stacktrace:vals=hitcount:sort=hitcount:size=2048 if delta < 10 [active]
+#
 
-The three load-acquire in CPU0 synchronize with the three store-release 
-in CPU2, but CPU0 and CPU1 are only synchronized up to gfn1 and CPU1 may 
-miss gfn2's fields other than flags.
+{ pid:       1389, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         pipe_read+0x318/0x420
+         new_sync_read+0x18b/0x1a0
+         vfs_read+0xf5/0x190
+         ksys_read+0xab/0xe0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:          3
+{ pid:       1189, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
+{ pid:         61, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         schedule_timeout+0x88/0x160
+         kcompactd+0x364/0x3f0
+         kthread+0x141/0x170
+         ret_from_fork+0x22/0x30
+} hitcount:         28
+{ pid:       1194, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
+{ pid:       1197, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
+{ pid:       1198, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
+{ pid:       1191, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
+{ pid:       1196, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
+{ pid:       1192, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
+{ pid:       1195, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
+{ pid:       1190, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
+{ pid:       1193, stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule+0x72/0x110
+         read_events+0x119/0x190
+         do_io_getevents+0x72/0xe0
+         __x64_sys_io_getevents+0x59/0xc0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+} hitcount:         28
 
-The kernel must be able to cope with invalid values of the fields, and 
-userspace will invoke the ioctl once more.  However, once the RESET flag 
-is cleared on gfn2, it is lost forever, therefore in the above scenario 
-CPU1 must read the correct value of gfn2's fields.
+Totals:
+    Hits: 311
+    Entries: 12
+    Dropped: 0
 
-Therefore RESET must be set with a store-release, that will synchronize 
-with a load-acquire in CPU1 as you suggested.
+Now we just need a tool to map the pids of the delta histogram to the pids
+of the stack traces to figure out where the issues may happen.
 
-Paolo
+The above is just to show that there's a lot of infrastructure already
+there that does a lot of this work, but needs improvement. My theme to this
+email is to modify what's there to make it work for you before just doing
+everything from scratch, and then we have a bunch of stuff that only does
+what we want, but is not flexible to do what others may want.
 
-> diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
-> index f4c2a6eb1666..ea620bfb012d 100644
-> --- a/virt/kvm/dirty_ring.c
-> +++ b/virt/kvm/dirty_ring.c
-> @@ -84,7 +84,7 @@ static inline void kvm_dirty_gfn_set_dirtied(struct kvm_dirty_gfn *gfn)
->  
->  static inline bool kvm_dirty_gfn_harvested(struct kvm_dirty_gfn *gfn)
->  {
-> -       return gfn->flags & KVM_DIRTY_GFN_F_RESET;
-> +       return smp_load_acquire(&gfn->flags) & KVM_DIRTY_GFN_F_RESET;
->  }
->  
->  int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring)
-> ===8<===
 > 
-> Thanks,
 > 
-> -- 
-> Peter Xu
+> > Not the prettiest thing to read. But hey, we got the full stack of where
+> > these latencies happened!  
 > 
+> Most of the time I _don't_ want full stacktraces, though!
 
+We could easily add a feature to limit how much you want to trace. Perhaps even
+a skip level. That is, add skip and depth options to the stacktrace field.
+
+> 
+> That means I have a ton more output to sort through, and the data is far more
+> expensive to collect.
+
+That's what user space tools are for ;-)
+
+> 
+> I don't know why it's what people go to first - see the page_owner stuff - but
+> that doesn't get used much either because the output is _really hard to sort
+> through_.
+> 
+> Most of the time, just a single file and line number is all you want - and
+> tracing has always made it hard to get at that.
+
+Because we would need to store too much dwarf information in the kernel to
+do so. But user space could do this for you with the function/offset
+information.
+
+> 
+> 
+> > Yes, it adds some overhead when the events are triggered due to the
+> > stacktrace code, but it's extremely useful information.
+> >   
+> > > 
+> > > So, it looks like tracing has made some progress over the past 10
+> > > years, but for debugging latency issues it's still not there yet in
+> > > general. I  
+> > 
+> > I call BS on that statement. Just because you do not know what has been
+> > added to the kernel in the last 10 years (like you had no idea about
+> > seq_buf and that was added in 2014) means to me that you are totally
+> > clueless on what tracing can and can not do.
+> > 
+> > It appears to me that you are too focused on inventing your own wheel
+> > that does exactly what you want before looking to see how things are
+> > today. Just because something didn't fit your needs 10 years ago
+> > doesn't mean that it can't fit your needs today.  
+> 
+> ...And the ad hominem attacks start.
+
+Look, you keep making comments about the tracing infrastructure that you
+clearly do not understand. And that is pretty insulting. Sorry, I'm not
+sure you realize this, but those comments do turn people off and their
+responses will start to become stronger.
+
+> 
+> Steve, I'm not attacking you, and there's room enough in this world for
+> the both of us to be doing our thing creating new and useful tools.
+
+You seem to push back hard when people suggest improving other utilities
+to suite your needs.
+
+> 
+> > I'm already getting complaints from customers/users that are saying
+> > there's too many tools in the toolbox already. (Do we use
+> > ftrace/perf/bpf?). The idea is to have the tools using mostly the same
+> > infrastructure, and not be 100% off on its own, unless there's a clear
+> > reason to invent a new wheel that several people are asking for, not
+> > just one or two.  
+> 
+> I would like to see more focus on usability.
+
+Then lets make the current tools more usable. For example, the synthetic
+event kernel interface is horrible. It's an awesome feature that wasn't
+getting used due to the interface. This is why I created "sqlhist". It's
+now really easy to create synthetic events with that tool. I agree, focus
+on usability, but that doesn't always mean to create yet another tool. This
+reminds me of:
+
+   https://xkcd.com/927/
+
+
+> 
+> That means, in a best case scenario, always-on data collection that I can
+> just look at, and it'll already be in the format most likely to be useful.
+> 
+> Surely you can appreciate the usefulness of that..?
+
+I find "runtime turn on and off" better than "always on". We have
+static_branches today (aka jump labels). I would strongly suggest using
+them. You get them automatically from tracepoints . Even sched_stats are
+using these.
+
+> 
+> Tracing started out as a tool for efficiently getting lots of data out of
+> the kernel, and it's great for that. But I think your focus on the cool
+> thing you built may be blinding you a bit to alternative approaches...
+
+I actually work hard to have the tracing infrastructure help out other
+approaches. perf and bpf use the ftrace infrastructure because it is
+designed to be modular. Nothing is "must be the ftrace way". I'm not against
+the new features you are adding, I just want you to make a little more
+effort in incorporating other infrastructures (and perhaps even improving
+that infrastructure) to suite your needs.
+
+If ftrace, perf, bpf can't do what you want, take a harder look to see if
+you can modify them to do so.
+
+-- Steve

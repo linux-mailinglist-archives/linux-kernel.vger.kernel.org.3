@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D76C5AADA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E325AADBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235069AbiIBLbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 07:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S235730AbiIBLc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 07:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236146AbiIBLbX (ORCPT
+        with ESMTP id S236124AbiIBLbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 07:31:23 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337C28E0EA
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 04:28:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3P4G0s8jHHnMDuhy8+v0Q+ixmj390VbhdMQwj5y5Wjc=; b=bZtQWi7EyAVPLA42Rzf8cb5JdM
-        G/3PyoSsE4+TzQ45xyyuvyIG/+TEOpTWEC9Otb+gWl6o0joUn+Fb2soBCKyda0m/awdEZrUKc7uak
-        z51s4DGVhtB++KNaE9LcvK41LZ+PM5S/HiBly41wGr52SLb4ElQBdb5IssVAsOaMMzlyCEgKM7B4P
-        wiVGMqooxE9e6urqnga+WXRKxxZVYoGuxulJw2ZV1V29cJpJe+yW0s0LvhhpPHIehl5vgWFClYJI4
-        xk9vQt5rQTEuzB79xm1Vd+fefkG8uvdSATf2/klQmygxH9N0KRAJEPTZEgVWsKx0Q385qyG2Lyz62
-        t3IxvyDQ==;
-Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=64065)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oU4qX-0004pl-Pv; Fri, 02 Sep 2022 13:28:25 +0200
-Message-ID: <020d44e6-884b-a817-8265-3461638cac71@tronnes.org>
-Date:   Fri, 2 Sep 2022 13:28:16 +0200
+        Fri, 2 Sep 2022 07:31:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314A22A277;
+        Fri,  2 Sep 2022 04:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 613D26209A;
+        Fri,  2 Sep 2022 11:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C66C9C433D6;
+        Fri,  2 Sep 2022 11:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662118217;
+        bh=p56tPFujkhk9sqPkTP10zznYngxLR5f7HLsH03HaYzY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=LiPG8H05Iu8lIKQL9SS/RdWdlipBUgpBuDQ0GPxiV+0kOXTdf7/eiEzGU/xdZMEd3
+         LVGc+g4kTK/4TcrT27/21BsHaWfJU17NywrM1jEh2B4fiMv8gpGUn3nlZBV+OM6S3D
+         TyhjaZt0X0FqRAj+V9pRXL26hoWbsyPtadH3JJwSVhzLXT4+nG36jdCtrdriDfB17A
+         uhwMHjbNKEWUBfRffoF4aeS+eW4zJc6CoMSv2u+SuYnkcycKbRhPFZuVCSpVgRTPbh
+         vI/LB8Yug8LlaIJGHjBtCLLDNmO9qjxtlBfBv6gJA+4uWPT7tjAMz1mOiXZM5x2nnu
+         3xb97sLYxfTqg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B0FA0E924D5;
+        Fri,  2 Sep 2022 11:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 00/41] drm: Analog TV Improvements
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Dom Cobley <dom@raspberrypi.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <24e09a29-6d04-3b1e-63ce-cd3c31d350e2@tronnes.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <24e09a29-6d04-3b1e-63ce-cd3c31d350e2@tronnes.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Subject: Re: [PATCH net-next 0/2] net: lan966x: make reset optional
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166211821772.29115.1067348886284578708.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Sep 2022 11:30:17 +0000
+References: <20220831111855.1749646-1-michael@walle.cc>
+In-Reply-To: <20220831111855.1749646-1-michael@walle.cc>
+To:     Michael Walle <michael@walle.cc>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, horatiu.vultur@microchip.com,
+        UNGLinuxDriver@microchip.com, p.zabel@pengutronix.de,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,49 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 31 Aug 2022 13:18:53 +0200 you wrote:
+> This is the remaining part of the reset rework on the LAN966x targetting
+> the netdev tree.
+> 
+> The former series can be found at:
+> https://lore.kernel.org/lkml/20220826115607.1148489-1-michael@walle.cc/
+> 
+> Michael Walle (2):
+>   dt-bindings: net: sparx5: don't require a reset line
+>   net: lan966x: make reset optional
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/2] dt-bindings: net: sparx5: don't require a reset line
+    https://git.kernel.org/netdev/net-next/c/baa6a9b59070
+  - [net-next,2/2] net: lan966x: make reset optional
+    https://git.kernel.org/netdev/net-next/c/f4c1f51cea4e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Den 01.09.2022 21.35, skrev Noralf Trønnes:
-> 
-> 
-> I have finally found a workaround for my kernel hangs.
-> 
-> Dom had a look at my kernel and found that the VideoCore was fine, and
-> he said this:
-> 
->> That suggests cause of lockup was on arm side rather than VC side.
->>
->> But it's hard to diagnose further. Once you've had a peripheral not
->> respond, the AXI bus locks up and no further operations are possible.
->> Usual causes of this are required clocks being stopped or domains
->> disabled and then trying to access the hardware.
->>
-> 
-> So when I got this on my 64-bit build:
-> 
-> [  166.702171] SError Interrupt on CPU1, code 0x00000000bf000002 -- SError
-> [  166.702187] CPU: 1 PID: 8 Comm: kworker/u8:0 Tainted: G        W
->     5.19.0-rc6-00096-gba7973977976-dirty #1
-> [  166.702200] Hardware name: Raspberry Pi 4 Model B Rev 1.1 (DT)
-> [  166.702206] Workqueue: events_freezable_power_ thermal_zone_device_check
-> [  166.702231] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS
-> BTYPE=--)
-> [  166.702242] pc : regmap_mmio_read32le+0x10/0x28
-> [  166.702261] lr : regmap_mmio_read+0x44/0x70
-> ...
-> [  166.702606]  bcm2711_get_temp+0x58/0xb0 [bcm2711_thermal]
-> 
-> I wondered if that reg read was stalled due to a clock being stopped.
-> 
-> Lo and behold, disabling runtime pm and keeping the vec clock running
-> all the time fixed it[1].
-> 
-> I don't know what the problem is, but at least I can now test this patchset.
-> 
-> [1] https://gist.github.com/notro/23b984e7fa05cfbda2db50a421cac065
-> 
-
-It turns out I didn't have to disable runtime pm:
-https://gist.github.com/notro/0adcfcb12460b54e54458afe11dc8ea2
-
-Noralf.

@@ -2,56 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678145AAED6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4715AB011
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236690AbiIBMaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S237544AbiIBMsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236770AbiIBM3K (ORCPT
+        with ESMTP id S237518AbiIBMsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:29:10 -0400
+        Fri, 2 Sep 2022 08:48:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8F1D3EC2;
-        Fri,  2 Sep 2022 05:25:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91B0F2430;
+        Fri,  2 Sep 2022 05:34:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDB01620C5;
-        Fri,  2 Sep 2022 12:23:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DD63C433C1;
-        Fri,  2 Sep 2022 12:23:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A24C9621AF;
+        Fri,  2 Sep 2022 12:32:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5320C433D6;
+        Fri,  2 Sep 2022 12:32:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121424;
-        bh=9rW3nqwkG9/teVnWYZkXKjkGH66eiuawPuG42zOstS8=;
+        s=korg; t=1662121950;
+        bh=qoyw/ywdNO6sZyo1tUQ3AoaTQwR0eePql9n0oiR6GcI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mWeBlMxdYyE+MlsJQElaBRcsiMNc5dcDHjzaQl85JgjVWHZav+VBo+osjPzRhAnVE
-         LiMYtmxCEMWulTRVoBJtfwwnVnASQBll9DKTzafjLwIhD6t4KaUt315f/GZ7BazeY8
-         46p1JrqhdokOT/zS4mvQx7LFubM4jt+AfV/HVFA4=
+        b=tjSCePsB+G6UUZ6fv8prV0bPPcJpCqB2jZNwSmcn7/HNEWhYHxXUUNTK898jDrfD9
+         BHnTJGBYx6tnQlKNw3npqk6TUKmTAG1vSbTAs5KjeqhW/4TEMkChxPFw9s1s5Pe2nR
+         rFjFRQ0GUmsqNduEax5d0H7HKfIS6Odwihzq2FW0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Christian Brauner <brauner@kernel.org>, netdev@vger.kernel.org,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        Konstantin Khorenko <khorenko@virtuozzo.com>,
-        kernel@openvz.org, devel@openvz.org,
-        "Denis V. Lunev" <den@openvz.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 38/42] neigh: fix possible DoS due to net iface start/stop loop
-Date:   Fri,  2 Sep 2022 14:19:02 +0200
-Message-Id: <20220902121400.085054125@linuxfoundation.org>
+        stable@vger.kernel.org, Josh Kilmer <srjek2@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.15 39/73] HID: asus: ROG NKey: Ignore portion of 0x5a report
+Date:   Fri,  2 Sep 2022 14:19:03 +0200
+Message-Id: <20220902121405.718984071@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -66,129 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Denis V. Lunev <den@openvz.org>
+From: Josh Kilmer <srjek2@gmail.com>
 
-[ Upstream commit 66ba215cb51323e4e55e38fd5f250e0fae0cbc94 ]
+commit 1c0cc9d11c665020cbeb80e660fb8929164407f4 upstream.
 
-Normal processing of ARP request (usually this is Ethernet broadcast
-packet) coming to the host is looking like the following:
-* the packet comes to arp_process() call and is passed through routing
-  procedure
-* the request is put into the queue using pneigh_enqueue() if
-  corresponding ARP record is not local (common case for container
-  records on the host)
-* the request is processed by timer (within 80 jiffies by default) and
-  ARP reply is sent from the same arp_process() using
-  NEIGH_CB(skb)->flags & LOCALLY_ENQUEUED condition (flag is set inside
-  pneigh_enqueue())
+On an Asus G513QY, of the 5 bytes in a 0x5a report, only the first byte
+is a meaningful keycode. The other bytes are zeroed out or hold garbage
+from the last packet sent to the keyboard.
 
-And here the problem comes. Linux kernel calls pneigh_queue_purge()
-which destroys the whole queue of ARP requests on ANY network interface
-start/stop event through __neigh_ifdown().
+This patch fixes up the report descriptor for this event so that the
+general hid code will only process 1 byte for keycodes, avoiding
+spurious key events and unmapped Asus vendor usagepage code warnings.
 
-This is actually not a problem within the original world as network
-interface start/stop was accessible to the host 'root' only, which
-could do more destructive things. But the world is changed and there
-are Linux containers available. Here container 'root' has an access
-to this API and could be considered as untrusted user in the hosting
-(container's) world.
-
-Thus there is an attack vector to other containers on node when
-container's root will endlessly start/stop interfaces. We have observed
-similar situation on a real production node when docker container was
-doing such activity and thus other containers on the node become not
-accessible.
-
-The patch proposed doing very simple thing. It drops only packets from
-the same namespace in the pneigh_queue_purge() where network interface
-state change is detected. This is enough to prevent the problem for the
-whole node preserving original semantics of the code.
-
-v2:
-	- do del_timer_sync() if queue is empty after pneigh_queue_purge()
-v3:
-	- rebase to net tree
-
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Yajun Deng <yajun.deng@linux.dev>
-Cc: Roopa Prabhu <roopa@nvidia.com>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
-Cc: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
-Cc: Konstantin Khorenko <khorenko@virtuozzo.com>
-Cc: kernel@openvz.org
-Cc: devel@openvz.org
-Investigated-by: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
-Signed-off-by: Denis V. Lunev <den@openvz.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Josh Kilmer <srjek2@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/neighbour.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+ drivers/hid/hid-asus.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index 358e84af0210b..8af9761768e00 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -222,14 +222,23 @@ static int neigh_del_timer(struct neighbour *n)
- 	return 0;
- }
- 
--static void pneigh_queue_purge(struct sk_buff_head *list)
-+static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
- {
-+	unsigned long flags;
- 	struct sk_buff *skb;
- 
--	while ((skb = skb_dequeue(list)) != NULL) {
--		dev_put(skb->dev);
--		kfree_skb(skb);
-+	spin_lock_irqsave(&list->lock, flags);
-+	skb = skb_peek(list);
-+	while (skb != NULL) {
-+		struct sk_buff *skb_next = skb_peek_next(skb, list);
-+		if (net == NULL || net_eq(dev_net(skb->dev), net)) {
-+			__skb_unlink(skb, list);
-+			dev_put(skb->dev);
-+			kfree_skb(skb);
-+		}
-+		skb = skb_next;
+--- a/drivers/hid/hid-asus.c
++++ b/drivers/hid/hid-asus.c
+@@ -1212,6 +1212,13 @@ static __u8 *asus_report_fixup(struct hi
+ 		rdesc = new_rdesc;
  	}
-+	spin_unlock_irqrestore(&list->lock, flags);
+ 
++	if (drvdata->quirks & QUIRK_ROG_NKEY_KEYBOARD &&
++			*rsize == 331 && rdesc[190] == 0x85 && rdesc[191] == 0x5a &&
++			rdesc[204] == 0x95 && rdesc[205] == 0x05) {
++		hid_info(hdev, "Fixing up Asus N-KEY keyb report descriptor\n");
++		rdesc[205] = 0x01;
++	}
++
+ 	return rdesc;
  }
  
- static void neigh_flush_dev(struct neigh_table *tbl, struct net_device *dev)
-@@ -295,9 +304,9 @@ int neigh_ifdown(struct neigh_table *tbl, struct net_device *dev)
- 	write_lock_bh(&tbl->lock);
- 	neigh_flush_dev(tbl, dev);
- 	pneigh_ifdown_and_unlock(tbl, dev);
--
--	del_timer_sync(&tbl->proxy_timer);
--	pneigh_queue_purge(&tbl->proxy_queue);
-+	pneigh_queue_purge(&tbl->proxy_queue, dev_net(dev));
-+	if (skb_queue_empty_lockless(&tbl->proxy_queue))
-+		del_timer_sync(&tbl->proxy_timer);
- 	return 0;
- }
- EXPORT_SYMBOL(neigh_ifdown);
-@@ -1609,7 +1618,7 @@ int neigh_table_clear(int index, struct neigh_table *tbl)
- 	/* It is not clean... Fix it to unload IPv6 module safely */
- 	cancel_delayed_work_sync(&tbl->gc_work);
- 	del_timer_sync(&tbl->proxy_timer);
--	pneigh_queue_purge(&tbl->proxy_queue);
-+	pneigh_queue_purge(&tbl->proxy_queue, NULL);
- 	neigh_ifdown(tbl, NULL);
- 	if (atomic_read(&tbl->entries))
- 		pr_crit("neighbour leakage\n");
--- 
-2.35.1
-
 
 

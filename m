@@ -2,103 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399F05AB4FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC535AB501
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbiIBPXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S236175AbiIBPX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236535AbiIBPWx (ORCPT
+        with ESMTP id S235495AbiIBPXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:22:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F4E38BA
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:56:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1394661E34
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB38C433D7;
-        Fri,  2 Sep 2022 14:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662130568;
-        bh=8HxsyLelsYqwOCxhTJ5jpbUjl0UPkAy78gN1FK3B4KQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SIfrCsnC9TPzpq/x+bzxefF3RTtWsi1KGr682ovbh1PBJBn9g8++/aZpERT2Hewmq
-         poSK1QtcWyTv+MHbfWWtQZnuTeqVdBDlR4m7Bm6CxoPZ0ZLTstOh/bnB1mYSAUrYFI
-         UGcx0TJUS/P9oScrPgZQT/BrI8uvssK25MpOCLp0=
-Date:   Fri, 2 Sep 2022 16:56:05 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Kuyo Chang <kuyo.chang@mediatek.com>, major.chen@samsung.com,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        wsd_upstream@mediatek.com, hongfei.tang@samsung.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/1] sched/debug: fix dentry leak in
- update_sched_domain_debugfs
-Message-ID: <YxIZhWB2tCXzlzWj@kroah.com>
-References: <20220902031518.1116-1-kuyo.chang@mediatek.com>
- <YxGUBzp9C7kcNgps@kroah.com>
- <5ce45c874d6a05ca69abed3961d413c4a4360e79.camel@mediatek.com>
- <YxGpp/+lWSzwpVLZ@kroah.com>
- <f14e71182ebf1520aeede06afb44af49ec6128a0.camel@mediatek.com>
- <YxHI2sRgF2gqYcHk@kroah.com>
- <YxIX96nUnwz56fte@ZenIV>
+        Fri, 2 Sep 2022 11:23:39 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE86C27FF5;
+        Fri,  2 Sep 2022 07:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662130606; x=1693666606;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=SqK+KES9Kef0oX5qHsG81CZHcrCq/64MccAPPJRXZy8=;
+  b=VaY3NGSn+OVbm/gFjQk5fZtdYh2N/IiVzF5+HffmEVfiAU+gWeOzWT/5
+   5QgrRdsYXU+s38zOlxOuqhrNSbrRwpYSlexM1pX6osswK2rFtWjeLIzyf
+   qyD1D2pad/ka/DIzjB4bCwAt/Tk1q4VEm/FBRFuOrTflFoHAUKQCqzGDW
+   Ap9FIpbFDABrS1JQ5Mpciurbtjug2yGXzeltkepBRy/X053N0YxXQb/5e
+   lwA3IV16LqEonKtJPLBQpm1ff9XuRX61Fr2xjYgt2lSQeSvgGJYb2k0Z5
+   75/NbHFRMyt62yNcUybvmpXKMS7tBj9Z/qXnASiS5UKw6KejUSKFCh2fp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="296002859"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="296002859"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:56:45 -0700
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="674379798"
+Received: from vbykovni-mobl.ger.corp.intel.com ([10.252.53.17])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:56:41 -0700
+Date:   Fri, 2 Sep 2022 17:56:40 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?ISO-8859-15?Q?Pali_Roh=E1r?= <pali@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 3/3] tty: serial: use
+ DEFINE_UART_PORT_TX_HELPER_LIMITED()
+In-Reply-To: <20220901110657.3305-4-jslaby@suse.cz>
+Message-ID: <f45fab19-5034-cd9c-4133-ed74e5888193@linux.intel.com>
+References: <20220901110657.3305-1-jslaby@suse.cz> <20220901110657.3305-4-jslaby@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxIX96nUnwz56fte@ZenIV>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1404598877-1662130606=:1647"
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 03:49:27PM +0100, Al Viro wrote:
-> On Fri, Sep 02, 2022 at 11:11:54AM +0200, Greg Kroah-Hartman wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1404598877-1662130606=:1647
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Thu, 1 Sep 2022, Jiri Slaby wrote:
+
+> DEFINE_UART_PORT_TX_HELPER_LIMITED() is a new helper to send characters
+> to the device. Use it in these drivers.
 > 
-> > +/**
-> > + * debugfs_lookup_and_remove - lookup a directory or file and recursively remove it
-> > + * @name: a pointer to a string containing the name of the item to look up.
-> > + * @parent: a pointer to the parent dentry of the item.
-> > + *
-> > + * This is the equlivant of doing something like
-> > + * debugfs_remove(debugfs_lookup(..)) but with the proper reference counting
-> > + * handled for the directory being looked up.
-> > + */
-> > +void debugfs_lookup_and_remove(const char *name, struct dentry *parent)
-> > +{
-> > +	struct dentry *dentry;
-> > +
-> > +	dentry = debugfs_lookup(name, parent);
-> > +	if (IS_ERR_OR_NULL(dentry))
-> > +		return;
-> 
-> 	Could somebody explain how could that return ERR_PTR()?
+> mux.c also needs to define tx_done(). But I'm not sure if the driver
+> really wants to wait for all the characters to dismiss from the HW fifo
+> at this code point. Hence I marked this as FIXME.
 
-If debugfs is not enabled then debugfs_lookup() will return an
-ERR_PTR().  But, doh, this _IS_ debugfs so you are right, that will
-never happen.
+Indeed, it seems odd.
 
-> Incidentally, IS_ERR_OR_NULL is almost always a sign of bad interface - or
-> that of lazy cargo-culting.  Please, don't propagate that garbage... ;-/
+This change looked good to me but I'll give my rev-by only after seeing 
+the next version.
 
-Fair enough, I'll fix that up, many thanks for noticing it.
+-- 
+ i.
 
-greg k-h
+
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: bcm-kernel-feedback-list@broadcom.com
+> Cc: "Pali Rohár" <pali@kernel.org>
+> Cc: Kevin Cernekee <cernekee@gmail.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Orson Zhai <orsonzhai@gmail.com>
+> Cc: Baolin Wang <baolin.wang7@gmail.com>
+> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+> Cc: linux-riscv@lists.infradead.org
+
+--8323329-1404598877-1662130606=:1647--

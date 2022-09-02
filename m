@@ -2,171 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FB25AB455
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FA35AB481
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236166AbiIBOyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S235492AbiIBO51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236835AbiIBOxt (ORCPT
+        with ESMTP id S236615AbiIBO4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:53:49 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C985FB2CF5;
-        Fri,  2 Sep 2022 07:17:56 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id k18so2370227lji.13;
-        Fri, 02 Sep 2022 07:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/+qv/qtVZLxZWjZaDQDBBWUqwZqD8Ult8cYyZQOZh8o=;
-        b=Q5H04ZVMrIAhefDQpGO8RR97Okeo5Vw0US0RPNRsryFh6DUuQ3ZNk9G0A4SDnmeo21
-         lOWXybJM0Cl/m1cuwid8E7HJbepJJSWGD8+l6QuDHNu82/OOMuFvNGoai/OsR0kxVph6
-         Q9aiLPfmxjSuHgZbIo+53k9U0a3CeA+x+3pQksMbDgA+ooxLw3o5GQXsmXfhHnHm9Pw5
-         8Ve+NZANM/bZodRLGl2MmK0kvwF9AIEc6ZwSOcXFnagzXQVZramA/8vNPhgP9okcX77C
-         v+lHRmXuL2QNXrI5y785Fz/T9Kaxu9TajHSNnMIqy9bfkqySEg62KWdiq+ZZT1f1wOOF
-         bceQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/+qv/qtVZLxZWjZaDQDBBWUqwZqD8Ult8cYyZQOZh8o=;
-        b=A5mAUfF2J+Vm+23qL9Bb6EORCiol8+m/u2mJl6iEI/Tt4JcFzB4U+ydXg3KXTQnMXT
-         07sgWcqSl6S+UtP030rhibNx53g2WI2NKdYRc/2W5Kt1chnBfJWRRKt+O+Vu1yEY6yK/
-         qbFuxfw90FEXrHb9i3D+4t9gYPkDltmssSX9c7jtMNVJphwSfBeop4KIeq2aDeUVhbzk
-         wXHwHnejOzMMfA+Qzyk31Cq22bPzPoMcbxJoj29fMcEX+9BR3AThJ0kzp+mZJ254gkGm
-         WoEbNpLgVtI3MVng6pnTWGimLqTDGhJAPN51GOsqbmq2F1H+jqWCp8TPNADQ9dXCYE1n
-         fOFA==
-X-Gm-Message-State: ACgBeo3AL7VfHc0v117fIn9+MBKbcW8yU7FO+7qjpmScvHbRSiv9rVK5
-        G4/LL70eG6GczrOH7LmOthBjW7+G+22V+qWD
-X-Google-Smtp-Source: AA6agR7baXn4SVJuzrf/vnZ6uXiphZvMo0i8uBoNHsA3EEIy6l2gKS5svbt6UQDxfL+jEx+73xbt2w==
-X-Received: by 2002:a05:651c:1048:b0:268:f7bd:8043 with SMTP id x8-20020a05651c104800b00268f7bd8043mr599403ljm.52.1662128274974;
-        Fri, 02 Sep 2022 07:17:54 -0700 (PDT)
-Received: from [10.0.0.127] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id f17-20020a05651232d100b00492f1b2ac0bsm261258lfg.101.2022.09.02.07.17.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 07:17:54 -0700 (PDT)
-Message-ID: <7dae9f3f-88eb-d996-3cb3-89402ea9e31f@gmail.com>
-Date:   Fri, 2 Sep 2022 17:20:30 +0300
+        Fri, 2 Sep 2022 10:56:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645E5C04E0;
+        Fri,  2 Sep 2022 07:21:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662128480; x=1693664480;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=6f+huALnahss6lYz0y0UEQS8/UevmtS+kT7aaSrmY2Q=;
+  b=hE/J+V0ofI5Raoy4pZTztHoHVFL9zpd/GF0mQDGgYlyEndnOoFGON1KG
+   EpF91m1YRMowzsyQO8O+PO4qBQKvbAbk88xTIzRC5S+hhTeemUvgB4a5r
+   Q6LI8TGaXR8Vkd0AlHKB9D9RfFVMD4NjowbLAo6nzLDW8ZvGDoxaZHOgP
+   QeKj0A9ElK4bq/sXxdM7+kiMqKrK8DLscLtkMUprsdtfewCAiLzV95Rdb
+   ub4lZHllbs951O+rITT6DBasK1UObq9fsqGGqUr3goS11vITRCbzaqwl+
+   AVA4WHlPLcx+ugtTxjMTjrKTSH6pZ0MHMhayHaXP34tY5vrFObNmomwIL
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="276391223"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="276391223"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:21:20 -0700
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="674369533"
+Received: from vbykovni-mobl.ger.corp.intel.com ([10.252.53.17])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:21:15 -0700
+Date:   Fri, 2 Sep 2022 17:21:14 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?ISO-8859-15?Q?Andreas_F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Subject: Re: [PATCH v2 2/3] tty: serial: use DEFINE_UART_PORT_TX_HELPER()
+In-Reply-To: <20220901110657.3305-3-jslaby@suse.cz>
+Message-ID: <89b44cd-6550-32b2-9bd-ae8dde6b48cd@linux.intel.com>
+References: <20220901110657.3305-1-jslaby@suse.cz> <20220901110657.3305-3-jslaby@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 1/2] dmaengine: ti: k3-udma: Respond TX done if
- DMA_PREP_INTERRUPT is not requested
-To:     Vaishnav Achath <vaishnav.a@ti.com>, vkoul@kernel.org,
-        broonie@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     vigneshr@ti.com, kishon@ti.com
-References: <20220822091531.27827-1-vaishnav.a@ti.com>
- <20220822091531.27827-2-vaishnav.a@ti.com>
- <1d4eb194-aab7-42c7-f33f-4b89e607dc6c@gmail.com>
- <37d51cde-de15-0cee-cd4b-ecaf5511fd2b@ti.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <37d51cde-de15-0cee-cd4b-ecaf5511fd2b@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1885109871-1662128480=:1647"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Achath,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 23/08/2022 09:57, Vaishnav Achath wrote:
-> Hi Peter,
-> 
-> On 22/08/22 18:42, Péter Ujfalusi wrote:
->>
->>
->> On 22/08/2022 12:15, Vaishnav Achath wrote:
->>> When the DMA consumer driver does not expect the callback for TX done,
->>> There is no need to perform the channel RT byte counter calculations
->>> and estimate the completion but return complete on first attempt itself.
->>> This assumes that the consumer who did not request DMA_PREP_INTERRUPT
->>> has its own mechanism for understanding TX completion, example: MCSPI
->>> EOW interrupt can be used as TX completion signal for a SPI transaction.
->>
->> The check is in place to make sure that we don't leave stale data in the
->> DMA fabric.
->> If you drop the check then it is going to be possible that some TX data
->> is going to be lost.
->> Could be one out of 10K transfers or 100K, but if that happens it is not
->> going to be easy to figure out.
->> Let's say we go the packet back, but PDMA is still have data to send and
->> the IP stops transmitting (externally clocked bus, some delay, etc).
->> Is it going to be OK to disable the channel?
->>
-> Thanks for the feedback, yes the check is necessary for most of the cases
-> but there needs to be  a way to disable the check for consumers which can
-> identify the end of transaction using some other internal mechanism/interrupt.
-> 
-> For example the MCSPI controller has an End of Word(EOW) interrupt when the
-> said number of bytes has been clocked out, in this case the EOW interrupt
-> being raised guarantees that there is no stale data in DMA fabric.Using
-> the EOW interrupt to identify the completion of a transaction significantly
-> improves the transaction speed since we need not now wait for the slower DMA
-> TX completion calculation.
-> 
-> This commit tries to bypass the check only if the consumer did not request
-> it by not passing the DMA_PREP_INTERRUPT flag, in other cases the check
-> should not be bypassed.
+--8323329-1885109871-1662128480=:1647
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Let me think about over the weekend... Do you have performance numbers 
-for this change?
+On Thu, 1 Sep 2022, Jiri Slaby wrote:
 
-If we make sure that this is only affecting non cyclic transfers with a 
-in code comment to explain the expectations from the user I think this 
-can be safe.
-
+> DEFINE_UART_PORT_TX_HELPER() is a new helper to send characters to the
+> device. Use it in these drivers.
 > 
->>>
->>> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
->>> ---
->>>   drivers/dma/ti/k3-udma.c | 5 ++++-
->>>   1 file changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
->>> index 39b330ada200..03d579068453 100644
->>> --- a/drivers/dma/ti/k3-udma.c
->>> +++ b/drivers/dma/ti/k3-udma.c
->>> @@ -263,6 +263,7 @@ struct udma_chan_config {
->>>   	enum udma_tp_level channel_tpl; /* Channel Throughput Level */
->>>   
->>>   	u32 tr_trigger_type;
->>> +	unsigned long tx_flags;
->>>   
->>>   	/* PKDMA mapped channel */
->>>   	int mapped_channel_id;
->>> @@ -1057,7 +1058,7 @@ static bool udma_is_desc_really_done(struct udma_chan *uc, struct udma_desc *d)
->>>   
->>>   	/* Only TX towards PDMA is affected */
->>>   	if (uc->config.ep_type == PSIL_EP_NATIVE ||
->>> -	    uc->config.dir != DMA_MEM_TO_DEV)
->>> +	    uc->config.dir != DMA_MEM_TO_DEV || !(uc->config.tx_flags & DMA_PREP_INTERRUPT))
->>>   		return true;
->>>   
->>>   	peer_bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
->>> @@ -3418,6 +3419,8 @@ udma_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
->>>   	if (!burst)
->>>   		burst = 1;
->>>   
->>> +	uc->config.tx_flags = tx_flags;
->>> +
->>>   	if (uc->config.pkt_mode)
->>>   		d = udma_prep_slave_sg_pkt(uc, sgl, sglen, dir, tx_flags,
->>>   					   context);
->>
+> Cc: Tobias Klauser <tklauser@distanz.ch>
+> Cc: Richard Genoud <richard.genoud@gmail.com>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Cc: Vladimir Zapolskiy <vz@mleia.com>
+> Cc: Liviu Dudau <liviu.dudau@arm.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Cc: "Andreas Färber" <afaerber@suse.de>
+> Cc: Manivannan Sadhasivam <mani@kernel.org>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> ---
+
+> diff --git a/drivers/tty/serial/mpc52xx_uart.c b/drivers/tty/serial/mpc52xx_uart.c
+> index 3f1986c89694..944686a0d00d 100644
+> --- a/drivers/tty/serial/mpc52xx_uart.c
+> +++ b/drivers/tty/serial/mpc52xx_uart.c
+> @@ -1338,7 +1338,6 @@ mpc52xx_uart_verify_port(struct uart_port *port, struct serial_struct *ser)
+>  	return 0;
+>  }
+>  
+> -
+>  static const struct uart_ops mpc52xx_uart_ops = {
+>  	.tx_empty	= mpc52xx_uart_tx_empty,
+>  	.set_mctrl	= mpc52xx_uart_set_mctrl,
+
+Stray change.
+
+> diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+> index e64e42a19d1a..738f4b20cb8e 100644
+> --- a/drivers/tty/serial/sa1100.c
+> +++ b/drivers/tty/serial/sa1100.c
+> @@ -226,45 +226,34 @@ sa1100_rx_chars(struct sa1100_port *sport)
+>  	tty_flip_buffer_push(&sport->port.state->port);
+>  }
+>  
+> -static void sa1100_tx_chars(struct sa1100_port *sport)
+> +static bool sa1100_tx_ready(struct uart_port *port)
+>  {
+> -	struct circ_buf *xmit = &sport->port.state->xmit;
+> +	struct sa1100_port *sport =
+> +		container_of(port, struct sa1100_port, port);
+>  
+> -	if (sport->port.x_char) {
+> -		UART_PUT_CHAR(sport, sport->port.x_char);
+> -		sport->port.icount.tx++;
+> -		sport->port.x_char = 0;
+> -		return;
+> -	}
+> +	return UART_GET_UTSR1(sport) & UTSR1_TNF;
+> +}
+> +
+> +static void sa1100_put_char(struct uart_port *port, unsigned char ch)
+> +{
+> +	struct sa1100_port *sport =
+> +		container_of(port, struct sa1100_port, port);
+> +
+> +	UART_PUT_CHAR(sport, ch);
+> +}
+
+Perhaps not to add into this change itself, but I just point out these 
+would be useful in addition to what is changed:
+	- Get rid of UART_PUT_CHAR()
+	- sa1100_console_putchar() could use sa1100_tx_ready()
+
+> diff --git a/drivers/tty/serial/vt8500_serial.c b/drivers/tty/serial/vt8500_serial.c
+> index 6f08136ce78a..ff430a1cc3a2 100644
+> --- a/drivers/tty/serial/vt8500_serial.c
+> +++ b/drivers/tty/serial/vt8500_serial.c
+> @@ -187,37 +187,17 @@ static void handle_rx(struct uart_port *port)
+>  	tty_flip_buffer_push(tport);
+>  }
+>  
+> -static void handle_tx(struct uart_port *port)
+> +static unsigned int vt8500_tx_empty(struct uart_port *port)
+>  {
+> -	struct circ_buf *xmit = &port->state->xmit;
+> -
+> -	if (port->x_char) {
+> -		writeb(port->x_char, port->membase + VT8500_TXFIFO);
+> -		port->icount.tx++;
+> -		port->x_char = 0;
+> -	}
+> -	if (uart_circ_empty(xmit) || uart_tx_stopped(port)) {
+> -		vt8500_stop_tx(port);
+> -		return;
+> -	}
+> +	unsigned int idx = vt8500_read(port, VT8500_URFIDX) & 0x1f;
+>  
+> -	while ((vt8500_read(port, VT8500_URFIDX) & 0x1f) < 16) {
+> -		if (uart_circ_empty(xmit))
+> -			break;
+> -
+> -		writeb(xmit->buf[xmit->tail], port->membase + VT8500_TXFIFO);
+> -
+> -		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+> -		port->icount.tx++;
+> -	}
+> -
+> -	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+> -		uart_write_wakeup(port);
+> -
+> -	if (uart_circ_empty(xmit))
+> -		vt8500_stop_tx(port);
+> +	return idx < 16 ? TIOCSER_TEMT : 0;
+>  }
+
+So there's just plain move and re-layouting of existing vt8500_tx_empty() 
+embedded here. Why not do it in a separate change beforehand?
+
+I discovered this the hard way, that is, I started to look why tx on 
+earth "FIFO index" < 16 should be called "tx empty", if it would be a 
+separate change it would have been immediately obvious that it was a 
+pre-existing thing.
+
+> +static DEFINE_UART_PORT_TX_HELPER(handle_tx, port, ch,
+> +		vt8500_tx_empty(port),
+> +		writeb(ch, port->membase + VT8500_TXFIFO));
+> +
+>  static void vt8500_start_tx(struct uart_port *port)
+>  {
+>  	struct vt8500_port *vt8500_port = container_of(port,
+> @@ -260,12 +240,6 @@ static irqreturn_t vt8500_irq(int irq, void *dev_id)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -static unsigned int vt8500_tx_empty(struct uart_port *port)
+> -{
+> -	return (vt8500_read(port, VT8500_URFIDX) & 0x1f) < 16 ?
+> -						TIOCSER_TEMT : 0;
+> -}
+> -
+>  static unsigned int vt8500_get_mctrl(struct uart_port *port)
+>  {
+>  	unsigned int usr;
 > 
 
 -- 
-Péter
+ i.
+
+--8323329-1885109871-1662128480=:1647--

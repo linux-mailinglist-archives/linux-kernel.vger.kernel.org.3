@@ -2,63 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DD55AACD6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F885AACDB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbiIBKyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S235962AbiIBKyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiIBKyB (ORCPT
+        with ESMTP id S235880AbiIBKyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:54:01 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE86C480C;
-        Fri,  2 Sep 2022 03:54:00 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MJvrG5MShzlCC0;
-        Fri,  2 Sep 2022 18:52:30 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgD3SXPE4BFjn3sRAQ--.17387S3;
-        Fri, 02 Sep 2022 18:53:58 +0800 (CST)
-Subject: Re: [PATCH -next 2/3] md/raid10: convert resync_lock to use seqlock
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
- <20220829131502.165356-3-yukuai1@huaweicloud.com>
- <3d8859bc-80d6-08b0-fd40-8874df4d3419@linux.dev>
- <1891ec2c-0ccc-681e-31de-fdd28eebce82@huaweicloud.com>
- <82f11462-454c-4a5e-d3a2-e71479960eaf@linux.dev>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <01191595-f2f7-d953-fb00-e24803910515@huaweicloud.com>
-Date:   Fri, 2 Sep 2022 18:53:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 2 Sep 2022 06:54:11 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBA2C9253;
+        Fri,  2 Sep 2022 03:54:10 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oU4JL-00041d-4F; Fri, 02 Sep 2022 12:54:07 +0200
+Message-ID: <57c596f7-014f-1833-3173-af3bad2ca45d@leemhuis.info>
+Date:   Fri, 2 Sep 2022 12:54:05 +0200
 MIME-Version: 1.0
-In-Reply-To: <82f11462-454c-4a5e-d3a2-e71479960eaf@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgD3SXPE4BFjn3sRAQ--.17387S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr1fuw1UWFyxWFW8Jw4xJFb_yoW8Xr1kpa
-        1kXFWUtrWYyrnY9w4Dt3yvvasayw17ta1UXrZ3X3W7AFnFqr4Sqry5WrnFgFyDZrWkJ3Wj
-        qFWUWa9xZF9xGFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
-        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
-        DUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [LKP] Re: [KVM] c3e0c8c2e8:
+ leaking-addresses.proc..data..ro_after_init.
+Content-Language: en-US, de-DE
+To:     Philip Li <philip.li@intel.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com, regressions@lists.linux.dev
+References: <YvpZYGa1Z1M38YcR@xsang-OptiPlex-9020>
+ <04ce8956-3285-345a-4ce5-b78500729e42@leemhuis.info>
+ <YxCyhTES9Nk+S94y@rli9-MOBL1.ccr.corp.intel.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <YxCyhTES9Nk+S94y@rli9-MOBL1.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1662116050;0eb7858f;
+X-HE-SMSGID: 1oU4JL-00041d-4F
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -68,58 +49,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2022/09/02 18:16, Guoqing Jiang 写道:
-> 
-> 
-> On 9/2/22 6:02 PM, Yu Kuai wrote:
->> Hi,
+On 01.09.22 15:24, Philip Li wrote:
+> On Thu, Sep 01, 2022 at 02:12:39PM +0200, Thorsten Leemhuis wrote:
+>> Hi, this is your Linux kernel regression tracker.
 >>
->> 在 2022/09/02 17:42, Guoqing Jiang 写道:
->>> Hi,
+>> On 15.08.22 16:34, kernel test robot wrote:
+>>> Greeting,
 >>>
->>> On 8/29/22 9:15 PM, Yu Kuai wrote:
->>>> +static bool wait_barrier_nolock(struct r10conf *conf)
->>>> +{
->>>> +    unsigned int seq = raw_read_seqcount(&conf->resync_lock.seqcount);
->>>> +
->>>> +    if (seq & 1)
->>>> +        return false;
->>>> +
->>>> +    if (READ_ONCE(conf->barrier))
->>>> +        return false;
->>>> +
->>>> +    atomic_inc(&conf->nr_pending);
->>>> +    if (!read_seqcount_retry(&conf->resync_lock.seqcount, seq))
+>>> FYI, we noticed the following commit (built with gcc-11):
 >>>
->>> I think 'seq' is usually get from read_seqcount_begin.
+>>> commit: c3e0c8c2e8b17bae30d5978bc2decdd4098f0f99 ("KVM: x86/mmu: Fully re-evaluate MMIO caching when SPTE masks change")
+>>> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+>>>
+>>> in testcase: leaking-addresses
+>>> version: leaking-addresses-x86_64-4f19048-1_20220518
+>>> with following parameters:
+>>>
+>>> 	ucode: 0x28
+>>>
+>>> on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz with 16G memory
+>>>
+>>> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>>>
+>>> If you fix the issue, kindly add following tag
+>>> Reported-by: kernel test robot <oliver.sang@intel.com>
+>>>
+>>> [...]
+>>>
+>>> #regzbot introduced: c3e0c8c2e8
 >>
->> read_seqcount_begin will loop untill "req & 1" failed, I'm afraid this
->> will cause high cpu usage in come cases.
+>> Removing this from the list of tracked regressions:
 >>
->> What I try to do here is just try once, and fall back to hold lock and
->> wait if failed.
+>> #regzbot invalid: report from the kernel test report that was ignored by
+>> developers, so I assume it's not something bad
+>>
+>> To explain: Yeah, maybe tracking regressions found by CI systems in
+>> regzbot might be a good idea now or in the long run. If you are from
+>> Intel and would like to discuss how to do this, please get in touch (I
+>> tried recently, but got no answer[1]).
 > 
-> Thanks for the explanation.
+> Sorry, this was a mistake that we missed [1] to provide our reply. I will
+> reply to the questions in that one soon.
+
+Thx!
+
+>> But I'm not sure if it's a good idea right now to get regzbot involved
+>> by default (especially as long as the reports are not telling developers
+>> to add proper "Link:" tags that would allow regzbot to notice when fixes
+>
+> Apologize again that we started to track mainline regression we found before
+> we fully understand [2], which probably not the effective usage. Especially
+> we missed the initial touch and led to more improper usage.
+
+No worries, as maybe it's a good thing to have the 0day reports in
+there, even if some of its reports don't get any traction. But having
+them in the list of tracked regressions gives them some more visibility
+for a while -- and at least one more set of eyes (mine) that take a look
+at it. And it's not that much work for me or anybody else to close the
+issue in regzbot (say after a week or two) if no developer acts on it
+because it's irrelevant from their point of view. But would still be
+better if they'd state that publicly themselves; in that case they even
+could tell regzbot to ignore the issue; your report's could tell people
+how to do that (e.g. "#regzbot invalid some_reason").
+
+>> for the problem are posted or merged; see [1] and [2]), as it looks like
+>> developers ignore quite a few (many?) reports like the one partly quoted
+>> above.
+>>
+>> I guess there are various reasons why developers do so (too many false
+>> positives? issues unlikely to happen in practice? already fixed?).
 > 
-> I'd suggest to try with read_seqcount_begin/read_seqcount_retry pattern
-> because it is a common usage in kernel I think, then check whether the
-> performance drops or not.  Maybe it is related to lockdep issue, but I am
-> not sure.
-
-I can try read_seqcount_begin/read_seqcount_retry.
-
-Please take a look at another thread, lockdep issue is due to
-inconsistent usage of lock and seqcount inside seqlock:
-
-wait_event() only release lock, seqcount is not released.
-
-Thansk,
-Kuai
+> agree, not all reports we send out got response even it was reported on
+> mainline (0day does wide range testing include the repos from developer,
+> so the reports are against these repos and mainline/next).
 > 
-> Thanks,
-> Guoqing
-> .
-> 
+> Usuaally, we also ping/discuss with developer when an issue enters
+> mainline if there's no response. This is one reason we tries to connect
+> with regzbot to track the issue on mainline, but we missed the point that
+> you mention below (it need look important).
 
+I just want to prevent the list of tracked regressions becoming too long
+(and thus obscure) due to many issues that are not worth tracking, as I
+fear people will then start to ignore regzbot and its reports. :-/
+
+>> Normally I'd say "this is a regression and I should try to find out and
+>> prod developers to get it fixed". And I'll do that if the issue
+>> obviously looks important to a Linux kernel generalist like me.
+> 
+> got it, thanks for the info, i found earlier you tracked a bug from kernel
+> test robot, which should be the case that you thought it was important.
+
+Yeah, some of the reports are valuable, that's why I guess it makes
+sense to track at least some of them. The question is, how to filter the
+bad ones out or how to pick just the valuable ones...
+
+Are you or someone from the 0day team an LPC? Then we could discuss this
+in person there.
+
+>> But that doesn't appear to be the case here (please correct me if I
+>> misjudged!). I hence chose to ignore this report, as there are quite a
+>> few other reports that are waiting for my attention, too. :-/
+> 
+> Thanks, we will revisit our process and consult you before we do any actual
+> action, and sorry for causing you extra effort to do cleanup.
+
+No need to be sorry, everything is fine, up to some point I liked what
+you did. :-D
+
+Ciao, Thorsten

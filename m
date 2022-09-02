@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B265AA9ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A125AA9D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235734AbiIBI0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 04:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S235711AbiIBIUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 04:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234788AbiIBI0D (ORCPT
+        with ESMTP id S235512AbiIBIUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 04:26:03 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B5B57201
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:26:02 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id w19so1497242ljj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 01:26:02 -0700 (PDT)
+        Fri, 2 Sep 2022 04:20:52 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE074C634;
+        Fri,  2 Sep 2022 01:20:50 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id br21so2304864lfb.0;
+        Fri, 02 Sep 2022 01:20:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=yZ7GI/H/npr8l+qVhno9QYWaE882wgaDO0sWPEtrVzI=;
-        b=gBY8OG2XpP3vttfs1RSHEWup1a1iLXJ18Xy6iShnIE/HNIwJph+Hjv9vUaXz/axDCA
-         iVd1PNmFNZKCy8mr44bY9s780B3kBdRpDdSAJLWzZqHmPPNv0MmgLE8FgQmGk6MeCYim
-         eQbCsVHw1nBiOsX3PwmKhBjTPYGZVbKvKvCNCB/j2NGcUvVfUG4QtfkZm/n90RiUuuse
-         +6ym92aIJpO96LxYalFyXhF3gMayHDtAM6TI9mvOcTspQlr/goaxcGLOxLzkGjyKhYiq
-         8M4XEf/deUHsFxD1OItXh9OiVX+tlJIFa2OFbUvSmaoB/oipSXfs/TyVEQ1VFlQH8aM6
-         HOjg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=k9HeV9s5RJqmOoAs4X6mfRUQcnflr2D6WhL4YEXe9A8=;
+        b=C/nkcPUsOieObthxNg9fCVGaYuhWDiMK5eOiprrNB1lSd9ZfCXTS7+7kbtdU2eiu5u
+         X2dMHujTgiYccI0Soqg82ZSrVJLoLqY464DSDjSjgReJTpVwqyyK3qnaf74mzBvRuro6
+         zUFXiWhW9+1ib8U8Wi1bNsUsZVW9YVbElDkfxmffuIa5JPDlSVWoI2xhWZ+CpkOZaVus
+         dvZ67ruo7uYKrxGdB8Lswt77BYmUYdZTYvUjowLjCO6sIAZASfFA8FioVROnRZz6UAup
+         shBUjr2U66MjpPLyT0S3wxRSUgFrxpCEYlF7+TepE3boPZ3SDXSsgPg/ig4kqqkNHTMn
+         KXsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=yZ7GI/H/npr8l+qVhno9QYWaE882wgaDO0sWPEtrVzI=;
-        b=3WFVq33qqjLlfq86ZjQeyk6EBwi+wtewx0g6i1MTUnB4aE9rdq7NrnfOieb2z21eWU
-         trgbQ7pnjaoQV+q05d+JZcZ0RCFbWBKCVw3h8OTDK3ZbN8iFedqdg6q+vr9GC829jqcg
-         SBw92MGw81GwFNmOHG7L1GmkqBZlQjtm1I0PQUN+Xr+q5rbKKT8xazzMmvy9suAa+9mN
-         8Wo07JaB41NzPGO6/3od7oMqXVpnQRGdLsW3OPt4GH/zx1XYAm3/DLjEgpNsr0jPRNwc
-         iXqtsRcwjX7sy7fXOcZ2r4JenUa6v8ecCVLEJ1hM0+mD7D5MemtqInxcrQ7BJ4VKnhwf
-         L4oA==
-X-Gm-Message-State: ACgBeo1wRgU2KZVbRHDmc6BgPU7KFAeo7W/ya573gnuqOqK8EJOeMfrF
-        3X7N4SBS9IXe7RzOfOq9hvcslihRFAJ17HbdZVQ=
-X-Google-Smtp-Source: AA6agR6HICholv9FC7LpKeoDOUnCvQdkHZTOJxhZ4iQqo4eM6ddVDLKACblmrSS4Nk3c0VjJ0a6i03hsVPNs8Hjweq0=
-X-Received: by 2002:a2e:9e48:0:b0:261:c713:37dd with SMTP id
- g8-20020a2e9e48000000b00261c71337ddmr10154143ljk.385.1662107160591; Fri, 02
- Sep 2022 01:26:00 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=k9HeV9s5RJqmOoAs4X6mfRUQcnflr2D6WhL4YEXe9A8=;
+        b=EdIxa74jBErjcjt5RgVYE0a+upPGFZMKAv6ZJE1Y3TqeRd/+ZMBIoirj5n0cHwYql2
+         LxpRvryK+TIDVZ3CX6iUwJCIWFlMBZlO2J1wDLiBkBNbhkHqZokm5p+OBkIa5hxdnZSw
+         ozRivxXywmGmtI1vXtPQGv0qD24lCEvVpZW/I9ycUEZx1FNE66V/5GXmlyPlRi3bmcce
+         6xEGwrCiVbx6NNbqtPPTMXEpgvWoEiru1FRUXofGicqHG5T2rGHYRr9RTqfSSdjGNCgo
+         s3Ot1PNwnQKSZ1F1/DZRigf8qK2eflcpKD4RF3GVRvJ2LZnygWr+7z4jic8eIweY4T+l
+         o75A==
+X-Gm-Message-State: ACgBeo2F9+96kq6Ao7feKukvmNCi948KEmF/1SCz7Y9LMYiNvuzP5qtH
+        rBdfbKAmW/yGx9kBi6nBS0v0PF0eTbM=
+X-Google-Smtp-Source: AA6agR4qxy7JuL5Kj2d2iLY3PqQ6Ytyr9gp5BBvPFzA4Fwtv18UaRFvaYnZ8kUMuZtPxZeD1cy0+hw==
+X-Received: by 2002:a05:6512:31c5:b0:48b:38cf:51f8 with SMTP id j5-20020a05651231c500b0048b38cf51f8mr12591310lfe.315.1662106849025;
+        Fri, 02 Sep 2022 01:20:49 -0700 (PDT)
+Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id a27-20020a05651c031b00b00263630ab29dsm108828ljp.118.2022.09.02.01.20.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 01:20:48 -0700 (PDT)
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
+        marcus.folkesson@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] VRC-2 Car Controller
+Date:   Fri,  2 Sep 2022 10:25:51 +0200
+Message-Id: <20220902082552.2433744-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220806122636.43068-1-tomas.winkler@intel.com> <20220806122636.43068-15-tomas.winkler@intel.com>
-In-Reply-To: <20220806122636.43068-15-tomas.winkler@intel.com>
-From:   Matthew Auld <matthew.william.auld@gmail.com>
-Date:   Fri, 2 Sep 2022 09:25:33 +0100
-Message-ID: <CAM0jSHO7sDegQysvZgfOXf5B-h6oe7nmfHeuH+KMAmFtnM3d2w@mail.gmail.com>
-Subject: Re: [Intel-gfx] [PATCH v7 14/15] drm/i915/gsc: allocate extended
- operational memory in LMEM
-To:     Tomas Winkler <tomas.winkler@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,74 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 6 Aug 2022 at 13:34, Tomas Winkler <tomas.winkler@intel.com> wrote:
->
-> GSC requires more operational memory than available on chip.
-> Reserve 4M of LMEM for GSC operation. The memory is provided to the
-> GSC as struct resource to the auxiliary data of the child device.
->
-> Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
-> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-> Signed-off-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-> ---
->  drivers/gpu/drm/i915/gt/intel_gsc.c | 91 ++++++++++++++++++++++++++---
->  drivers/gpu/drm/i915/gt/intel_gsc.h |  3 +
->  2 files changed, 87 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
-> index e1040c8f2fd3..162bea57fbb5 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gsc.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
-> @@ -7,6 +7,7 @@
->  #include <linux/mei_aux.h>
->  #include "i915_drv.h"
->  #include "i915_reg.h"
-> +#include "gem/i915_gem_region.h"
->  #include "gt/intel_gsc.h"
->  #include "gt/intel_gt.h"
->
-> @@ -36,12 +37,68 @@ static int gsc_irq_init(int irq)
->         return irq_set_chip_data(irq, NULL);
->  }
->
-> +static int
-> +gsc_ext_om_alloc(struct intel_gsc *gsc, struct intel_gsc_intf *intf, size_t size)
-> +{
-> +       struct intel_gt *gt = gsc_to_gt(gsc);
-> +       struct drm_i915_gem_object *obj;
-> +       void *vaddr;
-> +       int err;
-> +
-> +       obj = i915_gem_object_create_lmem(gt->i915, size, I915_BO_ALLOC_CONTIGUOUS);
-> +       if (IS_ERR(obj)) {
-> +               drm_err(&gt->i915->drm, "Failed to allocate gsc memory\n");
-> +               return PTR_ERR(obj);
-> +       }
-> +
-> +       err = i915_gem_object_pin_pages_unlocked(obj);
-> +       if (err) {
-> +               drm_err(&gt->i915->drm, "Failed to pin pages for gsc memory\n");
-> +               goto out_put;
-> +       }
-> +
-> +       vaddr = i915_gem_object_pin_map_unlocked(obj, i915_coherent_map_type(gt->i915, obj, true));
-> +       if (IS_ERR(vaddr)) {
-> +               err = PTR_ERR(vaddr);
-> +               drm_err(&gt->i915->drm, "Failed to map gsc memory\n");
-> +               goto out_unpin;
-> +       }
-> +
-> +       memset(vaddr, 0, obj->base.size);
-> +
-> +       i915_gem_object_unpin_map(obj);
+Hi,
 
-I think this was mentioned before, here we should rather use:
+The device creates two USB endpoints where on of those represent the X/Y
+axis as 16 buttons which is not.. quite right.
+So get rid of that endpoint.
 
-create_lmem(gt->i915, size,
-                      I915_BO_ALLOC_CONTIGUOUS |
-                      I915_BO_ALLOC_CPU_CLEAR);
+Also fix the report descriptor for the other endpoint.
 
-That way we don't need to manually map and clear it here. Instead when
-first allocating the pages (like with pin_pages), the clear will be
-done for you.
+Output from hid-recorder:
+#  X:     32 | Y:   1001 | # 
+E: 000105.808008 7 20 00 e9 03 00 00 00
+
+Link to previous discussion:
+https://lore.kernel.org/all/CAO-hwJL-3vAzywjeUsopsRSJX6j-maC5R75ekxZg-W_oKDqYYw@mail.gmail.com/
+
+
+v2:
+- Remove .remove
+- Change help text in Kconfig
+- Remove redundant check for USB endpoint in vrc2_report_fixup
+
+Marcus Folkesson (1):
+  HID: Add driver for VRC-2 Car Controller
+
+ MAINTAINERS            |  6 +++
+ drivers/hid/Kconfig    | 10 +++++
+ drivers/hid/Makefile   |  1 +
+ drivers/hid/hid-vrc2.c | 91 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 108 insertions(+)
+ create mode 100644 drivers/hid/hid-vrc2.c
+
+-- 
+2.37.1
+

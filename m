@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F282E5AB1FD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C985AB14D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236909AbiIBNr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S236756AbiIBNTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236951AbiIBNrJ (ORCPT
+        with ESMTP id S236092AbiIBNS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:47:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7178323168;
-        Fri,  2 Sep 2022 06:22:24 -0700 (PDT)
+        Fri, 2 Sep 2022 09:18:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D92D4F64;
+        Fri,  2 Sep 2022 05:55:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59EF462180;
-        Fri,  2 Sep 2022 12:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55629C433C1;
-        Fri,  2 Sep 2022 12:28:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 77A76CE2E67;
+        Fri,  2 Sep 2022 12:35:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C65C433D7;
+        Fri,  2 Sep 2022 12:35:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121732;
-        bh=GXpS0K7nMoJ0lD89ZTWvPSyPpAQxwDn/AVLCeVa0IZw=;
+        s=korg; t=1662122125;
+        bh=I0grwLaSN42BWeq13VtFyJ/P4Grxplt0kp3cRmVG1sA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PCmoN/aRW1pVkxKaYE3PG4TqTs7BgucLTThPLfmVpcueWr8kOWBGXfLYgoh5KVuLT
-         JNWsBtzJHMgiQJnnVO8EgsGDbKPGTLmnq6S5IRYjnrJxBPAMnriV1anjIFBxz24MGD
-         4wekye8glsLuNwcnVVsGX8tk1TVpKfw34zJKqoNQ=
+        b=yNYgyu9v+rtmEMvmehKoa2RMBETerMYR6bpN+kSYEYUZ/Z1ArmDgHdm+1Blt/bDrC
+         v7+dB6gWVpnXxlsHYUamlxswHPBg15PwxvFnpUiS1HXckkqDPEKlCaAjSeXqPNK8R/
+         /OoAbzaPqZ98n3XXp/QpZmlCAa358itIr38FyQzA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephane Eranian <eranian@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 5.4 47/77] perf/x86/intel/uncore: Fix broken read_counter() for SNB IMC PMU
+        stable@vger.kernel.org, Stefan Hansson <newbie13xd@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.19 20/72] HID: input: fix uclogic tablets
 Date:   Fri,  2 Sep 2022 14:18:56 +0200
-Message-Id: <20220902121405.211947115@linuxfoundation.org>
+Message-Id: <20220902121405.445523018@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-References: <20220902121403.569927325@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,85 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephane Eranian <eranian@google.com>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-commit 11745ecfe8fea4b4a4c322967a7605d2ecbd5080 upstream.
+commit 8db8be9cfc89935c97d791c7e6264e710a7e8a56 upstream.
 
-Existing code was generating bogus counts for the SNB IMC bandwidth counters:
+commit 87562fcd1342 ("HID: input: remove the need for HID_QUIRK_INVERT")
+made the assumption that it was the only one handling tablets and thus
+kept an internal state regarding the tool.
 
-$ perf stat -a -I 1000 -e uncore_imc/data_reads/,uncore_imc/data_writes/
-     1.000327813           1,024.03 MiB  uncore_imc/data_reads/
-     1.000327813              20.73 MiB  uncore_imc/data_writes/
-     2.000580153         261,120.00 MiB  uncore_imc/data_reads/
-     2.000580153              23.28 MiB  uncore_imc/data_writes/
+Turns out that the uclogic driver has a timer to release the in range
+bit, effectively making hid-input ignoring all in range information
+after the very first one.
 
-The problem was introduced by commit:
-  07ce734dd8ad ("perf/x86/intel/uncore: Clean up client IMC")
+Fix that by having a more rationale approach which consists in forwarding
+every event and let the input stack filter out the duplicates.
 
-Where the read_counter callback was replace to point to the generic
-uncore_mmio_read_counter() function.
-
-The SNB IMC counters are freerunnig 32-bit counters laid out contiguously in
-MMIO. But uncore_mmio_read_counter() is using a readq() call to read from
-MMIO therefore reading 64-bit from MMIO. Although this is okay for the
-uncore_perf_event_update() function because it is shifting the value based
-on the actual counter width to compute a delta, it is not okay for the
-uncore_pmu_event_start() which is simply reading the counter  and therefore
-priming the event->prev_count with a bogus value which is responsible for
-causing bogus deltas in the perf stat command above.
-
-The fix is to reintroduce the custom callback for read_counter for the SNB
-IMC PMU and use readl() instead of readq(). With the change the output of
-perf stat is back to normal:
-$ perf stat -a -I 1000 -e uncore_imc/data_reads/,uncore_imc/data_writes/
-     1.000120987             296.94 MiB  uncore_imc/data_reads/
-     1.000120987             138.42 MiB  uncore_imc/data_writes/
-     2.000403144             175.91 MiB  uncore_imc/data_reads/
-     2.000403144              68.50 MiB  uncore_imc/data_writes/
-
-Fixes: 07ce734dd8ad ("perf/x86/intel/uncore: Clean up client IMC")
-Signed-off-by: Stephane Eranian <eranian@google.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-Link: https://lore.kernel.org/r/20220803160031.1379788-1-eranian@google.com
+Reported-by: Stefan Hansson <newbie13xd@gmail.com>
+Fixes: 87562fcd1342 ("HID: input: remove the need for HID_QUIRK_INVERT")
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/events/intel/uncore_snb.c |   18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ drivers/hid/hid-input.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/arch/x86/events/intel/uncore_snb.c
-+++ b/arch/x86/events/intel/uncore_snb.c
-@@ -575,6 +575,22 @@ int snb_pci2phy_map_init(int devid)
- 	return 0;
- }
- 
-+static u64 snb_uncore_imc_read_counter(struct intel_uncore_box *box, struct perf_event *event)
-+{
-+	struct hw_perf_event *hwc = &event->hw;
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -1532,7 +1532,10 @@ void hidinput_hid_event(struct hid_devic
+ 			 * assume ours
+ 			 */
+ 			if (!report->tool)
+-				hid_report_set_tool(report, input, usage->code);
++				report->tool = usage->code;
 +
-+	/*
-+	 * SNB IMC counters are 32-bit and are laid out back to back
-+	 * in MMIO space. Therefore we must use a 32-bit accessor function
-+	 * using readq() from uncore_mmio_read_counter() causes problems
-+	 * because it is reading 64-bit at a time. This is okay for the
-+	 * uncore_perf_event_update() function because it drops the upper
-+	 * 32-bits but not okay for plain uncore_read_counter() as invoked
-+	 * in uncore_pmu_event_start().
-+	 */
-+	return (u64)readl(box->io_addr + hwc->event_base);
-+}
-+
- static struct pmu snb_uncore_imc_pmu = {
- 	.task_ctx_nr	= perf_invalid_context,
- 	.event_init	= snb_uncore_imc_event_init,
-@@ -594,7 +610,7 @@ static struct intel_uncore_ops snb_uncor
- 	.disable_event	= snb_uncore_imc_disable_event,
- 	.enable_event	= snb_uncore_imc_enable_event,
- 	.hw_config	= snb_uncore_imc_hw_config,
--	.read_counter	= uncore_mmio_read_counter,
-+	.read_counter	= snb_uncore_imc_read_counter,
- };
- 
- static struct intel_uncore_type snb_uncore_imc = {
++			/* drivers may have changed the value behind our back, resend it */
++			hid_report_set_tool(report, input, report->tool);
+ 		} else {
+ 			hid_report_release_tool(report, input, usage->code);
+ 		}
 
 

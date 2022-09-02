@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228175AA96B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C28E5AA982
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbiIBIHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 04:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
+        id S235691AbiIBIIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 04:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235625AbiIBIGy (ORCPT
+        with ESMTP id S235671AbiIBIIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 04:06:54 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C23B729D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:06:52 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id h5so2296644ejb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 01:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=/CPr7XRW/l7oJ5TwQnKLmZtSswvlFBKkXS84mHDGoF0=;
-        b=ov9NKalAZFyh2hTY2dbXszqArzlqn9GnZwUCyustVqEGsjRHlE2B+lEHUci2QWsq5O
-         VvRpapuuUtNowNTe1SZ4hx+1GXq2MsAAyusyFMW9cEccUaf19D+PYWzInE+depRigNqo
-         RyD/qbrxA4hF7KA0juayqdEYvFYUG6nTLg320DRnMC6jzYnBpi517gmkeDtm6g5RAhOd
-         eGTFZ3np6jsUxmDuGP0G7W15ecBq5ntTGoO7p4zWgAdrckvsw4OtNVud1rPCvJe6GJVt
-         WV0u3j98H9paeuHfEXZNjdT5hgUrIaWaGHpWeuOgdW3/V1mvGNCzHyTbhcIOrI2OajEu
-         Lkcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=/CPr7XRW/l7oJ5TwQnKLmZtSswvlFBKkXS84mHDGoF0=;
-        b=8GmE9kQcW3Ubk8HXH0Hvt9UztfEpsHASjIUqz6Fkrjrb4pmaMbznjCGDEnFdwXBY2D
-         yFTZ+YQq6IG2jEQwJK4RP/yE4855vvYegMopchT/bdZajLShRbCD2Iz/PuZsQT+mkWQj
-         cYccl5vf4Z0caIZm+vSElAVIGQHqp/JPY1wZTPftCEaD7c+Nbio2cOyZbRlYvLpbT8+J
-         rakK6l56ELcPjb/9JEghvho+K0Pc/cSkW3cMgd8l/dhuKgPE2EqkcUzg5nBcSuHQq6gk
-         Da9AkjNwyq7S7tJoZeDwDKd83LaL+5xsrZA4mb0W26dOnS432Uh9lBq+uUnqf7A48wcn
-         i69w==
-X-Gm-Message-State: ACgBeo0UU/TtOxLWo6zPz1xi7yqsJxTAPkYmdFvR7YfKNxMqmhLQhfwH
-        4TfY62PovSwK6ySFg/WI+y5HPc5ksdJld8Il4kJT7g==
-X-Google-Smtp-Source: AA6agR4LDNciPZtaUjUX6+2rGeSXUZhhZ0jz4kn1NPhxmpYPCdK4njNDmYFI/PgmcfJA4C22nLg5rswmxoKXLO8pMgM=
-X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
- dd6-20020a1709069b8600b0073d72cf72afmr26775363ejc.440.1662106010529; Fri, 02
- Sep 2022 01:06:50 -0700 (PDT)
+        Fri, 2 Sep 2022 04:08:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92D7BB91F;
+        Fri,  2 Sep 2022 01:08:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 972A3B829FA;
+        Fri,  2 Sep 2022 08:08:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E10CC433D7;
+        Fri,  2 Sep 2022 08:08:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662106094;
+        bh=NzHDhgY0zXBXtEi3T20cJPJB0uznOhoVmX/WodgpvMw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HD12sV+ZmWshRGuU92uYAtR4sxLCisrf1cxsMTNJMkD2713y6ltgEcfiW9xcWG+TE
+         NnvsA4jLZlHhoCXhXCi3TP6FGy4sZtjzLodEhsm8lFHZDnvdos+nFzmnVswE3IQrmi
+         Xgo1uQrqdQgeNVUhqTejCoxpbw1IG4Jxb6jWZ3paiF887Ne2JeUy7VM097mPR0rXkt
+         4/6Es2SuLkFj7x6ovjhmPVq5ClcuruZqT4rjAYXeuvYehOrGemZV/xgLieqsn9CGZw
+         WeHrOwwpXQ+BqNbCAPDsdhjTRyNsA8HJKzmem5siPn/YBcyetdLTfS+HWq4i9BbWGo
+         VN+NyF9L+m2qQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1oU1iq-000397-JV; Fri, 02 Sep 2022 10:08:16 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 0/2] dt-bindings: phy: qcom,qmp: add missing power-domains properties
+Date:   Fri,  2 Sep 2022 10:07:03 +0200
+Message-Id: <20220902080705.12050-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
-In-Reply-To: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 2 Sep 2022 10:06:39 +0200
-Message-ID: <CACRpkdb25ikL4F499NDCrv1kf2FGvJxqDW2wk9GNQCqrbX9kKQ@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] Add support for i.MXRT1170-evk
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     linux-imx@nxp.com, robh+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, aisheng.dong@nxp.com,
-        stefan@agner.ch, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
-        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
-        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
-        cniedermaier@dh-electronics.com, clin@suse.com,
-        giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,24 +63,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 8:33 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+The new SC8280XP USB PHYs require a power domain to be specified so
+amend the bindings.
 
-> This patch contains:
-> - Update to imxrt_defconfig
-> - Devicetree
-> - Clock driver
-> - Pinctrl driver
+Johan
 
-No it does not, I already merged that.
 
-I think you should probably split up your series per-subsystem so the
-clock bindings and changes can be merged separately etc.
+Johan Hovold (2):
+  dt-bindings: phy: qcom,qmp-usb: add missing power-domains property
+  dt-bindings: phy: qcom,qmp-usb3-dp: add missing power-domains property
 
-Then the DTS files can be added to the ARM SoC tree as a final step.
+ .../devicetree/bindings/phy/qcom,qmp-usb-phy.yaml  | 13 +++++++++++++
+ .../bindings/phy/qcom,qmp-usb3-dp-phy.yaml         | 14 ++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-When you send everything in one bundle like this subsystem maintainers
-don't know if they can merge e.g. just the clock patches separately
-and be done with their part (like what I did with pinctrl).
+-- 
+2.35.1
 
-Yours.
-Linus Walleij

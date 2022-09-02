@@ -2,86 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5965ABA59
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA5D5ABA55
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiIBVvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 17:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
+        id S229720AbiIBVrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 17:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiIBVvk (ORCPT
+        with ESMTP id S229490AbiIBVrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 17:51:40 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2E8F32FC
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:51:37 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id k18so3485004lji.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 14:51:37 -0700 (PDT)
+        Fri, 2 Sep 2022 17:47:09 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08667E9260;
+        Fri,  2 Sep 2022 14:47:09 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id v4so3010005pgi.10;
+        Fri, 02 Sep 2022 14:47:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=gN0Irs2o7oP1brfekJlSB6uGcftAcPdWHSp57rRt4Lw=;
-        b=Zf1RwmozYFv+ANs5Gsy4/WsBmDjw/JT43hlHNS0w9g86VKya0DDyD27O1voWWrKxQ9
-         ETFZ1f6B5nezMOJQ0k+J3NnLDgKmHJ+tquVFusKYsR9SXhIyiUxwn7ryF65i8Eh2PPiI
-         30bcQLSr3pxT8LQntuioWTHobmla49/diTT1c=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=8qrkjZATNcKs7ClCMRnzoadlGyVSZuIBOgyRx8UlO2k=;
+        b=M8ldlNGA2VFaNUIyEcgrOBDyNwIzmzSljb7q8CyGnXgSZ+0yt0T08a47GRH6CvKwSw
+         /BQwWahTc1Q7k1Qa5CUNRfrYW+hlh57Y70fu/1YQRIvRSc9S3KL1mS4+v74xB2E0n3uV
+         sHcFxhVr21O1uYY6gYd6WP6X3jdKcEVDX6iD9vjlqP9CTYDnR6eZHQybUUp5QYOm/Shc
+         iY7OnFu4gZXOXizatNHdzWwLBq677FbctHtmA25x82SYEwNTAzHCZVM51oQqxDXic9Du
+         QUeVqoeq7YXtHhjfaOPSY0oDmN3PKX8B/xhifjPSz9yhiUD/Uj2BLbAJeUtTY3TLRrxP
+         MLUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=gN0Irs2o7oP1brfekJlSB6uGcftAcPdWHSp57rRt4Lw=;
-        b=0mfZjtQqmvnI2Pbx7Vjx8wEdoKIByyJ7SUGCDZk/ULLxm3wt2z3Jc8c8lezKr6NEUm
-         aTXg7VH92YJ4TpZ5+Dssq/+ueuxcqBobeUnRXa6LfRwzn92M6Jy3vn0a5VP2eClRiGBA
-         jXCoDg7QKJLi509hpzdgZH9GGhDWHfVyWxU3+7bZl4s1j09GfA12LLaVcewX+dh9vGCX
-         0hoOscr2vVbadkY6T9mXnNqhp2R/wHM5AcCm3sZF9SC+db2PFZKZkunQU8VBGjuuy3Vf
-         ZakyDJfq+TbEPQsnYqYZemHF34kniKx8HEJK8JnqAeOm0/BizsKKL6hI3D0xWTh3I1bx
-         S3XA==
-X-Gm-Message-State: ACgBeo2bi0bNmU42m4f+ca4igYyacnC8zO9rIcb+6EOZeXuYHStxdfLF
-        oo/tNF+BBnBEbC5ZaDB6V9nVJVAEc/6m+fBjR8s=
-X-Google-Smtp-Source: AA6agR6r6vmS7kBU8IEbaJUkL3F9wGJTg8uVLKL63NeLJJjxMyRJuv3hfMF0EZmJb3FMFOlRyGRgYQ==
-X-Received: by 2002:a2e:8188:0:b0:25e:4ae6:5503 with SMTP id e8-20020a2e8188000000b0025e4ae65503mr10935526ljg.412.1662155495389;
-        Fri, 02 Sep 2022 14:51:35 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id u26-20020ac2519a000000b0048b17b0db44sm366487lfi.61.2022.09.02.14.51.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 14:51:35 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id q7so5098616lfu.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 14:51:34 -0700 (PDT)
-X-Received: by 2002:a5d:6045:0:b0:226:d21d:947b with SMTP id
- j5-20020a5d6045000000b00226d21d947bmr17791740wrt.274.1662155184166; Fri, 02
- Sep 2022 14:46:24 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=8qrkjZATNcKs7ClCMRnzoadlGyVSZuIBOgyRx8UlO2k=;
+        b=L6D9XoQEhknwKER3e/OoVYzBeBefxqxIqx5prlPUVmQPS/HYQnCXoc7IXg60b7ZkIi
+         MaQHCXDbXsvVhihMnwIkoil0AysidW9J/AU+JXIIPqtVRMr6ixC4UGXMgjx4LGB+Z98S
+         DaV2rfcGac8hJzDr15rTVenKU8TGVJcrCjPS2kojIPGD8Uqdr3ZUOTyIYsPzjTtUaX0R
+         JNW0MlnkJp5owI71xOASIZPA88PT/d3SGZndGaqBNlJdwA0KjPavSRiERBFvX1mDvrQa
+         FQSm4kHZyd7lXGxJf5JXMwENnignMMKBcQva5HrHf+O6S9xt0hqKMDGSvo/FbBvujhno
+         SLWA==
+X-Gm-Message-State: ACgBeo03/TQkrEinZTHxNefXWMyWHpATG2IVwSNj4//Fy7U61BKw3Lxt
+        fBbZ+8IaNBV6ceahoTrug7M=
+X-Google-Smtp-Source: AA6agR4x6jWRA9NlMcwdHJ4Kz/VQFMg4a/qOXmq33qEXCk9jhl147fyprECYpjzFYX42X6O1OUCedQ==
+X-Received: by 2002:a05:6a00:1586:b0:537:f5f:11d0 with SMTP id u6-20020a056a00158600b005370f5f11d0mr39031903pfk.64.1662155228453;
+        Fri, 02 Sep 2022 14:47:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w11-20020a170902c78b00b00172973d3cd9sm2086040pla.55.2022.09.02.14.47.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 14:47:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 2 Sep 2022 14:47:04 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Len Baker <len.baker@gmx.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] string: Introduce strtomem() and strtomem_pad()
+Message-ID: <20220902214704.GA4094673@roeck-us.net>
+References: <20220901190952.2229696-1-keescook@chromium.org>
+ <ba161718-bc61-57b8-dfbe-dee666fd06e8@roeck-us.net>
+ <202209021351.13203B669@keescook>
 MIME-Version: 1.0
-References: <20220902130625.217071627@infradead.org> <20220902130950.205726504@infradead.org>
- <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
- <YxI3Zf5drSHAkBL3@hirez.programming.kicks-ass.net> <YxJmdG9Ug7euJdZS@hirez.programming.kicks-ass.net>
-In-Reply-To: <YxJmdG9Ug7euJdZS@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Sep 2022 14:46:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj-njE+DwycFcVQ=ouXZpgKU2rjG3G0keNXSFWa_etrEA@mail.gmail.com>
-Message-ID: <CAHk-=wj-njE+DwycFcVQ=ouXZpgKU2rjG3G0keNXSFWa_etrEA@mail.gmail.com>
-Subject: Re: [PATCH v2 37/59] x86/putuser: Provide room for padding
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202209021351.13203B669@keescook>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,38 +83,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 1:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> The below (mashup of a handful of patches) is the best I could come up
-> with in a hurry.
+On Fri, Sep 02, 2022 at 01:52:35PM -0700, Kees Cook wrote:
+> On Thu, Sep 01, 2022 at 12:34:34PM -0700, Guenter Roeck wrote:
+> > On 9/1/22 12:09, Kees Cook wrote:
+> > > [...]
+> > > -If a caller is using non-NUL-terminated strings, strncpy() can
+> > > -still be used, but destinations should be marked with the `__nonstring
+> > > +If a caller is using non-NUL-terminated strings, strtomem() should be
+> > > +be used, and the destinations should be marked with the `__nonstring
+> > 
+> > s/be //
+> 
+> Thanks!
+> 
+> > > [...]
+> > > +++ b/include/linux/fortify-string.h
+> > > @@ -77,6 +77,36 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
+> > >   #define POS	__pass_object_size(1)
+> > >   #define POS0	__pass_object_size(0)
+> > > +/** strncpy - Copy a string to memory with non-guaranteed NUL padding
+> > 
+> > Does that need a newline before strncpy() ?
+> 
+> What do you mean here? I think this is valid kerndoc, but I'll
+> double-check. (And will continue in the neighboring htmldoc build thread.)
+> 
 
-Hmm. It doesn't look too horrible, but yeah, fi it still ends up
-getting the same padding overhead I'm not sure it ends up really
-mattering.
+Just asking. "/** strncpy - Copy a string ..." seemed unusual without
+newline between "/**" and the function name.
 
-I was hoping that some of the overhead would just go away - looking at
-my kernel build, we do have a fair number of functions that are 1-31
-bytes (according to a random and probably broken little shell script:
-
-    objdump -t vmlinux |
-        grep 'F .text' |
-        sort |
-        cut -f2- |
-        grep '^00000000000000[01]'
-
-but from a quick look, a fair number of them aren't actually even leaf
-functions (ie they are small because they just call another function
-with a set of simple arguments, often as a tail-call).,
-
-So maybe it's just not worth it.
-
-> If this patch makes you feel warm and fuzzy, I can clean it up,
-> otherwise I would suggest getting the stuff we have merged before adding
-> even more things on top.
-
-Yeah, it doesn't look that convincing.  I have no real numbers - a lot
-of small functions, but I'm not convinced that it is worth worrying
-about them, particularly if it doesn't really help the actual text
-size.
-
-              Linus
+Guenter

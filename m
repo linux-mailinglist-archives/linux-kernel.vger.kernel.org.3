@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26465AB044
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCBB5AAFEC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237804AbiIBMvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
+        id S237638AbiIBMpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237797AbiIBMup (ORCPT
+        with ESMTP id S237479AbiIBMno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:50:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8134AF72D3;
-        Fri,  2 Sep 2022 05:36:37 -0700 (PDT)
+        Fri, 2 Sep 2022 08:43:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01369ED03C;
+        Fri,  2 Sep 2022 05:32:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1DCD621EB;
-        Fri,  2 Sep 2022 12:36:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A83F9C433D6;
-        Fri,  2 Sep 2022 12:36:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90FD9B82A91;
+        Fri,  2 Sep 2022 12:32:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05340C433D6;
+        Fri,  2 Sep 2022 12:32:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122192;
-        bh=qoyw/ywdNO6sZyo1tUQ3AoaTQwR0eePql9n0oiR6GcI=;
+        s=korg; t=1662121940;
+        bh=rvsRqFwA2k2w3Fi1nbNzzjO0ZKeucinFjbQ5L5lGwKk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VDPNtWriuPmqL7AyrtTMjCgP9fr6JMTp5hh203uN58mmRS2HK35Gxhis7+3Qr1q2i
-         vIbeavnnGcXAo3MT7n2pwROL5TN78DzytsXGxP8a+NvWuyvvHTrIaVd7Uak1aL2sj+
-         NTSF1aL0N9qmU62sIwo0mBJBm9l+Of3jvRaErTBg=
+        b=QD2s1Hn9ozHT8A+4RT3IzBYGrK2el9fDyW4UXg9Y9G/QNCOElD1jx8YH6mL4qYr63
+         cS1lA5nQcU2T7oLnFAoh5tbGhQriXd3WvJXlUOlNaAu4MvbYmdZ34wEsgKsPs8gHjA
+         fZ1fPquJOieyvxNVVqwx4TL07ls6RKFUWadqOvFs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Kilmer <srjek2@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 5.19 24/72] HID: asus: ROG NKey: Ignore portion of 0x5a report
+        stable@vger.kernel.org, Lennert Van Alboom <lennert@vanalboom.org>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 36/73] ALSA: usb-audio: Add quirk for LH Labs Geek Out HD Audio 1V5
 Date:   Fri,  2 Sep 2022 14:19:00 +0200
-Message-Id: <20220902121405.585759133@linuxfoundation.org>
+Message-Id: <20220902121405.627749226@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Kilmer <srjek2@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 1c0cc9d11c665020cbeb80e660fb8929164407f4 upstream.
+commit 5f3d9e8161bb8cb23ab3b4678cd13f6e90a06186 upstream.
 
-On an Asus G513QY, of the 5 bytes in a 0x5a report, only the first byte
-is a meaningful keycode. The other bytes are zeroed out or hold garbage
-from the last packet sent to the keyboard.
+The USB DAC from LH Labs (2522:0007) seems requiring the same quirk as
+Sony Walkman to set up the interface like UAC1; otherwise it gets the
+constant errors "usb_set_interface failed (-71)".  This patch adds a
+quirk entry for addressing the buggy behavior.
 
-This patch fixes up the report descriptor for this event so that the
-general hid code will only process 1 byte for keycodes, avoiding
-spurious key events and unmapped Asus vendor usagepage code warnings.
-
-Signed-off-by: Josh Kilmer <srjek2@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Reported-by: Lennert Van Alboom <lennert@vanalboom.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/T3VPXtCc4uFws9Gfh2RjX6OdwM1RqfC6VqQr--_LMDyB2x5N3p9_q6AtPna17IXhHwBtcJVdXuS80ZZSCMjh_BafIbnzJPhbrkmhmWS6DlI=@vanalboom.org
+Link: https://lore.kernel.org/r/20220828074143.14736-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-asus.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ sound/usb/quirks.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/hid/hid-asus.c
-+++ b/drivers/hid/hid-asus.c
-@@ -1212,6 +1212,13 @@ static __u8 *asus_report_fixup(struct hi
- 		rdesc = new_rdesc;
- 	}
- 
-+	if (drvdata->quirks & QUIRK_ROG_NKEY_KEYBOARD &&
-+			*rsize == 331 && rdesc[190] == 0x85 && rdesc[191] == 0x5a &&
-+			rdesc[204] == 0x95 && rdesc[205] == 0x05) {
-+		hid_info(hdev, "Fixing up Asus N-KEY keyb report descriptor\n");
-+		rdesc[205] = 0x01;
-+	}
-+
- 	return rdesc;
- }
- 
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -1903,6 +1903,8 @@ static const struct usb_audio_quirk_flag
+ 		   QUIRK_FLAG_SHARE_MEDIA_DEVICE | QUIRK_FLAG_ALIGN_TRANSFER),
+ 	DEVICE_FLG(0x21b4, 0x0081, /* AudioQuest DragonFly */
+ 		   QUIRK_FLAG_GET_SAMPLE_RATE),
++	DEVICE_FLG(0x2522, 0x0007, /* LH Labs Geek Out HD Audio 1V5 */
++		   QUIRK_FLAG_SET_IFACE_FIRST),
+ 	DEVICE_FLG(0x2708, 0x0002, /* Audient iD14 */
+ 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
+ 	DEVICE_FLG(0x2912, 0x30c8, /* Audioengine D1 */
 
 

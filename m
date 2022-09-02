@@ -2,228 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A732B5AA740
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E815AA745
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbiIBFcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 01:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S234865AbiIBFdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 01:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiIBFcS (ORCPT
+        with ESMTP id S234836AbiIBFdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 01:32:18 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F250AE23C;
-        Thu,  1 Sep 2022 22:32:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rdVntkbKYXQ/M3wM3QRoo5+dO8Z8WrghezmeY6c5AlE=; b=JTKBYdxTdjUScWtD3AnPtcHIlM
-        sGfAGSI3jeQlKAJTZahcXoF4YAokCkDLny6cVmPeOuodNr0R5dpUoSXnjC3ZizcMwwTJMSCB7BPQz
-        m1PPHBgudoBtGPL8ejP+xZzKujHrrXhj5cc8dlo+rTB678WtYZn4SKX3wf434Y5oev+gfRlZ8NFqw
-        Vg5KARWh1y9N1/PltIGosS6oTR/fmPr9Uhg23bNXie9lRn/MzFGPkWDZdtPWjbdym5uRqujBdv/pG
-        zKQU7JYrEG4xIUbvZCow3lJqzRrB7A7B+447/iAc2ILdTig6Epl8Q0BjB21ODnZsUk6HiT0SCgSXD
-        dUaB1uMQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oTzHq-00BECv-Er;
-        Fri, 02 Sep 2022 05:32:14 +0000
-Date:   Fri, 2 Sep 2022 06:32:14 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 7/6] termios: kill uapi termios.h that are identical to
- generic one
-Message-ID: <YxGVXpS2dWoTwoa0@ZenIV>
-References: <YwF8vibZ2/Xz7a/g@ZenIV>
- <20220821010239.1554132-1-viro@zeniv.linux.org.uk>
- <20220821010239.1554132-3-viro@zeniv.linux.org.uk>
- <Yw4B6IU9WWKhN+1H@kroah.com>
- <YxDlyBneTC/zBx4S@ZenIV>
- <YxDnKvYCHn/ogBUv@ZenIV>
+        Fri, 2 Sep 2022 01:33:08 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA21B6D45
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 22:33:07 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-11eb8b133fbso2493993fac.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 22:33:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=pt84umBjwKOfigfK6cE/6IkovEu3oON8xwL8DcQpMdk=;
+        b=Sxry5y4/DNsEbVLf6RFwfmVP7HR0UIWiE8cqYBlBl0VkYJ7Hxp8mO3ZwaQMCpXBECB
+         SVHj+K4FC9OnGK+0WljWsOho3zC1XQ3pKGsBVBKJEWCGqN7a1kxVijW2YXkqeNtDdvNL
+         BHsJnetNeRWkXiqZBq8bxuv+bAZ+GZk0botls6ZgYvIwa4npqI6uMW3PzXEIF1nRAK27
+         CUSFP/EIwj09fBB80sTmO8bWAfloDtEyRlWeQfX4Z3lwzecg6u2KYyVTtpM5tfBTiwHs
+         NzX+lMnJW/BXgpngEEPxEROLo0TsH6fJW4Ti1wsWoF25aiVL28n9qVwG9nUbg9CZGJTS
+         xNOA==
+X-Gm-Message-State: ACgBeo2xVdiODJt+mOEbRlodRpeG39FBfsjbjrvjBnYjORn4Qc4h5HUx
+        DsEGgMjAFvDfVWwFsKs7Eh8u79L8HvYylDRYRUA=
+X-Google-Smtp-Source: AA6agR6nCprMhbyFsb5pru68odUkqCp5znhwNs9F4VNEbrOAcXuhG8I1M7GG5HoCcdiQYdbyw+dFkP7/1W+RxeAm6M8=
+X-Received: by 2002:a05:6870:a184:b0:116:bd39:7f94 with SMTP id
+ a4-20020a056870a18400b00116bd397f94mr1402554oaf.5.1662096786321; Thu, 01 Sep
+ 2022 22:33:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxDnKvYCHn/ogBUv@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220901130959.1285717-1-kan.liang@linux.intel.com>
+In-Reply-To: <20220901130959.1285717-1-kan.liang@linux.intel.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 1 Sep 2022 22:32:55 -0700
+Message-ID: <CAM9d7cgGPE7q9xhdxQtgv94i+SF-3+T2txdnY8m2P0qsSVWnkQ@mail.gmail.com>
+Subject: Re: [PATCH V2 0/6] Add sample_flags to improve the perf_sample_data struct
+To:     Kan Liang <kan.liang@linux.intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, andreas.kogler.0x@gmail.com,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mandatory-y will have the generic picked for architectures that
-don't have uapi/asm/termios.h of their own.  ia64, parisc and
-s390 ones are identical to generic, so...
-    
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
+On Thu, Sep 1, 2022 at 6:10 AM <kan.liang@linux.intel.com> wrote:
+>
+> From: Kan Liang <kan.liang@linux.intel.com>
+>
+> Changes since V1:
+> - Update the AMD LBR code in patch 3
+>
+> The patch series is to fix PEBS timestamps overwritten and improve the
+> perf_sample_data struct. The detailed discussion can be found at
+> https://lore.kernel.org/lkml/YwXvGe4%2FQdgGYOKJ@worktop.programming.kicks-ass.net/
+>
+> The patch series has two changes compared with the suggestions in the
+> above discussion.
+> - Only clear the sample flags for the perf_prepare_sample().
+>   The __perf_event_header__init_id is shared between perf_prepare_sample()
+>   (used by PERF_RECORD_SAMPLE) and perf_event_header__init_id() (used by
+>   other PERF_RECORD_* event type). The sample data is only available
+>   for the PERF_RECORD_SAMPLE.
+> - The CALLCHAIN_EARLY hack is still required for the BPF, especially
+>   perf_event_set_bpf_handler(). The sample data is not available when
+>   the function is invoked.
+>
+> Kan Liang (6):
+>   perf: Add sample_flags to indicate the PMU-filled sample data
+>   perf/x86/intel/pebs: Fix PEBS timestamps overwritten
+>   perf: Use sample_flags for branch stack
+>   perf: Use sample_flags for weight
+>   perf: Use sample_flags for data_src
+>   perf: Use sample_flags for txn
 
-diff --git a/arch/ia64/include/uapi/asm/termios.h b/arch/ia64/include/uapi/asm/termios.h
-deleted file mode 100644
-index 199742d08f2c..000000000000
---- a/arch/ia64/include/uapi/asm/termios.h
-+++ /dev/null
-@@ -1,51 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Modified 1999
-- *	David Mosberger-Tang <davidm@hpl.hp.com>, Hewlett-Packard Co
-- *
-- * 99/01/28	Added N_IRDA and N_SMSBLOCK
-- */
--#ifndef _UAPI_ASM_IA64_TERMIOS_H
--#define _UAPI_ASM_IA64_TERMIOS_H
--
--
--#include <asm/termbits.h>
--#include <asm/ioctls.h>
--
--struct winsize {
--	unsigned short ws_row;
--	unsigned short ws_col;
--	unsigned short ws_xpixel;
--	unsigned short ws_ypixel;
--};
--
--#define NCC 8
--struct termio {
--	unsigned short c_iflag;		/* input mode flags */
--	unsigned short c_oflag;		/* output mode flags */
--	unsigned short c_cflag;		/* control mode flags */
--	unsigned short c_lflag;		/* local mode flags */
--	unsigned char c_line;		/* line discipline */
--	unsigned char c_cc[NCC];	/* control characters */
--};
--
--/* modem lines */
--#define TIOCM_LE	0x001
--#define TIOCM_DTR	0x002
--#define TIOCM_RTS	0x004
--#define TIOCM_ST	0x008
--#define TIOCM_SR	0x010
--#define TIOCM_CTS	0x020
--#define TIOCM_CAR	0x040
--#define TIOCM_RNG	0x080
--#define TIOCM_DSR	0x100
--#define TIOCM_CD	TIOCM_CAR
--#define TIOCM_RI	TIOCM_RNG
--#define TIOCM_OUT1	0x2000
--#define TIOCM_OUT2	0x4000
--#define TIOCM_LOOP	0x8000
--
--/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
--
--
--#endif /* _UAPI_ASM_IA64_TERMIOS_H */
-diff --git a/arch/parisc/include/uapi/asm/termios.h b/arch/parisc/include/uapi/asm/termios.h
-deleted file mode 100644
-index aba174f23ef0..000000000000
---- a/arch/parisc/include/uapi/asm/termios.h
-+++ /dev/null
-@@ -1,44 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _UAPI_PARISC_TERMIOS_H
--#define _UAPI_PARISC_TERMIOS_H
--
--#include <asm/termbits.h>
--#include <asm/ioctls.h>
--
--struct winsize {
--	unsigned short ws_row;
--	unsigned short ws_col;
--	unsigned short ws_xpixel;
--	unsigned short ws_ypixel;
--};
--
--#define NCC 8
--struct termio {
--	unsigned short c_iflag;		/* input mode flags */
--	unsigned short c_oflag;		/* output mode flags */
--	unsigned short c_cflag;		/* control mode flags */
--	unsigned short c_lflag;		/* local mode flags */
--	unsigned char c_line;		/* line discipline */
--	unsigned char c_cc[NCC];	/* control characters */
--};
--
--/* modem lines */
--#define TIOCM_LE	0x001
--#define TIOCM_DTR	0x002
--#define TIOCM_RTS	0x004
--#define TIOCM_ST	0x008
--#define TIOCM_SR	0x010
--#define TIOCM_CTS	0x020
--#define TIOCM_CAR	0x040
--#define TIOCM_RNG	0x080
--#define TIOCM_DSR	0x100
--#define TIOCM_CD	TIOCM_CAR
--#define TIOCM_RI	TIOCM_RNG
--#define TIOCM_OUT1	0x2000
--#define TIOCM_OUT2	0x4000
--#define TIOCM_LOOP	0x8000
--
--/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
--
--
--#endif /* _UAPI_PARISC_TERMIOS_H */
-diff --git a/arch/s390/include/uapi/asm/termios.h b/arch/s390/include/uapi/asm/termios.h
-deleted file mode 100644
-index 54223169c806..000000000000
---- a/arch/s390/include/uapi/asm/termios.h
-+++ /dev/null
-@@ -1,50 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- *  S390 version
-- *
-- *  Derived from "include/asm-i386/termios.h"
-- */
--
--#ifndef _UAPI_S390_TERMIOS_H
--#define _UAPI_S390_TERMIOS_H
--
--#include <asm/termbits.h>
--#include <asm/ioctls.h>
--
--struct winsize {
--	unsigned short ws_row;
--	unsigned short ws_col;
--	unsigned short ws_xpixel;
--	unsigned short ws_ypixel;
--};
--
--#define NCC 8
--struct termio {
--	unsigned short c_iflag;		/* input mode flags */
--	unsigned short c_oflag;		/* output mode flags */
--	unsigned short c_cflag;		/* control mode flags */
--	unsigned short c_lflag;		/* local mode flags */
--	unsigned char c_line;		/* line discipline */
--	unsigned char c_cc[NCC];	/* control characters */
--};
--
--/* modem lines */
--#define TIOCM_LE	0x001
--#define TIOCM_DTR	0x002
--#define TIOCM_RTS	0x004
--#define TIOCM_ST	0x008
--#define TIOCM_SR	0x010
--#define TIOCM_CTS	0x020
--#define TIOCM_CAR	0x040
--#define TIOCM_RNG	0x080
--#define TIOCM_DSR	0x100
--#define TIOCM_CD	TIOCM_CAR
--#define TIOCM_RI	TIOCM_RNG
--#define TIOCM_OUT1	0x2000
--#define TIOCM_OUT2	0x4000
--#define TIOCM_LOOP	0x8000
--
--/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
--
--
--#endif /* _UAPI_S390_TERMIOS_H */
+Maybe we can get rid of perf_sample_data_init() completely.
+But it could be done later, so
+
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
+
+
+>
+>  arch/powerpc/perf/core-book3s.c | 10 ++++++---
+>  arch/x86/events/amd/core.c      |  4 +++-
+>  arch/x86/events/core.c          |  4 +++-
+>  arch/x86/events/intel/core.c    |  4 +++-
+>  arch/x86/events/intel/ds.c      | 39 ++++++++++++++++++++++++---------
+>  include/linux/perf_event.h      | 15 ++++++-------
+>  kernel/events/core.c            | 30 ++++++++++++++++++-------
+>  7 files changed, 74 insertions(+), 32 deletions(-)
+>
+> --
+> 2.35.1
+>

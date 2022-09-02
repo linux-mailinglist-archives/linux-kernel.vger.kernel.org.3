@@ -2,54 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8735AA67B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF015AA67F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235333AbiIBDmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        id S235343AbiIBDno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234195AbiIBDms (ORCPT
+        with ESMTP id S232014AbiIBDnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:42:48 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CC5B14F2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:42:46 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662090162;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rphHZCXlHUubQjamw80gazwJtM/3au0/Xd3ezUEQ7QI=;
-        b=MSdHtCuW91G8A5yAuYu2dghsgcz15Vz7GuMHAjxz/jAOpsrIGsogZNJG2Pb8iv6+j2p54X
-        za6ikPLSH9gTfDGw2tE1iOf0yNC3y0FXA2zZfjFTZpj8ai90nPIFjsU8mmE7wQMSqxzDSN
-        YC/DAuFFi8BmzUev6LPiGQ/2OP/YAvQ=
+        Thu, 1 Sep 2022 23:43:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F51DB1B8F;
+        Thu,  1 Sep 2022 20:43:42 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2823BajF025527;
+        Fri, 2 Sep 2022 03:43:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=72htk6PiIJYHXqt8bApvvEmrENk2JSjeEar/ghfbaDo=;
+ b=DzuVs12QEuR3EfTHtHQ9gSV4jmiwSNZ2olw7yDdjTwUSLy+ClFlnjX4HPEwbHuFlpNmb
+ zpbt0bDcail7rSdaYC/T4OLv/TbPeIgSHUOQCzfuukyWRAzFU6+AVWHte7JAFoO23Ls6
+ UYK1j2bPi/kcECZoWjcFHzFMQkV9AhdZlVF+67x3Qz8ReLv2BbSHNDsJvlN8cJRR7ouk
+ C8KHnSNepepeZCxRgEo18DxPgHjr5PShUKHlhvj+zMHHTqnmuVGoj6EB52VU/pcvXTxL
+ wGN3fzua6K0Pe5RAjVObSBAzJsISBu725Spx/m246WbD4395XH3BD2dtSFUkrSHVw7Xv vQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jb9pur23d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Sep 2022 03:43:30 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2823hTTH011139
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 2 Sep 2022 03:43:29 GMT
+Received: from [10.216.15.81] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 1 Sep 2022
+ 20:43:24 -0700
+Message-ID: <99fd7b57-3729-6a77-e2ff-3958194526b3@quicinc.com>
+Date:   Fri, 2 Sep 2022 09:13:20 +0530
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm: hugetlb: eliminate memory-less nodes handling
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <c39c6ed2-4766-71d2-d459-6bb39f09943a@linux.ibm.com>
-Date:   Fri, 2 Sep 2022 11:42:13 +0800
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Greg KH <gregkh@linuxfoundation.org>, rafael@kernel.org,
-        mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        osalvador@suse.de, david@redhat.com, ying.huang@intel.com,
-        rientjes@google.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8E1AF7F4-B904-40F0-A194-1735BEC41668@linux.dev>
-References: <20220901083023.42319-1-songmuchun@bytedance.com>
- <c39c6ed2-4766-71d2-d459-6bb39f09943a@linux.ibm.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/4] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
+ support for sc7280 BWMONs
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Nicolas Dechesne <nicolas.dechesne@linaro.org>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+References: <20220901124730.19460-1-quic_rjendra@quicinc.com>
+ <20220901124730.19460-2-quic_rjendra@quicinc.com>
+ <7d28d450-c90a-398a-3074-5d8237fcd051@linaro.org>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <7d28d450-c90a-398a-3074-5d8237fcd051@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: t5zaAjohpQ-lz9K7QkcKZ_gKTO1wac_1
+X-Proofpoint-GUID: t5zaAjohpQ-lz9K7QkcKZ_gKTO1wac_1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 phishscore=0 malwarescore=0
+ bulkscore=0 mlxlogscore=999 clxscore=1011 spamscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209020017
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,224 +89,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 9/1/2022 8:55 PM, Krzysztof Kozlowski wrote:
+> On 01/09/2022 15:47, Rajendra Nayak wrote:
+>> Add a compatible for the cpu BWMON (version 4) instance and one
+>> for the llcc BWMON (version 5) found in sc7280 SoC.
+> 
+> +Cc of few Linaro folks.
+> 
+> Awesome! I see bwmon is being used! Rajendra, do you have any particular
+> needs/todos for bwmon or other related pieces?
 
-> On Sep 1, 2022, at 17:00, Aneesh Kumar K V =
-<aneesh.kumar@linux.ibm.com> wrote:
->=20
-> On 9/1/22 2:00 PM, Muchun Song wrote:
->> The memory-notify-based approach aims to handle meory-less nodes, =
-however, it just adds
->> the complexity of code as pointed by David in thread [1].  The =
-handling of memory-less
->> nodes is introduced by commit 4faf8d950ec4 ("hugetlb: handle memory =
-hot-plug events").
->> =46rom its commit message, we cannot find any necessity of handling =
-this case. So, we can
->> simply register/unregister sysfs entries in =
-register_node/unregister_node to simlify the
->> code.
->=20
-> Isn't that hotplug callback added because in =
-hugetlb_register_all_nodes() we register
-> sysfs nodes only for N_MEMORY nodes?=20
+Thanks Krzysztof, nothing at the moment, things just worked out of the box
+(except for the PATCH 3/4 that took a while to uncover)
+We are still analyzing the perf/power numbers on sc7280 based ChromeOS devices,
+along with some other yet to be posted changes to enable memory latency
+based governors in firmware, but all is good with bwmon drivers for now.
 
-I think you might right. I have looked at the commit 9a30523066cd which =
-introduces the sysfs
-creation. I saw it create the sysfs for every possible node.
-
-	for (nid =3D 0; nid < nr_node_ids; nid++)
-		hugetlb_register_node(node);
-
-And then I checked the commit 9b5e5d0fdc91, which said it was a =
-preparation for handling
-memory-less nodes via memory hotplug.
-
->=20
->=20
->>=20
->> =
-https://lore.kernel.org/linux-mm/60933ffc-b850-976c-78a0-0ee6e0ea9ef0@redh=
-at.com/ [1]
->> Suggested-by: David Hildenbrand <david@redhat.com>
->> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> 
+>>
+>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
 >> ---
->> drivers/base/node.c  |  7 +++++--
->> include/linux/node.h |  5 +++++
->> mm/hugetlb.c         | 37 ++++++++++---------------------------
->> 3 files changed, 20 insertions(+), 29 deletions(-)
->>=20
->> diff --git a/drivers/base/node.c b/drivers/base/node.c
->> index ed391cb09999..cf115d5a9b8a 100644
->> --- a/drivers/base/node.c
->> +++ b/drivers/base/node.c
->> @@ -608,10 +608,12 @@ static int register_node(struct node *node, int =
-num)
->> 	node->dev.groups =3D node_dev_groups;
->> 	error =3D device_register(&node->dev);
->>=20
->> -	if (error)
->> +	if (error) {
->> 		put_device(&node->dev);
->> -	else
->> +	} else {
->> +		hugetlb_register_node(node);
->> 		compaction_register_node(node);
->> +	}
->>=20
->=20
->=20
-> I guess this will handle register of sysfs hugetlb files for new NUMA =
-nodes
-> after hugetlb_initialized =3D true;
+>>   .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+>> index 32e2892d736b..cac915c5c2aa 100644
+>> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+>> @@ -25,8 +25,10 @@ properties:
+>>         - items:
+>>             - enum:
+>>                 - qcom,sdm845-bwmon
+>> +              - qcom,sc7280-bwmon
+> 
+> Could you put it in alphabetical order, so before sdm845?
 
-Yes.
-
->=20
-> But what about N_CPU that can get memory added later. Do we need to =
-update
-> hugetlb_register_all_nodes() to handle N_ONLINE?=20
-
-I think we should.
-
->=20
->=20
->> 	return error;
->> }
->> @@ -625,6 +627,7 @@ static int register_node(struct node *node, int =
-num)
->>  */
->> void unregister_node(struct node *node)
->> {
->> +	hugetlb_unregister_node(node);
->> 	compaction_unregister_node(node);
->> 	node_remove_accesses(node);
->> 	node_remove_caches(node);
->> diff --git a/include/linux/node.h b/include/linux/node.h
->> index 427a5975cf40..f5d41498c2bf 100644
->> --- a/include/linux/node.h
->> +++ b/include/linux/node.h
->> @@ -138,6 +138,11 @@ extern void =
-unregister_memory_block_under_nodes(struct memory_block *mem_blk);
->> extern int register_memory_node_under_compute_node(unsigned int =
-mem_nid,
->> 						   unsigned int cpu_nid,
->> 						   unsigned access);
->> +
->> +#ifdef CONFIG_HUGETLBFS
->> +void hugetlb_register_node(struct node *node);
->> +void hugetlb_unregister_node(struct node *node);
->> +#endif
->> #else
->> static inline void node_dev_init(void)
->> {
->> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->> index d0617d64d718..722e862bb6be 100644
->> --- a/mm/hugetlb.c
->> +++ b/mm/hugetlb.c
->> @@ -3898,6 +3898,7 @@ static void __init hugetlb_sysfs_init(void)
->> }
->>=20
->> #ifdef CONFIG_NUMA
->> +static bool hugetlb_initialized __ro_after_init;
->>=20
->> /*
->>  * node_hstate/s - associate per node hstate attributes, via their =
-kobjects,
->> @@ -3953,7 +3954,7 @@ static struct hstate =
-*kobj_to_node_hstate(struct kobject *kobj, int *nidp)
->>  * Unregister hstate attributes from a single node device.
->>  * No-op if no hstate attributes attached.
->>  */
->> -static void hugetlb_unregister_node(struct node *node)
->> +void hugetlb_unregister_node(struct node *node)
->> {
->> 	struct hstate *h;
->> 	struct node_hstate *nhs =3D &node_hstates[node->dev.id];
->> @@ -3983,19 +3984,22 @@ static void hugetlb_unregister_node(struct =
-node *node)
->>  * Register hstate attributes for a single node device.
->>  * No-op if attributes already registered.
->>  */
->> -static int hugetlb_register_node(struct node *node)
->> +void hugetlb_register_node(struct node *node)
->> {
->> 	struct hstate *h;
->> 	struct node_hstate *nhs =3D &node_hstates[node->dev.id];
->> 	int err;
->>=20
->> +	if (!hugetlb_initialized)
->> +		return;
->> +
->> 	if (nhs->hugepages_kobj)
->> -		return 0;		/* already allocated */
->> +		return;		/* already allocated */
->>=20
->> 	nhs->hugepages_kobj =3D kobject_create_and_add("hugepages",
->> 							=
-&node->dev.kobj);
->> 	if (!nhs->hugepages_kobj)
->> -		return -ENOMEM;
->> +		return;
->>=20
->> 	for_each_hstate(h) {
->> 		err =3D hugetlb_sysfs_add_hstate(h, nhs->hugepages_kobj,
->> @@ -4005,28 +4009,9 @@ static int hugetlb_register_node(struct node =
-*node)
->> 			pr_err("HugeTLB: Unable to add hstate %s for =
-node %d\n",
->> 				h->name, node->dev.id);
->> 			hugetlb_unregister_node(node);
->> -			return -ENOMEM;
->> +			break;
->> 		}
->> 	}
->> -	return 0;
->> -}
->> -
->> -static int __meminit hugetlb_memory_callback(struct notifier_block =
-*self,
->> -					     unsigned long action, void =
-*arg)
->> -{
->> -	int ret =3D 0;
->> -	struct memory_notify *mnb =3D arg;
->> -	int nid =3D mnb->status_change_nid;
->> -
->> -	if (nid =3D=3D NUMA_NO_NODE)
->> -		return NOTIFY_DONE;
->> -
->> -	if (action =3D=3D MEM_GOING_ONLINE)
->> -		ret =3D hugetlb_register_node(node_devices[nid]);
->> -	else if (action =3D=3D MEM_CANCEL_ONLINE || action =3D=3D =
-MEM_OFFLINE)
->> -		hugetlb_unregister_node(node_devices[nid]);
->> -
->> -	return notifier_from_errno(ret);
->> }
->>=20
->> /*
->> @@ -4038,11 +4023,9 @@ static void __init =
-hugetlb_register_all_nodes(void)
->> {
->> 	int nid;
->>=20
->> -	get_online_mems();
->> -	hotplug_memory_notifier(hugetlb_memory_callback, 0);
->> +	hugetlb_initialized =3D true;
->> 	for_each_node_state(nid, N_MEMORY)
->=20
->=20
-> Should this be for_each_online_node() ?
-
-So, yes.
-
-Thanks for your review.
-
-Muchun.
-
->=20
->> 		hugetlb_register_node(node_devices[nid]);
->> -	put_online_mems();
->> }
->> #else	/* !CONFIG_NUMA */
-
+ah right, will fix and repost, thanks.
+  
+> With above:
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Best regards,
+> Krzysztof

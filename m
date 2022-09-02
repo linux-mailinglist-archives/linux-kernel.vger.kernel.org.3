@@ -2,106 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3DD5AB4B4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 269865AB4AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236037AbiIBPJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S237166AbiIBPHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236131AbiIBPJb (ORCPT
+        with ESMTP id S237160AbiIBPGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:09:31 -0400
-Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E04D158F33
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:39:01 -0700 (PDT)
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-03.nifty.com with ESMTP id 282EZapm032456
-        for <linux-kernel@vger.kernel.org>; Fri, 2 Sep 2022 23:35:36 +0900
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 282EZ7d1004313
-        for <linux-kernel@vger.kernel.org>; Fri, 2 Sep 2022 23:35:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 282EZ7d1004313
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662129308;
-        bh=GUDCkmsH6figZ+L4dA6Fdq0YrnToibMGL5SHkTP3Kdo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dcXNIG1py8Ycw9y9V1btG05NMbTro5w541fbAHrEbe/aBiq3wg355s+IsKu/CdR7b
-         MXDfJ6t1gxAHWzh6mJ4ETDSLTFelF2ocY0CzRwJoGtSJ8Q+J7NWR1Vv5bCxGh1MLpK
-         l505EOGEBFW0GGcbBQa5TUsLzPrD7ETGJjoV/65Vk5V6DV3+txDWJggIrcaQfUg4FF
-         BnCR49LVvXIscvFMelf5r+6awaA9FzdWpKBZQrNgU/pA5uRthQEXczFtKBha0peMhg
-         kUNDnMNvNp7IorbsUtmAyA9A7Ny+ehBTVee6InppP5P4ueDSXkKJDZGSiAeYRjK/pU
-         SwHZpA7aNjHdw==
-X-Nifty-SrcIP: [209.85.160.47]
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-12243fcaa67so5110959fac.8
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 07:35:07 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2WCeEmm7iTVSOvQj8Hqn16S3enZK8QvXO3TY35t+5gNnT8forQ
-        6AJgAnk66BbvfbjYUYw+4q5cwNuWC3RVAurrKlo=
-X-Google-Smtp-Source: AA6agR7JHM3XDWVljTbD+mc16Wy5/EZgJE+Ic1P2coqLV4oc9+w24bGS08NdQnk56TbdWqMbWIOgaX31Flxh7lFtgEc=
-X-Received: by 2002:a05:6808:1189:b0:33a:34b3:6788 with SMTP id
- j9-20020a056808118900b0033a34b36788mr2007654oil.194.1662129306631; Fri, 02
- Sep 2022 07:35:06 -0700 (PDT)
+        Fri, 2 Sep 2022 11:06:48 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7793814D46D;
+        Fri,  2 Sep 2022 07:36:22 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 282EZ0ZO038880;
+        Fri, 2 Sep 2022 09:35:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1662129300;
+        bh=oSDGQv0Ql4lDvw323MfY82wndn83ffKDgFCZsmZsf/I=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=pTQ7Bx9/v/k4xwV555XoEfws1N+ogVlgGWWlXnWVYKehrVptAixD+4lPhZp8ekj2V
+         0TDlJmcW6rLh+mt3zeuNPOmHDFoWCkgUQ6ylr+Aqvr3RZRHb+0KsHGSKLQiQfrS5wO
+         Z9yIkcXO5f7ZDwqKfCMDNU13B8+wlJ1XVb3Szprc=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 282EZ091000914
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 2 Sep 2022 09:35:00 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 2 Sep
+ 2022 09:35:00 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 2 Sep 2022 09:35:00 -0500
+Received: from [172.24.145.182] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 282EYwGj044829;
+        Fri, 2 Sep 2022 09:34:59 -0500
+Message-ID: <652841a9-a97e-0c87-8742-701be6633b82@ti.com>
+Date:   Fri, 2 Sep 2022 20:04:57 +0530
 MIME-Version: 1.0
-References: <165442136963.152751.14259048792272164569.tglx@xen13> <CAHk-=wgjTMQgiKzBZTmb=uWGDEQxDdyF1+qxBkODYciuNsmwnw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgjTMQgiKzBZTmb=uWGDEQxDdyF1+qxBkODYciuNsmwnw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 2 Sep 2022 23:34:30 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASL3tZ_NwNmCaovQdBaKvQf1HrFRsSMw3zrCB63wC9yKA@mail.gmail.com>
-Message-ID: <CAK7LNASL3tZ_NwNmCaovQdBaKvQf1HrFRsSMw3zrCB63wC9yKA@mail.gmail.com>
-Subject: Re: [GIT pull] objtool/urgent for v5.19-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH RESEND 2/6] arm64: dts: ti: k3-j721s2-main: Add SERDES and
+ WIZ device tree node
+Content-Language: en-US
+To:     Matt Ranostay <mranostay@ti.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
+References: <20220810094000.248487-1-mranostay@ti.com>
+ <20220810094000.248487-2-mranostay@ti.com>
+ <8c130e92-9970-54d3-d263-37ae2f722b34@ti.com> <YxFEk5zU4l9Yraek@ubuntu>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <YxFEk5zU4l9Yraek@ubuntu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-On Mon, Jun 6, 2022 at 2:14 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Sun, Jun 5, 2022 at 2:30 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >
-> > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> > index 06400504150b..6a663b27b286 100644
-> > --- a/scripts/Makefile.build
-> > +++ b/scripts/Makefile.build
-> > @@ -218,7 +218,7 @@ objtool_args =                                                              \
-> >         $(if $(CONFIG_SLS), --sls)                                      \
-> >         $(if $(CONFIG_STACK_VALIDATION), --stackval)                    \
-> >         $(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)          \
-> > -       --uaccess                                                       \
-> > +       $(if $(CONFIG_HAVE_UACCESS_VALIDATION), --uaccess)              \
-> >         $(if $(linked-object), --link)                                  \
-> >         $(if $(part-of-module), --module)                               \
-> >         $(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
->
-> Since this clashed with the Kbuild cleanups I just merged, I looked at
-> it and threw up in my mouth a little.
->
-> Not a new problem, but can we do something like that attached, perhaps?
->
-> Untested, but looks trivially obvious. FamousLastWords(tm).
->
->                   Linus
-
-A nice idea.
-
-I also cleaned up scripts/Makefile.vmlinux_o in a similar way,
-and submitted a patch.
-
-https://lore.kernel.org/lkml/20220902130846.654526-1-masahiroy@kernel.org/T/#u
-
-I will send it in the next MW.
 
 
---
-Best Regards
-Masahiro Yamada
+On 02/09/22 05:17, Matt Ranostay wrote:
+> On Thu, Sep 01, 2022 at 02:15:28PM +0530, Vignesh Raghavendra wrote:
+>>
+>>
+>> On 10/08/22 15:09, Matt Ranostay wrote:
+>>> From: Aswath Govindraju <a-govindraju@ti.com>
+>>>
+>>> Add dt node for the single instance of WIZ (SERDES wrapper) and
+>>> SERDES module shared by PCIe, eDP and USB.
+>>>
+>>> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+>>> Cc: Nishanth Menon <nm@ti.com>
+>>> Acked-by: Matt Ranostay <mranostay@ti.com>
+>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>> ---
+>>>  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 70 ++++++++++++++++++++++
+>>>  1 file changed, 70 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>>> index f7e359da8690..f1e02d896168 100644
+>>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>>> @@ -5,6 +5,13 @@
+>>>   * Copyright (C) 2021 Texas Instruments Incorporated - https://www.ti.com/
+>>>   */
+>>>  
+>>> +/ {
+>>> +	serdes_refclk: serdes-refclk {
+>>
+>> clk-X
+>>
+> 
+
+Sorry for the confusion, I meant clock-<abc>. DT specification says all
+clock nodes should follow above naming convention
+
+> So something like 'serdes_refclk: clock-cmnrefclk' would seem to match the current
+> naming style of other K3 platforms (albeit except j7200).
+> 
+
+Make sense...
+
+>>> +		#clock-cells = <0>;
+>>> +		compatible = "fixed-clock";
+>>> +	};
+>>> +};
+>>> +
+>>>  &cbass_main {
+>>>  	msmc_ram: sram@70000000 {
+>>>  		compatible = "mmio-sram";
+>>> @@ -33,6 +40,13 @@ scm_conf: scm-conf@104000 {
+>>>  		#size-cells = <1>;
+>>>  		ranges = <0x00 0x00 0x00104000 0x18000>;
+>>>  
+>>> +		serdes_ln_ctrl: mux-controller@80 {
+>>
+>> mux-controller-X
+>>
+> 
+> 80 is the index into the mmio region. So should it still have @ for the node
+> name?
+> 
+
+@addr can only be used with nodes that have reg property. And since
+there is no reg here -> would follow mux-controller-<abc> convention.
+
+> Also this is how the rest of the K3 platforms reference the mux controller.
+
+
+We need to fix other dtsi files to drop @addr part as they are now
+falling make dtbs_check
+
+> 
+>>> +			compatible = "mmio-mux";
+>>> +			#mux-control-cells = <1>;
+>>> +			mux-reg-masks = <0x80 0x3>, <0x84 0x3>, /* SERDES0 lane0/1 select */
+>>> +					<0x88 0x3>, <0x8c 0x3>; /* SERDES0 lane2/3 select */
+>>> +		};
+>>> +
+>>>  		usb_serdes_mux: mux-controller@0 {
+>>>  			compatible = "mmio-mux";
+>>>  			#mux-control-cells = <1>;
+>>> @@ -728,6 +742,62 @@ usb0: usb@6000000 {
+>>>  		};
+>>>  	};
+>>>  
+>>> +	serdes_wiz0: wiz@5060000 {
+>>> +		compatible = "ti,j721e-wiz-10g";
+>>> +		#address-cells = <1>;
+>>> +		#size-cells = <1>;
+>>> +		power-domains = <&k3_pds 365 TI_SCI_PD_EXCLUSIVE>;
+>>> +		clocks = <&k3_clks 365 0>, <&k3_clks 365 3>, <&serdes_refclk>;
+>>> +		clock-names = "fck", "core_ref_clk", "ext_ref_clk";
+>>> +		num-lanes = <4>;
+>>> +		#reset-cells = <1>;
+>>> +		ranges = <0x5060000 0x0 0x5060000 0x10000>;
+>>> +
+>>> +		assigned-clocks = <&k3_clks 365 3>;
+>>> +		assigned-clock-parents = <&k3_clks 365 7>;
+>>> +
+>>> +		wiz0_pll0_refclk: pll0-refclk {
+>>
+>> please use generic node name clk-X here and elsewhere in the patch
+> 
+> So something like 'wiz0_pll0_refclk: clk-refpll0'?
+
+
+Sorry, clock-refpll0  perhaps
+
+[...]
+
+-- 
+Regards
+Vignesh

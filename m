@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD24B5AAF43
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0A95AB08D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236927AbiIBMfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S238171AbiIBMzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236957AbiIBMdy (ORCPT
+        with ESMTP id S238096AbiIBMxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:33:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DBFE395D;
-        Fri,  2 Sep 2022 05:28:17 -0700 (PDT)
+        Fri, 2 Sep 2022 08:53:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D23186C8;
+        Fri,  2 Sep 2022 05:38:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8772062160;
-        Fri,  2 Sep 2022 12:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6473EC433D7;
-        Fri,  2 Sep 2022 12:28:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB85662119;
+        Fri,  2 Sep 2022 12:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06163C433D6;
+        Fri,  2 Sep 2022 12:35:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121687;
-        bh=RiliGPSZwKdFTnul30LcNjErRFxYycneIXzWkkJauHU=;
+        s=korg; t=1662122142;
+        bh=cYJwQ0rMnudUe3akeqw33dycPQO7EW+u8IdVBhMnKpA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fGTKDkDe/2a07v4r8vFl3Z2ZKWGUiRi0BX2EcSM+53H5DwMNqGrA5v6UojIhvmhIr
-         tXiBhrm795DF7wih5wTOb5KvBALQ5pbd2tSFZl2UygaIx66ML9EWHL2RRX9p7qIBqU
-         v7fxB+1oOvE24wr5GXof7jSod1/z6mpdOqHRMAeM=
+        b=ivK0/j47KAj/T0VZIQ+ObgNoFa9i9mXtidbid7KxGZy6eFE11Wr6yPIOY37Eweqj5
+         PcoXNyIN+xOpNh+csEvyzTzFwHWe/7HSrS/8xnM9QRrLuMmBkHsxXFvQ0WqoqqRLdp
+         NYayqFZ/HXx5g0wXYJWmeKWk//3ErPG5YuONodMA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 33/77] net: Fix a data-race around netdev_budget_usecs.
+        stable@vger.kernel.org, James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>, Lucas Wei <lucaswei@google.com>
+Subject: [PATCH 5.19 06/72] arm64: errata: Add Cortex-A510 to the repeat tlbi list
 Date:   Fri,  2 Sep 2022 14:18:42 +0200
-Message-Id: <20220902121404.739072097@linuxfoundation.org>
+Message-Id: <20220902121404.999570603@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-References: <20220902121403.569927325@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,36 +54,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: James Morse <james.morse@arm.com>
 
-[ Upstream commit fa45d484c52c73f79db2c23b0cdfc6c6455093ad ]
+commit 39fdb65f52e9a53d32a6ba719f96669fd300ae78 upstream.
 
-While reading netdev_budget_usecs, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+Cortex-A510 is affected by an erratum where in rare circumstances the
+CPUs may not handle a race between a break-before-make sequence on one
+CPU, and another CPU accessing the same page. This could allow a store
+to a page that has been unmapped.
 
-Fixes: 7acf8a1e8a28 ("Replace 2 jiffies with sysctl netdev_budget_usecs to enable softirq tuning")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Work around this by adding the affected CPUs to the list that needs
+TLB sequences to be done twice.
+
+Signed-off-by: James Morse <james.morse@arm.com>
+Link: https://lore.kernel.org/r/20220704155732.21216-1-james.morse@arm.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Cc: Lucas Wei <lucaswei@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/arm64/silicon-errata.rst |    2 ++
+ arch/arm64/Kconfig                     |   17 +++++++++++++++++
+ arch/arm64/kernel/cpu_errata.c         |    8 +++++++-
+ 3 files changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 7c19e672dde84..25b4fe06fbb4e 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6393,7 +6393,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
- {
- 	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
- 	unsigned long time_limit = jiffies +
--		usecs_to_jiffies(netdev_budget_usecs);
-+		usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
- 	int budget = READ_ONCE(netdev_budget);
- 	LIST_HEAD(list);
- 	LIST_HEAD(repoll);
--- 
-2.35.1
-
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -106,6 +106,8 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A510     | #2077057        | ARM64_ERRATUM_2077057       |
+ +----------------+-----------------+-----------------+-----------------------------+
++| ARM            | Cortex-A510     | #2441009        | ARM64_ERRATUM_2441009       |
+++----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A710     | #2119858        | ARM64_ERRATUM_2119858       |
+ +----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A710     | #2054223        | ARM64_ERRATUM_2054223       |
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -838,6 +838,23 @@ config ARM64_ERRATUM_2224489
+ 
+ 	  If unsure, say Y.
+ 
++config ARM64_ERRATUM_2441009
++	bool "Cortex-A510: Completion of affected memory accesses might not be guaranteed by completion of a TLBI"
++	default y
++	select ARM64_WORKAROUND_REPEAT_TLBI
++	help
++	  This option adds a workaround for ARM Cortex-A510 erratum #2441009.
++
++	  Under very rare circumstances, affected Cortex-A510 CPUs
++	  may not handle a race between a break-before-make sequence on one
++	  CPU, and another CPU accessing the same page. This could allow a
++	  store to a page that has been unmapped.
++
++	  Work around this by adding the affected CPUs to the list that needs
++	  TLB sequences to be done twice.
++
++	  If unsure, say Y.
++
+ config ARM64_ERRATUM_2064142
+ 	bool "Cortex-A510: 2064142: workaround TRBE register writes while disabled"
+ 	depends on CORESIGHT_TRBE
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -214,6 +214,12 @@ static const struct arm64_cpu_capabiliti
+ 		ERRATA_MIDR_RANGE(MIDR_QCOM_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
+ 	},
+ #endif
++#ifdef CONFIG_ARM64_ERRATUM_2441009
++	{
++		/* Cortex-A510 r0p0 -> r1p1. Fixed in r1p2 */
++		ERRATA_MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1),
++	},
++#endif
+ 	{},
+ };
+ #endif
+@@ -490,7 +496,7 @@ const struct arm64_cpu_capabilities arm6
+ #endif
+ #ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
+ 	{
+-		.desc = "Qualcomm erratum 1009, or ARM erratum 1286807",
++		.desc = "Qualcomm erratum 1009, or ARM erratum 1286807, 2441009",
+ 		.capability = ARM64_WORKAROUND_REPEAT_TLBI,
+ 		.type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,
+ 		.matches = cpucap_multi_entry_cap_matches,
 
 

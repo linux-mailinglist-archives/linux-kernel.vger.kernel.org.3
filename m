@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE185AAFDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B305AAF16
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237478AbiIBMpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
+        id S236654AbiIBMdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237381AbiIBMnD (ORCPT
+        with ESMTP id S236537AbiIBMbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:43:03 -0400
+        Fri, 2 Sep 2022 08:31:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9124BEA30B;
-        Fri,  2 Sep 2022 05:32:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66FAE1919;
+        Fri,  2 Sep 2022 05:27:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CF8DB82ACC;
-        Fri,  2 Sep 2022 12:31:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A77CC433D7;
-        Fri,  2 Sep 2022 12:31:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC03FB82A9B;
+        Fri,  2 Sep 2022 12:26:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 297AAC433C1;
+        Fri,  2 Sep 2022 12:26:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121895;
-        bh=Efn+RC4A9xr3g6ZZemO1GHFr28YmcxvuRXOBY+Vj6dI=;
+        s=korg; t=1662121610;
+        bh=dKNrh2jkJVvrCoEqs/AeEQ2un8Qz/MAYe710h9ewEAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mpo0tKUH0yFw1PwpICYAPcPCxQsbCs3xCsYGFF4+JiaHtYTK5jQL2ElAX7oKoxmkM
-         ANojuOBZjQaDWn0hwlflKmGlkjSWQ6dcOrYAiuJgIZ4l04ubZZIjAkZYBjSv1M6c+T
-         n13Ql8bCX0Cia3gAyWPzSPDnuowsXxD7u7dq8F8w=
+        b=EkY4MiywBVNPBObJlJ6nv+uXJrJ1Fzvq0UHuezMa8voMhGW41m3xljbP/AFhCVgK5
+         gfb+acNwvk9Uzx81CiFIIGRdBX+6Lsku+qfKq25S97ltMYHn87/1bsMpT8nj+jSOwE
+         kQknIkMkPqogtqSQ9yQKBIo/bTO68X0YYJRXjwyc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 21/73] io_uring: fail links when poll fails
-Date:   Fri,  2 Sep 2022 14:18:45 +0200
-Message-Id: <20220902121405.153057380@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 26/56] net: Fix a data-race around netdev_budget_usecs.
+Date:   Fri,  2 Sep 2022 14:18:46 +0200
+Message-Id: <20220902121401.118095124@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
+References: <20220902121400.219861128@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ upstream commmit c487a5ad48831afa6784b368ec40d0ee50f2fe1b ]
+[ Upstream commit fa45d484c52c73f79db2c23b0cdfc6c6455093ad ]
 
-Don't forget to cancel all linked requests of poll request when
-__io_arm_poll_handler() failed.
+While reading netdev_budget_usecs, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: aa43477b04025 ("io_uring: poll rework")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/a78aad962460f9fdfe4aa4c0b62425c88f9415bc.1655852245.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[pavel: backport]
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7acf8a1e8a28 ("Replace 2 jiffies with sysctl netdev_budget_usecs to enable softirq tuning")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c |    2 ++
- 1 file changed, 2 insertions(+)
+ net/core/dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5844,6 +5844,8 @@ static int io_poll_add(struct io_kiocb *
- 	ipt.pt._qproc = io_poll_queue_proc;
- 
- 	ret = __io_arm_poll_handler(req, &req->poll, &ipt, poll->events);
-+	if (!ret && ipt.error)
-+		req_set_fail(req);
- 	ret = ret ?: ipt.error;
- 	if (ret)
- 		__io_req_complete(req, issue_flags, ret, 0);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index c93068ea2e4f2..880b096eef8a6 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -6335,7 +6335,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
+ {
+ 	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
+ 	unsigned long time_limit = jiffies +
+-		usecs_to_jiffies(netdev_budget_usecs);
++		usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
+ 	int budget = READ_ONCE(netdev_budget);
+ 	LIST_HEAD(list);
+ 	LIST_HEAD(repoll);
+-- 
+2.35.1
+
 
 

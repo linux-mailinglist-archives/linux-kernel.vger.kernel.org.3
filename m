@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22225AA642
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752A25AA63E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235136AbiIBDU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S235121AbiIBDWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIBDUl (ORCPT
+        with ESMTP id S229804AbiIBDWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:20:41 -0400
+        Thu, 1 Sep 2022 23:22:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD2429A;
-        Thu,  1 Sep 2022 20:20:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21549564C8;
+        Thu,  1 Sep 2022 20:22:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DBE61EA7;
-        Fri,  2 Sep 2022 03:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6FEC433D7;
-        Fri,  2 Sep 2022 03:20:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B09CC61EA4;
+        Fri,  2 Sep 2022 03:22:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8643EC433C1;
+        Fri,  2 Sep 2022 03:22:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662088838;
-        bh=BsOHRM4pj/Cx8jQlerkEmWkvN1ZmISnL0o3Je+RC3rw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GKaUWEyjbUEJRtygq8yOuDVsk1O04YnbRJGoh7VvhNd2P1rxWx4bnXqflp21EoP8j
-         buEgk7J+cWUd5w63K33u1gmvuBgvleQoLczdUYEHhIe4b/bHpJk3wpa9oun5xIUUQn
-         EeCzn7anOLNmtAKSVDDC6xGqxiaJwsAWqKnd8bg0koKtrvKoo5/BUx2g8iCvQd2l9R
-         OsHcjQ2UoQlUNW460HYHQRSfenZNJxl2XpHCWCIjP/2mlhVWuKAcwFPKzQsBlnCJ5J
-         Tku/VFuscSdEsr3TD912gdlFXx+DBeNh233eWt1mF7hudLkeKk1xz5AJ5hwz4dfmNU
-         RjmGqaz32M8jg==
-Date:   Fri, 2 Sep 2022 06:20:33 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jason Gunthorpe <jgg@ziepe.ca>,
+        s=k20201202; t=1662088921;
+        bh=vgggjnwSi12Tj/VroAR1dh/1zC4HRD7ys9U3EW00yBs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B4ju/ZJAY/x9d5wubi8BI/qiyIH6e1/H/3vvbuUnU1OuMy5g2ND5CFLnvITdI7Ino
+         2RgSzAxcV9/lpoJQiQU29BgdPN/sNXt4mfKJX3Nhe++rJ5AWXenrQ+FW3awuA/TDwL
+         DxjLhC2Qe0XaaglRgq/smKHuWOKzZNjMyRR5Y0bDHXO0jjJiMpv5krSe2Of3NAB+mv
+         JCdADVEtY83uoAW4PROkd2fS54gpbg8mytaGbbqpmJS2jFYjrUOgwlry7b2dOFl+st
+         uYICNyPJUDSHMgBW6Z3BKnjUVcaKJvZ2FO5fEfpSVVeUdt4pO0td0zCwlQslfQib8P
+         pH8qr2BfOmxmQ==
+Date:   Thu, 1 Sep 2022 20:21:59 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nageswara R Sastry <rnsastry@linux.ibm.com>,
-        Coiby Xu <coxu@redhat.com>
-Subject: Re: [PATCH v8 2/4] tpm: of: Make of-tree specific function commonly
- available
-Message-ID: <YxF2gTw4vlfwxhpl@kernel.org>
-References: <20220901214610.768645-1-stefanb@linux.ibm.com>
- <20220901214610.768645-3-stefanb@linux.ibm.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        kernel test robot <lkp@intel.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v5 5/7] ethtool: add interface to interact with
+ Ethernet Power Equipment
+Message-ID: <20220901202159.2a600c70@kernel.org>
+In-Reply-To: <20220831133240.3236779-6-o.rempel@pengutronix.de>
+References: <20220831133240.3236779-1-o.rempel@pengutronix.de>
+        <20220831133240.3236779-6-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901214610.768645-3-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,141 +69,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 05:46:08PM -0400, Stefan Berger wrote:
-> Simplify tpm_read_log_of() by moving reusable parts of the code into
-> an inline function that makes it commonly available so it can be
-> used also for kexec support. Call the new of_tpm_get_sml_parameters()
-> function from the TPM Open Firmware driver.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Tested-by: Coiby Xu <coxu@redhat.com>
-> 
-> ---
-> v7:
->  - Added original comment back into inlined function
-> 
-> v4:
->  - converted to inline function
-> ---
->  drivers/char/tpm/eventlog/of.c | 31 +++++------------------------
->  include/linux/tpm.h            | 36 ++++++++++++++++++++++++++++++++++
->  2 files changed, 41 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-> index a9ce66d09a75..f9462d19632e 100644
-> --- a/drivers/char/tpm/eventlog/of.c
-> +++ b/drivers/char/tpm/eventlog/of.c
-> @@ -12,6 +12,7 @@
->  
->  #include <linux/slab.h>
->  #include <linux/of.h>
-> +#include <linux/tpm.h>
->  #include <linux/tpm_eventlog.h>
->  
->  #include "../tpm.h"
-> @@ -20,11 +21,10 @@
->  int tpm_read_log_of(struct tpm_chip *chip)
->  {
->  	struct device_node *np;
-> -	const u32 *sizep;
-> -	const u64 *basep;
->  	struct tpm_bios_log *log;
->  	u32 size;
->  	u64 base;
-> +	int ret;
->  
->  	log = &chip->log;
->  	if (chip->dev.parent && chip->dev.parent->of_node)
-> @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
->  	if (of_property_read_bool(np, "powered-while-suspended"))
->  		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
->  
-> -	sizep = of_get_property(np, "linux,sml-size", NULL);
-> -	basep = of_get_property(np, "linux,sml-base", NULL);
-> -	if (sizep == NULL && basep == NULL)
-> -		return -ENODEV;
-> -	if (sizep == NULL || basep == NULL)
-> -		return -EIO;
-> -
-> -	/*
-> -	 * For both vtpm/tpm, firmware has log addr and log size in big
-> -	 * endian format. But in case of vtpm, there is a method called
-> -	 * sml-handover which is run during kernel init even before
-> -	 * device tree is setup. This sml-handover function takes care
-> -	 * of endianness and writes to sml-base and sml-size in little
-> -	 * endian format. For this reason, vtpm doesn't need conversion
-> -	 * but physical tpm needs the conversion.
-> -	 */
-> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
-> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
-> -		size = be32_to_cpup((__force __be32 *)sizep);
-> -		base = be64_to_cpup((__force __be64 *)basep);
-> -	} else {
-> -		size = *sizep;
-> -		base = *basep;
-> -	}
-> +	ret = of_tpm_get_sml_parameters(np, &base, &size);
-> +	if (ret < 0)
-> +		return ret;
->  
->  	if (size == 0) {
->  		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index dfeb25a0362d..6356baaa1393 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -460,4 +460,40 @@ static inline struct tpm_chip *tpm_default_chip(void)
->  	return NULL;
->  }
->  #endif
-> +
-> +#ifdef CONFIG_OF
-> +static inline int of_tpm_get_sml_parameters(struct device_node *np,
-> +					    u64 *base, u32 *size)
+On Wed, 31 Aug 2022 15:32:38 +0200 Oleksij Rempel wrote:
+> +/**
+> + * pse_ethtool_get_status - get status of PSE control
+> + * @psec: PSE control pointer
+> + * @extack: extack for reporting useful error messages
+> + * @status: struct to store PSE status
+> + */
+> +int pse_ethtool_get_status(struct pse_control *psec,
+> +			   struct netlink_ext_ack *extack,
+> +			   struct pse_control_status *status)
 > +{
-> +	const u32 *sizep;
-> +	const u64 *basep;
+> +	const struct pse_controller_ops *ops;
+> +	int err;
 > +
-> +	sizep = of_get_property(np, "linux,sml-size", NULL);
-> +	basep = of_get_property(np, "linux,sml-base", NULL);
-> +	if (sizep == NULL && basep == NULL)
-> +		return -ENODEV;
-> +	if (sizep == NULL || basep == NULL)
-> +		return -EIO;
+> +	if (!psec)
+> +		return 0;
+
+Defensive programming?
+
+> +	if (WARN_ON(IS_ERR(psec)))
+> +		return -EINVAL;
 > +
-> +	/*
-> +	 * For both vtpm/tpm, firmware has log addr and log size in big
-> +	 * endian format. But in case of vtpm, there is a method called
-> +	 * sml-handover which is run during kernel init even before
-> +	 * device tree is setup. This sml-handover function takes care
-> +	 * of endianness and writes to sml-base and sml-size in little
-> +	 * endian format. For this reason, vtpm doesn't need conversion
-> +	 * but physical tpm needs the conversion.
-> +	 */
-> +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
-> +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
-> +		*size = be32_to_cpup((__force __be32 *)sizep);
-> +		*base = be64_to_cpup((__force __be64 *)basep);
-> +	} else {
-> +		*size = *sizep;
-> +		*base = *basep;
+> +	ops = psec->pcdev->ops;
+> +
+> +	if (!ops->ethtool_get_status) {
+> +		NL_SET_ERR_MSG(extack,
+> +			       "PSE driver does not support status report");
+> +		return -EOPNOTSUPP;
 > +	}
-> +	return 0;
-> +}
-> +#endif
 > +
->  #endif
-> -- 
-> 2.35.1
-> 
+> +	mutex_lock(&psec->pcdev->lock);
+> +	err = ops->ethtool_get_status(psec->pcdev, psec->id, extack, status);
+> +	mutex_unlock(&psec->pcdev->lock);
+> +
+> +	return err;
+> +}
+> +EXPORT_SYMBOL_GPL(pse_ethtool_get_status);
+> +
+> +/**
+> + * pse_ethtool_set_config - set PSE control configuration
+> + * @psec: PSE control pointer
+> + * @extack: extack for reporting useful error messages
+> + * @config: Configuration of the test to run
+> + */
+> +int pse_ethtool_set_config(struct pse_control *psec,
+> +			   struct netlink_ext_ack *extack,
+> +			   const struct pse_control_config *config)
+> +{
+> +	const struct pse_controller_ops *ops;
+> +	int err;
+> +
+> +	if (!psec)
+> +		return 0;
+> +
+> +	if (WARN_ON(IS_ERR(psec)))
+> +		return -EINVAL;
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+ditto
 
-BR, Jarkko
+> +	ops = psec->pcdev->ops;
+> +
+> +	if (!ops->ethtool_set_config) {
+> +		NL_SET_ERR_MSG(extack,
+> +			       "PSE driver does not configuration");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	mutex_lock(&psec->pcdev->lock);
+> +	err = ops->ethtool_set_config(psec->pcdev, psec->id, extack, config);
+> +	mutex_unlock(&psec->pcdev->lock);
+> +
+> +	return err;
+> +}
+> +EXPORT_SYMBOL_GPL(pse_ethtool_set_config);
+
+> +int pse_ethtool_get_status(struct pse_control *psec,
+> +			   struct netlink_ext_ack *extack,
+> +			   struct pse_control_status *status)
+> +{
+> +	return -ENOTSUPP;
+
+EOPNOTSUPP, please run checkpatch --strict on this patch.
+All of the complaints look legit at a glance.
+
+
+> +	ETHTOOL_MSG_PSE_NTF,
+
+I don't see you calling the ethtool_notify() function, does this ever
+
+> +static int pse_prepare_data(const struct ethnl_req_info *req_base,
+> +			       struct ethnl_reply_data *reply_base,
+> +			       struct genl_info *info)
+> +{
+> +	struct pse_reply_data *data = PSE_REPDATA(reply_base);
+> +	struct net_device *dev = reply_base->dev;
+> +	int ret;
+> +
+> +	ret = ethnl_ops_begin(dev);
+> +	if (ret < 0)
+> +		return 0;
+
+humpf, return ret;?
+
+> +	ret = pse_get_pse_attributs(dev, info->extack, data);
+> +
+> +	ethnl_ops_complete(dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int pse_reply_size(const struct ethnl_req_info *req_base,
+> +			  const struct ethnl_reply_data *reply_base)
+> +{
+> +	const struct pse_reply_data *data = PSE_REPDATA(reply_base);
+> +	const struct pse_control_status *st = &data->status;
+> +	int len = 0;
+> +
+> +	if (st->podl_admin_state >= 0)
+
+UNKNOWN is now 1, should be > 0 ?
+
+> +		len += nla_total_size(sizeof(u32)); /* _PODL_PSE_ADMIN_STATE */
+> +	if (st->podl_pw_status >= 0)
+> +		len += nla_total_size(sizeof(u32)); /* _PODL_PSE_PW_D_STATUS */
+> +
+> +	return len;
+> +}
+
+> +	if (!phydev)
+> +		return -EOPNOTSUPP;
+> +
+> +	if (!phydev->psec)
+> +		ret = -EOPNOTSUPP;
+
+Would be good to slap an extack msg on the two errors here.
+
+> +	else
+> +		ret = pse_ethtool_set_config(phydev->psec, extack, &config);
+
+And avoid indenting the success path. So the !phydev->psec should
+contain a return.
+
+> +	return ret;
+> +}

@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949AB5AAF05
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC125AAFE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236779AbiIBMcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S237566AbiIBMpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236666AbiIBMbi (ORCPT
+        with ESMTP id S237401AbiIBMnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:31:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD4EE190E;
-        Fri,  2 Sep 2022 05:26:54 -0700 (PDT)
+        Fri, 2 Sep 2022 08:43:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBFAEA8A9;
+        Fri,  2 Sep 2022 05:32:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B80B9B82ABD;
-        Fri,  2 Sep 2022 12:26:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28271C433B5;
-        Fri,  2 Sep 2022 12:26:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFEDE621A6;
+        Fri,  2 Sep 2022 12:32:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 993D6C433B5;
+        Fri,  2 Sep 2022 12:32:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121592;
-        bh=ygv5b7Fd2GBK1PHrrtgvE32HVeC9KUYkOtlJ+Y/J1Ds=;
+        s=korg; t=1662121934;
+        bh=592iDz/BO08z3ictvlp22YVVxQH8ZjZrTk0zzma+jgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pp9fxtoqede/2v52gayNt+ZHQTHqnTxBEUO0GGFp4k9U4bpDIy3an1DT6rNiPyL77
-         mSp7y2GfuT/UrwMpbYEBin4MGo03V58+nuqoftmI4hvWcptpXYpYVG2bc6ujIO98r6
-         3VGo9EA1Bp7iVx/ItSNdBd9h3nPgov0cO5aRyu+Y=
+        b=BVU9uqkjcIXJIMtS7LjPwm3FpfoKD5NXt/Fx/mV8JWyC1rmDX/4Dd/b6pDLqSUf6j
+         bHwMeiEQXZX6YeZcxZfCfYOf1QpWgQU9NYlnDtQAGu9NwqK+knB1IKr541xidwuRpU
+         RoPvTNRKpDLkKXTcvp4DnmkjradgSiargDLzCN38=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen Zhongjin <chenzhongjin@huawei.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 4.19 30/56] x86/unwind/orc: Unwind ftrace trampolines with correct ORC entry
+        stable@vger.kernel.org, Ben Greear <greearb@candelatech.com>,
+        Stefan Roese <sr@denx.de>, Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Yao Hongbo <yaohongbo@linux.alibaba.com>,
+        Naveen Naidu <naveennaidu479@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 26/73] Revert "PCI/portdrv: Dont disable AER reporting in get_port_device_capability()"
 Date:   Fri,  2 Sep 2022 14:18:50 +0200
-Message-Id: <20220902121401.293170735@linuxfoundation.org>
+Message-Id: <20220902121405.308996274@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Zhongjin <chenzhongjin@huawei.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit fc2e426b1161761561624ebd43ce8c8d2fa058da upstream.
+This reverts commit c968af565ca6c18b2f2af60fc1493c8db15abb3c which is
+commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 upstream.
 
-When meeting ftrace trampolines in ORC unwinding, unwinder uses address
-of ftrace_{regs_}call address to find the ORC entry, which gets next frame at
-sp+176.
+It is reported to cause problems, so drop it from the stable trees for
+now until it gets sorted out.
 
-If there is an IRQ hitting at sub $0xa8,%rsp, the next frame should be
-sp+8 instead of 176. It makes unwinder skip correct frame and throw
-warnings such as "wrong direction" or "can't access registers", etc,
-depending on the content of the incorrect frame address.
-
-By adding the base address ftrace_{regs_}caller with the offset
-*ip - ops->trampoline*, we can get the correct address to find the ORC entry.
-
-Also change "caller" to "tramp_addr" to make variable name conform to
-its content.
-
-[ mingo: Clarified the changelog a bit. ]
-
-Fixes: 6be7fa3c74d1 ("ftrace, orc, x86: Handle ftrace dynamically allocated trampolines")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220819084334.244016-1-chenzhongjin@huawei.com
+Link: https://lore.kernel.org/r/47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com
+Reported-by: Ben Greear <greearb@candelatech.com>
+Cc: Stefan Roese <sr@denx.de>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Pali Rohár <pali@kernel.org>
+Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+Cc: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Cc: Michal Simek <michal.simek@xilinx.com>
+Cc: Yao Hongbo <yaohongbo@linux.alibaba.com>
+Cc: Naveen Naidu <naveennaidu479@gmail.com>
+Cc: Sasha Levin <sashal@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/unwind_orc.c |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/pci/pcie/portdrv_core.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kernel/unwind_orc.c
-+++ b/arch/x86/kernel/unwind_orc.c
-@@ -89,22 +89,27 @@ static struct orc_entry *orc_find(unsign
- static struct orc_entry *orc_ftrace_find(unsigned long ip)
- {
- 	struct ftrace_ops *ops;
--	unsigned long caller;
-+	unsigned long tramp_addr, offset;
+--- a/drivers/pci/pcie/portdrv_core.c
++++ b/drivers/pci/pcie/portdrv_core.c
+@@ -222,8 +222,15 @@ static int get_port_device_capability(st
  
- 	ops = ftrace_ops_trampoline(ip);
- 	if (!ops)
- 		return NULL;
- 
-+	/* Set tramp_addr to the start of the code copied by the trampoline */
- 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS)
--		caller = (unsigned long)ftrace_regs_call;
-+		tramp_addr = (unsigned long)ftrace_regs_caller;
- 	else
--		caller = (unsigned long)ftrace_call;
-+		tramp_addr = (unsigned long)ftrace_caller;
+ #ifdef CONFIG_PCIEAER
+ 	if (dev->aer_cap && pci_aer_available() &&
+-	    (pcie_ports_native || host->native_aer))
++	    (pcie_ports_native || host->native_aer)) {
+ 		services |= PCIE_PORT_SERVICE_AER;
 +
-+	/* Now place tramp_addr to the location within the trampoline ip is at */
-+	offset = ip - ops->trampoline;
-+	tramp_addr += offset;
++		/*
++		 * Disable AER on this port in case it's been enabled by the
++		 * BIOS (the AER service driver will enable it when necessary).
++		 */
++		pci_disable_pcie_error_reporting(dev);
++	}
+ #endif
  
- 	/* Prevent unlikely recursion */
--	if (ip == caller)
-+	if (ip == tramp_addr)
- 		return NULL;
- 
--	return orc_find(caller);
-+	return orc_find(tramp_addr);
- }
- #else
- static struct orc_entry *orc_ftrace_find(unsigned long ip)
+ 	/* Root Ports and Root Complex Event Collectors may generate PMEs */
 
 

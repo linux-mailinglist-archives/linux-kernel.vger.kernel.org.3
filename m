@@ -2,94 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B225AB20C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04A95AAF72
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236250AbiIBNtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
+        id S237112AbiIBMic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237838AbiIBNsU (ORCPT
+        with ESMTP id S237085AbiIBMhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:48:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4546E166AA5;
-        Fri,  2 Sep 2022 06:23:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D9D2F5BE03;
-        Fri,  2 Sep 2022 12:34:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662122070;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZSh2REjiRAk/k5oPQg2yXZGh/unc7sc3tPapfoccmRI=;
-        b=wdEwtN3JZgc/dJfXvHTB2OuHq5iMMkwcvGadpvdtKl82JBp/CVm4q6hNc+Y/iWTf2Xz+aI
-        YGNc8TruF0sa2O/2hm9jHou3PZrcjEVob/160cOGyJ77oxrhQEaONmpuSIM0yX+QUzatCh
-        /RsJEpuKLTyOxrED2kdzlFs5ZvtVXAo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662122070;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZSh2REjiRAk/k5oPQg2yXZGh/unc7sc3tPapfoccmRI=;
-        b=KENUHNHD48w8jrLxhOstCJQGwUAg1XngO63jvWwXMV9t3VvgwJ8T1JrqwXS/ustyoxYoL+
-        euH2Gj9JTUuJQ1CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9A82A13328;
-        Fri,  2 Sep 2022 12:34:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Wbq4JFb4EWMIaQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Fri, 02 Sep 2022 12:34:30 +0000
-Date:   Fri, 2 Sep 2022 14:29:10 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 07/23] btrfs: Convert extent_write_cache_pages() to use
- filemap_get_folios_tag()
-Message-ID: <20220902122910.GV13489@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220901220138.182896-1-vishal.moola@gmail.com>
- <20220901220138.182896-8-vishal.moola@gmail.com>
+        Fri, 2 Sep 2022 08:37:48 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DEC2FC
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:19:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662121184; x=1693657184;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fS3Zg6CR41DlCRJ3YlObPpVsOET9vzxsmZZDS1sOMxU=;
+  b=SH/scYvvmnMCUsLpGS8cvXdETz61DaPLMRCCwWxQ0Innso3urnAiF9La
+   62BRhlDaqh8dpkJo9ICeEmbLWps7M6YRzJLSURpLG9GCEW+EOHXJ4otTX
+   82ZHsrerHCxaNxOGH+oAZAYzDSGb/+AKLM0ahyAj9kt5laTo2qFferDJh
+   utT2VqwU7M1aAqVFQKNxKz2ASOxj4OIWZiWy4c/0ANcpYYpxFrg0eXDB0
+   CquqgYSa/qHU/L19Up/Lm20GbqOX0H+3G/qzI8n+/qVVRA77TOALtZCcI
+   2/tmHoHtXslpBFR1YUnBtvbeP8N2u93HBMS7rtRAJdUx4tz5PldWuKn7f
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="295974597"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="295974597"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 05:19:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="563946986"
+Received: from crojewsk-ctrl.igk.intel.com ([10.102.9.28])
+  by orsmga003.jf.intel.com with ESMTP; 02 Sep 2022 05:19:40 -0700
+From:   Cezary Rojewski <cezary.rojewski@intel.com>
+To:     alsa-devel@alsa-project.org, broonie@kernel.org
+Cc:     tiwai@suse.com, perex@perex.cz,
+        amadeuszx.slawinski@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, hdegoede@redhat.com,
+        lgirdwood@gmail.com, kai.vehmanen@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
+        yung-chuan.liao@linux.intel.com, willy@infradead.org,
+        linux-kernel@vger.kernel.org, andy@kernel.org,
+        intel-poland@eclists.intel.com, andy.shevchenko@gmail.com,
+        Cezary Rojewski <cezary.rojewski@intel.com>
+Subject: [PATCH v4 0/2] lib/string_helpers: Introduce parse_int_array_user()
+Date:   Fri,  2 Sep 2022 14:29:26 +0200
+Message-Id: <20220902122928.632602-1-cezary.rojewski@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901220138.182896-8-vishal.moola@gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 03:01:22PM -0700, Vishal Moola (Oracle) wrote:
-> Converted function to use folios throughout. This is in preparation for
-> the removal of find_get_pages_range_tag(). Now also supports large
-> folios.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+Continuation of recent upstream discussion [1] regarding user string
+tokenization.
 
-Acked-by: David Sterba <dsterba@suse.com>
+First, parse_int_array_user() is introduced to allow for splitting
+specified user string into a sequence of integers. Makes use of
+get_options() internally so the parsing logic is not duplicated.
+
+With that done, redundant parts of the sound driver are removed.
+
+Originally similar functionality was added for the SOF sound driver. As
+more users are on the horizon, it is desirable to update existing
+string_helpers code and provide a unified solution.
+
+
+Changes in v4:
+- renamed the function to parse_int_array_user()
+- at the name several local variable names have been reworded to match
+  the above
+
+Changes in v3:
+- relocated tokenize_user_input() implementation to string_helpers as
+  requested by Matthew
+
+Changes in v2:
+- reused get_options() so no parsing logic is duplicated
+- simplified __user variant with help of memdup_user_nul()
+  Both suggested by Andy, thanks for thourough review
+
+
+[1]: https://lore.kernel.org/alsa-devel/20220707091301.1282291-1-cezary.rojewski@intel.com/
+
+
+Cezary Rojewski (2):
+  lib/string_helpers: Introduce parse_int_array_user()
+  ASoC: SOF: Remove strsplit_u32() and tokenize_input()
+
+ include/linux/string_helpers.h    |   2 +
+ lib/string_helpers.c              |  45 +++++++++++++
+ sound/soc/sof/sof-client-probes.c | 104 ++++++------------------------
+ 3 files changed, 65 insertions(+), 86 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,92 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF9E5AB4DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6E05AB4DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbiIBPRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        id S236138AbiIBPRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236391AbiIBPRJ (ORCPT
+        with ESMTP id S235589AbiIBPQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:17:09 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56EC28717
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aZ+oBpeo8JsuvtNdwggGcqsSE9afnliueCxoJZqBN7U=; b=RAadmeaUeYbulm9czRnwLyIs2I
-        WGb29yXZX4DZLJGpVl2nRhLsckXMLIiJSJVrV6LFl8X+wPJuomJYZh1vQggraP9Pdnhv/gGikP9Qu
-        th93zu2WpmdgXVac6wraItw1t1YbqW67M1jYL6VtttTEynEM/urS1xL7pSpQMAmKGMg9Iq//2Ggcq
-        P1w0VkeNNhKdGxuOVfjUmje02hm0DZPe3MHA6LEi4L94zZuNE7sFbdwjoT9d4oHoLNJYGTmYKucF1
-        Vy1wm7IRZ1IdAVc1VgIHfAJqFW2dcQV7w2VzMj3Y5UCeoGZSdlw5jrpv1pvVp53LTEpSQ6l/LSVyC
-        +Bp2YXWw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oU7z5-00BMvU-LF;
-        Fri, 02 Sep 2022 14:49:27 +0000
-Date:   Fri, 2 Sep 2022 15:49:27 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kuyo Chang <kuyo.chang@mediatek.com>, major.chen@samsung.com,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        wsd_upstream@mediatek.com, hongfei.tang@samsung.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/1] sched/debug: fix dentry leak in
- update_sched_domain_debugfs
-Message-ID: <YxIX96nUnwz56fte@ZenIV>
-References: <20220902031518.1116-1-kuyo.chang@mediatek.com>
- <YxGUBzp9C7kcNgps@kroah.com>
- <5ce45c874d6a05ca69abed3961d413c4a4360e79.camel@mediatek.com>
- <YxGpp/+lWSzwpVLZ@kroah.com>
- <f14e71182ebf1520aeede06afb44af49ec6128a0.camel@mediatek.com>
- <YxHI2sRgF2gqYcHk@kroah.com>
+        Fri, 2 Sep 2022 11:16:42 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 25C87578B9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:49:32 -0700 (PDT)
+Received: (qmail 273620 invoked by uid 1000); 2 Sep 2022 10:49:30 -0400
+Date:   Fri, 2 Sep 2022 10:49:30 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Ray Chi <raychi@google.com>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+        albertccwang@google.com, badhri@google.com, pumahsu@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch v2] usb: core: stop USB enumeration if too many retries
+Message-ID: <YxIX+jqWFfwAWYot@rowland.harvard.edu>
+References: <20220902091535.3572333-1-raychi@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxHI2sRgF2gqYcHk@kroah.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220902091535.3572333-1-raychi@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 11:11:54AM +0200, Greg Kroah-Hartman wrote:
+On Fri, Sep 02, 2022 at 05:15:35PM +0800, Ray Chi wrote:
+> If a broken accessory connected to a USB host, usbcore might
+> keep doing enumeration retries and it will take a long time to
+> cause system unstable.
+> 
+> This patch provides a quirk to specific USB ports of the hub to
+> stop USB enumeration if needed.
 
-> +/**
-> + * debugfs_lookup_and_remove - lookup a directory or file and recursively remove it
-> + * @name: a pointer to a string containing the name of the item to look up.
-> + * @parent: a pointer to the parent dentry of the item.
-> + *
-> + * This is the equlivant of doing something like
-> + * debugfs_remove(debugfs_lookup(..)) but with the proper reference counting
-> + * handled for the directory being looked up.
-> + */
-> +void debugfs_lookup_and_remove(const char *name, struct dentry *parent)
+This seems very awkward.  Why not have a quirk that prevents USB 
+enumeration completely, instead of after some number of retries?  After 
+all, if the port is connected to a broken accessory, there's no reason 
+to try enumerating it even once.
+
+For that matter, have you tried using the existing "disabled" port 
+attribute instead of adding a new quirk?  Does it already solve your 
+problem?
+
+> 
+> Signed-off-by: Ray Chi <raychi@google.com>
+> ---
+> Changes since v1:
+>  - remove usb_hub_set_port_power()
+>  - add a variable ignore_connect into struct port_dev
+>  - modify hub_port_stop_enumerate() and set ignore_connect in
+>    this function
+>  - avoid calling hub_port_connect_change() in port_event()
+> ---
+>  drivers/usb/core/hub.c | 40 ++++++++++++++++++++++++++++++++++++++++
+>  drivers/usb/core/hub.h |  2 ++
+>  include/linux/usb.h    |  3 +++
+>  3 files changed, 45 insertions(+)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 2633acde7ac1..7f34ee8bb81e 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -3081,6 +3081,30 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+>  	return status;
+>  }
+>  
+> +/* Stop enumerate if the port met errors and quirk is set */
+> +static bool hub_port_stop_enumerate(struct usb_hub *hub, int port1, int retries)
 > +{
-> +	struct dentry *dentry;
+> +	struct usb_port *port_dev = hub->ports[port1 - 1];
 > +
-> +	dentry = debugfs_lookup(name, parent);
-> +	if (IS_ERR_OR_NULL(dentry))
+> +	if (port_dev->quirks & USB_PORT_QUIRK_STOP_ENUM) {
+> +		if (port_dev->ignore_connect)
+> +			return true;
+> +
+> +		if (retries < (PORT_INIT_TRIES - 1) / 2)
+> +			return false;
+> +
+> +		/*
+> +		 * Some USB hosts can't take a long time to keep doing enumeration
+> +		 * retry. After doing half of the retries, we would turn off the port
+> +		 * power to stop enumeration if the quirk is set.
+
+What made you decide that half of the retries was the right place to 
+stop?  Why not do all the retries?
+
+> +		 */
+> +		port_dev->ignore_connect = true;
+> +	} else
+> +		port_dev->ignore_connect = false;
+> +
+> +	return port_dev->ignore_connect;
+> +}
+
+If the quirk prevented enumeration completely then this function 
+wouldn't be needed.
+
+> +
+>  /* Check if a port is power on */
+>  int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
+>  {
+> @@ -4855,6 +4879,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+>  					buf->bMaxPacketSize0;
+>  			kfree(buf);
+>  
+> +			if (r < 0 && (port_dev->quirks & USB_PORT_QUIRK_STOP_ENUM)) {
+
+How come this line tests the quirk but doesn't call 
+hub_port_stop_enumerate()?
+
+> +				retval = r;
+> +				goto fail;
+> +			}
+> +
+>  			retval = hub_port_reset(hub, port1, udev, delay, false);
+>  			if (retval < 0)		/* error or disconnect */
+>  				goto fail;
+> @@ -5387,6 +5416,9 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>  		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
+>  			break;
+>  
+> +		if (hub_port_stop_enumerate(hub, port1, i))
+> +			break;
+> +
+>  		/* When halfway through our retry count, power-cycle the port */
+>  		if (i == (PORT_INIT_TRIES - 1) / 2) {
+>  			dev_info(&port_dev->dev, "attempt power cycle\n");
+> @@ -5550,6 +5582,9 @@ static void port_event(struct usb_hub *hub, int port1)
+>  	if (usb_hub_port_status(hub, port1, &portstatus, &portchange) < 0)
+>  		return;
+>  
+> +	if (hub_port_stop_enumerate(hub, port1, 0))
 > +		return;
 
-	Could somebody explain how could that return ERR_PTR()?
+This test is in the wrong place.  It should go right next to the check 
+for pm_runtime_active(&port_dev->dev); even though the port isn't being 
+used we still want to turn off the port-change bits in the port status.
 
-Incidentally, IS_ERR_OR_NULL is almost always a sign of bad interface - or
-that of lazy cargo-culting.  Please, don't propagate that garbage... ;-/
+> +
+>  	if (portchange & USB_PORT_STAT_C_CONNECTION) {
+>  		usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_CONNECTION);
+>  		connect_change = 1;
+> @@ -5934,6 +5969,9 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+>  		ret = hub_port_init(parent_hub, udev, port1, i);
+>  		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
+>  			break;
+> +
+> +		if (hub_port_stop_enumerate(parent_hub, port1, i))
+> +			goto stop_enumerate;
+
+Also this -- the purpose is to avoid calling hub_port_init() for ports 
+with the quirk, so this test belongs before the call to hub_port_init(), 
+not after.
+
+>  	}
+>  	mutex_unlock(hcd->address0_mutex);
+>  
+> @@ -6022,6 +6060,8 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+>  	udev->bos = bos;
+>  	return 0;
+>  
+> +stop_enumerate:
+> +	mutex_unlock(hcd->address0_mutex);
+>  re_enumerate:
+>  	usb_release_bos_descriptor(udev);
+>  	udev->bos = bos;
+> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+> index b2925856b4cb..f0aa718f4c7f 100644
+> --- a/drivers/usb/core/hub.h
+> +++ b/drivers/usb/core/hub.h
+> @@ -90,6 +90,7 @@ struct usb_hub {
+>   * @is_superspeed cache super-speed status
+>   * @usb3_lpm_u1_permit: whether USB3 U1 LPM is permitted.
+>   * @usb3_lpm_u2_permit: whether USB3 U2 LPM is permitted.
+> + * @ignore_connect: ignore the connection or not
+>   */
+>  struct usb_port {
+>  	struct usb_device *child;
+> @@ -103,6 +104,7 @@ struct usb_port {
+>  	u32 over_current_count;
+>  	u8 portnum;
+>  	u32 quirks;
+> +	bool ignore_connect;
+
+This should be a bitfield like the following entries.  It's okay to make 
+it a bool rather than unsigned int.  But you may find that you don't 
+need this field at all.
+
+>  	unsigned int is_superspeed:1;
+>  	unsigned int usb3_lpm_u1_permit:1;
+>  	unsigned int usb3_lpm_u2_permit:1;
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index f7a9914fc97f..fc0fef58c706 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -490,6 +490,9 @@ enum usb_port_connect_type {
+>  /* Decrease TRSTRCY to 10ms during device enumeration. */
+>  #define USB_PORT_QUIRK_FAST_ENUM	BIT(1)
+>  
+> +/* Stop the enumeration for the given port if there are too many failures*/
+> +#define USB_PORT_QUIRK_STOP_ENUM	BIT(2)
+
+When you define a new port quirk, you have to document it in the 
+/sys/bus/usb/devices/.../<hub_interface>/port<X>/quirks section of 
+Documentation/ABI/testing/sysfs-bus-usb.
+
+Alan Stern
+
+> +
+>  /*
+>   * USB 2.0 Link Power Management (LPM) parameters.
+>   */
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 

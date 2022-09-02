@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462435AA836
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3675AA837
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235429AbiIBGns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 02:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S235526AbiIBGny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 02:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiIBGnq (ORCPT
+        with ESMTP id S230151AbiIBGnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Sep 2022 02:43:46 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43955BB92E
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B181BBBA57
         for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 23:43:44 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MJpFB5B57zlWbk;
-        Fri,  2 Sep 2022 14:40:14 +0800 (CST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MJpDx0h74z1N7ln;
+        Fri,  2 Sep 2022 14:40:01 +0800 (CST)
 Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Fri, 2 Sep 2022 14:43:42 +0800
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 2 Sep 2022 14:43:41 +0800
+ 15.1.2375.24; Fri, 2 Sep 2022 14:43:42 +0800
 From:   Kefeng Wang <wangkefeng.wang@huawei.com>
 To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
 CC:     Mike Rapoport <rppt@kernel.org>,
@@ -33,10 +33,12 @@ CC:     Mike Rapoport <rppt@kernel.org>,
         Oscar Salvador <osalvador@suse.de>,
         <linux-kernel@vger.kernel.org>, "Vlastimil Babka" <vbabka@suse.cz>,
         Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH 1/2] mm: reuse pageblock_start/end_pfn() macro
-Date:   Fri, 2 Sep 2022 14:47:50 +0800
-Message-ID: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
+Subject: [PATCH 2/2] mm: add pageblock_aligned() macro
+Date:   Fri, 2 Sep 2022 14:47:51 +0800
+Message-ID: <20220902064751.17890-2-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
+References: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -53,138 +55,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move pageblock_start_pfn/pageblock_end_pfn() into pageblock-flags.h,
-then they could be used somewhere else, not only in compaction.
+Add pageblock_aligned() and use it to simplify code.
 
 Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- include/linux/pageblock-flags.h |  2 ++
- mm/compaction.c                 |  2 --
- mm/memblock.c                   |  2 +-
- mm/page_alloc.c                 | 13 ++++++-------
+ include/linux/pageblock-flags.h |  1 +
+ mm/compaction.c                 |  8 ++++----
+ mm/memory_hotplug.c             |  6 ++----
+ mm/page_alloc.c                 | 17 +++++++----------
  mm/page_isolation.c             |  2 +-
- mm/page_owner.c                 |  4 ++--
- 6 files changed, 12 insertions(+), 13 deletions(-)
+ 5 files changed, 15 insertions(+), 19 deletions(-)
 
 diff --git a/include/linux/pageblock-flags.h b/include/linux/pageblock-flags.h
-index 83c7248053a1..ef2e17e312ae 100644
+index ef2e17e312ae..e0b980268442 100644
 --- a/include/linux/pageblock-flags.h
 +++ b/include/linux/pageblock-flags.h
-@@ -53,6 +53,8 @@ extern unsigned int pageblock_order;
+@@ -53,6 +53,7 @@ extern unsigned int pageblock_order;
  #endif /* CONFIG_HUGETLB_PAGE */
  
  #define pageblock_nr_pages	(1UL << pageblock_order)
-+#define pageblock_start_pfn(pfn)	round_down(pfn, pageblock_nr_pages)
-+#define pageblock_end_pfn(pfn)		ALIGN((pfn + 1), pageblock_nr_pages)
++#define pageblock_aligned(pfn)	IS_ALIGNED((unsigned long)(pfn), pageblock_nr_pages)
+ #define pageblock_start_pfn(pfn)	round_down(pfn, pageblock_nr_pages)
+ #define pageblock_end_pfn(pfn)		ALIGN((pfn + 1), pageblock_nr_pages)
  
- /* Forward declaration */
- struct page;
 diff --git a/mm/compaction.c b/mm/compaction.c
-index f72907c7cfef..65bef5f78897 100644
+index 65bef5f78897..c4e4453187a2 100644
 --- a/mm/compaction.c
 +++ b/mm/compaction.c
-@@ -52,8 +52,6 @@ static inline void count_compact_events(enum vm_event_item item, long delta)
+@@ -402,7 +402,7 @@ static bool test_and_set_skip(struct compact_control *cc, struct page *page,
+ 	if (cc->ignore_skip_hint)
+ 		return false;
  
- #define block_start_pfn(pfn, order)	round_down(pfn, 1UL << (order))
- #define block_end_pfn(pfn, order)	ALIGN((pfn) + 1, 1UL << (order))
--#define pageblock_start_pfn(pfn)	block_start_pfn(pfn, pageblock_order)
--#define pageblock_end_pfn(pfn)		block_end_pfn(pfn, pageblock_order)
+-	if (!IS_ALIGNED(pfn, pageblock_nr_pages))
++	if (!pageblock_aligned(pfn))
+ 		return false;
  
- /*
-  * Page order with-respect-to which proactive compaction
-diff --git a/mm/memblock.c b/mm/memblock.c
-index b5d3026979fc..46fe7575f03c 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -2000,7 +2000,7 @@ static void __init free_unused_memmap(void)
- 		 * presume that there are no holes in the memory map inside
- 		 * a pageblock
+ 	skip = get_pageblock_skip(page);
+@@ -884,7 +884,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 		 * COMPACT_CLUSTER_MAX at a time so the second call must
+ 		 * not falsely conclude that the block should be skipped.
  		 */
--		start = round_down(start, pageblock_nr_pages);
-+		start = pageblock_start_pfn(start);
+-		if (!valid_page && IS_ALIGNED(low_pfn, pageblock_nr_pages)) {
++		if (!valid_page && pageblock_aligned(low_pfn)) {
+ 			if (!isolation_suitable(cc, page)) {
+ 				low_pfn = end_pfn;
+ 				page = NULL;
+@@ -1936,7 +1936,7 @@ static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
+ 		 * before making it "skip" so other compaction instances do
+ 		 * not scan the same block.
+ 		 */
+-		if (IS_ALIGNED(low_pfn, pageblock_nr_pages) &&
++		if (pageblock_aligned(low_pfn) &&
+ 		    !fast_find_block && !isolation_suitable(cc, page))
+ 			continue;
  
- 		/*
- 		 * If we had a previous bank, and there is a space
+@@ -2122,7 +2122,7 @@ static enum compact_result __compact_finished(struct compact_control *cc)
+ 	 * migration source is unmovable/reclaimable but it's not worth
+ 	 * special casing.
+ 	 */
+-	if (!IS_ALIGNED(cc->migrate_pfn, pageblock_nr_pages))
++	if (!pageblock_aligned(cc->migrate_pfn))
+ 		return COMPACT_CONTINUE;
+ 
+ 	/* Direct compactor: Is a suitable page free? */
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 9ae1f98548b1..fd40f7e9f176 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -1085,8 +1085,7 @@ int __ref online_pages(unsigned long pfn, unsigned long nr_pages,
+ 	 * of the physical memory space for vmemmaps. That space is pageblock
+ 	 * aligned.
+ 	 */
+-	if (WARN_ON_ONCE(!nr_pages ||
+-			 !IS_ALIGNED(pfn, pageblock_nr_pages) ||
++	if (WARN_ON_ONCE(!nr_pages || !pageblock_aligned(pfn) ||
+ 			 !IS_ALIGNED(pfn + nr_pages, PAGES_PER_SECTION)))
+ 		return -EINVAL;
+ 
+@@ -1806,8 +1805,7 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+ 	 * of the physical memory space for vmemmaps. That space is pageblock
+ 	 * aligned.
+ 	 */
+-	if (WARN_ON_ONCE(!nr_pages ||
+-			 !IS_ALIGNED(start_pfn, pageblock_nr_pages) ||
++	if (WARN_ON_ONCE(!nr_pages || !pageblock_aligned(start_pfn) ||
+ 			 !IS_ALIGNED(start_pfn + nr_pages, PAGES_PER_SECTION)))
+ 		return -EINVAL;
+ 
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 36b20215a3be..93339cc61f92 100644
+index 93339cc61f92..d030c20a6081 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -544,7 +544,7 @@ static inline int pfn_to_bitidx(const struct page *page, unsigned long pfn)
- #ifdef CONFIG_SPARSEMEM
- 	pfn &= (PAGES_PER_SECTION-1);
- #else
--	pfn = pfn - round_down(page_zone(page)->zone_start_pfn, pageblock_nr_pages);
-+	pfn = pfn - pageblock_start_pfn(page_zone(page)->zone_start_pfn);
- #endif /* CONFIG_SPARSEMEM */
- 	return (pfn >> pageblock_order) * NR_PAGEBLOCK_BITS;
+@@ -1892,15 +1892,14 @@ static void __init deferred_free_range(unsigned long pfn,
+ 	page = pfn_to_page(pfn);
+ 
+ 	/* Free a large naturally-aligned chunk if possible */
+-	if (nr_pages == pageblock_nr_pages &&
+-	    (pfn & (pageblock_nr_pages - 1)) == 0) {
++	if (nr_pages == pageblock_nr_pages && pageblock_aligned(pfn)) {
+ 		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
+ 		__free_pages_core(page, pageblock_order);
+ 		return;
+ 	}
+ 
+ 	for (i = 0; i < nr_pages; i++, page++, pfn++) {
+-		if ((pfn & (pageblock_nr_pages - 1)) == 0)
++		if (pageblock_aligned(pfn))
+ 			set_pageblock_migratetype(page, MIGRATE_MOVABLE);
+ 		__free_pages_core(page, 0);
+ 	}
+@@ -1928,7 +1927,7 @@ static inline void __init pgdat_init_report_one_done(void)
+  */
+ static inline bool __init deferred_pfn_valid(unsigned long pfn)
+ {
+-	if (!(pfn & (pageblock_nr_pages - 1)) && !pfn_valid(pfn))
++	if (!pageblock_aligned(pfn) && !pfn_valid(pfn))
+ 		return false;
+ 	return true;
  }
-@@ -1857,7 +1857,7 @@ void set_zone_contiguous(struct zone *zone)
- 	unsigned long block_start_pfn = zone->zone_start_pfn;
- 	unsigned long block_end_pfn;
+@@ -1940,14 +1939,13 @@ static inline bool __init deferred_pfn_valid(unsigned long pfn)
+ static void __init deferred_free_pages(unsigned long pfn,
+ 				       unsigned long end_pfn)
+ {
+-	unsigned long nr_pgmask = pageblock_nr_pages - 1;
+ 	unsigned long nr_free = 0;
  
--	block_end_pfn = ALIGN(block_start_pfn + 1, pageblock_nr_pages);
-+	block_end_pfn = pageblock_end_pfn(block_start_pfn);
- 	for (; block_start_pfn < zone_end_pfn(zone);
- 			block_start_pfn = block_end_pfn,
- 			 block_end_pfn += pageblock_nr_pages) {
-@@ -2653,8 +2653,8 @@ int move_freepages_block(struct zone *zone, struct page *page,
- 		*num_movable = 0;
- 
- 	pfn = page_to_pfn(page);
--	start_pfn = pfn & ~(pageblock_nr_pages - 1);
--	end_pfn = start_pfn + pageblock_nr_pages - 1;
-+	start_pfn = pageblock_start_pfn(pfn);
-+	end_pfn = pageblock_end_pfn(pfn) - 1;
- 
- 	/* Do not cross zone boundaries */
- 	if (!zone_spans_pfn(zone, start_pfn))
-@@ -6939,9 +6939,8 @@ static void __init init_unavailable_range(unsigned long spfn,
- 	u64 pgcnt = 0;
- 
- 	for (pfn = spfn; pfn < epfn; pfn++) {
--		if (!pfn_valid(ALIGN_DOWN(pfn, pageblock_nr_pages))) {
--			pfn = ALIGN_DOWN(pfn, pageblock_nr_pages)
--				+ pageblock_nr_pages - 1;
-+		if (!pfn_valid(pageblock_start_pfn(pfn))) {
-+			pfn = pageblock_end_pfn(pfn) - 1;
+ 	for (; pfn < end_pfn; pfn++) {
+ 		if (!deferred_pfn_valid(pfn)) {
+ 			deferred_free_range(pfn - nr_free, nr_free);
+ 			nr_free = 0;
+-		} else if (!(pfn & nr_pgmask)) {
++		} else if (!pageblock_aligned(pfn)) {
+ 			deferred_free_range(pfn - nr_free, nr_free);
+ 			nr_free = 1;
+ 		} else {
+@@ -1967,7 +1965,6 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
+ 						 unsigned long pfn,
+ 						 unsigned long end_pfn)
+ {
+-	unsigned long nr_pgmask = pageblock_nr_pages - 1;
+ 	int nid = zone_to_nid(zone);
+ 	unsigned long nr_pages = 0;
+ 	int zid = zone_idx(zone);
+@@ -1977,7 +1974,7 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
+ 		if (!deferred_pfn_valid(pfn)) {
+ 			page = NULL;
  			continue;
+-		} else if (!page || !(pfn & nr_pgmask)) {
++		} else if (!page || !pageblock_aligned(pfn)) {
+ 			page = pfn_to_page(pfn);
+ 		} else {
+ 			page++;
+@@ -6759,7 +6756,7 @@ void __meminit memmap_init_range(unsigned long size, int nid, unsigned long zone
+ 		 * such that unmovable allocations won't be scattered all
+ 		 * over the place during system boot.
+ 		 */
+-		if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
++		if (pageblock_aligned(pfn)) {
+ 			set_pageblock_migratetype(page, migratetype);
+ 			cond_resched();
  		}
- 		__init_single_page(pfn_to_page(pfn), pfn, zone, node);
+@@ -6802,7 +6799,7 @@ static void __ref __init_zone_device_page(struct page *page, unsigned long pfn,
+ 	 * Please note that MEMINIT_HOTPLUG path doesn't clear memmap
+ 	 * because this is done early in section_activate()
+ 	 */
+-	if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
++	if (pageblock_aligned(pfn)) {
+ 		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
+ 		cond_resched();
+ 	}
 diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-index 9d73dc38e3d7..f2df4ad53cd6 100644
+index f2df4ad53cd6..13cc00598677 100644
 --- a/mm/page_isolation.c
 +++ b/mm/page_isolation.c
-@@ -172,7 +172,7 @@ static int set_migratetype_isolate(struct page *page, int migratetype, int isol_
- 	 * to avoid redundant checks.
- 	 */
- 	check_unmovable_start = max(page_to_pfn(page), start_pfn);
--	check_unmovable_end = min(ALIGN(page_to_pfn(page) + 1, pageblock_nr_pages),
-+	check_unmovable_end = min(pageblock_end_pfn(page_to_pfn(page)),
- 				  end_pfn);
+@@ -311,7 +311,7 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
+ 	struct zone *zone;
+ 	int ret;
  
- 	unmovable = has_unmovable_pages(check_unmovable_start, check_unmovable_end,
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 90023f938c19..c91664a4b768 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -297,7 +297,7 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
- 			continue;
- 		}
+-	VM_BUG_ON(!IS_ALIGNED(boundary_pfn, pageblock_nr_pages));
++	VM_BUG_ON(!pageblock_aligned(boundary_pfn));
  
--		block_end_pfn = ALIGN(pfn + 1, pageblock_nr_pages);
-+		block_end_pfn = pageblock_end_pfn(pfn);
- 		block_end_pfn = min(block_end_pfn, end_pfn);
- 
- 		pageblock_mt = get_pageblock_migratetype(page);
-@@ -637,7 +637,7 @@ static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
- 			continue;
- 		}
- 
--		block_end_pfn = ALIGN(pfn + 1, pageblock_nr_pages);
-+		block_end_pfn = pageblock_end_pfn(pfn);
- 		block_end_pfn = min(block_end_pfn, end_pfn);
- 
- 		for (; pfn < block_end_pfn; pfn++) {
+ 	if (isolate_before)
+ 		isolate_pageblock = boundary_pfn - pageblock_nr_pages;
 -- 
 2.35.3
 

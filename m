@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5DA5AB40C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2D55AB3BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236996AbiIBOtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
+        id S236475AbiIBOed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237266AbiIBOst (ORCPT
+        with ESMTP id S236415AbiIBOcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:48:49 -0400
+        Fri, 2 Sep 2022 10:32:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C680BC8A;
-        Fri,  2 Sep 2022 07:10:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5F22872B;
+        Fri,  2 Sep 2022 06:55:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CD59B82A92;
-        Fri,  2 Sep 2022 12:23:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A298EC433D7;
-        Fri,  2 Sep 2022 12:23:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28B3BB829E8;
+        Fri,  2 Sep 2022 12:35:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B8BC433D7;
+        Fri,  2 Sep 2022 12:35:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121412;
-        bh=Rk1WS9y8pDkFDaZEbT9tCSSI1OHbxBTz6GYp05s8Cmk=;
+        s=korg; t=1662122122;
+        bh=Ul++956RcBlwJcymq9BPp+XQ1rEbqtuPDH8RzOvEIyw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qUZE1iyPh0x1hi+d3AgTW1NbKZu7WgLkQQwjULaN0P57ozIucvIHMU05khKUyR42o
-         Eu46crq2aa52HtBYir0h1CPpXqWXl6y7ay4NQoWmoOH0oaPym/1YKtf73zKGtPgtS0
-         f/GGucZ8N5JuFlJb6imFD8Pv8ZOCt0/ig7pxolXg=
+        b=fBFmHv7lpsBh88vOe8DNw7cgHcqTLMEm6ELyaLetD4eZiZEa43jQeLnNuaQ1DrqYa
+         P1/yAP9W/HRl5B/juiTC9xRPlbbC8pvY0xg3Rjv/wHOdv2OiGl388kFeEAB0cFZmsF
+         rRgZ3A+sJipLJb0WKUqLGURrq+He2/+MvEez8B6g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 11/42] netfilter: nft_payload: do not truncate csum_offset and csum_type
-Date:   Fri,  2 Sep 2022 14:18:35 +0200
-Message-Id: <20220902121359.205058135@linuxfoundation.org>
+        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 5.19 02/72] drm/vc4: hdmi: Depends on CONFIG_PM
+Date:   Fri,  2 Sep 2022 14:18:38 +0200
+Message-Id: <20220902121404.844834275@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,72 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit 7044ab281febae9e2fa9b0b247693d6026166293 ]
+commit 72e2329e7c9bbe15e7a813670497ec9c6f919af3 upstream.
 
-Instead report ERANGE if csum_offset is too long, and EOPNOTSUPP if type
-is not support.
+We already depend on runtime PM to get the power domains and clocks for
+most of the devices supported by the vc4 driver, so let's just select it
+to make sure it's there.
 
-Fixes: 7ec3f7b47b8d ("netfilter: nft_payload: add packet mangling support")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220629123510.1915022-38-maxime@cerno.tech
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+(cherry picked from commit f1bc386b319e93e56453ae27e9e83817bb1f6f95)
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Cc: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nft_payload.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/vc4/Kconfig    |    1 +
+ drivers/gpu/drm/vc4/vc4_hdmi.c |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nft_payload.c b/net/netfilter/nft_payload.c
-index 04b9df9e39554..5732b32ab9320 100644
---- a/net/netfilter/nft_payload.c
-+++ b/net/netfilter/nft_payload.c
-@@ -332,6 +332,8 @@ static int nft_payload_set_init(const struct nft_ctx *ctx,
- 				const struct nlattr * const tb[])
- {
- 	struct nft_payload_set *priv = nft_expr_priv(expr);
-+	u32 csum_offset, csum_type = NFT_PAYLOAD_CSUM_NONE;
-+	int err;
- 
- 	priv->base        = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_BASE]));
- 	priv->offset      = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_OFFSET]));
-@@ -339,11 +341,15 @@ static int nft_payload_set_init(const struct nft_ctx *ctx,
- 	priv->sreg        = nft_parse_register(tb[NFTA_PAYLOAD_SREG]);
- 
- 	if (tb[NFTA_PAYLOAD_CSUM_TYPE])
--		priv->csum_type =
--			ntohl(nla_get_be32(tb[NFTA_PAYLOAD_CSUM_TYPE]));
--	if (tb[NFTA_PAYLOAD_CSUM_OFFSET])
--		priv->csum_offset =
--			ntohl(nla_get_be32(tb[NFTA_PAYLOAD_CSUM_OFFSET]));
-+		csum_type = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_CSUM_TYPE]));
-+	if (tb[NFTA_PAYLOAD_CSUM_OFFSET]) {
-+		err = nft_parse_u32_check(tb[NFTA_PAYLOAD_CSUM_OFFSET], U8_MAX,
-+					  &csum_offset);
-+		if (err < 0)
-+			return err;
-+
-+		priv->csum_offset = csum_offset;
-+	}
- 	if (tb[NFTA_PAYLOAD_CSUM_FLAGS]) {
- 		u32 flags;
- 
-@@ -354,13 +360,14 @@ static int nft_payload_set_init(const struct nft_ctx *ctx,
- 		priv->csum_flags = flags;
- 	}
- 
--	switch (priv->csum_type) {
-+	switch (csum_type) {
- 	case NFT_PAYLOAD_CSUM_NONE:
- 	case NFT_PAYLOAD_CSUM_INET:
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-+	priv->csum_type = csum_type;
- 
- 	return nft_validate_register_load(priv->sreg, priv->len);
+--- a/drivers/gpu/drm/vc4/Kconfig
++++ b/drivers/gpu/drm/vc4/Kconfig
+@@ -8,6 +8,7 @@ config DRM_VC4
+ 	depends on DRM
+ 	depends on SND && SND_SOC
+ 	depends on COMMON_CLK
++	depends on PM
+ 	select DRM_DISPLAY_HDMI_HELPER
+ 	select DRM_DISPLAY_HELPER
+ 	select DRM_KMS_HELPER
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -2875,7 +2875,7 @@ static int vc5_hdmi_init_resources(struc
+ 	return 0;
  }
--- 
-2.35.1
-
+ 
+-static int __maybe_unused vc4_hdmi_runtime_suspend(struct device *dev)
++static int vc4_hdmi_runtime_suspend(struct device *dev)
+ {
+ 	struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
+ 
 
 

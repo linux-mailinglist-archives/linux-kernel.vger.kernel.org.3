@@ -2,222 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9363A5AA9D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E325AA9DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbiIBIVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 04:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        id S235734AbiIBIXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 04:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235428AbiIBIUy (ORCPT
+        with ESMTP id S235428AbiIBIXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 04:20:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED75050068
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662106853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UyZUOg7p/TzqkDBtMIegEKQUho3iKfbgStXxRwVupNs=;
-        b=bpcCAOcKk/rpe91c7aP2gQ3U4HPx0e4AebNMu02KERMSzrkOhnKo9HHNX7cnichllOQ/P1
-        ul4GM9SZtV6GfIVQpTmU+pUDo9YyRJy4Hi/Doh1Vp9bMN1Mq2owOtzphi/tN3rRRm2xQXk
-        mfu/jqhpjZ9mkec5uMvBx8wgXrPKu/M=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-395-WkFXzdm4MrGv3swa6JYHRg-1; Fri, 02 Sep 2022 04:20:51 -0400
-X-MC-Unique: WkFXzdm4MrGv3swa6JYHRg-1
-Received: by mail-wr1-f71.google.com with SMTP id u15-20020adfa18f000000b00226d4b62f10so135490wru.9
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 01:20:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=UyZUOg7p/TzqkDBtMIegEKQUho3iKfbgStXxRwVupNs=;
-        b=K0rI88FAcVp13POwZyAMoCcwD4EgXaSKFzj6tc7dNRwficK3A1x1jvzbXAqwEDIvmM
-         wY+h/HeT1vOx+Zfw/CwN1wDlSR4MFyFXaKcTCvHN+IJi+LWOd01lRSmYk3IHTcXliYuJ
-         rXw0RE3lwWBaqI0w54/WrJipmWtqQBAHkZaupOgp67ljbljEG7bG616ZBnbDgDA0oXC5
-         a/+dFmnhRkCfHSEbwTl2slW8vPEYCNkfK7Pk6dhaJvvYHueubnWEMGJJ4uz/TpIZSdw2
-         m2qJUDfpUjE3iXDPjAwa0689t0+U4n6Tlz/cH5NnbdC5IERQR4xaqPTVeH0Rc2cm9ErQ
-         nh7g==
-X-Gm-Message-State: ACgBeo0rTxtybcUTSsLbYMnVdQFIXr+9Ix8/vssSO0wueG94oGVTnQh8
-        7AP3UJioIR5ZaxDISXKrbziKUIbJJkQJboQQZYp9bnb5jrVvBU29mMQmEuXJn8q4I5DolJGx1u5
-        N6DJiUecKDQZr5Ts6AdLNQhvf
-X-Received: by 2002:a7b:c451:0:b0:3a6:829a:6102 with SMTP id l17-20020a7bc451000000b003a6829a6102mr2003054wmi.12.1662106850797;
-        Fri, 02 Sep 2022 01:20:50 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4fuYPlcEhqJLhewH7Nd+dggsTljUv6rlMT2YuLUENnMUMi0oNDyE6wkUcyj08mesdw5rqhnw==
-X-Received: by 2002:a7b:c451:0:b0:3a6:829a:6102 with SMTP id l17-20020a7bc451000000b003a6829a6102mr2003031wmi.12.1662106850440;
-        Fri, 02 Sep 2022 01:20:50 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c714:4800:2077:1bf6:40e7:2833? (p200300cbc714480020771bf640e72833.dip0.t-ipconnect.de. [2003:cb:c714:4800:2077:1bf6:40e7:2833])
-        by smtp.gmail.com with ESMTPSA id v3-20020a5d6103000000b002252cb35184sm940758wrt.25.2022.09.02.01.20.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 01:20:50 -0700 (PDT)
-Message-ID: <417630cc-eaa8-1d73-6427-d87b02c187b6@redhat.com>
-Date:   Fri, 2 Sep 2022 10:20:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>
-References: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 1/2] mm: reuse pageblock_start/end_pfn() macro
-In-Reply-To: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+        Fri, 2 Sep 2022 04:23:12 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2368ADCE7
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:23:10 -0700 (PDT)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220902082303epoutp01ff76bc4815485ddc32f3b60f8936c448~Q-X7RbPoM1295812958epoutp01B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:23:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220902082303epoutp01ff76bc4815485ddc32f3b60f8936c448~Q-X7RbPoM1295812958epoutp01B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1662106983;
+        bh=6/Xt6T1+Ee7YepCFXOa2UQ/fraRQeGmtbuSNUh62rp4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HMWCFL9V/jU+KiTRlEtj3U7aB6o7VfqKRMGdNDT7IYZ3rBjEciHUjWZc56jcHHWpT
+         9FOU4KlIv1vT4RHG7j/WjRiteglQTDi6BIRndwZJvxgu5xPeZEnuyEXYDgThAK04By
+         QJvjxsPSiqvKJtdzpym/iVC3WUaErHztzMj3jPPU=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220902082303epcas1p133060fd10efa202a7baa0ce9fd1dbb6e~Q-X65qOiw0713307133epcas1p1p;
+        Fri,  2 Sep 2022 08:23:03 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.38.236]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4MJrWp1W1mz4x9Q8; Fri,  2 Sep
+        2022 08:23:02 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AD.AE.15556.66DB1136; Fri,  2 Sep 2022 17:23:02 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220902082301epcas1p4689f8cdbe675e224b595ceac57b3eadf~Q-X5XYsFl2971929719epcas1p4O;
+        Fri,  2 Sep 2022 08:23:01 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220902082301epsmtrp2ae01c5ffca335387ee1ba50290428f0a~Q-X5Wp9B10260902609epsmtrp2F;
+        Fri,  2 Sep 2022 08:23:01 +0000 (GMT)
+X-AuditID: b6c32a37-5b9ff70000003cc4-69-6311bd66069f
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        44.B8.18644.56DB1136; Fri,  2 Sep 2022 17:23:01 +0900 (KST)
+Received: from jiho-chu04.tn.corp.samsungelectronics.net (unknown
+        [10.113.112.236]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220902082301epsmtip239d159fc269f4f459a8e4184b8aa467e~Q-X5MBmiu2334023340epsmtip22;
+        Fri,  2 Sep 2022 08:23:01 +0000 (GMT)
+Date:   Fri, 2 Sep 2022 17:23:01 +0900
+From:   Jiho Chu <jiho.chu@samsung.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, yelini.jeong@samsung.com,
+        myungjoo.ham@samsung.com
+Subject: Re: [PATCH 1/9] trinity: Add base driver
+Message-Id: <20220902172301.b41588d3342b87e7c415bdc6@samsung.com>
+In-Reply-To: <YxD7kWBl88kMbdi5@sirena.org.uk>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmk+LIzCtJLcpLzFFi42LZdljTQDdtr2CyweTbnBZ/Jx1jt5j68Amb
+        RfPi9WwWl3fNYbO43biCzeL5tOssDmwev39NYvTYtKqTzWP/3DXsHn1bVjF6fN4kF8AalW2T
+        kZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SBkkJZYk4p
+        UCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAtECvODG3uDQvXS8vtcTK0MDAyBSoMCE7Y9Pb
+        FewFrVwVJ083MTUw9rN3MXJySAiYSGw518rYxcjFISSwg1Fiw/29UM4nRommhiXMEM5nRokJ
+        p66wwLQ0/VjFApHYxShx6tZ/Vging0li6cdTbF2MHBwsAioSy6ZGgjSwCahKzJyxBmyfiICy
+        xNXve8GamQUaGSX+NXxgAkkICxhKbLgxCWwDr4CjxNO598FsTgFdiecLPjBCbLaQuNuzghVk
+        Pq+AoMTfHcIgYWYBeYntb+cwg4QlBL6yS2xhhah2kXiw5DIbhC0s8er4FqiXpSQ+v9sLFc+W
+        mNKxCOqvAolzz7dCjTGWuLgiBcRkFtCUWL9LH6JCUWLn77mMEEv5JN597WGFqOaV6GgTgihR
+        kljy5zDUIgmJqTO+MUHYHhJTp1xlh4TTE0aJ6223WScwKsxCeGUWkldmISxewMi8ilEstaA4
+        Nz212LDAGB67yfm5mxjBqVHLfAfjtLcf9A4xMnEwHmKU4GBWEuGdelggWYg3JbGyKrUoP76o
+        NCe1+BCjKTBeJjJLiSbnA5NzXkm8oYmlgYmZkbGJhaGZoZI4r542Y7KQQHpiSWp2ampBahFM
+        HxMHp1QDE89FQb6nt+9wrHsq+Yh15pL5z79Vrdl/9OJ/nrS+JY/qLsln+x6TSDX4cI7r0uXj
+        EcKLFN/8YY3tV38V4nXFYsLdl9V5G/s5fY7x/VM0E7n9oH8R17nM7Q9XTNT7Jv0g4r/5i6KL
+        Pq4i3Hu4dxlpngq9HjuX5ZpZeYGHTilHydnoRUYskqczLbmzb86dKsLYs6H1jYV8zNVK95kP
+        Alysi0PDPr3duGN55OznfwLrNSZM7y7vfLqL69ErkdQrye/uql7Q/O7UJcjX6Osda7t9ilPb
+        +S07nx+v5f1+nptfKqeGp61+yTb/6+bTA1aKNdpmudVs1wu99KArfFXUEUPLhJquMpmaNPuK
+        YOM9n5LeK7EUZyQaajEXFScCALs3uLIWBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBLMWRmVeSWpSXmKPExsWy7bCSvG7qXsFkgwnb5Cz+TjrGbjH14RM2
+        i+bF69ksLu+aw2Zxu3EFm8XzaddZHNg8fv+axOixaVUnm8f+uWvYPfq2rGL0+LxJLoA1issm
+        JTUnsyy1SN8ugStj09sV7AWtXBUnTzcxNTD2s3cxcnJICJhINP1YxdLFyMUhJLCDUeLgvjXM
+        EAkJiU33lgPZHEC2sMThw8UQNW1MEqtP/mAEibMIqEgsmxoJUs4moCoxc8YasJkiAsoSV7/v
+        BZvJLNDIKHHkwzKwmcIChhIbbkxiAbF5BRwlns69D2ZzCuhKPF/wgRFiwRNGiettt1khjrCQ
+        uNuzghVkGa+AoMTfHcIgYWYBLYmHv26xQNjyEtvfzmGewCg4C6FqFpKqWUiqFjAyr2KUTC0o
+        zk3PLTYsMMpLLdcrTswtLs1L10vOz93ECA58La0djHtWfdA7xMjEwXiIUYKDWUmEd+phgWQh
+        3pTEyqrUovz4otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamJJE5qX+ioj9
+        IlYhcLA1j/dMnFLYtJcCr65tjq+Sr3psuCrR/zVb8dz1j39MiWpmfaqVKcu7oV3zE8uuNxMX
+        itwoe/b2pF5h8FWdy5/d8uqvFofPsYsJEDS/+pBV6LnTrinxvX7O1/+kcpvymEe112sbpT24
+        aXPnw9VDU9xdw6ri5Kd92CSlGCZw7Ekh19ENCy6tlWdVDfW2nHj61Q575qBL5p7b358455KW
+        fj3pS6brr0IR6e+s1Zf3zSnU2qf8pe9l+VpTZqXbRnNfW8lbaZ7Re1ARm87eE+Pgsb1CVeBs
+        R8qKT74vN832ytzx+nXT+zz3skvdHFu8+jVuWuedvLDn9p7KtUnPgzPFJgQ+VWIpzkg01GIu
+        Kk4EAHKtYEHrAgAA
+X-CMS-MailID: 20220902082301epcas1p4689f8cdbe675e224b595ceac57b3eadf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220725065309epcas1p4565e7bb0fea1aaf3e5e300de00774c2a
+References: <20220725065308.2457024-1-jiho.chu@samsung.com>
+        <CGME20220725065309epcas1p4565e7bb0fea1aaf3e5e300de00774c2a@epcas1p4.samsung.com>
+        <20220725065308.2457024-2-jiho.chu@samsung.com>
+        <YxD7kWBl88kMbdi5@sirena.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.09.22 08:47, Kefeng Wang wrote:
-> Move pageblock_start_pfn/pageblock_end_pfn() into pageblock-flags.h,
-> then they could be used somewhere else, not only in compaction.
+On Thu, 1 Sep 2022 19:36:01 +0100
+Mark Brown <broonie@kernel.org> wrote:
+
+> On Mon, Jul 25, 2022 at 03:53:00PM +0900, Jiho Chu wrote:
 > 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  include/linux/pageblock-flags.h |  2 ++
->  mm/compaction.c                 |  2 --
->  mm/memblock.c                   |  2 +-
->  mm/page_alloc.c                 | 13 ++++++-------
->  mm/page_isolation.c             |  2 +-
->  mm/page_owner.c                 |  4 ++--
->  6 files changed, 12 insertions(+), 13 deletions(-)
+> > +	drv->opened = drv->opened - 1;
+> > +	if (drv->opened == 0) {
+> > +		/* wait already submitted requests */
+> > +		if (drv->desc->drain_reqs)
+> > +			drv->desc->drain_reqs(drv);
 > 
-> diff --git a/include/linux/pageblock-flags.h b/include/linux/pageblock-flags.h
-> index 83c7248053a1..ef2e17e312ae 100644
-> --- a/include/linux/pageblock-flags.h
-> +++ b/include/linux/pageblock-flags.h
-> @@ -53,6 +53,8 @@ extern unsigned int pageblock_order;
->  #endif /* CONFIG_HUGETLB_PAGE */
->  
->  #define pageblock_nr_pages	(1UL << pageblock_order)
-> +#define pageblock_start_pfn(pfn)	round_down(pfn, pageblock_nr_pages)
-> +#define pageblock_end_pfn(pfn)		ALIGN((pfn + 1), pageblock_nr_pages)
->  
+> > +		drv->desc->set_state(drv, TRINITY_STATE_PAUSE);
+> 
+> > +	mutex_lock(&drv->lock);
+> > +	/** remove PAUSE set on the CP of the NPU */
+> > +	if (drv->opened == 0) {
+> > +		ret = trinity_wait_ready(drv);
+> > +		if (ret != 0)
+> > +			goto out;
+> > +	}
+> > +	drv->opened = drv->opened + 1;
+> 
+> Would it perhaps be cleaner to hold a runtime PM reference on the
+> device for each file and deal with the power up/down of the hardware in
+> the runtime PM callbacks?
 
-I'd naturally have paired ALIGN with ALIGN_DOWN -- or round_up with round_down.
-(You're replacing one instance where ALIGN_DOWN was used at least.)
+Hi, Mark.
+This open count will be removed as Greg's review.
+Anyway, the PM callback for suspend/resume is defined on device_driver struct.
 
-But maybe there is an obvious reason that I am missing :)
+@@ -1400,6 +1833,7 @@ static struct platform_driver trinity_triv2 = {
+                        .name = "triv2",
+                        .owner = THIS_MODULE,
+                        .of_match_table = of_match_ptr(trinity_match),
++                       .pm = &triv2_dev_pm_ops,
+                },
+ };
 
->  /* Forward declaration */
->  struct page;
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index f72907c7cfef..65bef5f78897 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -52,8 +52,6 @@ static inline void count_compact_events(enum vm_event_item item, long delta)
->  
->  #define block_start_pfn(pfn, order)	round_down(pfn, 1UL << (order))
->  #define block_end_pfn(pfn, order)	ALIGN((pfn) + 1, 1UL << (order))
-> -#define pageblock_start_pfn(pfn)	block_start_pfn(pfn, pageblock_order)
-> -#define pageblock_end_pfn(pfn)		block_end_pfn(pfn, pageblock_order)
->  
->  /*
->   * Page order with-respect-to which proactive compaction
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index b5d3026979fc..46fe7575f03c 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -2000,7 +2000,7 @@ static void __init free_unused_memmap(void)
->  		 * presume that there are no holes in the memory map inside
->  		 * a pageblock
->  		 */
-> -		start = round_down(start, pageblock_nr_pages);
-> +		start = pageblock_start_pfn(start);
->  
->  		/*
->  		 * If we had a previous bank, and there is a space
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 36b20215a3be..93339cc61f92 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -544,7 +544,7 @@ static inline int pfn_to_bitidx(const struct page *page, unsigned long pfn)
->  #ifdef CONFIG_SPARSEMEM
->  	pfn &= (PAGES_PER_SECTION-1);
->  #else
-> -	pfn = pfn - round_down(page_zone(page)->zone_start_pfn, pageblock_nr_pages);
-> +	pfn = pfn - pageblock_start_pfn(page_zone(page)->zone_start_pfn);
->  #endif /* CONFIG_SPARSEMEM */
->  	return (pfn >> pageblock_order) * NR_PAGEBLOCK_BITS;
->  }
-> @@ -1857,7 +1857,7 @@ void set_zone_contiguous(struct zone *zone)
->  	unsigned long block_start_pfn = zone->zone_start_pfn;
->  	unsigned long block_end_pfn;
->  
-> -	block_end_pfn = ALIGN(block_start_pfn + 1, pageblock_nr_pages);
-> +	block_end_pfn = pageblock_end_pfn(block_start_pfn);
->  	for (; block_start_pfn < zone_end_pfn(zone);
->  			block_start_pfn = block_end_pfn,
->  			 block_end_pfn += pageblock_nr_pages) {
-> @@ -2653,8 +2653,8 @@ int move_freepages_block(struct zone *zone, struct page *page,
->  		*num_movable = 0;
->  
->  	pfn = page_to_pfn(page);
-> -	start_pfn = pfn & ~(pageblock_nr_pages - 1);
-> -	end_pfn = start_pfn + pageblock_nr_pages - 1;
-> +	start_pfn = pageblock_start_pfn(pfn);
-> +	end_pfn = pageblock_end_pfn(pfn) - 1;
->  
->  	/* Do not cross zone boundaries */
->  	if (!zone_spans_pfn(zone, start_pfn))
-> @@ -6939,9 +6939,8 @@ static void __init init_unavailable_range(unsigned long spfn,
->  	u64 pgcnt = 0;
->  
->  	for (pfn = spfn; pfn < epfn; pfn++) {
-> -		if (!pfn_valid(ALIGN_DOWN(pfn, pageblock_nr_pages))) {
-> -			pfn = ALIGN_DOWN(pfn, pageblock_nr_pages)
-> -				+ pageblock_nr_pages - 1;
-> +		if (!pfn_valid(pageblock_start_pfn(pfn))) {
-> +			pfn = pageblock_end_pfn(pfn) - 1;
->  			continue;
->  		}
->  		__init_single_page(pfn_to_page(pfn), pfn, zone, node);
-> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-> index 9d73dc38e3d7..f2df4ad53cd6 100644
-> --- a/mm/page_isolation.c
-> +++ b/mm/page_isolation.c
-> @@ -172,7 +172,7 @@ static int set_migratetype_isolate(struct page *page, int migratetype, int isol_
->  	 * to avoid redundant checks.
->  	 */
->  	check_unmovable_start = max(page_to_pfn(page), start_pfn);
-> -	check_unmovable_end = min(ALIGN(page_to_pfn(page) + 1, pageblock_nr_pages),
-> +	check_unmovable_end = min(pageblock_end_pfn(page_to_pfn(page)),
->  				  end_pfn);
->  
-
-
-There are some more cases that might need care as well:
-
-
-mm/memblock.c:          prev_end = ALIGN(end, pageblock_nr_pages);
-mm/memblock.c:          prev_end = ALIGN(end, pageblock_nr_pages);
-mm/page_isolation.c:    VM_BUG_ON(ALIGN_DOWN(start_pfn, pageblock_nr_pages) !=
-mm/page_isolation.c:              ALIGN_DOWN(end_pfn - 1, pageblock_nr_pages));
-mm/page_isolation.c:    unsigned long isolate_start = ALIGN_DOWN(start_pfn, pageblock_nr_pages);
-mm/page_isolation.c:    unsigned long isolate_end = ALIGN(end_pfn, pageblock_nr_pages);
-mm/page_isolation.c:    unsigned long isolate_start = ALIGN_DOWN(start_pfn, pageblock_nr_pages);
-mm/page_isolation.c:    unsigned long isolate_end = ALIGN(end_pfn, pageblock_nr_pages);
-
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+Thanks.
+Jiho Chu

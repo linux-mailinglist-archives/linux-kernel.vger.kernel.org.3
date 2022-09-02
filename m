@@ -2,96 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6975AAC4D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEA25AAC55
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235541AbiIBKXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60402 "EHLO
+        id S235811AbiIBKYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiIBKXW (ORCPT
+        with ESMTP id S235861AbiIBKYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:23:22 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA78BA5725;
-        Fri,  2 Sep 2022 03:23:20 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oU3pT-000KkZ-Ek; Fri, 02 Sep 2022 20:23:16 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Sep 2022 18:23:15 +0800
-Date:   Fri, 2 Sep 2022 18:23:15 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     cuigaosheng <cuigaosheng1@huawei.com>
-Cc:     davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next 2/2] crypto: crc32c - add missing Kconfig option
- select
-Message-ID: <YxHZk7ADgv0Tzl6W@gondor.apana.org.au>
-References: <20220825084138.1881954-1-cuigaosheng1@huawei.com>
- <20220825084138.1881954-3-cuigaosheng1@huawei.com>
- <Ywc36LxM2+0eqKu2@gondor.apana.org.au>
- <35ec0aed-ee54-b6ea-1d34-06839b20befb@huawei.com>
+        Fri, 2 Sep 2022 06:24:16 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977C1BCC29;
+        Fri,  2 Sep 2022 03:24:14 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id kk26so2889316ejc.11;
+        Fri, 02 Sep 2022 03:24:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ubw4OAqYosXzoND9JMZTiJy0l/yQs/77EKbKqKbW0YY=;
+        b=BP2DZRPFf2sbOz8D9ICcUh7PSy1faNf/HDwU2zjY0QpLEYUzZcLSpSwA8byECDqifB
+         GTLeB6zIdfhi9QSKZxBhu3lTYh1wxN4Hs0v1519Zo3Wollw7gcYYDrby1Zi0c4cYatoF
+         gcqKk7seReSKQGmTKB+lB7ewZwFYPk2MxzFvt8VptUAmgJj3/7enhgut/t0MgcaoDus2
+         361w9kJ6cXKJ4H7DmvEbbtKcxRtS7XxHBB1Ak4s07ks0qYcH7AYe11MueMN5hLyV+ga6
+         xnWIVWGABa7t+5H60W+XIx57RQcXngb3+QhirOI4DJyyWzwaH1oudFIGADTvE97lJpdU
+         LfMA==
+X-Gm-Message-State: ACgBeo0OWS9j0TUblJOlsbOIUHyKmybeYl0Mfo16R1/w3BHGaUsfRaI8
+        ZgNDikuYDbGNslX/qbJpN8U=
+X-Google-Smtp-Source: AA6agR4ms7cVIiIp5M+0RzQlzueDIm22Ha8OGxxaGw+kpc4gvcmdlMOJOBV04pyZflw71zqaYkOJaQ==
+X-Received: by 2002:a17:906:dc89:b0:731:67eb:b60b with SMTP id cs9-20020a170906dc8900b0073167ebb60bmr25914231ejc.614.1662114252520;
+        Fri, 02 Sep 2022 03:24:12 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id f21-20020a056402195500b0043ba437fe04sm1163463edz.78.2022.09.02.03.24.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 03:24:11 -0700 (PDT)
+Message-ID: <ebbcb006-b0ec-0e17-577b-7149b47b07cd@kernel.org>
+Date:   Fri, 2 Sep 2022 12:24:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 1/3] tty: serial: introduce transmit helper generators
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220901110657.3305-1-jslaby@suse.cz>
+ <20220901110657.3305-2-jslaby@suse.cz>
+ <61411321-285d-ec3e-2d92-e93b0e95631@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <61411321-285d-ec3e-2d92-e93b0e95631@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <35ec0aed-ee54-b6ea-1d34-06839b20befb@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 08:55:12PM +0800, cuigaosheng wrote:
-> Thanks for your reply.
+On 02. 09. 22, 12:22, Ilpo Järvinen wrote:
+> On Thu, 1 Sep 2022, Jiri Slaby wrote:
 > 
-> While I was debugging the kernel code of linux-next, I start the kernel
-> with qemu-system-arm with following commands:
+>> Many serial drivers do the same thing:
+>> * send x_char if set
+>> * keep sending from the xmit circular buffer until either
+>>    - the loop reaches the end of the xmit buffer
+>>    - TX is stopped
+>>    - HW fifo is full
+>> * check for pending characters and:
+>>    - wake up tty writers to fill for more data into xmit buffer
+>>    - stop TX if there is nothing in the xmit buffer
+>>
+>> The only differences are:
+>> * how to write the character to the HW fifo
+>> * the check of the end condition:
+>>    - is the HW fifo full?
+>>    - is limit of the written characters reached?
+>>
+>> So unify the above into two helper generators:
+>> * DEFINE_UART_PORT_TX_HELPER_LIMITED() -- it performs the above taking
+>>    the written characters limit into account, and
+>> * DEFINE_UART_PORT_TX_HELPER() -- the same as above, except it only
+>>    checks the HW readiness, not the characters limit.
+>>
+>> The HW specific operations (as stated as "differences" above) are passed
+>> as arguments to the macros. They are:
+>> * tx_ready() -- returns true if HW can accept more data.
+>> * put_char() -- write a character to the device.
+>> * tx_done() -- when the write loop is done, perform arbitrary action
+>>    before potential invocation of ops->stop_tx() happens.
+>>
+>> Note that the above macros are generators. This means the code is
+>> generated in place and the above 3 arguments are "inlined". I.e. no
+>> added penalty by generating call instructions for every single
+>> character. Nor any indirect calls. (As in previous versions of this
+>> patchset.)
+>>
+>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+>> ---
+>>
+>> Notes:
+>>      [v2] instead of a function (uart_port_tx_limit()) in serial_core,
+>>           generate these in-place using macros. Thus eliminating "call"
+>>           penalty.
+>>
+>>   Documentation/driver-api/serial/driver.rst |  3 +
+>>   include/linux/serial_core.h                | 86 ++++++++++++++++++++++
+>>   2 files changed, 89 insertions(+)
+>>
+>> diff --git a/Documentation/driver-api/serial/driver.rst b/Documentation/driver-api/serial/driver.rst
+>> index 23c6b956cd90..25775bf1fcc6 100644
+>> --- a/Documentation/driver-api/serial/driver.rst
+>> +++ b/Documentation/driver-api/serial/driver.rst
+>> @@ -78,6 +78,9 @@ Other functions
+>>              uart_get_lsr_info uart_handle_dcd_change uart_handle_cts_change
+>>              uart_try_toggle_sysrq uart_get_console
+>>   
+>> +.. kernel-doc:: include/linux/serial_core.h
+>> +   :identifiers: DEFINE_UART_PORT_TX_HELPER_LIMITED DEFINE_UART_PORT_TX_HELPER
+>> +
+>>   Other notes
+>>   -----------
+>>   
+>> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+>> index 6e4f4765d209..715778160ae1 100644
+>> --- a/include/linux/serial_core.h
+>> +++ b/include/linux/serial_core.h
+>> @@ -646,6 +646,92 @@ struct uart_driver {
+>>   
+>>   void uart_write_wakeup(struct uart_port *port);
+>>   
+>> +#define __DEFINE_UART_PORT_TX_HELPER(name, port, ch, tx_ready, put_char,  \
+>> +		tx_done, for_test, for_post, ...)			  \
+>> +unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
+>> +{									  \
+>> +	struct circ_buf *xmit = &port->state->xmit;			  \
+>> +	unsigned int pending;						  \
+>> +	u8 ch;								  \
+>> +									  \
+>> +	for (; (for_test) && (tx_ready); (for_post), port->icount.tx++) { \
 > 
->     make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- vexpress_defconfig
->     make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- -j32
->     qemu-system-arm -M vexpress-a9 -m 1024M -s -nographic -kernel arch/arm/boot/zImage \
->                    -dtb arch/arm/boot/dts/vexpress-v2p-ca9.dtb -sd /home/rootfs.sd \
->                    -append "root=/dev/mmcblk0 rw console=ttyAMA0"
+>> + * The functions in parameters shall be designed as follows:
+>> + *  * **tx_ready(port):** the function shall return true if the HW can accept
+>> + *    more data to be sent. This function can be %NULL, which means the HW is
+>> + *    always ready.
 > 
-> But it failed, so I tried to locate the cause of the failure and finally found that
-> it failed from this patch(cad439fc040e crypto: api - Do not create test larvals if manager is disabled)，
-> logs as follows:
-> > EXT4-fs (mmcblk0): Cannot load crc32c driver. VFS: Cannot open root
-> > device "mmcblk0" or unknown-block(179,0): error -80 Please append a
-> > correct "root=" boot option; here are the available partitions: 1f00
-> > 131072 mtdblock0 (driver?) 1f01 32768 mtdblock1 (driver?) b300 32768
-> > mmcblk0 driver: mmcblk Kernel panic - not syncing: VFS: Unable to mount
-> > root fs on unknown-block(179,0) CPU: 0 PID: 1 Comm: swapper/0 Not
-> > tainted 5.15.0-rc1+ #1 Hardware name: ARM-Versatile Express [<8010f334>]
-> > (unwind_backtrace) from [<8010b08c>] (show_stack+0x10/0x14) [<8010b08c>]
-> > (show_stack) from [<8083f2a4>] (dump_stack_lvl+0x40/0x4c) [<8083f2a4>]
-> > (dump_stack_lvl) from [<8083b210>] (panic+0xf8/0x2f4) [<8083b210>]
-> > (panic) from [<80b0175c>] (mount_block_root+0x178/0x200) [<80b0175c>]
-> > (mount_block_root) from [<80b01bac>] (prepare_namespace+0x150/0x18c)
-> > [<80b01bac>] (prepare_namespace) from [<8084384c>]
-> > (kernel_init+0x10/0x124) [<8084384c>] (kernel_init) from [<80100130>]
-> > (ret_from_fork+0x14/0x24) Exception stack(0x8108bfb0 to 0x8108bff8)
-> > bfa0: ???????? ???????? ???????? ???????? bfc0: ???????? ????????
-> > ???????? ???????? ???????? ???????? ???????? ???????? bfe0: ????????
-> > ???????? ???????? ???????? ???????? ???????? ---[ end Kernel panic - not
-> > syncing: VFS: Unable to mount root fs on unknown-block(179,0) ]---
-> 
-> In the patch, crypto_alloc_test_larval will return NULL if CONFIG_CRYPTO_MANAGER disabled, so
-> I checked to see if this change was the cause "EXT4-fs (mmcblk0): Cannot load crc32c driver
-> ", the success logs does not have this error.
-> 
-> When I enabled CONFIG_CRYPTO_MANAGER, kernel can be boot successfully.
-> 
-> Could that be the reason? I would be very grateful if you could give me some advice.
+> So if tx_ready can be NULL, how does that for() loop above work??
 
-Can you please provide the whole .config file?
+Sorry, the docs is wrong (corresponded to v1). I fixed it locally already:
 
-Thanks,
+https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?h=devel&id=989c488c69faf2987648e09358c79d75b4a3b5c7
+
+thanks,
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+js
+suse labs
+

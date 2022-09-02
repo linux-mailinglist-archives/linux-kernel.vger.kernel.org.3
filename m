@@ -2,101 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5A05AB563
+	by mail.lfdr.de (Postfix) with ESMTP id 83F775AB564
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236429AbiIBPjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S236786AbiIBPjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbiIBPiO (ORCPT
+        with ESMTP id S237026AbiIBPiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:38:14 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5561A32D96
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:25:04 -0700 (PDT)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4CC20C000B;
-        Fri,  2 Sep 2022 15:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1662132302;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wGbRNf7kbHhzYj5QSqdFH2Zj9eYIH7p6ttXTqmWZyIU=;
-        b=DTUzlHI/6GYydDQYnyMIjTeMVctAHDbyahgKeVQ43uCl/wRxWfsMb1ONTQ8a1CoFA0lTsJ
-        hDmph31DjNdEAJH+ITGpNYY24lzwRIJra2dliv85dOn/Ce1qvulUE2NGpvQnhl+z2VdsC+
-        Q9kdp6LDAfWV2lYYWJGrdCElAFtWlg8jFtsyaVnqBeSFpWKfR6bDiSO/VIG8EQX/sEWpuN
-        kVqb+lxwmBqXfuYobdDU6AiVSuZPF9Cmc82M4lDCb4T5n7AznkTb1FFZBFrpzGLI+nJlSp
-        WVsiWA2CGn5jjoSajmuN3kjPpkdQ9N4CudtuDzlM5PnKlH3WBULpnArP/VNKTw==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: armada-38x: Add gpio-ranges for pin muxing
-In-Reply-To: <20220727131619.3056-1-pali@kernel.org>
-References: <20220727131619.3056-1-pali@kernel.org>
-Date:   Fri, 02 Sep 2022 17:25:01 +0200
-Message-ID: <87ilm5er3m.fsf@BL-laptop>
+        Fri, 2 Sep 2022 11:38:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9442AE38
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:25:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 836B761F70
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:25:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AA4AC433C1;
+        Fri,  2 Sep 2022 15:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662132321;
+        bh=c2WhCMaCzXv8dJqz92IA6FMuatOhffa5TwWAUmWx1/k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Nnf7pBqaQOoonBixGumgKVOPY8H+FK+BBdvW4nkp0Pk7QsR4kNycHly2ffUhY0FT4
+         JQuKbnPpKsYrxgCI3tlHmgvq81fJlIW1kU6HsaPIKVeQ7skk5vMfIOOF+uLZ0e60ba
+         5FoIVwXyLltlqc3nHASbm8jbkME+p5mW0+jYIeRA=
+Date:   Fri, 2 Sep 2022 17:25:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Char/Misc driver fixes for 6.0-rc4
+Message-ID: <YxIgXZNrSK+us7Vi@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-> GPIOs are configured by pinmux driver, so add corresponding references.
->
-> Fixes: 0d3d96ab0059 ("ARM: mvebu: add Device Tree description of the Arma=
-da 380/385 SoCs")
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-Applied on mvebu/dt
+are available in the Git repository at:
 
-Thanks,
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.0-rc4
 
-Gregory
-> ---
->  arch/arm/boot/dts/armada-38x.dtsi | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/arm/boot/dts/armada-38x.dtsi b/arch/arm/boot/dts/armada=
--38x.dtsi
-> index a176898944f7..1590143c52c8 100644
-> --- a/arch/arm/boot/dts/armada-38x.dtsi
-> +++ b/arch/arm/boot/dts/armada-38x.dtsi
-> @@ -298,6 +298,7 @@
->  				reg-names =3D "gpio", "pwm";
->  				ngpios =3D <32>;
->  				gpio-controller;
-> +				gpio-ranges =3D <&pinctrl 0 0 32>;
->  				#gpio-cells =3D <2>;
->  				#pwm-cells =3D <2>;
->  				interrupt-controller;
-> @@ -316,6 +317,7 @@
->  				reg-names =3D "gpio", "pwm";
->  				ngpios =3D <28>;
->  				gpio-controller;
-> +				gpio-ranges =3D <&pinctrl 0 32 28>;
->  				#gpio-cells =3D <2>;
->  				#pwm-cells =3D <2>;
->  				interrupt-controller;
-> --=20
-> 2.20.1
->
+for you to fetch changes up to 0f022aaac9ff2ceff683231b43923c650c90b47e:
 
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+  Merge tag 'soundwire-6.0-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire into char-misc-linus (2022-09-02 08:59:45 +0200)
+
+----------------------------------------------------------------
+Char/Misc driver fixes for 6.0-rc4
+
+Here are some small char/misc and other driver fixes for 6.0-rc4.
+
+Included in here are:
+  - binder fixes for previous fixes, and a few more fixes uncovered by
+    them.
+  - iio driver fixes
+  - soundwire driver fixes
+  - fastrpc driver fixes for memory corruption on some hardware
+  - peci driver fix
+  - mhi driver fix
+
+All of these have been in linux-next with no reported problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Carlos Llamas (2):
+      binder: fix UAF of ref->proc caused by race condition
+      binder: fix alloc->vma_vm_mm null-ptr dereference
+
+Christophe JAILLET (1):
+      iio: light: cm3605: Fix an error handling path in cm3605_probe()
+
+Greg Kroah-Hartman (5):
+      Revert "binder_alloc: Add missing mmap_lock calls when using the VMA"
+      Merge tag 'iio-fixes-for-6.0a' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio into char-misc-linus
+      Merge tag 'peci-fixes-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/iwi/linux into char-misc-linus
+      Merge tag 'mhi-fixes-for-v6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi into char-misc-linus
+      Merge tag 'soundwire-6.0-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire into char-misc-linus
+
+Iwona Winiarska (1):
+      peci: cpu: Fix use-after-free in adev_release()
+
+Johan Hovold (3):
+      misc: fastrpc: fix memory corruption on probe
+      misc: fastrpc: fix memory corruption on open
+      misc: fastrpc: increase maximum session count
+
+Krzysztof Kozlowski (1):
+      dt-bindings: iio: gyroscope: bosch,bmg160: correct number of pins
+
+Liam Howlett (1):
+      binder_alloc: Add missing mmap_lock calls when using the VMA
+
+Lv Ruyi (1):
+      peci: aspeed: fix error check return value of platform_get_irq()
+
+Marcus Folkesson (3):
+      iio: adc: mcp3911: make use of the sign bit
+      iio: adc: mcp3911: correct "microchip,device-addr" property
+      iio: adc: mcp3911: use correct formula for AD conversion
+
+Matti Vaittinen (1):
+      iio: ad7292: Prevent regulator double disable
+
+Qiang Yu (1):
+      bus: mhi: host: Fix up null pointer access in mhi_irq_handler
+
+Srinivas Kandagatla (2):
+      soundwire: qcom: remove duplicate reset control get
+      soundwire: qcom: fix device status array range
+
+sunliming (1):
+      iio: light: cm32181: make cm32181_pm_ops static
+
+ .../bindings/iio/gyroscope/bosch,bmg160.yaml       |  2 ++
+ drivers/android/binder.c                           | 12 ++++++++++
+ drivers/android/binder_alloc.c                     |  4 ++--
+ drivers/bus/mhi/host/main.c                        | 19 ++++++++++++---
+ drivers/iio/adc/ad7292.c                           |  4 +---
+ drivers/iio/adc/mcp3911.c                          | 28 +++++++++++++++++-----
+ drivers/iio/light/cm32181.c                        |  2 +-
+ drivers/iio/light/cm3605.c                         |  6 +++--
+ drivers/misc/fastrpc.c                             | 14 +++++++----
+ drivers/peci/controller/peci-aspeed.c              |  2 +-
+ drivers/peci/cpu.c                                 |  3 +--
+ drivers/soundwire/qcom.c                           | 10 +++-----
+ 12 files changed, 74 insertions(+), 32 deletions(-)

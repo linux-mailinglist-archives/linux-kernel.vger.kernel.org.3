@@ -2,121 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395045AB527
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF9E5AB4DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236288AbiIBP3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
+        id S236225AbiIBPRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237073AbiIBP2f (ORCPT
+        with ESMTP id S236391AbiIBPRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:28:35 -0400
-X-Greylist: delayed 598 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Sep 2022 08:04:48 PDT
-Received: from ext6.scm.com (ext6.scm.com [5.9.60.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E09F5F60;
-        Fri,  2 Sep 2022 08:04:48 -0700 (PDT)
-Received: from mintaka.ncbr.muni.cz (mintaka.ncbr.muni.cz [147.251.90.119])
-        by ext6.scm.com (Postfix) with ESMTPSA id 8E07E7E803ED;
-        Fri,  2 Sep 2022 16:46:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=scm.com;
-        s=dkim20220819; t=1662130007;
-        bh=QipHUAFLlQN8U0AxHQTuwbsAVXcDR9FKYRB7FW1CTBE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AfN0yqr9om7o+c6a7MhakZ4jromiLK15f5sJbWN7DQA4RyZ2XOttED2bN0E3my+be
-         nHIPjP6PqX8PXXsB5TJ3BcUr2vhHKR5RKXAxpU9guMzDPG8R8ZPFg+QtAYAAvoPUjS
-         kpwegXHb/+DcEBQDVhNspRiMVqSu3C7R8jafQj9ZnR+J8SuI0RO7/kZycDbUUSEqsF
-         XqOQewDqkXvefRyzntnvFQusutDT+fjVL18/mooXF/BdPvikrRR0Pd6uZdWd9rceTx
-         Sv2Td07oph8vEvSQOYBtxS/YG55kbrtWUslb7gpNySf+J0gD5H6Ka+fAz/YCysLM0K
-         7UzCyVyjyvfcQ==
-From:   =?utf-8?B?VG9tw6HFoQ==?= Trnka <trnka@scm.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+        Fri, 2 Sep 2022 11:17:09 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56EC28717
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aZ+oBpeo8JsuvtNdwggGcqsSE9afnliueCxoJZqBN7U=; b=RAadmeaUeYbulm9czRnwLyIs2I
+        WGb29yXZX4DZLJGpVl2nRhLsckXMLIiJSJVrV6LFl8X+wPJuomJYZh1vQggraP9Pdnhv/gGikP9Qu
+        th93zu2WpmdgXVac6wraItw1t1YbqW67M1jYL6VtttTEynEM/urS1xL7pSpQMAmKGMg9Iq//2Ggcq
+        P1w0VkeNNhKdGxuOVfjUmje02hm0DZPe3MHA6LEi4L94zZuNE7sFbdwjoT9d4oHoLNJYGTmYKucF1
+        Vy1wm7IRZ1IdAVc1VgIHfAJqFW2dcQV7w2VzMj3Y5UCeoGZSdlw5jrpv1pvVp53LTEpSQ6l/LSVyC
+        +Bp2YXWw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oU7z5-00BMvU-LF;
+        Fri, 02 Sep 2022 14:49:27 +0000
+Date:   Fri, 2 Sep 2022 15:49:27 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kuyo Chang <kuyo.chang@mediatek.com>, major.chen@samsung.com,
         Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: perf top -p broken for multithreaded processes since 5.19
-Date:   Fri, 02 Sep 2022 16:46:45 +0200
-Message-ID: <10137382.nUPlyArG6x@mintaka.ncbr.muni.cz>
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        wsd_upstream@mediatek.com, hongfei.tang@samsung.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/1] sched/debug: fix dentry leak in
+ update_sched_domain_debugfs
+Message-ID: <YxIX96nUnwz56fte@ZenIV>
+References: <20220902031518.1116-1-kuyo.chang@mediatek.com>
+ <YxGUBzp9C7kcNgps@kroah.com>
+ <5ce45c874d6a05ca69abed3961d413c4a4360e79.camel@mediatek.com>
+ <YxGpp/+lWSzwpVLZ@kroah.com>
+ <f14e71182ebf1520aeede06afb44af49ec6128a0.camel@mediatek.com>
+ <YxHI2sRgF2gqYcHk@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxHI2sRgF2gqYcHk@kroah.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Sep 02, 2022 at 11:11:54AM +0200, Greg Kroah-Hartman wrote:
 
-A bug in perf v5.19 and newer completely breaks monitoring multithreaded
-processes using "perf top -p". The tool fails to start with "Failed to mmap
-with 22 (Invalid argument)". It still seems to work fine on single-threaded
-processes. "perf record" is also unaffected.
+> +/**
+> + * debugfs_lookup_and_remove - lookup a directory or file and recursively remove it
+> + * @name: a pointer to a string containing the name of the item to look up.
+> + * @parent: a pointer to the parent dentry of the item.
+> + *
+> + * This is the equlivant of doing something like
+> + * debugfs_remove(debugfs_lookup(..)) but with the proper reference counting
+> + * handled for the directory being looked up.
+> + */
+> +void debugfs_lookup_and_remove(const char *name, struct dentry *parent)
+> +{
+> +	struct dentry *dentry;
+> +
+> +	dentry = debugfs_lookup(name, parent);
+> +	if (IS_ERR_OR_NULL(dentry))
+> +		return;
 
-I have bisected the issue to the following commit:
+	Could somebody explain how could that return ERR_PTR()?
 
-commit ae4f8ae16a07896403c90305d4b9be27f657c1fc
-Author: Adrian Hunter <adrian.hunter@intel.com>
-Date:   Tue May 24 10:54:31 2022 +0300
-
-    libperf evlist: Allow mixing per-thread and per-cpu mmaps
-   =20
-    mmap_per_evsel() will skip events that do not match the CPU, so all CPUs
-    can be iterated in any case.
-
-The issue can be easily reproduced using the following test:
-
-$ python - <<EOF
-import time
-import threading
-th =3D threading.Thread(target=3Dtime.sleep, args=3D(3600,))
-th.start()
-th.join()
-EOF
-
-stracing "perf top -p $(pgrep python)" yields this:
-
-145184 perf_event_open({type=3DPERF_TYPE_HARDWARE, size=3DPERF_ATTR_SIZE_VE=
-R7, config=3DPERF_COUNT_HW_CPU_CYCLES, sample_freq=3D4000, sample_type=3DPE=
-RF_SAMPLE_IP|PERF_SAMPLE_TID|PERF_SAMPLE_TIME|PERF_SAMPLE_PERIOD, read_form=
-at=3DPERF_FORMAT_ID, disabled=3D1, exclude_kernel=3D1, mmap=3D1, comm=3D1, =
-freq=3D1, task=3D1, precise_ip=3D0 /* arbitrary skid */, sample_id_all=3D1,=
- mmap2=3D1, comm_exec=3D1, ksymbol=3D1, ...}, 92061, -1, -1, PERF_FLAG_FD_C=
-LOEXEC) =3D 3
- > tools/perf/perf(evsel__open_cpu+0x287) [0x4c8ad7]
- > tools/perf/perf(cmd_top+0x1996) [0x439b26]
- > tools/perf/perf(run_builtin+0x68) [0x4a91f8]
- > tools/perf/perf(main+0x645) [0x40cad5]
-145184 perf_event_open({type=3DPERF_TYPE_HARDWARE, size=3DPERF_ATTR_SIZE_VE=
-R7, config=3DPERF_COUNT_HW_CPU_CYCLES, sample_freq=3D4000, sample_type=3DPE=
-RF_SAMPLE_IP|PERF_SAMPLE_TID|PERF_SAMPLE_TIME|PERF_SAMPLE_PERIOD, read_form=
-at=3DPERF_FORMAT_ID, disabled=3D1, exclude_kernel=3D1, mmap=3D1, comm=3D1, =
-freq=3D1, task=3D1, precise_ip=3D0 /* arbitrary skid */, sample_id_all=3D1,=
- mmap2=3D1, comm_exec=3D1, ksymbol=3D1, ...}, 104619, -1, -1, PERF_FLAG_FD_=
-CLOEXEC) =3D 5
- > tools/perf/perf(evsel__open_cpu+0x287) [0x4c8ad7]
- > tools/perf/perf(cmd_top+0x1996) [0x439b26]
- > tools/perf/perf(run_builtin+0x68) [0x4a91f8]
- > tools/perf/perf(main+0x645) [0x40cad5]
-=E2=80=A6(snip)=E2=80=A6
-145184 ioctl(5, PERF_EVENT_IOC_SET_OUTPUT, 3) =3D -1 EINVAL (Invalid argume=
-nt)
- > tools/perf/perf(perf_evlist__mmap_ops+0x2cf) [0x5d497f]
- > tools/perf/perf(evlist__mmap+0xa7) [0x4c09b7]
- > perf/perf(cmd_top+0x1ccd) [0x439e5d]
- > tools/perf/perf(run_builtin+0x68) [0x4a91f8]
- > tools/perf/perf(main+0x645) [0x40cad5]
-
-Best regards,
-
-Tom=C3=A1=C5=A1
-=2D-
-Tom=C3=A1=C5=A1 Trnka
-Software for Chemistry & Materials B.V.
-
-
-
+Incidentally, IS_ERR_OR_NULL is almost always a sign of bad interface - or
+that of lazy cargo-culting.  Please, don't propagate that garbage... ;-/

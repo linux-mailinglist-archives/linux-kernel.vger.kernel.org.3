@@ -2,141 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D935AB1F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0C15AB1DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237998AbiIBNp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S236006AbiIBNoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237330AbiIBNpS (ORCPT
+        with ESMTP id S237877AbiIBNna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:45:18 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D862912EC60;
-        Fri,  2 Sep 2022 06:21:22 -0700 (PDT)
+        Fri, 2 Sep 2022 09:43:30 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09139220D1;
+        Fri,  2 Sep 2022 06:20:04 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id e18so2682539edj.3;
+        Fri, 02 Sep 2022 06:20:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662124883; x=1693660883;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=nzPUc9EDrOhRtDNeKPMRzpudxcLrf0JAPFl0JHh3d9o=;
-  b=DZ2Sxio5il+oQReWjRJLz0mEL7NTc3FEzLKuoGfHG+NNTHSmzgEOS7DZ
-   xcKu9A6lXnc5joQlxm4W3hy8meJCNbRoBzYWkDgjWJkG20XucwkYeOlFS
-   S20HOBJfv/Ndg+MqjWPoSrx1u3YchQD5IkWjXdKn9L67gV/9Ww8J2EKaK
-   c=;
-X-IronPort-AV: E=Sophos;i="5.93,283,1654560000"; 
-   d="scan'208";a="255577710"
-Subject: Re: [PATCH v3 14/19] dt-bindings: hwmon: (mr75203) add "moortec,
- ts-series" property
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 13:18:10 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com (Postfix) with ESMTPS id C2D51E48AB;
-        Fri,  2 Sep 2022 13:18:09 +0000 (UTC)
-Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Fri, 2 Sep 2022 13:18:09 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.12; Fri, 2 Sep 2022 13:18:09 +0000
-Received: from [192.168.149.164] (10.85.143.177) by mail-relay.amazon.com
- (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Fri, 2 Sep 2022 13:18:03 +0000
-Message-ID: <52e48e0a-1369-2c8f-b3e8-c854365384d4@amazon.com>
-Date:   Fri, 2 Sep 2022 16:18:02 +0300
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Yflm318cdjKKS5Aq2XfV+05wBq9c0y5FzGJjH2Yk41k=;
+        b=Jkbt1v21G9Rxye/+N0o+IPOTj+CuYxmmfaK+N29VNl/9G+1qxjAcFRWyz3WKpt8fpG
+         0En1J4aPdQ1j2H/JkICRxNolwWhc7d9MxiK5bbehVLVvF8EGNqKn5KzTWDUAYuveOo/E
+         qEa14Xcww3Atx3eBw4lCvL/p5wjoVzdVALga1VjNQPIiTEvuZDSxnwKWheAwkcKWIt3q
+         lXcu6daCRI2nPoTmhpOea4xE7vXlBqojB4Q/nOhggO/jOpeLVC0vZvbxzBd6889QFMfV
+         M8UmLmatw9W+2wmJl6NTPcgsrA+qmPMEJ/OHrt/x4Ot9be4MAcLFtojgME9F/vYiaUlZ
+         3eFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Yflm318cdjKKS5Aq2XfV+05wBq9c0y5FzGJjH2Yk41k=;
+        b=jyQ5qfrsuJdSt8Y18OlpT3zSpmKo2cj0l10Dmi6XID87WCD7Lk57ZsJuXDzFJfPD8o
+         pCysIfxMVMmE2/mCKIsIZe+Wx/mDESS63EN3C9rVvmUkTYFNEtKQBZQs7hvhCBk3i8D5
+         n2I4xL3I/msK0sIY0XbbAKG1h05fAeTb8ml7CgiSj3vRVqPpwGJzlPgZt9+tzpMdTpn3
+         cGzY30t7A2C1aQmi0H+m13JzN0WLcQPlucYeyMCPxyezgp/6MwUgneeMBGispMIDC6sE
+         Ki4dH7uPNlbLFNrcw+YMPAFxkEwe+gGeJyt1iowxjspAUKFjMw7dQmQFkQf3QzfcwEmS
+         rMsQ==
+X-Gm-Message-State: ACgBeo0rvfVPGXba4QasNKpon0DbPKQkCQpnMrVhXH8mOwd2gZLk7myb
+        dU3mfIcqC9hjJ8C2gaZU7So=
+X-Google-Smtp-Source: AA6agR4OiTkdRvW0jcLpeFu+OQUHUqFNbN72o5cyjawWba6U+tMSbT/7lYfLOeesYk2FIldmbW4ZIw==
+X-Received: by 2002:aa7:cb56:0:b0:447:8d82:729b with SMTP id w22-20020aa7cb56000000b004478d82729bmr33697090edt.342.1662124707233;
+        Fri, 02 Sep 2022 06:18:27 -0700 (PDT)
+Received: from [10.17.0.13] ([37.120.217.82])
+        by smtp.gmail.com with ESMTPSA id bt14-20020a0564020a4e00b004462849aa06sm1484643edb.5.2022.09.02.06.18.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 06:18:26 -0700 (PDT)
+Message-ID: <312ede16-f0a9-9b9e-a0d6-fb6e37d9f1bb@gmail.com>
+Date:   Fri, 2 Sep 2022 15:18:25 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-To:     Philipp Zabel <p.zabel@pengutronix.de>, <jdelvare@suse.com>,
-        <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <rtanwar@maxlinear.com>, <linux-hwmon@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <talel@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
-        <hanochu@amazon.com>, <ronenk@amazon.com>, <itamark@amazon.com>,
-        <shellykz@amazon.com>, <shorer@amazon.com>, <amitlavi@amazon.com>,
-        <almogbs@amazon.com>, <dkl@amazon.com>,
-        <andriy.shevchenko@intel.com>, "Farber, Eliav" <farbere@amazon.com>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-15-farbere@amazon.com>
- <89806ee9a80652d5877ef5c4a86574e82af48da4.camel@pengutronix.de>
- <f49558fa-e987-145c-425e-0e8a7a9fba5f@amazon.com>
- <4ab6f79f54ad975d7c21c86c57fa2defbb8c98c0.camel@pengutronix.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/4] firmware: Add support for Qualcomm UEFI Secure
+ Application
 Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <4ab6f79f54ad975d7c21c86c57fa2defbb8c98c0.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <dfd07f84-c4bd-a18c-2263-49f999f2934c@linaro.org>
+ <f42539d0-c2a3-a2b2-c35b-b7a5904b376f@gmail.com>
+ <db00f6a9-263d-9c47-486e-7080ffc5b3c9@linaro.org>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <db00f6a9-263d-9c47-486e-7080ffc5b3c9@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/2022 12:42 PM, Philipp Zabel wrote:
-> On Mi, 2022-08-31 at 12:23 +0300, Farber, Eliav wrote:
->> On 8/31/2022 11:23 AM, Philipp Zabel wrote:
->> > On Di, 2022-08-30 at 19:22 +0000, Eliav Farber wrote:
->> > > Add optional "moortec,ts-series" property to define the temperature
->> > > equation and coefficients that shall be used to convert the digital
->> > > output to value in milli-Celsius.
->> > > Supported series: 5 (default) and 6.
->> >
->> > Is this the difference between mr75xxx and mr76xxx series?
->> > If so, should be a compatible "moortec,mr76006" instead?
->> > If the temperature equation could be derived from the compatible, this
->> > property would not be necessary.
->> The PVT (Process, Voltage, Temperature) monitoring logic can be
->> constructed from many different sub-blocks:
->> *) CONTROLLER (mr75203) - controlling TS, PD and VM.
->> *) TS (mr74137) - for measuring temperature in ring.
->> *) PD (mr74139) - for measuring IO based transistors.
->> *) VM (mr74138) - for measuring voltage rails across the SoC.
->> *) Ring oscillators (mr76007/mr76008)
->> *) Pre-scalers (mr76006)
->>
->> Besides mr75203 which is digital all other IPs are analog.
->> There is a single mr75203 and there can be several or none of the other
->> units.
->
-> Thank you for the explanation, I think this information would be nice
-> to have in a description in moortec,mr75203.yaml. 
+Hi,
 
-For v4 I added a new patch which adds this description in
-moortec,mr75203.yaml:
+On 9/2/22 09:26, Sumit Garg wrote:
+> Hi Maximilian,
+> 
+> On 02/08/22 18:52, Maximilian Luz wrote:
 
-description: |
-   A Moortec PVT (Process, Voltage, Temperature) monitoring logic design can
-   include many different units.
-   Such a design will usually consists of several Moortec's embedded 
-analog IPs,
-   and a single Moortec controller to configure and control the IPs.
+[...]
 
-   Some of the Moortec's analog hard IPs that can be used in a design:
-   *) Temperature Sensor (TS) - used to monitor core temperature (e.g. 
-mr74137).
-   *) Voltage Monitor (VM) - used to monitor voltage levels (e.g. mr74138).
-   *) Process Detector (PD) - used to assess silicon speed (e.g. mr74139).
-   *) Delay Chain - ring oscillator connected to the PD, used to measure IO
-      based transistors (e.g. mr76008 ring oscillator at 1.1V, mr76007 ring
-      oscillator at 1.8V).
-   *) Pre Scaler - provides divide-by-X scaling of input voltage, which 
-can then
-      be presented for VM for measurement within its range (e.g. mr76006 -
-      divide by 2 pre-scaler).
+>> Thanks for this information! So as far as I understand it, this is currently an
+>> interface to user-space only, i.e. does not allow in-kernel drivers for apps?
+> 
+> The Linux TEE framework already provides an in-kernel interface to TEE as well via TEE bus [1]. There are already multiple kernel drivers [2] [3] [4] [5] [6] [7] using it. So an EFI driver can be an addition to that.
+> 
+> Now coming on to TEE implementations, the drivers I mentioned are based on OP-TEE where devices are queried/enumerated during OP-TEE probe here [8]. So in similar manner QTEE smcinvoke driver should be able to register devices on the TEE bus.
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/staging/tee.rst#n56
+> 
+> [2] drivers/char/tpm/tpm_ftpm_tee.c
+> 
+> [3] drivers/char/hw_random/optee-rng.c
+> 
+> [4] drivers/firmware/arm_scmi/optee.c
+> 
+> [5] security/keys/trusted-keys/trusted_tee.c
+> 
+> [6] drivers/firmware/broadcom/tee_bnxt_fw.c
+> 
+> [7] drivers/rtc/rtc-optee.c
+> 
+> [8] drivers/tee/optee/device.c
 
-   TS, VM & PD also include a digital interface, which consists of 
-configuration
-   inputs and measurement outputs.
-   The mr75203 binding describes configuration for the controller unit, 
-but also
-   for some of the analog IPs.
+Thanks for those links!
 
---
-Regards, Eliav
+I think it would indeed be good if we could make it work via that
+interface and I guess that should generally be possible. As far as I can
+see, the biggest problem might be that the current firmware doesn't seem
+to use UUIDs, so I guess we might need to emulate them somehow.
+
+It would be great if someone with some actual knowledge of the firmware
+used on those devices could have a look at this and provide some
+insights.
+
+My plan for now is to hold off on the UEFI variable driver until we have
+a (proper) TEE driver, which unfortunately might be a bit out of my
+depth. I'm happy to help out in any way I can though.
+
+Regards,
+Max

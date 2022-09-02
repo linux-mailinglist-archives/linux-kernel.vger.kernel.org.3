@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849FF5AAD34
+	by mail.lfdr.de (Postfix) with ESMTP id CC1075AAD35
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbiIBLLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 07:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
+        id S235495AbiIBLLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 07:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235784AbiIBLLP (ORCPT
+        with ESMTP id S235833AbiIBLLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Sep 2022 07:11:15 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE0A9E2C0
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 04:11:07 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id qh18so3151110ejb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 04:11:07 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BF79E68A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 04:11:08 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id c59so2190337edf.10
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 04:11:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fairphone.com; s=fair;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=pgosDup0kTlaT74lXGXfgBHrhkiJ9yYENuHZSc/mVk8=;
-        b=UXEiCDwktlEbe9re+UzPAG6MLdZSfmqVtt7UKc7uT49N+0SqZ4AzoZ5rwbEOOYcxVv
-         RdBHvr6btdgBKYF6tR98Q5kjVVHl96NQGVqC3Wm7yVajTNVBPF5p1rm5c+dDgrUW66cq
-         jZqvyCGabdeo5d1l4dVvdrGIUQE4ZU6ZDxCNy8amoXBpoR3ii+obhv4XTdmS806BcCJb
-         Uj9yCcoLtTLfoCIW+rMbetJDpqVnpI3no+jWCWVh1sJnI1WvOoMZOY/plMyzoJzIczIC
-         Kjt8gGN2/YhPZ9RwvMW+mDeoPeP9Dx36PMq6j9ZA8+tNW2wCfX7EIOvX+4p6XXSoPtw0
-         YOrw==
+        bh=PRMWhQ4t0M1sAk+Bnx9CnAiZiIGtII9Bf7+9S4tN2rk=;
+        b=K42WY8Z04t8ao6AK0yOe8Tlfi/KHnuefjaonAFKRP/3kNLxhz+vNe272kN2waZCZQj
+         5GxFT3l/UApiS0wOx4eUfIW91sfZt8MmKQ1O79r030Qp4OIQr9EELMYXKLemi2BztePM
+         Vm0j/9tw4nhkr5VG5KiF8rcBldKXtvKlnbT5PPoulkPTksyz4rvCII0Jwh1gB0FbjKzn
+         z9OxSc5mwQTGSvkX2a5SOx0LnLKb3iY0CJaozzqi+hVFtC/l095X0NQyP0Z6vEgHZ9R7
+         pkL96RWluRQnylAP4PJUZJYDZ+MmiWMTTPwrCUtTfKRWBeqd9Vws9DrhmwQPar+LEmQV
+         Hfnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=pgosDup0kTlaT74lXGXfgBHrhkiJ9yYENuHZSc/mVk8=;
-        b=2BpSd3OarwksmlzlDgmPszH15XGHb1AGE704jOBKWE5NLq/kBNx9M75grsca5tr4p4
-         uuOlnPvVQeQXhvWarJRNVWU2Tfls6wTRSS09tcj8WaXR3j1ebb0wUfe8bxoPeEBSM7Fk
-         Zjdrqc87Z97AD9pmVi7eKRHWT/ORu/SG8MZzDl29AYmBQdmnLiwdUceSEvtPp7T8oWOH
-         WXpPNxI3vJyvo9P3BHmXv3pdwqdIFTxgkRPWXG9bJXHVOo5nDx2axFws+WSz5Z56QkTd
-         163sH7oWk04uGy/2GBAWMwUfKXbUPXdcm+8IGSIV9/NBxG7zNFtBX/JpmMGMIteWnRFJ
-         UYXA==
-X-Gm-Message-State: ACgBeo1HKZWUqaRsJqcyWDRX+3Jp78u3750BDacK/4yRCKnwVLKoHNUR
-        PSvzKjuWLVqX1YQRvbjHN+wHNQ==
-X-Google-Smtp-Source: AA6agR5uv6ZSUD5tOWHQmTksHQW9QBLDMjkC2uPD+MejoEgEQqO1CQKQSv2GOloq0ImI0WeYP0LNYw==
-X-Received: by 2002:a17:907:70b:b0:740:ef93:2ffb with SMTP id xb11-20020a170907070b00b00740ef932ffbmr21896909ejb.93.1662117065962;
-        Fri, 02 Sep 2022 04:11:05 -0700 (PDT)
+        bh=PRMWhQ4t0M1sAk+Bnx9CnAiZiIGtII9Bf7+9S4tN2rk=;
+        b=tl5cGNTCuAr+iUA8TKNWH9sewkf7hIwNoyT6sAyL6aj+p0EJcki0N2K+JMgzQ4ujsb
+         s1+OIjXJQY1OqJnO+zO7Q/zWrXNMc+Bwf1r6UwUfcu2tiIH/e7D+bBoXAdMwdowluNsC
+         J+Zc1Be9DFKNy6TrRdu01/qGtjGvI9toOoU915eMr2/HsIw42gD8nRHUfx8QcfSadOIQ
+         AJjOZp3k4DDxNYYEXD5VfmxxEeGAnHDNjuXfG7iLuAUHSYll3kQfwwyEhp14gkjBLltd
+         HgZR9jEGHfMNHBDy6/BGpr63nTYRjc8hO3RkMrshhf/ugy62WOHHdHFptTFCsnJcc0A/
+         io7Q==
+X-Gm-Message-State: ACgBeo3uxLcGjUX5q5smMJueyX68KTECtqnRfxbmGwM2G8BrBb3E5p9H
+        zGd8GGVDdKWFlLyb8X1BQ4J3CA==
+X-Google-Smtp-Source: AA6agR7y+kXFWFRqyJc/ceQtIQXv6k+bSzUFmy4sBqNhPw7LEiln9z7ysyeiwj6cbIMen9IoJiK+Sw==
+X-Received: by 2002:a05:6402:524b:b0:448:6824:8788 with SMTP id t11-20020a056402524b00b0044868248788mr21156865edd.227.1662117066948;
+        Fri, 02 Sep 2022 04:11:06 -0700 (PDT)
 Received: from otso.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl. [31.151.115.246])
-        by smtp.gmail.com with ESMTPSA id h1-20020a50cdc1000000b004483624d550sm1245624edj.71.2022.09.02.04.11.05
+        by smtp.gmail.com with ESMTPSA id h1-20020a50cdc1000000b004483624d550sm1245624edj.71.2022.09.02.04.11.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 04:11:05 -0700 (PDT)
+        Fri, 02 Sep 2022 04:11:06 -0700 (PDT)
 From:   Luca Weiss <luca.weiss@fairphone.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] arm64: dts: qcom: Add pm7250b PMIC
-Date:   Fri,  2 Sep 2022 13:10:54 +0200
-Message-Id: <20220902111055.106814-2-luca.weiss@fairphone.com>
+Subject: [PATCH 3/3] arm64: dts: qcom: sm7225-fairphone-fp4: Add pm7250b PMIC
+Date:   Fri,  2 Sep 2022 13:10:55 +0200
+Message-Id: <20220902111055.106814-3-luca.weiss@fairphone.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902111055.106814-1-luca.weiss@fairphone.com>
 References: <20220902111055.106814-1-luca.weiss@fairphone.com>
@@ -69,7 +69,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,172 +77,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PM7250B is a PMIC primarily used for charging and fuel gauge but also
-has some of the standard functionality like temp-alarm, adc, etc.
-
-Add the .dtsi with some of the functionality added.
+The PM7250B is primarily used for charger and fuel gauge on Fairphone 4
+but also has some thermal zones that we can configure already.
 
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- arch/arm64/boot/dts/qcom/pm7250b.dtsi | 149 ++++++++++++++++++++++++++
- 1 file changed, 149 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/pm7250b.dtsi
+ .../boot/dts/qcom/sm7225-fairphone-fp4.dts    | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-new file mode 100644
-index 000000000000..61f7a6345150
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-@@ -0,0 +1,149 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (C) 2022 Luca Weiss <luca.weiss@fairphone.com>
-+ */
+diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+index c76abe7587b4..30c94fd4fe61 100644
+--- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
++++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+@@ -12,6 +12,7 @@
+ #include "sm7225.dtsi"
+ #include "pm6150l.dtsi"
+ #include "pm6350.dtsi"
++#include "pm7250b.dtsi"
+ 
+ / {
+ 	model = "Fairphone 4";
+@@ -70,6 +71,36 @@ memory@efe01000 {
+ 			qcom,vmid = <15>;
+ 		};
+ 	};
 +
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/spmi/spmi.h>
-+
-+/ {
 +	thermal-zones {
-+		pm7250b-thermal {
-+			polling-delay-passive = <100>;
++		chg-skin-thermal {
++			polling-delay-passive = <0>;
 +			polling-delay = <0>;
-+
-+			thermal-sensors = <&pm7250b_temp>;
++			thermal-sensors = <&pm7250b_adc_tm 0>;
 +
 +			trips {
-+				trip0 {
-+					temperature = <95000>;
-+					hysteresis = <0>;
++				active-config0 {
++					temperature = <125000>;
++					hysteresis = <1000>;
 +					type = "passive";
 +				};
++			};
++		};
 +
-+				trip1 {
-+					temperature = <115000>;
-+					hysteresis = <0>;
-+					type = "hot";
-+				};
++		conn-thermal {
++			polling-delay-passive = <0>;
++			polling-delay = <0>;
++			thermal-sensors = <&pm7250b_adc_tm 1>;
 +
-+				trip2 {
-+					temperature = <145000>;
-+					hysteresis = <0>;
-+					type = "critical";
++			trips {
++				active-config0 {
++					temperature = <125000>;
++					hysteresis = <1000>;
++					type = "passive";
 +				};
 +			};
 +		};
++	};
+ };
+ 
+ &adsp {
+@@ -353,6 +384,42 @@ &pm6350_resin {
+ 	linux,code = <KEY_VOLUMEDOWN>;
+ };
+ 
++&pm7250b_adc {
++	adc-chan@4d {
++		reg = <ADC5_AMUX_THM1_100K_PU>;
++		qcom,ratiometric;
++		qcom,hw-settle-time = <200>;
++		qcom,pre-scaling = <1 1>;
++		label = "charger_skin_therm";
++	};
++
++	adc-chan@4f {
++		reg = <ADC5_AMUX_THM3_100K_PU>;
++		qcom,ratiometric;
++		qcom,hw-settle-time = <200>;
++		qcom,pre-scaling = <1 1>;
++		label = "conn_therm";
 +	};
 +};
 +
-+&spmi_bus {
-+	pmic@2 {
-+		compatible = "qcom,pm7250b", "qcom,spmi-pmic";
-+		reg = <0x2 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
++&pm7250b_adc_tm {
++	status = "okay";
 +
-+		pm7250b_temp: temp-alarm@2400 {
-+			compatible = "qcom,spmi-temp-alarm";
-+			reg = <0x2400>;
-+			interrupts = <0x2 0x24 0x0 IRQ_TYPE_EDGE_BOTH>;
-+			io-channels = <&pm7250b_adc ADC5_DIE_TEMP>;
-+			io-channel-names = "thermal";
-+			#thermal-sensor-cells = <0>;
-+		};
-+
-+		pm7250b_adc: adc@3100 {
-+			compatible = "qcom,spmi-adc5";
-+			reg = <0x3100>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#io-channel-cells = <1>;
-+			interrupts = <0x2 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
-+
-+			adc-chan@0 {
-+				reg = <ADC5_REF_GND>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "ref_gnd";
-+			};
-+
-+			adc-chan@1 {
-+				reg = <ADC5_1P25VREF>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "vref_1p25";
-+			};
-+
-+			adc-chan@2 {
-+				reg = <ADC5_DIE_TEMP>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "die_temp";
-+			};
-+
-+			adc-chan@7 {
-+				reg = <ADC5_USB_IN_I>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "usb_in_i_uv";
-+			};
-+
-+			adc-chan@8 {
-+				reg = <ADC5_USB_IN_V_16>;
-+				qcom,pre-scaling = <1 16>;
-+				label = "usb_in_v_div_16";
-+			};
-+
-+			adc-chan@9 {
-+				reg = <ADC5_CHG_TEMP>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "chg_temp";
-+			};
-+
-+			adc-chan@e {
-+				reg = <ADC5_AMUX_THM2>;
-+				qcom,hw-settle-time = <200>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "smb1390_therm";
-+			};
-+
-+			adc-chan@1e {
-+				reg = <ADC5_MID_CHG_DIV6>;
-+				qcom,pre-scaling = <1 6>;
-+				label = "chg_mid";
-+			};
-+
-+			adc-chan@83 {
-+				reg = <ADC5_VPH_PWR>;
-+				qcom,pre-scaling = <1 3>;
-+				label = "vph_pwr";
-+			};
-+
-+			adc-chan@84 {
-+				reg = <ADC5_VBAT_SNS>;
-+				qcom,pre-scaling = <1 3>;
-+				label = "vbat_sns";
-+			};
-+
-+			adc-chan@99 {
-+				reg = <ADC5_SBUx>;
-+				qcom,pre-scaling = <1 3>;
-+				label = "chg_sbux";
-+			};
-+		};
-+
-+		pm7250b_adc_tm: adc-tm@3500 {
-+			compatible = "qcom,spmi-adc-tm5";
-+			reg = <0x3500>;
-+			interrupts = <0x2 0x35 0x0 IRQ_TYPE_EDGE_RISING>;
-+			#thermal-sensor-cells = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
++	charger-skin-therm@0 {
++		reg = <0>;
++		io-channels = <&pm7250b_adc ADC5_AMUX_THM1_100K_PU>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
 +	};
 +
-+	pmic@3 {
-+		compatible = "qcom,pm7250b", "qcom,spmi-pmic";
-+		reg = <0x3 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
++	conn-therm@1 {
++		reg = <1>;
++		io-channels = <&pm7250b_adc ADC5_AMUX_THM3_100K_PU>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
 +	};
 +};
++
+ &qupv3_id_1 {
+ 	status = "okay";
+ };
 -- 
 2.37.3
 

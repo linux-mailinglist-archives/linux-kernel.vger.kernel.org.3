@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD38D5AAFB6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E475AAE63
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237319AbiIBMmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        id S234195AbiIBMWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237031AbiIBMls (ORCPT
+        with ESMTP id S235804AbiIBMVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:41:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AD3E869C;
-        Fri,  2 Sep 2022 05:31:31 -0700 (PDT)
+        Fri, 2 Sep 2022 08:21:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4079CCD7;
+        Fri,  2 Sep 2022 05:21:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BCFF620B6;
-        Fri,  2 Sep 2022 12:29:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DBEC433C1;
-        Fri,  2 Sep 2022 12:29:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1141FB82A8F;
+        Fri,  2 Sep 2022 12:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6011AC433D6;
+        Fri,  2 Sep 2022 12:21:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121760;
-        bh=P+jaSS/ABgscCL7bOLfDbwgtwfZD4mI/GtjODIiIDI0=;
+        s=korg; t=1662121260;
+        bh=ShxWmdastEh/OaWYqrIvumXK97FZMf4Sx12fYRQGky4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yanoOMFn4dFi/Cxec7xHng3g9FSG8EFKrICf2gHm7NwGcyBmctgsFGOoyIu4A6ha+
-         3yfQt87+UrIsAMmlkoBD2RcrLBmbNMcu7oQRvix+EUd1W30YwJnTe1Y8ymZf6ekxQ2
-         Y0ZNrWB3CtkLVO/tN5WgMU6EW9AMN9oQIdV7xclA=
+        b=DvZjSK4uDTr31vh4G/mSF+xkzfo48jCTC62zxcKCoZnfIIuqxzwZ1hpm/IPUuRQxE
+         ovvnax6NWD18wCvvb6J/Q7V5LmPP2KJgxYBR024oOZP4tK1iUFhA7nROS5qb0911yX
+         0yR5u7445w1wNoRlnZelsdBhZsRR8kXVjanZq+Hs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 25/77] netfilter: nft_tunnel: restrict it to netdev family
-Date:   Fri,  2 Sep 2022 14:18:34 +0200
-Message-Id: <20220902121404.488271284@linuxfoundation.org>
+Subject: [PATCH 4.9 09/31] net: Fix a data-race around sysctl_net_busy_poll.
+Date:   Fri,  2 Sep 2022 14:18:35 +0200
+Message-Id: <20220902121357.096918197@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-References: <20220902121403.569927325@linuxfoundation.org>
+In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
+References: <20220902121356.732130937@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 01e4092d53bc4fe122a6e4b6d664adbd57528ca3 ]
+[ Upstream commit c42b7cddea47503411bfb5f2f93a4154aaffa2d9 ]
 
-Only allow to use this expression from NFPROTO_NETDEV family.
+While reading sysctl_net_busy_poll, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: af308b94a2a4 ("netfilter: nf_tables: add tunnel support")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 060212928670 ("net: add low latency socket poll")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_tunnel.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/net/busy_poll.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nft_tunnel.c b/net/netfilter/nft_tunnel.c
-index 1effd4878619f..4e850c81ad8d8 100644
---- a/net/netfilter/nft_tunnel.c
-+++ b/net/netfilter/nft_tunnel.c
-@@ -134,6 +134,7 @@ static const struct nft_expr_ops nft_tunnel_get_ops = {
+diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
+index 2fbeb1313c0f4..e522187cb6935 100644
+--- a/include/net/busy_poll.h
++++ b/include/net/busy_poll.h
+@@ -39,7 +39,7 @@ extern unsigned int sysctl_net_busy_poll __read_mostly;
  
- static struct nft_expr_type nft_tunnel_type __read_mostly = {
- 	.name		= "tunnel",
-+	.family		= NFPROTO_NETDEV,
- 	.ops		= &nft_tunnel_get_ops,
- 	.policy		= nft_tunnel_policy,
- 	.maxattr	= NFTA_TUNNEL_MAX,
+ static inline bool net_busy_loop_on(void)
+ {
+-	return sysctl_net_busy_poll;
++	return READ_ONCE(sysctl_net_busy_poll);
+ }
+ 
+ static inline u64 busy_loop_us_clock(void)
 -- 
 2.35.1
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8DD5AAFEF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338CB5AAF7C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237385AbiIBMqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S236234AbiIBMj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237507AbiIBMnt (ORCPT
+        with ESMTP id S237053AbiIBMiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:43:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63861EE4BD;
-        Fri,  2 Sep 2022 05:32:38 -0700 (PDT)
+        Fri, 2 Sep 2022 08:38:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B83B33;
+        Fri,  2 Sep 2022 05:29:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43E94B82AD5;
-        Fri,  2 Sep 2022 12:32:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF223C433D6;
-        Fri,  2 Sep 2022 12:32:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34084B82A9D;
+        Fri,  2 Sep 2022 12:29:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E5DC433D6;
+        Fri,  2 Sep 2022 12:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121953;
-        bh=lV7mb2d2P7zCPfmJmyz0dYwCOsfkfJLOefpZXPPvb/4=;
+        s=korg; t=1662121782;
+        bh=GYn0TkjAII05z9pCYcIRoOHlN6MT+QAzlIGZeA4VpQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dYSK+/quhCTFcXJ8NoCZvUehwp6avjtH6kjeS2Z3HSxeAmsJtWFUKEj6fgKtdOMOO
-         JwGLaxgKl7r0H4RdwtzYFeJOwQKrJka2303CWBxHSxqH3tBGqcCBCT+qno9K25ckuk
-         lVIKM5zY9tXhyFGAWAvUt3E3YoqqukhdJIZ/a+aU=
+        b=x4ujdBviWpoho88IUaNa6EDko6JlN07Yygk5NWzS8ZxENdZXRpyL+OcBpemKDyM9j
+         o3wfFd1VSWQ4dbrCt1vfluNNjjyqhJn8WGUPGtQT+4BZnQpG1Ti0kg/Qni0g+DxJ41
+         0PU/qp9nmtqo7aufypa8LxGeQd4wX1/t0fo4mvac=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Michael=20H=C3=BCbner?= <michaelh.95@t-online.de>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 5.15 40/73] HID: thrustmaster: Add sparco wheel and fix array length
-Date:   Fri,  2 Sep 2022 14:19:04 +0200
-Message-Id: <20220902121405.761983346@linuxfoundation.org>
+        syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.4 56/77] media: pvrusb2: fix memory leak in pvr_probe
+Date:   Fri,  2 Sep 2022 14:19:05 +0200
+Message-Id: <20220902121405.543478779@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Hübner <michaelh.95@t-online.de>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-commit d9a17651f3749e69890db57ca66e677dfee70829 upstream.
+commit 945a9a8e448b65bec055d37eba58f711b39f66f0 upstream.
 
-Add device id for the Sparco R383 Mod wheel.
+The error handling code in pvr2_hdw_create forgets to unregister the
+v4l2 device. When pvr2_hdw_create returns back to pvr2_context_create,
+it calls pvr2_context_destroy to destroy context, but mp->hdw is NULL,
+which leads to that pvr2_hdw_destroy directly returns.
 
-Fix wheel info array length to match actual wheel count present in the array.
+Fix this by adding v4l2_device_unregister to decrease the refcount of
+usb interface.
 
-Signed-off-by: Michael Hübner <michaelh.95@t-online.de>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Reported-by: syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-thrustmaster.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/hid/hid-thrustmaster.c
-+++ b/drivers/hid/hid-thrustmaster.c
-@@ -67,12 +67,13 @@ static const struct tm_wheel_info tm_whe
- 	{0x0200, 0x0005, "Thrustmaster T300RS (Missing Attachment)"},
- 	{0x0206, 0x0005, "Thrustmaster T300RS"},
- 	{0x0209, 0x0005, "Thrustmaster T300RS (Open Wheel Attachment)"},
-+	{0x020a, 0x0005, "Thrustmaster T300RS (Sparco R383 Mod)"},
- 	{0x0204, 0x0005, "Thrustmaster T300 Ferrari Alcantara Edition"},
- 	{0x0002, 0x0002, "Thrustmaster T500RS"}
- 	//{0x0407, 0x0001, "Thrustmaster TMX"}
- };
- 
--static const uint8_t tm_wheels_infos_length = 4;
-+static const uint8_t tm_wheels_infos_length = 7;
- 
- /*
-  * This structs contains (in little endian) the response data
+--- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+@@ -2611,6 +2611,7 @@ struct pvr2_hdw *pvr2_hdw_create(struct
+ 		del_timer_sync(&hdw->encoder_run_timer);
+ 		del_timer_sync(&hdw->encoder_wait_timer);
+ 		flush_work(&hdw->workpoll);
++		v4l2_device_unregister(&hdw->v4l2_dev);
+ 		usb_free_urb(hdw->ctl_read_urb);
+ 		usb_free_urb(hdw->ctl_write_urb);
+ 		kfree(hdw->ctl_read_buffer);
 
 

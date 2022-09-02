@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397C75AAF88
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414335AB0FA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237066AbiIBMkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
+        id S238568AbiIBNBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236960AbiIBMiS (ORCPT
+        with ESMTP id S238729AbiIBM73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:38:18 -0400
+        Fri, 2 Sep 2022 08:59:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FE626575;
-        Fri,  2 Sep 2022 05:30:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C373CBEB;
+        Fri,  2 Sep 2022 05:40:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78498B82A90;
-        Fri,  2 Sep 2022 12:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89F5C433B5;
-        Fri,  2 Sep 2022 12:23:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7F2FB82A9C;
+        Fri,  2 Sep 2022 12:23:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EB36C433D7;
+        Fri,  2 Sep 2022 12:23:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121427;
-        bh=vfB4k2SeQ29GA069iFUDeC8iBhO7QGdaUDS12pAlEZU=;
+        s=korg; t=1662121430;
+        bh=rujMOJuIJAJ8nR+YJel1kq7ttVIeH9ANq0whh4gFWFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QUhJoUtBt5mV07XC1rkfGNLAikPxiMbv9bpcucfl5rTcQLFpxLWWgS3qAD67wMUMy
-         oCbkAm8FvkL4U6q/H8k4Vrc/Rm2f98fQKkoJUKdszqoNeW+aNozOy5SR/kD1w8J8Ee
-         peZ3OrdAWNs4Yrt9mrPX0HfhAxLGBGrOptk+XoZU=
+        b=WNVPqfaQBghn7YDdW4xGzj6F2MP3X9iBX+ERVbJG7zeFXrfKjYzv6L0ejJhGi8LuP
+         lteDooykXn78yf/HNKNVpQu1KFYjDfT+3/C55pZ6RAtC+Uj9Egh7tdoXLWs6FTIiCT
+         VOH7TWGr1FfqS2Ut/8iL5VVUi6qNmcF6e3DLztDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
+        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Florian Westphal <fw@strlen.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 39/42] s390/hypfs: avoid error message under KVM
-Date:   Fri,  2 Sep 2022 14:19:03 +0200
-Message-Id: <20220902121400.114616456@linuxfoundation.org>
+Subject: [PATCH 4.14 40/42] netfilter: conntrack: NF_CONNTRACK_PROCFS should no longer default to y
+Date:   Fri,  2 Sep 2022 14:19:04 +0200
+Message-Id: <20220902121400.143590015@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
 References: <20220902121358.773776406@linuxfoundation.org>
@@ -57,60 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
 
-[ Upstream commit 7b6670b03641ac308aaa6fa2e6f964ac993b5ea3 ]
+[ Upstream commit aa5762c34213aba7a72dc58e70601370805fa794 ]
 
-When booting under KVM the following error messages are issued:
+NF_CONNTRACK_PROCFS was marked obsolete in commit 54b07dca68557b09
+("netfilter: provide config option to disable ancient procfs parts") in
+v3.3.
 
-hypfs.7f5705: The hardware system does not support hypfs
-hypfs.7a79f0: Initialization of hypfs failed with rc=-61
-
-Demote the severity of first message from "error" to "info" and issue
-the second message only in other error cases.
-
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
-Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220620094534.18967-1-jgross@suse.com
-[arch/s390/hypfs/hypfs_diag.c changed description]
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/hypfs/hypfs_diag.c | 2 +-
- arch/s390/hypfs/inode.c      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ net/netfilter/Kconfig |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/s390/hypfs/hypfs_diag.c b/arch/s390/hypfs/hypfs_diag.c
-index be8cc53204b50..46338c65c75bf 100644
---- a/arch/s390/hypfs/hypfs_diag.c
-+++ b/arch/s390/hypfs/hypfs_diag.c
-@@ -437,7 +437,7 @@ __init int hypfs_diag_init(void)
- 	int rc;
+--- a/net/netfilter/Kconfig
++++ b/net/netfilter/Kconfig
+@@ -100,7 +100,6 @@ config NF_CONNTRACK_ZONES
  
- 	if (diag204_probe()) {
--		pr_err("The hardware system does not support hypfs\n");
-+		pr_info("The hardware system does not support hypfs\n");
- 		return -ENODATA;
- 	}
- 	if (diag204_info_type == DIAG204_INFO_EXT) {
-diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
-index 32f5b3fb069f3..2a34c075fef66 100644
---- a/arch/s390/hypfs/inode.c
-+++ b/arch/s390/hypfs/inode.c
-@@ -494,9 +494,9 @@ static int __init hypfs_init(void)
- 	hypfs_vm_exit();
- fail_hypfs_diag_exit:
- 	hypfs_diag_exit();
-+	pr_err("Initialization of hypfs failed with rc=%i\n", rc);
- fail_dbfs_exit:
- 	hypfs_dbfs_exit();
--	pr_err("Initialization of hypfs failed with rc=%i\n", rc);
- 	return rc;
- }
- device_initcall(hypfs_init)
--- 
-2.35.1
-
+ config NF_CONNTRACK_PROCFS
+ 	bool "Supply CT list in procfs (OBSOLETE)"
+-	default y
+ 	depends on PROC_FS
+ 	---help---
+ 	This option enables for the list of known conntrack entries
 
 

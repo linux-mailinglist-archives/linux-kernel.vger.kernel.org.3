@@ -2,143 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872955AA630
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA76F5AA63C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234886AbiIBDQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S235080AbiIBDUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232681AbiIBDQy (ORCPT
+        with ESMTP id S234641AbiIBDU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:16:54 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8827D1C5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662088613; x=1693624613;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bUi0aeVbMcIanw5XAQIVM/SJorqIa61WnrAoQoqeaUQ=;
-  b=V2e+P+gnKhbAoy4QLO+681PHp5FamgiGp53fqwdpjhLn5VFZ9rleJJdH
-   7es0Pg471Dt1NMFcvqH+sBfLFzQ9G2eCFaapMtzOVcgt+Ybsub+402sci
-   F9obWtmWB+dHC5gWtKB626fD57KsQUazjyXXLVwFgAbdnEgRk+bVupl7l
-   qdDUBD44HE7KCMPvVpODN359KbVz6Jsa2GrUsFq5sxzj4c57b9uRYO9wJ
-   zA+CBORXszmW2Itrjb7u3jfd/KrET53jgrmseRg2JI01jFnxPw+S+W3t3
-   /O1q2/+UQ0nSH7CQj2eD/SFpjjuN+UFtICDK2KtNE8JU7HjdZhnEepLik
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="282868476"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="282868476"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 20:16:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="738724476"
-Received: from lkp-server02.sh.intel.com (HELO fccc941c3034) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 01 Sep 2022 20:16:50 -0700
-Received: from kbuild by fccc941c3034 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTxAn-00004F-1U;
-        Fri, 02 Sep 2022 03:16:49 +0000
-Date:   Fri, 2 Sep 2022 11:16:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>
-Cc:     kbuild-all@lists.01.org, Christian Brauner <brauner@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        linux-kernel@vger.kernel.org,
-        syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com,
-        Ayushman Dutta <ayudutta@amazon.com>
-Subject: Re: [PATCH v1] seccomp: Release filter when copy_process() fails.
-Message-ID: <202209021116.hpxQOERU-lkp@intel.com>
-References: <20220822204436.26631-1-kuniyu@amazon.com>
+        Thu, 1 Sep 2022 23:20:29 -0400
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13B9313F91
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:20:06 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowABXX0tjdhFjm_xwAA--.15986S2;
+        Fri, 02 Sep 2022 11:20:04 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] USB: serial: ftdi_sio: Add check for create_sysfs_attrs
+Date:   Fri,  2 Sep 2022 11:20:02 +0800
+Message-Id: <20220902032002.3859368-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822204436.26631-1-kuniyu@amazon.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABXX0tjdhFjm_xwAA--.15986S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GFy5GrW3JFWkurWUur48JFb_yoWfCFXE9w
+        1UWFsxXryYkFyfJwn2k3yrArWYgws5ZF48uF12gFyfta4DJFZxXrs2v39xGr4UXr4kAr9x
+        Cwn8ua4xAay0gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4kFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWx
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUjhL8DU
+        UUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kuniyuki,
+As create_sysfs_attrs() can return error number,
+it should be better to check the return value and
+deal with the exception.
 
-Thank you for the patch! Yet something to improve:
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/usb/serial/ftdi_sio.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-[auto build test ERROR on kees/for-next/pstore]
-[also build test ERROR on linus/master v6.0-rc3]
-[cannot apply to kees/for-next/seccomp next-20220901]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/seccomp-Release-filter-when-copy_process-fails/20220823-044710
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
-config: arc-randconfig-r043-20220901 (https://download.01.org/0day-ci/archive/20220902/202209021116.hpxQOERU-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ea0fdd2f2e9a09bd5428bd59e81bac66e949f578
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kuniyuki-Iwashima/seccomp-Release-filter-when-copy_process-fails/20220823-044710
-        git checkout ea0fdd2f2e9a09bd5428bd59e81bac66e949f578
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   kernel/fork.c:163:13: warning: no previous prototype for 'arch_release_task_struct' [-Wmissing-prototypes]
-     163 | void __weak arch_release_task_struct(struct task_struct *tsk)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/arc/include/asm/bug.h:30,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/gfp.h:5,
-                    from include/linux/slab.h:15,
-                    from kernel/fork.c:16:
-   kernel/fork.c: In function 'free_task':
->> kernel/fork.c:540:34: error: 'struct seccomp' has no member named 'filter'
-     540 |         WARN_ON_ONCE(tsk->seccomp.filter);
-         |                                  ^
-   include/asm-generic/bug.h:166:32: note: in definition of macro 'WARN_ON'
-     166 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   kernel/fork.c:540:9: note: in expansion of macro 'WARN_ON_ONCE'
-     540 |         WARN_ON_ONCE(tsk->seccomp.filter);
-         |         ^~~~~~~~~~~~
-   kernel/fork.c: At top level:
-   kernel/fork.c:854:20: warning: no previous prototype for 'arch_task_cache_init' [-Wmissing-prototypes]
-     854 | void __init __weak arch_task_cache_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   kernel/fork.c:949:12: warning: no previous prototype for 'arch_dup_task_struct' [-Wmissing-prototypes]
-     949 | int __weak arch_dup_task_struct(struct task_struct *dst,
-         |            ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +540 kernel/fork.c
-
-   537	
-   538	void free_task(struct task_struct *tsk)
-   539	{
- > 540		WARN_ON_ONCE(tsk->seccomp.filter);
-   541		release_user_cpus_ptr(tsk);
-   542		scs_release(tsk);
-   543	
-
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index d5a3986dfee7..c28f894430a5 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -2251,7 +2251,11 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ 	if (read_latency_timer(port) < 0)
+ 		priv->latency = 16;
+ 	write_latency_timer(port);
+-	create_sysfs_attrs(port);
++	result = create_sysfs_attrs(port);
++	if (result) {
++		remove_sysfs_attrs(port);
++		return result;
++	}
+ 
+ 	result = ftdi_gpio_init(port);
+ 	if (result < 0) {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

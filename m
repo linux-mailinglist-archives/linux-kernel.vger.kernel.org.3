@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FF25AB230
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AA35AB22A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238134AbiIBNwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S237513AbiIBNwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238259AbiIBNwA (ORCPT
+        with ESMTP id S238249AbiIBNwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:52:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CC0139D53;
-        Fri,  2 Sep 2022 06:26:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 113E9B82B52;
-        Fri,  2 Sep 2022 13:25:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CFE6C433C1;
-        Fri,  2 Sep 2022 13:25:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662125113;
-        bh=P47PCuy0b6sjxqQyA4e/eNhGPyUNXr9Ohfa1FHwdEbo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GXgRa4X58KPDpke2OHKTTsw9CmD0ohAmE9l2+HfbtkI6/SxOs4Y3MdzOGcN8t7SjM
-         r20K8eFqEIt0FdeiHQ/WnRF+/B5KZsRCXyN0sE+K6hYt+LsVNixjZr2MaTvTj9CJr2
-         9jo/Dxrh4Ibtkk3Mc3YbaTuRLsBn8t+P6jdT7YlY=
-Date:   Fri, 2 Sep 2022 15:25:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorande@qti.qualcomm.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ola Jeppsson <ola@snap.com>
-Subject: Re: [PATCH 01/14] misc: fastrpc: Fix use-after-free and race in
- fastrpc_map_find
-Message-ID: <YxIENg1AalM46bpi@kroah.com>
-References: <20220902131344.3029826-1-abel.vesa@linaro.org>
- <20220902131344.3029826-2-abel.vesa@linaro.org>
+        Fri, 2 Sep 2022 09:52:23 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A7C138C99
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:26:35 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id kk26so3835538ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 06:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ZF/uMwTcnfyz2qEE7xRsLAhPm27QsIK3fVdRMITh1go=;
+        b=mtCXZWdp9QgmrYW++Cea2CEB1DgoyAJM1tlVGEe5YBBxfrhzbIOh++mMUvheALAnUJ
+         qglEpw7YAZAqrT0t19/ZFVIhClLwiJuoc+Gc2atWP13qPCL2scgmjjlzWm+XD5L5t84b
+         pDE519WHl1qfcZnXOQxXEsiQfqsGdayCi14KO0qLt1ZVPU7SLwI0KPFrWqryauaiJf19
+         BxwZTV44yNf/DLXwCaIiwcaftVf4ADpFA8ky6TvhyLS5z7cT3imLS15KDFLk04iJvh8i
+         hK8dmoA99XTyG2NO5reAVYM8gTNza6KFWvKuN3AKeOZjjUvJGrGduYP6puiDVkMG6CSe
+         MzCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZF/uMwTcnfyz2qEE7xRsLAhPm27QsIK3fVdRMITh1go=;
+        b=IlVQW/NRlLvHD0PcdzfFuuADWekFIrN4ooiVfwkhR3vVpabKYF+b/buPmUnzf4KmLg
+         lDsOJqzRZWiCaMEH5sMOBzWkQy1RL4KB1zBi+OoctIevn46hjKirrfEO5qE+eyW8dYTu
+         tryXju7VjaxMTaLy8gyvxg2UHDpN00gB7d1Bv5TE2ESarim2ykGjPA3MW5/AJzbq/t6W
+         +rCwhwPMo02apLEKA54YR0tDJriCWhoAiALAe1KqipIW55QCm2sJJNa7l8HeSVcyWfPG
+         Pdy+IDa9i3Rd33Igm+0gFesOPhjwmK0fu+SeUbjX93Lz14ys8LD6gn2lPz9Pl0DoZqwK
+         LqyQ==
+X-Gm-Message-State: ACgBeo1HX/tnF4hs4w7y/KDE2Itu5UwjFNGfeqzBIvTjkmMpkq1LeZQL
+        b8TYPwRZIFVBKcWNvU9TZSGpjCgkP64Zw8wUp5p6+w==
+X-Google-Smtp-Source: AA6agR6uVeydIrFZMSXhTDDYS4+Yng+f3hQTQnzA1QcrBi8I6dCnkKtn5QHHr9QNmRCaKQoIFPtEWdFKnqttE3hhFYA=
+X-Received: by 2002:a17:907:1c89:b0:741:4453:75be with SMTP id
+ nb9-20020a1709071c8900b00741445375bemr21506072ejc.208.1662125177323; Fri, 02
+ Sep 2022 06:26:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902131344.3029826-2-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
+ <CACRpkdb25ikL4F499NDCrv1kf2FGvJxqDW2wk9GNQCqrbX9kKQ@mail.gmail.com> <bb4804c0-04d2-6e0c-b9db-1243828ca515@gmail.com>
+In-Reply-To: <bb4804c0-04d2-6e0c-b9db-1243828ca515@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 2 Sep 2022 15:26:06 +0200
+Message-ID: <CACRpkdZwkhvM7JGeisdAyh4Bg2hx5E+dSG89Psb=13hD+wkjoQ@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] Add support for i.MXRT1170-evk
+To:     Jesse Taube <mr.bossman075@gmail.com>
+Cc:     linux-imx@nxp.com, robh+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, aisheng.dong@nxp.com,
+        stefan@agner.ch, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
+        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
+        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
+        cniedermaier@dh-electronics.com, clin@suse.com,
+        giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,29 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 04:13:31PM +0300, Abel Vesa wrote:
-> Currently, there is a race window between the point when the mutex is
-> unlocked in fastrpc_map_lookup and the reference count increasing
-> (fastrpc_map_get) in fastrpc_map_find, which can also lead to
-> use-after-free.
-> 
-> So lets merge fastrpc_map_find into fastrpc_map_lookup which allows us
-> to both protect the maps list by also taking the &fl->lock spinlock and
-> the reference count, since the spinlock will be released only after.
-> Add take_ref argument to make this suitable for all callers.
-> 
-> Co-developed-by: Ola Jeppsson <ola@snap.com>
-> Signed-off-by: Ola Jeppsson <ola@snap.com>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  drivers/misc/fastrpc.c | 41 +++++++++++++++++++++--------------------
->  1 file changed, 21 insertions(+), 20 deletions(-)
+On Fri, Sep 2, 2022 at 2:57 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+> On 9/2/22 04:06, Linus Walleij wrote:
+> > On Thu, Sep 1, 2022 at 8:33 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+> >
+> >> This patch contains:
+> >> - Update to imxrt_defconfig
+> >> - Devicetree
+> >> - Clock driver
+> >> - Pinctrl driver
+> >
+> > No it does not, I already merged that.
+> >
+> > I think you should probably split up your series per-subsystem so the
+> > clock bindings and changes can be merged separately etc.
+> >
+> > Then the DTS files can be added to the ARM SoC tree as a final step.
+> >
+> > When you send everything in one bundle like this subsystem maintainers
+> > don't know if they can merge e.g. just the clock patches separately
+> > and be done with their part (like what I did with pinctrl).
+>
+> Do you think its possible to add Docs for Device tree compatibles that
+> aren't added yet?
 
-What commit does this fix?  Should it go to stable trees?
+Bindings and drivers are orthogonal, we only submit them together
+to provide context for reviewers.
 
-Try splitting this series up into 2, one for 6.0-final with bugfixes to
-resolve issues found, and the next one on top of that for new features.
+It is also possible to submit device trees with compatibles and entire
+nodes without bindings because there essentially is no real police for
+this. Of course it is not recommended.
 
-thanks,
+If you are confident that bindings and device trees will come in the
+same merge window it is fine to merge them separately through different
+trees.
 
-greg k-h
+Yours,
+Linus Walleij

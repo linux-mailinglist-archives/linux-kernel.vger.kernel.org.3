@@ -2,52 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA6F5AAE96
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06875AAE94
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236407AbiIBM0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
+        id S236337AbiIBMZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236203AbiIBMZa (ORCPT
+        with ESMTP id S236293AbiIBMZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:25:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E985DC0B6;
-        Fri,  2 Sep 2022 05:23:02 -0700 (PDT)
+        Fri, 2 Sep 2022 08:25:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9A1D7404;
+        Fri,  2 Sep 2022 05:23:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18D9FB82A94;
-        Fri,  2 Sep 2022 12:22:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403A1C433B5;
-        Fri,  2 Sep 2022 12:22:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69440620FD;
+        Fri,  2 Sep 2022 12:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C3E1C433C1;
+        Fri,  2 Sep 2022 12:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121360;
-        bh=sUwlJyvcI27mQEYPrel6crGwHSEN82KIQ1itviBw3Go=;
+        s=korg; t=1662121363;
+        bh=WynDvxHoxmJta2Gj6rL0/fOVSZIoA7wkQqCFBQ7arEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OyPRIx1o0o01wTTxlNk0xcQymUMFgL5rVxLG0buNjQF+P2t5GT9Q8d0llTaBt68Ga
-         VmUDzxuf50nhf1BoqPH0hJlsq6n6JEcsjZgjIwycuTXTohVQ98+ImCZcxARb4TwoKV
-         vgLm8dnpzBvpVXWVtlgiF3UqcFITynsUl4o1YPtg=
+        b=uAdHX4ZboBBlGd/X1pS1qgObQJRuNOGby6uX/QhCqJ5G3N8BX9vOacfUs+0tHI0xt
+         XmlpxorTaOcDXq3TDelgfjsp8MkFvJFTBGm/r4jctyQqu5gawFOdO3x4adLks6kXVV
+         iPjy0AMXKiLFJOO6aP/CmpodeqBoOoAE3kLihZxY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Cyrill Gorcunov <gorcunov@openvz.org>,
-        Pavel Emelyanov <xemul@parallels.com>,
-        Jamie Liu <jamieliu@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.14 24/42] mm/hugetlb: fix hugetlb not supporting softdirty tracking
-Date:   Fri,  2 Sep 2022 14:18:48 +0200
-Message-Id: <20220902121359.639360507@linuxfoundation.org>
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH 4.14 25/42] md: call __md_stop_writes in md_stop
+Date:   Fri,  2 Sep 2022 14:18:49 +0200
+Message-Id: <20220902121359.669121787@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
 References: <20220902121358.773776406@linuxfoundation.org>
@@ -65,163 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Hildenbrand <david@redhat.com>
+From: Guoqing Jiang <guoqing.jiang@linux.dev>
 
-commit f96f7a40874d7c746680c0b9f57cef2262ae551f upstream.
+commit 0dd84b319352bb8ba64752d4e45396d8b13e6018 upstream.
 
-Patch series "mm/hugetlb: fix write-fault handling for shared mappings", v2.
+>From the link [1], we can see raid1d was running even after the path
+raid_dtr -> md_stop -> __md_stop.
 
-I observed that hugetlb does not support/expect write-faults in shared
-mappings that would have to map the R/O-mapped page writable -- and I
-found two case where we could currently get such faults and would
-erroneously map an anon page into a shared mapping.
+Let's stop write first in destructor to align with normal md-raid to
+fix the KASAN issue.
 
-Reproducers part of the patches.
+[1]. https://lore.kernel.org/linux-raid/CAPhsuW5gc4AakdGNdF8ubpezAuDLFOYUO_sfMZcec6hQFm8nhg@mail.gmail.com/T/#m7f12bf90481c02c6d2da68c64aeed4779b7df74a
 
-I propose to backport both fixes to stable trees.  The first fix needs a
-small adjustment.
-
-
-This patch (of 2):
-
-Staring at hugetlb_wp(), one might wonder where all the logic for shared
-mappings is when stumbling over a write-protected page in a shared
-mapping.  In fact, there is none, and so far we thought we could get away
-with that because e.g., mprotect() should always do the right thing and
-map all pages directly writable.
-
-Looks like we were wrong:
-
---------------------------------------------------------------------------
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <fcntl.h>
- #include <unistd.h>
- #include <errno.h>
- #include <sys/mman.h>
-
- #define HUGETLB_SIZE (2 * 1024 * 1024u)
-
- static void clear_softdirty(void)
- {
-         int fd = open("/proc/self/clear_refs", O_WRONLY);
-         const char *ctrl = "4";
-         int ret;
-
-         if (fd < 0) {
-                 fprintf(stderr, "open(clear_refs) failed\n");
-                 exit(1);
-         }
-         ret = write(fd, ctrl, strlen(ctrl));
-         if (ret != strlen(ctrl)) {
-                 fprintf(stderr, "write(clear_refs) failed\n");
-                 exit(1);
-         }
-         close(fd);
- }
-
- int main(int argc, char **argv)
- {
-         char *map;
-         int fd;
-
-         fd = open("/dev/hugepages/tmp", O_RDWR | O_CREAT);
-         if (!fd) {
-                 fprintf(stderr, "open() failed\n");
-                 return -errno;
-         }
-         if (ftruncate(fd, HUGETLB_SIZE)) {
-                 fprintf(stderr, "ftruncate() failed\n");
-                 return -errno;
-         }
-
-         map = mmap(NULL, HUGETLB_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-         if (map == MAP_FAILED) {
-                 fprintf(stderr, "mmap() failed\n");
-                 return -errno;
-         }
-
-         *map = 0;
-
-         if (mprotect(map, HUGETLB_SIZE, PROT_READ)) {
-                 fprintf(stderr, "mmprotect() failed\n");
-                 return -errno;
-         }
-
-         clear_softdirty();
-
-         if (mprotect(map, HUGETLB_SIZE, PROT_READ|PROT_WRITE)) {
-                 fprintf(stderr, "mmprotect() failed\n");
-                 return -errno;
-         }
-
-         *map = 0;
-
-         return 0;
- }
---------------------------------------------------------------------------
-
-Above test fails with SIGBUS when there is only a single free hugetlb page.
- # echo 1 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
- # ./test
- Bus error (core dumped)
-
-And worse, with sufficient free hugetlb pages it will map an anonymous page
-into a shared mapping, for example, messing up accounting during unmap
-and breaking MAP_SHARED semantics:
- # echo 2 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
- # ./test
- # cat /proc/meminfo | grep HugePages_
- HugePages_Total:       2
- HugePages_Free:        1
- HugePages_Rsvd:    18446744073709551615
- HugePages_Surp:        0
-
-Reason in this particular case is that vma_wants_writenotify() will
-return "true", removing VM_SHARED in vma_set_page_prot() to map pages
-write-protected. Let's teach vma_wants_writenotify() that hugetlb does not
-support softdirty tracking.
-
-Link: https://lkml.kernel.org/r/20220811103435.188481-1-david@redhat.com
-Link: https://lkml.kernel.org/r/20220811103435.188481-2-david@redhat.com
-Fixes: 64e455079e1b ("mm: softdirty: enable write notifications on VMAs after VM_SOFTDIRTY cleared")
-Signed-off-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Peter Feiner <pfeiner@google.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Cyrill Gorcunov <gorcunov@openvz.org>
-Cc: Pavel Emelyanov <xemul@parallels.com>
-Cc: Jamie Liu <jamieliu@google.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Muchun Song <songmuchun@bytedance.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: <stable@vger.kernel.org>	[3.18+]
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
+Fixes: 48df498daf62 ("md: move bitmap_destroy to the beginning of __md_stop")
+Reported-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mmap.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/md/md.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1598,8 +1598,12 @@ int vma_wants_writenotify(struct vm_area
- 	    pgprot_val(vm_pgprot_modify(vm_page_prot, vm_flags)))
- 		return 0;
- 
--	/* Do we need to track softdirty? */
--	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY))
-+	/*
-+	 * Do we need to track softdirty? hugetlb does not support softdirty
-+	 * tracking yet.
-+	 */
-+	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY) &&
-+	    !is_vm_hugetlb_page(vma))
- 		return 1;
- 
- 	/* Specialty mapping? */
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -5908,6 +5908,7 @@ void md_stop(struct mddev *mddev)
+ 	/* stop the array and free an attached data structures.
+ 	 * This is called from dm-raid
+ 	 */
++	__md_stop_writes(mddev);
+ 	__md_stop(mddev);
+ 	if (mddev->bio_set)
+ 		bioset_free(mddev->bio_set);
 
 

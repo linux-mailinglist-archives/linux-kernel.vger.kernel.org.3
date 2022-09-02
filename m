@@ -2,121 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDE05AA93B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C7E5AA93D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbiIBH5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 03:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S235581AbiIBH5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 03:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiIBH5d (ORCPT
+        with ESMTP id S235570AbiIBH5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 03:57:33 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774D0B07F2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 00:57:29 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MJqyH4LY4z9sld;
-        Fri,  2 Sep 2022 09:57:27 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id egxSLJOecBhG; Fri,  2 Sep 2022 09:57:27 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJqyH3Y3fz9slD;
-        Fri,  2 Sep 2022 09:57:27 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 69A528B786;
-        Fri,  2 Sep 2022 09:57:27 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 5F1jFIdX3c_t; Fri,  2 Sep 2022 09:57:27 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.39])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 285438B764;
-        Fri,  2 Sep 2022 09:57:27 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2827vFUZ2087537
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 2 Sep 2022 09:57:16 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2827vEmo2087532;
-        Fri, 2 Sep 2022 09:57:14 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc/vdso: link with -z noexecstack
-Date:   Fri,  2 Sep 2022 09:57:09 +0200
-Message-Id: <24daf2ae379597b8d5dff41e4f7cebdca9db2d9d.1662105421.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Fri, 2 Sep 2022 03:57:39 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B704B99FF;
+        Fri,  2 Sep 2022 00:57:38 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id f12so1078000plb.11;
+        Fri, 02 Sep 2022 00:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=vIy9hDwkx4yZn4J8a69vMd0+2priltLA6LrvRstnlSw=;
+        b=fpA4Y3ToNbXxHsdaEE0lX/1oD4nWABvDQl4PNC1J/7Ck4uuwpYzTTHBHaOuIiom1ew
+         6nsaohKhgJpMhiBruxbK7FzsuYWlvgLMtlULpP7TvgTqzSkKpSX5BS1eoSHAAxhcjP+Q
+         ny1m+i5dzAv+nfzb/zIJIvQSx4/zH1ztjaW91DI3SzHe2bTy9s7yIwoUh5NdpohJ+uvd
+         8XRuTlwakpDT8jQefggv19R/6MYevAa98mAlPvCXyHXgdqAijutgb3hETd2Ah5hCH5zt
+         T34chFMsoHY8y4cV8BIzm2Yg24A5TYjKsbmGBXA0SULu5CNAVIIyWsoX7inyug/pVzlL
+         zWtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=vIy9hDwkx4yZn4J8a69vMd0+2priltLA6LrvRstnlSw=;
+        b=anJ2Crh0EAeUiL0m+P89sdlbEWRcS+/KiB2waiIXzXYxfTiQp+LiHokySAXo9HcfH/
+         Ty1tNqF6M8GmICR3lqj5Bv3IxokREpjkpzzU8/fKXFqBCa5E3ArkpB0hIyQ41fWgRpWo
+         nsfHyCaFOTdfjwU4jykA8wiqJ4gX0duX8SwMj/ngD+p3hS/Hmi1CqI8ROR8vOt6Dh989
+         uSF/014l9JorvtHDyeakwuECb2gko47r90Hh9x3b572G1h6oauXcTGNb7+F08XcpXMB2
+         gzGfMECefLbmTOBAl5ZuDhJJbr0FKhSsXgbA9MVvSSJIZaaKe7HAeMU+S9jqIrc0SWxA
+         JSbg==
+X-Gm-Message-State: ACgBeo1TSJcysRGbMY+koXOkQoNmwy2WwBXwYYgCpEnMn+3AOWSOBALr
+        C+9S0euLIlFvpuSS6MYDdLY3nkgy0VmyFQ==
+X-Google-Smtp-Source: AA6agR5UAq2hV61FB3FoMipbuvEVVIYjmubJuI4EbaRWyxqf2LPOGobOPPaHb1QY9ryGj21rLTHeBQ==
+X-Received: by 2002:a17:90b:4a82:b0:1f5:5eaa:68a with SMTP id lp2-20020a17090b4a8200b001f55eaa068amr3422244pjb.13.1662105457472;
+        Fri, 02 Sep 2022 00:57:37 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id q96-20020a17090a17e900b001fd6460c2dcsm4519455pja.44.2022.09.02.00.57.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 00:57:36 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org
+Cc:     johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lily <floridsleeves@gmail.com>
+Subject: [PATCH v1] net/mac80211/agg-tx: check the return value of rcu_dereference_protected_tid_tx()
+Date:   Fri,  2 Sep 2022 00:57:25 -0700
+Message-Id: <20220902075725.2214351-1-floridsleeves@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662105428; l=2854; s=20211009; h=from:subject:message-id; bh=4je2IPtBOUkkvQQU234Vx8lnLidiGcAfki042ic7QVE=; b=zUXL5Kcv3xh4MsDlXA8hP1kHNQXHVAYG8V2A7SERteqNZfjtQESoZZWuXQ49N9x9iji2a/hsB9XZ 5TwTvbA/AVj/LthdmbXkpazX71z2VFU7TxWpoNUcSsEBxh5DK878
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With recent binutils, the following warning appears:
+From: lily <floridsleeves@gmail.com>
 
-  VDSO32L arch/powerpc/kernel/vdso/vdso32.so.dbg
-/opt/gcc-12.2.0-nolibc/powerpc64-linux/bin/../lib/gcc/powerpc64-linux/12.2.0/../../../../powerpc64-linux/bin/ld: warning: arch/powerpc/kernel/vdso/getcpu-32.o: missing .note.GNU-stack section implies executable stack
-/opt/gcc-12.2.0-nolibc/powerpc64-linux/bin/../lib/gcc/powerpc64-linux/12.2.0/../../../../powerpc64-linux/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+Check the return value of rcu_dereference_protected_tid_tx(), which
+could be NULL and result in null pointer dereference if not checked.
 
-To avoid that, explicitely tell the linker we don't
-want executable stack.
-
-For more explanations, see commit ffcf9c5700e4 ("x86: link vdso
-and boot with -z noexecstack --no-warn-rwx-segments")
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Li Zhong <floridsleeves@gmail.com>
 ---
- arch/powerpc/kernel/Makefile      | 3 ++-
- arch/powerpc/kernel/vdso/Makefile | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ net/mac80211/agg-tx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-index 06d2d1f78f71..b071e15dd574 100644
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -128,7 +128,8 @@ extra-y				+= vmlinux.lds
+diff --git a/net/mac80211/agg-tx.c b/net/mac80211/agg-tx.c
+index 07c892aa8c73..ce5f4a39bce2 100644
+--- a/net/mac80211/agg-tx.c
++++ b/net/mac80211/agg-tx.c
+@@ -503,6 +503,8 @@ void ieee80211_tx_ba_session_handle_start(struct sta_info *sta, int tid)
+ 	int ret;
  
- obj-$(CONFIG_RELOCATABLE)	+= reloc_$(BITS).o
+ 	tid_tx = rcu_dereference_protected_tid_tx(sta, tid);
++	if (!tid_tx)
++		return;
  
--obj-$(CONFIG_PPC32)		+= entry_32.o setup_32.o early_32.o static_call.o
-+obj-$(CONFIG_PPC32)		+= entry_32.o setup_32.o early_32.o
-+obj-$(CONFIG_HAVE_STATIC_CALL)	+= static_call.o
- obj-$(CONFIG_PPC64)		+= dma-iommu.o iommu.o
- obj-$(CONFIG_KGDB)		+= kgdb.o
- obj-$(CONFIG_BOOTX_TEXT)	+= btext.o
-diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-index 096b0bf1335f..a2e7b0ce5b19 100644
---- a/arch/powerpc/kernel/vdso/Makefile
-+++ b/arch/powerpc/kernel/vdso/Makefile
-@@ -92,13 +92,13 @@ include/generated/vdso64-offsets.h: $(obj)/vdso64.so.dbg FORCE
+ 	/*
+ 	 * Start queuing up packets for this aggregation session.
+@@ -742,6 +744,8 @@ static void ieee80211_agg_tx_operational(struct ieee80211_local *local,
+ 	lockdep_assert_held(&sta->ampdu_mlme.mtx);
  
- # actual build commands
- quiet_cmd_vdso32ld_and_check = VDSO32L $@
--      cmd_vdso32ld_and_check = $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) ; $(cmd_vdso_check)
-+      cmd_vdso32ld_and_check = $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
- quiet_cmd_vdso32as = VDSO32A $@
-       cmd_vdso32as = $(VDSOCC) $(a_flags) $(CC32FLAGS) $(AS32FLAGS) -c -o $@ $<
- quiet_cmd_vdso32cc = VDSO32C $@
-       cmd_vdso32cc = $(VDSOCC) $(c_flags) $(CC32FLAGS) -c -o $@ $<
+ 	tid_tx = rcu_dereference_protected_tid_tx(sta, tid);
++	if (!tid_tx)
++		return;
+ 	params.buf_size = tid_tx->buf_size;
+ 	params.amsdu = tid_tx->amsdu;
  
- quiet_cmd_vdso64ld_and_check = VDSO64L $@
--      cmd_vdso64ld_and_check = $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) ; $(cmd_vdso_check)
-+      cmd_vdso64ld_and_check = $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
- quiet_cmd_vdso64as = VDSO64A $@
-       cmd_vdso64as = $(VDSOCC) $(a_flags) $(CC64FLAGS) $(AS64FLAGS) -c -o $@ $<
 -- 
-2.37.1
+2.25.1
 

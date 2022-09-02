@@ -2,113 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC535AB501
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1835AB50D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236175AbiIBPX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S236846AbiIBP0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235495AbiIBPXj (ORCPT
+        with ESMTP id S235455AbiIBPZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:23:39 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE86C27FF5;
-        Fri,  2 Sep 2022 07:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662130606; x=1693666606;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=SqK+KES9Kef0oX5qHsG81CZHcrCq/64MccAPPJRXZy8=;
-  b=VaY3NGSn+OVbm/gFjQk5fZtdYh2N/IiVzF5+HffmEVfiAU+gWeOzWT/5
-   5QgrRdsYXU+s38zOlxOuqhrNSbrRwpYSlexM1pX6osswK2rFtWjeLIzyf
-   qyD1D2pad/ka/DIzjB4bCwAt/Tk1q4VEm/FBRFuOrTflFoHAUKQCqzGDW
-   Ap9FIpbFDABrS1JQ5Mpciurbtjug2yGXzeltkepBRy/X053N0YxXQb/5e
-   lwA3IV16LqEonKtJPLBQpm1ff9XuRX61Fr2xjYgt2lSQeSvgGJYb2k0Z5
-   75/NbHFRMyt62yNcUybvmpXKMS7tBj9Z/qXnASiS5UKw6KejUSKFCh2fp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="296002859"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="296002859"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:56:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="674379798"
-Received: from vbykovni-mobl.ger.corp.intel.com ([10.252.53.17])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:56:41 -0700
-Date:   Fri, 2 Sep 2022 17:56:40 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?ISO-8859-15?Q?Pali_Roh=E1r?= <pali@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 3/3] tty: serial: use
- DEFINE_UART_PORT_TX_HELPER_LIMITED()
-In-Reply-To: <20220901110657.3305-4-jslaby@suse.cz>
-Message-ID: <f45fab19-5034-cd9c-4133-ed74e5888193@linux.intel.com>
-References: <20220901110657.3305-1-jslaby@suse.cz> <20220901110657.3305-4-jslaby@suse.cz>
+        Fri, 2 Sep 2022 11:25:27 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D5A11A0E;
+        Fri,  2 Sep 2022 07:58:38 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id jy14so1573609qvb.12;
+        Fri, 02 Sep 2022 07:58:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=2d5MdwjguIxwbj6Za95JVK80ynCPGt/Wk3co+Z7DYxk=;
+        b=IdQCyPv5b/J4rZljCG/duWqbyByLgWx/0+dz9x+Wurb3kpyGt3XOVrrsTTGICh35Z2
+         AamGXZYk9lhjmLXff2CVSGZbnMQ2hWYSm6XaJ4oLD0z7H8ReLGrAxNcx2jNt51TIsAUN
+         P6MqidRYeN1ux+wqPPoa5jSCTMZabastalRQVZvfxU4otLyr3eIPPqtqM/kZHTilhAKY
+         S2RScwUg/rrgTBhoGG8J4zCgorzKO1vUQes2aQHffVggLbF7ZE6F79Ocd++UlY7M0UxQ
+         ZZYE096imLhkE0vYC32jORJ2mV+xqEkMAGjjHEvFviHMtmPZZJV7GY+wUf6z4JFDnnPl
+         288g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=2d5MdwjguIxwbj6Za95JVK80ynCPGt/Wk3co+Z7DYxk=;
+        b=8AYVfNxCV1EOdeX6GQwN6z7xNStXyVpCRN+aHaOo1AunkuWNIvwe63gG0CEorDk+E2
+         ReeGp2hDI7J7AdpUDJ6mqkL1c3OrfbkPvwrVmOg57Yvoh3N/VSRRcDI7EIO9ctbiV23L
+         SRu/04P5seKVZH7+LSrEpCuvTmT6uZHdML7oZP2PubBpZc/JnGa18kUmoJ+/O5aNTyFY
+         +4F0oJMOyCQ909lINrkGeOsmGIG67clThKk3L+gJ/rouAVa0EyP2sNDhx8w63bCUTCFm
+         t+7V7F2qmUewnIrI1yhrMRfIRtd+UZEtPZ0UzgsoiPve3606l687Lf9cabsoGZM6jXrw
+         pQZA==
+X-Gm-Message-State: ACgBeo0uM/2m6gN+b1eYGTSaakFz4tALNN66iGQRrZwWebyDWcMdMhgP
+        zizBKG9yEGMoAcIIZ8BGPqyfbT/3+ryB7I/dk0I=
+X-Google-Smtp-Source: AA6agR4U4C8fAMU0i3LIRRlTdojE81WLiwuDEgOyaYmkse0bdgODkqUo3kIXspGe9h6sAtCI8gNvo3iNhuy3sitJW0s=
+X-Received: by 2002:a05:6214:c26:b0:499:19f1:1a73 with SMTP id
+ a6-20020a0562140c2600b0049919f11a73mr13781988qvd.48.1662130716955; Fri, 02
+ Sep 2022 07:58:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1404598877-1662130606=:1647"
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1662116601.git.christophe.leroy@csgroup.eu> <97011204619556ecb3d8c9aaff2b58c28790fe8a.1662116601.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <97011204619556ecb3d8c9aaff2b58c28790fe8a.1662116601.git.christophe.leroy@csgroup.eu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 2 Sep 2022 17:58:01 +0300
+Message-ID: <CAHp75Ve6zMC9s=TZT_pWoyxnKtXE0xipFCv_RDY4r4amnVbVxQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/9] gpiolib: Get rid of ARCH_NR_GPIOS
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Davide Ciminaghi <ciminaghi@gnudd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Fri, Sep 2, 2022 at 4:57 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+> Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
+> there is no limitation on the number of GPIOs that can be allocated
+> in the system since the allocation is fully dynamic.
+>
+> ARCH_NR_GPIOS is today only used in order to provide downwards
+> gpiobase allocation from that value, while static allocation is
+> performed upwards from 0. However that has the disadvantage of
+> limiting the number of GPIOs that can be registered in the system.
+>
+> To overcome this limitation without requiring each and every
+> platform to provide its 'best-guess' maximum number, rework the
+> allocation to allocate upwards, allowing approx 2 millions of
+> GPIOs.
+>
+> In order to still allow static allocation for legacy drivers, define
+> GPIO_DYNAMIC_BASE with the value 512 as the start for dynamic
+> allocation. The 512 value is chosen because it is the end of
+> the current default range so all current static allocations are
+> expected to be below that value. Of course that's just a rough
+> estimate based on the default value, but assuming static
+> allocations come first, even if there are more static allocations
+> it should fit under the 512 value.
+>
+> In the future, it is expected that all static allocations go away
+> and then dynamic allocation will be patched to start at 0.
 
---8323329-1404598877-1662130606=:1647
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Eventually we have to get rid of gpio_is_valid() completely...
+But this is another story.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-On Thu, 1 Sep 2022, Jiri Slaby wrote:
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+> v2: Enhanced commit description and change from 256 to 512.
+> ---
+>  arch/arm/include/asm/gpio.h |  1 -
+>  drivers/gpio/gpiolib.c      | 10 +++----
+>  include/asm-generic/gpio.h  | 55 ++++++++++++++-----------------------
+>  3 files changed, 26 insertions(+), 40 deletions(-)
+>
+> diff --git a/arch/arm/include/asm/gpio.h b/arch/arm/include/asm/gpio.h
+> index f3bb8a2bf788..4ebbb58f06ea 100644
+> --- a/arch/arm/include/asm/gpio.h
+> +++ b/arch/arm/include/asm/gpio.h
+> @@ -2,7 +2,6 @@
+>  #ifndef _ARCH_ARM_GPIO_H
+>  #define _ARCH_ARM_GPIO_H
+>
+> -/* Note: this may rely upon the value of ARCH_NR_GPIOS set in mach/gpio.h */
+>  #include <asm-generic/gpio.h>
+>
+>  /* The trivial gpiolib dispatchers */
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index 4e2fcb7b0a01..1846f24971e3 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -183,14 +183,14 @@ EXPORT_SYMBOL_GPL(gpiod_to_chip);
+>  static int gpiochip_find_base(int ngpio)
+>  {
+>         struct gpio_device *gdev;
+> -       int base = ARCH_NR_GPIOS - ngpio;
+> +       int base = GPIO_DYNAMIC_BASE;
+>
+> -       list_for_each_entry_reverse(gdev, &gpio_devices, list) {
+> +       list_for_each_entry(gdev, &gpio_devices, list) {
+>                 /* found a free space? */
+> -               if (gdev->base + gdev->ngpio <= base)
+> +               if (gdev->base >= base + ngpio)
+>                         break;
+> -               /* nope, check the space right before the chip */
+> -               base = gdev->base - ngpio;
+> +               /* nope, check the space right after the chip */
+> +               base = gdev->base + gdev->ngpio;
+>         }
+>
+>         if (gpio_is_valid(base)) {
+> diff --git a/include/asm-generic/gpio.h b/include/asm-generic/gpio.h
+> index aea9aee1f3e9..a7752cf152ce 100644
+> --- a/include/asm-generic/gpio.h
+> +++ b/include/asm-generic/gpio.h
+> @@ -11,40 +11,18 @@
+>  #include <linux/gpio/driver.h>
+>  #include <linux/gpio/consumer.h>
+>
+> -/* Platforms may implement their GPIO interface with library code,
+> +/*
+> + * Platforms may implement their GPIO interface with library code,
+>   * at a small performance cost for non-inlined operations and some
+>   * extra memory (for code and for per-GPIO table entries).
+> - *
+> - * While the GPIO programming interface defines valid GPIO numbers
+> - * to be in the range 0..MAX_INT, this library restricts them to the
+> - * smaller range 0..ARCH_NR_GPIOS-1.
+> - *
+> - * ARCH_NR_GPIOS is somewhat arbitrary; it usually reflects the sum of
+> - * builtin/SoC GPIOs plus a number of GPIOs on expanders; the latter is
+> - * actually an estimate of a board-specific value.
+>   */
+>
+> -#ifndef ARCH_NR_GPIOS
+> -#if defined(CONFIG_ARCH_NR_GPIO) && CONFIG_ARCH_NR_GPIO > 0
+> -#define ARCH_NR_GPIOS CONFIG_ARCH_NR_GPIO
+> -#else
+> -#define ARCH_NR_GPIOS          512
+> -#endif
+> -#endif
+> -
+>  /*
+> - * "valid" GPIO numbers are nonnegative and may be passed to
+> - * setup routines like gpio_request().  only some valid numbers
+> - * can successfully be requested and used.
+> - *
+> - * Invalid GPIO numbers are useful for indicating no-such-GPIO in
+> - * platform data and other tables.
+> + * At the end we want all GPIOs to be dynamically allocated from 0.
+> + * However, some legacy drivers still perform fixed allocation.
+> + * Until they are all fixed, leave 0-512 space for them.
+>   */
+> -
+> -static inline bool gpio_is_valid(int number)
+> -{
+> -       return number >= 0 && number < ARCH_NR_GPIOS;
+> -}
+> +#define GPIO_DYNAMIC_BASE      512
+>
+>  struct device;
+>  struct gpio;
+> @@ -140,12 +118,6 @@ static inline void gpio_unexport(unsigned gpio)
+>
+>  #include <linux/kernel.h>
+>
+> -static inline bool gpio_is_valid(int number)
+> -{
+> -       /* only non-negative numbers are valid */
+> -       return number >= 0;
+> -}
+> -
+>  /* platforms that don't directly support access to GPIOs through I2C, SPI,
+>   * or other blocking infrastructure can use these wrappers.
+>   */
+> @@ -169,4 +141,19 @@ static inline void gpio_set_value_cansleep(unsigned gpio, int value)
+>
+>  #endif /* !CONFIG_GPIOLIB */
+>
+> +/*
+> + * "valid" GPIO numbers are nonnegative and may be passed to
+> + * setup routines like gpio_request().  only some valid numbers
+> + * can successfully be requested and used.
+> + *
+> + * Invalid GPIO numbers are useful for indicating no-such-GPIO in
+> + * platform data and other tables.
+> + */
+> +
+> +static inline bool gpio_is_valid(int number)
+> +{
+> +       /* only non-negative numbers are valid */
+> +       return number >= 0;
+> +}
+> +
+>  #endif /* _ASM_GENERIC_GPIO_H */
+> --
+> 2.37.1
+>
 
-> DEFINE_UART_PORT_TX_HELPER_LIMITED() is a new helper to send characters
-> to the device. Use it in these drivers.
-> 
-> mux.c also needs to define tx_done(). But I'm not sure if the driver
-> really wants to wait for all the characters to dismiss from the HW fifo
-> at this code point. Hence I marked this as FIXME.
-
-Indeed, it seems odd.
-
-This change looked good to me but I'll give my rev-by only after seeing 
-the next version.
 
 -- 
- i.
-
-
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: bcm-kernel-feedback-list@broadcom.com
-> Cc: "Pali Rohár" <pali@kernel.org>
-> Cc: Kevin Cernekee <cernekee@gmail.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Orson Zhai <orsonzhai@gmail.com>
-> Cc: Baolin Wang <baolin.wang7@gmail.com>
-> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
-> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-> Cc: linux-riscv@lists.infradead.org
-
---8323329-1404598877-1662130606=:1647--
+With Best Regards,
+Andy Shevchenko

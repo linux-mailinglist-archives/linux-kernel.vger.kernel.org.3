@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324A45AAE58
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913E65AAF33
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235614AbiIBMVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S236886AbiIBMev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235774AbiIBMVO (ORCPT
+        with ESMTP id S236921AbiIBMdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:21:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356754D251;
-        Fri,  2 Sep 2022 05:20:32 -0700 (PDT)
+        Fri, 2 Sep 2022 08:33:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E848FE3420;
+        Fri,  2 Sep 2022 05:28:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4B0A620C5;
-        Fri,  2 Sep 2022 12:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B36C9C433D6;
-        Fri,  2 Sep 2022 12:20:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11954B82AA5;
+        Fri,  2 Sep 2022 12:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50655C433C1;
+        Fri,  2 Sep 2022 12:28:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121231;
-        bh=01KB4X1Lm1hVLMRWDMNTi4UfXBMeRJrbmHAD7ql4puc=;
+        s=korg; t=1662121680;
+        bh=MUaU73BWKwBTtGsQu2MymRJAHGJQxN5FzuhKUXGRAns=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hp61bOcixj5vpfUlgf+qrtdlFMcYZjJ4T/sDBTfDCAt3GVaa0JQlmIy9rXVrQUExP
-         R8Y3zhyjfqBt+Xcvy9vyclOh8bRVRjadAz28v4HCqyFFFGKGQVcsW4Na5/DHZ+uuOY
-         LiZ4cYfeRdWM2N9uzaqPvR1JSkn8dUso2DnFS5Qw=
+        b=k5qEtf2kIx9jDLjEUZGzDYVP5pvLxBoVglI2E8UpxYn4Spvu6f5F1B7vnpo0Mz7ia
+         CrOUjtJeerH4XM/Dv5N5MNUKGIpuhzGmapEaTE9vdLg6DE57F0b82xm+zcpfIFWj+c
+         ssn122FXg9//cTv0n8yi0NrCeRmsIlx4CSEQxV0s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Siddh Raman Pant <code@siddh.me>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com
-Subject: [PATCH 4.9 14/31] loop: Check for overflow while configuring loop
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 31/77] net: Fix a data-race around sysctl_net_busy_read.
 Date:   Fri,  2 Sep 2022 14:18:40 +0200
-Message-Id: <20220902121357.276618508@linuxfoundation.org>
+Message-Id: <20220902121404.678101927@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
-References: <20220902121356.732130937@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,59 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddh Raman Pant <code@siddh.me>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit c490a0b5a4f36da3918181a8acdc6991d967c5f3 upstream.
+[ Upstream commit e59ef36f0795696ab229569c153936bfd068d21c ]
 
-The userspace can configure a loop using an ioctl call, wherein
-a configuration of type loop_config is passed (see lo_ioctl()'s
-case on line 1550 of drivers/block/loop.c). This proceeds to call
-loop_configure() which in turn calls loop_set_status_from_info()
-(see line 1050 of loop.c), passing &config->info which is of type
-loop_info64*. This function then sets the appropriate values, like
-the offset.
+While reading sysctl_net_busy_read, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-loop_device has lo_offset of type loff_t (see line 52 of loop.c),
-which is typdef-chained to long long, whereas loop_info64 has
-lo_offset of type __u64 (see line 56 of include/uapi/linux/loop.h).
-
-The function directly copies offset from info to the device as
-follows (See line 980 of loop.c):
-	lo->lo_offset = info->lo_offset;
-
-This results in an overflow, which triggers a warning in iomap_iter()
-due to a call to iomap_iter_done() which has:
-	WARN_ON_ONCE(iter->iomap.offset > iter->pos);
-
-Thus, check for negative value during loop_set_status_from_info().
-
-Bug report: https://syzkaller.appspot.com/bug?id=c620fe14aac810396d3c3edc9ad73848bf69a29e
-
-Reported-and-tested-by: syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com
-Cc: stable@vger.kernel.org
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220823160810.181275-1-code@siddh.me
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 2d48d67fa8cd ("net: poll/select low latency socket support")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/loop.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ net/core/sock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -1202,6 +1202,11 @@ loop_get_status(struct loop_device *lo,
- 	info->lo_rdevice = huge_encode_dev(lo->lo_device ? stat.rdev : stat.dev);
- 	info->lo_offset = lo->lo_offset;
- 	info->lo_sizelimit = lo->lo_sizelimit;
-+
-+	/* loff_t vars have been assigned __u64 */
-+	if (lo->lo_offset < 0 || lo->lo_sizelimit < 0)
-+		return -EOVERFLOW;
-+
- 	info->lo_flags = lo->lo_flags;
- 	memcpy(info->lo_file_name, lo->lo_file_name, LO_NAME_SIZE);
- 	memcpy(info->lo_crypt_name, lo->lo_crypt_name, LO_NAME_SIZE);
+diff --git a/net/core/sock.c b/net/core/sock.c
+index c84f68bff7f58..a2b12a5cf42bc 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2946,7 +2946,7 @@ void sock_init_data(struct socket *sock, struct sock *sk)
+ 
+ #ifdef CONFIG_NET_RX_BUSY_POLL
+ 	sk->sk_napi_id		=	0;
+-	sk->sk_ll_usec		=	sysctl_net_busy_read;
++	sk->sk_ll_usec		=	READ_ONCE(sysctl_net_busy_read);
+ #endif
+ 
+ 	sk->sk_max_pacing_rate = ~0UL;
+-- 
+2.35.1
+
 
 

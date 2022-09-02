@@ -2,102 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963A85AABC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B865AABBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235842AbiIBJu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S235646AbiIBJsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235396AbiIBJuV (ORCPT
+        with ESMTP id S232755AbiIBJsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:50:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A0E193DD;
-        Fri,  2 Sep 2022 02:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662112206; x=1693648206;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IaIr/VGI/rpzpeneCz+2giuJhgGkXrDlzgjqfyGBTt0=;
-  b=XNkTVRDmdjYHpc2zFXWAZdqZpACq+NCba3Ncih6zotmMe7WIDd76MfKA
-   tz7osbCFVke4sAMyNUagTq4E74VnYOYvI1q5XhAO9NMwx5aymVwsSEqBD
-   /VmMQ/xyPAdLayyItkKqB8tgPPl/4RhBcGqOcp/2mrqp8/gMy5cSnOYBS
-   MHrE+nWMU2OjlrCehVWjH1MwD6tmq/wxr7gJstOvpVttJnZU/T1QSGJiu
-   R0tZ3QMtw7O3IFGxYgzUh53NWwdCCaoxeDXwRVUWo/G/yEr3otor7DGGw
-   vkKh4atgyoQzUiNhnWLxBC3Q4H1gAawh+U7/zVdigDvN8dFVsZPmPqKPJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="359904491"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="359904491"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 02:50:06 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="563913638"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 02:50:04 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oU3HE-007Jfu-1v;
-        Fri, 02 Sep 2022 12:47:52 +0300
-Date:   Fri, 2 Sep 2022 12:47:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH] ACPI / property: Silence missing-declarations warning in
- apple.c
-Message-ID: <YxHRSPUWtQdP1w/4@smile.fi.intel.com>
-References: <202209020412.Ts31BZrs-lkp@intel.com>
- <a6030c5943ccd2965261a92320b1ae1adb909116.1662084833.git.lukas@wunner.de>
+        Fri, 2 Sep 2022 05:48:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8668C9E81
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662112127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L5hlwTGXpG9hUxZCZE5KZ7NE2krlb6FbDoRXg5yfQZY=;
+        b=IbCiGoPSnbyDmYyKCxHc57iB95d0zIJwN4kb+qK9pdn8QfpqyWHI3poXc3/b5JgPcYny1O
+        0RJRW470JPthpBOqTB6NJpv+urs3zCAoU2kMUNX3towpW7JkiXyR4dmauwesCmuNigv8kU
+        i5QHBa+GzQe/QkTzwcCmwmNElO5YUzY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-533-s4DrPB4TOryG3kiNBNPaMw-1; Fri, 02 Sep 2022 05:48:43 -0400
+X-MC-Unique: s4DrPB4TOryG3kiNBNPaMw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9AD273C0ED64;
+        Fri,  2 Sep 2022 09:48:42 +0000 (UTC)
+Received: from localhost (ovpn-12-173.pek2.redhat.com [10.72.12.173])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5809640C141D;
+        Fri,  2 Sep 2022 09:48:40 +0000 (UTC)
+Date:   Fri, 2 Sep 2022 17:48:37 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kbuild-all@lists.01.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, hch@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        linux-arm-kernel@lists.infradead.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
+Subject: Re: [PATCH v2 10/11] sh: mm: Convert to GENERIC_IOREMAP
+Message-ID: <YxHRdQft06rIBM+j@MiWiFi-R3L-srv>
+References: <20220820003125.353570-11-bhe@redhat.com>
+ <202208201146.8VeY9pez-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a6030c5943ccd2965261a92320b1ae1adb909116.1662084833.git.lukas@wunner.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202208201146.8VeY9pez-lkp@intel.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 04:15:55AM +0200, Lukas Wunner wrote:
-> Silence an annoying message emitted for W=1 builds:
+On 08/20/22 at 11:41am, kernel test robot wrote:
+> Hi Baoquan,
 > 
-> drivers/acpi/x86/apple.c:30:6: warning: no previous declaration for 'acpi_extract_apple_properties' [-Wmissing-declarations]
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> ---
->  drivers/acpi/x86/apple.c | 1 +
->  1 file changed, 1 insertion(+)
+> I love your patch! Yet something to improve:
 > 
-> diff --git a/drivers/acpi/x86/apple.c b/drivers/acpi/x86/apple.c
-> index c285c91a5e9c..8812ecd03d55 100644
-> --- a/drivers/acpi/x86/apple.c
-> +++ b/drivers/acpi/x86/apple.c
-> @@ -8,6 +8,7 @@
->  #include <linux/bitmap.h>
->  #include <linux/platform_data/x86/apple.h>
->  #include <linux/uuid.h>
-> +#include "../internal.h"
->  
->  /* Apple _DSM device properties GUID */
->  static const guid_t apple_prp_guid =
-> -- 
-> 2.36.1
+> [auto build test ERROR on akpm-mm/mm-everything]
 > 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/mm-ioremap-Convert-architectures-to-take-GENERIC_IOREMAP-way/20220820-083435
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> config: sh-allmodconfig
+> compiler: sh4-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/503a31451202f89e58bc5f0a49261398fafbd90e
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Baoquan-He/mm-ioremap-Convert-architectures-to-take-GENERIC_IOREMAP-way/20220820-083435
+>         git checkout 503a31451202f89e58bc5f0a49261398fafbd90e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh prepare
 
--- 
-With Best Regards,
-Andy Shevchenko
+I finally find gcc-sh-linux-gnu and its dependency on rpmfind.net, and
+succeeded to reproduce the building failure.
+isl-0.16.1-13
+cross-gcc-common
+gcc-sh-linux-gnu
 
+Based on previous fixing patch for parisc, below draft patch can fix all
+reported building issues on sh.
+
+diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
+index 3c5ff82a511a..eb550c72922d 100644
+--- a/arch/sh/include/asm/io.h
++++ b/arch/sh/include/asm/io.h
+@@ -225,6 +225,9 @@ __BUILD_IOPORT_STRING(q, u64)
+ #define IO_SPACE_LIMIT 0xffffffff
+ 
+ /* We really want to try and get these to memcpy etc */
++#define memset_io memset_io
++#define memcpy_fromio memcpy_fromio
++#define memcpy_toio memcpy_toio
+ void memcpy_fromio(void *, const volatile void __iomem *, unsigned long);
+ void memcpy_toio(volatile void __iomem *, const void *, unsigned long);
+ void memset_io(volatile void __iomem *, int, unsigned long);
+@@ -256,18 +259,17 @@ int arch_iounmap(void __iomem *addr);
+ 
+ #define ioremap_cache(addr, size)  \
+ 	ioremap_prot((addr), (size), pgprot_val(PAGE_KERNEL))
+-#define ioremap_cache ioremap_cache
+ 
+ #define ioremap_uc	ioremap
+ 
+-#include <asm-generic/io.h>
+-
+ /*
+  * Convert a physical pointer to a virtual kernel pointer for /dev/mem
+  * access
+  */
+ #define xlate_dev_mem_ptr(p)	__va(p)
+ 
++#include <asm-generic/io.h>
++
+ #define ARCH_HAS_VALID_PHYS_ADDR_RANGE
+ int valid_phys_addr_range(phys_addr_t addr, size_t size);
+ int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
+diff --git a/arch/sh/include/asm/io_noioport.h b/arch/sh/include/asm/io_noioport.h
+index f7938fe0f911..5ba4116b4265 100644
+--- a/arch/sh/include/asm/io_noioport.h
++++ b/arch/sh/include/asm/io_noioport.h
+@@ -53,6 +53,13 @@ static inline void ioport_unmap(void __iomem *addr)
+ #define outw_p(x, addr)	outw((x), (addr))
+ #define outl_p(x, addr)	outl((x), (addr))
+ 
++#define insb insb
++#define insw insw
++#define insl insl
++#define outsb outsb
++#define outsw outsw
++#define outsl outsl
++
+ static inline void insb(unsigned long port, void *dst, unsigned long count)
+ {
+ 	BUG();
+diff --git a/arch/sh/mm/ioremap.c b/arch/sh/mm/ioremap.c
+index 720a9186b06b..725a1623675a 100644
+--- a/arch/sh/mm/ioremap.c
++++ b/arch/sh/mm/ioremap.c
+@@ -72,7 +72,7 @@ __ioremap_29bit(phys_addr_t offset, unsigned long size, pgprot_t prot)
+ #define __ioremap_29bit(offset, size, prot)		NULL
+ #endif /* CONFIG_29BIT */
+ 
+-void __iomem *
++void __iomem * __ref
+ arch_ioremap(phys_addr_t *paddr, size_t size, unsigned long *prot_val)
+ {
+ 	unsigned long last_addr, phys_addr = *paddr;
+@@ -102,7 +102,8 @@ arch_ioremap(phys_addr_t *paddr, size_t size, unsigned long *prot_val)
+ 	 * First try to remap through the PMB.
+ 	 * PMB entries are all pre-faulted.
+ 	 */
+-	mapped = pmb_remap_caller(phys_addr, size, pgprot, caller);
++	mapped = pmb_remap_caller(phys_addr, size, pgprot,
++			__builtin_return_address(0));
+ 	if (mapped && !IS_ERR(mapped))
+ 		return mapped;
+ 
+@@ -129,7 +130,6 @@ static inline int iomapping_nontranslatable(unsigned long offset)
+ int arch_iounmap(void __iomem *addr)
+ {
+ 	unsigned long vaddr = (unsigned long __force)addr;
+-	struct vm_struct *p;
+ 
+ 	/*
+ 	 * Nothing to do if there is no translatable mapping.
 

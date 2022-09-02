@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582F55AAFA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD825AAE8C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236274AbiIBMl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        id S236336AbiIBMZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237395AbiIBMjc (ORCPT
+        with ESMTP id S236318AbiIBMYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:39:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29171DF668;
-        Fri,  2 Sep 2022 05:30:55 -0700 (PDT)
+        Fri, 2 Sep 2022 08:24:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C00D3E44;
+        Fri,  2 Sep 2022 05:22:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFCAC621AE;
-        Fri,  2 Sep 2022 12:30:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1FEBC433D7;
-        Fri,  2 Sep 2022 12:30:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C253620F0;
+        Fri,  2 Sep 2022 12:21:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AEFC433D6;
+        Fri,  2 Sep 2022 12:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121854;
-        bh=MteKdNzVp6cflqnKE+4HSQpIqrWCVu9lmRjk+wi8mcA=;
+        s=korg; t=1662121315;
+        bh=GRY44WcHqY/SgymLIc9wHIjeXiuJ7rxdOZn+fozOfg8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jNxhBx7YPbYEjQcuY0k4HocXTXNFoZKU3TAWqQaRpDxy8RET8GjFN9SDfhzRoAon0
-         kp7QEKqZKupmNJIotm6/SwjTplbW3R4w1dzIH/ETY4aWxENrsDwy02Ec+R991ZJaEy
-         4yCWEoJwh5XBTiDcx7IwIG86ertg5VZ6NfhUu160=
+        b=lhY4v3COGunXWzIwt+UHFFBsy/NnCEEtLKubgObivEfEm76kvjemDxKVjW08RuP2C
+         KVvSBe7X4h3Co3WFaLa1fKJ+l5nI5EkEWaAsxF3QRPXMvNthv8PLNVkqFR2+CNjkIL
+         H5muqMnlYANnVAKMQUke/Vl6btq8g75lEgUfUwp4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH 5.15 01/73] mm: Force TLB flush for PFNMAP mappings before unlink_file_vma()
-Date:   Fri,  2 Sep 2022 14:18:25 +0200
-Message-Id: <20220902121404.484452365@linuxfoundation.org>
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.14 02/42] parisc: Fix exception handler for fldw and fstw instructions
+Date:   Fri,  2 Sep 2022 14:18:26 +0200
+Message-Id: <20220902121358.861391702@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
+References: <20220902121358.773776406@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,53 +53,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Helge Deller <deller@gmx.de>
 
-commit b67fbebd4cf980aecbcc750e1462128bffe8ae15 upstream.
+commit 7ae1f5508d9a33fd58ed3059bd2d569961e3b8bd upstream.
 
-Some drivers rely on having all VMAs through which a PFN might be
-accessible listed in the rmap for correctness.
-However, on X86, it was possible for a VMA with stale TLB entries
-to not be listed in the rmap.
+The exception handler is broken for unaligned memory acceses with fldw
+and fstw instructions, because it trashes or uses randomly some other
+floating point register than the one specified in the instruction word
+on loads and stores.
 
-This was fixed in mainline with
-commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas"),
-but that commit relies on preceding refactoring in
-commit 18ba064e42df3 ("mmu_gather: Let there be one tlb_{start,end}_vma()
-implementation") and commit 1e9fdf21a4339 ("mmu_gather: Remove per arch
-tlb_{start,end}_vma()").
+The instruction "fldw 0(addr),%fr22L" (and the other fldw/fstw
+instructions) encode the target register (%fr22) in the rightmost 5 bits
+of the instruction word. The 7th rightmost bit of the instruction word
+defines if the left or right half of %fr22 should be used.
 
-This patch provides equivalent protection without needing that
-refactoring, by forcing a TLB flush between removing PTEs in
-unmap_vmas() and the call to unlink_file_vma() in free_pgtables().
+While processing unaligned address accesses, the FR3() define is used to
+extract the offset into the local floating-point register set.  But the
+calculation in FR3() was buggy, so that for example instead of %fr22,
+register %fr12 [((22 * 2) & 0x1f) = 12] was used.
 
-[This is a stable-specific rewrite of the upstream commit!]
-Signed-off-by: Jann Horn <jannh@google.com>
+This bug has been since forever in the parisc kernel and I wonder why it
+wasn't detected earlier. Interestingly I noticed this bug just because
+the libime debian package failed to build on *native* hardware, while it
+successfully built in qemu.
+
+This patch corrects the bitshift and masking calculation in FR3().
+
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mmap.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/parisc/kernel/unaligned.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2643,6 +2643,18 @@ static void unmap_region(struct mm_struc
- 	tlb_gather_mmu(&tlb, mm);
- 	update_hiwater_rss(mm);
- 	unmap_vmas(&tlb, vma, start, end);
-+
-+	/*
-+	 * Ensure we have no stale TLB entries by the time this mapping is
-+	 * removed from the rmap.
-+	 * Note that we don't have to worry about nested flushes here because
-+	 * we're holding the mm semaphore for removing the mapping - so any
-+	 * concurrent flush in this region has to be coming through the rmap,
-+	 * and we synchronize against that using the rmap lock.
-+	 */
-+	if ((vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) != 0)
-+		tlb_flush_mmu(&tlb);
-+
- 	free_pgtables(&tlb, vma, prev ? prev->vm_end : FIRST_USER_ADDRESS,
- 				 next ? next->vm_start : USER_PGTABLES_CEILING);
- 	tlb_finish_mmu(&tlb);
+--- a/arch/parisc/kernel/unaligned.c
++++ b/arch/parisc/kernel/unaligned.c
+@@ -121,7 +121,7 @@
+ #define R1(i) (((i)>>21)&0x1f)
+ #define R2(i) (((i)>>16)&0x1f)
+ #define R3(i) ((i)&0x1f)
+-#define FR3(i) ((((i)<<1)&0x1f)|(((i)>>6)&1))
++#define FR3(i) ((((i)&0x1f)<<1)|(((i)>>6)&1))
+ #define IM(i,n) (((i)>>1&((1<<(n-1))-1))|((i)&1?((0-1L)<<(n-1)):0))
+ #define IM5_2(i) IM((i)>>16,5)
+ #define IM5_3(i) IM((i),5)
 
 

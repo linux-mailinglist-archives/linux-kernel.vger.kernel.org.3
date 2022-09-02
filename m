@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DB65AB097
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8DD5AAFEF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238088AbiIBMy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S237385AbiIBMqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238006AbiIBMxW (ORCPT
+        with ESMTP id S237507AbiIBMnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:53:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E1EF995C;
-        Fri,  2 Sep 2022 05:38:02 -0700 (PDT)
+        Fri, 2 Sep 2022 08:43:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63861EE4BD;
+        Fri,  2 Sep 2022 05:32:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5DDD620DF;
-        Fri,  2 Sep 2022 12:37:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D34FEC433D6;
-        Fri,  2 Sep 2022 12:37:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43E94B82AD5;
+        Fri,  2 Sep 2022 12:32:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF223C433D6;
+        Fri,  2 Sep 2022 12:32:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122245;
-        bh=lDiYmQI/djaaLrRQd07xuv/P1PgvtaUZVRp8uxNge+w=;
+        s=korg; t=1662121953;
+        bh=lV7mb2d2P7zCPfmJmyz0dYwCOsfkfJLOefpZXPPvb/4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=duGwJcDAaWO/xWtofRiXZdbKi6Ps41sfWumZiI5eFbr1EoPSdinTfy5IaO0BM87/p
-         thMXOKZQKQmMK2Ncj6bKJgxLYkoP+WI5AO/qdajpl62kJwwiosqbzNaRrpLkc6m5vC
-         54rNiOli9xY1HgzMLlFA4hfVwb6VojcGKJ3bw/EE=
+        b=dYSK+/quhCTFcXJ8NoCZvUehwp6avjtH6kjeS2Z3HSxeAmsJtWFUKEj6fgKtdOMOO
+         JwGLaxgKl7r0H4RdwtzYFeJOwQKrJka2303CWBxHSxqH3tBGqcCBCT+qno9K25ckuk
+         lVIKM5zY9tXhyFGAWAvUt3E3YoqqukhdJIZ/a+aU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenbin Mei <wenbin.mei@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 28/72] mmc: mtk-sd: Clear interrupts when cqe off/disable
+        stable@vger.kernel.org,
+        =?UTF-8?q?Michael=20H=C3=BCbner?= <michaelh.95@t-online.de>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.15 40/73] HID: thrustmaster: Add sparco wheel and fix array length
 Date:   Fri,  2 Sep 2022 14:19:04 +0200
-Message-Id: <20220902121405.722131658@linuxfoundation.org>
+Message-Id: <20220902121405.761983346@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wenbin Mei <wenbin.mei@mediatek.com>
+From: Michael Hübner <michaelh.95@t-online.de>
 
-[ Upstream commit cc5d1692600613e72f32af60e27330fe0c79f4fe ]
+commit d9a17651f3749e69890db57ca66e677dfee70829 upstream.
 
-Currently we don't clear MSDC interrupts when cqe off/disable, which led
-to the data complete interrupt will be reserved for the next command.
-If the next command with data transfer after cqe off/disable, we process
-the CMD ready interrupt and trigger DMA start for data, but the data
-complete interrupt is already exists, then SW assume that the data transfer
-is complete, SW will trigger DMA stop, but the data may not be transmitted
-yet or is transmitting, so we may encounter the following error:
-mtk-msdc 11230000.mmc: CMD bus busy detected.
+Add device id for the Sparco R383 Mod wheel.
 
-Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
-Fixes: 88bd652b3c74 ("mmc: mediatek: command queue support")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220728080048.21336-1-wenbin.mei@mediatek.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fix wheel info array length to match actual wheel count present in the array.
+
+Signed-off-by: Michael Hübner <michaelh.95@t-online.de>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/mtk-sd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/hid/hid-thrustmaster.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 9da4489dc345a..378a26a1825c4 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -2414,6 +2414,9 @@ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
- 	/* disable busy check */
- 	sdr_clr_bits(host->base + MSDC_PATCH_BIT1, MSDC_PB1_BUSY_CHECK_SEL);
+--- a/drivers/hid/hid-thrustmaster.c
++++ b/drivers/hid/hid-thrustmaster.c
+@@ -67,12 +67,13 @@ static const struct tm_wheel_info tm_whe
+ 	{0x0200, 0x0005, "Thrustmaster T300RS (Missing Attachment)"},
+ 	{0x0206, 0x0005, "Thrustmaster T300RS"},
+ 	{0x0209, 0x0005, "Thrustmaster T300RS (Open Wheel Attachment)"},
++	{0x020a, 0x0005, "Thrustmaster T300RS (Sparco R383 Mod)"},
+ 	{0x0204, 0x0005, "Thrustmaster T300 Ferrari Alcantara Edition"},
+ 	{0x0002, 0x0002, "Thrustmaster T500RS"}
+ 	//{0x0407, 0x0001, "Thrustmaster TMX"}
+ };
  
-+	val = readl(host->base + MSDC_INT);
-+	writel(val, host->base + MSDC_INT);
-+
- 	if (recovery) {
- 		sdr_set_field(host->base + MSDC_DMA_CTRL,
- 			      MSDC_DMA_CTRL_STOP, 1);
-@@ -2871,11 +2874,14 @@ static int __maybe_unused msdc_suspend(struct device *dev)
- {
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
- 	int ret;
-+	u32 val;
+-static const uint8_t tm_wheels_infos_length = 4;
++static const uint8_t tm_wheels_infos_length = 7;
  
- 	if (mmc->caps2 & MMC_CAP2_CQE) {
- 		ret = cqhci_suspend(mmc);
- 		if (ret)
- 			return ret;
-+		val = readl(((struct msdc_host *)mmc_priv(mmc))->base + MSDC_INT);
-+		writel(val, ((struct msdc_host *)mmc_priv(mmc))->base + MSDC_INT);
- 	}
- 
- 	return pm_runtime_force_suspend(dev);
--- 
-2.35.1
-
+ /*
+  * This structs contains (in little endian) the response data
 
 

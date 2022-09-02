@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB955AAE5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E385AAFE7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236059AbiIBMWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
+        id S237609AbiIBMp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235907AbiIBMVP (ORCPT
+        with ESMTP id S237420AbiIBMng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:21:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBE77F0A1;
-        Fri,  2 Sep 2022 05:20:55 -0700 (PDT)
+        Fri, 2 Sep 2022 08:43:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25B2EB855;
+        Fri,  2 Sep 2022 05:32:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DCD4620EB;
-        Fri,  2 Sep 2022 12:20:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5316DC433D6;
-        Fri,  2 Sep 2022 12:20:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 349D7B82AA5;
+        Fri,  2 Sep 2022 12:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D9CC433D7;
+        Fri,  2 Sep 2022 12:32:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121254;
-        bh=0VtpXqFvjdzolSkUYnkn3ks1g0xBS+pk9oJcQgLaFCA=;
+        s=korg; t=1662121928;
+        bh=FyeLDq2PH9S41l9QFfUpiWJFrh1e22Akt8LbPtNul28=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GqJeItBXxICCJSz05bSCTGN3UmI1WLKK5BCscS6z7VoIeX9BfJiwCMFOqBbdwErHr
-         7jQ9DQZu+BQA7hIzEIt9v0vOLWpHR0wwdtYMyRSeB4Xf+RrypMAUc0ThXo5dB6BEL2
-         iQ67h3caXtZNjjvqWsOy1JHSJFi26CvX6CiGwY6Q=
+        b=gUwz6PpKP7WvVuIH2EjddkUu0kcLi3XTYNUIH4SZI5HPkR8gay5X5m1Qhw1334YXe
+         qFmGdSf8G68sREdIOE8E63l+rN/c7W41qG6vw4PSfW2mSvrg2AvMgkxb6ZgCN4iN35
+         M2osU0QqF6h9C1hBhOU2tOi4N/2udbsB70/5R1bQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 07/31] ratelimit: Fix data-races in ___ratelimit().
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.15 09/73] mm/hugetlb: avoid corrupting page->mapping in hugetlb_mcopy_atomic_pte
 Date:   Fri,  2 Sep 2022 14:18:33 +0200
-Message-Id: <20220902121357.020913818@linuxfoundation.org>
+Message-Id: <20220902121404.745542492@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
-References: <20220902121356.732130937@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-[ Upstream commit 6bae8ceb90ba76cdba39496db936164fa672b9be ]
+commit ab74ef708dc51df7cf2b8a890b9c6990fac5c0c6 upstream.
 
-While reading rs->interval and rs->burst, they can be changed
-concurrently via sysctl (e.g. net_ratelimit_state).  Thus, we
-need to add READ_ONCE() to their readers.
+In MCOPY_ATOMIC_CONTINUE case with a non-shared VMA, pages in the page
+cache are installed in the ptes.  But hugepage_add_new_anon_rmap is called
+for them mistakenly because they're not vm_shared.  This will corrupt the
+page->mapping used by page cache code.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220712130542.18836-1-linmiaohe@huawei.com
+Fixes: f619147104c8 ("userfaultfd: add UFFDIO_CONTINUE ioctl")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Axel Rasmussen <axelrasmussen@google.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/ratelimit.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ mm/hugetlb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/ratelimit.c b/lib/ratelimit.c
-index d01f471352390..b805702de84dd 100644
---- a/lib/ratelimit.c
-+++ b/lib/ratelimit.c
-@@ -27,10 +27,16 @@
-  */
- int ___ratelimit(struct ratelimit_state *rs, const char *func)
- {
-+	/* Paired with WRITE_ONCE() in .proc_handler().
-+	 * Changing two values seperately could be inconsistent
-+	 * and some message could be lost.  (See: net_ratelimit_state).
-+	 */
-+	int interval = READ_ONCE(rs->interval);
-+	int burst = READ_ONCE(rs->burst);
- 	unsigned long flags;
- 	int ret;
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5371,7 +5371,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_s
+ 	if (!huge_pte_none(huge_ptep_get(dst_pte)))
+ 		goto out_release_unlock;
  
--	if (!rs->interval)
-+	if (!interval)
- 		return 1;
- 
- 	/*
-@@ -45,7 +51,7 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
- 	if (!rs->begin)
- 		rs->begin = jiffies;
- 
--	if (time_is_before_jiffies(rs->begin + rs->interval)) {
-+	if (time_is_before_jiffies(rs->begin + interval)) {
- 		if (rs->missed) {
- 			if (!(rs->flags & RATELIMIT_MSG_ON_RELEASE)) {
- 				printk_deferred(KERN_WARNING
-@@ -57,7 +63,7 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
- 		rs->begin   = jiffies;
- 		rs->printed = 0;
- 	}
--	if (rs->burst && rs->burst > rs->printed) {
-+	if (burst && burst > rs->printed) {
- 		rs->printed++;
- 		ret = 1;
+-	if (vm_shared) {
++	if (page_in_pagecache) {
+ 		page_dup_rmap(page, true);
  	} else {
--- 
-2.35.1
-
+ 		ClearHPageRestoreReserve(page);
 
 

@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540275AA82D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6035AA835
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235026AbiIBGlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 02:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
+        id S235528AbiIBGnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 02:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233577AbiIBGlJ (ORCPT
+        with ESMTP id S235513AbiIBGm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 02:41:09 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7B365579
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 23:41:04 -0700 (PDT)
-X-UUID: 2b6002d6ba3441508911b2ebbf6a9ec5-20220902
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=kVl11gCVG+L3OOSrvd7lAtcHP1USRC9hCAiJGILnyY4=;
-        b=MN+1p2tLk/0Ss3T0gDnC/RILNKMYkfaVwRJttNmTvVJYZiGiK+1Kik89lAlQMWenADYL12ASqKFcWl7cz4E3RgITiPh4mdiiJrb/cSbAJwMFL6MLFspNznSpuDlqQ/fH+LU66mqXaAhkSdQ8WER8Z1j3YBAs0e/1ACSUPtq+Gt8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:cad20cac-07c1-43d2-a184-fd49ae91830c,OB:0,L
-        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,BULK:0,RULE:Releas
-        e_Ham,ACTION:release,TS:51
-X-CID-INFO: VERSION:1.1.10,REQID:cad20cac-07c1-43d2-a184-fd49ae91830c,OB:0,LOB
-        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:51
-X-CID-META: VersionHash:84eae18,CLOUDID:11206256-e800-47dc-8adf-0c936acf4f1b,C
-        OID:7a7498550631,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: 2b6002d6ba3441508911b2ebbf6a9ec5-20220902
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <kuyo.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1405539393; Fri, 02 Sep 2022 14:41:00 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 2 Sep 2022 14:40:59 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 2 Sep 2022 14:40:59 +0800
-Message-ID: <5ce45c874d6a05ca69abed3961d413c4a4360e79.camel@mediatek.com>
-Subject: Re: [PATCH 1/1] sched/debug: fix dentry leak in
- update_sched_domain_debugfs
-From:   Kuyo Chang <kuyo.chang@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <major.chen@samsung.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        "Mel Gorman" <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <wsd_upstream@mediatek.com>, <hongfei.tang@samsung.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Fri, 2 Sep 2022 14:40:59 +0800
-In-Reply-To: <YxGUBzp9C7kcNgps@kroah.com>
-References: <20220902031518.1116-1-kuyo.chang@mediatek.com>
-         <YxGUBzp9C7kcNgps@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 2 Sep 2022 02:42:59 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D177BBA79;
+        Thu,  1 Sep 2022 23:42:58 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id jy14so758600qvb.12;
+        Thu, 01 Sep 2022 23:42:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ijNv5WqEEQFROPjZ7hs8XYIOd3yXWWZXXWp0NKKqDtQ=;
+        b=C5o7qskSx+1+hp9CSvidJ3m4RcIrjIlaVRNx8Kr+rcLkWve7RXxSaVDkylrJKjpSaY
+         TnsVP9BpFVCHJAbUvaPFKBS0Tqq7JUyaHvc5PMWjP4lwziqXzRy5fHdkDPmWOBpdgW+v
+         ySg9NPKDBZ73phjgOv6IrVm/9Ybk9Z2kAxqZ+4/jw0IiVdqNj0iNYPONREliqIT+XNuQ
+         L2+EHElOpmQkBLaT3mOpebzcxC/5FexnASQN7YjM2X6RNGl0OH/5bzW1j8d0eq3vE58h
+         X5cHKv99WAQkmCEfA5BGTHEZkn4yVjh5Kgcc8wYlRvETdfL7+F2sQzlU4UOh2DPr5z2m
+         I3Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ijNv5WqEEQFROPjZ7hs8XYIOd3yXWWZXXWp0NKKqDtQ=;
+        b=UDsioRIf227JBAPwnlj4A9A1kVrjsVq+d4YdwWIJyJ/QCvUmnM2Pw7LdY3nAdOm6Dg
+         Bzjbc5M8IBQ0woLY9ytjekfHEDx3gcydDd7pFmuIjJm6x76NlyYXg0yHCHsM+8CHlGa9
+         s5WGFFPcEiU8QB73IE8VtEMkR3viG3Uk++04TgO/0F0slgPpjWDHoSnuZfpF/r5EvC3I
+         W8GeWpcHn5ciBwv8HVKUQe+h8zulcETv5Y1QFv3wVPHgXkNbm1fm8GOliGdJ68HRRFWj
+         5ttbxYt+6jAFcLTBOii4bQ6gbvJ915nZDZnyUDopm93T5ZZA+E6w5iAIspBEN94JOaCp
+         u2Ug==
+X-Gm-Message-State: ACgBeo1TmgWls8edeXDeqoXbUpbw7Vq1MELJQ9Eh1cg99yoHwgjLtATL
+        wTzy5bOR/kbJwTCRChHznNXqiMAwBo5C1rYAocJOfBG461A=
+X-Google-Smtp-Source: AA6agR4vBazx/jplPCR7QUKsWHhJXKjqYpf8dvxM0kDkmBar9x+MzdDN2Ny5QwQEfhxOMQu7C6j52hiI2G+IQzA6YLE=
+X-Received: by 2002:a05:6214:27ca:b0:499:95f:6379 with SMTP id
+ ge10-20020a05621427ca00b00499095f6379mr18544602qvb.82.1662100977308; Thu, 01
+ Sep 2022 23:42:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+References: <20220831055811.1936613-1-s.hauer@pengutronix.de> <20220831055811.1936613-2-s.hauer@pengutronix.de>
+In-Reply-To: <20220831055811.1936613-2-s.hauer@pengutronix.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 2 Sep 2022 09:42:21 +0300
+Message-ID: <CAHp75VfbNespbCZ81xcvA7zsr3K8nbb3LBrpXOjH04R-hEFumw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] gpio: Add gpio latch driver
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sascha Hauer <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,102 +70,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-02 at 07:26 +0200, Greg Kroah-Hartman wrote:
-> On Fri, Sep 02, 2022 at 11:15:15AM +0800, Kuyo Chang wrote:
-> > From: kuyo chang <kuyo.chang@mediatek.com>
-> > 
-> > [Syndrome]
-> > Lowmemorykiller triggered while doing hotplug stress test as below
-> > cmd:
-> > echo [0/1] > /sys/devices/system/cpu/cpu${index}/online
-> > 
-> > Rootcause:
-> > Call trace of the slab owner & usage as below after hotplug stress
-> > test(4hr).
-> > There exists dentry leak at update_sched_domain_debugfs.
-> > 
-> > Total size : 322000KB
-> > <prep_new_page+44>:
-> > <get_page_from_freelist+672>:
-> > <__alloc_pages+304>:
-> > <allocate_slab+144>:
-> > <___slab_alloc+404>:
-> > <__slab_alloc+60>:
-> > <kmem_cache_alloc+1204>:
-> > <alloc_inode+100>:
-> > <new_inode+40>:
-> > <__debugfs_create_file+172>:
-> > <update_sched_domain_debugfs+824>:
-> > <partition_sched_domains_locked+1292>:
-> > <rebuild_sched_domains_locked+576>:
-> > <cpuset_hotplug_workfn+1052>:
-> > <process_one_work+584>:
-> > <worker_thread+1008>:
-> > 
-> > [Solution]
-> > Provided by Major Chen <major.chen@samsung.com> as below link.
-> > 
-https://lore.kernel.org/lkml/20220711030341epcms5p173848e98b13c09eb2fcdf2fd7287526a@epcms5p1/
-> > update_sched_domain_debugfs() uses debugfs_lookup() to find wanted
-> > dentry(which has
-> > been created by debugfs_create_dir() before), but not call dput()
-> > to return this dentry
-> > back. This result in dentry leak even debugfs_remove() is called.
-> > 
-> > [Test result]
-> > Using below commands to check inode_cache & dentry leak.
-> > cat /proc/slabinfo | grep -w inode_cache
-> > cat /proc/slabinfo | grep -w dentry
-> > 
-> > With the patch, the inode_cache & dentry stays consistent
-> > so the lowmemorykiller will not triggered anymore.
-> > 
-> > Fixes: 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to debugfs")
-> > 
-> > Signed-off-by: Major Chen <major.chen@samsung.com>
-> > Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
-> > Tested-by: kuyo chang <kuyo.chang@mediatek.com>
-> > 
-> > ---
-> >  kernel/sched/debug.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-> > index bb3d63bdf4ae..4ffea2dc01da 100644
-> > --- a/kernel/sched/debug.c
-> > +++ b/kernel/sched/debug.c
-> > @@ -412,11 +412,14 @@ void update_sched_domain_debugfs(void)
-> >  
-> >  	for_each_cpu(cpu, sd_sysctl_cpus) {
-> >  		struct sched_domain *sd;
-> > -		struct dentry *d_cpu;
-> > +		struct dentry *d_cpu, *d_lookup;
-> >  		char buf[32];
-> >  
-> >  		snprintf(buf, sizeof(buf), "cpu%d", cpu);
-> > -		debugfs_remove(debugfs_lookup(buf, sd_dentry));
-> > +		d_lookup = debugfs_lookup(buf, sd_dentry);
-> > +		debugfs_remove(d_lookup);
-> > +		if (!IS_ERR_OR_NULL(d_lookup))
-> > +			dput(d_lookup);
-> 
-> That's odd, and means that something else is removing this file right
-> after we looked it up?  Is there a missing lock here that should be
-> used
-> instead?
-> 
-> thanks,
-> 
-> greg k-h
+On Wed, Aug 31, 2022 at 9:02 AM Sascha Hauer <s.hauer@pengutronix.de> wrote:
+>
+> This driver implements a GPIO multiplexer based on latches connected to
+> other GPIOs. A set of data GPIOs is connected to the data input of
+> multiple latches. The clock input of each latch is driven by another
+> set of GPIOs. With two 8-bit latches 10 GPIOs can be multiplexed into
+> 16 GPIOs. GPOs might be a better term as in fact the multiplexed pins
+> are output only.
 
+So, this is for only one type of latches, now I'm wondering why
+gpio-74xx-mmio can't cover this case (with probably small
+modifications to the code)?
 
-While doing cpu hotlug, the cpu_active_mask is changed, 
-so it need to update_sched_domain_debugfs.
-
-The original design is to recreate sd_dentry, so it doing
-debugfs_remove and then debugfs_create_dir.
-However, by debugfs_lookup function usage.
-The returned dentry must be passed to dput() when it is no longer
-needed to avoid dentry leak.
-
-
+-- 
+With Best Regards,
+Andy Shevchenko

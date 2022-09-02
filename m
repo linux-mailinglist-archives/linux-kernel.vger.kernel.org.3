@@ -2,170 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484AC5AAE0B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04175AADFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235667AbiIBMBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        id S235774AbiIBMC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235686AbiIBMBL (ORCPT
+        with ESMTP id S235637AbiIBMCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:01:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4889552451
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662120069; x=1693656069;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MA2F1NX+R2+2eM0M3J1/D21ak0GR9GaYbn0h6g67VsY=;
-  b=dmbTOAVNneYdqKg0xmaODbEskgagSBypDTIn/2G/xCBFp+fmdmlvcI4a
-   6LV6DEwr+DMCqhDE+uT82D6Pq/hZixWzxdK2gz3mEmAnfwMW46P5AElwt
-   tS+OnnVcxPfwffpu9C3ustZovx4vprLeWtVyabtDHR1H9bxXRj8KSQU0L
-   H0p6nyucX1lifnMvbR/+rZxuFZGQt4TYVqH1EIbB9bHBpMzTFtwyPeqrM
-   k7Xwyqy2RwBHYjOcwOqOXzBvFWaWfAJ6dFLM1ArTRwOYMXKV2etcVva/t
-   U4Y/z3/xpFvgfb/gnp+MzXnhU8OVuMN9yw1zIlOUbpZsaWWiNJ9lLWD76
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="295971295"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="295971295"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 05:01:07 -0700
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="674331452"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.42.34])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 05:01:05 -0700
-Message-ID: <bf500303-394a-4806-361a-7cc559d80e98@intel.com>
-Date:   Fri, 2 Sep 2022 15:01:01 +0300
+        Fri, 2 Sep 2022 08:02:22 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74462C0B4D;
+        Fri,  2 Sep 2022 05:02:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Nz8Tz1uBfArPzrTbA5QgwTqK/y15M7AwWAm6DXoAXqU=; b=dzVLQ+ITUI1Ov9D5o9xTJSFt4p
+        mOLLn0YcKkRuViRI7VyEeyozgdZF/Ar3cklopmx5UjHmQN06fE1jcQrHLEj3c6IkgcR0zXMSe7pTT
+        MVVH6hjfs6xWx2kY+E/QnrRFhgdovhsxlKSW7Et1l3omPAhJ1aPenTCMV046kwQdRio4GiRZgrQTV
+        JKc8liKe3U90Li+tPS589EaZAnOaYeVpOZkYZml5FHMw8HFf0Z0v1qQFLJNzZXy9EdDHVwAL2+wxi
+        HRThC6s5E5XUhR2/bKLs9DtLgLqBoxRDwBF1yHVuPxoX67ocDXH+fFRogakH6JGm0TB1w0KNPbo7x
+        Yd2EBW6Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oU5Mz-008evC-BL; Fri, 02 Sep 2022 12:01:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 84B75300413;
+        Fri,  2 Sep 2022 14:01:55 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 63AD520853050; Fri,  2 Sep 2022 14:01:55 +0200 (CEST)
+Date:   Fri, 2 Sep 2022 14:01:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH RESEND v4] perf/core: Fix reentry problem in
+ perf_output_read_group
+Message-ID: <YxHws5sL16hz4ZKc@hirez.programming.kicks-ass.net>
+References: <20220902082918.179248-1-yangjihong1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 5/5] perf intel-pt: Support itrace option flag d+e to log
- on error
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20220901110032.9226-1-adrian.hunter@intel.com>
- <20220901110032.9226-6-adrian.hunter@intel.com>
- <dadd6179-4867-211a-ad6e-30fcd66a8e0a@linux.intel.com>
- <1a7aaa51-1858-bb59-834c-7e8f6a58bc39@intel.com>
- <CAM9d7chiutXEZfpQbayJ3bgraLZ_YFGC15yDn7sQBT4asdEfjA@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAM9d7chiutXEZfpQbayJ3bgraLZ_YFGC15yDn7sQBT4asdEfjA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902082918.179248-1-yangjihong1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/09/22 04:34, Namhyung Kim wrote:
-> On Thu, Sep 1, 2022 at 9:29 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>
->> On 1/09/22 17:31, Andi Kleen wrote:
->>>
->>> On 9/1/2022 4:00 AM, Adrian Hunter wrote:
+On Fri, Sep 02, 2022 at 04:29:18PM +0800, Yang Jihong wrote:
+> perf_output_read_group may respond to IPI request of other cores and invoke
+> __perf_install_in_context function. As a result, hwc configuration is modified.
+> causing inconsistency and unexpected consequences.
 > 
-> [SNIP]
->>>> +
->>>> +static void log_buf__dump(struct log_buf *b)
->>>> +{
->>>> +    if (!b->buf)
->>>> +        return;
->>>> +
->>>> +    fflush(f);
->>>> +    fprintf(b->backend, "Dumping debug log buffer (first line may be sliced)\n");
->>>
->>>
->>> Should be easy to skip the first line, no?
->>
->> Not as easy as typing " (first line may be sliced)" ;-)
->>
->> Still not sure it is worth having the extra complication, but here
->> is the change as a separate patch:
->>
->> From: Adrian Hunter <adrian.hunter@intel.com>
->> Date: Thu, 1 Sep 2022 19:01:33 +0300
->> Subject: [PATCH] perf intel-pt: Remove first line of log dumped on error
->>
->> Instead of printing "(first line may be sliced)", always remove the
->> first line of the debug log when dumping on error.
->>
->> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
->> ---
->>  .../perf/util/intel-pt-decoder/intel-pt-log.c | 27 ++++++++++++++++---
->>  1 file changed, 24 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/perf/util/intel-pt-decoder/intel-pt-log.c b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
->> index ea96dcae187a7..6cc465d1f7a9e 100644
->> --- a/tools/perf/util/intel-pt-decoder/intel-pt-log.c
->> +++ b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
->> @@ -143,16 +143,37 @@ static FILE *log_buf__open(struct log_buf *b, FILE *backend, unsigned int sz)
->>         return file;
->>  }
->>
->> +static bool remove_first_line(const char **p, size_t *n)
->> +{
->> +       for (; *n && **p != '\n'; ++*p, --*n)
->> +               ;
->> +       if (*n) {
->> +               *p += 1;
->> +               *n -= 1;
->> +               return true;
->> +       }
->> +       return false;
->> +}
->> +
->> +static void write_lines(const char *p, size_t n, FILE *fp, bool *remove_first)
->> +{
->> +       if (*remove_first)
->> +               *remove_first = !remove_first_line(&p, &n);
->> +       fwrite(p, n, 1, fp);
->> +}
->> +
->>  static void log_buf__dump(struct log_buf *b)
->>  {
->> +       bool remove_first = true;
+> Interrupts are not disabled when perf_output_read_group reads PMU counter.
+> In this case, IPI request may be received from other cores.
+> As a result, PMU configuration is modified and an error occurs when
+> reading PMU counter:
 > 
-> Isn't it only required when the buf is wrapped?
+>                    CPU0                                         CPU1
+>                                                     __se_sys_perf_event_open
+>                                                       perf_install_in_context
+> perf_output_read_group                                  smp_call_function_single
+>   for_each_sibling_event(sub, leader) {                   generic_exec_single
+>     if ((sub != event) &&                                   remote_function
+>         (sub->state == PERF_EVENT_STATE_ACTIVE))                    |
+> <enter IPI handler: __perf_install_in_context>   <----RAISE IPI-----+
+> __perf_install_in_context
+>   ctx_resched
+>     event_sched_out
+>       armpmu_del
+>         ...
+>         hwc->idx = -1; // event->hwc.idx is set to -1
+> ...
+> <exit IPI>
+>             sub->pmu->read(sub);
+>               armpmu_read
+>                 armv8pmu_read_counter
+>                   armv8pmu_read_hw_counter
+>                     int idx = event->hw.idx; // idx = -1
+>                     u64 val = armv8pmu_read_evcntr(idx);
+>                       u32 counter = ARMV8_IDX_TO_COUNTER(idx); // invalid counter = 30
+>                       read_pmevcntrn(counter) // undefined instruction
+> 
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
 
-Very true! Thanks for spotting that!
-
-I will send a new version.
-
-> 
-> Thanks,
-> Namhyung
-> 
-> 
->> +
->>         if (!b->buf)
->>                 return;
->>
->>         fflush(f);
->> -       fprintf(b->backend, "Dumping debug log buffer (first line may be sliced)\n");
->> +       fprintf(b->backend, "Dumping debug log buffer\n");
->>         if (b->wrapped)
->> -               fwrite(b->buf + b->head, b->buf_sz - b->head, 1, b->backend);
->> -       fwrite(b->buf, b->head, 1, b->backend);
->> +               write_lines(b->buf + b->head, b->buf_sz - b->head, b->backend, &remove_first);
->> +       write_lines(b->buf, b->head, b->backend, &remove_first);
->>         fprintf(b->backend, "End of debug log buffer dump\n");
->>
->>         b->head = 0;
->> --
->> 2.34.1
->>
-
+Right; thanks for reminding me. I had hoped you'd pick up and test the
+extra assertion some, but I'll just do that on top.

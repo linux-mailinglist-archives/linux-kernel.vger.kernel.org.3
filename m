@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DF95AA6CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 06:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46F25AA710
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 06:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235137AbiIBEOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 00:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S232529AbiIBEkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 00:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbiIBEOG (ORCPT
+        with ESMTP id S229554AbiIBEkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 00:14:06 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D99FA9265;
-        Thu,  1 Sep 2022 21:14:05 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id z6so1551460lfu.9;
-        Thu, 01 Sep 2022 21:14:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date;
-        bh=AijBO9nrg7xX2FQ7t5pNNFjzi755cTFDKODqE4YFCPQ=;
-        b=mm2IaPaiZD2YANcxOHf7RTxd/urUt118pLj6ni5f+pIKMaHXNOFjHxopf+AxdheVEP
-         oE3Iwu+BchPlyJ0fTs2FN+KKWCI4ooCXNcsG6BcNokOMyK4Bp07Knk/Yq9+UKDH9cY4M
-         U9A8FGjZVmubakszF9f8+qrQBSkjeo8ftj4rr0uiemHUYI0qD8z+h0rMpNSommvj3bwc
-         LjnpzDRfS+osCXs2D261TmUzUd7Rc5v3omCgOJbDVQ6Yz1aBGKAOCSjub5NpoN/+F77T
-         ft3WcXPmWO6OjTGR5xfeXkQ+D0JCgfMmZn4EopOP5gJaRYhXjRSTS66vPMHFm6WfHfJH
-         Zkmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=AijBO9nrg7xX2FQ7t5pNNFjzi755cTFDKODqE4YFCPQ=;
-        b=bW2qCnbN8NV5RtO3L5/E8b/eTmspkx5kfWnh3wLCA85H8HlbRY3uBM6Os0VM3CCUgr
-         1C9e8uMhlhO8YQ0+59algRnY0SrxVzUfblKNO3aAlTsZ/YRMU4/7sKjKyQsVBFMXechd
-         tphPERIDnlEY0acFjWcppE13cdeeTbgd/L6ndN29s3T+21aRH749KNO1yWCHkYF7KmbU
-         REXd1eMBuCWJoyQG1D5rkbhLZ0PR9vRktwEQTi39/o4aZEZK33/6Pj4PxyDst76skhwC
-         wHSZy+MNgcm7wyFQIDIXMds8u8VLeBvRVIZJMNqg/i9qsGzDN29HyPvIK8ViVg5r1XNe
-         brMg==
-X-Gm-Message-State: ACgBeo29enQSKZmYYzPrAOcysmsgPF5N1OXHaxi8zzLayU5tLzF2DkFN
-        q6G1BJK/am4OLVzNAqTThN0=
-X-Google-Smtp-Source: AA6agR5mOoimDDR08ufDCX8FZ5yVJE5be3+aRioWr9enab2ly9IAyC7eRKTTJTTrAStepJkxsgJAdw==
-X-Received: by 2002:a05:6512:6c8:b0:494:796e:93b6 with SMTP id u8-20020a05651206c800b00494796e93b6mr5119794lff.213.1662092043519;
-        Thu, 01 Sep 2022 21:14:03 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id z4-20020a056512370400b00494706193adsm106680lfr.208.2022.09.01.21.14.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 21:14:02 -0700 (PDT)
-Message-ID: <59b6dd0a-7cbb-5dbd-8da0-57baeba3327e@gmail.com>
-Date:   Fri, 2 Sep 2022 07:14:01 +0300
+        Fri, 2 Sep 2022 00:40:08 -0400
+X-Greylist: delayed 1476 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Sep 2022 21:40:06 PDT
+Received: from terminus.zytor.com (unknown [IPv6:2607:7c80:54:3::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D8526AE5;
+        Thu,  1 Sep 2022 21:40:04 -0700 (PDT)
+Received: from [IPV6:2601:646:8600:40c1:5967:deb4:a714:2940] ([IPv6:2601:646:8600:40c1:5967:deb4:a714:2940])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2824ETn5646849
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Thu, 1 Sep 2022 21:14:29 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2824ETn5646849
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022080501; t=1662092073;
+        bh=AAFAcyYvevmGoyt0qkojwfLI0sP7++l3bt0rETKoshY=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=IZtbZCHiZSUhm9W9dC74nV+v1OsE2C/t+WE972YhS/zbW2PDwrDr5OZU5FVsdfubl
+         WKSY3/iFXnWQLZJM/Kg9mXF4iZRw/y3N13zY6a/dXegjblaTIkZ/PDOR1Bmnymo4YF
+         BHhxphrU0+t3HBhL+O7AlEEaH8t0xl8OSuN6n5HOUNTSoScmDrtrBosK73go5+dvQs
+         iREgIdP5qysR6y6TJN01dn01NqTqIlAYSkCKNdIZBJJSYSQEamhQiYU8JkNrcqJljE
+         JdF+9Kz6UL0U1oorsufV13ZRZCwAiwvjoSgyve9bQQ5bTuAuRpe0fA4TKpJDkiXiE2
+         ivGpYjxtbZIMQ==
+Message-ID: <f956753b-1aae-37c9-9c9d-88e1550dd541@zytor.com>
+Date:   Thu, 1 Sep 2022 21:14:24 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 1/2] x86/cpufeatures: Add macros for Intel's new fast
+ rep string features
+To:     Jim Mattson <jmattson@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)" 
+        <kvm@vger.kernel.org>
+References: <20220901211811.2883855-1-jmattson@google.com>
 Content-Language: en-US
-To:     Tim Harvey <tharvey@gateworks.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Marek Vasut <marex@denx.de>
-References: <CAJ+vNU1Za2CPGVX3q4HKufsxbL5zRrk1B5CWFpKritetrTs4dA@mail.gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT failure
-In-Reply-To: <CAJ+vNU1Za2CPGVX3q4HKufsxbL5zRrk1B5CWFpKritetrTs4dA@mail.gmail.com>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20220901211811.2883855-1-jmattson@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tim,
-
-On 9/2/22 01:23, Tim Harvey wrote:
-> Greetings,
+On 9/1/22 14:18, Jim Mattson wrote:
+> KVM_GET_SUPPORTED_CPUID should reflect these host CPUID bits. The bits
+> are already cached in word 12. Give the bits X86_FEATURE names, so
+> that they can be easily referenced. Hide these bits from
+> /proc/cpuinfo, since the host kernel makes no use of them at present.
 > 
-> I've found that the bd71847 clk driver (CONFIG_COMMON_CLK_BD718XX
-> drivers/clk/clk-bd718x7.c) disables clk-32k-out (the BD71847 C32K_OUT
-> pin) which is connected IMX8MM RTC_XTALI which ends up disabling the
-> IMX RTC as well as the IMX WDOG functionality.
+> Signed-off-by: Jim Mattson <jmattson@google.com>
+> ---
+>   arch/x86/include/asm/cpufeatures.h | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index ef4775c6db01..454f0faa8e90 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -308,6 +308,9 @@
+>   /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+>   #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+>   #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
+> +#define X86_FEATURE_FZRM		(12*32+10) /* "" Fast zero-length REP MOVSB */
+> +#define X86_FEATURE_FSRS		(12*32+11) /* "" Fast short REP STOSB */
+> +#define X86_FEATURE_FSRC		(12*32+12) /* "" Fast short REP {CMPSB,SCASB} */
+>   
+>   /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
+>   #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
 
-//snip
+Any reason why these bits are hidden from /proc/cpuinfo?
 
-> This happens via clk_unprepare_unused() as nothing is flagging the
-> clk-32k-out as being used. What should be added to the device-tree to
-> signify that this clk is indeed necessary and should not be disabled?
-
-I have seen following proposal from Marek Vasut:
-
-https://lore.kernel.org/all/20220517235919.200375-1-marex@denx.de/T/#m52d6d0831bf43d5f293e35cb27f3021f278d0564
-
-I am not sure if the discussion is completed though. I guess it was 
-agreed this was needed/usefull and maybe the remaining thing to decide 
-was just the property naming.
-
-Best Regards
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+	-hpa

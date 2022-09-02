@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 158445AAFA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325EC5AAF18
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236502AbiIBMld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S236580AbiIBMc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237334AbiIBMjQ (ORCPT
+        with ESMTP id S236526AbiIBMbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:39:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A92263AD;
-        Fri,  2 Sep 2022 05:30:28 -0700 (PDT)
+        Fri, 2 Sep 2022 08:31:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B42DD772;
+        Fri,  2 Sep 2022 05:26:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2029762109;
-        Fri,  2 Sep 2022 12:28:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F26C433C1;
-        Fri,  2 Sep 2022 12:28:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0402CB82AA3;
+        Fri,  2 Sep 2022 12:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C88C433C1;
+        Fri,  2 Sep 2022 12:26:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121717;
-        bh=dwulq3C42+QL6V1OJqh9EVSXbXuaeZA6njsv2Gq/iEI=;
+        s=korg; t=1662121598;
+        bh=F4vlN0+PCazpWuJH/8PKmMSCu5OzBSkiLxykRptJRxw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v6Ar2SGZSxOt8cH1N4sKFDjTU7UKIggsaZTJYm9rBB8eCEFhG3pz3FvgBniNpmmyu
-         rgamyLU+OiJy6fe3rdOV7auzORKHMg8sS8YJ6bcdKTXiHygZ+Bz4IETjQ8u6GP4cad
-         qWZ9uemA+Hx3Jv2KHVmftUIDrdHVcMM+8+66FvXg=
+        b=TbmezwLC0JDyxhC8ZCGqPxg+vo0vgw8LxMQRMqR5/W9yqWyCY56H2OX7/PB1Ukniz
+         bmZAW1wo92KD9QsgqyJI3OG8G8+j3zqklreWCBuekEhy63UAYF8l3QzCCF60P64QjW
+         T/EeFbCxKSXo9Od80W/tingVBDEoorl+THWK/6u8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,12 +38,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Thierry Reding <treding@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.4 42/77] asm-generic: sections: refactor memory_intersects
-Date:   Fri,  2 Sep 2022 14:18:51 +0200
-Message-Id: <20220902121405.050717759@linuxfoundation.org>
+Subject: [PATCH 4.19 32/56] asm-generic: sections: refactor memory_intersects
+Date:   Fri,  2 Sep 2022 14:18:52 +0200
+Message-Id: <20220902121401.383778713@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-References: <20220902121403.569927325@linuxfoundation.org>
+In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
+References: <20220902121400.219861128@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -128,7 +128,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/include/asm-generic/sections.h
 +++ b/include/asm-generic/sections.h
-@@ -114,7 +114,7 @@ static inline bool memory_contains(void
+@@ -100,7 +100,7 @@ static inline bool memory_contains(void
  /**
   * memory_intersects - checks if the region occupied by an object intersects
   *                     with another memory region
@@ -137,7 +137,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
   * @end: virtual address of the end of the memory region
   * @virt: virtual address of the memory object
   * @size: size of the memory object
-@@ -127,7 +127,10 @@ static inline bool memory_intersects(voi
+@@ -113,7 +113,10 @@ static inline bool memory_intersects(voi
  {
  	void *vend = virt + size;
  

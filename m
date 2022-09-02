@@ -2,83 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66D85AB9D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5EB5AB9E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiIBVHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 17:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
+        id S230463AbiIBVLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 17:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIBVHP (ORCPT
+        with ESMTP id S230039AbiIBVLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 17:07:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBD3C6FDD
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:07:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662152833;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1twqOZV7+i5p56v6efC4Oh5HGPuhxWk74nNLDWtwDHQ=;
-        b=FkbacA4QsC8ofDqPIkMreSmfTzCyZDba87I8Znbnpw2rZdZdlRGxoc5QA2tQB6Ejclw03B
-        apbs56YuzTYfI+5z2qWpfIx2xD71jLcvoO8wkvi9XVpPrs5Ip/119665CGJQGLRreQIELU
-        eXHF2AcP3IVQ6dReof/yR3yb1wfisrc=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-513-s1jAU8pWMhmsjYKRtoBy5Q-1; Fri, 02 Sep 2022 17:07:05 -0400
-X-MC-Unique: s1jAU8pWMhmsjYKRtoBy5Q-1
-Received: by mail-qt1-f197.google.com with SMTP id v5-20020ac873c5000000b003434ef0a8c7so2441327qtp.21
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 14:07:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=1twqOZV7+i5p56v6efC4Oh5HGPuhxWk74nNLDWtwDHQ=;
-        b=fAUE1ZypoHYmX4rJaYFrvynlFlP8vIE+5XkMwgRHNfOGNRR+67SuCQaLiNaKW8UZN8
-         I45vxPOy4LU6ldm2uLgGGeteDnLuIixr8QKHv9UAeZY4e0G0jszrxJS3QLZtSouhms1Z
-         xZBKM+wYeulhySd954vjOmRHULDPqq9xVD1M74RLl1+fT/bbMBc+GdLYyjL+T6Yg7m04
-         XHp7egZHqF10mdkhRuC+9f/mYdwOIvW8zVKdW2bV1ENyTYgyWIEnA1LqtR+P1fTKQEXS
-         bKa0PP/X1o86pWVAexODuO31f1+rnSoSCYgYBn5txVYI+oi9JiLID/dxagrgnGlUl7au
-         Q/Ig==
-X-Gm-Message-State: ACgBeo2kL+YAh8hveKljazxl3zvsVJPf27Z+h+Pi9NCXI9mWZ/0mCjEd
-        84cuMYlEJgnDpTe4WBvlbiSnCCPXw/Qd3roftLD2JT8Ww5Prp41tkbvumcm2rTVpVa3vg1Fmy44
-        YVsQM6pUDw+MSjSBwyW+Q+GQ=
-X-Received: by 2002:a05:620a:d51:b0:6bc:c53:5789 with SMTP id o17-20020a05620a0d5100b006bc0c535789mr24465463qkl.47.1662152824813;
-        Fri, 02 Sep 2022 14:07:04 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR43jROB3LezwXP2AO1Z1Rks2S9cODPmCHq7gntetrnSftSFIdvYUe2gMh7gmbyxRiTgUDi2IA==
-X-Received: by 2002:a05:620a:d51:b0:6bc:c53:5789 with SMTP id o17-20020a05620a0d5100b006bc0c535789mr24465442qkl.47.1662152824589;
-        Fri, 02 Sep 2022 14:07:04 -0700 (PDT)
-Received: from localhost (pool-68-160-173-162.bstnma.fios.verizon.net. [68.160.173.162])
-        by smtp.gmail.com with ESMTPSA id ay8-20020a05620a178800b006b949afa980sm2029065qkb.56.2022.09.02.14.07.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 14:07:04 -0700 (PDT)
-Date:   Fri, 2 Sep 2022 17:07:03 -0400
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     agk@redhat.com, snitzer@kernel.org, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, hch@lst.de,
-        Damien Le Moal <damien.lemoal@wdc.com>, bvanassche@acm.org,
-        pankydev8@gmail.com,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        gost.dev@samsung.com, jaegeuk@kernel.org, matias.bjorling@wdc.com
-Subject: Re: [PATCH v12 13/13] dm: add power-of-2 target for zoned devices
- with non power-of-2 zone sizes
-Message-ID: <YxJwd7xcZRdznsYz@redhat.com>
-References: <20220823121859.163903-1-p.raghav@samsung.com>
- <CGME20220823121915eucas1p10296d6a2ab00de5e73791a7d6b8e39de@eucas1p1.samsung.com>
- <20220823121859.163903-14-p.raghav@samsung.com>
- <YxJttvB2Z5I58SQ5@redhat.com>
+        Fri, 2 Sep 2022 17:11:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0BAD91C9;
+        Fri,  2 Sep 2022 14:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662153074; x=1693689074;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=a5+GIGbZMIwgtbXiPqaRrpL5Or/gY8wT5w0Zi+nQRuE=;
+  b=bX2Qw2YbGoDOzSSPoQRnNRnjNlWRIMIStVRKdAWSOE0mceCczc+jVKSA
+   ppdtBgcooM/a7btXFO44u6aAM4xduqvQlB9HoJxQL16gIb1WkDigPU3xo
+   sjBXy/0s6BFYvqCJIsb4uMyDlBdriXo9iO4H83YbOlRzkYK82gjHreIJI
+   2ETWhRPWIjaSDDxvO0UCAV8EzjcFk0pnfQDfXXxz4VhdYBqhR9NKpEaOj
+   nnGGBrdn7RLxowNbNM4lMGOljZRhaKCjK4zDv5Tvtqs34vEYlcGKCaU+v
+   +vmiguVT5/yMD6tI5wkLEzJKpFqxcPOIkmq+nlCKk4wePfyUuTxOO3xC/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="297380682"
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="297380682"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 14:11:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="674507798"
+Received: from cthornbr-mobl.amr.corp.intel.com (HELO [10.251.3.254]) ([10.251.3.254])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 14:11:13 -0700
+Message-ID: <44b33ce9-e0ed-976c-9a13-b154d32b200e@linux.intel.com>
+Date:   Fri, 2 Sep 2022 14:11:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxJttvB2Z5I58SQ5@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/4] PCI/PTM: Preserve PTM Root Select
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+References: <20220902203848.GA370638@bhelgaas>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220902203848.GA370638@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,95 +69,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02 2022 at  4:55P -0400,
-Mike Snitzer <snitzer@redhat.com> wrote:
+Hi Bjorn,
 
-> On Tue, Aug 23 2022 at  8:18P -0400,
-> Pankaj Raghav <p.raghav@samsung.com> wrote:
+On 9/2/22 1:38 PM, Bjorn Helgaas wrote:
+> On Fri, Sep 02, 2022 at 10:24:05AM -0700, Sathyanarayanan Kuppuswamy wrote:
+>> On 9/2/22 7:58 AM, Bjorn Helgaas wrote:
+>>> From: Bjorn Helgaas <bhelgaas@google.com>
+>>>
+>>> When disabling PTM, there's no need to clear the Root Select bit.  We
+>>> disable PTM during suspend, and we want to re-enable it during resume.
+>>> Clearing Root Select here makes re-enabling more complicated.
+>>
+>> Currently, it looks like we disable PCI_PTM_CTRL_ROOT in pci_disable_ptm(),
+>> but not enable it in pci_enable_ptm(). Do you know this did not trigger an
+>> issue?
 > 
-> > Only zoned devices with power-of-2(po2) number of sectors per zone(zone
-> > size) were supported in linux but now non power-of-2(npo2) zone sizes
-> > support has been added to the block layer.
-> > 
-> > Filesystems such as F2FS and btrfs have support for zoned devices with
-> > po2 zone size assumption. Before adding native support for npo2 zone
-> > sizes, it was suggested to create a dm target for npo2 zone size device to
-> > appear as a po2 zone size target so that file systems can initially
-> > work without any explicit changes by using this target.
-> > 
-> > The design of this target is very simple: remap the device zone size to
-> > the zone capacity and change the zone size to be the nearest power of 2
-> > value.
-> > 
-> > For e.g., a device with a zone size/capacity of 3M will have an equivalent
-> > target layout as follows:
-> > 
-> > Device layout :-
-> > zone capacity = 3M
-> > zone size = 3M
-> > 
-> > |--------------|-------------|
-> > 0             3M            6M
-> > 
-> > Target layout :-
-> > zone capacity=3M
-> > zone size = 4M
-> > 
-> > |--------------|---|--------------|---|
-> > 0             3M  4M             7M  8M
-> > 
-> > The area between target's zone capacity and zone size will be emulated
-> > in the target.
-> > The read IOs that fall in the emulated gap area will return 0 filled
-> > bio and all the other IOs in that area will result in an error.
-> > If a read IO span across the emulated area boundary, then the IOs are
-> > split across them. All other IO operations that span across the emulated
-> > area boundary will result in an error.
-> > 
-> > The target can be easily created as follows:
-> > dmsetup create <label> --table '0 <size_sects> po2zone /dev/nvme<id>'
-> > 
-> > Note that the target does not support partial mapping of the underlying
-> > device.
-> > 
-> > Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> > Suggested-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-> > Suggested-by: Damien Le Moal <damien.lemoal@wdc.com>
-> > Suggested-by: Hannes Reinecke <hare@suse.de>
+> For Root Ports and Switches, we enable PTM (and set Root Select when
+> appropriate) during enumeration in pci_ptm_init().  This is based on
+> the assumption that enabling PTM in Root Ports and Switches is a no-op
+> unless there's an Endpoint that generates PTM Requests.  (It turns out
+> that's not quite true, because Kai-Heng's bug report [1] shows the
+> 08:00.0 Switch sending PTM Requests even though no Endpoint even has a
+> PTM Capability.)
 > 
+> If we didn't enable PTM in Root Ports and Switches during enumeration,
+> we'd have to walk the whole path and enable them when enabling PTM for
+> an Endpoint.
 > 
-> This target needs more review from those who Suggested-by it.
+> pci_enable_ptm() currently only works for Endpoints, which cannot be
+> PTM Roots, so it never has to set PCI_PTM_CTRL_ROOT.
 > 
-> And the header and docs needs to address:
-> 
-> 1) why is a partial mapping of the underlying device disallowed?
-> 2) why is it assumed all IO is read-only? (talk to me and others like
->    we don't know the inherent limitations of this class of zoned hw)
-> 
-> On a code level:
-> 1) are you certain you're properly failing all writes?
->    - are writes allowed to the "zone capacity area" but _not_
->      allowed to the "emulated zone area"? (if yes, _please document_). 
-> 2) yes, you absolutely need to implement the .status target_type hook
->    (for both STATUS and TABLE).
-> 3) really not loving the nested return (of DM_MAPIO_SUBMITTED or
->    DM_MAPIO_REMAPPED) from methods called from dm_po2z_map().  Would
->    prefer to not have to do a depth-first search to see where and when
->    dm_po2z_map() returns a DM_MAPIO_XXX unless there is a solid
->    justification for it.  To me it just obfuscates the DM interface a
->    bit too much. 
-> 
-> Otherwise, pretty clean code and nothing weird going on.
-> 
-> I look forward to seeing your next (final?) revision of this patchset.
+> If we clear PCI_PTM_CTRL_ROOT in pci_disable_ptm(), it will never get
+> set again unless we re-enumerate the Root Port.
 
-Thinking further.. I'm left confused about just what the heck this
-target is assuming.
+Thanks for clarifying.
 
-E.g.: feels like its exposing a readonly end of the zone is very
-bi-polar... yet no hint to upper layer it shouldn't write to that
-read-only end (the "emulated zone").. but there has to be some zoned
-magic assumed?  And I'm just naive?
+> 
+> Thanks for asking this, because it reminds me why I didn't add
+> pci_enable_ptm() calls in the resume paths!  That would make them
+> parallel with the suspend paths, which would definitely be nice.  But
+> we would have to rework pci_enable_ptm() to work for Root Ports and
+> Switch Ports as well.  I think we *could* do that.  What do you think?
 
-Mike
+IMO, the code will look better if we keep the suspend and resume paths in
+sync. Since we are calling pci_disable_ptm() in suspend path, it makes
+sense to call pci_enable_ptm() in resume path.
 
+Making the pci_enable_ptm() handle root and upstream ports should not
+be very complicated, right?
+
+> 
+> Regardless of that question, I think it's unnecessary to clear
+> PCI_PTM_CTRL_ROOT in pci_disable_ptm(), so we should leave it alone.
+
+I agree with you. We should not touch PCI_PTM_CTRL_ROOT in pci_disable_ptm().
+
+> 
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=215453
+> 
+>> Also, you mentioned that it is complicated to enable it, can you add some
+>> details?
+>>
+>>> Per PCIe r6.0, sec 7.9.15.3, "When set, if the PTM Enable bit is also Set,
+>>> this Time Source is the PTM Root," so if PTM Enable is cleared, the value
+>>> of Root Select should be irrelevant.
+>>>
+>>> Preserve Root Select to simplify re-enabling PTM.
+>>>
+>>> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+>>> Cc: David E. Box <david.e.box@linux.intel.com>
+>>> ---
+>>>  drivers/pci/pcie/ptm.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
+>>> index 368a254e3124..b6a417247ce3 100644
+>>> --- a/drivers/pci/pcie/ptm.c
+>>> +++ b/drivers/pci/pcie/ptm.c
+>>> @@ -42,7 +42,7 @@ void pci_disable_ptm(struct pci_dev *dev)
+>>>  		return;
+>>>  
+>>>  	pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
+>>> -	ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
+>>> +	ctrl &= ~PCI_PTM_CTRL_ENABLE;
+>>>  	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
+>>>  }
+>>>  
+>>
+>> -- 
+>> Sathyanarayanan Kuppuswamy
+>> Linux Kernel Developer
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

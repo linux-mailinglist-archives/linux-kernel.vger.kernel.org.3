@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9EE5AB372
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8746B5AB38B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236162AbiIBO2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
+        id S236158AbiIBOaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235976AbiIBO1K (ORCPT
+        with ESMTP id S236098AbiIBO1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:27:10 -0400
+        Fri, 2 Sep 2022 10:27:36 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0842F168A25
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B975168A26
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=yIoG35cVddrSUYas1ovPM/6azqMQrScMR1ghVWokYpY=; b=KV6fDSwW14+spIe+PGUs5xODJs
-        0xBc83Rr/tlrxyR6iTx8pQ62NfCAv36/KS1GB8tl8bTbmY/g8EA8dMDgLFd17m+xqPnpazbEboag6
-        6w5fCRUuSb4NdX5fdHbR2cHzOZojBPCsslx9mtJ25ad8d885zKxz28tpJoLp1ysRrbBy7vG5Uz01K
-        XrjtygRHhLldm7mLBU8OIpDCOW4t6ra0VBZR1nSXcOwS3tGlKe1Vck2uZ9YNmpGnvvb512WQ5mNPX
-        JOBiEh3epN5q14LbE8jWArCmDACWlR1vR5He9fGYIzBa+d0m8vRe+zW1yyKQqF2n3aVU+0YHtAyF8
-        T/eQ1dEA==;
+        bh=YUhA2B9hWTAdbvtvLfAUCL48qsFF8kF9euAYgBwVN7c=; b=F1sdS6J0B07JaNau9gs7zg9nAa
+        JFqYigGC2sVpUTdJG0Ry7PoQlkHW5sSmWOwYlDjzxi0d0ZM6ucwdxaOGxu5ED0CyjXB1eFdseUDqN
+        jwYnJJAj/nI/+x1Nn/1VIPrh3UMEkX7GGDXBG01mgtwTMBVmqY6RCMX/1y2nfHXvPnIECNItRa0ai
+        pYFOHwxuBnSyFVrowORsKnxV/Pfj5qX8j1TjDhEXp7dTB7qw+DNU+KCzRAEgHisdvG+FcsW8y+KXb
+        yEr7fHD9l8gWsNkHiG0DwPEbdj52ujSMHBOrxSeGgjq57exmwfsJS4w1PQL9B1AH467E0chEIDvyn
+        ZEur5Odg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oU77M-0074T2-6c; Fri, 02 Sep 2022 13:53:56 +0000
+        id 1oU77M-0074T1-6d; Fri, 02 Sep 2022 13:53:56 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 00E7430067B;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 00E8430069C;
         Fri,  2 Sep 2022 15:53:54 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 3AE2529C4662E; Fri,  2 Sep 2022 15:53:52 +0200 (CEST)
-Message-ID: <20220902130947.086463061@infradead.org>
+        id 3F8F32B077D23; Fri,  2 Sep 2022 15:53:52 +0200 (CEST)
+Message-ID: <20220902130947.190618587@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 02 Sep 2022 15:06:32 +0200
+Date:   Fri, 02 Sep 2022 15:06:33 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v2 07/59] x86: Sanitize linker script
+Subject: [PATCH v2 08/59] x86/build: Ensure proper function alignment
 References: <20220902130625.217071627@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,62 +75,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-The section ordering in the text section is more than suboptimal:
+The Intel Architectures Optimization Reference Manual explains that
+functions should be aligned at 16 bytes because for a lot of (Intel)
+uarchs the I-fetch width is 16 bytes. The AMD Software Optimization
+Guide (for recent chips) mentions a 32 byte I-fetch window but a 16
+byte decode window.
 
-    ALIGN_ENTRY_TEXT_BEGIN
-    ENTRY_TEXT
-    ALIGN_ENTRY_TEXT_END
-    SOFTIRQENTRY_TEXT
-    STATIC_CALL_TEXT
-    INDIRECT_THUNK_TEXT
-
-ENTRY_TEXT is in a seperate PMD so it can be mapped into the cpu entry area
-when KPTI is enabled. That means the sections after it are also in a
-seperate PMD. That's wasteful especially as the indirect thunk text is a
-hotpath on retpoline enabled systems and the static call text is fairly hot
-on 32bit.
-
-Move the entry text section last so that the other sections share a PMD
-with the text before it. This is obviously just best effort and not
-guaranteed when the previous text is just at a PMD boundary.
-
-The text section placement needs an overhaul in general. There is e.g. no
-point to have debugfs, sysfs, cpuhotplug and other rarely used functions
-next to hot path text.
+Follow this advice and align functions to 16 bytes to optimize
+instruction delivery to decode and reduce front-end bottlenecks.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/kernel/vmlinux.lds.S |   13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ arch/x86/Kconfig.cpu              |    6 ++++++
+ arch/x86/Makefile                 |    4 ++++
+ arch/x86/include/asm/linkage.h    |    7 ++++---
+ include/asm-generic/vmlinux.lds.h |    7 ++++++-
+ 4 files changed, 20 insertions(+), 4 deletions(-)
 
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -132,18 +132,19 @@ SECTIONS
- 		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
--		ALIGN_ENTRY_TEXT_BEGIN
--		ENTRY_TEXT
--		ALIGN_ENTRY_TEXT_END
- 		SOFTIRQENTRY_TEXT
--		STATIC_CALL_TEXT
--		*(.gnu.warning)
--
- #ifdef CONFIG_RETPOLINE
- 		__indirect_thunk_start = .;
- 		*(.text.__x86.*)
- 		__indirect_thunk_end = .;
- #endif
-+		STATIC_CALL_TEXT
-+
-+		ALIGN_ENTRY_TEXT_BEGIN
-+		ENTRY_TEXT
-+		ALIGN_ENTRY_TEXT_END
-+		*(.gnu.warning)
-+
- 	} :text =0xcccc
+--- a/arch/x86/Kconfig.cpu
++++ b/arch/x86/Kconfig.cpu
+@@ -517,3 +517,9 @@ config CPU_SUP_VORTEX_32
+ 	  makes the kernel a tiny bit smaller.
  
- 	/* End of text section, which should occupy whole number of pages */
+ 	  If unsure, say N.
++
++# Defined here so it is defined for UM too
++config FUNCTION_ALIGNMENT
++	int
++	default 16 if X86_64 || X86_ALIGNMENT_16
++	default 8
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -84,6 +84,10 @@ else
+ KBUILD_CFLAGS += $(call cc-option,-fcf-protection=none)
+ endif
+ 
++ifneq ($(CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B),y)
++KBUILD_CFLAGS += -falign-functions=$(CONFIG_FUNCTION_ALIGNMENT)
++endif
++
+ ifeq ($(CONFIG_X86_32),y)
+         BITS := 32
+         UTS_MACHINE := i386
+--- a/arch/x86/include/asm/linkage.h
++++ b/arch/x86/include/asm/linkage.h
+@@ -14,9 +14,10 @@
+ 
+ #ifdef __ASSEMBLY__
+ 
+-#if defined(CONFIG_X86_64) || defined(CONFIG_X86_ALIGNMENT_16)
+-#define __ALIGN		.p2align 4, 0x90
+-#define __ALIGN_STR	__stringify(__ALIGN)
++#if CONFIG_FUNCTION_ALIGNMENT == 16
++#define __ALIGN			.p2align 4, 0x90
++#define __ALIGN_STR		__stringify(__ALIGN)
++#define FUNCTION_ALIGNMENT	16
+ #endif
+ 
+ #if defined(CONFIG_RETHUNK) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO)
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -82,7 +82,12 @@
+ #endif
+ 
+ /* Align . to a 8 byte boundary equals to maximum function alignment. */
+-#define ALIGN_FUNCTION()  . = ALIGN(8)
++#ifndef CONFIG_FUNCTION_ALIGNMENT
++#define __FUNCTION_ALIGNMENT	8
++#else
++#define __FUNCTION_ALIGNMENT	CONFIG_FUNCTION_ALIGNMENT
++#endif
++#define ALIGN_FUNCTION()  . = ALIGN(__FUNCTION_ALIGNMENT)
+ 
+ /*
+  * LD_DEAD_CODE_DATA_ELIMINATION option enables -fdata-sections, which
 
 

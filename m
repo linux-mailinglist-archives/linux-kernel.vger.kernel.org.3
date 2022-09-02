@@ -2,111 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8975AA9CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9363A5AA9D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 10:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbiIBIUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 04:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
+        id S232699AbiIBIVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 04:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbiIBIUi (ORCPT
+        with ESMTP id S235428AbiIBIUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 04:20:38 -0400
-Received: from giacobini.uberspace.de (giacobini.uberspace.de [185.26.156.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B201E32068
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:20:34 -0700 (PDT)
-Received: (qmail 32432 invoked by uid 990); 2 Sep 2022 08:20:32 -0000
-Authentication-Results: giacobini.uberspace.de;
-        auth=pass (plain)
-From:   Soenke Huster <soenke.huster@eknoes.de>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Soenke Huster <soenke.huster@eknoes.de>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] wifi: mac80211_hwsim: check length for virtio packets
-Date:   Fri,  2 Sep 2022 10:19:58 +0200
-Message-Id: <20220902081957.9718-1-soenke.huster@eknoes.de>
-X-Mailer: git-send-email 2.37.3
+        Fri, 2 Sep 2022 04:20:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED75050068
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662106853;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UyZUOg7p/TzqkDBtMIegEKQUho3iKfbgStXxRwVupNs=;
+        b=bpcCAOcKk/rpe91c7aP2gQ3U4HPx0e4AebNMu02KERMSzrkOhnKo9HHNX7cnichllOQ/P1
+        ul4GM9SZtV6GfIVQpTmU+pUDo9YyRJy4Hi/Doh1Vp9bMN1Mq2owOtzphi/tN3rRRm2xQXk
+        mfu/jqhpjZ9mkec5uMvBx8wgXrPKu/M=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-395-WkFXzdm4MrGv3swa6JYHRg-1; Fri, 02 Sep 2022 04:20:51 -0400
+X-MC-Unique: WkFXzdm4MrGv3swa6JYHRg-1
+Received: by mail-wr1-f71.google.com with SMTP id u15-20020adfa18f000000b00226d4b62f10so135490wru.9
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 01:20:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=UyZUOg7p/TzqkDBtMIegEKQUho3iKfbgStXxRwVupNs=;
+        b=K0rI88FAcVp13POwZyAMoCcwD4EgXaSKFzj6tc7dNRwficK3A1x1jvzbXAqwEDIvmM
+         wY+h/HeT1vOx+Zfw/CwN1wDlSR4MFyFXaKcTCvHN+IJi+LWOd01lRSmYk3IHTcXliYuJ
+         rXw0RE3lwWBaqI0w54/WrJipmWtqQBAHkZaupOgp67ljbljEG7bG616ZBnbDgDA0oXC5
+         a/+dFmnhRkCfHSEbwTl2slW8vPEYCNkfK7Pk6dhaJvvYHueubnWEMGJJ4uz/TpIZSdw2
+         m2qJUDfpUjE3iXDPjAwa0689t0+U4n6Tlz/cH5NnbdC5IERQR4xaqPTVeH0Rc2cm9ErQ
+         nh7g==
+X-Gm-Message-State: ACgBeo0rTxtybcUTSsLbYMnVdQFIXr+9Ix8/vssSO0wueG94oGVTnQh8
+        7AP3UJioIR5ZaxDISXKrbziKUIbJJkQJboQQZYp9bnb5jrVvBU29mMQmEuXJn8q4I5DolJGx1u5
+        N6DJiUecKDQZr5Ts6AdLNQhvf
+X-Received: by 2002:a7b:c451:0:b0:3a6:829a:6102 with SMTP id l17-20020a7bc451000000b003a6829a6102mr2003054wmi.12.1662106850797;
+        Fri, 02 Sep 2022 01:20:50 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4fuYPlcEhqJLhewH7Nd+dggsTljUv6rlMT2YuLUENnMUMi0oNDyE6wkUcyj08mesdw5rqhnw==
+X-Received: by 2002:a7b:c451:0:b0:3a6:829a:6102 with SMTP id l17-20020a7bc451000000b003a6829a6102mr2003031wmi.12.1662106850440;
+        Fri, 02 Sep 2022 01:20:50 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c714:4800:2077:1bf6:40e7:2833? (p200300cbc714480020771bf640e72833.dip0.t-ipconnect.de. [2003:cb:c714:4800:2077:1bf6:40e7:2833])
+        by smtp.gmail.com with ESMTPSA id v3-20020a5d6103000000b002252cb35184sm940758wrt.25.2022.09.02.01.20.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 01:20:50 -0700 (PDT)
+Message-ID: <417630cc-eaa8-1d73-6427-d87b02c187b6@redhat.com>
+Date:   Fri, 2 Sep 2022 10:20:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: +
-X-Rspamd-Report: R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) BAYES_HAM(-0.162514)
-X-Rspamd-Score: 1.237485
-Received: from unknown (HELO unkown) (::1)
-        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Fri, 02 Sep 2022 10:20:32 +0200
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>
+References: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 1/2] mm: reuse pageblock_start/end_pfn() macro
+In-Reply-To: <20220902064751.17890-1-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An invalid packet with a length shorter than the specified length in the
-netlink header can lead to use-after-frees and slab-out-of-bounds in the
-processing of the netlink attributes, such as the following:
+On 02.09.22 08:47, Kefeng Wang wrote:
+> Move pageblock_start_pfn/pageblock_end_pfn() into pageblock-flags.h,
+> then they could be used somewhere else, not only in compaction.
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  include/linux/pageblock-flags.h |  2 ++
+>  mm/compaction.c                 |  2 --
+>  mm/memblock.c                   |  2 +-
+>  mm/page_alloc.c                 | 13 ++++++-------
+>  mm/page_isolation.c             |  2 +-
+>  mm/page_owner.c                 |  4 ++--
+>  6 files changed, 12 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/linux/pageblock-flags.h b/include/linux/pageblock-flags.h
+> index 83c7248053a1..ef2e17e312ae 100644
+> --- a/include/linux/pageblock-flags.h
+> +++ b/include/linux/pageblock-flags.h
+> @@ -53,6 +53,8 @@ extern unsigned int pageblock_order;
+>  #endif /* CONFIG_HUGETLB_PAGE */
+>  
+>  #define pageblock_nr_pages	(1UL << pageblock_order)
+> +#define pageblock_start_pfn(pfn)	round_down(pfn, pageblock_nr_pages)
+> +#define pageblock_end_pfn(pfn)		ALIGN((pfn + 1), pageblock_nr_pages)
+>  
 
-  BUG: KASAN: slab-out-of-bounds in __nla_validate_parse+0x1258/0x2010
-  Read of size 2 at addr ffff88800ac7952c by task kworker/0:1/12
+I'd naturally have paired ALIGN with ALIGN_DOWN -- or round_up with round_down.
+(You're replacing one instance where ALIGN_DOWN was used at least.)
 
-  Workqueue: events hwsim_virtio_rx_work
-  Call Trace:
-   <TASK>
-   dump_stack_lvl+0x45/0x5d
-   print_report.cold+0x5e/0x5e5
-   kasan_report+0xb1/0x1c0
-   __nla_validate_parse+0x1258/0x2010
-   __nla_parse+0x22/0x30
-   hwsim_virtio_handle_cmd.isra.0+0x13f/0x2d0
-   hwsim_virtio_rx_work+0x1b2/0x370
-   process_one_work+0x8df/0x1530
-   worker_thread+0x575/0x11a0
-   kthread+0x29d/0x340
-   ret_from_fork+0x22/0x30
- </TASK>
+But maybe there is an obvious reason that I am missing :)
 
-Discarding packets with an invalid length solves this.
-Therefore, skb->len must be set at reception.
+>  /* Forward declaration */
+>  struct page;
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index f72907c7cfef..65bef5f78897 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -52,8 +52,6 @@ static inline void count_compact_events(enum vm_event_item item, long delta)
+>  
+>  #define block_start_pfn(pfn, order)	round_down(pfn, 1UL << (order))
+>  #define block_end_pfn(pfn, order)	ALIGN((pfn) + 1, 1UL << (order))
+> -#define pageblock_start_pfn(pfn)	block_start_pfn(pfn, pageblock_order)
+> -#define pageblock_end_pfn(pfn)		block_end_pfn(pfn, pageblock_order)
+>  
+>  /*
+>   * Page order with-respect-to which proactive compaction
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index b5d3026979fc..46fe7575f03c 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -2000,7 +2000,7 @@ static void __init free_unused_memmap(void)
+>  		 * presume that there are no holes in the memory map inside
+>  		 * a pageblock
+>  		 */
+> -		start = round_down(start, pageblock_nr_pages);
+> +		start = pageblock_start_pfn(start);
+>  
+>  		/*
+>  		 * If we had a previous bank, and there is a space
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 36b20215a3be..93339cc61f92 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -544,7 +544,7 @@ static inline int pfn_to_bitidx(const struct page *page, unsigned long pfn)
+>  #ifdef CONFIG_SPARSEMEM
+>  	pfn &= (PAGES_PER_SECTION-1);
+>  #else
+> -	pfn = pfn - round_down(page_zone(page)->zone_start_pfn, pageblock_nr_pages);
+> +	pfn = pfn - pageblock_start_pfn(page_zone(page)->zone_start_pfn);
+>  #endif /* CONFIG_SPARSEMEM */
+>  	return (pfn >> pageblock_order) * NR_PAGEBLOCK_BITS;
+>  }
+> @@ -1857,7 +1857,7 @@ void set_zone_contiguous(struct zone *zone)
+>  	unsigned long block_start_pfn = zone->zone_start_pfn;
+>  	unsigned long block_end_pfn;
+>  
+> -	block_end_pfn = ALIGN(block_start_pfn + 1, pageblock_nr_pages);
+> +	block_end_pfn = pageblock_end_pfn(block_start_pfn);
+>  	for (; block_start_pfn < zone_end_pfn(zone);
+>  			block_start_pfn = block_end_pfn,
+>  			 block_end_pfn += pageblock_nr_pages) {
+> @@ -2653,8 +2653,8 @@ int move_freepages_block(struct zone *zone, struct page *page,
+>  		*num_movable = 0;
+>  
+>  	pfn = page_to_pfn(page);
+> -	start_pfn = pfn & ~(pageblock_nr_pages - 1);
+> -	end_pfn = start_pfn + pageblock_nr_pages - 1;
+> +	start_pfn = pageblock_start_pfn(pfn);
+> +	end_pfn = pageblock_end_pfn(pfn) - 1;
+>  
+>  	/* Do not cross zone boundaries */
+>  	if (!zone_spans_pfn(zone, start_pfn))
+> @@ -6939,9 +6939,8 @@ static void __init init_unavailable_range(unsigned long spfn,
+>  	u64 pgcnt = 0;
+>  
+>  	for (pfn = spfn; pfn < epfn; pfn++) {
+> -		if (!pfn_valid(ALIGN_DOWN(pfn, pageblock_nr_pages))) {
+> -			pfn = ALIGN_DOWN(pfn, pageblock_nr_pages)
+> -				+ pageblock_nr_pages - 1;
+> +		if (!pfn_valid(pageblock_start_pfn(pfn))) {
+> +			pfn = pageblock_end_pfn(pfn) - 1;
+>  			continue;
+>  		}
+>  		__init_single_page(pfn_to_page(pfn), pfn, zone, node);
+> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+> index 9d73dc38e3d7..f2df4ad53cd6 100644
+> --- a/mm/page_isolation.c
+> +++ b/mm/page_isolation.c
+> @@ -172,7 +172,7 @@ static int set_migratetype_isolate(struct page *page, int migratetype, int isol_
+>  	 * to avoid redundant checks.
+>  	 */
+>  	check_unmovable_start = max(page_to_pfn(page), start_pfn);
+> -	check_unmovable_end = min(ALIGN(page_to_pfn(page) + 1, pageblock_nr_pages),
+> +	check_unmovable_end = min(pageblock_end_pfn(page_to_pfn(page)),
+>  				  end_pfn);
+>  
 
-Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
----
-v2: Spelling
 
- drivers/net/wireless/mac80211_hwsim.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+There are some more cases that might need care as well:
 
-diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
-index 4fb8f68e5c3b..6bd9bd50071e 100644
---- a/drivers/net/wireless/mac80211_hwsim.c
-+++ b/drivers/net/wireless/mac80211_hwsim.c
-@@ -5436,6 +5436,10 @@ static int hwsim_virtio_handle_cmd(struct sk_buff *skb)
- 
- 	nlh = nlmsg_hdr(skb);
- 	gnlh = nlmsg_data(nlh);
-+
-+	if (skb->len < nlh->nlmsg_len)
-+		return -EINVAL;
-+
- 	err = genlmsg_parse(nlh, &hwsim_genl_family, tb, HWSIM_ATTR_MAX,
- 			    hwsim_genl_policy, NULL);
- 	if (err) {
-@@ -5478,7 +5482,8 @@ static void hwsim_virtio_rx_work(struct work_struct *work)
- 	spin_unlock_irqrestore(&hwsim_virtio_lock, flags);
- 
- 	skb->data = skb->head;
--	skb_set_tail_pointer(skb, len);
-+	skb_reset_tail_pointer(skb);
-+	skb_put(skb, len);
- 	hwsim_virtio_handle_cmd(skb);
- 
- 	spin_lock_irqsave(&hwsim_virtio_lock, flags);
+
+mm/memblock.c:          prev_end = ALIGN(end, pageblock_nr_pages);
+mm/memblock.c:          prev_end = ALIGN(end, pageblock_nr_pages);
+mm/page_isolation.c:    VM_BUG_ON(ALIGN_DOWN(start_pfn, pageblock_nr_pages) !=
+mm/page_isolation.c:              ALIGN_DOWN(end_pfn - 1, pageblock_nr_pages));
+mm/page_isolation.c:    unsigned long isolate_start = ALIGN_DOWN(start_pfn, pageblock_nr_pages);
+mm/page_isolation.c:    unsigned long isolate_end = ALIGN(end_pfn, pageblock_nr_pages);
+mm/page_isolation.c:    unsigned long isolate_start = ALIGN_DOWN(start_pfn, pageblock_nr_pages);
+mm/page_isolation.c:    unsigned long isolate_end = ALIGN(end_pfn, pageblock_nr_pages);
+
+
+
 -- 
-2.37.3
+Thanks,
+
+David / dhildenb
 

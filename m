@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66245AB250
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEB35AB25D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236817AbiIBNzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S237692AbiIBN5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238108AbiIBNzE (ORCPT
+        with ESMTP id S235543AbiIBN5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:55:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EFA26121
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:29:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 2 Sep 2022 09:57:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556F17434D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662125395;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nHk5BTlmONqv6fEHgegmNNqBCjtFGaXUYYFXNjhPeHw=;
+        b=PtRLgHF3/JbjNVKCc2NkK0+hUdROO1LMJXZKgfm0ZcZKOQAY/CU/P3+nwOm579rtrT+9Nv
+        OX56AxH6XI+e12S3t0Z7iFHrWvO/RLqh09trDOZ904KzfDq2qo+vTMw5wse1B+8PuLfp4J
+        G3MvRH+ppPH6hkwQjlm1WUpDCuESlt4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-434-Ac5ZtnOcPti7L1bTbu94bw-1; Fri, 02 Sep 2022 09:29:52 -0400
+X-MC-Unique: Ac5ZtnOcPti7L1bTbu94bw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 282C4B82B6D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:29:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388ADC433D6;
-        Fri,  2 Sep 2022 13:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662125351;
-        bh=Y4J5I0C+hO5AiefuTKxvuCBGeemyxUhAnG6wAehE8dM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NGmcRuTX+8BTaBoTls7R4tK32GXjw+sNLdzp/6ELO0oN6wERQJkAavVBT5TOV8zru
-         jFIyR0g3IFTCtmEgGk3we4gRgN2IDsdkhazt+72+dOFWBntZkx/bIVy7G57sbyuqlp
-         ox2Zh+Bp5VAcCcVZihM5VcK4NyF5UazFol5FyTZo=
-Date:   Fri, 2 Sep 2022 15:29:08 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
-        Yangxi Xiang <xyangxi5@gmail.com>,
-        nick black <dankamongmen@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Marco Elver <elver@google.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        David Gow <davidgow@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-Subject: Re: [PATCH] kernel/panic: Drop unblank_screen call
-Message-ID: <YxIFJEz05hY9DWFO@kroah.com>
-References: <20220830145004.430545-1-daniel.vetter@ffwll.ch>
- <YxCY57DmFfTuHs1q@alley>
- <CAKMK7uFwJumoLCddSxtd=tPoV1xLFw5uCWpY+WDtiRC=fiSedg@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF56485A58F;
+        Fri,  2 Sep 2022 13:29:51 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.193.218])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 98605492CA2;
+        Fri,  2 Sep 2022 13:29:48 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 02/23] bpf: split btf_check_subprog_arg_match in two
+Date:   Fri,  2 Sep 2022 15:29:17 +0200
+Message-Id: <20220902132938.2409206-3-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKMK7uFwJumoLCddSxtd=tPoV1xLFw5uCWpY+WDtiRC=fiSedg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,54 +74,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:26:27PM +0200, Daniel Vetter wrote:
-> On Thu, 1 Sept 2022 at 13:35, Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > On Tue 2022-08-30 16:50:04, Daniel Vetter wrote:
-> > > console_unblank() does this too (called in both places right after),
-> > > and with a lot more confidence inspiring approach to locking.
-> > >
-> > > Reconstructing this story is very strange:
-> > >
-> > > In b61312d353da ("oops handling: ensure that any oops is flushed to
-> > > the mtdoops console") it is claimed that a printk(" "); flushed out
-> > > the console buffer, which was removed in e3e8a75d2acf ("[PATCH]
-> > > Extract and use wake_up_klogd()"). In todays kernels this is done way
-> > > earlier in console_flush_on_panic with some really nasty tricks. I
-> > > didn't bother to fully reconstruct this all, least because the call to
-> > > bust_spinlock(0); gets moved every few years, depending upon how the
-> > > wind blows (or well, who screamed loudest about the various issue each
-> > > call site caused).
-> > >
-> > > Before that commit the only calls to console_unblank() where in s390
-> > > arch code.
-> > >
-> > > The other side here is the console->unblank callback, which was
-> > > introduced in 2.1.31 for the vt driver. Which predates the
-> > > console_unblank() function by a lot, which was added (without users)
-> > > in 2.4.14.3. So pretty much impossible to guess at any motivation
-> > > here. Also afaict the vt driver is the only (and always was the only)
-> > > console driver implementing the unblank callback, so no idea why a
-> > > call to console_unblank() was added for the mtdooops driver - the
-> > > action actually flushing out the console buffers is done from
-> > > console_unlock() only.
-> >
-> > My understanding is that mtdoops is not a real console. The commit
-> > 4b23aff083649eafa141 ("[MTD] oops and panic message logging to MTD
-> > device") suggests that it was just (mis)using the console
-> > infrastructure.
-> >
-> > The commit 2e386e4bac90554887e73d ("mtd: mtdoops: refactor as a
-> > kmsg_dumper") converted it to use the new kmsg_dumper API that
-> > was created for this use case.
-> >
-> > So, I would consider all the mtdoops-related changes as a misuse
-> > of the console API.
-> 
-> Ah, that's a good piece of information that I didn't figure out.
-> 
-> Greg, if you haven't baked in the patch yet, can you perhaps add the
-> above information from Petr to the commit message?
+btf_check_subprog_arg_match() was used twice in verifier.c:
+- when checking for the type mismatches between a (sub)prog declaration
+  and BTF
+- when checking the call of a subprog to see if the provided arguments
+  are correct and valid
 
-It's already baked, sorry :(
+This is problematic when we check if the first argument of a program
+(pointer to ctx) is correctly accessed:
+To be able to ensure we access a valid memory in the ctx, the verifier
+assumes the pointer to context is not null.
+This has the side effect of marking the program accessing the entire
+context, even if the context is never dereferenced.
+
+For example, by checking the context access with the current code, the
+following eBPF program would fail with -EINVAL if the ctx is set to null
+from the userspace:
+
+```
+SEC("syscall")
+int prog(struct my_ctx *args) {
+  return 0;
+}
+```
+
+In that particular case, we do not want to actually check that the memory
+is correct while checking for the BTF validity, but we just want to
+ensure that the (sub)prog definition matches the BTF we have.
+
+So split btf_check_subprog_arg_match() in two so we can actually check
+for the memory used when in a call, and ignore that part when not.
+
+Note that a further patch is in preparation to disentangled
+btf_check_func_arg_match() from these two purposes, and so right now we
+just add a new hack around that by adding a boolean to this function.
+
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+
+---
+
+new in v10
+---
+ include/linux/bpf.h   |  2 ++
+ kernel/bpf/btf.c      | 54 +++++++++++++++++++++++++++++++++++++++----
+ kernel/bpf/verifier.c |  2 +-
+ 3 files changed, 52 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 9c1674973e03..c9c72a089579 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1943,6 +1943,8 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
+ struct bpf_reg_state;
+ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+ 				struct bpf_reg_state *regs);
++int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
++			   struct bpf_reg_state *regs);
+ int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+ 			      const struct btf *btf, u32 func_id,
+ 			      struct bpf_reg_state *regs,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 903719b89238..eca9ea78ee5f 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6170,7 +6170,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 				    const struct btf *btf, u32 func_id,
+ 				    struct bpf_reg_state *regs,
+ 				    bool ptr_to_mem_ok,
+-				    u32 kfunc_flags)
++				    u32 kfunc_flags,
++				    bool processing_call)
+ {
+ 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+ 	bool rel = false, kptr_get = false, trusted_arg = false;
+@@ -6356,7 +6357,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 					reg_ref_tname);
+ 				return -EINVAL;
+ 			}
+-		} else if (ptr_to_mem_ok) {
++		} else if (ptr_to_mem_ok && processing_call) {
+ 			const struct btf_type *resolve_ret;
+ 			u32 type_size;
+ 
+@@ -6431,7 +6432,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 	return rel ? ref_regno : 0;
+ }
+ 
+-/* Compare BTF of a function with given bpf_reg_state.
++/* Compare BTF of a function declaration with given bpf_reg_state.
+  * Returns:
+  * EFAULT - there is a verifier bug. Abort verification.
+  * EINVAL - there is a type mismatch or BTF is not available.
+@@ -6458,7 +6459,50 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+ 		return -EINVAL;
+ 
+ 	is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
+-	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
++	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0, false);
++
++	/* Compiler optimizations can remove arguments from static functions
++	 * or mismatched type can be passed into a global function.
++	 * In such cases mark the function as unreliable from BTF point of view.
++	 */
++	if (err)
++		prog->aux->func_info_aux[subprog].unreliable = true;
++	return err;
++}
++
++/* Compare BTF of a function call with given bpf_reg_state.
++ * Returns:
++ * EFAULT - there is a verifier bug. Abort verification.
++ * EINVAL - there is a type mismatch or BTF is not available.
++ * 0 - BTF matches with what bpf_reg_state expects.
++ * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
++ *
++ * NOTE: the code is duplicated from btf_check_subprog_arg_match()
++ * because btf_check_func_arg_match() is still doing both. Once that
++ * function is split in 2, we can call from here btf_check_subprog_arg_match()
++ * first, and then treat the calling part in a new code path.
++ */
++int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
++			   struct bpf_reg_state *regs)
++{
++	struct bpf_prog *prog = env->prog;
++	struct btf *btf = prog->aux->btf;
++	bool is_global;
++	u32 btf_id;
++	int err;
++
++	if (!prog->aux->func_info)
++		return -EINVAL;
++
++	btf_id = prog->aux->func_info[subprog].type_id;
++	if (!btf_id)
++		return -EFAULT;
++
++	if (prog->aux->func_info_aux[subprog].unreliable)
++		return -EINVAL;
++
++	is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
++	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0, true);
+ 
+ 	/* Compiler optimizations can remove arguments from static functions
+ 	 * or mismatched type can be passed into a global function.
+@@ -6474,7 +6518,7 @@ int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+ 			      struct bpf_reg_state *regs,
+ 			      u32 kfunc_flags)
+ {
+-	return btf_check_func_arg_match(env, btf, func_id, regs, true, kfunc_flags);
++	return btf_check_func_arg_match(env, btf, func_id, regs, true, kfunc_flags, true);
+ }
+ 
+ /* Convert BTF of a function into bpf_reg_state if possible
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0194a36d0b36..d27fae3ce949 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6626,7 +6626,7 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	func_info_aux = env->prog->aux->func_info_aux;
+ 	if (func_info_aux)
+ 		is_global = func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
+-	err = btf_check_subprog_arg_match(env, subprog, caller->regs);
++	err = btf_check_subprog_call(env, subprog, caller->regs);
+ 	if (err == -EFAULT)
+ 		return err;
+ 	if (is_global) {
+-- 
+2.36.1
 

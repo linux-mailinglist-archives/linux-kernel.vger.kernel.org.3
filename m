@@ -2,131 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84605AB592
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BAE5AB599
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237346AbiIBPqn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Sep 2022 11:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
+        id S237120AbiIBPrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236525AbiIBPqS (ORCPT
+        with ESMTP id S236952AbiIBPrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:46:18 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CD0D78
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:34:46 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oU8gg-0004tu-Qa; Fri, 02 Sep 2022 17:34:30 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     ajones@ventanamicro.com, Conor.Dooley@microchip.com
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, guoren@kernel.org, apatel@ventanamicro.com,
-        atishp@rivosinc.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] riscv: cleanup svpbmt cpufeature probing
-Date:   Fri, 02 Sep 2022 17:34:30 +0200
-Message-ID: <21316074.0c2gjJ1VT2@diego>
-In-Reply-To: <464dbc2b-e281-f9ad-f8c7-ba66e8247432@microchip.com>
-References: <20220901222744.2210215-1-heiko@sntech.de> <2910587.GUh0CODmnK@diego> <464dbc2b-e281-f9ad-f8c7-ba66e8247432@microchip.com>
+        Fri, 2 Sep 2022 11:47:33 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45DAE68F0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:36:59 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id k22so2655746ljg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 08:36:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=hYq4cv4cNUo/9VVzRmU4eVk/nrbDfe3lb0f5HSAbg0c=;
+        b=fXAJ+/P3fhtMN1q8A3rt66vZdRafbtT3fcpkG6YbzOLJGXgMenZOZnNNgfXKlGyB5r
+         /neSeMRbtxKr4RaUWpB2ly4PnRRPe3twwNXT5Zp04HSiIrWrtbPfxQPl4d/DCSv7Jw6P
+         v6OpRAIcUKGWzfQf/L+mK3HkoWkVWdXaqxmdGC+Oz21BBA6qkJR+PgSYOi4lpfJwFBEk
+         c4m+9c6wiXw6W0fyG49lUa9QfrMJ+Lu2JQOHxBNqW5Upsci/xG1gPacMteCbU+aw8w2R
+         Wa40oIUi6Z2lVi0NDIyqyuz6OUkgO1Yegq0OH/PklUbwM23JcCeCErq8rCn2j2KUs7+z
+         AwIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=hYq4cv4cNUo/9VVzRmU4eVk/nrbDfe3lb0f5HSAbg0c=;
+        b=eesbZW0WPsmHQKwDXabEbz8eyiIxy0dZCpb8jjuYUdo4PQ9N3DoGXHt9O5D2mPb1du
+         zdHvVUJbjPvT8zp31wbl9HwdNLisEPK300qePjf1lY1yF6sHMimay5yuyoN3fwwt0PLW
+         JM1UFX6b8XKoOgXPcZOefcdOIXpVrsY+N5SqpsHWIhHs6a8yvT9oubo1oZVTu54N372S
+         h1NSO6BZuQwqiR+UdmOaleAYqm/MW5af5YbIyYKRbWyH35AsXJeyaUQEq28TI0lIEuYu
+         rm8F9liFE+FUyhD7QckQWmwCwbjrssDTSL560TtvL6v441knBJBD4tRK4wRtpceEm+HU
+         kOOw==
+X-Gm-Message-State: ACgBeo1UzuNWF7YQijVGRUwU7o6Vpb7bcaNJnAlo1BF8ZS+YabiXsjSt
+        lzW1ezJjL4umbyIHOrDIyk9uba+7RHpv/kR9qBxw9g==
+X-Google-Smtp-Source: AA6agR5BgJy2rk6wsD1gHEWSl466MvJsMQgEJ7ryOhxaVIAxSSxBf5O7ox+glstyi65Tkgtdj9RtOlUAM7wEftZQWJQ=
+X-Received: by 2002:a05:651c:1953:b0:268:983a:c6de with SMTP id
+ bs19-20020a05651c195300b00268983ac6demr3626799ljb.218.1662133017439; Fri, 02
+ Sep 2022 08:36:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Fri, 2 Sep 2022 17:36:19 +0200
+Message-ID: <CAGuA+oo5HvBo6aVvpXmk+ZEgvAM_zBHW2JZLD376+s7uHpdJuA@mail.gmail.com>
+Subject: Thermal Framework, Thermal Driver, Thermal Aggregation
+To:     rafael@kernel.org, rui.zhang@intel.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
+        Rob Herring <robh@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 2. September 2022, 17:26:21 CEST schrieb Conor.Dooley@microchip.com:
-> On 02/09/2022 16:12, Heiko Stübner wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Am Freitag, 2. September 2022, 11:49:39 CEST schrieb Andrew Jones:
-> >> Hi Heiko,
-> >>
-> >> Please use a cover-letter for a patch series. They allow the series to be
-> >> threaded better and people can reply to the cover-letter with series-wide
-> >> comments. For example, I'd like to reply to a cover-letter now with
-> >>
-> >> For the series
-> >>
-> >> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> >>
-> >> but now it looks like I need to go back and reply to each patch
-> >> separately.
-> > 
-> > I'm not sure if tooling like b4 can handle Reviewed-by's in cover-letters.
-> 
-> Yup, it can! At least `b4 {am,shazam} -t` will.
-> I am not sure if the new `b4 trailers` does.
+Hello everybody,
 
-That is great to know ... gotta love b4 :-)
+I'm currently waiting for reviews of the LVTS Driver v9 series that I
+recently submitted
+"https://patchwork.kernel.org/project/linux-mediatek/cover/20220817080757.352021-1-bchihi@baylibre.com/",
+then I will send the v10 with additional mt8195 specific code.
+The upcoming v10 of the LVTS series will support Daniel's new Thermal
+Framework implementation
+"https://patchwork.kernel.org/project/linux-pm/cover/20220804224349.1926752-1-daniel.lezcano@linexp.org/",
+plus new changes that may be requested from reviews of the v9.
 
+After that, I will submit another series about Thermal Aggregation.
+Basically, I need to create an additional thermal_zone with all
+sensors registered to it, this will allow us to return MAX, AVG, or
+MIN temperature based on all sensor values within this new
+thermal_zone (could we call it Virtual?).
+A series for the same purpose are sent by Alexandre Bailon
+"https://patchwork.kernel.org/project/linux-pm/cover/20220218084604.1669091-1-abailon@baylibre.com/",
+the implementation is done in "thermal_of.c" (I'm continuing on
+Alexander's work). According to comments, other platforms not based on
+Device Tree should benefit from this feature. So, according to Daniel
+Lezcano, it should be implemented in "thermal_core.c" instead.
 
-> 
-> > At least some time back it couldn't, so am not sure if that was added
-> > meanwhile. So tags added to cover-letters might even get lost.
-> > 
-> > But I'll add a cover-letter nevertheless - need a place for the v2 changelog
-> > anyway :-)
-> > 
-> > Heiko
-> > 
-> > 
-> >>
-> >> Thanks,
-> >> drew
-> >>
-> >> On Fri, Sep 02, 2022 at 12:27:41AM +0200, Heiko Stuebner wrote:
-> >>> This can also do without the ifdef and use IS_ENABLED instead and
-> >>> for better readability, getting rid of that switch also seems
-> >>> waranted.
-> >>>
-> >>> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> >>> ---
-> >>>  arch/riscv/kernel/cpufeature.c | 13 +++++--------
-> >>>  1 file changed, 5 insertions(+), 8 deletions(-)
-> >>>
-> >>> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> >>> index 553d755483ed..764ea220161f 100644
-> >>> --- a/arch/riscv/kernel/cpufeature.c
-> >>> +++ b/arch/riscv/kernel/cpufeature.c
-> >>> @@ -253,16 +253,13 @@ void __init riscv_fill_hwcap(void)
-> >>>  #ifdef CONFIG_RISCV_ALTERNATIVE
-> >>>  static bool __init_or_module cpufeature_probe_svpbmt(unsigned int stage)
-> >>>  {
-> >>> -#ifdef CONFIG_RISCV_ISA_SVPBMT
-> >>> -   switch (stage) {
-> >>> -   case RISCV_ALTERNATIVES_EARLY_BOOT:
-> >>> +   if (!IS_ENABLED(CONFIG_RISCV_ISA_SVPBMT))
-> >>>             return false;
-> >>> -   default:
-> >>> -           return riscv_isa_extension_available(NULL, SVPBMT);
-> >>> -   }
-> >>> -#endif
-> >>>
-> >>> -   return false;
-> >>> +   if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> >>> +           return false;
-> >>> +
-> >>> +   return riscv_isa_extension_available(NULL, SVPBMT);
-> >>>  }
-> >>>
-> >>>  static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
-> >>
-> > 
-> > 
-> > 
-> > 
-> 
-> 
+So, I would like to discuss it with you, and ask for recommendations
+and help on how to implement this feature, because it is not easy for
+me alone to figure out how to do it.
+Should we update the thermal zone to support aggregation? or add a way
+to register a thermal zone that aggregates other thermal zones?
+what about applying some configuration to a multiple sensor thermal
+zone? does it override the trip already defined in mono sensor thermal
+zones?
+And many other questions that should be asked to implement this new feature...
+In my honest opinion, we should clarify together how it must be done.
 
+Thank you in advance.
 
-
-
+Best regards,
+Balsam CHIHI

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D496F5AB376
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548345AB373
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237602AbiIBO2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S236373AbiIBO21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237104AbiIBO1N (ORCPT
+        with ESMTP id S236207AbiIBO1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:27:13 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181B7168A08
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:29 -0700 (PDT)
+        Fri, 2 Sep 2022 10:27:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCF6145C66
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=exdW9cTzIEZMDSgoNhyqMCUVrHrKRGK4pmqnX15phYU=; b=ft6Iz6l/UXQcWYc4if2tCQx73L
-        dD50HHIY3H43UeRnB/6DA2rgloUopDrUxumWOtTZLslSYQSgzcaqAKUVzzT+fMk/uRaGgKKHPvtWl
-        RdFHe9Kp0rulxW4jUw1SZlbmtVnOR8w6yMh0FWKaZYGLgqXlnCq3gMKnyr1QJlSgaO+zurBU4EqKs
-        C93sepP37xJAjkT5bgmegHvEb/TmUXWmWM9pL7Ccd5i0JAQgRk/E6VwtHqPBQlz5bGR8E2IC9Mx3Q
-        P4JkTkEmBh+GygLCp89UGoVVo45Rulb8jjCC3XvLIS54KkYfwVYPeoopczgwQTpCoe4NJ2vAcrcl1
-        LAdGU1Uw==;
+        bh=esbaxv8bwXI/iX43XRRYBSC6TFpUTFx/YoIUh5Tifmk=; b=JvXyLbdcPIj/Me9w0zPrp4fQn9
+        M+yyGbe7gcpYehSxRrACWc2Kv56Uhf9DhFQcdzPHgpuC5UAuAW4DqoZOTpVoF4th60OrENjxCFS8Y
+        9+UevSI/Y3yIe3shPNM187AbNmvsTVXBdCc1LelQSU8LAu4I1khi6/6+vBL40CFtvfFKola272Tw1
+        74xkESyxYUjrtSvoawSPGIZ9Q9B/cL68/c5aW0PDqr9n+Q7C42Uhe9W48m1xzz6f/k/rJNBpb5yFi
+        rejPz+1wXwXw9iDWkjvxj2KPpmvasMVrX/lCciXRLJ3fP83QHOfkUzPvQphRzYRkht5DO7jqp3ZV1
+        tebyILuw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oU77K-008g7n-ND; Fri, 02 Sep 2022 13:53:55 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oU77M-0074T6-QL; Fri, 02 Sep 2022 13:53:56 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 59EFB3005DB;
-        Fri,  2 Sep 2022 15:53:52 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 00EDE300813;
+        Fri,  2 Sep 2022 15:53:54 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 2563D25D60EC2; Fri,  2 Sep 2022 15:53:52 +0200 (CEST)
-Message-ID: <20220902130946.775455579@infradead.org>
+        id 2E8F4299EA069; Fri,  2 Sep 2022 15:53:52 +0200 (CEST)
+Message-ID: <20220902130946.878962398@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 02 Sep 2022 15:06:29 +0200
+Date:   Fri, 02 Sep 2022 15:06:30 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v2 04/59] x86/cpu: Re-enable stackprotector
+Subject: [PATCH v2 05/59] x86/modules: Set VM_FLUSH_RESET_PERMS in module_alloc()
 References: <20220902130625.217071627@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,52 +75,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Commit 5416c2663517 ("x86: make sure load_percpu_segment has no
-stackprotector") disabled the stackprotector for cpu/common.c because of
-load_percpu_segment(). Back then the boot stack canary was initialized very
-early in start_kernel(). Switching the per CPU area by loading the GDT
-caused the stackprotector to fail with paravirt enabled kernels as the
-GSBASE was not updated yet. In hindsight a wrong change because it would
-have been sufficient to ensure that the canary is the same in both per CPU
-areas.
-
-Commit d55535232c3d ("random: move rand_initialize() earlier") moved the
-stack canary initialization to a later point in the init sequence. As a
-consequence the per CPU stack canary is 0 when switching the per CPU areas,
-so there is no requirement anymore to exclude this file.
-
-Add a comment to load_percpu_segment().
+Instead of resetting permissions all over the place when freeing module
+memory tell the vmalloc code to do so. Avoids the exercise for the next
+upcoming user.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/kernel/cpu/Makefile |    3 ---
- arch/x86/kernel/cpu/common.c |    3 +++
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/kernel/ftrace.c       |    2 --
+ arch/x86/kernel/kprobes/core.c |    1 -
+ arch/x86/kernel/module.c       |    9 +++++----
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
---- a/arch/x86/kernel/cpu/Makefile
-+++ b/arch/x86/kernel/cpu/Makefile
-@@ -16,9 +16,6 @@ KCOV_INSTRUMENT_perf_event.o := n
- # As above, instrumenting secondary CPU boot code causes boot hangs.
- KCSAN_SANITIZE_common.o := n
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -413,8 +413,6 @@ create_trampoline(struct ftrace_ops *ops
+ 	/* ALLOC_TRAMP flags lets us know we created it */
+ 	ops->flags |= FTRACE_OPS_FL_ALLOC_TRAMP;
  
--# Make sure load_percpu_segment has no stackprotector
--CFLAGS_common.o		:= -fno-stack-protector
+-	set_vm_flush_reset_perms(trampoline);
 -
- obj-y			:= cacheinfo.o scattered.o topology.o
- obj-y			+= common.o
- obj-y			+= rdrand.o
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -752,6 +752,9 @@ void __init switch_gdt_and_percpu_base(i
- 	 * early mapping is still valid. That means the GSBASE update will
- 	 * lose any prior per CPU data which was not copied over in
- 	 * setup_per_cpu_areas().
-+	 *
-+	 * This works even with stackprotector enabled because the
-+	 * per CPU stack canary is 0 in both per CPU areas.
- 	 */
- 	wrmsrl(MSR_GS_BASE, cpu_kernelmode_gs_base(cpu));
- #else
+ 	if (likely(system_state != SYSTEM_BOOTING))
+ 		set_memory_ro((unsigned long)trampoline, npages);
+ 	set_memory_x((unsigned long)trampoline, npages);
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -416,7 +416,6 @@ void *alloc_insn_page(void)
+ 	if (!page)
+ 		return NULL;
+ 
+-	set_vm_flush_reset_perms(page);
+ 	/*
+ 	 * First make the page read-only, and only then make it executable to
+ 	 * prevent it from being W+X in between.
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -74,10 +74,11 @@ void *module_alloc(unsigned long size)
+ 		return NULL;
+ 
+ 	p = __vmalloc_node_range(size, MODULE_ALIGN,
+-				    MODULES_VADDR + get_module_load_offset(),
+-				    MODULES_END, gfp_mask,
+-				    PAGE_KERNEL, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
+-				    __builtin_return_address(0));
++				 MODULES_VADDR + get_module_load_offset(),
++				 MODULES_END, gfp_mask, PAGE_KERNEL,
++				 VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK,
++				 NUMA_NO_NODE, __builtin_return_address(0));
++
+ 	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+ 		vfree(p);
+ 		return NULL;
 
 

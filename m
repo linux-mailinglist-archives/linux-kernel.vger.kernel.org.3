@@ -2,123 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE82D5AAE33
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4305AAF6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235485AbiIBMQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S237094AbiIBMhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiIBMQk (ORCPT
+        with ESMTP id S236982AbiIBMhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:16:40 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA7EC2F92;
-        Fri,  2 Sep 2022 05:16:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662120999; x=1693656999;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CJ7K6MAmvy9eYTd7oP1wszLEZKBCQJ6tFK2SaopjaYI=;
-  b=Rzs0+2nyXx00SSq6SgHv/p7hUhLoqv/wHOoFB1v12CAXOL2TO6LBzXX/
-   Ky+VtPEcqsqZuXwOaLjckJHMs0HivQkGLU1AV6hgLxb2QJb3hjiA0NnQ7
-   iWaHUVeFKeNfO89VU6k2XFQolGMLbbmmbDvy0L6fydGCEBHgIN9di4EwI
-   lp/KZBOqHEEkApjzi+TPF9tJPqUrio4tVmEqJG2ij47ai2jH/gcYXM0IQ
-   ZVurhisjy74nfCEvQbPWjH/UU5BZQ6rDlIOset0bYF4YjgtvPTjUKTnpX
-   ihHcH5Tx5ZGkKXDqDB4xCry0kNsdwF7wlouRrIo/0E3TmXYMbKXFxvPm5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="278983881"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="278983881"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 05:16:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="681270907"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Sep 2022 05:16:34 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oU5b8-000039-0W;
-        Fri, 02 Sep 2022 12:16:34 +0000
-Date:   Fri, 2 Sep 2022 20:16:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc:     kbuild-all@lists.01.org, Daniel Xu <dxu@dxuuu.xyz>,
-        pablo@netfilter.org, fw@strlen.de, toke@kernel.org,
-        martin.lau@linux.dev, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v4 4/5] bpf: Add support for writing to
- nf_conn:mark
-Message-ID: <202209022000.s58TmR9h-lkp@intel.com>
-References: <073173502d762faf87bde0ca23e609c84848dd7e.1661192455.git.dxu@dxuuu.xyz>
+        Fri, 2 Sep 2022 08:37:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B6F5B07E;
+        Fri,  2 Sep 2022 05:29:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1B00B82A9D;
+        Fri,  2 Sep 2022 12:27:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6FD6C433D7;
+        Fri,  2 Sep 2022 12:27:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662121674;
+        bh=r6FeWRx7xrmk2PuoWSai+ht1kUpwPfk6nSP4/MVeNGc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vYXTzswkTqjDNw0I9KCoXLnWArr7JpEsDxv9ZlwUTmTfiVXIsg/A0QDRqbijnwEfo
+         YSmdVwNfGKoB4AHYW6xb2eNMnYxs+yiLdCjeVbi1VRD4B/YpgNFIPTw7C0Us4k0ePy
+         SylX6Lxaha7usodHD3P1tOZro2WdcqfWsoQeZFZM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.4 00/77] 5.4.212-rc1 review
+Date:   Fri,  2 Sep 2022 14:18:09 +0200
+Message-Id: <20220902121403.569927325@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <073173502d762faf87bde0ca23e609c84848dd7e.1661192455.git.dxu@dxuuu.xyz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.212-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.4.212-rc1
+X-KernelTest-Deadline: 2022-09-04T12:14+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+This is the start of the stable review cycle for the 5.4.212 release.
+There are 77 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Thank you for the patch! Yet something to improve:
+Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+Anything received after that time might be too late.
 
-[auto build test ERROR on bpf-next/master]
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.212-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+and the diffstat can be found below.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220823-032643
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220902/202209022000.s58TmR9h-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/496ec6d75c8e8758f93c6b987eee83713c911a05
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220823-032643
-        git checkout 496ec6d75c8e8758f93c6b987eee83713c911a05
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+thanks,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+greg k-h
 
-All errors (new ones prefixed by >>):
+-------------
+Pseudo-Shortlog of commits:
 
-   ld: net/core/filter.o: in function `tc_cls_act_btf_struct_access':
->> net/core/filter.c:8644: undefined reference to `nf_conntrack_btf_struct_access'
-   ld: net/core/filter.o: in function `xdp_btf_struct_access':
-   include/net/net_namespace.h:369: undefined reference to `nf_conntrack_btf_struct_access'
-   pahole: .tmp_vmlinux.btf: No such file or directory
-   .btf.vmlinux.bin.o: file not recognized: file format not recognized
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.4.212-rc1
+
+Yang Yingliang <yangyingliang@huawei.com>
+    net: neigh: don't call kfree_skb() under spin_lock_irqsave()
+
+Zhengchao Shao <shaozhengchao@huawei.com>
+    net/af_packet: check len when min_header_len equals to 0
+
+Pavel Begunkov <asml.silence@gmail.com>
+    io_uring: disable polling pollfree files
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    kprobes: don't call disarm_kprobe() for disabled kprobes
+
+Andrei Vagin <avagin@gmail.com>
+    lib/vdso: Mark do_hres() and do_coarse() as __always_inline
+
+Christophe Leroy <christophe.leroy@c-s.fr>
+    lib/vdso: Let do_coarse() return 0 to simplify the callsite
+
+Josef Bacik <josef@toxicpanda.com>
+    btrfs: tree-checker: check for overlapping extent items
+
+Geert Uytterhoeven <geert@linux-m68k.org>
+    netfilter: conntrack: NF_CONNTRACK_PROCFS should no longer default to y
+
+Ilya Bakoulin <Ilya.Bakoulin@amd.com>
+    drm/amd/display: Fix pixel clock programming
+
+Juergen Gross <jgross@suse.com>
+    s390/hypfs: avoid error message under KVM
+
+Denis V. Lunev <den@openvz.org>
+    neigh: fix possible DoS due to net iface start/stop loop
+
+Fudong Wang <Fudong.Wang@amd.com>
+    drm/amd/display: clear optc underflow before turn off odm clock
+
+Josip Pavic <Josip.Pavic@amd.com>
+    drm/amd/display: Avoid MPC infinite loop
+
+Filipe Manana <fdmanana@suse.com>
+    btrfs: unify lookup return value when dir entry is missing
+
+Filipe Manana <fdmanana@suse.com>
+    btrfs: do not pin logs too early during renames
+
+Marcos Paulo de Souza <mpdesouza@suse.com>
+    btrfs: introduce btrfs_lookup_match_dir
+
+Jann Horn <jannh@google.com>
+    mm/rmap: Fix anon_vma->degree ambiguity leading to double-reuse
+
+Zhengchao Shao <shaozhengchao@huawei.com>
+    bpf: Don't redirect packets with invalid pkt_len
+
+Yang Jihong <yangjihong1@huawei.com>
+    ftrace: Fix NULL pointer dereference in is_ftrace_trampoline when ftrace is dead
+
+Letu Ren <fantasquex@gmail.com>
+    fbdev: fb_pm2fb: Avoid potential divide by zero error
+
+Karthik Alapati <mail@karthek.com>
+    HID: hidraw: fix memory leak in hidraw_release()
+
+Dongliang Mu <mudongliangabcd@gmail.com>
+    media: pvrusb2: fix memory leak in pvr_probe
+
+Vivek Kasireddy <vivek.kasireddy@intel.com>
+    udmabuf: Set the DMA mask for the udmabuf device (v2)
+
+Lee Jones <lee.jones@linaro.org>
+    HID: steam: Prevent NULL pointer dereference in steam_{recv,send}_report
+
+Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+    Bluetooth: L2CAP: Fix build errors in some archs
+
+Jing Leng <jleng@ambarella.com>
+    kbuild: Fix include path in scripts/Makefile.modpost
+
+Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+    x86/bugs: Add "unknown" reporting for MMIO Stale Data
+
+Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+    s390/mm: do not trigger write fault when vma does not allow VM_WRITE
+
+Jann Horn <jannh@google.com>
+    mm: Force TLB flush for PFNMAP mappings before unlink_file_vma()
+
+Saurabh Sengar <ssengar@linux.microsoft.com>
+    scsi: storvsc: Remove WQ_MEM_RECLAIM from storvsc_error_wq
+
+Stephane Eranian <eranian@google.com>
+    perf/x86/intel/uncore: Fix broken read_counter() for SNB IMC PMU
+
+Guoqing Jiang <guoqing.jiang@linux.dev>
+    md: call __md_stop_writes in md_stop
+
+David Hildenbrand <david@redhat.com>
+    mm/hugetlb: fix hugetlb not supporting softdirty tracking
+
+Riwen Lu <luriwen@kylinos.cn>
+    ACPI: processor: Remove freq Qos request for all CPUs
+
+Brian Foster <bfoster@redhat.com>
+    s390: fix double free of GS and RI CBs on fork() failure
+
+Quanyang Wang <quanyang.wang@windriver.com>
+    asm-generic: sections: refactor memory_intersects
+
+Siddh Raman Pant <code@siddh.me>
+    loop: Check for overflow while configuring loop
+
+Chen Zhongjin <chenzhongjin@huawei.com>
+    x86/unwind/orc: Unwind ftrace trampolines with correct ORC entry
+
+Goldwyn Rodrigues <rgoldwyn@suse.de>
+    btrfs: check if root is readonly while setting security xattr
+
+Anand Jain <anand.jain@oracle.com>
+    btrfs: add info when mount fails due to stale replace target
+
+Anand Jain <anand.jain@oracle.com>
+    btrfs: replace: drop assert for suspended replace
+
+Filipe Manana <fdmanana@suse.com>
+    btrfs: fix silent failure when deleting root reference
+
+Jacob Keller <jacob.e.keller@intel.com>
+    ixgbe: stop resetting SYSTIME in ixgbe_ptp_start_cyclecounter
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around sysctl_somaxconn.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around netdev_budget_usecs.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around netdev_budget.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around sysctl_net_busy_read.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around sysctl_net_busy_poll.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around sysctl_tstamp_allow_data.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    ratelimit: Fix data-races in ___ratelimit().
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix data-races around netdev_tstamp_prequeue.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix data-races around weight_p and dev_weight_[rt]x_bias.
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nft_tunnel: restrict it to netdev family
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nft_osf: restrict osf to ipv4, ipv6 and inet families
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nft_payload: do not truncate csum_offset and csum_type
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nft_payload: report ERANGE for too long offset and length
+
+Vikas Gupta <vikas.gupta@broadcom.com>
+    bnxt_en: fix NQ resource accounting during vf creation on 57500 chips
+
+Florian Westphal <fw@strlen.de>
+    netfilter: ebtables: reject blobs that don't provide all entry points
+
+Maciej Żenczykowski <maze@google.com>
+    net: ipvtap - add __init/__exit annotations to module init/exit funcs
+
+Jonathan Toppins <jtoppins@redhat.com>
+    bonding: 802.3ad: fix no transmission of LACPDUs
+
+Sergei Antonov <saproj@gmail.com>
+    net: moxa: get rid of asymmetry in DMA mapping/unmapping
+
+Vlad Buslov <vladbu@nvidia.com>
+    net/mlx5e: Properly disable vlan strip on non-UL reps
+
+Bernard Pidoux <f6bvp@free.fr>
+    rose: check NULL rose_loopback_neigh->loopback
+
+Trond Myklebust <trond.myklebust@hammerspace.com>
+    SUNRPC: RPC level errors should set task->tk_rpc_status
+
+Herbert Xu <herbert@gondor.apana.org.au>
+    af_key: Do not call xfrm_probe_algs in parallel
+
+Xin Xiong <xiongx18@fudan.edu.cn>
+    xfrm: fix refcount leak in __xfrm_policy_check()
+
+Hui Su <suhui_kernel@163.com>
+    kernel/sched: Remove dl_boosted flag comment
+
+Juri Lelli <juri.lelli@redhat.com>
+    sched/deadline: Fix priority inheritance with multiple scheduling classes
+
+Lucas Stach <l.stach@pengutronix.de>
+    sched/deadline: Fix stale throttling on de-/boosted tasks
+
+Daniel Bristot de Oliveira <bristot@redhat.com>
+    sched/deadline: Unthrottle PI boosted threads while enqueuing
+
+Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+    pinctrl: amd: Don't save/restore interrupt status and wake status bits
+
+Jean-Philippe Brucker <jean-philippe@linaro.org>
+    Revert "selftests/bpf: Fix test_align verifier log patterns"
+
+Jean-Philippe Brucker <jean-philippe@linaro.org>
+    Revert "selftests/bpf: Fix "dubious pointer arithmetic" test"
+
+Pawel Laszczak <pawell@cadence.com>
+    usb: cdns3: Fix issue for clear halt endpoint
+
+Randy Dunlap <rdunlap@infradead.org>
+    kernel/sys_ni: add compat entry for fadvise64_64
+
+Helge Deller <deller@gmx.de>
+    parisc: Fix exception handler for fldw and fstw instructions
+
+Gaosheng Cui <cuigaosheng1@huawei.com>
+    audit: fix potential double free on error path from fsnotify_add_inode_mark
 
 
-vim +8644 net/core/filter.c
+-------------
 
-  8632	
-  8633	static int tc_cls_act_btf_struct_access(struct bpf_verifier_log *log,
-  8634						const struct btf *btf,
-  8635						const struct btf_type *t, int off,
-  8636						int size, enum bpf_access_type atype,
-  8637						u32 *next_btf_id,
-  8638						enum bpf_type_flag *flag)
-  8639	{
-  8640		if (atype == BPF_READ)
-  8641			return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-  8642						 flag);
-  8643	
-> 8644		return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
-  8645						      next_btf_id, flag);
-  8646	}
-  8647	
+Diffstat:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ .../hw-vuln/processor_mmio_stale_data.rst          |  14 +++
+ Makefile                                           |   4 +-
+ arch/parisc/kernel/unaligned.c                     |   2 +-
+ arch/s390/hypfs/hypfs_diag.c                       |   2 +-
+ arch/s390/hypfs/inode.c                            |   2 +-
+ arch/s390/kernel/process.c                         |  22 +++-
+ arch/s390/mm/fault.c                               |   4 +-
+ arch/x86/events/intel/uncore_snb.c                 |  18 ++-
+ arch/x86/include/asm/cpufeatures.h                 |   3 +-
+ arch/x86/kernel/cpu/bugs.c                         |  14 ++-
+ arch/x86/kernel/cpu/common.c                       |  40 ++++---
+ arch/x86/kernel/unwind_orc.c                       |  15 ++-
+ drivers/acpi/processor_thermal.c                   |   2 +-
+ drivers/android/binder.c                           |   1 +
+ drivers/block/loop.c                               |   5 +
+ drivers/dma-buf/udmabuf.c                          |  18 ++-
+ .../gpu/drm/amd/display/dc/dce/dce_clock_source.c  |   2 +
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_mpc.c   |   6 +
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_optc.c  |   5 +
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_mpc.c   |   6 +
+ drivers/hid/hid-steam.c                            |  10 ++
+ drivers/hid/hidraw.c                               |   3 +
+ drivers/md/md.c                                    |   1 +
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c            |   1 +
+ drivers/net/bonding/bond_3ad.c                     |  38 +++---
+ drivers/net/ethernet/broadcom/bnxt/bnxt_sriov.c    |   2 +-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ptp.c       |  59 ++++++++--
+ drivers/net/ethernet/mellanox/mlx5/core/en_rep.c   |   2 +
+ drivers/net/ethernet/moxa/moxart_ether.c           |  11 +-
+ drivers/net/ipvlan/ipvtap.c                        |   4 +-
+ drivers/pinctrl/pinctrl-amd.c                      |  11 +-
+ drivers/scsi/storvsc_drv.c                         |   2 +-
+ drivers/usb/cdns3/gadget.c                         |   8 +-
+ drivers/video/fbdev/pm2fb.c                        |   5 +
+ fs/btrfs/ctree.h                                   |   2 +-
+ fs/btrfs/dev-replace.c                             |   5 +-
+ fs/btrfs/dir-item.c                                | 122 +++++++++++--------
+ fs/btrfs/inode.c                                   |  48 +++++++-
+ fs/btrfs/root-tree.c                               |   5 +-
+ fs/btrfs/tree-checker.c                            |  25 +++-
+ fs/btrfs/tree-log.c                                |  14 +--
+ fs/btrfs/xattr.c                                   |   3 +
+ fs/io_uring.c                                      |   3 +
+ fs/signalfd.c                                      |   1 +
+ include/asm-generic/sections.h                     |   7 +-
+ include/linux/fs.h                                 |   1 +
+ include/linux/netfilter_bridge/ebtables.h          |   4 -
+ include/linux/rmap.h                               |   7 +-
+ include/linux/sched.h                              |  14 ++-
+ include/linux/skbuff.h                             |   8 ++
+ include/net/busy_poll.h                            |   2 +-
+ kernel/audit_fsnotify.c                            |   1 +
+ kernel/kprobes.c                                   |   9 +-
+ kernel/sched/core.c                                |  11 +-
+ kernel/sched/deadline.c                            | 131 +++++++++++++--------
+ kernel/sys_ni.c                                    |   1 +
+ kernel/trace/ftrace.c                              |  10 ++
+ lib/ratelimit.c                                    |  12 +-
+ lib/vdso/gettimeofday.c                            |  27 +++--
+ mm/mmap.c                                          |  20 +++-
+ mm/rmap.c                                          |  31 ++---
+ net/bluetooth/l2cap_core.c                         |  10 +-
+ net/bpf/test_run.c                                 |   3 +
+ net/bridge/netfilter/ebtable_broute.c              |   8 --
+ net/bridge/netfilter/ebtable_filter.c              |   8 --
+ net/bridge/netfilter/ebtable_nat.c                 |   8 --
+ net/bridge/netfilter/ebtables.c                    |   8 +-
+ net/core/dev.c                                     |  15 +--
+ net/core/neighbour.c                               |  27 ++++-
+ net/core/skbuff.c                                  |   2 +-
+ net/core/sock.c                                    |   2 +-
+ net/core/sysctl_net_core.c                         |  15 ++-
+ net/key/af_key.c                                   |   3 +
+ net/netfilter/Kconfig                              |   1 -
+ net/netfilter/nft_osf.c                            |  18 ++-
+ net/netfilter/nft_payload.c                        |  29 +++--
+ net/netfilter/nft_tunnel.c                         |   1 +
+ net/packet/af_packet.c                             |   4 +-
+ net/rose/rose_loopback.c                           |   3 +-
+ net/sched/sch_generic.c                            |   2 +-
+ net/socket.c                                       |   2 +-
+ net/sunrpc/clnt.c                                  |   2 +-
+ net/xfrm/xfrm_policy.c                             |   1 +
+ scripts/Makefile.modpost                           |   3 +-
+ tools/testing/selftests/bpf/test_align.c           |  14 +--
+ 85 files changed, 712 insertions(+), 343 deletions(-)
+
+

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8335AB122
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27945AB0A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238650AbiIBNFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
+        id S238058AbiIBMyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238723AbiIBNDr (ORCPT
+        with ESMTP id S236398AbiIBMxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:03:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D95110F080;
-        Fri,  2 Sep 2022 05:42:04 -0700 (PDT)
+        Fri, 2 Sep 2022 08:53:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0581AFAC5E;
+        Fri,  2 Sep 2022 05:38:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3819F6211C;
-        Fri,  2 Sep 2022 12:32:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E06FC433D6;
-        Fri,  2 Sep 2022 12:32:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B130B82A99;
+        Fri,  2 Sep 2022 12:37:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7CDFC433C1;
+        Fri,  2 Sep 2022 12:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121943;
-        bh=QXhlD+e++6kgBMShPi6oO6OcUkdZpztpCjKg39eR83k=;
+        s=korg; t=1662122226;
+        bh=dQCyYYdHFTcYP0ibPebQBQKt6XsoJLS/blVx6w2TSvA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CzIP9wI8ajNBR1PwPlQd9BoYN+vOKJUxkADcx7j8iEJ4LqJGjJxpUOAJu8Q1L178K
-         p/woON2/fN98iJXq0oT/co1vGFTLnrVh9eFDipadOIn7KmxKRHriBA7PXuK+tf1x1i
-         WHgjDYrfMyePt+kne4DIv0cFMV/QEqT432hD1kbM=
+        b=iifTHv9PuRq/LAmziGZ+CuAmQ8XsN3BdH0DvTfJ+O7p+SEUAjynpkuSE17/u6HWXu
+         09RXXx5riEDZ3+QMVrhQ9kRnlmrO8bq4lrFu0a3mh86opLLSj6RAuCinAERGx1Jiyg
+         gcfllfhvjwrjMRkG/jLEi+jvOtU863nS1ml4dHEs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steev Klimaszewski <steev@kali.org>,
+        stable@vger.kernel.org,
+        "Daniel J. Ogorchock" <djogorchock@gmail.com>,
         Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 5.15 37/73] HID: add Lenovo Yoga C630 battery quirk
+Subject: [PATCH 5.19 25/72] HID: nintendo: fix rumble worker null pointer deref
 Date:   Fri,  2 Sep 2022 14:19:01 +0200
-Message-Id: <20220902121405.661670249@linuxfoundation.org>
+Message-Id: <20220902121405.623143625@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steev Klimaszewski <steev@kali.org>
+From: Daniel J. Ogorchock <djogorchock@gmail.com>
 
-commit 3a47fa7b14c7d9613909a844aba27f99d3c58634 upstream.
+commit 1ff89e06c2e5fab30274e4b02360d4241d6e605e upstream.
 
-Similar to the Surface Go devices, the Elantech touchscreen/digitizer in
-the Lenovo Yoga C630 mistakenly reports the battery of the stylus, and
-always reports an empty battery.
+We can dereference a null pointer trying to queue work to a destroyed
+workqueue.
 
-Apply the HID_BATTERY_QUIRK_IGNORE quirk to ignore this battery and
-prevent the erroneous low battery warnings.
+If the device is disconnected, nintendo_hid_remove is called, in which
+the rumble_queue is destroyed. Avoid using that queue to defer rumble
+work once the controller state is set to JOYCON_CTLR_STATE_REMOVED.
 
-Signed-off-by: Steev Klimaszewski <steev@kali.org>
+This eliminates the null pointer dereference.
+
+Signed-off-by: Daniel J. Ogorchock <djogorchock@gmail.com>
 Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-ids.h   |    1 +
- drivers/hid/hid-input.c |    2 ++
- 2 files changed, 3 insertions(+)
+ drivers/hid/hid-nintendo.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -399,6 +399,7 @@
- #define USB_DEVICE_ID_ASUS_UX550_TOUCHSCREEN	0x2706
- #define I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREEN	0x261A
- #define I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCREEN	0x2A1C
-+#define I2C_DEVICE_ID_LENOVO_YOGA_C630_TOUCHSCREEN	0x279F
+--- a/drivers/hid/hid-nintendo.c
++++ b/drivers/hid/hid-nintendo.c
+@@ -1222,6 +1222,7 @@ static void joycon_parse_report(struct j
  
- #define USB_VENDOR_ID_ELECOM		0x056e
- #define USB_DEVICE_ID_ELECOM_BM084	0x0061
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -335,6 +335,8 @@ static const struct hid_device_id hid_ba
- 	  HID_BATTERY_QUIRK_IGNORE },
- 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCREEN),
- 	  HID_BATTERY_QUIRK_IGNORE },
-+	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_LENOVO_YOGA_C630_TOUCHSCREEN),
-+	  HID_BATTERY_QUIRK_IGNORE },
- 	{}
- };
+ 	spin_lock_irqsave(&ctlr->lock, flags);
+ 	if (IS_ENABLED(CONFIG_NINTENDO_FF) && rep->vibrator_report &&
++	    ctlr->ctlr_state != JOYCON_CTLR_STATE_REMOVED &&
+ 	    (msecs - ctlr->rumble_msecs) >= JC_RUMBLE_PERIOD_MS &&
+ 	    (ctlr->rumble_queue_head != ctlr->rumble_queue_tail ||
+ 	     ctlr->rumble_zero_countdown > 0)) {
+@@ -1546,12 +1547,13 @@ static int joycon_set_rumble(struct joyc
+ 		ctlr->rumble_queue_head = 0;
+ 	memcpy(ctlr->rumble_data[ctlr->rumble_queue_head], data,
+ 	       JC_RUMBLE_DATA_SIZE);
+-	spin_unlock_irqrestore(&ctlr->lock, flags);
+ 
+ 	/* don't wait for the periodic send (reduces latency) */
+-	if (schedule_now)
++	if (schedule_now && ctlr->ctlr_state != JOYCON_CTLR_STATE_REMOVED)
+ 		queue_work(ctlr->rumble_queue, &ctlr->rumble_worker);
+ 
++	spin_unlock_irqrestore(&ctlr->lock, flags);
++
+ 	return 0;
+ }
  
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2A15AAE42
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254035AAED4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235990AbiIBMVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
+        id S236576AbiIBM3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235877AbiIBMVO (ORCPT
+        with ESMTP id S236482AbiIBM2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:21:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81673C159;
-        Fri,  2 Sep 2022 05:20:22 -0700 (PDT)
+        Fri, 2 Sep 2022 08:28:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4038711C03;
+        Fri,  2 Sep 2022 05:24:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63679620C5;
-        Fri,  2 Sep 2022 12:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A77EC433C1;
-        Fri,  2 Sep 2022 12:20:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C243B82A95;
+        Fri,  2 Sep 2022 12:23:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4B7C433D7;
+        Fri,  2 Sep 2022 12:23:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121221;
-        bh=ehXEKIgpyo2pSGUzFyaSoLNWJBLVOk7DMOiMXqXX/WQ=;
+        s=korg; t=1662121418;
+        bh=0VtpXqFvjdzolSkUYnkn3ks1g0xBS+pk9oJcQgLaFCA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0330HgO42X72CSr4nH8pkU7A9k+SdAmNKAZfAt/3zUaYT3GagKawLojuel6cZTh3Y
-         LlRCMo4wA3RNw3ug9m2Px4vnRJLTMdcKKbzDa4t3pFY7LsfGTKIaJCySJ1iQ8kMsgd
-         TpezG9J8Sm6EKDbhZXfsycsiULN5m4HvVN/M78p0=
+        b=UN/9nyBlOZ3OBu0b8JjRR0ETpgqWnl8RIuiqsthQjJ/u/Ib/PxoN5Yu7Ewl2pUhgC
+         C/Ge/EpbxysYyEN9ddSYhb2+f+lHwHBK6T6jlIv9UssZv3tjz44tTFqc13Am3S9uzN
+         fs67FDNf8mGqfZZUEZNRX0xMKN8IxQJpX9m6kL/8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 11/31] net: Fix a data-race around sysctl_somaxconn.
+Subject: [PATCH 4.14 13/42] ratelimit: Fix data-races in ___ratelimit().
 Date:   Fri,  2 Sep 2022 14:18:37 +0200
-Message-Id: <20220902121357.167948574@linuxfoundation.org>
+Message-Id: <20220902121359.282397749@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
-References: <20220902121356.732130937@linuxfoundation.org>
+In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
+References: <20220902121358.773776406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,32 +57,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 3c9ba81d72047f2e81bb535d42856517b613aba7 ]
+[ Upstream commit 6bae8ceb90ba76cdba39496db936164fa672b9be ]
 
-While reading sysctl_somaxconn, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+While reading rs->interval and rs->burst, they can be changed
+concurrently via sysctl (e.g. net_ratelimit_state).  Thus, we
+need to add READ_ONCE() to their readers.
 
 Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/socket.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/ratelimit.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/net/socket.c b/net/socket.c
-index ab64ae80ca2cd..6f1abcba0e360 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -1403,7 +1403,7 @@ SYSCALL_DEFINE2(listen, int, fd, int, backlog)
+diff --git a/lib/ratelimit.c b/lib/ratelimit.c
+index d01f471352390..b805702de84dd 100644
+--- a/lib/ratelimit.c
++++ b/lib/ratelimit.c
+@@ -27,10 +27,16 @@
+  */
+ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+ {
++	/* Paired with WRITE_ONCE() in .proc_handler().
++	 * Changing two values seperately could be inconsistent
++	 * and some message could be lost.  (See: net_ratelimit_state).
++	 */
++	int interval = READ_ONCE(rs->interval);
++	int burst = READ_ONCE(rs->burst);
+ 	unsigned long flags;
+ 	int ret;
  
- 	sock = sockfd_lookup_light(fd, &err, &fput_needed);
- 	if (sock) {
--		somaxconn = sock_net(sock->sk)->core.sysctl_somaxconn;
-+		somaxconn = READ_ONCE(sock_net(sock->sk)->core.sysctl_somaxconn);
- 		if ((unsigned int)backlog > somaxconn)
- 			backlog = somaxconn;
+-	if (!rs->interval)
++	if (!interval)
+ 		return 1;
  
+ 	/*
+@@ -45,7 +51,7 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+ 	if (!rs->begin)
+ 		rs->begin = jiffies;
+ 
+-	if (time_is_before_jiffies(rs->begin + rs->interval)) {
++	if (time_is_before_jiffies(rs->begin + interval)) {
+ 		if (rs->missed) {
+ 			if (!(rs->flags & RATELIMIT_MSG_ON_RELEASE)) {
+ 				printk_deferred(KERN_WARNING
+@@ -57,7 +63,7 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+ 		rs->begin   = jiffies;
+ 		rs->printed = 0;
+ 	}
+-	if (rs->burst && rs->burst > rs->printed) {
++	if (burst && burst > rs->printed) {
+ 		rs->printed++;
+ 		ret = 1;
+ 	} else {
 -- 
 2.35.1
 

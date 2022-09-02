@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0A95AB08D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AF35AAE5B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238171AbiIBMzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
+        id S236037AbiIBMWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238096AbiIBMxr (ORCPT
+        with ESMTP id S235900AbiIBMVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:53:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D23186C8;
-        Fri,  2 Sep 2022 05:38:18 -0700 (PDT)
+        Fri, 2 Sep 2022 08:21:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FB65F117;
+        Fri,  2 Sep 2022 05:20:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB85662119;
-        Fri,  2 Sep 2022 12:35:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06163C433D6;
-        Fri,  2 Sep 2022 12:35:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EF5FB82A90;
+        Fri,  2 Sep 2022 12:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D716C433C1;
+        Fri,  2 Sep 2022 12:20:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122142;
-        bh=cYJwQ0rMnudUe3akeqw33dycPQO7EW+u8IdVBhMnKpA=;
+        s=korg; t=1662121239;
+        bh=CaPcejMvq5lnvRq2Ub3CTht8iOus3RIxbKRjKmiWj2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ivK0/j47KAj/T0VZIQ+ObgNoFa9i9mXtidbid7KxGZy6eFE11Wr6yPIOY37Eweqj5
-         PcoXNyIN+xOpNh+csEvyzTzFwHWe/7HSrS/8xnM9QRrLuMmBkHsxXFvQ0WqoqqRLdp
-         NYayqFZ/HXx5g0wXYJWmeKWk//3ErPG5YuONodMA=
+        b=xVlR/vSt0sZyT0nwViKMfRWHnrZ05XnDZ7TLJDFFFzeP9jALuYCRn+HCygGYt02Wq
+         TvU4FH/icyIN3Qqhct+oGX9eLcPVXXMl4cX4oAFgKkhzELEuh2K9qDl/qYfwsPJPES
+         JndOnjW2q18TvmMTTEUfkxtMRAbY0sl57l51Tu+w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Morse <james.morse@arm.com>,
-        Will Deacon <will@kernel.org>, Lucas Wei <lucaswei@google.com>
-Subject: [PATCH 5.19 06/72] arm64: errata: Add Cortex-A510 to the repeat tlbi list
-Date:   Fri,  2 Sep 2022 14:18:42 +0200
-Message-Id: <20220902121404.999570603@linuxfoundation.org>
+        Jann Horn <jannh@google.com>
+Subject: [PATCH 4.9 17/31] mm: Force TLB flush for PFNMAP mappings before unlink_file_vma()
+Date:   Fri,  2 Sep 2022 14:18:43 +0200
+Message-Id: <20220902121357.380353210@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
+References: <20220902121356.732130937@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,89 +53,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Jann Horn <jannh@google.com>
 
-commit 39fdb65f52e9a53d32a6ba719f96669fd300ae78 upstream.
+commit b67fbebd4cf980aecbcc750e1462128bffe8ae15 upstream.
 
-Cortex-A510 is affected by an erratum where in rare circumstances the
-CPUs may not handle a race between a break-before-make sequence on one
-CPU, and another CPU accessing the same page. This could allow a store
-to a page that has been unmapped.
+Some drivers rely on having all VMAs through which a PFN might be
+accessible listed in the rmap for correctness.
+However, on X86, it was possible for a VMA with stale TLB entries
+to not be listed in the rmap.
 
-Work around this by adding the affected CPUs to the list that needs
-TLB sequences to be done twice.
+This was fixed in mainline with
+commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas"),
+but that commit relies on preceding refactoring in
+commit 18ba064e42df3 ("mmu_gather: Let there be one tlb_{start,end}_vma()
+implementation") and commit 1e9fdf21a4339 ("mmu_gather: Remove per arch
+tlb_{start,end}_vma()").
 
-Signed-off-by: James Morse <james.morse@arm.com>
-Link: https://lore.kernel.org/r/20220704155732.21216-1-james.morse@arm.com
-Signed-off-by: Will Deacon <will@kernel.org>
-Cc: Lucas Wei <lucaswei@google.com>
+This patch provides equivalent protection without needing that
+refactoring, by forcing a TLB flush between removing PTEs in
+unmap_vmas() and the call to unlink_file_vma() in free_pgtables().
+
+[This is a stable-specific rewrite of the upstream commit!]
+Signed-off-by: Jann Horn <jannh@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/arm64/silicon-errata.rst |    2 ++
- arch/arm64/Kconfig                     |   17 +++++++++++++++++
- arch/arm64/kernel/cpu_errata.c         |    8 +++++++-
- 3 files changed, 26 insertions(+), 1 deletion(-)
+ mm/mmap.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/Documentation/arm64/silicon-errata.rst
-+++ b/Documentation/arm64/silicon-errata.rst
-@@ -106,6 +106,8 @@ stable kernels.
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A510     | #2077057        | ARM64_ERRATUM_2077057       |
- +----------------+-----------------+-----------------+-----------------------------+
-+| ARM            | Cortex-A510     | #2441009        | ARM64_ERRATUM_2441009       |
-++----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A710     | #2119858        | ARM64_ERRATUM_2119858       |
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A710     | #2054223        | ARM64_ERRATUM_2054223       |
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -838,6 +838,23 @@ config ARM64_ERRATUM_2224489
- 
- 	  If unsure, say Y.
- 
-+config ARM64_ERRATUM_2441009
-+	bool "Cortex-A510: Completion of affected memory accesses might not be guaranteed by completion of a TLBI"
-+	default y
-+	select ARM64_WORKAROUND_REPEAT_TLBI
-+	help
-+	  This option adds a workaround for ARM Cortex-A510 erratum #2441009.
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2529,6 +2529,18 @@ static void unmap_region(struct mm_struc
+ 	tlb_gather_mmu(&tlb, mm, start, end);
+ 	update_hiwater_rss(mm);
+ 	unmap_vmas(&tlb, vma, start, end);
 +
-+	  Under very rare circumstances, affected Cortex-A510 CPUs
-+	  may not handle a race between a break-before-make sequence on one
-+	  CPU, and another CPU accessing the same page. This could allow a
-+	  store to a page that has been unmapped.
++	/*
++	 * Ensure we have no stale TLB entries by the time this mapping is
++	 * removed from the rmap.
++	 * Note that we don't have to worry about nested flushes here because
++	 * we're holding the mm semaphore for removing the mapping - so any
++	 * concurrent flush in this region has to be coming through the rmap,
++	 * and we synchronize against that using the rmap lock.
++	 */
++	if ((vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) != 0)
++		tlb_flush_mmu(&tlb);
 +
-+	  Work around this by adding the affected CPUs to the list that needs
-+	  TLB sequences to be done twice.
-+
-+	  If unsure, say Y.
-+
- config ARM64_ERRATUM_2064142
- 	bool "Cortex-A510: 2064142: workaround TRBE register writes while disabled"
- 	depends on CORESIGHT_TRBE
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -214,6 +214,12 @@ static const struct arm64_cpu_capabiliti
- 		ERRATA_MIDR_RANGE(MIDR_QCOM_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
- 	},
- #endif
-+#ifdef CONFIG_ARM64_ERRATUM_2441009
-+	{
-+		/* Cortex-A510 r0p0 -> r1p1. Fixed in r1p2 */
-+		ERRATA_MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1),
-+	},
-+#endif
- 	{},
- };
- #endif
-@@ -490,7 +496,7 @@ const struct arm64_cpu_capabilities arm6
- #endif
- #ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
- 	{
--		.desc = "Qualcomm erratum 1009, or ARM erratum 1286807",
-+		.desc = "Qualcomm erratum 1009, or ARM erratum 1286807, 2441009",
- 		.capability = ARM64_WORKAROUND_REPEAT_TLBI,
- 		.type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,
- 		.matches = cpucap_multi_entry_cap_matches,
+ 	free_pgtables(&tlb, vma, prev ? prev->vm_end : FIRST_USER_ADDRESS,
+ 				 next ? next->vm_start : USER_PGTABLES_CEILING);
+ 	tlb_finish_mmu(&tlb, start, end);
 
 

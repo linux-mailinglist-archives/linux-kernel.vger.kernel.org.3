@@ -2,104 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C57C5ABABD
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA445ABABF
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbiIBWRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 18:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S231175AbiIBWSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 18:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiIBWQ7 (ORCPT
+        with ESMTP id S229490AbiIBWSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 18:16:59 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DF0AE9E7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:16:57 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id d16so1889959ils.8
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 15:16:57 -0700 (PDT)
+        Fri, 2 Sep 2022 18:18:08 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB961BD10D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:18:07 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z2so4427717edc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 15:18:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=dcZR9Da5synONYsfv6BX3VmjpoYWheBsB/L6GCmbJhM=;
-        b=FxzlalIJ53cSaHZ8U3mRv/wFCu5A/pH3mLdB6wr7fqMkh12fSfEbqqLgxHZXPoC0AL
-         5lZ6/NrYprwu3fL+/Q5XQmVh5tWIB+T38YM5+MC7dTk2eyu6g5ZcFQXhEuLa21Tz5S8/
-         5vP0++y9TCBIPbTpYXWoMgmM7RkmhfUBRQn7I=
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=HpxkiE/rVFlomk7mcFdG7tTVTXis1x8OYXXnEOdixck=;
+        b=sNUWaqdd13oguTLoGAm+2mJSFjGuXPrQsZYidBhDKc/a7ZiL914yaOs6ivNAzRt8kt
+         ThnDLOjK7qzifJ+xMM1zEmNR3HrRRY3f1kH3XSAoV4VgAWJftAOKwF44PToqA561zDrs
+         l2sFlo26RW0fL7ohETfS7Fiv8F3yGM1AglYGSln/33vqrSHVRSfjisKFYgNOuMPiQe10
+         irT9I6XpGJzFJGVbt2zCVgPzg+0S6KHY2EOaTgZj6vjCcY7r7Zvglx8aa8EiDkpB+myM
+         uPdsCFmxLBkg8UfcpGl4v1s4FzXEfW9NXnNadrFV1E1WQzIckQF/GQXiLmnawzupmros
+         RHGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=dcZR9Da5synONYsfv6BX3VmjpoYWheBsB/L6GCmbJhM=;
-        b=dc7PipI8gpLf1uaU5ZgaaglSmYNgVrLxnVJGdvCUpN6FKcs8oNQTmvGXyPd7tWhlRy
-         yEbI7YAkt/umvmvYgy8ygrA4YJf92pFcI5WGPuc1V3ZcTJPbI9pwjXksoqIE+tagO/dd
-         L6xo4Q1OCrd7mEzK/jePIa7dWDLfGluoGZuzXdawxIayg8hX51t8QwHas0LspT0kmSLx
-         ZtMQkPFah9hAB1p63EKZw5RCsNL55ut7h+U4C8JBKdpUho9U05dQ+6d/pV2DWq6HyC5s
-         MD6srEc803OCIm4tivy69u9nmIOf6EbLzMm/qoJR/0rTXxJcjyuaOl7PZZTbgt3JKYhf
-         ZFgg==
-X-Gm-Message-State: ACgBeo1ptMAHXj1CTsDBdAmssieaJrgYkqxS3Nuv8W2HhSv2F6S8EC0D
-        CjTdXoYCJJ6JnKKSZsPbPauD+w==
-X-Google-Smtp-Source: AA6agR44Wb2McJNJDAdIOCveucmlLsKCNahB2tcM+FuZSfePOAUB5B27TD0e0KVFPb/5I2Ba4taPnQ==
-X-Received: by 2002:a05:6e02:15c4:b0:2e1:986c:91a1 with SMTP id q4-20020a056e0215c400b002e1986c91a1mr20565141ilu.22.1662157016979;
-        Fri, 02 Sep 2022 15:16:56 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a15-20020a92d34f000000b002eab1925fd4sm1248056ilh.73.2022.09.02.15.16.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 15:16:56 -0700 (PDT)
-Message-ID: <cdfc29b3-3054-55ae-aa5d-e5b35fc2ae05@linuxfoundation.org>
-Date:   Fri, 2 Sep 2022 16:16:55 -0600
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=HpxkiE/rVFlomk7mcFdG7tTVTXis1x8OYXXnEOdixck=;
+        b=vdAbI4cUMDWZ8A71U9ZdxbvGC46a2NBMFtfU8BTq3CiZ2OBjUfCaZFHdZ9gDfSVTdN
+         N5SGANThB74iv48y7gIW4s7D2KUlV6hvEwUn+ELVlQYH4A/ruS+ZnSI8zDvvLPJ24EzX
+         9LXlqiUYPBUppIaMhbhgKNgIw1mwJaixasYpHHiL6vI4s10fPXVYtvLJcgB6bwhTox3J
+         nv4h6bWJRmD0ErFVK/j29cqzMqcgpc3KtZn9KnA+IuztrMpMG/H5rg+LHHMm1YgRvpDq
+         SxSLBEqEiZMSHaaQ+ycDG1UhjfEK7EqKEjavtE8PEs96lvy3L5Z+kk/cRXd54XHmBSG2
+         G+Fw==
+X-Gm-Message-State: ACgBeo0vbKzxqcXrkkgLGSP7EozDcJabBRc3fYw3oLmzoeD5WxOB4d5D
+        5yk0kh/5xRjENjDrnNEsx7x3lADetOsWuGFmtCBlkHu03aM=
+X-Google-Smtp-Source: AA6agR7gx7SWF6iioajuC2kzWbvgag4v4M6Wj8SiTTynJ7CJ1hFTpicL6hCmGvt6sR+w6BLqsQpAyq9Hat89QHlr0NM=
+X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id
+ ew4-20020a056402538400b004316d84b451mr34269265edb.46.1662157086243; Fri, 02
+ Sep 2022 15:18:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.4 00/77] 5.4.212-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220902121403.569927325@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220830175850.44770-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220830175850.44770-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 3 Sep 2022 00:17:55 +0200
+Message-ID: <CACRpkday-0zhppj1V6Hp097hZGxaAOxZ=Xbsn_+93TQW_6mC_Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: mcp23s08: Drop assignment of default
+ number of OF cells
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/2/22 06:18, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.212 release.
-> There are 77 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.212-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Tue, Aug 30, 2022 at 7:58 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-Compiled and booted on my test system. No dmesg regressions.
+> The GPIO library code will assign default value for number of OF
+> cells, no need to repeat this in the driver.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Patch applied!
 
-thanks,
--- Shuah
+Yours,
+Linus Walleij

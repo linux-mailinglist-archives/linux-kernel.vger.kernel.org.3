@@ -2,133 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B273B5AB547
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C285AB548
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236714AbiIBPc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        id S236260AbiIBPdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbiIBPcZ (ORCPT
+        with ESMTP id S236326AbiIBPcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:32:25 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F9F656E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:15:03 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso3539566wmc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 08:15:03 -0700 (PDT)
+        Fri, 2 Sep 2022 11:32:31 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E542048E8B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:15:15 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l5so2307448pjy.5
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 08:15:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=ppnIzcD1Lvog5KH9Fyfxjv2BYJnZPxI6mOxm9069x0Q=;
-        b=Fvsdo4X7t20LzXiT5gHh6YEPAklYxulIy6hd9e1+71rOqYERWz3mUY8QIpce1YWs5c
-         T4GxcW+az/HLD9HYS7mo1WII36FmPQ62/cGEAJtSHd4mhVyFpkXKXjTmAPX2rHvb9Yjl
-         Wqc40omyd0iKDDLJkDYsYX1UUrW1NYCPYzx04NkdrKpDmvNTUK+atIJDatnxUJVTIaz3
-         R8GCtkFGKGeMd5D+tqYAvs2oChSOTCBt9HUJDvR+iJzpcZFrBlyA72C7ZuMddbEhzxMw
-         A8TXhu5Zpw2yscF2sKZ8r07wchn6YlROakTcdPXQ15+/Q4SU9f2bcjlVF3nZWT5YWHjq
-         3lyA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Homh/XQpZ+In2jR8/vqW/AC2iNbM1vot2oHBjKvCuQQ=;
+        b=EPFT3NDuhbIVJlt2/EAVLMfMNIs5hvQhEynJiMYPQ3cKDrSbf+mhQ5iuGBOgB0X0p+
+         GzSGq9MIItTvk6sw8KvHiv8sDrYAmL7XYhRWUEJB9o1vruTzW8l8FUn7k0/rWbupcCb3
+         qMTYbRjZDSdQjDe8u6LxAB1n1YFa4UHSWDOZgnwsJMkGhkIuI2N4Us+nLGErcoQZTmLZ
+         BGbyWYDFVFisMW0SWsE4nTMIqgFPkkl2HNTT5gMcXxQkuNmq2Yiwjs3rTDCRVAkEgxTJ
+         Vm2TSIYOOvrV9LzgjFfLq2nZK8uyRVP6rxmyjtwVnarcpyvTZmaGEl5OLaXKK53sw9qI
+         MNmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ppnIzcD1Lvog5KH9Fyfxjv2BYJnZPxI6mOxm9069x0Q=;
-        b=NNP6ihMXlhC0Ys4SFUia+KwLEpt/puoDwoV4oPb0flCGRl8OHixIWXBDG76mwVOMjC
-         Do9DreXh523dEJ+LOtss7Gp66+6jia5QtZrp+X7yZluxd35Uz2ibMYTJ/1iz01VBjOdZ
-         OlKx25wJcvDOp9CxKjIDKVqhRqlldlV2hIfr9qZ/gt+XhBbIrRTivpe728BsJOvrFZBM
-         RJM4jMcj+SpBMe9HXo77jECIxPhUovaBfDdXHXCABtLabKgvVnYWJrT2ba6HtJ/h7oOq
-         L7O0IGFHPo1cGC3paHAX9is99mC0Fx9J3TsgbcEjPBrbsxuxyqVoJwAt+TeKWLY4MHPW
-         5+lw==
-X-Gm-Message-State: ACgBeo2WiZE9AUq9c0vcAAJeD0nqdkn1hLxxnAWF4pB3yez7v1Ay6aoK
-        0xtW6rDwuPm3HMIUQVne1Z1wQA==
-X-Google-Smtp-Source: AA6agR7FlLcf18Fay4hYuE/8S7Rn5LcJExIwtFG5sZbJLUHX9IIteBZnXfpei+us/9OKzgyeQZXOyg==
-X-Received: by 2002:a05:600c:2311:b0:3a6:84e5:bcad with SMTP id 17-20020a05600c231100b003a684e5bcadmr3239020wmo.72.1662131702350;
-        Fri, 02 Sep 2022 08:15:02 -0700 (PDT)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id w10-20020a05600c014a00b003a4efb794d7sm2361493wmm.36.2022.09.02.08.15.00
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Homh/XQpZ+In2jR8/vqW/AC2iNbM1vot2oHBjKvCuQQ=;
+        b=QtIgPTCQwvP9+xuu2F059n+rNUOyXQYrrdSGluClgnyBjlfNJlEZ99pLQCbmnvU/AG
+         DA3qit7u3Dk2T70F/kUgpntRknXzwGQsDBwStaOnUOzimBIgXEH9kJ+s9RVSOLWniNOh
+         yl1uT+TchD+mrV16mg5kjI8iJhDBUNRRrhw2zQ2fazENSzi+0Ol6xNUlc8teZdpcqlde
+         6XQt+ljZQzAkV/nbf40ccknxmiuzpMn9wuUafHmTdz7pbkqfEJvpWQ6bPx0cGZiSmjg5
+         G7VT511DJqxGw+UUcoN09Rzc6PwJYJZfqPVgrn+vt7QS682XQaGG9Igv4sQRAq7u0G13
+         g6Aw==
+X-Gm-Message-State: ACgBeo1oWjnfyW+PjX/fUoAQ55qnap6hb9iarrtemHLejoYvLgD4H+3v
+        mZDnUFPdSSp3l3sgf67P2ju/p7xtRVsFXw==
+X-Google-Smtp-Source: AA6agR7n6lH4RupaFwBUWPMM6+aqGT9aqbinyE8VWB9OVk+lsyrUNl9X+KXwAssoytEghfBFLsP+dw==
+X-Received: by 2002:a17:90a:62cc:b0:1fa:c17d:de02 with SMTP id k12-20020a17090a62cc00b001fac17dde02mr5480681pjs.26.1662131713622;
+        Fri, 02 Sep 2022 08:15:13 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id j14-20020a170902da8e00b0016ee328fd61sm1754765plx.198.2022.09.02.08.15.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 08:15:01 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
-        Vamsi Krishna Gattupalli <quic_vgattupa@quicinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ola Jeppsson <ola@snap.com>
-Subject: [PATCH 3/3] misc: fastrpc: Fix use-after-free race condition for maps
-Date:   Fri,  2 Sep 2022 18:14:23 +0300
-Message-Id: <20220902151423.3351414-3-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220902151423.3351414-1-abel.vesa@linaro.org>
-References: <20220902151423.3351414-1-abel.vesa@linaro.org>
+        Fri, 02 Sep 2022 08:15:13 -0700 (PDT)
+Date:   Fri, 2 Sep 2022 15:15:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhao Liu <zhao1.liu@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+Subject: Re: [PATCH] KVM: SVM: Replace kmap_atomic() with kmap_local_page()
+Message-ID: <YxId/V1qZcie9eyp@google.com>
+References: <20220902090811.2430228-1-zhao1.liu@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902090811.2430228-1-zhao1.liu@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ola Jeppsson <ola@snap.com>
+On Fri, Sep 02, 2022, Zhao Liu wrote:
+> From: Zhao Liu <zhao1.liu@intel.com>
+> 
+> The use of kmap_atomic() is being deprecated in favor of
+> kmap_local_page()[1].
+> 
+> In arch/x86/kvm/svm/sev.c, the function sev_clflush_pages() doesn't
+> need to disable pagefaults and preemption in kmap_atomic(). It can
+> simply use kmap_local_page() / kunmap_local() that can instead do the
+> mapping / unmapping regardless of the context.
+> 
+> With kmap_local_page(), the mapping is per thread, CPU local and not
+> globally visible. Therefore, sev_clflush_pages() is a function where
+> the use of kmap_local_page() in place of kmap_atomic() is correctly
+> suited.
+> 
+> Convert the calls of kmap_atomic() / kunmap_atomic() to
+> kmap_local_page() / kunmap_local().
+> 
+> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+> 
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+> ---
+> Suggested by credits.
+>         Ira: Referred to his task document and review comments.
+>         Fabio: Referred to his boiler plate commit message.
+> ---
+>  arch/x86/kvm/svm/sev.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 28064060413a..12747c7bda4e 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -465,9 +465,9 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
+>  		return;
+>  
+>  	for (i = 0; i < npages; i++) {
+> -		page_virtual = kmap_atomic(pages[i]);
+> +		page_virtual = kmap_local_page(pages[i]);
+>  		clflush_cache_range(page_virtual, PAGE_SIZE);
 
-It is possible that in between calling fastrpc_map_get() until
-map->fl->lock is taken in fastrpc_free_map(), another thread can call
-fastrpc_map_lookup() and get a reference to a map that is about to be
-deleted.
+SEV is 64-bit only, any reason not to go straight to page_address()?
 
-Rewrite fastrpc_map_get() to only increase the reference count of a map
-if it's non-zero. Propagate this to callers so they can know if a map is
-about to be deleted.
-
-Fixes this warning:
-refcount_t: addition on 0; use-after-free.
-WARNING: CPU: 5 PID: 10100 at lib/refcount.c:25 refcount_warn_saturate
-...
-Call trace:
- refcount_warn_saturate
- [fastrpc_map_get inlined]
- [fastrpc_map_lookup inlined]
- fastrpc_map_create
- fastrpc_internal_invoke
- fastrpc_device_ioctl
- __arm64_sys_ioctl
- invoke_syscall
-
-Fixes: c68cfb718c8f9 ("misc: fastrpc: Add support for context Invoke method")
-Signed-off-by: Ola Jeppsson <ola@snap.com>
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/misc/fastrpc.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 50c17f5da3a8..58654d394d17 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -332,10 +332,12 @@ static void fastrpc_map_put(struct fastrpc_map *map)
- 		kref_put(&map->refcount, fastrpc_free_map);
- }
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 28064060413a..aaf39e3c7bb5 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -457,7 +457,6 @@ static void sev_unpin_memory(struct kvm *kvm, struct page **pages,
  
--static void fastrpc_map_get(struct fastrpc_map *map)
-+static int fastrpc_map_get(struct fastrpc_map *map)
+ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
  {
--	if (map)
--		kref_get(&map->refcount);
-+	if (!map)
-+		return -ENOENT;
-+
-+	return kref_get_unless_zero(&map->refcount) ? 0 : -ENOENT;
+-       uint8_t *page_virtual;
+        unsigned long i;
+ 
+        if (this_cpu_has(X86_FEATURE_SME_COHERENT) || npages == 0 ||
+@@ -465,9 +464,7 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
+                return;
+ 
+        for (i = 0; i < npages; i++) {
+-               page_virtual = kmap_atomic(pages[i]);
+-               clflush_cache_range(page_virtual, PAGE_SIZE);
+-               kunmap_atomic(page_virtual);
++               clflush_cache_range(page_address(pages[i]), PAGE_SIZE);
+                cond_resched();
+        }
  }
- 
- 
--- 
-2.34.1
 
+
+config KVM_AMD_SEV
+	def_bool y
+	bool "AMD Secure Encrypted Virtualization (SEV) support"
+	depends on KVM_AMD && X86_64 <==================================
+
+> -		kunmap_atomic(page_virtual);
+> +		kunmap_local(page_virtual);
+>  		cond_resched();
+>  	}
+>  }
+> -- 
+> 2.34.1
+> 

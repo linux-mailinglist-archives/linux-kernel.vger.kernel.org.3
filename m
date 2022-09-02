@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E7B5AAEC3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD38D5AAFB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236448AbiIBM3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S237319AbiIBMmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236481AbiIBM1u (ORCPT
+        with ESMTP id S237031AbiIBMls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:27:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34859DEB59;
-        Fri,  2 Sep 2022 05:24:34 -0700 (PDT)
+        Fri, 2 Sep 2022 08:41:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AD3E869C;
+        Fri,  2 Sep 2022 05:31:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65970B829B6;
-        Fri,  2 Sep 2022 12:23:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C698BC433C1;
-        Fri,  2 Sep 2022 12:23:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BCFF620B6;
+        Fri,  2 Sep 2022 12:29:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DBEC433C1;
+        Fri,  2 Sep 2022 12:29:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121409;
-        bh=nWRoO5ttH0qgnkkzYxYakfYShlDNVFZKpmajFJ1cLSU=;
+        s=korg; t=1662121760;
+        bh=P+jaSS/ABgscCL7bOLfDbwgtwfZD4mI/GtjODIiIDI0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=InX7/bB/5PI7EiwQyJP2Kb+VHORDIfl5tPcckMwvFIKePWX1bSMeEVJ7YGjPFYvcx
-         k8dM/iV+e3EEj6PGchKm88AkwhCFXhrZSnMOt+GlLHIrKVJ023+AmcFxlU/e67tvg4
-         HKl6T4/l9HSVDOmt/t+ZLgZzYdbL58/uz49OAHv0=
+        b=yanoOMFn4dFi/Cxec7xHng3g9FSG8EFKrICf2gHm7NwGcyBmctgsFGOoyIu4A6ha+
+         3yfQt87+UrIsAMmlkoBD2RcrLBmbNMcu7oQRvix+EUd1W30YwJnTe1Y8ymZf6ekxQ2
+         Y0ZNrWB3CtkLVO/tN5WgMU6EW9AMN9oQIdV7xclA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 10/42] netfilter: nft_payload: report ERANGE for too long offset and length
+Subject: [PATCH 5.4 25/77] netfilter: nft_tunnel: restrict it to netdev family
 Date:   Fri,  2 Sep 2022 14:18:34 +0200
-Message-Id: <20220902121359.165093492@linuxfoundation.org>
+Message-Id: <20220902121404.488271284@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +56,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 94254f990c07e9ddf1634e0b727fab821c3b5bf9 ]
+[ Upstream commit 01e4092d53bc4fe122a6e4b6d664adbd57528ca3 ]
 
-Instead of offset and length are truncation to u8, report ERANGE.
+Only allow to use this expression from NFPROTO_NETDEV family.
 
-Fixes: 96518518cc41 ("netfilter: add nftables")
+Fixes: af308b94a2a4 ("netfilter: nf_tables: add tunnel support")
 Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_payload.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ net/netfilter/nft_tunnel.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/netfilter/nft_payload.c b/net/netfilter/nft_payload.c
-index fd87216bc0a99..04b9df9e39554 100644
---- a/net/netfilter/nft_payload.c
-+++ b/net/netfilter/nft_payload.c
-@@ -398,6 +398,7 @@ nft_payload_select_ops(const struct nft_ctx *ctx,
- {
- 	enum nft_payload_bases base;
- 	unsigned int offset, len;
-+	int err;
+diff --git a/net/netfilter/nft_tunnel.c b/net/netfilter/nft_tunnel.c
+index 1effd4878619f..4e850c81ad8d8 100644
+--- a/net/netfilter/nft_tunnel.c
++++ b/net/netfilter/nft_tunnel.c
+@@ -134,6 +134,7 @@ static const struct nft_expr_ops nft_tunnel_get_ops = {
  
- 	if (tb[NFTA_PAYLOAD_BASE] == NULL ||
- 	    tb[NFTA_PAYLOAD_OFFSET] == NULL ||
-@@ -423,8 +424,13 @@ nft_payload_select_ops(const struct nft_ctx *ctx,
- 	if (tb[NFTA_PAYLOAD_DREG] == NULL)
- 		return ERR_PTR(-EINVAL);
- 
--	offset = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_OFFSET]));
--	len    = ntohl(nla_get_be32(tb[NFTA_PAYLOAD_LEN]));
-+	err = nft_parse_u32_check(tb[NFTA_PAYLOAD_OFFSET], U8_MAX, &offset);
-+	if (err < 0)
-+		return ERR_PTR(err);
-+
-+	err = nft_parse_u32_check(tb[NFTA_PAYLOAD_LEN], U8_MAX, &len);
-+	if (err < 0)
-+		return ERR_PTR(err);
- 
- 	if (len <= 4 && is_power_of_2(len) && IS_ALIGNED(offset, len) &&
- 	    base != NFT_PAYLOAD_LL_HEADER)
+ static struct nft_expr_type nft_tunnel_type __read_mostly = {
+ 	.name		= "tunnel",
++	.family		= NFPROTO_NETDEV,
+ 	.ops		= &nft_tunnel_get_ops,
+ 	.policy		= nft_tunnel_policy,
+ 	.maxattr	= NFTA_TUNNEL_MAX,
 -- 
 2.35.1
 

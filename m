@@ -2,46 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD825AAE8C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3835AAE49
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236336AbiIBMZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S235977AbiIBMVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236318AbiIBMYW (ORCPT
+        with ESMTP id S235853AbiIBMVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:24:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C00D3E44;
-        Fri,  2 Sep 2022 05:22:33 -0700 (PDT)
+        Fri, 2 Sep 2022 08:21:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB24937F86;
+        Fri,  2 Sep 2022 05:20:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C253620F0;
-        Fri,  2 Sep 2022 12:21:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AEFC433D6;
-        Fri,  2 Sep 2022 12:21:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CA42620EB;
+        Fri,  2 Sep 2022 12:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C03CC433D6;
+        Fri,  2 Sep 2022 12:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121315;
-        bh=GRY44WcHqY/SgymLIc9wHIjeXiuJ7rxdOZn+fozOfg8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lhY4v3COGunXWzIwt+UHFFBsy/NnCEEtLKubgObivEfEm76kvjemDxKVjW08RuP2C
-         KVvSBe7X4h3Co3WFaLa1fKJ+l5nI5EkEWaAsxF3QRPXMvNthv8PLNVkqFR2+CNjkIL
-         H5muqMnlYANnVAKMQUke/Vl6btq8g75lEgUfUwp4=
+        s=korg; t=1662121215;
+        bh=NEb01V7EyB+mV5/s4TeSfr67gO3EQiiQ0gLsSRsOOXM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ukDsvRSWGPyfYpQIm5mXPcYXAIUUNr/OL4OleJtsoVwk4NOP87CC8HbXRpaBwznAV
+         oki3Ag5tpEZ88ioxLCNTRvp54d+dNNIs4IE1Cr+wLKjVjhlh2qRB83X3Dm94Xc3F08
+         8ABef45F1+sF6Zbst+fj04H6M4iJzZcg+gCnm29Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.14 02/42] parisc: Fix exception handler for fldw and fstw instructions
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 4.9 00/31] 4.9.327-rc1 review
 Date:   Fri,  2 Sep 2022 14:18:26 +0200
-Message-Id: <20220902121358.861391702@linuxfoundation.org>
+Message-Id: <20220902121356.732130937@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
-User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.327-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.9.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.9.327-rc1
+X-KernelTest-Deadline: 2022-09-04T12:13+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -53,49 +62,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+This is the start of the stable review cycle for the 4.9.327 release.
+There are 31 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit 7ae1f5508d9a33fd58ed3059bd2d569961e3b8bd upstream.
+Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+Anything received after that time might be too late.
 
-The exception handler is broken for unaligned memory acceses with fldw
-and fstw instructions, because it trashes or uses randomly some other
-floating point register than the one specified in the instruction word
-on loads and stores.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.327-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+and the diffstat can be found below.
 
-The instruction "fldw 0(addr),%fr22L" (and the other fldw/fstw
-instructions) encode the target register (%fr22) in the rightmost 5 bits
-of the instruction word. The 7th rightmost bit of the instruction word
-defines if the left or right half of %fr22 should be used.
+thanks,
 
-While processing unaligned address accesses, the FR3() define is used to
-extract the offset into the local floating-point register set.  But the
-calculation in FR3() was buggy, so that for example instead of %fr22,
-register %fr12 [((22 * 2) & 0x1f) = 12] was used.
+greg k-h
 
-This bug has been since forever in the parisc kernel and I wonder why it
-wasn't detected earlier. Interestingly I noticed this bug just because
-the libime debian package failed to build on *native* hardware, while it
-successfully built in qemu.
+-------------
+Pseudo-Shortlog of commits:
 
-This patch corrects the bitshift and masking calculation in FR3().
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.9.327-rc1
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/parisc/kernel/unaligned.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    kprobes: don't call disarm_kprobe() for disabled kprobes
 
---- a/arch/parisc/kernel/unaligned.c
-+++ b/arch/parisc/kernel/unaligned.c
-@@ -121,7 +121,7 @@
- #define R1(i) (((i)>>21)&0x1f)
- #define R2(i) (((i)>>16)&0x1f)
- #define R3(i) ((i)&0x1f)
--#define FR3(i) ((((i)<<1)&0x1f)|(((i)>>6)&1))
-+#define FR3(i) ((((i)&0x1f)<<1)|(((i)>>6)&1))
- #define IM(i,n) (((i)>>1&((1<<(n-1))-1))|((i)&1?((0-1L)<<(n-1)):0))
- #define IM5_2(i) IM((i)>>16,5)
- #define IM5_3(i) IM((i),5)
+Jann Horn <jannh@google.com>
+    mm/rmap: Fix anon_vma->degree ambiguity leading to double-reuse
+
+Geert Uytterhoeven <geert@linux-m68k.org>
+    netfilter: conntrack: NF_CONNTRACK_PROCFS should no longer default to y
+
+Juergen Gross <jgross@suse.com>
+    s390/hypfs: avoid error message under KVM
+
+Hsin-Yi Wang <hsinyi@chromium.org>
+    arm64: map FDT as RW for early_init_dt_scan()
+
+Yang Jihong <yangjihong1@huawei.com>
+    ftrace: Fix NULL pointer dereference in is_ftrace_trampoline when ftrace is dead
+
+Letu Ren <fantasquex@gmail.com>
+    fbdev: fb_pm2fb: Avoid potential divide by zero error
+
+Karthik Alapati <mail@karthek.com>
+    HID: hidraw: fix memory leak in hidraw_release()
+
+Dongliang Mu <mudongliangabcd@gmail.com>
+    media: pvrusb2: fix memory leak in pvr_probe
+
+Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+    Bluetooth: L2CAP: Fix build errors in some archs
+
+Jing Leng <jleng@ambarella.com>
+    kbuild: Fix include path in scripts/Makefile.modpost
+
+Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+    x86/bugs: Add "unknown" reporting for MMIO Stale Data
+
+Gayatri Kammela <gayatri.kammela@intel.com>
+    x86/cpu: Add Tiger Lake to Intel family
+
+Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+    s390/mm: do not trigger write fault when vma does not allow VM_WRITE
+
+Jann Horn <jannh@google.com>
+    mm: Force TLB flush for PFNMAP mappings before unlink_file_vma()
+
+David Hildenbrand <david@redhat.com>
+    mm/hugetlb: fix hugetlb not supporting softdirty tracking
+
+Quanyang Wang <quanyang.wang@windriver.com>
+    asm-generic: sections: refactor memory_intersects
+
+Siddh Raman Pant <code@siddh.me>
+    loop: Check for overflow while configuring loop
+
+Goldwyn Rodrigues <rgoldwyn@suse.de>
+    btrfs: check if root is readonly while setting security xattr
+
+Jacob Keller <jacob.e.keller@intel.com>
+    ixgbe: stop resetting SYSTIME in ixgbe_ptp_start_cyclecounter
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around sysctl_somaxconn.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around sysctl_net_busy_read.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around sysctl_net_busy_poll.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    net: Fix a data-race around sysctl_tstamp_allow_data.
+
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    ratelimit: Fix data-races in ___ratelimit().
+
+Pablo Neira Ayuso <pablo@netfilter.org>
+    netfilter: nft_payload: report ERANGE for too long offset and length
+
+Jonathan Toppins <jtoppins@redhat.com>
+    bonding: 802.3ad: fix no transmission of LACPDUs
+
+Bernard Pidoux <f6bvp@free.fr>
+    rose: check NULL rose_loopback_neigh->loopback
+
+Herbert Xu <herbert@gondor.apana.org.au>
+    af_key: Do not call xfrm_probe_algs in parallel
+
+Xin Xiong <xiongx18@fudan.edu.cn>
+    xfrm: fix refcount leak in __xfrm_policy_check()
+
+Helge Deller <deller@gmx.de>
+    parisc: Fix exception handler for fldw and fstw instructions
+
+
+-------------
+
+Diffstat:
+
+ .../hw-vuln/processor_mmio_stale_data.rst          | 14 +++++
+ Makefile                                           |  4 +-
+ arch/arm64/include/asm/mmu.h                       |  2 +-
+ arch/arm64/kernel/kaslr.c                          |  5 +-
+ arch/arm64/kernel/setup.c                          |  9 +++-
+ arch/arm64/mm/mmu.c                                | 15 +-----
+ arch/parisc/kernel/unaligned.c                     |  2 +-
+ arch/s390/hypfs/hypfs_diag.c                       |  2 +-
+ arch/s390/hypfs/inode.c                            |  2 +-
+ arch/s390/mm/fault.c                               |  4 +-
+ arch/x86/include/asm/cpufeatures.h                 |  1 +
+ arch/x86/include/asm/intel-family.h                |  3 ++
+ arch/x86/kernel/cpu/bugs.c                         | 14 ++++-
+ arch/x86/kernel/cpu/common.c                       | 34 +++++++++----
+ drivers/block/loop.c                               |  5 ++
+ drivers/hid/hidraw.c                               |  3 ++
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c            |  1 +
+ drivers/net/bonding/bond_3ad.c                     | 38 ++++++--------
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ptp.c       | 59 +++++++++++++++++-----
+ drivers/video/fbdev/pm2fb.c                        |  5 ++
+ fs/btrfs/xattr.c                                   |  3 ++
+ include/asm-generic/sections.h                     |  7 ++-
+ include/linux/rmap.h                               |  7 ++-
+ include/net/busy_poll.h                            |  2 +-
+ kernel/kprobes.c                                   | 10 ++--
+ kernel/trace/ftrace.c                              | 10 ++++
+ lib/ratelimit.c                                    | 12 +++--
+ mm/mmap.c                                          | 20 +++++++-
+ mm/rmap.c                                          | 31 +++++++-----
+ net/bluetooth/l2cap_core.c                         | 10 ++--
+ net/core/skbuff.c                                  |  2 +-
+ net/core/sock.c                                    |  2 +-
+ net/key/af_key.c                                   |  3 ++
+ net/netfilter/Kconfig                              |  1 -
+ net/netfilter/nft_payload.c                        | 10 +++-
+ net/rose/rose_loopback.c                           |  3 +-
+ net/socket.c                                       |  2 +-
+ net/xfrm/xfrm_policy.c                             |  1 +
+ scripts/Makefile.modpost                           |  3 +-
+ 39 files changed, 245 insertions(+), 116 deletions(-)
 
 

@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151605AB99A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30B35AB99E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiIBUvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 16:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S230335AbiIBUwb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Sep 2022 16:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiIBUu6 (ORCPT
+        with ESMTP id S229685AbiIBUw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 16:50:58 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DB4A723E;
-        Fri,  2 Sep 2022 13:50:52 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-12566bc8e52so4435724fac.12;
-        Fri, 02 Sep 2022 13:50:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=EOpW4WejvYrrZZZ/HuJUkBNhBHbazAogZY3qNbeFoIE=;
-        b=1wMI1uEW3gqE0RtsGS5DDkVyA5/M0C1nhP8xWlck6Y4Nep1B6JRetlSKMp1N39S/p5
-         WzVBqc2A92HTreTwOdnb09cIaKIJb2MBtCJqkkUvFpCdHyx0sdV7rd7fcbX49bZOAuCX
-         d8QzJh7tMbm5cYY+dV2A4HAoYOUTeiIkPecQaGq0ejE1MjZIc5GIgsONv56ugnpaNvtu
-         xRR3urmAqAKMp3VjbF9zXpZopKTyLXiHrNdwp9j5ZhySwUdmEE8SmDq4FJJ7JwTpjFGE
-         qfT2bGKZfyFFKoSrxDHmMos+qwLjjugPutr1B3SKA7XHeh8H1fyKXVuGBretMTAnYArp
-         Brbw==
-X-Gm-Message-State: ACgBeo3Xjpg2S/hshI8xWb0uQewkTgPs4p3RyoGDYllfDPEkGWY1LbXa
-        d0uPt7UupyPl0Xplgfs/JQ==
-X-Google-Smtp-Source: AA6agR6pbUe/gxk0J9hqcfJSe/UXp4BZrJcIVle5VJp0L2jHl3JHWDzqJYX6EIL/eM+UckcDY9L+/w==
-X-Received: by 2002:a05:6808:1a13:b0:344:d744:5950 with SMTP id bk19-20020a0568081a1300b00344d7445950mr2661425oib.243.1662151851753;
-        Fri, 02 Sep 2022 13:50:51 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h34-20020a9d2f25000000b00638ab4c953asm1429274otb.74.2022.09.02.13.50.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 13:50:51 -0700 (PDT)
-Received: (nullmailer pid 392304 invoked by uid 1000);
-        Fri, 02 Sep 2022 20:50:50 -0000
-Date:   Fri, 2 Sep 2022 15:50:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v5 6/7] dt-bindings: net: pse-dt: add bindings
- for regulator based PoDL PSE controller
-Message-ID: <20220902205050.GA382567-robh@kernel.org>
-References: <20220831133240.3236779-1-o.rempel@pengutronix.de>
- <20220831133240.3236779-7-o.rempel@pengutronix.de>
+        Fri, 2 Sep 2022 16:52:29 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD5EFCA3A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:52:28 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 282JNaAb016796
+        for <linux-kernel@vger.kernel.org>; Fri, 2 Sep 2022 13:52:28 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jb9q8vqpu-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 13:52:27 -0700
+Received: from twshared10425.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 2 Sep 2022 13:52:26 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id 8620EC63D68A; Fri,  2 Sep 2022 13:52:14 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <jpoimboe@kernel.org>, <jikos@kernel.org>, <mbenes@suse.cz>,
+        <pmladek@suse.com>, <joe.lawrence@redhat.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH v3 0/2] add sysfs entry "patched" for each klp_object
+Date:   Fri, 2 Sep 2022 13:52:06 -0700
+Message-ID: <20220902205208.3117798-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831133240.3236779-7-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: v39Yt6SETZ0TLv4qQ8RJxUjujuTFE4uO
+X-Proofpoint-GUID: v39Yt6SETZ0TLv4qQ8RJxUjujuTFE4uO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-02_05,2022-08-31_03,2022-06-22_01
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,123 +56,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 03:32:39PM +0200, Oleksij Rempel wrote:
-> Add bindings for the regulator based Ethernet PoDL PSE controller and
-> generic bindings for all PSE controllers.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
-> changes v5:
-> - rename to podl-pse-regulator.yaml
-> - remove compatible description
-> - remove "-1" on node name
-> - add pse-controller.yaml for common properties
-> changes v4:
-> - rename to PSE regulator
-> - drop currently unused properties
-> - use own compatible for PoDL PSE
-> changes v2:
-> - rename compatible to more generic "ieee802.3-pse"
-> - add class and type properties for PoDL and PoE variants
-> - add pairs property
-> ---
->  .../net/pse-pd/podl-pse-regulator.yaml        | 40 +++++++++++++++++++
->  .../bindings/net/pse-pd/pse-controller.yaml   | 28 +++++++++++++
->  2 files changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
->  create mode 100644 Documentation/devicetree/bindings/net/pse-pd/pse-controller.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml b/Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
-> new file mode 100644
-> index 0000000000000..c6b1c188abf7e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/pse-pd/podl-pse-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Regulator based Power Sourcing Equipment
-> +
-> +maintainers:
-> +  - Oleksij Rempel <o.rempel@pengutronix.de>
-> +
-> +description: Regulator based PoDL PSE controller. The device must be referenced
-> +  by the PHY node to control power injection to the Ethernet cable.
-> +
-> +allOf:
-> +  - $ref: "pse-controller.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    const: podl-pse-regulator
-> +
-> +  '#pse-cells':
-> +    const: 0
-> +
-> +  pse-supply:
-> +    description: Power supply for the PSE controller
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - pse-supply
-> +
-> +examples:
-> +  - |
-> +    ethernet-pse {
-> +      compatible = "podl-pse-regulator";
-> +      pse-supply = <&reg_t1l1>;
-> +      #pse-cells = <0>;
-> +    };
-> diff --git a/Documentation/devicetree/bindings/net/pse-pd/pse-controller.yaml b/Documentation/devicetree/bindings/net/pse-pd/pse-controller.yaml
-> new file mode 100644
-> index 0000000000000..36e398fea220c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/pse-pd/pse-controller.yaml
-> @@ -0,0 +1,28 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/pse-pd/pse-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: PSE Generic Bindings
+I was debugging an issue that a livepatch appears to be attached, but
+actually not. It turns out that there is a mismatch in module name
+(abc-xyz vs. abc_xyz), klp_find_object_module failed to find the module.
+Add a sysfs entry for each klp_object, so that it is easier to debug
+such issues.
 
-What is PSE?
+Changes v2 => v3:
+1. Improve selftest. (Petr Mladek and Joe Lawrence)
 
-When would I use this binding? Does this follow some spec? Who is 
-the consumer? Please answer all those questions in this doc.
+Changes v1 => v2:
+1. Add selftest. (Petr Mladek)
+2. Update documentation. (Petr Mladek)
+3. Use sysfs_emit. (Petr Mladek)
 
-> +
-> +maintainers:
-> +  - Oleksij Rempel <o.rempel@pengutronix.de>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^ethernet-pse(@[a-f0-9]+)?$"
+Song Liu (2):
+  livepatch: add sysfs entry "patched" for each klp_object
+  selftests/livepatch: add sysfs test
 
-The format of the unit-address depends on the bus, so it shouldn't be 
-defined here. Just '^ethernet-pse(@.*)?$'.
+ .../ABI/testing/sysfs-kernel-livepatch        |  8 ++
+ kernel/livepatch/core.c                       | 18 ++++
+ tools/testing/selftests/livepatch/Makefile    |  3 +-
+ .../testing/selftests/livepatch/functions.sh  | 34 ++++++++
+ .../testing/selftests/livepatch/test-sysfs.sh | 86 +++++++++++++++++++
+ 5 files changed, 148 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/livepatch/test-sysfs.sh
 
-> +
-> +  "#pse-cells":
-> +    description:
-> +      Used to uniquely identify a PSE instance within an IC. Will be
-> +      0 on PSE nodes with only a single output and at least 1 on nodes
-> +      controlling several outputs.
-> +    enum: [0, 1]
-> +
-> +required:
-> +  - "#pse-cells"
-> +
-> +additionalProperties: true
-> +
-> +...
-> -- 
-> 2.30.2
-> 
-> 
+--
+2.30.2

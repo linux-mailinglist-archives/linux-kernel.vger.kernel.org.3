@@ -2,79 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094345AB401
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CD75AB37D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236327AbiIBOr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
+        id S236401AbiIBO3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236330AbiIBOrd (ORCPT
+        with ESMTP id S236739AbiIBO13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:47:33 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9199D2B15
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:08:02 -0700 (PDT)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oU65Y-000C5F-GN; Fri, 02 Sep 2022 14:48:00 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oU65Y-000B5y-7e; Fri, 02 Sep 2022 14:48:00 +0200
-Subject: Re: [RFC bpf-next 1/2] bpf: tnums: warn against the usage of
- tnum_in(tnum_range(), ...)
-To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-References: <20220831031907.16133-1-shung-hsi.yu@suse.com>
- <20220831031907.16133-2-shung-hsi.yu@suse.com>
- <0f6d7f97-8cd9-d513-368b-39706dd6b06a@iogearbox.net>
- <YxF984GIloJWnV9x@syu-laptop>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <615a2102-2244-f0be-6375-16cf795715ef@iogearbox.net>
-Date:   Fri, 2 Sep 2022 14:47:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 2 Sep 2022 10:27:29 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D73168A04
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=P7wIoFqf5p36KrKtv5UDBZ0MqutgeRhjhLt/RxYLrNI=; b=n8jSwtqq6VZlmvdbjh8wmD7wHt
+        992tnKu9B5qEAn+04B3IBRdVRXfhSKSGbdUbK6FOsphGe81exNCfcpdGFhfd2QcBAsUlESYyOkvam
+        gROGc/twSDTKU2OoUS2pSg34TqnC7+87aaMgO2dLYzftp6lV5jbGWzPvDPnJE+zwBh0m7O645lROV
+        NximJkP32vjiSYYEmto0mRv40ulkg55JaZiuV2l7w4EM+1PWS5A/Vk00uXkp0GljwePvJ299vFAnU
+        rrN5PQzm0v2mKV+5mXHmIOAGFlwJBMqKrIrqjg/Q44QVXvH+ZpjV+cgt58Va9AlBHyk7Kd+AR8yfb
+        xEe561QQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oU6Gu-008fTr-Ik; Fri, 02 Sep 2022 12:59:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DE79D300431;
+        Fri,  2 Sep 2022 14:59:42 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A49622B8AE594; Fri,  2 Sep 2022 14:59:42 +0200 (CEST)
+Date:   Fri, 2 Sep 2022 14:59:42 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Major Chen <major.chen@samsung.com>,
+        stable <stable@kernel.org>, Kuyo Chang <kuyo.chang@mediatek.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH 2/2] sched/debug: fix dentry leak in
+ update_sched_domain_debugfs
+Message-ID: <YxH+PlfhOV6ZrnrA@hirez.programming.kicks-ass.net>
+References: <20220902123107.109274-1-gregkh@linuxfoundation.org>
+ <20220902123107.109274-2-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <YxF984GIloJWnV9x@syu-laptop>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26646/Fri Sep  2 09:55:25 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902123107.109274-2-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/2/22 5:52 AM, Shung-Hsi Yu wrote:
-> On Thu, Sep 01, 2022 at 05:00:58PM +0200, Daniel Borkmann wrote:
->> On 8/31/22 5:19 AM, Shung-Hsi Yu wrote:
->>> Commit a657182a5c51 ("bpf: Don't use tnum_range on array range checking
->>> for poke descriptors") has shown that using tnum_range() as argument to
->>> tnum_in() can lead to misleading code that looks like tight bound check
->>> when in fact the actual allowed range is much wider.
->>>
->>> Document such behavior to warn against its usage in general, and suggest
->>> some scenario where result can be trusted.
->>>
->>> Link: https://lore.kernel.org/bpf/984b37f9fdf7ac36831d2137415a4a915744c1b6.1661462653.git.daniel@iogearbox.net/
->>> Link: https://www.openwall.com/lists/oss-security/2022/08/26/1
->>> Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
->>
->> Any objections from your side if I merge this? Thanks for adding doc. :)
+On Fri, Sep 02, 2022 at 02:31:07PM +0200, Greg Kroah-Hartman wrote:
+> Kuyo reports that the pattern of using debugfs_remove(debugfs_lookup())
+> leaks a dentry and with a hotplug stress test, the machine eventually
+> runs out of memory.
 > 
-> There is a small typo I meant to fix with s/including/include below.
-> 
-> Other than that, none at all, thanks! :)
+> Fix this up by using the newly created debugfs_lookup_and_remove() call
+> instead which properly handles the dentry reference counting logic.
 
-Fixed up and applied to bpf-next, thanks!
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+> ---
+>  kernel/sched/debug.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+> index bb3d63bdf4ae..667876da8382 100644
+> --- a/kernel/sched/debug.c
+> +++ b/kernel/sched/debug.c
+> @@ -416,7 +416,7 @@ void update_sched_domain_debugfs(void)
+>  		char buf[32];
+>  
+>  		snprintf(buf, sizeof(buf), "cpu%d", cpu);
+> -		debugfs_remove(debugfs_lookup(buf, sd_dentry));
+> +		debugfs_lookup_and_remove(buf, sd_dentry);
+>  		d_cpu = debugfs_create_dir(buf, sd_dentry);
+>  
+>  		i = 0;
+> -- 
+> 2.37.3
+> 

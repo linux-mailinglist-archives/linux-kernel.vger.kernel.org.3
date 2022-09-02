@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CC15AABD0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6225AABD1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbiIBJuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
+        id S235547AbiIBJvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235839AbiIBJul (ORCPT
+        with ESMTP id S235589AbiIBJu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:50:41 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C1A3C8C3
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:50:35 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id az27so1597473wrb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:50:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=6m9i/YdC17oU5bWU5Nzi6bcvOSQonOoItkoL6SM80y0=;
-        b=I60SNYse1k+1KUciSMADRTx4OhCmqmIaHVnumZp4iIatz/OM7uw/eExyQSE0QB0QSf
-         Triqqa28BSdrnFA4nMxHRssXWwQDyJIhQLDlfM+fmMvN6YrmQp/tPG32JLsThN4vCz7N
-         /mhjez1zuBOXht8GazgaPHwAoTkB1qGaJ4MD1hRf81DDHb/MjMwG6ze9NGc/B7FthDiN
-         SKISFIeYjVjlZXrw43I9e099GWWryvR3HIndYVWFXy8HJ+AvNwG4RAXwxExNRVjyAMdB
-         Nm4QL3dQmajabtO1Q9bky2yihw2pdGYY/DWbdALBupezlgRHPyIagAw8VFHFjKPck702
-         0T8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=6m9i/YdC17oU5bWU5Nzi6bcvOSQonOoItkoL6SM80y0=;
-        b=bJ0+am2r97H56HnrjszyhNW09gzNfgGwhARh4APXluWNji3JETAZ15G58AfazLJkxX
-         k0+AAYfiioyydgfqoLVje4rQ9TlerS8IMlukcDO8ZahBoMyuQM2Sw9SlyoeRNe5nK3kq
-         t4PElQcz56F1Vi/on8OtT0aNHZ8cmYZDlR6gXGATaa+iD/U9w7jorH5j0DuCpMBJaRTx
-         m8dc4YO0AsP6mM5EpIS3Zk6ZoCrRr2r7tx8e1PWY2IDej1kEWfCde9dpsn50goHqFSo9
-         OjhBIyPgmRzTRlvS7gxU1V2d0csXM463t/DiFkRXOHrgDy6XKdTn6R+MeAYZLVUt431t
-         IKNQ==
-X-Gm-Message-State: ACgBeo1ISsnAzUF9uGQg68ShzquF3BPxX8W5k1VBgdvwMW3AT1whEYHQ
-        oTw8nn6o0UsZwxibe4Vg0v6QzA==
-X-Google-Smtp-Source: AA6agR4rmLi+seS1O0PEpKug73BsNm2A2qb7kETj9vlCiD5QnmtKOSPBQ2qyNhnBjen3DR7zu0b5iA==
-X-Received: by 2002:adf:eb4c:0:b0:220:6aaf:ef5e with SMTP id u12-20020adfeb4c000000b002206aafef5emr16244619wrn.488.1662112234024;
-        Fri, 02 Sep 2022 02:50:34 -0700 (PDT)
-Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003a31fd05e0fsm17483957wms.2.2022.09.02.02.50.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 02:50:33 -0700 (PDT)
-Date:   Fri, 2 Sep 2022 11:50:32 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, conor.dooley@microchip.com,
-        guoren@kernel.org, apatel@ventanamicro.com, atishp@rivosinc.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] riscv: cleanup svpbmt cpufeature probing
-Message-ID: <20220902095032.h3yrady6lxmqqwvy@kamzik>
-References: <20220901222744.2210215-1-heiko@sntech.de>
+        Fri, 2 Sep 2022 05:50:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5CF3E75F
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:50:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662112257; x=1693648257;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bqm+zowBjVzB2+VAXhCBM414+ubRvd6H9wPv94kzRWI=;
+  b=0pe4LdBSFN2HOrtPR6Migjz2OqZtmE05NVDcea8hr0bu7Zc89GernnbR
+   cxdLACM82RSca8rqgCsE0HBHQ5G3Kyu7dk4NVN/To+g7YbZKOm4pjANoq
+   /eGoIX8fUlX78X5Z5wtWIHTk4rD+brh9wWwBWCulOigPd2+e+0Lf3Zlfg
+   XCBINazc/KJw0SMPLqZE24Ujmc/bO0SIlLtsYTOH9zCBh4mWFiATskPUY
+   cHb52SgB1/j0c+GlznONXmKDuTrRG2MjlOn0wbuGwwLApu3VhwAOrUJdU
+   lwbDzcqDWGNkp/lmh+eZRz0akzKwjxeaAjpTG6LsPMMTvtHCmOClPjnqH
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="111901500"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Sep 2022 02:50:45 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 2 Sep 2022 02:50:45 -0700
+Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 2 Sep 2022 02:50:43 -0700
+From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <gregkh@linuxfoundation.org>
+CC:     kernel test robot <lkp@intel.com>
+Subject: [PATCH char-misc-testing] misc: microchip: pci1xxxx: fix the build issue due to missing  depends on PCI in the Kconfig file.
+Date:   Fri, 2 Sep 2022 15:20:40 +0530
+Message-ID: <20220902095041.2429996-1-kumaravel.thiagarajan@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901222744.2210215-1-heiko@sntech.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,44 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 12:27:41AM +0200, Heiko Stuebner wrote:
-> This can also do without the ifdef and use IS_ENABLED instead and
-> for better readability, getting rid of that switch also seems
-> waranted.
-> 
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/kernel/cpufeature.c | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 553d755483ed..764ea220161f 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -253,16 +253,13 @@ void __init riscv_fill_hwcap(void)
->  #ifdef CONFIG_RISCV_ALTERNATIVE
->  static bool __init_or_module cpufeature_probe_svpbmt(unsigned int stage)
->  {
-> -#ifdef CONFIG_RISCV_ISA_SVPBMT
-> -	switch (stage) {
-> -	case RISCV_ALTERNATIVES_EARLY_BOOT:
-> +	if (!IS_ENABLED(CONFIG_RISCV_ISA_SVPBMT))
->  		return false;
-> -	default:
-> -		return riscv_isa_extension_available(NULL, SVPBMT);
-> -	}
-> -#endif
->  
-> -	return false;
-> +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> +		return false;
-> +
-> +	return riscv_isa_extension_available(NULL, SVPBMT);
->  }
->  
->  static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
-> -- 
-> 2.35.1
->
+Some build errors were reported by the kernel test robot
+<lkp@intel.com> on the char-misc-testing branch. This add-on patch
+will fix those errors.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Fixes: 3f359bf61b6f65be474fbcdf557cd412f19d0f1d
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+---
+ drivers/misc/mchp_pci1xxxx/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/misc/mchp_pci1xxxx/Kconfig b/drivers/misc/mchp_pci1xxxx/Kconfig
+index 387a88addfb0..f6a6970d2a59 100644
+--- a/drivers/misc/mchp_pci1xxxx/Kconfig
++++ b/drivers/misc/mchp_pci1xxxx/Kconfig
+@@ -1,5 +1,6 @@
+ config GP_PCI1XXXX
+        tristate "Microchip PCI1XXXX PCIe to GPIO Expander + OTP/EEPROM manager"
++       depends on PCI	
+        select GPIOLIB_IRQCHIP
+        help
+          PCI1XXXX is a PCIe GEN 3 switch with one of the endpoints having
+-- 
+2.25.1
+

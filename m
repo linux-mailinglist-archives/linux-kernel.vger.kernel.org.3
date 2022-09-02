@@ -2,164 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2315AAE09
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484AC5AAE0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235631AbiIBMBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
+        id S235667AbiIBMBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235614AbiIBMAw (ORCPT
+        with ESMTP id S235686AbiIBMBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:00:52 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBF932EE9;
-        Fri,  2 Sep 2022 05:00:48 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 05520580E63;
-        Fri,  2 Sep 2022 08:00:45 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 02 Sep 2022 08:00:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662120045; x=1662123645; bh=ZOo52ojNLD
-        +QQW1owuGlJGIJHO9inLm8ClF8VUiGMYc=; b=Q5LypI9JctwwOK78feEceNVi9z
-        mxfNcLR/Jr4MB9NTHeYJiHLefznX6HqRh6CiZvo1s/eRDzJ670NSZN2e2i+Fc7t/
-        ZdFzJtd0Ct06j6/lCrkdTQuc7BEdm0b726E16z+A38p/+rOnXKPeMSAnC7pozGyS
-        6LHwx11Ik1NmqfJlvPhWnbaw5ebEDvsbNdMkZN8g4WOrGEsqQWCRtu6Nc+KKLiho
-        MkqZpq7U0aQ2IjWx4UFJNZkc169bO+S4kLlj7u9QlxTpC3Q48s5HY7A4wJHVAWsN
-        uviiLlU190bmFHfBqdbNuWPA9Bl/oorH0qcnJRzDoDZTEOzV99ax1d6g+CXQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        i56a14606.fm1; t=1662120045; x=1662123645; bh=ZOo52ojNLD+QQW1owu
-        GlJGIJHO9inLm8ClF8VUiGMYc=; b=RiVPKGcUZp5HCdJHIyJkhIwH94i5ibwBiY
-        oIFBEtvkT5pEFqhCw8suvvo7zv+tFQylSuIgMGfzqvRjfMsr09J8LJ25TAG4A1Og
-        ZvgL5Yawofqm5gp1rqdKtCSfr5Y6feD3oZ+Xcs2wJcvV9YKY7FblBQlDZYdj18F+
-        ieBUJRAGKot6vy/iMUWaAxvCiXfr7dD2j3nweX3d+fo89N6tfjQufBXjRjzYiNr0
-        0swaOd8oblHwLSMK5LzNxEFrmHggOx0jKAYA/QZ0/nnsRPklrgz1CDkNYwUqhZ6h
-        D8bKPP++xX+JoFHh4uBKaHJJsbmr46Yeuoj//lmBLDDq0srXLCQQ==
-X-ME-Sender: <xms:avARY_2heRUfPqzyIL4IWlfH7Os1mu-7k3xmipOo1apEBOFrm-xOow>
-    <xme:avARY-FihW90435Acqlsl7wZZKrtjU8wiT0q7xaxcnUAkZrAyt6HpLLPkSJC6ooLC
-    mqW6FTXNKxnVPxQyG4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeltddggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:avARY_6XbY9hs3wScqe1qqj7Xf1BthXQwtKpnCrpx_-P-A-QUs9BXA>
-    <xmx:avARY01XQy-i_4phqIgYyyKTukNtLkEINc--1WuLQR9mcTJtQQDpKA>
-    <xmx:avARYyEeWx3R73AJIrsgUSWMqyoneyLQ7lQOaM1kr4Pu7SL78CqP4g>
-    <xmx:bPARYyKt9OEaSeHAoGO_VplbOvjcsP71GId8kxYOMELNnqTZReQByw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 83F4AB60083; Fri,  2 Sep 2022 08:00:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <254b7b9d-72b7-4b3a-821a-51a2745ebac5@www.fastmail.com>
-In-Reply-To: <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
-References: <cover.1661789204.git.christophe.leroy@csgroup.eu>
- <abb46a587b76d379ad32d53817d837d8a5fea8bd.1661789204.git.christophe.leroy@csgroup.eu>
- <CAHp75VcngRihpfUkeKs-g+TbPnpOsZ+-Q37zDVoWp8p_2GbSvQ@mail.gmail.com>
- <18cda49e-84f0-a806-566a-6e77705e98b3@csgroup.eu>
- <1d548a19-feec-42b9-944d-890d6dde2fb8@www.fastmail.com>
- <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
-Date:   Fri, 02 Sep 2022 14:00:21 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Andy Shevchenko" <andy.shevchenko@gmail.com>,
-        =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-Cc:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-arm Mailing List" <linux-arm-kernel@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Linux Documentation List" <linux-doc@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [PATCH v1 4/8] gpiolib: Get rid of ARCH_NR_GPIOS
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 2 Sep 2022 08:01:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4889552451
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:01:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662120069; x=1693656069;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MA2F1NX+R2+2eM0M3J1/D21ak0GR9GaYbn0h6g67VsY=;
+  b=dmbTOAVNneYdqKg0xmaODbEskgagSBypDTIn/2G/xCBFp+fmdmlvcI4a
+   6LV6DEwr+DMCqhDE+uT82D6Pq/hZixWzxdK2gz3mEmAnfwMW46P5AElwt
+   tS+OnnVcxPfwffpu9C3ustZovx4vprLeWtVyabtDHR1H9bxXRj8KSQU0L
+   H0p6nyucX1lifnMvbR/+rZxuFZGQt4TYVqH1EIbB9bHBpMzTFtwyPeqrM
+   k7Xwyqy2RwBHYjOcwOqOXzBvFWaWfAJ6dFLM1ArTRwOYMXKV2etcVva/t
+   U4Y/z3/xpFvgfb/gnp+MzXnhU8OVuMN9yw1zIlOUbpZsaWWiNJ9lLWD76
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="295971295"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="295971295"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 05:01:07 -0700
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="674331452"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.42.34])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 05:01:05 -0700
+Message-ID: <bf500303-394a-4806-361a-7cc559d80e98@intel.com>
+Date:   Fri, 2 Sep 2022 15:01:01 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 5/5] perf intel-pt: Support itrace option flag d+e to log
+ on error
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220901110032.9226-1-adrian.hunter@intel.com>
+ <20220901110032.9226-6-adrian.hunter@intel.com>
+ <dadd6179-4867-211a-ad6e-30fcd66a8e0a@linux.intel.com>
+ <1a7aaa51-1858-bb59-834c-7e8f6a58bc39@intel.com>
+ <CAM9d7chiutXEZfpQbayJ3bgraLZ_YFGC15yDn7sQBT4asdEfjA@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAM9d7chiutXEZfpQbayJ3bgraLZ_YFGC15yDn7sQBT4asdEfjA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022, at 12:52 PM, Andy Shevchenko wrote:
-> On Wed, Aug 31, 2022 at 11:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> ...
->
->> drivers/gpio/gpio-adp5520.c:    gc->base = pdata->gpio_start; // unused
->> drivers/gpio/gpio-adp5588.c:            gc->base = pdata->gpio_start; // unused
->> drivers/input/keyboard/adp5588-keys.c:  kpad->gc.base = gpio_data->gpio_start; // unused
->> drivers/input/keyboard/adp5589-keys.c:  kpad->gc.base = gpio_data->gpio_start; // unused
->
-> I believe we should convert them to -1.
+On 2/09/22 04:34, Namhyung Kim wrote:
+> On Thu, Sep 1, 2022 at 9:29 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 1/09/22 17:31, Andi Kleen wrote:
+>>>
+>>> On 9/1/2022 4:00 AM, Adrian Hunter wrote:
+> 
+> [SNIP]
+>>>> +
+>>>> +static void log_buf__dump(struct log_buf *b)
+>>>> +{
+>>>> +    if (!b->buf)
+>>>> +        return;
+>>>> +
+>>>> +    fflush(f);
+>>>> +    fprintf(b->backend, "Dumping debug log buffer (first line may be sliced)\n");
+>>>
+>>>
+>>> Should be easy to skip the first line, no?
+>>
+>> Not as easy as typing " (first line may be sliced)" ;-)
+>>
+>> Still not sure it is worth having the extra complication, but here
+>> is the change as a separate patch:
+>>
+>> From: Adrian Hunter <adrian.hunter@intel.com>
+>> Date: Thu, 1 Sep 2022 19:01:33 +0300
+>> Subject: [PATCH] perf intel-pt: Remove first line of log dumped on error
+>>
+>> Instead of printing "(first line may be sliced)", always remove the
+>> first line of the debug log when dumping on error.
+>>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>  .../perf/util/intel-pt-decoder/intel-pt-log.c | 27 ++++++++++++++++---
+>>  1 file changed, 24 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/perf/util/intel-pt-decoder/intel-pt-log.c b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
+>> index ea96dcae187a7..6cc465d1f7a9e 100644
+>> --- a/tools/perf/util/intel-pt-decoder/intel-pt-log.c
+>> +++ b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
+>> @@ -143,16 +143,37 @@ static FILE *log_buf__open(struct log_buf *b, FILE *backend, unsigned int sz)
+>>         return file;
+>>  }
+>>
+>> +static bool remove_first_line(const char **p, size_t *n)
+>> +{
+>> +       for (; *n && **p != '\n'; ++*p, --*n)
+>> +               ;
+>> +       if (*n) {
+>> +               *p += 1;
+>> +               *n -= 1;
+>> +               return true;
+>> +       }
+>> +       return false;
+>> +}
+>> +
+>> +static void write_lines(const char *p, size_t n, FILE *fp, bool *remove_first)
+>> +{
+>> +       if (*remove_first)
+>> +               *remove_first = !remove_first_line(&p, &n);
+>> +       fwrite(p, n, 1, fp);
+>> +}
+>> +
+>>  static void log_buf__dump(struct log_buf *b)
+>>  {
+>> +       bool remove_first = true;
+> 
+> Isn't it only required when the buf is wrapped?
 
-This is probably something we should do separately, but a lot of the
-drivers currently don't have support for probing from DT or any other
-firmware interface but rely on platform_data definitions from a
-board file that was never part of the upstream kernel.
+Very true! Thanks for spotting that!
 
-We are going to remove a lot more board files early next year,
-and I was hoping to follow up with a treewide cleanup of such
-drivers and remove a lot of them entirely.
+I will send a new version.
 
->> drivers/gpio/gpio-dwapb.c:      port->gc.base = pp->gpio_base; // from DT, deprecated
->
-> From board files, since some platforms expect a fixed number for it.
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+>> +
+>>         if (!b->buf)
+>>                 return;
+>>
+>>         fflush(f);
+>> -       fprintf(b->backend, "Dumping debug log buffer (first line may be sliced)\n");
+>> +       fprintf(b->backend, "Dumping debug log buffer\n");
+>>         if (b->wrapped)
+>> -               fwrite(b->buf + b->head, b->buf_sz - b->head, 1, b->backend);
+>> -       fwrite(b->buf, b->head, 1, b->backend);
+>> +               write_lines(b->buf + b->head, b->buf_sz - b->head, b->backend, &remove_first);
+>> +       write_lines(b->buf, b->head, b->backend, &remove_first);
+>>         fprintf(b->backend, "End of debug log buffer dump\n");
+>>
+>>         b->head = 0;
+>> --
+>> 2.34.1
+>>
 
->> drivers/gpio/gpio-pca953x.c:    gc->base = chip->gpio_start; // ???? used a lot
->
-> To answer this one needs to go via all board files (most of them ARM
-> 32-bit based) and look, but it means almost the same case as per Intel
-> above: 512-ngpios.
-
-Right, I went through all the board files the other drivers,
-this one just happens to be used more than the others:
-
-arch/arm/mach-davinci/board-da850-evm.c:#include <linux/platform_data/pca953x.h>
-arch/arm/mach-ep93xx/vision_ep9307.c:#include <linux/platform_data/pca953x.h>
-arch/arm/mach-mmp/ttc_dkb.c:#include <linux/platform_data/pca953x.h>
-arch/arm/mach-pxa/cm-x300.c:#include <linux/platform_data/pca953x.h>
-arch/arm/mach-pxa/spitz.c:#include <linux/platform_data/pca953x.h>
-arch/arm/mach-pxa/zeus.c:#include <linux/platform_data/pca953x.h>
-arch/arm/mach-pxa/zylonite_pxa300.c:#include <linux/platform_data/pca953x.h>
-arch/arm/mach-s3c/mach-crag6410.c:#include <linux/platform_data/pca953x.h>
-
-The only ones that have known users though are crag6410
-and vision_ep9307, the other ones will be removed.
-
-Vision-ep9307 has 128 GPIOs total, crag6410 is complicated because it
-many different GPIO controllers in various combinations.
-
->> drivers/pinctrl/renesas/gpio.c: gc->base = pfc->nr_gpio_pins; // ??? don't understand
->
-> I think, w/o looking into the code, that this just guarantees the
-> continuous numbering for all banks (chips) on the platform.
-
-Yes, that seems to be the idea most of the pinctrl drivers.
-
-      Arnd

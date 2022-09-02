@@ -2,141 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57095AB5CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C49D5AB5C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236847AbiIBPy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S237432AbiIBPyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237548AbiIBPxv (ORCPT
+        with ESMTP id S237505AbiIBPxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:53:51 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52250B14C8;
-        Fri,  2 Sep 2022 08:48:19 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662133697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X3uLK2B33Vs/uryalTDkiauADuUaETuEfrZIlg4V3Ns=;
-        b=Yk6Sb4XwCG9CU+f3BT3LbXi0D76Zsp6/FjzwDgiQfw4npSYYYR2n8nyR9Em2I2CvfprTj3
-        xrYdP0DciLxNTtMnbm09cD95Md2ecBGjtITQfevZ+wldGVXDw/tv9+BDcijqPrrj7tyGpz
-        nbsaz4MomVpOltLahS22jNzlERlm9Ng=
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Reiji Watanabe <reijiw@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/7] KVM: arm64: Use visibility hook to treat ID regs as RAZ
-Date:   Fri,  2 Sep 2022 15:47:57 +0000
-Message-Id: <20220902154804.1939819-2-oliver.upton@linux.dev>
-In-Reply-To: <20220902154804.1939819-1-oliver.upton@linux.dev>
-References: <20220902154804.1939819-1-oliver.upton@linux.dev>
+        Fri, 2 Sep 2022 11:53:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21EE088DC2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:48:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68212D6E;
+        Fri,  2 Sep 2022 08:48:12 -0700 (PDT)
+Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B2DC33F766;
+        Fri,  2 Sep 2022 08:48:03 -0700 (PDT)
+Message-ID: <4ca8b7c8-0b67-d3a0-73c9-a2c4974cdcac@arm.com>
+Date:   Fri, 2 Sep 2022 16:47:58 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 00/21] x86/resctrl: Make resctrl_arch_rmid_read()
+ return values in bytes
+Content-Language: en-GB
+To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        lcherian@marvell.com, bobo.shaobowang@huawei.com,
+        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
+        baolin.wang@linux.alibaba.com
+References: <20220622164629.20795-1-james.morse@arm.com>
+ <d8f0224a-6cb4-eeb4-59cc-39d6ce4fba5a@intel.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <d8f0224a-6cb4-eeb4-59cc-39d6ce4fba5a@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The generic id reg accessors already handle RAZ registers by way of the
-visibility hook. Add a visibility hook that returns REG_RAZ
-unconditionally and throw out the RAZ specific accessors.
+Hi Reinette,
 
-Reviewed-by: Reiji Watanabe <reijiw@google.com>
-Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
----
- arch/arm64/kvm/sys_regs.c | 33 ++++++++++++++-------------------
- 1 file changed, 14 insertions(+), 19 deletions(-)
+On 23/08/2022 18:20, Reinette Chatre wrote:
+> On 6/22/2022 9:46 AM, James Morse wrote:
+>> The aim of this series is to insert a split between the parts of the monitor
+>> code that the architecture must implement, and those that are part of the
+>> resctrl filesystem. The eventual aim is to move all filesystem parts out
+>> to live in /fs/resctrl, so that resctrl can be wired up for MPAM.
+>>
+>> What's MPAM? See the cover letter of a previous series. [1]
+>>
+>> The series adds domain online/offline callbacks to allow the filesystem to
+>> manage some of its structures itself, then moves all the 'mba_sc' behaviour
+>> to be part of the filesystem.
+>> This means another architecture doesn't need to provide an mbps_val array.
+>> As its all software, the resctrl filesystem should be able to do this without
+>> any help from the architecture code.
+>>
+>> Finally __rmid_read() is refactored to be the API call that the architecture
+>> provides to read a counter value. All the hardware specific overflow detection,
+>> scaling and value correction should occur behind this helper.
+>>
+> 
+> Thank you for your patience as I was offline for a while. 
 
-diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-index 3234f50b8c4b..e18efb9211f0 100644
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@ -1145,6 +1145,12 @@ static unsigned int id_visibility(const struct kvm_vcpu *vcpu,
- 	return 0;
- }
- 
-+static unsigned int raz_visibility(const struct kvm_vcpu *vcpu,
-+				   const struct sys_reg_desc *r)
-+{
-+	return REG_RAZ;
-+}
-+
- /* cpufeature ID register access trap handlers */
- 
- static bool __access_id_reg(struct kvm_vcpu *vcpu,
-@@ -1168,13 +1174,6 @@ static bool access_id_reg(struct kvm_vcpu *vcpu,
- 	return __access_id_reg(vcpu, p, r, raz);
- }
- 
--static bool access_raz_id_reg(struct kvm_vcpu *vcpu,
--			      struct sys_reg_params *p,
--			      const struct sys_reg_desc *r)
--{
--	return __access_id_reg(vcpu, p, r, true);
--}
--
- /* Visibility overrides for SVE-specific control registers */
- static unsigned int sve_visibility(const struct kvm_vcpu *vcpu,
- 				   const struct sys_reg_desc *rd)
-@@ -1262,12 +1261,6 @@ static int set_id_reg(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
- 	return __set_id_reg(vcpu, rd, val, raz);
- }
- 
--static int set_raz_id_reg(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
--			  u64 val)
--{
--	return __set_id_reg(vcpu, rd, val, true);
--}
--
- static int get_raz_reg(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
- 		       u64 *val)
- {
-@@ -1374,9 +1367,10 @@ static unsigned int mte_visibility(const struct kvm_vcpu *vcpu,
-  */
- #define ID_UNALLOCATED(crm, op2) {			\
- 	Op0(3), Op1(0), CRn(0), CRm(crm), Op2(op2),	\
--	.access = access_raz_id_reg,			\
--	.get_user = get_raz_reg,			\
--	.set_user = set_raz_id_reg,			\
-+	.access = access_id_reg,			\
-+	.get_user = get_id_reg,				\
-+	.set_user = set_id_reg,				\
-+	.visibility = raz_visibility			\
- }
- 
- /*
-@@ -1386,9 +1380,10 @@ static unsigned int mte_visibility(const struct kvm_vcpu *vcpu,
-  */
- #define ID_HIDDEN(name) {			\
- 	SYS_DESC(SYS_##name),			\
--	.access = access_raz_id_reg,		\
--	.get_user = get_raz_reg,		\
--	.set_user = set_raz_id_reg,		\
-+	.access = access_id_reg,		\
-+	.get_user = get_id_reg,			\
-+	.set_user = set_id_reg,			\
-+	.visibility = raz_visibility,		\
- }
- 
- /*
--- 
-2.37.2.789.g6183377224-goog
+No problem,
 
+
+> This series looks good to me. I have one remaining comment that I provided
+> in reply to "[07/21] x86/resctrl: Abstract and use supports_mba_mbps()" where
+> it seems to me that an existing issue could easily be addressed in the new
+> function. 
+
+Yup, that made sense to me.
+
+
+> I do not have tests for the software controller and only did basic sanity
+> checks. It would be great if the folks using this feature could test this
+> series.
+> 
+> Thank you very much. From my side it looks good:
+> 
+> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+
+
+Thanks!
+
+James

@@ -2,90 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE305ABB19
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E135ABB21
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiIBXR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 19:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S231341AbiIBX2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 19:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiIBXR0 (ORCPT
+        with ESMTP id S230163AbiIBX1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 19:17:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE68F9969;
-        Fri,  2 Sep 2022 16:17:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B6EDB82E01;
-        Fri,  2 Sep 2022 23:17:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E001AC433C1;
-        Fri,  2 Sep 2022 23:17:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662160642;
-        bh=ERg2TOZN4AaUjdAMP7nDz5p+LX6W9sfrRqCNVo8lkv8=;
-        h=Date:From:To:Subject:From;
-        b=AWZ56CzXcVo7rc7Regu2miBQIRJICbRWfZlSkB0V5Y3huCqB7WuYWjbZIUBk3W9gE
-         dq5J7UIDoaIFLBs2K3qOfDCEA8FOB4EyKRFRsJ+fiBczD1bayPuks0PB6YUXq3ikRT
-         cp+dzQHWsU2l9CbMJBIqPXxp9Jy/wfjcSrbBkyHU4KAa6CYAVIPspabIo28Hc8X21i
-         QSTw9fobr9ah21sC06v5mR9Awti7AE24G81EmgqPEa6yVQGaY9VxXk7m8dMp2csLmb
-         6kOSl7JWvd6yfAvm+uN48CH9O6MtsHQXWP7dcfirgQcEFHQZ+isqIRVlgHVW1ULYd3
-         xpUfW/iPepVbw==
-Date:   Sat, 3 Sep 2022 00:17:18 +0100
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Cc: linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org, ;
-Illegal-Object: Syntax error in To: address found on vger.kernel.org:
-        To:     ;
-                        ^-missing semicolon to end mail group, extraneous tokens in mailbox, missing end of mailbox
-Subject: [PATCH][next] mm/memremap: Replace zero-length array with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <YxKO/jY1x0xTpl4r@work>
+        Fri, 2 Sep 2022 19:27:24 -0400
+Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEA2B0B15
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 16:27:21 -0700 (PDT)
+Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
+        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id A2F45802A70B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:27:10 +0000 (UTC)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 6F148100AEE22
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:26:08 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id UG35ouvg3mB5LUG36ogTFR; Fri, 02 Sep 2022 23:26:08 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=MaSpB7zf c=1 sm=1 tr=0 ts=63129110
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=xOM3xZuef0cA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7ctZbvHOl7zGXHzbAHP06xpfYEwJG2UzkD+Xm7teGkg=; b=ZwV2nrk2UJ/VixJo9GcWSy4+Sf
+        1WxkXpRhWh66HfbeHxekhW+iAW8awVBeJLPjRvtpQNHBMql4w8GV8/pocC6Ta3BOBXNfvK+SIlzdF
+        oa6a3Xz96nOFWiYvT8tqvVdmy6x8o4jdpWa/ebS0wJOKzf7sGNrvwudtl4Potvqf4TZ9uVRLMA0xp
+        FgS3ZDBhoDi77fbmhBjVwa49Wm1Eim0XXalNvonkZdU0FSjEagrWkUkrPsBhQlhfqeYua84BsEing
+        e90thDZ8BVJE9r9ItJn8hdszMjYIlA+po0UEPvkAGDwgRCdabr8M/7b/d5g2aXWe8vaW6LD/tikg4
+        Wjww4Emw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:42978 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oUG34-001Ye4-HT;
+        Fri, 02 Sep 2022 17:26:06 -0600
+Subject: Re: [PATCH 5.19 00/72] 5.19.7-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <159f3c3e-70ba-b736-1b0a-c9ec6d4aac66@w6rz.net>
+Date:   Fri, 2 Sep 2022 16:26:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oUG34-001Ye4-HT
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:42978
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated and we are moving towards adopting
-C99 flexible-array members, instead. So, replace zero-length array
-declaration in struct dev_pagemap with the new DECLARE_FLEX_ARRAY()
-helper macro.
+On 9/2/22 5:18 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.7 release.
+> There are 72 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.7-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This helper allows for a flexible-array member in a union.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Also, this addresses multiple warnings reported when building
-with Clang-15 and -Wzero-length-array.
-
-Link: https://github.com/KSPP/linux/issues/193
-Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- include/linux/memremap.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/memremap.h b/include/linux/memremap.h
-index c3b4cc84877b..ad3c38840194 100644
---- a/include/linux/memremap.h
-+++ b/include/linux/memremap.h
-@@ -135,7 +135,7 @@ struct dev_pagemap {
- 	int nr_range;
- 	union {
- 		struct range range;
--		struct range ranges[0];
-+		DECLARE_FLEX_ARRAY(struct range, ranges);
- 	};
- };
- 
--- 
-2.34.1
+Tested-by: Ron Economos <re@w6rz.net>
 

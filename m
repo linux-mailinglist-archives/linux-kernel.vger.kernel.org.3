@@ -2,44 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878125AB023
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA6F5AAE96
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237614AbiIBMtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S236407AbiIBM0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236077AbiIBMs2 (ORCPT
+        with ESMTP id S236203AbiIBMZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:48:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA9C356F1;
-        Fri,  2 Sep 2022 05:34:57 -0700 (PDT)
+        Fri, 2 Sep 2022 08:25:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E985DC0B6;
+        Fri,  2 Sep 2022 05:23:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B24E5621EC;
-        Fri,  2 Sep 2022 12:34:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9A8DC433D6;
-        Fri,  2 Sep 2022 12:34:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18D9FB82A94;
+        Fri,  2 Sep 2022 12:22:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403A1C433B5;
+        Fri,  2 Sep 2022 12:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122097;
-        bh=GnataGiAFSX5NG5nekK6YOQLkPP8Hse4ndp5l0psnBA=;
+        s=korg; t=1662121360;
+        bh=sUwlJyvcI27mQEYPrel6crGwHSEN82KIQ1itviBw3Go=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vqV0trct8Wfq9mPEo2C6P8VI0DYax7Ka69IDVf3d0pgD3BGowlbowrX0jc36BSy9e
-         q58Lo4CN7G5cggQG3xOgXLcYDkEmWgQiIXs5AJIe6ah3nmw/4Ge4ZgSMWWZzW9+GjM
-         RoVaekIa+pMl5VGqWTCHuNZsCOn3wetmNsRorE2Y=
+        b=OyPRIx1o0o01wTTxlNk0xcQymUMFgL5rVxLG0buNjQF+P2t5GT9Q8d0llTaBt68Ga
+         VmUDzxuf50nhf1BoqPH0hJlsq6n6JEcsjZgjIwycuTXTohVQ98+ImCZcxARb4TwoKV
+         vgLm8dnpzBvpVXWVtlgiF3UqcFITynsUl4o1YPtg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        syzbot+b0de012ceb1e2a97891b@syzkaller.appspotmail.com
-Subject: [PATCH 5.19 12/72] USB: gadget: Fix use-after-free Read in usb_udc_uevent()
+        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Feiner <pfeiner@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Cyrill Gorcunov <gorcunov@openvz.org>,
+        Pavel Emelyanov <xemul@parallels.com>,
+        Jamie Liu <jamieliu@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.14 24/42] mm/hugetlb: fix hugetlb not supporting softdirty tracking
 Date:   Fri,  2 Sep 2022 14:18:48 +0200
-Message-Id: <20220902121405.199084223@linuxfoundation.org>
+Message-Id: <20220902121359.639360507@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
+References: <20220902121358.773776406@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,77 +65,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: David Hildenbrand <david@redhat.com>
 
-commit 2191c00855b03aa59c20e698be713d952d51fc18 upstream.
+commit f96f7a40874d7c746680c0b9f57cef2262ae551f upstream.
 
-The syzbot fuzzer found a race between uevent callbacks and gadget
-driver unregistration that can cause a use-after-free bug:
+Patch series "mm/hugetlb: fix write-fault handling for shared mappings", v2.
 
----------------------------------------------------------------
-BUG: KASAN: use-after-free in usb_udc_uevent+0x11f/0x130
-drivers/usb/gadget/udc/core.c:1732
-Read of size 8 at addr ffff888078ce2050 by task udevd/2968
+I observed that hugetlb does not support/expect write-faults in shared
+mappings that would have to map the R/O-mapped page writable -- and I
+found two case where we could currently get such faults and would
+erroneously map an anon page into a shared mapping.
 
-CPU: 1 PID: 2968 Comm: udevd Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google
-06/29/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
- usb_udc_uevent+0x11f/0x130 drivers/usb/gadget/udc/core.c:1732
- dev_uevent+0x290/0x770 drivers/base/core.c:2424
----------------------------------------------------------------
+Reproducers part of the patches.
 
-The bug occurs because usb_udc_uevent() dereferences udc->driver but
-does so without acquiring the udc_lock mutex, which protects this
-field.  If the gadget driver is unbound from the udc concurrently with
-uevent processing, the driver structure may be accessed after it has
-been deallocated.
+I propose to backport both fixes to stable trees.  The first fix needs a
+small adjustment.
 
-To prevent the race, we make sure that the routine holds the mutex
-around the racing accesses.
 
-Link: <https://lore.kernel.org/all/0000000000004de90405a719c951@google.com>
-CC: stable@vger.kernel.org # fc274c1e9973
-Reported-and-tested-by: syzbot+b0de012ceb1e2a97891b@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/YtlrnhHyrHsSky9m@rowland.harvard.edu
+This patch (of 2):
+
+Staring at hugetlb_wp(), one might wonder where all the logic for shared
+mappings is when stumbling over a write-protected page in a shared
+mapping.  In fact, there is none, and so far we thought we could get away
+with that because e.g., mprotect() should always do the right thing and
+map all pages directly writable.
+
+Looks like we were wrong:
+
+--------------------------------------------------------------------------
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <errno.h>
+ #include <sys/mman.h>
+
+ #define HUGETLB_SIZE (2 * 1024 * 1024u)
+
+ static void clear_softdirty(void)
+ {
+         int fd = open("/proc/self/clear_refs", O_WRONLY);
+         const char *ctrl = "4";
+         int ret;
+
+         if (fd < 0) {
+                 fprintf(stderr, "open(clear_refs) failed\n");
+                 exit(1);
+         }
+         ret = write(fd, ctrl, strlen(ctrl));
+         if (ret != strlen(ctrl)) {
+                 fprintf(stderr, "write(clear_refs) failed\n");
+                 exit(1);
+         }
+         close(fd);
+ }
+
+ int main(int argc, char **argv)
+ {
+         char *map;
+         int fd;
+
+         fd = open("/dev/hugepages/tmp", O_RDWR | O_CREAT);
+         if (!fd) {
+                 fprintf(stderr, "open() failed\n");
+                 return -errno;
+         }
+         if (ftruncate(fd, HUGETLB_SIZE)) {
+                 fprintf(stderr, "ftruncate() failed\n");
+                 return -errno;
+         }
+
+         map = mmap(NULL, HUGETLB_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+         if (map == MAP_FAILED) {
+                 fprintf(stderr, "mmap() failed\n");
+                 return -errno;
+         }
+
+         *map = 0;
+
+         if (mprotect(map, HUGETLB_SIZE, PROT_READ)) {
+                 fprintf(stderr, "mmprotect() failed\n");
+                 return -errno;
+         }
+
+         clear_softdirty();
+
+         if (mprotect(map, HUGETLB_SIZE, PROT_READ|PROT_WRITE)) {
+                 fprintf(stderr, "mmprotect() failed\n");
+                 return -errno;
+         }
+
+         *map = 0;
+
+         return 0;
+ }
+--------------------------------------------------------------------------
+
+Above test fails with SIGBUS when there is only a single free hugetlb page.
+ # echo 1 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+ # ./test
+ Bus error (core dumped)
+
+And worse, with sufficient free hugetlb pages it will map an anonymous page
+into a shared mapping, for example, messing up accounting during unmap
+and breaking MAP_SHARED semantics:
+ # echo 2 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+ # ./test
+ # cat /proc/meminfo | grep HugePages_
+ HugePages_Total:       2
+ HugePages_Free:        1
+ HugePages_Rsvd:    18446744073709551615
+ HugePages_Surp:        0
+
+Reason in this particular case is that vma_wants_writenotify() will
+return "true", removing VM_SHARED in vma_set_page_prot() to map pages
+write-protected. Let's teach vma_wants_writenotify() that hugetlb does not
+support softdirty tracking.
+
+Link: https://lkml.kernel.org/r/20220811103435.188481-1-david@redhat.com
+Link: https://lkml.kernel.org/r/20220811103435.188481-2-david@redhat.com
+Fixes: 64e455079e1b ("mm: softdirty: enable write notifications on VMAs after VM_SOFTDIRTY cleared")
+Signed-off-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Peter Feiner <pfeiner@google.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Cyrill Gorcunov <gorcunov@openvz.org>
+Cc: Pavel Emelyanov <xemul@parallels.com>
+Cc: Jamie Liu <jamieliu@google.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Muchun Song <songmuchun@bytedance.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: <stable@vger.kernel.org>	[3.18+]
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/udc/core.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ mm/mmap.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 7886497253cc..cafcf260394c 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1728,13 +1728,14 @@ static int usb_udc_uevent(struct device *dev, struct kobj_uevent_env *env)
- 		return ret;
- 	}
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1598,8 +1598,12 @@ int vma_wants_writenotify(struct vm_area
+ 	    pgprot_val(vm_pgprot_modify(vm_page_prot, vm_flags)))
+ 		return 0;
  
--	if (udc->driver) {
-+	mutex_lock(&udc_lock);
-+	if (udc->driver)
- 		ret = add_uevent_var(env, "USB_UDC_DRIVER=%s",
- 				udc->driver->function);
--		if (ret) {
--			dev_err(dev, "failed to add uevent USB_UDC_DRIVER\n");
--			return ret;
--		}
-+	mutex_unlock(&udc_lock);
-+	if (ret) {
-+		dev_err(dev, "failed to add uevent USB_UDC_DRIVER\n");
-+		return ret;
- 	}
+-	/* Do we need to track softdirty? */
+-	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY))
++	/*
++	 * Do we need to track softdirty? hugetlb does not support softdirty
++	 * tracking yet.
++	 */
++	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY) &&
++	    !is_vm_hugetlb_page(vma))
+ 		return 1;
  
- 	return 0;
--- 
-2.37.2
-
+ 	/* Specialty mapping? */
 
 

@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F7E5AB070
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8CA5AB027
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238029AbiIBMxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S237725AbiIBMuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237876AbiIBMwx (ORCPT
+        with ESMTP id S237955AbiIBMtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:52:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB0DF8FD2;
-        Fri,  2 Sep 2022 05:37:41 -0700 (PDT)
+        Fri, 2 Sep 2022 08:49:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF23D9EB8;
+        Fri,  2 Sep 2022 05:35:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BBE0B81CCF;
-        Fri,  2 Sep 2022 12:36:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9041EC433D6;
-        Fri,  2 Sep 2022 12:36:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DA15621BE;
+        Fri,  2 Sep 2022 12:33:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22FCFC433D7;
+        Fri,  2 Sep 2022 12:33:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122195;
-        bh=sYkZkvrgtkFRSF4QEy0oqraFW7XT7ofLBS5VurAovuo=;
+        s=korg; t=1662122005;
+        bh=tU0CSPW7Wpbx9znL3/33fzBgj7xdlhoFpnuci/3+y14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kJWIcffR2O6ONcFUXBtfeyybCG2c5waWRcc/L0paNUB/HvvdOufgBNpxEVqqg/cQX
-         GZpqTPWLKznLVdhNHy2Zyj9bhtaDNgmqjdgyQAt4+VhNObeo14Lo9p12KKCYhG/N0m
-         Zwc3Ghl3bgh9CYE8nmSiPDpP8gNMUuYAiXJdmrJk=
+        b=mgAiT8lY4PdGEGVnjhzfkA97digmZn1R/GkAAQ1hnZ3j9fsjDC3NBHQ8v1tPGwXQV
+         pxpIfBx+ECP87/VcDFIky9OXhM/ek1gkQJy7HIFzWZUoqoXevg3jbrUKz9ZbpMSgME
+         nXzw/nTVXfaq8mvDf4hWxSzjTTtDI2gKe501/qQ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jimmy Kizito <Jimmy.Kizito@amd.com>,
-        Jun Lei <Jun.Lei@amd.com>, Tom Chung <chiahsuan.chung@amd.com>,
-        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
+        stable@vger.kernel.org, Alvin Lee <alvin.lee2@amd.com>,
+        Tom Chung <chiahsuan.chung@amd.com>,
+        Fudong Wang <Fudong.Wang@amd.com>,
         Daniel Wheeler <daniel.wheeler@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 42/72] drm/amd/display: Fix TDR eDP and USB4 display light up issue
-Date:   Fri,  2 Sep 2022 14:19:18 +0200
-Message-Id: <20220902121406.146940764@linuxfoundation.org>
+Subject: [PATCH 5.15 55/73] drm/amd/display: clear optc underflow before turn off odm clock
+Date:   Fri,  2 Sep 2022 14:19:19 +0200
+Message-Id: <20220902121406.250816449@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,57 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>
+From: Fudong Wang <Fudong.Wang@amd.com>
 
-[ Upstream commit 30456ffa65469d1d2e5e1da05017e6728d24c11c ]
+[ Upstream commit b2a93490201300a749ad261b5c5d05cb50179c44 ]
 
 [Why]
-After TDR recovery, eDP and USB4 display does not light up. Because
-dmub outbox notifications are not enabled after dmub reload and link
-encoder assignments for the streams are not cleared before dc state
-reset.
+After ODM clock off, optc underflow bit will be kept there always and clear not work.
+We need to clear that before clock off.
 
 [How]
-- Dmub outbox notification is enabled after tdr recovery by issuing
-  inbox command to dmub.
-- Link encoders for the streams are unassigned before dc state reset.
+Clear that if have when clock off.
 
-Reviewed-by: Jimmy Kizito <Jimmy.Kizito@amd.com>
-Reviewed-by: Jun Lei <Jun.Lei@amd.com>
+Reviewed-by: Alvin Lee <alvin.lee2@amd.com>
 Acked-by: Tom Chung <chiahsuan.chung@amd.com>
-Signed-off-by: Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>
+Signed-off-by: Fudong Wang <Fudong.Wang@amd.com>
 Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc.c | 1 +
- drivers/gpu/drm/amd/display/dc/dc_link.h | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_optc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-index f144494011882..7d69341acca02 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -3783,6 +3783,7 @@ void dc_enable_dmub_outbox(struct dc *dc)
- 	struct dc_context *dc_ctx = dc->ctx;
- 
- 	dmub_enable_outbox_notification(dc_ctx->dmub_srv);
-+	DC_LOG_DC("%s: dmub outbox notifications enabled\n", __func__);
- }
- 
- /**
-diff --git a/drivers/gpu/drm/amd/display/dc/dc_link.h b/drivers/gpu/drm/amd/display/dc/dc_link.h
-index a3c37ee3f849c..f96f53c1bc258 100644
---- a/drivers/gpu/drm/amd/display/dc/dc_link.h
-+++ b/drivers/gpu/drm/amd/display/dc/dc_link.h
-@@ -337,6 +337,7 @@ enum dc_detect_reason {
- 	DETECT_REASON_HPDRX,
- 	DETECT_REASON_FALLBACK,
- 	DETECT_REASON_RETRAIN,
-+	DETECT_REASON_TDR,
- };
- 
- bool dc_link_detect(struct dc_link *dc_link, enum dc_detect_reason reason);
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_optc.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_optc.c
+index 37848f4577b18..92fee47278e5a 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_optc.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_optc.c
+@@ -480,6 +480,11 @@ void optc1_enable_optc_clock(struct timing_generator *optc, bool enable)
+ 				OTG_CLOCK_ON, 1,
+ 				1, 1000);
+ 	} else  {
++
++		//last chance to clear underflow, otherwise, it will always there due to clock is off.
++		if (optc->funcs->is_optc_underflow_occurred(optc) == true)
++			optc->funcs->clear_optc_underflow(optc);
++
+ 		REG_UPDATE_2(OTG_CLOCK_CONTROL,
+ 				OTG_CLOCK_GATE_DIS, 0,
+ 				OTG_CLOCK_EN, 0);
 -- 
 2.35.1
 

@@ -2,126 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEEF5AB367
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD7C5AB368
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbiIBO0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S235738AbiIBO1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237345AbiIBO0Z (ORCPT
+        with ESMTP id S237000AbiIBO0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:26:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C6713973E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:53:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662126795;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+ap6F3iUwG0XwvBvhq4auq9CyYIKW5QhAfRS88ukOs0=;
-        b=KOolh7sBAfFXejkUPlm+YB5oqz1/Sn/Kl25k/VDaGXoOQWm4yC3WSFL2xmehCzyQ7qmvFJ
-        GnX7bLDALVCTMuXG1XP6w63fF8++/4XDiTGTVSI2pgy8FDqticgd5+ubFbtlSckjkQoSJM
-        WcwXkDPJj1mPOdUz58j28TL882M4Ztg=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-605-U6xb6Ws3OgqYX7saadfHaQ-1; Fri, 02 Sep 2022 09:53:15 -0400
-X-MC-Unique: U6xb6Ws3OgqYX7saadfHaQ-1
-Received: by mail-qt1-f200.google.com with SMTP id bq11-20020a05622a1c0b00b003434f125b77so1580502qtb.20
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 06:53:14 -0700 (PDT)
+        Fri, 2 Sep 2022 10:26:33 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F316112EFF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:53:55 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 92-20020a9d0be5000000b0063946111607so1463847oth.10
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 06:53:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=TRNEPv/fVZBL+J+K0gbUvPbd/wP8B+12JIvN/V7uTcU=;
+        b=JJEiY1nRuKPAHexQSBWa1G1+D1zLBXZhFgMaAb2sUdoGvIO/vi/5FZjf3cbuXhRuS2
+         UCd9crNd+fUPxT9Fi7I5uObbhL0ex1QkxUU9j4jxgfQiBVy2PaiKUvTB8sXRu9fFVAah
+         KYM7x34v7hcl+UNTbsGMMKlRHV6XMoOvcb2TZQoY8bOAxvWLeI1qeyQgMq8zgOMAaF6b
+         PJe80p9cyT6qYpurA6bBVX9NENNzT/0xn0CRy3P8K3yed0vYzDunlyEfxOh5r2PDPQVM
+         kVGFJ5mDJrgi755A+/6bpL+HDjZYfesebLyl9SLaz24zvcnbRvbh+mKy9sapsSxqkoFV
+         IMJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=+ap6F3iUwG0XwvBvhq4auq9CyYIKW5QhAfRS88ukOs0=;
-        b=bDPqx3GAnPu8pX2dQb+FApxttG1OjnZB+70YmvTPkfNO3iNU0w60CrFtt4x5jETMQb
-         g8wRLO4CpyaAu9dPJjmBbgPoCjS6Q3vZTIWoL3NWOcNNAqwMAbXjyoAX1skSDG0eqxmu
-         c63XJLk6CRKceaatojtZ6DfoKeKem/Ab/+E/u3KV7O906dPnR/NiVc6RgXmdzPBwpNFW
-         7NsQIXaemMd0eLk/PD6yG7NL18WZVWI8aVW8hORujDb/iRqL48O1fZA4hxUKvW9G5ZzK
-         AuaxG0/FzeWXCtjFt/EhE+zMDD9c9Fg7drb+cdsd65GHcsRhESHzFamiWbrMnJhcnuRD
-         MOHQ==
-X-Gm-Message-State: ACgBeo3LZpAhZDGyPyHgUi+CjkewdgPrOpZTVF56lojJWH61p1/ocrZs
-        KVqOGSwCuG8aazhXegjXGaqv3i7cTMEezsb4wIDY92yERslS8Dhb22u7IyD3YSWg70+e0no9MUz
-        wL8a/1PmVRxVwySJTc5WAAJ4/
-X-Received: by 2002:a05:6214:5005:b0:472:e6b0:1fb2 with SMTP id jo5-20020a056214500500b00472e6b01fb2mr28503189qvb.124.1662126794261;
-        Fri, 02 Sep 2022 06:53:14 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7eXEaiAmq13RGGl+GkCbnlSnbZ4ozlFXTcz8QgSNrp2IcyLtHYanUGZZ1bg6lGbFXp1eBnBg==
-X-Received: by 2002:a05:6214:5005:b0:472:e6b0:1fb2 with SMTP id jo5-20020a056214500500b00472e6b01fb2mr28503172qvb.124.1662126794029;
-        Fri, 02 Sep 2022 06:53:14 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id b184-20020a37b2c1000000b006bb6c63114fsm1443338qkf.110.2022.09.02.06.53.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 06:53:13 -0700 (PDT)
-Date:   Fri, 2 Sep 2022 09:53:11 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Yang Shi <shy828301@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Jerome Marchand <jmarchan@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
-Message-ID: <YxIKxy5RIp36HuOf@xz-m1.local>
-References: <20220901072119.37588-1-david@redhat.com>
- <YxDdycTur733hMgt@xz-m1.local>
- <fa0bb4b1-3edd-eb5a-7ad6-dff785d88d8f@redhat.com>
- <YxDghv54uHYMGCfG@xz-m1.local>
- <c9dc3f22-4a72-9b9d-7a74-ad77fe4f3b6e@redhat.com>
- <CAHbLzkpdUMq2fMxqx-NgSZ2VLBU5RGqSpJRWH6eRrYymErAbaw@mail.gmail.com>
- <YxD00K1lv151X/eq@xz-m1.local>
- <CAHbLzkrA-jKzTBq_Mn3NZYc91exovv1gH2LNzetCNiVu8+W6Kg@mail.gmail.com>
- <2368d91f-8442-076f-f33a-64b51b44825c@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=TRNEPv/fVZBL+J+K0gbUvPbd/wP8B+12JIvN/V7uTcU=;
+        b=QK20ox9qI+HCVH7ed7t5dzfhW+YC34/K7ot0GZY9BZbCMBgL/xrSJ5wb/pZov+OptU
+         JjW1OfvPiZP6NNx/yP4q+2ayEEuHEAsPId/P8fGxcnXUfh6XlDSh5p742qtKwxvIdwFb
+         cZMt7A9bqnYwGl6QsaMYU/cFFAEORE/6fU1FJRy3kuVTh8qT7o7dHUoLSwNerNIfTpSM
+         W3bp24hWsBp848JQTRQ2Q6XvZkyvdWiFyZjgFP1t/PpQtGQpV/WWzG9vccwB5KjJyfsh
+         dqlX/xlJsfYnQWpJ4NM/1OVEw9clJkBEkr8rqEKgqhypC/Oqhe3DxS82bA8b1Y4M+bI3
+         frww==
+X-Gm-Message-State: ACgBeo24cdx1s1pMI2YLzg6C4PKEKnqOonEoTJu45P65GCGE/xd08odJ
+        SyuJNsLnQ3moL8dLdHLK4NV5uvLeIIShGtkJ6HiDrg==
+X-Google-Smtp-Source: AA6agR6zb53YPcXo5kDN/63AZ67C60d0NARcZzDg39E8JP0pQszvgj2ovZPGPXkptzTrSV8v0tYkxi9MEbsv38BvS44=
+X-Received: by 2002:a05:6830:2a17:b0:636:f7fc:98bb with SMTP id
+ y23-20020a0568302a1700b00636f7fc98bbmr14890114otu.223.1662126833447; Fri, 02
+ Sep 2022 06:53:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2368d91f-8442-076f-f33a-64b51b44825c@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220902112446.29858-1-shaozhengchao@huawei.com> <20220902112446.29858-2-shaozhengchao@huawei.com>
+In-Reply-To: <20220902112446.29858-2-shaozhengchao@huawei.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Fri, 2 Sep 2022 09:53:42 -0400
+Message-ID: <CAM0EoMnxxA5y2W22aMXF+QRqckbkGm9eJoEnu-CaKhgWMM7kdA@mail.gmail.com>
+Subject: Re: [PATCH net-next 01/22] net: sched: act_api: implement generic
+ walker and search for tc action
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, martin.lau@linux.dev, daniel@iogearbox.net,
+        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 08:32:42AM +0200, David Hildenbrand wrote:
-> Note that this matches ptep_get_and_clear() behavior on s390x. Quoting the comment in there:
-> 
-> 
-> /*
->  * This is hard to understand. ptep_get_and_clear and ptep_clear_flush
->  * both clear the TLB for the unmapped pte. The reason is that
->  * ptep_get_and_clear is used in common code (e.g. change_pte_range)
->  * to modify an active pte. The sequence is
->  *   1) ptep_get_and_clear
->  *   2) set_pte_at
->  *   3) flush_tlb_range
->  * On s390 the tlb needs to get flushed with the modification of the pte
->  * if the pte is active. The only way how this can be implemented is to
->  * have ptep_get_and_clear do the tlb flush. In exchange flush_tlb_range
->  * is a nop.
->  */
+On Fri, Sep 2, 2022 at 7:22 AM Zhengchao Shao <shaozhengchao@huawei.com> wrote:
+>
+> Being able to get tc_action_net by using net_id stored in tc_action_ops
+> and execute the generic walk/search function, add __tcf_generic_walker()
+> and __tcf_idr_search() helpers.
+>
 
-Ah, now I kind of see why s390 has its own world of pte operations.
+These are nice cleanups.
+Can you please run all tdc tests for all changes you are making to
+the tc subsystem? Maybe do a kindness and add more tests.
 
-But then we really should be noted on reworking the generic tlb code
-because s390 is always special; people will think the generic tlb API is
-for tlb but no-op for s390, e.g.  anyone optimizes generic tlb flushing
-it'll probably never apply to s390.
+Just small  opinions below. Otherwise you can add my ACK.
 
-Besides performance, hopefully there'll be no case where the tlb change
-will be functional then it may affect s390 too.  But I don't see any since
-as long as tlb was flushed earlier than the API then it seems always safe.
-Just trickier.
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> ---
+>  include/net/act_api.h |  1 +
+>  net/sched/act_api.c   | 48 +++++++++++++++++++++++++++++++++++++------
+>  2 files changed, 43 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/net/act_api.h b/include/net/act_api.h
+> index 9cf6870b526e..a79d6e58519e 100644
+\
 
--- 
-Peter Xu
+> @@ -926,7 +945,8 @@ int tcf_register_action(struct tc_action_ops *act,
+>         struct tc_action_ops *a;
+>         int ret;
+>
+> -       if (!act->act || !act->dump || !act->init || !act->walk || !act->lookup)
+> +       if (!act->act || !act->dump || !act->init ||
+> +           (!act->net_id && (!act->walk || !act->lookup)))
 
+I can understand net_id, but why && (!act->walk || !act->lookup) ?
+Assumedly they are now optional, no?
+
+
+> +       if (ops->walk) {
+> +               err = ops->walk(net, skb, &dcb, RTM_DELACTION, ops, extack);
+> +       } else {
+> +               err = __tcf_generic_walker(net, skb, &dcb, RTM_DELACTION, ops, extack);
+> +       }
+
+Bikeshed mod: those braces.
+
+cheers,
+jamal

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E715AB17B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDF65AAF9F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237237AbiIBNfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S237308AbiIBMlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237186AbiIBNek (ORCPT
+        with ESMTP id S237268AbiIBMi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:34:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B091208DE;
-        Fri,  2 Sep 2022 06:14:29 -0700 (PDT)
+        Fri, 2 Sep 2022 08:38:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDAE6B8D1;
+        Fri,  2 Sep 2022 05:30:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45821B82A9B;
-        Fri,  2 Sep 2022 12:34:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90235C433D6;
-        Fri,  2 Sep 2022 12:34:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04097B82AA1;
+        Fri,  2 Sep 2022 12:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E261C433C1;
+        Fri,  2 Sep 2022 12:30:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122063;
-        bh=ybn3jPN7cjq4pV1zRhzeUGKKFGk64wtqOZEfT7U0lBM=;
+        s=korg; t=1662121826;
+        bh=qJtlZbyOTsV51PIP1uTB7gctPH/B6Gl+DB+pExHFlyw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G5t/OP+zEIb1+nO3uooNic3yoCpO2B1krPtvD3mI7+Tl8k5f/unAxyffotEUIGkKn
-         9d+RclRz89QXiiFEcyP8IoLcmAT7cX7ictaeSF1dmpA2vNOOvu3qV2MkqsNuQn6sis
-         kSK3DcbLxoZCYR7hUUPX62dzD7PgW7+SKRZIztIg=
+        b=ZiO9ex39oc/ykwU/40wU9xIchlcVqZJ5hq2rap+/VPWjNkwzdTbb4jh02PHv3FX8/
+         4KUeUvdRoOYmBCgX4WqZpJqO41rQuQsW4p5ypAP1gfmov3wkrMy6ntD/kPFYziUjpY
+         1OfA/5JWAlSgbJRhIxH7IlA3scl4qLthJccsCQhY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dusica Milinkovic <Dusica.Milinkovic@amd.com>,
-        Shaoyun Liu <shaoyun.liu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 62/73] drm/amdgpu: Increase tlb flush timeout for sriov
+        stable@vger.kernel.org, "Denis V. Lunev" <den@openvz.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 77/77] net: neigh: dont call kfree_skb() under spin_lock_irqsave()
 Date:   Fri,  2 Sep 2022 14:19:26 +0200
-Message-Id: <20220902121406.465885961@linuxfoundation.org>
+Message-Id: <20220902121406.246311198@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,87 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dusica Milinkovic <Dusica.Milinkovic@amd.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 373008bfc9cdb0f050258947fa5a095f0657e1bc ]
+commit d5485d9dd24e1d04e5509916515260186eb1455c upstream.
 
-[Why]
-During multi-vf executing benchmark (Luxmark) observed kiq error timeout.
-It happenes because all of VFs do the tlb invalidation at the same time.
-Although each VF has the invalidate register set, from hardware side
-the invalidate requests are queue to execute.
+It is not allowed to call kfree_skb() from hardware interrupt
+context or with interrupts being disabled. So add all skb to
+a tmp list, then free them after spin_unlock_irqrestore() at
+once.
 
-[How]
-In case of 12 VF increase timeout on 12*100ms
-
-Signed-off-by: Dusica Milinkovic <Dusica.Milinkovic@amd.com>
-Acked-by: Shaoyun Liu <shaoyun.liu@amd.com>
-Acked-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 66ba215cb513 ("neigh: fix possible DoS due to net iface start/stop loop")
+Suggested-by: Denis V. Lunev <den@openvz.org>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu.h    | 2 +-
- drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c | 3 ++-
- drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c  | 3 ++-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ net/core/neighbour.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-index 5f95d03fd46a0..4f62f422bcb78 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-@@ -312,7 +312,7 @@ enum amdgpu_kiq_irq {
- 	AMDGPU_CP_KIQ_IRQ_DRIVER0 = 0,
- 	AMDGPU_CP_KIQ_IRQ_LAST
- };
--
-+#define SRIOV_USEC_TIMEOUT  1200000 /* wait 12 * 100ms for SRIOV */
- #define MAX_KIQ_REG_WAIT       5000 /* in usecs, 5ms */
- #define MAX_KIQ_REG_BAILOUT_INTERVAL   5 /* in msecs, 5ms */
- #define MAX_KIQ_REG_TRY 1000
-diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
-index 93a4da4284ede..9c07ec8b97327 100644
---- a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
-@@ -414,6 +414,7 @@ static int gmc_v10_0_flush_gpu_tlb_pasid(struct amdgpu_device *adev,
- 	uint32_t seq;
- 	uint16_t queried_pasid;
- 	bool ret;
-+	u32 usec_timeout = amdgpu_sriov_vf(adev) ? SRIOV_USEC_TIMEOUT : adev->usec_timeout;
- 	struct amdgpu_ring *ring = &adev->gfx.kiq.ring;
- 	struct amdgpu_kiq *kiq = &adev->gfx.kiq;
+--- a/net/core/neighbour.c
++++ b/net/core/neighbour.c
+@@ -282,21 +282,27 @@ static int neigh_del_timer(struct neighb
  
-@@ -432,7 +433,7 @@ static int gmc_v10_0_flush_gpu_tlb_pasid(struct amdgpu_device *adev,
+ static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
+ {
++	struct sk_buff_head tmp;
+ 	unsigned long flags;
+ 	struct sk_buff *skb;
  
- 		amdgpu_ring_commit(ring);
- 		spin_unlock(&adev->gfx.kiq.ring_lock);
--		r = amdgpu_fence_wait_polling(ring, seq, adev->usec_timeout);
-+		r = amdgpu_fence_wait_polling(ring, seq, usec_timeout);
- 		if (r < 1) {
- 			dev_err(adev->dev, "wait for kiq fence error: %ld.\n", r);
- 			return -ETIME;
-diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-index 0e731016921be..70d24b522df8d 100644
---- a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-@@ -863,6 +863,7 @@ static int gmc_v9_0_flush_gpu_tlb_pasid(struct amdgpu_device *adev,
- 	uint32_t seq;
- 	uint16_t queried_pasid;
- 	bool ret;
-+	u32 usec_timeout = amdgpu_sriov_vf(adev) ? SRIOV_USEC_TIMEOUT : adev->usec_timeout;
- 	struct amdgpu_ring *ring = &adev->gfx.kiq.ring;
- 	struct amdgpu_kiq *kiq = &adev->gfx.kiq;
++	skb_queue_head_init(&tmp);
+ 	spin_lock_irqsave(&list->lock, flags);
+ 	skb = skb_peek(list);
+ 	while (skb != NULL) {
+ 		struct sk_buff *skb_next = skb_peek_next(skb, list);
+ 		if (net == NULL || net_eq(dev_net(skb->dev), net)) {
+ 			__skb_unlink(skb, list);
+-			dev_put(skb->dev);
+-			kfree_skb(skb);
++			__skb_queue_tail(&tmp, skb);
+ 		}
+ 		skb = skb_next;
+ 	}
+ 	spin_unlock_irqrestore(&list->lock, flags);
++
++	while ((skb = __skb_dequeue(&tmp))) {
++		dev_put(skb->dev);
++		kfree_skb(skb);
++	}
+ }
  
-@@ -902,7 +903,7 @@ static int gmc_v9_0_flush_gpu_tlb_pasid(struct amdgpu_device *adev,
- 
- 		amdgpu_ring_commit(ring);
- 		spin_unlock(&adev->gfx.kiq.ring_lock);
--		r = amdgpu_fence_wait_polling(ring, seq, adev->usec_timeout);
-+		r = amdgpu_fence_wait_polling(ring, seq, usec_timeout);
- 		if (r < 1) {
- 			dev_err(adev->dev, "wait for kiq fence error: %ld.\n", r);
- 			up_read(&adev->reset_sem);
--- 
-2.35.1
-
+ static void neigh_flush_dev(struct neigh_table *tbl, struct net_device *dev,
 
 

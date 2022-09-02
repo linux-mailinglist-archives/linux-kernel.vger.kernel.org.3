@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4B55AA64E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0795AA651
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235205AbiIBDW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S233598AbiIBD0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiIBDW4 (ORCPT
+        with ESMTP id S231357AbiIBD0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:22:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBBAA99F9;
-        Thu,  1 Sep 2022 20:22:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D881EB82980;
-        Fri,  2 Sep 2022 03:22:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24D7C433D6;
-        Fri,  2 Sep 2022 03:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662088972;
-        bh=47feahsbwJMMuZYJG0XCwSe5FDCgnOyKkfLrDsV455g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dy9j7C3muf+St6PIzZ1PH6dV9m0FtsZjIu+O6wLkqHljooJrpyQesWoAhUImXe/9I
-         a8OLuGf40LfmJPrmgKxGA9dYYiJOEU/UB6rTAQ34Fz2LDgCrj4/si9cCKD+sghGrFQ
-         +V+D/W7mL6AGaUcQIiqIyF68YqKZB2dDe1D4hivvvpHGwTkZ/2KgPsqMlZlRaGAKYb
-         NkyyRAeMqAFwqOroVZ1A1QitM9jL7m3K1P/9U1AvERo1DFrLKhXvf3NYFBo7Q7nFR/
-         HuJlapuMP8dy6UsCd9YtZjcAJ+mC2x+kCefGVA7yrECawc31BAwrkjxe7uPXDJSznY
-         wSgSeMegNminA==
-Date:   Thu, 1 Sep 2022 20:22:51 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        kernel test robot <lkp@intel.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v5 5/7] ethtool: add interface to interact with
- Ethernet Power Equipment
-Message-ID: <20220901202251.6fd23828@kernel.org>
-In-Reply-To: <20220831133240.3236779-6-o.rempel@pengutronix.de>
-References: <20220831133240.3236779-1-o.rempel@pengutronix.de>
-        <20220831133240.3236779-6-o.rempel@pengutronix.de>
+        Thu, 1 Sep 2022 23:26:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C70A71BEA;
+        Thu,  1 Sep 2022 20:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=GJjAcM3GmyI6PjX3K2R26l59/UA4pSwDavyDI8Mg5+w=; b=wR+XeUdDcCp5w/WqaMHOa4LqNP
+        itSDr0ERIL0een/N4cx+/EdywehuJpWEcqBS7hxyzrWD47RfuUAl2uTewRiCxAC0kQdR8o6m6dVtX
+        AoVA7DWiPFWmbAwOaIRsCX7aPIBtdKNlH4rlI8RYgW+9ymsQFR0UAaQ3WjQmhdMUGN2VGv5Dfzwes
+        +qfsbMb2xsQlHj/j6vi1yoet2887S3mBA/skGa3YmHlJxEFgSz6eAFHejT7Eke9yEbrX+1x2OGHAH
+        RizT0LBjNhOCIXA+zfCA+oVd+6ttqpBHksIDqmxEnij+bKaKGYrdVsQ09uRg3lBVCgQhQsAuclzFp
+        5Et1VsiA==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oTxK7-00HKiG-2d; Fri, 02 Sep 2022 03:26:27 +0000
+Message-ID: <a8ac77b7-60a9-3e62-0d07-fa03c5600740@infradead.org>
+Date:   Thu, 1 Sep 2022 20:26:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: linux-next: Tree for Sep 1 (Kconfig for VIDEO_MEDIATEK_VPU)
+Content-Language: en-US
+To:     moudy ho <moudy.ho@mediatek.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20220901171832.78d88aed@canb.auug.org.au>
+ <f19684d4-9ef0-6308-8245-73c9a4511e67@infradead.org>
+ <e213e9d8ef900db665fee08b484181e1d47c5171.camel@mediatek.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <e213e9d8ef900db665fee08b484181e1d47c5171.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,13 +60,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 Aug 2022 15:32:38 +0200 Oleksij Rempel wrote:
-> Add interface to support Power Sourcing Equipment. At current step it
-> provides generic way to address all variants of PSE devices as defined
-> in IEEE 802.3-2018 but support only objects specified for IEEE 802.3-2018 104.4
-> PoDL Power Sourcing Equipment (PSE).
 
-include/linux/pse-pd/pse.h:37: warning: Function parameter or member 'podl_admin_state' not described in 'pse_control_status'
-include/linux/pse-pd/pse.h:37: warning: Function parameter or member 'podl_pw_status' not described in 'pse_control_status'
-include/linux/pse-pd/pse.h:52: warning: Function parameter or member 'ethtool_get_status' not described in 'pse_controller_ops'
-include/linux/pse-pd/pse.h:52: warning: Function parameter or member 'ethtool_set_config' not described in 'pse_controller_ops'
+
+On 9/1/22 19:55, moudy ho wrote:
+> Hi Randy,
+> 
+> Thanks for your efforts on this matter, the warning is due to not
+> setting V4L_MEM2MEM_DRIVERS on defconfig which the VIDEO_MEDIATEK_VPU
+> depends.
+> Could I send a patch to add a V4L_MEM2MEM_DRIVERS selection in MDP3
+> Kconfig to avoid this warning?
+> 
+> Regards,
+> Moudy
+
+Hi,
+That sounds good to me.
+
+Thanks.
+
+> 
+> On Thu, 2022-09-01 at 13:38 -0700, Randy Dunlap wrote:
+>>
+>> On 9/1/22 00:18, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> News: there will be no linux-next releases tomorrow or on Monday.
+>>>
+>>> Changes since 20220831:
+>>>
+>>
+>> on i386 or x86_64:
+>>
+>> WARNING: unmet direct dependencies detected for VIDEO_MEDIATEK_VPU
+>>   Depends on [n]: MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y]
+>> && MEDIA_PLATFORM_DRIVERS [=y] && V4L_MEM2MEM_DRIVERS [=n] &&
+>> VIDEO_DEV [=y] && (ARCH_MEDIATEK || COMPILE_TEST [=y])
+>>   Selected by [y]:
+>>   - VIDEO_MEDIATEK_MDP3 [=y] && MEDIA_SUPPORT [=y] &&
+>> MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] &&
+>> (MTK_IOMMU [=n] || COMPILE_TEST [=y]) && VIDEO_DEV [=y] &&
+>> (ARCH_MEDIATEK || COMPILE_TEST [=y]) && HAS_DMA [=y] && REMOTEPROC
+>> [=y]
+>>
+>>
+>>
+>> Full x86_64 randconfig file is attached.
+>>
+> 
+
+-- 
+~Randy

@@ -2,257 +2,455 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65085AAB92
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B655AAB99
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235607AbiIBJiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
+        id S235626AbiIBJj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbiIBJiU (ORCPT
+        with ESMTP id S234804AbiIBJjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:38:20 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983DAC04EE;
-        Fri,  2 Sep 2022 02:38:18 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28299eJd005200;
-        Fri, 2 Sep 2022 09:38:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=6DVvHBJK5oS36I91y8Xul0tolU1FYsD+UygTfAP2PS4=;
- b=VnyTA6ofZ6P9ZHkoCGKP4MPSYedW6+O3tZ14TDi9T2yH4MNH9bgCdxWXkNJ6yIMkfch7
- oQom6U7A3oo2fGftpOrujxfgM41vbxLnTkcMv9w6isNZRydpLcrQKUCbCgmf/yLS4rSZ
- NM1lPCSZNIWvy6RFuBkL5lYXwpNb/C5zoS31XRV6t99qB/aijYXN6/wTC58TcZ3Tw4vD
- lhAmlDL6zrwYi7/x8ijrz1J69Tkd8icVmD1OIqHrS+dAPzYl7M1PshcgKAZ62DKnCiKO
- 9lyx0zpUHe6KUP9JOiWzg+aprzTyeA5ApiB+IbfjfS+6IiROLX31aNsrGdE0eAHA4tCI 3Q== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jbafy8uh1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Sep 2022 09:38:15 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2829cBEX010456;
-        Fri, 2 Sep 2022 09:38:11 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3j7cbkwrk7-1;
-        Fri, 02 Sep 2022 09:38:11 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2829cBdN010449;
-        Fri, 2 Sep 2022 09:38:11 GMT
-Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 2829cAmX010448;
-        Fri, 02 Sep 2022 09:38:11 +0000
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id 3CAE64401; Fri,  2 Sep 2022 02:38:10 -0700 (PDT)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com
-Subject: [v2] drm/msm/disp/dpu1: add support for dspp sub block flush in sc7280
-Date:   Fri,  2 Sep 2022 02:38:06 -0700
-Message-Id: <1662111486-15021-1-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xi5vvSt5cqLNQ-WQeegDBekRvIIZQ9Hj
-X-Proofpoint-GUID: xi5vvSt5cqLNQ-WQeegDBekRvIIZQ9Hj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 mlxlogscore=971 impostorscore=0 adultscore=0
- clxscore=1011 mlxscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209020045
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 2 Sep 2022 05:39:24 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41725286D1;
+        Fri,  2 Sep 2022 02:39:22 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2829dAH8005840;
+        Fri, 2 Sep 2022 04:39:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1662111550;
+        bh=l9/6o5eu4ekkMB7RQCHS2OTvoy909Wl/aedxMWTuPSM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=jMHRWtQOQu6fYMftaq2v/HCbvOyRiFLZYX8i8K3zsBPuObho2K30pB6OT7WC7h31S
+         0NOm1bgNfXDrTuEWKvXS0OatX/LQHbarL8HSaEGFlAE6ZNp58zvDHV/pUuDXybRWDu
+         qLcm0vhtxKlsNVWLWRo8hdeFgBob5YFxAAZJ+ISA=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2829dAEL115520
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 2 Sep 2022 04:39:10 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 2 Sep
+ 2022 04:39:09 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 2 Sep 2022 04:39:09 -0500
+Received: from [10.24.69.114] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2829d42F099947;
+        Fri, 2 Sep 2022 04:39:05 -0500
+Message-ID: <7e7ed572-93fe-a9c8-f11e-d555e5113fd1@ti.com>
+Date:   Fri, 2 Sep 2022 15:09:04 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 2/6] remoteproc: pru: Add APIs to get and put the PRU
+ cores
+Content-Language: en-US
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Md Danish Anwar <danishanwar@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>, <rogerq@kernel.org>,
+        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <robh@kernel.org>
+References: <20220607045650.4999-1-p-mohan@ti.com>
+ <20220607045650.4999-3-p-mohan@ti.com> <20220712175949.GB2945984@p14s>
+ <20220714172015.GA3106020@p14s> <20c544ef-40b3-dcbc-1f29-aac140725b57@ti.com>
+From:   Md Danish Anwar <a0501179@ti.com>
+In-Reply-To: <20c544ef-40b3-dcbc-1f29-aac140725b57@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Flush mechanism for DSPP blocks has changed in sc7280 family, it
-allows individual sub blocks to be flushed in coordination with
-master flush control.
+Hi Mathieu,
 
-Representation: master_flush && (PCC_flush | IGC_flush .. etc )
 
-This change adds necessary support for the above design.
+On 15/07/22 11:52, Kishon Vijay Abraham I wrote:
+> +Danish
+> 
+> Hi Mathieu,
+> 
+> On 14/07/22 22:50, Mathieu Poirier wrote:
+>> On Tue, Jul 12, 2022 at 11:59:49AM -0600, Mathieu Poirier wrote:
+>>> Hi Puranjay,
+> 
+> Removed Puranjay (as he is no longer with TI) and adding Danish.
+> 
+> Regards,
+> Kishon
+>>>
+>>> On Tue, Jun 07, 2022 at 10:26:46AM +0530, Puranjay Mohan wrote:
+>>>> From: Tero Kristo <t-kristo@ti.com>
+>>>>
+>>>> Add two new APIs, pru_rproc_get() and pru_rproc_put(), to the PRU
+>>>> driver to allow client drivers to acquire and release the remoteproc
+>>>> device associated with a PRU core. The PRU cores are treated as
+>>>> resources with only one client owning it at a time.
+>>>>
+>>>> The pru_rproc_get() function returns the rproc handle corresponding
+>>>> to a PRU core identified by the device tree "ti,prus" property under
+>>>> the client node. The pru_rproc_put() is the complementary function
+>>>> to pru_rproc_get().
+>>>>
+>>>> Co-developed-by: Suman Anna <s-anna@ti.com>
+>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>> Co-developed-by: Puranjay Mohan <p-mohan@ti.com>
+>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>>>> ---
+>>>>   drivers/remoteproc/pru_rproc.c | 138 +++++++++++++++++++++++++++++++--
+>>>>   include/linux/pruss.h          |  56 +++++++++++++
+>>>>   2 files changed, 189 insertions(+), 5 deletions(-)
+>>>>   create mode 100644 include/linux/pruss.h
+>>>>
+>>>> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+>>>> index 1777a01fa84e..7a35b400287a 100644
+>>>> --- a/drivers/remoteproc/pru_rproc.c
+>>>> +++ b/drivers/remoteproc/pru_rproc.c
+>>>> @@ -2,12 +2,13 @@
+>>>>   /*
+>>>>    * PRU-ICSS remoteproc driver for various TI SoCs
+>>>>    *
+>>>> - * Copyright (C) 2014-2020 Texas Instruments Incorporated - https://www.ti.com/
+>>>> + * Copyright (C) 2014-2022 Texas Instruments Incorporated - https://www.ti.com/
+>>>>    *
+>>>>    * Author(s):
+>>>>    *	Suman Anna <s-anna@ti.com>
+>>>>    *	Andrew F. Davis <afd@ti.com>
+>>>>    *	Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org> for Texas Instruments
+>>>> + *	Puranjay Mohan <p-mohan@ti.com>
+>>>>    */
+>>>>   
+>>>>   #include <linux/bitops.h>
+>>>> @@ -16,6 +17,7 @@
+>>>>   #include <linux/module.h>
+>>>>   #include <linux/of_device.h>
+>>>>   #include <linux/of_irq.h>
+>>>> +#include <linux/pruss.h>
+>>>>   #include <linux/pruss_driver.h>
+>>>>   #include <linux/remoteproc.h>
+>>>>   
+>>>> @@ -111,6 +113,8 @@ struct pru_private_data {
+>>>>    * @rproc: remoteproc pointer for this PRU core
+>>>>    * @data: PRU core specific data
+>>>>    * @mem_regions: data for each of the PRU memory regions
+>>>> + * @client_np: client device node
+>>>> + * @lock: mutex to protect client usage
+>>>>    * @fw_name: name of firmware image used during loading
+>>>>    * @mapped_irq: virtual interrupt numbers of created fw specific mapping
+>>>>    * @pru_interrupt_map: pointer to interrupt mapping description (firmware)
+>>>> @@ -126,6 +130,8 @@ struct pru_rproc {
+>>>>   	struct rproc *rproc;
+>>>>   	const struct pru_private_data *data;
+>>>>   	struct pruss_mem_region mem_regions[PRU_IOMEM_MAX];
+>>>> +	struct device_node *client_np;
+>>>> +	struct mutex lock; /* client access lock */
+>>>>   	const char *fw_name;
+>>>>   	unsigned int *mapped_irq;
+>>>>   	struct pru_irq_rsc *pru_interrupt_map;
+>>>> @@ -146,6 +152,125 @@ void pru_control_write_reg(struct pru_rproc *pru, unsigned int reg, u32 val)
+>>>>   	writel_relaxed(val, pru->mem_regions[PRU_IOMEM_CTRL].va + reg);
+>>>>   }
+>>>>   
+>>>> +static struct rproc *__pru_rproc_get(struct device_node *np, int index)
+>>>> +{
+>>>> +	struct device_node *rproc_np = NULL;
+>>>> +	struct platform_device *pdev;
+>>>> +	struct rproc *rproc;
+>>>> +
+>>>> +	rproc_np = of_parse_phandle(np, "ti,prus", index);
+>>>> +	if (!rproc_np || !of_device_is_available(rproc_np))
+>>>> +		return ERR_PTR(-ENODEV);
+>>>> +
+>>>> +	pdev = of_find_device_by_node(rproc_np);
+>>>> +	of_node_put(rproc_np);
+>>>> +
+>>>> +	if (!pdev || !(&pdev->dev) || !((&pdev->dev)->driver))
+>>>> +		/* probably PRU not yet probed */
+>>>> +		return ERR_PTR(-EPROBE_DEFER);
+>>>> +
+>>>> +	/* make sure it is PRU rproc */
+>>>> +	if (!is_pru_rproc(&pdev->dev)) {
+>>>> +		put_device(&pdev->dev);
+>>>> +		return ERR_PTR(-ENODEV);
+>>>> +	}
+>>>> +
+>>>> +	rproc = platform_get_drvdata(pdev);
+>>>> +	put_device(&pdev->dev);
+>>>> +	if (!rproc)
+>>>> +		return ERR_PTR(-EPROBE_DEFER);
+>>>> +
+>>>> +	get_device(&rproc->dev);
+>>>> +
+>>>> +	return rproc;
+>>>> +}
+>>>> +
+>>>> +/**
+>>>> + * pru_rproc_get() - get the PRU rproc instance from a device node
+>>>> + * @np: the user/client device node
+>>>> + * @index: index to use for the ti,prus property
+>>>> + * @pru_id: optional pointer to return the PRU remoteproc processor id
+>>>> + *
+>>>> + * This function looks through a client device node's "ti,prus" property at
+>>>> + * index @index and returns the rproc handle for a valid PRU remote processor if
+>>>> + * found. The function allows only one user to own the PRU rproc resource at a
+>>>> + * time. Caller must call pru_rproc_put() when done with using the rproc, not
+>>>> + * required if the function returns a failure.
+>>>> + *
+>>>> + * When optional @pru_id pointer is passed the PRU remoteproc processor id is
+>>>> + * returned.
+>>>> + *
+>>>> + * Return: rproc handle on success, and an ERR_PTR on failure using one
+>>>> + * of the following error values
+>>>> + *    -ENODEV if device is not found
+>>>> + *    -EBUSY if PRU is already acquired by anyone
+>>>> + *    -EPROBE_DEFER is PRU device is not probed yet
+>>>> + */
+>>>> +struct rproc *pru_rproc_get(struct device_node *np, int index,
+>>>> +			    enum pruss_pru_id *pru_id)
+>>>> +{
+>>>> +	struct rproc *rproc;
+>>>> +	struct pru_rproc *pru;
+>>>> +	struct device *dev;
+>>>> +
+>>>> +	try_module_get(THIS_MODULE);
+>>>
+>>> There should be a module_put() in pru_rproc_put()...
+>>
+>> ... and in the error path of this function.
+>>
+>>>
+>>> More comments to come tomorrow.  I'm especially worried about this API racing
+>>> with a remote processor being removed or detached.
+>>>
+>>
+>> Looking at what is done in wkup_m3_ipc_probe(), it should be possible to call
+>> rproc_get_by_handle() here and that would make sure the remote processor doesn't
+>> go away before the end of the function.
+>>
+>> More comments to come...
 
-Changes in v1:
-- Few nits (Doug, Dmitry)
-- Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 +++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  2 ++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 35 +++++++++++++++++++++++++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     | 10 ++++++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h    |  7 ++++++
- 6 files changed, 56 insertions(+), 5 deletions(-)
+It is possible to call rproc_get_by_handle() here instead of 
+__pru_get_proc(), but that would not provide multiple functionality.
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 601d687..ab38a52 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -766,7 +766,7 @@ static void _dpu_crtc_setup_cp_blocks(struct drm_crtc *crtc)
- 
- 		/* stage config flush mask */
- 		ctl->ops.update_pending_flush_dspp(ctl,
--			mixer[i].hw_dspp->idx);
-+			mixer[i].hw_dspp->idx, DPU_DSPP_SUB_PCC);
- 	}
- }
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 27f029f..0eecb2f 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -65,7 +65,10 @@
- 	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
- 
- #define CTL_SC7280_MASK \
--	(BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG))
-+	(BIT(DPU_CTL_ACTIVE_CFG) | \
-+	 BIT(DPU_CTL_FETCH_ACTIVE) | \
-+	 BIT(DPU_CTL_VM_CFG) | \
-+	 BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
- 
- #define MERGE_3D_SM8150_MASK (0)
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index 38aa38a..6a0b784 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -191,6 +191,7 @@ enum {
-  * @DPU_CTL_SPLIT_DISPLAY:	CTL supports video mode split display
-  * @DPU_CTL_FETCH_ACTIVE:	Active CTL for fetch HW (SSPPs)
-  * @DPU_CTL_VM_CFG:		CTL config to support multiple VMs
-+ * @DPU_CTL_DSPP_BLOCK_FLUSH: CTL config to support dspp sub-block flush
-  * @DPU_CTL_MAX
-  */
- enum {
-@@ -198,6 +199,7 @@ enum {
- 	DPU_CTL_ACTIVE_CFG,
- 	DPU_CTL_FETCH_ACTIVE,
- 	DPU_CTL_VM_CFG,
-+	DPU_CTL_DSPP_SUB_BLOCK_FLUSH,
- 	DPU_CTL_MAX
- };
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index a35ecb6..3b14c30 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -33,6 +33,7 @@
- #define   CTL_INTF_FLUSH                0x110
- #define   CTL_INTF_MASTER               0x134
- #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
-+#define   CTL_DSPP_n_FLUSH		0x13C
- 
- #define CTL_MIXER_BORDER_OUT            BIT(24)
- #define CTL_FLUSH_MASK_CTL              BIT(17)
-@@ -82,6 +83,31 @@ static int _mixer_stages(const struct dpu_lm_cfg *mixer, int count,
- 	return stages;
- }
- 
-+static u32 _set_dspp_sub_block_flush(struct dpu_hw_ctl *ctx,
-+	enum dpu_dspp dspp, enum dpu_dspp_sub_blk dspp_sub_blk)
-+{
-+	uint32_t flushbits = 0, active;
-+
-+	switch (dspp_sub_blk) {
-+	case DPU_DSPP_SUB_IGC:
-+		flushbits = BIT(2);
-+		break;
-+	case DPU_DSPP_SUB_PCC:
-+		flushbits = BIT(4);
-+		break;
-+	case DPU_DSPP_SUB_GC:
-+		flushbits = BIT(5);
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	active = DPU_REG_READ(&ctx->hw, CTL_DSPP_n_FLUSH + ((dspp - 1) * 4));
-+	DPU_REG_WRITE(&ctx->hw, CTL_DSPP_n_FLUSH + ((dspp - 1) * 4), active | flushbits);
-+
-+	return BIT(29);
-+}
-+
- static inline u32 dpu_hw_ctl_get_flush_register(struct dpu_hw_ctl *ctx)
- {
- 	struct dpu_hw_blk_reg_map *c = &ctx->hw;
-@@ -287,8 +313,15 @@ static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
- }
- 
- static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
--	enum dpu_dspp dspp)
-+	enum dpu_dspp dspp, enum dpu_dspp_sub_blk dspp_sub_blk)
- {
-+
-+	if ((test_bit(DPU_CTL_DSPP_SUB_BLOCK_FLUSH, &ctx->caps->features))) {
-+		ctx->pending_flush_mask |=
-+			_set_dspp_sub_block_flush(ctx, dspp, dspp_sub_blk);
-+		return;
-+	}
-+
- 	switch (dspp) {
- 	case DSPP_0:
- 		ctx->pending_flush_mask |= BIT(13);
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-index 96c012e..227f1bd 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-@@ -149,12 +149,18 @@ struct dpu_hw_ctl_ops {
- 
- 	/**
- 	 * OR in the given flushbits to the cached pending_flush_mask
--	 * No effect on hardware
-+	 *
-+	 * If the hardware supports dspp sub block flush, then sub-block
-+	 * flushes are written to the hardware and main dspp flush will
-+	 * be cached in the pending_flush_mask.
-+	 *
- 	 * @ctx       : ctl path ctx pointer
- 	 * @blk       : DSPP block index
-+	 * @dspp_sub_blk : DSPP sub-block index
- 	 */
- 	void (*update_pending_flush_dspp)(struct dpu_hw_ctl *ctx,
--		enum dpu_dspp blk);
-+		enum dpu_dspp blk,  enum dpu_dspp_sub_blk dspp_sub_blk);
-+
- 	/**
- 	 * Write the value of the pending_flush_mask to hardware
- 	 * @ctx       : ctl path ctx pointer
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
-index d3b0ed0..c113d52 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
-@@ -167,6 +167,13 @@ enum dpu_dspp {
- 	DSPP_MAX
- };
- 
-+enum dpu_dspp_sub_blk{
-+	DPU_DSPP_SUB_PCC = 1,
-+	DPU_DSPP_SUB_IGC,
-+	DPU_DSPP_SUB_GC,
-+	DPU_DSPP_SUB_MAX
-+};
-+
- enum dpu_ctl {
- 	CTL_0 = 1,
- 	CTL_1,
--- 
-2.7.4
+The API rproc_get_by_handle() returns rproc handle on success, and NULL 
+on failure where as __pru_get_proc() returns ERR_PTR on failure which 
+provides multiple functionality and opportunity for us to distinguish 
+between multiple errors.
 
+So we have these three options.
+
+1. If we're using the API rproc_get_by_handle() and we want the multiple 
+ERR_PTR on failure then we will need to change the API 
+rproc_get_by_handle() and also all the functions that uses 
+rproc_get_by_handle().
+
+2. Keep the API rproc_get_by_handle() as it is. That will restrict us 
+from using multiple ERR_PTR on different kinds of error.
+
+3. Instead of using rproc_get_by_handle(), keep using __pru_get_proc(). 
+This will make sure we have the proper ERR_PTR to retrun for different 
+kinds of errors.
+
+Please let me know which option to continue with.
+
+Thanks,
+Danish
+
+
+>>
+>>
+>>> Thanks,
+>>> Mathieu
+>>>
+>>>> +
+>>>> +	rproc = __pru_rproc_get(np, index);
+>>>> +	if (IS_ERR(rproc))
+>>>> +		return rproc;
+>>>> +
+>>>> +	pru = rproc->priv;
+>>>> +	dev = &rproc->dev;
+>>>> +
+>>>> +	mutex_lock(&pru->lock);
+>>>> +
+>>>> +	if (pru->client_np) {
+>>>> +		mutex_unlock(&pru->lock);
+>>>> +		put_device(dev);
+>>>> +		return ERR_PTR(-EBUSY);
+>>>> +	}
+>>>> +
+>>>> +	pru->client_np = np;
+>>>> +
+>>>> +	mutex_unlock(&pru->lock);
+>>>> +
+>>>> +	if (pru_id)
+>>>> +		*pru_id = pru->id;
+>>>> +
+>>>> +	return rproc;
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(pru_rproc_get);
+>>>> +
+>>>> +/**
+>>>> + * pru_rproc_put() - release the PRU rproc resource
+>>>> + * @rproc: the rproc resource to release
+>>>> + *
+>>>> + * Releases the PRU rproc resource and makes it available to other
+>>>> + * users.
+>>>> + */
+>>>> +void pru_rproc_put(struct rproc *rproc)
+>>>> +{
+>>>> +	struct pru_rproc *pru;
+>>>> +
+>>>> +	if (IS_ERR_OR_NULL(rproc) || !is_pru_rproc(rproc->dev.parent))
+>>>> +		return;
+>>>> +
+>>>> +	pru = rproc->priv;
+>>>> +
+>>>> +	mutex_lock(&pru->lock);
+>>>> +
+>>>> +	if (!pru->client_np) {
+>>>> +		mutex_unlock(&pru->lock);
+>>>> +		return;
+>>>> +	}
+>>>> +
+>>>> +	pru->client_np = NULL;
+>>>> +	mutex_unlock(&pru->lock);
+>>>> +
+>>>> +	put_device(&rproc->dev);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(pru_rproc_put);
+>>>> +
+>>>>   static inline u32 pru_debug_read_reg(struct pru_rproc *pru, unsigned int reg)
+>>>>   {
+>>>>   	return readl_relaxed(pru->mem_regions[PRU_IOMEM_DEBUG].va + reg);
+>>>> @@ -438,7 +563,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
+>>>>   	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
+>>>>   	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
+>>>>   	/* PRU1 has its local RAM addresses reversed */
+>>>> -	if (pru->id == 1)
+>>>> +	if (pru->id == PRUSS_PRU1)
+>>>>   		swap(dram0, dram1);
+>>>>   	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
+>>>>   
+>>>> @@ -747,14 +872,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
+>>>>   	case RTU0_IRAM_ADDR_MASK:
+>>>>   		fallthrough;
+>>>>   	case PRU0_IRAM_ADDR_MASK:
+>>>> -		pru->id = 0;
+>>>> +		pru->id = PRUSS_PRU0;
+>>>>   		break;
+>>>>   	case TX_PRU1_IRAM_ADDR_MASK:
+>>>>   		fallthrough;
+>>>>   	case RTU1_IRAM_ADDR_MASK:
+>>>>   		fallthrough;
+>>>>   	case PRU1_IRAM_ADDR_MASK:
+>>>> -		pru->id = 1;
+>>>> +		pru->id = PRUSS_PRU1;
+>>>>   		break;
+>>>>   	default:
+>>>>   		ret = -EINVAL;
+>>>> @@ -816,6 +941,8 @@ static int pru_rproc_probe(struct platform_device *pdev)
+>>>>   	pru->pruss = platform_get_drvdata(ppdev);
+>>>>   	pru->rproc = rproc;
+>>>>   	pru->fw_name = fw_name;
+>>>> +	pru->client_np = NULL;
+>>>> +	mutex_init(&pru->lock);
+>>>>   
+>>>>   	for (i = 0; i < ARRAY_SIZE(mem_names); i++) {
+>>>>   		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+>>>> @@ -903,7 +1030,7 @@ MODULE_DEVICE_TABLE(of, pru_rproc_match);
+>>>>   
+>>>>   static struct platform_driver pru_rproc_driver = {
+>>>>   	.driver = {
+>>>> -		.name   = "pru-rproc",
+>>>> +		.name   = PRU_RPROC_DRVNAME,
+>>>>   		.of_match_table = pru_rproc_match,
+>>>>   		.suppress_bind_attrs = true,
+>>>>   	},
+>>>> @@ -915,5 +1042,6 @@ module_platform_driver(pru_rproc_driver);
+>>>>   MODULE_AUTHOR("Suman Anna <s-anna@ti.com>");
+>>>>   MODULE_AUTHOR("Andrew F. Davis <afd@ti.com>");
+>>>>   MODULE_AUTHOR("Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>");
+>>>> +MODULE_AUTHOR("Puranjay Mohan <p-mohan@ti.com>");
+>>>>   MODULE_DESCRIPTION("PRU-ICSS Remote Processor Driver");
+>>>>   MODULE_LICENSE("GPL v2");
+>>>> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
+>>>> new file mode 100644
+>>>> index 000000000000..fdc719b43db0
+>>>> --- /dev/null
+>>>> +++ b/include/linux/pruss.h
+>>>> @@ -0,0 +1,56 @@
+>>>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>>>> +/**
+>>>> + * PRU-ICSS Subsystem user interfaces
+>>>> + *
+>>>> + * Copyright (C) 2015-2022 Texas Instruments Incorporated - http://www.ti.com
+>>>> + *	Suman Anna <s-anna@ti.com>
+>>>> + */
+>>>> +
+>>>> +#ifndef __LINUX_PRUSS_H
+>>>> +#define __LINUX_PRUSS_H
+>>>> +
+>>>> +#include <linux/device.h>
+>>>> +#include <linux/types.h>
+>>>> +
+>>>> +#define PRU_RPROC_DRVNAME "pru-rproc"
+>>>> +
+>>>> +/*
+>>>> + * enum pruss_pru_id - PRU core identifiers
+>>>> + */
+>>>> +enum pruss_pru_id {
+>>>> +	PRUSS_PRU0 = 0,
+>>>> +	PRUSS_PRU1,
+>>>> +	PRUSS_NUM_PRUS,
+>>>> +};
+>>>> +
+>>>> +struct device_node;
+>>>> +
+>>>> +#if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>>>> +
+>>>> +struct rproc *pru_rproc_get(struct device_node *np, int index,
+>>>> +			    enum pruss_pru_id *pru_id);
+>>>> +void pru_rproc_put(struct rproc *rproc);
+>>>> +
+>>>> +#else
+>>>> +
+>>>> +static inline struct rproc *
+>>>> +pru_rproc_get(struct device_node *np, int index, enum pruss_pru_id *pru_id)
+>>>> +{
+>>>> +	return ERR_PTR(-EOPNOTSUPP);
+>>>> +}
+>>>> +
+>>>> +static inline void pru_rproc_put(struct rproc *rproc) { }
+>>>> +
+>>>> +#endif /* CONFIG_PRU_REMOTEPROC */
+>>>> +
+>>>> +static inline bool is_pru_rproc(struct device *dev)
+>>>> +{
+>>>> +	const char *drv_name = dev_driver_string(dev);
+>>>> +
+>>>> +	if (strncmp(drv_name, PRU_RPROC_DRVNAME, sizeof(PRU_RPROC_DRVNAME)))
+>>>> +		return false;
+>>>> +
+>>>> +	return true;
+>>>> +}
+>>>> +
+>>>> +#endif /* __LINUX_PRUSS_H */
+>>>> -- 
+>>>> 2.17.1
+>>>>

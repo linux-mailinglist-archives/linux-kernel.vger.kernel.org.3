@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BDA5AAC1F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDC15AAC24
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235847AbiIBKLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
+        id S232840AbiIBKNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235995AbiIBKKe (ORCPT
+        with ESMTP id S235924AbiIBKNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:10:34 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B9FD34F2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 03:09:33 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MJttP1r2Dz9sqv;
-        Fri,  2 Sep 2022 12:09:17 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id yn87RgKV0LbJ; Fri,  2 Sep 2022 12:09:17 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJttN1j3Zz9sr0;
-        Fri,  2 Sep 2022 12:09:16 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 28D768B764;
-        Fri,  2 Sep 2022 12:09:16 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id JjTPTkpSm95V; Fri,  2 Sep 2022 12:09:16 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.39])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D4CCD8B786;
-        Fri,  2 Sep 2022 12:09:15 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 282A92WJ2127999
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 2 Sep 2022 12:09:02 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 282A92Wt2127998;
-        Fri, 2 Sep 2022 12:09:02 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 2/2] powerpc/math-emu: Remove -w build flag and fix warnings
-Date:   Fri,  2 Sep 2022 12:08:55 +0200
-Message-Id: <35c86b7ca823954c6cd593acc3690dc3748da9b1.1662113301.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <a7384eafc6a27aea15bdc9e8f9a12aac593fccb7.1662113301.git.christophe.leroy@csgroup.eu>
-References: <a7384eafc6a27aea15bdc9e8f9a12aac593fccb7.1662113301.git.christophe.leroy@csgroup.eu>
+        Fri, 2 Sep 2022 06:13:01 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3815CB5C6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 03:12:53 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id s206so1576080pgs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 03:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=3JVroPxTcJOCN2o2XA3WnSR5tC+xoLxrSL/gfmOhIRU=;
+        b=zI95h6sekpVe20vXGieCyawXKPx9nvdc79NfYppL9QuorTJLM/PLN0qDTtMlbMCEJa
+         AWjPyKL86CfWa3tXf9O7SstUJ5RCjn/5vLSbypHrjPuJmmOCQYP4de/6kxoh+HWcdP1U
+         BTujz57FAzIJgnxNhYSU1v7mtjpckSRqaHJ6bDJ5Q0rwgZRQWMhOtGE+MmcdyKcGGUG0
+         kZj5NxSfUM1srmRmOJq0jLgTdV9w2rxy+9JYVJupY1pRcDAyO+BXB1C55qN5lM/UZob2
+         oXZoB/8Wx5b5T2plUiXahXUJopUpV0KIV/keIO6jIheBjzNUnr/n1gvraqEP8vXelTCI
+         jpmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=3JVroPxTcJOCN2o2XA3WnSR5tC+xoLxrSL/gfmOhIRU=;
+        b=N4NisHnTQqntC6Wrn/Qbp4Xq6lwmjz72cH/dRc1zklC/97v6DPiJJW8U8Rz7Ns8UVZ
+         Y99JR9RizKlD3+FxATs+vtbzEH9OLTgODqZ6Y3O3p95tb+cQ4X15ZHEbrP3b+iQIlhNB
+         f3vHCLE1RTbY/p9Q0CAsHWRexwdh87YMUhBChpGuDneZnnE3duf/XDJJDtnEVrWv3QIc
+         /JFEUluEdZyFLN5ktde7toljPp1UuH8+NPLcw7k3c7s9f53x4Xh2GvRrRYWOR2hk8XCK
+         mV0a2e9hLzaeBnlTUXe0ujECyTjD3Huqe60rpp8NJYpveZKLVqrBfjOBUpb+xaxbXJ6V
+         4wDQ==
+X-Gm-Message-State: ACgBeo25XYzsH67HrTx3i+t6dBZ6DcUOAuIbIkQd1kMCY4UylRmDt/fI
+        aWt9frF/YW6aYxwE0431xrbgRg==
+X-Google-Smtp-Source: AA6agR6yXjurVloXhqlHPjiqZgE2GPmuzrOFdXC1xZLpi2Bq07HI/s+8bJNdp87p95N8e2rk1sGUoA==
+X-Received: by 2002:a63:564b:0:b0:42c:414a:95fd with SMTP id g11-20020a63564b000000b0042c414a95fdmr18641373pgm.5.1662113573395;
+        Fri, 02 Sep 2022 03:12:53 -0700 (PDT)
+Received: from PF2E59YH-BKX.inc.bytedance.com ([139.177.225.237])
+        by smtp.gmail.com with ESMTPSA id s7-20020a625e07000000b005381d037d07sm1300927pfb.217.2022.09.02.03.12.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 03:12:53 -0700 (PDT)
+From:   Yunhui Cui <cuiyunhui@bytedance.com>
+To:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        akpm@linux-foundation.org, hannes@cmpxchg.org, david@redhat.com,
+        mail@christoph.anton.mitterer.name, ccross@google.com,
+        cuiyunhui@bytedance.com, vincent.whitchurch@axis.com,
+        paul.gortmaker@windriver.com, peterz@infradead.org,
+        edumazet@google.com, joshdon@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] bpf: added the account of BPF running time
+Date:   Fri,  2 Sep 2022 18:12:17 +0800
+Message-Id: <20220902101217.1419-1-cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662113333; l=9512; s=20211009; h=from:subject:message-id; bh=uIW+Vpni5U4dvK8k+EDD1ExI5h7T57uVbSCxSNXzCuw=; b=oGo6UIY+c6Mk9kvYvCxtkL/WXY5LqUT4529NqLD7dpeOhnqbZjVMivVuPcNNLr+KfQowmTxcrirn vLk7mNMcB8n88xz+jUDjIO/O/wvSVMsim+rLfmCKVEtf2ue/A/kP
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,319 +76,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported by Nathan, the module_init() macro was not taken into
-account because the header was missing. That means spe_mathemu_init()
-was never called.
+The following high CPU usage problem is caused by BPF, We found it through
+the perf tools.
+Children Self 	SharedObject 	Symbol
+45.52%	45.51%	[kernel]	[k] native_queued_spin_lock_slowpath
+45.35%	0.10%	[kernel]	[k] _raw_spin_lock_irqsave
+45.29%	0.01%	[kernel]	[k] bpf_map_update_elem
+45.29%	0.02%	[kernel]	[k] htab_map_update_elem
 
-This should have been detected by gcc at build time, but due to
-'-w' flag it went undetected.
+The above problem is caught when bpf_prog is executed, but we cannot
+get the load on the system from bpf_progs executed before, and we
+cannot monitor the occupancy rate of cpu by BPF all the time.
 
-Removing that flag leads to many warnings hence errors.
+Currently only the running time of a single bpf_prog is counted in the
+/proc/$pid/fdinfo/$fd file. It's impossible to count the occupancy rate
+of all bpf_progs on the CPU, because we can't know which processes, and
+it is possible that the process has exited.
 
-Fix those warnings then remove the -w flag.
+With the increasing use of BPF function modules, all running bpf_progs may
+occupy high CPU usage. So we need to add an item to the /proc/stat file to
+observe the CPU usage of BPF from a global perspective.
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
 ---
- arch/powerpc/math-emu/Makefile   |  2 --
- arch/powerpc/math-emu/math.c     | 18 +++++-----
- arch/powerpc/math-emu/math_efp.c | 57 +++++++++++++++++---------------
- 3 files changed, 39 insertions(+), 38 deletions(-)
+ Documentation/filesystems/proc.rst |  1 +
+ fs/proc/stat.c                     | 25 +++++++++++++++++++++++--
+ include/linux/filter.h             | 17 +++++++++++++++--
+ kernel/bpf/core.c                  |  1 +
+ 4 files changed, 40 insertions(+), 4 deletions(-)
 
-diff --git a/arch/powerpc/math-emu/Makefile b/arch/powerpc/math-emu/Makefile
-index a8794032f15f..26fef2e5672e 100644
---- a/arch/powerpc/math-emu/Makefile
-+++ b/arch/powerpc/math-emu/Makefile
-@@ -16,5 +16,3 @@ obj-$(CONFIG_SPE)		+= math_efp.o
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index e7aafc82be99..353f41c3e4eb 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -1477,6 +1477,7 @@ second).  The meanings of the columns are as follows, from left to right:
+ - steal: involuntary wait
+ - guest: running a normal guest
+ - guest_nice: running a niced guest
++- bpf: running in bpf_programs
  
- CFLAGS_fabs.o = -fno-builtin-fabs
- CFLAGS_math.o = -fno-builtin-fabs
--
--ccflags-y = -w
-diff --git a/arch/powerpc/math-emu/math.c b/arch/powerpc/math-emu/math.c
-index 36761bd00f38..936a9a149037 100644
---- a/arch/powerpc/math-emu/math.c
-+++ b/arch/powerpc/math-emu/math.c
-@@ -24,9 +24,9 @@ FLOATFUNC(mtfsf);
- FLOATFUNC(mtfsfi);
+ The "intr" line gives counts of interrupts  serviced since boot time, for each
+ of the  possible system interrupts.   The first  column  is the  total of  all
+diff --git a/fs/proc/stat.c b/fs/proc/stat.c
+index 4fb8729a68d4..ff8ef959fb4f 100644
+--- a/fs/proc/stat.c
++++ b/fs/proc/stat.c
+@@ -14,6 +14,8 @@
+ #include <linux/irqnr.h>
+ #include <linux/sched/cputime.h>
+ #include <linux/tick.h>
++#include <linux/filter.h>
++#include <linux/u64_stats_sync.h>
  
- #ifdef CONFIG_MATH_EMULATION_HW_UNIMPLEMENTED
--#undef FLOATFUNC(x)
-+#undef FLOATFUNC
- #define FLOATFUNC(x)	static inline int x(void *op1, void *op2, void *op3, \
--						 void *op4) { }
-+						 void *op4) { return 0; }
+ #ifndef arch_irq_stat_cpu
+ #define arch_irq_stat_cpu(cpu) 0
+@@ -22,6 +24,20 @@
+ #define arch_irq_stat() 0
  #endif
  
- FLOATFUNC(fadd);
-@@ -396,28 +396,28 @@ do_mathemu(struct pt_regs *regs)
++DECLARE_PER_CPU(struct bpf_account, bpftime);
++
++static void get_bpf_time(u64 *ns, int cpu)
++{
++	unsigned int start = 0;
++	const struct bpf_account *bact;
++
++	bact = per_cpu_ptr(&bpftime, cpu);
++	do {
++		start = u64_stats_fetch_begin_irq(&bact->syncp);
++		*ns = u64_stats_read(&bact->nsecs);
++	} while (u64_stats_fetch_retry_irq(&bact->syncp, start));
++}
++
+ #ifdef arch_idle_time
  
- 	case XCR:
- 		op0 = (void *)&regs->ccr;
--		op1 = (void *)((insn >> 23) & 0x7);
-+		op1 = (void *)(long)((insn >> 23) & 0x7);
- 		op2 = (void *)&current->thread.TS_FPR((insn >> 16) & 0x1f);
- 		op3 = (void *)&current->thread.TS_FPR((insn >> 11) & 0x1f);
- 		break;
+ u64 get_idle_time(struct kernel_cpustat *kcs, int cpu)
+@@ -112,11 +128,12 @@ static int show_stat(struct seq_file *p, void *v)
+ 	u64 guest, guest_nice;
+ 	u64 sum = 0;
+ 	u64 sum_softirq = 0;
++	u64 bpf_sum, bpf;
+ 	unsigned int per_softirq_sums[NR_SOFTIRQS] = {0};
+ 	struct timespec64 boottime;
  
- 	case XCRL:
- 		op0 = (void *)&regs->ccr;
--		op1 = (void *)((insn >> 23) & 0x7);
--		op2 = (void *)((insn >> 18) & 0x7);
-+		op1 = (void *)(long)((insn >> 23) & 0x7);
-+		op2 = (void *)(long)((insn >> 18) & 0x7);
- 		break;
+ 	user = nice = system = idle = iowait =
+-		irq = softirq = steal = 0;
++		irq = softirq = steal = bpf = bpf_sum = 0;
+ 	guest = guest_nice = 0;
+ 	getboottime64(&boottime);
+ 	/* shift boot timestamp according to the timens offset */
+@@ -127,6 +144,7 @@ static int show_stat(struct seq_file *p, void *v)
+ 		u64 *cpustat = kcpustat.cpustat;
  
- 	case XCRB:
--		op0 = (void *)((insn >> 21) & 0x1f);
-+		op0 = (void *)(long)((insn >> 21) & 0x1f);
- 		break;
+ 		kcpustat_cpu_fetch(&kcpustat, i);
++		get_bpf_time(&bpf, i);
  
- 	case XCRI:
--		op0 = (void *)((insn >> 23) & 0x7);
--		op1 = (void *)((insn >> 12) & 0xf);
-+		op0 = (void *)(long)((insn >> 23) & 0x7);
-+		op1 = (void *)(long)((insn >> 12) & 0xf);
- 		break;
+ 		user		+= cpustat[CPUTIME_USER];
+ 		nice		+= cpustat[CPUTIME_NICE];
+@@ -138,6 +156,7 @@ static int show_stat(struct seq_file *p, void *v)
+ 		steal		+= cpustat[CPUTIME_STEAL];
+ 		guest		+= cpustat[CPUTIME_GUEST];
+ 		guest_nice	+= cpustat[CPUTIME_GUEST_NICE];
++		bpf_sum		+= bpf;
+ 		sum		+= kstat_cpu_irqs_sum(i);
+ 		sum		+= arch_irq_stat_cpu(i);
  
- 	case XFLB:
--		op0 = (void *)((insn >> 17) & 0xff);
-+		op0 = (void *)(long)((insn >> 17) & 0xff);
- 		op1 = (void *)&current->thread.TS_FPR((insn >> 11) & 0x1f);
- 		break;
+@@ -160,6 +179,7 @@ static int show_stat(struct seq_file *p, void *v)
+ 	seq_put_decimal_ull(p, " ", nsec_to_clock_t(steal));
+ 	seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest));
+ 	seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest_nice));
++	seq_put_decimal_ull(p, " ", nsec_to_clock_t(bpf_sum));
+ 	seq_putc(p, '\n');
  
-diff --git a/arch/powerpc/math-emu/math_efp.c b/arch/powerpc/math-emu/math_efp.c
-index aa3bb8da1cb9..f01e3475f689 100644
---- a/arch/powerpc/math-emu/math_efp.c
-+++ b/arch/powerpc/math-emu/math_efp.c
-@@ -219,6 +219,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 		case AB:
- 		case XCR:
- 			FP_UNPACK_SP(SA, va.wp + 1);
-+			fallthrough;
- 		case XB:
- 			FP_UNPACK_SP(SB, vb.wp + 1);
- 			break;
-@@ -227,8 +228,8 @@ int do_spe_mathemu(struct pt_regs *regs)
- 			break;
- 		}
+ 	for_each_online_cpu(i) {
+@@ -167,7 +187,7 @@ static int show_stat(struct seq_file *p, void *v)
+ 		u64 *cpustat = kcpustat.cpustat;
  
--		pr_debug("SA: %ld %08lx %ld (%ld)\n", SA_s, SA_f, SA_e, SA_c);
--		pr_debug("SB: %ld %08lx %ld (%ld)\n", SB_s, SB_f, SB_e, SB_c);
-+		pr_debug("SA: %d %08x %d (%d)\n", SA_s, SA_f, SA_e, SA_c);
-+		pr_debug("SB: %d %08x %d (%d)\n", SB_s, SB_f, SB_e, SB_c);
+ 		kcpustat_cpu_fetch(&kcpustat, i);
+-
++		get_bpf_time(&bpf, i);
+ 		/* Copy values here to work around gcc-2.95.3, gcc-2.96 */
+ 		user		= cpustat[CPUTIME_USER];
+ 		nice		= cpustat[CPUTIME_NICE];
+@@ -190,6 +210,7 @@ static int show_stat(struct seq_file *p, void *v)
+ 		seq_put_decimal_ull(p, " ", nsec_to_clock_t(steal));
+ 		seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest));
+ 		seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest_nice));
++		seq_put_decimal_ull(p, " ", nsec_to_clock_t(bpf));
+ 		seq_putc(p, '\n');
+ 	}
+ 	seq_put_decimal_ull(p, "intr ", (unsigned long long)sum);
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index a5f21dc3c432..9cb072f9e32b 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -565,6 +565,12 @@ struct sk_filter {
+ 	struct bpf_prog	*prog;
+ };
  
- 		switch (func) {
- 		case EFSABS:
-@@ -279,7 +280,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 			} else {
- 				SB_e += (func == EFSCTSF ? 31 : 32);
- 				FP_TO_INT_ROUND_S(vc.wp[1], SB, 32,
--						(func == EFSCTSF));
-+						(func == EFSCTSF) ? 1 : 0);
- 			}
- 			goto update_regs;
++struct bpf_account {
++	u64_stats_t nsecs;
++	struct u64_stats_sync syncp;
++};
++DECLARE_PER_CPU(struct bpf_account, bpftime);
++
+ DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
  
-@@ -288,7 +289,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 			FP_CLEAR_EXCEPTIONS;
- 			FP_UNPACK_DP(DB, vb.dp);
+ typedef unsigned int (*bpf_dispatcher_fn)(const void *ctx,
+@@ -577,12 +583,14 @@ static __always_inline u32 __bpf_prog_run(const struct bpf_prog *prog,
+ 					  bpf_dispatcher_fn dfunc)
+ {
+ 	u32 ret;
++	struct bpf_account *bact;
++	unsigned long flags;
++	u64 start = 0;
  
--			pr_debug("DB: %ld %08lx %08lx %ld (%ld)\n",
-+			pr_debug("DB: %d %08x %08x %d (%d)\n",
- 					DB_s, DB_f1, DB_f0, DB_e, DB_c);
+ 	cant_migrate();
++	start = sched_clock();
+ 	if (static_branch_unlikely(&bpf_stats_enabled_key)) {
+ 		struct bpf_prog_stats *stats;
+-		u64 start = sched_clock();
+-		unsigned long flags;
  
- 			FP_CONV(S, D, 1, 2, SR, DB);
-@@ -302,7 +303,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 				FP_SET_EXCEPTION(FP_EX_INVALID);
- 			} else {
- 				FP_TO_INT_ROUND_S(vc.wp[1], SB, 32,
--						((func & 0x3) != 0));
-+						((func & 0x3) != 0) ? 1 : 0);
- 			}
- 			goto update_regs;
+ 		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
+ 		stats = this_cpu_ptr(prog->stats);
+@@ -593,6 +601,11 @@ static __always_inline u32 __bpf_prog_run(const struct bpf_prog *prog,
+ 	} else {
+ 		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
+ 	}
++	bact = this_cpu_ptr(&bpftime);
++	flags = u64_stats_update_begin_irqsave(&bact->syncp);
++	u64_stats_add(&bact->nsecs, sched_clock() - start);
++	u64_stats_update_end_irqrestore(&bact->syncp, flags);
++
+ 	return ret;
+ }
  
-@@ -313,7 +314,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 				FP_SET_EXCEPTION(FP_EX_INVALID);
- 			} else {
- 				FP_TO_INT_S(vc.wp[1], SB, 32,
--						((func & 0x3) != 0));
-+						((func & 0x3) != 0) ? 1 : 0);
- 			}
- 			goto update_regs;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index c1e10d088dbb..445ac1c6c01a 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -618,6 +618,7 @@ static const struct latch_tree_ops bpf_tree_ops = {
+ 	.comp	= bpf_tree_comp,
+ };
  
-@@ -323,7 +324,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 		break;
- 
- pack_s:
--		pr_debug("SR: %ld %08lx %ld (%ld)\n", SR_s, SR_f, SR_e, SR_c);
-+		pr_debug("SR: %d %08x %d (%d)\n", SR_s, SR_f, SR_e, SR_c);
- 
- 		FP_PACK_SP(vc.wp + 1, SR);
- 		goto update_regs;
-@@ -347,6 +348,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 		case AB:
- 		case XCR:
- 			FP_UNPACK_DP(DA, va.dp);
-+			fallthrough;
- 		case XB:
- 			FP_UNPACK_DP(DB, vb.dp);
- 			break;
-@@ -355,9 +357,9 @@ int do_spe_mathemu(struct pt_regs *regs)
- 			break;
- 		}
- 
--		pr_debug("DA: %ld %08lx %08lx %ld (%ld)\n",
-+		pr_debug("DA: %d %08x %08x %d (%d)\n",
- 				DA_s, DA_f1, DA_f0, DA_e, DA_c);
--		pr_debug("DB: %ld %08lx %08lx %ld (%ld)\n",
-+		pr_debug("DB: %d %08x %08x %d (%d)\n",
- 				DB_s, DB_f1, DB_f0, DB_e, DB_c);
- 
- 		switch (func) {
-@@ -409,7 +411,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 			} else {
- 				DB_e += (func == EFDCTSF ? 31 : 32);
- 				FP_TO_INT_ROUND_D(vc.wp[1], DB, 32,
--						(func == EFDCTSF));
-+						(func == EFDCTSF) ? 1 : 0);
- 			}
- 			goto update_regs;
- 
-@@ -418,7 +420,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 			FP_CLEAR_EXCEPTIONS;
- 			FP_UNPACK_SP(SB, vb.wp + 1);
- 
--			pr_debug("SB: %ld %08lx %ld (%ld)\n",
-+			pr_debug("SB: %d %08x %d (%d)\n",
- 					SB_s, SB_f, SB_e, SB_c);
- 
- 			FP_CONV(D, S, 2, 1, DR, SB);
-@@ -432,7 +434,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 				FP_SET_EXCEPTION(FP_EX_INVALID);
- 			} else {
- 				FP_TO_INT_D(vc.dp[0], DB, 64,
--						((func & 0x1) == 0));
-+						((func & 0x1) == 0) ? 1 : 0);
- 			}
- 			goto update_regs;
- 
-@@ -443,7 +445,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 				FP_SET_EXCEPTION(FP_EX_INVALID);
- 			} else {
- 				FP_TO_INT_ROUND_D(vc.wp[1], DB, 32,
--						((func & 0x3) != 0));
-+						((func & 0x3) != 0) ? 1 : 0);
- 			}
- 			goto update_regs;
- 
-@@ -454,7 +456,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 				FP_SET_EXCEPTION(FP_EX_INVALID);
- 			} else {
- 				FP_TO_INT_D(vc.wp[1], DB, 32,
--						((func & 0x3) != 0));
-+						((func & 0x3) != 0) ? 1 : 0);
- 			}
- 			goto update_regs;
- 
-@@ -464,7 +466,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 		break;
- 
- pack_d:
--		pr_debug("DR: %ld %08lx %08lx %ld (%ld)\n",
-+		pr_debug("DR: %d %08x %08x %d (%d)\n",
- 				DR_s, DR_f1, DR_f0, DR_e, DR_c);
- 
- 		FP_PACK_DP(vc.dp, DR);
-@@ -493,6 +495,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 		case XCR:
- 			FP_UNPACK_SP(SA0, va.wp);
- 			FP_UNPACK_SP(SA1, va.wp + 1);
-+			fallthrough;
- 		case XB:
- 			FP_UNPACK_SP(SB0, vb.wp);
- 			FP_UNPACK_SP(SB1, vb.wp + 1);
-@@ -503,13 +506,13 @@ int do_spe_mathemu(struct pt_regs *regs)
- 			break;
- 		}
- 
--		pr_debug("SA0: %ld %08lx %ld (%ld)\n",
-+		pr_debug("SA0: %d %08x %d (%d)\n",
- 				SA0_s, SA0_f, SA0_e, SA0_c);
--		pr_debug("SA1: %ld %08lx %ld (%ld)\n",
-+		pr_debug("SA1: %d %08x %d (%d)\n",
- 				SA1_s, SA1_f, SA1_e, SA1_c);
--		pr_debug("SB0: %ld %08lx %ld (%ld)\n",
-+		pr_debug("SB0: %d %08x %d (%d)\n",
- 				SB0_s, SB0_f, SB0_e, SB0_c);
--		pr_debug("SB1: %ld %08lx %ld (%ld)\n",
-+		pr_debug("SB1: %d %08x %d (%d)\n",
- 				SB1_s, SB1_f, SB1_e, SB1_c);
- 
- 		switch (func) {
-@@ -568,7 +571,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 			} else {
- 				SB0_e += (func == EVFSCTSF ? 31 : 32);
- 				FP_TO_INT_ROUND_S(vc.wp[0], SB0, 32,
--						(func == EVFSCTSF));
-+						(func == EVFSCTSF) ? 1 : 0);
- 			}
- 			if (SB1_c == FP_CLS_NAN) {
- 				vc.wp[1] = 0;
-@@ -576,7 +579,7 @@ int do_spe_mathemu(struct pt_regs *regs)
- 			} else {
- 				SB1_e += (func == EVFSCTSF ? 31 : 32);
- 				FP_TO_INT_ROUND_S(vc.wp[1], SB1, 32,
--						(func == EVFSCTSF));
-+						(func == EVFSCTSF) ? 1 : 0);
- 			}
- 			goto update_regs;
- 
-@@ -587,14 +590,14 @@ int do_spe_mathemu(struct pt_regs *regs)
- 				FP_SET_EXCEPTION(FP_EX_INVALID);
- 			} else {
- 				FP_TO_INT_ROUND_S(vc.wp[0], SB0, 32,
--						((func & 0x3) != 0));
-+						((func & 0x3) != 0) ? 1 : 0);
- 			}
- 			if (SB1_c == FP_CLS_NAN) {
- 				vc.wp[1] = 0;
- 				FP_SET_EXCEPTION(FP_EX_INVALID);
- 			} else {
- 				FP_TO_INT_ROUND_S(vc.wp[1], SB1, 32,
--						((func & 0x3) != 0));
-+						((func & 0x3) != 0) ? 1 : 0);
- 			}
- 			goto update_regs;
- 
-@@ -605,14 +608,14 @@ int do_spe_mathemu(struct pt_regs *regs)
- 				FP_SET_EXCEPTION(FP_EX_INVALID);
- 			} else {
- 				FP_TO_INT_S(vc.wp[0], SB0, 32,
--						((func & 0x3) != 0));
-+						((func & 0x3) != 0) ? 1 : 0);
- 			}
- 			if (SB1_c == FP_CLS_NAN) {
- 				vc.wp[1] = 0;
- 				FP_SET_EXCEPTION(FP_EX_INVALID);
- 			} else {
- 				FP_TO_INT_S(vc.wp[1], SB1, 32,
--						((func & 0x3) != 0));
-+						((func & 0x3) != 0) ? 1 : 0);
- 			}
- 			goto update_regs;
- 
-@@ -622,9 +625,9 @@ int do_spe_mathemu(struct pt_regs *regs)
- 		break;
- 
- pack_vs:
--		pr_debug("SR0: %ld %08lx %ld (%ld)\n",
-+		pr_debug("SR0: %d %08x %d (%d)\n",
- 				SR0_s, SR0_f, SR0_e, SR0_c);
--		pr_debug("SR1: %ld %08lx %ld (%ld)\n",
-+		pr_debug("SR1: %d %08x %d (%d)\n",
- 				SR1_s, SR1_f, SR1_e, SR1_c);
- 
- 		FP_PACK_SP(vc.wp, SR0);
++DEFINE_PER_CPU(struct bpf_account, bpftime);
+ static DEFINE_SPINLOCK(bpf_lock);
+ static LIST_HEAD(bpf_kallsyms);
+ static struct latch_tree_root bpf_tree __cacheline_aligned;
 -- 
-2.37.1
+2.20.1
 

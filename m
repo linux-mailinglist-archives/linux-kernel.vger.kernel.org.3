@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D461F5ABA4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8BD5AB92E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiIBVks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 17:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
+        id S229740AbiIBUJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 16:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiIBVkb (ORCPT
+        with ESMTP id S229482AbiIBUJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 17:40:31 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BF43E744
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:40:22 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id f14so2805681qkm.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 14:40:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=a/6y1tnbijdXc5qSMdd4IK5j90OSsiP2sEjvKMKEBTI=;
-        b=K6w/ph2YvbrAoqqGMdDTbzaJxkU/GCskA/gO5HYUyptfDzMuD/PCZN1AbjYE3Gz7kp
-         4qog5itKarci+dzN0DwAog50b8cVEWazuo1qmQbyjZzx4E7UdlnoZWRUB/dwB5pHj3v8
-         dqf50X1ggz6hSRBfL7zG0xJ6GyDhVmlADQKfkdiJUXCX4J4Wu51qxWaHi5XmELZEqF+3
-         KOdG549A38ufAzxL+PHq59/SFtS3W4i9tr9FaiKwl7dyXHUpYW7EXoBAoKMWyWLMRs0r
-         X2dref2ucuJ9yK/mW1v3ZguZpL9hmvpWKa64EWt++3TyJTjV0/wCRB8Ef5MH1ai19vZh
-         txcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=a/6y1tnbijdXc5qSMdd4IK5j90OSsiP2sEjvKMKEBTI=;
-        b=7GMrfvqK0xwbCs0LP4VPFsodQTn9ECriqZR4xL+oaU+2uz1HRS1GVTctW5tgIBKNJl
-         cOZKtu7TGXj1PXOJ64OXGESQO+lBN4gBhcsT2ysR9cqsz5AT6dxL65t8iqnW4iFOWCoX
-         Wo/17K20BofpbgQjyQdCn3eLJb9ac/uDy/AzHwU38xe7rM1jNLIU7uZvGPuzXW7tt3jb
-         tvLS6uHIRZyhHec1vYBJ7V7bIEGxN8oRwlQtSXiUHEhtvj5U/fRwd3r76iHcv3s57T4N
-         /bfLImodFFoRnYn0Ygu2vesZrdFL53bxP8pFMHa5Zyq/ICHTmLRzIvd9T02s/DOAWrax
-         V8VQ==
-X-Gm-Message-State: ACgBeo3r6J2f5pZ/G7iPqh7i7f6AD3U5s2iNBUIWEpAyUO4BIo4KFCgZ
-        aASmQZv/0+Kvif1LmDYc3wR12A==
-X-Google-Smtp-Source: AA6agR6OyuWkqksbnk9o2odwFhmHjE3fR48VDFM11LQr6zwHpcQ+2cXpaK5b2lZ0sKIUAtzPPBNrgA==
-X-Received: by 2002:ae9:e841:0:b0:6b9:c69e:ac99 with SMTP id a62-20020ae9e841000000b006b9c69eac99mr24436570qkg.450.1662154821173;
-        Fri, 02 Sep 2022 14:40:21 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id 15-20020ac84e8f000000b0031f0b43629dsm1819533qtp.23.2022.09.02.14.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 14:40:20 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     brgl@bgdev.pl, linus.walleij@linaro.org
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH 4/4] gpio: ws16c48: Make irq_chip immutable
-Date:   Fri,  2 Sep 2022 13:45:26 -0400
-Message-Id: <f4a75e8784f04247e0ef1b7af64d93e68cc373b0.1662140119.git.william.gray@linaro.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <cover.1662140119.git.william.gray@linaro.org>
-References: <cover.1662140119.git.william.gray@linaro.org>
+        Fri, 2 Sep 2022 16:09:50 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04CA32A8B;
+        Fri,  2 Sep 2022 13:09:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662149388; x=1693685388;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dfYcUn+noeT5T7sIeUiJNjSqZU06JxPpPMa1yx2CwNs=;
+  b=Xy8Y9qqZGC/baP+jeME/oFDbDgmHUmWi1ZUnQv47muSxlHpzswmPrO5R
+   v5j48Zmjw7/Jd1bWtVpbAME/5PvYBVtiNaIXsHzg/iDRhMpZhufn2HjzK
+   PA3wpiKlLjaB9By2ungKB4gUxq1UDkNtcMv33Tnhhxp2RUqi41Yu74EGQ
+   BqczzdPFWPwOIR7fbsg2TkKUzJ4qznQqnaXyrkobiBfsa59De5gt7kkwp
+   DU60wfV3+9osazpwG9ANUng4J3H/Vkr0T5rjLjH+h4m3IB8sWhH3a11PA
+   E3fWASxJ2z88bYfkbCrSfyxGZFqHiDeKkTb670PzM6uRKLkc7/q7VJ0UD
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="382373013"
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="382373013"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 12:36:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="609084187"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 02 Sep 2022 12:36:18 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUCSf-0000WB-2p;
+        Fri, 02 Sep 2022 19:36:17 +0000
+Date:   Sat, 3 Sep 2022 03:35:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yunhui Cui <cuiyunhui@bytedance.com>, corbet@lwn.net,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, david@redhat.com,
+        mail@christoph.anton.mitterer.name, ccross@google.com,
+        vincent.whitchurch@axis.com, paul.gortmaker@windriver.com,
+        peterz@infradead.org, edumazet@google.com, joshdon@google.com
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] bpf: added the account of BPF running time
+Message-ID: <202209030333.Goj9I0Pe-lkp@intel.com>
+References: <20220902101217.1419-1-cuiyunhui@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902101217.1419-1-cuiyunhui@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,64 +73,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel warns about mutable irq_chips:
+Hi Yunhui,
 
-    "not an immutable chip, please consider fixing!"
+Thank you for the patch! Yet something to improve:
 
-Make the struct irq_chip const, flag it as IRQCHIP_IMMUTABLE, add the
-new helper functions, and call the appropriate gpiolib functions.
+[auto build test ERROR on bpf-next/master]
+[also build test ERROR on bpf/master linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
- drivers/gpio/gpio-ws16c48.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yunhui-Cui/bpf-added-the-account-of-BPF-running-time/20220902-181437
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20220903/202209030333.Goj9I0Pe-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/e31420772f2a63d6bc561211b8ef0331d41b2123
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yunhui-Cui/bpf-added-the-account-of-BPF-running-time/20220902-181437
+        git checkout e31420772f2a63d6bc561211b8ef0331d41b2123
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
 
-diff --git a/drivers/gpio/gpio-ws16c48.c b/drivers/gpio/gpio-ws16c48.c
-index b098f2dc196b..59fb10641598 100644
---- a/drivers/gpio/gpio-ws16c48.c
-+++ b/drivers/gpio/gpio-ws16c48.c
-@@ -265,6 +265,7 @@ static void ws16c48_irq_mask(struct irq_data *data)
- 	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
- 
- 	ws16c48gpio->irq_mask &= ~mask;
-+	gpiochip_disable_irq(chip, offset);
- 	port_state = ws16c48gpio->irq_mask >> (8 * port);
- 
- 	/* Select Register Page 2; Unlock all I/O ports */
-@@ -295,6 +296,7 @@ static void ws16c48_irq_unmask(struct irq_data *data)
- 
- 	raw_spin_lock_irqsave(&ws16c48gpio->lock, flags);
- 
-+	gpiochip_enable_irq(chip, offset);
- 	ws16c48gpio->irq_mask |= mask;
- 	port_state = ws16c48gpio->irq_mask >> (8 * port);
- 
-@@ -356,12 +358,14 @@ static int ws16c48_irq_set_type(struct irq_data *data, unsigned flow_type)
- 	return 0;
- }
- 
--static struct irq_chip ws16c48_irqchip = {
-+static const struct irq_chip ws16c48_irqchip = {
- 	.name = "ws16c48",
- 	.irq_ack = ws16c48_irq_ack,
- 	.irq_mask = ws16c48_irq_mask,
- 	.irq_unmask = ws16c48_irq_unmask,
--	.irq_set_type = ws16c48_irq_set_type
-+	.irq_set_type = ws16c48_irq_set_type,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
- 
- static irqreturn_t ws16c48_irq_handler(int irq, void *dev_id)
-@@ -463,7 +467,7 @@ static int ws16c48_probe(struct device *dev, unsigned int id)
- 	ws16c48gpio->chip.set_multiple = ws16c48_gpio_set_multiple;
- 
- 	girq = &ws16c48gpio->chip.irq;
--	girq->chip = &ws16c48_irqchip;
-+	gpio_irq_chip_set_chip(girq, &ws16c48_irqchip);
- 	/* This will let us handle the parent IRQ in the driver */
- 	girq->parent_handler = NULL;
- 	girq->num_parents = 0;
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   /usr/bin/ld: warning: arch/x86/um/vdso/vdso.o: missing .note.GNU-stack section implies executable stack
+   /usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+   /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
+   /usr/bin/ld: kernel/seccomp.o: in function `seccomp_run_filters':
+   seccomp.c:(.text+0xaa7): undefined reference to `bpftime'
+   /usr/bin/ld: fs/proc/stat.o: in function `show_stat':
+   stat.c:(.text+0x124): undefined reference to `bpftime'
+   /usr/bin/ld: stat.c:(.text+0x332): undefined reference to `bpftime'
+   /usr/bin/ld: net/core/flow_dissector.o: in function `bpf_flow_dissect':
+>> flow_dissector.c:(.text+0x9f5): undefined reference to `bpftime'
+   /usr/bin/ld: net/core/dev.o: in function `bpf_prog_run_generic_xdp':
+>> dev.c:(.text+0x8c43): undefined reference to `bpftime'
+   /usr/bin/ld: net/core/ptp_classifier.o:ptp_classifier.c:(.text+0xf8): more undefined references to `bpftime' follow
+   collect2: error: ld returned 1 exit status
+
 -- 
-2.37.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

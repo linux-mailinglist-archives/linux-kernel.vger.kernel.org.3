@@ -1,48 +1,54 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391545AB13A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:14:24 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 227AA5AB00C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236550AbiIBNN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S237679AbiIBMrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238560AbiIBNNN (ORCPT
+        with ESMTP id S237460AbiIBMrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:13:13 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3829A98CBB;
-        Fri,  2 Sep 2022 05:50:24 -0700 (PDT)
+        Fri, 2 Sep 2022 08:47:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB957F14FD;
+        Fri,  2 Sep 2022 05:34:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A76D2CE2E6C;
-        Fri,  2 Sep 2022 12:40:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE09DC433C1;
-        Fri,  2 Sep 2022 12:40:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F0CF62119;
+        Fri,  2 Sep 2022 12:34:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5D8C433D6;
+        Fri,  2 Sep 2022 12:34:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122426;
-        bh=5I5WgbFR00KcFPgxXOaC3z7i3XsVwy5EdHXJcG36H14=;
+        s=korg; t=1662122049;
+        bh=MSnkjPP/MYSfeJHpJPpx1Hxgi4ylFwUpQBUk8PBVVwQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0gGWY16J7zQDvbbNDGz/bP3+ay63C4pqEbY3khHgBshJhR1MkeSM3WL+mCvVTBFFN
-         XGGyrKxiS9YaE21FwH4Iin7iAX2B38D05BfxPKUY76Y76RHjQQ8bBAKyNaAFhr24v/
-         Gsa6Kfvve6b6jXRtfUIX8SyX6AXBp6YVI4LEoP2k=
+        b=UkbhBaxt5sQlI765m99eY3C7bUQ7zQo09E4OryzStx5pZEknWr8jGNSSKn9uCxJUF
+         9kront30yvHezxHbKEMSPY14zwk3usOUefHvkHrO+7EJaG0dtuwn6+SDGhMK/35JN+
+         Ws6S55kYYR7oNYz+xdOwrX425s1q1KLOrOk+pgh8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Wen Gu <guwen@linux.alibaba.com>,
-        Hawkins Jiawei <yin31149@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
-Subject: [PATCH 5.10 13/37] net: fix refcount bug in sk_psock_get (2)
+        stable@vger.kernel.org,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        syzbot+da54fa8d793ca89c741f@syzkaller.appspotmail.com,
+        Todd Kjos <tkjos@google.com>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Martijn Coenen <maco@android.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.15 71/73] android: binder: fix lockdep check on clearing vma
 Date:   Fri,  2 Sep 2022 14:19:35 +0200
-Message-Id: <20220902121359.580930358@linuxfoundation.org>
+Message-Id: <20220902121406.747072796@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121359.177846782@linuxfoundation.org>
-References: <20220902121359.177846782@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,192 +63,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hawkins Jiawei <yin31149@gmail.com>
+From: Liam Howlett <liam.howlett@oracle.com>
 
-commit 2a0133723f9ebeb751cfce19f74ec07e108bef1f upstream.
+commit b0cab80ecd54ae3b2356bb081af0bffd538c8265 upstream.
 
-Syzkaller reports refcount bug as follows:
-------------[ cut here ]------------
-refcount_t: saturated; leaking memory.
-WARNING: CPU: 1 PID: 3605 at lib/refcount.c:19 refcount_warn_saturate+0xf4/0x1e0 lib/refcount.c:19
-Modules linked in:
-CPU: 1 PID: 3605 Comm: syz-executor208 Not tainted 5.18.0-syzkaller-03023-g7e062cda7d90 #0
- <TASK>
- __refcount_add_not_zero include/linux/refcount.h:163 [inline]
- __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
- refcount_inc_not_zero include/linux/refcount.h:245 [inline]
- sk_psock_get+0x3bc/0x410 include/linux/skmsg.h:439
- tls_data_ready+0x6d/0x1b0 net/tls/tls_sw.c:2091
- tcp_data_ready+0x106/0x520 net/ipv4/tcp_input.c:4983
- tcp_data_queue+0x25f2/0x4c90 net/ipv4/tcp_input.c:5057
- tcp_rcv_state_process+0x1774/0x4e80 net/ipv4/tcp_input.c:6659
- tcp_v4_do_rcv+0x339/0x980 net/ipv4/tcp_ipv4.c:1682
- sk_backlog_rcv include/net/sock.h:1061 [inline]
- __release_sock+0x134/0x3b0 net/core/sock.c:2849
- release_sock+0x54/0x1b0 net/core/sock.c:3404
- inet_shutdown+0x1e0/0x430 net/ipv4/af_inet.c:909
- __sys_shutdown_sock net/socket.c:2331 [inline]
- __sys_shutdown_sock net/socket.c:2325 [inline]
- __sys_shutdown+0xf1/0x1b0 net/socket.c:2343
- __do_sys_shutdown net/socket.c:2351 [inline]
- __se_sys_shutdown net/socket.c:2349 [inline]
- __x64_sys_shutdown+0x50/0x70 net/socket.c:2349
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
- </TASK>
+When munmapping a vma, the mmap_lock can be degraded to a write before
+calling close() on the file handle.  The binder close() function calls
+binder_alloc_set_vma() to clear the vma address, which now has a lock dep
+check for writing on the mmap_lock.  Change the lockdep check to ensure
+the reading lock is held while clearing and keep the write check while
+writing.
 
-During SMC fallback process in connect syscall, kernel will
-replaces TCP with SMC. In order to forward wakeup
-smc socket waitqueue after fallback, kernel will sets
-clcsk->sk_user_data to origin smc socket in
-smc_fback_replace_callbacks().
-
-Later, in shutdown syscall, kernel will calls
-sk_psock_get(), which treats the clcsk->sk_user_data
-as psock type, triggering the refcnt warning.
-
-So, the root cause is that smc and psock, both will use
-sk_user_data field. So they will mismatch this field
-easily.
-
-This patch solves it by using another bit(defined as
-SK_USER_DATA_PSOCK) in PTRMASK, to mark whether
-sk_user_data points to a psock object or not.
-This patch depends on a PTRMASK introduced in commit f1ff5ce2cd5e
-("net, sk_msg: Clear sk_user_data pointer on clone if tagged").
-
-For there will possibly be more flags in the sk_user_data field,
-this patch also refactor sk_user_data flags code to be more generic
-to improve its maintainability.
-
-Reported-and-tested-by: syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Acked-by: Wen Gu <guwen@linux.alibaba.com>
-Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lkml.kernel.org/r/20220627151857.2316964-1-Liam.Howlett@oracle.com
+Fixes: 472a68df605b ("android: binder: stop saving a pointer to the VMA")
+Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Reported-by: syzbot+da54fa8d793ca89c741f@syzkaller.appspotmail.com
+Acked-by: Todd Kjos <tkjos@google.com>
+Cc: "Arve Hjønnevåg" <arve@android.com>
+Cc: Christian Brauner (Microsoft) <brauner@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Hridya Valsaraju <hridya@google.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Martijn Coenen <maco@android.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/skmsg.h |    3 +-
- include/net/sock.h    |   68 +++++++++++++++++++++++++++++++++++---------------
- net/core/skmsg.c      |    4 ++
- 3 files changed, 53 insertions(+), 22 deletions(-)
+ drivers/android/binder_alloc.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -281,7 +281,8 @@ static inline void sk_msg_sg_copy_clear(
- 
- static inline struct sk_psock *sk_psock(const struct sock *sk)
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -315,12 +315,19 @@ static inline void binder_alloc_set_vma(
  {
--	return rcu_dereference_sk_user_data(sk);
-+	return __rcu_dereference_sk_user_data_with_flags(sk,
-+							 SK_USER_DATA_PSOCK);
+ 	unsigned long vm_start = 0;
+ 
++	/*
++	 * Allow clearing the vma with holding just the read lock to allow
++	 * munmapping downgrade of the write lock before freeing and closing the
++	 * file using binder_alloc_vma_close().
++	 */
+ 	if (vma) {
+ 		vm_start = vma->vm_start;
+ 		alloc->vma_vm_mm = vma->vm_mm;
++		mmap_assert_write_locked(alloc->vma_vm_mm);
++	} else {
++		mmap_assert_locked(alloc->vma_vm_mm);
+ 	}
+ 
+-	mmap_assert_write_locked(alloc->vma_vm_mm);
+ 	alloc->vma_addr = vm_start;
  }
  
- static inline void sk_psock_queue_msg(struct sk_psock *psock,
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -527,14 +527,26 @@ enum sk_pacing {
- 	SK_PACING_FQ		= 2,
- };
- 
--/* Pointer stored in sk_user_data might not be suitable for copying
-- * when cloning the socket. For instance, it can point to a reference
-- * counted object. sk_user_data bottom bit is set if pointer must not
-- * be copied.
-+/* flag bits in sk_user_data
-+ *
-+ * - SK_USER_DATA_NOCOPY:      Pointer stored in sk_user_data might
-+ *   not be suitable for copying when cloning the socket. For instance,
-+ *   it can point to a reference counted object. sk_user_data bottom
-+ *   bit is set if pointer must not be copied.
-+ *
-+ * - SK_USER_DATA_BPF:         Mark whether sk_user_data field is
-+ *   managed/owned by a BPF reuseport array. This bit should be set
-+ *   when sk_user_data's sk is added to the bpf's reuseport_array.
-+ *
-+ * - SK_USER_DATA_PSOCK:       Mark whether pointer stored in
-+ *   sk_user_data points to psock type. This bit should be set
-+ *   when sk_user_data is assigned to a psock object.
-  */
- #define SK_USER_DATA_NOCOPY	1UL
--#define SK_USER_DATA_BPF	2UL	/* Managed by BPF */
--#define SK_USER_DATA_PTRMASK	~(SK_USER_DATA_NOCOPY | SK_USER_DATA_BPF)
-+#define SK_USER_DATA_BPF	2UL
-+#define SK_USER_DATA_PSOCK	4UL
-+#define SK_USER_DATA_PTRMASK	~(SK_USER_DATA_NOCOPY | SK_USER_DATA_BPF |\
-+				  SK_USER_DATA_PSOCK)
- 
- /**
-  * sk_user_data_is_nocopy - Test if sk_user_data pointer must not be copied
-@@ -547,24 +559,40 @@ static inline bool sk_user_data_is_nocop
- 
- #define __sk_user_data(sk) ((*((void __rcu **)&(sk)->sk_user_data)))
- 
-+/**
-+ * __rcu_dereference_sk_user_data_with_flags - return the pointer
-+ * only if argument flags all has been set in sk_user_data. Otherwise
-+ * return NULL
-+ *
-+ * @sk: socket
-+ * @flags: flag bits
-+ */
-+static inline void *
-+__rcu_dereference_sk_user_data_with_flags(const struct sock *sk,
-+					  uintptr_t flags)
-+{
-+	uintptr_t sk_user_data = (uintptr_t)rcu_dereference(__sk_user_data(sk));
-+
-+	WARN_ON_ONCE(flags & SK_USER_DATA_PTRMASK);
-+
-+	if ((sk_user_data & flags) == flags)
-+		return (void *)(sk_user_data & SK_USER_DATA_PTRMASK);
-+	return NULL;
-+}
-+
- #define rcu_dereference_sk_user_data(sk)				\
-+	__rcu_dereference_sk_user_data_with_flags(sk, 0)
-+#define __rcu_assign_sk_user_data_with_flags(sk, ptr, flags)		\
- ({									\
--	void *__tmp = rcu_dereference(__sk_user_data((sk)));		\
--	(void *)((uintptr_t)__tmp & SK_USER_DATA_PTRMASK);		\
--})
--#define rcu_assign_sk_user_data(sk, ptr)				\
--({									\
--	uintptr_t __tmp = (uintptr_t)(ptr);				\
--	WARN_ON_ONCE(__tmp & ~SK_USER_DATA_PTRMASK);			\
--	rcu_assign_pointer(__sk_user_data((sk)), __tmp);		\
--})
--#define rcu_assign_sk_user_data_nocopy(sk, ptr)				\
--({									\
--	uintptr_t __tmp = (uintptr_t)(ptr);				\
--	WARN_ON_ONCE(__tmp & ~SK_USER_DATA_PTRMASK);			\
-+	uintptr_t __tmp1 = (uintptr_t)(ptr),				\
-+		  __tmp2 = (uintptr_t)(flags);				\
-+	WARN_ON_ONCE(__tmp1 & ~SK_USER_DATA_PTRMASK);			\
-+	WARN_ON_ONCE(__tmp2 & SK_USER_DATA_PTRMASK);			\
- 	rcu_assign_pointer(__sk_user_data((sk)),			\
--			   __tmp | SK_USER_DATA_NOCOPY);		\
-+			   __tmp1 | __tmp2);				\
- })
-+#define rcu_assign_sk_user_data(sk, ptr)				\
-+	__rcu_assign_sk_user_data_with_flags(sk, ptr, 0)
- 
- /*
-  * SK_CAN_REUSE and SK_NO_REUSE on a socket mean that the socket is OK
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -612,7 +612,9 @@ struct sk_psock *sk_psock_init(struct so
- 	sk_psock_set_state(psock, SK_PSOCK_TX_ENABLED);
- 	refcount_set(&psock->refcnt, 1);
- 
--	rcu_assign_sk_user_data_nocopy(sk, psock);
-+	__rcu_assign_sk_user_data_with_flags(sk, psock,
-+					     SK_USER_DATA_NOCOPY |
-+					     SK_USER_DATA_PSOCK);
- 	sock_hold(sk);
- 
- out:
 
 

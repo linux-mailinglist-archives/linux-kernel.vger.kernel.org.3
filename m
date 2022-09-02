@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D5B5AA4C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF7C5AA4CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235007AbiIBBBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 21:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S234852AbiIBBBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 21:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234836AbiIBBAi (ORCPT
+        with ESMTP id S235060AbiIBBAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 21:00:38 -0400
+        Thu, 1 Sep 2022 21:00:43 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B2B48CA6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:00:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174F45283C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:00:39 -0700 (PDT)
 Received: from localhost.localdomain (unknown [182.2.38.99])
-        by gnuweeb.org (Postfix) with ESMTPSA id 306D380C0E;
-        Fri,  2 Sep 2022 01:00:30 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 9384080C0F;
+        Fri,  2 Sep 2022 01:00:35 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1662080435;
-        bh=qs4JWXzimskB0a0dxpXuwJq+RPw5p6Ix1O988JFqCXs=;
+        s=default; t=1662080439;
+        bh=9GSXmeVjCxnKtOIl8QXARd1WE15qBfZ6Fsg6NpWTl7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KFNn40UYvQ4q7OUbaNPIHEDdxDyVPJu4V3423xzNxkvVntWFVsuDK9clwX0Kbk3Ic
-         rNYzP71HYXwvfugIWjJBA5zYwspn9hzBqxn6CznbImonljgWZ3GIC7Hg3+nXd4XjYw
-         W1axHUf68kA6cZm//gdXdDJYwTGFCR+cYd1lsotPgtWBRgW7/Jwdh/FpqJGZ9KZCc8
-         x2te4tc412nqE6FMg1pUHPQXZOU+u4EJOSZybSJspHc/3es2ivkRrQVXfjdrAZ95Mi
-         wkdJ3bCM8gI7YwrHaP2a7GxEp6Lt+iRT12O4bFpQvE1ZD+qCszrmNpc1zpOl/qfYvP
-         WHntArYofsaQA==
+        b=YZDE+vqvKQs2IiFObLQGYe56c1JQ2spJtNsYb1nxLPiDd5/q7gq/GsVqs5liG1Cyr
+         hs+QBx8s5lZKRX84VZedS9HOGM1Kkxqg/Luse9g5s0lJ6nWgZIh+y5E93hBmsTIW8g
+         lSTXPcPiQg4TtvP5bGB9u19wwIJh3CRdQKGqkMfTY24TUMx3tWORDRaZiH0vuC0k+p
+         iw5pBJ6pntwMxEvqK6yF0Whq1dIh5YIjil+VKlMsBN1pKt7rYfktXGPRBdfMVmaVUD
+         vxrDiVJlkqbJVH4ibX+r9VZsmalWovS2ZwDKMhYGkMZ/VTlz+eB2nAmj662hjfee9n
+         Mw61yG7GrB8ig==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -40,9 +40,9 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         io-uring Mailing List <io-uring@vger.gnuweeb.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH liburing v1 04/12] t/socket-rw-eagain: Don't brute force the port number
-Date:   Fri,  2 Sep 2022 07:59:38 +0700
-Message-Id: <20220902005825.2484023-5-ammar.faizi@intel.com>
+Subject: [PATCH liburing v1 05/12] t/socket-rw-offset: Don't brute force the port number
+Date:   Fri,  2 Sep 2022 07:59:39 +0700
+Message-Id: <20220902005825.2484023-6-ammar.faizi@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220902005825.2484023-1-ammar.faizi@intel.com>
 References: <20220902005825.2484023-1-ammar.faizi@intel.com>
@@ -68,14 +68,14 @@ Cc: Facebook Kernel Team <kernel-team@fb.com>
 Cc: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- test/socket-rw-eagain.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+ test/socket-rw-offset.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/test/socket-rw-eagain.c b/test/socket-rw-eagain.c
-index 2d6a817..a12c70d 100644
---- a/test/socket-rw-eagain.c
-+++ b/test/socket-rw-eagain.c
-@@ -8,61 +8,51 @@
+diff --git a/test/socket-rw-offset.c b/test/socket-rw-offset.c
+index 987b6c9..c422442 100644
+--- a/test/socket-rw-offset.c
++++ b/test/socket-rw-offset.c
+@@ -10,60 +10,51 @@
  #include <stdint.h>
  #include <assert.h>
  
@@ -124,10 +124,10 @@ index 2d6a817..a12c70d 100644
 -			exit(1);
 -		}
 -	} while (1);
--
 +	assert(!t_bind_ephemeral_port(recv_s0, &addr));
  	ret = listen(recv_s0, 128);
  	assert(ret != -1);
+ 
  
  	p_fd[1] = socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, IPPROTO_TCP);
  
@@ -138,7 +138,6 @@ index 2d6a817..a12c70d 100644
  	int32_t flags = fcntl(p_fd[1], F_GETFL, 0);
  	assert(flags != -1);
  
- 	flags |= O_NONBLOCK;
 -- 
 Ammar Faizi
 

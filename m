@@ -2,224 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D985AA5CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DED55AA5F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 04:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiIBCae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 22:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S231577AbiIBChp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 22:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234707AbiIBCaV (ORCPT
+        with ESMTP id S229602AbiIBChm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 22:30:21 -0400
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20077.outbound.protection.outlook.com [40.107.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC23399CB;
-        Thu,  1 Sep 2022 19:30:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AFgiS4dGtMnB6ItexXt5YUYowRsyGHNQMGco3cWtsYpxIPLOxAdVLYibZeR0+Ktk3YKQxj1md+OUXXyviVEjTO0Qi5NiSSXCI0G2tCXXwTHxsoKRT+ze3+7EZTizQRMArBX6ji7Ip69ZSH3ibDHwiVl3pRWMjg6n9N3M7cfINTl9qsR4cMVOTogADqsaf9DdxnmaiVP1e69BFMmS8vQ67LHTbE0dwg/ufuXNVQk1QM4NjWaF3VgRFYnu+VZ1OHbtgAwu9rP8m1EmAW6Ei7KQYvX9w5S7puv7QfIZCmhdinyrkjUPTTeVo1nuCiCj+YyLhe3Nuhmj/2TxmLq1mLhVfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MJaP4NzbnIVd9hBbWuNSC5ezZeNiUWCRkf2ZLiB/BYI=;
- b=b88WB0upPTga08jHuQR9y6m4RTy48JFNBC74cO2MMrtaxM4U/qXyQ5q3vgyOicUa4toDtsb3Gn7hRKzWIRCm85Lf7WANiLMXeiH0qiH4HjUpYL68bi+07Ewr5T78hm6eaeIJFLUxAA/H29vslKDr/ruNuwqVCc6DCftcWCxlwjihUzcgAiFtmdBgV1s6hG6iBOaIR98aF5x0jlabempIjn+WiTzWMEMm98ZHu8DDe/ozltXKC+0MwPAL5g2W+VNDpps/fFfvG4RBuJ4/pbD0MXgE87KcSA5e2xZl22iU12JULaJfzI++uy4iSYYQsBSw1cSIY+CTYNNHgDrkU9g7fA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MJaP4NzbnIVd9hBbWuNSC5ezZeNiUWCRkf2ZLiB/BYI=;
- b=T5hza8LFZSkrFLHkjQNNXVJk1J8bagSYgVNSjLx2dBk4cMe3Q3I+DlW8qPElFIcIU7L9OtsRLzLPXEl7CT7kZN40E4LrEEgStyM6zk+iLd97yRyTTP5Gaxl64cs7ARcx+lqCalwhMjjqSRx0CMOAjGrNQS2xU9fN2ZNXkZgZbIc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB9PR04MB8106.eurprd04.prod.outlook.com (2603:10a6:10:24b::13)
- by DB3PR0402MB3705.eurprd04.prod.outlook.com (2603:10a6:8:c::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Fri, 2 Sep
- 2022 02:30:15 +0000
-Received: from DB9PR04MB8106.eurprd04.prod.outlook.com
- ([fe80::a569:c84a:d972:38ce]) by DB9PR04MB8106.eurprd04.prod.outlook.com
- ([fe80::a569:c84a:d972:38ce%7]) with mapi id 15.20.5588.014; Fri, 2 Sep 2022
- 02:30:15 +0000
-From:   wei.fang@nxp.com
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 net-next] net: fec: add stop mode support for imx8 platform
-Date:   Fri,  2 Sep 2022 10:30:01 +0800
-Message-Id: <20220902023001.2258165-1-wei.fang@nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0039.apcprd02.prod.outlook.com
- (2603:1096:4:196::9) To DB9PR04MB8106.eurprd04.prod.outlook.com
- (2603:10a6:10:24b::13)
+        Thu, 1 Sep 2022 22:37:42 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D56971BDA
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 19:37:39 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id y1so586303plb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 19:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=21tuyaqs1vXmiWanrx2wXGnQAxkSG8CXdu407GW+pl8=;
+        b=zbMKRGazbm1KrHImUnWrYDGuiPfF7phVtFs4j0Z35FsT9/kORv31YVz2ufvqJWP1W1
+         oHlPL/Hqp4zo21FgxkC5QtmKosdv+hWChMiqh9U27SyyFQcH/W3kozIKw5V2aEd8CFKa
+         17l65BCyOF4cSZPFZLuDBkGFyF9bpIwAnajruqa6B+2eTFyNQ0kWYbSyVzM9YORi3+Xl
+         cTo+rADPXgKjccyun8G6Vn2tsH0ZquUIhfhTgGP+dVviWyIeb7O+0sKMzb4WFi3hrhjf
+         pGvX13lsc3OD6FcJxZTPUkXdijbAe3izTBG/uk/F85QsMSNhca99t+/Rn8LdI8TMFT53
+         7wAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=21tuyaqs1vXmiWanrx2wXGnQAxkSG8CXdu407GW+pl8=;
+        b=Nj2o5nku8w7rLA+Xcd+f+rQbmtqKVGnXAXbzdqlQ/u5zXguNyEbinJNMvrnWviEMX+
+         QbLIE0uFMU9DOoOOs1R6XDFZwLZ/bF2HmXcOw2Z6dFgvfxYHeM6UayYmMKCfNI+QGuYu
+         5GM0+XcmmB/Co/JIe6c8hfWKXFOspIxFW/HPTZrlP9eGCj3tC1apNGv6N53xQq1ESOtJ
+         If4tlvUMirWH7ugdwuZALpXJZVEvZsMBbcpt/vgDebxYz/iDB8MqXQmHMBvqQ5ct0zSH
+         1+5FsxR+g8Sn+h2Gz9fkaztHL1VJeO0t8b98RDLFXt9PsJXnU2DvDkVmMRhUdKV70xyv
+         ylJA==
+X-Gm-Message-State: ACgBeo3NmATEqqSdnIl+X2JcCqpZwRLP1PkSfeL7/ecMWgCMzbCzOt9z
+        fWNIzh+Jl3XVN/RBi1DEe72DxQ==
+X-Google-Smtp-Source: AA6agR70lXWiSYOehD1/HyPGkVxHRBe3KA2ak/PssCKtf4wb6t+6554LN1MuiOjM/TtyZOXFEx/U9A==
+X-Received: by 2002:a17:902:c403:b0:174:3a8a:b6e3 with SMTP id k3-20020a170902c40300b001743a8ab6e3mr32022633plk.48.1662086259048;
+        Thu, 01 Sep 2022 19:37:39 -0700 (PDT)
+Received: from [10.76.15.169] ([61.120.150.74])
+        by smtp.gmail.com with ESMTPSA id l194-20020a633ecb000000b0042fe1914e26sm252411pga.37.2022.09.01.19.37.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 19:37:38 -0700 (PDT)
+Message-ID: <db63eaac-08e5-cb78-9aef-14b3c9955e8b@bytedance.com>
+Date:   Fri, 2 Sep 2022 10:37:08 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d070da7d-4ae6-4c64-bb60-08da8c8b11ce
-X-MS-TrafficTypeDiagnostic: DB3PR0402MB3705:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r6HzdKGtr7hFgHE8sv26sdz18yL7oPqxbIeyz+lA0pO96caXo/1QnDJT24zgaoOxzuAXKi/UZ3ud3GkOcDR9MPpH/EOUwKyjLEjQHTSe6H8K17lkYtA/tPKhIBK/Ty9QPja1WiBLpgOcycXZ89Ixbe1NYL7tqGGU87p82vsJFca7iZYpJhm6duCg+Ntt+/i6VGHJmFPq2DaIWzo2g0NIHB/seBAM3M7prIeuGULZzKhWSp8RVafbmwO2rQSGDPEFP9L/MlttOnwfDzqTxuhxbR5So9lA/2Z9pBOJQOQw6zhT3XJyErqfkDJ+OQlSI7gelRWcJ5wGEAnhQKOUq8Wj0qHmdPh/cUhHgDJ6mVHLYFf4eH41B6F34S8v5m/BaVrIMmH3S3MYN5xysmVWplLo+fbh7KAPKeUJeT249kGx6UL8ESlLPOvXnBEeFRH/7HBspOmLBY3kuvtFGRSbdyIuMO/jcz0vahIGY38tkp2fvF8/WRroTzmO0y+xrGpHVMSPkEfHv2P0HPSzLwl25MK0WMmtiI23mEq2KBRKm0kfKFsPcNn8WXfyaeJ8gAFPMZfMkeDKjrnb2vtaASh7UImFwGRxKmWL2fnDWTDKZzcwqwGmcSqNgfT/nSb7dq/VXb1+jm6XxopD3LN9usS5tcjfvK89xd2LD7NviIWb3uRRDr9N/ipQT8NzskWj1p/Fih2EeE3jSMp7eSKZLGRAcTBFoFvk2Rnbk60pAuJHXVCAD4HFsZ8xHGUfueDu5yTqHf55
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8106.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(39860400002)(346002)(366004)(6512007)(2906002)(38100700002)(6666004)(316002)(41300700001)(6506007)(186003)(83380400001)(1076003)(86362001)(38350700002)(6486002)(4326008)(66556008)(66476007)(52116002)(9686003)(36756003)(8936002)(2616005)(66946007)(5660300002)(8676002)(26005)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3cfT8KbEU7sjlumZSI0N3cEuQf8DRHwJ//iq9GNPuZ/yxu6kI584ALdcQwCM?=
- =?us-ascii?Q?Ca7bgEgjh6vH8PWWoFrhHmFnrCLn2rFIaTAE53ic/8Mgd7wIqTXEyCiFoGOE?=
- =?us-ascii?Q?0qOPzRwKKv2AgUnPHf/3H0zckEPgLU/eRdL6h//GOr0lbLXb4qErxkvrlMBi?=
- =?us-ascii?Q?oUbReREjzTVZQHzpVQssLLjdSad47SKRD9glD3r/HNbo82187byPYzCs3MvO?=
- =?us-ascii?Q?yNcVQxiIzJPNkC+RODxndH1BnFQVrx+ITEZcKhau+JTVtgUMQV99iHCvcmee?=
- =?us-ascii?Q?nNsbSsd8Kvc9kmoyjraKAO55LD1Fsc5BRlSuWIai3kuEg/cuWfN+Fp1m4u4g?=
- =?us-ascii?Q?lkHKkCsyBmAeb2M9KlfypLHaunMaKcZrBVuzxNORD/c4OY4aswAeeqMojoP7?=
- =?us-ascii?Q?2kMopDY7wpTLhTn5HYnI88HyUKm6mpdUrvZsEqL63N9S3Env5nGi5XSc8P5/?=
- =?us-ascii?Q?kEZhvE2/XxuL2WtWTktxOWEQ/P7ofsvW9oWrhmmaW3Ol7uTkGBtHdNQq8YUK?=
- =?us-ascii?Q?HkFvoClyo+wkc228hUOGytB79Z3YC2WgXdWBU6fpv5yI2EalQ2jpq4Ppl8g0?=
- =?us-ascii?Q?L+CmIvdTlAoYgk5Wobvi43i/BPe8D56aKGx4098mqhlnyKeKQXGgktgenuDf?=
- =?us-ascii?Q?QquZxpttklF9iuHiaejkFydwKg+paF0Ff1yl5Ow3HMZ8AqCSIOfKt6dRx37Q?=
- =?us-ascii?Q?AqyvKJJkGf62RZ1wo00QW4uDMv/HZGz+cnDDOpp+SX6JD01i7wQ5+9ZtAmeD?=
- =?us-ascii?Q?SDOOrzY5vGzpbLyQkR/1oP1HlMlofE1C5SKL98VpfsssgunDKemlWnK0cnJ9?=
- =?us-ascii?Q?gU6Wkc6t+Xo0Q2yDLcJaL7nhVtqP4gfLO8mhQ8P1UQrIG/YJ+M+1/gkr9XiN?=
- =?us-ascii?Q?UbzPCVeLvhNCO+g/WjWP97rBehpTomMMjwwsRnF5uEClcljyKMtvtqnyinww?=
- =?us-ascii?Q?7YlwZbrb1GXZKK6g+CrnPSbeHX40Qc0waIFZzEPt09pnR9DmKAO/Y/5uN5Nh?=
- =?us-ascii?Q?3/SpUA+ajVleywhjgJJFEf4mrIwufVLJatJi959llaKfMAHWfm93rlmGX/KH?=
- =?us-ascii?Q?z3UVxTFyBzqvpyhccA/DYLv6wULzjkcWjnR+Ytynw/+njq0qYb+kGpB5/KT7?=
- =?us-ascii?Q?CchfkVr03jz/K4TyP6OnGT5gNdknuxiFxOw1Mgf6uyk+heSBeZItOlRByXKD?=
- =?us-ascii?Q?eiMD2pPHQYS1wqMwmx01LflPbRqa+FsCj+8L2zdMynQH7bLuWTtC/MfwyJ71?=
- =?us-ascii?Q?r3xqyXhcFaAD7qV/fAL77P9XMyOtUVt/J46aeCcSvbuCJZl0OsyT4sbxwlxX?=
- =?us-ascii?Q?tkWCQkK073TGyDqBfL7mpKFUTf8eUJtelfgGSxl4mXwJDI3DTm0UXe8V6BdZ?=
- =?us-ascii?Q?ThpPNu+0uBHBGFlgSFEVzId1lg1k1PyQkGD3u/tNgk27QfQ5b/hjdyvU/1NB?=
- =?us-ascii?Q?nx8Rr+gBjjxCs+antBVSYWnHrMZf0DiO83b85K+EDajdg+yxmqLvbMTm4bay?=
- =?us-ascii?Q?+YPqt4ULfXo18dMC3ngkmZEhATIbwNeCkP+W42FQBGIwyHon4dc0a3+UzvxI?=
- =?us-ascii?Q?7Jq5TxOyYtrg6k6e9O7j2OBBiJRoJf9Wpcfopxxe?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d070da7d-4ae6-4c64-bb60-08da8c8b11ce
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8106.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2022 02:30:15.8148
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZqZR5Q8zz4jhxsNTxV6VIC/mL2uO7JxOVNmZiPuN6WB4OnQzRH9J/L4/G2qpJ8wgFBVm5iFD6JiRqqgPvi4AlA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3705
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: Re: [PATCH v3 1/1] nvmet-tcp: Fix NULL pointer dereference during
+ release
+Content-Language: en-US
+To:     Sagi Grimberg <sagi@grimberg.me>, hch@lst.de
+Cc:     kch@nvidia.com, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220901061409.545456-1-pizhenwei@bytedance.com>
+ <20220901061409.545456-2-pizhenwei@bytedance.com>
+ <33269462-f989-c4ba-a9ac-846b629cd360@grimberg.me>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <33269462-f989-c4ba-a9ac-846b629cd360@grimberg.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Fang <wei.fang@nxp.com>
+On 9/1/22 18:52, Sagi Grimberg wrote:
+> 
+> 
+> On 9/1/22 09:14, zhenwei pi wrote:
+>> nvmet-tcp frees CMD buffers in nvmet_tcp_uninit_data_in_cmds(),
+>> and waits the inflight IO requests in nvmet_sq_destroy(). During wait
+>> the inflight IO requests, the callback nvmet_tcp_queue_response()
+>> is called from backend after IO complete, this leads a typical
+>> Use-After-Free issue like this:
+>>
+>>   BUG: kernel NULL pointer dereference, address: 0000000000000008
+>>   #PF: supervisor read access in kernel mode
+>>   #PF: error_code(0x0000) - not-present page
+>>   PGD 0 P4D 0
+>>   Oops: 0000 [#1] PREEMPT SMP NOPTI
+>>   CPU: 14 PID: 207 Comm: kworker/14:1H Kdump: loaded Tainted: 
+>> G            E      6.0.0-rc2.bm.1-amd64 #12
+>>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 
+>> rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+>>   Workqueue: nvmet_tcp_wq nvmet_tcp_io_work [nvmet_tcp]
+>>   RIP: 0010:shash_ahash_digest+0x2b/0x110
+>>   Code: 1f 44 00 00 41 57 41 56 41 55 41 54 55 48 89 fd 53 48 89 f3 48 
+>> 83 ec 08 44 8b 67 30 45 85 e4 74 1c 48 8b 57 38 b8 00 10 00 00 <44> 8b 
+>> 7a 08 44 29 f8 39 42 0c 0f 46 42 0c 41 39 c4 76 43 48 8b 03
+>>   RSP: 0018:ffffc900006e3dd8 EFLAGS: 00010206
+>>   RAX: 0000000000001000 RBX: ffff888104ac1650 RCX: 0000000000000000
+>>   RDX: 0000000000000000 RSI: ffff888104ac1650 RDI: ffff888104ac1600
+>>   RBP: ffff888104ac1600 R08: ffff8881073980c8 R09: ffff8881057798b8
+>>   R10: 8080808080808080 R11: 0000000000000000 R12: 0000000000001000
+>>   R13: 0000000000000000 R14: ffff88810601a1cc R15: ffff888107398000
+>>   FS:  0000000000000000(0000) GS:ffff88823fd80000(0000) 
+>> knlGS:0000000000000000
+>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>   CR2: 0000000000000008 CR3: 000000010a8e8000 CR4: 0000000000350ee0
+>>   Call Trace:
+>>    <TASK>
+>>    nvmet_tcp_io_work+0xa1c/0xb1c [nvmet_tcp]
+>>    ? __switch_to+0x106/0x420
+>>    process_one_work+0x1ae/0x380
+>>    ? process_one_work+0x380/0x380
+>>    worker_thread+0x30/0x360
+>>    ? process_one_work+0x380/0x380
+>>    kthread+0xe6/0x110
+>>    ? kthread_complete_and_exit+0x20/0x20
+>>    ret_from_fork+0x1f/0x30
+>>
+>> Suggested by Sagi, separate nvmet_tcp_uninit_data_in_cmds() into two
+>> steps:
+>>    uninit data in cmds                  <- new step 1
+>>    nvmet_sq_destroy();
+>>    cancel_work_sync(&queue->io_work);
+>>    free CMD buffers                     <- new step 2
+>>
+>> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+>> ---
+>>   drivers/nvme/target/tcp.c | 18 ++++++++++++++++--
+>>   1 file changed, 16 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
+>> index a3694a32f6d5..e18eae5ef90b 100644
+>> --- a/drivers/nvme/target/tcp.c
+>> +++ b/drivers/nvme/target/tcp.c
+>> @@ -1423,14 +1423,27 @@ static void 
+>> nvmet_tcp_uninit_data_in_cmds(struct nvmet_tcp_queue *queue)
+>>       for (i = 0; i < queue->nr_cmds; i++, cmd++) {
+>>           if (nvmet_tcp_need_data_in(cmd))
+>>               nvmet_req_uninit(&cmd->req);
+>> +    }
+>> +
+>> +    if (!queue->nr_cmds && nvmet_tcp_need_data_in(&queue->connect)) {
+>> +        /* failed in connect */
+>> +        nvmet_req_uninit(&queue->connect.req);
+>> +    }
+>> +}
+>> +static void nvmet_tcp_free_cmd_data_in_buffers(struct nvmet_tcp_queue 
+>> *queue)
+>> +{
+>> +    struct nvmet_tcp_cmd *cmd = queue->cmds;
+>> +    int i;
+>> +
+>> +    for (i = 0; i < queue->nr_cmds; i++, cmd++) {
+> 
+>          if (nvmet_tcp_need_data_in(cmd))
+> 
+>>           nvmet_tcp_unmap_pdu_iovec(cmd);
+> 
+> This function should no longer exist in the code.
+> 
 
-The current driver support stop mode by calling machine api.
-The patch add dts support to set GPR register for stop request.
+Hi, Sagi
 
-imx8mq enter stop/exit stop mode by setting GPR bit, which can
-be accessed by A core.
-imx8qm enter stop/exit stop mode by calling IMX_SC ipc APIs that
-communicate with M core ipc service, and the M core set the related
-GPR bit at last.
+Sorry, I didn't notice this patch is on the way...
+https://lore.kernel.org/linux-nvme/Yw%2F0cZFCQQpx3hhZ@ZenIV/T/#t
 
-Signed-off-by: Wei Fang <wei.fang@nxp.com>
----
-V2 change:
-V1 patch does not apply, so rebase it.
----
- drivers/net/ethernet/freescale/fec.h      |  4 +++
- drivers/net/ethernet/freescale/fec_main.c | 35 +++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
+I'll send the v4 after this patch apply. Thanks!
 
-diff --git a/drivers/net/ethernet/freescale/fec.h b/drivers/net/ethernet/freescale/fec.h
-index 0cebe4b63adb..68bc16058bae 100644
---- a/drivers/net/ethernet/freescale/fec.h
-+++ b/drivers/net/ethernet/freescale/fec.h
-@@ -18,6 +18,8 @@
- #include <linux/net_tstamp.h>
- #include <linux/ptp_clock_kernel.h>
- #include <linux/timecounter.h>
-+#include <dt-bindings/firmware/imx/rsrc.h>
-+#include <linux/firmware/imx/sci.h>
- 
- #if defined(CONFIG_M523x) || defined(CONFIG_M527x) || defined(CONFIG_M528x) || \
-     defined(CONFIG_M520x) || defined(CONFIG_M532x) || defined(CONFIG_ARM) || \
-@@ -641,6 +643,8 @@ struct fec_enet_private {
- 		u8 at_inc_corr;
- 	} ptp_saved_state;
- 
-+	struct imx_sc_ipc *ipc_handle;
-+
- 	u64 ethtool_stats[];
- };
- 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 7211597d323d..8ba8eb340b92 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -1181,6 +1181,34 @@ fec_restart(struct net_device *ndev)
- 
- }
- 
-+static int fec_enet_ipc_handle_init(struct fec_enet_private *fep)
-+{
-+	if (!(of_machine_is_compatible("fsl,imx8qm") ||
-+	      of_machine_is_compatible("fsl,imx8qxp") ||
-+	      of_machine_is_compatible("fsl,imx8dxl")))
-+		return 0;
-+
-+	return imx_scu_get_handle(&fep->ipc_handle);
-+}
-+
-+static void fec_enet_ipg_stop_set(struct fec_enet_private *fep, bool enabled)
-+{
-+	struct device_node *np = fep->pdev->dev.of_node;
-+	u32 rsrc_id, val;
-+	int idx;
-+
-+	if (!np || !fep->ipc_handle)
-+		return;
-+
-+	idx = of_alias_get_id(np, "ethernet");
-+	if (idx < 0)
-+		idx = 0;
-+	rsrc_id = idx ? IMX_SC_R_ENET_1 : IMX_SC_R_ENET_0;
-+
-+	val = enabled ? 1 : 0;
-+	imx_sc_misc_set_control(fep->ipc_handle, rsrc_id, IMX_SC_C_IPG_STOP, val);
-+}
-+
- static void fec_enet_stop_mode(struct fec_enet_private *fep, bool enabled)
- {
- 	struct fec_platform_data *pdata = fep->pdev->dev.platform_data;
-@@ -1196,6 +1224,8 @@ static void fec_enet_stop_mode(struct fec_enet_private *fep, bool enabled)
- 					   BIT(stop_gpr->bit), 0);
- 	} else if (pdata && pdata->sleep_mode_enable) {
- 		pdata->sleep_mode_enable(enabled);
-+	} else {
-+		fec_enet_ipg_stop_set(fep, enabled);
- 	}
- }
- 
-@@ -3851,6 +3881,10 @@ fec_probe(struct platform_device *pdev)
- 	    !of_property_read_bool(np, "fsl,err006687-workaround-present"))
- 		fep->quirks |= FEC_QUIRK_ERR006687;
- 
-+	ret = fec_enet_ipc_handle_init(fep);
-+	if (ret)
-+		goto failed_ipc_init;
-+
- 	if (of_get_property(np, "fsl,magic-packet", NULL))
- 		fep->wol_flag |= FEC_WOL_HAS_MAGIC_PACKET;
- 
-@@ -4048,6 +4082,7 @@ fec_probe(struct platform_device *pdev)
- 		of_phy_deregister_fixed_link(np);
- 	of_node_put(phy_node);
- failed_stop_mode:
-+failed_ipc_init:
- failed_phy:
- 	dev_id--;
- failed_ioremap:
+>>           nvmet_tcp_free_cmd_buffers(cmd);
+>>       }
+>>       if (!queue->nr_cmds && nvmet_tcp_need_data_in(&queue->connect)) {
+>> -        /* failed in connect */
+>> -        nvmet_tcp_finish_cmd(&queue->connect);
+>> +        nvmet_tcp_unmap_pdu_iovec(&queue->connect);
+> 
+> This function should no longer exist in the code.
+> 
+>> +        nvmet_tcp_free_cmd_buffers(&queue->connect);
+>>       }
+>>   }
+>> @@ -1452,6 +1465,7 @@ static void nvmet_tcp_release_queue_work(struct 
+>> work_struct *w)
+>>       nvmet_tcp_uninit_data_in_cmds(queue);
+>>       nvmet_sq_destroy(&queue->nvme_sq);
+>>       cancel_work_sync(&queue->io_work);
+>> +    nvmet_tcp_free_cmd_data_in_buffers(queue);
+>>       sock_release(queue->sock);
+>>       nvmet_tcp_free_cmds(queue);
+>>       if (queue->hdr_digest || queue->data_digest)
+
 -- 
-2.25.1
-
+zhenwei pi

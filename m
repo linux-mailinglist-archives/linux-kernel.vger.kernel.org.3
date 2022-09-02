@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E92A5AB173
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949AB5AAF05
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235713AbiIBNdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S236779AbiIBMcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236981AbiIBNci (ORCPT
+        with ESMTP id S236666AbiIBMbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:32:38 -0400
+        Fri, 2 Sep 2022 08:31:38 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B22C11B630;
-        Fri,  2 Sep 2022 06:11:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD4EE190E;
+        Fri,  2 Sep 2022 05:26:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90A23B82AD0;
-        Fri,  2 Sep 2022 12:35:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB805C433D6;
-        Fri,  2 Sep 2022 12:35:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B80B9B82ABD;
+        Fri,  2 Sep 2022 12:26:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28271C433B5;
+        Fri,  2 Sep 2022 12:26:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122103;
-        bh=YxCit/Xl6s/o/k3ghIFQB+uYFGiyCNux87AZntC9tpw=;
+        s=korg; t=1662121592;
+        bh=ygv5b7Fd2GBK1PHrrtgvE32HVeC9KUYkOtlJ+Y/J1Ds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bxnhc58vT4PpQ1P3J0yaHKOSO8oFWi0Gzv5U5J9DEAxuASbk2l+AsHG7if0rmg+b/
-         nco/EG5klLE/+ZWKhPdFRrn0jK3xl9CNg9RBj358oA3d411AJlYXyBE5fkZ+RKVxwz
-         mpcwJWM+srJDmn1uaT80FxLrJ/xCk+Cn1GIJe1Qo=
+        b=Pp9fxtoqede/2v52gayNt+ZHQTHqnTxBEUO0GGFp4k9U4bpDIy3an1DT6rNiPyL77
+         mSp7y2GfuT/UrwMpbYEBin4MGo03V58+nuqoftmI4hvWcptpXYpYVG2bc6ujIO98r6
+         3VGo9EA1Bp7iVx/ItSNdBd9h3nPgov0cO5aRyu+Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Wen Gu <guwen@linux.alibaba.com>,
-        Hawkins Jiawei <yin31149@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
-Subject: [PATCH 5.19 14/72] net: fix refcount bug in sk_psock_get (2)
+        stable@vger.kernel.org, Chen Zhongjin <chenzhongjin@huawei.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 4.19 30/56] x86/unwind/orc: Unwind ftrace trampolines with correct ORC entry
 Date:   Fri,  2 Sep 2022 14:18:50 +0200
-Message-Id: <20220902121405.257399777@linuxfoundation.org>
+Message-Id: <20220902121401.293170735@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-References: <20220902121404.772492078@linuxfoundation.org>
+In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
+References: <20220902121400.219861128@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,192 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hawkins Jiawei <yin31149@gmail.com>
+From: Chen Zhongjin <chenzhongjin@huawei.com>
 
-commit 2a0133723f9ebeb751cfce19f74ec07e108bef1f upstream.
+commit fc2e426b1161761561624ebd43ce8c8d2fa058da upstream.
 
-Syzkaller reports refcount bug as follows:
-------------[ cut here ]------------
-refcount_t: saturated; leaking memory.
-WARNING: CPU: 1 PID: 3605 at lib/refcount.c:19 refcount_warn_saturate+0xf4/0x1e0 lib/refcount.c:19
-Modules linked in:
-CPU: 1 PID: 3605 Comm: syz-executor208 Not tainted 5.18.0-syzkaller-03023-g7e062cda7d90 #0
- <TASK>
- __refcount_add_not_zero include/linux/refcount.h:163 [inline]
- __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
- refcount_inc_not_zero include/linux/refcount.h:245 [inline]
- sk_psock_get+0x3bc/0x410 include/linux/skmsg.h:439
- tls_data_ready+0x6d/0x1b0 net/tls/tls_sw.c:2091
- tcp_data_ready+0x106/0x520 net/ipv4/tcp_input.c:4983
- tcp_data_queue+0x25f2/0x4c90 net/ipv4/tcp_input.c:5057
- tcp_rcv_state_process+0x1774/0x4e80 net/ipv4/tcp_input.c:6659
- tcp_v4_do_rcv+0x339/0x980 net/ipv4/tcp_ipv4.c:1682
- sk_backlog_rcv include/net/sock.h:1061 [inline]
- __release_sock+0x134/0x3b0 net/core/sock.c:2849
- release_sock+0x54/0x1b0 net/core/sock.c:3404
- inet_shutdown+0x1e0/0x430 net/ipv4/af_inet.c:909
- __sys_shutdown_sock net/socket.c:2331 [inline]
- __sys_shutdown_sock net/socket.c:2325 [inline]
- __sys_shutdown+0xf1/0x1b0 net/socket.c:2343
- __do_sys_shutdown net/socket.c:2351 [inline]
- __se_sys_shutdown net/socket.c:2349 [inline]
- __x64_sys_shutdown+0x50/0x70 net/socket.c:2349
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
- </TASK>
+When meeting ftrace trampolines in ORC unwinding, unwinder uses address
+of ftrace_{regs_}call address to find the ORC entry, which gets next frame at
+sp+176.
 
-During SMC fallback process in connect syscall, kernel will
-replaces TCP with SMC. In order to forward wakeup
-smc socket waitqueue after fallback, kernel will sets
-clcsk->sk_user_data to origin smc socket in
-smc_fback_replace_callbacks().
+If there is an IRQ hitting at sub $0xa8,%rsp, the next frame should be
+sp+8 instead of 176. It makes unwinder skip correct frame and throw
+warnings such as "wrong direction" or "can't access registers", etc,
+depending on the content of the incorrect frame address.
 
-Later, in shutdown syscall, kernel will calls
-sk_psock_get(), which treats the clcsk->sk_user_data
-as psock type, triggering the refcnt warning.
+By adding the base address ftrace_{regs_}caller with the offset
+*ip - ops->trampoline*, we can get the correct address to find the ORC entry.
 
-So, the root cause is that smc and psock, both will use
-sk_user_data field. So they will mismatch this field
-easily.
+Also change "caller" to "tramp_addr" to make variable name conform to
+its content.
 
-This patch solves it by using another bit(defined as
-SK_USER_DATA_PSOCK) in PTRMASK, to mark whether
-sk_user_data points to a psock object or not.
-This patch depends on a PTRMASK introduced in commit f1ff5ce2cd5e
-("net, sk_msg: Clear sk_user_data pointer on clone if tagged").
+[ mingo: Clarified the changelog a bit. ]
 
-For there will possibly be more flags in the sk_user_data field,
-this patch also refactor sk_user_data flags code to be more generic
-to improve its maintainability.
-
-Reported-and-tested-by: syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Acked-by: Wen Gu <guwen@linux.alibaba.com>
-Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 6be7fa3c74d1 ("ftrace, orc, x86: Handle ftrace dynamically allocated trampolines")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220819084334.244016-1-chenzhongjin@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/skmsg.h |    3 +-
- include/net/sock.h    |   68 +++++++++++++++++++++++++++++++++++---------------
- net/core/skmsg.c      |    4 ++
- 3 files changed, 53 insertions(+), 22 deletions(-)
+ arch/x86/kernel/unwind_orc.c |   15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -277,7 +277,8 @@ static inline void sk_msg_sg_copy_clear(
- 
- static inline struct sk_psock *sk_psock(const struct sock *sk)
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -89,22 +89,27 @@ static struct orc_entry *orc_find(unsign
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)
  {
--	return rcu_dereference_sk_user_data(sk);
-+	return __rcu_dereference_sk_user_data_with_flags(sk,
-+							 SK_USER_DATA_PSOCK);
+ 	struct ftrace_ops *ops;
+-	unsigned long caller;
++	unsigned long tramp_addr, offset;
+ 
+ 	ops = ftrace_ops_trampoline(ip);
+ 	if (!ops)
+ 		return NULL;
+ 
++	/* Set tramp_addr to the start of the code copied by the trampoline */
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS)
+-		caller = (unsigned long)ftrace_regs_call;
++		tramp_addr = (unsigned long)ftrace_regs_caller;
+ 	else
+-		caller = (unsigned long)ftrace_call;
++		tramp_addr = (unsigned long)ftrace_caller;
++
++	/* Now place tramp_addr to the location within the trampoline ip is at */
++	offset = ip - ops->trampoline;
++	tramp_addr += offset;
+ 
+ 	/* Prevent unlikely recursion */
+-	if (ip == caller)
++	if (ip == tramp_addr)
+ 		return NULL;
+ 
+-	return orc_find(caller);
++	return orc_find(tramp_addr);
  }
- 
- static inline void sk_psock_set_state(struct sk_psock *psock,
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -545,14 +545,26 @@ enum sk_pacing {
- 	SK_PACING_FQ		= 2,
- };
- 
--/* Pointer stored in sk_user_data might not be suitable for copying
-- * when cloning the socket. For instance, it can point to a reference
-- * counted object. sk_user_data bottom bit is set if pointer must not
-- * be copied.
-+/* flag bits in sk_user_data
-+ *
-+ * - SK_USER_DATA_NOCOPY:      Pointer stored in sk_user_data might
-+ *   not be suitable for copying when cloning the socket. For instance,
-+ *   it can point to a reference counted object. sk_user_data bottom
-+ *   bit is set if pointer must not be copied.
-+ *
-+ * - SK_USER_DATA_BPF:         Mark whether sk_user_data field is
-+ *   managed/owned by a BPF reuseport array. This bit should be set
-+ *   when sk_user_data's sk is added to the bpf's reuseport_array.
-+ *
-+ * - SK_USER_DATA_PSOCK:       Mark whether pointer stored in
-+ *   sk_user_data points to psock type. This bit should be set
-+ *   when sk_user_data is assigned to a psock object.
-  */
- #define SK_USER_DATA_NOCOPY	1UL
--#define SK_USER_DATA_BPF	2UL	/* Managed by BPF */
--#define SK_USER_DATA_PTRMASK	~(SK_USER_DATA_NOCOPY | SK_USER_DATA_BPF)
-+#define SK_USER_DATA_BPF	2UL
-+#define SK_USER_DATA_PSOCK	4UL
-+#define SK_USER_DATA_PTRMASK	~(SK_USER_DATA_NOCOPY | SK_USER_DATA_BPF |\
-+				  SK_USER_DATA_PSOCK)
- 
- /**
-  * sk_user_data_is_nocopy - Test if sk_user_data pointer must not be copied
-@@ -565,24 +577,40 @@ static inline bool sk_user_data_is_nocop
- 
- #define __sk_user_data(sk) ((*((void __rcu **)&(sk)->sk_user_data)))
- 
-+/**
-+ * __rcu_dereference_sk_user_data_with_flags - return the pointer
-+ * only if argument flags all has been set in sk_user_data. Otherwise
-+ * return NULL
-+ *
-+ * @sk: socket
-+ * @flags: flag bits
-+ */
-+static inline void *
-+__rcu_dereference_sk_user_data_with_flags(const struct sock *sk,
-+					  uintptr_t flags)
-+{
-+	uintptr_t sk_user_data = (uintptr_t)rcu_dereference(__sk_user_data(sk));
-+
-+	WARN_ON_ONCE(flags & SK_USER_DATA_PTRMASK);
-+
-+	if ((sk_user_data & flags) == flags)
-+		return (void *)(sk_user_data & SK_USER_DATA_PTRMASK);
-+	return NULL;
-+}
-+
- #define rcu_dereference_sk_user_data(sk)				\
-+	__rcu_dereference_sk_user_data_with_flags(sk, 0)
-+#define __rcu_assign_sk_user_data_with_flags(sk, ptr, flags)		\
- ({									\
--	void *__tmp = rcu_dereference(__sk_user_data((sk)));		\
--	(void *)((uintptr_t)__tmp & SK_USER_DATA_PTRMASK);		\
--})
--#define rcu_assign_sk_user_data(sk, ptr)				\
--({									\
--	uintptr_t __tmp = (uintptr_t)(ptr);				\
--	WARN_ON_ONCE(__tmp & ~SK_USER_DATA_PTRMASK);			\
--	rcu_assign_pointer(__sk_user_data((sk)), __tmp);		\
--})
--#define rcu_assign_sk_user_data_nocopy(sk, ptr)				\
--({									\
--	uintptr_t __tmp = (uintptr_t)(ptr);				\
--	WARN_ON_ONCE(__tmp & ~SK_USER_DATA_PTRMASK);			\
-+	uintptr_t __tmp1 = (uintptr_t)(ptr),				\
-+		  __tmp2 = (uintptr_t)(flags);				\
-+	WARN_ON_ONCE(__tmp1 & ~SK_USER_DATA_PTRMASK);			\
-+	WARN_ON_ONCE(__tmp2 & SK_USER_DATA_PTRMASK);			\
- 	rcu_assign_pointer(__sk_user_data((sk)),			\
--			   __tmp | SK_USER_DATA_NOCOPY);		\
-+			   __tmp1 | __tmp2);				\
- })
-+#define rcu_assign_sk_user_data(sk, ptr)				\
-+	__rcu_assign_sk_user_data_with_flags(sk, ptr, 0)
- 
- static inline
- struct net *sock_net(const struct sock *sk)
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -735,7 +735,9 @@ struct sk_psock *sk_psock_init(struct so
- 	sk_psock_set_state(psock, SK_PSOCK_TX_ENABLED);
- 	refcount_set(&psock->refcnt, 1);
- 
--	rcu_assign_sk_user_data_nocopy(sk, psock);
-+	__rcu_assign_sk_user_data_with_flags(sk, psock,
-+					     SK_USER_DATA_NOCOPY |
-+					     SK_USER_DATA_PSOCK);
- 	sock_hold(sk);
- 
- out:
+ #else
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)
 
 

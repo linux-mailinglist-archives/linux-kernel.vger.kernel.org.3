@@ -2,209 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF44C5ABAF0
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24605ABAF1
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbiIBWvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 18:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S230424AbiIBWxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 18:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiIBWve (ORCPT
+        with ESMTP id S229504AbiIBWxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 18:51:34 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E656F0759;
-        Fri,  2 Sep 2022 15:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662159093; x=1693695093;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c/19cmV74+lMDRhNQPWjhl5pMjXYVED88nc4t0Rx8I8=;
-  b=EosBp1qwiJKW3q66gUE6SacWayrsWWesYaPjv9sjIdi7wLZc4ufcl70N
-   cw0YYI1yDs57Kre4xUKS21tioq1oB0XlM1duKQT6pYVMxsWg5/8kp3U/7
-   oknjI52lPPvFwXIRNrj19hl3L84qj540L713/sX2yl9q/FzbBha8iSh4q
-   oCWKK8p6e2wPXBmGzq9Arcm7YXm+anMsfenBc3Es9GhfZwvDZ5pZ8smHZ
-   oTQ55WPsAXviCVBvlqAkzLhVMc/SyfwhOyGtIFek+MPA/RKnND1Inn9bX
-   n8dIirdNcRm7kel/6yEGCEnDLqOMo+lM0ZBLp+0OgyXnXoB6966Pesoft
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="360060348"
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="360060348"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 15:51:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="613191709"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 02 Sep 2022 15:51:27 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUFVX-0000gt-0M;
-        Fri, 02 Sep 2022 22:51:27 +0000
-Date:   Sat, 3 Sep 2022 06:50:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     kbuild-all@lists.01.org, Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        David Gow <davidgow@google.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Eric Biggers <ebiggers@google.com>,
-        Hannes Reinecke <hare@suse.de>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2 3/3] fortify: Use SIZE_MAX instead of (size_t)-1
-Message-ID: <202209030625.wdoOhjAW-lkp@intel.com>
-References: <20220902204351.2521805-4-keescook@chromium.org>
+        Fri, 2 Sep 2022 18:53:18 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB540F0762
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:53:16 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4MKCqv6s4NzDrFl;
+        Fri,  2 Sep 2022 22:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1662159196; bh=i2F1c9iVsqZkDzJzJ6RHqg0ckfbot+Zkzd9ahCdNz0s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kUCEmXh7zX1JHy1VsNLd21up+NmwYy0af7IVmEYEPZ9/4aL0zPshrCX2SiJqFcJDL
+         HhRlnlNbbm9T7qm9ubwFTGZbKulOH6oqd1Wn2SJxNc67OrRy993jKjBXu052DLDSlM
+         lacB8dBFRF6aJzCUOIZnWtP1A3yvJjm871C+wcD4=
+X-Riseup-User-ID: CEDC724E390C6B4B331BDB7D15FA2D97D997D4091360D282775AAD1DE1285803
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4MKCqm6LGxz1yQr;
+        Fri,  2 Sep 2022 22:53:08 +0000 (UTC)
+Message-ID: <5343a9c6-d560-fc8b-e828-2e08810e4de0@riseup.net>
+Date:   Fri, 2 Sep 2022 19:53:05 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902204351.2521805-4-keescook@chromium.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 2/2] drm/tests: Change "igt_" prefix to "test_drm_"
+To:     =?UTF-8?Q?Micha=c5=82_Winiarski?= <michal.winiarski@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     David Gow <davidgow@google.com>, siqueirajordao@riseup.net,
+        magalilemes00@gmail.com, David Airlie <airlied@linux.ie>,
+        tales.aparecida@gmail.com, Arthur Grillo <arthur.grillo@usp.br>,
+        brendanhiggins@google.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        mwen@igalia.com, Maxime Ripard <maxime@cerno.tech>,
+        kunit-dev@googlegroups.com,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Isabella Basso <isabbasso@riseup.net>, andrealmeid@riseup.net
+References: <20220901124210.591994-1-mairacanal@riseup.net>
+ <20220901124210.591994-2-mairacanal@riseup.net>
+ <20220901125530.b56s4zisnkfuigvc@houat>
+ <04aeba53-793c-3196-3137-915f0640dc2a@riseup.net> <87h71qfbi9.fsf@intel.com>
+ <20220902123400.5ljgc7z6zw34d64m@houat> <87mtbidj3b.fsf@intel.com>
+ <20220902133828.ufwp6bgzd37yu6bv@nostramo.hardline.pl>
+Content-Language: en-US
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220902133828.ufwp6bgzd37yu6bv@nostramo.hardline.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+On 9/2/22 10:38, Michał Winiarski wrote:
+> On Fri, Sep 02, 2022 at 04:03:20PM +0300, Jani Nikula wrote:
+>> On Fri, 02 Sep 2022, Maxime Ripard <maxime@cerno.tech> wrote:
+>>> On Fri, Sep 02, 2022 at 11:04:14AM +0300, Jani Nikula wrote:
+>>>> On Thu, 01 Sep 2022, Maíra Canal <mairacanal@riseup.net> wrote:
+>>>>> Hi Maxime,
+>>>>>
+>>>>> On 9/1/22 09:55, Maxime Ripard wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> On Thu, Sep 01, 2022 at 09:42:10AM -0300, Maíra Canal wrote:
+>>>>>>> With the introduction of KUnit, IGT is no longer the only option to run
+>>>>>>> the DRM unit tests, as the tests can be run through kunit-tool or on
+>>>>>>> real hardware with CONFIG_KUNIT.
+>>>>>>>
+>>>>>>> Therefore, remove the "igt_" prefix from the tests and replace it with
+>>>>>>> the "test_drm_" prefix, making the tests' names independent from the tool
+>>>>>>> used.
+>>>>>>>
+>>>>>>> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+>>>>>>>
+>>>>>>> ---
+>>>>>>> v1 -> v2: https://lore.kernel.org/dri-devel/20220830211603.191734-1-mairacanal@riseup.net/
+>>>>>>> - Change "drm_" prefix to "test_drm_", as "drm_" can be a bit confusing (Jani Nikula).
+>>>>>>
+>>>>>> I appreciate it's a bit of a bikeshed but I disagree with this. The
+>>>>>> majority of the kunit tests already out there start with the framework
+>>>>>> name, including *all* the examples in the kunit doc. Plus, it's fairly
+>>>>>> obvious that it's a test, kunit is only about running tests in the first
+>>>>>> place.
+>>>>>
+>>>>> Would it be better to keep it as "drm_"?
+>>>>
+>>>> That's not "keeping". That's renaming igt to drm.
+>>>
+>>> Well, there's like half the tests that are prefixed with drm, the other
+>>> with igt, so it's both really
+>>>
+>>>>> Currently, I don't think it is appropriate to hold the "igt_" prefix, as
+>>>>> the tests are not IGT exclusive, but I don't have a strong opinion on
+>>>>> using the "drm_" or the "test_drm" prefixes.
+>>>>
+>>>> I repeat my stance that "drm_" alone is confusing.
+>>>
+>>> What are you confusing it with?
+>>>
+>>>> For the reason alone that it pollutes the code tagging tools, mixing
+>>>> actual drm_ types and functions with unit test functions.
+>>>
+>>> I don't get it, I'm sorry. All these functions are static and not part
+>>> of any API, so I can't see how it would pollute a code tagging tool. Or
+>>> at least, not more than any driver does.
+>>>
+>>> And we're part of a larger project here, it's about consistency with the
+>>> rest of the ecosystem.
+>>
+>> Okay, so I'm just going to explain what I mean, but say "whatever" right
+>> after and move on.
+>>
+>> For example, drm_buddy_test.c includes drm_buddy.h so with the igt_ ->
+>> drm_ rename none of the test functions may clash with the drm_buddy_
+>> prefixed existing functions. Ditto for all tests similarly.
+>>
+>> For example drm_buddy_alloc_range() as a name sounds like something that
+>> allocs a range, not something that tests range allocation. On the other
+>> hand, you have drm_buddy_alloc_blocks() which is actually a real
+>> drm_buddy function, not a test. What would you call a test that tests
+>> that? Here, we end up with names that are all prefixed drm_buddy and you
+>> won't know what's the actual function and what's the test unless you
+>> look it up.
+>>
+>> I use code tagging that I can use for finding and completing
+>> e.g. functions. Currently I have the following completions, for
+>> igt_buddy_ and drm_buddy_, respectively:
+>>
+>> Possible completions are:
+>> igt_buddy_alloc_limit 	igt_buddy_alloc_optimistic 	igt_buddy_alloc_pathological
+>> igt_buddy_alloc_pessimistic 	igt_buddy_alloc_range 	igt_buddy_alloc_smoke
+>>
+>> Possible completions are:
+>> drm_buddy_alloc_blocks 	drm_buddy_block 	drm_buddy_block_is_allocated 	drm_buddy_block_is_free
+>> drm_buddy_block_is_split 	drm_buddy_block_offset 	drm_buddy_block_order 	drm_buddy_block_print
+>> drm_buddy_block_size 	drm_buddy_block_state 	drm_buddy_block_trim 	drm_buddy_fini
+>> drm_buddy_free_block 	drm_buddy_free_list 	drm_buddy_init 	drm_buddy_init_test
+>> drm_buddy_module_exit 	drm_buddy_module_init 	drm_buddy_print
+>>
+>> With the patch at hand, they'll all be lumped under drm_buddy_
+>> completions, and some of them will be actual drm buddy functions and
+>> some not.
+>>
+>> I just find it a very odd convention to name the tests in a way that's
+>> indistinguishable from the real things. Even *within* drm_buddy_test.c
+>> where you read the test code. Because currently you do have calls to
+>> igt_buddy_ prefixed functions from other igt_buddy_ prefixed functions,
+>> along with the drm_buddy_ prefixed calls. I think it's just going to be
+>> a mess.
+>>
+>> /rant
+>>
+>> Whatever. Moving on.
+> 
+> KUnit docs [1] state:
+> https://docs.kernel.org/dev-tools/kunit/style.html#test-cases
+> "As tests are themselves functions, their names cannot conflict with other
+> C identifiers in the kernel. This may require some creative naming."
+> And give examples of names. But this should be local to individual test suite -
+> as long as the test is readable, and the name describes what it is testing, we
+> should be fine. We don't even need to pass drm_* prefix, as this convention is
+> expected for test suites, not test cases [2].
+> 
+> Having said that - I do believe that igt_* prefix don't belong here (which is
+> why I'm progressively trying to get rid of in the patches that refactor some of
+> the tests).
+> I agree with Jani - can we take it on a case-by-case basis?
+> If the test name is too similar to the function that it is testing, we could go
+> with one of the following (taking igt_buddy_alloc_limit as example):
+> drm_buddy_test_alloc_limit
+> test_drm_buddy_alloc_limit
+> buddy_test_alloc_limit
+> test_buddy_alloc_limit
+> 
+> And either of those is fine in my opinion (I'd personally go with
+> test_buddy_alloc_limit in this case).
+> We don't really need a DRM-wide (or worse, kernel wide) convention for test case
+> names (it's only really needed for test suites).
 
-I love your patch! Yet something to improve:
+Although I do like the idea of having a DRM-wide name convention for
+test cases as it would ease the identification of test cases, I can see
+that consensus on this matter might be hard. So I guess we can take case
+by case.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master kees/for-next/pstore v6.0-rc3 next-20220901]
-[cannot apply to kees/for-next/hardening]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+But as it would be nice to remove the "igt_" prefix from the tests, a
+first name convention might be needed. Currently, I'm not sure in which
+direction to go for removing the "igt_" from the tests.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kees-Cook/Fix-FORTIFY-y-UBSAN_LOCAL_BOUNDS-y/20220903-044622
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220903/202209030625.wdoOhjAW-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6c991b3511a531e44e856fdf2b64020b70fd7b22
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kees-Cook/Fix-FORTIFY-y-UBSAN_LOCAL_BOUNDS-y/20220903-044622
-        git checkout 6c991b3511a531e44e856fdf2b64020b70fd7b22
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc prepare
+For me, any of the options mentioned above would be okay, with a slight
+preference for the test_drm_ one.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Mentioning "test" on the test case really helps distinguish the API and
+the test cases. Most of the KUnit tests that I saw have the "test" in
+some part of the function (sometimes in the beginning, sometimes in the
+end, or after the subsystem prefix). So, I guess using "test" on the
+functions is not a bad practice, or redundant.
 
-All errors (new ones prefixed by >>):
+Best Regards,
+- Maíra Canal
 
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-   In file included from include/linux/string.h:253,
-                    from include/linux/uuid.h:12,
-                    from include/linux/mod_devicetable.h:13,
-                    from scripts/mod/devicetable-offsets.c:3:
-   include/linux/fortify-string.h: In function 'strcat':
->> include/linux/fortify-string.h:98:23: error: 'SIZE_MAX' undeclared (first use in this function)
-      98 |         if (p_size == SIZE_MAX)
-         |                       ^~~~~~~~
-   include/linux/fortify-string.h:6:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-       5 | #include <linux/const.h>
-     +++ |+#include <stdint.h>
-       6 | 
-   include/linux/fortify-string.h:98:23: note: each undeclared identifier is reported only once for each function it appears in
-      98 |         if (p_size == SIZE_MAX)
-         |                       ^~~~~~~~
-   include/linux/fortify-string.h: In function 'strnlen':
-   include/linux/fortify-string.h:20:24: error: 'SIZE_MAX' undeclared (first use in this function)
-      20 |         size_t __ret = SIZE_MAX;                                \
-         |                        ^~~~~~~~
-   include/linux/fortify-string.h:109:24: note: in expansion of macro '__compiletime_strlen'
-     109 |         size_t p_len = __compiletime_strlen(p);
-         |                        ^~~~~~~~~~~~~~~~~~~~
-   include/linux/fortify-string.h:20:24: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-      20 |         size_t __ret = SIZE_MAX;                                \
-         |                        ^~~~~~~~
-   include/linux/fortify-string.h:109:24: note: in expansion of macro '__compiletime_strlen'
-     109 |         size_t p_len = __compiletime_strlen(p);
-         |                        ^~~~~~~~~~~~~~~~~~~~
-   include/linux/fortify-string.h: In function '__fortify_strlen':
-   include/linux/fortify-string.h:141:23: error: 'SIZE_MAX' undeclared (first use in this function)
-     141 |         if (p_size == SIZE_MAX)
-         |                       ^~~~~~~~
-   include/linux/fortify-string.h:141:23: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-   include/linux/fortify-string.h: In function 'strlcpy':
-   include/linux/fortify-string.h:158:23: error: 'SIZE_MAX' undeclared (first use in this function)
-     158 |         if (p_size == SIZE_MAX && q_size == SIZE_MAX)
-         |                       ^~~~~~~~
-   include/linux/fortify-string.h:158:23: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-   include/linux/fortify-string.h: In function 'strscpy':
-   include/linux/fortify-string.h:186:23: error: 'SIZE_MAX' undeclared (first use in this function)
-     186 |         if (p_size == SIZE_MAX && q_size == SIZE_MAX)
-         |                       ^~~~~~~~
-   include/linux/fortify-string.h:186:23: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-   include/linux/fortify-string.h: In function 'strncat':
-   include/linux/fortify-string.h:231:23: error: 'SIZE_MAX' undeclared (first use in this function)
-     231 |         if (p_size == SIZE_MAX && q_size == SIZE_MAX)
-         |                       ^~~~~~~~
-   include/linux/fortify-string.h:231:23: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-   include/linux/fortify-string.h: In function 'fortify_memset_chk':
-   include/linux/fortify-string.h:275:23: error: 'SIZE_MAX' undeclared (first use in this function)
-     275 |         if (p_size != SIZE_MAX && p_size < size)
-         |                       ^~~~~~~~
-   include/linux/fortify-string.h:275:23: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-   include/linux/fortify-string.h: In function 'fortify_memcpy_chk':
-   include/linux/fortify-string.h:369:24: error: 'SIZE_MAX' undeclared (first use in this function)
-     369 |         if ((p_size != SIZE_MAX && p_size < size) ||
-         |                        ^~~~~~~~
-   include/linux/fortify-string.h:369:24: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-   include/linux/fortify-string.h: In function 'strcpy':
-   include/linux/fortify-string.h:469:23: error: 'SIZE_MAX' undeclared (first use in this function)
-     469 |         if (p_size == SIZE_MAX && q_size == SIZE_MAX)
-         |                       ^~~~~~~~
-   include/linux/fortify-string.h:469:23: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-   make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1204: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:222: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/SIZE_MAX +98 include/linux/fortify-string.h
-
-    92	
-    93	__FORTIFY_INLINE __diagnose_as(__builtin_strcat, 1, 2)
-    94	char *strcat(char * const POS p, const char *q)
-    95	{
-    96		size_t p_size = __builtin_object_size(p, 1);
-    97	
-  > 98		if (p_size == SIZE_MAX)
-    99			return __underlying_strcat(p, q);
-   100		if (strlcat(p, q, p_size) >= p_size)
-   101			fortify_panic(__func__);
-   102		return p;
-   103	}
-   104	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> [1] https://docs.kernel.org/dev-tools/kunit/style.html#test-cases
+> [2] https://docs.kernel.org/dev-tools/kunit/style.html#suites
+> 
+> -Michał
+> 
+>>
+>>
+>> BR,
+>> Jani.
+>>
+>>
+>> -- 
+>> Jani Nikula, Intel Open Source Graphics Center

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B513C5AABDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B33C5AABDC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235605AbiIBJxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S235606AbiIBJxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235715AbiIBJwm (ORCPT
+        with ESMTP id S235701AbiIBJwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Sep 2022 05:52:42 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12EDD11FA
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:52:36 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id y64so1982004ede.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:52:36 -0700 (PDT)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3660CD124C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:52:38 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b16so1966553edd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=1DfksHW7Ish2UvigiC+OsNMircH0PL3M9sKVGJTg530=;
-        b=GwURQpXCkXATE+oyuEySbyquqLfL6FdQvLFR57Y9myNNAv/qP+Ou99yQ18r0Vw6GNo
-         kAR2W2v1eD/sr/fPmVCE4h9HfHzWuvJ+uXPCvTa9n7QqTTiZk4VDlbvBp79G85MRsmKS
-         sR47+F1D92cK9CEbW87GgJoEp4hRgBXQEs6D5oQrq3qjonZcDvQhmgEaIKJPaEukssaZ
-         5vXcv4DPa3mG8ovOGuFXmJysv2P/EV2qfiap5oC971/5LD9BwS4wlAcX4CWolRkMNbqw
-         vVRDf5jDw+zNiYGYzSSyAv5tFkPMuqyhxw8GVI1JXTGPrqNyz274IDh59YN7nMgjb/YW
-         Fafw==
+        bh=ey0K4wQnhegdgAeyU9dIk00TcYC9S5EHVHT72Ibu5sU=;
+        b=oADDvJMm0G3cTIlJG7zJ3VyZ7WisOx61oK8b5QI5OcqUY9fdTFAky58nZ3d4UmX3x+
+         42OepF39qhDu6/WTH9IdodwDYDVQvYzybbQjNP+Yyj8EY9FRm920lb7jlJDrpAc2RYiq
+         O3zD1OH6ON1sdMnbZdzVIUZrvYjrjRcmlQIV3JqjGDiB055mNJXEZ2xRudpTCstpJfyp
+         oHVjERJDdlTN3pdtCXepRsapJKpyC0Zs95jVuDCGJ5EgZAeJB2zaBXTex7m+LQs/CuxM
+         OqXvC1OY3/aqNOSG9fiE0hFSZ3ACcxuP+vIasFVcCoPB3zu1UKtgYUnVG11F1GCuaawA
+         eh2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=1DfksHW7Ish2UvigiC+OsNMircH0PL3M9sKVGJTg530=;
-        b=ePapEXJq4P3rQbjr1PRFT9RbmHHGKdfceGxShAIv+tnORCi7gd9gX9cEDBmHE8+zXP
-         28pHkSKsf0K5zixDg8FsA6b4pgd4apcfMjWiGqJ+Kd7lAri+e2U8YNMl0aY2VueafVfI
-         0p8YiIOehAcaKjWI/fuJWuOICl3q9s3lku2TGGiaHRqI4T6GpNN40vxnFllTReHTnpew
-         WGg/ttOnJofY8G6QL3M0kWpqKaG5GxfbCrFhSEaTV7NYHg6JtW399+eWGsdnJoIxjMR6
-         1tnT5xeSmHLa4SUUOjvJx4bHzlERTDuc6mlngGSCXvkIV6Jj6hPt+O7uZajiIRjr/I4W
-         zIIw==
-X-Gm-Message-State: ACgBeo365ZD3UKZxcE2Bv+ffkkMTvdCXH6vco65Yoa7v05JGiQ7VxEiX
-        /DKv23D8Kg15I3cMX6+iy5k=
-X-Google-Smtp-Source: AA6agR55x2wjYUvZMbG74LyI3iQ3j9xx4uDuayhtH6FQD3FRbSBS5lG6m5cyMaQ3IDBJsEijGQ/y/w==
-X-Received: by 2002:a05:6402:1d54:b0:447:b1f7:9ecf with SMTP id dz20-20020a0564021d5400b00447b1f79ecfmr31881111edb.425.1662112355310;
-        Fri, 02 Sep 2022 02:52:35 -0700 (PDT)
+        bh=ey0K4wQnhegdgAeyU9dIk00TcYC9S5EHVHT72Ibu5sU=;
+        b=gb91BJ4n9YYfeguJRHqoDxD9A1wPutEeidqhE01KRYS3LVRe1pGF7YH2tG+ssjQvfj
+         wenUpllhOmtx8M1dNmHitGEDgIPNdbgLtkf2WnWcYFxtKgPw5aPorwjzISahYxy9E5vP
+         vuejpo7SADbH5HmbLNDwFLf6QhN0Z8Ciduq1YMKr2afP3L4SCxImVO3tdvIU2unnRXES
+         KTftkuA3pARvqcWn4bp2rNrNlCJUTjMCAALQmsr0HMZ0ralKHlWO40vktZXdLHj3Uj6x
+         MdPVqW7LZB0XoFx896ZRZZNE5PV88cRpWx+xglAsAk5verIWec3QtT4R+pNmI3EVe5OU
+         qabA==
+X-Gm-Message-State: ACgBeo2YfNsevQ7hTlW+EzVCHZ2bWXf7lGOiWApxozHojaWEt/BRa1yX
+        krRFGwHUL5Yt4XHGuXUND68=
+X-Google-Smtp-Source: AA6agR5R1BncknwGK1xi0WV/APgOv2OQIdbs7lZp4U4k5D5NiNrxABPmB9Vzieel1NVMX8gt4bE47g==
+X-Received: by 2002:a05:6402:34c6:b0:43d:8cea:76c0 with SMTP id w6-20020a05640234c600b0043d8cea76c0mr33115562edc.268.1662112356261;
+        Fri, 02 Sep 2022 02:52:36 -0700 (PDT)
 Received: from localhost.localdomain (ip-217-105-46-83.ip.prioritytelecom.net. [217.105.46.83])
-        by smtp.gmail.com with ESMTPSA id h6-20020a170906828600b0073d6234ceebsm959601ejx.160.2022.09.02.02.52.34
+        by smtp.gmail.com with ESMTPSA id h6-20020a170906828600b0073d6234ceebsm959601ejx.160.2022.09.02.02.52.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 02:52:34 -0700 (PDT)
+        Fri, 02 Sep 2022 02:52:35 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     Larry.Finger@lwfinger.net, gregkh@linuxfoundation.org,
         hdegoede@redhat.com
 Cc:     namcaov@gmail.com, linux-kernel@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 02/10] staging: rtl8723bs: delete function rtw_set_chplan_cmd
-Date:   Fri,  2 Sep 2022 11:51:52 +0200
-Message-Id: <b5a1fe5bc7bc8eb154247ee8eafafe6af266dab9.1662111798.git.namcaov@gmail.com>
+Subject: [PATCH 03/10] staging: rtl8723bs: remove rtw_change_ifname
+Date:   Fri,  2 Sep 2022 11:51:53 +0200
+Message-Id: <975cd771e5b6573b84b31690895d140cbdaeb5e2.1662111798.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1662111798.git.namcaov@gmail.com>
 References: <cover.1662111798.git.namcaov@gmail.com>
@@ -72,93 +72,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function rtw_set_chplan_cmd is not used. Remove it.
+Delete function rtw_change_ifname because it is not used.
 
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/rtl8723bs/core/rtw_cmd.c    | 55 ---------------------
- drivers/staging/rtl8723bs/include/rtw_cmd.h |  2 -
- 2 files changed, 57 deletions(-)
+ drivers/staging/rtl8723bs/include/drv_types.h |  2 -
+ .../staging/rtl8723bs/os_dep/osdep_service.c  | 50 -------------------
+ 2 files changed, 52 deletions(-)
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_cmd.c b/drivers/staging/rtl8723bs/core/rtw_cmd.c
-index a5e66b9868ad..5e82d491ad75 100644
---- a/drivers/staging/rtl8723bs/core/rtw_cmd.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_cmd.c
-@@ -1111,61 +1111,6 @@ u8 rtw_dynamic_chk_wk_cmd(struct adapter *padapter)
- 	return res;
+diff --git a/drivers/staging/rtl8723bs/include/drv_types.h b/drivers/staging/rtl8723bs/include/drv_types.h
+index 0bbbdebdf157..bb4650f0b297 100644
+--- a/drivers/staging/rtl8723bs/include/drv_types.h
++++ b/drivers/staging/rtl8723bs/include/drv_types.h
+@@ -493,8 +493,6 @@ static inline u8 *myid(struct eeprom_priv *peepriv)
+ 
+ #include <rtw_btcoex.h>
+ 
+-int rtw_change_ifname(struct adapter *padapter, const char *ifname);
+-
+ extern char *rtw_initmac;
+ extern int rtw_mc2u_disable;
+ extern int rtw_ht_enable;
+diff --git a/drivers/staging/rtl8723bs/os_dep/osdep_service.c b/drivers/staging/rtl8723bs/os_dep/osdep_service.c
+index 4fbfa75c05d7..f09c1324c39c 100644
+--- a/drivers/staging/rtl8723bs/os_dep/osdep_service.c
++++ b/drivers/staging/rtl8723bs/os_dep/osdep_service.c
+@@ -108,56 +108,6 @@ void rtw_free_netdev(struct net_device *netdev)
+ 	return;
  }
  
--u8 rtw_set_chplan_cmd(struct adapter *padapter, u8 chplan, u8 enqueue, u8 swconfig)
+-int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 -{
--	struct	cmd_obj *pcmdobj;
--	struct	SetChannelPlan_param *setChannelPlan_param;
--	struct	cmd_priv   *pcmdpriv = &padapter->cmdpriv;
+-	struct net_device *pnetdev;
+-	struct net_device *cur_pnetdev;
+-	struct rereg_nd_name_data *rereg_priv;
+-	int ret;
 -
--	u8 res = _SUCCESS;
+-	if (!padapter)
+-		goto error;
 -
--	/*  check if allow software config */
--	if (swconfig && rtw_hal_is_disable_sw_channel_plan(padapter)) {
--		res = _FAIL;
--		goto exit;
+-	cur_pnetdev = padapter->pnetdev;
+-	rereg_priv = &padapter->rereg_nd_name_priv;
+-
+-	/* free the old_pnetdev */
+-	if (rereg_priv->old_pnetdev) {
+-		free_netdev(rereg_priv->old_pnetdev);
+-		rereg_priv->old_pnetdev = NULL;
 -	}
 -
--	/* check input parameter */
--	if (!rtw_is_channel_plan_valid(chplan)) {
--		res = _FAIL;
--		goto exit;
--	}
+-	if (!rtnl_is_locked())
+-		unregister_netdev(cur_pnetdev);
+-	else
+-		unregister_netdevice(cur_pnetdev);
 -
--	/* prepare cmd parameter */
--	setChannelPlan_param = rtw_zmalloc(sizeof(struct SetChannelPlan_param));
--	if (!setChannelPlan_param) {
--		res = _FAIL;
--		goto exit;
--	}
--	setChannelPlan_param->channel_plan = chplan;
+-	rereg_priv->old_pnetdev = cur_pnetdev;
 -
--	if (enqueue) {
--		/* need enqueue, prepare cmd_obj and enqueue */
--		pcmdobj = rtw_zmalloc(sizeof(struct cmd_obj));
--		if (!pcmdobj) {
--			kfree(setChannelPlan_param);
--			res = _FAIL;
--			goto exit;
--		}
+-	pnetdev = rtw_init_netdev(padapter);
+-	if (!pnetdev)
+-		goto error;
 -
--		init_h2fwcmd_w_parm_no_rsp(pcmdobj, setChannelPlan_param, GEN_CMD_CODE(_SetChannelPlan));
--		res = rtw_enqueue_cmd(pcmdpriv, pcmdobj);
--	} else {
--		/* no need to enqueue, do the cmd hdl directly and free cmd parameter */
--		if (set_chplan_hdl(padapter, (unsigned char *)setChannelPlan_param) != H2C_SUCCESS)
--			res = _FAIL;
+-	SET_NETDEV_DEV(pnetdev, dvobj_to_dev(adapter_to_dvobj(padapter)));
 -
--		kfree(setChannelPlan_param);
--	}
+-	rtw_init_netdev_name(pnetdev, ifname);
 -
--	/* do something based on res... */
--	if (res == _SUCCESS)
--		padapter->mlmepriv.ChannelPlan = chplan;
+-	eth_hw_addr_set(pnetdev, padapter->eeprompriv.mac_addr);
 -
--exit:
--	return res;
+-	if (!rtnl_is_locked())
+-		ret = register_netdev(pnetdev);
+-	else
+-		ret = register_netdevice(pnetdev);
+-
+-	if (ret != 0)
+-		goto error;
+-
+-	return 0;
+-
+-error:
+-	return -1;
 -}
 -
- static void collect_traffic_statistics(struct adapter *padapter)
+ void rtw_buf_free(u8 **buf, u32 *buf_len)
  {
- 	struct dvobj_priv *pdvobjpriv = adapter_to_dvobj(padapter);
-diff --git a/drivers/staging/rtl8723bs/include/rtw_cmd.h b/drivers/staging/rtl8723bs/include/rtw_cmd.h
-index 0af8215e2f2f..fe1b03101203 100644
---- a/drivers/staging/rtl8723bs/include/rtw_cmd.h
-+++ b/drivers/staging/rtl8723bs/include/rtw_cmd.h
-@@ -612,8 +612,6 @@ extern u8 rtw_ps_cmd(struct adapter *padapter);
- 
- u8 rtw_chk_hi_queue_cmd(struct adapter *padapter);
- 
--extern u8 rtw_set_chplan_cmd(struct adapter *padapter, u8 chplan, u8 enqueue, u8 swconfig);
--
- extern u8 rtw_c2h_packet_wk_cmd(struct adapter *padapter, u8 *pbuf, u16 length);
- extern u8 rtw_c2h_wk_cmd(struct adapter *padapter, u8 *c2h_evt);
- 
+ 	if (!buf || !buf_len)
 -- 
 2.25.1
 

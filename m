@@ -2,159 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64AF5ABAED
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07C95ABAEF
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 00:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiIBWqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 18:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
+        id S230083AbiIBWuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 18:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiIBWqh (ORCPT
+        with ESMTP id S229734AbiIBWt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 18:46:37 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8A3786D9;
-        Fri,  2 Sep 2022 15:46:35 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id z29so5175390lfb.13;
-        Fri, 02 Sep 2022 15:46:35 -0700 (PDT)
+        Fri, 2 Sep 2022 18:49:58 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F7D2EF32
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:49:54 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id 76so3260456pfy.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 15:49:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=8JyF5h1NzfqWpROtOZhApbTwVUFn3bdqXHoSB9MDQ6Q=;
-        b=jMimy5l5I4oiotjXk9cJr4xyY85ZSfbD1DEoXg6aNV8fouwI8CONs+rTpAgqtCH1+T
-         ca79nzi0ofPuaAEgn1018ViDEzA29byQF5e1MtFSpGlPs43a3R21MzIWAyWLXC1xuZTU
-         F1spXQFW6g3+lzWT0YcSGis1gu+rtKjgNGumpfIuPldZtZlDDRiq8XAmn8PaOR3Ld+vH
-         dIwBqTIW277HRUDAVWdQ6UNJmXEHDNuTLSUjMRKgyFVidhq8gVcUY7XcDForzdkSU354
-         3wdAK2hu16bhVWulujk6Jo9dEOMw2fJuU9nvSFvW9Ae7JaTUosGsxYAK8Ip4DqNaW5lZ
-         v/qw==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=TOEwTeaDYKnckpI0Y0o8xp7WmAIhg+JUBZ+GedO0Bcs=;
+        b=U6YuTQ3YGA2rJuhQN2gVA5cKuPIC3AihfsnK0KSVuVbFhFVw15UAbIntKiB5jWtEnC
+         eE6N5w3p1oTnTXdwyngNsySqVKp8qXYy2L9VSZHIeyRSfDu2GDX6oiBFJyV8+ZnXze+h
+         2/NC3nUuts9cdvUuFc/uhM0vrZY80E8c5/3zk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8JyF5h1NzfqWpROtOZhApbTwVUFn3bdqXHoSB9MDQ6Q=;
-        b=CScZCH375eLPm+bf/gDjLD0L6SkrmyEpoaoWTnjrbxCwtFCvxOfprvcCJeb4485Tal
-         OvNeFmkOCPlSuebWBvF8iF6bTjjqzxiE6P0IVKJDmvAoXGnIlEU98iJ/1Z8R/BJvUlDt
-         BW6IvQ3dEdaNWNUldelQ221HoiV/VN4q4m2//+tRiz1Z/fm3340zvme+ha9dp3/aULy9
-         OBTmxyDCjTSJxTRssEGL6kSS/s7cSKcm0qy6Ot7RdRlP0dzvey1vE8jReeb42PB/Xwjn
-         PZhV7mCYxUb/oSmiazKrEZewuHyuYkoVfjZ2g9o/z6li+Vu5hiGKbN0S1NZYQExnsmkQ
-         jkLw==
-X-Gm-Message-State: ACgBeo2eCHfE/Tzdii99z0BfrIlIvaLxEOTQYIqpagy5WgHBDDg1hL3l
-        YvY1V/rlPTgu1Qj5bCLjjFw=
-X-Google-Smtp-Source: AA6agR6UpPhKUdRy7tF5AdDr2ocQqKxR8YXOGWLA/s7cUP7xh7CnnbgU/GcgvHPr2a6POowJgzvarg==
-X-Received: by 2002:a05:6512:16a1:b0:48a:87a2:103c with SMTP id bu33-20020a05651216a100b0048a87a2103cmr14428914lfb.554.1662158794090;
-        Fri, 02 Sep 2022 15:46:34 -0700 (PDT)
-Received: from mobilestation ([83.220.236.124])
-        by smtp.gmail.com with ESMTPSA id s4-20020a05651c048400b0025e040510e7sm316253ljc.74.2022.09.02.15.46.32
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=TOEwTeaDYKnckpI0Y0o8xp7WmAIhg+JUBZ+GedO0Bcs=;
+        b=JPNL+LqVNS+O5WDMS9teF14j/+am0GXHHUtBbLtUBPL4MnITKzcl8OQrUOFUa4H3ee
+         CR6Wa8C7ruzKQ8WRqcw2ZEJfZP8Bx9D+mKSx0HYyUqyzhDssv2nvnQOshDgqrTBJjq25
+         bKQ8qHZTsCv+yV1ApjSDGprXw2azAzAKYzOgs0smuf4xpsRGn+Z0JDD2NafdaEZAo72a
+         dNzstgMOzJx3ZYKYo8CSkBAvCgs7zdpMgbZYynG7cJikvbtTPnmCiLSkmy+00LWV+TZS
+         ulKQX/HYY1CZvh8AH4RsyrnaKWbdgpGh6560MnBuGHbTw77SOXfvZuoz4mFLJPNF9eeB
+         7FkA==
+X-Gm-Message-State: ACgBeo18lKoMze5HRbA3a0Nfa6mdjixIoejnGki8HpUiwwg0vsGdvzjB
+        JhyBUZEvX3ILHi+rN1kMK7qPpg==
+X-Google-Smtp-Source: AA6agR5O16U4bqe7Wvc4GNZtIcJReu7/vP8Gz5pjri/kJToBVgokwwZHLNuogPAgA4jM8OIsJKZHwg==
+X-Received: by 2002:a05:6a00:1c46:b0:538:2b27:dd7f with SMTP id s6-20020a056a001c4600b005382b27dd7fmr27872658pfw.30.1662158994274;
+        Fri, 02 Sep 2022 15:49:54 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q8-20020a17090311c800b0015e8d4eb1f7sm2168722plh.65.2022.09.02.15.49.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 15:46:33 -0700 (PDT)
-Date:   Sat, 3 Sep 2022 01:46:30 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Kelvin Cheung <keguang.zhang@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] MIPS: loongson32: Fix the validation failure of LS1B &
- LS1C Ethernet PHY
-Message-ID: <20220902224630.tik2zt7vpwv3pcww@mobilestation>
-References: <20220818050019.1924408-1-keguang.zhang@gmail.com>
- <20220821171030.wc343w6zmrtcz5to@mobilestation>
- <CAJhJPsW0HTs+=PD2JvXZVTkm9zrnRYKtEwLNv3dsVsf1AUNjDQ@mail.gmail.com>
+        Fri, 02 Sep 2022 15:49:53 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Len Baker <len.baker@gmx.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v3] string: Introduce strtomem() and strtomem_pad()
+Date:   Fri,  2 Sep 2022 15:49:51 -0700
+Message-Id: <20220902224951.2625138-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11205; h=from:subject; bh=8yoCfv+YdvttXETv9yPW1LGIlZeSHfxfhxnvV3BeUwc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEoiPCv0x9qfF/+B9b0XCPfYNPVmUBHlCSGrrHylZ nXywOgCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxKIjwAKCRCJcvTf3G3AJtGpD/ 47tVDfQHfSaTkzgJJH714QO8ZV6PU+EZhZn9TJiXL3CMhWqBwOYNPc+rsPXwsEjGjHSsulKYjgkTxe T0nXlXtnp6CgojefanWgKdM4WE17RECmQKyQI8cLUF8fdj58CyJBHGfV8NpZBu3BeXV5NKJb4IYQ07 Uon3TfRq06WkZAizxk7Tf5pej/62XQdPyNZbuCzHTPB3EaiURzw+se4dii3OodHKMbxmyvpv7X6vw+ PCom8JRERXUm/5D5VMslNb0z8cIvE01GmAG81umaQJPh5SA+8E4YRCkOa3TetBR6qNqxa7IQ06131C DNFu21qS6Pb76VOD4mEOI1JJCXSsTULhkRmhKunEeQPZv5MhkaNcBWRvsuGNG+rRMC3nZS1k5ihZhw qz7qcbV8j3axIRPUlKV23JOuF31da1OnFXjJbHm+ANeRsrz+QpJSPBr0LPtEvsUDGLChDq8209kLVJ DDR5WviGPxDO1UETl2IP1JSVdXvShDYrIyFkOxBwyentEAviiqZnDcATdbolLPLwczYYIYWzqlIK46 26zTMxoqN7urtLEz4I72kkf3NCpjvxKhTDjVPjBXj8mHNcFazXHlZQKS9Gsb1uFtkGraPHYmdiXYUn /liGyIdHJFERcZVtJwNEs0QQ1nLDrXCjhNJJ7ZqkqIFdgKICmWG/QHzUMfRg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJhJPsW0HTs+=PD2JvXZVTkm9zrnRYKtEwLNv3dsVsf1AUNjDQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 09:31:25PM +0800, Kelvin Cheung wrote:
-> Hi Serge,
-> Your patch also works for me.
+One of the "legitimate" uses of strncpy() is copying a NUL-terminated
+string into a fixed-size non-NUL-terminated character array. To avoid
+the weaknesses and ambiguity of intent when using strncpy(), provide
+replacement functions that explicitly distinguish between trailing
+padding and not, and require the destination buffer size be discoverable
+by the compiler.
 
-Great. Could you submit it for review then with your tested-by tag
-added?
+For example:
 
-> But what about the plat_dat->interface? Is it obsolete?
+struct obj {
+	int foo;
+	char small[4] __nonstring;
+	char big[8] __nonstring;
+	int bar;
+};
 
-No. As I said in the patch log it's still used in the STMMAC driver
-but for the MAC-PCS mode setting. Such PCS isn't available on the most
-of the cases so the "phy_interface" field should be mainly utilized
-instead while the "interface" field is supposed to be left untouched.
-See the commit 0060c8783330 ("net: stmmac: implement support for
-passive mode converters via dt") for details.
+struct obj p;
 
--Sergey
+/* This will truncate to 4 chars with no trailing NUL */
+strncpy(p.small, "hello", sizeof(p.small));
+/* p.small contains 'h', 'e', 'l', 'l' */
 
-> 
-> Serge Semin <fancer.lancer@gmail.com> 于2022年8月22日周一 01:10写道：
-> >
-> > Hello Keguang
-> >
-> > On Thu, Aug 18, 2022 at 01:00:19PM +0800, Keguang Zhang wrote:
-> > > From: Kelvin Cheung <keguang.zhang@gmail.com>
-> > >
-> > > The Ethernet of LS1B/LS1C doesn't work due to the stmmac driver
-> > > using phylink_generic_validate() instead of stmmac_validate().
-> > > Moreover the driver assumes the PHY interface mode
-> > > passed in platform data is always supported.
-> > >
-> > > stmmaceth stmmaceth.0 eth0: validation of gmii with support 00000000,00000000,000062cf and advertisement 00000000,00000000,000062cf failed: -EINVAL
-> > > stmmaceth stmmaceth.0 eth0: stmmac_open: Cannot attach to PHY (error: -22)
-> > >
-> > > This patch sets phy_interface field of platform data.
-> >
-> > I've got a similar fix in my repo, though didn't have a chance to test
-> > it out due to lacking any loongson hardware. I've discovered the
-> > issues on my still going way of the STMMAC driver refactoring. Anyway
-> > IMO the problem is a bit different than you describe and should be
-> > fixed in a bit different way. Please see a patch attached to this
-> > email. Could you test it out on your hw? If it fixes the problem you
-> > can resend it as v2 patch.
-> >
-> > -Sergey
-> >
-> > >
-> > > Fixes: 04a0683f7db4 ("net: stmmac: convert to phylink_generic_validate()")
-> > > Fixes: d194923d51c9 ("net: stmmac: fill in supported_interfaces")
-> > > Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-> > > ---
-> > >  arch/mips/loongson32/common/platform.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
-> > > index 794c96c2a4cd..741aace80b80 100644
-> > > --- a/arch/mips/loongson32/common/platform.c
-> > > +++ b/arch/mips/loongson32/common/platform.c
-> > > @@ -147,8 +147,10 @@ static struct plat_stmmacenet_data ls1x_eth0_pdata = {
-> > >       .phy_addr               = -1,
-> > >  #if defined(CONFIG_LOONGSON1_LS1B)
-> > >       .interface              = PHY_INTERFACE_MODE_MII,
-> > > +     .phy_interface          = PHY_INTERFACE_MODE_MII,
-> > >  #elif defined(CONFIG_LOONGSON1_LS1C)
-> > >       .interface              = PHY_INTERFACE_MODE_RMII,
-> > > +     .phy_interface          = PHY_INTERFACE_MODE_RMII,
-> > >  #endif
-> > >       .mdio_bus_data          = &ls1x_mdio_bus_data,
-> > >       .dma_cfg                = &ls1x_eth_dma_cfg,
-> > >
-> > > base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-> > > --
-> > > 2.34.1
-> > >
-> 
-> 
-> 
-> -- 
-> Best regards,
-> 
-> Kelvin Cheung
+/* This will NUL pad to 8 chars. */
+strncpy(p.big, "hello", sizeof(p.big));
+/* p.big contains 'h', 'e', 'l', 'l', 'o', '\0', '\0', '\0' */
+
+When the "__nonstring" attributes are missing, the intent of the
+programmer becomes ambiguous for whether the lack of a trailing NUL
+in the p.small copy is a bug. Additionally, it's not clear whether
+the trailing padding in the p.big copy is _needed_. Both cases
+become unambiguous with:
+
+strtomem(p.small, "hello");
+strtomem_pad(p.big, "hello", 0);
+
+See also https://github.com/KSPP/linux/issues/90
+
+Expand the memcpy KUnit tests to include these functions.
+
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v3:
+ - fix repeated "be be" (Guenter)
+ - fix kern-doc format (Guenter, Bagas)
+v2: https://lore.kernel.org/lkml/20220901190952.2229696-1-keescook@chromium.org
+v1: https://lore.kernel.org/lkml/20220831230006.1016236-1-keescook@chromium.org
+---
+ Documentation/process/deprecated.rst | 11 ++++--
+ include/linux/fortify-string.h       | 32 +++++++++++++++
+ include/linux/string.h               | 43 ++++++++++++++++++++
+ lib/memcpy_kunit.c                   | 59 ++++++++++++++++++++++++++--
+ 4 files changed, 137 insertions(+), 8 deletions(-)
+
+diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+index a6e36d9c3d14..c8fd53a11a20 100644
+--- a/Documentation/process/deprecated.rst
++++ b/Documentation/process/deprecated.rst
+@@ -138,17 +138,20 @@ be NUL terminated. This can lead to various linear read overflows and
+ other misbehavior due to the missing termination. It also NUL-pads
+ the destination buffer if the source contents are shorter than the
+ destination buffer size, which may be a needless performance penalty
+-for callers using only NUL-terminated strings. The safe replacement is
++for callers using only NUL-terminated strings.
++
++When the destination is required to be NUL-terminated, the replacement is
+ strscpy(), though care must be given to any cases where the return value
+ of strncpy() was used, since strscpy() does not return a pointer to the
+ destination, but rather a count of non-NUL bytes copied (or negative
+ errno when it truncates). Any cases still needing NUL-padding should
+ instead use strscpy_pad().
+ 
+-If a caller is using non-NUL-terminated strings, strncpy() can
+-still be used, but destinations should be marked with the `__nonstring
++If a caller is using non-NUL-terminated strings, strtomem() should be
++used, and the destinations should be marked with the `__nonstring
+ <https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html>`_
+-attribute to avoid future compiler warnings.
++attribute to avoid future compiler warnings. For cases still needing
++NUL-padding, strtomem_pad() can be used.
+ 
+ strlcpy()
+ ---------
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index 3b401fa0f374..8e8c2c87b1d5 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -77,6 +77,38 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
+ #define POS	__pass_object_size(1)
+ #define POS0	__pass_object_size(0)
+ 
++/**
++ * strncpy - Copy a string to memory with non-guaranteed NUL padding
++ *
++ * @p: pointer to destination of copy
++ * @q: pointer to NUL-terminated source string to copy
++ * @size: bytes to write at @p
++ *
++ * If strlen(@q) >= @size, the copy of @q will stop after @size bytes,
++ * and @p will NOT be NUL-terminated
++ *
++ * If strlen(@q) < @size, following the copy of @q, trailing NUL bytes
++ * will be written to @p until @size total bytes have been written.
++ *
++ * Do not use this function. While FORTIFY_SOURCE tries to avoid
++ * over-reads of @q, it cannot defend against writing unterminated
++ * results to @p. Using strncpy() remains ambiguous and fragile.
++ * Instead, please choose an alternative, so that the expectation
++ * of @p's contents is unambiguous:
++ *
++ * +--------------------+-----------------+------------+
++ * | @p needs to be:    | padded to @size | not padded |
++ * +====================+=================+============+
++ * |     NUL-terminated | strscpy_pad()   | strscpy()  |
++ * +--------------------+-----------------+------------+
++ * | not NUL-terminated | strtomem_pad()  | strtomem() |
++ * +--------------------+-----------------+------------+
++ *
++ * Note strscpy*()'s differing return values for detecting truncation,
++ * and strtomem*()'s expectation that the destination is marked with
++ * __nonstring when it is a character array.
++ *
++ */
+ __FORTIFY_INLINE __diagnose_as(__builtin_strncpy, 1, 2, 3)
+ char *strncpy(char * const POS p, const char *q, __kernel_size_t size)
+ {
+diff --git a/include/linux/string.h b/include/linux/string.h
+index 61ec7e4f6311..cf7607b32102 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -260,6 +260,49 @@ static inline const char *kbasename(const char *path)
+ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
+ 		    int pad);
+ 
++/**
++ * strtomem_pad - Copy NUL-terminated string to non-NUL-terminated buffer
++ *
++ * @dest: Pointer of destination character array (marked as __nonstring)
++ * @src: Pointer to NUL-terminated string
++ * @pad: Padding character to fill any remaining bytes of @dest after copy
++ *
++ * This is a replacement for strncpy() uses where the destination is not
++ * a NUL-terminated string, but with bounds checking on the source size, and
++ * an explicit padding character. If padding is not required, use strtomem().
++ *
++ * Note that the size of @dest is not an argument, as the length of @dest
++ * must be discoverable by the compiler.
++ */
++#define strtomem_pad(dest, src, pad)	do {				\
++	const size_t _dest_len = __builtin_object_size(dest, 1);	\
++									\
++	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
++		     _dest_len == (size_t)-1);				\
++	memcpy_and_pad(dest, _dest_len, src, strnlen(src, _dest_len), pad); \
++} while (0)
++
++/**
++ * strtomem - Copy NUL-terminated string to non-NUL-terminated buffer
++ *
++ * @dest: Pointer of destination character array (marked as __nonstring)
++ * @src: Pointer to NUL-terminated string
++ *
++ * This is a replacement for strncpy() uses where the destination is not
++ * a NUL-terminated string, but with bounds checking on the source size, and
++ * without trailing padding. If padding is required, use strtomem_pad().
++ *
++ * Note that the size of @dest is not an argument, as the length of @dest
++ * must be discoverable by the compiler.
++ */
++#define strtomem(dest, src)	do {					\
++	const size_t _dest_len = __builtin_object_size(dest, 1);	\
++									\
++	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
++		     _dest_len == (size_t)-1);				\
++	memcpy(dest, src, min(_dest_len, strnlen(src, _dest_len)));	\
++} while (0)
++
+ /**
+  * memset_after - Set a value after a struct member to the end of a struct
+  *
+diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+index 62f8ffcbbaa3..d22fa3838ee9 100644
+--- a/lib/memcpy_kunit.c
++++ b/lib/memcpy_kunit.c
+@@ -29,9 +29,8 @@ struct some_bytes {
+ };
+ 
+ #define check(instance, v) do {	\
+-	int i;	\
+ 	BUILD_BUG_ON(sizeof(instance.data) != 32);	\
+-	for (i = 0; i < sizeof(instance.data); i++) {	\
++	for (size_t i = 0; i < sizeof(instance.data); i++) {	\
+ 		KUNIT_ASSERT_EQ_MSG(test, instance.data[i], v, \
+ 			"line %d: '%s' not initialized to 0x%02x @ %d (saw 0x%02x)\n", \
+ 			__LINE__, #instance, v, i, instance.data[i]);	\
+@@ -39,9 +38,8 @@ struct some_bytes {
+ } while (0)
+ 
+ #define compare(name, one, two) do { \
+-	int i; \
+ 	BUILD_BUG_ON(sizeof(one) != sizeof(two)); \
+-	for (i = 0; i < sizeof(one); i++) {	\
++	for (size_t i = 0; i < sizeof(one); i++) {	\
+ 		KUNIT_EXPECT_EQ_MSG(test, one.data[i], two.data[i], \
+ 			"line %d: %s.data[%d] (0x%02x) != %s.data[%d] (0x%02x)\n", \
+ 			__LINE__, #one, i, one.data[i], #two, i, two.data[i]); \
+@@ -272,10 +270,63 @@ static void memset_test(struct kunit *test)
+ #undef TEST_OP
+ }
+ 
++static void strtomem_test(struct kunit *test)
++{
++	static const char input[] = "hi";
++	static const char truncate[] = "this is too long";
++	struct {
++		unsigned long canary1;
++		unsigned char output[sizeof(unsigned long)] __nonstring;
++		unsigned long canary2;
++	} wrap;
++
++	memset(&wrap, 0xFF, sizeof(wrap));
++	KUNIT_EXPECT_EQ_MSG(test, wrap.canary1, ULONG_MAX,
++			    "bad initial canary value");
++	KUNIT_EXPECT_EQ_MSG(test, wrap.canary2, ULONG_MAX,
++			    "bad initial canary value");
++
++	/* Check unpadded copy leaves surroundings untouched. */
++	strtomem(wrap.output, input);
++	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
++	KUNIT_EXPECT_EQ(test, wrap.output[0], input[0]);
++	KUNIT_EXPECT_EQ(test, wrap.output[1], input[1]);
++	for (size_t i = 2; i < sizeof(wrap.output); i++)
++		KUNIT_EXPECT_EQ(test, wrap.output[i], 0xFF);
++	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
++
++	/* Check truncated copy leaves surroundings untouched. */
++	memset(&wrap, 0xFF, sizeof(wrap));
++	strtomem(wrap.output, truncate);
++	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
++	for (size_t i = 0; i < sizeof(wrap.output); i++)
++		KUNIT_EXPECT_EQ(test, wrap.output[i], truncate[i]);
++	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
++
++	/* Check padded copy leaves only string padded. */
++	memset(&wrap, 0xFF, sizeof(wrap));
++	strtomem_pad(wrap.output, input, 0xAA);
++	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
++	KUNIT_EXPECT_EQ(test, wrap.output[0], input[0]);
++	KUNIT_EXPECT_EQ(test, wrap.output[1], input[1]);
++	for (size_t i = 2; i < sizeof(wrap.output); i++)
++		KUNIT_EXPECT_EQ(test, wrap.output[i], 0xAA);
++	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
++
++	/* Check truncated padded copy has no padding. */
++	memset(&wrap, 0xFF, sizeof(wrap));
++	strtomem(wrap.output, truncate);
++	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
++	for (size_t i = 0; i < sizeof(wrap.output); i++)
++		KUNIT_EXPECT_EQ(test, wrap.output[i], truncate[i]);
++	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
++}
++
+ static struct kunit_case memcpy_test_cases[] = {
+ 	KUNIT_CASE(memset_test),
+ 	KUNIT_CASE(memcpy_test),
+ 	KUNIT_CASE(memmove_test),
++	KUNIT_CASE(strtomem_test),
+ 	{}
+ };
+ 
+-- 
+2.34.1
+

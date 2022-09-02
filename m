@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8746B5AB38B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19535AB3AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236158AbiIBOaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
+        id S236209AbiIBOc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236098AbiIBO1g (ORCPT
+        with ESMTP id S238084AbiIBO2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:27:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B975168A26
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:31 -0700 (PDT)
+        Fri, 2 Sep 2022 10:28:48 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB85321E0E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=YUhA2B9hWTAdbvtvLfAUCL48qsFF8kF9euAYgBwVN7c=; b=F1sdS6J0B07JaNau9gs7zg9nAa
-        JFqYigGC2sVpUTdJG0Ry7PoQlkHW5sSmWOwYlDjzxi0d0ZM6ucwdxaOGxu5ED0CyjXB1eFdseUDqN
-        jwYnJJAj/nI/+x1Nn/1VIPrh3UMEkX7GGDXBG01mgtwTMBVmqY6RCMX/1y2nfHXvPnIECNItRa0ai
-        pYFOHwxuBnSyFVrowORsKnxV/Pfj5qX8j1TjDhEXp7dTB7qw+DNU+KCzRAEgHisdvG+FcsW8y+KXb
-        yEr7fHD9l8gWsNkHiG0DwPEbdj52ujSMHBOrxSeGgjq57exmwfsJS4w1PQL9B1AH467E0chEIDvyn
-        ZEur5Odg==;
+        bh=iyMt99aEuDsmq01H4vnoTwNVsujF1AlFYZo6vxM6wm8=; b=LOWPcYwarw+3cR9biYHzY8+3n9
+        kDt4l2BqObOIEE42ww5YWvoAHWXnVNiHZcyH8tX4otV6HVDEDUNy80sNYb3YhMAAJH5wJnxuaMmyO
+        Ya98irsbhLBT/Q1eEk/1hH3Z50RVLK/H9qn0fvAf+cQSMpx/QPWWJeNkx+f6oNhBehouVd1LE56/4
+        ru+bSagREjMxpOwgT/nlrLmRd4Y1TCd4GaFeny9yPBThpMtBW7SLFlCgF9ighH1i+KRyGi4HnBary
+        7Wf1FWBqpCKKwT3KNF8a7S0OKLD7pLOc99kfPGcqxULEEb3wBchmpebiZufEuTpiZOi4eIjZTLvBF
+        C0E4qUyQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oU77M-0074T1-6d; Fri, 02 Sep 2022 13:53:56 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oU77K-008g7o-Ua; Fri, 02 Sep 2022 13:53:55 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 00E8430069C;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 00EC5300779;
         Fri,  2 Sep 2022 15:53:54 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 3F8F32B077D23; Fri,  2 Sep 2022 15:53:52 +0200 (CEST)
-Message-ID: <20220902130947.190618587@infradead.org>
+        id 432242B1A6BC9; Fri,  2 Sep 2022 15:53:52 +0200 (CEST)
+Message-ID: <20220902130947.295146217@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 02 Sep 2022 15:06:33 +0200
+Date:   Fri, 02 Sep 2022 15:06:34 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v2 08/59] x86/build: Ensure proper function alignment
+Subject: [PATCH v2 09/59] x86/asm: Ensure proper function alignment
 References: <20220902130625.217071627@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,80 +75,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-The Intel Architectures Optimization Reference Manual explains that
-functions should be aligned at 16 bytes because for a lot of (Intel)
-uarchs the I-fetch width is 16 bytes. The AMD Software Optimization
-Guide (for recent chips) mentions a 32 byte I-fetch window but a 16
-byte decode window.
-
-Follow this advice and align functions to 16 bytes to optimize
-instruction delivery to decode and reduce front-end bottlenecks.
+With the compiler now aligning functions to 16 bytes, make sure the
+assmbler does the same. Change the SYM_FUNC_START*() variants to have
+matching alignment.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/Kconfig.cpu              |    6 ++++++
- arch/x86/Makefile                 |    4 ++++
- arch/x86/include/asm/linkage.h    |    7 ++++---
- include/asm-generic/vmlinux.lds.h |    7 ++++++-
- 4 files changed, 20 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/linkage.h |   23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
---- a/arch/x86/Kconfig.cpu
-+++ b/arch/x86/Kconfig.cpu
-@@ -517,3 +517,9 @@ config CPU_SUP_VORTEX_32
- 	  makes the kernel a tiny bit smaller.
- 
- 	  If unsure, say N.
-+
-+# Defined here so it is defined for UM too
-+config FUNCTION_ALIGNMENT
-+	int
-+	default 16 if X86_64 || X86_ALIGNMENT_16
-+	default 8
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -84,6 +84,10 @@ else
- KBUILD_CFLAGS += $(call cc-option,-fcf-protection=none)
- endif
- 
-+ifneq ($(CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B),y)
-+KBUILD_CFLAGS += -falign-functions=$(CONFIG_FUNCTION_ALIGNMENT)
-+endif
-+
- ifeq ($(CONFIG_X86_32),y)
-         BITS := 32
-         UTS_MACHINE := i386
 --- a/arch/x86/include/asm/linkage.h
 +++ b/arch/x86/include/asm/linkage.h
-@@ -14,9 +14,10 @@
+@@ -12,13 +12,20 @@
+ #define asmlinkage CPP_ASMLINKAGE __attribute__((regparm(0)))
+ #endif /* CONFIG_X86_32 */
  
- #ifdef __ASSEMBLY__
+-#ifdef __ASSEMBLY__
++#if CONFIG_FUNCTION_ALIGNMENT == 8
++#define __ALIGN			.p2align 3, 0x90;
++#elif CONFIG_FUNCTION_ALIGNMENT == 16
++#define __ALIGN			.p2align 4, 0x90;
++#else
++# error Unsupported function alignment
++#endif
  
--#if defined(CONFIG_X86_64) || defined(CONFIG_X86_ALIGNMENT_16)
--#define __ALIGN		.p2align 4, 0x90
--#define __ALIGN_STR	__stringify(__ALIGN)
-+#if CONFIG_FUNCTION_ALIGNMENT == 16
-+#define __ALIGN			.p2align 4, 0x90
-+#define __ALIGN_STR		__stringify(__ALIGN)
-+#define FUNCTION_ALIGNMENT	16
- #endif
+-#if CONFIG_FUNCTION_ALIGNMENT == 16
+-#define __ALIGN			.p2align 4, 0x90
+ #define __ALIGN_STR		__stringify(__ALIGN)
+-#define FUNCTION_ALIGNMENT	16
+-#endif
++#define ASM_FUNC_ALIGN		__ALIGN_STR
++#define __FUNC_ALIGN		__ALIGN
++#define SYM_F_ALIGN		__FUNC_ALIGN
++
++#ifdef __ASSEMBLY__
  
  #if defined(CONFIG_RETHUNK) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO)
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -82,7 +82,12 @@
- #endif
+ #define RET	jmp __x86_return_thunk
+@@ -46,7 +53,7 @@
  
- /* Align . to a 8 byte boundary equals to maximum function alignment. */
--#define ALIGN_FUNCTION()  . = ALIGN(8)
-+#ifndef CONFIG_FUNCTION_ALIGNMENT
-+#define __FUNCTION_ALIGNMENT	8
-+#else
-+#define __FUNCTION_ALIGNMENT	CONFIG_FUNCTION_ALIGNMENT
-+#endif
-+#define ALIGN_FUNCTION()  . = ALIGN(__FUNCTION_ALIGNMENT)
+ /* SYM_FUNC_START -- use for global functions */
+ #define SYM_FUNC_START(name)				\
+-	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)	\
++	SYM_START(name, SYM_L_GLOBAL, SYM_F_ALIGN)	\
+ 	ENDBR
  
- /*
-  * LD_DEAD_CODE_DATA_ELIMINATION option enables -fdata-sections, which
+ /* SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment */
+@@ -56,7 +63,7 @@
+ 
+ /* SYM_FUNC_START_LOCAL -- use for local functions */
+ #define SYM_FUNC_START_LOCAL(name)			\
+-	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)	\
++	SYM_START(name, SYM_L_LOCAL, SYM_F_ALIGN)	\
+ 	ENDBR
+ 
+ /* SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o alignment */
+@@ -66,7 +73,7 @@
+ 
+ /* SYM_FUNC_START_WEAK -- use for weak functions */
+ #define SYM_FUNC_START_WEAK(name)			\
+-	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)	\
++	SYM_START(name, SYM_L_WEAK, SYM_F_ALIGN)	\
+ 	ENDBR
+ 
+ /* SYM_FUNC_START_WEAK_NOALIGN -- use for weak functions, w/o alignment */
 
 

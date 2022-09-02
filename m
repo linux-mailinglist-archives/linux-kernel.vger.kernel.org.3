@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CD95AAE87
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF485AAF3B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbiIBMYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S236909AbiIBMfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234985AbiIBMYN (ORCPT
+        with ESMTP id S236936AbiIBMdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:24:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE2ED7CC3;
-        Fri,  2 Sep 2022 05:22:22 -0700 (PDT)
+        Fri, 2 Sep 2022 08:33:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8A3E3438;
+        Fri,  2 Sep 2022 05:28:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D9EFB82A92;
-        Fri,  2 Sep 2022 12:22:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A6BC433C1;
-        Fri,  2 Sep 2022 12:22:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 158CFB82AA1;
+        Fri,  2 Sep 2022 12:28:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DDB7C433C1;
+        Fri,  2 Sep 2022 12:28:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121337;
-        bh=MolakyFmjNbfxyrFA1j8Zfr9J+QdKVMz8ceNyw+BLG4=;
+        s=korg; t=1662121683;
+        bh=bjlUEf+Dr1gI09ygxVRd1FmBAP970UMclWHUNlzSSjI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=clEJM6lda484Aud1s5g400eYk5x5hZc69iJdZa3XMrqJ5KbM7nCuzuMHw4HZw7XL8
-         ZpI++bfOyduoXvVT29Zvg3LMj4C6H7strx2U8i5khPYtz5uekQwtAjxrbJmHQFfNPG
-         NW9JXm4q32Lz3PnoBIN8RKzoR6NZj9B0WqrFpkPE=
+        b=rE2jXoE3vAgqf4mqK9lGxlFKjuee/htTOmDdygFkhVCH0sGNRXpfDU9i/t3aTN9Xk
+         BlaejM7Th1ssUN7/aboVh1W0OeT2Yg39G4LydONHzqC0NxLs0ZHcgWaz178q8rox4J
+         rWkYLSet+cp+XypbUEHF16lwa1Nz2w1GYAGbU220=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 17/42] net: Fix a data-race around netdev_budget.
+Subject: [PATCH 5.4 32/77] net: Fix a data-race around netdev_budget.
 Date:   Fri,  2 Sep 2022 14:18:41 +0200
-Message-Id: <20220902121359.401149952@linuxfoundation.org>
+Message-Id: <20220902121404.710820787@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/core/dev.c b/net/core/dev.c
-index 51721fb2e30cf..f6d3cbc57425c 100644
+index 99b0025864984..7c19e672dde84 100644
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
-@@ -5649,7 +5649,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
+@@ -6394,7 +6394,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
  	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
  	unsigned long time_limit = jiffies +
  		usecs_to_jiffies(netdev_budget_usecs);

@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65AE5AA4DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220EB5AA4DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbiIBBGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 21:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
+        id S234732AbiIBBHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 21:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234186AbiIBBGx (ORCPT
+        with ESMTP id S235136AbiIBBHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 21:06:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175366BCF1
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:06:51 -0700 (PDT)
+        Thu, 1 Sep 2022 21:07:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F436C12B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:07:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3574C61AFA
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:06:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A033C43470
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:06:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A44861AA6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:07:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90354C43470
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 01:07:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662080810;
-        bh=G+foTZzT5RWnrPBOckb1rqSN5DWVDDelGqvcOVRSIqg=;
+        s=k20201202; t=1662080867;
+        bh=YGW06h42fog0+829pIdqqfbbxG5/bSPM5IarAA8Qg4Y=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jNsPI19q+QvWykkoUx5PxFYUfgsgSz4vQYP3jAfkz7LORKVnkNxod2kBsqcbk5e1B
-         yHutRgDmiyU5kpWk7L1Ak4VbvOWtt09itG2gaN44vRJa4f6SbHNZltbYsC4boJWGIv
-         7VNY34ibfeiHiyy2F/W+X7qMIUGLGsJuiT7MGAxEaKe4YEqoFwW+t6nV/noOCLfOqY
-         27HAU5kE/5VhBl/MQwf7mXefI17AqeyRrsnJYLh5DnaxNg5yMTD569aayCudIYZUY1
-         U2fla4esMHqO0iVbHb1wkmydIc7Wq9BTch8ucj24M839g5u7LwpB1cwhF87DS4HxGq
-         sFj1QBoAI/qBA==
-Received: by mail-ot1-f54.google.com with SMTP id v2-20020a056830090200b006397457afecso475047ott.13
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 18:06:50 -0700 (PDT)
-X-Gm-Message-State: ACgBeo06nKTriL8ksJLZ1n59I+Mu6gEao2DmVPy2d7+L4lXTUO2BOmwK
-        i9+Fe3BNj7fDAbD3q3+HmtXIECksu4YzgsD0T9M=
-X-Google-Smtp-Source: AA6agR44Cj/JO76hEKeM9LNLPEJOtlwqxquNV83WJgiqhEaHfCY7qxg9sevAiryJmQzhjxEG5kL9o5LfAWGxcWxb1uI=
-X-Received: by 2002:a05:6830:3482:b0:638:92b7:f09b with SMTP id
- c2-20020a056830348200b0063892b7f09bmr13288675otu.140.1662080809806; Thu, 01
- Sep 2022 18:06:49 -0700 (PDT)
+        b=goPsjt9899ORTuqLLkog1synbcfRjehQYCiugCW4nLaM1EV6HU0+oYY/4uDwnRcl8
+         xWTV/9Ta9+eQJ/qmK3SCstibOAnexccPfKfCoiKLu+Nr+1VFvOElFT7q2bkpjDSZDB
+         dZxQIEKwUPAZDzdBji2Jh803TKzH9mFcrEQKLHxA3dkCJpTVyWG7HyowSedQ33YJIe
+         AGcYUog1piTixJzlR1dtwTdcaAqFE0SunInOP4nHkQc5xU8xXCdBeptCAdgIM3GpQ2
+         YjoimfAofZEYlMaqNZr8k94rGHcuqFBAkOm3fTpJJvKfr8HJqp/7n5LgDqLaUbukRC
+         wTdUxr4BdV/UQ==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-11eab59db71so1346088fac.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 18:07:47 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2oClnjUVc7rFeG6f6lTyftR3WskOdzrwgFaVcfC1QfYV4dyJMl
+        ymov1veG/zeTKIJ7hfJ9kuHlNnKPCZ223GWGONs=
+X-Google-Smtp-Source: AA6agR4Ocs9kP9xBS2wmYYMgKp46ESJNJgZQyzz/kLfwkEqbvIlyV+tofNOYNy9gfS/+9/H3rD1//vbYWh8e8wc+wg4=
+X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
+ ba22-20020a056870c59600b001016409ae62mr1043596oab.112.1662080866791; Thu, 01
+ Sep 2022 18:07:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220901222744.2210215-1-heiko@sntech.de> <20220901222744.2210215-4-heiko@sntech.de>
-In-Reply-To: <20220901222744.2210215-4-heiko@sntech.de>
+References: <20220901222744.2210215-1-heiko@sntech.de>
+In-Reply-To: <20220901222744.2210215-1-heiko@sntech.de>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 2 Sep 2022 09:06:37 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQsXMB+igwMiya-sqyku+3iQPop1JJuHwXtTToj163h-A@mail.gmail.com>
-Message-ID: <CAJF2gTQsXMB+igwMiya-sqyku+3iQPop1JJuHwXtTToj163h-A@mail.gmail.com>
-Subject: Re: [PATCH 4/4] riscv: check for kernel config option in t-head
- memory types errata
+Date:   Fri, 2 Sep 2022 09:07:34 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRnhN37C3pd6FYKX8KEVUQHm5PzWTf6Urxe4kwVW5hg7Q@mail.gmail.com>
+Message-ID: <CAJF2gTRnhN37C3pd6FYKX8KEVUQHm5PzWTf6Urxe4kwVW5hg7Q@mail.gmail.com>
+Subject: Re: [PATCH 1/4] riscv: cleanup svpbmt cpufeature probing
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, conor.dooley@microchip.com,
@@ -65,32 +64,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Is it a Fixes?
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
 On Fri, Sep 2, 2022 at 6:28 AM Heiko Stuebner <heiko@sntech.de> wrote:
 >
-> The t-head variant of page-based memory types should also check first
-> for the enabled kernel config option.
+> This can also do without the ifdef and use IS_ENABLED instead and
+> for better readability, getting rid of that switch also seems
+> waranted.
 >
 > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 > ---
->  arch/riscv/errata/thead/errata.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  arch/riscv/kernel/cpufeature.c | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
 >
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> index a6f4bd8ccf3f..902e12452821 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -17,6 +17,9 @@
->  static bool errata_probe_pbmt(unsigned int stage,
->                               unsigned long arch_id, unsigned long impid)
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 553d755483ed..764ea220161f 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -253,16 +253,13 @@ void __init riscv_fill_hwcap(void)
+>  #ifdef CONFIG_RISCV_ALTERNATIVE
+>  static bool __init_or_module cpufeature_probe_svpbmt(unsigned int stage)
 >  {
-> +       if (!IS_ENABLED(CONFIG_ERRATA_THEAD_PBMT))
+> -#ifdef CONFIG_RISCV_ISA_SVPBMT
+> -       switch (stage) {
+> -       case RISCV_ALTERNATIVES_EARLY_BOOT:
+> +       if (!IS_ENABLED(CONFIG_RISCV_ISA_SVPBMT))
+>                 return false;
+> -       default:
+> -               return riscv_isa_extension_available(NULL, SVPBMT);
+> -       }
+> -#endif
+>
+> -       return false;
+> +       if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
 > +               return false;
 > +
->         if (arch_id != 0 || impid != 0)
->                 return false;
+> +       return riscv_isa_extension_available(NULL, SVPBMT);
+>  }
 >
+>  static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
 > --
 > 2.35.1
 >

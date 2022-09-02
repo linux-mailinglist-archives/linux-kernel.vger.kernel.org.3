@@ -2,239 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444595AB1F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1FF5AB231
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237319AbiIBNpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S235672AbiIBNwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236986AbiIBNpS (ORCPT
+        with ESMTP id S238016AbiIBNwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:45:18 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566C612D515;
-        Fri,  2 Sep 2022 06:21:19 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MJyHb0wlzz9slp;
-        Fri,  2 Sep 2022 14:42:51 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id t6fBFsb4UbyX; Fri,  2 Sep 2022 14:42:51 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJyHS0zPBz9sls;
-        Fri,  2 Sep 2022 14:42:44 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0C99A8B78C;
-        Fri,  2 Sep 2022 14:42:44 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id TIqipSHIuhEZ; Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.39])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CDF5D8B78D;
-        Fri,  2 Sep 2022 14:42:42 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 282CgYdb2141515
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 2 Sep 2022 14:42:34 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 282CgY0K2141514;
-        Fri, 2 Sep 2022 14:42:34 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Davide Ciminaghi <ciminaghi@gnudd.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v2 5/9] gpiolib: Get rid of ARCH_NR_GPIOS
-Date:   Fri,  2 Sep 2022 14:42:05 +0200
-Message-Id: <97011204619556ecb3d8c9aaff2b58c28790fe8a.1662116601.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1662116601.git.christophe.leroy@csgroup.eu>
-References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
+        Fri, 2 Sep 2022 09:52:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10F4134193
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:26:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7B96B829FB
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 12:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B85A0C433D6;
+        Fri,  2 Sep 2022 12:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662122807;
+        bh=hW87bCjg7mhQfCQ8qK8L55df2bf6Oy03cAkiFazu4jQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gRtcezHyRLdYAKxIdu4kAggfw0eKH/zs1cQ2efUFrRo1AS30kqqkFagEU4KstWLaC
+         04G/dmgX/kISBd/LoWRLHYmMNdFXr/H//90i3ynoJMrukKa0x2LLegCo3gOK5tG8XU
+         Pn4Yyz/D+SLbGUrDGTlabt8F51O7Zlp55hsTB3kE=
+Date:   Fri, 2 Sep 2022 14:46:44 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Major Chen <major.chen@samsung.com>, stable <stable@kernel.org>,
+        Kuyo Chang <kuyo.chang@mediatek.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH 2/2] sched/debug: fix dentry leak in
+ update_sched_domain_debugfs
+Message-ID: <YxH7NIe0Inz2V6sH@kroah.com>
+References: <20220902123107.109274-1-gregkh@linuxfoundation.org>
+ <20220902123107.109274-2-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662122527; l=5608; s=20211009; h=from:subject:message-id; bh=627tvaA946/n4BKkAs3Ap6n2Spr0bzlnkVDrEw1Weh4=; b=oK8L6x4YO0/Tfv1rrveqxWyPzUigpLkkcs3kpG/V0GCD1hH9rQwWg26uIXH5pm4hEOPy17HUWSCs RlrtLGZNAGwtNu+GH+gFces0cecHaH5Rk0+Fg/FbRiFpz6clOxDG
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902123107.109274-2-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
-there is no limitation on the number of GPIOs that can be allocated
-in the system since the allocation is fully dynamic.
+On Fri, Sep 02, 2022 at 02:31:07PM +0200, Greg Kroah-Hartman wrote:
+> Kuyo reports that the pattern of using debugfs_remove(debugfs_lookup())
+> leaks a dentry and with a hotplug stress test, the machine eventually
+> runs out of memory.
+> 
+> Fix this up by using the newly created debugfs_lookup_and_remove() call
+> instead which properly handles the dentry reference counting logic.
+> 
+> Cc: Major Chen <major.chen@samsung.com>
+> Cc: stable <stable@kernel.org>
+> Reported-by: Kuyo Chang <kuyo.chang@mediatek.com>
+> Tested-by: Kuyo Chang <kuyo.chang@mediatek.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  kernel/sched/debug.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-ARCH_NR_GPIOS is today only used in order to provide downwards
-gpiobase allocation from that value, while static allocation is
-performed upwards from 0. However that has the disadvantage of
-limiting the number of GPIOs that can be registered in the system.
+As this needs patch 1/2 to work properly, and Kuyo has tested this out
+already, I'll take both of them through my driver core git tree to Linus
+so that we can start getting the other debugfs_lookup() leaks fixed up
+as well.
 
-To overcome this limitation without requiring each and every
-platform to provide its 'best-guess' maximum number, rework the
-allocation to allocate upwards, allowing approx 2 millions of
-GPIOs.
+thanks,
 
-In order to still allow static allocation for legacy drivers, define
-GPIO_DYNAMIC_BASE with the value 512 as the start for dynamic
-allocation. The 512 value is chosen because it is the end of
-the current default range so all current static allocations are
-expected to be below that value. Of course that's just a rough
-estimate based on the default value, but assuming static
-allocations come first, even if there are more static allocations
-it should fit under the 512 value.
-
-In the future, it is expected that all static allocations go away
-and then dynamic allocation will be patched to start at 0.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v2: Enhanced commit description and change from 256 to 512.
----
- arch/arm/include/asm/gpio.h |  1 -
- drivers/gpio/gpiolib.c      | 10 +++----
- include/asm-generic/gpio.h  | 55 ++++++++++++++-----------------------
- 3 files changed, 26 insertions(+), 40 deletions(-)
-
-diff --git a/arch/arm/include/asm/gpio.h b/arch/arm/include/asm/gpio.h
-index f3bb8a2bf788..4ebbb58f06ea 100644
---- a/arch/arm/include/asm/gpio.h
-+++ b/arch/arm/include/asm/gpio.h
-@@ -2,7 +2,6 @@
- #ifndef _ARCH_ARM_GPIO_H
- #define _ARCH_ARM_GPIO_H
- 
--/* Note: this may rely upon the value of ARCH_NR_GPIOS set in mach/gpio.h */
- #include <asm-generic/gpio.h>
- 
- /* The trivial gpiolib dispatchers */
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 4e2fcb7b0a01..1846f24971e3 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -183,14 +183,14 @@ EXPORT_SYMBOL_GPL(gpiod_to_chip);
- static int gpiochip_find_base(int ngpio)
- {
- 	struct gpio_device *gdev;
--	int base = ARCH_NR_GPIOS - ngpio;
-+	int base = GPIO_DYNAMIC_BASE;
- 
--	list_for_each_entry_reverse(gdev, &gpio_devices, list) {
-+	list_for_each_entry(gdev, &gpio_devices, list) {
- 		/* found a free space? */
--		if (gdev->base + gdev->ngpio <= base)
-+		if (gdev->base >= base + ngpio)
- 			break;
--		/* nope, check the space right before the chip */
--		base = gdev->base - ngpio;
-+		/* nope, check the space right after the chip */
-+		base = gdev->base + gdev->ngpio;
- 	}
- 
- 	if (gpio_is_valid(base)) {
-diff --git a/include/asm-generic/gpio.h b/include/asm-generic/gpio.h
-index aea9aee1f3e9..a7752cf152ce 100644
---- a/include/asm-generic/gpio.h
-+++ b/include/asm-generic/gpio.h
-@@ -11,40 +11,18 @@
- #include <linux/gpio/driver.h>
- #include <linux/gpio/consumer.h>
- 
--/* Platforms may implement their GPIO interface with library code,
-+/*
-+ * Platforms may implement their GPIO interface with library code,
-  * at a small performance cost for non-inlined operations and some
-  * extra memory (for code and for per-GPIO table entries).
-- *
-- * While the GPIO programming interface defines valid GPIO numbers
-- * to be in the range 0..MAX_INT, this library restricts them to the
-- * smaller range 0..ARCH_NR_GPIOS-1.
-- *
-- * ARCH_NR_GPIOS is somewhat arbitrary; it usually reflects the sum of
-- * builtin/SoC GPIOs plus a number of GPIOs on expanders; the latter is
-- * actually an estimate of a board-specific value.
-  */
- 
--#ifndef ARCH_NR_GPIOS
--#if defined(CONFIG_ARCH_NR_GPIO) && CONFIG_ARCH_NR_GPIO > 0
--#define ARCH_NR_GPIOS CONFIG_ARCH_NR_GPIO
--#else
--#define ARCH_NR_GPIOS		512
--#endif
--#endif
--
- /*
-- * "valid" GPIO numbers are nonnegative and may be passed to
-- * setup routines like gpio_request().  only some valid numbers
-- * can successfully be requested and used.
-- *
-- * Invalid GPIO numbers are useful for indicating no-such-GPIO in
-- * platform data and other tables.
-+ * At the end we want all GPIOs to be dynamically allocated from 0.
-+ * However, some legacy drivers still perform fixed allocation.
-+ * Until they are all fixed, leave 0-512 space for them.
-  */
--
--static inline bool gpio_is_valid(int number)
--{
--	return number >= 0 && number < ARCH_NR_GPIOS;
--}
-+#define GPIO_DYNAMIC_BASE	512
- 
- struct device;
- struct gpio;
-@@ -140,12 +118,6 @@ static inline void gpio_unexport(unsigned gpio)
- 
- #include <linux/kernel.h>
- 
--static inline bool gpio_is_valid(int number)
--{
--	/* only non-negative numbers are valid */
--	return number >= 0;
--}
--
- /* platforms that don't directly support access to GPIOs through I2C, SPI,
-  * or other blocking infrastructure can use these wrappers.
-  */
-@@ -169,4 +141,19 @@ static inline void gpio_set_value_cansleep(unsigned gpio, int value)
- 
- #endif /* !CONFIG_GPIOLIB */
- 
-+/*
-+ * "valid" GPIO numbers are nonnegative and may be passed to
-+ * setup routines like gpio_request().  only some valid numbers
-+ * can successfully be requested and used.
-+ *
-+ * Invalid GPIO numbers are useful for indicating no-such-GPIO in
-+ * platform data and other tables.
-+ */
-+
-+static inline bool gpio_is_valid(int number)
-+{
-+	/* only non-negative numbers are valid */
-+	return number >= 0;
-+}
-+
- #endif /* _ASM_GENERIC_GPIO_H */
--- 
-2.37.1
-
+greg k-h

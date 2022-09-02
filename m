@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8157E5AB84D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 20:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1867D5AB849
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 20:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiIBSev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 14:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S229824AbiIBSeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 14:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiIBSe1 (ORCPT
+        with ESMTP id S229765AbiIBSeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 14:34:27 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1B4110D9A;
-        Fri,  2 Sep 2022 11:26:48 -0700 (PDT)
+        Fri, 2 Sep 2022 14:34:23 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3C3110DA8;
+        Fri,  2 Sep 2022 11:26:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662143208; x=1693679208;
+  t=1662143210; x=1693679210;
   h=from:to:subject:date:message-id:in-reply-to:references:
    mime-version:content-transfer-encoding;
-  bh=BDT5EmdqjuMJqMI5cl7RV/oDMZZp4jG1VH1Y9bjPvBA=;
-  b=MB6bGupnzcyWew3eYr/XVpYj9RRbYdjIeDZkOnkDw0/lcFbhzXkKq7iI
-   dCW8Lk8q+r4R2+LRf+6/nEpaT+R+gtkSUfz0Gpsl859ym+sBwmGex9Rp2
-   obP5RcHFLy66xqaH4gaNnHu8Bcbcf19/X7FapmzbICcHetE0ztF6Af8DA
-   2fswu0oIiMIJGveoXoNJtFygbKut9XkgLaf0YRnm4vynb8Ujox/VN58zy
-   1tq8Uftl9B+/LUVmw6QiTtJawA3hKLElyufysd4qsSqZg/8NLlIVmN427
-   CViWjDUafHTsScA7F0hFOxAy36DaX1oDBk6qQ6bDuxlpEtGZgMELXsPMy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="296832723"
+  bh=Q3WRq63GSFT0VKkdIUx6lAxO0G6NE0E/uC/WGB8UDaY=;
+  b=ghjbht9M2YaZbrD8rBmK7OcQrWf2oNn8Q0ECFw3yNPyzzMpjej6JA5MK
+   oUsEMRSTDe5ujNQD39+FqwLr5QI25WcHVAubuG/miq6VoT8Ugu/TihjfB
+   wrn/lnr6y08VsBW4BtEdNtBVU+ratItxvxQOpQQHsy/0QpGebpE6OBQxC
+   rcTMOkSy6b7BWbMLqRdjrnEztQ6BCrdE5R7ia4yBEy7EulQWHMCf1q6ri
+   ujMiloVjO5jzgSWkWxExNA7XUPzMJxDB3SEcKYEQc8sI8ihZE9NmJ00Ev
+   U4L272aA86jOIIsRfizCyaKHx8ixZxZcpABdKeOtH91fI97yahWq7Fs/B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="283034556"
 X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="296832723"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 11:26:48 -0700
+   d="scan'208";a="283034556"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 11:26:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="615791657"
+   d="scan'208";a="681373078"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Sep 2022 11:26:47 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 02 Sep 2022 11:26:47 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1F48449F; Fri,  2 Sep 2022 21:27:00 +0300 (EEST)
+        id 25BC35E4; Fri,  2 Sep 2022 21:27:00 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 07/17] pinctrl: cy8c95x0: Enable GPIO range
-Date:   Fri,  2 Sep 2022 21:26:40 +0300
-Message-Id: <20220902182650.83098-7-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 08/17] pinctrl: cy8c95x0: Remove device initialization
+Date:   Fri,  2 Sep 2022 21:26:41 +0300
+Message-Id: <20220902182650.83098-8-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220902182650.83098-1-andriy.shevchenko@linux.intel.com>
 References: <20220902182650.83098-1-andriy.shevchenko@linux.intel.com>
@@ -63,67 +63,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since it's a pin control, GPIO counterpart needs to know the mapping
-between pin numbering and GPIO numbering. Enable this by calling
-gpiochip_add_pin_range() at the chip addition time.
+The Cypress CY8C95x0 chips have an internal EEPROM that defines
+initial configuration. It might be that bootloader or other
+entity wrote the platform related setup into it. Don't override
+it in the driver.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/pinctrl-cy8c95x0.c | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ drivers/pinctrl/pinctrl-cy8c95x0.c | 28 ----------------------------
+ 1 file changed, 28 deletions(-)
 
 diff --git a/drivers/pinctrl/pinctrl-cy8c95x0.c b/drivers/pinctrl/pinctrl-cy8c95x0.c
-index eac8b073e19f..f09311d2d3fa 100644
+index f09311d2d3fa..b09f9485e57d 100644
 --- a/drivers/pinctrl/pinctrl-cy8c95x0.c
 +++ b/drivers/pinctrl/pinctrl-cy8c95x0.c
-@@ -801,7 +801,20 @@ static void cy8c95x0_gpio_set_multiple(struct gpio_chip *gc,
- 	cy8c95x0_write_regs_mask(chip, CY8C95X0_OUTPUT, bits, mask);
+@@ -1213,30 +1213,6 @@ static int cy8c95x0_setup_pinctrl(struct cy8c95x0_pinctrl *chip)
+ 	return 0;
  }
  
--static int cy8c95x0_setup_gpiochip(struct cy8c95x0_pinctrl *chip, int ngpio)
-+static int cy8c95x0_add_pin_ranges(struct gpio_chip *gc)
-+{
-+	struct cy8c95x0_pinctrl *chip = gpiochip_get_data(gc);
-+	struct device *dev = chip->dev;
-+	int ret;
-+
-+	ret = gpiochip_add_pin_range(gc, dev_name(dev), 0, 0, chip->tpin);
-+	if (ret)
-+		dev_err(dev, "failed to add GPIO pin range\n");
-+
-+	return ret;
-+}
-+
-+static int cy8c95x0_setup_gpiochip(struct cy8c95x0_pinctrl *chip)
+-static int device_cy8c95x0_init(struct cy8c95x0_pinctrl *chip)
+-{
+-	DECLARE_BITMAP(ones, MAX_LINE);
+-	DECLARE_BITMAP(zeros, MAX_LINE);
+-	int ret;
+-
+-	/* Set all pins to input. This is the POR default. */
+-	bitmap_fill(ones, MAX_LINE);
+-	ret = cy8c95x0_write_regs_mask(chip, CY8C95X0_DIRECTION, ones, ones);
+-	if (ret) {
+-		dev_err(chip->dev, "Failed to set pins to input\n");
+-		return ret;
+-	}
+-
+-	bitmap_zero(zeros, MAX_LINE);
+-	ret = cy8c95x0_write_regs_mask(chip, CY8C95X0_INVERT, zeros, ones);
+-	if (ret) {
+-		dev_err(chip->dev, "Failed to set polarity inversion\n");
+-		return ret;
+-	}
+-
+-	return 0;
+-}
+-
+ static int cy8c95x0_detect(struct i2c_client *client,
+ 			   struct i2c_board_info *info)
  {
- 	struct gpio_chip *gc = &chip->gpio_chip;
+@@ -1332,10 +1308,6 @@ static int cy8c95x0_probe(struct i2c_client *client)
+ 	bitmap_set(chip->shiftmask, 0, 20);
+ 	mutex_init(&chip->i2c_lock);
  
-@@ -814,9 +827,10 @@ static int cy8c95x0_setup_gpiochip(struct cy8c95x0_pinctrl *chip, int ngpio)
- 	gc->set_multiple = cy8c95x0_gpio_set_multiple;
- 	gc->set_config = cy8c95x0_gpio_set_config;
- 	gc->can_sleep = true;
-+	gc->add_pin_ranges = cy8c95x0_add_pin_ranges;
- 
- 	gc->base = -1;
--	gc->ngpio = ngpio;
-+	gc->ngpio = chip->tpin;
- 
- 	gc->parent = chip->dev;
- 	gc->owner = THIS_MODULE;
-@@ -1328,11 +1342,11 @@ static int cy8c95x0_probe(struct i2c_client *client)
- 			goto err_exit;
- 	}
- 
--	ret = cy8c95x0_setup_gpiochip(chip, chip->tpin);
-+	ret = cy8c95x0_setup_pinctrl(chip);
- 	if (ret)
- 		goto err_exit;
- 
--	ret = cy8c95x0_setup_pinctrl(chip);
-+	ret = cy8c95x0_setup_gpiochip(chip);
- 	if (ret)
- 		goto err_exit;
- 
+-	ret = device_cy8c95x0_init(chip);
+-	if (ret)
+-		goto err_exit;
+-
+ 	if (client->irq) {
+ 		ret = cy8c95x0_irq_setup(chip, client->irq);
+ 		if (ret)
 -- 
 2.35.1
 

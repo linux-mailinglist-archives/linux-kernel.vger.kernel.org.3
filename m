@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18A25AAECD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2D45AB020
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236597AbiIBM3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        id S237632AbiIBMtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236417AbiIBM2a (ORCPT
+        with ESMTP id S237714AbiIBMsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:28:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37D6DCFF8;
-        Fri,  2 Sep 2022 05:24:23 -0700 (PDT)
+        Fri, 2 Sep 2022 08:48:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABC8A00ED;
+        Fri,  2 Sep 2022 05:35:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53B6C620F0;
-        Fri,  2 Sep 2022 12:22:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C694C433C1;
-        Fri,  2 Sep 2022 12:22:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77766B829E8;
+        Fri,  2 Sep 2022 12:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C0CC433D6;
+        Fri,  2 Sep 2022 12:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121375;
-        bh=+0RIXtjL4dCGFnZcWvWmOCTGFsuswLnX0WkQWCR8Q18=;
+        s=korg; t=1662122018;
+        bh=xIwGVScQaB9wNQuwUy6UEhNULReYG68Iz9QNMVFlI5Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CVMyTI/33qtSAzs5/3lCerMzOkxVkkaMp+bVfjHg6qDMWAllTESyXau7VlTN6IaJH
-         QMrxQ42kHRVR2RWSRcY5Jkl+i7dj6tEbGbOxamhQdK+1pcE/WE1FG2cQnHe4oPcWfj
-         4uhCpahItRbqL+eRRZLZHo/ZxwPtE8Mlb2E39eS4=
+        b=z2uCC8q/bxvUvOTg6f5Ct2wqrBztC+rj4gXMs3Mm+NlBoZRMZhmjDhotDyzBdUPIu
+         4DD+eLYRivPmuRgdrmcubPbtGcyJ4VgwG636+zJ1LdhsaSzJZG3Pzy10/aVEaFqzyw
+         IVdt1Qh32uMQdGA1EXe3JNmbYKsZIJKXRp65EdRY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rahul Tanwar <rahul.tanwar@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: [PATCH 4.14 29/42] x86/cpu: Add Tiger Lake to Intel family
+        stable@vger.kernel.org,
+        syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.15 29/73] media: pvrusb2: fix memory leak in pvr_probe
 Date:   Fri,  2 Sep 2022 14:18:53 +0200
-Message-Id: <20220902121359.810537853@linuxfoundation.org>
+Message-Id: <20220902121405.402086771@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121358.773776406@linuxfoundation.org>
-References: <20220902121358.773776406@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,40 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gayatri Kammela <gayatri.kammela@intel.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-commit 6e1c32c5dbb4b90eea8f964c2869d0bde050dbe0 upstream.
+commit 945a9a8e448b65bec055d37eba58f711b39f66f0 upstream.
 
-Add the model numbers/CPUIDs of Tiger Lake mobile and desktop to the
-Intel family.
+The error handling code in pvr2_hdw_create forgets to unregister the
+v4l2 device. When pvr2_hdw_create returns back to pvr2_context_create,
+it calls pvr2_context_destroy to destroy context, but mp->hdw is NULL,
+which leads to that pvr2_hdw_destroy directly returns.
 
-Suggested-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Gayatri Kammela <gayatri.kammela@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rahul Tanwar <rahul.tanwar@linux.intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20190905193020.14707-2-tony.luck@intel.com
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Fix this by adding v4l2_device_unregister to decrease the refcount of
+usb interface.
+
+Reported-by: syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/intel-family.h |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -71,6 +71,9 @@
- #define INTEL_FAM6_ALDERLAKE		0x97
- #define INTEL_FAM6_ALDERLAKE_L		0x9A
- 
-+#define INTEL_FAM6_TIGERLAKE_L		0x8C
-+#define INTEL_FAM6_TIGERLAKE		0x8D
-+
- /* "Small Core" Processors (Atom) */
- 
- #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */
+--- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+@@ -2610,6 +2610,7 @@ struct pvr2_hdw *pvr2_hdw_create(struct
+ 		del_timer_sync(&hdw->encoder_run_timer);
+ 		del_timer_sync(&hdw->encoder_wait_timer);
+ 		flush_work(&hdw->workpoll);
++		v4l2_device_unregister(&hdw->v4l2_dev);
+ 		usb_free_urb(hdw->ctl_read_urb);
+ 		usb_free_urb(hdw->ctl_write_urb);
+ 		kfree(hdw->ctl_read_buffer);
 
 

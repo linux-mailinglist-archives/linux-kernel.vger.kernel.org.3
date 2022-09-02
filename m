@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F91A5AA8D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFFD5AA8D9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235325AbiIBHhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 03:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S233341AbiIBHjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 03:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbiIBHhe (ORCPT
+        with ESMTP id S233218AbiIBHje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 03:37:34 -0400
+        Fri, 2 Sep 2022 03:39:34 -0400
 Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A32D73936;
-        Fri,  2 Sep 2022 00:37:33 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id l65so1099931pfl.8;
-        Fri, 02 Sep 2022 00:37:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AF6B8F02;
+        Fri,  2 Sep 2022 00:38:16 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 145so1120662pfw.4;
+        Fri, 02 Sep 2022 00:38:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=SUpu6LE3Bg1N7sM9B4FOf+h9/LVY6PqSU+bwKRQ0w90=;
-        b=HUTjs1pkKOMO9HiNmZRNq0ZWGNuOat/h1TmqrfLtlyWhL6h+fikdz6CdTQWOyK8reX
-         yfIRKADSqRrU/H9u3XON+IhtzSTXKeTqqY2fjqyiqvg9g+EPURIJSsIq5fTwHymmapAt
-         LQDvGPyRyzYTgxScNKjLl+80lZ/JFaIwlqe6C4aMJQg9bho6A+Y0osIs59notUHacSy8
-         lQl9D0zLHHgL80WmSnNqijg/7zjotcbziOskOYnGlXzAsP2Wo2cR7RilsY2HGyWfm5ph
-         L7bf4MkVcgR2L4Z1mRNYXPE5EAONynVeCJ5B5MgkGhA6aFcrHtp/b7a7V1uOBuBsvmA2
-         2wJQ==
+        bh=WkR9LaSKiyJhtlTTWqMUWeVX6Mln5pRmeIixpHeSGbc=;
+        b=UcMpMc1Kcy3O9+Qc0m7+xjCFZ4XPruIw9U3cyOACsPf2/js7J9BrKgZ31g6rsm3+Ei
+         FLfdQeSqTXbXk8/aHm9FLoQQqVJSRN2X70HECxx9zjxrrnZFffErQZV3hLn47lYDi6et
+         e0mQSDo9gd513Fyx9JVs+qw3hR5Qa0V2C2dZmuH4ZSPksQC4BCOoqIzYnJ9z0DPO7HXs
+         xn05vGCvCx19VOo/6wTPnsR+2WciCIL8ot5B4TOwa04jVmrmX728oTDLkgiN+UymEq1b
+         QAIXQxoLSIhakaUZZJ+9YnwaXasIhR0IVRqLFSbcSa13hEQSqQeevomPXkjd/VK3ZEWk
+         5JNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=SUpu6LE3Bg1N7sM9B4FOf+h9/LVY6PqSU+bwKRQ0w90=;
-        b=zXNAWvh7xTuFTF9u6yY3sBj2fuScHVAKFuJYSP9luX+498sbvUjwQXZGixZRpFy7aE
-         U5P46D6sRVT/TVjwqFfK6omjn4noZr2LfKRc/2Gxhh6jc8t+uxM+xFmi6M/qsmv1YQY2
-         LyCyLNE5wkuveo89z5ldSDcEjr61IF9gBN/SBLNFWfLN4PxSrHdWLCUnkmN8EtBynvVX
-         g5xtB57/x5Oy5sIjWNx/ik4c73AapTnoch1lFZEtNujaYrDIYwvKIhKOzGnSMwnQ9pIJ
-         Eb3BfS0z5Bs0inIkC4HlVNt0+6SZoX4ljeBglJe3wgQXxbdHaJ0bmziOJXEzFMnYrndW
-         O4wA==
-X-Gm-Message-State: ACgBeo3Ai4IMa69j7aF4opXMjRPxHUMQPz+MwWGmgwPuSQoEMOm3bP5d
-        E3VkzI9qZrdJDpQ0Usc6Z2PTpsst/Y8=
-X-Google-Smtp-Source: AA6agR5/tXJBEmsdkgToFTmjPmHUsp/dvq5yBzTMQr6MrvRZDCpTpntr/t05Wcfx+NcnFLfwSuWE2Q==
-X-Received: by 2002:a63:fe12:0:b0:42a:e57:7464 with SMTP id p18-20020a63fe12000000b0042a0e577464mr29836274pgh.552.1662104252627;
-        Fri, 02 Sep 2022 00:37:32 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id l64-20020a639143000000b0042b435c6526sm729221pge.79.2022.09.02.00.37.30
+        bh=WkR9LaSKiyJhtlTTWqMUWeVX6Mln5pRmeIixpHeSGbc=;
+        b=KTR0Q7ieheEYUVlLeyBWIs/N7LNzkEfRemPQjoocfZJRSpYub+mHHl4mKtTGGGOppa
+         kxfwX9+gINXxhChoLUW0F/8oP3Usv8tohyz2gqrBZd7HG9OkPW4dvLneNCdwLaRlP2qq
+         xRnZtk6s0jHF3ujic1IFRtOeUfGZvcCEFCakHefgVC4gf1T7D3a5QrgH5fJaN25crSk9
+         WSFE+3daiixdUQKnwQv5TmmBpVGC63fROTC5UDBWYIwjwLyhiQ72qvd/vaYHDiitVU79
+         DKltssMwUJjU4SueD7zy0GyMcmIadzZzEpbr9CcOEt4Rr8DQDyJqif8hjhZLRrWGjmMC
+         adgQ==
+X-Gm-Message-State: ACgBeo1lesFQp8Q5c9LVT9d0/cZ2jY8Km/6n8EumRMy0bTMOoNzo++1F
+        5G+rXfMYhzN7ebR/IlnVAvk1TKXYIDk=
+X-Google-Smtp-Source: AA6agR7Rg6Dfva7zK/SAy8pg1Ez2Vf07BTbYdHwqsP4MSnQ8uQ+CJ/X7JT0MdHbjIZzxdYn5MeE1ZA==
+X-Received: by 2002:a65:6ccf:0:b0:42b:20e8:5b8a with SMTP id g15-20020a656ccf000000b0042b20e85b8amr28449731pgw.500.1662104295633;
+        Fri, 02 Sep 2022 00:38:15 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id i9-20020a170902c94900b0016ecc7d5297sm862930pla.292.2022.09.02.00.38.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 00:37:32 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: zhang.songyi@zte.com.cn
-To:     steffen.klassert@secunet.com
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhang songyi <zhang.songyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] xfrm: Remove the unneeded result variable
-Date:   Fri,  2 Sep 2022 07:37:17 +0000
-Message-Id: <20220902073717.319844-1-zhang.songyi@zte.com.cn>
+        Fri, 02 Sep 2022 00:38:15 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     rafael@kernel.org, lenb@kernel.org,
+        Li Zhong <floridsleeves@gmail.com>
+Subject: [PATCH v1] drivers/acpi/processor_idle: check the return value of acpi_fetch_acpi_dev()
+Date:   Fri,  2 Sep 2022 00:37:30 -0700
+Message-Id: <20220902073730.2207819-1-floridsleeves@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,40 +68,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+The return value of acpi_fetch_acpi_dev() could be NULL, which will
+cause null pointer dereference if used in acpi_device_hid().
 
-Return the xfrmi_create() directly instead of storing it in another
-redundant variable.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+Signed-off-by: Li Zhong <floridsleeves@gmail.com>
 ---
- net/xfrm/xfrm_interface.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/acpi/processor_idle.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/xfrm/xfrm_interface.c b/net/xfrm/xfrm_interface.c
-index 5a67b120c4db..5508dc11ce42 100644
---- a/net/xfrm/xfrm_interface.c
-+++ b/net/xfrm/xfrm_interface.c
-@@ -774,7 +774,6 @@ static int xfrmi_newlink(struct net *src_net, struct net_device *dev,
- 	struct net *net = dev_net(dev);
- 	struct xfrm_if_parms p = {};
- 	struct xfrm_if *xi;
--	int err;
+diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+index 16a1663d02d4..519f8f741da3 100644
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -1117,6 +1117,8 @@ static int acpi_processor_get_lpi_info(struct acpi_processor *pr)
+ 	status = acpi_get_parent(handle, &pr_ahandle);
+ 	while (ACPI_SUCCESS(status)) {
+ 		d = acpi_fetch_acpi_dev(pr_ahandle);
++		if (!d)
++			break;
+ 		handle = pr_ahandle;
  
- 	xfrmi_netlink_parms(data, &p);
- 	if (p.collect_md) {
-@@ -804,8 +803,7 @@ static int xfrmi_newlink(struct net *src_net, struct net_device *dev,
- 	xi->net = net;
- 	xi->dev = dev;
- 
--	err = xfrmi_create(dev);
--	return err;
-+	return xfrmi_create(dev);
- }
- 
- static void xfrmi_dellink(struct net_device *dev, struct list_head *head)
+ 		if (strcmp(acpi_device_hid(d), ACPI_PROCESSOR_CONTAINER_HID))
 -- 
 2.25.1
-
 

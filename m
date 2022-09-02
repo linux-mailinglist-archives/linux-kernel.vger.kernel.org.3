@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8855AABFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 337595AAC00
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbiIBKCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S235776AbiIBKCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234162AbiIBKCM (ORCPT
+        with ESMTP id S235720AbiIBKCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:02:12 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5679A9AD;
-        Fri,  2 Sep 2022 03:02:09 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MJth93Yyjz6S93D;
-        Fri,  2 Sep 2022 18:00:25 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgDHGXOe1BFjcdgPAQ--.13112S3;
-        Fri, 02 Sep 2022 18:02:07 +0800 (CST)
-Subject: Re: [PATCH -next 2/3] md/raid10: convert resync_lock to use seqlock
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
- <20220829131502.165356-3-yukuai1@huaweicloud.com>
- <3d8859bc-80d6-08b0-fd40-8874df4d3419@linux.dev>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <1891ec2c-0ccc-681e-31de-fdd28eebce82@huaweicloud.com>
-Date:   Fri, 2 Sep 2022 18:02:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 2 Sep 2022 06:02:40 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446779D8FF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 03:02:39 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id c131-20020a1c3589000000b003a84b160addso2328267wma.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 03:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=USfCu5JPEMwM2WiZpg8NQr50wGhXxJAKMik11VHM0fY=;
+        b=ofDIoyhajScZQRnDZ1bOk8ZpgKjeJC2/OgvK4HTRa8zR7RroDnBdVv0MSPwtDOIewH
+         hUVkznmqJKhHtVHm80SC+jnetKNx7B1TGdOxWQGyv1p47mNqK3L/Sm+i9iYM9F9LpnEf
+         CSaUyQsDC+4yY6lht4bIhSaZgmPY6ctQ/ETYm+Qe4t60Ec/AbHDPSWlZfNoxBhoJRc+e
+         gP/KEFaYySNNuSZX8YdfDOu14Z4EXmKj2olmTCyIGxfVuvDXDpDh1fxKPpQWzS1VFtrk
+         hVfG2B3qQGqw9nrUlLUsRuUIAJXYLaKUELdH/M9QQlv7s0cEbzqrpmIw8J8QqCTrEhL0
+         6mKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=USfCu5JPEMwM2WiZpg8NQr50wGhXxJAKMik11VHM0fY=;
+        b=mAOirgrFraMqdPFiUoHg3oeQ8gH1vvGmPue8AkGY9fNLXRHHj7DfnuLVlIrkU0En80
+         Z8PGGvU4tXwysVwSs93Te3Bn82qxCSq8vyaz+yoOm2b3O6b+kM0jlyyzydMSNzlIBOrV
+         TdgEd1wCQxH6sKts/tQdnWPwrb6lI9vJG4NRgwbufL2jSEVuTHBv1H8VWvshDpo7ZW3/
+         c8LvA+/9UuXsCLCoYHGFtXF5qOgakNySn0vOS6nSLTK0tbaw1C5IVzPTrFy6LBlKeEnU
+         XdzvwbznnhI70Mha5BM+5L4qBgRfboiI0hg6I7uz3FbCRX0EJFURQ065yUOb7lhSWCoM
+         mvjw==
+X-Gm-Message-State: ACgBeo1JPmPvxPG0TJgLnohoyCG6rX5j6nApNofe/7BQFJq0PnAAzMhe
+        rSDlli6oX5HwvMPReKmBOfNldw==
+X-Google-Smtp-Source: AA6agR78JvC00EEYNNjhhpK8YhZCsbqP0JBX0fEtIx8j+ylI/5XaoI/3+088aOmTZF3lc7Yg+dDFVA==
+X-Received: by 2002:a05:600c:358e:b0:3a5:f19d:28db with SMTP id p14-20020a05600c358e00b003a5f19d28dbmr2360350wmq.76.1662112957744;
+        Fri, 02 Sep 2022 03:02:37 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id 24-20020a05600c22d800b003a6125562e1sm1618072wmg.46.2022.09.02.03.02.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 03:02:37 -0700 (PDT)
+Message-ID: <01bdf6e2-f72a-e114-f3d2-deccf55403b1@linaro.org>
+Date:   Fri, 2 Sep 2022 11:02:35 +0100
 MIME-Version: 1.0
-In-Reply-To: <3d8859bc-80d6-08b0-fd40-8874df4d3419@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDHGXOe1BFjcdgPAQ--.13112S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrKF48Xw47Gw13Wr4fKw1xXwb_yoWfuwc_K3
-        98Wr1DWFW5J3y7Kr1qgr42vr9rtr1jkr1jyan0yF15G3W5GFZ8Jr1rXa95Jr15Gr45Jrnx
-        uryfua43t3WUujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/3] misc: fastrpc: fix memory corruption
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220829080531.29681-1-johan+linaro@kernel.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220829080531.29681-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,46 +79,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Johan,
 
-在 2022/09/02 17:42, Guoqing Jiang 写道:
-> Hi,
+On 29/08/2022 09:05, Johan Hovold wrote:
+> The fastrpc driver uses a fixed-sized array to store its sessions but
+> missing and broken sanity checks could lead to memory beyond the array
+> being corrupted.
 > 
-> On 8/29/22 9:15 PM, Yu Kuai wrote:
->> +static bool wait_barrier_nolock(struct r10conf *conf)
->> +{
->> +    unsigned int seq = raw_read_seqcount(&conf->resync_lock.seqcount);
->> +
->> +    if (seq & 1)
->> +        return false;
->> +
->> +    if (READ_ONCE(conf->barrier))
->> +        return false;
->> +
->> +    atomic_inc(&conf->nr_pending);
->> +    if (!read_seqcount_retry(&conf->resync_lock.seqcount, seq))
+> This specifically happens on SC8280XP platforms that use 14 sessions for
+> the compute DSP.
 > 
-> I think 'seq' is usually get from read_seqcount_begin.
+Thanks for doing this.
 
-read_seqcount_begin will loop untill "req & 1" failed, I'm afraid this
-will cause high cpu usage in come cases.
+I see that we hit this issue once again, and the way we are fixing it is 
+not really scalable. We should really get rid of FASTRPC_MAX_SESSIONS.
 
-What I try to do here is just try once, and fall back to hold lock and
-wait if failed.
+We should allocate the sessions dynamically based in the child node 
+count and qcom,nsessions.
 
-What do you think?
 
-Thanks,
-Kuai
+
+thanks,
+Srini
+
+> These are all needed for 6.0.
 > 
->> +        return true;
->> +
->> +    atomic_dec(&conf->nr_pending);
->> +    return false;
->> +
+> Johan
 > 
-> Thanks,
-> Guoqing
-> .
 > 
-
+> Johan Hovold (3):
+>    misc: fastrpc: fix memory corruption on probe
+>    misc: fastrpc: fix memory corruption on open
+>    misc: fastrpc: increase maximum session count
+> 
+>   drivers/misc/fastrpc.c | 14 +++++++++-----
+>   1 file changed, 9 insertions(+), 5 deletions(-)
+> 

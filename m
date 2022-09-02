@@ -2,182 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4985AAB3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE39D5AAB3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbiIBJT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S235679AbiIBJTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235457AbiIBJTL (ORCPT
+        with ESMTP id S235760AbiIBJTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:19:11 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732C9C9921;
-        Fri,  2 Sep 2022 02:19:07 -0700 (PDT)
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 2829IljR015545;
-        Fri, 2 Sep 2022 18:18:47 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2829IljR015545
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662110327;
-        bh=2NU7ltVrdW8WvUhptKYwPRrhqjFrbzpv9sQRVWxQ4iQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=197CkrWH499oMFvUYG74D7yrIrAzL5slRCWZUUncTi3iQL/nNk+tlrifiL79TEf/W
-         nw2Ne/Ux2wssrBpGQuyfwTrf+LqDn3qnk26f+B2+27lJ4KlGdRNuVXaPBnRFjbBn0t
-         HfctgsmA7nbzQ1/MutlN46MtFVFz+9yVnUKfiPaqimPblTcke/141aOoWmsiofnT2e
-         quG7hKJBWgWxiCjZnDnnmT8/SjUrvAUPthqiWtWR7Zay+1FD4yRI1c+uWhWgG1F9zl
-         uDboETlZiaXAY43atrH4lt7tBQpdx+99u91N6KWpHeG7Ctr3Bb4w0gvVbQhKHrTbAf
-         DpFDcPkDsblKw==
-X-Nifty-SrcIP: [209.85.210.42]
-Received: by mail-ot1-f42.google.com with SMTP id m21-20020a9d6ad5000000b00638df677850so1038930otq.5;
-        Fri, 02 Sep 2022 02:18:47 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3f+Gj677HtApUIBfcErx612UYA78FIrURe2Hlt2ee8DBL9m05Q
-        and3mQm+UaY0s2qagsnGmp0l2ruzmrePeGNIV3w=
-X-Google-Smtp-Source: AA6agR5Jk+EwlwFw19cN+nxmckn79O0R9R8/XDCTaCoK3DCv+k2L1LHlFboI9zmnQD83Lk8T2rvmuPtSDnQx5kmRNNc=
-X-Received: by 2002:a9d:4806:0:b0:637:cdca:f8d3 with SMTP id
- c6-20020a9d4806000000b00637cdcaf8d3mr14445392otf.225.1662110326367; Fri, 02
- Sep 2022 02:18:46 -0700 (PDT)
+        Fri, 2 Sep 2022 05:19:17 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EBDBD1CB
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:19:15 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id j6so1226932qkl.10
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=wN1g1xDoFb13lisdj6+cGYCXIaptZ92KuDnigLzcS88=;
+        b=a7Nge74CosWKyQX1L03O/zbvmcA1xfA3j0HobwDvTY31WHlj98Ami8ApDE3Ae+E6Cc
+         ROPMyJZcA0GBUu5jtF9amoi5RYqXj0R8N1E/Dn+rqAD+2y0WzOP6taxRKJJU5RTrUKR0
+         v+wDPXvgvT/tk1DZpGS55Tfd1pNLTLZIGJ8Rc92BHhik0ZuKdWSPj3b339CZlid0j2Em
+         pcg1HRkyCZ6lV+KiFQQR1uDEOFqAXYxXib3rlh+PQQwgzOvkWDoiaFJkAnfpGRwzpZaS
+         Xp9QAiO/I3HFV32a8ToZZWBLAKTySV5GLJKg9SV07TO47ihBDKK0dEDxc5pVczClFyEA
+         prZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=wN1g1xDoFb13lisdj6+cGYCXIaptZ92KuDnigLzcS88=;
+        b=MjdsBXirRwmj9+aF/RzSp05/WmFdXnvSBbYUqfsroafNgXVCG8/DIk/HXtPEwxY6E9
+         xxva6VqyGhDaLmNZdrBrFmnMEDvfAfS+gTvIH61e3YA4EURw5qYVc3RRNyldX5eNzWJ3
+         yXoX3RKegxb5cED7AihFuXdwlTILvbBy7K9Vexp6/GIROPYSx4iAmTa81YkabScEfbjt
+         9UYS8P/4koNDzfCkmzBZfjpz/5KV2KN3y19ZmOabfbQeLdr1GF5Y5yE0XW4pHR8wAsUh
+         X1KoM7HHGkLgGdDBr/obFZUSqSrqq6uPdSJ8DDFbzaO6NrEp36So+7L6+euadRwBBz2C
+         oOjg==
+X-Gm-Message-State: ACgBeo1DeJWfDzI309tk3q1IB852RU46zF3EEetis+jh9BEZm24QBUZY
+        yyZjV1y8L7VuYBr7kDzMSSvu+AqjwV2hiYv9el0=
+X-Google-Smtp-Source: AA6agR4katP00xVnTBW1U3/ZYh4xrZjbooFVNdP9HS5rJOykScomj2tHnTG8Rp6K5pKrfE1jskOuqDsLxWm/F5h9TcM=
+X-Received: by 2002:a05:620a:288a:b0:6b8:fcfe:db02 with SMTP id
+ j10-20020a05620a288a00b006b8fcfedb02mr23120785qkp.504.1662110354404; Fri, 02
+ Sep 2022 02:19:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <YjhdcJB4FaLfsoyO@gmail.com> <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
- <YjpLiKRUIB4TGJm0@zn.tnic> <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
- <YjsCpoRK7W4l6tSh@zn.tnic> <CAHk-=wi9pLxm+dXoCaiGO+f0EbhyfAR_L510vD0c2=hj6rbMXg@mail.gmail.com>
- <YjwsUT/6PkRPjnHE@gmail.com> <YjySjys3QZAWFlfo@dev-arch.thelio-3990X>
- <YkC08gKqJOUM7CA8@gmail.com> <YkHXQTKImf7Wr+Sk@dev-arch.thelio-3990X> <YxHD1MkulyL3yB9y@gmail.com>
-In-Reply-To: <YxHD1MkulyL3yB9y@gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 2 Sep 2022 18:18:10 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASyp8SzO3G+th5RgmRNBM_ryKuy0XzaMrdUdo8Sd6RR0A@mail.gmail.com>
-Message-ID: <CAK7LNASyp8SzO3G+th5RgmRNBM_ryKuy0XzaMrdUdo8Sd6RR0A@mail.gmail.com>
-Subject: Re: [PATCH] x86/config: Make the x86 defconfigs a bit more usable
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
+References: <1662104841-55360-1-git-send-email-john.garry@huawei.com> <1662104841-55360-6-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1662104841-55360-6-git-send-email-john.garry@huawei.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 2 Sep 2022 12:18:38 +0300
+Message-ID: <CAHp75VdfwGCUpZN3b1AD1kARc=FhyA4EDWDuZ8+1DKN3u73DeA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] bus: hisi_lpc: Use platform_device_register_full()
+To:     John Garry <john.garry@huawei.com>
+Cc:     "xuwei (O)" <xuwei5@hisilicon.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+        SoC Team <soc@kernel.org>,
+        Yang Yingliang <yangyingliang@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 5:50 PM Ingo Molnar <mingo@kernel.org> wrote:
+On Fri, Sep 2, 2022 at 11:10 AM John Garry <john.garry@huawei.com> wrote:
 >
+> The code to create the child platform device is essentially the same as
+> what platform_device_register_full() does, so change over to use
+> that same function to reduce duplication.
+
+Now statistics plays for you and not against.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/bus/hisi_lpc.c | 64 ++++++++++++++++++++----------------------
+>  1 file changed, 30 insertions(+), 34 deletions(-)
 >
-> * Nathan Chancellor <nathan@kernel.org> wrote:
+> diff --git a/drivers/bus/hisi_lpc.c b/drivers/bus/hisi_lpc.c
+> index 74f4448bff9d..3555a6857214 100644
+> --- a/drivers/bus/hisi_lpc.c
+> +++ b/drivers/bus/hisi_lpc.c
+> @@ -472,9 +472,7 @@ static int hisi_lpc_acpi_clear_enumerated(struct acpi_device *adev, void *not_us
 >
-> > On Sun, Mar 27, 2022 at 09:03:14PM +0200, Ingo Molnar wrote:
-> > > Yeah, good catch! ...
-> > >
-> > > I use defconfigs by explicitly adding in the architecture:
-> > >
-> > >   kepler:~/tip> make ARCH=i386 defconfig
-> > >
-> > >   kepler:~/tip> kconfig-arch
-> > >   i386
-> > >
-> > > ... so never I noticed this bug.
-> >
-> > Ah, good point!
-> >
-> > > I fixed this in the latest version (attached).
-> > >
-> > > Arguably 'make ARCH=i386 savedefconfig' should preserve this, so that
-> > > refreshing defconfigs on bi-arch architectures is idempotent, but that's no
-> > > excuse to regress the existing defconfig behavior.
-> >
-> > Hmmm, I thought that it would, but I think the behavior of savedefconfig
-> > is actually correct with regards to how it handles CONFIG_64BIT in the
-> > presence of an explicit ARCH value, based on how CONFIG_64BIT is
-> > defined:
-> >
-> > config 64BIT
-> >       bool "64-bit kernel" if "$(ARCH)" = "x86"
-> >       default "$(ARCH)" != "i386"
-> >       help
-> >         Say yes to build a 64-bit kernel - formerly known as x86_64
-> >         Say no to build a 32-bit kernel - formerly known as i386
-> >
-> > As the default is no when ARCH == i386 and there is no prompt in that
-> > situation, "# CONFIG_64BIT is not set" gets dropped, as that is the
-> > default. Using savedefconfig without the ARCH variable would do the
-> > right thing.
-> >
-> > I tried playing around with these Kconfig symbols to see if I could get
-> > something that would work for savedefconfig with or without ARCH, but I
-> > could not really come up with anything. I did not try super hard though,
-> > it might still be possible.
+>  struct hisi_lpc_acpi_cell {
+>         const char *hid;
+> -       const char *name;
+> -       void *pdata;
+> -       size_t pdata_size;
+> +       const struct platform_device_info *pdevinfo;
+>  };
 >
-> Unfortunately, even without the ARCH=i386 'make savedefconfig' doesn't seem
-> to be doing the right thing & is dropping the '# CONFIG_64BIT is not set'
-> line:
-
-
-Oh, really?
-
-Without ARCH=i386, it works correctly for me.
-
-
-
-masahiro@zoe:~/ref/linux$ make i386_defconfig savedefconfig
-#
-# No change to .config
-#
-masahiro@zoe:~/ref/linux$ grep CONFIG_64BIT defconfig
-# CONFIG_64BIT is not set
-
-
-
-
-I guess you gave ARCH=i386 somewhere.
-
-
-
-
-
-
-
->  kepler:~/tip> make ARCH=i386 defconfig
->  *** Default configuration is based on 'i386_defconfig'
->  #
->  # configuration written to .config
->  #
->  kepler:~/tip> make savedefconfig
->  kepler:~/tip> diff -up arch/x86/configs/i386_defconfig defconfig
->  --- arch/x86/configs/i386_defconfig    2022-09-02 10:45:43.117430882 +0200
->  +++ defconfig  2022-09-02 10:46:56.663864901 +0200
->  @@ -282,4 +282,3 @@ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
->   CONFIG_EARLY_PRINTK_DBGP=y
->   CONFIG_DEBUG_BOOT_PARAMS=y
->   CONFIG_UNWINDER_FRAME_POINTER=y
->  -# CONFIG_64BIT is not set
->  kepler:~/tip>
+>  static void hisi_lpc_acpi_remove(struct device *hostdev)
+> @@ -505,28 +503,45 @@ static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
+>                 /* ipmi */
+>                 {
+>                         .hid = "IPI0001",
+> -                       .name = "hisi-lpc-ipmi",
+> +                       .pdevinfo = (struct platform_device_info []) {
+> +                               {
+> +                                       .parent = hostdev,
+> +                                       .fwnode = acpi_fwnode_handle(child),
+> +                                       .name = "hisi-lpc-ipmi",
+> +                                       .id = PLATFORM_DEVID_AUTO,
+> +                                       .res = res,
+> +                                       .num_res = num_res,
+> +                               },
+> +                       },
+>                 },
+>                 /* 8250-compatible uart */
+>                 {
+>                         .hid = "HISI1031",
+> -                       .name = "serial8250",
+> -                       .pdata = (struct plat_serial8250_port []) {
+> +                       .pdevinfo = (struct platform_device_info []) {
+>                                 {
+> -                                       .iobase = res->start,
+> -                                       .uartclk = 1843200,
+> -                                       .iotype = UPIO_PORT,
+> -                                       .flags = UPF_BOOT_AUTOCONF,
+> +                                       .parent = hostdev,
+> +                                       .fwnode = acpi_fwnode_handle(child),
+> +                                       .name = "serial8250",
+> +                                       .id = PLATFORM_DEVID_AUTO,
+> +                                       .res = res,
+> +                                       .num_res = num_res,
+> +                                       .data = (struct plat_serial8250_port []) {
+> +                                               {
+> +                                                       .iobase = res->start,
+> +                                                       .uartclk = 1843200,
+> +                                                       .iotype = UPIO_PORT,
+> +                                                       .flags = UPF_BOOT_AUTOCONF,
+> +                                               },
+> +                                               {}
+> +                                       },
+> +                                       .size_data =  2 * sizeof(struct plat_serial8250_port),
+>                                 },
+> -                               {}
+>                         },
+> -                       .pdata_size = 2 *
+> -                               sizeof(struct plat_serial8250_port),
+>                 },
+>                 {}
+>         };
 >
-> This is annoying in that every time I modify the i386 defconfig and use
-> 'make savedefconfig', I have to manually revert that change ...
+> -       for (; cell && cell->name; cell++) {
+> +       for (; cell && cell->hid; cell++) {
+>                 if (!strcmp(cell->hid, hid)) {
+>                         found = true;
+>                         break;
+> @@ -540,31 +555,12 @@ static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
+>                 return 0;
+>         }
 >
-> This reduces the usability of 'make savedefconfig' quite a bit.
+> -       pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
+> +       pdev = platform_device_register_full(cell->pdevinfo);
+>         if (!pdev)
+>                 return -ENOMEM;
 >
-> Maybe Masahiro-san can tell me how I'm doing this wrong?
+> -       pdev->dev.parent = hostdev;
+> -       ACPI_COMPANION_SET(&pdev->dev, child);
+> -
+> -       ret = platform_device_add_resources(pdev, res, num_res);
+> -       if (ret)
+> -               goto fail;
+> -
+> -       ret = platform_device_add_data(pdev, cell->pdata, cell->pdata_size);
+> -       if (ret)
+> -               goto fail;
+> -
+> -       ret = platform_device_add(pdev);
+> -       if (ret)
+> -               goto fail;
+> -
+>         acpi_device_set_enumerated(child);
+>         return 0;
+> -
+> -fail:
+> -       platform_device_put(pdev);
+> -       return ret;
+>  }
 >
-> Thanks,
+>  /*
+> --
+> 2.35.3
 >
->         Ingo
 
 
-
---
-Best Regards
-Masahiro Yamada
+-- 
+With Best Regards,
+Andy Shevchenko

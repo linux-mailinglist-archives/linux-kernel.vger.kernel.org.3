@@ -2,304 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF765AB5A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5BC5AB5A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiIBPsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
+        id S236229AbiIBPtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237358AbiIBPry (ORCPT
+        with ESMTP id S236397AbiIBPsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:47:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218D5C4833
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:37:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 165AE61E37
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 15:37:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B224C433D6;
-        Fri,  2 Sep 2022 15:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662133045;
-        bh=b9T6gmVfxUcmggAVoTJ1ih3AzAqwEhHfPrMFlv0/fKg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C9I/BnEE77x7Oc0mRjjkTHjhJmKh7uf4I1Bg4nTpZMgbfMwQnJrcW2HseXCa9Ebpn
-         LCD74IhfnspSxYC1QZZCz3WMt5MBIBUVWSdZc+XgzizkYo+8wXw+PvAjDRXib3nA1C
-         gQ5X4YhvW2dmG9nhSEyuEBaWY3Fy/IhDo9aBX0ctgnvlOxvi7I9XeAyje3wyxjjMOg
-         rG96lDdEcqq5VEk8dH/TlAjNiRf/U4R14VMza6qJig1aZhxTO/4NQDZhINIjQqHxSY
-         X9+ZpIvLaTwCLrdkUqGrIyF3sntqLKWqY7Rcjb1GHW2/7llZj0YlVR31OAvbcitUcH
-         O2GdRA0EYeNTQ==
-Date:   Fri, 2 Sep 2022 08:37:23 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 2/2] powerpc/math-emu: Remove -w build flag and fix
- warnings
-Message-ID: <YxIjM/jdLajq4dFk@dev-arch.thelio-3990X>
-References: <a7384eafc6a27aea15bdc9e8f9a12aac593fccb7.1662113301.git.christophe.leroy@csgroup.eu>
- <35c86b7ca823954c6cd593acc3690dc3748da9b1.1662113301.git.christophe.leroy@csgroup.eu>
+        Fri, 2 Sep 2022 11:48:08 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7175927A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:37:48 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id l65so2239923pfl.8
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 08:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=wxuJKVL4TdrpBfaqB67ZFhkoV3FR0V/WApM6+UkhSDY=;
+        b=logBeReqwhiMPJ+9Et4jQQRif3S4/EFNghg66d1akxtF4CgpHkr2/2eH0P+FOUZ8YW
+         ni5I1humC6Jpi8wTov8hh67azGrQl7qqeyqH/+M4EJWbGfzc8+ixDdOTRBAxyvkRCUQ+
+         vha6jR73f3AKIaAMoa+mrNwkUhL5RkCVw/Yc0JOwd4hGzJJB5iQ+t1a9J0J9YIxmpVwQ
+         VCIO9ZaG/moxpcrb+UXJIVwFUKVVGER3GTv/w2xgIyG+EyPLqqWzogh80kg+zp6MQEy6
+         JWAFV7lWdn75iIyxFMgGpp5alFnb+X6oQeP4z7wgCiEHVQN2D76SgznaxasS5criYUwV
+         7/yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=wxuJKVL4TdrpBfaqB67ZFhkoV3FR0V/WApM6+UkhSDY=;
+        b=4bvsIx0q8JI4iYtJSEFarwf1t3BE6r/kufX9W+i8yE4DJ4C5EyXpB22KeLWHOC3RlL
+         ICgzQ7H4Jxq0lf/mUBgIj2n9ovfN4uo2EH4ZzzxDVsTw4Lt8QWXhEto9knQYm2LcFqFP
+         aBJ8GKHneOim1JFc1uqNUmDnvGZ7mXTtKIhsf/6q4UhZ0r6cQccF1ELgtukMAQdw2ldr
+         /k7m8cjs7Pq9UWqsOf95ypfzXWP87JnstdY7PlWAT+ZRi4D5tlZ9fBeZz482Tj+NlKoX
+         P742DTs3QpHWWRxf/D7d+KsOf+AIj6vSMzCVJ1pwO3WJtyYXAonqToDR1Umz3PdNZ3bh
+         pYgA==
+X-Gm-Message-State: ACgBeo15yuR930Kte/jMjiH0IDGX7R1minfPTkohLErPeO8dqAC87qzs
+        Lv5Tt3gd6wfr4KndLpp3csf+izMnVsauzYeuil4=
+X-Google-Smtp-Source: AA6agR73Ctcqg5Eu+vup07FNPO1+IPQ12OI47E1xnwJpeMPLt6l9qFgI30lW0WWHlbFLAtBMFoVHJEjBLxucssvaGc0=
+X-Received: by 2002:a63:de01:0:b0:42b:31f7:b6ea with SMTP id
+ f1-20020a63de01000000b0042b31f7b6eamr30333941pgg.587.1662133067862; Fri, 02
+ Sep 2022 08:37:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35c86b7ca823954c6cd593acc3690dc3748da9b1.1662113301.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220901072119.37588-1-david@redhat.com> <YxDdycTur733hMgt@xz-m1.local>
+ <fa0bb4b1-3edd-eb5a-7ad6-dff785d88d8f@redhat.com> <YxDghv54uHYMGCfG@xz-m1.local>
+ <c9dc3f22-4a72-9b9d-7a74-ad77fe4f3b6e@redhat.com> <CAHbLzkpdUMq2fMxqx-NgSZ2VLBU5RGqSpJRWH6eRrYymErAbaw@mail.gmail.com>
+ <YxD00K1lv151X/eq@xz-m1.local> <CAHbLzkrA-jKzTBq_Mn3NZYc91exovv1gH2LNzetCNiVu8+W6Kg@mail.gmail.com>
+ <2368d91f-8442-076f-f33a-64b51b44825c@redhat.com>
+In-Reply-To: <2368d91f-8442-076f-f33a-64b51b44825c@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 2 Sep 2022 08:37:35 -0700
+Message-ID: <CAHbLzkokbqhf2Q7BptHBpENjQGNBt19ot+wvSp=_f7oOBKgiXA@mail.gmail.com>
+Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jerome Marchand <jmarchan@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Thu, Sep 1, 2022 at 11:32 PM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 01.09.22 20:35, Yang Shi wrote:
+> > On Thu, Sep 1, 2022 at 11:07 AM Peter Xu <peterx@redhat.com> wrote:
+> >>
+> >> On Thu, Sep 01, 2022 at 10:50:48AM -0700, Yang Shi wrote:
+> >>> Yeah, because THP collapse does copy the data before clearing pte. If
+> >>> we want to remove pmdp_collapse_flush() by just clearing pmd, we
+> >>> should clear *AND* flush pte before copying the data IIRC.
+> >>
+> >> Yes tlb flush is still needed.  IIUC the generic pmdp_collapse_flush() will
+> >> still be working (with the pte level flushing there) but it should just
+> >> start to work for all archs, so potentially we could drop the arch-specific
+> >> pmdp_collapse_flush()s, mostly the ppc impl.
+> >
+> > I'm don't know why powperpc needs to have its specific
+> > pmdp_collapse_flush() in the first place, not only the mandatory IPI
+> > broadcast, but also the specific implementation of pmd tlb flush. But
+> > anyway the IPI broadcast could be removed at least IMO.
+> >
+>
+> pmdp_collapse_flush() is overwritten on book3s only. It either translates
+> to radix__pmdp_collapse_flush() or hash__pmdp_collapse_flush().
+>
+>
+> radix__pmdp_collapse_flush() has a comment explaining the situation:
+>
+>
+> +       /*
+> +        * pmdp collapse_flush need to ensure that there are no parallel gup
+> +        * walk after this call. This is needed so that we can have stable
+> +        * page ref count when collapsing a page. We don't allow a collapse page
+> +        * if we have gup taken on the page. We can ensure that by sending IPI
+> +        * because gup walk happens with IRQ disabled.
+> +        */
+>
+>
+> The comment for hash__pmdp_collapse_flush() is a bit more involved:
+>
+>         /*
+>          * Wait for all pending hash_page to finish. This is needed
+>          * in case of subpage collapse. When we collapse normal pages
+>          * to hugepage, we first clear the pmd, then invalidate all
+>          * the PTE entries. The assumption here is that any low level
+>          * page fault will see a none pmd and take the slow path that
+>          * will wait on mmap_lock. But we could very well be in a
+>          * hash_page with local ptep pointer value. Such a hash page
+>          * can result in adding new HPTE entries for normal subpages.
+>          * That means we could be modifying the page content as we
+>          * copy them to a huge page. So wait for parallel hash_page
+>          * to finish before invalidating HPTE entries. We can do this
+>          * by sending an IPI to all the cpus and executing a dummy
+>          * function there.
+>          */
+>
+> I'm not sure if that implies that the IPI is needed for some other hash-magic.
 
-On Fri, Sep 02, 2022 at 12:08:55PM +0200, Christophe Leroy wrote:
-> As reported by Nathan, the module_init() macro was not taken into
-> account because the header was missing. That means spe_mathemu_init()
-> was never called.
-> 
-> This should have been detected by gcc at build time, but due to
-> '-w' flag it went undetected.
-> 
-> Removing that flag leads to many warnings hence errors.
-> 
-> Fix those warnings then remove the -w flag.
-> 
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+They do issue IPI broadcast to call a dummy function in order to
+serialize against fast GUP, please see serialize_against_pte_lookup(),
+and it does full memory barrier too.
 
-Thanks for figuring out what was going on here! I took this patch for a
-spin with clang and it has a few more errors around
--Wimplicit-fallthrough:
+I think the IPI broadcast could be removed once my fix is merged and
+the common pmd clear and memory barrier could be consolidated, now it
+is duplicated in both radix and hash.
 
-    arch/powerpc/math-emu/fctiw.c:18:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-            FP_TO_INT_D(r, B, 32, 1);
-            ^
-    ./include/math-emu/double.h:120:34: note: expanded from macro 'FP_TO_INT_D'
-    #define FP_TO_INT_D(r,X,rsz,rsg)        _FP_TO_INT(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:665:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_ZERO:                                                     \
-              ^
-    arch/powerpc/math-emu/fctiw.c:18:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-    ./include/math-emu/double.h:120:34: note: expanded from macro 'FP_TO_INT_D'
-    #define FP_TO_INT_D(r,X,rsz,rsg)        _FP_TO_INT(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:671:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_NAN:                                                      \
-              ^
-    2 errors generated.
-    arch/powerpc/math-emu/fctiwz.c:23:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-            FP_TO_INT_D(r, B, 32, 1);
-            ^
-    ./include/math-emu/double.h:120:34: note: expanded from macro 'FP_TO_INT_D'
-    #define FP_TO_INT_D(r,X,rsz,rsg)        _FP_TO_INT(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:665:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_ZERO:                                                     \
-              ^
-    arch/powerpc/math-emu/fctiwz.c:23:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-    ./include/math-emu/double.h:120:34: note: expanded from macro 'FP_TO_INT_D'
-    #define FP_TO_INT_D(r,X,rsz,rsg)        _FP_TO_INT(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:671:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_NAN:                                                      \
-              ^
-    2 errors generated.
-    make[3]: *** [scripts/Makefile.build:249: arch/powerpc/math-emu/fctiw.o] Error 1
-    make[3]: *** [scripts/Makefile.build:249: arch/powerpc/math-emu/fctiwz.o] Error 1
-    arch/powerpc/math-emu/math_efp.c:282:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_ROUND_S(vc.wp[1], SB, 32,
-                                    ^
-    ./include/math-emu/single.h:110:40: note: expanded from macro 'FP_TO_INT_ROUND_S'
-    #define FP_TO_INT_ROUND_S(r,X,rsz,rsg)  _FP_TO_INT_ROUND(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:770:4: note: expanded from macro '_FP_TO_INT_ROUND'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:305:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_ROUND_S(vc.wp[1], SB, 32,
-                                    ^
-    ./include/math-emu/single.h:110:40: note: expanded from macro 'FP_TO_INT_ROUND_S'
-    #define FP_TO_INT_ROUND_S(r,X,rsz,rsg)  _FP_TO_INT_ROUND(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:770:4: note: expanded from macro '_FP_TO_INT_ROUND'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:316:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_S(vc.wp[1], SB, 32,
-                                    ^
-    ./include/math-emu/single.h:109:34: note: expanded from macro 'FP_TO_INT_S'
-    #define FP_TO_INT_S(r,X,rsz,rsg)        _FP_TO_INT(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:665:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_ZERO:                                                     \
-              ^
-    arch/powerpc/math-emu/math_efp.c:316:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-    ./include/math-emu/single.h:109:34: note: expanded from macro 'FP_TO_INT_S'
-    #define FP_TO_INT_S(r,X,rsz,rsg)        _FP_TO_INT(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:671:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:413:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_ROUND_D(vc.wp[1], DB, 32,
-                                    ^
-    ./include/math-emu/double.h:121:40: note: expanded from macro 'FP_TO_INT_ROUND_D'
-    #define FP_TO_INT_ROUND_D(r,X,rsz,rsg)  _FP_TO_INT_ROUND(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:770:4: note: expanded from macro '_FP_TO_INT_ROUND'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:436:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_D(vc.dp[0], DB, 64,
-                                    ^
-    ./include/math-emu/double.h:120:34: note: expanded from macro 'FP_TO_INT_D'
-    #define FP_TO_INT_D(r,X,rsz,rsg)        _FP_TO_INT(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:665:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_ZERO:                                                     \
-              ^
-    arch/powerpc/math-emu/math_efp.c:436:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-    ./include/math-emu/double.h:120:34: note: expanded from macro 'FP_TO_INT_D'
-    #define FP_TO_INT_D(r,X,rsz,rsg)        _FP_TO_INT(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:671:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:447:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_ROUND_D(vc.wp[1], DB, 32,
-                                    ^
-    ./include/math-emu/double.h:121:40: note: expanded from macro 'FP_TO_INT_ROUND_D'
-    #define FP_TO_INT_ROUND_D(r,X,rsz,rsg)  _FP_TO_INT_ROUND(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:770:4: note: expanded from macro '_FP_TO_INT_ROUND'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:458:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_D(vc.wp[1], DB, 32,
-                                    ^
-    ./include/math-emu/double.h:120:34: note: expanded from macro 'FP_TO_INT_D'
-    #define FP_TO_INT_D(r,X,rsz,rsg)        _FP_TO_INT(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:665:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_ZERO:                                                     \
-              ^
-    arch/powerpc/math-emu/math_efp.c:458:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-    ./include/math-emu/double.h:120:34: note: expanded from macro 'FP_TO_INT_D'
-    #define FP_TO_INT_D(r,X,rsz,rsg)        _FP_TO_INT(D,2,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:671:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:573:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_ROUND_S(vc.wp[0], SB0, 32,
-                                    ^
-    ./include/math-emu/single.h:110:40: note: expanded from macro 'FP_TO_INT_ROUND_S'
-    #define FP_TO_INT_ROUND_S(r,X,rsz,rsg)  _FP_TO_INT_ROUND(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:770:4: note: expanded from macro '_FP_TO_INT_ROUND'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:581:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_ROUND_S(vc.wp[1], SB1, 32,
-                                    ^
-    ./include/math-emu/single.h:110:40: note: expanded from macro 'FP_TO_INT_ROUND_S'
-    #define FP_TO_INT_ROUND_S(r,X,rsz,rsg)  _FP_TO_INT_ROUND(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:770:4: note: expanded from macro '_FP_TO_INT_ROUND'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:592:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_ROUND_S(vc.wp[0], SB0, 32,
-                                    ^
-    ./include/math-emu/single.h:110:40: note: expanded from macro 'FP_TO_INT_ROUND_S'
-    #define FP_TO_INT_ROUND_S(r,X,rsz,rsg)  _FP_TO_INT_ROUND(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:770:4: note: expanded from macro '_FP_TO_INT_ROUND'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:599:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_ROUND_S(vc.wp[1], SB1, 32,
-                                    ^
-    ./include/math-emu/single.h:110:40: note: expanded from macro 'FP_TO_INT_ROUND_S'
-    #define FP_TO_INT_ROUND_S(r,X,rsz,rsg)  _FP_TO_INT_ROUND(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:770:4: note: expanded from macro '_FP_TO_INT_ROUND'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:610:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_S(vc.wp[0], SB0, 32,
-                                    ^
-    ./include/math-emu/single.h:109:34: note: expanded from macro 'FP_TO_INT_S'
-    #define FP_TO_INT_S(r,X,rsz,rsg)        _FP_TO_INT(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:665:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_ZERO:                                                     \
-              ^
-    arch/powerpc/math-emu/math_efp.c:610:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-    ./include/math-emu/single.h:109:34: note: expanded from macro 'FP_TO_INT_S'
-    #define FP_TO_INT_S(r,X,rsz,rsg)        _FP_TO_INT(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:671:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_NAN:                                                      \
-              ^
-    arch/powerpc/math-emu/math_efp.c:617:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                                    FP_TO_INT_S(vc.wp[1], SB1, 32,
-                                    ^
-    ./include/math-emu/single.h:109:34: note: expanded from macro 'FP_TO_INT_S'
-    #define FP_TO_INT_S(r,X,rsz,rsg)        _FP_TO_INT(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:665:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_ZERO:                                                     \
-              ^
-    arch/powerpc/math-emu/math_efp.c:617:5: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-    ./include/math-emu/single.h:109:34: note: expanded from macro 'FP_TO_INT_S'
-    #define FP_TO_INT_S(r,X,rsz,rsg)        _FP_TO_INT(S,1,r,X,rsz,rsg)
-                                            ^
-    ./include/math-emu/op-common.h:671:4: note: expanded from macro '_FP_TO_INT'
-              case FP_CLS_NAN:                                                      \
-              ^
-    18 errors generated.
+>
+> Maybe Aneesh can clarify.
+>
+> >>
+> >> This also reminded me that the s390 version of pmdp_collapse_flush() is a
+> >> bit weird, since it doesn't even have the tlb flush there.  I feel like
+> >> it's broken but I can't really tell whether something I've overlooked.
+> >> Worth an eye on.
+> >
+> > I don't know why. But if s390 doesn't flush tlb in
+> > pmdp_collapse_flush(), then there may be data integrity problem since
+> > the page is still writable when copying the data because pte is
+> > cleared after data copying. Or s390 hardware does flush tlb
+> > automatically?
+>
+> s390x does a pmdp_huge_get_and_clear().
+>
+> pmdp_huge_get_and_clear() does an pmdp_xchg_direct().
+>
+> pmdp_xchg_direct() does an pmdp_flush_direct().
+>
+> pmdp_flush_direct() issues an IDTE, which is a TLB flush.
 
-The following diff resolves it and does not introduce any new issues
-with GCC. Would you mind squashing it in for a v2? With that:
+Aha, thanks, I didn't look that deep... I stopped looking once I saw
+pmdp_huge_get_and_clear(), I thought it just does clear...
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-Cheers,
-Nathan
-
-diff --git a/include/math-emu/op-common.h b/include/math-emu/op-common.h
-index 4b57bbba588a..ae73a30bf1a0 100644
---- a/include/math-emu/op-common.h
-+++ b/include/math-emu/op-common.h
-@@ -662,12 +662,14 @@ do {									\
- 	if (X##_e < 0)								\
- 	  {									\
- 	    FP_SET_EXCEPTION(FP_EX_INEXACT);					\
-+	    fallthrough;							\
- 	  case FP_CLS_ZERO:							\
- 	    r = 0;								\
- 	  }									\
- 	else if (X##_e >= rsize - (rsigned > 0 || X##_s)			\
- 		 || (!rsigned && X##_s))					\
- 	  {	/* overflow */							\
-+	  fallthrough;								\
- 	  case FP_CLS_NAN:                                                      \
- 	  case FP_CLS_INF:							\
- 	    if (rsigned == 2)							\
-@@ -767,6 +769,7 @@ do {									\
- 	if (X##_e >= rsize - (rsigned > 0 || X##_s)				\
- 	    || (!rsigned && X##_s))						\
- 	  {	/* overflow */							\
-+	  fallthrough;								\
- 	  case FP_CLS_NAN:                                                      \
- 	  case FP_CLS_INF:							\
- 	    if (!rsigned)							\
+>
+>
+> Note that this matches ptep_get_and_clear() behavior on s390x. Quoting the comment in there:
+>
+>
+> /*
+>  * This is hard to understand. ptep_get_and_clear and ptep_clear_flush
+>  * both clear the TLB for the unmapped pte. The reason is that
+>  * ptep_get_and_clear is used in common code (e.g. change_pte_range)
+>  * to modify an active pte. The sequence is
+>  *   1) ptep_get_and_clear
+>  *   2) set_pte_at
+>  *   3) flush_tlb_range
+>  * On s390 the tlb needs to get flushed with the modification of the pte
+>  * if the pte is active. The only way how this can be implemented is to
+>  * have ptep_get_and_clear do the tlb flush. In exchange flush_tlb_range
+>  * is a nop.
+>  */
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>

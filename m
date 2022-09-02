@@ -2,46 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326765AAEFF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482775AAF97
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236607AbiIBMcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
+        id S237291AbiIBMlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236627AbiIBMbd (ORCPT
+        with ESMTP id S237232AbiIBMiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:31:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E53E0FEB;
-        Fri,  2 Sep 2022 05:26:53 -0700 (PDT)
+        Fri, 2 Sep 2022 08:38:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABEF474D6;
+        Fri,  2 Sep 2022 05:30:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E01E2B82AB4;
-        Fri,  2 Sep 2022 12:26:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E5DC433C1;
-        Fri,  2 Sep 2022 12:26:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73F4762196;
+        Fri,  2 Sep 2022 12:29:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 497C4C433C1;
+        Fri,  2 Sep 2022 12:29:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121589;
-        bh=bBMehq7U4qeyLV9FM0POOT2U6AtqLtjlHUK6iYBBqbs=;
+        s=korg; t=1662121791;
+        bh=0qF/oYmMy+Nd9dHjixWzVS8ZidgujaNkK2EyJt3lh8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s0HJhWG2HcXePpx0QnT5PHtQXyJZOJ4ZGBLgCPtILpgz8reJCq4fskLte5xebZlAQ
-         P/2mU63MTxfYRI099CzkwDqm4i5b/JgGuegkmVEB/Qa9sJczZPOOsezFWm+l/8aYaA
-         1ZmhsSZENWVf6YQfghPZ9Woc4trbl2/+dumf4jSU=
+        b=x4xPb0+eomvKU9feZyFtAPKvAF9YVm5+atKcNT1bcfFLm8wY+qTRLm33gn5wsrwi8
+         LVz8EjjgV4C8D5udQ3FxIZAgKJ+Kd8GC5UB2jm+H41RvZ+W/PMhdEZ9moMS6TkB2NY
+         3h1Wtglv716SPabVE6a4oqEKp18AMqH5ZT/2XOdU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Denis V. Lunev" <den@openvz.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 56/56] net: neigh: dont call kfree_skb() under spin_lock_irqsave()
+        stable@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Christian Brauner <brauner@kernel.org>, netdev@vger.kernel.org,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Konstantin Khorenko <khorenko@virtuozzo.com>,
+        kernel@openvz.org, devel@openvz.org,
+        "Denis V. Lunev" <den@openvz.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 67/77] neigh: fix possible DoS due to net iface start/stop loop
 Date:   Fri,  2 Sep 2022 14:19:16 +0200
-Message-Id: <20220902121402.407009737@linuxfoundation.org>
+Message-Id: <20220902121405.911113172@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+References: <20220902121403.569927325@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +66,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Denis V. Lunev <den@openvz.org>
 
-commit d5485d9dd24e1d04e5509916515260186eb1455c upstream.
+[ Upstream commit 66ba215cb51323e4e55e38fd5f250e0fae0cbc94 ]
 
-It is not allowed to call kfree_skb() from hardware interrupt
-context or with interrupts being disabled. So add all skb to
-a tmp list, then free them after spin_unlock_irqrestore() at
-once.
+Normal processing of ARP request (usually this is Ethernet broadcast
+packet) coming to the host is looking like the following:
+* the packet comes to arp_process() call and is passed through routing
+  procedure
+* the request is put into the queue using pneigh_enqueue() if
+  corresponding ARP record is not local (common case for container
+  records on the host)
+* the request is processed by timer (within 80 jiffies by default) and
+  ARP reply is sent from the same arp_process() using
+  NEIGH_CB(skb)->flags & LOCALLY_ENQUEUED condition (flag is set inside
+  pneigh_enqueue())
 
-Fixes: 66ba215cb513 ("neigh: fix possible DoS due to net iface start/stop loop")
-Suggested-by: Denis V. Lunev <den@openvz.org>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+And here the problem comes. Linux kernel calls pneigh_queue_purge()
+which destroys the whole queue of ARP requests on ANY network interface
+start/stop event through __neigh_ifdown().
+
+This is actually not a problem within the original world as network
+interface start/stop was accessible to the host 'root' only, which
+could do more destructive things. But the world is changed and there
+are Linux containers available. Here container 'root' has an access
+to this API and could be considered as untrusted user in the hosting
+(container's) world.
+
+Thus there is an attack vector to other containers on node when
+container's root will endlessly start/stop interfaces. We have observed
+similar situation on a real production node when docker container was
+doing such activity and thus other containers on the node become not
+accessible.
+
+The patch proposed doing very simple thing. It drops only packets from
+the same namespace in the pneigh_queue_purge() where network interface
+state change is detected. This is enough to prevent the problem for the
+whole node preserving original semantics of the code.
+
+v2:
+	- do del_timer_sync() if queue is empty after pneigh_queue_purge()
+v3:
+	- rebase to net tree
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Yajun Deng <yajun.deng@linux.dev>
+Cc: Roopa Prabhu <roopa@nvidia.com>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
+Cc: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
+Cc: Konstantin Khorenko <khorenko@virtuozzo.com>
+Cc: kernel@openvz.org
+Cc: devel@openvz.org
+Investigated-by: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
+Signed-off-by: Denis V. Lunev <den@openvz.org>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/neighbour.c |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ net/core/neighbour.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
+diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+index 8b6140e67e7f8..6056b8e545658 100644
 --- a/net/core/neighbour.c
 +++ b/net/core/neighbour.c
-@@ -226,21 +226,27 @@ static int neigh_del_timer(struct neighb
- 
- static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
- {
-+	struct sk_buff_head tmp;
- 	unsigned long flags;
- 	struct sk_buff *skb;
- 
-+	skb_queue_head_init(&tmp);
- 	spin_lock_irqsave(&list->lock, flags);
- 	skb = skb_peek(list);
- 	while (skb != NULL) {
- 		struct sk_buff *skb_next = skb_peek_next(skb, list);
- 		if (net == NULL || net_eq(dev_net(skb->dev), net)) {
- 			__skb_unlink(skb, list);
--			dev_put(skb->dev);
--			kfree_skb(skb);
-+			__skb_queue_tail(&tmp, skb);
- 		}
- 		skb = skb_next;
- 	}
- 	spin_unlock_irqrestore(&list->lock, flags);
-+
-+	while ((skb = __skb_dequeue(&tmp))) {
-+		dev_put(skb->dev);
-+		kfree_skb(skb);
-+	}
+@@ -280,14 +280,23 @@ static int neigh_del_timer(struct neighbour *n)
+ 	return 0;
  }
  
- static void neigh_flush_dev(struct neigh_table *tbl, struct net_device *dev)
+-static void pneigh_queue_purge(struct sk_buff_head *list)
++static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
+ {
++	unsigned long flags;
+ 	struct sk_buff *skb;
+ 
+-	while ((skb = skb_dequeue(list)) != NULL) {
+-		dev_put(skb->dev);
+-		kfree_skb(skb);
++	spin_lock_irqsave(&list->lock, flags);
++	skb = skb_peek(list);
++	while (skb != NULL) {
++		struct sk_buff *skb_next = skb_peek_next(skb, list);
++		if (net == NULL || net_eq(dev_net(skb->dev), net)) {
++			__skb_unlink(skb, list);
++			dev_put(skb->dev);
++			kfree_skb(skb);
++		}
++		skb = skb_next;
+ 	}
++	spin_unlock_irqrestore(&list->lock, flags);
+ }
+ 
+ static void neigh_flush_dev(struct neigh_table *tbl, struct net_device *dev,
+@@ -358,9 +367,9 @@ static int __neigh_ifdown(struct neigh_table *tbl, struct net_device *dev,
+ 	write_lock_bh(&tbl->lock);
+ 	neigh_flush_dev(tbl, dev, skip_perm);
+ 	pneigh_ifdown_and_unlock(tbl, dev);
+-
+-	del_timer_sync(&tbl->proxy_timer);
+-	pneigh_queue_purge(&tbl->proxy_queue);
++	pneigh_queue_purge(&tbl->proxy_queue, dev_net(dev));
++	if (skb_queue_empty_lockless(&tbl->proxy_queue))
++		del_timer_sync(&tbl->proxy_timer);
+ 	return 0;
+ }
+ 
+@@ -1741,7 +1750,7 @@ int neigh_table_clear(int index, struct neigh_table *tbl)
+ 	/* It is not clean... Fix it to unload IPv6 module safely */
+ 	cancel_delayed_work_sync(&tbl->gc_work);
+ 	del_timer_sync(&tbl->proxy_timer);
+-	pneigh_queue_purge(&tbl->proxy_queue);
++	pneigh_queue_purge(&tbl->proxy_queue, NULL);
+ 	neigh_ifdown(tbl, NULL);
+ 	if (atomic_read(&tbl->entries))
+ 		pr_crit("neighbour leakage\n");
+-- 
+2.35.1
+
 
 

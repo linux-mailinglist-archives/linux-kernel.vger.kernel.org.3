@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5F05AB12D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274535AAE68
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238667AbiIBNG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S236219AbiIBMW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238580AbiIBNGB (ORCPT
+        with ESMTP id S235936AbiIBMVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:06:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7EBEA8AD;
-        Fri,  2 Sep 2022 05:43:42 -0700 (PDT)
+        Fri, 2 Sep 2022 08:21:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F9686FE1;
+        Fri,  2 Sep 2022 05:21:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 085A862194;
-        Fri,  2 Sep 2022 12:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B37C433D6;
-        Fri,  2 Sep 2022 12:31:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FA6EB82A8F;
+        Fri,  2 Sep 2022 12:21:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94011C433D6;
+        Fri,  2 Sep 2022 12:21:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121892;
-        bh=exs1M14G2hFHIOYMQ8AYApY+iIFCvLSFnU0OjU75pHQ=;
+        s=korg; t=1662121270;
+        bh=iAOuRObImeftCmpLIn8rH+IQRg9TxZTmsm9QwblKeRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xD5hvNG0pn5RpVX/G8wsHM8LOHvXZ5dMcEWmxQUiK4zHfjK2R9inNbdA3DrQYaRDh
-         +NEK2E66o24zNDCXCSqgG5eGYzWkXtlKh0TeTlER/TObxU608iOQ2TuTjt5BZlnyZj
-         bJ71LFazFacGTIMFnGJoGVueb8qrQ1om66YrUnbI=
+        b=hHp+OAKDWJ2c8VqL/Nwbuof4i+EjNlFr8jNNdkhUCzoZ4WqOFvBrxQ5xWUFPg+Ulc
+         QB7bQeh/SKby6hDw1dqsszliIBUfqJCqgtKxIoiqBP9zsFTK6Ue3OhfEQzCv8cMgP1
+         P13HodsjIqaoI1ANHFHF0Phq22H9hxgy2rK2VJL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH 5.15 20/73] io_uring: bump poll refs to full 31-bits
-Date:   Fri,  2 Sep 2022 14:18:44 +0200
-Message-Id: <20220902121405.123856088@linuxfoundation.org>
+        stable@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rahul Tanwar <rahul.tanwar@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: [PATCH 4.9 19/31] x86/cpu: Add Tiger Lake to Intel family
+Date:   Fri,  2 Sep 2022 14:18:45 +0200
+Message-Id: <20220902121357.468592657@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
+References: <20220902121356.732130937@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +60,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Gayatri Kammela <gayatri.kammela@intel.com>
 
-[ upstream commmit e2c0cb7c0cc72939b61a7efee376206725796625 ]
+commit 6e1c32c5dbb4b90eea8f964c2869d0bde050dbe0 upstream.
 
-The previous commit:
+Add the model numbers/CPUIDs of Tiger Lake mobile and desktop to the
+Intel family.
 
-1bc84c40088 ("io_uring: remove poll entry from list when canceling all")
-
-removed a potential overflow condition for the poll references. They
-are currently limited to 20-bits, even if we have 31-bits available. The
-upper bit is used to mark for cancelation.
-
-Bump the poll ref space to 31-bits, making that kind of situation much
-harder to trigger in general. We'll separately add overflow checking
-and handling.
-
-Fixes: aa43477b0402 ("io_uring: poll rework")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[pavel: backport]
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Suggested-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Gayatri Kammela <gayatri.kammela@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lkml.kernel.org/r/20190905193020.14707-2-tony.luck@intel.com
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/intel-family.h |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5314,7 +5314,7 @@ struct io_poll_table {
- };
+--- a/arch/x86/include/asm/intel-family.h
++++ b/arch/x86/include/asm/intel-family.h
+@@ -70,6 +70,9 @@
+ #define INTEL_FAM6_ALDERLAKE		0x97
+ #define INTEL_FAM6_ALDERLAKE_L		0x9A
  
- #define IO_POLL_CANCEL_FLAG	BIT(31)
--#define IO_POLL_REF_MASK	((1u << 20)-1)
-+#define IO_POLL_REF_MASK	GENMASK(30, 0)
++#define INTEL_FAM6_TIGERLAKE_L		0x8C
++#define INTEL_FAM6_TIGERLAKE		0x8D
++
+ /* "Small Core" Processors (Atom) */
  
- /*
-  * If refs part of ->poll_refs (see IO_POLL_REF_MASK) is 0, it's free. We can
+ #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */
 
 

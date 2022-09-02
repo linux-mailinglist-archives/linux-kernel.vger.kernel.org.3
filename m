@@ -2,113 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B01D5AB214
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751D65AB3F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238162AbiIBNvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 09:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
+        id S236780AbiIBOpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238149AbiIBNus (ORCPT
+        with ESMTP id S236652AbiIBOpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:50:48 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEDF4504B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:25:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662125124; x=1693661124;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+HasZQGD/dK7/z/ep2cvAoa6qEef3JudFUKpRtdWqMg=;
-  b=Qz579+DETtn0Vw9lB9jKZwdRS6D3TLmTm9KZGdLQAbFvEPRjbja5/g0q
-   CtV0f8BYqA41yD7Wiy6MTa+bheY58fp26sVkgraUYPd4fTzK8XysA1prk
-   /HbEImHHKwBQ1BY8rc5gbxFQAI4XG0FwtUcCvI0T7ElRuQjdd+qFjCGHh
-   FH5qwrpvryysuTrR7KGez4Bcs2A+X6S987d5i6SidMUtoHRCfH23UPvFx
-   dtOZyVWOTnFixPzLtWDdpIq2ORTnirzn6fnFmJUVtGtaVBM3FgzsKCOCD
-   MxTzImiS2e8A+u9u4RC7ZD4g3wBsmUYeoyRcXLxOUUz1nzP8yssKcGHRT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="278994222"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="278994222"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 06:23:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="674352535"
-Received: from crojewsk-ctrl.igk.intel.com ([10.102.9.28])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Sep 2022 06:23:06 -0700
-From:   Cezary Rojewski <cezary.rojewski@intel.com>
-To:     alsa-devel@alsa-project.org, broonie@kernel.org
-Cc:     tiwai@suse.com, perex@perex.cz,
-        amadeuszx.slawinski@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, hdegoede@redhat.com,
-        lgirdwood@gmail.com, kai.vehmanen@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, willy@infradead.org,
-        linux-kernel@vger.kernel.org, andy@kernel.org,
-        intel-poland@eclists.intel.com, andy.shevchenko@gmail.com,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-Subject: [PATCH v5 0/2] lib/string_helpers: Introduce parse_int_array_user()
-Date:   Fri,  2 Sep 2022 15:32:54 +0200
-Message-Id: <20220902133256.789165-1-cezary.rojewski@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 2 Sep 2022 10:45:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83698135B81;
+        Fri,  2 Sep 2022 07:05:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A319B82AA7;
+        Fri,  2 Sep 2022 12:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11770C433D7;
+        Fri,  2 Sep 2022 12:30:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662121857;
+        bh=VMIYCM4Qj9jiuMktXiXRSCAmF412h4t7gocB1eu3T6g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ooqSHbCHde+ND49X1q1GnYxnth0JPi0JsgmW/SN2Fw26Smt3EafbI5fctKEmcba6w
+         Fa3iny+uXwzvMrEglmfAN0zmIYfTKeR7zJj7OQVigyeMsPUhgDq0FWZgDAgDhuFW/D
+         jY9enmGmqRdrhgSN6ytqbOxJ3FwS+AYC73kct9kc=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>, Lucas Wei <lucaswei@google.com>
+Subject: [PATCH 5.15 10/73] arm64: errata: Add Cortex-A510 to the repeat tlbi list
+Date:   Fri,  2 Sep 2022 14:18:34 +0200
+Message-Id: <20220902121404.778460993@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Continuation of recent upstream discussion [1] regarding user string
-tokenization.
+From: James Morse <james.morse@arm.com>
 
-First, parse_int_array_user() is introduced to allow for splitting
-specified user string into a sequence of integers. Makes use of
-get_options() internally so the parsing logic is not duplicated.
+commit 39fdb65f52e9a53d32a6ba719f96669fd300ae78 upstream.
 
-With that done, redundant parts of the sound driver are removed.
+Cortex-A510 is affected by an erratum where in rare circumstances the
+CPUs may not handle a race between a break-before-make sequence on one
+CPU, and another CPU accessing the same page. This could allow a store
+to a page that has been unmapped.
 
-Originally similar functionality was added for the SOF sound driver. As
-more users are on the horizon, it is desirable to update existing
-string_helpers code and provide a unified solution.
+Work around this by adding the affected CPUs to the list that needs
+TLB sequences to be done twice.
 
+Signed-off-by: James Morse <james.morse@arm.com>
+Link: https://lore.kernel.org/r/20220704155732.21216-1-james.morse@arm.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Lucas Wei <lucaswei@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ Documentation/arm64/silicon-errata.rst |    2 ++
+ arch/arm64/Kconfig                     |   17 +++++++++++++++++
+ arch/arm64/kernel/cpu_errata.c         |    8 +++++++-
+ 3 files changed, 26 insertions(+), 1 deletion(-)
 
-Changes in v5:
-- fixed kernel doc for parse_int_array_user()
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -92,6 +92,8 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A77      | #1508412        | ARM64_ERRATUM_1508412       |
+ +----------------+-----------------+-----------------+-----------------------------+
++| ARM            | Cortex-A510     | #2441009        | ARM64_ERRATUM_2441009       |
+++----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Neoverse-N1     | #1188873,1418040| ARM64_ERRATUM_1418040       |
+ +----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Neoverse-N1     | #1349291        | N/A                         |
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -666,6 +666,23 @@ config ARM64_ERRATUM_1508412
+ 
+ 	  If unsure, say Y.
+ 
++config ARM64_ERRATUM_2441009
++	bool "Cortex-A510: Completion of affected memory accesses might not be guaranteed by completion of a TLBI"
++	default y
++	select ARM64_WORKAROUND_REPEAT_TLBI
++	help
++	  This option adds a workaround for ARM Cortex-A510 erratum #2441009.
++
++	  Under very rare circumstances, affected Cortex-A510 CPUs
++	  may not handle a race between a break-before-make sequence on one
++	  CPU, and another CPU accessing the same page. This could allow a
++	  store to a page that has been unmapped.
++
++	  Work around this by adding the affected CPUs to the list that needs
++	  TLB sequences to be done twice.
++
++	  If unsure, say Y.
++
+ config CAVIUM_ERRATUM_22375
+ 	bool "Cavium erratum 22375, 24313"
+ 	default y
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -214,6 +214,12 @@ static const struct arm64_cpu_capabiliti
+ 		ERRATA_MIDR_RANGE(MIDR_QCOM_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
+ 	},
+ #endif
++#ifdef CONFIG_ARM64_ERRATUM_2441009
++	{
++		/* Cortex-A510 r0p0 -> r1p1. Fixed in r1p2 */
++		ERRATA_MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1),
++	},
++#endif
+ 	{},
+ };
+ #endif
+@@ -429,7 +435,7 @@ const struct arm64_cpu_capabilities arm6
+ #endif
+ #ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
+ 	{
+-		.desc = "Qualcomm erratum 1009, or ARM erratum 1286807",
++		.desc = "Qualcomm erratum 1009, or ARM erratum 1286807, 2441009",
+ 		.capability = ARM64_WORKAROUND_REPEAT_TLBI,
+ 		.type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,
+ 		.matches = cpucap_multi_entry_cap_matches,
 
-Changes in v4:
-- renamed the function to parse_int_array_user()
-- at the name several local variable names have been reworded to match
-  the above
-
-Changes in v3:
-- relocated tokenize_user_input() implementation to string_helpers as
-  requested by Matthew
-
-Changes in v2:
-- reused get_options() so no parsing logic is duplicated
-- simplified __user variant with help of memdup_user_nul()
-  Both suggested by Andy, thanks for thorough review
-
-
-[1]: https://lore.kernel.org/alsa-devel/20220707091301.1282291-1-cezary.rojewski@intel.com/
-
-
-Cezary Rojewski (2):
-  lib/string_helpers: Introduce parse_int_array_user()
-  ASoC: SOF: Remove strsplit_u32() and tokenize_input()
-
- include/linux/string_helpers.h    |   2 +
- lib/string_helpers.c              |  44 +++++++++++++
- sound/soc/sof/sof-client-probes.c | 104 ++++++------------------------
- 3 files changed, 64 insertions(+), 86 deletions(-)
-
--- 
-2.25.1
 

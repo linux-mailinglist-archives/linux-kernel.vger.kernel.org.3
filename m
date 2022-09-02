@@ -2,270 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0DB5AABB7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838F05AABB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235751AbiIBJpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S235490AbiIBJoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235744AbiIBJo4 (ORCPT
+        with ESMTP id S235295AbiIBJob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:44:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0120DD125
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:44:53 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2828wVw0009142;
-        Fri, 2 Sep 2022 09:44:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=OHrCdqR+7nVowticktGiwfekN4OfMW/k6KwPMJ/DUGA=;
- b=Ao3hDPfZPJpIMMh7TyygNsdKsW9JuAwzV1khfeK5KWmYoZ2UPfhgghxWn5L/dYxEH2OX
- 9N+qrqdVQpEgq+QMVbLNAUWBN06TbSYYOsFGTuhilZnRdzNub0u5IkzF6VkTD7ZHOZ65
- tot7Aj+rXOg53du8w6R7+B2f6XrVz3uoyx5kciSw4UHdzOwcKTjXVHXbG2R5j3kuXitB
- IWHvwJDeReQ1WdMlKmCBSf7Z1FFJqp+QbY0Psl7F9t4gHcvc5EIg2Swida5ExS9wobi5
- gKeyu8KrK8E1dXt5cGLMQPrKNxAYu3zRz30V4Kl2MBSj5g/nx9hTp56jllNeslwahoT8 EA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jbesvsj4g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Sep 2022 09:44:26 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2828xoaZ011574;
-        Fri, 2 Sep 2022 09:44:25 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jbesvsj3k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Sep 2022 09:44:25 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2829a7ti018046;
-        Fri, 2 Sep 2022 09:44:23 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3j8hkacnsd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Sep 2022 09:44:23 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2829iKaZ42139988
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 2 Sep 2022 09:44:20 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B58F9AE055;
-        Fri,  2 Sep 2022 09:44:20 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5FA12AE04D;
-        Fri,  2 Sep 2022 09:44:15 +0000 (GMT)
-Received: from [9.43.81.233] (unknown [9.43.81.233])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  2 Sep 2022 09:44:15 +0000 (GMT)
-Message-ID: <5aaf395d-514a-2717-58c6-3845b97692bd@linux.ibm.com>
-Date:   Fri, 2 Sep 2022 15:14:14 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
- sysfs
-Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Wei Xu <weixugc@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>,
-        Greg Thelen <gthelen@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
- <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <ad19e105-9290-922d-59e6-e6813a30f5f0@linux.ibm.com>
- <87pmgezkhp.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
- <d91beb53-e940-e02a-f9ca-3326bf914da7@linux.ibm.com>
- <87fshaz63h.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <698120ce-d4df-3d13-dea9-a8f5c298783c@linux.ibm.com>
- <87bkryz4nh.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <2b4ddc45-74ae-27df-d973-6724f61f4e18@linux.ibm.com>
- <877d2mz3c1.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <45488760-02b5-115b-c16d-5219303f2f33@linux.ibm.com>
- <CAAPL-u_UoAQ9koo892sG-Tx4bi4xDRe9PUtjmFSsn90uU-n31g@mail.gmail.com>
- <871qsuyzr2.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <672e528d-40b7-fc12-9b0c-1591d586c079@linux.ibm.com>
- <87wnamxi30.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <87wnamxi30.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZfX0-LowShHPJLjikCQJmx_d2Dkg0j6M
-X-Proofpoint-ORIG-GUID: Tshqiy_QkK55o91ca1MWM24NLLIaypB1
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 2 Sep 2022 05:44:31 -0400
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AC5ACE313;
+        Fri,  2 Sep 2022 02:44:28 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAD3_8d40BFjmVGMAA--.46700S2;
+        Fri, 02 Sep 2022 17:44:24 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] USB: serial: ftdi_sio: Convert to use dev_groups
+Date:   Fri,  2 Sep 2022 17:44:23 +0800
+Message-Id: <20220902094423.4028673-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-02_01,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- suspectscore=0 priorityscore=1501 mlxlogscore=999 clxscore=1015
- spamscore=0 impostorscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209020045
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAD3_8d40BFjmVGMAA--.46700S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3GrWkXw1xXw1rCw15Zr17trb_yoW7Ar1DpF
+        WUXFWSyFWUJF4agrsYkw4DWw15Cw4kKrZxK3yUGw4SkF1xA34IqFyIyas0vr13JFykKFya
+        qrs3tryDCr4xJr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUOo7ZUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/2/22 2:34 PM, Huang, Ying wrote:
-> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
-> 
->> On 9/2/22 1:27 PM, Huang, Ying wrote:
->>> Wei Xu <weixugc@google.com> writes:
->>>
->>>> On Thu, Sep 1, 2022 at 11:44 PM Aneesh Kumar K V
->>>> <aneesh.kumar@linux.ibm.com> wrote:
->>>>>
->>>>> On 9/2/22 12:10 PM, Huang, Ying wrote:
->>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>>>
->>>>>>> On 9/2/22 11:42 AM, Huang, Ying wrote:
->>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>>
->>>>>>>>> On 9/2/22 11:10 AM, Huang, Ying wrote:
->>>>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>>>>
->>>>>>>>>>> On 9/2/22 10:39 AM, Wei Xu wrote:
->>>>>>>>>>>> On Thu, Sep 1, 2022 at 5:33 PM Huang, Ying <ying.huang@intel.com> wrote:
->>>>>>>>>>>>>
->>>>>>>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>>>>>>>
->>>>>>>>>>>>>> On 9/1/22 12:31 PM, Huang, Ying wrote:
->>>>>>>>>>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
->>>>>>>>>>>>>>>> related details can be found. All allocated memory tiers will be listed
->>>>>>>>>>>>>>>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> The nodes which are part of a specific memory tier can be listed via
->>>>>>>>>>>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> I think "memory_tier" is a better subsystem/bus name than
->>>>>>>>>>>>>>> memory_tiering.  Because we have a set of memory_tierN devices inside.
->>>>>>>>>>>>>>> "memory_tier" sounds more natural.  I know this is subjective, just my
->>>>>>>>>>>>>>> preference.
->>>>>>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> I missed replying to this earlier. I will keep memory_tiering as subsystem name in v4
->>>>>>>>>>> because we would want it to a susbsystem where all memory tiering related details can be found
->>>>>>>>>>> including memory type in the future. This is as per discussion
->>>>>>>>>>>
->>>>>>>>>>> https://lore.kernel.org/linux-mm/CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com
->>>>>>>>>>
->>>>>>>>>> I don't think that it's a good idea to mix 2 types of devices in one
->>>>>>>>>> subsystem (bus).  If my understanding were correct, that breaks the
->>>>>>>>>> driver core convention.
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> All these are virtual devices .I am not sure i follow what you mean by 2 types of devices.
->>>>>>>>> memory_tiering is a subsystem that represents all the details w.r.t memory tiering. It shows
->>>>>>>>> details of memory tiers and can possibly contain details of different memory types .
->>>>>>>>
->>>>>>>> IMHO, memory_tier and memory_type are 2 kind of devices.  They have
->>>>>>>> almost totally different attributes (sysfs file).  So, we should create
->>>>>>>> 2 buses for them.  Each has its own attribute group.  "virtual" itself
->>>>>>>> isn't a subsystem.
->>>>>>>
->>>>>>> Considering both the details are related to memory tiering, wouldn't it be much simpler we consolidate
->>>>>>> them within the same subdirectory? I am still not clear why you are suggesting they need to be in different
->>>>>>> sysfs hierarchy.  It doesn't break any driver core convention as you mentioned earlier.
->>>>>>>
->>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN
->>>>>>> /sys/devices/virtual/memory_tiering/memory_typeN
->>>>>>
->>>>>> I think we should add
->>>>>>
->>>>>>  /sys/devices/virtual/memory_tier/memory_tierN
->>>>>>  /sys/devices/virtual/memory_type/memory_typeN
->>>>>>
->>>>>
->>>>> I am trying to find if there is a technical reason to do the same?
->>>>>
->>>>>> I don't think this is complex.  Devices of same bus/subsystem should
->>>>>> have mostly same attributes.  This is my understanding of driver core
->>>>>> convention.
->>>>>>
->>>>>
->>>>> I was not looking at this from code complexity point. Instead of having multiple directories
->>>>> with details w.r.t memory tiering, I was looking at consolidating the details
->>>>> within the directory /sys/devices/virtual/memory_tiering. (similar to all virtual devices
->>>>> are consolidated within /sys/devics/virtual/).
->>>>>
->>>>> -aneesh
->>>>
->>>> Here is an example of /sys/bus/nd/devices (I know it is not under
->>>> /sys/devices/virtual, but it can still serve as a reference):
->>>>
->>>> ls -1 /sys/bus/nd/devices
->>>>
->>>> namespace2.0
->>>> namespace3.0
->>>> ndbus0
->>>> nmem0
->>>> nmem1
->>>> region0
->>>> region1
->>>> region2
->>>> region3
->>>>
->>>> So I think it is not unreasonable if we want to group memory tiering
->>>> related interfaces within a single top directory.
->>>
->>> Thanks for pointing this out.  My original understanding of driver core
->>> isn't correct.
->>>
->>> But I still think it's better to separate instead of mixing memory_tier
->>> and memory_type.  Per my understanding, memory_type shows information
->>> (abstract distance, latency, bandwidth, etc.) of memory types (and
->>> nodes), it can be useful even without memory tiers.  That is, memory
->>> types describes the physical characteristics, while memory tier reflects
->>> the policy.
->>>
->>
->> The latency and bandwidth details are already exposed via 
->>
->> 	/sys/devices/system/node/nodeY/access0/initiators/
->>
->> Documentation/admin-guide/mm/numaperf.rst
->>
->> That is the interface that libraries like libmemkind will look at for finding
->> details w.r.t latency/bandwidth
-> 
-> Yes.  Only with that, it's still inconvenient to find out which nodes
-> belong to same memory type (has same performance, same topology, managed
-> by same driver, etc).  So memory types can still provide useful
-> information even without memory tiering.
-> 
+The driver core supports the ability to handle the creation and removal
+of device-specific sysfs files in a race-free manner. Moreover, it can
+guarantee the success of creation. Therefore, it should be better to
+convert to use dev_groups.
 
-I am not sure i quiet follow what to conclude from your reply. I used the subsystem name
-"memory_tiering" so that all memory tiering related information can be consolidated there.
-I guess you agreed to the above part that we can consolidated things like that. 
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
+v2 -> v3:
 
-We might end up adding memory_type there if we allow changing "abstract distance" of a
-memory type from userspace later. Otherwise, I don't see a reason for memory type to be
-exposed. But then we don't have to decide on this now. 
+1. Add is_visible to filter the unneeded files.
 
+v1 -> v2:
 
--aneesh
+1. Change the title.
+2. Switch to use an attribute group.
+---
+ drivers/usb/serial/ftdi_sio.c | 101 +++++++++++++++++-----------------
+ 1 file changed, 51 insertions(+), 50 deletions(-)
+
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index d5a3986dfee7..479c3a5caaf8 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1107,11 +1107,40 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base);
+ static u32 ftdi_232bm_baud_to_divisor(int baud);
+ static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
+ static u32 ftdi_2232h_baud_to_divisor(int baud);
++static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
++					 struct attribute *attr, int idx);
++static ssize_t latency_timer_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *valbuf, size_t count);
++static ssize_t event_char_store(struct device *dev,
++	struct device_attribute *attr, const char *valbuf, size_t count);
++static ssize_t latency_timer_show(struct device *dev,
++				  struct device_attribute *attr, char *buf);
++
++static DEVICE_ATTR_RW(latency_timer);
++static DEVICE_ATTR_WO(event_char);
++
++static struct attribute *ftdi_sio_attrs[] = {
++	&dev_attr_event_char.attr,
++	&dev_attr_latency_timer.attr,
++	NULL,
++};
++
++static const struct attribute_group ftdi_sio_group = {
++	.attrs = ftdi_sio_attrs,
++	.is_visible = ftdi_sio_attr_is_visible,
++};
++
++static const struct attribute_group *ftdi_sio_groups[] = {
++	&ftdi_sio_group,
++	NULL
++};
+ 
+ static struct usb_serial_driver ftdi_sio_device = {
+ 	.driver = {
+ 		.owner =	THIS_MODULE,
+ 		.name =		"ftdi_sio",
++		.dev_groups =	ftdi_sio_groups,
+ 	},
+ 	.description =		"FTDI USB Serial Device",
+ 	.id_table =		id_table_combined,
+@@ -1696,7 +1725,6 @@ static ssize_t latency_timer_store(struct device *dev,
+ 		return -EIO;
+ 	return count;
+ }
+-static DEVICE_ATTR_RW(latency_timer);
+ 
+ /* Write an event character directly to the FTDI register.  The ASCII
+    value is in the low 8 bits, with the enable bit in the 9th bit. */
+@@ -1727,52 +1755,6 @@ static ssize_t event_char_store(struct device *dev,
+ 
+ 	return count;
+ }
+-static DEVICE_ATTR_WO(event_char);
+-
+-static int create_sysfs_attrs(struct usb_serial_port *port)
+-{
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-	int retval = 0;
+-
+-	/* XXX I've no idea if the original SIO supports the event_char
+-	 * sysfs parameter, so I'm playing it safe.  */
+-	if (priv->chip_type != SIO) {
+-		dev_dbg(&port->dev, "sysfs attributes for %s\n", ftdi_chip_name[priv->chip_type]);
+-		retval = device_create_file(&port->dev, &dev_attr_event_char);
+-		if ((!retval) &&
+-		    (priv->chip_type == FT232BM ||
+-		     priv->chip_type == FT2232C ||
+-		     priv->chip_type == FT232RL ||
+-		     priv->chip_type == FT2232H ||
+-		     priv->chip_type == FT4232H ||
+-		     priv->chip_type == FT232H ||
+-		     priv->chip_type == FTX)) {
+-			retval = device_create_file(&port->dev,
+-						    &dev_attr_latency_timer);
+-		}
+-	}
+-	return retval;
+-}
+-
+-static void remove_sysfs_attrs(struct usb_serial_port *port)
+-{
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-
+-	/* XXX see create_sysfs_attrs */
+-	if (priv->chip_type != SIO) {
+-		device_remove_file(&port->dev, &dev_attr_event_char);
+-		if (priv->chip_type == FT232BM ||
+-		    priv->chip_type == FT2232C ||
+-		    priv->chip_type == FT232RL ||
+-		    priv->chip_type == FT2232H ||
+-		    priv->chip_type == FT4232H ||
+-		    priv->chip_type == FT232H ||
+-		    priv->chip_type == FTX) {
+-			device_remove_file(&port->dev, &dev_attr_latency_timer);
+-		}
+-	}
+-
+-}
+ 
+ #ifdef CONFIG_GPIOLIB
+ 
+@@ -2251,7 +2233,6 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ 	if (read_latency_timer(port) < 0)
+ 		priv->latency = 16;
+ 	write_latency_timer(port);
+-	create_sysfs_attrs(port);
+ 
+ 	result = ftdi_gpio_init(port);
+ 	if (result < 0) {
+@@ -2377,8 +2358,6 @@ static void ftdi_sio_port_remove(struct usb_serial_port *port)
+ 
+ 	ftdi_gpio_remove(port);
+ 
+-	remove_sysfs_attrs(port);
+-
+ 	kfree(priv);
+ }
+ 
+@@ -2915,6 +2894,28 @@ static int ftdi_ioctl(struct tty_struct *tty,
+ 	return -ENOIOCTLCMD;
+ }
+ 
++static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
++					 struct attribute *attr, int idx)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct usb_serial_port *port = container_of(dev, struct usb_serial_port, dev);
++	struct ftdi_private *priv = usb_get_serial_port_data(port);
++	umode_t mode = attr->mode;
++
++	if (attr == &dev_attr_latency_timer.attr) {
++		if (priv->chip_type == FT232BM ||
++		    priv->chip_type == FT2232C ||
++		    priv->chip_type == FT232RL ||
++		    priv->chip_type == FT2232H ||
++		    priv->chip_type == FT4232H ||
++		    priv->chip_type == FT232H ||
++		    priv->chip_type == FTX) {
++			return mode;
++		}
++	}
++	return 0;
++}
++
+ module_usb_serial_driver(serial_drivers, id_table_combined);
+ 
+ MODULE_AUTHOR(DRIVER_AUTHOR);
+-- 
+2.25.1
 

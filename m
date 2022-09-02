@@ -2,114 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5495AAD0B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE0A5AAD12
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235975AbiIBLC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 07:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
+        id S235999AbiIBLEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 07:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235957AbiIBLC0 (ORCPT
+        with ESMTP id S236063AbiIBLEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 07:02:26 -0400
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FAFC58EC;
-        Fri,  2 Sep 2022 04:02:25 -0700 (PDT)
-Received: by mail-qt1-f170.google.com with SMTP id l5so1151434qtv.4;
-        Fri, 02 Sep 2022 04:02:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=dZTws1L2y2xyjbs91n4hGu/TU6dg0KKGjBmfL0/vaak=;
-        b=aofngmOsGOIslWnPv0kCg6/DJjGt52Eh3RGbfiln+J5wyI+7p1HxTFggisKIJRM+zR
-         tlLuy7xlPv08uTqW0NH/PbAe8+1LtA+41b6FA62gknkeEY97jdApDYOvnm8dsVsKAGA/
-         DPU/d/3kEntm4ESAphszrPeyTlG4t2aiN085LJN/fyP2+rrsQH0Prx72o0oGSpITyOd6
-         6V2mwjMilK3c6l8Bvjud0FYnYlyLal/gIcTZZwvzY7qri+5hXeNkGjOz155Ve0jpuOlp
-         jymsTBsPNqwi8F+wrw2ej3d0xDbSDwJy6vWEzjC3Gbddow+FSB1gyuocfZ773BJtR07e
-         wHNQ==
-X-Gm-Message-State: ACgBeo3qGEIMXgXi9h5QnctZB2x5omtfpaOn/I/z3NSbLKtrV/HGUupF
-        NxQqBuGwuWLFJp+BwwPUzXMcBqxjPSzRpg==
-X-Google-Smtp-Source: AA6agR76vP7Mjxh6TP8BWzfMH1ghKzbUlRSbiuv5NFRKVUkG3DHdqfDFIg+pjA43PLVExa16S9+BIQ==
-X-Received: by 2002:a05:622a:512:b0:343:6f1:a026 with SMTP id l18-20020a05622a051200b0034306f1a026mr27548265qtx.323.1662116543504;
-        Fri, 02 Sep 2022 04:02:23 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id l21-20020a37f915000000b006bbe7ded98csm1128981qkj.112.2022.09.02.04.02.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 04:02:22 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-324ec5a9e97so12900707b3.7;
-        Fri, 02 Sep 2022 04:02:22 -0700 (PDT)
-X-Received: by 2002:a0d:e895:0:b0:340:ab79:3285 with SMTP id
- r143-20020a0de895000000b00340ab793285mr26854285ywe.358.1662116542087; Fri, 02
- Sep 2022 04:02:22 -0700 (PDT)
+        Fri, 2 Sep 2022 07:04:11 -0400
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6CDD11F2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 04:04:08 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MJw5d5TyKzMpvhR;
+        Fri,  2 Sep 2022 13:04:05 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MJw5d0KwBzlh8kt;
+        Fri,  2 Sep 2022 13:04:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1662116645;
+        bh=2NupZEbQhzLkAmKzohlpC8jqcOh9uHWcOTqm5iFnBo4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=1xYd1nX4oRzTFfwoTyTfk4ekb+ct01DJz3FFBMRyzLRXc//Dq3/bVvsXMB9QZU0LI
+         vPNR4/RmMqxVVeRaaFMu0vDQ4unFAMKpmEeSdSOBYesRTX9FrYVyqLKFi8kjD6wLkF
+         2Mt1PJyxGQYsBtwxi/XUJfL4tT3r0Xj2/vlN/Qnw=
+Message-ID: <b1cfb8d4-ad54-9cc1-3d9d-e690c81da016@digikod.net>
+Date:   Fri, 2 Sep 2022 13:04:04 +0200
 MIME-Version: 1.0
-References: <cover.1661789204.git.christophe.leroy@csgroup.eu>
- <abb46a587b76d379ad32d53817d837d8a5fea8bd.1661789204.git.christophe.leroy@csgroup.eu>
- <CAHp75VcngRihpfUkeKs-g+TbPnpOsZ+-Q37zDVoWp8p_2GbSvQ@mail.gmail.com>
- <18cda49e-84f0-a806-566a-6e77705e98b3@csgroup.eu> <1d548a19-feec-42b9-944d-890d6dde2fb8@www.fastmail.com>
- <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
-In-Reply-To: <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 2 Sep 2022 13:02:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVVup8J0uge02H4u6o8NzxfkuFuZfExJ5u2M3FBE+RSAQ@mail.gmail.com>
-Message-ID: <CAMuHMdVVup8J0uge02H4u6o8NzxfkuFuZfExJ5u2M3FBE+RSAQ@mail.gmail.com>
-Subject: Re: [PATCH v1 4/8] gpiolib: Get rid of ARCH_NR_GPIOS
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: 
+Subject: Re: [RFC PATCH v1] checkpatch: Handle FILE pointer type
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Jerome Forissier <jerome.forissier@linaro.org>
+References: <20220901145948.1456353-1-mic@digikod.net>
+ <4f958a0c7c0aa2fce613371348477c002aa58e90.camel@perches.com>
+ <b028cf83798fd562f5d1b992d2651d53e21acaa2.camel@perches.com>
+ <b079d162-fa10-8cf0-bfc9-91f72a440e34@digikod.net>
+ <026c08d9ab841ef626f80d968a532dea94a37c62.camel@perches.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <026c08d9ab841ef626f80d968a532dea94a37c62.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
 
-CC linux-sh
+On 02/09/2022 12:39, Joe Perches wrote:
+> On Fri, 2022-09-02 at 11:04 +0200, Mickaël Salaün wrote:
+>> On 01/09/2022 20:22, Joe Perches wrote:
+>>> On Thu, 2022-09-01 at 11:49 -0400, Joe Perches wrote:
+>>>> On Thu, 2022-09-01 at 16:59 +0200, Mickaël Salaün wrote:
+>>>>> When using a "FILE *" type, checkpatch considers this an error.  Fix
+>>>>> this by explicitly defining "FILE" as a common type.
+>>>> []
+>>>>> Another error may be throw when we use FIXTURE_{DATA,VARIANT}() structs,
+>>>>> as defined in kselftest_harness.h .
+>>>> []
+>>>>> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+>>>> []
+>>>>> @@ -576,10 +576,17 @@ our $typeKernelTypedefs = qr{(?x:
+>>>>>    	(?:__)?(?:u|s|be|le)(?:8|16|32|64)|
+>>>>>    	atomic_t
+>>>>>    )};
+>>>>> +our $typeStdioTypedefs = qr{(?x:
+>>>>> +	FILE
+>>>>> +)};
+>>>>
+>>>> I'm fine with this.
+>>>>
+>>>>> +# our $typeKselftestHarnessTypedefs = qr{(?x:
+>>>>> +# 	FIXTURE_(?:DATA|VARIANT)\($Ident\)
+>>>>> +# )};
+>>>>
+>>>> But not this.  Random userspace typedefs should likely
+>>>> be kept in some local version of checkpatch.
+>>>>
+>>>> Or maybe add a command line option like --additional_typedefs=<file>.
+>>>
+>>> Oops.  I forgot it already exists:
+>>>
+>>>     --typedefsfile             Read additional types from this file
+>>>
+>>> commit 75ad8c575a5ad105e2afc2051c68abceb9c65431
+>>> Author: Jerome Forissier <jerome.forissier@linaro.org>
+>>> Date:   Mon May 8 15:56:00 2017 -0700
+>>>
+>>>       checkpatch: add --typedefsfile
+>>>       
+>>>       When using checkpatch on out-of-tree code, it may occur that some
+>>>       project-specific types are used, which will cause spurious warnings.
+>>>       Add the --typedefsfile option as a way to extend the known types and
+>>>       deal with this issue.
+>>
+>> This doesn't work for the FIXTURE_DATA() case.
+> 
+> checkpatch is a stupid little script.
+> It's not a c preprocessor nor a syntax complete compiler.
+> It's really easy for macros to make its output invalid.
+> If you feed obfuscated c to checkpatch, it'd be confused.
+> (Same is true for tools like coccinelle btw, though cocci is far better)
+> checkpatch will never be comprehensive nor perfect.
+> It's expected its users will use their common sense about its
+> output message validity.
+> 
+>> And I'm not sure how
+>> contributors would know that they need to use this option with a
+>> specific file.
+> 
+> --help exists
+> 
+> Maybe Documentation/dev-tools/checkpatch.rst could be expanded for
+> --verbose mode.
 
-On Fri, Sep 2, 2022 at 12:53 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Wed, Aug 31, 2022 at 11:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > drivers/pinctrl/renesas/gpio.c: gc->base = pfc->nr_gpio_pins; // ??? don't understand
->
-> I think, w/o looking into the code, that this just guarantees the
-> continuous numbering for all banks (chips) on the platform.
-
-This part of the code depends on CONFIG_PINCTRL_SH_FUNC_GPIO,
-which is used only on SH.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I was thinking about which file to use, but I understand your point. 
+I'll send a v2 with only the "FILE" addition.
+FIXTURE_{DATA,VARIANT}() will just not be handled but that's OK.

@@ -2,176 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE6A5AA48C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63465AA490
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234280AbiIBAmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 20:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S234221AbiIBAoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 20:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbiIBAmF (ORCPT
+        with ESMTP id S232898AbiIBAoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 20:42:05 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57487A1A75
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 17:42:04 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-33dc31f25f9so2983157b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 17:42:04 -0700 (PDT)
+        Thu, 1 Sep 2022 20:44:22 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2923A1D1A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 17:44:19 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id t5so741516edc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 17:44:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=IMQ+BZIR6+h0WYe8X2EFFlmyoPK1mtPErfGaqmTntwQ=;
+        b=F0+vYb25Gviz6CRRQK7SorbY/ckL8SrufqNyoh61zl77MW0dtPZOvV6ihZ4IiUHwXp
+         lwqPvyJRh2BwWNBPXxi/uN26X4GJfCELYZT+37Qav6trKj+XD4z+m/97EU1zDXqPTdUb
+         uxEfoe+gtUc0gXW3gaGFCcZFu2tHbgCPt8AHc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8fC2rZWTgCYBntka/As3bCqt2A+cDoDbQGtV1oAG1Rc=;
-        b=ER6EgofVxaIkfGpF5IPTjAU3nGc5gnsGWCFnIl+9d7a6tw4JZiLCjN5l5frKYONGtF
-         2EHhBBk2iqkd7WJp0I4dN8LvUuL5eJ4P7oAV/x6+pE7CYI3SXLV6j7Ubinlqr1RYmKEq
-         YyLIleN6U3nzXnAODOf9j1KlrUiHAO6vXNdN7yi/3JYhKHptUKJUrv2oqevEZtYG/G4z
-         SuQRmYJ2lFikgajR6mzaACT5jOt3mOWBtobiIdscyqjePs4bPzlV8uZk8kvSm++I6axa
-         BtoNdjEaED/OMi9cmRSApgjmOjFpJ7O10h1vta8lj74D/xXWJOhlV9L9+Ja00yVJsM+8
-         DpHA==
-X-Gm-Message-State: ACgBeo00poazeqR5J8b7elAJjs3F9C3r+FM7z+xkaDl4KRuArI8Ldm/x
-        U52XrpzOo4HUG2JctP2UBDXK/HV4tMQweV6NL7c=
-X-Google-Smtp-Source: AA6agR4qmd4h+RQhX/5BiuXjh/WdzAhWTCrnHQLr66XukbfP+zqT2pWK5eS96aPP7+tD4XVdijaxbYnRq1d49FV1B34=
-X-Received: by 2002:a81:4ccf:0:b0:32f:cccf:cef7 with SMTP id
- z198-20020a814ccf000000b0032fcccfcef7mr25416327ywa.191.1662079323488; Thu, 01
- Sep 2022 17:42:03 -0700 (PDT)
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=IMQ+BZIR6+h0WYe8X2EFFlmyoPK1mtPErfGaqmTntwQ=;
+        b=FHwtaQxvRQ8cOdGMifl6gQMeWgT5wsXyPBov2TcEEbDrwtmFyC9xPBJG5TZxeNKo2T
+         oqzAAb+NrQLIKc8gfDHKzniSjtXfiIrrCOzI7kwz+iggxHLctUzRIUgFzRph6+BNRfID
+         HMtV6VeJOgAwn3iPPcXhXnjQctEgs3BbiCpII4o2kXknCEmWLtkJWzmHSpJ5b1DXTD1b
+         StHpRPlxYk7eSOipytTGx1ffShwjqRexNLY/la61HlUtYa6wXZb3MiSmj7vgbibG+8SK
+         OzEeWoqOQzZ1hcN6sZjytd0JWSt4MJyNheJEYBp0Iwg3EifR0zr+FN0CaDlobNX67GIa
+         o0bQ==
+X-Gm-Message-State: ACgBeo3ZjWpqNgZmeroR0EpvbHqmk4nGYZxpRPB5LN9vlJT2ykhggr9N
+        90v3TitDCNxL929jrr2b44mFtadtadjFLV3s
+X-Google-Smtp-Source: AA6agR77kxC/sIG/YFsBFw7cC7QvOVygLCzsv4ULBVCfkWBhOndlv0R6CAfEFRw6Syb2YFkVjjhb7w==
+X-Received: by 2002:a05:6402:5002:b0:444:26fd:d341 with SMTP id p2-20020a056402500200b0044426fdd341mr31437255eda.351.1662079458101;
+        Thu, 01 Sep 2022 17:44:18 -0700 (PDT)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id lx12-20020a170906af0c00b0073dc6def190sm381278ejb.158.2022.09.01.17.44.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 17:44:17 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id m16so396722wru.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 17:44:15 -0700 (PDT)
+X-Received: by 2002:a05:6000:15c6:b0:226:f246:6e70 with SMTP id
+ y6-20020a05600015c600b00226f2466e70mr4192694wry.617.1662079455437; Thu, 01
+ Sep 2022 17:44:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220831075742.295-1-mailhol.vincent@wanadoo.fr> <Yw8hJS9f6SofG4/6@yury-laptop>
- <YxArx4UGoSQXljQd@yury-laptop> <CAMZ6Rq+XVWGEEHr9t5dkXN0E36hkpMb5kNEZJmMFgtJxyQntsg@mail.gmail.com>
- <YxC+eShQLDor0B9D@yury-laptop>
-In-Reply-To: <YxC+eShQLDor0B9D@yury-laptop>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 2 Sep 2022 09:41:52 +0900
-Message-ID: <CAMZ6RqJs0Ujg3hTSURbtueynhAh_-pqwyzemytLeq1i0Kq2ufg@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] x86/asm/bitops: optimize ff{s,z} functions for
- constant expressions
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
+References: <20220829164952.2672848-1-dianders@chromium.org>
+ <Yw8EE/ESDUnIRf8P@hovoldconsulting.com> <CAD=FV=VJz2hjvsUhsjBPt9nmm3X62oTdAqMeSFABYJietPPzWw@mail.gmail.com>
+ <YxDVNW+EQbHRw16s@hovoldconsulting.com>
+In-Reply-To: <YxDVNW+EQbHRw16s@hovoldconsulting.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 1 Sep 2022 17:44:03 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VaDNLLjtKswWvhD0JmLpOoVHR05yU8kZESH3yQ0xescA@mail.gmail.com>
+Message-ID: <CAD=FV=VaDNLLjtKswWvhD0JmLpOoVHR05yU8kZESH3yQ0xescA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] arm64: dts: qcom: Fix broken regulator spec on
+ RPMH boards
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 1 Sep. 2022 at 23:19, Yury Norov <yury.norov@gmail.com> wrote:
-> On Thu, Sep 01, 2022 at 07:30:10PM +0900, Vincent MAILHOL wrote:
-> > On Tue. 1 sept. 2022 at 12:49, Yury Norov <yury.norov@gmail.com> wrote:
-> > > On Wed, Aug 31, 2022 at 01:54:01AM -0700, Yury Norov wrote:
-> > > > On Wed, Aug 31, 2022 at 04:57:40PM +0900, Vincent Mailhol wrote:
-> > > > > The compilers provide some builtin expression equivalent to the ffs(),
-> > > > > __ffs() and ffz() functions of the kernel. The kernel uses optimized
-> > > > > assembly which produces better code than the builtin
-> > > > > functions. However, such assembly code can not be folded when used
-> > > > > with constant expressions.
-> > > > >
-> > > > > This series relies on __builtin_constant_p to select the optimal solution:
-> > > > >
-> > > > >   * use kernel assembly for non constant expressions
-> > > > >
-> > > > >   * use compiler's __builtin function for constant expressions.
-> > > > >
-> > > > >
-> > > > > ** Statistics **
-> > > > >
-> > > > > Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
-> > > > > of __ffs() and ffz() calls (details of the calculation in each patch).
-> > > >
-> > > > Hi Vincent,
-> > > >
-> > > > Can you please add a test for this? We've recently added a very similar
-> > > > test_bitmap_const_eval() in lib/test_bitmap.c.
-> > > >
-> > > > dc34d5036692c ("lib: test_bitmap: add compile-time optimization/evaluations
-> > > > assertions")
-> > > >
-> > > > Would be nice to have something like this for ffs() and ffz() in
-> > > > lib/test_bitops.c.
-> > > >
-> > > > Please keep me in loop in case of new versions.
+Hi,
+
+On Thu, Sep 1, 2022 at 8:52 AM Johan Hovold <johan@kernel.org> wrote:
+>
+> On Wed, Aug 31, 2022 at 07:52:52AM -0700, Doug Anderson wrote:
+> > Hi,
 > >
-> > Hi Yury,
+> > On Tue, Aug 30, 2022 at 11:47 PM Johan Hovold <johan@kernel.org> wrote:
+> > >
+> > > On Mon, Aug 29, 2022 at 09:49:46AM -0700, Douglas Anderson wrote:
+> > > > Prior to commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
+> > > > get_optimum_mode(), not set_load()") several boards were able to
+> > > > change their regulator mode even though they had nothing listed in
+> > > > "regulator-allowed-modes". After that commit (and fixes [1]) we'll be
+> > > > stuck at the initial mode. Discussion of this (again, see [1]) has
+> > > > resulted in the decision that the old dts files were wrong and should
+> > > > be fixed to fully restore old functionality.
+> > > >
+> > > > This series attempts to fix everyone. I've kept each board in a
+> > > > separate patch to make stable / backports work easier.
+> > >
+> > > Should you also update the bindings so that this can be caught during
+> > > devicetree validation? That is, to always require
+> > > "regulator-allowed-modes" when "regulator-allow-set-load" is specified.
 > >
-> > My patch only takes care of the x86 architecture.
+> > Yeah, it's probably a good idea. I'm happy to review a patch that does
+> > that. I'm already quite a few patches deep of submitting random
+> > cleanups because someone mentioned it in a code review. ;-) That's
+> > actually how I got in this mess to begin with. The RPMH change was in
+> > response to a request in a different code review. ...and that came
+> > about in a code review that was posted in response to a comment about
+> > how awkward setting regulator loads was... Need to get back to my day
+> > job.
 >
-> OK, I just realized that you started submitting this at least back in May.
+> Heh.
 >
-> For me, v6 is good enough and well-described. So, for the series:
-> Reviewed-by: Yury Norov <yury.norov@gmail.com>
-
-Thanks for the review!
-
-> How are you going to merge it? If you haven't a specific tree in mind
-> already, I can take it in my bitmap tree because  ffs and ffz are closely
-> related to find_bit() functions.
-
-I never thought of a specific tree. I just CCed the x86 architecture
-maintainers according to get_maintainer.pl and was expecting it to go
-through the x86/asm branch of the tip tree. But I am perfectly fine if
-it goes through your tree.
-
-So same as Nick's comment below, unless Borislav still has concern on
-the v6, please take it in your tree.
-
-> > Assuming some other
-> > architectures are not optimized yet, adding such a test might break
-> > some builds. I am fine with adding the test, however, I will not write
-> > patches for the other architecture because I do not have the
-> > environment to compile and test it.
-> >
-> > Does it still make sense to add the test before fixing all the architectures?
+> > In any case, I think these dts patches are ready to land now.
 >
-> All-arches fix should begin with changing the ffs design. Namely, there
-> should be a generic ffs() in include/linux/bitops.h,
+> Yeah, as the old dtbs are now broken with newer kernels these are indeed
+> needed.
 
-Currently, the generic ffl, ffs, flz are under:
-/include/asm-generic/bitops
+With the latest patches in the regulator tree things shouldn't be
+_too_ broken even without the dts files. Essentially things will get
+stuck at their initial mode (HPM). So without these patches things
+should all still boot but could possibly end up at a higher power
+state.
 
-especially, here is the generic ffs():
-https://elixir.bootlin.com/linux/latest/source/include/asm-generic/bitops/ffs.h
-
-Isn't this sufficient?
-
-> and arch-specific
-> arch__ffs() in arch/xxx/include/asm/bitops.h; like we do for the set_bit()
-> family. I have a feeling that it's far beyond the scope of your series.
->
-> The test is a different story. Good tests are always welcome, even if
-> they don't cover all the arches.
-
-ACK. I will add the test in a different patch *after* this series gets
-accepted. But to be clear, I will not fix other architectures.
-
-> > > Also, what about fls? Is there any difference with ffs/ffz wrt compile
-> > > time optimizations? If not, would be great if the series will take
-> > > care of it too.
-> >
-> > Agree. The fls() and fls64() can use __builtin_ctz() and
-> > __builtin_ctzll(). However, those two functions are a bit less
-> > trivial. I wanted to have this first series approved first before
-> > working on *fls*().
->
-> OK, the test and fls() can be a matter of a follow-up series, taking
-> into account how long are these 2 patches moving.
-
-ACK.
-
-> Thanks,
-> Yury
+-Doug

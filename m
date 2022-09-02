@@ -2,150 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904495AACF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416A35AACFF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 13:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233262AbiIBLAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 07:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S235490AbiIBLAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 07:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbiIBLAQ (ORCPT
+        with ESMTP id S235137AbiIBLAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 07:00:16 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AA83B954
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 04:00:11 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 282AxQN9047151
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Fri, 2 Sep 2022 18:59:26 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 2 Sep 2022 18:59:26 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>
-Subject: [Resend RFC PATCH] mm: introduce __GFP_TRACKLEAK to track in-kernel allocation
-Date:   Fri, 2 Sep 2022 18:59:07 +0800
-Message-ID: <1662116347-17649-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Fri, 2 Sep 2022 07:00:32 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E75C3FA1E;
+        Fri,  2 Sep 2022 04:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1662116430; x=1693652430;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+NMpbPFe8fp8R+B93WiLknkoUnpXkg4bwQ8Cau7P/jw=;
+  b=eUT3bNHxAbf3EzctDr+zA5d6Z4YI73334F2O5qejKqg7rKmlHlG1RqcR
+   Q7GFw2Us3C1uySQyH5MoWE3btt8BYlBBPQ9NB4nuF+idKgMVWkFnSXkrT
+   xeLkzvatBQ/O4HUf+wn1ImNmXyf3yQctZZcInR/xi3Ng+3fwRG0jllDBI
+   E=;
+X-IronPort-AV: E=Sophos;i="5.93,283,1654560000"; 
+   d="scan'208";a="222899704"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 11:00:13 +0000
+Received: from EX13D05EUB003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com (Postfix) with ESMTPS id 30D8345037;
+        Fri,  2 Sep 2022 11:00:12 +0000 (UTC)
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D05EUB003.ant.amazon.com (10.43.166.253) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Fri, 2 Sep 2022 11:00:10 +0000
+Received: from dev-dsk-mheyne-1b-c1362c4d.eu-west-1.amazon.com (10.15.57.183)
+ by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP Server id
+ 15.0.1497.38 via Frontend Transport; Fri, 2 Sep 2022 11:00:09 +0000
+Received: by dev-dsk-mheyne-1b-c1362c4d.eu-west-1.amazon.com (Postfix, from userid 5466572)
+        id D42F2275A; Fri,  2 Sep 2022 11:00:07 +0000 (UTC)
+Date:   Fri, 2 Sep 2022 11:00:07 +0000
+From:   Maximilian Heyne <mheyne@amazon.de>
+To:     SeongJae Park <sj@kernel.org>
+CC:     <jgross@suse.com>, <roger.pau@citrix.com>,
+        <marmarek@invisiblethingslab.com>,
+        <xen-devel@lists.xenproject.org>, <axboe@kernel.dk>,
+        <ptyadav@amazon.de>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] xen-blk{front, back}: Fix the broken semantic and
+ flow of feature-persistent
+Message-ID: <20220902110007.GA100460@dev-dsk-mheyne-1b-c1362c4d.eu-west-1.amazon.com>
+References: <20220831165824.94815-1-sj@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 282AxQN9047151
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220831165824.94815-1-sj@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Wed, Aug 31, 2022 at 04:58:21PM +0000, SeongJae Park wrote:
+> Changes from v1
+> (https://lore.kernel.org/xen-devel/20220825161511.94922-1-sj@kernel.org/)
+> - Fix the wrong feature_persistent caching position of blkfront
+> - Set blkfront's feature_persistent field setting with simple '&&'
+>   instead of 'if' (Pratyush Yadav)
+> 
+> This patchset fixes misuse of the 'feature-persistent' advertisement
+> semantic (patches 1 and 2), and the wrong timing of the
+> 'feature_persistent' value caching, which made persistent grants feature
+> always disabled.
+> 
+> SeongJae Park (3):
+>   xen-blkback: Advertise feature-persistent as user requested
+>   xen-blkfront: Advertise feature-persistent as user requested
+>   xen-blkfront: Cache feature_persistent value before advertisement
+> 
+>  drivers/block/xen-blkback/common.h |  3 +++
+>  drivers/block/xen-blkback/xenbus.c |  6 ++++--
+>  drivers/block/xen-blkfront.c       | 20 ++++++++++++--------
+>  3 files changed, 19 insertions(+), 10 deletions(-)
+> 
+> --
+> 2.25.1
+> 
 
-Kthread and drivers could fetch memory via alloc_pages directly which make them
-hard to debug when leaking. Solve this by introducing __GFP_TRACELEAK and reuse
-kmemleak mechanism which unified most of kernel cosuming pages into kmemleak.
+I've tested this patch series in the following ways:
+* Only applied the blkback patch but not the blkfront patches
+* Only applied the blkfront patches but not the blkback patch
+* Applied both
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- include/linux/gfp.h        | 4 +++-
- include/linux/page-flags.h | 3 +++
- mm/kmemleak.c              | 2 +-
- mm/page_alloc.c            | 6 ++++++
- 4 files changed, 13 insertions(+), 2 deletions(-)
+All scenarios worked, so
 
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index 2d2ccae..081ab54 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -68,6 +68,7 @@
- #else
- #define ___GFP_NOLOCKDEP	0
- #endif
-+#define ___GFP_TRACKLEAK	0x10000000u
- /* If the above are modified, __GFP_BITS_SHIFT may need updating */
- 
- /*
-@@ -259,12 +260,13 @@
- #define __GFP_SKIP_ZERO ((__force gfp_t)___GFP_SKIP_ZERO)
- #define __GFP_SKIP_KASAN_UNPOISON ((__force gfp_t)___GFP_SKIP_KASAN_UNPOISON)
- #define __GFP_SKIP_KASAN_POISON   ((__force gfp_t)___GFP_SKIP_KASAN_POISON)
-+#define __GFP_TRACKLEAK   ((__force gfp_t)___GFP_TRACKLEAK)
- 
- /* Disable lockdep for GFP context tracking */
- #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
- 
- /* Room for N __GFP_FOO bits */
--#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
-+#define __GFP_BITS_SHIFT (28 + IS_ENABLED(CONFIG_LOCKDEP))
- #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
- 
- /**
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index e66f7aa..ef0f814 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -942,6 +942,7 @@ static inline bool is_page_hwpoison(struct page *page)
- #define PG_offline	0x00000100
- #define PG_table	0x00000200
- #define PG_guard	0x00000400
-+#define PG_trackleak	0x00000800
- 
- #define PageType(page, flag)						\
- 	((page->page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
-@@ -1012,6 +1013,8 @@ static inline int page_has_type(struct page *page)
-  */
- PAGE_TYPE_OPS(Guard, guard)
- 
-+PAGE_TYPE_OPS(Trackleak, trackleak)
-+
- extern bool is_free_buddy_page(struct page *page);
- 
- PAGEFLAG(Isolated, isolated, PF_ANY);
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 422f28f..a182f5d 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1471,7 +1471,7 @@ static void kmemleak_scan(void)
- 			if (page_zone(page) != zone)
- 				continue;
- 			/* only scan if page is in use */
--			if (page_count(page) == 0 || PageReserved(page))
-+			if (page_count(page) == 0)
- 				continue;
- 			scan_block(page, page + 1, NULL);
- 			if (!(pfn & 63))
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e008a3d..d8995c6 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1361,6 +1361,8 @@ static __always_inline bool free_pages_prepare(struct page *page,
- 		page->mapping = NULL;
- 	if (memcg_kmem_enabled() && PageMemcgKmem(page))
- 		__memcg_kmem_uncharge_page(page, order);
-+	if (PageTrackleak(page))
-+		kmemleak_free(page);
- 	if (check_free)
- 		bad += check_free_page(page);
- 	if (bad)
-@@ -5444,6 +5446,10 @@ struct page *__alloc_pages(gfp_t gfp, unsigned int order, int preferred_nid,
- 		__free_pages(page, order);
- 		page = NULL;
- 	}
-+	if (gfp & __GFP_TRACKLEAK) {
-+		kmemleak_alloc(page_address(page), PAGE_SIZE << order, 1, gfp & ~__GFP_TRACKLEAK);
-+		__SetPageTrackleak(page);
-+	}
- 
- 	trace_mm_page_alloc(page, order, alloc_gfp, ac.migratetype);
- 
--- 
-1.9.1
+Tested-by: Maximilian Heyne <mheyne@amazon.de>
+
+Actually I also wanted to test changing feature_persistent and try reconnecting
+but I don't know how this is done. If anyone has a pointer here, I could test
+that as well.
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
 

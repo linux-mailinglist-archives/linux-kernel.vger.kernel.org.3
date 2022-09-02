@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B1B5AAEF7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8276A5AB11E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236600AbiIBMcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        id S238593AbiIBNEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236655AbiIBMbP (ORCPT
+        with ESMTP id S238667AbiIBNDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:31:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41D8E0FFE;
-        Fri,  2 Sep 2022 05:26:39 -0700 (PDT)
+        Fri, 2 Sep 2022 09:03:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0A1E68F3;
+        Fri,  2 Sep 2022 05:41:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4661B82AB5;
-        Fri,  2 Sep 2022 12:26:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C23C433C1;
-        Fri,  2 Sep 2022 12:25:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7BF0621B2;
+        Fri,  2 Sep 2022 12:32:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2678C433D7;
+        Fri,  2 Sep 2022 12:32:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121560;
-        bh=ggkzR7fXpZd66zV4XncdCKBI8YV+okgrGR8z07c89yk=;
+        s=korg; t=1662121965;
+        bh=/67D0l64kojxp9yNGoxfMK9Sz6bEFeIamMgjd0pcGog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kViYBqXRSjsb06YPXM5nFaEPBzW+TladWtty8qi1PtPIoaSExMnYvdaYfciC9zS5w
-         WXx4bpIHFK8h/fOvlEGPvwhvfKN22VT0jn6jQqnhVkgG+PFde1mwcbHifB9IaXccxg
-         w1C1T5alpOTw3kMOKH6UxlfqarydY0JqOAfzO17Y=
+        b=dIF/67Mks7DdYdXhH+umdZqvHzmq5abPh8mT3wkSg9lv+EObblEUPccYa0M0lsg+0
+         IPBSl3TbEgXVNRR+ou2nIVZjvKYGHg4sb4HY2rQ68LGi0i1RKYWEzdD7KocDdVLjrc
+         2M2naNex2ou7cjd4Fz+5UY5LurBHYslY9m+Yk2dI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com,
-        Karthik Alapati <mail@karthek.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 4.19 47/56] HID: hidraw: fix memory leak in hidraw_release()
-Date:   Fri,  2 Sep 2022 14:19:07 +0200
-Message-Id: <20220902121402.039710520@linuxfoundation.org>
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 44/73] mmc: sdhci-of-dwcmshc: rename rk3568 to rk35xx
+Date:   Fri,  2 Sep 2022 14:19:08 +0200
+Message-Id: <20220902121405.902840073@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,68 +56,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karthik Alapati <mail@karthek.com>
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-commit a5623a203cffe2d2b84d2f6c989d9017db1856af upstream.
+[ Upstream commit 86e1a8e1f9b555af342c53ae06284eeeab9a4263 ]
 
-Free the buffered reports before deleting the list entry.
+Prepare driver for rk3588 support by renaming the internal data
+structures.
 
-BUG: memory leak
-unreferenced object 0xffff88810e72f180 (size 32):
-  comm "softirq", pid 0, jiffies 4294945143 (age 16.080s)
-  hex dump (first 32 bytes):
-    64 f3 c6 6a d1 88 07 04 00 00 00 00 00 00 00 00  d..j............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814ac6c3>] kmemdup+0x23/0x50 mm/util.c:128
-    [<ffffffff8357c1d2>] kmemdup include/linux/fortify-string.h:440 [inline]
-    [<ffffffff8357c1d2>] hidraw_report_event+0xa2/0x150 drivers/hid/hidraw.c:521
-    [<ffffffff8356ddad>] hid_report_raw_event+0x27d/0x740 drivers/hid/hid-core.c:1992
-    [<ffffffff8356e41e>] hid_input_report+0x1ae/0x270 drivers/hid/hid-core.c:2065
-    [<ffffffff835f0d3f>] hid_irq_in+0x1ff/0x250 drivers/hid/usbhid/hid-core.c:284
-    [<ffffffff82d3c7f9>] __usb_hcd_giveback_urb+0xf9/0x230 drivers/usb/core/hcd.c:1670
-    [<ffffffff82d3cc26>] usb_hcd_giveback_urb+0x1b6/0x1d0 drivers/usb/core/hcd.c:1747
-    [<ffffffff82ef1e14>] dummy_timer+0x8e4/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
-    [<ffffffff812f50a8>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1474
-    [<ffffffff812f5586>] expire_timers kernel/time/timer.c:1519 [inline]
-    [<ffffffff812f5586>] __run_timers.part.0+0x316/0x430 kernel/time/timer.c:1790
-    [<ffffffff812f56e4>] __run_timers kernel/time/timer.c:1768 [inline]
-    [<ffffffff812f56e4>] run_timer_softirq+0x44/0x90 kernel/time/timer.c:1803
-    [<ffffffff848000e6>] __do_softirq+0xe6/0x2ea kernel/softirq.c:571
-    [<ffffffff81246db0>] invoke_softirq kernel/softirq.c:445 [inline]
-    [<ffffffff81246db0>] __irq_exit_rcu kernel/softirq.c:650 [inline]
-    [<ffffffff81246db0>] irq_exit_rcu+0xc0/0x110 kernel/softirq.c:662
-    [<ffffffff84574f02>] sysvec_apic_timer_interrupt+0xa2/0xd0 arch/x86/kernel/apic/apic.c:1106
-    [<ffffffff84600c8b>] asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
-    [<ffffffff8458a070>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
-    [<ffffffff8458a070>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
-    [<ffffffff8458a070>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
-    [<ffffffff8458a070>] acpi_idle_do_entry+0xc0/0xd0 drivers/acpi/processor_idle.c:554
-
-Link: https://syzkaller.appspot.com/bug?id=19a04b43c75ed1092021010419b5e560a8172c4f
-Reported-by: syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com
-Signed-off-by: Karthik Alapati <mail@karthek.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Link: https://lore.kernel.org/r/20220504213251.264819-11-sebastian.reichel@collabora.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hidraw.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/mmc/host/sdhci-of-dwcmshc.c | 46 ++++++++++++++---------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
---- a/drivers/hid/hidraw.c
-+++ b/drivers/hid/hidraw.c
-@@ -354,10 +354,13 @@ static int hidraw_release(struct inode *
- 	unsigned int minor = iminor(inode);
- 	struct hidraw_list *list = file->private_data;
- 	unsigned long flags;
-+	int i;
+diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+index 3a1b5ba364051..f5fd88c7adef1 100644
+--- a/drivers/mmc/host/sdhci-of-dwcmshc.c
++++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+@@ -56,14 +56,14 @@
+ #define DLL_LOCK_WO_TMOUT(x) \
+ 	((((x) & DWCMSHC_EMMC_DLL_LOCKED) == DWCMSHC_EMMC_DLL_LOCKED) && \
+ 	(((x) & DWCMSHC_EMMC_DLL_TIMEOUT) == 0))
+-#define RK3568_MAX_CLKS 3
++#define RK35xx_MAX_CLKS 3
  
- 	mutex_lock(&minors_lock);
+ #define BOUNDARY_OK(addr, len) \
+ 	((addr | (SZ_128M - 1)) == ((addr + len - 1) | (SZ_128M - 1)))
  
- 	spin_lock_irqsave(&hidraw_table[minor]->list_lock, flags);
-+	for (i = list->tail; i < list->head; i++)
-+		kfree(list->buffer[i].value);
- 	list_del(&list->node);
- 	spin_unlock_irqrestore(&hidraw_table[minor]->list_lock, flags);
- 	kfree(list);
+-struct rk3568_priv {
++struct rk35xx_priv {
+ 	/* Rockchip specified optional clocks */
+-	struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
++	struct clk_bulk_data rockchip_clks[RK35xx_MAX_CLKS];
+ 	struct reset_control *reset;
+ 	u8 txclk_tapnum;
+ };
+@@ -178,7 +178,7 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
+ {
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
+-	struct rk3568_priv *priv = dwc_priv->priv;
++	struct rk35xx_priv *priv = dwc_priv->priv;
+ 	u8 txclk_tapnum = DLL_TXCLK_TAPNUM_DEFAULT;
+ 	u32 extra, reg;
+ 	int err;
+@@ -281,7 +281,7 @@ static const struct sdhci_ops sdhci_dwcmshc_ops = {
+ 	.adma_write_desc	= dwcmshc_adma_write_desc,
+ };
+ 
+-static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
++static const struct sdhci_ops sdhci_dwcmshc_rk35xx_ops = {
+ 	.set_clock		= dwcmshc_rk3568_set_clock,
+ 	.set_bus_width		= sdhci_set_bus_width,
+ 	.set_uhs_signaling	= dwcmshc_set_uhs_signaling,
+@@ -296,18 +296,18 @@ static const struct sdhci_pltfm_data sdhci_dwcmshc_pdata = {
+ 	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
+ };
+ 
+-static const struct sdhci_pltfm_data sdhci_dwcmshc_rk3568_pdata = {
+-	.ops = &sdhci_dwcmshc_rk3568_ops,
++static const struct sdhci_pltfm_data sdhci_dwcmshc_rk35xx_pdata = {
++	.ops = &sdhci_dwcmshc_rk35xx_ops,
+ 	.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN |
+ 		  SDHCI_QUIRK_BROKEN_TIMEOUT_VAL,
+ 	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
+ 		   SDHCI_QUIRK2_CLOCK_DIV_ZERO_BROKEN,
+ };
+ 
+-static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc_priv)
++static int dwcmshc_rk35xx_init(struct sdhci_host *host, struct dwcmshc_priv *dwc_priv)
+ {
+ 	int err;
+-	struct rk3568_priv *priv = dwc_priv->priv;
++	struct rk35xx_priv *priv = dwc_priv->priv;
+ 
+ 	priv->reset = devm_reset_control_array_get_optional_exclusive(mmc_dev(host->mmc));
+ 	if (IS_ERR(priv->reset)) {
+@@ -319,14 +319,14 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
+ 	priv->rockchip_clks[0].id = "axi";
+ 	priv->rockchip_clks[1].id = "block";
+ 	priv->rockchip_clks[2].id = "timer";
+-	err = devm_clk_bulk_get_optional(mmc_dev(host->mmc), RK3568_MAX_CLKS,
++	err = devm_clk_bulk_get_optional(mmc_dev(host->mmc), RK35xx_MAX_CLKS,
+ 					 priv->rockchip_clks);
+ 	if (err) {
+ 		dev_err(mmc_dev(host->mmc), "failed to get clocks %d\n", err);
+ 		return err;
+ 	}
+ 
+-	err = clk_bulk_prepare_enable(RK3568_MAX_CLKS, priv->rockchip_clks);
++	err = clk_bulk_prepare_enable(RK35xx_MAX_CLKS, priv->rockchip_clks);
+ 	if (err) {
+ 		dev_err(mmc_dev(host->mmc), "failed to enable clocks %d\n", err);
+ 		return err;
+@@ -348,7 +348,7 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
+ static const struct of_device_id sdhci_dwcmshc_dt_ids[] = {
+ 	{
+ 		.compatible = "rockchip,rk3568-dwcmshc",
+-		.data = &sdhci_dwcmshc_rk3568_pdata,
++		.data = &sdhci_dwcmshc_rk35xx_pdata,
+ 	},
+ 	{
+ 		.compatible = "snps,dwcmshc-sdhci",
+@@ -371,7 +371,7 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 	struct sdhci_pltfm_host *pltfm_host;
+ 	struct sdhci_host *host;
+ 	struct dwcmshc_priv *priv;
+-	struct rk3568_priv *rk_priv = NULL;
++	struct rk35xx_priv *rk_priv = NULL;
+ 	const struct sdhci_pltfm_data *pltfm_data;
+ 	int err;
+ 	u32 extra;
+@@ -426,8 +426,8 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 	host->mmc_host_ops.request = dwcmshc_request;
+ 	host->mmc_host_ops.hs400_enhanced_strobe = dwcmshc_hs400_enhanced_strobe;
+ 
+-	if (pltfm_data == &sdhci_dwcmshc_rk3568_pdata) {
+-		rk_priv = devm_kzalloc(&pdev->dev, sizeof(struct rk3568_priv), GFP_KERNEL);
++	if (pltfm_data == &sdhci_dwcmshc_rk35xx_pdata) {
++		rk_priv = devm_kzalloc(&pdev->dev, sizeof(struct rk35xx_priv), GFP_KERNEL);
+ 		if (!rk_priv) {
+ 			err = -ENOMEM;
+ 			goto err_clk;
+@@ -435,7 +435,7 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 
+ 		priv->priv = rk_priv;
+ 
+-		err = dwcmshc_rk3568_init(host, priv);
++		err = dwcmshc_rk35xx_init(host, priv);
+ 		if (err)
+ 			goto err_clk;
+ 	}
+@@ -452,7 +452,7 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 	clk_disable_unprepare(pltfm_host->clk);
+ 	clk_disable_unprepare(priv->bus_clk);
+ 	if (rk_priv)
+-		clk_bulk_disable_unprepare(RK3568_MAX_CLKS,
++		clk_bulk_disable_unprepare(RK35xx_MAX_CLKS,
+ 					   rk_priv->rockchip_clks);
+ free_pltfm:
+ 	sdhci_pltfm_free(pdev);
+@@ -464,14 +464,14 @@ static int dwcmshc_remove(struct platform_device *pdev)
+ 	struct sdhci_host *host = platform_get_drvdata(pdev);
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct dwcmshc_priv *priv = sdhci_pltfm_priv(pltfm_host);
+-	struct rk3568_priv *rk_priv = priv->priv;
++	struct rk35xx_priv *rk_priv = priv->priv;
+ 
+ 	sdhci_remove_host(host, 0);
+ 
+ 	clk_disable_unprepare(pltfm_host->clk);
+ 	clk_disable_unprepare(priv->bus_clk);
+ 	if (rk_priv)
+-		clk_bulk_disable_unprepare(RK3568_MAX_CLKS,
++		clk_bulk_disable_unprepare(RK35xx_MAX_CLKS,
+ 					   rk_priv->rockchip_clks);
+ 	sdhci_pltfm_free(pdev);
+ 
+@@ -484,7 +484,7 @@ static int dwcmshc_suspend(struct device *dev)
+ 	struct sdhci_host *host = dev_get_drvdata(dev);
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct dwcmshc_priv *priv = sdhci_pltfm_priv(pltfm_host);
+-	struct rk3568_priv *rk_priv = priv->priv;
++	struct rk35xx_priv *rk_priv = priv->priv;
+ 	int ret;
+ 
+ 	ret = sdhci_suspend_host(host);
+@@ -496,7 +496,7 @@ static int dwcmshc_suspend(struct device *dev)
+ 		clk_disable_unprepare(priv->bus_clk);
+ 
+ 	if (rk_priv)
+-		clk_bulk_disable_unprepare(RK3568_MAX_CLKS,
++		clk_bulk_disable_unprepare(RK35xx_MAX_CLKS,
+ 					   rk_priv->rockchip_clks);
+ 
+ 	return ret;
+@@ -507,7 +507,7 @@ static int dwcmshc_resume(struct device *dev)
+ 	struct sdhci_host *host = dev_get_drvdata(dev);
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct dwcmshc_priv *priv = sdhci_pltfm_priv(pltfm_host);
+-	struct rk3568_priv *rk_priv = priv->priv;
++	struct rk35xx_priv *rk_priv = priv->priv;
+ 	int ret;
+ 
+ 	ret = clk_prepare_enable(pltfm_host->clk);
+@@ -521,7 +521,7 @@ static int dwcmshc_resume(struct device *dev)
+ 	}
+ 
+ 	if (rk_priv) {
+-		ret = clk_bulk_prepare_enable(RK3568_MAX_CLKS,
++		ret = clk_bulk_prepare_enable(RK35xx_MAX_CLKS,
+ 					      rk_priv->rockchip_clks);
+ 		if (ret)
+ 			return ret;
+-- 
+2.35.1
+
 
 

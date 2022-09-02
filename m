@@ -2,108 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1008C5ABA1D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90AA5ABA22
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiIBVec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 17:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
+        id S231132AbiIBVfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 17:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiIBVe2 (ORCPT
+        with ESMTP id S229811AbiIBVfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 17:34:28 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B9310A6;
-        Fri,  2 Sep 2022 14:34:27 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-11f34610d4aso7876511fac.9;
-        Fri, 02 Sep 2022 14:34:27 -0700 (PDT)
+        Fri, 2 Sep 2022 17:35:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E4E6B64B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:35:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662154504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8tLM/3lJtaAYsqKeYEGRVJvBSiRQW7/b6UjPp23Gpt8=;
+        b=eecIaoIdClM+KXOx0uIB/YIrNJ5+wAZ1Kles7Z2tKWklohoWWjo++g8Zq/7ThbaZ/PByuz
+        QeNxCvuQWHT/EEFQ/hjjiR60QuZOCBq0qSFYB4yCTDh1Y1WOHThzvD1b8tjHS/oPs8NYlt
+        VBzyWZaM9sNZwYTKP2xNlFschQ658P8=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-586-HQUKKrdlO8Kgy_W44t_YFA-1; Fri, 02 Sep 2022 17:35:03 -0400
+X-MC-Unique: HQUKKrdlO8Kgy_W44t_YFA-1
+Received: by mail-qv1-f71.google.com with SMTP id h13-20020a0ceecd000000b00498f5b113e6so2077379qvs.21
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 14:35:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
+        h=content-transfer-encoding:mime-version:user-agent:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=XXjP8cgiaYw1PqhWIGrRkQJ366WMJ28RuFPXWF5wiYY=;
-        b=Xohw6WOKydHeUjUzINi7qJMpswv8fCRqKPT3htN8dHYht0eSpLd57Sa10zUGCZ1/z3
-         CEBLlStKEsVGFJ8BOzSSEYYR2D5I+ailRXU0PRWwamspSRwoXxchoNuoG+51miNjK2Pc
-         cfWp8BmLCgpEjlTGff8QVg77TvhWLVO5O30ZbvCZZPn8csCzC/uHIdUIHxZ//Md/R9Al
-         wV5lyEB16Abczbb4k3v+aHFcNJoeq8Y4IuEbL2AOdRXZxUjS0or3OifwiX47AyYds9yW
-         OLKabLJoc14LcM6tJaOBnOmslXlyxCxJiDg6zl1+OTNkLY4QUsAK5MdyjY7aK8AoiTGi
-         uXIw==
-X-Gm-Message-State: ACgBeo2qJ2tAxPXXM/PmE6qjo0VCsrOvmdTd93x3y9tcLITYlqZ0EGba
-        65643Zcu5ZFE9/jTSdz3hQ==
-X-Google-Smtp-Source: AA6agR5MrliGH4/f0zSChYbho79KSE2oXFvKHQsWTmYQTKWOiMRQWDjOZm8zWMidzrHnWhrZZqaIXw==
-X-Received: by 2002:a05:6870:c0c1:b0:10d:96:737f with SMTP id e1-20020a056870c0c100b0010d0096737fmr3329609oad.101.1662154466229;
-        Fri, 02 Sep 2022 14:34:26 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bf15-20020a056808190f00b00344eb5a9416sm1415354oib.55.2022.09.02.14.34.25
+        bh=8tLM/3lJtaAYsqKeYEGRVJvBSiRQW7/b6UjPp23Gpt8=;
+        b=Sj3gaCXhWnqSlGD8AteY79lFtPMiyI9DD64K45nLvxC/DUpqnNeb6udra+JaENUm94
+         iVP8IpWejlgSiQfNpW3qFtEH1Zhl5L5DmY5n3s+zMmURqJnIkzItpNIXu5Y3oCdIr3US
+         xjucJUxhV7Ck3hAk8pTRI+5AJG3UTuZo3PEDk1GQeKER0MgUs93qZC/lC4qRyw4ICK0n
+         ocn0ezsj45QuEj9SKBdbE/EIdLslIcfwgVdMrzhYJCjNMQUcacoj32niWomVesZUYgZU
+         G9M/plAig02nWueGYQG9M97i1uhUIDabvjTsPKcysp7EhwZ3yh79xSB88++rJJTY+eTh
+         0Dww==
+X-Gm-Message-State: ACgBeo2HcQLE2nLuF9DnYqTZRlA9wlDPcm7mjYB9rf6ljMHfv2hRMwfB
+        l4HOK5AtM3PTzvt2RGN5OvKwYzlFVkke7eHXnqZCySsRJLE5EKUNS6r6FO2lc66gApJpBrGeWf2
+        VNzXWXZXonBZ947I6CRhnaRbt
+X-Received: by 2002:ac8:5a55:0:b0:343:72f9:7053 with SMTP id o21-20020ac85a55000000b0034372f97053mr29376140qta.518.1662154502915;
+        Fri, 02 Sep 2022 14:35:02 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR71MqC8+ulzndg1RInO2Lgus6TlkwKGDoiDVHA9iSaBYpFk7mer7xfBbfAfM9XAI4bEWzDHfA==
+X-Received: by 2002:ac8:5a55:0:b0:343:72f9:7053 with SMTP id o21-20020ac85a55000000b0034372f97053mr29376127qta.518.1662154502700;
+        Fri, 02 Sep 2022 14:35:02 -0700 (PDT)
+Received: from ?IPv6:2600:4040:5c48:e00:e786:1aff:4f5c:c549? ([2600:4040:5c48:e00:e786:1aff:4f5c:c549])
+        by smtp.gmail.com with ESMTPSA id s4-20020a05620a254400b006bacf4703c5sm2215158qko.111.2022.09.02.14.35.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 14:34:25 -0700 (PDT)
-Received: (nullmailer pid 454796 invoked by uid 1000);
-        Fri, 02 Sep 2022 21:34:24 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     broonie@kernel.org, lgirdwood@gmail.com, johan@kernel.org,
-        konrad.dybcio@somainline.org, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, dianders@chromium.org,
-        robh+dt@kernel.org
-In-Reply-To: <20220902185148.635292-2-ahalaney@redhat.com>
-References: <20220902185148.635292-1-ahalaney@redhat.com> <20220902185148.635292-2-ahalaney@redhat.com>
-Subject: Re: [PATCH 1/3] regulator: dt-bindings: qcom,rpmh: Use additionalProperties
-Date:   Fri, 02 Sep 2022 16:34:24 -0500
-Message-Id: <1662154464.752050.454795.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 02 Sep 2022 14:35:02 -0700 (PDT)
+Message-ID: <cde7369a1d078249244759662989427b1f853bdd.camel@redhat.com>
+Subject: Re: [PATCH] drm/dp: Avoid Reading DPCD_REV Before Native Aux Read
+From:   Lyude Paul <lyude@redhat.com>
+To:     Fangzhi Zuo <Jerry.Zuo@amd.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org
+Date:   Fri, 02 Sep 2022 17:35:00 -0400
+In-Reply-To: <20220831221321.748264-1-Jerry.Zuo@amd.com>
+References: <20220831221321.748264-1-Jerry.Zuo@amd.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 02 Sep 2022 13:51:46 -0500, Andrew Halaney wrote:
-> Right now, running make dt_binding_check results in this snippet:
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+
+On Wed, 2022-08-31 at 18:13 -0400, Fangzhi Zuo wrote:
+> The attempt to read DPCD_REV before any native aux read breaks
+> majority of DP2 compliance.
 > 
->     /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml: 'additionalProperties' is a required property
->             hint: A schema without a "$ref" to another schema must define all properties and use "additionalProperties"
->             from schema $id: http://devicetree.org/meta-schemas/base.yaml#
->       SCHEMA  Documentation/devicetree/bindings/processed-schema.json
->     <snip..>
->     /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml: ignoring, error in schema:
+> The spec. requires DP_SINK_STATUS to be polled for the reset status
+> DP_INTRA_HOP_AUX_REPLY_INDICATION during the clear training stage.
 > 
-> Which results in the schema not being properly evaluated. Swap out
-> unevaluatedProperties which doesn't seem to be doing anything for
-> additionalProperties.
+> Polling DP_SINK_STATUS each time gets DPCD_REV read first
+> that makes non link training regsiter DPCD_REV get read
+> during UHBR link training. It violates DP2 compliance.
 > 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> Cc: Ville Syrjala <ville.syrjala@linux.intel.com>
+> Cc: Lyude Paul <lyude@redhat.com>
+> Signed-off-by: Fangzhi Zuo <Jerry.Zuo@amd.com>
 > ---
->  .../devicetree/bindings/regulator/qcom,rpmh-regulator.yaml    | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/gpu/drm/display/drm_dp_helper.c | 18 ------------------
+>  1 file changed, 18 deletions(-)
 > 
+> diff --git a/drivers/gpu/drm/display/drm_dp_helper.c b/drivers/gpu/drm/display/drm_dp_helper.c
+> index e7c22c2ca90c..c7aa5bafa667 100644
+> --- a/drivers/gpu/drm/display/drm_dp_helper.c
+> +++ b/drivers/gpu/drm/display/drm_dp_helper.c
+> @@ -571,24 +571,6 @@ ssize_t drm_dp_dpcd_read(struct drm_dp_aux *aux, unsigned int offset,
+>  {
+>  	int ret;
+>  
+> -	/*
+> -	 * HP ZR24w corrupts the first DPCD access after entering power save
+> -	 * mode. Eg. on a read, the entire buffer will be filled with the same
+> -	 * byte. Do a throw away read to avoid corrupting anything we care
+> -	 * about. Afterwards things will work correctly until the monitor
+> -	 * gets woken up and subsequently re-enters power save mode.
+> -	 *
+> -	 * The user pressing any button on the monitor is enough to wake it
+> -	 * up, so there is no particularly good place to do the workaround.
+> -	 * We just have to do it before any DPCD access and hope that the
+> -	 * monitor doesn't power down exactly after the throw away read.
+> -	 */
+> -	if (!aux->is_remote) {
+> -		ret = drm_dp_dpcd_probe(aux, DP_DPCD_REV);
+> -		if (ret < 0)
+> -			return ret;
+> -	}
+> -
+>  	if (aux->is_remote)
+>  		ret = drm_dp_mst_dpcd_read(aux, offset, buffer, size);
+>  	else
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.example.dtb: pm8998-rpmh-regulators: 'vdd-l7-l12-l14-l15-supply' does not match any of the regexes: '^(smps|ldo|lvs)[0-9]+$', 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 

@@ -2,77 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9725AAE08
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC715AAE10
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235761AbiIBMDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
+        id S235781AbiIBME4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235822AbiIBMDN (ORCPT
+        with ESMTP id S235636AbiIBMEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:03:13 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FAEC7BB5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:03:09 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bp20so1543582wrb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 05:03:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=QD0f458hOs+Yc5mX36c226dEAIGqQyTyl2jnPRNMycE=;
-        b=Nhb1ahfA74o2s885SBr3+p7hcg6A5trn06OdOOEsjKKjFz3xUQjTC+3l3BPw4x4Qki
-         98tFbxCk29ZzNK7mwS9hdQLBXJ2U0PXMZ5YRU8SPhG0NBqBWxaUaS2FNC5qauktJkfRo
-         9rZdTHGIQ0cizhHhmN3DsASDHBBg2+6yta30EzY18XTF2GzhyvwTT5WtHS4pUXNOokWM
-         smV7YZ+D6cPPo9D1W/B0l/nDLsvOJ9pu2LT2+CSwck8KGk/8IsyKQWUrmcdEhVm+kqjm
-         6yIn4isWEbDRvmS5iiZ93glHw6Qy+ZKUoLeE6TwLCCFch0cQkdmvcpJL0LY/GNtpb4EI
-         zZtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=QD0f458hOs+Yc5mX36c226dEAIGqQyTyl2jnPRNMycE=;
-        b=kw4ArhQKPXrVRcVipqLf1AumlzGnadWY5BklOH8k2r34/b+AwyiPo83jL3Axr4PWTo
-         ZdUb8HLuA2/cSMzxNUT4wNA70T/+Op9Yrl2l4B33V7Ns2f4WIoT+2YrdkTaJyy4hkak6
-         cnABaE+fpYO8SiQCZmUebnHd5HkASSMiA3TVuN0giVQdGeXIvobB7zsSB33+k6sPqTBz
-         APyYGEKjv3tq2x5BfVEa41Cn1Jkul4ZCxxA+uCz5qbMBo7qnl1rWOOWW4Sg6ilzqm+uR
-         lebDLCYGtmMg/2CkM5begqOOdWAy+RA3ltNyhHJ23LXbH2uqRV3TqhWpsfJ9XTlcs/GT
-         EupA==
-X-Gm-Message-State: ACgBeo1Cm1UWsnKtomR6nBXYonwV7OQu1BIbndLzvU0b2Zce5ppD6LrQ
-        pk6q04OXOpBv3U5mz82nDumOOQ==
-X-Google-Smtp-Source: AA6agR6NBs+WZRiv1NUV1OsVl1k+nVX/H7sz5z2SKboCwbDVO74A7WpVLMgN0Co/JBUiwBZUjdmenA==
-X-Received: by 2002:a05:6000:799:b0:226:e3e9:e482 with SMTP id bu25-20020a056000079900b00226e3e9e482mr10057791wrb.219.1662120188014;
-        Fri, 02 Sep 2022 05:03:08 -0700 (PDT)
-Received: from [10.44.2.26] (84-199-106-91.ifiber.telenet-ops.be. [84.199.106.91])
-        by smtp.gmail.com with ESMTPSA id s8-20020a1cf208000000b003a83fda1dc5sm1894953wmc.44.2022.09.02.05.03.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 05:03:06 -0700 (PDT)
-Message-ID: <695db55b-959c-0165-b35d-338ba36fa0e4@tessares.net>
-Date:   Fri, 2 Sep 2022 14:03:04 +0200
+        Fri, 2 Sep 2022 08:04:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AEE2AFA;
+        Fri,  2 Sep 2022 05:04:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 217E7B82A6F;
+        Fri,  2 Sep 2022 12:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1CB9C433D7;
+        Fri,  2 Sep 2022 12:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662120287;
+        bh=RJzkQrYginDaiEze6Bo3xEmoYSFz6uJmuVZ7EbH+59I=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=t/sO9+33at7eXYHo30eKDNFt6A10JX8BQL80Zk0CtX8wMOH0ViaxuwYKqnhM0qm8U
+         9zt8zfZRS3q6viKGVJxSHEPbcZVS2MmNDW0QMq7IVmE4HCf71/PmIB74aTCYWnZ9RM
+         LnvqgsdjbhcalC6AdfspIkYOwRpO+Ty9jYcax3XcMqKvTvHdoa9Waxd+pYd1ugkjGR
+         kfWp0AML1TK56ToL7yjKjsOP+droGeQhqh+e0gfSIHGMvBJiyVzGEEne/tmwmwq9iT
+         S6sdW/MskApjS/00/KzPo1+RSxLBypDbz0iSrSLUpDBC3axaj54JvYINQOkutLcDUF
+         wA2nMRjJPA6bw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4BF965C06A7; Fri,  2 Sep 2022 05:04:47 -0700 (PDT)
+Date:   Fri, 2 Sep 2022 05:04:47 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Sascha Hauer <sha@pengutronix.de>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>, kernel@pengutronix.de
+Subject: Re: [PATCH rcu 04/32] rcu-tasks: Drive synchronous grace periods
+ from calling task
+Message-ID: <20220902120447.GH6159@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220620225402.GA3842369@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225411.3842519-4-paulmck@kernel.org>
+ <20220901103625.GA1658@pengutronix.de>
+ <20220901172725.GC6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220901173304.GA2280413@paulmck-ThinkPad-P17-Gen-1>
+ <20220902115228.GV24324@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] selftests: net: sort .gitignore file
-Content-Language: en-GB
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220829184748.1535580-1-axelrasmussen@google.com>
- <fe9280ff-50b3-805a-07ef-0227cbec13e8@tessares.net>
- <20220901130529.2f364617@kernel.org>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20220901130529.2f364617@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902115228.GV24324@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,68 +65,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
-
-On 01/09/2022 22:05, Jakub Kicinski wrote:
-> On Thu, 1 Sep 2022 12:15:02 +0200 Matthieu Baerts wrote:
->> Hello,
->>
->> On 29/08/2022 20:47, Axel Rasmussen wrote:
->>> This is the result of `sort tools/testing/selftests/net/.gitignore`, but
->>> preserving the comment at the top.  
->>
->> FYI, we got a small conflict (as expected by Jakub) when merging -net in
->> net-next in the MPTCP tree due to this patch applied in -net:
->>
->>   5a3a59981027 ("selftests: net: sort .gitignore file")
->>
->> and these ones from net-next:
->>
->>   c35ecb95c448 ("selftests/net: Add test for timing a bind request to a
->> port with a populated bhash entry")
->>   1be9ac87a75a ("selftests/net: Add sk_bind_sendto_listen and
->> sk_connect_zero_addr")
->>
->> The conflict has been resolved on our side[1] and the resolution we
->> suggest is attached to this email: new entries have been added in the
->> list respecting the alphabetical order.
+On Fri, Sep 02, 2022 at 01:52:28PM +0200, Sascha Hauer wrote:
+> On Thu, Sep 01, 2022 at 10:33:04AM -0700, Paul E. McKenney wrote:
+> > On Thu, Sep 01, 2022 at 10:27:25AM -0700, Paul E. McKenney wrote:
+> > > On Thu, Sep 01, 2022 at 12:36:25PM +0200, Sascha Hauer wrote:
+> > > > Hi Paul,
+> > > > 
+> > > > On Mon, Jun 20, 2022 at 03:53:43PM -0700, Paul E. McKenney wrote:
+> > > > > This commit causes synchronous grace periods to be driven from the task
+> > > > > invoking synchronize_rcu_*(), allowing these functions to be invoked from
+> > > > > the mid-boot dead zone extending from when the scheduler was initialized
+> > > > > to to point that the various RCU tasks grace-period kthreads are spawned.
+> > > > > This change will allow the self-tests to run in a consistent manner.
+> > > > > 
+> > > > > Reported-by: Matthew Wilcox <willy@infradead.org>
+> > > > > Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > 
+> > > > This commit (appeared in mainline as 4a8cc433b8bf) breaks booting my
+> > > > ARMv7 based i.MX6ul board when CONFIG_PROVE_RCU is enabled. Reverting
+> > > > this patch on v6.0-rc3 makes my board boot again. See below for a boot
+> > > > log. The last message is "Running RCU-tasks wait API self tests", after
+> > > > that the board hangs. Any idea what goes wrong here?
+> > > 
+> > > New one on me!
+> > > 
+> > > Is it possible to get a stack trace of the hang, perhaps via
+> > > one form or another of sysrq-T?  Such a stack trace would likely
+> > > include synchronize_rcu_tasks(), synchronize_rcu_tasks_rude(), or
+> > > synchronize_rcu_tasks_trace() followed by synchronize_rcu_tasks_generic(),
+> > > rcu_tasks_one_gp(), and one of rcu_tasks_wait_gp(),
+> > > rcu_tasks_rude_wait_gp(), or rcu_tasks_wait_gp().
+> > 
+> > If there is no chance of sysrq-T, kernel debuggers, kernel crash
+> > dumps, or any other source of the stack trace, please decorate the
+> > code path with printk() or similar and let me know where it goes.
+> > Under normal circumstances, this code path is not sensitive to performance
+> > perturbations of the printk() persuasion.
 > 
-> Yup, that was my plan as well. Apologies for the trouble, I thought
-> since the conflict will only exist for a day I'd be the only one
-> suffering.
-
-That's alright, it was not difficult to resolve :)
-
-We do the sync everyday around 6AM UTC time:
-
-
-https://github.com/multipath-tcp/mptcp_net-next/actions/workflows/update-tg-tree.yml
-
-If you prefer and if we have issues on a Thursday, we can also wait for
-the next day before looking at these conflicts and report them.
-
-> I think we should also sort the Makefile FWIW.
-> Perhaps it's better done during the merge window.
-
-Indeed, that would make sense to do them at this period but I also
-understand such clean-up are useful to reduce conflicts later.
-
-Such conflicts created by the clean-up are also easy to resolve so no
-need to worry to much I think.
-
->> I'm sharing this thinking it can help others but if it only creates
->> noise, please tell me! :-)
+> Some unrelated bug I was searching for made me turn on early console
+> output with the "earlycon" parameter. It turned out that when I remove
+> this parameter then my board boots fine.
 > 
->> [1] https://github.com/multipath-tcp/mptcp_net-next/commit/4151695b70b6
+> I then realized that even with earlycon enabled my board boots fine
+> when I remove the call to
 > 
-> It is useful, thanks!
+> 	pr_info("Running RCU-tasks wait API self tests\n");
 
-I'm glad it is! (Sharing them is also useful for us to avoid diverging
-our tree from net and net-next if the conflicts are resolved differently
-:) )
+Ah, there are some printk() fixes in the works.  Maybe this is one area
+needed that.  Or maybe not.
 
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+> Given that I am not sure how useful it is to add more printk. I did that
+> anyway like this:
+> 
+> > static void rcu_tasks_one_gp(struct rcu_tasks *rtp, bool midboot)
+> > {
+> > 	int needgpcb;
+> > 
+> > 	printk("%s: mutex_lock... midboot: %d\n", __func__, midboot);
+> > 	mutex_lock(&rtp->tasks_gp_mutex);
+> > 	printk("%s: mutex_locked midboot: %d\n", __func__, midboot);
+> > 
+> > 	// If there were none, wait a bit and start over.
+> > 	if (unlikely(midboot)) {
+> > 		needgpcb = 0x2;
+> > 	} else {
+> > 		printk("%s: set_tasks_gp_state(RTGS_WAIT_CBS)...\n", __func__);
+> > 		set_tasks_gp_state(rtp, RTGS_WAIT_CBS);
+> > 		printk("%s: rcuwait_wait_event...\n", __func__);
+> > 		rcuwait_wait_event(&rtp->cbs_wait,
+> > 				   (needgpcb = rcu_tasks_need_gpcb(rtp)),
+> > 				   TASK_IDLE);
+> >		printk("%s: rcuwait_wait_event done\n", __func__);
+> > 	}
+> >
+> 
+> What I see then is:
+> 
+> [    0.156362] synchronize_rcu_tasks_generic: rcu_tasks_one_gp....
+> [    0.162087] rcu_tasks_one_gp: mutex_lock... midboot: 1
+
+So one task gets stuck either in mutex_lock() or the printk() above
+and some other task below moves ahead?  Or might some printk()s have
+been lost?
+
+> [    0.167386] rcu_tasks_one_gp: mutex_lock... midboot: 0
+> [    0.172489] rcu_tasks_one_gp: mutex_locked midboot: 0
+> [    0.177535] rcu_tasks_one_gp: set_tasks_gp_state(RTGS_WAIT_CBS)...
+> [    0.183525] rcu_tasks_one_gp: rcuwait_wait_event...
+
+Given that everything works with printk()s turned off, my current
+suspicion is a printk() issue.
+
+> Here the board hangs. After some time I get:
+> 
+> [  254.493010] random: crng init done
+
+This looks unrelated.
+
+> But that's it.
+> 
+> > 
+> > > At this point in the boot sequence, there is only one online CPU,
+> > > correct?
+> 
+> Yes, it's a single core system.
+
+OK, then we should be able to rule out SMP issues.  ;-)
+
+								Thanx, Paul
+
+> Sascha
+> 
+> -- 
+> Pengutronix e.K.                           |                             |
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

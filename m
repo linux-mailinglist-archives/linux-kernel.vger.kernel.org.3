@@ -2,100 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B075AA4F2
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6365AA4F1
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbiIBBSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 21:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S235222AbiIBBSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 21:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234732AbiIBBSF (ORCPT
+        with ESMTP id S234571AbiIBBSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 21:18:05 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5BEA3D2F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:18:03 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id c3so638453vsc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 18:18:03 -0700 (PDT)
+        Thu, 1 Sep 2022 21:18:32 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F959A59BC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:18:27 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id y64so859185ede.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 18:18:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=rTzDP//vpfHx0nVWxJbV0HFrI6D0C5HQYNSPKTmQmqc=;
-        b=UWgThLj5qQy1WVf4h5Ch3hkbBGqp3/CtfM0uY0BEiBrEmfKmoOMhR9TKodXHXQ8UZI
-         Nps5eH9fwSuxS1+/Kpa/4rK/MRM5r5tRDduhRCq8fKqe8yv0MTE5YWK6lJZr7U3Jolcb
-         8ZeQtzQywmft38Mjk6K0YLw6peWxrRLhr7EWznpYO3b4hO0iexzPpulNjFSfTQZxKspw
-         XpfMEuCDg7sCgaYl9UdRJUa36ssv+biiXphvOPD6fo0JdXpQUVd4pLJ0Y4/SyNJhRTHC
-         j9MbKYChOijhjoCVpKNC/fLAUPWifHdbz2EqRZrbosyYkPYxfMGuUMyUiKg+WkmZWK4Y
-         tBPg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=vubaGOA7KAPskf9TWeTqLDaT3GTBzASXB3ONje3ZhBQ=;
+        b=e0XDxZD4BlDqW2yW2GdtDuadr5wMVeqgtWyK7SjJ89u1AF49qE5j3GpVJns1IOt8QV
+         Cl2N0D2I8pJeMrg67NariRniZVkO6LA2yFzMF1ojRACDYcVZIvYDzMNdO+rPQlb6ggbP
+         s96+VQpkVBkxE/kZo9KUt8lZAT1JKxCG7e9+0e3fz6DFRCps7SFuIkHZlbMzKB+BMSQt
+         zrZZKxE9k4FbnJxTdj4Mf1pH3hAKJAWwQ/kVSYlY0ucHkLXT2J8dqKZh3+SxIzz8omFZ
+         Pg/pqFsj2tF7cqgjrlxW6PEOUbpj/MWGkLKfeeMk0HMlcvQROXwKmZ3q+SY1+VW2wWmQ
+         Bdcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=rTzDP//vpfHx0nVWxJbV0HFrI6D0C5HQYNSPKTmQmqc=;
-        b=SUTDl+7BYKJS3fxiIZtx2a/9axHY/LnA7oNO8D3o8cnrQzN9yuag+wAADXYqRnJ5HL
-         2Xdrl+FQqAg/XecDdk7qteV6tvaNd6m7J9O2N96AxNEOK3+PKzDcsANwuVVISiXIaAxt
-         jXqJmxA2GiVf/H1K9fQ6cPDQdYM4y+hp1Eu6Hzw+ByybxOYcMqA0EQPXDmTPbgxzzCbB
-         t55by4KR3np4ZotHB5ourm5qOPS4sCx6+aLPIh2Rjb/SV2JqS1YumeJhGMiMTZTSfYkJ
-         Dl9pHsYScnLj2H3iKzFV9Q/o8Pkme+l3X3Hvhlo9k9DawwPpbik7YPKL5+MRPkiIZ85n
-         n34w==
-X-Gm-Message-State: ACgBeo1VY4uw4f+RjxRRBksCPtBIrXpAX8q3boLlbP8M/IFnV9wRL0dM
-        E5PGVdP1DzLVFhAwBmOucn9YuF7u5ixKpHBPLsOykA==
-X-Google-Smtp-Source: AA6agR7Tip6gCheFWRsDQxtd28hkc6ZUgXtTAsFe4eAmn5ExZQLdjvj3BoPN4Q/OdMBoJts2UxkQZmxs+NLu6F9s1wI=
-X-Received: by 2002:a67:d512:0:b0:390:db32:a96 with SMTP id
- l18-20020a67d512000000b00390db320a96mr8270856vsj.15.1662081482992; Thu, 01
- Sep 2022 18:18:02 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vubaGOA7KAPskf9TWeTqLDaT3GTBzASXB3ONje3ZhBQ=;
+        b=cPfvMsmOhXX+DKGWqhUebrEOD5qj8pm3MUWjlUNcueAP+iDJHSdGT7OJ8KOurTIo0V
+         kj4+JYXph8ffV47TWbRLGxvyKDewE4ul8B10dJ0REsQg7jlhVx6lNOh86+9xqGkY1BmC
+         k2uydbc0R/pwZktBzbKoRNk4P9e1/iK2PQtTWyZgDayH5t3sHtWh2WqRbhA3pnbBWWa3
+         cuc6eRW4bZe7D6gdvMA1X2DBRJmN5c82hOTttVG9nufj7JrMxmvnAwo7Gxq9tnoqWHt2
+         eBn/SiI+N7kYrXuTglqdQ+6XLn5d32xS0V3kqQYcL4i9bR23jLRoLzHmVM15WwBJ+jyg
+         qGrA==
+X-Gm-Message-State: ACgBeo3pNSTvcJckpx1+HXEpz9wekskqfdLN2oWfkYFVC6P0NY2xLz8y
+        8JS8vQTnZbFe0YmH4TebkmxKnQutN36z3V6c4cI=
+X-Google-Smtp-Source: AA6agR645HOEPE/gqaaVEnxnhpjUlnfl7tSda4XCFDPjOInVU7DSeqWhDlV+YM7dCxScZqQhB2VGwElrij+dAGvWvdw=
+X-Received: by 2002:aa7:df8c:0:b0:448:a9a0:5fd8 with SMTP id
+ b12-20020aa7df8c000000b00448a9a05fd8mr14996981edy.244.1662081506225; Thu, 01
+ Sep 2022 18:18:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220815071332.627393-1-yuzhao@google.com> <20220815071332.627393-8-yuzhao@google.com>
- <0F7CF2A7-F671-4196-B8FD-F35E9556391B@gmail.com>
-In-Reply-To: <0F7CF2A7-F671-4196-B8FD-F35E9556391B@gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 1 Sep 2022 19:17:26 -0600
-Message-ID: <CAOUHufZ6LGyBoPBkniB63-77r5=1POWpEWmUTESFtJo2bwbi-w@mail.gmail.com>
-Subject: Re: [PATCH v14 07/14] mm: multi-gen LRU: exploit locality in rmap
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, X86 ML <x86@kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        Barry Song <baohua@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <CAGsJ_4w=NKr-NOg2TLycx=ka1OpzmzC2dpq0Z1EUXaXDMM8uVQ@mail.gmail.com>
+ <20220901221114.81601-1-sj@kernel.org>
+In-Reply-To: <20220901221114.81601-1-sj@kernel.org>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Fri, 2 Sep 2022 13:18:15 +1200
+Message-ID: <CAGsJ_4zgQ87vfBN795Yxa4R25kQwHm9H1Kxi3RetpfTu9bzSew@mail.gmail.com>
+Subject: Re: [PATCH 7/8] mm/damon: introduce DAMON-based LRU-lists Sorting
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, damon@lists.linux.dev,
+        linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,73 +69,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 3:18 AM Nadav Amit <nadav.amit@gmail.com> wrote:
+On Fri, Sep 2, 2022 at 10:11 AM SeongJae Park <sj@kernel.org> wrote:
 >
+> On Fri, 2 Sep 2022 09:40:10 +1200 Barry Song <21cnbao@gmail.com> wrote:
 >
->
-> > On Aug 15, 2022, at 12:13 AM, Yu Zhao <yuzhao@google.com> wrote:
+> > On Fri, Sep 2, 2022 at 5:11 AM SeongJae Park <sj@kernel.org> wrote:
+> > >
+> > > Hi Barry,
+> > >
+> > >
+> > > On Thu, 1 Sep 2022 14:21:21 +1200 Barry Song <21cnbao@gmail.com> wrote:
+> > >
+> > > > On Thu, Sep 1, 2022 at 2:03 PM Barry Song <21cnbao@gmail.com> wrote:
+> > > > >
+> > > > > On Tue, Jun 14, 2022 at 10:01 AM SeongJae Park <sj@kernel.org> wrote:
+> > > > > >
+> > > > > > Users can do data access-aware LRU-lists sorting using 'LRU_PRIO' and
+> > > > > > 'LRU_DEPRIO' DAMOS actions.  However, finding best parameters including
+> > > > > > the hotness/coldness thresholds, CPU quota, and watermarks could be
+> > > > > > challenging for some users.  To make the scheme easy to be used without
+> > > > > > complex tuning for common situations, this commit implements a static
+> > > > > > kernel module called 'DAMON_LRU_SORT' using the 'LRU_PRIO' and
+> > > > > > 'LRU_DEPRIO' DAMOS actions.
+> > > > > >
+> > > > > > It proactively sorts LRU-lists using DAMON with conservatively chosen
+> > > > > > default values of the parameters.  That is, the module under its default
+> > > > > > parameters will make no harm for common situations but provide some
+> > > > > > level of efficiency improvements for systems having clear hot/cold
+> > > > > > access pattern under a level of memory pressure while consuming only a
+> > > > > > limited small portion of CPU time.
+> > > > >
+> > > >
+> > > > Hi SeongJae,
+> > > > While I believe DAMON pro-active reclamation and LRU-SORT can benefit the system
+> > > > by either swapping out cold pages earlier and sorting LRU lists before
+> > > > system has high
+> > > > memory pressure, I am still not convinced the improvement really comes from the
+> > > > identification of cold and hot pages by DAMON.
+> > > >
+> > > > My guess is that even if we randomly pick some regions in memory and do the same
+> > > > thing in the kernel, we can also see the improvement.
+> > > >
+> > > > As we actually depend on two facts to benefit from DAMON
+> > > > 1. locality
+> > > > while virtual address might have some locality, physical address seems
+> > > > not. for example,
+> > > > address A might be mapped by facebook, address A + 4096 could be
+> > > > mapped by youtube.
+> > > > There is nothing which can stop contiguous physical addresses from
+> > > > being mapped by
+> > > > completely irrelevant applications. so regions based on paddr seems pointless.
+> > > >
+> > > > 2. accuration
+> > > > As I have reported it is very hard for damon to accurately track
+> > > > virtual address since
+> > > > virtual space is so huge:
+> > > > https://lore.kernel.org/lkml/CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com/
+> > > > I believe it is also true for paddr since paddr has much worse
+> > > > locality than vaddr.
+> > > > so we probably need a lot of regions, ideally, one region for each page.
+> > > >
+> > > > To me, it seems neither of these two facts are true.  So I am more
+> > > > willing to believe
+> > > > that the benefits come from areas  picked randomly.
+> > > >
+> > > > Am I missing something?
+> > >
+> > > Thank you for the questions.
+> > >
+> > > As you mentioned, DAMON assumes spatial and temporal locality, to trade
+> > > accuracy for lower overhead[1].  That is, DAMON believes some memory regions
+> > > would have pages that accessed in similar frequency for similar time duration.
+> > > Therefore if the access pattern of the system is really chaotic, that is, if
+> > > every adjacent page have very different access frequency or the access
+> > > frequency changes very frequently, DAMON's accuracy would be bad.  But, would
+> > > such access pattern really common in the real world?  Given the Pareto
+> > > principle[2], I think that's not always true.  After all, many of kernel
+> > > mechanisms including the pseudo-LRU-based reclamation and the readahead assumes
+> > > some locality and makes good effect.
 > >
-> > Searching the rmap for PTEs mapping each page on an LRU list (to test
-> > and clear the accessed bit) can be expensive because pages from
-> > different VMAs (PA space) are not cache friendly to the rmap (VA
-> > space). For workloads mostly using mapped pages, searching the rmap
-> > can incur the highest CPU cost in the reclaim path.
+> > + yu zhao
+> >
+> > I do believe we have some locality in virtual addresses as they are in
+> > the same application.
+> > that is why we can "exploit locality in rmap" here:
+> > https://lore.kernel.org/linux-mm/20220815071332.627393-8-yuzhao@google.com/
+> >
+> > But for paddr, i doubt it is true as processes use page faults to get
+> > pages from buddy
+> > mainly in low order like zero.
 >
-> Impressive work. Sorry if my feedback is not timely.
+> Well, what I can tell for now is that it would depend on the specific system
+> and workload, but I found some production systems that have such kind of
+> physical address space locality.
 >
-> Just one minor point for thought, that can be left for a later cleanup.
+
+yep. I guess for mmu-less systems, spatial locality is more likely to be true.
+for mmu system, workload using 2MB or 1GB THP won't show locality in
+physical address as well. but THP_SWP will swap them as a whole, so it
+seems locality inside a THP
+
+> >
+> > >
+> > > If your system has too low locality and therefore DAMON doesn't provide good
+> > > enough accuracy, you could increase the accuracy by setting the upperbound of
+> > > the monitoring overhead higher.  For DAMOS schemes like DAMON_RECLAIM or
+> > > DAMON_LRU_SORT, you could also increase the minimum age of the target access
+> > > pattern.  If the access pattern is really chaotic, DAMON wouldn't show the
+> > > regions having the specific access pattern for long time.  Actually, definition
+> > > of the age and use of it means you believe the system's access pattern is not
+> > > that chaotic but has at least temporal locality.
+> > >
+> > > It's true that DAMON doesn't monitor access pattern in page granularity, and
+> > > therefore it could report some cold pages as hot, and vice versa.  However, I'd
+> > > say the benefit of making right decision for huge number of pages outweighs the
+> > > risk of making wrong decision for few pages in many cases.
+> > >
+> > > After all, it shows some benefit on my test environments and some production
+> > > systems.  I haven't compared that against random pageout or random lru sorting,
+> > > though.
+> > >
+> > > Nevertheless, DAMON has so many rooms for improvement, including the accuracy.
+> > > I want to improve the accuracy while keeping the overhead low.  Also, I know
+> > > that there are people who willing to do page-granularity monitoring though it
+> > > could incur high monitoring overhead.  As a part of the DAMON accuracy
+> > > improvement plan, to use that as a comparison target, and to convince such
+> > > people, I added the page granularity monitoring feature of DAMON to my todo
+> > > list.  I haven't had a time for prioritizing that yet, though, as I haven't
+> > > heard some clear voice of users for that.  I hope the DAMON Beer/Coffee/Tea
+> > > Chat Series to be a place to hear such voices.
+> >
+> > is it possible for us to leverage the idea from  "mm: multi-gen LRU:
+> > support page table walks"
+> >
+> > https://lore.kernel.org/linux-mm/20220815071332.627393-9-yuzhao@google.com/
+> >
+> > we pro-actively scan the virtual address space of those processes
+> > which have been really
+> > executed then get LRU sorted earlier?
+>
+> I didn't read MGLRU patchset thoroughly, but, maybe?
+>
+>
+> Thanks,
+> SJ
 >
 > >
-> > +     for (i =3D 0, addr =3D start; addr !=3D end; i++, addr +=3D PAGE_=
-SIZE) {
-> > +             unsigned long pfn;
-> > +
-> > +             pfn =3D get_pte_pfn(pte[i], pvmw->vma, addr);
-> > +             if (pfn =3D=3D -1)
-> > +                     continue;
-> > +
-> > +             if (!pte_young(pte[i]))
-> > +                     continue;
-> > +
-> > +             folio =3D get_pfn_folio(pfn, memcg, pgdat);
-> > +             if (!folio)
-> > +                     continue;
-> > +
-> > +             if (!ptep_test_and_clear_young(pvmw->vma, addr, pte + i))
-> > +                     continue;
-> > +
->
-> You have already checked that the PTE is old (not young) so this check
-> seems redundant.
-
-You are right, for x86, which belongs to category 1: hardware and
-OS share the same paging data structure.
-
-> I do not see a way in which the access-bit can be cleared
-> since you hold the ptl.
-
-There is also category 2: the OS paging data structure is a shadow of what
-hardware actually uses, e.g., POWER9 radix.
-
-To make both categories work, the general rule is that the OS paging
-data structure must be more strict, i.e., it can have A/D bits set
-while the hardware paging data structure may not. The opposite is not
-allowed, even for the A bit, because the A bit can also be used to
-determine whether a TLB flush is required. The Linux kernel doesn't do
-this but there are other OSes that do.
-
-For prefaulted PTEs, we generally mark them young unless
-arch_wants_old_prefaulted_pte() returns true (currently only ARMv8.2+
-do). On POWER9, we'd see those PTEs pass the first check but fail the
-second.
-
-> IOW, there is no need for the =E2=80=9Cif" and =E2=80=9Ccontinue".
->
-> Makes me also wonder whether having a separate ptep_clear_young() can
-> slightly help, since anyhow the access-bit is more of an estimation,
-> and having a separate ptep_clear_young() can enable optimizations.
->
-> On x86, for instance, if the PTE is dirty, we may be able to clear the
-> access-bit without an atomic operation, which should be faster.
-
-Agreed.
+> > >
+> > > [1] https://docs.kernel.org/mm/damon/design.html#address-space-independent-core-mechanisms
+> > > [2] https://en.wikipedia.org/wiki/Pareto_principle
+> > >
+> > >
+> > > Thanks,
+> > > SJ
+> >
+> > Thanks
+> > Barry

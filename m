@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320B25AA4C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF625AA4C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbiIBBBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 21:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S235255AbiIBBBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 21:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235145AbiIBBBF (ORCPT
+        with ESMTP id S235162AbiIBBBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 21:01:05 -0400
+        Thu, 1 Sep 2022 21:01:07 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC04A50ED
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:00:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A659A59A6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:00:57 -0700 (PDT)
 Received: from localhost.localdomain (unknown [182.2.38.99])
-        by gnuweeb.org (Postfix) with ESMTPSA id 950B180C12;
-        Fri,  2 Sep 2022 01:00:48 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id F2D9380C13;
+        Fri,  2 Sep 2022 01:00:52 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1662080452;
-        bh=9mn+NsOQ1zaPJ1WbjFHcvyNU4C6nPGPxtaZbqetpeAc=;
+        s=default; t=1662080456;
+        bh=641ABaukanUnlF8DlBpXWu8Xyzx65zYRCewGXBQKAhY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I7fFVRdMdz1lfJVbKj0RbWr/+JfX5pdiOFDMt/H/z02R1rIbqOhT7cdA/uvDleWwW
-         fsQiRQijO6dK0PTkHdD9KRCkuilkN5EnLon7028gKCTQN2BaLABSYwcWRI1eOEPw0B
-         1nYOGX4jWUq83wXK2qthJzIMlddhTeSF5jeJIwpwX1t3k6HEnDwv5IGn3QKnAkdx+Y
-         0RAAwlT5CKEKV/mPnoURRe218PD56EJogbMsikAswqz5H8ve2NeByhjaY+avxLl4gZ
-         o/w6EnsIBHOhYBg3Ki7vqZXXtNwl4OWhcTNwCV1/ZNgkzuG/XmTAmDeEE1lKd4xDZJ
-         SwF8U7IeLVPIw==
+        b=OJjQeTU1OfSw5E2rOHyia4KRVuSpEcYWzt1JG+Yu8b1zwKncDsqE7nQy7hEgGjwhq
+         FoHPAFYrYVBz4t7ngwnmUx6tZ5yQVUKrg/da6Wo9ZN7n6NWhW7p7ctPk5CriCD5/nw
+         aJYbVDNvKdnTEUtv8x49PnqrVTnFxhv4BFXInz35869nQ00aC+X4LP96DSC7BhzqM6
+         X6bEUIDtP0rkjzBn3H8mAZrrpeS9xCVPUA0c3OlpBOMDRRW5iQz0/UULD9oemZbDc0
+         8nGqjXTZZWLB4HLiqcBmX0EirHm8xWQf7l67/JoG6rQi2cWjmtSpZQPiVWEGc29f2M
+         E941hFXmVDjsQ==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -40,9 +40,9 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         io-uring Mailing List <io-uring@vger.gnuweeb.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH liburing v1 08/12] t/connect: Don't use a static port number
-Date:   Fri,  2 Sep 2022 07:59:42 +0700
-Message-Id: <20220902005825.2484023-9-ammar.faizi@intel.com>
+Subject: [PATCH liburing v1 09/12] t/shutdown: Don't use a static port number
+Date:   Fri,  2 Sep 2022 07:59:43 +0700
+Message-Id: <20220902005825.2484023-10-ammar.faizi@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220902005825.2484023-1-ammar.faizi@intel.com>
 References: <20220902005825.2484023-1-ammar.faizi@intel.com>
@@ -67,46 +67,73 @@ Cc: Facebook Kernel Team <kernel-team@fb.com>
 Cc: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- test/accept.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ test/shutdown.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/test/accept.c b/test/accept.c
-index b35ded4..1821faa 100644
---- a/test/accept.c
-+++ b/test/accept.c
-@@ -184,31 +184,28 @@ static int start_accept_listen(struct sockaddr_in *addr, int port_off,
+diff --git a/test/shutdown.c b/test/shutdown.c
+index 14c7407..064ee36 100644
+--- a/test/shutdown.c
++++ b/test/shutdown.c
+@@ -9,56 +9,55 @@
+ #include <string.h>
+ #include <assert.h>
  
- 	int32_t val = 1;
- 	ret = setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &val, sizeof(val));
- 	assert(ret != -1);
- 	ret = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
- 	assert(ret != -1);
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
+ #include <netinet/tcp.h>
+ #include <netinet/in.h>
+ #include <arpa/inet.h>
  
- 	struct sockaddr_in laddr;
+ #include "liburing.h"
++#include "helpers.h"
  
- 	if (!addr)
- 		addr = &laddr;
- 
- 	addr->sin_family = AF_INET;
--	addr->sin_port = htons(0x1235 + port_off);
- 	addr->sin_addr.s_addr = inet_addr("127.0.0.1");
--
--	ret = bind(fd, (struct sockaddr*)addr, sizeof(*addr));
--	assert(ret != -1);
-+	assert(!t_bind_ephemeral_port(fd, addr));
- 	ret = listen(fd, 128);
- 	assert(ret != -1);
- 
- 	return fd;
+ static void sig_pipe(int sig)
+ {
  }
  
- static int set_client_fd(struct sockaddr_in *addr)
+ int main(int argc, char *argv[])
  {
- 	int32_t val;
- 	int fd, ret;
+ 	int p_fd[2], ret;
+ 	int32_t recv_s0;
+ 	int32_t val = 1;
+-	struct sockaddr_in addr;
++	struct sockaddr_in addr = { };
  
- 	fd = socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, IPPROTO_TCP);
+ 	if (argc > 1)
+ 		return 0;
  
+ 	srand(getpid());
+ 
+ 	recv_s0 = socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, IPPROTO_TCP);
+ 
+ 	ret = setsockopt(recv_s0, SOL_SOCKET, SO_REUSEPORT, &val, sizeof(val));
+ 	assert(ret != -1);
+ 	ret = setsockopt(recv_s0, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
+ 	assert(ret != -1);
+ 
+ 	addr.sin_family = AF_INET;
+-	addr.sin_port = htons((rand() % 61440) + 4096);
+ 	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+ 
+-	ret = bind(recv_s0, (struct sockaddr*)&addr, sizeof(addr));
+-	assert(ret != -1);
++	assert(!t_bind_ephemeral_port(recv_s0, &addr));
+ 	ret = listen(recv_s0, 128);
+ 	assert(ret != -1);
+ 
+ 	p_fd[1] = socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, IPPROTO_TCP);
+ 
+ 	val = 1;
+ 	ret = setsockopt(p_fd[1], IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
+ 	assert(ret != -1);
+ 
+ 	int32_t flags = fcntl(p_fd[1], F_GETFL, 0);
+ 	assert(flags != -1);
+ 
+ 	flags |= O_NONBLOCK;
 -- 
 Ammar Faizi
 

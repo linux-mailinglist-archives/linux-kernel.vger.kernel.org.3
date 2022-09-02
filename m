@@ -2,102 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416E25AB5C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57095AB5CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbiIBPyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S236847AbiIBPy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237462AbiIBPxn (ORCPT
+        with ESMTP id S237548AbiIBPxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:53:43 -0400
-Received: from mail.base45.de (mail.base45.de [IPv6:2001:67c:2050:320::77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138CE7EFD9;
-        Fri,  2 Sep 2022 08:47:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fe80.eu;
-        s=20190804; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=CTrG12qWnI/c/AxI8kTL2+rjoFmKz1TXs568RjVaASw=; b=ifKtc5mRxPP/hgk+Ujk1yvgVcL
-        Hd0Yi+M6uyrX3B0eqHzbr8jt3EzwK2h1hez7h9JQijZsTOI/t7b77YbQsg8TdY2kbc1MoO2iNRdqx
-        fZW+VmZsVJeH2MySiJ5JZ5iiLwkpTJLYP/QJ+u3bsptU1mfzf971861j5yM7+VfOck15C0+diOs4j
-        kL+vIvmkhQ8N98uA87gx95GTk2C+k7qFrK5CfD6L/Ay9F4DUKz0oBSilvXKQRLXbmkQV00XqhEMom
-        Y3AJps/tqC2vkBIBL5YH8RPrRMTiOlGrInb/392Q1OI26agkHoUVlC5NwGEFsOUcCRbxKLExnQJoN
-        wxDzstOA==;
-Received: from [92.206.252.219] (helo=javelin)
-        by mail.base45.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lynxis@fe80.eu>)
-        id 1oU8sx-005KhR-5H; Fri, 02 Sep 2022 15:47:11 +0000
-Date:   Fri, 2 Sep 2022 17:47:10 +0200
-From:   Alexander 'lynxis' Couzens <lynxis@fe80.eu>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Daniel Golle <daniel@makrotopia.org>
-Subject: Re: [PATCH 3/4] net: mediatek: sgmii: mtk_pcs_setup_mode_an: don't
- rely on register defaults
-Message-ID: <20220902174710.54a1d317@javelin>
-In-Reply-To: <YwTyLwRnQ+eTXeDr@shell.armlinux.org.uk>
-References: <20220820224538.59489-1-lynxis@fe80.eu>
-        <20220820224538.59489-4-lynxis@fe80.eu>
-        <YwTyLwRnQ+eTXeDr@shell.armlinux.org.uk>
+        Fri, 2 Sep 2022 11:53:51 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52250B14C8;
+        Fri,  2 Sep 2022 08:48:19 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662133697;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X3uLK2B33Vs/uryalTDkiauADuUaETuEfrZIlg4V3Ns=;
+        b=Yk6Sb4XwCG9CU+f3BT3LbXi0D76Zsp6/FjzwDgiQfw4npSYYYR2n8nyR9Em2I2CvfprTj3
+        xrYdP0DciLxNTtMnbm09cD95Md2ecBGjtITQfevZ+wldGVXDw/tv9+BDcijqPrrj7tyGpz
+        nbsaz4MomVpOltLahS22jNzlERlm9Ng=
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Reiji Watanabe <reijiw@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/7] KVM: arm64: Use visibility hook to treat ID regs as RAZ
+Date:   Fri,  2 Sep 2022 15:47:57 +0000
+Message-Id: <20220902154804.1939819-2-oliver.upton@linux.dev>
+In-Reply-To: <20220902154804.1939819-1-oliver.upton@linux.dev>
+References: <20220902154804.1939819-1-oliver.upton@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 16:28:47 +0100
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+The generic id reg accessors already handle RAZ registers by way of the
+visibility hook. Add a visibility hook that returns REG_RAZ
+unconditionally and throw out the RAZ specific accessors.
 
-> On Sun, Aug 21, 2022 at 12:45:37AM +0200, Alexander Couzens wrote:
-> > Ensure autonegotiation is enabled.
-> > 
-> > Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
-> > ---
-> >  drivers/net/ethernet/mediatek/mtk_sgmii.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> > b/drivers/net/ethernet/mediatek/mtk_sgmii.c index
-> > 782812434367..aa69baf1a42f 100644 ---
-> > a/drivers/net/ethernet/mediatek/mtk_sgmii.c +++
-> > b/drivers/net/ethernet/mediatek/mtk_sgmii.c @@ -32,12 +32,13 @@
-> > static int mtk_pcs_setup_mode_an(struct mtk_pcs *mpcs)
-> > regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER,
-> > SGMII_LINK_TIMER_DEFAULT); 
-> > +	/* disable remote fault & enable auto neg */
-> >  	regmap_read(mpcs->regmap, SGMSYS_SGMII_MODE, &val);
-> > -	val |= SGMII_REMOTE_FAULT_DIS;
-> > +	val |= SGMII_REMOTE_FAULT_DIS | SGMII_SPEED_DUPLEX_AN;  
-> 
-> Does SGMII_SPEED_DUPLEX_AN need to be cleared in
-> mtk_pcs_setup_mode_force(), so mtk_pcs_link_up() can force the
-> duplex setting for base-X protocols?
-> 
+Reviewed-by: Reiji Watanabe <reijiw@google.com>
+Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+---
+ arch/arm64/kvm/sys_regs.c | 33 ++++++++++++++-------------------
+ 1 file changed, 14 insertions(+), 19 deletions(-)
 
-Yes SGMII_SPEED_DUPLEX_AN needs to be cleared to have FORCE_DUPLEX
-working. But mtk_pcs_setup_mode_force() is clearing it implicit by
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index 3234f50b8c4b..e18efb9211f0 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -1145,6 +1145,12 @@ static unsigned int id_visibility(const struct kvm_vcpu *vcpu,
+ 	return 0;
+ }
+ 
++static unsigned int raz_visibility(const struct kvm_vcpu *vcpu,
++				   const struct sys_reg_desc *r)
++{
++	return REG_RAZ;
++}
++
+ /* cpufeature ID register access trap handlers */
+ 
+ static bool __access_id_reg(struct kvm_vcpu *vcpu,
+@@ -1168,13 +1174,6 @@ static bool access_id_reg(struct kvm_vcpu *vcpu,
+ 	return __access_id_reg(vcpu, p, r, raz);
+ }
+ 
+-static bool access_raz_id_reg(struct kvm_vcpu *vcpu,
+-			      struct sys_reg_params *p,
+-			      const struct sys_reg_desc *r)
+-{
+-	return __access_id_reg(vcpu, p, r, true);
+-}
+-
+ /* Visibility overrides for SVE-specific control registers */
+ static unsigned int sve_visibility(const struct kvm_vcpu *vcpu,
+ 				   const struct sys_reg_desc *rd)
+@@ -1262,12 +1261,6 @@ static int set_id_reg(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
+ 	return __set_id_reg(vcpu, rd, val, raz);
+ }
+ 
+-static int set_raz_id_reg(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
+-			  u64 val)
+-{
+-	return __set_id_reg(vcpu, rd, val, true);
+-}
+-
+ static int get_raz_reg(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
+ 		       u64 *val)
+ {
+@@ -1374,9 +1367,10 @@ static unsigned int mte_visibility(const struct kvm_vcpu *vcpu,
+  */
+ #define ID_UNALLOCATED(crm, op2) {			\
+ 	Op0(3), Op1(0), CRn(0), CRm(crm), Op2(op2),	\
+-	.access = access_raz_id_reg,			\
+-	.get_user = get_raz_reg,			\
+-	.set_user = set_raz_id_reg,			\
++	.access = access_id_reg,			\
++	.get_user = get_id_reg,				\
++	.set_user = set_id_reg,				\
++	.visibility = raz_visibility			\
+ }
+ 
+ /*
+@@ -1386,9 +1380,10 @@ static unsigned int mte_visibility(const struct kvm_vcpu *vcpu,
+  */
+ #define ID_HIDDEN(name) {			\
+ 	SYS_DESC(SYS_##name),			\
+-	.access = access_raz_id_reg,		\
+-	.get_user = get_raz_reg,		\
+-	.set_user = set_raz_id_reg,		\
++	.access = access_id_reg,		\
++	.get_user = get_id_reg,			\
++	.set_user = set_id_reg,			\
++	.visibility = raz_visibility,		\
+ }
+ 
+ /*
+-- 
+2.37.2.789.g6183377224-goog
 
-val &= SGMII_DUPLEX_FULL & ~SGMII_IF_MODE_MASK
-
-because it's included in the SGMII_IF_MODE_MASK.
-I also don't understand why it's forcing it in the
-mtk_pcs_link_up().

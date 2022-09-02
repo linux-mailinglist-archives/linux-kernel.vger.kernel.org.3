@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5705AB3B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C9C5AB3A9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236717AbiIBOd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S236074AbiIBOcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236217AbiIBOaX (ORCPT
+        with ESMTP id S237943AbiIBO2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:30:23 -0400
+        Fri, 2 Sep 2022 10:28:47 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABDD20F4B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32601140CD
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:54:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=Mk4gyPud12Euk/9XIHAPXis5fefrr9FnQg5Sg88vnL0=; b=X7Th3/a7wdt17ojxWrABzi5Ae8
-        oaJGENC29iMmbnDD3sh8vciSWHTDv2S3CaixkPjaGmC8OFjWx8NmpOqDVD0tbLjtH12mbRFODkxng
-        PQo1KpOw1+NUHQnIopLOq87lu91khcWU0khwjLFicn4aOgFEtgBlxPbOp4uBsrXdnYLS39sfc+8dS
-        OtT7nzeilsw5T/nJ2Ip42YCzEUjMrYtHimjs0zmUx0pgSsVeMP/JHZQpxjuwxSa9uMNQ1ZyGwiYVK
-        lsebNDTOjDbP7PMGbrg1grISQc38zNKmCNsaCIvRRlR0HUz85NIXbBtvAaGEMXJEmS8wyE3fE6Qe5
-        nwaLhoXQ==;
+        bh=WG6G46Ua3WkaooMqyaY9G1V2PL1FK78RAajcxW19yWA=; b=Gv0FHzx9E3AunEp04b4luzhZS7
+        EVld5MobGXBeGMwpBn6R096leV+mMQ1IY5CXZuSN8Jf83TmSYR1D5ckkv0MfLguf+gC4r1to0aoLp
+        cKYqBF0kOF7hA7isc1wLsFjU+t3HorPPih6yI4hFIj2Lt20XXjvG+SQ8AZxazudJJH3m4OYcI++wK
+        vNBin//nusv8mRmOTv0+k8i2EBdnLQ19SBiDpoIk0T5tLylv3hqeVPBgvuoUEic1mbogkagdK7194
+        Q+b1Ldg0PJyX4IOrv3dZg5VniK5brdoJIIhi2y9oiUppRBpAr7F/iwqukzd2gpMUczH7qKm3dmc8D
+        y/F5EHwg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oU77P-008g8l-Jq; Fri, 02 Sep 2022 13:54:03 +0000
+        id 1oU77O-008g8e-9U; Fri, 02 Sep 2022 13:54:01 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 451CC302DA9;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4346C302DA6;
         Fri,  2 Sep 2022 15:53:54 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id A654D2B8EFB60; Fri,  2 Sep 2022 15:53:53 +0200 (CEST)
-Message-ID: <20220902130951.853460809@infradead.org>
+        id B08522B8EFB61; Fri,  2 Sep 2022 15:53:53 +0200 (CEST)
+Message-ID: <20220902130951.959811186@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 02 Sep 2022 15:07:18 +0200
+Date:   Fri, 02 Sep 2022 15:07:19 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
@@ -59,7 +59,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         K Prateek Nayak <kprateek.nayak@amd.com>,
         Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v2 53/59] kallsyms: Take callthunks into account
+Subject: [PATCH v2 54/59] x86/orc: Make it callthunk aware
 References: <20220902130625.217071627@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,123 +75,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-Since the pre-symbol function padding is an integral part of the
-symbol make kallsyms report it as part of the symbol by reporting it
-as sym-x instead of prev_sym+y.
+Callthunks addresses on the stack would confuse the ORC unwinder. Handle
+them correctly and tell ORC to proceed further down the stack.
 
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/kallsyms.c |   45 ++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 40 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/alternative.h |    5 +++++
+ arch/x86/kernel/callthunks.c       |   13 +++++++++++++
+ arch/x86/kernel/unwind_orc.c       |   21 ++++++++++++++++++++-
+ 3 files changed, 38 insertions(+), 1 deletion(-)
 
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -292,6 +292,12 @@ static unsigned long get_symbol_pos(unsi
- 	return low;
+--- a/arch/x86/include/asm/alternative.h
++++ b/arch/x86/include/asm/alternative.h
+@@ -92,6 +92,7 @@ extern void callthunks_patch_builtin_cal
+ extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
+ 					  struct module *mod);
+ extern void *callthunks_translate_call_dest(void *dest);
++extern bool is_callthunk(void *addr);
+ #else
+ static __always_inline void callthunks_patch_builtin_calls(void) {}
+ static __always_inline void
+@@ -101,6 +102,10 @@ static __always_inline void *callthunks_
+ {
+ 	return dest;
+ }
++static __always_inline bool is_callthunk(void *addr)
++{
++	return false;
++}
+ #endif
+ 
+ #ifdef CONFIG_SMP
+--- a/arch/x86/kernel/callthunks.c
++++ b/arch/x86/kernel/callthunks.c
+@@ -292,6 +292,19 @@ void *callthunks_translate_call_dest(voi
+ 	return target ? : dest;
  }
  
-+#ifdef CONFIG_FUNCTION_PADDING_BYTES
-+#define PADDING_BYTES	CONFIG_FUNCTION_PADDING_BYTES
++bool is_callthunk(void *addr)
++{
++	unsigned int tmpl_size = SKL_TMPL_SIZE;
++	void *tmpl = skl_call_thunk_template;
++	unsigned long dest;
++
++	dest = roundup((unsigned long)addr, CONFIG_FUNCTION_ALIGNMENT);
++	if (!thunks_initialized || skip_addr((void *)dest))
++		return false;
++
++	return !bcmp((void *)(dest - tmpl_size), tmpl, tmpl_size);
++}
++
+ #ifdef CONFIG_MODULES
+ void noinline callthunks_patch_module_calls(struct callthunk_sites *cs,
+ 					    struct module *mod)
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -131,6 +131,21 @@ static struct orc_entry null_orc_entry =
+ 	.type = UNWIND_HINT_TYPE_CALL
+ };
+ 
++#ifdef CONFIG_CALL_THUNKS
++static struct orc_entry *orc_callthunk_find(unsigned long ip)
++{
++	if (!is_callthunk((void *)ip))
++		return NULL;
++
++	return &null_orc_entry;
++}
 +#else
-+#define PADDING_BYTES	0
++static struct orc_entry *orc_callthunk_find(unsigned long ip)
++{
++	return NULL;
++}
 +#endif
 +
- /*
-  * Lookup an address but don't bother to find any names.
-  */
-@@ -299,13 +305,25 @@ int kallsyms_lookup_size_offset(unsigned
- 				unsigned long *offset)
- {
- 	char namebuf[KSYM_NAME_LEN];
-+	int ret;
-+
-+	addr += PADDING_BYTES;
+ /* Fake frame pointer entry -- used as a fallback for generated code */
+ static struct orc_entry orc_fp_entry = {
+ 	.type		= UNWIND_HINT_TYPE_CALL,
+@@ -184,7 +199,11 @@ static struct orc_entry *orc_find(unsign
+ 	if (orc)
+ 		return orc;
  
- 	if (is_ksym_addr(addr)) {
- 		get_symbol_pos(addr, symbolsize, offset);
--		return 1;
-+		ret = 1;
-+		goto found;
- 	}
--	return !!module_address_lookup(addr, symbolsize, offset, NULL, NULL, namebuf) ||
--	       !!__bpf_address_lookup(addr, symbolsize, offset, namebuf);
+-	return orc_ftrace_find(ip);
++	orc =  orc_ftrace_find(ip);
++	if (orc)
++		return orc;
 +
-+	ret = !!module_address_lookup(addr, symbolsize, offset, NULL, NULL, namebuf);
-+	if (!ret) {
-+		ret = !!__bpf_address_lookup(addr, symbolsize,
-+					     offset, namebuf);
-+	}
-+found:
-+	if (ret && offset)
-+		*offset -= PADDING_BYTES;
-+	return ret;
++	return orc_callthunk_find(ip);
  }
  
- static const char *kallsyms_lookup_buildid(unsigned long addr,
-@@ -318,6 +336,8 @@ static const char *kallsyms_lookup_build
- 	namebuf[KSYM_NAME_LEN - 1] = 0;
- 	namebuf[0] = 0;
- 
-+	addr += PADDING_BYTES;
-+
- 	if (is_ksym_addr(addr)) {
- 		unsigned long pos;
- 
-@@ -347,6 +367,8 @@ static const char *kallsyms_lookup_build
- 
- found:
- 	cleanup_symbol_name(namebuf);
-+	if (ret && offset)
-+		*offset -= PADDING_BYTES;
- 	return ret;
- }
- 
-@@ -373,6 +395,8 @@ int lookup_symbol_name(unsigned long add
- 	symname[0] = '\0';
- 	symname[KSYM_NAME_LEN - 1] = '\0';
- 
-+	addr += PADDING_BYTES;
-+
- 	if (is_ksym_addr(addr)) {
- 		unsigned long pos;
- 
-@@ -400,6 +424,8 @@ int lookup_symbol_attrs(unsigned long ad
- 	name[0] = '\0';
- 	name[KSYM_NAME_LEN - 1] = '\0';
- 
-+	addr += PADDING_BYTES;
-+
- 	if (is_ksym_addr(addr)) {
- 		unsigned long pos;
- 
-@@ -416,6 +442,8 @@ int lookup_symbol_attrs(unsigned long ad
- 		return res;
- 
- found:
-+	if (offset)
-+		*offset -= PADDING_BYTES;
- 	cleanup_symbol_name(name);
- 	return 0;
- }
-@@ -441,8 +469,15 @@ static int __sprint_symbol(char *buffer,
- 	len = strlen(buffer);
- 	offset -= symbol_offset;
- 
--	if (add_offset)
--		len += sprintf(buffer + len, "+%#lx/%#lx", offset, size);
-+	if (add_offset) {
-+		char s = '+';
-+
-+		if ((long)offset < 0) {
-+			s = '-';
-+			offset = 0UL - offset;
-+		}
-+		len += sprintf(buffer + len, "%c%#lx/%#lx", s, offset, size);
-+	}
- 
- 	if (modname) {
- 		len += sprintf(buffer + len, " [%s", modname);
+ #ifdef CONFIG_MODULES
 
 

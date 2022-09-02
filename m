@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D915ABA35
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F355ABA39
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbiIBViB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 17:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        id S231220AbiIBViI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 17:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiIBVh6 (ORCPT
+        with ESMTP id S231204AbiIBVh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 17:37:58 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9795F54A7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:37:55 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id u14-20020a170902e5ce00b00174b2ad8435so1927375plf.12
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 14:37:55 -0700 (PDT)
+        Fri, 2 Sep 2022 17:37:59 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA50EF5CCF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:37:57 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id a19-20020aa780d3000000b0052bccd363f8so1610934pfn.22
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 14:37:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=/mc1MiX+U2pcHLov/3qEbkqcM9lCxpiueiff0h+FJ+U=;
-        b=Q2EerrFu6GSc9+qdM21d39Ok1/UrtvKv9CPuKZnNEjP+CBLHM0P/0qMaUquffuhaKx
-         pfR483A9uJppNTh7XewDu1pr6uVOLwVHqAdfY2GAW7FSLlYIqCWJ6cmhqo7Bsvvm8lXD
-         7CQbeNE1Z1V3usBkx72vBtT5Ua8wkk9nDQGc7DXXqQxcYykqCJHrUiQO0LVf0Q8IOV2K
-         JP5NhWrhb9tF20Wz2nA9xYX3Jnl4yUgNAMmYYoGgqfoEVEtbVxpwT3MjcpCzaxqzGTsy
-         GpjqMb9a0HMBon5oX8PcVmDy1Pl3GOgMtHAqsunGj01rTDfSPzAhrLxPXKYffWw9712W
-         6JAA==
+        bh=HDZJ0lSRQoma7HASH55s+Lq3/kCI0PVAr3SKG55mmDE=;
+        b=rBbZGj2hyaPbBdrQ8ZAtAd8fBVTk/aNT+PMfh4D+6g9Dnr1lJ+8WgvE2JpQSQ5mpKr
+         LT2dmPZTqjjH4ka2YE7gNLcVOQ7eD+OWNfyQ2AkU6DMz3lRStI2yu9n2MfIPoTx7L5ey
+         +2YIepUmQxsASZ4ckcGjskYeuPdVvt1j/Wcq+jPORMIzjcCPcV4PD0zHxpxeC1Oq2wre
+         +8hAszoekk7kAiAJsqgWbZ2ymL+wkxPxV5ctB6USiI8NBgGNkPygEfA6Bm89F2jwk/eS
+         piZC+qd+beRl05PxC+rpuQfD/8nEToe3qBGP0kiN2/ERGnRCwcAREuiF7Yu7Hu4WltFr
+         fYMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=/mc1MiX+U2pcHLov/3qEbkqcM9lCxpiueiff0h+FJ+U=;
-        b=o+6e1FOEqQBz/obcudAIgO+CYhvxyojJwvERh2Nhn1PmCdwQeXp8dIwV/ptYUC02zI
-         FyliEUlsqyGNWmZcfcEmgm99cif3B7Xga6RuasVXT0/vrL92M6wp7Sl78u9Ta2oQ8FFx
-         26JbK1zh1CvTVJs3xcwgTE9ws7aoAn3ENM66Ap5WilheWzI6SdZFT4qJE4vKY9q5iRIM
-         KxwPrVpptMdTKC63KDebJa7CFx2vqk85vhaxRnwXITJUtF9xMR9LMB5P+eRXPBhkCj1a
-         /yrYGCxxeOsZeCnTeMuyY3HDA8wf9Ozkc+0+ONIP9+mRZVtqtVjcboT+3txvgXHFpIDS
-         4XhA==
-X-Gm-Message-State: ACgBeo1j4Fw0+E6GeY/Rv1zYqFUfuKO2cYLkA32VjCv1ItdKd86o0wyy
-        F/uwGkPNnyvfvfIOM5PFkc/5Mqhh
-X-Google-Smtp-Source: AA6agR4vXimw+E+0wnnf6E1awMel1BX3dAVTkK6yP715BhMBnACJPtNt15ZWtHDxbpZ1ZWi9c/wI5TnJhw==
+        bh=HDZJ0lSRQoma7HASH55s+Lq3/kCI0PVAr3SKG55mmDE=;
+        b=Kn+G9Q0suaGh6iGYP2regRgsv17jpE5UcnanBRA2vj14oscQF2q8p9D319i7DQDO13
+         fSzltOHqLAkbPYQ/3tLE0KKbFAG02ImLgaPRv6CYct2xJnKiinQybE1OnmnCFZ0ZElrj
+         COzum8crtIXP8ZFaTkj8r4mtm0H/VXi+oNFhnTCQvpw4hMq7EipYTjaxSBcG7H53W3WC
+         4PDB9xaLvCK+F7ZOdrjRFbFTOPbDBzFzzNciNyVEngrodQIN9PoYKXoHcMrz0p+rIYX3
+         dRXIL7G9kYAzBBVlaB+EyhXOjwMKq+O6qtRbV9Icjy9xnoqVxFytIGWR7v3Nfuto3VYO
+         cjhA==
+X-Gm-Message-State: ACgBeo2/ACkx4ewNzLFjek5eb8g6EFQfjQ8Td1ZHCURjlV/ktarcng/F
+        6xAoQahGDfHIDB02I0mH00kIN5Bi
+X-Google-Smtp-Source: AA6agR6rg/qLo+yQa1/A/MnMpENNlMrew4RjKFVFUDSg5m3sigIjZqHtxPyD4LsEch28EwHGn9DhXIq91Q==
 X-Received: from fawn.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5795])
- (user=morbo job=sendgmr) by 2002:a17:903:1cf:b0:176:8160:ac60 with SMTP id
- e15-20020a17090301cf00b001768160ac60mr106488plh.113.1662154675336; Fri, 02
- Sep 2022 14:37:55 -0700 (PDT)
-Date:   Fri,  2 Sep 2022 21:37:49 +0000
+ (user=morbo job=sendgmr) by 2002:a17:90b:264a:b0:1fd:f88d:dbad with SMTP id
+ pa10-20020a17090b264a00b001fdf88ddbadmr7040192pjb.93.1662154677243; Fri, 02
+ Sep 2022 14:37:57 -0700 (PDT)
+Date:   Fri,  2 Sep 2022 21:37:50 +0000
 In-Reply-To: <20220902213750.1124421-1-morbo@google.com>
 Mime-Version: 1.0
 References: <20220902213750.1124421-1-morbo@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220902213750.1124421-2-morbo@google.com>
-Subject: [PATCH 1/2] x86/paravirt: clean up typos and grammaros
+Message-ID: <20220902213750.1124421-3-morbo@google.com>
+Subject: [PATCH 2/2] x86/paravirt: add extra clobbers with ZERO_CALL_USED_REGS enabled
 From:   Bill Wendling <morbo@google.com>
 To:     Juergen Gross <jgross@suse.com>,
         "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
@@ -79,69 +79,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drive-by clean up of the comment.
+The ZERO_CALL_USED_REGS feature may zero out caller-saved registers
+before returning.
 
-[ Impact: cleanup]
+In spurious_kernel_fault(), the "pte_offset_kernel()" call results in
+this assembly code:
 
+.Ltmp151:
+        #APP
+        # ALT: oldnstr
+.Ltmp152:
+.Ltmp153:
+.Ltmp154:
+        .section        .discard.retpoline_safe,"",@progbits
+        .quad   .Ltmp154
+        .text
+
+        callq   *pv_ops+536(%rip)
+
+.Ltmp155:
+        .section        .parainstructions,"a",@progbits
+        .p2align        3, 0x0
+        .quad   .Ltmp153
+        .byte   67
+        .byte   .Ltmp155-.Ltmp153
+        .short  1
+        .text
+.Ltmp156:
+        # ALT: padding
+        .zero   (-(((.Ltmp157-.Ltmp158)-(.Ltmp156-.Ltmp152))>0))*((.Ltmp157-.Ltmp158)-(.Ltmp156-.Ltmp152)),144
+.Ltmp159:
+        .section        .altinstructions,"a",@progbits
+.Ltmp160:
+        .long   .Ltmp152-.Ltmp160
+.Ltmp161:
+        .long   .Ltmp158-.Ltmp161
+        .short  33040
+        .byte   .Ltmp159-.Ltmp152
+        .byte   .Ltmp157-.Ltmp158
+        .text
+
+        .section        .altinstr_replacement,"ax",@progbits
+        # ALT: replacement 1
+.Ltmp158:
+        movq    %rdi, %rax
+.Ltmp157:
+        .text
+        #NO_APP
+.Ltmp162:
+        testb   $-128, %dil
+
+The "testb" here is using %dil, but the %rdi register was cleared before
+returning from "callq *pv_ops+536(%rip)". Adding the proper constraints
+results in the use of a different register:
+
+        movq    %r11, %rdi
+
+        # Similar to above.
+
+        testb   $-128, %r11b
+
+Link: https://github.com/KSPP/linux/issues/192
 Signed-off-by: Bill Wendling <morbo@google.com>
+Reported-and-tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
- arch/x86/include/asm/paravirt_types.h | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ arch/x86/include/asm/paravirt_types.h | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
-index 89df6c6617f5..f04157456a49 100644
+index f04157456a49..b1ab5d94881b 100644
 --- a/arch/x86/include/asm/paravirt_types.h
 +++ b/arch/x86/include/asm/paravirt_types.h
-@@ -328,7 +328,7 @@ int paravirt_disable_iospace(void);
-  * Unfortunately, this is a relatively slow operation for modern CPUs,
-  * because it cannot necessarily determine what the destination
-  * address is.  In this case, the address is a runtime constant, so at
-- * the very least we can patch the call to e a simple direct call, or
-+ * the very least we can patch the call to a simple direct call, or,
-  * ideally, patch an inline implementation into the callsite.  (Direct
-  * calls are essentially free, because the call and return addresses
-  * are completely predictable.)
-@@ -339,10 +339,10 @@ int paravirt_disable_iospace(void);
-  * on the stack.  All caller-save registers (eax,edx,ecx) are expected
-  * to be modified (either clobbered or used for return values).
-  * X86_64, on the other hand, already specifies a register-based calling
-- * conventions, returning at %rax, with parameters going on %rdi, %rsi,
-+ * conventions, returning at %rax, with parameters going in %rdi, %rsi,
-  * %rdx, and %rcx. Note that for this reason, x86_64 does not need any
-  * special handling for dealing with 4 arguments, unlike i386.
-- * However, x86_64 also have to clobber all caller saved registers, which
-+ * However, x86_64 also has to clobber all caller saved registers, which
-  * unfortunately, are quite a bit (r8 - r11)
-  *
-  * The call instruction itself is marked by placing its start address
-@@ -360,22 +360,22 @@ int paravirt_disable_iospace(void);
-  * There are 5 sets of PVOP_* macros for dealing with 0-4 arguments.
-  * It could be extended to more arguments, but there would be little
-  * to be gained from that.  For each number of arguments, there are
-- * the two VCALL and CALL variants for void and non-void functions.
-+ * two VCALL and CALL variants for void and non-void functions.
-  *
-  * When there is a return value, the invoker of the macro must specify
-  * the return type.  The macro then uses sizeof() on that type to
-- * determine whether its a 32 or 64 bit value, and places the return
-+ * determine whether it's a 32 or 64 bit value and places the return
-  * in the right register(s) (just %eax for 32-bit, and %edx:%eax for
-- * 64-bit). For x86_64 machines, it just returns at %rax regardless of
-+ * 64-bit). For x86_64 machines, it just returns in %rax regardless of
-  * the return value size.
-  *
-- * 64-bit arguments are passed as a pair of adjacent 32-bit arguments
-+ * 64-bit arguments are passed as a pair of adjacent 32-bit arguments;
-  * i386 also passes 64-bit arguments as a pair of adjacent 32-bit arguments
-  * in low,high order
-  *
-  * Small structures are passed and returned in registers.  The macro
-  * calling convention can't directly deal with this, so the wrapper
-- * functions must do this.
-+ * functions must do it.
-  *
-  * These PVOP_* macros are only defined within this header.  This
-  * means that all uses must be wrapped in inline functions.  This also
+@@ -414,8 +414,17 @@ int paravirt_disable_iospace(void);
+ 				"=c" (__ecx)
+ #define PVOP_CALL_CLOBBERS	PVOP_VCALL_CLOBBERS, "=a" (__eax)
+ 
+-/* void functions are still allowed [re]ax for scratch */
++/*
++ * void functions are still allowed [re]ax for scratch.
++ *
++ * The ZERO_CALL_USED REGS feature may end up zeroing out callee-saved
++ * registers. Make sure we model this with the appropriate clobbers.
++ */
++#ifdef CONFIG_ZERO_CALL_USED_REGS
++#define PVOP_VCALLEE_CLOBBERS	"=a" (__eax), PVOP_VCALL_CLOBBERS
++#else
+ #define PVOP_VCALLEE_CLOBBERS	"=a" (__eax)
++#endif
+ #define PVOP_CALLEE_CLOBBERS	PVOP_VCALLEE_CLOBBERS
+ 
+ #define EXTRA_CLOBBERS	 , "r8", "r9", "r10", "r11"
 -- 
 2.37.2.789.g6183377224-goog
 

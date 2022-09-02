@@ -2,151 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D899D5AB9F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A664F5AB9F9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 23:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiIBVPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 17:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S229750AbiIBVVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 17:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiIBVO5 (ORCPT
+        with ESMTP id S229574AbiIBVVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 17:14:57 -0400
-Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FBF402DA;
-        Fri,  2 Sep 2022 14:14:54 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
-        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 67BAF4D;
-        Fri,  2 Sep 2022 23:14:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1662153290;
-        bh=u5FjiDtj+sc7V8QJwsamLfaOay7+nXBUtX8OoR4BnUI=;
+        Fri, 2 Sep 2022 17:21:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D753D9D64
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 14:21:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21C7A614A0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 21:21:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C311C433C1;
+        Fri,  2 Sep 2022 21:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662153671;
+        bh=gtA3mZspcIkAO5q5+QzGaBO8XNZ0ayfsNt1Fu8t0hhs=;
         h=From:To:Cc:Subject:Date:From;
-        b=J+X0M041Rk77l0bKInImGKixCg8ji0nu2ogvrVGKn5jPzyHYSLe5OHITrFOpr9N48
-         AMpOZpW7QNxgB7OueLDLVFKn4/dDOiDrMRNdETKxH9S3Eg0Eukp1JDZ9cZ3e0Wtk7U
-         SMdm+E9ge9ym+pdH1MzWjE1B0929j1XLJgRNGYEN1j3kNAMaal8DgxRGgKj8fuCCdv
-         VpvcgYLAXmi9Xivnnk3GRMDWWACTvHa4OXv8l3yvUmhvKSgm7yOpdXYXxzxMMdwQYe
-         OZSByvtwo22CFElr4wlnPdhV34PUGh/5QWYcl9Od6hEZQ+MqKHiyYJhS60IpocUu7N
-         O8nJ6I5A/ijbw==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 61BBA1ABC; Fri,  2 Sep 2022 23:14:50 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 3C1361ABB;
-        Fri,  2 Sep 2022 23:14:50 +0200 (CEST)
-Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 375AD1AB7;
-        Fri,  2 Sep 2022 23:14:50 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 33B864A0440; Fri,  2 Sep 2022 23:14:50 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id D77AC4A007E;
-        Fri,  2 Sep 2022 23:14:49 +0200 (CEST)
-        (Extended-Queue-bit xtech_jl@fff.in.tum.de)
-From:   =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: [PATCH v3] tools/memory-model: Weaken ctrl dependency definition in explanation.txt
-Date:   Fri,  2 Sep 2022 21:13:40 +0000
-Message-Id: <20220902211341.2585133-1-paul.heidekrueger@in.tum.de>
-X-Mailer: git-send-email 2.35.1
+        b=XOoJ7WBIO14VZr25jns0ogH6zTUXGBSfsN1xVdU2DL8Wbo0WO+aVkhclGRTcCjlnA
+         9zwPOU9qCBfWMNMYjyUpu6EPqH2OdxhnYHWjdWbiKOfsiN6zCgQU/dgB38w5hIUAks
+         HqLwuS9QGKUtwbPRTPDZROk23T95r/xykDDq9hjNmSmbSBu31TJ1RVcXF7E0jRbiLX
+         a4EpH1xSY8JUMNGcrcovR2iusqVUE8dbuq5ZAHSoxEVWixR7zz8YgNrJKIuKfc17pp
+         S3JqRWyp8ZZf/mZ5NonD11Onr77jdtwIN4nzPQgYWOngeoNfwgRw9Ng8+nfh1v6Z/z
+         z/eScuD3ISzdA==
+Received: by pali.im (Postfix)
+        id 5BE717EA; Fri,  2 Sep 2022 23:21:08 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] powerpc: Fix SPE Power ISA properties for e500v1 platforms
+Date:   Fri,  2 Sep 2022 23:21:02 +0200
+Message-Id: <20220902212103.22534-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current informal control dependency definition in explanation.txt is
-too broad and, as discussed, needs to be updated.
+Commit 2eb28006431c ("powerpc/e500v2: Add Power ISA properties to comply
+with ePAPR 1.1") introduced new include file e500v2_power_isa.dtsi and
+should have used it for all e500v2 platforms. But apparently it was used
+also for e500v1 platforms mpc8540, mpc8541, mpc8555 and mpc8560.
 
-Consider the following example:
+e500v1 cores compared to e500v2 do not support double precision floating
+point SPE instructions. Hence power-isa-sp.fd should not be set on e500v1
+platforms, which is in e500v2_power_isa.dtsi include file.
 
-> if(READ_ONCE(x))
->   return 42;
->
-> WRITE_ONCE(y, 42);
->
-> return 21;
+Fix this issue by introducing a new e500v1_power_isa.dtsi include file and
+use it in all e500v1 device tree files.
 
-The read event determines whether the write event will be executed "at all"
-- as per the current definition - but the formal LKMM does not recognize
-this as a control dependency.
-
-Introduce a new definition which includes the requirement for the second
-memory access event to syntactically lie within the arm of a non-loop
-conditional.
-
-Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
-Cc: Marco Elver <elver@google.com>
-Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-Cc: Martin Fink <martin.fink@in.tum.de>
-Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+Fixes: 2eb28006431c ("powerpc/e500v2: Add Power ISA properties to comply with ePAPR 1.1")
+Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
+ .../dts/fsl/{e500v2_power_isa.dtsi => e500v1_power_isa.dtsi}   | 3 +--
+ arch/powerpc/boot/dts/fsl/mpc8540ads.dts                       | 2 +-
+ arch/powerpc/boot/dts/fsl/mpc8541cds.dts                       | 2 +-
+ arch/powerpc/boot/dts/fsl/mpc8555cds.dts                       | 2 +-
+ arch/powerpc/boot/dts/fsl/mpc8560ads.dts                       | 2 +-
+ 5 files changed, 5 insertions(+), 6 deletions(-)
+ copy arch/powerpc/boot/dts/fsl/{e500v2_power_isa.dtsi => e500v1_power_isa.dtsi} (95%)
 
-v3:
-- Address Alan and Joel's feedback re: the wording around switch statements
-and the use of "guarding"
-
-v2:
-- Fix typos
-- Fix indentation of code snippet
-
-v1:
-@Alan, since I got it wrong the last time, I'm adding you as a co-developer
-after my SOB. I'm sorry if this creates extra work on your side due to you
-having to resubmit the patch now with your SOB if I understand correctly,
-but since it's based on your wording from the other thread, I definitely
-wanted to give you credit.
-
- tools/memory-model/Documentation/explanation.txt | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-index ee819a402b69..0b7e1925a673 100644
---- a/tools/memory-model/Documentation/explanation.txt
-+++ b/tools/memory-model/Documentation/explanation.txt
-@@ -464,9 +464,11 @@ to address dependencies, since the address of a location accessed
- through a pointer will depend on the value read earlier from that
- pointer.
-
--Finally, a read event and another memory access event are linked by a
--control dependency if the value obtained by the read affects whether
--the second event is executed at all.  Simple example:
-+Finally, a read event X and another memory access event Y are linked by
-+a control dependency if Y syntactically lies within an arm of an if
-+statement and X affects the evaluation of the if condition via a data or
-+address dependency (or similarly for a switch statement).  Simple
-+example:
-
- 	int x, y;
-
---
-2.35.1
+diff --git a/arch/powerpc/boot/dts/fsl/e500v2_power_isa.dtsi b/arch/powerpc/boot/dts/fsl/e500v1_power_isa.dtsi
+similarity index 95%
+copy from arch/powerpc/boot/dts/fsl/e500v2_power_isa.dtsi
+copy to arch/powerpc/boot/dts/fsl/e500v1_power_isa.dtsi
+index f4928144d2c8..7e2a90cde72e 100644
+--- a/arch/powerpc/boot/dts/fsl/e500v2_power_isa.dtsi
++++ b/arch/powerpc/boot/dts/fsl/e500v1_power_isa.dtsi
+@@ -1,5 +1,5 @@
+ /*
+- * e500v2 Power ISA Device Tree Source (include)
++ * e500v1 Power ISA Device Tree Source (include)
+  *
+  * Copyright 2012 Freescale Semiconductor Inc.
+  *
+@@ -44,7 +44,6 @@
+ 		power-isa-ecl;		// Embedded Cache Locking
+ 		power-isa-mmc;		// Memory Coherence
+ 		power-isa-sp;		// Signal Processing Engine
+-		power-isa-sp.fd;	// SPE.Embedded Float Scalar Double
+ 		power-isa-sp.fs;	// SPE.Embedded Float Scalar Single
+ 		power-isa-sp.fv;	// SPE.Embedded Float Vector
+ 		mmu-type = "power-embedded";
+diff --git a/arch/powerpc/boot/dts/fsl/mpc8540ads.dts b/arch/powerpc/boot/dts/fsl/mpc8540ads.dts
+index 18a885130538..e03ae130162b 100644
+--- a/arch/powerpc/boot/dts/fsl/mpc8540ads.dts
++++ b/arch/powerpc/boot/dts/fsl/mpc8540ads.dts
+@@ -7,7 +7,7 @@
+ 
+ /dts-v1/;
+ 
+-/include/ "e500v2_power_isa.dtsi"
++/include/ "e500v1_power_isa.dtsi"
+ 
+ / {
+ 	model = "MPC8540ADS";
+diff --git a/arch/powerpc/boot/dts/fsl/mpc8541cds.dts b/arch/powerpc/boot/dts/fsl/mpc8541cds.dts
+index ac381e7b1c60..a2a6c5cf852e 100644
+--- a/arch/powerpc/boot/dts/fsl/mpc8541cds.dts
++++ b/arch/powerpc/boot/dts/fsl/mpc8541cds.dts
+@@ -7,7 +7,7 @@
+ 
+ /dts-v1/;
+ 
+-/include/ "e500v2_power_isa.dtsi"
++/include/ "e500v1_power_isa.dtsi"
+ 
+ / {
+ 	model = "MPC8541CDS";
+diff --git a/arch/powerpc/boot/dts/fsl/mpc8555cds.dts b/arch/powerpc/boot/dts/fsl/mpc8555cds.dts
+index 9f58db2a7e66..901b6ff06dfb 100644
+--- a/arch/powerpc/boot/dts/fsl/mpc8555cds.dts
++++ b/arch/powerpc/boot/dts/fsl/mpc8555cds.dts
+@@ -7,7 +7,7 @@
+ 
+ /dts-v1/;
+ 
+-/include/ "e500v2_power_isa.dtsi"
++/include/ "e500v1_power_isa.dtsi"
+ 
+ / {
+ 	model = "MPC8555CDS";
+diff --git a/arch/powerpc/boot/dts/fsl/mpc8560ads.dts b/arch/powerpc/boot/dts/fsl/mpc8560ads.dts
+index a24722ccaebf..c2f9aea78b29 100644
+--- a/arch/powerpc/boot/dts/fsl/mpc8560ads.dts
++++ b/arch/powerpc/boot/dts/fsl/mpc8560ads.dts
+@@ -7,7 +7,7 @@
+ 
+ /dts-v1/;
+ 
+-/include/ "e500v2_power_isa.dtsi"
++/include/ "e500v1_power_isa.dtsi"
+ 
+ / {
+ 	model = "MPC8560ADS";
+-- 
+2.20.1
 

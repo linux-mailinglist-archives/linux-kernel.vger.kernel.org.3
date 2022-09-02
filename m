@@ -2,95 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB96C5AAE23
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE82D5AAE33
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235870AbiIBMKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
+        id S235485AbiIBMQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235854AbiIBMKU (ORCPT
+        with ESMTP id S231266AbiIBMQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:10:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22572A73E;
-        Fri,  2 Sep 2022 05:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2EF620D1;
-        Fri,  2 Sep 2022 12:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59A17C433B5;
-        Fri,  2 Sep 2022 12:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662120616;
-        bh=cfLV+hYmpTeGN4Jr6uIQCPnEFumTwBtZQ2Qc4OquoBs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=noAS4ZqhKh2VfXz2bKLz9WBA1M3CECYi24vq7zaHqMNueSfJQmbsU7Kbp8WEH8prT
-         HOs28qruw4CU0X1KGU9sXTJ8x9TqYs5sSOQyqSwxta4R0f9dPyjIfEvbzM33AoHuoh
-         T9rdD3XbTcm7z49wKHZ4x2DkuFRidKSfRnnLSmq8lrh8H5HHe4OeHW/+Ed4rme0JYU
-         CwZKVtI2JLtHOmE+40yLIPCu8C8kzDacGfkyllq4351Uxnfl+8XhqIPm6UQlxWnIMk
-         dfjrPHl4fspRwCz9diZGIFXC6UzLrfJjWHA8H5onf8TIhK3VSKr+NbA1Uv6bWxrQhF
-         /AmiBgYfDBhVg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3DC06E924E4;
-        Fri,  2 Sep 2022 12:10:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 2 Sep 2022 08:16:40 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA7EC2F92;
+        Fri,  2 Sep 2022 05:16:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662120999; x=1693656999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CJ7K6MAmvy9eYTd7oP1wszLEZKBCQJ6tFK2SaopjaYI=;
+  b=Rzs0+2nyXx00SSq6SgHv/p7hUhLoqv/wHOoFB1v12CAXOL2TO6LBzXX/
+   Ky+VtPEcqsqZuXwOaLjckJHMs0HivQkGLU1AV6hgLxb2QJb3hjiA0NnQ7
+   iWaHUVeFKeNfO89VU6k2XFQolGMLbbmmbDvy0L6fydGCEBHgIN9di4EwI
+   lp/KZBOqHEEkApjzi+TPF9tJPqUrio4tVmEqJG2ij47ai2jH/gcYXM0IQ
+   ZVurhisjy74nfCEvQbPWjH/UU5BZQ6rDlIOset0bYF4YjgtvPTjUKTnpX
+   ihHcH5Tx5ZGkKXDqDB4xCry0kNsdwF7wlouRrIo/0E3TmXYMbKXFxvPm5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="278983881"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="278983881"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 05:16:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="681270907"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Sep 2022 05:16:34 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oU5b8-000039-0W;
+        Fri, 02 Sep 2022 12:16:34 +0000
+Date:   Fri, 2 Sep 2022 20:16:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Cc:     kbuild-all@lists.01.org, Daniel Xu <dxu@dxuuu.xyz>,
+        pablo@netfilter.org, fw@strlen.de, toke@kernel.org,
+        martin.lau@linux.dev, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 4/5] bpf: Add support for writing to
+ nf_conn:mark
+Message-ID: <202209022000.s58TmR9h-lkp@intel.com>
+References: <073173502d762faf87bde0ca23e609c84848dd7e.1661192455.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/6] rxrpc: Miscellaneous fixes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166212061624.16201.6479351109057474742.git-patchwork-notify@kernel.org>
-Date:   Fri, 02 Sep 2022 12:10:16 +0000
-References: <166203518656.271364.567426359603115318.stgit@warthog.procyon.org.uk>
-In-Reply-To: <166203518656.271364.567426359603115318.stgit@warthog.procyon.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, marc.dionne@auristor.com,
-        jaltman@auristor.com, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <073173502d762faf87bde0ca23e609c84848dd7e.1661192455.git.dxu@dxuuu.xyz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Daniel,
 
-This series was applied to netdev/net.git (master)
-by David Howells <dhowells@redhat.com>:
+Thank you for the patch! Yet something to improve:
 
-On Thu, 01 Sep 2022 13:26:26 +0100 you wrote:
-> Here are some fixes for AF_RXRPC:
-> 
->  (1) Fix the handling of ICMP/ICMP6 packets.  This is a problem due to
->      rxrpc being switched to acting as a UDP tunnel, thereby allowing it to
->      steal the packets before they go through the UDP Rx queue.  UDP
->      tunnels can't get ICMP/ICMP6 packets, however.  This patch adds an
->      additional encap hook so that they can.
-> 
-> [...]
+[auto build test ERROR on bpf-next/master]
 
-Here is the summary with links:
-  - [net,v3,1/6] rxrpc: Fix ICMP/ICMP6 error handling
-    https://git.kernel.org/netdev/net/c/ac56a0b48da8
-  - [net,v3,2/6] rxrpc: Fix an insufficiently large sglist in rxkad_verify_packet_2()
-    https://git.kernel.org/netdev/net/c/0d40f728e283
-  - [net,v3,3/6] rxrpc: Fix local destruction being repeated
-    https://git.kernel.org/netdev/net/c/d3d863036d68
-  - [net,v3,4/6] rxrpc: Fix calc of resend age
-    https://git.kernel.org/netdev/net/c/214a9dc7d852
-  - [net,v3,5/6] afs: Use the operation issue time instead of the reply time for callbacks
-    https://git.kernel.org/netdev/net/c/7903192c4b4a
-  - [net,v3,6/6] rxrpc: Remove rxrpc_get_reply_time() which is no longer used
-    https://git.kernel.org/netdev/net/c/21457f4a91cb
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220823-032643
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220902/202209022000.s58TmR9h-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/496ec6d75c8e8758f93c6b987eee83713c911a05
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220823-032643
+        git checkout 496ec6d75c8e8758f93c6b987eee83713c911a05
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-You are awesome, thank you!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: net/core/filter.o: in function `tc_cls_act_btf_struct_access':
+>> net/core/filter.c:8644: undefined reference to `nf_conntrack_btf_struct_access'
+   ld: net/core/filter.o: in function `xdp_btf_struct_access':
+   include/net/net_namespace.h:369: undefined reference to `nf_conntrack_btf_struct_access'
+   pahole: .tmp_vmlinux.btf: No such file or directory
+   .btf.vmlinux.bin.o: file not recognized: file format not recognized
+
+
+vim +8644 net/core/filter.c
+
+  8632	
+  8633	static int tc_cls_act_btf_struct_access(struct bpf_verifier_log *log,
+  8634						const struct btf *btf,
+  8635						const struct btf_type *t, int off,
+  8636						int size, enum bpf_access_type atype,
+  8637						u32 *next_btf_id,
+  8638						enum bpf_type_flag *flag)
+  8639	{
+  8640		if (atype == BPF_READ)
+  8641			return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
+  8642						 flag);
+  8643	
+> 8644		return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
+  8645						      next_btf_id, flag);
+  8646	}
+  8647	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

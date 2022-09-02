@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE2B5AA4BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943AB5AA4C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234653AbiIBBAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 21:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S234915AbiIBBAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 21:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbiIBBAV (ORCPT
+        with ESMTP id S232835AbiIBBAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 21:00:21 -0400
+        Thu, 1 Sep 2022 21:00:23 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D4527CE8
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:00:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CC637FBE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:00:22 -0700 (PDT)
 Received: from localhost.localdomain (unknown [182.2.38.99])
-        by gnuweeb.org (Postfix) with ESMTPSA id 5BCF78060F;
-        Fri,  2 Sep 2022 01:00:13 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id BE9B480C0B;
+        Fri,  2 Sep 2022 01:00:17 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1662080417;
-        bh=VO/rnidcgujqXxV0CuQhSoMG8kd2wmNu8KfPPyEJ1sI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TYb+MtmCBzmGA63u+TygMGSyZoh8osMcQtX3hD4YhyZzZGSS2svO5TqNrz0BkBPTX
-         R4Qx6k0O2JXuOB8jBGjfTrVGgoVRiDEX3ZUKZMkXNzNvPTktuxDcbhj4V0nJIBoGWp
-         ADkY+kIN6VstQRtb17dY1XeMeJAg802GIXEB0wdQGsT22/mF2XYCQ6MFihB+CVsycp
-         pGLkbM94NgkgpOe3x7zUl+8tenmY6N4tFvpYLR4c+olmPRCmLWobSn/OIA42/Q6I43
-         atAepwx6taS3/mI+Iv2TFPOFGzZoTSC78/1zZBZNDl1ldwN+2poSeW2O2hzeNAv8c5
-         hxplegWhsjzmw==
+        s=default; t=1662080421;
+        bh=xlT8ZBYljMLF/iDvL7d497O6CwzFosNpW9mk4b4aomw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ClxGCIIcEIszw+3JW53Bqjpf88KCRC7NZBZ0GUYOvPwutLy3eWMMGhkQp6/LxlhiQ
+         CI3vjnnY1W98dPS+2nkcqkhZCTXJVsyxXjdngOIQk3j37k5eQyCVX/EQTeD0fvhXUd
+         fvyocMgjLvUGoZu0GRoS0+Se22Pg83dRANo/TisiH+5epjtUJZI/Og47BwUoXczzPs
+         3An1cA8CyRO+3+FcUqRvX7/WFGVDHEEi2wM4ekX0dyt+kBny1atdRphv/FgqN/cpNJ
+         X8U2bB7up2wyxRNMzUHSDW7r2q0GCb0Gv7M9j1twHtJ2O2MsvQaLTAgzeERIGrrAxQ
+         GzhioQ3koBIxA==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -40,10 +40,12 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         io-uring Mailing List <io-uring@vger.gnuweeb.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH liburing v1 00/12] Introducing t_bind_ephemeral_port() function
-Date:   Fri,  2 Sep 2022 07:59:34 +0700
-Message-Id: <20220902005825.2484023-1-ammar.faizi@intel.com>
+Subject: [PATCH liburing v1 01/12] test/helpers: Add `t_bind_ephemeral_port()` function
+Date:   Fri,  2 Sep 2022 07:59:35 +0700
+Message-Id: <20220902005825.2484023-2-ammar.faizi@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220902005825.2484023-1-ammar.faizi@intel.com>
+References: <20220902005825.2484023-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,12 +59,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Hi,
+This is a prep patch to fix an intermittent issue with the port number.
 
-After discussing an intermittent bind() issue with Dylan, I decided to
-introduce a new helper function, t_bind_ephemeral_port().
-
-## Problem:
 We have many places where we need to bind() a socket to any unused port
 number. To achieve that, the current approach does one of the following
 mechanisms:
@@ -75,7 +73,6 @@ mechanisms:
 This is not reliable and it results in an intermittent issue (test
 fails when the selected port is in use).
 
-## Solution:
 Setting @addr->sin_port to zero on a bind() syscall lets the kernel
 choose a port number that is not in use. The caller then can know the
 port number to be bound by invoking a getsockname() syscall after
@@ -85,50 +82,103 @@ Wrap this procedure in a new function called t_bind_ephemeral_port().
 The selected port will be returned into @addr->sin_port, the caller
 can use it later to connect() or whatever they need.
 
-## Patchset summary:
-There are 12 patches in this series, summary:
-1) Patch #1 introduces a new helper function t_bind_ephemeral_port().
-2) Patch #2 to #6 get rid of the port number brute force mechanism.
-3) Patch #7 to #12 stop using a static port number.
-
 Link: https://lore.kernel.org/r/918facd1-78ba-2de7-693a-5f8c65ea2fcd@gnuweeb.org
 Cc: Dylan Yudaken <dylany@fb.com>
 Cc: Facebook Kernel Team <kernel-team@fb.com>
 Cc: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
+ test/helpers.c | 18 ++++++++++++++++++
+ test/helpers.h |  7 +++++++
+ 2 files changed, 25 insertions(+)
 
-Ammar Faizi (12):
-  test/helpers: Add `t_bind_ephemeral_port()` function
-  t/poll-link: Don't brute force the port number
-  t/socket-rw: Don't brute force the port number
-  t/socket-rw-eagain: Don't brute force the port number
-  t/socket-rw-offset: Don't brute force the port number
-  t/files-exit-hang-poll: Don't brute force the port number
-  t/socket: Don't use a static port number
-  t/connect: Don't use a static port number
-  t/shutdown: Don't use a static port number
-  t/recv-msgall: Don't use a static port number
-  t/232c93d07b74: Don't use a static port number
-  t/recv-msgall-stream: Don't use a static port number
-
- test/232c93d07b74.c         | 10 ++++------
- test/accept.c               |  5 +----
- test/files-exit-hang-poll.c | 23 +++--------------------
- test/helpers.c              | 18 ++++++++++++++++++
- test/helpers.h              |  7 +++++++
- test/poll-link.c            | 20 ++++++--------------
- test/recv-msgall-stream.c   | 22 ++++++++++------------
- test/recv-msgall.c          | 10 ++++------
- test/shutdown.c             |  7 +++----
- test/socket-rw-eagain.c     | 14 ++------------
- test/socket-rw-offset.c     | 13 ++-----------
- test/socket-rw.c            | 13 ++-----------
- test/socket.c               | 11 ++++++-----
- 13 files changed, 68 insertions(+), 105 deletions(-)
-
-
-base-commit: b8c37f02662faa4f2b61840b123201ccc5678fb1
+diff --git a/test/helpers.c b/test/helpers.c
+index 0146533..4d5c402 100644
+--- a/test/helpers.c
++++ b/test/helpers.c
+@@ -18,26 +18,44 @@
+ #include "liburing.h"
+ 
+ /*
+  * Helper for allocating memory in tests.
+  */
+ void *t_malloc(size_t size)
+ {
+ 	void *ret;
+ 	ret = malloc(size);
+ 	assert(ret);
+ 	return ret;
+ }
+ 
++/*
++ * Helper for binding socket to an ephemeral port.
++ * The port number to be bound is returned in @addr->sin_port.
++ */
++int t_bind_ephemeral_port(int fd, struct sockaddr_in *addr)
++{
++	socklen_t addrlen;
++
++	addr->sin_port = 0;
++	if (bind(fd, (struct sockaddr *)addr, sizeof(*addr)))
++		return -errno;
++
++	addrlen = sizeof(*addr);
++	assert(!getsockname(fd, (struct sockaddr *)addr, &addrlen));
++	assert(addr->sin_port != 0);
++	return 0;
++}
++
+ /*
+  * Helper for allocating size bytes aligned on a boundary.
+  */
+ void t_posix_memalign(void **memptr, size_t alignment, size_t size)
+ {
+ 	int ret;
+ 	ret = posix_memalign(memptr, alignment, size);
+ 	assert(!ret);
+ }
+ 
+ /*
+  * Helper for allocating space for an array of nmemb elements
+  * with size bytes for each element.
+diff --git a/test/helpers.h b/test/helpers.h
+index 6d5726c..9ad9947 100644
+--- a/test/helpers.h
++++ b/test/helpers.h
+@@ -12,26 +12,33 @@ extern "C" {
+ #include "liburing.h"
+ 
+ enum t_setup_ret {
+ 	T_SETUP_OK	= 0,
+ 	T_SETUP_SKIP,
+ };
+ 
+ enum t_test_result {
+ 	T_EXIT_PASS   = 0,
+ 	T_EXIT_FAIL   = 1,
+ 	T_EXIT_SKIP   = 77,
+ };
+ 
++/*
++ * Helper for binding socket to an ephemeral port.
++ * The port number to be bound is returned in @addr->sin_port.
++ */
++int t_bind_ephemeral_port(int fd, struct sockaddr_in *addr);
++
++
+ /*
+  * Helper for allocating memory in tests.
+  */
+ void *t_malloc(size_t size);
+ 
+ 
+ /*
+  * Helper for allocating size bytes aligned on a boundary.
+  */
+ void t_posix_memalign(void **memptr, size_t alignment, size_t size);
+ 
+ 
+ /*
 -- 
 Ammar Faizi
 

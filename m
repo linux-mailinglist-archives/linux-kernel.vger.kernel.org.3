@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0220B5AA516
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FF15AA51C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 03:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiIBBca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 21:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S232810AbiIBBdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 21:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIBBc2 (ORCPT
+        with ESMTP id S229602AbiIBBc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 21:32:28 -0400
-Received: from smtpbg.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D0967159
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 18:32:23 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1662082339t5mcogcp
-Received: from localhost.localdomain ( [182.148.14.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 02 Sep 2022 09:32:18 +0800 (CST)
-X-QQ-SSF: 01000000000000D0F000000A0000000
-X-QQ-FEAT: PeTlvEY0Q2DKEN3eff4vI55TGF3TOPQrrVITEjBBnYMs8WvBdY/Fabo0YQSAZ
-        Aun7VXpostQ2MAD/fVvZV+5N7Pr7yinscxfuFp02u4mWW6SkFe9HvAXTTX/+RrwY/T7vdQr
-        JgD4iWXJqqxKYcXwyUmDIz/lFY8+KCUfhQTKyKW2Ba40EbaDmqHGH+iTAuah8N+I0aFM3d0
-        m3TV1mAJ502ZjNz8oPUxdms6YvpHh+t9yFQHwwtuCPl+woHqoUGpN+PkYzaJptemiYrUQi+
-        7d8lMAZOhNGrm0Z/Y4gAUw2fUnexulPOUWco0ZGuyYqo6CmT7qadt6t2JZdfdaDBzmjn8vD
-        BG/yDNGDVp5t0gW/rZ0r703ZpMZW2zH8EbuUT1FXFqHdT5esUg=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     terrelln@fb.com
-Cc:     linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] lib: zstd: fix repeated words in comments
-Date:   Fri,  2 Sep 2022 09:32:12 +0800
-Message-Id: <20220902013212.3739-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 1 Sep 2022 21:32:57 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A816CF71;
+        Thu,  1 Sep 2022 18:32:56 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MJgNT71ClzHncr;
+        Fri,  2 Sep 2022 09:31:05 +0800 (CST)
+Received: from [10.174.178.134] (10.174.178.134) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 2 Sep 2022 09:32:54 +0800
+Subject: Re: [PATCH v2 13/14] ext2: replace bh_submit_read() helper with
+ bh_read_locked()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+CC:     <linux-ext4@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <cluster-devel@redhat.com>,
+        <ntfs3@lists.linux.dev>, <ocfs2-devel@oss.oracle.com>,
+        <reiserfs-devel@vger.kernel.org>, <jack@suse.cz>, <tytso@mit.edu>,
+        <akpm@linux-foundation.org>, <axboe@kernel.dk>,
+        <rpeterso@redhat.com>, <agruenba@redhat.com>,
+        <almaz.alexandrovich@paragon-software.com>, <mark@fasheh.com>,
+        <dushistov@mail.ru>, <hch@infradead.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
+References: <20220901133505.2510834-1-yi.zhang@huawei.com>
+ <20220901133505.2510834-14-yi.zhang@huawei.com> <YxFOqimAyJNxuPM9@ZenIV>
+From:   Zhang Yi <yi.zhang@huawei.com>
+Message-ID: <3fdab5fd-1efa-9668-da5c-889e9bfa1524@huawei.com>
+Date:   Fri, 2 Sep 2022 09:32:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+In-Reply-To: <YxFOqimAyJNxuPM9@ZenIV>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.134]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
+On 2022/9/2 8:30, Al Viro wrote:
+> On Thu, Sep 01, 2022 at 09:35:04PM +0800, Zhang Yi wrote:
+>> bh_submit_read() and the uptodate check logic in bh_uptodate_or_lock()
+>> has been integrated in bh_read() helper, so switch to use it directly.
+> 
+> s/bh_read_locked/bh_read/ in the summary?
+> 
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- lib/zstd/compress/zstd_compress.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sorry, I don't get your question, I have already replace bh_read_locked()
+with bh_read() in the commit message, there is no bh_read_locked in the whole
+patch. Am I missing something?
 
-diff --git a/lib/zstd/compress/zstd_compress.c b/lib/zstd/compress/zstd_compress.c
-index a4e916008b3a..73fff4c60149 100644
---- a/lib/zstd/compress/zstd_compress.c
-+++ b/lib/zstd/compress/zstd_compress.c
-@@ -4441,7 +4441,7 @@ static size_t ZSTD_validateSequence(U32 offCode, U32 matchLength,
-                                     size_t posInSrc, U32 windowLog, size_t dictSize, U32 minMatch) {
-     size_t offsetBound;
-     U32 windowSize = 1 << windowLog;
--    /* posInSrc represents the amount of data the the decoder would decode up to this point.
-+    /* posInSrc represents the amount of data the decoder would decode up to this point.
-      * As long as the amount of data decoded is less than or equal to window size, offsets may be
-      * larger than the total length of output decoded in order to reference the dict, even larger than
-      * window size. After output surpasses windowSize, we're limited to windowSize offsets again.
--- 
-2.36.1
-
+Thanks,
+Yi.

@@ -2,101 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0915AAB43
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674865AAB46
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 11:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235366AbiIBJWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 05:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S235951AbiIBJW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 05:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235377AbiIBJWb (ORCPT
+        with ESMTP id S235551AbiIBJWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 05:22:31 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A799AB432
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:22:30 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id w18so1242612qki.8
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:22:30 -0700 (PDT)
+        Fri, 2 Sep 2022 05:22:49 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9939EC7F9B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 02:22:48 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id j26so921232wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 02:22:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=L9O5decV2/N6JOI8M13p/L7aDc3oKkUKc7b1+iVr6Ns=;
-        b=n8pH9KVWUwdC05ORursrzQoLTB97iTUEuehPv0ggTG2QfBGg4nhiwfUPI/g+QGH3zT
-         r9xBeHoditdJ7HHhnwz0AeDSPO8cfpprt8M7agSmx3x6JQS5ZWR1kvT3LsYcbVnvpvwm
-         omAtNUkcO62GYE8XSPDGGD5cVtwdCjlLJ2fJD01v4N1jRJZv/Fxvo2StNLMikWN/6ods
-         0H5mdHSLTjgbx77KBirRUlzPEWeDgPxO3CE1inI1PJ8QqlMTwyG+Kig104RY9g4hIx1w
-         ju4WuFunjO25RTn99gp3+OZWHMLi58Zn5cjvS7v9Iw6GkeavE3qAUE4yDKd1VotFCsTp
-         l2EQ==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=/C7RwhByTdUP1+TnbaoYX2Ts5Wnty/4rGeK1KUWN06M=;
+        b=lh3d+no8joYHCHPHo+Gc5tbpyQ0MTyMJY4Ej08d5sJocxi5X7/d2G6IRrkWL4czNhU
+         /Mmfe6+5KGf9SgHQ0bLRteA4BUiVAhlnUbd1aOEvk2VNA/5OSr8lPiYqNG3RSBpfIKdq
+         wJ9QgnxvnS8288gT7VNCbD9SI6PFVHtQee95bXsGgU/4ZGkRJxKYPjMFiiO8e7ZH3+OE
+         kCusFNP8rYvFsHCAzhUMX0MwvS/5KFlQEoHrlTS02Ux5YbveXp1FgsngNRJi2+Vtc059
+         OWZak6VVknNWTEfQwkeBmu3oMjFjFYEOD/jBPxWM2Vl+4Ajwixb7DgG1VttsVo5lcrKe
+         h5nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=L9O5decV2/N6JOI8M13p/L7aDc3oKkUKc7b1+iVr6Ns=;
-        b=EDEKCqn0m4yps+OiFuB3tVfBY1Ynn+o0QI6OM7FKFzRA9le4QB4m2iqC9X2AdgML/c
-         R+egSLw0kEgUdK8GjnN0YJARsH+q4Q3S85lJ8pT7H3XakqDuvb1lFqTMY333cQLKIert
-         lRkhRofCyDNBinTNpN1ZmgR5uJsUr1cUH6Vl+4JCVwqQ+wxio4lI2kjUyg+OlhkMFDVT
-         Q6u0fSeX+LHq+2yPLIJdhNvAKRsJzwopa6GVaJaFWnNrRmYoT8gMonGzNAWwDZ7i+WLh
-         PZQU6N0gsqN/zvOlpVsK93n4LiiQ9Ci2RwHGnvZH2xKgznaFiID0ni/I389wEXhZEfyj
-         d12A==
-X-Gm-Message-State: ACgBeo1E344uuuGbsdSvd61mqCzTCJ/sekZmBaaRnUvqniRnrc1PxT9o
-        6qp84iPZlVBU5n31aaJSKH09xcULNwzOdBQ5XBU=
-X-Google-Smtp-Source: AA6agR5D3GHip/lU9Aj+WQapz0eupiIvUYun+mL3ehqHavPF9Osvco/OW9GJftX+j+YzjPj7xn78DqEhKYcPwbahytE=
-X-Received: by 2002:a05:620a:410e:b0:6bc:5cdc:88ec with SMTP id
- j14-20020a05620a410e00b006bc5cdc88ecmr22866476qko.734.1662110549331; Fri, 02
- Sep 2022 02:22:29 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=/C7RwhByTdUP1+TnbaoYX2Ts5Wnty/4rGeK1KUWN06M=;
+        b=KW7+mSnmczwnof0yFW5YW7RCO6grO7zeiD/m7Mz9hHSRaP3Ng5u5xkhmdCGWZbNCZk
+         /yuUkaFEPcv2y+gpMF+UidG/O26GewiqDB7W56e97V0mJEaUMUifAg7kULgmk7GafQc7
+         8h4sei2dtGrNhygUs8k6eblnWWjPyDqfJWbpGqzDHA2zvumTX8nJWKqADSimdqOXQj+v
+         W/CgqeQMI7A9pV2/zv2dB1TZNYEjBC0Rs+wLLvR0hdbFHbQ6sPjkS/COtQhiZQF0dA5p
+         yvjrEzCHe1uNzZcT/oCUspMgNNg0wXz1uzbuav9+t69tfFDtXKZ//kB109WJrxrck/Db
+         kA0Q==
+X-Gm-Message-State: ACgBeo3fg9ciYodko+HGf/HUze03lkUdD9fKLIGwk2iQo2zUfjAsz3Gt
+        wkkoCS3lxu1Dd9PCjr1sz1pnF57lq4/HEw==
+X-Google-Smtp-Source: AA6agR5FjFJhvxzRFHHVTDqYt7V8n6WL9uP4+1ZPwqFi1jH92Af7U+J1YF+j6Z9mYqxWiQyWuk1pWQ==
+X-Received: by 2002:a1c:7214:0:b0:3a5:ea1c:c55b with SMTP id n20-20020a1c7214000000b003a5ea1cc55bmr2219205wmc.190.1662110567142;
+        Fri, 02 Sep 2022 02:22:47 -0700 (PDT)
+Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id h2-20020a5d4302000000b0021e51c039c5sm1037769wrq.80.2022.09.02.02.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 02:22:46 -0700 (PDT)
+Date:   Fri, 2 Sep 2022 11:22:45 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-riscv@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv: fix a nasty sigreturn bug...
+Message-ID: <20220902092245.ande6fvievnbn35h@kamzik>
+References: <YU0wDzeS/jXwkAca@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-References: <1662104841-55360-1-git-send-email-john.garry@huawei.com>
- <1662104841-55360-6-git-send-email-john.garry@huawei.com> <CAHp75VdfwGCUpZN3b1AD1kARc=FhyA4EDWDuZ8+1DKN3u73DeA@mail.gmail.com>
-In-Reply-To: <CAHp75VdfwGCUpZN3b1AD1kARc=FhyA4EDWDuZ8+1DKN3u73DeA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 2 Sep 2022 12:21:53 +0300
-Message-ID: <CAHp75VeE2OZHzwG-KbTHYks+G=sLfyx9Yy1W=RxORTtet-vDnQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] bus: hisi_lpc: Use platform_device_register_full()
-To:     John Garry <john.garry@huawei.com>
-Cc:     "xuwei (O)" <xuwei5@hisilicon.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SoC Team <soc@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YU0wDzeS/jXwkAca@zeniv-ca.linux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 12:18 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Fri, Sep 24, 2021 at 01:55:27AM +0000, Al Viro wrote:
+> riscv has an equivalent of arm bug fixed by 653d48b22166; if signal
+> gets caught by an interrupt that hits when we have the right value
+> in a0 (-513), *and* another signal gets delivered upon sigreturn()
+> (e.g. included into the blocked mask for the first signal and posted
+> while the handler had been running), the syscall restart logics will
+> see regs->cause equal to EXC_SYSCALL (we are in a syscall, after all)
+> and a0 already restored to its original value (-513, which happens to
+> be -ERESTARTNOINTR) and assume that we need to apply the usual
+> syscall restart logics.
+>     
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> ---
+> diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+> index c2d5ecbe55264..f8fb85dc94b7a 100644
+> --- a/arch/riscv/kernel/signal.c
+> +++ b/arch/riscv/kernel/signal.c
+> @@ -121,6 +121,8 @@ SYSCALL_DEFINE0(rt_sigreturn)
+>  	if (restore_altstack(&frame->uc.uc_stack))
+>  		goto badframe;
+>  
+> +	regs->cause = -1UL;
+> +
+>  	return regs->a0;
+>  
+>  badframe:
 >
-> On Fri, Sep 2, 2022 at 11:10 AM John Garry <john.garry@huawei.com> wrote:
-> >
-> > The code to create the child platform device is essentially the same as
-> > what platform_device_register_full() does, so change over to use
-> > that same function to reduce duplication.
->
-> Now statistics plays for you and not against.
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Too fast to give a tag, see below (keep tag if addressing it)
+This looks good to me based on what other architectures do.
 
-...
+For example, arm64 does
 
-> > -       pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
-> > +       pdev = platform_device_register_full(cell->pdevinfo);
+  rt_sigreturn
+    restore_sigframe
+      forget_syscall
+        regs->syscallno = NO_SYSCALL
 
-> >         if (!pdev)
-> >                 return -ENOMEM;
+  which results in do_signal avoiding syscall restarting
 
-As per kernel doc:
- * Returns &struct platform_device pointer on success, or ERR_PTR() on error.
+And x86 does
 
--- 
-With Best Regards,
-Andy Shevchenko
+  rt_sigreturn
+    restore_sigcontext
+      regs->orig_ax = -1
+
+  where its handle_signal only restarts syscalls when regs->orig_ax != -1
+
+So, for riscv, where in do_signal and handle_signal syscall restarting
+is avoided when regs->cause != EXC_SYSCALL and it's common to set cause
+to -1 to avoid it, then it makes sense to set regs->cause != EXEC_SYSCALL
+in rt_sigreturn or in restore_sigcontext, which rt_sigreturn calls, as
+well.
+
+So the only question I have is whether or not the cause assignment
+is better in restore_sigcontext() like other architectures? At least,
+since rt_sigreturn is the only caller of restore_sigcontext, it can't
+break anything putting it there atm...
+
+Anyway,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+
+BTW, I ran the testcase from 653d48b22166 with the asm modified for
+riscv for a while over QEMU. It didn't reproduce, but I suppose that
+doesn't mean much.
+
+Thanks,
+drew

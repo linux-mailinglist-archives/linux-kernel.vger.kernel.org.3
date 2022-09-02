@@ -2,245 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6845AA69B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F26F5AA69E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbiIBDtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
+        id S235410AbiIBDv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235406AbiIBDsp (ORCPT
+        with ESMTP id S235422AbiIBDvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:48:45 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4274CB4EA5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:48:29 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id l3so632622plb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 20:48:29 -0700 (PDT)
+        Thu, 1 Sep 2022 23:51:11 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F17953037;
+        Thu,  1 Sep 2022 20:50:55 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id n202so701813iod.6;
+        Thu, 01 Sep 2022 20:50:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=sr2Wd6yR3mz5619cIGOwnPXQ5QeGOidAclAniAYTKBQ=;
-        b=xBMouZC6OH2kkJpibOv1tQN8zSxENxxC5h2KVWxPL6H+zCGNOmaLDbOH0jvTSwyQL4
-         7YxXghf2j9Q8nZ9Huczr/yDQh7mq87u2l7kvXp6M/YTK2sDi1sga9WpObRGgaUzBVg7d
-         Abpkz/lBP1r38UWwG9XZ8/901g631Ds0DxRJEhdHzYXt+Ch/cMsNSLxlnnEaVFgn5HWo
-         y6nsGvLTOmHp4bB4zyMbYvcAcomCpVhxQmK/O8Q9NlKWamVsbqCc8GiLqjOiZxHc9l03
-         65nq0v+DC3eKV7MjAg6iA5UC2nE4cj16cFdl8FDdsiZGgd6x3YxdS0sEZp9NjcsmRvRm
-         WOAw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=E+LJ1geH9sHZ7zNZY9aNOFdRivMlaRJnVrHaJZ75NKo=;
+        b=nRy9G0eht6ytO52NCU/doiQCtMeaRAV6V7krSlmSA9qcUj7j3ecvqgG1ge+ubUm4hy
+         5zTEUU2+pN2G9UjF/E1TmIyiq2Gtmx0YhQVHIuwxsTaygjYaZSspj1di9q324yvyHLOs
+         onkk7PntBDcPqCBMReGZ5Kx+7NwYsGoO6vm00HM1pp3JzxLVuDF5vGFxvOLmqc1dnknH
+         vdmXethcA7SAPx10M2RQkjSXVHxCcjMzI/ZvksBqpGZsPJvqn0pJGHV0vOSCiSGioJS/
+         UbfCnamfaV1Into6YeCLtbsjys6xcHUKFr2MT9AU/SAm9XZXLaA3eLvR/YlyAKFCnfHy
+         Fgpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=sr2Wd6yR3mz5619cIGOwnPXQ5QeGOidAclAniAYTKBQ=;
-        b=t10OgTobGC3rJGkEpNdTYIDZOVG4D2GOVwdIrqdFWRE/OAyqnO3Cqg0hfF5/Kaew7J
-         ySrhWEA2zceheQ5n3GZo3Tgs8JdHmb9TirzxNEoTRG9aiwL7QIyfr1UytRZM5mCR6cnw
-         9bBXU3Kmj6pto0FKJx6FH6IhQJGF8j6USH1YgCtPfhXfxNVry/wUMS64Yy+K7OXomuWe
-         d8D6Bb69u8DQi7BggRQ+RRcsfUu+pOb9nLGdcrjztnDXqHcTCD+riWvhdmrpumhGRI9O
-         1Bcc5304jzZTH3zyJFxapbw5zLCA6tqqm9m0nMEBIBI6D9w8LSiOleOUlxQfWaq1uv8V
-         Fzag==
-X-Gm-Message-State: ACgBeo3622/I5KI/UcceODMKqheaWfJsOpUL8smW+TlQijltIPqmCawr
-        2DWyZqQQd3nOC9riPTYDteHoDA==
-X-Google-Smtp-Source: AA6agR7y/khiEhfD/7DQ3kLKGorQklRk5KRNHXJoxoQsLBObMQE1F4fe4ivJ7i3X+3CAzpY6ZSFh+g==
-X-Received: by 2002:a17:902:ea01:b0:175:458e:65be with SMTP id s1-20020a170902ea0100b00175458e65bemr10290462plg.25.1662090508746;
-        Thu, 01 Sep 2022 20:48:28 -0700 (PDT)
-Received: from C02G705SMD6V.bytedance.net ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id w8-20020a170902e88800b0016c4546fbf9sm376152plg.128.2022.09.01.20.48.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 20:48:28 -0700 (PDT)
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
-        huyue2@coolpad.com, Jia Zhu <zhujia.zj@bytedance.com>
-Subject: [PATCH V1 5/5] erofs: support fscache based shared domain
-Date:   Fri,  2 Sep 2022 11:47:48 +0800
-Message-Id: <20220902034748.60868-6-zhujia.zj@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
-In-Reply-To: <20220902034748.60868-1-zhujia.zj@bytedance.com>
-References: <20220902034748.60868-1-zhujia.zj@bytedance.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=E+LJ1geH9sHZ7zNZY9aNOFdRivMlaRJnVrHaJZ75NKo=;
+        b=AgEYTiyfAdDw0NWjJPXEVo7Tj2KSOOPbBouarQIE8qToZJe3D+wri0Eudj9KY5xwN3
+         352IgrPwPnyY5RuoRM5O/IlkOlv4tUJENMaX1sKyTTf2H+gJ947XHZUcsrAIXlf3urhF
+         TADQYSBamnrlGT0n7OPzT1jcFRQXrw4sVBBpVUJeqJXtHxg5B2Dph0b/rMrfxEGqZn0P
+         gbv6EizHn7/EfBRL33dnK5YDa6UzPWvemF9bUvarXinCenDGRD/SvfZzFQKeV0tRzHB3
+         OG8qbcpX1gD9LoQF3EytG+xmYXaDaBDW2G+DOi0NASgJgnPsRn/OnCsyZ4mUfIU+okMw
+         iI+A==
+X-Gm-Message-State: ACgBeo0jX18X2szq0twvLakogsDczJSfB+fszslNj+eS1zLIdRxaWTt0
+        J4R0xLfZkhc2BhecvTH2bRwXl0pBQAqda1qliRg=
+X-Google-Smtp-Source: AA6agR7DtugthLRfnyg7YwsykX98zovzEb5HyhodkBFu5mzFBonF8cErMKxWUkl202KP0GIgPA2dBHRGOzjeT5EVFI4=
+X-Received: by 2002:a6b:2ac4:0:b0:688:3a14:2002 with SMTP id
+ q187-20020a6b2ac4000000b006883a142002mr15979839ioq.62.1662090654002; Thu, 01
+ Sep 2022 20:50:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
+ <20220824134055.1328882-2-benjamin.tissoires@redhat.com> <CAADnVQKgkFpLh_URJn6qCiAONteA1dwZHd6=4cZn15g1JCAPag@mail.gmail.com>
+ <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
+ <CAO-hwJLd9wXx+ppccBYPKZDymO0sk++Nt2E3-R97PY7LbfJfTg@mail.gmail.com>
+ <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com>
+ <CAO-hwJK9uHTWCg3_6jrPF6UKiamkNfj=cuH5mHauoLX+0udV9w@mail.gmail.com>
+ <CAADnVQLuL045Sxdvh8kfcNkmD55+Wz8fHU3RtH+oQyOgePU5Pw@mail.gmail.com> <CAO-hwJJJJRtoq2uTXRKCck6QSH8SFDSTpHmvTyOieczY7bdm8g@mail.gmail.com>
+In-Reply-To: <CAO-hwJJJJRtoq2uTXRKCck6QSH8SFDSTpHmvTyOieczY7bdm8g@mail.gmail.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Fri, 2 Sep 2022 05:50:18 +0200
+Message-ID: <CAP01T77SJyiDxv0A++_mNw7JZ-Mzh4B1FAM6zLiP6n75MNY0uQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 01/23] bpf/verifier: allow all functions to
+ read user provided context
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several erofs filesystems can belong to one domain, and data blobs can
-be shared among these erofs filesystems of same domain.
+On Thu, 1 Sept 2022 at 18:48, Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> [...]
+> If the above is correct, then yes, it would make sense to me to have 2
+> distinct functions: one to check for the args types only (does the
+> function definition in the problem matches BTF), and one to check for
+> its use.
+> Behind the scenes, btf_check_subprog_arg_match() calls
+> btf_check_func_arg_match() which is the one function with entangled
+> arguments type checking and actually assessing that the values
+> provided are correct.
+>
+> I can try to split that  btf_check_func_arg_match() into 2 distinct
+> functions, though I am not sure I'll get it right.
 
-Users could specify domain_id mount option to create or join into a domain.
+FYI, I've already split them into separate functions in my tree
+because it had become super ugly at this point with all the new
+support and I refactored it to add the linked list helpers support
+using kfuncs (which requires some special handling for the args), so I
+think you can just leave it with a "processing_call" check in for your
+series for now.
 
-Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
----
- fs/erofs/fscache.c  | 67 +++++++++++++++++++++++++++++++++++++++++++++
- fs/erofs/internal.h | 13 +++++++++
- fs/erofs/super.c    | 10 +++++--
- 3 files changed, 88 insertions(+), 2 deletions(-)
-
-diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-index bf6c9ecabec1..07e5d71e412b 100644
---- a/fs/erofs/fscache.c
-+++ b/fs/erofs/fscache.c
-@@ -569,6 +569,8 @@ void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
- 
- 	if (!ctx)
- 		return;
-+	if (ctx->domain && !refcount_dec_and_test(&ctx->ref))
-+		return;
- 
- 	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
- 	fscache_relinquish_cookie(ctx->cookie, false);
-@@ -576,7 +578,12 @@ void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
- 
- 	iput(ctx->inode);
- 	ctx->inode = NULL;
-+	iput(ctx->anon_inode);
-+	ctx->anon_inode = NULL;
-+	erofs_fscache_domain_put(ctx->domain);
- 
-+	kfree(ctx->name);
-+	ctx->name = NULL;
- 	kfree(ctx);
- 	*fscache = NULL;
- }
-@@ -616,3 +623,63 @@ void erofs_fscache_unregister_fs(struct super_block *sb)
- 	sbi->volume = NULL;
- 	sbi->domain = NULL;
- }
-+
-+static int erofs_fscache_domain_init_cookie(struct super_block *sb,
-+		struct erofs_fscache **fscache, char *name, bool need_inode)
-+{
-+	int ret;
-+	struct inode *inode;
-+	struct erofs_fscache *ctx;
-+	struct erofs_sb_info *sbi = EROFS_SB(sb);
-+	struct erofs_domain *domain = sbi->domain;
-+
-+	ret = erofs_fscache_register_cookie(sb, &ctx, name, need_inode);
-+	if (ret)
-+		return ret;
-+
-+	ctx->name = kstrdup(name, GFP_KERNEL);
-+	if (!ctx->name)
-+		return -ENOMEM;
-+
-+	inode = new_inode(domain->mnt->mnt_sb);
-+	if (!inode) {
-+		kfree(ctx->name);
-+		return -ENOMEM;
-+	}
-+
-+	ctx->domain = domain;
-+	ctx->anon_inode = inode;
-+	inode->i_private = ctx;
-+	refcount_set(&ctx->ref, 1);
-+	erofs_fscache_domain_get(domain);
-+	*fscache = ctx;
-+	return 0;
-+}
-+
-+int erofs_domain_register_cookie(struct super_block *sb,
-+	struct erofs_fscache **fscache, char *name, bool need_inode)
-+{
-+	int err;
-+	struct inode *inode;
-+	struct erofs_fscache *ctx;
-+	struct erofs_sb_info *sbi = EROFS_SB(sb);
-+	struct erofs_domain *domain = sbi->domain;
-+	struct super_block *psb = domain->mnt->mnt_sb;
-+
-+	mutex_lock(&domain->mutex);
-+	list_for_each_entry(inode, &psb->s_inodes, i_sb_list) {
-+		ctx = inode->i_private;
-+		if (!ctx)
-+			continue;
-+		if (!strcmp(ctx->name, name)) {
-+			*fscache = ctx;
-+			refcount_inc(&ctx->ref);
-+			mutex_unlock(&domain->mutex);
-+			return 0;
-+		}
-+	}
-+	err = erofs_fscache_domain_init_cookie(sb, fscache, name, need_inode);
-+	mutex_unlock(&domain->mutex);
-+
-+	return err;
-+}
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 7240a2acaa5c..25e5031ca878 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -109,8 +109,12 @@ struct erofs_domain {
- };
- 
- struct erofs_fscache {
-+	refcount_t ref;
- 	struct fscache_cookie *cookie;
- 	struct inode *inode;
-+	struct inode *anon_inode;
-+	struct erofs_domain *domain;
-+	char *name;
- };
- 
- struct erofs_sb_info {
-@@ -626,6 +630,9 @@ int erofs_fscache_register_domain(struct super_block *sb);
- int erofs_fscache_register_cookie(struct super_block *sb,
- 				  struct erofs_fscache **fscache,
- 				  char *name, bool need_inode);
-+int erofs_domain_register_cookie(struct super_block *sb,
-+				  struct erofs_fscache **fscache,
-+				  char *name, bool need_inode);
- void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache);
- 
- extern const struct address_space_operations erofs_fscache_access_aops;
-@@ -647,6 +654,12 @@ static inline int erofs_fscache_register_cookie(struct super_block *sb,
- {
- 	return -EOPNOTSUPP;
- }
-+static inline int erofs_domain_register_cookie(struct super_block *sb,
-+						struct erofs_fscache **fscache,
-+						char *name, bool need_inode)
-+{
-+	return -EOPNOTSUPP;
-+}
- 
- static inline void erofs_fscache_unregister_cookie(struct erofs_fscache **fscache)
- {
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 667a78f0ee70..11c5ba84567c 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -245,8 +245,12 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
- 	}
- 
- 	if (erofs_is_fscache_mode(sb)) {
--		ret = erofs_fscache_register_cookie(sb, &dif->fscache,
--				dif->path, false);
-+		if (sbi->opt.domain_id)
-+			ret = erofs_domain_register_cookie(sb, &dif->fscache, dif->path,
-+					false);
-+		else
-+			ret = erofs_fscache_register_cookie(sb, &dif->fscache, dif->path,
-+					false);
- 		if (ret)
- 			return ret;
- 	} else {
-@@ -726,6 +730,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 			err = erofs_fscache_register_domain(sb);
- 			if (err)
- 				return err;
-+			err = erofs_domain_register_cookie(sb, &sbi->s_fscache,
-+					sbi->opt.fsid, true);
- 		} else {
- 			err = erofs_fscache_register_fs(sb);
- 			if (err)
--- 
-2.20.1
-
+> Maybe the hack about having "processing_call" for
+> btf_check_func_arg_match() only will be good enough as a first step
+> towards a better solution?
+>
+> > And may cleanup the rest of that function ?
+> > Like all of if (is_kfunc) applies only to 'calling' case.
+> > Other ideas?
+> >
+>
+> I was trying to understand the problem most of today, and the only
+> other thing I could think of was "why is the assumption that
+> PTR_TO_CTX is not NULL actually required?". But again, this question
+> is "valid" in the function declaration part, but not in the caller
+> insn part. So I think splitting btf_check_subprog_arg_match() in 2 is
+> probably the best.
+>
+> Cheers,
+> Benjamin
+>

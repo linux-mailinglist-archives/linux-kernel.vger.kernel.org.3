@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4156C5AA8A9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57145AA8AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 09:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbiIBHUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 03:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S235045AbiIBHWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 03:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiIBHUr (ORCPT
+        with ESMTP id S230317AbiIBHWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 03:20:47 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92894DF00;
-        Fri,  2 Sep 2022 00:20:45 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id x5so842999qtv.9;
-        Fri, 02 Sep 2022 00:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=0ztFA8rsuY2vloiv1HdRcTr25R2NxgCLNPLghGc91Mc=;
-        b=ItdHuTR9MapOms5sjGNpCkLjWOb+4vrB+PijQJWFD22X+KE4TdlFV7IhXu6ZNfqMv+
-         DJHbv3oATrDqCJZZ2Yg7IJOBk2/KKByM67vW09IoR4lumCwo0uTWEFJzVE2lhqaBEoIY
-         rbxH//7bPev65d0IFM+vJmhYPM+YXfUGniRBaR/0FfKtNZ7TLewwo41JAHgTKZBzXbJ2
-         0EHv3zMxTwxCm4AfGkWAZ6XbboM/4yn8mCDJgK4dn0eVD9QSkEJnyWGcLZZqk5eU640V
-         E5fr1bdwhlmHJ67XVbOstsYNteZphRUFcntHDMvpjEacSphh18dPitnwP75C21Qz8DNG
-         wUyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0ztFA8rsuY2vloiv1HdRcTr25R2NxgCLNPLghGc91Mc=;
-        b=gzSKs8cNMaOq4KOwYR44CTGu5EkbJWPjP4GQCBYtY2YxtrFh7SqIb0UlmcgLqy6sf6
-         fqOlimnEC13NvzUGzmScb5SUXskHRUwaHfTtpbs7sY5Gdulbh+yYxnh8gFQeL9MO+UTh
-         BaH3IQIybjXCsmtSeqoxz7gxUZhcqJGkH3c1venJwKyXn6bKUJJrvBzbK++VZXwJwS7k
-         oqlYBMIjIzmxbBBKXW+soRb/a0Gc8J1YwJaEZDCbaR/7WnO5ODEmPDkNKBNsfghcmOxX
-         xpvX5mtfafl0giay53AplBzv4sBL8vGOTysqnODRZSSikmh2IwVsvTtqDBfhgAuIAMsR
-         Jc0Q==
-X-Gm-Message-State: ACgBeo3+5BmMIwvy350I8szapmXLlkz84RZ9J/DEwTcDyUloOZYBTots
-        3ABaXmb5rneBiRVNlET3YsaOLcs6MurZXRlF0xY=
-X-Google-Smtp-Source: AA6agR4mVHw0REbRDals331L5SGq4UqqF6ji289fQzeaZkZ17hBU/O0z3ZAWFjnXzie2LBfMTWQqCAAE0IYEXONvJUY=
-X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id
- v6-20020ac85786000000b003433051170dmr26872765qta.429.1662103244912; Fri, 02
- Sep 2022 00:20:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220831055811.1936613-1-s.hauer@pengutronix.de>
- <20220831055811.1936613-2-s.hauer@pengutronix.de> <CAHp75VfbNespbCZ81xcvA7zsr3K8nbb3LBrpXOjH04R-hEFumw@mail.gmail.com>
- <20220902071601.GU24324@pengutronix.de>
-In-Reply-To: <20220902071601.GU24324@pengutronix.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 2 Sep 2022 10:20:08 +0300
-Message-ID: <CAHp75VchGZV-cPzZnDRBmd_+jEiRap7oA2oFz6w8dBw=7LNtbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] gpio: Add gpio latch driver
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sascha Hauer <kernel@pengutronix.de>
+        Fri, 2 Sep 2022 03:22:43 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A89B3B32;
+        Fri,  2 Sep 2022 00:22:42 -0700 (PDT)
+X-UUID: 35051b864fc44fc0ab1da91be3e8e01b-20220902
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=jBUU3V4XFnZyK0U7HAevIpvYAVw8v4fGi9VKp93Zo6w=;
+        b=pNyXidXXMlC2ZvDheJW83d6iSa2UKteEBzbN9dYmiMYL1sUBZhzUy/f+2V/QJrnXjrnwK5hwLjNClR93XnRygPRH3R1yv3m1SUFH0atYcQjr+QAa5/qNyre+uxSJ4VPFDFTY1roRBhH+ngXGMV4QLz6q7WSL+qG3+d5XdMAoo64=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:42e1bdb2-12d5-43fa-a173-850779970c5c,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:84eae18,CLOUDID:1d7b6dd0-20bd-4e5e-ace8-00692b7ab380,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
+        nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 35051b864fc44fc0ab1da91be3e8e01b-20220902
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1997302502; Fri, 02 Sep 2022 15:22:37 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 2 Sep 2022 15:22:36 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 2 Sep 2022 15:22:35 +0800
+Message-ID: <475ece688e497d77779a29626daf9aef93dddf01.camel@mediatek.com>
+Subject: Re: [PATCH v17 04/10] drm/mediatek: dp: Add multiple bridge types
+ support
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 2 Sep 2022 15:22:35 +0800
+In-Reply-To: <20220901044149.16782-5-rex-bc.chen@mediatek.com>
+References: <20220901044149.16782-1-rex-bc.chen@mediatek.com>
+         <20220901044149.16782-5-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,37 +75,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 10:16 AM Sascha Hauer <s.hauer@pengutronix.de> wrote:
-> On Fri, Sep 02, 2022 at 09:42:21AM +0300, Andy Shevchenko wrote:
-> > On Wed, Aug 31, 2022 at 9:02 AM Sascha Hauer <s.hauer@pengutronix.de> wrote:
-> > >
-> > > This driver implements a GPIO multiplexer based on latches connected to
-> > > other GPIOs. A set of data GPIOs is connected to the data input of
-> > > multiple latches. The clock input of each latch is driven by another
-> > > set of GPIOs. With two 8-bit latches 10 GPIOs can be multiplexed into
-> > > 16 GPIOs. GPOs might be a better term as in fact the multiplexed pins
-> > > are output only.
-> >
-> > So, this is for only one type of latches, now I'm wondering why
-> > gpio-74xx-mmio can't cover this case (with probably small
-> > modifications to the code)?
->
-> gpio-74xx-mmio is about latches connected to a parallel bus. You can
-> access the GPIOs by doing readl/writel operations. The latches are
-> driven by the bus logic and likely an additional address decoder.
->
-> What I have here instead is a latch fully driven by GPIOs.
+Hi, Bo-Chen:
 
-But this reminds me of some kind of gpio-aggregator with a specific
-layer on top. To me it really feels that we are (semi-)reinventing a
-wheel between the lines...
+On Thu, 2022-09-01 at 12:41 +0800, Bo-Chen Chen wrote:
+> The bridge types of eDP and DP are different. We add device data to
+> this driver and add bridge_type to the device data to define them.
 
-> Yes, with enough force you could implement it in the gpio-74xx-mmio
-> driver, but that wouldn't be mmio at all and likely completely different
-> code pathes.
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
-Got it, thanks for elaboration.
+> 
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dp.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
+> b/drivers/gpu/drm/mediatek/mtk_dp.c
+> index e2ec9b02b1aa..2696c1ac1a47 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+> @@ -101,6 +101,7 @@ struct mtk_dp {
+>  	struct drm_device *drm_dev;
+>  	struct drm_dp_aux aux;
+>  
+> +	const struct mtk_dp_data *data;
+>  	struct mtk_dp_info info;
+>  	struct mtk_dp_train_info train_info;
+>  
+> @@ -109,6 +110,9 @@ struct mtk_dp {
+>  	struct regmap *regs;
+>  };
+>  
+> +struct mtk_dp_data {
+> +	int bridge_type;
+> +};
+>  static const struct mtk_dp_efuse_fmt
+> mtk_dp_efuse_data[MTK_DP_CAL_MAX] = {
+>  	[MTK_DP_CAL_GLB_BIAS_TRIM] = {
+>  		.idx = 3,
+> @@ -1871,6 +1875,7 @@ static int mtk_dp_probe(struct platform_device
+> *pdev)
+>  		return -ENOMEM;
+>  
+>  	mtk_dp->dev = dev;
+> +	mtk_dp->data = (struct mtk_dp_data
+> *)of_device_get_match_data(dev);
+>  
+>  	irq_num = platform_get_irq(pdev, 0);
+>  	if (irq_num < 0)
+> @@ -1925,7 +1930,7 @@ static int mtk_dp_probe(struct platform_device
+> *pdev)
+>  
+>  	mtk_dp->bridge.ops =
+>  		DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
+> DRM_BRIDGE_OP_HPD;
+> -	mtk_dp->bridge.type = DRM_MODE_CONNECTOR_eDP;
+> +	mtk_dp->bridge.type = mtk_dp->data->bridge_type;
+>  
+>  	drm_bridge_add(&mtk_dp->bridge);
+>  
+> @@ -1974,8 +1979,15 @@ static int mtk_dp_resume(struct device *dev)
+>  
+>  static SIMPLE_DEV_PM_OPS(mtk_dp_pm_ops, mtk_dp_suspend,
+> mtk_dp_resume);
+>  
+> +static const struct mtk_dp_data mt8195_edp_data = {
+> +	.bridge_type = DRM_MODE_CONNECTOR_eDP,
+> +};
+> +
+>  static const struct of_device_id mtk_dp_of_match[] = {
+> -	{ .compatible = "mediatek,mt8195-edp-tx" },
+> +	{
+> +		.compatible = "mediatek,mt8195-edp-tx",
+> +		.data = &mt8195_edp_data,
+> +	},
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, mtk_dp_of_match);
 
--- 
-With Best Regards,
-Andy Shevchenko

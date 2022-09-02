@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268F25AB0B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AD95AB135
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238318AbiIBM50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        id S238738AbiIBNMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238001AbiIBMyo (ORCPT
+        with ESMTP id S238790AbiIBNLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:54:44 -0400
+        Fri, 2 Sep 2022 09:11:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDB2B33;
-        Fri,  2 Sep 2022 05:39:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9190F3ECD1;
+        Fri,  2 Sep 2022 05:48:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2A5A6215D;
-        Fri,  2 Sep 2022 12:38:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2311C433C1;
-        Fri,  2 Sep 2022 12:38:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B237C620DF;
+        Fri,  2 Sep 2022 12:39:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05ADC433C1;
+        Fri,  2 Sep 2022 12:39:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122333;
-        bh=BCPPt0LOctTxI2SeC9BJPqci9jzrGee47gQKv2P6LsI=;
+        s=korg; t=1662122367;
+        bh=m9vXiS0wVCsyjRG1863RIyfzqmzDF4v8y0kU38y9bBc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S+JPoxsFnksEkX0THWA3YPOOcGMS6BhWSZoEAm2HA0Qraal0RBkifuh6wMh4lmHx9
-         Fbx8jXoLcHC8vTdtIAt42yXBaSohiuoMsMz9vz+J2z0QFOvwcnbO5RhBzM0k+0LQoM
-         l3/ELnSw5zaFWe9u8s3NmP+i9o81lPr37HUPV2qk=
+        b=omKcVDKF7+g1EvOjlInbwvwM004hauvnibjA7t7MhMEkELDWGGHcJbXxvAHkes78e
+         L/qjOJTNdhyNPoN+3hYOdIoWJ2XJaOoFkhHkOIsi3W8opuSDuLqvlpOWRICd9vjqns
+         pD/aRehQ5hNu5sUTnOAW6cqbxpBp16452azOdG9g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jing Leng <jleng@ambarella.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <n.schier@avm.de>
-Subject: [PATCH 5.10 06/37] kbuild: Fix include path in scripts/Makefile.modpost
-Date:   Fri,  2 Sep 2022 14:19:28 +0200
-Message-Id: <20220902121359.376467893@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 5.10 07/37] Bluetooth: L2CAP: Fix build errors in some archs
+Date:   Fri,  2 Sep 2022 14:19:29 +0200
+Message-Id: <20220902121359.409183770@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220902121359.177846782@linuxfoundation.org>
 References: <20220902121359.177846782@linuxfoundation.org>
@@ -55,43 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-commit 23a0cb8e3225122496bfa79172005c587c2d64bf upstream.
+commit b840304fb46cdf7012722f456bce06f151b3e81b upstream.
 
-When building an external module, if users don't need to separate the
-compilation output and source code, they run the following command:
-"make -C $(LINUX_SRC_DIR) M=$(PWD)". At this point, "$(KBUILD_EXTMOD)"
-and "$(src)" are the same.
+This attempts to fix the follow errors:
 
-If they need to separate them, they run "make -C $(KERNEL_SRC_DIR)
-O=$(KERNEL_OUT_DIR) M=$(OUT_DIR) src=$(PWD)". Before running the
-command, they need to copy "Kbuild" or "Makefile" to "$(OUT_DIR)" to
-prevent compilation failure.
+In function 'memcmp',
+    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
+    inlined from 'l2cap_global_chan_by_psm' at
+    net/bluetooth/l2cap_core.c:2003:15:
+./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp'
+specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+   44 | #define __underlying_memcmp     __builtin_memcmp
+      |                                 ^
+./include/linux/fortify-string.h:420:16: note: in expansion of macro
+'__underlying_memcmp'
+  420 |         return __underlying_memcmp(p, q, size);
+      |                ^~~~~~~~~~~~~~~~~~~
+In function 'memcmp',
+    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
+    inlined from 'l2cap_global_chan_by_psm' at
+    net/bluetooth/l2cap_core.c:2004:15:
+./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp'
+specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+   44 | #define __underlying_memcmp     __builtin_memcmp
+      |                                 ^
+./include/linux/fortify-string.h:420:16: note: in expansion of macro
+'__underlying_memcmp'
+  420 |         return __underlying_memcmp(p, q, size);
+      |                ^~~~~~~~~~~~~~~~~~~
 
-So the kernel should change the included path to avoid the copy operation.
-
-Signed-off-by: Jing Leng <jleng@ambarella.com>
-[masahiro: I do not think "M=$(OUT_DIR) src=$(PWD)" is the official way,
-but this patch is a nice clean up anyway.]
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Nicolas Schier <n.schier@avm.de>
+Fixes: 332f1795ca20 ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression")
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/Makefile.modpost |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/bluetooth/l2cap_core.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/scripts/Makefile.modpost
-+++ b/scripts/Makefile.modpost
-@@ -87,8 +87,7 @@ obj := $(KBUILD_EXTMOD)
- src := $(obj)
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -1988,11 +1988,11 @@ static struct l2cap_chan *l2cap_global_c
+ 			src_match = !bacmp(&c->src, src);
+ 			dst_match = !bacmp(&c->dst, dst);
+ 			if (src_match && dst_match) {
+-				c = l2cap_chan_hold_unless_zero(c);
+-				if (c) {
+-					read_unlock(&chan_list_lock);
+-					return c;
+-				}
++				if (!l2cap_chan_hold_unless_zero(c))
++					continue;
++
++				read_unlock(&chan_list_lock);
++				return c;
+ 			}
  
- # Include the module's Makefile to find KBUILD_EXTRA_SYMBOLS
--include $(if $(wildcard $(KBUILD_EXTMOD)/Kbuild), \
--             $(KBUILD_EXTMOD)/Kbuild, $(KBUILD_EXTMOD)/Makefile)
-+include $(if $(wildcard $(src)/Kbuild), $(src)/Kbuild, $(src)/Makefile)
- 
- # modpost option for external modules
- MODPOST += -e
+ 			/* Closest match */
 
 

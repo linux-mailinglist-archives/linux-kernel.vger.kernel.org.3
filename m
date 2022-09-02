@@ -2,124 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B7C5AB97B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E505AB97F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 22:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiIBUf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 16:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S229923AbiIBUh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 16:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiIBUfz (ORCPT
+        with ESMTP id S229804AbiIBUhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 16:35:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341F8F63E5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 13:35:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662150952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fn+Zoib7z+3jWmLDklpcVUHy37Y7jPpJPmAY6A3wSS4=;
-        b=EUBE6q1XBNfPmHpqV9iK4CAr3YVmw2q8Hvb16kUSWbBhctMGRmUb5xfMsCA0n0kMdeJtVj
-        mmpJ9FSK275fcJzdIiASnv1ZuDFrWlyaR5uM58tiL5TJT+h4ERLGk4RtmRQE7nsUsgpbqY
-        nH+fj6xbj5wL+309RbRqfY/U9a0lII8=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-395-m3gmaiD0M36f4ugvP4_h5g-1; Fri, 02 Sep 2022 16:35:51 -0400
-X-MC-Unique: m3gmaiD0M36f4ugvP4_h5g-1
-Received: by mail-qk1-f200.google.com with SMTP id br15-20020a05620a460f00b006bc58c26501so2864303qkb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 13:35:51 -0700 (PDT)
+        Fri, 2 Sep 2022 16:37:23 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C113F8F7C;
+        Fri,  2 Sep 2022 13:37:23 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-11e7e0a63e2so7626045fac.4;
+        Fri, 02 Sep 2022 13:37:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=fn+Zoib7z+3jWmLDklpcVUHy37Y7jPpJPmAY6A3wSS4=;
-        b=4F8gnmw92VFtvj1xKo1m6lA7vx0XXtUxj39LbhbMJCNyZfHdOiQWhcndYe2jHIH/MP
-         c28xqArA9T3Zkzzb3GoHAI3EZyBdJXrmRwwXiUukKQrmcvZCXtBQ8T0Ed5pPFIadNw8W
-         I59jC0bqsXSbn87lNRKGvg5yc5HVpL4yqhuWbZNsmQLyd42TdhWksa0K0bUBZhojlii0
-         wbJtFEtbegr4xGr/GAcx9/VsjUcih6lmbO6RrzDM/XxJH3BYPb5QVdHYgUpw9BoFm7fb
-         Zws4RpbQDSiXIBv+rfSIMlt7otazJArbyQZveU2B8UyqoaADBS9CB5Mm7kFe6ihKU4G8
-         6Cmw==
-X-Gm-Message-State: ACgBeo0XiSJ+jhjeiVACskauXZHkriwLz10AykuJ9pXFFezjCF5JVy3N
-        mC9ZeuTsgPw1uWREwfhaj/eQYJnksAJ6T70WMXhP5pIYZhFD8vpvocGART7XT9aAC1pOFHFzcLF
-        y+ZpDE4dINu9OSov9lbejRb7Y
-X-Received: by 2002:a05:6214:cca:b0:499:216a:bb53 with SMTP id 10-20020a0562140cca00b00499216abb53mr12361609qvx.98.1662150950663;
-        Fri, 02 Sep 2022 13:35:50 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6kIdR84rwbeR6TPg15NwPgQnYmK4+injhS/K8qL1Ci4QeM6ILUyA6WUnfYAugNgzwk5mCQRQ==
-X-Received: by 2002:a05:6214:cca:b0:499:216a:bb53 with SMTP id 10-20020a0562140cca00b00499216abb53mr12361578qvx.98.1662150950432;
-        Fri, 02 Sep 2022 13:35:50 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id i7-20020a05620a404700b006b5cc25535fsm2262614qko.99.2022.09.02.13.35.48
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=D5I2FegB0/865hyvFadrtO3KVuPLcvZSOcVWjIZiMYE=;
+        b=jxmloLFLIaPDLsr+I0lHc5hCBCWUvs481Gci+St/O7eEXvwloIHfh9vcTjuNYUM+MS
+         GU6rcNa9rn5jEFTBKVMC3QXtOeHKxrfrsI3I6JeE87arTf8UVfrsPPD8nShDS29N++u3
+         07RvTcuoRJ5rH4zYjZEtQ/419Qs7Uu6tdEHe4YEyDbXsphXcfGDy9wKOvMLkgomvpaa1
+         2V9Fc8Dh3mfp8aFYnMOUgn1mvBDrPRafVEUWr+chHApi3T1XN8FWyNLLkE5kxQSQlmn7
+         hyoOTETSX4b30i5by9GcXbJk+2hnTivCC3H2MEOjCTW/7oiTE+laRReUgITshhphcZEr
+         o2SA==
+X-Gm-Message-State: ACgBeo2n1xjYvS42eeWG8otASlhAM2nL9Ht0otODZYv/aSX3qyyd9qju
+        R16zGcPT/6iypV5X7X2AEM/YB/RvQA==
+X-Google-Smtp-Source: AA6agR74vMjIV6E6x7glZrZm9SKfzRvLDhnq5sddCSsKFOxouv32JrJa1HCse/8QJkatK6iljKePLQ==
+X-Received: by 2002:a05:6870:d7a5:b0:11d:a0b:f62b with SMTP id bd37-20020a056870d7a500b0011d0a0bf62bmr3000832oab.190.1662151042314;
+        Fri, 02 Sep 2022 13:37:22 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e28-20020a544f1c000000b003436fa2c23bsm1408427oiy.7.2022.09.02.13.37.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 13:35:50 -0700 (PDT)
-Date:   Fri, 2 Sep 2022 16:35:47 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org,
-        "Huang, Ying" <ying.huang@intel.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] mm/migrate_device.c: Flush TLB while holding PTL
-Message-ID: <YxJpIwPn0FGOka0C@xz-m1.local>
-References: <9f801e9d8d830408f2ca27821f606e09aa856899.1662078528.git-series.apopple@nvidia.com>
+        Fri, 02 Sep 2022 13:37:21 -0700 (PDT)
+Received: (nullmailer pid 372769 invoked by uid 1000);
+        Fri, 02 Sep 2022 20:37:21 -0000
+Date:   Fri, 2 Sep 2022 15:37:21 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 1/3] dt-bindings: reset: syscon-reboot: Add priority
+ property
+Message-ID: <20220902203721.GA356619-robh@kernel.org>
+References: <20220820102925.29476-1-pali@kernel.org>
+ <20220822124728.GA3641041-robh@kernel.org>
+ <20220822135050.o4a4bw3dqkmhtjgb@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <9f801e9d8d830408f2ca27821f606e09aa856899.1662078528.git-series.apopple@nvidia.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220822135050.o4a4bw3dqkmhtjgb@pali>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 10:35:51AM +1000, Alistair Popple wrote:
-> When clearing a PTE the TLB should be flushed whilst still holding the
-> PTL to avoid a potential race with madvise/munmap/etc. For example
-> consider the following sequence:
+On Mon, Aug 22, 2022 at 03:50:50PM +0200, Pali Rohár wrote:
+> On Monday 22 August 2022 07:47:28 Rob Herring wrote:
+> > On Sat, Aug 20, 2022 at 12:29:23PM +0200, Pali Rohár wrote:
+> > > This new optional priority property allows to specify custom priority level
+> > > of reset device. Default level was always 192.
+> > 
+> > Why do we need/want this? What problem does it solve?
 > 
->   CPU0                          CPU1
->   ----                          ----
+> See patch 3/3.
 > 
->   migrate_vma_collect_pmd()
->   pte_unmap_unlock()
->                                 madvise(MADV_DONTNEED)
->                                 -> zap_pte_range()
->                                 pte_offset_map_lock()
->                                 [ PTE not present, TLB not flushed ]
->                                 pte_unmap_unlock()
->                                 [ page is still accessible via stale TLB ]
->   flush_tlb_range()
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > ---
+> > >  .../devicetree/bindings/power/reset/syscon-reboot.yaml        | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> > > index da2509724812..d905133aab27 100644
+> > > --- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> > > +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> > > @@ -42,6 +42,10 @@ properties:
+> > >      $ref: /schemas/types.yaml#/definitions/uint32
+> > >      description: The reset value written to the reboot register (32 bit access).
+> > >  
+> > > +  priority:
+> > 
+> > A bit too generic for the name.
+> > 
+> > > +    $ref: /schemas/types.yaml#/definitions/sint32
+> > > +    description: Priority level of this syscon reset device. Default 192.
+> > 
+> > default: 192
+> > 
+> > 
+> > Though I'm not really sure about the whole concept of this in DT. Where 
+> > does 192 come from?
 > 
-> In this case the page may still be accessed via the stale TLB entry
-> after madvise returns. Fix this by flushing the TLB while holding the
-> PTL.
-> 
-> Signed-off-by: Alistair Popple <apopple@nvidia.com>
-> Reported-by: Nadav Amit <nadav.amit@gmail.com>
-> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-> Fixes: 8c3328f1f36a ("mm/migrate: migrate_vma() unmap page from vma while collecting pages")
-> Cc: stable@vger.kernel.org
+> Implicitly from the current implementation and how it is used.
 
-Acked-by: Peter Xu <peterx@redhat.com>
+Implementation of what? u-boot? BSD? robOS?
 
--- 
-Peter Xu
+> > Presumably if we have more than 1 reset device, then 
+> > 'priority' is needed in multiple places. So you need a common schema 
+> > defining the property (as property types should be defined exactly 
+> > once) which this schema can reference.
+> > 
+> > Rob
+> 
+> Sorry, I do not understand.
 
+So just keep sending new versions instead?
+
+syscon-reboot is not the only binding for a system reset device, right? 
+So those others reset devices will need 'priority' too. For a given 
+property, there should only be one schema definition defining the type 
+for the property. Otherwise, there might be conflicts. So you need a 
+common schema doing that. And here you would just have 'priority: true' 
+or possibly some binding specific constraints.
+
+Rob

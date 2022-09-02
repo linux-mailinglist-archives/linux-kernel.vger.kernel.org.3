@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C615AAFFB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3439E5AB1B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 15:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237183AbiIBMq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
+        id S237576AbiIBNia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 09:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236652AbiIBMpY (ORCPT
+        with ESMTP id S236255AbiIBNh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:45:24 -0400
+        Fri, 2 Sep 2022 09:37:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772C6E1A80;
-        Fri,  2 Sep 2022 05:33:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D8F124872;
+        Fri,  2 Sep 2022 06:16:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25D3B620DF;
-        Fri,  2 Sep 2022 12:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6E6C433D6;
-        Fri,  2 Sep 2022 12:33:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC034621EC;
+        Fri,  2 Sep 2022 12:36:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BECE6C433C1;
+        Fri,  2 Sep 2022 12:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662122008;
-        bh=YAswBaI54FmrGFv/3FgYV6pl5yuiVekOIL5Memp56VQ=;
+        s=korg; t=1662122201;
+        bh=qPtMQN6i7xa1IWnEibQFMTsGeomTP4hM3LBvwPWuPms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e3EF7LpBRWLSh2jdaPmJSBf3WaV8pJjvqXZ5pxFEsGr1g05G1bQGr3lCa3nMkwbgs
-         0i3JNuzuXUjlMhXfK/lgFK6d5ahuRDYOZfhMaoTKZFr8RjvmpEt7D63c8YxDlKjx9g
-         cQxXLzMAx8DsxqhrSe7animCvVaymmT1WbQ0iIck=
+        b=U2jlOZHXz8AA371DAKf5q5T4a/s6WJ7G+oS9VoXACN3U6+Pfzbk+9OMFUMxFzjHym
+         2S+lxB9b31Z2gJ+VHaFhsLjVzr+2qHlZm/xYe0bHlO2203ViRIy5NBhB3+YvxRsI/z
+         B1a2zeON6/2oYpq82p23u/9oApXbyIhzPQNA92ns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
-        Hyunchul Lee <hyc.lee@gmail.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 56/73] ksmbd: return STATUS_BAD_NETWORK_NAME error status if share is not configured
+        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Xiaogang Chen <Xiaogang.Chen@amd.com>
+Subject: [PATCH 5.19 44/72] drm/amdkfd: Handle restart of kfd_ioctl_wait_events
 Date:   Fri,  2 Sep 2022 14:19:20 +0200
-Message-Id: <20220902121406.278968570@linuxfoundation.org>
+Message-Id: <20220902121406.223114522@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Felix Kuehling <Felix.Kuehling@amd.com>
 
-[ Upstream commit fe54833dc8d97ef387e86f7c80537d51c503ca75 ]
+[ Upstream commit bea9a56afbc4b5a41ea579b8b0dc5e189b439504 ]
 
-If share is not configured in smb.conf, smb2 tree connect should return
-STATUS_BAD_NETWORK_NAME instead of STATUS_BAD_NETWORK_PATH.
+When kfd_ioctl_wait_events needs to restart due to a signal, we need to
+update the timeout to account for the time already elapsed. We also need
+to undo auto_reset of events that have signaled already, so that the
+restarted ioctl will be able to count those signals again.
 
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
-Reviewed-by: Hyunchul Lee <hyc.lee@gmail.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+This fixes infinite hangs when kfd_ioctl_wait_events is interrupted by a
+signal.
+
+Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Reviewed-and-tested-by: Xiaogang Chen <Xiaogang.Chen@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ksmbd/mgmt/tree_connect.c | 2 +-
- fs/ksmbd/smb2pdu.c           | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_chardev.c |  2 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_events.c  | 24 ++++++++++++------------
+ drivers/gpu/drm/amd/amdkfd/kfd_priv.h    |  2 +-
+ 3 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/fs/ksmbd/mgmt/tree_connect.c b/fs/ksmbd/mgmt/tree_connect.c
-index 0d28e723a28c7..940385c6a9135 100644
---- a/fs/ksmbd/mgmt/tree_connect.c
-+++ b/fs/ksmbd/mgmt/tree_connect.c
-@@ -18,7 +18,7 @@
- struct ksmbd_tree_conn_status
- ksmbd_tree_conn_connect(struct ksmbd_session *sess, char *share_name)
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+index 1c7016958d6d9..bfca17ca399c6 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+@@ -814,7 +814,7 @@ static int kfd_ioctl_wait_events(struct file *filp, struct kfd_process *p,
+ 	err = kfd_wait_on_events(p, args->num_events,
+ 			(void __user *)args->events_ptr,
+ 			(args->wait_for_all != 0),
+-			args->timeout, &args->wait_result);
++			&args->timeout, &args->wait_result);
+ 
+ 	return err;
+ }
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_events.c b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
+index 4df9c36146ba9..cbc20d779e5aa 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_events.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_events.c
+@@ -895,7 +895,8 @@ static long user_timeout_to_jiffies(uint32_t user_timeout_ms)
+ 	return msecs_to_jiffies(user_timeout_ms) + 1;
+ }
+ 
+-static void free_waiters(uint32_t num_events, struct kfd_event_waiter *waiters)
++static void free_waiters(uint32_t num_events, struct kfd_event_waiter *waiters,
++			 bool undo_auto_reset)
  {
--	struct ksmbd_tree_conn_status status = {-EINVAL, NULL};
-+	struct ksmbd_tree_conn_status status = {-ENOENT, NULL};
- 	struct ksmbd_tree_connect_response *resp = NULL;
- 	struct ksmbd_share_config *sc;
- 	struct ksmbd_tree_connect *tree_conn = NULL;
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 28b5d20c8766e..824f17a101a9e 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -1932,8 +1932,9 @@ int smb2_tree_connect(struct ksmbd_work *work)
- 		rsp->hdr.Status = STATUS_SUCCESS;
- 		rc = 0;
- 		break;
-+	case -ENOENT:
- 	case KSMBD_TREE_CONN_STATUS_NO_SHARE:
--		rsp->hdr.Status = STATUS_BAD_NETWORK_PATH;
-+		rsp->hdr.Status = STATUS_BAD_NETWORK_NAME;
- 		break;
- 	case -ENOMEM:
- 	case KSMBD_TREE_CONN_STATUS_NOMEM:
+ 	uint32_t i;
+ 
+@@ -904,6 +905,9 @@ static void free_waiters(uint32_t num_events, struct kfd_event_waiter *waiters)
+ 			spin_lock(&waiters[i].event->lock);
+ 			remove_wait_queue(&waiters[i].event->wq,
+ 					  &waiters[i].wait);
++			if (undo_auto_reset && waiters[i].activated &&
++			    waiters[i].event && waiters[i].event->auto_reset)
++				set_event(waiters[i].event);
+ 			spin_unlock(&waiters[i].event->lock);
+ 		}
+ 
+@@ -912,7 +916,7 @@ static void free_waiters(uint32_t num_events, struct kfd_event_waiter *waiters)
+ 
+ int kfd_wait_on_events(struct kfd_process *p,
+ 		       uint32_t num_events, void __user *data,
+-		       bool all, uint32_t user_timeout_ms,
++		       bool all, uint32_t *user_timeout_ms,
+ 		       uint32_t *wait_result)
+ {
+ 	struct kfd_event_data __user *events =
+@@ -921,7 +925,7 @@ int kfd_wait_on_events(struct kfd_process *p,
+ 	int ret = 0;
+ 
+ 	struct kfd_event_waiter *event_waiters = NULL;
+-	long timeout = user_timeout_to_jiffies(user_timeout_ms);
++	long timeout = user_timeout_to_jiffies(*user_timeout_ms);
+ 
+ 	event_waiters = alloc_event_waiters(num_events);
+ 	if (!event_waiters) {
+@@ -971,15 +975,11 @@ int kfd_wait_on_events(struct kfd_process *p,
+ 		}
+ 
+ 		if (signal_pending(current)) {
+-			/*
+-			 * This is wrong when a nonzero, non-infinite timeout
+-			 * is specified. We need to use
+-			 * ERESTARTSYS_RESTARTBLOCK, but struct restart_block
+-			 * contains a union with data for each user and it's
+-			 * in generic kernel code that I don't want to
+-			 * touch yet.
+-			 */
+ 			ret = -ERESTARTSYS;
++			if (*user_timeout_ms != KFD_EVENT_TIMEOUT_IMMEDIATE &&
++			    *user_timeout_ms != KFD_EVENT_TIMEOUT_INFINITE)
++				*user_timeout_ms = jiffies_to_msecs(
++					max(0l, timeout-1));
+ 			break;
+ 		}
+ 
+@@ -1020,7 +1020,7 @@ int kfd_wait_on_events(struct kfd_process *p,
+ 					       event_waiters, events);
+ 
+ out_unlock:
+-	free_waiters(num_events, event_waiters);
++	free_waiters(num_events, event_waiters, ret == -ERESTARTSYS);
+ 	mutex_unlock(&p->event_mutex);
+ out:
+ 	if (ret)
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_priv.h b/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+index 2585d6e61d422..c6eec54b8102f 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+@@ -1314,7 +1314,7 @@ void kfd_event_free_process(struct kfd_process *p);
+ int kfd_event_mmap(struct kfd_process *process, struct vm_area_struct *vma);
+ int kfd_wait_on_events(struct kfd_process *p,
+ 		       uint32_t num_events, void __user *data,
+-		       bool all, uint32_t user_timeout_ms,
++		       bool all, uint32_t *user_timeout_ms,
+ 		       uint32_t *wait_result);
+ void kfd_signal_event_interrupt(u32 pasid, uint32_t partial_id,
+ 				uint32_t valid_id_bits);
 -- 
 2.35.1
 

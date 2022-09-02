@@ -2,89 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0BF5AB3D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1BA5AB3DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237088AbiIBOkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S237056AbiIBOm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236881AbiIBOkG (ORCPT
+        with ESMTP id S236965AbiIBOl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:40:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7401C12484B;
-        Fri,  2 Sep 2022 07:00:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 2 Sep 2022 10:41:56 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F5517F6A5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 07:02:34 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64F8CB82C03;
-        Fri,  2 Sep 2022 14:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1AE3CC433D7;
-        Fri,  2 Sep 2022 14:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662127216;
-        bh=6FkOE0V4Xl0gp19KmvjJh3tYe8TXuJxNaJXe5cYKWtY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QwevnPlVKT8sKyLUXOmFC3g8jLH3mwyfHt2ULozsHipTdWaNetXQIgZLubI6v789S
-         by009iQSOMS11/xX/tVlKUyTnYoqRxIITAu7X9eTVFk/nuftkOx96+aeIsQhor1MHz
-         l6yhZ1vEnPAOGFFVfk//OweyVjp+oU8gPOszu9XLwvdUHQUzMy++UmTGTgtbxPZDlU
-         JsGMsul8wM8KStocJnEwWeya+1aAN4brXciTrlpRiktODdhG0Mv7GvJAVhmdYASBT5
-         24H1WRL/J0eieDR18h5zDUYU0li3u9TMEKadsYyzB0s7RaD4XNDx+qmlWrwbyjWVhR
-         ihxU86cWFOJmg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EFF0DC4166F;
-        Fri,  2 Sep 2022 14:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.3ffe.de (Postfix) with ESMTPSA id 426D9216B;
+        Fri,  2 Sep 2022 16:01:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1662127296;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HAwDC+ZGNEoPxSWgUlrI5jj7H9smOzKu5zWicRxfk50=;
+        b=zluc78GHr8brCngTJtcQTa2rPxwNrKKDUQhKENNFnSV5m+0WfG9zhi0Ib39upNLHQw4lnp
+        FLOtloAKdpdkLMgbV2EbEN1DrCvP4OgdPwFk69E6S1bZR1DVZo7NDbwXZIAAlSTV8ra7/i
+        1U1ugFa0cnnSbyTREqUTPUCVi8P57qMXyWoxK2fSFHRUI4o16BlSG2WGEbmM4iBTnvL+4r
+        uC6/c5Xp0NZtfhBPABMwkvA0NX9k+2X1D3w1FfM7EJcOAMqGs2OEHZs0/lc3xwDVP49tC3
+        OzbQ7xnabN2KChxSZ4ON7e2cZOnBu1c5JeaLTS5ZL53K7vcGnfGB+9MZ55Kqfg==
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1] selftests/xsk: Avoid use-after-free on ctx
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166212721597.8214.1758586217041951809.git-patchwork-notify@kernel.org>
-Date:   Fri, 02 Sep 2022 14:00:15 +0000
-References: <20220901202645.1463552-1-irogers@google.com>
-In-Reply-To: <20220901202645.1463552-1-irogers@google.com>
-To:     Ian Rogers <irogers@google.com>
-Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
-        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Fri, 02 Sep 2022 16:01:36 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     tudor.ambarus@microchip.com, pratyush@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, stable <stable@kernel.org>
+Subject: Re: [PATCH] mtd: spi-nor: fix memory leak when using debugfs_lookup()
+In-Reply-To: <20220902133724.278133-1-gregkh@linuxfoundation.org>
+References: <20220902133724.278133-1-gregkh@linuxfoundation.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <bcd0cc5153457fb52566519a76e7b5b4@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Thu,  1 Sep 2022 13:26:45 -0700 you wrote:
-> The put lowers the reference count to 0 and frees ctx, reading it
-> afterwards is invalid. Move the put after the uses and determine the
-> last use by the reference count being 1.
+Am 2022-09-02 15:37, schrieb Greg Kroah-Hartman:
+> When calling debugfs_lookup() the result must have dput() called on it,
+> otherwise the memory will leak over time.  Fix this up to be much
+> simpler logic and only create the root debugfs directory once when the
+> driver is first accessed.  That resolves the memory leak and makes
+> things more obvious as to what the intent is.
 > 
-> Fixes: 39e940d4abfa ("selftests/xsk: Destroy BPF resources only when ctx refcount drops to 0")
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Cc: Pratyush Yadav <pratyush@kernel.org>
+> Cc: Michael Walle <michael@walle.cc>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: linux-mtd@lists.infradead.org
+> Cc: stable <stable@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/mtd/spi-nor/debugfs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> [...]
+> diff --git a/drivers/mtd/spi-nor/debugfs.c 
+> b/drivers/mtd/spi-nor/debugfs.c
+> index df76cb5de3f9..3aab595e82d1 100644
+> --- a/drivers/mtd/spi-nor/debugfs.c
+> +++ b/drivers/mtd/spi-nor/debugfs.c
+> @@ -228,11 +228,11 @@ static void spi_nor_debugfs_unregister(void 
+> *data)
+> 
+>  void spi_nor_debugfs_register(struct spi_nor *nor)
+>  {
+> -	struct dentry *rootdir, *d;
+> +	static struct dentry *rootdir;
+> +	struct dentry *d;
+>  	int ret;
+> 
+>  	/* Create rootdir once. Will never be deleted again. */
+> -	rootdir = debugfs_lookup(SPI_NOR_DEBUGFS_ROOT, NULL);
 
-Here is the summary with links:
-  - [v1] selftests/xsk: Avoid use-after-free on ctx
-    https://git.kernel.org/bpf/bpf-next/c/af515a5587b8
+IIRC I had that one and it didn't work with spi-nor as a module.
+Wouldn't it try to create the root dir twice if you remove the module
+and load it again?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+-michael
 
-
+>  	if (!rootdir)
+>  		rootdir = debugfs_create_dir(SPI_NOR_DEBUGFS_ROOT, NULL);

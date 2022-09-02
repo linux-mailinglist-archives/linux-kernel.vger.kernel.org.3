@@ -2,122 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3501E5AA860
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D295AA864
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 08:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235586AbiIBGxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 02:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S235579AbiIBGx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 02:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235563AbiIBGxJ (ORCPT
+        with ESMTP id S235595AbiIBGxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 02:53:09 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6675FAA345;
-        Thu,  1 Sep 2022 23:53:08 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id 92-20020a9d0be5000000b0063946111607so844080oth.10;
-        Thu, 01 Sep 2022 23:53:08 -0700 (PDT)
+        Fri, 2 Sep 2022 02:53:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94528BC807
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 23:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662101594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h+57PdWMxpBWbQjargyaqlxNH+Zcmno8dXbh3sZc6/c=;
+        b=NSAJyKI1OzMusRWmc9xm0T7junBLWZK0BQb5u1L5PilV5/iWSLXHSRIk4rGxbMCA89aFiY
+        1uObkmayh9HTYMYu457YqMOOaKnMltSEKQY+kDK5godGc8GaMw2nGMW6BGT8Q5KptkM87v
+        QKsGWQl1S478qkp2kGPQPvTVMVor7Jg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-625-kANBYT9oPZSWd9tQ4fvvTg-1; Fri, 02 Sep 2022 02:53:13 -0400
+X-MC-Unique: kANBYT9oPZSWd9tQ4fvvTg-1
+Received: by mail-wm1-f69.google.com with SMTP id v67-20020a1cac46000000b003a615c4893dso738715wme.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 23:53:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kljxdECqJZOyxDQ4X50tiBQvLj6Z7Laiz45KlKlPDwQ=;
-        b=l65GnPEmcapIn3yiJbFuiMxY9PWnTdMsMHmzhh2oNl87iws/HeS4+hJRv008kx2OEt
-         N9gorSrf7eWLp7GjZphzz0I++jc9cOEmF/+dnJWqSYTr+chEmHy1nuhWFu4mfRGObyIt
-         hxRlCUxm4iqLJSHiYcQdpz2FlkP2aaAwm6ezX9hrGG5ZX+CbGifoVd9H0JsOgSkSVakN
-         enn8AS4B4ffxHxsobpokpqFlCvzyG2Ifce3h+/sRbkhLCHoFqv3IrHc7zZET8CNWoxso
-         9lERHM1Ld5kJCizw02pGXPmg34iypFoX/tCb7W6+KcAY5erR9KqRK/RL02x9ZU5zxyca
-         OckA==
-X-Gm-Message-State: ACgBeo38ympLDTx8f2/VFJAAb7UaN3pPGjHzWKZIORRrq1LVLMHx7cpf
-        t2R336YX3vNsJ1NCK/omTx7M3qno0gMSivm8+p4=
-X-Google-Smtp-Source: AA6agR7g4fE4+zjF6i7bVAuoDrD/9iAOk6+5sznzlRtEp2vResweR9Tp4Gy6BghWD7ig/WCzk0IXUv8+O5774F2ZxmM=
-X-Received: by 2002:a9d:6a59:0:b0:638:92fd:d5b4 with SMTP id
- h25-20020a9d6a59000000b0063892fdd5b4mr14306119otn.247.1662101587717; Thu, 01
- Sep 2022 23:53:07 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=h+57PdWMxpBWbQjargyaqlxNH+Zcmno8dXbh3sZc6/c=;
+        b=RWAMhf751TEE91V9IIOG3WlgvvF+j5VBtqgIie890ixvUSch3QvS9DaNdhdBDfZUuN
+         LFDra9EwZdn3tKNqm4rpgUkh4/C1CDe9Lm4+CKWEeLDmS12kXKsSu9gVV4oBzgiYp4iN
+         gnGOLsxUsmgMb6FRECuBwoA5ZNvazbZnAOuf3XOaH4G/O12Yufo8GSr+080Ex2YGby8a
+         K/NsM4wXjTtlXteGP8A4J3P2q2MTfjkeFWvfNklfJbrnujIYMSIb2ppKxaDUWSVRoMf0
+         tkk4NU+zuvEjhl8O5W3Bi/fzcf6MXk7MHvUSybhHTRjaPenvDpNrqEtnf4wVypbYdOQA
+         yazg==
+X-Gm-Message-State: ACgBeo2FmldcNqjD9V4LJxyom/iY2UPNW8ljGpu2pDOFI1ehp4aOPz+A
+        XFju8NZSiXTrma7tAfO5GGX4tPMi5FTI/wSZXSfktEFnMkwPnCGwy/ur/yZLCG7Ym0kN5WxzgAt
+        5zLWHO4odk6/YP2GgZEDuiONx
+X-Received: by 2002:adf:fb0e:0:b0:21a:34a2:5ca9 with SMTP id c14-20020adffb0e000000b0021a34a25ca9mr16886157wrr.472.1662101592037;
+        Thu, 01 Sep 2022 23:53:12 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR72FIltlXb2TQPeyqyCZoaRVMW4kclo3DOPj63oymphdPfUvZp/uulcrUG16hwS6UnSef2yNw==
+X-Received: by 2002:adf:fb0e:0:b0:21a:34a2:5ca9 with SMTP id c14-20020adffb0e000000b0021a34a25ca9mr16886135wrr.472.1662101591768;
+        Thu, 01 Sep 2022 23:53:11 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c714:4800:2077:1bf6:40e7:2833? (p200300cbc714480020771bf640e72833.dip0.t-ipconnect.de. [2003:cb:c714:4800:2077:1bf6:40e7:2833])
+        by smtp.gmail.com with ESMTPSA id z15-20020a5d654f000000b002211fc70174sm842621wrv.99.2022.09.01.23.53.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 23:53:11 -0700 (PDT)
+Message-ID: <2fccd4c1-d12f-334c-3fab-24a84bcac007@redhat.com>
+Date:   Fri, 2 Sep 2022 08:53:09 +0200
 MIME-Version: 1.0
-References: <20220901184709.2179309-1-robh@kernel.org>
-In-Reply-To: <20220901184709.2179309-1-robh@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 1 Sep 2022 23:52:56 -0700
-Message-ID: <CAM9d7chY6T-EAN3BT487MUK0LbfGp27X+2Dd_+S0azgh2GQn9w@mail.gmail.com>
-Subject: Re: [PATCH] perf: Ignore format attributes with an unknown
- perf_event_attr field
-To:     Rob Herring <robh@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 3/4] mm/migrate_device.c: Copy pte dirty bit to page
+Content-Language: en-US
+To:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Peter Xu <peterx@redhat.com>, Nadav Amit <nadav.amit@gmail.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        linuxppc-dev@lists.ozlabs.org,
+        "Huang, Ying" <ying.huang@intel.com>, stable@vger.kernel.org
+References: <9f801e9d8d830408f2ca27821f606e09aa856899.1662078528.git-series.apopple@nvidia.com>
+ <dd48e4882ce859c295c1a77612f66d198b0403f9.1662078528.git-series.apopple@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <dd48e4882ce859c295c1a77612f66d198b0403f9.1662078528.git-series.apopple@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Thu, Sep 1, 2022 at 11:55 AM Rob Herring <robh@kernel.org> wrote:
->
-> If the kernel exposes a new perf_event_attr field in a format attr, perf
-> will return an error stating the specified PMU can't be found. For
-> example, a format attr with 'config3:0-63' causes an error if config3 is
-> unknown to perf. This causes a compatibility issue between a newer
-> kernel and an older perf tool.
->
-> The addition here makes any attr string up to the ':' ignored, but
-> still checks the 'bits' portion.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On 02.09.22 02:35, Alistair Popple wrote:
+> migrate_vma_setup() has a fast path in migrate_vma_collect_pmd() that
+> installs migration entries directly if it can lock the migrating page.
+> When removing a dirty pte the dirty bit is supposed to be carried over
+> to the underlying page to prevent it being lost.
+> 
+> Currently migrate_vma_*() can only be used for private anonymous
+> mappings. That means loss of the dirty bit usually doesn't result in
+> data loss because these pages are typically not file-backed. However
+> pages may be backed by swap storage which can result in data loss if an
+> attempt is made to migrate a dirty page that doesn't yet have the
+> PageDirty flag set.
+> 
+> In this case migration will fail due to unexpected references but the
+> dirty pte bit will be lost. If the page is subsequently reclaimed data
+> won't be written back to swap storage as it is considered uptodate,
+> resulting in data loss if the page is subsequently accessed.
+> 
+> Prevent this by copying the dirty bit to the page when removing the pte
+> to match what try_to_migrate_one() does.
+> 
+> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+> Acked-by: Peter Xu <peterx@redhat.com>
+> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+> Reported-by: "Huang, Ying" <ying.huang@intel.com>
+> Fixes: 8c3328f1f36a ("mm/migrate: migrate_vma() unmap page from vma while collecting pages")
+> Cc: stable@vger.kernel.org
+> 
 > ---
-> This is the YACC mud I threw and seems to stick. Maybe there's a better
-> way to handle this. It doesn't seem like there's a way to do wildcards
-> (i.e. config.*) in YACC.
->
-> This is needed for this series[1]. Unfortunately the best we do to avoid
-> the issue is applying this to stable. I think there's some time before
-> v8.7 h/w is deployed, too.
+> 
+> Changes for v4:
+> 
+>  - Added Reviewed-by
+> 
+> Changes for v3:
+> 
+>  - Defer TLB flushing
+>  - Split a TLB flushing fix into a separate change.
+> 
+> Changes for v2:
+> 
+>  - Fixed up Reported-by tag.
+>  - Added Peter's Acked-by.
+>  - Atomically read and clear the pte to prevent the dirty bit getting
+>    set after reading it.
+>  - Added fixes tag
+> ---
+>  mm/migrate_device.c |  9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+> index 4cc849c..dbf6c7a 100644
+> --- a/mm/migrate_device.c
+> +++ b/mm/migrate_device.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/export.h>
+>  #include <linux/memremap.h>
+>  #include <linux/migrate.h>
+> +#include <linux/mm.h>
+>  #include <linux/mm_inline.h>
+>  #include <linux/mmu_notifier.h>
+>  #include <linux/oom.h>
+> @@ -196,7 +197,7 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>  			flush_cache_page(vma, addr, pte_pfn(*ptep));
+>  			anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+>  			if (anon_exclusive) {
+> -				ptep_clear_flush(vma, addr, ptep);
+> +				pte = ptep_clear_flush(vma, addr, ptep);
+>  
+>  				if (page_try_share_anon_rmap(page)) {
+>  					set_pte_at(mm, addr, ptep, pte);
+> @@ -206,11 +207,15 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+>  					goto next;
+>  				}
+>  			} else {
+> -				ptep_get_and_clear(mm, addr, ptep);
+> +				pte = ptep_get_and_clear(mm, addr, ptep);
+>  			}
+>  
+>  			migrate->cpages++;
+>  
+> +			/* Set the dirty flag on the folio now the pte is gone. */
+> +			if (pte_dirty(pte))
+> +				folio_mark_dirty(page_folio(page));
+> +
+>  			/* Setup special migration page table entry */
+>  			if (mpfn & MIGRATE_PFN_WRITE)
+>  				entry = make_writable_migration_entry(
 
-Maybe you could change the format_term rule to take an identifier instead
-of PP_CONFIG* directly and pass it to perf_pmu__new_format().  Then
-it could check the string and create an appropriate PERF_PMU_FORMAT_VALUE_*
-or ignore it according to the PERF_ATTR_SIZE_VER*.
 
+This matches what we do in try_to_unmap_one()
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
 Thanks,
-Namhyung
 
+David / dhildenb
 
->
-> Rob
->
-> [1] https://lore.kernel.org/all/20220825-arm-spe-v8-7-v1-0-c75b8d92e692@kernel.org/
->
->  tools/perf/util/pmu.y | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/tools/perf/util/pmu.y b/tools/perf/util/pmu.y
-> index bfd7e8509869..3096864ec9b9 100644
-> --- a/tools/perf/util/pmu.y
-> +++ b/tools/perf/util/pmu.y
-> @@ -60,6 +60,9 @@ PP_CONFIG2 ':' bits
->                                       PERF_PMU_FORMAT_VALUE_CONFIG2,
->                                       $3));
->  }
-> +|
-> +error ':' bits
-> +{}
->
->  bits:
->  bits ',' bit_term
-> --
-> 2.34.1
->

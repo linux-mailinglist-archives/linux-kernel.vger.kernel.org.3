@@ -2,83 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA2F5AA729
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5311A5AA72C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232681AbiIBFRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 01:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S232849AbiIBFU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 01:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbiIBFRC (ORCPT
+        with ESMTP id S229514AbiIBFUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 01:17:02 -0400
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1821BA5718;
-        Thu,  1 Sep 2022 22:17:02 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id e18so1232636edj.3;
-        Thu, 01 Sep 2022 22:17:02 -0700 (PDT)
+        Fri, 2 Sep 2022 01:20:55 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5618B99F;
+        Thu,  1 Sep 2022 22:20:54 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-11e9a7135easo2312600fac.6;
+        Thu, 01 Sep 2022 22:20:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=0M41M0g1zyDSIMdScglkRscM+P47aJdZuPKP2PAMAu4=;
+        b=LpvtAYXIKuu3kw+LtR4zhkgYLFUkZqWLGU/67/nlDDrm2AvFlmHW5OHimX8VzX3APi
+         Nheq0VtWCVHU0jARIwdKfBHdZzur1b+1STrXBZIbnoDo7Ir53kEC12LZDCgSGgqGvZ8i
+         ha/uSmIrGjPYNbvLB+F6/o8fvLM0gBFJW07XDPS1NmMOQoH09rDFfGx03TqcZfbdThoc
+         Bb9AD2vF+TWf9k+eQqGAfeE7fV1BjX+KGtFhsZ/FJQOkCgKPKqOf58bZUle7t9TUrpKZ
+         Z1AphlNaCYC2PAuUPh/tHvn1eUX3FZyEKdAkNo+i+xAhIUeuQ7cRPNAHAumimkaMl3UK
+         jvJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=XeKu+qTJ04LpGfaU8mzpIsHanK2YeKifc8Qw+NqHOGk=;
-        b=r5yHQ/ydwTv4eudqPNOtiD49jxD0DwlBLHBRNGr9LcLwm0SAVw3vAfnOtb6A0idTia
-         t3ET0t5c33T4hYto7tMkWoPkDXwKiidw5o38brsYT3yuwNjJZgGjbmYJ6izhTBfIqn1f
-         n6YnBbc4EhcSDEBKvXcAa7xGE4pLhOfBHgzZq38GtDPvi4rzDJEYGzZ3fDg2cjfbQHpe
-         hiRGfi9RDE/gE+SlWChdZyPa9zJn2Ylxgf8QOv0D8vcAKN90unuE/ju6WFrOZPeWUbL7
-         ywrbbmxeUt7dgqORCE/S8YjSFoBVZqWV7t5eSgHG0/+2EdTcwvBRoL/AoSeNjilZWpM7
-         uVSQ==
-X-Gm-Message-State: ACgBeo1rJ7OM3IBL1BFr6DRGeXAPMn3CQgvpIwgduV+gFhbrar3KvNGZ
-        ue2z7UqBoMZx9V8iGWKE+gzLHnGpoMc=
-X-Google-Smtp-Source: AA6agR7zcRg1xtZQaSnEH5F7HoYUUNKhyTlJAuQTNpdO15sPCXwdKygzQKisrhYBDfp/TZEJYLbI9g==
-X-Received: by 2002:a05:6402:1f02:b0:445:f674:eac0 with SMTP id b2-20020a0564021f0200b00445f674eac0mr30456039edb.370.1662095820497;
-        Thu, 01 Sep 2022 22:17:00 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id kz16-20020a17090777d000b0073c8d4c9f38sm655960ejc.177.2022.09.01.22.16.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 22:16:59 -0700 (PDT)
-Message-ID: <e122fe60-484b-fd50-d166-4a21e08d4775@kernel.org>
-Date:   Fri, 2 Sep 2022 07:16:58 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=0M41M0g1zyDSIMdScglkRscM+P47aJdZuPKP2PAMAu4=;
+        b=6315xker9UT4LAQYB4Spspp9P3r/YKlDDV+fQnax0RE2A7W88ooIh3VQXprchZnxR+
+         z4Q+62CfkJG28GPf/r/DA3r+nq0YdnYxhHggiwvcFpN0QF+PPyPnI2sStAV9uZwg8ZsO
+         +XoNzPwDlZdf5ArcYqTHAMIKYPvgwWgRxj68r+k8ryGdObGxccnIR+egVwZivspChHCJ
+         SD7Myv/5/Ap1ujJ87RTE7MNbl2vo1O/ux8QUZfsxkuY2dz06k12vNdGOkwnwj6t17s8c
+         JuAeklnE/f556x5eiOg1LLZlZoYbo82hkOfYBGYNFLeu7BeqVwquncPJ5y4OgoZ3RtLl
+         Wgow==
+X-Gm-Message-State: ACgBeo094VcGz4CzKFQnS7AKf33dpxhSDo+2HQusfJxYFnvi2BQiqNkz
+        E07ilAKovPAXNTOJsZ+tcYHEqpRRsjm1jlI/1gqG9xWdb7M=
+X-Google-Smtp-Source: AA6agR6v9u9AxByCM705v0HqN1vsVuwmslKTgJMUvjgORtAELl7ikO4rppUmnfXm9qvfFTdKl6p6VJdovERU2aZcICE=
+X-Received: by 2002:aca:a8d4:0:b0:343:3d2b:dbb8 with SMTP id
+ r203-20020acaa8d4000000b003433d2bdbb8mr1150456oie.85.1662096053969; Thu, 01
+ Sep 2022 22:20:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 1/3] tty: serial: introduce transmit helper generators
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220901110657.3305-1-jslaby@suse.cz>
- <20220901110657.3305-2-jslaby@suse.cz> <YxCkqmz32qMAZAPh@kroah.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <YxCkqmz32qMAZAPh@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220828205723.20834-1-joelselvaraj.oss@gmail.com>
+ <20220828205723.20834-2-joelselvaraj.oss@gmail.com> <d9b5e312-4999-4410-03be-299e95bbe8b2@linaro.org>
+In-Reply-To: <d9b5e312-4999-4410-03be-299e95bbe8b2@linaro.org>
+From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
+Date:   Fri, 2 Sep 2022 00:20:42 -0500
+Message-ID: <CAF+P-ZoAooPFEK8dueEnQg5d5+K4QRmj-W0WsjyUV-btgBfYnw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: arm: qcom: update beryllium
+ compatible property
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01. 09. 22, 14:25, Greg KH wrote:
-> Much nicer, but:
-> 
->> +#define __DEFINE_UART_PORT_TX_HELPER(name, port, ch, tx_ready, put_char,  \
->> +		tx_done, for_test, for_post, ...)			  \
-> 
-> Do you really need "port" and "ch" as part of this macro?  You always
-> set that to the same thing in your patches, so is it really needed?
+Hi Krzysztof Kozlowski,
 
-Not really, just to make obvious that those are the names that can be 
-used in tx_ready, put_char... I can remove it, if you prefer, of course.
+> The board compatibles are not that important for ABI yet this creates
+> precedence, so I am against it. Simple renaming should not be a reason
+> to change compatibles.
 
-thanks,
--- 
-js
-suse labs
+So what should I do now?
+1. Retain "xiaomi,beryllium" for tianma and "xiaomi,beryllium-ebbg" for ebbg?
+2. If adding new compatible is not an issue, can I do
+"xiaomi,beryllium-tianma", "xiaomi,beryllium", "qcom,sdm845" - for tianma
+"xiaomi,beryllium-ebbg", "xiaomi,beryllium", "qcom,sdm845" - for ebbg
 
+Kindly let me know if any other possible solution is present.
+
+Thank you,
+Joel Selvaraj

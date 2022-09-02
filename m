@@ -2,81 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E8E5AA4AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765BA5AA4AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 02:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234332AbiIBAts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 20:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S234159AbiIBAv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 20:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbiIBAtq (ORCPT
+        with ESMTP id S232159AbiIBAv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 20:49:46 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03BDA346C;
-        Thu,  1 Sep 2022 17:49:43 -0700 (PDT)
-Subject: Re: [PATCH -next 2/3] md/raid10: convert resync_lock to use seqlock
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662079781;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0tfKxGEYrA0RBCCtx0QWA44gG7pan/FKXmz4kkJLuMg=;
-        b=domX3+D/CcCUokpt8f3DKgU6FIdsOVqYte6ENDaUHk2/J4u6HpfQHkqTgdF+RFLQI/Xrpz
-        Ik34IbDRuo852jbWQYdjM8LwKB7xjktuvluX2bSV9YPynEX/i0DEMod7H7txypzblnAcMo
-        351pFc/7CcnIzf0kGw+AYczU4ttOok0=
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
- <20220829131502.165356-3-yukuai1@huaweicloud.com>
- <04128618-962f-fd4e-64a9-09ecf7f83776@deltatee.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Guoqing Jiang <guoqing.jiang@linux.dev>
-Message-ID: <917c01c1-1e2b-66f9-69f1-ed706b7ffc8f@linux.dev>
-Date:   Fri, 2 Sep 2022 08:49:37 +0800
+        Thu, 1 Sep 2022 20:51:26 -0400
+Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2526B15C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 17:51:24 -0700 (PDT)
+Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-11e9a7135easo1357858fac.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 17:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=nidOMS6ikafcmd9pBlqU3bVEl1XH1VyVGzzAC2C9Drs=;
+        b=k3orlCEHu7ura1UozpYR299BPulolHBmOzbioaImR6n8VwGin/mSKOG1N8Orwonodu
+         OhWT9UQrWEcP1XTKIC/kBmut2eZdvty3jmdhqBXuLM9wLYlZfvCizKwAyiKjiXbFKkt+
+         M1DxCpc3VU38bthL40HpvjjdOzuerW/JYmI1dHNAloHKxXv+Bshnoun+6qHTxGCXaSg8
+         NQ+my720nLhQOuoXCaB0PJCYju1rnzixgQHL2lZOJBeopNJfWHcf42YMUHk+DEwtya07
+         f3iVXD0se1ESPdrba3+hjHjMFKj2jLHVe7SExNtM3y4lR9zS9e7eCK8cSDYgwb+SSRMx
+         oZhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=nidOMS6ikafcmd9pBlqU3bVEl1XH1VyVGzzAC2C9Drs=;
+        b=JWm/R9vgIKtPwJfC1RL7U629s1TYMYQP0CXSESQDOHYmzMIQJdSwNct/kmNX/4iUzZ
+         4Dht+cZjynsDNAfsVi4UAf2BY/kcd8TJg+ZLEqCKgSCBgYZzBKNhZjKGTuDPGVh1Sixo
+         oew6xxfYTf2CEK/fN8lUiZW1vT4+y5qJyQmstkqxXQ9CnYlaKrNBJ9g2e0WjEOu9d+qq
+         R7lZ2RdQ0UE/LOauBben0TmiN1Gk6f41uwBMPSlEiZHnCO17WWTdlfo7HrctC4fxZBE6
+         lvWwDKv/y2nrGckCzJx5+LRY/TDxkc+MQFxSOdAAQ7ozPon7DWh0N+a5+LCdb2vCP393
+         tzOQ==
+X-Gm-Message-State: ACgBeo0uCLhC9CXlI/4MbXe0UQpYyeTflezEUemheNKOwmLRVdBMcmUC
+        c0sgi11c/cjeuIWgDwWscI0Srjxwjm8=
+X-Google-Smtp-Source: AA6agR5mEG+Nc8HMuk9D7LE0x/cMbVOOBaRfwNnxoczcpbhV1BIeix4t4v4T8Te1FAcBpw9FzW8MOg==
+X-Received: by 2002:aca:a9d3:0:b0:347:cf89:e6a2 with SMTP id s202-20020acaa9d3000000b00347cf89e6a2mr857488oie.101.1662079883818;
+        Thu, 01 Sep 2022 17:51:23 -0700 (PDT)
+Received: from sophie (static-198-54-128-70.cust.tzulo.com. [198.54.128.70])
+        by smtp.gmail.com with ESMTPSA id o186-20020aca41c3000000b00344afa2b08bsm354439oia.26.2022.09.01.17.51.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 17:51:23 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 19:51:21 -0500
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v3 2/4] memblock tests: add top-down NUMA tests for
+ memblock_alloc_try_nid*
+Message-ID: <20220902005121.GC18733@sophie>
+References: <cover.1661578435.git.remckee0@gmail.com>
+ <d46ba668a9f3ba369f3402f107730b9629c01417.1661578435.git.remckee0@gmail.com>
+ <YxB0fh+YaVMq+AF+@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <04128618-962f-fd4e-64a9-09ecf7f83776@deltatee.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxB0fh+YaVMq+AF+@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 01, 2022 at 11:59:42AM +0300, Mike Rapoport wrote:
+> On Sat, Aug 27, 2022 at 12:53:00AM -0500, Rebecca Mckeever wrote:
+> > Add tests for memblock_alloc_try_nid() and memblock_alloc_try_nid_raw()
+> > where the simulated physical memory is set up with multiple NUMA nodes.
+> > Additionally, all of these tests set nid != NUMA_NO_NODE. These tests are
+> > run with a top-down allocation direction.
+> > 
+> > The tested scenarios are:
+> > 
+> > Range unrestricted:
+> > - region can be allocated in the specific node requested:
+> >       + there are no previously reserved regions
+> >       + the requested node is partially reserved but has enough space
+> > - the specific node requested cannot accommodate the request, but the
+> >   region can be allocated in a different node:
+> >       + there are no previously reserved regions, but node is too small
+> >       + the requested node is fully reserved
+> >       + the requested node is partially reserved and does not have
+> >         enough space
+> > 
+> > Range restricted:
+> > - region can be allocated in the specific node requested after dropping
+> >   min_addr:
+> >       + range partially overlaps with two different nodes, where the first
+> >         node is the requested node
+> >       + range partially overlaps with two different nodes, where the
+> >         requested node ends before min_addr
+> > - region cannot be allocated in the specific node requested, but it can be
+> >   allocated in the requested range:
+> >       + range overlaps with multiple nodes along node boundaries, and the
+> >         requested node ends before min_addr
+> >       + range overlaps with multiple nodes along node boundaries, and the
+> >         requested node starts after max_addr
+> > - region cannot be allocated in the specific node requested, but it can be
+> >   allocated after dropping min_addr:
+> >       + range partially overlaps with two different nodes, where the
+> >         second node is the requested node
+> > 
+> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> > ---
+> >  tools/testing/memblock/tests/alloc_nid_api.c | 702 ++++++++++++++++++-
+> >  tools/testing/memblock/tests/alloc_nid_api.h |  16 +
+> >  tools/testing/memblock/tests/common.h        |  18 +
+> >  3 files changed, 725 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/tools/testing/memblock/tests/alloc_nid_api.c b/tools/testing/memblock/tests/alloc_nid_api.c
+> > index 32b3c1594fdd..e5ef93ea1ce5 100644
+> > --- a/tools/testing/memblock/tests/alloc_nid_api.c
+> > +++ b/tools/testing/memblock/tests/alloc_nid_api.c
+> > @@ -1094,7 +1094,7 @@ static int alloc_try_nid_bottom_up_cap_min_check(void)
+> >  	return 0;
+> >  }
+> >  
+> > -/* Test case wrappers */
+> > +/* Test case wrappers for range tests */
+> >  static int alloc_try_nid_simple_check(void)
+> >  {
+> >  	test_print("\tRunning %s...\n", __func__);
+> > @@ -1226,17 +1226,10 @@ static int alloc_try_nid_low_max_check(void)
+> >  	return 0;
+> >  }
+> >  
+> > -static int memblock_alloc_nid_checks_internal(int flags)
+> > +static int memblock_alloc_nid_range_checks(void)
+> >  {
+> > -	const char *func = get_memblock_alloc_try_nid_name(flags);
+> > -
+> > -	alloc_nid_test_flags = flags;
+> > -	prefix_reset();
+> > -	prefix_push(func);
+> > -	test_print("Running %s tests...\n", func);
+> > -
+> > -	reset_memblock_attributes();
+> > -	dummy_physical_memory_init();
+> > +	test_print("Running %s range tests...\n",
+> > +		   get_memblock_alloc_try_nid_name(alloc_nid_test_flags));
+> >  
+> >  	alloc_try_nid_simple_check();
+> >  	alloc_try_nid_misaligned_check();
+> > @@ -1253,6 +1246,693 @@ static int memblock_alloc_nid_checks_internal(int flags)
+> >  	alloc_try_nid_reserved_all_check();
+> >  	alloc_try_nid_low_max_check();
+> >  
+> > +	return 0;
+> > +}
+> > +
+> > +/*
+> > + * A test that tries to allocate a memory region in a specific NUMA node that
+> > + * has enough memory to allocate a region of the requested size.
+> > + * Expect to allocate an aligned region at the end of the requested node.
+> > + */
+> > +static int alloc_try_nid_top_down_numa_simple_check(void)
+> > +{
+> > +	int nid_req = 3;
+> > +	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
+> > +	struct memblock_region *req_node = &memblock.memory.regions[nid_req];
+> > +	void *allocated_ptr = NULL;
+> > +
+> > +	PREFIX_PUSH();
+> > +
+> > +	phys_addr_t size;
+> > +	phys_addr_t min_addr;
+> > +	phys_addr_t max_addr;
+> > +
+> > +	setup_numa_memblock();
+> > +
+> > +	ASSERT_LE(SZ_4, req_node->size);
+> > +	size = req_node->size / SZ_4;
+> > +	min_addr = memblock_start_of_DRAM();
+> > +	max_addr = memblock_end_of_DRAM();
+> > +
+> > +	allocated_ptr = run_memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
+> > +						   min_addr, max_addr, nid_req);
+> > +
+> > +	ASSERT_NE(allocated_ptr, NULL);
+> > +	assert_mem_content(allocated_ptr, size, alloc_nid_test_flags);
+> > +
+> > +	ASSERT_EQ(new_rgn->size, size);
+> > +	ASSERT_EQ(new_rgn->base, region_end(req_node) - size);
+> > +	ASSERT_LE(req_node->base, new_rgn->base);
+> > +
+> > +	ASSERT_EQ(memblock.reserved.cnt, 1);
+> > +	ASSERT_EQ(memblock.reserved.total_size, size);
+> > +
+> > +	test_pass_pop();
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +/*
+> > + * A test that tries to allocate a memory region in a specific NUMA node that
+> > + * does not have enough memory to allocate a region of the requested size:
+> > + *
+> > + *  |   +-----+          +------------------+     |
+> > + *  |   | req |          |     expected     |     |
+> > + *  +---+-----+----------+------------------+-----+
+> > + *
+> > + *  |                             +---------+     |
+> > + *  |                             |   rgn   |     |
+> > + *  +-----------------------------+---------+-----+
+> > + *
+> > + * Expect to allocate an aligned region at the end of the last node that has
+> > + * enough memory (in this case, nid = 6) after falling back to NUMA_NO_NODE.
+> > + */
+> > +static int alloc_try_nid_top_down_numa_small_node_check(void)
+> > +{
+> > +	int nid_req = 1;
+> > +	int nid_exp = 6;
+> > +	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
+> > +	struct memblock_region *exp_node = &memblock.memory.regions[nid_exp];
+> 
+> AFAIU, having required and expected nodes here means very tight relation
+> between the NUMA layout used by setup_numa_memblock() and the test cases. 
+> 
+> I believe it would be clearer and less error prone if the relation were
+> more explicit. 
+> 
+I agree.
 
+> Can't say I have a great ideas how to achieve this, but maybe its worth
+> passing NUMA layout to setup_numa_memblock() every time, or setting the
+> requested and expected nid based on the NUMA layout, or maybe something
+> smarted than either of these.
+> 
+I like the first option. I'll pass the NUMA layout if I can't think of a
+better idea.
 
-On 9/2/22 2:41 AM, Logan Gunthorpe wrote:
-> Hi,
->
-> On 2022-08-29 07:15, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Currently, wait_barrier() will hold 'resync_lock' to read 'conf->barrier',
->> and io can't be dispatched until 'barrier' is dropped.
->>
->> Since holding the 'barrier' is not common, convert 'resync_lock' to use
->> seqlock so that holding lock can be avoided in fast path.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> I've found some lockdep issues starting with this patch in md-next while
-> running mdadm tests (specifically 00raid10 when run about 10 times in a
-> row).
->
-> I've seen a couple different lock dep errors. The first seems to be
-> reproducible on this patch, then it possibly changes to the second on
-> subsequent patches. Not sure exactly.
+> > +	void *allocated_ptr = NULL;
+> > +
+> > +	PREFIX_PUSH();
+> > +
+> > +	phys_addr_t size;
+> > +	phys_addr_t min_addr;
+> > +	phys_addr_t max_addr;
+> > +
+> > +	setup_numa_memblock();
+> > +
+> > +	size = SZ_2K * MEM_FACTOR;
+> > +	min_addr = memblock_start_of_DRAM();
+> > +	max_addr = memblock_end_of_DRAM();
+> > +
+> > +	allocated_ptr = run_memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
+> > +						   min_addr, max_addr, nid_req);
+> > +
+> > +	ASSERT_NE(allocated_ptr, NULL);
+> > +	assert_mem_content(allocated_ptr, size, alloc_nid_test_flags);
+> > +
+> > +	ASSERT_EQ(new_rgn->size, size);
+> > +	ASSERT_EQ(new_rgn->base, region_end(exp_node) - size);
+> > +	ASSERT_LE(exp_node->base, new_rgn->base);
+> > +
+> > +	ASSERT_EQ(memblock.reserved.cnt, 1);
+> > +	ASSERT_EQ(memblock.reserved.total_size, size);
+> > +
+> > +	test_pass_pop();
+> > +
+> > +	return 0;
+> > +}
+> > +
+> 
+> -- 
+> Sincerely yours,
+> Mike.
 
-That's why I said "try mdadm test suites too to avoid regression." ...
-
-Guoqing
+Thanks,
+Rebecca

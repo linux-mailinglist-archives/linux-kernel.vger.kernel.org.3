@@ -2,135 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAE35AACD3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A535AACD9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 12:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbiIBKxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 06:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S235859AbiIBKyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 06:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiIBKxQ (ORCPT
+        with ESMTP id S235482AbiIBKyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:53:16 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF86C1654;
-        Fri,  2 Sep 2022 03:53:15 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id a15so1382719qko.4;
-        Fri, 02 Sep 2022 03:53:15 -0700 (PDT)
+        Fri, 2 Sep 2022 06:54:08 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821FDC88A1
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 03:54:07 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id h13-20020a17090a648d00b001fdb9003787so1753752pjj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 03:54:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=LGFWBpXGuGtPPFnyd0g7vGaOWidpAnEGhpM4DC7jOvU=;
-        b=LQN7OCs87Q7FvHg8zuWABcEGqqz46CqxTMRZgyCtFDODSb4aVWVzKKohKOgRl80nJQ
-         3spxwhsHptQb3FfaknuK3qJ2w88ZZWKvYPfc2VxtDO/D0gdhOozb5J6r+Oo9IzNxE/rx
-         Qb1sZBiUmNMkxx8aF76b2JC4VpOqEjdYVudd4SNZj8Xrw8zWXOB9GS8rdGCh2DTuHblJ
-         vV3E2ybZjvQB8RmXY0WMy+cGrX+b/po/PdVaYB4V8cOkE7joBx5w3pNcefJG1ET2t9iX
-         8H/vWMl5LY3DoWaSMWGnmWDP2ps2UvRIVihRRM8lsil/jHehr/FiS+RVEsBDAeSnp3MH
-         TQKw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=vT4GD3+/0MzbbBEdOSGt98w+JvqU9hw4JCyFBULPEdA=;
+        b=5RX14LCU/zE20jlyYS+jNVKQQY9uCRNuM5U94KDBQRnMPdv/BHlAUQKGHnpHxtYgPt
+         YUC3gSidU4Ur8dKx1aE1Q39Pl1kU0Sc9F350a4+d8tRlMnGjCwrjlp1fF9xb38kQpzK4
+         8rVNcFKvZdeU+5qqa1gtZoz4qq91WYBrw0clTb3l1kCU1RENsFuy+cZRf6m82kjXwxH+
+         fUXq4nkVHXTHH8R/i1iasX0iwxtcQi1zp+kB8DAVoxpEI3K2+pNNvY8eGKO/Twl+mR0j
+         VUk9OQDPCA2VSsoVmrc3o1F7PJLe/9cWfIiIml7/qFkWRTI3tDGFFDFhGZiPcXR8J/1F
+         N9pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=LGFWBpXGuGtPPFnyd0g7vGaOWidpAnEGhpM4DC7jOvU=;
-        b=Sx70aaKIwg98GcRDq/GKz8FCd5KIBwCYH858x0AuxaWji8lC571/Nhodwp5XDdDxas
-         fx9WD+iwGIKVNtPTuXufXbhS6y8qbYzFOE2E8kNBN957w64+9l95GDvWWB9E5hFGWjCe
-         BIs/GFs3Xe5v+0DA6taxcBibxoA1WUDLSNMAxCnWUh1awyCm2O/tGJaqaB6QzBp5u7CJ
-         pEAxNbw7uFccZD/fVrpto28ZbbgQl2XOSiBlwpciRug4tqFLwc3VWQkch8aMrl5FbFy0
-         dR5Nd0QW9NsAUu7mKmYUql4KuyT7FUo2Zhx7bLGejgEDgrVjF4p6l7KDLrSNvitwmnAA
-         mDXg==
-X-Gm-Message-State: ACgBeo2vOiO71O3YG1jZDzuXRvUxy5QyyOs6gPW4SyxglbORQmnJEPib
-        3RboByMKXCpR2RGT8mfMB+4sNCGC7hXuOcCJ1H0=
-X-Google-Smtp-Source: AA6agR4O6WI1xhAjVxdJci/isoGrXNz3yJRxhNxJOeaUWeLr1nI2zULs9b9MMXu3JWTyoUQJGRSKGFUKg1EXOPdGxT8=
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
- s13-20020a05620a254d00b006ab84b825ebmr22678075qko.383.1662115994453; Fri, 02
- Sep 2022 03:53:14 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=vT4GD3+/0MzbbBEdOSGt98w+JvqU9hw4JCyFBULPEdA=;
+        b=FDcrSfZxaGPoM05mDIQqA1jinv4Uuqp3B/es3IAHlcuns4wgicWz8T9HiLxmtSvOaC
+         7BE2luhvrVWWFNdUq6mkCFJFdkde9HTNRFmjyzROJETRO/3oPUZHPnZN7d+HiSEhwjq7
+         ZmXTFMgjYtxeqN8hM8aWYF7wn87NTGpK6+Bu+x3b4q3xArko7FJnULNUSunmj8MS7aTY
+         GrgSW1RM5jfiTRIoXnkFjEvWYkLZto5/Lw3iBo2tP0Vv5A13oJ3i3YfEcXH2p4UZEFLm
+         yk8qCilSJqAaU9lRX/hHw/pI11GB22DcSK49B5SojPEi2S4taGscVC8B20Q08QuijuUq
+         DcJg==
+X-Gm-Message-State: ACgBeo1I67YzFbsiqZxc4QCLQe86lyZPdj6Zpj6YPj44t+av1z/PwHpK
+        sH0259+khsxjBRXxDkUEmEzTCSqNwUM1Qw==
+X-Google-Smtp-Source: AA6agR6kEeWww8j05ZFcDdob4i78cy50JnfDQIPezSnmR418EyvU4bI8yHEHQdn5r9dIeRz74989RQ==
+X-Received: by 2002:a17:90b:4d12:b0:1f5:59e1:994f with SMTP id mw18-20020a17090b4d1200b001f559e1994fmr4142105pjb.217.1662116047024;
+        Fri, 02 Sep 2022 03:54:07 -0700 (PDT)
+Received: from C02G705SMD6V.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id e4-20020a63d944000000b0041b29fd0626sm1128681pgj.88.2022.09.02.03.54.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 03:54:06 -0700 (PDT)
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
+        huyue2@coolpad.com, Jia Zhu <zhujia.zj@bytedance.com>
+Subject: [PATCH V2 0/5] Introduce erofs shared domain
+Date:   Fri,  2 Sep 2022 18:53:00 +0800
+Message-Id: <20220902105305.79687-1-zhujia.zj@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-References: <cover.1661789204.git.christophe.leroy@csgroup.eu>
- <abb46a587b76d379ad32d53817d837d8a5fea8bd.1661789204.git.christophe.leroy@csgroup.eu>
- <CAHp75VcngRihpfUkeKs-g+TbPnpOsZ+-Q37zDVoWp8p_2GbSvQ@mail.gmail.com>
- <18cda49e-84f0-a806-566a-6e77705e98b3@csgroup.eu> <1d548a19-feec-42b9-944d-890d6dde2fb8@www.fastmail.com>
-In-Reply-To: <1d548a19-feec-42b9-944d-890d6dde2fb8@www.fastmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 2 Sep 2022 13:52:37 +0300
-Message-ID: <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
-Subject: Re: [PATCH v1 4/8] gpiolib: Get rid of ARCH_NR_GPIOS
-To:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Nuno, one point below for you)
+Changes since V1:
+0. Only initialize one pseudo fs to manage anonymous inodes(cookies).
+1. Remove ctx's 'ref' field and replace it with inode's i_count.
+2. Add lock in erofs_fscache_unregister_cookie() to avoid race condition
+   between cookie's get/put/search.
+3. Remove useless blank lines.
 
-On Wed, Aug 31, 2022 at 11:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
+[Kernel Patchset]
+===============
+Git tree:
+	https://github.com/userzj/linux.git zhujia/shared-domain-v2
+Git web:
+	https://github.com/userzj/linux/tree/zhujia/shared-domain-v2
 
-...
+[Background]
+============
+In ondemand read mode, we use individual volume to present an erofs
+mountpoint, cookies to present bootstrap and data blobs.
 
-> drivers/gpio/gpio-adp5520.c:    gc->base = pdata->gpio_start; // unused
-> drivers/gpio/gpio-adp5588.c:            gc->base = pdata->gpio_start; // unused
-> drivers/input/keyboard/adp5588-keys.c:  kpad->gc.base = gpio_data->gpio_start; // unused
-> drivers/input/keyboard/adp5589-keys.c:  kpad->gc.base = gpio_data->gpio_start; // unused
+In which case, since cookies can't be shared between fscache volumes,
+even if the data blobs between different mountpoints are exactly same,
+they can't be shared.
 
-I believe we should convert them to -1.
+[Introduction]
+==============
+Here we introduce erofs shared domain to resolve above mentioned case.
+Several erofs filesystems can belong to one domain, and data blobs can
+be shared among these erofs filesystems of same domain.
 
-> drivers/gpio/gpio-bt8xx.c:      c->base = modparam_gpiobase; // from modprobe
-> drivers/gpio/gpio-ich.c:        chip->base = modparam_gpiobase; // from modprobe
+[Usage]
+Users could specify 'domain_id' mount option to create or join into a
+domain which reuses the same cookies(blobs).
 
-I believe it was designed for Intel hardware and so it can't be higher
-than 512 - ngpios, where the latter one is small enough (dozen or a
-couple of dozens of pins).
+[Design]
+========
+1. Use pseudo mnt to manage domain's lifecycle.
+2. Use a linked list to maintain & traverse domains.
+3. Use pseudo sb to create anonymous inode for recording cookie's info
+   and manage cookies lifecycle.
 
-> drivers/gpio/gpio-dwapb.c:      port->gc.base = pp->gpio_base; // from DT, deprecated
+[Flow Path]
+===========
+1. User specify a new 'domain_id' in mount option.
+   1.1 Traverse domain list, compare domain_id with existing domain.[Miss]
+   1.2 Create a new domain(volume), add it to domain list.
+   1.3 Traverse pseudo sb's inode list, compare cookie name with
+       existing cookies.[Miss]
+   1.4 Alloc new anonymous inodes and cookies.
 
-From board files, since some platforms expect a fixed number for it.
+2. User specify an existing 'domain_id' in mount option and the data
+   blob is existed in domain.
+   2.1 Traverse domain list, compare domain_id with existing domain.[Hit]
+   2.2 Reuse the domain and increase its refcnt.
+   2.3 Traverse pseudo sb's inode list, compare cookie name with
+   	   existing cookies.[Hit]
+   2.4 Reuse the cookie and increase its refcnt.
+[Test]
+======
+Git web:
+	https://github.com/userzj/demand-read-cachefilesd/tree/shared-domain
+More test cases will be added to:
+	https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/log/?h=experimental-tests-fscache 
 
-> drivers/gpio/gpio-mockup.c:     gc->base = base; // module parama
+RFC: https://lore.kernel.org/all/YxAlO%2FDHDrIAafR2@B-P7TQMD6M-0146.local/
+V1: https://lore.kernel.org/all/20220902034748.60868-1-zhujia.zj@bytedance.com/
 
-This is for testing, so the test cases should be amended accordingly.
-But I think the module itself is deprecated, and gpio-sim seems not
-using it as a modprobe parameter, but rather as configfs.
 
-> drivers/gpio/gpio-pca953x.c:    gc->base = chip->gpio_start; // ???? used a lot
+Jia Zhu (5):
+  erofs: add 'domain_id' mount option for on-demand read sementics
+  erofs: introduce fscache-based domain
+  erofs: add 'domain_id' prefix when register sysfs
+  erofs: remove duplicated unregister_cookie
+  erofs: support fscache based shared domain
 
-To answer this one needs to go via all board files (most of them ARM
-32-bit based) and look, but it means almost the same case as per Intel
-above: 512-ngpios.
-
-> drivers/pinctrl/renesas/gpio.c: gc->base = pfc->nr_gpio_pins; // ??? don't understand
-
-I think, w/o looking into the code, that this just guarantees the
-continuous numbering for all banks (chips) on the platform.
-
-> drivers/pinctrl/stm32/pinctrl-stm32.c:          bank->gpio_chip.base = args.args[1];
-
-Device Tree?!
+ fs/erofs/fscache.c  | 168 +++++++++++++++++++++++++++++++++++++++++++-
+ fs/erofs/internal.h |  31 +++++++-
+ fs/erofs/super.c    |  94 +++++++++++++++++++------
+ fs/erofs/sysfs.c    |  11 ++-
+ 4 files changed, 278 insertions(+), 26 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.20.1
+

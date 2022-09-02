@@ -2,50 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA135AA74F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64F55AA752
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiIBFkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 01:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
+        id S235121AbiIBFkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 01:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235045AbiIBFkC (ORCPT
+        with ESMTP id S235060AbiIBFkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 01:40:02 -0400
+        Fri, 2 Sep 2022 01:40:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490541054A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 22:39:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D172E6BB;
+        Thu,  1 Sep 2022 22:40:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4AF3B829DB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:39:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05510C433D6;
-        Fri,  2 Sep 2022 05:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662097197;
-        bh=+/6bMo6MZ6HQeomRdoMkT9tL2tvliyapBilN0i6IwjA=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC045B829E0;
+        Fri,  2 Sep 2022 05:40:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528C7C433C1;
+        Fri,  2 Sep 2022 05:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662097228;
+        bh=5515oJEpY7e2I8udEF7OHHU204KydB1v52PApM443tg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HB6gJvKFliXXws4pLxzOctf5p+DqKAy8lKOjKbLX9KHCG4E9pl55E5K+gVydJpef2
-         QdkehK9q4423p06fxqnOgF/ydrkPcLTwklunPe01ifE9qjPEeocoKorvEP1De8M93q
-         jgtnNctz8oA4hkSQopFF2UYXF4YtO95+ql10xhi8=
-Date:   Fri, 2 Sep 2022 07:39:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dafna Hirschfeld <dafna@fastmail.com>
-Cc:     Jiho Chu <jiho.chu@samsung.com>, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, yelini.jeong@samsung.com,
-        myungjoo.ham@samsung.com
-Subject: Re: [PATCH 1/9] trinity: Add base driver
-Message-ID: <YxGXKkRqsJJ0c624@kroah.com>
-References: <20220725065308.2457024-1-jiho.chu@samsung.com>
- <CGME20220725065309epcas1p4565e7bb0fea1aaf3e5e300de00774c2a@epcas1p4.samsung.com>
- <20220725065308.2457024-2-jiho.chu@samsung.com>
- <YuE8JNjIBNdg/kkX@kroah.com>
- <20220901190443.d6b42mtmzju354b5@guri>
+        b=sJet8hBnFqqyrC9W0n0b3eThX9T6n4CsDdtz5NdFRHR0HOlUtqamI3yVFGjyN+MWf
+         C7hNT1BRP8mgqAe8rE7pVkFxtOAiBv95sRqdzCrXptrE3Es90TAToceIc+OKteMW6L
+         gRedBukWWda2YsAjalC9hceCIqp2vJlTsKZrT4knd+1aqyr5teHlUVD18uzNVyVpAQ
+         gpX7ABDmgWzEtwApq2mxjuYqTuJC2pHLOCSHZU09d2LqGEa0vfkfeTp051Syn/FH1y
+         lgbS447yof5RAiFPFbnC7sFkCUotyevshni8FAfmez3pvcwPnw60V1y4gMfGgk7sSL
+         uu6ZTRw6QurRw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oTzPq-0007lS-PV; Fri, 02 Sep 2022 07:40:30 +0200
+Date:   Fri, 2 Sep 2022 07:40:30 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/6] arm64: dts: qcom: Fix broken regulator spec on
+ RPMH boards
+Message-ID: <YxGXTs0MO6Sg7nit@hovoldconsulting.com>
+References: <20220829164952.2672848-1-dianders@chromium.org>
+ <Yw8EE/ESDUnIRf8P@hovoldconsulting.com>
+ <CAD=FV=VJz2hjvsUhsjBPt9nmm3X62oTdAqMeSFABYJietPPzWw@mail.gmail.com>
+ <YxDVNW+EQbHRw16s@hovoldconsulting.com>
+ <CAD=FV=VaDNLLjtKswWvhD0JmLpOoVHR05yU8kZESH3yQ0xescA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220901190443.d6b42mtmzju354b5@guri>
+In-Reply-To: <CAD=FV=VaDNLLjtKswWvhD0JmLpOoVHR05yU8kZESH3yQ0xescA@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,157 +76,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:04:43PM +0300, Dafna Hirschfeld wrote:
-> On 27.07.2022 15:22, Greg KH wrote:
-> > On Mon, Jul 25, 2022 at 03:53:00PM +0900, Jiho Chu wrote:
-> > > It contains the base codes for trinity driver. Minimal codes to load and
-> > > probe device is provided. The Trinity Family is controlled by the
-> > > Memory-Mapped Registers, the register addresses and offsets are
-> > > described. And user api interfaces are presented to control device under
-> > > ioctl manner.
-> > > 
-> > > Signed-off-by: Jiho Chu <jiho.chu@samsung.com>
-> > > Signed-off-by: yelini-jeong <yelini.jeong@samsung.com>
-> > > Signed-off-by: Dongju Chae <dongju.chae@samsung.com>
-> > > Signed-off-by: Parichay Kapoor <pk.kapoor@samsung.com>
-> > > Signed-off-by: Wook Song <wook16.song@samsung.com>
-> > > Signed-off-by: MyungJoo Ham <myungjoo.ham@samsung.com>
-> > > ---
-> > >  drivers/misc/Kconfig                        |   1 +
-> > >  drivers/misc/Makefile                       |   1 +
-> > >  drivers/misc/trinity/Kconfig                |  27 ++
-> > >  drivers/misc/trinity/Makefile               |   7 +
-> > >  drivers/misc/trinity/trinity.c              | 369 ++++++++++++++
-> > >  drivers/misc/trinity/trinity_common.h       | 392 +++++++++++++++
-> > >  drivers/misc/trinity/trinity_vision2_drv.c  | 512 ++++++++++++++++++++
-> > >  drivers/misc/trinity/trinity_vision2_regs.h | 210 ++++++++
-> > >  include/uapi/misc/trinity.h                 | 458 +++++++++++++++++
-> > >  9 files changed, 1977 insertions(+)
-> > >  create mode 100644 drivers/misc/trinity/Kconfig
-> > >  create mode 100644 drivers/misc/trinity/Makefile
-> > >  create mode 100644 drivers/misc/trinity/trinity.c
-> > >  create mode 100644 drivers/misc/trinity/trinity_common.h
-> > >  create mode 100644 drivers/misc/trinity/trinity_vision2_drv.c
-> > >  create mode 100644 drivers/misc/trinity/trinity_vision2_regs.h
-> > >  create mode 100644 include/uapi/misc/trinity.h
-> > > 
-> > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> > > index 41d2bb0ae23a..ad0d5f6af291 100644
-> > > --- a/drivers/misc/Kconfig
-> > > +++ b/drivers/misc/Kconfig
-> > > @@ -500,4 +500,5 @@ source "drivers/misc/cardreader/Kconfig"
-> > >  source "drivers/misc/habanalabs/Kconfig"
-> > >  source "drivers/misc/uacce/Kconfig"
-> > >  source "drivers/misc/pvpanic/Kconfig"
-> > > +source "drivers/misc/trinity/Kconfig"
-> > >  endmenu
-> > > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> > > index 70e800e9127f..c63f3fc89780 100644
-> > > --- a/drivers/misc/Makefile
-> > > +++ b/drivers/misc/Makefile
-> > > @@ -60,3 +60,4 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
-> > >  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
-> > >  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
-> > >  obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
-> > > +obj-$(CONFIG_TRINITY)		+= trinity/
-> > > diff --git a/drivers/misc/trinity/Kconfig b/drivers/misc/trinity/Kconfig
-> > > new file mode 100644
-> > > index 000000000000..ad4bab78f7c6
-> > > --- /dev/null
-> > > +++ b/drivers/misc/trinity/Kconfig
-> > > @@ -0,0 +1,27 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only
-> > > +
-> > > +config TRINITY
-> > > +	bool "Samsung Neural Processing Unit"
-> > > +	depends on HAS_IOMEM
-> > > +	depends on HAS_DMA
-> > > +	default n
-> > 
-> > The default is 'n', no need to ever say it again.
-> > 
-> > > +	help
-> > > +	  Select this option to enable driver support for Samsung
-> > > +	  Neural Processing Unit (NPU).
-> > > +
-> > > +	  This driver works as a base driver of the other drivers
-> > > +	  for Trinity device family.
-> > > +
-> > > +	  This option should be enabled to support Trinity
-> > > +	  Vision 2 (TRIV2), and Trinity Audio (TRIA).
-> > > +
-> > > +config TRINITY_VISION2
-> > > +	tristate "Samsung NPU Trinity Vision 2"
-> > 
-> > What happened to "vision 1"?
-> > 
-> > > +	depends on TRINITY
-> > > +	default n
-> > > +	help
-> > > +	  Select this option to enable driver support for a Samsung
-> > > +	  Neural Processing Unit (NPU), Tinity Vision 2.
-> > > +
-> > > +	  This driver enables userspace system library to access the
-> > > +	  device via /dev/triv2-N.
-> > 
-> > What is the module name?
-> > 
-> > Where is the userspace library code that talks to this?  Any
-> > documentation for this interface anywhere?
-> > 
-> > > +#define BASE_DEV_NAME "trinity"
-> > 
-> > KBUILD_MODNAME?
-> > 
-> > > +/* A global lock for shared static variables such as dev_bitmap */
-> > > +static DEFINE_SPINLOCK(trinity_lock);
-> > 
-> > That's a sign something is wrong, you should not need any module-wide
-> > code variables.
-> > 
-> > > +/* A bitmap to keep track of active Trinity devices */
-> > > +static unsigned long dev_bitmap[TRINITY_DEV_END];
-> > 
-> > Should not be needed, use a simple ida structure if you really want to
-> > name things cleanly.
-> > 
-> > > +
-> > > +/**
-> > > + * trinity_release() - A common callback for close() in file_operations for a
-> > > + *		Trinity	device node. If there are device-specific data to be
-> > > + *		cleaned-up, it is required to clean them up before invoke this
-> > > + *		callback.
-> > > + *
-> > > + * @inode: Inode to be closed
-> > > + * @file: File to be closed
-> > > + *
-> > > + * Returns 0 on success. Otherwise, returns negative error.
-> > > + */
-> > > +int trinity_release(struct inode *inode, struct file *file)
-> > > +{
-> > > +	struct trinity_driver *drv;
-> > > +
-> > > +	drv = file->private_data;
-> > > +
-> > > +	if (drv->verbose)
-> > > +		dev_info(drv_to_dev_ptr(drv), "%s\n", "Device closed");
-> > > +
-> > > +	mutex_lock(&drv->lock);
-> > > +	drv->opened = drv->opened - 1;
-> > 
-> > That will never work, you can't keep track of open/close calls.
+On Thu, Sep 01, 2022 at 05:44:03PM -0700, Doug Anderson wrote:
+> Hi,
 > 
-> Hi, can you explain why this will not work?
+> On Thu, Sep 1, 2022 at 8:52 AM Johan Hovold <johan@kernel.org> wrote:
+> >
+> > On Wed, Aug 31, 2022 at 07:52:52AM -0700, Doug Anderson wrote:
+> > > Hi,
+> > >
+> > > On Tue, Aug 30, 2022 at 11:47 PM Johan Hovold <johan@kernel.org> wrote:
+> > > >
+> > > > On Mon, Aug 29, 2022 at 09:49:46AM -0700, Douglas Anderson wrote:
+> > > > > Prior to commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
+> > > > > get_optimum_mode(), not set_load()") several boards were able to
+> > > > > change their regulator mode even though they had nothing listed in
+> > > > > "regulator-allowed-modes". After that commit (and fixes [1]) we'll be
+> > > > > stuck at the initial mode. Discussion of this (again, see [1]) has
+> > > > > resulted in the decision that the old dts files were wrong and should
+> > > > > be fixed to fully restore old functionality.
+> > > > >
+> > > > > This series attempts to fix everyone. I've kept each board in a
+> > > > > separate patch to make stable / backports work easier.
+> > > >
+> > > > Should you also update the bindings so that this can be caught during
+> > > > devicetree validation? That is, to always require
+> > > > "regulator-allowed-modes" when "regulator-allow-set-load" is specified.
+> > >
+> > > Yeah, it's probably a good idea. I'm happy to review a patch that does
+> > > that. I'm already quite a few patches deep of submitting random
+> > > cleanups because someone mentioned it in a code review. ;-) That's
+> > > actually how I got in this mess to begin with. The RPMH change was in
+> > > response to a request in a different code review. ...and that came
+> > > about in a code review that was posted in response to a comment about
+> > > how awkward setting regulator loads was... Need to get back to my day
+> > > job.
+> >
+> > Heh.
+> >
+> > > In any case, I think these dts patches are ready to land now.
+> >
+> > Yeah, as the old dtbs are now broken with newer kernels these are indeed
+> > needed.
+> 
+> With the latest patches in the regulator tree things shouldn't be
+> _too_ broken even without the dts files. Essentially things will get
+> stuck at their initial mode (HPM). So without these patches things
+> should all still boot but could possibly end up at a higher power
+> state.
 
-Let me switch it the other way around, can you explain to me how this
-will actually work?  Think about userspace calling dup(2) and passing
-file handles around to other processes...
+Ok, and there's also a warning during boot when that happens so that
+it's not a silent regression?
 
-It's an impossible thing, just don't worry about it at all.  If
-userspace wants to open multiple instances of the same device and do
-foolish things with it, let it.  That's a userspace bug, not a kernel
-issue.
-
-thanks,
-
-greg k-h
+Johan

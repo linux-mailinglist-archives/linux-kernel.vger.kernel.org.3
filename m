@@ -2,86 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AA95AA664
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CCB5AA660
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 05:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235240AbiIBDaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 23:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
+        id S232186AbiIBDaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 23:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbiIBDaU (ORCPT
+        with ESMTP id S233341AbiIBDam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:30:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E1E2DAA2;
-        Thu,  1 Sep 2022 20:30:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A8792CE294F;
-        Fri,  2 Sep 2022 03:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D62D0C433B5;
-        Fri,  2 Sep 2022 03:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662089414;
-        bh=FBK+gLOAYk4bUyFHWH7/4ROZIQr2TA1sFIc+RioXJPw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=szMIqPvYLVxQnF9F6U7huBXa+bOi7IXx7XEUl374kn/qtVDR6/ot5Vj8ijzmxyHXw
-         4JpVPF0CY4yc/wsdlUK4ME7UlbjwI+qzPUzCdyaJTrE+cZpRVzjx12iZKHCVa53zU8
-         KSRi3oe1smYbb0wCcWn/zbjJ0VZ0HgUicpE3pm47YFLGftvVxFwpU0mZou0DdRzVI9
-         PpKX8PgLVDGwlmOURMLdzFp9UjEUwMSfUDcDPJO5wqrRgpf0CtkIc5MwVuOno+zUp6
-         TyGoML0V3X0+wImMQ4gGNcri/J1J2bMzu9BjY4FI9ySqEByXnERJOhqzkUCMRXTdj8
-         XPrKoBMXF6/cQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B62D6E924E6;
-        Fri,  2 Sep 2022 03:30:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 1 Sep 2022 23:30:42 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1754E6CF46
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:30:42 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id j5so656988plj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 20:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=RRqSMFNoW/cIHVbpeeBppz0F/PdamR7IpDVsHgGJtSA=;
+        b=ieXOM6So1q38BgNcA3HUrGTpasyOfAoBrzIPTlFwOfjByRiv5g5gEk2lv3rO9IpTe4
+         Rrb4Rw3zDNwW/3zv3sjVXGhi9gBIraN61bkH3jAE49Sbr2sGwAJdbK1FqPDu25hvzTr1
+         ECWkzDagKaqhtuhu/42GN9uYBjfoWZGENxzEX5BDbNiMApeE752yp6PBUB9TWf3QC7hQ
+         5dciYb4GTGY1ka+eC8tJ8nS6ruSj/TepTT3IXDP+0rTtgqRK5O+rmxXyGTXE96yQqpl9
+         ZZ098QJA+A96U08JQuhIJLwVfJuhRG02IS1dcpjLa2RDy86KHOQFOQviVnim1gBejQ9L
+         kmEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=RRqSMFNoW/cIHVbpeeBppz0F/PdamR7IpDVsHgGJtSA=;
+        b=tX/RtfSPIVN2CAdm0lsiBEr+lym9I8fc7vlWL456AkDhDQta/Z6yEEMxrEaQP0DCmd
+         Zl9nS8Bo2t5adt4R3cyzMPhxKomKl2XkZcjC332bBXoRrYOGjxRvdP1SHQTAB+2BlqqQ
+         j5k6eytJ2eyQCah+mF41/u0sfjkfpnmj/qdrY1CxJbLVSG2k9NuzOB+Or78nC87mEFBc
+         KW34FiLvVKy4wHAx+auK0NA4Y0sEiKKE0gubJgK5zPCLpGTeMBz0KrJSyDbmUSJCZjFn
+         tAg8vN62OvUlEHKTWzwCQecIF2Ny2GRSjcissuqxsHzoRRtlAeqLNE0KWt2czg+7rvH+
+         wuJQ==
+X-Gm-Message-State: ACgBeo1ywRM7yMYrvm5aPxTr15ZDg8iHxOtmYtBB63YsWZwnd5aY3uul
+        ZI7PsD3GQb59I0yADSvxoswugZL34g2PgQiL
+X-Google-Smtp-Source: AA6agR4RQxSmcZI7FlplqOgABqhekS1rIHU1sCY9AmJ0KHt83R9zIE3vBcqQdtIB8Dfl1zNaJM5w/g==
+X-Received: by 2002:a17:902:d4c4:b0:173:1206:cee7 with SMTP id o4-20020a170902d4c400b001731206cee7mr33052643plg.142.1662089441570;
+        Thu, 01 Sep 2022 20:30:41 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.227])
+        by smtp.gmail.com with ESMTPSA id w21-20020a634915000000b0042a93b625d4sm325680pga.27.2022.09.01.20.30.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 01 Sep 2022 20:30:41 -0700 (PDT)
+From:   Abel Wu <wuyun.abel@bytedance.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
+        Yicong Yang <yangyicong@huawei.com>,
+        linux-kernel@vger.kernel.org, Abel Wu <wuyun.abel@bytedance.com>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH v3 1/5] sched/fair: remove redundant check in select_idle_smt
+Date:   Fri,  2 Sep 2022 11:30:28 +0800
+Message-Id: <20220902033032.79846-1-wuyun.abel@bytedance.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: sched: etf: remove true check in
- etf_enable_offload()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166208941474.631.1304037912816857154.git-patchwork-notify@kernel.org>
-Date:   Fri, 02 Sep 2022 03:30:14 +0000
-References: <20220831092919.146149-1-shaozhengchao@huawei.com>
-In-Reply-To: <20220831092919.146149-1-shaozhengchao@huawei.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vinicius.gomes@intel.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+If two cpus share LLC cache, then the two cores they belong to
+are also in the same LLC domain.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+Reviewed-by: Josh Don <joshdon@google.com>
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+---
+ kernel/sched/fair.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-On Wed, 31 Aug 2022 17:29:19 +0800 you wrote:
-> etf_enable_offload() is only called when q->offload is false in
-> etf_init(). So remove true check in etf_enable_offload().
-> 
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> ---
->  net/sched/sch_etf.c | 3 ---
->  1 file changed, 3 deletions(-)
-
-Here is the summary with links:
-  - [net-next] net: sched: etf: remove true check in etf_enable_offload()
-    https://git.kernel.org/netdev/net-next/c/75aad41ac3cf
-
-You are awesome, thank you!
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index efceb670e755..9657c7de5f57 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6350,14 +6350,11 @@ static int select_idle_core(struct task_struct *p, int core, struct cpumask *cpu
+ /*
+  * Scan the local SMT mask for idle CPUs.
+  */
+-static int select_idle_smt(struct task_struct *p, struct sched_domain *sd, int target)
++static int select_idle_smt(struct task_struct *p, int target)
+ {
+ 	int cpu;
+ 
+-	for_each_cpu(cpu, cpu_smt_mask(target)) {
+-		if (!cpumask_test_cpu(cpu, p->cpus_ptr) ||
+-		    !cpumask_test_cpu(cpu, sched_domain_span(sd)))
+-			continue;
++	for_each_cpu_and(cpu, cpu_smt_mask(target), p->cpus_ptr) {
+ 		if (available_idle_cpu(cpu) || sched_idle_cpu(cpu))
+ 			return cpu;
+ 	}
+@@ -6381,7 +6378,7 @@ static inline int select_idle_core(struct task_struct *p, int core, struct cpuma
+ 	return __select_idle_cpu(core, p);
+ }
+ 
+-static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd, int target)
++static inline int select_idle_smt(struct task_struct *p, int target)
+ {
+ 	return -1;
+ }
+@@ -6615,7 +6612,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 		has_idle_core = test_idle_cores(target, false);
+ 
+ 		if (!has_idle_core && cpus_share_cache(prev, target)) {
+-			i = select_idle_smt(p, sd, prev);
++			i = select_idle_smt(p, prev);
+ 			if ((unsigned int)i < nr_cpumask_bits)
+ 				return i;
+ 		}
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.31.1
 

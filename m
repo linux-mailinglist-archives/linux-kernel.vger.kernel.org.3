@@ -2,56 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2F75AB8B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 21:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC78C5AB8C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 21:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiIBTJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 15:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
+        id S229646AbiIBTMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 15:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiIBTJe (ORCPT
+        with ESMTP id S229751AbiIBTMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 15:09:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF6413E88;
-        Fri,  2 Sep 2022 12:09:33 -0700 (PDT)
+        Fri, 2 Sep 2022 15:12:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FA6FBA4D;
+        Fri,  2 Sep 2022 12:12:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDE67B82D6B;
-        Fri,  2 Sep 2022 19:09:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 568BEC433D7;
-        Fri,  2 Sep 2022 19:09:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50EED6229E;
+        Fri,  2 Sep 2022 19:12:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BDE9C433D6;
+        Fri,  2 Sep 2022 19:12:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662145770;
-        bh=JgbTsvyX+Nxm+CbzSBYRYr/ejplaYINRqEHHMS7q/2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KaN+qsET2GDv9Q4Ifk4pA/Achrq/6l7EPYiXmu9TapL9PQZBIHpYXI77hHl8ylS+m
-         7QMFwk9J15Gn7I8ZdeQg6r9H9sGHWgd+XSPh8bQ9jodrVfA+NDS6hnvgH1rTRh65QL
-         nm7Qn6mnG7g/Erd1SpibM+fPvHWvxBXZiTAPV5CYPMpQTnS4gH7J22kPeyf5ywi8dz
-         JuB3MnhOPGOsox2Ys1eYi4CtBb7pGJUbD4xNTDgrN7IuQMkSsUpBLxW84VO21OZzCg
-         03EG5F/gaEmksp+ywA0yOrHlqIDaNOu2VxLnQZ1ipfOHvG4iuHRd64R7S9Aq+B2Xk1
-         ElPe/jalzUmbg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 96389404A1; Fri,  2 Sep 2022 16:09:27 -0300 (-03)
-Date:   Fri, 2 Sep 2022 16:09:27 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCHSET 0/5] perf tools: Show per-event lost sample count (v2)
-Message-ID: <YxJU5yfFC0bI545e@kernel.org>
-References: <20220901195739.668604-1-namhyung@kernel.org>
- <5466ec6a-e964-ea8a-d253-f7d3d4af4ea1@intel.com>
+        s=k20201202; t=1662145923;
+        bh=rJDLXs4RxM5/uTreWGTpem458YPycLhkzqUiqONrjDY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aBZGi0RYXJahnjFCnOvAslff2adgx6/RpvP1D3sAHZhvIh2wnbv8h31jmgElsGIkW
+         oBAGnyCCnF4EOlcsW1lqqVCUwFB7h5NiSJwfU9Dmi7d3wDLEjo2RNpSsXxOIzLGDeg
+         SwD3jk1ueOHubNqwACGDGfCADYqtCIELrC2Ec9h8pr9K0M11otV6lL3Klu5njJ8Gk5
+         KC4RS86RroeG/sVkFwv1EHBP3Zf1iYX6vcAWp7sBARNc6aq7VFCpTkb4UCxYfMbqDN
+         yOKwMMHl4qM42NW79eShU+czoiEfdsRVXa4VAhP7GAmaV98Ao+sxQAUAUsSeYwAIHE
+         BDTPqYtALPA0Q==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     sj@kernel.org, gregkh@linuxfoundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH v2] mm/damon/dbgfs: fix memory leak when using
+Date:   Fri,  2 Sep 2022 19:11:49 +0000
+Message-Id: <20220902191149.112434-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5466ec6a-e964-ea8a-d253-f7d3d4af4ea1@intel.com>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,40 +53,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Sep 02, 2022 at 08:44:25PM +0300, Adrian Hunter escreveu:
-> On 1/09/22 22:57, Namhyung Kim wrote:
-> > Hello,
-> > 
-> > Now we have PERF_FORMAT_LOST support, add it to perf record and report so that
-> > it can show number of lost samples per event.  This can be useful if you want
-> > to reconstruct number of events from the samples like when using -c option.
-> > 
-> > Changes in v2)
-> >  * fix id_hdr_size calculation  (Adrian)
-> >  * fix a memory leak
-> >  * display lost samples even if no samples
-> >  
-> >  
-> > Currently it adds PERF_RECORD_LOST_SAMPLES at the end of perf data after reading
-> > event values by read(2).  The perf record unconditionally sets the lost bit if
-> > the kernel supports it.  Users can see the number with `perf report --stat`.
-> > 
-> > You can get the code from 'perf/report-lost-v2' brach on
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> > 
-> > Thanks,
-> > Namhyung
-> > 
-> > Namhyung Kim (5):
-> >   perf tools: Print LOST read format in the verbose mode
-> >   perf record: Set PERF_FORMAT_LOST by default
-> >   perf record: Read and inject LOST_SAMPLES events
-> >   perf hist: Add nr_lost_samples to hist_stats
-> >   perf report: Show per-event LOST SAMPLES stat
-> 
-> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Thanks, applied.
+debugfs_lookup()
+Date: Fri,  2 Sep 2022 14:56:31 +0200	[thread overview]
+Message-ID: <20220902125631.128329-1-gregkh@linuxfoundation.org> (raw)
 
-- Arnaldo
+When calling debugfs_lookup() the result must have dput() called on it,
+otherwise the memory will leak over time.  Fix this up by properly
+calling dput().
+
+Fixes: 75c1c2b53c78b ("mm/damon/dbgfs: support multiple contexts")
+Cc: <stable@vger.kernel.org> # 5.15.x
+Cc: SeongJae Park <sj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: damon@lists.linux.dev
+Cc: linux-mm@kvack.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+Changes from v1
+(https://lore.kernel.org/damon/20220902125631.128329-1-gregkh@linuxfoundation.org/)
+- Call dput() for failure-return case (Andrew Morton)
+
+ mm/damon/dbgfs.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+index 3b55a1b219b5..652a94deafe3 100644
+--- a/mm/damon/dbgfs.c
++++ b/mm/damon/dbgfs.c
+@@ -884,6 +884,7 @@ static int dbgfs_rm_context(char *name)
+ 	struct dentry *root, *dir, **new_dirs;
+ 	struct damon_ctx **new_ctxs;
+ 	int i, j;
++	int ret = 0;
+ 
+ 	if (damon_nr_running_ctxs())
+ 		return -EBUSY;
+@@ -898,14 +899,16 @@ static int dbgfs_rm_context(char *name)
+ 
+ 	new_dirs = kmalloc_array(dbgfs_nr_ctxs - 1, sizeof(*dbgfs_dirs),
+ 			GFP_KERNEL);
+-	if (!new_dirs)
+-		return -ENOMEM;
++	if (!new_dirs) {
++		ret = -ENOMEM;
++		goto out_dput;
++	}
+ 
+ 	new_ctxs = kmalloc_array(dbgfs_nr_ctxs - 1, sizeof(*dbgfs_ctxs),
+ 			GFP_KERNEL);
+ 	if (!new_ctxs) {
+-		kfree(new_dirs);
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto out_new_dirs;
+ 	}
+ 
+ 	for (i = 0, j = 0; i < dbgfs_nr_ctxs; i++) {
+@@ -925,7 +928,13 @@ static int dbgfs_rm_context(char *name)
+ 	dbgfs_ctxs = new_ctxs;
+ 	dbgfs_nr_ctxs--;
+ 
+-	return 0;
++	goto out_dput;
++
++out_new_dirs:
++	kfree(new_dirs);
++out_dput:
++	dput(dir);
++	return ret;
+ }
+ 
+ static ssize_t dbgfs_rm_context_write(struct file *file,
+-- 
+2.25.1
+

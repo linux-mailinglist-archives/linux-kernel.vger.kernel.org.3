@@ -2,105 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FF15AB8FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 21:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75E45AB903
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 21:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiIBTvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 15:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
+        id S230234AbiIBTyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 15:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiIBTvR (ORCPT
+        with ESMTP id S229950AbiIBTyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 15:51:17 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09064AB180;
-        Fri,  2 Sep 2022 12:51:16 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1225219ee46so7363859fac.2;
-        Fri, 02 Sep 2022 12:51:16 -0700 (PDT)
+        Fri, 2 Sep 2022 15:54:01 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC7CC2763
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 12:53:58 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so6463792pjq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 12:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=BgSQRPeP2vU+fzfPkC5136xUIsrQV+zIPc0zX8WqYvQ=;
+        b=4q1ObG8WZYb+BFWPgZh7N7aITtmlNIGPzQtvKE2aYuRrU3oMZQ76tQz2zqxy31cTLt
+         d8rIjpGYxzTxBhay1NPxlOw7vaD/UOVOLVL9kTH97EOmLP9jqiD95DNmZFsZ1Ptc8XmN
+         SpoCT9nh9ECoUVn4HyZ7Qsn6ksQUfbOmmaLZNC8YNvNZJ0mYksYatinKwvYndzY1XvJm
+         nky6nJQ50OCGfppKmlv+KompjFnK/xiaX17J7WZx+2ulxNlRcgnWzxkBWjasiiHjJ4Jl
+         WgqrWN7XLOnHrvW9WLg3mCJ+/TAuDw9lCpZSCR3GLv/KhadF9BUUSKQnQ8/gjIX8jzxs
+         EhUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Z/1e21K0fic8vcdpiAOPusKQ6uAC44z45F500a/5SUA=;
-        b=5PgxeI5J4mw5J27oUr9pFffuMpB7QqYzM835D9GLtNYrWO5DBZz595xzOC3YgzkEcj
-         jJtN6XmPq9M0LxBiuBEVyqZmy+CwmN9+lN7bf2uLTbpUA9Evg53C+43HoDqqF4AGCPnC
-         miM9680cXMwAgD/geZrIFCcoaKaNiodabKTqlcKeDpNT/nenwoCDXaNC6pWgsLdv0Jtu
-         BleVK0T46tTBrMz/py7wGZLki5xolSLvQ6ZrOLak3Ll5NTuXSMk6uDWPC4aL4+8lXYRx
-         Y4zvcX0sBFdR20g3zxuwX/SqWybm7Z2LZNIGVBsbUT4AATn14+jbGsv0Oq3Sk6fZHacO
-         ynEA==
-X-Gm-Message-State: ACgBeo1JVdCKGWhD7Ok+TloxRIJhkKsFD7DQrXvSo9iTpahQ5KfoljYX
-        v2UaFN82pTu1spuWjone0Q==
-X-Google-Smtp-Source: AA6agR6DTTGeiiUnLCzaaZP9BSI8eCO9U1ifoI27QIQY+ErlyxK+PZR9YkTYlxALfL3CcXnCUKs6HA==
-X-Received: by 2002:a05:6870:45a9:b0:10a:9ebc:63ab with SMTP id y41-20020a05687045a900b0010a9ebc63abmr2983240oao.209.1662148275348;
-        Fri, 02 Sep 2022 12:51:15 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cz20-20020a056870649400b0010c0d04eb00sm1626681oab.2.2022.09.02.12.51.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 12:51:15 -0700 (PDT)
-Received: (nullmailer pid 306663 invoked by uid 1000);
-        Fri, 02 Sep 2022 19:51:14 -0000
-Date:   Fri, 2 Sep 2022 14:51:14 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        talel@amazon.com, hhhawa@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, ronenk@amazon.com, itamark@amazon.com,
-        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
-        almogbs@amazon.com, dkl@amazon.com, rahul.tanwar@linux.intel.com,
-        andriy.shevchenko@intel.com
-Subject: Re: [PATCH v3 04/19] dt-bindings: hwmon: (mr75203) change "reset"
- property to be optional
-Message-ID: <20220902195114.GA305400-robh@kernel.org>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-5-farbere@amazon.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=BgSQRPeP2vU+fzfPkC5136xUIsrQV+zIPc0zX8WqYvQ=;
+        b=wgrEF+c3SMBKvktbupPLnLOpZU3oGE+BX9e3qQrVb8biUSPwZaTO6wP9lQuZgZp2lX
+         1Ptb6VZ5uBvV4r1tSdpoQURo+RDm0hWWQWE38DlU5+OKphnMtdg7Q+XEw77Q3oq4vH1W
+         Ujy5ehPpcBFTqRbK21j5zndX7uoLa5u4OpqjF8T3x0OYhe3oTW4iOF+7hnptqCbwCfwI
+         aPkuV0qsFiqeVlDqvXiQKtVZxOftIQ9i/fZPU6Ng4JkhVtM+O1DFmn6DkhYTT9v2ZrTt
+         AElX+ldqN7EeEBx8jDRvqIXxlqyW4gL2iA4JBC653/B30pRY4bFhkFiDoJFvXyRiJSzl
+         n4AA==
+X-Gm-Message-State: ACgBeo1CbMsPcoIvblKE94y8xyazZauIq26p47eP2Pa23biLZo2kf45A
+        Yb4/h/iWOOUBGypSCXDCbnpL4g==
+X-Google-Smtp-Source: AA6agR5BylTPZ3Gegvy/NzTiavEg8hhtbTLj8aGfOurXCnjCbkfIWop802MX5aLKWWzJpm5rxypzOA==
+X-Received: by 2002:a17:90b:b16:b0:1fd:b47c:6ab with SMTP id bf22-20020a17090b0b1600b001fdb47c06abmr6698292pjb.203.1662148438176;
+        Fri, 02 Sep 2022 12:53:58 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c6-20020a170902c1c600b00172ccb3f4ebsm2008369plc.160.2022.09.02.12.53.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 12:53:57 -0700 (PDT)
+Message-ID: <d5526090-0380-a586-40e1-7b3bb6fe6fb8@kernel.dk>
+Date:   Fri, 2 Sep 2022 13:53:53 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830192212.28570-5-farbere@amazon.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>, dave@stgolabs.net,
+        Matthew Wilcox <willy@infradead.org>, liam.howlett@oracle.com,
+        void@manifault.com, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, Linux-MM <linux-mm@kvack.org>,
+        iommu@lists.linux.dev, kasan-dev@googlegroups.com,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+ <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <CAJD7tkaev9B=UDYj2RL6pz-1454J8tv4gEr9y-2dnCksoLK0bw@mail.gmail.com>
+ <YxExz+c1k3nbQMh4@P9FQF9L96D.corp.robot.car>
+ <20220901223720.e4gudprscjtwltif@moria.home.lan>
+ <YxE4BXw5i+BkxxD8@P9FQF9L96D.corp.robot.car>
+ <20220902001747.qqsv2lzkuycffuqe@moria.home.lan>
+ <YxFWrka+Wx0FfLXU@P9FQF9L96D.lan>
+ <3a41b9fc-05f1-3f56-ecd0-70b9a2912a31@kernel.dk>
+ <20220902194839.xqzgsoowous72jkz@moria.home.lan>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220902194839.xqzgsoowous72jkz@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:21:57PM +0000, Eliav Farber wrote:
-> Change "reset" property to be optional instead of required, for SOCs that
+On 9/2/22 1:48 PM, Kent Overstreet wrote:
+> On Fri, Sep 02, 2022 at 06:02:12AM -0600, Jens Axboe wrote:
+>> On 9/1/22 7:04 PM, Roman Gushchin wrote:
+>>> On Thu, Sep 01, 2022 at 08:17:47PM -0400, Kent Overstreet wrote:
+>>>> On Thu, Sep 01, 2022 at 03:53:57PM -0700, Roman Gushchin wrote:
+>>>>> I'd suggest to run something like iperf on a fast hardware. And maybe some
+>>>>> io_uring stuff too. These are two places which were historically most sensitive
+>>>>> to the (kernel) memory accounting speed.
+>>>>
+>>>> I'm getting wildly inconsistent results with iperf.
+>>>>
+>>>> io_uring-echo-server and rust_echo_bench gets me:
+>>>> Benchmarking: 127.0.0.1:12345
+>>>> 50 clients, running 512 bytes, 60 sec.
+>>>>
+>>>> Without alloc tagging:	120547 request/sec
+>>>> With:			116748 request/sec
+>>>>
+>>>> https://github.com/frevib/io_uring-echo-server
+>>>> https://github.com/haraldh/rust_echo_bench
+>>>>
+>>>> How's that look to you? Close enough? :)
+>>>
+>>> Yes, this looks good (a bit too good).
+>>>
+>>> I'm not that familiar with io_uring, Jens and Pavel should have a better idea
+>>> what and how to run (I know they've workarounded the kernel memory accounting
+>>> because of the performance in the past, this is why I suspect it might be an
+>>> issue here as well).
+>>
+>> io_uring isn't alloc+free intensive on a per request basis anymore, it
+>> would not be a good benchmark if the goal is to check for regressions in
+>> that area.
+> 
+> Good to know. The benchmark is still a TCP benchmark though, so still useful.
+> 
+> Matthew suggested
+>   while true; do echo 1 >/tmp/foo; rm /tmp/foo; done
+> 
+> I ran that on tmpfs, and the numbers with and without alloc tagging were
+> statistically equal - there was a fair amount of variation, it wasn't a super
+> controlled test, anywhere from 38-41 seconds with 100000 iterations (and alloc
+> tagging was some of the faster runs).
+> 
+> But with memcg off, it ran in 32-33 seconds. We're piggybacking on the same
+> mechanism memcg uses for stashing per-object pointers, so it looks like that's
+> the bigger cost.
 
-'resets'
+I've complained about memcg accounting before, the slowness of it is why
+io_uring works around it by caching. Anything we account we try NOT do
+in the fast path because of it, the slowdown is considerable.
 
-And subject too.
+You care about efficiency now? I thought that was relegated to
+irrelevant 10M IOPS cases.
 
-> don't support a reset controller.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
-> V3 -> v2:
-> - Change "reset" property to be optional instead of adding new
->   "reset-control-skip" property.
-> 
->  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index 6abde48b746e..2ec4b9da4b92 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -49,7 +49,6 @@ required:
->    - reg
->    - reg-names
->    - clocks
-> -  - resets
->    - "#thermal-sensor-cells"
->  
->  additionalProperties: false
-> -- 
-> 2.37.1
-> 
-> 
+-- 
+Jens Axboe

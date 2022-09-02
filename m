@@ -2,114 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4730D5AA75C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 659D15AA75E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 07:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbiIBFpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 01:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        id S235212AbiIBFq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 01:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIBFpg (ORCPT
+        with ESMTP id S235164AbiIBFqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 01:45:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEA74A132
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 22:45:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C587861FC9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 05:45:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DADC433D6;
-        Fri,  2 Sep 2022 05:45:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662097534;
-        bh=C7tV2XoRZugY9Jp39eiSNu4b8iV+v2WndlYbNXd66TM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NLjRs0RI4MSHV6C67otnhJjN013ru2/gY/ufaSEKGmG3lrgSmjxtZrhplc0zE6nHk
-         Ym0ECns81YqnN6RiF+E6MKWeGOVZwFsFsaTCXbipSE5wgtSXe0OGxC6Dcx+EAgQv/i
-         SSzcs67aKUmSWr4nedVTIpVUXe+xNtlijoDyfses=
-Date:   Fri, 2 Sep 2022 07:45:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] debugfs: Only clobber mode/uid/gid on remount if
- asked
-Message-ID: <YxGYepQlLZTE84HB@kroah.com>
-References: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
- <YxDWlgulBijTzj3y@kroah.com>
- <YxEy8mTO1nZ1sxHV@google.com>
+        Fri, 2 Sep 2022 01:46:42 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1858B72A9
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 22:46:41 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2825KMdM009797;
+        Fri, 2 Sep 2022 05:46:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=2kGDg9Dp2d0zhgJm9E003gVW+w2o3XLxDKCY1K/fko8=;
+ b=HUJCxGSyMMAm7xwGx/rR+ONmhWP/0Domr5Uvr/oGfKe8MZSQelT+VZigPiC/jRplUGOY
+ 5A6DRTgal2IY+8mD8QpaHDjRlGm+aNI6BM78u6u/j4xKKWLCvS950wa2MALHRtpMIzPc
+ GXmlACDy0fTeOb82fDxJIx4rY42IUauccaobAw+vRV4D9Vsak/uRSAnytZLQnOPuMdfw
+ icYNMqZX9jP6mw6xs5tRxncBo06EZqp7NbMnfSk7aFoGAl+UtKrFZtc7ZyRSlNgUshdK
+ 7C/fekSjSXUi6968KC5AU+G2XRHHWDbGB3hr7j7zKTX3DRJ0CzmOdHbZO9BkF6+Ztz4u dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jbbkm8skm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Sep 2022 05:46:26 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2825Svwt007914;
+        Fri, 2 Sep 2022 05:46:25 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jbbkm8sjv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Sep 2022 05:46:25 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2825a4qe026113;
+        Fri, 2 Sep 2022 05:46:23 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3j8hkacfdx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Sep 2022 05:46:23 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2825kKZb39191008
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 2 Sep 2022 05:46:21 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2CE44C04A;
+        Fri,  2 Sep 2022 05:46:20 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 800C04C046;
+        Fri,  2 Sep 2022 05:46:15 +0000 (GMT)
+Received: from [9.43.64.219] (unknown [9.43.64.219])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  2 Sep 2022 05:46:15 +0000 (GMT)
+Message-ID: <698120ce-d4df-3d13-dea9-a8f5c298783c@linux.ibm.com>
+Date:   Fri, 2 Sep 2022 11:16:14 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
+ sysfs
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Wei Xu <weixugc@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>,
+        Greg Thelen <gthelen@google.com>
+References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
+ <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <ad19e105-9290-922d-59e6-e6813a30f5f0@linux.ibm.com>
+ <87pmgezkhp.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
+ <d91beb53-e940-e02a-f9ca-3326bf914da7@linux.ibm.com>
+ <87fshaz63h.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <87fshaz63h.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: fMk2BmpsOaAYWWmk2fjHWEPQEsq66UsJ
+X-Proofpoint-GUID: LTE2Qlv-iimLSGIL2cJnepsrskMFwPQr
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxEy8mTO1nZ1sxHV@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
+ bulkscore=0 malwarescore=0 clxscore=1015 adultscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209020024
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 03:32:18PM -0700, Brian Norris wrote:
-> On Thu, Sep 01, 2022 at 05:58:14PM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Aug 26, 2022 at 05:44:16PM -0700, Brian Norris wrote:
-> > > Users may have explicitly configured their debugfs permissions; we
-> > > shouldn't overwrite those just because a second mount appeared.
-> > 
-> > What userspace mounts debugfs twice?
+On 9/2/22 11:10 AM, Huang, Ying wrote:
+> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 > 
-> I'll admit, my particular userspace in question (Chrom{e,ium}OS) does
-> not. There are several debugfs mounts, but they are bind mounts, which
-> don't hit this problem.
+>> On 9/2/22 10:39 AM, Wei Xu wrote:
+>>> On Thu, Sep 1, 2022 at 5:33 PM Huang, Ying <ying.huang@intel.com> wrote:
+>>>>
+>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>>>
+>>>>> On 9/1/22 12:31 PM, Huang, Ying wrote:
+>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>>>>>
+>>>>>>> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
+>>>>>>> related details can be found. All allocated memory tiers will be listed
+>>>>>>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
+>>>>>>>
+>>>>>>> The nodes which are part of a specific memory tier can be listed via
+>>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
+>>>>>>
+>>>>>> I think "memory_tier" is a better subsystem/bus name than
+>>>>>> memory_tiering.  Because we have a set of memory_tierN devices inside.
+>>>>>> "memory_tier" sounds more natural.  I know this is subjective, just my
+>>>>>> preference.
+>>>>>>
+>>
+>>
+>> I missed replying to this earlier. I will keep memory_tiering as subsystem name in v4 
+>> because we would want it to a susbsystem where all memory tiering related details can be found
+>> including memory type in the future. This is as per discussion 
+>>
+>> https://lore.kernel.org/linux-mm/CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com
 > 
-> But Steven hits the nail on the head for most of my reasoning; my main
-> motivation is for tracefs (patch 2), whose automount makes this very
-> surprising. I included patch 1 for consistency (tracefs essentially
-> copy/pasted debugfs). I could drop patch 1 if that helps somehow, but
-> I'd still like to consider the automount difficulties in patch 2.
+> I don't think that it's a good idea to mix 2 types of devices in one
+> subsystem (bus).  If my understanding were correct, that breaks the
+> driver core convention.
 > 
-> > > Only clobber if the options were provided at mount time.
-> > > 
-> > >   # Don't change /sys/kernel/debug/ permissions.
-> > >   mount -t debugfs none /mnt/foo
-> > > 
-> > >   # Change /sys/kernel/debug/ mode and uid, but not gid.
-> > >   mount -t debugfs -o uid=bar,mode=0750 none /mnt/baz
-> > 
-> > So what happens today with this change?  Without it?
-> 
-> Sorry, this was probably a bit too implied -- the gid changes to its
-> default (0 if we never set it in a mount option before; or it will reset
-> to any previous gid= mount setting).
-> 
-> # ls -ld /sys/kernel/debug/.
-> drwxr-x---. 45 root debugfs-access 0 Dec 31  1969 /sys/kernel/debug/.
-> # chown root:power /sys/kernel/debug/
-> # ls -ld /sys/kernel/debug/.
-> drwxr-x---. 45 root power 0 Dec 31  1969 /sys/kernel/debug/.
-> # mount -t debugfs -o uid=power,mode=0750 none /tmp/mnt
-> # ls -ld /sys/kernel/debug/.
-> drwxr-x---. 45 power debugfs-access 0 Dec 31  1969 /sys/kernel/debug/.
-> # mount | grep '\/sys\/kernel\/debug '
-> debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime,seclabel,uid=228,gid=605,mode=750)
-> 
-> I can include more before/after examples in the commit message if you
-> want. Honestly, that's kind of why I offered to write test cases; test
-> cases show what's happening better than narrative descriptions.
 
-before/after in the changelog comments are very good, thanks.  And yes,
-tests are also good, I'd gladly take that too if you do a v2 of this
-patch.
+All these are virtual devices .I am not sure i follow what you mean by 2 types of devices.
+memory_tiering is a subsystem that represents all the details w.r.t memory tiering. It shows
+details of memory tiers and can possibly contain details of different memory types .
 
-And make it independant of the tracefs change please, these would go
-through two different trees as they have different maintainers.
+-aneesh
 
-thanks,
-
-greg k-h

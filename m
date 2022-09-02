@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AF35AAE5B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070275AAFFC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236037AbiIBMWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S237563AbiIBMqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235900AbiIBMVP (ORCPT
+        with ESMTP id S237414AbiIBMol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:21:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FB65F117;
-        Fri,  2 Sep 2022 05:20:42 -0700 (PDT)
+        Fri, 2 Sep 2022 08:44:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A114E1AB0;
+        Fri,  2 Sep 2022 05:33:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EF5FB82A90;
-        Fri,  2 Sep 2022 12:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D716C433C1;
-        Fri,  2 Sep 2022 12:20:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 789586212E;
+        Fri,  2 Sep 2022 12:31:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8027DC433D6;
+        Fri,  2 Sep 2022 12:31:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121239;
-        bh=CaPcejMvq5lnvRq2Ub3CTht8iOus3RIxbKRjKmiWj2s=;
+        s=korg; t=1662121885;
+        bh=RlgmLsc1QgR4aQk2lM5b0iqGogmpdMQV8MKniSME4yQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xVlR/vSt0sZyT0nwViKMfRWHnrZ05XnDZ7TLJDFFFzeP9jALuYCRn+HCygGYt02Wq
-         TvU4FH/icyIN3Qqhct+oGX9eLcPVXXMl4cX4oAFgKkhzELEuh2K9qDl/qYfwsPJPES
-         JndOnjW2q18TvmMTTEUfkxtMRAbY0sl57l51Tu+w=
+        b=Utm8PHSPtEFtTPj10hirOLj80NeepQPy/PpAHhFMcaGCYX0m1IUgfC8ypD/4VGECB
+         RiSEoco1HimpzvcEMh2ZygYafinR9i7t6CeZq0HY+qJiOF+eTg4WLHtZHv6tsTfOmu
+         /wvfUtM29fid/vzgxezccbKb57H0cm3yQiXFYjl4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH 4.9 17/31] mm: Force TLB flush for PFNMAP mappings before unlink_file_vma()
+        Dylan Yudaken <dylany@fb.com>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH 5.15 19/73] io_uring: remove poll entry from list when canceling all
 Date:   Fri,  2 Sep 2022 14:18:43 +0200
-Message-Id: <20220902121357.380353210@linuxfoundation.org>
+Message-Id: <20220902121405.091863140@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
-References: <20220902121356.732130937@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,53 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Jens Axboe <axboe@kernel.dk>
 
-commit b67fbebd4cf980aecbcc750e1462128bffe8ae15 upstream.
+[ upstream commmit 61bc84c4008812d784c398cfb54118c1ba396dfc ]
 
-Some drivers rely on having all VMAs through which a PFN might be
-accessible listed in the rmap for correctness.
-However, on X86, it was possible for a VMA with stale TLB entries
-to not be listed in the rmap.
+When the ring is exiting, as part of the shutdown, poll requests are
+removed. But io_poll_remove_all() does not remove entries when finding
+them, and since completions are done out-of-band, we can find and remove
+the same entry multiple times.
 
-This was fixed in mainline with
-commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas"),
-but that commit relies on preceding refactoring in
-commit 18ba064e42df3 ("mmu_gather: Let there be one tlb_{start,end}_vma()
-implementation") and commit 1e9fdf21a4339 ("mmu_gather: Remove per arch
-tlb_{start,end}_vma()").
+We do guard the poll execution by poll ownership, but that does not
+exclude us from reissuing a new one once the previous removal ownership
+goes away.
 
-This patch provides equivalent protection without needing that
-refactoring, by forcing a TLB flush between removing PTEs in
-unmap_vmas() and the call to unlink_file_vma() in free_pgtables().
+This can race with poll execution as well, where we then end up seeing
+req->apoll be NULL because a previous task_work requeue finished the
+request.
 
-[This is a stable-specific rewrite of the upstream commit!]
-Signed-off-by: Jann Horn <jannh@google.com>
+Remove the poll entry when we find it and get ownership of it. This
+prevents multiple invocations from finding it.
+
+Fixes: aa43477b0402 ("io_uring: poll rework")
+Reported-by: Dylan Yudaken <dylany@fb.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+[pavel: backport]
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mmap.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ fs/io_uring.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2529,6 +2529,18 @@ static void unmap_region(struct mm_struc
- 	tlb_gather_mmu(&tlb, mm, start, end);
- 	update_hiwater_rss(mm);
- 	unmap_vmas(&tlb, vma, start, end);
-+
-+	/*
-+	 * Ensure we have no stale TLB entries by the time this mapping is
-+	 * removed from the rmap.
-+	 * Note that we don't have to worry about nested flushes here because
-+	 * we're holding the mm semaphore for removing the mapping - so any
-+	 * concurrent flush in this region has to be coming through the rmap,
-+	 * and we synchronize against that using the rmap lock.
-+	 */
-+	if ((vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) != 0)
-+		tlb_flush_mmu(&tlb);
-+
- 	free_pgtables(&tlb, vma, prev ? prev->vm_end : FIRST_USER_ADDRESS,
- 				 next ? next->vm_start : USER_PGTABLES_CEILING);
- 	tlb_finish_mmu(&tlb, start, end);
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -5720,6 +5720,7 @@ static bool io_poll_remove_all(struct io
+ 		list = &ctx->cancel_hash[i];
+ 		hlist_for_each_entry_safe(req, tmp, list, hash_node) {
+ 			if (io_match_task_safe(req, tsk, cancel_all)) {
++				hlist_del_init(&req->hash_node);
+ 				io_poll_cancel_req(req);
+ 				found = true;
+ 			}
 
 

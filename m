@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679F95AB31D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DA75AB31A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238966AbiIBOMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
+        id S238915AbiIBOMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238908AbiIBOLm (ORCPT
+        with ESMTP id S238868AbiIBOLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:11:42 -0400
+        Fri, 2 Sep 2022 10:11:40 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 794C2BF48
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:39:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39742BC25
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 06:39:47 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7EFAD6E;
-        Fri,  2 Sep 2022 05:40:45 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2DB97153B;
+        Fri,  2 Sep 2022 05:40:56 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4AC3B3F766;
-        Fri,  2 Sep 2022 05:40:38 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A67AC3F766;
+        Fri,  2 Sep 2022 05:40:48 -0700 (PDT)
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         op-tee@lists.trustedfirmware.org
@@ -31,10 +31,12 @@ Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Valentin Laurent <valentin.laurent@trustonic.com>,
         Lukas Hanel <lukas.hanel@trustonic.com>,
         Coboy Chen <coboy.chen@mediatek.com>
-Subject: [PATCH v2 00/10] firmware: arm_ffa: Refactoring and initial/minor v1.1 update
-Date:   Fri,  2 Sep 2022 13:40:22 +0100
-Message-Id: <20220902124032.788488-1-sudeep.holla@arm.com>
+Subject: [PATCH v2 05/10] firmware: arm_ffa: Use FFA_FEATURES to detect if native versions are supported
+Date:   Fri,  2 Sep 2022 13:40:27 +0100
+Message-Id: <20220902124032.788488-6-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220902124032.788488-1-sudeep.holla@arm.com>
+References: <20220902124032.788488-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
@@ -46,45 +48,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Currently, the ffa_dev->mode_32bit is use to detect if the native 64-bit
+or 32-bit versions of FF-A ABI needs to be used. However for the FF-A
+memory ABIs, it is not dependent on the ffa_device(i.e. the partition)
+itself, but the partition manager(SPM).
 
-This series is just some refactoring in preparation to add FF-A v1.1
-support. It doesn't have any memory layout or notification changes
-supported in v1.1 yet.
+So, the FFA_FEATURES can be use to detect if the native 64bit ABIs are
+supported or not and appropriate calls can be made based on that.
 
-Regards,
-Sudeep
+Use FFA_FEATURES to detect if native versions of MEM_LEND or MEM_SHARE
+are implemented and make of the same to use native memory ABIs later on.
 
-v1[1]->v2:
-	- Merged dropping of ffa_ops in optee_ffa structure and using
-	  ffa_dev->ops into single patch
-	- Added separate patch(didn't fit any patch strictly to fit in)
-	  to rename ffa_dev_ops as ffa_ops as suggested by Sumit
-	- Fixed some minor comments, handling size > structure size in
-	  partition_info_get and added extra parameter to ffa_features
-	  to get both possible output/interface properties.
+Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/firmware/arm_ffa/driver.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-[1] https://lore.kernel.org/all/20220830100700.344594-1-sudeep.holla@arm.com/
-
-Sudeep Holla (10):
-  firmware: arm_ffa: Add pointer to the ffa_dev_ops in struct ffa_dev
-  tee: optee: Drop ffa_ops in optee_ffa structure using ffa_dev->ops directly
-  firmware: arm_ffa: Remove ffa_dev_ops_get()
-  firmware: arm_ffa: Add support for querying FF-A features
-  firmware: arm_ffa: Use FFA_FEATURES to detect if native versions are supported
-  firmware: arm_ffa: Make memory apis ffa_device independent
-  firmware: arm_ffa: Rename ffa_dev_ops as ffa_ops
-  firmware: arm_ffa: Add v1.1 get_partition_info support
-  firmware: arm_ffa: Set up 32bit execution mode flag using partiion property
-  firmware: arm_ffa: Split up ffa_ops into info, message and memory operations
-
- drivers/firmware/arm_ffa/bus.c    |   4 +-
- drivers/firmware/arm_ffa/driver.c | 130 +++++++++++++++++++++++-------
- drivers/tee/optee/ffa_abi.c       |  46 +++++------
- drivers/tee/optee/optee_private.h |   1 -
- include/linux/arm_ffa.h           |  36 ++++++---
- 5 files changed, 150 insertions(+), 67 deletions(-)
-
+diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+index 81b8d578b6ea..37a8ee304508 100644
+--- a/drivers/firmware/arm_ffa/driver.c
++++ b/drivers/firmware/arm_ffa/driver.c
+@@ -163,6 +163,7 @@ struct ffa_drv_info {
+ 	struct mutex tx_lock; /* lock to protect Tx buffer */
+ 	void *rx_buffer;
+ 	void *tx_buffer;
++	bool mem_ops_native;
+ };
+ 
+ static struct ffa_drv_info *drv_info;
+@@ -597,6 +598,13 @@ static int ffa_features(u32 func_feat_id, u32 input_props,
+ 	return 0;
+ }
+ 
++static void ffa_set_up_mem_ops_native_flag(void)
++{
++	if (!ffa_features(FFA_FN_NATIVE(MEM_LEND), 0, NULL, NULL) ||
++	    !ffa_features(FFA_FN_NATIVE(MEM_SHARE), 0, NULL, NULL))
++		drv_info->mem_ops_native = true;
++}
++
+ static u32 ffa_api_version_get(void)
+ {
+ 	return drv_info->version;
+@@ -638,10 +646,10 @@ static int ffa_sync_send_receive(struct ffa_device *dev,
+ static int
+ ffa_memory_share(struct ffa_device *dev, struct ffa_mem_ops_args *args)
+ {
+-	if (dev->mode_32bit)
+-		return ffa_memory_ops(FFA_MEM_SHARE, args);
++	if (drv_info->mem_ops_native)
++		return ffa_memory_ops(FFA_FN_NATIVE(MEM_SHARE), args);
+ 
+-	return ffa_memory_ops(FFA_FN_NATIVE(MEM_SHARE), args);
++	return ffa_memory_ops(FFA_MEM_SHARE, args);
+ }
+ 
+ static int
+@@ -654,10 +662,10 @@ ffa_memory_lend(struct ffa_device *dev, struct ffa_mem_ops_args *args)
+ 	 * however on systems without a hypervisor the responsibility
+ 	 * falls to the calling kernel driver to prevent access.
+ 	 */
+-	if (dev->mode_32bit)
+-		return ffa_memory_ops(FFA_MEM_LEND, args);
++	if (drv_info->mem_ops_native)
++		return ffa_memory_ops(FFA_FN_NATIVE(MEM_LEND), args);
+ 
+-	return ffa_memory_ops(FFA_FN_NATIVE(MEM_LEND), args);
++	return ffa_memory_ops(FFA_MEM_LEND, args);
+ }
+ 
+ static const struct ffa_dev_ops ffa_ops = {
+@@ -768,6 +776,8 @@ static int __init ffa_init(void)
+ 
+ 	ffa_setup_partitions();
+ 
++	ffa_set_up_mem_ops_native_flag();
++
+ 	return 0;
+ free_pages:
+ 	if (drv_info->tx_buffer)
 -- 
 2.37.3
 

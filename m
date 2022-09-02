@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B11E5AB3F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A715AB40E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 16:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236701AbiIBOpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 10:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S236114AbiIBOt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 10:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236785AbiIBOpZ (ORCPT
+        with ESMTP id S237264AbiIBOst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:45:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BC1F2405;
-        Fri,  2 Sep 2022 07:05:58 -0700 (PDT)
+        Fri, 2 Sep 2022 10:48:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D793B4A4;
+        Fri,  2 Sep 2022 07:10:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D1E2AB82A90;
-        Fri,  2 Sep 2022 12:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12ACAC433D6;
-        Fri,  2 Sep 2022 12:30:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35743B82AA5;
+        Fri,  2 Sep 2022 12:34:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A252BC433B5;
+        Fri,  2 Sep 2022 12:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121823;
-        bh=uV//fd3/pCklVx3bACI/j43ll78KoIWsCtxberp1jf4=;
+        s=korg; t=1662122069;
+        bh=ngG15JejDqqcJ9SlXbwYiQ/bNv4YoNx9fC8TWrz6c3Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gR/B+x2LSq506PaefKrhfyD71MPBC26/L7p3A/XQ3wB1m2IWZ/9o6tR5OYyGfSSw4
-         WTRUhOy4849E4s1aMzwOcBbvR6KKYnuvvZk+9iWuqp3OcJckqkF5UuHGWkOw3TAJnf
-         9OhlE2neRpNkROWMwyCb6MKDbjmAAi8kXJGQT3Uw=
+        b=vmKG1FhpJKcIEeHXo1UP2m8abQwI2tqs0qKXLVuNL5MNY806AZU0ecoZWpIPaW74j
+         QJACl700Hmc2vSOhooyu30tUKnon+gnxJp/W79rpeV7CbpXtgnoh4Zg4lliI8GSYuF
+         0Kggt4tomIO9VLJIMy1QdQ02qlMie9W1ETrjLz40=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 76/77] net/af_packet: check len when min_header_len equals to 0
-Date:   Fri,  2 Sep 2022 14:19:25 +0200
-Message-Id: <20220902121406.217342438@linuxfoundation.org>
+        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Florian Westphal <fw@strlen.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 64/73] netfilter: conntrack: NF_CONNTRACK_PROCFS should no longer default to y
+Date:   Fri,  2 Sep 2022 14:19:28 +0200
+Message-Id: <20220902121406.522493900@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
-References: <20220902121403.569927325@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+References: <20220902121404.435662285@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengchao Shao <shaozhengchao@huawei.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
 
-commit dc633700f00f726e027846a318c5ffeb8deaaeda upstream.
+[ Upstream commit aa5762c34213aba7a72dc58e70601370805fa794 ]
 
-User can use AF_PACKET socket to send packets with the length of 0.
-When min_header_len equals to 0, packet_snd will call __dev_queue_xmit
-to send packets, and sock->type can be any type.
+NF_CONNTRACK_PROCFS was marked obsolete in commit 54b07dca68557b09
+("netfilter: provide config option to disable ancient procfs parts") in
+v3.3.
 
-Reported-by: syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com
-Fixes: fd1894224407 ("bpf: Don't redirect packets with invalid pkt_len")
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/packet/af_packet.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/netfilter/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -2960,8 +2960,8 @@ static int packet_snd(struct socket *soc
- 	if (err)
- 		goto out_free;
+diff --git a/net/netfilter/Kconfig b/net/netfilter/Kconfig
+index 92a747896f808..4f645d51c2573 100644
+--- a/net/netfilter/Kconfig
++++ b/net/netfilter/Kconfig
+@@ -133,7 +133,6 @@ config NF_CONNTRACK_ZONES
  
--	if (sock->type == SOCK_RAW &&
--	    !dev_validate_header(dev, skb->data, len)) {
-+	if ((sock->type == SOCK_RAW &&
-+	     !dev_validate_header(dev, skb->data, len)) || !skb->len) {
- 		err = -EINVAL;
- 		goto out_free;
- 	}
+ config NF_CONNTRACK_PROCFS
+ 	bool "Supply CT list in procfs (OBSOLETE)"
+-	default y
+ 	depends on PROC_FS
+ 	help
+ 	This option enables for the list of known conntrack entries
+-- 
+2.35.1
+
 
 

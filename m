@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAB65AAF40
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BE25AB099
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 14:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbiIBMf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 08:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
+        id S238155AbiIBMzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 08:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbiIBMd5 (ORCPT
+        with ESMTP id S237811AbiIBMxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:33:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEC1D6324;
-        Fri,  2 Sep 2022 05:28:13 -0700 (PDT)
+        Fri, 2 Sep 2022 08:53:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D999FE3979;
+        Fri,  2 Sep 2022 05:38:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CC0AB82AA6;
-        Fri,  2 Sep 2022 12:25:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412A7C433D7;
-        Fri,  2 Sep 2022 12:25:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDF566217E;
+        Fri,  2 Sep 2022 12:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5FA4C433C1;
+        Fri,  2 Sep 2022 12:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662121527;
-        bh=O2wktyySvoBAnlLSaIcIBia5ZLZZO3UuY8hVjRz1L0g=;
+        s=korg; t=1662122258;
+        bh=4Mef6oIVxypHg+mAHZHx0JWOr5/CBtzWkSoMACY3YZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wrmJRd3SVo8UhAhyYUmlHl6swuUxmwo/IBtcfMe/+9w3ABZt9lsIzp8oeWJCx9DwK
-         wuX8J1mvHPK1XRkqd64fNThUUt+xhgqSBWonVaQIeHta0tOpJ2LBMhJXGlh7kSfmPF
-         uM8yKHTbcErk5Gyonl6Ud96KyTnVO8FYVMPBOMao=
+        b=V7a+TT/xmchhADjHRmBzZTAFc8ALdcJ5XYw15Lf9Db6Z1Q+d1hE90zki3xunMHQgb
+         XV3TIALyEkQmbtxao9DhfFXCEge3bjCn8A/DOBsf1IpMOznW8HJHoiFBo7mo94BjZF
+         vkjtgNZRAQW9Df0W4yyR9TMKNRaDbq02mSNxWHaE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH 4.19 37/56] mm: Force TLB flush for PFNMAP mappings before unlink_file_vma()
-Date:   Fri,  2 Sep 2022 14:18:57 +0200
-Message-Id: <20220902121401.602810819@linuxfoundation.org>
+        stable@vger.kernel.org, Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.19 22/72] HID: AMD_SFH: Add a DMI quirk entry for Chromebooks
+Date:   Fri,  2 Sep 2022 14:18:58 +0200
+Message-Id: <20220902121405.511661631@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-References: <20220902121400.219861128@linuxfoundation.org>
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,53 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Akihiko Odaki <akihiko.odaki@gmail.com>
 
-commit b67fbebd4cf980aecbcc750e1462128bffe8ae15 upstream.
+commit adada3f4930ac084740ea340bd8e94028eba4f22 upstream.
 
-Some drivers rely on having all VMAs through which a PFN might be
-accessible listed in the rmap for correctness.
-However, on X86, it was possible for a VMA with stale TLB entries
-to not be listed in the rmap.
+Google Chromebooks use Chrome OS Embedded Controller Sensor Hub instead
+of Sensor Hub Fusion and leaves MP2 uninitialized, which disables all
+functionalities, even including the registers necessary for feature
+detections.
 
-This was fixed in mainline with
-commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas"),
-but that commit relies on preceding refactoring in
-commit 18ba064e42df3 ("mmu_gather: Let there be one tlb_{start,end}_vma()
-implementation") and commit 1e9fdf21a4339 ("mmu_gather: Remove per arch
-tlb_{start,end}_vma()").
+The behavior was observed with Lenovo ThinkPad C13 Yoga.
 
-This patch provides equivalent protection without needing that
-refactoring, by forcing a TLB flush between removing PTEs in
-unmap_vmas() and the call to unlink_file_vma() in free_pgtables().
-
-[This is a stable-specific rewrite of the upstream commit!]
-Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+Acked-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mmap.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.c |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2572,6 +2572,18 @@ static void unmap_region(struct mm_struc
- 	tlb_gather_mmu(&tlb, mm, start, end);
- 	update_hiwater_rss(mm);
- 	unmap_vmas(&tlb, vma, start, end);
+--- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
++++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+@@ -285,11 +285,29 @@ static int amd_sfh_irq_init(struct amd_m
+ 	return 0;
+ }
+ 
++static const struct dmi_system_id dmi_nodevs[] = {
++	{
++		/*
++		 * Google Chromebooks use Chrome OS Embedded Controller Sensor
++		 * Hub instead of Sensor Hub Fusion and leaves MP2
++		 * uninitialized, which disables all functionalities, even
++		 * including the registers necessary for feature detections.
++		 */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Google"),
++		},
++	},
++	{ }
++};
 +
-+	/*
-+	 * Ensure we have no stale TLB entries by the time this mapping is
-+	 * removed from the rmap.
-+	 * Note that we don't have to worry about nested flushes here because
-+	 * we're holding the mm semaphore for removing the mapping - so any
-+	 * concurrent flush in this region has to be coming through the rmap,
-+	 * and we synchronize against that using the rmap lock.
-+	 */
-+	if ((vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) != 0)
-+		tlb_flush_mmu(&tlb);
+ static int amd_mp2_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ {
+ 	struct amd_mp2_dev *privdata;
+ 	int rc;
+ 
++	if (dmi_first_match(dmi_nodevs))
++		return -ENODEV;
 +
- 	free_pgtables(&tlb, vma, prev ? prev->vm_end : FIRST_USER_ADDRESS,
- 				 next ? next->vm_start : USER_PGTABLES_CEILING);
- 	tlb_finish_mmu(&tlb, start, end);
+ 	privdata = devm_kzalloc(&pdev->dev, sizeof(*privdata), GFP_KERNEL);
+ 	if (!privdata)
+ 		return -ENOMEM;
 
 

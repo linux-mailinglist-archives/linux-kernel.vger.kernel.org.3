@@ -2,80 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80CD5ABB63
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F36E5ABB75
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 01:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiIBXsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 19:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        id S230026AbiIBX4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 19:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiIBXsP (ORCPT
+        with ESMTP id S229436AbiIBX4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 19:48:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B8A106DA4;
-        Fri,  2 Sep 2022 16:48:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E63CCB82E0A;
-        Fri,  2 Sep 2022 23:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3B4EC433C1;
-        Fri,  2 Sep 2022 23:48:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662162492;
-        bh=qhfsEkifW71IEPGW+0CPZfPYtHJyIl9VFVZwDOlc9wg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=r/CouHhll325bB+sNBgV8dKlmcMwqMpQHrzND4UfYX00PK8DiNthiVB2NzgwCU7ez
-         uwfPBtKFRLGlPJnTN6CiQTKFCdXa95X3oIGMWAosohyEsxlpLjiUQsbxJ8iGnE5ML1
-         pEYXxv3qav18KsXHMEzUPhyn+dkRqslpe/aaxCeEpFLd93GjQr1UT//4RWo/ug0Hj6
-         jllzUdPaQkRq1Ixfx0MqseGyHFY/pgagr5rTG+6cZgBRQHgADqJXjEu8KcutNG2jcN
-         JyZNqx+qed0GpNq/7FmRKnRho03uPjgCiJ1RKcuO2gLl4Y8z3krssU/6I34APdoyWa
-         I83SZ8+lZCKMA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A13F8E924E4;
-        Fri,  2 Sep 2022 23:48:12 +0000 (UTC)
-Subject: Re: [GIT PULL] Landlock fix for v6.0
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220902140400.1617323-1-mic@digikod.net>
-References: <20220902140400.1617323-1-mic@digikod.net>
-X-PR-Tracked-List-Id: <stable.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220902140400.1617323-1-mic@digikod.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-6.0-rc4
-X-PR-Tracked-Commit-Id: 55e55920bbe3ccf516022c51f5527e7d026b8f1d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0c95f02269a1ef6c3fae4f46bbdd7a4578d44b8f
-Message-Id: <166216249265.12135.11311488938314646464.pr-tracker-bot@kernel.org>
-Date:   Fri, 02 Sep 2022 23:48:12 +0000
-To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, stable@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 2 Sep 2022 19:56:42 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBE3DDA9A;
+        Fri,  2 Sep 2022 16:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662163001; x=1693699001;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BnSeA2s0ZqwQIAEryzw/fkfvhxBxnJlfAEFdXa5WICQ=;
+  b=jPUEcjzTE9lQOcKuGLRiu34gVyCr5Jb9FCexe13QGlEz4nmM+YdQ1dK6
+   8MNt1TrLn/bwhK4I0gCvlmpVxoFExRitcq0cs7AsAOhsMMs8UnpwrMIrW
+   w5D1BMifxm3YuNty3/iBX2ajg5UIqwsQ6C2Ks1c4WK85Bhz8mUUZsGVjc
+   /Cy3P86C5pw+myLZPyGximifulgKod4tccIAHcNg63mHe8FLC/rhrpHvf
+   c7fY80a9+2dLOsiIv5wC7STY71dcKACxiIhpiqAD1qkFtTjhVdakGHzoi
+   9iGAYAYUZ4bNPFedqjgR21POSx1EZNNCgOkfW/uw9/srOGCX/zmtkjlyQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="279125309"
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="279125309"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:56:41 -0700
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="755422551"
+Received: from cgoff-mobl1.amr.corp.intel.com (HELO [10.209.53.13]) ([10.209.53.13])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 16:56:40 -0700
+Message-ID: <8f4c3040-392e-f64d-4f30-a4e6838f9a1d@linux.intel.com>
+Date:   Fri, 2 Sep 2022 16:56:39 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/3] PCI/PTM: Implement pci_enable_ptm() for Root
+ Ports, Switch Upstream Ports
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+References: <20220902233543.390890-1-helgaas@kernel.org>
+ <20220902233543.390890-3-helgaas@kernel.org>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220902233543.390890-3-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri,  2 Sep 2022 16:04:00 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-6.0-rc4
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0c95f02269a1ef6c3fae4f46bbdd7a4578d44b8f
+On 9/2/22 4:35 PM, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/pci/pcie/ptm.c | 34 +++++++++++++++++++++++++++-------
+>  1 file changed, 27 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
+> index b6a417247ce3..ad283818f37b 100644
+> --- a/drivers/pci/pcie/ptm.c
+> +++ b/drivers/pci/pcie/ptm.c
+> @@ -167,11 +167,11 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+>  	if (!pos)
+>  		return -EINVAL;
+>  
+> -	pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
+> -	if (!(cap & PCI_PTM_CAP_REQ))
+> -		return -EINVAL;
+> -
 
-Thank you!
+May be saving PCI_PTM_CAP_REQ enabled state here and using it below only for
+endpoints checks will reduce the code duplication?
+
+>  	/*
+> +	 * Root Ports and Switch Upstream Ports have been configured
+> +	 * by pci_ptm_init(), so preserve their PCI_PTM_CTRL_ROOT and
+> +	 * granularity.
+> +	 *
+>  	 * For a PCIe Endpoint, PTM is only useful if the endpoint can
+>  	 * issue PTM requests to upstream devices that have PTM enabled.
+>  	 *
+> @@ -179,19 +179,39 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+>  	 * device, so there must be some implementation-specific way to
+>  	 * associate the endpoint with a time source.
+>  	 */
+> -	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT) {
+> +	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
+> +	    pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM) {
+> +		if (pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM) {
+> +			ups = pci_upstream_bridge(dev);
+> +			if (!ups || !ups->ptm_enabled)
+> +				return -EINVAL;
+> +		}
+> +
+> +		pci_read_config_dword(dev, pos + PCI_PTM_CTRL, &ctrl);
+
+Why read PCI_PTM_CTRL state only for root and upstream ports? The same logic
+will work for endpoints and RC endpoints right? 
+
+What not use dev->ptm_granularity for root ports?
+
+> +		ctrl |= PCI_PTM_CTRL_ENABLE;
+> +	} else if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT) {
+> +		pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
+> +		if (!(cap & PCI_PTM_CAP_REQ))
+> +			return -EINVAL;
+> +
+>  		ups = pci_upstream_bridge(dev);
+>  		if (!ups || !ups->ptm_enabled)
+>  			return -EINVAL;
+>  
+>  		dev->ptm_granularity = ups->ptm_granularity;
+> +		ctrl = PCI_PTM_CTRL_ENABLE;
+> +		ctrl |= dev->ptm_granularity << 8;
+>  	} else if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_END) {
+> +		pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
+> +		if (!(cap & PCI_PTM_CAP_REQ))
+> +			return -EINVAL;
+> +
+>  		dev->ptm_granularity = 0;
+> +		ctrl = PCI_PTM_CTRL_ENABLE;
+> +		ctrl |= dev->ptm_granularity << 8;
+>  	} else
+>  		return -EINVAL;
+>  
+> -	ctrl = PCI_PTM_CTRL_ENABLE;
+> -	ctrl |= dev->ptm_granularity << 8;
+>  	pci_write_config_dword(dev, pos + PCI_PTM_CTRL, ctrl);
+>  	dev->ptm_enabled = 1;
+>  
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020875AB568
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDF15AB569
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 17:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236940AbiIBPjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 11:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
+        id S237171AbiIBPjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 11:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236649AbiIBPi1 (ORCPT
+        with ESMTP id S236673AbiIBPi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 11:38:27 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68307D5735
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 08:25:44 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MK1vW3Wfkz9sZ3;
-        Fri,  2 Sep 2022 17:25:43 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QPSFDO7JHai2; Fri,  2 Sep 2022 17:25:43 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MK1vV4t3qz9sff;
-        Fri,  2 Sep 2022 17:25:42 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 973788B764;
-        Fri,  2 Sep 2022 17:25:42 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id CYFeafEYm9IA; Fri,  2 Sep 2022 17:25:42 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.39])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 581E18B787;
-        Fri,  2 Sep 2022 17:25:42 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 282FPVCa2217410
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 2 Sep 2022 17:25:31 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 282FPUMj2217380;
-        Fri, 2 Sep 2022 17:25:30 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2] powerpc/vdso: link with -z noexecstack
-Date:   Fri,  2 Sep 2022 17:25:24 +0200
-Message-Id: <b95f2e3216a574837dd61208444e9515c3423da4.1662132312.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Fri, 2 Sep 2022 11:38:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78778E68ED;
+        Fri,  2 Sep 2022 08:25:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F779B82C79;
+        Fri,  2 Sep 2022 15:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F30C433D6;
+        Fri,  2 Sep 2022 15:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662132348;
+        bh=FrFg+xmdEDkMXv1wDlDQ6uNNvv9sbAcSL1qiGhUUHdg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qAzEyJ1361X9yBv3PliR9wcd4XO7H+RmdlGFAu390ZDMbmvYP/CjsF42JrqBMXz0l
+         xB44489KSJ9azPNBg8p+l+o5zdvGJVaeVN1tbsFAEUqD4WGxAqaT0a9Ly22xhSizvt
+         nNhY7xtyWXtuO45YX3ntyDDuskIDaY9xJIkOeO9oAHtF8RMWWldFHxBAGMv3kIJO29
+         BYztCdgzS8MRIVGSw4AQZv1oV2WHzc0JcUB7kWj3EPLi8TB1bGUfIUtoEH40w+DdbI
+         zYB6AVm6+N/Yuiiuq0z8Dofa2jANlRfMxfpmXqFxtIwFdR14bKuZvK3kIyVVooigQb
+         7FStAgoJri4Sg==
+Received: by mail-vk1-f169.google.com with SMTP id o12so1129954vkn.7;
+        Fri, 02 Sep 2022 08:25:48 -0700 (PDT)
+X-Gm-Message-State: ACgBeo31uNpKv8N04c0HTB6ct6jRDXf5LQYmY7cm2/91kNF0pddOum5d
+        DYK3M0R4bgWBAVZqhyZ7b5lRgTL5Sa9W9FiUSQ==
+X-Google-Smtp-Source: AA6agR50oV56jYwuRURRAX9mWAXKrjgKJL8ObI8pOpCwrhYhlFYAz/zsj5ffn6XwdO7wZKYS9DBW31KW+9iwTRLO1nU=
+X-Received: by 2002:a1f:1d4d:0:b0:382:59cd:596c with SMTP id
+ d74-20020a1f1d4d000000b0038259cd596cmr10769792vkd.35.1662132347322; Fri, 02
+ Sep 2022 08:25:47 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662132323; l=2291; s=20211009; h=from:subject:message-id; bh=1t0lJDIli6rqkKhPYM/6mAJjgb0mjc9+/i/6Gd5VKd4=; b=GS9dzfO8nvY0H/dFq+PXD7w8mxK6h81gVlUTrwOkNQtOAmuTzoPuZla9o5Z7AIKE+npi198uUc7q tNdr7NTyBPEydSBjB50jA0IJ4WUqgtPn/usPib8+va3qsykMgV09
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220901184709.2179309-1-robh@kernel.org> <CAM9d7chY6T-EAN3BT487MUK0LbfGp27X+2Dd_+S0azgh2GQn9w@mail.gmail.com>
+In-Reply-To: <CAM9d7chY6T-EAN3BT487MUK0LbfGp27X+2Dd_+S0azgh2GQn9w@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 2 Sep 2022 10:25:36 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLmszK=NzD_2nYnZG1dD=tU1fKGUtYL-dUG2a497LkEcg@mail.gmail.com>
+Message-ID: <CAL_JsqLmszK=NzD_2nYnZG1dD=tU1fKGUtYL-dUG2a497LkEcg@mail.gmail.com>
+Subject: Re: [PATCH] perf: Ignore format attributes with an unknown
+ perf_event_attr field
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With recent binutils, the following warning appears:
+On Fri, Sep 2, 2022 at 1:53 AM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> Hello,
+>
+> On Thu, Sep 1, 2022 at 11:55 AM Rob Herring <robh@kernel.org> wrote:
+> >
+> > If the kernel exposes a new perf_event_attr field in a format attr, perf
+> > will return an error stating the specified PMU can't be found. For
+> > example, a format attr with 'config3:0-63' causes an error if config3 is
+> > unknown to perf. This causes a compatibility issue between a newer
+> > kernel and an older perf tool.
+> >
+> > The addition here makes any attr string up to the ':' ignored, but
+> > still checks the 'bits' portion.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> > This is the YACC mud I threw and seems to stick. Maybe there's a better
+> > way to handle this. It doesn't seem like there's a way to do wildcards
+> > (i.e. config.*) in YACC.
+> >
+> > This is needed for this series[1]. Unfortunately the best we do to avoid
+> > the issue is applying this to stable. I think there's some time before
+> > v8.7 h/w is deployed, too.
+>
+> Maybe you could change the format_term rule to take an identifier instead
+> of PP_CONFIG* directly and pass it to perf_pmu__new_format().  Then
+> it could check the string and create an appropriate PERF_PMU_FORMAT_VALUE_*
+> or ignore it according to the PERF_ATTR_SIZE_VER*.
 
-  VDSO32L arch/powerpc/kernel/vdso/vdso32.so.dbg
-/opt/gcc-12.2.0-nolibc/powerpc64-linux/bin/../lib/gcc/powerpc64-linux/12.2.0/../../../../powerpc64-linux/bin/ld: warning: arch/powerpc/kernel/vdso/getcpu-32.o: missing .note.GNU-stack section implies executable stack
-/opt/gcc-12.2.0-nolibc/powerpc64-linux/bin/../lib/gcc/powerpc64-linux/12.2.0/../../../../powerpc64-linux/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+That only moves parsing of configN from YACC to strcmp in C. In doing
+so, we'd be left with just the 'error' token case which seems a bit
+odd (if there's another way to do it, I don't know. yacc is not my
+thing). Is that really better? Unless there is some way to retrieve
+the PERF_ATTR_SIZE_VER* from the kernel at runtime?
 
-To avoid that, explicitely tell the linker we don't
-want executable stack.
-
-For more explanations, see commit ffcf9c5700e4 ("x86: link vdso
-and boot with -z noexecstack --no-warn-rwx-segments")
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v2: Removed unrelated change in arch/powerpc/kernel/Makefile
----
- arch/powerpc/kernel/vdso/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-index 096b0bf1335f..a2e7b0ce5b19 100644
---- a/arch/powerpc/kernel/vdso/Makefile
-+++ b/arch/powerpc/kernel/vdso/Makefile
-@@ -92,13 +92,13 @@ include/generated/vdso64-offsets.h: $(obj)/vdso64.so.dbg FORCE
- 
- # actual build commands
- quiet_cmd_vdso32ld_and_check = VDSO32L $@
--      cmd_vdso32ld_and_check = $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) ; $(cmd_vdso_check)
-+      cmd_vdso32ld_and_check = $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
- quiet_cmd_vdso32as = VDSO32A $@
-       cmd_vdso32as = $(VDSOCC) $(a_flags) $(CC32FLAGS) $(AS32FLAGS) -c -o $@ $<
- quiet_cmd_vdso32cc = VDSO32C $@
-       cmd_vdso32cc = $(VDSOCC) $(c_flags) $(CC32FLAGS) -c -o $@ $<
- 
- quiet_cmd_vdso64ld_and_check = VDSO64L $@
--      cmd_vdso64ld_and_check = $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) ; $(cmd_vdso_check)
-+      cmd_vdso64ld_and_check = $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
- quiet_cmd_vdso64as = VDSO64A $@
-       cmd_vdso64as = $(VDSOCC) $(a_flags) $(CC64FLAGS) $(AS64FLAGS) -c -o $@ $<
--- 
-2.37.1
-
+Rob

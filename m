@@ -2,159 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BF35AC032
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7235AC042
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbiICRi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 13:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S231753AbiICRk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 13:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiICRi0 (ORCPT
+        with ESMTP id S230507AbiICRk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 13:38:26 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE9153D2B;
-        Sat,  3 Sep 2022 10:38:25 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b19so5233073ljf.8;
-        Sat, 03 Sep 2022 10:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xX2O58QMupv9rWIX/wz0TD9J8Ed7HqVnisBNPZl6V04=;
-        b=P/hsH1QKS4072Gai1EmOGCnjPTQWZiiOiE+P26T80mgV0tbTOnkDXKC3nEWi1Xoe/A
-         Hs7LLFSp+fCaJRWZVqv/8C2xzImMvLQoTDYUfx6u9PmIwXRQtB9n4gGmx+GH0S1f7zYT
-         EpKdDfbdqDAHgNmhwbrPGp06lVMfmsEbewBLDb/B+dQfW30xzF8F2l2F/gidKFJKBG6M
-         xlYX6S3WMrWsrSfVCDpCmKqprjSkUDidSKYHiXrhQ6jx9rWQ1os07RE+QbroswHSap0D
-         gOYyJOlFnRdNpKj+sEkb2UqwaGfM6EvoZTNoU3eDmRl2MoAiXkF/RCfX0IxvBDH8/V+n
-         XD8A==
+        Sat, 3 Sep 2022 13:40:57 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283EF5208A;
+        Sat,  3 Sep 2022 10:40:56 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 202so2726194ybe.13;
+        Sat, 03 Sep 2022 10:40:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xX2O58QMupv9rWIX/wz0TD9J8Ed7HqVnisBNPZl6V04=;
-        b=imTLFN8Eux+H9bfSleRewZH/5DsXR08iBnirAYp8x+S0JfQBmlHrGXNN1Nh3DlOYwp
-         iSeScOiatLAIcV2QQXWsycH5nExk+rxB7Gkx6Ev0k1BvXc21ku/gWYj5FLIY1t5mlZja
-         TSwe0rI583L76zVdWL3yggKQ37/9MuBrEevDRIVGFOno+Jhq5scwA/9LE8kAMCWjgaTj
-         PfK7Bok2vlWQQRKSOAMgPnfhlim5fcJjXBJ3UOt4hNNz76LLd0JTGIQj75rnqGhWgnF+
-         q7lscpM8EwUz1wAj239CIOgDRmwmY13nyjxc4Rx2pG73MR5Tn50WhfRZn4YPo818v1Vy
-         uf3w==
-X-Gm-Message-State: ACgBeo3Cc2Y2VegKEuKQ/9rp0/0ZPZVf1OZ2nGmHq1yGZ41nC/+3e2Gx
-        dLQxqi1fUAL/Rjn/aDiOfT5enZ6HDPLHglijCyY=
-X-Google-Smtp-Source: AA6agR7+UPXECkLr9xecEnlHY9jJP9Sk53/z1csaRMZh+iBcI4PkxC6eajktqUCZxUcf8SInATP1uw7iY4QjQlwWETk=
-X-Received: by 2002:a2e:b8d5:0:b0:25f:e94d:10a2 with SMTP id
- s21-20020a2eb8d5000000b0025fe94d10a2mr13425885ljp.274.1662226704352; Sat, 03
- Sep 2022 10:38:24 -0700 (PDT)
+        bh=ADCDZkM9VRAAcy+FPVXNht63Zj+njGChRH3Rklp+Wy8=;
+        b=ocEsvxDYyomHlVkffJCXMnkJIRtBjfGDnCnz/K/iZNQA7tq2KiFYPNFn290t6spYfe
+         QrafLIyZZMgKxsvaUKBN3iAbQsj5Q2RyoYx1xhlE6KK4IPeE0nYzYcewW8iAgkpr4DWV
+         x2GtR4ReouASIjJnp6Li4grSq/TJV6t8Y4jWfLkp/IaII3gYAeiBzZEs2/4336ngiDA+
+         brtTAzBG9dP/8eKi6QEwOc7yUhVQdtrMJFrN63lzq6Hg5ia1ERRyUhxPWvTyv8C0BH9x
+         Qtotq/vAAHwYvwIMx7Q+XkoVepu/mYppEMoBsKljuKLdtHf05XcfrtKWQYxwT5PjjPPU
+         9NVA==
+X-Gm-Message-State: ACgBeo0m8KgxFqwaA8/3wCWcwDW7twj3e1ycxZtc8dEJeFj+a09o3sSB
+        P+5qRc1mPzvvbJ4Ut1vuCM8DqMBx0iN7p1wcptE=
+X-Google-Smtp-Source: AA6agR536TsmH0/J0LAucPibLANU1mbFYloX4jDfE+3oUtt6HXJozc0iRDgfkYk6wbFjQDVKkeXuyTzegMfeoQxoem4=
+X-Received: by 2002:a25:b749:0:b0:68f:171f:96bd with SMTP id
+ e9-20020a25b749000000b0068f171f96bdmr28745931ybm.137.1662226855380; Sat, 03
+ Sep 2022 10:40:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220901220138.182896-1-vishal.moola@gmail.com> <20220901220138.182896-19-vishal.moola@gmail.com>
-In-Reply-To: <20220901220138.182896-19-vishal.moola@gmail.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Sun, 4 Sep 2022 02:38:06 +0900
-Message-ID: <CAKFNMo=YwdFOQNUuwNvYn6u41C8A2M905-nDkEFRejPZ2_svYg@mail.gmail.com>
-Subject: Re: [PATCH 18/23] nilfs2: Convert nilfs_lookup_dirty_data_buffers()
- to use filemap_get_folios_tag()
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
-        linux-mm@kvack.org
+References: <20220902233543.390890-1-helgaas@kernel.org> <20220902233543.390890-3-helgaas@kernel.org>
+In-Reply-To: <20220902233543.390890-3-helgaas@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 3 Sep 2022 19:40:44 +0200
+Message-ID: <CAJZ5v0jV94TwifmoF2UfiDpXNP_Kgt6qNkQH7zwQjo=ZhyU-4A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] PCI/PTM: Implement pci_enable_ptm() for Root
+ Ports, Switch Upstream Ports
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 7:07 AM Vishal Moola (Oracle) wrote:
+On Sat, Sep 3, 2022 at 1:35 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> Convert function to use folios throughout. This is in preparation for
-> the removal of find_get_pages_range_tag().
+> From: Bjorn Helgaas <bhelgaas@google.com>
 >
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 > ---
->  fs/nilfs2/segment.c | 29 ++++++++++++++++-------------
->  1 file changed, 16 insertions(+), 13 deletions(-)
+>  drivers/pci/pcie/ptm.c | 34 +++++++++++++++++++++++++++-------
+>  1 file changed, 27 insertions(+), 7 deletions(-)
 >
-> diff --git a/fs/nilfs2/segment.c b/fs/nilfs2/segment.c
-> index 0afe0832c754..e95c667bdc8f 100644
-> --- a/fs/nilfs2/segment.c
-> +++ b/fs/nilfs2/segment.c
-> @@ -680,7 +680,7 @@ static size_t nilfs_lookup_dirty_data_buffers(struct inode *inode,
->                                               loff_t start, loff_t end)
->  {
->         struct address_space *mapping = inode->i_mapping;
-> -       struct pagevec pvec;
-> +       struct folio_batch fbatch;
->         pgoff_t index = 0, last = ULONG_MAX;
->         size_t ndirties = 0;
->         int i;
-> @@ -694,23 +694,26 @@ static size_t nilfs_lookup_dirty_data_buffers(struct inode *inode,
->                 index = start >> PAGE_SHIFT;
->                 last = end >> PAGE_SHIFT;
->         }
-> -       pagevec_init(&pvec);
-> +       folio_batch_init(&fbatch);
->   repeat:
->         if (unlikely(index > last) ||
-> -           !pagevec_lookup_range_tag(&pvec, mapping, &index, last,
-> -                               PAGECACHE_TAG_DIRTY))
-> +             !filemap_get_folios_tag(mapping, &index, last,
-> +                     PAGECACHE_TAG_DIRTY, &fbatch))
->                 return ndirties;
+> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
+> index b6a417247ce3..ad283818f37b 100644
+> --- a/drivers/pci/pcie/ptm.c
+> +++ b/drivers/pci/pcie/ptm.c
+> @@ -167,11 +167,11 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+>         if (!pos)
+>                 return -EINVAL;
 >
-> -       for (i = 0; i < pagevec_count(&pvec); i++) {
-> +       for (i = 0; i < folio_batch_count(&fbatch); i++) {
->                 struct buffer_head *bh, *head;
-> -               struct page *page = pvec.pages[i];
-> +               struct folio *folio = fbatch.folios[i];
->
-> -               lock_page(page);
-> -               if (!page_has_buffers(page))
-> -                       create_empty_buffers(page, i_blocksize(inode), 0);
-> -               unlock_page(page);
-
-> +               head = folio_buffers(folio);
-> +               folio_lock(folio);
-
-Could you please swap these two lines to keep the "head" check in the lock?
-
-Thanks,
-Ryusuke Konishi
-
-
-> +               if (!head) {
-> +                       create_empty_buffers(&folio->page, i_blocksize(inode), 0);
-> +                       head = folio_buffers(folio);
+> -       pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
+> -       if (!(cap & PCI_PTM_CAP_REQ))
+> -               return -EINVAL;
+> -
+>         /*
+> +        * Root Ports and Switch Upstream Ports have been configured
+> +        * by pci_ptm_init(), so preserve their PCI_PTM_CTRL_ROOT and
+> +        * granularity.
+> +        *
+>          * For a PCIe Endpoint, PTM is only useful if the endpoint can
+>          * issue PTM requests to upstream devices that have PTM enabled.
+>          *
+> @@ -179,19 +179,39 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+>          * device, so there must be some implementation-specific way to
+>          * associate the endpoint with a time source.
+>          */
+> -       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT) {
+> +       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
+> +           pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM) {
+> +               if (pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM) {
+> +                       ups = pci_upstream_bridge(dev);
+> +                       if (!ups || !ups->ptm_enabled)
+> +                               return -EINVAL;
 > +               }
-> +               folio_unlock(folio);
+> +
+> +               pci_read_config_dword(dev, pos + PCI_PTM_CTRL, &ctrl);
+> +               ctrl |= PCI_PTM_CTRL_ENABLE;
+> +       } else if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT) {
+> +               pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
+> +               if (!(cap & PCI_PTM_CAP_REQ))
+> +                       return -EINVAL;
+> +
+>                 ups = pci_upstream_bridge(dev);
+>                 if (!ups || !ups->ptm_enabled)
+>                         return -EINVAL;
 >
-> -               bh = head = page_buffers(page);
-> +               bh = head;
->                 do {
->                         if (!buffer_dirty(bh) || buffer_async_write(bh))
->                                 continue;
-> @@ -718,13 +721,13 @@ static size_t nilfs_lookup_dirty_data_buffers(struct inode *inode,
->                         list_add_tail(&bh->b_assoc_buffers, listp);
->                         ndirties++;
->                         if (unlikely(ndirties >= nlimit)) {
-> -                               pagevec_release(&pvec);
-> +                               folio_batch_release(&fbatch);
->                                 cond_resched();
->                                 return ndirties;
->                         }
->                 } while (bh = bh->b_this_page, bh != head);
->         }
-> -       pagevec_release(&pvec);
-> +       folio_batch_release(&fbatch);
->         cond_resched();
->         goto repeat;
->  }
+>                 dev->ptm_granularity = ups->ptm_granularity;
+> +               ctrl = PCI_PTM_CTRL_ENABLE;
+> +               ctrl |= dev->ptm_granularity << 8;
+>         } else if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_END) {
+> +               pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
+> +               if (!(cap & PCI_PTM_CAP_REQ))
+> +                       return -EINVAL;
+> +
+>                 dev->ptm_granularity = 0;
+> +               ctrl = PCI_PTM_CTRL_ENABLE;
+> +               ctrl |= dev->ptm_granularity << 8;
+>         } else
+>                 return -EINVAL;
+
+I would do
+
+if ((pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM || pci_pcie_type(dev)
+== PCI_EXP_TYPE_ENDPOINT)) {
+        ups = pci_upstream_bridge(dev);
+        if (!ups || !ups->ptm_enabled)
+                return -EINVAL;
+
+        dev->ptm_granularity = ups->ptm_granularity;
+}
+
+switch(pci_pcie_type(dev)) {
+case PCI_EXP_TYPE_ROOT_PORT:
+case PCI_EXP_TYPE_UPSTREAM:
+        pci_read_config_dword(dev, pos + PCI_PTM_CTRL, &ctrl);
+        ctrl |= PCI_PTM_CTRL_ENABLE;
+        break;
+case PCI_EXP_TYPE_ENDPOINT:
+case PCI_EXP_TYPE_RC_END:
+        ctrl = PCI_PTM_CTRL_ENABLE;
+        break;
+default:
+        return -EINVAL;
+}
+
+>
+> -       ctrl = PCI_PTM_CTRL_ENABLE;
+> -       ctrl |= dev->ptm_granularity << 8;
+
+And I wouldn't remove the line above.
+
+Note that for root ports dev->ptm_granularity must be set and reflect
+the register setting or else the code wouldn't have worked for
+downstream components.
+
+>         pci_write_config_dword(dev, pos + PCI_PTM_CTRL, ctrl);
+>         dev->ptm_enabled = 1;
+>
 > --
-> 2.36.1
->

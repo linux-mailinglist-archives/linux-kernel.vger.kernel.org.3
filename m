@@ -2,138 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D435ABD97
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 09:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328675ABD9B
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 09:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbiICHKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 03:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
+        id S232898AbiICHOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 03:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiICHK2 (ORCPT
+        with ESMTP id S231977AbiICHOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 03:10:28 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D11A5A146;
-        Sat,  3 Sep 2022 00:10:26 -0700 (PDT)
-Received: from [192.168.100.8] (unknown [112.20.110.237])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx72vY_RJjzl0QAA--.891S3;
-        Sat, 03 Sep 2022 15:10:17 +0800 (CST)
-Message-ID: <34c19e49-1752-9d8c-0766-2f55416c2f10@loongson.cn>
-Date:   Sat, 3 Sep 2022 15:10:10 +0800
+        Sat, 3 Sep 2022 03:14:32 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E122DF33;
+        Sat,  3 Sep 2022 00:14:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662189270; x=1693725270;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0VMaUf39Dl5/S2OcKDeWvPX+WLyOasn5kDclyX6/3Mo=;
+  b=jLqB61ue/kUkZIiussW/zZUfjoQ22vTu8es6jtSkBb+OnCArR58hx2OM
+   TpUhStvo0tD39SepGcQX8LXbNAP19oAKyJ+ZkKo8ETqCVXcekDAV7cDNO
+   /nFbYUgsbQPPBx9oi/a6p8a3HXepwbtS7qR5SmIJ9dg36/JUKrO3SJAmt
+   RrPntgMScVcbjWTuwA6ILesVtEWgsWUDX8K/b1/lEQBEyJOuJozUxYULg
+   WBVJtEZwh5wMaOweiNmze9/eA6QSKMkBfHziau/GAYvjAJXWBN34H/90n
+   5eYZwORtT4qqTYkKrQzG911roNOm6jeBk/br+O+UvdNNZ/4qsivh9bleM
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="276536234"
+X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
+   d="scan'208";a="276536234"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 00:14:30 -0700
+X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
+   d="scan'208";a="674642960"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.55.118])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 00:14:28 -0700
+Message-ID: <ca905aa0-9d7b-d6d8-c789-2bd22057619b@intel.com>
+Date:   Sat, 3 Sep 2022 10:14:25 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] Documentation/zh_CN: add latest kmap_local_page
- translation
-To:     Zhao Liu <zhao1.liu@linux.intel.com>, Alex Shi <alexs@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Wu XiangCheng <bobwxc@email.cn>,
-        Mike Rapoport <rppt@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-References: <20220902081304.2259706-1-zhao1.liu@linux.intel.com>
-From:   YanTeng Si <siyanteng@loongson.cn>
-In-Reply-To: <20220902081304.2259706-1-zhao1.liu@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: perf top -p broken for multithreaded processes since 5.19
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     =?UTF-8?B?VG9tw6HFoSBUcm5rYQ==?= <trnka@scm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <10137382.nUPlyArG6x@mintaka.ncbr.muni.cz>
+ <2fd9b620-e9a8-9cd9-1b4a-6b13d829b2ae@intel.com>
+ <YxJW19MwaMOb8D30@kernel.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <YxJW19MwaMOb8D30@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx72vY_RJjzl0QAA--.891S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF13Ww1ktF43KryDCw13XFb_yoWrAFyxpF
-        929ry2gw43A342v3ySg342v3WrJ3W7GF42kFW7JasrX398A39Yy3y7KF98X3Z7Z3s7CFWx
-        ArWUurn5Ar909wUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9mb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xK
-        xwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8CwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j0g4fUUUUU=
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/09/22 22:17, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Sep 02, 2022 at 05:50:22PM +0300, Adrian Hunter escreveu:
+>> On 2/09/22 17:46, Tomáš Trnka wrote:
+>>> Hello,
+>>>
+>>> A bug in perf v5.19 and newer completely breaks monitoring multithreaded
+>>> processes using "perf top -p". The tool fails to start with "Failed to mmap
+>>> with 22 (Invalid argument)". It still seems to work fine on single-threaded
+>>> processes. "perf record" is also unaffected.
+>>
+>> It has been reported here:
+>>
+>> 	https://bugzilla.kernel.org/show_bug.cgi?id=216441
+> 
+> If I do:
+> 
+> ⬢[acme@toolbox perf-urgent]$ git log -2
+> commit dfeb0bc60782471c293938e71b1a1117cfac2cb3 (HEAD -> perf/urgent)
+> Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Date:   Fri Sep 2 16:15:39 2022 -0300
+> 
+>     Revert "libperf evlist: Check nr_mmaps is correct"
+> 
+>     This reverts commit 4ce47d842d4c16c07b135b8a7975b8f0672bcc0e.
+> 
+>     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> 
+> commit 78cd283f6b8ab701cb35eafd5af8140560a88f16
+> Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Date:   Fri Sep 2 16:13:41 2022 -0300
+> 
+>     Revert "libperf evlist: Allow mixing per-thread and per-cpu mmaps"
+> 
+>     This reverts commit ae4f8ae16a07896403c90305d4b9be27f657c1fc.
+> 
+>     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> ⬢[acme@toolbox perf-urgent]$
+> 
+> It works again, Tomáš can you please try doing this to see if this works
+> for you?
+> 
 
-在 2022/9/2 16:13, Zhao Liu 写道:
-> From: Zhao Liu <zhao1.liu@intel.com>
->
-> Translate the lastest description of kmap_local_page into Chinese.
->
-> The translation is based on these commits:
->
-> commit 516ea046ec555 ("Documentation/mm: don't kmap*() pages which
-> can't come from HIGHMEM")
->
-> commit 6b3afe2eeec27 ("Documentation/mm: avoid invalid use of
-> addresses from kmap_local_page()")
->
-> commit 84b86f6054c42 ("Documentation/mm: rrefer kmap_local_page()
-> and avoid kmap()")
->
-> commit a9e9c93966afd ("Documentation/mm: add details about
-> kmap_local_page() and preemption")
->
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+This is the fix I have so far.  I would like to test it some more though.
 
-Acked-by: Yanteng Si <siyanteng@loongson.cn>
-> ---
-> Suggested by credits.
->          Ira: Referred to his task document.
->          Fabio: Referred to his work on the original English document.
->
-> ---
->   .../translations/zh_CN/mm/highmem.rst         | 20 ++++++++++++++++---
->   1 file changed, 17 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/translations/zh_CN/mm/highmem.rst b/Documentation/translations/zh_CN/mm/highmem.rst
-> index f74800a6d9a7..ac4c86ed74d8 100644
-> --- a/Documentation/translations/zh_CN/mm/highmem.rst
-> +++ b/Documentation/translations/zh_CN/mm/highmem.rst
-> @@ -58,14 +58,28 @@
->     在可行的情况下，这个函数应该比其他所有的函数优先使用。
->   
->     这些映射是线程本地和CPU本地的，这意味着映射只能从这个线程中访问，并且当映射处于活动状
-> -  态时，该线程与CPU绑定。即使线程被抢占了（因为抢占永远不会被函数禁用），CPU也不能通过
-> -  CPU-hotplug从系统中拔出，直到映射被处理掉。
-> +  态时，该线程与CPU绑定。即使抢占永远不会被这个函数禁用，CPU也不能通过CPU-hotplug从系
-> +  统中拔出，直到映射被处理掉。
->   
-> -  在本地的kmap区域中采取pagefaults是有效的，除非获取本地映射的上下文由于其他原因不允许
-> +  在本地的kmap区域中获取pagefaults是有效的，除非获取本地映射的上下文由于其他原因不允许
->     这样做。
->   
-> +  如前所述，pagefault和抢占永远不会被禁用。不需要禁用抢占，因为当上下文切换到不同的任务
-> +  时，传出任务的映射会被保存，而传入任务的映射会被恢复。
-> +
->     kmap_local_page()总是返回一个有效的虚拟地址，并且假定kunmap_local()不会失败。
->   
-> +  在CONFIG_HIGHMEM=n内核和低内存页面上，这将返回直接映射的虚拟地址。只有真正的高内存页
-> +  面会被临时映射。因此，用户可以为已知不是来自ZONE_HIGHMEM的页面调用普通的
-> +  page_address()，但是，使用kmap_local_page() / kunmap_local()总是安全的。
-> +
-> +  虽然它比kmap()快得多，但对于高内存情况，它带有指针有效性的限制。和kmap()映射相反，本地
-> +  映射仅在调用者的上下文中有效，并不能被交给其他的上下文。这意味着用户必须绝对确保返回的地址
-> +  仅在映射它的线程的本地使用。
-> +
-> +  大多数代码可以设计为使用线程本地映射。因此，用户应该尝试这样去设计他们的代码，在地址会被使
-> +  用的同一线程中映射页面来避免使用kmap()，并且更倾向于去使用kmap_local_page()。
-> +
->     嵌套kmap_local_page()和kmap_atomic()映射在一定程度上是允许的（最多到KMAP_TYPE_NR），
->     但是它们的调用必须严格排序，因为映射的实现是基于堆栈的。关于如何管理嵌套映射的细节，
->     请参见kmap_local_page() kdocs（包含在 "函数 "部分）。
+From: Adrian Hunter <adrian.hunter@intel.com>
+Date: Sat, 3 Sep 2022 10:05:08 +0300
+Subject: [PATCH] libperf evlist: Fix per-thread mmaps for multi-threaded
+ targets
+
+Offending commit did not consider the different set-output rules for
+per-thread mmaps i.e. in the per-thread case set-output is used for
+mmaps of the same thread not the same cpu.
+
+This was not immediately noticed because it only happens with
+multi-threaded targets and we do not have a test for that yet.
+
+Fixes: ae4f8ae16a07 ("libperf evlist: Allow mixing per-thread and per-cpu mmaps")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+ tools/lib/perf/evlist.c | 49 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+
+diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+index e6c98a6e3908e..24280c887520c 100644
+--- a/tools/lib/perf/evlist.c
++++ b/tools/lib/perf/evlist.c
+@@ -486,6 +486,7 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
+ 			if (ops->idx)
+ 				ops->idx(evlist, evsel, mp, idx);
+ 
++			pr_debug("idx %d: mmapping fd %d\n", idx, *output);
+ 			if (ops->mmap(map, mp, *output, evlist_cpu) < 0)
+ 				return -1;
+ 
+@@ -494,6 +495,7 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
+ 			if (!idx)
+ 				perf_evlist__set_mmap_first(evlist, map, overwrite);
+ 		} else {
++			pr_debug("idx %d: set output fd %d -> %d\n", idx, fd, *output);
+ 			if (ioctl(fd, PERF_EVENT_IOC_SET_OUTPUT, *output) != 0)
+ 				return -1;
+ 
+@@ -519,6 +521,47 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
+ 	return 0;
+ }
+ 
++static int
++mmap_per_thread(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
++		struct perf_mmap_param *mp)
++{
++	int nr_threads = perf_thread_map__nr(evlist->threads);
++	int nr_cpus    = perf_cpu_map__nr(evlist->all_cpus);
++	int cpu, thread, idx = 0;
++	int nr_mmaps = 0;
++
++	pr_debug("%s: nr cpu values (may include -1) %d nr threads %d\n", __func__, nr_cpus, nr_threads);
++
++	/* per-thread mmaps */
++	for (thread = 0; thread < nr_threads; thread++, idx++) {
++		int output = -1;
++		int output_overwrite = -1;
++
++		if (mmap_per_evsel(evlist, ops, idx, mp, 0, thread, &output,
++				   &output_overwrite, &nr_mmaps))
++			goto out_unmap;
++	}
++
++	/* system-wide mmaps i.e. per-cpu */
++	for (cpu = 1; cpu < nr_cpus; cpu++, idx ++) {
++		int output = -1;
++		int output_overwrite = -1;
++
++		if (mmap_per_evsel(evlist, ops, idx, mp, cpu, 0, &output,
++				   &output_overwrite, &nr_mmaps))
++			goto out_unmap;
++	}
++
++	if (nr_mmaps != evlist->nr_mmaps)
++		pr_err("Miscounted nr_mmaps %d vs %d\n", nr_mmaps, evlist->nr_mmaps);
++
++	return 0;
++
++out_unmap:
++	perf_evlist__munmap(evlist);
++	return -1;
++}
++
+ static int
+ mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
+ 	     struct perf_mmap_param *mp)
+@@ -528,6 +571,8 @@ mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
+ 	int nr_mmaps = 0;
+ 	int cpu, thread;
+ 
++	pr_debug("%s: nr cpu values %d nr threads %d\n", __func__, nr_cpus, nr_threads);
++
+ 	for (cpu = 0; cpu < nr_cpus; cpu++) {
+ 		int output = -1;
+ 		int output_overwrite = -1;
+@@ -569,6 +614,7 @@ int perf_evlist__mmap_ops(struct perf_evlist *evlist,
+ 			  struct perf_evlist_mmap_ops *ops,
+ 			  struct perf_mmap_param *mp)
+ {
++	const struct perf_cpu_map *cpus = evlist->all_cpus;
+ 	struct perf_evsel *evsel;
+ 
+ 	if (!ops || !ops->get || !ops->mmap)
+@@ -588,6 +634,9 @@ int perf_evlist__mmap_ops(struct perf_evlist *evlist,
+ 	if (evlist->pollfd.entries == NULL && perf_evlist__alloc_pollfd(evlist) < 0)
+ 		return -ENOMEM;
+ 
++	if (perf_cpu_map__empty(cpus))
++		return mmap_per_thread(evlist, ops, mp);
++
+ 	return mmap_per_cpu(evlist, ops, mp);
+ }
+ 
+-- 
+2.34.1
+
+
 

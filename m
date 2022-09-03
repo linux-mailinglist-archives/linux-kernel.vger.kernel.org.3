@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B3B5ABBA5
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719715ABBAC
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiICAZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 20:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
+        id S231905AbiICAZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 20:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbiICAYd (ORCPT
+        with ESMTP id S231879AbiICAY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 20:24:33 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16881114ED
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 17:23:53 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id i6-20020a259786000000b0069648392979so2772590ybo.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 17:23:53 -0700 (PDT)
+        Fri, 2 Sep 2022 20:24:28 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578D310F0A8
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 17:23:59 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id gg12-20020a17090b0a0c00b001fbc6ba91bbso1683452pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 17:23:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date;
-        bh=LdiXi7ZmRYWfAPERNLf/gz/Xml73VY2Moq9FlK1+JBc=;
-        b=gVjWhAQcAI+bfNHz4uTVmIx3nAkEmZPbWE9B7vVyZy+8Tjn5vubmdisoN87VgqcXAU
-         J/ZZFScLpXNbdE9gcLCv4qVgU4wyDTfEQR0rRpYqI4ySU1BJlDWuiEJdpHJQghuT7nC1
-         78zCwkkBSnLluOvdD24yDgEGPzjYTqVqZgL8nNUfcpPKtKD2NuIfJXXHV3Q99qZgkfQA
-         4AezuVeI6wEX9TexV0/N1o2EOwN9niYMB/rhYN9wZ00jYw3zkePsVEjvy5MrFeJG+pqV
-         jTqlCJmphQU3DmJtdw983qzAhF39W+UclFY53a9GNg2fN/6uHQ1AhN+TGVAg/DAKHtpt
-         iN1Q==
+        bh=yq8rKHnlAx/4DWABYX1mFX9uFU/+PCTlIPB312439UQ=;
+        b=TKFhg3LAJMrV16A/4dAGF27lXzJUSFetR+f3A80VfApjg2+P9tJXoDm6Z4U9IUeY30
+         8jYY5yBOQWSFVC4BZ8MG9yoVBTSaBi7zNiArYlzrQLsEVTNjAzJVGoZr1Jl4sRa/1U/9
+         +VTq3+oQ/it6ZH+V3BCoPWC+XRGMG2N7F7hTW+vz6yq0GaP5GcqC+Io0VDVELUt/ntC7
+         MFlXLZEQpFQuO1akDGR9LdSbdY/5kt4hqBh6wmak0PO0cNrqVz1wyIsuPlvI7rwQX8oF
+         KNf3vHYei0aZVGJgxZer2NGpWwoFt4lToHld1QfOSsl48RHmZpkn5Ho8BnKridvsT9d5
+         zxHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=LdiXi7ZmRYWfAPERNLf/gz/Xml73VY2Moq9FlK1+JBc=;
-        b=3l35PwZVYwjd5x9obE48IeA0pDkPRKJHAySwqtak5VlktAy817em6SJzG4j50jLBDY
-         b7cCdTVBg1AVM8Ry3N+klNtZGc8abn4l6AgSOYNamhsYwcxU8a7iV06KWNCmwmhr8eSH
-         G8FbtfseBnQXlsMSWWmqePmBVc3CR+H9k31VPfNaeEtd0hqvvZ5Az7BZ/cHadWEgF1TA
-         UsutB3UEW9wbdjFTxiOcfCT+rT/i4ix1IQ1F8UIGdbTSr3pokrQE6ujzJJ4JmzBAgyOg
-         i8WFx4hTfLHARLaW7DjYQt3l3CKLCRyIGP7yPINOUdYSrLGOi1VssJgQKCZa4qMMO1L/
-         rb5A==
-X-Gm-Message-State: ACgBeo3/wguvV0gfz0jx6mvv5PitT2iiw6EKaoHluJwoj7HphGDLi3GA
-        hv/oXaVatmJ8Yw8fYkiC/M26confPTE=
-X-Google-Smtp-Source: AA6agR4Wlh7daQ+R0dhwpkQy+xCElmTBe/vKQcUjkr8uz9o2uhmDKQhgDfFFicXMqktQ8vLCwNZ3KrpAEPE=
+        bh=yq8rKHnlAx/4DWABYX1mFX9uFU/+PCTlIPB312439UQ=;
+        b=wuaiNFkBRyeYLaN8DId+CST/qaHbLDySE/05mW39KhCHqXNLtafNv41RcjTNg0lFyb
+         OwJkaJEiRmv5qJRMn24pj604Fu5eQ0GiUIqbYPq0ZUMVzKMkfOguI2wUsRast8yhRRjI
+         Dz2wFEz8jdFCO7cvAmW1YdJ0ViLvgD7KTGk2AAgcZ4ST1UPCsUYQJAYSNa51o8vQ8Jeb
+         BVR3u5HSOic19oUW4X9LIyj0WN0ZO1kf0bUZqyxvNSIetGMyVY/weMLko0wlSrb6ze+x
+         HwjafM/iZidgnvJORBqaLCWn3M3Z1H+zho6mEala/qFIaMMVy2dv7eUM8phSc7sqZVFI
+         V9oA==
+X-Gm-Message-State: ACgBeo3cDq5ASH3nxv5NNdwhJloGj4u6mWUQLXUr779mI1+OZkLDbObk
+        z4sZ/q2GYGN48lq83QFxMJLByUR4tOU=
+X-Google-Smtp-Source: AA6agR4Bc9TlcFnkBSJ7Ifwme04Amv5NR4xxJxrKUpqAqHbGDTd3OghEmb9cnpUzT3+MkQMR6v4nBPcxnmk=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a0d:df92:0:b0:340:b90d:fb75 with SMTP id
- i140-20020a0ddf92000000b00340b90dfb75mr28814158ywe.149.1662164616127; Fri, 02
- Sep 2022 17:23:36 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:150e:b0:537:e2f5:dc87 with SMTP id
+ q14-20020a056a00150e00b00537e2f5dc87mr34332719pfu.44.1662164617809; Fri, 02
+ Sep 2022 17:23:37 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  3 Sep 2022 00:22:53 +0000
+Date:   Sat,  3 Sep 2022 00:22:54 +0000
 In-Reply-To: <20220903002254.2411750-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220903002254.2411750-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220903002254.2411750-23-seanjc@google.com>
-Subject: [PATCH v2 22/23] KVM: SVM: Ignore writes to Remote Read Data on AVIC
- write traps
+Message-ID: <20220903002254.2411750-24-seanjc@google.com>
+Subject: [PATCH v2 23/23] Revert "KVM: SVM: Do not throw warning when calling
+ avic_vcpu_load on a running vcpu"
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -66,40 +66,41 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop writes to APIC_RRR, a.k.a. Remote Read Data Register, on AVIC
-unaccelerated write traps.  The register is read-only and isn't emulated
-by KVM.  Sending the register through kvm_apic_write_nodecode() will
-result in screaming when x2APIC is enabled due to the unexpected failure
-to retrieve the MSR (KVM expects that only "legal" accesses will trap).
+Turns out that some warnings exist for good reasons.  Restore the warning
+in avic_vcpu_load() that guards against calling avic_vcpu_load() on a
+running vCPU now that KVM avoids doing so when switching between x2APIC
+and xAPIC.  The entire point of the WARN is to highlight that KVM should
+not be reloading an AVIC.
 
-Fixes: 4d1d7942e36a ("KVM: SVM: Introduce logic to (de)activate x2AVIC mode")
+Opportunistically convert the WARN_ON() to WARN_ON_ONCE() to avoid
+spamming the kernel if it does fire.
+
+This reverts commit c0caeee65af3944b7b8abbf566e7cc1fae15c775.
+
 Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/kvm/svm/avic.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/kvm/svm/avic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 39b367a14a8c..17c78051f3ea 100644
+index 17c78051f3ea..a13279205df3 100644
 --- a/arch/x86/kvm/svm/avic.c
 +++ b/arch/x86/kvm/svm/avic.c
-@@ -658,6 +658,9 @@ static int avic_unaccel_trap_write(struct kvm_vcpu *vcpu)
- 	case APIC_DFR:
- 		avic_handle_dfr_update(vcpu);
- 		break;
-+	case APIC_RRR:
-+		/* Ignore writes to Read Remote Data, it's read-only. */
-+		return 1;
- 	default:
- 		break;
- 	}
+@@ -1064,6 +1064,7 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+ 		return;
+ 
+ 	entry = READ_ONCE(*(svm->avic_physical_id_cache));
++	WARN_ON_ONCE(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
+ 
+ 	entry &= ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK;
+ 	entry |= (h_physical_id & AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK);
 -- 
 2.37.2.789.g6183377224-goog
 

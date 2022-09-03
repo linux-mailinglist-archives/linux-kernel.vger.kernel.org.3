@@ -2,76 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31ED5ABC1F
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9715ABC23
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbiICBk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 21:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S231361AbiICBmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 21:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiICBk4 (ORCPT
+        with ESMTP id S229609AbiICBmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 21:40:56 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4186610F;
-        Fri,  2 Sep 2022 18:40:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 2 Sep 2022 21:42:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD7A883D6;
+        Fri,  2 Sep 2022 18:42:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5A5D85CDDD;
-        Sat,  3 Sep 2022 01:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662169253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kOtyw6vlWTD4GBfJ46VsGKoxC3DDcJeFHhSL1DQkmvE=;
-        b=LpKIfTv5HEWEL+Ymq+LnYUN+RHHdZOKMb+wRoNTH7fIDHsYpsokuiiZ+8xRS6DdG+pEBWL
-        ylvZ6uaPMDc5dBgyKy9VbUcANvR3HnSDvf5y42BEI1GilGyPIL9BRubjGHRlojBbbRxQ15
-        PraZODD7+kzIKFuKSkBqbqruQ4O7yX4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662169253;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kOtyw6vlWTD4GBfJ46VsGKoxC3DDcJeFHhSL1DQkmvE=;
-        b=Z05dagcxqNBT2NgVh8n/tcwXlyfV7BzxSHQAmeuh1SCir53yg0eiDCUb17ln+pEO/QmMTu
-        28CdkNY1PMuuuwBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C4F88133A7;
-        Sat,  3 Sep 2022 01:40:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kLNgH6KwEmOBeAAAMHmgww
-        (envelope-from <neilb@suse.de>); Sat, 03 Sep 2022 01:40:50 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id E22F8B82D27;
+        Sat,  3 Sep 2022 01:42:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2598AC433D6;
+        Sat,  3 Sep 2022 01:42:40 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch: Fix section mismatch due to acpi_os_ioremap()
+Date:   Sat,  3 Sep 2022 09:42:07 +0800
+Message-Id: <20220903014207.2312965-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Al Viro" <viro@zeniv.linux.org.uk>
-Cc:     "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Daire Byrne" <daire@dneg.com>,
-        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Chuck Lever" <chuck.lever@oracle.com>,
-        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        "LKML" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/10] VFS: support parallel updates in the one directory.
-In-reply-to: <YxKaaN9cHD5yzlTr@ZenIV>
-References: <166147828344.25420.13834885828450967910.stgit@noble.brown>,
- <166147984370.25420.13019217727422217511.stgit@noble.brown>,
- <YwmS63X3Sm4bhlcT@ZenIV>,
- <166173834258.27490.151597372187103012@noble.neil.brown.name>,
- <YxKaaN9cHD5yzlTr@ZenIV>
-Date:   Sat, 03 Sep 2022 11:40:44 +1000
-Message-id: <166216924401.28768.5809376269835339554@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,45 +44,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 03 Sep 2022, Al Viro wrote:
-> On Mon, Aug 29, 2022 at 11:59:02AM +1000, NeilBrown wrote:
-> 
-> > > When would we get out of __lookup_hash() with in-lookup dentry?
-> > > Confused...
-> > 
-> > Whenever wq is passed in and ->lookup() decides, based on the flags, to do
-> > nothing.
-> > NFS does this for LOOKUP_CREATE|LOOKUP_EXCL and for LOOKUP_RENAME_TARGET
-> 
-> Frankly, I would rather do what all other callers of ->lookup() do and
-> just follow it with d_lookup_done(dentry), no matter what it returns.
-> It's cheap enough...
-> 
+Now acpi_os_ioremap() is marked with __init because it calls memblock_
+is_memory() which is also marked with __init in the !ARCH_KEEP_MEMBLOCK
+case. However, acpi_os_ioremap() is called by ordinary functions such
+as acpi_os_{read, write}_memory() and causes section mismatch warnings:
 
-I don't think that is a good idea.  Once you call d_lookup_done()
-(without having first called d_add() or similar) the dentry becomes
-invisible to normal path lookup, so another might be created.  But the
-dentry will still be used for the 'create' or 'rename' and may then be
-added to the dcache - at which point you could have two dentries with the
-same name.
+WARNING: modpost: vmlinux.o: section mismatch in reference: acpi_os_read_memory (section: .text) -> acpi_os_ioremap (section: .init.text)
+WARNING: modpost: vmlinux.o: section mismatch in reference: acpi_os_write_memory (section: .text) -> acpi_os_ioremap (section: .init.text)
 
-When ->lookup() returns success without d_add()ing the dentry, that
-means that something else will complete the d_add() if/when necessary.
-For NFS, it specifically means that the lookup is effectively being
-combined with the following CREATE or RENAME.  In this case there is no
-d_lookup_done() until the full operation is complete.
+Fix these warnings by selecting ARCH_KEEP_MEMBLOCK unconditionally and
+removing the __init modifier of acpi_os_ioremap(). This can also give a
+chance to track "memory" and "reserved" memblocks after early boot.
 
-For autofs (thanks for pointing me to that) the operation is completed
-when d_automount() signals the daemon to create the directory or
-symlink.  In that case there IS a d_lookup_done() call and autofs needs
-some extra magic (the internal 'active' list) to make sure subsequent
-->lookup requests can see that dentry which is still in the process of
-being set up.
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/Kconfig            | 1 +
+ arch/loongarch/include/asm/acpi.h | 2 +-
+ arch/loongarch/kernel/acpi.c      | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-It might be nice if the dentry passed to autofs_lookup() could remain
-"d_inlookup()" until after d_automount has completed.  Then autofs
-wouldn't need that active list.  However I haven't yet looked at how
-disruptive such a change might be.
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 3bc5b911ae1a..c7dd6ad779af 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -39,6 +39,7 @@ config LOONGARCH
+ 	select ARCH_INLINE_SPIN_UNLOCK_BH if !PREEMPTION
+ 	select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
+ 	select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
++	select ARCH_KEEP_MEMBLOCK
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+ 	select ARCH_MIGHT_HAVE_PC_SERIO
+ 	select ARCH_SPARSEMEM_ENABLE
+diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
+index c5108213876c..17162f494b9b 100644
+--- a/arch/loongarch/include/asm/acpi.h
++++ b/arch/loongarch/include/asm/acpi.h
+@@ -15,7 +15,7 @@ extern int acpi_pci_disabled;
+ extern int acpi_noirq;
+ 
+ #define acpi_os_ioremap acpi_os_ioremap
+-void __init __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
++void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
+ 
+ static inline void disable_acpi(void)
+ {
+diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
+index f1c928648a4a..335398482038 100644
+--- a/arch/loongarch/kernel/acpi.c
++++ b/arch/loongarch/kernel/acpi.c
+@@ -48,7 +48,7 @@ void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
+ 	early_memunmap(map, size);
+ }
+ 
+-void __init __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
++void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+ {
+ 	if (!memblock_is_memory(phys))
+ 		return ioremap(phys, size);
+-- 
+2.31.1
 
-Thanks,
-NeilBrown

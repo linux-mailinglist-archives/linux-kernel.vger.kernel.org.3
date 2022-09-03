@@ -2,107 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066A45AC10D
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 21:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E38785AC111
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 21:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbiICTIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 15:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
+        id S233112AbiICTLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 15:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiICTIe (ORCPT
+        with ESMTP id S229698AbiICTLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 15:08:34 -0400
-X-Greylist: delayed 557 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Sep 2022 12:08:33 PDT
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BBF57E3B;
-        Sat,  3 Sep 2022 12:08:33 -0700 (PDT)
-Date:   Sat, 03 Sep 2022 19:08:20 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1662232111; x=1662491311;
-        bh=iURgxyu9ob4++N5UHicPVjw94qeA3C2soRlfY+K5wPk=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=Pb53YiaSOfwtRJGfhelyHt4rQRkpIUiz7lx95feravHcOKKH/bEGOwGzxy7W1M3vM
-         yXMBaRnECFnSHhvr4BKFur1qgkEriYm/k5Dc1DYumrETedoU6HoszP2N9e5SjN+NIU
-         Kcl7WG+XexCMMHllIcNkvccN9m48rlHwdzrCgbd0=
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [PATCH v2 6/9] dt-bindings: arm: qcom: Add compatible for oneplus,billie2 phone
-Message-ID: <180096cd-9205-96b8-b6c4-a2a900166ceb@connolly.tech>
-In-Reply-To: <20220903174150.3566935-7-iskren.chernev@gmail.com>
-References: <20220903174150.3566935-1-iskren.chernev@gmail.com> <20220903174150.3566935-7-iskren.chernev@gmail.com>
-Feedback-ID: 10753939:user:proton
+        Sat, 3 Sep 2022 15:11:11 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943F159278;
+        Sat,  3 Sep 2022 12:11:10 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id c4so4176032iof.3;
+        Sat, 03 Sep 2022 12:11:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Mbyw/mu0jAIVQROaKkVGCnmmrU+pXQz7nTijzFBftWo=;
+        b=RaZ3n9mWytjtDX0egW+ngxgH8Wf329+qiS4fGPVW4zS7OF31vEn7sWrE3Uoiw4NaU5
+         OdrZUtk8ayr+zbaR6mnVkxCBdLYSYWakXP+kYtpis22ihHep13HpJQG9/Pbyv/OokFip
+         hdBxZb/mmlDyQoEo0gUPt+XjlWasQhDlzpoJyFKh8ql/tDMYKwoDeJMTOwR53gKWjZPR
+         tf6UDyumdI5XLSw57ikgYjB5kTj5rdAiJxR+q58b3AJB+q+vEEqZR8o1loZRqVKQClT5
+         0e9t5apyXwCIfFfQX+bWSAhST6qP7jLAA4RBVlVDKVfzk2dpZ1JnGKIcY4+JihTk7b46
+         kBoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Mbyw/mu0jAIVQROaKkVGCnmmrU+pXQz7nTijzFBftWo=;
+        b=cafaRNT5ajPf0lNQz2HtqT5XequfL9ssy1flKzPGwE69IaBj7oiHcpIwML0mz83i/z
+         JIwxgozTxfXjK6qzO+2wfvYSG4T+KR+baGQVyd75yJwRVNStfZ28Aq8P7iUMjvO+odXz
+         eU5HJpzmYmoiS+hywPQz/5vDqdFL1ePct02rdUfPJde62qcHg5UmeQoGJpuP5ZnfdwgT
+         ZS5H0I+ZCtnCcRY+gE4gZPuMAaJE5HBB3tK2YEYzkZ8s6Dh1AJSKd9AP4nyEgette1x2
+         IcrSRc+Aiddfb6rNwekZaHVmub7zXYX2/bf6mLd2f58fXi3XzAq4d69839dxk6cmpJRr
+         A8bw==
+X-Gm-Message-State: ACgBeo2457uOQlagKlmdPaTXz4he/PNM3A4nsPTeQrexf5bhnDlBz0qJ
+        myDpFHK7hMQ3TEoWOtoBIq0+kEat73TcAVF1ZJgxPUhzFhw=
+X-Google-Smtp-Source: AA6agR6X5Z375QTRfJMD4VpBbtZW/vPEcOsnzOy7Bi4b301xYoD27Gzo7ZeUXt1cn4RKtYPtS1Q7gmw0NY+vHlWWFN0=
+X-Received: by 2002:a02:3f63:0:b0:349:cef9:d8c2 with SMTP id
+ c35-20020a023f63000000b00349cef9d8c2mr22836615jaf.231.1662232269958; Sat, 03
+ Sep 2022 12:11:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <YxOjRm5xqL68JVnt@playground>
+In-Reply-To: <YxOjRm5xqL68JVnt@playground>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Sat, 3 Sep 2022 21:10:31 +0200
+Message-ID: <CAP01T750UfvnrS7pc6t5_z6P8xH6iPh_66X_fsAgidBqwsbdXQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] bpf: Fix warning of Using plain integer as NULL pointer
+To:     Jules Irenge <jbi.octave@gmail.com>
+Cc:     ast@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
+        daniel@iogearbox.net, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 03/09/2022 18:41, Iskren Chernev wrote:
-> oneplus,billie2 (OnePlus Nord N100) is based on QualComm Snapdragon
-> SM4250 SoC.
+On Sat, 3 Sept 2022 at 20:59, Jules Irenge <jbi.octave@gmail.com> wrote:
 >
-> Add support for the same in dt-bindings.
+> This patch fixes a warning generated by Sparse
 >
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Caleb Connolly <caleb@connolly.tech>
+> "Using plain integer as NULL pointer"
+>
+> by replacing the offending 0 by NULL.
+>
+> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
 > ---
->   Documentation/devicetree/bindings/arm/qcom.yaml | 7 +++++++
->   1 file changed, 7 insertions(+)
+>  kernel/bpf/syscall.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentat=
-ion/devicetree/bindings/arm/qcom.yaml
-> index 19c2f4314741..63cc41cd0119 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -54,6 +54,8 @@ description: |
->           sdm845
->           sdx55
->           sdx65
-> +        sm4250
-> +        sm6115
->           sm6125
->           sm6350
->           sm7225
-> @@ -670,6 +672,11 @@ properties:
->                 - xiaomi,polaris
->             - const: qcom,sdm845
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 27760627370d..427b7e3829e0 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -598,7 +598,7 @@ void bpf_map_free_kptrs(struct bpf_map *map, void *map_value)
+>                 if (off_desc->type == BPF_KPTR_UNREF) {
+>                         u64 *p = (u64 *)btf_id_ptr;
 >
-> +      - items:
-> +          - enum:
-> +              - oneplus,billie2
-> +          - const: qcom,sm4250
-> +
->         - items:
->             - enum:
->                 - sony,pdx201
-> --
-> 2.37.2
->
+> -                       WRITE_ONCE(p, 0);
+> +                       WRITE_ONCE(p, NULL);
 
---
-Kind Regards,
-Caleb
+Uff, this should have been WRITE_ONCE(*p, 0) instead. Mea Culpa.
+Can you make that fix? It's not a big problem since it's just that the
+pointer won't be cleared on map value delete (and there is nothing to
+reclaim for the unref case when map is freed), so you can target
+bpf-next with a Fixes tag.
 
+So in your patch you will need [PATCH bpf-next] in the subject and the
+fixes tag would be:
+Fixes: 14a324f6a67e ("bpf: Wire up freeing of referenced kptr")

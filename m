@@ -2,57 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8785F5ABC49
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 04:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804105ABC5C
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 04:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiICCR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 22:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S231240AbiICChp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 22:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiICCRZ (ORCPT
+        with ESMTP id S229538AbiICChn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 22:17:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F166E01F5;
-        Fri,  2 Sep 2022 19:17:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB1D3B82D0E;
-        Sat,  3 Sep 2022 02:17:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3071C433D6;
-        Sat,  3 Sep 2022 02:17:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662171441;
-        bh=eioRvOtIHJKvIPDEtWmHeI3UQjUk/+sTTkBT+LYyiFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kSJAbsR9gPX6GlfA+hpa7+Eo8ghjuUjJU/RoNjAUt5zjW/NTFJzFAHIzvHH+TQv+V
-         ErPSN/Tx4xYcum2g4HxsMC3/KF4bn/y40gMevIM6k29fGfFqiH6XHdQ8oVIOU2O4Y/
-         Dru/wF/Go1dIXBzURbTjqL0I9dl5sdwmfzjq9WN2WE9f02j1hul0wVYTwXbHXKRYwC
-         FQWiwxmHdOtjzcJzEy3tRqeyt9AZXwXhszoxj+47XUgcjWJUQ0uLrpxfROPuXDPip5
-         OPcJWvjk/r3o0z3AYCivJAI+H3HpI8GUQwNEcjXO2+6y5FgXNTusaOCuEMrvAjGzxr
-         HhJ7IvC6oEeNA==
-Date:   Sat, 3 Sep 2022 10:17:14 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        m.felsch@pengutronix.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V5 0/8] imx: add i.MX8MP hdmi blk ctrl hdcp/hrv and vpu
- blk ctrl
-Message-ID: <20220903021714.GC1728671@dragon>
-References: <20220822064536.3947512-1-peng.fan@oss.nxp.com>
+        Fri, 2 Sep 2022 22:37:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FC4E97C6;
+        Fri,  2 Sep 2022 19:37:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662172662; x=1693708662;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=uZjszkbsmhce7t/ileXAuZqNCiVsozNNHJWKPtgsoeY=;
+  b=dCbHuhnO+nO5CbfjlxMNU3xgVKh9pgpQQNSLU7Irj/FncX6JIjWKGOpx
+   2+IwxFHkx8l0L9xw9dgenPUu3hL7B8RPk8v4YyzWjaCNU146hjeQTAb9/
+   rxcGg3h/uRQZ8j7iB4Vyo28/AzN9yQdWM2kZKa4nDm5B0A0aPs4PvjYne
+   /UDPUzKg/rA9FMQRGqkLHvsyrPLal/lai+JzyvEF5jRREp9e6jDLmmLWA
+   VDqzG8i4j0PD6ToYLX0l4ny3qrwMMiXQrCyheua+Z6BLckm2ibxpSv0xu
+   U+Gq7sWWyq6coEXNeibqfULdOjruqAoi0ObvO89Jk5evurGVxSYthy1iW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="360080006"
+X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
+   d="scan'208";a="360080006"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 19:37:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
+   d="scan'208";a="609165471"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 02 Sep 2022 19:37:40 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUJ2R-0000uT-1B;
+        Sat, 03 Sep 2022 02:37:39 +0000
+Date:   Sat, 3 Sep 2022 10:36:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Peter Zijlstra <peterz@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kbuild: use objtool-args-y to clean up objtool arguments
+Message-ID: <202209031000.bJCDq6zH-lkp@intel.com>
+References: <20220902130846.654526-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822064536.3947512-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220902130846.654526-1-masahiroy@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,44 +69,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 02:45:28PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> V5:
->  Add R-b for dt-bindings
->  Tune order of vpu blk ctrl node per unit address
->  Update commit log of patch 5.
->    - Per HRV, this should be detailed explained in HDMI HRV driver, so here
->    I only say HRV_MWR(HDMI RX Video Memory Write Master for RX validation).
-> 
-> V4:
->  Add R-b for patch 2
->  Add a new patch 3 to introduce interconnect property for i.MX8MM VPU blk ctrl,
->  same to other properties, i.MX8MM/P could use their own names in patch 4
-> 
-> V3:
->  Per DT maitainer, add a new patch to clean up minItems, see patch 2
-> 
-> V2:
->  - Add A-b from DT maintainer for patch 1
->  - Per DT maintainer, I added description for items. To
->  make it consistent, I also added description to i.MX8MM.
->  - Per Adam, change VPU H1/h1 to VC8000E/vc8000e in the patchset.
-> 
-> This patchset is to add more blk ctrl support for i.MX8MP
->  - Add HDMI HDCP/HRV BLK CTRL support
->  - Add VPU BLK CTRL support
->  - Add PGC VPU node which supplies power domain for VPU BLK
-> 
-> Peng Fan (8):
->   dt-bindings: power: imx8mp-power: add HDMI HDCP/HRV
->   dt-bindings: soc: imx: drop minItems for i.MX8MM vpu blk ctrl
->   dt-bindings: soc: imx: add interconnect property for i.MX8MM vpu blk
->     ctrl
->   dt-bindings: soc: imx: add i.MX8MP vpu blk ctrl
->   soc: imx: add i.MX8MP HDMI blk ctrl HDCP/HRV_MWR
->   soc: imx: imx8m-blk-ctrl: add i.MX8MP VPU blk ctrl
->   arm64: dts: imx8mp: add vpu pgc nodes
->   arm64: dts: imx8mp: add VPU blk ctrl node
+Hi Masahiro,
 
-Applied all, thanks!
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on masahiroy-kbuild/for-next]
+[also build test ERROR on linux/master linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/kbui=
+ld-use-objtool-args-y-to-clean-up-objtool-arguments/20220902-221441
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbu=
+ild.git for-next
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/202=
+20903/202209031000.bJCDq6zH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=3D1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/9cb92b4715f74a8869c=
+a8ec50a8dcdc4fb5b384e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Masahiro-Yamada/kbuild-use-objtool=
+-args-y-to-clean-up-objtool-arguments/20220902-221441
+        git checkout 9cb92b4715f74a8869ca8ec50a8dcdc4fb5b384e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> /bin/bash: -c: line 1: syntax error near unexpected token `)'
+   /bin/bash: -c: line 1: `set -e;  echo '  LD      vmlinux.o';  ld -m elf_=
+x86_64 -z noexecstack --no-warn-rwx-segments -r -o vmlinux.o  --whole-archi=
+ve arch/x86/kernel/head_64.o arch/x86/kernel/head64.o arch/x86/kernel/ebda.=
+o arch/x86/kernel/platform-quirks.o init/built-in.a usr/built-in.a arch/x86=
+/built-in.a kernel/built-in.a certs/built-in.a mm/built-in.a fs/built-in.a =
+ipc/built-in.a security/built-in.a crypto/built-in.a io_uring/built-in.a li=
+b/built-in.a arch/x86/lib/built-in.a  lib/lib.a  arch/x86/lib/lib.a drivers=
+/built-in.a sound/built-in.a net/built-in.a virt/built-in.a arch/x86/pci/bu=
+ilt-in.a arch/x86/power/built-in.a arch/x86/video/built-in.a --no-whole-arc=
+hive --start-group  --end-group  ; ./tools/objtool/objtool --hacks=3Djump_l=
+abel --hacks=3Dnoinstr --orc --static-call --uaccess --no-unreachable --no-=
+unreachable --noinstr ) --link vmlinux.o; printf '%s\n' 'cmd_vmlinux.o :=3D=
+ ld -m elf_x86_64 -z noexecstack --no-warn-rwx-segments -r -o vmlinux.o  --=
+whole-archive arch/x86/kernel/head_64.o arch/x86/kernel/head64.o arch/x86/k=
+ernel/ebda.o arch/x86/kernel/platform-quirks.o init/built-in.a usr/built-in=
+=2Ea arch/x86/built-in.a kernel/built-in.a certs/built-in.a mm/built-in.a f=
+s/built-in.a ipc/built-in.a security/built-in.a crypto/built-in.a io_uring/=
+built-in.a lib/built-in.a arch/x86/lib/built-in.a  lib/lib.a  arch/x86/lib/=
+lib.a drivers/built-in.a sound/built-in.a net/built-in.a virt/built-in.a ar=
+ch/x86/pci/built-in.a arch/x86/power/built-in.a arch/x86/video/built-in.a -=
+-no-whole-archive --start-group  --end-group  ; ./tools/objtool/objtool --h=
+acks=3Djump_label --hacks=3Dnoinstr --orc --static-call --uaccess --no-unre=
+achable --no-unreachable --noinstr ) --link vmlinux.o' > ./.vmlinux.o.cmd'
+
+--=20
+0-DAY CI Kernel Test Service
+https://01.org/lkp

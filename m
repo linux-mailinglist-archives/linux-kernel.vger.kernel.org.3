@@ -2,71 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E947A5AC0E1
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2555AC0DF
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiICSlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 14:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S232054AbiICSlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 14:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiICSlu (ORCPT
+        with ESMTP id S229963AbiICSlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 14:41:50 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0DF2CC95;
-        Sat,  3 Sep 2022 11:41:49 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id z8so6637525edb.6;
-        Sat, 03 Sep 2022 11:41:49 -0700 (PDT)
+        Sat, 3 Sep 2022 14:41:45 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A128707;
+        Sat,  3 Sep 2022 11:41:44 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id kh8so3833193qvb.1;
+        Sat, 03 Sep 2022 11:41:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=y/fyX7Fgx7pidbZm1EbW1sYH2qqBKD2aPEMgJoc7r7A=;
-        b=cKK/oblrAd4xpjnI2tAso16qm9Dx5ZK4cT9a7pOslArAyWGvZQRvP1C+61uKZGqXk0
-         ChPwXWrEMKYiQTq5IUIaeVfy0FoC83K/EIqZxIdqHQuY1C+C3J3FbAQt30nvIvJlm5Px
-         N56ZDNfNHMvDNvJ/WpHR2Sro4SujJxEZILta2c04tx4IWWRio66XCVXRrHUhADjYrsgV
-         3Cx+lmZ3pKqnBvGhIZGIp4Q1m3da4V+loZCcfZhXRR9BdqmogEpQ3nFQVeO8xa8osaTy
-         Iu1mgRjIIMfhXeIDFDV/CXGyXgA4zOfkCwXINP1A6Ae0KVVSRKR+9XdjkiXEClxQCgWb
-         KsFg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=R+6fr3Z46+up0wQuivCog9HCcCTNyVOBY73hRlyB6EY=;
+        b=eUWcwbV9/QYS4UNYw5GnHynYy3Dwg7BqVnua3yKsPmEk/nTJKTlmpwUWOxVBwawMgK
+         8xCynUVFW1ebLJhmW5GSCGXrMjB2ej1kAHU/OKEVu50798pd9gipegQHhDtC592xd8e1
+         qLRLEP1sM+c03FYmSiP1SLHmsPDFqfXXwa3rP7VAzHAE4zM2LfnPw+MoFdo4suq9Kw3Q
+         lVQls+EbFFR98DNi07NH9KSkxvczJSLbqmRq24/ajvl+GpkM/FUX/x5G43c42OFmBnW8
+         vR+haAw4aSMkWKZjqdDQVlIYzXiqmLwRbvcv6CFnx3rXpDUxdu7sK0TO/zhTyBdZX9aA
+         RH3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=y/fyX7Fgx7pidbZm1EbW1sYH2qqBKD2aPEMgJoc7r7A=;
-        b=HvwYyNXmNSh9wZ9cSfSLbT77NRqkgJBuS0/0ECRCavo1MgHn+2F8WHNJQoq6GY3NO2
-         OXbXK0PHaI93iLleoZyiO+W79GdSeqr6UQWPF7iIOTGahwtd5dbKWJMp+uBY5zoc3O54
-         zLtFOuLjbHSszrBi2YxISQ3PY86JjHBNAGEgxh7ylhIDf8a52Uz9XXzwoH0Qq/T60Y0l
-         D1VPczKbQFZO/lrrWyaN2hjCsxjyYt3wrLJ1SCaZOfpXijJfjYCwLZ83b/9p3FOHbsvK
-         tKXu8HYl92EHM+QZ9y2upx7roLjbyNF0XBpMhTSgcV83jcePiXVF2KgWiyH2PqY2ZkRL
-         qFUQ==
-X-Gm-Message-State: ACgBeo2Dh+k1vhQ2Bw6/feoGECxRJDhSaW1IFoRsTaTO33DorHgVQYaT
-        /fEZQr8MYfdll2eSMAffiWdzd1/MVSGhm9NC6og=
-X-Google-Smtp-Source: AA6agR5kquHLK08sJV7wPSiA6uDfnxrcaGSZokgPnt8ENqvTPyodp6p6/lTYfIShLzXKEcAmhUXvwNyourKGFKn/PFU=
-X-Received: by 2002:a05:6402:11d0:b0:448:89ff:88f0 with SMTP id
- j16-20020a05640211d000b0044889ff88f0mr23145854edw.166.1662230508161; Sat, 03
- Sep 2022 11:41:48 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=R+6fr3Z46+up0wQuivCog9HCcCTNyVOBY73hRlyB6EY=;
+        b=vFvxECCJUSLhgkAV70zL2d4PQPwMWB8lthltPWqhCmEKhlcBBfLuwTGZjnbZnXVS1J
+         T6Ult8+HLFgBW53sj+dVSLYBa9s2XZePjkaZdocI3JcW9UotlXyhKorRo/rvGIelrV2s
+         /Y1KqMBOW3ROKC9HaW4FHwcsykU4PP6zN6lq0zGU0CAXj6TerAbNiXJMzjqGk8C89eWS
+         sJCZXNk8eX8WKqVJRnSZQ9Cdo0xSzbMwvmwD0Kgx8l6VlqhkYOgRgi8Vb1vd0xk8tb+Q
+         OPbglp8I8zLe6Rc117N7kWqtTouq3GecMkI6x5v7jq+htnLkGvXQVHR2fb3gdkYqW8G/
+         6+aw==
+X-Gm-Message-State: ACgBeo3yj3NSa9AW1gIx+CUfw+d/A4wXGg+adbxbWR4d9+9xXD8r4gyE
+        B/86f2I7Sf3NhVYRiahiTjQ=
+X-Google-Smtp-Source: AA6agR79o/Sxqsj/ecrboICideMqI973um+6n0GYVre3ZB1RF9tuMHTKi1o6dOktrhnCT2D/a389dQ==
+X-Received: by 2002:a0c:df8d:0:b0:49e:47f2:c6ba with SMTP id w13-20020a0cdf8d000000b0049e47f2c6bamr2195009qvl.76.1662230503217;
+        Sat, 03 Sep 2022 11:41:43 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id m25-20020ac84459000000b00344cb66b860sm3496308qtn.38.2022.09.03.11.41.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Sep 2022 11:41:42 -0700 (PDT)
+Message-ID: <3e0a54a8-5cea-ba31-89a2-8bf1a5d9ec88@gmail.com>
+Date:   Sat, 3 Sep 2022 11:41:39 -0700
 MIME-Version: 1.0
-References: <20220821173051.155038-1-peron.clem@gmail.com> <20220821173051.155038-5-peron.clem@gmail.com>
- <0c028109-bb50-fbaa-de18-9876706a7477@sholland.org>
-In-Reply-To: <0c028109-bb50-fbaa-de18-9876706a7477@sholland.org>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Sat, 3 Sep 2022 20:41:36 +0200
-Message-ID: <CAJiuCcf7NuXFFLw6-RFcyZPNFPagfSB5aR7rY5528USzNB-iKg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] arm64: dts: allwinner: beelink-gs1: Enable GPU OPP
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] clk: iproc: Do not rely on node name for correct PLL
+ setup
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>, linux-clk@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     rafal@milecki.pl, Michael Turquette <mturquette@baylibre.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "moderated list:BROADCOM IPROC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220803025836.107886-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220803025836.107886-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,66 +83,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
-
-On Tue, 23 Aug 2022 at 05:07, Samuel Holland <samuel@sholland.org> wrote:
->
-> On 8/21/22 12:30 PM, Cl=C3=A9ment P=C3=A9ron wrote:
-> > Enable GPU OPP table for Beelink GS1
-> >
-> > Signed-off-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts b/=
-arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-> > index 6249e9e02928..20fc0584d1c6 100644
-> > --- a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-> > +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-> > @@ -5,6 +5,7 @@
-> >
-> >  #include "sun50i-h6.dtsi"
-> >  #include "sun50i-h6-cpu-opp.dtsi"
-> > +#include "sun50i-h6-gpu-opp.dtsi"
-> >
-> >  #include <dt-bindings/gpio/gpio.h>
-> >
-> > @@ -261,6 +262,7 @@ reg_dcdca: dcdca {
-> >                       };
-> >
-> >                       reg_dcdcc: dcdcc {
-> > +                             regulator-always-on;
->
-> Why is this necessary? This file already has:
-
-This is a relica from the first serie at this time the OPP doesn't
-properly enable the regulator it's now fixed since:
-https://patchwork.kernel.org/project/linux-pm/patch/81eb2efeeed1556d1240652=
-52f32777838a6d850.1589528491.git.viresh.kumar@linaro.org/
-
-I will drop it.
-
-Thanks for the review.
-Regards,
-Clement
 
 
+On 8/2/2022 7:58 PM, Florian Fainelli wrote:
+> After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
+> description") a warning from clk-iproc-pll.c was generated due to a
+> duplicate PLL name as well as the console stopped working. Upon closer
+> inspection it became clear that iproc_pll_clk_setup() used the Device
+> Tree node unit name as an unique identifier as well as a parent name to
+> parent all clocks under the PLL.
+> 
+> BCM5301X was the first platform on which that got noticed because of the
+> DT node unit name renaming but the same assumptions hold true for any
+> user of the iproc_pll_clk_setup() function.
+> 
+> The first 'clock-output-names' property is always guaranteed to be
+> unique as well as providing the actual desired PLL clock name, so we
+> utilize that to register the PLL and as a parent name of all children
+> clock.
+> 
+> Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
+Stephen,
 
->
-> &gpu {
->         mali-supply =3D <&reg_dcdcc>;
->         status =3D "okay";
-> };
->
-> So there is a consumer for this regulator.
->
-> Regards,
-> Samuel
->
-> >                               regulator-enable-ramp-delay =3D <32000>;
-> >                               regulator-min-microvolt =3D <810000>;
-> >                               regulator-max-microvolt =3D <1080000>;
-> >
->
+Can we get this applied for an upcoming 6.0-rc? Thanks
+-- 
+Florian

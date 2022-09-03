@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01225ABB9C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0DE5ABBA9
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiICAVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 20:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
+        id S231224AbiICAXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 20:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiICAVP (ORCPT
+        with ESMTP id S229788AbiICAXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 20:21:15 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CD1F61BC
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 17:21:14 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id l15-20020a0566022dcf00b00688e70a26deso2232346iow.12
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 17:21:14 -0700 (PDT)
+        Fri, 2 Sep 2022 20:23:00 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC9CF63D7
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 17:22:59 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id a9-20020a17090a8c0900b001fff9a99c0fso1525836pjo.5
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 17:22:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date;
+        bh=0j7MSpIXd0q2GhPEJ3BS0PsB62uO0eOMnRwnKzDz08g=;
+        b=s4lyhcm5HaQP8/H13vmtetQuSvCpB2maDrfqBSZsBiTH6sJUfC42q5kV1dTH9e8QwT
+         ZD2QNBWOPUr9YvJyZnMw+TxaRFcuebzVNGMt8i3dueX+aY8pTVQ9ikBnvGQKSajZKhZc
+         iD/4u1XxRGiC0N4EAImOTWox95ZTQGH+slLWLR4LsG4SE6N8owAJmMlY191yHf9eJv5O
+         1ogUo+RQp/D9wsTYtOf/4w8IuQ126wqhI6qvMxBvaLiq+UqXdC/9MzhA3xMjnRevYiY9
+         VbHA0Cvj+Mqu8Fb4nWeFXiF5E6fJ0RceIKJjvDqpnoxJs4VEayibp7zJi0vrBYNUCS73
+         sWzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=R4kxorsb0UegzTakN74D8817HQJ9eZIA49uSeHxOMJc=;
-        b=TttfmpOJSx1NIwqpyPuabH+5o3/74pbZkh6UCDdUUf7yqqWPY2JmOjlFhbMGNoc/4V
-         m7wXYqFzgRJnq8hbXQMDtq4C8ecFFNT/EJQsLCXjV+p2C5IRvICeipgFWUOe6bZxC2Ao
-         EOPtw0/tZ/31SM4xoBls/8iflPqXH0WCeSx4yDdlPMkQR8F9x6QvqAhPSpi1pvihaxw2
-         g6lnIM0LcaXHyoQHkSEj8qAGQbz/O8q31RzOXwAp44HFhNIOauppCBQUvnrcPzIjpxSV
-         ibUTEA3PRkYr0IzlMiwq2LBr4nGvRzKT+QMQfHdxB4HQaEVwGOKeFI9r4DfGPIbTX5/7
-         usng==
-X-Gm-Message-State: ACgBeo3s8aVMSZZqe7Zk7XYebKaXRiUDcoaT5g8XUj1rQoRsRFlTJ9wG
-        PqrH0Zgf9Zg5lbINRdsQVyWYNxGZvEfZkUtlQfG1Kdp/UVWZ
-X-Google-Smtp-Source: AA6agR7Tn3BK7/RRBjnqX4a9aJMK/gdGLgOr40uzBdemnwAn/RuJeUw5JUTD7TWImJF4YgP8qIBcuRChOIvOMp7ITg2GYF9IG6Rh
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:410f:b0:34a:811:c64b with SMTP id
- ay15-20020a056638410f00b0034a0811c64bmr21911989jab.189.1662164473814; Fri, 02
- Sep 2022 17:21:13 -0700 (PDT)
-Date:   Fri, 02 Sep 2022 17:21:13 -0700
-In-Reply-To: <20220902235427.2189-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000524af05e7bad379@google.com>
-Subject: Re: [syzbot] INFO: task hung in blk_freeze_queue (3)
-From:   syzbot <syzbot+38e6c55d4969a14c1534@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+        bh=0j7MSpIXd0q2GhPEJ3BS0PsB62uO0eOMnRwnKzDz08g=;
+        b=cSjJr3wBIKpXZQhXb9K5PDdafbwSMKpMoorkkh/Bf/qd6suiLuiazptFg8rr/Qsx0P
+         7HavLBeWGO401c08f0379DiOwRDdU8i4L1Boys/WhOQTYfpmEllW4dDvpXdTqMOBhZNH
+         uEZ0F8q3EQ9/YUCzUAo986bYeTx8OeUxuEaykn6823le+2YZ2wHcaimrMuFW8zUvglSH
+         8VR2ZtXETsK4HeLocS0THTXdemF/stGAb9HdOf4iRG1ij30hMHI0prt9VgD31+70WOJK
+         5Km7tiLoE5vPA1QUjnV82jznoDF42bdsQY374jQ0yBEksW/qi3ZCOWiVKn4cas9J7r0s
+         swGw==
+X-Gm-Message-State: ACgBeo0uGQ4un+nxM1uNkUEh1rwF9USsGBrcxR7e7EwTDCa4W+K8XDMe
+        x3Q9k09IcWme+ymBsAeRK7P/Oga32KY=
+X-Google-Smtp-Source: AA6agR4QXzjexqiug2t1VU1SaYqlM3t8Px+9ZriS3I+E0zHBH7sqCcNoooCRRS3XElkbS4jYv5ApSn/86kU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:aa7:8551:0:b0:538:22ec:d965 with SMTP id
+ y17-20020aa78551000000b0053822ecd965mr28942077pfn.16.1662164578867; Fri, 02
+ Sep 2022 17:22:58 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Sat,  3 Sep 2022 00:22:31 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220903002254.2411750-1-seanjc@google.com>
+Subject: [PATCH v2 00/23] KVM: x86: AVIC and local APIC fixes+cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Li RongQing <lirongqing@baidu.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Bugs for everyone!  Two new notable bug fixes:
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: task hung in blkdev_put
+  - Purge vCPU's "highest ISR" cache when toggling APICv
+  - Flush TLB when activating AVIC
 
-INFO: task syz-executor.0:3518 blocked for more than 143 seconds.
-      Not tainted 6.0.0-rc3-syzkaller-00299-gd895ec7938c4-dirty #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.0  state:D stack:    0 pid: 3518 ppid:  3499 flags:0x0000000d
-Call trace:
- __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
- context_switch kernel/sched/core.c:5182 [inline]
- __schedule+0x414/0x570 kernel/sched/core.c:6494
- schedule+0x64/0xa4 kernel/sched/core.c:6570
- schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6629
- __mutex_lock_common+0x74c/0xc28 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- blkdev_put+0x78/0x270 block/bdev.c:910
- blkdev_close+0x24/0x38 block/fops.c:499
- __fput+0x198/0x3bc fs/file_table.c:320
- ____fput+0x20/0x30 fs/file_table.c:353
- task_work_run+0xc4/0x208 kernel/task_work.c:177
- get_signal+0xac8/0xb30 kernel/signal.c:2634
- do_signal+0x128/0x424 arch/arm64/kernel/signal.c:1071
- do_notify_resume+0xc0/0x1d0 arch/arm64/kernel/signal.c:1124
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:625
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
+TL;DR: KVM's AVIC and optimized APIC map code doesn't correctly handle
+various edge cases that are architecturally legal(ish), but are unlikely
+to occur in most real world scenarios.
 
-Showing all locks held in the system:
-1 lock held by rcu_tasks_kthre/10:
- #0: ffff80000d4a3568 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
-1 lock held by rcu_tasks_trace/11:
- #0: ffff80000d4a3bb8 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
-1 lock held by khungtaskd/26:
- #0: ffff80000d4a3440 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x4/0x48 include/linux/rcupdate.h:279
-2 locks held by getty/2709:
- #0: ffff0000c6c9a098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x28/0x58 drivers/tty/tty_ldisc.c:244
- #1: ffff80000f67e2f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x19c/0x88c drivers/tty/n_tty.c:2177
-1 lock held by udevd/3495:
- #0: ffff0000c4b1e4c8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev+0xfc/0x2fc block/bdev.c:812
-1 lock held by syz-executor.0/3518:
- #0: ffff0000c4b1e4c8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_put+0x78/0x270 block/bdev.c:910
-1 lock held by syz-executor.0/3553:
- #0: ffff0000c4b1e4c8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev+0xfc/0x2fc block/bdev.c:812
-1 lock held by syz-executor.0/3579:
- #0: ffff0000c4b1e4c8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev+0xfc/0x2fc block/bdev.c:812
+I have tested this heavily with KUT, but I haven't booted Windows and
+don't have access to x2AVIC, so additional testing would be much
+appreciated.
 
-=============================================
+v2:
+  - Collect reviews. [Li, Maxim]
+  - Disable only MMIO access when x2APIC is enabled (instead of disabling
+    all of AVIC). [Maxim]
+  - Inhibit AVIC when logical IDs are aliased. [Maxim]
+  - Tweak name of set_virtual_apic_mode() hook. [Maxim]
+  - Straight up revert logical ID fastpath mess. [Maxim]
+  - Reword changelog about skipping vCPU during logical setup. [Maxim]
+  - Fix LDR updates on AVIC. [Maxim?]
+  - Fix a nasty ISR caching bug.
+  - Flush TLB when activating AVIC.
+
+v1: https://lore.kernel.org/all/20220831003506.4117148-1-seanjc@google.com
+
+Sean Christopherson (22):
+  KVM: x86: Purge "highest ISR" cache when updating APICv state
+  KVM: SVM: Flush the "current" TLB when activating AVIC
+  KVM: SVM: Process ICR on AVIC IPI delivery failure due to invalid
+    target
+  KVM: x86: Inhibit AVIC SPTEs if any vCPU enables x2APIC
+  KVM: SVM: Don't put/load AVIC when setting virtual APIC mode
+  KVM: SVM: Replace "avic_mode" enum with "x2avic_enabled" boolean
+  KVM: SVM: Compute dest based on sender's x2APIC status for AVIC kick
+  Revert "KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when
+    possible"
+  KVM: SVM: Document that vCPU ID == APIC ID in AVIC kick fastpatch
+  KVM: SVM: Add helper to perform final AVIC "kick" of single vCPU
+  KVM: x86: Disable APIC logical map if logical ID covers multiple MDAs
+  KVM: x86: Disable APIC logical map if vCPUs are aliased in logical
+    mode
+  KVM: x86: Honor architectural behavior for aliased 8-bit APIC IDs
+  KVM: x86: Explicitly skip adding vCPU to optimized logical map if
+    LDR==0
+  KVM: x86: Explicitly track all possibilities for APIC map's logical
+    modes
+  KVM: SVM: Inhibit AVIC if vCPUs are aliased in logical mode
+  KVM: SVM: Always update local APIC on writes to logical dest register
+  KVM: SVM: Update svm->ldr_reg cache even if LDR is "bad"
+  KVM: SVM: Require logical ID to be power-of-2 for AVIC entry
+  KVM: SVM: Handle multiple logical targets in AVIC kick fastpath
+  KVM: SVM: Ignore writes to Remote Read Data on AVIC write traps
+  Revert "KVM: SVM: Do not throw warning when calling avic_vcpu_load on
+    a running vcpu"
+
+Suravee Suthikulpanit (1):
+  KVM: SVM: Fix x2APIC Logical ID calculation for
+    avic_kick_target_vcpus_fast
+
+ Documentation/virt/kvm/x86/errata.rst |  11 +
+ arch/x86/include/asm/kvm_host.h       |  37 ++-
+ arch/x86/kvm/lapic.c                  | 112 +++++++--
+ arch/x86/kvm/mmu/mmu.c                |   2 +-
+ arch/x86/kvm/svm/avic.c               | 321 +++++++++++++-------------
+ arch/x86/kvm/svm/svm.c                |   4 +-
+ arch/x86/kvm/svm/svm.h                |  11 +-
+ arch/x86/kvm/x86.c                    |  35 ++-
+ 8 files changed, 329 insertions(+), 204 deletions(-)
 
 
-
-Tested on:
-
-commit:         d895ec79 Merge tag 'block-6.0-2022-09-02' of git://git..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=134b2be7080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=57b9bfeca947ab90
-dashboard link: https://syzkaller.appspot.com/bug?extid=38e6c55d4969a14c1534
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12ca9c55080000
+base-commit: 372d07084593dc7a399bf9bee815711b1fb1bcf2
+-- 
+2.37.2.789.g6183377224-goog
 

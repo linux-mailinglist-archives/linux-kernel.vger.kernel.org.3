@@ -2,133 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B605AC0D1
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03AA5AC0E4
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiICSiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 14:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S233099AbiICSnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 14:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiICSiR (ORCPT
+        with ESMTP id S233014AbiICSnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 14:38:17 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCD25508E;
-        Sat,  3 Sep 2022 11:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662230296; x=1693766296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qpinBAJKB6E6Wwqx7GDFK6m+AcQ6AEB6MqMz5swIr2Y=;
-  b=g38UIYZkUn7CAATen4cC1McmvWpu/Lp29/pUnDlxvTXXv9Z0IzfOZdf+
-   49Ps4DLXXXzaN+ZHtfT0UmQcIq3oxfEHSKJMEADUz2YZe80vxjwQFGDZ0
-   lFYqQ4LRt38vsCqiJykekvnETPkoparRjYa8/7xpIytAHDrFIKfOyzrXS
-   wkTYjjTk0TZ2HOsvQk+TWgjljo5+aBqf7w8Se3Hyv2n919K2pa8O6RzV+
-   6yoAfiSnjIiH5+MgLzMrTt33r+lIOSNHfDXkWQOsH0wZP+cApCJjethtw
-   Fp5/3y+kFatRwjFGGdqczwMer6BFN/VEmYC0UxQqKAh8AyDovVZkqOG8n
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="179063137"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Sep 2022 11:38:16 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Sat, 3 Sep 2022 11:38:15 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Sat, 3 Sep 2022 11:38:15 -0700
-Date:   Sat, 3 Sep 2022 20:42:33 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH] pinctrl: ocelot: Fix interrupt controller
-Message-ID: <20220903184233.whjduwtdyuvyf6lv@soft-dev3-1.localhost>
-References: <20220902124354.630826-1-horatiu.vultur@microchip.com>
- <CAHp75Ve7EkE3q3_nOvT_KLmpmnXzMw179nbOxYEYzUeLY0QRnw@mail.gmail.com>
+        Sat, 3 Sep 2022 14:43:21 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79A55A2F3;
+        Sat,  3 Sep 2022 11:43:07 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-33dce2d4bc8so41714767b3.4;
+        Sat, 03 Sep 2022 11:43:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=HwYOgy3zjOIkUemctgk5rYZBZTmWSTF6W5pZxZvAJgQ=;
+        b=6DXtTvyAfhrXKNHu8fam1Ys0tS5VnN4PY5eLjpst7AjLv9WWv6dUAgYTiOcbqRXqwH
+         fvLobn9c0B7TbJl5igG9WoON+1d8BD7+uZJ8kSoFyVZW8AjSZTNRlxhxzxMo0FxN+UMS
+         iYJJqH8G2anTmCBQF3E6/xITzy+CNLr7aZekQKif4cT1EtooHpj67Y87hXixJcUoXsUN
+         1s2r26my1kF7+fsUbeC2X4Lcl+rlFXCqk/wVobqwncuQ6tLtEGIpy5xpuEZ9G+5Wb7Nk
+         xEwdWEwPQMln0FIIpyz+gU3vj5fcXnWLGBukRqh3uNV2CvKQiA4YT1bWEOBJ0dW6hDa8
+         hyvg==
+X-Gm-Message-State: ACgBeo2Cnu00mvxN8yn+Xn5aCp8cGIzMAWwmEqtKCW47kD5rY9+7DCLu
+        qxTxC/tMgrGzvwky6s+aoEQCQEloDPEwMSwsYmE=
+X-Google-Smtp-Source: AA6agR5hTZSytWkFK60t4lqd3xPUE1Kkrp5WF+DjNbCz9cnaCaGumC2NHors5Mf8d+bn8AFN4GwRC/sg1xazozUYhoA=
+X-Received: by 2002:a81:4850:0:b0:33c:922b:5739 with SMTP id
+ v77-20020a814850000000b0033c922b5739mr32031824ywa.515.1662230586823; Sat, 03
+ Sep 2022 11:43:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <CAHp75Ve7EkE3q3_nOvT_KLmpmnXzMw179nbOxYEYzUeLY0QRnw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220826171635.15652-1-andriy.shevchenko@linux.intel.com> <20220826171635.15652-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220826171635.15652-2-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 3 Sep 2022 20:42:55 +0200
+Message-ID: <CAJZ5v0g93SH6ty2J=36jOV0fs+KoGc8h5DtbU=FU0S-yNiAQGg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] ACPI: bus: Refactor ACPI matching functions for
+ better readability
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 09/02/2022 17:51, Andy Shevchenko wrote:
-
-Hi Andy,
-
-> 
-> > +       /*
-> > +        * It is enough to read only one action because the trigger level is the
-> > +        * same for all of them.
-> > +        */
-> 
-> Hmm... this is interesting. How is the hardware supposed to work if
-> the user asks for two contradictory levels for two different IRQs?
-
-The HW can detect the changes in line for each pin on which the IRQ is.
-And each pin will have a different irq_desc with different actions.
-Or maybe I missunderstood the question?
-
-Also maybe a better way to get trigger level is to use
-irqd_get_trigger_type.
-
-...
-
-> > +               struct ocelot_irq_work *work = kmalloc(sizeof(*work), GFP_ATOMIC);
-> 
-> It's more visible what's going on if you split this to definition and
-> assignment and move assignment closer to its first user.
-> 
-> > +               if (!work)
-> > +                       return;
-
-So you would like something like this:
----
-struct ocelot_irq_work *work;
-
-work = kmalloc(sizeof(*work), GFP_ATOMIC);
-if (!work)
-    return;
-...
----
-
-> 
-> ...
-> 
-> >         type &= IRQ_TYPE_SENSE_MASK;
-> 
-> This seems redundant, see below.
-> 
-> 
-> > -       if (!(type & (IRQ_TYPE_EDGE_BOTH | IRQ_TYPE_LEVEL_HIGH)))
-> > +       if (type == IRQ_TYPE_NONE)
-> >                 return -EINVAL;
-> 
-> Is it ever possible? IIRC the IRQ chip code, the set->type won't be
-> called at all in such a case. Also type is already limited to the
-> sense mask, no?
-
-It is not possible. From what I have seen on the callstack, the type is
-already anded with IRQ_TYPE_SENSE_MASK, and it would not call
-ocelot_irq_set_type for IRQ_TYPE_NONE.
-Therefor I will remove these.
-
-> 
+On Fri, Aug 26, 2022 at 7:16 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> With temporary variables for OF and ACPI IDs, it's easier to read
+> the code. No functional change intended.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: refactored another function (due to drop the rest of the series)
+>  drivers/acpi/bus.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index f3e868d35144..d466c8195314 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -925,12 +925,13 @@ static const void *acpi_of_device_get_match_data(const struct device *dev)
+>
+>  const void *acpi_device_get_match_data(const struct device *dev)
+>  {
+> +       const struct acpi_device_id *acpi_ids = dev->driver->acpi_match_table;
+>         const struct acpi_device_id *match;
+>
+> -       if (!dev->driver->acpi_match_table)
+> +       if (!acpi_ids)
+>                 return acpi_of_device_get_match_data(dev);
+>
+> -       match = acpi_match_device(dev->driver->acpi_match_table, dev);
+> +       match = acpi_match_device(acpi_ids, dev);
+>         if (!match)
+>                 return NULL;
+>
+> @@ -948,14 +949,13 @@ EXPORT_SYMBOL(acpi_match_device_ids);
+>  bool acpi_driver_match_device(struct device *dev,
+>                               const struct device_driver *drv)
+>  {
+> -       if (!drv->acpi_match_table)
+> -               return acpi_of_match_device(ACPI_COMPANION(dev),
+> -                                           drv->of_match_table,
+> -                                           NULL);
+> -
+> -       return __acpi_match_device(acpi_companion_match(dev),
+> -                                  drv->acpi_match_table, drv->of_match_table,
+> -                                  NULL, NULL);
+> +       const struct acpi_device_id *acpi_ids = drv->acpi_match_table;
+> +       const struct of_device_id *of_ids = drv->of_match_table;
+> +
+> +       if (!acpi_ids)
+> +               return acpi_of_match_device(ACPI_COMPANION(dev), of_ids, NULL);
+> +
+> +       return __acpi_match_device(acpi_companion_match(dev), acpi_ids, of_ids, NULL, NULL);
+>  }
+>  EXPORT_SYMBOL_GPL(acpi_driver_match_device);
+>
 > --
-> With Best Regards,
-> Andy Shevchenko
 
--- 
-/Horatiu
+Applied along with the [1/2] as 6.1 material, thanks!

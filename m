@@ -2,51 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F52F5ABD7C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD065ABD7E
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbiICGmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 02:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S232594AbiICGnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 02:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbiICGmU (ORCPT
+        with ESMTP id S232557AbiICGni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 02:42:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA670B07E2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:42:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 3 Sep 2022 02:43:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1BDB1B85
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:43:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662187417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zZUo4Yh/oc1vNFvxaSNW3YUhPsCaAqVSFhhyRBZevNo=;
+        b=DamoIUL9h9qYs5IKVh6UDPuDoTuTNaRyf+rvMfvT4hGJE3sbAZsGJsHsSdV6Run1unsHR6
+        MFawp4SgvWecQZP8Ofyuft1Ns+F+XnvLhoYNI3+e0PhM5roLeIkb3C1QBJa4CcShVhYPZ8
+        knEIwlxIfc5/G880ppsC/nLRTTGe3dU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-435-Sqaui8VDPACHMNd1m7TfYg-1; Sat, 03 Sep 2022 02:43:33 -0400
+X-MC-Unique: Sqaui8VDPACHMNd1m7TfYg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 764A1B82E81
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F097C433C1;
-        Sat,  3 Sep 2022 06:42:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662187337;
-        bh=rKNMGllfZe2l+RKwVXIACnwY+MJaVa2QnM3LCCg3Ti0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JHCAvDcTdxtT8P/IqYrNgv2IQOTF6F2IwmNanQsAQIvqUcns+CopD7TtCYuemx3ro
-         RQuVYV9mFqg0HlPhGMSyq+HexU9GjKTl1+y4tHMiHpsL3X5KkZVBurFIEsD1sNg0c+
-         v3spVnURYqsoxWh9dZX0EG/KvGIQpFxftzI28piA=
-Date:   Sat, 3 Sep 2022 08:42:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>
-Subject: Re: [GIT PULL] Driver core fixes for 6.0-rc4
-Message-ID: <YxL3W3Sb0AMMt01T@kroah.com>
-References: <YxIht+ev+gXsF6ZD@kroah.com>
- <CAHk-=whnNO4T9PHNC1DT35sROGNK_geKL0Q_EjZH=0sLoACPHw@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88DE8805B9A;
+        Sat,  3 Sep 2022 06:43:32 +0000 (UTC)
+Received: from localhost (unknown [10.40.192.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6FAFAC15BBD;
+        Sat,  3 Sep 2022 06:43:31 +0000 (UTC)
+From:   Oleksandr Natalenko <oleksandr@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Will Deacon <will@kernel.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Stephen Kitt <steve@sk2.org>, Rob Herring <robh@kernel.org>,
+        Joel Savitz <jsavitz@redhat.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        =?UTF-8?q?Renaud=20M=C3=A9trich?= <rmetrich@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Grzegorz Halat <ghalat@redhat.com>, Qi Guo <qguo@redhat.com>
+Subject: [PATCH] core_pattern: add CPU specifier
+Date:   Sat,  3 Sep 2022 08:43:30 +0200
+Message-Id: <20220903064330.20772-1-oleksandr@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whnNO4T9PHNC1DT35sROGNK_geKL0Q_EjZH=0sLoACPHw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,33 +74,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 11:02:00AM -0700, Linus Torvalds wrote:
-> On Fri, Sep 2, 2022 at 8:31 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-6.0-rc4
-> 
-> Entirely unrelated to this pull request, but since the diffstat made
-> that "drivers/base/dd.c" file stand out, I tried to look at what the
-> history of that odd name is.
-> 
-> And it's not obvious to me.
-> 
-> Very strange filename. Should it perhaps be named "device.c" or
-> "probe.c" or something more descriptive?
-> 
-> Not a huge deal, more of a passing thought inspired by that diffstat.
+Statistically, in a large deployment regular segfaults may indicate a CPU issue.
 
-I think Pat named it and I always think of it as "device vs. driver".c
-as it handles all of the device and driver interactions between binding
-and unbinding and other fun logic there.  I'm all for a new name if
-anyone has any ideas, "probe.c" is sane, but it also handles disconnect
-logic.  "core.c" already has lots of device functions, so renaming it to
-"device.c" would be confusing.  I don't know...
+Currently, it is not possible to find out what CPU the segfault happened on.
+There are at least two attempts to improve segfault logging with this regard,
+but they do not help in case the logs rotate.
 
-Yeah, in digging, Pat did this in commit 07e4a3e27fe4 ("[PATCH] Move
-device/driver code to drivers/base/dd.c") way back in 2005 to get code
-out of drivers/base/bus.c.
+Hence, lets make sure it is possible to permanently record a CPU
+the task ran on using a new core_pattern specifier.
 
-Naming is hard :)
+Suggested-by: Renaud Métrich <rmetrich@redhat.com>
+Signed-off-by: Oleksandr Natalenko <oleksandr@redhat.com>
+---
+ Documentation/admin-guide/sysctl/kernel.rst | 1 +
+ fs/coredump.c                               | 5 +++++
+ include/linux/coredump.h                    | 1 +
+ 3 files changed, 7 insertions(+)
 
-greg k-h
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index 835c8844bba48..b566fff04946b 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -169,6 +169,7 @@ core_pattern
+ 	%f      	executable filename
+ 	%E		executable path
+ 	%c		maximum size of core file by resource limit RLIMIT_CORE
++	%C		CPU the task ran on
+ 	%<OTHER>	both are dropped
+ 	========	==========================================
+ 
+diff --git a/fs/coredump.c b/fs/coredump.c
+index a8661874ac5b6..166d1f84a9b17 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -325,6 +325,10 @@ static int format_corename(struct core_name *cn, struct coredump_params *cprm,
+ 				err = cn_printf(cn, "%lu",
+ 					      rlimit(RLIMIT_CORE));
+ 				break;
++			/* CPU the task ran on */
++			case 'C':
++				err = cn_printf(cn, "%d", cprm->cpu);
++				break;
+ 			default:
+ 				break;
+ 			}
+@@ -535,6 +539,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+ 		 */
+ 		.mm_flags = mm->flags,
+ 		.vma_meta = NULL,
++		.cpu = raw_smp_processor_id(),
+ 	};
+ 
+ 	audit_core_dumps(siginfo->si_signo);
+diff --git a/include/linux/coredump.h b/include/linux/coredump.h
+index 08a1d3e7e46d0..191dcf5af6cb9 100644
+--- a/include/linux/coredump.h
++++ b/include/linux/coredump.h
+@@ -22,6 +22,7 @@ struct coredump_params {
+ 	struct file *file;
+ 	unsigned long limit;
+ 	unsigned long mm_flags;
++	int cpu;
+ 	loff_t written;
+ 	loff_t pos;
+ 	loff_t to_skip;
+-- 
+2.37.2
+

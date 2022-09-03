@@ -2,60 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8ED55ABED4
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 13:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70125ABEDA
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 14:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiICL5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 07:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
+        id S230339AbiICMFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 08:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiICL5e (ORCPT
+        with ESMTP id S229506AbiICMFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 07:57:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AAB78BD9
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 04:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662206252; x=1693742252;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WMfD17hOuYZbjKMAArmXOTMgvOGXcrPvbKUtOcHN7dc=;
-  b=Wm959D5YuYjQ2qtd4woJQrFaKv2lSiZZYyengQcu692dqGCsDsnCuycT
-   wdGdzogN9RlWUP3F735tBmeuNvtXYOkD83C4QzLxtM/jQWXnHAXeVydDb
-   rWjDeMKxhE4+nm8OX1djQ3h5hiNqsC7Xji7mVjifb7r+Dzpy2N9UyqrL0
-   D8sJklWzG4PqdSei0eAQb2GHbxezna5uWjDi6Fu0bWCrTZJDTiG3EA6tj
-   P8r4xLe/qRoxKwNTLHx/GqkYZ5ajtqw/3UXIa0+MC9qH9Q3Reo1S3mSSb
-   LdSVDKA3xN6QcD4B+e0CVxakHOtVGoCOJhpho34q8n7EKEYKj0Hbe3HTV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="279168110"
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="279168110"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 04:57:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="609239673"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 03 Sep 2022 04:57:30 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oURmE-0001cz-0T;
-        Sat, 03 Sep 2022 11:57:30 +0000
-Date:   Sat, 03 Sep 2022 19:56:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/6.0-rc2-fam0-non-uapi] BUILD SUCCESS
- 8a09a674560855effa4e33efa15de1eece07bf04
-Message-ID: <631340fa.Yeyv0QF7jroP2ISf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 3 Sep 2022 08:05:04 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC03275C8;
+        Sat,  3 Sep 2022 05:05:00 -0700 (PDT)
+Received: from localhost.localdomain (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 8850440737B2;
+        Sat,  3 Sep 2022 12:04:54 +0000 (UTC)
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     QCA ath9k Development <ath9k-devel@qca.qualcomm.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        ldv-project@linuxtesting.org,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH] ath9k: verify the expected usb_endpoints are present
+Date:   Sat,  3 Sep 2022 15:04:24 +0300
+Message-Id: <20220903120424.12472-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,129 +44,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/6.0-rc2-fam0-non-uapi
-branch HEAD: 8a09a674560855effa4e33efa15de1eece07bf04  exportfs: Replace zero-length array with DECLARE_FLEX_ARRAY() helper
+The bug arises when a USB device claims to be an ATH9K but doesn't
+have the expected endpoints. (In this case there was an interrupt
+endpoint where the driver expected a bulk endpoint.) The kernel
+needs to be able to handle such devices without getting an internal error.
 
-elapsed time: 720m
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 3 PID: 500 at drivers/usb/core/urb.c:493 usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
+Modules linked in:
+CPU: 3 PID: 500 Comm: kworker/3:2 Not tainted 5.10.135-syzkaller #0
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+Workqueue: events request_firmware_work_func
+RIP: 0010:usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
+Call Trace:
+ ath9k_hif_usb_alloc_rx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:908 [inline]
+ ath9k_hif_usb_alloc_urbs+0x75e/0x1010 drivers/net/wireless/ath/ath9k/hif_usb.c:1019
+ ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1109 [inline]
+ ath9k_hif_usb_firmware_cb+0x142/0x530 drivers/net/wireless/ath/ath9k/hif_usb.c:1242
+ request_firmware_work_func+0x12e/0x240 drivers/base/firmware_loader/main.c:1097
+ process_one_work+0x9af/0x1600 kernel/workqueue.c:2279
+ worker_thread+0x61d/0x12f0 kernel/workqueue.c:2425
+ kthread+0x3b4/0x4a0 kernel/kthread.c:313
+ ret_from_fork+0x22/0x30 arch/x86/entry/entry_64.S:299
 
-configs tested: 108
-configs skipped: 2
+Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ drivers/net/wireless/ath/ath9k/hif_usb.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-gcc tested configs:
-x86_64                              defconfig
-i386                                defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                               rhel-8.3
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-i386                          randconfig-a001
-m68k                             allyesconfig
-i386                          randconfig-a003
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a005
-x86_64                           allyesconfig
-i386                          randconfig-a016
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                             allyesconfig
-arc                  randconfig-r043-20220901
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-x86_64                          rhel-8.3-func
-sh                               allmodconfig
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-kvm
-parisc64                            defconfig
-alpha                             allnoconfig
-sh                        dreamcast_defconfig
-xtensa                  nommu_kc705_defconfig
-m68k                       m5249evb_defconfig
-sh                                  defconfig
-sh                        apsh4ad0a_defconfig
-xtensa                              defconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-sh                     magicpanelr2_defconfig
-xtensa                       common_defconfig
-arm                            qcom_defconfig
-riscv                               defconfig
-arm                           stm32_defconfig
-sparc64                          alldefconfig
-powerpc                      tqm8xx_defconfig
-mips                        vocore2_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arc                        nsim_700_defconfig
-arm                          simpad_defconfig
-sparc64                             defconfig
-arm                           sunxi_defconfig
-arm                           sama5_defconfig
-sh                         microdev_defconfig
-powerpc                    adder875_defconfig
-powerpc                       ppc64_defconfig
-mips                            ar7_defconfig
-mips                    maltaup_xpa_defconfig
-i386                          randconfig-c001
-mips                           jazz_defconfig
-um                               alldefconfig
-mips                      loongson3_defconfig
-arm                           tegra_defconfig
-ia64                             allmodconfig
-powerpc                        warp_defconfig
-arm                           h5000_defconfig
-arm                            zeus_defconfig
-powerpc                     rainier_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220902
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-
-clang tested configs:
-i386                          randconfig-a013
-i386                          randconfig-a002
-i386                          randconfig-a011
-i386                          randconfig-a004
-x86_64                        randconfig-a014
-i386                          randconfig-a015
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a006
-hexagon              randconfig-r041-20220901
-riscv                randconfig-r042-20220901
-x86_64                        randconfig-a001
-hexagon              randconfig-r045-20220901
-x86_64                        randconfig-a003
-s390                 randconfig-r044-20220901
-x86_64                        randconfig-a005
-arm                         mv78xx0_defconfig
-powerpc                   microwatt_defconfig
-powerpc                       ebony_defconfig
-riscv                            alldefconfig
-powerpc                     tqm5200_defconfig
-x86_64                        randconfig-k001
-powerpc                      walnut_defconfig
-arm                          ixp4xx_defconfig
-
+diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
+index 4d9002a9d082..2b26acf409fc 100644
+--- a/drivers/net/wireless/ath/ath9k/hif_usb.c
++++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
+@@ -1332,6 +1332,20 @@ static int ath9k_hif_usb_probe(struct usb_interface *interface,
+ 	struct usb_device *udev = interface_to_usbdev(interface);
+ 	struct hif_device_usb *hif_dev;
+ 	int ret = 0;
++	struct usb_host_interface *alt;
++	struct usb_endpoint_descriptor *bulk_in, *bulk_out, *int_in, *int_out;
++
++	/* Verify the expected endpoints are present */
++	alt = interface->cur_altsetting;
++	if (usb_find_common_endpoints(alt, &bulk_in, &bulk_out, &int_in, &int_out) < 0 ||
++			usb_endpoint_num(bulk_in) != USB_WLAN_RX_PIPE ||
++			usb_endpoint_num(bulk_out) != USB_WLAN_TX_PIPE ||
++			usb_endpoint_num(int_in) != USB_REG_IN_PIPE ||
++			usb_endpoint_num(int_out) != USB_REG_OUT_PIPE) {
++		dev_err(&udev->dev,
++				"ath9k_htc: Device endpoint numbers are not the expected ones\n");
++		return -ENODEV;
++	}
+ 
+ 	if (id->driver_info == STORAGE_DEVICE)
+ 		return send_eject_command(interface);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70125ABEDA
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 14:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5B55ABEDC
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 14:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbiICMFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 08:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
+        id S230521AbiICMGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 08:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiICMFE (ORCPT
+        with ESMTP id S230471AbiICMGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 08:05:04 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC03275C8;
-        Sat,  3 Sep 2022 05:05:00 -0700 (PDT)
-Received: from localhost.localdomain (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 8850440737B2;
-        Sat,  3 Sep 2022 12:04:54 +0000 (UTC)
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     QCA ath9k Development <ath9k-devel@qca.qualcomm.com>,
-        Kalle Valo <kvalo@codeaurora.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH] ath9k: verify the expected usb_endpoints are present
-Date:   Sat,  3 Sep 2022 15:04:24 +0300
-Message-Id: <20220903120424.12472-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.25.1
+        Sat, 3 Sep 2022 08:06:17 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20867434B
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 05:06:14 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-11e7e0a63e2so11129294fac.4
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 05:06:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=melexis.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=uy6b604W6fPaKBQUMKEMdXcHLnIEaX4Dt4TqfHX1c5o=;
+        b=Xg6epoTbQ6LvJIss0GUUMax4qm/ljJ+FA8Bb6m0daylOP6wi6huZxYeNDIJ0MHRW8a
+         Vhknw3kpS37z11USHL5oknH8I5Y6e5xefbrDTm9NNd0vOp80YyrXrzoVXEIh3eM1LLP1
+         LSSz06ugyyiAuQgUOwXFa+SmLv6HxVtriZ3hxZQ3ftTEItwjLx7aE5S7BZkoJi1Qsxvc
+         o5Zv8tkfi3CNMfjzpuFHHWiLU6xkoL/cHIxy9aoj5X7ftruD55jyN0WJwo7U1YPMvgpQ
+         x8/pIdBFZoWiCdSXrozLRFWufg7H2kkQDqPPze2lhizyrYMdnpcxIo2XWj/CdZ0z+4ha
+         TBoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=uy6b604W6fPaKBQUMKEMdXcHLnIEaX4Dt4TqfHX1c5o=;
+        b=dcgkgI+eN4huXGV9ldYcIqgUrf1ViOVo7j5wPxVW1jlOBvRqwH9NsYAEwVXpAL0Zpi
+         fUp7Q61VhxWUEQd4GAgEYQFdA4y02gqRgndjvFmpyS/nXtSg/IJEFmR5jhl+USVViySm
+         HKKSWFJ/XEUhDMWp0Yju/EacHdWeP9cBSzfL6YYZLyGuezTqud0O0dv9OzpgOpS+Ibxg
+         opFTgD4c9ilkwXNeNugHc+FC+/EcxiVyYoSxQVJ0eeEIbUwKHzOdD1Htn1q48nHgRgYn
+         A+wa+WzUuh7NVMMkPFDjFQmAzVMeu2+5vwXS4rkUFfZd/vphwoZdxN4eZSJ7u8acTYr3
+         2YzQ==
+X-Gm-Message-State: ACgBeo08MaslTZGjkZtsPzjYBAF13qh1a9fYH66O23qz2St4+unnis3s
+        xn5IUAzhzh0uF/28ANoiN7BDvdEZGTg8BU7cDrwYqw==
+X-Google-Smtp-Source: AA6agR4bm7j3g8DW0HLMGctDD4s5gdb3iwsUqNW1GTNBe0naylGwNiOVUtNtINzwcvenxERaHlGBtsxMZgguG3a3EAg=
+X-Received: by 2002:a05:6808:21a6:b0:344:beb5:1fb1 with SMTP id
+ be38-20020a05680821a600b00344beb51fb1mr3756947oib.175.1662206774175; Sat, 03
+ Sep 2022 05:06:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220902131258.3316367-1-cmo@melexis.com> <CAHp75VdOHDHUVhVXj4L-6ZV25mTWTeO3s3EJQVgLxknXHKRUMg@mail.gmail.com>
+ <CAKv63ut0rtTFh3XdF3oR6fxQSLzNkFRS+HPPOY8Xp4LX0OY4Tg@mail.gmail.com> <CAHp75VfJMpf3GeOryt9cH6-tK48BB8ZcfuGxhXovObBanDcc7w@mail.gmail.com>
+In-Reply-To: <CAHp75VfJMpf3GeOryt9cH6-tK48BB8ZcfuGxhXovObBanDcc7w@mail.gmail.com>
+From:   Crt Mori <cmo@melexis.com>
+Date:   Sat, 3 Sep 2022 14:05:38 +0200
+Message-ID: <CAKv63us6OLg8ahdbKvd8c4x9-Ri4aDwNvgc_oov7wZnSBmJGVA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] iio: temperature: mlx90632 Add runtime
+ powermanagement modes
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug arises when a USB device claims to be an ATH9K but doesn't
-have the expected endpoints. (In this case there was an interrupt
-endpoint where the driver expected a bulk endpoint.) The kernel
-needs to be able to handle such devices without getting an internal error.
+On Fri, 2 Sept 2022 at 20:39, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+>
+> On Fri, Sep 2, 2022 at 8:59 PM Crt Mori <cmo@melexis.com> wrote:
+> > On Fri, 2 Sept 2022 at 17:28, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > On Fri, Sep 2, 2022 at 4:13 PM <cmo@melexis.com> wrote:
+> > > > +       if (current_powerstatus == MLX90632_PWR_STATUS_SLEEP_STEP)
+> > > > +               return mlx90632_pwr_set_sleep_step(data->regmap);
+> > >
+> > > > +       else
+> > >
+> > > Redundant.
+> > >
+> > No, the powermode changes among the type.
+>
+> Yes. 'else' keyword is always redundant in the
+>
+>   if (...)
+>     return / break / continue / goto
+>   else
+>
+> cases.
+>
+In this case current power mode of the sensor is halt, so the else is
+needed to set it to continuous mode, which means I can't just remove
+the else here because this statement restores the power mode before
+this function was entered (and changed powermode for the setup).
 
-usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-WARNING: CPU: 3 PID: 500 at drivers/usb/core/urb.c:493 usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
-Modules linked in:
-CPU: 3 PID: 500 Comm: kworker/3:2 Not tainted 5.10.135-syzkaller #0
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-Workqueue: events request_firmware_work_func
-RIP: 0010:usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
-Call Trace:
- ath9k_hif_usb_alloc_rx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:908 [inline]
- ath9k_hif_usb_alloc_urbs+0x75e/0x1010 drivers/net/wireless/ath/ath9k/hif_usb.c:1019
- ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1109 [inline]
- ath9k_hif_usb_firmware_cb+0x142/0x530 drivers/net/wireless/ath/ath9k/hif_usb.c:1242
- request_firmware_work_func+0x12e/0x240 drivers/base/firmware_loader/main.c:1097
- process_one_work+0x9af/0x1600 kernel/workqueue.c:2279
- worker_thread+0x61d/0x12f0 kernel/workqueue.c:2425
- kthread+0x3b4/0x4a0 kernel/kthread.c:313
- ret_from_fork+0x22/0x30 arch/x86/entry/entry_64.S:299
-
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
- drivers/net/wireless/ath/ath9k/hif_usb.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
-index 4d9002a9d082..2b26acf409fc 100644
---- a/drivers/net/wireless/ath/ath9k/hif_usb.c
-+++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
-@@ -1332,6 +1332,20 @@ static int ath9k_hif_usb_probe(struct usb_interface *interface,
- 	struct usb_device *udev = interface_to_usbdev(interface);
- 	struct hif_device_usb *hif_dev;
- 	int ret = 0;
-+	struct usb_host_interface *alt;
-+	struct usb_endpoint_descriptor *bulk_in, *bulk_out, *int_in, *int_out;
-+
-+	/* Verify the expected endpoints are present */
-+	alt = interface->cur_altsetting;
-+	if (usb_find_common_endpoints(alt, &bulk_in, &bulk_out, &int_in, &int_out) < 0 ||
-+			usb_endpoint_num(bulk_in) != USB_WLAN_RX_PIPE ||
-+			usb_endpoint_num(bulk_out) != USB_WLAN_TX_PIPE ||
-+			usb_endpoint_num(int_in) != USB_REG_IN_PIPE ||
-+			usb_endpoint_num(int_out) != USB_REG_OUT_PIPE) {
-+		dev_err(&udev->dev,
-+				"ath9k_htc: Device endpoint numbers are not the expected ones\n");
-+		return -ENODEV;
-+	}
- 
- 	if (id->driver_info == STORAGE_DEVICE)
- 		return send_eject_command(interface);
--- 
-2.25.1
-
+> > > > +               return mlx90632_pwr_continuous(data->regmap);
+>
+> ...
+>
+> > > > +static int __maybe_unused mlx90632_pm_runtime_suspend(struct device *dev)
+> > >
+> > > No __maybe_unused, use pm_ptr() / pm_sleep_ptr() below.
+> > >
+> > Care to explain a bit more about this? I just followed what other
+> > drivers have...
+>
+> And other drivers have what I said, but it's a new feature.
+> If you run `git log --no-merges --grep 'pm_ptr' -- drivers/iio
+> include/linux/` and read the history it will explain the case.
+>
+Thanks for the hint.

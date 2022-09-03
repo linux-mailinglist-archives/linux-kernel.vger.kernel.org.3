@@ -2,128 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949345ABC08
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3263D5ABC0D
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbiICB17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 21:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S231147AbiICB3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 21:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbiICB14 (ORCPT
+        with ESMTP id S230459AbiICB3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 21:27:56 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 28C9FEF026
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 18:27:55 -0700 (PDT)
-Received: (qmail 289817 invoked by uid 1000); 2 Sep 2022 21:27:54 -0400
-Date:   Fri, 2 Sep 2022 21:27:54 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH v3] tools/memory-model: Weaken ctrl dependency definition
- in explanation.txt
-Message-ID: <YxKtmk2q8Uzb+Qk9@rowland.harvard.edu>
-References: <20220902211341.2585133-1-paul.heidekrueger@in.tum.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220902211341.2585133-1-paul.heidekrueger@in.tum.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Fri, 2 Sep 2022 21:29:08 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EADEEF13
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 18:29:07 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id m5-20020a170902f64500b0016d313f3ce7so2186664plg.23
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 18:29:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=zLFYPEVszfNpW6dCutbkzHT/LYTZJZBJHTuaDoaj/cE=;
+        b=jduT6xdjGBEpUaZZI4/ZP9lwMs8afG7T8AbeScf86NEDtTl3FPIPdc5ZefkA3jIrDj
+         Bwb3/DP5hlGZY0WU3YZpC5AglW3nbor5Zb/S961uBOb3PUmk7Udw1GQ54mX1dNwk2jPI
+         noQNbXLcB4uoecphVEXOx8qyF64OLSPdkp5kRKQ40qZtBN9TNL8jJOLNR5Qj1qWQf22C
+         VZf2Oer2GQYEIYNZQgsTsx8MKpiIT0bwQfRO4eB4SchDYHhXAng2I65osVf2BG7qAN7I
+         PaEOhkYpuXWewR8O1cB7p9EM3Jjvlow8cWj5mMfdLwCu8QGWMEC+jR2eMfeJ2zXg6bmN
+         VquQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=zLFYPEVszfNpW6dCutbkzHT/LYTZJZBJHTuaDoaj/cE=;
+        b=qnzKvL3zrzQY5jJ2l0NC7I7imZQ9YrIVDqRSkc0APdIsguc3TIvnaRjF1TgeXdzXlW
+         BEmqTqlHby/Pzmoah1Gv0vWZEeb+JAnSWXjVYocIjvdggMUJ/qhvckLZgR6PgyLobpK7
+         dH7EXDObYHZ359lca6BTkPBnLhYhMi2o85cVYkIk7FJ0+cP9WAPXeb5cvNGo5E3pmIX7
+         nLenSJN1kG55nI5KD+MKGCEo3dA7JZ/zKfXfYF85HTV6Q7l2LWvCZnuEstPa/XV9tTX0
+         /mN9c5ftvQh93nzk4cILm36R+gX5Qci+Dk66hrdaWvdiGPemCUhNKTNgJaxeC4beCqYH
+         Kgeg==
+X-Gm-Message-State: ACgBeo13A9YP8edipziAe9RI/iXt4fVoiKXiO8pYwdxOAt/wqYgoo7pu
+        J+g6vhiNBQaRSuDtSPxCgE2psfzbpavC/IW7
+X-Google-Smtp-Source: AA6agR66rzFlSrfpXOBJSYUMRES0YBW3NRHNhBL90Jx4+4OKfXFQ2RxhLBsioUbgHaLkY0WBRQnAVizY/BrawuDR
+X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
+ (user=vannapurve job=sendgmr) by 2002:a62:27c1:0:b0:536:32d2:d098 with SMTP
+ id n184-20020a6227c1000000b0053632d2d098mr39234197pfn.63.1662168546414; Fri,
+ 02 Sep 2022 18:29:06 -0700 (PDT)
+Date:   Sat,  3 Sep 2022 01:28:44 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220903012849.938069-1-vannapurve@google.com>
+Subject: [V1 PATCH 0/5] Execute hypercalls from guests according to cpu type
+From:   Vishal Annapurve <vannapurve@google.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, shuah@kernel.org, bgardon@google.com,
+        seanjc@google.com, oupton@google.com, peterx@redhat.com,
+        vkuznets@redhat.com, drjones@redhat.com, dmatlack@google.com,
+        Vishal Annapurve <vannapurve@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 09:13:40PM +0000, Paul Heidekrüger wrote:
-> The current informal control dependency definition in explanation.txt is
-> too broad and, as discussed, needs to be updated.
-> 
-> Consider the following example:
-> 
-> > if(READ_ONCE(x))
-> >   return 42;
-> >
-> > WRITE_ONCE(y, 42);
-> >
-> > return 21;
-> 
-> The read event determines whether the write event will be executed "at all"
-> - as per the current definition - but the formal LKMM does not recognize
-> this as a control dependency.
-> 
-> Introduce a new definition which includes the requirement for the second
-> memory access event to syntactically lie within the arm of a non-loop
-> conditional.
-> 
-> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
-> Cc: Marco Elver <elver@google.com>
-> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-> Cc: Martin Fink <martin.fink@in.tum.de>
-> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+This series is posted in context of the discussion at:
+https://lore.kernel.org/lkml/Ywa9T+jKUpaHLu%2Fl@google.com/
 
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Major changes:
+1) Move common startup logic to a single common main function in
+kvm_util.c
+2) Introduce following APIs:
+	kvm_arch_main: to perform arch specific common startup.
+	kvm_post_vm_load: to update the guest memory state to convey
+		common information to guests.
+3) For x86, capture cpu type at startup and pass on the cpu type to
+guest after guest elf is loaded.
+4) Execute hypercall instruction from within guest VMs according to the
+cpu type. This will help prevent an extra kvm exit during hypercall
+execution.
 
-> ---
-> 
-> v3:
-> - Address Alan and Joel's feedback re: the wording around switch statements
-> and the use of "guarding"
-> 
-> v2:
-> - Fix typos
-> - Fix indentation of code snippet
-> 
-> v1:
-> @Alan, since I got it wrong the last time, I'm adding you as a co-developer
-> after my SOB. I'm sorry if this creates extra work on your side due to you
-> having to resubmit the patch now with your SOB if I understand correctly,
-> but since it's based on your wording from the other thread, I definitely
-> wanted to give you credit.
-> 
->  tools/memory-model/Documentation/explanation.txt | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> index ee819a402b69..0b7e1925a673 100644
-> --- a/tools/memory-model/Documentation/explanation.txt
-> +++ b/tools/memory-model/Documentation/explanation.txt
-> @@ -464,9 +464,11 @@ to address dependencies, since the address of a location accessed
->  through a pointer will depend on the value read earlier from that
->  pointer.
-> 
-> -Finally, a read event and another memory access event are linked by a
-> -control dependency if the value obtained by the read affects whether
-> -the second event is executed at all.  Simple example:
-> +Finally, a read event X and another memory access event Y are linked by
-> +a control dependency if Y syntactically lies within an arm of an if
-> +statement and X affects the evaluation of the if condition via a data or
-> +address dependency (or similarly for a switch statement).  Simple
-> +example:
-> 
->  	int x, y;
-> 
+Vishal Annapurve (5):
+  selftests: kvm: move common startup logic to kvm_util.c
+  selftests: kvm: Introduce kvm_arch_main and helpers
+  selftests: kvm: x86: Execute vmcall/vmmcall according to CPU type
+  selftests: kvm: delete svm_vmcall_test
+  selftests: kvm: Execute vmcall/vmmcall as per cpu type
+
+ tools/testing/selftests/kvm/.gitignore        |  1 -
+ .../selftests/kvm/aarch64/arch_timer.c        |  5 +-
+ .../selftests/kvm/aarch64/debug-exceptions.c  |  2 +-
+ .../selftests/kvm/aarch64/get-reg-list.c      |  2 +-
+ .../selftests/kvm/aarch64/hypercalls.c        |  4 +-
+ .../testing/selftests/kvm/aarch64/psci_test.c |  2 +-
+ .../selftests/kvm/aarch64/vcpu_width_config.c |  2 +-
+ .../testing/selftests/kvm/aarch64/vgic_init.c |  2 +-
+ .../testing/selftests/kvm/aarch64/vgic_irq.c  |  5 +-
+ .../selftests/kvm/access_tracking_perf_test.c |  4 +-
+ .../selftests/kvm/demand_paging_test.c        |  7 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |  4 +-
+ tools/testing/selftests/kvm/dirty_log_test.c  |  4 +-
+ .../selftests/kvm/hardware_disable_test.c     |  2 +-
+ .../selftests/kvm/include/kvm_util_base.h     | 15 ++++
+ .../selftests/kvm/include/x86_64/processor.h  | 10 +++
+ .../selftests/kvm/include/x86_64/vmx.h        |  9 ---
+ .../selftests/kvm/kvm_binary_stats_test.c     |  3 +-
+ .../selftests/kvm/kvm_create_max_vcpus.c      |  4 +-
+ .../selftests/kvm/kvm_page_table_test.c       |  4 +-
+ .../selftests/kvm/lib/aarch64/processor.c     |  8 ++
+ tools/testing/selftests/kvm/lib/elf.c         |  2 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 12 +++
+ .../selftests/kvm/lib/riscv/processor.c       |  8 ++
+ .../selftests/kvm/lib/s390x/processor.c       |  8 ++
+ tools/testing/selftests/kvm/lib/sparsebit.c   |  2 +-
+ .../selftests/kvm/lib/x86_64/perf_test_util.c |  2 +-
+ .../selftests/kvm/lib/x86_64/processor.c      | 38 +++++++++-
+ .../selftests/kvm/max_guest_memory_test.c     |  2 +-
+ .../kvm/memslot_modification_stress_test.c    |  4 +-
+ .../testing/selftests/kvm/memslot_perf_test.c |  9 +--
+ tools/testing/selftests/kvm/rseq_test.c       |  7 +-
+ tools/testing/selftests/kvm/s390x/memop.c     |  4 +-
+ tools/testing/selftests/kvm/s390x/resets.c    |  4 +-
+ .../selftests/kvm/s390x/sync_regs_test.c      |  5 +-
+ tools/testing/selftests/kvm/s390x/tprot.c     |  2 +-
+ .../selftests/kvm/set_memory_region_test.c    |  7 +-
+ tools/testing/selftests/kvm/steal_time.c      |  4 +-
+ .../kvm/system_counter_offset_test.c          |  2 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c |  2 +-
+ .../testing/selftests/kvm/x86_64/cpuid_test.c |  2 +-
+ .../kvm/x86_64/cr4_cpuid_sync_test.c          |  6 +-
+ .../testing/selftests/kvm/x86_64/debug_regs.c |  4 +-
+ .../kvm/x86_64/emulator_error_test.c          |  7 +-
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |  2 +-
+ .../selftests/kvm/x86_64/fix_hypercall_test.c |  2 +-
+ .../kvm/x86_64/get_msr_index_features.c       |  2 +-
+ .../selftests/kvm/x86_64/hyperv_clock.c       |  2 +-
+ .../selftests/kvm/x86_64/hyperv_cpuid.c       |  7 +-
+ .../selftests/kvm/x86_64/hyperv_features.c    |  2 +-
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |  2 +-
+ .../selftests/kvm/x86_64/kvm_clock_test.c     |  2 +-
+ .../selftests/kvm/x86_64/kvm_pv_test.c        |  2 +-
+ .../kvm/x86_64/max_vcpuid_cap_test.c          |  3 +-
+ .../selftests/kvm/x86_64/mmio_warning_test.c  |  4 +-
+ .../selftests/kvm/x86_64/monitor_mwait_test.c |  3 +-
+ .../selftests/kvm/x86_64/nx_huge_pages_test.c |  4 +-
+ .../selftests/kvm/x86_64/platform_info_test.c |  7 +-
+ .../kvm/x86_64/pmu_event_filter_test.c        |  7 +-
+ .../selftests/kvm/x86_64/set_boot_cpu_id.c    |  2 +-
+ .../selftests/kvm/x86_64/set_sregs_test.c     |  7 +-
+ .../selftests/kvm/x86_64/sev_migrate_tests.c  |  3 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |  4 +-
+ .../testing/selftests/kvm/x86_64/state_test.c | 10 +--
+ .../selftests/kvm/x86_64/svm_int_ctl_test.c   |  3 +-
+ .../kvm/x86_64/svm_nested_soft_inject_test.c  |  7 +-
+ .../selftests/kvm/x86_64/svm_vmcall_test.c    | 74 -------------------
+ .../selftests/kvm/x86_64/sync_regs_test.c     |  7 +-
+ .../kvm/x86_64/triple_fault_event_test.c      |  2 +-
+ .../selftests/kvm/x86_64/tsc_msrs_test.c      |  4 +-
+ .../selftests/kvm/x86_64/tsc_scaling_sync.c   |  3 +-
+ .../kvm/x86_64/ucna_injection_test.c          |  2 +-
+ .../selftests/kvm/x86_64/userspace_io_test.c  |  6 +-
+ .../kvm/x86_64/userspace_msr_exit_test.c      |  7 +-
+ .../kvm/x86_64/vmx_apic_access_test.c         |  5 +-
+ .../kvm/x86_64/vmx_close_while_nested_test.c  |  2 +-
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c |  4 +-
+ .../vmx_exception_with_invalid_guest_state.c  |  2 +-
+ .../x86_64/vmx_invalid_nested_guest_state.c   |  2 +-
+ .../selftests/kvm/x86_64/vmx_msrs_test.c      |  2 +-
+ .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |  5 +-
+ .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |  2 +-
+ .../kvm/x86_64/vmx_preemption_timer_test.c    |  4 +-
+ .../kvm/x86_64/vmx_set_nested_state_test.c    |  3 +-
+ .../kvm/x86_64/vmx_tsc_adjust_test.c          |  5 +-
+ .../selftests/kvm/x86_64/xapic_ipi_test.c     |  4 +-
+ .../selftests/kvm/x86_64/xapic_state_test.c   |  2 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    | 67 +++++++----------
+ .../selftests/kvm/x86_64/xen_vmcall_test.c    | 17 +++--
+ .../selftests/kvm/x86_64/xss_msr_test.c       |  2 +-
+ 90 files changed, 223 insertions(+), 339 deletions(-)
+ delete mode 100644 tools/testing/selftests/kvm/x86_64/svm_vmcall_test.c
+
+-- 
+2.37.2.789.g6183377224-goog
+

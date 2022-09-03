@@ -2,113 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E458F5ABDA1
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 09:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4D55ABDA3
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 09:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbiICHRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 03:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S233014AbiICHSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 03:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiICHRl (ORCPT
+        with ESMTP id S229603AbiICHSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 03:17:41 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8723B07D0;
-        Sat,  3 Sep 2022 00:17:38 -0700 (PDT)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 2837Gbth007057-2837Gbtk007057
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 3 Sep 2022 15:16:44 +0800
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: misc: usb3503: call clk_disable_unprepare in the error handling
-Date:   Sat,  3 Sep 2022 15:15:40 +0800
-Message-Id: <20220903071543.2844698-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.35.1
+        Sat, 3 Sep 2022 03:18:49 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E03D99E8
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 00:18:48 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id h188so3762044pgc.12
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 00:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=SHiiav/UTzP3n773mJagoVt2o/t4dOU1H79RijaCaHU=;
+        b=AskGi2axoxsEY7KBMXI29CjNbAw+cxBhimz+Uws86axHbnwkRzVkZm0D1J5APPX1zH
+         RE63qqDfrdaIRKvGYkOK9sQyFnbW82CNfeKcNNVKRsuR6HwoHzDihm8NXT8SAX1B+tKM
+         ROhbgkgg/KN32vOURtYpeFrRIqnmAQkrQ4fYI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=SHiiav/UTzP3n773mJagoVt2o/t4dOU1H79RijaCaHU=;
+        b=vmIioGDKc+35ZaJXOqfp1kZRTmWXFMekFV6r0jrr5wzitp22+CFPW7oSHJfXN10vl+
+         nT/NbNbo2Xx8J7PiMpHT/r1hI/AIZr9KZ5C63ExPG/5PSi0R/5nxKyxbBWItjcKCJHo+
+         H6jXe6IDBz2vI7/hZA6ZkiVbWbpG6CI2xYbew+OdmiXAKXGwH65QjTYpl0Td9HXP2Kce
+         yar9f6aaTVNwIy8rLxtYVy/gHGzJuNwWSPV1Mf+YeSLiAmSmduthRjTmCgmu7R3StIs0
+         C5X5X8OsIxbJWULuMc2WjAickL5eoKJB+dYEOkUhunKWKImmO8FHCXqRPiE7/rFzqnMG
+         MaWg==
+X-Gm-Message-State: ACgBeo3h4Bzp+A9DBTXxWoWeDeUK5AZsnRe6PuAGQv+AYQmVlRJOYCqW
+        x+3a8m0CV9h3iDlg0BO3RJdmjw==
+X-Google-Smtp-Source: AA6agR7is3qPx2jzNtjCUYC08MYC3I8gIVe9jpfazv4o1qlzZaJVGogtiDukY6sKPz49eksygDlzsg==
+X-Received: by 2002:a63:8bc3:0:b0:42b:1bd2:9a6d with SMTP id j186-20020a638bc3000000b0042b1bd29a6dmr31887720pge.503.1662189528295;
+        Sat, 03 Sep 2022 00:18:48 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e24-20020a63f558000000b0042c5a1715d7sm2519864pgk.83.2022.09.03.00.18.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 00:18:47 -0700 (PDT)
+Date:   Sat, 3 Sep 2022 00:18:46 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Bill Wendling <morbo@google.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
+ ZERO_CALL_USED_REGS enabled
+Message-ID: <202209022251.B14BD50B29@keescook>
+References: <20220902213750.1124421-1-morbo@google.com>
+ <20220902213750.1124421-3-morbo@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902213750.1124421-3-morbo@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
+> [...]
+>         callq   *pv_ops+536(%rip)
 
-Smatch reports the following warning:
+Do you know which pv_ops function is this? I can't figure out where
+pte_offset_kernel() gets converted into a pv_ops call....
 
-vers/usb/misc/usb3503.c:267 usb3503_probe() warn: 'hub->clk'
-from clk_prepare_enable() not released on lines: 240,246,252
+> [...]
+> --- a/arch/x86/include/asm/paravirt_types.h
+> +++ b/arch/x86/include/asm/paravirt_types.h
+> @@ -414,8 +414,17 @@ int paravirt_disable_iospace(void);
+>  				"=c" (__ecx)
+>  #define PVOP_CALL_CLOBBERS	PVOP_VCALL_CLOBBERS, "=a" (__eax)
+>  
+> -/* void functions are still allowed [re]ax for scratch */
+> +/*
+> + * void functions are still allowed [re]ax for scratch.
+> + *
+> + * The ZERO_CALL_USED REGS feature may end up zeroing out callee-saved
+> + * registers. Make sure we model this with the appropriate clobbers.
+> + */
+> +#ifdef CONFIG_ZERO_CALL_USED_REGS
+> +#define PVOP_VCALLEE_CLOBBERS	"=a" (__eax), PVOP_VCALL_CLOBBERS
+> +#else
+>  #define PVOP_VCALLEE_CLOBBERS	"=a" (__eax)
+> +#endif
+>  #define PVOP_CALLEE_CLOBBERS	PVOP_VCALLEE_CLOBBERS
 
-Fix this by adding a flag to indicate if hub->clk is prepared or not and
-invoke clk_disable_unprepare in the error handling.
+I don't think this should depend on CONFIG_ZERO_CALL_USED_REGS; it should
+always be present.
 
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
- drivers/usb/misc/usb3503.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+I've only been looking at this just now, so many I'm missing
+something. The callee clobbers are for functions with return values,
+yes?
 
-diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
-index 330f494cd158..add47dd964b2 100644
---- a/drivers/usb/misc/usb3503.c
-+++ b/drivers/usb/misc/usb3503.c
-@@ -160,6 +160,7 @@ static int usb3503_probe(struct usb3503 *hub)
- 	struct usb3503_platform_data *pdata = dev_get_platdata(dev);
- 	struct device_node *np = dev->of_node;
- 	int err;
-+	int is_clk_enable = 0;
- 	u32 mode = USB3503_MODE_HUB;
- 	const u32 *property;
- 	enum gpiod_flags flags;
-@@ -217,6 +218,8 @@ static int usb3503_probe(struct usb3503 *hub)
- 			return err;
- 		}
- 
-+		// set a flag for successful clk_prepare_enable
-+		is_clk_enable = 1;
- 		property = of_get_property(np, "disabled-ports", &len);
- 		if (property && (len / sizeof(u32)) > 0) {
- 			int i;
-@@ -236,20 +239,29 @@ static int usb3503_probe(struct usb3503 *hub)
- 	else
- 		flags = GPIOD_OUT_HIGH;
- 	hub->intn = devm_gpiod_get_optional(dev, "intn", flags);
--	if (IS_ERR(hub->intn))
-+	if (IS_ERR(hub->intn)) {
-+		if (is_clk_enable)
-+			clk_disable_unprepare(hub->clk);
- 		return PTR_ERR(hub->intn);
-+	}
- 	if (hub->intn)
- 		gpiod_set_consumer_name(hub->intn, "usb3503 intn");
- 
- 	hub->connect = devm_gpiod_get_optional(dev, "connect", GPIOD_OUT_LOW);
--	if (IS_ERR(hub->connect))
-+	if (IS_ERR(hub->connect)) {
-+		if (is_clk_enable)
-+			clk_disable_unprepare(hub->clk);
- 		return PTR_ERR(hub->connect);
-+	}
- 	if (hub->connect)
- 		gpiod_set_consumer_name(hub->connect, "usb3503 connect");
- 
- 	hub->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(hub->reset))
-+	if (IS_ERR(hub->reset)) {
-+		if (is_clk_enable)
-+			clk_disable_unprepare(hub->clk);
- 		return PTR_ERR(hub->reset);
-+	}
- 	if (hub->reset) {
- 		/* Datasheet defines a hardware reset to be at least 100us */
- 		usleep_range(100, 10000);
+For example, 32-bit has to manually deal with doing a 64-bit value return,
+and even got it wrong originally, fixing it in commit 0eb592dbba40
+("x86/paravirt: return full 64-bit result"), with:
+
+-#define PVOP_VCALLEE_CLOBBERS          "=a" (__eax)
++#define PVOP_VCALLEE_CLOBBERS          "=a" (__eax), "=d" (__edx)
+
+But the naming is confusing, since these aren't actually clobbers,
+they're input constraints marked as clobbers (the "=" modifier).
+
+Regardless, the note in the comments ...
+
+ ...
+ * However, x86_64 also have to clobber all caller saved registers, which
+ * unfortunately, are quite a bit (r8 - r11)
+ ...
+
+... would indicate that ALL the function argument registers need to be
+marked as clobbers (i.e. the compiler can't figure this out on its own).
+
+I was going to say it seems like they're missing from EXTRA_CLOBBERS,
+but it's not used with any of the macros using PVOP_VCALLEE_CLOBBERS,
+and then I saw the weird alternatives patching that encodes the clobbers
+a second time (CLBR_ANY vs CLBR_RET_REG) via:
+
+#define _paravirt_alt(insn_string, type, clobber)       \
+        "771:\n\t" insn_string "\n" "772:\n"            \
+        ".pushsection .parainstructions,\"a\"\n"        \
+        _ASM_ALIGN "\n"                                 \
+        _ASM_PTR " 771b\n"                              \
+        "  .byte " type "\n"                            \
+        "  .byte 772b-771b\n"                           \
+        "  .short " clobber "\n"                        \
+        ".popsection\n"
+
+And after reading the alternatives patching code which parses this via
+the following struct:
+
+/* These all sit in the .parainstructions section to tell us what to patch. */
+struct paravirt_patch_site {
+        u8 *instr;              /* original instructions */
+        u8 type;                /* type of this instruction */
+        u8 len;                 /* length of original instruction */
+};
+
+... I see it _doesn't use the clobbers_ at all! *head explode* I found
+that removal in commit 27876f3882fd ("x86/paravirt: Remove clobbers from
+struct paravirt_patch_site")
+
+So, I guess the CLBR_* can all be entirely removed. But back to my other
+train of thought...
+
+It seems like all the input registers need to be explicitly listed in
+the PVOP_VCALLEE_CLOBBERS list (as you have), but likely should be done
+unconditionally and for 32-bit as well.
+
+-Kees
+
+(Also, please CC linux-hardening@vger.kernel.org.)
+
 -- 
-2.25.1
-
+Kees Cook

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31235ABD77
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99ADF5ABD78
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232350AbiICGdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 02:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S232415AbiICGej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 02:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiICGde (ORCPT
+        with ESMTP id S231520AbiICGeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 02:33:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFCFB7779
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:33:33 -0700 (PDT)
+        Sat, 3 Sep 2022 02:34:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FA91C104
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:34:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C24F60B2F
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D22C2C433D6;
-        Sat,  3 Sep 2022 06:33:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F173B82E80
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:34:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 665FAC433D6;
+        Sat,  3 Sep 2022 06:34:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662186812;
-        bh=FLClP/CWYVB7U+G72MvxNuGbFWXAOpLmjXm5ZoyA6vs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZjHw+0/MjXvHwOTouWtGvy6gmAjwb5e8II4gKD8hDH9egGOQ/u5GSdGCxUyrcsBnL
-         IfAE4LPvPLaoHXWB708NdPUVmcL/BzcKVVDudtMFOrSOKwtJ9vp7gcJDS3ey13Rx2p
-         e+V/goiZZfJtAKgx8f+td7Bo1Z1bBIauRMwW0p2A=
-Date:   Sat, 3 Sep 2022 08:33:50 +0200
+        s=korg; t=1662186870;
+        bh=qIryOSkgNbM7AVmMMg3eIYDfrnzRdTzTcuVH3brBIwE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=vtcYWniZu4/0foGlk441ZFvBzjrrpCgUcQNqbvmT7BtVmd7iMXCRzz4r2MfLrmFSU
+         /HCXR0szqNFRTFZtV4FrSvXwDbJO3D6vd3ziyvTY2wCZdDECNNECd4RGM6qMpqiDe6
+         jee0+5J4Zzxiud3qpfBt5HTtM3P8yVYpZ9eeSj9I=
+Date:   Sat, 3 Sep 2022 08:34:49 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Li Zhong <floridsleeves@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        rafael@kernel.org
-Subject: Re: [PATCH v1] drivers/base/auxiliary: check return value of
- strrchr()
-Message-ID: <YxL1TprLv3wzr08u@kroah.com>
-References: <CAMEuxRrg0nSroVGXwaCM1579Ddb822mY0hkSX5_Kcz1YqF_9sg@mail.gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [GIT PULL] Staging driver fixes for 6.0-rc4
+Message-ID: <YxL1iR5/c+tl60ja@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMEuxRrg0nSroVGXwaCM1579Ddb822mY0hkSX5_Kcz1YqF_9sg@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,57 +50,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 11:25:31PM -0700, Li Zhong wrote:
-> From: Li Zhong <floridsleeves@gmail.com>
-> 
-> The return value of strrchr() could be NULL, which will cause invalid
-> offset in (int)(p - name). So we check it here.
-> 
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> ---
->  drivers/base/auxiliary.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/auxiliary.c b/drivers/base/auxiliary.c
-> index 8c5e65930617..7ac23be47e1f 100644
-> --- a/drivers/base/auxiliary.c
-> +++ b/drivers/base/auxiliary.c
-> @@ -191,7 +191,8 @@ static int auxiliary_uevent(struct device *dev,
-> struct kobj_uevent_env *env)
-> 
->   name = dev_name(dev);
->   p = strrchr(name, '.');
-> -
-> + if (!p)
-> + return -EINVAL;
->   return add_uevent_var(env, "MODALIAS=%s%.*s", AUXILIARY_MODULE_PREFIX,
->         (int)(p - name), name);
->  }
-> -- 
-> 2.25.1
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Hi,
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+are available in the Git repository at:
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-6.0-rc4
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/email-clients.txt in order to fix this.
+for you to fetch changes up to e230a4455ac3e9b112f0367d1b8e255e141afae0:
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+  staging: rtl8712: fix use after free bugs (2022-08-30 17:15:16 +0200)
 
-thanks,
+----------------------------------------------------------------
+Staging driver fixes for 6.0-rc4
 
-greg k-h's patch email bot
+Here are 3 small staging driver fixes for 6.0-rc4 that resolve some
+reported problems and add some a device id:
+  - new device id for r8188eu driver
+  - use-after-free bugfixes for the rtl8712 driver
+  - fix up firmware dependency problem for the r8188eu driver
+
+All of these have been in linux-next for a while with no reported
+problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      staging: rtl8712: fix use after free bugs
+
+Grzegorz Szymaszek (1):
+      staging: r8188eu: add firmware dependency
+
+Larry Finger (1):
+      staging: r8188eu: Add Rosewill USB-N150 Nano to device tables
+
+ drivers/staging/r8188eu/os_dep/os_intfs.c |  1 +
+ drivers/staging/r8188eu/os_dep/usb_intf.c |  1 +
+ drivers/staging/rtl8712/rtl8712_cmd.c     | 36 -------------------------------
+ 3 files changed, 2 insertions(+), 36 deletions(-)

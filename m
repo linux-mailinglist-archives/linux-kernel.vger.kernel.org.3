@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF14E5AC06C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC62E5AC06F
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiICRtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 13:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
+        id S232712AbiICRwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 13:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiICRs7 (ORCPT
+        with ESMTP id S229612AbiICRw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 13:48:59 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239B553D16;
-        Sat,  3 Sep 2022 10:48:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662227338; x=1693763338;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vBns7j9FUt8fPAWHIlfUjC3o9Q8+8wFBJc0wtm12Fns=;
-  b=dGlP1PDUkOqd/DsMkLj4AQg/cphpq+Dmo/tAqL1YbRAZCwPoisexWIQ7
-   YnoryWHzQeI7TXBvdREyEIL5tewSRDXbL3qq3D34ygYLG8/WU4PjwfUP3
-   MoiyhyeM1vM3fwLY2fla/LHUhrIkaiVCj6Sp2mIW6RBcJGrT4c6movwZO
-   BomXP0q2fcLvMh1wCpTk7B7ROZs3kJ/6c1flZb9nInUlcFuVsonT36JpH
-   LJGTb/0aDVQ4XMUU5EoeN3CsehGplVS+v01NU+meLWUJVkidrvrY4sYmY
-   UistAoe0wyjomd6e0krxaiATmNoiksojSWWyhxl7H8uH+yklkW3vdyCAX
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="279190954"
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="279190954"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 10:48:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="613359713"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 03 Sep 2022 10:48:55 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUXGI-0001yL-1a;
-        Sat, 03 Sep 2022 17:48:54 +0000
-Date:   Sun, 4 Sep 2022 01:48:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     guoren@kernel.org, arnd@arndb.de, palmer@rivosinc.com,
-        tglx@linutronix.de, luto@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: Re: [PATCH 1/3] riscv: convert to generic entry
-Message-ID: <202209040122.Nhovi9f6-lkp@intel.com>
-References: <20220903163808.1954131-2-guoren@kernel.org>
+        Sat, 3 Sep 2022 13:52:27 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FE7580A7;
+        Sat,  3 Sep 2022 10:52:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4dwZEjTHso5b/E8ambbqsH4pHZvxi/mrOhOv3FzbXQI=; b=SKuBBVq3qR/tefEtR0X/Himz+P
+        H9EvUpqaCLaUDOYrM98uxMiIfF128W33ZcslR7Qt2HlCTkRbo9UcwAwPvqlzZ3iOsGG26wDsdVHkO
+        OnUDpHh6p6YG/yZlteu3mnGS1b5h+Mr1Oxy/GqpDmU+CSvMxKfKXY3DrmIMZ9h3BB90JUl0hVlQ/9
+        TYu7mu3yvpfOfcfQCGryedNL4xgGFPbITCCKftzNJeTEee81HyCyMuXpGbLCXIgDjXR4+G3+lVRWB
+        57lIL2LpFi3l+71yvcOLlt6TvwVvqdcmNC1owqASAn9SYbhQdRTBnBJKXkdFWocJaZ591WJ1n8cjJ
+        4kFiTuGw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oUXJY-00Bq1X-KZ;
+        Sat, 03 Sep 2022 17:52:16 +0000
+Date:   Sat, 3 Sep 2022 18:52:16 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daire Byrne <daire@dneg.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/10] VFS: support parallel updates in the one directory.
+Message-ID: <YxOUUEXAbUdFLVKk@ZenIV>
+References: <166147828344.25420.13834885828450967910.stgit@noble.brown>
+ <166147984370.25420.13019217727422217511.stgit@noble.brown>
+ <YwmS63X3Sm4bhlcT@ZenIV>
+ <166173834258.27490.151597372187103012@noble.neil.brown.name>
+ <YxKaaN9cHD5yzlTr@ZenIV>
+ <166216924401.28768.5809376269835339554@noble.neil.brown.name>
+ <YxK4CiVNaQ6egobJ@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220903163808.1954131-2-guoren@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YxK4CiVNaQ6egobJ@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Sep 03, 2022 at 03:12:26AM +0100, Al Viro wrote:
 
-I love your patch! Perhaps something to improve:
+> Very much so.  You are starting to invent new rules for ->lookup() that
+> just never had been there, basing on nothing better than a couple of
+> examples.  They are nowhere near everything there is.
 
-[auto build test WARNING on soc/for-next]
-[also build test WARNING on linus/master v6.0-rc3 next-20220901]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+A few examples besides NFS and autofs:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209040122.Nhovi9f6-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8390e92d0bcc635f457df18c8c1baefc78a94e48
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
-        git checkout 8390e92d0bcc635f457df18c8c1baefc78a94e48
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+ext4, f2fs and xfs might bloody well return NULL without hashing - happens
+on negative lookups with 'casefolding' crap.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+kernfs - treatment of inactive nodes.
 
-All warnings (new ones prefixed by >>):
+afs_dynroot_lookup() treatment of @cell... names.
 
->> arch/riscv/kernel/signal.c:275:6: warning: no previous prototype for 'arch_do_signal_or_restart' [-Wmissing-prototypes]
-     275 | void arch_do_signal_or_restart(struct pt_regs *regs, bool has_signal)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+afs_lookup() treatment of @sys... names.
 
+There might very well be more - both merged into mainline and in
+development trees of various filesystems (including devel branches
+of in-tree ones - I'm not talking about out-of-tree projects).
 
-vim +/arch_do_signal_or_restart +275 arch/riscv/kernel/signal.c
+Note, BTW, that with the current rules it's perfectly possible to
+have this kind of fun:
+	a name that resolves to different files for different processes
+	unlink(2) is allowed and results depend upon the calling process
 
-   274	
- > 275	void arch_do_signal_or_restart(struct pt_regs *regs, bool has_signal)
+All it takes is ->lookup() deliberately *NOT* hashing the sucker and
+->unlink() acting according to dentry it has gotten from the caller.
+unlink(2) from different callers are serialized and none of that
+stuff is ever going to be hashed.  d_alloc_parallel() might pick an
+in-lookup dentry from another caller of e.g. stat(2), but it will
+wait for in-lookup state ending, notice that the sucker is not hashed,
+drop it and retry.  Suboptimal, but it works.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Nothing in the mainline currently does that.  Nothing that I know of,
+that is.  Sure, it could be made work with the changes you seem to
+imply (if I'm not misreading you) - all it takes is lookup
+calling d_lookup_done() on its argument before returning NULL.
+But that's subtle, non-obvious and not documented anywhere...
+
+Another interesting question is the rules for unhashing dentries.
+What is needed for somebody to do temporary unhash, followed by
+rehashing?

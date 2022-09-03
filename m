@@ -2,192 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 370295ABE27
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 11:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FED5ABE26
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 11:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbiICJgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 05:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
+        id S233548AbiICJgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 05:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbiICJgH (ORCPT
+        with ESMTP id S233179AbiICJgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 05:36:07 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F4A2B27A;
-        Sat,  3 Sep 2022 02:36:01 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id p16so8053454ejb.9;
-        Sat, 03 Sep 2022 02:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=cYpK52+AbV0mo3/PdZ6oSyeezUksBCAZPCdP5o2p4qQ=;
-        b=hWeJbzzd5Vv/c7G5J+qdsWZWuyvLD+6FW7EBpWY1oyV2IimGtw91VnZU6ykBhKxRd0
-         HI/96YapkPZ/Qb4/kqaW4eEDuAyMD1X9WfXF6zxWTs/aQplO4nYBuINcP3ia27eqf4UJ
-         2zXJmG75WpnBUWPf0F56nYuPjp3tnu2DNOkcfSqkaCzC84w3M9Rllu3/iqK3KYKzo1Nd
-         yGl0dV5x1gEnElOVQSdnmI+bLDJGYJmn6UPajVPZUkas/IPEifhcQvJLO/1QIdBO7JOL
-         BchBJgDnma3ZtQNxffW+NjcqLme5Uch9iNbm/1uAVVrQ7p5rcvAPN15Nu2/qpTnbfII8
-         vThg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=cYpK52+AbV0mo3/PdZ6oSyeezUksBCAZPCdP5o2p4qQ=;
-        b=fy8LIHCeIild9gWHlppA3rxF+7zgqQUcnHFCj1M7zyeU8+P0+uvakNQHY0h3Qg+Tu3
-         JbeFYQYbN+9VjUnF1TDSQaJDVmNLCLz3plwieiZUQgB2AVwaQEK31/VhiIYfue2GtmKc
-         1Dmyv+ltgVVWg0qB920er6Z9av8OEGHLcZUDVM+ytgks+wZCQnKsTKxGKg2koiEYXYB+
-         YbOnPSeygIUkk62gHFcoRo7ptOONRt3HAlOagQyKtbaC1cs8Kgu5guGzUAmCNQOa0vId
-         0a4cAbEOID4VUnVgrJ8YD/ypwJaoP1ARpg34MSMfNQkcTnLc16DIujI5rYSX8xCeepFS
-         TLxw==
-X-Gm-Message-State: ACgBeo35dUyUywQl4Xpz3gUgRNVxjAt1vefQnU1Ji8/zNA8d6YWr1gsF
-        Uc+pGCoCDSZZdmwIdDMaKNY=
-X-Google-Smtp-Source: AA6agR4omMFKjEKOdgtb55PZdhzqZpjCSGctYWyltoqHlH76z+4YzTjZ+VzWrbhbU4D8lNkcPMiHmA==
-X-Received: by 2002:a17:906:5a64:b0:741:3586:92f with SMTP id my36-20020a1709065a6400b007413586092fmr25542689ejc.721.1662197759752;
-        Sat, 03 Sep 2022 02:35:59 -0700 (PDT)
-Received: from ?IPV6:2a04:241e:502:a09c:f5ae:4a6b:1158:493a? ([2a04:241e:502:a09c:f5ae:4a6b:1158:493a])
-        by smtp.gmail.com with ESMTPSA id 8-20020a170906328800b0073dbaeb50f6sm2259494ejw.169.2022.09.03.02.35.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Sep 2022 02:35:59 -0700 (PDT)
-Message-ID: <64091cfa-b735-14d4-f184-b02333dd303c@gmail.com>
-Date:   Sat, 3 Sep 2022 12:35:56 +0300
+        Sat, 3 Sep 2022 05:36:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA61DFE3;
+        Sat,  3 Sep 2022 02:36:23 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2839Nxsp013070;
+        Sat, 3 Sep 2022 09:36:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=GOkO7kUUsDo/h9lgcGw5jZNwdqu6IJS0Ee1s02diS7E=;
+ b=rk6KaMiO3rmhEI/t37emgA1uxVJuMgGOjdpT+ckOj0bf+R3dDOn2YKoZ4vjaO832qwPC
+ h0PobmO7VA/LDQpQ5Bo8+C6FmRHRmAtrhVa9FKRMDi0Wyd82mHepLTJBq4C7eL/GEe5e
+ sB5j2G0HtF5c0FmVAla+vbkFQrU3Xxmck1NmOia3LoYsTh6PXhEnoBsiHhwQZi+Yz3rq
+ PMMt3lQKh4Bvy8xNdvFab255PMjZdO+yAHSZKgVBkCXo3QNCsaMtEEsvc/m133y+1CT5
+ 6yVigbQtSzKe3iOYQ0TXUvAYN3g3SEl0zXh2lq33t4O5fl6U3zaW+5n8CHk0/xlfacQB sQ== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jc48rr7wg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 03 Sep 2022 09:36:22 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2839aKKu005762;
+        Sat, 3 Sep 2022 09:36:20 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma05fra.de.ibm.com with ESMTP id 3jbxj8r702-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 03 Sep 2022 09:36:20 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2839aG3k38404566
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 3 Sep 2022 09:36:16 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B3CB45204F;
+        Sat,  3 Sep 2022 09:36:16 +0000 (GMT)
+Received: from localhost (unknown [9.171.88.165])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 587765204E;
+        Sat,  3 Sep 2022 09:36:16 +0000 (GMT)
+Date:   Sat, 3 Sep 2022 11:36:14 +0200
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [GIT PULL] s390 updates for 6.0-rc4
+Message-ID: <your-ad-here.call-01662197774-ext-9772@work.hours>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1YNkT7tYqvpPYWWfv2CGnKxvO9i4ghYU
+X-Proofpoint-ORIG-GUID: 1YNkT7tYqvpPYWWfv2CGnKxvO9i4ghYU
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 08/31] net/tcp: Introduce TCP_AO setsockopt()s
-Content-Language: en-US
-To:     Dmitry Safonov <dima@arista.com>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        David Ahern <dsahern@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-References: <20220818170005.747015-1-dima@arista.com>
- <20220818170005.747015-9-dima@arista.com>
- <162ae93b-5589-fbde-c63b-749f21051784@gmail.com>
- <CAGrbwDTW4_uVD+YbsL=jnfTGKAaHGOmzNZmpkSRi4xotzyNASg@mail.gmail.com>
-From:   Leonard Crestez <cdleonard@gmail.com>
-In-Reply-To: <CAGrbwDTW4_uVD+YbsL=jnfTGKAaHGOmzNZmpkSRi4xotzyNASg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-03_03,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ mlxscore=0 malwarescore=0 priorityscore=1501 impostorscore=0 spamscore=0
+ mlxlogscore=609 bulkscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209030048
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/22 21:48, Dmitry Safonov wrote:
-> On 8/23/22 15:45, Leonard Crestez wrote:
->> On 8/18/22 19:59, Dmitry Safonov wrote:
-> [..]
->>> +#define TCP_AO            38    /* (Add/Set MKT) */
->>> +#define TCP_AO_DEL        39    /* (Delete MKT) */
->>> +#define TCP_AO_MOD        40    /* (Modify MKT) */
->>
->> The TCP_AO_MOD sockopt doesn't actually modify and MKT, it only controls
->> per-socket properties. It is equivalent to my TCP_AUTHOPT sockopt while
->> TCP_AO is equivalent to TCP_AUTHOPT_KEY. My equivalent of TCP_AO_DEL
->> sockopt is a flag inside tcp_authopt_key.
-> 
-> Fair point, the comment could be "Modify AO", rather than "Modify MKT".
-> On the other side, this can later support more per-key changes than in
-> the initial proposal: i.e., zero per-key counters. Password and rcv/snd
-> ids can't change to follow RFC text, but non-essentials may.
-> So, the comment to the command here is not really incorrect.
+Hello Linus,
 
-I think it makes sense to at least separate per-key and per-socket 
-options. This way a sockopt for per-socket info doesn't contain fields 
-used to identify keys which is much clearer.
+please pull s390 changes for 6.0-rc4.
 
->> I also have two fields called "recv_keyid" and "recv_rnextkeyid" which
->> inform userspace about what the remote is sending, I'm not seeing an
->> equivalent on your side.
-> 
-> Sounds like a good candidate for getsockopt() for logs/debugging.
-> 
->> The specification around send_keyid in the RFC is conflicting:
->> * User must be able to control it
-> 
-> I don't see where you read it, care to point it out?
-> I see choosing the current_key by marking the preferred key during
-> an establishment of a connection, but I don't see any "MUST control
-> current_key". We allow changing current_key, but that's actually
-> not something required by RFC, the only thing required is to respect
-> rnext_key that's asked by peer.
-> 
->> * Implementation must respect rnextkeyid in incoming packet
->>
->> I solved this apparent conflict by adding a
->> "TCP_AUTHOPT_FLAG_LOCK_KEYID" flag so that user can choose if it wants
->> to control the sending key or let it be controlled from the other side.
-> 
-> That's exactly violating the above "Implementation must respect
-> rnextkeyid in incoming packet". See RFC5925 (7.5.2.e).
+Thank you,
+Vasily
 
-This is based on paragraphs towards the end of Section 7.1:
+The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
 
- >> TCP SEND, or a sequence of commands resulting in a SEND, MUST be
-augmented so that the preferred outgoing MKT (current_key) and/or the
-preferred incoming MKT (rnext_key) of a connection can be indicated.
+  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
 
-This is for TCP SEND, not just open/connect. I'm reading this as a
-requirement that userspace *MUST* be able to control the current key. 
-Yes, it does seem contradict 7.5.2.e which is why I implemented this as 
-a "key lock flag".
+are available in the Git repository at:
 
- >> TCP RECEIVE, or the sequence of commands resulting in a RECEIVE,
-MUST be augmented so that the KeyID and RNextKeyID of a recently
-received segment is available to the user out of band (e.g., as an
-additional parameter to RECEIVE or via a STATUS call).
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.0-3
 
-It seems to me that it *MUST* be possible for userspace to read the 
-incoming rnextkeyid and handle it by itself. It could choose to follow 
-7.5.2.e or it could do something entirely different. When it can't 
-respect rnextkeyid because the key is not yet valid then userspace has 
-more information to make an alternative current_key decision.
+for you to fetch changes up to 7c8d42fdf1a84b1a0dd60d6528309c8ec127e87c:
 
-> 
-> [..]
->> Only two algorithms are defined in RFC5926 and you have to treat one of
->> them as a special case. I remain convinced that generic support for
->> arbitrary algorithms is undesirable; it's better for the algorithm to be
->> specified as an enum.
-> 
-> So, why limit a new TCP sign feature to already insecure algorithms?
-> One can already use any crypto algorithms for example, in tunnels.
-> And I don't see any benefit in defining new magic macros, only downside.
+  s390/hugetlb: fix prepare_hugepage_range() check for 2 GB hugepages (2022-08-30 21:57:07 +0200)
 
-Adding support for arbitrary algorithms increases complexity for no 
-real-world gain. There are also lots of corner cases that must be 
-treated correctly like odd traffic_keylen and maclen, having an enum
-means that userspace can't attempt to trick us. The ABI is also smaller.
+----------------------------------------------------------------
+s390 updates for 6.0-rc4
 
-There's also a special case in one of the two concrete KDFs defined by 
-RFC5925. What if there are more, will the ABI be expanded to support all 
-the cases?
+- Update defconfigs.
 
-Disagreements over whether a particular form of extensibility is 
-"useful" are unlikely to result in any sort of useful conclusion. I'm 
-lazy so I only care about interop with existing implementations from 
-Juniper and Cisco.
+- Fix linker script to align nospec tables correctly to avoid potentially
+  unbootable kernel with some config options.
 
---
-Regards,
-Leonard
+- Fix alignment check in prepare_hugepage_range() for 2GB hugepages to avoid
+  BUG in __unmap_hugepage_range() for unaligned mappings later.
+
+- Remove useless hugepage address alignment in hugetlb faults handling.
+
+----------------------------------------------------------------
+Gerald Schaefer (2):
+      s390/mm: remove useless hugepage address alignment
+      s390/hugetlb: fix prepare_hugepage_range() check for 2 GB hugepages
+
+Heiko Carstens (1):
+      s390: update defconfigs
+
+Josh Poimboeuf (1):
+      s390: fix nospec table alignments
+
+ arch/s390/configs/debug_defconfig    | 53 ++++++++++++++++++++----------------
+ arch/s390/configs/defconfig          | 49 ++++++++++++++++++---------------
+ arch/s390/configs/zfcpdump_defconfig |  6 ++--
+ arch/s390/include/asm/hugetlb.h      |  6 ++--
+ arch/s390/kernel/vmlinux.lds.S       |  1 +
+ arch/s390/mm/fault.c                 |  2 --
+ 6 files changed, 65 insertions(+), 52 deletions(-)

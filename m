@@ -2,167 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BE55ABD84
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B925ABD8A
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbiICGs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 02:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S232758AbiICGwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 02:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiICGsz (ORCPT
+        with ESMTP id S231666AbiICGwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 02:48:55 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CF46A59BD;
-        Fri,  2 Sep 2022 23:48:53 -0700 (PDT)
-Received: from [192.168.100.8] (unknown [112.20.110.237])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmvO+BJj3VsQAA--.55696S3;
-        Sat, 03 Sep 2022 14:48:47 +0800 (CST)
-Message-ID: <f05f2c68-70cf-60b7-49a9-f531f329de5c@loongson.cn>
-Date:   Sat, 3 Sep 2022 14:48:41 +0800
+        Sat, 3 Sep 2022 02:52:39 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A5EBB6A3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:52:38 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-33dce2d4bc8so33483387b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 23:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ReE86CAuXFmaMHJ7YOUAJHviWpFsT5ozIc0Vr/5is54=;
+        b=eFWMH5qnQtV84oUmcsyzFEuWFg1a1ann3d3GfyO1fKAPei7VpCFvt3PEKfE/LWBD2/
+         Pj0IwkfG+2UrAk+Zq2lM3COEfUfFcFCL7RYZ8nVuQQVQR9g4fxfif/tAASgmZvNSwy5z
+         Y5sDf66a6OFuM+7OPgHzMT8Vh6WqMdzYtjmRyUVf5YOYizLf6W8vQPfS7XALBBy/W9su
+         Z79aaLmYlUpfGtB+Cy1bI/PK7gDqEsmkPIwZLw3aKLtCIw/0Q98W6ps9rMgv8UCULCYK
+         HJ//3s87yITwqRnqEvMGVO5eUlnL9CUtmH25yMPL+B7zcobtXx6W/ibisQxa5Qiip/0D
+         5Vaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ReE86CAuXFmaMHJ7YOUAJHviWpFsT5ozIc0Vr/5is54=;
+        b=5MUTINJY+Z4Qby5IhIbkh0HPFZU/h0h7Iij3Tnchju1Dtt1XVWVM9wNNBvPUYJFMDw
+         T18yFwC9BD389JxpqophXLQf1P1kSK706pNgeumpeQc/JAq9IB8pprD8hKzSKSAHvxHc
+         bSfv2cnX9STn3bQL6RHEzOkN004EyaO99by0yLiKyxVC0EW3ySbBRnd6E8k4MBLRCUE1
+         uYONLss/FSU9oqa3wX6TXH+heDe7YS5heNFjIOzY7JguAvzEibu+U+fkX20hahQuxAA1
+         EIAMJGsUmBGDg0jHQ6Ok10yEbYhVG6wAtY61ysiUPOQYPAh2Ag0+PowKQ52jhyiyWnxx
+         fWbw==
+X-Gm-Message-State: ACgBeo2XBKdhWg7zjY/Z64wvID/AW5VMVbNhv4ssqb9pKWR8bIPMquQR
+        1kyVSb8P7dzZkqDR/FW/gFw9/+vA3Ydl8wuu82H0+Q==
+X-Google-Smtp-Source: AA6agR5NLwbY37rIKDr5iizkgRfVc6QFlkp9VsnBMmmRAefLTFJUEUrxxvWaur/K+fvnqZ3yhMeQo3IQUNJX6X0GBnI=
+X-Received: by 2002:a81:6808:0:b0:345:be:890a with SMTP id d8-20020a816808000000b0034500be890amr3134610ywc.267.1662187957704;
+ Fri, 02 Sep 2022 23:52:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] counter: Realign counter_comp comment block to 80
- characters
-To:     William Breathitt Gray <william.gray@linaro.org>,
-        linux-iio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220902120839.4260-1-william.gray@linaro.org>
-From:   YanTeng Si <siyanteng@loongson.cn>
-In-Reply-To: <20220902120839.4260-1-william.gray@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxnmvO+BJj3VsQAA--.55696S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxtFW5Zr1xZr4UKr48Gw48JFb_yoW7trW5pF
-        Wq9rs8Cw1293W8Z3sFyw48X3W5Gw4FvF43Ca9Fga4UArnFk3s5WFyDKr10qw4UJanYyFyD
-        A3W8X34UXa18GaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
-        8wCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
-        9x07bwQ6XUUUUU=
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220903000210.1112014-1-namhyung@kernel.org>
+In-Reply-To: <20220903000210.1112014-1-namhyung@kernel.org>
+From:   Marco Elver <elver@google.com>
+Date:   Sat, 3 Sep 2022 08:52:01 +0200
+Message-ID: <CANpmjNMPh5QjdxXtrCc5FApjgzV=81CNNiwbeg_rE3NxN_WCZw@mail.gmail.com>
+Subject: Re: [PATCH] perf test: Skip sigtrap test on old kernels
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/9/2 20:08, William Breathitt Gray 写道:
-> The member documentation comment lines for struct counter_comp extend
-> past the 80-characters column boundary due to extra identation at the
-> start of each section. This patch realigns the comment block within the
-> 80-characters boundary by removing these superfluous indents.
+On Sat, 3 Sept 2022 at 02:02, Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> Cc: Yanteng Si <siyanteng@loongson.cn>
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
-Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
+> If it runs on an old kernel, perf_event_open would fail because of the
+> new fields sigtrap and sig_data.  Just skip the test if it failed.
+>
+> Cc: Marco Elver <elver@google.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 > ---
->   include/linux/counter.h | 40 ++++++++++++++++++++--------------------
->   1 file changed, 20 insertions(+), 20 deletions(-)
+>  tools/perf/tests/sigtrap.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/include/linux/counter.h b/include/linux/counter.h
-> index 1fe17f5adb09..a81234bc8ea8 100644
-> --- a/include/linux/counter.h
-> +++ b/include/linux/counter.h
-> @@ -38,64 +38,64 @@ enum counter_comp_type {
->    * @type:		Counter component data type
->    * @name:		device-specific component name
->    * @priv:		component-relevant data
-> - * @action_read:		Synapse action mode read callback. The read value of the
-> + * @action_read:	Synapse action mode read callback. The read value of the
->    *			respective Synapse action mode should be passed back via
->    *			the action parameter.
-> - * @device_u8_read:		Device u8 component read callback. The read value of the
-> + * @device_u8_read:	Device u8 component read callback. The read value of the
->    *			respective Device u8 component should be passed back via
->    *			the val parameter.
-> - * @count_u8_read:		Count u8 component read callback. The read value of the
-> + * @count_u8_read:	Count u8 component read callback. The read value of the
->    *			respective Count u8 component should be passed back via
->    *			the val parameter.
-> - * @signal_u8_read:		Signal u8 component read callback. The read value of the
-> + * @signal_u8_read:	Signal u8 component read callback. The read value of the
->    *			respective Signal u8 component should be passed back via
->    *			the val parameter.
-> - * @device_u32_read:		Device u32 component read callback. The read value of
-> + * @device_u32_read:	Device u32 component read callback. The read value of
->    *			the respective Device u32 component should be passed
->    *			back via the val parameter.
-> - * @count_u32_read:		Count u32 component read callback. The read value of the
-> + * @count_u32_read:	Count u32 component read callback. The read value of the
->    *			respective Count u32 component should be passed back via
->    *			the val parameter.
-> - * @signal_u32_read:		Signal u32 component read callback. The read value of
-> + * @signal_u32_read:	Signal u32 component read callback. The read value of
->    *			the respective Signal u32 component should be passed
->    *			back via the val parameter.
-> - * @device_u64_read:		Device u64 component read callback. The read value of
-> + * @device_u64_read:	Device u64 component read callback. The read value of
->    *			the respective Device u64 component should be passed
->    *			back via the val parameter.
-> - * @count_u64_read:		Count u64 component read callback. The read value of the
-> + * @count_u64_read:	Count u64 component read callback. The read value of the
->    *			respective Count u64 component should be passed back via
->    *			the val parameter.
-> - * @signal_u64_read:		Signal u64 component read callback. The read value of
-> + * @signal_u64_read:	Signal u64 component read callback. The read value of
->    *			the respective Signal u64 component should be passed
->    *			back via the val parameter.
-> - * @action_write:		Synapse action mode write callback. The write value of
-> + * @action_write:	Synapse action mode write callback. The write value of
->    *			the respective Synapse action mode is passed via the
->    *			action parameter.
-> - * @device_u8_write:		Device u8 component write callback. The write value of
-> + * @device_u8_write:	Device u8 component write callback. The write value of
->    *			the respective Device u8 component is passed via the val
->    *			parameter.
-> - * @count_u8_write:		Count u8 component write callback. The write value of
-> + * @count_u8_write:	Count u8 component write callback. The write value of
->    *			the respective Count u8 component is passed via the val
->    *			parameter.
-> - * @signal_u8_write:		Signal u8 component write callback. The write value of
-> + * @signal_u8_write:	Signal u8 component write callback. The write value of
->    *			the respective Signal u8 component is passed via the val
->    *			parameter.
-> - * @device_u32_write:		Device u32 component write callback. The write value of
-> + * @device_u32_write:	Device u32 component write callback. The write value of
->    *			the respective Device u32 component is passed via the
->    *			val parameter.
-> - * @count_u32_write:		Count u32 component write callback. The write value of
-> + * @count_u32_write:	Count u32 component write callback. The write value of
->    *			the respective Count u32 component is passed via the val
->    *			parameter.
-> - * @signal_u32_write:		Signal u32 component write callback. The write value of
-> + * @signal_u32_write:	Signal u32 component write callback. The write value of
->    *			the respective Signal u32 component is passed via the
->    *			val parameter.
-> - * @device_u64_write:		Device u64 component write callback. The write value of
-> + * @device_u64_write:	Device u64 component write callback. The write value of
->    *			the respective Device u64 component is passed via the
->    *			val parameter.
-> - * @count_u64_write:		Count u64 component write callback. The write value of
-> + * @count_u64_write:	Count u64 component write callback. The write value of
->    *			the respective Count u64 component is passed via the val
->    *			parameter.
-> - * @signal_u64_write:		Signal u64 component write callback. The write value of
-> + * @signal_u64_write:	Signal u64 component write callback. The write value of
->    *			the respective Signal u64 component is passed via the
->    *			val parameter.
->    */
->
-> base-commit: a12224997bec72d231a8dd642876e6364decdc45
+> diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+> index e32ece90e164..7057566e6ae4 100644
+> --- a/tools/perf/tests/sigtrap.c
+> +++ b/tools/perf/tests/sigtrap.c
+> @@ -140,6 +140,7 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
+>         fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
+>         if (fd < 0) {
+>                 pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
+> +               ret = TEST_SKIP;
 
+Wouldn't we be interested if perf_event_open() fails because it could
+actually be a bug? By skipping we'll be more likely to miss the fact
+there's a real problem.
+
+That's my naive thinking at least - what do other perf tests usually
+do in this case?
+
+Thanks,
+-- Marco

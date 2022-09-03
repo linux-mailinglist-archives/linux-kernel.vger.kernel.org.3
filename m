@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B79A5ABF3C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 16:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 007AE5ABF51
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 16:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbiICOL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 10:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
+        id S230018AbiICOUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 10:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiICOLY (ORCPT
+        with ESMTP id S229825AbiICOUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 10:11:24 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573DC205E8
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 07:11:24 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id b63so2247360vkh.5
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 07:11:24 -0700 (PDT)
+        Sat, 3 Sep 2022 10:20:42 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B79C5C9C0
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 07:20:38 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-11eb44f520dso11585526fac.10
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 07:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=R+M1YvVpdR2Y/vihfHhLq4Wuj9YhHF0H0u4Cbj7WBq8=;
-        b=o9NRMPL9u4Da8MRhtDCt6JITbrQLv+e2QU9zvjpwm7kJIr0I3L71YgQca6gArSgvli
-         Hqa0wFrvv41YNbIk2s46OWDyLYVvIXfOsPMdwGs8hrGFCAvVJdYRun1+U82HxGLHoC40
-         C03yKrLtnAJbIMbUHhtSFiKzVatLYVJda8P6drP/UvFZFzIyIbs2EY4PZrl8PxYhURZi
-         gYFzc9ZxHwiDgTO2FPPiZyyDm3ZY3m8D6BPOpK4jJE3im4f5ufi29IC+we7COVqjsuSw
-         t93ZH7JI67d1yOEaEknwgrykWCkHm+saDjzDujOv7vMI8GOE3TfRzDLvW7AYHvRVxg6Z
-         49TA==
+        d=linuxtx.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=rpEmRJ1mNkHbfkRJnjyamGSfVQCR30g6KpgPEcvcyuM=;
+        b=ZORo2E9awlrODtIhY4o0f7kedepDXVi3CtO0qcaIqcr9WRHxRmSz1vtXiLvZP6K91S
+         5ygZlfqplvyL3o8RlNvlCps/mPwP18AzFKwNCaqVILMvOCGhciQKS91XpiYhzl87QLWO
+         Vd78k+0U1Gq7wYlPTsRBc1ISlQx7PEh8QQabw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=R+M1YvVpdR2Y/vihfHhLq4Wuj9YhHF0H0u4Cbj7WBq8=;
-        b=1hk11cKioZukD18/eHZ5c8F7XdAicH9bzwo7geTh2tXd+Lpm69D5F2k3Mq+haxhKeX
-         TYMutfjJ3RQT6l6UBBGYG7X8YABo9nXMs9Zr2U1g6CMv2Y1Bial7KYP9C/RyZmdBdLhT
-         GVP9vmA8zddOJ1ixZBOXHCvsSOAbK4YEXwqWx7ALSsO8kMydRBHQOTRb8FfmmttkNk6G
-         CI3JFr0HFe3aUKPFjGi88xChm7sGRvx4/5ZU3HIsohg80hRGRYn+X0QzX5tzwgmt9Q9B
-         KnxQA0gokXQxx1LpxAOyFRsjxlU1DZkuL6Dya2nsgaMbJOw9v9pUCeEib9qcdmbo0Y6O
-         jQLQ==
-X-Gm-Message-State: ACgBeo0zzAEk9eOrDVy+P27Yb1ptWUJFMDWi+pf/JBj2XQO69Tnd1Su3
-        p3yeLdtTHE7tV3kHwWZN+/5tF6nKRJUeuO0kdRo=
-X-Google-Smtp-Source: AA6agR4ZXrSj8UcycnvDSOG65EODD+X8oslAxIkfYEvu5DQRXUvk+iR033UvTxWXzy2BvJ6nHQteJKHustSbC9SCfvw=
-X-Received: by 2002:a1f:ce05:0:b0:394:5ae7:5857 with SMTP id
- e5-20020a1fce05000000b003945ae75857mr10048191vkg.22.1662214283317; Sat, 03
- Sep 2022 07:11:23 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=rpEmRJ1mNkHbfkRJnjyamGSfVQCR30g6KpgPEcvcyuM=;
+        b=bXIxSMb3RqIoGUMv2InJt7smCH57LjioSNzSsxUasHsXr4+8Iy/ii3zjb76dXze9CE
+         j9IOPayN9BrJF+QQoZJRLaqu2w08iwtErXl2UF7G3mSS/YtR76o2/8lEi+MHWehcTI1h
+         X1Cd0pLb1sez539NXojOBofGe0Jka7lmXyhAFye4V/V+ZuI4pW3t44Ko6+rgYLMjXWNx
+         8YIGh2kRRdqP5Z9FbCPNk1R0TcMl7y2oF1ZAyGd1YsElQfTRCiidrEIRLAOGVL/F6dJx
+         g4bjZxLDyYaFEUiUYJunOnwKgguO4Hg/bPHwQVXc4UwOSvYcAAfXbzw/47YKxLbmiG7i
+         Lxjw==
+X-Gm-Message-State: ACgBeo2Oy69BDedD5MiOULc5QAUC24kPVJdYgnw9RNREypYxtVi++jDu
+        7f1PUGBJ6lY6N+mR0hlByT/wRQ==
+X-Google-Smtp-Source: AA6agR6sv6e7lTJlwQk82+32kkL8yIevjQbilZS9V9OXWx4FIBJm7KPzzRXRJV9Veuf4B/vR7JrzSw==
+X-Received: by 2002:a05:6870:2392:b0:125:7a80:879f with SMTP id e18-20020a056870239200b001257a80879fmr2002751oap.174.1662214837584;
+        Sat, 03 Sep 2022 07:20:37 -0700 (PDT)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id a7-20020a9d5c87000000b0063736db0ae9sm2381178oti.15.2022.09.03.07.20.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 07:20:36 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Sat, 3 Sep 2022 09:20:34 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 00/72] 5.19.7-rc1 review
+Message-ID: <YxNisrx2UIztutHK@fedora64.linuxtx.org>
+References: <20220902121404.772492078@linuxfoundation.org>
 MIME-Version: 1.0
-Received: by 2002:a59:d3eb:0:b0:2d1:220c:9afa with HTTP; Sat, 3 Sep 2022
- 07:11:22 -0700 (PDT)
-Reply-To: keenjr73@gmail.com
-From:   "keen J. Richardson" <roseibrahim1985@gmail.com>
-Date:   Sat, 3 Sep 2022 14:11:22 +0000
-Message-ID: <CAEJJipWbrp5pfwQONJV6Lg5A7_MPiqZED3Jbzv=ZgA=VN95c2g@mail.gmail.com>
-Subject: Guten Morgen
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a32 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5226]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [roseibrahim1985[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [keenjr73[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [roseibrahim1985[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Irgendwann letzte Woche wurde Ihnen eine Mail mit der Erwartung von gesende=
-t
-Ich habe eine Antwortmail von Ihnen erhalten, aber zu meiner
-=C3=9Cberraschung haben Sie sich nie die M=C3=BChe gemacht, zu antworten.
-Bitte antworten Sie f=C3=BCr weitere Erkl=C3=A4rungen.
+On Fri, Sep 02, 2022 at 02:18:36PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.7 release.
+> There are 72 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.7-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Hochachtungsvoll,
-Keen J. Richardson.
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
+
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

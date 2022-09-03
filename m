@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A865ABE99
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 12:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC4A5ABEA8
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 13:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiICKuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 06:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
+        id S230163AbiICLMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 07:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiICKt5 (ORCPT
+        with ESMTP id S229626AbiICLMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 06:49:57 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE9D286E8;
-        Sat,  3 Sep 2022 03:49:55 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id c11so962179wrp.11;
-        Sat, 03 Sep 2022 03:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=XrMdVv2xUhxR5Q9kOZUXM47qxjFM4pdwsuKh8dulBXY=;
-        b=X1THUn+uLxxNb25VDUXlkAxwbhSEA7vESxCPVQFbn/j3T9JBQ0o8jiOoOAfD0TodR7
-         kyyzzq5XALDLjnhj1XbWHm4MME8mhngQoct6DDU6Z6T8xEfFhMAuJuwT3kexD9btG0re
-         Ixb7t+giDUIvY6ice111MF/3acqruDyymnnExBlSGzg2WLmKuGyyV5s71jmEmbSIitOD
-         VW9wgYeuiFmxqjEsvvDCzpMQysrmWKNBQ514yJVCd+tO5WhjL8Q6rRWCWOEScCLrG2Wq
-         kQJGsyMQr9etrhUtlq2ljq6weeQGhTEDyMiMoT7tpQfuZSPykwjgTzdlwlD0Q/XQeS9i
-         o1uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=XrMdVv2xUhxR5Q9kOZUXM47qxjFM4pdwsuKh8dulBXY=;
-        b=CawTfQXGqhTqyWFMQCCV9uAzSOoSTphJm95GPeJ9u/hrPFKbDJcgH/wXoCIgXlWEYo
-         0gXaRg2sRYcT3vx5yubuA0qZ/54HoWZX1qYgqhVpo8w7HE0v4vNSXDE+l8HFOJm6z/+3
-         lxUJMoSpSTT+mJ7OTNbuibxcxi18lqA4faEOHEzIZiXYpS1mwAKOq57w8yyLWPlNC0ku
-         oM2VDGKdyPQi7Llo4aZhHBLzydz4FOiqDuyUEM7uocKTM3S0OG5WHzr0FuobvgRcpqUQ
-         iTrN72Z1LuYxBItkV8Fi6JMYXC01rSsffMmRUbwbEkHc4yaw06nYIb9YT/DbfUsT2IL/
-         BcBg==
-X-Gm-Message-State: ACgBeo00eAnIve8OkvPOsRp/mDChc5lYXWkBAqBV1MC7E2DzU55eUWho
-        LZ7/LxKpzf4fyuAh6n/aR8Q=
-X-Google-Smtp-Source: AA6agR49Vb//Nrma131t5FYZi2Q3c28psceHp6QgCMnwtih0gYx9oR2scSZcR5oMcwGpsyjYeVOEzQ==
-X-Received: by 2002:a5d:5885:0:b0:228:28df:91af with SMTP id n5-20020a5d5885000000b0022828df91afmr3948437wrf.511.1662202194469;
-        Sat, 03 Sep 2022 03:49:54 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id t6-20020a05600c41c600b003a5ffec0b91sm4619362wmh.30.2022.09.03.03.49.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 03:49:53 -0700 (PDT)
-Date:   Sat, 3 Sep 2022 11:49:52 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 00/72] 5.19.7-rc1 review
-Message-ID: <YxMxUOSMDpdU1j7w@debian>
-References: <20220902121404.772492078@linuxfoundation.org>
+        Sat, 3 Sep 2022 07:12:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE576B660
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 04:12:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C02760B26
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 11:12:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805DAC433C1;
+        Sat,  3 Sep 2022 11:12:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662203523;
+        bh=+UvzqH1QDFPmQPVn1gryZ3anDIwLfLLPp25gCyAKngk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kwVco4vrevgzAcgyTdJZVjcSgZDEG+VtnkceWDBGB+Fqfp5LJOdwqRMw4pAfoRnNh
+         r1OZxqbk5JFonuURh9KERKlOC8jQzl+3SH+26WnmQl50O50dBPgnX9In/GUOAMA784
+         yVRzLeZ7bluqoEQLfff8bESAGTOY0sROP0AjTq9n8FhgLuUxi9vwCLHo8njyeNK5Vy
+         dykuDuKdbH+UJna9Bu+oxbcrQc0h0V7K4KK5lO+kjFCdJu7uK+kuoLEqJ/uer+xZ2H
+         Td9onCZ8fvThhsA3771mTZ4Gtg7mTPmZ/rQJbBRzCxI2hZd+ZJ7hLaFPSkMdOhAl8A
+         GfzFc53XpR2LQ==
+Date:   Sat, 3 Sep 2022 16:41:59 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Linux Phy <linux-phy@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL]: Generic phy fixes for v6.0
+Message-ID: <YxM2f3BCvYm0tvWt@matsya>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Ug023SCU/+hnlU35"
 Content-Disposition: inline
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Fri, Sep 02, 2022 at 02:18:36PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.7 release.
-> There are 72 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
-> Anything received after that time might be too late.
+--Ug023SCU/+hnlU35
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Build test (gcc version 12.2.1 20220819):
-mips: 59 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Hello Greg,
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+Please pull to receive a single fix to marvell a3700-comphy driver which
+fixes broken reset  in the driver
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1758
-[2]. https://openqa.qa.codethink.co.uk/tests/1761
-[3]. https://openqa.qa.codethink.co.uk/tests/1763
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
---
-Regards
-Sudip
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tags/phy-=
+fixes-6.0
+
+for you to fetch changes up to 0a6fc70d76bddf98278af2ac000379c82aec8f11:
+
+  phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support (2022-0=
+8-30 10:32:33 +0530)
+
+----------------------------------------------------------------
+phy: fixes for 6.0
+
+Fix for broken reset in marvell a3700-comphy
+
+----------------------------------------------------------------
+Pali Roh=E1r (1):
+      phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support
+
+ drivers/phy/marvell/phy-mvebu-a3700-comphy.c | 87 ++++++------------------=
+----
+ 1 file changed, 17 insertions(+), 70 deletions(-)
+
+--=20
+~Vinod
+
+--Ug023SCU/+hnlU35
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmMTNn4ACgkQfBQHDyUj
+g0ccmhAAyi8YWvbZPRthVfdGq0nQ2DcvZAooBdNYZwpJoEPXFDUF8I8qL+GrshJV
+VEOZERZpINOvijaPMQKznxvd0DSI5nlABwQLFCgwm0bN28Lf2lJzSL/Veq+Kb4Xk
+pEiW1AVgnuUDnmdBECuYYLGyeue7/q11M04vEEXiJcFs5mxqLURSEM0Lr+hbcFHb
+HrMRhlISBrEQZ6oKcwg3uwscpS0MhLQBaOAV/mDmBCsZj3WMavRnAo3NSBX51HfK
+DFE2nSFbAWvPo3Ov/7WbEu25pMDYBhHh9/aV6SWSkrf58RthZUMfF12bdFALYnp6
+1JsCLzmjY7ZAmfE8kFMv4pEXXqPYfElfsLv8w3pD4mo199whucOBLWz49Nur2Kx5
+FlWWBlVF4GyO2f2Z/+/uHPS85qSO4jpA6z1Wg+uApbMKYhYD4HZC9M08g4MCd5J4
+TrfvmXLMuE9qNyNeD/KC3AOW9xry3fW9uFzXXjJYyYNalRLFAuS7aCR8bLDaoGSi
+zO1frvdTCaZC8jL+9WlmkfLVCR2Tczy27DSINiM80E9I2CFNah7D6thNUEPEm4yc
+Mip6uZ+jnq+CPMuQLwGTG906+8A1zKMGXA5iHqcOPLJMMHFecA+2CHAs8hWklIvB
+qMGe2G439PfV4A5DZhupWTqIiHCJZZ7d/yc6Kge8wFL1ZPhDx08=
+=nCmi
+-----END PGP SIGNATURE-----
+
+--Ug023SCU/+hnlU35--

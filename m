@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681695ABDB5
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 09:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45CE5ABDB9
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 09:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiICHmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 03:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
+        id S232422AbiICH7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 03:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiICHmk (ORCPT
+        with ESMTP id S229464AbiICH7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 03:42:40 -0400
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B68B8E0F1
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 00:42:40 -0700 (PDT)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 7C7A210040423
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 07:42:26 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id UNnNofIMzCokGUNnOoe2kS; Sat, 03 Sep 2022 07:42:26 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=c8Nu/Txl c=1 sm=1 tr=0 ts=63130562
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=xOM3xZuef0cA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5xG0qatLwsUtCEOjZrSnwM0Wv+TJ7yVp3aG+uUj4Tkc=; b=lhaTMDvARTxHPovyIEqlaonj3w
-        7mgYlVFLGaSZM76KOg0CwOVP/iGN4wrvLihsnUhNz9aS0e+IXhO/ARMziteFiIywmsuReCU+EE9UW
-        EYD4Bl5c9dMyCmtsFr2mSgdEwVJeABPXL2BwTJlAEm9DOHyd5GrRkEoZ5eQ7u+gW1W+CIs9+uCsDE
-        KdZPqzSG2oT78pmS78K41ewlV88IWNPK5nHqMIC95vE0v1BRmF8zLbQgEGw6TYMR7klxX685t1oaW
-        wK6i1Cp0JYdBk7r9lISYKGTk/jatwRCaDkD/Xw37lL+HvZGTiQ0WsoCHiNvYN6IZk+RVsRwENowXl
-        TEZOdY1w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43016 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oUNnM-0044cf-Or;
-        Sat, 03 Sep 2022 01:42:24 -0600
-Subject: Re: [PATCH 5.15 00/73] 5.15.65-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220902121404.435662285@linuxfoundation.org>
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <970b2a07-e2ce-a68e-9d24-51482dccba91@w6rz.net>
-Date:   Sat, 3 Sep 2022 00:42:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sat, 3 Sep 2022 03:59:00 -0400
+X-Greylist: delayed 523 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Sep 2022 00:58:53 PDT
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4155979EE
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 00:58:53 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 9E6EF100072; Sat,  3 Sep 2022 08:49:56 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+        t=1662191396; bh=G4MT1MV4esuAr0v8xfY1oNqEbcDxmnusDDYk2WFLurE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lPjBKz4YJU0zBRkohIzEImV5T8Vdxs3wm3YIKJvuSG6n3TB5kkoRxK7v2E4acMO2d
+         wRNpdZ7ncFfzgIgDoTZ0FPXvOJYNkd1qBW3JGyLXG+hwHoLR+dtAK2mB/V+xbG8BOj
+         kr+24owdZBA84+AdXiaC3KBw8zpIJlwIw06m7r01O4VbhvPt3hWdfaAPdNHigCVaDT
+         cq2ekM0T3kjS54NikN5pyi+teKRf6CeO/9Fs7iMj7rrHpP0PIGSjr92PwUXDMF1ZxM
+         JT4G088rtwYzRwPVxDTHTZ39ZEaLduSAbFMESumMoT3B+cgDOI7Df06ATHNCqloLPN
+         48CCuyN81XiXA==
+Date:   Sat, 3 Sep 2022 08:49:56 +0100
+From:   Sean Young <sean@mess.org>
+To:     Gautam Menghani <gautammenghani201@gmail.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+0c3cb6dc05fbbdc3ad66@syzkaller.appspotmail.com,
+        hdanton@sina.com
+Subject: Re: [PATCH] drivers/media/rc: Ensure usb_submit_urb() is not called
+ if write is in progress
+Message-ID: <YxMHJNNq2e3kLxdQ@gofer.mess.org>
+References: <20220814142543.24910-1-gautammenghani201@gmail.com>
+ <YxJHmYDMtmzaHWQG@biggie>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oUNnM-0044cf-Or
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:43016
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxJHmYDMtmzaHWQG@biggie>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/2/22 5:18 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.65 release.
-> There are 73 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.65-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Sep 02, 2022 at 11:42:41PM +0530, Gautam Menghani wrote:
+> On Sun, Aug 14, 2022 at 07:55:42PM +0530, Gautam Menghani wrote:
+> > The warning "URB submitted while active" is reported if the function
+> > send_packet() in imon.c is called if a write is already is in progress.
+> > Add a check to return -EBUSY in case a write is already is in progress.
+> > Also, mark tx.busy as false after transmission is completed.
+> > 
+> > Fixes: 21677cfc562a ("V4L/DVB: ir-core: add imon driver")
+> > Cc: hdanton@sina.com
+> > Suggested-by: hdanton@sina.com
+> > Link: https://syzkaller.appspot.com/bug?id=e378e6a51fbe6c5cc43e34f131cc9a315ef0337e
+> > Reported-by: syzbot+0c3cb6dc05fbbdc3ad66@syzkaller.appspotmail.com
+> > Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> > ---
+> >  drivers/media/rc/imon.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+> > index 735b925da998..a5b997c2c7e2 100644
+> > --- a/drivers/media/rc/imon.c
+> > +++ b/drivers/media/rc/imon.c
+> > @@ -598,6 +598,8 @@ static int send_packet(struct imon_context *ictx)
+> >  	int retval = 0;
+> >  	struct usb_ctrlrequest *control_req = NULL;
+> >  
+> > +	if (ictx->tx.busy)
+> > +		return -EBUSY;
+> >  	/* Check if we need to use control or interrupt urb */
+> >  	if (!ictx->tx_control) {
+> >  		pipe = usb_sndintpipe(ictx->usbdev_intf0,
+> > @@ -654,6 +656,7 @@ static int send_packet(struct imon_context *ictx)
+> >  			pr_err_ratelimited("task interrupted\n");
+> >  		}
+> >  		mutex_lock(&ictx->lock);
+> > +		ictx->tx.busy = false;
+> >  
+> >  		retval = ictx->tx.status;
+> >  		if (retval)
+> > -- 
+> > 2.34.1
+> > 
+> Hi,
+> 
+> Please review the above fix and let me know if any changes are needed.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Greg has pointed out issues with this patch: there is no locking.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Thanks,
 
+Sean

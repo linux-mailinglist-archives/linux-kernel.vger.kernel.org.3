@@ -2,115 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13955ABC04
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0201E5ABC06
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiICBYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 21:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S230257AbiICB1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 21:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiICBYs (ORCPT
+        with ESMTP id S229436AbiICB1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 21:24:48 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE0F1C132
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 18:24:45 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id p8-20020a17090ad30800b001fdfc8c7567so8657240pju.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 18:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=jP6EPggHjkZX1NaV9U8a8QOu1uLproFoHSDlqllEgzg=;
-        b=HEhKmQ7gwK/HxPmpwnIWy4QlrEFl9/wj4w99hLp/jVkhQLgZ4BAmC76DOTiCqRjsDr
-         fZiLkszhkXerCXtNDQLNeXW1GK3grzipGrmPCQkBVgNn0+S9w2zh5nIa+W5kpdZEwKSu
-         0i4UIFEZqLZAm8d4Jtdw4nUGMB0wMY12p9HUEmuRkxF1ybhxrIg3uAFswaj+QR2ODU4k
-         nLTL9W45u7hJ3vfGnUikejtAJts46K+2IZKiBObrqrnR8CFOys0o04MzBWJYKX9ByATv
-         FbKqt59LgeJs6PO3Fpfgmv9lSJWaCjB6BiK22ChN/bjbUJ0nH5cHRENg0IxCSxxbBb3L
-         abBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=jP6EPggHjkZX1NaV9U8a8QOu1uLproFoHSDlqllEgzg=;
-        b=d/JYAoOV6EmVO93BYOkO95n6KpejiovCi8G04hJ6M/5QswyvVPBsVN0q/OMsHkEdre
-         1y+EoQKc1V85vPtELailq5LR0z8od/SejMLZpXCuU8myN6SwXWj+JyxoBW/SC9NF/LK8
-         0m7yWGrJulBXY4Tj2p8FISBzTRJ8POhwRDR2e2GTSLkX9OOU+bsLMSwCouO0ntYz9EE7
-         nxsXE07p9ajng+MJJgfsDqa12EYyAYtXuZTK7/pOE+a4qgIO5M/ddYcKSb9mcqLIeZjY
-         4+qEVYeGztsTC/tyvB3fYPqpIoNq4cEu5NtvySqCGsI+juDsmcRseuhn50rWR+bhnADn
-         spZw==
-X-Gm-Message-State: ACgBeo0kSiwYvhDEH7iWLE4NmdB6CUR3VWGy60UKmHillIoUEvxnfzoN
-        Ux6ZYkFzoxzEL9JhmTuFwtmupnB3S03Qug==
-X-Google-Smtp-Source: AA6agR5IEz5aJDLkp5TRHq5P2h/qWb7MGKFVw0S3OHTvkLzzJ2T8H7XmTUu8Ga+mU6r2dqZKmJDQJw==
-X-Received: by 2002:a17:902:e94c:b0:171:3df0:c886 with SMTP id b12-20020a170902e94c00b001713df0c886mr39349023pll.39.1662168284652;
-        Fri, 02 Sep 2022 18:24:44 -0700 (PDT)
-Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170902654700b00172ba718ed4sm2262494pln.138.2022.09.02.18.24.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 18:24:43 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH v2] ext4: place buffer head allocation before handle start
-Date:   Sat,  3 Sep 2022 09:24:29 +0800
-Message-Id: <20220903012429.22555-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Fri, 2 Sep 2022 21:27:38 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C75EEF0C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 18:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662168457; x=1693704457;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aKDTzIydv1VX0AFqsd26Zi+tHOpIoK888fl9HUc+lR4=;
+  b=KBr0SQMV7msq4ZcyjRUF7UcGOe73RzA8vNOKXFRF6rc+RF4DCNwlP4IX
+   S/UcxnyhyIyNoRZaDvFb7l6PlQkh/Q4mwsrTRcs+e7NiQWWKHYrZQt89d
+   F9Y0v5oje8YYfFJ8cNvju2WAUspTfD7CPLIdO6OeYsZ4UCTmEKsCDwr3U
+   lwMkDg0YomAcCbLrUFtlfmj0ttx06Xg5pQgrYE1h1jWRhaLgxpvGGaIb7
+   wOjJYeD5TXviya3y9VsgA8KA59qpFTy2AH9P3inJzi+H7ri+KcGh3vjZJ
+   Sy3pXd4smTnA0wHEX54JI2NNYjzhzUQoAergx68oV51P6D5EeZTpS8IX0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="296902433"
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="296902433"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 18:27:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="590277298"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 02 Sep 2022 18:27:35 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUHwc-0000qE-2u;
+        Sat, 03 Sep 2022 01:27:34 +0000
+Date:   Sat, 03 Sep 2022 09:27:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/microcode] BUILD SUCCESS
+ 7fce8d6eccbc31a561d07c79f359ad09f0424347
+Message-ID: <6312ad68.vFrlrTMoz5knQBWG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
+branch HEAD: 7fce8d6eccbc31a561d07c79f359ad09f0424347  x86/microcode: Print previous version of microcode after reload
 
-In our product environment, we encounter some jbd hung waiting handles to
-stop while several writters were doing memory reclaim for buffer head
-allocation in delay alloc write path. Ext4 do buffer head allocation with
-holding transaction handle which may be blocked too long if the reclaim
-works not so smooth. According to our bcc trace, the reclaim time in
-buffer head allocation can reach 258s and the jbd transaction commit also
-take almost the same time meanwhile. Except for these extreme cases,
-we often see several seconds delays for cgroup memory reclaim on our
-servers. This is more likely to happen considering docker environment.
+elapsed time: 1146m
 
-One thing to note, the allocation of buffer heand is as often as page
-allocation or more often when blocksize less than page size. Just like
-page cache allocation, we should also place the buffer head allocation
-before startting the handle.
+configs tested: 57
+configs skipped: 2
 
-After commit:cc883236b792, no nore need to do for delay alloc path, just
-do it for no delay alloc code.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
----
- fs/ext4/inode.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                  randconfig-r043-20220901
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                              defconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a014
+powerpc                           allnoconfig
+x86_64                               rhel-8.3
+m68k                             allyesconfig
+m68k                             allmodconfig
+i386                          randconfig-a012
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                          randconfig-a016
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                           allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                        randconfig-a015
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a005
+x86_64                    rhel-8.3-kselftests
+sh                               allmodconfig
+x86_64                           rhel-8.3-syz
+x86_64                           rhel-8.3-kvm
+powerpc                          allmodconfig
+mips                             allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+ia64                             allmodconfig
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 601214453c3a..0d6c4ec7c840 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1188,6 +1188,13 @@ static int ext4_write_begin(struct file *file, struct address_space *mapping,
- 	page = grab_cache_page_write_begin(mapping, index);
- 	if (!page)
- 		return -ENOMEM;
-+	/*
-+	 * The same as page allocation, we prealloc buffer heads before
-+	 * starting the handle.
-+	 */
-+	if (!page_has_buffers(page))
-+		create_empty_buffers(page, inode->i_sb->s_blocksize, 0);
-+
- 	unlock_page(page);
- 
- retry_journal:
+clang tested configs:
+hexagon              randconfig-r041-20220901
+x86_64                        randconfig-a001
+hexagon              randconfig-r045-20220901
+x86_64                        randconfig-a003
+i386                          randconfig-a013
+x86_64                        randconfig-a005
+riscv                randconfig-r042-20220901
+i386                          randconfig-a011
+s390                 randconfig-r044-20220901
+i386                          randconfig-a015
+x86_64                        randconfig-a012
+i386                          randconfig-a002
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a004
+i386                          randconfig-a006
+
 -- 
-2.20.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,213 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA405ABDFA
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 11:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924355ABE0A
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 11:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbiICJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 05:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S232903AbiICJfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 05:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiICJ1M (ORCPT
+        with ESMTP id S233087AbiICJew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 05:27:12 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D599ABD5B;
-        Sat,  3 Sep 2022 02:27:11 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id a10so3399784qkl.13;
-        Sat, 03 Sep 2022 02:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=FMss4nvageHB6cqXPlGEFtiQOpQh9GnVLRZoHj1mbA8=;
-        b=jtriAd1CLHhcG1iTDUlsp34s74uPtVr3bly1796PlHwrIik6+ac+pXJN6MKF2/RKzG
-         37eoexXnTlKAvs1yare8K6DMDcOWMnVyoT0RrzAHD+nCqeCjSCArK1X8S/MZ/Yy0ItRy
-         LIlv9suNc6YCTOe2r88yIWBXmY2VIOhogiYB+5ToIMohDWS6FveJkwHbOqrEGyLyAQGJ
-         XqxjPreSBAlwPyaTFNbCqiQYzzFWot574rF71XAmpHtJXoucbqhKpWJKWA6tPsMGuyWb
-         dXT5cCkKBFnbNUAzETGYiKJ3ogBkENPMngNnK6/rfeC0Id0HZ5V2+9MEKLhaiLoCq++l
-         fJmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=FMss4nvageHB6cqXPlGEFtiQOpQh9GnVLRZoHj1mbA8=;
-        b=lhrHToA+dhpeWsUIPtPFn/PvdoBJxbpp5pWpviPLZWOLk0+dF9dKDhvMLE5yruOlti
-         1AsY0ZTNVXJr1xnWl58OpNAGjR2sFvRnH93IM3CDIMo+Oo/gIhPURh0XXic2GWSiMT0w
-         0gQexLelcCyg4HmODWsTVU89x51o/bGbOwvZNWlfArYs2DVqyLfYwm5hP9b7525HmNLE
-         4pLbWuwmjgRG/9aP7eLwosXIdstwjj0zK00JBU5RJtxd4llPUvPTADKowP0hbBiiF0cT
-         pg2yhAR8s26CJAtKfpUYp11dIKZDElIKPV/sfK+GSXdXv+1JN2uFyfr5oxhMJlI8HzYy
-         kDAQ==
-X-Gm-Message-State: ACgBeo0+0PnXphvL4wWxJtXIQRMQK2ehRp16Gdn+kt8CpuGK8F/gJEbr
-        LcnqJF+IbuUq47g5mIbw3CB/k3TpijrtZ8rE0ZsB3EG270c=
-X-Google-Smtp-Source: AA6agR4ea/vo9mWWNQFqdXnMV81u7jF5AoHAj26MN+aoZ6NOkdj/ds3sYW4lAEIlHWkn1f9wSLhMwZw9jtnavgYZFiY=
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
- s13-20020a05620a254d00b006ab84b825ebmr26052121qko.383.1662197230214; Sat, 03
- Sep 2022 02:27:10 -0700 (PDT)
+        Sat, 3 Sep 2022 05:34:52 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB67421260;
+        Sat,  3 Sep 2022 02:34:37 -0700 (PDT)
+X-UUID: 8f5aa7cec44e4bf88f5fbc40a7def764-20220903
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=85nido2etOpg9jJYQFbRVZv19oAO9gLaQLHV39+tA4A=;
+        b=j0rdHukpRWvpqeCt8hUsYqHVEetSP5RR1GNE9uoN4CNyXiGBmusScEWlGArFomwOYG2zIzDN8Vl/FxOPRVGsAaDCSNBtuBjKHM2v4onZwJbI/SWgHrw196pNLxDL3XO0Q942hnZPhxC1qRuUnahpUgiMm93FGu3OUdP6DCGVvrA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:ef36b599-93fc-4bca-a97b-ead363518b4c,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release
+        _Ham,ACTION:release,TS:95
+X-CID-INFO: VERSION:1.1.10,REQID:ef36b599-93fc-4bca-a97b-ead363518b4c,OB:0,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS98
+        1B3D,ACTION:quarantine,TS:95
+X-CID-META: VersionHash:84eae18,CLOUDID:d46f0521-1c20-48a5-82a0-25f9c331906d,C
+        OID:e6d5d1283953,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 8f5aa7cec44e4bf88f5fbc40a7def764-20220903
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <lecopzer.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 5461367; Sat, 03 Sep 2022 17:34:18 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Sat, 3 Sep 2022 17:34:16 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Sat, 3 Sep 2022 17:34:16 +0800
+From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <mark.rutland@arm.com>, <will@kernel.org>
+CC:     <lecopzer.chen@mediatek.com>, <acme@kernel.org>,
+        <akpm@linux-foundation.org>, <alexander.shishkin@linux.intel.com>,
+        <catalin.marinas@arm.com>, <davem@davemloft.net>,
+        <jolsa@redhat.com>, <jthierry@redhat.com>, <keescook@chromium.org>,
+        <kernelfans@gmail.com>, <masahiroy@kernel.org>,
+        <matthias.bgg@gmail.com>, <maz@kernel.org>, <mcgrof@kernel.org>,
+        <mingo@redhat.com>, <namhyung@kernel.org>, <nixiaoming@huawei.com>,
+        <peterz@infradead.org>, <pmladek@suse.com>,
+        <sparclinux@vger.kernel.org>, <sumit.garg@linaro.org>,
+        <wangqing@vivo.com>, <yj.chiang@mediatek.com>
+Subject: [PATCH v7 0/6] Support hld delayed init based on Pseudo-NMI for
+Date:   Sat, 3 Sep 2022 17:34:09 +0800
+Message-ID: <20220903093415.15850-1-lecopzer.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220903050252.2711950-1-o.rempel@pengutronix.de> <20220903050252.2711950-2-o.rempel@pengutronix.de>
-In-Reply-To: <20220903050252.2711950-2-o.rempel@pengutronix.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 3 Sep 2022 12:26:32 +0300
-Message-ID: <CAHp75Veyyd9XEom4ya0ZcKoxzbtJ4kKLCSUzwiLxzfnMkpMGXg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] iio: adc: tsc2046: add vref support
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_CSS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 3, 2022 at 8:03 AM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
->
-> If VREF pin is attached, we should use external VREF source instead of
-> the internal. Otherwise we will get wrong measurements on some of the channel
-> types.
+As we already used hld internally for arm64 since 2020, there still
+doesn't have a proper commit on the upstream and we badly need it.
 
-FWIW,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+This serise rework on 5.17 from [1] and the origin author is
+Pingfan Liu <kernelfans@gmail.com>
+Sumit Garg <sumit.garg@linaro.org>
 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
-> changes v5:
-> - add "the" before channel
-> - refactor error handling on regulator registration
-> - use MILLI instead of 1000
-> changes v4:
-> - use vref_reg pointer instead of bool use_internal_vref
-> - move regulator registration to a separate function
-> - rework error handling
-> - add devm_add_action_or_reset
-> ---
->  drivers/iio/adc/ti-tsc2046.c | 57 ++++++++++++++++++++++++++++++++++--
->  1 file changed, 55 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
-> index 0d9436a69cbfb..c7601b29b3bef 100644
-> --- a/drivers/iio/adc/ti-tsc2046.c
-> +++ b/drivers/iio/adc/ti-tsc2046.c
-> @@ -8,7 +8,9 @@
->  #include <linux/bitfield.h>
->  #include <linux/delay.h>
->  #include <linux/module.h>
-> +#include <linux/regulator/consumer.h>
->  #include <linux/spi/spi.h>
-> +#include <linux/units.h>
->
->  #include <asm/unaligned.h>
->
-> @@ -175,6 +177,8 @@ struct tsc2046_adc_priv {
->         u32 time_per_bit_ns;
->
->         struct tsc2046_adc_ch_cfg ch_cfg[TI_TSC2046_MAX_CHAN];
-> +       unsigned int vref_mv;
-> +       struct regulator *vref_reg;
+Qoute from [1]:
 
-I would put pointer first since it will make sizeof(priv) 4 bytes less
-on some architectures due to padding elimination.
+> Hard lockup detector is helpful to diagnose unpaired irq
+> enable/disable.
+> But the current watchdog framework can not cope with arm64 hw perf
+> event
+> easily.
 
->  };
->
->  #define TI_TSC2046_V_CHAN(index, bits, name)                   \
-> @@ -252,7 +256,9 @@ static u8 tsc2046_adc_get_cmd(struct tsc2046_adc_priv *priv, int ch_idx,
->         case TI_TSC2046_ADDR_AUX:
->         case TI_TSC2046_ADDR_VBAT:
->         case TI_TSC2046_ADDR_TEMP0:
-> -               pd |= TI_TSC2046_SER | TI_TSC2046_PD1_VREF_ON;
-> +               pd |= TI_TSC2046_SER;
-> +               if (!priv->vref_reg)
-> +                       pd |= TI_TSC2046_PD1_VREF_ON;
->         }
->
->         return TI_TSC2046_START | FIELD_PREP(TI_TSC2046_ADDR, ch_idx) | pd;
-> @@ -468,7 +474,7 @@ static int tsc2046_adc_read_raw(struct iio_dev *indio_dev,
->                  * So, it is better to use external voltage-divider driver
->                  * instead, which is calculating complete chain.
->                  */
-> -               *val = TI_TSC2046_INT_VREF;
-> +               *val = priv->vref_mv;
->                 *val2 = chan->scan_type.realbits;
->                 return IIO_VAL_FRACTIONAL_LOG2;
->         }
-> @@ -740,6 +746,49 @@ static void tsc2046_adc_parse_fwnode(struct tsc2046_adc_priv *priv)
->         }
->  }
->
-> +static void tsc2046_adc_regulator_disable(void *data)
-> +{
-> +       struct tsc2046_adc_priv *priv = data;
-> +
-> +       regulator_disable(priv->vref_reg);
-> +}
-> +
-> +static int tsc2046_adc_configure_regulator(struct tsc2046_adc_priv *priv)
-> +{
-> +       struct device *dev = &priv->spi->dev;
-> +       int ret;
-> +
-> +       priv->vref_reg = devm_regulator_get_optional(dev, "vref");
-> +       if (IS_ERR(priv->vref_reg)) {
-> +               /* If regulator exists but can't be get, return an error */
-> +               if (PTR_ERR(priv->vref_reg) != -ENODEV)
-> +                       return PTR_ERR(priv->vref_reg);
-> +               priv->vref_reg = NULL;
-> +       }
-> +       if (!priv->vref_reg) {
-> +               /* Use internal reference */
-> +               priv->vref_mv = TI_TSC2046_INT_VREF;
-> +               return 0;
-> +       }
-> +
-> +       ret = regulator_enable(priv->vref_reg);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = devm_add_action_or_reset(dev, tsc2046_adc_regulator_disable,
-> +                                      priv);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = regulator_get_voltage(priv->vref_reg);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       priv->vref_mv = ret / MILLI;
-> +
-> +       return 0;
-> +}
-> +
->  static int tsc2046_adc_probe(struct spi_device *spi)
->  {
->         const struct tsc2046_adc_dcfg *dcfg;
-> @@ -781,6 +830,10 @@ static int tsc2046_adc_probe(struct spi_device *spi)
->         indio_dev->num_channels = dcfg->num_channels;
->         indio_dev->info = &tsc2046_adc_info;
->
-> +       ret = tsc2046_adc_configure_regulator(priv);
-> +       if (ret)
-> +               return ret;
-> +
->         tsc2046_adc_parse_fwnode(priv);
->
->         ret = tsc2046_adc_setup_spi_msg(priv);
-> --
-> 2.30.2
->
+> On arm64, when lockup_detector_init()->watchdog_nmi_probe(), PMU is
+> not
+> ready until device_initcall(armv8_pmu_driver_init).  And it is deeply
+> integrated with the driver model and cpuhp. Hence it is hard to push
+> the
+> initialization of armv8_pmu_driver_init() before smp_init().
 
+> But it is easy to take an opposite approach by enabling watchdog_hld
+> to
+> get the capability of PMU async. 
+> The async model is achieved by expanding watchdog_nmi_probe() with
+> -EBUSY, and a re-initializing work_struct which waits on a
+> wait_queue_head.
+
+Provide an API - retry_lockup_detector_init() for anyone who needs
+to delayed init lockup detector.
+
+The original assumption is: nobody should use delayed probe after
+lockup_detector_check() (which has __init attribute).
+That is, anyone uses this API must call between lockup_detector_init()
+and lockup_detector_check(), and the caller must have __init attribute
+
+The delayed init flow is:
+1. lockup_detector_init() -> watchdog_nmi_probe() get non-zero retun,
+   then set allow_lockup_detector_init_retry to true which means it's
+   able to do delayed probe later.
+
+2. PMU arch code init done, call retry_lockup_detector_init().
+
+3. retry_lockup_detector_init() queue the work only when
+   allow_lockup_detector_init_retry is true which means nobody should
+call
+   this before lockup_detector_init().
+
+4. the work lockup_detector_delay_init() is doing without wait event.
+   if probe success, set allow_lockup_detector_init_retry to false.
+
+5. at late_initcall_sync(), lockup_detector_check() set
+   allow_lockup_detector_init_retry to false first to avoid any later
+retry,
+   and then flush_work() to make sure the __init section won't be freed
+   before the work done.
+
+[1]
+https://lore.kernel.org/lkml/20211014024155.15253-1-kernelfans@gmail.com/
+
+v7:
+  rebase on v6.0-rc3
+
+v6:
+  fix build failed reported by kernel test robot <lkp@intel.com>
+https://lore.kernel.org/lkml/20220614062835.7196-1-lecopzer.chen@mediatek.com/
+
+v5:
+  1. rebase on v5.19-rc2
+  2. change to proper schedule api
+  3. return value checking before retry_lockup_detector_init()
+https://lore.kernel.org/lkml/20220613135956.15711-1-lecopzer.chen@mediatek.com/
+
+v4:
+  1. remove -EBUSY protocal, let all the non-zero value from
+     watchdog_nmi_probe() be able to retry.
+  2. separate arm64 part patch into hw_nmi_get_sample_period and retry
+     delayed init
+  3. tweak commit msg that we don't have to limit to -EBUSY  
+  4. rebase on v5.18-rc4
+https://lore.kernel.org/lkml/20220427161340.8518-1-lecopzer.chen@mediatek.com/
+
+v3:
+  1. Tweak commit message in patch 04 
+	2. Remove wait event
+  3. s/lockup_detector_pending_init/allow_lockup_detector_init_retry/
+  4. provide api retry_lockup_detector_init() 
+https://lore.kernel.org/lkml/20220324141405.10835-1-lecopzer.chen@mediatek.com/ 
+
+v2:
+  1. Tweak commit message in patch 01/02/04/05 
+  2. Remove vobose WARN in patch 04 within watchdog core.
+  3. Change from three states variable: detector_delay_init_state to
+     two states variable: allow_lockup_detector_init_retry
+
+     Thanks Petr Mladek <pmladek@suse.com> for the idea.
+     > 1.  lockup_detector_work() called before lockup_detector_check().
+     >     In this case, wait_event() will wait until
+     >     lockup_detector_check()
+     >     clears detector_delay_pending_init and calls wake_up().
+
+     > 2. lockup_detector_check() called before lockup_detector_work().
+     >    In this case, wait_even() will immediately continue because
+     >    it will see cleared detector_delay_pending_init.
+  4. Add comment in code in patch 04/05 for two states variable
+changing.
+https://lore.kernel.org/lkml/20220307154729.13477-1-lecopzer.chen@mediatek.com/
+
+
+Lecopzer Chen (5):
+  kernel/watchdog: remove WATCHDOG_DEFAULT
+  kernel/watchdog: change watchdog_nmi_enable() to void
+  kernel/watchdog: Adapt the watchdog_hld interface for async model
+  arm64: add hw_nmi_get_sample_period for preparation of lockup detector
+  arm64: Enable perf events based hard lockup detector
+
+Pingfan Liu (1):
+  kernel/watchdog_hld: Ensure CPU-bound context when creating hardlockup
+    detector event
+
+ arch/arm64/Kconfig               |  2 +
+ arch/arm64/kernel/Makefile       |  1 +
+ arch/arm64/kernel/perf_event.c   | 12 +++++-
+ arch/arm64/kernel/watchdog_hld.c | 39 +++++++++++++++++
+ arch/sparc/kernel/nmi.c          |  8 ++--
+ drivers/perf/arm_pmu.c           |  5 +++
+ include/linux/nmi.h              |  4 +-
+ include/linux/perf/arm_pmu.h     |  2 +
+ kernel/watchdog.c                | 72 +++++++++++++++++++++++++++++---
+ kernel/watchdog_hld.c            |  8 +++-
+ 10 files changed, 139 insertions(+), 14 deletions(-)
+ create mode 100644 arch/arm64/kernel/watchdog_hld.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+

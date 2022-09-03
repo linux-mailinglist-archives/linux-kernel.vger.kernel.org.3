@@ -2,184 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AFC5ABEC9
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 13:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9D75ABED2
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 13:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiICLln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 07:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S230471AbiICLsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 07:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiICLll (ORCPT
+        with ESMTP id S229732AbiICLsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 07:41:41 -0400
-Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFB453D25;
-        Sat,  3 Sep 2022 04:41:39 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
-        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 5E3C04D;
-        Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1662205296;
-        bh=WTHSGOgXdL1ETWQB4FmjCtq7b8+QUK7FV8+8M7WsAaQ=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=AS887YsN6S7/Ti227pObQKvjit4dHOmfKaqtPMo4KgKboWFSGMTcIVOUEXtJ/tTF1
-         VvtJh114tguB3szieJipx4Z7tDowAjax3P1C7ZbOssuI5sIGreIToLeQjtdikoqRNM
-         /mp83GZfkyzbLeLU+32HkyKZUUQ3f/dFkrOgVqUcQqKwS4qnZy4X0+oRLjOxCjjFRK
-         Jp3ca3wja9qNgMCSfyPJbrZRpIJZcK6HVwUzQ/Rfkjoj9QN33hdl+6QJNkQ5OcqEJg
-         ZSnTVMwSc/qka9HJLbdVzZtOIzMnpvet2VjbvMjrv+QaaCY2lURJA3kDBOOajXprnk
-         WBhB5yjM0LlIQ==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 586EF1ADC; Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 2BBBD1ADB;
-        Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
-Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 275D11AD9;
-        Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 23B3C4A01E6; Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id 4B57F4A01CD;
-        Sat,  3 Sep 2022 13:41:35 +0200 (CEST)
-        (Extended-Queue-bit xtech_yq@fff.in.tum.de)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v3] tools/memory-model: Weaken ctrl dependency definition
- in explanation.txt
-From:   =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
-In-Reply-To: <YxKtmk2q8Uzb+Qk9@rowland.harvard.edu>
-Date:   Sat, 3 Sep 2022 13:41:34 +0200
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D7E3D42D-2ABE-4D16-9DCA-0605F0C84F7D@in.tum.de>
-References: <20220902211341.2585133-1-paul.heidekrueger@in.tum.de>
- <YxKtmk2q8Uzb+Qk9@rowland.harvard.edu>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 3 Sep 2022 07:48:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8403341F
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 04:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662205713; x=1693741713;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=PTRpdYTZVjkzB9A3G/dP9KDaNGEagJf1u6l6G72lnkM=;
+  b=NgLkUcrTz18V1daZMQJ7yTvISc0vSRQRmB6IobPxav9YNgulj1iaHSph
+   xfP1Ul0BVqxDFdOmCYHOwR3GTWfAaEgf9xzozgomKjloIsz4fkBE4v8CZ
+   9Bg+W40zmCIEvDGhE+aY3Q4Tv0CBtZ3kkzYGjM8GTZ8rPtpElGNWTYmU7
+   l6BoyLI8YVJfqbWlGw8RtemUnKT22JNZehEmiuH5NLR+mXGf8AyCngWyg
+   xoIWLsR3rUa9GAMTzg9ghHItQgg3gT9UneeYNehPjQ+NtsC4mDijMcuk/
+   AtK0rdRhnoTipA7TyrcEb06589bBuN+J4OToJ1QrQXsUKZhlDK8dNe9g1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="360108051"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="360108051"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 04:48:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="702412172"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Sep 2022 04:48:28 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oURdT-0001ad-1q;
+        Sat, 03 Sep 2022 11:48:27 +0000
+Date:   Sat, 3 Sep 2022 19:47:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        David Gow <davidgow@google.com>
+Cc:     kbuild-all@lists.01.org, kunit-dev@googlegroups.com,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        mwen@igalia.com,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        dri-devel@lists.freedesktop.org,
+        Isabella Basso <isabbasso@riseup.net>, andrealmeid@riseup.net
+Subject: Re: [PATCH v2 7/8] drm/amd/display: Introduce KUnit tests to
+ dc_dmub_srv library
+Message-ID: <202209031904.Q8eJt6X4-lkp@intel.com>
+References: <20220831172239.344446-8-mairacanal@riseup.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220831172239.344446-8-mairacanal@riseup.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3. Sep 2022, at 03:27, Alan Stern <stern@rowland.harvard.edu> wrote:
+Hi "Maíra,
 
-> On Fri, Sep 02, 2022 at 09:13:40PM +0000, Paul Heidekr=C3=BCger wrote:
->> The current informal control dependency definition in explanation.txt =
-is
->> too broad and, as discussed, needs to be updated.
->>=20
->> Consider the following example:
->>=20
->>> if(READ_ONCE(x))
->>>  return 42;
->>>=20
->>> WRITE_ONCE(y, 42);
->>>=20
->>> return 21;
->>=20
->> The read event determines whether the write event will be executed =
-"at all"
->> - as per the current definition - but the formal LKMM does not =
-recognize
->> this as a control dependency.
->>=20
->> Introduce a new definition which includes the requirement for the =
-second
->> memory access event to syntactically lie within the arm of a non-loop
->> conditional.
->>=20
->> Link: =
-https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.=
-tum.de/
->> Cc: Marco Elver <elver@google.com>
->> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
->> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
->> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
->> Cc: Martin Fink <martin.fink@in.tum.de>
->> Signed-off-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
->> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
->=20
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
->=20
->> ---
->>=20
->> v3:
->> - Address Alan and Joel's feedback re: the wording around switch =
-statements
->> and the use of "guarding"
->>=20
->> v2:
->> - Fix typos
->> - Fix indentation of code snippet
->>=20
->> v1:
->> @Alan, since I got it wrong the last time, I'm adding you as a =
-co-developer
->> after my SOB. I'm sorry if this creates extra work on your side due =
-to you
->> having to resubmit the patch now with your SOB if I understand =
-correctly,
->> but since it's based on your wording from the other thread, I =
-definitely
->> wanted to give you credit.
->>=20
->> tools/memory-model/Documentation/explanation.txt | 8 +++++---
->> 1 file changed, 5 insertions(+), 3 deletions(-)
->>=20
->> diff --git a/tools/memory-model/Documentation/explanation.txt =
-b/tools/memory-model/Documentation/explanation.txt
->> index ee819a402b69..0b7e1925a673 100644
->> --- a/tools/memory-model/Documentation/explanation.txt
->> +++ b/tools/memory-model/Documentation/explanation.txt
->> @@ -464,9 +464,11 @@ to address dependencies, since the address of a =
-location accessed
->> through a pointer will depend on the value read earlier from that
->> pointer.
->>=20
->> -Finally, a read event and another memory access event are linked by =
-a
->> -control dependency if the value obtained by the read affects whether
->> -the second event is executed at all.  Simple example:
->> +Finally, a read event X and another memory access event Y are linked =
-by
->> +a control dependency if Y syntactically lies within an arm of an if
->> +statement and X affects the evaluation of the if condition via a =
-data or
->> +address dependency (or similarly for a switch statement).  Simple
->> +example:
->>=20
->> 	int x, y;
+Thank you for the patch! Yet something to improve:
 
-Hang on, shouldn't this read "a write event" instead of "another memory
-access event"? Control dependencies only provide ordering from READ_ONCE =
-to
-WRITE_ONCE, not from READ_ONCE to (READ | WRITE)_ONCE?
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm/drm-next drm-intel/for-linux-next drm-tip/drm-tip linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Or am I missing something?
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-ra-Canal/drm-amd-display-Introduce-KUnit-to-Display-Mode-Library/20220901-012715
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220903/202209031904.Q8eJt6X4-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/510f486251586c33675dc1e1639f1b5fa2bd0da7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ma-ra-Canal/drm-amd-display-Introduce-KUnit-to-Display-Mode-Library/20220901-012715
+        git checkout 510f486251586c33675dc1e1639f1b5fa2bd0da7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash
 
-Many thanks,
-Paul=
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:814:
+   drivers/gpu/drm/amd/amdgpu/../display/dc/../tests/dc/dc_dmub_srv_test.c: In function 'populate_subvp_cmd_drr_info_test':
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/../tests/dc/dc_dmub_srv_test.c:260:9: error: implicit declaration of function 'populate_subvp_cmd_drr_info'; did you mean 'populate_subvp_cmd_drr_info_test'? [-Werror=implicit-function-declaration]
+     260 |         populate_subvp_cmd_drr_info(test_param->dc, test_param->subvp_pipe,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |         populate_subvp_cmd_drr_info_test
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:31:
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h: At top level:
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:137:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
+     137 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
+         |                      ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:134:17: warning: 'DP_SINK_BRANCH_DEV_NAME_7580' defined but not used [-Wunused-const-variable=]
+     134 | static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:132:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     132 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:131:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     131 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +260 drivers/gpu/drm/amd/amdgpu/../display/dc/../tests/dc/dc_dmub_srv_test.c
+
+   246	
+   247	KUNIT_ARRAY_PARAM(populate_subvp_cmd_drr_info, populate_subvp_cmd_drr_info_cases,
+   248			  populate_subvp_cmd_drr_info_test_to_desc);
+   249	
+   250	static void populate_subvp_cmd_drr_info_test(struct kunit *test)
+   251	{
+   252		const struct populate_subvp_cmd_drr_info_test_case *test_param =
+   253			test->param_value;
+   254		struct dmub_cmd_fw_assisted_mclk_switch_pipe_data_v2 *pipe_data;
+   255	
+   256		pipe_data = kunit_kzalloc(test,
+   257					  sizeof(struct dmub_cmd_fw_assisted_mclk_switch_pipe_data_v2),
+   258					  GFP_KERNEL);
+   259	
+ > 260		populate_subvp_cmd_drr_info(test_param->dc, test_param->subvp_pipe,
+   261					    test_param->vblank_pipe, pipe_data);
+   262	
+   263		KUNIT_EXPECT_EQ(test, test_param->drr_in_use,
+   264				pipe_data->pipe_config.vblank_data.drr_info.drr_in_use);
+   265		KUNIT_EXPECT_EQ(test, test_param->drr_window_size_ms,
+   266				pipe_data->pipe_config.vblank_data.drr_info.drr_window_size_ms);
+   267		KUNIT_EXPECT_EQ(test, test_param->use_ramping,
+   268				pipe_data->pipe_config.vblank_data.drr_info.use_ramping);
+   269		KUNIT_EXPECT_EQ(test, test_param->min_vtotal_supported,
+   270				pipe_data->pipe_config.vblank_data.drr_info.min_vtotal_supported);
+   271		KUNIT_EXPECT_EQ(test, test_param->max_vtotal_supported,
+   272				pipe_data->pipe_config.vblank_data.drr_info.max_vtotal_supported);
+   273	}
+   274	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

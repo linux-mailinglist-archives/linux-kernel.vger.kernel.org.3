@@ -2,77 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7865ABDA8
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 09:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDB75ABD87
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbiICHUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 03:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        id S232616AbiICGvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 02:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbiICHUe (ORCPT
+        with ESMTP id S231876AbiICGu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 03:20:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D05B6DF95
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 00:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662189632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UHFFj9vepk7u9EoGJKlFbytlhoGP7nwiP3Wn6nevpP8=;
-        b=JMGvW7VRGtqlEeEC8VsqYq+75zWvq7TvFqYH9RljL0bBISbKQBYQDHSXdsi0II1G8F3/gq
-        r/Vc1+ig8WNLmFsY7/tZRVRJ7uSnIhCg7q4pCCL+fMr9OXFAaK3Q1iThjO5XWufElsVJQv
-        GKqtOEH/canBWa0tCi6ZbplgM4NqPio=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-465-ppu4bCiwMhe62PT5SwKPug-1; Sat, 03 Sep 2022 03:20:28 -0400
-X-MC-Unique: ppu4bCiwMhe62PT5SwKPug-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3BED7811E76;
-        Sat,  3 Sep 2022 07:20:27 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.34])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 33575422E3;
-        Sat,  3 Sep 2022 07:20:20 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Sat,  3 Sep 2022 09:20:26 +0200 (CEST)
-Date:   Sat, 3 Sep 2022 09:20:19 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Oleksandr Natalenko <oleksandr@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Will Deacon <will@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Stephen Kitt <steve@sk2.org>, Rob Herring <robh@kernel.org>,
-        Joel Savitz <jsavitz@redhat.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Renaud =?iso-8859-1?Q?M=E9trich?= <rmetrich@redhat.com>,
-        Grzegorz Halat <ghalat@redhat.com>, Qi Guo <qguo@redhat.com>
-Subject: Re: [PATCH] core_pattern: add CPU specifier
-Message-ID: <20220903072018.GA15331@redhat.com>
-References: <20220903064330.20772-1-oleksandr@redhat.com>
+        Sat, 3 Sep 2022 02:50:56 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D484173307;
+        Fri,  2 Sep 2022 23:50:55 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MKQNt29yDzrS2y;
+        Sat,  3 Sep 2022 14:49:02 +0800 (CST)
+Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 3 Sep 2022 14:50:52 +0800
+Received: from huawei.com (10.175.100.227) by kwepemm600008.china.huawei.com
+ (7.193.23.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 3 Sep
+ 2022 14:50:51 +0800
+From:   Shang XiaoJing <shangxiaojing@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <shangxiaojing@huawei.com>
+Subject: [PATCH 0/3] perf: Clean up and fix potential mem leak
+Date:   Sat, 3 Sep 2022 15:25:39 +0800
+Message-ID: <20220903072542.27678-1-shangxiaojing@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220903064330.20772-1-oleksandr@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600008.china.huawei.com (7.193.23.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,24 +51,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03, Oleksandr Natalenko wrote:
->
-> Statistically, in a large deployment regular segfaults may indicate a CPU issue.
->
-> Currently, it is not possible to find out what CPU the segfault happened on.
-> There are at least two attempts to improve segfault logging with this regard,
-> but they do not help in case the logs rotate.
->
-> Hence, lets make sure it is possible to permanently record a CPU
-> the task ran on using a new core_pattern specifier.
->
-> Suggested-by: Renaud Métrich <rmetrich@redhat.com>
-> Signed-off-by: Oleksandr Natalenko <oleksandr@redhat.com>
-> ---
->  Documentation/admin-guide/sysctl/kernel.rst | 1 +
->  fs/coredump.c                               | 5 +++++
->  include/linux/coredump.h                    | 1 +
->  3 files changed, 7 insertions(+)
+Some clean up in perf.c and builtin-c2c.c.
 
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Shang XiaoJing (3):
+  perf clean: Add same_cmd_with_prefix helper
+  perf c2c: Add helpers to get counts of loads or stores
+  perf c2c: Prevent potential memory leak in c2c_he_zalloc
+
+ tools/perf/builtin-c2c.c | 79 ++++++++++++++++++++--------------------
+ tools/perf/perf.c        | 12 ++++--
+ 2 files changed, 48 insertions(+), 43 deletions(-)
+
+-- 
+2.17.1
 

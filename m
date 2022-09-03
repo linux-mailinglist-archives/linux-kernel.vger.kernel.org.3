@@ -2,95 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5641E5AC0ED
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6703A5AC0EF
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbiICSyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 14:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S231880AbiICS4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 14:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiICSyt (ORCPT
+        with ESMTP id S229526AbiICS4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 14:54:49 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251C9193CA;
-        Sat,  3 Sep 2022 11:54:48 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 202so2881445ybe.13;
-        Sat, 03 Sep 2022 11:54:48 -0700 (PDT)
+        Sat, 3 Sep 2022 14:56:17 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8554C4E845;
+        Sat,  3 Sep 2022 11:56:16 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id c11so1985468wrp.11;
+        Sat, 03 Sep 2022 11:56:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=auo0Yh1ew/M6mCn6aj4WFRXG6DkdVRyhM9HBkAtNNMk=;
+        b=gn1NG5U15WlrFg13cEU+uRfBvztx2UMeacnxZAiCrTVGCwEjx0v2ByLkQVN4n85u2V
+         PWnab4rY8JAtAEcHbUd3+RRcFr8wcYIM9HMVdE21PHiVTKrVTsto2KQfx6V1WrinRYgB
+         drCDNH2grgFt5GiwJ4EI/iwp3+T+wCH/0N6/fw/rSPKpqwhGZLX2Tx6wY7D5ihqKAl7T
+         FPTtXNC02qRdM4M2TGk0hGipLz4BDTX2hoDvvWJOj8jVBR1Nl3h99FCsVpLUvI9Nc2iE
+         BrYGE1XIcqZAOBi62fPHPzUWzua1b1HnRhckSf4UF/H5vyyrzm+2F0+SUFCwYvpdokal
+         8qVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=c2u8J3e6VWb+BJya6Kv1BbnFoz2femQjTxZJArvM/N0=;
-        b=Tslxu42YP74NEGXdYVj4/VZGT3UKLtLi0kRDy7KiQn7RD5t9QXp6jgHIE6jn6PO+bp
-         Z+mzXc0eirpYmRRTHJx2krTZpFzcLJ38v29yKolst1J2WPVlsJy9yPcjGU+rgUICoHqJ
-         b65YjZau8yKsKU27yvquH2ZLkItSUaLGEi7b7GsulN37aCoEVtyroisCd1n4cjYqAdM+
-         ukkl+iB2FN3Q6cE00L3QGWzj4I2zw1cb8SKBn2cz2A9HVUzTvlIS2ERnSx1a3QO8pfPy
-         dk3JjXRMLrF8jxoC8Rada5jvevQyZDvW9jNs9rVnzWwhPSgRlwP7OcokhC1A0mbvgKeC
-         lbuQ==
-X-Gm-Message-State: ACgBeo1WMj8TFw3iFQlew2BgvZi66Qx0eZYqKWvd9A0yyaOIuKh1cB6J
-        PM5OJkaXboDLyclEymL/KLolvok8012hqu+XlnbYPxMz
-X-Google-Smtp-Source: AA6agR56QRT8XFU2RNWpZ9enfUA6I+xPDm5x89hd8la9xofTrximH4goCU+VQBtVboB5wh3qaLrNJ9jKuptajTYrG58=
-X-Received: by 2002:a25:2785:0:b0:69b:b1d2:fd05 with SMTP id
- n127-20020a252785000000b0069bb1d2fd05mr23048084ybn.81.1662231287387; Sat, 03
- Sep 2022 11:54:47 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=auo0Yh1ew/M6mCn6aj4WFRXG6DkdVRyhM9HBkAtNNMk=;
+        b=C/5BSw/+iKO6WLaZN+ZgTBC7npU6wS99xKGrFYnhWdVcPPsyeM6TRjlSQZhYCN1BDi
+         bTZhoc9tRzqLc31/2NHo/VsVcGKDQb02V48hSVIm2MnMkfI2bn8CyYUmE4Hd4jV31cff
+         SdP/mAJSt2W6Dx6uOf+d/lqBjOpo77FdzXZ4/ZIQkA2PA3m07FhM0benDb99OBW/Vvpn
+         ZYw9R2a7hxDL+q9RRP7OIaCHufO0ddO+3oP8ymqyhetVoVxw2fOj5/XlIfBQgqrHJbaG
+         jfSZL+7yD/eFgRC7sOWzWejFa9Q7mfo9gm+/Vsa+lSGAhZVlwBZMzSwQJKR1mEGm9Vbj
+         Tblw==
+X-Gm-Message-State: ACgBeo0OeowRKoXojiWhUeW5DaDW0FLlgPkXqdQWjjwBz0kOINs/7ZuX
+        RnUbx05aTpwNdFN0s/LoVpxTTe7Ur7vb
+X-Google-Smtp-Source: AA6agR6w2GvmL0I/sgLYnsKM5RoKw/N7UFODpAp5t/8fRe5vlsIcHUmZbbE7C99mhzBtq5j272E1bg==
+X-Received: by 2002:adf:e508:0:b0:228:62fd:932b with SMTP id j8-20020adfe508000000b0022862fd932bmr928365wrm.410.1662231374836;
+        Sat, 03 Sep 2022 11:56:14 -0700 (PDT)
+Received: from playground (host-92-29-143-165.as13285.net. [92.29.143.165])
+        by smtp.gmail.com with ESMTPSA id e7-20020a05600c4e4700b003a60f0f34b7sm6006123wmq.40.2022.09.03.11.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 11:56:14 -0700 (PDT)
+Date:   Sat, 3 Sep 2022 19:56:06 +0100
+From:   Jules Irenge <jbi.octave@gmail.com>
+To:     ast@kernel.org
+Cc:     john.fastabend@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, jbi.octave@gmail.com
+Subject: [PATCH 1/2] bpf: Fix warning of Using plain integer as NULL pointer
+Message-ID: <YxOjRm5xqL68JVnt@playground>
 MIME-Version: 1.0
-References: <20220831140327.79149-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220831140327.79149-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 3 Sep 2022 20:54:36 +0200
-Message-ID: <CAJZ5v0jRPmq--RRNHLNR+b+MfrefXexBdTXEuZitg0-VbB6omA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] ACPI: platform: Get rid of redundant 'else'
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 4:03 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> In the snippets like the following
->
->         if (...)
->                 return / goto / break / continue ...;
->         else
->                 ...
->
-> the 'else' is redundant. Get rid of it.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: no changes
->  drivers/acpi/acpi_platform.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
-> index 1a1c78b23fba..75e26528056d 100644
-> --- a/drivers/acpi/acpi_platform.c
-> +++ b/drivers/acpi/acpi_platform.c
-> @@ -114,9 +114,9 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
->
->         INIT_LIST_HEAD(&resource_list);
->         count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
-> -       if (count < 0) {
-> +       if (count < 0)
->                 return NULL;
-> -       } else if (count > 0) {
-> +       if (count > 0) {
->                 resources = kcalloc(count, sizeof(struct resource),
->                                     GFP_KERNEL);
->                 if (!resources) {
-> --
+This patch fixes a warning generated by Sparse
 
-Whole series applied as 6.1 material, thanks!
+"Using plain integer as NULL pointer"
+
+by replacing the offending 0 by NULL.
+
+Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+---
+ kernel/bpf/syscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 27760627370d..427b7e3829e0 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -598,7 +598,7 @@ void bpf_map_free_kptrs(struct bpf_map *map, void *map_value)
+ 		if (off_desc->type == BPF_KPTR_UNREF) {
+ 			u64 *p = (u64 *)btf_id_ptr;
+ 
+-			WRITE_ONCE(p, 0);
++			WRITE_ONCE(p, NULL);
+ 			continue;
+ 		}
+ 		old_ptr = xchg(btf_id_ptr, 0);
+-- 
+2.35.1
+

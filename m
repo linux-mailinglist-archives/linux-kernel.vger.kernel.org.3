@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F014D5ABBD0
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB295ABBDC
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbiICA3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 20:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
+        id S230391AbiICAed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 20:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiICA2g (ORCPT
+        with ESMTP id S229508AbiICAea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 20:28:36 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AECD11EB5F;
-        Fri,  2 Sep 2022 17:26:30 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8EDEB6DD;
-        Sat,  3 Sep 2022 02:25:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662164704;
-        bh=H2oIKKpl7vDJ+UZWMIb/3wmlWoyGMna5rxAUCLWh4mk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Me420Y6rkhnnjE3cmtE1eQhJLjVnyqoxTJulX2e9n1z/YSEpUTbVY03AFsoZdS+6m
-         QKRU+jSdrp1Ll1vBPqQLs379abGsgkxlNG3mF0N7IMZIBP0C4pkdkKFdHiI2kyFKwV
-         i6x72SSeG9MqHcxYqURlKq09XYaRXpnWRgnw/gww=
-Date:   Sat, 3 Sep 2022 03:24:51 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Max Krummenacher <max.oss.09@gmail.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: imx8mp-verdin: add dsi to hdmi
- functionality
-Message-ID: <YxKe00H2S9AzF0Yi@pendragon.ideasonboard.com>
-References: <20220901154051.1885509-1-max.oss.09@gmail.com>
- <YxD09SqpcbB3dt8I@pendragon.ideasonboard.com>
- <20220902155720.GB5699@francesco-nb.int.toradex.com>
+        Fri, 2 Sep 2022 20:34:30 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28557A1A3;
+        Fri,  2 Sep 2022 17:34:29 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id l3so3332962plb.10;
+        Fri, 02 Sep 2022 17:34:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=A+rdY+/HIFxMsYQnafcVE64D86S78IFqsd6Y1LJws4I=;
+        b=f/mBEYrJ0VOnRQm4h6VkA+dewTUyIo2gSoqe1kyvow1s+wxA2KI86r5b2OqSUMcX5y
+         /1n8Jcs/vknDB/GcIQ0+ihB4+y16j/aXTbwatbBrJAjqihRhRFMRTgqn2RkUcdXaPNli
+         ppi6eKeLKkl19i5cT6eJthEuqk2FSh3WgcQ+FeDZkN9SEcIuFgRSDC5Ym9jWwX3Y6UWp
+         7yyQkIDofz7TISTfIDhzHzf5wFn12Q++c0pghBjAb9g/CeqB9N1Bc3DpgwIsjSAVIPB3
+         09rmSGCzqvXZ7jjmAVu92EArEJWITeP+grdbQfjeeo061k7A6hwU3smYrVmzc5KwB21K
+         tEZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=A+rdY+/HIFxMsYQnafcVE64D86S78IFqsd6Y1LJws4I=;
+        b=nKaP7MnDQE8WhA6D3Om1HYW6eUoCs3J9jmxBXJU9U5Sgmb0ZCzG4cKc7oqbC6fFk9x
+         M8NKxH4j6d2BMsRKEtxOzuTkY7l9K8N9mIn/HpG/OhaYdlLFtcAFbhEIl1mBJBrSYKM2
+         zgBgBlPqlu2v5HDJWJjuxsjiNZ0/MvR0ctkiCEzjUqMAD0MZsXRM6DHONTXtsatr9qeS
+         65WL31sMh4ydTE6gvhy7KfKU3PjqVVPGaIdutlCVFSRLwL2M9LuOG/xZ7Fj/FHizlgga
+         LAvt0upVpBNKbC3DhwqsIL8bsXwzYRNi3ftN6M2MSDR0h7aGuBYpWglDx9jFyFZjq3T5
+         DS9A==
+X-Gm-Message-State: ACgBeo3QFDPOEAhOwrBzlZx1PKqK/0b3FTqaU0JPMK5paUrNRPyCkY1n
+        5TfFjTGGhPHpRhu0t/BEZTu/m47WEJW5sw==
+X-Google-Smtp-Source: AA6agR4h3q/CejZAoKRvYPs3Oa+t53Prmaa+H6qSA/JgoZDStn0CV4Az0IcaMQZSVNyhIHXlFp/kyw==
+X-Received: by 2002:a17:902:7803:b0:172:c13a:fd9b with SMTP id p3-20020a170902780300b00172c13afd9bmr37788695pll.86.1662165268576;
+        Fri, 02 Sep 2022 17:34:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h3-20020a170902680300b001714fa07b74sm2273390plk.108.2022.09.02.17.34.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 17:34:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 2 Sep 2022 17:34:26 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.9 00/31] 4.9.327-rc1 review
+Message-ID: <20220903003426.GA847372@roeck-us.net>
+References: <20220902121356.732130937@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220902155720.GB5699@francesco-nb.int.toradex.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220902121356.732130937@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Francesco,
-
-On Fri, Sep 02, 2022 at 05:57:20PM +0200, Francesco Dolcini wrote:
-> Hello Laurent,
-> answering here for both patches (1/2 and 2/2).
+On Fri, Sep 02, 2022 at 02:18:26PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.327 release.
+> There are 31 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On Thu, Sep 01, 2022 at 09:07:49PM +0300, Laurent Pinchart wrote:
-> > On Thu, Sep 01, 2022 at 05:40:50PM +0200, Max Krummenacher wrote:
-> > > From: Max Krummenacher <max.krummenacher@toradex.com>
-> > > 
-> > > Add the hdmi connector present on the dsi to hdmi adapter now
-> > > required by the upstream lontium bridge driver.
-> > > The dsi to hdmi adapter is enabled in an device tree overlay.
-> > 
-> > Shouldn't the connector also be in the overlay ? There's certainly no
-> > physical HDMI connector on the i.MX8MP Verdin SoM :-)
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
 > 
-> Toradex DTS include and overlay files structure so far has been a little
-> bit different and not following the expectation you just stated here,
-> you can just check the current *toradex*dts* files and you'll see that there
-> is other stuff that is not strictly part of the module.
-> 
-> Copying from a previous email thread on a very similar discussion [0]
-> some of the reasons:
-> 
->  - The SoM dtsi representing not only the functionality implemented into
->    the SoM, but the whole connector pinout to the carrier makes very easy
->    to just include a different som.dtsi in the carrier board dts and just
->    switch SoM, for example from a colibri-imx6 to a colibri-imx7.
 
-That's fine, but I don't see how that's related to the issue at hand.
-The DSI to HDMI bridge wouldn't be present on either SoM, would it ?
+Build results:
+	total: 164 pass: 164 fail: 0
+Qemu test results:
+	total: 394 pass: 394 fail: 0
 
->  - We avoid code duplication
-> 
-> This is working for us pretty well so far and the majority of the users
-> of ours modules rely on this structure, we would prefer not to change that.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-It may work for your current use cases, but it doesn't make it right :-)
-Someone can integrate a Verdin SoM with a carrier board that has no DSI
-to HDMI (or LVDS) bridge, there should thus be no such device in the
-device tree. The SoM has DSI signals present on its connector, that's
-what the SoM .dtsi should expose.
-
-> [0] https://lore.kernel.org/all/20220413094449.GB118560@francesco-nb.int.toradex.com/
-
--- 
-Regards,
-
-Laurent Pinchart
+Guenter

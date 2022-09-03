@@ -2,146 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072895ABCA1
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 05:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5936B5ABCB2
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 05:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiICDrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 23:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S231127AbiICD6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 23:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiICDrr (ORCPT
+        with ESMTP id S231379AbiICD6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 23:47:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48ADE3408
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 20:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662176865; x=1693712865;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VytJkr2Us+omk6fHRS/qKuslrK2rhsh1ait7dpI2zbY=;
-  b=k/FeWRvmIFVfv5B04b010FwF1VWq3sv9umg0NW7R7OKLME5wc2XJxQB0
-   IsYKk59kw+ejtO1Gx28SuZh1J6AYTOMj5MRarW5yUVQ/pQQYSkSlIGbsh
-   DJ9ep9q2wYA+Kl87aF9lX1q4IIHFWYDynEiZjtN+PilP/aRmGqC9+LWwL
-   MnenOoR4SwvWF+16M3ywGrSuzkpwbzv0pZQF+bbUQKjqobM3icPW8Kw4e
-   Sk3HJHS5rSjLh09BJiyGxN7H8/EeqWLQBisVb52csI6CpbGEFfF8JMLz/
-   qFE5g0qL3gGkfW3gHcF3ZYSD40NzMCgQ3Wf7kJ+qfSbNGM9KKu2Y2o/f+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="276526490"
-X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="276526490"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 20:47:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="564173464"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 02 Sep 2022 20:47:44 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUK8F-0000zF-1h;
-        Sat, 03 Sep 2022 03:47:43 +0000
-Date:   Sat, 3 Sep 2022 11:46:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [djbw-nvdimm:libnvdimm-pending 12/16] drivers/dax/mapping.c:345:17:
- error: implicit declaration of function 'get_dev_pagemap_many'; did you mean
- 'put_dev_pagemap_many'?
-Message-ID: <202209031128.VXHDkr70-lkp@intel.com>
+        Fri, 2 Sep 2022 23:58:34 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416923ECDF;
+        Fri,  2 Sep 2022 20:58:31 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id E6017D39; Fri,  2 Sep 2022 22:58:28 -0500 (CDT)
+Date:   Fri, 2 Sep 2022 22:58:28 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Song Liu <songliubraving@fb.com>,
+        Paul Moore <paul@paul-moore.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>,
+        "jackmanb@chromium.org" <jackmanb@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
+        "eparis@parisplace.org" <eparis@parisplace.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
+        "cgzones@googlemail.com" <cgzones@googlemail.com>,
+        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
+        "tixxdz@gmail.com" <tixxdz@gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+Message-ID: <20220903035828.GA23652@mail.hallyn.com>
+References: <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+ <20220819144537.GA16552@mail.hallyn.com>
+ <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
+ <875yigp4tp.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+ <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
+ <20220826152445.GB12466@mail.hallyn.com>
+ <25C89E75-A900-42C7-A8E4-2800AA2E3387@fb.com>
+ <20220826210039.GA15952@mail.hallyn.com>
+ <20220829153304.nvhakybpkj7erpuc@wittgenstein>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220829153304.nvhakybpkj7erpuc@wittgenstein>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+On Mon, Aug 29, 2022 at 05:33:04PM +0200, Christian Brauner wrote:
+> On Fri, Aug 26, 2022 at 04:00:39PM -0500, Serge Hallyn wrote:
+> > On Fri, Aug 26, 2022 at 05:00:51PM +0000, Song Liu wrote:
+> > > 
+> > > 
+> > > > On Aug 26, 2022, at 8:24 AM, Serge E. Hallyn <serge@hallyn.com> wrote:
+> > > > 
+> > > > On Thu, Aug 25, 2022 at 09:58:46PM +0000, Song Liu wrote:
+> > > >> 
+> > > >> 
+> > > >>> On Aug 25, 2022, at 12:19 PM, Paul Moore <paul@paul-moore.com> wrote:
+> > > >>> 
+> > > >>> On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > >>>> Paul Moore <paul@paul-moore.com> writes:
+> > > >>>>> On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> > > >>>>>> I am hoping we can come up with
+> > > >>>>>> "something better" to address people's needs, make everyone happy, and
+> > > >>>>>> bring forth world peace.  Which would stack just fine with what's here
+> > > >>>>>> for defense in depth.
+> > > >>>>>> 
+> > > >>>>>> You may well not be interested in further work, and that's fine.  I need
+> > > >>>>>> to set aside a few days to think on this.
+> > > >>>>> 
+> > > >>>>> I'm happy to continue the discussion as long as it's constructive; I
+> > > >>>>> think we all are.  My gut feeling is that Frederick's approach falls
+> > > >>>>> closest to the sweet spot of "workable without being overly offensive"
+> > > >>>>> (*cough*), but if you've got an additional approach in mind, or an
+> > > >>>>> alternative approach that solves the same use case problems, I think
+> > > >>>>> we'd all love to hear about it.
+> > > >>>> 
+> > > >>>> I would love to actually hear the problems people are trying to solve so
+> > > >>>> that we can have a sensible conversation about the trade offs.
+> > > >>> 
+> > > >>> Here are several taken from the previous threads, it's surely not a
+> > > >>> complete list, but it should give you a good idea:
+> > > >>> 
+> > > >>> https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
+> > > >>> 
+> > > >>>> As best I can tell without more information people want to use
+> > > >>>> the creation of a user namespace as a signal that the code is
+> > > >>>> attempting an exploit.
+> > > >>> 
+> > > >>> Some use cases are like that, there are several other use cases that
+> > > >>> go beyond this; see all of our previous discussions on this
+> > > >>> topic/patchset.  As has been mentioned before, there are use cases
+> > > >>> that require improved observability, access control, or both.
+> > > >>> 
+> > > >>>> As such let me propose instead of returning an error code which will let
+> > > >>>> the exploit continue, have the security hook return a bool.  With true
+> > > >>>> meaning the code can continue and on false it will trigger using SIGSYS
+> > > >>>> to terminate the program like seccomp does.
+> > > >>> 
+> > > >>> Having the kernel forcibly exit the process isn't something that most
+> > > >>> LSMs would likely want.  I suppose we could modify the hook/caller so
+> > > >>> that *if* an LSM wanted to return SIGSYS the system would kill the
+> > > >>> process, but I would want that to be something in addition to
+> > > >>> returning an error code like LSMs normally do (e.g. EACCES).
+> > > >> 
+> > > >> I am new to user_namespace and security work, so please pardon me if
+> > > >> anything below is very wrong. 
+> > > >> 
+> > > >> IIUC, user_namespace is a tool that enables trusted userspace code to 
+> > > >> control the behavior of untrusted (or less trusted) userspace code. 
+> > > > 
+> > > > No.  user namespaces are not a way for more trusted code to control the
+> > > > behavior of less trusted code.
+> > > 
+> > > Hmm.. In this case, I think I really need to learn more. 
+> > > 
+> > > Thanks for pointing out my misunderstanding.
+> > 
+> > (I thought maybe Eric would chime in with a better explanation, but I'll
+> > fill it in for now :)
+> > 
+> > One of the main goals of user namespaces is to allow unprivileged users
+> > to do things like chroot and mount, which are very useful development
+> > tools, without needing admin privileges.  So it's almost the opposite
+> > of what you said: rather than to enable trusted userspace code to control
+> > the behavior of less trusted code, it's to allow less privileged code to
+> > do things which do not affect other users, without having to assume *more*
+> > privilege.
+> > 
+> > To be precise, the goals were:
+> > 
+> > 1. uid mapping - allow two users to both "use uid 500" without conflicting
+> > 2. provide (unprivileged) users privilege over their own resources
+> > 3. absolutely no extra privilege over other resources
+> > 4. be able to nest
+> > 
+> > While (3) was technically achieved, the problem we have is that
+> > (2) provides unprivileged users the ability to exercise kernel code
+> > which they previously could not.
+> 
+> The consequence of the refusal to give users any way to control whether
+> or not user namespaces are available to unprivileged users is that a
+> non-significant number of distros still carry the same patch for about
+> 10 years now that adds an unprivileged_userns_clone sysctl to restrict
+> them to privileged users. That includes current Debian and Archlinux btw.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Hi Christian,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git libnvdimm-pending
-head:   ac9d6b3ba0a537b67bdc8e525308dc371da91e1b
-commit: fd2e18c05d353b59283b4cb5508bafecd766b304 [12/16] devdax: Move address_space helpers to the DAX core
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220903/202209031128.VXHDkr70-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git/commit/?id=fd2e18c05d353b59283b4cb5508bafecd766b304
-        git remote add djbw-nvdimm https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git
-        git fetch --no-tags djbw-nvdimm libnvdimm-pending
-        git checkout fd2e18c05d353b59283b4cb5508bafecd766b304
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/
+I'm wondering about your placement of this argument in the thread, and whether
+you interpreted what I said above as an argument against this patchset, or
+whether you're just expanding on what I said.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> The LSM hook is a simple way to allow administrators to control this and
 
-All errors (new ones prefixed by >>):
+(I think the "control" here is suboptimal, but I've not seen - nor
+conceived of - anything better as of yet)
 
-   drivers/dax/mapping.c: In function 'dax_associate_entry':
->> drivers/dax/mapping.c:345:17: error: implicit declaration of function 'get_dev_pagemap_many'; did you mean 'put_dev_pagemap_many'? [-Werror=implicit-function-declaration]
-     345 |         pgmap = get_dev_pagemap_many(pfn, NULL, PHYS_PFN(size));
-         |                 ^~~~~~~~~~~~~~~~~~~~
-         |                 put_dev_pagemap_many
-   drivers/dax/mapping.c:345:15: warning: assignment to 'struct dev_pagemap *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     345 |         pgmap = get_dev_pagemap_many(pfn, NULL, PHYS_PFN(size));
-         |               ^
-   cc1: some warnings being treated as errors
-
-
-vim +345 drivers/dax/mapping.c
-
-   324	
-   325	/*
-   326	 * When it is called in dax_insert_entry(), the cow flag will indicate that
-   327	 * whether this entry is shared by multiple files.  If so, set the page->mapping
-   328	 * FS_DAX_MAPPING_COW, and use page->index as refcount.
-   329	 */
-   330	static vm_fault_t dax_associate_entry(void *entry,
-   331					      struct address_space *mapping,
-   332					      struct vm_fault *vmf, unsigned long flags)
-   333	{
-   334		unsigned long size = dax_entry_size(entry), pfn, index;
-   335		struct dev_pagemap *pgmap;
-   336		int i = 0;
-   337	
-   338		if (IS_ENABLED(CONFIG_FS_DAX_LIMITED))
-   339			return 0;
-   340	
-   341		if (!size)
-   342			return 0;
-   343	
-   344		pfn = dax_to_pfn(entry);
- > 345		pgmap = get_dev_pagemap_many(pfn, NULL, PHYS_PFN(size));
-   346		if (!pgmap)
-   347			return VM_FAULT_SIGBUS;
-   348	
-   349		index = linear_page_index(vmf->vma, ALIGN(vmf->address, size));
-   350		for_each_mapped_pfn(entry, pfn) {
-   351			struct page *page = pfn_to_page(pfn);
-   352	
-   353			if (flags & DAX_COW) {
-   354				dax_mapping_set_cow(page);
-   355			} else {
-   356				WARN_ON_ONCE(page->mapping);
-   357				page->mapping = mapping;
-   358				page->index = index + i++;
-   359			}
-   360		}
-   361	
-   362		return 0;
-   363	}
-   364	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> will allow user namespaces to be enabled in scenarios where they
+> would otherwise not be accepted precisely because they are available to
+> unprivileged users.
+> 
+> I fully understand the motivation and usefulness in unprivileged
+> scenarios but it's an unfounded fear that giving users the ability to
+> control user namespace creation via an LSM hook will cause proliferation
+> of setuid binaries (Ignoring for a moment that any fully unprivileged
+> container with useful idmappings has to rely on the new{g,u}idmap setuid
+> binaries to setup useful mappings anyway.) or decrease system safety let
+> alone cause regressions (Which I don't think is an applicable term here
+> at all.). Distros that have unprivileged user namespaces turned on by
+> default are extremely unlikely to switch to an LSM profile that turns
+> them off and distros that already turn them off will continue to turn
+> them off whether or not that LSM hook is available.
+> 
+> It's much more likely that workloads that want to minimize their attack
+> surface while still getting the benefits of user namespaces for e.g.
+> service isolation will feel comfortable enabling them for the first time
+> since they can control them via an LSM profile.

@@ -2,105 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719715ABBAC
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F014D5ABBD0
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbiICAZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 20:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S231693AbiICA3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 20:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbiICAY2 (ORCPT
+        with ESMTP id S232026AbiICA2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 20:24:28 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578D310F0A8
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 17:23:59 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id gg12-20020a17090b0a0c00b001fbc6ba91bbso1683452pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 17:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date;
-        bh=yq8rKHnlAx/4DWABYX1mFX9uFU/+PCTlIPB312439UQ=;
-        b=TKFhg3LAJMrV16A/4dAGF27lXzJUSFetR+f3A80VfApjg2+P9tJXoDm6Z4U9IUeY30
-         8jYY5yBOQWSFVC4BZ8MG9yoVBTSaBi7zNiArYlzrQLsEVTNjAzJVGoZr1Jl4sRa/1U/9
-         +VTq3+oQ/it6ZH+V3BCoPWC+XRGMG2N7F7hTW+vz6yq0GaP5GcqC+Io0VDVELUt/ntC7
-         MFlXLZEQpFQuO1akDGR9LdSbdY/5kt4hqBh6wmak0PO0cNrqVz1wyIsuPlvI7rwQX8oF
-         KNf3vHYei0aZVGJgxZer2NGpWwoFt4lToHld1QfOSsl48RHmZpkn5Ho8BnKridvsT9d5
-         zxHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=yq8rKHnlAx/4DWABYX1mFX9uFU/+PCTlIPB312439UQ=;
-        b=wuaiNFkBRyeYLaN8DId+CST/qaHbLDySE/05mW39KhCHqXNLtafNv41RcjTNg0lFyb
-         OwJkaJEiRmv5qJRMn24pj604Fu5eQ0GiUIqbYPq0ZUMVzKMkfOguI2wUsRast8yhRRjI
-         Dz2wFEz8jdFCO7cvAmW1YdJ0ViLvgD7KTGk2AAgcZ4ST1UPCsUYQJAYSNa51o8vQ8Jeb
-         BVR3u5HSOic19oUW4X9LIyj0WN0ZO1kf0bUZqyxvNSIetGMyVY/weMLko0wlSrb6ze+x
-         HwjafM/iZidgnvJORBqaLCWn3M3Z1H+zho6mEala/qFIaMMVy2dv7eUM8phSc7sqZVFI
-         V9oA==
-X-Gm-Message-State: ACgBeo3cDq5ASH3nxv5NNdwhJloGj4u6mWUQLXUr779mI1+OZkLDbObk
-        z4sZ/q2GYGN48lq83QFxMJLByUR4tOU=
-X-Google-Smtp-Source: AA6agR4Bc9TlcFnkBSJ7Ifwme04Amv5NR4xxJxrKUpqAqHbGDTd3OghEmb9cnpUzT3+MkQMR6v4nBPcxnmk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:150e:b0:537:e2f5:dc87 with SMTP id
- q14-20020a056a00150e00b00537e2f5dc87mr34332719pfu.44.1662164617809; Fri, 02
- Sep 2022 17:23:37 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  3 Sep 2022 00:22:54 +0000
-In-Reply-To: <20220903002254.2411750-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220903002254.2411750-1-seanjc@google.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220903002254.2411750-24-seanjc@google.com>
-Subject: [PATCH v2 23/23] Revert "KVM: SVM: Do not throw warning when calling
- avic_vcpu_load on a running vcpu"
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Li RongQing <lirongqing@baidu.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Sep 2022 20:28:36 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AECD11EB5F;
+        Fri,  2 Sep 2022 17:26:30 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8EDEB6DD;
+        Sat,  3 Sep 2022 02:25:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662164704;
+        bh=H2oIKKpl7vDJ+UZWMIb/3wmlWoyGMna5rxAUCLWh4mk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Me420Y6rkhnnjE3cmtE1eQhJLjVnyqoxTJulX2e9n1z/YSEpUTbVY03AFsoZdS+6m
+         QKRU+jSdrp1Ll1vBPqQLs379abGsgkxlNG3mF0N7IMZIBP0C4pkdkKFdHiI2kyFKwV
+         i6x72SSeG9MqHcxYqURlKq09XYaRXpnWRgnw/gww=
+Date:   Sat, 3 Sep 2022 03:24:51 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     Max Krummenacher <max.oss.09@gmail.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] arm64: dts: imx8mp-verdin: add dsi to hdmi
+ functionality
+Message-ID: <YxKe00H2S9AzF0Yi@pendragon.ideasonboard.com>
+References: <20220901154051.1885509-1-max.oss.09@gmail.com>
+ <YxD09SqpcbB3dt8I@pendragon.ideasonboard.com>
+ <20220902155720.GB5699@francesco-nb.int.toradex.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220902155720.GB5699@francesco-nb.int.toradex.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turns out that some warnings exist for good reasons.  Restore the warning
-in avic_vcpu_load() that guards against calling avic_vcpu_load() on a
-running vCPU now that KVM avoids doing so when switching between x2APIC
-and xAPIC.  The entire point of the WARN is to highlight that KVM should
-not be reloading an AVIC.
+Hi Francesco,
 
-Opportunistically convert the WARN_ON() to WARN_ON_ONCE() to avoid
-spamming the kernel if it does fire.
+On Fri, Sep 02, 2022 at 05:57:20PM +0200, Francesco Dolcini wrote:
+> Hello Laurent,
+> answering here for both patches (1/2 and 2/2).
+> 
+> On Thu, Sep 01, 2022 at 09:07:49PM +0300, Laurent Pinchart wrote:
+> > On Thu, Sep 01, 2022 at 05:40:50PM +0200, Max Krummenacher wrote:
+> > > From: Max Krummenacher <max.krummenacher@toradex.com>
+> > > 
+> > > Add the hdmi connector present on the dsi to hdmi adapter now
+> > > required by the upstream lontium bridge driver.
+> > > The dsi to hdmi adapter is enabled in an device tree overlay.
+> > 
+> > Shouldn't the connector also be in the overlay ? There's certainly no
+> > physical HDMI connector on the i.MX8MP Verdin SoM :-)
+> 
+> Toradex DTS include and overlay files structure so far has been a little
+> bit different and not following the expectation you just stated here,
+> you can just check the current *toradex*dts* files and you'll see that there
+> is other stuff that is not strictly part of the module.
+> 
+> Copying from a previous email thread on a very similar discussion [0]
+> some of the reasons:
+> 
+>  - The SoM dtsi representing not only the functionality implemented into
+>    the SoM, but the whole connector pinout to the carrier makes very easy
+>    to just include a different som.dtsi in the carrier board dts and just
+>    switch SoM, for example from a colibri-imx6 to a colibri-imx7.
 
-This reverts commit c0caeee65af3944b7b8abbf566e7cc1fae15c775.
+That's fine, but I don't see how that's related to the issue at hand.
+The DSI to HDMI bridge wouldn't be present on either SoM, would it ?
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/svm/avic.c | 1 +
- 1 file changed, 1 insertion(+)
+>  - We avoid code duplication
+> 
+> This is working for us pretty well so far and the majority of the users
+> of ours modules rely on this structure, we would prefer not to change that.
 
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 17c78051f3ea..a13279205df3 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -1064,6 +1064,7 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- 		return;
- 
- 	entry = READ_ONCE(*(svm->avic_physical_id_cache));
-+	WARN_ON_ONCE(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
- 
- 	entry &= ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK;
- 	entry |= (h_physical_id & AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK);
+It may work for your current use cases, but it doesn't make it right :-)
+Someone can integrate a Verdin SoM with a carrier board that has no DSI
+to HDMI (or LVDS) bridge, there should thus be no such device in the
+device tree. The SoM has DSI signals present on its connector, that's
+what the SoM .dtsi should expose.
+
+> [0] https://lore.kernel.org/all/20220413094449.GB118560@francesco-nb.int.toradex.com/
+
 -- 
-2.37.2.789.g6183377224-goog
+Regards,
 
+Laurent Pinchart

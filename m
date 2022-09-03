@@ -2,296 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6DE5ABFEC
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 18:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B51E5ABFF9
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiICQ6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 12:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
+        id S229525AbiICREE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 13:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiICQ54 (ORCPT
+        with ESMTP id S230422AbiICREB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 12:57:56 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9694BA7C
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 09:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662224274; x=1693760274;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FgwLo0OSaqWGwSmvO4HdjqqQr9wo29Wa/BNgzi0H7Fo=;
-  b=ZRe/XhRrNBkWGM9wzLEiUUMIeDdzkpeXlrl43aUYkhSG5NkR1Nl6WY82
-   22oUCKZoS2wIsH2v2V+EBdlAda4gMA/hcdI2Kjbfoy5/ByP1B9NLUWVf9
-   GI3wsJVP0kNJ+YjrXMmnJdLkqF+xWf5O8tfmEkot/geXIGUPZ2vVs7jfJ
-   HLTR18O2kQiumstrO1aPfEjHe3YgC1YNctdaCt3AkOE/M4D53pZ4sT1zn
-   vI4odXV4kVGSrX++fKMcEdsxlo7y/lbKXZCh0c2wSABw3MnC/XKaYVQIt
-   JX9zDq2wp7uaF+aoIyyjYI0yZct9ZhyTnMvSI2jKd1ai45MsimqcoG49A
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="357886276"
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="357886276"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 09:57:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="643301140"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2022 09:57:53 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUWSu-0001wO-1M;
-        Sat, 03 Sep 2022 16:57:52 +0000
-Date:   Sun, 4 Sep 2022 00:57:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mark:arm64/insn/rework 17/17] arch/arm64/lib/insn.c:37:6: warning:
- no previous prototype for 'test__insn_imm_insn__unsigned_N'
-Message-ID: <202209040035.zoHGzSIk-lkp@intel.com>
+        Sat, 3 Sep 2022 13:04:01 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79624DF2A;
+        Sat,  3 Sep 2022 10:03:59 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-33dc31f25f9so40302177b3.11;
+        Sat, 03 Sep 2022 10:03:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=JgSQJQrFl0rSiXz9IMqGp2Wpf0/dqAi3JjYTCVyHmUQ=;
+        b=sj5tupm/U2K99MCeNnIpLxU9a5HruEzY8WAKBoshlC3iMN28aFKBu0sN1+deCyMrBl
+         BYDMjWaOgIg39kBHtn0O0mDKqS/oI2ryAgybsPaKwYSVhDDygr9qKrDLedAo9zEnVTQ+
+         Jn2nYFdcEgIPqeZHmq+JzSL77Q+jTAaCWwTeBmR7T51hJ6kb4At9YIH5GeK5Xdrfs6ny
+         DlOmIYLD61OackXFq6iKdxhL4NAASoM2x0Od0lqNsT5lZblhifpkf4AepZfG8x+0xtA7
+         af6UG1YH4ZoGyCXj3AuBP9z+CF4ppbpqN4Vd+eBVNcY/3c8xOvD/d4VDXakaQtCb+ETG
+         kLhg==
+X-Gm-Message-State: ACgBeo1EWqtwEx5lt8UgVv8JkKS79sC3BXV4fHjZRQ1hpoq6L1SmrnCu
+        ZIhwpBopaXOWaKQm04qFzZoTCeZlNe1SstYs0EY=
+X-Google-Smtp-Source: AA6agR7EXLzv1zu3fvIr/maPTZ5i4xfOjZGbNLwkQPzIqRxev0XP+/UekAGp3HKPSula8b7kHPuD7iacZmS+s9KdZs4=
+X-Received: by 2002:a0d:df92:0:b0:340:b90d:fb75 with SMTP id
+ i140-20020a0ddf92000000b00340b90dfb75mr31334425ywe.149.1662224638934; Sat, 03
+ Sep 2022 10:03:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAJZ5v0jdFPauNKurpXFdCJBtsXavvLzV9fu02divz61hE_STbQ@mail.gmail.com>
+ <20220901212631.GA250789@bhelgaas>
+In-Reply-To: <20220901212631.GA250789@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 3 Sep 2022 19:03:47 +0200
+Message-ID: <CAJZ5v0guiJ7JzN1gzhuBQxxELHUPyNaHUmTpE99yCqSRgE1gqg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3 2/2] PCI/PTM: fix to maintain pci_dev->ptm_enabled
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        David Box <david.e.box@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/insn/rework
-head:   e7a596adf2e7a4ff7e585c053b93d81730d605a7
-commit: e7a596adf2e7a4ff7e585c053b93d81730d605a7 [17/17] HACK: arm64: insn: add immediate tests
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209040035.zoHGzSIk-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=e7a596adf2e7a4ff7e585c053b93d81730d605a7
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/insn/rework
-        git checkout e7a596adf2e7a4ff7e585c053b93d81730d605a7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Thu, Sep 1, 2022 at 11:26 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Wed, Aug 31, 2022 at 07:53:05PM +0200, Rafael J. Wysocki wrote:
+> > ...
+>
+> > In the meantime, I recalled that nvme wanted to leave the device in D0
+> > and program it into an internal low-power state in some cases which
+> > would be disturbed by disabling PTM later on (a config space write
+> > would kick the device out of the internal low-power state).
+> >
+> > So it looks like it would be better to disable PTM as the first thing
+> > in pci_pm_suspend() before calling the driver's suspend callback
+> > (which may be nvme suspend),
+>
+> Yes, I was thinking the same thing.  There's no reason we need to wait
+> until interrupts are disabled to disable PTM.
+>
+> > but then we'd need to save the original PTM status and restore it
+> > during the subsequent resume.  That could be done as early as in
+> > pci_pm_resume_noirq(), but I think the cleanest way would be to add
+> > a new bit to struct pci_device for that.
+>
+> > Alternatively, we can drop the $subject patch, so ptm_enabled still
+> > only means that it has been enabled during enumeration and it can be
+> > used to restore the original PTM status during resume.
+>
+> I like this second idea of dropping this "PCI/PTM: fix to maintain
+> pci_dev->ptm_enabled" patch and using "dev->ptm_enabled" to set the
+> PTM Enable bit on restore, as in the patches below.  Then we don't
+> need to do anything explicit to re-enable PTM.
+>
+> If this makes sense, I'll add a few cleanups on top and post as a
+> formal series.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+It does to me.
 
-All warnings (new ones prefixed by >>):
+Thanks for taking care of this!
 
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:79:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      79 | IMM_ROUNDTRIP(imm6_15);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:37:6: warning: no previous prototype for 'test__insn_imm_insn__unsigned_imm6_10' [-Wmissing-prototypes]
-      37 | bool test__insn_imm_insn__unsigned_##imm(const u32 old_insn)            \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:80:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      80 | IMM_ROUNDTRIP(imm6_10);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:45:6: warning: no previous prototype for 'test__insn_imm_insn__signed_imm6_10' [-Wmissing-prototypes]
-      45 | bool test__insn_imm_insn__signed_##imm(const u32 old_insn)              \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:80:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      80 | IMM_ROUNDTRIP(imm6_10);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:53:6: warning: no previous prototype for 'test__imm_insn_imm__unsigned_imm6_10' [-Wmissing-prototypes]
-      53 | bool test__imm_insn_imm__unsigned_##imm(const u64 imm)                  \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:80:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      80 | IMM_ROUNDTRIP(imm6_10);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:60:6: warning: no previous prototype for 'test__imm_insn_imm__signed_imm6_10' [-Wmissing-prototypes]
-      60 | bool test__imm_insn_imm__signed_##imm(const s64 imm)                    \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:80:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      80 | IMM_ROUNDTRIP(imm6_10);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:37:6: warning: no previous prototype for 'test__insn_imm_insn__unsigned_immr' [-Wmissing-prototypes]
-      37 | bool test__insn_imm_insn__unsigned_##imm(const u32 old_insn)            \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:81:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      81 | IMM_ROUNDTRIP(immr);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:45:6: warning: no previous prototype for 'test__insn_imm_insn__signed_immr' [-Wmissing-prototypes]
-      45 | bool test__insn_imm_insn__signed_##imm(const u32 old_insn)              \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:81:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      81 | IMM_ROUNDTRIP(immr);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:53:6: warning: no previous prototype for 'test__imm_insn_imm__unsigned_immr' [-Wmissing-prototypes]
-      53 | bool test__imm_insn_imm__unsigned_##imm(const u64 imm)                  \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:81:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      81 | IMM_ROUNDTRIP(immr);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:60:6: warning: no previous prototype for 'test__imm_insn_imm__signed_immr' [-Wmissing-prototypes]
-      60 | bool test__imm_insn_imm__signed_##imm(const s64 imm)                    \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:81:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      81 | IMM_ROUNDTRIP(immr);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:37:6: warning: no previous prototype for 'test__insn_imm_insn__unsigned_imms' [-Wmissing-prototypes]
-      37 | bool test__insn_imm_insn__unsigned_##imm(const u32 old_insn)            \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:82:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      82 | IMM_ROUNDTRIP(imms);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:45:6: warning: no previous prototype for 'test__insn_imm_insn__signed_imms' [-Wmissing-prototypes]
-      45 | bool test__insn_imm_insn__signed_##imm(const u32 old_insn)              \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:82:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      82 | IMM_ROUNDTRIP(imms);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:53:6: warning: no previous prototype for 'test__imm_insn_imm__unsigned_imms' [-Wmissing-prototypes]
-      53 | bool test__imm_insn_imm__unsigned_##imm(const u64 imm)                  \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:82:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      82 | IMM_ROUNDTRIP(imms);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:60:6: warning: no previous prototype for 'test__imm_insn_imm__signed_imms' [-Wmissing-prototypes]
-      60 | bool test__imm_insn_imm__signed_##imm(const s64 imm)                    \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:82:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      82 | IMM_ROUNDTRIP(imms);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:37:6: warning: no previous prototype for 'test__insn_imm_insn__unsigned_hw' [-Wmissing-prototypes]
-      37 | bool test__insn_imm_insn__unsigned_##imm(const u32 old_insn)            \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:83:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      83 | IMM_ROUNDTRIP(hw);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:45:6: warning: no previous prototype for 'test__insn_imm_insn__signed_hw' [-Wmissing-prototypes]
-      45 | bool test__insn_imm_insn__signed_##imm(const u32 old_insn)              \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:83:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      83 | IMM_ROUNDTRIP(hw);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:53:6: warning: no previous prototype for 'test__imm_insn_imm__unsigned_hw' [-Wmissing-prototypes]
-      53 | bool test__imm_insn_imm__unsigned_##imm(const u64 imm)                  \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:83:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      83 | IMM_ROUNDTRIP(hw);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:60:6: warning: no previous prototype for 'test__imm_insn_imm__signed_hw' [-Wmissing-prototypes]
-      60 | bool test__imm_insn_imm__signed_##imm(const s64 imm)                    \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:83:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      83 | IMM_ROUNDTRIP(hw);
-         | ^~~~~~~~~~~~~
->> arch/arm64/lib/insn.c:37:6: warning: no previous prototype for 'test__insn_imm_insn__unsigned_N' [-Wmissing-prototypes]
-      37 | bool test__insn_imm_insn__unsigned_##imm(const u32 old_insn)            \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:84:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      84 | IMM_ROUNDTRIP(N);
-         | ^~~~~~~~~~~~~
->> arch/arm64/lib/insn.c:45:6: warning: no previous prototype for 'test__insn_imm_insn__signed_N' [-Wmissing-prototypes]
-      45 | bool test__insn_imm_insn__signed_##imm(const u32 old_insn)              \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:84:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      84 | IMM_ROUNDTRIP(N);
-         | ^~~~~~~~~~~~~
->> arch/arm64/lib/insn.c:53:6: warning: no previous prototype for 'test__imm_insn_imm__unsigned_N' [-Wmissing-prototypes]
-      53 | bool test__imm_insn_imm__unsigned_##imm(const u64 imm)                  \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:84:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      84 | IMM_ROUNDTRIP(N);
-         | ^~~~~~~~~~~~~
->> arch/arm64/lib/insn.c:60:6: warning: no previous prototype for 'test__imm_insn_imm__signed_N' [-Wmissing-prototypes]
-      60 | bool test__imm_insn_imm__signed_##imm(const s64 imm)                    \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:84:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      84 | IMM_ROUNDTRIP(N);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:37:6: warning: no previous prototype for 'test__insn_imm_insn__unsigned_sf' [-Wmissing-prototypes]
-      37 | bool test__insn_imm_insn__unsigned_##imm(const u32 old_insn)            \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:85:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      85 | IMM_ROUNDTRIP(sf);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:45:6: warning: no previous prototype for 'test__insn_imm_insn__signed_sf' [-Wmissing-prototypes]
-      45 | bool test__insn_imm_insn__signed_##imm(const u32 old_insn)              \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:85:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      85 | IMM_ROUNDTRIP(sf);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:53:6: warning: no previous prototype for 'test__imm_insn_imm__unsigned_sf' [-Wmissing-prototypes]
-      53 | bool test__imm_insn_imm__unsigned_##imm(const u64 imm)                  \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:85:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      85 | IMM_ROUNDTRIP(sf);
-         | ^~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:60:6: warning: no previous prototype for 'test__imm_insn_imm__signed_sf' [-Wmissing-prototypes]
-      60 | bool test__imm_insn_imm__signed_##imm(const s64 imm)                    \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:85:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      85 | IMM_ROUNDTRIP(sf);
-         | ^~~~~~~~~~~~~
->> arch/arm64/lib/insn.c:37:6: warning: no previous prototype for 'test__insn_imm_insn__unsigned_sh' [-Wmissing-prototypes]
-      37 | bool test__insn_imm_insn__unsigned_##imm(const u32 old_insn)            \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:86:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      86 | IMM_ROUNDTRIP(sh);
-         | ^~~~~~~~~~~~~
->> arch/arm64/lib/insn.c:45:6: warning: no previous prototype for 'test__insn_imm_insn__signed_sh' [-Wmissing-prototypes]
-      45 | bool test__insn_imm_insn__signed_##imm(const u32 old_insn)              \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:86:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      86 | IMM_ROUNDTRIP(sh);
-         | ^~~~~~~~~~~~~
->> arch/arm64/lib/insn.c:53:6: warning: no previous prototype for 'test__imm_insn_imm__unsigned_sh' [-Wmissing-prototypes]
-      53 | bool test__imm_insn_imm__unsigned_##imm(const u64 imm)                  \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:86:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      86 | IMM_ROUNDTRIP(sh);
-         | ^~~~~~~~~~~~~
->> arch/arm64/lib/insn.c:60:6: warning: no previous prototype for 'test__imm_insn_imm__signed_sh' [-Wmissing-prototypes]
-      60 | bool test__imm_insn_imm__signed_##imm(const s64 imm)                    \
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/lib/insn.c:86:1: note: in expansion of macro 'IMM_ROUNDTRIP'
-      86 | IMM_ROUNDTRIP(sh);
-         | ^~~~~~~~~~~~~
-
-
-vim +/test__insn_imm_insn__unsigned_N +37 arch/arm64/lib/insn.c
-
-    35	
-    36	#define IMM_ROUNDTRIP(imm)						\
-  > 37	bool test__insn_imm_insn__unsigned_##imm(const u32 old_insn)		\
-    38	{									\
-    39		u32 new_insn = old_insn;					\
-    40		u64 imm = aarch64_insn_decode_unsigned_##imm(old_insn);		\
-    41		if (!aarch64_insn_try_encode_unsigned_##imm(&new_insn, imm))	\
-    42			return true;						\
-    43		return new_insn == old_insn;					\
-    44	}									\
-  > 45	bool test__insn_imm_insn__signed_##imm(const u32 old_insn)		\
-    46	{									\
-    47		u32 new_insn = old_insn;					\
-    48		s64 imm = aarch64_insn_decode_signed_##imm(old_insn);		\
-    49		if (!aarch64_insn_try_encode_signed_##imm(&new_insn, imm))	\
-    50			return true;						\
-    51		return new_insn == old_insn;					\
-    52	}									\
-  > 53	bool test__imm_insn_imm__unsigned_##imm(const u64 imm)			\
-    54	{									\
-    55		u32 insn = 0;							\
-    56		if (!aarch64_insn_try_encode_unsigned_##imm(&insn, imm))	\
-    57			return true;						\
-    58		return aarch64_insn_decode_unsigned_##imm(insn) == imm;		\
-    59	}									\
-  > 60	bool test__imm_insn_imm__signed_##imm(const s64 imm)			\
-    61	{									\
-    62		u32 insn = 0;							\
-    63		if (!aarch64_insn_try_encode_signed_##imm(&insn, imm))		\
-    64			return true;						\
-    65		return aarch64_insn_decode_signed_##imm(insn) == imm;		\
-    66	}
-    67	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> commit 73690aa361a7 ("PCI/PM: Always disable PTM for all devices during suspend")
+> Author: Bjorn Helgaas <bhelgaas@google.com>
+> Date:   Thu Sep 1 16:14:45 2022 -0500
+>
+>     PCI/PM: Always disable PTM for all devices during suspend
+>
+>     We want to disable PTM on Root Ports because that allows some chips, e.g.,
+>     Intel mobile chips since Coffee Lake, to enter a lower-power PM state.
+>
+>     That means we also have to disable PTM on downstream devices because PCIe
+>     r6.0, sec 2.2.8, strongly recommends that functions support generation of
+>     messages in non-D0 states, so we assume Switch Upstream Ports or Endpoints
+>     may send PTM Requests while in D1, D2, and D3hot.  A PTM message received
+>     by a Downstream Port (including a Root Port) with PTM disabled must be
+>     treated as an Unsupported Request (sec 6.21.3).
+>
+>     PTM was previously disabled only for Root Ports, and it was disabled in
+>     pci_prepare_to_sleep(), which is not called at all if a driver supports
+>     legacy PM or does its own state saving.
+>
+>     Instead, disable PTM early in pci_pm_suspend() and pci_pm_runtime_suspend()
+>     so we do it in all cases.
+>
+>     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+>
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 2815922ac525..f07399a94807 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -772,6 +772,12 @@ static int pci_pm_suspend(struct device *dev)
+>         struct pci_dev *pci_dev = to_pci_dev(dev);
+>         const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+>
+> +       /*
+> +        * Disabling PTM allows some systems, e.g., Intel mobile chips
+> +        * since Coffee Lake, to enter a lower-power PM state.
+> +        */
+> +       pci_disable_ptm(pci_dev);
+> +
+>         pci_dev->skip_bus_pm = false;
+>
+>         if (pci_has_legacy_pm_support(pci_dev))
+> @@ -1269,6 +1275,8 @@ static int pci_pm_runtime_suspend(struct device *dev)
+>         pci_power_t prev = pci_dev->current_state;
+>         int error;
+>
+> +       pci_disable_ptm(pci_dev);
+> +
+>         /*
+>          * If pci_dev->driver is not set (unbound), we leave the device in D0,
+>          * but it may go to D3cold when the bridge above it runtime suspends.
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 95bc329e74c0..b0e2968c8cca 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2706,16 +2706,6 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
+>         if (target_state == PCI_POWER_ERROR)
+>                 return -EIO;
+>
+> -       /*
+> -        * There are systems (for example, Intel mobile chips since Coffee
+> -        * Lake) where the power drawn while suspended can be significantly
+> -        * reduced by disabling PTM on PCIe root ports as this allows the
+> -        * port to enter a lower-power PM state and the SoC to reach a
+> -        * lower-power idle state as a whole.
+> -        */
+> -       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -               pci_disable_ptm(dev);
+> -
+>         pci_enable_wake(dev, target_state, wakeup);
+>
+>         error = pci_set_power_state(dev, target_state);
+> @@ -2764,16 +2754,6 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
+>         if (target_state == PCI_POWER_ERROR)
+>                 return -EIO;
+>
+> -       /*
+> -        * There are systems (for example, Intel mobile chips since Coffee
+> -        * Lake) where the power drawn while suspended can be significantly
+> -        * reduced by disabling PTM on PCIe root ports as this allows the
+> -        * port to enter a lower-power PM state and the SoC to reach a
+> -        * lower-power idle state as a whole.
+> -        */
+> -       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -               pci_disable_ptm(dev);
+> -
+>         __pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
+>
+>         error = pci_set_power_state(dev, target_state);
+>
+> commit f84a7e954e37 ("PCI/PTM: Enable PTM when restoring state")
+> Author: Bjorn Helgaas <bhelgaas@google.com>
+> Date:   Thu Sep 1 15:51:23 2022 -0500
+>
+>     PCI/PTM: Enable PTM when restoring state
+>
+>     The suspend path may disable PTM before saving config state, which means
+>     the PCI_PTM_CTRL_ENABLE bit in the saved state may be cleared even though
+>     we want PTM to be enabled when resuming.
+>
+>     If "dev->ptm_enabled" is set, it means PTM should be enabled, so make sure
+>     PCI_PTM_CTRL_ENABLE is set when restoring the PTM state.
+>
+>     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+>
+> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
+> index b6a417247ce3..3115601a85ef 100644
+> --- a/drivers/pci/pcie/ptm.c
+> +++ b/drivers/pci/pcie/ptm.c
+> @@ -82,6 +82,14 @@ void pci_restore_ptm_state(struct pci_dev *dev)
+>                 return;
+>
+>         cap = (u16 *)&save_state->cap.data[0];
+> +
+> +       /*
+> +        * The suspend path may disable PTM before saving config state.
+> +        * Make sure PCI_PTM_CTRL_ENABLE is set if PTM should be enabled.
+> +        */
+> +       if (dev->ptm_enabled)
+> +               *cap |= PCI_PTM_CTRL_ENABLE;
+> +
+>         pci_write_config_word(dev, ptm + PCI_PTM_CTRL, *cap);
+>  }
+>
+>
+> commit 1d7d32a35df0 ("PCI/PTM: Preserve PTM Root Select")
+> Author: Bjorn Helgaas <bhelgaas@google.com>
+> Date:   Thu Sep 1 15:54:15 2022 -0500
+>
+>     PCI/PTM: Preserve PTM Root Select
+>
+>     When disabling PTM, there's no need to clear the Root Select bit.  We
+>     disable PTM during suspend, and we want to re-enable it during resume.
+>     Clearing Root Select here makes re-enabling more complicated.
+>
+>     Per PCIe r6.0, sec 7.9.15.3, "When set, if the PTM Enable bit is also Set,
+>     this Time Source is the PTM Root," so if PTM Enable is cleared, the value
+>     of Root Select should be irrelevant.
+>
+>     Preserve Root Select to simplify re-enabling PTM.
+>
+>     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+>     Cc: David E. Box <david.e.box@linux.intel.com>
+>
+> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
+> index 368a254e3124..b6a417247ce3 100644
+> --- a/drivers/pci/pcie/ptm.c
+> +++ b/drivers/pci/pcie/ptm.c
+> @@ -42,7 +42,7 @@ void pci_disable_ptm(struct pci_dev *dev)
+>                 return;
+>
+>         pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
+> -       ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
+> +       ctrl &= ~PCI_PTM_CTRL_ENABLE;
+>         pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
+>  }
+>

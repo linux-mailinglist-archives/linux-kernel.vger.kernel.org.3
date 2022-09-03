@@ -2,110 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562545ABDF7
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 11:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA405ABDFA
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 11:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbiICJZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 05:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S232553AbiICJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 05:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiICJZ1 (ORCPT
+        with ESMTP id S229667AbiICJ1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 05:25:27 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30845A894;
-        Sat,  3 Sep 2022 02:25:26 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id w139so4101084pfc.13;
-        Sat, 03 Sep 2022 02:25:26 -0700 (PDT)
+        Sat, 3 Sep 2022 05:27:12 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D599ABD5B;
+        Sat,  3 Sep 2022 02:27:11 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id a10so3399784qkl.13;
+        Sat, 03 Sep 2022 02:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Ewk0nk4wTlKkKkfzvpkFb8Ugz6vHAQN9pFS8k+GvnaI=;
-        b=Gi6HhJVBmbpDteA23N20m0rt8DHPMcdvoAT5rmDz/ZXJccYRb6hnzpGgrXH+zfW1FZ
-         ojSYfnBItJAhDLc9qZlxLlCHyeM1C4b6hvJFY8gQ2BAYGajy4iB3wCRs9IBhNJyOr6V3
-         CYLpo34p+7gesyhM7fwL9s9dX3Z/mtdYTzS2Z/GFmoDV4B6YyAsPy0XxWOZ6n/fUT6sE
-         RhPIGFRlRkIBAldKnfNNpAS9CYDMnZKQsRn0XBnDU6JtJ/nPDeQiY8cKE0f/GuSvnRIA
-         u6EivcHfo32wNBc4S6IQ0fAA9+iloMwvmemnZgs+v4YrliCHGoy0L0JyB7aNdQdxbPeC
-         FCsw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=FMss4nvageHB6cqXPlGEFtiQOpQh9GnVLRZoHj1mbA8=;
+        b=jtriAd1CLHhcG1iTDUlsp34s74uPtVr3bly1796PlHwrIik6+ac+pXJN6MKF2/RKzG
+         37eoexXnTlKAvs1yare8K6DMDcOWMnVyoT0RrzAHD+nCqeCjSCArK1X8S/MZ/Yy0ItRy
+         LIlv9suNc6YCTOe2r88yIWBXmY2VIOhogiYB+5ToIMohDWS6FveJkwHbOqrEGyLyAQGJ
+         XqxjPreSBAlwPyaTFNbCqiQYzzFWot574rF71XAmpHtJXoucbqhKpWJKWA6tPsMGuyWb
+         dXT5cCkKBFnbNUAzETGYiKJ3ogBkENPMngNnK6/rfeC0Id0HZ5V2+9MEKLhaiLoCq++l
+         fJmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ewk0nk4wTlKkKkfzvpkFb8Ugz6vHAQN9pFS8k+GvnaI=;
-        b=knQqBKVmA+Vh8b18VIQPTn/gnwqNWp+tDYfbgNA/zNIfKI+5h9UIZwcWDDaLupqskY
-         BbdKO01j8/nQQjt3dHuWBoqbrmXyLTreIVVCfB81HYlmMKm6+LSaZg/di0LFiGGNC8Ft
-         FvVzpS2qO19sTchHf1aL1l/d85+AJnBVftIhBQdLlg9cBsI9BtOW3spOXFEAiLmS0mkz
-         2vu7k99QIPW2Xr8ITYFreJ1LDbruzAVT0r8gS4NcLH1C5xssBQC5//4dLCY+0nYRBUYf
-         AdB1tjLUhEoJb9E522Ai6jJTXtxPsRxm0PTfL3rsTXGN4FqSXNptwAzSi635Dnpi47gZ
-         EZwg==
-X-Gm-Message-State: ACgBeo03WSO2ouM5AEHrysuVAbdUYuehsYQU3li6bm8vJXtXmr2UE3z8
-        +9N4FPqbMOxa2EwvTljPvzY=
-X-Google-Smtp-Source: AA6agR6hnmHf/DO+TBqjgJ297vGta83KydhpwZLAzZJxdyrN/fwJY81CY0jj0KQtMl0MGWTdbXA9+Q==
-X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id h5-20020a056a00218500b0052072766570mr40458030pfi.84.1662197126346;
-        Sat, 03 Sep 2022 02:25:26 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-86.three.co.id. [180.214.232.86])
-        by smtp.gmail.com with ESMTPSA id o11-20020a62cd0b000000b0052cc561f320sm3358539pfg.54.2022.09.03.02.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 02:25:25 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id EF0DB103D36; Sat,  3 Sep 2022 16:25:21 +0700 (WIB)
-Date:   Sat, 3 Sep 2022 16:25:21 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 00/72] 5.19.7-rc1 review
-Message-ID: <YxMdgcPPy9hJx34J@debian.me>
-References: <20220902121404.772492078@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=FMss4nvageHB6cqXPlGEFtiQOpQh9GnVLRZoHj1mbA8=;
+        b=lhrHToA+dhpeWsUIPtPFn/PvdoBJxbpp5pWpviPLZWOLk0+dF9dKDhvMLE5yruOlti
+         1AsY0ZTNVXJr1xnWl58OpNAGjR2sFvRnH93IM3CDIMo+Oo/gIhPURh0XXic2GWSiMT0w
+         0gQexLelcCyg4HmODWsTVU89x51o/bGbOwvZNWlfArYs2DVqyLfYwm5hP9b7525HmNLE
+         4pLbWuwmjgRG/9aP7eLwosXIdstwjj0zK00JBU5RJtxd4llPUvPTADKowP0hbBiiF0cT
+         pg2yhAR8s26CJAtKfpUYp11dIKZDElIKPV/sfK+GSXdXv+1JN2uFyfr5oxhMJlI8HzYy
+         kDAQ==
+X-Gm-Message-State: ACgBeo0+0PnXphvL4wWxJtXIQRMQK2ehRp16Gdn+kt8CpuGK8F/gJEbr
+        LcnqJF+IbuUq47g5mIbw3CB/k3TpijrtZ8rE0ZsB3EG270c=
+X-Google-Smtp-Source: AA6agR4ea/vo9mWWNQFqdXnMV81u7jF5AoHAj26MN+aoZ6NOkdj/ds3sYW4lAEIlHWkn1f9wSLhMwZw9jtnavgYZFiY=
+X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
+ s13-20020a05620a254d00b006ab84b825ebmr26052121qko.383.1662197230214; Sat, 03
+ Sep 2022 02:27:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dEcUBkpNWOxk8+Ch"
-Content-Disposition: inline
-In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20220903050252.2711950-1-o.rempel@pengutronix.de> <20220903050252.2711950-2-o.rempel@pengutronix.de>
+In-Reply-To: <20220903050252.2711950-2-o.rempel@pengutronix.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 3 Sep 2022 12:26:32 +0300
+Message-ID: <CAHp75Veyyd9XEom4ya0ZcKoxzbtJ4kKLCSUzwiLxzfnMkpMGXg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] iio: adc: tsc2046: add vref support
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Sep 3, 2022 at 8:03 AM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+>
+> If VREF pin is attached, we should use external VREF source instead of
+> the internal. Otherwise we will get wrong measurements on some of the channel
+> types.
 
---dEcUBkpNWOxk8+Ch
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-On Fri, Sep 02, 2022 at 02:18:36PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.7 release.
-> There are 72 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+> changes v5:
+> - add "the" before channel
+> - refactor error handling on regulator registration
+> - use MILLI instead of 1000
+> changes v4:
+> - use vref_reg pointer instead of bool use_internal_vref
+> - move regulator registration to a separate function
+> - rework error handling
+> - add devm_add_action_or_reset
+> ---
+>  drivers/iio/adc/ti-tsc2046.c | 57 ++++++++++++++++++++++++++++++++++--
+>  1 file changed, 55 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
+> index 0d9436a69cbfb..c7601b29b3bef 100644
+> --- a/drivers/iio/adc/ti-tsc2046.c
+> +++ b/drivers/iio/adc/ti-tsc2046.c
+> @@ -8,7 +8,9 @@
+>  #include <linux/bitfield.h>
+>  #include <linux/delay.h>
+>  #include <linux/module.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/spi/spi.h>
+> +#include <linux/units.h>
+>
+>  #include <asm/unaligned.h>
+>
+> @@ -175,6 +177,8 @@ struct tsc2046_adc_priv {
+>         u32 time_per_bit_ns;
+>
+>         struct tsc2046_adc_ch_cfg ch_cfg[TI_TSC2046_MAX_CHAN];
+> +       unsigned int vref_mv;
+> +       struct regulator *vref_reg;
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+I would put pointer first since it will make sizeof(priv) 4 bytes less
+on some architectures due to padding elimination.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>  };
+>
+>  #define TI_TSC2046_V_CHAN(index, bits, name)                   \
+> @@ -252,7 +256,9 @@ static u8 tsc2046_adc_get_cmd(struct tsc2046_adc_priv *priv, int ch_idx,
+>         case TI_TSC2046_ADDR_AUX:
+>         case TI_TSC2046_ADDR_VBAT:
+>         case TI_TSC2046_ADDR_TEMP0:
+> -               pd |= TI_TSC2046_SER | TI_TSC2046_PD1_VREF_ON;
+> +               pd |= TI_TSC2046_SER;
+> +               if (!priv->vref_reg)
+> +                       pd |= TI_TSC2046_PD1_VREF_ON;
+>         }
+>
+>         return TI_TSC2046_START | FIELD_PREP(TI_TSC2046_ADDR, ch_idx) | pd;
+> @@ -468,7 +474,7 @@ static int tsc2046_adc_read_raw(struct iio_dev *indio_dev,
+>                  * So, it is better to use external voltage-divider driver
+>                  * instead, which is calculating complete chain.
+>                  */
+> -               *val = TI_TSC2046_INT_VREF;
+> +               *val = priv->vref_mv;
+>                 *val2 = chan->scan_type.realbits;
+>                 return IIO_VAL_FRACTIONAL_LOG2;
+>         }
+> @@ -740,6 +746,49 @@ static void tsc2046_adc_parse_fwnode(struct tsc2046_adc_priv *priv)
+>         }
+>  }
+>
+> +static void tsc2046_adc_regulator_disable(void *data)
+> +{
+> +       struct tsc2046_adc_priv *priv = data;
+> +
+> +       regulator_disable(priv->vref_reg);
+> +}
+> +
+> +static int tsc2046_adc_configure_regulator(struct tsc2046_adc_priv *priv)
+> +{
+> +       struct device *dev = &priv->spi->dev;
+> +       int ret;
+> +
+> +       priv->vref_reg = devm_regulator_get_optional(dev, "vref");
+> +       if (IS_ERR(priv->vref_reg)) {
+> +               /* If regulator exists but can't be get, return an error */
+> +               if (PTR_ERR(priv->vref_reg) != -ENODEV)
+> +                       return PTR_ERR(priv->vref_reg);
+> +               priv->vref_reg = NULL;
+> +       }
+> +       if (!priv->vref_reg) {
+> +               /* Use internal reference */
+> +               priv->vref_mv = TI_TSC2046_INT_VREF;
+> +               return 0;
+> +       }
+> +
+> +       ret = regulator_enable(priv->vref_reg);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = devm_add_action_or_reset(dev, tsc2046_adc_regulator_disable,
+> +                                      priv);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = regulator_get_voltage(priv->vref_reg);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       priv->vref_mv = ret / MILLI;
+> +
+> +       return 0;
+> +}
+> +
+>  static int tsc2046_adc_probe(struct spi_device *spi)
+>  {
+>         const struct tsc2046_adc_dcfg *dcfg;
+> @@ -781,6 +830,10 @@ static int tsc2046_adc_probe(struct spi_device *spi)
+>         indio_dev->num_channels = dcfg->num_channels;
+>         indio_dev->info = &tsc2046_adc_info;
+>
+> +       ret = tsc2046_adc_configure_regulator(priv);
+> +       if (ret)
+> +               return ret;
+> +
+>         tsc2046_adc_parse_fwnode(priv);
+>
+>         ret = tsc2046_adc_setup_spi_msg(priv);
+> --
+> 2.30.2
+>
 
---=20
-An old man doll... just what I always wanted! - Clara
 
---dEcUBkpNWOxk8+Ch
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYxMdfAAKCRD2uYlJVVFO
-o6eyAP42Lix2mH4GH++lD3n3Qy4T3Nsxa0PK0vKKw9UEn6MToAEA4qK+S0pDh8R0
-h19beqm4AeNCNUBhymNGDsNwcGkqTQY=
-=AtO9
------END PGP SIGNATURE-----
-
---dEcUBkpNWOxk8+Ch--
+-- 
+With Best Regards,
+Andy Shevchenko

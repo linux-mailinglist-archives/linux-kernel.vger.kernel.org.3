@@ -2,180 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E7D5ABF28
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 15:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9031B5ABF2A
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 15:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiICNrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 09:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S231157AbiICNwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 09:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiICNrT (ORCPT
+        with ESMTP id S229506AbiICNwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 09:47:19 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F4253014;
-        Sat,  3 Sep 2022 06:47:18 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 013E55C0107;
-        Sat,  3 Sep 2022 09:47:18 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 03 Sep 2022 09:47:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dustymabe.com;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1662212837; x=
-        1662299237; bh=uqDIkoyxcAMiLmXCE3T3UrD+uLp05BUSMisS7iDN1Kw=; b=O
-        gRFQnaRZg/o6hYZlLv4MYMlwQ49w1vK3/ype0108eXWyHfY2queZv5XsedkO0pf6
-        9x0ktvjmVe1Qxxr+PTw4DTsUZ+1W+wzYM/nYtgg9RzBjrnQYzefj52pXNgDrkFcV
-        T4By6z+hGcl5YtW9VYotyYSj2p1SdsHXR8+jnlb0zLj3jWE6e5llgb3Muvr1VXB5
-        FzpKuPJeOidKurbGb4tQrg+gKNWiN1+mjerZ7RDPc2fbjdR1CIctg9ne1b9cSdDh
-        HHNOcx/gIU1gyZd+n08NRpRTYQX2f6/2Wn9PLEa6eZvobP+l7IatubeeVK5TrFa7
-        eKdtZrmACwe7Hnbm5y+gA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1662212837; x=
-        1662299237; bh=uqDIkoyxcAMiLmXCE3T3UrD+uLp05BUSMisS7iDN1Kw=; b=p
-        wSgTwVIvhQW6a4auSR1rqi3UsKAn5Bbo6f8gOOgsxkXmOmYnzlfwKM7L4dHftGWh
-        eZOP/vrBUNcE/GsIDlwiVa7sQR/UgMbEVMJUckyN1X4gkHhnEirCX82p6wLIwaFA
-        t0EVseORcxC3gRKqGFYbtSI8OW0f7NbniCt+Rs9nQg++Jh/v1kA6ARRoz20e+Kh4
-        pyg+5aeAmNTPzikfqeumrBDUVgDe9I/TeIpfr5Uk5yzhNchjNGb0wt49kO5hq9H2
-        gCplq7fKI/nseI/bPoL7W6ZxnLDqCYgnZ1M7hY2Q8tUVtjOGzydes3kmxP0Xs7LW
-        r18CGMfz/5k8BBo6vusqA==
-X-ME-Sender: <xms:5VoTY9e1AGDg3BTPDv8uf-R-7RxYm-RnUOkplh6YDnP0NflUPHxFXQ>
-    <xme:5VoTY7Oy1t9Svr_qW8JJOfsHcYejrWC8KscPmE73UHIuu420fdii9100ocI9i4duL
-    trZ4LsK64lTbsyx-Ug>
-X-ME-Received: <xmr:5VoTY2hAWyGlARHEN6MuKN_jiQ6bsKrjEVC0uxB-ao1zVBFxhDSOWmtkk4dqvBmRTFgV>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelvddgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeffuhhs
-    thihucforggsvgcuoeguuhhsthihseguuhhsthihmhgrsggvrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeeguedtgfffvedvieegtddvtefgvdevgfduvdeuveduveeifeegjefgjeff
-    veekueenucffohhmrghinhepghhithhhuhgsrdgtohhmpdguvghsihhgnhdrmhgupdhrvg
-    guhhgrthdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpeguuhhsthihseguuhhsthihmhgrsggvrdgtohhm
-X-ME-Proxy: <xmx:5VoTY29IewREcGRfLOxnwYTPMcptPqG45vvDc_8Twnjky7b0MRKWEA>
-    <xmx:5VoTY5tVKfBd-l5wmX2-hXPhnyTMhpI8lubOvFqkfzd0-k4uujJdLQ>
-    <xmx:5VoTY1FRTTr9LsPdRrNYzUI_xc2pBbiEp2Fyx20UhUSnwp52Z5qHzw>
-    <xmx:5VoTYzJDjjX7XzViucQKBM1P7EAKg476WMAtmXNXcbRJNpMeDyb80g>
-Feedback-ID: i13394474:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 3 Sep 2022 09:47:17 -0400 (EDT)
-Message-ID: <c09fe083-e94f-17ad-43a5-4f7748fab751@dustymabe.com>
-Date:   Sat, 3 Sep 2022 09:47:16 -0400
+        Sat, 3 Sep 2022 09:52:44 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C1C5C342
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:52:39 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id n65-20020a17090a5ac700b001fbb4fad865so4632710pji.1
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 06:52:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=+5qJofjqWUy5lZd4VFANhZ1h3tbGIlYWCmOlY/PP/TI=;
+        b=ikS8uGLT+gKKILkbfV234ebG/8G8CMCxL4Na1lxbBBAottTVeeQGurTywX4GwnYCZ6
+         GduxIdNJ3v2bb1KvUrQbQE774z3wacW1B9BvLHCUf+jSs91qZwFlakLdnzqypnfhFMMx
+         75kDOyjHNuDs2bDljMrA6Gr05UP6c7r5oL8MWJztzdzwZ5ts+VTQTE3sOs4S0sZjpVc3
+         HP6QvN0dMB1tt9moTZMCZ6N4lbGJXAxCfk+YLs1o07Po3KndiQMwc+OdmeDQFhUgKKB7
+         +kOPD8e0WAsurGaRbOcHRD0XrkaL+xvg+uo9Y8UOLEkqgBfYdNb37T+ZJYzjdAQgN0WC
+         3PfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=+5qJofjqWUy5lZd4VFANhZ1h3tbGIlYWCmOlY/PP/TI=;
+        b=MHy2cd3xg3HCzq1bM8dZwn9p0N9r0aEHbRgYcm3+irxpnfsKvZWP3Jcmuglpi8BUHl
+         RPwaKN+Z28Agju0n1cmTK4MEmbS51t1AF7f78ljAgaJj20FNguzmNXfJqZp2z+tWvsx2
+         bpLujzC2lrf+DwuFw3CeSBgX+ntYsUwWD0jOS+V2Vtn9+TJ4rOKZ/xsCbZWcEUOfwVqM
+         XnaS+5790PNDRuOZu9NsOENcT2UCML/Fl/x6dnqFa6sFpPIOnLiwdDLISZDnkufiIQYR
+         9JmLSEgS5kvapvibocSC6vRppmojYi41oxOYFP1d7hCxZ2snma84pRDSytFdyMDpcDc5
+         Fv+Q==
+X-Gm-Message-State: ACgBeo0Xlh/2wrfCyGtpIQ3OjoATsyBvTVwaaU6Jcrz7JPwcd80BT6qZ
+        1k9jShBfcvj0OpvpQXn2QlR1un8BtsY=
+X-Google-Smtp-Source: AA6agR4m4I/IgNV99zfo91P/hqcsQKGEgL4seVwSMqVfxswgoxOUBkAn9qbc2f16qHgR4eLEakc3YA==
+X-Received: by 2002:a17:903:1205:b0:171:4f8d:22a7 with SMTP id l5-20020a170903120500b001714f8d22a7mr39642617plh.164.1662213159196;
+        Sat, 03 Sep 2022 06:52:39 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id u195-20020a6279cc000000b00537eb00850asm3986204pfc.130.2022.09.03.06.52.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 06:52:38 -0700 (PDT)
+From:   wuchi <wuchi.zero@gmail.com>
+To:     mcgrof@kernel.org, viro@zeniv.linux.org.uk,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] latencytop: use the last element of latency_record of system
+Date:   Sat,  3 Sep 2022 21:52:33 +0800
+Message-Id: <20220903135233.5225-1-wuchi.zero@gmail.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: regression caused by block: freeze the queue earlier in
- del_gendisk
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hch@lst.de,
-        linux-raid@vger.kernel.org
-References: <017845ae-fbae-70f6-5f9e-29aff2742b8c@dustymabe.com>
- <YxBZ4BBjxvAkvI2A@T590>
-From:   Dusty Mabe <dusty@dustymabe.com>
-In-Reply-To: <YxBZ4BBjxvAkvI2A@T590>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In function account_global_scheduler_latency(), when we don't find
+the matching latency_record, try to select one which is unused in
+latency_record[MAXLR], but the condition will skip the last one.
 
+if (i >= MAXLR-1)
 
-On 9/1/22 03:06, Ming Lei wrote:
-> Hi Dusty,
+Fix that.
 
-Hi Ming,
+Signed-off-by: wuchi <wuchi.zero@gmail.com>
+---
+ kernel/latencytop.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> On Fri, Aug 26, 2022 at 12:15:22PM -0400, Dusty Mabe wrote:
->> Hey All,
->>
->> I think I've found a regression introduced by:
->>
->> a09b314 o block: freeze the queue earlier in del_gendisk
->>
->> In Fedora CoreOS we have tests that set up RAID1 on the /boot/ and /root/ partitions
->> and then subsequently removes one of the disks to simulate a failure. Sometime recently
-> 
-> Do you have test case which doesn't need raid1 over /boot or /root? such
-> as by create raid1 over two disks, then mount & remove one of device, ...
-> 
-> It isn't easy to setup/observe such test case and observe what is wrong.
+diff --git a/kernel/latencytop.c b/kernel/latencytop.c
+index 76166df011a4..781249098cb6 100644
+--- a/kernel/latencytop.c
++++ b/kernel/latencytop.c
+@@ -112,7 +112,7 @@ static void __sched
+ account_global_scheduler_latency(struct task_struct *tsk,
+ 				 struct latency_record *lat)
+ {
+-	int firstnonnull = MAXLR + 1;
++	int firstnonnull = MAXLR;
+ 	int i;
+ 
+ 	/* skip kernel threads for now */
+@@ -150,7 +150,7 @@ account_global_scheduler_latency(struct task_struct *tsk,
+ 	}
+ 
+ 	i = firstnonnull;
+-	if (i >= MAXLR - 1)
++	if (i >= MAXLR)
+ 		return;
+ 
+ 	/* Allocted a new one: */
+-- 
+2.20.1
 
-I don't have such a test case. For Fedora CoreOS we have a very
-specific partition layout [1] so it's not easy to change that
-and continue to run our test framework.
-
-That being said there are plenty of people in the bug report [2]
-that are reporint seeing this as well, so they might have other
-test cases they can share.
-
-[1] https://github.com/coreos/fedora-coreos-tracker/blob/main/Design.md#disk-layout
-[2] https://bugzilla.redhat.com/show_bug.cgi?id=2121791
-
-> 
->> this test started timing out occasionally. Looking a bit closer it appears instances are
->> getting stuck during reboot with a bunch of looping messages:
->>
->> ```
->> [   17.978854] block device autoloading is deprecated and will be removed.
->> [   17.982555] block device autoloading is deprecated and will be removed.
->> [   17.985537] block device autoloading is deprecated and will be removed.
->> [   17.987546] block device autoloading is deprecated and will be removed.
->> [   17.989540] block device autoloading is deprecated and will be removed.
->> [   17.991547] block device autoloading is deprecated and will be removed.
->> [   17.993555] block device autoloading is deprecated and will be removed.
->> [   17.995539] block device autoloading is deprecated and will be removed.
->> [   17.997577] block device autoloading is deprecated and will be removed.
->> [   17.999544] block device autoloading is deprecated and will be removed.
->> [   22.979465] blkdev_get_no_open: 1666 callbacks suppressed
->> ...
->> ...
->> ...
->> [  618.221270] blkdev_get_no_open: 1664 callbacks suppressed
->> [  618.221273] block device autoloading is deprecated and will be removed.
->> [  618.224274] block device autoloading is deprecated and will be removed.
->> [  618.227267] block device autoloading is deprecated and will be removed.
->> [  618.229274] block device autoloading is deprecated and will be removed.
->> [  618.231277] block device autoloading is deprecated and will be removed.
->> [  618.233277] block device autoloading is deprecated and will be removed.
->> [  618.235282] block device autoloading is deprecated and will be removed.
->> [  618.237370] block device autoloading is deprecated and will be removed.
->> [  618.239356] block device autoloading is deprecated and will be removed.
->> [  618.241290] block device autoloading is deprecated and will be removed.
->> ```
->>
->> Using the Fedora kernels I narrowed it down to being introduced between 
->> `kernel-5.19.0-0.rc3.27.fc37` (good) and `kernel-5.19.0-0.rc4.33.fc37` (bad).
->>
->> I then did a bisect and found:
->>
->> ```
->> $ git bisect bad
->> a09b314005f3a0956ebf56e01b3b80339df577cc is the first bad commit
->> commit a09b314005f3a0956ebf56e01b3b80339df577cc
->> Author: Christoph Hellwig <hch@lst.de>
->> Date:   Tue Jun 14 09:48:27 2022 +0200
->>
->>     block: freeze the queue earlier in del_gendisk
-> 
-> It is a bit hard to associate the above commit with reported issue.
-
-Indeed, though I think now there is enough emperical evidence that
-points directly at this commit. It may ultimately end up as not the
-root cause, but it's definitely related.
-
-Dusty

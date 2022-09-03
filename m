@@ -2,92 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFCD5ABF7A
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 17:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7690F5ABF7E
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 17:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbiICPNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 11:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S230138AbiICPVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 11:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiICPNO (ORCPT
+        with ESMTP id S229586AbiICPV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 11:13:14 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247DC41D34;
-        Sat,  3 Sep 2022 08:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=BiitqeKalMPshyno6OYFxIT0YzySsq7ePYD/GgFK/wU=; b=TkoZpy3K7Y7WD4HUl5W90O86ph
-        lcawWuy6T88t1KjgVa6YCokVy7lQzN2zZnVan2F77Y8svLmvFwqClP5s3Huq2HVfZFaujLAPjqvXL
-        m9LNA2yCPu6n2r4vrIjW3PUa8GvjdzhAYIlWUkhsAs094KEuFeBihH6cxR7JAx/df/Dg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oUUpK-00FVsj-G9; Sat, 03 Sep 2022 17:12:54 +0200
-Date:   Sat, 3 Sep 2022 17:12:54 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: turris-omnia: Add mcu node
-Message-ID: <YxNu9sXY5UhVCZ+w@lunn.ch>
-References: <20220819131152.6513-1-pali@kernel.org>
- <20220831142809.lcmnv3l4rnulo522@pali>
- <YxE2JqJutZ0ilghH@lunn.ch>
- <20220903043828.6afd3ab4@thinkpad>
+        Sat, 3 Sep 2022 11:21:27 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1996E0F5;
+        Sat,  3 Sep 2022 08:21:25 -0700 (PDT)
+Received: (Authenticated sender: peter@korsgaard.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1FF3C1BF207;
+        Sat,  3 Sep 2022 15:21:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+        (envelope-from <peter@korsgaard.com>)
+        id 1oUUxS-002V0V-Mt; Sat, 03 Sep 2022 17:21:18 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 07/12] riscv: dts: allwinner: Add Allwinner D1 Nezha
+ devicetree
+References: <20220815050815.22340-1-samuel@sholland.org>
+        <20220815050815.22340-8-samuel@sholland.org>
+Date:   Sat, 03 Sep 2022 17:21:18 +0200
+In-Reply-To: <20220815050815.22340-8-samuel@sholland.org> (Samuel Holland's
+        message of "Mon, 15 Aug 2022 00:08:10 -0500")
+Message-ID: <87sfl8zdox.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220903043828.6afd3ab4@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > > diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> > > > index f4878df39753..f655e9229d68 100644
-> > > > --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> > > > +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> > > > @@ -184,7 +184,13 @@
-> > > >  			#size-cells = <0>;
-> > > >  			reg = <0>;
-> > > >  
-> > > > -			/* STM32F0 command interface at address 0x2a */
-> > > > +			/* MCU command i2c API */
-> > > > +			mcu: mcu@2a {
-> > > > +				compatible = "cznic,turris-omnia-mcu";
-> > > > +				reg = <0x2a>;
-> > > > +				gpio-controller;
-> > > > +				#gpio-cells = <3>;
-> > > > +			};  
-> > 
-> > Please document the binding, preferably in yaml.
-> > 
-> > I'm also not sure what the DT people will say about the node name mcu.
-> > I don't see any examples of that in the binding documentation. They
-> > might request you rename it to gpio-controller, unless it does more
-> > than GPIO? And if it does do more than GPIO we are then into mfd
-> > territory, and the binding then becomes much more interesting. Then we
-> > start the questions, are you defining a ABI now, before there is even
-> > a driver for it?
-> 
-> Most probably mfd territory. It is at least a gpio-controller,
-> reset-controller and watchdog.
+>>>>> "Samuel" == Samuel Holland <samuel@sholland.org> writes:
 
-O.K.
+ > "D1 Nezha" is Allwinner's first-party development board for the D1 SoC.
+ > It was shipped with 512M, 1G, or 2G of DDR3. It supports onboard audio,
+ > HDMI, gigabit Ethernet, WiFi and Bluetooth, USB 2.0 host and OTG ports,
+ > plus low-speed I/O from the SoC and a GPIO expander chip.
 
-Then i suggest we wait for the actual drivers before committing any
-DT. The binding will need revier, and could change.
+ > Most other D1 boards copied the Nezha's power tree, with the 1.8V rail
+ > powered by the SoCs internal LDOA, analog domains powered by ALDO, and
+ > the rest of the board powered by always-on fixed regulators. Some (but
+ > not all) boards also copied the PWM CPU regulator. To avoid duplication,
+ > factor out the out the regulator references that are common across all
 
-    Andrew
+NIT: s/out the out the/out the/
+
+-- 
+Bye, Peter Korsgaard

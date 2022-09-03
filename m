@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE36C5ABC93
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 05:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBCE5ABC97
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 05:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbiICD0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 23:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S231348AbiICDd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 23:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiICD0b (ORCPT
+        with ESMTP id S229520AbiICDdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 23:26:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59723ED54;
-        Fri,  2 Sep 2022 20:26:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EFB7B82D29;
-        Sat,  3 Sep 2022 03:26:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FECEC433D7;
-        Sat,  3 Sep 2022 03:26:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662175588;
-        bh=98NKJlaPWZHnwvVGk2QKrUmwnmDcquvTeKOMmxSnIrQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ldm+DGAekvedKf/is4OTH/bJJQftOyWcsLLuaCqmL5rH9JtaDKaF789Fz9fFYFTXx
-         Txr8XZKvwqwqTExMP0Z92I7onXCsue6XhL+pRzphk9CjneOjSNhXjXctGKb9kLm2DY
-         6fugTwrokdeiycxG3QwCmOqTHZxgkCMScjAKr+3MY2k+g2C29mNCVkl2rapafRutp0
-         a+ppdT0Bj/mhjeO/2sqQmYyB+35kc0drgCJb+ZqW6ThE1GWLSzcTeLycndDLP61bhJ
-         cUiKLvpVPQmdt9OKu+x9ycfIUnsg9MXVoXkB9JGDxfDPUyhBgakmakXCudBmk+yhQT
-         6fgBYUFxdfuFQ==
-Date:   Sat, 3 Sep 2022 11:26:21 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Frieder Schrempf <frieder@fris.de>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH v4 0/8] arm64: dts: imx8mm-kontron: Improvements and OSM
- board support
-Message-ID: <20220903032621.GD1728671@dragon>
-References: <20220822080357.24478-1-frieder@fris.de>
+        Fri, 2 Sep 2022 23:33:55 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276B5E2C5D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 20:33:54 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bj12so7172334ejb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 20:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hp6nv6h7bty1ARLn1E+z6KwR5eZiuL+MItLPO1Nzzt8=;
+        b=GaJOygzrJaHGChNu7cINHp0pXLkfGcJr5SxOXk50B6ZnX5cK0S6tYm1Sj4PrjR5fBH
+         0R8J6Z60gd4mkCsd0loYB7htt5jO9It1P3X6dTgCUfq5GCzjia+18e88Ryy4V9wnFcPt
+         2lMEduSxPTRj3wQtiYWLnCHtriO8n5BgAO3pzui1GBg0UnAhBdxih/ffyoTeAKTmPtA3
+         SYWNPqV4JqjZAgJ5HBAKZKgH30A5NmI+9jHEUv5DYcEJ5YvDO1Qcd+Sz146Vgxjyp4+M
+         IUSh8AqL8O/vrtsSBJT5+lpJtk8BNUmm+wLDHrQKWI6cX7yuIIJrHd8GSJakxQqLRB3w
+         Ss1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hp6nv6h7bty1ARLn1E+z6KwR5eZiuL+MItLPO1Nzzt8=;
+        b=3IKm0uSG0zl8sh1OxxVeh0cTCtsx9vrReUZuDmG7XgXu0MdXrAfH6WRKfRM26lK0+s
+         HJO46Y32jF9j1IP3+CLAVwO1kIn4Vopw5gKy63AD9EsebZLx/mkGEOOhf2rq8XWh6Jmi
+         rWqyiOM0nk/JG7P02TpDrrDe6K86ag/WRBW7fsbE9ZU8EapiBHCD1UoAw6ts4BELmLP5
+         qnXy1wghofIqOUnEjQU4MtLXo0mYok/oJ5GOBZn6QpctFZ1TAkb2Dj/dHmWXR9G4LPmx
+         04QD05PUZraqcHohZP9rAOcDRPdSNgmLRwIkdrPD3mJrSJP3n2WmIZQeMoEOnu5REsR0
+         QLhQ==
+X-Gm-Message-State: ACgBeo3rCKSGTk8E1xG0FqR0UKxHJcYYwLJCs2DaVGbiSHtU77NqrPX7
+        mFPNoGzXCSCi1cTG2WtozplzBJtCHyyIu7Uycy7h3UmyDLFsoQ==
+X-Google-Smtp-Source: AA6agR4qnIVh4QrhKfBstj8mL7plaDZwIluX24qYlrj+31jsVoT3h3420nWjX6jaWumXyvrbHeHA9RLb1LO7sjirmq0=
+X-Received: by 2002:a17:906:da86:b0:740:7120:c6e6 with SMTP id
+ xh6-20020a170906da8600b007407120c6e6mr24895516ejb.44.1662176032507; Fri, 02
+ Sep 2022 20:33:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822080357.24478-1-frieder@fris.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 3 Sep 2022 09:03:40 +0530
+Message-ID: <CA+G9fYtST3tfAMOsnRhLDumH+zBDTRLbA-_XnAVNqT=f0v6p4A@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/73] 5.15.65-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,45 +70,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 10:03:46AM +0200, Frieder Schrempf wrote:
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
-> 
-> This set contains a few improvements for the imx8mm-kontron devicetrees
-> (patch 3-7) and support for a new SoM (patch 8, including baseboard) that
-> complies to the Open Standard Module (OSM) 1.0 hardware specification, size S
-> (https://sget.org/standards/osm).
-> 
-> It also includes binding changes in patch 1 and 2.
-> 
-> Changes in v4:
-> * fix hex values and unit addresses in SPI NOR partition nodes
-> * fix SoM dtsi includes
-> 
-> Changes in v3:
-> * drop patch for 2 which was applied separately
-> * rebase on v6.0-rc1
-> * rename compatibles and file names
-> 
-> Changes in v2:
-> * move binding changes to beginning of patchset
-> * Allow arbitrary regulator names in PCA9450 bindings
-> * Use voltage rail names from schematic for PMIC regulator-names
-> * Add SPI NOR partition layout to devicetree
-> * Remove unneeded header include
-> * Add tags
-> 
-> Frieder Schrempf (8):
->   dt-bindings: arm: fsl: Rename compatibles for Kontron i.MX8MM
->     SoM/board
->   dt-bindings: arm: fsl: Add Kontron BL i.MX8MM OSM-S board
->   arm64: dts: imx8mm-kontron: Adjust compatibles, file names and model
->     strings
->   arm64: dts: imx8mm-kontron: Use the VSELECT signal to switch SD card
->     IO voltage
->   arm64: dts: imx8mm-kontron: Remove low DDRC operating point
->   arm64: dts: imx8mm-kontron: Use voltage rail names from schematic for
->     PMIC regulator-names
->   arm64: dts: imx8mm-kontron: Add SPI NOR partition layout
->   arm64: dts: Add support for Kontron SL/BL i.MX8MM OSM-S
+On Fri, 2 Sept 2022 at 18:02, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.65 release.
+> There are 73 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.65-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Applied all, thanks!
+
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.15.65-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: ad2e22e028e72136a55cb6c301a29aa0178fe7d6
+* git describe: v5.15.63-211-gad2e22e028e7
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.63-211-gad2e22e028e7
+
+## No test Regressions (compared to v5.15.63)
+
+## No metric Regressions (compared to v5.15.63)
+
+## No test Fixes (compared to v5.15.63)
+
+## No metric Fixes (compared to v5.15.63)
+
+## Test result summary
+total: 107640, pass: 94949, fail: 685, skip: 11690, xfail: 316
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 306 total, 303 passed, 3 failed
+* arm64: 68 total, 65 passed, 3 failed
+* i386: 57 total, 51 passed, 6 failed
+* mips: 50 total, 47 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 59 total, 56 passed, 3 failed
+* riscv: 27 total, 26 passed, 1 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 61 total, 58 passed, 3 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

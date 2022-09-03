@@ -2,199 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C631E5ABEAB
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 13:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69335ABEB2
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 13:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbiICLMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 07:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
+        id S230088AbiICLPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 07:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiICLMi (ORCPT
+        with ESMTP id S230242AbiICLPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 07:12:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF366BD4D
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 04:12:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662203557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5IrOfp9puY1TEMIMWVabBtxJr8/+Tn4f9nR5sBX7gVk=;
-        b=RI97WCNvmOp2rhnby94j6ma04X/Hvy+015in2ddpjWB3oJqiYQDMxEuA75EjtdY2moKy4/
-        6fRiic0uUazPfT28PKtjTGIi0Hub7lRPig89bNwzlvkoI3qE8iKyjI8jaht0vGGogn/OCW
-        NXG/kqMvjIb884ukN7z0hEIDxe+SH2Q=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-90-6ujjT9VtPCiihd4QQXGl3w-1; Sat, 03 Sep 2022 07:12:33 -0400
-X-MC-Unique: 6ujjT9VtPCiihd4QQXGl3w-1
-Received: by mail-ed1-f71.google.com with SMTP id c14-20020a05640227ce00b0043e5df12e2cso2953179ede.15
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 04:12:33 -0700 (PDT)
+        Sat, 3 Sep 2022 07:15:32 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5C56DFB2
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 04:15:29 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id z20-20020a056602005400b006974af20e8fso67542ioz.10
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 04:15:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=5IrOfp9puY1TEMIMWVabBtxJr8/+Tn4f9nR5sBX7gVk=;
-        b=Qm8Dg9tCK3Z5eKoBs5vVS8/UIGWGWumKzt58P+ZY202gB5bp1uw6gWBj8drw6gYvyj
-         aEMObyCHSN1yNgfprbQJu9IHa2OilWjYj+4IJHQbv4NpXQK1Ejfc+H2r082htT1AQQo1
-         Y+YjWHlKvW0GY9z25ZxVRqEuTtWCNg49lz2UHHDbAVOkQ+FAt9lMIWE3+C8Uaur7C546
-         OkRwpD9Yu2766sPvIM4lOtkFtY8di9D44H54wDmI8gB42Vu8HMIlg0KBnups1WxeRNsb
-         9TryRZYtluEqo0mD+3ohMfAYo8QbCCZbavx1UeznqeSfQdsnEqOzpFfREuVlp1DOr3bp
-         TlxQ==
-X-Gm-Message-State: ACgBeo3dfVEZdRCbklaqa5MaIyQN6feEfHaLRBO+s2fZQTp1rYK7NIrv
-        tJHQkB9uZk1x2xzig0HQ3APkzW9m3xYmsn1wfdPeiOGp2c8a5HLcCjyJm+EE0Lp9fw1Akxf0FiX
-        ESMoFbcN5cevnP2UuK1ufkJdo
-X-Received: by 2002:a17:907:74e:b0:74f:83d4:cf58 with SMTP id xc14-20020a170907074e00b0074f83d4cf58mr5338319ejb.178.1662203552843;
-        Sat, 03 Sep 2022 04:12:32 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6zDs4lYW9Hm1WbO9PCWqUvNoagEH3Orok7R1GTo5J0ZffsXhhHyi2wrtS4MHcdhAMjyftl/w==
-X-Received: by 2002:a17:907:74e:b0:74f:83d4:cf58 with SMTP id xc14-20020a170907074e00b0074f83d4cf58mr5338312ejb.178.1662203552662;
-        Sat, 03 Sep 2022 04:12:32 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id b13-20020aa7d48d000000b00445d760fc69sm3121347edr.50.2022.09.03.04.12.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Sep 2022 04:12:32 -0700 (PDT)
-Message-ID: <0033b40f-f583-c3a4-ce87-73cbb362537b@redhat.com>
-Date:   Sat, 3 Sep 2022 13:12:31 +0200
+        bh=yy+lwjd7AR62brDcwzrE9i7LclpeqCg0V3x3Lzyxlg4=;
+        b=hCvwzsw6Kwhipaq16G3SsATDn4UggvrTuxTfyVltyrdU3Nt5DV1hj7M/hggFCpnFeE
+         34SSSgTtDd6zUSMSPdllpnIXcCwAAJQ42R+ml4Vlap4yN+nlP6DaR/gnaoezQd5sU67i
+         LM3ni5GClUdraFhIMTfWKmhUpQv8YdNN3/kUQl+tm6pvSTIdcoHI7YnkTgA1phTBYheP
+         prMgwfabwBgcMLikNz66+Kbe+ml2+deuyGGxv4mNRQotp3BvTy58EiGEeILeQpwjYYP/
+         2r+KzaIoRiqsz1idgPijyOGPefN7/SDACPc5GST/XCTNsJN2zupZmdD+CbAqCto/zuiX
+         SImw==
+X-Gm-Message-State: ACgBeo1KBnp9rdzxnMcqu7qVtjlxiKj9CJPg3ILeRbveVTQZKviD7ia5
+        efmL1W/EQ2mefabUju+adUw2SFVW+LLmR33Z7jrOZ3hrR//v
+X-Google-Smtp-Source: AA6agR7sFjl20OjcwPk9Bv2JsbbjeglcTpIDgL4huWUXUZlEgBogeU6pNedM2ni8my5SongrvJssOQ7ApTyovaeTRlBdu8ASpA01
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] platform/x86: wmi: Allow duplicate GUIDs for drivers
- that use struct wmi_driver
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20220829201500.6341-1-mario.limonciello@amd.com>
- <CAHp75Vc3v4a6=ZJnOYYFGHEomExxopuUy8axDL=M2tbxHqtXqQ@mail.gmail.com>
- <MN0PR12MB6101441AA29CE815DCAD26AEE27B9@MN0PR12MB6101.namprd12.prod.outlook.com>
- <3df6405a-924a-b0e6-c879-05b9151011e3@redhat.com>
- <168cb996-513e-77a8-b895-ef0fdd0c1793@amd.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <168cb996-513e-77a8-b895-ef0fdd0c1793@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:b4a:b0:2f0:c6ca:110a with SMTP id
+ f10-20020a056e020b4a00b002f0c6ca110amr2049354ilu.252.1662203728478; Sat, 03
+ Sep 2022 04:15:28 -0700 (PDT)
+Date:   Sat, 03 Sep 2022 04:15:28 -0700
+In-Reply-To: <0000000000006efbd905e61a66f1@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c7cad805e7c3f663@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in __rxe_do_task
+From:   syzbot <syzbot+ab99dc4c6e961eed8b8e@syzkaller.appspotmail.com>
+To:     fgheet255t@gmail.com, jgg@ziepe.ca, leon@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        lizhijian@fujitsu.com, netdev@vger.kernel.org,
+        rpearsonhpe@gmail.com, syzkaller-bugs@googlegroups.com,
+        yanjun.zhu@linux.dev, zyjzyj2000@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+syzbot has found a reproducer for the following issue on:
 
-On 9/2/22 14:19, Mario Limonciello wrote:
-> On 9/2/22 03:07, Hans de Goede wrote:
->> Hi,
->>
->> On 9/1/22 23:39, Limonciello, Mario wrote:
->>> [Public]
->>>
->>>
->>>
->>>> -----Original Message-----
->>>> From: Andy Shevchenko <andy.shevchenko@gmail.com>
->>>> Sent: Thursday, September 1, 2022 12:17
->>>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
->>>> Cc: Hans de Goede <hdegoede@redhat.com>; Mark Gross
->>>> <markgross@kernel.org>; Platform Driver <platform-driver-
->>>> x86@vger.kernel.org>; Linux Kernel Mailing List <linux-
->>>> kernel@vger.kernel.org>
->>>> Subject: Re: [PATCH v2] platform/x86: wmi: Allow duplicate GUIDs for drivers
->>>> that use struct wmi_driver
->>>>
->>>> On Mon, Aug 29, 2022 at 11:20 PM Mario Limonciello
->>>> <mario.limonciello@amd.com> wrote:
->>>>>
->>>>> The WMI subsystem in the kernel currently tracks WMI devices by
->>>>> a GUID string not by ACPI device.  The GUID used by the `wmi-bmof`
->>>>> module however is available from many devices on nearly every machine.
->>>>>
->>>>> This originally was though to be a bug, but as it happens on most
->>>>
->>>> thought
->>>>
->>>>> machines it is a design mistake.  It has been fixed by tying an ACPI
->>>>> device to the driver with struct wmi_driver. So drivers that have
->>>>> moved over to struct wmi_driver can actually support multiple
->>>>> instantiations of a GUID without any problem.
->>>>>
->>>>> Add an allow list into wmi.c for GUIDs that the drivers that are known
->>>>> to use struct wmi_driver.  The list is populated with `wmi-bmof` right
->>>>> now. The additional instances of that in sysfs with be suffixed with -%d
->>>>
->>>> ...
->>>>
->>>>> +/* allow duplicate GUIDs as these device drivers use struct wmi_driver */
->>>>> +static const char * const allow_duplicates[] = {
->>>>> +       "05901221-D566-11D1-B2F0-00A0C9062910", /* wmi-bmof */
->>>>> +       NULL,
->>>>
->>>> No comma for the terminator.
->>>>
->>>>> +};
->>>>
->>>> ...
->>>>
->>>>> +static int guid_count(const guid_t *guid)
->>>>> +{
->>>>> +       struct wmi_block *wblock;
->>>>> +       int count = 0;
->>>>> +
->>>>> +       list_for_each_entry(wblock, &wmi_block_list, list) {
->>>>> +               if (guid_equal(&wblock->gblock.guid, guid))
->>>>> +                       count++;
->>>>> +       }
->>>>> +
->>>>> +       return count;
->>>>> +}
->>>>
->>>> I haven't deeply checked the code, but this kind of approach is
->>>> fragile and proven to be error prone as shown in practice. The
->>>> scenario is (again, not sure if it's possible, need a comment in the
->>>> code if it's not possible) removing an entry from the list in the
->>>> middle and trying to add it again. you will see the duplicate count
->>>> values. That's why in the general case we use IDA or similar
->>>> approaches.
->>>
->>> It shouldn't be possible to add/remove from the list, they're fixed
->>> lists that were parsed from _WDG.
->>>
->>> Hans - since you already took this into your review queue, can you
->>> land fixes for the 3 things Andy pointed out before it goes to -next
->>> or do you want me to do a manual follow up for them?
->>
->> I can do a local fix and squash it into the original commit.
->>
->>> 1) Spelling error in commit message
->>> 2) Remove comma on terminator
->>
->> Ack, will fix.
->>
->>> 3) Add a comment why guid_count is safe (if you agree with me it is)
->>
->> I agree it is safe.
->>
->> Can you suggest some wording for the comment please ?
->>
->> Regards,
->>
->> Hans
->>
-> 
-> Maybe something like "_WDG is a static list that is only parsed at startup, it's safe to count entries without extra protection".
+HEAD commit:    05a5474efe93 Merge git://git.kernel.org/pub/scm/linux/kern..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=14e4bddb080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=892a57667b7af6cf
+dashboard link: https://syzkaller.appspot.com/bug?extid=ab99dc4c6e961eed8b8e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17718427080000
 
-Ok, that works for me. I've added that as a comment as
-well as squashed in the other 2 suggestions by Andy.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/cdeb0ae7599a/disk-05a5474e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d59d928441e6/vmlinux-05a5474e.xz
 
-Regards,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ab99dc4c6e961eed8b8e@syzkaller.appspotmail.com
 
-Hans
+infiniband syz0: set active
+infiniband syz0: added ip6gre0
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD 1d64c067 P4D 1d64c067 PUD 22925067 PMD 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3780 Comm: syz-executor.1 Not tainted 6.0.0-rc3-syzkaller-00123-g05a5474efe93 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000413eb40 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffff8880776e25c8 RCX: 0000000000000000
+RDX: ffff88807932bb00 RSI: ffffffff86d530bb RDI: 0000000000000000
+RBP: ffffed100eedc4c8 R08: 0000000000000001 R09: ffff8880776e269f
+R10: ffffed100eedc4d3 R11: 0000000000000000 R12: 0000000000000000
+R13: ffffed100eedc4c9 R14: ffff8880776e2640 R15: ffff8880776e2648
+FS:  00007f1d65587700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000001bd9d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __rxe_do_task+0x56/0xc0 drivers/infiniband/sw/rxe/rxe_task.c:18
+ rxe_qp_do_cleanup+0x102/0x770 drivers/infiniband/sw/rxe/rxe_qp.c:800
+ execute_in_process_context+0x37/0x150 kernel/workqueue.c:3359
+ __rxe_cleanup+0x21a/0x400 drivers/infiniband/sw/rxe/rxe_pool.c:276
+ rxe_create_qp+0x2be/0x340 drivers/infiniband/sw/rxe/rxe_verbs.c:441
+ create_qp+0x5ac/0x960 drivers/infiniband/core/verbs.c:1233
+ ib_create_qp_kernel+0x9d/0x310 drivers/infiniband/core/verbs.c:1344
+ ib_create_qp include/rdma/ib_verbs.h:3732 [inline]
+ create_mad_qp+0x177/0x2d0 drivers/infiniband/core/mad.c:2910
+ ib_mad_port_open drivers/infiniband/core/mad.c:2991 [inline]
+ ib_mad_init_device+0xd51/0x13f0 drivers/infiniband/core/mad.c:3082
+ add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:721
+ enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1332
+ ib_register_device drivers/infiniband/core/device.c:1420 [inline]
+ ib_register_device+0x83e/0xb20 drivers/infiniband/core/device.c:1366
+ rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:1138
+ rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:521
+ rxe_newlink drivers/infiniband/sw/rxe/rxe.c:195 [inline]
+ rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:176
+ nldev_newlink+0x32e/0x5c0 drivers/infiniband/core/nldev.c:1717
+ rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
+ rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
+ rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2482
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+ __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1d64489279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f1d65587168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f1d6459bf80 RCX: 00007f1d64489279
+RDX: 0000000000000000 RSI: 0000000020000180 RDI: 0000000000000003
+RBP: 00007f1d644e32e9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd40d1b80f R14: 00007f1d65587300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000413eb40 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffff8880776e25c8 RCX: 0000000000000000
+RDX: ffff88807932bb00 RSI: ffffffff86d530bb RDI: 0000000000000000
+RBP: ffffed100eedc4c8 R08: 0000000000000001 R09: ffff8880776e269f
+R10: ffffed100eedc4d3 R11: 0000000000000000 R12: 0000000000000000
+R13: ffffed100eedc4c9 R14: ffff8880776e2640 R15: ffff8880776e2648
+FS:  00007f1d65587700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000001bd9d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 

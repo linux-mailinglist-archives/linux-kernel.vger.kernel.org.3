@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680435ABDB3
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 09:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681695ABDB5
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 09:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiICHjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 03:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
+        id S231760AbiICHmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 03:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiICHjL (ORCPT
+        with ESMTP id S229666AbiICHmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 03:39:11 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A817D6F549;
-        Sat,  3 Sep 2022 00:39:09 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 145so3988756pfw.4;
-        Sat, 03 Sep 2022 00:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ROgdEwGTwKSezP6yTg8Bn5b9HWITXNuPp4Q731RWP+M=;
-        b=aDZMg+5Gm5Z4KOXdcDeuVimJyU0uVQjdAQwcQwrupA3dK9GcXnOTJ1Go03nMO5UyIi
-         FeAOY3WR4t3d4kBYiXdbh/karp3nWeMzIKPNe1GjSRWstX3jcBW+G6NKSbCfW5u/Tvg+
-         5kRi8bZBQvV92jv9FWMu5Yq7yXg9X4fnz00+Ywyb6vEMoDYl10D7q2ZMToCtXPL1C0xe
-         i4S4ZxWiI/RjCU6JKkX3JksmRs7gdmwWGLazYwyeHMTJ+bEBxJ/2TGUQ54iwSfdrxgCu
-         kBsyEt+iDL7CP3ZUpk+gRIWGP1ZYIPLIuV5DjlxubDNmsPUdBKT/6Sl9T0UFhfL9BGe0
-         FuDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ROgdEwGTwKSezP6yTg8Bn5b9HWITXNuPp4Q731RWP+M=;
-        b=zbppJsQ4vf362KGbMZDmEkp44estlEpz1+13ReSLKdCTW20Q05Ehy2Gnwwfy3HElyY
-         jDkG7bILRR6y6u6eFAvLtnHFknEy702kPv4VW39PTaieDSPVUDwOdLO4UQd8IE2LzmiF
-         I8YW/NGdfb/wKpaB3BuaSBRHePXmbyMc2LszJAFQ8oI/2dvNf1sa8hJkRQEbp5/ouLvs
-         YJ5fmtTRuwSTxJrGOrUb46YdQGR9IDnI6l+cK+Y5pCFW8hSQKr/tU09Hk5ay2yCw9gU4
-         j9lM4JsnMcYemKj2DPm7y8Af40CsRCC4N91sTbT0bZBo+Mnr8Sy0WcFnufDNP1MpezCE
-         3EJg==
-X-Gm-Message-State: ACgBeo1MqZfOIuwjWyj2tmMpFH7eGVYDnKEAxgd/vThS1261e+XJXFI+
-        vDJIWeKWW4DvUZxdkrMV/vw=
-X-Google-Smtp-Source: AA6agR57jxS7L9aa+NHczXrLUs5tGLCFmC508F1B/uwdaU5GBjHzXDuYk1MADtsscXoIC3Xfvhxabw==
-X-Received: by 2002:a05:6a02:104:b0:430:93ec:776f with SMTP id bg4-20020a056a02010400b0043093ec776fmr8025194pgb.544.1662190749090;
-        Sat, 03 Sep 2022 00:39:09 -0700 (PDT)
-Received: from biggie.. ([103.230.148.184])
-        by smtp.gmail.com with ESMTPSA id h14-20020a17090adb8e00b001fd6066284dsm2738133pjv.6.2022.09.03.00.39.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 00:39:08 -0700 (PDT)
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     pbonzini@redhat.com, shuah@kernel.org
-Cc:     Gautam Menghani <gautammenghani201@gmail.com>, seanjc@google.com,
-        guang.zeng@intel.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH] selftests/kvm: Use num_vcpus when testing ICR in the xapic_state_test
-Date:   Sat,  3 Sep 2022 13:09:01 +0530
-Message-Id: <20220903073901.73862-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 3 Sep 2022 03:42:40 -0400
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B68B8E0F1
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 00:42:40 -0700 (PDT)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 7C7A210040423
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 07:42:26 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id UNnNofIMzCokGUNnOoe2kS; Sat, 03 Sep 2022 07:42:26 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=c8Nu/Txl c=1 sm=1 tr=0 ts=63130562
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=xOM3xZuef0cA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5xG0qatLwsUtCEOjZrSnwM0Wv+TJ7yVp3aG+uUj4Tkc=; b=lhaTMDvARTxHPovyIEqlaonj3w
+        7mgYlVFLGaSZM76KOg0CwOVP/iGN4wrvLihsnUhNz9aS0e+IXhO/ARMziteFiIywmsuReCU+EE9UW
+        EYD4Bl5c9dMyCmtsFr2mSgdEwVJeABPXL2BwTJlAEm9DOHyd5GrRkEoZ5eQ7u+gW1W+CIs9+uCsDE
+        KdZPqzSG2oT78pmS78K41ewlV88IWNPK5nHqMIC95vE0v1BRmF8zLbQgEGw6TYMR7klxX685t1oaW
+        wK6i1Cp0JYdBk7r9lISYKGTk/jatwRCaDkD/Xw37lL+HvZGTiQ0WsoCHiNvYN6IZk+RVsRwENowXl
+        TEZOdY1w==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43016 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oUNnM-0044cf-Or;
+        Sat, 03 Sep 2022 01:42:24 -0600
+Subject: Re: [PATCH 5.15 00/73] 5.15.65-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220902121404.435662285@linuxfoundation.org>
+In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <970b2a07-e2ce-a68e-9d24-51482dccba91@w6rz.net>
+Date:   Sat, 3 Sep 2022 00:42:21 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oUNnM-0044cf-Or
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:43016
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A TODO in xapic_state_test asks to use number of vCPUs instead of
-vcpu.id + 1 in test_icr(). This patch adds support to get the number 
-of vCPUs from the VM created and use it.
+On 9/2/22 5:18 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.65 release.
+> There are 73 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.65-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
----
- .../selftests/kvm/x86_64/xapic_state_test.c     | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-index 6f7a5ef66718..de934e8e5e41 100644
---- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-@@ -96,9 +96,8 @@ static void __test_icr(struct xapic_vcpu *x, uint64_t val)
- 	____test_icr(x, val & ~(u64)APIC_ICR_BUSY);
- }
- 
--static void test_icr(struct xapic_vcpu *x)
-+static void test_icr(struct xapic_vcpu *x, int num_vcpus)
- {
--	struct kvm_vcpu *vcpu = x->vcpu;
- 	uint64_t icr, i, j;
- 
- 	icr = APIC_DEST_SELF | APIC_INT_ASSERT | APIC_DM_FIXED;
-@@ -110,11 +109,11 @@ static void test_icr(struct xapic_vcpu *x)
- 		__test_icr(x, icr | i);
- 
- 	/*
--	 * Send all flavors of IPIs to non-existent vCPUs.  TODO: use number of
--	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
-+	 * Send all flavors of IPIs to non-existent vCPUs. Arbitrarily use vector 0xff.
- 	 */
-+
- 	icr = APIC_INT_ASSERT | 0xff;
--	for (i = vcpu->id + 1; i < 0xff; i++) {
-+	for (i = num_vcpus; i < 0xff; i++) {
- 		for (j = 0; j < 8; j++)
- 			__test_icr(x, i << (32 + 24) | icr | (j << 8));
- 	}
-@@ -137,9 +136,13 @@ int main(int argc, char *argv[])
- 		.is_x2apic = true,
- 	};
- 	struct kvm_vm *vm;
-+	struct list_head *iter;
-+	int nr_vcpus_created = 0;
- 
- 	vm = vm_create_with_one_vcpu(&x.vcpu, x2apic_guest_code);
--	test_icr(&x);
-+	list_for_each(iter, &vm->vcpus)
-+		nr_vcpus_created++;
-+	test_icr(&x, nr_vcpus_created);
- 	kvm_vm_free(vm);
- 
- 	/*
-@@ -153,6 +156,6 @@ int main(int argc, char *argv[])
- 	vcpu_clear_cpuid_feature(x.vcpu, X86_FEATURE_X2APIC);
- 
- 	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
--	test_icr(&x);
-+	test_icr(&x, nr_vcpus_created);
- 	kvm_vm_free(vm);
- }
--- 
-2.34.1
+Tested-by: Ron Economos <re@w6rz.net>
 

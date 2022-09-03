@@ -2,81 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05795AC13E
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 21:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C104B5AC145
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 22:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbiICTvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 15:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S232654AbiICUBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 16:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbiICTvK (ORCPT
+        with ESMTP id S229509AbiICUBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 15:51:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2876A558F4
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 12:51:09 -0700 (PDT)
+        Sat, 3 Sep 2022 16:01:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CEB5464B
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 13:01:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662234669; x=1693770669;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3NPntIDVBvHXGIzNn2Egr3SFUyvwpkrt48LyCws0pmg=;
-  b=ZddUeGP/KjZPOFmWKUwBrFbBn62bGyRUMBSm3igNYhlpK/iW/JpTxvwq
-   7XeoyxOeJ4HnzzJyWi/hzZVnpn7mC+lhJWeWbQp+e9YB6OG+Xm7Qr2ut9
-   rhMmEZDYLArrhREBdFO6IKB7bokLlVIR6vgr67yzqlxrEXeJFvZSIskak
-   fXmgH2yt0fobEuqrINSOBsq323jw0aZ9BjS+fbaWPGhEm24j0SSfUOxd3
-   uS0p8dTYODp1FzkrJmD3vRqqNDT7pYZbcGLDV8Yaeevc6oxpOUvdAD1aO
-   zatAnzYby32zhq8DOM6FZQQUIDXWCghoYzIL2eusbuNV0V48sdypgVgWJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="275927985"
+  t=1662235266; x=1693771266;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QCNt9tPUCtvhDMkrf/gPorUSVH7r0IizXYpggqk9B6w=;
+  b=L/VxD58OBIX+QTHtyDTrKdyXWdZFGQTMPyHIOEXhI89xtcMYF5SC3mYq
+   nTE6npf8P+jhxZ8UeIJDj8QhXDdVDwRRWXLUucQAiN1QTwZjPzR7zqllG
+   NpuO6y8ClPfnP+O+OZj2d/xjf/f49NjS5S5xUTkEiPDIvybKEWilQ0mS7
+   HRQpHSdBveUaQJkzIUbEP2b2/s9TSxBlYUz4Tu2HG10wzctqRE0jCu/hu
+   0SVZ5NBUkjIonB1CI2adYeYImu64PPi6v4mFGY2oqZPDmZF0AZUlyCBv8
+   OdIXNGMHLMP7n1hYqGGN33gGvfIFldp/sIqjjen/Nq0WJe7LIu+b5MrD8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="294923950"
 X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="275927985"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 12:51:08 -0700
+   d="scan'208";a="294923950"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 13:01:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="739193302"
+   d="scan'208";a="643327928"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 03 Sep 2022 12:51:03 -0700
+  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2022 13:01:04 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oUZAU-00026P-1a;
-        Sat, 03 Sep 2022 19:51:02 +0000
-Date:   Sun, 4 Sep 2022 03:50:41 +0800
+        id 1oUZKC-00028g-0S;
+        Sat, 03 Sep 2022 20:01:04 +0000
+Date:   Sun, 4 Sep 2022 04:00:59 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>
-Cc:     kbuild-all@lists.01.org, kunit-dev@googlegroups.com,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        mwen@igalia.com,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        dri-devel@lists.freedesktop.org,
-        Isabella Basso <isabbasso@riseup.net>, andrealmeid@riseup.net
-Subject: Re: [PATCH v2 6/8] drm/amd/display: Introduce KUnit tests for
- dcn20_fpu
-Message-ID: <202209040310.aa1jd14e-lkp@intel.com>
-References: <20220831172239.344446-7-mairacanal@riseup.net>
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [thierryreding:for-5.21/work 120/125]
+ drivers/cpufreq/cppc_cpufreq.c:625:32: error: 'cppc_get_cpu_power'
+ undeclared
+Message-ID: <202209040311.MTIju8YW-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220831172239.344446-7-mairacanal@riseup.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,69 +62,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Maíra,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm/drm-next drm-intel/for-linux-next drm-tip/drm-tip linus/master v6.0-rc3 next-20220901]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ma-ra-Canal/drm-amd-display-Introduce-KUnit-to-Display-Mode-Library/20220901-012715
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209040310.aa1jd14e-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+tree:   https://github.com/thierryreding/linux for-5.21/work
+head:   52ddba5b7001206107d4587c706be62369d71240
+commit: 80a1856c0cbc57c7ecee8571cd34b76b5542bbd1 [120/125] WIP
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209040311.MTIju8YW-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/6b01e906d58654fb9c209fa848883658d203b073
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ma-ra-Canal/drm-amd-display-Introduce-KUnit-to-Display-Mode-Library/20220901-012715
-        git checkout 6b01e906d58654fb9c209fa848883658d203b073
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/thierryreding/linux/commit/80a1856c0cbc57c7ecee8571cd34b76b5542bbd1
+        git remote add thierryreding https://github.com/thierryreding/linux
+        git fetch --no-tags thierryreding for-5.21/work
+        git checkout 80a1856c0cbc57c7ecee8571cd34b76b5542bbd1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../display/tests/dc/dml/dcn20/dcn20_fpu_test.c:455:5: warning: no previous prototype for 'dcn20_fpu_dcn21_update_bw_bounding_box_test_init' [-Wmissing-prototypes]
-     455 | int dcn20_fpu_dcn21_update_bw_bounding_box_test_init(struct kunit *test)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/resource.h:28,
-                    from drivers/gpu/drm/amd/amdgpu/../display/tests/dc/dml/dcn20/dcn20_fpu_test.c:10:
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:137:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
-     137 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
-         |                      ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:134:17: warning: 'DP_SINK_BRANCH_DEV_NAME_7580' defined but not used [-Wunused-const-variable=]
-     134 | static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:132:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
-     132 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:131:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
-     131 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/device.h:16,
+                    from include/linux/node.h:18,
+                    from include/linux/cpu.h:17,
+                    from drivers/cpufreq/cppc_cpufreq.c:17:
+   drivers/cpufreq/cppc_cpufreq.c: In function 'cppc_cpufreq_register_em':
+>> drivers/cpufreq/cppc_cpufreq.c:625:32: error: 'cppc_get_cpu_power' undeclared (first use in this function)
+     625 |                 EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+         |                                ^~~~~~~~~~~~~~~~~~
+   include/linux/energy_model.h:164:27: note: in definition of macro 'EM_ADV_DATA_CB'
+     164 |         { .active_power = _active_power_cb,             \
+         |                           ^~~~~~~~~~~~~~~~
+   drivers/cpufreq/cppc_cpufreq.c:625:32: note: each undeclared identifier is reported only once for each function it appears in
+     625 |                 EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+         |                                ^~~~~~~~~~~~~~~~~~
+   include/linux/energy_model.h:164:27: note: in definition of macro 'EM_ADV_DATA_CB'
+     164 |         { .active_power = _active_power_cb,             \
+         |                           ^~~~~~~~~~~~~~~~
+>> drivers/cpufreq/cppc_cpufreq.c:625:52: error: 'cppc_get_cpu_cost' undeclared (first use in this function)
+     625 |                 EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+         |                                                    ^~~~~~~~~~~~~~~~~
+   include/linux/energy_model.h:165:23: note: in definition of macro 'EM_ADV_DATA_CB'
+     165 |           .get_cost = _cost_cb }
+         |                       ^~~~~~~~
 
 
-vim +/dcn20_fpu_dcn21_update_bw_bounding_box_test_init +455 drivers/gpu/drm/amd/amdgpu/../display/tests/dc/dml/dcn20/dcn20_fpu_test.c
+vim +/cppc_get_cpu_power +625 drivers/cpufreq/cppc_cpufreq.c
 
-   450	
-   451	/**
-   452	 * dcn20_fpu_dcn21_update_bw_bounding_box_test_init - Store backup copies of DCN global structures
-   453	 * @test: represents a running instance of a test.
-   454	 */
- > 455	int dcn20_fpu_dcn21_update_bw_bounding_box_test_init(struct kunit *test)
-   456	{
-   457		memcpy(&original_dcn2_1_soc, &dcn2_1_soc, sizeof(struct _vcs_dpi_soc_bounding_box_st));
-   458		memcpy(&original_dcn2_1_ip, &dcn2_1_ip, sizeof(struct _vcs_dpi_ip_params_st));
-   459	
-   460		return 0;
-   461	}
-   462	
+d3c3db41df7e1b Pierre Gondois 2022-04-25  620  
+740fcdc2c20ecf Pierre Gondois 2022-04-25  621  static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+740fcdc2c20ecf Pierre Gondois 2022-04-25  622  {
+740fcdc2c20ecf Pierre Gondois 2022-04-25  623  	struct cppc_cpudata *cpu_data;
+740fcdc2c20ecf Pierre Gondois 2022-04-25  624  	struct em_data_callback em_cb =
+740fcdc2c20ecf Pierre Gondois 2022-04-25 @625  		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+740fcdc2c20ecf Pierre Gondois 2022-04-25  626  
+740fcdc2c20ecf Pierre Gondois 2022-04-25  627  	cpu_data = policy->driver_data;
+740fcdc2c20ecf Pierre Gondois 2022-04-25  628  	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
+740fcdc2c20ecf Pierre Gondois 2022-04-25  629  			get_perf_level_count(policy), &em_cb,
+740fcdc2c20ecf Pierre Gondois 2022-04-25  630  			cpu_data->shared_cpu_map, 0);
+740fcdc2c20ecf Pierre Gondois 2022-04-25  631  }
+740fcdc2c20ecf Pierre Gondois 2022-04-25  632  
+
+:::::: The code at line 625 was first introduced by commit
+:::::: 740fcdc2c20ecf855b36b919d7fa1b872b5a7eae cpufreq: CPPC: Register EM based on efficiency class information
+
+:::::: TO: Pierre Gondois <Pierre.Gondois@arm.com>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service

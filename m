@@ -2,104 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940AB5ABCCE
+	by mail.lfdr.de (Postfix) with ESMTP id EA6755ABCCF
 	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 06:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiICEVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 00:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        id S231757AbiICEU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 00:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbiICEUw (ORCPT
+        with ESMTP id S231753AbiICEUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 00:20:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE00C85AB1
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 21:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662178848; x=1693714848;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kWmZiNluUmvpy1ua3vJr7FsaopJvmUQevsR2l4xPRlg=;
-  b=FTnK1V8kiSK63KtArJ7XzHP+h5Yydgk9gVf5z5qdb/zl6vK4IWOF8HWC
-   /7Oev9NuhsSRpQ+Ue5ckMQobFmgUawOWgAez78sJGfvYRRPqSD8vv4SR1
-   TW4FVuJtH6MMP0kc3sFJ2Tr1AEsibauHPy9t2gKP3ZRObC8s/7FbDqUXT
-   jO0g7cgfSVIKD+UDYHYyfHks8Gsjx5J0WfAZh4zMzoE8i8eQ79v0dK+CB
-   lzRCzBAsJjCJaT9E3YzHx6QKqO1qAbxtlA8DvmQ1LDJih4tCYdrmZsOvG
-   ecN/d2cpzdWkjEMji05J/Yx1sV/SbDAzgTXEheOWACvoytffSPB9huxDc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="322292787"
-X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="322292787"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 21:20:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="941517088"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2022 21:20:47 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUKeE-00012l-35;
-        Sat, 03 Sep 2022 04:20:46 +0000
-Date:   Sat, 03 Sep 2022 12:20:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- fb4aa1d5342688f1688492791cd3301cd64e2a44
-Message-ID: <6312d5fb.nnXFrcm8617ZxRcQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 3 Sep 2022 00:20:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3448132AA7;
+        Fri,  2 Sep 2022 21:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9463FB82E32;
+        Sat,  3 Sep 2022 04:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1510CC433D7;
+        Sat,  3 Sep 2022 04:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662178817;
+        bh=rtFupttbrocc//hi2dAYjl4KhKvr3MtZmnTX4JhTOLM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bxuRUKEmJqCsaggfm/dbq9/FfGLTtPZSNvHcIuTzUja1dCw1he5huNIWMDWz8DPg3
+         L9pcoPxmf95S36WM2vi2CLPX+e6uGIK3V7+ADXQwZ95E3KaYlSAYcvnkvLZhqNGJZL
+         Xu8dDZrcAzIqb/USyFfy7ZGMVCFkGCK23wo2dDjqRCDzdAjhiKXWFveOob9A6Y+HJv
+         jqnAwDad/A071WGiJJ6BXuQ87+OtYAUdJ9nLj/0mOYTaSBiwbHQ2TMjcU3fEwvBSE9
+         zA1NCzy923SvXyVMPGH5rEjcXnFLlHDQf1xNWkaE7UyuR/AECnd3s417HacYRjR8G1
+         5qx4q+vTGS31w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EB3AAC73FE1;
+        Sat,  3 Sep 2022 04:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: fec: add pm_qos support on imx6q platform
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166217881695.4142.6608924461529704195.git-patchwork-notify@kernel.org>
+Date:   Sat, 03 Sep 2022 04:20:16 +0000
+References: <20220830070148.2021947-1-wei.fang@nxp.com>
+In-Reply-To: <20220830070148.2021947-1-wei.fang@nxp.com>
+To:     Wei Fang <wei.fang@nxp.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: fb4aa1d5342688f1688492791cd3301cd64e2a44  Merge branch into tip/master: 'x86/timers'
+Hello:
 
-elapsed time: 931m
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-configs tested: 24
-configs skipped: 2
+On Tue, 30 Aug 2022 15:01:48 +0800 you wrote:
+> From: Wei Fang <wei.fang@nxp.com>
+> 
+> There is a very low probability that tx timeout will occur during
+> suspend and resume stress test on imx6q platform. So we add pm_qos
+> support to prevent system from entering low level idles which may
+> affect the transmission of tx.
+> 
+> [...]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Here is the summary with links:
+  - [net] net: fec: add pm_qos support on imx6q platform
+    https://git.kernel.org/netdev/net/c/7d650df99d52
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-x86_64                              defconfig
-sh                               allmodconfig
-x86_64                               rhel-8.3
-i386                                defconfig
-x86_64                           allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-i386                             allyesconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C551F5AC16A
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 23:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9609B5AC16C
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 23:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiICVKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 17:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
+        id S231357AbiICVKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 17:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiICVKE (ORCPT
+        with ESMTP id S230320AbiICVKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 17:10:04 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71CA3E776
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 14:10:01 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id b5so6523371wrr.5
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 14:10:01 -0700 (PDT)
+        Sat, 3 Sep 2022 17:10:48 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693C052802
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 14:10:47 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id z8so6914533edb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 14:10:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=hUIxq73xHC/NSP+mtX2SJrGVr9RNYXnpazSPUw7uS04=;
-        b=HrfsBNpzcWnf0eUgqZMdG12DHWiSKM+S0oyJTgea2q0BSKeos2rlyJsTIPFqLxKTJn
-         wqeFIicVastzH6wc/PFCkdWZCFB4OVIL+CHNst39dF7PxZ1l/MSvrdTK1GYaA+HLCdKA
-         V1G2HDenA615+3TZzZGyM3ql0IPR7OD+MytNH8M0/aTE3O+yuDMkmOc8wo4VnAnasVxd
-         6StlbYsAsqdInL1Ogotcglp5wMyvWr7NkDiSyPiOwWGB1xsSjTpceVvjoNyIez1GBJV6
-         35WwaVh1zgTxTjjjzHpcuS7T/TrwOR6g6/3ITtT1RAVutEjpeTQ/w8xqGk449sdNZzeG
-         MdJw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=vJKtdgXq7yuBweDmfJZUWn/nlXQ6UJlkcHeot6gA4Ag=;
+        b=QO8Gsxbs5Jffjg4C1YRMcMoianiLTUpUlUfkoWl8/yhHrLOOTQR4QSLzA/k0vHZsnz
+         Zuo1tLfZtixr4Mde4wRIXBjOC4o32+0I5e1l52SeKo2j8W/UKGEbLsxnjrt0TgAtVUON
+         xEk4QTzMMoaDXB6N9FhnQldba+Lw/fRYG234EYfwOomOGwKg2pJQsF49iy2/vgQyYn5R
+         TF2LohBi5gcsKMWl9HOuT/9y3KOONr6cJSRQfTlmQ+1NNx2OY60QjbUp8XDrrJwnX8ve
+         NVHZzusYcQ6Ka2ku0oqTVnySaBwH3sCJVqVH54YDrcZQPB+ZUy6ud5zCIJgFe12dJxCs
+         l3wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=hUIxq73xHC/NSP+mtX2SJrGVr9RNYXnpazSPUw7uS04=;
-        b=QYNh/KjiEipJMDGXQnDcw/aPYADXL1aCfsYPBOf31Dm8bEXR88Zx4sx5jTRMisko24
-         aGLSQnagFF3mpHiaBNh9TYDBDmv1BnANDxnK9h4HCk8XvFBEXVRH/3fnGb7MJYq3XPyZ
-         h0FiDXLQEpi+YiyrEzoqPyNqxEYpR2m2E+LHcyW0PKzjiDxLVMOCEZgF3PKHKL1iZCkw
-         ebgy/NBnoOI7I1qVOH3WjuxqeM0j1S4NWLdCr9ijExXUgd79F/I8CPYOxnwhxkxRF8yc
-         frSqgmM8CrgV2NpIUHRqkQenH/Pateoq0xYB7xqdaC3cSweGzgvXR9bqHUNmBM4YflN9
-         XNLQ==
-X-Gm-Message-State: ACgBeo2/usthf+B8pu76ma6jSpkuPp0ltgTxLD1LoPjQ9DE6xVnJPFtG
-        RFQqBNi8eE2tjx8NmHB8Nq8pSw==
-X-Google-Smtp-Source: AA6agR7hdw5g6zg1fdg/fKAgZxyUaBkqrHb7pAuipZkiMB6l9ISuoDLR+dFk8Q6ng+pfdDLx9QUw6w==
-X-Received: by 2002:a5d:54c2:0:b0:225:8841:551c with SMTP id x2-20020a5d54c2000000b002258841551cmr21193099wrv.134.1662239400433;
-        Sat, 03 Sep 2022 14:10:00 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:216e:c311:337a:8942])
-        by smtp.gmail.com with ESMTPSA id y2-20020adfd082000000b0021d6924b777sm4574762wrh.115.2022.09.03.14.09.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 14:09:59 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: fixes for v6.0-rc4
-Date:   Sat,  3 Sep 2022 23:09:56 +0200
-Message-Id: <20220903210956.6008-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vJKtdgXq7yuBweDmfJZUWn/nlXQ6UJlkcHeot6gA4Ag=;
+        b=4CBcG+AW1lQ6I8vjXfNpMbsmjRjm3HFguCVgJwfd9yGkY7MYycqQ1A2ZKdiW2ZrWtj
+         4x0xwo5VtO1w65W68P9iLYQpLXEw1Z45I/7JAhi+deJRqFjOSit2fo/ySf0ap0WZ239L
+         ldNiA/vFtebPUBXBKpKlxS4fPH90aQE07KfcLKLN91KKr2scXUD1bzuKGJXQdZ3TSADE
+         ilp17QPowEhjG15zyASQjGK4X3azIKicbBxfcvlZX0jDDap3tFzyJv4I9K4A/1VZARpg
+         GPPd9cuyLDqdkwCr0LIKWJELgy/xmYM4I5kX7gjTjDABzMzdtvWDYAB8K4YlqQxEA8t7
+         RYrQ==
+X-Gm-Message-State: ACgBeo1r8D6MfaTzJAUC/4N27fqAXmKJEgAbKp5JFz/LYkJlTqAf7rZr
+        0EBylzWir+6gfxQvEziw+MThOlEjySSkKEJMrUU26w==
+X-Google-Smtp-Source: AA6agR7erVlroClkeFb3zhIgBfDh5pGTzjruKq0qjH9dguKnc2JT2q8khr8k8WVHQLCYF7Ke5G38cqTdwXTD0JMDBpU=
+X-Received: by 2002:aa7:d292:0:b0:447:f99d:8b9b with SMTP id
+ w18-20020aa7d292000000b00447f99d8b9bmr33012566edq.29.1662239446007; Sat, 03
+ Sep 2022 14:10:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1662140119.git.william.gray@linaro.org>
+In-Reply-To: <cover.1662140119.git.william.gray@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Sat, 3 Sep 2022 23:10:35 +0200
+Message-ID: <CAMRc=MeURJXOrbD-xi=QfZKr9KViF-Cu5r2bWnKQAbj0dj0YGg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Make irq_chip immutable for ISA drivers
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -69,66 +66,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Fri, Sep 2, 2022 at 11:40 PM William Breathitt Gray
+<william.gray@linaro.org> wrote:
+>
+> Kernel warns about mutable irq_chips in ISA drivers:
+>
+>     "not an immutable chip, please consider fixing!"
+>
+> Make the struct irq_chip const, flag it as IRQCHIP_IMMUTABLE, add the
+> new helper functions, and call the appropriate gpiolib functions.
+>
+> William Breathitt Gray (4):
+>   gpio: 104-dio-48e: Make irq_chip immutable
+>   gpio: 104-idi-48: Make irq_chip immutable
+>   gpio: 104-idio-16: Make irq_chip immutable
+>   gpio: ws16c48: Make irq_chip immutable
+>
+>  drivers/gpio/gpio-104-dio-48e.c | 10 +++++++---
+>  drivers/gpio/gpio-104-idi-48.c  | 10 +++++++---
+>  drivers/gpio/gpio-104-idio-16.c | 18 +++++++++++-------
+>  drivers/gpio/gpio-ws16c48.c     | 10 +++++++---
+>  4 files changed, 32 insertions(+), 16 deletions(-)
+>
+>
+> base-commit: 6ae8e1d0d5e5de922315830aea975c63e8c70b2f
+> --
+> 2.37.2
+>
 
-Here's a set of fixes from the GPIO subsystem for the next RC. Most are small
-driver fixes except the realtek-otto driver patch which is pretty big but
-addresses a significant flaw that can cause the CPU to stay infinitely busy
-on uncleared ISR on some platforms.
+Queued for fixes, thanks!
 
-Please pull!
-Bartosz Golaszewski
-
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.0-rc4
-
-for you to fetch changes up to 6890381720b27a41f2d9e68cce241336342ea3b7:
-
-  gpio: ws16c48: Make irq_chip immutable (2022-09-03 22:56:34 +0200)
-
-----------------------------------------------------------------
-gpio fixes for v6.0-rc4
-
-- MAINTAINERS update
-- fix resource leaks in gpio-mockup and gpio-pxa
-- add missing locking in gpio-pca953x
-- use 32-bit I/O in gpio-realtek-otto
-- make irq_chip structures immutable in four more drivers
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      gpio: pxa: use devres for the clock struct
-
-Haibo Chen (1):
-      gpio: pca953x: Add mutex_lock for regcache sync in PM
-
-Lukas Bulwahn (1):
-      MAINTAINERS: rectify entry for XILINX GPIO DRIVER
-
-Sander Vanheule (1):
-      gpio: realtek-otto: switch to 32-bit I/O
-
-Wei Yongjun (1):
-      gpio: mockup: remove gpio debugfs when remove device
-
-William Breathitt Gray (4):
-      gpio: 104-dio-48e: Make irq_chip immutable
-      gpio: 104-idi-48: Make irq_chip immutable
-      gpio: 104-idio-16: Make irq_chip immutable
-      gpio: ws16c48: Make irq_chip immutable
-
- MAINTAINERS                      |   2 +-
- drivers/gpio/gpio-104-dio-48e.c  |  10 ++-
- drivers/gpio/gpio-104-idi-48.c   |  10 ++-
- drivers/gpio/gpio-104-idio-16.c  |  18 +++--
- drivers/gpio/gpio-mockup.c       |   9 ++-
- drivers/gpio/gpio-pca953x.c      |   8 +-
- drivers/gpio/gpio-pxa.c          |  11 +--
- drivers/gpio/gpio-realtek-otto.c | 166 ++++++++++++++++++++-------------------
- drivers/gpio/gpio-ws16c48.c      |  10 ++-
- 9 files changed, 135 insertions(+), 109 deletions(-)
+Bart

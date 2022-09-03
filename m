@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC62E5AC06F
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3ABB5AC074
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbiICRwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 13:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        id S232988AbiICR5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 13:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiICRw1 (ORCPT
+        with ESMTP id S229612AbiICR5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 13:52:27 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FE7580A7;
-        Sat,  3 Sep 2022 10:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4dwZEjTHso5b/E8ambbqsH4pHZvxi/mrOhOv3FzbXQI=; b=SKuBBVq3qR/tefEtR0X/Himz+P
-        H9EvUpqaCLaUDOYrM98uxMiIfF128W33ZcslR7Qt2HlCTkRbo9UcwAwPvqlzZ3iOsGG26wDsdVHkO
-        OnUDpHh6p6YG/yZlteu3mnGS1b5h+Mr1Oxy/GqpDmU+CSvMxKfKXY3DrmIMZ9h3BB90JUl0hVlQ/9
-        TYu7mu3yvpfOfcfQCGryedNL4xgGFPbITCCKftzNJeTEee81HyCyMuXpGbLCXIgDjXR4+G3+lVRWB
-        57lIL2LpFi3l+71yvcOLlt6TvwVvqdcmNC1owqASAn9SYbhQdRTBnBJKXkdFWocJaZ591WJ1n8cjJ
-        4kFiTuGw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oUXJY-00Bq1X-KZ;
-        Sat, 03 Sep 2022 17:52:16 +0000
-Date:   Sat, 3 Sep 2022 18:52:16 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daire Byrne <daire@dneg.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/10] VFS: support parallel updates in the one directory.
-Message-ID: <YxOUUEXAbUdFLVKk@ZenIV>
-References: <166147828344.25420.13834885828450967910.stgit@noble.brown>
- <166147984370.25420.13019217727422217511.stgit@noble.brown>
- <YwmS63X3Sm4bhlcT@ZenIV>
- <166173834258.27490.151597372187103012@noble.neil.brown.name>
- <YxKaaN9cHD5yzlTr@ZenIV>
- <166216924401.28768.5809376269835339554@noble.neil.brown.name>
- <YxK4CiVNaQ6egobJ@ZenIV>
+        Sat, 3 Sep 2022 13:57:04 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6C53023;
+        Sat,  3 Sep 2022 10:57:03 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-334dc616f86so41016307b3.8;
+        Sat, 03 Sep 2022 10:57:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6Z8GKPwv0VpZ/qZskdH19bolEfM25JaWF8WrYodGaEA=;
+        b=xfvitAcCgC/r/bW0pcjdTbBSukBZvKgRwpA/wUObv0TPKF2iW74bpp7m9X6Oca1Glo
+         w+ClXo9GAjlhrq0OWX1PIYFgt3QgcCaNdJ+Gg02CGM1PNFexHxi8luxUgRqxr+xuk0NK
+         HyMm7Xfs3z9m7kOh1kj0FuYa5y2nFdhe81+FTdHhfYMqQhv5EVN2vDHVuxF9/RID7oqE
+         XQtRQMJvKcNA34N1DKInGZjx6ffIUTRJ3vXW1R+eQy9w4d2L8hfPTl5MsV+tMlzvlOjG
+         jDVdPkTlXbXiJFReBKmmhJ3LyvPhTZ84/QpzuRwQ39g82PiBW1WV5vOEcCysQFYP2Gqo
+         n4Yg==
+X-Gm-Message-State: ACgBeo2TvUy9GPgFXBilFWv1CmwFDOWg/2qijO0ZEZRiTCBiNeND0kD9
+        TnSRZDPXxlco5sDFr+xys+rgo4jUlK+lzYKC1YM=
+X-Google-Smtp-Source: AA6agR7JLebP8UxAPve8tgfo84lBxzbx6wgRHlv9HUdLlk3fI/fr3SLoR4I3bxBuuOiTGg/lOxi+zcGvtfX0R1TjtOY=
+X-Received: by 2002:a0d:e701:0:b0:336:90d7:c67a with SMTP id
+ q1-20020a0de701000000b0033690d7c67amr31474683ywe.7.1662227822857; Sat, 03 Sep
+ 2022 10:57:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxK4CiVNaQ6egobJ@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220822123239.28400-1-yuanjilin@cdjrlc.com>
+In-Reply-To: <20220822123239.28400-1-yuanjilin@cdjrlc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 3 Sep 2022 19:56:51 +0200
+Message-ID: <CAJZ5v0idwPoK_VoHXTNr+eGzq8+d2=Y0v1sxS7NmwX-PkvNSBA@mail.gmail.com>
+Subject: Re: [PATCH] drivers/thermal: fix repeated words in comments
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     Amit Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 03, 2022 at 03:12:26AM +0100, Al Viro wrote:
+On Mon, Aug 22, 2022 at 2:32 PM Jilin Yuan <yuanjilin@cdjrlc.com> wrote:
+>
+>  Delete the redundant word 'device'.
+>  Delete the redundant word 'which'.
+>
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  drivers/thermal/cpufreq_cooling.c | 2 +-
+>  drivers/thermal/thermal_of.c      | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index b8151d95a806..13551b386e72 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -495,7 +495,7 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
+>
+>  /**
+>   * __cpufreq_cooling_register - helper function to create cpufreq cooling device
+> - * @np: a valid struct device_node to the cooling device device tree node
+> + * @np: a valid struct device_node to the cooling device tree node
+>   * @policy: cpufreq policy
+>   * Normally this should be same as cpufreq policy->related_cpus.
+>   * @em: Energy Model of the cpufreq policy
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index b65d435cb92f..91bbed308305 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -651,7 +651,7 @@ EXPORT_SYMBOL_GPL(devm_thermal_zone_of_sensor_register);
+>  /**
+>   * devm_thermal_zone_of_sensor_unregister - Resource managed version of
+>   *                             thermal_zone_of_sensor_unregister().
+> - * @dev: Device for which which resource was allocated.
+> + * @dev: Device for which resource was allocated.
+>   * @tzd: a pointer to struct thermal_zone_device where the sensor is registered.
+>   *
+>   * This function removes the sensor callbacks and private data from the
+> --
 
-> Very much so.  You are starting to invent new rules for ->lookup() that
-> just never had been there, basing on nothing better than a couple of
-> examples.  They are nowhere near everything there is.
+Applied (as 6.1 material) under edited subject and with rewritten changelog.
 
-A few examples besides NFS and autofs:
-
-ext4, f2fs and xfs might bloody well return NULL without hashing - happens
-on negative lookups with 'casefolding' crap.
-
-kernfs - treatment of inactive nodes.
-
-afs_dynroot_lookup() treatment of @cell... names.
-
-afs_lookup() treatment of @sys... names.
-
-There might very well be more - both merged into mainline and in
-development trees of various filesystems (including devel branches
-of in-tree ones - I'm not talking about out-of-tree projects).
-
-Note, BTW, that with the current rules it's perfectly possible to
-have this kind of fun:
-	a name that resolves to different files for different processes
-	unlink(2) is allowed and results depend upon the calling process
-
-All it takes is ->lookup() deliberately *NOT* hashing the sucker and
-->unlink() acting according to dentry it has gotten from the caller.
-unlink(2) from different callers are serialized and none of that
-stuff is ever going to be hashed.  d_alloc_parallel() might pick an
-in-lookup dentry from another caller of e.g. stat(2), but it will
-wait for in-lookup state ending, notice that the sucker is not hashed,
-drop it and retry.  Suboptimal, but it works.
-
-Nothing in the mainline currently does that.  Nothing that I know of,
-that is.  Sure, it could be made work with the changes you seem to
-imply (if I'm not misreading you) - all it takes is lookup
-calling d_lookup_done() on its argument before returning NULL.
-But that's subtle, non-obvious and not documented anywhere...
-
-Another interesting question is the rules for unhashing dentries.
-What is needed for somebody to do temporary unhash, followed by
-rehashing?
+Thanks!

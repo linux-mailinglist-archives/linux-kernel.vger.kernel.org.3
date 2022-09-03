@@ -2,134 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C104B5AC145
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 22:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA135AC148
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 22:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbiICUBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 16:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
+        id S233355AbiICUFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 16:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiICUBK (ORCPT
+        with ESMTP id S229509AbiICUFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 16:01:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CEB5464B
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 13:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662235266; x=1693771266;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QCNt9tPUCtvhDMkrf/gPorUSVH7r0IizXYpggqk9B6w=;
-  b=L/VxD58OBIX+QTHtyDTrKdyXWdZFGQTMPyHIOEXhI89xtcMYF5SC3mYq
-   nTE6npf8P+jhxZ8UeIJDj8QhXDdVDwRRWXLUucQAiN1QTwZjPzR7zqllG
-   NpuO6y8ClPfnP+O+OZj2d/xjf/f49NjS5S5xUTkEiPDIvybKEWilQ0mS7
-   HRQpHSdBveUaQJkzIUbEP2b2/s9TSxBlYUz4Tu2HG10wzctqRE0jCu/hu
-   0SVZ5NBUkjIonB1CI2adYeYImu64PPi6v4mFGY2oqZPDmZF0AZUlyCBv8
-   OdIXNGMHLMP7n1hYqGGN33gGvfIFldp/sIqjjen/Nq0WJe7LIu+b5MrD8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="294923950"
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="294923950"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 13:01:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="643327928"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2022 13:01:04 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUZKC-00028g-0S;
-        Sat, 03 Sep 2022 20:01:04 +0000
-Date:   Sun, 4 Sep 2022 04:00:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thierry Reding <treding@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [thierryreding:for-5.21/work 120/125]
- drivers/cpufreq/cppc_cpufreq.c:625:32: error: 'cppc_get_cpu_power'
- undeclared
-Message-ID: <202209040311.MTIju8YW-lkp@intel.com>
+        Sat, 3 Sep 2022 16:05:20 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C502A2CDFA;
+        Sat,  3 Sep 2022 13:05:19 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y29so5160058pfq.0;
+        Sat, 03 Sep 2022 13:05:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=XIYPkRvxAVyJZ8758VPMnQXXVzGY/2gLg8W5CxBNhEQ=;
+        b=T64co4pFrl6pvsmMK4pHYGKtxLF5UILMRpxu0XFUucSkQltpeRNSXClldoJnhE6Iav
+         RmUNi/YdTeW9NzifnRhYeJNIvSVcu1FPiMhE48fHQgWNgvarcNIoAn7dKXmYXwJqWZxX
+         IVCosSBslKT8u24lgnzqMiwzPcBfaKKJakKpznp1+vSjue0OKSeB0r++kOhh3TR2UCXB
+         f0kVKdTEH9C6DvYEj3JtrLDCyP9H7cQaMAd5WXtBA1tIqwxa2OfPTprdtcCXZ7ejn/Yn
+         s4ichU1oyUn5Xl1wCNIPBdczv/9X9YNZWPb4TKT2mUT2zrz3+TW9NP434mV28VDCEap+
+         e+xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=XIYPkRvxAVyJZ8758VPMnQXXVzGY/2gLg8W5CxBNhEQ=;
+        b=u7goWqWshYCn7vx7+gR8Pyg8pMwuQ3dcnapguze+k+8K5hs6Ib3i/mOeg2MQbyouts
+         ek/Hup8/jbfffwdAaEjQeLIedgjCEfy+spixb9gM/JLtr/I9707AtAEu6bRdL65vzBFW
+         NI/VILP1J+s4a6zRGnkqqsJuE4cCgw8fD8QW+Zi9TCp8yZAkNaZ+Td197oBDndR6HFWW
+         8cz1+gV2Br/FMr61GHV2g+hlivTPspfpxzkVNn2CDW7+HEMICC7rxIIf53wiQGtOGhu5
+         tjhXJaAHgu8C8SMWTRXfjUuB6Bluw6YH2lSPZWW4lVDWkyBeerT+lVJqhN/llAcUtxIN
+         WxXg==
+X-Gm-Message-State: ACgBeo0ntu7KykEgwdzun8frsfU/PrvPYHyNwgKdjG9vG74FzPrjUM7F
+        WPdatdhMSkWXt/ntOpsrRCiD84IxrGQ=
+X-Google-Smtp-Source: AA6agR5+ildvk3EZSHxece2o1QbD39BSM+BUHnqMaYvLdPje6gI/fFJU3uzL5ocVwCNqSIet+96WOw==
+X-Received: by 2002:a63:83c7:0:b0:42b:b618:31b4 with SMTP id h190-20020a6383c7000000b0042bb61831b4mr28923640pge.607.1662235519074;
+        Sat, 03 Sep 2022 13:05:19 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:ea21:afd4:e65e:539c])
+        by smtp.gmail.com with ESMTPSA id nd10-20020a17090b4cca00b001fdc88d206fsm157460pjb.9.2022.09.03.13.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 13:05:18 -0700 (PDT)
+Date:   Sat, 3 Sep 2022 13:05:16 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [git pull] Input updates for v6.0-rc3
+Message-ID: <YxOzfPVU+ogFrEb8@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/thierryreding/linux for-5.21/work
-head:   52ddba5b7001206107d4587c706be62369d71240
-commit: 80a1856c0cbc57c7ecee8571cd34b76b5542bbd1 [120/125] WIP
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209040311.MTIju8YW-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/thierryreding/linux/commit/80a1856c0cbc57c7ecee8571cd34b76b5542bbd1
-        git remote add thierryreding https://github.com/thierryreding/linux
-        git fetch --no-tags thierryreding for-5.21/work
-        git checkout 80a1856c0cbc57c7ecee8571cd34b76b5542bbd1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
+Hi Linus,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Please pull from:
 
-All errors (new ones prefixed by >>):
+	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.0-rc3
 
-   In file included from include/linux/device.h:16,
-                    from include/linux/node.h:18,
-                    from include/linux/cpu.h:17,
-                    from drivers/cpufreq/cppc_cpufreq.c:17:
-   drivers/cpufreq/cppc_cpufreq.c: In function 'cppc_cpufreq_register_em':
->> drivers/cpufreq/cppc_cpufreq.c:625:32: error: 'cppc_get_cpu_power' undeclared (first use in this function)
-     625 |                 EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
-         |                                ^~~~~~~~~~~~~~~~~~
-   include/linux/energy_model.h:164:27: note: in definition of macro 'EM_ADV_DATA_CB'
-     164 |         { .active_power = _active_power_cb,             \
-         |                           ^~~~~~~~~~~~~~~~
-   drivers/cpufreq/cppc_cpufreq.c:625:32: note: each undeclared identifier is reported only once for each function it appears in
-     625 |                 EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
-         |                                ^~~~~~~~~~~~~~~~~~
-   include/linux/energy_model.h:164:27: note: in definition of macro 'EM_ADV_DATA_CB'
-     164 |         { .active_power = _active_power_cb,             \
-         |                           ^~~~~~~~~~~~~~~~
->> drivers/cpufreq/cppc_cpufreq.c:625:52: error: 'cppc_get_cpu_cost' undeclared (first use in this function)
-     625 |                 EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
-         |                                                    ^~~~~~~~~~~~~~~~~
-   include/linux/energy_model.h:165:23: note: in definition of macro 'EM_ADV_DATA_CB'
-     165 |           .get_cost = _cost_cb }
-         |                       ^~~~~~~~
+to receive updates for the input subsystem. You will get:
 
+- GT1158 ID added to Goodix touchscreen driver
+- Boeder Force Feedback Wheel USB added to iforce joystick driver
+- fixup for iforce driver to avoid hangups
+- fix autoloading of rk805-pwrkey driver.
 
-vim +/cppc_get_cpu_power +625 drivers/cpufreq/cppc_cpufreq.c
+Changelog:
+---------
 
-d3c3db41df7e1b Pierre Gondois 2022-04-25  620  
-740fcdc2c20ecf Pierre Gondois 2022-04-25  621  static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-740fcdc2c20ecf Pierre Gondois 2022-04-25  622  {
-740fcdc2c20ecf Pierre Gondois 2022-04-25  623  	struct cppc_cpudata *cpu_data;
-740fcdc2c20ecf Pierre Gondois 2022-04-25  624  	struct em_data_callback em_cb =
-740fcdc2c20ecf Pierre Gondois 2022-04-25 @625  		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
-740fcdc2c20ecf Pierre Gondois 2022-04-25  626  
-740fcdc2c20ecf Pierre Gondois 2022-04-25  627  	cpu_data = policy->driver_data;
-740fcdc2c20ecf Pierre Gondois 2022-04-25  628  	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
-740fcdc2c20ecf Pierre Gondois 2022-04-25  629  			get_perf_level_count(policy), &em_cb,
-740fcdc2c20ecf Pierre Gondois 2022-04-25  630  			cpu_data->shared_cpu_map, 0);
-740fcdc2c20ecf Pierre Gondois 2022-04-25  631  }
-740fcdc2c20ecf Pierre Gondois 2022-04-25  632  
+Greg Tulli (1):
+      Input: iforce - add support for Boeder Force Feedback Wheel
 
-:::::: The code at line 625 was first introduced by commit
-:::::: 740fcdc2c20ecf855b36b919d7fa1b872b5a7eae cpufreq: CPPC: Register EM based on efficiency class information
+Jarrah Gosbell (2):
+      dt-bindings: input: touchscreen: add compatible string for Goodix GT1158
+      Input: goodix - add compatible string for GT1158
 
-:::::: TO: Pierre Gondois <Pierre.Gondois@arm.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Lukas Bulwahn (1):
+      MAINTAINERS: add include/dt-bindings/input to INPUT DRIVERS
+
+Ondrej Jirman (1):
+      Input: goodix - add support for GT1158
+
+Peter Robinson (1):
+      Input: rk805-pwrkey - fix module autoloading
+
+Tetsuo Handa (1):
+      Input: iforce - wake up after clearing IFORCE_XMIT_RUNNING flag
+
+Diffstat:
+--------
+
+ Documentation/devicetree/bindings/input/touchscreen/goodix.yaml | 1 +
+ Documentation/input/joydev/joystick.rst                         | 1 +
+ MAINTAINERS                                                     | 1 +
+ drivers/input/joystick/iforce/iforce-main.c                     | 1 +
+ drivers/input/joystick/iforce/iforce-serio.c                    | 6 +++---
+ drivers/input/joystick/iforce/iforce-usb.c                      | 8 ++++----
+ drivers/input/joystick/iforce/iforce.h                          | 6 ++++++
+ drivers/input/misc/rk805-pwrkey.c                               | 1 +
+ drivers/input/touchscreen/goodix.c                              | 2 ++
+ 9 files changed, 20 insertions(+), 7 deletions(-)
+
+Thanks.
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Dmitry

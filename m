@@ -2,120 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661BE5ABB94
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECC95ABB98
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 02:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbiICANp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 20:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
+        id S231136AbiICAOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 20:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiICANm (ORCPT
+        with ESMTP id S229734AbiICAOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 20:13:42 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5FAE726B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 17:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662164014; x=1693700014;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=72/WkZh44x271usWu2tdKgvUpZAOEpvaKjYt39Jf9lY=;
-  b=E+D/eJCQ0QSOxfmgpwe1fglwW0Rc9rV9KxIWRVT16IJdiC7tJMbpDzff
-   inieGbuc0FWjvtAfoAkSAygB3kdkwzps/fp6ZAYx/r7TgDTAvYRvXYf+4
-   oP8jJXui2XOEImka883HRsuPHMpQHtEp++hSfhCP+hHw8XSULX8vs46q5
-   c89u4KGL5VVNmPTtR9Tg5A1f9/M3/Sd9xcEpqx4NXX5zxbgjqrEdJ8vuF
-   z4QPA/MamGYVSYlNc6pkgB5tjyBoG71a8TF10AfmULmrVXU+Xevc9L0k1
-   ocU2lw2HQFVvD7so2S6LnCeU4GMBlHsSxzSCw/NBfbFkT+7/CGRN/xAET
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="294852083"
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="294852083"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 17:13:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
-   d="scan'208";a="646291714"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 02 Sep 2022 17:13:32 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUGmx-0000lj-1d;
-        Sat, 03 Sep 2022 00:13:31 +0000
-Date:   Sat, 3 Sep 2022 08:12:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-Cc:     kbuild-all@lists.01.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: [driver-core:driver-core-linus 9/9]
- drivers/base/arch_topology.c:727:24: warning: returning 'int' from a
- function with return type 'const struct cpumask *' makes pointer from
- integer without a cast
-Message-ID: <202209030824.SouwDV5M-lkp@intel.com>
+        Fri, 2 Sep 2022 20:14:19 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE30E97D0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 17:14:18 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-11f11d932a8so8694008fac.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 17:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=4d2rjgmYFonsZIA/vvWlVIIe1M0YYIwhseZs1soQQhU=;
+        b=X6fuqudWdKK576+9fZ1LMvr6MKGhSMQ7P8t38PQeydMAIkjFxL6d6KpDtMQSlRSNcE
+         gslGV3xdU1EjHMzKf4X0PyM3jLVDbz4M9rSacF3yPZW/Rw0g+zKjHIozDmmidjPayJNZ
+         692bUcYIe8or9YFy1zjkeMN0R/CmGm40MQ/mEdda+P4r3F5QYdJTornNgSJvmE7MIShG
+         xGx/KydQ7OsEWlgWEYoSoE0j/3Sw2NC/hzqWy7GCKxj2BdtgGH/MYTgUJduaREVSBIPo
+         XLmNdKUwjW1UjaJnHcrRTQar0+vHZecd49P8EZhCL48MFRZRrJ1Yf3615Ugn2r9gmJYc
+         csPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=4d2rjgmYFonsZIA/vvWlVIIe1M0YYIwhseZs1soQQhU=;
+        b=I9LF0uV66DLFRz2BPZCtWkpOeXvYIRXaIvls8HLvTCTuWofS5skQJFCCNjiBNEq4Zb
+         3R0G9kwDVjjkjMiyuFCMNBc9c+8AjcSHz80QKpBBeo5VgCET3ooJOpnWDdjCcdncSTc/
+         8VOMxUw68B9Sv/bESAwgGNdzRuSszDyzjzzGyHfde42qz6eHBrWUYhvB717FGtyyjAvn
+         gOx0bmDfeRc+eOMSq9TUsWhIFoF0yLQfpTsJeXDSRs8KXbIddq+FFUF27AzVDKFhGF02
+         uKFpbSt5ah8bEtkLiNyEL2h61fB0rJzlhPQcmXB6EY7RdYImlbW4x92aC4TbBTFM1lpk
+         Joyg==
+X-Gm-Message-State: ACgBeo2F9N2xpHoh7R6Ecj5BGQ3+rusVTEYnG20dSuyV2AJ2+FkSIfqE
+        j6U2RhDjagd9A9OGfjPVVTk=
+X-Google-Smtp-Source: AA6agR5yzCyl+ldHRkOlYlrxdHyGOqyU/T6yWlUrygocyhFanVRRbTKlN9JuALVh7qAheBJq2L6j1Q==
+X-Received: by 2002:a05:6870:41c3:b0:11c:3697:6632 with SMTP id z3-20020a05687041c300b0011c36976632mr27800oac.1.1662164056576;
+        Fri, 02 Sep 2022 17:14:16 -0700 (PDT)
+Received: from localhost ([104.183.150.195])
+        by smtp.gmail.com with UTF8SMTPSA id c7-20020a9d6847000000b006393ea22c1csm1656795oto.16.2022.09.02.17.14.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 17:14:16 -0700 (PDT)
+From:   Fangfei Yang <yangff1@gmail.com>
+To:     dave.hansen@intel.com
+Cc:     dave.hansen@linux.intel.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org,
+        sroettger@google.com, x86@kernel.org
+Subject: Re: PKU usage improvements for threads
+Date:   Fri,  2 Sep 2022 19:14:12 -0500
+Message-Id: <20220903001412.17015-1-yangff1@gmail.com>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <b4f0dca5-1d15-67f7-4600-9a0a91e9d0bd@intel.com>
+References: <b4f0dca5-1d15-67f7-4600-9a0a91e9d0bd@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git driver-core-linus
-head:   6b66ca0bac1b9cee7608d7c4dc59b699458b4cb8
-commit: 6b66ca0bac1b9cee7608d7c4dc59b699458b4cb8 [9/9] arch_topology: Make cluster topology span at least SMT CPUs
-config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220903/202209030824.SouwDV5M-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=6b66ca0bac1b9cee7608d7c4dc59b699458b4cb8
-        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-        git fetch --no-tags driver-core driver-core-linus
-        git checkout 6b66ca0bac1b9cee7608d7c4dc59b699458b4cb8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I guess the question here is whether the code to call sigaltstack and signal handler is considered part of the security code (sigreturn obviously has to be, since the kernel has to restore the PKRU based on the saved fpu).
+I think to a large extent this is necessary, at least for the signal handler to be able to access the relevant registers at the time of the interrupt, which may contain data that the handler should not have access to. Even specifying a PKRU at the time of signal registration would make the system functionally sound and safe since the relevant calls must be protected.
 
-All warnings (new ones prefixed by >>):
+It's just that the design here should be such as to minimize the ways in which the interface can be abused (e.g., accidental override access) as well as to simplify the difficulty of writing secure code. It might be reasonable, then, to save the PKRU when the `sigaltstack` is called.
 
-   drivers/base/arch_topology.c: In function 'cpu_clustergroup_mask':
-   drivers/base/arch_topology.c:727:24: error: implicit declaration of function 'cpu_smt_mask'; did you mean 'cpu_cpu_mask'? [-Werror=implicit-function-declaration]
-     727 |                 return cpu_smt_mask(cpu);
-         |                        ^~~~~~~~~~~~
-         |                        cpu_cpu_mask
->> drivers/base/arch_topology.c:727:24: warning: returning 'int' from a function with return type 'const struct cpumask *' makes pointer from integer without a cast [-Wint-conversion]
-     727 |                 return cpu_smt_mask(cpu);
-         |                        ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+The main purpose is to simplify the design of the handler entry point without adding new system calls, while not accidentally gaining privileges that do not belong to the current PKRU because of the system call, whether immediately, or later in signal delivery.
 
+This is because this part of the design can be largely made easier if additional source checking and PKRU switching by the handler at the entry point can be avoided.
 
-vim +727 drivers/base/arch_topology.c
+As `WRPKRU` can be abused, if the handler uses this instruction, additional SP as well as PKRU checks must be performed to prevent malicious programs from forging signals, and the check must get multiplex among all threads. However, for the kernel, it takes very little code to avoid these checks by giving the handler the PKRU it wants.
 
-   718	
-   719	const struct cpumask *cpu_clustergroup_mask(int cpu)
-   720	{
-   721		/*
-   722		 * Forbid cpu_clustergroup_mask() to span more or the same CPUs as
-   723		 * cpu_coregroup_mask().
-   724		 */
-   725		if (cpumask_subset(cpu_coregroup_mask(cpu),
-   726				   &cpu_topology[cpu].cluster_sibling))
- > 727			return cpu_smt_mask(cpu);
-   728	
-   729		return &cpu_topology[cpu].cluster_sibling;
-   730	}
-   731	
+If only one PKEY is specified, then it is likely that `WRPKRU` is still needed, since the TCB itself may occupy multiple PKEYs, or, the handler need to access the memory of other PKEYs (e.g., complex multi-domain signal designs).
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+And, logically, it makes sense for a signal context (sigaltstack) to have the same PKRU when it is registered, and when it is used in the future. Thus, a special flag in `ss_flags & SS_SAVEPKRU` to ask the kernel to save the current PKRU would be sufficient.
+
+From the security side, if the current PKRU does not have access to the signal stack, then a future signal occurring when the kernel uses this PKRU to write will also result in an segfault, thus avoiding unwanted access through sigaltstack.
+This is also more accurate than checking the PKEY of the page when registering the signal stack (if we restricted the PKRU when registering the sigaltstack). Consider a possible error: a page is accidentally unmaped after being registered as a signal stack, and then another page that should not have been accessed by this PKRU is mapped to the same location, thus causing an override during signal delivery.
+
+> I also bet we could do this with minimal new ABI.  There's already a
+> ->ss_flags field.  We could assign a flag to mean that stack_t doesn't
+> end at '->ss_size' and that there's a pkey value *after* ss_size.  I do
+> think having a single pkey that is made accessible before signal entry
+> is a more flexible ABI than taking an explicit PKRU value.
+
+Agreed, the most flexible way should be allow setting the PKRU to any subset of the current PKRU. So we can check `(~new_pkru) & current_pkru == 0` when calling sigaltstack. 
+
+However, no matter how it is done, one of the more disgusting thing is that code like this appears in the program that handles the signal.
+```
+old_pkru = read_pkru();
+write_pkru(stack_pkru);
+do_xsave(); 
+*(fpu_saved + pkru_offset()) = old_pkru; // this may be an argument of fpu function call
+```
+And when restoring, you also need
+```
+old_pkru = *(fpu_saved + pkru_offset());
+*(fpu_saved + pkru_offset()) = stack_pkru;
+do_xstor();
+write_pkru(old_pkru);
+```
+These plus the testing of the current runtime environment (MPK) are truly disgusting. It's just structually ugly.

@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6CC5ABD10
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 06:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676C85ABD18
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 06:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiICEiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 00:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S231723AbiICEu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 00:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiICEiC (ORCPT
+        with ESMTP id S231511AbiICEu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 00:38:02 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699F7E0FF1
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 21:38:01 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l5so3705036pjy.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 21:38:01 -0700 (PDT)
+        Sat, 3 Sep 2022 00:50:56 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED27CD7A6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 21:50:53 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id p187so3191570iod.8
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 21:50:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=8nxHAJjNJIWIS9zp8ReO9CFJ5l6F+DeHqEeikcdRx8A=;
-        b=X3lVsVyiXuVeUrPc0SfBRYXsv+r0wXnzDinfXhWzg0rcwgVH00dNuGxyp8ILJbrzKe
-         FhVA4UE2lXfoDl2VC5CrLsJyA1NrdVmISCVYcMuorCm5ahdWpcFshtng/mI+zvKlZuEX
-         3dD3MkRXOKpFlUQo6Yp0wZyGx9Jm/4p2eTryw=
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=/jnxYgkJXMYsjbokKvcye0yiyfDXPFgpoek+6RNFmOY=;
+        b=QuehXOenSTMiMaQj0tjn4Spni2D8homjpALWifcjtPsiGMWKMY2EmxWmDYkSR86ckp
+         +HuAJyx2W78388wxCTArsrZroDS7KrIRg+JJe5Ev1E5tDbe4/eVZi15D+WCCXAnGoELi
+         SiQPejTgON+YFICm78hL3ENz4nNa5iTPT+6mEXSd0vBz5O/I7nIm+KQa85AP+KSjO/Fk
+         DnLFLKadfhCx/nTzM6Rf7Y1cD2htdHJRCaRGRVQKZ81ScAFG8yHtr19RZcHeEESF3mV6
+         O7nh4Bp/hkvyVD6SJsxHUQPLReMVNCvMLWsCYcRI1SCneUNk9MTnyhRRvpkdhqdY8AvD
+         MUrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=8nxHAJjNJIWIS9zp8ReO9CFJ5l6F+DeHqEeikcdRx8A=;
-        b=rOGvS6X/+IZ/lmQ0SaHOOA7ooK7K6RvC1OH8MHhZ0G6uJfgLLrc+/Bm4ZoJvTtPOzV
-         A4b+3rv/8Zpe9pEqOZJ4DlE+PJrtpJllsgyHnrKxN3s1MFbVJpgTVQ0P4JW8aMgSEmf4
-         KeKCDFTyMOQBnwOAzN8fIYICnmGPe/gqQl8pSVprYcf59xZh/WIKhZijELWFRj9pLuX2
-         WxNE84vc+F8OxKLwxUYUJTDdZgVk11pjNgU2z/ugNnFuJHSLR6fGRCfpKfzqWhpvX7LO
-         DzFtMM53x+cT7iwbTzSpuYu45Qk6MK69ZbJ+b8sf8/8J7lQFOFjHbyELU9VGM0x4jsMU
-         U23g==
-X-Gm-Message-State: ACgBeo3yxXmNbpppZGJdU0NX2sTyXqDYoOfp3BEzcmAu31BAs8mRbb+C
-        DeulfI/AVbdhcGH84En1K9YtNg==
-X-Google-Smtp-Source: AA6agR4tHbhmttrlfXXBLnYW6bC7tSeb/QIaCb2aEofXok4fszW2M01DOX72YVzujYwLN4janJeuvg==
-X-Received: by 2002:a17:90b:4f44:b0:1f5:1310:9e7f with SMTP id pj4-20020a17090b4f4400b001f513109e7fmr8267103pjb.235.1662179880957;
-        Fri, 02 Sep 2022 21:38:00 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ot17-20020a17090b3b5100b001fb3522d53asm6106848pjb.34.2022.09.02.21.37.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 21:37:59 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v4] netlink: Bounds-check struct nlmsgerr creation
-Date:   Fri,  2 Sep 2022 21:37:49 -0700
-Message-Id: <20220903043749.3102675-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=/jnxYgkJXMYsjbokKvcye0yiyfDXPFgpoek+6RNFmOY=;
+        b=7ViuO3FJdzJKZC2dznZGgoDqBMtEG7ZU477SALgaCHeZ60e9yioy6nXCCn01yII3Gz
+         A5yKWvjVZsYtzVVXyWpAjJJxSlaWQyW24LzBxHxoQ5h5toyjkCzpkytBjdSrQwjhty5C
+         DuiXPiFv3qRlF1wxO8YVAa1D7N0I8CD7yVuFH0nUtV0ROumtoEUwtsfxmzcS4n2P2F7o
+         9xo6rznnfFQtHIRAehEa4a3KGy4G8NYqmH94htE2rIAww14vbe8IsXyh5biH37cobpxn
+         /TSibnRjseDbdbe4K1bxXb2zpRofc/+C2TYgoiKFjn0yKAg+Lz5hWTmkbejSw57Wy3jb
+         YKWA==
+X-Gm-Message-State: ACgBeo0scGF3kspdKlMLjxOehsUdzyd4YJ0oHtfQvirer5CqQRueyLbQ
+        z72tSvPDMzxh6RkqDr/ws3zSu6pn98iVACZBkiL3OA==
+X-Google-Smtp-Source: AA6agR50vjC2thNmimLf9LoXeTpeGoEaFeFtpFxTFtQ1gxpGQVUa5ldvFpMS0otajwRFAQLEGKLNrGuYN7goA9W4f1s=
+X-Received: by 2002:a05:6638:2696:b0:344:f106:eff8 with SMTP id
+ o22-20020a056638269600b00344f106eff8mr21367471jat.89.1662180652972; Fri, 02
+ Sep 2022 21:50:52 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3165; h=from:subject; bh=+867zmYG0ld3KfCtaWXXbDBtt9S0k+MtCYquudNfT9Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEtocUmRItUSNtW/RTth/KU3s4KwnEmu+44cDc5a/ nPduHrKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxLaHAAKCRCJcvTf3G3AJvy3EA C0NT7YlazAAErZVQ5th3Ygbrxza2BA+hg90Sou5UwTF20tyTpRMy2yyXiLuObjL+ztWexEY4y7y1e+ t+iC7eg5RiLysFTGfbBAHoRzvnA+2RsINYiG6jzux01QYm0cfdyIRjO3+kmBsqXamAe10yey74wyEy 51SFpBVb3oUf1nelP/JwsZfQbworKmB3uvhc/eGV/nFItFNk/zwLTeCHjxKKfPOlU5QPhhb67XlJt0 2bUH3UMOqNE7k3ksE4Evem4E5TkgvbqntVcE5U1ND7P0SnGeUaYP8iFisX8TMVk5GImU1T6lcyhMk/ uwhy+ULjLiDaDIH9dvMqsV4Zu1E+vJmgmL0WVRB2/fLA6pUkR0/7+GB2GmCpHay1yK1NsQLHtmZOWl rBO02Io72jB2ID91gCgkSHFrleBBWUqUg06+PCYcmpAK+CzQch4nW+KNU6rbU/10nVYkJtB+S72KFn TQP/6uSRqyim3bMMjYyE85iMq+AeMSMAfCtIF6NAoT/YSNa/Tj4n6Wv3EtLdHDLy3wFV1njy+vkWkI ATBbd/OSj9xMUtIzHdnJBRD5jyaYPGqH5z6N9pUkNHVoYT+9GNxRnjBsuOMF3HS65I/FxnjIj0ZBkq zwo/flWB1PpdNUBcCbi+F/bSsl3mDFlWiqBXdHturSUMBuyC2ZOm3DxFfkEg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <1662171184-25211-1-git-send-email-quic_krichai@quicinc.com> <1662171184-25211-2-git-send-email-quic_krichai@quicinc.com>
+In-Reply-To: <1662171184-25211-2-git-send-email-quic_krichai@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 3 Sep 2022 07:50:42 +0300
+Message-ID: <CAA8EJppa3ZXr54BMNATZMdnk_VS8HmfXYQ_RovDEKE96ZcqQZw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] PCI: qcom: Add sc7280 aggre0, aggre1 and ddr sf
+ tbu clocks in PCIe driver
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,79 +78,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for FORTIFY_SOURCE doing bounds-check on memcpy(),
-switch from __nlmsg_put to nlmsg_put(), and explain the bounds check
-for dealing with the memcpy() across a composite flexible array struct.
-Avoids this future run-time warning:
+On Sat, 3 Sept 2022 at 05:23, Krishna chaitanya chundru
+<quic_krichai@quicinc.com> wrote:
+>
+> Add missing aggre0, aggre1 and ddrs sf tbu clocks in PCIe driver.
+>
+> If these clocks are not presenti, the PCIe link goes down in system suspend
+> and resume.
+>
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
 
-  memcpy: detected field-spanning write (size 32) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
+This does not apply onto the linux-next. If this is a fix intended for
+the current master or for the linux-stable please state so.
 
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
-Cc: Florian Westphal <fw@strlen.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: syzbot <syzkaller@googlegroups.com>
-Cc: netfilter-devel@vger.kernel.org
-Cc: coreteam@netfilter.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220901071336.1418572-1-keescook@chromium.org
----
-v4:
- - switch to nlmsg_put() instead of __nlmsg_put() (kuba)
-v3: https://lore.kernel.org/lkml/20220901071336.1418572-1-keescook@chromium.org
-v2: https://lore.kernel.org/lkml/20220901064858.1417126-1-keescook@chromium.org
-v1: https://lore.kernel.org/lkml/20220901030610.1121299-3-keescook@chromium.org
----
- net/netfilter/ipset/ip_set_core.c | 8 +++++---
- net/netlink/af_netlink.c          | 8 +++++---
- 2 files changed, 10 insertions(+), 6 deletions(-)
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 2ea1375..a7202f0 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1548,7 +1548,10 @@ static const struct qcom_pcie_cfg sm8450_pcie1_cfg = {
+>  static const struct qcom_pcie_cfg sc7280_cfg = {
+>         .ops = &ops_1_9_0,
+>         .has_tbu_clk = true,
+> +       .has_ddrss_sf_tbu_clk = true,
+>         .pipe_clk_need_muxing = true,
+> +       .has_aggre0_clk = true,
+> +       .has_aggre1_clk = true,
+>  };
+>
+>  static const struct qcom_pcie_cfg sc8180x_cfg = {
+> --
+> 2.7.4
+>
 
-diff --git a/net/netfilter/ipset/ip_set_core.c b/net/netfilter/ipset/ip_set_core.c
-index 16ae92054baa..6b31746f9be3 100644
---- a/net/netfilter/ipset/ip_set_core.c
-+++ b/net/netfilter/ipset/ip_set_core.c
-@@ -1719,11 +1719,13 @@ call_ad(struct net *net, struct sock *ctnl, struct sk_buff *skb,
- 		skb2 = nlmsg_new(payload, GFP_KERNEL);
- 		if (!skb2)
- 			return -ENOMEM;
--		rep = __nlmsg_put(skb2, NETLINK_CB(skb).portid,
--				  nlh->nlmsg_seq, NLMSG_ERROR, payload, 0);
-+		rep = nlmsg_put(skb2, NETLINK_CB(skb).portid,
-+				nlh->nlmsg_seq, NLMSG_ERROR, payload, 0);
- 		errmsg = nlmsg_data(rep);
- 		errmsg->error = ret;
--		memcpy(&errmsg->msg, nlh, nlh->nlmsg_len);
-+		unsafe_memcpy(&errmsg->msg, nlh, nlh->nlmsg_len,
-+			      /* Bounds checked by the skb layer. */);
-+
- 		cmdattr = (void *)&errmsg->msg + min_len;
- 
- 		ret = nla_parse(cda, IPSET_ATTR_CMD_MAX, cmdattr,
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index f89ba302ac6e..a662e8a5ff84 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -2494,11 +2494,13 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
- 		return;
- 	}
- 
--	rep = __nlmsg_put(skb, NETLINK_CB(in_skb).portid, nlh->nlmsg_seq,
--			  NLMSG_ERROR, payload, flags);
-+	rep = nlmsg_put(skb, NETLINK_CB(in_skb).portid, nlh->nlmsg_seq,
-+			NLMSG_ERROR, payload, flags);
- 	errmsg = nlmsg_data(rep);
- 	errmsg->error = err;
--	memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg) ? nlh->nlmsg_len : sizeof(*nlh));
-+	unsafe_memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg)
-+					 ? nlh->nlmsg_len : sizeof(*nlh),
-+		      /* Bounds checked by the skb layer. */);
- 
- 	if (tlvlen)
- 		netlink_ack_tlv_fill(in_skb, skb, nlh, err, extack);
+
 -- 
-2.34.1
-
+With best wishes
+Dmitry

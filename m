@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6D95ABD53
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841DE5ABD51
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232022AbiICGBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 02:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S232088AbiICGBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 02:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiICGBf (ORCPT
+        with ESMTP id S231719AbiICGBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 02:01:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E970918B2B;
-        Fri,  2 Sep 2022 23:01:34 -0700 (PDT)
+        Sat, 3 Sep 2022 02:01:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E181346DAD;
+        Fri,  2 Sep 2022 23:01:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5218E60B81;
-        Sat,  3 Sep 2022 06:01:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 639E7C433D7;
-        Sat,  3 Sep 2022 06:01:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7697160B81;
+        Sat,  3 Sep 2022 06:01:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F621C433C1;
+        Sat,  3 Sep 2022 06:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662184893;
-        bh=sI33xlLAUaH4cdr016uruCb0i4EaryzepKAX77QNFME=;
+        s=k20201202; t=1662184896;
+        bh=oHvBd1ffjg/s99ZfllkCt1FwNVqrZNIyO0l4IQri3jg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eB5DpyHuMXf92QJjvhjc2Vsy0SK8NOOpas+LQ9JWK9hVnazFZFzInAfoAyQhEMi20
-         KAi8qQDFK0ZwgnLaSo2lfvvLvxkNbwOs2L3oEmPZo7Hvlyl8OVrqnxVAw/KoDQ+5R0
-         zVXLKppvBnUdaj/eVtiyGdHLwV+0P/kDMra6Ze42JZooyRFewS50CzhO2tKQBElViN
-         1B+KIZ5bUd/DoOzzKtu9+VHSLbn7bvbrso6IwKunzR/NJ3+w98zZaXzjD/groQCGvv
-         pPX29zEPwepcv/3fhCWMRrnz6uy1eR0ND6rojneFdSi52ifsL+4JZi53+sC3nZCRrO
-         HF3xeI6L9Ul7w==
+        b=m5MqTAnMXAy1pvMEXAEZdXJZtrDqtEAGcnA2BkHitBVjmmGYv0J/kQmK8CXvfyCkA
+         hMKn02xxBOMA6z+iCB3jm4OD8zgaysiqqwDXSK/fsWgY6DU67uZcF1qa99bgtQTBtn
+         PICT1eMQkN50Qz1Z5I14OogR0EdsfgAmMenPxkerG8tAKnD6PjjobXWlJLn5bP6Ioi
+         6J0AbbSJHJpke5Jo0w8JB4MNLXv+hWzPcOjoQ1k7EGPMi2q7bl6s8r3WWJ5Z1uocrg
+         +kku1Z/BgC7nSVO1cjBblxl8445b7KRh4rABfz3TEBkdZdurEMp6bnkGfwwsFeKuCS
+         Y6oQzErcdsYug==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-sgx@vger.kernel.org
 Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
@@ -39,16 +39,16 @@ Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Paul Menzel <pmenzel@molgen.mpg.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>, stable@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
         "H. Peter Anvin" <hpa@zytor.com>,
         linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
         64-BIT))
-Subject: [PATCH 1/2] x86/sgx: Do not fail on incomplete sanitization on premature stop of ksgxd
-Date:   Sat,  3 Sep 2022 09:01:07 +0300
-Message-Id: <20220903060108.1709739-2-jarkko@kernel.org>
+Subject: [PATCH 2/2] x86/sgx: Handle VA page allocation failure for EAUG on PF.
+Date:   Sat,  3 Sep 2022 09:01:08 +0300
+Message-Id: <20220903060108.1709739-3-jarkko@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220903060108.1709739-1-jarkko@kernel.org>
 References: <20220903060108.1709739-1-jarkko@kernel.org>
@@ -64,141 +64,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unsanitized pages trigger WARN_ON() unconditionally, which can panic the
-whole computer, if /proc/sys/kernel/panic_on_warn is set.
+From: Haitao Huang <haitao.huang@linux.intel.com>
 
-In sgx_init(), if misc_register() fails or misc_register() succeeds but
-neither sgx_drv_init() nor sgx_vepc_init() succeeds, then ksgxd will be
-prematurely stopped. This may leave unsanitized pages, which will result a
-false warning.
+VM_FAULT_NOPAGE is expected behaviour for -EBUSY failure path, when
+augmenting a page, as this means that the reclaimer thread has been
+triggered, and the intention is just to round-trip in ring-3, and
+retry with a new page fault.
 
-Refine __sgx_sanitize_pages() to return:
-
-1. Zero when the sanitization process is complete or ksgxd has been
-   requested to stop.
-2. The number of unsanitized pages otherwise.
-
-Use the return value as the criteria for triggering output, and tone down
-the output to pr_err() to prevent the whole system to be taken down if for
-some reason sanitization process does not complete.
-
-Link: https://lore.kernel.org/linux-sgx/20220825051827.246698-1-jarkko@kernel.org/T/#u
-Fixes: 51ab30eb2ad4 ("x86/sgx: Replace section->init_laundry_list with sgx_dirty_page_list")
-Cc: stable@vger.kernel.org # v5.13+
-Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Fixes: 5a90d2c3f5ef ("x86/sgx: Support adding of pages to an initialized enclave")
+Signed-off-by: Haitao Huang <haitao.huang@linux.intel.com>
+Tested-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
-v7:
-- Rewrote commit message.
-- Do not return -ECANCELED on premature stop. Instead use zero both
-  premature stop and complete sanitization.
-
-v6:
-- Address Reinette's feedback:
-  https://lore.kernel.org/linux-sgx/Yw6%2FiTzSdSw%2FY%2FVO@kernel.org/
-
-v5:
-- Add the klog dump and sysctl option to the commit message.
-
 v4:
-- Explain expectations for dirty_page_list in the function header, instead
-  of an inline comment.
-- Improve commit message to explain the conditions better.
-- Return the number of pages left dirty to ksgxd() and print warning after
-  the 2nd call, if there are any.
+* Remove extra white space.
 
 v3:
-- Remove WARN_ON().
-- Tuned comments and the commit message a bit.
+* Added Reinette's ack.
 
 v2:
-- Replaced WARN_ON() with optional pr_info() inside
-  __sgx_sanitize_pages().
-- Rewrote the commit message.
-- Added the fixes tag.
+* Removed reviewed-by, no other changes.
 ---
- arch/x86/kernel/cpu/sgx/main.c | 33 ++++++++++++++++++++++++++-------
- 1 file changed, 26 insertions(+), 7 deletions(-)
+ arch/x86/kernel/cpu/sgx/encl.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 515e2a5f25bb..c0a5ce19c608 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -49,17 +49,23 @@ static LIST_HEAD(sgx_dirty_page_list);
-  * Reset post-kexec EPC pages to the uninitialized state. The pages are removed
-  * from the input list, and made available for the page allocator. SECS pages
-  * prepending their children in the input list are left intact.
-+ *
-+ * Contents of the @dirty_page_list must be thread-local, i.e.
-+ * not shared by multiple threads.
-+ *
-+ * Return 0 when sanitization was successful or kthread was stopped, and the
-+ * number of unsanitized pages otherwise.
-  */
--static void __sgx_sanitize_pages(struct list_head *dirty_page_list)
-+static unsigned long __sgx_sanitize_pages(struct list_head *dirty_page_list)
- {
-+	unsigned long left_dirty = 0;
- 	struct sgx_epc_page *page;
- 	LIST_HEAD(dirty);
- 	int ret;
- 
--	/* dirty_page_list is thread-local, no need for a lock: */
- 	while (!list_empty(dirty_page_list)) {
- 		if (kthread_should_stop())
--			return;
-+			return 0;
- 
- 		page = list_first_entry(dirty_page_list, struct sgx_epc_page, list);
- 
-@@ -92,12 +98,14 @@ static void __sgx_sanitize_pages(struct list_head *dirty_page_list)
- 		} else {
- 			/* The page is not yet clean - move to the dirty list. */
- 			list_move_tail(&page->list, &dirty);
-+			left_dirty++;
- 		}
- 
- 		cond_resched();
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+index f40d64206ded..9f13d724172e 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.c
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -347,8 +347,11 @@ static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
  	}
  
- 	list_splice(&dirty, dirty_page_list);
-+	return left_dirty;
- }
+ 	va_page = sgx_encl_grow(encl, false);
+-	if (IS_ERR(va_page))
++	if (IS_ERR(va_page)) {
++		if (PTR_ERR(va_page) == -EBUSY)
++			vmret = VM_FAULT_NOPAGE;
+ 		goto err_out_epc;
++	}
  
- static bool sgx_reclaimer_age(struct sgx_epc_page *epc_page)
-@@ -388,17 +396,28 @@ void sgx_reclaim_direct(void)
- 
- static int ksgxd(void *p)
- {
-+	unsigned long left_dirty;
-+
- 	set_freezable();
- 
- 	/*
- 	 * Sanitize pages in order to recover from kexec(). The 2nd pass is
- 	 * required for SECS pages, whose child pages blocked EREMOVE.
- 	 */
--	__sgx_sanitize_pages(&sgx_dirty_page_list);
--	__sgx_sanitize_pages(&sgx_dirty_page_list);
-+	left_dirty = __sgx_sanitize_pages(&sgx_dirty_page_list);
-+	pr_debug("%ld unsanitized pages\n", left_dirty);
- 
--	/* sanity check: */
--	WARN_ON(!list_empty(&sgx_dirty_page_list));
-+	left_dirty = __sgx_sanitize_pages(&sgx_dirty_page_list);
-+	/*
-+	 * Never expected to happen in a working driver. If it happens the bug
-+	 * is expected to be in the sanitization process, but successfully
-+	 * sanitized pages are still valid and driver can be used and most
-+	 * importantly debugged without issues. To put short, the global state
-+	 * of kernel is not corrupted so no reason to do any more complicated
-+	 * rollback.
-+	 */
-+	if (left_dirty)
-+		pr_err("%ld unsanitized pages\n", left_dirty);
- 
- 	while (!kthread_should_stop()) {
- 		if (try_to_freeze())
+ 	if (va_page)
+ 		list_add(&va_page->list, &encl->va_pages);
 -- 
 2.37.2
 

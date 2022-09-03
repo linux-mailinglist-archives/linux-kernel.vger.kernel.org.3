@@ -2,91 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0545ABD6F
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F565ABD6B
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbiICGZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 02:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
+        id S232026AbiICGRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 02:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiICGZo (ORCPT
+        with ESMTP id S229515AbiICGRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 02:25:44 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD625F9B6
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:25:42 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id n65-20020a17090a5ac700b001fbb4fad865so4018610pji.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 23:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=2aBg7pOkFNE7VKGxuLLp1g4emrck3wu0cGWeIb1Nuyg=;
-        b=e9NyOGCVOoHERqtP9FWbaLvdnL45HR9KJdZ6n+WU3RMhAAGCvxMOKrV5DdPrftiY0l
-         LqXv8VvH95AeYr3F5gCSXsK0PtXb1D4TgvkmgHuvrCNbpGCQXT5GxGpeWi2eYdhGQ4JS
-         eLrHIirNkkBnGsWiSi2IoOE1qCNiV+NA1sUjZ2VRbgXQV+Cp9bfbbYxVG5KjRJ/DnBvh
-         piCbB2scIySf2FVMPl3/B2gwdWPvrHgeuUa+c1dv9eX/TmmLAp3rm7JU/w+cxyOpH+qi
-         gtwWYbC0pcA6dFQGjGVubnIIW2FA75rUDsj4+TRLQfalT9XH8xplhL8d05HpbIzzwFzZ
-         JwoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=2aBg7pOkFNE7VKGxuLLp1g4emrck3wu0cGWeIb1Nuyg=;
-        b=6LDLmJ7pLGEizt7rtFg+XT0g+ZqNhQfWhKhH/bhWleYmklG4OJRzD5phoRV4SlWwVS
-         7Gd6d1oRys2aLcb/DZyKG4SQ3sgNNMBl3nyUH1Vsk8NgUa5GNGn0kbXL09mulY7wVQrO
-         NXE9bPl+hG9t/hREOoOxg+lIEokX16iKbX8fmH34jbTSBjygEppZxxzpbzBJtinEma5r
-         jIGGV6n2zutP56p7uYPQspOfI1QIVHMFnsr68tffQAzXLZ8M1p2fZPMh3IqajJxk+KvW
-         DveCWhIdR5JdaE0zBaM843w6atlcG/v15EkKiYvXjsWC9iLdQ5zhN9gcA+P0NUbci0cR
-         8q2g==
-X-Gm-Message-State: ACgBeo0bDO8OzjhVP7mxhZmYhP2mZ22yDivBYownEaJIta6xBKe6OmLn
-        aFqGczFXHhCNGqrm/rCvetyYv1QfuuXq3+Y7JhmnSXTlDkM=
-X-Google-Smtp-Source: AA6agR6sr4jNEq4k453W+zKpgGKqeDKMhvTASI0vrm279pLGh9U0TKPHnHYlraohiO7CBfX44Uq0dP6PnlIie7lH+UI=
-X-Received: by 2002:a17:90a:9f96:b0:1fa:b4fb:6297 with SMTP id
- o22-20020a17090a9f9600b001fab4fb6297mr8578755pjp.80.1662186342139; Fri, 02
- Sep 2022 23:25:42 -0700 (PDT)
+        Sat, 3 Sep 2022 02:17:17 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30663F0776;
+        Fri,  2 Sep 2022 23:17:15 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MKPf924XwzKDR9;
+        Sat,  3 Sep 2022 14:15:29 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP2 (Coremail) with SMTP id Syh0CgBH53Bn8RJjLm43AQ--.14139S4;
+        Sat, 03 Sep 2022 14:17:12 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     tj@kernel.org, axboe@kernel.dk
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: [PATCH] blk-throttle: clean up codes that can't be reached
+Date:   Sat,  3 Sep 2022 14:28:26 +0800
+Message-Id: <20220903062826.1099085-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-From:   Li Zhong <floridsleeves@gmail.com>
-Date:   Fri, 2 Sep 2022 23:25:31 -0700
-Message-ID: <CAMEuxRrg0nSroVGXwaCM1579Ddb822mY0hkSX5_Kcz1YqF_9sg@mail.gmail.com>
-Subject: [PATCH v1] drivers/base/auxiliary: check return value of strrchr()
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgBH53Bn8RJjLm43AQ--.14139S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxur1rJr47Gr4rGr45Jw4fXwb_yoWrAr4kpF
+        Wava13Aw1UXrsF9r43tw1DtFWFvws7X343t3y7Jw43trW2qw1qgF1kZa40vFWFyFZ7Wrs3
+        ZFn8KrWDGF4UC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Zhong <floridsleeves@gmail.com>
+From: Yu Kuai <yukuai3@huawei.com>
 
-The return value of strrchr() could be NULL, which will cause invalid
-offset in (int)(p - name). So we check it here.
+While doing code coverage testing while CONFIG_BLK_DEV_THROTTLING_LOW is
+disabled, we found that there are many codes can never be reached.
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+This patch move such codes inside "#ifdef CONFIG_BLK_DEV_THROTTLING_LOW".
+
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/base/auxiliary.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ block/blk-throttle.c | 90 +++++++++++++++++++++++++++-----------------
+ 1 file changed, 56 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/base/auxiliary.c b/drivers/base/auxiliary.c
-index 8c5e65930617..7ac23be47e1f 100644
---- a/drivers/base/auxiliary.c
-+++ b/drivers/base/auxiliary.c
-@@ -191,7 +191,8 @@ static int auxiliary_uevent(struct device *dev,
-struct kobj_uevent_env *env)
-
-  name = dev_name(dev);
-  p = strrchr(name, '.');
--
-+ if (!p)
-+ return -EINVAL;
-  return add_uevent_var(env, "MODALIAS=%s%.*s", AUXILIARY_MODULE_PREFIX,
-        (int)(p - name), name);
+diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+index 9f5fe62afff9..667b2958471a 100644
+--- a/block/blk-throttle.c
++++ b/block/blk-throttle.c
+@@ -1673,6 +1673,40 @@ struct blkcg_policy blkcg_policy_throtl = {
+ 	.pd_free_fn		= throtl_pd_free,
+ };
+ 
++void blk_throtl_cancel_bios(struct request_queue *q)
++{
++	struct cgroup_subsys_state *pos_css;
++	struct blkcg_gq *blkg;
++
++	spin_lock_irq(&q->queue_lock);
++	/*
++	 * queue_lock is held, rcu lock is not needed here technically.
++	 * However, rcu lock is still held to emphasize that following
++	 * path need RCU protection and to prevent warning from lockdep.
++	 */
++	rcu_read_lock();
++	blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg) {
++		struct throtl_grp *tg = blkg_to_tg(blkg);
++		struct throtl_service_queue *sq = &tg->service_queue;
++
++		/*
++		 * Set the flag to make sure throtl_pending_timer_fn() won't
++		 * stop until all throttled bios are dispatched.
++		 */
++		blkg_to_tg(blkg)->flags |= THROTL_TG_CANCELING;
++		/*
++		 * Update disptime after setting the above flag to make sure
++		 * throtl_select_dispatch() won't exit without dispatching.
++		 */
++		tg_update_disptime(tg);
++
++		throtl_schedule_pending_timer(sq, jiffies + 1);
++	}
++	rcu_read_unlock();
++	spin_unlock_irq(&q->queue_lock);
++}
++
++#ifdef CONFIG_BLK_DEV_THROTTLING_LOW
+ static unsigned long __tg_last_low_overflow_time(struct throtl_grp *tg)
+ {
+ 	unsigned long rtime = jiffies, wtime = jiffies;
+@@ -1777,39 +1811,6 @@ static bool throtl_hierarchy_can_upgrade(struct throtl_grp *tg)
+ 	return false;
  }
+ 
+-void blk_throtl_cancel_bios(struct request_queue *q)
+-{
+-	struct cgroup_subsys_state *pos_css;
+-	struct blkcg_gq *blkg;
+-
+-	spin_lock_irq(&q->queue_lock);
+-	/*
+-	 * queue_lock is held, rcu lock is not needed here technically.
+-	 * However, rcu lock is still held to emphasize that following
+-	 * path need RCU protection and to prevent warning from lockdep.
+-	 */
+-	rcu_read_lock();
+-	blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg) {
+-		struct throtl_grp *tg = blkg_to_tg(blkg);
+-		struct throtl_service_queue *sq = &tg->service_queue;
+-
+-		/*
+-		 * Set the flag to make sure throtl_pending_timer_fn() won't
+-		 * stop until all throttled bios are dispatched.
+-		 */
+-		blkg_to_tg(blkg)->flags |= THROTL_TG_CANCELING;
+-		/*
+-		 * Update disptime after setting the above flag to make sure
+-		 * throtl_select_dispatch() won't exit without dispatching.
+-		 */
+-		tg_update_disptime(tg);
+-
+-		throtl_schedule_pending_timer(sq, jiffies + 1);
+-	}
+-	rcu_read_unlock();
+-	spin_unlock_irq(&q->queue_lock);
+-}
+-
+ static bool throtl_can_upgrade(struct throtl_data *td,
+ 	struct throtl_grp *this_tg)
+ {
+@@ -2005,7 +2006,6 @@ static void blk_throtl_update_idletime(struct throtl_grp *tg)
+ 	tg->checked_last_finish_time = last_finish_time;
+ }
+ 
+-#ifdef CONFIG_BLK_DEV_THROTTLING_LOW
+ static void throtl_update_latency_buckets(struct throtl_data *td)
+ {
+ 	struct avg_latency_bucket avg_latency[2][LATENCY_BUCKET_SIZE];
+@@ -2086,6 +2086,28 @@ static void throtl_update_latency_buckets(struct throtl_data *td)
+ static inline void throtl_update_latency_buckets(struct throtl_data *td)
+ {
+ }
++
++static void blk_throtl_update_idletime(struct throtl_grp *tg)
++{
++}
++
++static void throtl_downgrade_check(struct throtl_grp *tg)
++{
++}
++
++static void throtl_upgrade_check(struct throtl_grp *tg)
++{
++}
++
++static bool throtl_can_upgrade(struct throtl_data *td,
++	struct throtl_grp *this_tg)
++{
++	return false;
++}
++
++static void throtl_upgrade_state(struct throtl_data *td)
++{
++}
+ #endif
+ 
+ bool __blk_throtl_bio(struct bio *bio)
 -- 
-2.25.1
+2.31.1
+

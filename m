@@ -2,139 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87BE5ABD7B
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F52F5ABD7C
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 08:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiICGlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 02:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S232500AbiICGmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 02:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiICGk5 (ORCPT
+        with ESMTP id S232463AbiICGmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 02:40:57 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752E683F1C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662187256; x=1693723256;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GLkS8X/L6JyR/IBCAjWP7fA2pbEBDyBvO/x518Ie630=;
-  b=nppvNkhWJYOS98g57VmdA8p9EQgB/VEGBt3K6Lx1/aEELNrOeOrGRZ//
-   DHvaAijfUnxUQ6t9CE5dOWNkvvdxHz0Vs/+CXRdWFh1PTuSpw0cK0LQUo
-   OE4e085kSmQT7042Cuq0qOylMVpeTnM6YYbQ7fY03uDlzwc42JmWrt50o
-   lKzlaZu9NMwiUvcwuhjZvr5kLrNBZZEIluH0kqqsd9EJbY8ly0KAhZBhw
-   dLeE0ha7I78/JTNByx8JmVNJJcMMpI8K1FVjmQkuyjkln+ENQt+jC3Hp7
-   2PMVND7e3I21LNQtaTVZh/UlV6AAlQsbHkecg65oj8DIYpHl+sKrlOfuc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="283125227"
-X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="283125227"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 23:40:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
-   d="scan'208";a="564196882"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 02 Sep 2022 23:40:54 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUMpq-0001BY-0n;
-        Sat, 03 Sep 2022 06:40:54 +0000
-Date:   Sat, 03 Sep 2022 14:40:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/mm] BUILD SUCCESS
- c0d2e63d4c618185cdd92faae10bdde33a00c25d
-Message-ID: <6312f6e5.bXP/pfoHt6oYDRmV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 3 Sep 2022 02:42:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA670B07E2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 23:42:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 764A1B82E81
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:42:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F097C433C1;
+        Sat,  3 Sep 2022 06:42:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662187337;
+        bh=rKNMGllfZe2l+RKwVXIACnwY+MJaVa2QnM3LCCg3Ti0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JHCAvDcTdxtT8P/IqYrNgv2IQOTF6F2IwmNanQsAQIvqUcns+CopD7TtCYuemx3ro
+         RQuVYV9mFqg0HlPhGMSyq+HexU9GjKTl1+y4tHMiHpsL3X5KkZVBurFIEsD1sNg0c+
+         v3spVnURYqsoxWh9dZX0EG/KvGIQpFxftzI28piA=
+Date:   Sat, 3 Sep 2022 08:42:35 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [GIT PULL] Driver core fixes for 6.0-rc4
+Message-ID: <YxL3W3Sb0AMMt01T@kroah.com>
+References: <YxIht+ev+gXsF6ZD@kroah.com>
+ <CAHk-=whnNO4T9PHNC1DT35sROGNK_geKL0Q_EjZH=0sLoACPHw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whnNO4T9PHNC1DT35sROGNK_geKL0Q_EjZH=0sLoACPHw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
-branch HEAD: c0d2e63d4c618185cdd92faae10bdde33a00c25d  x86/defconfig: Enable CONFIG_DEBUG_WX=y
+On Fri, Sep 02, 2022 at 11:02:00AM -0700, Linus Torvalds wrote:
+> On Fri, Sep 2, 2022 at 8:31 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-6.0-rc4
+> 
+> Entirely unrelated to this pull request, but since the diffstat made
+> that "drivers/base/dd.c" file stand out, I tried to look at what the
+> history of that odd name is.
+> 
+> And it's not obvious to me.
+> 
+> Very strange filename. Should it perhaps be named "device.c" or
+> "probe.c" or something more descriptive?
+> 
+> Not a huge deal, more of a passing thought inspired by that diffstat.
 
-elapsed time: 1071m
+I think Pat named it and I always think of it as "device vs. driver".c
+as it handles all of the device and driver interactions between binding
+and unbinding and other fun logic there.  I'm all for a new name if
+anyone has any ideas, "probe.c" is sane, but it also handles disconnect
+logic.  "core.c" already has lots of device functions, so renaming it to
+"device.c" would be confusing.  I don't know...
 
-configs tested: 57
-configs skipped: 2
+Yeah, in digging, Pat did this in commit 07e4a3e27fe4 ("[PATCH] Move
+device/driver code to drivers/base/dd.c") way back in 2005 to get code
+out of drivers/base/bus.c.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Naming is hard :)
 
-gcc tested configs:
-alpha                            allyesconfig
-arc                              allyesconfig
-um                             i386_defconfig
-m68k                             allmodconfig
-um                           x86_64_defconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-arc                  randconfig-r043-20220901
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a002
-x86_64                           allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a006
-x86_64                        randconfig-a011
-x86_64                        randconfig-a004
-x86_64                        randconfig-a015
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-i386                          randconfig-a014
-x86_64                           rhel-8.3-syz
-i386                             allyesconfig
-i386                          randconfig-a001
-x86_64                           rhel-8.3-kvm
-i386                          randconfig-a012
-i386                          randconfig-a003
-i386                          randconfig-a016
-i386                          randconfig-a005
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20220901
-hexagon              randconfig-r045-20220901
-riscv                randconfig-r042-20220901
-s390                 randconfig-r044-20220901
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a002
-i386                          randconfig-a015
-i386                          randconfig-a006
-i386                          randconfig-a004
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

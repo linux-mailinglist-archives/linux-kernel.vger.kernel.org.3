@@ -2,110 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C4C5ABCBF
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 06:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983325ABCC9
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 06:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbiICEKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 00:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S231740AbiICETz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 00:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiICEKO (ORCPT
+        with ESMTP id S229520AbiICETw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 00:10:14 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563A23C8EF;
-        Fri,  2 Sep 2022 21:10:10 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l5so3672804pjy.5;
-        Fri, 02 Sep 2022 21:10:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=r84HFZkccUaYxXvM6ffE71pSzkEJB1JiTaWDdFI/JxQ=;
-        b=C5MfrO1BY1KiK8U6JzLrqfVebZxALepPdQ9593bpS5te1fjZQabFuGphOSYrnOin+n
-         MUM6zDFeyfoyPRN8Z5Q0P+aS2p0PeRqyjZubCQgHgshZV5OrAQjW9lfc1HdwkQCT3gg8
-         KvaA3fWjLXjFT1QtQf/EGxlb2edpQgmnbK0OBtWPrhCI85xmIWvyGE5AKg/3UfKXAaVx
-         fLUi9KmlN6NzMCiCyrsPw0Td/nIi+T0YSTZuFzRbIa6Nifz5wmHcYTEqf6yjsX8G7Qz4
-         j9hD4pKRUqnLMKDbzi4gkYKpvXP4550VbR7cjFofTGsj6OFN0NHK5qgJzkuS+jtQim5a
-         BEgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=r84HFZkccUaYxXvM6ffE71pSzkEJB1JiTaWDdFI/JxQ=;
-        b=wT0AqLOFMrHevpE2sgNm4HOFaHs/83ZTHa0cegHSrX36cLTZfyNfxkBdGNwe6fcqia
-         IHcNsai+TAEAsLuGcdr6btX59PfBVN6TndynkBOcfrL6JrAa5+her3xfSXfttDRKEb05
-         lOjV9wqI2mv+5qdTf+0RbpkruSsiUIbfsxSknrOx7eKAT61lwf0/e2aPSiEKpB5bgzKR
-         K4k219qs3t5+w+jXHlUUv5Kg+83EqHcaaPO6RrYmy2mNM0w7sV6x96vIKWna9sqlr5GW
-         B/9NhRBkX9bmYIhNMMDIJWAvOD/UxbXz3IonK12mfxthWAX//aGWFxuRV/cGCSnJiTM2
-         knPQ==
-X-Gm-Message-State: ACgBeo3RoP++IFPGZK+Lu4t+GSrOaGTWi7GYRgBgANEqZFsAUmse/663
-        o+TGA/BKc6h9sQ/G7s3M3N8=
-X-Google-Smtp-Source: AA6agR6tQ3PDFiAsBa8QPuN9Q/RtdDLNaMAKvO12FPgGta6FIq3eXB7290w1VSBf0uqyz6Fd6KUiIA==
-X-Received: by 2002:a17:90b:1b0f:b0:1fd:e29c:d8e1 with SMTP id nu15-20020a17090b1b0f00b001fde29cd8e1mr8294675pjb.118.1662178210092;
-        Fri, 02 Sep 2022 21:10:10 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-88.three.co.id. [180.214.232.88])
-        by smtp.gmail.com with ESMTPSA id l15-20020a170903120f00b0017508d2665dsm2525538plh.34.2022.09.02.21.10.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 21:10:09 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E576410024C; Sat,  3 Sep 2022 11:10:05 +0700 (WIB)
-Date:   Sat, 3 Sep 2022 11:10:05 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/73] 5.15.65-rc1 review
-Message-ID: <YxLTnTHpP6YxpNPi@debian.me>
-References: <20220902121404.435662285@linuxfoundation.org>
+        Sat, 3 Sep 2022 00:19:52 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD1B2E9C8;
+        Fri,  2 Sep 2022 21:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662178790; x=1693714790;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/XdTWVITF6pH27tSJB4d8eknbMi4ORepldVdA6NqxSs=;
+  b=cAQF5blAtX5gKvj9+Ssl6UJapHuAbZA6mkz22731qQkDHzwFN2s4VzDn
+   N9pOE4cOyMRTwWGryu0zDshQ1pwRhwJUcRsq3auBHWKA0/UFkeORdy3B8
+   m4ltKFJfzc610TKv92q7SzQTY5qZU2cv0L33iZUuCUaCSSvp+25CUnmwE
+   xb5IIeqE0iOIz3FzwLzSZBJx7RWAASUGUjweNujiJdzYVZ5surqH4Jddn
+   ZDD6lYmAjOCXpTjT3Aw/8GQtk28bCzReCQSBx200XH+4bhrUf4WATeR32
+   i6ux2T+eNfDSfOwJhr5z5xD3pn5zeRzeg757ktXPFnkyWcD4/WcBITZCq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="360085431"
+X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
+   d="scan'208";a="360085431"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 21:19:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,286,1654585200"; 
+   d="scan'208";a="702349342"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Sep 2022 21:19:47 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUKdG-00012f-2w;
+        Sat, 03 Sep 2022 04:19:46 +0000
+Date:   Sat, 3 Sep 2022 12:18:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     kbuild-all@lists.01.org, Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Subject: Re: [PATCH v2 3/3] PCI/PM: Always disable PTM for all devices during
+ suspend
+Message-ID: <202209031256.McjuB8mz-lkp@intel.com>
+References: <20220902233543.390890-4-helgaas@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="34utSIO2zxgtLw/3"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220902121404.435662285@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220902233543.390890-4-helgaas@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bjorn,
 
---34utSIO2zxgtLw/3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Yet something to improve:
 
-On Fri, Sep 02, 2022 at 02:18:24PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.65 release.
-> There are 73 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-=20
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Helgaas/PCI-PM-Always-disable-PTM-for-all-devices-during-suspend/20220903-073808
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220903/202209031256.McjuB8mz-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/809e1c954b459ee37193c4ab9fa843243fbd7fa9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bjorn-Helgaas/PCI-PM-Always-disable-PTM-for-all-devices-during-suspend/20220903-073808
+        git checkout 809e1c954b459ee37193c4ab9fa843243fbd7fa9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
---=20
-An old man doll... just what I always wanted! - Clara
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
---34utSIO2zxgtLw/3
-Content-Type: application/pgp-signature; name="signature.asc"
+All errors (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+   drivers/pci/pci-driver.c: In function 'pci_pm_runtime_resume':
+>> drivers/pci/pci-driver.c:1350:22: error: 'struct pci_dev' has no member named 'ptm_enabled'; did you mean 'ats_enabled'?
+    1350 |         if (pci_dev->ptm_enabled)
+         |                      ^~~~~~~~~~~
+         |                      ats_enabled
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYxLTmAAKCRD2uYlJVVFO
-oxRCAQCFJR64NLywovtHbRPHxPWQNa/V4GEraKGLpD1qeKzJ/AEApxfGuD9K/G4C
-bkWjTn502cRfrshJPkAXvltKFnXWQww=
-=ph7l
------END PGP SIGNATURE-----
 
---34utSIO2zxgtLw/3--
+vim +1350 drivers/pci/pci-driver.c
+
+  1335	
+  1336	static int pci_pm_runtime_resume(struct device *dev)
+  1337	{
+  1338		struct pci_dev *pci_dev = to_pci_dev(dev);
+  1339		const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+  1340		pci_power_t prev_state = pci_dev->current_state;
+  1341		int error = 0;
+  1342	
+  1343		/*
+  1344		 * Restoring config space is necessary even if the device is not bound
+  1345		 * to a driver because although we left it in D0, it may have gone to
+  1346		 * D3cold when the bridge above it runtime suspended.
+  1347		 */
+  1348		pci_pm_default_resume_early(pci_dev);
+  1349	
+> 1350		if (pci_dev->ptm_enabled)
+  1351			pci_enable_ptm(pci_dev, NULL);
+  1352	
+  1353		if (!pci_dev->driver)
+  1354			return 0;
+  1355	
+  1356		pci_fixup_device(pci_fixup_resume_early, pci_dev);
+  1357		pci_pm_default_resume(pci_dev);
+  1358	
+  1359		if (prev_state == PCI_D3cold)
+  1360			pci_pm_bridge_power_up_actions(pci_dev);
+  1361	
+  1362		if (pm && pm->runtime_resume)
+  1363			error = pm->runtime_resume(dev);
+  1364	
+  1365		return error;
+  1366	}
+  1367	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

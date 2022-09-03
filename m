@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB60E5AC15D
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 22:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E135AC15E
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 22:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233492AbiICU3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 16:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S230507AbiICU3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 16:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbiICU3L (ORCPT
+        with ESMTP id S233355AbiICU3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 16:29:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C413F5245A;
-        Sat,  3 Sep 2022 13:29:10 -0700 (PDT)
+        Sat, 3 Sep 2022 16:29:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8362350727;
+        Sat,  3 Sep 2022 13:29:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F04960DE7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 419A3B80BAA;
+        Sat,  3 Sep 2022 20:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EBE17C433C1;
         Sat,  3 Sep 2022 20:29:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BB62CC433C1;
-        Sat,  3 Sep 2022 20:29:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662236949;
-        bh=5565w3/bwkb3qWieTCNNWPDqPqESCuufpbO7asrfnMg=;
+        s=k20201202; t=1662236951;
+        bh=Yh2FGLdGSTMaVVCLjZEu9qf1zvs2khzdtw/oOGyW48E=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Sp+edGZ6ZtUpv2HyQInbQPXbpQvPzEawP2/INlpDnifZLv770+O5dtQklruGSfGrf
-         JEDfBphGWyqtaocrtdbuLBz5W94Jf3QBdVX+uuzF+w63jPWrPu4mdAWxAh0OJW0321
-         wlE2WCIgdjPo3QpROzGH5KotuSOH2PfdoKhJfbvaRyrvAwhLSgre14LeTuGDn/4rOJ
-         tsVy183S+cEr0YgeuGG7UsSfaeMhLgzi6FIQQUmSip4BK3X3Q+bEDWq6RGiNuE/oqm
-         ekZoufjVzKOipazOSX2ias0UQw/hn8Efl07wHs5KSUU//w+2/efhk3jufg1k0vhsk5
-         gnkDNuIwTXIsw==
+        b=doBqrcJ48sPmCx32T7vaJNRvMk3wtZ6WoDSVWxuL0LvI59Nu/CloCt489Q2y4lUTF
+         dlKQcgXrRmqhn1DCQ3X8LkW1U59JjXm2Fyl8HRAhjZU+jV/qZhyn306bi3eCStvOrj
+         mAXUPr3dbp3PvRRj9m6chdzu+vPqL/XlPR2Lg76r0p7xKkm6QGqyFhSCJmvL43qZAW
+         WRtuZ569J0QY0tpXLb/zbW7OLjgfCkzNQ7Y07cTPA/t0iB+nqiHwlmXVrM5/rmTn0R
+         W7uag97NiheLaWhfIV2B+tOcL3ToPJL4F4jqzD/6Wg9yqRafGJvjFRNen7qehs9XFe
+         7RtjXvX/7YxNQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A94E0E924D9;
-        Sat,  3 Sep 2022 20:29:09 +0000 (UTC)
-Subject: Re: [GIT PULL] s390 updates for 6.0-rc4
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB42EE924D9;
+        Sat,  3 Sep 2022 20:29:10 +0000 (UTC)
+Subject: Re: [git pull] Input updates for v6.0-rc3
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <your-ad-here.call-01662197774-ext-9772@work.hours>
-References: <your-ad-here.call-01662197774-ext-9772@work.hours>
-X-PR-Tracked-List-Id: <linux-s390.vger.kernel.org>
-X-PR-Tracked-Message-Id: <your-ad-here.call-01662197774-ext-9772@work.hours>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.0-3
-X-PR-Tracked-Commit-Id: 7c8d42fdf1a84b1a0dd60d6528309c8ec127e87c
+In-Reply-To: <YxOzfPVU+ogFrEb8@google.com>
+References: <YxOzfPVU+ogFrEb8@google.com>
+X-PR-Tracked-List-Id: <linux-input.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YxOzfPVU+ogFrEb8@google.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.0-rc3
+X-PR-Tracked-Commit-Id: 9c9c71168f7979f3798b61c65b4530fbfbcf19d1
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cda9a8486c48f09dabfec0c17ab109e352fe368e
-Message-Id: <166223694968.8828.4720583457733412215.pr-tracker-bot@kernel.org>
-Date:   Sat, 03 Sep 2022 20:29:09 +0000
-To:     Vasily Gorbik <gor@linux.ibm.com>
+X-PR-Merge-Commit-Id: 6433fe06f698936e02f79bf18f69be766e4f53aa
+Message-Id: <166223695089.8828.13485836366674501098.pr-tracker-bot@kernel.org>
+Date:   Sat, 03 Sep 2022 20:29:10 +0000
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 3 Sep 2022 11:36:14 +0200:
+The pull request you sent on Sat, 3 Sep 2022 13:05:16 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.0-3
+> git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.0-rc3
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cda9a8486c48f09dabfec0c17ab109e352fe368e
+https://git.kernel.org/torvalds/c/6433fe06f698936e02f79bf18f69be766e4f53aa
 
 Thank you!
 

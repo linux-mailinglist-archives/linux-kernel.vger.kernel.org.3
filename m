@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2555AC0DF
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3772E5AC0E2
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiICSlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 14:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
+        id S232782AbiICSmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 14:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiICSlp (ORCPT
+        with ESMTP id S232681AbiICSmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 14:41:45 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A128707;
-        Sat,  3 Sep 2022 11:41:44 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id kh8so3833193qvb.1;
-        Sat, 03 Sep 2022 11:41:44 -0700 (PDT)
+        Sat, 3 Sep 2022 14:42:14 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5229731DF6
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 11:42:12 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id y18so3762705qtv.5
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 11:42:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=R+6fr3Z46+up0wQuivCog9HCcCTNyVOBY73hRlyB6EY=;
-        b=eUWcwbV9/QYS4UNYw5GnHynYy3Dwg7BqVnua3yKsPmEk/nTJKTlmpwUWOxVBwawMgK
-         8xCynUVFW1ebLJhmW5GSCGXrMjB2ej1kAHU/OKEVu50798pd9gipegQHhDtC592xd8e1
-         qLRLEP1sM+c03FYmSiP1SLHmsPDFqfXXwa3rP7VAzHAE4zM2LfnPw+MoFdo4suq9Kw3Q
-         lVQls+EbFFR98DNi07NH9KSkxvczJSLbqmRq24/ajvl+GpkM/FUX/x5G43c42OFmBnW8
-         vR+haAw4aSMkWKZjqdDQVlIYzXiqmLwRbvcv6CFnx3rXpDUxdu7sK0TO/zhTyBdZX9aA
-         RH3A==
+        bh=J6XE1O2ZWCpY/clzvoN88TJg9PZ0eb26xbhiVvKP4lo=;
+        b=ZLRqn/c0+rzTsE0ll2clObgAAimBVEPP9MBpfugRmWtY5mYL5FNjYMzFbDhaVOvk4T
+         ee4RwcJLQ0DN4yFn7iFLl+BZZyGL0FQizewfH+HGkeRu7msjQCNQ98DgC4h8tNwX1em/
+         KQw6LehBXLAFtmcDQUNJ+iX0dD2D3QBGbzpgbjXmmiJxZbhh+2GsXq2aYwIN3/UZQvIX
+         y0Nl8CMK1TEXvQ/QsnQgPP6Iw3XZW1clbatqKuGfdHIQUEznNwz+JGDcMlqKOCxNgxbm
+         jH6k1U6aRneVWVKg3nLs7TJlwG7WAv3PtJUdRA/KGJmmHvoBtFmitCqAZv4KkJjjD/DB
+         prcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=R+6fr3Z46+up0wQuivCog9HCcCTNyVOBY73hRlyB6EY=;
-        b=vFvxECCJUSLhgkAV70zL2d4PQPwMWB8lthltPWqhCmEKhlcBBfLuwTGZjnbZnXVS1J
-         T6Ult8+HLFgBW53sj+dVSLYBa9s2XZePjkaZdocI3JcW9UotlXyhKorRo/rvGIelrV2s
-         /Y1KqMBOW3ROKC9HaW4FHwcsykU4PP6zN6lq0zGU0CAXj6TerAbNiXJMzjqGk8C89eWS
-         sJCZXNk8eX8WKqVJRnSZQ9Cdo0xSzbMwvmwD0Kgx8l6VlqhkYOgRgi8Vb1vd0xk8tb+Q
-         OPbglp8I8zLe6Rc117N7kWqtTouq3GecMkI6x5v7jq+htnLkGvXQVHR2fb3gdkYqW8G/
-         6+aw==
-X-Gm-Message-State: ACgBeo3yj3NSa9AW1gIx+CUfw+d/A4wXGg+adbxbWR4d9+9xXD8r4gyE
-        B/86f2I7Sf3NhVYRiahiTjQ=
-X-Google-Smtp-Source: AA6agR79o/Sxqsj/ecrboICideMqI973um+6n0GYVre3ZB1RF9tuMHTKi1o6dOktrhnCT2D/a389dQ==
-X-Received: by 2002:a0c:df8d:0:b0:49e:47f2:c6ba with SMTP id w13-20020a0cdf8d000000b0049e47f2c6bamr2195009qvl.76.1662230503217;
-        Sat, 03 Sep 2022 11:41:43 -0700 (PDT)
+        bh=J6XE1O2ZWCpY/clzvoN88TJg9PZ0eb26xbhiVvKP4lo=;
+        b=1W2DYTF/2lKtlo/ETFNYWm84g5Fi1KYfPeUngvr3CIULI4tXsANWsT7GAkA6iZPAwv
+         Yn56QFcEnk5NczGS/NgFwZ13Yp0KVjbRqLus/EHJZmT1xfZD8LlLkfixCmYLteci178L
+         5V0lLAUz2+E5bEYRHdnulYpXmYGpWqx+dJ6KHmu/kxCNIDKhjVPMn7suUvPyGD4MKjEH
+         mESdVFwqRQxIn+II/BgYluypxvvkSmTxsBMIuUJOfykc8DWm7aEfzoqKDGDWDVBB0roS
+         g4Z9b6DOUdrkovkTFRv5WPyXviOFXcb+VUltRFjxH8Db7R0ZRhmqDTCf/FkLe8bjMvqV
+         5I3A==
+X-Gm-Message-State: ACgBeo3YjIJ1pitX6KWkT3MXGko+p05gz6Tvfwxaha7zr5Yfzn0zeHuz
+        AExHIq53i57weCoSaxX5EyM=
+X-Google-Smtp-Source: AA6agR7HxzIwTJ9RWwG3gXmLje2tPCj6V0jw/52dT39Mb7QmN934e3u3R0eV3Zbu5KvY9JGCDDU+hQ==
+X-Received: by 2002:a05:622a:1a01:b0:343:310d:fedf with SMTP id f1-20020a05622a1a0100b00343310dfedfmr34464267qtb.622.1662230531251;
+        Sat, 03 Sep 2022 11:42:11 -0700 (PDT)
 Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id m25-20020ac84459000000b00344cb66b860sm3496308qtn.38.2022.09.03.11.41.40
+        by smtp.gmail.com with ESMTPSA id o12-20020ac841cc000000b003430589dd34sm3390388qtm.57.2022.09.03.11.42.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Sep 2022 11:41:42 -0700 (PDT)
-Message-ID: <3e0a54a8-5cea-ba31-89a2-8bf1a5d9ec88@gmail.com>
-Date:   Sat, 3 Sep 2022 11:41:39 -0700
+        Sat, 03 Sep 2022 11:42:10 -0700 (PDT)
+Message-ID: <cdde4e0a-dfd7-51d7-0800-7ac124c34ff7@gmail.com>
+Date:   Sat, 3 Sep 2022 11:42:07 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
-Subject: Re: [PATCH] clk: iproc: Do not rely on node name for correct PLL
- setup
+Subject: Re: [PATCH 0/2] mtd: rawnand: brcmnand: Glue driver Kconfig entries
 Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>, linux-clk@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     rafal@milecki.pl, Michael Turquette <mturquette@baylibre.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-mtd@lists.infradead.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
-        "moderated list:BROADCOM IPROC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220803025836.107886-1-f.fainelli@gmail.com>
+        Roger Quadros <rogerq@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Colin Ian King <colin.king@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        William Zhang <william.zhang@broadcom.com>
+References: <20220711222323.4048197-1-f.fainelli@gmail.com>
+ <6008ef46-ccdb-ea01-f9fb-4f8fceed2d29@gmail.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220803025836.107886-1-f.fainelli@gmail.com>
+In-Reply-To: <6008ef46-ccdb-ea01-f9fb-4f8fceed2d29@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,28 +91,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 8/2/2022 7:58 PM, Florian Fainelli wrote:
-> After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
-> description") a warning from clk-iproc-pll.c was generated due to a
-> duplicate PLL name as well as the console stopped working. Upon closer
-> inspection it became clear that iproc_pll_clk_setup() used the Device
-> Tree node unit name as an unique identifier as well as a parent name to
-> parent all clocks under the PLL.
+On 8/4/2022 10:55 AM, Florian Fainelli wrote:
+> On 7/11/22 15:23, Florian Fainelli wrote:
+>> Hi all,
+>>
+>> This patch series allows for a finer control over the BRCMNAND driver
+>> glue driver selection such that it defaults to the various platforms
+>> enabled in the configuration file.
 > 
-> BCM5301X was the first platform on which that got noticed because of the
-> DT node unit name renaming but the same assumptions hold true for any
-> user of the iproc_pll_clk_setup() function.
-> 
-> The first 'clock-output-names' property is always guaranteed to be
-> unique as well as providing the actual desired PLL clock name, so we
-> utilize that to register the PLL and as a parent name of all children
-> clock.
-> 
-> Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Miquel are you able to review and apply those patches if satisfactory? Thanks!
 
-Stephen,
-
-Can we get this applied for an upcoming 6.0-rc? Thanks
+Ping?
 -- 
 Florian

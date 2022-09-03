@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3ABB5AC074
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBAE5AC076
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbiICR5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 13:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S233034AbiICR7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 13:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiICR5E (ORCPT
+        with ESMTP id S229612AbiICR7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 13:57:04 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6C53023;
-        Sat,  3 Sep 2022 10:57:03 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-334dc616f86so41016307b3.8;
-        Sat, 03 Sep 2022 10:57:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6Z8GKPwv0VpZ/qZskdH19bolEfM25JaWF8WrYodGaEA=;
-        b=xfvitAcCgC/r/bW0pcjdTbBSukBZvKgRwpA/wUObv0TPKF2iW74bpp7m9X6Oca1Glo
-         w+ClXo9GAjlhrq0OWX1PIYFgt3QgcCaNdJ+Gg02CGM1PNFexHxi8luxUgRqxr+xuk0NK
-         HyMm7Xfs3z9m7kOh1kj0FuYa5y2nFdhe81+FTdHhfYMqQhv5EVN2vDHVuxF9/RID7oqE
-         XQtRQMJvKcNA34N1DKInGZjx6ffIUTRJ3vXW1R+eQy9w4d2L8hfPTl5MsV+tMlzvlOjG
-         jDVdPkTlXbXiJFReBKmmhJ3LyvPhTZ84/QpzuRwQ39g82PiBW1WV5vOEcCysQFYP2Gqo
-         n4Yg==
-X-Gm-Message-State: ACgBeo2TvUy9GPgFXBilFWv1CmwFDOWg/2qijO0ZEZRiTCBiNeND0kD9
-        TnSRZDPXxlco5sDFr+xys+rgo4jUlK+lzYKC1YM=
-X-Google-Smtp-Source: AA6agR7JLebP8UxAPve8tgfo84lBxzbx6wgRHlv9HUdLlk3fI/fr3SLoR4I3bxBuuOiTGg/lOxi+zcGvtfX0R1TjtOY=
-X-Received: by 2002:a0d:e701:0:b0:336:90d7:c67a with SMTP id
- q1-20020a0de701000000b0033690d7c67amr31474683ywe.7.1662227822857; Sat, 03 Sep
- 2022 10:57:02 -0700 (PDT)
+        Sat, 3 Sep 2022 13:59:01 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0296653028;
+        Sat,  3 Sep 2022 10:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662227941; x=1693763941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HlaM+epqGJ7fpGSR39vLYKuzrDeEOiiUHDjsICgQbs4=;
+  b=fDn08d2ONpHfiKhg0YBtCMUndEekWnkoKomhIWrmb0fkRfmp+LhDWH6w
+   uQRngi06XVRv32qur8cXtbRTiozbRlXfxsZDvwhe+tTWecfAeFs99Yr0x
+   g24PpqMOrKwoWeMF7ikKUBpQEmQI/XTVNmbS7qXo2N6jzOrAsMPJoBGES
+   c8O5Y3d1H3Oe6cb/oOdTB3V5JRyEcwcVP+kvWTcc3rSyuDfOtPy6fmOmt
+   3CDzKhJM/k1Fu6XZL56Fj4g/a7D57aTutloqrbU5OtQknGYXFQ8Icg1Ct
+   wPFFDHLC2N62cDkbtZS90ASjv7wbcceBD98t6cgket7ZsMCx7MJ+utRR2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="297472589"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="297472589"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 10:59:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="564299002"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 03 Sep 2022 10:58:58 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUXQ1-00020D-1F;
+        Sat, 03 Sep 2022 17:58:57 +0000
+Date:   Sun, 4 Sep 2022 01:58:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     guoren@kernel.org, arnd@arndb.de, palmer@rivosinc.com,
+        tglx@linutronix.de, luto@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH 3/3] riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+Message-ID: <202209040118.GmG1Lby1-lkp@intel.com>
+References: <20220903163808.1954131-4-guoren@kernel.org>
 MIME-Version: 1.0
-References: <20220822123239.28400-1-yuanjilin@cdjrlc.com>
-In-Reply-To: <20220822123239.28400-1-yuanjilin@cdjrlc.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 3 Sep 2022 19:56:51 +0200
-Message-ID: <CAJZ5v0idwPoK_VoHXTNr+eGzq8+d2=Y0v1sxS7NmwX-PkvNSBA@mail.gmail.com>
-Subject: Re: [PATCH] drivers/thermal: fix repeated words in comments
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     Amit Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220903163808.1954131-4-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 2:32 PM Jilin Yuan <yuanjilin@cdjrlc.com> wrote:
->
->  Delete the redundant word 'device'.
->  Delete the redundant word 'which'.
->
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
-> ---
->  drivers/thermal/cpufreq_cooling.c | 2 +-
->  drivers/thermal/thermal_of.c      | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index b8151d95a806..13551b386e72 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -495,7 +495,7 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
->
->  /**
->   * __cpufreq_cooling_register - helper function to create cpufreq cooling device
-> - * @np: a valid struct device_node to the cooling device device tree node
-> + * @np: a valid struct device_node to the cooling device tree node
->   * @policy: cpufreq policy
->   * Normally this should be same as cpufreq policy->related_cpus.
->   * @em: Energy Model of the cpufreq policy
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index b65d435cb92f..91bbed308305 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -651,7 +651,7 @@ EXPORT_SYMBOL_GPL(devm_thermal_zone_of_sensor_register);
->  /**
->   * devm_thermal_zone_of_sensor_unregister - Resource managed version of
->   *                             thermal_zone_of_sensor_unregister().
-> - * @dev: Device for which which resource was allocated.
-> + * @dev: Device for which resource was allocated.
->   * @tzd: a pointer to struct thermal_zone_device where the sensor is registered.
->   *
->   * This function removes the sensor callbacks and private data from the
-> --
+Hi,
 
-Applied (as 6.1 material) under edited subject and with rewritten changelog.
+I love your patch! Perhaps something to improve:
 
-Thanks!
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209040118.GmG1Lby1-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6ed1ef93b372116f7d4586b13bfd352e19453740
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
+        git checkout 6ed1ef93b372116f7d4586b13bfd352e19453740
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/riscv/kernel/irq.c:48:6: warning: no previous prototype for 'do_softirq_own_stack' [-Wmissing-prototypes]
+      48 | void do_softirq_own_stack(void)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kernel/irq.c:74:25: warning: no previous prototype for 'handle_riscv_irq' [-Wmissing-prototypes]
+      74 | asmlinkage void noinstr handle_riscv_irq(struct pt_regs *regs)
+         |                         ^~~~~~~~~~~~~~~~
+   arch/riscv/kernel/irq.c:85:25: warning: no previous prototype for 'do_riscv_irq' [-Wmissing-prototypes]
+      85 | asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
+         |                         ^~~~~~~~~~~~
+
+
+vim +/do_softirq_own_stack +48 arch/riscv/kernel/irq.c
+
+    47	
+  > 48	void do_softirq_own_stack(void)
+    49	{
+    50		ulong *sp = per_cpu(irq_stack_ptr, smp_processor_id());
+    51	
+    52		call_on_stack(NULL, sp, do_riscv_softirq, 0);
+    53	}
+    54	#endif /* CONFIG_PREEMPT_RT */
+    55	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

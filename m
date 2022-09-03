@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF635AC1B3
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 01:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C645AC1B6
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 01:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiICXKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 19:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S230348AbiICXPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 19:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiICXKv (ORCPT
+        with ESMTP id S229493AbiICXPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 19:10:51 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14CA4BA5A;
-        Sat,  3 Sep 2022 16:10:49 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id b144so555704pfb.7;
-        Sat, 03 Sep 2022 16:10:49 -0700 (PDT)
+        Sat, 3 Sep 2022 19:15:12 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8A91F639;
+        Sat,  3 Sep 2022 16:15:10 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y136so399210pfb.3;
+        Sat, 03 Sep 2022 16:15:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=MTRyQeNwNmtbjly6m0NqygvjI275gpJb7kZzL+rHJ2w=;
-        b=EMCanUpSg48ofcHvYZZ62AUtfn3jLg9Ld74CDzZ6h3O5ErCHFO9JkPi3I4re9fj7J7
-         DsdhthaD2uz1iuZxz14zaFQQIUb5+pMyZrePU7gU1wvTrknnmvEG1VjZ2gidt8p95nna
-         IYyCdMjMgoYinVgnLybtZaMbTLWOpGU1lfqYb2hlZ42/VyixOgOnk17eQhHPT5SkGn+A
-         2Rm9lx20CsgVdenw3Snqbvv+X/Z94FZs90FU0Lncuo+bY5J4vUrTa2Gt6NbX0XPEXO75
-         zktj3I11VeSP1HXRZyf8UDtf3vztuwoswpPNmVRrkk2RvpRkBRDHbxSJzcQH+a1+JhzO
-         b29w==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=/UIVvNPGGuVuyXHfCkfmj/E2Gp1v4KdZ0mdzCPC+OYw=;
+        b=dAOkDv239fvFc7/ElwPWxTQH97P40kR/orJoA9Xlw9ccnznIfgqb7O7ekI18YfqFzL
+         CrbNXeJuh1WRELXO5l5EEyfLyPNCmvr5BcoUy/8utEYpzcqWRskhJK/8S1V+vcI6fP5F
+         G6dCyUGPo1QT5tC/KxnkhuQaO5MB6iYety1tAk0VMZEvWNxaH8mVOSDeWdF2E8lRdLQ0
+         sbzXagjXQM76ElnUNNA+bdtahiI0yYy9RbVitZe3tNynkJQgszj/zjNXVfexLscw/m7q
+         OUIg4Nl+Xgu/Uk36j/7Z4ZjsNGh4NNRTGrTjibMMqq4inQeMx7P28opw1ii3f2cO/yi+
+         25Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=MTRyQeNwNmtbjly6m0NqygvjI275gpJb7kZzL+rHJ2w=;
-        b=2objGE4+Vdx5K7LzipMSKxKTW9w5rCQGl3lHkuGQHo1a8EUGk098l87HFBD3PzMR2v
-         5MPSPGAR9ZgXX8GlvrxYeZFpJGMcmmeYMMinmKA/70jXpVLMV1HNiROfWJHUwv0A3w1L
-         0n9Qw5eqixm/72la+atux1UnszpbkjCnSCVzjAlKeKj3d/HWC67tjuxU339MU1EKvtPk
-         8k7iqcysCypsp6yPh0Szw9UUq2yBg4n6fTuil+crSJd0xUSfg6BZPRzhehHwPIk56fCf
-         wSfJF8rDcgu3uVbdY0NNMSg4SGCHrdMFSQqqD1swWotntoVvLSK44QHiUKOuDoNF7gXg
-         BT0g==
-X-Gm-Message-State: ACgBeo3BdhTt9bricV7Lwk2REFhFjApEkZylhe9nf+RfRubik1yKvF8z
-        q9ZVIyFeTfyI8xofUX2lZ84LJeFpH+S7sQ==
-X-Google-Smtp-Source: AA6agR45+pXNZR02/7Cfkl6KEYX/PdbuySpk+wI7mEklSiLX0ZR7hqbJmHg/4RP9mo6g3U0/QhYx2w==
-X-Received: by 2002:a05:6a00:ac6:b0:530:3197:48b6 with SMTP id c6-20020a056a000ac600b00530319748b6mr43260583pfl.80.1662246649085;
-        Sat, 03 Sep 2022 16:10:49 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id 26-20020a630d5a000000b00434272fe870sm934390pgn.88.2022.09.03.16.10.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 16:10:48 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org
-Cc:     damien.lemoal@opensource.wdc.com,
-        Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v2] ata: libata-core: Check errors in sata_print_link_status()
-Date:   Sat,  3 Sep 2022 16:10:39 -0700
-Message-Id: <20220903231039.2278817-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/UIVvNPGGuVuyXHfCkfmj/E2Gp1v4KdZ0mdzCPC+OYw=;
+        b=QN896bwRbdDJIk3Kec0qTDO8Y4EXzNUTMQlD7R4f6d6HyjqyMsXwdeurD/bWBqWa9E
+         zhVBJVIl8b6egETATO1boHZy7o2O4DG87HODo95HEPnEz7/rSFlJShFi6kXM4DumZdZg
+         aUoNQv5wmL7pHBTds6GmsztIwe0wLPb+xdRutXqB9njovEEvsznPboPmbvPNIxJvZ4OJ
+         u5TbjfiWqQzLkcFnF+nqzM6qO622qsEE2RFhEIZ6opZmPnEcYFMec1Yab4FRSHidJUca
+         yOAlMKhwzhxhTv9OOlK1+04jKLmcHDAWC6cjncFLKBphcxLF6ie/hOPafl322rGiZBFc
+         CelA==
+X-Gm-Message-State: ACgBeo1bH0Ksn2STTnomt/jqAX94rEYqJK1l1f/KTP7S7UuIf7EXvp6E
+        i+RVRT+8HEJoPxrRPhPI4VMawnVSwXfWkv1ImGesAJaZxg2tFg==
+X-Google-Smtp-Source: AA6agR43Cdz+UJ42BXrfaxVQWH39Ywbee/ktCZmqwsjoke9j9bXqOMVfSIGBra4PqrCx+G43S5ttLLDNt3JpF6Nynos=
+X-Received: by 2002:a63:62c3:0:b0:434:2b09:6f62 with SMTP id
+ w186-20020a6362c3000000b004342b096f62mr2166716pgb.374.1662246910212; Sat, 03
+ Sep 2022 16:15:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220826083612.1699194-1-floridsleeves@gmail.com>
+ <CAHp75VcdqL4wYnhEi8LrxqJktA2uDzP3a6-08suJRghX=1UZsg@mail.gmail.com>
+ <CAMEuxRqBEMdva3qEphvuYkFLpRjp=xg7vpqQT1oqb2AgkkG2+w@mail.gmail.com>
+ <2033d06d-10a4-5a57-d650-7541c39990ee@linux.intel.com> <CAMEuxRq6wn+wakYHGtnS_vSgpcw6aNOir=KyXWb12vPrOr76pA@mail.gmail.com>
+ <40e16474-99d2-2359-a545-4a437f555ec1@linux.intel.com>
+In-Reply-To: <40e16474-99d2-2359-a545-4a437f555ec1@linux.intel.com>
+From:   Li Zhong <floridsleeves@gmail.com>
+Date:   Sat, 3 Sep 2022 16:14:59 -0700
+Message-ID: <CAMEuxRpm5xNm2kEnhCSimoaCE3zSxbyoo7xUxNg74QrL7F6YUg@mail.gmail.com>
+Subject: Re: [PATCH v2] drivers/tty/serial: check the return value of uart_port_check()
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,28 +75,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sata_scr_read() could return negative error code on failure. Check the
-return value when reading the control register.
+On Tue, Aug 30, 2022 at 12:20 AM Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
+>
+> On Mon, 29 Aug 2022, Li Zhong wrote:
+>
+> > On Mon, Aug 29, 2022 at 12:09 AM Ilpo J=C3=A4rvinen
+> > <ilpo.jarvinen@linux.intel.com> wrote:
+> > >
+> > > On Sun, 28 Aug 2022, Li Zhong wrote:
+> > >
+> > > > On Fri, Aug 26, 2022 at 9:01 AM Andy Shevchenko
+> > > > <andy.shevchenko@gmail.com> wrote:
+> > > > >
+> > > > > On Fri, Aug 26, 2022 at 11:38 AM Li Zhong <floridsleeves@gmail.co=
+m> wrote:
+> > > > > >
+> > > > > > uart_port_check() will return NULL pointer when state->uart_por=
+t is
+> > > > > > NULL. Check the return value before dereference it to avoid
+> > > > > > null-pointer-dereference error.
+> > > > >
+> > > > > Have you taken the locking into consideration?
+> > > > > If no, please do, if yes, expand your commit message to explain w=
+hy
+> > > > > the current locking scheme doesn't prevent an error from happenin=
+g.
+> > > > >
+> > > >
+> > > > The locking is taken into consideration but these three checks do n=
+ot need to
+> > > > unlock in error-handling because unlock() will be called in the cal=
+lers. Will
+> > > > add the comment in v2 patch.
+> > >
+> > > I think he meant you should indicate why the current locking doesn't =
+cover
+> > > the case you're fixing, not whether this function should call unlock(=
+) or
+> > > not.
+> > >
+> >
+> > Thanks for clarifications. The locking does not guarantee the return va=
+lue of
+> > uart_port_check()  is not NULL.
+>
+> Please put such explanation into the commit message like Andy was asking,
+> thank you.
+>
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- drivers/ata/libata-core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks! I'll add this into the v3 patch.
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 826d41f341e4..ae08c7d35cb0 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -3021,7 +3021,8 @@ static void sata_print_link_status(struct ata_link *link)
- 
- 	if (sata_scr_read(link, SCR_STATUS, &sstatus))
- 		return;
--	sata_scr_read(link, SCR_CONTROL, &scontrol);
-+	if (sata_scr_read(link, SCR_CONTROL, &scontrol))
-+		return;
- 
- 	if (ata_phys_link_online(link)) {
- 		tmp = (sstatus >> 4) & 0xf;
--- 
-2.25.1
+> And make sure you properly mention what has changed for any new version
+> of any patch you send so that Greg don't need to auto-mail you about it
+> (and end up ignoring your patch).
+>
 
+I'll mention this in the commit message of new patch.
+
+> > Actually in line 773 of this file
+> > (drivers/tty/serial/serial_core.c), uart_port_check() is also called in
+> > critical section but still there is check on whether the return value i=
+s NULL.
+>
+> Existance of such a check elsewhere alone isn't enough to guarantee that
+> the check is necessary (and not even that the check in that other place
+> would be necessary). You need a deeper analysis than that. I'm not
+> claiming its either way here, just pointing out to the direction/details
+> you should consider while writing the analysis of the problem.
+>
+
+Thanks for the suggestions. We will try consider more factor into our analy=
+sis
+tools to reduce false postives.
+
+>
+> --
+>  i.

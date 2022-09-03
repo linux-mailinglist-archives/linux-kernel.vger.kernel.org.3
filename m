@@ -2,117 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC4A5ABEA8
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 13:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276A55ABEA9
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 13:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiICLMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 07:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
+        id S230428AbiICLML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 07:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiICLMF (ORCPT
+        with ESMTP id S230356AbiICLMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 07:12:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE576B660
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 04:12:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C02760B26
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 11:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805DAC433C1;
-        Sat,  3 Sep 2022 11:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662203523;
-        bh=+UvzqH1QDFPmQPVn1gryZ3anDIwLfLLPp25gCyAKngk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kwVco4vrevgzAcgyTdJZVjcSgZDEG+VtnkceWDBGB+Fqfp5LJOdwqRMw4pAfoRnNh
-         r1OZxqbk5JFonuURh9KERKlOC8jQzl+3SH+26WnmQl50O50dBPgnX9In/GUOAMA784
-         yVRzLeZ7bluqoEQLfff8bESAGTOY0sROP0AjTq9n8FhgLuUxi9vwCLHo8njyeNK5Vy
-         dykuDuKdbH+UJna9Bu+oxbcrQc0h0V7K4KK5lO+kjFCdJu7uK+kuoLEqJ/uer+xZ2H
-         Td9onCZ8fvThhsA3771mTZ4Gtg7mTPmZ/rQJbBRzCxI2hZd+ZJ7hLaFPSkMdOhAl8A
-         GfzFc53XpR2LQ==
-Date:   Sat, 3 Sep 2022 16:41:59 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Phy <linux-phy@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL]: Generic phy fixes for v6.0
-Message-ID: <YxM2f3BCvYm0tvWt@matsya>
+        Sat, 3 Sep 2022 07:12:09 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E2B6B8DD
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 04:12:08 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id l6so2444692ilk.13
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 04:12:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=upPQCftHoDomU/3682Givj5uYVRty3lpN8O9J87AHeU=;
+        b=W2Cs5pOiDVytUfYn0uizp7RXDbljkNyI8Dhko8tlRlo6JVOF+8fz/ofEnrfCfBet9/
+         jAbbj/Xt/+exyVQc5N8y/9JXizhTMmQmgOhTApFevOtz+nJ0Pef7ocFysG02PA7shToK
+         NSgXjhtcZK0OXJOQ4KKLz9xd0I59zOgAT18MP5uzBTjP4rM+WEo9wcCmX/hoYhQ0o2SG
+         3pWCweraeq3Br/JbNB2c5s1UA8HCX6aGicJ8A2mYtzaVxJNei/W8zhfCsjshUlMr+O35
+         4WaQ83rG59DgKd43Kp+CSPKV669mcYyxgcd2MYuc/9I1T09/Twpmqcc5BKaI54iD1ia+
+         OU3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=upPQCftHoDomU/3682Givj5uYVRty3lpN8O9J87AHeU=;
+        b=xe9Zb00Uy3p5XN+hDTTveqvuxiroOG/9XgDLWpxhLQQgen+UmvMFyFvWkID+Di1BC+
+         KsEkZS1qPl5aiwzUvgh4t2BwCz1uLN783E9bvRP1iCLrIKfacrNVxQFpyJSSV/TSkEoo
+         d6WtOzWXSAHX2EccXcAgYKcLMt8CB9oWv8zFz+okWeA4YYzMlX1mrBnvpasZz7BOtOat
+         7TkaOHTykrB+nLzre1VDn595bb/Q5dxuAzwnBRXrpcrPXDNwnj5gOa5uVN3OfOynjHFD
+         ATL0s75+ACErLkQwx9A40johW0VKLCKvmhJEiTjseeY4owAo8U/6lcCOU1FVSJzwQuAe
+         9dcQ==
+X-Gm-Message-State: ACgBeo1ciFp2FHFSkPIMpUd8oxIfR7cEDmg/Fc5lprIOglhu1tyuHl8y
+        1LW3DDveX94MlzjScj8XF+8pUr1krACmL7qjeO0=
+X-Google-Smtp-Source: AA6agR5u82IenTTZlNyFhN+CTCwId5d/4S87HXnQ084aLVMqdXXNPWG8SDlMrh+vJAaCKk63KRFDIo/ryHjxL8l7EY4=
+X-Received: by 2002:a92:cbc4:0:b0:2e7:147b:6f7 with SMTP id
+ s4-20020a92cbc4000000b002e7147b06f7mr21558078ilq.174.1662203527970; Sat, 03
+ Sep 2022 04:12:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Ug023SCU/+hnlU35"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a4f:2b1d:0:0:0:0:0 with HTTP; Sat, 3 Sep 2022 04:12:07 -0700 (PDT)
+Reply-To: Dr_natalia.johnson@proton.me
+From:   "Dr .Natalia Johnson" <ttrvcdzwwqz01@gmail.com>
+Date:   Sat, 3 Sep 2022 14:12:07 +0300
+Message-ID: <CABq-8SQ2TYaFwdvBh6vJMu5L2eYDj+cDubi6s0neFLm7NV2O-w@mail.gmail.com>
+Subject: Good Day Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is the information
 
---Ug023SCU/+hnlU35
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+   My name is Dr .Natalia Johnson from United States of America living
+in Italy am 33 years old medical doctor.
+    I have important thing to discuss with you.. you can reach out to
+me by my private email address (Dr_natalia.johnson@proton.me)
 
-Hello Greg,
+Thanks.
 
-Please pull to receive a single fix to marvell a3700-comphy driver which
-fixes broken reset  in the driver
-
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tags/phy-=
-fixes-6.0
-
-for you to fetch changes up to 0a6fc70d76bddf98278af2ac000379c82aec8f11:
-
-  phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support (2022-0=
-8-30 10:32:33 +0530)
-
-----------------------------------------------------------------
-phy: fixes for 6.0
-
-Fix for broken reset in marvell a3700-comphy
-
-----------------------------------------------------------------
-Pali Roh=E1r (1):
-      phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support
-
- drivers/phy/marvell/phy-mvebu-a3700-comphy.c | 87 ++++++------------------=
-----
- 1 file changed, 17 insertions(+), 70 deletions(-)
-
---=20
-~Vinod
-
---Ug023SCU/+hnlU35
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmMTNn4ACgkQfBQHDyUj
-g0ccmhAAyi8YWvbZPRthVfdGq0nQ2DcvZAooBdNYZwpJoEPXFDUF8I8qL+GrshJV
-VEOZERZpINOvijaPMQKznxvd0DSI5nlABwQLFCgwm0bN28Lf2lJzSL/Veq+Kb4Xk
-pEiW1AVgnuUDnmdBECuYYLGyeue7/q11M04vEEXiJcFs5mxqLURSEM0Lr+hbcFHb
-HrMRhlISBrEQZ6oKcwg3uwscpS0MhLQBaOAV/mDmBCsZj3WMavRnAo3NSBX51HfK
-DFE2nSFbAWvPo3Ov/7WbEu25pMDYBhHh9/aV6SWSkrf58RthZUMfF12bdFALYnp6
-1JsCLzmjY7ZAmfE8kFMv4pEXXqPYfElfsLv8w3pD4mo199whucOBLWz49Nur2Kx5
-FlWWBlVF4GyO2f2Z/+/uHPS85qSO4jpA6z1Wg+uApbMKYhYD4HZC9M08g4MCd5J4
-TrfvmXLMuE9qNyNeD/KC3AOW9xry3fW9uFzXXjJYyYNalRLFAuS7aCR8bLDaoGSi
-zO1frvdTCaZC8jL+9WlmkfLVCR2Tczy27DSINiM80E9I2CFNah7D6thNUEPEm4yc
-Mip6uZ+jnq+CPMuQLwGTG906+8A1zKMGXA5iHqcOPLJMMHFecA+2CHAs8hWklIvB
-qMGe2G439PfV4A5DZhupWTqIiHCJZZ7d/yc6Kge8wFL1ZPhDx08=
-=nCmi
------END PGP SIGNATURE-----
-
---Ug023SCU/+hnlU35--
+Dr .Natalia Johnson

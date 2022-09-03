@@ -2,91 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04D85AC101
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 21:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BFB5AC105
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 21:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbiICTAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 15:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S231445AbiICTCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 15:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiICTAi (ORCPT
+        with ESMTP id S229493AbiICTC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 15:00:38 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF513D5A6;
-        Sat,  3 Sep 2022 12:00:38 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-324ec5a9e97so41755697b3.7;
-        Sat, 03 Sep 2022 12:00:38 -0700 (PDT)
+        Sat, 3 Sep 2022 15:02:27 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410D6459B7;
+        Sat,  3 Sep 2022 12:02:26 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id w5so6213875wrn.12;
+        Sat, 03 Sep 2022 12:02:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=Qf7PXikGCovsdv/2K6jAdSbyiEi6rrfmnYyZf0F4aGk=;
+        b=PArMLiFee//94f9H5QNZjUZjFuoq+KvecU3v0RVUxJ3Go0RNuyHUBsggZXC1NuoBXo
+         uvQvbSex10fLw4LMOgDBZQoBmHiCIJli3qPtPq69zkacaxIFT8EldYR5hsuTmOrjcOJK
+         Cg6Qso+q+z3xIpFFqGLEsbqV36YJuTcBO4p9TvQ7SfGxoGCtXkrddaL7jZPgJ97XV+HV
+         MyG5Yhck95bj+0gqLbnaaJCUpSDNDyWaGniBLIImCpeqAiJ1StRaSd3nvByaFHIKlhRW
+         dSTEYvxJ9F26SdLQp/gQC5OjxiAEUfe/9pZB8h2lDfK+mfxMK1k/1/lhq/gBo5nO/a38
+         /6XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ibwnT0cqW7ADmxA6K2xllH0o+FjvNmoCUtXkTE8svNo=;
-        b=OxfXsHwpqmKATS6m4FFtxYhBTSZbCcl2PLrRPYjN2T6FKJt/qhJ+QUJnvrwuZaZabM
-         9GtF/iuNMBO3vf6EDuTb7FFVWS/0p0JCStwkip/pAsWLiUyfuw6pP1aMzuD2tzndG3Ub
-         gSXGfDSqf5tjIWZjCgf46nzT1de2mJKB7UyhLTxO/+cQIpR/DrwsPG4w8KwNwBBWR4rJ
-         U4suBgfFnfIJzmPioYAwlUx/eJ11iUCADRm2vXTDDBYOp3x9NOt27Av7c8jvZezsJgdt
-         8Am9H56sAMdiHwz6sSLjWQaJ2mW/1xr1tJT3Hv3uICetTCRf5En4Gf5B6lutHPMbPHZ2
-         cx8g==
-X-Gm-Message-State: ACgBeo2eEE1ZVkmPKLV2hzBgDrOr8SPNYWV0GtVv7ANQ6ySIKYklYwQM
-        3+D/D8tu/hL7AQBTCFRPifNqECjiYeqoOVpB/+I=
-X-Google-Smtp-Source: AA6agR7sHIA8jeuw/V/G2pAEJ3ErQ0yEJVn+RxOKLyZgPT+3Xoci2MvmS4WwW2zidMxkAylE3LY2zAHnY6dGDztMk0M=
-X-Received: by 2002:a81:4850:0:b0:33c:922b:5739 with SMTP id
- v77-20020a814850000000b0033c922b5739mr32073228ywa.515.1662231637489; Sat, 03
- Sep 2022 12:00:37 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Qf7PXikGCovsdv/2K6jAdSbyiEi6rrfmnYyZf0F4aGk=;
+        b=eRCW3Y1fehld63zt6v+5/e0zy5z4izaPdivO3sVCQSELAKaU6Q9SyFpDCfOihq5jxi
+         D9QWjHEDnZfTkyKFhfgAxoBo9fRarmqIu+KiwgKLTlM+GLPDOq6zBkAqyM6okGGqYSfY
+         NAeOd/h/6OOHC7qUj1PacGahzYMU2UaH2iJG5l8s9l0VE46H2vTHo/oSNJQG94Xhsxgt
+         CCRpIMvPs4mXeoR+bDbs1jeHRtr3SdJTrK9xz26g6O0MRSAgzYwc4/RFhre25k4EPkZ9
+         TsNBn8PDuGFhq18XvDC4iYgLHSuMW0YBSYGjTl9GhXQHHctKf+pdPU1Q+efFVKtILAZK
+         ynHw==
+X-Gm-Message-State: ACgBeo1v2ML/+lib71nMxkNK5+Uy/vdkehc5eoc17Gg3V+kS13o6oLsa
+        W32d22YYt+KU2cdmpB7Bmg==
+X-Google-Smtp-Source: AA6agR7kdeDvq4gxLSPKLxeBw32Ouq9hhnC9Ft8uf6ZUtdmoNBeGrCy0oyCLkaPvRF4r3SoDu/DJcA==
+X-Received: by 2002:a5d:59a6:0:b0:226:fdaf:3ece with SMTP id p6-20020a5d59a6000000b00226fdaf3ecemr6121754wrr.444.1662231744731;
+        Sat, 03 Sep 2022 12:02:24 -0700 (PDT)
+Received: from playground (host-92-29-143-165.as13285.net. [92.29.143.165])
+        by smtp.gmail.com with ESMTPSA id f15-20020adfb60f000000b00226d1b81b45sm5167315wre.27.2022.09.03.12.02.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 12:02:24 -0700 (PDT)
+Date:   Sat, 3 Sep 2022 20:02:15 +0100
+From:   Jules Irenge <jbi.octave@gmail.com>
+To:     martin.lau@linux.dev
+Cc:     Elana.Copperman@mobileye.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org, sdf@google.com,
+        haoluo@google.com
+Subject: [PATCH 2/2] bpf: Fix warning of incorrect type in return expression
+Message-ID: <YxOkt4An+u1azlvG@playground>
 MIME-Version: 1.0
-References: <202209020412.Ts31BZrs-lkp@intel.com> <a6030c5943ccd2965261a92320b1ae1adb909116.1662084833.git.lukas@wunner.de>
- <YxHRSPUWtQdP1w/4@smile.fi.intel.com>
-In-Reply-To: <YxHRSPUWtQdP1w/4@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 3 Sep 2022 21:00:26 +0200
-Message-ID: <CAJZ5v0g3ybQr7zmgW2FVPQkCgP-ezjgUwz_ro_3q2KgzOpCs9w@mail.gmail.com>
-Subject: Re: [PATCH] ACPI / property: Silence missing-declarations warning in apple.c
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lukas Wunner <lukas@wunner.de>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 11:50 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Sep 02, 2022 at 04:15:55AM +0200, Lukas Wunner wrote:
-> > Silence an annoying message emitted for W=1 builds:
-> >
-> > drivers/acpi/x86/apple.c:30:6: warning: no previous declaration for 'acpi_extract_apple_properties' [-Wmissing-declarations]
->
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> > ---
-> >  drivers/acpi/x86/apple.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/acpi/x86/apple.c b/drivers/acpi/x86/apple.c
-> > index c285c91a5e9c..8812ecd03d55 100644
-> > --- a/drivers/acpi/x86/apple.c
-> > +++ b/drivers/acpi/x86/apple.c
-> > @@ -8,6 +8,7 @@
-> >  #include <linux/bitmap.h>
-> >  #include <linux/platform_data/x86/apple.h>
-> >  #include <linux/uuid.h>
-> > +#include "../internal.h"
-> >
-> >  /* Apple _DSM device properties GUID */
-> >  static const guid_t apple_prp_guid =
-> > --
+Sparse reports a warning at bpf_array_map_seq_start()
 
-Applied as 6.1 material, thanks!
+"warning: incorrect type in return expression (different address spaces)"
+
+The root cause is the function expect a return of type void *
+but instead got a percpu value in one of the return.
+
+To fix this a variable of type void * is created
+and the complainining return value is saved into the variable and return.
+
+Fix incorrect type in return expression
+
+Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+---
+ kernel/bpf/arraymap.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 624527401d4d..b1914168c23a 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -548,6 +548,7 @@ static void *bpf_array_map_seq_start(struct seq_file *seq, loff_t *pos)
+ 	struct bpf_map *map = info->map;
+ 	struct bpf_array *array;
+ 	u32 index;
++	void *pptrs;
+ 
+ 	if (info->index >= map->max_entries)
+ 		return NULL;
+@@ -556,8 +557,10 @@ static void *bpf_array_map_seq_start(struct seq_file *seq, loff_t *pos)
+ 		++*pos;
+ 	array = container_of(map, struct bpf_array, map);
+ 	index = info->index & array->index_mask;
+-	if (info->percpu_value_buf)
+-	       return array->pptrs[index];
++	if (info->percpu_value_buf) {
++		pptrs = &array->pptrs[index];
++		return pptrs;
++	}
+ 	return array_map_elem_ptr(array, index);
+ }
+ 
+-- 
+2.35.1
+

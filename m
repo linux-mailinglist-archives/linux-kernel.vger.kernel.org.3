@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2E75AC07E
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93ED5AC08B
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbiICSF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 14:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        id S232361AbiICSJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 14:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiICSFz (ORCPT
+        with ESMTP id S231445AbiICSJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 14:05:55 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF08146D87;
-        Sat,  3 Sep 2022 11:05:54 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 193so7420573ybc.10;
-        Sat, 03 Sep 2022 11:05:54 -0700 (PDT)
+        Sat, 3 Sep 2022 14:09:25 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3D62C6;
+        Sat,  3 Sep 2022 11:09:22 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-3376851fe13so41219717b3.6;
+        Sat, 03 Sep 2022 11:09:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=VZspdJAb/ju//+Bhc5iNyCD8XcmOd3SFg+vf3tdYitk=;
-        b=iXBucZgU2aEr53vHlmLGeKhl5tu41XQQvteVtm6c0Ig6Nyo/mXglI5QRdW9o1RoGWM
-         2YEEW/TSE2el/fdJvVGq7OL6r2G5VgTg+89KwpXUrS5G3pmCxBegll4NDVQWQ/kkeHNB
-         8Gj67QIpmHuNOQ/TBEexoK5qk1km6Nre3ChA747AhMMjSVHLWZJQwVSh68/yl6gFLGeb
-         goSlK4VF2nX6qGDZ3Df55GXDepq2MCWuKt4QQZWgG9oYk0Z0MKdXtIV7sKXkNXPcaSlI
-         75KysQVKHbQMhcA8QLl+QkLimKIThwR8xw5Oqd6llDOXEbjYRJ9m8/yV6p8gbyzBmW2N
-         Y4Xw==
-X-Gm-Message-State: ACgBeo2AUC2MK/SU+jCkY6Kw2YnLW8AwTVGsyGO8X+HDsauc4JTcFqU3
-        OTW7yitGjaK6wKr+rHlBHF/zTrueMpE2CX1Pmnk=
-X-Google-Smtp-Source: AA6agR5NNHHq6rGLcfeG4BrTFM5UI/K8XJrdCnLCQ5XP3PW+FXN6QNyYiiQfu53azMXBYQSxO0ECTm6kSB15PmloIFk=
-X-Received: by 2002:a25:b749:0:b0:68f:171f:96bd with SMTP id
- e9-20020a25b749000000b0068f171f96bdmr28803814ybm.137.1662228354205; Sat, 03
- Sep 2022 11:05:54 -0700 (PDT)
+        bh=5TvOzDgsOBFBbklyss9/Ftz1OqCB2n8dPRcJ8qkoIdo=;
+        b=CVEc5V5ZZjTR0Cwrp0rZTtpmBH+nddLl3DSue+PqLbNyvpbqpcve2+0UmFpe6mDM//
+         k92YB4q8rbWYYM7pTnSI9E++0nfaC/yLjBE9ZrUp7M00KtHD97aMRF1iMNXlvR/1ijGe
+         4uyVKjnGGZ+62MdpT4zprk6nqWgWw6nLWoFXl2ySj0b6Gks8+scPIsKFXZKg4fsIJgRs
+         QZXVXIkfqwOZuMg45oiSc6C55g/nVE339JhuGsctsCpdxSEMI2K3wrXgmTT3/qf7V7eu
+         X2r6P3kMmzAy0B+0Zo14lGs4xMzUv5g8KXzE3KiMv6KdMN+hIjqXY6k/wBnA8UYniHhj
+         VQaw==
+X-Gm-Message-State: ACgBeo134I8Kc78h3JtLHD4HS/oaGMdoT1+bItC6QzdxllVGVKwM7/QT
+        Ze1SwZRRDG9hKr8rIWBQ1eXbgm0s0JfXbFR0Igg=
+X-Google-Smtp-Source: AA6agR70ERCaU+wGxH3tC+tdf2v4CCkjEOH0SXQw0lYGliAJvpTjIwuIbS/uEBJCecIb40tkW1kniJeaGH2ATGcxqmg=
+X-Received: by 2002:a0d:c841:0:b0:33d:bf96:f823 with SMTP id
+ k62-20020a0dc841000000b0033dbf96f823mr31231457ywd.326.1662228559975; Sat, 03
+ Sep 2022 11:09:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220825013630.16311-1-mario.limonciello@amd.com>
-In-Reply-To: <20220825013630.16311-1-mario.limonciello@amd.com>
+References: <20220825114018.1715-1-xuewen.yan@unisoc.com> <20220830053417.eebsc6joyvlpti3s@vireshk-i7>
+In-Reply-To: <20220830053417.eebsc6joyvlpti3s@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 3 Sep 2022 20:05:43 +0200
-Message-ID: <CAJZ5v0jc_MNm6-s=p1Kaymk72h4QEH12J33dadyiKB76muqLtQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: wakeup: Add extra debugging statement for multiple
- active IRQs
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+Date:   Sat, 3 Sep 2022 20:09:08 +0200
+Message-ID: <CAJZ5v0j=s-RS2oVjPtR0=pAiXHNwvtDih6Jt6dffC4eKh1bBcg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Check the policy first in cpufreq_cooling_register
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Xuewen Yan <xuewen.yan@unisoc.com>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        xuewen.yan94@gmail.com, Di Shen <di.shen@unisoc.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -58,38 +63,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 3:36 AM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Tue, Aug 30, 2022 at 7:34 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Since commit cb1f65c1e1424 ("PM: s2idle: ACPI: Fix wakeup interrupts
-> handling") was introduced the kernel can now handle multiple
-> simultaneous interrupts during wakeup.  Ths uncovered some existing
-> subtle firmware bugs where multiple IRQs are unintentionally active.
+> On 25-08-22, 19:40, Xuewen Yan wrote:
+> > Since the policy needs to be accessed first when obtaining cpu devices,
+> > first check whether the policy is legal before this.
+> >
+> > Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
 >
-> To help with fixing those bugs add an extra message when PM debugging
-> is enabled that can show the individual IRQs triggered as if a variety
-> are fired they'll potentially be lost as /sys/power/pm_wakeup_irq only
-> contains the first one that triggered the wakeup after resume is
-> complete but all may be needed to demonstrate the whole picture.
+> Fixes: 5130802ddbb1 ("thermal: cpu_cooling: Switch to QoS requests for freq limits")
 >
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215770
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/base/power/wakeup.c | 1 +
->  1 file changed, 1 insertion(+)
+> > ---
+> >  drivers/thermal/cpufreq_cooling.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> > index b76293cc989c..7838b6e2dba5 100644
+> > --- a/drivers/thermal/cpufreq_cooling.c
+> > +++ b/drivers/thermal/cpufreq_cooling.c
+> > @@ -501,17 +501,17 @@ __cpufreq_cooling_register(struct device_node *np,
+> >       struct thermal_cooling_device_ops *cooling_ops;
+> >       char *name;
+> >
+> > +     if (IS_ERR_OR_NULL(policy)) {
+> > +             pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
+> > +             return ERR_PTR(-EINVAL);
+> > +     }
+> > +
+> >       dev = get_cpu_device(policy->cpu);
+> >       if (unlikely(!dev)) {
+> >               pr_warn("No cpu device for cpu %d\n", policy->cpu);
+> >               return ERR_PTR(-ENODEV);
+> >       }
+> >
+> > -     if (IS_ERR_OR_NULL(policy)) {
+> > -             pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
+> > -             return ERR_PTR(-EINVAL);
+> > -     }
+> > -
+> >       i = cpufreq_table_count_valid_entries(policy);
+> >       if (!i) {
+> >               pr_debug("%s: CPUFreq table not found or has no valid entries\n",
 >
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index e3befa2c1b661..dcd06eac30afd 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -943,6 +943,7 @@ void pm_system_irq_wakeup(unsigned int irq_number)
->                 wakeup_irq[1] = irq_number;
->         else
->                 irq_number = 0;
-> +       pm_pr_dbg("Triggering wakeup from IRQ %d\n", irq_number);
->
->         raw_spin_unlock_irqrestore(&wakeup_irq_lock, flags);
->
-> --
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 Applied as 6.1 material, thanks!

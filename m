@@ -2,149 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934415AC122
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 21:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AD35AC123
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 21:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbiICTbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 15:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S233014AbiICTcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 15:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiICTbH (ORCPT
+        with ESMTP id S229698AbiICTch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 15:31:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DB548C99
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 12:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662233464; x=1693769464;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/ZpWWn9bhFroyOUx3+Apl1nhkOMU4SaDz+sTMnRtgyw=;
-  b=hf+juKJJPK5LvGuJlhy3lRo5qW566Eo6rbZ1umMF01T9SR5MURkp+o33
-   yfBxQMY88RLS5JKfjOyoaBVxcefsTc4VSNJlA7gLyYoLg6UrYrpMoXS8g
-   mOEwBmjGQvHId0iVJn5yIFsVpQ4nb8U3MRhj6cFgylE4SxfBSIPWXwglc
-   ynHywq+zUekr/CvCzOS8HixOSK/bfMFuAgvqjTkLopoZUumPgYUYHICE9
-   Gc+vbwD2B2U/a3ixlDmMShKeh9nUwUR88pKM4iF97ZYJREsY7S3w9IwPC
-   KA5MRF1sRuSX/mGCxZmNm+6ms7DhoUJ7DLOU7+fxZyyQLIZ3d0ud69+wL
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="296967326"
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="296967326"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 12:31:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="643323584"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2022 12:31:02 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUYr7-00025f-29;
-        Sat, 03 Sep 2022 19:31:01 +0000
-Date:   Sun, 4 Sep 2022 03:30:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Janne Grunau <j@jannau.net>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 11/22]
- drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
- prototype for function 'spihid_get_data'
-Message-ID: <202209040357.Xt9ih8dg-lkp@intel.com>
+        Sat, 3 Sep 2022 15:32:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A2148EA8
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 12:32:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BFB660D36
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 19:32:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA5DC433D6;
+        Sat,  3 Sep 2022 19:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662233555;
+        bh=mh3N+GmFc5Rx9AiBTB6cAzvRqaNHLVykgec3apa4ju4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CnKY2yCIHdBupTV/FW5lzQ1TBLjhnFNFWKZuiUAGkMH1z9TpnXoKy5fhfSms3ASQp
+         qyHwz1a+tmBKOgLl/GYPmgGcmSrEhekuy9HJ16wesiJbrzKEc+xkETylWGhHQg0gwv
+         p7V4tu1lBldxMmp6OztkTzdwi5n9oxFq7X3OH6lFk92MQn1G4wyhHSRofVtgdn0pwo
+         5rqrLlbdXIstgskZHtNqWGgF0ogTx9JpIwMMSGWXnKh82X2+Z6o7yu3GJXtHSrnp3J
+         tKWYHsVQby5o/D8uOiXmiagULOpFi3wiMZ5FNWqLTGpwugeZ8PBkm6YErgNeXlkGxa
+         5y2IDik60CSgQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     willy@infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH for-mm-unstable] mm/swap.h: Define swap_cache_get_folio() for !CONFIG_SWAP
+Date:   Sat,  3 Sep 2022 19:32:28 +0000
+Message-Id: <20220903193228.172238-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   480924e97dddd088c4ed360eb12ecf92a30f19b1
-commit: ab84f7572c5928c7412539ab0e51a581ecafe4f1 [11/22] WIP: HID: transport: spi: add Apple SPI transport
-config: riscv-randconfig-r032-20220904 (https://download.01.org/0day-ci/archive/20220904/202209040357.Xt9ih8dg-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/ab84f7572c5928c7412539ab0e51a581ecafe4f1
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout ab84f7572c5928c7412539ab0e51a581ecafe4f1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/hid/spi-hid/ drivers/platform/
+Commit 4d3cb611e6df ("swap: add swap_cache_get_folio()") in mm-unstable
+tree defines 'swap_cache_get_folio()' for CONFIG_SWAP only, and as a
+result build fails on !CONFIG_SWAP as below, after following commits
+using the function under !CONFIG_SWAP is applied.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    mm/shmem.c: In function ‘shmem_swapin_folio’:
+    mm/shmem.c:1738:10: error: implicit declaration of function ‘swap_cache_get_folio’; did you mean ‘read_cache_folio’? [-Werror=implicit-function-declaration]
+     1738 |  folio = swap_cache_get_folio(swap, NULL, 0);
+          |          ^~~~~~~~~~~~~~~~~~~~
+          |          read_cache_folio
+    mm/shmem.c:1738:8: warning: assignment to ‘struct folio *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+     1738 |  folio = swap_cache_get_folio(swap, NULL, 0);
+          |        ^
+    cc1: some warnings being treated as errors
 
-All warnings (new ones prefixed by >>):
+This commit fixes the issue by defining the function for !CONFIG_SWAP
+case.
 
->> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for function 'spihid_get_data' [-Wmissing-prototypes]
-   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-                        ^
-   drivers/hid/spi-hid/spi-hid-apple-core.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   ^
-   static 
-   drivers/hid/spi-hid/spi-hid-apple-core.c:56:17: warning: variable 'spi_hid_apple_status_ok' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-   static const u8 spi_hid_apple_status_ok[4] = { 0xac, 0x27, 0x68, 0xd5 };
-                   ^
-   2 warnings generated.
---
->> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for function 'spihid_apple_of_power_on' [-Wmissing-prototypes]
-   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for function 'spihid_apple_of_power_off' [-Wmissing-prototypes]
-   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for function 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
-   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for function 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
-   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-   ^
-   static 
-   4 warnings generated.
+Fixes:4d3cb611e6df ("swap: add swap_cache_get_folio()") in mm-unstable (1e6b789996e7)
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
 
+Note: This patch does not cleanly applicable on top of the mm-unstable
+but the fixing commit.
 
-vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
+ mm/swap.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-   258	
- > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   260	{
-   261		switch (idev->id) {
-   262		case SPIHID_DEVICE_ID_KBD:
-   263			return container_of(idev, struct spihid_apple, kbd);
-   264		case SPIHID_DEVICE_ID_TP:
-   265			return container_of(idev, struct spihid_apple, tp);
-   266		default:
-   267			return NULL;
-   268		}
-   269	}
-   270	
-
+diff --git a/mm/swap.h b/mm/swap.h
+index 2d6fe6c44ad9..ccd8d9a9ad36 100644
+--- a/mm/swap.h
++++ b/mm/swap.h
+@@ -101,6 +101,12 @@ static inline int swap_writepage(struct page *p, struct writeback_control *wbc)
+ 	return 0;
+ }
+ 
++static inline struct folio *swap_cache_get_folio(swp_entry_t entry,
++		struct vm_area_struct *vma, unsigned long addr)
++{
++	return NULL;
++}
++
+ static inline struct page *lookup_swap_cache(swp_entry_t swp,
+ 					     struct vm_area_struct *vma,
+ 					     unsigned long addr)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

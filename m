@@ -2,208 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4005ABFF7
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EC25AC001
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbiICREa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 13:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
+        id S231472AbiICRXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 13:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiICRE1 (ORCPT
+        with ESMTP id S229526AbiICRXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 13:04:27 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F176EB0;
-        Sat,  3 Sep 2022 10:04:25 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id bj12so9348414ejb.13;
-        Sat, 03 Sep 2022 10:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=yxIgBn6wmYWPsRLdC51HzjmvMPKahEKhVb6/Ezsf8mA=;
-        b=ijUqM1sW6mBfkE8312xgrAE9ovi6QTzYF9G5bRdlJopYfEEo8RczFkLnWsPzA+hCPu
-         DgtA9/7hQa1L2Ml01WIt5kue58GqgQL0NpEFJva2/+wTK8Ycv+nRh9DKIRINXFPHSMWC
-         qMAMVIobLM68kXcjbNITPradRcbZ8HX3rkzC84vZ7+j9zb9/N/N8BjhXnhHE5vPQVvxc
-         DGZEvXWEbp3mAriGUJLvgSvO36crwcPhWrT/JdORFhmGWdy/+/TmOrBztEZRL0NBIoxk
-         2dkfem6hMT6NYE/rObRHBRMknb1LxEAlvZNnH9Az3jNu/Sq7bdY4IrHuheF8KiQ5mUHo
-         cNHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=yxIgBn6wmYWPsRLdC51HzjmvMPKahEKhVb6/Ezsf8mA=;
-        b=zCuNg6unDJUfD0bGw2Oa1XM8fX7Ij76m4hN2ptlBnB9ZhTgy2UIrB4IqYD+N04fOwv
-         LJC7yQZ1huxphA43up2Rm4KSYuqvhEVoJg9Xn/Dq2YU2+amndVxyWiuOl6IjhXmQlXTg
-         sm8gq8dt3JyfWg0GGlEFWYUGzS5ZP/jkQ7VPGmLocEfNx1ARhzB2oNI8QdsgDFwZETVY
-         c7TmX5a9XOw++n3T3SV65twfXtK4NasbD1MGCRUYeSQc6CMyoAiC0YX75VmTlX83h1zd
-         l5q0FI6jlFSd0KyLA9YWjDg+S95MSthpBHSXOqayHvoiak0iffS20HTk6ddrL5BKykI4
-         urGg==
-X-Gm-Message-State: ACgBeo0pJeJwf/XlZSLStYawVGft0hPyNZbErAoy1YS04b6YStPtU6iV
-        3Nc6dzwQnc5rWAlPkZ65j3Q=
-X-Google-Smtp-Source: AA6agR6LpCThAlRPo/ggANiOJBQT8ScLgVqJIejA+pV0Wm8SSnWY7ZA/pyHOPnOS4TlJmbpeUnE+Zg==
-X-Received: by 2002:a17:907:2bc7:b0:73d:d239:110b with SMTP id gv7-20020a1709072bc700b0073dd239110bmr30616553ejc.752.1662224663681;
-        Sat, 03 Sep 2022 10:04:23 -0700 (PDT)
-Received: from [192.168.74.101] ([77.78.20.135])
-        by smtp.gmail.com with ESMTPSA id e23-20020a50a697000000b004481ee9b4besm3464223edc.63.2022.09.03.10.04.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Sep 2022 10:04:23 -0700 (PDT)
-Message-ID: <488be3d3-d4c4-6200-be99-b85e6ac72c34@gmail.com>
-Date:   Sat, 3 Sep 2022 20:04:19 +0300
+        Sat, 3 Sep 2022 13:23:03 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29138564E2;
+        Sat,  3 Sep 2022 10:23:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662225783; x=1693761783;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E7SV1tvE14Rrta1eoerSvxDnugKpcVZ31cMcGlREDBs=;
+  b=ajUkTe+MiIF6zES0tsCMZ2MbS9DaEgWkDE1b0uYb9GJ9MCTQ2kHFGl5A
+   +/HQQmVCAMlS22zxas1aHx6srTbX2Mg3aUkDAiiObN5tQrPa/Rz5+cYx8
+   UFaTmjh6gx2CSho3Td/Zzpu8tC3BuV3dj+F2jJZxUJvQZmOPnzun1fPR/
+   3AzTxo80aKLa6mIcK/mLAo1X8UWAlP4CZ9nBdTqlJCKsaAmOhT5PEGwu4
+   sH3RLuohrs1NG6GLCBBNniOyfnSgLJr2Zk/8wIgaZtgJ5PfGiGHQmJV5A
+   bwTkb5AbpKYXYI4oHbNSET/AK4iDJIZAYrEoNE4NFjsb7XZrB6CEu4Wbo
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="293762106"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="293762106"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 10:23:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="590428747"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga006.jf.intel.com with ESMTP; 03 Sep 2022 10:22:57 -0700
+Date:   Sun, 4 Sep 2022 01:13:34 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+Cc:     "git (AMD-Xilinx)" <git@amd.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "ronak.jain@xilinx.com" <ronak.jain@xilinx.com>,
+        "rajan.vaja@xilinx.com" <rajan.vaja@xilinx.com>,
+        "abhyuday.godhasara@xilinx.com" <abhyuday.godhasara@xilinx.com>,
+        "piyush.mehta@xilinx.com" <piyush.mehta@xilinx.com>,
+        "lakshmi.sai.krishna.potthuri@xilinx.com" 
+        <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        "harsha.harsha@xilinx.com" <harsha.harsha@xilinx.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "nava.manne@xilinx.com" <nava.manne@xilinx.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>
+Subject: Re: [PATCH 1/4] firmware: xilinx: Add afi ioctl support
+Message-ID: <YxOLPrwwvMWatObc@yilunxu-OptiPlex-7050>
+References: <20220824035542.706433-1-nava.kishore.manne@amd.com>
+ <20220824035542.706433-2-nava.kishore.manne@amd.com>
+ <Ywm39iYGLliU9ncv@yilunxu-OptiPlex-7050>
+ <DM6PR12MB3993321B918B2124B6776320CD799@DM6PR12MB3993.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 09/14] arm64: dts: qcom: sm6115: Add UFS nodes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
- <20220901072414.1923075-10-iskren.chernev@gmail.com>
- <a0204dc3-af13-6b0b-d779-0f207d1aff7e@linaro.org>
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-In-Reply-To: <a0204dc3-af13-6b0b-d779-0f207d1aff7e@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR12MB3993321B918B2124B6776320CD799@DM6PR12MB3993.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-08-30 at 09:25:47 +0000, Manne, Nava kishore wrote:
+> Hi Yilun,
+> 
+> 	Please find my response inline. 
+> 
+> > -----Original Message-----
+> > From: Xu Yilun <yilun.xu@intel.com>
+> > Sent: Saturday, August 27, 2022 11:52 AM
+> > To: Manne, Nava kishore <nava.kishore.manne@amd.com>
+> > Cc: git (AMD-Xilinx) <git@amd.com>; robh+dt@kernel.org;
+> > krzysztof.kozlowski+dt@linaro.org; michal.simek@xilinx.com;
+> > mdf@kernel.org; hao.wu@intel.com; trix@redhat.com;
+> > p.zabel@pengutronix.de; gregkh@linuxfoundation.org;
+> > ronak.jain@xilinx.com; rajan.vaja@xilinx.com;
+> > abhyuday.godhasara@xilinx.com; piyush.mehta@xilinx.com;
+> > lakshmi.sai.krishna.potthuri@xilinx.com; harsha.harsha@xilinx.com;
+> > linus.walleij@linaro.org; nava.manne@xilinx.com;
+> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> > kernel@vger.kernel.org; linux-fpga@vger.kernel.org; yilun.xu@intel.com
+> > Subject: Re: [PATCH 1/4] firmware: xilinx: Add afi ioctl support
+> > 
+> > On 2022-08-24 at 09:25:39 +0530, Nava kishore Manne wrote:
+> > > Adds afi ioctl to support dynamic PS-PL bus width settings.
+> > 
+> > Please also describe what is afi, PS, PL here, Patch #0 won't appear in
+> > upstream tree finally.
+> > 
+> 
+> Agree, Will update the description in v2.
+> 
+> > Thanks,
+> > Yilun
+> > 
+> > >
+> > > Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> > > ---
+> > >  drivers/firmware/xilinx/zynqmp.c     | 14 +++++++++++
+> > >  include/linux/firmware/xlnx-zynqmp.h | 36
+> > > ++++++++++++++++++++++++++++
+> > >  2 files changed, 50 insertions(+)
+> > >
+> > > diff --git a/drivers/firmware/xilinx/zynqmp.c
+> > > b/drivers/firmware/xilinx/zynqmp.c
+> > > index d1f652802181..cbd84c96a66a 100644
+> > > --- a/drivers/firmware/xilinx/zynqmp.c
+> > > +++ b/drivers/firmware/xilinx/zynqmp.c
+> > > @@ -843,6 +843,20 @@ int zynqmp_pm_read_pggs(u32 index, u32
+> > *value)  }
+> > > EXPORT_SYMBOL_GPL(zynqmp_pm_read_pggs);
+> > >
+> > > +/**
+> > > + * zynqmp_pm_afi() - PM API for setting the PS-PL bus width
+> > > + * @config_id:	Register index value
+> > > + * @bus_width:	Afi interface bus width value.
+> > > + *
+> > > + * Return:	Returns status, either success or error+reason
+> > 
+> > I see other functions are also like this, but I still can't figure out what values
+> > for success and what for error+reason.
+> > 
+> 
+> Please find the relevant error info here:
+> https://elixir.bootlin.com/linux/v6.0-rc3/source/drivers/firmware/xilinx/zynqmp.c#L81
 
+The caller should at least know what value is success and what are
+failures from the kernel doc, so they could write the code which call
+your API.
 
-On 9/1/22 19:13, Krzysztof Kozlowski wrote:
-> On 01/09/2022 10:24, Iskren Chernev wrote:
->> The SM6115 comes with UFS support, so add the related UFS and UFS PHY
->> nodes.
->>
->> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
->> ---
->>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 70 ++++++++++++++++++++++++++++
->>  1 file changed, 70 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> index cde963c56ac9..491fffff8aa1 100644
->> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> @@ -620,6 +620,76 @@ opp-202000000 {
->>  			};
->>  		};
->>
->> +		ufs_mem_hc: ufshc@4804000 {
->> +			compatible = "qcom,sm6115-ufshc", "qcom,ufshc",
->> +				     "jedec,ufs-2.0";
->> +			reg = <0x4804000 0x3000>, <0x4810000 0x8000>;
->> +			reg-names = "std", "ice";
->
-> I could imagine that testing DTS against existing bindings might miss a
-> lot, because we have still a lot of errors. But at least I would expect
-> you test your DTS against your own bindings, which you submit here (and
-> previously).
->
-> You just wrote that ice is not allowed.
+Thanks,
+Yilun
 
-OK, I'm an idiot. I didn't run the bindings checks, not against existing
-bindings or my bindings or whatever. It's my fault.
-
-Ice should be allowed, I fixed the bindings in v2.
-
-For the record, running dtbs_checks is a PITA, not only because of the
-thousands of warnings in unrelated code, but because it takes forever.
-
-Maybe the docs should be updated with instructions on how to run it on a single
-(or a small subset) of DTBs. I had to comment out a lot of Makefile lines to
-focus it on mine. It would really help if the binding check works more like
-a compiler, not some magic spell hidden in a bunch of Makefiles.
-
-I'll list all remaining issues with description/explanation in v2. The fact
-that some bindings break on all DTBs present doesn't help either.
-
->> +			interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
->> +			phys = <&ufs_mem_phy_lanes>;
->> +			phy-names = "ufsphy";
->> +			lanes-per-direction = <1>;
->> +			#reset-cells = <1>;
->> +			resets = <&gcc GCC_UFS_PHY_BCR>;
->> +			reset-names = "rst";
->> +
->> +			power-domains = <&gcc GCC_UFS_PHY_GDSC>;
->> +			iommus = <&apps_smmu 0x100 0>;
->> +
->> +			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
->> +				 <&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
->> +				 <&gcc GCC_UFS_PHY_AHB_CLK>,
->> +				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
->> +				 <&gcc GCC_UFS_PHY_ICE_CORE_CLK>,
->> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>,
->> +				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
->> +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>;
->> +			clock-names = "core_clk",
->> +				      "bus_aggr_clk",
->> +				      "iface_clk",
->> +				      "core_clk_unipro",
->> +				      "core_clk_ice",
->> +				      "ref_clk",
->> +				      "tx_lane0_sync_clk",
->> +				      "rx_lane0_sync_clk";
->> +
->> +			freq-table-hz = <50000000 200000000>,
->> +					<0 0>,
->> +					<0 0>,
->> +					<37500000 150000000>,
->> +					<75000000 300000000>,
->> +					<0 0>,
->> +					<0 0>,
->> +					<0 0>;
->> +
->> +			non-removable;
->
-> Is it allowed property?
-
-I dropped it.
-
->> +			status = "disabled";
->> +		};
->> +
->> +		ufs_mem_phy: phy@4807000 {
->> +			compatible = "qcom,sm6115-qmp-ufs-phy";
->> +			reg = <0x4807000 0x1c4>;
->> +			#address-cells = <1>;
->> +			#size-cells = <1>;
->> +			ranges;
->> +
->> +			clocks = <&gcc GCC_UFS_CLKREF_CLK>,
->> +				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
->> +			clock-names = "ref", "ref_aux";
->> +
->> +			resets = <&ufs_mem_hc 0>;
->> +			reset-names = "ufsphy";
->> +			status = "disabled";
->> +
->> +			ufs_mem_phy_lanes: lanes@4807400 {
->> +				reg = <0x4807400 0x098>,
->> +				      <0x4807600 0x130>,
->> +				      <0x4807c00 0x16c>;
->> +				#phy-cells = <0>;
->> +			};
->> +		};
->> +
->> +
->
-> Just one blank line.
->
-> Best regards,
-> Krzysztof
+> 
+> Regards,
+> Navakishore.
+> 

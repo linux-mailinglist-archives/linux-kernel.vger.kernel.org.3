@@ -2,114 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2076E5AC09E
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAC85AC0BE
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 20:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiICSXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 14:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
+        id S231305AbiICS3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 14:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiICSXP (ORCPT
+        with ESMTP id S229493AbiICS3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 14:23:15 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAA34E628;
-        Sat,  3 Sep 2022 11:23:14 -0700 (PDT)
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 283IMsO8020276;
-        Sun, 4 Sep 2022 03:22:55 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 283IMsO8020276
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662229375;
-        bh=Dxm2wQdJj73TakmQEfY+6pG1g4ZOeoTk/i+CCWeCWRE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=g6ANVaL2IxQaEKpn8bW3eCUgMp4EGJuzH1wHH0A+ZmxW/4caNZflWADJibwYud3F2
-         ophhKsX2aTL5gWJZs4kG5pDpXHNnPoF39sQ1qe7fpTbEKICMEZkfM3Ke9BpD4ScpIC
-         7vcvftdQEXqiEKY/qG4SgmQAsuMf2EJ4LljkPaWIukixeqZW3lB0D+SfIBKfpHLAsj
-         P1/JCk3t5oS4lgl2S6W7UoLKaPHXxOueK+SqMq1Faiv7i3IhlnhGbe8B5tv2LOy6C+
-         ogBDucroXrBs4V1Dr7RIBQkl/yneAgVHiB4LLPnIQJP375TetytrkEl5eIJJ65Owjt
-         GxM1H3qqH/kwQ==
-X-Nifty-SrcIP: [209.85.160.54]
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-11ee4649dfcso12670407fac.1;
-        Sat, 03 Sep 2022 11:22:54 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2bTWiaIO2I6790All7VU2gX+M+7vksiErlVBXSo0MNudpV7Jvp
-        cJDwVOgAcha70ubyYMT/AQqLh8gJCfru+T9/J1A=
-X-Google-Smtp-Source: AA6agR5XKsnppjDXu4BD9qugd41qLgY6/rMzviOWkZiuaL6QjvVlXtseU4fcnp90Ju6SmXMiKkvZPUbk0DFIfHubSNc=
-X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
- ek38-20020a056870f62600b0010da798f3aamr5119106oab.194.1662229373859; Sat, 03
- Sep 2022 11:22:53 -0700 (PDT)
+        Sat, 3 Sep 2022 14:29:02 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFA642AE9
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 11:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662229740; x=1693765740;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8WKt1oEVOBZWaPvR7msRUcf06y5oJYLOrbFtRIAH5sU=;
+  b=FkeZrdUcYhJwl7w6LyvpQ9zjw+97MBE0itcvAjoe059Fh9RI2zTDIfUm
+   4zpTVbPnuwFmJ8qobxq5Sx4pyrAeVYZNA8zruR/K+O9M/Qa47b9SgUUNE
+   Pv4yYSclrupqv8mf1Gx9zCYWfgmSCqns/K6NS9do2gMT52z4eXCa2rCfw
+   YZ+6144gbEPzYMhpgmQRg0UFeB8pGbszjczx4afWSSZ32Og4CAtrDD6oE
+   stqHUPVjr2DDNgYHgMsc2WeqKve9iwOgqyySvPpQQ10x2gERV8hPTuvYl
+   CL6MC+gSb9VRsMt5Kk1gXEY4VmozV3jdcovOyWc0wB+FO/sRcTD3W5kje
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="279193395"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="279193395"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 11:29:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="941641184"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 03 Sep 2022 11:28:58 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUXt3-00020v-31;
+        Sat, 03 Sep 2022 18:28:57 +0000
+Date:   Sun, 4 Sep 2022 02:28:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [steev:c630-6.0.0-rc3 27/94]
+ drivers/interconnect/qcom/icc-rpm.c:352:13: error: redefinition of
+ 'qcom_icc_bus_aggregate'
+Message-ID: <202209040243.Cd4XFUph-lkp@intel.com>
 MIME-Version: 1.0
-References: <CAHk-=wiW_LjFRE9wFMj-j2gp9=u8jqrMVZtT3n4-oJWtQ6E0iQ@mail.gmail.com>
- <20220901175913.2183047-1-ndesaulniers@google.com>
-In-Reply-To: <20220901175913.2183047-1-ndesaulniers@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 4 Sep 2022 03:22:17 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARmhEE8Fxas5_VRKCzGYb9gMH-iDiKGo9yZaYSCzB0KsA@mail.gmail.com>
-Message-ID: <CAK7LNARmhEE8Fxas5_VRKCzGYb9gMH-iDiKGo9yZaYSCzB0KsA@mail.gmail.com>
-Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang; take 2
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Justin Stitt <jstitt007@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 2:59 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> -Wformat was recently re-enabled for builds with clang, then quickly
-> re-disabled, due to concerns stemming from the frequency of default
-> argument promotion related warning instances.
->
-> commit 258fafcd0683 ("Makefile.extrawarn: re-enable -Wformat for clang")
-> commit 21f9c8a13bb2 ("Revert "Makefile.extrawarn: re-enable -Wformat for clang"")
->
-> ISO WG14 has ratified N2562 to address default argument promotion
-> explicitly for printf, as part of the upcoming ISO C2X standard.
->
-> The behavior of clang was changed in clang-16 to not warn for the cited
-> cases in all language modes.
->
-> Add a version check, so that users of clang-16 now get the full effect
-> of -Wformat. For older clang versions, re-enable flags under the
-> -Wformat group that way users still get some useful checks related to
-> format strings, without noisy default argument promotion warnings. I
-> intentionally omitted -Wformat-y2k and -Wformat-security from being
-> re-enabled, which are also part of -Wformat in clang-16.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Link: https://github.com/llvm/llvm-project/issues/57102
-> Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2562.pdf
-> Suggested-by: Justin Stitt <jstitt007@gmail.com>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Youngmin Nam <youngmin.nam@samsung.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
-> Linus, I figured I'd send this to you to see whether you'd prefer to
-> apply it, or let it "ride the trains" up through the kbuild tree? I do
-> have another series I'm working on to improve the compiler version
-> checks
-> <https://lore.kernel.org/llvm/20220831184408.2778264-4-ndesaulniers@google.com/>
-> where I can/will improve the checks used here, but I'm also interested in
-> having something that might backport cleanly to stable.
+tree:   https://github.com/steev/linux c630-6.0.0-rc3
+head:   012f3cdd2a60528b877305877b52135b0076e028
+commit: 1ecec38075e2393a1ed0b00d6c34aef77a3ec540 [27/94] interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220904/202209040243.Cd4XFUph-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/steev/linux/commit/1ecec38075e2393a1ed0b00d6c34aef77a3ec540
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev c630-6.0.0-rc3
+        git checkout 1ecec38075e2393a1ed0b00d6c34aef77a3ec540
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Linus was addressed, so I just reviewed it.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+All errors (new ones prefixed by >>):
 
+>> drivers/interconnect/qcom/icc-rpm.c:352:13: error: redefinition of 'qcom_icc_bus_aggregate'
+     352 | static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+         |             ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/interconnect/qcom/icc-rpm.c:312:13: note: previous definition of 'qcom_icc_bus_aggregate' with type 'void(struct icc_provider *, u64 *, u64 *, u64 *)' {aka 'void(struct icc_provider *, long long unsigned int *, long long unsigned int *, long long unsigned int *)'}
+     312 | static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+         |             ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/interconnect/qcom/icc-rpm.c:312:13: warning: 'qcom_icc_bus_aggregate' defined but not used [-Wunused-function]
+
+
+vim +/qcom_icc_bus_aggregate +352 drivers/interconnect/qcom/icc-rpm.c
+
+   344	
+   345	/**
+   346	 * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
+   347	 * @provider: generic interconnect provider
+   348	 * @agg_avg: an array for aggregated average bandwidth of buckets
+   349	 * @agg_peak: an array for aggregated peak bandwidth of buckets
+   350	 * @max_agg_avg: pointer to max value of aggregated average bandwidth
+   351	 */
+ > 352	static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+   353						u64 *agg_avg, u64 *agg_peak,
+   354						u64 *max_agg_avg)
+   355	{
+   356		struct icc_node *node;
+   357		struct qcom_icc_node *qn;
+   358		int i;
+   359	
+   360		/* Initialise aggregate values */
+   361		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+   362			agg_avg[i] = 0;
+   363			agg_peak[i] = 0;
+   364		}
+   365	
+   366		*max_agg_avg = 0;
+   367	
+   368		/*
+   369		 * Iterate nodes on the interconnect and aggregate bandwidth
+   370		 * requests for every bucket.
+   371		 */
+   372		list_for_each_entry(node, &provider->nodes, node_list) {
+   373			qn = node->data;
+   374			for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+   375				agg_avg[i] += qn->sum_avg[i];
+   376				agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
+   377			}
+   378		}
+   379	
+   380		/* Find maximum values across all buckets */
+   381		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++)
+   382			*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
+   383	}
+   384	
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,119 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39B55ABE86
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 12:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B215ABE8D
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 12:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiICKbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 06:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S230254AbiICKlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 06:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiICKbl (ORCPT
+        with ESMTP id S229515AbiICKlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 06:31:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF4B59279;
-        Sat,  3 Sep 2022 03:31:34 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 283AGBkl027701;
-        Sat, 3 Sep 2022 10:31:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=nFjaabrQNY09jR57Vw3+gq4pp7hiX6Yx4HqOBOuEyuM=;
- b=euMhdGex0T9MpxehGqZDkWO51VXaMiySATthlffz4pyGpuagoh1EplUmzaWxL5aLZNlf
- OTAnd0MtoHIiB9vdZ0CQPLpywXrQBYXE/6lwdLm258kXfTsys46ugNznvB1k2bixV+1M
- ek7zYG6J1Lr8DPrMlMLwsLj2NerxT7NIuCLHqWpiCeAVIifgAvuuCWlFif5NS9m75QEy
- 3JPWkPJg47KfCkSoq2AH+SnNEn3DJdA6ckcGxD40HCzwK8QUGxhDGtDCjwkjGwIOl4Z1
- mxMRUUtoSbzag3UI3pmwa8vjIxsKV+COmoVZSZbLTGQcATGBd7hT+nM5cokGaaucH7kT HQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jc03v0hed-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 03 Sep 2022 10:31:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 283AVMLH024663
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 3 Sep 2022 10:31:22 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sat, 3 Sep 2022 03:31:15 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v12 3/3] arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
-Date:   Sat, 3 Sep 2022 16:00:48 +0530
-Message-ID: <1662201048-26049-4-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1662201048-26049-1-git-send-email-quic_kriskura@quicinc.com>
-References: <1662201048-26049-1-git-send-email-quic_kriskura@quicinc.com>
+        Sat, 3 Sep 2022 06:41:22 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2EC2CCB2;
+        Sat,  3 Sep 2022 03:41:20 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id bp20so4706716wrb.9;
+        Sat, 03 Sep 2022 03:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=VHxvMSygKVD9CKnhhsxoMpTwOE8lJNgN8OaQ16IexB4=;
+        b=ctnp1WprFkV18F3xytmry0sIi7rKDFIVUO824H+qHvRr7wxcSHVRvwLtGIb6ncEWWr
+         C/XO+ldnyCP250vNpwviyPO0SV9LTKlYntdM/UMzNKkiWMhEcrADMiDdBqWrYd8j9qr8
+         kha3u3xC4zdzjToU2lXuYNyWipirjgs//+ol83zyh1JZ6BO5uq0UwNbcbRZHSfRnpedH
+         HgkJzN6LJFUimOS3LR9dAwJjbJdk/r6GqrAj6xDFF8OU4Bo+mslgEvmfxSLX7cXaEsaT
+         K5N1ZxJrh6T3sXXTHopxmlAozhrXijg0Esjg6yh/4AHc5cBtzjhcVxjI+tE42bcVba8c
+         b0Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=VHxvMSygKVD9CKnhhsxoMpTwOE8lJNgN8OaQ16IexB4=;
+        b=nvk9+jNlwHekqjW6S32cWfeD1jPhn4dfW4rMWMS180QilPJizFqPvI+IdQUDZRonvb
+         jgsH68iBL2w8zAl8O9qMrQgPfHWeFsVEwlnC0k1cpBej7prfz6Hn7rwYqYDzw7Xn4HGz
+         atLy0TJEFYYQRk28eLUIurs28TAoiMl7FipXUh6x/isfcmwBYfbGuuJsVWtmCaHjtbvL
+         3VTsRn5lLYmUI5tUklysIPN8AsjZj9oT7V8az6669742Z1rJbw4j3A+ZVwMxIbyEH9Xo
+         T2QvjDPLynOLP2l7NUbj0WAvMaXiwmr98HXwYCbuSwCQvo8/F067UmR9ER4mhtIeZP6+
+         v1FA==
+X-Gm-Message-State: ACgBeo2q8SjQOEVWpiqkGQLqrjp5MQQpt+vWf5lBFrpj7uC7QItD0Gsx
+        Q9E8r4q6scjLOJBPwAVof1BrRPHAAk0=
+X-Google-Smtp-Source: AA6agR76Eu5mo+Zm0caU9G80qHna7ylj1fTzEz1r05vmIY+gDmAKnH56VOKEGNgZcwhYnBeFSwE6ZA==
+X-Received: by 2002:adf:e902:0:b0:225:5462:94db with SMTP id f2-20020adfe902000000b00225546294dbmr19247305wrm.481.1662201678922;
+        Sat, 03 Sep 2022 03:41:18 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id j5-20020a5d6185000000b0022533c4fa48sm3444256wru.55.2022.09.03.03.41.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 03:41:18 -0700 (PDT)
+Date:   Sat, 3 Sep 2022 11:41:16 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/56] 4.19.257-rc1 review
+Message-ID: <YxMvTB3wl0cKDrt+@debian>
+References: <20220902121400.219861128@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jvsscNWZggA4EwLm8w20FtB3mlsaWjAI
-X-Proofpoint-ORIG-GUID: jvsscNWZggA4EwLm8w20FtB3mlsaWjAI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-03_03,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- impostorscore=0 mlxscore=0 spamscore=0 priorityscore=1501 bulkscore=0
- phishscore=0 clxscore=1015 mlxlogscore=783 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209030053
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Overriding the SNPS Phy tuning parameters for SC7280 IDP device.
+Hi Greg,
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Fri, Sep 02, 2022 at 02:18:20PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.257 release.
+> There are 56 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 0c48db6..053fd1e 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -325,6 +325,12 @@
- 	vdda-pll-supply = <&vreg_l10c_0p8>;
- 	vdda33-supply = <&vreg_l2b_3p0>;
- 	vdda18-supply = <&vreg_l1c_1p8>;
-+	qcom,hs-rise-fall-time-bp = <0>;
-+	qcom,squelch-detector-bp = <(-2090)>;
-+	qcom,hs-disconnect-bp = <1743>;
-+	qcom,hs-amplitude-bp = <1780>;
-+	qcom,hs-crossover-voltage-microvolt = <(-31000)>;
-+	qcom,hs-output-impedance-micro-ohms = <2600000>;
- };
- 
- &usb_1_qmpphy {
--- 
-2.7.4
+Build test (gcc version 11.3.1 20220819):
+mips: 63 configs -> no  failure
+arm: 115 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1754
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

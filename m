@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AD35AC123
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 21:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDFD5AC126
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 21:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbiICTcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 15:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S233273AbiICTfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 15:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiICTch (ORCPT
+        with ESMTP id S233114AbiICTfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 15:32:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A2148EA8
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 12:32:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BFB660D36
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 19:32:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA5DC433D6;
-        Sat,  3 Sep 2022 19:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662233555;
-        bh=mh3N+GmFc5Rx9AiBTB6cAzvRqaNHLVykgec3apa4ju4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CnKY2yCIHdBupTV/FW5lzQ1TBLjhnFNFWKZuiUAGkMH1z9TpnXoKy5fhfSms3ASQp
-         qyHwz1a+tmBKOgLl/GYPmgGcmSrEhekuy9HJ16wesiJbrzKEc+xkETylWGhHQg0gwv
-         p7V4tu1lBldxMmp6OztkTzdwi5n9oxFq7X3OH6lFk92MQn1G4wyhHSRofVtgdn0pwo
-         5rqrLlbdXIstgskZHtNqWGgF0ogTx9JpIwMMSGWXnKh82X2+Z6o7yu3GJXtHSrnp3J
-         tKWYHsVQby5o/D8uOiXmiagULOpFi3wiMZ5FNWqLTGpwugeZ8PBkm6YErgNeXlkGxa
-         5y2IDik60CSgQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     willy@infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH for-mm-unstable] mm/swap.h: Define swap_cache_get_folio() for !CONFIG_SWAP
-Date:   Sat,  3 Sep 2022 19:32:28 +0000
-Message-Id: <20220903193228.172238-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Sat, 3 Sep 2022 15:35:03 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B151EEF7;
+        Sat,  3 Sep 2022 12:35:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662233702; x=1693769702;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=PxhrSNgegw/If3/EaW4kYpuEXX6/cf/dY4xYtRrZeyw=;
+  b=I2IQ98jIOc1x9eLs0LnQ/3Rgwt7FuucDBRcW8DimkixfNGuLUeaTNQRU
+   qmzM+gzhG25IDrUI0s1ManppDxyhpP493vflmFdEBR8ocWfkFKRtxwjEE
+   hDfgxEeUSRfEctQxco4Phrs5rAZSEMUr/R7asG3ttsiwcBDxgFpx65EVf
+   4=;
+X-IronPort-AV: E=Sophos;i="5.93,287,1654560000"; 
+   d="scan'208";a="126424489"
+Subject: Re: [PATCH v3 10/19] dt-bindings: hwmon: (mr75203) add "moortec,
+ vm-pre-scaler" property
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-6e5a0cd6.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 19:34:47 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-6e5a0cd6.us-west-2.amazon.com (Postfix) with ESMTPS id 30E02A2647;
+        Sat,  3 Sep 2022 19:34:46 +0000 (UTC)
+Received: from EX19D013UWA001.ant.amazon.com (10.13.138.253) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Sat, 3 Sep 2022 19:34:45 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA001.ant.amazon.com (10.13.138.253) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Sat, 3 Sep 2022 19:34:45 +0000
+Received: from [192.168.97.127] (10.85.143.175) by mail-relay.amazon.com
+ (10.43.160.118) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Sat, 3 Sep 2022 19:34:39 +0000
+Message-ID: <02741c2c-7524-5093-19c1-622ac87e7cf9@amazon.com>
+Date:   Sat, 3 Sep 2022 22:34:39 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <jdelvare@suse.com>, <linux@roeck-us.net>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dkl@amazon.com>, <andriy.shevchenko@intel.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-11-farbere@amazon.com>
+ <20220902195737.GA306891-robh@kernel.org>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220902195737.GA306891-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,51 +78,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4d3cb611e6df ("swap: add swap_cache_get_folio()") in mm-unstable
-tree defines 'swap_cache_get_folio()' for CONFIG_SWAP only, and as a
-result build fails on !CONFIG_SWAP as below, after following commits
-using the function under !CONFIG_SWAP is applied.
+On 9/2/2022 10:57 PM, Rob Herring wrote:
+> On Tue, Aug 30, 2022 at 07:22:03PM +0000, Eliav Farber wrote:
+>> Add support for mr76006 pre-scaler which provides divide-by-2 scaling of
+>> input voltage, which can then be presented for VM for measurement within
+>> its range (the VM input range is limited to -0.1V to 1V).
+>>
+>> The new "moortec,vm-pre-scaler" property lists the channels that use a
+>> pre-scaler.
+>>
+>> The driver will use this list to multiply the voltage result by 2, to
+>> present to the user the actual voltage input source.
+>>
+>> Signed-off-by: Eliav Farber <farbere@amazon.com>
+>> ---
+>> V3 -> V2:
+>> - Add "moortec" prefix to property name.
+>> - Change property format to be a single u8 array.
+>> - Fix typo: scalar --> scaler.
+>>
+>>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml    | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml 
+>> b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>> index 69cc6caceb2c..4c983d8f8fe7 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>> @@ -54,6 +54,16 @@ properties:
+>>      default: 16
+>>      $ref: /schemas/types.yaml#definitions/uint8-array
+>>
+>> +  moortec,vm-pre-scaler:
+>> +    description:
+>> +      moortec,vm-pre-scaler property is an array of channels that 
+>> use a mr76006
+>> +      pre-scaler to divides the input source by 2.
+>
+> to divide the
 
-    mm/shmem.c: In function ‘shmem_swapin_folio’:
-    mm/shmem.c:1738:10: error: implicit declaration of function ‘swap_cache_get_folio’; did you mean ‘read_cache_folio’? [-Werror=implicit-function-declaration]
-     1738 |  folio = swap_cache_get_folio(swap, NULL, 0);
-          |          ^~~~~~~~~~~~~~~~~~~~
-          |          read_cache_folio
-    mm/shmem.c:1738:8: warning: assignment to ‘struct folio *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
-     1738 |  folio = swap_cache_get_folio(swap, NULL, 0);
-          |        ^
-    cc1: some warnings being treated as errors
+Fixed in v4.
 
-This commit fixes the issue by defining the function for !CONFIG_SWAP
-case.
+> You don't need the property name in the description. The entries are the
+> pre-scaler values for each channel? The array index is the channel? If
+> so, then 'an array of pre-scaler values for each channel ...'.
 
-Fixes:4d3cb611e6df ("swap: add swap_cache_get_folio()") in mm-unstable (1e6b789996e7)
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
+Removed property name in the description.
 
-Note: This patch does not cleanly applicable on top of the mm-unstable
-but the fixing commit.
+The entries are channel numbers that use a pre-scaler.
+Assume 2 VMs, with 16 channels each (so 32 channels in total, numbered
+from 0 to 31) and assume: moortec,vm-pre-scaler = /bits/ 8 <5 6 20>;
+This means that only channels 5 6 and 20 use a pre-scaler, and the driver
+will use a factor of 2 only for these channels.
 
- mm/swap.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+For v4 I renamed the property name to be "moortec,vm-pre-scaler-x2".
+And I changed binding to:
 
-diff --git a/mm/swap.h b/mm/swap.h
-index 2d6fe6c44ad9..ccd8d9a9ad36 100644
---- a/mm/swap.h
-+++ b/mm/swap.h
-@@ -101,6 +101,12 @@ static inline int swap_writepage(struct page *p, struct writeback_control *wbc)
- 	return 0;
- }
- 
-+static inline struct folio *swap_cache_get_folio(swp_entry_t entry,
-+		struct vm_area_struct *vma, unsigned long addr)
-+{
-+	return NULL;
-+}
-+
- static inline struct page *lookup_swap_cache(swp_entry_t swp,
- 					     struct vm_area_struct *vma,
- 					     unsigned long addr)
--- 
-2.25.1
+moortec,vm-pre-scaler-x2:
+description:
+   Defines the channels that use a mr76006 pre-scaler to divide the input
+   source by 2.
+   The pre-scaler is used for input sources that exceed the VM input range.
+   The driver uses this information to present to the user with the actual
+   value of the voltage source.
+   For channels that are not listed, no pre-scaler is assumed.
+   Maximum number of items - total number of channels in all VMs.
+   Each channel should not appear more than once.
+$ref: /schemas/types.yaml#/definitions/uint8-array
 
+>> +      The pre-scaler is used for input sources that exceed the VM 
+>> input range.
+>> +      The driver uses this information to present to the user the 
+>> actual value
+>> +      of the voltage source.
+>> +    default: 1
+>
+> It's an array, so a scalar default doesn't make sense.
+What I meant was the in-case channel is not defined the default pre-
+scaler value is 1.
+
+>> +    $ref: /schemas/types.yaml#definitions/uint8-array
+>
+> Constraints? I assume there's a finite number of channels to set the
+> array size bounds for example. 
+Added some constraints in the new description above.
+
+--
+Thanks, Eliav

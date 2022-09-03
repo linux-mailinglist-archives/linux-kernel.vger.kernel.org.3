@@ -2,74 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601DC5ABF1C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 15:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B795ABF1E
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 15:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbiICNYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 09:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
+        id S231183AbiICNZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 09:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiICNYg (ORCPT
+        with ESMTP id S230488AbiICNZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 09:24:36 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347C3B4A4
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:24:35 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id bn9so4827165ljb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 06:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date;
-        bh=S2u9Q+tjkz31iCRfklDeKGl5LtO3Yk8kTNoA3qpbsNs=;
-        b=eiY6Qg+IHT46rgzl4Cmogmh3qvEMhB+4LjtHSlFkcuJ1zkCQ+CVRy4i87gYaAJS+J6
-         N8Pv0Nk/YK1KP915M2z3p/H6gaw/h30EqWFM8US0LYLGud5g1WklqWT2ct6VCy+bAJGJ
-         8kDnSmyewMzHzWEQawmwM3W6fZsytkqvsLl1rnOIpasxhX/smPIfa1ADlz19rXwBw54q
-         7/JJ2DliCkidFDjTKuYGlfx7IyTBtjsTd/7uEirFRlmY7gunISAeLQLOiyqj1foJ1FY7
-         Gn2mzlt1GLa3x3SkHg8xpHDbhwyMerJ5P1sjUFG0j1nQGPiZDpifm3XlNzeL7BJkzH1g
-         dBYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=S2u9Q+tjkz31iCRfklDeKGl5LtO3Yk8kTNoA3qpbsNs=;
-        b=Ghfkfvu1eftv/yN+r0kMSxZUNVSAgvnQ6ah2yTjlKeUJmVhi92Qc4goUiZ4goxFOdZ
-         SAcyrg96amKYoKAsqcxHMErZtMr31Zu0pWyhBYaTyGhybhTszKyU96uijIegnLygX0Mr
-         B8zoiMbi5gdZ/z6mUhUKtEVjBxfQ0TJPFaBZpPW0rK8nWeFFQsuQWSL1wLF56kEGrkf1
-         DqbG9sOXoozAsPEKQ6VegbkmRh1PduuAfX+9U6tAgwRCwX2nQwWxzaMwB8kdFrhJ9IpB
-         2l5kALg2nyyoHMC3oLCMFJiOl1I84+bMNdcGRM5gZzG1j9nPjkMtnekLou1s3ChKw3qN
-         mzkw==
-X-Gm-Message-State: ACgBeo0lanxvj/otxhqxwhl3nDKWzSzI9VJFxcO9IAUoXiVDFyjj480q
-        smL0/buhc4P198T+30cKdMdv1kJfqyrDkktB20o=
-X-Google-Smtp-Source: AA6agR5SFTYdo+zjKl8XFofHVph6TR9RRvhCplgBba/lMwtKQ79S2f76Hi+WeaGlGgqyHqSji+PtLNSMgyFXqCyf85g=
-X-Received: by 2002:a2e:8181:0:b0:25f:e028:a67 with SMTP id
- e1-20020a2e8181000000b0025fe0280a67mr12996015ljg.89.1662211473196; Sat, 03
- Sep 2022 06:24:33 -0700 (PDT)
+        Sat, 3 Sep 2022 09:25:27 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A852AE0F;
+        Sat,  3 Sep 2022 06:25:25 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::e2d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id A713B4B0;
+        Sat,  3 Sep 2022 13:25:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A713B4B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1662211525; bh=bJCWEkDDvhyPhDxPqXVdbXV2a+4oXAK3ZRM+enz8kG0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Uc0DEG3L+d4/xd4bF1ZOFWktJeDZvGSKsZjAB2ip9FdVyR817I+8HHBzLQ1y37g/T
+         VmuzpARfEzJ1MoHGTupLoQEA8lV8wk6SRriU7b4fzoTkqJMUSxjcRDr4gksTC1YT+I
+         Oe/VxUhhe1hvLed9dW3/KoOIj/08zcDYkHHJ7L8mcCfvEQQ8WLuhAOIsuZoVNqbJij
+         4I571ZCbzaa7FUsoVU6d9MzWabe7scaDGDgehtzp+1zkcervBkkmt2Fh6hgKapyjV/
+         XRtW9uCgJT4Nl5kHkXyd9sUlChdDyNhnBMUlXEkjocHdZYKMybdUkTLGbVp9JpLU/i
+         1XST+oQXsGkMA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Thorsten Leemhuis <linux@leemhuis.info>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] Rewrite the top-level index.rst
+In-Reply-To: <938a9905-217c-f02a-b5c2-35c1e5d7822b@leemhuis.info>
+References: <20220901231632.518583-1-corbet@lwn.net>
+ <938a9905-217c-f02a-b5c2-35c1e5d7822b@leemhuis.info>
+Date:   Sat, 03 Sep 2022 07:25:25 -0600
+Message-ID: <87tu5ooaii.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Sender: missabibatu@gmail.com
-Received: by 2002:ab3:1e0c:0:b0:1db:50d2:db73 with HTTP; Sat, 3 Sep 2022
- 06:24:32 -0700 (PDT)
-From:   Ariel iah <pb589847@gmail.com>
-Date:   Sat, 3 Sep 2022 14:24:32 +0100
-X-Google-Sender-Auth: JOMuouFDq26rSDvYUp4nsPhMeiM
-Message-ID: <CAHRP2D73OLNYgnntRN1AMzqD6T4L7LWRuqsp-8iqX7c_0qcQTg@mail.gmail.com>
-Subject: GOOD DAY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-i am Mrs  Benaiah and i was diagnosed with cancer about 2 years
-ago,before i go for a surgery  i  have to do this by helping the
-Less-privileged,so If you are interested to use the sum of
-US17.3Million)to help them kindly get back to me for more information.
-Warm Regards,
-Mrs. Peninnah Ariel Benaiah
+Thorsten Leemhuis <linux@leemhuis.info> writes:
+
+> Great initiative. But looking at the rendered result made me wonder:
+> what overall structure for the docs are you aiming for in the end? I'm
+> sure you have a picture in your head, but I failed to grasp it, as for
+> me a few things looked a little odd:
+
+Thanks for taking a look!
+
+> * we do all of this for the users, so shouldn't the section aimed at
+> users be at the top? And list more things they will look for?
+
+My thinking is that the main consumers of the kernel docs is kernel
+developers (I can't prove this, I just know it :), and that I see a lot
+of referrals to the process documentation.  So I started with that.  I'm
+not wedded to that organization if something else seems better.
+
+> * What is so important about "Architecture-agnostic documentation" and
+> "Architecture-specific documentation" (both with just one entry) that
+> they have to be listed here? Same for "Firmware-related documentation".
+
+I kind of ran out of energy after moving a lot of stuff from the front
+page and wasn't sure what to do with them.  There's definitely room for
+improvement. 
+
+> And is the User-oriented section really the right place for the kbuild
+> stuff, as from a quite look it seems most of those aim at developers and
+> not at users?
+
+I guess I saw building and installation as a *use* of the kernel.  This
+one does sort of cross the lines and could certainly go somewhere else.
+I was mostly trying to avoid a bunch of subsections with a single entry. 
+
+> * Quite a few things I'd had expected on that front page aren't listed
+> there. Sure, everybody has different expectations on what's important,
+> but I for example hat expected "command-line parameters" or "Reporting
+> issues" (here I'm obviously biased) to be somewhere on that page.
+
+I'm happy to change the mix; "reporting issues" probably does belong
+there, at least.  As long as we don't get back to the current state
+where *everything* is on the front page.
+
+> This made me think: should that main index page maybe just have these
+> three sections (apart from Translations) ?
+>
+> * User-oriented documentation
+> * Application-developer documentation
+> * Other documentation on the Linux kernel and its development
+
+That relegates an awful lot of our important stuff to "other"; as said
+above, I think that the main consumers of the documentation are kernel
+developers, and the documentation organization should reflect that.
+
+> I'd say that makes it quite clear where readers need to go from there,
+> even if the name of the third section is a bit vague (but in contrast it
+> becomes clear I'd say).
+>
+> Each section could list its five to ten most important documents before
+> linking to a separate index file with more. And that index file for will
+> need subcategories, too, otherwise it will become large, too.
+>
+> And sure, quite a few documents will be hard to categorize currently.
+> Making things fit properly might take a decade or two (unless somebody
+> hires a few people to bring order into this). But it would set a clear
+> direction. It also would tell doc writers what tone and detail level to
+> use when writing their texts, as that depends on the audience which
+> becomes clearer this way.
+
+The creation of a bit more structure is certainly one of the goals here.
+After several years I'm not having to argue quite so much about grouping
+documentation for the intended readers, so it seems like time to stir
+things up again :)
+
+> Ciao, Thorsten
+>
+> P.S.: /me wonders if Jonathan posted this patch-set as a bait and will
+> force everyone replying to come to his LPC/kernel summit session "What
+> kernel documentation could be"
+> /me despite this replied, as he had planned to go anyway
+
+An awful lot of kernel work gets done on conference-presentation
+deadline schedules...  The session would be a good time to talk about
+what we think our overall structure should be.
+
+I will try to do another pass on this before then, but there's no
+guarantees.  If nothing else, it'll clean up the bottom-of-page
+messiness where I got lazy the first time.
+
+Thanks,
+
+jon

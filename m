@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEF55AC013
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2225AC037
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbiICRhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 13:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
+        id S232243AbiICRi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 13:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiICRhI (ORCPT
+        with ESMTP id S231976AbiICRiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 13:37:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BDC52DD2;
-        Sat,  3 Sep 2022 10:37:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07AD860BA3;
-        Sat,  3 Sep 2022 17:37:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 682B9C433C1;
-        Sat,  3 Sep 2022 17:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662226627;
-        bh=m6WohAShk7KIdbjJFBHGlpyQaW+gPanAx6yMOvu71z8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=bATeTWuzDd1NS7NIW1AG8uuHccCeEvK5VO93XJc816pbERgQumQ4fuFMFt+xR6HNe
-         0moA+0IDnj4AfH+jG04sFpNoSho8I8FtcGNUwF0aQADaurjR1c2fvTSeVy7ohQ7QNN
-         DsPjcJXTB4NQamrYiVrJcA01DthUuqF2GvreBMnRZxe6hUAvGR011Xb3kgCc8DlUtw
-         xlz+7jZl0ppPTbtBMo8feo1cLVO0F1LmdXwniJrQG6kBlSBQ8fyCpnqE1SI7wTRgeK
-         snV03xcf9dt7KzQIH46wLy6woKglZ3QsQ35Eq5eqV6TIupAHwPQUspTWcAJCuzG+bt
-         baiK64nQcPM6Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 55A87C4166E;
-        Sat,  3 Sep 2022 17:37:07 +0000 (UTC)
-Subject: Re: [GIT PULL] clk fixes for v6.0-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220903050126.2767493-1-sboyd@kernel.org>
-References: <20220903050126.2767493-1-sboyd@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220903050126.2767493-1-sboyd@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
-X-PR-Tracked-Commit-Id: abb5f3f4b1f5f0ad50eb067a00051d3587dec9fb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9a61442cba0e93de5e505b9f43d04d1afa6f18c1
-Message-Id: <166222662734.30432.488222497781379159.pr-tracker-bot@kernel.org>
-Date:   Sat, 03 Sep 2022 17:37:07 +0000
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 3 Sep 2022 13:38:17 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A5957563;
+        Sat,  3 Sep 2022 10:38:03 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id b26so5206040ljk.12;
+        Sat, 03 Sep 2022 10:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=T9PB00G8n49mkQ5GqTry0cp+XpHMmRJWkRcveZs969s=;
+        b=fIOMCu7AITN9Pt+nFN8BJTaa3K5P3d8RThC1MmB5xW6+aCOf4ziM11dh3PVY8ChogI
+         2In7ghfavyCyWtgzUXJdWJbLcoFt8im2w1QA4Z8PA+4nH1IpLvWqzc4K3XXoKDtzZut+
+         zrPXw4Xgu7XAc/zA8NHyqWGScGc/Vw+ZfkvXQsEFQsWc2nQpj9tj4wlMemyYzJexkbQZ
+         tGfwIBaPTWxhz6U3HENtbDZhuNci6vVbLotA4cnZW4d6tLzMaxSeSrJVmoSXVaGAym04
+         0TdYH9bByMpa7AqY2/rQEU0ONx3kmD/re/WCnYtxpF1wiZp12OHS1//jc0Wu8MCo7ffF
+         I/MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=T9PB00G8n49mkQ5GqTry0cp+XpHMmRJWkRcveZs969s=;
+        b=5CDKYqN4J/Gh96GYEZ7AcH68OQzLn8jRvdp1+V46vkcRtkuYllzKmKVZ+A/pD3XUeF
+         47Ocy0h5uy1EmuayaW3j330TjYTJ+9BRN/sJ1w+Op6zjLP1jZFwNPVvFT18QrdBC/SW9
+         06Cz8NxR5+4M1XEd5gS8w6t83Jb2rH22AEnvW1LQbkycUIfPgl433M02D51XTnlJJvaK
+         /Zzc8loR3+CiSN7zi/be9FybW1UyfFINRkOSWuy56KQEsEL7LEJkeZwaKWr1Srgp+YCQ
+         dtUxLr8BjIJSGbLzGf2i8YyjwTS6AlfuLZZSrrYdHyCCRyje0cD8J3CWfuKskGQQGMoZ
+         782Q==
+X-Gm-Message-State: ACgBeo16TUzEuuVhRFUF/Lr3nRrFi2W4CVITuaeUSD8qGtwrrxhQc77W
+        8FPCfpG/Ky8kHvP+dKE3lVop0ZZ3xwDfKk3Kwm5lhpQ9jb8MMg==
+X-Google-Smtp-Source: AA6agR70Jzdv99OIWtBI+Fq39YHvU0oO+xeoqhKJN9rejAsxAabkcRwmiauhY/c5RKQZKtQjTgpBf1Dezn5qMhA8Xac=
+X-Received: by 2002:a2e:8541:0:b0:261:b44b:1a8b with SMTP id
+ u1-20020a2e8541000000b00261b44b1a8bmr13288406ljj.46.1662226680495; Sat, 03
+ Sep 2022 10:38:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220901220138.182896-1-vishal.moola@gmail.com> <20220901220138.182896-20-vishal.moola@gmail.com>
+In-Reply-To: <20220901220138.182896-20-vishal.moola@gmail.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Sun, 4 Sep 2022 02:37:43 +0900
+Message-ID: <CAKFNMon3fuhwv32mtP_yV1agLUQkOePOfAN0yBH2X669YgonCA@mail.gmail.com>
+Subject: Re: [PATCH 19/23] nilfs2: Convert nilfs_lookup_dirty_node_buffers()
+ to use filemap_get_folios_tag()
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri,  2 Sep 2022 22:01:25 -0700:
+On Fri, Sep 2, 2022 at 7:07 AM Vishal Moola (Oracle) wrote:
+>
+> Convert function to use folios throughout. This is in preparation for
+> the removal of find_get_pages_range_tag().
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  fs/nilfs2/segment.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9a61442cba0e93de5e505b9f43d04d1afa6f18c1
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Ryusuke Konishi

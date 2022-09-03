@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA135AC148
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 22:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837D45AC14A
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 22:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbiICUFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 16:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S233408AbiICUGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 16:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiICUFU (ORCPT
+        with ESMTP id S229509AbiICUGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 16:05:20 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C502A2CDFA;
-        Sat,  3 Sep 2022 13:05:19 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id y29so5160058pfq.0;
-        Sat, 03 Sep 2022 13:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=XIYPkRvxAVyJZ8758VPMnQXXVzGY/2gLg8W5CxBNhEQ=;
-        b=T64co4pFrl6pvsmMK4pHYGKtxLF5UILMRpxu0XFUucSkQltpeRNSXClldoJnhE6Iav
-         RmUNi/YdTeW9NzifnRhYeJNIvSVcu1FPiMhE48fHQgWNgvarcNIoAn7dKXmYXwJqWZxX
-         IVCosSBslKT8u24lgnzqMiwzPcBfaKKJakKpznp1+vSjue0OKSeB0r++kOhh3TR2UCXB
-         f0kVKdTEH9C6DvYEj3JtrLDCyP9H7cQaMAd5WXtBA1tIqwxa2OfPTprdtcCXZ7ejn/Yn
-         s4ichU1oyUn5Xl1wCNIPBdczv/9X9YNZWPb4TKT2mUT2zrz3+TW9NP434mV28VDCEap+
-         e+xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=XIYPkRvxAVyJZ8758VPMnQXXVzGY/2gLg8W5CxBNhEQ=;
-        b=u7goWqWshYCn7vx7+gR8Pyg8pMwuQ3dcnapguze+k+8K5hs6Ib3i/mOeg2MQbyouts
-         ek/Hup8/jbfffwdAaEjQeLIedgjCEfy+spixb9gM/JLtr/I9707AtAEu6bRdL65vzBFW
-         NI/VILP1J+s4a6zRGnkqqsJuE4cCgw8fD8QW+Zi9TCp8yZAkNaZ+Td197oBDndR6HFWW
-         8cz1+gV2Br/FMr61GHV2g+hlivTPspfpxzkVNn2CDW7+HEMICC7rxIIf53wiQGtOGhu5
-         tjhXJaAHgu8C8SMWTRXfjUuB6Bluw6YH2lSPZWW4lVDWkyBeerT+lVJqhN/llAcUtxIN
-         WxXg==
-X-Gm-Message-State: ACgBeo0ntu7KykEgwdzun8frsfU/PrvPYHyNwgKdjG9vG74FzPrjUM7F
-        WPdatdhMSkWXt/ntOpsrRCiD84IxrGQ=
-X-Google-Smtp-Source: AA6agR5+ildvk3EZSHxece2o1QbD39BSM+BUHnqMaYvLdPje6gI/fFJU3uzL5ocVwCNqSIet+96WOw==
-X-Received: by 2002:a63:83c7:0:b0:42b:b618:31b4 with SMTP id h190-20020a6383c7000000b0042bb61831b4mr28923640pge.607.1662235519074;
-        Sat, 03 Sep 2022 13:05:19 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:ea21:afd4:e65e:539c])
-        by smtp.gmail.com with ESMTPSA id nd10-20020a17090b4cca00b001fdc88d206fsm157460pjb.9.2022.09.03.13.05.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 13:05:18 -0700 (PDT)
-Date:   Sat, 3 Sep 2022 13:05:16 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [git pull] Input updates for v6.0-rc3
-Message-ID: <YxOzfPVU+ogFrEb8@google.com>
+        Sat, 3 Sep 2022 16:06:06 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B544DB0E;
+        Sat,  3 Sep 2022 13:06:03 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2839EGQB031956;
+        Sat, 3 Sep 2022 20:06:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=DvtTk1Z/ESP+39Y8V1aV0Jj1x/WVB/9tkpYI5Y8WQPA=;
+ b=pZSp6QJ8sJxouzIrBcgGoyhKRUsxh8Gkz7M7iedc3WmPmrNOCoqAmjYpmMTO5/BrfZoO
+ PGidL0AumTumJJ0Tk76fzFgb54+36dVNWz69ron937qSX5ebQJ+dj1DhF8nrHiZsaAki
+ ziA3/31ioQ4eL81sd9xsYjERqJIWGh298CUw75yMzlUiV97gl9VjrFCkuLXcJ4v8ni1Z
+ NotYlHWgDKR9lY7RnBby7o2tExfy/shPuoud6ReqiPTbvRgHF1HxIzaBr/zGgX67DQ2H
+ 7pl6jodzdgqNh4g+Ybl854KZG67lsCpiFqhTZZa9EUugeGUli0evBXoRoqBH4Ouc/Hb/ Ew== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jbwbc101k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 03 Sep 2022 20:05:59 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 283IkqjE016402;
+        Sat, 3 Sep 2022 20:05:58 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jbwc0ma52-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 03 Sep 2022 20:05:58 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 283K5wZM018676;
+        Sat, 3 Sep 2022 20:05:58 GMT
+Received: from alaljime-amd-bm-e3.allregionalphxs.osdevelopmenphx.oraclevcn.com (alaljime-amd-bm-e3.allregionalphxs.osdevelopmenphx.oraclevcn.com [100.107.196.22])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3jbwc0ma4y-1;
+        Sat, 03 Sep 2022 20:05:58 +0000
+From:   Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+To:     seanjc@google.com, pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        suravee.suthikulpanit@amd.com, mlevitsk@redhat.com,
+        joao.m.martins@oracle.com, alejandro.j.jimenez@oracle.com
+Subject: [PATCH 1/1] KVM: x86: Allow emulation of EOI writes with AVIC enabled
+Date:   Sat,  3 Sep 2022 20:05:57 +0000
+Message-Id: <20220903200557.1719-1-alejandro.j.jimenez@oracle.com>
+X-Mailer: git-send-email 2.34.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-03_10,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209030104
+X-Proofpoint-ORIG-GUID: oQMLQonpWEv3fjYMeJ-EE-4jul812gHa
+X-Proofpoint-GUID: oQMLQonpWEv3fjYMeJ-EE-4jul812gHa
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,57 +73,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+According to section 15.29.9.2 - AVIC Access to un-accelerated vAPIC register
+of the AMD APM [1]:
 
-Please pull from:
+"A guest access to an APIC register that is not accelerated by AVIC results in
+a #VMEXIT with the exit code of AVIC_NOACCEL. This fault is also generated if
+an EOI is attempted when the highest priority in-service interrupt is set for
+level-triggered mode."
 
-	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.0-rc3
+This is also stated in Table 15-22 - Guest vAPIC Register Access Behavior,
+confirming that AVIC hardware traps on EOI writes for level triggered
+interrupts, and leading to the following call stack:
 
-to receive updates for the input subsystem. You will get:
+avic_unaccelerated_access_interception()
+-> avic_unaccel_trap_write()
+  -> kvm_apic_write_nodecode()
+    -> kvm_lapic_msr_read()
+      -> kvm_lapic_reg_read()
 
-- GT1158 ID added to Goodix touchscreen driver
-- Boeder Force Feedback Wheel USB added to iforce joystick driver
-- fixup for iforce driver to avoid hangups
-- fix autoloading of rk805-pwrkey driver.
+In kvm_lapic_reg_read(), the APIC_EOI offset (0xb0) is not allowed as valid, so
+the error returned triggers the assertion introduced by 'commit 70c8327c11c6
+("KVM: x86: Bug the VM if an accelerated x2APIC trap occurs on a "bad" reg")'
+and kills the VM.
 
-Changelog:
----------
+Add APIC_EOI offset to the valid mask in kvm_lapic_reg_read() to allow the
+emulation of EOI behavior for level triggered interrupts.
 
-Greg Tulli (1):
-      Input: iforce - add support for Boeder Force Feedback Wheel
+[1] https://www.amd.com/system/files/TechDocs/24593.pdf
 
-Jarrah Gosbell (2):
-      dt-bindings: input: touchscreen: add compatible string for Goodix GT1158
-      Input: goodix - add compatible string for GT1158
+Fixes: 0105d1a52640 ("KVM: x2apic interface to lapic")
+Signed-off-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+Cc: stable@vger.kernel.org
+---
 
-Lukas Bulwahn (1):
-      MAINTAINERS: add include/dt-bindings/input to INPUT DRIVERS
+I am unsure as to the proper commit to use for the Fixes: tag. Technically the
+issue was introduced by the initial SVM AVIC commits in 2016, since they failed
+to add the EOI offset to the valid mask.
 
-Ondrej Jirman (1):
-      Input: goodix - add support for GT1158
+To be safe, I used the commit that introduces the valid mask, but that is
+somewhat misleading since at the time AVIC was not available, and I believe that
+Intel posted interrupts implementation does not require access to EOI offset in
+this code.
 
-Peter Robinson (1):
-      Input: rk805-pwrkey - fix module autoloading
+Please correct Fixes: tag if necessary.
+---
+ arch/x86/kvm/lapic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Tetsuo Handa (1):
-      Input: iforce - wake up after clearing IFORCE_XMIT_RUNNING flag
-
-Diffstat:
---------
-
- Documentation/devicetree/bindings/input/touchscreen/goodix.yaml | 1 +
- Documentation/input/joydev/joystick.rst                         | 1 +
- MAINTAINERS                                                     | 1 +
- drivers/input/joystick/iforce/iforce-main.c                     | 1 +
- drivers/input/joystick/iforce/iforce-serio.c                    | 6 +++---
- drivers/input/joystick/iforce/iforce-usb.c                      | 8 ++++----
- drivers/input/joystick/iforce/iforce.h                          | 6 ++++++
- drivers/input/misc/rk805-pwrkey.c                               | 1 +
- drivers/input/touchscreen/goodix.c                              | 2 ++
- 9 files changed, 20 insertions(+), 7 deletions(-)
-
-Thanks.
-
-
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 9dda989a1cf0..61041fecfa89 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1452,6 +1452,7 @@ static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
+ 		APIC_REG_MASK(APIC_LVR) |
+ 		APIC_REG_MASK(APIC_TASKPRI) |
+ 		APIC_REG_MASK(APIC_PROCPRI) |
++		APIC_REG_MASK(APIC_EOI) |
+ 		APIC_REG_MASK(APIC_LDR) |
+ 		APIC_REG_MASK(APIC_DFR) |
+ 		APIC_REG_MASK(APIC_SPIV) |
 -- 
-Dmitry
+2.34.2
+

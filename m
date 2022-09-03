@@ -2,136 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD6E5AC171
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 23:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857625AC181
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 00:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiICVdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 17:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
+        id S231550AbiICWAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 18:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiICVdM (ORCPT
+        with ESMTP id S231435AbiICWAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 17:33:12 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA1949B60
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 14:33:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662240791; x=1693776791;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DdROJJyFoDFybdcKUUDVwpQAp9WdLWvtGivqf21JP8M=;
-  b=ZMU71xoMgoZHPebH5v49e30CeI8R1lQsugStjsWFCFgBZCrBSTiKyaUn
-   rEWcf9rcdbFS5pyXv51prqyi6RQM2LQDbfsq186LqSayJpGpaR7gSneQs
-   llvIpObbeZabXN2F1NoyJ0MdVXfxqYzmbajIBkmlT1sSSSmS2TNHYJrk8
-   JJ50/k2BDBs6MRjRbbXLBnqC3Ee9WiG9wlrNLhTkhAj74O5m7Mh/kr0sX
-   eyH9PGSI8RVNQ74cN5nSyN2c9iYkDmeUJDiO1c9cVD070CWF5Zf3WS8m+
-   JQ2PnaEonFE/RHtiaE1HQRiLQ0q7AKtG9sjQzu3ZF7Esw/EpOybw37SFm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="279206101"
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="279206101"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 14:33:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
-   d="scan'208";a="646482092"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 03 Sep 2022 14:33:09 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUalJ-0002Dx-0j;
-        Sat, 03 Sep 2022 21:33:09 +0000
-Date:   Sun, 4 Sep 2022 05:32:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: xillybus_of.c:undefined reference to `devm_platform_ioremap_resource'
-Message-ID: <202209040504.IypzxQ0u-lkp@intel.com>
+        Sat, 3 Sep 2022 18:00:33 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAB84B0F9
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 15:00:31 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id m5so4238707qkk.1
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 15:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=u+kxf3Mk8+FQgloXjB0j6r4XiunuDU8cUK2uuImDHew=;
+        b=WRk8qIaK1KlK/bMR9yB/rnuP0D7C4gkK1fxXvaCOHkpQOPOqzW/y3ua4Dso1vEvS3Y
+         Mqk88gd9/98GwbFwUECnlBiszMnRMM6BVTetZLzbOi2phpVx1ua4OanmomNHitknNLvV
+         vEsEZ2LfuxjFoc5YKlUKKVr42rFFWBFY92owY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=u+kxf3Mk8+FQgloXjB0j6r4XiunuDU8cUK2uuImDHew=;
+        b=BSsJX2udu96jKz3Bevxwergf7iwRpe/0Kv+L/r6LfT6SM7c3+gHWH0VMgawjorAirF
+         MrOyaDdjvWZes2EGwZyjKStcwmrbiFe5UkOxlTBld4Agl5bu0V3KA+UoVMOjz2roOtcw
+         CgifF8lvAszXqD/a3Yc78Bd6UKUB4XChFWmvwMIFZLxzX34kw4eOE16NdsETr3UbSz+g
+         hQLMQyRMRzINRyVEjW/BuK4Prg84Ff9h/QPYQQOph9sGAJ6ePa0jdLEOAMY9xdrltXnM
+         MMVDCB+XNae2leCL4WXZZ/uL1MSZZF4A8D8gZzPQKhsOE15j8EyK16BGeL8G/7Q9YODg
+         8NYw==
+X-Gm-Message-State: ACgBeo2MtEWKhbh8kHyGneLB8264DzCyTOKaC8btFkFGncZq78Nze+I8
+        +lkHHYy9hMINzlcEIKLafIIxIQ==
+X-Google-Smtp-Source: AA6agR5ekOGLODSeUofP+ecxaHtu90UOsouL28dyBxK9YtL/I6e0BeBlxPnij3XHIxSr85XcSeGzTA==
+X-Received: by 2002:a05:620a:4155:b0:6bb:2061:1167 with SMTP id k21-20020a05620a415500b006bb20611167mr28395464qko.623.1662242430206;
+        Sat, 03 Sep 2022 15:00:30 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id bm15-20020a05620a198f00b006bb9125363fsm4576297qkb.121.2022.09.03.15.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 15:00:29 -0700 (PDT)
+Date:   Sat, 3 Sep 2022 22:00:29 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org, boqun.feng@gmail.com
+Subject: Re: [PATCH v5 06/18] rcu: Introduce call_rcu_lazy() API
+ implementation
+Message-ID: <YxPOfVMzRWEa7xqf@google.com>
+References: <20220901221720.1105021-1-joel@joelfernandes.org>
+ <20220901221720.1105021-7-joel@joelfernandes.org>
+ <20220902152132.GA115525@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220902152132.GA115525@lothringen>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+On Fri, Sep 02, 2022 at 05:21:32PM +0200, Frederic Weisbecker wrote:
+[..] 
+> > +
+> >  	raw_spin_unlock_irqrestore(&rdp_gp->nocb_gp_lock, flags);
+> >  
+> >  	trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, reason);
+> [...]
+> > @@ -705,12 +816,21 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+> >  	my_rdp->nocb_gp_gp = needwait_gp;
+> >  	my_rdp->nocb_gp_seq = needwait_gp ? wait_gp_seq : 0;
+> >  
+> > -	if (bypass && !rcu_nocb_poll) {
+> > -		// At least one child with non-empty ->nocb_bypass, so set
+> > -		// timer in order to avoid stranding its callbacks.
+> > -		wake_nocb_gp_defer(my_rdp, RCU_NOCB_WAKE_BYPASS,
+> > -				   TPS("WakeBypassIsDeferred"));
+> > +	// At least one child with non-empty ->nocb_bypass, so set
+> > +	// timer in order to avoid stranding its callbacks.
+> > +	if (!rcu_nocb_poll) {
+> > +		// If bypass list only has lazy CBs. Add a deferred
+> > +		// lazy wake up.
+> > +		if (lazy && !bypass) {
+> > +			wake_nocb_gp_defer(my_rdp, RCU_NOCB_WAKE_LAZY,
+> > +					TPS("WakeLazyIsDeferred"));
+> 
+> What if:
+> 
+> 1) rdp(1) has lazy callbacks
+> 2) all other rdp's have no callback at all
+> 3) nocb_gp_wait() runs through all rdp's, everything is handled, except for
+>    these lazy callbacks
+> 4) It reaches the above path, ready to arm the RCU_NOCB_WAKE_LAZY timer,
+>    but it hasn't yet called wake_nocb_gp_defer()
+> 5) Oh but rdp(2) queues a non-lazy callback. interrupts are disabled so it defers
+>    the wake up to nocb_gp_wait() with arming the timer in RCU_NOCB_WAKE.
+> 6) nocb_gp_wait() finally calls wake_nocb_gp_defer() and override the timeout
+>    to several seconds ahead.
+> 7) No more callbacks queued, the non-lazy callback will have to wait several
+>    seconds to complete.
+> 
+> Or did I miss something? Note that the race exists with RCU_NOCB_WAKE_BYPASS
+> but it's only about one jiffy delay, not seconds.
+> 
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+So I think the below patch should fix that. But I have not tested it at all
+and it could very well have issues. In particular, there is a likelihood of a
+wake up while holding a lock which I'm not sure is safe due to scheduler
+locks. I'll test it next week. Let me know any thoughts though.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   42cf58c272ee1dae902e8cc1166c246589abd1d8
-commit: a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a hwrng: ks-sa - Add dependency on IOMEM and OF
-date:   1 year, 9 months ago
-config: s390-randconfig-r015-20220902 (https://download.01.org/0day-ci/archive/20220904/202209040504.IypzxQ0u-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+---8<-----------------------
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Subject: [PATCH] rcu: Fix race where wake_nocb_gp_defer() lazy wake can
+ overwrite a non-lazy wake
 
-All errors (new ones prefixed by >>):
+Fix by holding nocb_gp_lock when observing the state of all rdps. If any
+rdp queued a non-lazy CB, we would do a wake up of the main gp thread.
 
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
-   coherent.c:(.text+0x374): undefined reference to `memremap'
-   s390-linux-ld: coherent.c:(.text+0x436): undefined reference to `memunmap'
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
-   coherent.c:(.text+0x576): undefined reference to `memunmap'
-   s390-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
-   irq-al-fic.c:(.init.text+0x4e): undefined reference to `of_iomap'
-   s390-linux-ld: irq-al-fic.c:(.init.text+0xaa): undefined reference to `iounmap'
-   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
-   irq-imx-intmux.c:(.text+0x442): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
-   phy-mvebu-a3700-utmi.c:(.text+0xfe): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_close':
-   dpaa2-console.c:(.text+0x6a): undefined reference to `iounmap'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_probe':
-   dpaa2-console.c:(.text+0x122): undefined reference to `of_address_to_resource'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_generic_console_open.constprop.0':
-   dpaa2-console.c:(.text+0x214): undefined reference to `ioremap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x266): undefined reference to `iounmap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x29a): undefined reference to `ioremap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x328): undefined reference to `iounmap'
-   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
-   exynos-trng.c:(.text+0x15e): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
-   meson-rng.c:(.text+0x70): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
-   mtk-rng.c:(.text+0x228): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
-   npcm-rng.c:(.text+0x1ba): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
->> xillybus_of.c:(.text+0x13e): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/mfd/sun6i-prcm.o: in function `sun6i_prcm_probe':
-   sun6i-prcm.c:(.text+0xa0): undefined reference to `mfd_add_devices'
-   s390-linux-ld: drivers/crypto/ccree/cc_driver.o: in function `init_cc_resources':
-   cc_driver.c:(.text+0x674): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/crypto/ccree/cc_debugfs.o: in function `cc_debugfs_init':
-   cc_debugfs.c:(.text+0x9e): undefined reference to `debugfs_create_regset32'
-   s390-linux-ld: cc_debugfs.c:(.text+0x132): undefined reference to `debugfs_create_regset32'
+This should address the race Frederick reported (which could effect both
+non-lazy CBs using the bypass list, and lazy CBs, though lazy CBs much
+more noticeably).
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MFD_SUN6I_PRCM
-   Depends on [n]: HAS_IOMEM [=n] && (ARCH_SUNXI || COMPILE_TEST [=y])
-   Selected by [y]:
-   - CLK_SUNXI_PRCM_SUN6I [=y] && COMMON_CLK [=y] && CLK_SUNXI [=y]
-   - CLK_SUNXI_PRCM_SUN8I [=y] && COMMON_CLK [=y] && CLK_SUNXI [=y]
+Quoting from Frederic's email:
 
+1) rdp(1) has lazy callbacks
+2) all other rdp's have no callback at all
+3) nocb_gp_wait() runs through all rdp's, everything is handled, except for
+   these lazy callbacks
+4) It reaches the above path, ready to arm the RCU_NOCB_WAKE_LAZY timer,
+   but it hasn't yet called wake_nocb_gp_defer()
+5) Oh but rdp(2) queues a non-lazy callback. interrupts are disabled so it defers
+   the wake up to nocb_gp_wait() with arming the timer in RCU_NOCB_WAKE.
+6) nocb_gp_wait() finally calls wake_nocb_gp_defer() and override the timeout
+   to several seconds ahead.
+7) No more callbacks queued, the non-lazy callback will have to wait several
+   seconds to complete.
+
+Here, the nocb gp lock is held when #4 happens. So the deferred wakeup
+on #5 has to wait till #4 finishes.
+
+Reported-by: Frederic Weisbecker <fweisbec@gmail.com>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ kernel/rcu/tree_nocb.h | 28 ++++++++++++++++++++++------
+ 1 file changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 8b46442e4473..6690ece8fe20 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -285,14 +285,15 @@ EXPORT_SYMBOL(rcu_lazy_get_jiffies_till_flush);
+  * Arrange to wake the GP kthread for this NOCB group at some future
+  * time when it is safe to do so.
+  */
+-static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+-			       const char *reason)
++static void __wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
++			       const char *reason, bool locked)
+ {
+ 	unsigned long flags;
+ 	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
+ 	unsigned long mod_jif = 0;
+ 
+-	raw_spin_lock_irqsave(&rdp_gp->nocb_gp_lock, flags);
++	if (!locked)
++		raw_spin_lock_irqsave(&rdp_gp->nocb_gp_lock, flags);
+ 
+ 	/*
+ 	 * Bypass and lazy wakeup overrides previous deferments. In case of
+@@ -323,11 +324,23 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+ 	if (rdp_gp->nocb_defer_wakeup < waketype)
+ 		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
+ 
+-	raw_spin_unlock_irqrestore(&rdp_gp->nocb_gp_lock, flags);
++	if (!locked)
++		raw_spin_unlock_irqrestore(&rdp_gp->nocb_gp_lock, flags);
+ 
+ 	trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, reason);
+ }
+ 
++static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
++		const char *reason) {
++	__wake_nocb_gp_defer(rdp, waketype, reason, false);
++}
++
++
++static void wake_nocb_gp_defer_locked(struct rcu_data *rdp, int waketype,
++		const char *reason) {
++	__wake_nocb_gp_defer(rdp, waketype, reason, true);
+
++
+ /*
+  * Flush the ->nocb_bypass queue into ->cblist, enqueuing rhp if non-NULL.
+  * However, if there is a callback to be enqueued and if ->nocb_bypass
+@@ -754,6 +767,8 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+ 	 * is added to the list, so the skipped-over rcu_data structures
+ 	 * won't be ignored for long.
+ 	 */
++
++	raw_spin_lock_irqsave(&my_rdp->nocb_gp_lock, flags);
+ 	list_for_each_entry_rcu(rdp, &my_rdp->nocb_head_rdp, nocb_entry_rdp, 1) {
+ 		bool needwake_state = false;
+ 		bool flush_bypass = false;
+@@ -855,14 +870,15 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+ 		// If bypass list only has lazy CBs. Add a deferred
+ 		// lazy wake up.
+ 		if (lazy && !bypass) {
+-			wake_nocb_gp_defer(my_rdp, RCU_NOCB_WAKE_LAZY,
++			wake_nocb_gp_defer_locked(my_rdp, RCU_NOCB_WAKE_LAZY,
+ 					TPS("WakeLazyIsDeferred"));
+ 		// Otherwise add a deferred bypass wake up.
+ 		} else if (bypass) {
+-			wake_nocb_gp_defer(my_rdp, RCU_NOCB_WAKE_BYPASS,
++			wake_nocb_gp_defer_locked(my_rdp, RCU_NOCB_WAKE_BYPASS,
+ 					TPS("WakeBypassIsDeferred"));
+ 		}
+ 	}
++	raw_spin_unlock_irqrestore(&my_rdp->nocb_gp_lock, flags);
+ 
+ 	if (rcu_nocb_poll) {
+ 		/* Polling, so trace if first poll in the series. */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2.789.g6183377224-goog
+

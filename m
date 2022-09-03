@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354FC5ABC28
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292DC5ABC2A
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbiICBre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 21:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
+        id S229854AbiICBuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 21:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiICBrc (ORCPT
+        with ESMTP id S229586AbiICBuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 21:47:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A386F98597;
-        Fri,  2 Sep 2022 18:47:31 -0700 (PDT)
+        Fri, 2 Sep 2022 21:50:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FBE32072;
+        Fri,  2 Sep 2022 18:50:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B14FB82D04;
-        Sat,  3 Sep 2022 01:47:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F1B4C43143;
-        Sat,  3 Sep 2022 01:47:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D3A6B82D0E;
+        Sat,  3 Sep 2022 01:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271FCC433D6;
+        Sat,  3 Sep 2022 01:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662169649;
-        bh=VNBkhEB8UPfoUwOuvNFnhvuSY23Yrnn4bJB/p03igJk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Svvz2igDlSL16t93hNVhmn2vybHyovMu/IQCMkIGskRbLAHpPb1+8FqGipg/4LUwL
-         /x2Pf8BEUAwZgvUD3iiKMi2qiD8ryckF1wjzqw8sTJ2cnNrEf+DHn397ua3G6n3eEY
-         ti1BZ8V4sBd8LNv7wQJoaI+wVu1JnUU9wnVF43GWEmPv9N090Ag+1fSJjIxpxxAtHd
-         Oc+bGKvAMOr70pkjT1mWJqKTGgyuHJ9QcxEtWCwuTvekqBtXDjbiykUIiOvfvCLKbv
-         xNGk6xj2Wcq7EsyUW2Iy21cQFJCRq7zWepE5WKaFbGO0VzDjZROnxgv/dsPeUB7CRm
-         2lAtABGGuM59Q==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1225219ee46so9082121fac.2;
-        Fri, 02 Sep 2022 18:47:29 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3Cvz5I4O5JGmRUTb3XIDFWO0Ice4Egt2MPpGxgf4uW2Jl/gpPM
-        yTgdaD1BWoL0RxEleHdqG/n0KMkNwiUue8PVkHM=
-X-Google-Smtp-Source: AA6agR7uBZjGjvrcNdzmuJlzw5xUBuMmrZJ+0OH5DKLIHefCkqDgmDAGVH8PW+vusGn4PdORlmIERJN1HvALZ0R+0nQ=
-X-Received: by 2002:a05:6808:1687:b0:347:cbd3:3dcf with SMTP id
- bb7-20020a056808168700b00347cbd33dcfmr3046504oib.53.1662169648293; Fri, 02
- Sep 2022 18:47:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220819094354.247273-1-marcel@ziswiler.com> <20220903014337.GA1728671@dragon>
-In-Reply-To: <20220903014337.GA1728671@dragon>
+        s=k20201202; t=1662169802;
+        bh=8zH5gxI+OIaTvPBN8CtiW/C2Ma0B/x4cCp73Xma/fEo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ns1UreuYUsfeuPQ0FmWblT6aa5nDkwiyEFPfYAsoYlq2UvJ7avgcxyIj42LVS7IKi
+         tsivupa7Cge5HXGGxefYJL2q/zqk950Y1aZxpFhPYUTyjKxI2K6jcnwnxu7zhluaL3
+         0I2VRL1W0fPy5SmoIiue2iL4g785xA5AbObWvx1RpEajEM7/aNR0d6Pd/CZvo0b3zK
+         e0r7HWZ/eoSLJphKrXPlhne3WE62yUNDQTIoBxdigjConynaGrrYmkSMRRTWnAnZiy
+         tOdJvtq45WUgl5lP+hJW0adqVWyzawCoQG9YNpe64fP+yAK9+3RjMEorpPEkGGV5VO
+         h33+aPm2ikSkA==
+Date:   Sat, 3 Sep 2022 09:49:56 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
-Date:   Sat, 3 Sep 2022 09:47:17 +0800
-X-Gmail-Original-Message-ID: <CAJBJ56+1_1fgtb+X7PHZuJ+9zpEsTU5Pm13rAvO6S3LwqX3SJA@mail.gmail.com>
-Message-ID: <CAJBJ56+1_1fgtb+X7PHZuJ+9zpEsTU5Pm13rAvO6S3LwqX3SJA@mail.gmail.com>
-Subject: Re: [PATCH v1] ARM: dts: vf610: ddr pinmux
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+To:     Max Krummenacher <max.oss.09@gmail.com>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
         Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Stefan Agner <stefan@agner.ch>, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: imx8mp-verdin: add cpu-supply
+Message-ID: <20220903014956.GB1728671@dragon>
+References: <20220822075342.2611279-1-max.oss.09@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822075342.2611279-1-max.oss.09@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,34 +64,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 3, 2022 at 9:43 AM Shawn Guo <shawnguo@kernel.org> wrote:
->
-> On Fri, Aug 19, 2022 at 11:43:54AM +0200, Marcel Ziswiler wrote:
-> > From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> >
-> > Add DDR pinmux which may be used in U-Boot after synchronising all
-> > them device trees (and includes) from Linux.
-> >
-> > Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> >
-> > ---
-> >
-> >  arch/arm/boot/dts/vf610-pinfunc.h | 52 ++++++++++++++++++++++++++++++-
-> >  1 file changed, 51 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm/boot/dts/vf610-pinfunc.h b/arch/arm/boot/dts/vf610-pinfunc.h
-> > index f1e5a7cf58a9..b7b7322a2d1b 100644
-> > --- a/arch/arm/boot/dts/vf610-pinfunc.h
-> > +++ b/arch/arm/boot/dts/vf610-pinfunc.h
-> > @@ -420,7 +420,7 @@
-> >  #define VF610_PAD_PTD29__FTM3_CH2            0x104 0x000 ALT4 0x0
-> >  #define VF610_PAD_PTD29__DSPI2_SIN           0x104 0x000 ALT5 0x0
-> >  #define VF610_PAD_PTD29__DEBUG_OUT11         0x104 0x000 ALT7 0x0
-> > -#define VF610_PAD_PTD28__GPIO_66             0x108 0x000 ALT0 0x0
-> > +#define VF610_PAD_PTD28__GPIO_66             0x108 0x000 ALT0 0x0
->
-> I mentioned this white-space fix in the commit log.
+On Mon, Aug 22, 2022 at 09:53:42AM +0200, Max Krummenacher wrote:
+> From: Max Krummenacher <max.krummenacher@toradex.com>
+> 
+> Add the cpu-supply property to all CPU nodes to enable the cpufreq
+> driver.
+> 
+> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
-Ah, never mind, you actually had another patch for this change.
-
-Shawn
+Applied, thanks!

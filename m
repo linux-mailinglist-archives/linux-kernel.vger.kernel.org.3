@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E4A5ABF24
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 15:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66485ABF26
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 15:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiICNis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 09:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
+        id S231157AbiICNmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 09:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiICNiq (ORCPT
+        with ESMTP id S229595AbiICNmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 09:38:46 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95C05AA37
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:38:42 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id E78FE3200564;
-        Sat,  3 Sep 2022 09:38:38 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 03 Sep 2022 09:38:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1662212318; x=
-        1662298718; bh=Tw9iM29JVXAAF7Othcl+TL+b6fxAKApvQt80+NZTFOE=; b=L
-        SP//Dm7OEHbO67NnFPFM+vC3oGQcVlOvTBoh+HsPJoSyQYR4S4FYAdnQMJTzjVtS
-        z8bk3w0B6yqAOIFh7j1wMl2kCg7fz8arDnKot3xg9VNOuk0OAWSjMEj8EjhH03N0
-        mZXWve7OJ7LHYE5vy3L/1prNgZ94KiKOX2WpB4Ebeh642RUVvfuScdakjXpE+OxN
-        pzwkhZgDpqS1c73iZPWL4dXl3v9iCKAZreg35e3fzhAmjM1xu79Vq8FZGYRRZERe
-        QjLGSF91SmFnCt4LhgBQOQKjz9bvP3e2vOUTzkbN34gUkso4V+gtDtJtbj8Uravu
-        yn5Ahif1HeBVbMuavt4dw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1662212318; x=
-        1662298718; bh=Tw9iM29JVXAAF7Othcl+TL+b6fxAKApvQt80+NZTFOE=; b=A
-        EIAesrryWEGyHobgL255e5n+z6GRTEogqcn+7R1sQiKES2fINewK+OhTDuUGYUVH
-        sbNBbG57NxDPUCxvm09360HTO+PnxrtAbqWxvImf0XYSeXRst1aQad7XoyROtIDa
-        2SADG4Fj+2E+C5CATDaywTvcMFQJs5mJr9i+ozMtP6k1WyD8AFZvN68YPpUS2i3X
-        Y9pVwsa+WbFNvU5ih+hZjV+7B5IQmTApFj6VEqSdAhCeGrBtY/8kkou9j8sWIxMJ
-        5Mu25Qwkv4xyIZZ4+wGBgE2lc362Zk4WQXKZnxbgvjsxvYRSGgWseOnSL7YWiht9
-        j9o8N4MZyIz5dbjPLs/rA==
-X-ME-Sender: <xms:3VgTYzv7p9jY5z0Xu7Ua707s367WXjOaG38VPxMUC4owOpFs0YTQSw>
-    <xme:3VgTY0cWlzcu8cYJDG8YzsvwJ6qMuAac691f6LWzoqajrosHQFOUQUKgG_8ak3OLt
-    LVdHl7PiDOHTkr1jg>
-X-ME-Received: <xmr:3VgTY2yeLHytvSNAGgoBVyCDbXkay1pIyCTCHYZYhBa4H_m7UrhesdNOzjmSC7_1ZvVz-QWWI7L2JBopFXj01L8kJCRCum4B3LdBqQkhP9N100ju7hfg83xTbQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelvddgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:3VgTYyPox-38QOvAU_iNQ_5Yi1rMUOQ9KVZgBTa33_ukSGmTRJNGVQ>
-    <xmx:3VgTYz8NNW-_uV12sYVjWlseiicqq6CtxTOXl_QGBu8J1wOKatII5A>
-    <xmx:3VgTYyXad1x6MUa25zBTWT3_IiGkxKGPpIaKeoUAo98O5p6FDhEHZA>
-    <xmx:3lgTY_T5L2HxBVCZ3BSZP1GX9lMCpJyTVj7-kwixdl28PIIU8cUX0g>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 3 Sep 2022 09:38:37 -0400 (EDT)
-Subject: Re: [PATCH v4] phy: rockchip-inno-usb2: Return zero after otg sync
-To:     Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Markus Reichl <m.reichl@fivetechno.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220902184543.1234835-1-pgwipeout@gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <9a2d493f-d4af-0880-d593-50120cfd3328@sholland.org>
-Date:   Sat, 3 Sep 2022 08:38:36 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Sat, 3 Sep 2022 09:42:38 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A02D57E2A
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662212558; x=1693748558;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JWXBYi6wj7UanpONosxU3VdonLafP0dX8CcdOCc9KnY=;
+  b=XYnihnSKSj9+p+3bbFktZsOXxfnwYLxGVjYn7RnIGXFBoFuH3Qu/jBGt
+   MJHOXeWY14KiiQd6+whtlCfnfqigDoKb/5IZhNQYLJW/vijA/AmWV/1Hl
+   ykpVza7JLf9vRbC+z2OOdyMxF9bkhzg8h6prf/wnaT0huXuaekriUDojA
+   uSUt+ngsMoJVGqKgIxA7EoQgPTFzB5IuSXOgifNcQIiG/yd3tQQpvdouh
+   cALa9DId4asaH0q0utJsRoTcKQGmlyHQUx5aOWl1AvFWAzfxIiWCP4/pd
+   YmOquMZURblWrBQVxOPowkI/iY37tzGa46GZtiOIZiyJlDGpAuAQ/9XtV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="297453892"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="297453892"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 06:42:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="564257424"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 03 Sep 2022 06:42:36 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUTPv-0001iV-2j;
+        Sat, 03 Sep 2022 13:42:35 +0000
+Date:   Sat, 3 Sep 2022 21:42:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [steev:c630-6.0.0-rc3 55/94] drivers/soc/qcom/pmic_glink.c:200:34:
+ warning: 'pmic_glink_of_match' defined but not used
+Message-ID: <202209032155.zm12fhX7-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220902184543.1234835-1-pgwipeout@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/2/22 1:45 PM, Peter Geis wrote:
-> The otg sync state patch reuses the ret variable, but fails to set it to
-> zero after use. This leads to a situation when the otg port is in
-> peripheral mode where the otg phy aborts halfway through setup.  It also
-> fails to account for a failure to register the extcon notifier. Fix this
-> by using our own variable and skipping otg sync in case of failure.
-> 
-> Fixes: 8dc60f8da22f ("phy: rockchip-inno-usb2: Sync initial otg state")
-> Reported-by: Markus Reichl <m.reichl@fivetechno.de>
-> Reported-by: Michael Riesch <michael.riesch@wolfvision.net>
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> Tested-by: Michael Riesch <michael.riesch@wolfvision.net>
-> Tested-by: Markus Reichl <m.reichl@fivetechno.de>
+tree:   https://github.com/steev/linux c630-6.0.0-rc3
+head:   012f3cdd2a60528b877305877b52135b0076e028
+commit: 20a897f2e309490859a53e4627b72227768dcd84 [55/94] soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220903/202209032155.zm12fhX7-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/steev/linux/commit/20a897f2e309490859a53e4627b72227768dcd84
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev c630-6.0.0-rc3
+        git checkout 20a897f2e309490859a53e4627b72227768dcd84
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/soc/qcom/
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/soc/qcom/pmic_glink.c:200:34: warning: 'pmic_glink_of_match' defined but not used [-Wunused-const-variable=]
+     200 | static const struct of_device_id pmic_glink_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~~~~~~
+
+
+vim +/pmic_glink_of_match +200 drivers/soc/qcom/pmic_glink.c
+
+   199	
+ > 200	static const struct of_device_id pmic_glink_of_match[] = {
+   201		{ .compatible = "qcom,pmic-glink", },
+   202		{}
+   203	};
+   204	MODULE_DEVICE_TABLE(of, pmic_glink_of_match);
+   205	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

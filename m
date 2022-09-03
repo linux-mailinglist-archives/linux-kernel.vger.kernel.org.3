@@ -2,177 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDAC5ABF0C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 15:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 793375ABF10
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 15:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiICNJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 09:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
+        id S229527AbiICNMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 09:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiICNJN (ORCPT
+        with ESMTP id S229463AbiICNMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 09:09:13 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2126.outbound.protection.outlook.com [40.107.94.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429785AA29
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:09:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BxxY4BcgWsuvGdNYUUmm7HabUkriuyge6giRTWXrudAn2D/0R4j4oCoXUEtcglRKU7thVWciszyl/rxQZ6tJoeNE7W1M8+RZ3n7XzaRvrX0evgklSUkFsEdArbdRge9nfBy5QiGdw4U9e7JRKY0VItHrkicLkvP3sbfABTYO1HXGT3G+Q0FDb5AWaLtDM2GXiFPfEpIDx2STjuFNbu4/1JIA2wz66uuXDbSnjrTlSBho/U4PxK+z3/fq+QC2cSuS2KiYfWZQukVtavmghYbEq8NGFkD8YmjtR6Q0fR0Bi+LcmtHVHMwy5yOQQ6Q84AIMsTnY4uic7vpn3UveM9XHjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c2UaCSavDG62F08hDCwHmoO+mWP1oqYWzJVTbj+2l7I=;
- b=IcakWxXbj//pcTPP0gzyKTPdPKpekhfomTtFD1xHbsQa3dzcVll5WObO/zDLq3yp62jU1er+Kr256Ub64hpQ3h+cVCFFfPzr3SH4AZlXKybJ9wDLPFNfM2UZco8ef5obuwL5fidc06vRPWcJaPPGj1wiNNyhwplHj74sUwE/QYMJM7LRDL369vebdf8F6hE5HntHWOz+NWSNegSliNyP0VMaxTi/B/+6ot9Hbm/bSVCTurBJTAKB/SGSqL29gC/uXK9m0zrpEUDpAzVTuwWAWpftVUUwEXWOetfczmp7YUYKltcTOCNRc8O3zTSAByxwao0ZAP9XkKraguXLYO/TDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+        Sat, 3 Sep 2022 09:12:02 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E04B642E2
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 06:12:00 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id og21so8750488ejc.2
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 06:12:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c2UaCSavDG62F08hDCwHmoO+mWP1oqYWzJVTbj+2l7I=;
- b=gKT8VehpCZofl9mam3zAb3UGRMYgm3MjlajaOvwijTjyCB6e+SZAGDeHBnaBOlE2dSV1CzG3bD9Gby22PRO2WEg2CeN9Af9lbfdnW3mXeFwSTHQT6cPWLjFZhlY2a0WRopK0D6B/S9YBJAgZggKJzQvnLof+Lleq+LhbqOKHrns=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by DM6PR04MB4458.namprd04.prod.outlook.com (2603:10b6:5:2e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Sat, 3 Sep
- 2022 13:09:07 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::1ad:536d:f2aa:8d13]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::1ad:536d:f2aa:8d13%3]) with mapi id 15.20.5588.017; Sat, 3 Sep 2022
- 13:09:07 +0000
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
-        mliu@analogixsemi.com, hsinyi@chromium.org,
-        Xin Ji <xji@analogixsemi.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/bridge: anx7625: Set HPD irq detect window to 2ms
-Date:   Sat,  3 Sep 2022 21:08:33 +0800
-Message-Id: <20220903130833.541463-1-xji@analogixsemi.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TY2PR0101CA0038.apcprd01.prod.exchangelabs.com
- (2603:1096:404:8000::24) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=5pK8XIRSSltGgDWR58jM3/KvU8/t6p0BHV06v8LQlaw=;
+        b=F1Pefqc6SQ7Mca6NjcUOUzpM9YmufSEnd4yJYOY+aHKROx4J9EXAB1I+QxOLFHlqA9
+         wZ1tlDU8Hn/yPMOTVTO0M476KSDzeOzPN1ngeKELJTmYTxPMKYnuYyqvmN30fquqXWKb
+         0S8h1rdo1Lx0pFL9lrfnqRs5sDqbOW9A9pZ+Kmb+QkegvuIrImSxC9eGfJwhS/7gUtvx
+         vuAU0FySeD+Xvx72twhmyZF4X8+P+5mybloGMr53hK6/LCxbhQY3hahwiYvtfaVYrdG7
+         j/8k8ngKlqdgdknuli25BXiijBjqPRn7TC2DAboIA9mj8A/do0rubAmXjD+P540++klu
+         c21A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5pK8XIRSSltGgDWR58jM3/KvU8/t6p0BHV06v8LQlaw=;
+        b=M5yQ76/ayXdDFhf++LxuXnfpddECcPvBJG4hgnFxsJbowYSQVnyCQ9iUik9Pe3+mVI
+         FKfCW1SMdhmer4gzHk4UwkJIs+QVjhe2nJe+3JaD+muxgcwdmt3YI5MeF/XFnFU+Pjur
+         ZsybzXE/fHWwBCDRBNekeqOeLZa76mihpLphvz4ApvSRu06UwgbdBf2kSlv8lPUREWsm
+         QPKea+OnvsINQsMMP49mPAlEqCva3JyLSlknDiC4fR6s1G7inJUkoH+WuMEiNlEdreVo
+         wOMdnSEWQ/cCKCFANc8XT6+ezYc5KUuEecfB7QRdszz1aaJmdiywdQB5rvY+p/qEG/jl
+         sedg==
+X-Gm-Message-State: ACgBeo1ql4UYoSw7nn0z8QXqzm0eVS4tnQ5rcbKlxFujbDKLukY0efb+
+        3ulu8+pgHTGpk0yulVG2Es/8lPuPRPFYv7NmteVNIQ==
+X-Google-Smtp-Source: AA6agR5fnISiBWO8Y8BGDhJnzmn7JX1r3NApCDYtgslm2Zi5p4pL8K0MjiwEqDMgPlBn1RVFycdpI7nBDvC1cebLT0I=
+X-Received: by 2002:a17:906:9bd9:b0:73d:da74:120c with SMTP id
+ de25-20020a1709069bd900b0073dda74120cmr27530354ejc.412.1662210718515; Sat, 03
+ Sep 2022 06:11:58 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a2345198-b7d9-4e5e-1dc8-08da8dad7bc0
-X-MS-TrafficTypeDiagnostic: DM6PR04MB4458:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pRrqIj8jRP7Bu6YsYJhc0itWnndGQtSl22TL17Rn7xK11K+pjvd8hZmtXRvMNjooO5b4hXTZSKcelz4xjMCiM2R69rp0AmxazrIFV0A+9Hf3xHV1CrU0I8+Rc4Rre8jR7ZeaNv9/6tLE5QbaNK9Iwz81ONUVmXUC1BF1wc8VOMegdwh7/Wz+N/wCwrgwzXvlIlOD1OyK3Ygku2SrThiQl3KEAZKIX6MavV8KGDMFV/Ym+KljpnaKr1/Nt/2/ehuL6W6NgXm3t0hGXItYjARa/gdfr963OFwOlLlCtxbjAk7p9H4HwopC7sRQ0eK82pj8SNAhBznCMWdRwAY4eILaSW+CpOY2nEaJbhZrAXNMZZnoPB9lb38vuUBjPPkgfAOorv5dKGJPjrOFBs06u9fl7yZBRwwQaovL1W5efD1BbPiMlUIbd1G8Z7AlPn4w07tSG8nAhb0CukyjyJuyM90s/L9Cy/wqauGACGjd+GaH0EpIUpfwCzi3sHLbG+CzGCDKOhQsbpLsZUBo1ngN+eDldG5EJlIa3Kw73uj3GmDFut6gXV92o67ZgGmCIhtQVwO7A4fiBtz7HTYqm4xAuLZs5v2p9HKYD1KNrvTObUpb1sGkSsuiuEPSTVirA6cGbUl9f6ooHBTDpHPgyHiqOKWFbWB4WQse3IwUuJ/hMR3yS0jZ9PgPxxswGHb85MK6zilfoduwf1fUXmlOupAwEA11UsuiSSds2jvWBTpgWMu3XanoLb1VpPywi3Pg8gNYz40OQvtdIUkHuzg7nKdDJp7yTg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(376002)(39830400003)(346002)(396003)(366004)(38350700002)(5660300002)(66476007)(110136005)(66556008)(316002)(4326008)(66946007)(7416002)(2906002)(8936002)(38100700002)(8676002)(52116002)(6666004)(36756003)(6512007)(6506007)(86362001)(1076003)(26005)(2616005)(41300700001)(6486002)(83380400001)(478600001)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZNXgPHRGVLkpnrK67SfGQfE6jumMSL9+6iWNrNHzqGFU00Pa+2QGHjfB8uih?=
- =?us-ascii?Q?GkdjB4Ba6L/SsFxIpwn9kd9PGVu9JFky52U94L8RUfxG0cLvtz5aBFw4Gc8A?=
- =?us-ascii?Q?yuEaAFBAb8uefsQZf9AsXh8gZqLE43fwecQFWUloUEr5WAAlnAJcEUYBEjw9?=
- =?us-ascii?Q?w8GDFOrjkTFii1Vufg60OsRje1nsNwIkXjH0KWamQWaiEpj/4v6TzB2eTZYC?=
- =?us-ascii?Q?ji2HA46scrjhlCyyg9PXFQ++DW8YZvq91S2Gag60pcoAx9Yhf8bPJZOmQ/ps?=
- =?us-ascii?Q?/HeEnvGjFxoGGG9kleUHaMZvM2O/FL3VDx/9AXEl/dZz0CXymi5qmjg4ZpIs?=
- =?us-ascii?Q?nCOSfBleYrde0YAWuS7rBJA8VD3xdPbLtUtz16jDpe3RCwf2jGJNExA4mpNf?=
- =?us-ascii?Q?OkoKD68OojFoy05Jkk2R6RkxI4UsLnXxQkHQpB0zMmC5BrMmvOVl6YEYHhNv?=
- =?us-ascii?Q?Khxxj20Q8FGCoB4UZ2QFOR4/sU0oYLFililx4+TKDOquBAFu1aL3DBTEG/q8?=
- =?us-ascii?Q?ZGmoMU+H0RteBDA/5//R04q5jr2sn+teZidD13x2Ap3HmNL9cTdChl8Fi80Z?=
- =?us-ascii?Q?hchqieH6xp0qY4AaN5dPZlVVS2AkMQta1uldQ/+nN58hG2sse4GwjWnxjeBt?=
- =?us-ascii?Q?A2DSM2SJlVSXkD5wecqHRTmE+wRX/pu7X+0jBQw0AdIOUwj4R/5NC58ul/Ek?=
- =?us-ascii?Q?ORiMSifpNv00jaMZLEs++lz9cJcvKtb+AK6CWMUSlxGprv2N/idgXa4cvllR?=
- =?us-ascii?Q?TpQQJXqlIF0amRfjQbnToAl3O11mMsvTc6QCYvJ+JU5OX5da3UCd2SsrHKc3?=
- =?us-ascii?Q?B4/DR7E/oX1VtmRYBLnWWv8aDuDl4RjvNscI/n6jC4l6K1DmzVS+dxy0kbC3?=
- =?us-ascii?Q?kgHRC/igqFwiGcnIzO74x/+Lf++J7AK/pby7dyXTC1+bGYyC2EwaeFgxjZ8h?=
- =?us-ascii?Q?Lcm+pm3ZpwELv5GrOoH/hYS/7WjgA3BOIZ8L4L45TSkfqp+huBx9yoBpCHIo?=
- =?us-ascii?Q?6JZLn7PFP8U0ATiLu6RNJtOr9hwrWaTuAifRXJMjpB8cijUX7VnyRHKmOK6k?=
- =?us-ascii?Q?oyuNTp/Ku6hj/94QZIFBwKoHaBxLZ6IjJCwKIg/CvJ0SU2t/zBLhP0jy2EFH?=
- =?us-ascii?Q?8YmNx941M1LcCjJYELWfLTCzLYB/E4FSQWedSnEopJRgoY+oRZEAxQHBrMmL?=
- =?us-ascii?Q?EFZ4rLvKbrkXhHTd+gAgPVfOmasoojmuNGn+KLbTIfh5JfTlR/TsP5EYINMx?=
- =?us-ascii?Q?yqhK0PAW45HqLCrV76CVuBwvRPUGW8GNXegWdQH/EpHsRJ9DnwnAnk7pXfC8?=
- =?us-ascii?Q?5qeYxexgMmIKZb7vKwawT7AkKOcW4GqLfvbuk08YsCmBuKnUhLb9USZyeWbB?=
- =?us-ascii?Q?cOL6NZ52n3QEmkY8YqMcUKdVXJDbDnsPqsYKmw87KJroyZcWqG2VXHDIE9Bt?=
- =?us-ascii?Q?VxM5D0jMuKd1g7VitFOpvUEfF8BUYiyWsYVhSAdRyEu9fxlYjRBNtgx3UVoK?=
- =?us-ascii?Q?NSHXNrAldpG56G15adlZL4fCs552vVxpLWO6+PXetKnUcTMUsQvIFqOA9h3W?=
- =?us-ascii?Q?VOuqYs/jJSaFv5Fgq5yFfJQZxDzaH0rD+THp/DEJ?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2345198-b7d9-4e5e-1dc8-08da8dad7bc0
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Sep 2022 13:09:07.3424
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oIppu2hiWXpkHtwNFRin+WsGvsTXBbZIsiIPrf6LPvYf0ze0PjxXF9X865SrsYrkAwbvSRaVmsanHjGTEy8mKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB4458
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220902121403.569927325@linuxfoundation.org>
+In-Reply-To: <20220902121403.569927325@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 3 Sep 2022 18:41:47 +0530
+Message-ID: <CA+G9fYszX+g+gg46MCvRDkweKbjpuUR3EdutwLm3fuHtaDJ=3Q@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/77] 5.4.212-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some panels trigger HPD irq due to noise, the HPD debounce
-may be 1.8ms, exceeding the default irq detect window, ~1.4ms.
-This patch set HPD irq detection window to 2ms to
-tolerate the HPD noise.
+On Fri, 2 Sept 2022 at 17:57, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.212 release.
+> There are 77 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.212-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Xin Ji <xji@analogixsemi.com>
----
- drivers/gpu/drm/bridge/analogix/anx7625.c | 14 ++++++++++++++
- drivers/gpu/drm/bridge/analogix/anx7625.h |  6 ++++++
- 2 files changed, 20 insertions(+)
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index c74b5df4cade..0c323b5a1c99 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -1440,6 +1440,20 @@ static void anx7625_start_dp_work(struct anx7625_data *ctx)
- 
- static int anx7625_read_hpd_status_p0(struct anx7625_data *ctx)
- {
-+	int ret;
-+
-+	/* Set irq detect window to 2ms */
-+	ret = anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
-+				HPD_DET_TIMER_BIT0_7, HPD_TIME & 0xFF);
-+	ret |= anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
-+				 HPD_DET_TIMER_BIT8_15,
-+				 (HPD_TIME >> 8) & 0xFF);
-+	ret |= anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
-+				 HPD_DET_TIMER_BIT16_23,
-+				 (HPD_TIME >> 16) & 0xFF);
-+	if (ret < 0)
-+		return ret;
-+
- 	return anx7625_reg_read(ctx, ctx->i2c.rx_p0_client, SYSTEM_STSTUS);
- }
- 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
-index e257a84db962..14f33d6be289 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.h
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
-@@ -132,6 +132,12 @@
- #define I2S_SLAVE_MODE 0x08
- #define AUDIO_LAYOUT   0x01
- 
-+#define HPD_DET_TIMER_BIT0_7   0xea
-+#define HPD_DET_TIMER_BIT8_15  0xeb
-+#define HPD_DET_TIMER_BIT16_23 0xec
-+/* HPD debounce time 2ms for 27M clock */
-+#define HPD_TIME               54000
-+
- #define AUDIO_CONTROL_REGISTER 0xe6
- #define TDM_TIMING_MODE 0x08
- 
--- 
-2.25.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.4.212-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 35d9f706c6df9df6ca8205b796f74081c0d93326
+* git describe: v5.4.211-78-g35d9f706c6df
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.211-78-g35d9f706c6df
+
+## No test Regressions (compared to v5.4.211)
+
+## No metric Regressions (compared to v5.4.211)
+
+## No test Fixes (compared to v5.4.211)
+
+## No metric Fixes (compared to v5.4.211)
+
+## Test result summary
+total: 95512, pass: 83135, fail: 739, skip: 11232, xfail: 406
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 302 total, 302 passed, 0 failed
+* arm64: 61 total, 57 passed, 4 failed
+* i386: 28 total, 26 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 27 total, 26 passed, 1 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 54 total, 52 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

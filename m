@@ -2,85 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E3B5ABE97
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 12:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A865ABE99
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 12:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiICKte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 06:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
+        id S230138AbiICKuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 06:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiICKta (ORCPT
+        with ESMTP id S229504AbiICKt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 06:49:30 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC34E6B
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 03:49:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1662202165;
-        bh=8I2CCom6GzLdMkmqYuc6ZCbm5jRcJA32i6ToxSl5Zkg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=g5DNxviT7XZuksCX+3hFQNGEDISb+9Nr+bXh2GWC+RI87IcV6c0kwnpV3xVnVeUcn
-         K7NAxY9hGbkY/LEcEA+xeTma50VvqksF7tWiwIbnhm5KJge35asDjQMenIjmdoXVNt
-         dywTOcPpJCZd6uf8GaBMTRUJQk2fdcfkwwVL5Pog=
-Received: from [IPv6:240e:358:1104:1500:dc73:854d:832e:4] (unknown [IPv6:240e:358:1104:1500:dc73:854d:832e:4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 10E1065907;
-        Sat,  3 Sep 2022 06:49:20 -0400 (EDT)
-Message-ID: <78a4a6b0970c309daa336a2329e69d28df486552.camel@xry111.site>
-Subject: Re: [PATCH 1/3] LoongArch: tools: Add relocs tool support
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Youling Tang <tangyouling@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jinyang He <hejinyang@loongson.cn>
-Date:   Sat, 03 Sep 2022 18:49:14 +0800
-In-Reply-To: <f0e77716-9533-724a-2ea9-86bc5b52066c@loongson.cn>
-References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
-         <1662113335-14282-2-git-send-email-tangyouling@loongson.cn>
-         <c9880165f0355fc3be3ec23153b43ad33e558b5d.camel@xry111.site>
-         <4df8a26c49a35c1fce36d80c370f738fa71a2bef.camel@xry111.site>
-         <f0e77716-9533-724a-2ea9-86bc5b52066c@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.45.2 
+        Sat, 3 Sep 2022 06:49:57 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE9D286E8;
+        Sat,  3 Sep 2022 03:49:55 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id c11so962179wrp.11;
+        Sat, 03 Sep 2022 03:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=XrMdVv2xUhxR5Q9kOZUXM47qxjFM4pdwsuKh8dulBXY=;
+        b=X1THUn+uLxxNb25VDUXlkAxwbhSEA7vESxCPVQFbn/j3T9JBQ0o8jiOoOAfD0TodR7
+         kyyzzq5XALDLjnhj1XbWHm4MME8mhngQoct6DDU6Z6T8xEfFhMAuJuwT3kexD9btG0re
+         Ixb7t+giDUIvY6ice111MF/3acqruDyymnnExBlSGzg2WLmKuGyyV5s71jmEmbSIitOD
+         VW9wgYeuiFmxqjEsvvDCzpMQysrmWKNBQ514yJVCd+tO5WhjL8Q6rRWCWOEScCLrG2Wq
+         kQJGsyMQr9etrhUtlq2ljq6weeQGhTEDyMiMoT7tpQfuZSPykwjgTzdlwlD0Q/XQeS9i
+         o1uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=XrMdVv2xUhxR5Q9kOZUXM47qxjFM4pdwsuKh8dulBXY=;
+        b=CawTfQXGqhTqyWFMQCCV9uAzSOoSTphJm95GPeJ9u/hrPFKbDJcgH/wXoCIgXlWEYo
+         0gXaRg2sRYcT3vx5yubuA0qZ/54HoWZX1qYgqhVpo8w7HE0v4vNSXDE+l8HFOJm6z/+3
+         lxUJMoSpSTT+mJ7OTNbuibxcxi18lqA4faEOHEzIZiXYpS1mwAKOq57w8yyLWPlNC0ku
+         oM2VDGKdyPQi7Llo4aZhHBLzydz4FOiqDuyUEM7uocKTM3S0OG5WHzr0FuobvgRcpqUQ
+         iTrN72Z1LuYxBItkV8Fi6JMYXC01rSsffMmRUbwbEkHc4yaw06nYIb9YT/DbfUsT2IL/
+         BcBg==
+X-Gm-Message-State: ACgBeo00eAnIve8OkvPOsRp/mDChc5lYXWkBAqBV1MC7E2DzU55eUWho
+        LZ7/LxKpzf4fyuAh6n/aR8Q=
+X-Google-Smtp-Source: AA6agR49Vb//Nrma131t5FYZi2Q3c28psceHp6QgCMnwtih0gYx9oR2scSZcR5oMcwGpsyjYeVOEzQ==
+X-Received: by 2002:a5d:5885:0:b0:228:28df:91af with SMTP id n5-20020a5d5885000000b0022828df91afmr3948437wrf.511.1662202194469;
+        Sat, 03 Sep 2022 03:49:54 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id t6-20020a05600c41c600b003a5ffec0b91sm4619362wmh.30.2022.09.03.03.49.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 03:49:53 -0700 (PDT)
+Date:   Sat, 3 Sep 2022 11:49:52 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 00/72] 5.19.7-rc1 review
+Message-ID: <YxMxUOSMDpdU1j7w@debian>
+References: <20220902121404.772492078@linuxfoundation.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902121404.772492078@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-09-03 at 09:57 +0800, Youling Tang wrote:
-> > > Unlike (pre-r6) MIPS, LoongArch has a complete support for PIC, and
-> > > currently LoongArch toolchain always produces PIC (except, if -Wa,-ml=
-a-
-> > > {local,global}-with-abs or la.abs macros are used explicitly).
-> > >=20
-> > > So would it be easier to review and correct the uses of "la.abs" in t=
-he
-> > > code, and make the main kernel image a real PIE?=C2=A0 Then we can lo=
-ad it
-> > > everywhere w/o any need to do relocation at load time.
->=20
-> At the beginning I also wanted to make the main kernel image a real PIE
-> and tried it, some of the "la.abs" can be modified, but I encountered
-> difficulties in modifying the=C2=A0 exception handling code part, the ker=
-nel
-> will not=C2=A0 boot after modification :(, I will continue to work hard t=
-ry.
+Hi Greg,
 
-I just tried the same thing and get the same result :(.  Will spend
-several hours reading the LoongArch manual about exception...
+On Fri, Sep 02, 2022 at 02:18:36PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.7 release.
+> There are 72 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 04 Sep 2022 12:13:47 +0000.
+> Anything received after that time might be too late.
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+Build test (gcc version 12.2.1 20220819):
+mips: 59 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1758
+[2]. https://openqa.qa.codethink.co.uk/tests/1761
+[3]. https://openqa.qa.codethink.co.uk/tests/1763
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

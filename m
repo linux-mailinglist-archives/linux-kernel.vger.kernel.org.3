@@ -2,173 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7235AC042
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18855AC05B
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 19:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbiICRk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 13:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
+        id S232090AbiICRm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 13:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbiICRk5 (ORCPT
+        with ESMTP id S230507AbiICRmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 13:40:57 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283EF5208A;
-        Sat,  3 Sep 2022 10:40:56 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 202so2726194ybe.13;
-        Sat, 03 Sep 2022 10:40:56 -0700 (PDT)
+        Sat, 3 Sep 2022 13:42:23 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826043E744;
+        Sat,  3 Sep 2022 10:42:22 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id se27so9496683ejb.8;
+        Sat, 03 Sep 2022 10:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=D2qyNP74bkeHUfQDADt03rKY4mapPBk8YQvQpuKozmc=;
+        b=p1HseITbCo5DzJgZHHSZBat4C+PhV9H+NyKhorNitRbgYDe+twK6hAnq+BHZGVfpkK
+         BLCFj+n2kVp0wBh3kDnEaLkUU5a4IpMLn7gaXAjf7Tn+BX9CRa10rIDs4zHQXKgyrCAO
+         9jwlFRCzu+FSqdIVZRQZQU/ffg/QX0eCKn6NSHFzl3TCXRIoy5x7Wuqq8UWcYmLiHB43
+         NGIVhMFL4r/GdXDKO9nfOM/yPxSkIYuq/RfZLX1uic0iCx6ZABV+hX6//TcQXLAm/VoD
+         7OSAO1xbhkhdwK6rKV4Yfbh6ykPpQ0c/7A/v4262LJH+KKxiE/U6GA7V6Uvzr1ylMwaX
+         bFnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ADCDZkM9VRAAcy+FPVXNht63Zj+njGChRH3Rklp+Wy8=;
-        b=ocEsvxDYyomHlVkffJCXMnkJIRtBjfGDnCnz/K/iZNQA7tq2KiFYPNFn290t6spYfe
-         QrafLIyZZMgKxsvaUKBN3iAbQsj5Q2RyoYx1xhlE6KK4IPeE0nYzYcewW8iAgkpr4DWV
-         x2GtR4ReouASIjJnp6Li4grSq/TJV6t8Y4jWfLkp/IaII3gYAeiBzZEs2/4336ngiDA+
-         brtTAzBG9dP/8eKi6QEwOc7yUhVQdtrMJFrN63lzq6Hg5ia1ERRyUhxPWvTyv8C0BH9x
-         Qtotq/vAAHwYvwIMx7Q+XkoVepu/mYppEMoBsKljuKLdtHf05XcfrtKWQYxwT5PjjPPU
-         9NVA==
-X-Gm-Message-State: ACgBeo0m8KgxFqwaA8/3wCWcwDW7twj3e1ycxZtc8dEJeFj+a09o3sSB
-        P+5qRc1mPzvvbJ4Ut1vuCM8DqMBx0iN7p1wcptE=
-X-Google-Smtp-Source: AA6agR536TsmH0/J0LAucPibLANU1mbFYloX4jDfE+3oUtt6HXJozc0iRDgfkYk6wbFjQDVKkeXuyTzegMfeoQxoem4=
-X-Received: by 2002:a25:b749:0:b0:68f:171f:96bd with SMTP id
- e9-20020a25b749000000b0068f171f96bdmr28745931ybm.137.1662226855380; Sat, 03
- Sep 2022 10:40:55 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=D2qyNP74bkeHUfQDADt03rKY4mapPBk8YQvQpuKozmc=;
+        b=Kc9qdTeOZB0Bz74efJmQ+fiZo496r9zYRPFOjtuUf3G8SI2KlYEOElVBHxpu/3mW8t
+         jL95ag+WBLEYUw0uEP9N4Zsr0qvWPJbTWDD6qKb8UQmIQDeH8kf03mQXyh1eedOhQjSj
+         neCYSW52OZZzgjP8+UeGWYIWENjqwUuUqWN/Nci2QwJO119u4irL+/LIeqVwV3uZMrO9
+         Le/0KyWTZTqGnbPoK4OLqEEsTNaGlMyY+3bIXkR/KOi+QBP8r7NM6t0YHX3Ypxc2+Yfl
+         K+0JzRuU/Tofv/Q/82pTX7brV5ZcRYe4CC0flXvVAKJD7qrsNDpYjSqbiZ5/9/JbNivd
+         ZhKw==
+X-Gm-Message-State: ACgBeo0FHmkFrxsZOKn8Y43g1/HHdXQmEGvDXkyYmcvtBBsvIl2H70sg
+        P/Eea6BMXxB7ogImpbYUVGA=
+X-Google-Smtp-Source: AA6agR7H+AF+kBGgB2nDfQn3ShDwIAdxH/R5napeahxVwQNIz/Oo4Psea/trzOr3PBGD3w9Xorltrg==
+X-Received: by 2002:a17:906:4d9a:b0:73d:b425:d6b8 with SMTP id s26-20020a1709064d9a00b0073db425d6b8mr30454921eju.120.1662226941067;
+        Sat, 03 Sep 2022 10:42:21 -0700 (PDT)
+Received: from localhost ([77.78.20.135])
+        by smtp.gmail.com with ESMTPSA id 9-20020a170906210900b0073d61238ae1sm2696220ejt.83.2022.09.03.10.42.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Sep 2022 10:42:20 -0700 (PDT)
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/9] dt-bindings: ufs: qcom: Add sm6115 binding
+Date:   Sat,  3 Sep 2022 20:41:42 +0300
+Message-Id: <20220903174150.3566935-2-iskren.chernev@gmail.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220903174150.3566935-1-iskren.chernev@gmail.com>
+References: <20220903174150.3566935-1-iskren.chernev@gmail.com>
 MIME-Version: 1.0
-References: <20220902233543.390890-1-helgaas@kernel.org> <20220902233543.390890-3-helgaas@kernel.org>
-In-Reply-To: <20220902233543.390890-3-helgaas@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 3 Sep 2022 19:40:44 +0200
-Message-ID: <CAJZ5v0jV94TwifmoF2UfiDpXNP_Kgt6qNkQH7zwQjo=ZhyU-4A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] PCI/PTM: Implement pci_enable_ptm() for Root
- Ports, Switch Upstream Ports
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Koba Ko <koba.ko@canonical.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "David E . Box" <david.e.box@linux.intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 3, 2022 at 1:35 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> From: Bjorn Helgaas <bhelgaas@google.com>
->
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> ---
->  drivers/pci/pcie/ptm.c | 34 +++++++++++++++++++++++++++-------
->  1 file changed, 27 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-> index b6a417247ce3..ad283818f37b 100644
-> --- a/drivers/pci/pcie/ptm.c
-> +++ b/drivers/pci/pcie/ptm.c
-> @@ -167,11 +167,11 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
->         if (!pos)
->                 return -EINVAL;
->
-> -       pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
-> -       if (!(cap & PCI_PTM_CAP_REQ))
-> -               return -EINVAL;
-> -
->         /*
-> +        * Root Ports and Switch Upstream Ports have been configured
-> +        * by pci_ptm_init(), so preserve their PCI_PTM_CTRL_ROOT and
-> +        * granularity.
-> +        *
->          * For a PCIe Endpoint, PTM is only useful if the endpoint can
->          * issue PTM requests to upstream devices that have PTM enabled.
->          *
-> @@ -179,19 +179,39 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
->          * device, so there must be some implementation-specific way to
->          * associate the endpoint with a time source.
->          */
-> -       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT) {
-> +       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
-> +           pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM) {
-> +               if (pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM) {
-> +                       ups = pci_upstream_bridge(dev);
-> +                       if (!ups || !ups->ptm_enabled)
-> +                               return -EINVAL;
-> +               }
-> +
-> +               pci_read_config_dword(dev, pos + PCI_PTM_CTRL, &ctrl);
-> +               ctrl |= PCI_PTM_CTRL_ENABLE;
-> +       } else if (pci_pcie_type(dev) == PCI_EXP_TYPE_ENDPOINT) {
-> +               pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
-> +               if (!(cap & PCI_PTM_CAP_REQ))
-> +                       return -EINVAL;
-> +
->                 ups = pci_upstream_bridge(dev);
->                 if (!ups || !ups->ptm_enabled)
->                         return -EINVAL;
->
->                 dev->ptm_granularity = ups->ptm_granularity;
-> +               ctrl = PCI_PTM_CTRL_ENABLE;
-> +               ctrl |= dev->ptm_granularity << 8;
->         } else if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_END) {
-> +               pci_read_config_dword(dev, pos + PCI_PTM_CAP, &cap);
-> +               if (!(cap & PCI_PTM_CAP_REQ))
-> +                       return -EINVAL;
-> +
->                 dev->ptm_granularity = 0;
-> +               ctrl = PCI_PTM_CTRL_ENABLE;
-> +               ctrl |= dev->ptm_granularity << 8;
->         } else
->                 return -EINVAL;
+Add SM6115 UFS to DT schema.
 
-I would do
+Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+---
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-if ((pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM || pci_pcie_type(dev)
-== PCI_EXP_TYPE_ENDPOINT)) {
-        ups = pci_upstream_bridge(dev);
-        if (!ups || !ups->ptm_enabled)
-                return -EINVAL;
+diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+index f2d6298d926c..be55a5dfc68f 100644
+--- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
++++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+@@ -28,6 +28,7 @@ properties:
+           - qcom,msm8998-ufshc
+           - qcom,sc8280xp-ufshc
+           - qcom,sdm845-ufshc
++          - qcom,sm6115-ufshc
+           - qcom,sm6350-ufshc
+           - qcom,sm8150-ufshc
+           - qcom,sm8250-ufshc
+@@ -178,6 +179,31 @@ allOf:
+           minItems: 1
+           maxItems: 1
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm6115-ufshc
++    then:
++      properties:
++        clocks:
++          minItems: 8
++          maxItems: 8
++        clock-names:
++          items:
++            - const: core_clk
++            - const: bus_aggr_clk
++            - const: iface_clk
++            - const: core_clk_unipro
++            - const: core_clk_ice
++            - const: ref_clk
++            - const: tx_lane0_sync_clk
++            - const: rx_lane0_sync_clk
++        reg:
++          minItems: 2
++          maxItems: 2
++
+     # TODO: define clock bindings for qcom,msm8994-ufshc
+ 
+ unevaluatedProperties: false
+-- 
+2.37.2
 
-        dev->ptm_granularity = ups->ptm_granularity;
-}
-
-switch(pci_pcie_type(dev)) {
-case PCI_EXP_TYPE_ROOT_PORT:
-case PCI_EXP_TYPE_UPSTREAM:
-        pci_read_config_dword(dev, pos + PCI_PTM_CTRL, &ctrl);
-        ctrl |= PCI_PTM_CTRL_ENABLE;
-        break;
-case PCI_EXP_TYPE_ENDPOINT:
-case PCI_EXP_TYPE_RC_END:
-        ctrl = PCI_PTM_CTRL_ENABLE;
-        break;
-default:
-        return -EINVAL;
-}
-
->
-> -       ctrl = PCI_PTM_CTRL_ENABLE;
-> -       ctrl |= dev->ptm_granularity << 8;
-
-And I wouldn't remove the line above.
-
-Note that for root ports dev->ptm_granularity must be set and reflect
-the register setting or else the code wouldn't have worked for
-downstream components.
-
->         pci_write_config_dword(dev, pos + PCI_PTM_CTRL, ctrl);
->         dev->ptm_enabled = 1;
->
-> --

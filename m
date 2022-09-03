@@ -2,84 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE055ABC39
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 04:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CC95ABC3F
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 04:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiICCEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 22:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S231467AbiICCMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 22:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiICCD6 (ORCPT
+        with ESMTP id S229508AbiICCMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 22:03:58 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A2DC8754;
-        Fri,  2 Sep 2022 19:03:57 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id d1so2781169qvs.0;
-        Fri, 02 Sep 2022 19:03:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=wuSBjMiBTaAL8YRizai7RiR6f5CVFgeNpvVuZnceTRg=;
-        b=VZuhTACe0U3EXGt8EU0qfjCtXlQc2l5Ukl2XQwX+e8zN7/S/94ov1ahq/aw82swBoi
-         Tdq8DoMVuF1BRV3+AZSi8vfdu3lYAL+dTeMsIrynhuEY7lcQoIAJuDyGlA9ClR5TZeXK
-         DdHDNnXnlnvdUkZPPyBOZR3OL6ER9doo75Y2Tzwq4YWF2bVLpcG87ut0MWzRLm5SrDtC
-         Af0CZ6XEjcnivlm3INNqRi8uPLruUs5T8HPnEGaj7wFu1UFUsRLTcEQYhH0HErbTVs+n
-         oCuFjXo+sYeO8qCF6dMWouzDqhQPjjHa/rskFYirXvcCgE+Zt3Sa1JTNi0vyV7jHFBvJ
-         /Vxw==
-X-Gm-Message-State: ACgBeo0QqGcf7s3D6UVPE7izQrPW/zG/GoICibLZa73Vo3z1l55jjt5l
-        vjcNr7bNaPq/Exk1KTgfFQB2Aco03I4=
-X-Google-Smtp-Source: AA6agR59MlkhSq+vlXnlcC8JiBBEJ/6n6KMBfgpZvlo8YtzVRP/QsfUTKR6pxdCYzu/dP04gHZ9hEA==
-X-Received: by 2002:a17:902:cf11:b0:172:6437:412e with SMTP id i17-20020a170902cf1100b001726437412emr37762911plg.77.1662170029186;
-        Fri, 02 Sep 2022 18:53:49 -0700 (PDT)
-Received: from localhost.localdomain ([211.49.23.9])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170902dacd00b001743be790b4sm2338512plx.215.2022.09.02.18.53.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 18:53:48 -0700 (PDT)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, hyc.lee@gmail.com, senozhatsky@chromium.org,
-        tom@talpey.com, Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH] MAINTAINERS: Add Tom Talpey as ksmbd reviewer
-Date:   Sat,  3 Sep 2022 10:53:40 +0900
-Message-Id: <20220903015340.7336-1-linkinjeon@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 2 Sep 2022 22:12:38 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B5EE42CD;
+        Fri,  2 Sep 2022 19:12:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+9hT3j8PY8NaJfAXBqOIgtHebUuVNz5evAMl6MQrDZM=; b=ImpVKficYcJZfn/PGfcZIeWwIT
+        i3sOwcqfBBOo9/04H4EvdYmeTXQyqAtQcUUjkDsZnYpJRYNaO4U6dnVOH1iSpI/nGtl1OCacl8I87
+        MdYdlxVyh2qd7jXqWuVtIq6HlPyyG14dBQavaEZpsCkdXQH160E55IuBfXZjOUHzzfmSWEVd0+4KR
+        KhJveS9tkCVcIwA/vUIGGiqf+FPIprO8pMMJR+IQZ/FLihVVJRKbKYr/4VZOw7QdYmk+zSTKUDXrG
+        gPUIP+3F0OZc6xNqaqid6OzICV0qSgi1hHR44HbzoYMA65n9TNsySthic+fDVLrJRs6/H5DqeOTBa
+        kY67tQEQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oUIe2-00BW85-2R;
+        Sat, 03 Sep 2022 02:12:26 +0000
+Date:   Sat, 3 Sep 2022 03:12:26 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daire Byrne <daire@dneg.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/10] VFS: support parallel updates in the one directory.
+Message-ID: <YxK4CiVNaQ6egobJ@ZenIV>
+References: <166147828344.25420.13834885828450967910.stgit@noble.brown>
+ <166147984370.25420.13019217727422217511.stgit@noble.brown>
+ <YwmS63X3Sm4bhlcT@ZenIV>
+ <166173834258.27490.151597372187103012@noble.neil.brown.name>
+ <YxKaaN9cHD5yzlTr@ZenIV>
+ <166216924401.28768.5809376269835339554@noble.neil.brown.name>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166216924401.28768.5809376269835339554@noble.neil.brown.name>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tom have been actively reviewing ksmbd patches as well as
-smb-direct patches. He agreed to help us as a reviewer,
-So adding him to reviewer list in ksmbd entry.
+On Sat, Sep 03, 2022 at 11:40:44AM +1000, NeilBrown wrote:
 
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+> I don't think that is a good idea.  Once you call d_lookup_done()
+> (without having first called d_add() or similar) the dentry becomes
+> invisible to normal path lookup, so another might be created.  But the
+> dentry will still be used for the 'create' or 'rename' and may then be
+> added to the dcache - at which point you could have two dentries with the
+> same name.
+> 
+> When ->lookup() returns success without d_add()ing the dentry, that
+> means that something else will complete the d_add() if/when necessary.
+> For NFS, it specifically means that the lookup is effectively being
+> combined with the following CREATE or RENAME.  In this case there is no
+> d_lookup_done() until the full operation is complete.
+>
+> For autofs (thanks for pointing me to that) the operation is completed
+> when d_automount() signals the daemon to create the directory or
+> symlink.  In that case there IS a d_lookup_done() call and autofs needs
+> some extra magic (the internal 'active' list) to make sure subsequent
+> ->lookup requests can see that dentry which is still in the process of
+> being set up.
+> 
+> It might be nice if the dentry passed to autofs_lookup() could remain
+> "d_inlookup()" until after d_automount has completed.  Then autofs
+> wouldn't need that active list.  However I haven't yet looked at how
+> disruptive such a change might be.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f512b430c7cb..f7ccb9abfe86 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11070,6 +11070,7 @@ M:	Namjae Jeon <linkinjeon@kernel.org>
- M:	Steve French <sfrench@samba.org>
- M:	Hyunchul Lee <hyc.lee@gmail.com>
- R:	Sergey Senozhatsky <senozhatsky@chromium.org>
-+R:	Tom Talpey <tom@talpey.com>
- L:	linux-cifs@vger.kernel.org
- S:	Maintained
- T:	git git://git.samba.org/ksmbd.git
--- 
-2.25.1
+Very much so.  You are starting to invent new rules for ->lookup() that
+just never had been there, basing on nothing better than a couple of
+examples.  They are nowhere near everything there is.
 
+And you can't rely upon d_add() done by a method, for very obvious
+reasons.  They are out of your control, they might very well decide
+that object creation has failed and drop the damn thing.  Which is
+not allowed for in-lookup dentries without d_lookup_done().
+
+Neil, *IF* you are introducing new rules like that, the absolutely minimal
+requirement is having them in Documentation/filesystems/porting.rst.
+And that includes "such-and-such method might be called with parent
+locked only shared; in that case it's guaranteed such-and-such things
+about its arguments (bitlocks held, etc.)".
+
+One thing we really need to avoid is that thing coming undocumented, with
+"NFS copes, nobody else has it enabled, whoever does it for other
+filesystems will just have to RTFS".  I hope it's obvious that this
+is not an option.  Because I can bloody guarantee that it will be
+cargo-culted over to other filesystems, with nobody (you and me included)
+understanding the resulting code.

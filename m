@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFFC5ABE5D
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 12:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9732C5ABE5F
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 12:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiICKAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 06:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
+        id S230231AbiICKBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 06:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiICKAO (ORCPT
+        with ESMTP id S229506AbiICKBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 06:00:14 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A613357C2;
-        Sat,  3 Sep 2022 03:00:12 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id c9so3455326qkk.6;
-        Sat, 03 Sep 2022 03:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=eIvSaUS74WCbxqQm0wgPs0M7RkM/w20HZGOfg7cVeFk=;
-        b=hd3p6+efVudsTYMcznatjZDKB2UTlcameqXBLdQNKEiChBpwpDjjUUo97j9ncaGdb2
-         AqgBQHDnDiNCLesO5ANYzzzxg9uLaDSjZuZMdQyxO5+va4gu/u9IAtJfIcVF97eouQh1
-         gDrCOJtSmN7RzZmW07ybvdQbMRLNnyY0QcgPOngzEqN7F/wSRYNNMonKPoD8xPgtZfEu
-         n0WwR6M13YqdjY3Xhu7y9qGpUOOWa5Kcywh5aNU7NZFyl0hCRX51jHkUcibPBztUD3Uz
-         xZ2AXyNShyrfwzNziA3rYf+vOynvCINCWhhRoCr/wZckmDuOYNre1ebNBNIKciwKY7z9
-         GlwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=eIvSaUS74WCbxqQm0wgPs0M7RkM/w20HZGOfg7cVeFk=;
-        b=TzvjGvg/e5Fdu7kkxcu6NlWshXQ4K/ORlIUEu27XLkbSvyWr160i1doDnMNekR04BX
-         vd+MMWOpVzLC0HRm61/x5p4qY7BCcZf8bFnKiVLiWpZe22478ImBgo5mtUYMKVebpGdD
-         jXfYfJLTcvjRZHRd+gu5zYIUR9zK5TVlQuQ3rXLfu8s3uT1phTlcPYkzYtyAEXtnxqPp
-         Y8a9wH0eY6gEeUgsx11RXC0kUnJOgLWcMbfrHe36yC6tQgAvrZf9nNRZeTArnzISU3gA
-         PfMYTlrMNMi2ly2dCv70KcAKJ6RcT65d7JNNtYTsXwIyaqSsEDpCUrGfW6aa6cL/C2Z0
-         Xa/w==
-X-Gm-Message-State: ACgBeo1fd2S1ByzXdVWzuIJVS1SwNVgQBXEGwgEpQVvMw2Ee9g3Z5T/x
-        uIPGXq0zg43Bap38ztK/wsaXF6swKg3aCXIVm64=
-X-Google-Smtp-Source: AA6agR7bc0aNf1qMTLPs6ApPcKggpasv5/RD+VFeZKCP1aSbFPW5yXsOJaJNTFz0drsemN/PZ1mBnK8SevsrbKcvciU=
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
- s13-20020a05620a254d00b006ab84b825ebmr26106520qko.383.1662199211678; Sat, 03
- Sep 2022 03:00:11 -0700 (PDT)
+        Sat, 3 Sep 2022 06:01:35 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0365755A;
+        Sat,  3 Sep 2022 03:01:33 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 283A15mQ005669-283A15mT005669
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 3 Sep 2022 18:01:11 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hangyu Hua <hbh25y@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: misc: uss720: fix uninitialized variable rlen
+Date:   Sat,  3 Sep 2022 18:00:01 +0800
+Message-Id: <20220903100004.2874741-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220902-get_gpiod_from_child-remove-v1-0-1e47125df20f@gmail.com>
-In-Reply-To: <20220902-get_gpiod_from_child-remove-v1-0-1e47125df20f@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 3 Sep 2022 12:59:35 +0300
-Message-ID: <CAHp75Vf5Law7suOPRW=LGrBacv=WfFBmhOae+frBdj46dT-KCg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] Get rid of devm_fwnode_get_[index_]gpiod_from_child()
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 3, 2022 at 3:59 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> This drops the last uses of devm_fwnode_get_[index_]gpiod_from_child()
-> from the tree and drops the stubs implementing this API on top of
-> devm_fwnode_gpiod_get_index().
->
-> Note that the bulk of users were converted in 2019, the couple of LED
-> drivers are all that have remained.
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-Full support and green light from me, thanks!
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Smatch reports the following error: uninitialized symbol 'rlen'
 
-P.S. More of the similar is welcome, if you have any!
+drivers/usb/misc/uss720.c:514 parport_uss720_epp_write_data() error
+drivers/usb/misc/uss720.c:575 parport_uss720_ecp_write_data() error
+drivers/usb/misc/uss720.c:593 parport_uss720_ecp_read_data() error
+drivers/usb/misc/uss720.c:626 parport_uss720_write_compat() error
 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+The root cause is, the failure of usb_bulk_msg leads to the
+uninitialized variable rlen in printk function.
 
+Fix this by initializing rlen with zero.
 
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ drivers/usb/misc/uss720.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
+index 0be8efcda15d..b00d92db5dfd 100644
+--- a/drivers/usb/misc/uss720.c
++++ b/drivers/usb/misc/uss720.c
+@@ -502,7 +502,7 @@ static size_t parport_uss720_epp_write_data(struct parport *pp, const void *buf,
+ #else
+ 	struct parport_uss720_private *priv = pp->private_data;
+ 	struct usb_device *usbdev = priv->usbdev;
+-	int rlen;
++	int rlen = 0;
+ 	int i;
+ 
+ 	if (!usbdev)
+@@ -563,7 +563,7 @@ static size_t parport_uss720_ecp_write_data(struct parport *pp, const void *buff
+ {
+ 	struct parport_uss720_private *priv = pp->private_data;
+ 	struct usb_device *usbdev = priv->usbdev;
+-	int rlen;
++	int rlen = 0;
+ 	int i;
+ 
+ 	if (!usbdev)
+@@ -581,7 +581,7 @@ static size_t parport_uss720_ecp_read_data(struct parport *pp, void *buffer, siz
+ {
+ 	struct parport_uss720_private *priv = pp->private_data;
+ 	struct usb_device *usbdev = priv->usbdev;
+-	int rlen;
++	int rlen = 0;
+ 	int i;
+ 
+ 	if (!usbdev)
+@@ -614,7 +614,7 @@ static size_t parport_uss720_write_compat(struct parport *pp, const void *buffer
+ {
+ 	struct parport_uss720_private *priv = pp->private_data;
+ 	struct usb_device *usbdev = priv->usbdev;
+-	int rlen;
++	int rlen = 0;
+ 	int i;
+ 
+ 	if (!usbdev)
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.1
+

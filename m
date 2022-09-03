@@ -2,78 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D635ABC31
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84AE05ABC34
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 04:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiICB67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 21:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
+        id S231414AbiICCBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 22:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiICB6y (ORCPT
+        with ESMTP id S229586AbiICCBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 21:58:54 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C4DE1146
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 18:58:53 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id fa2so3547192pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 18:58:53 -0700 (PDT)
+        Fri, 2 Sep 2022 22:01:47 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBC3C8754;
+        Fri,  2 Sep 2022 19:01:45 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 78so3369972pgb.13;
+        Fri, 02 Sep 2022 19:01:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=5H8pIAL+DYHHI5l4+Ml0i0IAndmMiHzeUh2KaNWL3RM=;
-        b=LLioZ3j2yDGFcR6QQUlQVHz6Y2Ce0rdEnTp1iGZQ7X29fUkLT4JrFVhqr5xy/hTYtU
-         zy7AMAHbWb8J7oZSai8aDQ0KaszJ4TluL/PaMkrGd+QSbTEpgxbvIZTCeElOl7zawLc/
-         /s3OHTUhwY/94IU7a2+2suldH2mAddYNVeqtA=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=SL2OYo4Y0nRVWNk4wkdLxh4PM2k6Tf5TlXKaNlHd0hA=;
+        b=EwhJrKWE+kHpLXR1dPyFa+YBsZWDzfcBpZ4fc07lumM2ZyvdkbrcaMJubiK3mQr6jo
+         zZJ3VO8bOK35Tehyb6/qURRWrXusqMM/91y5q0HoCxx8iyYMi7dLCjO6dyYtJJLDHDnI
+         eG4bYBPMNfsvk4cCdxtkVg6u2aMp3n0YN676QCUEPm2w0KmOa+cU7CflbeRHP1ZBDWMY
+         3lZEJ53k1nH8zldOqykdo+5ZRhzC+qzxEV3Em/JSCkF8gco+sSOxblBsVVouz2kIKve3
+         QBjKgl9E1KzHpj0Z1gLrSyEWgGV2UuMLQFzCuP5m9TSXH9eG+8NtYgMwzD2Z8GOP8AOO
+         YLNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=5H8pIAL+DYHHI5l4+Ml0i0IAndmMiHzeUh2KaNWL3RM=;
-        b=qrpk0JwpKvAIzZQKWNQ1l2z6rmGdmA+XtHSer7gpV9iyPsows/o0SZaJ/7BX/Os4Hk
-         E7FNXqCLPRTHOl1EaPdkaWYESJEFRJ8GqZSGnfVYYGHwQJZGVg/RrKJDMQ0XvfC5nFVP
-         QXqraVskgHVrd1K2libbz+A5fCpOd/NxgvKtLm5F9y2BGhOzcRAIfXsR6fzWn4IS3VAq
-         o5nZ7cqylHoS2ooxTMGX9dO4V9XtcUKJfynYyaoeeOyFB2qAmWggXKe61ZFKvCYmtEJB
-         QeBdmsC8Wxa656H0eKZGRn+RjaQ1NQmRs+v9xkjpNTnKcH5xtR0VuMNXrSMQtOCdrZ1Y
-         iG7A==
-X-Gm-Message-State: ACgBeo3Di0VwrsEcdWq23C4iXKU8TDk4HzwdR6uYO2vYeb11xgmteXGr
-        yNLsIT5ERgaq3bMpHl4qhhj8pg==
-X-Google-Smtp-Source: AA6agR4GORnA4Wx/SDGDcI7KhC4jQCnM7Xh/7FWJ/Vd80S4wEEiDytSWsuGjL2tMJv3TdH6pabpKIw==
-X-Received: by 2002:a17:90a:b00b:b0:1f1:6023:dacd with SMTP id x11-20020a17090ab00b00b001f16023dacdmr7596126pjq.184.1662170333437;
-        Fri, 02 Sep 2022 18:58:53 -0700 (PDT)
-Received: from google.com ([110.11.159.72])
-        by smtp.gmail.com with ESMTPSA id c14-20020a056a00008e00b0053ab9c18d3csm2631443pfj.14.2022.09.02.18.58.50
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=SL2OYo4Y0nRVWNk4wkdLxh4PM2k6Tf5TlXKaNlHd0hA=;
+        b=IZsv96AV2AU0vy2Jp9PWtg6VNvO/iyDVYdUMvIDORH/8+mdigB3gFUFdQqdhIVDTBk
+         CAlFYruBWSCIMdytujFPaqVc/kjaQBj3kuCJDLZzrfq3Hn/u39Tfk3vrTxP8GHlahzs/
+         SafLHHpqcoIVJ4b8HrJLycyOK1fhA/lscW4X9LPl0PFOVMGadBMS8HV/Rk5+3W8fuiD1
+         b6zCXo389mgS3CyPUbRkM+UtwYltpjO3ZglIprMrWhKdfdKPEEIKAsZh9EYSyqh53sTi
+         n7LR22k0rayiuCIp4p11QeyO9ofeco7RygIw86cvxr6X3INnCvB9hK0OEn+I3MA7PJgj
+         hm0g==
+X-Gm-Message-State: ACgBeo3uuAWx3e4AzBHzGHqqOAP91vB9zMs6/5rJtl0aMNNiJS+kQHrs
+        5xpq2yapEBqvJNl9gqr/eRJLYyRtyJ0beg==
+X-Google-Smtp-Source: AA6agR7DuGXQ7p0PuJkDvlZ/I4w7fr3C12eiSRwvIWADF99iU9LYtaTUC6XrgFbgs58xCAX0zy2GrQ==
+X-Received: by 2002:a63:484a:0:b0:42b:2e71:6665 with SMTP id x10-20020a63484a000000b0042b2e716665mr32759033pgk.407.1662170505239;
+        Fri, 02 Sep 2022 19:01:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n19-20020a170903405300b00172b5d1e054sm2305628pla.17.2022.09.02.19.01.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Sep 2022 18:58:52 -0700 (PDT)
-Date:   Sat, 3 Sep 2022 10:58:48 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Namjae Jeon <linkinjeon@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        smfrench@gmail.com, hyc.lee@gmail.com, senozhatsky@chromium.org,
-        tom@talpey.com, Steve French <stfrench@microsoft.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Tom Talpey as ksmbd reviewer
-Message-ID: <YxK02EVt/7OWjfiE@google.com>
-References: <20220903015340.7336-1-linkinjeon@kernel.org>
+        Fri, 02 Sep 2022 19:01:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.0-rc4
+Date:   Fri,  2 Sep 2022 19:01:42 -0700
+Message-Id: <20220903020142.852288-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220903015340.7336-1-linkinjeon@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/03 10:53), Namjae Jeon wrote:
-> Tom have been actively reviewing ksmbd patches as well as
-> smb-direct patches. He agreed to help us as a reviewer,
-> So adding him to reviewer list in ksmbd entry.
-> 
-> Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
-> Signed-off-by: Steve French <stfrench@microsoft.com>
+Hi Linus,
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Please pull hwmon fixes for Linux v6.0-rc4 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.0-rc4
+
+Thanks,
+Guenter
+------
+
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.0-rc4
+
+for you to fetch changes up to f233d2be38dbbb22299192292983037f01ab363c:
+
+  hwmon: (gpio-fan) Fix array out of bounds access (2022-08-29 21:23:23 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v6.0-rc4
+
+- Fix out of bounds access in gpio-fan driver
+
+- Fix VOUT margin caching in PMBus core
+
+- Avoid error message after -EPROBE_DEFER from devm_regulator_register()
+
+----------------------------------------------------------------
+Armin Wolf (1):
+      hwmon: (gpio-fan) Fix array out of bounds access
+
+Christophe JAILLET (1):
+      hwmon: (pmbus) Use dev_err_probe() to filter -EPROBE_DEFER error messages
+
+Vincent Whitchurch (1):
+      hwmon: (pmbus) Fix vout margin caching
+
+ drivers/hwmon/gpio-fan.c         |  3 +++
+ drivers/hwmon/pmbus/pmbus_core.c | 19 ++++++++++++-------
+ 2 files changed, 15 insertions(+), 7 deletions(-)

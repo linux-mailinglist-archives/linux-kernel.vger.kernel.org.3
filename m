@@ -2,122 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A645ABBFA
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE7B5ABBFE
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Sep 2022 03:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiICBCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Sep 2022 21:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S230010AbiICBMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Sep 2022 21:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiICBCQ (ORCPT
+        with ESMTP id S229436AbiICBMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Sep 2022 21:02:16 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B87E2F023
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Sep 2022 18:02:15 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id b9-20020a92c569000000b002eb7fbf5ca1so2982900ilj.20
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Sep 2022 18:02:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=x/bIznkOZ6UM7yMIkGJt1PcvCTM+9jh0wfcvMy8JF6U=;
-        b=JA3RVVfx//1vEVzxrt6ZAF8Jih80l8NfHGtMfbThopyHuIP1gUBhHf6595WiUGDAhR
-         TYQExRRB6o+3gQVVIrHok/51lS0+/r1c5Fxv6ObS2lDPeRVSNiPRllJWgt+EjLX5DEMH
-         yWUsiSYhUQlnjqOP51Dy/7CC8zUADDygQTna/IeCH6Ot4Z++WCu+NDOHkZgODpJOVcrx
-         5vHMfmzPVd6Pk5/qhWl1jR66vc3UhTt+1koZKOe/d1eMcEpZblsCGd1zmzEgxCX8NtYy
-         LjmNqv6dEkvmwT9Sm4GuTrM4N351Uc8bqyY4tv+WeOVhHiKPVjuFjENjf0zZk2LdoKu7
-         JsAg==
-X-Gm-Message-State: ACgBeo0439xEFT+zAsvy2H4KOdrXYBNBVZj/jLLAaarJaYYbjPVI5OYB
-        w6xy5hOTt2uDbCYNCzIHp8CCkAr2hoZnjhkudzX+nRGq/ZIY
-X-Google-Smtp-Source: AA6agR44DUEjCmnX0cYStqTmG6LrqVYPpiDRq6bK7+N0WTCCuE+7S9v2nbFvH3kj5FFvXO9swXcNqwh8GORsomT+IauCHs+/iXKZ
+        Fri, 2 Sep 2022 21:12:06 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142D5CE32B;
+        Fri,  2 Sep 2022 18:12:04 -0700 (PDT)
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 2831BfNL007480;
+        Sat, 3 Sep 2022 10:11:41 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2831BfNL007480
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662167502;
+        bh=d1zZMjIp/AEHUFQaxKnZBp8fdpmaAc/pofnE8yjoj0Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RvpB/SQMo96ICeGqOoYzZR985R9GyCMDlN+mwMjn5EwdfWIYOitLm0k32VB+6DwDi
+         zjcbewmZ76ZIcAbaxfHRsZU75b4hxDgHXYupFt5IEoMzAOg8T6ArhQ+LIuYsPkBgrH
+         Ts335P0Eu+WGad8AiBOaeBAKBCVasValNRknV6nUW5by0AInrjF9QdY8kIp+oZ4rKW
+         1HkUyONcQaAxT+mYSnqYF0vv19P4OjTt6W263grjTQyDCOr9HGeq/GkOLFh79ylLjr
+         3hadkAfYdl0Wukv70mKNGLaHfn2mIJWvq2+jDvIdaxq6n29FEdKX9+UDR5fspzxwpt
+         nTPVY6hn2ldXg==
+X-Nifty-SrcIP: [209.85.160.50]
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-11e7e0a63e2so8917776fac.4;
+        Fri, 02 Sep 2022 18:11:41 -0700 (PDT)
+X-Gm-Message-State: ACgBeo23/9Bx9fBSgqXY+V8F2t8atsEQ3Ya176aHpL0xOIoKMQYPYwMW
+        9CNhLIyeNTvdN/DQ6yAbb7JwJPx0IrmGA7xOeVk=
+X-Google-Smtp-Source: AA6agR72d0VE/5+VJ8O5be1iaUMumL9bYP4n7YcvmqeZwMvwba4zChF2mHdngQ3NQeGza6WcSrTPTKGhHRRK+itE67o=
+X-Received: by 2002:a05:6808:1189:b0:33a:34b3:6788 with SMTP id
+ j9-20020a056808118900b0033a34b36788mr3025795oil.194.1662167500600; Fri, 02
+ Sep 2022 18:11:40 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:cda3:0:b0:2e3:e214:5fa5 with SMTP id
- g3-20020a92cda3000000b002e3e2145fa5mr20321487ild.306.1662166934626; Fri, 02
- Sep 2022 18:02:14 -0700 (PDT)
-Date:   Fri, 02 Sep 2022 18:02:14 -0700
-In-Reply-To: <20220903004735.2250-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b2264605e7bb6593@google.com>
-Subject: Re: [syzbot] INFO: task hung in blk_freeze_queue (3)
-From:   syzbot <syzbot+38e6c55d4969a14c1534@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20220902130846.654526-1-masahiroy@kernel.org>
+In-Reply-To: <20220902130846.654526-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 3 Sep 2022 10:11:04 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASAJPb06oE7yAhAtAWSB5_So_1PP8L8jgnkpgEb035JoA@mail.gmail.com>
+Message-ID: <CAK7LNASAJPb06oE7yAhAtAWSB5_So_1PP8L8jgnkpgEb035JoA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: use objtool-args-y to clean up objtool arguments
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Sep 2, 2022 at 10:11 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Based on Linus' patch.
+>
+> Link: https://lore.kernel.org/lkml/CAHk-=wgjTMQgiKzBZTmb=uWGDEQxDdyF1+qxBkODYciuNsmwnw@mail.gmail.com/
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/Makefile.lib       | 31 ++++++++++++++++---------------
+>  scripts/Makefile.vmlinux_o | 17 ++++++++---------
+>  2 files changed, 24 insertions(+), 24 deletions(-)
+>
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index b594705d571a..731f735240f8 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -229,25 +229,26 @@ ifdef CONFIG_OBJTOOL
+>
+>  objtool := $(objtree)/tools/objtool/objtool
+>
+> -objtool_args =                                                         \
+> -       $(if $(CONFIG_HAVE_JUMP_LABEL_HACK), --hacks=jump_label)        \
+> -       $(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)              \
+> -       $(if $(CONFIG_X86_KERNEL_IBT), --ibt)                           \
+> -       $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             \
+> -       $(if $(CONFIG_UNWINDER_ORC), --orc)                             \
+> -       $(if $(CONFIG_RETPOLINE), --retpoline)                          \
+> -       $(if $(CONFIG_RETHUNK), --rethunk)                              \
+> -       $(if $(CONFIG_SLS), --sls)                                      \
+> -       $(if $(CONFIG_STACK_VALIDATION), --stackval)                    \
+> -       $(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)          \
+> -       $(if $(CONFIG_HAVE_UACCESS_VALIDATION), --uaccess)              \
+> +objtool-args-$(CONFIG_HAVE_JUMP_LABEL_HACK)            += --hacks=jump_label
+> +objtool-args-$(CONFIG_HAVE_NOINSTR_HACK)               += --hacks=noinstr
+> +objtool-args-$(CONFIG_X86_KERNEL_IBT)                  += --ibt
+> +objtool-args-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)       += --mcount
+> +objtool-args-$(CONFIG_UNWINDER_ORC)                    += --orc
+> +objtool-args-$(CONFIG_RETPOLINE)                       += --retpoline
+> +objtool-args-$(CONFIG_RETHUNK)                         += --rethunk
+> +objtool-args-$(CONFIG_SLS)                             += --sls
+> +objtool-args-$(CONFIG_STACK_VALIDATION)                        += --stackval
+> +objtool-args-$(CONFIG_HAVE_STATIC_CALL_INLINE)         += --static-call
+> +objtool-args-$(CONFIG_HAVE_UACCESS_VALIDATION)         += --uaccess
+> +objtool-args-$(CONFIG_GCOV_KERNEL)                     += --no-unreachable
+> +
+> +objtool-args = $(objtool-args-y)                                       \
+>         $(if $(delay-objtool), --link)                                  \
+> -       $(if $(part-of-module), --module)                               \
+> -       $(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
+> +       $(if $(part-of-module), --module)
+>
+>  delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
+>
+> -cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+> +cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool-args) $@)
+>  cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+>
+>  endif # CONFIG_OBJTOOL
+> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+> index 81a4e0484457..df928a6717a1 100644
+> --- a/scripts/Makefile.vmlinux_o
+> +++ b/scripts/Makefile.vmlinux_o
+> @@ -35,18 +35,17 @@ endif
+>
+>  objtool-enabled := $(or $(delay-objtool),$(CONFIG_NOINSTR_VALIDATION))
+>
+> -# Reuse objtool_args defined in scripts/Makefile.lib if LTO or IBT is enabled.
+> +# Reuse objtool-args-y defined in scripts/Makefile.lib if LTO or IBT is enabled.
+> +# (Expand objtool-args-y to a simple variable to avoid circular reference)
+>  #
+>  # Add some more flags as needed.
+> -# --no-unreachable and --link might be added twice, but it is fine.
+> -#
+> -# Expand objtool_args to a simple variable to avoid circular reference.
+> +# --no-unreachable might be added twice, but it is fine.
+> +
+> +objtool-args-$(delay-objtool)                  := $(objtool-args-y)
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: task hung in blkdev_put
+This line is wrong. I will change like follows:
 
-INFO: task syz-executor.0:3527 blocked for more than 143 seconds.
-      Not tainted 6.0.0-rc3-syzkaller-00299-gd895ec7938c4-dirty #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.0  state:D stack:    0 pid: 3527 ppid:  3506 flags:0x0000000d
-Call trace:
- __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
- context_switch kernel/sched/core.c:5182 [inline]
- __schedule+0x414/0x570 kernel/sched/core.c:6494
- schedule+0x64/0xa4 kernel/sched/core.c:6570
- schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6629
- __mutex_lock_common+0x74c/0xc28 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- blkdev_put+0x78/0x270 block/bdev.c:910
- blkdev_close+0x24/0x38 block/fops.c:499
- __fput+0x198/0x3bc fs/file_table.c:320
- ____fput+0x20/0x30 fs/file_table.c:353
- task_work_run+0xc4/0x208 kernel/task_work.c:177
- get_signal+0xac8/0xb30 kernel/signal.c:2634
- do_signal+0x128/0x424 arch/arm64/kernel/signal.c:1071
- do_notify_resume+0xc0/0x1d0 arch/arm64/kernel/signal.c:1124
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:625
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-
-Showing all locks held in the system:
-1 lock held by rcu_tasks_kthre/10:
- #0: ffff80000d4a3568 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
-1 lock held by rcu_tasks_trace/11:
- #0: ffff80000d4a3bb8 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
-1 lock held by khungtaskd/26:
- #0: ffff80000d4a3440 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x4/0x48 include/linux/rcupdate.h:279
-2 locks held by getty/2709:
- #0: ffff0000c6319898 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x28/0x58 drivers/tty/tty_ldisc.c:244
- #1: ffff80000f67e2f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x19c/0x88c drivers/tty/n_tty.c:2177
-1 lock held by udevd/3505:
- #0: ffff0000c1f45cc8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev+0xfc/0x2fc block/bdev.c:812
-1 lock held by syz-executor.0/3527:
- #0: ffff0000c1f45cc8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_put+0x78/0x270 block/bdev.c:910
-1 lock held by syz-executor.0/3563:
- #0: ffff0000c1f45cc8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev+0xfc/0x2fc block/bdev.c:812
-1 lock held by syz-executor.0/3585:
- #0: ffff0000c1f45cc8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev+0xfc/0x2fc block/bdev.c:812
-
-=============================================
+objtool-args-y    := $(if $(delay-objtool), $(objtool-args-y))
 
 
 
-Tested on:
+> +objtool-args-$(CONFIG_GCOV_KERNEL)             += --no-unreachable
+> +objtool-args-$(CONFIG_NOINSTR_VALIDATION)      += --noinstr $(if $(CONFIG_CPU_UNRET_ENTRY), --unret))
+>
+> -objtool_args := \
+> -       $(if $(delay-objtool),$(objtool_args)) \
+> -       $(if $(CONFIG_NOINSTR_VALIDATION), --noinstr $(if $(CONFIG_CPU_UNRET_ENTRY), --unret)) \
+> -       $(if $(CONFIG_GCOV_KERNEL), --no-unreachable) \
+> -       --link
+> +objtool-args = $(objtool-args-y) --link
+>
+>  # Link of vmlinux.o used for section mismatch analysis
+>  # ---------------------------------------------------------------------------
+> --
+> 2.34.1
+>
 
-commit:         d895ec79 Merge tag 'block-6.0-2022-09-02' of git://git..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=101b868b080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=57b9bfeca947ab90
-dashboard link: https://syzkaller.appspot.com/bug?extid=38e6c55d4969a14c1534
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1138e4b7080000
 
+-- 
+Best Regards
+Masahiro Yamada

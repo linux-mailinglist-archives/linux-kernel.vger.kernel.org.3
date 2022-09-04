@@ -2,229 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FB35AC4B0
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 16:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59EAE5AC4D1
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 16:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbiIDOLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 10:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
+        id S233742AbiIDOiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 10:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbiIDOLT (ORCPT
+        with ESMTP id S229997AbiIDOh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 10:11:19 -0400
-X-Greylist: delayed 465 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Sep 2022 07:11:17 PDT
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 759BA31DF4
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 07:11:17 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.218:42302.846211882
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-222.210.155.225 (unknown [172.18.0.218])
-        by chinatelecom.cn (HERMES) with SMTP id 013A32801A6;
-        Sun,  4 Sep 2022 22:03:25 +0800 (CST)
-X-189-SAVE-TO-SEND: +lic121@chinatelecom.cn
-Received: from  ([172.18.0.218])
-        by app0025 with ESMTP id fcb6896dd8644185bf2f35d5547c90c4 for mike.kravetz@oracle.com;
-        Sun, 04 Sep 2022 22:03:30 CST
-X-Transaction-ID: fcb6896dd8644185bf2f35d5547c90c4
-X-Real-From: lic121@chinatelecom.cn
-X-Receive-IP: 172.18.0.218
-X-MEDUSA-Status: 0
-Sender: lic121@chinatelecom.cn
-From:   Cheng Li <lic121@chinatelecom.cn>
-To:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Cheng Li <lic121@chinatelecom.cn>
-Subject: [PATCH] mm: use mem_map_offset instead of mem_map_next
-Date:   Sun,  4 Sep 2022 14:02:41 +0000
-Message-Id: <1662300161-22049-1-git-send-email-lic121@chinatelecom.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 4 Sep 2022 10:37:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A383341B;
+        Sun,  4 Sep 2022 07:37:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72AB6B80D78;
+        Sun,  4 Sep 2022 14:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42711C433D6;
+        Sun,  4 Sep 2022 14:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662302274;
+        bh=7zTaLKk/YvXMljqVKzIItnnizZmpS7vkmEXB4DMC+Hs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=o+940ZsrS37x4e4mDMiB7rDt+uuYjA21QQk/PX0LqJFdqKDgIn3TO/cNl2SArmG8a
+         Hq/W/LOcdBG/KiyIWALo53KjGchc+2oaDftg1dF1yszDXq+rZSZI3CUB4qShy12F67
+         sJHejE9w0aXwziIrf9JDgNuxpi6Ld8Pbu6S0dlANrpMznRwTqI8Ho2g7LPKe0w0rYC
+         feChJE8C/re8eZqhSBCUr2sw1rH540P8Okomb8zjbpAwuFj9uKFr/yjdp/oJHlxjfw
+         wZfUUXlLFL3tom7GAjL3w/alJ/sSkSWeoPL+CmxZsQ35s/EFyFkCPmlUI7IabeTXMo
+         Zh+RvgkiLkAYg==
+Date:   Sun, 4 Sep 2022 15:03:46 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Crt Mori <cmo@melexis.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] iio: temperature: mlx90632 Add runtime
+ powermanagement modes
+Message-ID: <20220904150346.0c56de9d@jic23-huawei>
+In-Reply-To: <CAKv63us6OLg8ahdbKvd8c4x9-Ri4aDwNvgc_oov7wZnSBmJGVA@mail.gmail.com>
+References: <20220902131258.3316367-1-cmo@melexis.com>
+        <CAHp75VdOHDHUVhVXj4L-6ZV25mTWTeO3s3EJQVgLxknXHKRUMg@mail.gmail.com>
+        <CAKv63ut0rtTFh3XdF3oR6fxQSLzNkFRS+HPPOY8Xp4LX0OY4Tg@mail.gmail.com>
+        <CAHp75VfJMpf3GeOryt9cH6-tK48BB8ZcfuGxhXovObBanDcc7w@mail.gmail.com>
+        <CAKv63us6OLg8ahdbKvd8c4x9-Ri4aDwNvgc_oov7wZnSBmJGVA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To handle discontiguity case, mem_map_next() has a parameter named
-`offset`. As a function caller, one would be confused why "get
-next entry" needs a parameter named "offset". The other drawback of
-mem_map_next() is that the callers must take care of the map between
-parameter "iter" and "offset", otherwise we may get an hole or
-duplication during iteration. So we use mem_map_offset instead of
-mem_map_next.
+On Sat, 3 Sep 2022 14:05:38 +0200
+Crt Mori <cmo@melexis.com> wrote:
 
-Signed-off-by: Cheng Li <lic121@chinatelecom.cn>
-Fixes: 69d177c2fc70 ("hugetlbfs: handle pages higher order than MAX_ORDER")
----
- mm/hugetlb.c  | 25 +++++++++++++++----------
- mm/internal.h | 16 ++--------------
- mm/memory.c   | 21 ++++++++++-----------
- 3 files changed, 27 insertions(+), 35 deletions(-)
+> On Fri, 2 Sept 2022 at 20:39, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> >
+> > On Fri, Sep 2, 2022 at 8:59 PM Crt Mori <cmo@melexis.com> wrote:  
+> > > On Fri, 2 Sept 2022 at 17:28, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:  
+> > > > On Fri, Sep 2, 2022 at 4:13 PM <cmo@melexis.com> wrote:  
+> > > > > +       if (current_powerstatus == MLX90632_PWR_STATUS_SLEEP_STEP)
+> > > > > +               return mlx90632_pwr_set_sleep_step(data->regmap);  
+> > > >  
+> > > > > +       else  
+> > > >
+> > > > Redundant.
+> > > >  
+> > > No, the powermode changes among the type.  
+> >
+> > Yes. 'else' keyword is always redundant in the
+> >
+> >   if (...)
+> >     return / break / continue / goto
+> >   else
+> >
+> > cases.
+> >  
+> In this case current power mode of the sensor is halt, so the else is
+> needed to set it to continuous mode, which means I can't just remove
+> the else here because this statement restores the power mode before
+> this function was entered (and changed powermode for the setup).
+> 
+> > > > > +               return mlx90632_pwr_continuous(data->regmap);  
+> >
+> > ...
+> >  
+> > > > > +static int __maybe_unused mlx90632_pm_runtime_suspend(struct device *dev)  
+> > > >
+> > > > No __maybe_unused, use pm_ptr() / pm_sleep_ptr() below.
+> > > >  
+> > > Care to explain a bit more about this? I just followed what other
+> > > drivers have...  
+> >
+> > And other drivers have what I said, but it's a new feature.
+> > If you run `git log --no-merges --grep 'pm_ptr' -- drivers/iio
+> > include/linux/` and read the history it will explain the case.
+> >  
+> Thanks for the hint.
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e070b8593b37..56d74cdbdbf9 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1308,12 +1308,13 @@ static void __destroy_compound_gigantic_page(struct page *page,
- {
- 	int i;
- 	int nr_pages = 1 << order;
--	struct page *p = page + 1;
-+	struct page *p;
- 
- 	atomic_set(compound_mapcount_ptr(page), 0);
- 	atomic_set(compound_pincount_ptr(page), 0);
- 
--	for (i = 1; i < nr_pages; i++, p = mem_map_next(p, page, i)) {
-+	for (i = 1; i < nr_pages; i++) {
-+		p = mem_map_offset(page, i);
- 		p->mapping = NULL;
- 		clear_compound_head(p);
- 		if (!demote)
-@@ -1530,7 +1531,7 @@ static void add_hugetlb_page(struct hstate *h, struct page *page,
- static void __update_and_free_page(struct hstate *h, struct page *page)
- {
- 	int i;
--	struct page *subpage = page;
-+	struct page *subpage;
- 
- 	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
- 		return;
-@@ -1561,8 +1562,8 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
- 	if (unlikely(PageHWPoison(page)))
- 		hugetlb_clear_page_hwpoison(page);
- 
--	for (i = 0; i < pages_per_huge_page(h);
--	     i++, subpage = mem_map_next(subpage, page, i)) {
-+	for (i = 0; i < pages_per_huge_page(h); i++) {
-+		subpage = mem_map_offset(page, i);
- 		subpage->flags &= ~(1 << PG_locked | 1 << PG_error |
- 				1 << PG_referenced | 1 << PG_dirty |
- 				1 << PG_active | 1 << PG_private |
-@@ -1769,13 +1770,15 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
- {
- 	int i, j;
- 	int nr_pages = 1 << order;
--	struct page *p = page + 1;
-+	struct page *p;
- 
- 	/* we rely on prep_new_huge_page to set the destructor */
- 	set_compound_order(page, order);
- 	__ClearPageReserved(page);
- 	__SetPageHead(page);
--	for (i = 1; i < nr_pages; i++, p = mem_map_next(p, page, i)) {
-+	for (i = 1; i < nr_pages; i++) {
-+		p = mem_map_offset(p, page, i);
-+
- 		/*
- 		 * For gigantic hugepages allocated through bootmem at
- 		 * boot, it's safer to be consistent with the not-gigantic
-@@ -1822,14 +1825,16 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
- 
- out_error:
- 	/* undo tail page modifications made above */
--	p = page + 1;
--	for (j = 1; j < i; j++, p = mem_map_next(p, page, j)) {
-+	for (j = 1; j < i; j++) {
-+		p = mem_map_offset(page, j);
- 		clear_compound_head(p);
- 		set_page_refcounted(p);
- 	}
- 	/* need to clear PG_reserved on remaining tail pages  */
--	for (; j < nr_pages; j++, p = mem_map_next(p, page, j))
-+	for (; j < nr_pages; j++) {
-+		p = mem_map_offset(page, j);
- 		__ClearPageReserved(p);
-+	}
- 	set_compound_order(page, 0);
- #ifdef CONFIG_64BIT
- 	page[1].compound_nr = 0;
-diff --git a/mm/internal.h b/mm/internal.h
-index 785409805ed7..1012a305a60f 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -646,25 +646,13 @@ static inline void vunmap_range_noflush(unsigned long start, unsigned long end)
-  */
- static inline struct page *mem_map_offset(struct page *base, int offset)
- {
--	if (unlikely(offset >= MAX_ORDER_NR_PAGES))
--		return nth_page(base, offset);
--	return base + offset;
--}
--
--/*
-- * Iterator over all subpages within the maximally aligned gigantic
-- * page 'base'.  Handle any discontiguity in the mem_map.
-- */
--static inline struct page *mem_map_next(struct page *iter,
--						struct page *base, int offset)
--{
--	if (unlikely((offset & (MAX_ORDER_NR_PAGES - 1)) == 0)) {
-+	if (unlikely(offset >= MAX_ORDER_NR_PAGES)) {
- 		unsigned long pfn = page_to_pfn(base) + offset;
- 		if (!pfn_valid(pfn))
- 			return NULL;
- 		return pfn_to_page(pfn);
- 	}
--	return iter + 1;
-+	return base + offset;
- }
- 
- /* Memory initialisation debug and verification */
-diff --git a/mm/memory.c b/mm/memory.c
-index 4ba73f5aa8bb..32179c4fd1a5 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5637,11 +5637,11 @@ static void clear_gigantic_page(struct page *page,
- 				unsigned int pages_per_huge_page)
- {
- 	int i;
--	struct page *p = page;
-+	struct page *p;
- 
- 	might_sleep();
--	for (i = 0; i < pages_per_huge_page;
--	     i++, p = mem_map_next(p, page, i)) {
-+	for (i = 0; i < pages_per_huge_page; i++) {
-+		p = mem_map_offset(page, i);
- 		cond_resched();
- 		clear_user_highpage(p, addr + i * PAGE_SIZE);
- 	}
-@@ -5677,13 +5677,12 @@ static void copy_user_gigantic_page(struct page *dst, struct page *src,
- 	struct page *dst_base = dst;
- 	struct page *src_base = src;
- 
--	for (i = 0; i < pages_per_huge_page; ) {
-+	for (i = 0; i < pages_per_huge_page; i++) {
-+		dst = mem_map_offset(dst_base, i);
-+		src = mem_map_offset(src_base, i);
-+
- 		cond_resched();
- 		copy_user_highpage(dst, src, addr + i*PAGE_SIZE, vma);
--
--		i++;
--		dst = mem_map_next(dst, dst_base, i);
--		src = mem_map_next(src, src_base, i);
- 	}
- }
- 
-@@ -5730,10 +5729,10 @@ long copy_huge_page_from_user(struct page *dst_page,
- 	void *page_kaddr;
- 	unsigned long i, rc = 0;
- 	unsigned long ret_val = pages_per_huge_page * PAGE_SIZE;
--	struct page *subpage = dst_page;
-+	struct page *subpage;
- 
--	for (i = 0; i < pages_per_huge_page;
--	     i++, subpage = mem_map_next(subpage, dst_page, i)) {
-+	for (i = 0; i < pages_per_huge_page; i++) {
-+		subpage = mem_map_offset(dst_page, i);
- 		if (allow_pagefault)
- 			page_kaddr = kmap(subpage);
- 		else
--- 
-1.8.3.1
+The relevant EXPORT_ for this particular case isn't upstream yet
+We had a proposal on IIO list, but there was a better one as part of
+cleaning this up for MFD.  I haven't checked if there is a suitable
+immutable branch for that patch yet...
+
+Jonathan
+
 

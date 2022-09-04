@@ -2,93 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847825AC641
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 22:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087B75AC648
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 22:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234466AbiIDUDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 16:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
+        id S234977AbiIDULL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 16:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiIDUDP (ORCPT
+        with ESMTP id S230013AbiIDULJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 16:03:15 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8136328E01
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 13:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662321794; x=1693857794;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jQb8mUvTMPfMjPqfrEWEt7duRWsNrq5v55Flbe+Luz4=;
-  b=NBao/ALidKNEBfTDkptRLftYnFB8+GpH5eEIse7bltqro2UD/lB5Mnps
-   +C0UH15fMA7s+FtVebxfFdDqOJ5h/F5K1+/Y47sqfYc2WakMx8rZjV7+m
-   2l4Ivx0NcKubxqyH0mvGGnNGu39CPOclkxqa3ZVeIcMn8+iZ2ZnZ7oxkV
-   FvVCGep79P8caOU1xUM17ULqoXfcWw1GlOdoDzN0JWleLSv56h6wqA1yy
-   mSVB4oyBMnef1faevBnFKPQDNMEcuNauB6sdq80gfcP7KcxQmb88ZhWtR
-   ymSoOMW93qjvj3fAFrYDD+58TMX9+NmLhvvQXzumwq8Kv4PPzjNbBw+1r
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="357981765"
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="357981765"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 13:03:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="590677233"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 04 Sep 2022 13:03:13 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUvpo-0003Kf-1U;
-        Sun, 04 Sep 2022 20:03:12 +0000
-Date:   Mon, 5 Sep 2022 04:03:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [djbw-nvdimm:libnvdimm-pending 13/17]
- mapping.c:(.rodata.cst4+0x158): undefined reference to `dax_flush'
-Message-ID: <202209050355.CsrTeF0B-lkp@intel.com>
+        Sun, 4 Sep 2022 16:11:09 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAA92A725;
+        Sun,  4 Sep 2022 13:11:05 -0700 (PDT)
+Received: (Authenticated sender: peter@korsgaard.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 74875FF804;
+        Sun,  4 Sep 2022 20:10:53 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+        (envelope-from <peter@korsgaard.com>)
+        id 1oUvxD-005rMX-Lq; Sun, 04 Sep 2022 22:10:51 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     <Conor.Dooley@microchip.com>
+Cc:     <samuel@sholland.org>, <wens@csie.org>, <jernej.skrabec@gmail.com>,
+        <linux-sunxi@lists.linux.dev>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
+        <linux-riscv@lists.infradead.org>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <heiko@sntech.de>
+Subject: Re: [PATCH 07/12] riscv: dts: allwinner: Add Allwinner D1 Nezha
+ devicetree
+References: <20220815050815.22340-1-samuel@sholland.org>
+        <20220815050815.22340-8-samuel@sholland.org>
+        <adc4a8e2-7347-7616-99b9-59762023b2ff@microchip.com>
+Date:   Sun, 04 Sep 2022 22:10:51 +0200
+In-Reply-To: <adc4a8e2-7347-7616-99b9-59762023b2ff@microchip.com> (Conor
+        Dooley's message of "Fri, 19 Aug 2022 22:10:44 +0000")
+Message-ID: <87o7vuzyr8.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+>>>>>   <Conor.Dooley@microchip.com> writes:
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+ > Hey Samuel,
+ > Finally got around to giving this a go with the fix for loading
+ > modules which is mostly what was blocking me before..
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git libnvdimm-pending
-head:   28533c3555d9f4cc074eb01189343adbaa47b6f5
-commit: 1ea5502b1e98f725dfb7d47839ea6ab6dc201e9f [13/17] devdax: Move address_space helpers to the DAX core
-config: parisc-randconfig-r004-20220904 (https://download.01.org/0day-ci/archive/20220905/202209050355.CsrTeF0B-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git/commit/?id=1ea5502b1e98f725dfb7d47839ea6ab6dc201e9f
-        git remote add djbw-nvdimm https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git
-        git fetch --no-tags djbw-nvdimm libnvdimm-pending
-        git checkout 1ea5502b1e98f725dfb7d47839ea6ab6dc201e9f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+ > On 15/08/2022 06:08, Samuel Holland wrote:
+ >> "D1 Nezha" is Allwinner's first-party development board for the D1 SoC.
+ >> It was shipped with 512M, 1G, or 2G of DDR3. It supports onboard audio,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+ > I am really not keen on the way you have things, with the memory
+ > nodes removed from the device tree. I know your preferred flow
+ > for booting these things might be to pass the dtb up from U-Boot,
+ > but I think the devicetree in the kernel should be usable in a
+ > standalone manner, even if that is the barest-minimum memory
+ > config.
 
-All errors (new ones prefixed by >>):
-
-   hppa-linux-ld: drivers/dax/mapping.o: in function `.LC303':
->> mapping.c:(.rodata.cst4+0x158): undefined reference to `dax_flush'
+Yes, this also confused me. Part of the reason seems to be that u-boot
+on RISC-V doesn't fixup the memory node of a provided device tree like
+it is done on E.G. ARM for some reason.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Bye, Peter Korsgaard

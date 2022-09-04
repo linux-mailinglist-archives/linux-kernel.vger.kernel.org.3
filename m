@@ -2,153 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C645AC1B6
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 01:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEAC5AC1CA
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 02:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiICXPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Sep 2022 19:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
+        id S229612AbiIDAEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Sep 2022 20:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiICXPM (ORCPT
+        with ESMTP id S229487AbiIDAE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Sep 2022 19:15:12 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8A91F639;
-        Sat,  3 Sep 2022 16:15:10 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id y136so399210pfb.3;
-        Sat, 03 Sep 2022 16:15:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=/UIVvNPGGuVuyXHfCkfmj/E2Gp1v4KdZ0mdzCPC+OYw=;
-        b=dAOkDv239fvFc7/ElwPWxTQH97P40kR/orJoA9Xlw9ccnznIfgqb7O7ekI18YfqFzL
-         CrbNXeJuh1WRELXO5l5EEyfLyPNCmvr5BcoUy/8utEYpzcqWRskhJK/8S1V+vcI6fP5F
-         G6dCyUGPo1QT5tC/KxnkhuQaO5MB6iYety1tAk0VMZEvWNxaH8mVOSDeWdF2E8lRdLQ0
-         sbzXagjXQM76ElnUNNA+bdtahiI0yYy9RbVitZe3tNynkJQgszj/zjNXVfexLscw/m7q
-         OUIg4Nl+Xgu/Uk36j/7Z4ZjsNGh4NNRTGrTjibMMqq4inQeMx7P28opw1ii3f2cO/yi+
-         25Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/UIVvNPGGuVuyXHfCkfmj/E2Gp1v4KdZ0mdzCPC+OYw=;
-        b=QN896bwRbdDJIk3Kec0qTDO8Y4EXzNUTMQlD7R4f6d6HyjqyMsXwdeurD/bWBqWa9E
-         zhVBJVIl8b6egETATO1boHZy7o2O4DG87HODo95HEPnEz7/rSFlJShFi6kXM4DumZdZg
-         aUoNQv5wmL7pHBTds6GmsztIwe0wLPb+xdRutXqB9njovEEvsznPboPmbvPNIxJvZ4OJ
-         u5TbjfiWqQzLkcFnF+nqzM6qO622qsEE2RFhEIZ6opZmPnEcYFMec1Yab4FRSHidJUca
-         yOAlMKhwzhxhTv9OOlK1+04jKLmcHDAWC6cjncFLKBphcxLF6ie/hOPafl322rGiZBFc
-         CelA==
-X-Gm-Message-State: ACgBeo1bH0Ksn2STTnomt/jqAX94rEYqJK1l1f/KTP7S7UuIf7EXvp6E
-        i+RVRT+8HEJoPxrRPhPI4VMawnVSwXfWkv1ImGesAJaZxg2tFg==
-X-Google-Smtp-Source: AA6agR43Cdz+UJ42BXrfaxVQWH39Ywbee/ktCZmqwsjoke9j9bXqOMVfSIGBra4PqrCx+G43S5ttLLDNt3JpF6Nynos=
-X-Received: by 2002:a63:62c3:0:b0:434:2b09:6f62 with SMTP id
- w186-20020a6362c3000000b004342b096f62mr2166716pgb.374.1662246910212; Sat, 03
- Sep 2022 16:15:10 -0700 (PDT)
+        Sat, 3 Sep 2022 20:04:26 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D66422A;
+        Sat,  3 Sep 2022 17:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662249861; x=1693785861;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RVEhZ6y4T1JLmd8UZJsB2e4A0dQiVCt7KFVfFW0jwQA=;
+  b=cAtyjK00jWHVtA2WvzESCxsPrAKFS0tycokzzT+8Tt+S9CfaBxUeKnJc
+   R3jSL9ttdEEmeQjCuRodx4Vb8PS5Ir3/1iWekFv3JmzDCYIoUkaxT2rKZ
+   AjbQ6jPZtDwbhFAHygsg2uisHpGslDA1AScnhwRrZMaoLwAYunSrQLQRy
+   2+fAJk9tCYavi+M1t8kU1c3HTF6pMIfoRJsFheoR6e+X9JXBIVNiDY6Fu
+   3HGn7Zx+MD1817DUVUGoz0uAcveV4ZsdGfgmlUSKILxLP3X5zM1Pgb+Wc
+   5D/a72JXPKwNeL9/2MVDREaIkfc2oxXGu2AMHeCUHmcQ0i5gx2lOLJK8R
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="297494730"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="297494730"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 17:04:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="564348244"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 03 Sep 2022 17:04:17 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUd7Y-0002Ll-1R;
+        Sun, 04 Sep 2022 00:04:16 +0000
+Date:   Sun, 4 Sep 2022 08:03:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Szuying Chen <chensiying21@gmail.com>, gregkh@linuxfoundation.org,
+        mario.limonciello@amd.com, mika.westerberg@linux.intel.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Yd_Tseng@asmedia.com.tw,
+        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
+Subject: Re: [PATCH v8 1/3] thunderbolt: Add vendor's specific operations of
+ NVM
+Message-ID: <202209040723.T3GBSVUx-lkp@intel.com>
+References: <20220902094010.2170-2-chensiying21@gmail.com>
 MIME-Version: 1.0
-References: <20220826083612.1699194-1-floridsleeves@gmail.com>
- <CAHp75VcdqL4wYnhEi8LrxqJktA2uDzP3a6-08suJRghX=1UZsg@mail.gmail.com>
- <CAMEuxRqBEMdva3qEphvuYkFLpRjp=xg7vpqQT1oqb2AgkkG2+w@mail.gmail.com>
- <2033d06d-10a4-5a57-d650-7541c39990ee@linux.intel.com> <CAMEuxRq6wn+wakYHGtnS_vSgpcw6aNOir=KyXWb12vPrOr76pA@mail.gmail.com>
- <40e16474-99d2-2359-a545-4a437f555ec1@linux.intel.com>
-In-Reply-To: <40e16474-99d2-2359-a545-4a437f555ec1@linux.intel.com>
-From:   Li Zhong <floridsleeves@gmail.com>
-Date:   Sat, 3 Sep 2022 16:14:59 -0700
-Message-ID: <CAMEuxRpm5xNm2kEnhCSimoaCE3zSxbyoo7xUxNg74QrL7F6YUg@mail.gmail.com>
-Subject: Re: [PATCH v2] drivers/tty/serial: check the return value of uart_port_check()
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902094010.2170-2-chensiying21@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 12:20 AM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> On Mon, 29 Aug 2022, Li Zhong wrote:
->
-> > On Mon, Aug 29, 2022 at 12:09 AM Ilpo J=C3=A4rvinen
-> > <ilpo.jarvinen@linux.intel.com> wrote:
-> > >
-> > > On Sun, 28 Aug 2022, Li Zhong wrote:
-> > >
-> > > > On Fri, Aug 26, 2022 at 9:01 AM Andy Shevchenko
-> > > > <andy.shevchenko@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, Aug 26, 2022 at 11:38 AM Li Zhong <floridsleeves@gmail.co=
-m> wrote:
-> > > > > >
-> > > > > > uart_port_check() will return NULL pointer when state->uart_por=
-t is
-> > > > > > NULL. Check the return value before dereference it to avoid
-> > > > > > null-pointer-dereference error.
-> > > > >
-> > > > > Have you taken the locking into consideration?
-> > > > > If no, please do, if yes, expand your commit message to explain w=
-hy
-> > > > > the current locking scheme doesn't prevent an error from happenin=
-g.
-> > > > >
-> > > >
-> > > > The locking is taken into consideration but these three checks do n=
-ot need to
-> > > > unlock in error-handling because unlock() will be called in the cal=
-lers. Will
-> > > > add the comment in v2 patch.
-> > >
-> > > I think he meant you should indicate why the current locking doesn't =
-cover
-> > > the case you're fixing, not whether this function should call unlock(=
-) or
-> > > not.
-> > >
-> >
-> > Thanks for clarifications. The locking does not guarantee the return va=
-lue of
-> > uart_port_check()  is not NULL.
->
-> Please put such explanation into the commit message like Andy was asking,
-> thank you.
->
+Hi Szuying,
 
-Thanks! I'll add this into the v3 patch.
+Thank you for the patch! Perhaps something to improve:
 
-> And make sure you properly mention what has changed for any new version
-> of any patch you send so that Greg don't need to auto-mail you about it
-> (and end up ignoring your patch).
->
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I'll mention this in the commit message of new patch.
+url:    https://github.com/intel-lab-lkp/linux/commits/Szuying-Chen/thunderbolt-add-vendor-s-NVM-formats/20220902-174246
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 42e66b1cc3a070671001f8a1e933a80818a192bf
+config: loongarch-randconfig-s051-20220901 (https://download.01.org/0day-ci/archive/20220904/202209040723.T3GBSVUx-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/02a1339d2c5a67367909bfcb11e307d3cfa44f74
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Szuying-Chen/thunderbolt-add-vendor-s-NVM-formats/20220902-174246
+        git checkout 02a1339d2c5a67367909bfcb11e307d3cfa44f74
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/
 
-> > Actually in line 773 of this file
-> > (drivers/tty/serial/serial_core.c), uart_port_check() is also called in
-> > critical section but still there is check on whether the return value i=
-s NULL.
->
-> Existance of such a check elsewhere alone isn't enough to guarantee that
-> the check is necessary (and not even that the check in that other place
-> would be necessary). You need a deeper analysis than that. I'm not
-> claiming its either way here, just pointing out to the direction/details
-> you should consider while writing the analysis of the problem.
->
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for the suggestions. We will try consider more factor into our analy=
-sis
-tools to reduce false postives.
+sparse warnings: (new ones prefixed by >>)
+   drivers/thunderbolt/nvm.c: note: in included file:
+>> drivers/thunderbolt/tb.h:743:20: sparse: sparse: marked inline, but without a definition
+>> drivers/thunderbolt/tb.h:743:20: sparse: sparse: marked inline, but without a definition
 
->
-> --
->  i.
+vim +743 drivers/thunderbolt/tb.h
+
+   742	
+ > 743	inline int nvm_read(struct tb_switch *sw, unsigned int address,
+   744				   void *buf, size_t size);
+   745	struct tb_nvm *tb_nvm_alloc(struct device *dev);
+   746	int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
+   747	int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
+   748			     size_t bytes);
+   749	int tb_nvm_add_non_active(struct tb_nvm *nvm, size_t size,
+   750				  nvmem_reg_write_t reg_write);
+   751	void tb_nvm_free(struct tb_nvm *nvm);
+   752	void tb_nvm_exit(void);
+   753	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

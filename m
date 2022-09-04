@@ -2,81 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A345AC657
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 22:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE635AC660
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 22:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234977AbiIDU0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 16:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S235182AbiIDUjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 16:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234507AbiIDUZ5 (ORCPT
+        with ESMTP id S234419AbiIDUjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 16:25:57 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125272A971
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 13:25:56 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x73so2026513ede.10
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 13:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=bIeaeXxAAEhPfe0SYYGIV7PuLZ8/qj+bkQMo3e3Le0c=;
-        b=qBC12g5AQtAVGD11sEMYl5qpv8St+Zq1xd5SI3cxak4kegt9lp97Vh0dzMBMQWPZNs
-         ULa9f6FS3gqOa2eWM8VfJe5+/6EDEsFuJrhD12HNv6vMM0bRXgfc59yPu9bFPZ8qvGhJ
-         lqY2kXehXPrMrMqbrQLDd1NpAExRet50ihaTkXBxo9qwbTOhBCtDJGwp01zF3G1c4QVx
-         NyeHTqKldS+yVcjvRogIkmTfQ+CaQvJ3mju2zHZ/Hlh47jez8MkNgwQLKQtAQmb84mWq
-         ffARUALus+R6+eVgoirkSyC+HqBqGaDx/WXWJUyxr/+ugfAnPsXnwv9R8k18FRg9v0cT
-         DCdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=bIeaeXxAAEhPfe0SYYGIV7PuLZ8/qj+bkQMo3e3Le0c=;
-        b=JlK7NqyVqkjnLqz04n+1eEYnzZot8A4HcZ3r5KJlLo1BIx3v3NsR1WF7RbvVJjOmBp
-         lj92aXXJN7CctzgngnBqlryrbgATRboVY2c2CF9xPzy9bhVyKarKCVAyWdAyNnbmm2Sq
-         bfYLz6eEzXYS9MjtuWagsD6YV+cwthvRaXe/hTsPThi87zhNFDMr+WF0fl6mgPx2rjMR
-         FgncfBtntMTmBYJUvGLPtyrG5SlZO3sgNhUCJfpCFWf8n8DKu79ktjPUiErE4Jz+TW/c
-         xowgwZlpxr6fSoLJwbkRqbwTCbsE2nJZez5RdTRtV1IVcfryGfMtI6gbIldlLrU2yzXp
-         B7Gw==
-X-Gm-Message-State: ACgBeo3PiretwCijL8vPTP2HUM4ewyeOl27wz7KfO75Tk7avGSvHud1f
-        PSrqgckU0Lk7UGqG6S5Ci1nQGMyxTy9dpc3puabspE17XQg=
-X-Google-Smtp-Source: AA6agR6dysZ5aS5EYW7RJBAwkuJBz3n5N6X5gqI4/V0VvJQiPex7hlRdAZyKG5xoxuoHgGXtGnVQ19xIBhSXP4zMVgg=
-X-Received: by 2002:a05:6402:524c:b0:43e:aba4:a42d with SMTP id
- t12-20020a056402524c00b0043eaba4a42dmr40801347edd.328.1662323154640; Sun, 04
- Sep 2022 13:25:54 -0700 (PDT)
+        Sun, 4 Sep 2022 16:39:14 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 500DA275C1
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 13:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hHJgr
+        5wYhr6xRNrFQsZXLLIPlZg5J3cO6F0appWlrC4=; b=ll+PFt5LdejQ4kR3xS8fW
+        wJ76cRSpjKKDgjKvcoBsPzngE1qO0VwjYecubwQGgGqXIrSgFbbX9MM1pmQUKnbP
+        p1W6NYAAHlsjECEcP6QNC9FVgvNQ+0nD/vZx/MPBzTdDNjDcQanUm4gFrzjCK7+M
+        Xa/tIW4ityfbn3RDjFYCrQ=
+Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
+        by smtp12 (Coremail) with SMTP id EMCowAA37pK9DBVjKCHDJg--.22806S4;
+        Mon, 05 Sep 2022 04:38:49 +0800 (CST)
+From:   Jingyu Wang <jingyuwang_vip@163.com>
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jingyu Wang <jingyuwang_vip@163.com>
+Subject: [PATCH] drm/print: cleanup coding style in drm_print.h
+Date:   Mon,  5 Sep 2022 04:38:18 +0800
+Message-Id: <20220904203818.16775-1-jingyuwang_vip@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220902061434.46995-1-qingtao.cao@digi.com>
-In-Reply-To: <20220902061434.46995-1-qingtao.cao@digi.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Sun, 4 Sep 2022 22:25:43 +0200
-Message-ID: <CAMRc=McBYhKkzap28H9KxHT2Vg4w1EPsEJpfu8J3JZjTcuQ41w@mail.gmail.com>
-Subject: Re: [v3 PATCH 1/1] gpio: exar: access MPIO registers on cascaded chips
-To:     Qingtao Cao <qingtao.cao.au@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Qingtao Cao <qingtao.cao@digi.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EMCowAA37pK9DBVjKCHDJg--.22806S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw18GFy5Cr47Zry3uryDKFg_yoW8Ar48p3
+        ZxJFyktr4qyr43Ww1qyF42yr1fX3yIgF1xXFZ7Kw1rAF1jva4v9wsYyryjkw1rWryxKF13
+        JF9FyFyUuF9xArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEVyxJUUUUU=
+X-Originating-IP: [1.203.67.201]
+X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/xtbBaRpyF1Xly05dGgAAsk
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 8:15 AM Qingtao Cao <qingtao.cao.au@gmail.com> wrote:
->
-> When EXAR xr17v35x chips are cascaded in order to access the MPIO registers
-> (part of the Device Configuration Registers) of the secondary chips, an offset
-> needs to be applied based on the number of primary chip's UART channels.
->
-> Signed-off-by: Qingtao Cao <qingtao.cao@digi.com>
-> ---
+Fix everything checkpatch.pl complained about in drm_print.h
 
-Applied, thanks!
+Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
+---
+ include/drm/drm_print.h | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-Bart
+diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
+index 22fabdeed297..4332fbeb76a8 100644
+--- a/include/drm/drm_print.h
++++ b/include/drm/drm_print.h
+@@ -1,3 +1,4 @@
++/* SPDX-License-Identifier: MIT */
+ /*
+  * Copyright (C) 2016 Red Hat
+  *
+@@ -103,7 +104,7 @@ __printf(2, 0)
+  * @va: the va_list
+  */
+ static inline void
+-drm_vprintf(struct drm_printer *p, const char *fmt, va_list *va)
++drm_vprintf(struct drm_printer *p, const char *fmt, va_list * va)
+ {
+ 	struct va_format vaf = { .fmt = fmt, .va = va };
+ 
+@@ -426,16 +427,16 @@ void drm_dev_dbg(const struct device *dev, enum drm_debug_category category,
+ 
+ 
+ #define drm_info(drm, fmt, ...)					\
+-	__drm_printk((drm), info,, fmt, ##__VA_ARGS__)
++	__drm_printk((drm), info, fmt, ##__VA_ARGS__)
+ 
+ #define drm_notice(drm, fmt, ...)				\
+-	__drm_printk((drm), notice,, fmt, ##__VA_ARGS__)
++	__drm_printk((drm), notice, fmt, ##__VA_ARGS__)
+ 
+ #define drm_warn(drm, fmt, ...)					\
+-	__drm_printk((drm), warn,, fmt, ##__VA_ARGS__)
++	__drm_printk((drm), warn, fmt, ##__VA_ARGS__)
+ 
+ #define drm_err(drm, fmt, ...)					\
+-	__drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
++	__drm_printk((drm), err, "*ERROR* " fmt, ##__VA_ARGS__)
+ 
+ 
+ #define drm_info_once(drm, fmt, ...)				\
+
+base-commit: e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+prerequisite-patch-id: f039528bc88876d6e0f64e843da089e85f6d3f58
+prerequisite-patch-id: c14ed2e970be2c3f8ba746634e8161b94c148e88
+-- 
+2.34.1
+

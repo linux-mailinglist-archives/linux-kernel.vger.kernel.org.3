@@ -2,113 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FE15AC3F3
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 12:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56965AC3F5
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 12:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbiIDKg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 06:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S233770AbiIDKkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 06:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIDKgw (ORCPT
+        with ESMTP id S232552AbiIDKkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 06:36:52 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB2D1A075;
-        Sun,  4 Sep 2022 03:36:50 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id t7so2773557wrm.10;
-        Sun, 04 Sep 2022 03:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=nm3l/5tmVYSxCPHkufqRYaNkN+NHrBZPKsqsiOzgYMw=;
-        b=d6E95ITP96aHNOZfgRwe9C8jQAY6whrpnLChU+l6AncOxrOKbrFeBz9AXkKp2GSpaz
-         PonplmjU5dTsqLmz2BLQftVawRqyTWUYXGW6boj/pyH2HdJb0B8fxffmIXxPMEUURECx
-         Io0PODKEPVqTYVcHEMBqe0snbv1myJt5zDPLTzgawoiH/qTHspOAG17S+TROSZ9aloDI
-         Qaxf22gyuU+ZC3sVDEkDurJvrGy9i3QADEmGrnP1NYwqk8c73wIh4UMuRKdwTXc241GP
-         /U4evSAojN1WtfwveoJq7O8tjXUnki1Wvku/b0BafB9cmjidMQH6fZO69JJURJ1ROAu9
-         U4CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nm3l/5tmVYSxCPHkufqRYaNkN+NHrBZPKsqsiOzgYMw=;
-        b=zMPdgYkGpOyUSBtJxbddmiuSSIMwSGrHh+/R/rho2m1CdPEEEzlUnmP1Q9wvjoldxK
-         Bw6OmmcVLRKkSBRd80SUD7SwsH5DvdkSydlm42Bnub8QkUVYGjDj9deJGelgP87xjFFJ
-         aawKsQvo6BxsYXzhdDrA287cnEBBpdk3JQxB2Z18JiNNKxNDh6gib6js3tCPTUDaIfBn
-         RaGbKHV1cNvoyUKsJFp8/HPafHh9YJPnaBxd/G170YBkl8oy7psW0blPwvNRhffftGF7
-         8uOtYi4WJLAvGkbORWyStLAXrxnXdLL6Ft89EsGmc3oOAyXu8i4bMUlNjK9yWdaCNK8p
-         gWww==
-X-Gm-Message-State: ACgBeo28X79JDgKhjCEFZTeFWZaOXKukY8o53JDO9k7zDO9rcj23GMxM
-        IcnfWYXztcQHKBKXpcNMZ5b/MlAErYVR
-X-Google-Smtp-Source: AA6agR6EEw6CQAwdooKIp5jMRAmmswV09j0COAv/iGqoHRphCDVeI2/KBfTqrShvBXQJkdmsKW0acg==
-X-Received: by 2002:a5d:684e:0:b0:220:63df:3760 with SMTP id o14-20020a5d684e000000b0022063df3760mr20572296wrw.508.1662287809289;
-        Sun, 04 Sep 2022 03:36:49 -0700 (PDT)
-Received: from playground (host-92-29-143-165.as13285.net. [92.29.143.165])
-        by smtp.gmail.com with ESMTPSA id p17-20020a5d4e11000000b00225250f2d1bsm5718150wrt.94.2022.09.04.03.36.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 03:36:49 -0700 (PDT)
-Date:   Sun, 4 Sep 2022 11:36:41 +0100
-From:   Jules Irenge <jbi.octave@gmail.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        john.fastabend@gmail.com, ast@kernel.org
-Subject: Re: [PATCH 1/2] bpf: Fix warning of Using plain integer as NULL
- pointer
-Message-ID: <YxR/uSCd9fPWbR55@playground>
-References: <YxOjRm5xqL68JVnt@playground>
- <CAP01T750UfvnrS7pc6t5_z6P8xH6iPh_66X_fsAgidBqwsbdXQ@mail.gmail.com>
+        Sun, 4 Sep 2022 06:40:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273982A276;
+        Sun,  4 Sep 2022 03:40:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BED8BB80D63;
+        Sun,  4 Sep 2022 10:40:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C30C4314A;
+        Sun,  4 Sep 2022 10:40:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662288027;
+        bh=QvekvzTHziUiAlppqzOc2503IrEaR87Amqi+A2N8Wbo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lWIFglzecdpNXDWI4IMKk1ezBgmV9MIPsn5+kBZRDzrxI4epuXV+BaX49nWQlFuoQ
+         CzGigb9q83kkFaaH84x1q6lKA6n7vlJ//F7BBdlGOS8ly+vDJ3CVbN4Yi7IgfsV8ml
+         ZhRmETx/9KE5j/l2kRHtXH4D4tfBBtSu+N9hbghGNr8aPVzKxXI7Xceo3tIX9mVxsa
+         mlazkVPe//f3fr4UI/m5/ap9q00k3RTqxVIZtwyDPJlZ4LnIuiJwOrayKT4fJpTEEH
+         rx0LQ5h0YMYCc+pDMqU542E724ROg4Bg1QtmIN8PITAT3BxaKD3Un3T/ubo5LZF/fG
+         HdxQ3iDgX4VZg==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-11f34610d4aso15549993fac.9;
+        Sun, 04 Sep 2022 03:40:27 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0FnVJ1FWWZfJIhOh8SPfTV3oJ9TI9clNeVul24q5MRpAhVCUaM
+        zvHSKRQBOT/qxfoBKwohwelAdC/MCRdmh0NHfKw=
+X-Google-Smtp-Source: AA6agR6sAHYb4ljI9RHXksbswRfpihbmkms10dn4bovNyYlfRGc7CVPKnpnoNgXAoLNEX7VZY1o7Q2k2oR8tSaiBMJA=
+X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
+ v18-20020a056870709200b0011eff3ad984mr6115401oae.19.1662288026365; Sun, 04
+ Sep 2022 03:40:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP01T750UfvnrS7pc6t5_z6P8xH6iPh_66X_fsAgidBqwsbdXQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220904072637.8619-1-guoren@kernel.org> <bdac65bd-175f-3f09-ae46-97d4fcc77d6f@microchip.com>
+In-Reply-To: <bdac65bd-175f-3f09-ae46-97d4fcc77d6f@microchip.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 4 Sep 2022 18:40:14 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSOdZCDAk7Gq1-7cxYTXabVbZoarEPk=jh4Ss-L3zAsLQ@mail.gmail.com>
+Message-ID: <CAJF2gTSOdZCDAk7Gq1-7cxYTXabVbZoarEPk=jh4Ss-L3zAsLQ@mail.gmail.com>
+Subject: Re: [PATCH V2 0/6] riscv: Add GENERIC_ENTRY, IRQ_STACKS support
+To:     Conor.Dooley@microchip.com
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        guoren@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 03, 2022 at 09:10:31PM +0200, Kumar Kartikeya Dwivedi wrote:
-> On Sat, 3 Sept 2022 at 20:59, Jules Irenge <jbi.octave@gmail.com> wrote:
+On Sun, Sep 4, 2022 at 6:17 PM <Conor.Dooley@microchip.com> wrote:
+>
+> Hey Guo Ren,
+> (off topic: is Guo or Ren your given name?)
+>
+> This series seems to introduce a build warning:
+>
+> arch/riscv/kernel/irq.c:17:1: warning: symbol 'irq_stack_ptr' was not declared. Should it be static?
+>
+> One more comment below:
+>
+> On 04/09/2022 08:26, guoren@kernel.org wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > >
-> > This patch fixes a warning generated by Sparse
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > "Using plain integer as NULL pointer"
+> > The patches convert riscv to use the generic entry infrastructure from
+> > kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu to
+> > prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
+> > feature for the IRQ_STACKS config. You can try it directly with [1].
 > >
-> > by replacing the offending 0 by NULL.
+> > [1] https://github.com/guoren83/linux/tree/generic_entry_v2
 > >
-> > Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
-> > ---
-> >  kernel/bpf/syscall.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 27760627370d..427b7e3829e0 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -598,7 +598,7 @@ void bpf_map_free_kptrs(struct bpf_map *map, void *map_value)
-> >                 if (off_desc->type == BPF_KPTR_UNREF) {
-> >                         u64 *p = (u64 *)btf_id_ptr;
-> >
-> > -                       WRITE_ONCE(p, 0);
-> > +                       WRITE_ONCE(p, NULL);
-> 
-> Uff, this should have been WRITE_ONCE(*p, 0) instead. Mea Culpa.
-> Can you make that fix? It's not a big problem since it's just that the
-> pointer won't be cleared on map value delete (and there is nothing to
-> reclaim for the unref case when map is freed), so you can target
-> bpf-next with a Fixes tag.
-> So in your patch you will need [PATCH bpf-next] in the subject and the
-> fixes tag would be:
-> Fixes: 14a324f6a67e ("bpf: Wire up freeing of referenced kptr")
+> > Changes in V2:
+> >  - Fixup compile error by include "riscv: ptrace: Remove duplicate
+> >    operation"
+> >   https://lore.kernel.org/linux-riscv/20220903162328 .1952477-2-guoren@kernel.org/T/#u
+>
+> I find this really confusing. The same patch is in two different series?
+Generic entry needn't TIF_SYSCALL_TRACE. So it depends on "riscv:
+ptrace: Remove duplicate"
 
- Thanks, already done. if there is  anything I miss, please let me know. I am on a learning
- journey.
- 
- Jules
+> Is the above series no longer required & this is a different approach?
+Above series cleanup ptrace_disable, we still need that.
+
+> Thanks,
+> Conor.
+>
+> >  - Fixup compile warning
+> >    Reported-by: kernel test robot <lkp@intel.com>
+> >  - Add test repo link in cover letter
+> >
+> > Guo Ren (6):
+> >   riscv: ptrace: Remove duplicate operation
+> >   riscv: convert to generic entry
+> >   riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+> >   riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+> >   riscv: elf_kexec: Fixup compile warning
+> >   riscv: compat_syscall_table: Fixup compile warning
+> >
+> >  arch/riscv/Kconfig                    |  10 +
+> >  arch/riscv/include/asm/csr.h          |   1 -
+> >  arch/riscv/include/asm/entry-common.h |   8 +
+> >  arch/riscv/include/asm/irq.h          |   3 +
+> >  arch/riscv/include/asm/ptrace.h       |  10 +-
+> >  arch/riscv/include/asm/stacktrace.h   |   5 +
+> >  arch/riscv/include/asm/syscall.h      |   6 +
+> >  arch/riscv/include/asm/thread_info.h  |  15 +-
+> >  arch/riscv/include/asm/vmap_stack.h   |  28 +++
+> >  arch/riscv/kernel/Makefile            |   1 +
+> >  arch/riscv/kernel/elf_kexec.c         |   4 +
+> >  arch/riscv/kernel/entry.S             | 255 +++++---------------------
+> >  arch/riscv/kernel/irq.c               |  75 ++++++++
+> >  arch/riscv/kernel/ptrace.c            |  41 -----
+> >  arch/riscv/kernel/signal.c            |  21 +--
+> >  arch/riscv/kernel/sys_riscv.c         |  26 +++
+> >  arch/riscv/kernel/traps.c             |  11 ++
+> >  arch/riscv/mm/fault.c                 |  12 +-
+> >  18 files changed, 250 insertions(+), 282 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/entry-common.h
+> >  create mode 100644 arch/riscv/include/asm/vmap_stack.h
+> >
+> > --
+> > 2.36.1
+> >
+>
 
 
+-- 
+Best Regards
+ Guo Ren

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131F95AC256
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7CC5AC257
 	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 06:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbiIDEXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 00:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S233291AbiIDEYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 00:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiIDEXw (ORCPT
+        with ESMTP id S232903AbiIDEYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 00:23:52 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66DB4D4E7
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 21:23:51 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso4183035otb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 21:23:51 -0700 (PDT)
+        Sun, 4 Sep 2022 00:24:18 -0400
+Received: from mail-oa1-x41.google.com (mail-oa1-x41.google.com [IPv6:2001:4860:4864:20::41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A70C4DB05
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 21:24:16 -0700 (PDT)
+Received: by mail-oa1-x41.google.com with SMTP id 586e51a60fabf-11e9a7135easo14564420fac.6
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 21:24:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=1Zf+3VluTf2veyGKPV597nMSAXr4oCS9VnEuD4NhVeQ=;
-        b=QLhrVd8eJct8PH7G1zUmHfOHMCyHIYvSW0fZNbyH4dR5GWalC2H74+NgPHp76R72LJ
-         gerIJTfagCqF/bJ7zTigZo5mfxpSFDf1OqGMOle98k5XUYqeV75mtnNHfjS4TJfHtVvG
-         NM1tmyHOsBDl3DDqfHiY3+pfhgppX1LGas7qQ4ABX/AOa+FaWn9RJX3vJ5bHTPx7ztTQ
-         j1u2bk9kNeDwo7LM12y8tAQGSyLAROLpVE0ulldpU5ocvZYlPe8VZn5NpWtMtLwA0anX
-         Be/AHZgAp/qge+pSQwSa4y0rzJwlifvW1YcGgh2sc5/QCOjyKFhFnPpC5fwP1awO0emE
-         7cOg==
+        bh=GfcbyZijaXqemBql9JbVcFguwRU1k9i39hT5KMCovS0=;
+        b=HLfBsnaqXlGx6Z5AQ/y2AHaTSt3dAk19FNdq931svL893zZga+jvC7AZFxEhbfzSyr
+         l+aiZT3F0Ze1hsHbdcbY8c7JzBaqlWkSSjEuHftanc2MDVH+10K2cn8r/UBtgVxkLaiO
+         x1lTkyvIJ/gfhsIQN0wDeHF1hdOjGO6MVyeD4HQlJ+HVS7496ZpLwo19qieG31x8qEvS
+         L1ijI3gl25rc//jwdw1e9xoKxtufrD9eS1GitNZHMrTbEc0S1aBLVEXqdGt4LWIhepUi
+         mdnCUpURsTPrSlhhII1fSJS+fm5i/WxYQHKAhO/cw0nnCfEa+Xup+px7aGx0dLUgiDYd
+         lRGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=1Zf+3VluTf2veyGKPV597nMSAXr4oCS9VnEuD4NhVeQ=;
-        b=Dkb2P88bue+ISDdyFglRITcbjswGZ9ESoAo5wdyAbc6XK6HKzGFewnpGfqCb8SjaHy
-         ZMfjTLLSrLKqMc0INcmlFg8u0C0RQrSP98kCpR3f/8G0fa/evD/L+tw6FmhlGKiOoYZw
-         tE4YV8n87NkL3n8fSsp0kBIgH+j3E4+4dCpAfLSThsmsiRPP6mcd/omVY4VMKyNmmCFi
-         2mS1xvZvj+4r8MHqexxgH4SM9qNOOj0fb38cV+VB0RHOdus3e8daq3GpnnyF4G4eGun/
-         iwLstg7YtZkHyAmR4AcTPXhPf8pacM+0RVenmn0eiObX/3/HMPxnj71ZOoXPD4KAEgRQ
-         1QtQ==
-X-Gm-Message-State: ACgBeo0JnU37OsHVU3L56BQIy5xEjNY0Cwhem1m77C+OxR0HQ4gnzLEh
-        6B1/qjQSyDhKlDAM9/bsPC0=
-X-Google-Smtp-Source: AA6agR4jh5armIKKqupi91gquZRzhVPMBXYvsakzn+kcELswsdOIUc7hqXcr+zsI2FXdxnWJncjsGQ==
-X-Received: by 2002:a05:6830:1017:b0:637:163a:38db with SMTP id a23-20020a056830101700b00637163a38dbmr16546453otp.89.1662265430886;
-        Sat, 03 Sep 2022 21:23:50 -0700 (PDT)
+        bh=GfcbyZijaXqemBql9JbVcFguwRU1k9i39hT5KMCovS0=;
+        b=yDvll8JEffg5NyJqde6Uy8QRZFv92hd4h0MUmmjQel+4/n7Hk+svMgT8VXzz/mbTom
+         aqHpJMjhjJXf1IOmJCeFhmvt6triHjsodm/svS++3WnRrF+W3QZOu9t+Lyk/0h/ibbgO
+         TshyKxszCKqDaju/zUspf74x7KakIM8196IqIo3yTEIlucUyWpq7nEI35FXJBHFJH7pI
+         69SHuPytl9bHmF40mp3qBUdfvBjGZZ8gE4+0RiwJOJIwXzzTfajctC1STgD2AlOcnQE0
+         uJlFoydJEMiAqY8eYyuzKuIzrKlXPbKBNsgVzThCafs/JYfIE9JUS4Q88lxS+5bnVagY
+         aqtA==
+X-Gm-Message-State: ACgBeo3Xeq5Cuzj6CKiqf64OxtvilGqEzWcfivJAPmqBJ7hfqrbifTBl
+        J6RMwRWJk8kEvjTXAk96FPOoTbrwdr4=
+X-Google-Smtp-Source: AA6agR6QBqkostyIGwf5SihAKe4+49drJpicVjlizf1WCJussETwWz0h262P6gIZXaiixfNU7k2HyA==
+X-Received: by 2002:a05:6870:d1c9:b0:127:2df9:b459 with SMTP id b9-20020a056870d1c900b001272df9b459mr593764oac.168.1662265454311;
+        Sat, 03 Sep 2022 21:24:14 -0700 (PDT)
 Received: from sophie (static-198-54-128-109.cust.tzulo.com. [198.54.128.109])
-        by smtp.gmail.com with ESMTPSA id u42-20020a056870d5aa00b00120f7de7f6esm3196185oao.58.2022.09.03.21.23.50
+        by smtp.gmail.com with ESMTPSA id g20-20020a9d6194000000b00616dfd2c859sm2939724otk.59.2022.09.03.21.24.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 21:23:50 -0700 (PDT)
+        Sat, 03 Sep 2022 21:24:14 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH] memblock tests: remove 'cleared' from comment blocks
-Date:   Sat,  3 Sep 2022 23:23:37 -0500
-Message-Id: <e8be24137e54e9f81a06af969ded82b319114d7a.1662264347.git.remckee0@gmail.com>
+Subject: [PATCH] memblock_tests: move variable declarations to single block
+Date:   Sat,  3 Sep 2022 23:24:06 -0500
+Message-Id: <e61431e73977f305fdd027bca99d1dc119e96d84.1662264355.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,120 +69,692 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tests in alloc_nid_api can now run either memblock_alloc_try_nid()
-or memblock_alloc_try_nid_raw(). The comment blocks for these tests
-should not refer to a 'cleared' region since that only applies to
-memblock_alloc_try_nid(). Remove 'cleared' from the comment blocks so
-that the comments are accurate for either memblock function.
+Move variable declarations to a single block at the beginning of each
+testing function.
 
 Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
- tools/testing/memblock/tests/alloc_nid_api.c | 22 ++++++++++----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ tools/testing/memblock/tests/alloc_api.c      | 57 ++++---------
+ .../memblock/tests/alloc_helpers_api.c        | 32 ++------
+ tools/testing/memblock/tests/alloc_nid_api.c  | 80 +++++--------------
+ 3 files changed, 42 insertions(+), 127 deletions(-)
 
+diff --git a/tools/testing/memblock/tests/alloc_api.c b/tools/testing/memblock/tests/alloc_api.c
+index 36dd7e254cce..68f1a75cd72c 100644
+--- a/tools/testing/memblock/tests/alloc_api.c
++++ b/tools/testing/memblock/tests/alloc_api.c
+@@ -25,12 +25,10 @@ static int alloc_top_down_simple_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_2;
+ 	phys_addr_t expected_start;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	expected_start = memblock_end_of_DRAM() - SMP_CACHE_BYTES;
+@@ -76,15 +74,13 @@ static int alloc_top_down_disjoint_check(void)
+ 	struct memblock_region *rgn2 = &memblock.reserved.regions[0];
+ 	struct region r1;
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r2_size = SZ_16;
+ 	/* Use custom alignment */
+ 	phys_addr_t alignment = SMP_CACHE_BYTES * 2;
+ 	phys_addr_t total_size;
+ 	phys_addr_t expected_start;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_end_of_DRAM() - SZ_2;
+@@ -128,9 +124,6 @@ static int alloc_top_down_before_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	/*
+ 	 * The first region ends at the aligned address to test region merging
+ 	 */
+@@ -138,6 +131,7 @@ static int alloc_top_down_before_check(void)
+ 	phys_addr_t r2_size = SZ_512;
+ 	phys_addr_t total_size = r1_size + r2_size;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	memblock_reserve(memblock_end_of_DRAM() - total_size, r1_size);
+@@ -174,12 +168,10 @@ static int alloc_top_down_after_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	struct region r1;
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r2_size = SZ_512;
+ 	phys_addr_t total_size;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	/*
+@@ -225,12 +217,10 @@ static int alloc_top_down_second_fit_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	struct region r1, r2;
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r3_size = SZ_1K;
+ 	phys_addr_t total_size;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_end_of_DRAM() - SZ_512;
+@@ -276,9 +266,6 @@ static int alloc_in_between_generic_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	struct region r1, r2;
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t gap_size = SMP_CACHE_BYTES;
+ 	phys_addr_t r3_size = SZ_64;
+ 	/*
+@@ -287,6 +274,7 @@ static int alloc_in_between_generic_check(void)
+ 	phys_addr_t rgn_size = (MEM_SIZE - (2 * gap_size + r3_size)) / 2;
+ 	phys_addr_t total_size;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.size = rgn_size;
+@@ -332,13 +320,11 @@ static int alloc_in_between_generic_check(void)
+ static int alloc_small_gaps_generic_check(void)
+ {
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t region_size = SZ_1K;
+ 	phys_addr_t gap_size = SZ_256;
+ 	phys_addr_t region_end;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	region_end = memblock_start_of_DRAM();
+@@ -366,7 +352,6 @@ static int alloc_all_reserved_generic_check(void)
+ 	void *allocated_ptr = NULL;
+ 
+ 	PREFIX_PUSH();
+-
+ 	setup_memblock();
+ 
+ 	/* Simulate full memory */
+@@ -397,14 +382,12 @@ static int alloc_all_reserved_generic_check(void)
+ static int alloc_no_space_generic_check(void)
+ {
+ 	void *allocated_ptr = NULL;
++	phys_addr_t available_size = SZ_256;
++	phys_addr_t reserved_size = MEM_SIZE - available_size;
+ 
+ 	PREFIX_PUSH();
+-
+ 	setup_memblock();
+ 
+-	phys_addr_t available_size = SZ_256;
+-	phys_addr_t reserved_size = MEM_SIZE - available_size;
+-
+ 	/* Simulate almost-full memory */
+ 	memblock_reserve(memblock_start_of_DRAM(), reserved_size);
+ 
+@@ -432,12 +415,10 @@ static int alloc_limited_space_generic_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t available_size = SZ_256;
+ 	phys_addr_t reserved_size = MEM_SIZE - available_size;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	/* Simulate almost-full memory */
+@@ -504,7 +485,6 @@ static int alloc_too_large_generic_check(void)
+ 	void *allocated_ptr = NULL;
+ 
+ 	PREFIX_PUSH();
+-
+ 	setup_memblock();
+ 
+ 	allocated_ptr = run_memblock_alloc(MEM_SIZE + SZ_2, SMP_CACHE_BYTES);
+@@ -530,7 +510,6 @@ static int alloc_bottom_up_simple_check(void)
+ 	void *allocated_ptr = NULL;
+ 
+ 	PREFIX_PUSH();
+-
+ 	setup_memblock();
+ 
+ 	allocated_ptr = run_memblock_alloc(SZ_2, SMP_CACHE_BYTES);
+@@ -572,15 +551,13 @@ static int alloc_bottom_up_disjoint_check(void)
+ 	struct memblock_region *rgn2 = &memblock.reserved.regions[1];
+ 	struct region r1;
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r2_size = SZ_16;
+ 	/* Use custom alignment */
+ 	phys_addr_t alignment = SMP_CACHE_BYTES * 2;
+ 	phys_addr_t total_size;
+ 	phys_addr_t expected_start;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_start_of_DRAM() + SZ_2;
+@@ -624,13 +601,11 @@ static int alloc_bottom_up_before_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r1_size = SZ_512;
+ 	phys_addr_t r2_size = SZ_128;
+ 	phys_addr_t total_size = r1_size + r2_size;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	memblock_reserve(memblock_start_of_DRAM() + r1_size, r2_size);
+@@ -666,12 +641,10 @@ static int alloc_bottom_up_after_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	struct region r1;
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r2_size = SZ_512;
+ 	phys_addr_t total_size;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	/*
+@@ -718,12 +691,10 @@ static int alloc_bottom_up_second_fit_check(void)
+ 	struct memblock_region *rgn  = &memblock.reserved.regions[1];
+ 	struct region r1, r2;
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r3_size = SZ_1K;
+ 	phys_addr_t total_size;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_start_of_DRAM();
+diff --git a/tools/testing/memblock/tests/alloc_helpers_api.c b/tools/testing/memblock/tests/alloc_helpers_api.c
+index 06577bd0e349..3ef9486da8a0 100644
+--- a/tools/testing/memblock/tests/alloc_helpers_api.c
++++ b/tools/testing/memblock/tests/alloc_helpers_api.c
+@@ -19,12 +19,10 @@ static int alloc_from_simple_generic_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_16;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_end_of_DRAM() - SMP_CACHE_BYTES;
+@@ -64,12 +62,10 @@ static int alloc_from_misaligned_generic_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_32;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	/* A misaligned address */
+@@ -113,12 +109,10 @@ static int alloc_from_top_down_high_addr_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_32;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	/* The address is too close to the end of the memory */
+@@ -158,14 +152,12 @@ static int alloc_from_top_down_no_space_above_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r1_size = SZ_64;
+ 	phys_addr_t r2_size = SZ_2;
+ 	phys_addr_t total_size = r1_size + r2_size;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_end_of_DRAM() - SMP_CACHE_BYTES * 2;
+@@ -197,13 +189,11 @@ static int alloc_from_top_down_min_addr_cap_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r1_size = SZ_64;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t start_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	start_addr = (phys_addr_t)memblock_start_of_DRAM();
+@@ -245,12 +235,10 @@ static int alloc_from_bottom_up_high_addr_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_32;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	/* The address is too close to the end of the memory */
+@@ -289,13 +277,11 @@ static int alloc_from_bottom_up_no_space_above_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r1_size = SZ_64;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t r2_size;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() + SZ_128;
+@@ -327,13 +313,11 @@ static int alloc_from_bottom_up_min_addr_cap_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r1_size = SZ_64;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t start_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	start_addr = (phys_addr_t)memblock_start_of_DRAM();
 diff --git a/tools/testing/memblock/tests/alloc_nid_api.c b/tools/testing/memblock/tests/alloc_nid_api.c
-index 8f25c90c2300..77f83f31c835 100644
+index 77f83f31c835..5789379ad9da 100644
 --- a/tools/testing/memblock/tests/alloc_nid_api.c
 +++ b/tools/testing/memblock/tests/alloc_nid_api.c
-@@ -41,7 +41,7 @@ static inline void *run_memblock_alloc_try_nid(phys_addr_t size,
-  *        |                   |
-  *        min_addr           max_addr
-  *
-- * Expect to allocate a cleared region that ends at max_addr.
-+ * Expect to allocate a region that ends at max_addr.
-  */
- static int alloc_try_nid_top_down_simple_check(void)
+@@ -47,14 +47,12 @@ static int alloc_try_nid_top_down_simple_check(void)
  {
-@@ -95,7 +95,7 @@ static int alloc_try_nid_top_down_simple_check(void)
-  *                 Aligned address
-  *                 boundary
-  *
-- * Expect to allocate a cleared, aligned region that ends before max_addr.
-+ * Expect to allocate an aligned region that ends before max_addr.
-  */
- static int alloc_try_nid_top_down_end_misaligned_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_128;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t rgn_end;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() + SMP_CACHE_BYTES * 2;
+@@ -101,15 +99,13 @@ static int alloc_try_nid_top_down_end_misaligned_check(void)
  {
-@@ -147,7 +147,7 @@ static int alloc_try_nid_top_down_end_misaligned_check(void)
-  *         |               |
-  *         min_addr        max_addr
-  *
-- * Expect to allocate a cleared region that starts at min_addr and ends at
-+ * Expect to allocate a region that starts at min_addr and ends at
-  * max_addr, given that min_addr is aligned.
-  */
- static int alloc_try_nid_exact_address_generic_check(void)
-@@ -201,7 +201,7 @@ static int alloc_try_nid_exact_address_generic_check(void)
-  *           address    |
-  *           boundary   min_add
-  *
-- * Expect to drop the lower limit and allocate a cleared memory region which
-+ * Expect to drop the lower limit and allocate a memory region which
-  * ends at max_addr (if the address is aligned).
-  */
- static int alloc_try_nid_top_down_narrow_range_check(void)
-@@ -649,7 +649,7 @@ static int alloc_try_nid_reserved_all_generic_check(void)
- /*
-  * A test that tries to allocate a memory region, where max_addr is
-  * bigger than the end address of the available memory. Expect to allocate
-- * a cleared region that ends before the end of the memory.
-+ * a region that ends before the end of the memory.
-  */
- static int alloc_try_nid_top_down_cap_max_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_128;
+ 	phys_addr_t misalign = SZ_2;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t rgn_end;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() + SMP_CACHE_BYTES * 2;
+@@ -154,14 +150,12 @@ static int alloc_try_nid_exact_address_generic_check(void)
  {
-@@ -688,7 +688,7 @@ static int alloc_try_nid_top_down_cap_max_check(void)
- /*
-  * A test that tries to allocate a memory region, where min_addr is
-  * smaller than the start address of the available memory. Expect to allocate
-- * a cleared region that ends before the end of the memory.
-+ * a region that ends before the end of the memory.
-  */
- static int alloc_try_nid_top_down_cap_min_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_1K;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t rgn_end;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() + SMP_CACHE_BYTES;
+@@ -208,13 +202,11 @@ static int alloc_try_nid_top_down_narrow_range_check(void)
  {
-@@ -736,7 +736,7 @@ static int alloc_try_nid_top_down_cap_min_check(void)
-  *        |                       |
-  *        min_addr                max_addr
-  *
-- * Expect to allocate a cleared region that ends before max_addr.
-+ * Expect to allocate a region that ends before max_addr.
-  */
- static int alloc_try_nid_bottom_up_simple_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_256;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() + SZ_512;
+@@ -261,13 +253,11 @@ static int alloc_try_nid_top_down_narrow_range_check(void)
+ static int alloc_try_nid_low_max_generic_check(void)
  {
-@@ -790,7 +790,7 @@ static int alloc_try_nid_bottom_up_simple_check(void)
-  *                 Aligned address
-  *                 boundary
-  *
-- * Expect to allocate a cleared, aligned region that ends before max_addr.
-+ * Expect to allocate an aligned region that ends before max_addr.
-  */
- static int alloc_try_nid_bottom_up_start_misaligned_check(void)
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_1K;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM();
+@@ -302,9 +292,6 @@ static int alloc_try_nid_min_reserved_generic_check(void)
  {
-@@ -844,7 +844,7 @@ static int alloc_try_nid_bottom_up_start_misaligned_check(void)
-  *                      |
-  *                      min_add
-  *
-- * Expect to drop the lower limit and allocate a cleared memory region which
-+ * Expect to drop the lower limit and allocate a memory region which
-  * starts at the beginning of the available memory.
-  */
- static int alloc_try_nid_bottom_up_narrow_range_check(void)
-@@ -1027,7 +1027,7 @@ static int alloc_try_nid_bottom_up_reserved_no_space_check(void)
- /*
-  * A test that tries to allocate a memory region, where max_addr is
-  * bigger than the end address of the available memory. Expect to allocate
-- * a cleared region that starts at the min_addr
-+ * a region that starts at the min_addr.
-  */
- static int alloc_try_nid_bottom_up_cap_max_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r1_size = SZ_128;
+ 	phys_addr_t r2_size = SZ_64;
+ 	phys_addr_t total_size = r1_size + r2_size;
+@@ -312,6 +299,7 @@ static int alloc_try_nid_min_reserved_generic_check(void)
+ 	phys_addr_t max_addr;
+ 	phys_addr_t reserved_base;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	max_addr = memblock_end_of_DRAM();
+@@ -356,15 +344,13 @@ static int alloc_try_nid_max_reserved_generic_check(void)
  {
-@@ -1066,7 +1066,7 @@ static int alloc_try_nid_bottom_up_cap_max_check(void)
- /*
-  * A test that tries to allocate a memory region, where min_addr is
-  * smaller than the start address of the available memory. Expect to allocate
-- * a cleared region at the beginning of the available memory.
-+ * a region at the beginning of the available memory.
-  */
- static int alloc_try_nid_bottom_up_cap_min_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r1_size = SZ_64;
+ 	phys_addr_t r2_size = SZ_128;
+ 	phys_addr_t total_size = r1_size + r2_size;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	max_addr = memblock_end_of_DRAM() - r1_size;
+@@ -413,15 +399,13 @@ static int alloc_try_nid_top_down_reserved_with_space_check(void)
+ 	struct memblock_region *rgn2 = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+ 	struct region r1, r2;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r3_size = SZ_64;
+ 	phys_addr_t gap_size = SMP_CACHE_BYTES;
+ 	phys_addr_t total_size;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_end_of_DRAM() - SMP_CACHE_BYTES * 2;
+@@ -479,14 +463,12 @@ static int alloc_try_nid_reserved_full_merge_generic_check(void)
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+ 	struct region r1, r2;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r3_size = SZ_64;
+ 	phys_addr_t total_size;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_end_of_DRAM() - SMP_CACHE_BYTES * 2;
+@@ -544,15 +526,13 @@ static int alloc_try_nid_top_down_reserved_no_space_check(void)
+ 	struct memblock_region *rgn2 = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+ 	struct region r1, r2;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r3_size = SZ_256;
+ 	phys_addr_t gap_size = SMP_CACHE_BYTES;
+ 	phys_addr_t total_size;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_end_of_DRAM() - SMP_CACHE_BYTES * 2;
+@@ -613,14 +593,12 @@ static int alloc_try_nid_reserved_all_generic_check(void)
  {
+ 	void *allocated_ptr = NULL;
+ 	struct region r1, r2;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r3_size = SZ_256;
+ 	phys_addr_t gap_size = SMP_CACHE_BYTES;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_end_of_DRAM() - SMP_CACHE_BYTES;
+@@ -655,13 +633,11 @@ static int alloc_try_nid_top_down_cap_max_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_256;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_end_of_DRAM() - SZ_1K;
+@@ -694,13 +670,11 @@ static int alloc_try_nid_top_down_cap_min_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_1K;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() - SZ_256;
+@@ -742,14 +716,12 @@ static int alloc_try_nid_bottom_up_simple_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_128;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t rgn_end;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() + SMP_CACHE_BYTES * 2;
+@@ -796,15 +768,13 @@ static int alloc_try_nid_bottom_up_start_misaligned_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_128;
+ 	phys_addr_t misalign = SZ_2;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t rgn_end;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() + misalign;
+@@ -851,13 +821,11 @@ static int alloc_try_nid_bottom_up_narrow_range_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_256;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() + SZ_512;
+@@ -904,15 +872,13 @@ static int alloc_try_nid_bottom_up_reserved_with_space_check(void)
+ 	struct memblock_region *rgn2 = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+ 	struct region r1, r2;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r3_size = SZ_64;
+ 	phys_addr_t gap_size = SMP_CACHE_BYTES;
+ 	phys_addr_t total_size;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_end_of_DRAM() - SMP_CACHE_BYTES * 2;
+@@ -976,15 +942,13 @@ static int alloc_try_nid_bottom_up_reserved_no_space_check(void)
+ 	struct memblock_region *rgn3 = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+ 	struct region r1, r2;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t r3_size = SZ_256;
+ 	phys_addr_t gap_size = SMP_CACHE_BYTES;
+ 	phys_addr_t total_size;
+ 	phys_addr_t max_addr;
+ 	phys_addr_t min_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	r1.base = memblock_end_of_DRAM() - SMP_CACHE_BYTES * 2;
+@@ -1033,13 +997,11 @@ static int alloc_try_nid_bottom_up_cap_max_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_256;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM() + SZ_1K;
+@@ -1072,13 +1034,11 @@ static int alloc_try_nid_bottom_up_cap_min_check(void)
+ {
+ 	struct memblock_region *rgn = &memblock.reserved.regions[0];
+ 	void *allocated_ptr = NULL;
+-
+-	PREFIX_PUSH();
+-
+ 	phys_addr_t size = SZ_1K;
+ 	phys_addr_t min_addr;
+ 	phys_addr_t max_addr;
+ 
++	PREFIX_PUSH();
+ 	setup_memblock();
+ 
+ 	min_addr = memblock_start_of_DRAM();
 -- 
 2.25.1
 

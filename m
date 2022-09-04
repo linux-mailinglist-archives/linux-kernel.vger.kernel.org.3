@@ -2,104 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31405AC5FC
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 21:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C865AC5FA
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 21:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234337AbiIDTIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 15:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S234228AbiIDTI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 15:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiIDTIw (ORCPT
+        with ESMTP id S229702AbiIDTI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 15:08:52 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3652BB2B;
-        Sun,  4 Sep 2022 12:08:52 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id j1so5177924qvv.8;
-        Sun, 04 Sep 2022 12:08:52 -0700 (PDT)
+        Sun, 4 Sep 2022 15:08:26 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5085F1054D
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 12:08:22 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id p16so10405447lfd.6
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 12:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=juGsLKnqTXsnwZqRs+MmcAEQwaIZtbGH5Zi0HPPGJzk=;
-        b=mZi3BejmzkopJJwZy4mQLPZIKs10+v92BcLT/ZV+n/ZEI86GF/1zaJvhBrO5dchPOp
-         K519FXbBIvbMjclN3fBufHSIIqRWjLlqEGZL4LdXR+bodb+6V9Ko6hpPeYMWK0T5MLC5
-         V0WCY/En33bYc0bh4BzwDpnM5sJbTzJnbqPQeypnaS+IrzVidbZeCCPl8KnL+T4zSHrO
-         PotUylI8PJQ2xb4atCYUUMefHJusVZkw8sTAX9Xl/8NmrpGg8U2rYtAM3ALvi64PgPiX
-         fxiEPm9eYvNK1LK5Z5MBNDN7tVmPVv6o9xpKbnp5LMVSpDPTQoI0sqmE5RQ7oqYzhEkE
-         JA7w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=YlkqaOEVfnAcJNdhPnwwyOFkWGniyUwZfTkbWM3JHJU=;
+        b=QPTVeGwGHyB4PL/sHpYy7p22E6WFaqGiRYwoqgTJz+HosSqH4kTIcJrx+WvKKcTaif
+         X5+5jekS2yhUfmoL43nWc7zFasmiZYcm2Tb5Bk5ERZESMdDXCCe2w1LdA2M961efLlu6
+         r5cIuXiOMzfYjYLhFa0qv/5d97ItAlmwnPaqRKqix9TxnrCMbjjaGvL19fTgzlTnNZHT
+         +3RqmCDdYOtKu8dlDqIyjCC0nIccSoTH3BNtP6uyGfWpQTnsdb6oYNspTDzu5DnOZo65
+         JSZ0cqbwxijrCcbMOkLmdbjvWF450RP2MWtnZYXYus8jYTv7ySiOIMOYQPwb+v6+eBW7
+         +nXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=juGsLKnqTXsnwZqRs+MmcAEQwaIZtbGH5Zi0HPPGJzk=;
-        b=nknfKi8VWb6EV4vwUhideKk1lJUrv1Sdq6tTRug5zxZkFZ2cOXPdyy6cxTwI2Pr374
-         /26JnCRE9LR2xt3r/yGduvul+rpI8S2iWmDMrmyzXLCwJnLB4iW72hy5FC9lOfF1Hewx
-         Z2APZZ+3YkA3o1untfcm8lwKuRp42HGzIZbUj75Xej5YWlk1aNtTOWPz9UxQ7CXSalE5
-         CDgefJd3yPyk3fEtqqmNyr1iCj0ty9j7ff8DixMBIgp0kM3wp1RQBPIh4ZAIJnM/Yz87
-         ibLDs0ACPIHRqMXYJzlcnzbyuZxuv24HdTMT1JYLi0L++ZXRw2T4jFbRAu2VgrZk/XUo
-         6FfQ==
-X-Gm-Message-State: ACgBeo26m+bflJBk3CV+QlV56QVtuPtRzXjf6+D3o1wATkr5IfBGw86i
-        bfQO7mcLMtGFi6iOBhRQ5s2CnzWiWOH+s4bg2GN781BCY5g=
-X-Google-Smtp-Source: AA6agR6hWx2DZCWskDIHl/i4XU4bpGVxGVqmo4490iUi1W8K8zuZGqNfWzfJwl/Kzp5EEXnep6Y8SyDDhiDUVoLc3+A=
-X-Received: by 2002:a0c:e24b:0:b0:4a1:d41b:e280 with SMTP id
- x11-20020a0ce24b000000b004a1d41be280mr3423294qvl.11.1662318531239; Sun, 04
- Sep 2022 12:08:51 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=YlkqaOEVfnAcJNdhPnwwyOFkWGniyUwZfTkbWM3JHJU=;
+        b=gd6Js7fgmS+ygJB5KatscdTA81wnXqyIzHv7aS3v2Ta3RVY2haU+MQJmitIQx9F/od
+         VE5ci8+C3P4w+NQy95ZO+j2W7d/srsAHHRdWKmUk4xfJO66yhu5TsuupqtoyIxWeGMK4
+         Z26g7Gnz46uZ8+ieeMlIEJVwlA75UmMSvcdr3eyZmJl2dKnDV1v1lOFOsFim46Vj3djB
+         hP7HKgBUh+ILe2da6XBTfo44Z1cNvyenEIYr/EAIT8w9MFC9Q+oIcb+nZI+EzUExegKo
+         HFsLWRJiBrZh3zocum93qsiwCJJBSpDbtRxGAOo/xMm+nk/B0IDuAR2kbYq3w4GpZdP1
+         V86Q==
+X-Gm-Message-State: ACgBeo0XrTwOSdKqsrH2lQLJz9+OnuW4TyD1ueKZzmC0MXEFYUNvm+aV
+        9jLYOF+gV57rhtE61mdW6E0P5BYaCHSOSYprJI8=
+X-Google-Smtp-Source: AA6agR7p5IsnW2ri1U1OVp+ptkLLArOLKqo0mv2HoCsVhvLQZUTZmSmhIRi0jPVkHoGttS5sY9kypQ==
+X-Received: by 2002:ac2:4e15:0:b0:48b:7a5f:923c with SMTP id e21-20020ac24e15000000b0048b7a5f923cmr16415296lfr.134.1662318500695;
+        Sun, 04 Sep 2022 12:08:20 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a24-20020ac25218000000b0048a7ef09b22sm985464lfl.274.2022.09.04.12.08.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Sep 2022 12:08:20 -0700 (PDT)
+Message-ID: <167a7200-264f-3214-d4b1-e1daaafb6985@linaro.org>
+Date:   Sun, 4 Sep 2022 22:08:18 +0300
 MIME-Version: 1.0
-References: <20220902131258.3316367-1-cmo@melexis.com> <CAHp75VdOHDHUVhVXj4L-6ZV25mTWTeO3s3EJQVgLxknXHKRUMg@mail.gmail.com>
- <CAKv63ut0rtTFh3XdF3oR6fxQSLzNkFRS+HPPOY8Xp4LX0OY4Tg@mail.gmail.com>
- <CAHp75VfJMpf3GeOryt9cH6-tK48BB8ZcfuGxhXovObBanDcc7w@mail.gmail.com>
- <CAKv63us6OLg8ahdbKvd8c4x9-Ri4aDwNvgc_oov7wZnSBmJGVA@mail.gmail.com> <20220904150346.0c56de9d@jic23-huawei>
-In-Reply-To: <20220904150346.0c56de9d@jic23-huawei>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 4 Sep 2022 22:08:15 +0300
-Message-ID: <CAHp75VdMZYD4AwXjoy6dbopUyv4=qwzfgnVpSu_-_ZWtYMG92Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] iio: temperature: mlx90632 Add runtime
- powermanagement modes
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Crt Mori <cmo@melexis.com>, linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/4] dt-bindings: display: Add ClockworkPi CWD686 panel
+Content-Language: en-US
+To:     Max Fierke <max@maxfierke.com>, thierry.reding@gmail.com,
+        sam@ravnborg.org, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220903183753.25736-1-max@maxfierke.com>
+ <20220903183753.25736-3-max@maxfierke.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220903183753.25736-3-max@maxfierke.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 4, 2022 at 5:37 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> On Sat, 3 Sep 2022 14:05:38 +0200
-> Crt Mori <cmo@melexis.com> wrote:
-> > On Fri, 2 Sept 2022 at 20:39, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > > On Fri, Sep 2, 2022 at 8:59 PM Crt Mori <cmo@melexis.com> wrote:
-> > > > On Fri, 2 Sept 2022 at 17:28, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > > > > On Fri, Sep 2, 2022 at 4:13 PM <cmo@melexis.com> wrote:
+On 03/09/2022 21:37, Max Fierke wrote:
+> The CWD686 is a 6.86" IPS LCD panel used as the primary
+> display in the ClockworkPi DevTerm portable (all cores)
+> 
+> Signed-off-by: Max Fierke <max@maxfierke.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> Changes in v2 (Krzysztof Kozlowski and Rob Herring's Suggestions)
+>  - remove redundant backlight example
+>  - add missing regulators
+> 
+>  .../display/panel/clockworkpi,cwd686.yaml     | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/clockworkpi,cwd686.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/panel/clockworkpi,cwd686.yaml b/Documentation/devicetree/bindings/display/panel/clockworkpi,cwd686.yaml
+> new file mode 100644
+> index 000000000000..eaf55d629266
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/panel/clockworkpi,cwd686.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/panel/clockworkpi,cwd686.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ClockworkPi CWD686 6.86" IPS LCD panel
+> +
+> +maintainers:
+> +  - Max Fierke <max@maxfierke.com>
+> +
+> +description: |
+> +  The ClockworkPi CWD686 is a 6.86" ICNL9707-based IPS LCD panel used within the
+> +  ClockworkPi DevTerm series of portable devices. The panel has a 480x1280
+> +  resolution and uses 24 bit RGB per pixel.
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: clockworkpi,cwd686
+> +
+> +  reg:
+> +    description: DSI virtual channel used by that screen
+> +    maxItems: 1
 
-...
+You still need blank line here.
 
-> > > > > > +static int __maybe_unused mlx90632_pm_runtime_suspend(struct device *dev)
-> > > > >
-> > > > > No __maybe_unused, use pm_ptr() / pm_sleep_ptr() below.
-> > > > >
-> > > > Care to explain a bit more about this? I just followed what other
-> > > > drivers have...
-> > >
-> > > And other drivers have what I said, but it's a new feature.
-> > > If you run `git log --no-merges --grep 'pm_ptr' -- drivers/iio
-> > > include/linux/` and read the history it will explain the case.
-> > >
-> > Thanks for the hint.
->
-> The relevant EXPORT_ for this particular case isn't upstream yet
-> We had a proposal on IIO list, but there was a better one as part of
-> cleaning this up for MFD.  I haven't checked if there is a suitable
-> immutable branch for that patch yet...
+> +  iovcc-supply:
+> +    description: regulator that supplies the iovcc voltage
 
-Oh, well to know. But in any case pm_ptr() / DEFINE_*PM_OPS can still be used.
+And here...
 
--- 
-With Best Regards,
-Andy Shevchenko
+> +  vci-supply:
+> +    description: regulator that supplies the vci voltage
+> +
+
+
+Best regards,
+Krzysztof

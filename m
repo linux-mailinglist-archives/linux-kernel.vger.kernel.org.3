@@ -2,113 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988865AC483
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 15:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9B25AC496
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 15:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232681AbiIDNf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 09:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S234059AbiIDNzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 09:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiIDNfY (ORCPT
+        with ESMTP id S229782AbiIDNzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 09:35:24 -0400
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B442B2E69C
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 06:35:22 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id UpmRocfhftUbyUpmRoyoAn; Sun, 04 Sep 2022 15:35:20 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 04 Sep 2022 15:35:20 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Corey Minyard <minyard@acm.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        openipmi-developer@lists.sourceforge.net
-Subject: [PATCH] ipmi: kcs_bmc: Avoid wasting some memory.
-Date:   Sun,  4 Sep 2022 15:35:16 +0200
-Message-Id: <5d69a2d0939ce3917c856b36ef1e41b579081be6.1662298496.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 4 Sep 2022 09:55:42 -0400
+X-Greylist: delayed 911 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Sep 2022 06:55:40 PDT
+Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D159813EAB
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 06:55:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tF31H
+        YNBq9FEgUfHe2lhN7dhYzjH0fiHkuXz0eoXuZc=; b=FWYyyObcnG3BL8OQd43pV
+        20mqhI0KQw6TqAeeoTpa88KP0GpMcxr9Ey6TfU4o4nO4LnZxNbYkmAxdW3thnDy+
+        YI+8moT+PGWYUhynl1UDtfgYY9bsTOtQZjuUvukOy2s9W5VH+jPM/4vIm7LH5V0c
+        ofBE9WHLHwYkOqcD8kuB5o=
+Received: from whoami-VirtualBox.. (unknown [223.72.91.155])
+        by smtp14 (Coremail) with SMTP id EsCowAAHgf8IqhRjP+7qDg--.32759S2;
+        Sun, 04 Sep 2022 21:37:12 +0800 (CST)
+From:   Jinyu Tang <tjytimi@163.com>
+To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, alexandre.ghiti@canonical.com,
+        guoren@kernel.org, heiko@sntech.de, akpm@linux-foundation.org,
+        panqinglin2020@iscas.ac.cn, tongtiangen@huawei.com,
+        sunnanyong@huawei.com, anshuman.khandual@arm.com,
+        atishp@rivosinc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        falcon@tinylab.org, tjytimi@163.com
+Subject: [PATCH v2] riscv: make update_mmu_cache to support asid
+Date:   Sun,  4 Sep 2022 21:37:10 +0800
+Message-Id: <20220904133710.117263-1-tjytimi@163.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: EsCowAAHgf8IqhRjP+7qDg--.32759S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAFy7Cw1rtrWUWr47tw1xGrg_yoW5ZryUpF
+        srCws5K3yfGrn3Gry7Zr9I9r13Xw4qg3WayFWav3yYqrsIgFyjgr9xK340vr1rJFyrWFWS
+        kayayr15u3yYywUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pKLvugUUUUU=
+X-Originating-IP: [223.72.91.155]
+X-CM-SenderInfo: xwm13xlpl6il2tof0z/1tbiYwhyeFaEK+FoogAAsz
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KCS_MSG_BUFSIZ is 1000.
+The `update_mmu_cache` function in riscv flush tlb cache without asid
+information now, which will flush tlbs in other tasks' address space
+even if processor supports asid. So add a new function
+`flush_tlb_local_one_page` to flush local one page whether processor
+supports asid or not,for cases that need to flush local one page like
+function `update_mmu_cache`.
 
-When using devm_kmalloc(), there is a small memory overhead and, on most
-systems, this leads to 40 bytes of extra memory allocation.
-So 1040 bytes are expected to be allocated.
-
-The memory allocator works with fixed size hunks of memory. In this case,
-it will require 2048 bytes of memory because more than 1024 bytes are
-required.
-
-So, when requesting 3 x 1000 bytes, it ends up to 2048 x 3.
-
-In order to avoid wasting 3ko of memory, allocate buffers all at once.
-3000+40 bytes will be required and 4ko allocated. This still wastes 1ko,
-but it is already better.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Jinyu Tang <tjytimi@163.com>
 ---
-Looking at this code, I wonder why priv->miscdev.name is not freed in
-kcs_bmc_ipmi_remove_device()?
+RFC V1 -> V2 : 
+1.Rebased on PATCH9 of IPI imporvement series as Anup Patel
+suggestion. 
+2.Make commit log more clear.
 
-If this make sense, this also mean that KCS_MSG_BUFSIZ can be increased at
-no cost.
-Or it could be slightly reduce to around 1024-40-1 bytes to keep the logic
-which is in place.
+ arch/riscv/include/asm/pgtable.h  |  2 +-
+ arch/riscv/include/asm/tlbflush.h |  2 ++
+ arch/riscv/mm/tlbflush.c          | 11 +++++++++++
+ 3 files changed, 14 insertions(+), 1 deletion(-)
 
-Another solution would be to use just kmalloc and add a
-devm_add_action_or_reset() call and a function that frees the memory.
-If it make sense, KCS_MSG_BUFSIZ could be increased to 1024 and we would
-allocate just a little above 3x1024 bytes.
----
- drivers/char/ipmi/kcs_bmc_cdev_ipmi.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
-index 486834a962c3..15a4a39a6478 100644
---- a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
-+++ b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
-@@ -485,14 +485,15 @@ static int kcs_bmc_ipmi_add_device(struct kcs_bmc_device *kcs_bmc)
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 7ec936910a96..09ccefa6b6c7 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -415,7 +415,7 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+ 	 * Relying on flush_tlb_fix_spurious_fault would suffice, but
+ 	 * the extra traps reduce performance.  So, eagerly SFENCE.VMA.
+ 	 */
+-	local_flush_tlb_page(address);
++	flush_tlb_local_one_page(vma, address);
+ }
  
- 	priv->client.dev = kcs_bmc;
- 	priv->client.ops = &kcs_bmc_ipmi_client_ops;
--	priv->data_in = devm_kmalloc(kcs_bmc->dev, KCS_MSG_BUFSIZ, GFP_KERNEL);
--	priv->data_out = devm_kmalloc(kcs_bmc->dev, KCS_MSG_BUFSIZ, GFP_KERNEL);
--	priv->kbuffer = devm_kmalloc(kcs_bmc->dev, KCS_MSG_BUFSIZ, GFP_KERNEL);
-+	/* Allocate buffers all at once */
-+	priv->data_in = devm_kmalloc(kcs_bmc->dev, KCS_MSG_BUFSIZ * 3, GFP_KERNEL);
-+	priv->data_out = priv->data_in + KCS_MSG_BUFSIZ;
-+	priv->kbuffer  = priv->data_in + KCS_MSG_BUFSIZ * 2;
+ static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/asm/tlbflush.h
+index 801019381dea..120aeb1c6ecf 100644
+--- a/arch/riscv/include/asm/tlbflush.h
++++ b/arch/riscv/include/asm/tlbflush.h
+@@ -30,6 +30,7 @@ static inline void local_flush_tlb_page(unsigned long addr)
+ #if defined(CONFIG_SMP) && defined(CONFIG_MMU)
+ void flush_tlb_all(void);
+ void flush_tlb_mm(struct mm_struct *mm);
++void flush_tlb_local_one_page(struct vm_area_struct *vma, unsigned long addr);
+ void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr);
+ void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
+ 		     unsigned long end);
+@@ -42,6 +43,7 @@ void flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long start,
  
- 	priv->miscdev.minor = MISC_DYNAMIC_MINOR;
- 	priv->miscdev.name = devm_kasprintf(kcs_bmc->dev, GFP_KERNEL, "%s%u", DEVICE_NAME,
- 					   kcs_bmc->channel);
--	if (!priv->data_in || !priv->data_out || !priv->kbuffer || !priv->miscdev.name)
-+	if (!priv->data_in || !priv->miscdev.name)
- 		return -EINVAL;
+ #define flush_tlb_all() local_flush_tlb_all()
+ #define flush_tlb_page(vma, addr) local_flush_tlb_page(addr)
++#define flush_tlb_local_one_page(vma, addr) local_flush_tlb_page(addr)
  
- 	priv->miscdev.fops = &kcs_bmc_ipmi_fops;
-@@ -531,8 +532,6 @@ static int kcs_bmc_ipmi_remove_device(struct kcs_bmc_device *kcs_bmc)
+ static inline void flush_tlb_range(struct vm_area_struct *vma,
+ 		unsigned long start, unsigned long end)
+diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+index 27a7db8eb2c4..0843e1baaf34 100644
+--- a/arch/riscv/mm/tlbflush.c
++++ b/arch/riscv/mm/tlbflush.c
+@@ -41,6 +41,17 @@ static inline void local_flush_tlb_range_asid(unsigned long start,
+ 		local_flush_tlb_all_asid(asid);
+ }
  
- 	misc_deregister(&priv->miscdev);
- 	kcs_bmc_disable_device(priv->client.dev, &priv->client);
--	devm_kfree(kcs_bmc->dev, priv->kbuffer);
--	devm_kfree(kcs_bmc->dev, priv->data_out);
- 	devm_kfree(kcs_bmc->dev, priv->data_in);
- 	devm_kfree(kcs_bmc->dev, priv);
- 
++void flush_tlb_local_one_page(struct vm_area_struct *vma, unsigned long addr)
++{
++	if (static_branch_unlikely(&use_asid_allocator)) {
++		unsigned long asid = atomic_long_read(&vma->vm_mm->context.id);
++
++		local_flush_tlb_page_asid(addr, asid);
++	} else {
++		local_flush_tlb_page(addr);
++	}
++}
++
+ static void __ipi_flush_tlb_all(void *info)
+ {
+ 	local_flush_tlb_all();
 -- 
-2.34.1
+2.30.2
 

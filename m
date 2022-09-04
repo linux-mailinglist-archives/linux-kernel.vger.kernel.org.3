@@ -2,121 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CDF5AC655
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 22:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A345AC657
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 22:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235207AbiIDUXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 16:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S234977AbiIDU0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 16:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbiIDUXa (ORCPT
+        with ESMTP id S234507AbiIDUZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 16:23:30 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6828A28729
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 13:23:29 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id 9so3500644plj.11
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 13:23:29 -0700 (PDT)
+        Sun, 4 Sep 2022 16:25:57 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125272A971
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 13:25:56 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id x73so2026513ede.10
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 13:25:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=ySzswEK7H7/mId1gd4B+DRPGrFPxULy/Wv8aaKMazJE=;
-        b=M6ErLHlE/E3jmkdGrZHFVP+dfOoGtPv8dkB4INMMGkjRrvur3lx6OspxA2w7I8a7KD
-         IntMW6L4HFRlUDgVIqwITLjGCEja8VbVEwdFZCeOQAMmGIddzUnvpSApRlobBp9j1BDq
-         iDHirYE4PPSIJaUKjf5+SEaMpGDP8mHtVGlm1p7KXCJe7ZJTOmXXQhwxXJgEa2UFWjzU
-         bSsRViP6Ph/Zze1tKgVHKYnvLEX3QoYHr3ZKI5mbDvbKeVzKuvnZjw+/P0n0qLBb+eX6
-         27utxgesDFoUw5iExveYjdgl8ILBnfcOcoyWsdCaLO6gFgwPc6/jtrwnxmRrRJoxKvF+
-         SVGA==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=bIeaeXxAAEhPfe0SYYGIV7PuLZ8/qj+bkQMo3e3Le0c=;
+        b=qBC12g5AQtAVGD11sEMYl5qpv8St+Zq1xd5SI3cxak4kegt9lp97Vh0dzMBMQWPZNs
+         ULa9f6FS3gqOa2eWM8VfJe5+/6EDEsFuJrhD12HNv6vMM0bRXgfc59yPu9bFPZ8qvGhJ
+         lqY2kXehXPrMrMqbrQLDd1NpAExRet50ihaTkXBxo9qwbTOhBCtDJGwp01zF3G1c4QVx
+         NyeHTqKldS+yVcjvRogIkmTfQ+CaQvJ3mju2zHZ/Hlh47jez8MkNgwQLKQtAQmb84mWq
+         ffARUALus+R6+eVgoirkSyC+HqBqGaDx/WXWJUyxr/+ugfAnPsXnwv9R8k18FRg9v0cT
+         DCdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ySzswEK7H7/mId1gd4B+DRPGrFPxULy/Wv8aaKMazJE=;
-        b=0JUH1I3aaLOrM1OidIrwZKAUU1qvvjekBwUNwWqaVkxuoVZYXujIEPZpN45pGMudpm
-         mQjPK73Y/5oWkISRc/EIh67QATY/juyKKrnOJG5t+mxZ5NWA+yOXz/o1n5ufciPngjm3
-         Iq1Nbsqwh0xvO/hQpelp/DWpDpHDmb8/QPBOlh7BatTakpN07B1iPR1mb5xkqhbWgWAI
-         IYLeD+fg654PjlVP/yWBMDkcwDXMg6+vtQ/XVUA8V4ZpqBMz7XbYWuaA+VSlnxC1L0Hd
-         +u0X27V9iOj2T2DcEL8eyM6Fbqi489bGqR/EYykI2SAhbjGKdDu4XCIyOa2xvWQNRKMA
-         Onkg==
-X-Gm-Message-State: ACgBeo0LKY/XTR8hjlXMREa7KNXpth2bFnJopuyU/+QPW+9I3DPRJk18
-        x3QODgOjvd00Yu4HAC3IJFA=
-X-Google-Smtp-Source: AA6agR7XFkK7zMI442nuR6eEYXtZoJJgk6O5wZzScogcYHLGLL5SDb9NyG4Ww6eLus7EaPEv7L6r+A==
-X-Received: by 2002:a17:902:b581:b0:172:a34e:18fd with SMTP id a1-20020a170902b58100b00172a34e18fdmr45125432pls.163.1662323008752;
-        Sun, 04 Sep 2022 13:23:28 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:291b])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170902684800b001708b189c4asm986423pln.137.2022.09.04.13.23.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 13:23:28 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 4 Sep 2022 10:23:26 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Zqiang <qiang1.zhang@intel.com>
-Subject: Re: [PATCH] workqueue: Protects wq_unbound_cpumask with
- wq_pool_attach_mutex
-Message-ID: <YxUJPrRGmUTQu5VS@slm.duckdns.org>
-References: <Yvrb3hfZuUzSpX5e@slm.duckdns.org>
- <20220818143348.1134136-1-jiangshanlai@gmail.com>
- <Ywlmb1ADhHnfFUI8@slm.duckdns.org>
- <CAJhGHyB69M7uSu6Ot5JQ=Uc_svRCKqXbvUvwFK1xCm=FcS9Zmw@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=bIeaeXxAAEhPfe0SYYGIV7PuLZ8/qj+bkQMo3e3Le0c=;
+        b=JlK7NqyVqkjnLqz04n+1eEYnzZot8A4HcZ3r5KJlLo1BIx3v3NsR1WF7RbvVJjOmBp
+         lj92aXXJN7CctzgngnBqlryrbgATRboVY2c2CF9xPzy9bhVyKarKCVAyWdAyNnbmm2Sq
+         bfYLz6eEzXYS9MjtuWagsD6YV+cwthvRaXe/hTsPThi87zhNFDMr+WF0fl6mgPx2rjMR
+         FgncfBtntMTmBYJUvGLPtyrG5SlZO3sgNhUCJfpCFWf8n8DKu79ktjPUiErE4Jz+TW/c
+         xowgwZlpxr6fSoLJwbkRqbwTCbsE2nJZez5RdTRtV1IVcfryGfMtI6gbIldlLrU2yzXp
+         B7Gw==
+X-Gm-Message-State: ACgBeo3PiretwCijL8vPTP2HUM4ewyeOl27wz7KfO75Tk7avGSvHud1f
+        PSrqgckU0Lk7UGqG6S5Ci1nQGMyxTy9dpc3puabspE17XQg=
+X-Google-Smtp-Source: AA6agR6dysZ5aS5EYW7RJBAwkuJBz3n5N6X5gqI4/V0VvJQiPex7hlRdAZyKG5xoxuoHgGXtGnVQ19xIBhSXP4zMVgg=
+X-Received: by 2002:a05:6402:524c:b0:43e:aba4:a42d with SMTP id
+ t12-20020a056402524c00b0043eaba4a42dmr40801347edd.328.1662323154640; Sun, 04
+ Sep 2022 13:25:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJhGHyB69M7uSu6Ot5JQ=Uc_svRCKqXbvUvwFK1xCm=FcS9Zmw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220902061434.46995-1-qingtao.cao@digi.com>
+In-Reply-To: <20220902061434.46995-1-qingtao.cao@digi.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Sun, 4 Sep 2022 22:25:43 +0200
+Message-ID: <CAMRc=McBYhKkzap28H9KxHT2Vg4w1EPsEJpfu8J3JZjTcuQ41w@mail.gmail.com>
+Subject: Re: [v3 PATCH 1/1] gpio: exar: access MPIO registers on cascaded chips
+To:     Qingtao Cao <qingtao.cao.au@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Qingtao Cao <qingtao.cao@digi.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Sep 2, 2022 at 8:15 AM Qingtao Cao <qingtao.cao.au@gmail.com> wrote:
+>
+> When EXAR xr17v35x chips are cascaded in order to access the MPIO registers
+> (part of the Device Configuration Registers) of the secondary chips, an offset
+> needs to be applied based on the number of primary chip's UART channels.
+>
+> Signed-off-by: Qingtao Cao <qingtao.cao@digi.com>
+> ---
 
-On Tue, Aug 30, 2022 at 05:32:17PM +0800, Lai Jiangshan wrote:
-> > Is this enough? Shouldn't the lock be protecting a wider scope? If there's
-> > someone reading the flag with just pool_attach_mutex, what prevents them
-> > reading it right before the new value is committed and keeps using the stale
-> > value?
-> 
-> Which "flag"? wq_unbound_cpumask?
+Applied, thanks!
 
-Oh, yeah, sorry.
-
-> This code is adding protection for wq_unbound_cpumask and makes
-> unbind_workers() use a stable version of wq_unbound_cpumask during
-> operation.
-> 
-> It doesn't really matter if pool's mask becomes stale later again
-> with respect to wq_unbound_cpumask.
-> 
-> No code ensures the disassociated pool's mask is kept with the newest
-> wq_unbound_cpumask since the 10a5a651e3af ("workqueue: Restrict kworker
-> in the offline CPU pool running on housekeeping CPUs") first uses
-> wq_unbound_cpumask for the disassociated pools.
-> 
-> What matters is that the pool's mask should the wq_unbound_cpumask
-> at the time when it becomes disassociated which has no isolated CPUs.
-> 
-> I don't like 10a5a651e3af for it not synching the pool's mask
-> with wq_unbound_cpumask. But I think it works anyway.
-
-Hmm... I see. Can you add a comment explaining why we're grasbbing
-wq_pool_attach_mutex there?
-
-Thanks.
-
--- 
-tejun
+Bart

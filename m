@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02005AC507
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B825AC4DC
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 16:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234531AbiIDPaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 11:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        id S234406AbiIDO4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 10:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiIDPaI (ORCPT
+        with ESMTP id S229783AbiIDO4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 11:30:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E0E2B63A;
-        Sun,  4 Sep 2022 08:30:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B218760FA6;
-        Sun,  4 Sep 2022 15:30:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4CF3C433D7;
-        Sun,  4 Sep 2022 15:30:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662305406;
-        bh=hOhC3aj6/CGi+YEG3NgjPbtkba6VrznLEWM20iom+j0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=O1fjy5v7OXgDpixpiZk/uDXR9xvfbtknx2OcvAnpfnHnGjJwCVK/9dc2rSX/g0ejj
-         /Ag1GRFrsYXKIPAWI8PiqCPltkubLCYZ5HhwAa+Vnh3gItVNHz7bxgBl9x/BziGK33
-         PbeI3lUtO9U3b6yggNHRc+UsyX/LodjUo7M/b5INCclvfQQCclJm4CKRk4hFJWJFXI
-         R3adzftpsxXqpdqC6FOUUjA43FrCA7pWpKhG9R8zrkRalj9ZLOPTP8qB+ucfhG/0b/
-         ULy7ArWxjBAne7Jn9PzoMVyJHB9cuIMxKhpMBS/UoAeZWE+V144O4MeWfJlIXsozOI
-         5+i0qLNw6SnWQ==
-Date:   Sun, 4 Sep 2022 15:55:57 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ciprian Regus <ciprian.regus@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/5] drivers: iio: adc: LTC2499 support
-Message-ID: <20220904155557.33c96d66@jic23-huawei>
-In-Reply-To: <CAHp75Vfn_84-xww5w_oHf0zqm4dZxycSU1cDKw7-KQzDyoCHXw@mail.gmail.com>
-References: <20220901121700.1325733-1-ciprian.regus@analog.com>
-        <20220901121700.1325733-4-ciprian.regus@analog.com>
-        <4067432b-b5a6-f3eb-a707-5fa298ba846b@linaro.org>
-        <20220902120611.000007a0@huawei.com>
-        <CAHp75Vfn_84-xww5w_oHf0zqm4dZxycSU1cDKw7-KQzDyoCHXw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 4 Sep 2022 10:56:45 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED30357F9;
+        Sun,  4 Sep 2022 07:56:41 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p7so9936202lfu.3;
+        Sun, 04 Sep 2022 07:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=fC3lh2YMOyHrManyFcmY7+Wx+z/ZpVeqWfU4+YdqBv4=;
+        b=jWJ6WZaSrU9FfU2y0hsSVm6LyRs2Cu3lKLTVy/RIID88varEs+jkY7d1VruP3yuqf2
+         mAjDDF9c1emAj8wh4Hyp2XPYob1i8GENIbDMHmBUriGC36YJARdCRPS2cE54QgvHWznw
+         7mVrjAuI624Hp7e0UVmNr0mL9qJn4nh9sWzYQt3L7xdBxIrnipBwRYnPG8/RwEwyz6Xn
+         1QH/Kv8YTC29XXLg6OmzqXsCbT1mNRAPKxYBrnaAEKHCIgdgBnT+aXqsbCZi0VC0x/cA
+         mU8MXo4zaMwPyA4tYjptrWZoG66L8WfMu+HaYxEwAFKSSBPvKsti/VtABlRtYWul9Orn
+         HeVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=fC3lh2YMOyHrManyFcmY7+Wx+z/ZpVeqWfU4+YdqBv4=;
+        b=lm/FenI7xuLLkt45qkSe8Adj603HTyf/lmvPbkgRT55BHaveSyAelxbbApcVtU3kCA
+         9nmKhkYxdH+VIh9jNhbnqAuoGN5+7jE8DrHjOEZ+L6DZxV9eV4RdJWAzBwvKYfz2JmN6
+         wsVFyVQAMadz0QhZW5SQiU1NN1P9GKDlQFxFowOdM7s/uvojcnbIvXO190IMMVwYwONF
+         vbqjMISrx9t/X90APtgs4Z4It9IJjqmSiU1repef9oKBcAFxLU66U9nFFxOIhuW8hf8j
+         BiehbLpGRtEZsCMhG+YGMHMRosGqDj0ZgC7t8YhLz/SyZKHlBNKmmik5jNs5jlnXeUOy
+         BS7g==
+X-Gm-Message-State: ACgBeo2rgUoid5ScXFeDsoNlmebuivBVhj8dsDGwQ2L50Y9mglmhc/Sf
+        T91biup1/J30f6pEuzjsZH0=
+X-Google-Smtp-Source: AA6agR61c8An6mbrNZfhfHKEubyxAYbejF29KvnHLmiAlYpPv9/3q/F9sPfNQEADHmqOVrKU4YEokg==
+X-Received: by 2002:a05:6512:4002:b0:494:5dc9:b2fe with SMTP id br2-20020a056512400200b004945dc9b2femr11247598lfb.687.1662303399672;
+        Sun, 04 Sep 2022 07:56:39 -0700 (PDT)
+Received: from [192.168.2.145] ([109.252.119.13])
+        by smtp.googlemail.com with ESMTPSA id m13-20020ac2428d000000b00492eeabd6f8sm933897lfh.52.2022.09.04.07.56.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Sep 2022 07:56:39 -0700 (PDT)
+Message-ID: <7294f049-f58f-6ca8-6315-ad062d775bcf@gmail.com>
+Date:   Sun, 4 Sep 2022 17:56:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v17 02/10] video/hdmi: Add audio_infoframe packing for DP
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
+        airlied@linux.ie
+Cc:     devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        granquet@baylibre.com, jitao.shi@mediatek.com,
+        liangxu.xu@mediatek.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, msp@baylibre.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org, wenst@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com
+References: <20220901044149.16782-1-rex-bc.chen@mediatek.com>
+ <20220901044149.16782-3-rex-bc.chen@mediatek.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220901044149.16782-3-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Sep 2022 14:37:03 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+01.09.2022 07:41, Bo-Chen Chen пишет:
+> diff --git a/include/drm/display/drm_dp.h b/include/drm/display/drm_dp.h
+> index 9e3aff7e68bb..6c0871164771 100644
+> --- a/include/drm/display/drm_dp.h
+> +++ b/include/drm/display/drm_dp.h
+> @@ -1536,6 +1536,8 @@ enum drm_dp_phy {
+>  #define DP_SDP_VSC_EXT_CEA		0x21 /* DP 1.4 */
+>  /* 0x80+ CEA-861 infoframe types */
+>  
+> +#define DP_SDP_AUDIO_INFOFRAME_HB2	0x1b
 
-> On Fri, Sep 2, 2022 at 2:06 PM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> > On Thu, 1 Sep 2022 16:23:09 +0300
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:  
-> > > On 01/09/2022 15:16, Ciprian Regus wrote:  
-> 
-> ...
-> 
-> > > > Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/2499fe.pdf  
-> > >
-> > > Missing blank line. Use standard Git tools for handling your patches or
-> > > be sure you produce the same result when using some custom process.  
-> >
-> > My understanding is Datasheet is a standard tag as part of the main tag block.
-> > There should not be a blank line between that and the Sign off.
-> >
-> > +CC Andy who can probably point to a reference for that...  
-> 
-> Yes, the idea to have a Datasheet as a formal tag. Which is, by the
-> way, somehow established practice (since ca.2020).
-
-We should probably add it to the docs so we have somewhere to point at
-beyond fairly common practice.
-
-Hohum.  Anyone want to take that on with associated possible bikeshedding?
-
-Jonathan
-
-> 
-
+Is there any good reason why this is not grouped with the rest of the
+DP_SDP_* defines above?

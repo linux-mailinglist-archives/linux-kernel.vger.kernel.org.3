@@ -2,130 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F92E5AC613
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 21:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF4C5AC617
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 21:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234482AbiIDTXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 15:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
+        id S231374AbiIDTZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 15:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiIDTXg (ORCPT
+        with ESMTP id S229627AbiIDTZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 15:23:36 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D4E2E69E;
-        Sun,  4 Sep 2022 12:23:35 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id x23so6639445pll.7;
-        Sun, 04 Sep 2022 12:23:35 -0700 (PDT)
+        Sun, 4 Sep 2022 15:25:16 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C5721260
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 12:25:15 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id l65so6771882pfl.8
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 12:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=t1xTYA4sjuGCh4pw3N6/8X8I4YHHyXAx3KGLnNc3nds=;
-        b=JuQdFQznN6fig6R2GT4wFv4boLIPrh52pkOjt7Lk8nwSgI65990K1hikW1+UWssukE
-         hkoBhQ15kid+XL/9WfgKqmYdxnNhivT42x0Favs9JqSVfbZk7KM6V/nvm87u8L5ENJxK
-         sUnBMp3KajXtvWlKqVkJ2nmon4lFv5WpkK7pP63O25Cz9I3Lhra7fp0atBGfasq85YMU
-         0piwSM/rdcd/050P3aavp1ybATVo4tInhsgWKqxmQjpQ02QhR1ya7lZCMid3kzVbxR0H
-         j6RZa8ATgc8gnLynqW/GwbdGRJVzFBafXFM12/beAvTFdWSb/jM8PqtVC1QNo4dxT1YA
-         tMQg==
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=emZNPPVwOPEYtlX5oujYRHUo2IH2LiQXBoAVIF8q5zg=;
+        b=kaepJ0W4BxacL0kZ6uRT6GN1grtPahza2D3S0Y9nDBIblRX7LqqRKaCFYX6aX11AjS
+         mby8Jh2LEvOln9FNbW7XdBXzqRoUmKVgt9S8l8/32OUuun+mtR/U1mEyqtzIQXZG30pR
+         1+2PtRx92nGRi8R7r7RL+hBbMt9auoqtROEAgbe0tuEI0goapEop+zYjM3aejMsrIp07
+         msiXjxMVSlgqijzAOQqgLZRb+3omjaI7mMb6qXhzQVWLMGapoqumEJ6d9OgtTQpRhNr1
+         dpDtIQqLCB8bgfr5u7jNLH2ULQMMdDnsxF65inL8NX4UgrBBfNSZIOIScTkJbsmkjICz
+         yZZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=t1xTYA4sjuGCh4pw3N6/8X8I4YHHyXAx3KGLnNc3nds=;
-        b=3FlyJrHXT00o9acOFVG30aCNY5J27dt4LditI0dnOo2OKrUkd6BJ+6Gem+mZY1sRjF
-         NiF+LOmfP0GpY+OPkqvkUM8tgPh8s7sn/M/c7TnTojtMT9gSAm2nfbCQI3byEOCSsU25
-         lm1fR5CZHKEdJInMy4XAQUK7jS8dlxw0g7ecawN3eXkWhx/5VD7V0y/TRa3z2s41zGah
-         n7wjvPStNRSuTHegD/cIVMMqCJkgEX9Ulnqte1Ug2T5rQSyLpJszlxKsgbvxk+cAcgSQ
-         ZawrIMLGmsDtJHRHeIP4SPMW326aj59aDUgn23Tr2VKbcrhoF/3Zxav0oXCBQ1vzH+6q
-         HMNA==
-X-Gm-Message-State: ACgBeo0mpVbEYDTAfErADPeg+U+wybmOSQ8wtXheD1+I+tfa1st0h6XF
-        G1KZDsKGXcflYcNXLmV1R28=
-X-Google-Smtp-Source: AA6agR7Fr+8qy74vv2j29N2M5Bf8aHfMmlBDM7k04lJv67nFAGaICCLvwviLtM1Rxh97EiGfwGZi1g==
-X-Received: by 2002:a17:902:b217:b0:172:bd6c:814d with SMTP id t23-20020a170902b21700b00172bd6c814dmr45833683plr.55.1662319414609;
-        Sun, 04 Sep 2022 12:23:34 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:291b])
-        by smtp.gmail.com with ESMTPSA id i192-20020a6287c9000000b00538116bab6fsm5980580pfe.213.2022.09.04.12.23.33
+        bh=emZNPPVwOPEYtlX5oujYRHUo2IH2LiQXBoAVIF8q5zg=;
+        b=oXFvEXTXu24X8IQf90u4WfB5AHPbcwRK6v85/vqapwvG4IyzjjNtOFtyhjOP06sq+f
+         G1Iq+2c8mQFsQGkptBOjtuJ/x6CssaZHQ4r6D8RwDZy+qI6Xf80puIyJHYOMSMCGPL9E
+         9GmT3c01jOnZHmwedHQ//9b+bYXQwlnLM3lv3uBQCOrDIXy47jJxpH7q9mY4hnt6lENo
+         dFug+1LtDNqNpIGQDy7bqiggUTW0iC7cB4BBuhj4dwgSNZnYMITO+XDPSnH1dHzyImIz
+         gtCEsTDAQD9RCp8MGSaMMhRofeEPlAhn70tMyfzMnFqhnQLR/lvQWxXrZzcCwugvKBrL
+         El6Q==
+X-Gm-Message-State: ACgBeo2adq24+V1Vlarz1znL/bxnywvFX147tmWoHbBCJ/pmJsGRxzjw
+        ltU9FG2D5yAjLuLs5dA7tCU=
+X-Google-Smtp-Source: AA6agR53RUWZD7DU1GRWOn3CBvjcndSAHXe4f89dMVrmtkg2TgC1L7Qo9IicFkuzmTI8p0Cckgih9g==
+X-Received: by 2002:aa7:8149:0:b0:536:84bf:69a0 with SMTP id d9-20020aa78149000000b0053684bf69a0mr47231471pfn.85.1662319514634;
+        Sun, 04 Sep 2022 12:25:14 -0700 (PDT)
+Received: from asif-desktop.domain.name ([122.177.222.82])
+        by smtp.gmail.com with ESMTPSA id j23-20020a632317000000b0042bd73400b6sm4968449pgj.87.2022.09.04.12.25.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 12:23:33 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 4 Sep 2022 09:23:32 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Gabriel Ryan <gabe@cs.columbia.edu>,
-        Abhishek Shah <abhishek.shah@columbia.edu>,
-        linux-kernel@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org, daniel@iogearbox.net,
-        hannes@cmpxchg.org, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, lizefan.x@bytedance.com,
-        netdev@vger.kernel.org, songliubraving@fb.com, yhs@fb.com
-Subject: [PATCH cgroup/for-6.1] cgroup: Remove data-race around
- cgrp_dfl_visible
-Message-ID: <YxT7NASKiuZDx6PT@slm.duckdns.org>
-References: <CAEHB249jcoG=sMGLUgqw3Yf+SjZ7ZkUfF_M+WcyQGCAe77o2kA@mail.gmail.com>
- <20220819072256.fn7ctciefy4fc4cu@wittgenstein>
- <CALbthtdFY+GHTzGH9OujzqpOtWZAqsU3MAsjv5OpwZUW6gVa7A@mail.gmail.com>
- <YwuySgH4j6h2CGvk@slm.duckdns.org>
- <20220829072741.tsxfgjp75lywzlgn@wittgenstein>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829072741.tsxfgjp75lywzlgn@wittgenstein>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Sun, 04 Sep 2022 12:25:14 -0700 (PDT)
+From:   Asif Khan <asif.kgauri@gmail.com>
+To:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        gregkh@linuxfoundation.org
+Cc:     Asif Khan <asif.kgauri@gmail.com>, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: rtl8712: fix camelcase in UserPriority
+Date:   Mon,  5 Sep 2022 00:54:00 +0530
+Message-Id: <20220904192400.8309-1-asif.kgauri@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From dc79ec1b232ad2c165d381d3dd2626df4ef9b5a4 Mon Sep 17 00:00:00 2001
-From: Tejun Heo <tj@kernel.org>
-Date: Sun, 4 Sep 2022 09:16:19 -1000
+Replace camelcase variable UserPriority with snake case
+variable user_priority.
 
-There's a seemingly harmless data-race around cgrp_dfl_visible detected by
-kernel concurrency sanitizer. Let's remove it by throwing WRITE/READ_ONCE at
-it.
-
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
-Cc: Gabriel Ryan <gabe@cs.columbia.edu>
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-Link: https://lore.kernel.org/netdev/20220819072256.fn7ctciefy4fc4cu@wittgenstein/
+Signed-off-by: Asif Khan <asif.kgauri@gmail.com>
 ---
-Applied to cgroup/for-6.1.
+ drivers/staging/rtl8712/xmit_linux.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Thanks.
-
- kernel/cgroup/cgroup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 0005de2e2ed9..e0b72eb5d283 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -2173,7 +2173,7 @@ static int cgroup_get_tree(struct fs_context *fc)
- 	struct cgroup_fs_context *ctx = cgroup_fc2context(fc);
- 	int ret;
+diff --git a/drivers/staging/rtl8712/xmit_linux.c b/drivers/staging/rtl8712/xmit_linux.c
+index 4a93839bf947..aaabd1189ab0 100644
+--- a/drivers/staging/rtl8712/xmit_linux.c
++++ b/drivers/staging/rtl8712/xmit_linux.c
+@@ -66,16 +66,16 @@ void r8712_set_qos(struct pkt_file *ppktfile, struct pkt_attrib *pattrib)
+ {
+ 	struct ethhdr etherhdr;
+ 	struct iphdr ip_hdr;
+-	u16 UserPriority = 0;
++	u16 user_priority = 0;
  
--	cgrp_dfl_visible = true;
-+	WRITE_ONCE(cgrp_dfl_visible, true);
- 	cgroup_get_live(&cgrp_dfl_root.cgrp);
- 	ctx->root = &cgrp_dfl_root;
+ 	_r8712_open_pktfile(ppktfile->pkt, ppktfile);
+ 	_r8712_pktfile_read(ppktfile, (unsigned char *)&etherhdr, ETH_HLEN);
  
-@@ -6098,7 +6098,7 @@ int proc_cgroup_show(struct seq_file *m, struct pid_namespace *ns,
- 		struct cgroup *cgrp;
- 		int ssid, count = 0;
+-	/* get UserPriority from IP hdr*/
++	/* get user_priority from IP hdr*/
+ 	if (pattrib->ether_type == 0x0800) {
+ 		_r8712_pktfile_read(ppktfile, (u8 *)&ip_hdr, sizeof(ip_hdr));
+-		/*UserPriority = (ntohs(ip_hdr.tos) >> 5) & 0x3 ;*/
+-		UserPriority = ip_hdr.tos >> 5;
++		/*user_priority = (ntohs(ip_hdr.tos) >> 5) & 0x3 ;*/
++		user_priority = ip_hdr.tos >> 5;
+ 	} else {
+ 		/* "When priority processing of data frames is supported,
+ 		 * a STA's SME should send EAPOL-Key frames at the highest
+@@ -83,9 +83,9 @@ void r8712_set_qos(struct pkt_file *ppktfile, struct pkt_attrib *pattrib)
+ 		 */
  
--		if (root == &cgrp_dfl_root && !cgrp_dfl_visible)
-+		if (root == &cgrp_dfl_root && !READ_ONCE(cgrp_dfl_visible))
- 			continue;
- 
- 		seq_printf(m, "%d:", root->hierarchy_id);
+ 		if (pattrib->ether_type == 0x888e)
+-			UserPriority = 7;
++			user_priority = 7;
+ 	}
+-	pattrib->priority = UserPriority;
++	pattrib->priority = user_priority;
+ 	pattrib->hdrlen = WLAN_HDR_A3_QOS_LEN;
+ 	pattrib->subtype = WIFI_QOS_DATA_TYPE;
+ }
 -- 
-2.37.3
+2.17.1
 

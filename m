@@ -2,232 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311895AC3A7
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 11:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495475AC3A8
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 11:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233489AbiIDJhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 05:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
+        id S233505AbiIDJnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 05:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiIDJhi (ORCPT
+        with ESMTP id S229754AbiIDJnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 05:37:38 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B113FA1F;
-        Sun,  4 Sep 2022 02:37:37 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oUm4N-0000yq-Ju; Sun, 04 Sep 2022 11:37:35 +0200
-Message-ID: <bd39073c-771b-bbe4-dc44-52d7f7d4be6f@leemhuis.info>
-Date:   Sun, 4 Sep 2022 11:37:35 +0200
+        Sun, 4 Sep 2022 05:43:16 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D6143315
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 02:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662284594; x=1693820594;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=zrMRAFffj7oYDyc6aUL90hxGQClRONQUMBHjGh044yM=;
+  b=FYvgoxFhAg7McxSrinHlgHc8qZpU2FKa/68+0mRwu4pH+f0Rdk+moTmA
+   3FS/Ly7dpoXN+GqyOyIGdM8KfzfVQsQZe41cI1W/y02ZYZWWu8xE5tR93
+   9GnRNTbHKE6j7oJEAIyUz/FzUzdZCZuIhH7JZTCb3ugcwEi0lJpExTtrK
+   YtTVtNMccdzoaEh5hOU+SATpcZwDyOvkhjcXQ8YptYlaF0uC0x11blGEd
+   bwOXzGmP5glypv0qoU8od20PEGjE8DGxmeX5+PlHFYeAG5g0fJux3eSgz
+   wVhHE6x2H0omIlS+59YFDNlf5T78dSt0FqzjxZQno0JcqUZomEpkJWIJd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="279243806"
+X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
+   d="scan'208";a="279243806"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 02:43:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
+   d="scan'208";a="789098485"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga005.jf.intel.com with ESMTP; 04 Sep 2022 02:43:14 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 4 Sep 2022 02:43:13 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Sun, 4 Sep 2022 02:43:13 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.173)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Sun, 4 Sep 2022 02:43:13 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PLSMWfwZMKgRfIX0p4qYgYY2DPwjlL/pm6lo4I4x82vkY4BzX0x0l/t2Pzk+9USmTMvSNpF1Ad4atE/TwrPv3G2g/GQ1yJwiHYWH64b4ttwH7KxyrP8jkzaEW9hIvVrtHuLrzF66KCdIvIpyy7H9vH2eQfzR8fz6j4gTT15RGyst+3k1nqR+xtseWEjTynToMvnOUGR2LLe1M3f8c+k7RPe8Hx2oXEzN4ne0go/EIu1RBhcBCNYybo6tBnj/uRiLDrLzKV+Z68bBV+3olDj2G5zGAl5lbSdAUAihCWmLyaXBWXVvShBq6xRk8kKJgwXGQxuK7tN89VpAj8doYZ+O1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vsumifRNW6O6GZSJxvTMP2SmgsafQFYdgfm/Y3OL6Mg=;
+ b=GAgWzfDY+l3tQNLd+9e92TBgkZXXm6fcXnnesAxWWI3ydnqOCrG6iBNtTsIY3xFpSR3eWhH1fwT425RhaDoD440U7uEsYtvSwlGp87J2U71deDLdgf7Kz6b+wQq//ReY3KOS5hXmgDyD2L6K/ZvPOp/gj2ZYabP0EAsoyUBIwMoAsOjsmbIUfRnCSWimbRjLCwAG2WL3tiGX0DHL7wKUb6OF+KhjhtfVV1i32yxl3YquzqXzPsJculHiJJQNywk0YUKrVwED6OBALk7nDUA328TLhUUC7q9T3q/+FDV4zFVPE4A+LGdl0vf6x+ra/MaA8JaFvNFzGkB8j8R1ZafpTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by CH2PR11MB4406.namprd11.prod.outlook.com (2603:10b6:610:43::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Sun, 4 Sep
+ 2022 09:43:12 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::4c8f:1e3c:5288:d77e]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::4c8f:1e3c:5288:d77e%7]) with mapi id 15.20.5588.015; Sun, 4 Sep 2022
+ 09:43:12 +0000
+Date:   Sun, 4 Sep 2022 17:42:33 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        "Dmitry Vyukov" <dvyukov@google.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "John Garry" <john.garry@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v4 1/4] mm/slub: enable debugging memory wasting of
+ kmalloc
+Message-ID: <YxRzCX8WqOv3KESJ@feng-clx>
+References: <20220829075618.69069-1-feng.tang@intel.com>
+ <20220829075618.69069-2-feng.tang@intel.com>
+ <YxC7Kda5g/aEqarm@hyeyoo>
+ <YxGfkdvJcNJma/88@feng-clx>
+ <YxRp5uz9KSY0S9id@hyeyoo>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YxRp5uz9KSY0S9id@hyeyoo>
+X-ClientProxiedBy: SG2PR02CA0083.apcprd02.prod.outlook.com
+ (2603:1096:4:90::23) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [BUG] commit a8d302a0b77057568350fe0123e639d02dba0745 cause
- IO_PAGE_FAULT and a lot of errors #forregzbot
-Content-Language: en-US, de-DE
-To:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        linux-sound@vger.kernel.org
-References: <CABXGCsO+kB2t5QyHY-rUe76npr1m0-5JOtt8g8SiHUo34ur7Ww@mail.gmail.com>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CABXGCsO+kB2t5QyHY-rUe76npr1m0-5JOtt8g8SiHUo34ur7Ww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1662284257;5517fcc2;
-X-HE-SMSGID: 1oUm4N-0000yq-Ju
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6e5ebe9a-dc70-4770-f26c-08da8e59e1ae
+X-MS-TrafficTypeDiagnostic: CH2PR11MB4406:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CyJaJYcQACn7BgHuqYrivZVbj+QdGc1YScbzRyDpp1rUABxt4y/KWMSvLTIRO2aEfRjcBk0Td/gxozSLGUK/BFEv+PUWd3ic5TvzKzPDc1d1XOApLbZBbLQI+lq3X6JrpPJIPB//+PgsnMdbvnS/qLLqhOiKMoYtS0b3F79TUd18YYyoM8w4pbGm1z4vKGTjhZXtEsdeG9EGS4FaUCNoyBXdsjEAXFIcHB64YX8rIGDLhExmFg/fZxdLhDb7Kq0B2VvOh6QHuU31ZrdDVuPEi6RrrszG7wEwEfxI9DB/SiIklJeEhUf5ilQ6IB8sggl8j3DyzuWsgj5fFIl89QQR2OFaFOJK4aECJCB90uB1ErYWuA416OVObJ+Yq2KqiKWs2izmPp25O8tqJKTkjDqk0+OQDI3zcS4Re8bvI9LI3I5Q9TEb3unZkSnLXd/KIiakLJdxAH8oxfwkU0b1geZfUqIUTxfp/MUV1umZhaX4IQ8EAsrmG+SqN7T2qifMsJ0KPh4+BJAz9JVgDKRGVAIdfiptLZJpYnJoDPGQj7VeEl/dvO5sqmTrz5RBBoPr0wXnehg6JhWoDoTQH2gbLl2lE9F22kxp7bQkmSbAAFu/SSE7Bjd81ZZhwM+DroD2PgS2rDBJkr56S05Q8svzJpS3yUVI3O9PILaFWsqN9BwB6Zs+X8U/39vv1ZdxhBq0rtLb
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(376002)(136003)(346002)(396003)(39860400002)(6506007)(478600001)(6486002)(38100700002)(86362001)(41300700001)(83380400001)(6666004)(186003)(9686003)(6512007)(26005)(8936002)(2906002)(44832011)(5660300002)(7416002)(316002)(54906003)(82960400001)(6916009)(33716001)(4326008)(66946007)(66556008)(66476007)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ATUYQBK8lNJBUeARI53CZMmnCu2DqYNE4pmTGk/2fShrfJf8w4S5rmuon8Ad?=
+ =?us-ascii?Q?i2JH4C63VswgHMwdDSTyAg0SssQlxwtzQe9wRerFguyO5vbaD+1qPUoG6afK?=
+ =?us-ascii?Q?jHZJAqyHEuX7ljQPJFDan9c3ZeE8nVeNnU8MCCvgQ1iSoq8n5HfN3T0D1bto?=
+ =?us-ascii?Q?7YJrWc4G7hL8qYf1fZ4TUxDn9IFw+VpCplImUnIvR6rmIWJwpSRwNFh3G9B1?=
+ =?us-ascii?Q?8ocr+hQBLNpumMtHtiEHzX5wBuGYJYRdRJJCZtQxVDoQ7QrC9z4ZJhe08Nm9?=
+ =?us-ascii?Q?IdD/V9aO7xdv3wCiW553tQooKOSnzfLkuNF+w+RE8ipf7xdw0u5sJSbwXN39?=
+ =?us-ascii?Q?1arpyaJNeoGLIYyGjyMgKCmSXOttLDoj4jIhccnBG6eOQgEJMjVRbFyqS5KS?=
+ =?us-ascii?Q?VgbkBrD54uz9HMwucAfyIuWlN4+NuvhkVAxDWocuvJrInPrmaal/jm02ykYR?=
+ =?us-ascii?Q?yu3DTppDm52IBcwcU2/vtLYnjNIi94/8nw6Hvpv8B6o7UTZGq3oRppoO8TxF?=
+ =?us-ascii?Q?74LkRwas0Vz7FQ6IpB1cBldLayDLbbpMs8kV0Z4piucqkcDaD+93Cjp0LmTE?=
+ =?us-ascii?Q?R2k99i0gfokCCmNkS/vuBl7HVLk9kXVwpMlXn2ROyFl9YcOZ/4jKxFckgrRj?=
+ =?us-ascii?Q?QN8G9umkiYyOY/vaxKxaAQJ49TsbY2GT5LwnULIfIe6+ckOy2EEhPHOT0M0k?=
+ =?us-ascii?Q?2LBocjOuDwmTkWJg8LBgjh7kdQU0LXzvg+MNQ1a3ojbU07lk6G8Qap0FiKpp?=
+ =?us-ascii?Q?iCeqAttI2vQ40rHVWIIXSfNavWiwBpWh4C7DmYhMbGjMMLQaCsgo79JFSKtf?=
+ =?us-ascii?Q?RQgb+idKggz5XJleivOVknLq2CV6qMcML06l+fZKJtLpwF0U138PrYbhMVZC?=
+ =?us-ascii?Q?xS6W3V5tiyaVRZZDzI9s5wCCcuJn0mxBqqXZE5SlHMIT4xvcbraGqHWOGya9?=
+ =?us-ascii?Q?fmJ9YQzyU/1Zyu9e96CEbIDuEi4NcgXJRqB3BXwgsiZXeb9otAscputdDyby?=
+ =?us-ascii?Q?aZZ1qMHTXHXVrFJtR0XWT+fUKFaA6Yj21KtneP3uZo7Xt7ilyrcfBgwuN/FC?=
+ =?us-ascii?Q?G7/kGjQsBFpLBQosBnqNf8IR0YafyVGXUhMFeHxh6SrxQPAUIPA+iojzKjqM?=
+ =?us-ascii?Q?f73eRL+S8s1WNjLlSPJLJ3vfiqvT8yfip/jloPsx4j+fny4DOBsFdbsPClR9?=
+ =?us-ascii?Q?/QhEO8CqIYUBUEWg1vkQnE+iJyOeNSvNkAINlIISKoor8t6cOves+BBnFN6q?=
+ =?us-ascii?Q?qH+/UPx833quWNK3M6kOURsv4Od0x1zt9UkISlUXKYe9GEwY9kDyyX6GqvIh?=
+ =?us-ascii?Q?dT8kUuqplM058O9GMvdfNeUkhXBoqoZt2PdR9HedcONZZT8cw2XB86SEiaeN?=
+ =?us-ascii?Q?fLvJgCaRJuO9/GpGmDBy1pKC3vJrbJLm0mV+gMcXqz54sj0J9dQyiSZ6973p?=
+ =?us-ascii?Q?g5K8/4BkhwXOB994RAkOS2fOYcb8kcdZByMa9HtSDgt3TFCV/8+DCeH+un9p?=
+ =?us-ascii?Q?XkqEi+lJYuNwFl8CE3pnfIwwdUiuUCyz3NUxucrkP5bLcTvaJ7uwGaN/16PD?=
+ =?us-ascii?Q?1B1EaptnLBSkYKf8o+5kiqOT6njc2doauXa19V4D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e5ebe9a-dc70-4770-f26c-08da8e59e1ae
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2022 09:43:11.7481
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NOXewKdUiODZF4OtPVVzhyBwId8MAbZK4nHjvczziZzrpgRgV5dkZG4nfMvizaW6ZmpP0TehDUdfL2e+DaK7Jg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB4406
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TWIMC: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
-
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
-
-Hi, this is your Linux kernel regression tracker. CCing the regression
-mailing list, as it should be in the loop for all regressions, as
-explained here:
-https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
-
-On 03.09.22 20:04, Mikhail Gavrilov wrote:
-> Hi, I am bisecting issue that cause errors:
-> [   57.710235] snd_hda_intel 0000:03:00.1: spurious response
-> 0xeb0cce6a:0x8b612b0d, rp = 1, wp = 1
-> [   57.710240] ------------[ cut here ]------------
-> [   57.710241] BUG?
-> [   57.710257] amd_iommu_report_page_fault: 216 callbacks suppressed
-> [   57.710260] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848808 flags=0x0020]
-> [   57.710270] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848800 flags=0x0000]
-> [   57.710276] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848810 flags=0x0020]
-> [   57.710282] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848810 flags=0x0000]
-> [   57.710278] WARNING: CPU: 5 PID: 968 at
-> sound/hda/hdac_controller.c:215
-> snd_hdac_bus_update_rirb.cold+0x24/0x5b [snd_hda_core]
-> [   57.710289] Modules linked in: uinput
-> [   57.710291] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848818 flags=0x0020]
-> [   57.710292]  rfcomm snd_seq_dummy snd_hrtimer nft_objref
-> nf_conntrack_netbios_ns nf_conntrack_broadcast
-> [   57.710296] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848810 flags=0x0000]
-> [   57.710297]  nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib
-> nft_reject_inet nf_reject_ipv4
-> [   57.710302] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848820 flags=0x0020]
-> [   57.710301]  nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat
-> nf_conntrack
-> [   57.710307] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848820 flags=0x0000]
-> [   57.710306]  nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables
-> nfnetlink qrtr bnep
-> [   57.710312] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848828 flags=0x0020]
-> [   57.710313]  snd_hda_codec_realtek snd_hda_codec_generic
-> snd_hda_codec_hdmi intel_rapl_msr snd_sof_amd_renoir snd_sof_amd_acp
-> [   57.710318] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
-> [IO_PAGE_FAULT domain=0x000e address=0x152848820 flags=0x0000]
-> [   57.710318]  intel_rapl_common mt7921e snd_sof_pci mt7921_common
-> snd_sof sunrpc snd_sof_utils mt76_connac_lib snd_hda_intel
-> snd_intel_dspcfg snd_intel_sdw_acpi snd_soc_core mt76 snd_hda_codec
-> snd_compress ac97_bus edac_mce_amd snd_hda_core snd_pcm_dmaengine
-> btusb snd_pci_acp6x binfmt_misc snd_hwdep kvm_amd btrtl mac80211 btbcm
-> snd_seq vfat btintel libarc4 snd_seq_device btmtk kvm fat bluetooth
-> snd_pcm irqbypass snd_pci_acp5x cfg80211 rapl snd_timer
-> snd_rn_pci_acp3x snd_acp_config joydev snd pcspkr snd_soc_acpi
-> wmi_bmof asus_nb_wmi soundcore snd_pci_acp3x k10temp i2c_piix4
-> asus_wireless amd_pmc zram amdgpu drm_ttm_helper ttm iommu_v2 hid_asus
-> gpu_sched asus_wmi ledtrig_audio drm_buddy drm_display_helper
-> sparse_keymap crct10dif_pclmul platform_profile ucsi_acpi nvme
-> crc32_pclmul hid_multitouch crc32c_intel ghash_clmulni_intel serio_raw
-> typec_ucsi rfkill ccp nvme_core cec r8169 sp5100_tco typec wmi video
-> i2c_hid_acpi i2c_hid ip6_tables ip_tables fuse
-> [   57.710389] CPU: 5 PID: 968 Comm: systemd-logind Tainted: G
-> W    L     6.0.0-rc2-06-a8d302a0b77057568350fe0123e639d02dba0745+ #65
-> [   57.710392] Hardware name: ASUSTeK COMPUTER INC. ROG Strix
-> G513QY_G513QY/G513QY, BIOS G513QY.318 03/29/2022
-> [   57.710394] RIP: 0010:snd_hdac_bus_update_rirb.cold+0x24/0x5b [snd_hda_core]
-> [   57.710403] Code: f0 e9 10 9f ff ff 48 8b 3b 41 89 e9 44 89 e9 44
-> 89 fa 48 c7 c6 e0 53 c4 c1 e8 38 85 2a f0 48 c7 c7 0e 0c c4 c1 e8 df
-> 0d 26 f0 <0f> 0b 0f b7 83 c0 03 00 00 e9 6a bf ff ff 48 8b 3b 44 89 e9
-> 44 89
-> [   57.710406] RSP: 0000:ffffab4e05f1fe20 EFLAGS: 00010082
-> [   57.710408] RAX: 0000000000000004 RBX: ffff99c7415b9028 RCX: 0000000000000000
-> [   57.710410] RDX: 0000000000010002 RSI: ffffffffb28cf864 RDI: 00000000ffffffff
-> [   57.710412] RBP: 0000000000000001 R08: 0000000000000000 R09: ffffab4e05f1fcd0
-> [   57.710414] R10: 0000000000000003 R11: ffff99d65d2fffe8 R12: ffff99c7415b9540
-> [   57.710415] R13: 000000008b612b0d R14: 0000000000000001 R15: 00000000eb0cce6a
-> [   57.710417] FS:  00007f0fd0b9bbc0(0000) GS:ffff99d617600000(0000)
-> knlGS:0000000000000000
-> [   57.710419] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   57.710421] CR2: 00007f364c00c0f8 CR3: 0000000153686000 CR4: 0000000000750ee0
-> [   57.710423] PKRU: 55555554
-> [   57.710425] Call Trace:
-> [   57.710427]  <TASK>
-> [   57.710431]  azx_interrupt+0x83/0x110 [snd_hda_codec]
-> [   57.710443]  __handle_irq_event_percpu+0x93/0x330
-> [   57.710449]  handle_irq_event+0x34/0x70
-> [   57.710452]  handle_fasteoi_irq+0x90/0x1e0
-> [   57.710455]  __common_interrupt+0x71/0x150
-> [   57.710460]  common_interrupt+0x5c/0xd0
-> [   57.710465]  asm_common_interrupt+0x22/0x40
-> [   57.710469] RIP: 0033:0x7f0fd17c56e4
-> [   57.710471] Code: 00 0f 1f 44 00 00 f3 0f 1e fa f2 ff 25 15 61 2d
-> 00 0f 1f 44 00 00 f3 0f 1e fa f2 ff 25 0d 61 2d 00 0f 1f 44 00 00 f3
-> 0f 1e fa <f2> ff 25 05 61 2d 00 0f 1f 44 00 00 f3 0f 1e fa f2 ff 25 fd
-> 60 2d
-> [   57.710473] RSP: 002b:00007ffdafa5db78 EFLAGS: 00000202
-> [   57.710475] RAX: 0000000000000358 RBX: 0000557736741ed0 RCX: 00007f0fd16473eb
-> [   57.710476] RDX: 0000557736741f0c RSI: 0000557736741ed0 RDI: 0000557736742000
-> [   57.710477] RBP: 00007ffdafa5dba0 R08: 000055773674f3d0 R09: 0000000557736755
-> [   57.710479] R10: 0000000000000000 R11: 0000000000000202 R12: 0000557736734d00
-> [   57.710480] R13: 0000557736734d00 R14: 0000557736734d00 R15: 0000557736733a30
-> [   57.710485]  </TASK>
-> [   57.710487] irq event stamp: 268268
-> [   57.710488] hardirqs last  enabled at (268267):
-> [<ffffffffb1f273b4>] _raw_write_unlock_irq+0x24/0x50
-> [   57.710491] hardirqs last disabled at (268268):
-> [<ffffffffb1f1ddfc>] __schedule+0xe2c/0x16d0
-> [   57.710495] softirqs last  enabled at (267528):
-> [<ffffffffb10fe6a9>] __irq_exit_rcu+0xf9/0x170
-> [   57.710499] softirqs last disabled at (267487):
-> [<ffffffffb10fe6a9>] __irq_exit_rcu+0xf9/0x170
-> [   57.710502] ---[ end trace 0000000000000000 ]---
-> [   57.710514] snd_hdac_bus_update_rirb: 22 callbacks suppressed
-> [   57.710515] snd_hda_intel 0000:03:00.1: spurious response
-> 0x2b0dec20:0xf61a0b81, last cmd=0x000000
-> [   57.710523] snd_hda_intel 0000:03:00.1: spurious response
-> 0x84f2e10f:0xdb14c123, last cmd=0x000000
-> [   57.710525] snd_hda_intel 0000:03:00.1: spurious response
-> 0x1826d07:0x9c2987ff, rp = 5, wp = 9
-> [   57.710527] ------------[ cut here ]------------
+On Sun, Sep 04, 2022 at 05:03:34PM +0800, Hyeonggon Yoo wrote:
+[...]
+> > > 
+> > > This patch is okay but with patch 4, init_object() initializes redzone/poison area
+> > > using s->object_size, and init_kmalloc_object() fixes redzone/poison area using orig_size.
+> > > Why not do it in init_object() in the first time?
+> > > 
+> > > Also, updating redzone/poison area after alloc_single_from_new_slab()
+> > > (outside list_lock, after adding slab to list) will introduce races with validation.
+> > > 
+> > > So I think doing set_orig_size()/init_kmalloc_object() in alloc_debug_processing() would make more sense.
+> > 
+> > Yes, this makes sense, and in v3, kmalloc redzone/poison setup was
+> > done in alloc_debug_processing() (through init_object()). When
+> > rebasing to v4, I met the classical problem: how to pass 'orig_size'
+> > parameter :)
+> > 
+> > In latest 'for-next' branch, one call path for alloc_debug_processing()
+> > is
+> >   ___slab_alloc
+> >     get_partial
+> >       get_any_partial
+> >         get_partial_node
+> >           alloc_debug_processing
+> > 
+> > Adding 'orig_size' paramter to all these function looks horrible, and
+> > I couldn't figure out a good way and chosed to put those ops after
+> > 'set_track()'
 > 
-> and bisect said this commit causes it:
-> a8d302a0b77057568350fe0123e639d02dba0745 is the first bad commit
-> commit a8d302a0b77057568350fe0123e639d02dba0745
-> Author: Takashi Iwai <tiwai@suse.de>
-> Date:   Sun Aug 21 17:59:11 2022 +0200
+> IMO adding a parameter to them isn't too horrible...
+> I don't see better solution than adding a parameter with current implementation.
+> (Yeah, the code is quite complicated...)
 > 
->     ALSA: memalloc: Revive x86-specific WC page allocations again
-> 
->     We dropped the x86-specific hack for WC-page allocations with a hope
->     that the standard dma_alloc_wc() works nowadays.  Alas, it doesn't,
->     and we need to take back some workaround again, but in a different
->     form, as the previous one was broken for some platforms.
-> 
->     This patch re-introduces the x86-specific WC-page allocations, but it
->     uses rather the manual page allocations instead of
->     dma_alloc_coherent().  The use of dma_alloc_coherent() was also a
->     potential problem in the recent addition of the fallback allocation
->     for noncontig pages, and this patch eliminates both at once.
-> 
->     Fixes: 9882d63bea14 ("ALSA: memalloc: Drop x86-specific hack for
-> WC allocations")
->     Cc: <stable@vger.kernel.org>
->     BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216363
->     Link: https://lore.kernel.org/r/20220821155911.10715-1-tiwai@suse.de
->     Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> 
->  sound/core/memalloc.c | 87 +++++++++++++++++++++++++++++++++++++++++----------
->  1 file changed, 71 insertions(+), 16 deletions(-)
-> 
-> Full kernel log is here: https://pastebin.com/RMtNAYPe
-> 
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
+> It won't affect performance to meaningful degree as most of
+> allocations will be served from cpu slab or percpu partial list. 
 
-#regzbot ^introduced a8d302a0b770
-#regzbot title snd: IO_PAGE_FAULT and a lot of errors since a8d302a0b770
-#regzbot ignore-activity
+Thanks for the suggestion! I'm fine with it and just afraid other
+developers may dislike the extra parameter. 
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
+The race condition you mentioned is a valid concern, and I have thought
+about it, one way is moving the set_orig_size() after the redzone/poision
+setup, and in 'check_object()' we can detect whether the 'orig_size' is
+set, and skip that check if it's not set yet. As the manual validate_slab
+triggered from sysfs interface is a rare debug activity, I think skipping
+one object shouldn't hurt much.
 
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replies to), as explained for
-in the Linux kernel's documentation; above webpage explains why this is
-important for tracked regressions.
+Thanks,
+Feng
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+> -- 
+> Thanks,
+> Hyeonggon
+> 

@@ -2,230 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C875AC3AD
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 11:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD865AC3B1
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 11:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233561AbiIDJtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 05:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        id S229754AbiIDJxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 05:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiIDJtL (ORCPT
+        with ESMTP id S229537AbiIDJxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 05:49:11 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A16F255A9
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 02:49:10 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-32a09b909f6so49456867b3.0
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 02:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=F21Bj+//ggRk3yzzpw12wST3DISVqXFGdTsD2TfnV/o=;
-        b=KVr0X5UOhQ09YBV8ZVBtb7kUuXPLI8hdcT5j18rDfuvGchXmwlKQXC7FIIHdYzrclw
-         HFouHEZO1XkQ/C7dXgbMMIFtIieTkXBJU+G/8eRfsuHx10U/PkX74dGjuSw7PnsTDJRJ
-         +0QlsvJ8GkTP2gXBn7ChiQ3Fq6a+e3VApIdE5Z+bVslHloq590aRaXZGpPpZZ83+WFFm
-         Z25Wb7mhxI6w04J88G1QCcCWawz95SeYY086cvm6GEv5jnB7u0YqlcsUQk4/Pd/Kg23/
-         DoW5r7jK7986XVdqRgxSYGtVFpCKLF4wuuedrNPOwPhf508PBwKFiv+Yfn3nGU9Fm1j6
-         4zHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=F21Bj+//ggRk3yzzpw12wST3DISVqXFGdTsD2TfnV/o=;
-        b=wOfp65M+ClOvKLirNk1oFsTIQ+S5doroklxV98dPlF54TH187/Lm/mwW9GcSJjAQ7A
-         ZHEoKf0+oQz/Rjs/ed7tKjrw7SQkE6Ixv++puHXWsYm6MndlTvSNoV6m2yqlUMVu7e2B
-         IpanF+8VzxEHFWzQLUZYgGVVpXw5Z5n3zv+S7cNE6e53QQMZlu3vnyI5wT+UBmfAhkyg
-         rN85bU3Y/Szjt1biqT47OPhB3LGMvM/WeL6xJ2P+nJqMmTYFOTrdNUQ6hpu/C69nCvDL
-         cFW175u8mWHSddJcfaym1K+bowtUVMzBIJ9WgWymiAeJgxgQl84xDyiXkUgs6XNRapIT
-         gRwQ==
-X-Gm-Message-State: ACgBeo1fWvDA4Qzi0x8bBmmjKKSyRLq3f8cuTUO4KBacqqwZiU4NQlVb
-        lmEHKgoNg6Fu2VAxI+zv0+u14ZsXejihALf4Qcqh2GfV2fg=
-X-Google-Smtp-Source: AA6agR4H35a2pOPWUcgq9EqP4rOkPYw+tP5pe1QTl703YDFx5SBe257OrpY3wHXf55lepFt98InwZqbhR976nSJE/TQ=
-X-Received: by 2002:a0d:e850:0:b0:33d:c65e:db0f with SMTP id
- r77-20020a0de850000000b0033dc65edb0fmr33460493ywe.253.1662284949644; Sun, 04
- Sep 2022 02:49:09 -0700 (PDT)
+        Sun, 4 Sep 2022 05:53:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D6B32EF6;
+        Sun,  4 Sep 2022 02:52:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A21DFB80D08;
+        Sun,  4 Sep 2022 09:52:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2917CC433D7;
+        Sun,  4 Sep 2022 09:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662285175;
+        bh=oNkWZ4/hWXYyuu78VrChwrGSNiPFJXRi5Fi+u7FDfFA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GPDpCsjW7oSeQRDUcV+LFWEgRWdk8xy60YiwFcq1ZxIDApdQFXv5Ichya4XkYQca1
+         eZmadloUrocNWmIDVxBFVD45nlPQrio7KCyOuYgNuccubB3klxHipkXfc70hYDCK2N
+         C/S5sU9me4XfbQS70cWdGRgfv7oSbJ43l2xqvNVfDpDWiobyCMDlRZf7n31dS/IRRW
+         V1y61fvF1ft2fRb0RPDFGsGlI3LgaVqvakoKzMU23Lr969A6pl1lQsA7gpiayeLuMl
+         Zkf4fnpvAtHZugMpMpwIc7FUX5T4entuDZQKx0t5ZWC80cPt1LKtBWB6DghW4PH73b
+         aod4kpWCkbjRA==
+Date:   Sun, 4 Sep 2022 17:52:48 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, aisheng.dong@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V8 3/6] soc: imx: add i.MX93 SRC power domain driver
+Message-ID: <20220904095248.GI1728671@dragon>
+References: <20220823055215.1139197-1-peng.fan@oss.nxp.com>
+ <20220823055215.1139197-4-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-From:   butt3rflyh4ck <butterflyhuangxx@gmail.com>
-Date:   Sun, 4 Sep 2022 17:48:37 +0800
-Message-ID: <CAFcO6XN7JDM4xSXGhtusQfS2mSBcx50VJKwQpCq=WeLt57aaZA@mail.gmail.com>
-Subject: A new null-ptr-deref Write bug in snd_pcm_format_set_silence
-To:     perex@perex.cz, tiwai@suse.com, cuibixuan@linux.alibaba.com
-Cc:     alsa-devel@alsa-project.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823055215.1139197-4-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, there is a new null-ptr-deref Write bug in
-snd_pcm_format_set_slience in sound/core/pcm_misc.c in the latest
-upstream kernel and can reproduce it.
-We call SNDCTL_DSP_SYNC and SNDCTL_DSP_SPEED in multiple threads to
-trigger the vulnerability.
+On Tue, Aug 23, 2022 at 01:52:12PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Support controlling power domain managed by System Reset
+> Controller(SRC). Current supported power domain is mediamix power
+> domain.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/soc/imx/Kconfig     |   8 ++
+>  drivers/soc/imx/Makefile    |   1 +
+>  drivers/soc/imx/imx93-pd.c  | 164 ++++++++++++++++++++++++++++++++++++
+>  drivers/soc/imx/imx93-src.c |  33 ++++++++
+>  4 files changed, 206 insertions(+)
+>  create mode 100644 drivers/soc/imx/imx93-pd.c
+>  create mode 100644 drivers/soc/imx/imx93-src.c
+> 
+> diff --git a/drivers/soc/imx/Kconfig b/drivers/soc/imx/Kconfig
+> index a840494e849a..4b906791d6c7 100644
+> --- a/drivers/soc/imx/Kconfig
+> +++ b/drivers/soc/imx/Kconfig
+> @@ -20,4 +20,12 @@ config SOC_IMX8M
+>  	  support, it will provide the SoC info like SoC family,
+>  	  ID and revision etc.
+>  
+> +config SOC_IMX9
+> +	tristate "i.MX9 SoC family support"
+> +	depends on ARCH_MXC || COMPILE_TEST
+> +	default ARCH_MXC && ARM64
+> +	select SOC_BUS
+> +	help
+> +	  If you say yes here, you get support for the NXP i.MX9 family
+> +
+>  endmenu
+> diff --git a/drivers/soc/imx/Makefile b/drivers/soc/imx/Makefile
+> index 63cd29f6d4d2..a0baa2a01adb 100644
+> --- a/drivers/soc/imx/Makefile
+> +++ b/drivers/soc/imx/Makefile
+> @@ -7,3 +7,4 @@ obj-$(CONFIG_IMX_GPCV2_PM_DOMAINS) += gpcv2.o
+>  obj-$(CONFIG_SOC_IMX8M) += soc-imx8m.o
+>  obj-$(CONFIG_SOC_IMX8M) += imx8m-blk-ctrl.o
+>  obj-$(CONFIG_SOC_IMX8M) += imx8mp-blk-ctrl.o
+> +obj-$(CONFIG_SOC_IMX9) += imx93-src.o imx93-pd.o
+> diff --git a/drivers/soc/imx/imx93-pd.c b/drivers/soc/imx/imx93-pd.c
+> new file mode 100644
+> index 000000000000..042a89cb53da
+> --- /dev/null
+> +++ b/drivers/soc/imx/imx93-pd.c
+> @@ -0,0 +1,164 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2022 NXP
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/of_device.h>
+> +#include <linux/delay.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
 
-See the Call Trace:
-==================================================================
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- memset+0x20/0x40 mm/kasan/shadow.c:44
- snd_pcm_format_set_silence sound/core/pcm_misc.c:441 [inline]
- snd_pcm_format_set_silence+0x215/0x350 sound/core/pcm_misc.c:424
- snd_pcm_oss_sync+0x60e/0x800 sound/core/oss/pcm_oss.c:1690
- snd_pcm_oss_ioctl+0x2087/0x3420 sound/core/oss/pcm_oss.c:2634
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-==================================================================
-We can see the function snd_pcm_format_set_silence code below:
-```
-int snd_pcm_format_set_silence(snd_pcm_format_t format, void *data,
-unsigned int samples)
-{
-        int width;
-        unsigned char *dst;
-        const unsigned char *pat;
+Can we sort these headers alphabetically?
 
-        if (!valid_format(format))
-                return -EINVAL;
-        if (samples == 0)
-                return 0;
-        width = pcm_formats[(INT)format].phys; /* physical width */
-        pat = pcm_formats[(INT)format].silence;
-        if (!width || !pat)
-                return -EINVAL;
-        /* signed or 1 byte data */
-        if (pcm_formats[(INT)format].signd == 1 || width <= 8) {
-                unsigned int bytes = samples * width / 8;
-                memset(data, *pat, bytes);    ///// [1] ---------> data is NULL
-                return 0;
-        }
-       ......
-}
-```
-[1], the data pointer is NULL, we can know snd_pcm_format_set_silence
-called in line 1690 in sound/core/oss/pcm_oss.c from call stack trace.
-let we see code below:
-```
-static int snd_pcm_oss_sync(struct snd_pcm_oss_file *pcm_oss_file)
-{
-        int err = 0;
-        unsigned int saved_f_flags;
-        struct snd_pcm_substream *substream;
-        struct snd_pcm_runtime *runtime;
-        snd_pcm_format_t format;
-        unsigned long width;
-        size_t size;
+> +
+> +#define MIX_SLICE_SW_CTRL_OFF		0x20
+> +#define SLICE_SW_CTRL_PSW_CTRL_OFF_MASK	BIT(4)
+> +#define SLICE_SW_CTRL_PDN_SOFT_MASK	BIT(31)
+> +
+> +#define MIX_FUNC_STAT_OFF		0xB4
+> +
+> +#define FUNC_STAT_PSW_STAT_MASK		BIT(0)
+> +#define FUNC_STAT_RST_STAT_MASK		BIT(2)
+> +#define FUNC_STAT_ISO_STAT_MASK		BIT(4)
+> +
+> +struct imx93_power_domain {
+> +	struct generic_pm_domain genpd;
+> +	struct device *dev;
+> +	void __iomem *addr;
+> +	struct clk_bulk_data *clks;
+> +	int num_clks;
+> +	bool init_off;
+> +};
+> +
+> +#define to_imx93_pd(_genpd) container_of(_genpd, struct imx93_power_domain, genpd)
+> +
+> +static int imx93_pd_on(struct generic_pm_domain *genpd)
+> +{
+> +	struct imx93_power_domain *domain = to_imx93_pd(genpd);
+> +	void __iomem *addr = domain->addr;
+> +	u32 val;
+> +	int ret;
+> +
+> +	ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
+> +	if (ret) {
+> +		dev_err(domain->dev, "failed to enable clocks for domain: %s\n", genpd->name);
+> +		return ret;
+> +	}
+> +
+> +	val = readl(addr + MIX_SLICE_SW_CTRL_OFF);
+> +	val &= ~SLICE_SW_CTRL_PDN_SOFT_MASK;
+> +	writel(val, addr + MIX_SLICE_SW_CTRL_OFF);
+> +
+> +	ret = readl_poll_timeout(addr + MIX_FUNC_STAT_OFF, val,
+> +				 !(val & FUNC_STAT_ISO_STAT_MASK), 1, 10000);
+> +	if (ret) {
+> +		dev_err(domain->dev, "pd_on timeout: name: %s, stat: %x\n", genpd->name, val);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx93_pd_off(struct generic_pm_domain *genpd)
+> +{
+> +	struct imx93_power_domain *domain = to_imx93_pd(genpd);
+> +	void __iomem *addr = domain->addr;
+> +	int ret;
+> +	u32 val;
+> +
+> +	/* Power off MIX */
+> +	val = readl(addr + MIX_SLICE_SW_CTRL_OFF);
+> +	val |= SLICE_SW_CTRL_PDN_SOFT_MASK;
+> +	writel(val, addr + MIX_SLICE_SW_CTRL_OFF);
+> +
+> +	ret = readl_poll_timeout(addr + MIX_FUNC_STAT_OFF, val,
+> +				 val & FUNC_STAT_PSW_STAT_MASK, 1, 1000);
+> +	if (ret) {
+> +		dev_err(domain->dev, "pd_off timeout: name: %s, stat: %x\n", genpd->name, val);
+> +		return ret;
+> +	}
+> +
+> +	clk_bulk_disable_unprepare(domain->num_clks, domain->clks);
+> +
+> +	return 0;
+> +};
+> +
+> +static int imx93_pd_remove(struct platform_device *pdev)
+> +{
+> +	struct imx93_power_domain *domain = platform_get_drvdata(pdev);
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +
+> +	if (!domain->init_off)
+> +		clk_bulk_disable_unprepare(domain->num_clks, domain->clks);
+> +
+> +	of_genpd_del_provider(np);
+> +	pm_genpd_remove(&domain->genpd);
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx93_pd_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +	struct imx93_power_domain *domain;
+> +	int ret;
+> +
+> +	domain = devm_kzalloc(dev, sizeof(*domain), GFP_KERNEL);
+> +	if (!domain)
+> +		return -ENOMEM;
+> +
+> +	domain->addr = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(domain->addr))
+> +		return PTR_ERR(domain->addr);
+> +
+> +	domain->num_clks = devm_clk_bulk_get_all(dev, &domain->clks);
+> +	if (domain->num_clks < 0)
+> +		return dev_err_probe(dev, domain->num_clks, "Failed to get domain's clocks\n");
+> +
+> +	domain->genpd.name = dev_name(dev);
+> +	domain->genpd.power_off = imx93_pd_off;
+> +	domain->genpd.power_on = imx93_pd_on;
+> +	domain->dev = dev;
+> +
+> +	domain->init_off = readl(domain->addr + MIX_FUNC_STAT_OFF) & FUNC_STAT_ISO_STAT_MASK;
+> +	/* Just to sync the status of hardware */
+> +	if (!domain->init_off) {
+> +		ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
+> +		if (ret) {
+> +			dev_err(domain->dev, "failed to enable clocks for domain: %s\n",
+> +				domain->genpd.name);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	ret = pm_genpd_init(&domain->genpd, NULL, domain->init_off);
+> +	if (ret)
+> +		return ret;
+> +
+> +	platform_set_drvdata(pdev, domain);
+> +
+> +	return of_genpd_add_provider_simple(np, &domain->genpd);
+> +}
+> +
+> +static const struct of_device_id imx93_dt_ids[] = {
 
-        substream = pcm_oss_file->streams[SNDRV_PCM_STREAM_PLAYBACK];
-        if (substream != NULL) {
-                runtime = substream->runtime;
-                if (atomic_read(&substream->mmap_count))
-                        goto __direct;
-                err = snd_pcm_oss_make_ready(substream);
-                if (err < 0)
-                        return err;
-                atomic_inc(&runtime->oss.rw_ref);
-                if (mutex_lock_interruptible(&runtime->oss.params_lock)) {
-                        atomic_dec(&runtime->oss.rw_ref);
-                        return -ERESTARTSYS;
-                }
-                format = snd_pcm_oss_format_from(runtime->oss.format);
-                width = snd_pcm_format_physical_width(format);
-                if (runtime->oss.buffer_used > 0) {
-#ifdef OSS_DEBUG
-                        pcm_dbg(substream->pcm, "sync: buffer_used\n");
-#endif
-                        size = (8 * (runtime->oss.period_bytes -
-runtime->oss.buffer_used) + 7) / width;
-                        snd_pcm_format_set_silence(format,
-                                                   runtime->oss.buffer
-+ runtime->oss.buffer_used,   ///// [2]
-                                                   size);
-                        err = snd_pcm_oss_sync1(substream,
-runtime->oss.period_bytes);
-                        if (err < 0)
-                                goto unlock;
-                } else if (runtime->oss.period_ptr > 0) {
+Can we make the variable name a bit driver specific? 'imx93_dt_ids' is
+used in both this power domain and SRC driver below.
 
-```
-[2]  runtime->oss.buffer + runtime->oss.buffer_used is the data
-pointer, but runtime->oss.buffer is NULL here but it doesn't make
-sense.
-runtime->oss.buffter is allocated by kvzalloc, if runtime->oss_buffer
-is NULL, it would return an ENOMEM error.
-Maybe I think there is a race condition, the runtime->oss.buffer is
-freed and set to NULL but we can use runtime->oss.buffter via ioctl.
+> +	{ .compatible = "fsl,imx93-src-slice" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, imx93_dt_ids);
+> +
+> +static struct platform_driver imx93_power_domain_driver = {
+> +	.driver = {
+> +		.name	= "imx93_power_domain",
+> +		.owner	= THIS_MODULE,
+> +		.of_match_table = imx93_dt_ids,
+> +	},
+> +	.probe = imx93_pd_probe,
+> +	.remove = imx93_pd_remove,
+> +};
+> +module_platform_driver(imx93_power_domain_driver);
+> +
+> +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
+> +MODULE_DESCRIPTION("NXP i.MX93 power domain driver");
+> +MODULE_LICENSE("GPL");
 
-###reproduce it
-[  167.258988][T25615]
-==================================================================
-[  167.265917][T25615] BUG: KASAN: null-ptr-deref in
-snd_pcm_format_set_silence+0x215/0x350
-[  167.266704][T25615] Write of size 16383 at addr 0000000000000001 by
-task snd_pcm_format_/25615
-[  167.267506][T25615]
-[  167.267732][T25615] CPU: 0 PID: 25615 Comm: snd_pcm_format_ Not
-tainted 6.0.0-rc3-00299-gd895ec7938c4 #11
-[  167.268617][T25615] Hardware name: QEMU Standard PC (i440FX + PIIX,
-1996), BIOS 1.14.0-2 04/01/2014
-[  167.269410][T25615] Call Trace:
-[  167.269697][T25615]  <TASK>
-[  167.269977][T25615]  dump_stack_lvl+0xcd/0x134
-[  167.270428][T25615]  ? snd_pcm_format_set_silence+0x215/0x350
-[  167.270985][T25615]  kasan_report+0xb1/0x1e0
-[  167.271405][T25615]  ? snd_pcm_format_set_silence+0x215/0x350
-[  167.271964][T25615]  kasan_check_range+0x13d/0x180
-[  167.272440][T25615]  memset+0x20/0x40
-[  167.272809][T25615]  snd_pcm_format_set_silence+0x215/0x350
-[  167.273366][T25615]  snd_pcm_oss_sync+0x60e/0x800
-[  167.273831][T25615]  snd_pcm_oss_ioctl+0x2087/0x3420
-[  167.274320][T25615]  ? snd_pcm_oss_release+0x300/0x300
-[  167.274817][T25615]  ? __fget_files+0x26a/0x440
-[  167.275262][T25615]  ? bpf_lsm_file_ioctl+0x5/0x10
-[  167.275731][T25615]  ? snd_pcm_oss_release+0x300/0x300
-[  167.276222][T25615]  __x64_sys_ioctl+0x193/0x200
-[  167.276677][T25615]  do_syscall_64+0x35/0xb0
-[  167.277108][T25615]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[  167.277679][T25615] RIP: 0033:0x44af9d
-[  167.278058][T25615] Code: 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 f3
-0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b
-4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff 8
-[  167.279792][T25615] RSP: 002b:00007f0cb636a178 EFLAGS: 00000246
-ORIG_RAX: 0000000000000010
-[  167.280546][T25615] RAX: ffffffffffffffda RBX: 0000000000000000
-RCX: 000000000044af9d
-[  167.281285][T25615] RDX: 0000000000000000 RSI: 0000000000005001
-RDI: 0000000000000003
-[  167.282001][T25615] RBP: 00007f0cb636a1a0 R08: 0000000000000000
-R09: 0000000000000000
-[  167.282715][T25615] R10: 0000000000000000 R11: 0000000000000246
-R12: 00007ffcfea8e08e
-[  167.283432][T25615] R13: 00007ffcfea8e08f R14: 0000000000000000
-R15: 00007f0cb636a640
-[  167.284164][T25615]  </TASK>
-[  167.284453][T25615]
-==================================================================
+Considering 'SPDX-License-Identifier: GPL-2.0' above, should we use
+"GPL v2" here?
 
-If needed I would provide a reproduce.
+Shawn
 
-
-Regards,
-   butt3rflyh4ck.
-
---
-Active Defense Lab of Venustech
+> diff --git a/drivers/soc/imx/imx93-src.c b/drivers/soc/imx/imx93-src.c
+> new file mode 100644
+> index 000000000000..830cbb9541c1
+> --- /dev/null
+> +++ b/drivers/soc/imx/imx93-src.c
+> @@ -0,0 +1,33 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2022 NXP
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +
+> +static int imx93_src_probe(struct platform_device *pdev)
+> +{
+> +	return devm_of_platform_populate(&pdev->dev);
+> +}
+> +
+> +static const struct of_device_id imx93_dt_ids[] = {
+> +	{ .compatible = "fsl,imx93-src" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, imx93_dt_ids);
+> +
+> +static struct platform_driver imx93_src_driver = {
+> +	.driver = {
+> +		.name	= "imx93_src",
+> +		.owner	= THIS_MODULE,
+> +		.of_match_table = imx93_dt_ids,
+> +	},
+> +	.probe = imx93_src_probe,
+> +};
+> +module_platform_driver(imx93_src_driver);
+> +
+> +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
+> +MODULE_DESCRIPTION("NXP i.MX93 src driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.37.1
+> 

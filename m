@@ -2,109 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFC65AC63C
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 21:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C14145AC640
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 22:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiIDTuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 15:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
+        id S233768AbiIDT7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 15:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiIDTuM (ORCPT
+        with ESMTP id S230013AbiIDT7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 15:50:12 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B04823167;
-        Sun,  4 Sep 2022 12:50:10 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id c20so4976149qtw.8;
-        Sun, 04 Sep 2022 12:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=PPfkQm8NNB1xxEVgujz8sY2zHs93/Mg3JVXZu2/nhoE=;
-        b=fLW5rs1cND7l8wMp30gWpEONB1/oIBWF1Wg4hZcr88lQdtKeW48E6Y6mLqEmZvV0ia
-         tupES7bDnhezg7s2S6XDddcHfdTTC/ex7jrZCPxmtOGS2/E1+iMJgE36DrH8M11vTmtL
-         0t7mT150I0QO5XOxQkd++h7Z/b5/0TANjC+RZVxmjQerzDKo85+49y5vPovQtbisrbPq
-         i0fEjq3mTnx431o72RGg0u3mO6lAAtiM7LGQAD7HfbGG5w572ardCj3oC89obc2sP3a6
-         zAtsbFTtrzEw8Y8VmKOtP7sujzuXRTJ9FplSP42eQbV9LPjQLclFf3GH9IZ0NJ8WX5Hl
-         R6Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=PPfkQm8NNB1xxEVgujz8sY2zHs93/Mg3JVXZu2/nhoE=;
-        b=dz2CT3aK+gDJ8ktVm6ucRm193ghDGwOa4CZ0zVoWT0Mi7fc5roDqVaursaa26mnb6O
-         1NLX2d1LjgQHkFM6Y36BWv9en0E3oeuCXu46Uf0gW0Hx/i8N9jZaTH8oSdBFE9GMKcr2
-         82Y3JIC0jmNnHoNGWSTrQ68mMCS2gZwn+12+WlHaxleNB/PXfzAo1nUkvFhWCIgD9EAK
-         ihQadsFZ5Rd0NPqc2WyaZKw1+MU3DpvgHGYiWzbSTB2yov9SV8Xixy5yz68TTPFssQu9
-         33Xk5l/reOXFnmZghOe4Xe4T1F+LbOM8tuEusWzaHjAVBjrn5DRV3Y165GqzYOvVx9HW
-         Fkcw==
-X-Gm-Message-State: ACgBeo1BLbv3QTsPh/NjCorTFrE6tZnAc9nYVxlTZDDNj/Sj8VgqFOGX
-        CcsqyWFCQiAwg/iY12Qj+j5pVrdoKmRx1atzmgc=
-X-Google-Smtp-Source: AA6agR4hc/rPnQNNG62T1S7K2jmYKFLKYzreXh9EChGqDaIJOmq1fH1rfD8sM5NjynE8Y26XXgbgy/kmTrdB6Y5diLY=
-X-Received: by 2002:a05:622a:491:b0:344:95bf:8f05 with SMTP id
- p17-20020a05622a049100b0034495bf8f05mr37068281qtx.61.1662321009265; Sun, 04
- Sep 2022 12:50:09 -0700 (PDT)
+        Sun, 4 Sep 2022 15:59:33 -0400
+Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDE4B7D3
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 12:59:29 -0700 (PDT)
+Received: from localhost (7of9.are-b.org [127.0.0.1])
+        by 7of9.schinagl.nl (Postfix) with ESMTP id AF740186CE17;
+        Sun,  4 Sep 2022 21:59:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
+        t=1662321566; bh=iwMZ7uzxvYMKIoxrcd+Q6G1OEy+h53dtjR3hmBS2kP8=;
+        h=From:To:Cc:Subject:Date;
+        b=hs+TzS6knz+ZfzCEDOuHCpgkscEHGi10Kh79UdvWwytCNBrH3YgTrEluWwppJ4HHP
+         hibfUHQKfFn9DhxIsLlB5nxpP2igMhXxxiIN/WUQhNA6MRTld/3mhUlY1U4j0ffTG9
+         uIRbde9nGwGyJwWZyn+36B9MXJm6q4dxYU3omcq4=
+X-Virus-Scanned: amavisd-new at schinagl.nl
+Received: from 7of9.schinagl.nl ([127.0.0.1])
+        by localhost (7of9.schinagl.nl [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id iO484-TzXJdC; Sun,  4 Sep 2022 21:59:25 +0200 (CEST)
+Received: from valexia.are-b.org (unknown [10.2.11.251])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by 7of9.schinagl.nl (Postfix) with ESMTPSA id 55B23186CE12;
+        Sun,  4 Sep 2022 21:59:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
+        t=1662321565; bh=iwMZ7uzxvYMKIoxrcd+Q6G1OEy+h53dtjR3hmBS2kP8=;
+        h=From:To:Cc:Subject:Date;
+        b=mIg9xaTq9XCocTN5xuqITIOnLJB6JWD+1YQVmgjQgIGRYiRYqvR+yzWR8YRGujp/A
+         fz/b2LvW+3NCMP6thJs3A1XqfdZY6Y9K7ADUutvEWPoxlvVTfKX8uB+P8ZGQPWwLXT
+         LnoN0au0gOJpT7A7cgSQeRl/cv+tHa5KsppKLdy8=
+From:   Olliver Schinagl <oliver@schinagl.nl>
+To:     linux-kernel@vger.kernel.org
+Cc:     Olliver Schinagl <oliver+list@schinagl.nl>,
+        Matt Wagantall <mattw@codeaurora.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Robert Elliott <elliott@hp.com>, Arnd Bergmann <arnd@arndb.de>,
+        Will Deacon <will.deacon@arm.com>,
+        Olliver Schinagl <oliver@schinagl.nl>
+Subject: [PATCH] iopoll: Introduce ioreadX_poll_timeout[_atomic]
+Date:   Sun,  4 Sep 2022 21:59:20 +0200
+Message-Id: <20220904195920.1763240-1-oliver@schinagl.nl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220831133021.215625-1-ramona.bolboaca@analog.com>
- <20220831133021.215625-2-ramona.bolboaca@analog.com> <20220904165003.192d5030@jic23-huawei>
- <20220904165145.39cb4f75@jic23-huawei>
-In-Reply-To: <20220904165145.39cb4f75@jic23-huawei>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 4 Sep 2022 22:49:33 +0300
-Message-ID: <CAHp75VcszDjWXhjX+E7Xe0a=1_2tVpLNk8UWaAP7p=dKGMCUdw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] iio: adc: add max11205 adc driver
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 4, 2022 at 7:31 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> On Sun, 4 Sep 2022 16:50:03 +0100
-> Jonathan Cameron <jic23@kernel.org> wrote:
-> > On Wed, 31 Aug 2022 16:30:21 +0300
-> > Ramona Bolboaca <ramona.bolboaca@analog.com> wrote:
+While the readX_poll_timeout[_atomic] macro's are great, we are actually
+encouraged to use ioreadX where possible (LDDv3 C9) [0]. This patch
+introduces macro's for our ioreadX friends.
 
-...
+[0]: https://www.oreilly.com/library/view/linux-device-drivers/0596005903/ch09.html
 
-> > Given the requested changes below and those from Andy and Kryzstof are minor, I'll just
-> > tweak them whilst applying.
->
-> On that note, applied to the togreg branch of iio.git (with changes as noted)
-> and pushed out as testing for 0-day to see if it can find anything we missed.
+Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
+---
+ include/linux/iopoll.h | 72 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-If you are not too lazy and have time to tweak one completely minor
-thingy, see below.
-
-...
-
-> > @@ -81,12 +81,12 @@ static const struct iio_chan_spec max11205_channels[] = {
-> >                         .endianness = IIO_BE
-
-+ A comma here :-)
-
-
-> >                 },
-> >                 .info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> > -               BIT(IIO_CHAN_INFO_SAMP_FREQ) |
-> > -               BIT(IIO_CHAN_INFO_SCALE),
-> > +                                     BIT(IIO_CHAN_INFO_SAMP_FREQ) |
-> > +                                     BIT(IIO_CHAN_INFO_SCALE),
-> >         },
-
+diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
+index 2c8860e406bd..0e1dbd8057f4 100644
+--- a/include/linux/iopoll.h
++++ b/include/linux/iopoll.h
+@@ -188,4 +188,76 @@
+ #define readq_relaxed_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
+ 	readx_poll_timeout_atomic(readq_relaxed, addr, val, cond, delay_us, timeout_us)
+ 
++#define ioread8_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread8, addr, val, cond, delay_us, timeout_us)
++
++#define ioread8be_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread8be, addr, val, cond, delay_us, timeout_us)
++
++#define ioread8_rep_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread8_rep, addr, val, cond, delay_us, timeout_us)
++
++#define ioread8_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread8, addr, val, cond, delay_us, timeout_us)
++
++#define ioread8be_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread8be, addr, val, cond, delay_us, timeout_us)
++
++#define ioread8_rep_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread8_rep, addr, val, cond, delay_us, timeout_us)
++
++#define ioread16_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread16, addr, val, cond, delay_us, timeout_us)
++
++#define ioread16be_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread16be, addr, val, cond, delay_us, timeout_us)
++
++#define ioread16_rep_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread16_rep, addr, val, cond, delay_us, timeout_us)
++
++#define ioread16_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread16, addr, val, cond, delay_us, timeout_us)
++
++#define ioread16_rep_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread16_rep, addr, val, cond, delay_us, timeout_us)
++
++#define ioread16be_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread16be, addr, val, cond, delay_us, timeout_us)
++
++#define ioread32_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread32, addr, val, cond, delay_us, timeout_us)
++
++#define ioread32be_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread32be, addr, val, cond, delay_us, timeout_us)
++
++#define ioread32_rep_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread32_rep, addr, val, cond, delay_us, timeout_us)
++
++#define ioread32_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread32, addr, val, cond, delay_us, timeout_us)
++
++#define ioread32be_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread32be, addr, val, cond, delay_us, timeout_us)
++
++#define ioread32_rep_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread32_rep, addr, val, cond, delay_us, timeout_us)
++
++#define ioread64_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread64, addr, val, cond, delay_us, timeout_us)
++
++#define ioread64be_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioreab64be, addr, val, cond, delay_us, timeout_us)
++
++#define ioread64_rep_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(ioread64_rep, addr, val, cond, delay_us, timeout_us)
++
++#define ioread64_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread64, addr, val, cond, delay_us, timeout_us)
++
++#define ioread64be_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioreab64be, addr, val, cond, delay_us, timeout_us)
++
++#define ioread64_rep_poll_timeout_atomic(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout_atomic(ioread64_rep, addr, val, cond, delay_us, timeout_us)
++
+ #endif /* _LINUX_IOPOLL_H */
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.2
+

@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C040B5AC491
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 15:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F525AC494
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 15:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiIDNug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 09:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S233492AbiIDNyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 09:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233945AbiIDNuc (ORCPT
+        with ESMTP id S229782AbiIDNyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 09:50:32 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FDB26ACD
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 06:50:11 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-324ec5a9e97so51296047b3.7
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 06:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date;
-        bh=8JC6EsSfafXmIapFg+dMsRIDXE8++LB1Nr2fu20u/vM=;
-        b=duhFjZDteDpu7z3VF1i5MCwnIverAbFhBHyPGZQGAveFaeP+8rcuETFwoF1BfUzpZW
-         dIpDgaoAQYOs+9YTuKOTAXM8WKBkwnDXub9e29JfXe3CHdjuj8+EnbdWa7ChKfVH/XJJ
-         59uNZoSxBokjpFlXHEPaBT4ATN8OQXFXTqZu0F7IpEmBXplGDni3KiMlN1yLCZ4oMzyb
-         J73U1gL8OA+Z4SlBZg8kP9nD9XyI4Xv+nXJJVELTdKQ7PlDwtNR2eteThdBCVP00eY7Y
-         UBcqXzvh75F0xDlKwMeddKYfKc0VzSA58E7NfJwwYN3SxuwHIk7Auo3k532XD+thhjow
-         9+zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8JC6EsSfafXmIapFg+dMsRIDXE8++LB1Nr2fu20u/vM=;
-        b=JaQBJWyI70qZZUBNPLsOEmcXPvjyZhcuSjmkGapUq6S/kwvgSEgMjSN66AyvVkOnfq
-         7VmOCjM5eBeDrlwXD+kV/g18RhC6JI3KMXNui8z2jyWnG3tWCk++fNo5g0i7neJJpmB2
-         wQ2r8ivQTi9FIjQOAUjO+Ig1a5poElE7qu7tFtv7eVupgEaonwx+l0XvcMHoxH+bkPXF
-         lVbkWwf8JDUlEEAY+4yIUPgr4W6tOPeOhs+uzb/89Zk3uW7+5gZDZ7E6HbPDNQ6epz5s
-         38js5P9GqOqkh44SDlkAXDDiCc6eH4GrzsfW88CdRZS157AqQ78Gj7iP+GDL6OQE3rsc
-         8Rog==
-X-Gm-Message-State: ACgBeo27LcgzXUTwSMwiPUMzCJU4Id3ALUQpngscWzs5KlxMAwueZL/K
-        0o6OheY1MnIwoJ+2VcTlhBosm2E14+8DMVYKRMs=
-X-Google-Smtp-Source: AA6agR65SsFfKYctriGVjs1lUk0TPQVTZ9F7E+llK1oHr/i8Cm6+sEdj/YlWG6uV+TTT+WxVqdEUDDjXhQlXILei2gM=
-X-Received: by 2002:a81:ad59:0:b0:340:b000:368d with SMTP id
- l25-20020a81ad59000000b00340b000368dmr34373948ywk.397.1662299410698; Sun, 04
- Sep 2022 06:50:10 -0700 (PDT)
+        Sun, 4 Sep 2022 09:54:08 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 37D683AE74
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 06:54:05 -0700 (PDT)
+Received: (qmail 328391 invoked by uid 1000); 4 Sep 2022 09:54:04 -0400
+Date:   Sun, 4 Sep 2022 09:54:04 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Rondreis <linhaoguo86@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: KASAN: use-after-free Read in configfs_composite_bind
+Message-ID: <YxSt/OPYpd+cRp2d@rowland.harvard.edu>
+References: <CAB7eexLHN1gn2QPdo1_PF70sPbo2cA8skwG17oZb7+J1DQ+J1Q@mail.gmail.com>
+ <CAB7eexKGRgDWBLiRs=U70OPLREESi+bCgwt=7wWCESBDZDM=zQ@mail.gmail.com>
+ <YxC7ix+MerW5xGsB@kroah.com>
+ <CAB7eexK+x8+RZp16aJFmdmqqEL=NMYp+Fy+hAJG+CWUUEH1_fg@mail.gmail.com>
 MIME-Version: 1.0
-Reply-To: paulassidubroker612@gmail.com
-Sender: sambieningbabe@gmail.com
-Received: by 2002:a05:7010:26a3:b0:2ef:f144:c87c with HTTP; Sun, 4 Sep 2022
- 06:50:09 -0700 (PDT)
-From:   Paul Assidu <paulassidubroker612@gmail.com>
-Date:   Sun, 4 Sep 2022 13:50:09 +0000
-X-Google-Sender-Auth: wRbsIi6_qlrKebq-AJQvWkP04jY
-Message-ID: <CAKz7bGYzKPcEAFxcOFCZO9Uaa8UnN-=u9f-0V2Bs4VseG5h7WA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAB7eexK+x8+RZp16aJFmdmqqEL=NMYp+Fy+hAJG+CWUUEH1_fg@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings, trust you're good. please check and reply my previous emails to you.
+On Sun, Sep 04, 2022 at 09:21:07PM +0800, Rondreis wrote:
+> Thanks for your reply! I ran the reproducer again on the master
+> branch(commit id: 7726d4c3e60bfe206738894267414a5f10510f1a) and it
+> didn't crash.
+> 
+> The reason for not using the latest version is I can't attach more
+> than one gadget at a time using `configfs` and `dummy_hcd`. When I
+> attach the second gadget with a different `udc` it always fails and
+> the kernel message says:
+> 
+> ```
+> [ 1625.254858] Error: Driver 'configfs-gadget' is already registered,
+> aborting...
+> [ 1625.271018] UDC core: g1: driver registration failed: -16
+> ```
+> 
+> I'm not sure if this is a new feature from version v5.19(v5.18, commit
+> id: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f works very well) or a
+> potential bug, or my mistake...
+
+It probably was introduced by a change I made.  One consequence of that 
+change is that gadget drivers now must all have different names (as must 
+drivers on any bus) -- but configfs uses the same name for all the 
+drivers it registers: "configfs-gadget".
+
+I had to adjust a couple of drivers to avoid this problem.  See for 
+example commit f2d8c2606825 ("usb: gadget: Fix non-unique driver names 
+in raw-gadget driver").  You could use that as a model for changing 
+configfs.c.
+
+Alan Stern

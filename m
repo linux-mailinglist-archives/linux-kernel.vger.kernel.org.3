@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1C95AC6BC
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785BA5AC6BE
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235023AbiIDVm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 17:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S235069AbiIDVm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 17:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234778AbiIDVmQ (ORCPT
+        with ESMTP id S234761AbiIDVmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 17:42:16 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFA82C643
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:42:14 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id p187so5652637iod.8
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:42:14 -0700 (PDT)
+        Sun, 4 Sep 2022 17:42:19 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9959E2DA8E
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:42:15 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id d68so5628781iof.11
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:42:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=lfSfy0OiU9ae6zZc6r/YuzMWOjdJ0UjQGjJ43pXzmPk=;
-        b=KcesxilWXRdWpOhaJNS8hSdNzO2vJhvPIX8XFE/aZuuFFV/+3fkufo6o6ElznrbWN1
-         hoQZPHbfdOcz8L6sXkvFrKKZliazt6a4HKb0p79Fa2Zhrdr6HDCcI0KK/H9P9yVDZ0Y1
-         XOoaExBg1xHhuXs3yHeI8R5l5GWskuW3Z+FVRjyUb653F8P0zqYTLWJiVIDzJ2NhKKTd
-         sAM2TckvvjW2cAHdzhkzl7UYgmcQlxp7qgTNOjT2XZzRsRWDv8h0wvTVgRljyvneh0q1
-         9N5+8G6XjIRe/5YLV+HiKEXVas9ltjJefKy4f23RAvj1+gQWPwzMCaVO52+Z4MXYdv5k
-         T+pQ==
+        bh=86ewCwjQW9i1kYjMVzcHXeBvyH4rTaXf6X7Uwlu5n+M=;
+        b=GXl1s6xju+1eOoRqJRl5q8cmU4AqdZG79xuy+4LJGCEiw/Hpm6hcED/kqRFHo3q+gu
+         qamuPL9FDFXp54vbLn1D/b404KlO7XolhPIJPAhLWpnmuPX+sSGTlZLE8h+zZqYnQIrO
+         WQv5lca1ZofQjJIzLmrQTtiUPEYKCY216cU1ZnpHg+6ZUjNnIOjcVxlqwiL58RevVO8D
+         pGUHsa6tvLQW+hC5jGjp1KE581rAtx4OqvJE4X3qwKJoz1fNkj+HyJpZ/66sdZUCD24D
+         Mz7y6TAL9Xr3pr/ZW5qptrtm61mPi57w9KyBOC6mMX4UYP+bimaAR2CSopw3oHJTZyoA
+         VPjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=lfSfy0OiU9ae6zZc6r/YuzMWOjdJ0UjQGjJ43pXzmPk=;
-        b=Qf1DmaPsWRVIHAUqsdVJqOB6XO0h1ccmRM7dzeJh3MbFFfUUfugvPXr/P6AZISDDBP
-         pb5fxXiyNHuekY4Bhgr6V44jeT0LMvpIScMgKV3K1NMccCjeGbsayBX6bUVw0kiuHnyu
-         AynaBSEX7QBcDnMS++zX5SEEFQSTr1KnZIjDztFHw2p1W5/r04I7SOq6//X5myZpm3+s
-         SzY6C2b2kcVYikiZso3EmYHBceiNRKNCjTYTzEb0wC2NElDnraLtFyIVSCM6/ln4CvQv
-         3+qYGxu1Nzb17PMEmsYiJ1nzqeIkKa1X+3+oiKcGbH2CfqO7lGcGKSODoArzQebTDP86
-         NcZw==
-X-Gm-Message-State: ACgBeo2Vh574bwyNEoyIw6mJfTs6O4eMLj9jCQF+ERHxHZRnniW+ThGZ
-        9cifGXrVFWp5qaFUN1lyF44=
-X-Google-Smtp-Source: AA6agR52gEm4o8C36a4sLU4vrMjIM3u6oGZjtYr9bqiC4iAeliEnkHdid9H5R34pPZS4s09WvEyVEg==
-X-Received: by 2002:a5e:a70f:0:b0:684:d596:b7e7 with SMTP id b15-20020a5ea70f000000b00684d596b7e7mr20134222iod.84.1662327733775;
-        Sun, 04 Sep 2022 14:42:13 -0700 (PDT)
+        bh=86ewCwjQW9i1kYjMVzcHXeBvyH4rTaXf6X7Uwlu5n+M=;
+        b=XQTvhvS7H9ws2H9jYj98Jno0xHiuk4sqZ9B4h4wLgZ6jwkyCRepktvE2XIZyJ3pSCW
+         PSIBIyLdBpls0RvohvHPoPs9MBivOWG0yLBpyN2ZNfNq+ihIcaK6P4KzkGci9xei00iX
+         hXCLA3doOsxPaa31cPjjKDOjilDzTG/xdZww8L1+6TRb0OgI54KHsFaEgG0ORgGgK2mP
+         Eku9YN00LpACi+5sxT/zcx3sIU373gwdk3C7+kAuhk3mX4r/x7XWQ7VnLoz6bvBjha+N
+         C3U0TlGFf8QDr3AHw4j+nVLWp61TTwNAno62nQefhtm2arBIobnwICQuQbVQCRmrvCOt
+         0CcQ==
+X-Gm-Message-State: ACgBeo3B8WNoC5QSMbflp+laoDMrDN9B/FnFS9iE2+E+cRzAI0QbN4H2
+        5EuSZgfMYJsBLSgwEgJcvww=
+X-Google-Smtp-Source: AA6agR6667/lK+w05CI7BYagBtCSm/gCmvjQy5HHxRwHWCtcxf7YniB8McshMO9sqao4Jd/ymXysNA==
+X-Received: by 2002:a05:6638:1607:b0:34a:105c:7204 with SMTP id x7-20020a056638160700b0034a105c7204mr24730394jas.216.1662327734786;
+        Sun, 04 Sep 2022 14:42:14 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.12
+        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 14:42:13 -0700 (PDT)
+        Sun, 04 Sep 2022 14:42:14 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -57,9 +57,9 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH v6 04/57] dyndbg: reverse module walk in cat control
-Date:   Sun,  4 Sep 2022 15:40:41 -0600
-Message-Id: <20220904214134.408619-5-jim.cromie@gmail.com>
+Subject: [PATCH v6 05/57] dyndbg: reverse module.callsite walk in cat control
+Date:   Sun,  4 Sep 2022 15:40:42 -0600
+Message-Id: <20220904214134.408619-6-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220904214134.408619-1-jim.cromie@gmail.com>
 References: <20220904214134.408619-1-jim.cromie@gmail.com>
@@ -75,32 +75,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-/proc/dynamic_debug/control walks the prdbg catalog in "reverse",
-fix this by adding new ddebug_tables to tail of list.
+Walk the module's vector of callsites backwards; ie N..0.  This
+"corrects" the backwards appearance of a module's prdbg vector when
+walked 0..N.  I think this is due to linker mechanics, which I'm
+inclined to treat as immutable, and the order is fixable in display.
 
-This puts init/main.c entries 1st, which looks more than coincidental.
+No functional changes.
 
-no functional changes.
+Combined with previous commit, which reversed tables-list, we get:
+
+  :#> head -n7 /proc/dynamic_debug/control
+  # filename:lineno [module]function flags format
+  init/main.c:1179 [main]initcall_blacklist =_ "blacklisting initcall %s\012"
+  init/main.c:1218 [main]initcall_blacklisted =_ "initcall %s blacklisted\012"
+  init/main.c:1424 [main]run_init_process =_ "  with arguments:\012"
+  init/main.c:1426 [main]run_init_process =_ "    %s\012"
+  init/main.c:1427 [main]run_init_process =_ "  with environment:\012"
+  init/main.c:1429 [main]run_init_process =_ "    %s\012"
 
 Acked-by: Jason Baron <jbaron@akamai.com>
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- lib/dynamic_debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/dynamic_debug.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 8faf584f2f4b..7fb99492c16f 100644
+index 7fb99492c16f..8ff11977b8bd 100644
 --- a/lib/dynamic_debug.c
 +++ b/lib/dynamic_debug.c
-@@ -970,7 +970,7 @@ int ddebug_add_module(struct _ddebug *tab, unsigned int n,
- 	dt->ddebugs = tab;
+@@ -59,7 +59,7 @@ struct ddebug_query {
  
- 	mutex_lock(&ddebug_lock);
--	list_add(&dt->link, &ddebug_tables);
-+	list_add_tail(&dt->link, &ddebug_tables);
- 	mutex_unlock(&ddebug_lock);
+ struct ddebug_iter {
+ 	struct ddebug_table *table;
+-	unsigned int idx;
++	int idx;
+ };
  
- 	vpr_info("%3u debug prints in module %s\n", n, dt->mod_name);
+ struct flag_settings {
+@@ -805,13 +805,12 @@ static struct _ddebug *ddebug_iter_first(struct ddebug_iter *iter)
+ {
+ 	if (list_empty(&ddebug_tables)) {
+ 		iter->table = NULL;
+-		iter->idx = 0;
+ 		return NULL;
+ 	}
+ 	iter->table = list_entry(ddebug_tables.next,
+ 				 struct ddebug_table, link);
+-	iter->idx = 0;
+-	return &iter->table->ddebugs[iter->idx];
++	iter->idx = iter->table->num_ddebugs;
++	return &iter->table->ddebugs[--iter->idx];
+ }
+ 
+ /*
+@@ -824,15 +823,16 @@ static struct _ddebug *ddebug_iter_next(struct ddebug_iter *iter)
+ {
+ 	if (iter->table == NULL)
+ 		return NULL;
+-	if (++iter->idx == iter->table->num_ddebugs) {
++	if (--iter->idx < 0) {
+ 		/* iterate to next table */
+-		iter->idx = 0;
+ 		if (list_is_last(&iter->table->link, &ddebug_tables)) {
+ 			iter->table = NULL;
+ 			return NULL;
+ 		}
+ 		iter->table = list_entry(iter->table->link.next,
+ 					 struct ddebug_table, link);
++		iter->idx = iter->table->num_ddebugs;
++		--iter->idx;
+ 	}
+ 	return &iter->table->ddebugs[iter->idx];
+ }
 -- 
 2.37.2
 

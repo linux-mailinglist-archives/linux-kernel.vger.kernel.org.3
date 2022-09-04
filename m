@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087B75AC648
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 22:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57545AC64A
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 22:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234977AbiIDULL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 16:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
+        id S235089AbiIDUM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 16:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiIDULJ (ORCPT
+        with ESMTP id S234482AbiIDUMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 16:11:09 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAA92A725;
-        Sun,  4 Sep 2022 13:11:05 -0700 (PDT)
-Received: (Authenticated sender: peter@korsgaard.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 74875FF804;
-        Sun,  4 Sep 2022 20:10:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
-        (envelope-from <peter@korsgaard.com>)
-        id 1oUvxD-005rMX-Lq; Sun, 04 Sep 2022 22:10:51 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     <Conor.Dooley@microchip.com>
-Cc:     <samuel@sholland.org>, <wens@csie.org>, <jernej.skrabec@gmail.com>,
-        <linux-sunxi@lists.linux.dev>, <palmer@dabbelt.com>,
-        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <heiko@sntech.de>
-Subject: Re: [PATCH 07/12] riscv: dts: allwinner: Add Allwinner D1 Nezha
- devicetree
-References: <20220815050815.22340-1-samuel@sholland.org>
-        <20220815050815.22340-8-samuel@sholland.org>
-        <adc4a8e2-7347-7616-99b9-59762023b2ff@microchip.com>
-Date:   Sun, 04 Sep 2022 22:10:51 +0200
-In-Reply-To: <adc4a8e2-7347-7616-99b9-59762023b2ff@microchip.com> (Conor
-        Dooley's message of "Fri, 19 Aug 2022 22:10:44 +0000")
-Message-ID: <87o7vuzyr8.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 4 Sep 2022 16:12:54 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783C22A737
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 13:12:52 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id r4so8973596edi.8
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 13:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=wc+Wz38j60Q7l1csFn+LeKvfSEVzWwyMdA8x0tTNYDU=;
+        b=hVb7tdmwazu5pkbV6qFjL1GEHrl1kx/9pXjgESq2R/SXYgg3b1BCCycnFo0I4aTv72
+         qA1tLsAPDmGIfWm3v6xjFuPst3sgaYwOMl6Hx2XUW4XBx4MeBrt9NYjsKcnt1Li3dAcz
+         0vmCHt44/4Cqbfai5bW2p8i7evMawEoewYuz99bD5Pep8TVpgN/0PBxurC4BWtdEUMMj
+         jmkihigLI24idoLLpr+zXy4lR0IYEvWJ8xCl0ceHHvXR/KM01QPET5O523Bvxm4+ome6
+         ZC49Qrfyx3jfAvh9fn5wJTcV/CUwOZSvtBYJWabGtEvN3/irW1uwufThu+9KJc0MXGvl
+         5y/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=wc+Wz38j60Q7l1csFn+LeKvfSEVzWwyMdA8x0tTNYDU=;
+        b=23dzwRMITZLf3aN0/ZTNYUd7zRrSDXBzA3BRoW08ryAY7RrHOZie//dLEm4O43UBMD
+         tOGwHetLkEFMqLRzcqC9QG9rzaX9nSDbP6m28JcH6gFyd+QTiOYUTc4DY46eMac+vqg/
+         r/tHLwDjInCovCrEYpbwSuBOvso6fX1PWrsFALG+48QC/yRi7tXve6DYNUNAY48IPS8t
+         8n2m9EJlk0Rgh3hYyAU1FyB3egxregu9hWtmP228B+gCWfGDHy1NnGvY0TArNhfDLBLw
+         vYImMASep6MBe55rI+qRHHocg2biKIeG9Zdg8nPtHdfW3PSwYdGSBTcEk/adn+fqRLt0
+         qkrQ==
+X-Gm-Message-State: ACgBeo15s9RoIVprVOmBv75emeU/cscThIuOrYeTGyZCDvZNBy4LrcIy
+        NDs1zd8bybGyLzx4zDoLjzyX2ug/PQueaFoISFhZlA==
+X-Google-Smtp-Source: AA6agR4HfZragLapKkUjZzy4TZmv6ATE2JGl7SwGjuVIiL+0XwxHvpfhtc/5VoGeTkXZNhjZdh47ayKNxwRyfvYNWvg=
+X-Received: by 2002:a05:6402:2073:b0:44e:3555:5fcd with SMTP id
+ bd19-20020a056402207300b0044e35555fcdmr4044581edb.82.1662322371057; Sun, 04
+ Sep 2022 13:12:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <YxRDRx3oubAISIB0@google.com>
+In-Reply-To: <YxRDRx3oubAISIB0@google.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Sun, 4 Sep 2022 22:12:40 +0200
+Message-ID: <CAMRc=Me+4xEgH8S9C594rrd=2_oBe4wqC+ay5iS0YqmEBCuDPQ@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: make fwnode_get_named_gpiod() static
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>>   <Conor.Dooley@microchip.com> writes:
+On Sun, Sep 4, 2022 at 8:18 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> There are no external users of fwnode_get_named_gpiod() anymore, so
+> let's stop exporting it and mark it as static.
+>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
 
- > Hey Samuel,
- > Finally got around to giving this a go with the fix for loading
- > modules which is mostly what was blocking me before..
+Applied, thanks!
 
- > On 15/08/2022 06:08, Samuel Holland wrote:
- >> "D1 Nezha" is Allwinner's first-party development board for the D1 SoC.
- >> It was shipped with 512M, 1G, or 2G of DDR3. It supports onboard audio,
-
- > I am really not keen on the way you have things, with the memory
- > nodes removed from the device tree. I know your preferred flow
- > for booting these things might be to pass the dtb up from U-Boot,
- > but I think the devicetree in the kernel should be usable in a
- > standalone manner, even if that is the barest-minimum memory
- > config.
-
-Yes, this also confused me. Part of the reason seems to be that u-boot
-on RISC-V doesn't fixup the memory node of a provided device tree like
-it is done on E.G. ARM for some reason.
-
--- 
-Bye, Peter Korsgaard
+Bart

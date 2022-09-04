@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11ACE5AC444
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 14:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1025AC449
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 14:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiIDMVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 08:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S233578AbiIDMgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 08:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiIDMVi (ORCPT
+        with ESMTP id S231576AbiIDMf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 08:21:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB1633A0E
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 05:21:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D3DC60F69
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 12:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA108C43141
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 12:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662294095;
-        bh=/SEAOMCA+8HBwDpNxYUnYSQtq8kMjUKnKRnM4mRrywc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=B0uHU09qYy8S63H5FVjrmZ8OMZxlr3IOvyHOD8vF6sbAIBhjd0RTAk11Lk20hON5g
-         TzBIoVRFTEem3fV3uO/n740hq9a8E6LfYtFv9HdOTIksR0fCKDFLkjYqxRWRrZj0Yb
-         ITqAirXTsQ+Wm7g9DcrB6sr8Oi/ZtE9VqB9tdT9toV7La2dw8GTIqtymidZfgE66rb
-         q6tSMbSpOuMamgGV1Lp3NFWRkxAZXFs2VsUfskHMlAshP7mtCPSaxxjnXep9+e0VU5
-         hIjikEWw2RqF8cSOrRj7GcHQytE13j4JM4tWiSO60y+PXnRma73e6MtL3cQpNj8R8N
-         TcbGdxm95H0cw==
-Received: by mail-vk1-f179.google.com with SMTP id g185so3024329vkb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 05:21:35 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3Hv+ZGY1oTFJll2pQ9Mv/soE5VIL3D3Cw8OyN/SbLNYMRWu5kp
-        ambM9UvX2aWuysz68G+H1hEILA0AANAVtfW8AOk=
-X-Google-Smtp-Source: AA6agR5AUiiOBLt/QgkN2tQHfTT7nGwBWP5CPtTkVyF1LASuaJ6vdax7XxR1rKtxYN+6r33NaT6G7pBMHzEPtH8h6Ss=
-X-Received: by 2002:a1f:1d4d:0:b0:382:59cd:596c with SMTP id
- d74-20020a1f1d4d000000b0038259cd596cmr12831879vkd.35.1662294094393; Sun, 04
- Sep 2022 05:21:34 -0700 (PDT)
+        Sun, 4 Sep 2022 08:35:59 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6742A250
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 05:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662294957; x=1693830957;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=piSF2v4mJ2U0UnZMtBmkBQ2gtOgRHy7T+1lHBFuWN6Q=;
+  b=gqNREGl+eK+al3tyeRzLAA5hnl9ICsuJbiME9YASIw2mWL0AEaCsiLWQ
+   1vtREpFBfjfuTQN1ePCUKRwlRB6LqQY3T3dN4j+WaSKD3Q85GsZNpUkOG
+   M/9hFtX51yyPqM15CHKs0w6uHEcdC9oJHZSIOQ9rGNejHI37W/7HUVxka
+   ERkG/2CPII/1RZGPdzsYvE6HEKj/IHpHGfIhcy7ORoupoRtDnee36HJvk
+   F1+3sT3AyIwoQkd0/Ng36IqH7hMQq3qOT4x8c3dKc5YLbIclu8ZvXCwy9
+   9n4yoSguCkNZceNHXP9LL8oSe/uE5Ep5DXduKhwuziqjXUIhFLWczrQ1v
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="297538821"
+X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
+   d="scan'208";a="297538821"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 05:35:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
+   d="scan'208";a="564462865"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 04 Sep 2022 05:35:53 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUoqu-00032l-2a;
+        Sun, 04 Sep 2022 12:35:52 +0000
+Date:   Sun, 4 Sep 2022 20:35:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jingyu Wang <jingyuwang_vip@163.com>, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, evan.quan@amd.com, mario.limonciello@amd.com,
+        Hawking.Zhang@amd.com, andrey.grodzovsky@amd.com,
+        solomon.chiu@amd.com
+Cc:     kbuild-all@lists.01.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jingyu Wang <jingyuwang_vip@163.com>
+Subject: Re: [PATCH] drm: amd: This is a patch to the amdgpu_drv.c file that
+ fixes some warnings and errors found by the checkpatch.pl tool
+Message-ID: <202209042040.j7yoKrbB-lkp@intel.com>
+References: <20220904083912.1006262-1-jingyuwang_vip@163.com>
 MIME-Version: 1.0
-References: <1661747823-23745-1-git-send-email-tangyouling@loongson.cn> <1661747823-23745-3-git-send-email-tangyouling@loongson.cn>
-In-Reply-To: <1661747823-23745-3-git-send-email-tangyouling@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 4 Sep 2022 20:21:21 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6LkcnS4Z7YP=kfAkuDzKys57=6frsY0+T11ucKrWPuPw@mail.gmail.com>
-Message-ID: <CAAhV-H6LkcnS4Z7YP=kfAkuDzKys57=6frsY0+T11ucKrWPuPw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] LoongArch: Add kdump support
-To:     Youling Tang <tangyouling@loongson.cn>
-Cc:     Baoquan He <bhe@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kexec@lists.infradead.org, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220904083912.1006262-1-jingyuwang_vip@163.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,438 +70,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Youling,
+Hi Jingyu,
 
-I think crash.c can be merged into crash_dump.c
+Thank you for the patch! Yet something to improve:
 
-Huacai
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On Mon, Aug 29, 2022 at 12:37 PM Youling Tang <tangyouling@loongson.cn> wrote:
->
-> This patch adds support for kdump, the kernel will reserve a region
-> for the crash kernel and jump there on panic.
->
-> Arch-specific functions are added to allow for implementing a crash
-> dump file interface, /proc/vmcore, which can be viewed as a ELF file.
->
-> A user space tool, like kexec-tools, is responsible for allocating a
-> separate region for the core's ELF header within crash kdump kernel
-> memory and filling it in when executing kexec_load().
->
-> Then, its location will be advertised to crash dump kernel via a new
-> device-tree property, "linux,elfcorehdr", and crash dump kernel preserves
-> the region for later use with fdt_reserve_elfcorehdr() at boot time.
->
-> At the same time, it will also limit the crash kdump kernel to the
-> crashkernel area via a new device-tree property, "linux, usable-memory-range",
-> so as not to destroy the original kernel dump data.
->
-> On crash dump kernel, /proc/vmcore will access the primary kernel's memory
-> with copy_oldmem_page().
->
-> I tested this on  LoongArch 3A5000 machine and works as expected (Suggest
-> crashkernel parameter is "crashkernel=512M@2320M"), you may test it by
-> triggering a crash through /proc/sysrq_trigger:
->
->  $ sudo kexec -p /boot/vmlinux-kdump --reuse-cmdline --append="nr_cpus=1"
->  # echo c > /proc/sysrq_trigger
->
-> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-> ---
->  arch/loongarch/Kconfig                  |  22 ++++++
->  arch/loongarch/Makefile                 |   4 +
->  arch/loongarch/kernel/Makefile          |   3 +-
->  arch/loongarch/kernel/crash.c           | 100 ++++++++++++++++++++++++
->  arch/loongarch/kernel/crash_dump.c      |  19 +++++
->  arch/loongarch/kernel/machine_kexec.c   |  12 ++-
->  arch/loongarch/kernel/mem.c             |   6 ++
->  arch/loongarch/kernel/relocate_kernel.S |   6 ++
->  arch/loongarch/kernel/setup.c           |  49 ++++++++++++
->  arch/loongarch/kernel/traps.c           |   4 +
->  10 files changed, 217 insertions(+), 8 deletions(-)
->  create mode 100644 arch/loongarch/kernel/crash.c
->  create mode 100644 arch/loongarch/kernel/crash_dump.c
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 903c82fa958d..7c1b07a5b5bd 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -420,6 +420,28 @@ config KEXEC
->
->           The name comes from the similarity to the exec system call.
->
-> +config CRASH_DUMP
-> +       bool "Build kdump crash kernel"
-> +       help
-> +         Generate crash dump after being started by kexec. This should
-> +         be normally only set in special crash dump kernels which are
-> +         loaded in the main kernel with kexec-tools into a specially
-> +         reserved region and then later executed after a crash by
-> +         kdump/kexec.
-> +
-> +         For more details see Documentation/admin-guide/kdump/kdump.rst
-> +
-> +config PHYSICAL_START
-> +       hex "Physical address where the kernel is loaded"
-> +       default "0x9000000091000000" if 64BIT
-> +       depends on CRASH_DUMP
-> +       help
-> +         This gives the XKPRANGE address where the kernel is loaded.
-> +         If you plan to use kernel for capturing the crash dump change
-> +         this value to start of the reserved region (the "X" value as
-> +         specified in the "crashkernel=YM@XM" command line boot parameter
-> +         passed to the panic-ed kernel).
-> +
->  config SECCOMP
->         bool "Enable seccomp to safely compute untrusted bytecode"
->         depends on PROC_FS
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index 4bc47f47cfd8..7dabd580426d 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -48,7 +48,11 @@ KBUILD_CFLAGS_MODULE         += -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
->  cflags-y += -ffreestanding
->  cflags-y += $(call cc-option, -mno-check-zero-division)
->
-> +ifdef CONFIG_PHYSICAL_START
-> +load-y         = $(CONFIG_PHYSICAL_START)
-> +else
->  load-y         = 0x9000000000200000
-> +endif
->  bootvars-y     = VMLINUX_LOAD_ADDRESS=$(load-y)
->
->  drivers-$(CONFIG_PCI)          += arch/loongarch/pci/
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> index 20b64ac3f128..df5aea129364 100644
-> --- a/arch/loongarch/kernel/Makefile
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -17,7 +17,8 @@ obj-$(CONFIG_CPU_HAS_FPU)     += fpu.o
->  obj-$(CONFIG_MODULES)          += module.o module-sections.o
->  obj-$(CONFIG_STACKTRACE)       += stacktrace.o
->
-> -obj-$(CONFIG_KEXEC)             += machine_kexec.o relocate_kernel.o
-> +obj-$(CONFIG_KEXEC)             += machine_kexec.o relocate_kernel.o crash.o
-> +obj-$(CONFIG_CRASH_DUMP)        += crash_dump.o
->
->  obj-$(CONFIG_PROC_FS)          += proc.o
->
-> diff --git a/arch/loongarch/kernel/crash.c b/arch/loongarch/kernel/crash.c
-> new file mode 100644
-> index 000000000000..b4f249ec6301
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/crash.c
-> @@ -0,0 +1,100 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Loongson Technology Corporation Limited
-> + *
-> + * Derived from MIPS
-> + */
-> +#include <linux/kernel.h>
-> +#include <linux/smp.h>
-> +#include <linux/reboot.h>
-> +#include <linux/crash_dump.h>
-> +#include <linux/delay.h>
-> +#include <linux/irq.h>
-> +#include <linux/types.h>
-> +#include <linux/sched.h>
-> +#include <linux/sched/task_stack.h>
-> +#include <asm/cacheflush.h>
-> +#include <asm/kexec.h>
-> +
-> +static cpumask_t cpus_in_crash = CPU_MASK_NONE;
-> +
-> +#ifdef CONFIG_SMP
-> +static void crash_shutdown_secondary(void *passed_regs)
-> +{
-> +       struct pt_regs *regs = passed_regs;
-> +       int cpu = smp_processor_id();
-> +
-> +       /*
-> +        * If we are passed registers, use those.  Otherwise get the
-> +        * regs from the last interrupt, which should be correct, as
-> +        * we are in an interrupt.  But if the regs are not there,
-> +        * pull them from the top of the stack.  They are probably
-> +        * wrong, but we need something to keep from crashing again.
-> +        */
-> +       if (!regs)
-> +               regs = get_irq_regs();
-> +       if (!regs)
-> +               regs = task_pt_regs(current);
-> +
-> +       local_irq_disable();
-> +       if (!cpumask_test_cpu(cpu, &cpus_in_crash))
-> +               crash_save_cpu(regs, cpu);
-> +       cpumask_set_cpu(cpu, &cpus_in_crash);
-> +
-> +       while (!atomic_read(&kexec_ready_to_reboot))
-> +               cpu_relax();
-> +
-> +       kexec_reboot();
-> +}
-> +
-> +/* Override the weak function in kernel/panic.c */
-> +void crash_smp_send_stop(void)
-> +{
-> +       static int cpus_stopped;
-> +       unsigned long timeout;
-> +       unsigned int ncpus;
-> +
-> +       /*
-> +        * This function can be called twice in panic path, but obviously
-> +        * we execute this only once.
-> +        */
-> +       if (cpus_stopped)
-> +               return;
-> +
-> +       cpus_stopped = 1;
-> +
-> +        /* Excluding the panic cpu */
-> +       ncpus = num_online_cpus() - 1;
-> +
-> +       smp_call_function(crash_shutdown_secondary, NULL, 0);
-> +       smp_wmb();
-> +
-> +       /*
-> +        * The crash CPU sends an IPI and wait for other CPUs to
-> +        * respond. Delay of at least 10 seconds.
-> +        */
-> +       pr_emerg("Sending IPI to other cpus...\n");
-> +       timeout = USEC_PER_SEC * 10;
-> +       while ((cpumask_weight(&cpus_in_crash) < ncpus) && timeout--) {
-> +               cpu_relax();
-> +               udelay(1);
-> +       }
-> +}
-> +
-> +#endif
-> +
-> +void machine_crash_shutdown(struct pt_regs *regs)
-> +{
-> +       int crashing_cpu;
-> +
-> +       local_irq_disable();
-> +
-> +       crashing_cpu = smp_processor_id();
-> +       crash_save_cpu(regs, crashing_cpu);
-> +
-> +       /* shutdown non-crashing cpus */
-> +       crash_smp_send_stop();
-> +       cpumask_set_cpu(crashing_cpu, &cpus_in_crash);
-> +
-> +       pr_info("Starting crashdump kernel...\n");
-> +}
-> diff --git a/arch/loongarch/kernel/crash_dump.c b/arch/loongarch/kernel/crash_dump.c
-> new file mode 100644
-> index 000000000000..13e5d2f7870d
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/crash_dump.c
-> @@ -0,0 +1,19 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/highmem.h>
-> +#include <linux/crash_dump.h>
-> +#include <linux/io.h>
-> +
-> +ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn,
-> +                        size_t csize, unsigned long offset)
-> +{
-> +       void  *vaddr;
-> +
-> +       if (!csize)
-> +               return 0;
-> +
-> +       vaddr = kmap_local_pfn(pfn);
-> +       csize = copy_to_iter(vaddr + offset, csize, iter);
-> +       kunmap_local(vaddr);
-> +
-> +       return csize;
-> +}
-> diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/kernel/machine_kexec.c
-> index 4ffcd4cd9c8c..f793a3ff09a3 100644
-> --- a/arch/loongarch/kernel/machine_kexec.c
-> +++ b/arch/loongarch/kernel/machine_kexec.c
-> @@ -69,7 +69,7 @@ int machine_kexec_prepare(struct kimage *kimage)
->                 continue;
->         }
->
-> -       /* kexec need a safe page to save reboot_code_buffer */
-> +       /* kexec/kdump need a safe page to save reboot_code_buffer */
->         kimage->control_code_page = virt_to_page((void *)KEXEC_CTRL_CODE);
->
->         reboot_code_buffer =
-> @@ -113,10 +113,6 @@ static void kexec_shutdown_secondary(void *)
->
->         kexec_reboot();
->  }
-> -
-> -void machine_crash_shutdown(struct pt_regs *regs)
-> -{
-> -}
->  #endif
->
->  void machine_shutdown(void)
-> @@ -135,7 +131,8 @@ void machine_kexec(struct kimage *image)
->
->         jump_addr = (unsigned long)phys_to_virt(image->start);
->
-> -       first_ind_entry = (unsigned long)phys_to_virt(image->head & PAGE_MASK);
-> +       if (image->type == KEXEC_TYPE_DEFAULT)
-> +               first_ind_entry = (unsigned long)phys_to_virt(image->head & PAGE_MASK);
->
->         /*
->          * The generic kexec code builds a page list with physical
-> @@ -167,7 +164,8 @@ void machine_kexec(struct kimage *image)
->
->         /*
->          * We know we were online, and there will be no incoming IPIs at
-> -        * this point.
-> +        * this point. Mark online again before rebooting so that the crash
-> +        * analysis tool will see us correctly.
->          */
->         set_cpu_online(smp_processor_id(), true);
->
-> diff --git a/arch/loongarch/kernel/mem.c b/arch/loongarch/kernel/mem.c
-> index 7423361b0ebc..c6def6ff81c8 100644
-> --- a/arch/loongarch/kernel/mem.c
-> +++ b/arch/loongarch/kernel/mem.c
-> @@ -5,6 +5,7 @@
->  #include <linux/efi.h>
->  #include <linux/initrd.h>
->  #include <linux/memblock.h>
-> +#include <linux/of_fdt.h>
->
->  #include <asm/bootinfo.h>
->  #include <asm/loongson.h>
-> @@ -61,4 +62,9 @@ void __init memblock_init(void)
->
->         /* Reserve the initrd */
->         reserve_initrd_mem();
-> +
-> +       /* Mainly reserved memory for the elf core head */
-> +       early_init_fdt_scan_reserved_mem();
-> +       /* Parse linux,usable-memory-range is for crash dump kernel */
-> +       early_init_dt_check_for_usable_mem_range();
->  }
-> diff --git a/arch/loongarch/kernel/relocate_kernel.S b/arch/loongarch/kernel/relocate_kernel.S
-> index d1f242f74ea8..4ee5ac4ac2d7 100644
-> --- a/arch/loongarch/kernel/relocate_kernel.S
-> +++ b/arch/loongarch/kernel/relocate_kernel.S
-> @@ -28,6 +28,12 @@ SYM_CODE_START(relocate_new_kernel)
->         move            s2, a2
->         move            s3, a3
->
-> +       /*
-> +        * In case of a kdump/crash kernel, the indirection page is not
-> +        * populated as the kernel is directly copied to a reserved location
-> +        */
-> +       beqz            s2, done
-> +
->  process_entry:
->         PTR_L           s4, s2, 0
->         PTR_ADDI        s2, s2, SZREG
-> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-> index f938aae3e92c..ea34b77e402f 100644
-> --- a/arch/loongarch/kernel/setup.c
-> +++ b/arch/loongarch/kernel/setup.c
-> @@ -19,6 +19,8 @@
->  #include <linux/memblock.h>
->  #include <linux/initrd.h>
->  #include <linux/ioport.h>
-> +#include <linux/kexec.h>
-> +#include <linux/crash_dump.h>
->  #include <linux/root_dev.h>
->  #include <linux/console.h>
->  #include <linux/pfn.h>
-> @@ -186,6 +188,50 @@ static int __init early_parse_mem(char *p)
->  }
->  early_param("mem", early_parse_mem);
->
-> +static void __init loongarch_parse_crashkernel(void)
-> +{
-> +#ifdef CONFIG_KEXEC
-> +       unsigned long long start;
-> +       unsigned long long total_mem;
-> +       unsigned long long crash_size, crash_base;
-> +       int ret;
-> +
-> +       total_mem = memblock_phys_mem_size();
-> +       ret = parse_crashkernel(boot_command_line, total_mem,
-> +                               &crash_size, &crash_base);
-> +       if (ret != 0 || crash_size <= 0)
-> +               return;
-> +
-> +
-> +       start = memblock_phys_alloc_range(crash_size, 1, crash_base,
-> +                                       crash_base + crash_size);
-> +       if (start != crash_base) {
-> +               pr_warn("Invalid memory region reserved for crash kernel\n");
-> +               return;
-> +       }
-> +
-> +       crashk_res.start = crash_base;
-> +       crashk_res.end   = crash_base + crash_size - 1;
-> +#endif
-> +}
-> +
-> +static void __init request_crashkernel(struct resource *res)
-> +{
-> +#ifdef CONFIG_KEXEC
-> +       int ret;
-> +
-> +       if (crashk_res.start == crashk_res.end)
-> +               return;
-> +
-> +       ret = request_resource(res, &crashk_res);
-> +       if (!ret)
-> +               pr_info("Reserving %ldMB of memory at %ldMB for crashkernel\n",
-> +                       (unsigned long)((crashk_res.end -
-> +                                        crashk_res.start + 1) >> 20),
-> +                       (unsigned long)(crashk_res.start  >> 20));
-> +#endif
-> +}
-> +
->  void __init platform_init(void)
->  {
->         efi_init();
-> @@ -229,6 +275,8 @@ static void __init arch_mem_init(char **cmdline_p)
->
->         check_kernel_sections_mem();
->
-> +       loongarch_parse_crashkernel();
-> +
->         /*
->          * In order to reduce the possibility of kernel panic when failed to
->          * get IO TLB memory under CONFIG_SWIOTLB, it is better to allocate
-> @@ -290,6 +338,7 @@ static void __init resource_init(void)
->                 request_resource(res, &code_resource);
->                 request_resource(res, &data_resource);
->                 request_resource(res, &bss_resource);
-> +               request_crashkernel(res);
->         }
->  }
->
-> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-> index aa1c95aaf595..0e610872f3f4 100644
-> --- a/arch/loongarch/kernel/traps.c
-> +++ b/arch/loongarch/kernel/traps.c
-> @@ -10,6 +10,7 @@
->  #include <linux/entry-common.h>
->  #include <linux/init.h>
->  #include <linux/kernel.h>
-> +#include <linux/kexec.h>
->  #include <linux/module.h>
->  #include <linux/extable.h>
->  #include <linux/mm.h>
-> @@ -246,6 +247,9 @@ void __noreturn die(const char *str, struct pt_regs *regs)
->
->         oops_exit();
->
-> +       if (regs && kexec_should_crash(current))
-> +               crash_kexec(regs);
-> +
->         if (in_interrupt())
->                 panic("Fatal exception in interrupt");
->
-> --
-> 2.36.0
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Jingyu-Wang/drm-amd-This-is-a-patch-to-the-amdgpu_drv-c-file-that-fixes-some-warnings-and-errors-found-by-the-checkpatch-pl-tool/20220904-165633
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+config: mips-randconfig-r006-20220904 (https://download.01.org/0day-ci/archive/20220904/202209042040.j7yoKrbB-lkp@intel.com/config)
+compiler: mips64el-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/639ddf37854dd71c3ee836591db7518b146ae8ae
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jingyu-Wang/drm-amd-This-is-a-patch-to-the-amdgpu_drv-c-file-that-fixes-some-warnings-and-errors-found-by-the-checkpatch-pl-tool/20220904-165633
+        git checkout 639ddf37854dd71c3ee836591db7518b146ae8ae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:290:17: warning: missing terminating " character
+     290 |                 "for passthrough or sriov, 10000 for all jobs.
+         |                 ^
+   In file included from include/linux/module.h:22,
+                    from include/linux/device/driver.h:21,
+                    from include/linux/device.h:32,
+                    from include/drm/drm_print.h:32,
+                    from include/drm/drm_mm.h:51,
+                    from include/drm/drm_vma_manager.h:26,
+                    from include/drm/drm_gem.h:40,
+                    from drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:28:
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:290:17: error: missing terminating " character
+     290 |                 "for passthrough or sriov, 10000 for all jobs.
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/moduleparam.h:26:61: note: in definition of macro '__MODULE_INFO'
+      26 |                 = __MODULE_INFO_PREFIX __stringify(tag) "=" info
+         |                                                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:289:1: note: in expansion of macro 'MODULE_PARM_DESC'
+     289 | MODULE_PARM_DESC(lockup_timeout, "GPU lockup timeout in ms (default: for bare metal 10000 for non-compute jobs and 60000 for compute jobs; "
+         | ^~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:291:17: error: expected ',' or ';' before numeric constant
+     291 |                 0: keep default value. negative: infinity timeout),
+         |                 ^
+   include/linux/moduleparam.h:26:61: note: in definition of macro '__MODULE_INFO'
+      26 |                 = __MODULE_INFO_PREFIX __stringify(tag) "=" info
+         |                                                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:289:1: note: in expansion of macro 'MODULE_PARM_DESC'
+     289 | MODULE_PARM_DESC(lockup_timeout, "GPU lockup timeout in ms (default: for bare metal 10000 for non-compute jobs and 60000 for compute jobs; "
+         | ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:292:83: warning: missing terminating " character
+     292 |                 format: for bare metal [Non-Compute] or [GFX,Compute,SDMA,Video]; "
+         |                                                                                   ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:292:83: error: missing terminating " character
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:293:17: error: expected identifier or '(' before string constant
+     293 |                 "for passthrough or sriov [all jobs] or [GFX,Compute,SDMA,Video].");
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:604:9: warning: missing terminating " character
+     604 |         "reserve gtt for smu debug usage, 0 = disable,
+         |         ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:605:76: warning: missing terminating " character
+     605 |                 0x1 = 256Mbyte, 0x2 = 512Mbyte, 0x4 = 1 Gbyte, 0x8 = 2GByte");
+         |                                                                            ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:2799:45: error: unterminated argument list invoking macro "MODULE_PARM_DESC"
+    2799 | MODULE_LICENSE("GPL and additional rights");
+         |                                             ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:603:1: error: expected '=', ',', ';', 'asm' or '__attribute__' at end of input
+     603 | MODULE_PARM_DESC(smu_memory_pool_size,
+         | ^~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:186:13: warning: 'amdgpu_drv_delayed_reset_work_handler' used but never defined
+     186 | static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work);
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +290 drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+
+   185	
+ > 186	static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work);
+   187	
+   188	struct amdgpu_mgpu_info mgpu_info = {
+   189		.mutex = __MUTEX_INITIALIZER(mgpu_info.mutex),
+   190		.delayed_reset_work = __DELAYED_WORK_INITIALIZER(
+   191				mgpu_info.delayed_reset_work,
+   192				amdgpu_drv_delayed_reset_work_handler, 0),
+   193	};
+   194	int amdgpu_ras_enable = -1;
+   195	uint amdgpu_ras_mask = 0xffffffff;
+   196	int amdgpu_bad_page_threshold = -1;
+   197	struct amdgpu_watchdog_timer amdgpu_watchdog_timer = {
+   198		.timeout_fatal_disable = false,
+   199		.period = 0x0, /* default to 0x0 (timeout disable) */
+   200	};
+   201	
+   202	/**
+   203	 * DOC: vramlimit (int)
+   204	 * Restrict the total amount of VRAM in MiB for testing.  The default is 0 (Use full VRAM).
+   205	 */
+   206	MODULE_PARM_DESC(vramlimit, "Restrict VRAM for testing, in megabytes");
+   207	module_param_named(vramlimit, amdgpu_vram_limit, int, 0600);
+   208	
+   209	/**
+   210	 * DOC: vis_vramlimit (int)
+   211	 * Restrict the amount of CPU visible VRAM in MiB for testing.  The default is 0 (Use full CPU visible VRAM).
+   212	 */
+   213	MODULE_PARM_DESC(vis_vramlimit, "Restrict visible VRAM for testing, in megabytes");
+   214	module_param_named(vis_vramlimit, amdgpu_vis_vram_limit, int, 0444);
+   215	
+   216	/**
+   217	 * DOC: gartsize (uint)
+   218	 * Restrict the size of GART in Mib (32, 64, etc.) for testing. The default is -1 (The size depends on asic).
+   219	 */
+   220	MODULE_PARM_DESC(gartsize, "Size of GART to setup in megabytes (32, 64, etc., -1=auto)");
+   221	module_param_named(gartsize, amdgpu_gart_size, uint, 0600);
+   222	
+   223	/**
+   224	 * DOC: gttsize (int)
+   225	 * Restrict the size of GTT domain in MiB for testing. The default is -1 (It's VRAM size if 3GB < VRAM < 3/4 RAM,
+   226	 * otherwise 3/4 RAM size).
+   227	 */
+   228	MODULE_PARM_DESC(gttsize, "Size of the GTT domain in megabytes (-1 = auto)");
+   229	module_param_named(gttsize, amdgpu_gtt_size, int, 0600);
+   230	
+   231	/**
+   232	 * DOC: moverate (int)
+   233	 * Set maximum buffer migration rate in MB/s. The default is -1 (8 MB/s).
+   234	 */
+   235	MODULE_PARM_DESC(moverate, "Maximum buffer migration rate in MB/s. (32, 64, etc., -1=auto, 0=1=disabled)");
+   236	module_param_named(moverate, amdgpu_moverate, int, 0600);
+   237	
+   238	/**
+   239	 * DOC: audio (int)
+   240	 * Set HDMI/DPAudio. Only affects non-DC display handling. The default is -1 (Enabled), set 0 to disabled it.
+   241	 */
+   242	MODULE_PARM_DESC(audio, "Audio enable (-1 = auto, 0 = disable, 1 = enable)");
+   243	module_param_named(audio, amdgpu_audio, int, 0444);
+   244	
+   245	/**
+   246	 * DOC: disp_priority (int)
+   247	 * Set display Priority (1 = normal, 2 = high). Only affects non-DC display handling. The default is 0 (auto).
+   248	 */
+   249	MODULE_PARM_DESC(disp_priority, "Display Priority (0 = auto, 1 = normal, 2 = high)");
+   250	module_param_named(disp_priority, amdgpu_disp_priority, int, 0444);
+   251	
+   252	/**
+   253	 * DOC: hw_i2c (int)
+   254	 * To enable hw i2c engine. Only affects non-DC display handling. The default is 0 (Disabled).
+   255	 */
+   256	MODULE_PARM_DESC(hw_i2c, "hw i2c engine enable (0 = disable)");
+   257	module_param_named(hw_i2c, amdgpu_hw_i2c, int, 0444);
+   258	
+   259	/**
+   260	 * DOC: pcie_gen2 (int)
+   261	 * To disable PCIE Gen2/3 mode (0 = disable, 1 = enable). The default is -1 (auto, enabled).
+   262	 */
+   263	MODULE_PARM_DESC(pcie_gen2, "PCIE Gen2 mode (-1 = auto, 0 = disable, 1 = enable)");
+   264	module_param_named(pcie_gen2, amdgpu_pcie_gen2, int, 0444);
+   265	
+   266	/**
+   267	 * DOC: msi (int)
+   268	 * To disable Message Signaled Interrupts (MSI) functionality (1 = enable, 0 = disable). The default is -1 (auto, enabled).
+   269	 */
+   270	MODULE_PARM_DESC(msi, "MSI support (1 = enable, 0 = disable, -1 = auto)");
+   271	module_param_named(msi, amdgpu_msi, int, 0444);
+   272	
+   273	/**
+   274	 * DOC: lockup_timeout (string)
+   275	 * Set GPU scheduler timeout value in ms.
+   276	 *
+   277	 * The format can be [Non-Compute] or [GFX,Compute,SDMA,Video]. That is there can be one or
+   278	 * multiple values specified. 0 and negative values are invalidated. They will be adjusted
+   279	 * to the default timeout.
+   280	 *
+   281	 * - With one value specified, the setting will apply to all non-compute jobs.
+   282	 * - With multiple values specified, the first one will be for GFX.
+   283	 *   The second one is for Compute. The third and fourth ones are
+   284	 *   for SDMA and Video.
+   285	 *
+   286	 * By default(with no lockup_timeout settings), the timeout for all non-compute(GFX, SDMA and Video)
+   287	 * jobs is 10000. The timeout for compute is 60000.
+   288	 */
+   289	MODULE_PARM_DESC(lockup_timeout, "GPU lockup timeout in ms (default: for bare metal 10000 for non-compute jobs and 60000 for compute jobs; "
+ > 290			"for passthrough or sriov, 10000 for all jobs.
+ > 291			0: keep default value. negative: infinity timeout),
+   292			format: for bare metal [Non-Compute] or [GFX,Compute,SDMA,Video]; "
+ > 293			"for passthrough or sriov [all jobs] or [GFX,Compute,SDMA,Video].");
+   294	module_param_string(lockup_timeout, amdgpu_lockup_timeout, sizeof(amdgpu_lockup_timeout), 0444);
+   295	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

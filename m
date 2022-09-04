@@ -2,92 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089425AC47A
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 15:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354345AC481
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 15:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbiIDNVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 09:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S233945AbiIDNZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 09:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiIDNVU (ORCPT
+        with ESMTP id S229748AbiIDNY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 09:21:20 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DEF303E8;
-        Sun,  4 Sep 2022 06:21:19 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id k2so6537866vsk.8;
-        Sun, 04 Sep 2022 06:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=zm+EyzwIQUGPDwFnMMoLTrR9COFLYicTA4/koBenuTc=;
-        b=b6+N4hNrgd/gwbt5oOVeNZuwJR+TKHHQTg3dog//QrbCMyNOeDYTfcg02r/phrrZpA
-         WClzq/CZsyp7IOzAaZ4rE2nXfo0mD3g/pt3tz65NSNlW9YHcdQKUZzzMpcwNt+qule/x
-         VxB7mDGI/0TTcjT2rbGmlob/sfViC8FWwISqW5xHsXRFseBwkLWf1vVlhNH8ick5cYUE
-         aT1IcwBnICVufrkheKnZkfsEc2BO0wtsZjvhOGV0bds5H9eCQO0II/hg83uWpC44Q+rH
-         W+WrbCuVfZjvUassAMGNxjHfRTvGnLy1UvHVwjGkZ2vsvQKgkF7OgOf0xFK1+lU6UpC/
-         6B5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=zm+EyzwIQUGPDwFnMMoLTrR9COFLYicTA4/koBenuTc=;
-        b=z5AcCMpuLMSAV9GzlYmBGNnoVjZcUKYOiQ8MetqWMHTz7WRUxgqbiz5S9LAZ2Q4lN+
-         5pJ//lduH6XqfapUqyTX7UM8XIqrxUQ0vbpbj0LKS7B3BlWquBJYsQaB6Jdvm2eQInBh
-         rJAzDKMkVikdAaIvU0/sO5TVAMqmZ3nNBj8v3fzmrN4JqKpjZtanoFem6I6gSnfy/145
-         38WWOWcKzAahmop3pGidTriK6EQSA9wkT6rSoj7YCMCB7MKqckhksiEScXGm8EVMFa9v
-         icZcBCrYSMbevTtRI4xd2WJIhRKG/Z+1UYbTlQVKCGhL9m5lmVxY4jjFFWzFY6z4PJey
-         zsOw==
-X-Gm-Message-State: ACgBeo3I840KxQ46VLWEZO4TnmPLO5Kc1YqWkQahqiyktfhTmcYa+luA
-        CpchoJVZARSboKrYYNeJhriL4MbJehhmG/iGsKgWuFCYLcw1Lg==
-X-Google-Smtp-Source: AA6agR6v9SEpaR8/h54E7r+sUehl1VRLwX60543GLlfUliZxUS0Q7Y+G3LNY7pi73BRd34qYx8zL8bEUVnnr9mRK28U=
-X-Received: by 2002:a67:d901:0:b0:390:d093:591a with SMTP id
- t1-20020a67d901000000b00390d093591amr12463484vsj.81.1662297678763; Sun, 04
- Sep 2022 06:21:18 -0700 (PDT)
+        Sun, 4 Sep 2022 09:24:58 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8061E3E2;
+        Sun,  4 Sep 2022 06:24:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 00DD3CE0EA9;
+        Sun,  4 Sep 2022 13:24:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E5CFC4347C;
+        Sun,  4 Sep 2022 13:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662297893;
+        bh=rl6fLZU0cQ0lmq75jhbnr25T1XXEIy5vIoogxAgbYxk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SmYl2hECZR3wKwP+FMP1Gd8wTuF9lZuvDfmmxHZg94srIxB3nUdZUAKqkh7F+0bTa
+         CKO2jUfuZg8Y0U5tNgIK6sZ0H9rDqwAe2kZVpJygXouICSger77vb4WHfYTNcJng83
+         7ewP7a5EHhWyoyf985PhLtLWyec5WSYKsR9K8BY5RuOI42dw1qj3CTLLCQpj/ooNiN
+         ZARzUJSFT8eLRxfHn8XqiGkAFtXpF5cnMfCZQGvCqctNVAM5sevqlPi3dvNlwZLpIf
+         j+wzJG+lP7APtAYKInLayW+1mxccmxwJNJHaOqSyeVJmJP5EAPLUX68tAnpMhS8jsx
+         qaWk6BZxazCnQ==
+Received: by mail-ua1-f46.google.com with SMTP id s5so2474523uar.1;
+        Sun, 04 Sep 2022 06:24:53 -0700 (PDT)
+X-Gm-Message-State: ACgBeo10yMjmzWVL7VjnvcS2y7lL7BYN9eTS3fTn/akhxzFShTpe14iF
+        LxaXIqu2DG6mYHCA58ZXqbH2G65oPyM5n31k6bw=
+X-Google-Smtp-Source: AA6agR5Y4uVz9cAZw9EOYYNKxQt74TW6VgX0gb/I4EmRjuSpKKxu15vMq4u5YFoTjUSdQWo9wYv1viWPPTHI6+gP+sk=
+X-Received: by 2002:a05:6130:c13:b0:39f:58bb:d51c with SMTP id
+ cg19-20020a0561300c1300b0039f58bbd51cmr13564275uab.104.1662297892187; Sun, 04
+ Sep 2022 06:24:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAB7eexLHN1gn2QPdo1_PF70sPbo2cA8skwG17oZb7+J1DQ+J1Q@mail.gmail.com>
- <CAB7eexKGRgDWBLiRs=U70OPLREESi+bCgwt=7wWCESBDZDM=zQ@mail.gmail.com> <YxC7ix+MerW5xGsB@kroah.com>
-In-Reply-To: <YxC7ix+MerW5xGsB@kroah.com>
-From:   Rondreis <linhaoguo86@gmail.com>
-Date:   Sun, 4 Sep 2022 21:21:07 +0800
-Message-ID: <CAB7eexK+x8+RZp16aJFmdmqqEL=NMYp+Fy+hAJG+CWUUEH1_fg@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in configfs_composite_bind
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20220819102037.2697798-1-chenhuacai@loongson.cn>
+ <9b6f0aeaebbd36882b5b40d655f9ccd20c7be496.camel@xry111.site>
+ <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com> <CAAhV-H6MR=rWhecY_uuiXAysED-BBJhKhGHj2cCkefJiPOo-ZQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H6MR=rWhecY_uuiXAysED-BBJhKhGHj2cCkefJiPOo-ZQ@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sun, 4 Sep 2022 21:24:39 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4KXVUBgNoQxOFiEj2AH-ojhnrEJ8QLvNrALY69MhXF3w@mail.gmail.com>
+Message-ID: <CAAhV-H4KXVUBgNoQxOFiEj2AH-ojhnrEJ8QLvNrALY69MhXF3w@mail.gmail.com>
+Subject: Re: [PATCH V3] LoongArch: Add efistub booting support
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Xi Ruoyao <xry111@xry111.site>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your reply! I ran the reproducer again on the master
-branch(commit id: 7726d4c3e60bfe206738894267414a5f10510f1a) and it
-didn't crash.
+Hi, Ard,
 
-The reason for not using the latest version is I can't attach more
-than one gadget at a time using `configfs` and `dummy_hcd`. When I
-attach the second gadget with a different `udc` it always fails and
-the kernel message says:
+On Thu, Sep 1, 2022 at 6:40 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> Hi, Ard,
+>
+> On Sat, Aug 27, 2022 at 3:14 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Sat, 27 Aug 2022 at 06:41, Xi Ruoyao <xry111@xry111.site> wrote:
+> > >
+> > > Tested V3 with the magic number check manually removed in my GRUB build.
+> > > The system boots successfully.  I've not tested Arnd's zBoot patch yet.
+> >
+> > I am Ard not Arnd :-)
+> >
+> > Please use this branch when testing the EFI decompressor:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-decompressor-v4
+> The root cause of LoongArch zboot boot failure has been found, it is a
+> binutils bug, latest toolchain with the below patch can solve the
+> problem.
+>
+> diff --git a/bfd/elfnn-loongarch.c b/bfd/elfnn-loongarch.c
+> index 5b44901b9e0..fafdc7c7458 100644
+> --- a/bfd/elfnn-loongarch.c
+> +++ b/bfd/elfnn-loongarch.c
+> @@ -2341,9 +2341,10 @@ loongarch_elf_relocate_section (bfd
+> *output_bfd, struct bfd_link_info *info,
+>      case R_LARCH_SOP_PUSH_PLT_PCREL:
+>        unresolved_reloc = false;
+>
+> -      if (resolved_to_const)
+> +      if (!is_undefweak && resolved_to_const)
+>          {
+>            relocation += rel->r_addend;
+> +          relocation -= pc;
+>            break;
+>          }
+>        else if (is_undefweak)
+>
+>
+> Huacai
+Now the patch is submitted here:
+https://sourceware.org/pipermail/binutils/2022-September/122713.html
 
-```
-[ 1625.254858] Error: Driver 'configfs-gadget' is already registered,
-aborting...
-[ 1625.271018] UDC core: g1: driver registration failed: -16
-```
+And I have some other questions about kexec: kexec should jump to the
+elf entry or the pe entry? I think is the elf entry, because if we
+jump to the pe entry, then SVAM will be executed twice (but it should
+be executed only once). However, how can we jump to the elf entry if
+we use zboot? Maybe it is kexec-tool's responsibility to decompress
+the zboot kernel image?
 
-I'm not sure if this is a new feature from version v5.19(v5.18, commit
-id: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f works very well) or a
-potential bug, or my mistake...
-
-The kernel config is: https://pastebin.com/raw/SLmNMMRd
-The shell to attach gadgets is: https://pastebin.com/raw/2eDPNip3
-The kernel log is: https://pastebin.com/raw/MaDwMQWk
-
-Best wishes!
-Rondreis
+Huacai

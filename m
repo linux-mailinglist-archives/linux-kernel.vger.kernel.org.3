@@ -2,47 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF635AC504
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02005AC507
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbiIDP2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 11:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        id S234531AbiIDPaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 11:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiIDP2w (ORCPT
+        with ESMTP id S229748AbiIDPaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 11:28:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C86331225;
-        Sun,  4 Sep 2022 08:28:51 -0700 (PDT)
+        Sun, 4 Sep 2022 11:30:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E0E2B63A;
+        Sun,  4 Sep 2022 08:30:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02FD6B80C03;
-        Sun,  4 Sep 2022 15:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AF1C433D6;
-        Sun,  4 Sep 2022 15:28:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B218760FA6;
+        Sun,  4 Sep 2022 15:30:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4CF3C433D7;
+        Sun,  4 Sep 2022 15:30:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662305328;
-        bh=JFsY7FgGXp9kN8ipF99InyICvItyoWbz5eKMQichUr0=;
+        s=k20201202; t=1662305406;
+        bh=hOhC3aj6/CGi+YEG3NgjPbtkba6VrznLEWM20iom+j0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NL5vGfO1rMXIsIWjwLnFsoSQxgqb+VkCGunx1CoHW4LprXo276PSeXxdTOtM1gLSw
-         AbIK7sTZBimhzb+gr4TAbfvwNf9GRK0ZxvWGglEDVmGHuoS/1Z2gz2HscXsH7trNgQ
-         osAttfgpzIAWMBR2jPbF8rTJ+VhqslqyhVu/JXcn6Wk4SVCQ/tjELbFiBRag8vrN2W
-         LAJCpXLnKYGcJCa8tUpADmd7eZ1qP2hfJfCnlyAmTsB3dxWCOYbRALLtl3Sn9Hs8cV
-         7bHHCPrpy7/cgryS/v1sME7rumpDax4i84FwJWd7MZM2W20zS6077X+FKxticzzPiu
-         WFp15GxjNr/ig==
-Date:   Sun, 4 Sep 2022 15:54:40 +0100
+        b=O1fjy5v7OXgDpixpiZk/uDXR9xvfbtknx2OcvAnpfnHnGjJwCVK/9dc2rSX/g0ejj
+         /Ag1GRFrsYXKIPAWI8PiqCPltkubLCYZ5HhwAa+Vnh3gItVNHz7bxgBl9x/BziGK33
+         PbeI3lUtO9U3b6yggNHRc+UsyX/LodjUo7M/b5INCclvfQQCclJm4CKRk4hFJWJFXI
+         R3adzftpsxXqpdqC6FOUUjA43FrCA7pWpKhG9R8zrkRalj9ZLOPTP8qB+ucfhG/0b/
+         ULy7ArWxjBAne7Jn9PzoMVyJHB9cuIMxKhpMBS/UoAeZWE+V144O4MeWfJlIXsozOI
+         5+i0qLNw6SnWQ==
+Date:   Sun, 4 Sep 2022 15:55:57 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Ciprian Regus <ciprian.regus@analog.com>
-Cc:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/5] Add the LTC2496 MAINTAINERS entry
-Message-ID: <20220904155440.4c6dcea3@jic23-huawei>
-In-Reply-To: <20220901121700.1325733-2-ciprian.regus@analog.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ciprian Regus <ciprian.regus@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/5] drivers: iio: adc: LTC2499 support
+Message-ID: <20220904155557.33c96d66@jic23-huawei>
+In-Reply-To: <CAHp75Vfn_84-xww5w_oHf0zqm4dZxycSU1cDKw7-KQzDyoCHXw@mail.gmail.com>
 References: <20220901121700.1325733-1-ciprian.regus@analog.com>
-        <20220901121700.1325733-2-ciprian.regus@analog.com>
+        <20220901121700.1325733-4-ciprian.regus@analog.com>
+        <4067432b-b5a6-f3eb-a707-5fa298ba846b@linaro.org>
+        <20220902120611.000007a0@huawei.com>
+        <CAHp75Vfn_84-xww5w_oHf0zqm4dZxycSU1cDKw7-KQzDyoCHXw@mail.gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,43 +65,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Sep 2022 15:16:57 +0300
-Ciprian Regus <ciprian.regus@analog.com> wrote:
+On Fri, 2 Sep 2022 14:37:03 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-> Update the MAINTAINERS file to include the path for the LTC2496
-> devicetree bindings documentation.
+> On Fri, Sep 2, 2022 at 2:06 PM Jonathan Cameron
+> <Jonathan.Cameron@huawei.com> wrote:
+> > On Thu, 1 Sep 2022 16:23:09 +0300
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:  
+> > > On 01/09/2022 15:16, Ciprian Regus wrote:  
 > 
-> Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
-Hi Ciprian,
+> ...
+> 
+> > > > Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/2499fe.pdf  
+> > >
+> > > Missing blank line. Use standard Git tools for handling your patches or
+> > > be sure you produce the same result when using some custom process.  
+> >
+> > My understanding is Datasheet is a standard tag as part of the main tag block.
+> > There should not be a blank line between that and the Sign off.
+> >
+> > +CC Andy who can probably point to a reference for that...  
+> 
+> Yes, the idea to have a Datasheet as a formal tag. Which is, by the
+> way, somehow established practice (since ca.2020).
 
-Thanks for tidying this up.
+We should probably add it to the docs so we have somewhere to point at
+beyond fairly common practice.
 
-Pulling the addition of the line for the ltc2497 into this patch as well
-would make more sense than the current split between patches 1 and 2.
-
-Obviously with updates to the patch description to mention that it is
-covering both.
-
-Thanks,
+Hohum.  Anyone want to take that on with associated possible bikeshedding?
 
 Jonathan
 
-> ---
-> changes in v2:
->  - new patch
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3c847619ceb1..1beb41a8b672 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1327,6 +1327,7 @@ W:	https://ez.analog.com/linux-software-drivers
->  F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-ad9523
->  F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4350
->  F:	Documentation/devicetree/bindings/iio/*/adi,*
-> +F:	Documentation/devicetree/bindings/iio/adc/lltc,ltc2496.yaml
->  F:	Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
->  F:	Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
->  F:	drivers/iio/*/ad*
 

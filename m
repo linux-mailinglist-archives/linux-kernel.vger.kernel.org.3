@@ -2,50 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D465AC80D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 00:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6C35AC812
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 00:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235242AbiIDWzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 18:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S235337AbiIDW7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 18:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiIDWzM (ORCPT
+        with ESMTP id S229627AbiIDW64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 18:55:12 -0400
-X-Greylist: delayed 370 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Sep 2022 15:55:10 PDT
-Received: from shiva-su2.sorbonne-universite.fr (shiva-su2.sorbonne-universite.fr [134.157.0.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BDA62A71B
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 15:55:10 -0700 (PDT)
-Received: from nirriti.ent.upmc.fr (nirriti.dsi.upmc.fr [134.157.0.215])
-        by shiva-su2.sorbonne-universite.fr (Postfix) with ESMTP id 9862D413FDB0;
-        Mon,  5 Sep 2022 00:48:57 +0200 (CEST)
-Received: from [44.168.19.21] (lfbn-idf1-1-596-24.w86-242.abo.wanadoo.fr [86.242.59.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pidoux)
-        by nirriti.ent.upmc.fr (Postfix) with ESMTPSA id C373F1234C71D;
-        Mon,  5 Sep 2022 00:48:58 +0200 (CEST)
-Message-ID: <4cb974e2-d5ba-d610-7fe8-4089256a9854@free.fr>
-Date:   Mon, 5 Sep 2022 00:48:58 +0200
+        Sun, 4 Sep 2022 18:58:56 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEAE2A72E;
+        Sun,  4 Sep 2022 15:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662332335; x=1693868335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6lRrC028A9Us0DoTusO+pndhBJWhk8nDRSwaWIEpGho=;
+  b=So6hOxruTsqFaVcXFP1UNOOApEDIig/gzZhEWUVkcTZeoGwm7EmY9mHs
+   emrOWn+6VRkr+MzUULkdbNHh0aQll3bgeIWtiqmrYp69CfFvmMDoRc+wJ
+   kXIusyWlOqk7p9zxLSoQFmj6O4MHdqgV5YtQfxeWDA4fL2vFIe78QAUW0
+   U04M9z6Eko3tZ8gcpK69PZ0+1/ooKxSAzAyOgIdKMPo7s3OnvkPcK3b0d
+   wZ1sZNxpqLUXleMMVHncs9f6vBGIQd7SCW2cHB9jYJUossUmAH20xwlB1
+   CnVgNWfs2u2ux+afrHaQEZZRXGBHV8DnlJl//OmGulBGvoOCRPuzKIib0
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="279289639"
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="279289639"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 15:58:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="702697580"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Sep 2022 15:58:49 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUyZk-0003TJ-2O;
+        Sun, 04 Sep 2022 22:58:48 +0000
+Date:   Mon, 5 Sep 2022 06:57:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        will@kernel.org
+Cc:     kbuild-all@lists.01.org, lecopzer.chen@mediatek.com,
+        acme@kernel.org, akpm@linux-foundation.org,
+        alexander.shishkin@linux.intel.com, catalin.marinas@arm.com,
+        davem@davemloft.net, jolsa@redhat.com, jthierry@redhat.com,
+        keescook@chromium.org, kernelfans@gmail.com, masahiroy@kernel.org,
+        matthias.bgg@gmail.com, maz@kernel.org, mcgrof@kernel.org,
+        mingo@redhat.com, namhyung@kernel.org, nixiaoming@huawei.com,
+        peterz@infradead.org, pmladek@suse.com, sparclinux@vger.kernel.org,
+        sumit.garg@linaro.org, wangqing@vivo.com, yj.chiang@mediatek.com
+Subject: Re: [PATCH v7 6/6] arm64: Enable perf events based hard lockup
+ detector
+Message-ID: <202209050639.jDaWd49E-lkp@intel.com>
+References: <20220903093415.15850-7-lecopzer.chen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-To:     edumazet@google.com
-Cc:     davem@davemloft.net, duoming@zju.edu.cn, f6bvp@free.fr,
-        kuba@kernel.org, linux-hams@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, ralf@linux-mips.org
-References: <CANn89i+FBa-KLJz5xPvk3jO3Miww4Vs+qw4nPf_9SPwiWpyTWw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] [PATCH] net: rose: fix unregistered netdevice:
- waiting for rose0 to become free
-Content-Language: en-US
-From:   f6bvp <f6bvp@free.fr>
-In-Reply-To: <CANn89i+FBa-KLJz5xPvk3jO3Miww4Vs+qw4nPf_9SPwiWpyTWw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NEUTRAL,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220903093415.15850-7-lecopzer.chen@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,215 +75,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux bernard-f6bvp 6.0.0-rc3-DEBUG+ #6 SMP PREEMPT_DYNAMIC Sun Sep 4 
-19:40:14 CEST 2022 x86_64 x86_64 x86_64 GNU/Linux
-
-
-Trying to removing rose module when it is no more in use is still impossible
-
-# lsmod
-
-Module                  Size  Used by
-
-rose                   53248  -1
-
-ax25                   65536  1 rose
-
-
-
-#dmesg
-..........
-[17199.188170] NET: Unregistered PF_ROSE protocol family
-
-[17209.327901] unregister_netdevice: waiting for rose0 to become free. 
-Usage count = 17
-
-[17209.327910] leaked reference.
-
-[17209.327913]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.327923]  rose_route_frame+0x287/0x740 [rose]
-
-[17209.327928]  ax25_rx_iframe.part.0+0x8a/0x340 [ax25]
-
-[17209.327936]  ax25_rx_iframe+0x13/0x20 [ax25]
-
-[17209.327942]  ax25_std_frame_in+0x7ae/0x810 [ax25]
-
-[17209.327948]  ax25_rcv.constprop.0+0x5ee/0x880 [ax25]
-
-[17209.327953]  ax25_kiss_rcv+0x6c/0x90 [ax25]
-
-[17209.327959]  __netif_receive_skb_one_core+0x91/0xa0
-
-[17209.327964]  __netif_receive_skb+0x15/0x60
-
-[17209.327968]  process_backlog+0x96/0x140
-
-[17209.327971]  __napi_poll+0x33/0x190
-
-[17209.327974]  net_rx_action+0x19f/0x300
-
-[17209.327977]  __do_softirq+0x103/0x366
-
-[17209.327983] leaked reference.
-
-[17209.327985]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.327990]  rose_loopback_timer+0xa3/0x1c0 [rose]
-
-[17209.327995]  call_timer_fn+0x2c/0x150
-
-[17209.328000]  __run_timers.part.0+0x1d9/0x280
-
-[17209.328003]  run_timer_softirq+0x3f/0xa0
-
-[17209.328007]  __do_softirq+0x103/0x366
-
-[17209.328011] leaked reference.
-
-[17209.328013]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.328018]  rose_route_frame+0x287/0x740 [rose]
-
-[17209.328023]  ax25_rx_iframe.part.0+0x8a/0x340 [ax25]
-
-[17209.328028]  ax25_rx_iframe+0x13/0x20 [ax25]
-
-[17209.328034]  ax25_std_frame_in+0x7ae/0x810 [ax25]
-
-[17209.328040]  ax25_rcv.constprop.0+0x5ee/0x880 [ax25]
-
-[17209.328045]  ax25_kiss_rcv+0x6c/0x90 [ax25]
-
-[17209.328050]  __netif_receive_skb_one_core+0x91/0xa0
-
-[17209.328054]  __netif_receive_skb+0x15/0x60
-
-[17209.328057]  process_backlog+0x96/0x140
-
-[17209.328060]  __napi_poll+0x33/0x190
-
-[17209.328063]  net_rx_action+0x19f/0x300
-
-[17209.328067]  __do_softirq+0x103/0x366
-
-[17209.328071] leaked reference.
-
-[17209.328072]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.328077]  rose_loopback_timer+0xa3/0x1c0 [rose]
-
-[17209.328082]  call_timer_fn+0x2c/0x150
-
-[17209.328085]  __run_timers.part.0+0x1d9/0x280
-
-[17209.328089]  run_timer_softirq+0x3f/0xa0
-
-[17209.328092]  __do_softirq+0x103/0x366
-
-[17209.328096] leaked reference.
-
-[17209.328098]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.328103]  rose_loopback_timer+0xa3/0x1c0 [rose]
-
-[17209.328107]  call_timer_fn+0x2c/0x150
-
-[17209.328111]  __run_timers.part.0+0x1d9/0x280
-
-[17209.328114]  run_timer_softirq+0x3f/0xa0
-
-[17209.328117]  __do_softirq+0x103/0x366
-
-[17209.328121] leaked reference.
-
-[17209.328123]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.328128]  rose_route_frame+0x287/0x740 [rose]
-
-[17209.328133]  ax25_rx_iframe.part.0+0x8a/0x340 [ax25]
-
-[17209.328138]  ax25_rx_iframe+0x13/0x20 [ax25]
-
-[17209.328144]  ax25_std_frame_in+0x7ae/0x810 [ax25]
-
-[17209.328150]  ax25_rcv.constprop.0+0x5ee/0x880 [ax25]
-
-[17209.328155]  ax25_kiss_rcv+0x6c/0x90 [ax25]
-
-[17209.328160]  __netif_receive_skb_one_core+0x91/0xa0
-
-[17209.328164]  __netif_receive_skb+0x15/0x60
-
-[17209.328167]  process_backlog+0x96/0x140
-
-[17209.328170]  __napi_poll+0x33/0x190
-
-[17209.328173]  net_rx_action+0x19f/0x300
-
-[17209.328176]  __do_softirq+0x103/0x366
-
-[17209.328180] leaked reference.
-
-[17209.328182]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.328187]  rose_loopback_timer+0xa3/0x1c0 [rose]
-
-[17209.328192]  call_timer_fn+0x2c/0x150
-
-[17209.328195]  __run_timers.part.0+0x1d9/0x280
-
-[17209.328198]  run_timer_softirq+0x3f/0xa0
-
-[17209.328202]  __do_softirq+0x103/0x366
-
-[17209.328206] leaked reference.
-
-[17209.328208]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.328212]  rose_loopback_timer+0xa3/0x1c0 [rose]
-
-[17209.328217]  call_timer_fn+0x2c/0x150
-
-[17209.328220]  __run_timers.part.0+0x1d9/0x280
-
-[17209.328223]  run_timer_softirq+0x3f/0xa0
-
-[17209.328227]  __do_softirq+0x103/0x366
-
-[17209.328231] leaked reference.
-
-[17209.328232]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.328237]  rose_loopback_timer+0xa3/0x1c0 [rose]
-
-[17209.328242]  call_timer_fn+0x2c/0x150
-
-[17209.328245]  __run_timers.part.0+0x1d9/0x280
-
-[17209.328248]  run_timer_softirq+0x3f/0xa0
-
-[17209.328252]  __do_softirq+0x103/0x366
-
-[17209.328256] leaked reference.
-
-[17209.328258]  rose_rx_call_request+0x334/0x7b0 [rose]
-
-[17209.328262]  rose_loopback_timer+0xa3/0x1c0 [rose]
-
-[17209.328267]  call_timer_fn+0x2c/0x150
-
-[17209.328270]  __run_timers.part.0+0x1d9/0x280
-
-[17209.328273]  run_timer_softirq+0x3f/0xa0
-
-[17209.328277]  __do_softirq+0x103/0x366
-
-
-
-
-
-
-
-
+Hi Lecopzer,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on arm/for-next soc/for-next linus/master v6.0-rc4 next-20220901]
+[cannot apply to xilinx-xlnx/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lecopzer-Chen/Support-hld-delayed-init-based-on-Pseudo-NMI-for/20220903-173641
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: arm64-randconfig-c033-20220904 (https://download.01.org/0day-ci/archive/20220905/202209050639.jDaWd49E-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/de75eba8785b631eb168737fbff6dc31418cb852
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lecopzer-Chen/Support-hld-delayed-init-based-on-Pseudo-NMI-for/20220903-173641
+        git checkout de75eba8785b631eb168737fbff6dc31418cb852
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: arch/arm64/kernel/perf_event.o: in function `armv8_pmu_driver_init':
+>> arch/arm64/kernel/perf_event.c:1402: undefined reference to `retry_lockup_detector_init'
+
+
+vim +1402 arch/arm64/kernel/perf_event.c
+
+  1391	
+  1392	static int __init armv8_pmu_driver_init(void)
+  1393	{
+  1394		int ret;
+  1395	
+  1396		if (acpi_disabled)
+  1397			ret = platform_driver_register(&armv8_pmu_driver);
+  1398		else
+  1399			ret = arm_pmu_acpi_probe(armv8_pmuv3_pmu_init);
+  1400	
+  1401		if (!ret)
+> 1402			retry_lockup_detector_init();
+  1403	
+  1404		return ret;
+  1405	}
+  1406	device_initcall(armv8_pmu_driver_init)
+  1407	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

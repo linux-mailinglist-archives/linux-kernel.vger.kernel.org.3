@@ -2,102 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE5F5AC68D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC2B5AC693
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbiIDVBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 17:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S231221AbiIDVK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 17:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiIDVBi (ORCPT
+        with ESMTP id S229596AbiIDVK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 17:01:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5261B2870C;
-        Sun,  4 Sep 2022 14:01:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE88561018;
-        Sun,  4 Sep 2022 21:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA58DC433D6;
-        Sun,  4 Sep 2022 21:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662325296;
-        bh=eMJUB1gy+kxLJqRVw1Z/bd/e2b4QxmsudxdCqmT87wk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MG3gYYfZAXBsoxy72zSrFZEDlCJ/iKqdbn1FOuYNJQOnd+yT/5wmCcfLNN0IlTmp1
-         qK7LNbnuGbRO6CbCrddF5DMAa75abGY2H+39oSFoQGMMXVmVHqeUzCst0XQW3QwbcI
-         nIpnVgVXeHUUGdJUZf8PgU7ZbsAfhgJbKWaP7WcZiN84hqCygVdUOW//UZQNX+e6PQ
-         WvEzk/JeZy60hbZqF1jAj6Q+pZ34eqv7YN2AINuk3wt2I6+m8YsjjctLk8yRABGtGY
-         FaBIWXQGa4BHayy5JzG9qBGyZZQFweTC2D68x+o82GrjD1Ycao9VgnqTmoXgmBq1vn
-         XLHT/M/Oame6Q==
-Date:   Sun, 4 Sep 2022 23:01:33 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org, boqun.feng@gmail.com
-Subject: Re: [PATCH v5 06/18] rcu: Introduce call_rcu_lazy() API
- implementation
-Message-ID: <20220904210133.GA149888@lothringen>
-References: <20220901221720.1105021-1-joel@joelfernandes.org>
- <20220901221720.1105021-7-joel@joelfernandes.org>
- <20220902152132.GA115525@lothringen>
- <YxPOfVMzRWEa7xqf@google.com>
+        Sun, 4 Sep 2022 17:10:56 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F786286C3;
+        Sun,  4 Sep 2022 14:10:55 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id z72so5606985iof.12;
+        Sun, 04 Sep 2022 14:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=J51I8RaCuzdT8Bm/bwvJ5WcPKRZ8WBpgbavhM4XpO+M=;
+        b=hzmufDgT5oVB7PkbGKtfLUEKpLN8jhiF7t4rTHyxd6u4n7cFvai2UUTMqxsi02g8Mo
+         2LP6nd/B6n82UA3Tv29BFhEaTfoTjUp5nqR2qwLFlW/f5Z6eaEUsNNV5F42cz8ze2n1c
+         9zKnQahwia/oOAKw4EzTz+gswVsZZtLA9wincWGyzAA/mLEdP38eThHnvatHvcRpxnIy
+         WiKqilQnYCprbB85dAi/sDffTQCKSDh/craYEcoOZajYtrS3BDI+Nj1evrr/HWg45VWZ
+         4V7A0tB2bzeN2CyxahKJZu/mI+sHZlabZDJwHdUB4FI88nfU3y94ZSiOGpGfWj7PmN0C
+         bJ4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=J51I8RaCuzdT8Bm/bwvJ5WcPKRZ8WBpgbavhM4XpO+M=;
+        b=v40HQ92O9AENjD9Q5JXaOeN4ABgY3ez9Y4H9UI8666G3PxkXdwcTl73pwGxO1f/ScX
+         5jDuGZoq93OLfnqFzZi9YjmkfFO/f5I9fq83BJqo+uGCuU6pngCq6iwybeZhcH7VDgFR
+         xDl26pD0ubOagc4ltHjOo6FvJe8BoeU8kxVqU/2DBxoU4pZFuwc02CIWHRZs+SIHjL3X
+         tj76ovPpGHdUPbfKXKTYrLU7Np+4MBd2FHcHKa9/WTJ2WXYsrGDCJyKPBdHc20oZ+Oyz
+         7qZgQokRLpNSR+jRE5ZmReDsAg3gg87slrQWApo7pt7lDlzMBroFKpRfr6OEl4LdQK7g
+         rsyw==
+X-Gm-Message-State: ACgBeo0+8VsFWpuqVYAUYFX7kTfgreIDGyB8I3wH1TUQrD2hayGane3G
+        0pkejFlGvh1e8xUkUfi79WM+rrWitsAHCaewUZ/t9FhOAfk=
+X-Google-Smtp-Source: AA6agR6AywIt7M7No4j2fnJElZWk/VLIDrBPVK5mZaTNsEq1I6Uq8B7FMRTiAPnQeMHuDFxFTEX9CT8IBjljZCtDDjs=
+X-Received: by 2002:a5e:dc46:0:b0:689:94f6:fa3e with SMTP id
+ s6-20020a5edc46000000b0068994f6fa3emr22214989iop.110.1662325854603; Sun, 04
+ Sep 2022 14:10:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxPOfVMzRWEa7xqf@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YxR9v/dyzDt8sBFT@playground>
+In-Reply-To: <YxR9v/dyzDt8sBFT@playground>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Sun, 4 Sep 2022 23:10:18 +0200
+Message-ID: <CAP01T76nG7wQ-WFdjtYr5v-KutAOTRJ_zME-nV6HYUwwYW=z6Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] Fixes: 14a324f6a67e ("bpf: Wire up freeing of
+ referenced kptr")
+To:     Jules Irenge <jbi.octave@gmail.com>
+Cc:     ast@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev,
+        Elana.Copperman@mobileye.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 03, 2022 at 10:00:29PM +0000, Joel Fernandes wrote:
-> On Fri, Sep 02, 2022 at 05:21:32PM +0200, Frederic Weisbecker wrote:
-> +
-> +	raw_spin_lock_irqsave(&my_rdp->nocb_gp_lock, flags);
+On Sun, 4 Sept 2022 at 12:28, Jules Irenge <jbi.octave@gmail.com> wrote:
+>
+> This patch fixes a warning generated by Sparse
+>
+> "warning: Using plain integer as NULL pointer"
+>
+> by replacing p with *p in the WRITE_ONCE() macro
+>
+> This enables the pointer to be cleared on map value delete,
+> hence clearing the warning.
+>
+> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+> ---
 
-This is locking during the whole group iteration potentially contending call_rcu(),
-idle loop, resume to userspace on all rdp in the group...
+1. Always bump the version number when resending a patch
+2. Fixes: ... tag needs to come before your SoB.
+3. The headline can instead be [PATCH bpf-next vN] bpf: Fix resetting
+logic for unreferenced kptrs
+where N is your version number.
+4. Commit message needs more work. Apart from what you have specified
+about sparse, it can be:
 
-How about not overwriting timers instead and only set the RCU_NOCB_WAKE_LAZY
-timer when it is previously in RCU_NOCB_WAKE_NOT state? After all if the timer is armed,
-it's because we have regular callbacks queued and thus we don't need to wait
-before processing the lazy callbacks since we are going to start a grace period
-anyway.
+During the process of fixing this warning, it was discovered that the
+current code erroneously writes to the pointer variable instead
+dereferencing and writing to the actual kptr. Hence, the sparse tool
+accidently helped tp uncover this problem. Fix this by doing
+WRITE_ONCE(*p, 0) instead of WRITE_ONCE(p, 0). Note that the effect of
+this bug is that unreferenced kptrs won't be cleared during
+check_and_free_fields. It is not a problem if the clearing is not done
+during map_free stage, as there is nothing to free for them.
 
-Thanks.
+5. There is no requirement to Cc linux-kernel ML for BPF patches.
 
-
->  	list_for_each_entry_rcu(rdp, &my_rdp->nocb_head_rdp, nocb_entry_rdp, 1) {
->  		bool needwake_state = false;
->  		bool flush_bypass = false;
-> @@ -855,14 +870,15 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
->  		// If bypass list only has lazy CBs. Add a deferred
->  		// lazy wake up.
->  		if (lazy && !bypass) {
-> -			wake_nocb_gp_defer(my_rdp, RCU_NOCB_WAKE_LAZY,
-> +			wake_nocb_gp_defer_locked(my_rdp, RCU_NOCB_WAKE_LAZY,
->  					TPS("WakeLazyIsDeferred"));
->  		// Otherwise add a deferred bypass wake up.
->  		} else if (bypass) {
-> -			wake_nocb_gp_defer(my_rdp, RCU_NOCB_WAKE_BYPASS,
-> +			wake_nocb_gp_defer_locked(my_rdp, RCU_NOCB_WAKE_BYPASS,
->  					TPS("WakeBypassIsDeferred"));
->  		}
->  	}
-> +	raw_spin_unlock_irqrestore(&my_rdp->nocb_gp_lock, flags);
->  
->  	if (rcu_nocb_poll) {
->  		/* Polling, so trace if first poll in the series. */
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+>  kernel/bpf/syscall.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 27760627370d..f798acd43a28 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -598,7 +598,7 @@ void bpf_map_free_kptrs(struct bpf_map *map, void *map_value)
+>                 if (off_desc->type == BPF_KPTR_UNREF) {
+>                         u64 *p = (u64 *)btf_id_ptr;
+>
+> -                       WRITE_ONCE(p, 0);
+> +                       WRITE_ONCE(*p, 0);
+>                         continue;
+>                 }
+>                 old_ptr = xchg(btf_id_ptr, 0);
+> --
+> 2.35.1
+>

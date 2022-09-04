@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303115AC6BD
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26A05AC726
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235407AbiIDVms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 17:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S235429AbiIDVmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 17:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234907AbiIDVmV (ORCPT
+        with ESMTP id S234928AbiIDVmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 4 Sep 2022 17:42:21 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFF32C109
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:42:19 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e7so3873045ilc.5
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:42:19 -0700 (PDT)
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496ED2C661
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:42:20 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id 62so5673882iov.5
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=774vPkNjj+tHobVK7wxTpiFngzuHiOZuQGU68liCSfs=;
-        b=C7K+Yu8rS5CfqjlNHPHnOaD4zxwfuunfcvyOT5g9f9rMen9a6bVHcvqbwXA2+Y+9Kz
-         RKQbD2pNaDWCYN70iNH05lkOWO4RBz/bQ8/cRwN6WEZcEvurKwq1+mOrxYFqPOqFAgqc
-         jTojshygRsAzBiQhplkoP1HY15Ecq9/KjZAyKP3dmiszNKFO5leOY1ZvfEMxlgqXIOZd
-         dYRX5/7LlkpgOOE5bEoz36HFy0JsAvZ+ng4hTn9uDioPYMM7Bu0T/tVRPEgpDqQID6iV
-         nipB6JonPPNto+aq00YwjoQiAFGv/V/8G9n0DURSqGi4XiyI78KNHcGZM6RuJDkxs46Z
-         26bg==
+        bh=JzdXJQgZbXW3FjxRfc8LeNnI2jIQsEPwZbCx/pElNeM=;
+        b=FUv8NBMgLulwhhEoMyLnxfYB3+uPNeLFEo5/TLMiSZjR94roddKbiqTTG31unDiBV2
+         koej5AIOTpgc4Fj75xhV1jWGKl/5CM8q7EieivOlV5/b+BYdXa9pALtMLQe6QZEuohs8
+         uc4jHbPW01pKLaccj4L/SBD9SF3hrWMDpeLoGgRrvCEUQKX8JmTlITp0J8QvdPavHfqS
+         KpCN89/psw628tV7ylJY71laqV2x/K4y1PPoettY5lY6Kg7pmI05/DzTkiDbBqcz1dnc
+         NsgFPB4IEgajS8Toc7/PVXqE2pPIC6p3Ibe6XKVfl3deYBS708mMbxWmh4z8Z7N8CYIi
+         UccQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=774vPkNjj+tHobVK7wxTpiFngzuHiOZuQGU68liCSfs=;
-        b=p5+W/5ggSREFgjvIoZp9LHMvLvrR4jL2ns3cmiggd7Q4fMIF7MMglilO1D+yRsrobn
-         1J7/CY6pYgSB6yvir+34Dt+2A/FYLu9H+z5m2keyepxNmlutBcT68WGyPg0g60RY+aDc
-         C/q7g4DK3WKH7HyntC2gKqpAxYFsDc9RApOTjALG/6q+u8XrX4Lgn+XjaL83ZHVszmMo
-         8+8sOiCIfR+ko+e/uDu6qSTVHpA5ATljmoN6cRuGf+dBe7mcHp0Z3n5L4JlV9EkQuqy4
-         PhhA+QWnDCTYvQUiH33hdNZ8+qyrYRXE3JqE9jamJdoTCrw7PLhiaA945ImeV6q6DXgY
-         G1vw==
-X-Gm-Message-State: ACgBeo1TgK1WIs2wnG+KVKzWS1BcktAYXdTIaI0wCvRO/pK07n0+JRkr
-        cauXzndJ25NOVejvnLZlzXA=
-X-Google-Smtp-Source: AA6agR5dk7sIC47F0zJwtTKZLwCG1OGpPQGC5vGCcEQBykOFT3Gx9Uw/vzxF/89YxMKOB4dB9YkQUQ==
-X-Received: by 2002:a05:6e02:148d:b0:2ee:82e:63fc with SMTP id n13-20020a056e02148d00b002ee082e63fcmr7362054ilk.289.1662327738560;
-        Sun, 04 Sep 2022 14:42:18 -0700 (PDT)
+        bh=JzdXJQgZbXW3FjxRfc8LeNnI2jIQsEPwZbCx/pElNeM=;
+        b=C8P8iZWZk81ggH+/BxLOLwSrHcaRIip+CUrdb3URVAi/1dHW8/2gBZ9erUMuRQWsWm
+         vGeI60tGw9eegoPVOgIYXNbqo5S5GofQTR9Z1rf5MnH/VxkYa/NoTvlYl5Vcbc0BwjqB
+         4Gzf8kTf1u2FoOPaoDZdzJeLTjp5gCWD39Yr+JgdoCyTygHAMZJIZtidaxs2Us0ouoCF
+         Ia9LJJj3L6u0gSuuhq2823zYeQ0OKS4Ojs0j3mAUpeo3VPg1YupwDFsy/BBCY/+fIFz/
+         X5BlEzmp7HYQFWbHnFoKaUibKg/zo8/4Mf1zFwVSX2ioSWVg27IOsMm88SruC5fDn9Od
+         Cz+g==
+X-Gm-Message-State: ACgBeo0FP7CzRsPccR2OPeYIRKgRa0NJZlOCU1Aadf4Notf32Qajbjve
+        ZhL7ilCIrYbjl+gDByyCnfM=
+X-Google-Smtp-Source: AA6agR69LwdoHmp66Z3rxXxBJJ0Vec0ZLNH/n+zC6VNVydFgIRnTRHkjqAX0L8kf28KEk70mHqw2jw==
+X-Received: by 2002:a5e:8414:0:b0:689:e3c:308a with SMTP id h20-20020a5e8414000000b006890e3c308amr21338651ioj.29.1662327739611;
+        Sun, 04 Sep 2022 14:42:19 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.17
+        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 14:42:18 -0700 (PDT)
+        Sun, 04 Sep 2022 14:42:19 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -57,9 +57,9 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH v6 09/57] dyndbg: drop EXPORTed dynamic_debug_exec_queries
-Date:   Sun,  4 Sep 2022 15:40:46 -0600
-Message-Id: <20220904214134.408619-10-jim.cromie@gmail.com>
+Subject: [PATCH v6 10/57] dyndbg: cleanup auto vars in dynamic_debug_init
+Date:   Sun,  4 Sep 2022 15:40:47 -0600
+Message-Id: <20220904214134.408619-11-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220904214134.408619-1-jim.cromie@gmail.com>
 References: <20220904214134.408619-1-jim.cromie@gmail.com>
@@ -75,89 +75,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This exported fn is unused, and will not be needed. Lets dump it.
+rework var-names for clarity, regularity
+rename variables
+  - n to mod_sites - it counts sites-per-module
+  - entries to i - display only
+  - iter_start to iter_mod_start - marks start of each module's subrange
+  - modct to mod_ct - stylistic
 
-The export was added to let drm control pr_debugs, as part of using
-them to avoid drm_debug_enabled overheads.  But its better to just
-implement the drm.debug bitmap interface, then its available for
-everyone.
+new iterator var:
+  - site - cursor parallel to iter
+    1st step towards 'demotion' of iter->site, for removal later
 
-Fixes: a2d375eda771 ("dyndbg: refine export, rename to dynamic_debug_exec_queries()")
-Fixes: 4c0d77828d4f ("dyndbg: export ddebug_exec_queries")
-Acked-by: Jason Baron <jbaron@akamai.com>
+treat vars as iters:
+  - drop init at top
+    init just above for-loop, in a textual block
+
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/linux/dynamic_debug.h |  9 ---------
- lib/dynamic_debug.c           | 29 -----------------------------
- 2 files changed, 38 deletions(-)
+ lib/dynamic_debug.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index f30b01aa9fa4..8d9eec5f6d8b 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -55,9 +55,6 @@ struct _ddebug {
- 
- #if defined(CONFIG_DYNAMIC_DEBUG_CORE)
- 
--/* exported for module authors to exercise >control */
--int dynamic_debug_exec_queries(const char *query, const char *modname);
--
- int ddebug_add_module(struct _ddebug *tab, unsigned int n,
- 				const char *modname);
- extern int ddebug_remove_module(const char *mod_name);
-@@ -221,12 +218,6 @@ static inline int ddebug_dyndbg_module_param_cb(char *param, char *val,
- 				rowsize, groupsize, buf, len, ascii);	\
- 	} while (0)
- 
--static inline int dynamic_debug_exec_queries(const char *query, const char *modname)
--{
--	pr_warn("kernel not built with CONFIG_DYNAMIC_DEBUG_CORE\n");
--	return 0;
--}
--
- #endif /* !CONFIG_DYNAMIC_DEBUG_CORE */
- 
- #endif
 diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 5a849716220a..e96dc216463b 100644
+index e96dc216463b..2e8ebef3bd0d 100644
 --- a/lib/dynamic_debug.c
 +++ b/lib/dynamic_debug.c
-@@ -558,35 +558,6 @@ static int ddebug_exec_queries(char *query, const char *modname)
- 	return nfound;
- }
+@@ -1059,11 +1059,10 @@ static int __init dynamic_debug_init_control(void)
  
--/**
-- * dynamic_debug_exec_queries - select and change dynamic-debug prints
-- * @query: query-string described in admin-guide/dynamic-debug-howto
-- * @modname: string containing module name, usually &module.mod_name
-- *
-- * This uses the >/proc/dynamic_debug/control reader, allowing module
-- * authors to modify their dynamic-debug callsites. The modname is
-- * canonically struct module.mod_name, but can also be null or a
-- * module-wildcard, for example: "drm*".
-- */
--int dynamic_debug_exec_queries(const char *query, const char *modname)
--{
--	int rc;
--	char *qry; /* writable copy of query */
--
--	if (!query) {
--		pr_err("non-null query/command string expected\n");
--		return -EINVAL;
--	}
--	qry = kstrndup(query, PAGE_SIZE, GFP_KERNEL);
--	if (!qry)
--		return -ENOMEM;
--
--	rc = ddebug_exec_queries(qry, modname);
--	kfree(qry);
--	return rc;
--}
--EXPORT_SYMBOL_GPL(dynamic_debug_exec_queries);
--
- #define PREFIX_SIZE 64
+ static int __init dynamic_debug_init(void)
+ {
+-	struct _ddebug *iter, *iter_start;
+-	const char *modname = NULL;
++	struct _ddebug *iter, *iter_mod_start;
++	int ret, i, mod_sites, mod_ct;
++	const char *modname;
+ 	char *cmdline;
+-	int ret = 0;
+-	int n = 0, entries = 0, modct = 0;
  
- static int remaining(int wrote)
+ 	if (&__start___dyndbg == &__stop___dyndbg) {
+ 		if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
+@@ -1074,30 +1073,32 @@ static int __init dynamic_debug_init(void)
+ 		ddebug_init_success = 1;
+ 		return 0;
+ 	}
+-	iter = __start___dyndbg;
++
++	iter = iter_mod_start = __start___dyndbg;
+ 	modname = iter->modname;
+-	iter_start = iter;
+-	for (; iter < __stop___dyndbg; iter++) {
+-		entries++;
++	i = mod_sites = mod_ct = 0;
++
++	for (; iter < __stop___dyndbg; iter++, i++, mod_sites++) {
++
+ 		if (strcmp(modname, iter->modname)) {
+-			modct++;
+-			ret = ddebug_add_module(iter_start, n, modname);
++			mod_ct++;
++			ret = ddebug_add_module(iter_mod_start, mod_sites, modname);
+ 			if (ret)
+ 				goto out_err;
+-			n = 0;
++
++			mod_sites = 0;
+ 			modname = iter->modname;
+-			iter_start = iter;
++			iter_mod_start = iter;
+ 		}
+-		n++;
+ 	}
+-	ret = ddebug_add_module(iter_start, n, modname);
++	ret = ddebug_add_module(iter_mod_start, mod_sites, modname);
+ 	if (ret)
+ 		goto out_err;
+ 
+ 	ddebug_init_success = 1;
+ 	vpr_info("%d prdebugs in %d modules, %d KiB in ddebug tables, %d kiB in __dyndbg section\n",
+-		 entries, modct, (int)((modct * sizeof(struct ddebug_table)) >> 10),
+-		 (int)((entries * sizeof(struct _ddebug)) >> 10));
++		 i, mod_ct, (int)((mod_ct * sizeof(struct ddebug_table)) >> 10),
++		 (int)((i * sizeof(struct _ddebug)) >> 10));
+ 
+ 	/* now that ddebug tables are loaded, process all boot args
+ 	 * again to find and activate queries given in dyndbg params.
 -- 
 2.37.2
 

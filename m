@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5931A5AC56D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 18:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794E45AC590
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 19:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiIDQ2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 12:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S234858AbiIDRDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 13:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbiIDQ2V (ORCPT
+        with ESMTP id S229627AbiIDRDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 12:28:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7305C32A80;
-        Sun,  4 Sep 2022 09:28:20 -0700 (PDT)
+        Sun, 4 Sep 2022 13:03:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35CE2B273;
+        Sun,  4 Sep 2022 10:03:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 267F6B80DB1;
-        Sun,  4 Sep 2022 16:28:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67812C433D6;
-        Sun,  4 Sep 2022 16:28:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C5C960FC4;
+        Sun,  4 Sep 2022 17:03:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A857C433C1;
+        Sun,  4 Sep 2022 17:03:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662308897;
-        bh=K5NnPbSymMs3AKykE7PHxHnFNTgsCQlVrRUjYmQkZd8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZECx8K6fBpYlrkY+btLivGDbw5VXPkR6+YJzWV8G/MgykN1BXw2Zz1zo2qvaJ3eE8
-         U4m6UfrxEHwVzQsN+BDU6xkqSLsO+As4B7EcrbQIWWakpwlDVjMsMymHLiVAxn743F
-         FRLWsFqeyxq3SiN1AQR7o6jZnlHCkFGgLyKzYEamRdJ+4L5qmRqPc171e9J0RouUgb
-         QzNMa3lPzixNfc+gqmw8VciIZyxtas4bKEEaBYKkQKK5rTCjLoPEvIzq1WN73YiTdl
-         6kiwtqZ3+Xuo3tXJ2tmf5k4pZSefX0PCRuJL0V4JAQ+wbe/hf+OrgRLLwxkb6TYmUg
-         bsNHXHi3Gbv9g==
-Date:   Sun, 4 Sep 2022 21:58:14 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org
-Subject: Re: [PATCH v2] dmaengine: idxd: avoid deadlock in
- process_misc_interrupts()
-Message-ID: <YxTSHscENM2NL+ze@matsya>
-References: <20220823162435.2099389-1-jsnitsel@redhat.com>
- <20220823163709.2102468-1-jsnitsel@redhat.com>
+        s=k20201202; t=1662310987;
+        bh=EcXPP6Y1c06oVCwaXq53q7wHe38vVS+n7PCI/+LSJlU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r6SEjWAgDGaLrHQguYgL/Gh3uSkNLN/+SuAki6ImXRJ4SxfKHpNg0XOK1i24G1EiX
+         yiFzDzS7NvW0fg61wG+3JDJVZUqAZm2D5S7fXS2RSHcpnwvR1XcAMeE4jdcDFUa7De
+         ICIceCPpLVgapZLRKtdMVFNHrOKa9VzbQk9y3+cav6RdMoQzzIrc9HZHwGBFTpmEXw
+         bG6fRSrov3nOnvYIeMkAVJo0qsFdMrp6EaXyuoZPG3EwE2D9PEzRbcSUPEW5/pSeZ8
+         twHu53h8YbvX2VdyqWp/6g1eHIzCU8OsB4+1kaGECTi+Bnj/h7qiDV2+N5484zxi3l
+         TKUbU2eptjHOw==
+Date:   Sun, 4 Sep 2022 17:29:00 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     kernel <kernel@axis.com>, "lars@metafoo.de" <lars@metafoo.de>,
+        Axel Jonsson <Axel.Jonsson@axis.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] iio: adc: mcp320x: add triggered buffer support
+Message-ID: <20220904172900.099ed1d0@jic23-huawei>
+In-Reply-To: <Yw8SJil96IT6fP0n@axis.com>
+References: <20220824104002.2749075-1-vincent.whitchurch@axis.com>
+        <20220824104002.2749075-3-vincent.whitchurch@axis.com>
+        <20220828182430.533bf8e0@jic23-huawei>
+        <Yw8SJil96IT6fP0n@axis.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823163709.2102468-1-jsnitsel@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,14 +60,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-08-22, 09:37, Jerry Snitselaar wrote:
-> idxd_device_clear_state() now grabs the idxd->dev_lock
-> itself, so don't grab the lock prior to calling it.
+On Wed, 31 Aug 2022 09:47:50 +0200
+Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:
+
+> On Sun, Aug 28, 2022 at 07:24:30PM +0200, Jonathan Cameron wrote:
+> > On Wed, 24 Aug 2022 12:40:02 +0200
+> > Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:  
+> > > Add support for triggered buffers.  Just read the channels in a loop to
+> > > keep things simple.  
+> > 
+> > Just curious, but what other options are there?  A quick datasheet scroll
+> > through didn't seem to suggest you can overlap setup of next read with
+> > reading out the previous (common on SPI ADCs).  
 > 
-> This was seen in testing after dmar fault occurred on system,
-> resulting in lockup stack traces.
+> You're right that the hardware doesn't support any special method to
+> read out multiple channels; I can mention that in the commit message.
+> But I think you could construct a spi_message which a bunch of
+> spi_transfers which toggle the CS appropriately between them to read out
+> multiple channels in one go?  (Note that the variants have different
+> data formats, and many of the variants only have one channel.)
 
-Applied, thanks
+That might be a little more efficient on a suitably advanced
+SPI controller, or where the overhead of jumping between drivers
+is large, but in many cases it won't save that much.
 
--- 
-~Vinod
+Would need an experiment on a platform someone cares about to decide
+if it is worthwhile.
+
+Jonathan
+

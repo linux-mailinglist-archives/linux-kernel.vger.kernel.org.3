@@ -2,324 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62815AC251
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 06:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0A05AC24C
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 06:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbiIDEV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 00:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S232458AbiIDEVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 00:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233207AbiIDEVf (ORCPT
+        with ESMTP id S231550AbiIDEVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 00:21:35 -0400
-Received: from mail-oa1-x41.google.com (mail-oa1-x41.google.com [IPv6:2001:4860:4864:20::41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733AB4D80F
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 21:21:34 -0700 (PDT)
-Received: by mail-oa1-x41.google.com with SMTP id 586e51a60fabf-11f34610d4aso14517214fac.9
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Sep 2022 21:21:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=nFrCU9H+yZfz0Rv5KY1oVWlm8oyUWBoBmZmxLKuuzI4=;
-        b=Ns1b1DQoXsz5p0SSKmpl63+99/CPj4DT4gOigB3NBTlthJmdqHj+8Q+LmgcNgCZ7KM
-         Zg9de6RI8FeFoRRoZy3kBYLdBXoE7qQ7TnPUaoIkTptEGshkSnbatrMqe6LVi+FdrabS
-         t7RVKaKRtEFUzWPbbnjy0j8hg3BBnPQiiRobqgQIDneAcGKTdPZSmoeqD1jiLt09UsMp
-         TGz8qTwOYNOw48h5+b8OKpAqdQuZv6RiltLW2WvQbNGYPaCGR8JQ7UOGTdLFg4BNNpvP
-         fE+QtFepVeRqVRJ0ABiGtFhRbUdGymZe34hr1mZuL5Lqm9mopMER9qQEkp3TxuCo5H3b
-         CTCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=nFrCU9H+yZfz0Rv5KY1oVWlm8oyUWBoBmZmxLKuuzI4=;
-        b=Wab+0TQonsGwZWEPJM5CqN30CoGNzUmunNAgNrOOXD0ZWBeTzqq9g2j6kdMPgjWnuI
-         A+YuZGF/6z7DVqqISDIh90b+Iad+hT369hfsQGUXpG+OOL7fhxAYdN+XKIlmmb7Vfmk8
-         3TFa3sIEifbghrOesDBQcdHH6yTey97shaSKYQa9FMmoHVkWlWiGVF5ql8TO6TJAbPxW
-         u2tsHYKjiJIsC7bwBKDSBibrN+yYjXgestSjgJ61ALKVboJOGdlXFDndUGYq7zdhYETL
-         RvlDD0N0l02ifsHs8wA1PO9juhyO8xcQEeB53r/ABcuqhahimcFKmdfrXBTU+crIASF/
-         Dcsw==
-X-Gm-Message-State: ACgBeo1I5dgrw3cl4YTp0xOENQH/ZAFEADY2doUV02tgS1mNnIJRdY65
-        tLXEoyCQDgkhOGhEdN5BiPma8UaL0oI=
-X-Google-Smtp-Source: AA6agR5SeMYX6CXpetX2QhyGq5JsqLJEz5qCWz1Rl3sWitDouLQ34laKOa01IXHJM1rwNXxCsS9PxQ==
-X-Received: by 2002:a54:4014:0:b0:343:3683:1b60 with SMTP id x20-20020a544014000000b0034336831b60mr4906667oie.203.1662265293494;
-        Sat, 03 Sep 2022 21:21:33 -0700 (PDT)
-Received: from sophie (static-198-54-128-109.cust.tzulo.com. [198.54.128.109])
-        by smtp.gmail.com with ESMTPSA id i7-20020a056870890700b0010bf07976c9sm3485476oao.41.2022.09.03.21.21.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 21:21:33 -0700 (PDT)
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     David Hildenbrand <david@redhat.com>,
-        Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH v4 4/4] memblock tests: add generic NUMA tests for memblock_alloc_try_nid*
-Date:   Sat,  3 Sep 2022 23:21:08 -0500
-Message-Id: <3644b4e2e459bb656dd29bdef0b62291528b2f65.1662264560.git.remckee0@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1662264560.git.remckee0@gmail.com>
-References: <cover.1662264560.git.remckee0@gmail.com>
+        Sun, 4 Sep 2022 00:21:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4473F1F603;
+        Sat,  3 Sep 2022 21:21:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D448060EBF;
+        Sun,  4 Sep 2022 04:21:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA62C433D6;
+        Sun,  4 Sep 2022 04:21:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662265274;
+        bh=HTaLkyOjeRqU6VsCndu9y+G0HXRggqTWGIUw/ybXXiE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MxGJ2cteHFQQU2LqmX2NpaI/6R7xnmfcsx/3Eu0WPftaDbPga46zvXsc12SBVYA81
+         lv08BC3pvPTj+qtjvZ5epX+o5nbRxd2+3XMWDP+1VCy9o6nU2YctavaHm39honQsQJ
+         nQ3QSnn/iD8Qu1/plkJMQoS4dpOMC3k4W2tcZkqGkzOVoU+dgt9Y/suyebfFn1oh/i
+         L5SiXE+3MuRAKin/VKVpWa4JfEwFn1swTSXH/mth7Vu/vvX/MieBG3i65bmGIE07sy
+         pJoaJkJU0bRALRKlxXySzIYWV4Wor0CvMfnV2Z30JpfxXzeInpDJ+1Xx31UdblFOLz
+         +VGAPe0uPt+gw==
+Date:   Sun, 4 Sep 2022 07:21:09 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     linux-sgx@vger.kernel.org,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/6] selftests/sgx: Add SGX selftest
+ augment_via_eaccept_long
+Message-ID: <YxQntXMQfEZ/kZQT@kernel.org>
+References: <20220831173829.126661-1-jarkko@kernel.org>
+ <20220831173829.126661-5-jarkko@kernel.org>
+ <d2b76530-82a2-6ac1-32ea-696e653d767d@intel.com>
+ <YxEwwzXOsCliznQJ@kernel.org>
+ <YxQjPbFSHOThq4c5@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxQjPbFSHOThq4c5@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for memblock_alloc_try_nid() and memblock_alloc_try_nid_raw()
-where the simulated physical memory is set up with multiple NUMA nodes.
-Additionally, two of these tests set nid != NUMA_NO_NODE. All tests are
-run for both top-down and bottom-up allocation directions.
+On Sun, Sep 04, 2022 at 07:02:08AM +0300, Jarkko Sakkinen wrote:
+> On Fri, Sep 02, 2022 at 01:22:59AM +0300, Jarkko Sakkinen wrote:
+> > > Is this test passing on your system? This version is missing the change to
+> > > mrenclave_ecreate() that causes SGX_IOC_ENCLAVE_INIT to fail when I try it out.
+> > 
+> > I *did* get a pass in my test machine. Hmm... I'll check if
+> > the kernel tree was out-of-sync, which could be the reason.
+> > 
+> > I do not compile kernel on that machine but have the kernel
+> > tree for running selftests. So there is a possiblity for
+> > a human error. Thanks for pointing this out.
+> 
+> Apparently, v1 and v2 break the encl->src_size calculation:
+> the dynamic heap size is not added.
+> 
+> So, in order to revert sigstruct change:
+> 
+> diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+> index 47b2786d6a77..0e4e12e1e3eb 100644
+> --- a/tools/testing/selftests/sgx/load.c
+> +++ b/tools/testing/selftests/sgx/load.c
+> @@ -172,7 +172,7 @@ uint64_t encl_get_entry(struct encl *encl, const char *symbol)
+>  }
+> 
+>  bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
+> -              unsigned long edmm_size)
+> +              unsigned long dynamic_heap_size)
+>  {
+>         const char device_path[] = "/dev/sgx_enclave";
+>         struct encl_segment *seg;
+> @@ -299,9 +299,9 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
+>         if (seg->src == MAP_FAILED)
+>                 goto err;
+> 
+> -       encl->src_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
+> +       encl->src_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size + dynamic_heap_size;
+> 
+> -       for (encl->encl_size = 4096; encl->encl_size < encl->src_size + edmm_size;)
+> +       for (encl->encl_size = 4096; encl->encl_size < encl->src_size;)
+>                 encl->encl_size <<= 1;
 
-The tested scenarios are:
+Actually, it is correct after all how Vijay changed it. We should use
+the final pre-calculated enclave address range in sigstruct.c. It's the
+re-calculation of that in sigstruct is a reminiscent of it being a
+separate command-line utility, instead of calculating the sigstruct
+on-fly. I.e. there has been sane reasons why it has been like that.
 
-Range unrestricted:
-- region cannot be allocated:
-      + none of the nodes have enough memory to allocate the region
-
-Range restricted:
-- region can be allocated in the specific node requested without dropping
-  min_addr:
-      + the range fully overlaps with the node, and there are adjacent
-        reserved regions
-- region cannot be allocated:
-      + nid is set to NUMA_NO_NODE and the total range can fit the region,
-        but the range is split between two nodes and everything else is
-        reserved
-
-Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
----
- tools/testing/memblock/tests/alloc_nid_api.c | 197 +++++++++++++++++++
- 1 file changed, 197 insertions(+)
-
-diff --git a/tools/testing/memblock/tests/alloc_nid_api.c b/tools/testing/memblock/tests/alloc_nid_api.c
-index 133d77e83e0e..8f25c90c2300 100644
---- a/tools/testing/memblock/tests/alloc_nid_api.c
-+++ b/tools/testing/memblock/tests/alloc_nid_api.c
-@@ -2349,6 +2349,173 @@ static int alloc_try_nid_bottom_up_numa_no_overlap_high_check(void)
- 	return 0;
- }
- 
-+/*
-+ * A test that tries to allocate a memory region in a specific NUMA node that
-+ * does not have enough memory to allocate a region of the requested size.
-+ * Additionally, none of the nodes have enough memory to allocate the region:
-+ *
-+ * +-----------------------------------+
-+ * |                new                |
-+ * +-----------------------------------+
-+ *     |-------+-------+-------+-------+-------+-------+-------+-------|
-+ *     | node0 | node1 | node2 | node3 | node4 | node5 | node6 | node7 |
-+ *     +-------+-------+-------+-------+-------+-------+-------+-------+
-+ *
-+ * Expect no allocation to happen.
-+ */
-+static int alloc_try_nid_numa_large_region_generic_check(void)
-+{
-+	int nid_req = 3;
-+	void *allocated_ptr = NULL;
-+	phys_addr_t size = MEM_SIZE / SZ_2;
-+	phys_addr_t min_addr;
-+	phys_addr_t max_addr;
-+
-+	PREFIX_PUSH();
-+	setup_numa_memblock(node_fractions);
-+
-+	min_addr = memblock_start_of_DRAM();
-+	max_addr = memblock_end_of_DRAM();
-+
-+	allocated_ptr = run_memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-+						   min_addr, max_addr, nid_req);
-+	ASSERT_EQ(allocated_ptr, NULL);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
-+/*
-+ * A test that tries to allocate memory within min_addr and max_addr range when
-+ * there are two reserved regions at the borders. The requested node starts at
-+ * min_addr and ends at max_addr and is the same size as the region to be
-+ * allocated:
-+ *
-+ *                     min_addr
-+ *                     |                       max_addr
-+ *                     |                       |
-+ *                     v                       v
-+ *  |      +-----------+-----------------------+-----------------------|
-+ *  |      |   node5   |       requested       |         node7         |
-+ *  +------+-----------+-----------------------+-----------------------+
-+ *                     +                       +
-+ *  |             +----+-----------------------+----+                  |
-+ *  |             | r2 |          new          | r1 |                  |
-+ *  +-------------+----+-----------------------+----+------------------+
-+ *
-+ * Expect to merge all of the regions into one. The region counter and total
-+ * size fields get updated.
-+ */
-+static int alloc_try_nid_numa_reserved_full_merge_generic_check(void)
-+{
-+	int nid_req = 6;
-+	int nid_next = nid_req + 1;
-+	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
-+	struct memblock_region *req_node = &memblock.memory.regions[nid_req];
-+	struct memblock_region *next_node = &memblock.memory.regions[nid_next];
-+	void *allocated_ptr = NULL;
-+	struct region r1, r2;
-+	phys_addr_t size = req_node->size;
-+	phys_addr_t total_size;
-+	phys_addr_t max_addr;
-+	phys_addr_t min_addr;
-+
-+	PREFIX_PUSH();
-+	setup_numa_memblock(node_fractions);
-+
-+	r1.base = next_node->base;
-+	r1.size = SZ_128;
-+
-+	r2.size = SZ_128;
-+	r2.base = r1.base - (size + r2.size);
-+
-+	total_size = r1.size + r2.size + size;
-+	min_addr = r2.base + r2.size;
-+	max_addr = r1.base;
-+
-+	memblock_reserve(r1.base, r1.size);
-+	memblock_reserve(r2.base, r2.size);
-+
-+	allocated_ptr = run_memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-+						   min_addr, max_addr, nid_req);
-+
-+	ASSERT_NE(allocated_ptr, NULL);
-+	assert_mem_content(allocated_ptr, size, alloc_nid_test_flags);
-+
-+	ASSERT_EQ(new_rgn->size, total_size);
-+	ASSERT_EQ(new_rgn->base, r2.base);
-+
-+	ASSERT_LE(new_rgn->base, req_node->base);
-+	ASSERT_LE(region_end(req_node), region_end(new_rgn));
-+
-+	ASSERT_EQ(memblock.reserved.cnt, 1);
-+	ASSERT_EQ(memblock.reserved.total_size, total_size);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
-+/*
-+ * A test that tries to allocate memory within min_addr and max_add range,
-+ * where the total range can fit the region, but it is split between two nodes
-+ * and everything else is reserved. Additionally, nid is set to NUMA_NO_NODE
-+ * instead of requesting a specific node:
-+ *
-+ *                         +-----------+
-+ *                         |    new    |
-+ *                         +-----------+
-+ *  |      +---------------------+-----------|
-+ *  |      |      prev node      | next node |
-+ *  +------+---------------------+-----------+
-+ *                         +           +
-+ *  |----------------------+           +-----|
-+ *  |          r1          |           |  r2 |
-+ *  +----------------------+-----------+-----+
-+ *                         ^           ^
-+ *                         |           |
-+ *                         |           max_addr
-+ *                         |
-+ *                         min_addr
-+ *
-+ * Expect no allocation to happen.
-+ */
-+static int alloc_try_nid_numa_split_all_reserved_generic_check(void)
-+{
-+	void *allocated_ptr = NULL;
-+	struct memblock_region *next_node = &memblock.memory.regions[7];
-+	struct region r1, r2;
-+	phys_addr_t size = SZ_256;
-+	phys_addr_t max_addr;
-+	phys_addr_t min_addr;
-+
-+	PREFIX_PUSH();
-+	setup_numa_memblock(node_fractions);
-+
-+	r2.base = next_node->base + SZ_128;
-+	r2.size = memblock_end_of_DRAM() - r2.base;
-+
-+	r1.size = MEM_SIZE - (r2.size + size);
-+	r1.base = memblock_start_of_DRAM();
-+
-+	min_addr = r1.base + r1.size;
-+	max_addr = r2.base;
-+
-+	memblock_reserve(r1.base, r1.size);
-+	memblock_reserve(r2.base, r2.size);
-+
-+	allocated_ptr = run_memblock_alloc_try_nid(size, SMP_CACHE_BYTES,
-+						   min_addr, max_addr,
-+						   NUMA_NO_NODE);
-+
-+	ASSERT_EQ(allocated_ptr, NULL);
-+
-+	test_pass_pop();
-+
-+	return 0;
-+}
-+
- /* Test case wrappers for NUMA tests */
- static int alloc_try_nid_numa_simple_check(void)
- {
-@@ -2460,6 +2627,33 @@ static int alloc_try_nid_numa_no_overlap_high_check(void)
- 	return 0;
- }
- 
-+static int alloc_try_nid_numa_large_region_check(void)
-+{
-+	test_print("\tRunning %s...\n", __func__);
-+	run_top_down(alloc_try_nid_numa_large_region_generic_check);
-+	run_bottom_up(alloc_try_nid_numa_large_region_generic_check);
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_numa_reserved_full_merge_check(void)
-+{
-+	test_print("\tRunning %s...\n", __func__);
-+	run_top_down(alloc_try_nid_numa_reserved_full_merge_generic_check);
-+	run_bottom_up(alloc_try_nid_numa_reserved_full_merge_generic_check);
-+
-+	return 0;
-+}
-+
-+static int alloc_try_nid_numa_split_all_reserved_check(void)
-+{
-+	test_print("\tRunning %s...\n", __func__);
-+	run_top_down(alloc_try_nid_numa_split_all_reserved_generic_check);
-+	run_bottom_up(alloc_try_nid_numa_split_all_reserved_generic_check);
-+
-+	return 0;
-+}
-+
- int __memblock_alloc_nid_numa_checks(void)
- {
- 	test_print("Running %s NUMA tests...\n",
-@@ -2476,6 +2670,9 @@ int __memblock_alloc_nid_numa_checks(void)
- 	alloc_try_nid_numa_no_overlap_split_check();
- 	alloc_try_nid_numa_no_overlap_low_check();
- 	alloc_try_nid_numa_no_overlap_high_check();
-+	alloc_try_nid_numa_large_region_check();
-+	alloc_try_nid_numa_reserved_full_merge_check();
-+	alloc_try_nid_numa_split_all_reserved_check();
- 
- 	return 0;
- }
--- 
-2.25.1
-
+BR, Jarkko

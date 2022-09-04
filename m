@@ -2,99 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EB05AC51F
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408F55AC528
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234627AbiIDPtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 11:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S234614AbiIDP6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 11:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234332AbiIDPtZ (ORCPT
+        with ESMTP id S230286AbiIDP6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 11:49:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72028DEC;
-        Sun,  4 Sep 2022 08:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662306564; x=1693842564;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9r82ZTSuD0x+QvHSVy2lzg+W+9scndMmZbzkLh1CQPM=;
-  b=XBqPxJh+GcpszFbdqbqSXJDCUVQTM7le8T4DltMg2ax6/+j/kpLFp8YH
-   rO6GivNHOL4eHNdl1FpcKgUinRwUTE3zsTVOdwTu03iLuj/8/b/oEaPUJ
-   N9XTCUTBzqimLDnCDQ6RgWcgrKPNOPyNZYFdpHVmAWKg4nu2m2zowL0O1
-   TeTPtRi7nnkwTGyfWw6IUAcc3TCgkVuaaS+j8tjiTrS2xvrK8huKbRQEv
-   okIN/gGlj5agaGot8O6ahCRJLRYG6vCM8l/TWTvuJMC4UTkcR0kwsSMCV
-   UOjfoswomal8bX+sHzFKFxq2IhsQfopVODAAxYV3b0H8zaVFk5pXXwCYf
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="297553926"
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="297553926"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 08:49:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="674974980"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Sep 2022 08:49:20 -0700
-Date:   Sun, 4 Sep 2022 23:54:15 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: Re: [PATCH] KVM: SVM: Replace kmap_atomic() with kmap_local_page()
-Message-ID: <YxTKJ0O3Gd6at5lH@liuzhao-OptiPlex-7080>
-References: <20220902090811.2430228-1-zhao1.liu@linux.intel.com>
- <e08c8c46-2aa8-3cb4-dce6-61d64c6835cb@intel.com>
+        Sun, 4 Sep 2022 11:58:09 -0400
+Received: from smtpbg.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475272F01E
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 08:58:02 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1662307075tmb8563g
+Received: from localhost.localdomain ( [182.148.14.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 04 Sep 2022 23:57:50 +0800 (CST)
+X-QQ-SSF: 01000000002000C0C000B00A0000000
+X-QQ-FEAT: xqT8U4SkSpiIB5z0Hu95yECpJaE5fCl+c/d/YmousacjABDUFmPy7QmoUA2pM
+        caSqPuiInk+ceyas9YGV28opibaowRftm/aeRbc9drTt1UYlEnbZQKSYWWBjdnCQ1ilRbi3
+        PSln4ADQcElKpJ3oE/YBje3rojZkmFY/YDGzqav1w7GWQ2twsSaB051QYJIkZcpVd7kz0/y
+        Tl3HcerhaustDXYMkTDhpmvNHpvMUkgKFPY/iDxU8+aAwdMkR4bGd6kLjqZVQjrb5NMAMzF
+        +xo0MkwXaldqqn56Rb8rTGifY5ZtrrxdCyuV2FyuhkiS4Z4Gv+WdHbjw3A54YUHTypreDjO
+        1/u/JCATnS4OJHuLTKrJQEpuWOIj+NUyH4pXpHU+cDkfUIBys2JKCSzG5+D9mDm+js05jxv
+X-QQ-GoodBg: 0
+From:   Shaomin Deng <dengshaomin@cdjrlc.com>
+To:     linux@dominikbrodowski.net, linux-kernel@vger.kernel.org
+Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: [PATCH] pcmcia: Fix double word in comments
+Date:   Sun,  4 Sep 2022 11:57:49 -0400
+Message-Id: <20220904155749.29026-1-dengshaomin@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e08c8c46-2aa8-3cb4-dce6-61d64c6835cb@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_PBL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 08:09:29AM -0700, Dave Hansen wrote:
-> This changelog is a little on the weak side.  You could literally take
-> any arbitrary call-site and file for kmap_atomic() and slap that
-> changelog on it.  For instance:
-> 
-> 	In drivers/target/target_core_sbc.c, the function
-> 	sbc_dif_copy_prot() doesn't need to disable pagefaults and
-> 	preemption in kmap_atomic(). It can simply use kmap_local_page()
-> 	/ kunmap_local() that can instead do the mapping / unmapping
-> 	regardless of the context.
-> 
-> 	With kmap_local_page(), the mapping is per thread, CPU local and
-> 	not globally visible. Therefore, sbc_dif_copy_prot() is a
-> 	function where the use of kmap_local_page() in place of
-> 	kmap_atomic() is correctly suited.
-> 
-> That's all valid English and there's nothing incorrect in it.  But, it
-> doesn't indicate that any actual analysis was performed.  It's utterly
-> generic.  It could literally have been generated by a pretty trivial script.
-> 
-> It would be great to add at least a small, call-site-specific human
-> touch to these changelogs.
-> 
-> In this case, saying something about how global the cache flush is would
-> be a great addition.
-Thanks Dave! I'll add more detail to the commit message and avoid overly
-templated changelogs.
+Delete the repeated word "really" in comments.
 
-Zhao
+Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+---
+ drivers/pcmcia/ds.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pcmcia/ds.c b/drivers/pcmcia/ds.c
+index ace133b9f7d4..05d18614f6b4 100644
+--- a/drivers/pcmcia/ds.c
++++ b/drivers/pcmcia/ds.c
+@@ -1304,7 +1304,7 @@ static int pcmcia_bus_early_resume(struct pcmcia_socket *skt)
+  * physically present, even if the call to this function returns
+  * non-NULL. Furthermore, the device driver most likely is unbound
+  * almost immediately, so the timeframe where pcmcia_dev_present
+- * returns NULL is probably really really small.
++ * returns NULL is probably really small.
+  */
+ struct pcmcia_device *pcmcia_dev_present(struct pcmcia_device *_p_dev)
+ {
+-- 
+2.35.1
+

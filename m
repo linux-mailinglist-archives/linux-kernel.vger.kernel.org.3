@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83E15AC4AD
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 16:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7505AC4AF
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 16:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiIDOK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 10:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S234233AbiIDOLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 10:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbiIDOKy (ORCPT
+        with ESMTP id S234115AbiIDOLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 10:10:54 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79807326FC
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 07:10:52 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id y136so1411151pfb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 07:10:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=NvLw5KU+55jz8ItVCImcVo81PfvmbTqj67db51rQx28=;
-        b=mA5YuvaEcz9geqjvbYjrvj1uTFyLPeCLOL+HNvpQHyO0Zv2nV/o1TqHc/bzTId7zL7
-         d9fpPVSRB7wCgOAG2faGq1j8xKPTmmpFos9w4mt4yXKJKfkJsKLzI4MTu8izMH7fHxh6
-         4xsmAxiEMQbDa00GtWWbsqCvS9Ca6O+7Xz5kE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=NvLw5KU+55jz8ItVCImcVo81PfvmbTqj67db51rQx28=;
-        b=d5U9UnTZwZ85ol3EZ71G4PvI4yTJA5BZsI9G7Yf1yu7HognJl36m4sJ9v4FI1vEN5U
-         yU1vOiXGEH574N51Zv3EuiMKyelaz8WAzbzm6RRT3Iy7O7N6Ng/Ma6CrRaxlfYthSOzt
-         leksFslA7nn5q1n2u8hukU8ST51qBb+HBfkLSq5m/HgrPAnibbaDtzNSbTs0Nc5pkOAA
-         wqaXwo2VHtiFfi/hZnHmtMCYURBs60dVHpxA4ZujwZUM1jC+QbWGqTYfihnjUwIf9a8G
-         Faeor/47Shcwf4VkCMsY0WyIIKpB25n+jTVppjx//P0zrnJK8e/fO7wVbUGRqkiBYDrl
-         DmZg==
-X-Gm-Message-State: ACgBeo3ZqpsM9OPBmlZnzE10Dehsr87Qz7aMsfZFXg6gov644KwhvJTZ
-        fO8ecx/bJmuogulXgB9uXnnKPonHjKeGeQ==
-X-Google-Smtp-Source: AA6agR4USjcm3W8RIzfgrbED9CyUkSroEFickkr7JF56t7MZ5obBKpMtezqBj392uWfNcSMg9f4NQA==
-X-Received: by 2002:a63:5a50:0:b0:429:8580:fc61 with SMTP id k16-20020a635a50000000b004298580fc61mr39578533pgm.215.1662300651563;
-        Sun, 04 Sep 2022 07:10:51 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (host-79-31-31-9.retail.telecomitalia.it. [79.31.31.9])
-        by smtp.gmail.com with ESMTPSA id z9-20020a17090a170900b001fe136b4930sm8606760pjd.50.2022.09.04.07.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 07:10:50 -0700 (PDT)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-amarula@amarulasolutions.com,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [RESEND PATCH v5 2/2] dmaengine: mxs: fix section mismatch
-Date:   Sun,  4 Sep 2022 16:10:20 +0200
-Message-Id: <20220904141020.2947725-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220904141020.2947725-1-dario.binacchi@amarulasolutions.com>
-References: <20220904141020.2947725-1-dario.binacchi@amarulasolutions.com>
+        Sun, 4 Sep 2022 10:11:15 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A5131EE5;
+        Sun,  4 Sep 2022 07:11:13 -0700 (PDT)
+Received: from stefanw-SCHENKER ([37.4.248.23]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1M6lUk-1oS5iI2clq-008K9h; Sun, 04 Sep 2022 16:10:56 +0200
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH] clk: bcm2835: fix bcm2835_clock_rate_from_divisor declaration
+Date:   Sun,  4 Sep 2022 16:10:37 +0200
+Message-Id: <20220904141037.38816-1-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:6oSaHcTOotAL64NBQsFwW8u0vvbfsKei7LqGC3+lO+x1QPcXby7
+ VT+BeGToJk56f7xT+x0OzbJsJqcKAElsInVqjK6xvy33uMlgFEYplwiCWayB7hHgLfdc8cl
+ 6pbheYHb2iUQkwvibDn3NVMzQYZwBwYU8ubZQJ9kQLcmTyMd7Z5ODDQCs4BWNzVljJY9S3y
+ nKapWwmV0tvAZaVgGdwIw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YNM5B2ppFuI=:YdJ7zX5WteTZAf+raa7NgE
+ JVP0HieizKyN6kB44LkkZ3IfOqyq6PO8t/JOqeAQPxRxHUUnW1+dTptLE8Vbn7iXF2zCHk0qM
+ 7JwLeyLhuE3Tl4Ghna9H6mbTCFS5hvf5LLYwYr90KZ4Ce28PXQb868DI5Tz6tIFxAyh+k/X37
+ 8FIJ3Wzd7e8CWaOMY9bqr7Oebwf53yxa4hpFo26OEzq6aoKN4j2ThmTtdpmIlvaEqvC5NDb4n
+ Gqn8oropAwn6+DjKEpFJ4WxxjcbjTr6RkaKm7Bp+ZNKqjZ9BlWUIBHaBFaVDlppmUYV49qGXN
+ yiAoPtCCunoISJe5pRs8Rk/Dp2M0yFnUiPDW4KAebo0yL+xglRSmytmseQHjNn6wOjY9VyYXU
+ GsArdFvjNwpjrJzyaBqy+Y5YTge001jlsO6rT02a1HCLB31wtP4vHKt2ObsRllB/bxc9BDmUB
+ k4iGeDaZQpt1fZY535eHm37uIIeeckg0eeiU7yL/6qg+vj2YczGDcV0IecM5JcvFOaHMU+nDW
+ qFvO++dFe6NKfIjxAmFPdZTwSr3jLJqenLET5LZOp/lZk8T7SrBCQGUvqn+n8+uf7Uj9QLPMT
+ I8EouWVXiaQ6+a17Ad83FYDgG6jLU2FcpxLwVpaoveZJ0r23lIU3SjeYUifpzKAno1DQZHjcb
+ 8nxaTj1+9fRaDo/UdGwvgBX4bpvJkGeGx8XYu1kl5ATma+/LqvYT5qlXhdSLEvp6w0wNC8v+x
+ 4woTCKC3JTIQoOUmIKeg8usjxE8EtqFJofMP/3BPqIVWMSaWBQ2gk96DKFVoRSZCGTlgpUJh6
+ UU7Jg4WdWSsztgwjiwdieLO8EHM0w==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch was suggested by the following modpost warning:
+The return value of bcm2835_clock_rate_from_divisor is always unsigned
+and also all caller expect this. So fix the declaration accordingly.
 
-WARNING: modpost: vmlinux.o(.data+0xa3900): Section mismatch in reference from the variable mxs_dma_driver to the function .init.text:mxs_dma_probe()
-The variable mxs_dma_driver references
-the function __init mxs_dma_probe()
-If the reference is valid then annotate the
-variable with __init* or __refdata (see linux/init.h) or name the variable:
-*_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
-
-Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: stable@vger.kernel.org
+Fixes: 41691b8862e2 ("clk: bcm2835: Add support for programming the audio domain clocks")
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
+ drivers/clk/bcm/clk-bcm2835.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-(no changes since v1)
-
- drivers/dma/mxs-dma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
-index 18f8154b859b..a01953e06048 100644
---- a/drivers/dma/mxs-dma.c
-+++ b/drivers/dma/mxs-dma.c
-@@ -834,7 +834,7 @@ static int __init mxs_dma_probe(struct platform_device *pdev)
- 	return 0;
+diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
+index 48a1eb9f2d55..9e9f8b242958 100644
+--- a/drivers/clk/bcm/clk-bcm2835.c
++++ b/drivers/clk/bcm/clk-bcm2835.c
+@@ -966,9 +966,9 @@ static u32 bcm2835_clock_choose_div(struct clk_hw *hw,
+ 	return div;
  }
  
--static struct platform_driver mxs_dma_driver = {
-+static struct platform_driver mxs_dma_driver __initdata = {
- 	.driver		= {
- 		.name	= "mxs-dma",
- 		.of_match_table = mxs_dma_dt_ids,
+-static long bcm2835_clock_rate_from_divisor(struct bcm2835_clock *clock,
+-					    unsigned long parent_rate,
+-					    u32 div)
++static unsigned long bcm2835_clock_rate_from_divisor(struct bcm2835_clock *clock,
++						     unsigned long parent_rate,
++						     u32 div)
+ {
+ 	const struct bcm2835_clock_data *data = clock->data;
+ 	u64 temp;
 -- 
-2.32.0
+2.34.1
 

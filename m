@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303485AC6B1
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0407C5AC6B9
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiIDVmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 17:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S234742AbiIDVmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 17:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiIDVmC (ORCPT
+        with ESMTP id S234698AbiIDVmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 17:42:02 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20412B62D
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:41:59 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id d16so3872997ils.8
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:41:59 -0700 (PDT)
+        Sun, 4 Sep 2022 17:42:08 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6012C648
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:42:07 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id p187so5652534iod.8
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:42:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Rk0v3z6nbpdvu88IImrHMGbLoUUPdnPRh/3Godzt1FA=;
-        b=J2j1esbki5TiJj8l6H2Q6c2JHxiCFaB7O6YGdT/pn7Ag+2yqvlGJJweNSqogG5zEb3
-         diZzFKrda46JEN7PyM8gc/0Xahl4bAs5OoUt1yopJui7ZMfGo//PDQeA59ddFWxzg3vz
-         gqvfrHJ06LSDXQQTH322kmGT2t5nLF5iYUtCtLULrNzzZclYuwWFMpEPMJNuuaJz2f5E
-         KlO5OmjsdjFozKTAmalEqVDHQzJH1gBZ4o6kAqUA0n3MRbhARGj+Pg2J3y5bONpqxZMN
-         9gxyQ4asUPXvVEsUeYypcYKMsqMw/Nl60eI1KOPpWsEPBmGHn30hJUDfnigMHVwuBZIX
-         6LBw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=wU3a+NtnQXjoNN7rXOqrGTxjDahMgVmGQsWn0PV1P8M=;
+        b=oqkgy1Lfx8/69RwJIe3zmzWJ5fKHCCfMExZbNN1eCUrtrvQvfE+1n1ok/9I/8qxcYJ
+         V2Y5ovP3OXd3K2CAgS1BbVBtTfJUEdG+6tO5gfR37M2/5p6wJ7VN6X0nrZdJxzrfPg/O
+         GkZXIIfX5vDFQr6/LJp0ofI0n6FCf/1AN3tsFeNZ25fi7xHd9VYOST2OyHqYWaGYzSlw
+         QAv9HoibN19LRrRCQG9pGNe24p8W2DNmEf8nLDndfGLmEJnHDeMsDoQW6Zdu2pC0wkcY
+         XlK7itax1DrgPu8UOaURRS4O0KdAKHHKQZ5pij8wgvGjblMAY0dpNFeQ9Bgy/4Pt7tCN
+         CpYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Rk0v3z6nbpdvu88IImrHMGbLoUUPdnPRh/3Godzt1FA=;
-        b=jyfXHG3l67/uhkmJjjhmLWVaurDxS7xZlHNDAYv74lE6QifRFuJO1HZJtve8JvB+tf
-         RW86lSXIfbyFOULajKCkBPQNd3elenOR3kkE3cPLqAAgt1tWM6rbVKYl5rDy4nA3TIq2
-         quMI8det5SABsyZCryUpz34OjunAJvdcq6iSo3++sBy3frhH9KViKyWJfFhfnaBWWGBi
-         EEIY0JJGFDDACba/QSrPFztdc42uE3RRrnDsvZAj/Ae6x3vUsh9R6pIEITzJQpORO/BK
-         +YPzjFJ5ekicq80Qso66Jm1+Hn86TBKac1J3xLzJgL7Md4l4OFOnSNI8OOzcRHwpjYGm
-         qQRw==
-X-Gm-Message-State: ACgBeo0DgKFs0R9+uVZu7ON7ccdy1BfMpz/eCTBkREOLalNDZRUsMPe3
-        9DHBmv8uj7N7xwjjMdtjiis=
-X-Google-Smtp-Source: AA6agR7CD92JSdC+7MhP3s0TXTkBFP2IYi9ja006MgU6Xo9IdJnxicAEFaNporcaAvAi1/sbjpYAow==
-X-Received: by 2002:a05:6e02:543:b0:2eb:5d3c:dde6 with SMTP id i3-20020a056e02054300b002eb5d3cdde6mr12602343ils.84.1662327719085;
-        Sun, 04 Sep 2022 14:41:59 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=wU3a+NtnQXjoNN7rXOqrGTxjDahMgVmGQsWn0PV1P8M=;
+        b=HXci5Uj1eQui56bOj8lp+JfYxuaEF404XKpPfxq62XwDFSBfkLfLoopxz8EGMWKZJA
+         QxXWXBy9RkOkpy+u3YOB5eKm3E8EKvg2YI8rUgYK7UDP2pr+06y7YIQlJrLAoYPbuI0/
+         hsYp7uRjy7yS6sGmMzXqafPjwXsam0eH18hnkyF70qNIbM0VGh0/eNjLmHZfbjfBaZeI
+         uOqT5KbamoVXFrsI9wN3xgwbzuja+LVxBATwxVmzwMm9dEJxYmCxGHwlapKDcdPCU5gt
+         Isnka0uP/KNPgijrW4Dw/uWsEVUdIiijXMJ4pYsjmp6LV6+630yywfAaIKRJbVS4H1nJ
+         hOyQ==
+X-Gm-Message-State: ACgBeo3bjNgSLLQ9XJmt23GO2L7HCm73X7mNB4MmH1p6qC3NyQDQGXnp
+        vpoXprICewYmCVi2JFUw4cStzLv54zk=
+X-Google-Smtp-Source: AA6agR6woh73WD6o0519OJbQFrJQIwWPKVm7AZf+Fo8tuX8h74mdDupZVosU1fX68Rvv18her7b2lQ==
+X-Received: by 2002:a05:6638:25ca:b0:351:1a2a:763d with SMTP id u10-20020a05663825ca00b003511a2a763dmr3305728jat.251.1662327726407;
+        Sun, 04 Sep 2022 14:42:06 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.41.57
+        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 14:41:58 -0700 (PDT)
+        Sun, 04 Sep 2022 14:42:06 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -55,11 +56,13 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
-        Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH v6 00/57] DYNDBG: opt-in class'd debug for modules, use in drm.
-Date:   Sun,  4 Sep 2022 15:40:37 -0600
-Message-Id: <20220904214134.408619-1-jim.cromie@gmail.com>
+        Jim Cromie <jim.cromie@gmail.com>, vincent.whitchurch@axis.com
+Subject: [PATCH v6 01/57] dyndbg: fix static_branch manipulation
+Date:   Sun,  4 Sep 2022 15:40:38 -0600
+Message-Id: <20220904214134.408619-2-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220904214134.408619-1-jim.cromie@gmail.com>
+References: <20220904214134.408619-1-jim.cromie@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,191 +75,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Greg, Jason, DRM-folk, Steven,
+In https://lore.kernel.org/lkml/20211209150910.GA23668@axis.com/
 
-If Im not too late for linux-next in this cycle, heres V6.  Diffs are minor:
+Vincent's patch commented on, and worked around, a bug toggling
+static_branch's, when a 2nd PRINTK-ish flag was added.  The bug
+results in a premature static_branch_disable when the 1st of 2 flags
+was disabled.
 
- - rebased onto e47eb90a0a9a (tag: next-20220901, linux-next/master)
-   gets past Kconfig conflict, same for drm-tip.
- - uint debug_level, not ulong.  to fit nouveau.
- - -1 on param-read-back, to match prev write val.
- - added back tracefs parts, missing from -V5
-   updated for tracing/events: Add __vstring() and __assign_vstr() helper macros
-   no decorations-lite in TP_printk, do it right later.
- - commit-msg tweaks
+The cited commit computed newflags, but then in the JUMP_LABEL block,
+failed to use that result, instead using just one of the terms in it.
+Using newflags instead made the code work properly.
 
-Theres also new RFC stuff with the potential to reduce the size of the
-__dyndbgs section by 20%.  Not ready for prime time, or linux-next,
-but I hope compelling.
+This is Vincents test-case, reduced.  It needs the 2nd flag to
+demonstrate the bug, but it's explanatory here.
 
-FEATURE DESCRIPTION
+pt_test() {
+    echo 5 > /sys/module/dynamic_debug/verbose
 
-dyndbg provides DECLARE_DYNAMIC_DEBUG_CLASSMAP() which allows module
-authors to declare "good" class-names, of 4 types.
+    site="module tcp" # just one callsite
+    echo " $site =_ " > /proc/dynamic_debug/control # clear it
 
-  DYNAMIC_DEBUG_CLASSMAP(drm_debug_classes,
-  			DD_CLASS_TYPE_DISJOINT_BITS, offset,
-                        "DRM_UT_CORE",
-                        "DRM_UT_DRIVER",
-                        "DRM_UT_KMS",
-                        "DRM_UT_PRIME",
-                        "DRM_UT_ATOMIC",
-                        "DRM_UT_VBL",
-                        "DRM_UT_STATE",
-                        "DRM_UT_LEASE",
-                        "DRM_UT_DP",
-                        "DRM_UT_DRMRES");
+    # A B ~A ~B
+    for flg in +T +p "-T #broke here" -p; do
+	echo " $site $flg " > /proc/dynamic_debug/control
+    done;
 
-That usage authorizes dyndbg to set class'd pr_debugs accordingly:
+    # A B ~B ~A
+    for flg in +T +p "-p #broke here" -T; do
+	echo " $site $flg " > /proc/dynamic_debug/control
+    done
+}
+pt_test
 
-  echo class DRM_UT_CORE +p > /proc/dynamic_debug/control
-  echo class DRM_UT_KMS  +p > /proc/dynamic_debug/control
+Fixes: 84da83a6ffc0 dyndbg: combine flags & mask into a struct, simplify with it
+CC: vincent.whitchurch@axis.com
+Acked-by: Jason Baron <jbaron@akamai.com>
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+.drop @stable, no exposed bug.
+.add jbaron ack
+---
+ lib/dynamic_debug.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Because the DRM modules declare the same classes, they each authorize
-dyndbg with the same classnames, which allows dyndbg to effect changes
-to its selected class'd prdbgs.
-
-Opting in by using the macro effectively privatizes the limited
-63-classes available per module; only modules which share classnames
-must coordinate their use of the common range, and they can
-independently use the remaining id-space.
-
-Other dyndbg filtering pertains too, so single sites can be selected.
-
-
-4 DD_CLASS_TYPE_*_*s determine 2 behaviors:
-
-  DISJOINT	bits are independent, like drm.debug categories
-  LEVELs	3>2, turns on level-2, like nouveau debug-levels
-  NUM/BITS	numeric input, bitmap if disjoint, else 0-32.
-  NAMES		accept proper names, like DRM_UT_CORE
-
-Dyndbg provides param-callbacks which enforce those behaviors:
-
-  # DISJOINT_BITS
-  echo 0x03 > /sys/module/drm/parameters/debug
-
-  # LEVEL_NUM
-  echo 3 > /sys/module/drm/nouveau/debug-mumble*
-
-  # DISJOINT_NAMES
-  echo +DRM_UT_CORE,+DRM_UT_KMS,-DRM_UT_DRIVER > /sys/module/drm/parameters/debug_categories
-
-  # LEVEL_NAMES
-  echo NV_TRACE > /sys/module/nouveau/parameters/debug-mumble*
-
-That design choice is allowed cuz verbosity is always attached to a
-(user visible) interface, and theres no reason not to put the
-implementation there (in the callback).  It also considerably
-simplifies things; ddebug_change can treat class_id's as disjoint,
-period.
-
-
-Jim Cromie (57):
-prep:
-  dyndbg: fix static_branch manipulation
-  dyndbg: fix module.dyndbg handling
-  dyndbg: show both old and new in change-info
-  dyndbg: reverse module walk in cat control
-  dyndbg: reverse module.callsite walk in cat control
-  dyndbg: use ESCAPE_SPACE for cat control
-  dyndbg: let query-modname override actual module name
-  dyndbg: add test_dynamic_debug module
-  dyndbg: drop EXPORTed dynamic_debug_exec_queries
-  dyndbg: cleanup auto vars in dynamic_debug_init
-  dyndbg: gather __dyndbg[] state into struct _ddebug_info
-
-class feature:
-  dyndbg: add class_id to pr_debug callsites
-  dyndbg: add __pr_debug_cls for testing
-  dyndbg: add DECLARE_DYNDBG_CLASSMAP macro
-  kernel/module: add __dyndbg_classes section
-  dyndbg: add ddebug_attach_module_classes
-  dyndbg: validate class FOO by checking with module
-  doc-dyndbg: describe "class CLASS_NAME" query support
-  doc-dyndbg: edit dynamic-debug-howto for brevity, audience
-  dyndbg: add drm.debug style (drm/parameters/debug) bitmap support
-  dyndbg: test DECLARE_DYNDBG_CLASSMAP, sysfs nodes
-
-drm-use-case:
-  drm_print: condense enum drm_debug_category
-  drm: POC drm on dyndbg - use in core, 2 helpers, 3 drivers.
-  drm_print: interpose drm_*dbg with forwarding macros
-  drm_print: wrap drm_*_dbg in dyndbg descriptor factory macro
-  drm-print.h: include dyndbg header
-  drm-print: add drm_dbg_driver to improve namespace symmetry
-  drm_print: refine drm_debug_enabled for jump-label
-  drm_print: prefer bare printk KERN_DEBUG on generic fn
-  drm_print: add _ddebug descriptor to drm_*dbg prototypes
-  nouveau: change nvkm_debug/trace to use dev_dbg POC
-  nouveau: adapt NV_DEBUG, NV_ATOMIC to use DRM.debug
-  nouveau: WIP add 2 LEVEL_NUM classmaps for CLI, SUBDEV
-
-dyndbg-tracefs:
-  dyndbg: add _DPRINTK_FLAGS_ENABLED
-  dyndbg: add _DPRINTK_FLAGS_TRACE
-  dyndbg: add write-events-to-tracefs code
-  dyndbg: add 2 trace-events: drm_debug, drm_devdbg
-  dyndbg: add 2 more trace-events: pr_debug, dev_dbg
-  dyndbg/drm: POC add tracebits sysfs-knob
-
-RFC-20%-data-reclaim:
-  dyndbg: abstraction macros for modname,function,filename fields
-  dyndbg: split repeating columns to new struct _ddebug_site
-  dyndbg: shrink lineno field by 2 bits
-  dyndbg: add _index,_map to struct _ddebug
-  dyndbg: extend __ddebug_add_module proto to allow packing sites
-  dyndbg: de-duplicate sites
-  dyndbg: drop site-> in add-module, more needed
-  dyndbg: demote iter->site in _init
-  dyndbg: add .gnu.linkonce slot in vmlinux.lds.h KEEPs
-  dyndbg: add structs _ddebug_hdr, _ddebug_site_hdr
-  dyndbg: count unique callsites
-  dyndbg: prevent build bugs via -DNO_DYNAMIC_DEBUG_TABLE
-  dyndbg: add DEFINE_DYNAMIC_DEBUG_TABLE, use it tacitly RFC
-  dyndbg: add/use is_dyndbg_header then set _uplink
-  dyndbg: add .gnu.linkonce. & __dyndbg* sections in module.lds.h
-  dyndbg: dynamic_debug_sites_reclaim() using free_reserved_page() WAG
-  dyndbg: work ddebug_map_site
-  dyndbg: fiddle with readback value on LEVEL_NAMES types
-
- .../admin-guide/dynamic-debug-howto.rst       | 249 +++---
- MAINTAINERS                                   |   2 +
- arch/arm/boot/compressed/Makefile             |   2 +
- arch/sparc/vdso/Makefile                      |   2 +
- arch/x86/boot/compressed/Makefile             |   1 +
- arch/x86/entry/vdso/Makefile                  |   3 +
- arch/x86/purgatory/Makefile                   |   1 +
- drivers/firmware/efi/libstub/Makefile         |   3 +-
- drivers/gpu/drm/Kconfig                       |  12 +
- drivers/gpu/drm/Makefile                      |   2 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  14 +
- drivers/gpu/drm/display/drm_dp_helper.c       |  13 +
- drivers/gpu/drm/drm_crtc_helper.c             |  13 +
- drivers/gpu/drm/drm_print.c                   |  83 +-
- drivers/gpu/drm/i915/i915_params.c            |  12 +
- .../gpu/drm/nouveau/include/nvkm/core/debug.h |  16 +
- .../drm/nouveau/include/nvkm/core/subdev.h    |  17 +-
- drivers/gpu/drm/nouveau/nouveau_drm.c         |  20 +
- drivers/gpu/drm/nouveau/nouveau_drv.h         |  16 +-
- drivers/gpu/drm/nouveau/nvkm/core/subdev.c    |  23 +
- include/asm-generic/module.lds.h              |  12 +-
- include/asm-generic/vmlinux.lds.h             |  10 +
- include/drm/drm_print.h                       |  85 +-
- include/linux/dynamic_debug.h                 | 286 ++++++-
- include/trace/events/drm.h                    |  54 ++
- include/trace/events/dyndbg.h                 |  73 ++
- kernel/module/internal.h                      |   4 +-
- kernel/module/main.c                          |  22 +-
- lib/Kconfig.debug                             |  10 +
- lib/Makefile                                  |   1 +
- lib/dynamic_debug.c                           | 792 +++++++++++++++---
- lib/test_dynamic_debug.c                      | 165 ++++
- 32 files changed, 1680 insertions(+), 338 deletions(-)
- create mode 100644 include/trace/events/drm.h
- create mode 100644 include/trace/events/dyndbg.h
- create mode 100644 lib/test_dynamic_debug.c
-
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index dd7f56af9aed..a56c1286ffa4 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -211,10 +211,11 @@ static int ddebug_change(const struct ddebug_query *query,
+ 				continue;
+ #ifdef CONFIG_JUMP_LABEL
+ 			if (dp->flags & _DPRINTK_FLAGS_PRINT) {
+-				if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
++				if (!(newflags & _DPRINTK_FLAGS_PRINT))
+ 					static_branch_disable(&dp->key.dd_key_true);
+-			} else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
++			} else if (newflags & _DPRINTK_FLAGS_PRINT) {
+ 				static_branch_enable(&dp->key.dd_key_true);
++			}
+ #endif
+ 			dp->flags = newflags;
+ 			v4pr_info("changed %s:%d [%s]%s =%s\n",
 -- 
 2.37.2
 

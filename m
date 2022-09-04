@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596C55AC4FB
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBC45AC4FF
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbiIDP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 11:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S234333AbiIDP2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 11:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiIDP2G (ORCPT
+        with ESMTP id S234311AbiIDP2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 11:28:06 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB042DA9C
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 08:28:05 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1225219ee46so16553168fac.2
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 08:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=melexis.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=hcFXKaVN7xLyFAVBIOuj4texmheiWWevA2tOjfJ8uMo=;
-        b=QGzRpVGHHSYMZSChpI6UOWocLebJIhN8z/UccDWkh7prx0Hhb0R1mXK2uvkng9K2Eq
-         ARBh3KoCsoL+0KqAsvuM96ozoS8Ab7GqIlKq9eER7PjIQyEEPGywKGfbvkAeab+OUdBy
-         4eWl7+ZT4tEkS2xuuOVGMkQ07f3HO2k3x1tNk+Rvu1tx5UFNAunwKm0oAMh3e8YnJrkX
-         PRToYK4Un97B1wqCG0m31feN4ABVftPXxsKdrnze+EO4QcOaCj/85eXUcIkY4uNMTNTX
-         KD8cvVGLoS7DSza0Zi0x0GbA1T0cf1tLTyJlOgrw9ePPvterJ+oWbUDPEjMQzK5t2FDK
-         tH+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hcFXKaVN7xLyFAVBIOuj4texmheiWWevA2tOjfJ8uMo=;
-        b=TMWIYdKjWT1gFZf69HG2oq2JYm8uzZxhDqWZP90C/umfPjaBqLfZ2HvX3bjiS+VQuM
-         V+bXyqt6EQrsH4Feqo9hbzJAxiWHM9lzb+h15e7jhsZug94uPpA18r5o/Md/vVarMykU
-         Mn1o70Gsq8CTyvQcNfDIdh76QrEuuXcTpZrinHmNy6V3SsMLZSLTUaBYgelu4jjiIywB
-         R7v1PBlrSfnHz2jBmZFBpcXxKJqzqVHYJJDG/koVETDp7m3ZhWg7JJqwHq8/O7vhv42P
-         biPlc4/4SfLGMdHBh2QnVo0YW2UlXde5F2A5pQIHwDzlSH+UwbnGl1+OLtLUPJdGZvTW
-         J22Q==
-X-Gm-Message-State: ACgBeo333+3UERHXvyrU5IbtGUwiTqslNIDRSdVShVUQRp/ttCsLynPf
-        0VNyCcp6ra5hWL51/ZdlM3u2bqWs4r+AiisteDg9/Q==
-X-Google-Smtp-Source: AA6agR47OSA0XlJqPUCLUCCGQ3UKBuX73ZHWcrtQU6ox8Mbji9REVND6L/50TqhkIXfJ8D8/mR/mp8/yQIe+bBWHreY=
-X-Received: by 2002:a05:6808:21a6:b0:344:beb5:1fb1 with SMTP id
- be38-20020a05680821a600b00344beb51fb1mr5939271oib.175.1662305284897; Sun, 04
- Sep 2022 08:28:04 -0700 (PDT)
+        Sun, 4 Sep 2022 11:28:34 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D112DABA;
+        Sun,  4 Sep 2022 08:28:32 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oUrXm-0000U5-3l; Sun, 04 Sep 2022 17:28:18 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Simon Xue <xxm@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: Aw: Re:  Re: [PATCH v5 5/5] arm64: dts: rockchip: Add PCIe v3 nodes to BPI-R2-Pro
+Date:   Sun, 04 Sep 2022 17:28:14 +0200
+Message-ID: <3349380.9Mp67QZiUf@diego>
+In-Reply-To: <trinity-9006aaf2-5bc2-467c-a86e-ba43efc692e6-1661591668494@3c-app-gmx-bs16>
+References: <20220825193836.54262-1-linux@fw-web.de> <ee6dc940-8b90-1f57-28b7-6de8e3483027@linaro.org> <trinity-9006aaf2-5bc2-467c-a86e-ba43efc692e6-1661591668494@3c-app-gmx-bs16>
 MIME-Version: 1.0
-References: <20220903222422.3426156-1-cmo@melexis.com> <20220904154923.33b79d83@jic23-huawei>
-In-Reply-To: <20220904154923.33b79d83@jic23-huawei>
-From:   Crt Mori <cmo@melexis.com>
-Date:   Sun, 4 Sep 2022 17:27:28 +0200
-Message-ID: <CAKv63uviUbiAy6tYjkqFP-Qgs7dwAV5BPrr2aTTxQyjPBeA+Og@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] iio: temperature: mlx90632 Change return value of
- sensor measurement channel
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,47 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 4 Sept 2022 at 17:23, Jonathan Cameron <jic23@kernel.org> wrote:
->
-> On Sun,  4 Sep 2022 00:24:22 +0200
-> cmo@melexis.com wrote:
->
-> > From: Crt Mori <cmo@melexis.com>
-> >
-> > The current EINVAL value is more applicable to embedded library, where
-> > user can actually put the fixed value to the sensor. In case of the
-> > driver if the value of the channel is invalid it is better in inform
-> > userspace that Channel was out of range as that implies more to internal
-> > driver error than invalid input. It also makes for easier debugging of
-> > where the error comes from during the development.
-> >
-> > Signed-off-by: Crt Mori <cmo@melexis.com>
-> Hmm. That's an obscure return value - I think it's mostly going to confuse
-> anyone who ever gets it.  So not sure this change is wise even though the
-> descriptive text for that one does seem very much suited to this usecase.
->
-I did get it few times during the development due to read when sensor
-is not busy, but the measurement data not yet updated correctly due to
-powermode switch. I think I added enough delays all around to avoid
-hitting it and with proper power mode switching, but there might be a
-case, so it will be easier to spot in the source code in future. I
-would not remove it, if that is what you are proposing.
+Hi,
 
-> > ---
-> >  drivers/iio/temperature/mlx90632.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+Am Samstag, 27. August 2022, 11:14:28 CEST schrieb Frank Wunderlich:
+> > Gesendet: Samstag, 27. August 2022 um 10:56 Uhr
+> > Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+> 
+> > On 27/08/2022 11:50, Frank Wunderlich wrote:
+> > > Hi
+> > >
+> > >> Gesendet: Freitag, 26. August 2022 um 08:50 Uhr
+> > >> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+> > >> On 25/08/2022 22:38, Frank Wunderlich wrote:
+> > >>> From: Frank Wunderlich <frank-w@public-files.de>
+> > >
+> > >>> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+> > >>> index 93d383b8be87..40b90c052634 100644
+> > >>> --- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+> > >>> +++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+> > >>> @@ -86,6 +86,66 @@ vcc5v0_sys: vcc5v0-sys {
+> > >>>  		vin-supply = <&dc_12v>;
+> > >>>  	};
+> > >>>
+> > >>> +	pcie30_avdd0v9: pcie30-avdd0v9 {
+> > >>
+> > >> Use consistent naming, so if other nodes have "regulator" suffix, use it
+> > >> here as well.
+> > >
+> > > only these 3 new have the suffix:
+> > >
+> > > vcc3v3_pi6c_05: vcc3v3-pi6c-05-regulator
+> > > vcc3v3_minipcie: vcc3v3-minipcie-regulator
+> > > vcc3v3_ngff: vcc3v3-ngff-regulator
+> > >
+> > > so i would drop it there...
+> > >
+> > > so i end up with (including existing ones to compare):
+> > >
+> > > vcc3v3_sys: vcc3v3-sys
+> > > vcc5v0_sys: vcc5v0-sys
+> > > pcie30_avdd0v9: pcie30-avdd0v9
+> > > pcie30_avdd1v8: pcie30-avdd1v8
+> > > vcc3v3_pi6c_05: vcc3v3-pi6c-05
+> > > vcc3v3_minipcie: vcc3v3-minipcie
+> > > vcc3v3_ngff: vcc3v3-ngff
+> > > vcc5v0_usb: vcc5v0_usb
+> > > vcc5v0_usb_host: vcc5v0-usb-host
+> > > vcc5v0_usb_otg: vcc5v0-usb-otg
+> > >
+> > > is this ok?
+> > >
+> > > maybe swap avdd* and pcie30 part to have voltage in front of function.
+> > >
 > >
-> > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature/mlx90632.c
-> > index 37edd324d6a1..d511d36942d3 100644
-> > --- a/drivers/iio/temperature/mlx90632.c
-> > +++ b/drivers/iio/temperature/mlx90632.c
-> > @@ -435,7 +435,7 @@ static int mlx90632_channel_new_select(int perform_ret, uint8_t *channel_new,
-> >               *channel_old = 1;
-> >               break;
-> >       default:
-> > -             return -EINVAL;
-> > +             return -ECHRNG;
-> >       }
-> >
-> >       return 0;
->
+> > I prefer all of them have regulator suffix. I think reasonable is also
+> > to rename the old ones and then add new ones with suffix.
+> 
+> ok, will change these to add -regulator in name (not label). and then rename the others in separate Patch outside of the series.
+> 
+> so basicly here
+> -       pcie30_avdd0v9: pcie30-avdd0v9 {
+> +       pcie30_avdd0v9: pcie30-avdd0v9-regulator {
+> -       pcie30_avdd1v8: pcie30-avdd1v8 {
+> +       pcie30_avdd1v8: pcie30-avdd1v8-regulator {
+> 
+> how about the swapping of pcie30 and the avddXvY? In Schematic they are named PCIE30_AVDD_0V9 / PCIE30_AVDD_1V8, so better leave this?
+> 
+> avdd0v9-pcie30 will be more similar to the other regulators, but inconsistent with Schematic.
+
+now that the phy-driver changes got applied I'll just pick up the remaining
+patches and do the node-name conversion while applying, so no need
+to send another revision for it.
+
+But of course feel free so send patches for converting the other regulator
+names.
+
+And I'm definitly preferring keeping close to schematic names :-)
+
+
+Heiko
+
+

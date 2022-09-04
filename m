@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B075AC4EC
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5815AC4EE
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234521AbiIDPSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 11:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        id S234067AbiIDPTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 11:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiIDPSG (ORCPT
+        with ESMTP id S234311AbiIDPTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 11:18:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6A433427;
-        Sun,  4 Sep 2022 08:18:05 -0700 (PDT)
+        Sun, 4 Sep 2022 11:19:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB5915A2B;
+        Sun,  4 Sep 2022 08:19:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB51AB80D90;
-        Sun,  4 Sep 2022 15:18:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 616F4C433D6;
-        Sun,  4 Sep 2022 15:18:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FD2560F36;
+        Sun,  4 Sep 2022 15:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8570FC433D6;
+        Sun,  4 Sep 2022 15:19:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662304682;
-        bh=UIVKM4dgWisAgJC+evK11klj0IF2Xp7TEeOgrLbZViI=;
+        s=k20201202; t=1662304782;
+        bh=5T5KK1R+lLkAiOgyJVvenWpyIpd2PPMpzy2c4deWB6I=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=THfzc7edhGA2wwERLowrq7KTB9R5Z+zsL2vV2EAPWjI4TDsZfdGQBj9yMPH33BsOc
-         xN2R+efU22+uYoFUCw2R07m+ASpfa6Q/1Jt44ihjBHWiaAxDtW5vyonZy9FuiAx4Xn
-         DuG/59ZdU5XoVBy4k2LUhveABcmXccWlQP6OSo31IAdY2758vX/9YQ6vz41cgOJ8Ec
-         zXS5CZhih4XwNHQzGrvT2SSVhpT4ddPb2Gsu3Efd7AsqxesiHZnGzvYDhI7N670SkX
-         fxQqAv1QI4DS3uWSLni7b26KtJL7j2ogmzD9d12w5Euwns7tz8Pur8ICIn2xmqmKPf
-         xgR75OJCLzMjQ==
-Date:   Sun, 4 Sep 2022 15:43:55 +0100
+        b=dgfCT7NPTr7maI8aCZ++zMT7lYNHlabDUVdgplghDV4PFsRehywmABWlisb0Q4Mof
+         Vs50C8gGL1XUMm7Y4NaxXIF226qzAsSlY9H0p6AQSoZ1Zy7KTDRy7vjkIlrlu+IjzS
+         k+ESU0CMVnM34FTHFof8zh/1eA8QRydy4GlofNVZChd3rcgrm+ljYHZqPmRAj7NAa6
+         f2ijauvAf6l9DyQkyfOGKencpePCywifPm9Zm8AB/ceaQnX3ZfkcK2dHJjkTGFXMXa
+         Ytt+CmCQq6xF3e8IbuXbsJ0JGgMZhYzb7tkmfXL5tXkzvw1d9Eg1aSIokvaKDmhMlR
+         yU00JfqrQY8OQ==
+Date:   Sun, 4 Sep 2022 15:45:35 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     cmo@melexis.com
 Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Subject: Re: [PATCH v2 2/3] iio: temperature: mlx90632 Read sampling
  frequency
-Message-ID: <20220904154355.6b38246e@jic23-huawei>
+Message-ID: <20220904154535.0bb526bc@jic23-huawei>
 In-Reply-To: <20220903222402.3426058-1-cmo@melexis.com>
 References: <20220903222402.3426058-1-cmo@melexis.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
@@ -63,14 +63,15 @@ cmo@melexis.com wrote:
 > 
 > Allow users to read sensor sampling frequency to better plan the
 > application measurement requests.
+
+I didn't read this closely enough.  Why is the frequency read only?
+We'd not normally have an available attribute in that case, because
+the values aren't available if we have no way to set the value.
+
+Jonathan
+
 > 
 > Signed-off-by: Crt Mori <cmo@melexis.com>
-Please use the read_avail() callback for the available attribute.
-One day I'll finish converting all the many old attrs for this over, but I don't want
-to introduce more work to do in the meantime.
-
-Otherwise this looks fine to me.
-
 > ---
 >  drivers/iio/temperature/mlx90632.c | 44 ++++++++++++++++++++++++++++++
 >  1 file changed, 44 insertions(+)
@@ -138,14 +139,6 @@ Otherwise this looks fine to me.
 > +
 > +static struct attribute *mlx90632_attributes[] = {
 > +	&iio_const_attr_sampling_frequency_available.dev_attr.attr,
-
-Please use the read_avail() callback and appropriate mask instead of a separate attribute.
-I'm slowly trying to kill off these, because of the lack of inkernel
-visibility.  Obviously may never be relevant for this driver, but
-the fewer new instances of attrs being added for things the core handles
-the better.  You can also reused your _freq table above to provide the data in
-one place rather than current repetition.
-
 > +	NULL
 > +};
 > +

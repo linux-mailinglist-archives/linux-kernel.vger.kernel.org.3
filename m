@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B80A5AC540
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 18:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57955AC552
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 18:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbiIDQFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 12:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
+        id S234778AbiIDQLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 12:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbiIDQFH (ORCPT
+        with ESMTP id S229938AbiIDQLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 12:05:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4484C23BC8;
-        Sun,  4 Sep 2022 09:05:00 -0700 (PDT)
+        Sun, 4 Sep 2022 12:11:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3665727CFB;
+        Sun,  4 Sep 2022 09:11:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF372B80D8B;
-        Sun,  4 Sep 2022 16:04:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB93C433C1;
-        Sun,  4 Sep 2022 16:04:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C70F460F97;
+        Sun,  4 Sep 2022 16:11:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C511C433C1;
+        Sun,  4 Sep 2022 16:11:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662307498;
-        bh=eWedaFx7f3zdDiTGwJz6gVLQxBalM9NLV1LNJ3xn+Ok=;
+        s=k20201202; t=1662307906;
+        bh=jEC7BDHEzbus1QSyICot3fVdFcnRPpNPPhhmw+RRi6A=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sj3XQhFaOAiK0Cvtjsa4X/e07mrE5iyvqGsSTv8JljSXbbiDCyqcNs8kIpQrIxPqU
-         JtpgA0EhfbvbGk3SHeAJk8df3jdaytlmXLu+5R23r7sRu/w/cfS/HNyXG/VGHm7xnH
-         LN6Y8ESqNpSYnLu7RXGNfP0N8uH9Uzbskm2tRS9NnGpYjRa+Fz0tOX9rfNzc9dnaLz
-         d1KToWzUKGwy/sgVoCxvMbpRT0mbkJGRKgUyRqSH6EHy8qDNZkjE/s8mM4XFaXQT8a
-         WfOis3PI/L+zgBUQQ/DXBcy7LSytjna19b0cv0DZizhgqoBp1ncEB6LvSwAJXG2jHI
-         VxsUslp42iYnA==
-Date:   Sun, 4 Sep 2022 16:30:50 +0100
+        b=J84kGNaQ40uemrQsVotTmGyqGCtvwPT2F1d6xSxr42ONecG7o2KKE6E5QMl5RXs81
+         Q3M65yqa79MIHiBHGWJ8OcgstOwt5H2yaLanvFeMGNVQhQwmLLs3Zqv5mcqo3y7U53
+         K2g27CbgCCln9z8kL8ICf17OuhrdnvkiMC+5tAQgi3emwUDOP5tmJuY4gj8FSnMm63
+         HqjlxgY+UMRUxCxAtZKJTvpNdJEMs0j3QJ+R1BB1ewiMRHMbI8BS+IasyXSBef+Vyr
+         1uSW0oTu/Fh/mf/+DPAyfsjNzfacqlTt0tV28Paj82nVrnlGrX0WTCjCCyP8OLlm52
+         zwi2KOeW27zsQ==
+Date:   Sun, 4 Sep 2022 16:37:38 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jakob Hauser <jahau@rocketmail.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v2 1/3] iio: magnetometer: yamaha-yas530: Use pointers
- as driver data
-Message-ID: <20220904163050.7cc52153@jic23-huawei>
-In-Reply-To: <20220831141530.80572-1-andriy.shevchenko@linux.intel.com>
-References: <20220831141530.80572-1-andriy.shevchenko@linux.intel.com>
+To:     "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] iio: adc: add max11205 adc driver
+Message-ID: <20220904163738.2bebf51f@jic23-huawei>
+In-Reply-To: <BL1PR03MB59923C7F3907FA7A71CBA623807B9@BL1PR03MB5992.namprd03.prod.outlook.com>
+References: <20220831133021.215625-1-ramona.bolboaca@analog.com>
+        <20220831133021.215625-2-ramona.bolboaca@analog.com>
+        <CAHp75Vco8ftAkjVEmKGKKYHS-1mnZzLuPA+N98giqi17mqQnRw@mail.gmail.com>
+        <BL1PR03MB59923C7F3907FA7A71CBA623807B9@BL1PR03MB5992.namprd03.prod.outlook.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -58,80 +62,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 Aug 2022 17:15:28 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-> Unify ID tables to use pointers for driver data. It will allow
-> to simplify the driver later on.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >   
+> > > +       if (!st->chip_info)
+> > > +               st->chip_info = (const struct chip_info *)spi_get_device_id(spi)->driver_data;
+> > > +
+> > > +       indio_dev->name = st->chip_info->name;
+> > > +       indio_dev->modes = INDIO_DIRECT_MODE;
+> > > +       indio_dev->channels = max11205_channels;
+> > > +       indio_dev->num_channels = 1;
+> > > +       indio_dev->info = &max11205_iio_info;
+> > > +
+> > > +       st->vref = devm_regulator_get(&spi->dev, "vref");  
+> > 
 
-Series applied to the togreg branch of iio.git and pushed out as testing
-for 0-day to see if it can find things we missed.
+> > devm_regulator_get_enable() ?  
 
-Still time for feedback from others before I push this out as the
-more or less non-rebasing, togreg branch.
+> I found the patches which implement devm_regulator_get_enable.
+> However, I need to get the voltage of the regulator using
+> regulator_get_voltage(struct regulator *regulator) and if I use
+> devm_regulator_get_enable I do not have access to the regulator
+> pointer. What should I do in this case? Is there an API which works
+> like devm_regulator_get_enable but also gives access to the
+> regulator's pointer? Thank you for you review!
 
-Thanks,
+Ah.  You've run into a fun long running 'discussion'.  There was
+great resistance to adding devm_regulator_get_enable() because it
+was felt that it was too easy to get the handling wrong and end up
+with underflowing reference counters etc.  So the 'solution' was
+to make it less useful than it would otherwise have been by making
+sure it could not be combined with other accesses to the regulator.
+
+Upshot is you are correct that it cannot be applied in this case.
+
+Also relevant is that the patch in question is going through the
+regulator tree so won't be generally available to the rest of the
+kernel until next cycle.  As such we'd have had to make such a
+change as a follow up patch if it were possible.
 
 Jonathan
 
-> ---
-> v2: left ID fallback in place (Jonathan)
->  drivers/iio/magnetometer/yamaha-yas530.c | 23 +++++++++++++----------
->  1 file changed, 13 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/iio/magnetometer/yamaha-yas530.c b/drivers/iio/magnetometer/yamaha-yas530.c
-> index 026f71e524f3..58f527cfde07 100644
-> --- a/drivers/iio/magnetometer/yamaha-yas530.c
-> +++ b/drivers/iio/magnetometer/yamaha-yas530.c
-> @@ -32,6 +32,7 @@
->  #include <linux/mod_devicetable.h>
->  #include <linux/mutex.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/random.h>
-> @@ -1437,8 +1438,10 @@ static int yas5xx_probe(struct i2c_client *i2c,
->  		goto assert_reset;
->  	}
->  
-> -	yas5xx->chip_info = &yas5xx_chip_info_tbl[id->driver_data];
-> -	ci = yas5xx->chip_info;
-> +	ci = device_get_match_data(dev);
-> +	if (!ci)
-> +		ci = (const struct yas5xx_chip_info *)id->driver_data;
-> +	yas5xx->chip_info = ci;
->  
->  	ret = regmap_read(yas5xx->map, YAS5XX_DEVICE_ID, &id_check);
->  	if (ret)
-> @@ -1583,19 +1586,19 @@ static DEFINE_RUNTIME_DEV_PM_OPS(yas5xx_dev_pm_ops, yas5xx_runtime_suspend,
->  				 yas5xx_runtime_resume, NULL);
->  
->  static const struct i2c_device_id yas5xx_id[] = {
-> -	{"yas530", yas530 },
-> -	{"yas532", yas532 },
-> -	{"yas533", yas533 },
-> -	{"yas537", yas537 },
-> +	{"yas530", (kernel_ulong_t)&yas5xx_chip_info_tbl[yas530] },
-> +	{"yas532", (kernel_ulong_t)&yas5xx_chip_info_tbl[yas532] },
-> +	{"yas533", (kernel_ulong_t)&yas5xx_chip_info_tbl[yas533] },
-> +	{"yas537", (kernel_ulong_t)&yas5xx_chip_info_tbl[yas537] },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(i2c, yas5xx_id);
->  
->  static const struct of_device_id yas5xx_of_match[] = {
-> -	{ .compatible = "yamaha,yas530", },
-> -	{ .compatible = "yamaha,yas532", },
-> -	{ .compatible = "yamaha,yas533", },
-> -	{ .compatible = "yamaha,yas537", },
-> +	{ .compatible = "yamaha,yas530", &yas5xx_chip_info_tbl[yas530] },
-> +	{ .compatible = "yamaha,yas532", &yas5xx_chip_info_tbl[yas532] },
-> +	{ .compatible = "yamaha,yas533", &yas5xx_chip_info_tbl[yas533] },
-> +	{ .compatible = "yamaha,yas537", &yas5xx_chip_info_tbl[yas537] },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, yas5xx_of_match);
+p.s. Wrap your replies at 80 chars as well as the code.
+Kernel developers have an annoying habit of reading their email in
+one small window even when they have very large monitors :)
+Also, where sensible crop unnecessary parts of the email to only
+include the bit you are responding to. Saves on lots of scrolling..
 
+> Kind Regards, Ramona
+> Bolboaca

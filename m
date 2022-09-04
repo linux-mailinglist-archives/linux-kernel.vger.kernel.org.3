@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68515AC23D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 06:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD915AC242
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 06:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232993AbiIDENK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 00:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S232470AbiIDENZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 00:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232231AbiIDEM4 (ORCPT
+        with ESMTP id S232681AbiIDENI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 00:12:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE6A4AD7F
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 21:12:54 -0700 (PDT)
+        Sun, 4 Sep 2022 00:13:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056BD4BA49
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Sep 2022 21:13:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D172B80C0A
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 04:12:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08636C433C1;
-        Sun,  4 Sep 2022 04:12:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE29CB80C0A
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 04:13:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C9B6C433D6;
+        Sun,  4 Sep 2022 04:13:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662264772;
-        bh=K/d3vX51mEexmpqHtP3wbEBKnlZkDTKnEblnfizmPOc=;
+        s=k20201202; t=1662264781;
+        bh=Hv2Jx1ndLQnx6xs2OJpYs242JzL+rZSDUvGGhHc/mvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KMelVFPK5C2kIcMfaWGhzhyPjw8dmEQsIaH9RETG253AsAybLThN6Kk/8oZTnOdpH
-         ISoznEALqlwumzwDSdtNXCjgNbGoLOIa0NC0ACcUcauSy3iH50pYj7QmnqpjYYnPgE
-         5Xm1b8HlmaiAvWGMlecJSHIEg8wf0DD0SNnFhvKWp6opTJrN8by8mxNKanxCbFM0Jd
-         q80S2foQBeN2aAgoZFAVhWYxiWTPeGU0JkAqsikvjTrLfr5vZZHwGZd0uCzSzeIvZQ
-         M2I8uoMfsfJCjwrt34M1U94F9WgWgcihcADSuJoCuVpE8jjmy4hYgGq/hmD2Ag8JCN
-         /kNEZ1/L0ilcg==
+        b=HHJf/nHL4l43jIHWxdbjy28482FI8xNWbcHrt61HiOKR5t6ZSF+zq5uYXFGxS+DUi
+         sM7m9dNXYjGXXqDoGRuRZm++D1VGbA0gIb+85sTX7uCNLvXwqn5hBHmqz1D4L3+DO0
+         etn6TT72UvZcZ2wWGGnZsb7VuC1JBaKVP4HTnqzX7jBR/q5KO4CkL+kHm/W6VEiQDG
+         ScJf6pkiS+ItJFtU8H2j7FWsTIspmnNXUydiv8hOtsFUeBSAKCYIUUBzqfWsnjPwNd
+         WnsWdkK0vjcEjUySz7wKl+vP5IETMP+lQHI1SJ1N4JDVuaGO3fQ5SOBR5S4ancH17d
+         dhsM59gno7VeA==
 From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Tom Zanussi <zanussi@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/6] tracing: Add .graph suffix option to histogram value
-Date:   Sun,  4 Sep 2022 13:12:48 +0900
-Message-Id: <166226476841.223837.17477492032466945922.stgit@devnote2>
+Subject: [PATCH v5 5/6] tracing: Add nohitcount option for suppressing display of raw hitcount
+Date:   Sun,  4 Sep 2022 13:12:57 +0900
+Message-Id: <166226477757.223837.8207996579689008539.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <166226473132.223837.9011128463174539022.stgit@devnote2>
 References: <166226473132.223837.9011128463174539022.stgit@devnote2>
@@ -58,236 +58,164 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Add the .graph suffix which shows the bar graph of the histogram value.
+Add 'nohitcount' ('NOHC' for short) option for suppressing display of
+the raw hitcount column in the histogram.
+Note that you must specify at least one value except raw 'hitcount'
+when you specify this nohitcount option.
 
-For example, the below example shows that the bar graph
-of the histogram of the runtime for each tasks.
-
-------
   # cd /sys/kernel/debug/tracing/
-  # echo hist:keys=pid:vals=runtime.graph:sort=pid > \
-   events/sched/sched_stat_runtime/trigger
+  # echo hist:keys=pid:vals=runtime.percent,runtime.graph:sort=pid:NOHC > \
+        events/sched/sched_stat_runtime/trigger
   # sleep 10
   # cat events/sched/sched_stat_runtime/hist
  # event histogram
  #
- # trigger info: hist:keys=pid:vals=hitcount,runtime.graph:sort=pid:size=2048 [active]
+ # trigger info: hist:keys=pid:vals=runtime.percent,runtime.graph:sort=pid:size=2048:nohitcount  [active]
  #
 
- { pid:         14 } hitcount:          2  runtime:
- { pid:         16 } hitcount:          8  runtime:
- { pid:         26 } hitcount:          1  runtime:
- { pid:         57 } hitcount:          3  runtime:
- { pid:         61 } hitcount:         20  runtime: ###
- { pid:         66 } hitcount:          2  runtime:
- { pid:         70 } hitcount:          3  runtime:
- { pid:         72 } hitcount:          2  runtime:
- { pid:        145 } hitcount:         14  runtime: ####################
- { pid:        152 } hitcount:          5  runtime: #######
- { pid:        153 } hitcount:          2  runtime: ####
+ { pid:          8 }  runtime (%):   3.02  runtime: #
+ { pid:         14 }  runtime (%):   2.25  runtime:
+ { pid:         16 }  runtime (%):   2.25  runtime:
+ { pid:         26 }  runtime (%):   0.17  runtime:
+ { pid:         61 }  runtime (%):  11.52  runtime: ####
+ { pid:         67 }  runtime (%):   1.56  runtime:
+ { pid:         68 }  runtime (%):   0.84  runtime:
+ { pid:         76 }  runtime (%):   0.92  runtime:
+ { pid:        117 }  runtime (%):   2.50  runtime: #
+ { pid:        146 }  runtime (%):  49.88  runtime: ####################
+ { pid:        157 }  runtime (%):  16.63  runtime: ######
+ { pid:        158 }  runtime (%):   8.38  runtime: ###
 
- Totals:
-     Hits: 62
-     Entries: 11
-     Dropped: 0
--------
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
  Changes in v5:
-  - Show raw hitcount value always even if hitcount.graph
-    is specified.
-  - Update README file
- Changes in v3:
-  - Show hitcount.graph in trigger info correctly.
-  - Show both hitcount.percent and hitcount.graph on the same histogram.
- Changes in v2:
-  - Show an error when failing to calculate the percentage.
+  - Add nohitcount and NOHC option to avoid showing hitcount.
 ---
- kernel/trace/trace.c             |    3 +
- kernel/trace/trace_events_hist.c |   77 ++++++++++++++++++++++++++++++--------
- 2 files changed, 63 insertions(+), 17 deletions(-)
+ kernel/trace/trace.c             |    3 +++
+ kernel/trace/trace_events_hist.c |   34 ++++++++++++++++++++++++++--------
+ 2 files changed, 29 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 5e5efc550ac4..aec092b4ed3e 100644
+index aec092b4ed3e..e39d3d3b64ac 100644
 --- a/kernel/trace/trace.c
 +++ b/kernel/trace/trace.c
-@@ -5701,7 +5701,8 @@ static const char readme_msg[] =
- 	"\t            .log2       display log2 value rather than raw number\n"
- 	"\t            .buckets=size  display values in groups of size rather than raw number\n"
- 	"\t            .usecs      display a common_timestamp in microseconds\n"
--	"\t            .percent    display a number of percentage value\n\n"
-+	"\t            .percent    display a number of percentage value\n"
-+	"\t            .graph      display a bar-graph of a value\n\n"
- 	"\t    The 'pause' parameter can be used to pause an existing hist\n"
- 	"\t    trigger or to start a hist trigger but not log any events\n"
- 	"\t    until told to do so.  'continue' can be used to start or\n"
+@@ -5654,6 +5654,7 @@ static const char readme_msg[] =
+ 	"\t            [:size=#entries]\n"
+ 	"\t            [:pause][:continue][:clear]\n"
+ 	"\t            [:name=histname1]\n"
++	"\t            [:nohitcount]\n"
+ 	"\t            [:<handler>.<action>]\n"
+ 	"\t            [if <filter>]\n\n"
+ 	"\t    Note, special fields can be used as well:\n"
+@@ -5710,6 +5711,8 @@ static const char readme_msg[] =
+ 	"\t    The 'clear' parameter will clear the contents of a running\n"
+ 	"\t    hist trigger and leave its current paused/active state\n"
+ 	"\t    unchanged.\n\n"
++	"\t    The 'nohitcount' (or NOHC) parameter will suppress display of\n"
++	"\t    raw hitcount in the histogram.\n\n"
+ 	"\t    The enable_hist and disable_hist triggers can be used to\n"
+ 	"\t    have one event conditionally start and stop another event's\n"
+ 	"\t    already-attached hist trigger.  The syntax is analogous to\n"
 diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 053b23e10c48..753da682d404 100644
+index 753da682d404..8d1db056766f 100644
 --- a/kernel/trace/trace_events_hist.c
 +++ b/kernel/trace/trace_events_hist.c
-@@ -507,6 +507,7 @@ enum hist_field_flags {
- 	HIST_FIELD_FL_BUCKET		= 1 << 17,
- 	HIST_FIELD_FL_CONST		= 1 << 18,
- 	HIST_FIELD_FL_PERCENT		= 1 << 19,
-+	HIST_FIELD_FL_GRAPH		= 1 << 20,
- };
+@@ -69,7 +69,8 @@
+ 	C(INVALID_STR_OPERAND,	"String type can not be an operand in expression"), \
+ 	C(EXPECT_NUMBER,	"Expecting numeric literal"),		\
+ 	C(UNARY_MINUS_SUBEXPR,	"Unary minus not supported in sub-expressions"), \
+-	C(DIVISION_BY_ZERO,	"Division by zero"),
++	C(DIVISION_BY_ZERO,	"Division by zero"),			\
++	C(NEED_NOHC_VAL,	"Non-hitcount value is required for 'nohitcount'"),
  
- struct var_defs {
-@@ -1710,6 +1711,8 @@ static const char *get_hist_field_flags(struct hist_field *hist_field)
- 		flags_str = "usecs";
- 	else if (hist_field->flags & HIST_FIELD_FL_PERCENT)
- 		flags_str = "percent";
-+	else if (hist_field->flags & HIST_FIELD_FL_GRAPH)
-+		flags_str = "graph";
+ #undef C
+ #define C(a, b)		HIST_ERR_##a
+@@ -526,6 +527,7 @@ struct hist_trigger_attrs {
+ 	bool		cont;
+ 	bool		clear;
+ 	bool		ts_in_usecs;
++	bool		no_hitcount;
+ 	unsigned int	map_bits;
  
- 	return flags_str;
- }
-@@ -2322,6 +2325,10 @@ parse_field(struct hist_trigger_data *hist_data, struct trace_event_file *file,
- 			if (*flags & (HIST_FIELD_FL_VAR | HIST_FIELD_FL_KEY))
- 				goto error;
- 			*flags |= HIST_FIELD_FL_PERCENT;
-+		} else if (strncmp(modifier, "graph", 5) == 0) {
-+			if (*flags & (HIST_FIELD_FL_VAR | HIST_FIELD_FL_KEY))
-+				goto error;
-+			*flags |= HIST_FIELD_FL_GRAPH;
- 		} else {
-  error:
- 			hist_err(tr, HIST_ERR_BAD_FIELD_MODIFIER, errpos(modifier));
-@@ -5313,20 +5320,52 @@ static inline unsigned int __get_percentage(u64 val, u64 total)
- 	return val ? UINT_MAX : 0;
- }
- 
-+#define BAR_CHAR '#'
-+
-+static inline const char *__fill_bar_str(char *buf, int size, u64 val, u64 max)
-+{
-+	unsigned int len = __get_percentage(val, max);
-+	int i;
-+
-+	if (len == UINT_MAX) {
-+		snprintf(buf, size, "[ERROR]");
-+		return buf;
+ 	char		*assignment_str[TRACING_MAP_VARS_MAX];
+@@ -1550,7 +1552,10 @@ parse_hist_trigger_attrs(struct trace_array *tr, char *trigger_str)
+ 			ret = parse_assignment(tr, str, attrs);
+ 			if (ret)
+ 				goto free;
+-		} else if (strcmp(str, "pause") == 0)
++		} else if (strcmp(str, "nohitcount") == 0 ||
++			   strcmp(str, "NOHC") == 0)
++			attrs->no_hitcount = true;
++		else if (strcmp(str, "pause") == 0)
+ 			attrs->pause = true;
+ 		else if ((strcmp(str, "cont") == 0) ||
+ 			 (strcmp(str, "continue") == 0))
+@@ -4377,6 +4382,12 @@ static int create_val_fields(struct hist_trigger_data *hist_data,
+ 	if (fields_str && (strcmp(fields_str, "hitcount") != 0))
+ 		ret = -EINVAL;
+  out:
++	/* There is only raw hitcount but nohitcount suppresses it. */
++	if (j == 1 && hist_data->attrs->no_hitcount) {
++		hist_err(hist_data->event_file->tr, HIST_ERR_NEED_NOHC_VAL, 0);
++		ret = -ENOENT;
 +	}
 +
-+	len = len * size / 10000;
-+	for (i = 0; i < len && i < size; i++)
-+		buf[i] = BAR_CHAR;
-+	while (i < size)
-+		buf[i++] = ' ';
-+	buf[size] = '\0';
-+
-+	return buf;
-+}
-+
-+struct hist_val_stat {
-+	u64 max;
-+	u64 total;
-+};
-+
- static void hist_trigger_print_val(struct seq_file *m, unsigned int idx,
- 				   const char *field_name, unsigned long flags,
--				   u64 *totals, struct tracing_map_elt *elt)
-+				   struct hist_val_stat *stats,
-+				   struct tracing_map_elt *elt)
- {
- 	u64 val = tracing_map_read_sum(elt, idx);
- 	unsigned int pc;
-+	char bar[21];
+ 	return ret;
+ }
  
- 	if (flags & HIST_FIELD_FL_PERCENT) {
--		pc = __get_percentage(val, totals[idx]);
-+		pc = __get_percentage(val, stats[idx].total);
- 		if (pc == UINT_MAX)
- 			seq_printf(m, " %s (%%):[ERROR]", field_name);
- 		else
- 			seq_printf(m, " %s (%%): %3u.%02u", field_name,
- 					pc / 100, pc % 100);
-+	} else if (flags & HIST_FIELD_FL_GRAPH) {
-+		seq_printf(m, " %s: %20s", field_name,
-+			   __fill_bar_str(bar, 20, val, stats[idx].max));
- 	} else if (flags & HIST_FIELD_FL_HEX) {
- 		seq_printf(m, " %s: %10llx", field_name, val);
- 	} else {
-@@ -5336,7 +5375,7 @@ static void hist_trigger_print_val(struct seq_file *m, unsigned int idx,
+@@ -5385,13 +5396,13 @@ static void hist_trigger_entry_print(struct seq_file *m,
  
- static void hist_trigger_entry_print(struct seq_file *m,
- 				     struct hist_trigger_data *hist_data,
--				     u64 *totals,
-+				     struct hist_val_stat *stats,
- 				     void *key,
- 				     struct tracing_map_elt *elt)
- {
-@@ -5347,7 +5386,7 @@ static void hist_trigger_entry_print(struct seq_file *m,
  	hist_trigger_print_key(m, hist_data, key, elt);
  
- 	/* At first, show the raw hitcount always */
--	hist_trigger_print_val(m, i, "hitcount", 0, totals, elt);
-+	hist_trigger_print_val(m, i, "hitcount", 0, stats, elt);
+-	/* At first, show the raw hitcount always */
+-	hist_trigger_print_val(m, i, "hitcount", 0, stats, elt);
++	/* At first, show the raw hitcount if !nohitcount */
++	if (!hist_data->attrs->no_hitcount)
++		hist_trigger_print_val(m, i, "hitcount", 0, stats, elt);
  
  	for (i = 1; i < hist_data->n_vals; i++) {
  		field_name = hist_field_name(hist_data->fields[i], 0);
-@@ -5357,7 +5396,7 @@ static void hist_trigger_entry_print(struct seq_file *m,
+ 		flags = hist_data->fields[i]->flags;
+-
+ 		if (flags & HIST_FIELD_FL_VAR || flags & HIST_FIELD_FL_EXPR)
  			continue;
  
- 		seq_puts(m, " ");
--		hist_trigger_print_val(m, i, field_name, flags, totals, elt);
-+		hist_trigger_print_val(m, i, field_name, flags, stats, elt);
- 	}
+@@ -5836,6 +5847,7 @@ static int event_hist_trigger_print(struct seq_file *m,
+ 	struct hist_trigger_data *hist_data = data->private_data;
+ 	struct hist_field *field;
+ 	bool have_var = false;
++	bool show_val = false;
+ 	unsigned int i;
  
- 	print_actions(m, hist_data, elt);
-@@ -5371,7 +5410,8 @@ static int print_entries(struct seq_file *m,
- 	struct tracing_map_sort_entry **sort_entries = NULL;
- 	struct tracing_map *map = hist_data->map;
- 	int i, j, n_entries;
--	u64 *totals = NULL;
-+	struct hist_val_stat *stats = NULL;
-+	u64 val;
- 
- 	n_entries = tracing_map_sort_entries(map, hist_data->sort_keys,
- 					     hist_data->n_sort_keys,
-@@ -5379,28 +5419,33 @@ static int print_entries(struct seq_file *m,
- 	if (n_entries < 0)
- 		return n_entries;
- 
-+	/* Calculate the max and the total for each field if needed. */
- 	for (j = 0; j < hist_data->n_vals; j++) {
--		if (!(hist_data->fields[j]->flags & HIST_FIELD_FL_PERCENT))
-+		if (!(hist_data->fields[j]->flags &
-+			(HIST_FIELD_FL_PERCENT | HIST_FIELD_FL_GRAPH)))
+ 	seq_puts(m, HIST_PREFIX);
+@@ -5866,12 +5878,16 @@ static int event_hist_trigger_print(struct seq_file *m,
  			continue;
--		if (!totals) {
--			totals = kcalloc(hist_data->n_vals, sizeof(u64),
--					 GFP_KERNEL);
--			if (!totals) {
-+		if (!stats) {
-+			stats = kcalloc(hist_data->n_vals, sizeof(*stats),
-+				       GFP_KERNEL);
-+			if (!stats) {
- 				n_entries = -ENOMEM;
- 				goto out;
- 			}
  		}
--		for (i = 0; i < n_entries; i++)
--			totals[j] += tracing_map_read_sum(
--					sort_entries[i]->elt, j);
-+		for (i = 0; i < n_entries; i++) {
-+			val = tracing_map_read_sum(sort_entries[i]->elt, j);
-+			stats[j].total += val;
-+			if (stats[j].max < val)
-+				stats[j].max = val;
-+		}
+ 
+-		if (i == HITCOUNT_IDX)
++		if (i == HITCOUNT_IDX) {
++			if (hist_data->attrs->no_hitcount)
++				continue;
+ 			seq_puts(m, "hitcount");
+-		else {
+-			seq_puts(m, ",");
++		} else {
++			if (show_val)
++				seq_puts(m, ",");
+ 			hist_field_print(m, field);
+ 		}
++		show_val = true;
  	}
  
- 	for (i = 0; i < n_entries; i++)
--		hist_trigger_entry_print(m, hist_data, totals,
-+		hist_trigger_entry_print(m, hist_data, stats,
- 					 sort_entries[i]->key,
- 					 sort_entries[i]->elt);
+ 	if (have_var) {
+@@ -5922,6 +5938,8 @@ static int event_hist_trigger_print(struct seq_file *m,
+ 	seq_printf(m, ":size=%u", (1 << hist_data->map->map_bits));
+ 	if (hist_data->enable_timestamps)
+ 		seq_printf(m, ":clock=%s", hist_data->attrs->clock);
++	if (hist_data->attrs->no_hitcount)
++		seq_puts(m, ":nohitcount");
  
--	kfree(totals);
-+	kfree(stats);
- out:
- 	tracing_map_destroy_sort_entries(sort_entries, n_entries);
+ 	print_actions_spec(m, hist_data);
  
 

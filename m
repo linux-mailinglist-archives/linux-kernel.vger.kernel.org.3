@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5785AC370
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 10:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600135AC37F
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 10:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiIDI1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 04:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        id S232793AbiIDI4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 04:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiIDI1G (ORCPT
+        with ESMTP id S229537AbiIDIz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 04:27:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D58A419A8
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 01:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662280025; x=1693816025;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JQeFaJ4f95e8WYDw78FGLeuc+EIjHNI0iN4qkwgBqg0=;
-  b=RP5+FZDCcPSF4B2vUBJj+Qg6qKuwRrGicPm3krJY9L5FFT2KC4bZO9Wt
-   Atg5eRE1hzd1l1GOWXsbJ3qqScgDyMg8mlYisgOernOBpWkAJJuNOHsn1
-   8Nm0uuCCc4bUqLtBu/GFMWt7qjB3A25g5RxNJd608WqbdLu8xvRqJvRZW
-   yL3adQ8BQBrTFB2TBRigjZ+O7XHb6udz3v0RJZFsgaVDd4db9Bv3qlnsU
-   3yqC/1p8F3BVry1UuzbOCEcWK5G85U3vzHnxsOcDtmQAYhIH5ZypAeAI7
-   o7QS4EFcXr9VDIZo02qzTkUhtDMp5+gmBxpJN7UaQbOef0H6K8LXX6j5J
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="296226830"
-X-IronPort-AV: E=Sophos;i="5.93,288,1654585200"; 
-   d="scan'208";a="296226830"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 01:26:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,288,1654585200"; 
-   d="scan'208";a="616113245"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Sep 2022 01:26:40 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUkxj-0002or-28;
-        Sun, 04 Sep 2022 08:26:39 +0000
-Date:   Sun, 04 Sep 2022 16:26:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:lazy.2022.09.03a] BUILD SUCCESS
- e0c7d40eb8b115b099f2a5a01bf1d6719c0aa228
-Message-ID: <6314613d.Sr3zYvr16cna560u%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 4 Sep 2022 04:55:58 -0400
+X-Greylist: delayed 907 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Sep 2022 01:55:56 PDT
+Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C84D41993
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 01:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=trq9m
+        Cm5wrYfaBcrg7Qyz492XenZKTBbpI4PqsuVuQ0=; b=hhQoOPJVi/p645MTP0flY
+        tkojayRrsVYSvtlLbJr4cXrPm9CZddeNkDZ8HMBMYBLsakYSQc66rVLIJ4r7GcdL
+        FDlMC8SZCY8fWKKCfUZDKNaPLcfieoB26ORBgSGIEe51R64i/cwV+k36S6uIIM1E
+        b1xb5nq9jd3j5AVi1dGkLA=
+Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
+        by smtp14 (Coremail) with SMTP id EsCowABHmfQ0ZBRjya_EDg--.56376S4;
+        Sun, 04 Sep 2022 16:40:32 +0800 (CST)
+From:   Jingyu Wang <jingyuwang_vip@163.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        evan.quan@amd.com, mario.limonciello@amd.com,
+        Hawking.Zhang@amd.com, andrey.grodzovsky@amd.com,
+        solomon.chiu@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Jingyu Wang <jingyuwang_vip@163.com>
+Subject: [PATCH] drm: amd: This is a patch to the amdgpu_drv.c file that fixes some warnings and errors found by the checkpatch.pl tool
+Date:   Sun,  4 Sep 2022 16:39:12 +0800
+Message-Id: <20220904083912.1006262-1-jingyuwang_vip@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EsCowABHmfQ0ZBRjya_EDg--.56376S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxtr4rCFW8tF1DuF4xGr1UGFg_yoWxWFyxpF
+        WfCr97trWxZr42qryDJrs3WFn0ga48XrW8XayDZrW2gwn7GFn5Ga1xtasYgF9rWrs3ur4x
+        XrykJ3y7Wa4FvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEVc_7UUUUU=
+X-Originating-IP: [1.203.67.201]
+X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/xtbBaR9yF1Xly0hTpwACsW
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,99 +56,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git lazy.2022.09.03a
-branch HEAD: e0c7d40eb8b115b099f2a5a01bf1d6719c0aa228  squash! rcu: Fix late wakeup when flush of bypass cblist happens
+Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 40 ++++++++++++-------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
-elapsed time: 725m
-
-configs tested: 78
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                        randconfig-a004
-arm                                 defconfig
-x86_64                        randconfig-a002
-x86_64                               rhel-8.3
-i386                                defconfig
-x86_64                        randconfig-a006
-x86_64                    rhel-8.3-kselftests
-arc                  randconfig-r043-20220904
-x86_64                           allyesconfig
-alpha                            allyesconfig
-x86_64                          rhel-8.3-func
-powerpc                           allnoconfig
-arc                              allyesconfig
-x86_64                        randconfig-a013
-riscv                randconfig-r042-20220904
-powerpc                          allmodconfig
-x86_64                         rhel-8.3-kunit
-s390                 randconfig-r044-20220904
-sh                               allmodconfig
-x86_64                           rhel-8.3-kvm
-m68k                             allyesconfig
-mips                             allyesconfig
-arm                              allyesconfig
-m68k                             allmodconfig
-arm64                            allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                        randconfig-a011
-i386                          randconfig-a001
-i386                          randconfig-a003
-ia64                             allmodconfig
-csky                              allnoconfig
-x86_64                        randconfig-a015
-i386                          randconfig-a005
-arc                               allnoconfig
-i386                          randconfig-a014
-alpha                             allnoconfig
-riscv                             allnoconfig
-i386                          randconfig-a012
-arm                           u8500_defconfig
-m68k                       m5475evb_defconfig
-sh                           se7722_defconfig
-sh                          sdk7780_defconfig
-sparc64                          alldefconfig
-i386                          randconfig-a016
-m68k                             alldefconfig
-i386                             allyesconfig
-mips                      fuloong2e_defconfig
-m68k                           sun3_defconfig
-arc                            hsdk_defconfig
-powerpc                 mpc837x_rdb_defconfig
-arm                         assabet_defconfig
-m68k                          atari_defconfig
-mips                         bigsur_defconfig
-arm                           tegra_defconfig
-mips                  decstation_64_defconfig
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220904
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-hexagon              randconfig-r045-20220904
-x86_64                        randconfig-a003
-hexagon              randconfig-r041-20220904
-i386                          randconfig-a006
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-x86_64                        randconfig-a014
-i386                          randconfig-a004
-arm                   milbeaut_m10v_defconfig
-arm                         orion5x_defconfig
-arm                           sama7_defconfig
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-powerpc                 xes_mpc85xx_defconfig
-
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+index de7144b06e93..5c2ac8123450 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@ -140,8 +140,8 @@ uint amdgpu_pcie_lane_cap;
+ u64 amdgpu_cg_mask = 0xffffffffffffffff;
+ uint amdgpu_pg_mask = 0xffffffff;
+ uint amdgpu_sdma_phase_quantum = 32;
+-char *amdgpu_disable_cu = NULL;
+-char *amdgpu_virtual_display = NULL;
++char *amdgpu_disable_cu;
++char *amdgpu_virtual_display;
+ 
+ /*
+  * OverDrive(bit 14) disabled by default
+@@ -287,9 +287,9 @@ module_param_named(msi, amdgpu_msi, int, 0444);
+  * jobs is 10000. The timeout for compute is 60000.
+  */
+ MODULE_PARM_DESC(lockup_timeout, "GPU lockup timeout in ms (default: for bare metal 10000 for non-compute jobs and 60000 for compute jobs; "
+-		"for passthrough or sriov, 10000 for all jobs."
+-		" 0: keep default value. negative: infinity timeout), "
+-		"format: for bare metal [Non-Compute] or [GFX,Compute,SDMA,Video]; "
++		"for passthrough or sriov, 10000 for all jobs.
++		0: keep default value. negative: infinity timeout),
++		format: for bare metal [Non-Compute] or [GFX,Compute,SDMA,Video]; "
+ 		"for passthrough or sriov [all jobs] or [GFX,Compute,SDMA,Video].");
+ module_param_string(lockup_timeout, amdgpu_lockup_timeout, sizeof(amdgpu_lockup_timeout), 0444);
+ 
+@@ -502,7 +502,7 @@ module_param_named(virtual_display, amdgpu_virtual_display, charp, 0444);
+  * Set how much time allow a job hang and not drop it. The default is 0.
+  */
+ MODULE_PARM_DESC(job_hang_limit, "how much time allow a job hang and not drop it (default 0)");
+-module_param_named(job_hang_limit, amdgpu_job_hang_limit, int ,0444);
++module_param_named(job_hang_limit, amdgpu_job_hang_limit, int, 0444);
+ 
+ /**
+  * DOC: lbpw (int)
+@@ -565,8 +565,8 @@ module_param_named(timeout_period, amdgpu_watchdog_timer.period, uint, 0644);
+  */
+ #ifdef CONFIG_DRM_AMDGPU_SI
+ 
+-#if defined(CONFIG_DRM_RADEON) || defined(CONFIG_DRM_RADEON_MODULE)
+-int amdgpu_si_support = 0;
++#if IS_ENABLED(CONFIG_DRM_RADEON) || defined(CONFIG_DRM_RADEON_MODULE)
++int amdgpu_si_support;
+ MODULE_PARM_DESC(si_support, "SI support (1 = enabled, 0 = disabled (default))");
+ #else
+ int amdgpu_si_support = 1;
+@@ -584,8 +584,8 @@ module_param_named(si_support, amdgpu_si_support, int, 0444);
+  */
+ #ifdef CONFIG_DRM_AMDGPU_CIK
+ 
+-#if defined(CONFIG_DRM_RADEON) || defined(CONFIG_DRM_RADEON_MODULE)
+-int amdgpu_cik_support = 0;
++#if IS_ENABLED(CONFIG_DRM_RADEON) || defined(CONFIG_DRM_RADEON_MODULE)
++int amdgpu_cik_support;
+ MODULE_PARM_DESC(cik_support, "CIK support (1 = enabled, 0 = disabled (default))");
+ #else
+ int amdgpu_cik_support = 1;
+@@ -601,8 +601,8 @@ module_param_named(cik_support, amdgpu_cik_support, int, 0444);
+  * E.g. 0x1 = 256Mbyte, 0x2 = 512Mbyte, 0x4 = 1 Gbyte, 0x8 = 2GByte. The default is 0 (disabled).
+  */
+ MODULE_PARM_DESC(smu_memory_pool_size,
+-	"reserve gtt for smu debug usage, 0 = disable,"
+-		"0x1 = 256Mbyte, 0x2 = 512Mbyte, 0x4 = 1 Gbyte, 0x8 = 2GByte");
++	"reserve gtt for smu debug usage, 0 = disable,
++		0x1 = 256Mbyte, 0x2 = 512Mbyte, 0x4 = 1 Gbyte, 0x8 = 2GByte");
+ module_param_named(smu_memory_pool_size, amdgpu_smu_memory_pool_size, uint, 0444);
+ 
+ /**
+@@ -772,9 +772,9 @@ module_param(hws_gws_support, bool, 0444);
+ MODULE_PARM_DESC(hws_gws_support, "Assume MEC2 FW supports GWS barriers (false = rely on FW version check (Default), true = force supported)");
+ 
+ /**
+-  * DOC: queue_preemption_timeout_ms (int)
+-  * queue preemption timeout in ms (1 = Minimum, 9000 = default)
+-  */
++ * DOC: queue_preemption_timeout_ms (int)
++ * queue preemption timeout in ms (1 = Minimum, 9000 = default)
++ */
+ int queue_preemption_timeout_ms = 9000;
+ module_param(queue_preemption_timeout_ms, int, 0644);
+ MODULE_PARM_DESC(queue_preemption_timeout_ms, "queue preemption timeout in ms (1 = Minimum, 9000 = default)");
+@@ -799,7 +799,7 @@ MODULE_PARM_DESC(no_system_mem_limit, "disable system memory limit (false = defa
+  * DOC: no_queue_eviction_on_vm_fault (int)
+  * If set, process queues will not be evicted on gpuvm fault. This is to keep the wavefront context for debugging (0 = queue eviction, 1 = no queue eviction). The default is 0 (queue eviction).
+  */
+-int amdgpu_no_queue_eviction_on_vm_fault = 0;
++int amdgpu_no_queue_eviction_on_vm_fault;
+ MODULE_PARM_DESC(no_queue_eviction_on_vm_fault, "No queue eviction on VM fault (0 = queue eviction, 1 = no queue eviction)");
+ module_param_named(no_queue_eviction_on_vm_fault, amdgpu_no_queue_eviction_on_vm_fault, int, 0444);
+ #endif
+@@ -1609,7 +1609,7 @@ static const u16 amdgpu_unsupported_pciidlist[] = {
+ };
+ 
+ static const struct pci_device_id pciidlist[] = {
+-#ifdef  CONFIG_DRM_AMDGPU_SI
++#ifdef CONFIG_DRM_AMDGPU_SI
+ 	{0x1002, 0x6780, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_TAHITI},
+ 	{0x1002, 0x6784, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_TAHITI},
+ 	{0x1002, 0x6788, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_TAHITI},
+@@ -2289,7 +2289,6 @@ static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work)
+ 			amdgpu_amdkfd_device_init(adev);
+ 		amdgpu_ttm_set_buffer_funcs_status(adev, true);
+ 	}
+-	return;
+ }
+ 
+ static int amdgpu_pmops_prepare(struct device *dev)
+@@ -2478,6 +2477,7 @@ static int amdgpu_pmops_runtime_suspend(struct device *dev)
+ 	/* wait for all rings to drain before suspending */
+ 	for (i = 0; i < AMDGPU_MAX_RINGS; i++) {
+ 		struct amdgpu_ring *ring = adev->rings[i];
++
+ 		if (ring && ring->sched.ready) {
+ 			ret = amdgpu_fence_wait_empty(ring);
+ 			if (ret)
+@@ -2600,6 +2600,7 @@ long amdgpu_drm_ioctl(struct file *filp,
+ 	struct drm_file *file_priv = filp->private_data;
+ 	struct drm_device *dev;
+ 	long ret;
++
+ 	dev = file_priv->minor->dev;
+ 	ret = pm_runtime_get_sync(dev->dev);
+ 	if (ret < 0)
+@@ -2664,9 +2665,8 @@ int amdgpu_file_to_fpriv(struct file *filp, struct amdgpu_fpriv **fpriv)
+ 	if (!filp)
+ 		return -EINVAL;
+ 
+-	if (filp->f_op != &amdgpu_driver_kms_fops) {
++	if (filp->f_op != &amdgpu_driver_kms_fops)
+ 		return -EINVAL;
+-	}
+ 
+ 	file = filp->private_data;
+ 	*fpriv = file->driver_priv;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

@@ -2,103 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3231C5AC54A
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 18:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0D35AC54C
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 18:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbiIDQKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 12:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
+        id S234596AbiIDQKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 12:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiIDQK2 (ORCPT
+        with ESMTP id S234489AbiIDQKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 12:10:28 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EA9252AD;
-        Sun,  4 Sep 2022 09:10:27 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id p18so6384919plr.8;
-        Sun, 04 Sep 2022 09:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=rVLZb4Hf7Ua5TDuZnyaLll5Sbo0H0rw7t+/XBLaglQk=;
-        b=Bk6vgmNv7vY/bQPjRqW+JBYTLyjHVIEjfVHUj9iZmbmmbcSIqbFRRHQxaL4bMEUCl9
-         n2FAkbD3JGsMU51ladOCDElfd1pVl7A/sqScU0UPy4utn2Kila9+vzEVfboeOI/FFrc4
-         z3pWP8k3hZm7o/vCaHC5ZHSYPaRJIjsDum8l+L6I4LCzmBqX7wjDoX/ItxHrTKMOejeF
-         GGItN3Dlcx4p5X7uxvJFshBteHKD+ETFcse/ay9lSsHx5cejguz138PqmbEguvEpxtMu
-         QoWn9BFUC0jZ8CEQCDcoSnyouZNYpjRpcrowv3+1kPmyQf6mk10psNo2KnhwugJZN9G4
-         N8lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=rVLZb4Hf7Ua5TDuZnyaLll5Sbo0H0rw7t+/XBLaglQk=;
-        b=YtLkgqmjrCg3uqBpu+YJLR9I7A/7i0Mtr/36B1Jh8z8N5X1N8Mu1QIB/F7l71f4aGG
-         l0iLe5IhobllB/Oc3OhdaVKQOIziapvhKCZOUV4uSojlZPwJNwEPK5pSwDC9MtlsGJh7
-         5H7VUBEmfBloH8OzQC5du1jogsN5oOISmEsEDC15/UlmbtBJA9R0TCRWK1RnVQLUNTkL
-         cI2trvKmp7kX4hKcMrj3ajklJc+qu6eHxo6291TPtiJF3jwHkFcfZs+Di+wVeyhAQQlG
-         9yDeI4niBcjEmqRjEf3TbFT4LyoKqF6oWPFUKmmeZNAckcEW2/CBGgjzE6VrxORAQ9re
-         UiiA==
-X-Gm-Message-State: ACgBeo2RmTRiMlzwawkqU38z6/gDYT+8NmL2qMdA6AnmyWmRddWyC/vq
-        YyQFziXkAchJS4HIUWLrMXs=
-X-Google-Smtp-Source: AA6agR5psTPTTWOCJ155h+RGXr5bEoRE6WboX1qy8wy713aVOlHWiOb1Q80F10WMcPPMhPtaNHEXkQ==
-X-Received: by 2002:a17:902:e844:b0:174:79c4:9449 with SMTP id t4-20020a170902e84400b0017479c49449mr38921012plg.66.1662307827063;
-        Sun, 04 Sep 2022 09:10:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w69-20020a628248000000b00537f16e25d3sm5767736pfd.75.2022.09.04.09.10.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 09:10:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 4 Sep 2022 09:10:24 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] hwmon: (emc2305) Remove unused including
- <linux/version.h>
-Message-ID: <20220904161024.GA3007639@roeck-us.net>
-References: <20220901022332.40248-1-jiapeng.chong@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901022332.40248-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Sun, 4 Sep 2022 12:10:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8307E2ED63
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 09:10:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0876BB80D70
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 16:10:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3791C433D6;
+        Sun,  4 Sep 2022 16:10:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662307839;
+        bh=Om6/hIL+0XN2aqKtuH8An6Dj/YydVxAyOKwj78wK3wM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XjNo+HzbD17U+BT6DCtAQao0RF3qT2443tfSEub2zvUwRKWPwgupnBUkye1fhzgaz
+         HfPQc8SHLDHhxO7kltNZuZnN7uNWZSx+rG8uyf5G6XiehwEskr3lH/emeJRiXShEMB
+         N8tiPrnp7T3epssKyCc4TKWrNboI4W4neC6aSc7VemLBa9s+f8z8RDhQ3Ird7aJ3GL
+         pGO4U4KgM2jnwdKFnOTQ3bRhyTO/VZA2tZIRsoPDvK+TdUd95SUCPUSWU0DbBlBJ9r
+         9UybP0DAKASjNBHm9aBY+9VMjFLs+uh3j9KC/dr7hOqeMpl+ox5Gw2SMCeZIbaVUqh
+         iCSZMfx8M+9kA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oUsCj-007uJo-CE;
+        Sun, 04 Sep 2022 17:10:37 +0100
+Date:   Sun, 04 Sep 2022 17:10:36 +0100
+Message-ID: <87v8q3unlv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH 0/4] ARM: footbridge: cleanups
+In-Reply-To: <YxSVhsHVsqZiAUS0@shell.armlinux.org.uk>
+References: <20220818211550.3272321-1-arnd@kernel.org>
+        <87wnajuzyj.wl-maz@kernel.org>
+        <YxSVhsHVsqZiAUS0@shell.armlinux.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux@armlinux.org.uk, arnd@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, hch@lst.de, linus.walleij@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:23:32AM +0800, Jiapeng Chong wrote:
-> ./drivers/hwmon/emc2305.c: 14 linux/version.h not needed.
+On Sun, 04 Sep 2022 13:09:42 +0100,
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 > 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2024
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-
-Applied.
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/emc2305.c | 1 -
->  1 file changed, 1 deletion(-)
+> On Sun, Sep 04, 2022 at 12:43:48PM +0100, Marc Zyngier wrote:
+> > On Thu, 18 Aug 2022 22:15:46 +0100,
+> > Arnd Bergmann <arnd@kernel.org> wrote:
+> > > 
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > > 
+> > > I had an older patch to remove the addin mode for footbridge,
+> > > which nobody is using any more, and I found a few other small
+> > > cleanups that are worth doing here.
+> > > 
+> > > Footbridge is now the only platform with a custom __virt_to_bus()
+> > > for ISA DMA, and a custom phys_to_dma() for PCI devices. Both
+> > > just add a fixed offset, so there is probably a better way
+> > > of doing the same without a custom helper function.
+> > > 
+> > >      Arnd
+> > > 
+> > > Arnd Bergmann (4):
+> > >   ARM: footbridge: remove addin mode
+> > >   ARM: footbridge: remove leftover from personal-server
+> > >   ARM: footbridge: move isa-dma support into footbridge
+> > >   ARM: footbridge: limit CONFIG_ISA to CATS
+> > > 
+> > >  arch/arm/Kconfig                              |  5 --
+> > >  arch/arm/include/asm/hardware/dec21285.h      | 13 ----
+> > >  arch/arm/kernel/Makefile                      |  1 -
+> > >  arch/arm/mach-footbridge/Kconfig              | 30 +-------
+> > >  arch/arm/mach-footbridge/Makefile             |  5 +-
+> > >  arch/arm/mach-footbridge/common.c             | 73 ++-----------------
+> > >  arch/arm/mach-footbridge/dc21285.c            | 61 +++++-----------
+> > >  .../arm/{kernel => mach-footbridge}/dma-isa.c |  7 +-
+> > >  arch/arm/mach-footbridge/dma.c                | 58 ---------------
+> > >  .../mach-footbridge/include/mach/isa-dma.h    | 14 +---
+> > >  .../arm/mach-footbridge/include/mach/memory.h | 22 ------
+> > >  arch/arm/mach-footbridge/isa.c                | 14 ++--
+> > >  drivers/tty/serial/21285.c                    |  3 -
+> > >  13 files changed, 42 insertions(+), 264 deletions(-)
+> > >  rename arch/arm/{kernel => mach-footbridge}/dma-isa.c (98%)
+> > >  delete mode 100644 arch/arm/mach-footbridge/dma.c
+> > > 
+> > > -- 
+> > > 2.29.2
+> > > 
+> > > Cc: Russell King <linux@armlinux.org.uk>
+> > > Cc: Christoph Hellwig <hch@lst.de>
+> > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > Cc: Marc Zyngier <maz@kernel.org>
+> > 
+> > I finally managed to give this a go on my netwinder using v2 of patch
+> > 5/4 (!), and the box booted nicely.
+> > 
+> > Note that apart from the serial console, everything I'm using on this
+> > box is PCI (I tried to enable sound and failed, probably because I
+> > can't select CONFIG_ISA anymore on this machine).
 > 
-> diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-> index df4c5816f661..e5e96a895549 100644
-> --- a/drivers/hwmon/emc2305.c
-> +++ b/drivers/hwmon/emc2305.c
-> @@ -11,7 +11,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_data/emc2305.h>
->  #include <linux/thermal.h>
-> -#include <linux/version.h>
->  
->  static const unsigned short
->  emc2305_normal_i2c[] = { 0x27, 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d, I2C_CLIENT_END };
+> That tends to mean, therefore, that the statement "CONFIG_ISA is for
+> add-in cards" is wrong, because it's caused a user-visible regression
+> by killing sound support on Netwinders!
+
+To some extent, yes. Adding this allows me to peek at some of the ISA
+soundcards:
+
+diff --git a/arch/arm/mach-footbridge/Kconfig b/arch/arm/mach-footbridge/Kconfig
+index f452663576d1..f4c4222fa7c0 100644
+--- a/arch/arm/mach-footbridge/Kconfig
++++ b/arch/arm/mach-footbridge/Kconfig
+@@ -31,6 +31,7 @@ config ARCH_NETWINDER
+ 	select CLKEVT_I8253
+ 	select CLKSRC_I8253
+ 	select FORCE_PCI
++	select ISA
+ 	help
+ 	  Say Y here if you intend to run this kernel on the Rebel.COM
+ 	  NetWinder.  Information about this machine can be found at:
+
+However, the Waveartist driver has gone the way of the dodo (together
+with the rest of the OSS support in 4.15), and it isn't obvious to me
+whether one of the several SoundBlaster drivers is appropriate on this
+machine.
+
+I also cannot say I deeply care, to be honest.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

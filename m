@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF765AC516
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D520E5AC51C
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234157AbiIDPoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 11:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
+        id S234157AbiIDPro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 11:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiIDPoB (ORCPT
+        with ESMTP id S229627AbiIDPrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 11:44:01 -0400
+        Sun, 4 Sep 2022 11:47:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117B2357DD;
-        Sun,  4 Sep 2022 08:43:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16C13719C;
+        Sun,  4 Sep 2022 08:47:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5222460C01;
-        Sun,  4 Sep 2022 15:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A5DFC433D6;
-        Sun,  4 Sep 2022 15:43:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E3B960FB2;
+        Sun,  4 Sep 2022 15:47:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB50BC433C1;
+        Sun,  4 Sep 2022 15:47:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662306238;
-        bh=CSx9D8U7zeLdj+S2jR8ebHyZgl/+lsPzYuJJygOC9Dk=;
+        s=k20201202; t=1662306460;
+        bh=QxAvxhmC6ir/QFdZzQ1oKmEPPSLatuOJhN2AJgQ0x4U=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ntvXgUAynAgToZ5zloMz/8fSdopBqHKe9bllfCGSkwrONgQSW63aVtrVAMA1L3qqN
-         8FW3uaTP9x6VpgJjro1SR1P0UBxeularKr05KruHPyFDmInFKRtc10IHnpVB02fi0h
-         fgGEv5tytEAr69uzXtIjR6vgQVYEyhxJlO4xXvtW7iLsq5LmMS5fxYrWpQGfEXdI6o
-         9EXDF+RL3inckXqis8UzkiayHN+gmg0QxEEWMay7bKFFeaTt/KSzewlu88wcoP+BeO
-         iJHmlNqLJbaKXpuWn2CKrmi9eUM8b2AzT8oeLRxEfSQvF3LyP6NCN060wCbwZ9TLi9
-         yHS7t+pu35Nxw==
-Date:   Sun, 4 Sep 2022 16:09:51 +0100
+        b=S6rJRymE9G9c6QLkozoVaXnGITy9BEaXDPZJ+/EdMUwxbB5No9Kbpj9gr+2aal/aA
+         ZIRjUsUTZu45pFqNR6NjCGkqFls0qe3MswaKRv4KOXGSAiaNDP2TdVCnNM3TPPf+CH
+         RbzmEZelRzn7ZGn4hQi4HOZpxrpUo5irk8Am4Vm8QcS6aSwwx07hOSxRSfw0gB7vc7
+         72lhW5ZcuknbgeRzZru4crQauUK6fnGTL4++/2CaCufH6vcd3bJbwaQHcA97x5JM82
+         svjjXFd36EoWqwoHEMG2xRkznpkoa5l7kgqutxdcJgMzL9HNxNnrCL9B9om/WDKTr2
+         8ropNsPHnPhNQ==
+Date:   Sun, 4 Sep 2022 16:13:32 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Ciprian Regus <ciprian.regus@analog.com>
+To:     George Mois <george.mois@analog.com>
 Cc:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/5] drivers: iio: adc: Rename the LTC2499 iio device
-Message-ID: <20220904160951.7de30240@jic23-huawei>
-In-Reply-To: <20220901121700.1325733-5-ciprian.regus@analog.com>
-References: <20220901121700.1325733-1-ciprian.regus@analog.com>
-        <20220901121700.1325733-5-ciprian.regus@analog.com>
+        <linux-kernel@vger.kernel.org>, <lucas.p.stankus@gmail.com>
+Subject: Re: [PATCH v3 1/2] bindings: iio: accel: extend adxl313
+ documentation file
+Message-ID: <20220904161332.587e3a6f@jic23-huawei>
+In-Reply-To: <20220831143538.65816-1-george.mois@analog.com>
+References: <20220831143538.65816-1-george.mois@analog.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,84 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Sep 2022 15:17:00 +0300
-Ciprian Regus <ciprian.regus@analog.com> wrote:
+On Wed, 31 Aug 2022 17:35:37 +0300
+George Mois <george.mois@analog.com> wrote:
 
-> Set the iio device's name based on the chip used for the
-> LTC2499 only. The most common way for IIO clients to interact
-> with a device is to address it based on it's name. By using
-> the dev_name() function, the name will be set based on a
-> i2c_client's kobj name, which has the format i2c_instance-i2c_address
-> (1-0076 for example). This is not ideal, since it makes a
-> requirement for userspace to have knowledge about the hardware
-> connections of the device.
+> Extend the adi,adxl313.yaml file with information regrding the
+> ADXL312 and ADXL314 devices.
 > 
-> The name field is set to NULL for the LTC2497 and LTC2496, so
-> that the old name can kept as it is, since changing it will
-> result in an ABI breakage.
-> 
-> Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
-Other than the issue with the split between patches 4 and 5 that
-the robot found this looks good to me.
+> Signed-off-by: George Mois <george.mois@analog.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content is fine, but dt-bindings patches have a particular patch
+title format. Something like:
 
-Jonathan
+dt-bindings: iio: accel: adxl313: Add compatibles for adxl312 and adxl314
 
 > ---
-> changes in v2:
->  - updated the patch title (LTC249x -> LTC2499), since the name change only
->    affects the LTC2499.
->  - updated the commit description to better explain what is being done.
->  - only changed the iio_dev's name for the LTC2499.
->  - added a comment to explain difference in naming.
->  - added the const qualifier to the name field.
->  drivers/iio/adc/ltc2496.c      |  1 +
->  drivers/iio/adc/ltc2497-core.c | 10 +++++++++-
->  drivers/iio/adc/ltc2497.h      |  1 +
->  3 files changed, 11 insertions(+), 1 deletion(-)
+> no changes in v3.
+>  .../devicetree/bindings/iio/accel/adi,adxl313.yaml     | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/iio/adc/ltc2496.c b/drivers/iio/adc/ltc2496.c
-> index bf89d5ae19af..2593fa4322eb 100644
-> --- a/drivers/iio/adc/ltc2496.c
-> +++ b/drivers/iio/adc/ltc2496.c
-> @@ -89,6 +89,7 @@ static void ltc2496_remove(struct spi_device *spi)
+> diff --git a/Documentation/devicetree/bindings/iio/accel/adi,adxl313.yaml b/Documentation/devicetree/bindings/iio/accel/adi,adxl313.yaml
+> index d6afc1b8c272..59d48ff1a16c 100644
+> --- a/Documentation/devicetree/bindings/iio/accel/adi,adxl313.yaml
+> +++ b/Documentation/devicetree/bindings/iio/accel/adi,adxl313.yaml
+> @@ -4,20 +4,24 @@
+>  $id: http://devicetree.org/schemas/iio/accel/adi,adxl313.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
 >  
->  static const struct ltc2497_chip_info ltc2496_info = {
->  	.resolution = 16,
-> +	.name = NULL,
->  };
+> -title: Analog Devices ADXL313 3-Axis Digital Accelerometer
+> +title: Analog Devices ADXL312, ADXL313, and ADXL314 3-Axis Digital Accelerometers
 >  
->  static const struct of_device_id ltc2496_of_match[] = {
-> diff --git a/drivers/iio/adc/ltc2497-core.c b/drivers/iio/adc/ltc2497-core.c
-> index b2752399402c..f52d37af4d1f 100644
-> --- a/drivers/iio/adc/ltc2497-core.c
-> +++ b/drivers/iio/adc/ltc2497-core.c
-> @@ -169,7 +169,15 @@ int ltc2497core_probe(struct device *dev, struct iio_dev *indio_dev)
->  	struct ltc2497core_driverdata *ddata = iio_priv(indio_dev);
->  	int ret;
+>  maintainers:
+>    - Lucas Stankus <lucas.p.stankus@gmail.com>
 >  
-> -	indio_dev->name = dev_name(dev);
-> +	/*
-> +	 * Keep using dev_name() for the iio_dev's name on some of the parts,
-> +	 * since updating it would result in a ABI breakage.
-> +	 */
-> +	if (ddata->chip_info->name)
-> +		indio_dev->name = ddata->chip_info->name;
-> +	else
-> +		indio_dev->name = dev_name(dev);
-> +
->  	indio_dev->info = &ltc2497core_info;
->  	indio_dev->modes = INDIO_DIRECT_MODE;
->  	indio_dev->channels = ltc2497core_channel;
-> diff --git a/drivers/iio/adc/ltc2497.h b/drivers/iio/adc/ltc2497.h
-> index 95f6a5f4d4a6..fd3dfd491060 100644
-> --- a/drivers/iio/adc/ltc2497.h
-> +++ b/drivers/iio/adc/ltc2497.h
-> @@ -12,6 +12,7 @@ enum ltc2497_chip_type {
+>  description: |
+> -  Analog Devices ADXL313 3-Axis Digital Accelerometer that supports
+> -  both I2C & SPI interfaces.
+> +  Analog Devices ADXL312, ADXL313, and ADXL314 3-Axis Digital Accelerometer that
+> +  support both I2C & SPI interfaces.
+> +    https://www.analog.com/en/products/adxl312.html
+>      https://www.analog.com/en/products/adxl313.html
+> +    https://www.analog.com/en/products/adxl314.html
 >  
->  struct ltc2497_chip_info {
->  	u32 resolution;
-> +	const char *name;
->  };
+>  properties:
+>    compatible:
+>      enum:
+> +      - adi,adxl312
+>        - adi,adxl313
+> +      - adi,adxl314
 >  
->  struct ltc2497core_driverdata {
+>    reg:
+>      maxItems: 1
 

@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1345AC40D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 13:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DBF5AC411
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 13:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234117AbiIDLD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 07:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        id S230174AbiIDLFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 07:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiIDLDz (ORCPT
+        with ESMTP id S229569AbiIDLFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 07:03:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9B9DE
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 04:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662289434; x=1693825434;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4xFvZorPNgarWpqxdvR5B56hPUE5VZ8Xelhg2+9k5mE=;
-  b=X4zzME3RLfCEjfOZ+wXT7+2LFrSZnWcCw66DtlDhEdJO1TZshbY7H/aV
-   9K1NM2Wf/BZNWp6gR33G31ShBRjMBirkWF0KEG/9GjDocCcTIl+30FhRy
-   mKK4v4kPTKAHYGZZ6wNhhR/+kq59IPpHtRCPAo5Obu1DDzRBRro2+o9cr
-   6sFH/v8OvKWxo5Mt3SoP8iyC3iwlJ9M81BX4fBgOR6gyN0O1r6tA//ICv
-   NNKp4iYdUdVm6YzeNLRiU2fV+pLCOzfl+ieCm/UNO6diNJYjemkY2+PLG
-   kq8dd5b5rrvVH3ACj3XiX1Vb/tONLGorhsWDrPaCnSlBRdujOoqyxrMaM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="296235707"
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="296235707"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 04:03:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="681754228"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Sep 2022 04:03:50 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oUnPq-0002zT-0A;
-        Sun, 04 Sep 2022 11:03:50 +0000
-Date:   Sun, 4 Sep 2022 19:03:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jingyu Wang <jingyuwang_vip@163.com>, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, evan.quan@amd.com, mario.limonciello@amd.com,
-        Hawking.Zhang@amd.com, andrey.grodzovsky@amd.com,
-        solomon.chiu@amd.com
-Cc:     kbuild-all@lists.01.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jingyu Wang <jingyuwang_vip@163.com>
-Subject: Re: [PATCH] drm: amd: This is a patch to the amdgpu_drv.c file that
- fixes some warnings and errors found by the checkpatch.pl tool
-Message-ID: <202209041839.rob9XU3V-lkp@intel.com>
-References: <20220904083912.1006262-1-jingyuwang_vip@163.com>
+        Sun, 4 Sep 2022 07:05:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA75432D85;
+        Sun,  4 Sep 2022 04:05:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6186060F63;
+        Sun,  4 Sep 2022 11:05:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA2BC43142;
+        Sun,  4 Sep 2022 11:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662289532;
+        bh=K4+vScggM2EV2pgo7YlzZVyHFKhrScIEqSPeoPwXFmg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qEbp8Y1rPsMAPQEHmx3Iqc8skXgGHkWIu4d8pizi/7MYtcpj4RE4U3bC0uG0Gv+LX
+         fJRNTCVGmRfEfT6PhSsiyLGxHYkNAtZl/umdVaMiT0v1qL+meNyWTuurP17//TbZSu
+         PWAQ/Nu+qPipNEDmyn9Rb0xpf0kfkeorStcamYXdlfpOOPwqSJVIOeGdoX3zR1vlrr
+         hf6mchIX3nuOO9nxTUy+Dn/SynzFo3bfNrJuQNJvORtL+LoPnYU0EQVf/RqD8wWb7F
+         nEQ3ejUgLvV8ruCeJa3hx2M/MpLW47yXgsPDUAaGl0YRrfAgzL1SIw8LP4rmBjOGiF
+         p3R89Jak14kPA==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1272fc7f51aso2355566fac.12;
+        Sun, 04 Sep 2022 04:05:32 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2qREMplpWrk2Tfnt4jPNf0rokS3odm7FEXcPMCXJGsTjVLYfSv
+        Ic1BemPmZVHhqGJhwanhZOLUGmOe3AjKax2lzec=
+X-Google-Smtp-Source: AA6agR5em28Nke+ymvWJLH5tNCVE9mGs7sOBHIp9Y9/1hyIoiIOMyGS3DYeVmncLqQ00+S/CpLllRUFRYkewJP0d+Yw=
+X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
+ v18-20020a056870709200b0011eff3ad984mr6156094oae.19.1662289531884; Sun, 04
+ Sep 2022 04:05:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220904083912.1006262-1-jingyuwang_vip@163.com>
+References: <20220904072637.8619-1-guoren@kernel.org> <bdac65bd-175f-3f09-ae46-97d4fcc77d6f@microchip.com>
+In-Reply-To: <bdac65bd-175f-3f09-ae46-97d4fcc77d6f@microchip.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 4 Sep 2022 19:05:20 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTvsWycqjx9joy6mRq_M4pgAPDy30ZhwKCsMC8HF6pKSQ@mail.gmail.com>
+Message-ID: <CAJF2gTTvsWycqjx9joy6mRq_M4pgAPDy30ZhwKCsMC8HF6pKSQ@mail.gmail.com>
+Subject: Re: [PATCH V2 0/6] riscv: Add GENERIC_ENTRY, IRQ_STACKS support
+To:     Conor.Dooley@microchip.com
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        guoren@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,203 +68,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jingyu,
+On Sun, Sep 4, 2022 at 6:17 PM <Conor.Dooley@microchip.com> wrote:
+>
+> Hey Guo Ren,
+> (off topic: is Guo or Ren your given name?)
+My name is written in Guo Ren / guoren. Don't separate them. In China,
+no one calls me Guo or Ren separately, it makes me strange.
 
-Thank you for the patch! Perhaps something to improve:
+>
+> This series seems to introduce a build warning:
+>
+> arch/riscv/kernel/irq.c:17:1: warning: symbol 'irq_stack_ptr' was not declared. Should it be static?
+I don't have that warning. But you are right, it should be static.
+Thank you. I will fix it in the next version of the patch.
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v6.0-rc3 next-20220901]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> One more comment below:
+>
+> On 04/09/2022 08:26, guoren@kernel.org wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The patches convert riscv to use the generic entry infrastructure from
+> > kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu to
+> > prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
+> > feature for the IRQ_STACKS config. You can try it directly with [1].
+> >
+> > [1] https://github.com/guoren83/linux/tree/generic_entry_v2
+> >
+> > Changes in V2:
+> >  - Fixup compile error by include "riscv: ptrace: Remove duplicate
+> >    operation"
+> >    https://lore.kernel.org/linux-riscv/20220903162328.1952477-2-guoren@kernel.org/T/#u
+>
+> I find this really confusing. The same patch is in two different series?
+> Is the above series no longer required & this is a different approach?
+> Thanks,
+> Conor.
+>
+> >  - Fixup compile warning
+> >    Reported-by: kernel test robot <lkp@intel.com>
+> >  - Add test repo link in cover letter
+> >
+> > Guo Ren (6):
+> >   riscv: ptrace: Remove duplicate operation
+> >   riscv: convert to generic entry
+> >   riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+> >   riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+> >   riscv: elf_kexec: Fixup compile warning
+> >   riscv: compat_syscall_table: Fixup compile warning
+> >
+> >  arch/riscv/Kconfig                    |  10 +
+> >  arch/riscv/include/asm/csr.h          |   1 -
+> >  arch/riscv/include/asm/entry-common.h |   8 +
+> >  arch/riscv/include/asm/irq.h          |   3 +
+> >  arch/riscv/include/asm/ptrace.h       |  10 +-
+> >  arch/riscv/include/asm/stacktrace.h   |   5 +
+> >  arch/riscv/include/asm/syscall.h      |   6 +
+> >  arch/riscv/include/asm/thread_info.h  |  15 +-
+> >  arch/riscv/include/asm/vmap_stack.h   |  28 +++
+> >  arch/riscv/kernel/Makefile            |   1 +
+> >  arch/riscv/kernel/elf_kexec.c         |   4 +
+> >  arch/riscv/kernel/entry.S             | 255 +++++---------------------
+> >  arch/riscv/kernel/irq.c               |  75 ++++++++
+> >  arch/riscv/kernel/ptrace.c            |  41 -----
+> >  arch/riscv/kernel/signal.c            |  21 +--
+> >  arch/riscv/kernel/sys_riscv.c         |  26 +++
+> >  arch/riscv/kernel/traps.c             |  11 ++
+> >  arch/riscv/mm/fault.c                 |  12 +-
+> >  18 files changed, 250 insertions(+), 282 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/entry-common.h
+> >  create mode 100644 arch/riscv/include/asm/vmap_stack.h
+> >
+> > --
+> > 2.36.1
+> >
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jingyu-Wang/drm-amd-This-is-a-patch-to-the-amdgpu_drv-c-file-that-fixes-some-warnings-and-errors-found-by-the-checkpatch-pl-tool/20220904-165633
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209041839.rob9XU3V-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/639ddf37854dd71c3ee836591db7518b146ae8ae
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jingyu-Wang/drm-amd-This-is-a-patch-to-the-amdgpu_drv-c-file-that-fixes-some-warnings-and-errors-found-by-the-checkpatch-pl-tool/20220904-165633
-        git checkout 639ddf37854dd71c3ee836591db7518b146ae8ae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:290:17: warning: missing terminating " character
-     290 |                 "for passthrough or sriov, 10000 for all jobs.
-         |                 ^
-   In file included from include/linux/module.h:22,
-                    from include/linux/device/driver.h:21,
-                    from include/linux/device.h:32,
-                    from include/drm/drm_print.h:32,
-                    from include/drm/drm_mm.h:51,
-                    from include/drm/drm_vma_manager.h:26,
-                    from include/drm/drm_gem.h:40,
-                    from drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:28:
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:290:17: error: missing terminating " character
-     290 |                 "for passthrough or sriov, 10000 for all jobs.
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/moduleparam.h:26:61: note: in definition of macro '__MODULE_INFO'
-      26 |                 = __MODULE_INFO_PREFIX __stringify(tag) "=" info
-         |                                                             ^~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:289:1: note: in expansion of macro 'MODULE_PARM_DESC'
-     289 | MODULE_PARM_DESC(lockup_timeout, "GPU lockup timeout in ms (default: for bare metal 10000 for non-compute jobs and 60000 for compute jobs; "
-         | ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:291:17: error: expected ',' or ';' before numeric constant
-     291 |                 0: keep default value. negative: infinity timeout),
-         |                 ^
-   include/linux/moduleparam.h:26:61: note: in definition of macro '__MODULE_INFO'
-      26 |                 = __MODULE_INFO_PREFIX __stringify(tag) "=" info
-         |                                                             ^~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:289:1: note: in expansion of macro 'MODULE_PARM_DESC'
-     289 | MODULE_PARM_DESC(lockup_timeout, "GPU lockup timeout in ms (default: for bare metal 10000 for non-compute jobs and 60000 for compute jobs; "
-         | ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:292:83: warning: missing terminating " character
-     292 |                 format: for bare metal [Non-Compute] or [GFX,Compute,SDMA,Video]; "
-         |                                                                                   ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:292:83: error: missing terminating " character
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:293:17: error: expected identifier or '(' before string constant
-     293 |                 "for passthrough or sriov [all jobs] or [GFX,Compute,SDMA,Video].");
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:604:9: warning: missing terminating " character
-     604 |         "reserve gtt for smu debug usage, 0 = disable,
-         |         ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:605:76: warning: missing terminating " character
-     605 |                 0x1 = 256Mbyte, 0x2 = 512Mbyte, 0x4 = 1 Gbyte, 0x8 = 2GByte");
-         |                                                                            ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:2799:45: error: unterminated argument list invoking macro "MODULE_PARM_DESC"
-    2799 | MODULE_LICENSE("GPL and additional rights");
-         |                                             ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:603:1: error: expected '=', ',', ';', 'asm' or '__attribute__' at end of input
-     603 | MODULE_PARM_DESC(smu_memory_pool_size,
-         | ^~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:186:13: warning: 'amdgpu_drv_delayed_reset_work_handler' used but never defined
-     186 | static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work);
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +290 drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-
-   185	
- > 186	static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work);
-   187	
-   188	struct amdgpu_mgpu_info mgpu_info = {
-   189		.mutex = __MUTEX_INITIALIZER(mgpu_info.mutex),
-   190		.delayed_reset_work = __DELAYED_WORK_INITIALIZER(
-   191				mgpu_info.delayed_reset_work,
-   192				amdgpu_drv_delayed_reset_work_handler, 0),
-   193	};
-   194	int amdgpu_ras_enable = -1;
-   195	uint amdgpu_ras_mask = 0xffffffff;
-   196	int amdgpu_bad_page_threshold = -1;
-   197	struct amdgpu_watchdog_timer amdgpu_watchdog_timer = {
-   198		.timeout_fatal_disable = false,
-   199		.period = 0x0, /* default to 0x0 (timeout disable) */
-   200	};
-   201	
-   202	/**
-   203	 * DOC: vramlimit (int)
-   204	 * Restrict the total amount of VRAM in MiB for testing.  The default is 0 (Use full VRAM).
-   205	 */
-   206	MODULE_PARM_DESC(vramlimit, "Restrict VRAM for testing, in megabytes");
-   207	module_param_named(vramlimit, amdgpu_vram_limit, int, 0600);
-   208	
-   209	/**
-   210	 * DOC: vis_vramlimit (int)
-   211	 * Restrict the amount of CPU visible VRAM in MiB for testing.  The default is 0 (Use full CPU visible VRAM).
-   212	 */
-   213	MODULE_PARM_DESC(vis_vramlimit, "Restrict visible VRAM for testing, in megabytes");
-   214	module_param_named(vis_vramlimit, amdgpu_vis_vram_limit, int, 0444);
-   215	
-   216	/**
-   217	 * DOC: gartsize (uint)
-   218	 * Restrict the size of GART in Mib (32, 64, etc.) for testing. The default is -1 (The size depends on asic).
-   219	 */
-   220	MODULE_PARM_DESC(gartsize, "Size of GART to setup in megabytes (32, 64, etc., -1=auto)");
-   221	module_param_named(gartsize, amdgpu_gart_size, uint, 0600);
-   222	
-   223	/**
-   224	 * DOC: gttsize (int)
-   225	 * Restrict the size of GTT domain in MiB for testing. The default is -1 (It's VRAM size if 3GB < VRAM < 3/4 RAM,
-   226	 * otherwise 3/4 RAM size).
-   227	 */
-   228	MODULE_PARM_DESC(gttsize, "Size of the GTT domain in megabytes (-1 = auto)");
-   229	module_param_named(gttsize, amdgpu_gtt_size, int, 0600);
-   230	
-   231	/**
-   232	 * DOC: moverate (int)
-   233	 * Set maximum buffer migration rate in MB/s. The default is -1 (8 MB/s).
-   234	 */
-   235	MODULE_PARM_DESC(moverate, "Maximum buffer migration rate in MB/s. (32, 64, etc., -1=auto, 0=1=disabled)");
-   236	module_param_named(moverate, amdgpu_moverate, int, 0600);
-   237	
-   238	/**
-   239	 * DOC: audio (int)
-   240	 * Set HDMI/DPAudio. Only affects non-DC display handling. The default is -1 (Enabled), set 0 to disabled it.
-   241	 */
-   242	MODULE_PARM_DESC(audio, "Audio enable (-1 = auto, 0 = disable, 1 = enable)");
-   243	module_param_named(audio, amdgpu_audio, int, 0444);
-   244	
-   245	/**
-   246	 * DOC: disp_priority (int)
-   247	 * Set display Priority (1 = normal, 2 = high). Only affects non-DC display handling. The default is 0 (auto).
-   248	 */
-   249	MODULE_PARM_DESC(disp_priority, "Display Priority (0 = auto, 1 = normal, 2 = high)");
-   250	module_param_named(disp_priority, amdgpu_disp_priority, int, 0444);
-   251	
-   252	/**
-   253	 * DOC: hw_i2c (int)
-   254	 * To enable hw i2c engine. Only affects non-DC display handling. The default is 0 (Disabled).
-   255	 */
-   256	MODULE_PARM_DESC(hw_i2c, "hw i2c engine enable (0 = disable)");
-   257	module_param_named(hw_i2c, amdgpu_hw_i2c, int, 0444);
-   258	
-   259	/**
-   260	 * DOC: pcie_gen2 (int)
-   261	 * To disable PCIE Gen2/3 mode (0 = disable, 1 = enable). The default is -1 (auto, enabled).
-   262	 */
-   263	MODULE_PARM_DESC(pcie_gen2, "PCIE Gen2 mode (-1 = auto, 0 = disable, 1 = enable)");
-   264	module_param_named(pcie_gen2, amdgpu_pcie_gen2, int, 0444);
-   265	
-   266	/**
-   267	 * DOC: msi (int)
-   268	 * To disable Message Signaled Interrupts (MSI) functionality (1 = enable, 0 = disable). The default is -1 (auto, enabled).
-   269	 */
-   270	MODULE_PARM_DESC(msi, "MSI support (1 = enable, 0 = disable, -1 = auto)");
-   271	module_param_named(msi, amdgpu_msi, int, 0444);
-   272	
-   273	/**
-   274	 * DOC: lockup_timeout (string)
-   275	 * Set GPU scheduler timeout value in ms.
-   276	 *
-   277	 * The format can be [Non-Compute] or [GFX,Compute,SDMA,Video]. That is there can be one or
-   278	 * multiple values specified. 0 and negative values are invalidated. They will be adjusted
-   279	 * to the default timeout.
-   280	 *
-   281	 * - With one value specified, the setting will apply to all non-compute jobs.
-   282	 * - With multiple values specified, the first one will be for GFX.
-   283	 *   The second one is for Compute. The third and fourth ones are
-   284	 *   for SDMA and Video.
-   285	 *
-   286	 * By default(with no lockup_timeout settings), the timeout for all non-compute(GFX, SDMA and Video)
-   287	 * jobs is 10000. The timeout for compute is 60000.
-   288	 */
-   289	MODULE_PARM_DESC(lockup_timeout, "GPU lockup timeout in ms (default: for bare metal 10000 for non-compute jobs and 60000 for compute jobs; "
- > 290			"for passthrough or sriov, 10000 for all jobs.
-   291			0: keep default value. negative: infinity timeout),
-   292			format: for bare metal [Non-Compute] or [GFX,Compute,SDMA,Video]; "
-   293			"for passthrough or sriov [all jobs] or [GFX,Compute,SDMA,Video].");
-   294	module_param_string(lockup_timeout, amdgpu_lockup_timeout, sizeof(amdgpu_lockup_timeout), 0444);
-   295	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+ Guo Ren

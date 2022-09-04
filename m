@@ -2,95 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8815AC461
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 15:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089425AC47A
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 15:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiIDNLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 09:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S233811AbiIDNVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 09:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiIDNLH (ORCPT
+        with ESMTP id S229748AbiIDNVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 09:11:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB5733E21;
-        Sun,  4 Sep 2022 06:11:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5509260F80;
-        Sun,  4 Sep 2022 13:11:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D83AC433C1;
-        Sun,  4 Sep 2022 13:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662297062;
-        bh=SZnkkbwyEqa8lifFAwJPPRnDoRtwMPM1gQIj/+dydlM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NpFM5mJOAKsZgDy+G67HEtjMHBWr5r2EtJVYbtu5csJdNm58PuFxLP69RUqtYuplQ
-         6Arb9IR/xvp0a7W1Z3OV3qAMk2QuHFfB+tAfF6oexfzQQYF6bWZWsXkCzrQkAlzP81
-         kEVu6JKfYBiYUpCHlHZXWzdkTNq7IShyOnL+fm5w=
-Date:   Sun, 4 Sep 2022 15:10:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     tuo cao <91tuocao@gmail.com>
-Cc:     alcooperx@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND] serial: 8250_bcm7271: move spin_lock_irqsave to
- spin_lock in interrupt handler
-Message-ID: <YxSj4wExrNxUxlEU@kroah.com>
-References: <20220822141110.17199-1-91tuocao@gmail.com>
- <YwORy3QMbRUSlBZE@kroah.com>
- <CAEVeK2AiYFK9eopn1Uzp+osA-j22e1KbfUohJ+hRVmLNsq0gpQ@mail.gmail.com>
- <Yw316/3zuIXvm/Ty@kroah.com>
- <CAEVeK2DfcvguQ__GroRY+erU+-4=ZKvPBf1V2poRxUF77G60OQ@mail.gmail.com>
+        Sun, 4 Sep 2022 09:21:20 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DEF303E8;
+        Sun,  4 Sep 2022 06:21:19 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id k2so6537866vsk.8;
+        Sun, 04 Sep 2022 06:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=zm+EyzwIQUGPDwFnMMoLTrR9COFLYicTA4/koBenuTc=;
+        b=b6+N4hNrgd/gwbt5oOVeNZuwJR+TKHHQTg3dog//QrbCMyNOeDYTfcg02r/phrrZpA
+         WClzq/CZsyp7IOzAaZ4rE2nXfo0mD3g/pt3tz65NSNlW9YHcdQKUZzzMpcwNt+qule/x
+         VxB7mDGI/0TTcjT2rbGmlob/sfViC8FWwISqW5xHsXRFseBwkLWf1vVlhNH8ick5cYUE
+         aT1IcwBnICVufrkheKnZkfsEc2BO0wtsZjvhOGV0bds5H9eCQO0II/hg83uWpC44Q+rH
+         W+WrbCuVfZjvUassAMGNxjHfRTvGnLy1UvHVwjGkZ2vsvQKgkF7OgOf0xFK1+lU6UpC/
+         6B5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=zm+EyzwIQUGPDwFnMMoLTrR9COFLYicTA4/koBenuTc=;
+        b=z5AcCMpuLMSAV9GzlYmBGNnoVjZcUKYOiQ8MetqWMHTz7WRUxgqbiz5S9LAZ2Q4lN+
+         5pJ//lduH6XqfapUqyTX7UM8XIqrxUQ0vbpbj0LKS7B3BlWquBJYsQaB6Jdvm2eQInBh
+         rJAzDKMkVikdAaIvU0/sO5TVAMqmZ3nNBj8v3fzmrN4JqKpjZtanoFem6I6gSnfy/145
+         38WWOWcKzAahmop3pGidTriK6EQSA9wkT6rSoj7YCMCB7MKqckhksiEScXGm8EVMFa9v
+         icZcBCrYSMbevTtRI4xd2WJIhRKG/Z+1UYbTlQVKCGhL9m5lmVxY4jjFFWzFY6z4PJey
+         zsOw==
+X-Gm-Message-State: ACgBeo3I840KxQ46VLWEZO4TnmPLO5Kc1YqWkQahqiyktfhTmcYa+luA
+        CpchoJVZARSboKrYYNeJhriL4MbJehhmG/iGsKgWuFCYLcw1Lg==
+X-Google-Smtp-Source: AA6agR6v9SEpaR8/h54E7r+sUehl1VRLwX60543GLlfUliZxUS0Q7Y+G3LNY7pi73BRd34qYx8zL8bEUVnnr9mRK28U=
+X-Received: by 2002:a67:d901:0:b0:390:d093:591a with SMTP id
+ t1-20020a67d901000000b00390d093591amr12463484vsj.81.1662297678763; Sun, 04
+ Sep 2022 06:21:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEVeK2DfcvguQ__GroRY+erU+-4=ZKvPBf1V2poRxUF77G60OQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAB7eexLHN1gn2QPdo1_PF70sPbo2cA8skwG17oZb7+J1DQ+J1Q@mail.gmail.com>
+ <CAB7eexKGRgDWBLiRs=U70OPLREESi+bCgwt=7wWCESBDZDM=zQ@mail.gmail.com> <YxC7ix+MerW5xGsB@kroah.com>
+In-Reply-To: <YxC7ix+MerW5xGsB@kroah.com>
+From:   Rondreis <linhaoguo86@gmail.com>
+Date:   Sun, 4 Sep 2022 21:21:07 +0800
+Message-ID: <CAB7eexK+x8+RZp16aJFmdmqqEL=NMYp+Fy+hAJG+CWUUEH1_fg@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in configfs_composite_bind
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 04, 2022 at 04:48:13PM +0800, tuo cao wrote:
-> Greg KH <gregkh@linuxfoundation.org> 于2022年8月30日周二 19:35写道：
-> >
-> > On Sat, Aug 27, 2022 at 05:42:19PM +0800, tuo cao wrote:
-> > > No, whether it's spin_lock_irqsave() or spin_lock(), the security is
-> > > the same. Since this commit:e58aa3d2d0cc01ad8d6f7f640a0670433f794922,
-> > > interrupt nesting is disabled, which means interrupts has disabled in
-> > > the interrupt handlers. So, it is unnecessary to call
-> > > spin_lock_irqsave in a interrupt handler. And it takes less time
-> > > obviously to use spin_lock()，so I think this change is needed.
-> >
-> > I have no context at all here, please never top-post :(
-> >
-> Sorry for causing you trouble. It should be OK this time.
-> 
-> > And have you measured the time difference?  Is it a real thing?
-> >
-> Yes, sir. I have measured it, it is a read thing. The test code and
-> log have been put on Github, please check:
-> https://github.com/tuocao1991/api_test
+Thanks for your reply! I ran the reproducer again on the master
+branch(commit id: 7726d4c3e60bfe206738894267414a5f10510f1a) and it
+didn't crash.
 
-Did you test it for this code change?
+The reason for not using the latest version is I can't attach more
+than one gadget at a time using `configfs` and `dummy_hcd`. When I
+attach the second gadget with a different `udc` it always fails and
+the kernel message says:
 
-And remember, those calls are being made inside of an IRQ handler, did
-you measure that time difference?
+```
+[ 1625.254858] Error: Driver 'configfs-gadget' is already registered,
+aborting...
+[ 1625.271018] UDC core: g1: driver registration failed: -16
+```
 
-And that link does not show much, sorry, you are doing no real work at
-all, and again, not operating in an irq handler.
+I'm not sure if this is a new feature from version v5.19(v5.18, commit
+id: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f works very well) or a
+potential bug, or my mistake...
 
-Can you see a measurable difference with your patch applied and without
-it?  If so, great, provide that informatin in the changelog text.  If
-not, be very careful about changing code in stuff like this.
+The kernel config is: https://pastebin.com/raw/SLmNMMRd
+The shell to attach gadgets is: https://pastebin.com/raw/2eDPNip3
+The kernel log is: https://pastebin.com/raw/MaDwMQWk
 
-thanks,
-
-greg k-h
+Best wishes!
+Rondreis

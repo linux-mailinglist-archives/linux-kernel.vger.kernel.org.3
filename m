@@ -2,165 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E288D5AC3CC
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 12:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4085AC3D2
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 12:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233712AbiIDKJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 06:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
+        id S233236AbiIDKP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 06:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233711AbiIDKJo (ORCPT
+        with ESMTP id S231446AbiIDKPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 06:09:44 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5A513F4E;
-        Sun,  4 Sep 2022 03:09:42 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id t14so472811wrx.8;
-        Sun, 04 Sep 2022 03:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=O3iIl1Mah8kQtl3WghuXwmguMd4Xu3bPcYKCjyUtt4c=;
-        b=aI3AGoqier4Ibi2qlq8ENNTmbh71D0vu39dKS16YHZERYD1YCsB//U3lRf+UsIGaNA
-         3Vm4UrXrVwIvapd8+a6iVGGTG+6Hvjpd0ko3PopQYkWl7vUj8mdWNdcq0Yn1GU4Oppqb
-         +hrWT2wzdm40yE+Z/KQJ/5Nu+m5WDV8jDlI+UHfOnClb+gehATqWjqyNK9jlKNzjkgGN
-         mz64BrddlL7G3HVggeVGfThJiJYgUXiVmUF9lqBlZ3Ah5TYfJZ3cQG3TNa1Ef0CsNE0Q
-         /5kwQcXpsoJuSOqIwtxRCZltfh1VWbv/cUzSTQdOcKXpKVBSL7veS0aiwZ1uknac23M5
-         EWsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=O3iIl1Mah8kQtl3WghuXwmguMd4Xu3bPcYKCjyUtt4c=;
-        b=UxeVQODwekLBdKfkBIZxzaeJ9LM38rE7ziPb85B8UQnnds6EduwAMqOwAtCI0EOLLV
-         4II/jxkX6Y+zg9LcKz0OOVUSvd1wPwjB531AmYXTRGmhWtXQb/ZqM9UEOjjYQfC8rMtc
-         xGEnRVO48Zuez3NJrJEz/qFYTFHO4yepoxBkubxol1TYEA/6yGisv/lGduN1UGIg4KHQ
-         hP1IeDTzNu/t4SJ9mwfgep5M6G9Me66sGPFMp1XZCAhcIGfzz/o8Iv2ZGDfRyoEnsb/5
-         oUR2C1bBK5hG74sDxRElqAb7kRnJlaezjOrbn1NDwnso9Lyoe9MIodPfWSIVZJ26Cd4W
-         i2RQ==
-X-Gm-Message-State: ACgBeo3GFyV6JTC2xQZtI7OgBGoNG1JMo+0+3h7k80sk6FHmoO0fPYjr
-        KbjqS9n/WzqMZvEJxX5SN5w=
-X-Google-Smtp-Source: AA6agR5IgE879p9Hge1JcwyMTv0t11Mi3wjtLdqCclf5CjC6eJ4bp2ztUi6Q7940Oh280WxgYfjLtA==
-X-Received: by 2002:a05:6000:1a87:b0:222:2c85:2f5b with SMTP id f7-20020a0560001a8700b002222c852f5bmr22353236wry.654.1662286180290;
-        Sun, 04 Sep 2022 03:09:40 -0700 (PDT)
-Received: from gmail.com (1F2EF751.nat.pool.telekom.hu. [31.46.247.81])
-        by smtp.gmail.com with ESMTPSA id k23-20020a05600c1c9700b003a531c7aa66sm7910968wms.1.2022.09.04.03.09.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 03:09:39 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sun, 4 Sep 2022 12:09:37 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Message-ID: <YxR5Yauhd90WN/AY@gmail.com>
-References: <20220822111816.760285417@infradead.org>
- <20220822114649.055452969@infradead.org>
+        Sun, 4 Sep 2022 06:15:24 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03971DA74;
+        Sun,  4 Sep 2022 03:15:22 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oUmev-0004f1-4c; Sun, 04 Sep 2022 12:15:21 +0200
+Message-ID: <5eca514c-2f05-2714-b496-233e8a39fe29@leemhuis.info>
+Date:   Sun, 4 Sep 2022 12:15:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822114649.055452969@infradead.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: perf top -p broken for multithreaded processes since 5.19
+ #forregzbot
+Content-Language: en-US, de-DE
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <10137382.nUPlyArG6x@mintaka.ncbr.muni.cz>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <10137382.nUPlyArG6x@mintaka.ncbr.muni.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1662286522;9afae47c;
+X-HE-SMSGID: 1oUmev-0004f1-4c
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+TWIMC: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
 
-* Peter Zijlstra <peterz@infradead.org> wrote:
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
 
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -81,25 +81,32 @@ struct task_group;
->   */
->  
->  /* Used in tsk->state: */
-> -#define TASK_RUNNING			0x0000
-> -#define TASK_INTERRUPTIBLE		0x0001
-> -#define TASK_UNINTERRUPTIBLE		0x0002
-> -#define __TASK_STOPPED			0x0004
-> -#define __TASK_TRACED			0x0008
-> +#define TASK_RUNNING			0x000000
-> +#define TASK_INTERRUPTIBLE		0x000001
-> +#define TASK_UNINTERRUPTIBLE		0x000002
-> +#define __TASK_STOPPED			0x000004
-> +#define __TASK_TRACED			0x000008
->  /* Used in tsk->exit_state: */
-> -#define EXIT_DEAD			0x0010
-> -#define EXIT_ZOMBIE			0x0020
-> +#define EXIT_DEAD			0x000010
-> +#define EXIT_ZOMBIE			0x000020
->  #define EXIT_TRACE			(EXIT_ZOMBIE | EXIT_DEAD)
->  /* Used in tsk->state again: */
-> -#define TASK_PARKED			0x0040
-> -#define TASK_DEAD			0x0080
-> -#define TASK_WAKEKILL			0x0100
-> -#define TASK_WAKING			0x0200
-> -#define TASK_NOLOAD			0x0400
-> -#define TASK_NEW			0x0800
-> -/* RT specific auxilliary flag to mark RT lock waiters */
-> -#define TASK_RTLOCK_WAIT		0x1000
-> -#define TASK_STATE_MAX			0x2000
-> +#define TASK_PARKED			0x000040
-> +#define TASK_DEAD			0x000080
-> +#define TASK_WAKEKILL			0x000100
-> +#define TASK_WAKING			0x000200
-> +#define TASK_NOLOAD			0x000400
-> +#define TASK_NEW			0x000800
-> +#define TASK_FREEZABLE			0x001000
-> +#define __TASK_FREEZABLE_UNSAFE	       (0x002000 * IS_ENABLED(CONFIG_LOCKDEP))
-> +#define TASK_FROZEN			0x004000
-> +#define TASK_RTLOCK_WAIT		0x008000
-> +#define TASK_STATE_MAX			0x010000
+Hi, this is your Linux kernel regression tracker. CCing the regression
+mailing list, as it should be in the loop for all regressions, as
+explained here:
+https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
 
-Patch ordering suggestion: would be really nice to first do the width 
-adjustment as a preparatory patch, then the real changes. The mixing 
-obscures what the patch is doing here, that we leave all bits before 
-TASK_NEW unchanged, add in TASK_FREEZABLE, __TASK_FREEZABLE_UNSAFE & 
-TASK_FROZEN to before TASK_RTLOCK_WAIT.
+On 02.09.22 16:46, Tomáš Trnka wrote:
+> Hello,
+> 
+> A bug in perf v5.19 and newer completely breaks monitoring multithreaded
+> processes using "perf top -p". The tool fails to start with "Failed to mmap
+> with 22 (Invalid argument)". It still seems to work fine on single-threaded
+> processes. "perf record" is also unaffected.
+> 
+> I have bisected the issue to the following commit:
+> 
+> commit ae4f8ae16a07896403c90305d4b9be27f657c1fc
+> Author: Adrian Hunter <adrian.hunter@intel.com>
+> Date:   Tue May 24 10:54:31 2022 +0300
+> 
+>     libperf evlist: Allow mixing per-thread and per-cpu mmaps
+>     
+>     mmap_per_evsel() will skip events that do not match the CPU, so all CPUs
+>     can be iterated in any case.
+> 
+> The issue can be easily reproduced using the following test:
+> 
+> $ python - <<EOF
+> import time
+> import threading
+> th = threading.Thread(target=time.sleep, args=(3600,))
+> th.start()
+> th.join()
+> EOF
+> 
+> stracing "perf top -p $(pgrep python)" yields this:
+> 
+> 145184 perf_event_open({type=PERF_TYPE_HARDWARE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CPU_CYCLES, sample_freq=4000, sample_type=PERF_SAMPLE_IP|PERF_SAMPLE_TID|PERF_SAMPLE_TIME|PERF_SAMPLE_PERIOD, read_format=PERF_FORMAT_ID, disabled=1, exclude_kernel=1, mmap=1, comm=1, freq=1, task=1, precise_ip=0 /* arbitrary skid */, sample_id_all=1, mmap2=1, comm_exec=1, ksymbol=1, ...}, 92061, -1, -1, PERF_FLAG_FD_CLOEXEC) = 3
+>  > tools/perf/perf(evsel__open_cpu+0x287) [0x4c8ad7]
+>  > tools/perf/perf(cmd_top+0x1996) [0x439b26]
+>  > tools/perf/perf(run_builtin+0x68) [0x4a91f8]
+>  > tools/perf/perf(main+0x645) [0x40cad5]
+> 145184 perf_event_open({type=PERF_TYPE_HARDWARE, size=PERF_ATTR_SIZE_VER7, config=PERF_COUNT_HW_CPU_CYCLES, sample_freq=4000, sample_type=PERF_SAMPLE_IP|PERF_SAMPLE_TID|PERF_SAMPLE_TIME|PERF_SAMPLE_PERIOD, read_format=PERF_FORMAT_ID, disabled=1, exclude_kernel=1, mmap=1, comm=1, freq=1, task=1, precise_ip=0 /* arbitrary skid */, sample_id_all=1, mmap2=1, comm_exec=1, ksymbol=1, ...}, 104619, -1, -1, PERF_FLAG_FD_CLOEXEC) = 5
+>  > tools/perf/perf(evsel__open_cpu+0x287) [0x4c8ad7]
+>  > tools/perf/perf(cmd_top+0x1996) [0x439b26]
+>  > tools/perf/perf(run_builtin+0x68) [0x4a91f8]
+>  > tools/perf/perf(main+0x645) [0x40cad5]
+> …(snip)…
+> 145184 ioctl(5, PERF_EVENT_IOC_SET_OUTPUT, 3) = -1 EINVAL (Invalid argument)
+>  > tools/perf/perf(perf_evlist__mmap_ops+0x2cf) [0x5d497f]
+>  > tools/perf/perf(evlist__mmap+0xa7) [0x4c09b7]
+>  > perf/perf(cmd_top+0x1ccd) [0x439e5d]
+>  > tools/perf/perf(run_builtin+0x68) [0x4a91f8]
+>  > tools/perf/perf(main+0x645) [0x40cad5]
+> 
+> Best regards,
+> 
+> Tomáš
+> --
+> Tomáš Trnka
+> Software for Chemistry & Materials B.V.
 
-Btw., wouldn't it be better to just add the new bits right before 
-TASK_STATE_MAX, and leave the existing ones unchanged? I don't think the 
-order of TASK_RTLOCK_WAIT is relevant, right?
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
 
->  /* Convenience macros for the sake of set_current_state: */
->  #define TASK_KILLABLE			(TASK_WAKEKILL | TASK_UNINTERRUPTIBLE)
-> @@ -1714,7 +1721,6 @@ extern struct pid *cad_pid;
->  #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
->  #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
->  #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
-> -#define PF_FROZEN		0x00010000	/* Frozen for system suspend */
->  #define PF_KSWAPD		0x00020000	/* I am kswapd */
->  #define PF_MEMALLOC_NOFS	0x00040000	/* All allocation requests will inherit GFP_NOFS */
->  #define PF_MEMALLOC_NOIO	0x00080000	/* All allocation requests will inherit GFP_NOIO */
+#regzbot introduced ae4f8ae16a07896 ^
+https://bugzilla.kernel.org/show_bug.cgi?id=216441
+#regzbot title perf: perf top -p broken for multithreaded processes
+since 5.19
+#regzbot ignore-activity
 
-yay.
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
 
-BTW., we should probably mark/document all PF_ holes with a PF__RESERVED 
-kind of scheme? Something simple, like:
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replies to), as explained for
+in the Linux kernel's documentation; above webpage explains why this is
+important for tracked regressions.
 
-   #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
-   #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
- + #define PF__RESERVED_04000	0x00004000	/* Unused */
-   #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
- + #define PF__RESERVED_10000	0x00010000	/* Unused */
-   #define PF_KSWAPD		0x00020000	/* I am kswapd */
-   #define PF_MEMALLOC_NOFS	0x00040000	/* All allocation requests will inherit GFP_NOFS */
-   #define PF_MEMALLOC_NOIO	0x00080000	/* All allocation requests will inherit GFP_NOIO */
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-?
-
-Thanks,
-
-	Ingo
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.

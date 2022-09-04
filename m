@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D145AC7BE
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56F35AC7C8
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236245AbiIDVq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 17:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        id S236259AbiIDVqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 17:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235328AbiIDVpC (ORCPT
+        with ESMTP id S236031AbiIDVpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 4 Sep 2022 17:45:02 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BA230576
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:42:59 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id r7so3867536ile.11
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:42:59 -0700 (PDT)
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7726C30F43
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:43:00 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id y187so5724197iof.0
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:43:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=KACUwbv9zFDFS+/NnZ2+bHc0BJ5XxAtoDioY/cngaq0=;
-        b=VWLo9KQRx3wUEpHavD9gtPYNFllTyy4JKxvs/7m7tkQZM4ST377wbMAzvfbzKUgbOp
-         J6WuHZ3P93mqwHnELmx4xWY2iE88bkmZTSJqZgzV49g9rgdp//m9df+iAKw5mapuizNM
-         8N7/7jcJanbJgpES8DxAtzXNIpOD8ZbW5WOPK05nV0i1YT9y6m46gm5tX0ZuDvQutVME
-         hVXVPzZsqJYaB2x7eaQgiQ5QGXMW5MZGs2s9lLUmDUh275cuM3Hr9LM8UftEseh/RA6Z
-         Yc6+zDt9i1m5X50alTa/P6gMXlOYHL2RiMbZY6SXX3tIiEk2zkHyzL+A2td9lp2Hi3c2
-         vR2A==
+        bh=HlXlcsu2RqT6fAUiV6NVhuDn1t0xR93nZ+jChKYhqUw=;
+        b=aHV/k9J2PuitBnlhA4br73E9JnLl2gCBHHBTGdkL9KmqcRS5bomgzwR0OaqXBlVyql
+         Mf+7Y+KsEOXcIs+D0+rNcc1xfUx+tf11ZEtL7jgmdcXn3KKcYRtVgMKv2QivMhgwGB6p
+         qhysutFwua8FbpIFvlVp/S3j8MzU+FtQko8iiKsgLlooadXPLQQ21I6Q1NTrYJTip/4D
+         0VC0OYdPKhw0V3Mzu3DZ0R5yhcn852KcFxvjVL4Bi2PKi8TFHfnlMTt0MfuMqEB1W0cT
+         r3SV72vbw59OuMsz2HCPNecCDPTzT4EzG4nBHs7LsaOq7fTjOvTkLYW8hBG4OuYPJt9E
+         DnRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=KACUwbv9zFDFS+/NnZ2+bHc0BJ5XxAtoDioY/cngaq0=;
-        b=vXjYzP9v7C+uaxpH6wOxKAteQHD3A+c3HeXK34TG8+XoECNKSzYg9Fvndzb5V454RS
-         XAc3pBEENdGur5yRJCkaio3CUrJRRobwhFixtFzgkpKyKqj6y8rsri9JC55a4v20ZNNV
-         yb/5q4t8/COUkwEZQUx7TCfDw61smrdDqYIlXD7xMQdDfZl3Z/8q8xdaaVFY38iGvsOf
-         vNPiicG98qijWmAh0xKfWtgIFcExV7Bnf3UFSuRUq1DOgN7IVxRy9kRxxHEYBPbRR0Vm
-         CPCJEe4TbMtZ6803UKEvKD7nGVbp6jeAxyaEZTKnQ6XTyD5oQkf7tOL/Z3ovviz8nfvT
-         ao0A==
-X-Gm-Message-State: ACgBeo3JFRsICJWQn3bDPTxdRAlIHwwVjiFui88HFpl0Blg/j1rEKrAs
-        C6tENR5hjZYjqx+lbr6qDrw=
-X-Google-Smtp-Source: AA6agR4Fn4lGPNDj+VkdpCwid3ve66XVQ8L4VIZBVbVLfcwMhJmhHwO+CmYwocy3EXC3pDUoc7POZw==
-X-Received: by 2002:a05:6e02:1c2b:b0:2e9:f263:2942 with SMTP id m11-20020a056e021c2b00b002e9f2632942mr24514448ilh.74.1662327779197;
-        Sun, 04 Sep 2022 14:42:59 -0700 (PDT)
+        bh=HlXlcsu2RqT6fAUiV6NVhuDn1t0xR93nZ+jChKYhqUw=;
+        b=YMl0yUJ7tzTCPCoRdH79r7coEEza+075rGzzhIJcwko+kyIMRPgyDuuP44wzmrgAta
+         RW2gASxWJKQzS2e6Hm9FzYIQvMZSv8vxhLrcp4qn4hWfPniwj9NrWeZKHdDuyNcqb2+x
+         M3WbKzBA3taMGMuUE70BPne4TTkpCc5fzf18XpHe8bLU8C2ea1x+mwpig14548OqkDoP
+         f6TQUWa2lsxkRQKyrxhidoEfDGNTVLzzuBO9DyHiTWg3ehnT6mgWn6RL8fIVRNVpFMZ9
+         /9bqrvP/jq2W/Qr2P/dwQT8UMuQlI53wZfm2Iv9OgBaRRZNYv5G2PdHu+RCwvvBEUiqb
+         8xWQ==
+X-Gm-Message-State: ACgBeo3CuufZnDa0Un7RURVyrTqaoh1mZG8wFjcEB7Lzi+lORLQXoAhm
+        qKXbXgj9XNE5t2l7jvg8R2E=
+X-Google-Smtp-Source: AA6agR7vlI7R7BZjvt5nOZUe1nHbAjNSYfJLtX8tg1fOrQTMkIvWzLEFddRnIK11jzK+Lp9kCqNOZQ==
+X-Received: by 2002:a05:6638:22d1:b0:34f:5d31:5fe with SMTP id j17-20020a05663822d100b0034f5d3105femr6114929jat.185.1662327780173;
+        Sun, 04 Sep 2022 14:43:00 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.58
+        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 14:42:58 -0700 (PDT)
+        Sun, 04 Sep 2022 14:42:59 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -56,10 +56,10 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
-        Jim Cromie <jim.cromie@gmail.com>, lkp@intel.com
-Subject: [PATCH v6 51/57] dyndbg: prevent build bugs via -DNO_DYNAMIC_DEBUG_TABLE
-Date:   Sun,  4 Sep 2022 15:41:28 -0600
-Message-Id: <20220904214134.408619-52-jim.cromie@gmail.com>
+        Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v6 52/57] dyndbg: add DEFINE_DYNAMIC_DEBUG_TABLE, use it tacitly RFC
+Date:   Sun,  4 Sep 2022 15:41:29 -0600
+Message-Id: <20220904214134.408619-53-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220904214134.408619-1-jim.cromie@gmail.com>
 References: <20220904214134.408619-1-jim.cromie@gmail.com>
@@ -75,104 +75,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The next patch adds DEFINE_DYNAMIC_DEBUG_TABLE(), which broke several
-subtrees, including efi, vdso, and some of arch/*/boot/compressed,
-with various relocation errors, iirc.
+This defines a new macro (tbd: tweak name) which is a special version
+of DEFINE_DYNAMIC_DEBUG_METADATA_CLS().  Unlike that macro, which
+declares callsites in pairs of desc/site recs.
 
-Avoid those problems by adding a define to suppress the "transparent"
-DEFINE_DYNAMIC_DEBUG_TABLE() invocation.  I found the x86 problems
-myself, lkp@intel.com found arm & sparc problems, and may yet find
-others.
+This macro declares a pair of header records, which the linker script
+then places once (.gnu.linkonce.) into the front of the respective
+sections.  For builtins, the .linkonce gives us a single header
+preceding all ~3-5k callsites.
 
-Reported-by: <lkp@intel.com> # on [jimc:lkp-test/dyndbg-diet] recently
+It uses __unused, __weak, .gnu.linkonce to avoid trouble with multiple
+inclusions, and should not consume space when not linked to by a
+callsite in a loadable module.
+
+Atypically, this macro is also tacitly invoked in the header, which is
+indirectly included by printk.h.  This means 2 things: it mostly
+insures that source files will declare it at least once, and that
+multiple decls resolve to the identical storage address.
+
+I did this with the expectation that I could let the linker compute
+the offset and initialize ._index accordingly, but that resulted in
+some "linker cant compute" error.  Ive initialized it in
+__ddebug_add_module() instead.
+
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- arch/arm/boot/compressed/Makefile     | 2 ++
- arch/sparc/vdso/Makefile              | 2 ++
- arch/x86/boot/compressed/Makefile     | 1 +
- arch/x86/entry/vdso/Makefile          | 3 +++
- arch/x86/purgatory/Makefile           | 1 +
- drivers/firmware/efi/libstub/Makefile | 3 ++-
- 6 files changed, 11 insertions(+), 1 deletion(-)
+ include/linux/dynamic_debug.h | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
-index 41bcbb460fac..f2d7a3b62727 100644
---- a/arch/arm/boot/compressed/Makefile
-+++ b/arch/arm/boot/compressed/Makefile
-@@ -81,6 +81,8 @@ compress-$(CONFIG_KERNEL_LZMA) = lzma_with_size
- compress-$(CONFIG_KERNEL_XZ)   = xzkern_with_size
- compress-$(CONFIG_KERNEL_LZ4)  = lz4_with_size
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index f23608c38a79..23d3d2882882 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -220,6 +220,32 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)		\
+ 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt)
  
-+KBUILD_CFLAGS += -DNO_DYNAMIC_DEBUG_TABLE
++/*
++ * DEFINE_DYNAMIC_DEBUG_TABLE(): This is a special version of
++ * DEFINE_DYNAMIC_DEBUG_METADATA().  It creates a single pair of
++ * header records, which the linker scripts place in front of their
++ * respective sections.
++ *
++ * To allow for a robust runtime test in dynamic_debug_init(), the
++ * pair of records is hardwired into a self-reference loop which can
++ * be validated before the field is altered to support _ddebug_map_site()
++ */
++#define DEFINE_DYNAMIC_DEBUG_TABLE()					\
++	/* forward decl, allowing loopback pointer */			\
++	struct _ddebug_hdr __used __aligned(8)				\
++		__section(".gnu.linkonce.dyndbg")			\
++		_LINKONCE_dyndbg_header;				\
++	struct _ddebug_site_hdr __used __aligned(8)			\
++		__section(".gnu.linkonce.dyndbg_site")			\
++		_LINKONCE_dyndbg_site_header = {			\
++		._uplink = (void *) &_LINKONCE_dyndbg_header		\
++	};								\
++	struct _ddebug_hdr __used __aligned(8)				\
++		__section(".gnu.linkonce.dyndbg")			\
++		_LINKONCE_dyndbg_header = {				\
++		._uplink = (void *) &_LINKONCE_dyndbg_site_header	\
++	}
 +
- libfdt_objs := fdt_rw.o fdt_ro.o fdt_wip.o fdt.o
+ #ifdef CONFIG_JUMP_LABEL
  
- ifeq ($(CONFIG_ARM_ATAG_DTB_COMPAT),y)
-diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
-index 77d7b9032158..58ed4d64c978 100644
---- a/arch/sparc/vdso/Makefile
-+++ b/arch/sparc/vdso/Makefile
-@@ -30,6 +30,8 @@ obj-y += $(vdso_img_objs)
- targets += $(vdso_img_cfiles)
- targets += $(vdso_img_sodbg) $(vdso_img-y:%=vdso%.so)
+ #ifdef DEBUG
+@@ -390,4 +416,12 @@ static inline int param_get_dyndbg_classes(char *buffer, const struct kernel_par
  
-+KBUILD_CFLAGS += -DNO_DYNAMIC_DEBUG_TABLE
+ extern const struct kernel_param_ops param_ops_dyndbg_classes;
+ 
++#if ((defined(CONFIG_DYNAMIC_DEBUG) ||					\
++      (defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE))) \
++     && defined(KBUILD_MODNAME) && !defined(NO_DYNAMIC_DEBUG_TABLE))
 +
- CPPFLAGS_vdso.lds += -P -C
- 
- VDSO_LDFLAGS_vdso.lds = -m elf64_sparc -soname linux-vdso.so.1 --no-undefined \
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 35ce1a64068b..b76bbf9fc504 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -36,6 +36,7 @@ KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
- KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
- KBUILD_CFLAGS += -Wundef
- KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
-+KBUILD_CFLAGS += -DNO_DYNAMIC_DEBUG_TABLE
- cflags-$(CONFIG_X86_32) := -march=i386
- cflags-$(CONFIG_X86_64) := -mcmodel=small -mno-red-zone
- KBUILD_CFLAGS += $(cflags-y)
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 12f6c4d714cd..3182728f9f4d 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -29,6 +29,9 @@ vobjs32-y := vdso32/note.o vdso32/system_call.o vdso32/sigreturn.o
- vobjs32-y += vdso32/vclock_gettime.o
- vobjs-$(CONFIG_X86_SGX)	+= vsgx.o
- 
-+# avoid a x86_64_RELATIVE error
-+KBUILD_CFLAGS += -DNO_DYNAMIC_DEBUG_TABLE
++/* transparently invoked, except when -DNO_DYNAMIC_DEBUG_TABLE */
++DEFINE_DYNAMIC_DEBUG_TABLE();
++#endif
 +
- # files to link into kernel
- obj-y				+= vma.o extable.o
- KASAN_SANITIZE_vma.o		:= y
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index 31c634a22818..8d264836ae64 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -35,6 +35,7 @@ PURGATORY_CFLAGS_REMOVE := -mcmodel=kernel
- PURGATORY_CFLAGS := -mcmodel=large -ffreestanding -fno-zero-initialized-in-bss -g0
- PURGATORY_CFLAGS += $(DISABLE_STACKLEAK_PLUGIN) -DDISABLE_BRANCH_PROFILING
- PURGATORY_CFLAGS += -fno-stack-protector
-+PURGATORY_CFLAGS += -DNO_DYNAMIC_DEBUG_TABLE
- 
- # Default KBUILD_CFLAGS can have -pg option set when FTRACE is enabled. That
- # in turn leaves some undefined symbols like __fentry__ in purgatory and not
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index 3ef67431f05e..2b7e34555c5a 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -14,7 +14,8 @@ cflags-$(CONFIG_X86)		+= -m$(BITS) -D__KERNEL__ \
- 				   $(call cc-disable-warning, address-of-packed-member) \
- 				   $(call cc-disable-warning, gnu) \
- 				   -fno-asynchronous-unwind-tables \
--				   $(CLANG_FLAGS)
-+				   $(CLANG_FLAGS) \
-+				   -DNO_DYNAMIC_DEBUG_TABLE
- 
- # arm64 uses the full KBUILD_CFLAGS so it's necessary to explicitly
- # disable the stackleak plugin
+ #endif
 -- 
 2.37.2
 

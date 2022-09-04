@@ -2,318 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F615AC39E
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 11:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2D75AC390
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 11:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbiIDJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 05:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
+        id S233046AbiIDJJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 05:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiIDJay (ORCPT
+        with ESMTP id S229617AbiIDJJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 05:30:54 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C4F3AE5D;
-        Sun,  4 Sep 2022 02:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=PqeBpEnnPmllMIhmthofTdUEgeizN8inQGjDzYTEba8=;
-        b=m95b5HkAAIa9pXzzRte5P+OB1TqFQUBrJxR5rfgHSgLlTARU4z0kV0rgSOZ18Mo3lUP+P1BK/NJc1
-         bHCrfYlB1E0hbxj62o6fvUVPYcdRjoyOhGZWJ+wYFJQNaLKc2CStBmtjeA0s92KiRRDRCicb7bRFfY
-         FHqgO8v0prT9qMa1mqDsjPEtVKP9bY15BdG+MLVjlNHfPt95DE0mddnM17l/qub2Wn1V3FjG0qMXSu
-         2JsDA/ddUkxMKgVcOpfyYgjWMHXHgtxU1qDV7TrPkW7S3zhjMfkyrx7kzFX1ngyqqfrhDTvmklOHhS
-         A9l/lkXs3/KYKFEmgTTcAMYzroh/f5Q==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000011,0.026038)], BW: [Enabled, t: (0.000024,0.000002)], RTDA: [Enabled, t: (0.084246), Hit: No, Details: v2.41.0; Id: 15.52k0s3.1gc3td08h.57c; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from x260 ([92.100.85.134])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Sun, 4 Sep 2022 12:30:41 +0300
-Date:   Sun, 4 Sep 2022 12:04:10 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
-        j.zink@pengutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, system@metrotek.ru
-Subject: Re: [PATCH v9 1/2] fpga: lattice-sysconfig-spi: add Lattice
- sysCONFIG FPGA manager
-Message-ID: <20220904090410.cetopp34t33pc6uo@x260>
-References: <20220830095405.31609-1-i.bornyakov@metrotek.ru>
- <20220830095405.31609-2-i.bornyakov@metrotek.ru>
- <YxOGh5Qu1SLzZKgU@yilunxu-OptiPlex-7050>
+        Sun, 4 Sep 2022 05:09:02 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A967491D5;
+        Sun,  4 Sep 2022 02:09:01 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id e18so7906582edj.3;
+        Sun, 04 Sep 2022 02:09:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=O2typRxdzqsHfp2kEBOr4WNIbnu/ovQ09qqv/Hu1pIU=;
+        b=mEwv2YDOLkvyR5SAWvf1KvXxyVk/W4CM3FINHf0fPt6/1CATbsBeLTMvw7NAxBITnL
+         beIONGwUkW/Emdz3lnPVQxGohbnsuzOSZGy0nCqHiQH17U1lMP7Z2pN0JzcqlYz3PtUj
+         OO8z8KxVH1Fhbqz6ELFXF0nSOLhm34jt66kw6ypGQmUYPWk3UGNGhgsnMdY1/gp1nq38
+         0rOjQ/8mWEZl7TcIG+kLCBhjNqdgkJYjpRFA5YFWfcvXVK5i0uY35XmjhLL51T/HMO5x
+         GExGiQd6KOQEFt9dUqlOWWPDdWB6VOUA3yYd0eBYtMnUh8W1UVNzW1T/mTLg3GlKvt8d
+         YYDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=O2typRxdzqsHfp2kEBOr4WNIbnu/ovQ09qqv/Hu1pIU=;
+        b=tEznhUfTIFa17HiNm72KpBM/qBCqux3Y7FRfnVY5/5h/MQC5xFTMgpnbun1REFjTFi
+         YIvffqJo4G+tq2wQfE+YLCyiRYg2j9ZKScsVCu2DThEzhjmfccanMFSfV1fkLsOwEzv9
+         aLwU/AymUeIPomnWRk+6lKlkvrlAji9donRAl4sDyUDQXxp/3M7BGzOwaGYE4bmqKOh4
+         vSqS7GztIPVgM8gQzmhgyYhadd005N5w825fm3AcFaGvZJsmmgJaNouLdc5yOUCWaOBM
+         F0wfqHqDz7hZG34vPC+fdo0MRJOyTWGYHs0e2a/PfTfSGUj4Ski88wjlTuekcn/6nsFI
+         9Sag==
+X-Gm-Message-State: ACgBeo0CuoSAjenq9DFEQUfNgWhSvnVZSyyNUtvE2lhHqGTReC7XlNdo
+        4eWbvrmSOOf7OKNinGU8moOCzuzgfuA=
+X-Google-Smtp-Source: AA6agR4NJnx5sNg8PNykLl1mgRsJURuIQHjA9zZgAk1EeYC3FtDilwF6YINYFa0BfKPRxYHeSe0T6A==
+X-Received: by 2002:a05:6402:1f8c:b0:43e:8fab:76c with SMTP id c12-20020a0564021f8c00b0043e8fab076cmr38989547edc.126.1662282539472;
+        Sun, 04 Sep 2022 02:08:59 -0700 (PDT)
+Received: from masalkhi.. (p5ddb3241.dip0.t-ipconnect.de. [93.219.50.65])
+        by smtp.gmail.com with ESMTPSA id eg46-20020a05640228ae00b0044e7862ab3fsm447553edb.7.2022.09.04.02.08.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Sep 2022 02:08:59 -0700 (PDT)
+From:   Abd-Alrhman Masalkhi <abd.masalkhi@gmail.com>
+To:     bhelgaas@google.com, makvihas@gmail.com, kw@linux.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abd-Alrhman Masalkhi <abd.masalkhi@gmail.com>
+Subject: [PATCH] PCI: ibmphp: Convert a double pointer to single pointer parameter
+Date:   Sun,  4 Sep 2022 11:08:22 +0200
+Message-Id: <20220904090822.8083-1-abd.masalkhi@gmail.com>
+X-Mailer: git-send-email 2.29.0.rc1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxOGh5Qu1SLzZKgU@yilunxu-OptiPlex-7050>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 04, 2022 at 12:53:27AM +0800, Xu Yilun wrote:
-> On 2022-08-30 at 12:54:04 +0300, Ivan Bornyakov wrote:
-> > Add support to the FPGA manager for programming Lattice ECP5 and MachXO2
-> > FPGAs over slave SPI sysCONFIG interface.
-> > 
-> > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> > ---
-> > 
-> > ... snip ...
-> > 
-> > +static int sysconfig_spi_probe(struct spi_device *spi)
-> > +{
-> > +	const struct sysconfig_fpga_priv *fpga_priv;
-> > +	const struct spi_device_id *dev_id;
-> > +	struct device *dev = &spi->dev;
-> > +	struct sysconfig_priv *priv;
-> > +
-> > +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > +	if (!priv)
-> > +		return -ENOMEM;
-> > +
-> > +	fpga_priv = of_device_get_match_data(dev);
-> > +	if (!fpga_priv) {
-> > +		dev_id = spi_get_device_id(spi);
-> > +		if (!dev_id)
-> > +			return -ENODEV;
-> > +
-> > +		fpga_priv = (const struct sysconfig_fpga_priv *)dev_id->driver_data;
-> > +	}
-> > +
-> > +	if (!fpga_priv)
-> > +		return -EINVAL;
-> > +
-> > +	if (spi->max_speed_hz > fpga_priv->spi_max_speed_hz) {
-> > +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
-> > +			spi->max_speed_hz, fpga_priv->spi_max_speed_hz);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	priv->dev = dev;
-> > +	priv->spi = spi;
-> > +	priv->fpga_priv = fpga_priv;
-> > +	priv->sysconfig_transfer = sysconfig_spi_transfer;
-> > +	priv->sysconfig_fpga_mgr_ops.state = sysconfig_ops_state;
-> > +	priv->sysconfig_fpga_mgr_ops.write_init = sysconfig_ops_write_init;
-> 
-> Why initialize the fpga_mgr_ops in spi driver? I think it should be the
-> sysconfig core driver's job.
-> 
+Convert the parameter of type 'struct slot **' to 'struct slot *' of
+ibmphp_init_devno() to improve code readability.
 
-The reasoning was that there is bus-specific write callback.
+Signed-off-by: Abd-Alrhman Masalkhi <abd.masalkhi@gmail.com>
+---
+ drivers/pci/hotplug/TODO          |  3 ---
+ drivers/pci/hotplug/ibmphp.h      |  2 +-
+ drivers/pci/hotplug/ibmphp_core.c | 30 +++++++++++++++---------------
+ drivers/pci/hotplug/ibmphp_ebda.c |  2 +-
+ 4 files changed, 17 insertions(+), 20 deletions(-)
 
-> > +	priv->sysconfig_fpga_mgr_ops.write = sysconfig_ops_spi_write;
-> 
-> We already have the transfer callback, why we need a special spi write
-> here.
-> 
-
-Transfer callback performs transaction with single buffer on its input
-(with optional read back). Paged write makes one write transaction with
-two buffers, command + data, and it is only place where we need to
-transfer several buffers. More of that, burst write needs locked bus.
-IMHO, it is reasonable to have a bus-specific write.
-
-> > +	priv->sysconfig_fpga_mgr_ops.write_complete = sysconfig_ops_write_complete;
-> 
-> same concern
-> 
-> > +
-> > +	return sysconfig_probe(priv);
-> > +}
-> > +
-> > 
-> > ... snip ...
-> > 
-> > +int sysconfig_ops_write_init(struct fpga_manager *mgr,
-> > +			     struct fpga_image_info *info,
-> > +			     const char *buf, size_t count)
-> > +{
-> > +	const struct sysconfig_fpga_priv *fpga_priv;
-> > +	struct sysconfig_priv *priv;
-> > +	struct device *dev;
-> > +	int ret;
-> > +
-> > +	dev = &mgr->dev;
-> > +	priv = mgr->priv;
-> > +	fpga_priv = priv->fpga_priv;
-> > +
-> > +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
-> > +		dev_err(dev, "Partial reconfiguration is not supported\n");
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +
-> > +	if (!fpga_priv->internal_flash) {
-> > +		/* Write directly to SRAM */
-> > +		ret = sysconfig_refresh(priv);
-> > +		if (ret) {
-> > +			dev_err(dev, "Failed to go to program mode\n");
-> > +			return ret;
-> > +		}
-> > +	}
-> > +
-> > +	/* Enter ISC mode */
-> > +	ret = sysconfig_isc_init(priv);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to go to ISC mode\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	/* Initialize the Address Shift Register */
-> > +	ret = sysconfig_lsc_init_addr(priv);
-> > +	if (ret) {
-> > +		dev_err(dev,
-> > +			"Failed to initialize the Address Shift Register\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	if (fpga_priv->spi_burst_write) {
-> > +		/* Prepare for SPI burst write */
-> > +		ret = sysconfig_lsc_burst_init(priv);
-> 
-> Don't make the sysconfig.c dependent to sysconfig-spi.c, sysconfig.c
-> should be common and workable without sysconfig-spi.c
-> 
-
-Agreed. How about separate this if-block to a bus-specific
-sysconfig_ops_spi_write_init()?
-
-> > +		if (ret)
-> > +			dev_err(dev,
-> > +				"Failed to prepare for bitstream burst write\n");
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static void sysconfig_cleanup(struct sysconfig_priv *priv)
-> > +{
-> > +	sysconfig_isc_erase(priv);
-> > +	sysconfig_refresh(priv);
-> > +}
-> > 
-> > ... snip ...
-> > 
-> > +int sysconfig_ops_write_complete(struct fpga_manager *mgr,
-> > +				 struct fpga_image_info *info)
-> > +{
-> > +	const struct sysconfig_fpga_priv *fpga_priv;
-> > +	struct sysconfig_priv *priv;
-> > +	struct device *dev;
-> > +	int ret;
-> > +
-> > +	dev = &mgr->dev;
-> > +	priv = mgr->priv;
-> > +	fpga_priv = priv->fpga_priv;
-> > +
-> > +	if (fpga_priv->spi_burst_write) {
-> > +		ret = sysconfig_lsc_burst_complete(priv);
-> 
-> Same concern
-> 
-
-Same as above, how about sysconfig_ops_spi_write_complete()?
-
-> > +		if (ret) {
-> > +			dev_err(dev,
-> > +				"Error while waiting bitstream write to finish\n");
-> > +			goto fail;
-> > +		}
-> > +	}
-> > +
-> > +	if (fpga_priv->internal_flash) {
-> > +		ret = sysconfig_isc_prog_done(priv);
-> > +		if (!ret)
-> > +			ret = sysconfig_refresh(priv);
-> > +
-> > +		if (ret) {
-> > +			dev_err(dev, "Failed to enable Self-Download Mode\n");
-> > +			goto fail;
-> > +		}
-> > +	}
-> > +
-> > +	ret = sysconfig_isc_finish(priv);
-> > +
-> > +fail:
-> > +	if (ret)
-> > +		sysconfig_cleanup(priv);
-> > +
-> > +	return ret;
-> > +}
-> > 
-> > ... snip ...
-> > 
-> > +struct sysconfig_fpga_priv {
-> > +	u32 spi_max_speed_hz;
-> 
-> Don't put bus specific stuff here, this should be common across all
-> transport.
-> 
-
-Personally, I don't see why not. This struct is just a bunch of
-FPGA-specific constants which may or may not be used by a bus-specific
-sysCONFIG implementation. IMHO it is more convinient to define them in
-one place.
-
-> > +	u8 isc_enable_operand;
-> > +	bool spi_burst_write;
-> 
-> same concern
-> 
-> > +	bool internal_flash;
-> > +};
-> > +
-> > +extern const struct sysconfig_fpga_priv ecp5_data;
-> > +extern const struct sysconfig_fpga_priv machxo2_data;
-> > +
-> > +struct sysconfig_priv {
-> > +	struct fpga_manager_ops sysconfig_fpga_mgr_ops;
-> > +	const struct sysconfig_fpga_priv *fpga_priv;
-> > +	struct gpio_desc *program;
-> > +	struct gpio_desc *init;
-> > +	struct gpio_desc *done;
-> > +	struct spi_device *spi;
-> 
-> same concern
-> 
-
-MachXO2's I2C isc_enable and lsc_refresh commands are 3-bytes long while
-SPI variants are 4-bytes long. Having pointer to either spi_device or
-i2c_client makes it easy to add quirks about transfer length to
-sysconfig_isc_enable() and sysconfig_lsc_refresh() routines.
-
-> > +	struct device *dev;
-> > +	int (*sysconfig_transfer)(struct sysconfig_priv *priv,
-> > +				  const void *tx_buf, size_t tx_len,
-> > +				  void *rx_buf, size_t rx_len);
-> > +};
-> > +
-> > +int sysconfig_poll_busy(struct sysconfig_priv *priv);
-> > +int sysconfig_lsc_burst_init(struct sysconfig_priv *priv);
-> > +int sysconfig_lsc_burst_complete(struct sysconfig_priv *priv);
-> > +
-> > +enum fpga_mgr_states sysconfig_ops_state(struct fpga_manager *mgr);
-> > +int sysconfig_ops_write_init(struct fpga_manager *mgr,
-> > +			     struct fpga_image_info *info,
-> > +			     const char *buf, size_t count);
-> > +int sysconfig_ops_write_complete(struct fpga_manager *mgr,
-> > +				 struct fpga_image_info *info);
-> > +
-> > +int sysconfig_probe(struct sysconfig_priv *priv);
-> > +
-> > +#endif /* __LATTICE_SYSCONFIG_H */
-> > -- 
-> > 2.37.2
-> > 
-> > 
+diff --git a/drivers/pci/hotplug/TODO b/drivers/pci/hotplug/TODO
+index 88f217c82b4f..63a9fed407ed 100644
+--- a/drivers/pci/hotplug/TODO
++++ b/drivers/pci/hotplug/TODO
+@@ -30,9 +30,6 @@ ibmphp:
+   or ibmphp should store a pointer to its bus in struct slot.  Probably the
+   former.
+ 
+-* ibmphp_init_devno() takes a struct slot **, it could instead take a
+-  struct slot *.
+-
+ * The return value of pci_hp_register() is not checked.
+ 
+ * The various slot data structures are difficult to follow and need to be
+diff --git a/drivers/pci/hotplug/ibmphp.h b/drivers/pci/hotplug/ibmphp.h
+index 0399c60d2ec1..28fe92cf544a 100644
+--- a/drivers/pci/hotplug/ibmphp.h
++++ b/drivers/pci/hotplug/ibmphp.h
+@@ -734,7 +734,7 @@ struct controller {
+ 
+ /* Functions */
+ 
+-int ibmphp_init_devno(struct slot **);	/* This function is called from EBDA, so we need it not be static */
++int ibmphp_init_devno(struct slot *cur_slot);	/* This function is called from EBDA, so we need it not be static */
+ int ibmphp_do_disable_slot(struct slot *slot_cur);
+ int ibmphp_update_slot_info(struct slot *);	/* This function is called from HPC, so we need it to not be static */
+ int ibmphp_configure_card(struct pci_func *, u8);
+diff --git a/drivers/pci/hotplug/ibmphp_core.c b/drivers/pci/hotplug/ibmphp_core.c
+index 197997e264a2..107752b11f2c 100644
+--- a/drivers/pci/hotplug/ibmphp_core.c
++++ b/drivers/pci/hotplug/ibmphp_core.c
+@@ -109,7 +109,7 @@ static int __init get_max_slots(void)
+  * Parameters: struct slot
+  * Returns 0 or errors
+  */
+-int ibmphp_init_devno(struct slot **cur_slot)
++int ibmphp_init_devno(struct slot *cur_slot)
+ {
+ 	struct irq_routing_table *rtable;
+ 	int len;
+@@ -130,21 +130,21 @@ int ibmphp_init_devno(struct slot **cur_slot)
+ 		return -1;
+ 	}
+ 	for (loop = 0; loop < len; loop++) {
+-		if ((*cur_slot)->number == rtable->slots[loop].slot &&
+-		    (*cur_slot)->bus == rtable->slots[loop].bus) {
+-			(*cur_slot)->device = PCI_SLOT(rtable->slots[loop].devfn);
++		if (cur_slot->number == rtable->slots[loop].slot &&
++		    cur_slot->bus == rtable->slots[loop].bus) {
++			cur_slot->device = PCI_SLOT(rtable->slots[loop].devfn);
+ 			for (i = 0; i < 4; i++)
+-				(*cur_slot)->irq[i] = IO_APIC_get_PCI_irq_vector((int) (*cur_slot)->bus,
+-						(int) (*cur_slot)->device, i);
+-
+-			debug("(*cur_slot)->irq[0] = %x\n",
+-					(*cur_slot)->irq[0]);
+-			debug("(*cur_slot)->irq[1] = %x\n",
+-					(*cur_slot)->irq[1]);
+-			debug("(*cur_slot)->irq[2] = %x\n",
+-					(*cur_slot)->irq[2]);
+-			debug("(*cur_slot)->irq[3] = %x\n",
+-					(*cur_slot)->irq[3]);
++				cur_slot->irq[i] = IO_APIC_get_PCI_irq_vector((int) cur_slot->bus,
++						(int) cur_slot->device, i);
++
++			debug("cur_slot->irq[0] = %x\n",
++					cur_slot->irq[0]);
++			debug("cur_slot->irq[1] = %x\n",
++					cur_slot->irq[1]);
++			debug("cur_slot->irq[2] = %x\n",
++					cur_slot->irq[2]);
++			debug("cur_slot->irq[3] = %x\n",
++					cur_slot->irq[3]);
+ 
+ 			debug("rtable->exclusive_irqs = %x\n",
+ 					rtable->exclusive_irqs);
+diff --git a/drivers/pci/hotplug/ibmphp_ebda.c b/drivers/pci/hotplug/ibmphp_ebda.c
+index 7fb75401ad8a..5c7821ad9c2c 100644
+--- a/drivers/pci/hotplug/ibmphp_ebda.c
++++ b/drivers/pci/hotplug/ibmphp_ebda.c
+@@ -880,7 +880,7 @@ static int __init ebda_rsrc_controller(void)
+ 			if (rc)
+ 				goto error;
+ 
+-			rc = ibmphp_init_devno(&tmp_slot);
++			rc = ibmphp_init_devno(tmp_slot);
+ 			if (rc)
+ 				goto error;
+ 			tmp_slot->hotplug_slot.ops = &ibmphp_hotplug_slot_ops;
+-- 
+2.29.0.rc1.dirty
 

@@ -2,90 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AB15AC4EA
+	by mail.lfdr.de (Postfix) with ESMTP id 298A55AC4E9
 	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbiIDPRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 11:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbiIDPR0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234480AbiIDPR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sun, 4 Sep 2022 11:17:26 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBC133427
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 08:17:25 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id g14so4730840qto.11
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 08:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=Qg14KAR5yRWmPJdHFs0q9bs6+kIlvmZZHVh2Rc+wcyI=;
-        b=hLerUNWGni6uy5HPrDFGAuE984Edt/VTpgZ4+IdB3VoufOHO84YGjkXKqb68D9+QUg
-         9a6JUdyUXw7sg4f7zMga5xGgdyWNhwd3CafYG8renw4Oz3vbi28vJz92xAVY3qJBRjhR
-         B5duACaBzo+98yQ0MwORO6vJSlDasjiI2BtpwJpfuINrwYpWJV2n3Q6XNq0YjW4ND/BQ
-         /Ej1+JI4i87VL6OC3dcuR3ccFxKstyFlamA6sXvk5n4GwCsUB5Gvmw2z6kYvwScdQdyp
-         8Yxr/l3qoDe6c13LjwzupEpBRQdkKnRnmpjv5+4bhmY6TH362l7d9aPmSUd1gMgXF7Ei
-         7LYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=Qg14KAR5yRWmPJdHFs0q9bs6+kIlvmZZHVh2Rc+wcyI=;
-        b=pIsZPGnKencXGAmXyy8IngSbI9RLDHlnEkXDQrrZpqBK41biSc4HSSmIh3e9mV5qT8
-         0t9DNlInOZ0j1J+8+atfktoDoNKkm6OVEAyCxW5p0SpyjEESvKRpME+r+rfNqzNesoqE
-         onqQ7vvJw4rzDvq8S/dbHxwPZO3gMyN0nEDv77z5X9WZ+Ns33VsiMfmRl2NAaIdjQ9s5
-         QmXnraiz1Zlz4KSyDIcMU1/miD36dNH06zQ4K+yKeT6DnUVins5toNqqPfuzRmChkEZO
-         Ym2JHvmJwVPKe9C4viGLVAUAphWFRsBbArFTEjik2c4WnAeALNYQQ8KPtvN6IpatoDnq
-         SwNg==
-X-Gm-Message-State: ACgBeo2w8NODN++oeoYj8fC6EXd+e4/2vyFIYtvfyufytfy33tyMRZ3C
-        mVxBVS0Ja963j1vMXiuoX3wwU3PLLoDbVNm86nw=
-X-Google-Smtp-Source: AA6agR493lqpsKu6OMermHc+Fep3qhLapB8A+58D+zuwIRHd4cSiG5wacJPv7VbYKRGi4R55ZQ6TVUZl70hK+qM5dGg=
-X-Received: by 2002:ac8:7e8d:0:b0:344:7e3a:3da9 with SMTP id
- w13-20020ac87e8d000000b003447e3a3da9mr35416922qtj.37.1662304644398; Sun, 04
- Sep 2022 08:17:24 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229477AbiIDPRX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 4 Sep 2022 11:17:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D7533427;
+        Sun,  4 Sep 2022 08:17:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5502AB80D70;
+        Sun,  4 Sep 2022 15:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21440C433D6;
+        Sun,  4 Sep 2022 15:17:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662304640;
+        bh=xjdPYgdB9h50iN/sMAXgx3TlezzJ2hEsjMGUNuESwQw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bSZ4dTKtfMNrRfeMjIh0uwpaywenCjzYh7YAtyAapy/xSEsV2B/DjrmrWFNfaoIxZ
+         fRLCTgyJhn0nU3HHUKigGDtRWjfxtQfKkiBmg4Vx2ur7rtVDKDpxBAFTMbsJ57ckn0
+         K0zPIG3VCYowbB3wCwadpgFSVG+fLaqif+4d2OmQPZm2pSQaSdYPsgr87J2XIsGgY0
+         Q8qcamBf9Wd2s0h/3AwC0MKS3OFLay2XyAnJTm6sIJSaZt0qTzAqjKri9VZ/yLm+ub
+         J82ButxZ6R+CFLc8PS+QSfsRwyKehuqD4AoIBiq7IuTkw4KDCipnGxROIAEzUS+mAu
+         DzYxz/mLbtQ3A==
+Date:   Sun, 4 Sep 2022 20:47:15 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v11 2/3] phy: qcom-snps: Add support for overriding phy
+ tuning parameters
+Message-ID: <YxTBewhBecSgXvPq@matsya>
+References: <1658384954-9506-1-git-send-email-quic_kriskura@quicinc.com>
+ <1658384954-9506-3-git-send-email-quic_kriskura@quicinc.com>
+ <20220830203518.pty67fyefho4ewgw@builder.lan>
+ <31d459e4-57c0-85d1-2d88-e5bf0bed6604@quicinc.com>
 MIME-Version: 1.0
-From:   Qiujun Huang <hqjagain@gmail.com>
-Date:   Sun, 4 Sep 2022 23:17:13 +0800
-Message-ID: <CAJRQjofRCF7wjrYmw3D7zd5QZnwHQq+F8U-mJDJ6NZ4bddYdLA@mail.gmail.com>
-Subject: [PATCH] pstore/zone: Use GFP_ATOMIC to allocate zone buffer
-To:     keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <31d459e4-57c0-85d1-2d88-e5bf0bed6604@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a case found when triggering a panic_on_oom, pstore fails to dump
-kmsg. Because psz_kmsg_write_record can't get the new buffer.
+On 31-08-22, 18:41, Krishna Kurapati PSSNV wrote:
+ 
+> > The ordering of this list needs to match the order of
+> > override_param_map[] and there's nothing indicating this in the code.
+> > 
+> > I was considering suggesting that you add a enum/define and do
+> > 	[SQUELCH_DETECTOR_BP] = "qcom,squelch-detector-bp",
+> > 	...
+> > and then do the same in the override_param_map array.
+> > >
+> > But I think it will be cleaner if you add a const char const pointer to
+> > override_param_map and just specify these strings in the
+> > override_param_map array.
+> > 
+> > Each entry will grow by a pointer, but multiple copies of the same
+> > strings (when added in the future) should be combined by the compiler.
+> > 
+> IIUC, you want me to remove this array of const char*'s and embed them in
+> the override_param_map and iterate through it without using this const
+> phy_seq_props as a reference.
 
-Handle this by using GFP_ATOMIC to allocate a buffer at lower watermark.
+I think that would make it simpler.. 
 
-Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
----
- fs/pstore/zone.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > +static const struct override_param_map sc7280[] = {
+> > 
+> > There's nothing ensuring that the loop below doesn't run off the end of
+> > this array. So when the next platform is added, there's no way to
+> > handle the fact that they might have a different set of properties.
+> > 
+> > If you add the property name to these elements, that will no longer be a
+> > problem (and you can add a {} entry at the end of the list and check for
+> > this when looping over the elements.
 
-diff --git a/fs/pstore/zone.c b/fs/pstore/zone.c
-index 017d0d4ad329..2770746bb7aa 100644
---- a/fs/pstore/zone.c
-+++ b/fs/pstore/zone.c
-@@ -761,7 +761,7 @@ static inline int notrace
-psz_kmsg_write_record(struct psz_context *cxt,
-  /* avoid destroying old data, allocate a new one */
-  len = zone->buffer_size + sizeof(*zone->buffer);
-  zone->oldbuf = zone->buffer;
-- zone->buffer = kzalloc(len, GFP_KERNEL);
-+ zone->buffer = kzalloc(len, GFP_ATOMIC);
-  if (!zone->buffer) {
-  zone->buffer = zone->oldbuf;
-  return -ENOMEM;
+Would be great if this is addressed as well
+
 -- 
-2.25.1
+~Vinod

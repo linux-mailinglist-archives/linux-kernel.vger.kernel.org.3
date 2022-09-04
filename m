@@ -2,139 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760FB5AC3B7
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 11:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2725AC3BB
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 11:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233580AbiIDJzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 05:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
+        id S233582AbiIDJ40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 05:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiIDJzC (ORCPT
+        with ESMTP id S229537AbiIDJ4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 05:55:02 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FCF1AD8A;
-        Sun,  4 Sep 2022 02:55:01 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id az27so7731324wrb.6;
-        Sun, 04 Sep 2022 02:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=CX6HyoXoNrpwT2zqgVQd1bn03u5+Dy2MPfI5sUj0GEQ=;
-        b=fd7uRQSzhyvkRgFe34gxiqFihsATcR/JD3WsAWdqwYljihTT8Gn9Di2CXiJmWKoOOL
-         9V4fEUpC/c3iSZwVcQU0IuG1ZfUi5BCXpmuutkuuJg49cg3GO2dKWFxwHTgwNp+aPysd
-         au60dNAr2jNDZjHtJODm5cyfU7UN+5D0Webr6N+xRnIkWQMsLZuP8+KxGZrc/g4P6Aiq
-         nlKQtxq7KQQ5m1xtBSalVKAtRY1GxxaH+/gpamKwVNUMHq8ZBsncqguIO9fWfGbBU+AB
-         tMSVeIM/UsCRILIBtyLmtOnc7tvogaMGNsff1dzg+Yy3LqubpvlWxaayfKaB9szcaoCe
-         fEag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=CX6HyoXoNrpwT2zqgVQd1bn03u5+Dy2MPfI5sUj0GEQ=;
-        b=isE9InWqLEldmHQQ2NNpWBOP3IRPwAvdzdJ5HsbgpEGW0zFAQ/fdGSz83tkKBL8Vlz
-         quxE+2dFFd+JdnDfHvxCBBacMSukrhBN6ObWtnCL4uFUK8daMW6/XsIQGWrnrcDaloed
-         XGtsFQcQFEM+SA0E3qsRfz+2ouWeGG0/PHnaxfwSYcfJ93Jmn/RG8UJvCirBzQrdGoRm
-         M3t/fkThlHYIAsi8OKdam4jsUeL9kptDD2zImEaqLZs3IiEYZb3M5MP4Y/71LmA8QnzF
-         bsGSMM3etINcNYgnj810u4sf6mjO1Ufhc9euABimDdqOFxK31h6Xpv5ctY3ixjS8DL+Y
-         zfEg==
-X-Gm-Message-State: ACgBeo3G8u2NEx33SDEFSSNIXbyylS1+hJx/MdF0cKueAUEw3Hn34aJ1
-        VB4JEsNX6TMbVvKDiNd9WOs=
-X-Google-Smtp-Source: AA6agR5CBJYThzh9FyBWSfNYoYmprrRAlNbCf5SuASa5Me4mWcaDtXXWFeWXJZ1L2uBCfi+W7k4bPg==
-X-Received: by 2002:a5d:6e10:0:b0:226:ed14:e340 with SMTP id h16-20020a5d6e10000000b00226ed14e340mr11166252wrz.122.1662285299969;
-        Sun, 04 Sep 2022 02:54:59 -0700 (PDT)
-Received: from gmail.com (1F2EF751.nat.pool.telekom.hu. [31.46.247.81])
-        by smtp.gmail.com with ESMTPSA id w4-20020adfd4c4000000b0021badf3cb26sm7092108wrk.63.2022.09.04.02.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 02:54:59 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sun, 4 Sep 2022 11:54:57 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] sched/wait: Add wait_event_state()
-Message-ID: <YxR18Qs8vqTpPFV5@gmail.com>
-References: <20220822111816.760285417@infradead.org>
- <20220822114648.989212021@infradead.org>
+        Sun, 4 Sep 2022 05:56:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9439D33374
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 02:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662285378;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jimRioD4+++SuaoJblcBl1o/gjoraYSNzOcLbvs8+DQ=;
+        b=Wm3Y1utdRCBhaDLLGJILpHv2rA7BxxBZKLVmF26tb4Sq5AxXMVLQY67UdKCRnwJPoS0aT5
+        di/teFvFWdNf9VKv4NXaa89Wu07rK41vJGWZPFNQptSMW2rPkUWsV4Z8f2CiBn0ky8RhGq
+        LvNGZMab/1AxmMMxwBTpgzkhTnOYFGk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-251-xna6bcvkPUOpI1hzsdyM-Q-1; Sun, 04 Sep 2022 05:56:17 -0400
+X-MC-Unique: xna6bcvkPUOpI1hzsdyM-Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 140E938041C0;
+        Sun,  4 Sep 2022 09:56:17 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EB99FC15BB3;
+        Sun,  4 Sep 2022 09:56:16 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 6.0-rc4
+Date:   Sun,  4 Sep 2022 05:56:16 -0400
+Message-Id: <20220904095616.3966213-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822114648.989212021@infradead.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Linus,
 
-* Peter Zijlstra <peterz@infradead.org> wrote:
+The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
 
-> Allows waiting with a custom @state.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  include/linux/wait.h |   28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> --- a/include/linux/wait.h
-> +++ b/include/linux/wait.h
-> @@ -931,6 +931,34 @@ extern int do_wait_intr_irq(wait_queue_h
->  	__ret;									\
->  })
->  
-> +#define __wait_event_state(wq, condition, state)				\
-> +	___wait_event(wq, condition, state, 0, 0, schedule())
-> +
-> +/**
-> + * wait_event_state - sleep until a condition gets true
-> + * @wq_head: the waitqueue to wait on
-> + * @condition: a C expression for the event to wait for
-> + * @state: state to sleep in
-> + *
-> + * The process is put to sleep (@state) until the @condition evaluates to true
-> + * or a signal is received.  The @condition is checked each time the waitqueue
-> + * @wq_head is woken up.
+  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
 
-Documentation inconsistency nit: if TASK_INTERRUPTIBLE isn't in @state then 
-we won't wake up when a signal is received. This probably got copy-pasted 
-from a signal variant.
+are available in the Git repository at:
 
-> + *
-> + * wake_up() has to be called after changing any variable that could
-> + * change the result of the wait condition.
-> + *
-> + * The function will return -ERESTARTSYS if it was interrupted by a
-> + * signal and 0 if @condition evaluated to true.
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-That's not unconditionally true either if !TASK_INTERRUPTIBLE.
+for you to fetch changes up to 29250ba51bc1cbe8a87e923f76978b87c3247a8c:
 
-> +#define wait_event_state(wq_head, condition, state)				\
-> +({										\
-> +	int __ret = 0;								\
-> +	might_sleep();								\
+  Merge tag 'kvm-s390-master-6.0-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux into HEAD (2022-09-01 19:21:27 -0400)
 
-Very small style consistency nit, the above should have a newline after 
-local variables:
+----------------------------------------------------------------
+s390:
 
-> +#define wait_event_state(wq_head, condition, state)				\
-> +({										\
-> +	int __ret = 0;								\
-> +                                                                             \
-> +	might_sleep();								\
+* PCI interpretation compile fixes
 
-Like most (but not all ... :-/ ) of the existing primitives have.
+RISC-V:
 
-Thanks,
+* Fix unused variable warnings in vcpu_timer.c
 
-	Ingo
+* Move extern sbi_ext declarations to a header
+
+x86:
+
+* check validity of argument to KVM_SET_MP_STATE
+
+* use guest's global_ctrl to completely disable guest PEBS
+
+* fix a memory leak on memory allocation failure
+
+* mask off unsupported and unknown bits of IA32_ARCH_CAPABILITIES
+
+* fix build failure with Clang integrated assembler
+
+* fix MSR interception
+
+* Always flush TLBs when enabling dirty logging
+
+----------------------------------------------------------------
+Conor Dooley (2):
+      riscv: kvm: vcpu_timer: fix unused variable warnings
+      riscv: kvm: move extern sbi_ext declarations to a header
+
+David Matlack (2):
+      KVM: selftests: Fix KVM_EXCEPTION_MAGIC build with Clang
+      KVM: selftests: Fix ambiguous mov in KVM_ASM_SAFE()
+
+Jim Mattson (2):
+      KVM: VMX: Heed the 'msr' argument in msr_write_intercepted()
+      KVM: x86: Mask off unsupported and unknown bits of IA32_ARCH_CAPABILITIES
+
+Junaid Shahid (2):
+      kvm: x86: mmu: Drop the need_remote_flush() function
+      kvm: x86: mmu: Always flush TLBs when enabling dirty logging
+
+Like Xu (1):
+      perf/x86/core: Completely disable guest PEBS via guest's global_ctrl
+
+Miaohe Lin (1):
+      KVM: x86: fix memoryleak in kvm_arch_vcpu_create()
+
+Paolo Bonzini (3):
+      KVM: x86: check validity of argument to KVM_SET_MP_STATE
+      Merge tag 'kvm-riscv-fixes-6.0-1' of https://github.com/kvm-riscv/linux into HEAD
+      Merge tag 'kvm-s390-master-6.0-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux into HEAD
+
+Pierre Morel (1):
+      KVM: s390: pci: Hook to access KVM lowlevel from VFIO
+
+ arch/riscv/include/asm/kvm_vcpu_sbi.h              | 12 +++
+ arch/riscv/kvm/vcpu_sbi.c                          | 12 +--
+ arch/riscv/kvm/vcpu_timer.c                        |  4 -
+ arch/s390/include/asm/kvm_host.h                   | 17 ++--
+ arch/s390/kvm/pci.c                                | 12 ++-
+ arch/s390/pci/Makefile                             |  2 +-
+ arch/s390/pci/pci_kvm_hook.c                       | 11 +++
+ arch/x86/events/intel/core.c                       |  3 +-
+ arch/x86/kvm/mmu/mmu.c                             | 60 ++------------
+ arch/x86/kvm/mmu/spte.h                            | 14 +++-
+ arch/x86/kvm/vmx/vmx.c                             |  3 +-
+ arch/x86/kvm/x86.c                                 | 92 +++++++++++++++++++---
+ drivers/vfio/pci/vfio_pci_zdev.c                   |  8 +-
+ .../selftests/kvm/include/x86_64/processor.h       |  4 +-
+ 14 files changed, 151 insertions(+), 103 deletions(-)
+ create mode 100644 arch/s390/pci/pci_kvm_hook.c
+

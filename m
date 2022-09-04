@@ -2,166 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AF15AC5CB
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 19:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50335AC5CF
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 19:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234617AbiIDRih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 13:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S231982AbiIDRwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 13:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiIDRif (ORCPT
+        with ESMTP id S229725AbiIDRwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 13:38:35 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C043831DC4
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 10:38:33 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id lx1so12928972ejb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 10:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Q5N+J8wBw1AV+GwgbfKt4HyLOFEJ+Iwg2EMe1QjH8o4=;
-        b=sVRyryW0LBQVSRFhnUymCGEkUse3TDO7H2zM3EuqvRchgIhcdd2V9Mi6vJ9LD/VMIi
-         G+o4EG+Lm9nUMrkuZOrQPF0B5Qsla55APj0w1TPQGQIWfI6mSQM+/fw8+HUGlvclfwJJ
-         /3VZB2n5BOQYxBXTviSAujGhYrgcl+Bws/0IqdQWFrcPqiMPFmljDE/tGp4lyAgzgdaB
-         A5Z3/tvULOxuw7hYeWZyMDOtUF9NJBDL5ZWHpvYQZ8dbeTxdPP9rot1IAAikygwl3fM4
-         OWkg5Rq4UfOCemQNBBCe3E3BtDgY9/i+cIDslpx3Pl5rxEd/glN5xy7AJf1a6ahEmnPX
-         CbvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Q5N+J8wBw1AV+GwgbfKt4HyLOFEJ+Iwg2EMe1QjH8o4=;
-        b=6nOwjuD9FDJEYyO3XkDNaPdX7o/pCv8ieRFz9bx5F6llEhRDjP/oymUJqIIsi7lOnq
-         6UIw7NtRAydowkMjLkoI5yMxWMuz4f/8WGFTEhhAbqHS4TceQRQsNPKW16Q+3X8XUO4L
-         NWk8hXdtj5AGBuxvVRwwO3B2eZQVJbvd8UpkuYPBoZSxtQVVtq3h5a+G5pOZvxOdUgzW
-         Xj1AwXavllc1EhvvfUU7YHs2F1ag8UQzrT03H3NSRODx6KFkEobb/FrA1xC4EVlScevH
-         jTiUlL9lTogn+UyBjwPIEAhQysU02yR3YnSRg+S9Ojslm3ymN5o6/KUcTHnmco4pOjWm
-         jedQ==
-X-Gm-Message-State: ACgBeo08f0eIO9kf4L+e/rX8RttNzroydVlJPcMafb+XES/oNMMbAwE9
-        2bu+Dw+cHZXMqDYjOyi2+ssp4w==
-X-Google-Smtp-Source: AA6agR4XRuvmXNdEnkZFQbrlQGH5TeJOBJrqI6M+MiObIIZgh443V8UPUPw/OzVmzE7PJmYFQHhPUg==
-X-Received: by 2002:a17:907:9812:b0:742:2865:eca8 with SMTP id ji18-20020a170907981200b007422865eca8mr18416152ejc.537.1662313112297;
-        Sun, 04 Sep 2022 10:38:32 -0700 (PDT)
-Received: from ?IPV6:2003:d9:971d:3600:c0da:98ce:2525:c9a0? (p200300d9971d3600c0da98ce2525c9a0.dip0.t-ipconnect.de. [2003:d9:971d:3600:c0da:98ce:2525:c9a0])
-        by smtp.googlemail.com with ESMTPSA id w8-20020a170906384800b0074a82932e3bsm3898693ejc.77.2022.09.04.10.38.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Sep 2022 10:38:31 -0700 (PDT)
-Message-ID: <b94f08a6-a2e2-c719-37ac-7c412fe1b519@colorfullife.com>
-Date:   Sun, 4 Sep 2022 19:38:30 +0200
+        Sun, 4 Sep 2022 13:52:12 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27852D1C9
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 10:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662313930; x=1693849930;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s+U1XhTJ0Wvvvqv6HICkGlCcCwN0Z3mAsCPx3osKbdM=;
+  b=L/7uXNHMBqFlPSvKKpAmSdrhexQGRV4DlrjV4kGUiB5gbxinSNR+YJ/J
+   L3doJPEyUllNH1xepTZM5E3N0uMcK8zFBPbErH/fau9I0XEj8THLVO+N9
+   vpuecoMEa7V4gNozAtEgQwyqZQJSl+imYy9xrzdBaSRPxQtSjd2jNUWQy
+   7Sus9LATgOKw8DGNuKPZQM9nY3O+NjQ+sdpD9/75VfzSi9/yNM82VzEl0
+   0PnV8aCsxFwMmpgVKBZBNjfbh5ksD4BQXjmhA+rKE2KsVRru4VyZre70p
+   Avj9WCXnjV1MGhSxhSfTnFBnxuGBbf57zbwvhD9EUx7p99XUXCituWJQl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="297045564"
+X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
+   d="scan'208";a="297045564"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 10:52:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
+   d="scan'208";a="739365160"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 04 Sep 2022 10:52:09 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUtmy-0003H5-2P;
+        Sun, 04 Sep 2022 17:52:08 +0000
+Date:   Mon, 5 Sep 2022 01:51:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [djbw-nvdimm:libnvdimm-pending 13/17] mapping.c:undefined reference
+ to `dax_flush'
+Message-ID: <202209050157.cidXIuy1-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: Request to cherry-pick 20401d1058f3f841f35a594ac2fc1293710e55b9
- to v5.10 and v5.4
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Varsha Teratipally <teratipally@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Rafael Aquini <aquini@redhat.com>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20220902135912.816188-1-teratipally@google.com>
- <YxIS4jWE03E5pZjS@kroah.com>
-Content-Language: en-US
-From:   Manfred Spraul <manfred@colorfullife.com>
-In-Reply-To: <YxIS4jWE03E5pZjS@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Dan,
 
-On 9/2/22 16:27, Greg Kroah-Hartman wrote:
-> On Fri, Sep 02, 2022 at 01:59:11PM +0000, Varsha Teratipally wrote:
->> Hi all,
->>
->> Commit 20401d1058f3f841f35a594ac2fc1293710e55b9("ipc: replace costly
->> bailout check in sysvipc_find_ipc()" fixes a high cve and optimizes the
->> costly loop by adding a checkpoint, which I think might be a good
->> candidate for the stable branches
-> What do you mean by "high cve"?
->
-> And that feels like it's an artificial benchmark fixup, what real
-> workload benefits from this change?
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Standard ipcs end up parsing /proc/sysvipc/*, thus there are real users 
-where the performance of /proc/sysvsem/* matters.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git libnvdimm-pending
+head:   28533c3555d9f4cc074eb01189343adbaa47b6f5
+commit: 1ea5502b1e98f725dfb7d47839ea6ab6dc201e9f [13/17] devdax: Move address_space helpers to the DAX core
+config: parisc-buildonly-randconfig-r002-20220904 (https://download.01.org/0day-ci/archive/20220905/202209050157.cidXIuy1-lkp@intel.com/config)
+compiler: hppa64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git/commit/?id=1ea5502b1e98f725dfb7d47839ea6ab6dc201e9f
+        git remote add djbw-nvdimm https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git
+        git fetch --no-tags djbw-nvdimm libnvdimm-pending
+        git checkout 1ea5502b1e98f725dfb7d47839ea6ab6dc201e9f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc64 SHELL=/bin/bash
 
-But:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The performance of the function was bad since 2007, i.e. why is is now 
-urgent? I do not see a bug that must be fixed.
+All errors (new ones prefixed by >>):
 
-Initial patch:
+   hppa64-linux-ld: hppa64-linux-ld: DWARF error: could not find abbrev number 2778688810
+   drivers/dax/mapping.o: in function `.LC397':
+>> mapping.c:(.data.rel.ro+0x4d0): undefined reference to `dax_flush'
 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/ipc/util.c?id=7ca7e564e049d8b350ec9d958ff25eaa24226352
-
-(core issue: The code needs to find the next entry in an idr. And 
-instead of using idr_get_next(), it uses idr_find() in a for(;;id++) loop.)
-
-<<<
-
-[manfred@localhost Input]$ rpm -qf /usr/bin/ipcs
-util-linux-core-2.38-1.fc36.x86_64
-
-
-[manfred@localhost Input]$ strace -e openat /usr/bin/ipcs
-openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
-openat(AT_FDCWD, "/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
-openat(AT_FDCWD, "/usr/lib/locale/locale-archive", O_RDONLY|O_CLOEXEC) = 3
-openat(AT_FDCWD, "/usr/share/locale/locale.alias", O_RDONLY|O_CLOEXEC) = 3
-openat(AT_FDCWD, "/usr/lib/locale/en_US.UTF-8/LC_TIME", 
-O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-openat(AT_FDCWD, "/usr/lib/locale/en_US.utf8/LC_TIME", 
-O_RDONLY|O_CLOEXEC) = 3
-openat(AT_FDCWD, "/usr/lib64/gconv/gconv-modules.cache", O_RDONLY) = 3
-
-openat(AT_FDCWD, 
-"/usr/share/locale/en_US.UTF-8/LC_MESSAGES/util-linux.mo", O_RDONLY) = 
--1 ENOENT (No such file or directory)
-openat(AT_FDCWD, 
-"/usr/share/locale/en_US.utf8/LC_MESSAGES/util-linux.mo", O_RDONLY) = -1 
-ENOENT (No such file or directory)
-openat(AT_FDCWD, "/usr/share/locale/en_US/LC_MESSAGES/util-linux.mo", 
-O_RDONLY) = -1 ENOENT (No such file or directory)
-openat(AT_FDCWD, "/usr/share/locale/en.UTF-8/LC_MESSAGES/util-linux.mo", 
-O_RDONLY) = -1 ENOENT (No such file or directory)
-openat(AT_FDCWD, "/usr/share/locale/en.utf8/LC_MESSAGES/util-linux.mo", 
-O_RDONLY) = -1 ENOENT (No such file or directory)
-openat(AT_FDCWD, "/usr/share/locale/en/LC_MESSAGES/util-linux.mo", 
-O_RDONLY) = -1 ENOENT (No such file or directory)
------- Message Queues --------
-key        msqid      owner      perms      used-bytes messages
-openat(AT_FDCWD, "/proc/sysvipc/msg", O_RDONLY) = 3
-
------- Shared Memory Segments --------
-key        shmid      owner      perms      bytes      nattch status
-openat(AT_FDCWD, "/proc/sysvipc/shm", O_RDONLY) = 3
-openat(AT_FDCWD, "/etc/nsswitch.conf", O_RDONLY|O_CLOEXEC) = 3
-openat(AT_FDCWD, "/etc/passwd", O_RDONLY|O_CLOEXEC) = 3
-0x00000000 18         manfred    600        524288     2 dest
-openat(AT_FDCWD, "/etc/passwd", O_RDONLY|O_CLOEXEC) = 3
-0x5125004a 19         manfred    600        3208 1
-
------- Semaphore Arrays --------
-key        semid      owner      perms      nsems
-openat(AT_FDCWD, "/proc/sysvipc/sem", O_RDONLY) = 3
-openat(AT_FDCWD, "/etc/passwd", O_RDONLY|O_CLOEXEC) = 3
-0x51250047 0          manfred    600        1
-openat(AT_FDCWD, "/etc/passwd", O_RDONLY|O_CLOEXEC) = 3
-0x51250049 2          manfred    600        1
-
- >>>
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

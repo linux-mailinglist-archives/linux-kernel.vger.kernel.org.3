@@ -2,76 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC035AC81D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 01:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 057765AC820
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 01:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiIDXdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 19:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        id S234462AbiIDXhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 19:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiIDXdt (ORCPT
+        with ESMTP id S229596AbiIDXh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 19:33:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BD2175BA;
-        Sun,  4 Sep 2022 16:33:47 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4167B384DC;
-        Sun,  4 Sep 2022 23:33:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662334426; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7wL1UsufC/2TYfqXALUnz3P66S7/A6vXRUT/r091DT4=;
-        b=f8BWz4ljqyxYbb137zDcgOkYYHXQujZkE9DWZOp0lS43pGNbF03cnJy8y/j0uPSNDDrBeb
-        9JxCdGcNtLlsrxcmcc2fVrOjflOfpq7TTAu9MriUJ0M0aSXu9aI3ead9L8OTlGiwegbTLL
-        BLCMup/Uetf5uyTBu9GSh8KYGb8UYvc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662334426;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7wL1UsufC/2TYfqXALUnz3P66S7/A6vXRUT/r091DT4=;
-        b=n6SGdhfUq336qP/umCt+2NKS9PG0OdSxLxLz3/qyL73I6lHuHnkHIuCvW7CXZ9/pyUNAdP
-        ZwYtsbwVnhCqBCBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C90EF13A6B;
-        Sun,  4 Sep 2022 23:33:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hP36INc1FWOSYAAAMHmgww
-        (envelope-from <neilb@suse.de>); Sun, 04 Sep 2022 23:33:43 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Sun, 4 Sep 2022 19:37:27 -0400
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E844B2409F;
+        Sun,  4 Sep 2022 16:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1662334641; bh=jLRdilnMCYu/2LORSkSSfxq/7hawIRimyy0TcaBVSdg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=S0ySmocwO3hM9JxO7DVtM3BcsMOuVQiuSuyiUqAblDsNs3nMBXZz0MtnYh/iRZZlw
+         7GBbCtHMg2YpaYHkUaAxJxRa2FNET3QbSWn8CuzwBBgHVbqtoCEwKakqKj1/4ZY1Nh
+         GibpZNZcbt55iHvGPsOnwgTEhQC6T/UsbLlQO8f8=
+From:   Ondrej Jirman <megi@xff.cz>
+To:     linux-rockchip@lists.infradead.org
+Cc:     Ondrej Jirman <megi@xff.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Martijn Braam <martijn@brixit.nl>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Arnaud Ferraris <arnaud.ferraris@gmail.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <n@nfraprado.net>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
+        support), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] arm64: dts: rockchip: Fix SD card controller probe on Pinephone Pro
+Date:   Mon,  5 Sep 2022 01:36:47 +0200
+Message-Id: <20220904233652.3197885-1-megi@xff.cz>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Al Viro" <viro@zeniv.linux.org.uk>
-Cc:     "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Daire Byrne" <daire@dneg.com>,
-        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Chuck Lever" <chuck.lever@oracle.com>,
-        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        "LKML" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/10] VFS: support parallel updates in the one directory.
-In-reply-to: <YxOUUEXAbUdFLVKk@ZenIV>
-References: <166147828344.25420.13834885828450967910.stgit@noble.brown>,
- <166147984370.25420.13019217727422217511.stgit@noble.brown>,
- <YwmS63X3Sm4bhlcT@ZenIV>,
- <166173834258.27490.151597372187103012@noble.neil.brown.name>,
- <YxKaaN9cHD5yzlTr@ZenIV>,
- <166216924401.28768.5809376269835339554@noble.neil.brown.name>,
- <YxK4CiVNaQ6egobJ@ZenIV>, <YxOUUEXAbUdFLVKk@ZenIV>
-Date:   Mon, 05 Sep 2022 09:33:40 +1000
-Message-id: <166233442086.1168.1631109347260612253@noble.neil.brown.name>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -81,58 +50,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 04 Sep 2022, Al Viro wrote:
-> On Sat, Sep 03, 2022 at 03:12:26AM +0100, Al Viro wrote:
-> 
-> > Very much so.  You are starting to invent new rules for ->lookup() that
-> > just never had been there, basing on nothing better than a couple of
-> > examples.  They are nowhere near everything there is.
-> 
-> A few examples besides NFS and autofs:
+Voltage constraints on vccio_sd are invalid. They don't match the voltages
+that LDO9 can generate, and this causes rk808-regulator driver to fail
+to probe with -EINVAL when it tries to apply the constraints during boot.
 
-Hi Al,
- thanks for these - very helpful.  I will give them due consideration
- when I write relevant documentation to include in the next posting of
- the series.
+Fix the constraints to something that LDO9 can be actually configured for.
 
-Thanks a lot,
-NeilBrown
+Fixes: 78a21c7d5952 ("arm64: dts: rockchip: Add initial support for Pine64 PinePhone Pro")
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+---
+ arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+index f00c80361377a..2e058c3150256 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+@@ -253,8 +253,8 @@ regulator-state-mem {
+ 
+ 			vccio_sd: LDO_REG9 {
+ 				regulator-name = "vccio_sd";
+-				regulator-min-microvolt = <1710000>;
+-				regulator-max-microvolt = <3150000>;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			vcc3v3_s0: SWITCH_REG {
+-- 
+2.37.3
 
-> 
-> ext4, f2fs and xfs might bloody well return NULL without hashing - happens
-> on negative lookups with 'casefolding' crap.
-> 
-> kernfs - treatment of inactive nodes.
-> 
-> afs_dynroot_lookup() treatment of @cell... names.
-> 
-> afs_lookup() treatment of @sys... names.
-> 
-> There might very well be more - both merged into mainline and in
-> development trees of various filesystems (including devel branches
-> of in-tree ones - I'm not talking about out-of-tree projects).
-> 
-> Note, BTW, that with the current rules it's perfectly possible to
-> have this kind of fun:
-> 	a name that resolves to different files for different processes
-> 	unlink(2) is allowed and results depend upon the calling process
-> 
-> All it takes is ->lookup() deliberately *NOT* hashing the sucker and
-> ->unlink() acting according to dentry it has gotten from the caller.
-> unlink(2) from different callers are serialized and none of that
-> stuff is ever going to be hashed.  d_alloc_parallel() might pick an
-> in-lookup dentry from another caller of e.g. stat(2), but it will
-> wait for in-lookup state ending, notice that the sucker is not hashed,
-> drop it and retry.  Suboptimal, but it works.
-> 
-> Nothing in the mainline currently does that.  Nothing that I know of,
-> that is.  Sure, it could be made work with the changes you seem to
-> imply (if I'm not misreading you) - all it takes is lookup
-> calling d_lookup_done() on its argument before returning NULL.
-> But that's subtle, non-obvious and not documented anywhere...
-> 
-> Another interesting question is the rules for unhashing dentries.
-> What is needed for somebody to do temporary unhash, followed by
-> rehashing?
-> 

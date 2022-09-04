@@ -2,90 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B735AC30D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 08:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B438F5AC31B
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 09:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232782AbiIDGnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 02:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S232842AbiIDHX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 03:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiIDGnB (ORCPT
+        with ESMTP id S229478AbiIDHX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 02:43:01 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AF94CA3A;
-        Sat,  3 Sep 2022 23:43:00 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 5FEE3C020; Sun,  4 Sep 2022 08:42:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1662273778; bh=XUxJ04rfDRvv6seKolK+ZMqlBB2QN+5n0YBdPSmBOW8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZGXLq7MsxbAYij0mul8f4yq+/7C2R36x/VNclc+hNnlS71XDQbntLETX4zT35ypzU
-         pPdoWc2UzcxaM08ERVdKiaRFKzC+xlCpXa9UOfS5Yo/L38n5WLLm4Wcwafk1AxN3MK
-         m8CHnlJGKvsYdVQe3Vmv37tAwtY/McNfjBO0Bbo0FZ72ogytVxdCtkUcXchqvRkkOX
-         ug5APh39ayttlgk7ITma9VEine8deUDmUFo5Pefg/Io56n89QJXgH789I90EH3wY6y
-         lh1Vci01u3vUtM8PxuHTTh0U0BNYsRds95QGM1Yzrtu5QxYn2g6eYnIG48thU273YI
-         qqwgltawk0K/g==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
+        Sun, 4 Sep 2022 03:23:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A10546229;
+        Sun,  4 Sep 2022 00:23:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B469E20B56;
+        Sun,  4 Sep 2022 07:23:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662276233; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m3QZT9nBhXHroliaxvizZCMetCynso1mJ8WpdlhAaBg=;
+        b=c9mdEr/VO7TZvBypPlRdLBkiLeu94zTRJLKx/4CqETNxeDNZ2f2RguPCPIxv7ouA0h3QMF
+        3t+t3w/tnzIyfBgskl9PSZ2R4Eq7mglVcLw7ZQIZdFP7D9dDqJjBLTUxrxbO7ocYUyvV3w
+        B0XCjnZBoqlnpMVy7RGhj0Yu/9KQeCI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662276233;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m3QZT9nBhXHroliaxvizZCMetCynso1mJ8WpdlhAaBg=;
+        b=KesrAzIKewkyZJ48A+l/FGvKAkBICXOGmlE3UBENjA7azdXixBaztnCmmtsGSMURU74NbF
+        vQC9NU2ALLsdTCAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 93F4713A6B;
+        Sun,  4 Sep 2022 07:23:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xpI3I4lSFGNaXQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 04 Sep 2022 07:23:53 +0000
+Date:   Sun, 04 Sep 2022 09:23:53 +0200
+Message-ID: <87ilm3vbzq.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     tiwai@suse.de,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        linux-sound@vger.kernel.org
+Subject: Re: [BUG] commit a8d302a0b77057568350fe0123e639d02dba0745 cause IO_PAGE_FAULT and a lot of errors
+In-Reply-To: <CABXGCsO+kB2t5QyHY-rUe76npr1m0-5JOtt8g8SiHUo34ur7Ww@mail.gmail.com>
+References: <CABXGCsO+kB2t5QyHY-rUe76npr1m0-5JOtt8g8SiHUo34ur7Ww@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 845E6C009;
-        Sun,  4 Sep 2022 08:42:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1662273777; bh=XUxJ04rfDRvv6seKolK+ZMqlBB2QN+5n0YBdPSmBOW8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ti3HpvPS4J5cpUncPFp3ngayKhAZY9WCaXJBpCFBtVi3620Kz+hbad14wicvk586K
-         H83HvlddU8HZ91zmI2RFvF5UhQa7mCwf/TwvspbASEmcsxh3DWVbC0ovIqnQcnn2zT
-         NfziNWplw6rdiMRpVRjzCyBqZEpee6VWXTawtdEzh8NbwTDNKK8zAelCRxiNGreZ6u
-         7K0SWZpLP8v2Gu5O4QDb0Ns/IS9mESlVTed87rNTrPfXx48S4ZiQRwGv8HqpNFa7OH
-         X3xtmsxiksd2MROkdqE5oZ03iYQFX8mqwIqtgkJfceqylxt5bMJZaX8akm70P7Y5+q
-         QghXKmhFMqLqw==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id b43ef3ff;
-        Sun, 4 Sep 2022 06:42:52 +0000 (UTC)
-Date:   Sun, 4 Sep 2022 15:42:37 +0900
-From:   asmadeus@codewreck.org
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Schspa Shi <schspa@gmail.com>, ericvh@gmail.com, lucho@ionkov.net,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] p9: trans_fd: Fix deadlock when connection cancel
-Message-ID: <YxRI3Z0k8tOm9IlD@codewreck.org>
-References: <20220831180950.76907-1-schspa@gmail.com>
- <Yw/HmHcmXBVIg/SW@codewreck.org>
- <m2bkrz7qc8.fsf@gmail.com>
- <2739602.9NfmOOc9RC@silver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2739602.9NfmOOc9RC@silver>
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Schoenebeck wrote on Thu, Sep 01, 2022 at 05:27:53PM +0200:
-> > > If you have a test setup, would you mind testing my patch?
-> > > That's the main reason I was delaying pushing it.
-> > 
-> > I have test it with my enviroment, it not hang anymore.
+On Sat, 03 Sep 2022 20:04:19 +0200,
+Mikhail Gavrilov wrote:
 > 
-> Are you fine with that Dominique, or do you want me to test your linked patch 
-> as well?
+> Hi, I am bisecting issue that cause errors:
+> [   57.710235] snd_hda_intel 0000:03:00.1: spurious response
+> 0xeb0cce6a:0x8b612b0d, rp = 1, wp = 1
+> [   57.710240] ------------[ cut here ]------------
+> [   57.710241] BUG?
+> [   57.710257] amd_iommu_report_page_fault: 216 callbacks suppressed
+> [   57.710260] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
+> [IO_PAGE_FAULT domain=0x000e address=0x152848808 flags=0x0020]
+
+Grr...  again hitting an issue with AMD IOMMU...
+
+> and bisect said this commit causes it:
+> a8d302a0b77057568350fe0123e639d02dba0745 is the first bad commit
+> commit a8d302a0b77057568350fe0123e639d02dba0745
+> Author: Takashi Iwai <tiwai@suse.de>
+> Date:   Sun Aug 21 17:59:11 2022 +0200
 > 
-> You can also explicitly tell me if you need something to be reviewed/tested.
+>     ALSA: memalloc: Revive x86-specific WC page allocations again
 
-I've just resent both patches properly; that should be better for
-everyone. It can't hurt to get more tests :)
+OK, could you try the patch below?
+I wonder whether this is specific to CORB/RIRB mapping or generically
+about the transfer buffers.
 
-I don't think we'll catch anything with Tetsuo Handa's other two fixes
-as we don't really test trans_fd all that much, so I'll give it a spin
-with ganesha on my end when I can find time.
 
-Thanks!
---
-Dominiquem
+Takashi
+
+---
+diff --git a/sound/pci/hda/hda_controller.h b/sound/pci/hda/hda_controller.h
+index f5bf295eb830..d4b146da0863 100644
+--- a/sound/pci/hda/hda_controller.h
++++ b/sound/pci/hda/hda_controller.h
+@@ -28,12 +28,12 @@
+ #else
+ #define AZX_DCAPS_I915_COMPONENT 0		/* NOP */
+ #endif
+-/* 14 unused */
++#define AZX_DCAPS_WC_CORB_RIRB	(1 << 14)	/* WC pages for CORB/RIRB */
+ #define AZX_DCAPS_CTX_WORKAROUND (1 << 15)	/* X-Fi workaround */
+ #define AZX_DCAPS_POSFIX_LPIB	(1 << 16)	/* Use LPIB as default */
+ #define AZX_DCAPS_AMD_WORKAROUND (1 << 17)	/* AMD-specific workaround */
+ #define AZX_DCAPS_NO_64BIT	(1 << 18)	/* No 64bit address */
+-/* 19 unused */
++#define AZX_DCAPS_WC_BUFFER	(1 << 19)	/* allocate non-cached buffer */
+ #define AZX_DCAPS_OLD_SSYNC	(1 << 20)	/* Old SSYNC reg for ICH */
+ #define AZX_DCAPS_NO_ALIGN_BUFSIZE (1 << 21)	/* no buffer size alignment */
+ /* 22 unused */
+diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
+index bf9df9bc8f1b..cccd42b9d489 100644
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -295,7 +295,7 @@ enum {
+ 
+ /* quirks for ATI HDMI with snoop off */
+ #define AZX_DCAPS_PRESET_ATI_HDMI_NS \
+-	(AZX_DCAPS_PRESET_ATI_HDMI | AZX_DCAPS_SNOOP_OFF)
++	(AZX_DCAPS_PRESET_ATI_HDMI | AZX_DCAPS_SNOOP_OFF | AZX_DCAPS_WC_BUFFER)
+ 
+ /* quirks for AMD SB */
+ #define AZX_DCAPS_PRESET_AMD_SB \
+@@ -310,7 +310,7 @@ enum {
+ 
+ #define AZX_DCAPS_PRESET_CTHDA \
+ 	(AZX_DCAPS_NO_MSI | AZX_DCAPS_POSFIX_LPIB |\
+-	 AZX_DCAPS_NO_64BIT |\
++	 AZX_DCAPS_NO_64BIT | AZX_DCAPS_WC_CORB_RIRB | AZX_DCAPS_WC_BUFFER|\
+ 	 AZX_DCAPS_4K_BDLE_BOUNDARY | AZX_DCAPS_SNOOP_OFF)
+ 
+ /*
+@@ -1692,6 +1692,8 @@ static void azx_check_snoop_available(struct azx *chip)
+ 			 snoop ? "snoop" : "non-snoop");
+ 		chip->snoop = snoop;
+ 		chip->uc_buffer = !snoop;
++		if (!snoop)
++			azx_bus(chip)->dma_type = SNDRV_DMA_TYPE_DEV_WC;
+ 		return;
+ 	}
+ 
+@@ -1712,12 +1714,11 @@ static void azx_check_snoop_available(struct azx *chip)
+ 		snoop = false;
+ 
+ 	chip->snoop = snoop;
+-	if (!snoop) {
++	if (!snoop)
+ 		dev_info(chip->card->dev, "Force to non-snoop mode\n");
+-		/* C-Media requires non-cached pages only for CORB/RIRB */
+-		if (chip->driver_type != AZX_DRIVER_CMEDIA)
+-			chip->uc_buffer = true;
+-	}
++	if (chip->driver_caps & AZX_DCAPS_WC_CORB_RIRB)
++		azx_bus(chip)->dma_type = SNDRV_DMA_TYPE_DEV_WC;
++	chip->uc_buffer = !!(chip->driver_caps & AZX_DCAPS_WC_BUFFER);
+ }
+ 
+ static void azx_probe_work(struct work_struct *work)
+@@ -1808,10 +1809,6 @@ static int azx_create(struct snd_card *card, struct pci_dev *pci,
+ 	if (err < 0)
+ 		return err;
+ 
+-	/* use the non-cached pages in non-snoop mode */
+-	if (!azx_snoop(chip))
+-		azx_bus(chip)->dma_type = SNDRV_DMA_TYPE_DEV_WC;
+-
+ 	if (chip->driver_type == AZX_DRIVER_NVIDIA) {
+ 		dev_dbg(chip->card->dev, "Enable delay in RIRB handling\n");
+ 		chip->bus.core.needs_damn_long_delay = 1;
+@@ -2756,7 +2753,8 @@ static const struct pci_device_id azx_ids[] = {
+ 	/* CM8888 */
+ 	{ PCI_DEVICE(0x13f6, 0x5011),
+ 	  .driver_data = AZX_DRIVER_CMEDIA |
+-	  AZX_DCAPS_NO_MSI | AZX_DCAPS_POSFIX_LPIB | AZX_DCAPS_SNOOP_OFF },
++	  AZX_DCAPS_NO_MSI | AZX_DCAPS_POSFIX_LPIB | AZX_DCAPS_SNOOP_OFF |
++	  AZX_DCAPS_WC_CORB_RIRB },
+ 	/* Vortex86MX */
+ 	{ PCI_DEVICE(0x17f3, 0x3010), .driver_data = AZX_DRIVER_GENERIC },
+ 	/* VMware HDAudio */

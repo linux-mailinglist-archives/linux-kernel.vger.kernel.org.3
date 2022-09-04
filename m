@@ -2,102 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22AD5AC61D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 21:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4635AC62A
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 21:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234774AbiIDT3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 15:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
+        id S234928AbiIDTad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 15:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiIDT3P (ORCPT
+        with ESMTP id S234871AbiIDTab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 15:29:15 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02552DA9F
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 12:29:13 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id s15so7299511ljp.5
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 12:29:13 -0700 (PDT)
+        Sun, 4 Sep 2022 15:30:31 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0C42D1E5
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 12:30:30 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id u6so8860144eda.12
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 12:30:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=zHeAXo2eVvuHVI2CtRdbixiwjmytc3y6afJUtYoJYpk=;
-        b=ThWlvfZfdpLZC6rr/TLTj3uI1wa6gss0BeXEu/MR0bu6mh5ROH84GuWWi0yMygSsk8
-         GQMd6eUlDaYvmd9VAzJKYHpIlk81VNLE1B6WbCvBWQ8cmCfHV7IdZaxRlu62hKuwI68T
-         aWoUSaic1aeLY7G3xVPOc5+D8P1P28prp2Dw4wLC0UFzleMPnWcdC4RW5nEsCHvjA26N
-         h9e8wEp0ulmb1DhqIsw/uU3xo076Qrz6al7h0tKy2PDYbFViyg0vm2JCX+EWUjovIO7h
-         jAAdt5zqurVEgQ1Glytm30i06NVu1K1E4kCgWhcmFsrts1U7FFwRj3FVvrhLU4Lqecxm
-         hgCw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=eQ0wwoXomODSOHYfgmsXCfhMZdEoQj3yqUmJitWV+MQ=;
+        b=dXf4c/Tzcv21P7fD7Ag0pnDRZGDqOOvgqeSFm7p5NydAwk0eeYidMglHZG6La5CcuP
+         cXmjT/zX9XjkKGxugoBnRBDK8XvkdNlvheFsKmt5NYQQ+TihcQFKEqJwFPI3ybO6QehM
+         cZkvvHrai8ymubn/Cq0EiOWlaiuU/8F0wVZwzp8PYg6FQVq73v5jmEifPHNJIDPqDAqn
+         lhfHM7AYkS5VrOedXeoWQTC83AiuALgmYT+GRCElFLLme+nZSZRO6NWpF24GlsYgDpho
+         DoHsGkjmXWjs5U3CK8N5CBtSSa1EhhSq3qnljm07nJxJK947H2zE1qY2X6byioIrTuqO
+         5Pkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=zHeAXo2eVvuHVI2CtRdbixiwjmytc3y6afJUtYoJYpk=;
-        b=SKVKNMH0/8HNqItk+Y1f9zsNE91UwAecuYk4nljDV+nKTyo2Q9ROs3mnwozZX3pg37
-         Jl4B5BUYC5m8e53ybF66Hhu8tLmzfBUO4Zt3NHCiQteDzURwPIk/6+rHVsHP1nrsF7+/
-         WNrQwinTx6UIeWyGlyHRlFsSN1kEsxGa9oR+JzAo1lFjq68gcgmnITaQMMTPD5p8ujfk
-         f2oXmJO1oorgCvVrhShqlhcTUhvY1GrRCXXjJtx1N56nMvmw3SA1Ldq+zkkCCXZCoMpZ
-         T21Bkp1TXFoQRFMS493M1PlvieBRngdBYC1EpjYdm9rJp3yhR6JBOvWGgOe5anYWKCCx
-         ouzA==
-X-Gm-Message-State: ACgBeo0ahK33xRkgHzw2v+sCNrSmctspUfkXsCWDlBRe2cudLVyk3U1u
-        y2A43Chi4fTFlQgj1UkgsloHSg==
-X-Google-Smtp-Source: AA6agR65K/IgRHnj6QpYI1nFz586TFGQ5PPBnlzIci/aK9vvxN7Khb0SzyqI1idYiXM726MSBrsDTA==
-X-Received: by 2002:a2e:bc26:0:b0:266:9e0f:ee86 with SMTP id b38-20020a2ebc26000000b002669e0fee86mr8871593ljf.1.1662319752110;
-        Sun, 04 Sep 2022 12:29:12 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id e19-20020a05651c111300b00261aecd1c53sm1087776ljo.71.2022.09.04.12.29.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Sep 2022 12:29:11 -0700 (PDT)
-Message-ID: <58608d9f-bc79-4e97-2027-e68863213aea@linaro.org>
-Date:   Sun, 4 Sep 2022 22:29:04 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=eQ0wwoXomODSOHYfgmsXCfhMZdEoQj3yqUmJitWV+MQ=;
+        b=yPumeC7KlFYpr2qjHUDY20rq2nvHtKFZEQjXn4bL1AjBm7FwuBNlUvUifJ7aiQcaEA
+         U6h/+5cbfpSpuNKiA7O9KF2WSaQXn2TNmyYOxic5dGlfyrjzn6nGyfDkhiKKVu8dVObu
+         n0jvYtiXKDl7IB5o9oRxXr1ifa14vSCPyBAvzs9n0qFy87jceBz2tkEpS5DoDSnXd5ID
+         vrbg35dvT3/mPLGOETkPJmO8W7+PKwuxH5hoKnmWdLxFTWn0Agr+3mLrxVKf+5P5HMx9
+         rh1BlEIKeuFAyZrI7HGredAZ6NIgygq1sn6E4XOrGTQc7PS65e07lg0WJ66MgUL4/JuU
+         PF9w==
+X-Gm-Message-State: ACgBeo2AAwxWwuXlhRAQF/WMU8J7lE1UZb+Zv7LwJo1ajG7FjusJ+woR
+        Ir+o5iEqiHm5OoFk1L+oAtE=
+X-Google-Smtp-Source: AA6agR42ZNV+5bPUSS4sIWh6RcAfYnOjDyIHLz+jgojN92I7FVTj/urf2/e2hnAWd8S4BfVxtui/6A==
+X-Received: by 2002:aa7:da86:0:b0:44e:91c8:eb4f with SMTP id q6-20020aa7da86000000b0044e91c8eb4fmr551279eds.252.1662319828656;
+        Sun, 04 Sep 2022 12:30:28 -0700 (PDT)
+Received: from jyo.local (dslb-002-205-066-233.002.205.pools.vodafone-ip.de. [2.205.66.233])
+        by smtp.googlemail.com with ESMTPSA id gz28-20020a170907a05c00b0072b92daef1csm4095170ejc.146.2022.09.04.12.30.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Sep 2022 12:30:28 -0700 (PDT)
+From:   Jeungwoo Yoo <casionwoo@gmail.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Sangyun Kim <sangyun.kim@snu.ac.kr>,
+        Jeungwoo Yoo <casionwoo@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: Remove d-cache clean operation at preserve_boot_args().
+Date:   Sun,  4 Sep 2022 21:30:19 +0200
+Message-Id: <20220904193020.65556-1-casionwoo@gmail.com>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 03/10] dt-bindings: misc: fastrpc: Document
- memory-region property
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Ekansh Gupta <quic_ekagupt@quicinc.com>
-Cc:     Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org
-References: <20220902154900.3404524-1-abel.vesa@linaro.org>
- <20220902154900.3404524-4-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220902154900.3404524-4-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/09/2022 18:48, Abel Vesa wrote:
-> Add memory-region property to the list of optional properties, specify
-> the value type and a definition
+Kernel expects only the clean operation as a booting requirement in
+arm64 architecture [1], therefore, the kernel has to invalidate any
+cache entries after accessing a memory in the booting time (before
+enabling D-cache and MMU) not to overwrite the memory with the stale
+cache entry.
 
-You should write why adding this property. Is it already used?
+Same applied in preserve_boot_args(), kernel saves boot arguments into
+'boot_args' and invalidates the corresponding cache entry. However,
+according to the 'dcache_inval_poc()' implementation, the cache entry
+will be not only invalidated but also cleaned. That means if there is a
+stale cache entry corresponding to the address of the 'boot_args', the
+saved boot arguments in 'boot_args' will be overwritten by the stale
+cache entry. Therefore, it uses 'dv ivac' instruction directly instead
+of calling 'dcache_inval_poc()'.
 
-New properties can go only to DT schema, so first the conversion [1]
-should be finished or started from zero (9 months it's quite a time for
-a resend...).
+The address of the 'boot_args' is aligned to the cache line size and the
+size of 'boot_args' is 32 byte (8 byte * 4), therefore, a single
+invalidate operation is enough to invalidate the cache line belonging to
+the 'boot_args'.
 
-https://lore.kernel.org/all/20211208101508.24582-1-david@ixit.cz/
+Sometimes clean operation is required not to lose any contents in the
+cache entry but not the target of the invalidation. However, in this
+case, there is no valid cache entries at a very early booting stage and
+preserve_boot_args() is not called by any other (non-primary) CPUs.
+Therefore, this invalidation operation will not introduce any problems.
 
+[1] in Documentation/arm64/booting.rst:
+The address range corresponding to the loaded kernel image must be
+cleaned to the PoC.
 
-Best regards,
-Krzysztof
+Co-developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+
+Co-developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+
+Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
+---
+ arch/arm64/kernel/head.S | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+index cefe6a73ee54..916227666b07 100644
+--- a/arch/arm64/kernel/head.S
++++ b/arch/arm64/kernel/head.S
+@@ -121,9 +121,7 @@ SYM_CODE_START_LOCAL(preserve_boot_args)
+ 
+ 	dmb	sy				// needed before dc ivac with
+ 						// MMU off
+-
+-	add	x1, x0, #0x20			// 4 x 8 bytes
+-	b	dcache_inval_poc		// tail call
++	dc	ivac, x0			// Invalidate potentially stale cache line
+ SYM_CODE_END(preserve_boot_args)
+ 
+ SYM_FUNC_START_LOCAL(clear_page_tables)
+-- 
+2.34.3
+

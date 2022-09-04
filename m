@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5BE5AC712
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCD05AC71F
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235230AbiIDVm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 17:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S235494AbiIDVm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 17:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiIDVmZ (ORCPT
+        with ESMTP id S234761AbiIDVma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 17:42:25 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF3A2F000
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:42:21 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id a9so3885307ilh.1
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:42:21 -0700 (PDT)
+        Sun, 4 Sep 2022 17:42:30 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2902EF2B
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:42:22 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id r7so3867178ile.11
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=UryXZ8MRQvm9M8ywPbYKJOd9IzaI7xdASsleEmdDI64=;
-        b=muSWjLs7x00fb34NXmJsZan+xUhIQRfkeBRQvGNO6EFtSqDV4gjF1KMkI8Bqak2VBg
-         M+SglSeYYC0OIZzXmOEj02FMTLSgdMYfMKEdDLaaJuUeMzg1y8KursXgroBhEJhRXtPE
-         ES3Dwgi1AQvCREt4K2pjDPVYOugleYpu5qaUw9tS2HWryERwvYXOQYwsEa82WRrrUjO/
-         yp7b0DPlePFOgcmNGO1FDSg1nPI3ICuWkKnZ9YbEBpQ3YvU6cljVk8CuOS4yIAP4Zg5S
-         dnOYXunWEY24yxfgLxp+iCfDjBKFKOLqcksfSprGowZrq59RNyZHdmnZQ7ThwtBHf/Qg
-         N9vg==
+        bh=xIjcpB1yObanMGjMFeMKYjIQWCM49hxUe0Q+YC489GU=;
+        b=MLaOUG1eQyDNFysR3kFQ1CuvqHjhT0aQXApMqF4gTtmKSNtSjX/I5UlLfKj7GXM5dJ
+         ERh08+wfPW/pY1uDfq/mQRn9W4pI+ZknWQk0O9BgR5Mk9AjPJWG5zDfHLcpmenzVQTzo
+         579HyQFoNP2ls47VGJ5G3weYDitOixMG/+//9S/xiAYoLVVWBuJc+DV/rYYNjDLyRLfb
+         HNDjMkbf5rFexzATxXpZ556L2eM2E51BpzYlMdQx5ufJQGJ8cauf0lUEASuflYmkRnFq
+         wm3CJLRAjYbtQSKbcHHo9KjCQC9bF3ISuBv6sJ+vPDbFd2H4Yl4b8qIqAqmbssefUuAQ
+         LhwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=UryXZ8MRQvm9M8ywPbYKJOd9IzaI7xdASsleEmdDI64=;
-        b=tXhDYGDP55SN9Od+/MzWscWb3TvnMqTqlzwa7+/6LhAFXzHD7f0vMzY7dh7VC1LTpF
-         wdo/+Xo0PcYFSGKd+6OaD4qHOx6YuQKp+wrl5xj9KqHzLoHM4CE0HVOCpss54EYntoHz
-         vV3h1yOvf//e93N0OLp7pt5zTL0cWdIMhk8ws82JOkE1P+sfglSNfXGrFEJAXCTs1nP5
-         eSm9i7WyRFQExA0Qntepy2cUBC7dHEmoXJpkOHM8Ftql4iVQGzPij5maMndRASntVlgl
-         FMRBvhHeY9qTKdHslBs/atWm+rVWZoO/aU2u0Ib6+KONnRBCCnzDCLa1YBlPyiHmtl9u
-         9dyQ==
-X-Gm-Message-State: ACgBeo0Yj1XGtKTeSf8ggw2oYD4pvw4Z/GPj3ul35eTk9wEiAUmv/OeL
-        2SuAX4yKe1usoOvzn5OLJUw=
-X-Google-Smtp-Source: AA6agR4xCBLCNJuB54OnGN7VtAxvyEt+vNDQxb7qX+QcTnPDx6k921Txd/smbqxpe7ugLH91cljdjg==
-X-Received: by 2002:a05:6e02:15c4:b0:2e1:986c:91a1 with SMTP id q4-20020a056e0215c400b002e1986c91a1mr24412890ilu.22.1662327740646;
-        Sun, 04 Sep 2022 14:42:20 -0700 (PDT)
+        bh=xIjcpB1yObanMGjMFeMKYjIQWCM49hxUe0Q+YC489GU=;
+        b=eJ7nxhKwJU1ffZ8WHDiYj3AVNIqQ8mu7b7oRlKMqwB+uR8+2Qn2bLYSzAhamFB+QAd
+         3rZSC13/Rq692PvbPis7RXTDn1Rjzjbtt58p8YTANZN1wsf10JJ/lJ3ZvxVeFC25sWKX
+         lzP3yXneFs8xbWNvwR3oOo6JXjMZDcCHVbLKB2k4JZCrgAceEepI/WnqFXjmW/Kc2xH6
+         9lJUzIYivARP7Gb2Ur4tIx+zfcLoTlv6Yw5wlqa1okxWPeMAWfiqZipX1pLc67EWMmQz
+         aVwtVNaAfYJRwVQt9jdd4E23qsAGZE7gJ8h+g1jY/Z8wE1atFpFuQyObGWdRRGox7PIP
+         duKA==
+X-Gm-Message-State: ACgBeo2kcpMBl8+iSBPU6kb7PCfdI3KXGc1JgCCj7DT4MER8kqJcM+V9
+        ZJxq89bTiWi8Cm1oLLGkcZA=
+X-Google-Smtp-Source: AA6agR67iR6BYXhMU24o7aSNMqzyMctDSZZTQcZ/yxizOCzV0f4LJSYbYSri4MSdNRuTGB/KPRJVfw==
+X-Received: by 2002:a05:6e02:15c9:b0:2e1:a5b6:7e25 with SMTP id q9-20020a056e0215c900b002e1a5b67e25mr23241731ilu.185.1662327741691;
+        Sun, 04 Sep 2022 14:42:21 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.19
+        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 14:42:20 -0700 (PDT)
+        Sun, 04 Sep 2022 14:42:21 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -57,10 +57,10 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
         Jim Cromie <jim.cromie@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH v6 11/57] dyndbg: gather __dyndbg[] state into struct _ddebug_info
-Date:   Sun,  4 Sep 2022 15:40:48 -0600
-Message-Id: <20220904214134.408619-12-jim.cromie@gmail.com>
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Subject: [PATCH v6 12/57] dyndbg: add class_id to pr_debug callsites
+Date:   Sun,  4 Sep 2022 15:40:49 -0600
+Message-Id: <20220904214134.408619-13-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220904214134.408619-1-jim.cromie@gmail.com>
 References: <20220904214134.408619-1-jim.cromie@gmail.com>
@@ -76,268 +76,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new struct composes the linker provided (vector,len) section,
-and provides a place to add other __dyndbg[] state-data later:
+DRM issues ~10 exclusive categories of debug messages; to represent
+this directly in dyndbg, add a new 6-bit field: struct _ddebug.class_id.
+This gives us 64 classes, which should be more than enough.
 
-  descs - the vector of descriptors in __dyndbg section.
-  num_descs - length of the data/section.
+  #> echo 0x012345678 > /sys/module/drm/parameters/debug
 
-Use it, in several different ways, as follows:
+All existing callsites are initialized with _DPRINTK_CLASS_DFLT, which
+is 2^6-1.  This reserves 0-62 for use in new categorized/class'd
+pr_debugs, which fits perfectly with natural enums (ints: 0..N).
 
-In lib/dynamic_debug.c:
+Thats done by extending the init macro: DEFINE_DYNAMIC_DEBUG_METADATA()
+with _CLS(cls, ...) suffix, and redefing old name using extended name.
 
-ddebug_add_module(): Alter params-list, replacing 2 args (array,index)
-with a struct _ddebug_info * containing them both, with room for
-expansion.  This helps future-proof the function prototype against the
-looming addition of class-map info into the dyndbg-state, by providing
-a place to add more member fields later.
+Then extend the factory macro callchain with _cls() versions to provide
+the callsite.class_id, with old-names passing _DPRINTK_CLASS_DFLT.
 
-NB: later add static struct _ddebug_info builtins_state declaration,
-not needed yet.
+This sets us up to create class'd prdebug callsites (class'd callsites
+are those with .class_id != _DPRINTK_CLASS_DFLT).
 
-ddebug_add_module() is called in 2 contexts:
+No behavior change.
 
-In dynamic_debug_init(), declare, init a struct _ddebug_info di
-auto-var to use as a cursor.  Then iterate over the prdbg blocks of
-the builtin modules, and update the di cursor before calling
-_add_module for each.
-
-Its called from kernel/module/main.c:load_info() for each loaded
-module:
-
-In internal.h, alter struct load_info, replacing the dyndbg array,len
-fields with an embedded _ddebug_info containing them both; and
-populate its members in find_module_sections().
-
-The 2 calling contexts differ in that _init deals with contiguous
-subranges of __dyndbgs[] section, packed together, while loadable
-modules are added one at a time.
-
-So rename ddebug_add_module() into outer/__inner fns, call __inner
-from _init, and provide the offset into the builtin __dyndbgs[] where
-the module's prdbgs reside.  The cursor provides start, len of the
-subrange for each.  The offset will be used later to pack the results
-of builtin __dyndbg_sites[] de-duplication, and is 0 and unneeded for
-loadable modules,
-
-Note:
-
-kernel/module/main.c includes <dynamic_debug.h> for struct
-_ddeubg_info.  This might be prone to include loops, since its also
-included by printk.h.  Nothing has broken in robot-land on this.
-
-cc: Luis Chamberlain <mcgrof@kernel.org>
+cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/linux/dynamic_debug.h | 13 +++++++-----
- kernel/module/internal.h      |  4 ++--
- kernel/module/main.c          | 18 ++++++++--------
- lib/dynamic_debug.c           | 40 +++++++++++++++++++++++++++--------
- 4 files changed, 50 insertions(+), 25 deletions(-)
+ include/linux/dynamic_debug.h | 71 +++++++++++++++++++++++++++--------
+ 1 file changed, 55 insertions(+), 16 deletions(-)
 
 diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 8d9eec5f6d8b..6a2001250da1 100644
+index 6a2001250da1..633f4e463766 100644
 --- a/include/linux/dynamic_debug.h
 +++ b/include/linux/dynamic_debug.h
-@@ -51,12 +51,16 @@ struct _ddebug {
+@@ -6,6 +6,8 @@
+ #include <linux/jump_label.h>
  #endif
- } __attribute__((aligned(8)));
  
--
-+/* encapsulate linker provided built-in (or module) dyndbg data */
-+struct _ddebug_info {
-+	struct _ddebug *descs;
-+	unsigned int num_descs;
-+};
- 
- #if defined(CONFIG_DYNAMIC_DEBUG_CORE)
- 
--int ddebug_add_module(struct _ddebug *tab, unsigned int n,
--				const char *modname);
-+int ddebug_add_module(struct _ddebug_info *dyndbg, const char *modname);
++#include <linux/build_bug.h>
 +
- extern int ddebug_remove_module(const char *mod_name);
- extern __printf(2, 3)
- void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...);
-@@ -184,8 +188,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- #include <linux/errno.h>
- #include <linux/printk.h>
- 
--static inline int ddebug_add_module(struct _ddebug *tab, unsigned int n,
--				    const char *modname)
-+static inline int ddebug_add_module(struct _ddebug_info *dinfo, const char *modname)
- {
- 	return 0;
- }
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 680d980a4fb2..2e2bf236f558 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -53,6 +53,7 @@ extern const struct kernel_symbol __stop___ksymtab_gpl[];
- extern const s32 __start___kcrctab[];
- extern const s32 __start___kcrctab_gpl[];
- 
-+#include <linux/dynamic_debug.h>
- struct load_info {
- 	const char *name;
- 	/* pointer to module in temporary copy, freed at end of load_module() */
-@@ -62,8 +63,7 @@ struct load_info {
- 	Elf_Shdr *sechdrs;
- 	char *secstrings, *strtab;
- 	unsigned long symoffs, stroffs, init_typeoffs, core_typeoffs;
--	struct _ddebug *debug;
--	unsigned int num_debug;
-+	struct _ddebug_info dyndbg;
- 	bool sig_ok;
- #ifdef CONFIG_KALLSYMS
- 	unsigned long mod_kallsyms_init_off;
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index a4e4d84b6f4e..4c20bc3ff203 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1598,16 +1598,16 @@ static void free_modinfo(struct module *mod)
- 	}
- }
- 
--static void dynamic_debug_setup(struct module *mod, struct _ddebug *debug, unsigned int num)
-+static void dynamic_debug_setup(struct module *mod, struct _ddebug_info *dyndbg)
- {
--	if (!debug)
-+	if (!dyndbg->num_descs)
- 		return;
--	ddebug_add_module(debug, num, mod->name);
-+	ddebug_add_module(dyndbg, mod->name);
- }
- 
--static void dynamic_debug_remove(struct module *mod, struct _ddebug *debug)
-+static void dynamic_debug_remove(struct module *mod, struct _ddebug_info *dyndbg)
- {
--	if (debug)
-+	if (dyndbg->num_descs)
- 		ddebug_remove_module(mod->name);
- }
- 
-@@ -2111,8 +2111,8 @@ static int find_module_sections(struct module *mod, struct load_info *info)
- 	if (section_addr(info, "__obsparm"))
- 		pr_warn("%s: Ignoring obsolete parameters\n", mod->name);
- 
--	info->debug = section_objs(info, "__dyndbg",
--				   sizeof(*info->debug), &info->num_debug);
-+	info->dyndbg.descs = section_objs(info, "__dyndbg",
-+					sizeof(*info->dyndbg.descs), &info->dyndbg.num_descs);
- 
- 	return 0;
- }
-@@ -2807,7 +2807,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	}
- 
- 	init_build_id(mod, info);
--	dynamic_debug_setup(mod, info->debug, info->num_debug);
-+	dynamic_debug_setup(mod, &info->dyndbg);
- 
- 	/* Ftrace init must be called in the MODULE_STATE_UNFORMED state */
- 	ftrace_module_init(mod);
-@@ -2871,7 +2871,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 
-  ddebug_cleanup:
- 	ftrace_release_mod(mod);
--	dynamic_debug_remove(mod, info->debug);
-+	dynamic_debug_remove(mod, &info->dyndbg);
- 	synchronize_rcu();
- 	kfree(mod->args);
-  free_arch_cleanup:
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 2e8ebef3bd0d..c358ccdf4a39 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -923,14 +923,20 @@ static const struct proc_ops proc_fops = {
-  * Allocate a new ddebug_table for the given module
-  * and add it to the global list.
-  */
--int ddebug_add_module(struct _ddebug *tab, unsigned int n,
--			     const char *name)
-+static int __ddebug_add_module(struct _ddebug_info *di, unsigned int base,
-+			       const char *modname)
- {
- 	struct ddebug_table *dt;
- 
-+	v3pr_info("add-module: %s.%d sites\n", modname, di->num_descs);
-+	if (!di->num_descs) {
-+		v3pr_info(" skip %s\n", modname);
-+		return 0;
-+	}
-+
- 	dt = kzalloc(sizeof(*dt), GFP_KERNEL);
- 	if (dt == NULL) {
--		pr_err("error adding module: %s\n", name);
-+		pr_err("error adding module: %s\n", modname);
- 		return -ENOMEM;
- 	}
+ /*
+  * An instance of this structure is created in a special
+  * ELF section at every dynamic debug callsite.  At runtime,
+@@ -21,6 +23,9 @@ struct _ddebug {
+ 	const char *filename;
+ 	const char *format;
+ 	unsigned int lineno:18;
++#define CLS_BITS 6
++	unsigned int class_id:CLS_BITS;
++#define _DPRINTK_CLASS_DFLT		((1 << CLS_BITS) - 1)
  	/*
-@@ -939,18 +945,25 @@ int ddebug_add_module(struct _ddebug *tab, unsigned int n,
- 	 * member of struct module, which lives at least as long as
- 	 * this struct ddebug_table.
- 	 */
--	dt->mod_name = name;
--	dt->num_ddebugs = n;
--	dt->ddebugs = tab;
-+	dt->mod_name = modname;
-+	dt->ddebugs = di->descs;
-+	dt->num_ddebugs = di->num_descs;
+ 	 * The flags field controls the behaviour at the callsite.
+ 	 * The bits here are changed dynamically when the user
+@@ -88,7 +93,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 			 const struct ib_device *ibdev,
+ 			 const char *fmt, ...);
+ 
+-#define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)		\
++#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
+ 	static struct _ddebug  __aligned(8)			\
+ 	__section("__dyndbg") name = {				\
+ 		.modname = KBUILD_MODNAME,			\
+@@ -97,8 +102,14 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 		.format = (fmt),				\
+ 		.lineno = __LINE__,				\
+ 		.flags = _DPRINTK_FLAGS_DEFAULT,		\
++		.class_id = cls,				\
+ 		_DPRINTK_KEY_INIT				\
+-	}
++	};							\
++	BUILD_BUG_ON_MSG(cls > _DPRINTK_CLASS_DFLT,		\
++			 "classid value overflow")
 +
-+	INIT_LIST_HEAD(&dt->link);
++#define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)		\
++	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt)
  
- 	mutex_lock(&ddebug_lock);
- 	list_add_tail(&dt->link, &ddebug_tables);
- 	mutex_unlock(&ddebug_lock);
+ #ifdef CONFIG_JUMP_LABEL
  
--	vpr_info("%3u debug prints in module %s\n", n, dt->mod_name);
-+	vpr_info("%3u debug prints in module %s\n", di->num_descs, modname);
- 	return 0;
- }
+@@ -129,17 +140,34 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
  
-+int ddebug_add_module(struct _ddebug_info *di, const char *modname)
-+{
-+	return __ddebug_add_module(di, 0, modname);
-+}
+ #endif /* CONFIG_JUMP_LABEL */
+ 
+-#define __dynamic_func_call(id, fmt, func, ...) do {	\
+-	DEFINE_DYNAMIC_DEBUG_METADATA(id, fmt);		\
+-	if (DYNAMIC_DEBUG_BRANCH(id))			\
+-		func(&id, ##__VA_ARGS__);		\
+-} while (0)
+-
+-#define __dynamic_func_call_no_desc(id, fmt, func, ...) do {	\
+-	DEFINE_DYNAMIC_DEBUG_METADATA(id, fmt);			\
++/*
++ * Factory macros: ($prefix)dynamic_func_call($suffix)
++ *
++ * Lower layer (with __ prefix) gets the callsite metadata, and wraps
++ * the func inside a debug-branch/static-key construct.  Upper layer
++ * (with _ prefix) does the UNIQUE_ID once, so that lower can ref the
++ * name/label multiple times, and tie the elements together.
++ * Multiple flavors:
++ * (|_cls):	adds in _DPRINT_CLASS_DFLT as needed
++ * (|_no_desc):	former gets callsite descriptor as 1st arg (for prdbgs)
++ */
++#define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {	\
++	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);	\
+ 	if (DYNAMIC_DEBUG_BRANCH(id))				\
+-		func(__VA_ARGS__);				\
++		func(&id, ##__VA_ARGS__);			\
+ } while (0)
++#define __dynamic_func_call(id, fmt, func, ...)				\
++	__dynamic_func_call_cls(id, _DPRINTK_CLASS_DFLT, fmt,		\
++				func, ##__VA_ARGS__)
 +
- /* helper for ddebug_dyndbg_(boot|module)_param_cb */
- static int ddebug_dyndbg_param_cb(char *param, char *val,
- 				const char *modname, int on_err)
-@@ -1064,6 +1077,11 @@ static int __init dynamic_debug_init(void)
- 	const char *modname;
- 	char *cmdline;
++#define __dynamic_func_call_cls_no_desc(id, cls, fmt, func, ...) do {	\
++	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);		\
++	if (DYNAMIC_DEBUG_BRANCH(id))					\
++		func(__VA_ARGS__);					\
++} while (0)
++#define __dynamic_func_call_no_desc(id, fmt, func, ...)			\
++	__dynamic_func_call_cls_no_desc(id, _DPRINTK_CLASS_DFLT,	\
++					fmt, func, ##__VA_ARGS__)
  
-+	struct _ddebug_info di = {
-+		.descs = __start___dyndbg,
-+		.num_descs = __stop___dyndbg - __start___dyndbg,
-+	};
+ /*
+  * "Factory macro" for generating a call to func, guarded by a
+@@ -149,22 +177,33 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+  * the varargs. Note that fmt is repeated in invocations of this
+  * macro.
+  */
++#define _dynamic_func_call_cls(cls, fmt, func, ...)			\
++	__dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+ #define _dynamic_func_call(fmt, func, ...)				\
+-	__dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
++	_dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
 +
- 	if (&__start___dyndbg == &__stop___dyndbg) {
- 		if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
- 			pr_warn("_ddebug table is empty in a CONFIG_DYNAMIC_DEBUG build\n");
-@@ -1082,7 +1100,9 @@ static int __init dynamic_debug_init(void)
+ /*
+  * A variant that does the same, except that the descriptor is not
+  * passed as the first argument to the function; it is only called
+  * with precisely the macro's varargs.
+  */
+-#define _dynamic_func_call_no_desc(fmt, func, ...)	\
+-	__dynamic_func_call_no_desc(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
++#define _dynamic_func_call_cls_no_desc(cls, fmt, func, ...)		\
++	__dynamic_func_call_cls_no_desc(__UNIQUE_ID(ddebug), cls, fmt,	\
++					func, ##__VA_ARGS__)
++#define _dynamic_func_call_no_desc(fmt, func, ...)			\
++	_dynamic_func_call_cls_no_desc(_DPRINTK_CLASS_DFLT, fmt,	\
++				       func, ##__VA_ARGS__)
++
++#define dynamic_pr_debug_cls(cls, fmt, ...)				\
++	_dynamic_func_call_cls(cls, fmt, __dynamic_pr_debug,		\
++			   pr_fmt(fmt), ##__VA_ARGS__)
  
- 		if (strcmp(modname, iter->modname)) {
- 			mod_ct++;
--			ret = ddebug_add_module(iter_mod_start, mod_sites, modname);
-+			di.num_descs = mod_sites;
-+			di.descs = iter_mod_start;
-+			ret = __ddebug_add_module(&di, i - mod_sites, modname);
- 			if (ret)
- 				goto out_err;
+ #define dynamic_pr_debug(fmt, ...)				\
+-	_dynamic_func_call(fmt,	__dynamic_pr_debug,		\
++	_dynamic_func_call(fmt, __dynamic_pr_debug,		\
+ 			   pr_fmt(fmt), ##__VA_ARGS__)
  
-@@ -1091,7 +1111,9 @@ static int __init dynamic_debug_init(void)
- 			iter_mod_start = iter;
- 		}
- 	}
--	ret = ddebug_add_module(iter_mod_start, mod_sites, modname);
-+	di.num_descs = mod_sites;
-+	di.descs = iter_mod_start;
-+	ret = __ddebug_add_module(&di, i - mod_sites, modname);
- 	if (ret)
- 		goto out_err;
+ #define dynamic_dev_dbg(dev, fmt, ...)				\
+-	_dynamic_func_call(fmt,__dynamic_dev_dbg, 		\
++	_dynamic_func_call(fmt, __dynamic_dev_dbg, 		\
+ 			   dev, fmt, ##__VA_ARGS__)
  
+ #define dynamic_netdev_dbg(dev, fmt, ...)			\
 -- 
 2.37.2
 

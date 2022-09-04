@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5269D5AC7E3
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929205AC7E4
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiIDV4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 17:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44700 "EHLO
+        id S236099AbiIDV4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 17:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbiIDVzl (ORCPT
+        with ESMTP id S236132AbiIDV43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 17:55:41 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F49A17A97;
-        Sun,  4 Sep 2022 14:53:28 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id b16so9144845edd.4;
-        Sun, 04 Sep 2022 14:53:28 -0700 (PDT)
+        Sun, 4 Sep 2022 17:56:29 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D072A97E
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:55:08 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id b17so3914157ilh.0
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:55:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date;
-        bh=lYbV35uTqzxof3PRLCtOB2AjQ6YCxGJB8ZrkPJEQRC8=;
-        b=eyPQ1Z5msk8BKpRWQZuZnrYn9DHo8IrWbjmn3s68x/pkeJWKugm7ZOwUWp3RyxN4B2
-         aSobFC8LEpVO/MvSNnII3kw+/+Qw88bT1daGmW6yJSr235VSZs+H0AVvkX4BvD1CxqVL
-         /gxFgxm89fEapFAwKddTydynx+TfSYmZBYigy45L7rLsQWLyS23Nc2csBvpOt49h48Xn
-         quv0+0sxmWNJbHP+27aq1dSoz8MPA4pf89fjkoVl3tJoiGGYf+nhtcJ3FAdPhyWQLfmc
-         3eThNdx6jA/TmWoG+jgyj45r57b5PZjcBRqMMDjknEbZgUEYjQvWWdGHL+EtuarrLDBk
-         e+qw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Rk0v3z6nbpdvu88IImrHMGbLoUUPdnPRh/3Godzt1FA=;
+        b=Nc+rQZCQ0ZDF1h9ecA4rpVSJrG6dmkL3xgNJXZtX3/cFCPkOmE+G06GlMonjPQqJBm
+         YnXKfZNHOR/rAehmRjdpqpziT556KQvktB/Ht4pEEzygq3h/BvtHWel8JjiN/tgd3HAl
+         ZRciRFIz4P266UKb/8MhtLxbrrVipYcxDk5sPm6Ig4u/BMOLFvsQtAeiKq2nAzR6kk1K
+         cN+GwHnHHBFCobrftxSnVV842YyyUQ4mpiQEkzm2k2IrL6A5XRKpep71ICeYTI08uHUU
+         6oReuJJbsm7n3GXJCG0MWwvFbIKcfG4E7ctmaGDY2jg4GpqOG+Z18BiaD75we5V/YGQS
+         oWJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=lYbV35uTqzxof3PRLCtOB2AjQ6YCxGJB8ZrkPJEQRC8=;
-        b=Who3pe7EgDjE0348Gce+9IeUCHt3F7T1i3Lv7B6tCD0OFpbjkuahSgh2bXGhzZ+S2X
-         /veoGbTwNzhaHRvWuAMFLTsvJHj/MSoAYAi7gzhXSESaFk6Xy3XJSIKqeXwQYBHDW1qW
-         E3GKxxPcz354H5lbd7iuFxMmGgJBgxmxpLn2hY6kx2qBqQf0R4e2LGMvJsfdYifkYrUu
-         6Tpcm1DuDcUnLJVMjgHWQ157oITWyl60nftkwx9ZArveY5/z6GnS8RtXKkArDjnWeWKU
-         PnwiDQPQWplqI/nh2+g5yaAJwTG1EuCfL6i9UOrKRBGoLNkKIsKjDov5t7cWVLUolEaU
-         1vsA==
-X-Gm-Message-State: ACgBeo1eh4qLcxVHrUM03lZis7gL/2MZrt6QpV6wQG8lJq9phy8w5uKu
-        i3iKDiJwec/7y/HXaj24zfk=
-X-Google-Smtp-Source: AA6agR4iXZ/Y0o+IsybabCZyKvgkmvKDfYiI5sBk1+f8OqJf6a5D1PXbHgYj9GovKmpxzEd2RObp/A==
-X-Received: by 2002:a05:6402:1e8f:b0:440:eb20:7a05 with SMTP id f15-20020a0564021e8f00b00440eb207a05mr40220362edf.169.1662328406180;
-        Sun, 04 Sep 2022 14:53:26 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.googlemail.com with ESMTPSA id n27-20020a056402515b00b0043cf2e0ce1csm5315695edd.48.2022.09.04.14.53.25
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Rk0v3z6nbpdvu88IImrHMGbLoUUPdnPRh/3Godzt1FA=;
+        b=i5aaUAD2Pa7SMBIriAv3b9Shamc1MfJTRn4PoRD1ZK7R1mOZb/zJtJwS4PoNColooh
+         xVbJfDE/v1SotD5GJHq/mABzVAAb1P/c7iE6Qo0MGXMkAq7BMirr+3GwibP7UFAEQ5tZ
+         AxJMev6/Vcf0Z1c8HkeVRyLG2fkf+I619wHpXom3PChf3p2s1mB4pvm6lm7jywgySrV5
+         CxI9fC9XANA4Wv0APcVluoz9qCfRBRtwGcwUTT0oLM5wN1z9B0LqXCVI2/3U7UMbpw44
+         ejG7J5H8Zm7HR6kjhi0O0+aaYqbREdPmwChC93V3jerXJ5/ERM8hMieKWJwj9AA9E8FR
+         88Jg==
+X-Gm-Message-State: ACgBeo0OGzyRe02R9Ax3Gy5nibtVCmuwKk9Dr+T4JCPHLeGRbKU2wnLk
+        ba3fMaLV7ElfraG0c+UWmAY=
+X-Google-Smtp-Source: AA6agR4XTXXktwhX8R2Jt7aKfDSaTpwp94V7TsaoovzK2OVp+nUjnVV/mAujGfHfaFQB50yYS9CNbw==
+X-Received: by 2002:a05:6e02:1946:b0:2df:2988:64fd with SMTP id x6-20020a056e02194600b002df298864fdmr23635856ilu.201.1662328508016;
+        Sun, 04 Sep 2022 14:55:08 -0700 (PDT)
+Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
+        by smtp.googlemail.com with ESMTPSA id s14-20020a056602168e00b0068844be44d7sm3743269iow.6.2022.09.04.14.55.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 14:53:25 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [net PATCH] net: dsa: qca8k: fix NULL pointer dereference for of_device_get_match_data
-Date:   Sun,  4 Sep 2022 23:53:19 +0200
-Message-Id: <20220904215319.13070-1-ansuelsmth@gmail.com>
+        Sun, 04 Sep 2022 14:55:07 -0700 (PDT)
+From:   Jim Cromie <jim.cromie@gmail.com>
+Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v6 00/57] DYNDBG: opt-in class'd debug for modules, use in drm.
+Date:   Sun,  4 Sep 2022 15:54:54 -0600
+Message-Id: <20220904215454.416637-1-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,35 +63,196 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_device_get_match_data is called on priv->dev before priv->dev is
-actually set. Move of_device_get_match_data after priv->dev is correctly
-set to fix this kernel panic.
+hi Greg, Jason, DRM-folk, Steven,
 
-Fixes: 3bb0844e7bcd ("net: dsa: qca8k: cache match data to speed up access")
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/net/dsa/qca/qca8k-8xxx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If Im not too late for linux-next in this cycle, heres V6.  Diffs are minor:
 
-diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
-index 1d3e7782a71f..c181346388a4 100644
---- a/drivers/net/dsa/qca/qca8k-8xxx.c
-+++ b/drivers/net/dsa/qca/qca8k-8xxx.c
-@@ -1889,9 +1889,9 @@ qca8k_sw_probe(struct mdio_device *mdiodev)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	priv->info = of_device_get_match_data(priv->dev);
- 	priv->bus = mdiodev->bus;
- 	priv->dev = &mdiodev->dev;
-+	priv->info = of_device_get_match_data(priv->dev);
- 
- 	priv->reset_gpio = devm_gpiod_get_optional(priv->dev, "reset",
- 						   GPIOD_ASIS);
+ - rebased onto e47eb90a0a9a (tag: next-20220901, linux-next/master)
+   gets past Kconfig conflict, same for drm-tip.
+ - uint debug_level, not ulong.  to fit nouveau.
+ - -1 on param-read-back, to match prev write val.
+ - added back tracefs parts, missing from -V5
+   updated for tracing/events: Add __vstring() and __assign_vstr() helper macros
+   no decorations-lite in TP_printk, do it right later.
+ - commit-msg tweaks
+
+Theres also new RFC stuff with the potential to reduce the size of the
+__dyndbgs section by 20%.  Not ready for prime time, or linux-next,
+but I hope compelling.
+
+FEATURE DESCRIPTION
+
+dyndbg provides DECLARE_DYNAMIC_DEBUG_CLASSMAP() which allows module
+authors to declare "good" class-names, of 4 types.
+
+  DYNAMIC_DEBUG_CLASSMAP(drm_debug_classes,
+  			DD_CLASS_TYPE_DISJOINT_BITS, offset,
+                        "DRM_UT_CORE",
+                        "DRM_UT_DRIVER",
+                        "DRM_UT_KMS",
+                        "DRM_UT_PRIME",
+                        "DRM_UT_ATOMIC",
+                        "DRM_UT_VBL",
+                        "DRM_UT_STATE",
+                        "DRM_UT_LEASE",
+                        "DRM_UT_DP",
+                        "DRM_UT_DRMRES");
+
+That usage authorizes dyndbg to set class'd pr_debugs accordingly:
+
+  echo class DRM_UT_CORE +p > /proc/dynamic_debug/control
+  echo class DRM_UT_KMS  +p > /proc/dynamic_debug/control
+
+Because the DRM modules declare the same classes, they each authorize
+dyndbg with the same classnames, which allows dyndbg to effect changes
+to its selected class'd prdbgs.
+
+Opting in by using the macro effectively privatizes the limited
+63-classes available per module; only modules which share classnames
+must coordinate their use of the common range, and they can
+independently use the remaining id-space.
+
+Other dyndbg filtering pertains too, so single sites can be selected.
+
+
+4 DD_CLASS_TYPE_*_*s determine 2 behaviors:
+
+  DISJOINT	bits are independent, like drm.debug categories
+  LEVELs	3>2, turns on level-2, like nouveau debug-levels
+  NUM/BITS	numeric input, bitmap if disjoint, else 0-32.
+  NAMES		accept proper names, like DRM_UT_CORE
+
+Dyndbg provides param-callbacks which enforce those behaviors:
+
+  # DISJOINT_BITS
+  echo 0x03 > /sys/module/drm/parameters/debug
+
+  # LEVEL_NUM
+  echo 3 > /sys/module/drm/nouveau/debug-mumble*
+
+  # DISJOINT_NAMES
+  echo +DRM_UT_CORE,+DRM_UT_KMS,-DRM_UT_DRIVER > /sys/module/drm/parameters/debug_categories
+
+  # LEVEL_NAMES
+  echo NV_TRACE > /sys/module/nouveau/parameters/debug-mumble*
+
+That design choice is allowed cuz verbosity is always attached to a
+(user visible) interface, and theres no reason not to put the
+implementation there (in the callback).  It also considerably
+simplifies things; ddebug_change can treat class_id's as disjoint,
+period.
+
+
+Jim Cromie (57):
+prep:
+  dyndbg: fix static_branch manipulation
+  dyndbg: fix module.dyndbg handling
+  dyndbg: show both old and new in change-info
+  dyndbg: reverse module walk in cat control
+  dyndbg: reverse module.callsite walk in cat control
+  dyndbg: use ESCAPE_SPACE for cat control
+  dyndbg: let query-modname override actual module name
+  dyndbg: add test_dynamic_debug module
+  dyndbg: drop EXPORTed dynamic_debug_exec_queries
+  dyndbg: cleanup auto vars in dynamic_debug_init
+  dyndbg: gather __dyndbg[] state into struct _ddebug_info
+
+class feature:
+  dyndbg: add class_id to pr_debug callsites
+  dyndbg: add __pr_debug_cls for testing
+  dyndbg: add DECLARE_DYNDBG_CLASSMAP macro
+  kernel/module: add __dyndbg_classes section
+  dyndbg: add ddebug_attach_module_classes
+  dyndbg: validate class FOO by checking with module
+  doc-dyndbg: describe "class CLASS_NAME" query support
+  doc-dyndbg: edit dynamic-debug-howto for brevity, audience
+  dyndbg: add drm.debug style (drm/parameters/debug) bitmap support
+  dyndbg: test DECLARE_DYNDBG_CLASSMAP, sysfs nodes
+
+drm-use-case:
+  drm_print: condense enum drm_debug_category
+  drm: POC drm on dyndbg - use in core, 2 helpers, 3 drivers.
+  drm_print: interpose drm_*dbg with forwarding macros
+  drm_print: wrap drm_*_dbg in dyndbg descriptor factory macro
+  drm-print.h: include dyndbg header
+  drm-print: add drm_dbg_driver to improve namespace symmetry
+  drm_print: refine drm_debug_enabled for jump-label
+  drm_print: prefer bare printk KERN_DEBUG on generic fn
+  drm_print: add _ddebug descriptor to drm_*dbg prototypes
+  nouveau: change nvkm_debug/trace to use dev_dbg POC
+  nouveau: adapt NV_DEBUG, NV_ATOMIC to use DRM.debug
+  nouveau: WIP add 2 LEVEL_NUM classmaps for CLI, SUBDEV
+
+dyndbg-tracefs:
+  dyndbg: add _DPRINTK_FLAGS_ENABLED
+  dyndbg: add _DPRINTK_FLAGS_TRACE
+  dyndbg: add write-events-to-tracefs code
+  dyndbg: add 2 trace-events: drm_debug, drm_devdbg
+  dyndbg: add 2 more trace-events: pr_debug, dev_dbg
+  dyndbg/drm: POC add tracebits sysfs-knob
+
+RFC-20%-data-reclaim:
+  dyndbg: abstraction macros for modname,function,filename fields
+  dyndbg: split repeating columns to new struct _ddebug_site
+  dyndbg: shrink lineno field by 2 bits
+  dyndbg: add _index,_map to struct _ddebug
+  dyndbg: extend __ddebug_add_module proto to allow packing sites
+  dyndbg: de-duplicate sites
+  dyndbg: drop site-> in add-module, more needed
+  dyndbg: demote iter->site in _init
+  dyndbg: add .gnu.linkonce slot in vmlinux.lds.h KEEPs
+  dyndbg: add structs _ddebug_hdr, _ddebug_site_hdr
+  dyndbg: count unique callsites
+  dyndbg: prevent build bugs via -DNO_DYNAMIC_DEBUG_TABLE
+  dyndbg: add DEFINE_DYNAMIC_DEBUG_TABLE, use it tacitly RFC
+  dyndbg: add/use is_dyndbg_header then set _uplink
+  dyndbg: add .gnu.linkonce. & __dyndbg* sections in module.lds.h
+  dyndbg: dynamic_debug_sites_reclaim() using free_reserved_page() WAG
+  dyndbg: work ddebug_map_site
+  dyndbg: fiddle with readback value on LEVEL_NAMES types
+
+ .../admin-guide/dynamic-debug-howto.rst       | 249 +++---
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/compressed/Makefile             |   2 +
+ arch/sparc/vdso/Makefile                      |   2 +
+ arch/x86/boot/compressed/Makefile             |   1 +
+ arch/x86/entry/vdso/Makefile                  |   3 +
+ arch/x86/purgatory/Makefile                   |   1 +
+ drivers/firmware/efi/libstub/Makefile         |   3 +-
+ drivers/gpu/drm/Kconfig                       |  12 +
+ drivers/gpu/drm/Makefile                      |   2 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  14 +
+ drivers/gpu/drm/display/drm_dp_helper.c       |  13 +
+ drivers/gpu/drm/drm_crtc_helper.c             |  13 +
+ drivers/gpu/drm/drm_print.c                   |  83 +-
+ drivers/gpu/drm/i915/i915_params.c            |  12 +
+ .../gpu/drm/nouveau/include/nvkm/core/debug.h |  16 +
+ .../drm/nouveau/include/nvkm/core/subdev.h    |  17 +-
+ drivers/gpu/drm/nouveau/nouveau_drm.c         |  20 +
+ drivers/gpu/drm/nouveau/nouveau_drv.h         |  16 +-
+ drivers/gpu/drm/nouveau/nvkm/core/subdev.c    |  23 +
+ include/asm-generic/module.lds.h              |  12 +-
+ include/asm-generic/vmlinux.lds.h             |  10 +
+ include/drm/drm_print.h                       |  85 +-
+ include/linux/dynamic_debug.h                 | 286 ++++++-
+ include/trace/events/drm.h                    |  54 ++
+ include/trace/events/dyndbg.h                 |  73 ++
+ kernel/module/internal.h                      |   4 +-
+ kernel/module/main.c                          |  22 +-
+ lib/Kconfig.debug                             |  10 +
+ lib/Makefile                                  |   1 +
+ lib/dynamic_debug.c                           | 792 +++++++++++++++---
+ lib/test_dynamic_debug.c                      | 165 ++++
+ 32 files changed, 1680 insertions(+), 338 deletions(-)
+ create mode 100644 include/trace/events/drm.h
+ create mode 100644 include/trace/events/dyndbg.h
+ create mode 100644 lib/test_dynamic_debug.c
+
 -- 
 2.37.2
 

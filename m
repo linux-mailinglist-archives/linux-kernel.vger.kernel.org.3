@@ -2,126 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B025AC582
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 18:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EAB5AC584
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 18:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiIDQxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 12:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
+        id S234523AbiIDQ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 12:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiIDQxg (ORCPT
+        with ESMTP id S229748AbiIDQ4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 12:53:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CAD220C8;
-        Sun,  4 Sep 2022 09:53:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87C7260F77;
-        Sun,  4 Sep 2022 16:53:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D01DC433B5;
-        Sun,  4 Sep 2022 16:53:34 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hLM4cvDc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1662310412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=YXNcAp0liMqxmL43DGQLzGIaJVjmZ/8F5Gi+IgHDjE0=;
-        b=hLM4cvDcwMMrumPGPOpyNhk18viVfOQeL1tnv6RewDiAP+Vl5Y4jRfRJ/S7R72v0aJ0Jly
-        lkrVUANi/E2IqaJKJoJ0Q0k544veLxrapXSmPQS3rbH/WqpILwrloypkMkt+ShKLCzL7zp
-        Ed1etqpCAM+7lP4uM+VibNOMo92xDlQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 530cf8f3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 4 Sep 2022 16:53:32 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, ardb@kernel.org, bp@alien8.de
-Cc:     "Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] efi: x86: Wipe setup_data on pure EFI boot
-Date:   Sun,  4 Sep 2022 18:53:21 +0200
-Message-Id: <20220904165321.1140894-1-Jason@zx2c4.com>
+        Sun, 4 Sep 2022 12:56:15 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EAC30565;
+        Sun,  4 Sep 2022 09:56:11 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id b9so5090321qka.2;
+        Sun, 04 Sep 2022 09:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=DweC0xGYEQiKuhEU2wfv4BL8C5hOa+ko8JEuIgGa79M=;
+        b=LRaoVWgJT9RdH4EGC2nrqbah10twpMB/cBIeHGVoBfRxMiT1wWvOtp0qxDtN0MIIuJ
+         zdjvxiXfzblBcqx3wgdHbU1iBqlz+0n6fqIH27IAWlfiCaiwBRw7zISg8nr6y/iAEV1q
+         GjM5n3Vv09/1NMPvHHKsfh4lM9dZL9x5+QKIwgWWrHrXX22M4LFtnbcfQFSMluKpUkv1
+         MFKJcFDYIZv6CtqWtP53fSqyfDWvhY+L33nJnuNw+qUmEY7yxcs3V6mz0E3ciWdDI3Ci
+         voNOS99El6qtL2lqqhT1OGkrMIxDLw9m7gss6fsTRHptHm1U1RYVyQu58DzgALF3Qq9q
+         awdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date;
+        bh=DweC0xGYEQiKuhEU2wfv4BL8C5hOa+ko8JEuIgGa79M=;
+        b=ufzbYOfSU/qvRmT7xBsX8+zxP6VDTTWwf+dnEKM48JU9p3EQ94dvzdZaS+z22djhzA
+         ZjYdIBHQvSCsE/oozwgLO+GpouRuFxMBihs2n+YbEi2ZXk8Ve9arqbyqF7mf82QmUMAn
+         5P41Y26SrZTFz8RSUo1v+dJk60Ilda3p+DeTTJsJwdbzvr/qIYQg9n58JLSTD520O0Ad
+         PUnXQF7dpovEdnqotARkfKgYKrRFMUA4K0MB9JmmJtB2k+z2jH13bnDuxwzT6DNozzfR
+         qZtQcpxve9ohbAcq9nNjOOcuAujm3hl3vOlPqk0JRQ5javbgC07AANxK7Gwop8lceCYJ
+         qx2Q==
+X-Gm-Message-State: ACgBeo3kSgxAYsgKazrT3BvhdcLnUCRPSeYciQhZjVWoM2g1lYnLRG33
+        YoIdCmgr1DCjbWmCQ2mCdw==
+X-Google-Smtp-Source: AA6agR7ugl73vbBqSVIq3LKbH4H4rLGSvzd8kxJ/CT2BLQss06uJv73Yx8FnWndMyA3intEFDR1fdg==
+X-Received: by 2002:a05:620a:46a8:b0:6bb:29e6:f315 with SMTP id bq40-20020a05620a46a800b006bb29e6f315mr30165251qkb.714.1662310570611;
+        Sun, 04 Sep 2022 09:56:10 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id 6-20020a370c06000000b006bbbd4ce6e1sm5912645qkm.35.2022.09.04.09.56.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Sep 2022 09:56:10 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:e25f:adca:563b:692])
+        by serve.minyard.net (Postfix) with ESMTPSA id E16B01828A0;
+        Sun,  4 Sep 2022 16:56:08 +0000 (UTC)
+Date:   Sun, 4 Sep 2022 11:56:07 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Andrew Jeffery <andrew@aj.id.au>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net
+Subject: Re: [PATCH] ipmi: kcs_bmc: Avoid wasting some memory.
+Message-ID: <YxTYp6Hhmqdou3S9@minyard.net>
+Reply-To: minyard@acm.org
+References: <5d69a2d0939ce3917c856b36ef1e41b579081be6.1662298496.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d69a2d0939ce3917c856b36ef1e41b579081be6.1662298496.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+Adding Andrew, the author of this code.
 
-When booting the x86 kernel via EFI using the LoadImage/StartImage boot
-services [as opposed to the deprecated EFI handover protocol], the setup
-header is taken from the image directly, and given that EFI's LoadImage
-has no Linux/x86 specific knowledge regarding struct bootparams or
-struct setup_header, any absolute addresses in the setup header must
-originate from the file and not from a prior loading stage.
+On Sun, Sep 04, 2022 at 03:35:16PM +0200, Christophe JAILLET wrote:
+> KCS_MSG_BUFSIZ is 1000.
+> 
+> When using devm_kmalloc(), there is a small memory overhead and, on most
+> systems, this leads to 40 bytes of extra memory allocation.
+> So 1040 bytes are expected to be allocated.
+> 
+> The memory allocator works with fixed size hunks of memory. In this case,
+> it will require 2048 bytes of memory because more than 1024 bytes are
+> required.
+> 
+> So, when requesting 3 x 1000 bytes, it ends up to 2048 x 3.
+> 
+> In order to avoid wasting 3ko of memory, allocate buffers all at once.
+> 3000+40 bytes will be required and 4ko allocated. This still wastes 1ko,
+> but it is already better.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Looking at this code, I wonder why priv->miscdev.name is not freed in
+> kcs_bmc_ipmi_remove_device()?
 
-Since we cannot generally predict where LoadImage() decides to load an
-image (*), such absolute addresses must be treated as suspect: even if a
-prior boot stage intended to make them point somewhere inside the
-[signed] image, there is no way to validate that, and if they point at
-an arbitrary location in memory, the setup_data nodes will not be
-covered by any signatures or TPM measurements either, and could be made
-to contain an arbitrary sequence of SETUP_xxx nodes, which could
-interfere quite badly with the early x86 boot sequence.
+If I understand correctly, none of these need to be freed.  devm
+allocated memory is freed automatically when the device is removed.
 
-(*) Note that, while LoadImage() does take a buffer/size tuple in
-addition to a device path, which can be used to provide the image
-contents directly, it will re-allocate such images, as the memory
-footprint of an image is generally larger than the PE/COFF file
-representation.
+> 
+> If this make sense, this also mean that KCS_MSG_BUFSIZ can be increased at
+> no cost.
+> Or it could be slightly reduce to around 1024-40-1 bytes to keep the logic
+> which is in place.
+> 
+> Another solution would be to use just kmalloc and add a
+> devm_add_action_or_reset() call and a function that frees the memory.
+> If it make sense, KCS_MSG_BUFSIZ could be increased to 1024 and we would
+> allocate just a little above 3x1024 bytes.
+> ---
+>  drivers/char/ipmi/kcs_bmc_cdev_ipmi.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
+> index 486834a962c3..15a4a39a6478 100644
+> --- a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
+> +++ b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
+> @@ -485,14 +485,15 @@ static int kcs_bmc_ipmi_add_device(struct kcs_bmc_device *kcs_bmc)
+>  
+>  	priv->client.dev = kcs_bmc;
+>  	priv->client.ops = &kcs_bmc_ipmi_client_ops;
+> -	priv->data_in = devm_kmalloc(kcs_bmc->dev, KCS_MSG_BUFSIZ, GFP_KERNEL);
+> -	priv->data_out = devm_kmalloc(kcs_bmc->dev, KCS_MSG_BUFSIZ, GFP_KERNEL);
+> -	priv->kbuffer = devm_kmalloc(kcs_bmc->dev, KCS_MSG_BUFSIZ, GFP_KERNEL);
+> +	/* Allocate buffers all at once */
+> +	priv->data_in = devm_kmalloc(kcs_bmc->dev, KCS_MSG_BUFSIZ * 3, GFP_KERNEL);
+> +	priv->data_out = priv->data_in + KCS_MSG_BUFSIZ;
+> +	priv->kbuffer  = priv->data_in + KCS_MSG_BUFSIZ * 2;
 
-Next, in order to allow hypervisors to still use setup_data in scenarios
-where it may be useful, bump the x86 boot protocol version, so that
-hypervisors, e.g. QEMU in the linked patch, can do the right thing
-automatically depending on whether it is safe.
+You are doing arithmetic on a possibly NULL pointer.  It's generally ok,
+but kind of frowned upon.
 
-Link: https://lore.kernel.org/qemu-devel/20220904165058.1140503-1-Jason@zx2c4.com/
-Coauthored-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/x86/boot/header.S                  | 2 +-
- drivers/firmware/efi/libstub/x86-stub.c | 7 +++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+Andew, what do you think?  I guess it saves a little memory.
 
-diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
-index f912d7770130..e4e2d6e33924 100644
---- a/arch/x86/boot/header.S
-+++ b/arch/x86/boot/header.S
-@@ -307,7 +307,7 @@ _start:
- 	# Part 2 of the header, from the old setup.S
- 
- 		.ascii	"HdrS"		# header signature
--		.word	0x020f		# header version number (>= 0x0105)
-+		.word	0x0210		# header version number (>= 0x0105)
- 					# or else old loadlin-1.5 will fail)
- 		.globl realmode_swtch
- realmode_swtch:	.word	0, 0		# default_switch, SETUPSEG
-diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-index 05ae8bcc9d67..9780f32a9f24 100644
---- a/drivers/firmware/efi/libstub/x86-stub.c
-+++ b/drivers/firmware/efi/libstub/x86-stub.c
-@@ -517,6 +517,13 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
- 	hdr->ramdisk_image = 0;
- 	hdr->ramdisk_size = 0;
- 
-+	/*
-+	 * Disregard any setup data that was provided by the bootloader:
-+	 * setup_data could be pointing anywhere, and we have no way of
-+	 * authenticating or validating the payload.
-+	 */
-+	hdr->setup_data = 0;
-+
- 	efi_stub_entry(handle, sys_table_arg, boot_params);
- 	/* not reached */
- 
--- 
-2.37.3
+-Corey
 
+>  
+>  	priv->miscdev.minor = MISC_DYNAMIC_MINOR;
+>  	priv->miscdev.name = devm_kasprintf(kcs_bmc->dev, GFP_KERNEL, "%s%u", DEVICE_NAME,
+>  					   kcs_bmc->channel);
+> -	if (!priv->data_in || !priv->data_out || !priv->kbuffer || !priv->miscdev.name)
+> +	if (!priv->data_in || !priv->miscdev.name)
+>  		return -EINVAL;
+>  
+>  	priv->miscdev.fops = &kcs_bmc_ipmi_fops;
+> @@ -531,8 +532,6 @@ static int kcs_bmc_ipmi_remove_device(struct kcs_bmc_device *kcs_bmc)
+>  
+>  	misc_deregister(&priv->miscdev);
+>  	kcs_bmc_disable_device(priv->client.dev, &priv->client);
+> -	devm_kfree(kcs_bmc->dev, priv->kbuffer);
+> -	devm_kfree(kcs_bmc->dev, priv->data_out);
+>  	devm_kfree(kcs_bmc->dev, priv->data_in);
+>  	devm_kfree(kcs_bmc->dev, priv);
+>  
+> -- 
+> 2.34.1
+> 

@@ -2,147 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E4F5AC62C
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 21:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897635AC62E
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 21:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234959AbiIDTcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 15:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S235021AbiIDTc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 15:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234318AbiIDTcL (ORCPT
+        with ESMTP id S234318AbiIDTc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 15:32:11 -0400
-Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29DAE2F002
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 12:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=L6daq
-        wHVQLkLiNfq8TDmxWwToy3Ef+On7jVkCO/wFL8=; b=JhMkxVCpy5sMBx4wkvAPw
-        1i9+1KpKAhB/7BIKyoWfnEdXZiFkxhNobCYp8drXdmVJZ+mUVpxgMoY9x7JeTuDe
-        PqdOL5sb5/uqX1TKNASl9opU0jQLDKtKsT65dYnUWV97dSv43eliBmXyEdOvQHMi
-        dKSViBRDy2b9N5YE2pX4EI=
-Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
-        by smtp12 (Coremail) with SMTP id EMCowADHKqkX_RRjiCK7Jg--.38130S4;
-        Mon, 05 Sep 2022 03:31:48 +0800 (CST)
-From:   Jingyu Wang <jingyuwang_vip@163.com>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        Hawking.Zhang@amd.com, ray.huang@amd.com, Jack.Xiao@amd.com,
-        guchun.chen@amd.com, Likun.Gao@amd.com, en.brown@intel.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jingyu Wang <jingyuwang_vip@163.com>
-Subject: [PATCH] drm/amdgpu: cleanup coding style in amdgpu_fence.c
-Date:   Mon,  5 Sep 2022 03:31:32 +0800
-Message-Id: <20220904193132.15446-1-jingyuwang_vip@163.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 4 Sep 2022 15:32:57 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A32E2F017
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 12:32:55 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id by6so7282679ljb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 12:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=v94704O0TujNsYv17nMnBtu+OH84/eWQsf7ETYu5jHU=;
+        b=raPVkER/pA/imnNF3kT8eAcWerRaKCjrqBh/wET6ENZryx2c7P8UT3SIFG8eB/Qlq0
+         tE/YDV+OC6gtDr5gXzoGgkMLmAbYi6Qh4HclWcsAZ06fe1mpQwlQLrlOEiI1qQ9Dyy0H
+         3GYilxmuI4B4dkhfvCffFepqRjpB0jvtGAq9qnbKgpeV/M21yrwAqADL7HO9zkmnnxnm
+         xNfpjh/E0ooeAQJWMS0K7sZbigbdYL0hWMkZoRqOTqjU+bUXWIMUCtNocmCRcW+VXF+y
+         gNCsQ381EOG6ADOir1Pwr7PkgAKuK7G1iKTHWeyOT1qTcgNJaMHVMNyC+WQkqPWIi2O7
+         XQ9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=v94704O0TujNsYv17nMnBtu+OH84/eWQsf7ETYu5jHU=;
+        b=s1rs1xEWoMo3/0MGMOVdpWFYmd2fR+1ZTHR361sbe1zu7x8Jph3wysmbrYx8x0S0Wx
+         UAiJ4JB93Wav6rbv7kn3UfqoQkvJrC21Fwlbrw0DsPe3HQjr5RvHigBGPk7cLYV33Jxw
+         NlB0u0XWKQBjqCqD/lKOIIo9WnvGZKeQtHGuXdg+EaB9QbO5O4mozlr3uWj8vlHWl2c4
+         OP1ewN7vxBgavmRJqSI0wzFXPE0o6diQXU8aDjJfWkiL+MPRn/AxCjWkJeijL7EqRgSV
+         nylSZOoGdvRMRszxEJYmdTcLAIaM9KbTiyns51Kzr8K6iBz8s7wt0ynkQ9rVEjHhcR+z
+         vHtg==
+X-Gm-Message-State: ACgBeo1HSrT+jKkY5dS/8KFGA7tbb8fKOWETrWw63dBuvRYfyTXCDVtO
+        rKcaC96QjZ+jxYchW8Shx5cCdQ==
+X-Google-Smtp-Source: AA6agR5REWTNOc8xN6hgbVoCILU5d1wRngjWNHHWSEPfiwS7FtzGVXNiGV9cwF3kbGOmN7JE7NzJSg==
+X-Received: by 2002:a2e:7207:0:b0:269:1f9:6365 with SMTP id n7-20020a2e7207000000b0026901f96365mr2851875ljc.201.1662319974001;
+        Sun, 04 Sep 2022 12:32:54 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id x12-20020ac259cc000000b0049497a2b288sm996454lfn.58.2022.09.04.12.32.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Sep 2022 12:32:53 -0700 (PDT)
+Message-ID: <3ff2773d-92e0-d52d-4350-d63a40a70f07@linaro.org>
+Date:   Sun, 4 Sep 2022 22:32:51 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EMCowADHKqkX_RRjiCK7Jg--.38130S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCr17KFyDAr15tr17AFy5Jwb_yoW5CFW7pF
-        4fK345KrWDZF1UWrW8AF1vvFnxKw1IqF1IgrW7A34Sgwn8CF15K3WIyrWjqryDCF4kuF4a
-        kFW2v3y5ZF1jqF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEs2-OUUUUU=
-X-Originating-IP: [1.203.67.201]
-X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/1tbisgRyF1UMWQSWNAAAs1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RESEND PATCH] arm64: defconfig: enable newer Qualcomm SoC sound
+ drivers
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        arm@kernel.org, soc@kernel.org, Olof Johansson <olof@lixom.net>
+References: <20220831141218.516100-1-krzysztof.kozlowski@linaro.org>
+ <81ed8e35-fa70-4b0e-9601-131c9d0c46d4@www.fastmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <81ed8e35-fa70-4b0e-9601-131c9d0c46d4@www.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix everything checkpatch.pl complained about in amdgpu_fence.c
+On 02/09/2022 12:34, Arnd Bergmann wrote:
+> On Wed, Aug 31, 2022, at 4:12 PM, Krzysztof Kozlowski wrote:
+>> Enable sound support (machine drivers) for Qualcomm SC7180 and SC7280
+>> SoCs.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>
+>> Resending because I missed ARM SoC maintainers and Bjorn.
+> 
+> No objections to the patch, but I'm unsure what I'm supposed to
+> do with it. Is this for Bjorn or me to pick up? 
 
-Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+It seems usually Bjorn picks his parts of defconfig changes, so I guess
+this can go indeed via Bjorn.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-index 8adeb7469f1e..ae9daf653ad3 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: MIT
- /*
-  * Copyright 2009 Jerome Glisse.
-  * All Rights Reserved.
-@@ -42,7 +43,6 @@
- #include "amdgpu_reset.h"
- 
- /*
-- * Fences
-  * Fences mark an event in the GPUs pipeline and are used
-  * for GPU/CPU synchronization.  When the fence is written,
-  * it is expected that all buffers associated with that fence
-@@ -139,7 +139,7 @@ static u32 amdgpu_fence_read(struct amdgpu_ring *ring)
-  * Returns 0 on success, -ENOMEM on failure.
-  */
- int amdgpu_fence_emit(struct amdgpu_ring *ring, struct dma_fence **f, struct amdgpu_job *job,
--		      unsigned flags)
-+		      unsigned int flags)
- {
- 	struct amdgpu_device *adev = ring->adev;
- 	struct dma_fence *fence;
-@@ -173,8 +173,7 @@ int amdgpu_fence_emit(struct amdgpu_ring *ring, struct dma_fence **f, struct amd
- 				       adev->fence_context + ring->idx, seq);
- 			/* Against remove in amdgpu_job_{free, free_cb} */
- 			dma_fence_get(fence);
--		}
--		else
-+		} else
- 			dma_fence_init(fence, &amdgpu_fence_ops,
- 				       &ring->fence_drv.lock,
- 				       adev->fence_context + ring->idx, seq);
-@@ -393,7 +392,7 @@ signed long amdgpu_fence_wait_polling(struct amdgpu_ring *ring,
-  * Returns the number of emitted fences on the ring.  Used by the
-  * dynpm code to ring track activity.
-  */
--unsigned amdgpu_fence_count_emitted(struct amdgpu_ring *ring)
-+unsigned int amdgpu_fence_count_emitted(struct amdgpu_ring *ring)
- {
- 	uint64_t emitted;
- 
-@@ -422,7 +421,7 @@ unsigned amdgpu_fence_count_emitted(struct amdgpu_ring *ring)
-  */
- int amdgpu_fence_driver_start_ring(struct amdgpu_ring *ring,
- 				   struct amdgpu_irq_src *irq_src,
--				   unsigned irq_type)
-+				   unsigned int irq_type)
- {
- 	struct amdgpu_device *adev = ring->adev;
- 	uint64_t index;
-@@ -594,6 +593,7 @@ void amdgpu_fence_driver_hw_init(struct amdgpu_device *adev)
- 
- 	for (i = 0; i < AMDGPU_MAX_RINGS; i++) {
- 		struct amdgpu_ring *ring = adev->rings[i];
-+
- 		if (!ring || !ring->fence_drv.initialized)
- 			continue;
- 
-@@ -772,6 +772,7 @@ static int amdgpu_debugfs_fence_info_show(struct seq_file *m, void *unused)
- 
- 	for (i = 0; i < AMDGPU_MAX_RINGS; ++i) {
- 		struct amdgpu_ring *ring = adev->rings[i];
-+
- 		if (!ring || !ring->fence_drv.initialized)
- 			continue;
- 
-@@ -845,6 +846,7 @@ static void amdgpu_debugfs_reset_work(struct work_struct *work)
- 						  reset_work);
- 
- 	struct amdgpu_reset_context reset_context;
-+
- 	memset(&reset_context, 0, sizeof(reset_context));
- 
- 	reset_context.method = AMD_RESET_METHOD_NONE;
+> Do we need it
+> as a 6.0 fix or should this wait for 6.1?
 
-base-commit: e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
-prerequisite-patch-id: f039528bc88876d6e0f64e843da089e85f6d3f58
--- 
-2.34.1
+Can wait for v6.1.
 
+
+Best regards,
+Krzysztof

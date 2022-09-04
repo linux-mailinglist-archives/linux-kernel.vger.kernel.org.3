@@ -2,42 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7303C5AC5B3
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 19:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D735AC5BB
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 19:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235291AbiIDRWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 13:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S235232AbiIDRYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 13:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235160AbiIDRWd (ORCPT
+        with ESMTP id S234039AbiIDRYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 13:22:33 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7F732DA9;
-        Sun,  4 Sep 2022 10:22:31 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oUtKD-0000tW-Cv; Sun, 04 Sep 2022 19:22:25 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-Cc:     Heiko Stuebner <heiko@sntech.de>, phone-devel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 0/1] Add support for the Pine64 PinePhone Pro phone
-Date:   Sun,  4 Sep 2022 19:22:21 +0200
-Message-Id: <166231195330.2423948.5394487959576836993.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220829050040.17330-1-tom@tom-fitzhenry.me.uk>
-References: <20220829050040.17330-1-tom@tom-fitzhenry.me.uk>
+        Sun, 4 Sep 2022 13:24:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79C1D134;
+        Sun,  4 Sep 2022 10:24:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A57E9B80E28;
+        Sun,  4 Sep 2022 17:24:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABAAC433D6;
+        Sun,  4 Sep 2022 17:24:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662312266;
+        bh=KM+tXy5ruBifHaiU7QANp5OKx2GDwpl5tXPjBlBNfbo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r8p4PsGm4uykiEURez0U+dWyYh2ygeMSQ7O/sC4O/v6wtkiYYynmmkCqnOZv4D8ne
+         K35s6+tZJODK+lQOUfLkl/b7ADvl38+jBRCiLqLNI9F7y/g8roYN4e0LoW8q4+cpR3
+         I/JDjhzjV06bM1n92/iO2c04Nf7qgzSID4ysJh5SXqit1L+OZ/cmwlaDbj94TghbHg
+         AC6Ut0qct/47774GEu3Hj73/HmkpEwjMqzWbSIAP6IoBoXhnOM5aimRcm9CKgMEsDw
+         YBaRqM28bD2dNn4nD2Z+HCWUXqmjwotWKNZcHb8tHYl6AixtcFTmjD97kyyMmwQlQX
+         8UhMY4RbCJJyg==
+Date:   Sun, 4 Sep 2022 22:54:20 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Swati Agarwal <swati.agarwal@xilinx.com>
+Cc:     lars@metafoo.de, adrianml@alumnos.upm.es, libaokun1@huawei.com,
+        marex@denx.de, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        harini.katakam@xilinx.com, radhey.shyam.pandey@xilinx.com,
+        michal.simek@xilinx.com, swati.agarwal@amd.com,
+        harini.katakam@amd.com, radhey.shyam.pandey@amd.com,
+        michal.simek@amd.com
+Subject: Re: [PATCH v2 0/3]  dmaengine : xilinx_dma: Fix error handling paths
+Message-ID: <YxTfRPgOItCAiyui@matsya>
+References: <20220817061125.4720-1-swati.agarwal@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817061125.4720-1-swati.agarwal@xilinx.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,30 +59,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Aug 2022 15:00:39 +1000, Tom Fitzhenry wrote:
-> PinePhone Pro is a RK3399 based phone produced by Pine64.
-> 
-> Add a basic DTS for it. This is a working base that will allow myself and
-> others to add more nodes.
-> 
-> Relies on "dt-bindings: arm: rockchip: Add PinePhone Pro bindings"[0].
-> 
-> [...]
+On 17-08-22, 11:41, Swati Agarwal wrote:
+> Fix Unchecked return value coverity warning.
+> Fix probe error cleanup.
 
-Applied, thanks!
+Applied, thanks
 
-[1/1] arm64: dts: rockchip: Add initial support for Pine64 PinePhone Pro
-      commit: 78a21c7d59520e72ebea667fe8745a4371d9fe86
-
-
-Why was the dt-binding addition missing?
-I've pulled the binding from v3 now.
-
-While it is true that you should not resend patches just to add Acks,
-when re-sending a whole series that includes other changes it's still
-necessary to keep all patches together ;-)
-
-
-Best regards,
 -- 
-Heiko Stuebner <heiko@sntech.de>
+~Vinod

@@ -2,107 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C633E5AC37B
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 10:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9965AC37E
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 10:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbiIDIsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 04:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S232800AbiIDIv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 04:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiIDIs2 (ORCPT
+        with ESMTP id S229537AbiIDIvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 04:48:28 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3F043E48;
-        Sun,  4 Sep 2022 01:48:27 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1273a47cdb6so1323742fac.13;
-        Sun, 04 Sep 2022 01:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=dGmayfXc9w/lfNLKggje5mvDJdeDpyPvfT6beacitTE=;
-        b=pJAs11c3l33RJL77Wqdaa+JvCT/GqfBuF0ZJYsoPdRjL8ctZFCJLK39J532rfKN2yW
-         uwW0eDK756uyD7Ys+hMocd0ymJF9wUJHkPUdp0bEP65c5EtKuCSHP0rzWrEU4OG2a1Qx
-         7qHU1t93qSVusyRqDooXhIolTJ26zV+pQ1rtpQ/TPXcJzsqZmOLnLvexSm4oVLvjCFae
-         /8OJ/9/AvQer9XWK49LjuAzrWP8+R7FBN2d7zrz1eXKRX8hGkYlSvyT9acg5wemX9eHd
-         hbUdJFu8ZJ16mwbx+fomesul5MOmFTjR9SqOAuVyfF+FcRCbBiwIs/twjBUS4KvayANi
-         Bcbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=dGmayfXc9w/lfNLKggje5mvDJdeDpyPvfT6beacitTE=;
-        b=228pq/DlEob+3Rr6PR9jq2VOmO46SeuaN3qvRkDcUzI9MHlKr6hBopDC6UYiNU7XcB
-         NtcgiMcCkNTLOHAeWDNHs8CVdv3x3FMWylo1xWkMtyOfGZmVWFxANuj+dSEx9j8HCiB4
-         oE0v9dnNB7CP+VyGhJyHbPEGZyY5yRZ6U6ytmR9wMDUowVJnkhUB33tbbg0Q1C0lT4DO
-         /cDh8aDqvjE21/xd7VK8R6HtQ0HZ/d3cFaDQjT7HpOb7B2qsGOLOcPAzhQbvzbBCbKM3
-         0Rk188Qt/SJ1y0a4G4RiEB57PwGXdMF4p0D8IcTCUWCh2/3v0iBhH/RdYuTLfGRTE3Kr
-         Oacw==
-X-Gm-Message-State: ACgBeo1uOPUfiMRkCsEct4STNV35tjgukx9AJRa4oltEJjE3RFHmtZxs
-        WYg0EV+Q/zufP3Owjy7HzlP7Vli5ow0T/vyBeks=
-X-Google-Smtp-Source: AA6agR5HItE5b9HOyknTNTcGei9/A5ATki8diaYMjR6pMorNY/bbPVSjJTN4QneULu0B2AH9AsK71cyWLXQUgibnKFg=
-X-Received: by 2002:a05:6870:3486:b0:10e:62b:159a with SMTP id
- n6-20020a056870348600b0010e062b159amr6536755oah.254.1662281305739; Sun, 04
- Sep 2022 01:48:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220822141110.17199-1-91tuocao@gmail.com> <YwORy3QMbRUSlBZE@kroah.com>
- <CAEVeK2AiYFK9eopn1Uzp+osA-j22e1KbfUohJ+hRVmLNsq0gpQ@mail.gmail.com> <Yw316/3zuIXvm/Ty@kroah.com>
-In-Reply-To: <Yw316/3zuIXvm/Ty@kroah.com>
-From:   tuo cao <91tuocao@gmail.com>
-Date:   Sun, 4 Sep 2022 16:48:13 +0800
-Message-ID: <CAEVeK2DfcvguQ__GroRY+erU+-4=ZKvPBf1V2poRxUF77G60OQ@mail.gmail.com>
-Subject: Re: [RESEND] serial: 8250_bcm7271: move spin_lock_irqsave to
- spin_lock in interrupt handler
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     alcooperx@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 4 Sep 2022 04:51:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3887342AE0;
+        Sun,  4 Sep 2022 01:51:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B609E33D2A;
+        Sun,  4 Sep 2022 08:51:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662281510; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZfLPDguBI9CiWephvIX7oB8XNxpHf0tcDpgyGtWMOO8=;
+        b=MnBszdkUlbc01MFLgeOmRDqSFv+zsjGm1jzIJm8GGeNHcju3M/EdfATpvElN14AUteA9D8
+        /4XD7T/2SJ1BN0S6PeFRtZ6LekD2si/qXpenApUrU92jIdZuOyAGuQ+0yJU37pcz43La1G
+        8GnBzNkGUjkGtIbhXBALwUENE1p1U3Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662281510;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZfLPDguBI9CiWephvIX7oB8XNxpHf0tcDpgyGtWMOO8=;
+        b=fNgT/DpSJ4Cneme8c7OJb1YvEEeGVQkBUlPkFoKSpKRgi9zywKsV4nkWrHmEwoYQWb6bl7
+        rUnUrsZIB8WaR9CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 90E241348C;
+        Sun,  4 Sep 2022 08:51:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mYL2ISZnFGMKdQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 04 Sep 2022 08:51:50 +0000
+Date:   Sun, 04 Sep 2022 10:51:49 +0200
+Message-ID: <875yi3froa.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        linux-sound@vger.kernel.org
+Subject: Re: [BUG] commit a8d302a0b77057568350fe0123e639d02dba0745 cause IO_PAGE_FAULT and a lot of errors
+In-Reply-To: <87ilm3vbzq.wl-tiwai@suse.de>
+References: <CABXGCsO+kB2t5QyHY-rUe76npr1m0-5JOtt8g8SiHUo34ur7Ww@mail.gmail.com>
+        <87ilm3vbzq.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B48=E6=9C=8830=E6=
-=97=A5=E5=91=A8=E4=BA=8C 19:35=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Sat, Aug 27, 2022 at 05:42:19PM +0800, tuo cao wrote:
-> > No, whether it's spin_lock_irqsave() or spin_lock(), the security is
-> > the same. Since this commit:e58aa3d2d0cc01ad8d6f7f640a0670433f794922,
-> > interrupt nesting is disabled, which means interrupts has disabled in
-> > the interrupt handlers. So, it is unnecessary to call
-> > spin_lock_irqsave in a interrupt handler. And it takes less time
-> > obviously to use spin_lock()=EF=BC=8Cso I think this change is needed.
->
-> I have no context at all here, please never top-post :(
->
-Sorry for causing you trouble. It should be OK this time.
+On Sun, 04 Sep 2022 09:23:53 +0200,
+Takashi Iwai wrote:
+> 
+> On Sat, 03 Sep 2022 20:04:19 +0200,
+> Mikhail Gavrilov wrote:
+> > 
+> > Hi, I am bisecting issue that cause errors:
+> > [   57.710235] snd_hda_intel 0000:03:00.1: spurious response
+> > 0xeb0cce6a:0x8b612b0d, rp = 1, wp = 1
+> > [   57.710240] ------------[ cut here ]------------
+> > [   57.710241] BUG?
+> > [   57.710257] amd_iommu_report_page_fault: 216 callbacks suppressed
+> > [   57.710260] snd_hda_intel 0000:03:00.1: AMD-Vi: Event logged
+> > [IO_PAGE_FAULT domain=0x000e address=0x152848808 flags=0x0020]
+> 
+> Grr...  again hitting an issue with AMD IOMMU...
+> 
+> > and bisect said this commit causes it:
+> > a8d302a0b77057568350fe0123e639d02dba0745 is the first bad commit
+> > commit a8d302a0b77057568350fe0123e639d02dba0745
+> > Author: Takashi Iwai <tiwai@suse.de>
+> > Date:   Sun Aug 21 17:59:11 2022 +0200
+> > 
+> >     ALSA: memalloc: Revive x86-specific WC page allocations again
+> 
+> OK, could you try the patch below?
+> I wonder whether this is specific to CORB/RIRB mapping or generically
+> about the transfer buffers.
 
-> And have you measured the time difference?  Is it a real thing?
->
-Yes, sir. I have measured it, it is a read thing. The test code and
-log have been put on Github, please check:
-https://github.com/tuocao1991/api_test
+Also, please check the patch below instead of the previous one, too.
+If this one works, it'd be a better choice.
 
-> > Finally, I'm sorry I lacked real hardware to verify it and can't
-> > provide changelog text.
->
-> Try to never do changes for drivers for functionality like this where
-> you do not have the hardware to test for, until you get a lot more
-> experience.
->
-I got it, thanks
 
-> good luck!
->
-> greg k-h
+Takashi
 
-Best Regards!
+---
+diff --git a/sound/hda/hdac_controller.c b/sound/hda/hdac_controller.c
+index 9a60bfdb39ba..f00a4819676b 100644
+--- a/sound/hda/hdac_controller.c
++++ b/sound/hda/hdac_controller.c
+@@ -46,7 +46,7 @@ void snd_hdac_bus_init_cmd_io(struct hdac_bus *bus)
+ 
+ 	spin_lock_irq(&bus->reg_lock);
+ 	/* CORB set up */
+-	bus->corb.addr = bus->rb.addr;
++	bus->corb.addr = snd_sgbuf_get_addr(&bus->rb, 0);
+ 	bus->corb.buf = (__le32 *)bus->rb.area;
+ 	snd_hdac_chip_writel(bus, CORBLBASE, (u32)bus->corb.addr);
+ 	snd_hdac_chip_writel(bus, CORBUBASE, upper_32_bits(bus->corb.addr));
+@@ -65,7 +65,7 @@ void snd_hdac_bus_init_cmd_io(struct hdac_bus *bus)
+ 	snd_hdac_chip_writeb(bus, CORBCTL, AZX_CORBCTL_RUN);
+ 
+ 	/* RIRB set up */
+-	bus->rirb.addr = bus->rb.addr + 2048;
++	bus->rirb.addr = snd_sgbuf_get_addr(&bus->rb, 2048);
+ 	bus->rirb.buf = (__le32 *)(bus->rb.area + 2048);
+ 	bus->rirb.wp = bus->rirb.rp = 0;
+ 	memset(bus->rirb.cmds, 0, sizeof(bus->rirb.cmds));
+@@ -504,6 +504,8 @@ static void azx_int_clear(struct hdac_bus *bus)
+  */
+ bool snd_hdac_bus_init_chip(struct hdac_bus *bus, bool full_reset)
+ {
++	dma_addr_t addr;
++
+ 	if (bus->chip_init)
+ 		return false;
+ 
+@@ -520,9 +522,10 @@ bool snd_hdac_bus_init_chip(struct hdac_bus *bus, bool full_reset)
+ 	azx_int_enable(bus);
+ 
+ 	/* program the position buffer */
+-	if (bus->use_posbuf && bus->posbuf.addr) {
+-		snd_hdac_chip_writel(bus, DPLBASE, (u32)bus->posbuf.addr);
+-		snd_hdac_chip_writel(bus, DPUBASE, upper_32_bits(bus->posbuf.addr));
++	addr = snd_sgbuf_get_addr(&bus->posbuf, 0);
++	if (bus->use_posbuf && addr) {
++		snd_hdac_chip_writel(bus, DPLBASE, (u32)addr);
++		snd_hdac_chip_writel(bus, DPUBASE, upper_32_bits(addr));
+ 	}
+ 
+ 	bus->chip_init = true;
+@@ -548,7 +551,7 @@ void snd_hdac_bus_stop_chip(struct hdac_bus *bus)
+ 	snd_hdac_bus_stop_cmd_io(bus);
+ 
+ 	/* disable position buffer */
+-	if (bus->posbuf.addr) {
++	if (snd_sgbuf_get_addr(&bus->posbuf, 0)) {
+ 		snd_hdac_chip_writel(bus, DPLBASE, 0);
+ 		snd_hdac_chip_writel(bus, DPUBASE, 0);
+ 	}
+diff --git a/sound/hda/hdac_stream.c b/sound/hda/hdac_stream.c
+index f3582012d22f..f64dfa08ba87 100644
+--- a/sound/hda/hdac_stream.c
++++ b/sound/hda/hdac_stream.c
+@@ -212,6 +212,7 @@ int snd_hdac_stream_setup(struct hdac_stream *azx_dev)
+ {
+ 	struct hdac_bus *bus = azx_dev->bus;
+ 	struct snd_pcm_runtime *runtime;
++	dma_addr_t addr;
+ 	unsigned int val;
+ 
+ 	if (azx_dev->substream)
+@@ -239,17 +240,18 @@ int snd_hdac_stream_setup(struct hdac_stream *azx_dev)
+ 	snd_hdac_stream_writew(azx_dev, SD_LVI, azx_dev->frags - 1);
+ 
+ 	/* program the BDL address */
++	addr = snd_sgbuf_get_addr(&azx_dev->bdl, 0);
+ 	/* lower BDL address */
+-	snd_hdac_stream_writel(azx_dev, SD_BDLPL, (u32)azx_dev->bdl.addr);
++	snd_hdac_stream_writel(azx_dev, SD_BDLPL, (u32)addr);
+ 	/* upper BDL address */
+-	snd_hdac_stream_writel(azx_dev, SD_BDLPU,
+-			       upper_32_bits(azx_dev->bdl.addr));
++	snd_hdac_stream_writel(azx_dev, SD_BDLPU, upper_32_bits(addr));
+ 
+ 	/* enable the position buffer */
+-	if (bus->use_posbuf && bus->posbuf.addr) {
++	addr = snd_sgbuf_get_addr(&bus->posbuf, 0);
++	if (bus->use_posbuf && addr) {
+ 		if (!(snd_hdac_chip_readl(bus, DPLBASE) & AZX_DPLBASE_ENABLE))
+ 			snd_hdac_chip_writel(bus, DPLBASE,
+-				(u32)bus->posbuf.addr | AZX_DPLBASE_ENABLE);
++					     (u32)addr | AZX_DPLBASE_ENABLE);
+ 	}
+ 
+ 	/* set the interrupt enable bits in the descriptor control register */
+diff --git a/sound/pci/hda/hda_controller.h b/sound/pci/hda/hda_controller.h
+index f5bf295eb830..94568d0ab492 100644
+--- a/sound/pci/hda/hda_controller.h
++++ b/sound/pci/hda/hda_controller.h
+@@ -28,7 +28,7 @@
+ #else
+ #define AZX_DCAPS_I915_COMPONENT 0		/* NOP */
+ #endif
+-/* 14 unused */
++#define AZX_DCAPS_AMD_IOMMU_WORKAROUND (1 << 14) /* workaround for AMD IOMMU page allocations */
+ #define AZX_DCAPS_CTX_WORKAROUND (1 << 15)	/* X-Fi workaround */
+ #define AZX_DCAPS_POSFIX_LPIB	(1 << 16)	/* Use LPIB as default */
+ #define AZX_DCAPS_AMD_WORKAROUND (1 << 17)	/* AMD-specific workaround */
+diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
+index a77165bd92a9..36408430b7fb 100644
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -302,7 +302,8 @@ enum {
+ 
+ /* quirks for ATI HDMI with snoop off */
+ #define AZX_DCAPS_PRESET_ATI_HDMI_NS \
+-	(AZX_DCAPS_PRESET_ATI_HDMI | AZX_DCAPS_SNOOP_OFF)
++	(AZX_DCAPS_PRESET_ATI_HDMI | AZX_DCAPS_SNOOP_OFF |\
++	 AZX_DCAPS_AMD_IOMMU_WORKAROUND)
+ 
+ /* quirks for AMD SB */
+ #define AZX_DCAPS_PRESET_AMD_SB \
+@@ -1816,8 +1817,12 @@ static int azx_create(struct snd_card *card, struct pci_dev *pci,
+ 		return err;
+ 
+ 	/* use the non-cached pages in non-snoop mode */
+-	if (!azx_snoop(chip))
+-		azx_bus(chip)->dma_type = SNDRV_DMA_TYPE_DEV_WC;
++	if (!azx_snoop(chip)) {
++		if (chip->driver_caps & AZX_DCAPS_AMD_IOMMU_WORKAROUND)
++			azx_bus(chip)->dma_type = SNDRV_DMA_TYPE_DEV_WC_SG;
++		else
++			azx_bus(chip)->dma_type = SNDRV_DMA_TYPE_DEV_WC;
++	}
+ 
+ 	if (chip->driver_type == AZX_DRIVER_NVIDIA) {
+ 		dev_dbg(chip->card->dev, "Enable delay in RIRB handling\n");

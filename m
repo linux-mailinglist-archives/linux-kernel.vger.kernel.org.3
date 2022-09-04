@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5815AC4EE
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ED25AC4D7
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 16:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234067AbiIDPTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 11:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S234372AbiIDOpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 10:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234311AbiIDPTp (ORCPT
+        with ESMTP id S229997AbiIDOps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 11:19:45 -0400
+        Sun, 4 Sep 2022 10:45:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB5915A2B;
-        Sun,  4 Sep 2022 08:19:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9027D2FFD3;
+        Sun,  4 Sep 2022 07:45:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FD2560F36;
-        Sun,  4 Sep 2022 15:19:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8570FC433D6;
-        Sun,  4 Sep 2022 15:19:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24C9660F9E;
+        Sun,  4 Sep 2022 14:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96037C433D6;
+        Sun,  4 Sep 2022 14:45:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662304782;
-        bh=5T5KK1R+lLkAiOgyJVvenWpyIpd2PPMpzy2c4deWB6I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dgfCT7NPTr7maI8aCZ++zMT7lYNHlabDUVdgplghDV4PFsRehywmABWlisb0Q4Mof
-         Vs50C8gGL1XUMm7Y4NaxXIF226qzAsSlY9H0p6AQSoZ1Zy7KTDRy7vjkIlrlu+IjzS
-         k+ESU0CMVnM34FTHFof8zh/1eA8QRydy4GlofNVZChd3rcgrm+ljYHZqPmRAj7NAa6
-         f2ijauvAf6l9DyQkyfOGKencpePCywifPm9Zm8AB/ceaQnX3ZfkcK2dHJjkTGFXMXa
-         Ytt+CmCQq6xF3e8IbuXbsJ0JGgMZhYzb7tkmfXL5tXkzvw1d9Eg1aSIokvaKDmhMlR
-         yU00JfqrQY8OQ==
-Date:   Sun, 4 Sep 2022 15:45:35 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     cmo@melexis.com
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v2 2/3] iio: temperature: mlx90632 Read sampling
- frequency
-Message-ID: <20220904154535.0bb526bc@jic23-huawei>
-In-Reply-To: <20220903222402.3426058-1-cmo@melexis.com>
-References: <20220903222402.3426058-1-cmo@melexis.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        s=k20201202; t=1662302745;
+        bh=lRnCSu1PcWRi1dcwd3ZSbkYCjHJYOQ7jhl/iMlUpALI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dDQQJkIEw9Ne28COBtbnCJVSxB2/WS/tiPua3lQ97NQ2GDC6/njoTDxDozzF05SxW
+         gtf6nC7ZTCOEsKChsHqmacSQ6e+i1rMoQtFBnKeICfohnOSNSQl68mym0XfoOVMvf8
+         NiteCsplLZm5VRif9Nz6hnaBe5IHPI7Qthd+/wGzB4tS1zA2tDj+BG3OjF5liZ+8oz
+         HnRmNvg4uvG+fVYDXVWhNFuc0FDtsqo2QXZXHfJ6n0559ATh5gtbg2ljubMxgJb2iu
+         WqFy8mgtYNkh5sw2J3MIYEKVoSnQ/Jbrzhccxg0x4airiDWbUd9lVEsG8ZetwvMuhw
+         2Cs8PuMhiYdGA==
+Date:   Sun, 4 Sep 2022 20:15:40 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Jim Lin <jilin@nvidia.com>
+Cc:     jckuo@nvidia.com, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        balbi@kernel.org, gregkh@linuxfoundation.org, bhsieh@nvidia.com,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] phy: tegra: xusb: add utmi pad power on/down ops
+Message-ID: <YxS6FBeyS1Cs7xhI@matsya>
+References: <20220816082353.13390-1-jilin@nvidia.com>
+ <20220816082353.13390-2-jilin@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816082353.13390-2-jilin@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,119 +57,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun,  4 Sep 2022 00:24:02 +0200
-cmo@melexis.com wrote:
+On 16-08-22, 16:23, Jim Lin wrote:
+> Add utmi_pad_power_on/down ops for each SOC instead of exporting
+> tegra_phy_xusb_utmi_pad_power_on/down directly for Tegra186 chip.
 
-> From: Crt Mori <cmo@melexis.com>
-> 
-> Allow users to read sensor sampling frequency to better plan the
-> application measurement requests.
-
-I didn't read this closely enough.  Why is the frequency read only?
-We'd not normally have an available attribute in that case, because
-the values aren't available if we have no way to set the value.
-
-Jonathan
+Can you please help me understand why do we need to utmi power_on/down
+exported and cant be handled thry phy-ops..
 
 > 
-> Signed-off-by: Crt Mori <cmo@melexis.com>
+> Signed-off-by: BH Hsieh <bhsieh@nvidia.com>
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
 > ---
->  drivers/iio/temperature/mlx90632.c | 44 ++++++++++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
+> v2: update copyright year 
 > 
-> diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature/mlx90632.c
-> index 9acd819c76a6..37edd324d6a1 100644
-> --- a/drivers/iio/temperature/mlx90632.c
-> +++ b/drivers/iio/temperature/mlx90632.c
-> @@ -80,6 +80,9 @@
->  #define MLX90632_PWR_STATUS_CONTINUOUS MLX90632_PWR_STATUS(3) /* continuous */
+>  drivers/phy/tegra/xusb-tegra186.c | 19 ++++++++++++-------
+>  drivers/phy/tegra/xusb.c          | 22 +++++++++++++++++++++-
+>  drivers/phy/tegra/xusb.h          |  4 +++-
+>  include/linux/phy/tegra/xusb.h    |  4 +++-
+>  4 files changed, 39 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
+> index ae3915ed9fef..5abdf81aa143 100644
+> --- a/drivers/phy/tegra/xusb-tegra186.c
+> +++ b/drivers/phy/tegra/xusb-tegra186.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * Copyright (c) 2016-2020, NVIDIA CORPORATION.  All rights reserved.
+> + * Copyright (c) 2016-2022, NVIDIA CORPORATION.  All rights reserved.
+>   */
 >  
->  #define MLX90632_EE_RR(ee_val) (ee_val & GENMASK(10, 8)) /* Only Refresh Rate bits */
-> +#define MLX90632_REFRESH_RATE(ee_val) (MLX90632_EE_RR(ee_val) >> 8)
-> +					/* Extract Refresh Rate from ee register */
-> +#define MLX90632_REFRESH_RATE_STATUS(refresh_rate) (refresh_rate << 8)
->  
->  /* Measurement types */
->  #define MLX90632_MTYP_MEDICAL 0
-> @@ -908,6 +911,24 @@ static int mlx90632_calc_ambient_dsp105(struct mlx90632_data *data, int *val)
->  	return ret;
+>  #include <linux/delay.h>
+> @@ -638,7 +638,7 @@ static void tegra186_utmi_bias_pad_power_off(struct tegra_xusb_padctl *padctl)
+>  	mutex_unlock(&padctl->lock);
 >  }
 >  
-> +static int mlx90632_get_refresh_rate(struct mlx90632_data *data,
-> +				     int *refresh_rate)
-> +{
-> +	unsigned int meas1;
-> +	int ret;
-> +
-> +	ret = regmap_read(data->regmap, MLX90632_EE_MEDICAL_MEAS1, &meas1);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*refresh_rate = MLX90632_REFRESH_RATE(meas1);
-> +
-> +	return ret;
-> +}
-> +
-> +static const int mlx90632_freqs[][2] = { {0, 500000}, {1, 0}, {2, 0}, {4, 0},
-> +					  {8, 0}, {16, 0}, {32, 0}, {64, 0} };
-> +
->  static int mlx90632_pm_interraction_wakeup(struct mlx90632_data *data)
+> -static void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
+> +static void tegra186_utmi_pad_power_on(struct phy *phy)
 >  {
->  	unsigned long now;
-> @@ -978,6 +999,15 @@ static int mlx90632_read_raw(struct iio_dev *indio_dev,
->  		*val = data->object_ambient_temperature;
->  		ret = IIO_VAL_INT;
->  		break;
-> +	case IIO_CHAN_INFO_SAMP_FREQ:
-> +		ret = mlx90632_get_refresh_rate(data, &cr);
-> +		if (ret < 0)
-> +			goto mlx90632_read_raw_pm;
-> +
-> +		*val = mlx90632_freqs[cr][0];
-> +		*val2 = mlx90632_freqs[cr][1];
-> +		ret = IIO_VAL_INT_PLUS_MICRO;
-> +		break;
->  	default:
->  		ret = -EINVAL;
->  		break;
-> @@ -1012,12 +1042,24 @@ static int mlx90632_write_raw(struct iio_dev *indio_dev,
+>  	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
+>  	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
+> @@ -656,6 +656,8 @@ static void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
+>  		return;
 >  	}
+>  
+> +	dev_dbg(dev, "power on UTMI pad %u\n", index);
+> +
+>  	tegra186_utmi_bias_pad_power_on(padctl);
+>  
+>  	udelay(2);
+> @@ -669,7 +671,7 @@ static void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
+>  	padctl_writel(padctl, value, XUSB_PADCTL_USB2_OTG_PADX_CTL1(index));
 >  }
 >  
-> +static IIO_CONST_ATTR(sampling_frequency_available, "0.5 1 2 4 8 16 32 64");
+> -static void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
+> +static void tegra186_utmi_pad_power_down(struct phy *phy)
+>  {
+>  	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
+>  	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
+> @@ -679,6 +681,8 @@ static void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
+>  	if (!phy)
+>  		return;
+>  
+> +	dev_dbg(padctl->dev, "power down UTMI pad %u\n", index);
 > +
-> +static struct attribute *mlx90632_attributes[] = {
-> +	&iio_const_attr_sampling_frequency_available.dev_attr.attr,
-> +	NULL
-> +};
+>  	value = padctl_readl(padctl, XUSB_PADCTL_USB2_OTG_PADX_CTL0(index));
+>  	value |= USB2_OTG_PD;
+>  	padctl_writel(padctl, value, XUSB_PADCTL_USB2_OTG_PADX_CTL0(index));
+> @@ -849,15 +853,14 @@ static int tegra186_utmi_phy_power_on(struct phy *phy)
+>  	value |= RPD_CTRL(priv->calib.rpd_ctrl);
+>  	padctl_writel(padctl, value, XUSB_PADCTL_USB2_OTG_PADX_CTL1(index));
+>  
+> -	/* TODO: pad power saving */
+> -	tegra_phy_xusb_utmi_pad_power_on(phy);
+> +	tegra186_utmi_pad_power_on(phy);
 > +
-> +static const struct attribute_group mlx90632_attribute_group = {
-> +	.attrs = mlx90632_attributes,
-> +};
-> +
->  static const struct iio_chan_spec mlx90632_channels[] = {
->  	{
->  		.type = IIO_TEMP,
->  		.modified = 1,
->  		.channel2 = IIO_MOD_TEMP_AMBIENT,
->  		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
-> +		.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ),
->  	},
->  	{
->  		.type = IIO_TEMP,
-> @@ -1025,12 +1067,14 @@ static const struct iio_chan_spec mlx90632_channels[] = {
->  		.channel2 = IIO_MOD_TEMP_OBJECT,
->  		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
->  			BIT(IIO_CHAN_INFO_CALIBEMISSIVITY) | BIT(IIO_CHAN_INFO_CALIBAMBIENT),
-> +		.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ),
->  	},
+>  	return 0;
+>  }
+>  
+>  static int tegra186_utmi_phy_power_off(struct phy *phy)
+>  {
+> -	/* TODO: pad power saving */
+> -	tegra_phy_xusb_utmi_pad_power_down(phy);
+> +	tegra186_utmi_pad_power_down(phy);
+>  
+>  	return 0;
+>  }
+> @@ -1486,6 +1489,8 @@ static const struct tegra_xusb_padctl_ops tegra186_xusb_padctl_ops = {
+>  	.suspend_noirq = tegra186_xusb_padctl_suspend_noirq,
+>  	.resume_noirq = tegra186_xusb_padctl_resume_noirq,
+>  	.vbus_override = tegra186_xusb_padctl_vbus_override,
+> +	.utmi_pad_power_on = tegra186_utmi_pad_power_on,
+> +	.utmi_pad_power_down = tegra186_utmi_pad_power_down,
 >  };
 >  
->  static const struct iio_info mlx90632_info = {
->  	.read_raw = mlx90632_read_raw,
->  	.write_raw = mlx90632_write_raw,
-> +	.attrs = &mlx90632_attribute_group,
+>  #if IS_ENABLED(CONFIG_ARCH_TEGRA_186_SOC)
+> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+> index 963de5913e50..49873718d54a 100644
+> --- a/drivers/phy/tegra/xusb.c
+> +++ b/drivers/phy/tegra/xusb.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (c) 2014-2020, NVIDIA CORPORATION.  All rights reserved.
+> + * Copyright (c) 2014-2022, NVIDIA CORPORATION.  All rights reserved.
+>   */
+>  
+>  #include <linux/delay.h>
+> @@ -1458,6 +1458,26 @@ int tegra_phy_xusb_utmi_port_reset(struct phy *phy)
+>  }
+>  EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_port_reset);
+>  
+> +void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy)
+> +{
+> +	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
+> +	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
+> +
+> +	if (padctl->soc->ops->utmi_pad_power_on)
+> +		padctl->soc->ops->utmi_pad_power_on(phy);
+> +}
+> +EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_pad_power_on);
+> +
+> +void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
+> +{
+> +	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
+> +	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
+> +
+> +	if (padctl->soc->ops->utmi_pad_power_down)
+> +		padctl->soc->ops->utmi_pad_power_down(phy);
+> +}
+> +EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_pad_power_down);
+> +
+>  int tegra_xusb_padctl_get_usb3_companion(struct tegra_xusb_padctl *padctl,
+>  				    unsigned int port)
+>  {
+> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
+> index 034f7a2c28d6..8cfbbdbd6e0c 100644
+> --- a/drivers/phy/tegra/xusb.h
+> +++ b/drivers/phy/tegra/xusb.h
+> @@ -1,6 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0-only */
+>  /*
+> - * Copyright (c) 2014-2020, NVIDIA CORPORATION.  All rights reserved.
+> + * Copyright (c) 2014-2022, NVIDIA CORPORATION.  All rights reserved.
+>   * Copyright (c) 2015, Google Inc.
+>   */
+>  
+> @@ -412,6 +412,8 @@ struct tegra_xusb_padctl_ops {
+>  				    unsigned int index, bool enable);
+>  	int (*vbus_override)(struct tegra_xusb_padctl *padctl, bool set);
+>  	int (*utmi_port_reset)(struct phy *phy);
+> +	void (*utmi_pad_power_on)(struct phy *phy);
+> +	void (*utmi_pad_power_down)(struct phy *phy);
 >  };
 >  
->  static int mlx90632_sleep(struct mlx90632_data *data)
+>  struct tegra_xusb_padctl_soc {
+> diff --git a/include/linux/phy/tegra/xusb.h b/include/linux/phy/tegra/xusb.h
+> index 3a35e74cdc61..70998e6dd6fd 100644
+> --- a/include/linux/phy/tegra/xusb.h
+> +++ b/include/linux/phy/tegra/xusb.h
+> @@ -1,6 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0-only */
+>  /*
+> - * Copyright (c) 2016-2020, NVIDIA CORPORATION.  All rights reserved.
+> + * Copyright (c) 2016-2022, NVIDIA CORPORATION.  All rights reserved.
+>   */
+>  
+>  #ifndef PHY_TEGRA_XUSB_H
+> @@ -21,6 +21,8 @@ int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *padctl,
+>  					   unsigned int port, bool enable);
+>  int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
+>  					bool val);
+> +void tegra_phy_xusb_utmi_pad_power_on(struct phy *phy);
+> +void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy);
+>  int tegra_phy_xusb_utmi_port_reset(struct phy *phy);
+>  int tegra_xusb_padctl_get_usb3_companion(struct tegra_xusb_padctl *padctl,
+>  					 unsigned int port);
+> -- 
+> 2.17.1
 
+-- 
+~Vinod

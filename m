@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298A55AC4E9
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5AD5AC4F4
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 17:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234480AbiIDPR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 11:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S233821AbiIDPYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 11:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiIDPRX (ORCPT
+        with ESMTP id S233963AbiIDPX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 11:17:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D7533427;
-        Sun,  4 Sep 2022 08:17:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5502AB80D70;
-        Sun,  4 Sep 2022 15:17:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21440C433D6;
-        Sun,  4 Sep 2022 15:17:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662304640;
-        bh=xjdPYgdB9h50iN/sMAXgx3TlezzJ2hEsjMGUNuESwQw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bSZ4dTKtfMNrRfeMjIh0uwpaywenCjzYh7YAtyAapy/xSEsV2B/DjrmrWFNfaoIxZ
-         fRLCTgyJhn0nU3HHUKigGDtRWjfxtQfKkiBmg4Vx2ur7rtVDKDpxBAFTMbsJ57ckn0
-         K0zPIG3VCYowbB3wCwadpgFSVG+fLaqif+4d2OmQPZm2pSQaSdYPsgr87J2XIsGgY0
-         Q8qcamBf9Wd2s0h/3AwC0MKS3OFLay2XyAnJTm6sIJSaZt0qTzAqjKri9VZ/yLm+ub
-         J82ButxZ6R+CFLc8PS+QSfsRwyKehuqD4AoIBiq7IuTkw4KDCipnGxROIAEzUS+mAu
-         DzYxz/mLbtQ3A==
-Date:   Sun, 4 Sep 2022 20:47:15 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v11 2/3] phy: qcom-snps: Add support for overriding phy
- tuning parameters
-Message-ID: <YxTBewhBecSgXvPq@matsya>
-References: <1658384954-9506-1-git-send-email-quic_kriskura@quicinc.com>
- <1658384954-9506-3-git-send-email-quic_kriskura@quicinc.com>
- <20220830203518.pty67fyefho4ewgw@builder.lan>
- <31d459e4-57c0-85d1-2d88-e5bf0bed6604@quicinc.com>
+        Sun, 4 Sep 2022 11:23:56 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D09031373
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 08:23:53 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-11f0fa892aeso16454541fac.7
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 08:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=melexis.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=wF53HjxtR86veH7tNHBqva/Hj5Xhl68Fnyl6ylaPrRk=;
+        b=FdZYmtoXbUfpevwZPExfiZoJOJfteKBm0rZg0bFDy6woJYbXO+kEbnrX2JKqn/0K5F
+         iM0QYbK+tH1rrPniF27TFNGYr6wDZSNaEIy40ZhVVayzsyga+GjFk4t/8Tqb1XENcZNs
+         3cHTJUb0g6JFr+n8WLAqOaPmglLjAzDWlYQu2QPPU+e+HNHe53Qhup+vmYdjTn0D96gO
+         z5rDHs8KL8OPDAPtdvdNrmNXIjGNNCPewd1lQ2QRinqq+xdHF2CJSmbSLHEkma6j5dts
+         RQIc3LKAbFPsrzD0/WkFKG+caZqeCjD/eJJ232N+j2X4gwCDnTurJC0QALarfEyShmZ8
+         RiGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=wF53HjxtR86veH7tNHBqva/Hj5Xhl68Fnyl6ylaPrRk=;
+        b=R8nI16vaV2fzpM9XOi9BQA4MMPV6K6NvElxur9RM05LFm8CL2iAUBAbJWvGMItDUUl
+         GKr0KiwO9oZpjDqS9RKFd7BMnRx60fqJY+Hx+VP58pApU5QsDAehsPFXIhla8kHsu9jQ
+         a8/6nUM3sN9RasZVFtfbBN1gZSOLmIUmKoGWjDC5zdQArNYksB9TbxFV55TRVJLqw9x8
+         hRVCUKmItN38QeJf9Yy8MVzNys9HFELFVpulpM3FbJv14GlpvMF3KaW5eiwTQwKkiJVD
+         tYN7X2uQE2lVYF1xdG5XumcKZ1eFUqGCFc7KxZBjRnrkHcrvAXYerNY3Y2x5T3nUZw6U
+         LfgQ==
+X-Gm-Message-State: ACgBeo3JWgsadYAiMSht+Z6kbcEC5+xfHsGCenOMAa7TkTEBazm+ctYm
+        7mF8vk0CkJ3slg/Y/GzcJlriNZPnpsOdx1sEz9crZw==
+X-Google-Smtp-Source: AA6agR4XvDpYJdMgoQCi6PrjINAZN8b6mGWcF/9fo4JnPiIh1htSPLTLwfsWvhf94umpnpaTh6NfisJrY3xqXhh98fk=
+X-Received: by 2002:a05:6870:3115:b0:11e:753e:d2e3 with SMTP id
+ v21-20020a056870311500b0011e753ed2e3mr6922369oaa.175.1662305032453; Sun, 04
+ Sep 2022 08:23:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <31d459e4-57c0-85d1-2d88-e5bf0bed6604@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220903222402.3426058-1-cmo@melexis.com> <20220904154535.0bb526bc@jic23-huawei>
+In-Reply-To: <20220904154535.0bb526bc@jic23-huawei>
+From:   Crt Mori <cmo@melexis.com>
+Date:   Sun, 4 Sep 2022 17:23:16 +0200
+Message-ID: <CAKv63uuHpjVEPoTgcJ6QptQmkCmvWhh8eNBwibOrR0SQGLG8Bg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] iio: temperature: mlx90632 Read sampling frequency
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,40 +66,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31-08-22, 18:41, Krishna Kurapati PSSNV wrote:
- 
-> > The ordering of this list needs to match the order of
-> > override_param_map[] and there's nothing indicating this in the code.
-> > 
-> > I was considering suggesting that you add a enum/define and do
-> > 	[SQUELCH_DETECTOR_BP] = "qcom,squelch-detector-bp",
-> > 	...
-> > and then do the same in the override_param_map array.
-> > >
-> > But I think it will be cleaner if you add a const char const pointer to
-> > override_param_map and just specify these strings in the
-> > override_param_map array.
-> > 
-> > Each entry will grow by a pointer, but multiple copies of the same
-> > strings (when added in the future) should be combined by the compiler.
-> > 
-> IIUC, you want me to remove this array of const char*'s and embed them in
-> the override_param_map and iterate through it without using this const
-> phy_seq_props as a reference.
+On Sun, 4 Sept 2022 at 17:19, Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> On Sun,  4 Sep 2022 00:24:02 +0200
+> cmo@melexis.com wrote:
+>
+> > From: Crt Mori <cmo@melexis.com>
+> >
+> > Allow users to read sensor sampling frequency to better plan the
+> > application measurement requests.
+>
+> I didn't read this closely enough.  Why is the frequency read only?
+> We'd not normally have an available attribute in that case, because
+> the values aren't available if we have no way to set the value.
+>
 
-I think that would make it simpler.. 
+It is writable, but so far I did not want to include the change part,
+because it is writing to EEPROM and that means sensor slowly gets
+killed as memory has limited number of write cycles.
 
-> > > +static const struct override_param_map sc7280[] = {
-> > 
-> > There's nothing ensuring that the loop below doesn't run off the end of
-> > this array. So when the next platform is added, there's no way to
-> > handle the fact that they might have a different set of properties.
-> > 
-> > If you add the property name to these elements, that will no longer be a
-> > problem (and you can add a {} entry at the end of the list and check for
-> > this when looping over the elements.
-
-Would be great if this is addressed as well
-
--- 
-~Vinod
+> Jonathan
+>
+> >
+> > Signed-off-by: Crt Mori <cmo@melexis.com>
+> > ---
+> >  drivers/iio/temperature/mlx90632.c | 44 ++++++++++++++++++++++++++++++
+> >  1 file changed, 44 insertions(+)
+> >
+> > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature/mlx90632.c
+> > index 9acd819c76a6..37edd324d6a1 100644
+> > --- a/drivers/iio/temperature/mlx90632.c
+> > +++ b/drivers/iio/temperature/mlx90632.c
+> > @@ -80,6 +80,9 @@
+> >  #define MLX90632_PWR_STATUS_CONTINUOUS MLX90632_PWR_STATUS(3) /* continuous */
+> >
+> >  #define MLX90632_EE_RR(ee_val) (ee_val & GENMASK(10, 8)) /* Only Refresh Rate bits */
+> > +#define MLX90632_REFRESH_RATE(ee_val) (MLX90632_EE_RR(ee_val) >> 8)
+> > +                                     /* Extract Refresh Rate from ee register */
+> > +#define MLX90632_REFRESH_RATE_STATUS(refresh_rate) (refresh_rate << 8)
+> >
+> >  /* Measurement types */
+> >  #define MLX90632_MTYP_MEDICAL 0
+> > @@ -908,6 +911,24 @@ static int mlx90632_calc_ambient_dsp105(struct mlx90632_data *data, int *val)
+> >       return ret;
+> >  }
+> >
+> > +static int mlx90632_get_refresh_rate(struct mlx90632_data *data,
+> > +                                  int *refresh_rate)
+> > +{
+> > +     unsigned int meas1;
+> > +     int ret;
+> > +
+> > +     ret = regmap_read(data->regmap, MLX90632_EE_MEDICAL_MEAS1, &meas1);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     *refresh_rate = MLX90632_REFRESH_RATE(meas1);
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +static const int mlx90632_freqs[][2] = { {0, 500000}, {1, 0}, {2, 0}, {4, 0},
+> > +                                       {8, 0}, {16, 0}, {32, 0}, {64, 0} };
+> > +
+> >  static int mlx90632_pm_interraction_wakeup(struct mlx90632_data *data)
+> >  {
+> >       unsigned long now;
+> > @@ -978,6 +999,15 @@ static int mlx90632_read_raw(struct iio_dev *indio_dev,
+> >               *val = data->object_ambient_temperature;
+> >               ret = IIO_VAL_INT;
+> >               break;
+> > +     case IIO_CHAN_INFO_SAMP_FREQ:
+> > +             ret = mlx90632_get_refresh_rate(data, &cr);
+> > +             if (ret < 0)
+> > +                     goto mlx90632_read_raw_pm;
+> > +
+> > +             *val = mlx90632_freqs[cr][0];
+> > +             *val2 = mlx90632_freqs[cr][1];
+> > +             ret = IIO_VAL_INT_PLUS_MICRO;
+> > +             break;
+> >       default:
+> >               ret = -EINVAL;
+> >               break;
+> > @@ -1012,12 +1042,24 @@ static int mlx90632_write_raw(struct iio_dev *indio_dev,
+> >       }
+> >  }
+> >
+> > +static IIO_CONST_ATTR(sampling_frequency_available, "0.5 1 2 4 8 16 32 64");
+> > +
+> > +static struct attribute *mlx90632_attributes[] = {
+> > +     &iio_const_attr_sampling_frequency_available.dev_attr.attr,
+> > +     NULL
+> > +};
+> > +
+> > +static const struct attribute_group mlx90632_attribute_group = {
+> > +     .attrs = mlx90632_attributes,
+> > +};
+> > +
+> >  static const struct iio_chan_spec mlx90632_channels[] = {
+> >       {
+> >               .type = IIO_TEMP,
+> >               .modified = 1,
+> >               .channel2 = IIO_MOD_TEMP_AMBIENT,
+> >               .info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
+> > +             .info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ),
+> >       },
+> >       {
+> >               .type = IIO_TEMP,
+> > @@ -1025,12 +1067,14 @@ static const struct iio_chan_spec mlx90632_channels[] = {
+> >               .channel2 = IIO_MOD_TEMP_OBJECT,
+> >               .info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
+> >                       BIT(IIO_CHAN_INFO_CALIBEMISSIVITY) | BIT(IIO_CHAN_INFO_CALIBAMBIENT),
+> > +             .info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ),
+> >       },
+> >  };
+> >
+> >  static const struct iio_info mlx90632_info = {
+> >       .read_raw = mlx90632_read_raw,
+> >       .write_raw = mlx90632_write_raw,
+> > +     .attrs = &mlx90632_attribute_group,
+> >  };
+> >
+> >  static int mlx90632_sleep(struct mlx90632_data *data)
+>

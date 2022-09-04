@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCD05AC71F
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557B75AC70A
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235494AbiIDVm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 17:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S235509AbiIDVnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 17:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234761AbiIDVma (ORCPT
+        with ESMTP id S235104AbiIDVmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 17:42:30 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2902EF2B
+        Sun, 4 Sep 2022 17:42:31 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0048E2F007
         for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:42:22 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id r7so3867178ile.11
+Received: by mail-io1-xd35.google.com with SMTP id d68so5628878iof.11
         for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=xIjcpB1yObanMGjMFeMKYjIQWCM49hxUe0Q+YC489GU=;
-        b=MLaOUG1eQyDNFysR3kFQ1CuvqHjhT0aQXApMqF4gTtmKSNtSjX/I5UlLfKj7GXM5dJ
-         ERh08+wfPW/pY1uDfq/mQRn9W4pI+ZknWQk0O9BgR5Mk9AjPJWG5zDfHLcpmenzVQTzo
-         579HyQFoNP2ls47VGJ5G3weYDitOixMG/+//9S/xiAYoLVVWBuJc+DV/rYYNjDLyRLfb
-         HNDjMkbf5rFexzATxXpZ556L2eM2E51BpzYlMdQx5ufJQGJ8cauf0lUEASuflYmkRnFq
-         wm3CJLRAjYbtQSKbcHHo9KjCQC9bF3ISuBv6sJ+vPDbFd2H4Yl4b8qIqAqmbssefUuAQ
-         LhwA==
+        bh=9SzKct1HE2F9SFFHU0qV3d4yTS+Vy3tZKPhpRiWkMoE=;
+        b=keVbDAqmRl0RyYCgYBZ9vpqCQmkMyk7el0JhW316fk9lzXS1Qp8s1NvY5dl+0KhmSp
+         ibqXTnOnHqVsgbVNxEqbtv43vgYRsJvWCMIHnYD2MdOnweaxtJ/6lJmRUKioxtauNnK3
+         MAOa5YY5NhAaVnZUHf9WjVTMmFZFR8zfXvqsn6ug0qyuxgGFFgrtJhQLojNKtMyGeGVu
+         +yc9Lpue47auQ2O1yq9JKZ+AL+lsysQCM4CP52NRtG4YNpaMNSOR2BmwDKNu/vEgwcNy
+         CzChZLaOzOawknlDJ4jxM+ihj0KwR+efhIg2T10h1eobX6skVdqLap7sQsWzIfHZi9ST
+         UvOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=xIjcpB1yObanMGjMFeMKYjIQWCM49hxUe0Q+YC489GU=;
-        b=eJ7nxhKwJU1ffZ8WHDiYj3AVNIqQ8mu7b7oRlKMqwB+uR8+2Qn2bLYSzAhamFB+QAd
-         3rZSC13/Rq692PvbPis7RXTDn1Rjzjbtt58p8YTANZN1wsf10JJ/lJ3ZvxVeFC25sWKX
-         lzP3yXneFs8xbWNvwR3oOo6JXjMZDcCHVbLKB2k4JZCrgAceEepI/WnqFXjmW/Kc2xH6
-         9lJUzIYivARP7Gb2Ur4tIx+zfcLoTlv6Yw5wlqa1okxWPeMAWfiqZipX1pLc67EWMmQz
-         aVwtVNaAfYJRwVQt9jdd4E23qsAGZE7gJ8h+g1jY/Z8wE1atFpFuQyObGWdRRGox7PIP
-         duKA==
-X-Gm-Message-State: ACgBeo2kcpMBl8+iSBPU6kb7PCfdI3KXGc1JgCCj7DT4MER8kqJcM+V9
-        ZJxq89bTiWi8Cm1oLLGkcZA=
-X-Google-Smtp-Source: AA6agR67iR6BYXhMU24o7aSNMqzyMctDSZZTQcZ/yxizOCzV0f4LJSYbYSri4MSdNRuTGB/KPRJVfw==
-X-Received: by 2002:a05:6e02:15c9:b0:2e1:a5b6:7e25 with SMTP id q9-20020a056e0215c900b002e1a5b67e25mr23241731ilu.185.1662327741691;
-        Sun, 04 Sep 2022 14:42:21 -0700 (PDT)
+        bh=9SzKct1HE2F9SFFHU0qV3d4yTS+Vy3tZKPhpRiWkMoE=;
+        b=mLoPzAT0tPQupExuRDKWzYWQzNaZ4pujoLH6pVtLffbC4w3/0hLg7Uv40LS56WeKVC
+         GjEe0Ai5MWzbHj+WQPriEXpoIcH/1e7b7lsXMWepMUAtRyJAcq1bwj9xH0kwCOv0r9t0
+         UVOD7+60wOdxexNHti9XjKBj1TEj4yYvnrrWgwhneXB4H2pMLYtksIhChmgmqzYZrMLR
+         ciJzF8ISAO1zpX/14fnOhuWhshz2ufqGQjeQ/ftxki5HfLR4Aon2DDeTAE4E1oW5txpn
+         3vHgvevcObRrw0O0tA63WfNJhBl9jGzU5bU/cehBQGaj7YVQf3Pil6A1llQMMyyjv2+a
+         uulQ==
+X-Gm-Message-State: ACgBeo1tFrLkaHbmR7MTjoeBK1zbtA28knuLirFM8azroP9Dh8K6NrNo
+        gltpuuc0XbEYSA5wBxywFgM=
+X-Google-Smtp-Source: AA6agR6jMolGXndfzGgA0ZvJd/LMfHAfLgpxQDVqtziCymaTm3c0Mj4mJvOTk/aEeCbTagH4y5NkEA==
+X-Received: by 2002:a5e:8407:0:b0:689:ff32:84d3 with SMTP id h7-20020a5e8407000000b00689ff3284d3mr21836771ioj.180.1662327742655;
+        Sun, 04 Sep 2022 14:42:22 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.20
+        by smtp.googlemail.com with ESMTPSA id e12-20020a056602044c00b006889ea7be7bsm3727688iov.29.2022.09.04.14.42.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 14:42:21 -0700 (PDT)
+        Sun, 04 Sep 2022 14:42:22 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -56,11 +56,10 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: [PATCH v6 12/57] dyndbg: add class_id to pr_debug callsites
-Date:   Sun,  4 Sep 2022 15:40:49 -0600
-Message-Id: <20220904214134.408619-13-jim.cromie@gmail.com>
+        Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v6 13/57] dyndbg: add __pr_debug_cls for testing
+Date:   Sun,  4 Sep 2022 15:40:50 -0600
+Message-Id: <20220904214134.408619-14-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220904214134.408619-1-jim.cromie@gmail.com>
 References: <20220904214134.408619-1-jim.cromie@gmail.com>
@@ -76,164 +75,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DRM issues ~10 exclusive categories of debug messages; to represent
-this directly in dyndbg, add a new 6-bit field: struct _ddebug.class_id.
-This gives us 64 classes, which should be more than enough.
+For selftest purposes, add __pr_debug_cls(class, fmt, ...)
 
-  #> echo 0x012345678 > /sys/module/drm/parameters/debug
+I didn't think we'd need to define this, since DRM effectively has it
+already in drm_dbg, drm_devdbg.  But test_dynamic_debug needs it in
+order to demonstrate all the moving parts.
 
-All existing callsites are initialized with _DPRINTK_CLASS_DFLT, which
-is 2^6-1.  This reserves 0-62 for use in new categorized/class'd
-pr_debugs, which fits perfectly with natural enums (ints: 0..N).
+Note the __ prefix; its not intended for general use, at least until a
+need emerges.  ISTM the drm.debug model (macro wrappers inserting enum
+const 1st arg) is the baseline approach.
 
-Thats done by extending the init macro: DEFINE_DYNAMIC_DEBUG_METADATA()
-with _CLS(cls, ...) suffix, and redefing old name using extended name.
+That said, nouveau might want it for easy use in its debug macros. TBD.
 
-Then extend the factory macro callchain with _cls() versions to provide
-the callsite.class_id, with old-names passing _DPRINTK_CLASS_DFLT.
+NB: it does require a builtin-constant class, __pr_debug_cls(i++, ...)
+is disallowed by compiler.
 
-This sets us up to create class'd prdebug callsites (class'd callsites
-are those with .class_id != _DPRINTK_CLASS_DFLT).
-
-No behavior change.
-
-cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/linux/dynamic_debug.h | 71 +++++++++++++++++++++++++++--------
- 1 file changed, 55 insertions(+), 16 deletions(-)
+ include/linux/dynamic_debug.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 6a2001250da1..633f4e463766 100644
+index 633f4e463766..3c9690da44d9 100644
 --- a/include/linux/dynamic_debug.h
 +++ b/include/linux/dynamic_debug.h
-@@ -6,6 +6,8 @@
- #include <linux/jump_label.h>
- #endif
+@@ -221,6 +221,13 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 				   KERN_DEBUG, prefix_str, prefix_type,	\
+ 				   rowsize, groupsize, buf, len, ascii)
  
-+#include <linux/build_bug.h>
++/* for test only, generally expect drm.debug style macro wrappers */
++#define __pr_debug_cls(cls, fmt, ...) do {			\
++	BUILD_BUG_ON_MSG(!__builtin_constant_p(cls),		\
++			 "expecting constant class int/enum");	\
++	dynamic_pr_debug_cls(cls, fmt, ##__VA_ARGS__);		\
++	} while (0)
 +
- /*
-  * An instance of this structure is created in a special
-  * ELF section at every dynamic debug callsite.  At runtime,
-@@ -21,6 +23,9 @@ struct _ddebug {
- 	const char *filename;
- 	const char *format;
- 	unsigned int lineno:18;
-+#define CLS_BITS 6
-+	unsigned int class_id:CLS_BITS;
-+#define _DPRINTK_CLASS_DFLT		((1 << CLS_BITS) - 1)
- 	/*
- 	 * The flags field controls the behaviour at the callsite.
- 	 * The bits here are changed dynamically when the user
-@@ -88,7 +93,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 			 const struct ib_device *ibdev,
- 			 const char *fmt, ...);
+ #else /* !CONFIG_DYNAMIC_DEBUG_CORE */
  
--#define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)		\
-+#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
- 	static struct _ddebug  __aligned(8)			\
- 	__section("__dyndbg") name = {				\
- 		.modname = KBUILD_MODNAME,			\
-@@ -97,8 +102,14 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 		.format = (fmt),				\
- 		.lineno = __LINE__,				\
- 		.flags = _DPRINTK_FLAGS_DEFAULT,		\
-+		.class_id = cls,				\
- 		_DPRINTK_KEY_INIT				\
--	}
-+	};							\
-+	BUILD_BUG_ON_MSG(cls > _DPRINTK_CLASS_DFLT,		\
-+			 "classid value overflow")
-+
-+#define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)		\
-+	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, _DPRINTK_CLASS_DFLT, fmt)
- 
- #ifdef CONFIG_JUMP_LABEL
- 
-@@ -129,17 +140,34 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 
- #endif /* CONFIG_JUMP_LABEL */
- 
--#define __dynamic_func_call(id, fmt, func, ...) do {	\
--	DEFINE_DYNAMIC_DEBUG_METADATA(id, fmt);		\
--	if (DYNAMIC_DEBUG_BRANCH(id))			\
--		func(&id, ##__VA_ARGS__);		\
--} while (0)
--
--#define __dynamic_func_call_no_desc(id, fmt, func, ...) do {	\
--	DEFINE_DYNAMIC_DEBUG_METADATA(id, fmt);			\
-+/*
-+ * Factory macros: ($prefix)dynamic_func_call($suffix)
-+ *
-+ * Lower layer (with __ prefix) gets the callsite metadata, and wraps
-+ * the func inside a debug-branch/static-key construct.  Upper layer
-+ * (with _ prefix) does the UNIQUE_ID once, so that lower can ref the
-+ * name/label multiple times, and tie the elements together.
-+ * Multiple flavors:
-+ * (|_cls):	adds in _DPRINT_CLASS_DFLT as needed
-+ * (|_no_desc):	former gets callsite descriptor as 1st arg (for prdbgs)
-+ */
-+#define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {	\
-+	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);	\
- 	if (DYNAMIC_DEBUG_BRANCH(id))				\
--		func(__VA_ARGS__);				\
-+		func(&id, ##__VA_ARGS__);			\
- } while (0)
-+#define __dynamic_func_call(id, fmt, func, ...)				\
-+	__dynamic_func_call_cls(id, _DPRINTK_CLASS_DFLT, fmt,		\
-+				func, ##__VA_ARGS__)
-+
-+#define __dynamic_func_call_cls_no_desc(id, cls, fmt, func, ...) do {	\
-+	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);		\
-+	if (DYNAMIC_DEBUG_BRANCH(id))					\
-+		func(__VA_ARGS__);					\
-+} while (0)
-+#define __dynamic_func_call_no_desc(id, fmt, func, ...)			\
-+	__dynamic_func_call_cls_no_desc(id, _DPRINTK_CLASS_DFLT,	\
-+					fmt, func, ##__VA_ARGS__)
- 
- /*
-  * "Factory macro" for generating a call to func, guarded by a
-@@ -149,22 +177,33 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
-  * the varargs. Note that fmt is repeated in invocations of this
-  * macro.
-  */
-+#define _dynamic_func_call_cls(cls, fmt, func, ...)			\
-+	__dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
- #define _dynamic_func_call(fmt, func, ...)				\
--	__dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-+	_dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-+
- /*
-  * A variant that does the same, except that the descriptor is not
-  * passed as the first argument to the function; it is only called
-  * with precisely the macro's varargs.
-  */
--#define _dynamic_func_call_no_desc(fmt, func, ...)	\
--	__dynamic_func_call_no_desc(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-+#define _dynamic_func_call_cls_no_desc(cls, fmt, func, ...)		\
-+	__dynamic_func_call_cls_no_desc(__UNIQUE_ID(ddebug), cls, fmt,	\
-+					func, ##__VA_ARGS__)
-+#define _dynamic_func_call_no_desc(fmt, func, ...)			\
-+	_dynamic_func_call_cls_no_desc(_DPRINTK_CLASS_DFLT, fmt,	\
-+				       func, ##__VA_ARGS__)
-+
-+#define dynamic_pr_debug_cls(cls, fmt, ...)				\
-+	_dynamic_func_call_cls(cls, fmt, __dynamic_pr_debug,		\
-+			   pr_fmt(fmt), ##__VA_ARGS__)
- 
- #define dynamic_pr_debug(fmt, ...)				\
--	_dynamic_func_call(fmt,	__dynamic_pr_debug,		\
-+	_dynamic_func_call(fmt, __dynamic_pr_debug,		\
- 			   pr_fmt(fmt), ##__VA_ARGS__)
- 
- #define dynamic_dev_dbg(dev, fmt, ...)				\
--	_dynamic_func_call(fmt,__dynamic_dev_dbg, 		\
-+	_dynamic_func_call(fmt, __dynamic_dev_dbg, 		\
- 			   dev, fmt, ##__VA_ARGS__)
- 
- #define dynamic_netdev_dbg(dev, fmt, ...)			\
+ #include <linux/string.h>
 -- 
 2.37.2
 

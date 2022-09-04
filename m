@@ -2,257 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929205AC7E4
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182065AC7E7
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Sep 2022 23:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbiIDV4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 17:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
+        id S231952AbiIDV7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 17:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236132AbiIDV43 (ORCPT
+        with ESMTP id S231735AbiIDV7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 17:56:29 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D072A97E
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 14:55:08 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id b17so3914157ilh.0
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 14:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Rk0v3z6nbpdvu88IImrHMGbLoUUPdnPRh/3Godzt1FA=;
-        b=Nc+rQZCQ0ZDF1h9ecA4rpVSJrG6dmkL3xgNJXZtX3/cFCPkOmE+G06GlMonjPQqJBm
-         YnXKfZNHOR/rAehmRjdpqpziT556KQvktB/Ht4pEEzygq3h/BvtHWel8JjiN/tgd3HAl
-         ZRciRFIz4P266UKb/8MhtLxbrrVipYcxDk5sPm6Ig4u/BMOLFvsQtAeiKq2nAzR6kk1K
-         cN+GwHnHHBFCobrftxSnVV842YyyUQ4mpiQEkzm2k2IrL6A5XRKpep71ICeYTI08uHUU
-         6oReuJJbsm7n3GXJCG0MWwvFbIKcfG4E7ctmaGDY2jg4GpqOG+Z18BiaD75we5V/YGQS
-         oWJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Rk0v3z6nbpdvu88IImrHMGbLoUUPdnPRh/3Godzt1FA=;
-        b=i5aaUAD2Pa7SMBIriAv3b9Shamc1MfJTRn4PoRD1ZK7R1mOZb/zJtJwS4PoNColooh
-         xVbJfDE/v1SotD5GJHq/mABzVAAb1P/c7iE6Qo0MGXMkAq7BMirr+3GwibP7UFAEQ5tZ
-         AxJMev6/Vcf0Z1c8HkeVRyLG2fkf+I619wHpXom3PChf3p2s1mB4pvm6lm7jywgySrV5
-         CxI9fC9XANA4Wv0APcVluoz9qCfRBRtwGcwUTT0oLM5wN1z9B0LqXCVI2/3U7UMbpw44
-         ejG7J5H8Zm7HR6kjhi0O0+aaYqbREdPmwChC93V3jerXJ5/ERM8hMieKWJwj9AA9E8FR
-         88Jg==
-X-Gm-Message-State: ACgBeo0OGzyRe02R9Ax3Gy5nibtVCmuwKk9Dr+T4JCPHLeGRbKU2wnLk
-        ba3fMaLV7ElfraG0c+UWmAY=
-X-Google-Smtp-Source: AA6agR4XTXXktwhX8R2Jt7aKfDSaTpwp94V7TsaoovzK2OVp+nUjnVV/mAujGfHfaFQB50yYS9CNbw==
-X-Received: by 2002:a05:6e02:1946:b0:2df:2988:64fd with SMTP id x6-20020a056e02194600b002df298864fdmr23635856ilu.201.1662328508016;
-        Sun, 04 Sep 2022 14:55:08 -0700 (PDT)
-Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id s14-20020a056602168e00b0068844be44d7sm3743269iow.6.2022.09.04.14.55.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 14:55:07 -0700 (PDT)
-From:   Jim Cromie <jim.cromie@gmail.com>
-Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH v6 00/57] DYNDBG: opt-in class'd debug for modules, use in drm.
-Date:   Sun,  4 Sep 2022 15:54:54 -0600
-Message-Id: <20220904215454.416637-1-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Sun, 4 Sep 2022 17:59:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8CEBC16;
+        Sun,  4 Sep 2022 14:59:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A5F761000;
+        Sun,  4 Sep 2022 21:59:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4953C4347C;
+        Sun,  4 Sep 2022 21:59:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662328781;
+        bh=D+iyzZIHB2cM5PZLFOtFUR+KWPyV6ywMqPuWdApmM+M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=K2LzFLQyGJok6JeQsjj/cNPKxF/VyLZPjbwvm99nHTyDEvphrvqkoc9ma4MYc/u/X
+         XyoxdSErW9gGvarq0hWx1KodOQjKRpEjuvtB95SkVCEVhcbk5LsoaPuVB0Nfa+yLhb
+         wlGuwySvA+XaaV1ynjWyP9g91iATXtakTaXCAW+yqsXLHF6aXEti8QjGi9B0BcMqQr
+         V6Z6BWzW7C2KOvnPxlrcsLEtTo3poe+ZxISr3Kf81/AEfo/fe6vmejoLj22Dg706eM
+         RucZGhZ6nruKasTKVjJLiCtuCuUcFMwQnYXL1KzzMdo6fnIqUQJ+qlr+FHaGFFPVxE
+         42WVqyc36jR1g==
+Received: by mail-lj1-f172.google.com with SMTP id b26so7464002ljk.12;
+        Sun, 04 Sep 2022 14:59:41 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1K2N1eG9AuxSJVt+V4eFWqyCYeqm4TWrezSn2Gxw9pTzcShB/k
+        4Nq1xKp4E/xMPCgzYcNJD0ovpCx958XQ+X/ENCg=
+X-Google-Smtp-Source: AA6agR4MDdbTuFXMI/wun5KB8TsOF09ANKpd3b5UDdG9HJexkppqLqpmAclTBX5zWDCvsDWLv7CK19uDxdpLR1z4rbA=
+X-Received: by 2002:a2e:710c:0:b0:264:ed38:e57f with SMTP id
+ m12-20020a2e710c000000b00264ed38e57fmr9027418ljc.189.1662328779881; Sun, 04
+ Sep 2022 14:59:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220819102037.2697798-1-chenhuacai@loongson.cn>
+ <9b6f0aeaebbd36882b5b40d655f9ccd20c7be496.camel@xry111.site>
+ <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com>
+ <CAAhV-H6MR=rWhecY_uuiXAysED-BBJhKhGHj2cCkefJiPOo-ZQ@mail.gmail.com> <CAAhV-H4KXVUBgNoQxOFiEj2AH-ojhnrEJ8QLvNrALY69MhXF3w@mail.gmail.com>
+In-Reply-To: <CAAhV-H4KXVUBgNoQxOFiEj2AH-ojhnrEJ8QLvNrALY69MhXF3w@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sun, 4 Sep 2022 23:59:28 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHJv_6mLhMikg+ic7=EUABLdrX3f__eBbHntrpGHjRfXg@mail.gmail.com>
+Message-ID: <CAMj1kXHJv_6mLhMikg+ic7=EUABLdrX3f__eBbHntrpGHjRfXg@mail.gmail.com>
+Subject: Re: [PATCH V3] LoongArch: Add efistub booting support
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Xi Ruoyao <xry111@xry111.site>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Greg, Jason, DRM-folk, Steven,
+On Sun, 4 Sept 2022 at 15:24, Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> Hi, Ard,
+>
+> On Thu, Sep 1, 2022 at 6:40 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> >
+> > Hi, Ard,
+> >
+> > On Sat, Aug 27, 2022 at 3:14 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > >
+> > > On Sat, 27 Aug 2022 at 06:41, Xi Ruoyao <xry111@xry111.site> wrote:
+> > > >
+> > > > Tested V3 with the magic number check manually removed in my GRUB build.
+> > > > The system boots successfully.  I've not tested Arnd's zBoot patch yet.
+> > >
+> > > I am Ard not Arnd :-)
+> > >
+> > > Please use this branch when testing the EFI decompressor:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-decompressor-v4
+> > The root cause of LoongArch zboot boot failure has been found, it is a
+> > binutils bug, latest toolchain with the below patch can solve the
+> > problem.
+> >
+> > diff --git a/bfd/elfnn-loongarch.c b/bfd/elfnn-loongarch.c
+> > index 5b44901b9e0..fafdc7c7458 100644
+> > --- a/bfd/elfnn-loongarch.c
+> > +++ b/bfd/elfnn-loongarch.c
+> > @@ -2341,9 +2341,10 @@ loongarch_elf_relocate_section (bfd
+> > *output_bfd, struct bfd_link_info *info,
+> >      case R_LARCH_SOP_PUSH_PLT_PCREL:
+> >        unresolved_reloc = false;
+> >
+> > -      if (resolved_to_const)
+> > +      if (!is_undefweak && resolved_to_const)
+> >          {
+> >            relocation += rel->r_addend;
+> > +          relocation -= pc;
+> >            break;
+> >          }
+> >        else if (is_undefweak)
+> >
+> >
+> > Huacai
+> Now the patch is submitted here:
+> https://sourceware.org/pipermail/binutils/2022-September/122713.html
+>
 
-If Im not too late for linux-next in this cycle, heres V6.  Diffs are minor:
+Great. Given the severity of this bug, I imagine that building the
+LoongArch kernel will require a version of binutils that carries this
+fix.
 
- - rebased onto e47eb90a0a9a (tag: next-20220901, linux-next/master)
-   gets past Kconfig conflict, same for drm-tip.
- - uint debug_level, not ulong.  to fit nouveau.
- - -1 on param-read-back, to match prev write val.
- - added back tracefs parts, missing from -V5
-   updated for tracing/events: Add __vstring() and __assign_vstr() helper macros
-   no decorations-lite in TP_printk, do it right later.
- - commit-msg tweaks
+Therefore, i will revert back to the original approach for accessing
+uncompressed_size, using an extern declaration with an __aligned(1)
+attribute.
 
-Theres also new RFC stuff with the potential to reduce the size of the
-__dyndbgs section by 20%.  Not ready for prime time, or linux-next,
-but I hope compelling.
+> And I have some other questions about kexec: kexec should jump to the
+> elf entry or the pe entry? I think is the elf entry, because if we
+> jump to the pe entry, then SVAM will be executed twice (but it should
+> be executed only once). However, how can we jump to the elf entry if
+> we use zboot? Maybe it is kexec-tool's responsibility to decompress
+> the zboot kernel image?
+>
 
-FEATURE DESCRIPTION
+Yes, very good point. Kexec kernels cannot boot via the EFI entry
+point, as the boot services will already be shutdown. So the kexec
+kernel needs to boot via the same entrypoint in the core kernel that
+the EFI stub calls when it hands over.
 
-dyndbg provides DECLARE_DYNAMIC_DEBUG_CLASSMAP() which allows module
-authors to declare "good" class-names, of 4 types.
+For the EFI zboot image in particular, we will need to teach kexec how
+to decompress them. The zboot image has a header that
+a) describes it as a EFI linux zimg
+b) describes the start and end offset of the compressed payload
+c) describes which compression algorithm was used.
 
-  DYNAMIC_DEBUG_CLASSMAP(drm_debug_classes,
-  			DD_CLASS_TYPE_DISJOINT_BITS, offset,
-                        "DRM_UT_CORE",
-                        "DRM_UT_DRIVER",
-                        "DRM_UT_KMS",
-                        "DRM_UT_PRIME",
-                        "DRM_UT_ATOMIC",
-                        "DRM_UT_VBL",
-                        "DRM_UT_STATE",
-                        "DRM_UT_LEASE",
-                        "DRM_UT_DP",
-                        "DRM_UT_DRMRES");
-
-That usage authorizes dyndbg to set class'd pr_debugs accordingly:
-
-  echo class DRM_UT_CORE +p > /proc/dynamic_debug/control
-  echo class DRM_UT_KMS  +p > /proc/dynamic_debug/control
-
-Because the DRM modules declare the same classes, they each authorize
-dyndbg with the same classnames, which allows dyndbg to effect changes
-to its selected class'd prdbgs.
-
-Opting in by using the macro effectively privatizes the limited
-63-classes available per module; only modules which share classnames
-must coordinate their use of the common range, and they can
-independently use the remaining id-space.
-
-Other dyndbg filtering pertains too, so single sites can be selected.
-
-
-4 DD_CLASS_TYPE_*_*s determine 2 behaviors:
-
-  DISJOINT	bits are independent, like drm.debug categories
-  LEVELs	3>2, turns on level-2, like nouveau debug-levels
-  NUM/BITS	numeric input, bitmap if disjoint, else 0-32.
-  NAMES		accept proper names, like DRM_UT_CORE
-
-Dyndbg provides param-callbacks which enforce those behaviors:
-
-  # DISJOINT_BITS
-  echo 0x03 > /sys/module/drm/parameters/debug
-
-  # LEVEL_NUM
-  echo 3 > /sys/module/drm/nouveau/debug-mumble*
-
-  # DISJOINT_NAMES
-  echo +DRM_UT_CORE,+DRM_UT_KMS,-DRM_UT_DRIVER > /sys/module/drm/parameters/debug_categories
-
-  # LEVEL_NAMES
-  echo NV_TRACE > /sys/module/nouveau/parameters/debug-mumble*
-
-That design choice is allowed cuz verbosity is always attached to a
-(user visible) interface, and theres no reason not to put the
-implementation there (in the callback).  It also considerably
-simplifies things; ddebug_change can treat class_id's as disjoint,
-period.
-
-
-Jim Cromie (57):
-prep:
-  dyndbg: fix static_branch manipulation
-  dyndbg: fix module.dyndbg handling
-  dyndbg: show both old and new in change-info
-  dyndbg: reverse module walk in cat control
-  dyndbg: reverse module.callsite walk in cat control
-  dyndbg: use ESCAPE_SPACE for cat control
-  dyndbg: let query-modname override actual module name
-  dyndbg: add test_dynamic_debug module
-  dyndbg: drop EXPORTed dynamic_debug_exec_queries
-  dyndbg: cleanup auto vars in dynamic_debug_init
-  dyndbg: gather __dyndbg[] state into struct _ddebug_info
-
-class feature:
-  dyndbg: add class_id to pr_debug callsites
-  dyndbg: add __pr_debug_cls for testing
-  dyndbg: add DECLARE_DYNDBG_CLASSMAP macro
-  kernel/module: add __dyndbg_classes section
-  dyndbg: add ddebug_attach_module_classes
-  dyndbg: validate class FOO by checking with module
-  doc-dyndbg: describe "class CLASS_NAME" query support
-  doc-dyndbg: edit dynamic-debug-howto for brevity, audience
-  dyndbg: add drm.debug style (drm/parameters/debug) bitmap support
-  dyndbg: test DECLARE_DYNDBG_CLASSMAP, sysfs nodes
-
-drm-use-case:
-  drm_print: condense enum drm_debug_category
-  drm: POC drm on dyndbg - use in core, 2 helpers, 3 drivers.
-  drm_print: interpose drm_*dbg with forwarding macros
-  drm_print: wrap drm_*_dbg in dyndbg descriptor factory macro
-  drm-print.h: include dyndbg header
-  drm-print: add drm_dbg_driver to improve namespace symmetry
-  drm_print: refine drm_debug_enabled for jump-label
-  drm_print: prefer bare printk KERN_DEBUG on generic fn
-  drm_print: add _ddebug descriptor to drm_*dbg prototypes
-  nouveau: change nvkm_debug/trace to use dev_dbg POC
-  nouveau: adapt NV_DEBUG, NV_ATOMIC to use DRM.debug
-  nouveau: WIP add 2 LEVEL_NUM classmaps for CLI, SUBDEV
-
-dyndbg-tracefs:
-  dyndbg: add _DPRINTK_FLAGS_ENABLED
-  dyndbg: add _DPRINTK_FLAGS_TRACE
-  dyndbg: add write-events-to-tracefs code
-  dyndbg: add 2 trace-events: drm_debug, drm_devdbg
-  dyndbg: add 2 more trace-events: pr_debug, dev_dbg
-  dyndbg/drm: POC add tracebits sysfs-knob
-
-RFC-20%-data-reclaim:
-  dyndbg: abstraction macros for modname,function,filename fields
-  dyndbg: split repeating columns to new struct _ddebug_site
-  dyndbg: shrink lineno field by 2 bits
-  dyndbg: add _index,_map to struct _ddebug
-  dyndbg: extend __ddebug_add_module proto to allow packing sites
-  dyndbg: de-duplicate sites
-  dyndbg: drop site-> in add-module, more needed
-  dyndbg: demote iter->site in _init
-  dyndbg: add .gnu.linkonce slot in vmlinux.lds.h KEEPs
-  dyndbg: add structs _ddebug_hdr, _ddebug_site_hdr
-  dyndbg: count unique callsites
-  dyndbg: prevent build bugs via -DNO_DYNAMIC_DEBUG_TABLE
-  dyndbg: add DEFINE_DYNAMIC_DEBUG_TABLE, use it tacitly RFC
-  dyndbg: add/use is_dyndbg_header then set _uplink
-  dyndbg: add .gnu.linkonce. & __dyndbg* sections in module.lds.h
-  dyndbg: dynamic_debug_sites_reclaim() using free_reserved_page() WAG
-  dyndbg: work ddebug_map_site
-  dyndbg: fiddle with readback value on LEVEL_NAMES types
-
- .../admin-guide/dynamic-debug-howto.rst       | 249 +++---
- MAINTAINERS                                   |   2 +
- arch/arm/boot/compressed/Makefile             |   2 +
- arch/sparc/vdso/Makefile                      |   2 +
- arch/x86/boot/compressed/Makefile             |   1 +
- arch/x86/entry/vdso/Makefile                  |   3 +
- arch/x86/purgatory/Makefile                   |   1 +
- drivers/firmware/efi/libstub/Makefile         |   3 +-
- drivers/gpu/drm/Kconfig                       |  12 +
- drivers/gpu/drm/Makefile                      |   2 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  14 +
- drivers/gpu/drm/display/drm_dp_helper.c       |  13 +
- drivers/gpu/drm/drm_crtc_helper.c             |  13 +
- drivers/gpu/drm/drm_print.c                   |  83 +-
- drivers/gpu/drm/i915/i915_params.c            |  12 +
- .../gpu/drm/nouveau/include/nvkm/core/debug.h |  16 +
- .../drm/nouveau/include/nvkm/core/subdev.h    |  17 +-
- drivers/gpu/drm/nouveau/nouveau_drm.c         |  20 +
- drivers/gpu/drm/nouveau/nouveau_drv.h         |  16 +-
- drivers/gpu/drm/nouveau/nvkm/core/subdev.c    |  23 +
- include/asm-generic/module.lds.h              |  12 +-
- include/asm-generic/vmlinux.lds.h             |  10 +
- include/drm/drm_print.h                       |  85 +-
- include/linux/dynamic_debug.h                 | 286 ++++++-
- include/trace/events/drm.h                    |  54 ++
- include/trace/events/dyndbg.h                 |  73 ++
- kernel/module/internal.h                      |   4 +-
- kernel/module/main.c                          |  22 +-
- lib/Kconfig.debug                             |  10 +
- lib/Makefile                                  |   1 +
- lib/dynamic_debug.c                           | 792 +++++++++++++++---
- lib/test_dynamic_debug.c                      | 165 ++++
- 32 files changed, 1680 insertions(+), 338 deletions(-)
- create mode 100644 include/trace/events/drm.h
- create mode 100644 include/trace/events/dyndbg.h
- create mode 100644 lib/test_dynamic_debug.c
-
--- 
-2.37.2
-
+This means that any non-EFI loader (including kexec) should be able to
+extract the inner PE/COFF image and decompress it. For arm64 and
+RISC-V, this is sufficient as the EFI and raw images are the same. For
+LoongArch, I suppose it means we need a way to enter the core kernel
+directly via the entrypoint that the EFI stub uses when handing over
+(and pass the original DT argument so the kexec kernel has access to
+the EFI and ACPI firmware tables)

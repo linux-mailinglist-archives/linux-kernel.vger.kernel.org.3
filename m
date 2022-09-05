@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED02D5ACFDB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F785AD008
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbiIEKS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S237794AbiIEKTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237660AbiIEKSf (ORCPT
+        with ESMTP id S238052AbiIEKSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:18:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E3C543D0;
-        Mon,  5 Sep 2022 03:17:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40836B80F00;
-        Mon,  5 Sep 2022 10:17:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 978BAC433C1;
-        Mon,  5 Sep 2022 10:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662373057;
-        bh=nK8Zb48Wne5nhL9HOe0FujHipATbPnEIBFN7VAl1t4U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kul+PCyi5BHBk8xB+YyaUgvKsGmkmkcgcqgXRMCWc9WzRQTo4yicNcb/pHC8Nw/V0
-         vhFYjF8ekxorruzTAL1iEWNXaYIhJwKwdZBMhgqPDl9Z6MBPaggtmBBrx50AyDANuU
-         4Lg/zjoRcPcl7GRvUTqYwD9nTvh5ByOhTG4qvC0UGzuQ5jj7RiLRGnQBJT1tt3iVZZ
-         GIxfNI45Ps/I4Wy6vQPpxq9UlKd5v2AlgGxHz2ux7U6EAS7KXOBN+N8eaMLehTERCb
-         3hnu0G6on3Ckn0WeCIU+rXD6Py2OMpCAmq72qtqp28+tcntvIa3YNNfKdaNjjoPoif
-         d7bsV2deUfpcg==
-Date:   Mon, 5 Sep 2022 13:17:32 +0300
-From:   "jarkko@kernel.org" <jarkko@kernel.org>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "haitao.huang@linux.intel.com" <haitao.huang@linux.intel.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] x86/sgx: Do not fail on incomplete sanitization on
- premature stop of ksgxd
-Message-ID: <YxXMvPLfxdv8QlJo@kernel.org>
-References: <20220903060108.1709739-1-jarkko@kernel.org>
- <20220903060108.1709739-2-jarkko@kernel.org>
- <YxMr7hIXsNcWAiN5@kernel.org>
- <a5fa56bdc57d6472a306bd8d795afc674b724538.camel@intel.com>
- <YxXFGLSmRri2T1yb@kernel.org>
+        Mon, 5 Sep 2022 06:18:47 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B97753014
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:17:58 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q3so8001285pjg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 03:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=F0ddXFVLxsyluskjlQCTzOkpXw/Iq5ze8DpeLG6TX/8=;
+        b=ZKiFiuxy/bJNdyZsis/2GMHJnWZKLPLWmKNo/OlfL+iAGLD/H/nqM6nR8jgAXrij+O
+         n46QHM71KCKpys9Js1hB0qdJa4QA4gOky5ZHGuiPTesuRIW2o2YhrAdahEVazSdipXqG
+         eNhOMzXg6X6bL2uLwlvFY3gDtD6BmMIFmTuqE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=F0ddXFVLxsyluskjlQCTzOkpXw/Iq5ze8DpeLG6TX/8=;
+        b=AXw73YiAvBjZAFEzen20GLLuzzQhNV5ZgYoUbSEAxGebNUOSFvhgzrvt64C0ZPeWKo
+         6AzYnleufmgP+nBHx5QGsbufZzDHgvaifwHl520VVhIU0cjsdsv+EHy5YLkWA2VSVUhM
+         mm6TuO0HlaTLrupFV8l4HjE01a1wH3IbnsNVmFAxTBofhYDE+3DL8h2i9G5RmVH37OTY
+         WAb0wLRa9Z1CIW0GpRj2VxBun4Jb2tfTXoDP7cOfCybW5NSzqovuUgasCg0blrE9n00C
+         k0hOOa+e9GAQ/V4+WWxbQvKr8j0hjcEFfRp+XQhcKwkqKWOBWVj9pCEKvk1mnh5bxRW5
+         UUbw==
+X-Gm-Message-State: ACgBeo3EYGH1+K9l/HTHmaJNFt/Bu/svaU398+VxOdD+0PJYJH27lwCE
+        XDDErbfXk3UgnnP6B4c2zYdyIsM4eWqs1A==
+X-Google-Smtp-Source: AA6agR7cQ6Kdc7lDA6p+oTLhOt05qMwgjkaiG/8Sj4vFtvXw6tmM2bKARpAGBYRvbaAPM0qvjdAywg==
+X-Received: by 2002:a17:90a:6b4c:b0:1fa:d973:e4eb with SMTP id x12-20020a17090a6b4c00b001fad973e4ebmr18424093pjl.15.1662373077690;
+        Mon, 05 Sep 2022 03:17:57 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:5167:aa6c:9829:64dd])
+        by smtp.gmail.com with ESMTPSA id v28-20020aa799dc000000b00537ab89c66csm7630564pfi.143.2022.09.05.03.17.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 03:17:57 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 19:17:52 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH RFC 4/7] zram: Introduce recompress sysfs knob
+Message-ID: <YxXM0PwVEghPF9hg@google.com>
+References: <20220905081552.2740917-1-senozhatsky@chromium.org>
+ <20220905081552.2740917-8-senozhatsky@chromium.org>
+ <CAGsJ_4yciyk49cTk9A4di2sM=io-4z5oi4Q7P-SUOG-MGJGcQg@mail.gmail.com>
+ <YxXHFZ1PJI3h6BZY@google.com>
+ <CAGsJ_4zqXJJHA02NzyZ662jfL+sNp3LrErTP18vGz2N4u1Tqiw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YxXFGLSmRri2T1yb@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAGsJ_4zqXJJHA02NzyZ662jfL+sNp3LrErTP18vGz2N4u1Tqiw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,41 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 12:44:56PM +0300, jarkko@kernel.org wrote:
-> On Mon, Sep 05, 2022 at 07:50:33AM +0000, Huang, Kai wrote:
-> > On Sat, 2022-09-03 at 13:26 +0300, Jarkko Sakkinen wrote:
-> > > >   static int ksgxd(void *p)
-> > > >   {
-> > > > +	unsigned long left_dirty;
-> > > > +
-> > > >   	set_freezable();
-> > > >   
-> > > >   	/*
-> > > >   	 * Sanitize pages in order to recover from kexec(). The 2nd pass is
-> > > >   	 * required for SECS pages, whose child pages blocked EREMOVE.
-> > > >   	 */
-> > > > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > > +	left_dirty = __sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > > +	pr_debug("%ld unsanitized pages\n", left_dirty);
-> > >                   %lu
-> > > 
-> > 
-> > I assume the intention is to print out the unsanitized SECS pages, but what is
-> > the value of printing it? To me it doesn't provide any useful information, even
-> > for debug.
+On (22/09/05 22:06), Barry Song wrote:
 > 
-> How do you measure "useful"?
+> make sense! thanks! i assume you will have some benchmark data to compare
+> three cases,
+> 1. lzo with recompress zstd
+> 2. always use lzo
+> 3. always use zstd
 > 
-> If for some reason there were unsanitized pages, I would at least
-> want to know where it ended on the first value.
-> 
-> Plus it does zero harm unless you explicitly turn it on.
+> such as power consumption, cpu utilization, available memory, benefits to user
+> experiences especially to UI smoothness under memory pressure?
 
-I would split it though for a separate patch because it does not need
-to be part of the stable fix and change it to:
+So I didn't want to include any benchmarks, because this is entirely
+specific to device's data sets/patterns. In term of CPU usage, zstd
+decompression is really fast [1]; and the way plan to use is battery
+aware - e.g. when low on battery do not recompress at all, if AC is
+plugged in then recompress more aggressively, etc.
 
-        if (left_dirty)
-                pr_debug("%lu unsanitized pages\n", left_dirty);
+In term of benchmarks... a copy paste from our internal tests. But
+*do note* that this is relative only to our specific data sets.
+Your millage may vary.
 
-BR, Jarkko
+ZSTD recomp algorithm (5.10 kernel, so the last column is the number of
+'zram huge pages'):
+
+- Initial state of zram swap partition
+localhost ~ # cat /sys/block/zram0/mm_stat 
+8955662336 2180671776 2277711872        0 3179720704   798724   469474   118949
+
+- Recompress HUGE objects only
+localhost ~ # echo huge > /sys/block/zram0/recompress 
+localhost ~ # cat /sys/block/zram0/mm_stat 
+8944390144 2106998658 2211835904        0 3179720704   798617   469474    66821
+
+- Recompress IDLE pages that are >= 3000 bytes in size
+localhost ~ # echo 3000 > /sys/block/zram0/recompress 
+localhost ~ # cat /sys/block/zram0/mm_stat 
+8934166528 2085232505 2207690752        0 3179720704   798484   469474    66811
+
+- Recompress the remaining IDLE pages that are >= 2000 bytes in size
+localhost ~ # echo 2000 > /sys/block/zram0/recompress 
+localhost ~ # cat /sys/block/zram0/mm_stat 
+8913981440 1946488434 2145157120        0 3179720704   798130   469474    66498
+
+- Recompress the remaining IDLE pages that are >= 1000 bytes in size
+localhost ~ # echo 1000 > /sys/block/zram0/recompress 
+localhost ~ # cat /sys/block/zram0/mm_stat 
+8905592832 1711533182 1984495616        0 3179720704   797162   469474    66222
+
+[1] https://facebook.github.io/zstd/

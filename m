@@ -2,147 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8505AD9B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 21:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4045B5AD9BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 21:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbiIETfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 15:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
+        id S232328AbiIETg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 15:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiIETfr (ORCPT
+        with ESMTP id S230347AbiIETgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 15:35:47 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56508192A1;
-        Mon,  5 Sep 2022 12:35:46 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso12907779pjh.5;
-        Mon, 05 Sep 2022 12:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=7aEZor/0qSkVunoEHgQL2gSUt5mSZZxwcIrLRXXUv74=;
-        b=kRz+EoKgbH/v5V+kWM9vI7suLFWPqh1wudHhCQsgYyToXNdfTMF3zkd+cxvGSDzDMg
-         aV6HTEv+679+PSU/eajuEECNA5Tzi63P2u7ABofOyv+D57Tac8hnxfRh1VQhASbh+H2T
-         cXTOTBvHFjMjMQWlLbr7neEN9hS+5zCzekuUSZjeKCJ5iPKlrTViWBE6u6+1xHBDqacf
-         qr87isKsFggMsY4gH6JVNBJhTsBX7r2Op1Wwlzvm9hfMwa/iBu3UAFi08/6ylcVtvF9Y
-         RdblgSyTuBK8BKb4mUwnden63M+73w2Cz4cZ3zSynyWKOsNJDLPHGEM5bUsuwOD4IzAc
-         e3cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=7aEZor/0qSkVunoEHgQL2gSUt5mSZZxwcIrLRXXUv74=;
-        b=hOhlAiPJZk9r0jPioRD+AnpnkO8yMRN7B1jIlC29rqVdJMmh9Kf7+ihhA3HKjKGqIU
-         tDrqdJXT1hFVRh2RZq8toMB98eQjRJe7mfCD9CXmiZ1GejZ05sWUu1yfTuU4JOtYPewM
-         bp7fxNQ41BRBbQNRhDMW5Z9ZLYMVnhqGIdAAWMfGrslE+eIIv13vFgiws+kdHqY7wfR5
-         dV/CRtwtLPa5PFsvsn8vyPNCgtf1tbirm7vvdU8PCkmMu7TJ0E6UvzT/T58dauwuSzzJ
-         zMX19ttvlIbYMEt3OdRksT53n95QqaNltSd551xRXXI6Ry5mXdrERu3/sn8i7+Bh+0nA
-         AYoQ==
-X-Gm-Message-State: ACgBeo0+ckiURzZgiqCYej8/eUCtIDkO5UOwl6Bm9+gJY7ioQNwmr4hc
-        w5QsuJqbQz/6MDBEw72nrqs=
-X-Google-Smtp-Source: AA6agR4nlC4q69eore5Hr67VeZeR0yfg6hIFeNYOz0SHVfhiZE5g9P4b0kNnrVIkGs2dos0edLe7LA==
-X-Received: by 2002:a17:90a:cf06:b0:200:22cc:9380 with SMTP id h6-20020a17090acf0600b0020022cc9380mr13257332pju.43.1662406545578;
-        Mon, 05 Sep 2022 12:35:45 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:7332:f188:2984:5930])
-        by smtp.gmail.com with ESMTPSA id z127-20020a623385000000b0053abb15b3d9sm8433309pfz.19.2022.09.05.12.35.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 12:35:45 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 12:35:42 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v1 1/1] Input: icn8505 - Utilize acpi_get_subsystem_id()
-Message-ID: <YxZPjsRJXJijZ/K3@google.com>
-References: <20220905172001.69244-1-andriy.shevchenko@linux.intel.com>
+        Mon, 5 Sep 2022 15:36:54 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EC9501B4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 12:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662406613; x=1693942613;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J9Sntj6lpirkv8YfEPsIBobwbrrf+kJSBmd/Heg9YCk=;
+  b=jCrBbfsewnLS5meeiMJb4+o0hfb69JGW2C9F31oVsjJfjCZA1I3s/fnL
+   tlemrIbCkDzkLSk84VpmpZciV7Oi3b/AR+12OPz1OmGAVR0IPheWMFrMU
+   ByHDikFMQZXvzlMU3h5pOWTukR4sBlfDifsI66jDodSFASu72lQ/tKw9n
+   yATt9cmQAjPf/kQldKbLmLlXL44GmOfeficl+LCjQHl7y2ZAoamlbA+YD
+   r6bZnAthBPn37uEv9edlUkZ689pkAN2ByBZb7jmG70Rz497mxhqcQVuOJ
+   WMdyLh6Zp2IhcCp9fuCZjyqmTns81gTAsgSx0o5tFOcSS3fUIupSqd7NO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="283440007"
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="283440007"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 12:36:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="682152139"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 12:36:51 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVHtq-0004UA-2W;
+        Mon, 05 Sep 2022 19:36:50 +0000
+Date:   Tue, 06 Sep 2022 03:36:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 4ad861bb89e01fc6166afcc53bff767913b4d285
+Message-ID: <63164faf.5W+0tBRkzX3TTSKq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220905172001.69244-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 4ad861bb89e01fc6166afcc53bff767913b4d285  Merge branch into tip/master: 'x86/timers'
 
-On Mon, Sep 05, 2022 at 08:20:01PM +0300, Andy Shevchenko wrote:
-> Replace open coded variant of recently introduced acpi_get_subsystem_id().
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/input/touchscreen/chipone_icn8505.c | 29 ++++++---------------
->  1 file changed, 8 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/input/touchscreen/chipone_icn8505.c b/drivers/input/touchscreen/chipone_icn8505.c
-> index f9ca5502ac8c..bb5e63b87c5d 100644
-> --- a/drivers/input/touchscreen/chipone_icn8505.c
-> +++ b/drivers/input/touchscreen/chipone_icn8505.c
-> @@ -364,32 +364,19 @@ static irqreturn_t icn8505_irq(int irq, void *dev_id)
->  
->  static int icn8505_probe_acpi(struct icn8505_data *icn8505, struct device *dev)
->  {
-> -	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-> -	const char *subsys = "unknown";
-> -	struct acpi_device *adev;
-> -	union acpi_object *obj;
-> -	acpi_status status;
-> -
-> -	adev = ACPI_COMPANION(dev);
-> -	if (!adev)
-> -		return -ENODEV;
-> +	const char *subsys;
->  
-> -	status = acpi_evaluate_object(adev->handle, "_SUB", NULL, &buffer);
-> -	if (ACPI_SUCCESS(status)) {
-> -		obj = buffer.pointer;
-> -		if (obj->type == ACPI_TYPE_STRING)
-> -			subsys = obj->string.pointer;
-> -		else
-> -			dev_warn(dev, "Warning ACPI _SUB did not return a string\n");
-> -	} else {
-> -		dev_warn(dev, "Warning ACPI _SUB failed: %#x\n", status);
-> -		buffer.pointer = NULL;
-> -	}
-> +	subsys = acpi_get_subsystem_id(ACPI_HANDLE(dev));
-> +	if (IS_ERR(subsys) && PTR_ERR(subsys) != -ENODATA)
-> +		return PTR_ERR(subsys);
-> +
-> +	if (IS_ERR(subsys) && PTR_ERR(subsys) == -ENODATA)
-> +		subsys = kstrdup_const("unknown", GFP_KERNEL);
+elapsed time: 724m
 
-Do we really need kstrdup_const() here? This makes me wonder if we need
-to also have error handling here, and if we going to tip some automated
-tools by not having it. Why can't we simply assign the constant here
-(and continue using kfree_const() below)?
+configs tested: 57
+configs skipped: 2
 
-I think this is the case where PTR_ERR_OR_ZERO() might help avoid
-multiple IS_ERR/PTR_ERR:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-	subsys = acpi_get_subsystem_id(ACPI_HANDLE(dev));
-	error = PTR_ERR_OR_ZERO(subsys);
-	if (error == -ENODATA)
-		subsys = "unknown";
-	else if (error)
-		return error;
+gcc tested configs:
+i386                                defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                  randconfig-r043-20220905
+i386                 randconfig-a001-20220905
+m68k                             allmodconfig
+i386                 randconfig-a002-20220905
+arc                              allyesconfig
+x86_64                              defconfig
+powerpc                          allmodconfig
+alpha                            allyesconfig
+i386                 randconfig-a005-20220905
+i386                 randconfig-a003-20220905
+i386                             allyesconfig
+i386                 randconfig-a006-20220905
+mips                             allyesconfig
+i386                 randconfig-a004-20220905
+powerpc                           allnoconfig
+m68k                             allyesconfig
+sh                               allmodconfig
+sparc                               defconfig
+sh                               j2_defconfig
+sh                             espt_defconfig
+sh                 kfr2r09-romimage_defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+x86_64               randconfig-a001-20220905
+x86_64               randconfig-a006-20220905
+x86_64               randconfig-a004-20220905
+x86_64               randconfig-a003-20220905
+x86_64               randconfig-a002-20220905
+x86_64               randconfig-a005-20220905
+i386                 randconfig-c001-20220905
+loongarch                           defconfig
+loongarch                         allnoconfig
+ia64                             allmodconfig
 
->  
->  	snprintf(icn8505->firmware_name, sizeof(icn8505->firmware_name),
->  		 "chipone/icn8505-%s.fw", subsys);
->  
-> -	kfree(buffer.pointer);
-> +	kfree_const(subsys);
->  	return 0;
->  }
->  
-
-Thanks.
+clang tested configs:
+hexagon              randconfig-r045-20220905
+hexagon              randconfig-r041-20220905
+s390                 randconfig-r044-20220905
+riscv                randconfig-r042-20220905
+i386                 randconfig-a016-20220905
+i386                 randconfig-a012-20220905
+i386                 randconfig-a015-20220905
+i386                 randconfig-a011-20220905
+i386                 randconfig-a013-20220905
+i386                 randconfig-a014-20220905
+x86_64               randconfig-a012-20220905
+x86_64               randconfig-a014-20220905
+x86_64               randconfig-a013-20220905
 
 -- 
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,159 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BF15ACFFF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777CF5AD00B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235444AbiIEKX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S235598AbiIEKYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236058AbiIEKXG (ORCPT
+        with ESMTP id S235407AbiIEKYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:23:06 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766C0B4B5
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:23:05 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id g185so3916335vkb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 03:23:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=gDOAAIbklvT29CJuu7pOpzOXc61p69Nt20uj65HH+Lg=;
-        b=MOkrXfAJNGqIpa9k8LbDYP0VjFBVuipcgQXrhbGa7k7twMvW0v22mFJYYY1CKAAu8t
-         J8nV06+D7tmCDU7NHWtaUCAwv8DSQRo6+R0cD8pi3ogTO2cbcUhxqqI4xPoXkjB/SBFz
-         ulbLXwMhgxVuhxNMWvbjxSRk/R1eKztqhnVgiIeiuaeNyGA9lmceqwfapCmWZjcog033
-         6HnuWKR2wTWC0Y48L4U0b6UrfH7IvtgyJ4ND+RKscpAE+4lIS4o6j3paNuQnEgC3Dju+
-         JGiqBL9KcuTeR3hFLwtCBVyEHnAYYgsASVBiNW3iD8UXyti3ZOt29uWBqE1aSa2qYei9
-         ZLdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=gDOAAIbklvT29CJuu7pOpzOXc61p69Nt20uj65HH+Lg=;
-        b=xqrFMza9Bx2sSPK1Hk6ZN0z1W8nOGsP6FXPPT4cTLgRPeQe/uZ0/TuceY9fUDT/T8B
-         OtThGQMqA20QtOvYDvmbUZ2rvdrIzvQ4k3lrEg/vO/SMRLigMcW5UrTMcfiJhS/IhiKl
-         fygnwVwl3vByXVVJWNilBd1ObiJFivumLbjjwMlpYi0gVNn1A8Hn9/km+wvkHek5V42Q
-         PD4N6uZ+2gtLHi7eol6X44Mah8x4VSJ2NAtDrzSradG/P2avQdqAZBN8qCYJsVGgcybk
-         uvueK+Wiatjp2JoTU7jsPzc52u7bELdrYz2f2fv0QDxc63ci3f8oAdZOXgYiVtVD8x6X
-         3p1A==
-X-Gm-Message-State: ACgBeo1+AD/a67wzCIGTobb0IXTBnOkU3sN/Wa74aBqV2JX0HIhq5tEl
-        TOqS2mwPtA0XQSvf/NJbXr7jrKFS0PphQZ4bVK0=
-X-Google-Smtp-Source: AA6agR4nASQXgiNrfnyKM3qda065KyN5E9LiO1GUAzDjPmNNsWMfA4sxI1IlbtNSV1ihgoQjtWdLxajcO81ZzKarpyg=
-X-Received: by 2002:a1f:b446:0:b0:394:e8c2:ca45 with SMTP id
- d67-20020a1fb446000000b00394e8c2ca45mr6055282vkf.12.1662373384295; Mon, 05
- Sep 2022 03:23:04 -0700 (PDT)
+        Mon, 5 Sep 2022 06:24:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A894393;
+        Mon,  5 Sep 2022 03:24:11 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2534A6601EB2;
+        Mon,  5 Sep 2022 11:24:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662373449;
+        bh=bYfDLiA2ERg8hGGzHNEQdP7PWNDTavkHqOv/zPnBBww=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WgGwH1cmE6gheXGmxT/u4IMMyAum+qgVztsmQr7lxhp3QOOSpYLqsbzghWxVF+/JI
+         YYzGdRvlB1synFtDv8yu00wqK3Sm69PSJg0FUZnP+DI99eM8ZdWFG82M1Wf7EzF886
+         cChSHa4suMf0gvaVvRwpeg2y0yYU3Xcgy3gAyn9BOv1G690kzVFPdAyS+n31bRSk+8
+         9yyj1AVgYq3E43gLsdIT7EisyY9aFefKCb2ExDu9NFgrB+RnJQJA46BOHp1G42XZN2
+         YUG08HZZUbvWST4rkXJi+3+nvGBvViTiqTJNs6NTkx56RCHwMfU8Pozr7MWbaubLnU
+         xlIOJbDYSxkJA==
+Message-ID: <f7913808-d9b7-9f42-1a16-aedcc0d21497@collabora.com>
+Date:   Mon, 5 Sep 2022 12:24:06 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6122:90f:0:0:0:0 with HTTP; Mon, 5 Sep 2022 03:23:03
- -0700 (PDT)
-Reply-To: philipsjohnsongood@gmail.com
-From:   philips <okeyyoyopa7@gmail.com>
-Date:   Mon, 5 Sep 2022 11:23:03 +0100
-Message-ID: <CAH8nkvYbk4sCSXJ9a4c3q0GQvqSXtK-TSfrkdX+p_RWs6AqvcA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UPPERCASE_50_75 autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 00/19] Add driver for dvfsrc, support for interconnect
+Content-Language: en-US
+To:     Dawei Chien <dawei.chien@mediatek.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ryan Case <ryandcase@chromium.org>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Boichat <drinkcat@google.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Fan Chen <fan.chen@mediatek.com>,
+        Arvin Wang <arvin.wang@mediatek.com>,
+        James Liao <jamesjj.liao@mediatek.com>
+References: <20210812085846.2628-1-dawei.chien@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20210812085846.2628-1-dawei.chien@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a2c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
-        *  1.0 HK_RANDOM_FROM From username looks random
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [okeyyoyopa7[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [okeyyoyopa7[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 UPPERCASE_50_75 message body is 50-75% uppercase
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0J/QntCS0JXQoNCV0J3QndCr0Jkg0Jgg0J3QntCi0JDQoNCY0KPQoQ0KINCb0J7QndCU0J7QnS3Q
-ktC10LvQuNC60L7QsdGA0LjRgtCw0L3QuNGPDQoNCtCx0YPQtNGD0YnQtdCz0L46INC00L7RgNC+
-0LPQvtC5INC00YDRg9CzDQoNCtCf0L7QttCw0LvRg9C50YHRgtCwLCDQvdC1INC+0LHQuNC20LDQ
-udGC0LXRgdGMLCDQtdGB0LvQuCDRjdGC0L4g0YHQvtC+0LHRidC10L3QuNC1INC/0YDQuNC00LXR
-giDQuiDQstCw0LwsINC/0L7RgdC60L7Qu9GM0LrRgw0K0Y8g0LTQvtC70LbQtdC9INCx0YvQuyDQ
-v9C+0LvRg9GH0LjRgtGMINCy0LDRiNC1INGB0L7Qs9C70LDRgdC40LUg0Lgg0L7QtNC+0LHRgNC1
-0L3QuNC1LCDQv9GA0LXQttC00LUg0YfQtdC8INC+0YLQv9GA0LDQstC40YLRjA0K0Y3RgtC+INC/
-0YDQtdC00LvQvtC20LXQvdC40LUg0L/QviDRjdC70LXQutGC0YDQvtC90L3QvtC5INC/0L7Rh9GC
-0LUuINCvINC00LXQudGB0YLQstC+0LLQsNC7INGC0LDQuiwg0LrQsNC6INGPINGB0LTQtdC70LDQ
-uywNCtC40Lct0LfQsCDQstCw0LbQvdC+0YHRgtC4INC4INGB0YDQvtGH0L3QvtGB0YLQuCDRjdGC
-0L7Qs9C+INC00LXQu9CwLiDQoSDQutCw0LrQvtC5INCx0Ysg0YHRgtC+0YDQvtC90Ysg0LLRiyDQ
-vdC4DQrRgdC80L7RgtGA0LXQu9C4INC90LAg0Y3RgtC+LCDQv9GD0YHRgtGMINCy0LDQvCDQsdGD
-0LTQtdGCINC/0YDQuNGP0YLQvdC+INCx0YvRgdGC0YDQviDQvtGC0LLQtdGC0LjRgtGMINC70LjQ
-sdC+DQrQvtGC0YDQuNGG0LDRgtC10LvRjNC90L4sINC70LjQsdC+INC/0L7Qu9C+0LbQuNGC0LXQ
-u9GM0L3Qvi4NCg0K0JzQtdC90Y8g0LfQvtCy0YPRgiDQpNC40LvQuNC/0YEg0JTQttC+0L3RgdC+
-0L0uINCvINC+0YLQv9GA0LDQstC40Lsg0LLQsNC8INC80L7QtSDRjdC70LXQutGC0YDQvtC90L3Q
-vtC1INC/0LjRgdGM0LzQviDRgNCw0L3QtdC1DQrQsdC10Lcg0L7RgtCy0LXRgtCwLCDQsiDQvNC+
-0LXQvCDQv9C10YDQstC+0Lwg0Y3Qu9C10LrRgtGA0L7QvdC90L7QvCDQv9C40YHRjNC80LUg0Y8g
-0YPQv9C+0LzRj9C90YPQuyDQviDQutC70LjQtdC90YLQtSwNCtC60L7RgtC+0YDRi9C5INGD0LzQ
-tdGAIDE1INGB0LXQvdGC0Y/QsdGA0Y8gMjAxNSDQs9C+0LTQsC4g0K8g0YHQtNC10LvQsNC7INC9
-0LXRgdC60L7Qu9GM0LrQviDQv9C+0YHRgtGD0L/Qu9C10L3QuNGPLA0K0YfRgtC+0LHRiyDQvdCw
-0LnRgtC4INC60L7Qs9C+LdC70LjQsdC+INC40Lcg0LTQsNC70YzQvdC40YUg0YDQvtC00YHRgtCy
-0LXQvdC90LjQutC+0LIg0LzQvtC10LPQviDQutC70LjQtdC90YLQsCwg0L3QviDRjdGC0L4NCtCy
-0LXRgNC+0Y/RgtC90L4g0LHQtdC30YPRgdC/0LXRiNC90L4sINGPINGC0YDQtdCx0YPRjiDQstCw
-0YjQtdCz0L4g0L/QtdGA0LLQvtCz0L4g0L/RgNC10LTRgdGC0LDQstC70LXQvdC40Y8g0LrQsNC6
-DQrQsdC70LjQt9C60L7Qs9C+INGA0L7QtNGB0YLQstC10L3QvdC40LrQsCDQkdCb0JjQltCd0JXQ
-k9CeINCg0J7QlNCh0KLQktCV0J3QndCY0JrQkCDQnNCe0JXQk9CeINCf0J7QodCb0JXQlNCd0JXQ
-k9CeINCa0JvQmNCV0J3QotCQLA0K0J/QntCi0J7QnNCjINCn0KLQniDQoyDQktCQ0KEg0J7QlNCY
-0J3QkNCa0J7QktCr0JUg0JjQnNCV0J3QkCDRgSDQv9C+0LrQvtC50L3Ri9C8LCDRg9C90LDRgdC7
-0LXQtNC+0LLQsNGC0Ywg0LTQtdC/0L7Qt9C40YLQvdGL0LkNCtC00LXQv9C+0LfQuNGCINC90LAg
-0YHRg9C80LzRgyAyIDcwMCAwMDAsMDAg0YTRg9C90YLQvtCyINGB0YLQtdGA0LvQuNC90LPQvtCy
-ICjRgtC+0LvRjNC60L4g0LTQstCwINC80LjQu9C70LjQvtC90LANCtGB0LXQvNC40YHQvtGCINGC
-0YvRgdGP0Ycg0LHRgNC40YLQsNC90YHQutC40YUg0YTRg9C90YLQvtCyINGB0YLQtdGA0LvQuNC9
-0LPQvtCyLCDQsiBGU1QtQkFOSyBMb25kb24sDQrQvtGB0YLQsNCy0LvQtdC90L3Ri9C5INC60LvQ
-uNC10L3RgiDQtNC+INGC0L7Qs9C+LCDQutCw0Log0L7QvSDQsdGD0LTQtdGCINC60L7QvdGE0LjR
-gdC60L7QstCw0L0sDQoNCtCR0LDQvdC6INCy0YvQtNCw0Lsg0LzQvdC1LiDQryDQvdCw0LTQtdGP
-0LvRgdGPLCDRh9GC0L4g0LLRiyDQvdC1INGA0LDQt9C+0LHQu9Cw0YfQuNGC0LUg0Lgg0L3QtSDQ
-v9GA0LXQtNCw0LTQuNGC0LUg0Y3RgtC+DQrQtNC+0LLQtdGA0LjQtSDQuCDRg9Cy0LXRgNC10L3Q
-vdC+0YHRgtGMLCDQutC+0YLQvtGA0YvQtSDRjyDQv9GL0YLQsNGO0YHRjCDRg9GB0YLQsNC90L7Q
-stC40YLRjCDRgSDQstCw0LzQuCDQtNC70Y8g0L3QsNGI0LXQuQ0K0LLQt9Cw0LjQvNC90L7QuSDQ
-stGL0LPQvtC00YssINGPINC90LUg0YXQvtGH0YMsINGH0YLQvtCx0Ysg0YEg0L3QsNC80Lgg0LHR
-i9C70LAg0YLRgNC10YLRjNGPINGB0YLQvtGA0L7QvdCwLCDRjdGC0L4NCtC00L7Qu9C20L3QviDQ
-sdGL0YLRjCDRgdC10LrRgNC10YLQvtC8INC80LXQttC00YMg0LzQvdC+0Lkg0Lgg0LLQsNC80Lgu
-INCvINC30LDQstC10YDRj9GOINC4INCz0LDRgNCw0L3RgtC40YDRg9GOLCDRh9GC0L4NCtGN0YLQ
-viDQsdGD0LTQtdGCINCy0YvQv9C+0LvQvdC10L3QviDQsiDRgdC+0L7RgtCy0LXRgtGB0YLQstC4
-0Lgg0YEg0LfQsNC60L7QvdC90YvQvCDRgdC+0LPQu9Cw0YjQtdC90LjQtdC8LCDQutC+0YLQvtGA
-0L7QtQ0K0LfQsNGJ0LjRidCw0LXRgiDQstCw0YEg0L7RgiDQu9GO0LHRi9GFINC90LDRgNGD0YjQ
-tdC90LjQuSDQt9Cw0LrQvtC90L7Qsi4g0JLRgdC1LCDRh9GC0L4g0Y8g0YLRgNC10LHRg9GOINC+
-0YIg0LLQsNGBLCAtDQrRjdGC0L4g0LLQsNGI0LUg0YfQtdGB0YLQvdC+0LUg0YHQvtGC0YDRg9C0
-0L3QuNGH0LXRgdGC0LLQviwg0YfRgtC+0LHRiyDQvNGLINC80L7Qs9C70Lgg0L/RgNC+0LLQtdGB
-0YLQuCDRjdGC0YMNCtGC0YDQsNC90LfQsNC60YbQuNGOLg0KDQrQlNC70Y8g0L/QvtC70YPRh9C1
-0L3QuNGPINCx0L7Qu9C10LUg0L/QvtC00YDQvtCx0L3QvtC5INC40L3RhNC+0YDQvNCw0YbQuNC4
-LCDQv9C+0LbQsNC70YPQudGB0YLQsCwg0YHQstGP0LbQuNGC0LXRgdGMINGB0L4NCtC80L3QvtC5
-LCDQvtC20LjQtNCw0Y8g0LLQsNGI0LXQs9C+INGB0YDQvtGH0L3QvtCz0L4g0L7RgtCy0LXRgtCw
-Lg0KDQrQl9Cw0YDQsNC90LXQtSDRgdC/0LDRgdC40LHQviDQuCDRhdGA0LDQvdC4INCy0LDRgSDQ
-kdC+0LMsDQoNCtCc0LjRgdGC0LXRgCDQpNC40LvQuNC/0YEg0JTQttC+0L3RgdC+0L0sINGN0YHQ
-utCy0LDQudGALg0K0KPRgdCw0LTRjNCx0LAgMiwg0J3RjNGOLdCu0L3QuNC+0L0t0YHRgtGA0LjR
-giwgTEQxIDJQRg0K0JvQntCd0JTQntCdLdCS0LXQu9C40LrQvtCx0YDQuNGC0LDQvdC40Y8NCtCf
-0J7QktCV0KDQldCd0J3Qq9CZINCYINCd0J7QotCQ0KDQmNCj0KENCiDQm9Ce0J3QlNCe0J0t0JLQ
-tdC70LjQutC+0LHRgNC40YLQsNC90LjRjw0KUE9WRVJFTk5ZWSBJIE5PVEFSSVVTDQogTE9ORE9O
-LVZlbGlrb2JyaXRhbml5YQ0K
+Hello Dawei,
+this series brings very nice improvements to many MediaTek platforms, it would
+be a real pity to abandon it.
+
+Can you, or anyone else from MediaTek, please respin on the latest -next?
+
+Thanks,
+Angelo
+
+> This series is based on v5.14-rc1.
+> 
+> The patchsets add support for MediaTek hardware module named DVFSRC
+> (dynamic voltage and frequency scaling resource collector). The DVFSRC is
+> a HW module which is used to collect all the requests from both software
+> and hardware and turn into the decision of minimum operating voltage and
+> minimum DRAM frequency to fulfill those requests.
+> 
+> So, This series is to implement the dvfsrc driver to collect all the
+> requests of operating voltage or DRAM bandwidth from other device drivers
+> likes GPU/Camera through 3 frameworks basically:
+> 
+> 1. interconnect framework: to aggregate the bandwidth
+>     requirements from different clients
+> 
+> [1] https://patchwork.kernel.org/cover/10766329/
+> 
+> There has a hw module "DRAM scheduler", which used to control the
+> throughput.
+> The DVFSRC will collect forecast data of dram bandwidth from
+> SW consumers(camera/gpu...), and according the forecast to change the DRAM
+> frequency
+> 
+> 2. Regualtor framework: to handle the operating voltage requirement from
+>     user or cosumer which not belong any power domain
+> 
+> Changes in V11:
+> * rebase all patches on v5.14-rc1.
+> * support platform mt8195.
+> * add initial bw in mediatek interconnect driver.
+> * add one more pcie client in mediatek interconnect driver.
+> * add compatible for MT8195 dvfsrc.
+> 
+> Changes in V10:
+> * rebase all patches on v5.13-rc1
+> * add acked TAG for interconnect provider driver (Georgi)
+> * update comment message for typos. (Georgi)
+> * update cover leter for typos.
+> 
+> Changes in V9:
+> * modify the configuration of dvfsrc.yaml. (Rob)
+> 
+> Changes in V8:
+> * Fixed the dt_binding_check error of dvfsrc.yaml. (Rob)
+> * Remove Kconfig dependency of DVFSRC
+> 
+> Changes in V7:
+> * Fixed the dt_binding_check error of dvfsrc.yaml. (Rob)
+> * Fixed the checkpatch complains of "Signed-off-by:
+> email name mismatch". (Georgi)
+> * Fixed coding style of interconnect driver. (Georgi)
+> * Update comment of the years to 2021. (Georgi)
+> 
+> Changes in V6:
+> * Remove the performace state support, because the request from consumer
+> can be replaced by using interconnect and regulator framework.
+> * Update the DT patches and convert them to DT schema. (Georgi)
+> * Modify the comment format and coding style. (Mark)
+> 
+> Changes in V5:
+> * Support more platform mt6873/mt8192
+> * Drop the compatible and interconnect provider node and make the parent
+> node an interconnect provider. (Rob/Georgi)
+> * Make modification of interconnect driver from coding suggestion. (Georgi)
+> * Move interconnect diagram into the commit text of patch. (Georgi)
+> * Register the interconnect provider as a platform sub-device. (Georgi)
+> 
+> Changes in V4:
+> * Add acked TAG on dt-bindings patches. (Rob)
+> * Declaration of emi_icc_aggregate since the prototype of aggregate
+> function has changed meanwhile. (Georgi)
+> * Used emi_icc_remove instead of icc_provider_del on probe. (Georgi)
+> * Add dvfsrc regulator driver into series.
+> * Bug fixed of mt8183_get_current_level.
+> * Add mutex protection for pstate operation on dvfsrc_set_performance.
+> 
+> Changes in V3:
+> * Remove RFC from the subject prefix of the series
+> * Combine dt-binding patch and move interconnect dt-binding document into
+> dvfsrc. (Rob)
+> * Remove unused header, add unit descirption to the bandwidth, rename
+> compatible name on interconnect driver. (Georgi)
+> * Fixed some coding style: check flow, naming, used readx_poll_timeout
+> on dvfsrc driver. (Ryan)
+> * Rename interconnect driver mt8183.c to mtk-emi.c
+> * Rename interconnect header mtk,mt8183.h to mtk,emi.h
+> * mtk-scpsys.c: Add opp table check first to avoid OF runtime parse failed
+> 
+> Changes in RFC V2:
+> * Remove the DT property dram_type. (Rob)
+> * Used generic dts property 'opp-level' to get the performace
+> state. (Stephen)
+> * Remove unnecessary dependency config on Kconfig. (Stephen)
+> * Remove unused header file, fixed some coding style issue, typo,
+> error handling on dvfsrc driver. (Nicolas/Stephen)
+> * Remove irq handler on dvfsrc driver. (Stephen)
+> * Remove init table on dvfsrc driver, combine hw init on trustzone.
+> * Add interconnect support of mt8183 to aggregate the emi bandwidth.
+> (Georgi)
+> 
+> v10: https://patchwork.kernel.org/project/linux-mediatek/list/?series=494095
+> V9: https://patchwork.kernel.org/project/linux-mediatek/list/?series=440389
+> V8: https://patchwork.kernel.org/project/linux-mediatek/list/?series=421713
+> V7: https://patchwork.kernel.org/project/linux-mediatek/list/?series=411057
+> V6: https://patchwork.kernel.org/project/linux-mediatek/list/?series=406077
+> V5: https://patchwork.kernel.org/project/linux-mediatek/list/?series=348065
+> V4: https://lore.kernel.org/patchwork/cover/1209284/
+> V3: https://patchwork.kernel.org/cover/11118867/
+> RFC V2: https://lore.kernel.org/patchwork/patch/1068113/
+> RFC V1: https://lore.kernel.org/patchwork/cover/1028535/
+> 
+> Dawei Chien (8):
+>    dt-bindings: mediatek: add compatible for MT8195 dvfsrc
+>    soc: mediatek: add support for mt8195
+>    arm64: dts: mt8195: add dvfsrc related nodes
+>    dt-bindings: interconnect: add MT8195 interconnect dt-bindings
+>    interconnect: mediatek: add support for mt8195
+>    interconnect: mediatek: add initial bandwidth
+>    regulator: mediatek: add support for mt8195
+>    arm64: dts: mt8195: add dvfsrc related nodes
+> 
+> Henry Chen (11):
+>    dt-bindings: soc: Add dvfsrc driver bindings
+>    soc: mediatek: add header for mediatek SIP interface
+>    soc: mediatek: add driver for dvfsrc support
+>    soc: mediatek: add support for mt6873
+>    arm64: dts: mt8183: add dvfsrc related nodes
+>    arm64: dts: mt8192: add dvfsrc related nodes
+>    dt-bindings: interconnect: add MT6873 interconnect dt-bindings
+>    interconnect: mediatek: Add interconnect provider driver
+>    arm64: dts: mt8183: add dvfsrc related nodes
+>    arm64: dts: mt8192: add dvfsrc related nodes
+>    arm64: dts: mt8192: add dvfsrc regulator nodes
+> 
+>   .../devicetree/bindings/soc/mediatek/dvfsrc.yaml   |  68 +++
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi           |   7 +
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi           |  14 +
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi           |   7 +
+>   drivers/interconnect/Kconfig                       |   1 +
+>   drivers/interconnect/Makefile                      |   1 +
+>   drivers/interconnect/mediatek/Kconfig              |  13 +
+>   drivers/interconnect/mediatek/Makefile             |   3 +
+>   drivers/interconnect/mediatek/mtk-emi.c            | 385 +++++++++++++++
+>   drivers/regulator/mtk-dvfsrc-regulator.c           |  23 +
+>   drivers/soc/mediatek/Kconfig                       |  11 +
+>   drivers/soc/mediatek/Makefile                      |   1 +
+>   drivers/soc/mediatek/mtk-dvfsrc.c                  | 538 +++++++++++++++++++++
+>   include/dt-bindings/interconnect/mtk,mt6873-emi.h  |  41 ++
+>   include/dt-bindings/interconnect/mtk,mt8183-emi.h  |  21 +
+>   include/dt-bindings/interconnect/mtk,mt8195-emi.h  |  42 ++
+>   include/linux/soc/mediatek/mtk_dvfsrc.h            |  35 ++
+>   include/linux/soc/mediatek/mtk_sip_svc.h           |   4 +
+>   18 files changed, 1215 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/soc/mediatek/dvfsrc.yaml
+>   create mode 100644 drivers/interconnect/mediatek/Kconfig
+>   create mode 100644 drivers/interconnect/mediatek/Makefile
+>   create mode 100644 drivers/interconnect/mediatek/mtk-emi.c
+>   create mode 100644 drivers/soc/mediatek/mtk-dvfsrc.c
+>   create mode 100644 include/dt-bindings/interconnect/mtk,mt6873-emi.h
+>   create mode 100644 include/dt-bindings/interconnect/mtk,mt8183-emi.h
+>   create mode 100644 include/dt-bindings/interconnect/mtk,mt8195-emi.h
+>   create mode 100644 include/linux/soc/mediatek/mtk_dvfsrc.h
+> 
+
+
+

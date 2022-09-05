@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6FD5ACB79
+	by mail.lfdr.de (Postfix) with ESMTP id 7464D5ACB78
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235490AbiIEGzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 02:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S235911AbiIEGz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 02:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236797AbiIEGzW (ORCPT
+        with ESMTP id S236829AbiIEGz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 02:55:22 -0400
+        Mon, 5 Sep 2022 02:55:29 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B92515A27;
-        Sun,  4 Sep 2022 23:55:11 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2853bIKx021590;
-        Mon, 5 Sep 2022 06:54:55 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB41C11A23;
+        Sun,  4 Sep 2022 23:55:17 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2855gvbD015576;
+        Mon, 5 Sep 2022 06:55:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=NNyDIoMOKXc8FoBD3PaIJTG7x8FfAuZr/STsSVCovvY=;
- b=GutV9Pf5EMZSsKVqoKKdo5mQu37GItBNLx+RUiZSjRHi5QxKTJ45S14AL2ATDpskoJ36
- 3m9n9v3c48g9lBu2wsEnBFH0mLocgA0q0ehR7kOV/Be7pb5sbJOAgD+fQ9Ik/Z9tS45Z
- WYO/eKMZ2c8a2NoM40h1hsA9zqLuYEjOOHa7P4Cm7+AHhdChopFvXnkQo9DDw5y/kFxf
- b/By5xdmdGM4d0YlcFOhWOScfXXwbQjgRNZJ7LUyuPaU60IqkllbwC5+CZo6IurleR8x
- qcYmIvIVWHxj8EC2UO4Fdh/67ly27Ef+guj7EkRo13yPlTMYtFE18VhZGXivNSaCZjzy 4g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jc03v3adr-1
+ bh=2EEEReGdL9RLJPyS0xMdsTucp7KL8VXMMmxiw0ZRMbY=;
+ b=jblMqu12kUJYYP2rMnCyxAaY9+/DYldPQTTG/nVQXY3a69Z9ezhmSwqQe1DsUWsbcwvo
+ +EUiSrWCYwPh5tH+8b8nemc9tlN5ChZxhSYIARrLQaZG/DSEpOQyitkXdH5zW1gEhHtJ
+ dtuuzBM4p3DzHXf8PuETooZW0/H4WZnXkeKNgQ3i37KlcLDS7sAFaz1cERlI5BFaVjo6
+ C4JSujlftG+G1fS9tyGEB/d09C/z5zIuF3LvzEQFQqQiu8pA9KSKqeLuehKVgJ/mSHOX
+ h4to8mVq4SOxGnkfZyph9+rKfTpCrHjry5/XCN5NB2p47BuXhiukCsvTrooH9eIvuMfK Tg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jbypmkbtp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 06:54:55 +0000
+        Mon, 05 Sep 2022 06:54:59 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2856ss7v010602
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2856sxIU005379
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Sep 2022 06:54:54 GMT
+        Mon, 5 Sep 2022 06:54:59 GMT
 Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sun, 4 Sep 2022 23:54:49 -0700
+ 15.2.986.29; Sun, 4 Sep 2022 23:54:54 -0700
 From:   Mao Jinlong <quic_jinlmao@quicinc.com>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -61,9 +61,9 @@ CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Hao Zhang <quic_hazha@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH v13 8/9] arm64: dts: qcom: sm8250: Add coresight components
-Date:   Mon, 5 Sep 2022 14:53:56 +0800
-Message-ID: <20220905065357.1296-9-quic_jinlmao@quicinc.com>
+Subject: [PATCH v13 9/9] arm64: dts: qcom: sm8250: Add tpdm mm/prng
+Date:   Mon, 5 Sep 2022 14:53:57 +0800
+Message-ID: <20220905065357.1296-10-quic_jinlmao@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220905065357.1296-1-quic_jinlmao@quicinc.com>
 References: <20220905065357.1296-1-quic_jinlmao@quicinc.com>
@@ -74,15 +74,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: KL7Cqz5g6gaNqOQ3MYN9pwY_PwQ8O5RA
-X-Proofpoint-ORIG-GUID: KL7Cqz5g6gaNqOQ3MYN9pwY_PwQ8O5RA
+X-Proofpoint-ORIG-GUID: Qlg8MjMdysB_DmwKEh5qeHGfJaeIYhFd
+X-Proofpoint-GUID: Qlg8MjMdysB_DmwKEh5qeHGfJaeIYhFd
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-05_04,2022-09-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=2
- impostorscore=0 mlxscore=0 spamscore=0 priorityscore=1501 bulkscore=0
- phishscore=0 clxscore=1011 mlxlogscore=890 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2022-09-05_05,2022-09-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ phishscore=0 spamscore=0 mlxscore=0 bulkscore=0 adultscore=0
+ suspectscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=851
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2207270000 definitions=main-2209050033
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -94,70 +94,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add coresight components for sm8250. STM/ETM are added.
+Add tpdm mm and tpdm prng for sm8250.
 
-Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
++---------------+                +-------------+
+|  tpdm@6c08000 |                |tpdm@684C000 |
++-------|-------+                +------|------+
+        |                               |
++-------|-------+                       |
+| funnel@6c0b000|                       |
++-------|-------+                       |
+        |                               |
++-------|-------+                       |
+|funnel@6c2d000 |                       |
++-------|-------+                       |
+        |                               |
+        |    +---------------+          |
+        +----- tpda@6004000  -----------+
+             +-------|-------+
+                     |
+             +-------|-------+
+             |funnel@6005000 |
+             +---------------+
+
 Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 498 +++++++++++++++++++++++++++
- 1 file changed, 498 insertions(+)
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 173 +++++++++++++++++++++++++++
+ 1 file changed, 173 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index bc773e210023..55c5ebc9f889 100644
+index 55c5ebc9f889..6344781c3647 100644
 --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2721,6 +2721,504 @@
+@@ -2738,6 +2738,76 @@
  			};
  		};
  
-+		stm@6002000 {
-+			compatible = "arm,coresight-stm", "arm,primecell";
-+			reg = <0 0x06002000 0 0x1000>, <0 0x16280000 0 0x180000>;
-+			reg-names = "stm-base", "stm-stimulus-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					stm_out: endpoint {
-+						remote-endpoint = <&funnel0_in7>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6041000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x06041000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_in0_out_funnel_merg: endpoint {
-+						remote-endpoint = <&funnel_merg_in_funnel_in0>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@7 {
-+					reg = <7>;
-+					funnel0_in7: endpoint {
-+						remote-endpoint = <&stm_out>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6042000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x06042000 0 0x1000>;
++		tpda@6004000 {
++			compatible = "arm,primecell";
++			reg = <0 0x06004000 0 0x1000>;
++			reg-names = "tpda-base";
 +
 +			clocks = <&aoss_qmp>;
 +			clock-names = "apb_pclk";
@@ -168,8 +143,8 @@ index bc773e210023..55c5ebc9f889 100644
 +
 +				port@0 {
 +					reg = <0>;
-+					funnel_in1_out_funnel_merg: endpoint {
-+						remote-endpoint = <&funnel_merg_in_funnel_in1>;
++					tpda_out_funnel_qatb: endpoint {
++						remote-endpoint = <&funnel_qatb_in_tpda>;
 +					};
 +				};
 +			};
@@ -178,97 +153,26 @@ index bc773e210023..55c5ebc9f889 100644
 +				#address-cells = <1>;
 +				#size-cells = <0>;
 +
-+				port@4 {
-+					reg = <4>;
-+					funnel_in1_in_funnel_apss_merg: endpoint {
-+					remote-endpoint = <&funnel_apss_merg_out_funnel_in1>;
++				port@9 {
++					reg = <9>;
++					tpda_9_in_tpdm_mm: endpoint {
++						remote-endpoint = <&tpdm_mm_out_tpda9>;
++					};
++				};
++
++				port@17 {
++					reg = <23>;
++					tpda_23_in_tpdm_prng: endpoint {
++						remote-endpoint = <&tpdm_prng_out_tpda_23>;
 +					};
 +				};
 +			};
 +		};
 +
-+		funnel@6045000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x06045000 0 0x1000>;
++		funnel@6005000 {
++			compatible = "arm,primecell";
 +
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_merg_out_funnel_swao: endpoint {
-+					remote-endpoint = <&funnel_swao_in_funnel_merg>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_merg_in_funnel_in0: endpoint {
-+					remote-endpoint = <&funnel_in0_out_funnel_merg>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					funnel_merg_in_funnel_in1: endpoint {
-+					remote-endpoint = <&funnel_in1_out_funnel_merg>;
-+					};
-+				};
-+			};
-+		};
-+
-+		replicator@6046000 {
-+			compatible = "arm,coresight-dynamic-replicator", "arm,primecell";
-+			reg = <0 0x06046000 0 0x1000>;
-+
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					replicator_out: endpoint {
-+						remote-endpoint = <&etr_in>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				port {
-+					replicator_cx_in_swao_out: endpoint {
-+						remote-endpoint = <&replicator_swao_out_cx_in>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etr@6048000 {
-+			compatible = "arm,coresight-tmc", "arm,primecell";
-+			reg = <0 0x06048000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,scatter-gather;
-+
-+			in-ports {
-+				port {
-+					etr_in: endpoint {
-+						remote-endpoint = <&replicator_out>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6b04000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			arm,primecell-periphid = <0x000bb908>;
-+
-+			reg = <0 0x06b04000 0 0x1000>;
++			reg = <0 0x06005000 0 0x1000>;
 +			reg-names = "funnel-base";
 +
 +			clocks = <&aoss_qmp>;
@@ -276,37 +180,8 @@ index bc773e210023..55c5ebc9f889 100644
 +
 +			out-ports {
 +				port {
-+					funnel_swao_out_etf: endpoint {
-+						remote-endpoint = <&etf_in_funnel_swao_out>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@7 {
-+					reg = <7>;
-+					funnel_swao_in_funnel_merg: endpoint {
-+						remote-endpoint= <&funnel_merg_out_funnel_swao>;
-+					};
-+				};
-+			};
-+
-+		};
-+
-+		etf@6b05000 {
-+			compatible = "arm,coresight-tmc", "arm,primecell";
-+			reg = <0 0x06b05000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					etf_out: endpoint {
-+						remote-endpoint = <&replicator_in>;
++					funnel_qatb_out_funnel_in0: endpoint {
++						remote-endpoint = <&funnel_in0_in_funnel_qatb>;
 +					};
 +				};
 +			};
@@ -317,200 +192,88 @@ index bc773e210023..55c5ebc9f889 100644
 +
 +				port@0 {
 +					reg = <0>;
-+					etf_in_funnel_swao_out: endpoint {
-+						remote-endpoint = <&funnel_swao_out_etf>;
++					funnel_qatb_in_tpda: endpoint {
++						remote-endpoint = <&tpda_out_funnel_qatb>;
 +					};
 +				};
 +			};
 +		};
 +
-+		replicator@6b06000 {
-+			compatible = "arm,coresight-dynamic-replicator", "arm,primecell";
-+			reg = <0 0x06b06000 0 0x1000>;
+ 		funnel@6041000 {
+ 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+ 			reg = <0 0x06041000 0 0x1000>;
+@@ -2757,6 +2827,13 @@
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 
++				port@6 {
++					reg = <6>;
++					funnel_in0_in_funnel_qatb: endpoint {
++						remote-endpoint = <&funnel_qatb_out_funnel_in0>;
++					};
++				};
++
+ 				port@7 {
+ 					reg = <7>;
+ 					funnel0_in7: endpoint {
+@@ -2875,6 +2952,23 @@
+ 			};
+ 		};
+ 
++		tpdm@684c000 {
++			compatible = "arm,primecell";
++			reg = <0 0x0684c000 0 0x1000>;
++			reg-names = "tpdm-base";
 +
 +			clocks = <&aoss_qmp>;
 +			clock-names = "apb_pclk";
 +
 +			out-ports {
 +				port {
-+					replicator_swao_out_cx_in: endpoint {
-+						remote-endpoint = <&replicator_cx_in_swao_out>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				port {
-+					replicator_in: endpoint {
-+						remote-endpoint = <&etf_out>;
++					tpdm_prng_out_tpda_23: endpoint {
++						remote-endpoint = <&tpda_23_in_tpdm_prng>;
 +					};
 +				};
 +			};
 +		};
 +
-+		etm@7040000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07040000 0 0x1000>;
-+
-+			cpu = <&CPU0>;
+ 		funnel@6b04000 {
+ 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+ 			arm,primecell-periphid = <0x000bb908>;
+@@ -2959,6 +3053,85 @@
+ 			};
+ 		};
+ 
++		tpdm@6c08000 {
++			compatible = "arm,primecell";
++			reg = <0 0x06c08000 0 0x1000>;
++			reg-names = "tpdm-base";
 +
 +			clocks = <&aoss_qmp>;
 +			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
 +
 +			out-ports {
 +				port {
-+					etm0_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in0>;
++					tpdm_mm_out_funnel_dl_mm: endpoint {
++						remote-endpoint = <&funnel_dl_mm_in_tpdm_mm>;
 +					};
 +				};
 +			};
 +		};
 +
-+		etm@7140000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07140000 0 0x1000>;
-+
-+			cpu = <&CPU1>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm1_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in1>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7240000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07240000 0 0x1000>;
-+
-+			cpu = <&CPU2>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm2_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in2>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7340000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07340000 0 0x1000>;
-+
-+			cpu = <&CPU3>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm3_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in3>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7440000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07440000 0 0x1000>;
-+
-+			cpu = <&CPU4>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm4_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in4>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7540000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07540000 0 0x1000>;
-+
-+			cpu = <&CPU5>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm5_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in5>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7640000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07640000 0 0x1000>;
-+
-+			cpu = <&CPU6>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm6_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in6>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7740000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07740000 0 0x1000>;
-+
-+			cpu = <&CPU7>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm7_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in7>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@7800000 {
++		funnel@6c0b000 {
 +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x07800000 0 0x1000>;
++
++			reg = <0 0x06c0b000 0 0x1000>;
++			reg-names = "funnel-base";
 +
 +			clocks = <&aoss_qmp>;
 +			clock-names = "apb_pclk";
 +
 +			out-ports {
 +				port {
-+					funnel_apss_out_funnel_apss_merg: endpoint {
-+					remote-endpoint = <&funnel_apss_merg_in_funnel_apss>;
++					funnel_dl_mm_out_funnel_dl_center: endpoint {
++					remote-endpoint = <&funnel_dl_center_in_funnel_dl_mm>;
 +					};
 +				};
 +			};
@@ -518,68 +281,21 @@ index bc773e210023..55c5ebc9f889 100644
 +			in-ports {
 +				#address-cells = <1>;
 +				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					apss_funnel_in0: endpoint {
-+						remote-endpoint = <&etm0_out>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					apss_funnel_in1: endpoint {
-+						remote-endpoint = <&etm1_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+					apss_funnel_in2: endpoint {
-+						remote-endpoint = <&etm2_out>;
-+					};
-+				};
 +
 +				port@3 {
 +					reg = <3>;
-+					apss_funnel_in3: endpoint {
-+						remote-endpoint = <&etm3_out>;
-+					};
-+				};
-+
-+				port@4 {
-+					reg = <4>;
-+					apss_funnel_in4: endpoint {
-+						remote-endpoint = <&etm4_out>;
-+					};
-+				};
-+
-+				port@5 {
-+					reg = <5>;
-+					apss_funnel_in5: endpoint {
-+						remote-endpoint = <&etm5_out>;
-+					};
-+				};
-+
-+				port@6 {
-+					reg = <6>;
-+					apss_funnel_in6: endpoint {
-+						remote-endpoint = <&etm6_out>;
-+					};
-+				};
-+
-+				port@7 {
-+					reg = <7>;
-+					apss_funnel_in7: endpoint {
-+						remote-endpoint = <&etm7_out>;
++					funnel_dl_mm_in_tpdm_mm: endpoint {
++						remote-endpoint = <&tpdm_mm_out_funnel_dl_mm>;
 +					};
 +				};
 +			};
 +		};
 +
-+		funnel@7810000 {
++		funnel@6c2d000 {
 +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x07810000 0 0x1000>;
++
++			reg = <0 0x06c2d000 0 0x1000>;
++			reg-names = "funnel-base";
 +
 +			clocks = <&aoss_qmp>;
 +			clock-names = "apb_pclk";
@@ -587,10 +303,9 @@ index bc773e210023..55c5ebc9f889 100644
 +			out-ports {
 +				#address-cells = <1>;
 +				#size-cells = <0>;
-+
 +				port {
-+					funnel_apss_merg_out_funnel_in1: endpoint {
-+					remote-endpoint = <&funnel_in1_in_funnel_apss_merg>;
++					tpdm_mm_out_tpda9: endpoint {
++						remote-endpoint = <&tpda_9_in_tpdm_mm>;
 +					};
 +				};
 +			};
@@ -599,18 +314,18 @@ index bc773e210023..55c5ebc9f889 100644
 +				#address-cells = <1>;
 +				#size-cells = <0>;
 +
-+				port@0 {
-+					reg = <0>;
-+					funnel_apss_merg_in_funnel_apss: endpoint {
-+					remote-endpoint = <&funnel_apss_out_funnel_apss_merg>;
++				port@2 {
++					reg = <2>;
++					funnel_dl_center_in_funnel_dl_mm: endpoint {
++					remote-endpoint = <&funnel_dl_mm_out_funnel_dl_center>;
 +					};
 +				};
 +			};
 +		};
 +
- 		cdsp: remoteproc@8300000 {
- 			compatible = "qcom,sm8250-cdsp-pas";
- 			reg = <0 0x08300000 0 0x10000>;
+ 		etm@7040000 {
+ 			compatible = "arm,coresight-etm4x", "arm,primecell";
+ 			reg = <0 0x07040000 0 0x1000>;
 -- 
 2.17.1
 

@@ -2,92 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35C55ACD3B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85165ACCF0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237069AbiIEHzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
+        id S236734AbiIEHoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235698AbiIEHzI (ORCPT
+        with ESMTP id S229598AbiIEHoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:55:08 -0400
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5AD11C25
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1662364501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BtUJUYZOy4dsKmtYSOJkIch/jexIUqRsQ+FbLNIyJJQ=;
-        b=HvvjpPNYr6G2Rg53atVCceL0cWusJNbrtwFjF2G5ko0pnAp41yA8up0Vwq9UmtdEzvE4xr
-        pL/xXI8woEf+/m+NhAezPe7W4OW6drCdEsRUZqTI7u4V/dxr4sgFsonuKrrqo66jOgcnG+
-        RpkI3K7XQpvWNToYGjK2vFTN3/pG3t14TywMdWEyf2qrKkxow8f/DpNrf+Pweb9k23zCiQ
-        RNz5K62VAQQs+JgX16i/itTNxe5duBuocCZBmzVt5K4XiXuz5uikpfnd82iJDB4oDSYRf9
-        3EE4R8L2rZubCxT3X7qPbabWxE5HQ2/4QkXMBNdU6GDKrIk1ZbTsS4DOlTaiGQ==
-Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-78-H49kdtHfNy6Rs7NwcPrkMA-1; Mon, 05 Sep 2022 03:44:08 -0400
-X-MC-Unique: H49kdtHfNy6Rs7NwcPrkMA-1
-Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
- mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
- Mon, 5 Sep 2022 00:44:05 -0700
-From:   Rahul Tanwar <rtanwar@maxlinear.com>
-To:     <sboyd@kernel.org>, <mturquette@baylibre.com>,
-        <linux-clk@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-lgm-soc@maxlinear.com>,
-        "Rahul Tanwar" <rtanwar@maxlinear.com>
-Subject: [PATCH v2 5/5] clk: mxl: Add a missing flag to allow parent clock rate change
-Date:   Mon, 5 Sep 2022 15:43:48 +0800
-Message-ID: <112a3d6f959fdb14a853897fe4b171d50eab7e55.1662363020.git.rtanwar@maxlinear.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1662363020.git.rtanwar@maxlinear.com>
-References: <cover.1662363020.git.rtanwar@maxlinear.com>
+        Mon, 5 Sep 2022 03:44:10 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D13237D6;
+        Mon,  5 Sep 2022 00:44:09 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 9170D1C0004; Mon,  5 Sep 2022 09:44:08 +0200 (CEST)
+Date:   Mon, 5 Sep 2022 09:44:08 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/56] 4.19.257-rc1 review
+Message-ID: <20220905074408.GB14983@duo.ucw.cz>
+References: <20220902121400.219861128@linuxfoundation.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: maxlinear.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="IiVenqGWf+H9Y6IX"
+Content-Disposition: inline
+In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One of the clock entry "dcl" clk's rate can only be changed by
-changing its parent's clock rate. But it was missing to have
-CLK_SET_RATE_PARENT flag as enabled.
 
-Add/enable CLK_SET_RATE_PARENT flag for dcl clk in order to
-allow its clk rate to be changed via its parent's clk.
+--IiVenqGWf+H9Y6IX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
----
- drivers/clk/x86/clk-lgm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi!
 
-diff --git a/drivers/clk/x86/clk-lgm.c b/drivers/clk/x86/clk-lgm.c
-index e312af42e97a..34e16ea90596 100644
---- a/drivers/clk/x86/clk-lgm.c
-+++ b/drivers/clk/x86/clk-lgm.c
-@@ -255,7 +255,7 @@ static const struct lgm_clk_branch lgm_branch_clks[] =
-=3D {
- =09LGM_FIXED(LGM_CLK_SLIC, "slic", NULL, 0, CGU_IF_CLK1,
- =09=09  8, 2, CLOCK_FLAG_VAL_INIT, 8192000, 2),
- =09LGM_FIXED(LGM_CLK_DOCSIS, "v_docsis", NULL, 0, 0, 0, 0, 0, 16000000, 0)=
-,
--=09LGM_DIV(LGM_CLK_DCL, "dcl", "v_ifclk", 0, CGU_PCMCR,
-+=09LGM_DIV(LGM_CLK_DCL, "dcl", "v_ifclk", CLK_SET_RATE_PARENT, CGU_PCMCR,
- =09=0925, 3, 0, 0, 0, 0, dcl_div),
- =09LGM_MUX(LGM_CLK_PCM, "pcm", pcm_p, 0, CGU_C55_PCMCR,
- =09=090, 1, CLK_MUX_ROUND_CLOSEST, 0),
+> This is the start of the stable review cycle for the 4.19.257 release.
+> There are 56 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+
+CIP testing did not find any problems here:                                =
+           =20
+                                                                           =
+           =20
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.19.y     =20
+                                                                           =
+           =20
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>                              =
+           =20
+                                                                           =
+           =20
+Best regards,                                                              =
+           =20
+                                                                Pavel      =
+           =20
+
 --=20
-2.17.1
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
+--IiVenqGWf+H9Y6IX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYxWoyAAKCRAw5/Bqldv6
+8gNMAJkByPArsITjuCA6aRlVsoQkGXm3MwCeMtGuHKBJejA89DJlGxqjRnTIBaA=
+=/xAu
+-----END PGP SIGNATURE-----
+
+--IiVenqGWf+H9Y6IX--

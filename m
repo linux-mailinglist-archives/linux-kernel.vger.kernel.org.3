@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522705AD1F0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD365AD1DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237705AbiIEL4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
+        id S230054AbiIELyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236780AbiIELzd (ORCPT
+        with ESMTP id S236214AbiIELyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:55:33 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C0D2982F;
-        Mon,  5 Sep 2022 04:55:33 -0700 (PDT)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MLn104437z681Yv;
-        Mon,  5 Sep 2022 19:51:32 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 5 Sep 2022 13:55:31 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 5 Sep 2022 12:55:29 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 5/5] scsi: hisi_sas: Don't send bcast events from HW during nexus HA reset
-Date:   Mon, 5 Sep 2022 19:48:49 +0800
-Message-ID: <1662378529-101489-6-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1662378529-101489-1-git-send-email-john.garry@huawei.com>
-References: <1662378529-101489-1-git-send-email-john.garry@huawei.com>
+        Mon, 5 Sep 2022 07:54:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EC6DF2C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662378881; x=1693914881;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IJhTAgu2cxNzpV0h3DX4P61WCYhZ95uQuCPblFmdGpk=;
+  b=SLvBXuURR9kPbtGVDvvNuBBJEnOinBPaGDVb048CqKFnS07tEbwBU34g
+   jAJX3fE8LV+Jn4KxyluK6zpnMrOqoDiThOSqChE5iVlO1dPgVKkYo9yBh
+   B0TkCVbOS7WtK9I1FtQGLnH0LGY8pqGTBJzThKoViO2nTyIKTvyvnXsVK
+   +7HLVGFZN3gp6PfaydzCvIIDNHGfaa6bbEg7niN3oDNJelpuxyEGFkMNB
+   9NWjd7aSNoEfGit/VSSZHBcTmc0vAtoxsFgNKB9hCU9rUSqL2Uv5NTrRY
+   lsJzqZpwnf2wIdeHdoNbyU6Z4eYpVvOx9zMA9RKoEiUq1vFGCU3SqeKCE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="276115325"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="276115325"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 04:54:41 -0700
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="643784115"
+Received: from jiebinsu-mobl.ccr.corp.intel.com (HELO [10.238.0.228]) ([10.238.0.228])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 04:54:37 -0700
+Message-ID: <da91f763-b74b-68d9-312b-1bc86179273f@intel.com>
+Date:   Mon, 5 Sep 2022 19:54:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [PATCH] ipc/msg.c: mitigate the lock contention with percpu
+ counter
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     vasily.averin@linux.dev, shakeelb@google.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, ebiederm@xmission.com,
+        legion@kernel.org, manfred@colorfullife.com,
+        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, tim.c.chen@intel.com,
+        feng.tang@intel.com, ying.huang@intel.com, tianyou.li@intel.com,
+        wangyang.guo@intel.com
+References: <20220902152243.479592-1-jiebin.sun@intel.com>
+ <20220902090659.28829853543cac3f3f725df5@linux-foundation.org>
+From:   "Sun, Jiebin" <jiebin.sun@intel.com>
+In-Reply-To: <20220902090659.28829853543cac3f3f725df5@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,65 +69,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remote devices may go missing from the per-device nexus reset part of the
-HA nexus, i.e after the controller reset. This is because libsas may find
-the devices to be gone as the phy may be temporarily down when processing
-the bcast event generated from the nexus reset. Filter out bcast events
-during this time to stop the devices being lost.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+On 9/3/2022 12:06 AM, Andrew Morton wrote:
+> On Fri,  2 Sep 2022 23:22:43 +0800 Jiebin Sun <jiebin.sun@intel.com> wrote:
+>
+>> The msg_bytes and msg_hdrs atomic counters are frequently
+>> updated when IPC msg queue is in heavy use, causing heavy
+>> cache bounce and overhead. Change them to percpu_counters
+>> greatly improve the performance. Since there is one unique
+>> ipc namespace, additional memory cost is minimal. Reading
+>> of the count done in msgctl call, which is infrequent. So
+>> the need to sum up the counts in each CPU is infrequent.
+>>
+>> Apply the patch and test the pts/stress-ng-1.4.0
+>> -- system v message passing (160 threads).
+>>
+>> Score gain: 3.38x
+> So this test became 3x faster?
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 32fa775e7d37..699b07abb6b0 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1823,12 +1823,14 @@ static int hisi_sas_clear_nexus_ha(struct sas_ha_struct *sas_ha)
- 	struct hisi_hba *hisi_hba = sas_ha->lldd_ha;
- 	HISI_SAS_DECLARE_RST_WORK_ON_STACK(r);
- 	ASYNC_DOMAIN_EXCLUSIVE(async);
--	int i;
-+	int i, ret;
- 
- 	queue_work(hisi_hba->wq, &r.work);
- 	wait_for_completion(r.completion);
--	if (!r.done)
--		return TMF_RESP_FUNC_FAILED;
-+	if (!r.done) {
-+		ret = TMF_RESP_FUNC_FAILED;
-+		goto out;
-+	}
- 
- 	for (i = 0; i < HISI_SAS_MAX_DEVICES; i++) {
- 		struct hisi_sas_device *sas_dev = &hisi_hba->devices[i];
-@@ -1845,7 +1847,9 @@ static int hisi_sas_clear_nexus_ha(struct sas_ha_struct *sas_ha)
- 	async_synchronize_full_domain(&async);
- 	hisi_sas_release_tasks(hisi_hba);
- 
--	return TMF_RESP_FUNC_COMPLETE;
-+	ret = TMF_RESP_FUNC_COMPLETE;
-+out:
-+	return ret;
- }
- 
- static int hisi_sas_query_task(struct sas_task *task)
-@@ -1993,10 +1997,14 @@ void hisi_sas_phy_bcast(struct hisi_sas_phy *phy)
- {
- 	struct asd_sas_phy *sas_phy = &phy->sas_phy;
- 	struct hisi_hba	*hisi_hba = phy->hisi_hba;
-+	struct sas_ha_struct *sha = &hisi_hba->sha;
- 
- 	if (test_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags))
- 		return;
- 
-+	if (test_bit(SAS_HA_FROZEN, &sha->state))
-+		return;
-+
- 	sas_notify_port_event(sas_phy, PORTE_BROADCAST_RCVD, GFP_ATOMIC);
- }
- EXPORT_SYMBOL_GPL(hisi_sas_phy_bcast);
--- 
-2.35.3
+Yes. It is from the phoronix test suite stress-ng-1.4.0 -- system v message
+passing with dual sockets ICX servers. In this benchmark, there are 160
+pairs of threads, which do msgsnd and msgrcv. The patch benefit more as the
+threads of workload increase.
+
+>
+>> CPU: ICX 8380 x 2 sockets
+>> Core number: 40 x 2 physical cores
+>> Benchmark: pts/stress-ng-1.4.0
+>> -- system v message passing (160 threads)
+>>
+>> ...
+>>
+>> @@ -138,6 +139,14 @@ percpu_counter_add(struct percpu_counter *fbc, s64 amount)
+>>   	preempt_enable();
+>>   }
+>>   
+>> +static inline void
+>> +percpu_counter_add_local(struct percpu_counter *fbc, s64 amount)
+>> +{
+>> +	preempt_disable();
+>> +	fbc->count += amount;
+>> +	preempt_enable();
+>> +}
+> What's this and why is it added?
+>
+> It would be best to propose this as a separate preparatory patch.
+> Fully changelogged and perhaps even with a code comment explaining why
+> and when it should be used.
+>
+> Thanks.
+
+As it will always do sum in msgctl_info, there is no need to use
+percpu_counter_add_batch. It will do global updating when the counter reach
+the batch size. So we add percpu_counter_add_local for smp and non_smp,
+which will only do local adding to the percpu counter.
+I have separate the original patch into two patches.
+
+Thanks.
 

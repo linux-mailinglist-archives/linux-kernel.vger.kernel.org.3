@@ -2,93 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E603D5ADAE6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E47B5ADAEC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbiIEViE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 17:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        id S232836AbiIEVjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 17:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiIEViC (ORCPT
+        with ESMTP id S230074AbiIEVi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 17:38:02 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B440E45993;
-        Mon,  5 Sep 2022 14:37:59 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 5 Sep 2022 17:38:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC384459A6;
+        Mon,  5 Sep 2022 14:38:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MM21d6q4lz4xG3;
-        Tue,  6 Sep 2022 07:37:57 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662413878;
-        bh=vDNiX+BpvfYT2D33EpbXur3PHESzRNwtOPIB4VLff4U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oxFX1EDLgFfR12rYZQAHnVyPi5NSjAvyYAf096pTJg4XFcJgDnqTq/zpxJrNULQkb
-         jI5mGaPwjb4kOOiv/wFt16nZNlKfTWjfym7FK/KgspB9GX495DW3pTt+PQcD2EVrx8
-         AFLMD+W41e11Oqc9NbzdI6SZlfC1WzTeehv6x8yeSda337GvCVPfDspRsNgS/w0t/Z
-         rfJdGYIGMZ/Mz8RclEl2bHu/JnxqMiy6Tg0XKmemZ5aWLCt67rSFNXrGcrDQhWOJLr
-         N5MLj2YOCAISMKX2NVkHC7KQnw9zXtjyzLmVoD5Fewtch+g+SRO2dF5hv0q5Fy4GWy
-         DeGk4OOzebXQA==
-Date:   Tue, 6 Sep 2022 07:37:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the imx-mxs tree
-Message-ID: <20220906073746.1f2713f7@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DD7C60BEB;
+        Mon,  5 Sep 2022 21:38:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B92C433C1;
+        Mon,  5 Sep 2022 21:38:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662413935;
+        bh=cZo+nBDWscuk91kBYX2XhmZN6ePZTsV8K5UeyA4xrmk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cQziaopxhGVv009umQpUpd8obSATqKfY9NnDXhX1q5uPKlpurRFh1idZ/CFMVXywu
+         12WYc2CtCq1obyDoDsDUGh/qpD5+g2fKTvS6EztF7rLzb/wDNIZNEn5erCImUgAJLO
+         qAIXMmX1AsvmHXwgIuKwx8mnb9pqi8MnVmmT2EMiyJZ7Ks0zHj4MMtvM+UnNYwi8yU
+         yxGftCzVy2u+X7jnYcyRyLNwOYc23YGAxs9TMwSX5S1imL25UaiakAbs39ANBjNSKA
+         VhGLo/hI66bNKaScLgd7OFrJAc34aQ8jFNTblKexe+sTT1RvqkoLXWhhlsz+gBwJZr
+         QEfaxmIqiSkTw==
+Date:   Tue, 6 Sep 2022 00:38:52 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v16 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and define KEY_LOOKUP_ALL
+Message-ID: <YxZsbLIAcR4/bScc@kernel.org>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+ <20220905143318.1592015-6-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ywu2rSJw.=gq2boginXcdaL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905143318.1592015-6-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ywu2rSJw.=gq2boginXcdaL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Sep 05, 2022 at 04:33:11PM +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
+> kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
+> validate the kfunc parameters. Add them to enum key_lookup_flag, so that
+> all the current ones and the ones defined in the future are automatically
+> exported through BTF and available to eBPF programs.
+> 
+> Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking whether a
+> variable contains only defined flags.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Hi all,
+You should remove ack if there is any substantial change.
 
-In commit
+> ---
+>  include/linux/key.h      | 6 ++++++
+>  security/keys/internal.h | 2 --
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/key.h b/include/linux/key.h
+> index 7febc4881363..d84171f90cbd 100644
+> --- a/include/linux/key.h
+> +++ b/include/linux/key.h
+> @@ -88,6 +88,12 @@ enum key_need_perm {
+>  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
+>  };
+>  
+> +enum key_lookup_flag {
+> +	KEY_LOOKUP_CREATE = 0x01,	/* Create special keyrings if they don't exist */
+> +	KEY_LOOKUP_PARTIAL = 0x02,	/* Permit partially constructed keys to be found */
+> +	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL), /* OR of previous flags */
 
-  47170487f674 ("arm64: dts: imx8mm-verdin: extend pmic voltages")
+Drop the comments (should be reviewed separately + out of context).
 
-Fixes tag
+> +};
+> +
+>  struct seq_file;
+>  struct user_struct;
+>  struct signal_struct;
+> diff --git a/security/keys/internal.h b/security/keys/internal.h
+> index 9b9cf3b6fcbb..3c1e7122076b 100644
+> --- a/security/keys/internal.h
+> +++ b/security/keys/internal.h
+> @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct key_type *type,
+>  
+>  extern bool lookup_user_key_possessed(const struct key *key,
+>  				      const struct key_match_data *match_data);
+> -#define KEY_LOOKUP_CREATE	0x01
+> -#define KEY_LOOKUP_PARTIAL	0x02
+>  
+>  extern long join_session_keyring(const char *name);
+>  extern void key_change_session_keyring(struct callback_head *twork);
+> -- 
+> 2.25.1
+> 
 
-  Fixes: commit 6a57f224f734 ("arm64: dts: freescale: add initial support f=
-or verdin imx8m mini")
-
-has these problem(s):
-
-  - leading word 'commit' unexpected
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ywu2rSJw.=gq2boginXcdaL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMWbCoACgkQAVBC80lX
-0Gw+pQf+Piz1IAsM24sF7Bpqx8eykEQYmB+O9g8NlUevh+hKZlto8JCwRoOXjyrb
-qeJZsWJDpMR87iPNpKEyfcGpliu79esT5et/UPqnDvQZML9krjO89BkByrZmlazx
-2yG52RMFUoO1n9HrmC9Ii4/+gGq+3qmXSimzL/oSVbyd7gAxS2V3htfpCtGh4LFJ
-+8y2HX2lkxp9FcSiN7plt/lem/34xounjd09DM1c2kJTKhNxodNwdXKVmm6Wm9yL
-50AqAPrUGc4DPrwwbJl/nTDGFBUMcWekVlB59WNn8wkQTSuFXks9FjCoVO1dCI9Z
-ajupZhZI8iVAS1hVOHPFSVHc92ua8A==
-=AWrC
------END PGP SIGNATURE-----
-
---Sig_/ywu2rSJw.=gq2boginXcdaL--
+BR, Jarkko

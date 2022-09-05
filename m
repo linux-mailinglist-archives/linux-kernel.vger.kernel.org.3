@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29C05ACD4B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA725ACD48
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236507AbiIEIAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
+        id S236676AbiIEIAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236197AbiIEIAg (ORCPT
+        with ESMTP id S235312AbiIEIAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:00:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA4552CC85;
-        Mon,  5 Sep 2022 01:00:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBE59ED1;
-        Mon,  5 Sep 2022 01:00:40 -0700 (PDT)
-Received: from [10.162.40.17] (unknown [10.162.40.17])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A0DD3F73D;
-        Mon,  5 Sep 2022 01:00:28 -0700 (PDT)
-Message-ID: <613c9f12-dcd4-d78c-f0a3-dc0c5231a17a@arm.com>
-Date:   Mon, 5 Sep 2022 13:30:25 +0530
+        Mon, 5 Sep 2022 04:00:37 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F17C6582;
+        Mon,  5 Sep 2022 01:00:35 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b16so10184907wru.7;
+        Mon, 05 Sep 2022 01:00:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=VaWJ/ARhAOBGNuUeehNxEZSalc/K693ceMetl/r8zM0=;
+        b=SnJhQQZLPDQoJOp4A6JgHJxbKXZb9XVqvdh2cpuymb/xL6glfU9k9AIRC1OC4q567m
+         WeGvKxSbv3ypSaMKi2ZaAquvKuuxVYsCUzdP6BUR7FLo68gDZt6Pvk68EcBVWzCVJjwG
+         0iJ1ksTQhC9Peq8UKLS6K5Xdwrt22abbzta8YQBRVkHZg8DiJAUE7T4zjNj154crQmo2
+         fVAwwe3YrMejDL4szCZfXaeRP49E3aqQT0fWguEpC05mSB07XUvtyyuVwRmxCsiU5Lr5
+         keXZohZ4yQjL7FidpcZL5DrAGN+0vTOSZsCbo0y43Lq/WvLBGVPfvcn6Z2AtVOUBLyIc
+         NoCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=VaWJ/ARhAOBGNuUeehNxEZSalc/K693ceMetl/r8zM0=;
+        b=B3n5GHgAIXAnL/Z+hUgfICIjSytCB/b+a24dnEIQ7RBbgcwDMOl73nWBsW3X68xHGx
+         y+bWMS+nxy1XGE2Q86C7iIvgHcXHgXIE64tT+CQWSJJsQB1SQJaUn3UGyYLD4MfNtVcv
+         brrxfVYw7+Ilji0fSTkbaD0h0s4jeZ08QjcydZR95KoAR4yay6KPkFxhxfQCb70Pqlcy
+         PalEixgtPnhqDdwYx5BZbvXKR55BdkfTt29tZx2LNbvTTXq1L0bPvftLkfXwEDeCXv1l
+         XnSLT0srMb4rmI9v6ZoCmRsez1RqbF6hxr+8x33pK1c/Tx7e3LS80m5DKA6yNjRopnMD
+         xBKA==
+X-Gm-Message-State: ACgBeo0qizifqRG0W+ZypKdxPt4n83RJ3kyXdvarMXrWzwTXRmFN84Dm
+        /QtGyxtFNbfgSuYE8hmroRrWLzaNFXg=
+X-Google-Smtp-Source: AA6agR60M9DbGesrt7BIBrBnQOq6chv1b4N5FjBbhGVwQjqOFSOuMcViNY3ntJmPvfXnH/oAQukyzg==
+X-Received: by 2002:a5d:64ab:0:b0:226:d997:ad5c with SMTP id m11-20020a5d64ab000000b00226d997ad5cmr20049042wrp.602.1662364833934;
+        Mon, 05 Sep 2022 01:00:33 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id l20-20020a05600c089400b003a30fbde91dsm15646478wmp.20.2022.09.05.01.00.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 01:00:33 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 10:00:29 +0200
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     anton@tuxera.com, linux-ntfs-dev@lists.sourceforge.net,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: WARNING: inconsistent lock state when doing fdisk -l
+Message-ID: <YxWsnc1JlNemcXfA@Red>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V7 6/8] perf/tools: Extend branch type classification
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, mark.rutland@arm.com,
-        Robin Murphy <robin.murphy@arm.com>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220824044822.70230-1-anshuman.khandual@arm.com>
- <20220824044822.70230-7-anshuman.khandual@arm.com>
- <Yw59CkHUVbfrHdkh@kernel.org> <9b1a8ebd-0562-f104-7439-308282f7fb52@arm.com>
- <YxI99uLvpgAZjm2r@kernel.org> <YxJBh3wvAGol+Ekq@kernel.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <YxJBh3wvAGol+Ekq@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,101 +69,251 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello
 
+On a jetson-tk1 I got today:
+[   39.582103] ================================
+[   39.586361] WARNING: inconsistent lock state
+[   39.590618] 6.0.0-rc3-next-20220901-00130-gb6b3fb681f34-dirty #8 Not tainted
+[   39.597649] --------------------------------
+[   39.601907] inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-R} usage.
+[   39.607897] rngd/218 [HC0[0]:SC1[1]:HE0:SE0] takes:
+[   39.612763] c284dba4 (&inode->i_size_seqcount){+.+-}-{0:0}, at: end_bio_bh_io_sync+0x30/0x4c
+[   39.621198] {SOFTIRQ-ON-W} state was registered at:
+[   39.626061]   simple_write_end+0x1e8/0x2a4
+[   39.630154]   page_symlink+0xb0/0x158
+[   39.633808]   ramfs_symlink+0x50/0xcc
+[   39.637466]   vfs_symlink+0x80/0xf0
+[   39.640944]   init_symlink+0x54/0x88
+[   39.644512]   do_symlink+0x54/0x88
+[   39.647905]   write_buffer+0x28/0x3c
+[   39.651470]   flush_buffer+0x40/0x98
+[   39.655035]   __gunzip+0x2c4/0x35c
+[   39.658427]   gunzip+0x2c/0x34
+[   39.661470]   unpack_to_rootfs+0x18c/0x2b4
+[   39.665556]   do_populate_rootfs+0x78/0x1cc
+[   39.669728]   async_run_entry_fn+0x24/0xb0
+[   39.673817]   process_one_work+0x288/0x774
+[   39.677904]   worker_thread+0x54/0x51c
+[   39.681643]   kthread+0xf8/0x12c
+[   39.684862]   ret_from_fork+0x14/0x2c
+[   39.688513]   0x0
+[   39.690430] irq event stamp: 19119
+[   39.693820] hardirqs last  enabled at (19118): [<c010145c>] __do_softirq+0xdc/0x598
+[   39.701460] hardirqs last disabled at (19119): [<c0d0afb0>] _raw_read_lock_irqsave+0x84/0x88
+[   39.709883] softirqs last  enabled at (19108): [<c01016b4>] __do_softirq+0x334/0x598
+[   39.717609] softirqs last disabled at (19117): [<c012bdb0>] __irq_exit_rcu+0x124/0x1a8
+[   39.725511] 
+[   39.725511] other info that might help us debug this:
+[   39.732021]  Possible unsafe locking scenario:
+[   39.732021] 
+[   39.737924]        CPU0
+[   39.740360]        ----
+[   39.742796]   lock(&inode->i_size_seqcount);
+[   39.747056]   <Interrupt>
+[   39.749665]     lock(&inode->i_size_seqcount);
+[   39.754098] 
+[   39.754098]  *** DEADLOCK ***
+[   39.754098] 
+[   39.760001] 1 lock held by rngd/218:
+[   39.763566]  #0: c284d950 (&ni->size_lock){...-}-{2:2}, at: ntfs_end_buffer_async_read+0x68/0x458
+[   39.772432] 
+[   39.772432] stack backtrace:
+[   39.776777] CPU: 0 PID: 218 Comm: rngd Not tainted 6.0.0-rc3-next-20220901-00130-gb6b3fb681f34-dirty #8
+[   39.786149] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+[   39.792401]  unwind_backtrace from show_stack+0x10/0x14
+[   39.797618]  show_stack from dump_stack_lvl+0x58/0x70
+[   39.802660]  dump_stack_lvl from mark_lock.part.0+0xb80/0x1298
+[   39.808482]  mark_lock.part.0 from __lock_acquire+0xa70/0x29fc
+[   39.814304]  __lock_acquire from lock_acquire+0x11c/0x3c8
+[   39.819691]  lock_acquire from ntfs_end_buffer_async_read+0xac/0x458
+[   39.826033]  ntfs_end_buffer_async_read from end_bio_bh_io_sync+0x30/0x4c
+[   39.832809]  end_bio_bh_io_sync from blk_update_request+0x158/0x57c
+[   39.839064]  blk_update_request from scsi_end_request+0x1c/0x3d4
+[   39.845059]  scsi_end_request from scsi_io_completion+0x38/0x688
+[   39.851053]  scsi_io_completion from blk_complete_reqs+0x54/0x60
+[   39.857047]  blk_complete_reqs from __do_softirq+0x134/0x598
+[   39.862694]  __do_softirq from __irq_exit_rcu+0x124/0x1a8
+[   39.868083]  __irq_exit_rcu from irq_exit+0x8/0x28
+[   39.872866]  irq_exit from call_with_stack+0x18/0x20
+[   39.877824]  call_with_stack from __irq_usr+0x7c/0xa0
+[   39.882868] Exception stack(0xf0c69fb0 to 0xf0c69ff8)
+[   39.887906] 9fa0:                                     553c47b7 41bd9715 553c47b7 b6b5e9d8
+[   39.896065] 9fc0: b6b5ea40 00000000 00000000 b62046a0 0000000a b635f000 beefcbf4 b6b5e924
+[   39.904223] 9fe0: 0000001d b6b5e910 b6f448ec b6f44900 80000010 ffffffff
 
-On 9/2/22 23:16, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Sep 02, 2022 at 02:31:34PM -0300, Arnaldo Carvalho de Melo escreveu:
->> Em Thu, Sep 01, 2022 at 10:37:24AM +0530, Anshuman Khandual escreveu:
->>> On 8/31/22 02:41, Arnaldo Carvalho de Melo wrote:
->>>> Strange:
->>>>
->>>>   75     8.89 ubuntu:20.04-x-powerpc64el    : FAIL gcc version 10.3.0 (Ubuntu 10.3.0-1ubuntu1~20.04)
->>>>         inlined from 'branch_type_stat_display' at util/branch.c:152:4:
->>>>     /usr/powerpc64le-linux-gnu/include/bits/stdio2.h:100:10: error: '%8s' directive argument is null [-Werror=format-overflow=]
->>>>       100 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
->>>>           |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>       101 |    __va_arg_pack ());
->>>>           |    ~~~~~~~~~~~~~~~~~
->>>>
->>>
->>> Indeed. But this new code block here looks exact same like the previous and existing one
->>> i.e with branch_new_name() and PERF_BR_NEW_MAX. The complain is that - '%8s' directive
->>> argument is NULL. This warning might just be a false positive [1], because of a compiler
->>> problem on powerpc64el ? But please do let me know if something needs to be changed here
->>> to avoid this warning.
->>>
->>> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90036
->>>
->>
->> So, I tried not returning NULL in the functions that are ultimately
->> called, but that didn't help, so I'll try just disabling that specific
->> warning for this specific file.
-> 
-> Got it building:
+The command leading to this is a simple fdisk -l
+It is not clear to me if the problem came from NTFS or ramfs.
 
-Thanks Arnaldo, I guess all the tool changes in this series, along with this
-build will land in linux-next later for more test coverage.
+The full output is:
+fdisk -l
+Disk /dev/ram0: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram1: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram2: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram3: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram4: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram5: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram6: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram7: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram8: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram9: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram10: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram11: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram12: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512[   39.577565] 
+[   39.582103] ================================
+[   39.586361] WARNING: inconsistent lock state
+[   39.590618] 6.0.0-rc3-next-20220901-00130-gb6b3fb681f34-dirty #8 Not tainted
+[   39.597649] --------------------------------
+[   39.601907] inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-R} usage.
+[   39.607897] rngd/218 [HC0[0]:SC1[1]:HE0:SE0] takes:
+[   39.612763] c284dba4 (&inode->i_size_seqcount){+.+-}-{0:0}, at: end_bio_bh_io_sync+0x30/0x4c
+[   39.621198] {SOFTIRQ-ON-W} state was registered at:
+[   39.626061]   simple_write_end+0x1e8/0x2a4
+[   39.630154]   page_symlink+0xb0/0x158
+[   39.633808]   ramfs_symlink+0x50/0xcc
+[   39.637466]   vfs_symlink+0x80/0xf0
+[   39.640944]   init_symlink+0x54/0x88
+[   39.644512]   do_symlink+0x54/0x88
+[   39.647905]   write_buffer+0x28/0x3c
+[   39.651470]   flush_buffer+0x40/0x98
+[   39.655035]   __gunzip+0x2c4/0x35c
+[   39.658427]   gunzip+0x2c/0x34
+[   39.661470]   unpack_to_rootfs+0x18c/0x2b4
+[   39.665556]   do_populate_rootfs+0x78/0x1cc
+[   39.669728]   async_run_entry_fn+0x24/0xb0
+[   39.673817]   process_one_work+0x288/0x774
+[   39.677904]   worker_thread+0x54/0x51c
+[   39.681643]   kthread+0xf8/0x12c
+[   39.684862]   ret_from_fork+0x14/0x2c
+[   39.688513]   0x0
+[   39.690430] irq event stamp: 19119
+[   39.693820] hardirqs last  enabled at (19118): [<c010145c>] __do_softirq+0xdc/0x598
+[   39.701460] hardirqs last disabled at (19119): [<c0d0afb0>] _raw_read_lock_irqsave+0x84/0x88
+[   39.709883] softirqs last  enabled at (19108): [<c01016b4>] __do_softirq+0x334/0x598
+[   39.717609] softirqs last disabled at (19117): [<c012bdb0>] __irq_exit_rcu+0x124/0x1a8
+[   39.725511] 
+[   39.725511] other info that might help us debug this:
+[   39.732021]  Possible unsafe locking scenario:
+[   39.732021] 
+[   39.737924]        CPU0
+[   39.740360]        ----
+[   39.742796]   lock(&inode->i_size_seqcount);
+[   39.747056]   <Interrupt>
+[   39.749665]     lock(&inode->i_size_seqcount);
+[   39.754098] 
+[   39.754098]  *** DEADLOCK ***
+[   39.754098] 
+[   39.760001] 1 lock held by rngd/218:
+[   39.763566]  #0: c284d950 (&ni->size_lock){...-}-{2:2}, at: ntfs_end_buffer_async_read+0x68/0x458
+[   39.772432] 
+[   39.772432] stack backtrace:
+[   39.776777] CPU: 0 PID: 218 Comm: rngd Not tainted 6.0.0-rc3-next-20220901-00130-gb6b3fb681f34-dirty #8
+[   39.786149] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+[   39.792401]  unwind_backtrace from show_stack+0x10/0x14
+[   39.797618]  show_stack from dump_stack_lvl+0x58/0x70
+[   39.802660]  dump_stack_lvl from mark_lock.part.0+0xb80/0x1298
+[   39.808482]  mark_lock.part.0 from __lock_acquire+0xa70/0x29fc
+[   39.814304]  __lock_acquire from lock_acquire+0x11c/0x3c8
+[   39.819691]  lock_acquire from ntfs_end_buffer_async_read+0xac/0x458
+[   39.826033]  ntfs_end_buffer_async_read from end_bio_bh_io_sync+0x30/0x4c
+[   39.832809]  end_bio_bh_io_sync from blk_update_request+0x158/0x57c
+[   39.839064]  blk_update_request from scsi_end_request+0x1c/0x3d4
+[   39.845059]  scsi_end_request from scsi_io_completion+0x38/0x688
+[   39.851053]  scsi_io_completion from blk_complete_reqs+0x54/0x60
+[   39.857047]  blk_complete_reqs from __do_softirq+0x134/0x598
+[   39.862694]  __do_softirq from __irq_exit_rcu+0x124/0x1a8
+[   39.868083]  __irq_exit_rcu from irq_exit+0x8/0x28
+[   39.872866]  irq_exit from call_with_stack+0x18/0x20
+[   39.877824]  call_with_stack from __irq_usr+0x7c/0xa0
+[   39.882868] Exception stack(0xf0c69fb0 to 0xf0c69ff8)
+[   39.887906] 9fa0:                                     553c47b7 41bd9715 553c47b7 b6b5e9d8
+[   39.896065] 9fc0: b6b5ea40 00000000 00000000 b62046a0 0000000a b635f000 beefcbf4 b6b5e924
+[   39.904223] 9fe0: 0000001d b6b5e910 b6f448ec b6f44900 80000010 ffffffff
+ = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram13: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/ram14: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optima[   39.951621] ntfs: volume version 3.1.
+l): 4096 bytes / 4096 bytes
+Disk /dev/ram15: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk /dev/mmcblk1: 14.68 GiB, 15758000128 bytes, 30777344 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: 00F7EF05-A1E9-E53A-CA0B-CBD0484764BD
+Device            Start      End  Sectors  Size Type
+/dev/mmcblk1p1    49152 29908991 29859840 14.2G Linux filesystem
+/dev/mmcblk1p2 29908992 29917183     8192    4M Microsoft basic data
+/dev/mmcblk1p3 29917184 30048255   131072   64M Microsoft basic data
+/dev/mmcblk1p4 30048256 30056447     8192    4M Microsoft basic data
+/dev/mmcblk1p5 30056448 30064639     8192    4M Microsoft basic data
+/dev/mmcblk1p6 30064640 30072831     8192    4M Microsoft basic data
+/dev/mmcblk1p7 30072832 30081023     8192    4M Microsoft basic data
+/dev/mmcblk1p8 30081024 30773247   692224  338M Microsoft basic data
+Disk /dev/mmcblk1boot0: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk /dev/mmcblk1boot1: 4 MiB, 4194304 bytes, 8192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk /dev/sda: 149.05 GiB, 160041885696 bytes, 312581808 sectors
+Disk model: WDC WD1600BEVS-6
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x40aa40aa
+Device     Boot     Start       End   Sectors   Size Id Type
+/dev/sda1  *           63 296929394 296929332 141.6G  7 HPFS/NTFS/exFAT
+/dev/sda2       296929395 312576704  15647310   7.5G  7 HPFS/NTFS/exFAT
 
-> 
->     23.68 ubuntu:20.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0
-> BUILD_TARBALL_HEAD=b0f700972d9d0c9b8e73f69ccf0e56d74c580d71
-> 
-> With:
-> 
->>From b0f700972d9d0c9b8e73f69ccf0e56d74c580d71 Mon Sep 17 00:00:00 2001
-> From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Date: Fri, 2 Sep 2022 14:35:26 -0300
-> Subject: [PATCH 1/1] perf build: Avoid false positive with
->  -Werror=format-overflow= with gcc 10.3.0 on powerpc
-> 
-> When building with gcc 10.3.0 on powerpc this is happening:
-> 
->    75     8.89 ubuntu:20.04-x-powerpc64el    : FAIL gcc version 10.3.0 (Ubuntu 10.3.0-1ubuntu1~20.04)
->          inlined from 'branch_type_stat_display' at util/branch.c:152:4:
->      /usr/powerpc64le-linux-gnu/include/bits/stdio2.h:100:10: error: '%8s' directive argument is null [-Werror=format-overflow=]
->        100 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
->            |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->        101 |    __va_arg_pack ());
->            |    ~~~~~~~~~~~~~~~~~
-> 
-> Looks related to:
-> 
->   [10/11/12/13 Regression] false positive: directive argument is null [-Werror=format-overflow=]
->   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90036
-> 
-> So lets disable this just for the util/branch.o file.
-> 
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: James Clark <james.clark@arm.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Suzuki Poulouse <suzuki.poulose@arm.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Will Deacon <will@kernel.org>
-> Link: http://lore.kernel.org/lkml/YxI99uLvpgAZjm2r@kernel.org
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> ---
->  tools/perf/util/Build | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> index 8fd6dc8de5210336..20a5524e88a04d44 100644
-> --- a/tools/perf/util/Build
-> +++ b/tools/perf/util/Build
-> @@ -223,6 +223,10 @@ CFLAGS_llvm-utils.o += -DPERF_INCLUDE_DIR="BUILD_STR($(perf_include_dir_SQ))"
->  # avoid compiler warnings in 32-bit mode
->  CFLAGS_genelf_debug.o  += -Wno-packed
->  
-> +# avoid false positive when building with gcc 10.3.0 on powerpc
-> +# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90036
-> +CFLAGS_branch.o += -Wno-format-overflow
-> +
->  $(OUTPUT)util/parse-events-flex.c $(OUTPUT)util/parse-events-flex.h: util/parse-events.l $(OUTPUT)util/parse-events-bison.c
->  	$(call rule_mkdir)
->  	$(Q)$(call echo-cmd,flex)$(FLEX) -o $(OUTPUT)util/parse-events-flex.c \
+Regards

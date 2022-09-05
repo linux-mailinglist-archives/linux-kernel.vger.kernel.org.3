@@ -2,128 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7345AD17A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D24C5AD17F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237097AbiIELWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
+        id S238083AbiIELXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237123AbiIELWE (ORCPT
+        with ESMTP id S235821AbiIELXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:22:04 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63A63DBCB;
-        Mon,  5 Sep 2022 04:22:03 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MLmGb73YLzkWxF;
-        Mon,  5 Sep 2022 19:18:15 +0800 (CST)
-Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 19:22:02 +0800
-Received: from [10.174.176.230] (10.174.176.230) by
- kwepemm600008.china.huawei.com (7.193.23.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 19:22:01 +0800
-Message-ID: <7bb62639-a94e-907c-7110-aad45dda4db4@huawei.com>
-Date:   Mon, 5 Sep 2022 19:22:00 +0800
+        Mon, 5 Sep 2022 07:23:13 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3F75B07A
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:23:10 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oVABy-0005s7-0y; Mon, 05 Sep 2022 13:23:02 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, Conor.Dooley@microchip.com
+Cc:     guoren@kernel.org, apatel@ventanamicro.com, atishp@rivosinc.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] riscv: use BIT() marco for cpufeature probing
+Date:   Mon, 05 Sep 2022 13:23:01 +0200
+Message-ID: <7693745.aoefvbuG5b@diego>
+In-Reply-To: <1e61d31a-9bf5-af79-dbc4-87d63d24b497@microchip.com>
+References: <20220905111027.2463297-1-heiko@sntech.de> <20220905111027.2463297-5-heiko@sntech.de> <1e61d31a-9bf5-af79-dbc4-87d63d24b497@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH 3/3] perf c2c: Prevent potential memory leak in
- c2c_he_zalloc
-To:     Jiri Olsa <olsajiri@gmail.com>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <namhyung@kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220903072542.27678-1-shangxiaojing@huawei.com>
- <20220903072542.27678-4-shangxiaojing@huawei.com> <YxXNHtXoOeZG9Bzb@krava>
-From:   shangxiaojing <shangxiaojing@huawei.com>
-In-Reply-To: <YxXNHtXoOeZG9Bzb@krava>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.176.230]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600008.china.huawei.com (7.193.23.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Montag, 5. September 2022, 13:19:41 CEST schrieb Conor.Dooley@microchip.com:
+> On 05/09/2022 12:10, Heiko Stuebner wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Using the appropriate BIT macro makes the code better readable.
+> > 
+> > Suggested-by: Conor Dooley <conor.dooley@microchip.com>
+> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> 
+> Missing the cover-letter with the changelog?
+> At least, I didn't get it in my inbox.
 
-On 2022/9/5 18:19, Jiri Olsa wrote:
-> On Sat, Sep 03, 2022 at 03:25:42PM +0800, Shang XiaoJing wrote:
->> Free allocated resources when zalloc is failed for members in c2c_he, to
->> prevent potential memory leak in c2c_he_zalloc.
->>
->> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
->> ---
->>   tools/perf/builtin-c2c.c | 14 +++++++++++---
->>   1 file changed, 11 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
->> index 12f272811487..5530433eda80 100644
->> --- a/tools/perf/builtin-c2c.c
->> +++ b/tools/perf/builtin-c2c.c
->> @@ -146,15 +146,15 @@ static void *c2c_he_zalloc(size_t size)
->>   
->>   	c2c_he->cpuset = bitmap_zalloc(c2c.cpus_cnt);
->>   	if (!c2c_he->cpuset)
->> -		return NULL;
->> +		goto out_free_he;
->>   
->>   	c2c_he->nodeset = bitmap_zalloc(c2c.nodes_cnt);
->>   	if (!c2c_he->nodeset)
->> -		return NULL;
->> +		goto out_free_cpuset;
->>   
->>   	c2c_he->node_stats = zalloc(c2c.nodes_cnt * sizeof(*c2c_he->node_stats));
->>   	if (!c2c_he->node_stats)
->> -		return NULL;
->> +		goto out_free_nodeset;
->>   
->>   	init_stats(&c2c_he->cstats.lcl_hitm);
->>   	init_stats(&c2c_he->cstats.rmt_hitm);
->> @@ -163,6 +163,14 @@ static void *c2c_he_zalloc(size_t size)
->>   	init_stats(&c2c_he->cstats.load);
->>   
->>   	return &c2c_he->he;
-> nit, given that c2c_he is zero allocated we could just have
-> single error label that would free everything
->
-> for the patchset:
->
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
->
-> thanks,
-> jirka
+darn git send-email and its automatic selection ;-)
 
-right, i'll be mindful of that in future.
+I.e. I _should_ have added you to the hard recipient list for my series
+in the first place, but instead git send-email selected you based on
+the Suggested-by ... but it looks like these selectoions don't get
+applied to the cover-letter ... sorry about that
 
-this will be done in v2.
 
->> +
->> +out_free_nodeset:
->> +	free(c2c_he->nodeset);
->> +out_free_cpuset:
->> +	free(c2c_he->cpuset);
->> +out_free_he:
->> +	free(c2c_he);
->> +	return NULL;
->>   }
->>   
->>   static void c2c_he_free(void *he)
->> -- 
->> 2.17.1
+Heiko
 
-Thanks,
 
-Shang XiaoJing
+> Either way,
+> 
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> > ---
+> >   arch/riscv/kernel/cpufeature.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index 729f7a218093..08f7445985dc 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -289,10 +289,10 @@ static u32 __init_or_module cpufeature_probe(unsigned int stage)
+> >          u32 cpu_req_feature = 0;
+> > 
+> >          if (cpufeature_probe_svpbmt(stage))
+> > -               cpu_req_feature |= (1U << CPUFEATURE_SVPBMT);
+> > +               cpu_req_feature |= BIT(CPUFEATURE_SVPBMT);
+> > 
+> >          if (cpufeature_probe_zicbom(stage))
+> > -               cpu_req_feature |= (1U << CPUFEATURE_ZICBOM);
+> > +               cpu_req_feature |= BIT(CPUFEATURE_ZICBOM);
+> > 
+> >          return cpu_req_feature;
+> >   }
+> > --
+> > 2.35.1
+> > 
+> 
+> 
+
+
+
 

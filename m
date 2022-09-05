@@ -2,117 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713E85AD84A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62EB55AD84D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbiIERT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S237123AbiIERWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 13:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiIERTx (ORCPT
+        with ESMTP id S230479AbiIERWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:19:53 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070ED1EC69;
-        Mon,  5 Sep 2022 10:19:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662398392; x=1693934392;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=H1x3D21Fgj3oIVsGcghx8kOsLr/B4ZFW56g8adE84zI=;
-  b=QCcjUe21IL33v8n9+6fJ2hC2sQ2X02M0WsJlA7jwWmuP7esoVZoMiYhB
-   sJWdwtdnQA9wv2Ej8VYAJj4wz479a4pNl5Chd8Miv4qbTaeTKqpi5+27G
-   Og5BeMkW8MqSoSpbvGsAG8y/KC5TM4D/2n9RFcenlXDBNLFq3KJqox2P5
-   /JWWhYBydIByslzvnTujshXA9Ty9IHHO4sS74QY4A4Omt4wBKSGdImPYw
-   m07KYctpFmbC+J64xOBrb6Jpk1ew60gIFqxQiiwUuyFRklPiHfiDyttV0
-   dEW1C3VUdoZAecWK60JBIVJb4vkWsdK5K2JzZZU15nZ6nVyjd+Ml68waA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="358143073"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="358143073"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 10:19:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="739647611"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 05 Sep 2022 10:19:50 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 76464101; Mon,  5 Sep 2022 20:20:05 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH v1 1/1] Input: icn8505 - Utilize acpi_get_subsystem_id()
-Date:   Mon,  5 Sep 2022 20:20:01 +0300
-Message-Id: <20220905172001.69244-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Sep 2022 13:22:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E099D52FC4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 10:22:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C4F161369
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 17:22:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D76DEC433D6;
+        Mon,  5 Sep 2022 17:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662398521;
+        bh=pW6cPiKz1ABqdGUp/M/nDAZUMJVaiT/7PREpOhe2/2Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=C88GljmRRQAQXH2uSpuZTjqlfOqA5PMvLsWwMvzLfMiUP9kM67sXvkQ2+LmDURY8X
+         N3xekTP8OzTr4X+qy+NjK8TwIQy+ECtDFCRAjUOdivEv9cUzbKMV+QNUgfcmJ8PW2X
+         cHM3+s6kYourVSadJBWcE6GC0RsyJQ+j/yoAMbV+uP3861b42/qKF92qKcICwZ6RZE
+         Ud4ZmaUQmvRZMgp6VupyWhGcCZYw0POm213FWAUk3nAI5t+NqzwcBAXl3HREyQvSWJ
+         Rxdy1u798vcgYJBvFT78fTfYWGXBWWZPKDx0vpUzcsUH/UgOmY8QkLp+qo30vqVsbP
+         5u096LZhLLkhQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oVFnL-0088Cr-0D;
+        Mon, 05 Sep 2022 18:21:59 +0100
+Date:   Mon, 05 Sep 2022 18:21:57 +0100
+Message-ID: <87o7vtrb2i.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     <tglx@linutronix.de>, <linux-kernel@vger.kernel.org>,
+        <john.garry@huawei.com>
+Subject: Re: [PATCH V2] irqchip/gic-v3-its: Reclaim the dangling bits in LPI maps
+In-Reply-To: <20220831023332.191368-1-liaochang1@huawei.com>
+References: <20220831023332.191368-1-liaochang1@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: liaochang1@huawei.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, john.garry@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_BTC_ID,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace open coded variant of recently introduced acpi_get_subsystem_id().
+On Wed, 31 Aug 2022 03:33:32 +0100,
+Liao Chang <liaochang1@huawei.com> wrote:
+> 
+> Following interrupt allocation process leads to some interrupts are
+> mapped in the low-level domain(Arm ITS), but they have never mapped
+> at the higher level.
+> 
+> irq_domain_alloc_irqs_hierarchy(.., nr_irqs, ...)
+>   its_irq_domain_alloc(..., nr_irqs, ...)
+>     its_alloc_device_irq(..., nr_irqs, ...)
+>       bitmap_find_free_region(..., get_count_order(nr_irqs))
+> 
+> Since ITS domain finds a region of zero bits, the length of which must
+> aligned to the power of two. If nr_irqs is 30, the length of zero bits
+> is actually 32, but the first 30 bits are really mapped.
+> 
+> On teardown, the low-level domain only free these interrupts that
+> actually mapped, and leave last interrupts dangling in the ITS domain.
+> Thus the ITS device resources are never freed. On device driver reload,
+> dangling interrupts prevent ITS domain from allocating enough resource.
+> 
+> irq_domain_free_irqs_hierarchy(..., nr_irqs, ...)
+>   its_irq_domain_free(..., irq_base + i, 1)
+>     bitmap_release_region(..., irq_base + i, get_count_order(1))
+> 
+> John reported this problem to LKML and Marc provided a solution and fix
+> it in the generic code, see the discussion from Link tag. Marc's patch
+> fix John's problem, but does not take care of some corner case, look one
+> example below.
+> 
+> Step1: 32 interrupts allocated in LPI domain, but return the first 30 to
+> higher driver.
+> 
+>    111111111111111111111111111111 11
+>   |<------------0~29------------>|30,31|
+> 
+> Step2: interrupt #16~28 are released one by one, then #0~15 and #29~31
+> still be there.
+> 
+>    1111111111111111 0000000000000 1  11
+>   |<-----0~15----->|<---16~28--->|29|30,31|
+> 
+> Step#: on driver teardown, generic code will invoke ITS domain code
+> twice. The first time, #0~15 will be released, the second one, only #29
+> will be released(1 align to power of two).
+> 
+>    0000000000000000 0000000000000 0  11
+>   |<-----0~15----->|<---16~28--->|29|30,31|
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/input/touchscreen/chipone_icn8505.c | 29 ++++++---------------
- 1 file changed, 8 insertions(+), 21 deletions(-)
+Which driver is doing this? This really looks like a driver bug to
+only free a portion of its MSI allocation, and that's definitely not
+something that is commonly done.
 
-diff --git a/drivers/input/touchscreen/chipone_icn8505.c b/drivers/input/touchscreen/chipone_icn8505.c
-index f9ca5502ac8c..bb5e63b87c5d 100644
---- a/drivers/input/touchscreen/chipone_icn8505.c
-+++ b/drivers/input/touchscreen/chipone_icn8505.c
-@@ -364,32 +364,19 @@ static irqreturn_t icn8505_irq(int irq, void *dev_id)
- 
- static int icn8505_probe_acpi(struct icn8505_data *icn8505, struct device *dev)
- {
--	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
--	const char *subsys = "unknown";
--	struct acpi_device *adev;
--	union acpi_object *obj;
--	acpi_status status;
--
--	adev = ACPI_COMPANION(dev);
--	if (!adev)
--		return -ENODEV;
-+	const char *subsys;
- 
--	status = acpi_evaluate_object(adev->handle, "_SUB", NULL, &buffer);
--	if (ACPI_SUCCESS(status)) {
--		obj = buffer.pointer;
--		if (obj->type == ACPI_TYPE_STRING)
--			subsys = obj->string.pointer;
--		else
--			dev_warn(dev, "Warning ACPI _SUB did not return a string\n");
--	} else {
--		dev_warn(dev, "Warning ACPI _SUB failed: %#x\n", status);
--		buffer.pointer = NULL;
--	}
-+	subsys = acpi_get_subsystem_id(ACPI_HANDLE(dev));
-+	if (IS_ERR(subsys) && PTR_ERR(subsys) != -ENODATA)
-+		return PTR_ERR(subsys);
-+
-+	if (IS_ERR(subsys) && PTR_ERR(subsys) == -ENODATA)
-+		subsys = kstrdup_const("unknown", GFP_KERNEL);
- 
- 	snprintf(icn8505->firmware_name, sizeof(icn8505->firmware_name),
- 		 "chipone/icn8505-%s.fw", subsys);
- 
--	kfree(buffer.pointer);
-+	kfree_const(subsys);
- 	return 0;
- }
- 
+Even worse, this can result in some LPIs being released behind the
+driver's back, exactly due to this power-of-two alignment.
+
+It seems to me that you are trying to solve a problem that only exists
+for a buggy driver. Please point me to the upstream code that has such
+behaviour and explain why this can't be fixed in that driver itself.
+
+Thanks,
+
+	M.
+
 -- 
-2.35.1
-
+Without deviation from the norm, progress is not possible.

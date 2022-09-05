@@ -2,163 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE4E5AD872
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF1F5AD889
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238021AbiIERhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
+        id S231791AbiIERmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 13:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbiIERhD (ORCPT
+        with ESMTP id S231289AbiIERmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:37:03 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA4B5EDEC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 10:37:02 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-11eab59db71so22741840fac.11
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 10:37:02 -0700 (PDT)
+        Mon, 5 Sep 2022 13:42:53 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC7228704
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 10:42:52 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id x23so9062331pll.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 10:42:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=a1Wl5OOBM+OdiCqwjpRNbQVvWBi9SOkRJQ7j+gqJGAI=;
-        b=omXxCPqBgDlAxdUX5U3YmgblCVqUcKpbsoTO+4DUk94Iq8Ti9QLdiueFbqZ+DgSlp1
-         V8iuStpxP2j4Ww3tI5mVwdlgs1zcuRT7t7INHg1D0a7/IAnd9sXOCdqgra40rPUE8wD0
-         cg4U3zqiRno6i+kIK7wfyr0jwxRhlU3xtFU/jTVDRYdedLsMRBHOcbn1RUKJY2Unmeeb
-         4iCsdLOAZ4xhRkAWzbOtmAMh4Fj2HMXy2Og0EuTF0lq0EjrIGgbFcqz+I3BrU271nVeH
-         fzkUWc7H43GObS8fzc6AQAbWhMpWmlJsPGwVRHukT8vRkg/NL9sNpwmkJRLBvILW1I/Q
-         3qpg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date;
+        bh=rk1xIdlDNKhP9l6j42SzgPHQVRQjVoccTZ6QkSsI3f8=;
+        b=odnhHJ1ZQuTW6h0+C0dSvy2zECycCOilBBRq8hUnljIMntRnokKCTu7VkvS/ywRj+Z
+         5ldwqbJYAB5o511wsx18hjb57aY4QQzXcQ9ipeYXx5Xiy43D3yZntDYDeHcSNF9JqmgK
+         mSYQfVIeFnqkyngCW9DjnLOqzKmLhK1Wyeh5TvETa95DcvxnEZoBaK6+bUNk+Fc+OPmy
+         +PXGIvzmXOj/zCir5skUNnwo0NEu28Io6v4SfMoEBZHQ5yrO3uqetFqUF+hOTov3LO+T
+         s1WrW6K0MSTBhCdYRMbRqD3nFIn5SlO7oG3nqY5sC/H/b5+OQJAb4sExkOz2iRvk+ZCg
+         2euQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=a1Wl5OOBM+OdiCqwjpRNbQVvWBi9SOkRJQ7j+gqJGAI=;
-        b=Fu8rBk8r5O6eRl0u/EsR5mMYG7UVlC1r0PagGu7ZESM82ozlgsNgqxaPh7INZQZ0/T
-         OWjGgSs4MswLEVVzcTy/hGhPSl13NFpZjXOjABEQJN8595O/870ABQ2WrRua2RtBMdbU
-         V0Yg5ggIa0sgVB8ncrQ2ZdrAqtM2nkmNf2+diESZmBoPmzoqmBjH3L8z8AdiNj08+B6n
-         XDqOpDvb5ks9sQ+vQdgQ8JcAVAqzs9kdE+S7nRUDpcI0/EGILgKEuJkcKmNMmivGD8Ui
-         jdBqxCVG/yLGPjMHvJt5AJifaXOiLy1zkj3euYP6Q8PDY/ceQ0i4nSbA7ogHeSjftX5Z
-         NdbQ==
-X-Gm-Message-State: ACgBeo0xD0e3wOmNYLqigviAGczYmB30o8suT/p/bblxjMu1zTTGS8JY
-        C2OWrg4WndhOvPDOSdApUOKVhCj/QLnSCjpQWKGcDA==
-X-Google-Smtp-Source: AA6agR5aL8W3+sousDudZxT+/nLQAmWyTAA2BbxmIIkDasYIK+tFHEa7u4ZnJLfSCaHD7jyPJkRRUB/yg6ndTpAc0Jk=
-X-Received: by 2002:a05:6808:150f:b0:343:3202:91cf with SMTP id
- u15-20020a056808150f00b00343320291cfmr8032565oiw.112.1662399422082; Mon, 05
- Sep 2022 10:37:02 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=rk1xIdlDNKhP9l6j42SzgPHQVRQjVoccTZ6QkSsI3f8=;
+        b=qje3mkO/p18PkT0YjWIEb9AORur0nWCATPshDHzFGqlL4q7b9mCqL+k1FCWzNz1pqA
+         gl4A64a4iJDZ9ziYuPkGVwmxpvWhP7cdV9oV7fEwoFX7pB9MEeJkISJ4X/J1kWnyMYZT
+         E+I2LqXIzJIsBgVxBsVBznJwJlPTI9VFAPsA9tJ9LrwCSt3Z+Dh67tQy/b/ov91FUJ8a
+         Vp3cTXWuPGV5CQSG4j+nuMikWdwV2ZbLROAK0xGpNwfYa+f31kWbU7mGnbBPSAohJUmR
+         wu9VW8BMLxG1aMFnz2MbvwOiwZt6A8Ue/uJLZlO8nyOhHX77Ml0nb2xGmBwJJT2HSITv
+         Mh2g==
+X-Gm-Message-State: ACgBeo2V/CBazggY6llq/6+88kT/1uFyHhn/3f9eWDiw2e1bz14KqUQP
+        cFg+dy0HSXJXyyDDe4A07fAvgA==
+X-Google-Smtp-Source: AA6agR7L6IWNxD3apKBqzeJd2S3iyK3xAjAcxbIE/kBW9r7eNKq8DQgFYFD91z8Hpe7oCNXvKemSAw==
+X-Received: by 2002:a17:902:d482:b0:176:ca6b:ea8e with SMTP id c2-20020a170902d48200b00176ca6bea8emr598761plg.26.1662399772119;
+        Mon, 05 Sep 2022 10:42:52 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id u9-20020a170903124900b0017286f83fadsm7910276plh.135.2022.09.05.10.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 10:42:51 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-kernel@vger.kernel.org, asml.silence@gmail.com,
+        Abaci Robot <abaci@linux.alibaba.com>, io-uring@vger.kernel.org
+In-Reply-To: <20220905020436.51894-1-jiapeng.chong@linux.alibaba.com>
+References: <20220905020436.51894-1-jiapeng.chong@linux.alibaba.com>
+Subject: Re: [PATCH] io_uring/notif: Remove the unused function io_notif_complete()
+Message-Id: <166239977130.373346.18092502016932557951.b4-ty@kernel.dk>
+Date:   Mon, 05 Sep 2022 11:42:51 -0600
 MIME-Version: 1.0
-References: <20220905123946.95223-1-likexu@tencent.com> <20220905123946.95223-5-likexu@tencent.com>
-In-Reply-To: <20220905123946.95223-5-likexu@tencent.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 5 Sep 2022 10:36:51 -0700
-Message-ID: <CALMp9eQtjZ-iRiW5Jusa+NF-P0sdHtcoR8fPiBSKtNXKgstgVA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf 0x80000022
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-65ba7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 5:45 AM Like Xu <like.xu.linux@gmail.com> wrote:
->
-> From: Sandipan Das <sandipan.das@amd.com>
->
-> CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some
-> new performance monitoring features for AMD processors.
->
-> Bit 0 of EAX indicates support for Performance Monitoring
-> Version 2 (PerfMonV2) features. If found to be set during
-> PMU initialization, the EBX bits of the same CPUID function
-> can be used to determine the number of available PMCs for
-> different PMU types.
->
-> Expose the relevant bits via KVM_GET_SUPPORTED_CPUID so
-> that guests can make use of the PerfMonV2 features.
->
-> Co-developed-by: Like Xu <likexu@tencent.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-> ---
->  arch/x86/include/asm/perf_event.h |  8 ++++++++
->  arch/x86/kvm/cpuid.c              | 21 ++++++++++++++++++++-
->  2 files changed, 28 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-> index f6fc8dd51ef4..c848f504e467 100644
-> --- a/arch/x86/include/asm/perf_event.h
-> +++ b/arch/x86/include/asm/perf_event.h
-> @@ -214,6 +214,14 @@ union cpuid_0x80000022_ebx {
->         unsigned int            full;
->  };
->
-> +union cpuid_0x80000022_eax {
-> +       struct {
-> +               /* Performance Monitoring Version 2 Supported */
-> +               unsigned int    perfmon_v2:1;
-> +       } split;
-> +       unsigned int            full;
-> +};
-> +
->  struct x86_pmu_capability {
->         int             version;
->         int             num_counters_gp;
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 75dcf7a72605..08a29ab096d2 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -1094,7 +1094,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->                 entry->edx = 0;
->                 break;
->         case 0x80000000:
-> -               entry->eax = min(entry->eax, 0x80000021);
-> +               entry->eax = min(entry->eax, 0x80000022);
->                 /*
->                  * Serializing LFENCE is reported in a multitude of ways, and
->                  * NullSegClearsBase is not reported in CPUID on Zen2; help
-> @@ -1203,6 +1203,25 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->                 if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
->                         entry->eax |= BIT(6);
->                 break;
-> +       /* AMD Extended Performance Monitoring and Debug */
-> +       case 0x80000022: {
-> +               union cpuid_0x80000022_eax eax;
-> +               union cpuid_0x80000022_ebx ebx;
-> +
-> +               entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-> +               if (!enable_pmu)
-> +                       break;
-> +
-> +               if (kvm_pmu_cap.version > 1) {
-> +                       /* AMD PerfMon is only supported up to V2 in the KVM. */
-> +                       eax.split.perfmon_v2 = 1;
-> +                       ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
-> +                                                    KVM_AMD_PMC_MAX_GENERIC);
+On Mon, 5 Sep 2022 10:04:36 +0800, Jiapeng Chong wrote:
+> The function io_notif_complete() is defined in the notif.c file, but not
+> called elsewhere, so delete this unused function.
+> 
+> io_uring/notif.c:24:20: warning: unused function 'io_notif_complete' [-Wunused-function].
+> 
+> 
 
-Note that the number of core PMCs has to be at least 6 if
-guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE). I suppose this leaf
-could claim fewer, but the first 6 PMCs must work, per the v1 PMU
-spec. That is, software that knows about PERFCTR_CORE, but not about
-PMU v2, can rightfully expect 6 PMCs.
+Applied, thanks!
+
+[1/1] io_uring/notif: Remove the unused function io_notif_complete()
+      commit: 4fa07edbb7eacfb56b3aa64f590e9f38e7f1042c
+
+Best regards,
+-- 
+Jens Axboe
 
 
-> +               }
-> +               entry->eax = eax.full;
-> +               entry->ebx = ebx.full;
-> +               break;
-> +       }
->         /*Add support for Centaur's CPUID instruction*/
->         case 0xC0000000:
->                 /*Just support up to 0xC0000004 now*/
-> --
-> 2.37.3
->

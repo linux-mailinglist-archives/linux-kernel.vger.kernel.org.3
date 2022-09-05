@@ -2,90 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390505AD908
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF005AD90E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbiIESdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 14:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
+        id S232037AbiIESdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 14:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiIESdB (ORCPT
+        with ESMTP id S232009AbiIESdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:33:01 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1EA52805
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 11:33:00 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id d68so7282343iof.11
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 11:33:00 -0700 (PDT)
+        Mon, 5 Sep 2022 14:33:38 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4426F52824;
+        Mon,  5 Sep 2022 11:33:37 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id g185so4463752vkb.13;
+        Mon, 05 Sep 2022 11:33:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=FNv/KEMtf5XOtkND3AyjhcP/3pLjOBMwZm4O4kjr360=;
-        b=i5KCDSUH/dFt94fpjc7Fphku0Tn3reBabaBpFtdU+oRbFh+e8Cx/DMlqQivEg1MZjm
-         7FbOvlY6Y9f+9LZ9N+zgTB71z3cagQ2sGfp1oudx0Kv1xpUW6Up8K51vig+01CsmnL3L
-         C3xCWMqLQrpYBGvHC0UNi+yNQ6XvxIjh2dsHMNd34BBtJz1xyaPEvWMxsK55kusb2lJe
-         FYhU7ADU9KYt1l8KwJpBXu48E1hUBJcr2CIqnesgVXkiai+CuNr/V0a+QqiqySxoUimH
-         yIvsq78rMCW0kTv83Fiph1I394+CJ8Hgoqi6ZFAZmMb3pGsqLwLA4vfAoG5DeUW7LJqa
-         cUpw==
+        bh=mdiYTElc0N7vxtlgVoJ4ru4DWj2kj5bPdL6LfLpy0aM=;
+        b=D8oBhUif2Jjk678o2fHLYtmnpB6UYZ7abkmoEbTSB7gYd+aR7NJTzbHizWX0tEsttg
+         94prx+9nmPlCZdE5toZMsp430z+gngCXzzQ8F0xiJjKACppBxdxBLTlqIcPPacfPndOw
+         Z0Lqt285BGObRHpVzemZKZ/kraVoHaDn4JSYqvYh6Nh5r6wWFZtrxjWA7nvig9Ud7IFJ
+         xcs8Pv7moCtVzQwibbdhdRJ3R/sMYt1epwFDFt15E3PejndhkY4f8QjW6Ee3NYrLE9xB
+         xToTfryH++k4nKcj4DdExkema16S3GQs73HBYq5kYCwNzB+TI5x6OI0EPu/Ajcdi79z+
+         Fb6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=FNv/KEMtf5XOtkND3AyjhcP/3pLjOBMwZm4O4kjr360=;
-        b=mQ7S+59FA8Qgp/dZvrlb9nu3nGnKIA2zX/5Q8jAyOEKLiZHnLOBYij7ZHAAiZuN7zo
-         NmqFXa2JIjs42V0d+DCn3rRgsJpg24Z63QCWIqNFQen2IRE6VxWnRI/Ys9C72bRaBcoG
-         TWIf2orifCA/DotlvKs2R2odFLsGqAWZq87JdjlNVD83n+vVIYQH5nOKXAr8r7NZsDCo
-         Oyb1057fCsN70WygDRjk43uE1A2ivVO3KuFAUeQnHONLbH+s5swjiMHmDi/dicQPRDgZ
-         UVwCciG5QjLe9e93vAM+N8KDrCQwzSB5+xR/z9dVQ0TsDiedsa3CpHW3gcj/JPGav81W
-         1Jog==
-X-Gm-Message-State: ACgBeo0GlNVBcX0MyxUl3IyEXI0xUV6aosSPKQ4Bsfg2wT0Ww+QxVEJe
-        H/tA53i+ENzZDOkaxyplU0Jw74hIs254ClvBMWr6CQ==
-X-Google-Smtp-Source: AA6agR7tgjJDEPLfwwS1LRrijFcmlJFxoiqhAebJjxrWU7CYsmX7SoR6nKTNAJ7nNJVYWRRFlsmMoE7vtwAV8983goQ=
-X-Received: by 2002:a02:740b:0:b0:349:bcdd:ca20 with SMTP id
- o11-20020a02740b000000b00349bcddca20mr28183219jac.110.1662402779688; Mon, 05
- Sep 2022 11:32:59 -0700 (PDT)
+        bh=mdiYTElc0N7vxtlgVoJ4ru4DWj2kj5bPdL6LfLpy0aM=;
+        b=2P0ekqFKsU5YNn8p+z0Rx8wNWlOXWkrKM+FNLCzVgXQEoOoTVmgrEUZ/Ky1wQqR1EX
+         kAyjkAj9+vMO7todrk0aUW/K1TRXcw39GPg+sbM9XKZ+7T2z0Ewp+mBYaT1xi2HERjVO
+         htRntOAxGpRqpQgahUOailp21hGAsoFvp2N1gCPFfqOh669yMBPX2lcdUBiVBTsqbYKY
+         K5I/gIjwUquH/1b0KDhEOZJ9oM3EC3RIV6wia6ZtjRizwtJ+Tl94K+cX54mOcpEV9XhX
+         aJRaDcNcGZIlp5FHna2utJWk/yI4fXN+dZlQiGV5rxMJRVWDpzdVUFglYNdoJA+2QTxs
+         Jf1A==
+X-Gm-Message-State: ACgBeo3wNE928k6BFnDzmFMJb8tzRldqDiv7lGsMFAvdsPxKDTd9FZKV
+        7NtEZXBxy970o/umH51NMC689hrDidLA5cjfmCvpA9F5
+X-Google-Smtp-Source: AA6agR5O+agHArA/yt3Tr7w/AexHtBdz7ROCfVnT2AWabzEmYu4CO6i9d2nt4ec+fPUaR8DJL5zcLXKUYod+baz4ttw=
+X-Received: by 2002:a05:6122:2212:b0:374:2fb5:19ef with SMTP id
+ bb18-20020a056122221200b003742fb519efmr13937297vkb.2.1662402816175; Mon, 05
+ Sep 2022 11:33:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220901173516.702122-1-surenb@google.com> <YxXsQKoQ0URIRuKi@dhcp22.suse.cz>
-In-Reply-To: <YxXsQKoQ0URIRuKi@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 5 Sep 2022 11:32:48 -0700
-Message-ID: <CAJuCfpG3bMLzNhP5wt8my8j7_9wW=darLegd6WPV6tddtCKGAA@mail.gmail.com>
-Subject: Re: [RFC PATCH RESEND 00/28] per-VMA locks proposal
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michel Lespinasse <michel@lespinasse.org>,
-        Jerome Glisse <jglisse@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
+References: <20220825181210.284283-1-vschneid@redhat.com> <20220825181210.284283-5-vschneid@redhat.com>
+ <YwfmIDEbRT4JfsZp@yury-laptop> <xhsmh5yi1db56.mognet@vschneid.remote.csb>
+In-Reply-To: <xhsmh5yi1db56.mognet@vschneid.remote.csb>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Mon, 5 Sep 2022 11:33:24 -0700
+Message-ID: <CAAH8bW8DHTgXFB4wvjQqNqk7cbsYNk-SvBHL48tQwEBor_34hg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/9] cpumask: Introduce for_each_cpu_andnot()
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Laurent Dufour <laurent.dufour@fr.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
-        Hugh Dickins <hughd@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Minchan Kim <minchan@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,59 +87,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 5:32 AM 'Michal Hocko' via kernel-team
-<kernel-team@android.com> wrote:
+On Mon, Sep 5, 2022 at 9:44 AM Valentin Schneider <vschneid@redhat.com> wrote:
 >
-> Unless I am missing something, this is not based on the Maple tree
-> rewrite, right? Does the change in the data structure makes any
-> difference to the approach? I remember discussions at LSFMM where it has
-> been pointed out that some issues with the vma tree are considerably
-> simpler to handle with the maple tree.
-
-Correct, this does not use the Maple tree yet but once Maple tree
-transition happens and it supports RCU-safe lookups, my code in
-find_vma_under_rcu() becomes really simple.
-
+> On 25/08/22 14:14, Yury Norov wrote:
+> > On Thu, Aug 25, 2022 at 07:12:05PM +0100, Valentin Schneider wrote:
+> >> +#define for_each_cpu_andnot(cpu, mask1, mask2)                              \
+> >> +    for ((cpu) = -1;                                                \
+> >> +            (cpu) = cpumask_next_andnot((cpu), (mask1), (mask2)),   \
+> >> +            (cpu) < nr_cpu_ids;)
+> >
+> > The standard doesn't guarantee the order of execution of last 2 lines,
+> > so you might end up with unreliable code. Can you do it in a more
+> > conventional style:
+> >    #define for_each_cpu_andnot(cpu, mask1, mask2)                     \
+> >       for ((cpu) = cpumask_next_andnot(-1, (mask1), (mask2));         \
+> >               (cpu) < nr_cpu_ids;                                     \
+> >               (cpu) = cpumask_next_andnot((cpu), (mask1), (mask2)))
+> >
 >
-> On Thu 01-09-22 10:34:48, Suren Baghdasaryan wrote:
-> [...]
-> > One notable way the implementation deviates from the proposal is the way
-> > VMAs are marked as locked. Because during some of mm updates multiple
-> > VMAs need to be locked until the end of the update (e.g. vma_merge,
-> > split_vma, etc).
+> IIUC the order of execution *is* guaranteed as this is a comma operator,
+> not argument passing:
 >
-> I think it would be really helpful to spell out those issues in a greater
-> detail. Not everybody is aware of those vma related subtleties.
-
-Ack. I'll expand the description of the cases when multiple VMAs need
-to be locked in the same update. The main difficulties are:
-1. Multiple VMAs might need to be locked within one
-mmap_write_lock/mmap_write_unlock session (will call it an update
-transaction).
-2. Figuring out when it's safe to unlock a previously locked VMA is
-tricky because that might be happening in different functions and at
-different call levels.
-
-So, instead of the usual lock/unlock pattern, the proposed solution
-marks a VMA as locked and provides an efficient way to:
-1. Identify locked VMAs.
-2. Unlock all locked VMAs in bulk.
-
-We also postpone unlocking the locked VMAs until the end of the update
-transaction, when we do mmap_write_unlock. Potentially this keeps a
-VMA locked for longer than is absolutely necessary but it results in a
-big reduction of code complexity.
-
+>   6.5.17 Comma operator
 >
-> Thanks for working on this Suren!
-
-Thanks for reviewing!
-Suren.
-
-> --
-> Michal Hocko
-> SUSE Labs
+>   The left operand of a comma operator is evaluated as a void expression;
+>   there is a sequence point after its evaluation. Then the right operand is
+>   evaluated; the result has its type and value.
 >
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> for_each_cpu{_and}() uses the same pattern (which I simply copied here).
 >
+> Still, I'd be up for making this a bit more readable. I did a bit of
+> digging to figure out how we ended up with that pattern, and found
+>
+>   7baac8b91f98 ("cpumask: make for_each_cpu_mask a bit smaller")
+>
+> so this appears to have been done to save up on generated instructions.
+> *if* it is actually OK standard-wise, I'd vote to leave it as-is.
+
+Indeed. I probably messed with ANSI C.
+
+Sorry for the noise.

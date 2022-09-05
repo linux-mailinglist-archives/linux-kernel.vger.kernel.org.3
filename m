@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCA35AD3EB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D026B5AD3E8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237845AbiIENa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        id S237772AbiIENaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237743AbiIENaW (ORCPT
+        with ESMTP id S237743AbiIENaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:30:22 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2B317E31
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 06:30:21 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id e17so3774604edc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 06:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=KrRA2cX8z10HEQ4v1cXvZVjulHhsSFP9pWWa+tjEAn4=;
-        b=v5nprAvdybdSNnBEAeyC/crVd/J6prq4TENcOLwQEaD9hjnmcfr5jRtgeLBU0u0ruv
-         J8RD5vjuI5VuNnJTGPvoY+S7BY954tfc9cS9nGvu0qy9+GaHxZBgih/XtO/RmXzD3O/e
-         oH+5OmNKBpN78s8uKbQJJmMMWuzV/RZ45i5HagxXHqHejXv+FWr6cZDp/Zgg851tVYLs
-         WpixmQE+gVDaNLG+ZGUhccB7mqi6PMZ0r+jg3c558mcMUL90tik0VBSP/TPat35RDCp7
-         Ghh4jqR012tqBQNUcnBN3p/aurvW5/TgQgcd5slGn1iym8T/pan9muhvrbrnQqpObD9s
-         yzaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=KrRA2cX8z10HEQ4v1cXvZVjulHhsSFP9pWWa+tjEAn4=;
-        b=nuiYjXFOam/mj+xLD0CjysBfO+M+KedbGe4hU+Fk3NXzvDX72sOAcGDKLnETzIqKLq
-         i/0N2vyc6ZHAZ0+JuuNID1ZNlRZw5sDIsofNnKWev22OWhTTU/CNO6hr5KSRkN7jwdwH
-         eUg5nyYHwfo5Cx4u4inU1vkvq+r8VA6Vcc91hP3KsYn9kU7CX0LyMBasevS+OQ4jGlBl
-         6p/5FF6CKuByzHK50YREKzOt7I51h4V27R3SHbT1F6m9jIiVaaccQVlWO3R/YjimrdDW
-         99IqI5H42UHo2AFMVPblt3h64Pqy3dvbiUJid+fcbXEYldmEH6IFMqGCwvCw05xLrOwq
-         26xw==
-X-Gm-Message-State: ACgBeo1GUuwYdeLeDBTad0wM7FtvEC0kA6F2RhjUB9L+HD2eINisDPMy
-        ixKccDK7wcxvHlsam/ru1gNsOZYuKDOYQzkVi9s0jKDxP2Q=
-X-Google-Smtp-Source: AA6agR6zkSK5djgMG2gZnKqFh8/UxlxLbrRpBu9JlVipw0Ev9r7eAygJBB3ZC+lzPPVR/n6oS8Ufr+6YySwLggti3Og=
-X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
- ez23-20020a056402451700b004437fe12d60mr43741158edb.133.1662384620295; Mon, 05
- Sep 2022 06:30:20 -0700 (PDT)
+        Mon, 5 Sep 2022 09:30:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2310615A10;
+        Mon,  5 Sep 2022 06:30:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3003B8119E;
+        Mon,  5 Sep 2022 13:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7FD81C433D7;
+        Mon,  5 Sep 2022 13:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662384614;
+        bh=7XONn9KaUTnR3WKojdkRi/lvfYNW+Pp+4J0HaSGdd2o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BvEQK6meER+TAYOo+F4z0cz9x6AQDGGcyxjPrKaHQEP+zhBoprqa1Ah47FFL06+C5
+         0LcayaKEXLql+97ZPM6VRrohXS8lPJ2xcuRvySLtzZ2IWfv0ESPqDb0are/r39UjNb
+         bZ9Qq0v6JFMl1mjEzdG8tyiSmxVFVn3q0PJY4CzKTS5iT3uoKJMDbpX2br+28yBtkd
+         CUsqjph4ciptxSbGzHEnOcHT3LUCT4Z3EGDJh/szDA+PyGKLkycNEtWKJHIb9Uub07
+         FaA4elaa6oRxlBJJlki3YTtzdmC5m21nR4IasNB2yAs21f2beK+yDCJNfgAF/8/vPx
+         AF4jkjZRrHtjw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 66986E1CABF;
+        Mon,  5 Sep 2022 13:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220902182650.83098-1-andriy.shevchenko@linux.intel.com>
- <20220902182650.83098-3-andriy.shevchenko@linux.intel.com>
- <CAHp75VcNGEVRnkWeVThaq4zNYoiZGSY-+KfbV5_9zG_5XoriMg@mail.gmail.com> <YxXyTCSKzL42PF1D@smile.fi.intel.com>
-In-Reply-To: <YxXyTCSKzL42PF1D@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 5 Sep 2022 15:30:08 +0200
-Message-ID: <CACRpkdY4nJuXAxM7tYviWSPeqmCc6o4D--Vq0CZRPNjWNj+E_A@mail.gmail.com>
-Subject: Re: [PATCH v1 03/17] pinctrl: cy8c95x0: Allow most of the registers
- to be cached
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] stmmac: intel: Simplify intel_eth_pci_remove()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166238461441.27659.12239110868917016619.git-patchwork-notify@kernel.org>
+Date:   Mon, 05 Sep 2022 13:30:14 +0000
+References: <35ab3ac5b67716acb3f7073229b02a38fce71fb7.1662135995.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <35ab3ac5b67716acb3f7073229b02a38fce71fb7.1662135995.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,33 +62,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 2:57 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Fri, Sep 02, 2022 at 09:42:00PM +0300, Andy Shevchenko wrote:
-> > On Fri, Sep 2, 2022 at 9:36 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > It's unclear why many of static registers were marked as volatile.
-> >
-> > the static (yeah, forgot it)
-> >
-> > > They are pretty much bidirectional and static in a sense that
-> > > written value is kept there until a new write or chip reset.
-> > > Drop those registers from the list to allow them to be cached.
-> >
-> > This patch is not correct due to indexing access. It's sneaked since I
-> > forgot I added it into my main repo. The proper approach should be to
-> > create virtual registers and decode them before use. This allows to
-> > cache all ports and as a benefit to debug print all port actual
-> > statuses.
->
-> To be clear: With this one removed from the bunch the rest can be applied w.o.
-> any change.
+Hello:
 
-I'll give Patrick a day or two to test/review and then I'll just apply
-them all except this one, they are all pretty self-evident except ACPI
-things which have obviously been tested on hardware so from my
-point of view it's good to merge.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Yours,
-Linus Walleij
+On Fri,  2 Sep 2022 18:26:56 +0200 you wrote:
+> There is no point to call pcim_iounmap_regions() in the remove function,
+> this frees a managed resource that would be release by the framework
+> anyway.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3] stmmac: intel: Simplify intel_eth_pci_remove()
+    https://git.kernel.org/netdev/net/c/1621e70fc79d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

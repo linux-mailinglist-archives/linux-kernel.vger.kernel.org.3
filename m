@@ -2,54 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EACB5ACE49
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F955ACE45
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236239AbiIEImi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
+        id S236695AbiIEImC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237034AbiIEIme (ORCPT
+        with ESMTP id S236779AbiIEIl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:42:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEA5165B2;
-        Mon,  5 Sep 2022 01:42:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C036A387C1;
-        Mon,  5 Sep 2022 08:42:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662367351; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=HbWaoNdP2toM16lcXgeM6vS2i0ALZk2x+6JC5BCoCmU=;
-        b=hMZZnJrjHF5Bc/U7bPSDE2gcDTQBzNq8g3JAknWcYKkoFV8toka5re4tx5Pg1ZEFfKLx6C
-        rGtc1arfPS6mUQOPr+GnF9JUAxCWWbA0nIE3330HiUmn58erlpzBhpevs9TkC52EFSh657
-        wRdoOsqLtWdQcGqC5MGi0dVxY7wndxI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96AF8139C7;
-        Mon,  5 Sep 2022 08:42:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T0K/I3e2FWOgEwAAMHmgww
-        (envelope-from <petr.pavlu@suse.com>); Mon, 05 Sep 2022 08:42:31 +0000
-From:   Petr Pavlu <petr.pavlu@suse.com>
-To:     mcgrof@kernel.org
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, mwilck@suse.com, Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH] module: Merge same-name module load requests
-Date:   Mon,  5 Sep 2022 10:41:31 +0200
-Message-Id: <20220905084131.14567-1-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Mon, 5 Sep 2022 04:41:57 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796A7FFA;
+        Mon,  5 Sep 2022 01:41:56 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2858Qrud015938;
+        Mon, 5 Sep 2022 08:41:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=9UVYFgAh52ib3j1YI92FCeEQVdbURKw9mP4lweIvr0k=;
+ b=DxM5DSlf0liBUCP0qKi5JSYwrrHVviKSNkLQsH7Oq669nrMypLkj00+3w1jmfMLlpo+H
+ kgbI70QpevVaVV1B+HbYoSmtSmKrI4ZS2Ol3GAB4ITQ05U2WtXwPzEddXa0PRiPcxYM9
+ oVzVuANphJbK77wQzzXuOZU4Y7ey+Z6SgHtLg2t8ytTDjnsKTDi52c1+OVTCJFS4mHST
+ AJSvNNmmHJgfWy8/UoJnQGvhPuSWNNUpviHLJMz8qHA01nl70r2NjoO8JokVTRjn3Wus
+ d49OIcfNYRPsugHoZxY67ZnfSCXmkOAlh2JwBwOFK0M+ndTLqLUstZmRqGAdk6xdYV4k ug== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jddkxrcdw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 08:41:56 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2858S6Xi020143;
+        Mon, 5 Sep 2022 08:41:55 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jddkxrcd4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 08:41:55 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2858a6Yw012606;
+        Mon, 5 Sep 2022 08:41:53 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3jbxj8t5dx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 08:41:53 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2858foZj43123062
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 5 Sep 2022 08:41:50 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11368A4051;
+        Mon,  5 Sep 2022 08:41:50 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 75506A4040;
+        Mon,  5 Sep 2022 08:41:49 +0000 (GMT)
+Received: from li-c6ac47cc-293c-11b2-a85c-d421c8e4747b.ibm.com.com (unknown [9.171.66.232])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  5 Sep 2022 08:41:49 +0000 (GMT)
+From:   Pierre Morel <pmorel@linux.ibm.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, svens@linux.ibm.com
+Subject: [PATCH] KVM: s390: vsie: fix crycb virtual vs physical usage
+Date:   Mon,  5 Sep 2022 10:41:48 +0200
+Message-Id: <20220905084148.234821-1-pmorel@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qzyyhsdbhk_HKC3RJSbea-c0eDXaVkWo
+X-Proofpoint-GUID: _dYIp8JSws_NfReCVE7EP-nm6mZwofKx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-05_05,2022-09-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 spamscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209050040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,376 +89,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a system boot, it can happen that the kernel receives a burst of
-requests to insert the same module but loading it eventually fails
-during its init call. For instance, udev can make a request to insert
-a frequency module for each individual CPU when another frequency module
-is already loaded which causes the init function of the new module to
-return an error.
+Prepare VSIE for architectural changes where lowmem kernel real and
+kernel virtual address are different.
 
-The module loader currently serializes all such requests, with the
-barrier in add_unformed_module(). This creates a lot of unnecessary work
-and delays the boot.
+When we get the original crycb from the guest crycb we can use the
+phys_to_virt transformation, which will use the host transformations,
+but we must use an offset to calculate the guest real address apcb
+and give it to read_guest_real().
 
-This patch improves the behavior as follows:
-* A check whether a module load matches an already loaded module is
-  moved right after a module name is determined.
-* A new reference-counted shared_load_info structure is introduced to
-  keep track of duplicate load requests. Two loads are considered
-  equivalent if their module name matches. In case a load duplicates
-  another running insert, the code waits for its completion and then
-  returns -EEXIST or -ENODEV depending on whether it succeeded.
-
-Note that prior to 6e6de3dee51a ("kernel/module.c: Only return -EEXIST
-for modules that have finished loading"), the kernel already did merge
-some of same load requests but it was more by accident and relied on
-specific timing. The patch brings this behavior back in a more explicit
-form.
-
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
 ---
- kernel/module/main.c | 207 ++++++++++++++++++++++++++++++-------------
- 1 file changed, 144 insertions(+), 63 deletions(-)
+ arch/s390/kvm/vsie.c | 37 ++++++++++++++++++++++---------------
+ 1 file changed, 22 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index a4e4d84b6f4e..24d0777c48e3 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -61,14 +61,28 @@
- 
- /*
-  * Mutex protects:
-- * 1) List of modules (also safely readable with preempt_disable),
-+ * 1) list of modules (also safely readable with preempt_disable, delete and add
-+ *    uses RCU list operations).
-  * 2) module_use links,
-- * 3) mod_tree.addr_min/mod_tree.addr_max.
-- * (delete and add uses RCU list operations).
-+ * 3) mod_tree.addr_min/mod_tree.addr_max,
-+ * 4) list of unloaded_tainted_modules.
-+ * 5) list of running_loads.
-  */
- DEFINE_MUTEX(module_mutex);
- LIST_HEAD(modules);
- 
-+/* Shared information to track duplicate module loads. */
-+struct shared_load_info {
-+	char name[MODULE_NAME_LEN];
-+	refcount_t refcnt;
-+	struct list_head list;
-+	int err;
-+};
-+LIST_HEAD(running_loads);
-+
-+/* Waiting for a module to finish loading? */
-+static DECLARE_WAIT_QUEUE_HEAD(module_wq);
-+
- /* Work queue for freeing init sections in success case */
- static void do_free_init(struct work_struct *w);
- static DECLARE_WORK(init_free_wq, do_free_init);
-@@ -122,9 +136,6 @@ static void mod_update_bounds(struct module *mod)
- int modules_disabled;
- core_param(nomodule, modules_disabled, bint, 0);
- 
--/* Waiting for a module to finish initializing? */
--static DECLARE_WAIT_QUEUE_HEAD(module_wq);
--
- static BLOCKING_NOTIFIER_HEAD(module_notify_list);
- 
- int register_module_notifier(struct notifier_block *nb)
-@@ -762,8 +773,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
- 	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false), sizeof(last_unloaded_module.taints));
- 
- 	free_module(mod);
--	/* someone could wait for the module in add_unformed_module() */
--	wake_up_all(&module_wq);
- 	return 0;
- out:
- 	mutex_unlock(&module_mutex);
-@@ -2374,26 +2383,6 @@ static int post_relocation(struct module *mod, const struct load_info *info)
- 	return module_finalize(info->hdr, info->sechdrs, mod);
+diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
+index 94138f8f0c1c..f37851c9b1ab 100644
+--- a/arch/s390/kvm/vsie.c
++++ b/arch/s390/kvm/vsie.c
+@@ -138,9 +138,12 @@ static int prepare_cpuflags(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
  }
- 
--/* Is this module of this name done loading?  No locks held. */
--static bool finished_loading(const char *name)
--{
--	struct module *mod;
--	bool ret;
--
--	/*
--	 * The module_mutex should not be a heavily contended lock;
--	 * if we get the occasional sleep here, we'll go an extra iteration
--	 * in the wait_event_interruptible(), which is harmless.
--	 */
--	sched_annotate_sleep();
--	mutex_lock(&module_mutex);
--	mod = find_module_all(name, strlen(name), true);
--	ret = !mod || mod->state == MODULE_STATE_LIVE;
--	mutex_unlock(&module_mutex);
--
--	return ret;
--}
--
- /* Call module constructors. */
- static void do_mod_ctors(struct module *mod)
+ /* Copy to APCB FORMAT1 from APCB FORMAT0 */
+ static int setup_apcb10(struct kvm_vcpu *vcpu, struct kvm_s390_apcb1 *apcb_s,
+-			unsigned long apcb_o, struct kvm_s390_apcb1 *apcb_h)
++			unsigned long crycb_o, struct kvm_s390_apcb1 *apcb_h)
  {
-@@ -2524,7 +2513,6 @@ static noinline int do_init_module(struct module *mod)
- 		schedule_work(&init_free_wq);
- 
- 	mutex_unlock(&module_mutex);
--	wake_up_all(&module_wq);
- 
- 	return 0;
- 
-@@ -2540,7 +2528,6 @@ static noinline int do_init_module(struct module *mod)
- 	klp_module_going(mod);
- 	ftrace_release_mod(mod);
- 	free_module(mod);
--	wake_up_all(&module_wq);
- 	return ret;
- }
- 
-@@ -2552,43 +2539,129 @@ static int may_init_module(void)
- 	return 0;
- }
- 
-+static struct shared_load_info *
-+shared_load_info_alloc(const struct load_info *info)
-+{
-+	struct shared_load_info *shared_info =
-+		kzalloc(sizeof(*shared_info), GFP_KERNEL);
-+	if (shared_info == NULL)
-+		return ERR_PTR(-ENOMEM);
+ 	struct kvm_s390_apcb0 tmp;
++	unsigned long apcb_o;
 +
-+	strscpy(shared_info->name, info->name, sizeof(shared_info->name));
-+	refcount_set(&shared_info->refcnt, 1);
-+	INIT_LIST_HEAD(&shared_info->list);
-+	return shared_info;
-+}
-+
-+static void shared_load_info_get(struct shared_load_info *shared_info)
-+{
-+	refcount_inc(&shared_info->refcnt);
-+}
-+
-+static void shared_load_info_put(struct shared_load_info *shared_info)
-+{
-+	if (refcount_dec_and_test(&shared_info->refcnt))
-+		kfree(shared_info);
-+}
-+
- /*
-- * We try to place it in the list now to make sure it's unique before
-- * we dedicate too many resources.  In particular, temporary percpu
-+ * Check that the module load is unique and make it visible to others. The code
-+ * looks for parallel running inserts and already loaded modules. Two inserts
-+ * are considered equivalent if their module name matches. In case this load
-+ * duplicates another running insert, the code waits for its completion and
-+ * then returns -EEXIST or -ENODEV depending on whether it succeeded.
-+ *
-+ * Detecting early that a load is unique avoids dedicating too many cycles and
-+ * resources to bring up the module. In particular, it prevents temporary percpu
-  * memory exhaustion.
-+ *
-+ * Merging same load requests then primarily helps during the boot process. It
-+ * can happen that the kernel receives a burst of requests to load the same
-+ * module (for example, a same module for each individual CPU) and loading it
-+ * eventually fails during its init call. Merging the requests allows that only
-+ * one full attempt to load the module is made.
-+ *
-+ * On a non-error return, it is guaranteed that this load is unique.
++	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb0);
+ 
+ 	if (read_guest_real(vcpu, apcb_o, &tmp, sizeof(struct kvm_s390_apcb0)))
+ 		return -EFAULT;
+@@ -157,14 +160,18 @@ static int setup_apcb10(struct kvm_vcpu *vcpu, struct kvm_s390_apcb1 *apcb_s,
+  * setup_apcb00 - Copy to APCB FORMAT0 from APCB FORMAT0
+  * @vcpu: pointer to the virtual CPU
+  * @apcb_s: pointer to start of apcb in the shadow crycb
+- * @apcb_o: pointer to start of original apcb in the guest2
++ * @crycb_o: real guest address to start of original guest crycb
+  * @apcb_h: pointer to start of apcb in the guest1
+  *
+  * Returns 0 and -EFAULT on error reading guest apcb
   */
--static int add_unformed_module(struct module *mod)
-+static struct shared_load_info *add_running_load(const struct load_info *info)
+ static int setup_apcb00(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
+-			unsigned long apcb_o, unsigned long *apcb_h)
++			unsigned long crycb_o, unsigned long *apcb_h)
  {
--	int err;
- 	struct module *old;
-+	struct shared_load_info *shared_info;
- 
--	mod->state = MODULE_STATE_UNFORMED;
++	unsigned long apcb_o;
++
++	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb0);
++
+ 	if (read_guest_real(vcpu, apcb_o, apcb_s,
+ 			    sizeof(struct kvm_s390_apcb0)))
+ 		return -EFAULT;
+@@ -178,15 +185,19 @@ static int setup_apcb00(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
+  * setup_apcb11 - Copy the FORMAT1 APCB from the guest to the shadow CRYCB
+  * @vcpu: pointer to the virtual CPU
+  * @apcb_s: pointer to start of apcb in the shadow crycb
+- * @apcb_o: pointer to start of original guest apcb
++ * @crycb_o: real guest address to start of original guest crycb
+  * @apcb_h: pointer to start of apcb in the host
+  *
+  * Returns 0 and -EFAULT on error reading guest apcb
+  */
+ static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
+-			unsigned long apcb_o,
++			unsigned long crycb_o,
+ 			unsigned long *apcb_h)
+ {
++	unsigned long apcb_o;
++
++	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb1);
++
+ 	if (read_guest_real(vcpu, apcb_o, apcb_s,
+ 			    sizeof(struct kvm_s390_apcb1)))
+ 		return -EFAULT;
+@@ -200,7 +211,7 @@ static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
+  * setup_apcb - Create a shadow copy of the apcb.
+  * @vcpu: pointer to the virtual CPU
+  * @crycb_s: pointer to shadow crycb
+- * @crycb_o: pointer to original guest crycb
++ * @crycb_o: real address of original guest crycb
+  * @crycb_h: pointer to the host crycb
+  * @fmt_o: format of the original guest crycb.
+  * @fmt_h: format of the host crycb.
+@@ -215,10 +226,6 @@ static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
+ 	       struct kvm_s390_crypto_cb *crycb_h,
+ 	       int fmt_o, int fmt_h)
+ {
+-	struct kvm_s390_crypto_cb *crycb;
 -
--again:
- 	mutex_lock(&module_mutex);
--	old = find_module_all(mod->name, strlen(mod->name), true);
--	if (old != NULL) {
--		if (old->state != MODULE_STATE_LIVE) {
--			/* Wait in case it fails to load. */
-+
-+	/* Search if there is a running load of a module with the same name. */
-+	list_for_each_entry(shared_info, &running_loads, list)
-+		if (strcmp(shared_info->name, info->name) == 0) {
-+			int err;
-+
-+			shared_load_info_get(shared_info);
- 			mutex_unlock(&module_mutex);
-+
- 			err = wait_event_interruptible(module_wq,
--					       finished_loading(mod->name));
--			if (err)
--				goto out_unlocked;
--			goto again;
-+						       shared_info->err != 0);
-+			if (!err)
-+				err = shared_info->err;
-+			shared_load_info_put(shared_info);
-+			shared_info = ERR_PTR(err);
-+			goto out_unlocked;
+-	crycb = (struct kvm_s390_crypto_cb *) (unsigned long)crycb_o;
+-
+ 	switch (fmt_o) {
+ 	case CRYCB_FORMAT2:
+ 		if ((crycb_o & PAGE_MASK) != ((crycb_o + 256) & PAGE_MASK))
+@@ -226,18 +233,18 @@ static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
+ 		if (fmt_h != CRYCB_FORMAT2)
+ 			return -EINVAL;
+ 		return setup_apcb11(vcpu, (unsigned long *)&crycb_s->apcb1,
+-				    (unsigned long) &crycb->apcb1,
++				    crycb_o,
+ 				    (unsigned long *)&crycb_h->apcb1);
+ 	case CRYCB_FORMAT1:
+ 		switch (fmt_h) {
+ 		case CRYCB_FORMAT2:
+ 			return setup_apcb10(vcpu, &crycb_s->apcb1,
+-					    (unsigned long) &crycb->apcb0,
++					    crycb_o,
+ 					    &crycb_h->apcb1);
+ 		case CRYCB_FORMAT1:
+ 			return setup_apcb00(vcpu,
+ 					    (unsigned long *) &crycb_s->apcb0,
+-					    (unsigned long) &crycb->apcb0,
++					    crycb_o,
+ 					    (unsigned long *) &crycb_h->apcb0);
  		}
--		err = -EEXIST;
-+
-+	/* Search if there is a live module with the given name already. */
-+	old = find_module_all(info->name, strlen(info->name), true);
-+	if (old != NULL) {
-+		if (old->state == MODULE_STATE_LIVE) {
-+			shared_info = ERR_PTR(-EEXIST);
-+			goto out;
-+		}
-+
-+		/*
-+		 * Any active load always has its record in running_loads and so
-+		 * would be found above. This applies independent whether such
-+		 * a module is currently in MODULE_STATE_UNFORMED,
-+		 * MODULE_STATE_COMING, or even in MODULE_STATE_GOING if its
-+		 * initialization failed. It therefore means this must be an
-+		 * older going module and the caller should try later once it is
-+		 * gone.
-+		 */
-+		WARN_ON(old->state != MODULE_STATE_GOING);
-+		shared_info = ERR_PTR(-EAGAIN);
- 		goto out;
+ 		break;
+@@ -248,13 +255,13 @@ static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
+ 		switch (fmt_h) {
+ 		case CRYCB_FORMAT2:
+ 			return setup_apcb10(vcpu, &crycb_s->apcb1,
+-					    (unsigned long) &crycb->apcb0,
++					    crycb_o,
+ 					    &crycb_h->apcb1);
+ 		case CRYCB_FORMAT1:
+ 		case CRYCB_FORMAT0:
+ 			return setup_apcb00(vcpu,
+ 					    (unsigned long *) &crycb_s->apcb0,
+-					    (unsigned long) &crycb->apcb0,
++					    crycb_o,
+ 					    (unsigned long *) &crycb_h->apcb0);
+ 		}
  	}
--	mod_update_bounds(mod);
--	list_add_rcu(&mod->list, &modules);
--	mod_tree_insert(mod);
--	err = 0;
-+
-+	/* The load is unique, make it visible to others. */
-+	shared_info = shared_load_info_alloc(info);
-+	if (IS_ERR(shared_info))
-+		goto out;
-+	list_add(&shared_info->list, &running_loads);
- 
- out:
- 	mutex_unlock(&module_mutex);
- out_unlocked:
--	return err;
-+	return shared_info;
-+}
-+
-+/* Complete the running load and inform other duplicate inserts about it. */
-+static void finalize_running_load(struct shared_load_info *shared_info, int err)
-+{
-+	mutex_lock(&module_mutex);
-+	list_del(&shared_info->list);
-+	shared_info->err = err == 0 ? -EEXIST : -ENODEV;
-+	mutex_unlock(&module_mutex);
-+
-+	wake_up_all(&module_wq);
-+	shared_load_info_put(shared_info);
-+}
-+
-+static void add_unformed_module(struct module *mod)
-+{
-+	mod->state = MODULE_STATE_UNFORMED;
-+
-+	mutex_lock(&module_mutex);
-+	mod_update_bounds(mod);
-+	list_add_rcu(&mod->list, &modules);
-+	mod_tree_insert(mod);
-+	mutex_unlock(&module_mutex);
- }
- 
- static int complete_formation(struct module *mod, struct load_info *info)
-@@ -2674,6 +2747,7 @@ static void cfi_init(struct module *mod);
- static int load_module(struct load_info *info, const char __user *uargs,
- 		       int flags)
- {
-+	struct shared_load_info *shared_info;
- 	struct module *mod;
- 	long err = 0;
- 	char *after_dashes;
-@@ -2711,38 +2785,43 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 		goto free_copy;
- 
- 	/*
--	 * Now that we know we have the correct module name, check
--	 * if it's blacklisted.
-+	 * Now that we know we have the correct module name, check if there is
-+	 * another load of the same name in progress.
- 	 */
-+	shared_info = add_running_load(info);
-+	if (IS_ERR(shared_info)) {
-+		err = PTR_ERR(shared_info);
-+		goto free_copy;
-+	}
-+
-+	/* Check if the module is blacklisted. */
- 	if (blacklisted(info->name)) {
- 		err = -EPERM;
- 		pr_err("Module %s is blacklisted\n", info->name);
--		goto free_copy;
-+		goto free_shared;
- 	}
- 
- 	err = rewrite_section_headers(info, flags);
- 	if (err)
--		goto free_copy;
-+		goto free_shared;
- 
- 	/* Check module struct version now, before we try to use module. */
- 	if (!check_modstruct_version(info, info->mod)) {
- 		err = -ENOEXEC;
--		goto free_copy;
-+		goto free_shared;
- 	}
- 
- 	/* Figure out module layout, and allocate all the memory. */
- 	mod = layout_and_allocate(info, flags);
- 	if (IS_ERR(mod)) {
- 		err = PTR_ERR(mod);
--		goto free_copy;
-+		goto free_shared;
- 	}
- 
- 	audit_log_kern_module(mod->name);
- 
- 	/* Reserve our place in the list. */
--	err = add_unformed_module(mod);
--	if (err)
--		goto free_module;
-+	add_unformed_module(mod);
- 
- #ifdef CONFIG_MODULE_SIG
- 	mod->sig_ok = info->sig_ok;
-@@ -2852,7 +2931,9 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	/* Done! */
- 	trace_module_load(mod);
- 
--	return do_init_module(mod);
-+	err = do_init_module(mod);
-+	finalize_running_load(shared_info, err);
-+	return err;
- 
-  sysfs_cleanup:
- 	mod_sysfs_teardown(mod);
-@@ -2886,15 +2967,15 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	/* Unlink carefully: kallsyms could be walking list. */
- 	list_del_rcu(&mod->list);
- 	mod_tree_remove(mod);
--	wake_up_all(&module_wq);
- 	/* Wait for RCU-sched synchronizing before releasing mod->list. */
- 	synchronize_rcu();
- 	mutex_unlock(&module_mutex);
-- free_module:
- 	/* Free lock-classes; relies on the preceding sync_rcu() */
- 	lockdep_free_key_range(mod->data_layout.base, mod->data_layout.size);
- 
- 	module_deallocate(mod, info);
-+ free_shared:
-+	finalize_running_load(shared_info, err);
-  free_copy:
- 	free_copy(info, flags);
- 	return err;
 -- 
-2.35.3
+2.31.1
 

@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45BC5ACD6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307505ACD70
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236676AbiIEIJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S237118AbiIEIKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236507AbiIEIJb (ORCPT
+        with ESMTP id S237034AbiIEIJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:09:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9133B6420
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:09:30 -0700 (PDT)
+        Mon, 5 Sep 2022 04:09:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B8A1A07C;
+        Mon,  5 Sep 2022 01:09:58 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 461175FC08;
-        Mon,  5 Sep 2022 08:09:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662365369; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A46325FC08;
+        Mon,  5 Sep 2022 08:09:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662365396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=o6Rk5ALDqwlE94C3Voh82QcVjOVhQ+ciXULHNmvzoUk=;
-        b=kRV09M5jju9eFDIPZxeRoTdR+Ed3uiTX68nBvPK92nMWToIs6X8KiWgOe5kiqNnq3Dv1cJ
-        O5yRddh4iShYZYWF8OCNJlMhdXDP/n9N8Jw5Bw+VxJC9a0gqTUS8FP3A1lL6wgl4H+UQUo
-        ch7v+NyqBx7p3h8gkT8/107f/nNKgjE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662365369;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o6Rk5ALDqwlE94C3Voh82QcVjOVhQ+ciXULHNmvzoUk=;
-        b=2OoZLn/910ccBQX+mLoGzu9FsXcmJZQW2hpLJfcICDOqMj92Tg35bDoNpQ4wg6SZP6WePj
-        wCGPMt7rFLL+eDDw==
+        bh=OHm22wnscSeSLam9oTNKfPWE3cR9ClcG+vTIYFYQYNg=;
+        b=Clf8v2x2EIxxiOces8FJ+7tgJEbgJXlWJlcBiaA0gxiKUOz7A6mH6LiLhyRiQEnTU/xljc
+        tbpCfb8FIpQrs86wwdAaOETDd2DffL+bPNOJNjF6IbbU6iQHoIBInQNOrphhkNO9zkFk7U
+        2WmCmOq7qV/NuyF/zc3b24aWjfUfSyA=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2FA6413A66;
-        Mon,  5 Sep 2022 08:09:29 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B88BE13A66;
+        Mon,  5 Sep 2022 08:09:55 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id XNexCrmuFWMVAwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 05 Sep 2022 08:09:29 +0000
-Message-ID: <d7abbe06-6e0b-0939-a162-2583d7600b83@suse.de>
-Date:   Mon, 5 Sep 2022 10:09:28 +0200
+        id Af9FJ9OuFWNRAwAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 05 Sep 2022 08:09:55 +0000
+Message-ID: <1cf62567-3af5-a76a-cfbc-b7de1de8cb8a@suse.com>
+Date:   Mon, 5 Sep 2022 10:09:55 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 07/12] drm/udl: Add parameter to set number of URBs
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] x86/paravirt: Remove clobber bitmask from
+ .parainstructions
 Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220816153655.27526-1-tiwai@suse.de>
- <20220816153655.27526-8-tiwai@suse.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220816153655.27526-8-tiwai@suse.de>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220903073706.3193746-1-keescook@chromium.org>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220903073706.3193746-1-keescook@chromium.org>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------PdPzT4DBtzO7K33JqmtzXQqx"
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ boundary="------------qYy4CPEzyVEhFLU0f08weABw"
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,86 +74,126 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------PdPzT4DBtzO7K33JqmtzXQqx
-Content-Type: multipart/mixed; boundary="------------ZCIfbFQZfOMQBZ12ufSuK08k";
+--------------qYy4CPEzyVEhFLU0f08weABw
+Content-Type: multipart/mixed; boundary="------------z0isp1U00RPiyrhaQ6saS2Lw";
  protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Message-ID: <d7abbe06-6e0b-0939-a162-2583d7600b83@suse.de>
-Subject: Re: [PATCH 07/12] drm/udl: Add parameter to set number of URBs
-References: <20220816153655.27526-1-tiwai@suse.de>
- <20220816153655.27526-8-tiwai@suse.de>
-In-Reply-To: <20220816153655.27526-8-tiwai@suse.de>
+From: Juergen Gross <jgross@suse.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+ Alexey Makhalov <amakhalov@vmware.com>,
+ VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Bill Wendling <morbo@google.com>, virtualization@lists.linux-foundation.org,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Message-ID: <1cf62567-3af5-a76a-cfbc-b7de1de8cb8a@suse.com>
+Subject: Re: [PATCH] x86/paravirt: Remove clobber bitmask from
+ .parainstructions
+References: <20220903073706.3193746-1-keescook@chromium.org>
+In-Reply-To: <20220903073706.3193746-1-keescook@chromium.org>
 
---------------ZCIfbFQZfOMQBZ12ufSuK08k
+--------------z0isp1U00RPiyrhaQ6saS2Lw
+Content-Type: multipart/mixed; boundary="------------tJl5n20pvStM0PbURFVzKsvv"
+
+--------------tJl5n20pvStM0PbURFVzKsvv
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
-SGkNCg0KQW0gMTYuMDguMjIgdW0gMTc6MzYgc2NocmllYiBUYWthc2hpIEl3YWk6DQo+IEZy
-b206IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPiANCj4gRm9y
-IGZ1cnRoZXIgZGVidWdnaW5nIGFuZCBvcHRpbWl6YXRpb24gcHVycG9zZSwgYWxsb3cgdXNl
-cnMgdG8gYWRqdXN0DQo+IHRoZSBudW1iZXIgb2YgVVJCcyB2aWEgYSBuZXcgbW9kdWxlIHBh
-cmFtZXRlciwgbnVtdXJicy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFRob21hcyBaaW1tZXJt
-YW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPiBTaWduZWQtb2ZmLWJ5OiBUYWthc2hpIEl3
-YWkgPHRpd2FpQHN1c2UuZGU+DQoNCkkgbWFkZSB0aGlzIHBhdGNoIGZvciBkZWJ1Z2dpbmcs
-IGJ1dCBJIGRvbid0IHRoaW5rIGl0IHNob3VsZCBiZSBhZGRlZCB0byANCnRoZSB1cHN0cmVh
-bSBrZXJuZWwuIFBsZWFzZSBkb24ndCBtZXJnZS4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMN
-Cg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMgfCA5ICsrKysr
-KysrLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24o
-LSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMg
-Yi9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMNCj4gaW5kZXggMmI3ZWFmZDQ4ZWMy
-Li4zYzk3ZjY0Nzg4M2YgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS91ZGwvdWRs
-X21haW4uYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMNCj4gQEAg
-LTgsNiArOCw4IEBADQo+ICAgICogQ29weXJpZ2h0IChDKSAyMDA5IEJlcm5pZSBUaG9tcHNv
-biA8YmVybmllQHBsdWdhYmxlLmNvbT4NCj4gICAgKi8NCj4gICANCj4gKyNpbmNsdWRlIDxs
-aW51eC9tb2R1bGVwYXJhbS5oPg0KPiArDQo+ICAgI2luY2x1ZGUgPGRybS9kcm0uaD4NCj4g
-ICAjaW5jbHVkZSA8ZHJtL2RybV9wcmludC5oPg0KPiAgICNpbmNsdWRlIDxkcm0vZHJtX3By
-b2JlX2hlbHBlci5oPg0KPiBAQCAtMjMsNiArMjUsOSBAQA0KPiAgICNkZWZpbmUgV1JJVEVT
-X0lOX0ZMSUdIVCAoMjApDQo+ICAgI2RlZmluZSBNQVhfVkVORE9SX0RFU0NSSVBUT1JfU0la
-RSAyNTYNCj4gICANCj4gK3N0YXRpYyB1aW50IHVkbF9udW1fdXJicyA9IFdSSVRFU19JTl9G
-TElHSFQ7DQo+ICttb2R1bGVfcGFyYW1fbmFtZWQobnVtdXJicywgdWRsX251bV91cmJzLCB1
-aW50LCAwNjAwKTsNCj4gKw0KPiAgIHN0YXRpYyBpbnQgdWRsX3BhcnNlX3ZlbmRvcl9kZXNj
-cmlwdG9yKHN0cnVjdCB1ZGxfZGV2aWNlICp1ZGwpDQo+ICAgew0KPiAgIAlzdHJ1Y3QgdXNi
-X2RldmljZSAqdWRldiA9IHVkbF90b191c2JfZGV2aWNlKHVkbCk7DQo+IEBAIC0yOTQsNiAr
-Mjk5LDggQEAgaW50IHVkbF9pbml0KHN0cnVjdCB1ZGxfZGV2aWNlICp1ZGwpDQo+ICAgCXN0
-cnVjdCBkcm1fZGV2aWNlICpkZXYgPSAmdWRsLT5kcm07DQo+ICAgCWludCByZXQgPSAtRU5P
-TUVNOw0KPiAgIA0KPiArCWRybV9pbmZvKGRldiwgInByZS1hbGxvY2F0aW5nICVkIFVSQnNc
-biIsIHVkbF9udW1fdXJicyk7DQo+ICsNCj4gICAJRFJNX0RFQlVHKCJcbiIpOw0KPiAgIA0K
-PiAgIAl1ZGwtPmRtYWRldiA9IHVzYl9pbnRmX2dldF9kbWFfZGV2aWNlKHRvX3VzYl9pbnRl
-cmZhY2UoZGV2LT5kZXYpKTsNCj4gQEAgLTMxMSw3ICszMTgsNyBAQCBpbnQgdWRsX2luaXQo
-c3RydWN0IHVkbF9kZXZpY2UgKnVkbCkNCj4gICAJaWYgKHVkbF9zZWxlY3Rfc3RkX2NoYW5u
-ZWwodWRsKSkNCj4gICAJCURSTV9FUlJPUigiU2VsZWN0aW5nIGNoYW5uZWwgZmFpbGVkXG4i
-KTsNCj4gICANCj4gLQlpZiAoIXVkbF9hbGxvY191cmJfbGlzdChkZXYsIFdSSVRFU19JTl9G
-TElHSFQsIE1BWF9UUkFOU0ZFUikpIHsNCj4gKwlpZiAoIXVkbF9hbGxvY191cmJfbGlzdChk
-ZXYsIHVkbF9udW1fdXJicywgTUFYX1RSQU5TRkVSKSkgew0KPiAgIAkJRFJNX0VSUk9SKCJ1
-ZGxfYWxsb2NfdXJiX2xpc3QgZmFpbGVkXG4iKTsNCj4gICAJCWdvdG8gZXJyOw0KPiAgIAl9
-DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXIN
-ClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwg
-OTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpH
-ZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+T24gMDMuMDkuMjIgMDk6MzcsIEtlZXMgQ29vayB3cm90ZToNCj4gVGhlIHUxNiAiY2xvYmJl
+ciIgdmFsdWUgaXMgbm90IHVzZWQgaW4gLnBhcmFpbnN0cnVjdGlvbnMgc2luY2UgY29tbWl0
+DQo+IDI3ODc2ZjM4ODJmZCAoIng4Ni9wYXJhdmlydDogUmVtb3ZlIGNsb2JiZXJzIGZyb20g
+c3RydWN0IHBhcmF2aXJ0X3BhdGNoX3NpdGUiKQ0KPiANCj4gUmVtb3ZlIHRoZSB1MTYgZnJv
+bSB0aGUgc2VjdGlvbiBtYWNybywgdGhlIGFyZ3VtZW50IGZyb20gYWxsIG1hY3JvcywgYW5k
+DQo+IGFsbCBub3ctdW51c2VkIENMQlJfKiBtYWNyb3MuDQo+IA0KPiBDYzogSnVlcmdlbiBH
+cm9zcyA8amdyb3NzQHN1c2UuY29tPg0KPiBDYzogIlNyaXZhdHNhIFMuIEJoYXQgKFZNd2Fy
+ZSkiIDxzcml2YXRzYUBjc2FpbC5taXQuZWR1Pg0KPiBDYzogQWxleGV5IE1ha2hhbG92IDxh
+bWFraGFsb3ZAdm13YXJlLmNvbT4NCj4gQ2M6IFZNd2FyZSBQVi1Ecml2ZXJzIFJldmlld2Vy
+cyA8cHYtZHJpdmVyc0B2bXdhcmUuY29tPg0KPiBDYzogVGhvbWFzIEdsZWl4bmVyIDx0Z2x4
+QGxpbnV0cm9uaXguZGU+DQo+IENjOiBJbmdvIE1vbG5hciA8bWluZ29AcmVkaGF0LmNvbT4N
+Cj4gQ2M6IEJvcmlzbGF2IFBldGtvdiA8YnBAYWxpZW44LmRlPg0KPiBDYzogRGF2ZSBIYW5z
+ZW4gPGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbT4NCj4gQ2M6IHg4NkBrZXJuZWwub3Jn
+DQo+IENjOiAiSC4gUGV0ZXIgQW52aW4iIDxocGFAenl0b3IuY29tPg0KPiBDYzogQmlsbCBX
+ZW5kbGluZyA8bW9yYm9AZ29vZ2xlLmNvbT4NCj4gQ2M6IHZpcnR1YWxpemF0aW9uQGxpc3Rz
+LmxpbnV4LWZvdW5kYXRpb24ub3JnDQo+IFNpZ25lZC1vZmYtYnk6IEtlZXMgQ29vayA8a2Vl
+c2Nvb2tAY2hyb21pdW0ub3JnPg0KDQpSZXZpZXdlZC1ieTogSnVlcmdlbiBHcm9zcyA8amdy
+b3NzQHN1c2UuY29tPg0KDQoNCkp1ZXJnZW4NCg==
+--------------tJl5n20pvStM0PbURFVzKsvv
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
---------------ZCIfbFQZfOMQBZ12ufSuK08k--
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
---------------PdPzT4DBtzO7K33JqmtzXQqx
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------tJl5n20pvStM0PbURFVzKsvv--
+
+--------------z0isp1U00RPiyrhaQ6saS2Lw--
+
+--------------qYy4CPEzyVEhFLU0f08weABw
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMVrrgFAwAAAAAACgkQlh/E3EQov+C9
-2A/+Mfe4AnRxK1eStWNIc5kMWU7Gow1Gm+LfXj8dDpl25EOjQgG1iPvnKywdMzboycQW9h1LDXPc
-QjIiHpaSgAXj0JPLpBvoEqG/Q7a40OecAu/YrRrlF14K50SIOGb49xxL6emG9pRgbZe3ix0UDW74
-Vu//X59ldjkqNOQ//0iv/jJmzdPYyOgNoDwqqvSZJz8Tg9JQ5eBu5KAg9gOuuJCP/IBk34tB+SUE
-k95mED+tAGxb2h58+Hr9iGwtVexDEQCP7hLvWwRAbkMpjhZqj83C7Udz+Wo9GmH0mt4fAy5VeHJp
-eISvSh4bnrQR0tHP1ASTB9FpwitE9vHjpG1Y6MDI0YTjUxjs0b6nlwMLk/GOxdewXKvi/Sf7sBwp
-9KP20WhbANKBtHNybC3Qvl3fW8G/vV7WtLr40a7G9Uk/zhuliTQ4kBagmznqaTbffBLIhUosc8Wz
-ui4WGl0rE2HzyZFhN+UNGVI8/fFrarZXgYGkLUPwimLI9intEaQ4NbYwGEu+fILpLBv+9NZkL7UN
-cIrj1IRj57HUr+wQSdUrtyjZae1ib4GVn5cI/mNkfCbjmbcDqkMGzSot5fh/sdoZfn2PZXtmGsms
-ixKWL7B1orBvX5bQ9jZN/rFV08gBMBdxUju/xgR2yb+0YNU698ufV0i64J2m8gyjRkDkMm8g6dc/
-/Kw=
-=OMuU
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMVrtMFAwAAAAAACgkQsN6d1ii/Ey99
+pgf/U7sZwyD/ZGgFNwhAzp/LJQkm5CqSEBtYgFpQYMyX36O3jYw5Ms5/KwLBmiikwVLiEvQbFV0a
+WdxbTqghNNqSplAelf2QI9CsUIynVXxPYwFuVJCXedEaQoecTx+KOwWFYZwTzv0od4zf1UNlu4Kl
+9ayxpIs4Mmc1EbErxOek4ZwZEyA3DeaMHo41ByQR2QnWKsGbrvXHXfo61H00ezELkwxQZCv3FYUI
+LfYK/CKA4Cz/XFRUW8FvmBDQWKpNx362vt2PpwrTlqbRAnJFXe0TrnV8xisiNPPlAri2TZV1hsfR
+do/Wk5ZJYGSHsZq0RX49dOs+2bJs5Yw3or14nUSF2w==
+=sYNm
 -----END PGP SIGNATURE-----
 
---------------PdPzT4DBtzO7K33JqmtzXQqx--
+--------------qYy4CPEzyVEhFLU0f08weABw--

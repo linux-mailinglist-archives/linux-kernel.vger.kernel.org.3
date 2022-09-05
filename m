@@ -2,199 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459025ACFEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACED15AD000
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237620AbiIEKSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        id S236358AbiIEKTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237434AbiIEKRz (ORCPT
+        with ESMTP id S237972AbiIEKSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:17:55 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40CC193D3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:16:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VOR5yVU_1662373002;
-Received: from 30.97.48.66(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VOR5yVU_1662373002)
-          by smtp.aliyun-inc.com;
-          Mon, 05 Sep 2022 18:16:43 +0800
-Message-ID: <0c9d9774-77dd-fd93-b5b6-fc63f3d01b7f@linux.alibaba.com>
-Date:   Mon, 5 Sep 2022 18:16:52 +0800
+        Mon, 5 Sep 2022 06:18:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974D757E2B;
+        Mon,  5 Sep 2022 03:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662373066; x=1693909066;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=1LxAEb0YeNv/EF5OX+3v58gClT2GrInwD87KBgwe+HA=;
+  b=y75nAuRw/g8UC2IG1tPDxk162LsfrJneZyz2SPtlaRSdd6WE0BLaf2eM
+   YWVAdKdxsjwCle6/ZDT+I3tEzObKOVs5kYmtvsOEe7TabCWEfCLnuYFvD
+   7/xMiR9KjHvqCJSo1ROX2Gq9Pn+eBk3LiGoYjEY0MekX98Rc41v/F1hj1
+   TXHE6Lmn4toPoWy1ESVjbYhlgYuX2oUHfrJ0BZJOOUz9r6OSKczp1jZNg
+   1HQFIUvdQImKNRy8/ZAu8J7AuRTCm6sGxqrx+7VjHffffAnRfpQbUfTlP
+   gPBx1jxUdQcZTUUPZLymwp+JYmKMNBiFRD/oVdivi59G4bJYLeOSHhVIj
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="175641566"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Sep 2022 03:17:45 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 5 Sep 2022 03:17:44 -0700
+Received: from training-HP-280-G1-MT-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 5 Sep 2022 03:17:40 -0700
+From:   Divya Koppera <Divya.Koppera@microchip.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>
+Subject: [PATCH v2 net-next] net: phy: micrel: Adding SQI support for lan8814 phy
+Date:   Mon, 5 Sep 2022 15:47:30 +0530
+Message-ID: <20220905101730.29951-1-Divya.Koppera@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
-To:     David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>, peterx@redhat.com,
-        kirill.shutemov@linux.intel.com, jgg@nvidia.com, hughd@google.com,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220901222707.477402-1-shy828301@gmail.com>
- <e6ad1084-c301-9f11-1fa7-7614bf859aaf@nvidia.com>
- <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Supports SQI(Signal Quality Index) for lan8814 phy, where
+it has SQI index of 0-7 values and this indicator can be used
+for cable integrity diagnostic and investigating other noise
+sources. It is not supported for 10Mbps speed
 
+Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
+---
+v1 -> v2
+- Given SQI support for all pairs of wires in 1000/100 base-T phy's
+  uAPI may run through all instances in future. At present returning
+  only first instance as uAPI supports for only 1 pair.
+- SQI is not supported for 10Mbps speed, handled accordingly.
+---
+ drivers/net/phy/micrel.c | 44 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-On 9/5/2022 3:59 PM, David Hildenbrand wrote:
-> On 05.09.22 00:29, John Hubbard wrote:
->> On 9/1/22 15:27, Yang Shi wrote:
->>> Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
->>> introduce a general RCU get_user_pages_fast()"), a TLB flush is no 
->>> longer
->>> sufficient to handle concurrent GUP-fast in all cases, it only handles
->>> traditional IPI-based GUP-fast correctly.  On architectures that send
->>> an IPI broadcast on TLB flush, it works as expected.  But on the
->>> architectures that do not use IPI to broadcast TLB flush, it may have
->>> the below race:
->>>
->>>     CPU A                                          CPU B
->>> THP collapse                                     fast GUP
->>>                                                gup_pmd_range() <-- 
->>> see valid pmd
->>>                                                    gup_pte_range() 
->>> <-- work on pte
->>> pmdp_collapse_flush() <-- clear pmd and flush
->>> __collapse_huge_page_isolate()
->>>      check page pinned <-- before GUP bump refcount
->>>                                                        pin the page
->>>                                                        check PTE <-- 
->>> no change
->>> __collapse_huge_page_copy()
->>>      copy data to huge page
->>>      ptep_clear()
->>> install huge pmd for the huge page
->>>                                                        return the 
->>> stale page
->>> discard the stale page
->>
->> Hi Yang,
->>
->> Thanks for taking the trouble to write down these notes. I always
->> forget which race we are dealing with, and this is a great help. :)
->>
->> More...
->>
->>>
->>> The race could be fixed by checking whether PMD is changed or not after
->>> taking the page pin in fast GUP, just like what it does for PTE.  If the
->>> PMD is changed it means there may be parallel THP collapse, so GUP
->>> should back off.
->>>
->>> Also update the stale comment about serializing against fast GUP in
->>> khugepaged.
->>>
->>> Fixes: 2667f50e8b81 ("mm: introduce a general RCU 
->>> get_user_pages_fast()")
->>> Signed-off-by: Yang Shi <shy828301@gmail.com>
->>> ---
->>>   mm/gup.c        | 30 ++++++++++++++++++++++++------
->>>   mm/khugepaged.c | 10 ++++++----
->>>   2 files changed, 30 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/mm/gup.c b/mm/gup.c
->>> index f3fc1f08d90c..4365b2811269 100644
->>> --- a/mm/gup.c
->>> +++ b/mm/gup.c
->>> @@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int 
->>> *nr, int nr_start,
->>>   }
->>>   #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
->>> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned 
->>> long end,
->>> -             unsigned int flags, struct page **pages, int *nr)
->>> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
->>> +             unsigned long end, unsigned int flags,
->>> +             struct page **pages, int *nr)
->>>   {
->>>       struct dev_pagemap *pgmap = NULL;
->>>       int nr_start = *nr, ret = 0;
->>> @@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned 
->>> long addr, unsigned long end,
->>>               goto pte_unmap;
->>>           }
->>> -        if (unlikely(pte_val(pte) != pte_val(*ptep))) {
->>> +        /*
->>> +         * THP collapse conceptually does:
->>> +         *   1. Clear and flush PMD
->>> +         *   2. Check the base page refcount
->>> +         *   3. Copy data to huge page
->>> +         *   4. Clear PTE
->>> +         *   5. Discard the base page
->>> +         *
->>> +         * So fast GUP may race with THP collapse then pin and
->>> +         * return an old page since TLB flush is no longer sufficient
->>> +         * to serialize against fast GUP.
->>> +         *
->>> +         * Check PMD, if it is changed just back off since it
->>> +         * means there may be parallel THP collapse.
->>> +         */
->>
->> As I mentioned in the other thread, it would be a nice touch to move
->> such discussion into the comment header.
->>
->>> +        if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
->>> +            unlikely(pte_val(pte) != pte_val(*ptep))) {
->>
->>
->> That should be READ_ONCE() for the *pmdp and *ptep reads. Because this
->> whole lockless house of cards may fall apart if we try reading the
->> page table values without READ_ONCE().
-> 
-> I came to the conclusion that the implicit memory barrier when grabbing 
-> a reference on the page is sufficient such that we don't need READ_ONCE 
-> here.
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 7b8c5c8d013e..37845efe2cb6 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -1975,6 +1975,13 @@ static int ksz886x_cable_test_get_status(struct phy_device *phydev,
+ #define LAN8814_CLOCK_MANAGEMENT			0xd
+ #define LAN8814_LINK_QUALITY				0x8e
+ 
++#define LAN8814_DCQ_CTRL				0xe6
++#define LAN8814_DCQ_CTRL_READ_CAPTURE_			BIT(15)
++#define LAN8814_DCQ_CTRL_CHANNEL_MASK			GENMASK(1, 0)
++#define LAN8814_DCQ_SQI					0xe4
++#define LAN8814_DCQ_SQI_MAX				7
++#define LAN8814_DCQ_SQI_VAL_MASK			GENMASK(3, 1)
++
+ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
+ {
+ 	int data;
+@@ -2933,6 +2940,41 @@ static int lan8814_probe(struct phy_device *phydev)
+ 	return 0;
+ }
+ 
++static int lan8814_get_sqi(struct phy_device *phydev)
++{
++	int ret, val, pair;
++	int sqi_val[4];
++
++	if (phydev->speed == SPEED_10)
++		return -EOPNOTSUPP;
++
++	for (pair = 0; pair < 4; pair++) {
++		val = lanphy_read_page_reg(phydev, 1, LAN8814_DCQ_CTRL);
++		if (val < 0)
++			return val;
++
++		val &= ~LAN8814_DCQ_CTRL_CHANNEL_MASK;
++		val |= pair;
++		val |= LAN8814_DCQ_CTRL_READ_CAPTURE_;
++		ret = lanphy_write_page_reg(phydev, 1, LAN8814_DCQ_CTRL, val);
++		if (ret < 0)
++			return ret;
++
++		ret = lanphy_read_page_reg(phydev, 1, LAN8814_DCQ_SQI);
++		if (ret < 0)
++			return ret;
++
++		sqi_val[pair] = FIELD_GET(LAN8814_DCQ_SQI_VAL_MASK, ret);
++	}
++
++	return *sqi_val;
++}
++
++static int lan8814_get_sqi_max(struct phy_device *phydev)
++{
++	return LAN8814_DCQ_SQI_MAX;
++}
++
+ static struct phy_driver ksphy_driver[] = {
+ {
+ 	.phy_id		= PHY_ID_KS8737,
+@@ -3123,6 +3165,8 @@ static struct phy_driver ksphy_driver[] = {
+ 	.resume		= kszphy_resume,
+ 	.config_intr	= lan8814_config_intr,
+ 	.handle_interrupt = lan8814_handle_interrupt,
++	.get_sqi	= lan8814_get_sqi,
++	.get_sqi_max	= lan8814_get_sqi_max,
+ }, {
+ 	.phy_id		= PHY_ID_LAN8804,
+ 	.phy_id_mask	= MICREL_PHY_ID_MASK,
+-- 
+2.17.1
 
-IMHO the compiler may optimize the code 'pte_val(*ptep)' to be always 
-get from a register, then we can get an old value if other thread did 
-set_pte(). I am not sure how the implicit memory barrier can pervent the 
-compiler optimization? Please correct me if I missed something.
-
-> If we still intend to change that code, we should fixup all GUP-fast 
-> functions in a similar way. But again, I don't think we need a change here.
-> 
-> 
->>> -     * After this gup_fast can't run anymore. This also removes
->>> -     * any huge TLB entry from the CPU so we won't allow
->>> -     * huge and small TLB entries for the same virtual address
->>> -     * to avoid the risk of CPU bugs in that area.
->>> +     * This removes any huge TLB entry from the CPU so we won't allow
->>> +     * huge and small TLB entries for the same virtual address to
->>> +     * avoid the risk of CPU bugs in that area.
->>> +     *
->>> +     * Parallel fast GUP is fine since fast GUP will back off when
->>> +     * it detects PMD is changed.
->>>        */
->>>       _pmd = pmdp_collapse_flush(vma, address, pmd);
->>
->> To follow up on David Hildenbrand's note about this in the nearby 
->> thread...
->> I'm also not sure if pmdp_collapse_flush() implies a memory barrier on
->> all arches. It definitely does do an atomic op with a return value on 
->> x86,
->> but that's just one arch.
->>
-> 
-> I think a ptep/pmdp clear + TLB flush really has to imply a memory 
-> barrier, otherwise TLB flushing code might easily mess up with 
-> surrounding code. But we should better double-check.
-> 
-> s390x executes an IDTE instruction, which performs serialization (-> 
-> memory barrier). arm64 seems to use DSB instructions to enforce memory 
-> ordering.
-> 

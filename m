@@ -2,81 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8F85AD6CE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AA05AD6D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238430AbiIEPpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 11:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
+        id S238452AbiIEPrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 11:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbiIEPpO (ORCPT
+        with ESMTP id S238119AbiIEPrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 11:45:14 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AEC4505E
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 08:45:11 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1662392710; bh=q9fEBH3gcopu3CzK9ZpmTk1BGZLQ/rDml3lYdRY2lSE=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=WqxmVGsk9LDpi1helFou5dOiZiiuSbq7JfhJvMKulTsjUg7R3uATz8Y4qb86/fsuX
-         VzH2cIsYo2GQtMResuDSGsH6+CrZKNgIQvlAsR/YrJh86+BKLFX0l56JyoUpk9pkeA
-         GRsK3dT4uNF+R6juj5bH4vQKG+gaKxvuz5R08LSI=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH 0/2] Untested TAS2562 power setting fixes
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-In-Reply-To: <166239232739.736206.17258746656389143736.b4-ty@kernel.org>
-Date:   Mon, 5 Sep 2022 17:45:09 +0200
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, Stephen Kitt <steve@sk2.org>,
-        raphael-xu@ti.com, alsa-devel@alsa-project.org, asyrus@ti.com,
-        Charles Keepax <ckeepax@opensource.cirrus.com>, navada@ti.com,
-        linux-kernel@vger.kernel.org, shenghao-ding@ti.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C600ACEB-C64F-4501-94E4-17B4FD0A8918@cutebit.org>
-References: <20220825142226.80929-1-povik+lin@cutebit.org>
- <166239232739.736206.17258746656389143736.b4-ty@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Sep 2022 11:47:10 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD3648C88
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 08:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fg+XnDXSnqRCu9Mai3sCVJ/hy6+I8T4qZe1klnldH0E=; b=O/HtuUvV3KD/LNUQwARMDwjHJV
+        dPFQsqg/DhExbykZiQfU+NspxB4AFyTc8AHX+wzXnMVbSCG9Rl6mEZ2aXoy4xYNS2LHisCdY3AClj
+        jqIV9t2+PE6K+T5ECBOZm90//MvD9HqEvYhpaDqUeko1plcLPoijv3QB4rUrzjXHSPocnGMI0mZLU
+        okdZsfdTCcBAoSHE9NUNdTjv62EZuCiPUYIT3rWHDL/1lVCFe97j9dUAMO4hOeQMONJrZR9BdaUnu
+        vNW2npHJiSGDmg3t/HzVcumUIL/nHPOBffW5SodeCmQ7yrC3ATLxM1m5MAwfjk+7Qz7jQ690HDUkA
+        9NmoiTMA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVEJH-009meN-CX; Mon, 05 Sep 2022 15:46:51 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AC0E430030F;
+        Mon,  5 Sep 2022 17:46:49 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 906012B972612; Mon,  5 Sep 2022 17:46:49 +0200 (CEST)
+Date:   Mon, 5 Sep 2022 17:46:49 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Bharata B Rao <bharata@amd.com>, ananth.narayan@amd.com,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
+Message-ID: <YxYZ6Q+JVg79aDNS@hirez.programming.kicks-ass.net>
+References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
+ <20220904010001.knlcejmw4lg2uzy3@box.shutemov.name>
+ <64519d0b-b696-db47-52c2-303451e10c09@amd.com>
+ <20220905134457.a2f7uluq42frsgwe@box.shutemov.name>
+ <YxYIAVx2qJLMDJlC@hirez.programming.kicks-ass.net>
+ <20220905153517.k6ctaqqtkcyu2zmn@box.shutemov.name>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905153517.k6ctaqqtkcyu2zmn@box.shutemov.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 05, 2022 at 06:35:17PM +0300, Kirill A. Shutemov wrote:
+> What about something like this?
+> 
+> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+> index 803241dfc473..868d2730884b 100644
+> --- a/arch/x86/include/asm/uaccess.h
+> +++ b/arch/x86/include/asm/uaccess.h
+> @@ -30,8 +30,10 @@ static inline bool pagefault_disabled(void);
+>   */
+>  #define untagged_addr(mm, addr)	({					\
+>  	u64 __addr = (__force u64)(addr);				\
+> -	s64 sign = (s64)__addr >> 63;					\
+> -	__addr &= (mm)->context.untag_mask | sign;			\
+> +	if (static_cpu_has(X86_FEATURE_LAM)) {				\
+> +		s64 sign = (s64)__addr >> 63;				\
+> +		__addr &= (mm)->context.untag_mask | sign;		\
+> +	}								\
+>  	(__force __typeof__(addr))__addr;				\
+>  })
 
-> On 5. 9. 2022, at 17:38, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Thu, 25 Aug 2022 16:22:24 +0200, Martin Povi=C5=A1er wrote:
->> The tas2562 driver does the same thing with the setting of PWR_CTRL
->> field as the tas2764/tas2770 drivers were doing.
->> Link: =
-https://lore.kernel.org/alsa-devel/20220808141246.5749-1-povik+lin@cutebit=
-.org/T/#t
->> Link: =
-https://lore.kernel.org/alsa-devel/20220825140241.53963-1-povik+lin@cutebi=
-t.org/T/#t
->>=20
->> These are blindly written patches without testing since I don't have
->> the hardware. (I even tried TI's formal sample request program but
->> was refused there. CCing @ti.com addresses I found on other series
->> recently submitted.)
->>=20
->> [...]
->=20
-> Applied to
->=20
->   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git =
-for-next
->=20
-> Thanks!
-
-Texas Instruments is shipping me samples of the affected
-codecs, so I should be able to test the changes on hardware soon.
-
-Should I find regressions, I will report back.
-
-Martin
-
+Well, if you go throught the trouble of adding it, might as well use a
+regular static branch and only enable it once there's an actual user,
+no?

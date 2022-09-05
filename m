@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A6F5ADAC6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 162F05ADAC8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237958AbiIEVLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 17:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S237999AbiIEVLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 17:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237440AbiIEVLB (ORCPT
+        with ESMTP id S237585AbiIEVLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 17:11:01 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DB72250C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 14:10:23 -0700 (PDT)
+        Mon, 5 Sep 2022 17:11:03 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA49469F73
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 14:10:25 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662412216;
+        t=1662412217;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vX65IvaMkEV2nE74f0VGWlIcO5REzzEOQVG3jlGiFU0=;
-        b=iLcEJBbWrHxEvOCEUW0Nx+EFmd6xHROIvcpb5oFWtuLWNS3j4x85eWyhS/nQCqKvhQFY+9
-        DZlhZZ6zIR0Jqhe/YPyXARUvqFh4uR/0eIygdiza2I+gSgeBeN1AdVl6C6TLGQEnT5e8r/
-        xpqrVEk1zG6Wg7hVB7ThRMhkc/m8S3w=
+        bh=zEfgbyod9TAfDmSVR8FRbZx2ES7CDMUEPsx9DLtb/Fc=;
+        b=HXM9rl7HBoe458HguBeCJMpud8xnvFvzKLmPxcNwGKPRbJa+5fBcWrLyp7/5mGOpn6JM0W
+        9GGHaABZtIuxWJZG+PMAY29EALboC7lxUQobOMboGzVwu8Lz4JdX6TEqsY1WC5rWUC5VsQ
+        WSMaC2V3y1JSDhFOzdUlKZFHfPJR5to=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -38,19 +38,19 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Florian Mayer <fmayer@google.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v3 26/34] kasan: introduce complete_report_info
-Date:   Mon,  5 Sep 2022 23:05:41 +0200
-Message-Id: <8eb1a9bd01f5d31eab4524da54a101b8720b469e.1662411799.git.andreyknvl@google.com>
+Subject: [PATCH mm v3 27/34] kasan: fill in cache and object in complete_report_info
+Date:   Mon,  5 Sep 2022 23:05:42 +0200
+Message-Id: <23264572cb2cbb8f0efbb51509b6757eb3cc1fc9.1662411799.git.andreyknvl@google.com>
 In-Reply-To: <cover.1662411799.git.andreyknvl@google.com>
 References: <cover.1662411799.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,90 +59,92 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Introduce a complete_report_info() function that fills in the
-first_bad_addr field of kasan_report_info instead of doing it in
-kasan_report_*().
+Add cache and object fields to kasan_report_info and fill them in in
+complete_report_info() instead of fetching them in the middle of the
+report printing code.
 
-This function will be extended in the next patch.
+This allows the reporting code to get access to the object information
+before starting printing the report. One of the following patches uses
+this information to determine the bug type with the tag-based modes.
 
 Reviewed-by: Marco Elver <elver@google.com>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/kasan/kasan.h  |  5 ++++-
- mm/kasan/report.c | 17 +++++++++++++++--
- 2 files changed, 19 insertions(+), 3 deletions(-)
+ mm/kasan/kasan.h  |  2 ++
+ mm/kasan/report.c | 21 +++++++++++++--------
+ 2 files changed, 15 insertions(+), 8 deletions(-)
 
 diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index 4fddfdb08abf..7e07115873d3 100644
+index 7e07115873d3..b8fa1e50f3d4 100644
 --- a/mm/kasan/kasan.h
 +++ b/mm/kasan/kasan.h
-@@ -153,12 +153,15 @@ enum kasan_report_type {
- };
+@@ -162,6 +162,8 @@ struct kasan_report_info {
  
- struct kasan_report_info {
-+	/* Filled in by kasan_report_*(). */
- 	enum kasan_report_type type;
- 	void *access_addr;
--	void *first_bad_addr;
- 	size_t access_size;
- 	bool is_write;
- 	unsigned long ip;
-+
-+	/* Filled in by the common reporting code. */
-+	void *first_bad_addr;
+ 	/* Filled in by the common reporting code. */
+ 	void *first_bad_addr;
++	struct kmem_cache *cache;
++	void *object;
  };
  
  /* Do not change the struct layout: compiler ABI. */
 diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index dc38ada86f85..0c2e7a58095d 100644
+index 0c2e7a58095d..763de8e68887 100644
 --- a/mm/kasan/report.c
 +++ b/mm/kasan/report.c
-@@ -413,6 +413,17 @@ static void print_report(struct kasan_report_info *info)
- 	}
+@@ -287,19 +287,16 @@ static inline bool init_task_stack_addr(const void *addr)
+ 			sizeof(init_thread_union.stack));
  }
  
-+static void complete_report_info(struct kasan_report_info *info)
-+{
-+	void *addr = kasan_reset_tag(info->access_addr);
-+
-+	if (info->type == KASAN_REPORT_ACCESS)
-+		info->first_bad_addr = kasan_find_first_bad_addr(
-+					info->access_addr, info->access_size);
-+	else
-+		info->first_bad_addr = addr;
-+}
-+
- void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_type type)
+-static void print_address_description(void *addr, u8 tag)
++static void print_address_description(void *addr, u8 tag,
++				      struct kasan_report_info *info)
  {
- 	unsigned long flags;
-@@ -430,11 +441,12 @@ void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_ty
+ 	struct page *page = addr_to_page(addr);
+-	struct slab *slab = kasan_addr_to_slab(addr);
  
- 	info.type = type;
- 	info.access_addr = ptr;
--	info.first_bad_addr = kasan_reset_tag(ptr);
- 	info.access_size = 0;
- 	info.is_write = false;
- 	info.ip = ip;
+ 	dump_stack_lvl(KERN_ERR);
+ 	pr_err("\n");
  
-+	complete_report_info(&info);
+-	if (slab) {
+-		struct kmem_cache *cache = slab->slab_cache;
+-		void *object = nearest_obj(cache, slab,	addr);
+-
+-		describe_object(cache, object, addr, tag);
++	if (info->cache && info->object) {
++		describe_object(info->cache, info->object, addr, tag);
+ 		pr_err("\n");
+ 	}
+ 
+@@ -406,7 +403,7 @@ static void print_report(struct kasan_report_info *info)
+ 	pr_err("\n");
+ 
+ 	if (addr_has_metadata(addr)) {
+-		print_address_description(addr, tag);
++		print_address_description(addr, tag, info);
+ 		print_memory_metadata(info->first_bad_addr);
+ 	} else {
+ 		dump_stack_lvl(KERN_ERR);
+@@ -416,12 +413,20 @@ static void print_report(struct kasan_report_info *info)
+ static void complete_report_info(struct kasan_report_info *info)
+ {
+ 	void *addr = kasan_reset_tag(info->access_addr);
++	struct slab *slab;
+ 
+ 	if (info->type == KASAN_REPORT_ACCESS)
+ 		info->first_bad_addr = kasan_find_first_bad_addr(
+ 					info->access_addr, info->access_size);
+ 	else
+ 		info->first_bad_addr = addr;
 +
- 	print_report(&info);
++	slab = kasan_addr_to_slab(addr);
++	if (slab) {
++		info->cache = slab->slab_cache;
++		info->object = nearest_obj(info->cache, slab, addr);
++	} else
++		info->cache = info->object = NULL;
+ }
  
- 	end_report(&flags, ptr);
-@@ -463,11 +475,12 @@ bool kasan_report(unsigned long addr, size_t size, bool is_write,
- 
- 	info.type = KASAN_REPORT_ACCESS;
- 	info.access_addr = ptr;
--	info.first_bad_addr = kasan_find_first_bad_addr(ptr, size);
- 	info.access_size = size;
- 	info.is_write = is_write;
- 	info.ip = ip;
- 
-+	complete_report_info(&info);
-+
- 	print_report(&info);
- 
- 	end_report(&irq_flags, ptr);
+ void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_type type)
 -- 
 2.25.1
 

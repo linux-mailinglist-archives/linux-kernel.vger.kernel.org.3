@@ -2,56 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512955ACFD3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459025ACFEF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbiIEKTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S237620AbiIEKSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236413AbiIEKSN (ORCPT
+        with ESMTP id S237434AbiIEKRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:18:13 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CD55464C;
-        Mon,  5 Sep 2022 03:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662373044; x=1693909044;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=PbFMApXZgw+38bgGm8dKdd9ii/xxRNRjkKs3anjHN+g=;
-  b=mQGKsPu4pnN6i1n5bwLFpr4dRZjSusptueuU7pIP5jf+pM1ZIS0pWMyc
-   P9em7OEOrjMsOq9xXdOQnO/WEckpGQrBbPrdBKUyev00obq5+xvzq52H1
-   y7CKoJRjfcaPoNT4HKxkGCFfRmaEz9RMmxWpoGOFlPVJLSf1zLrkDQ10d
-   kaxPOTetcHQpc/oo0X1BkMwbbFLsh5DGzVxVOmY6SOKzSn9R4JrGD68fq
-   9bBB9EZ7r8tIGwO3LASM27MA/sa9Jjej7N3tV8EPC9gFDmabOlj4X48m/
-   ecLoCUcriePf7f+/GN7yyX2g5DMeR+SLww0Pfj0YXAlLz+wjAeFZonAQu
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="358073048"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="358073048"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 03:17:09 -0700
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="675231205"
-Received: from lpontegg-mobl.ger.corp.intel.com ([10.249.45.111])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 03:16:51 -0700
-Date:   Mon, 5 Sep 2022 13:16:46 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Li Zhong <floridsleeves@gmail.com>
-cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Subject: Re: [PATCH v3] drivers/tty/serial: check the return value of
- uart_port_check()
-In-Reply-To: <20220904004524.2281227-1-floridsleeves@gmail.com>
-Message-ID: <acf3b04e-14f7-030-bdf9-3427bbb688@linux.intel.com>
-References: <20220904004524.2281227-1-floridsleeves@gmail.com>
+        Mon, 5 Sep 2022 06:17:55 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40CC193D3
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:16:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VOR5yVU_1662373002;
+Received: from 30.97.48.66(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VOR5yVU_1662373002)
+          by smtp.aliyun-inc.com;
+          Mon, 05 Sep 2022 18:16:43 +0800
+Message-ID: <0c9d9774-77dd-fd93-b5b6-fc63f3d01b7f@linux.alibaba.com>
+Date:   Mon, 5 Sep 2022 18:16:52 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
+To:     David Hildenbrand <david@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>, peterx@redhat.com,
+        kirill.shutemov@linux.intel.com, jgg@nvidia.com, hughd@google.com,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220901222707.477402-1-shy828301@gmail.com>
+ <e6ad1084-c301-9f11-1fa7-7614bf859aaf@nvidia.com>
+ <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,68 +49,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 3 Sep 2022, Li Zhong wrote:
 
-> uart_port_check() will return NULL pointer when state->uart_port is
-> NULL. Check the return value before dereference it to avoid
-> null-pointer-dereference error
 
-> because the locking does not guarantee the return value is not NULL.
-
-Please include also the answer to the "Why it doesn't guarantee?"
-question.
-
-In addition, it's expected you'll keep the people who have expressed 
-interest in your patch among the receipients for any new version you 
-send out. Thank you.
-
--- 
- i.
-
-> Here we do not need unlock in the error
-> handling because the mutex_unlock() is called in callers.
+On 9/5/2022 3:59 PM, David Hildenbrand wrote:
+> On 05.09.22 00:29, John Hubbard wrote:
+>> On 9/1/22 15:27, Yang Shi wrote:
+>>> Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
+>>> introduce a general RCU get_user_pages_fast()"), a TLB flush is no 
+>>> longer
+>>> sufficient to handle concurrent GUP-fast in all cases, it only handles
+>>> traditional IPI-based GUP-fast correctly.  On architectures that send
+>>> an IPI broadcast on TLB flush, it works as expected.  But on the
+>>> architectures that do not use IPI to broadcast TLB flush, it may have
+>>> the below race:
+>>>
+>>>     CPU A                                          CPU B
+>>> THP collapse                                     fast GUP
+>>>                                                gup_pmd_range() <-- 
+>>> see valid pmd
+>>>                                                    gup_pte_range() 
+>>> <-- work on pte
+>>> pmdp_collapse_flush() <-- clear pmd and flush
+>>> __collapse_huge_page_isolate()
+>>>      check page pinned <-- before GUP bump refcount
+>>>                                                        pin the page
+>>>                                                        check PTE <-- 
+>>> no change
+>>> __collapse_huge_page_copy()
+>>>      copy data to huge page
+>>>      ptep_clear()
+>>> install huge pmd for the huge page
+>>>                                                        return the 
+>>> stale page
+>>> discard the stale page
+>>
+>> Hi Yang,
+>>
+>> Thanks for taking the trouble to write down these notes. I always
+>> forget which race we are dealing with, and this is a great help. :)
+>>
+>> More...
+>>
+>>>
+>>> The race could be fixed by checking whether PMD is changed or not after
+>>> taking the page pin in fast GUP, just like what it does for PTE.  If the
+>>> PMD is changed it means there may be parallel THP collapse, so GUP
+>>> should back off.
+>>>
+>>> Also update the stale comment about serializing against fast GUP in
+>>> khugepaged.
+>>>
+>>> Fixes: 2667f50e8b81 ("mm: introduce a general RCU 
+>>> get_user_pages_fast()")
+>>> Signed-off-by: Yang Shi <shy828301@gmail.com>
+>>> ---
+>>>   mm/gup.c        | 30 ++++++++++++++++++++++++------
+>>>   mm/khugepaged.c | 10 ++++++----
+>>>   2 files changed, 30 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/mm/gup.c b/mm/gup.c
+>>> index f3fc1f08d90c..4365b2811269 100644
+>>> --- a/mm/gup.c
+>>> +++ b/mm/gup.c
+>>> @@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int 
+>>> *nr, int nr_start,
+>>>   }
+>>>   #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
+>>> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned 
+>>> long end,
+>>> -             unsigned int flags, struct page **pages, int *nr)
+>>> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
+>>> +             unsigned long end, unsigned int flags,
+>>> +             struct page **pages, int *nr)
+>>>   {
+>>>       struct dev_pagemap *pgmap = NULL;
+>>>       int nr_start = *nr, ret = 0;
+>>> @@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned 
+>>> long addr, unsigned long end,
+>>>               goto pte_unmap;
+>>>           }
+>>> -        if (unlikely(pte_val(pte) != pte_val(*ptep))) {
+>>> +        /*
+>>> +         * THP collapse conceptually does:
+>>> +         *   1. Clear and flush PMD
+>>> +         *   2. Check the base page refcount
+>>> +         *   3. Copy data to huge page
+>>> +         *   4. Clear PTE
+>>> +         *   5. Discard the base page
+>>> +         *
+>>> +         * So fast GUP may race with THP collapse then pin and
+>>> +         * return an old page since TLB flush is no longer sufficient
+>>> +         * to serialize against fast GUP.
+>>> +         *
+>>> +         * Check PMD, if it is changed just back off since it
+>>> +         * means there may be parallel THP collapse.
+>>> +         */
+>>
+>> As I mentioned in the other thread, it would be a nice touch to move
+>> such discussion into the comment header.
+>>
+>>> +        if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
+>>> +            unlikely(pte_val(pte) != pte_val(*ptep))) {
+>>
+>>
+>> That should be READ_ONCE() for the *pmdp and *ptep reads. Because this
+>> whole lockless house of cards may fall apart if we try reading the
+>> page table values without READ_ONCE().
 > 
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> ---
-> 
-> v3: Add the reason why we need to check the NULL value in the commit
-> message.  The bug is detected by static analysis.
-> 
-> ---
->  drivers/tty/serial/serial_core.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 12c87cd201a7..760e177166cf 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -194,6 +194,9 @@ static int uart_port_startup(struct tty_struct *tty, struct uart_state *state,
->  	unsigned long page;
->  	int retval = 0;
->  
-> +	if (!uport)
-> +		return -EIO;
-> +
->  	if (uport->type == PORT_UNKNOWN)
->  		return 1;
->  
-> @@ -498,6 +501,8 @@ static void uart_change_speed(struct tty_struct *tty, struct uart_state *state,
->  	struct ktermios *termios;
->  	int hw_stopped;
->  
-> +	if (!uport)
-> +		return;
->  	/*
->  	 * If we have no tty, termios, or the port does not exist,
->  	 * then we can't set the parameters for this port.
-> @@ -1045,6 +1050,8 @@ static int uart_get_lsr_info(struct tty_struct *tty,
->  	struct uart_port *uport = uart_port_check(state);
->  	unsigned int result;
->  
-> +	if (!uport)
-> +		return -EIO;
->  	result = uport->ops->tx_empty(uport);
->  
->  	/*
-> 
+> I came to the conclusion that the implicit memory barrier when grabbing 
+> a reference on the page is sufficient such that we don't need READ_ONCE 
+> here.
 
+IMHO the compiler may optimize the code 'pte_val(*ptep)' to be always 
+get from a register, then we can get an old value if other thread did 
+set_pte(). I am not sure how the implicit memory barrier can pervent the 
+compiler optimization? Please correct me if I missed something.
+
+> If we still intend to change that code, we should fixup all GUP-fast 
+> functions in a similar way. But again, I don't think we need a change here.
+> 
+> 
+>>> -     * After this gup_fast can't run anymore. This also removes
+>>> -     * any huge TLB entry from the CPU so we won't allow
+>>> -     * huge and small TLB entries for the same virtual address
+>>> -     * to avoid the risk of CPU bugs in that area.
+>>> +     * This removes any huge TLB entry from the CPU so we won't allow
+>>> +     * huge and small TLB entries for the same virtual address to
+>>> +     * avoid the risk of CPU bugs in that area.
+>>> +     *
+>>> +     * Parallel fast GUP is fine since fast GUP will back off when
+>>> +     * it detects PMD is changed.
+>>>        */
+>>>       _pmd = pmdp_collapse_flush(vma, address, pmd);
+>>
+>> To follow up on David Hildenbrand's note about this in the nearby 
+>> thread...
+>> I'm also not sure if pmdp_collapse_flush() implies a memory barrier on
+>> all arches. It definitely does do an atomic op with a return value on 
+>> x86,
+>> but that's just one arch.
+>>
+> 
+> I think a ptep/pmdp clear + TLB flush really has to imply a memory 
+> barrier, otherwise TLB flushing code might easily mess up with 
+> surrounding code. But we should better double-check.
+> 
+> s390x executes an IDTE instruction, which performs serialization (-> 
+> memory barrier). arm64 seems to use DSB instructions to enforce memory 
+> ordering.
+> 

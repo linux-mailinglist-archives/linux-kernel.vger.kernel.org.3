@@ -2,87 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7FA5ACFB0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F6F5ACFE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237207AbiIEKK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S237215AbiIEKMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237014AbiIEKKZ (ORCPT
+        with ESMTP id S236991AbiIEKML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:10:25 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E602C670
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:10:22 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id p16so12440888lfd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 03:10:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=9iZUJ2C+XzNkKLqBt28HLIylkiN68ZpTZ2fgZQtMBpU=;
-        b=g075S5okKrDHmJNtm8Ec66J8SgI+LW/7dkJPUaLVxLUIdCMZ7mkZ0uP6vLvlWxfGY3
-         GSUj7p9ZQsjq1Liw8ZLR0G3LGJDB8hgK1ItCJL4z40Ai0Z3RlFfsi2nTw9XDVAPSFQBO
-         nx3xh9rJN0Vr1VyajPjDDIfxmKvg4tUSm36bdVQy1dMe9JG4yFh2T87fbnpVKflQ/ROp
-         N4auuALgoy4s2xWcRD4eVsqjGRHiYcUlFtKZUcH3XH1fVvFHbHbim2J9xrgn/nAAOCeR
-         maPHym/1hVHv/AS1eEu/ipimDkb/yAg/mc8e0vAXc4bRxyQLkbSPnqMlPSijxb0mMPjP
-         UfoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=9iZUJ2C+XzNkKLqBt28HLIylkiN68ZpTZ2fgZQtMBpU=;
-        b=edPRfA60H64RIlk2UgWhrKhvf4P+XyV4WOO2iMm3iH/xONEpCBmKGbBwBfWSXp5cDL
-         kK1Y0yUtJcru5t8NbLKISVdSDRF/BWKFEe6Chsnm19pbnFChBEYg2Da6kDHvWpRo5MmJ
-         Hkc8X1mwZ/TZt3XEA+Ak+UpJFYupM7M+Cg7vfZoMGHZSB0EKEN9dlKya73Y6XvDwIr65
-         J3dkVmxorlYREUxpCBl1Q7zZIaUgow0eXjvsE09IJGvrfNUux73XTCXWDTn+6Zyj3tls
-         Nm65WNNYJdkfTpjtXVgo7rrood/X3eUi4JrFnGX1n0V9QzqMC9txd66qhepXHnf0PCX9
-         ZAfg==
-X-Gm-Message-State: ACgBeo2JXm+fyXyia94SDulNtH/5tZCvCWUgP5H0B1faf5OIXeCp6vmu
-        lQ4EWlrbEtos07gJvvJ4kYGgkw==
-X-Google-Smtp-Source: AA6agR54xygcg8U5xob0simsg/0TJd3c+/Trm5Wr5mH6lOfqkDvRVfkz6Tv/7SEAHfrH+2elmOMrXw==
-X-Received: by 2002:a05:6512:12c4:b0:494:8373:5678 with SMTP id p4-20020a05651212c400b0049483735678mr8899913lfg.577.1662372620382;
-        Mon, 05 Sep 2022 03:10:20 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 9-20020ac25f09000000b0048b365176d9sm1135613lfq.286.2022.09.05.03.10.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 03:10:19 -0700 (PDT)
-Message-ID: <baa9c80a-bc81-03a9-680f-883a54cb4e63@linaro.org>
-Date:   Mon, 5 Sep 2022 12:10:18 +0200
+        Mon, 5 Sep 2022 06:12:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D5C4DF3C;
+        Mon,  5 Sep 2022 03:12:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8CEBFB80F9F;
+        Mon,  5 Sep 2022 10:12:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2CF9C433C1;
+        Mon,  5 Sep 2022 10:12:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662372727;
+        bh=1VL/XTFkmu+9hXElRggT7MH3mGSH1N14dnaXkYpOTgg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hh1wIyfqHo7wxw6uzYFMC113+kEnCBjOpMoa4VliXbIZxg4OI+fBWMCZLIs+isOJk
+         D1bpYHmeizWZ1LfkFvGN+7rrwK9Mrx6I3bYkSzpzMQfOL/sDyXdj4yTcsqKFf96s6P
+         U4Z43npyw0BvKuu0/FbMgm6MvsGSI30oGYDrK9vA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.9.327
+Date:   Mon,  5 Sep 2022 12:12:03 +0200
+Message-Id: <1662372723221228@kroah.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
- json-schema
-Content-Language: en-US
-To:     Eugen.Hristev@microchip.com, Sergiu.Moga@microchip.com,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20220817075517.49575-1-sergiu.moga@microchip.com>
- <20220817075517.49575-3-sergiu.moga@microchip.com>
- <942accc5-70aa-3bb2-63dd-306a39ee5ea4@linaro.org>
- <d1aad8ea-3852-f36b-366b-7aa67d2dd9d5@microchip.com>
- <ec86420c-a210-facd-ab3a-5baf84a736f3@linaro.org>
- <0aba8906-ed30-786e-cff4-6cb70d6e73c5@linaro.org>
- <f2fdaf34-ad66-9e6d-2f11-34171fb7aaa9@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f2fdaf34-ad66-9e6d-2f11-34171fb7aaa9@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,49 +50,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 13:31, Eugen.Hristev@microchip.com wrote:
->>>>>> diff --git a/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..cf15d73fa1e8
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>>>> One more thing - I think this should be in serial directory, not mfd,
->>>>> even though it includes SPI. MFD is just a Linux naming/wrapper device.
->>>>>
->>>>> Best regards,
->>>>> Krzysztof
->>>>
->>>> I would rather keep it in this directory, since its corresponding driver
->>>> is also in the mfd directory.
->>>
->>> Sorry, but that's poor argument. Driver subsystems match Linux
->>> convention, not necessarily hardware type/naming. Bindings directories
->>> match hardware. MFD bindings are only for MFD wrapper drivers and this
->>> is a serial interface. Not a MFD. You even do not add MFD devices in the
->>> driver but add *always one* device depending on serial feature you want.
->>> This is not even MFD device but regular platform device with children.
->>>
->>> You put it in SoC, though, because all other SoCs store it there...
->>
->> The last one should be:
->>
->> You could put it in SoC, though, because all other SoCs store it there...
-> 
-> Hi,
-> 
-> If it this is only a conversion to yaml, why do you want it moved to 
-> another dir ?
-> Perhaps if you consider SoC or serial as a better place, it should be 
-> done through a different patch.
-> 
-> Also, disputing whether this is really a MFD or not, is not in the scope 
-> of this patch.
-> 
+I'm announcing the release of the 4.9.327 kernel.
 
-Because you are converting - thus renaming - the bindings, so this is
-the place to put them in proper place. The conversion to DT Schema comes
-pretty often with small fixups, so proper location is one of them.
-That's quite common case.
+All users of the 4.9 kernel series must upgrade.
 
-Best regards,
-Krzysztof
+The updated 4.9.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Documentation/hw-vuln/processor_mmio_stale_data.rst |   14 ++++
+ Makefile                                            |    2 
+ arch/arm64/include/asm/mmu.h                        |    2 
+ arch/arm64/kernel/kaslr.c                           |    5 -
+ arch/arm64/kernel/setup.c                           |    9 ++-
+ arch/arm64/mm/mmu.c                                 |   15 -----
+ arch/parisc/kernel/unaligned.c                      |    2 
+ arch/s390/hypfs/hypfs_diag.c                        |    2 
+ arch/s390/hypfs/inode.c                             |    2 
+ arch/s390/mm/fault.c                                |    4 +
+ arch/x86/include/asm/cpufeatures.h                  |    1 
+ arch/x86/include/asm/intel-family.h                 |    3 +
+ arch/x86/kernel/cpu/bugs.c                          |   14 ++++
+ arch/x86/kernel/cpu/common.c                        |   34 +++++++----
+ drivers/block/loop.c                                |    5 +
+ drivers/hid/hidraw.c                                |    3 +
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c             |    1 
+ drivers/net/bonding/bond_3ad.c                      |   38 +++++-------
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ptp.c        |   59 +++++++++++++++-----
+ drivers/video/fbdev/pm2fb.c                         |    5 +
+ fs/btrfs/xattr.c                                    |    3 +
+ include/asm-generic/sections.h                      |    7 +-
+ include/linux/rmap.h                                |    7 +-
+ include/net/busy_poll.h                             |    2 
+ kernel/kprobes.c                                    |   10 ++-
+ kernel/trace/ftrace.c                               |   10 +++
+ lib/ratelimit.c                                     |   12 +++-
+ mm/mmap.c                                           |   20 ++++++
+ mm/rmap.c                                           |   31 +++++-----
+ net/bluetooth/l2cap_core.c                          |   10 +--
+ net/core/skbuff.c                                   |    2 
+ net/core/sock.c                                     |    2 
+ net/key/af_key.c                                    |    3 +
+ net/netfilter/Kconfig                               |    1 
+ net/netfilter/nft_payload.c                         |   10 ++-
+ net/rose/rose_loopback.c                            |    3 -
+ net/socket.c                                        |    2 
+ net/xfrm/xfrm_policy.c                              |    1 
+ scripts/Makefile.modpost                            |    3 -
+ 39 files changed, 244 insertions(+), 115 deletions(-)
+
+Bernard Pidoux (1):
+      rose: check NULL rose_loopback_neigh->loopback
+
+David Hildenbrand (1):
+      mm/hugetlb: fix hugetlb not supporting softdirty tracking
+
+Dongliang Mu (1):
+      media: pvrusb2: fix memory leak in pvr_probe
+
+Gayatri Kammela (1):
+      x86/cpu: Add Tiger Lake to Intel family
+
+Geert Uytterhoeven (1):
+      netfilter: conntrack: NF_CONNTRACK_PROCFS should no longer default to y
+
+Gerald Schaefer (1):
+      s390/mm: do not trigger write fault when vma does not allow VM_WRITE
+
+Goldwyn Rodrigues (1):
+      btrfs: check if root is readonly while setting security xattr
+
+Greg Kroah-Hartman (1):
+      Linux 4.9.327
+
+Helge Deller (1):
+      parisc: Fix exception handler for fldw and fstw instructions
+
+Herbert Xu (1):
+      af_key: Do not call xfrm_probe_algs in parallel
+
+Hsin-Yi Wang (1):
+      arm64: map FDT as RW for early_init_dt_scan()
+
+Jacob Keller (1):
+      ixgbe: stop resetting SYSTIME in ixgbe_ptp_start_cyclecounter
+
+Jann Horn (2):
+      mm: Force TLB flush for PFNMAP mappings before unlink_file_vma()
+      mm/rmap: Fix anon_vma->degree ambiguity leading to double-reuse
+
+Jing Leng (1):
+      kbuild: Fix include path in scripts/Makefile.modpost
+
+Jonathan Toppins (1):
+      bonding: 802.3ad: fix no transmission of LACPDUs
+
+Juergen Gross (1):
+      s390/hypfs: avoid error message under KVM
+
+Karthik Alapati (1):
+      HID: hidraw: fix memory leak in hidraw_release()
+
+Kuniyuki Iwashima (6):
+      ratelimit: Fix data-races in ___ratelimit().
+      net: Fix a data-race around sysctl_tstamp_allow_data.
+      net: Fix a data-race around sysctl_net_busy_poll.
+      net: Fix a data-race around sysctl_net_busy_read.
+      net: Fix a data-race around sysctl_somaxconn.
+      kprobes: don't call disarm_kprobe() for disabled kprobes
+
+Letu Ren (1):
+      fbdev: fb_pm2fb: Avoid potential divide by zero error
+
+Luiz Augusto von Dentz (1):
+      Bluetooth: L2CAP: Fix build errors in some archs
+
+Pablo Neira Ayuso (1):
+      netfilter: nft_payload: report ERANGE for too long offset and length
+
+Pawan Gupta (1):
+      x86/bugs: Add "unknown" reporting for MMIO Stale Data
+
+Quanyang Wang (1):
+      asm-generic: sections: refactor memory_intersects
+
+Siddh Raman Pant (1):
+      loop: Check for overflow while configuring loop
+
+Xin Xiong (1):
+      xfrm: fix refcount leak in __xfrm_policy_check()
+
+Yang Jihong (1):
+      ftrace: Fix NULL pointer dereference in is_ftrace_trampoline when ftrace is dead
+

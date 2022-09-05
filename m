@@ -2,281 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849735ACA57
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99935ACA55
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236134AbiIEGGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 02:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
+        id S236212AbiIEGGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 02:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbiIEGGG (ORCPT
+        with ESMTP id S236160AbiIEGGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 02:06:06 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2071.outbound.protection.outlook.com [40.107.94.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E662AE0E
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 23:06:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RpVcT5pvX/qYM3mXpi+GWsuT8dgyybrc3t2+HTFhetZP4EmqoFMtvG4Ijdj8L9fWZS4K70JIYt9jjXUbWo8zMGJZK9IxBx1fhMf285L8K1M/F01gqNa3bWMwkT5ZVZyHceIUp7KVo8Z+M1ZkyY85LE9Fv/pLQNcflGDFd32rDH0MvbtM9mVSqm9cGbThhOWlI2H5pfF+CyqkwblC+df//ZaZOnQ+OmRt+Toumq3DQoNnHrQMwjPOyzD3eGhGy94ZQsP43hgNSdZziexoYwmk0KpwFCgJWBm8ArfpBzdU0EBJbBJ/MlCG+CEqNvdtisdjssC7YrVETVS8Xa5cPpgLtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RNnAT+WVhYNuGkD+rHXv/qu6ylNi+Jzed4P0KiGlGhc=;
- b=HVXn+h27gquYNZTbIv/ncmbyXmbQPdAB1Rr9+/phYpElUP0J7JMmenp2DqOf/eiJB5ECdqvCdHtSOp3GPEYy/IrBBeUeqoGb/5PNoXxtPFvA8sBDc04HdkZHItuH/JMXLLt4lmjxJ+LBYYNVdR7pNBdyU/YZKRDDCwDeDrWuIcDDieIJH6PERcvjQmSSM6OZ42Q1wM+UVUsFKprsiC7bRukuOtjWiBvZiVdjgaGjdW9Luk+j8thvPOQt9zNWtH4XQQ1SxBkGd0UCf6qy73nX3N2tH46A/hvrVeUvVw6/JeVS87KXRYfHma8E0nRa7RS3FbtR7jPi4Vw3b5SZHGoOrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RNnAT+WVhYNuGkD+rHXv/qu6ylNi+Jzed4P0KiGlGhc=;
- b=dZgpRDapoPjmNIliKkrxZj03fwFT80GzAsOdeezobH7VYtRaYoEEVXC9XmiRspYu1Phd3Z6EhjEiD+oYMq5Jb6O98xVTk7Y1IIMfpLz4vqpvtMuVx7rqhw0hjVYsU2U7f43O4srOhycJnrv86kllW8DYi4tTb/ZljpskbKBg3OE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM6PR12MB4515.namprd12.prod.outlook.com (2603:10b6:5:2a1::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
- 2022 06:06:02 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
- 06:06:02 +0000
-Message-ID: <2f793737-17a1-7497-27c1-3feec713114b@amd.com>
-Date:   Mon, 5 Sep 2022 08:05:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm:Fix the blank screen problem of some 1920x1080 75Hz
- monitors using R520 graphics card
-Content-Language: en-US
-To:     zhongpei <zhongpei@kylinos.cn>, alexander.deucher@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        isabbasso@riseup.net
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220905032307.1519169-1-zhongpei@kylinos.cn>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220905032307.1519169-1-zhongpei@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR06CA0225.eurprd06.prod.outlook.com
- (2603:10a6:20b:45e::13) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d535175f-aa0a-4690-c70e-08da8f04b5e6
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4515:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4AhlogUsfyJDMmfNpoWSyTt6u09CiTwGcfBCopJwtiEbRnKQtfBbeTJp493k50JsA60v+1nSlh07l8AoVTP5knoezwAqB5UcepDdHWXtZ20nM3B+/uFI3D5bJzDOwROKWjUyW0uQxKrnLZAqKTfJdeHYKD1E5eQrXUGwikOSlWA72w03qHQLhzliunGzSpdvZVJpoIAnacSGQ7w8TEeBxg2Z4AvpPXhnzjNSyKjj5QJFSWX9Q0t531sZuUaGHsJ/HJBmJg8CLZs6FfYbhvACrxQe9hVsFqTG/cPBjdHixjmFXv/uC9PWPkYf3Rtz0FmJo88hUVRMB2req6HmCvoer7LJisS5C0694oAFBFJfn9GQI39iWYfMPvSIdN1M5n/eOn+/fyacWKvySoNYj8tCumf+Nl5l1nO6gr7oPMSG5DZKDbjbnADHLoGneRhq549VNQvLEFI8YrISXoQg2VfUY5geMKt4wATEHpeaulqJ8bgLPwD2z9+ojGBsCadUIAG75sNf+4X6E2sAhzL1AOE0GDiVZRQGuRtNi0ho2RY5miWPk5e6ejqR13BISMqtw4ox8zZgpGFF2NS9C37w+gF80kQ3y+6X8Oq+yQNSSvQu8HqC03Y1noaSvyXVqK3Je2hSZb6DQ7B9SJq0nDnt6oVAr26K6jYk3HCMDUbTOaMRqpsvJkCDAp8DVN7LvV1ynuXh38SZK05r60qcJQbaZPfUA+2cpCOLBXKqr7ByBS0hAqE7X+MbvovzjIcD/SPl7pe5dyyqMZH9/xoVwtTJSO/1rdA4vpq9AJHa7qIWW2nCNKo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(346002)(136003)(396003)(39860400002)(31686004)(186003)(83380400001)(316002)(2616005)(6486002)(26005)(2906002)(5660300002)(8936002)(36756003)(6512007)(41300700001)(4326008)(8676002)(31696002)(6506007)(38100700002)(478600001)(66946007)(66556008)(86362001)(66476007)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UjVOeHZIUUV3KzFndzZlbHJHbCs1MVh4N0ZiVStISkMyT3o2SlRXM1dyekIv?=
- =?utf-8?B?dXJMWDA5WG5OdU5VZGhudmUxTGlSdHNPd0hpb2VqdjcyM1owVDRiUzdOZTVo?=
- =?utf-8?B?dXNHZnc2anRyaFkxbXZodTdkZTRHZ3pDOXlJUG8rMU15d3VoOGhDcTRBT2V0?=
- =?utf-8?B?T0hHMEVuSE9HWnlySWs3L01XZ1N5NXExRkxZclVOMW9WV1dNYUg2azhhK0Rq?=
- =?utf-8?B?NVB4U0RNOWc4SWlOVFZYSzUvcTU3RGFLc1IybE9MK0x6eHhzRGw4eGtVOUJR?=
- =?utf-8?B?dkFZOGM3S0tTcG9HV250azg2YXhENzlENHdjNEQvRmQ5YjRzTnY3djJxWXkv?=
- =?utf-8?B?VSs0N05VTU1oRFFzM2NFOFZwUHNaV25BcWpxRzRZcWlEeVlPOUR1Si9xNTZW?=
- =?utf-8?B?bzJTdThwWTFPeGNJVGlaWldvL3V1NVBoR3dGSzNvMWZCTEZ4QWlhemxwaGcr?=
- =?utf-8?B?YzVwU0xqaUVCMm9uQVNzRW9aVFFhTXlTMmpJYkNSQzA3Z2NvWEVjUEVYOHNl?=
- =?utf-8?B?NVIvc2lYQ3RFYmNpaWdHV0NKUzlzNWRGMXM4QmtMQVFJMFIva29KTzFabW1o?=
- =?utf-8?B?NFV4MG1LZHF4OEw0anJnTjRLRmY1MWlKVW5RY0dxVTcrRkV5d05mYW9zQzJT?=
- =?utf-8?B?eUZ2eGkvSjhZSXk4L2x4Y2JReWZoaVlWaHZPQXRYTWtqMjBKb2hUMGxZUHVs?=
- =?utf-8?B?OUtySFVCODlna1NBMEQrY3FJOGdMTEZOTkkzZFRaN1k5V0J2WGR4L3Q3eS9E?=
- =?utf-8?B?Q3ZVM2NHV2FHeXlHNzRDVFhSTHpPaE5iWlZ6em0wRDhISldTY1ZTS3BIYnFD?=
- =?utf-8?B?S1IrN0Q5aXNiOGU2bHJNZ1lyMVpNZG9LREdCa1Q0WE0wU2RwSkRqRXJ0elBm?=
- =?utf-8?B?b2I5SFlsaWpVV3NiTG5EMXJrZUlIWHJ4ZDBERXFvbDU3NjlrS0RFYUxuSWpk?=
- =?utf-8?B?ZnNyalNVS0kyWmFJekJVVzVjK09oOWxuajM5dndWOUY1Q2E4Q21JLzZZNWdO?=
- =?utf-8?B?RDVzcDI3UTdrS092YUVta2cybFF3Z1FzWUY1MFJySHpidHB3bmdHaVh3cGhv?=
- =?utf-8?B?em8zd1FuUWVQanIzNmRBejZNeEdiYTVjcWlvRTRoajFOdWlzM0xLVkRzWEZy?=
- =?utf-8?B?TVFVT0pYbTQ5ZWNLNWJrL0Q5TlNib2xwV0h1bDlmdFFtY2lMYUFmMldyNkZx?=
- =?utf-8?B?SkdobW9neXQrUW50LzFFUkZyeXduYVRwMmJkRGt2cUg5bGhUNFJQZlQ2U1hN?=
- =?utf-8?B?RjFXcjFybFdpN2g0eWVMOHo0Y1o3TEhRNGRBNmN4RmhKcG4rVDJoR0VITGpy?=
- =?utf-8?B?bjdhVjk3aStMTUtZak1uemRmV1R2NnpIQ21ncmFYay9nQWNLTVRoTy9DK0k3?=
- =?utf-8?B?enlJNGJCcm9Hdm5iZmU3UlpVZ1JLTWJ5enFjN0lyQVFYUTUyT0FQckdkeDFu?=
- =?utf-8?B?d3VwYzRHUE5QY291aGxhZmZCZ241elpEM1lhdnNabXdoT0xhSGQzZ2Q5WGxB?=
- =?utf-8?B?UVl0S0xSQ2ZQeTNqaHNJUjhSQWJrSWJmSGFZU29wRjVjYytiV29RZG5IL2xp?=
- =?utf-8?B?L0dWRFhPNy9yN2YvQlFJckRiLzBMenJHM0JBa21aYzZLUGlWRllxNGZHcG8v?=
- =?utf-8?B?MForOHZDWndSTWI1cmZqUlRwR3FOMGlodFZ4Q090VUNwd3c2SHZnSXllRjhW?=
- =?utf-8?B?U09jQ1ZIRS95OWtDbDMwK0pLSmx2OG5ESVdxeVNlckloeEp0blBrY0t2YTlk?=
- =?utf-8?B?QStyUHBvR1RiUkFhM3l5OFNmTFRYSll6U1dyOUhTZmpQb1g3OUdZTEtTRzgv?=
- =?utf-8?B?VlFKd3hlV0FHdDZWVG5qQllYeHNtdGlFMUtQUUpVeHh4Qmwrc083akZKbHpj?=
- =?utf-8?B?NmJoOGMza2pvOEdzK3BKR2h0eDJJYnJDRzZWWFRwek9keGtCblF3dThrQS9P?=
- =?utf-8?B?REhFU3VoUmZjNzQ4cUlVYzErVDAzQnVDSTdVd3ZIaFAzWC82UisxRFJsS0U5?=
- =?utf-8?B?NzAvenFDQzhjY211NW90L1lNZlFnWjhlRWd2dkVWVVhzcUxrK25SZGF4eGhN?=
- =?utf-8?B?SG94SVFxNHhUQ1ZZRThDSUJFZ3lGQTFFQWo2YXBocmkwK0d5T1BoQnZERUhw?=
- =?utf-8?Q?Wl9O01kIRU0I1brgzUgJaXyaW?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d535175f-aa0a-4690-c70e-08da8f04b5e6
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 06:06:02.2194
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: r/TC/CG9xdbdee/6h2K5FtUP9DKb1yJg/sYt1Z7MWWocRJrmtMmeMxQ6DkDexIIp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4515
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Sep 2022 02:06:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DDB2AE29
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 23:06:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3882B38769;
+        Mon,  5 Sep 2022 06:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662358001; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QKk8S8qzU6Fl+27XFb6gRsgKrKn8Tc1/vki/7ncZFyw=;
+        b=ZpKRwJEFT3NGCGnDwg8Tlr1zpbNWkVmJkYso6akLLRdM48nJx1PnsW92KT0gcsLxwrJX1v
+        FqwjgCD/6gRgBFSIsTsozg7iSer8vFnMx6MgpQ5DtAUKOo4LQbSfXB2/ZgWT3Zdo4Cb/NF
+        BxhW91TCfM7YV/FaxNMfTKMzShzz334=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662358001;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QKk8S8qzU6Fl+27XFb6gRsgKrKn8Tc1/vki/7ncZFyw=;
+        b=dYZACzk6L1wmlrWzTT2SrLCrQAOduUW9zu9wJnHMAbC5tVgkZk4OxJ0TIFkwXyCIgrCaOv
+        BSd7e/vIQv5o9IBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 155FB13A66;
+        Mon,  5 Sep 2022 06:06:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6Px0BPGRFWPgUAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 05 Sep 2022 06:06:41 +0000
+Date:   Mon, 05 Sep 2022 08:06:40 +0200
+Message-ID: <87zgfejqxb.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Cc:     cuibixuan@linux.alibaba.com, LKML <linux-kernel@vger.kernel.org>,
+        alsa-devel@alsa-project.org, tiwai@suse.com
+Subject: Re: A new null-ptr-deref Write bug in snd_pcm_format_set_silence
+In-Reply-To: <CAFcO6XPxCN7DEXbUvtRTKq+ku0OJA21gCz_dqMacDpsNUrsUhg@mail.gmail.com>
+References: <CAFcO6XN7JDM4xSXGhtusQfS2mSBcx50VJKwQpCq=WeLt57aaZA@mail.gmail.com>
+        <87edwrl9i8.wl-tiwai@suse.de>
+        <CAFcO6XPxCN7DEXbUvtRTKq+ku0OJA21gCz_dqMacDpsNUrsUhg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 05.09.22 um 05:23 schrieb zhongpei:
-> We found that in the scenario of AMD R520 graphics card
-> and some 1920x1080 monitors,when we switch the refresh rate
-> of the monitor to 75Hz,the monitor will have a blank screen problem,
-> and the restart cannot be restored.After testing, it is found that
-> when we limit the maximum value of ref_div_max to 128,
-> the problem can be solved.In order to keep the previous modification
-> to be compatible with other monitors,we added a judgment
-> when finding the minimum diff value in the loop of the
-> amdgpu_pll_compute/radeon_compute_pll_avivo function.
-> If no diff value of 0 is found when the maximum value of ref_div_max
-> is limited to 100,continue to search when it is 128,
-> and take the parameter with the smallest diff value.
+On Sun, 04 Sep 2022 19:06:05 +0200,
+butt3rflyh4ck wrote:
+> 
+> I have tested this patch, it works well.
 
-Well that's at least better than what I've seen in previous tries to fix 
-this.
+Great, I'm going to submit a proper patch.
 
-But as far as I can see this will certainly break some other monitors, 
-so that is pretty much a NAK.
 
-Regards,
-Christian.
+thanks,
 
->
-> Signed-off-by: zhongpei <zhongpei@kylinos.cn>
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c | 17 +++++++++++++----
->   drivers/gpu/drm/radeon/radeon_display.c | 15 +++++++++++----
->   2 files changed, 24 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c
-> index 0bb2466d539a..0c298faa0f94 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c
-> @@ -84,12 +84,13 @@ static void amdgpu_pll_reduce_ratio(unsigned *nom, unsigned *den,
->   static void amdgpu_pll_get_fb_ref_div(struct amdgpu_device *adev, unsigned int nom,
->   				      unsigned int den, unsigned int post_div,
->   				      unsigned int fb_div_max, unsigned int ref_div_max,
-> -				      unsigned int *fb_div, unsigned int *ref_div)
-> +				      unsigned int ref_div_limit, unsigned int *fb_div,
-> +				      unsigned int *ref_div)
->   {
->   
->   	/* limit reference * post divider to a maximum */
->   	if (adev->family == AMDGPU_FAMILY_SI)
-> -		ref_div_max = min(100 / post_div, ref_div_max);
-> +		ref_div_max = min(ref_div_limit / post_div, ref_div_max);
->   	else
->   		ref_div_max = min(128 / post_div, ref_div_max);
->   
-> @@ -136,6 +137,7 @@ void amdgpu_pll_compute(struct amdgpu_device *adev,
->   	unsigned ref_div_min, ref_div_max, ref_div;
->   	unsigned post_div_best, diff_best;
->   	unsigned nom, den;
-> +	unsigned ref_div_limit, ref_limit_best;
->   
->   	/* determine allowed feedback divider range */
->   	fb_div_min = pll->min_feedback_div;
-> @@ -204,11 +206,12 @@ void amdgpu_pll_compute(struct amdgpu_device *adev,
->   	else
->   		post_div_best = post_div_max;
->   	diff_best = ~0;
-> +	ref_div_limit = ref_limit_best = 100;
->   
->   	for (post_div = post_div_min; post_div <= post_div_max; ++post_div) {
->   		unsigned diff;
->   		amdgpu_pll_get_fb_ref_div(adev, nom, den, post_div, fb_div_max,
-> -					  ref_div_max, &fb_div, &ref_div);
-> +					  ref_div_max, ref_div_limit, &fb_div, &ref_div);
->   		diff = abs(target_clock - (pll->reference_freq * fb_div) /
->   			(ref_div * post_div));
->   
-> @@ -217,13 +220,19 @@ void amdgpu_pll_compute(struct amdgpu_device *adev,
->   
->   			post_div_best = post_div;
->   			diff_best = diff;
-> +			ref_limit_best = ref_div_limit;
->   		}
-> +		if (post_div >= post_div_max && diff_best != 0 && ref_div_limit != 128) {
-> +			ref_div_limit = 128;
-> +			post_div = post_div_min - 1;
-> +		}
-> +
->   	}
->   	post_div = post_div_best;
->   
->   	/* get the feedback and reference divider for the optimal value */
->   	amdgpu_pll_get_fb_ref_div(adev, nom, den, post_div, fb_div_max, ref_div_max,
-> -				  &fb_div, &ref_div);
-> +				  ref_limit_best, &fb_div, &ref_div);
->   
->   	/* reduce the numbers to a simpler ratio once more */
->   	/* this also makes sure that the reference divider is large enough */
-> diff --git a/drivers/gpu/drm/radeon/radeon_display.c b/drivers/gpu/drm/radeon/radeon_display.c
-> index f12675e3d261..0fcbf45a68db 100644
-> --- a/drivers/gpu/drm/radeon/radeon_display.c
-> +++ b/drivers/gpu/drm/radeon/radeon_display.c
-> @@ -925,10 +925,10 @@ static void avivo_reduce_ratio(unsigned *nom, unsigned *den,
->    */
->   static void avivo_get_fb_ref_div(unsigned nom, unsigned den, unsigned post_div,
->   				 unsigned fb_div_max, unsigned ref_div_max,
-> -				 unsigned *fb_div, unsigned *ref_div)
-> +				 unsigned ref_div_limit, unsigned *fb_div, unsigned *ref_div)
->   {
->   	/* limit reference * post divider to a maximum */
-> -	ref_div_max = max(min(100 / post_div, ref_div_max), 1u);
-> +	ref_div_max = max(min(ref_div_limit / post_div, ref_div_max), 1u);
->   
->   	/* get matching reference and feedback divider */
->   	*ref_div = min(max(den/post_div, 1u), ref_div_max);
-> @@ -971,6 +971,7 @@ void radeon_compute_pll_avivo(struct radeon_pll *pll,
->   	unsigned ref_div_min, ref_div_max, ref_div;
->   	unsigned post_div_best, diff_best;
->   	unsigned nom, den;
-> +	unsigned ref_div_limit, ref_limit_best;
->   
->   	/* determine allowed feedback divider range */
->   	fb_div_min = pll->min_feedback_div;
-> @@ -1042,11 +1043,12 @@ void radeon_compute_pll_avivo(struct radeon_pll *pll,
->   	else
->   		post_div_best = post_div_max;
->   	diff_best = ~0;
-> +	ref_div_limit = ref_limit_best = 100;
->   
->   	for (post_div = post_div_min; post_div <= post_div_max; ++post_div) {
->   		unsigned diff;
->   		avivo_get_fb_ref_div(nom, den, post_div, fb_div_max,
-> -				     ref_div_max, &fb_div, &ref_div);
-> +				     ref_div_max, ref_div_limit, &fb_div, &ref_div);
->   		diff = abs(target_clock - (pll->reference_freq * fb_div) /
->   			(ref_div * post_div));
->   
-> @@ -1055,13 +1057,18 @@ void radeon_compute_pll_avivo(struct radeon_pll *pll,
->   
->   			post_div_best = post_div;
->   			diff_best = diff;
-> +			ref_limit_best = ref_div_limit;
-> +		}
-> +		if (post_div >= post_div_max && diff_best != 0 && ref_div_limit != 128) {
-> +			ref_div_limit = 128;
-> +			post_div = post_div_min - 1;
->   		}
->   	}
->   	post_div = post_div_best;
->   
->   	/* get the feedback and reference divider for the optimal value */
->   	avivo_get_fb_ref_div(nom, den, post_div, fb_div_max, ref_div_max,
-> -			     &fb_div, &ref_div);
-> +			     ref_limit_best, &fb_div, &ref_div);
->   
->   	/* reduce the numbers to a simpler ratio once more */
->   	/* this also makes sure that the reference divider is large enough */
+Takashi
 
+
+> Regards,
+>  butt3rflyh4ck.
+> 
+> On Sun, Sep 4, 2022 at 6:27 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Sun, 04 Sep 2022 11:48:37 +0200,
+> > butt3rflyh4ck wrote:
+> > >
+> > > Hi, there is a new null-ptr-deref Write bug in
+> > > snd_pcm_format_set_slience in sound/core/pcm_misc.c in the latest
+> > > upstream kernel and can reproduce it.
+> > > We call SNDCTL_DSP_SYNC and SNDCTL_DSP_SPEED in multiple threads to
+> > > trigger the vulnerability.
+> > >
+> > > See the Call Trace:
+> > > ==================================================================
+> > > Call Trace:
+> > >  <TASK>
+> > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > >  kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+> > >  check_region_inline mm/kasan/generic.c:183 [inline]
+> > >  kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+> > >  memset+0x20/0x40 mm/kasan/shadow.c:44
+> > >  snd_pcm_format_set_silence sound/core/pcm_misc.c:441 [inline]
+> > >  snd_pcm_format_set_silence+0x215/0x350 sound/core/pcm_misc.c:424
+> > >  snd_pcm_oss_sync+0x60e/0x800 sound/core/oss/pcm_oss.c:1690
+> > >  snd_pcm_oss_ioctl+0x2087/0x3420 sound/core/oss/pcm_oss.c:2634
+> > >  vfs_ioctl fs/ioctl.c:51 [inline]
+> > >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> > >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> > >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > ==================================================================
+> > > We can see the function snd_pcm_format_set_silence code below:
+> > > ```
+> > > int snd_pcm_format_set_silence(snd_pcm_format_t format, void *data,
+> > > unsigned int samples)
+> > > {
+> > >         int width;
+> > >         unsigned char *dst;
+> > >         const unsigned char *pat;
+> > >
+> > >         if (!valid_format(format))
+> > >                 return -EINVAL;
+> > >         if (samples == 0)
+> > >                 return 0;
+> > >         width = pcm_formats[(INT)format].phys; /* physical width */
+> > >         pat = pcm_formats[(INT)format].silence;
+> > >         if (!width || !pat)
+> > >                 return -EINVAL;
+> > >         /* signed or 1 byte data */
+> > >         if (pcm_formats[(INT)format].signd == 1 || width <= 8) {
+> > >                 unsigned int bytes = samples * width / 8;
+> > >                 memset(data, *pat, bytes);    ///// [1] ---------> data is NULL
+> > >                 return 0;
+> > >         }
+> > >        ......
+> > > }
+> > > ```
+> > > [1], the data pointer is NULL, we can know snd_pcm_format_set_silence
+> > > called in line 1690 in sound/core/oss/pcm_oss.c from call stack trace.
+> > > let we see code below:
+> > > ```
+> > > static int snd_pcm_oss_sync(struct snd_pcm_oss_file *pcm_oss_file)
+> > > {
+> > >         int err = 0;
+> > >         unsigned int saved_f_flags;
+> > >         struct snd_pcm_substream *substream;
+> > >         struct snd_pcm_runtime *runtime;
+> > >         snd_pcm_format_t format;
+> > >         unsigned long width;
+> > >         size_t size;
+> > >
+> > >         substream = pcm_oss_file->streams[SNDRV_PCM_STREAM_PLAYBACK];
+> > >         if (substream != NULL) {
+> > >                 runtime = substream->runtime;
+> > >                 if (atomic_read(&substream->mmap_count))
+> > >                         goto __direct;
+> > >                 err = snd_pcm_oss_make_ready(substream);
+> > >                 if (err < 0)
+> > >                         return err;
+> > >                 atomic_inc(&runtime->oss.rw_ref);
+> > >                 if (mutex_lock_interruptible(&runtime->oss.params_lock)) {
+> > >                         atomic_dec(&runtime->oss.rw_ref);
+> > >                         return -ERESTARTSYS;
+> > >                 }
+> > >                 format = snd_pcm_oss_format_from(runtime->oss.format);
+> > >                 width = snd_pcm_format_physical_width(format);
+> > >                 if (runtime->oss.buffer_used > 0) {
+> > > #ifdef OSS_DEBUG
+> > >                         pcm_dbg(substream->pcm, "sync: buffer_used\n");
+> > > #endif
+> > >                         size = (8 * (runtime->oss.period_bytes -
+> > > runtime->oss.buffer_used) + 7) / width;
+> > >                         snd_pcm_format_set_silence(format,
+> > >                                                    runtime->oss.buffer
+> > > + runtime->oss.buffer_used,   ///// [2]
+> > >                                                    size);
+> > >                         err = snd_pcm_oss_sync1(substream,
+> > > runtime->oss.period_bytes);
+> > >                         if (err < 0)
+> > >                                 goto unlock;
+> > >                 } else if (runtime->oss.period_ptr > 0) {
+> > >
+> > > ```
+> > > [2]  runtime->oss.buffer + runtime->oss.buffer_used is the data
+> > > pointer, but runtime->oss.buffer is NULL here but it doesn't make
+> > > sense.
+> > > runtime->oss.buffter is allocated by kvzalloc, if runtime->oss_buffer
+> > > is NULL, it would return an ENOMEM error.
+> > > Maybe I think there is a race condition, the runtime->oss.buffer is
+> > > freed and set to NULL but we can use runtime->oss.buffter via ioctl.
+> >
+> > Yeah, likely it's in a small race window between two calls.
+> >
+> > Could you try the patch below?
+> >
+> >
+> > thanks,
+> >
+> > Takashi
+> >
+> > ---
+> > --- a/sound/core/oss/pcm_oss.c
+> > +++ b/sound/core/oss/pcm_oss.c
+> > @@ -1672,14 +1672,14 @@ static int snd_pcm_oss_sync(struct snd_pcm_oss_file *pcm_oss_file)
+> >                 runtime = substream->runtime;
+> >                 if (atomic_read(&substream->mmap_count))
+> >                         goto __direct;
+> > -               err = snd_pcm_oss_make_ready(substream);
+> > -               if (err < 0)
+> > -                       return err;
+> >                 atomic_inc(&runtime->oss.rw_ref);
+> >                 if (mutex_lock_interruptible(&runtime->oss.params_lock)) {
+> >                         atomic_dec(&runtime->oss.rw_ref);
+> >                         return -ERESTARTSYS;
+> >                 }
+> > +               err = snd_pcm_oss_make_ready_locked(substream);
+> > +               if (err < 0)
+> > +                       goto unlock;
+> >                 format = snd_pcm_oss_format_from(runtime->oss.format);
+> >                 width = snd_pcm_format_physical_width(format);
+> >                 if (runtime->oss.buffer_used > 0) {
+> 
+> 
+> 
+> -- 
+> Active Defense Lab of Venustech
+> 

@@ -2,272 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4AB25AC877
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DDF5AC87D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234931AbiIEBRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 21:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S235191AbiIEBWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 21:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiIEBRK (ORCPT
+        with ESMTP id S230013AbiIEBV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 21:17:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670B01EAF5;
-        Sun,  4 Sep 2022 18:17:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0351560F3C;
-        Mon,  5 Sep 2022 01:17:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8346C433D6;
-        Mon,  5 Sep 2022 01:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662340628;
-        bh=i6YebanYdcVUYEtFkj/RLupCZbN05OptRzFY1/Cjs28=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bdu5Vc8IEC3GpwPCtIDJXubDt76+2fOIU9UUTnK7QjBd0XyiHS4DUA2gbWdddkPSP
-         G9jFIkohfycQOonR6ce5uj82LlZirajPgJ7e9yiFZvFMbCDu3Hk9+72uuQ7IkK9OiI
-         8FuY7njhEkLZiTj1q/CfOwW1WISNJIzt+0Vk0+hZdkxodYZ3GtKObNdg1v3Brje7E8
-         w9OTzueSmGqcMPF7kXHcyfXj59zQnAOzl4j1umD9gBPZyBuJDTndxdy6mYCde9tph4
-         0ymCrtvUKnz6maT1OQ88CmIWOok3HLNkvx0L34f1cPQj6jhobCtBgMCl6IRGT8mvEq
-         lhuXN2aK+gl3A==
-Date:   Mon, 5 Sep 2022 09:17:02 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Camelia Groza <camelia.groza@nxp.com>,
-        Pankaj Bansal <pankaj.bansal@nxp.com>
-Subject: Re: [PATCH 8/9] arm64: dts: ls1046a-qds: add mmio based mdio-mux
- support
-Message-ID: <20220905011702.GT1728671@dragon>
-References: <20220824231200.494-1-leoyang.li@nxp.com>
- <20220824231200.494-9-leoyang.li@nxp.com>
+        Sun, 4 Sep 2022 21:21:58 -0400
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA76F28E02;
+        Sun,  4 Sep 2022 18:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1662340913;
+        bh=p7tq8EFo2hJlkSavCDSglg7r5xGb0ADexWQox9zQCOw=;
+        h=From:To:Cc:Subject:Date;
+        b=uJrXjx63SiYFmPEfnsGcvZaTb6mJWEWCxy9js5kvhr5krTCoGs3HXQagP6XG1U6ZD
+         vZdmxtu6Dy7Urzb8PGt7ca/aiMeIsX73nUdbcMwTqeRs8aFoCH+lsFx7eyVSSxnU2G
+         L2wVrAqJ3eADGuDZMvZlEpnOGWXtfzHRh/yJ8esE=
+Received: from localhost.localdomain ([112.31.70.25])
+        by newxmesmtplogicsvrsza31.qq.com (NewEsmtp) with SMTP
+        id 519A9474; Mon, 05 Sep 2022 09:20:25 +0800
+X-QQ-mid: xmsmtpt1662340825t907jmgji
+Message-ID: <tencent_3F0D3FA6C173619315358082BA45961FD008@qq.com>
+X-QQ-XMAILINFO: MyirvGjpKb1j/a0KbPEA511fFlavcJNNlbfq0lc4rsXw6VSA5e4phzKnIX2SXm
+         hGP1K4f162PBDeySpqKcoscrxT1UVoQdrfo8Uuh3ctOVdXZVZgcZw59PE2EBm5pODPScIc7RU6BZ
+         uri6/h9Nc5YNSCC6PETPSWS6DKaVNR6iSfl1MFzZhEvzP1qGHNLB8AUApo2GUhdY0hTCbPvEyd/z
+         0cKzLFL8mDdW83BBNd5eKVnBldukragscpnbu7jwKA3NMKZ/1QlwCOiNKwQpnhonLBWyM9KUC53p
+         5GcppHGPD8KiQucr3LXxf3UrRbx5ZJYvdMO8kGRQUx2d4P9h6OORGFW2yWud4dkS+4Wy7Zh2v9IU
+         CD73I9gG3zpxTiMq6mSroNRcP5bvdTcI5JjhZck9P7CnLwBq6s5HxF1Ifr42ndEeC1RK09D/lz8k
+         7uI/9ornZFUJth6hKL0Rz0+pTa5NKNfKqc+lGOBhbAgYSOb9sVhms2N37mEPljUMvXP+PQY+8xhA
+         RGA3V+zE6CkMIgcOVcPUZ9rFnqfZxPEdImVYNZ2pEk/hVmcoanW0/2I6Z9ifCn5zprQVrvkcz6ed
+         1SH/oMtb+lXCVoCqhJRBwycBMtTQXcVhdigk300McPWFWzq4PU9zfoVtTf+xRIiCqY3jPty/4JQN
+         ecm3PxU5DEsYdyiCaK5VvQ9HsOrS9qnU8qYW/QRbr7uvSR+X0hMtsLvAJFzxs8OAMrXYLydu1koP
+         LHm4g7mQTkie2szMhISoIhgR6M1o9iu82P8MxJ9bTDEnEj8CZYMbePMNT8Bet9H3FcN4Phe14XYD
+         kvBITf/T2lDdMJoP6aou3wVid8hO+plDQ5a+R/GE1YHks4ZILSzjI8R1CKCsIKzuo2cp7s/fsn9o
+         p7VS/cuXpSXEUxQus+AtmVGz0vMM8JGCdW6/SvCTVV2c+SB29YxvPaqGWl936yTNf7RKD4Gn3pEJ
+         Qyx2g60MwWUGGpbPVSCg==
+From:   "jerry.meng" <jerry-meng@foxmail.com>
+To:     johan@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "jerry.meng" <jerry-meng@foxmail.com>
+Subject: [PATCH] USB: serial: option: add Quectel RM520N
+Date:   Mon,  5 Sep 2022 09:19:38 +0800
+X-OQ-MSGID: <20220905011938.35620-1-jerry-meng@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824231200.494-9-leoyang.li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 06:11:59PM -0500, Li Yang wrote:
-> There is mmio based mdio mux function in the FPGA device on ls1046a-qds
-> board.  Add the mmio based mdio-mux nodes to ls1046a-qds boards and
-> add simple-mfd as a compatbile for the FPGA node to reflect the
-> multi-function nature of it.
-> 
-> Signed-off-by: Camelia Groza <camelia.groza@nxp.com>
-> Signed-off-by: Pankaj Bansal <pankaj.bansal@nxp.com>
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> ---
->  .../boot/dts/freescale/fsl-ls1046a-qds.dts    | 156 +++++++++++++++++-
->  1 file changed, 154 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts
-> index eec62c63dafe..eb74ed6419b6 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts
-> @@ -3,7 +3,7 @@
->   * Device Tree Include file for Freescale Layerscape-1046A family SoC.
->   *
->   * Copyright 2016 Freescale Semiconductor, Inc.
-> - * Copyright 2018 NXP
-> + * Copyright 2018-2021 NXP
->   *
->   * Shaohui Xie <Shaohui.Xie@nxp.com>
->   */
-> @@ -25,6 +25,20 @@ aliases {
->  		serial1 = &duart1;
->  		serial2 = &duart2;
->  		serial3 = &duart3;
-> +
+add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
 
-Unnecessary newline.
+0x0801: DIAG + NMEA + AT + MODEM + RMNET
 
-> +		emi1-slot1 = &ls1046mdio_s1;
-> +		emi1-slot2 = &ls1046mdio_s2;
-> +		emi1-slot4 = &ls1046mdio_s4;
+T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=0801 Rev= 5.04
+S:  Manufacturer=Quectel
+S:  Product=RM520N-GL
+S:  SerialNumber=384af524
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Keep the list alphabetically sorted?
+Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
+---
+ drivers/usb/serial/option.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> +
-> +		sgmii-s1-p1 = &sgmii_phy_s1_p1;
-> +		sgmii-s1-p2 = &sgmii_phy_s1_p2;
-> +		sgmii-s1-p3 = &sgmii_phy_s1_p3;
-> +		sgmii-s1-p4 = &sgmii_phy_s1_p4;
-> +		sgmii-s4-p1 = &sgmii_phy_s4_p1;
-> +		qsgmii-s2-p1 = &qsgmii_phy_s2_p1;
-> +		qsgmii-s2-p2 = &qsgmii_phy_s2_p2;
-> +		qsgmii-s2-p3 = &qsgmii_phy_s2_p3;
-> +		qsgmii-s2-p4 = &qsgmii_phy_s2_p4;
->  	};
->  
->  	chosen {
-> @@ -153,8 +167,9 @@ nand@1,0 {
->  	};
->  
->  	fpga: board-control@2,0 {
-> -		compatible = "fsl,ls1046aqds-fpga", "fsl,fpga-qixis";
-> +		compatible = "fsl,ls1046aqds-fpga", "fsl,fpga-qixis", "simple-mfd";
->  		reg = <0x2 0x0 0x0000100>;
-> +		ranges = <0 2 0 0x100>;
->  	};
->  };
->  
-> @@ -177,3 +192,140 @@ qflash0: flash@0 {
->  };
->  
->  #include "fsl-ls1046-post.dtsi"
-> +
-> +&fman0 {
-> +	ethernet@e0000 {
-> +		phy-handle = <&qsgmii_phy_s2_p1>;
-> +		phy-connection-type = "sgmii";
-> +	};
-> +
-> +	ethernet@e2000 {
-> +		phy-handle = <&sgmii_phy_s4_p1>;
-> +		phy-connection-type = "sgmii";
-> +	};
-> +
-> +	ethernet@e4000 {
-> +		phy-handle = <&rgmii_phy1>;
-> +		phy-connection-type = "rgmii";
-> +	};
-> +
-> +	ethernet@e6000 {
-> +		phy-handle = <&rgmii_phy2>;
-> +		phy-connection-type = "rgmii";
-> +	};
-> +
-> +	ethernet@e8000 {
-> +		phy-handle = <&sgmii_phy_s1_p3>;
-> +		phy-connection-type = "sgmii";
-> +	};
-> +
-> +	ethernet@ea000 {
-> +		phy-handle = <&sgmii_phy_s1_p4>;
-> +		phy-connection-type = "sgmii";
-> +	};
-> +
-> +	ethernet@f0000 { /* DTSEC9/10GEC1 */
-> +		phy-handle = <&sgmii_phy_s1_p1>;
-> +		phy-connection-type = "xgmii";
-> +	};
-> +
-> +	ethernet@f2000 { /* DTSEC10/10GEC2 */
-> +		phy-handle = <&sgmii_phy_s1_p2>;
-> +		phy-connection-type = "xgmii";
-> +	};
-> +};
-> +
-> +&fpga {
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index a5e8374a8d71..e716395268fe 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EM060K			0x030b
+ #define QUECTEL_PRODUCT_EM12			0x0512
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
++#define QUECTEL_PRODUCT_RM520N			0x0801
+ #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+ #define QUECTEL_PRODUCT_EC200T			0x6026
+ #define QUECTEL_PRODUCT_RM500K			0x7001
+@@ -1159,6 +1160,9 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
+ 	  .driver_info = ZLP },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
+-- 
+2.25.1
 
-Have a newline between properties and child node.
-
-Shawn
-
-> +	mdio-mux-emi1@54 {
-> +		compatible = "mdio-mux-mmioreg", "mdio-mux";
-> +		mdio-parent-bus = <&mdio0>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		reg = <0x54 1>;    /* BRDCFG4 */
-> +		mux-mask = <0xe0>; /* EMI1 */
-> +
-> +		/* On-board RGMII1 PHY */
-> +		ls1046mdio0: mdio@0 {
-> +			reg = <0>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			rgmii_phy1: ethernet-phy@1 { /* MAC3 */
-> +				reg = <0x1>;
-> +			};
-> +		};
-> +
-> +		/* On-board RGMII2 PHY */
-> +		ls1046mdio1: mdio@20 {
-> +			reg = <0x20>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			rgmii_phy2: ethernet-phy@2 { /* MAC4 */
-> +				reg = <0x2>;
-> +			};
-> +		};
-> +
-> +		/* Slot 1 */
-> +		ls1046mdio_s1: mdio@40 {
-> +			reg = <0x40>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +
-> +			sgmii_phy_s1_p1: ethernet-phy@1c {
-> +				reg = <0x1c>;
-> +			};
-> +
-> +			sgmii_phy_s1_p2: ethernet-phy@1d {
-> +				reg = <0x1d>;
-> +			};
-> +
-> +			sgmii_phy_s1_p3: ethernet-phy@1e {
-> +				reg = <0x1e>;
-> +			};
-> +
-> +			sgmii_phy_s1_p4: ethernet-phy@1f {
-> +				reg = <0x1f>;
-> +			};
-> +		};
-> +
-> +		/* Slot 2 */
-> +		ls1046mdio_s2: mdio@60 {
-> +			reg = <0x60>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +
-> +			qsgmii_phy_s2_p1: ethernet-phy@8 {
-> +				reg = <0x8>;
-> +			};
-> +
-> +			qsgmii_phy_s2_p2: ethernet-phy@9 {
-> +				reg = <0x9>;
-> +			};
-> +
-> +			qsgmii_phy_s2_p3: ethernet-phy@a {
-> +				reg = <0xa>;
-> +			};
-> +
-> +			qsgmii_phy_s2_p4: ethernet-phy@b {
-> +				reg = <0xb>;
-> +			};
-> +		};
-> +
-> +		/* Slot 4 */
-> +		ls1046mdio_s4: mdio@80 {
-> +			reg = <0x80>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +
-> +			sgmii_phy_s4_p1: ethernet-phy@1c {
-> +				reg = <0x1c>;
-> +			};
-> +		};
-> +	};
-> +};
-> -- 
-> 2.37.1
-> 

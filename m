@@ -2,153 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99D25ADB88
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C615ADB8E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbiIEWuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
+        id S232288AbiIEWx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 18:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiIEWtv (ORCPT
+        with ESMTP id S230076AbiIEWxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:49:51 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594682CE18;
-        Mon,  5 Sep 2022 15:49:48 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id fa2so9483272pjb.2;
-        Mon, 05 Sep 2022 15:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=Nz+uqA7e4/P8W1+vztFIrzinPtJHEHUsBZrInKc0qlM=;
-        b=QV/OF44k3joZDZETl0+ZlAcG808nTpQ+6yaZoVIx1EasnMTt4l9JtEqbk6ylV1sjPH
-         CpsCnzKXD1yaRjJY8yjGFM/Rgnq9yiszyTc8TCHLEugHFhpgglTtFg/61iYR6lNKhfNX
-         n+f8CJcsIFbu92wir0N7hH/bTYw1QemkS4mo8z9i7RazUS8WbaVUlDCuaya5GJBZu9IE
-         QvA+bSBWFp0EO1XhWI8AaZpOPguSsXCXaTdXXwJTBB7rNsozxl6OvfDIM+wu5p0E19qV
-         /OGRMYL6CRqyQ5aXHZUHHnxJTRmKFDJXhnoU6eq51SznMODXDCf9krZ5aKy7RCOTOjHC
-         Ptlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Nz+uqA7e4/P8W1+vztFIrzinPtJHEHUsBZrInKc0qlM=;
-        b=LevFqHsaCX0jtoBjPgrY+4f9HyEU1IaOKcwTIryijHGPv36tl/PeTX98Q/zlAat7Q2
-         FZGVDRUTFzWtVQ/Z0kaf9bIXJD48v+GuZsh/lkc4ZxUr/KacoM0SecYl2CiptDpBpS+j
-         i7QeJaov1VRUYoynqSSWf1iY9rBmWBhQ7GRcFDsgFcGETHnH7UUYOLeLcGBvFf+diHWg
-         qRqu0YerXewOhHOjfgWb8hsQP86gcFj1ZKyYer74tPGDOYnueuEAqywchRXoMcI/oSWP
-         /inqPBH/BlKsRmueIyGDV/jdKrJsAU470khVnJQiJJMcYpiiOvz+Y4x0sM84qYhDYA28
-         vm1g==
-X-Gm-Message-State: ACgBeo1W/TYni+exhOcn7oPMW+8KPWEddi+4/Ty2eBOqYD/5Ir7XVeqs
-        wZilEV+GQcAGxPGWZu9UbL4=
-X-Google-Smtp-Source: AA6agR4K6lIuAxsSdVJ0oNphFJqoDM1Qz4a/ewauw+FqqlvVaYz09d/58GCWTrClE39lnwuTI3+EHg==
-X-Received: by 2002:a17:902:d4c4:b0:172:f328:e474 with SMTP id o4-20020a170902d4c400b00172f328e474mr51321307plg.144.1662418187481;
-        Mon, 05 Sep 2022 15:49:47 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:1190:fbfa:ae95:111c])
-        by smtp.gmail.com with ESMTPSA id x10-20020a170902a38a00b0017300ec80b0sm8054511pla.308.2022.09.05.15.49.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 15:49:46 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 15:49:42 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 01/11] PCI: tegra: switch to using
- devm_fwnode_gpiod_get
-Message-ID: <YxZ9BkBnQOUpXt/O@google.com>
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-1-b29adfb27a6c@gmail.com>
- <20220905071902.fv4uozrsttk3mosu@pali>
+        Mon, 5 Sep 2022 18:53:23 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD74696FE;
+        Mon,  5 Sep 2022 15:53:22 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 9A0AF1237;
+        Tue,  6 Sep 2022 00:53:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1662418400;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/By73UdS4I5mXEc+O0lv8vgBFlHY3Pw70xtrxrWK0x0=;
+        b=uqIwMHV5QXcnmwPSQQFAGiGSIpvCewYSE95VUUm7vli6FaCVmqoEBkzLaStZ5E3ssMoXN8
+        gUFNsTKZEOTasqeL8B4aU/0DlQZtZ4JrTi1ikPo8SxJc+htVmrzHQ2p4KZwHKOySw5NEXg
+        UK+hs34g6mR+b9JXAGvGADxYDTW8w4CnyIf/9z9qg1WnLzPG2u+YCPxXhIw9uSvflOCeuP
+        IRbHF68NE8ZRfndEEzwt+AtPdoqoMmIpv3i9IgXeSAVHOUP5jjtIcGmVTMVTpEPqIa99eS
+        /MOJR8km43shSZE4wCpD6ErddsvLdbtdDhVEhOGlkWst8R+wMIKNCeVoNhSFNQ==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220905071902.fv4uozrsttk3mosu@pali>
+Date:   Tue, 06 Sep 2022 00:53:20 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net 1/3] net: dsa: felix: tc-taprio intervals smaller
+ than MTU should send at least one packet
+In-Reply-To: <20220905170125.1269498-2-vladimir.oltean@nxp.com>
+References: <20220905170125.1269498-1-vladimir.oltean@nxp.com>
+ <20220905170125.1269498-2-vladimir.oltean@nxp.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <d50be0e224c70453e1a4a7d690cfdf1b@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 09:19:02AM +0200, Pali Rohár wrote:
-> On Sunday 04 September 2022 23:30:53 Dmitry Torokhov wrote:
-> > I would like to limit (or maybe even remove) use of
-> > [devm_]gpiod_get_from_of_node in drivers so that gpiolib can be cleaned
-> > a bit, so let's switch to the generic device property API. It may even
-> > help with handling secondary fwnodes when gpiolib is taught to handle
-> > gpios described by swnodes.
-> > 
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > 
-> > diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-> > index 8e323e93be91..929f9363e94b 100644
-> > --- a/drivers/pci/controller/pci-tegra.c
-> > +++ b/drivers/pci/controller/pci-tegra.c
-> > @@ -2202,10 +2202,11 @@ static int tegra_pcie_parse_dt(struct tegra_pcie *pcie)
-> >  		 * and in this case fall back to using AFI per port register
-> >  		 * to toggle PERST# SFIO line.
-> >  		 */
-> > -		rp->reset_gpio = devm_gpiod_get_from_of_node(dev, port,
-> > -							     "reset-gpios", 0,
-> > -							     GPIOD_OUT_LOW,
-> > -							     label);
-> > +		rp->reset_gpio = devm_fwnode_gpiod_get(dev,
-> > +						       of_fwnode_handle(port),
-> > +						       "reset",
-> > +						       GPIOD_OUT_LOW,
-> > +						       label);
+Am 2022-09-05 19:01, schrieb Vladimir Oltean:
+> The blamed commit broke tc-taprio schedules such as this one:
 > 
-> Why in pci-aardvark.c for PERST# reset-gpio you have used
-> devm_gpiod_get_optional() and here in pci-tegra.c you have used
-> devm_fwnode_gpiod_get()? I think that PERST# logic is same in both
-> drivers.
+> tc qdisc replace dev $swp1 root taprio \
+>         num_tc 8 \
+>         map 0 1 2 3 4 5 6 7 \
+>         queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
+>         base-time 0 \
+>         sched-entry S 0x7f 990000 \
+>         sched-entry S 0x80  10000 \
+>         flags 0x2
+> 
+> because the gate entry for TC 7 (S 0x80 10000 ns) now has a static 
+> guard
+> band added earlier than its 'gate close' event, such that packet
+> overruns won't occur in the worst case of the largest packet possible.
+> 
+> Since guard bands are statically determined based on the per-tc
+> QSYS_QMAXSDU_CFG_* with a fallback on the port-based QSYS_PORT_MAX_SDU,
+> we need to discuss what happens with TC 7 depending on kernel version,
+> since the driver, prior to commit 55a515b1f5a9 ("net: dsa: felix: drop
+> oversized frames with tc-taprio instead of hanging the port"), did not
+> touch QSYS_QMAXSDU_CFG_*, and therefore relied on QSYS_PORT_MAX_SDU.
+> 
+> 1 (before vsc9959_tas_guard_bands_update): QSYS_PORT_MAX_SDU defaults 
+> to
+>   1518, and at gigabit this introduces a static guard band (independent
+>   of packet sizes) of 12144 ns, plus QSYS::HSCH_MISC_CFG.FRM_ADJ (bit
+>   time of 20 octets => 160 ns). But this is larger than the time window
+>   itself, of 10000 ns. So, the queue system never considers a frame 
+> with
+>   TC 7 as eligible for transmission, since the gate practically never
+>   opens, and these frames are forever stuck in the TX queues and hang
+>   the port.
+> 
+> 2 (after vsc9959_tas_guard_bands_update): Under the sole goal of
+>   enabling oversized frame dropping, we make an effort to set
+>   QSYS_QMAXSDU_CFG_7 to 1230 bytes. But QSYS_QMAXSDU_CFG_7 plays
+>   one more role, which we did not take into account: per-tc static 
+> guard
+>   band, expressed in L2 byte time (auto-adjusted for FCS and L1 
+> overhead).
+>   There is a discrepancy between what the driver thinks (that there is
+>   no guard band, and 100% of min_gate_len[tc] is available for egress
+>   scheduling) and what the hardware actually does (crops the equivalent
+>   of QSYS_QMAXSDU_CFG_7 ns out of min_gate_len[tc]). In practice, this
+>   means that the hardware thinks it has exactly 0 ns for scheduling tc 
+> 7.
+> 
+> In both cases, even minimum sized Ethernet frames are stuck on egress
+> rather than being considered for scheduling on TC 7, even if they would
+> fit given a proper configuration. Considering the current situation,
+> with vsc9959_tas_guard_bands_update(), frames between 60 octets and 
+> 1230
+> octets in size are not eligible for oversized dropping (because they 
+> are
+> smaller than QSYS_QMAXSDU_CFG_7), but won't be considered as eligible
+> for scheduling either, because the min_gate_len[7] (10000 ns) minus the
+> guard band determined by QSYS_QMAXSDU_CFG_7 (1230 octets * 8 ns per
+> octet == 9840 ns) minus the guard band auto-added for L1 overhead by
+> QSYS::HSCH_MISC_CFG.FRM_ADJ (20 octets * 8 ns per octet == 160 octets)
+> leaves 0 ns for scheduling in the queue system proper.
+> 
+> Investigating the hardware behavior, it becomes apparent that the queue
+> system needs precisely 33 ns of 'gate open' time in order to consider a
+> frame as eligible for scheduling to a tc. So the solution to this
+> problem is to amend vsc9959_tas_guard_bands_update(), by giving the
+> per-tc guard bands less space by exactly 33 ns, just enough for one
+> frame to be scheduled in that interval. This allows the queue system to
+> make forward progress for that port-tc, and prevents it from hanging.
+> 
+> Fixes: 297c4de6f780 ("net: dsa: felix: re-enable TAS guard band mode")
+> Reported-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-I believe Andy already answered that, but in this driver we can have
-several root ports described via subnodes of dev->of_node, and reset
-GPIOs are attached to those subnodes. We are forced to use
-devm_fwnode_gpiod_get() instead of devm_gpiod_get_optional() as we need
-to supply the exact fwnode we need to look up GPIO in, and can not infer
-it from the 'dev' parameter of devm_gpiod_get().
+I haven't looked at the overall code, but the solution described
+above sounds good.
 
-Thanks.
+FWIW, I don't think such a schedule, where exactly one frame
+can be sent, is very likely in the wild though. Imagine a piece
+of software is generating one frame per cycle. It might happen
+that during one (hardware) cycle there is no frame ready (because
+it is software and it jitters), but then in the next cycle, there
+are now two frames ready. In that case you'll always lag one frame
+behind and you'll never recover from it.
 
--- 
-Dmitry
+Either I'd make sure I can send at two frames in one cycle, or
+my software would only send a frame every other cycle.
+
+Thanks for taking care of this!
+
+-michael

@@ -2,168 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E315AD32B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719125AD31D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238197AbiIEMmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        id S235747AbiIEMmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238192AbiIEMm3 (ORCPT
+        with ESMTP id S238196AbiIEMmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:42:29 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2046F5F238
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:37:09 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id k9so11234006wri.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=QwM9pjS8vOQW1a1STYq71WLO8dxfYAsXiAlllIOYMN8=;
-        b=q8nEcRgVsOrOU1VFDfPIB27R/2mM02Druvaoqf8Su3GfKhPcPrkLSfHnsjcdDg2AEw
-         uCRXvSP6hg0J2YFbFY1DY0nTlWo3ITvCkb7TB8zuOH+n90RKd+sYCl0D4mbSl1LP8ikZ
-         jFyFUQceu2hJK1saRg/ZufPdyRlFSCxMqO2HMOi0dGPQlyT/JUkKllKPc3AvwllhQLDs
-         jlPBfv5j4i1vkUOBdBE/6hIh1ZYAw2Uky3j86WKysmjH9XA76/gP5+LHecuVlHzzPwGJ
-         XPtgD5qKUEOX/atbh+5mmvgKuwfk0iQcfA6PHM5rf06SJgTV8VVFo3JM9qe+pt8Twi0e
-         O8/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=QwM9pjS8vOQW1a1STYq71WLO8dxfYAsXiAlllIOYMN8=;
-        b=Z3enraupYeJ7XRTEL2JALUCJFJnKsu32dUwVYiSwWr4J/2AAySlF/aRmAisp5XSIG+
-         nsctYilqf9+2ZEJ/nyOA6wIt/psCX+YZN/0Ofq+CCZ4rdt9xJUcq3o0H2csVSa9z5CJH
-         G0BJ5ncSMgSFhOXBbSVmamZ4aMJle8G76rTlfvjHkkziclx5v9W5ZC8PlhS2PMbXZv9g
-         qpOZyklHuGneUjqDBmGn9q3/77YihTwR+bWuWDDEjUvBwYCsFDyd7//C4Ef31iQt0GJ3
-         30GuOboniL8yJMivMWT5bUxeV1WHnnMqAyMl8lK2Wo9+iznRtyhMkn+RyVe2cUrmhr+t
-         U8vg==
-X-Gm-Message-State: ACgBeo0crzMTwsnYacz+1rcxfHiQozwah8a0DsqIqO740fpZX9EBHq51
-        JwhUmBvr7XBtclwruJUMTNJC0A==
-X-Google-Smtp-Source: AA6agR7Fv8c2V+OgVGbhYzvF0iVD7ZtJgvDsUEj0Oadue3v7WJjZRCNM6ua7SGOrhlkYox4vxWdvrA==
-X-Received: by 2002:a5d:64cf:0:b0:220:6d8e:1db0 with SMTP id f15-20020a5d64cf000000b002206d8e1db0mr23297118wri.564.1662381427668;
-        Mon, 05 Sep 2022 05:37:07 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:f365:27e9:453c:4c15? ([2a01:e0a:982:cbb0:f365:27e9:453c:4c15])
-        by smtp.gmail.com with ESMTPSA id g26-20020a7bc4da000000b003a54f49c1c8sm10534879wmk.12.2022.09.05.05.37.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 05:37:06 -0700 (PDT)
-Message-ID: <b9886af8-8580-e553-13b4-d730d1113456@baylibre.com>
-Date:   Mon, 5 Sep 2022 14:37:05 +0200
+        Mon, 5 Sep 2022 08:42:31 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51E75FAF2
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:37:45 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MLnxx1nLQzkWwQ;
+        Mon,  5 Sep 2022 20:33:57 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 5 Sep 2022 20:37:43 +0800
+CC:     <yangyicong@hisilicon.com>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
+        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
+        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
+        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
+        <john.garry@huawei.com>, <shenyang39@huawei.com>,
+        <kprateek.nayak@amd.com>, <yu.c.chen@intel.com>,
+        <wuyun.abel@bytedance.com>
+Subject: Re: [PATCH v7 0/2] sched/fair: Scan cluster before scanning LLC in
+ wake-up path
+To:     <peterz@infradead.org>, <mingo@redhat.com>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220822073610.27205-1-yangyicong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <79874960-3537-4978-0247-eb0486df6cdd@huawei.com>
+Date:   Mon, 5 Sep 2022 20:37:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH RESEND v8 0/5] fix the meson NFC clock
-Content-Language: en-US
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mtd@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220905075027.19114-1-liang.yang@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220905075027.19114-1-liang.yang@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220822073610.27205-1-yangyicong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+a friendly ping...
 
-On 05/09/2022 09:50, Liang Yang wrote:
-> EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK'
-> which is defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is
-> the divider and bit6~7 is the mux for fix pll and xtal. At the beginning,
-> a common MMC and NAND sub-clock was discussed and planed to be implemented
-> as NFC clock provider, but now this series of patches of a common MMC and
-> NAND sub-clock are never being accepted and the current binding was never
-> valid. the reasons are:
-> 1. EMMC and NAND, which are mutually exclusive anyway
-> 2. coupling the EMMC and NAND.
-> 3. it seems that a common MMC and NAND sub-clock is over engineered.
-> and let us see the link for more information:
-> https://lore.kernel.org/all/20220121074508.42168-5-liang.yang@amlogic.com
-> so The meson nfc can't work now, let us rework the clock.
->
-> Changes since v7 [8]
->   - use COMMON_CLK && (ARCH_MESON || COMPILE_TEST) instead of
->     ARCH_MESON || COMPILE_TEST || COMMON_CLK.
->   - collect the review and ack
->
-> Changes since v6 [7]
->   - use COMMON_CLK instead of !HAVE_LEGACY_CLK
->
-> Changes since v5 [6]
->   - add change log for patch 3/5
->   - add patch 5/5 to fix the reporting error of test robot
->
-> Changes since v4 [5]
->   - split the dt binding patch into two patches, one for fixing,
->     clock, the other for coverting to yaml
->   - split the nfc driver patch into two patches, one for fixing
->     clock, the other for refining the get nfc resource.
->
-> Changes since v3 [4]
->   - use devm_platform_ioremap_resource_byname
->   - dt_binding_check for mtd/amlogic,meson-nand.yaml
->
-> Changes since v2 [3]
->   - use fw_name from dts, instead the wrong way using __clk_get_name
->   - reg resource size change to 0x800
->   - use reg-names
->
-> Changes since v1 [2]
->   - use clk_parent_data instead of parent_names
->   - define a reg resource instead of sd_emmc_c_clkc
->
-> [1] https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
->      https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
-> [2] https://lore.kernel.org/all/20220217063346.21691-1-liang.yang@amlogic.com
-> [3] https://lore.kernel.org/all/20220318124121.26117-1-liang.yang@amlogic.com
-> [4] https://lore.kernel.org/all/20220402074921.13316-1-liang.yang@amlogic.com/
-> [5] https://lore.kernel.org/all/20220513123404.48513-1-liang.yang@amlogic.com/
-> [6] https://lore.kernel.org/all/20220607064731.13367-1-liang.yang@amlogic.com/
-> [7] https://lore.kernel.org/all/20220624131257.29906-1-liang.yang@amlogic.com/
->
-> Liang Yang (5):
->    dt-bindings: nand: meson: fix meson nfc clock
->    mtd: rawnand: meson: fix the clock
->    mtd: rawnand: meson: refine resource getting in probe
->    dt-bindings: nand: meson: convert txt to yaml
->    mtd: rawnand: meson: not support legacy clock
->
->   .../bindings/mtd/amlogic,meson-nand.txt       | 60 -------------
->   .../bindings/mtd/amlogic,meson-nand.yaml      | 88 +++++++++++++++++++
->   drivers/mtd/nand/raw/Kconfig                  |  2 +-
->   drivers/mtd/nand/raw/meson_nand.c             | 86 +++++++++---------
->   4 files changed, 131 insertions(+), 105 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
->   create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
->
-It seems you sent only patch 4
+Thanks.
 
-Neil
-
+On 2022/8/22 15:36, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> This is the follow-up work to support cluster scheduler. Previously
+> we have added cluster level in the scheduler for both ARM64[1] and
+> X86[2] to support load balance between clusters to bring more memory
+> bandwidth and decrease cache contention. This patchset, on the other
+> hand, takes care of wake-up path by giving CPUs within the same cluster
+> a try before scanning the whole LLC to benefit those tasks communicating
+> with each other.
+> 
+> [1] 778c558f49a2 ("sched: Add cluster scheduler level in core and related Kconfig for ARM64")
+> [2] 66558b730f25 ("sched: Add cluster scheduler level for x86")
+> 
+> Change since v6:
+> - rebase on 6.0-rc1
+> Link: https://lore.kernel.org/lkml/20220726074758.46686-1-yangyicong@huawei.com/
+> 
+> Change since v5:
+> - Improve patch 2 according to Peter's suggestion:
+>   - use sched_cluster_active to indicate whether cluster is active
+>   - consider SMT case and use wrap iteration when scanning cluster
+> - Add Vincent's tag
+> Thanks.
+> Link: https://lore.kernel.org/lkml/20220720081150.22167-1-yangyicong@hisilicon.com/
+> 
+> Change since v4:
+> - rename cpus_share_resources to cpus_share_lowest_cache to be more informative, per Tim
+> - return -1 when nr==0 in scan_cluster(), per Abel
+> Thanks!
+> Link: https://lore.kernel.org/lkml/20220609120622.47724-1-yangyicong@hisilicon.com/
+> 
+> Change since v3:
+> - fix compile error when !CONFIG_SCHED_CLUSTER, reported by lkp test.
+> Link: https://lore.kernel.org/lkml/20220608095758.60504-1-yangyicong@hisilicon.com/
+> 
+> Change since v2:
+> - leverage SIS_PROP to suspend redundant scanning when LLC is overloaded
+> - remove the ping-pong suppression
+> - address the comment from Tim, thanks.
+> Link: https://lore.kernel.org/lkml/20220126080947.4529-1-yangyicong@hisilicon.com/
+> 
+> Change since v1:
+> - regain the performance data based on v5.17-rc1
+> - rename cpus_share_cluster to cpus_share_resources per Vincent and Gautham, thanks!
+> Link: https://lore.kernel.org/lkml/20211215041149.73171-1-yangyicong@hisilicon.com/
+> 
+> 
+> Barry Song (2):
+>   sched: Add per_cpu cluster domain info and cpus_share_lowest_cache API
+>   sched/fair: Scan cluster before scanning LLC in wake-up path
+> 
+>  include/linux/sched/sd_flags.h |  7 +++++++
+>  include/linux/sched/topology.h |  8 +++++++-
+>  kernel/sched/core.c            | 12 ++++++++++++
+>  kernel/sched/fair.c            | 30 +++++++++++++++++++++++++++---
+>  kernel/sched/sched.h           |  4 ++++
+>  kernel/sched/topology.c        | 25 +++++++++++++++++++++++++
+>  6 files changed, 82 insertions(+), 4 deletions(-)
+> 

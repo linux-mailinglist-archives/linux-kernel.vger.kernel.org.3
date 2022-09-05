@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBB45AD026
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0055AD038
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237870AbiIEKbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S237816AbiIEKff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237864AbiIEKbK (ORCPT
+        with ESMTP id S236831AbiIEKfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:31:10 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3559730F49
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:31:08 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id iw17so1483409plb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 03:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=08C+VXVc0IMFZrrErYdVw4bP2ZSZwMhBjMLfYmODNYY=;
-        b=5qJtR8o8q181yaW02Pelm8vTh5nB2r4JcZaAQf0dDH/GMDD0eJ3Idryy96VUutJSOz
-         KQ5J9dfV/XmiSfy5EmB0QFQTPnznNeCLysW/MtuxyOf9or/9pCi7+kTulpJV0lqNPJaQ
-         l+qYtBb67hvNTpaB8DY83GYE8wxcqjjYVCk6I1zxMATw+o/9r/pyKNIOVDLDTLlVpS0N
-         mjwDdQQgRjmDm88FKrmPj0gSJ5pK7bPiwQ+N+4s+ZDrbz3QrdEkhWW4XHITKpitraDVS
-         JxW2ocZ64qsQC7v9cRrVwhvjFX0BsZnzhBr9owyS4NVMexUpNLtQvfy3woNaTPNw5LTq
-         1snw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=08C+VXVc0IMFZrrErYdVw4bP2ZSZwMhBjMLfYmODNYY=;
-        b=Cu0mBxA5m8BeyPdRN5/AugDzRbKFtcqHppwYuaaBR6CvMjpID14StmObZGYGKNwOcw
-         zNpS/U5wY40c0LceD1x1KViZl7Q5o5VH3yy31ohL+57Fw1BykIshoR93KaT9HWGP05xD
-         1fFCc74zrid0Jo0D+IWCFCG4WnoLMTCKaKsdeagVxJC3PB0ULBjutbBWJUawielC2ssU
-         ZZl+GXb3EIDKAmXw1kunrLYfuDFOFnM2FXStsY7ISeSpYPM1ondyqUxGMHj0iAqehuI8
-         6Mup2T/EVUjagVF0XPX67PEk+Heq9hBcfl9678bPVhi/cXEfRV3ePc+52RTj4ktfjJK0
-         wLzQ==
-X-Gm-Message-State: ACgBeo3oPIa0KQDV3qNKP8feYRxSHIl76gmgBgFriIdha2qigJSoEToR
-        iUceG5Lcv2gIKkA2b5hyUvLcAA==
-X-Google-Smtp-Source: AA6agR7gFWof19I/xutyLSVCT2f+PsYjQouLLkyLJQ2fOpfCDSCz/eWBBqTJ20QLUG+Rzd90AMtE/Q==
-X-Received: by 2002:a17:90a:4fa3:b0:200:8ba3:94bc with SMTP id q32-20020a17090a4fa300b002008ba394bcmr164449pjh.21.1662373867667;
-        Mon, 05 Sep 2022 03:31:07 -0700 (PDT)
-Received: from [10.4.229.138] ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id r10-20020a17090b050a00b0020080e8c8besm950991pjz.40.2022.09.05.03.31.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 03:31:07 -0700 (PDT)
-Message-ID: <0e5f380b-9201-0f56-9144-ce8449491fc8@bytedance.com>
-Date:   Mon, 5 Sep 2022 18:30:55 +0800
+        Mon, 5 Sep 2022 06:35:33 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE7120F43
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:35:28 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2855wec8006069;
+        Mon, 5 Sep 2022 05:34:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=KdQsKPkmzzna+66ZNEVg4limEcdND9IVkdx5GyLXL0Y=;
+ b=SEbfUku9x7l9LuazcQeJc8IcuX6YQaamzRINoJt+eYnrOVYM/Pn3jFh1LBKGoAFcoJMW
+ rmtQMu/YYetaxjp82ymkuTEUAp9sKy7x0NDfh1HYjpAcYeA8dNpAwNTsMbq6s9phMOIy
+ xWVugVK43jtdZXfy4JRHyKcRiO9WRbFKG/AX8DpDFhJdtK6kMy7DAwadYDU9tdRvsOJZ
+ TU/U8zNEbRCAdUYDcOkrMpgE8ENL1tvgWqCMTpUNw4B+jupHrDTtq3si5X6WQBF0jTja
+ jtqZWP4mX+E+brGAanaPjz1GiMjmpzQHyqjEjqXhHcuH7+ZGDRL/UsZJybxKRSC8Q5wy mg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3jc4b29uxs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 05:34:25 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Mon, 5 Sep
+ 2022 05:34:22 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.12 via Frontend Transport; Mon, 5 Sep 2022 05:34:22 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BE1BB46B;
+        Mon,  5 Sep 2022 10:34:22 +0000 (UTC)
+Date:   Mon, 5 Sep 2022 10:34:22 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Vlad Karpovich" <Vlad.Karpovich@cirrus.com>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
+Subject: Re: [PATCH v2] ASoC: wm_adsp: Handle optional legacy support
+Message-ID: <20220905103422.GP92394@ediswmail.ad.cirrus.com>
+References: <20220825220530.1205141-1-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [External] Re: [PATCH] cgroup/cpuset: Add a new isolated
- mems.policy type.
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, lizefan.x@bytedance.com,
-        wuyun.abel@bytedance.com
-References: <20220904040241.1708-1-hezhongkun.hzk@bytedance.com>
- <YxWbBYZKDTrkmlOe@dhcp22.suse.cz>
-From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
-In-Reply-To: <YxWbBYZKDTrkmlOe@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220825220530.1205141-1-cristian.ciocaltea@collabora.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: SSupwDQyn-zFDGAWTJbr5gdZlcA_Akgv
+X-Proofpoint-ORIG-GUID: SSupwDQyn-zFDGAWTJbr5gdZlcA_Akgv
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,45 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal, thanks for your reply.
-
-The current 'mempolicy' is hierarchically independent. The default value 
-of the child is to inherit from the parent. The modification of the 
-child policy will not be restricted by the parent.
-
-Of course, there are other options, such as the child's policy mode must 
-be the same as the parent's. node can be the subset of parent's, but the 
-interleave type will be complicated, that's why hierarchy independence 
-is used. It would be better if you have other suggestions?
-
-Thanks.
-
-> On Sun 04-09-22 12:02:41, hezhongkun wrote:
->> From: Zhongkun He <hezhongkun.hzk@bytedance.com>
->>
->> Mempolicy is difficult to use because it is set in-process
->> via a system call. We want to make it easier to use mempolicy
->> in cpuset, and  we can control low-priority cgroups to
->> allocate memory in specified nodes. So this patch want to
->> adds the mempolicy interface in cpuset.
->>
->> The mempolicy priority of cpuset is lower than the task.
->> The order of getting the policy is:
->> 	1) vma mempolicy
->> 	2) task->mempolicy
->> 	3) cpuset->mempolicy
->> 	4) default policy.
->>
->> cpuset's policy is owned by itself, but descendants will
->> get the default mempolicy from parent.
+On Fri, Aug 26, 2022 at 01:05:30AM +0300, Cristian Ciocaltea wrote:
+> The tracing capabilities for the speaker protection fw enabled via
+> commit c55b3e46cb99 ("ASoC: wm_adsp: Add trace caps to speaker
+> protection FW") are not be available on all platforms, such as the
+> Valve's Steam Deck which is based on the Halo Core DSP.
 > 
-> What is the hierarchical behavior of the policy? Say parent has a
-> stronger requirement (say bind) than a child (prefer)?
->   
->> How to use the mempolicy interface:
->> 	echo prefer:2 > /sys/fs/cgroup/zz/cpuset.mems.policy
->> 	echo bind:1-3 > /sys/fs/cgroup/zz/cpuset.mems.policy
->>          echo interleave:0,1,2,3 >/sys/fs/cgroup/zz/cpuset.mems.policy
+> As a consequence, whenever the firmware is loaded, a rather misleading
+> 'Failed to parse legacy: -19' error message is written to the kernel
+> ring buffer:
 > 
-> Am I just confused or did you really mean to combine all these
-> together?
+> [  288.977412] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Firmware version: 3
+> [  288.978002] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: cs35l41-dsp1-spk-prot.wmfw: Fri 02 Apr 2021 21:03:50 W. Europe Daylight Time
+> [  289.094065] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Firmware: 400a4 vendor: 0x2 v0.33.0, 2 algorithms
+> [  289.095073] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: 0: ID cd v29.53.0 XM@94 YM@e
+> [  289.095665] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: 1: ID f20b v0.0.1 XM@170 YM@0
+> [  289.096275] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Protection: C:\Users\ocanavan\Desktop\cirrusTune_july2021.bin
+> [  291.172383] steamdeck kernel: cs35l41 spi-VLV1776:01: DSP1: Failed to parse legacy: -19
+> 
+> Update wm_adsp_buffer_init() to print a more descriptive info message
+> when wm_adsp_buffer_parse_legacy() returns -ENODEV.
+> 
+> Fixes: c55b3e46cb99 ("ASoC: wm_adsp: Add trace caps to speaker protection FW")
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> ---
+
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+
+Thanks,
+Charles

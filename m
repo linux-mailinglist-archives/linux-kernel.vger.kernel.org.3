@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309D05AD57B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111E45AD571
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiIEOrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S238136AbiIEOri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238324AbiIEOrO (ORCPT
+        with ESMTP id S237485AbiIEOre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:47:14 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8E1AE56
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:47:12 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id az27so11676194wrb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=IJOnhwwzRsVseSJrzo8/DS7wx+sQBQac4zRpiRsGkDo=;
-        b=U9143da/WdVUblk21I1X+vFiVwDlbfSAx66bjWUQeS5UbfVs6Btd17iYEUvPyLAWcG
-         bIJnjO7AzfJO1GQFXM1SdE4kCInxojlQCasuRMfQb2XbsNx48WGg1fnL6aiWeeYarCnf
-         FRnHVrRDju79sFhtIsDskKbyX+gUAMq5GSFSOhIJcBk90otBwG5fWbFx2DVI4cgTUHm2
-         VBCVI0l2XOrOVQLJPr1lBxeS1pEOFj+2+ThbahTk1rpLqY4/AkmrOXmhNumvDIIMqZWY
-         4PPGWhEU4030u/7PILYdn7W8wOu1xaOgf4+bQN/Z4Fb/EwGrQCr03iP3+ug94yL6YKqa
-         xqnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=IJOnhwwzRsVseSJrzo8/DS7wx+sQBQac4zRpiRsGkDo=;
-        b=2HlpbcUdjSh102fMQwufRI4F8ZVm/scRNYbZw70qcXcOSS1mg83x1Y3+RtM3FY8bJl
-         DYBFs/x0k2bnXC4AUcMaQE8UWSqr08EZfIpy/TbnarsWCce/eu2TI4J307Xm5AxPfR71
-         fht1YRz8FokynRPgpM4ClJ7oJROaVJQB7/5QUDB1vk4444+q13SILVVmYqmmVyt6Mge4
-         q8xN8R86uxRX8PWZ1Z4dU8lrJtQuE/Qi8mMUcs6N76kewODFHa251nwU9dWaWR9TzBzM
-         6cxr0vYr6lBCSkWkquUey8bNUmWO0cZJ+95zM2vTN28a5OQ7cV9rrnUutoXpdYJDiokI
-         vDMg==
-X-Gm-Message-State: ACgBeo3UnMVX48wDrVf0QbpBSqogZnAk+rJma5Faz8zyztX5+5UjicsZ
-        XM+7JrwZUotJHbmJJ6w37w4tJjSrc9K4JIr+
-X-Google-Smtp-Source: AA6agR7HkIpVkRVwR24W2H8jZIYnAmc84QOOZRT5sktlhgyghzdxjHSc65BOQemJlrFTxiPjQtYbgQ==
-X-Received: by 2002:a5d:468a:0:b0:226:d78a:6af with SMTP id u10-20020a5d468a000000b00226d78a06afmr23107394wrq.339.1662389231104;
-        Mon, 05 Sep 2022 07:47:11 -0700 (PDT)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id n19-20020a05600c3b9300b003a846a014c1sm18990244wms.23.2022.09.05.07.47.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 07:47:10 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 2/2] MAINTAINERS: Update fastrpc documentation file from txt to yaml
-Date:   Mon,  5 Sep 2022 17:45:54 +0300
-Message-Id: <20220905144554.1772073-2-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220905144554.1772073-1-abel.vesa@linaro.org>
-References: <20220905144554.1772073-1-abel.vesa@linaro.org>
+        Mon, 5 Sep 2022 10:47:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85601E5A;
+        Mon,  5 Sep 2022 07:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662389252; x=1693925252;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EZwtkoVzthvQh0BwuPCbrIeiKZoNKlYVrBGd6h2F+gk=;
+  b=c+zBo/8qLBSnkjm5PKTQsufuOtI3+6ry0I0Jv6DDsgvXXI0t4KOD5kjQ
+   YCCTSRwh2BSAzeWfOIpRvtJ9kssuwv99SH+Sjru6W4rih8JBXqG6tbs12
+   IvoTMC87meupNcQewjoHa4IlRH5aDAY63IuuXcqZMSwu5gkwhRAwaKClk
+   oSWqyuprwA+ytW+3H/xrehJPHyb2dW2MS2d+8qN4KJ90DT149+ujnhXw1
+   3Fx1CHsOqT2iUWJFMgsXabLrMJpO3iu7QC/eJ1H10V0cLhYXn0v87qqMK
+   KZlzuTUHKs62c5ZN8sCvkKZ9bTERWe2EMGOETmwR1tB9C7+Of2Itf6co8
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="283396830"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="283396830"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 07:47:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="942131368"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Sep 2022 07:47:29 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVDNo-0004FZ-2H;
+        Mon, 05 Sep 2022 14:47:28 +0000
+Date:   Mon, 5 Sep 2022 22:47:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Petr Pavlu <petr.pavlu@suse.com>, mcgrof@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, mwilck@suse.com,
+        Petr Pavlu <petr.pavlu@suse.com>
+Subject: Re: [PATCH] module: Merge same-name module load requests
+Message-ID: <202209052214.GvWvd88T-lkp@intel.com>
+References: <20220905084131.14567-1-petr.pavlu@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905084131.14567-1-petr.pavlu@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The documentation for fastrpc bingings is now YAML. So update the
-MAINTAINERS file.
+Hi Petr,
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
+Thank you for the patch! Perhaps something to improve:
 
-Changes since v6:
- * no change
+[auto build test WARNING on v6.0-rc4]
+[also build test WARNING on linus/master next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Pavlu/module-Merge-same-name-module-load-requests/20220905-164434
+base:    7e18e42e4b280c85b76967a9106a13ca61c16179
+config: i386-randconfig-s033-20220905 (https://download.01.org/0day-ci/archive/20220905/202209052214.GvWvd88T-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/581eb179f101ce9990a4435e198280b542fa68ed
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Petr-Pavlu/module-Merge-same-name-module-load-requests/20220905-164434
+        git checkout 581eb179f101ce9990a4435e198280b542fa68ed
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/module/
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 96f47a7865d6..ad697195fc59 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16863,7 +16863,7 @@ M:	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
- M:	Amol Maheshwari <amahesh@qti.qualcomm.com>
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-+F:	Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
- F:	drivers/misc/fastrpc.c
- F:	include/uapi/misc/fastrpc.h
- 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+>> kernel/module/main.c:81:1: sparse: sparse: symbol 'running_loads' was not declared. Should it be static?
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

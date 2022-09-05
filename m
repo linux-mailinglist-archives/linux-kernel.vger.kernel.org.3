@@ -2,98 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B65D5AD43A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA28A5AD43C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238214AbiIENpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S238210AbiIENqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237130AbiIENpH (ORCPT
+        with ESMTP id S237084AbiIENqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:45:07 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164E24E610
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 06:45:05 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id C6DD13200928;
-        Mon,  5 Sep 2022 09:45:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 05 Sep 2022 09:45:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1662385502; x=1662471902; bh=yg
-        aFQaIZgsPlCvGxBshcdt6jZDFSv4YrxILywAef6b8=; b=coAufvSS5LgJkML+Dv
-        lLyuYw/AKPUQP2GvZSgAeHrLKFkSEk7QGwlbpqCnjpNDhZ5daNWM3UWOwuTRi0sM
-        OfPO6MYqRUwp5K1W6cUpk6E3txlJW3bicoPGdy87xLZjYNbFr53oLPH1Gz01lAXd
-        /YUBGMSj9mvU8WjO5VcIFlTYFZmrqo/tEBrrnOEMQHYAZIPj44qYeHD2r/VIZwdw
-        6ZlIrOSlimsg5hCebvtECkBDm4HV7UvLngpOh6mxYH3IwVf2ACsdd5SbAPXHrXLs
-        atHkg579fM+vVpMQukXWDOoYtUd811JHAo0YySqXs6O5pqZMYfqMAzewAmVvKDzC
-        3zyw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1662385502; x=1662471902; bh=ygaFQaIZgsPlCvGxBshcdt6jZDFS
-        v4YrxILywAef6b8=; b=nFm8Mfc2DXB+9ZyKKBwZh78iHFJRJHN93G1ikx6tfDsi
-        Lvq8gtE+UpIavRFvoMwU8zNPmUbQRtXXwnT6KN8zOFGK72WXFJZPEcl7OS5LqKqo
-        fBDpgAdXHvsMvpou52fDMLmS6DsPCsUao7RqeDFOGI6dJ47MWQzwc1dok0w6OoUV
-        ppyijT6WzohX3BlO+ndF3YBsM9nf55We/O64qtdHwSnhL6udto8m7dDu7WdF21vS
-        pll2lZ/pXkgEjVRsgM1qRGL3l4r91QIEywa0AyOIQcFe6JEBmRx3TB/3y/OiYH/Z
-        X8evXWjq/DN7R42/3DcSS5SL8GQiF1GUieA8HBOoCQ==
-X-ME-Sender: <xms:Xf0VYxuT60pTvyFcH6w4Lgeis20TJjjSimBzC60dRM_fjHPP6IAhgw>
-    <xme:Xf0VY6cAUtuXr_s3ExUO4I8pJg6Sq-IS1s-vHaksqrafBNm8aCVRg4oVVCGSN4zFz
-    Y_mxwkF_GuJ-p6DIaY>
-X-ME-Received: <xmr:Xf0VY0yp1HFRwGFtL4dItbpV9gJG7HVuAasBivGUs9jK6bMOscCgTu3fM2-YJ0kU-5HYnA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeliedgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeelgffhfeetlefhveffleevfffgtefffeelfedu
-    udfhjeduteeggfeiheefteehjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
-    sehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:Xv0VY4PJmcalfS2PabQZMuCpNXGwRjl6eLkq2hQ5ZTFdLJXB1lSIrQ>
-    <xmx:Xv0VYx9DjlW7kFG8PrxvsnXK2hevXMMCVXwSIy4nR8sdJLyls6Muvw>
-    <xmx:Xv0VY4UKW4G8Sb0tW7OxYlz2lyv_imGDuZ-7XpUSLOAwKoGIG5jwAg>
-    <xmx:Xv0VY5MtUsJeiYDnV8BEysyb1t20LVr1zfBI3gZmnvY0ZWBWkAgRZA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Sep 2022 09:45:01 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id CC4821040BF; Mon,  5 Sep 2022 16:44:57 +0300 (+03)
-Date:   Mon, 5 Sep 2022 16:44:57 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     ananth.narayan@amd.com,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
-Message-ID: <20220905134457.a2f7uluq42frsgwe@box.shutemov.name>
-References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
- <20220904010001.knlcejmw4lg2uzy3@box.shutemov.name>
- <64519d0b-b696-db47-52c2-303451e10c09@amd.com>
+        Mon, 5 Sep 2022 09:46:35 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2056.outbound.protection.outlook.com [40.107.101.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928D157246;
+        Mon,  5 Sep 2022 06:46:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=byr+4kUrDvpPezNMRwar3Vo+W+MlZ/M549VPOrYVx/PnlbLJF7i8yJIEoVKzm0kXwHmZ1Nq7jCHaDJTJ9oQLt/kibaMoQ/lYtZ01VXIOSjKkgt6ypsapR4rTnnaBauCBfpy8tvJCoqDfDXQr5rJA7M/MZNXDde8bNrP0nrqTwsHDGNjpxoA/lBDcDJbEt/8oBQsmcF0Ry1WmDk/EciiferOb6M9sR0t0O1raDC6pYh8IyOAiQaz8bRWbWhoX5aSLINGCQLDNkkteQUFGihMFA8fCabw4t4MOGvqi8eiSz3f+BaqyPkf1VC3RCmbdJ1E3RBkFuja9dk2qwpn3rqrGpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lcPplKUDEjgINzdCtUs89a9QyZXpiG00bMXBwbd+XpI=;
+ b=Sd9Bz+JLSYa1O9d3Efcl7qIGHqXtvRPSi2WX8Euo1cvApM618z5VMCfKMHGJmDVew0M5Ot3GY9973UF8lH7lTm9TA7UQbYlKwKQG6PYIgNOD13l2oKaAESpSc3kbOAUhkWyBF5snZhdy+yJylI5ISF3dNeuhY0D8lOv/bOKxMt4qVapIZUstYhGwCH1KbNjRHdXXhh0lyhvNIhhffIgnW40F47t9l+kYfxcPz7jT84eh143ZWiw3PDYN5pe+PJmzOuLF6NfPKoWai5ODvYQtSJbB7nl7DuBsxbB5j251lPIiYzI45vUO29v0htQQClt10WxlRkKPKCrEI0mSiB/Xow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lcPplKUDEjgINzdCtUs89a9QyZXpiG00bMXBwbd+XpI=;
+ b=v62AZ6Pe5LLh8jzELQNAMDRTRe7Bpf23tuhTlMOp8xaeg04dPXqma1sBupioqiR6NOfRu8yU/v/evEaZ9buSRv92LlSD6HKvMNSlb4+J5bOHV7hzxAOOugACWV7N18ZC18RksoPyiu01tknH9KU9EyVANlAD092BdtUu6PFpGOQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15)
+ by DM6PR12MB4076.namprd12.prod.outlook.com (2603:10b6:5:213::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
+ 2022 13:46:32 +0000
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::2e8f:6161:3959:aa0c]) by PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::2e8f:6161:3959:aa0c%5]) with mapi id 15.20.5588.015; Mon, 5 Sep 2022
+ 13:46:32 +0000
+Message-ID: <5b84f7c1-99a6-02c8-2606-8986891a95b0@amd.com>
+Date:   Mon, 5 Sep 2022 19:16:19 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 2/4] drm/sched: Add callback and enable signaling on debug
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220905105653.13670-1-Arvind.Yadav@amd.com>
+ <20220905105653.13670-3-Arvind.Yadav@amd.com>
+ <96d14c8a-e3de-fcea-b3b1-434bc6a78ae4@amd.com>
+From:   "Yadav, Arvind" <arvyadav@amd.com>
+In-Reply-To: <96d14c8a-e3de-fcea-b3b1-434bc6a78ae4@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN3PR01CA0124.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:96::12) To PH7PR12MB6000.namprd12.prod.outlook.com
+ (2603:10b6:510:1dc::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64519d0b-b696-db47-52c2-303451e10c09@amd.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 30e2f401-affd-410f-12cb-08da8f450a69
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4076:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NSjuUShio2ILT0zk62TYe5TONYQt77Hk/ZHETT28HMIdp9+QpriKb00M5PvrBMPLldT5l1mosvUOB/thkBQvzMp2BmSkz9WXwJbvClyTjrDRdoyreBYw1d3SRhsN8hN/7ey9adgONo8CThHIDH6HRzToTziEur826EbIbKN5eG8hfQ5Ydnv2t6z2/UrOwVLkHx5CtNANoUtEknM4OFjYRxMCUPAYotyGLOZ3thIao3kXf0nszupgRy9L1w97rlScRckJAWl9vNCpUzYid/fGXF8OCVugpHZNqU7rAO2XkGSAC6nes7CSg02HR1iHtK+Y2gDM90l+wailTQRcTjeGcRao3j6up/vfh35+63hMD1oGaEIGJsH1y4SyyKRzgIC3BbakXrPV0kDnt+wvD7oqxlrdNMsit2DkTbRFmSsDj+3VFIcRPRmq/4it6lPAOz6GdYDJKQQR6tC3rpUGpISGnhT/ptznJ5KGqW8/m4Mq02LL5FwhtUbAyr52C29/ssLOHcziFSuaWhqBbvVVfbquX8GFb8GICPBmi0frbi3C3hiOQ0b0WtUVEC863UDqO1TzDWyuuoTVx3Jg2ICbzC9kuj8hQz/ajFgWEky0WHM3F4DVG+wOW6cDNVgyxnthsDMdvFXalsRjN4iKNrtEZMY1AwnlDyYYSq/Gi/xdbOTTx6OgM8Suf3ya3gX4t/rYX3AOvYonejNkcfSGheWGQbjqPymZZG8EZG4u/fEiMa8vpEl3qZUOVjodis5DYRliGG4M3tOfuBT3miQzDzAqH3sThspfgqlYdFqw2NJy45WitXLdSSE43EzaBAKD2O+XKkkj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6000.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39860400002)(346002)(376002)(396003)(136003)(8676002)(83380400001)(66476007)(66574015)(66946007)(8936002)(66556008)(5660300002)(6506007)(478600001)(26005)(53546011)(6486002)(6666004)(41300700001)(186003)(2616005)(6512007)(316002)(110136005)(31696002)(36756003)(31686004)(921005)(38100700002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RW5Pb0xGZndnTlRrYjJuQVpWZjI0TzJtN0M0RVhSamo3dWNnUnhuaW9HSElm?=
+ =?utf-8?B?S3IvMXpxbHd2ZjNMaDJ1ZjVESUd4SDB2SFpmSGlDY3R6amtlcXBWK2JqaWhY?=
+ =?utf-8?B?VVhwOXpWeEZuRk9NRkRNcTUycXRHcEUyd3Q4VFdLR2g3NEp4ck5pazJQR3BL?=
+ =?utf-8?B?RHB0VXBBZmlwaWFBS1RRbzdHREI1RXJja1pZWFhWdkNJOSszZUJYZyttTFpv?=
+ =?utf-8?B?aVZUWW1nRmNEUmxONnVyWndRNWJKZ21uSDZkS3JxNi9Hc3dCcmd2RVJ3VWli?=
+ =?utf-8?B?OXlDVWNieGNSVmxyalJveUN0K3ZGOVVMSU5vdHRBaXR0cmdLSFYwd25KZFpK?=
+ =?utf-8?B?YVRuTW9Dam9keSt1VDhFNVdlcmNYYVl4UjRaZk4xbjJIR0JnaVByMjJQZS95?=
+ =?utf-8?B?YlVoQVlLQS8wbkNvaHZxZWg1SzVVWHJmOHhLUUtuTER3ZzJ0ZktFTDhPMzgz?=
+ =?utf-8?B?Q0ZqOUZqWWMxbllkQ2tZS3BYa28xb1NGVTB1T0xxQXBqeW9YSEJiODRSMFlL?=
+ =?utf-8?B?UVlqalptdnFNM1d4b0NHYURrOVg4emxzZlYzMWRlVzd4NzcydjY5eW5aR2Jk?=
+ =?utf-8?B?Y3VLOHMzcXAycTNtRjVtVFlNcWdjU1d2bnBVdlNRRVlDQmRHcGZqSDZHU2Zy?=
+ =?utf-8?B?WHNIVk1tNkhYZDZrdkdyTlloYjR3YkRTTnI0bERtQzJ6VnphZ0MwKzBGb1E3?=
+ =?utf-8?B?dCtCcDFFelFzRWR1UUJScFlXNkVVelBUYjE5bGJmQ3ZKTnhlK2RFZWdpM1dG?=
+ =?utf-8?B?azB3RXJyeXE3ak01ek1zU05wcVFaT0h4MllNWHNaK2Z2V1dWMlhGdjh4QXhy?=
+ =?utf-8?B?bnlhMU9xSm9lZjc5TTRFcWJqeG5ab2dQT2o4bjYyZDBFNnNtU0xNcU9OeUNJ?=
+ =?utf-8?B?ZU1PNVBYc2FCRE51Q3BSU3QzdDNsMFNubC9zZzNWQUVuU3V4VlhjME5CTk5a?=
+ =?utf-8?B?RTR6ZnpuWFZ6Rmo3SlJpMk1qZk5Wb3B3cUE5QVQwdVJLYXFOeHM3bkJieDQv?=
+ =?utf-8?B?dzRLYm9VdmUxTjV5REppb3ZzZHhLL1pRangyeDF3dmRGZm8rdllYNUlnS3Zv?=
+ =?utf-8?B?bzBFdzJrbTc0clNhRDU3TStEbXQrTzh4bE5xeEZxOE9PUzZsc3U1ekVROEwy?=
+ =?utf-8?B?VVVaY0Q3RFJGOGozOElJSFcyL25LK1lweEFSb3lhZDNBczh4MlA5UnRpRDFq?=
+ =?utf-8?B?MTdKSnhybGN6Z2w2cmowc1FpNmZocVRTand1QjNnZVFZSlhIS0RzRi82MGpL?=
+ =?utf-8?B?TEZ1WGFrdVQ1M0lITEUyTWNiYW5WY2tVbXQzOXlVYWt1aVRSS3RjL3c2V2s3?=
+ =?utf-8?B?ZEE1TFhma1ZvTS8wblA0U04vWEhjdDQrR2J4bEhmVFZ4cE9aejhVdkVURjdV?=
+ =?utf-8?B?eGp4YTBIVWxwUUVKQXZJdHZZNG90YU5GSUdudzVyNWxLNmMzRnUyandaVlI1?=
+ =?utf-8?B?RWxGeCsyKy9pYlZGY3J6cEdJd3E4cDZrV1IvMVVRRk1iUWRnMnJmSnNDTUFy?=
+ =?utf-8?B?dnl2TzAreFgvUzNBNmFXN2hRM1BWYlcvekpzZ3hXR1d1TjNlZEhMeE1lS0M5?=
+ =?utf-8?B?V1lsWWVibDVnTVRFYkpoUVlYRjFxak1WSzRVd1hpeW1XUkJwU0lYUTVWV0t5?=
+ =?utf-8?B?OXF4WWVVcENGZWZIbUlnbm1mR2xnSzhPT1g5T1JnVnBtQWhrbi93dndSUS9q?=
+ =?utf-8?B?TVk2amJkM1dFUDFsTWUzQS8ra0U4OUJXbXB4S0lFTHBlSjZ0aXpGM003NmZ5?=
+ =?utf-8?B?bHNKa0RveG5sVEdzSG1ZeU5rL2hZRVdqdXZpSG1BQXZkY0VoQzNTbHdjVzd2?=
+ =?utf-8?B?UkJvYVBNdFFTcjZmYUJUNmlnSWxTcEg1Y1Q1NmJBUDQ0cDB5aWN0RVEwdGI1?=
+ =?utf-8?B?QWZlUUkzZ1Bmb2lwTVVVQmJYNWgwdWc5WVNFaGhOdXBYL0phL0xsS2I0Tng1?=
+ =?utf-8?B?ZUNwTVZMNUtCTXFyM2NhRk1YRU9veFhLM0tNV0JmYXNjWnJmR20vaUpCazhB?=
+ =?utf-8?B?SXc3VkhTaHVhQ2oxeVhoSHROUGw0RWtsTmxBb2h1c0VIbWdiUTBTZm91WU5w?=
+ =?utf-8?B?Y2NMbzUwdWNHeVdjUUFpek41THlWUlgxRnJHcUJTYm1PQ2pxRlJjelVSalB5?=
+ =?utf-8?Q?wVCcWDhTMAtnTpHTmI3o9NNpF?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30e2f401-affd-410f-12cb-08da8f450a69
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6000.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 13:46:31.9538
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: A3stqcI/vNP/B/x10L2HyNZgjzxXFXVYChKj7Nz3AUMqiCwXA9DuSZ1SjbNqQ5sILuIzU+tQhCQ/1pw2Cc1mJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4076
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -102,53 +130,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 10:35:44AM +0530, Bharata B Rao wrote:
-> Hi Kirill,
-> 
-> On 9/4/2022 6:30 AM, Kirill A. Shutemov wrote:
-> > On Tue, Aug 30, 2022 at 04:00:53AM +0300, Kirill A. Shutemov wrote:
-> >> Linear Address Masking[1] (LAM) modifies the checking that is applied to
-> >> 64-bit linear addresses, allowing software to use of the untranslated
-> >> address bits for metadata.
-> >>
-> >> The patchset brings support for LAM for userspace addresses. Only LAM_U57 at
-> >> this time.
-> >>
-> >> Please review and consider applying.
-> >>
-> >> git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
-> > 
-> > +Bharata, Ananth.
-> > 
-> > Do you folks have any feedback on the patchset?
-> > 
-> > Looks like AMD version of the tagged pointers feature does not get
-> > traction as of now, but I want to be sure that the interface introduced
-> > here can be suitable for your future plans.
-> > 
-> > Do you see anything in the interface that can prevent it to be extended to
-> > the AMD feature?
-> 
-> The arch_prctl() extensions is generic enough that it should be good.
-> 
-> The untagged_addr() macro looks like this from one of the callers:
-> 
->         start = untagged_addr(mm, start);
-> ffffffff814d39bb:       48 8b 8d 40 ff ff ff    mov    -0xc0(%rbp),%rcx
-> ffffffff814d39c2:       48 89 f2                mov    %rsi,%rdx
-> ffffffff814d39c5:       48 c1 fa 3f             sar    $0x3f,%rdx
-> ffffffff814d39c9:       48 0b 91 50 03 00 00    or     0x350(%rcx),%rdx
-> ffffffff814d39d0:       48 21 f2                and    %rsi,%rdx
-> ffffffff814d39d3:       49 89 d6                mov    %rdx,%r14
-> 
-> Can this overhead of a few additional instructions be removed for
-> platforms that don't have LAM feature? I haven't measured how much
-> overhead this effectively contributes to in real, but wonder if it is
-> worth optimizing for non-LAM platforms.
 
-I'm not sure how the optimization should look like. I guess we can stick
-static_cpu_has() there, but I'm not convinced that adding jumps there will
-be beneficial.
+On 9/5/2022 4:55 PM, Christian König wrote:
+>
+>
+> Am 05.09.22 um 12:56 schrieb Arvind Yadav:
+>> Here's on debug adding an enable_signaling callback for finished
+>> fences and enabling software signaling for finished fence.
+>>
+>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>> ---
+>>   drivers/gpu/drm/scheduler/sched_fence.c | 12 ++++++++++++
+>>   drivers/gpu/drm/scheduler/sched_main.c  |  4 +++-
+>>   2 files changed, 15 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/scheduler/sched_fence.c 
+>> b/drivers/gpu/drm/scheduler/sched_fence.c
+>> index 7fd869520ef2..ebd26cdb79a0 100644
+>> --- a/drivers/gpu/drm/scheduler/sched_fence.c
+>> +++ b/drivers/gpu/drm/scheduler/sched_fence.c
+>> @@ -122,16 +122,28 @@ static void 
+>> drm_sched_fence_release_finished(struct dma_fence *f)
+>>         dma_fence_put(&fence->scheduled);
+>>   }
+>> +#ifdef CONFIG_DEBUG_FS
+>> +static bool drm_sched_enable_signaling(struct dma_fence *f)
+>> +{
+>> +    return true;
+>> +}
+>> +#endif
+>>     static const struct dma_fence_ops drm_sched_fence_ops_scheduled = {
+>>       .get_driver_name = drm_sched_fence_get_driver_name,
+>>       .get_timeline_name = drm_sched_fence_get_timeline_name,
+>> +#ifdef CONFIG_DEBUG_FS
+>> +    .enable_signaling = drm_sched_enable_signaling,
+>> +#endif
+>>       .release = drm_sched_fence_release_scheduled,
+>>   };
+>>     static const struct dma_fence_ops drm_sched_fence_ops_finished = {
+>>       .get_driver_name = drm_sched_fence_get_driver_name,
+>>       .get_timeline_name = drm_sched_fence_get_timeline_name,
+>> +#ifdef CONFIG_DEBUG_FS
+>> +    .enable_signaling = drm_sched_enable_signaling,
+>> +#endif
+>
+> Adding the callback should not be necessary.
+sure, I will remove this change.
+>
+>>       .release = drm_sched_fence_release_finished,
+>>   };
+>>   diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
+>> b/drivers/gpu/drm/scheduler/sched_main.c
+>> index e0ab14e0fb6b..140e3d8646e2 100644
+>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>> @@ -961,7 +961,9 @@ static int drm_sched_main(void *param)
+>>               s_fence->parent = dma_fence_get(fence);
+>>               /* Drop for original kref_init of the fence */
+>>               dma_fence_put(fence);
+>
+> Uff, not related to your patch but that looks wrong to me. The 
+> reference can only be dropped after the call to dma_fence_add_callback().
+>
+Shall I take care with this patch or I will submit separate one ?
+>> -
+>> +#ifdef CONFIG_DEBUG_FS
+>> + dma_fence_enable_sw_signaling(&s_fence->finished);
+>> +#endif
+>
+> This should always be called, independent of the config options set.
+>
+> Christian.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+sure, I will remove the Config check.
+
+~arvind
+
+>
+>>               r = dma_fence_add_callback(fence, &sched_job->cb,
+>>                              drm_sched_job_done_cb);
+>>               if (r == -ENOENT)
+>

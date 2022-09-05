@@ -2,87 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDBE5AD472
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FEC5AD46C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237528AbiIEOAC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Sep 2022 10:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S238069AbiIEOAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238165AbiIEN7z (ORCPT
+        with ESMTP id S238058AbiIEOAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:59:55 -0400
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3566521B3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 06:59:53 -0700 (PDT)
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id EABB5120266;
-        Mon,  5 Sep 2022 13:59:51 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf20.hostedemail.com (Postfix) with ESMTPA id A845D20027;
-        Mon,  5 Sep 2022 13:59:50 +0000 (UTC)
-Message-ID: <d5ab81794ef1c666e947ed1f23570c175bf7d9d4.camel@perches.com>
-Subject: Re: [PATCH] checkpatch: move duplicate sign off to separate warning
- type
-From:   Joe Perches <joe@perches.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Rob Clark <robdclark@gmail.com>
-Date:   Mon, 05 Sep 2022 06:59:49 -0700
-In-Reply-To: <20220905104542.2368950-1-dmitry.baryshkov@linaro.org>
-References: <20220905104542.2368950-1-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Mon, 5 Sep 2022 10:00:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5522FD10;
+        Mon,  5 Sep 2022 07:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E433612C6;
+        Mon,  5 Sep 2022 14:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A36E3C433D7;
+        Mon,  5 Sep 2022 14:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662386414;
+        bh=Xuprs2MAHE3FNmZK/wLqJF3xpvEk6SEVjYJwRRAVh70=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KKV9kimMSkHJHH/2mLd7bbMxvzRNSI98TWtghR1rSt/83kgRhgjwV84dFCtwfPuBt
+         aVNcVFX/Wmd25Vx+WcRyz4+uytjbGniVTOGDDQynndCpfFyAnPgmYDNqTvCr2XRKrP
+         JnSe6UM1WtjLqycB0xJopkhg1XYXY/mtXVM3hpbSwgEJRvB4h8EPVccKTdHRjxnjJQ
+         M0tv7ytOJzKgCojUkEwDv43BCBtogCNtJomvkJmb9IxfijuieoiK9aAUDVvmGdpWFS
+         W362tM0BbpHbCHz/Uz6T+prIUYDbwmvidxXAvUC2xuzHsA+5v+Q8mmu1rHH6CxmYVm
+         N8hvGpvWh0v/A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8D02FE1CABF;
+        Mon,  5 Sep 2022 14:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: A845D20027
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net-next PATCH v3] net: phy: Add 1000BASE-KX interface mode
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166238641457.11602.14140679950100520661.git-patchwork-notify@kernel.org>
+Date:   Mon, 05 Sep 2022 14:00:14 +0000
+References: <20220902220240.996257-1-sean.anderson@seco.com>
+In-Reply-To: <20220902220240.996257-1-sean.anderson@seco.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, kuba@kernel.org, corbet@lwn.net,
+        pabeni@redhat.com, olteanv@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, edumazet@google.com,
+        davem@davemloft.net, linux-phy@lists.infradead.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: 5o1ptdx137rjsguzjw7imkwkbs19c6gc
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18ay7l8iVabQgw/zrilqkrP6Fwl9uebvVo=
-X-HE-Tag: 1662386390-961837
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-09-05 at 13:45 +0300, Dmitry Baryshkov wrote:
-> Some maintainers prefer to allow duplicate signatures if that provides
-> additional details about the patch flow. E.g. if the original patch
-> author pulls the patch from the patchwork into the kernel branch, this
-> can result in duplicate SOB tags from him, however this reflects the
-> patch flow (one SOB for being the author, one SOB for pulling the patch,
-> adding (and maybe fixing) tags and pushing the patch further.
+Hello:
 
-I think that's poor process, but whatever...
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
+On Fri,  2 Sep 2022 18:02:39 -0400 you wrote:
+> Add 1000BASE-KX interface mode. This 1G backplane ethernet as described in
+> clause 70. Clause 73 autonegotiation is mandatory, and only full duplex
+> operation is supported.
 > 
-> To facilitate easily handling this kind of warnings, separate duplicate
-> SOBs into the separate warning class ('DUPLICATE_SIGN_OFF').
+> Although at the PMA level this interface mode is identical to
+> 1000BASE-X, it uses a different form of in-band autonegation. This
+> justifies a separate interface mode, since the interface mode (along
+> with the MLO_AN_* autonegotiation mode) sets the type of autonegotiation
+> which will be used on a link. This results in more than just electrical
+> differences between the link modes.
 > 
-> Cc: Rob Clark <robdclark@gmail.com>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  scripts/checkpatch.pl | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 79e759aac543..f95d4ac19901 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -3115,7 +3115,7 @@ sub process {
->  			$sig_nospace =~ s/\s//g;
->  			$sig_nospace = lc($sig_nospace);
->  			if (defined $signatures{$sig_nospace}) {
-> -				WARN("BAD_SIGN_OFF",
-> +				WARN("DUPLICATE_SIGN_OFF",
->  				     "Duplicate signature\n" . $herecurr);
->  			} else {
->  				$signatures{$sig_nospace} = 1;
+> [...]
+
+Here is the summary with links:
+  - [net-next,v3] net: phy: Add 1000BASE-KX interface mode
+    https://git.kernel.org/netdev/net-next/c/05ad5d4581c3
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

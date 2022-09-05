@@ -2,121 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E525ACB7C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A556F5ACB81
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237036AbiIEG4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 02:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
+        id S237005AbiIEG4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 02:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236769AbiIEGza (ORCPT
+        with ESMTP id S236822AbiIEG4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 02:55:30 -0400
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465861D0C5;
-        Sun,  4 Sep 2022 23:55:20 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9e:d400:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 2856t5FO876715
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 5 Sep 2022 07:55:07 +0100
-Received: from miraculix.mork.no ([IPv6:2a01:799:961:910a:a293:6d6e:8bbf:c204])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 2856t0fO1042270
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 5 Sep 2022 08:55:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1662360900; bh=B8ds51VEQCz5E7/NG7drgSbJ23MaxqKfWsx4DbN9JtM=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=hnJa60PtRVy0j9Y7+kZGgs3afvqGApgD0Ic6z4z9qfFCszjcvjCcwnMkX1F/yFJFe
-         pFYcp9P7a/9mQcOq0xMFQHQVgxitiISdCy+ccAcEvjkkFBwzL1s9uOcWS+CrhYV/o4
-         LjvAhj4hJRruFTsSX0UfzhgxT4C4PWyHPtfeQSsQ=
-Received: (nullmailer pid 176082 invoked by uid 1000);
-        Mon, 05 Sep 2022 06:54:45 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     "jerry.meng" <jerry-meng@foxmail.com>
-Cc:     davem@davemloft.net, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] net: usb: qmi_wwan: add Quectel RM520N
-Organization: m
-References: <tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com>
-Date:   Mon, 05 Sep 2022 08:54:45 +0200
-In-Reply-To: <tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com> (jerry
-        meng's message of "Mon, 5 Sep 2022 09:24:52 +0800")
-Message-ID: <874jxmfgzu.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 5 Sep 2022 02:56:38 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DA220F47;
+        Sun,  4 Sep 2022 23:56:32 -0700 (PDT)
+Received: from HP-EliteBook-840-G7.. (1-171-245-2.dynamic-ip.hinet.net [1.171.245.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id DF2C93F3B3;
+        Mon,  5 Sep 2022 06:56:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1662360990;
+        bh=3OTxH04tly8ykdh4ItSLPlbz4yOOpq5wfxksyfOj0sA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=uGW1LI/emstwM+wyRNi345Bi6KinpHcmTHeidzg/TU+4g1+LOGJ1bqORO4qnq8DMx
+         D/UuNRRHw6jnyqDfhYh4tAbGsyyhez3/G05fUciVD5Lpz0sThwqGI5o6jRs9jQQppa
+         a1wRG7GZSVNuq2v/ZG6lWIGXuMmGRWD9zXhx8eN6nlVL6SGI6IMOHw+E6RzIIY/bOK
+         fuEHz/0qsLgKN2iuCxFrbxu+orqUyFWQaFnDaeSWy9G0czDODpnWvz19sPzs1prs/j
+         DbleJTrJ/Z5Heve1deqnUrFnYAgPWD1Q9pA8yhWuOnnBi0SNq9E4pQinHYGuqGWiIC
+         JPH1V9IA/2URQ==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com
+Cc:     sanju.mehta@amd.com, mario.limonciello@amd.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] thunderbolt: Resume PCIe bridges after switch is found on AMD USB4 controller
+Date:   Mon,  5 Sep 2022 14:56:22 +0800
+Message-Id: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.6 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"jerry.meng" <jerry-meng@foxmail.com> writes:
+AMD USB4 can not detect external PCIe devices like external NVMe when
+it's hotplugged, because card/link are not up:
 
-> add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
->
-> 0x0801: DIAG + NMEA + AT + MODEM + RMNET
->
-> T:  Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D01 Cnt=3D02 Dev#=3D 10 Spd=3D480  =
-MxCh=3D 0
-> D:  Ver=3D 2.10 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
-> P:  Vendor=3D2c7c ProdID=3D0801 Rev=3D 5.04
-> S:  Manufacturer=3DQuectel
-> S:  Product=3DRM520N-GL
-> S:  SerialNumber=3D384af524
-> C:* #Ifs=3D 5 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
-> I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Driver=
-=3Doption
-> E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D40 Driver=
-=3Doption
-> E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-> E:  Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-> E:  Ad=3D85(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-> E:  Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-> E:  Ad=3D87(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-> E:  Ad=3D86(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 4 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Dqmi_wwan
-> E:  Ad=3D88(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D32ms
-> E:  Ad=3D8e(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:  Ad=3D0f(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
->
-> Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
-> ---
->  drivers/net/usb/qmi_wwan.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index 709e3c59e340..0cb187def5bc 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
-> @@ -1087,6 +1087,7 @@ static const struct usb_device_id products[] =3D {
->  	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
->  	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
->  	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
-> +	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0801)},	/* Quectel RM520N */
->=20=20
->  	/* 3. Combined interface devices matching on interface number */
->  	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
+pcieport 0000:00:04.1: pciehp: pciehp_check_link_active: lnk_status = 1101
 
+Use `lspci` to resume pciehp bridges can find external devices.
 
-Looks good!
+A long delay before checking card/link presence doesn't help, either.
+The only way to make the hotplug work is to enable pciehp interrupt and
+check card presence after the TB switch is added.
 
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+Since the topology of USB4 and its PCIe bridges are siblings, hardcode
+the bridge ID so TBT driver can wake them up to check presence.
+
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216448
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/thunderbolt/nhi.c    | 29 +++++++++++++++++++++++++++++
+ drivers/thunderbolt/switch.c |  6 ++++++
+ drivers/thunderbolt/tb.c     |  1 +
+ drivers/thunderbolt/tb.h     |  5 +++++
+ include/linux/thunderbolt.h  |  1 +
+ 5 files changed, 42 insertions(+)
+
+diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+index cb8c9c4ae93a2..75f5ce5e22978 100644
+--- a/drivers/thunderbolt/nhi.c
++++ b/drivers/thunderbolt/nhi.c
+@@ -1225,6 +1225,8 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ {
+ 	struct tb_nhi *nhi;
+ 	struct tb *tb;
++	struct pci_dev *p = NULL;
++	struct tb_pci_bridge *pci_bridge, *n;
+ 	int res;
+ 
+ 	if (!nhi_imr_valid(pdev)) {
+@@ -1306,6 +1308,19 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		nhi_shutdown(nhi);
+ 		return res;
+ 	}
++
++	if (pdev->vendor == PCI_VENDOR_ID_AMD) {
++		while ((p = pci_get_device(PCI_VENDOR_ID_AMD, 0x14cd, p))) {
++			pci_bridge = kmalloc(sizeof(struct tb_pci_bridge), GFP_KERNEL);
++			if (!pci_bridge)
++				goto cleanup;
++
++			pci_bridge->bridge = p;
++			INIT_LIST_HEAD(&pci_bridge->list);
++			list_add(&pci_bridge->list, &tb->bridge_list);
++		}
++	}
++
+ 	pci_set_drvdata(pdev, tb);
+ 
+ 	device_wakeup_enable(&pdev->dev);
+@@ -1316,12 +1331,26 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	pm_runtime_put_autosuspend(&pdev->dev);
+ 
+ 	return 0;
++
++cleanup:
++	list_for_each_entry_safe(pci_bridge, n, &tb->bridge_list, list) {
++		list_del(&pci_bridge->list);
++		kfree(pci_bridge);
++	}
++
++	return -ENOMEM;
+ }
+ 
+ static void nhi_remove(struct pci_dev *pdev)
+ {
+ 	struct tb *tb = pci_get_drvdata(pdev);
+ 	struct tb_nhi *nhi = tb->nhi;
++	struct tb_pci_bridge *pci_bridge, *n;
++
++	list_for_each_entry_safe(pci_bridge, n, &tb->bridge_list, list) {
++		list_del(&pci_bridge->list);
++		kfree(pci_bridge);
++	}
+ 
+ 	pm_runtime_get_sync(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index c63c1f4ff9dc7..aae898cc907d3 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -2836,6 +2836,8 @@ static void tb_switch_credits_init(struct tb_switch *sw)
+ int tb_switch_add(struct tb_switch *sw)
+ {
+ 	int i, ret;
++	struct tb *tb = sw->tb;
++	struct tb_pci_bridge *pci_bridge;
+ 
+ 	/*
+ 	 * Initialize DMA control port now before we read DROM. Recent
+@@ -2933,6 +2935,10 @@ int tb_switch_add(struct tb_switch *sw)
+ 	}
+ 
+ 	tb_switch_debugfs_init(sw);
++
++	list_for_each_entry(pci_bridge, &tb->bridge_list, list)
++		pm_request_resume(&pci_bridge->bridge->dev);
++
+ 	return 0;
+ 
+ err_ports:
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 9853f6c7e81d7..07e97b77ac630 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1771,6 +1771,7 @@ struct tb *tb_probe(struct tb_nhi *nhi)
+ 		tb->security_level = TB_SECURITY_NOPCIE;
+ 
+ 	tb->cm_ops = &tb_cm_ops;
++	INIT_LIST_HEAD(&tb->bridge_list);
+ 
+ 	tcm = tb_priv(tb);
+ 	INIT_LIST_HEAD(&tcm->tunnel_list);
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 5db76de40cc1c..8efbd1afacad0 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -489,6 +489,11 @@ struct tb_cm_ops {
+ 						   u32 *status);
+ };
+ 
++struct tb_pci_bridge {
++	struct pci_dev *bridge;
++	struct list_head list;
++};
++
+ static inline void *tb_priv(struct tb *tb)
+ {
+ 	return (void *)tb->privdata;
+diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
+index 9f442d73f3df8..728bb36070e9d 100644
+--- a/include/linux/thunderbolt.h
++++ b/include/linux/thunderbolt.h
+@@ -83,6 +83,7 @@ struct tb {
+ 	int index;
+ 	enum tb_security_level security_level;
+ 	size_t nboot_acl;
++	struct list_head bridge_list;
+ 	unsigned long privdata[];
+ };
+ 
+-- 
+2.36.1
+

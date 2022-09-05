@@ -2,46 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988535AD1AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207F15AD1A7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237713AbiIELgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
+        id S237856AbiIELhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiIELgr (ORCPT
+        with ESMTP id S230038AbiIELhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:36:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D9DF24F0C;
-        Mon,  5 Sep 2022 04:36:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15C1CED1;
-        Mon,  5 Sep 2022 04:36:52 -0700 (PDT)
-Received: from [10.57.16.151] (unknown [10.57.16.151])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63E0F3F7B4;
-        Mon,  5 Sep 2022 04:36:44 -0700 (PDT)
-Message-ID: <cad6b3c2-f78f-a6c4-25fd-3402b02a4944@arm.com>
-Date:   Mon, 5 Sep 2022 12:36:43 +0100
+        Mon, 5 Sep 2022 07:37:13 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120C55C34D;
+        Mon,  5 Sep 2022 04:37:12 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id s11so10943314edd.13;
+        Mon, 05 Sep 2022 04:37:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=6yE/u9qfu0XEjAgeN3XgYZq4VzPJwMp6A+Ku/AIYFYc=;
+        b=WGdE/mMel/PGiISQlELlCCIhWBf6GNl3zz8Sf46Lkl0Deraa08pjR1YOTrC9SvLunX
+         zTs8EVjtG8Dx9w+KE1V0T/DvLuTFFkt8iNHLCo04WxWNncMwl40kWZC70tp9Z1uGH2xw
+         nvcCF/ABxbyetnbV4eoDA6kCJW6Uqk9uA4loxMTbAbBJK77Jm+3sJ84Stvxk+BbMc1zO
+         rmHWh2c5OOi0WRH6KslyWB53KG6nJLwVWh9QUXaqjRSHzO4pL2GHYOU+f5up07fncM4E
+         EGg4Gy4t2apbZKXomswnzWYF0b5IZ++VDxQ44ZkgQLafC02xJ1MvLxHp5PCc3OFHbWXW
+         bkfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6yE/u9qfu0XEjAgeN3XgYZq4VzPJwMp6A+Ku/AIYFYc=;
+        b=hs5KP1o/FGKSC8a5F+rl/9fTjCSe+Vknmy/IDoUAUHCin8TBh23v2C0uV3N5ydwJVn
+         T7pCH+56KKK87fwkLK0r5Mab3VK8sdytae/YgtVxy/XnoptuTOn3J1dWX3V1adZ4LvUY
+         QlYGTfoIieTc+/j1BJQJA5R4xvjh2dGvuoqkNcaaPD7woMhzK25c5WohO1NQUPYcXUXD
+         xyPzCJyfDzpbnEH1ae2+otoFtJxbXToCAyKXOyxDkKNTMjMQ+XEP2oKo6wcQRtoefp6p
+         2gxK9enSP7IcTlMQTxicjVGdh8Q5DerRnHpkk0EREU31prGHyx1wSbfyc8mKt9kTXGY8
+         gh+A==
+X-Gm-Message-State: ACgBeo01sRuWLSmNv2M2/lQooKeQ7hCMlgBF570AF5KB0IM3kticauEE
+        Uwj1+VIBUSrYR20M6Vhy5YDsECu9u7/bMAKoYp8=
+X-Google-Smtp-Source: AA6agR4AKzHEe7F4JA3ksdfS9O1tMcT9KK59Hn6iqpDKJL2FsOYdDBtpum23Sx8xalYNdPuZU49pOHkpKS4np91Q8Rs=
+X-Received: by 2002:aa7:d759:0:b0:447:b08b:6d00 with SMTP id
+ a25-20020aa7d759000000b00447b08b6d00mr42192045eds.413.1662377830599; Mon, 05
+ Sep 2022 04:37:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 11/13] perf: cs-etm: Handle
- PERF_RECORD_AUX_OUTPUT_HW_ID packet
-Content-Language: en-US
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        quic_jinlmao@quicinc.com
-References: <20220823091009.14121-1-mike.leach@linaro.org>
- <20220823091009.14121-12-mike.leach@linaro.org>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220823091009.14121-12-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <1662359735-18320-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1662359735-18320-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Mon, 5 Sep 2022 13:36:57 +0200
+Message-ID: <CAOi1vP-F1wgwY-j9ov6s+Rbc21budTGqh_39x_E+8-wQ7AZ8zw@mail.gmail.com>
+Subject: Re: [PATCH] ceph, docs: Remove Sage's git tree
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, ceph-devel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,110 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23/08/2022 10:10, Mike Leach wrote:
-> When using dynamically assigned CoreSight trace IDs the drivers can output
-> the ID / CPU association as a PERF_RECORD_AUX_OUTPUT_HW_ID packet.
-> 
-> Update cs-etm decoder to handle this packet by setting the CPU/Trace ID
-> mapping.
-> 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+On Mon, Sep 5, 2022 at 8:35 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> Sage's git tree has not been pushed to in years, and it was removed in
+> commit 3a5ccecd9af7 ("MAINTAINERS: remove myself as ceph co-maintainer"),
+> so it is better to remove it in the documentation too.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
+>  Documentation/filesystems/ceph.rst | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/Documentation/filesystems/ceph.rst b/Documentation/filesystems/ceph.rst
+> index 4942e01..76ce938 100644
+> --- a/Documentation/filesystems/ceph.rst
+> +++ b/Documentation/filesystems/ceph.rst
+> @@ -203,7 +203,6 @@ For more information on Ceph, see the home page at
+>
+>  The Linux kernel client source tree is available at
+>         - https://github.com/ceph/ceph-client.git
+> -       - git://git.kernel.org/pub/scm/linux/kernel/git/sage/ceph-client.git
+>
+>  and the source for the full system is at
+>         https://github.com/ceph/ceph.git
+> --
+> 2.1.0
+>
 
-[...]
+Applied.
 
-> -	/* before aux records are queued, need to map metadata to trace IDs */
-> -	err = cs_etm__map_trace_ids_metadata(num_cpu, metadata);
-> +	/*
-> +	 * Map Trace ID values to CPU metadata.
-> +	 *
-> +	 * Trace metadata will always contain Trace ID values from the legacy algorithm. If the
-> +	 * files has been recorded by a "new" perf updated to handle AUX_HW_ID then the metadata
-> +	 * ID value will also have the CORESIGHT_TRACE_ID_UNUSED_FLAG set.
-> +	 *
-> +	 * The updated kernel drivers that use AUX_HW_ID to sent Trace IDs will attempt to use
-> +	 * the same IDs as the old algorithm as far as is possible, unless there are clashes
-> +	 * in which case a different value will be used. This means an older perf may still
-> +	 * be able to record and read files generate on a newer system.
-> +	 *
-> +	 * For a perf able to interpret AUX_HW_ID packets we first check for the presence of
-> +	 * those packets. If they are there then the values will be mapped and plugged into
-> +	 * the metadata. We then set any remaining metadata values with the used flag to a
-> +	 * value CORESIGHT_TRACE_ID_UNUSED_VAL - which indicates no decoder is required.
-> +	 *
-> +	 * If no AUX_HW_ID packets are present - which means a file recorded on an old kernel
-> +	 * then we map Trace ID values to CPU directly from the metadata - clearing any unused
-> +	 * flags if present.
-> +	 */
-> +
-> +	/* first scan for AUX_OUTPUT_HW_ID records to map trace ID values to CPU metadata */
-> +	aux_hw_id_found = 0;
-> +	err = perf_session__peek_events(session, session->header.data_offset,
-> +					session->header.data_size,
-> +					cs_etm__process_aux_hw_id_cb, &aux_hw_id_found);
-> +	if (err)
-> +		goto err_delete_thread;
-> +
-> +	/* if HW ID found then clear any unused metadata ID values */
-> +	if (aux_hw_id_found)
-> +		err = cs_etm__clear_unused_trace_ids_metadata(num_cpu, metadata);
-> +	/* otherwise, this is a file with metadata values only, map from metadata */
-> +	else
-> +		err = cs_etm__map_trace_ids_metadata(num_cpu, metadata);
-> +
->  	if (err)
->  		goto err_delete_thread;
->  
-> @@ -3124,13 +3342,14 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
->  
->  	etm->data_queued = etm->queues.populated;
->  	/*
-> -	 * Print warning in pipe mode, see cs_etm__process_auxtrace_event() and
-> +	 * Print error in pipe mode, see cs_etm__process_auxtrace_event() and
->  	 * cs_etm__queue_aux_fragment() for details relating to limitations.
->  	 */
-> -	if (!etm->data_queued)
-> -		pr_warning("CS ETM warning: Coresight decode and TRBE support requires random file access.\n"
-> -			   "Continuing with best effort decoding in piped mode.\n\n");
-> -
-> +	if (!etm->data_queued) {
-> +		pr_err("CS ETM: Coresight decode and TRBE support need random file access.\n");
-> +		err = -EINVAL;
-> +		goto err_delete_thread;
-> +	}
+Thanks,
 
-This error message is never hit because the peek that was added is
-followed by:
-
-  if (err)
-      goto err_delete_thread;
-
-Peek will return -1 in pipe mode so then you get this output instead:
-
-  ./perf record -e cs_etm//u -o - -- ls > stdio.data
-  cat stdio.data | ./perf report -i -
-
-  0x1464 [0x168]: failed to process type: 70
-  Error:
-  failed to process sample
-
-It would be simpler to add this new check to the very beginning of
-cs_etm__process_auxtrace_info() and print the message/quit there instead:
-
-  if (perf_data__is_pipe(session->data))
-      return -1;
-
-Then etm->data_queued can also be removed because it's always true.
-
-Apart from that issue:
-
-Reviewed-by: James Clark <james.clark@arm.com>
-
-Thanks
-James
-
->  	return 0;
->  
->  err_delete_thread:
+                Ilya

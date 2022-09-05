@@ -2,81 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057765AC820
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 01:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC835AC847
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 02:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiIDXhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 19:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S230176AbiIEAiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 20:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiIDXh1 (ORCPT
+        with ESMTP id S229560AbiIEAiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 19:37:27 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E844B2409F;
-        Sun,  4 Sep 2022 16:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1662334641; bh=jLRdilnMCYu/2LORSkSSfxq/7hawIRimyy0TcaBVSdg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=S0ySmocwO3hM9JxO7DVtM3BcsMOuVQiuSuyiUqAblDsNs3nMBXZz0MtnYh/iRZZlw
-         7GBbCtHMg2YpaYHkUaAxJxRa2FNET3QbSWn8CuzwBBgHVbqtoCEwKakqKj1/4ZY1Nh
-         GibpZNZcbt55iHvGPsOnwgTEhQC6T/UsbLlQO8f8=
-From:   Ondrej Jirman <megi@xff.cz>
-To:     linux-rockchip@lists.infradead.org
-Cc:     Ondrej Jirman <megi@xff.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Martijn Braam <martijn@brixit.nl>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Arnaud Ferraris <arnaud.ferraris@gmail.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <n@nfraprado.net>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
-        support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] arm64: dts: rockchip: Fix SD card controller probe on Pinephone Pro
-Date:   Mon,  5 Sep 2022 01:36:47 +0200
-Message-Id: <20220904233652.3197885-1-megi@xff.cz>
+        Sun, 4 Sep 2022 20:38:03 -0400
+Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9383A2655F
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 17:38:01 -0700 (PDT)
+Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
+        by smtp.orange.fr with ESMTPA
+        id V07SoNhIZJ83FV07bovION; Mon, 05 Sep 2022 02:37:59 +0200
+X-ME-Helo: YC20090004.ad.ts.tri-ad.global
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 05 Sep 2022 02:37:59 +0200
+X-ME-IP: 103.175.111.222
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v7 0/2] x86/asm/bitops: optimize ff{s,z} functions for constant expressions
+Date:   Mon,  5 Sep 2022 09:37:30 +0900
+Message-Id: <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Voltage constraints on vccio_sd are invalid. They don't match the voltages
-that LDO9 can generate, and this causes rk808-regulator driver to fail
-to probe with -EINVAL when it tries to apply the constraints during boot.
+The compilers provide some builtin expression equivalent to the ffs(),
+__ffs() and ffz() functions of the kernel. The kernel uses optimized
+assembly which produces better code than the builtin
+functions. However, such assembly code can not be folded when used
+with constant expressions.
 
-Fix the constraints to something that LDO9 can be actually configured for.
+This series relies on __builtin_constant_p to select the optimal solution:
 
-Fixes: 78a21c7d5952 ("arm64: dts: rockchip: Add initial support for Pine64 PinePhone Pro")
-Signed-off-by: Ondrej Jirman <megi@xff.cz>
----
- arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+  * use kernel assembly for non constant expressions
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-index f00c80361377a..2e058c3150256 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-@@ -253,8 +253,8 @@ regulator-state-mem {
- 
- 			vccio_sd: LDO_REG9 {
- 				regulator-name = "vccio_sd";
--				regulator-min-microvolt = <1710000>;
--				regulator-max-microvolt = <3150000>;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
- 			};
- 
- 			vcc3v3_s0: SWITCH_REG {
+  * use compiler's __builtin function for constant expressions.
+
+
+** Statistics **
+
+Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+of __ffs() and ffz() calls (details of the calculation in each patch).
+
+
+** Changelog **
+
+v6 -> v7:
+
+  * (no changes on code, only commit tag was modified)
+
+  * Add Reviewed-by: Yury Norov <yury.norov@gmail.com> in both patches
+
+
+v5 -> v6:
+  * Rename variable___ffs() into variable__ffs() (two underscores
+    instead of three)
+
+
+v4 -> v5:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Rewrite the commit log:
+    - Use two spaces instead of `| ' to indent code snippets.
+    - Do not use `we'.
+    - Do not use `this patch' in the commit description. Instead,
+      use imperative tone.
+  Link: https://lore.kernel.org/all/YvUZVYxbOMcZtR5G@zn.tnic/
+
+
+v3 -> v4:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Remove note and link to Nick's message in patch 1/2, c.f.:
+  Link: https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 2/2.
+
+
+v2 -> v3:
+
+  * Redacted out the instructions after ret and before next function
+    in the assembly output.
+
+  * Added a note and a link to Nick's message on the constant
+    propagation missed-optimization in clang:
+    Link: https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+
+  * Fix copy/paste typo in statistics of patch 1/2. Number of
+    occurences before patches are 1081 and not 3607 (percentage
+    reduction of 26.7% remains correct)
+
+  * Rename the functions as follow:
+    - __varible_ffs() -> variable___ffs()
+    - __variable_ffz() -> variable_ffz()
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 1/2.
+
+
+Vincent Mailhol (2):
+  x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+    expressions
+  x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+    expressions
+
+ arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 26 deletions(-)
+
 -- 
-2.37.3
+2.35.1
 

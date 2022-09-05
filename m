@@ -2,283 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B0D5AC93C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987635AC939
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236132AbiIEDvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 23:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        id S235821AbiIEDub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 23:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236134AbiIEDvL (ORCPT
+        with ESMTP id S232094AbiIEDu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 23:51:11 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911291DA5B
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 20:50:47 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2852nj5V001842;
-        Mon, 5 Sep 2022 03:50:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=8gQkty3nta2/PsXOq0Gh81Snvglo1DbcIKl7kHtYUOg=;
- b=pxjKlgKFdb6bNmWPDdZg7hWDvIY2lD62g+mBresAbWjWJYNMcF+TEzDz0Zcr58ZNgLGi
- IBS80roI2PNVRGqJ5dZFYoluiRnztQKLJZt6aj96gQJj/AcVm1TuJ6jpM8edW1OVYWO/
- QseoXDn3fiz3wtH1iCoOInhQDaf19J8ggYm0X4aSKBVHKHRsADjFTzInCXAgBFTmguPv
- uARA1QEe/YB/N6s6KLziisLuQWxVDlgjP9Si5qhiql4+jOhn+sad/w5UCpLiQX+9l9rJ
- DVFVuVDniF0z3a842E34hq03NIby+FZfkyr7l5wwNAKDUNgMLdZoDsW/j9Rk1cD3FIeF Zg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jd8p012mu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 03:50:27 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2853oPFl002872;
-        Mon, 5 Sep 2022 03:50:26 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jd8p012m1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 03:50:26 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2853a7Iw017235;
-        Mon, 5 Sep 2022 03:50:23 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3jbx6hhuwy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 03:50:23 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2853kucV41681312
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 5 Sep 2022 03:46:56 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8CBA842041;
-        Mon,  5 Sep 2022 03:50:21 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 191AD4203F;
-        Mon,  5 Sep 2022 03:50:16 +0000 (GMT)
-Received: from [9.43.107.234] (unknown [9.43.107.234])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  5 Sep 2022 03:50:15 +0000 (GMT)
-Message-ID: <dbd5b8e4-2b74-97cd-f05c-1b57a2df5c0c@linux.ibm.com>
-Date:   Mon, 5 Sep 2022 09:20:14 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
- sysfs
-Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Wei Xu <weixugc@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>,
-        Greg Thelen <gthelen@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
- <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <ad19e105-9290-922d-59e6-e6813a30f5f0@linux.ibm.com>
- <87pmgezkhp.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
- <d91beb53-e940-e02a-f9ca-3326bf914da7@linux.ibm.com>
- <87fshaz63h.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <698120ce-d4df-3d13-dea9-a8f5c298783c@linux.ibm.com>
- <87bkryz4nh.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <2b4ddc45-74ae-27df-d973-6724f61f4e18@linux.ibm.com>
- <877d2mz3c1.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <45488760-02b5-115b-c16d-5219303f2f33@linux.ibm.com>
- <CAAPL-u_UoAQ9koo892sG-Tx4bi4xDRe9PUtjmFSsn90uU-n31g@mail.gmail.com>
- <871qsuyzr2.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <672e528d-40b7-fc12-9b0c-1591d586c079@linux.ibm.com>
- <87wnamxi30.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <5aaf395d-514a-2717-58c6-3845b97692bd@linux.ibm.com>
- <87sfl6y4d0.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <87sfl6y4d0.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 34FehicP_WObdDh8w0y6LorMZH91TBrU
-X-Proofpoint-GUID: jRbx7_dysA7oftqX6S1zV6kQIphfrmk2
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 4 Sep 2022 23:50:26 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FE417582;
+        Sun,  4 Sep 2022 20:50:24 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso11003952pjk.0;
+        Sun, 04 Sep 2022 20:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=PzzlxoDD0gwMbgIt54iifLiktjUm4ME8kopVopYW44g=;
+        b=DbdhYATM1wJP4Tk73rr8pWbvq2OPyd/Dj1s9xBJzNLlXWTUK9xKqCqf35l+NwAyWXn
+         IYFpa/aVFUgKRjiR+6s9LEcjdHwFn6cFPuw3cD2oGPv61Wgj1vl977QohjG4IUvxCz8b
+         bvFDpV+Wg4ZGfSz9hSr3u8EYgYGRShqOsYWv7ln210ePKiQwjZTR8iLE8YqIqt/AKiW3
+         MgylES9M7c2pXHRFNp2miu/TgOmMo2dnZ3C88VqyAqlp0qwS87E/Il3lUF/RSF5CDwQv
+         1aPcHnCkVvIMsqySxqN1t2/rknzr0huhQY3rP8IwSvUcFBqB+TJF0pAFkeWprwrclrnS
+         a0VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=PzzlxoDD0gwMbgIt54iifLiktjUm4ME8kopVopYW44g=;
+        b=o9GA1IoxQ1Nl/8FQ6jCa95OGlexQSDdZe27nDORlaO91CW8URHuDS316wXRjdLSFLY
+         2GOydO14IlBZfRgec+7Ecf5QEw5fMUVRuMnBmTj4ysq814fCNM5K2lgKy9w2JNSogKYP
+         efmmz9htKQ57tzyV94kRgi8YcQ39YbVaGDp5naa09a+nWFFPrWKAtFvqbmCxtsVg3eR8
+         wnYH5UwtiTZNq5bMcsulYV0q5v48kBGTOiwTMxFm5V940v9GteDy1oH6LjgHOpyh+XHB
+         6g7FG8IprhH8gR2Oo/nuYwtglIZe/OQEa8Y5JjwfnVjzlasOoucOW7DydTbaJqNoBG0i
+         WELw==
+X-Gm-Message-State: ACgBeo2MIU5GFOjy9fLbc54DG5E4RZXaNUfjyCHPYkQKoYszP7dTdjMX
+        n4s15o6N0emaAX6CQsIGwsI=
+X-Google-Smtp-Source: AA6agR5QPUhDCuZ7OVO7f4zAAMkzkkzMXIJfS2I7H+BkaIO+mcAZeOUNMCCkE0jsFJPK0ZnJibCyiA==
+X-Received: by 2002:a17:902:f641:b0:172:e2f8:7efb with SMTP id m1-20020a170902f64100b00172e2f87efbmr45707640plg.140.1662349824317;
+        Sun, 04 Sep 2022 20:50:24 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.25])
+        by smtp.gmail.com with ESMTPSA id e126-20020a621e84000000b00535c4b7f1eesm6416663pfe.87.2022.09.04.20.50.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Sep 2022 20:50:23 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     edumazet@google.com, kuba@kernel.org
+Cc:     davem@davemloft.net, pabeni@redhat.com, rostedt@goodmis.org,
+        mingo@redhat.com, imagedong@tencent.com, dsahern@kernel.org,
+        flyingpeng@tencent.com, dongli.zhang@oracle.com, robh@kernel.org,
+        asml.silence@gmail.com, luiz.von.dentz@intel.com,
+        vasily.averin@linux.dev, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH net v3] net: skb: export skb drop reaons to user by TRACE_DEFINE_ENUM
+Date:   Mon,  5 Sep 2022 11:50:15 +0800
+Message-Id: <20220905035015.1130730-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-05_02,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- suspectscore=0 spamscore=0 clxscore=1015 adultscore=0 priorityscore=1501
- lowpriorityscore=0 mlxscore=0 impostorscore=0 phishscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209050017
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/5/22 7:22 AM, Huang, Ying wrote:
-> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
-> 
->> On 9/2/22 2:34 PM, Huang, Ying wrote:
->>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>
->>>> On 9/2/22 1:27 PM, Huang, Ying wrote:
->>>>> Wei Xu <weixugc@google.com> writes:
->>>>>
->>>>>> On Thu, Sep 1, 2022 at 11:44 PM Aneesh Kumar K V
->>>>>> <aneesh.kumar@linux.ibm.com> wrote:
->>>>>>>
->>>>>>> On 9/2/22 12:10 PM, Huang, Ying wrote:
->>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>>
->>>>>>>>> On 9/2/22 11:42 AM, Huang, Ying wrote:
->>>>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>>>>
->>>>>>>>>>> On 9/2/22 11:10 AM, Huang, Ying wrote:
->>>>>>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>>>>>>
->>>>>>>>>>>>> On 9/2/22 10:39 AM, Wei Xu wrote:
->>>>>>>>>>>>>> On Thu, Sep 1, 2022 at 5:33 PM Huang, Ying <ying.huang@intel.com> wrote:
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> On 9/1/22 12:31 PM, Huang, Ying wrote:
->>>>>>>>>>>>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
->>>>>>>>>>>>>>>>>> related details can be found. All allocated memory tiers will be listed
->>>>>>>>>>>>>>>>>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
->>>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> The nodes which are part of a specific memory tier can be listed via
->>>>>>>>>>>>>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> I think "memory_tier" is a better subsystem/bus name than
->>>>>>>>>>>>>>>>> memory_tiering.  Because we have a set of memory_tierN devices inside.
->>>>>>>>>>>>>>>>> "memory_tier" sounds more natural.  I know this is subjective, just my
->>>>>>>>>>>>>>>>> preference.
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>
->>>>>>>>>>>>>
->>>>>>>>>>>>> I missed replying to this earlier. I will keep memory_tiering as subsystem name in v4
->>>>>>>>>>>>> because we would want it to a susbsystem where all memory tiering related details can be found
->>>>>>>>>>>>> including memory type in the future. This is as per discussion
->>>>>>>>>>>>>
->>>>>>>>>>>>> https://lore.kernel.org/linux-mm/CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com
->>>>>>>>>>>>
->>>>>>>>>>>> I don't think that it's a good idea to mix 2 types of devices in one
->>>>>>>>>>>> subsystem (bus).  If my understanding were correct, that breaks the
->>>>>>>>>>>> driver core convention.
->>>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> All these are virtual devices .I am not sure i follow what you mean by 2 types of devices.
->>>>>>>>>>> memory_tiering is a subsystem that represents all the details w.r.t memory tiering. It shows
->>>>>>>>>>> details of memory tiers and can possibly contain details of different memory types .
->>>>>>>>>>
->>>>>>>>>> IMHO, memory_tier and memory_type are 2 kind of devices.  They have
->>>>>>>>>> almost totally different attributes (sysfs file).  So, we should create
->>>>>>>>>> 2 buses for them.  Each has its own attribute group.  "virtual" itself
->>>>>>>>>> isn't a subsystem.
->>>>>>>>>
->>>>>>>>> Considering both the details are related to memory tiering, wouldn't it be much simpler we consolidate
->>>>>>>>> them within the same subdirectory? I am still not clear why you are suggesting they need to be in different
->>>>>>>>> sysfs hierarchy.  It doesn't break any driver core convention as you mentioned earlier.
->>>>>>>>>
->>>>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN
->>>>>>>>> /sys/devices/virtual/memory_tiering/memory_typeN
->>>>>>>>
->>>>>>>> I think we should add
->>>>>>>>
->>>>>>>>  /sys/devices/virtual/memory_tier/memory_tierN
->>>>>>>>  /sys/devices/virtual/memory_type/memory_typeN
->>>>>>>>
->>>>>>>
->>>>>>> I am trying to find if there is a technical reason to do the same?
->>>>>>>
->>>>>>>> I don't think this is complex.  Devices of same bus/subsystem should
->>>>>>>> have mostly same attributes.  This is my understanding of driver core
->>>>>>>> convention.
->>>>>>>>
->>>>>>>
->>>>>>> I was not looking at this from code complexity point. Instead of having multiple directories
->>>>>>> with details w.r.t memory tiering, I was looking at consolidating the details
->>>>>>> within the directory /sys/devices/virtual/memory_tiering. (similar to all virtual devices
->>>>>>> are consolidated within /sys/devics/virtual/).
->>>>>>>
->>>>>>> -aneesh
->>>>>>
->>>>>> Here is an example of /sys/bus/nd/devices (I know it is not under
->>>>>> /sys/devices/virtual, but it can still serve as a reference):
->>>>>>
->>>>>> ls -1 /sys/bus/nd/devices
->>>>>>
->>>>>> namespace2.0
->>>>>> namespace3.0
->>>>>> ndbus0
->>>>>> nmem0
->>>>>> nmem1
->>>>>> region0
->>>>>> region1
->>>>>> region2
->>>>>> region3
->>>>>>
->>>>>> So I think it is not unreasonable if we want to group memory tiering
->>>>>> related interfaces within a single top directory.
->>>>>
->>>>> Thanks for pointing this out.  My original understanding of driver core
->>>>> isn't correct.
->>>>>
->>>>> But I still think it's better to separate instead of mixing memory_tier
->>>>> and memory_type.  Per my understanding, memory_type shows information
->>>>> (abstract distance, latency, bandwidth, etc.) of memory types (and
->>>>> nodes), it can be useful even without memory tiers.  That is, memory
->>>>> types describes the physical characteristics, while memory tier reflects
->>>>> the policy.
->>>>>
->>>>
->>>> The latency and bandwidth details are already exposed via 
->>>>
->>>> 	/sys/devices/system/node/nodeY/access0/initiators/
->>>>
->>>> Documentation/admin-guide/mm/numaperf.rst
->>>>
->>>> That is the interface that libraries like libmemkind will look at for finding
->>>> details w.r.t latency/bandwidth
->>>
->>> Yes.  Only with that, it's still inconvenient to find out which nodes
->>> belong to same memory type (has same performance, same topology, managed
->>> by same driver, etc).  So memory types can still provide useful
->>> information even without memory tiering.
->>>
->>
->> I am not sure i quiet follow what to conclude from your reply. I used the subsystem name
->> "memory_tiering" so that all memory tiering related information can be consolidated there.
->> I guess you agreed to the above part that we can consolidated things like that. 
-> 
-> I just prefer to separate memory_tier and memory_type sysfs directories
-> personally.  Because memory_type describes the physical memory types and
-> performance, while memory_tier is more about the policy to group
-> memory_types.
->
-IMHO we can decide on that based on why we end up adding memory_type details to sysfs. If that
-is only for memory tier modification from userspace we can look at adding that in the memory tiering
-sysfs hierarchy. 
+From: Menglong Dong <imagedong@tencent.com>
 
-Also since we have precedence of consolidating things within a sysfs hierarchy as explained in previous emails,
-I think we should keep "memory_tiering" as sysfs subsystem name? I hope we can get an agreement on that
-for now?
+As Eric reported, the 'reason' field is not presented when trace the
+kfree_skb event by perf:
 
--aneesh
+$ perf record -e skb:kfree_skb -a sleep 10
+$ perf script
+  ip_defrag 14605 [021]   221.614303:   skb:kfree_skb:
+  skbaddr=0xffff9d2851242700 protocol=34525 location=0xffffffffa39346b1
+  reason:
 
+The cause seems to be passing kernel address directly to TP_printk(),
+which is not right. As the enum 'skb_drop_reason' is not exported to
+user space through TRACE_DEFINE_ENUM(), perf can't get the drop reason
+string from the 'reason' field, which is a number.
+
+Therefore, we introduce the macro DEFINE_DROP_REASON(), which is used
+to define the trace enum by TRACE_DEFINE_ENUM(). With the help of
+DEFINE_DROP_REASON(), now we can remove the auto-generate that we
+introduced in the commit ec43908dd556
+("net: skb: use auto-generation to convert skb drop reason to string"),
+and define the string array 'drop_reasons'.
+
+Hmmmm...now we come back to the situation that have to maintain drop
+reasons in both enum skb_drop_reason and DEFINE_DROP_REASON. But they
+are both in dropreason.h, which makes it easier.
+
+After this commit, now the format of kfree_skb is like this:
+
+$ cat /tracing/events/skb/kfree_skb/format
+name: kfree_skb
+ID: 1524
+format:
+        field:unsigned short common_type;       offset:0;       size:2; signed:0;
+        field:unsigned char common_flags;       offset:2;       size:1; signed:0;
+        field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
+        field:int common_pid;   offset:4;       size:4; signed:1;
+
+        field:void * skbaddr;   offset:8;       size:8; signed:0;
+        field:void * location;  offset:16;      size:8; signed:0;
+        field:unsigned short protocol;  offset:24;      size:2; signed:0;
+        field:enum skb_drop_reason reason;      offset:28;      size:4; signed:0;
+
+print fmt: "skbaddr=%p protocol=%u location=%p reason: %s", REC->skbaddr, REC->protocol, REC->location, __print_symbolic(REC->reason, { 1, "NOT_SPECIFIED" }, { 2, "NO_SOCKET" } ......
+
+Fixes: ec43908dd556 ("net: skb: use auto-generation to convert skb drop reason to string")
+Link: https://lore.kernel.org/netdev/CANn89i+bx0ybvE55iMYf5GJM48WwV1HNpdm9Q6t-HaEstqpCSA@mail.gmail.com/
+Reported-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+---
+v3:
+- add missing Fixes and Link tags (Eric Dumazet)
+
+v2:
+- undef FN/FNe after use it (Jakub Kicinski)
+---
+ include/net/dropreason.h   | 67 ++++++++++++++++++++++++++++++++++++++
+ include/trace/events/skb.h | 15 ++++++++-
+ net/core/.gitignore        |  1 -
+ net/core/Makefile          | 22 +------------
+ net/core/skbuff.c          |  6 +++-
+ 5 files changed, 87 insertions(+), 24 deletions(-)
+ delete mode 100644 net/core/.gitignore
+
+diff --git a/include/net/dropreason.h b/include/net/dropreason.h
+index fae9b40e54fa..c1cbcdbaf149 100644
+--- a/include/net/dropreason.h
++++ b/include/net/dropreason.h
+@@ -3,6 +3,73 @@
+ #ifndef _LINUX_DROPREASON_H
+ #define _LINUX_DROPREASON_H
+ 
++#define DEFINE_DROP_REASON(FN, FNe)	\
++	FN(NOT_SPECIFIED)		\
++	FN(NO_SOCKET)			\
++	FN(PKT_TOO_SMALL)		\
++	FN(TCP_CSUM)			\
++	FN(SOCKET_FILTER)		\
++	FN(UDP_CSUM)			\
++	FN(NETFILTER_DROP)		\
++	FN(OTHERHOST)			\
++	FN(IP_CSUM)			\
++	FN(IP_INHDR)			\
++	FN(IP_RPFILTER)			\
++	FN(UNICAST_IN_L2_MULTICAST)	\
++	FN(XFRM_POLICY)			\
++	FN(IP_NOPROTO)			\
++	FN(SOCKET_RCVBUFF)		\
++	FN(PROTO_MEM)			\
++	FN(TCP_MD5NOTFOUND)		\
++	FN(TCP_MD5UNEXPECTED)		\
++	FN(TCP_MD5FAILURE)		\
++	FN(SOCKET_BACKLOG)		\
++	FN(TCP_FLAGS)			\
++	FN(TCP_ZEROWINDOW)		\
++	FN(TCP_OLD_DATA)		\
++	FN(TCP_OVERWINDOW)		\
++	FN(TCP_OFOMERGE)		\
++	FN(TCP_RFC7323_PAWS)		\
++	FN(TCP_INVALID_SEQUENCE)	\
++	FN(TCP_RESET)			\
++	FN(TCP_INVALID_SYN)		\
++	FN(TCP_CLOSE)			\
++	FN(TCP_FASTOPEN)		\
++	FN(TCP_OLD_ACK)			\
++	FN(TCP_TOO_OLD_ACK)		\
++	FN(TCP_ACK_UNSENT_DATA)		\
++	FN(TCP_OFO_QUEUE_PRUNE)		\
++	FN(TCP_OFO_DROP)		\
++	FN(IP_OUTNOROUTES)		\
++	FN(BPF_CGROUP_EGRESS)		\
++	FN(IPV6DISABLED)		\
++	FN(NEIGH_CREATEFAIL)		\
++	FN(NEIGH_FAILED)		\
++	FN(NEIGH_QUEUEFULL)		\
++	FN(NEIGH_DEAD)			\
++	FN(TC_EGRESS)			\
++	FN(QDISC_DROP)			\
++	FN(CPU_BACKLOG)			\
++	FN(XDP)				\
++	FN(TC_INGRESS)			\
++	FN(UNHANDLED_PROTO)		\
++	FN(SKB_CSUM)			\
++	FN(SKB_GSO_SEG)			\
++	FN(SKB_UCOPY_FAULT)		\
++	FN(DEV_HDR)			\
++	FN(DEV_READY)			\
++	FN(FULL_RING)			\
++	FN(NOMEM)			\
++	FN(HDR_TRUNC)			\
++	FN(TAP_FILTER)			\
++	FN(TAP_TXFILTER)		\
++	FN(ICMP_CSUM)			\
++	FN(INVALID_PROTO)		\
++	FN(IP_INADDRERRORS)		\
++	FN(IP_INNOROUTES)		\
++	FN(PKT_TOO_BIG)			\
++	FNe(MAX)
++
+ /**
+  * enum skb_drop_reason - the reasons of skb drops
+  *
+diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
+index 45264e4bb254..50a974f7dfb4 100644
+--- a/include/trace/events/skb.h
++++ b/include/trace/events/skb.h
+@@ -9,6 +9,15 @@
+ #include <linux/netdevice.h>
+ #include <linux/tracepoint.h>
+ 
++#undef FN
++#define FN(reason)	TRACE_DEFINE_ENUM(SKB_DROP_REASON_##reason);
++DEFINE_DROP_REASON(FN, FN)
++
++#undef FN
++#undef FNe
++#define FN(reason)	{ SKB_DROP_REASON_##reason, #reason },
++#define FNe(reason)	{ SKB_DROP_REASON_##reason, #reason }
++
+ /*
+  * Tracepoint for free an sk_buff:
+  */
+@@ -35,9 +44,13 @@ TRACE_EVENT(kfree_skb,
+ 
+ 	TP_printk("skbaddr=%p protocol=%u location=%p reason: %s",
+ 		  __entry->skbaddr, __entry->protocol, __entry->location,
+-		  drop_reasons[__entry->reason])
++		  __print_symbolic(__entry->reason,
++				   DEFINE_DROP_REASON(FN, FNe)))
+ );
+ 
++#undef FN
++#undef FNe
++
+ TRACE_EVENT(consume_skb,
+ 
+ 	TP_PROTO(struct sk_buff *skb),
+diff --git a/net/core/.gitignore b/net/core/.gitignore
+deleted file mode 100644
+index df1e74372cce..000000000000
+--- a/net/core/.gitignore
++++ /dev/null
+@@ -1 +0,0 @@
+-dropreason_str.c
+diff --git a/net/core/Makefile b/net/core/Makefile
+index e8ce3bd283a6..5857cec87b83 100644
+--- a/net/core/Makefile
++++ b/net/core/Makefile
+@@ -5,7 +5,7 @@
+ 
+ obj-y := sock.o request_sock.o skbuff.o datagram.o stream.o scm.o \
+ 	 gen_stats.o gen_estimator.o net_namespace.o secure_seq.o \
+-	 flow_dissector.o dropreason_str.o
++	 flow_dissector.o
+ 
+ obj-$(CONFIG_SYSCTL) += sysctl_net_core.o
+ 
+@@ -40,23 +40,3 @@ obj-$(CONFIG_NET_SOCK_MSG) += skmsg.o
+ obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
+ obj-$(CONFIG_OF)	+= of_net.o
+-
+-clean-files := dropreason_str.c
+-
+-quiet_cmd_dropreason_str = GEN     $@
+-cmd_dropreason_str = awk -F ',' 'BEGIN{ print "\#include <net/dropreason.h>\n"; \
+-	print "const char * const drop_reasons[] = {" }\
+-	/^enum skb_drop/ { dr=1; }\
+-	/^\};/ { dr=0; }\
+-	/^\tSKB_DROP_REASON_/ {\
+-		if (dr) {\
+-			sub(/\tSKB_DROP_REASON_/, "", $$1);\
+-			printf "\t[SKB_DROP_REASON_%s] = \"%s\",\n", $$1, $$1;\
+-		}\
+-	}\
+-	END{ print "};" }' $< > $@
+-
+-$(obj)/dropreason_str.c: $(srctree)/include/net/dropreason.h
+-	$(call cmd,dropreason_str)
+-
+-$(obj)/dropreason_str.o: $(obj)/dropreason_str.c
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 48ecfbf29174..f1b8b20fc20b 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -91,7 +91,11 @@ static struct kmem_cache *skbuff_ext_cache __ro_after_init;
+ int sysctl_max_skb_frags __read_mostly = MAX_SKB_FRAGS;
+ EXPORT_SYMBOL(sysctl_max_skb_frags);
+ 
+-/* The array 'drop_reasons' is auto-generated in dropreason_str.c */
++#undef FN
++#define FN(reason) [SKB_DROP_REASON_##reason] = #reason,
++const char * const drop_reasons[] = {
++	DEFINE_DROP_REASON(FN, FN)
++};
+ EXPORT_SYMBOL(drop_reasons);
+ 
+ /**
+-- 
+2.37.2
 

@@ -2,156 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DA65ACF02
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 618FA5ACF0B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237426AbiIEJio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 05:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S236916AbiIEJmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 05:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237359AbiIEJim (ORCPT
+        with ESMTP id S236526AbiIEJmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 05:38:42 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A35952831
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 02:38:41 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MLk3g3Dkkz9sf2;
-        Mon,  5 Sep 2022 11:38:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Kv_mhwZ_2oli; Mon,  5 Sep 2022 11:38:39 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MLk3Y3cKhz9sfx;
-        Mon,  5 Sep 2022 11:38:33 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 69FAF8B76C;
-        Mon,  5 Sep 2022 11:38:33 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id oBEjZLODXewf; Mon,  5 Sep 2022 11:38:33 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4232A8B763;
-        Mon,  5 Sep 2022 11:38:33 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2859cQXm2574990
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 5 Sep 2022 11:38:26 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2859cPQi2574988;
-        Mon, 5 Sep 2022 11:38:25 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc/book3s: Inline first level of update_mmu_cache()
-Date:   Mon,  5 Sep 2022 11:38:25 +0200
-Message-Id: <bea5ad0de7f83eff256116816d46c84fa0a444de.1662370698.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Mon, 5 Sep 2022 05:42:40 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B314E86B
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 02:42:38 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id g5-20020a92cda5000000b002e954ecceb0so6929049ild.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 02:42:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=X3yk1eG/DV5Le3kCaxu0Ha0WlwBmmsjzDesiw7cpZEM=;
+        b=m353b/CB6VKG+uq/1wHpxSPS9qbX6DoEIyMfJIlyqWlrJ5FKRG5Nu1dNu01U6jcmCm
+         w+Zn3YOnmp5Y3kys3hl+jPvqIL2rf+W+wPKMk7Y+9AKeDbFId67zHwQuzoAK/DiSx37K
+         E31YXiHddY+MHJ7T8dq1UNNZUP6PijhY0vL13WndhzMzTutRGQX9XwQp35ZCv/2zLQAR
+         WX/CoNdFK8XXecp0ialVy+yE9U6EMyoZwMboyR3RSdSUIpLnLl4FbCiInB5MzmsultLN
+         gZXyDm3m19rb8gCO6v8TQ0AmE4AM7N4QhsZf3hCqw/aIibpLuo1kjTPQ351s9bs5IwPQ
+         LsOw==
+X-Gm-Message-State: ACgBeo0T4N/QA4uKzUTwZHs471gvb3P+e7KS3D/5jNgG/VdbXV9230Xc
+        kWBi+e7G+E31sE1oqVxs11eslwrR4SHJd8VdyFt9VBk2QBFn
+X-Google-Smtp-Source: AA6agR681pLVYWY+KeBgzKX9+rikNjuvJjzOHnLjjwGbsfRlpFuTOZTpFMkAnpkeOJPO2pxVhl1tiE5zgmk1B1bKRzs0I0FHvOSO
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662370704; l=3705; s=20211009; h=from:subject:message-id; bh=qKquPqCwVOVBNSiGTfFSYH26Sba7qHorr6rv6pPHCmQ=; b=tneaAHvb+tDXQ74I3O8vmHZHWSL2HSHYmUrAGWUYPXRVm8dDBro3cVX1eBFuZqzBnli4bZJLG4OK ZcCsLvv/DY4Mc+rwFy3Ny8IDJJPWdxOBBRYtDNe69u9Yb+CRgyTA
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:1c2c:b0:2ee:5b19:fbf4 with SMTP id
+ m12-20020a056e021c2c00b002ee5b19fbf4mr8438540ilh.131.1662370957895; Mon, 05
+ Sep 2022 02:42:37 -0700 (PDT)
+Date:   Mon, 05 Sep 2022 02:42:37 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006e2d4305e7eae644@google.com>
+Subject: [syzbot] WARNING: refcount bug in drm_gem_object_handle_put_unlocked
+From:   syzbot <syzbot+c512687fff9d22327436@syzkaller.appspotmail.com>
+To:     airlied@linux.ie, christian.koenig@amd.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com,
+        tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-update_mmu_cache() voids when hash page tables are not used.
-On PPC32 that means when MMU_FTR_HPTE_TABLE is not defined.
-On PPC64 that means when RADIX is enabled.
+Hello,
 
-Rename core part of update_mmu_cache() as __update_mmu_cache()
-and include the initial verification in an inlined caller.
+syzbot found the following issue on:
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17ae17bd080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
+dashboard link: https://syzkaller.appspot.com/bug?extid=c512687fff9d22327436
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10e8fee5080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b6bf13080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c512687fff9d22327436@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+refcount_t: underflow; use-after-free.
+WARNING: CPU: 0 PID: 3029 at lib/refcount.c:28 refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+Modules linked in:
+CPU: 0 PID: 3029 Comm: syz-executor717 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+lr : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+sp : ffff80001200baa0
+x29: ffff80001200baa0 x28: 00000000000a201d x27: 0000000000002000
+x26: dead000000000100 x25: 0000000000000000 x24: 0000000000000001
+x23: 0000000000000001 x22: 0000000000000000 x21: 0000000000000000
+x20: 0000000000000003 x19: ffff80000d937000 x18: 00000000000000c0
+x17: ffff80000dd7a698 x16: ffff80000dbb8658 x15: ffff0000c10a4f80
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c10a4f80
+x11: ff808000081c39dc x10: 0000000000000000 x9 : 9016e5cf66052a00
+x8 : 9016e5cf66052a00 x7 : ffff800008197c8c x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000026
+Call trace:
+ refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+ __refcount_sub_and_test include/linux/refcount.h:283 [inline]
+ __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+ refcount_dec_and_test include/linux/refcount.h:333 [inline]
+ kref_put include/linux/kref.h:64 [inline]
+ __drm_gem_object_put include/drm/drm_gem.h:381 [inline]
+ drm_gem_object_put include/drm/drm_gem.h:394 [inline]
+ drm_gem_object_handle_put_unlocked+0x178/0x190 drivers/gpu/drm/drm_gem.c:240
+ drm_gem_object_release_handle+0x90/0xa8 drivers/gpu/drm/drm_gem.c:259
+ idr_for_each+0xf0/0x174 lib/idr.c:208
+ drm_gem_release+0x30/0x48 drivers/gpu/drm/drm_gem.c:932
+ drm_file_free+0x220/0x2cc drivers/gpu/drm/drm_file.c:281
+ drm_close_helper drivers/gpu/drm/drm_file.c:308 [inline]
+ drm_release+0x108/0x22c drivers/gpu/drm/drm_file.c:495
+ __fput+0x198/0x3bc fs/file_table.c:320
+ ____fput+0x20/0x30 fs/file_table.c:353
+ task_work_run+0xc4/0x208 kernel/task_work.c:177
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x26c/0xbb8 kernel/exit.c:795
+ do_group_exit+0x60/0xe8 kernel/exit.c:925
+ __do_sys_exit_group kernel/exit.c:936 [inline]
+ __se_sys_exit_group kernel/exit.c:934 [inline]
+ __wake_up_parent+0x0/0x40 kernel/exit.c:934
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+irq event stamp: 12698
+hardirqs last  enabled at (12697): [<ffff8000081c1c48>] __up_console_sem+0xb0/0xfc kernel/printk/printk.c:264
+hardirqs last disabled at (12698): [<ffff80000bffe9cc>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
+softirqs last  enabled at (12442): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (12417): [<ffff800008104658>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
+softirqs last disabled at (12417): [<ffff800008104658>] invoke_softirq+0x70/0xbc kernel/softirq.c:452
+---[ end trace 0000000000000000 ]---
+
+
 ---
- arch/powerpc/include/asm/book3s/pgtable.h | 15 ++++++++++-----
- arch/powerpc/mm/book3s32/mmu.c            |  4 +---
- arch/powerpc/mm/book3s64/hash_utils.c     |  5 +----
- 3 files changed, 12 insertions(+), 12 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/powerpc/include/asm/book3s/pgtable.h b/arch/powerpc/include/asm/book3s/pgtable.h
-index e8269434ecbe..d18b748ea3ae 100644
---- a/arch/powerpc/include/asm/book3s/pgtable.h
-+++ b/arch/powerpc/include/asm/book3s/pgtable.h
-@@ -25,7 +25,8 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
- 				     unsigned long size, pgprot_t vma_prot);
- #define __HAVE_PHYS_MEM_ACCESS_PROT
- 
--#if defined(CONFIG_PPC32) || defined(CONFIG_PPC_64S_HASH_MMU)
-+void __update_mmu_cache(struct vm_area_struct *vma, unsigned long address, pte_t *ptep);
-+
- /*
-  * This gets called at the end of handling a page fault, when
-  * the kernel has put a new PTE into the page table for the process.
-@@ -35,10 +36,14 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
-  * corresponding HPTE into the hash table ahead of time, instead of
-  * waiting for the inevitable extra hash-table miss exception.
-  */
--void update_mmu_cache(struct vm_area_struct *vma, unsigned long address, pte_t *ptep);
--#else
--static inline void update_mmu_cache(struct vm_area_struct *vma, unsigned long address, pte_t *ptep) {}
--#endif
-+static inline void update_mmu_cache(struct vm_area_struct *vma, unsigned long address, pte_t *ptep)
-+{
-+	if (IS_ENABLED(CONFIG_PPC32) && !mmu_has_feature(MMU_FTR_HPTE_TABLE))
-+		return;
-+	if (radix_enabled())
-+		return;
-+	__update_mmu_cache(vma, address, ptep);
-+}
- 
- #endif /* __ASSEMBLY__ */
- #endif
-diff --git a/arch/powerpc/mm/book3s32/mmu.c b/arch/powerpc/mm/book3s32/mmu.c
-index a96b73006dfb..7053eb229b4f 100644
---- a/arch/powerpc/mm/book3s32/mmu.c
-+++ b/arch/powerpc/mm/book3s32/mmu.c
-@@ -314,11 +314,9 @@ static void hash_preload(struct mm_struct *mm, unsigned long ea)
-  *
-  * This must always be called with the pte lock held.
-  */
--void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-+void __update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
- 		      pte_t *ptep)
- {
--	if (!mmu_has_feature(MMU_FTR_HPTE_TABLE))
--		return;
- 	/*
- 	 * We don't need to worry about _PAGE_PRESENT here because we are
- 	 * called with either mm->page_table_lock held or ptl lock held
-diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
-index 363a9447d63d..ced1107b1677 100644
---- a/arch/powerpc/mm/book3s64/hash_utils.c
-+++ b/arch/powerpc/mm/book3s64/hash_utils.c
-@@ -1781,7 +1781,7 @@ static void hash_preload(struct mm_struct *mm, pte_t *ptep, unsigned long ea,
-  *
-  * This must always be called with the pte lock held.
-  */
--void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-+void __update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
- 		      pte_t *ptep)
- {
- 	/*
-@@ -1791,9 +1791,6 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
- 	unsigned long trap;
- 	bool is_exec;
- 
--	if (radix_enabled())
--		return;
--
- 	/* We only want HPTEs for linux PTEs that have _PAGE_ACCESSED set */
- 	if (!pte_young(*ptep) || address >= TASK_SIZE)
- 		return;
--- 
-2.37.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,168 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6784D5ACB7A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272C15ACB67
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236267AbiIEGxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 02:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S236241AbiIEGyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 02:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbiIEGxq (ORCPT
+        with ESMTP id S236355AbiIEGyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 02:53:46 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECAE3C15A
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 23:53:44 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MLfKG1c7yzlWs6;
-        Mon,  5 Sep 2022 14:50:10 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 14:53:41 +0800
-Subject: Re: [PATCH 2/6] mm, hwpoison: use __PageMovable() to detect non-lru
- movable pages
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220830123604.25763-1-linmiaohe@huawei.com>
- <20220830123604.25763-3-linmiaohe@huawei.com>
- <20220905052243.GA1355682@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <1f7ee86e-7d28-0d8c-e0de-b7a5a94519e8@huawei.com>
-Date:   Mon, 5 Sep 2022 14:53:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 5 Sep 2022 02:54:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B13B7FF;
+        Sun,  4 Sep 2022 23:54:39 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2855eb4Z021847;
+        Mon, 5 Sep 2022 06:54:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ZUIEl+4WD4NaRQLXv9dXuG1XnICSHABP58clEbULyY4=;
+ b=CExsCnCwmszsru6VWg5nXrwsLrX+EpK9wbdsqO234BIf7hfsh4Kzf4u/s1u9Nhnumogd
+ 5sSM8LEpn9TovDwX0VWVmtNrlb8so8fI8JJxYIPM7a4jwpSWxieRvnxMOk6CB8IWR8JJ
+ PJ6Dp/14iYV3x73+60LIA0ZNg2paMi0pkxEGmlToKFQ6iF09De55wpvt8yg18nM1NX9A
+ g2A8fz7puIDkMMUObkogXuv+5bTWYKiWetUVfi7+H6QoYjEn+KTD0SPKgzjs68X5nJ14
+ rwtQ8+7zQG2K7V0VjffKPHBXeat9s/VUDfgAXTGw7zI09rxdiVH7tFUZ2yoXZ6ElbBdc gg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jbww03fcp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 06:54:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2856sIF2022812
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 5 Sep 2022 06:54:18 GMT
+Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Sun, 4 Sep 2022 23:54:14 -0700
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH v13 0/9] Coresight: Add support for TPDM and TPDA 
+Date:   Mon, 5 Sep 2022 14:53:48 +0800
+Message-ID: <20220905065357.1296-1-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20220905052243.GA1355682@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nYMrwkHFN9tEXdHjVf2KGRCF3b-ZhifA
+X-Proofpoint-ORIG-GUID: nYMrwkHFN9tEXdHjVf2KGRCF3b-ZhifA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-05_05,2022-09-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
+ bulkscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209050033
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/5 13:22, HORIGUCHI NAOYA(堀口 直也) wrote:
-> Hi Miaohe,
-> 
-> On Tue, Aug 30, 2022 at 08:36:00PM +0800, Miaohe Lin wrote:
->> It's more recommended to use __PageMovable() to detect non-lru movable
->> pages. We can avoid bumping page refcnt via isolate_movable_page() for
->> the isolated lru pages. Also if pages become PageLRU just after they're
->> checked but before trying to isolate them, isolate_lru_page() will be
->> called to do the right work.
-> 
-> Good point, non-lru movable page is currently handled by isolate_lru_page(),
-> which always fails.  This means that we lost the chance of soft-offlining
-> for any non-lru movable page.  So this patch improves the situation.
+This series adds support for the trace performance monitoring and
+diagnostics hardware (TPDM and TPDA). It is composed of two major
+elements.
+a) Changes for original coresight framework to support for TPDM and TPDA.
+b) Add driver code for TPDM and TPDA.
 
-Non-lru movable page will still be handled by isolate_movable_page() before the code change
-as they don't have PageLRU set. The current situation is that the isolated LRU pages are
-passed to isolate_movable_page() uncorrectly. This might not hurt. But the chance that pages
-become un-isolated and thus available just after checking could be seized with this patch.
+Introduction of changes for original coresight framework
+Support TPDM as new coresight source.
+Since only STM and ETM are supported as coresight source originally.
+TPDM is a newly added coresight source. We need to change
+the original way of saving coresight path to support more types source
+for coresight driver.
+The following patch is to add support more coresight sources.
+    coresight: core: Use IDR for non-cpu bound sources' paths.
 
-> 
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/memory-failure.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index a923a6dde871..3966fa6abe03 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -2404,7 +2404,7 @@ EXPORT_SYMBOL(unpoison_memory);
->>  static bool isolate_page(struct page *page, struct list_head *pagelist)
->>  {
->>  	bool isolated = false;
->> -	bool lru = PageLRU(page);
->> +	bool lru = !__PageMovable(page);
-> 
-> It seems that PAGE_MAPPING_MOVABLE is not set for hugetlb pages, so
-> lru becomes true for them.  Then, if isolate_hugetlb() succeeds,
-> inc_node_page_state() is called for hugetlb pages, maybe that's not expected.
+Introduction of TPDM and TPDA
+TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
+short serves as data collection component for various dataset types
+specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+architecture) spec. The primary use case of the TPDM is to collect data
+from different data sources and send it to a TPDA for packetization,
+timestamping and funneling.
+     Coresight: Add coresight TPDM source driver
+     dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+     coresight-tpdm: Add DSB dataset support
+     coresight-tpdm: Add integration test support
+     docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
 
-Yes, that's unexpected. Thanks for pointing this out.
+TPDA - The trace performance monitoring and diagnostics aggregator or
+TPDA in short serves as an arbitration and packetization engine for the
+performance monitoring and diagnostics network as specified in the QPMDA
+(Qualcomm performance monitoring and diagnostics architecture)
+specification. The primary use case of the TPDA is to provide
+packetization, funneling and timestamping of Monitor data as specified
+in the QPMDA specification.
+The following patch is to add driver for TPDA.
+     Coresight: Add TPDA link driver
+     dt-bindings: arm: Adds CoreSight TPDA hardware definitions
 
-> 
->>  
->>  	if (PageHuge(page)) {
->>  		isolated = !isolate_hugetlb(page, pagelist);
->         } else {
->                 if (lru)
->                         isolated = !isolate_lru_page(page);
->                 else
->                         isolated = !isolate_movable_page(page, ISOLATE_UNEVICTABLE);
-> 
->                 if (isolated)
->                         list_add(&page->lru, pagelist);
->         }
-> 
->         if (isolated && lru)
->                 inc_node_page_state(page, NR_ISOLATED_ANON +
->                                     page_is_file_lru(page));
-> 
-> so, how about moving this if block into the above else block?
-> Then, the automatic variable lru can be moved into the else block.
+The last patch of this series is a device tree modification, which add
+the TPDM and TPDA configuration to device tree for validating.
+    ARM: dts: msm: Add coresight components for SM8250
+    ARM: dts: msm: Add tpdm mm/prng for sm8250
 
-Do you mean something like below?
+Once this series patches are applied properly, the tpdm and tpda nodes
+should be observed at the coresight path /sys/bus/coresight/devices
+e.g.
+/sys/bus/coresight/devices # ls -l | grep tpd
+tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index df3bf266eebf..48780f3a61d3 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2404,24 +2404,25 @@ EXPORT_SYMBOL(unpoison_memory);
- static bool isolate_page(struct page *page, struct list_head *pagelist)
- {
-        bool isolated = false;
--       bool lru = !__PageMovable(page);
+We can use the commands are similar to the below to validate TPDMs.
+Enable coresight sink first.
 
-        if (PageHuge(page)) {
-                isolated = !isolate_hugetlb(page, pagelist);
-        } else {
-+               bool lru = !__PageMovable(page);
-+
-                if (lru)
-                        isolated = !isolate_lru_page(page);
-                else
-                        isolated = !isolate_movable_page(page, ISOLATE_UNEVICTABLE);
+echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+The test data will be collected in the coresight sink which is enabled.
+If rwp register of the sink is keeping updating when do
+integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+generated from TPDM to sink.
 
--               if (isolated)
-+               if (isolated) {
-                        list_add(&page->lru, pagelist);
-+                       if (lru)
-+                               inc_node_page_state(page, NR_ISOLATED_ANON +
-+                                                   page_is_file_lru(page));
-+               }
-        }
+There must be a tpda between tpdm and the sink. When there are some
+other trace event hw components in the same HW block with tpdm, tpdm
+and these hw components will connect to the coresight funnel. When
+there is only tpdm trace hw in the HW block, tpdm will connect to
+tpda directly.
+  
+    +---------------+                +-------------+
+    |  tpdm@6c08000 |                |tpdm@684C000 |
+    +-------|-------+                +------|------+
+            |                               |
+    +-------|-------+                       |
+    | funnel@6c0b000|                       |
+    +-------|-------+                       |
+            |                               |
+    +-------|-------+                       |
+    |funnel@6c2d000 |                       |
+    +-------|-------+                       |
+            |                               |
+            |    +---------------+          |
+            +----- tpda@6004000  -----------+
+                 +-------|-------+
+                         |
+                 +-------|-------+
+                 |funnel@6005000 |
+                 +---------------+
 
--       if (isolated && lru)
--               inc_node_page_state(page, NR_ISOLATED_ANON +
--                                   page_is_file_lru(page));
--
-        /*
-         * If we succeed to isolate the page, we grabbed another refcount on
-         * the page, so we can safely drop the one we got from get_any_pages().
+This patch series depends on patch series:
+"[v4,00/13] coresight: Add new API to allocate trace source ID values"
+https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220823091009.14121-1-mike.leach@linaro.org/
 
-> 
-> Thanks,
-> Naoya Horiguchi
+Changes from V12:
+1. Fix the conflicts when apply patches to the latest base line.
 
-Thanks a lot for your review and comment on this series, Naoya.
+Mao Jinlong (9):
+  coresight: core: Use IDR for non-cpu bound sources' paths.
+  Coresight: Add coresight TPDM source driver
+  dt-bindings: arm: Adds CoreSight TPDM hardware
+  coresight-tpdm: Add DSB dataset support
+  coresight-tpdm: Add integration test support
+  Coresight: Add TPDA link driver
+  dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+  arm64: dts: qcom: sm8250: Add coresight components
+  arm64: dts: qcom: sm8250: Add tpdm mm/prng
 
-Thanks,
-Miaohe Lin.
+ .../testing/sysfs-bus-coresight-devices-tpdm  |  13 +
+ .../bindings/arm/qcom,coresight-tpda.yaml     | 111 +++
+ .../bindings/arm/qcom,coresight-tpdm.yaml     |  93 +++
+ MAINTAINERS                                   |   1 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 671 ++++++++++++++++++
+ drivers/hwtracing/coresight/Kconfig           |  23 +
+ drivers/hwtracing/coresight/Makefile          |   2 +
+ drivers/hwtracing/coresight/coresight-core.c  |  42 +-
+ drivers/hwtracing/coresight/coresight-tpda.c  | 208 ++++++
+ drivers/hwtracing/coresight/coresight-tpda.h  |  35 +
+ drivers/hwtracing/coresight/coresight-tpdm.c  | 259 +++++++
+ drivers/hwtracing/coresight/coresight-tpdm.h  |  62 ++
+ include/linux/coresight.h                     |   1 +
+ 13 files changed, 1509 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+
+-- 
+2.17.1
 

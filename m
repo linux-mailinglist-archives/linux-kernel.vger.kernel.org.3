@@ -2,206 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C925AD6EB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765645AD704
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237725AbiIEPyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 11:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
+        id S231400AbiIEP6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 11:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238227AbiIEPyG (ORCPT
+        with ESMTP id S230043AbiIEP6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 11:54:06 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512065E67F
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 08:54:04 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id j14so13687316lfu.4
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 08:54:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=axcq0cGN9BhyHQpt/85tTBoyR2tAVPcLTBqmW6py4bI=;
-        b=EvKjans9FGr8FG9rT4gME7E5YvWEzwRQWFIpr6VbBeoqQQ/lrmcozd/n7Jx2My49u/
-         WIYXH42xflcqzXMRtcLQFeTbBysLQTiCL6qZsPlgYqM/KDa6GfchSfU9BNefXVIc9zjP
-         2lDKkO7bmYDNHJSeeSrsOV5DHjslnOzDKfxgXTKcocDN+V0pddXvHXp6I9w32JXk6gwX
-         Q6RN0xuAd2JjMVVqmLoWwcVQBd6hOhx5w0SEmGLFfBjxM61XoASGcRT5ViAORx2+kABU
-         gflXFeFMvrg9DoA0TsRBCbsw9k3y11iWHtfpFs7y0YfbTtZ00fvNhCiE9hXFuP0qf6f/
-         aRXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=axcq0cGN9BhyHQpt/85tTBoyR2tAVPcLTBqmW6py4bI=;
-        b=Cqmq1F0CHoCE1u2L9bMKkYPDFODaifRFB1uICOwgf0ZwSbQ8Gc8LNePC+K243i58Hv
-         8ujSVdNVmzG3X/X9odFDoJgCbhctj+nuzDgttOC+PUAIc7a9YDwMriTMlnOt8b5JMLCC
-         r2qmk9epnJEaH4NJTC3UrmUq9vBfyN5SkDvTGQRf+54pyLcb5Xpv7bAuDaCcqeiNateC
-         HTTqEY9piAqR/SQELWBJdhKhDbG2CVB/g+Lmv1xbnTyMwKMQANpg+137LBOiutpRHlCg
-         c+DPsig77aZkLZx5SdvYHidHFOL/iGe/1GkYhTVEpiJJBKBz9B+b3W48+UARd8pSsZnW
-         aKfg==
-X-Gm-Message-State: ACgBeo3MHE/PZ1C7QKyZ4zbHu6LLvpyWE0iNm0xgCwP5yIAVq5zr2lrX
-        B1OLuxTtyQ6yL1iQVCprdx3zEn3QXDgSfW383ZCgiQ==
-X-Google-Smtp-Source: AA6agR4/5He9Y3Z7G1/htuFab9D5EBSz11P00unv5/mdq5+/IKf2s7S3N+YLnud3GaNs7zq/EGDj1cz0w1kwEevaVVU=
-X-Received: by 2002:a05:6512:118b:b0:492:e3c4:a164 with SMTP id
- g11-20020a056512118b00b00492e3c4a164mr17965949lfr.598.1662393242431; Mon, 05
- Sep 2022 08:54:02 -0700 (PDT)
+        Mon, 5 Sep 2022 11:58:13 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298D412616;
+        Mon,  5 Sep 2022 08:58:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CBORDRsz5kGle9Y3bP1Gu/hpK/nuzq4n0cH15n3ZtVDGNWLY3AaAuV24Apa+HFqrDN5b1EQt5NJTblO1rMxF8AhzaWVDYqm39LsPXkzqfltZgfd26ZgW8URn3zYJvOqU/WBvdLrZRnb0T14a+8I/gHNPAbvpJx7m+RLJRRfSppmsBIgwkSas7zcOLJwM9ARaJzqemT+QYmK9Og0ybFv9V8nQd/YvGUIYyrZ4CxCiNyPxyiRazaGmMHbYCndoqDtpm+XiNyEwr7D+TTzzc7Vm3KJJ6oVEGUgkT8SphxB7DEcvFMoERMxwWKtBaNDXY7iuP6jdCw8lKc4N4BtnfP+/qQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tFqqqRjkdG2e3v/z334g1131NoYzU4caX8u9JyR6s+E=;
+ b=BiuRqu+H5PJdCQJZpSHejptEfTnJtup+YfoJLZJkrvyzivgZKEprFmjBNLcbuuMs8yyLo3v55i0NGYvZXz1w3Yc/Lxgz6Lr9k7DiEog9cxuycjuEKb8KTYayvRH2MOgjwrAXAgNLBlD0rabOmyAQi6UbxgdGQ2QqFp5baQt61YhSt5I9rWjjoXHAuDa1fbruORRP7uezhljMTUUKYeAWO9BOoLI0iKaekHchUgM25btSFyy7nctejrek0sZsl9d/nBzvnZlthv7Ilfp7HI9zfOHYiYVQa5sSFWFuiJtyGByChKPJ6muA/DlnSNpxSSjyV1CAbBFFF8noe6awfM96oQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tFqqqRjkdG2e3v/z334g1131NoYzU4caX8u9JyR6s+E=;
+ b=Wg6kCRRtjnE+6SEZrhHQts9q6W4QSK2vgVb157J1Z5kN7HhzDPo5PSN+ORMxMyfTq6vJLS/81ybQ4YaD54MQ24VCKyf1plHF4iXuGjLdR+y9dg7nhDFITw19+pljS80xyVNfQY+mEi/tsDa3hYrrFlgHWDdQ6YENBkPH0us0P8ar/ejsQv8dLcdDdMrnjxEjL741wGLrkdGu03I1ED9SMB0gc0Q+RV7pzN64wptWCP02JfFE3pzC2S5tqWYAnkpNOZdWNaIWRF2vDzGSJWdEnZHTyuZdYg2Gh380leN2WA2nMbXX/8wv5i65j2JkdzDrz8Omrk2UlPd83oXWKxa05A==
+Received: from MW2PR16CA0001.namprd16.prod.outlook.com (2603:10b6:907::14) by
+ DM4PR12MB5104.namprd12.prod.outlook.com (2603:10b6:5:393::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.10; Mon, 5 Sep 2022 15:58:10 +0000
+Received: from CO1NAM11FT017.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:907:0:cafe::b5) by MW2PR16CA0001.outlook.office365.com
+ (2603:10b6:907::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18 via Frontend
+ Transport; Mon, 5 Sep 2022 15:58:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.234) by
+ CO1NAM11FT017.mail.protection.outlook.com (10.13.175.108) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5588.10 via Frontend Transport; Mon, 5 Sep 2022 15:58:10 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.38; Mon, 5 Sep 2022 15:58:09 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 5 Sep 2022 08:58:08 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Mon, 5 Sep 2022 08:58:06 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <treding@nvidia.com>, <jonathanh@nvidia.com>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <bbasu@nvidia.com>, <sumitg@nvidia.com>, <sanjayc@nvidia.com>,
+        <ksitaraman@nvidia.com>
+Subject: [Patch] cpufreq: tegra239: Add support for T239
+Date:   Mon, 5 Sep 2022 21:27:59 +0530
+Message-ID: <20220905155759.17743-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <20220902100057.404817-1-elver@google.com>
-In-Reply-To: <20220902100057.404817-1-elver@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 5 Sep 2022 17:53:50 +0200
-Message-ID: <CACT4Y+ZCzoK9+3qKOzXSHvZ5cfaXpYXbBL+R9bicapOuRpUNFQ@mail.gmail.com>
-Subject: Re: [PATCH] perf: Allow restricted kernel breakpoints on user addresses
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Jann Horn <jannh@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 59a045fc-e8e1-4239-2edf-08da8f576e4c
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5104:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ampBNxy0GcY3dAGq9fDpiaaGGHjaYxyd7vc8VuoEHA3rcQo5Zmt9mQmXy2ZKaNo6yVHqQ8kdOn65mz65lmaOffSFwk9XTA+/qfxmJg8WT4S06W2Fe2xkNGyxxkAhk/qPoOIRtXwhV2jPmB7I+a4rvgeieYA5QazxTGzNr1lPJXJhC/KXhKuOtkxGFJ7qonXauMIlVMsp46S8uIaoS9gTLbbKwGK9LDqwArsgLRV7Y9SFc2jOCcV7QQErQHcG96N2ySUrGkAMyc6K/a9nIAQRG3SbvQBjFMF2QjSNKTPqJmS3vVanrLlCtkGMdzXpPyvWzyCAt7A5uU15wPxjEonWLJCybPYIERgWR+l/oqdkaN2BQcDWEMopyY4IiH5YVNB+os4qaD9lju0QsrQNq34jLBuzFq12fwK3LjU+pj9wOXNBm7iqHtrw85ujO+m02EL58Mw23spB2FBSPyh62JmksWvj6qLbXYBvJYFpYwmire7ocW6L3yOb82CyN8Qz6E6IzFHAHr+9L+aMEimPDduOcrRjgfmGVGJeCG0IvWmi8eCijBCMwkRG6k8YQZnUXlu1X4r8uc7XrEVgJfO8A2vKrGS168sQ8DAujUh6Bo43dzXqtuIahuWpIyY75S2lgme1aZdkb61Fu3rts5H3YIEAkK9vuKwSd960e4tA2AwEPwX4mPPKESpzaCZnJvCm6p2Y4AYR18ETUqfVGffY8atalVQGyZPxMqFpiYZII3fPXB2IdEss40CqFkD4q4JdHHjFNLtRoMW3CfPdQI5fDZgKM8SD5TreKQksNoLh9ncLua5J9I1FjykkAuncEAVYlu0a
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(396003)(136003)(346002)(40470700004)(46966006)(36840700001)(107886003)(7696005)(26005)(6666004)(478600001)(41300700001)(47076005)(83380400001)(426003)(5660300002)(336012)(2906002)(2616005)(8936002)(40480700001)(82310400005)(40460700003)(54906003)(110136005)(186003)(1076003)(70206006)(4326008)(8676002)(70586007)(36756003)(82740400003)(86362001)(81166007)(356005)(316002)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 15:58:10.0666
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59a045fc-e8e1-4239-2edf-08da8f576e4c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT017.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5104
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Sept 2022 at 12:01, Marco Elver <elver@google.com> wrote:
->
-> Allow the creation of restricted breakpoint perf events that also fire
-> in the kernel (!exclude_kernel), if:
->
->   1. No sample information is requested; samples may contain IPs,
->      registers, or other information that may disclose kernel addresses.
->
->   2. The breakpoint (viz. data watchpoint) is on a user address.
->
-> The rules constrain the allowable perf events such that no sensitive
-> kernel information can be disclosed.
->
-> Despite no explicit kernel information disclosure, the following
-> questions may need answers:
->
->  1. Is obtaining information that the kernel accessed a particular
->     user's known memory location revealing new information?
->     Given the kernel's user space ABI, there should be no "surprise
->     accesses" to user space memory in the first place.
->
->  2. Does causing breakpoints on user memory accesses by the kernel
->     potentially impact timing in a sensitive way?
->     Since hardware breakpoints trigger regardless of the state of
->     perf_event_attr::exclude_kernel, but are filtered in the perf
->     subsystem, this possibility already exists independent of the
->     proposed change.
+Adding support for Tegra239 SoC which has eight cores in
+a single cluster. Also, moving num_clusters to soc data
+to avoid over allocating memory for four clusters always.
 
-I don't see how this gives userspace any new information.
-As you noted userspace already should know what userspace addresses
-kernel accesses. Additionally since the breakpoint fires anyway (just
-filtered out), the fact of it firing should be easily recoverable from
-the timing side-channel already. So:
+Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+---
+ drivers/cpufreq/tegra194-cpufreq.c | 29 +++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
 
-Acked-by: Dmitry Vyukov <dvyukov@google.com>
+diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+index 1216046cf4c2..f38a760da61b 100644
+--- a/drivers/cpufreq/tegra194-cpufreq.c
++++ b/drivers/cpufreq/tegra194-cpufreq.c
+@@ -38,14 +38,6 @@
+ /* cpufreq transisition latency */
+ #define TEGRA_CPUFREQ_TRANSITION_LATENCY (300 * 1000) /* unit in nanoseconds */
+ 
+-enum cluster {
+-	CLUSTER0,
+-	CLUSTER1,
+-	CLUSTER2,
+-	CLUSTER3,
+-	MAX_CLUSTERS,
+-};
+-
+ struct tegra_cpu_ctr {
+ 	u32 cpu;
+ 	u32 coreclk_cnt, last_coreclk_cnt;
+@@ -67,12 +59,12 @@ struct tegra_cpufreq_ops {
+ struct tegra_cpufreq_soc {
+ 	struct tegra_cpufreq_ops *ops;
+ 	int maxcpus_per_cluster;
++	size_t num_clusters;
+ 	phys_addr_t actmon_cntr_base;
+ };
+ 
+ struct tegra194_cpufreq_data {
+ 	void __iomem *regs;
+-	size_t num_clusters;
+ 	struct cpufreq_frequency_table **tables;
+ 	const struct tegra_cpufreq_soc *soc;
+ };
+@@ -166,6 +158,14 @@ static const struct tegra_cpufreq_soc tegra234_cpufreq_soc = {
+ 	.ops = &tegra234_cpufreq_ops,
+ 	.actmon_cntr_base = 0x9000,
+ 	.maxcpus_per_cluster = 4,
++	.num_clusters = 3,
++};
++
++const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
++	.ops = &tegra234_cpufreq_ops,
++	.actmon_cntr_base = 0x4000,
++	.maxcpus_per_cluster = 8,
++	.num_clusters = 1,
+ };
+ 
+ static void tegra194_get_cpu_cluster_id(u32 cpu, u32 *cpuid, u32 *clusterid)
+@@ -382,7 +382,7 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+ 
+ 	data->soc->ops->get_cpu_cluster_id(policy->cpu, NULL, &clusterid);
+ 
+-	if (clusterid >= data->num_clusters || !data->tables[clusterid])
++	if (clusterid >= data->soc->num_clusters || !data->tables[clusterid])
+ 		return -EINVAL;
+ 
+ 	start_cpu = rounddown(policy->cpu, maxcpus_per_cluster);
+@@ -433,6 +433,7 @@ static struct tegra_cpufreq_ops tegra194_cpufreq_ops = {
+ static const struct tegra_cpufreq_soc tegra194_cpufreq_soc = {
+ 	.ops = &tegra194_cpufreq_ops,
+ 	.maxcpus_per_cluster = 2,
++	.num_clusters = 4,
+ };
+ 
+ static void tegra194_cpufreq_free_resources(void)
+@@ -525,15 +526,14 @@ static int tegra194_cpufreq_probe(struct platform_device *pdev)
+ 
+ 	soc = of_device_get_match_data(&pdev->dev);
+ 
+-	if (soc->ops && soc->maxcpus_per_cluster) {
++	if (soc->ops && soc->maxcpus_per_cluster && soc->num_clusters) {
+ 		data->soc = soc;
+ 	} else {
+ 		dev_err(&pdev->dev, "soc data missing\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	data->num_clusters = MAX_CLUSTERS;
+-	data->tables = devm_kcalloc(&pdev->dev, data->num_clusters,
++	data->tables = devm_kcalloc(&pdev->dev, data->soc->num_clusters,
+ 				    sizeof(*data->tables), GFP_KERNEL);
+ 	if (!data->tables)
+ 		return -ENOMEM;
+@@ -558,7 +558,7 @@ static int tegra194_cpufreq_probe(struct platform_device *pdev)
+ 		goto put_bpmp;
+ 	}
+ 
+-	for (i = 0; i < data->num_clusters; i++) {
++	for (i = 0; i < data->soc->num_clusters; i++) {
+ 		data->tables[i] = init_freq_table(pdev, bpmp, i);
+ 		if (IS_ERR(data->tables[i])) {
+ 			err = PTR_ERR(data->tables[i]);
+@@ -590,6 +590,7 @@ static int tegra194_cpufreq_remove(struct platform_device *pdev)
+ static const struct of_device_id tegra194_cpufreq_of_match[] = {
+ 	{ .compatible = "nvidia,tegra194-ccplex", .data = &tegra194_cpufreq_soc },
+ 	{ .compatible = "nvidia,tegra234-ccplex-cluster", .data = &tegra234_cpufreq_soc },
++	{ .compatible = "nvidia,tegra239-ccplex-cluster", .data = &tegra239_cpufreq_soc },
+ 	{ /* sentinel */ }
+ };
+ 
+-- 
+2.17.1
 
-
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->
-> Changelog
-> ~~~~~~~~~
->
-> v1:
-> * Rebase.
->
-> RFC: https://lkml.kernel.org/r/20220601093502.364142-1-elver@google.com
-> ---
->  include/linux/perf_event.h |  8 +-------
->  kernel/events/core.c       | 38 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 39 insertions(+), 7 deletions(-)
->
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index a784e055002e..907b0e3f1318 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1367,13 +1367,7 @@ static inline int perf_is_paranoid(void)
->         return sysctl_perf_event_paranoid > -1;
->  }
->
-> -static inline int perf_allow_kernel(struct perf_event_attr *attr)
-> -{
-> -       if (sysctl_perf_event_paranoid > 1 && !perfmon_capable())
-> -               return -EACCES;
-> -
-> -       return security_perf_event_open(attr, PERF_SECURITY_KERNEL);
-> -}
-> +extern int perf_allow_kernel(struct perf_event_attr *attr);
->
->  static inline int perf_allow_cpu(struct perf_event_attr *attr)
->  {
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 2621fd24ad26..75f5705b6892 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -3176,6 +3176,12 @@ static int perf_event_modify_attr(struct perf_event *event,
->                 return -EOPNOTSUPP;
->         }
->
-> +       if (!event->attr.exclude_kernel) {
-> +               err = perf_allow_kernel(attr);
-> +               if (err)
-> +                       return err;
-> +       }
-> +
->         WARN_ON_ONCE(event->ctx->parent_ctx);
->
->         mutex_lock(&event->child_mutex);
-> @@ -12037,6 +12043,38 @@ perf_check_permission(struct perf_event_attr *attr, struct task_struct *task)
->         return is_capable || ptrace_may_access(task, ptrace_mode);
->  }
->
-> +/*
-> + * Check if unprivileged users are allowed to set up breakpoints on user
-> + * addresses that also count when the kernel accesses them.
-> + */
-> +static bool perf_allow_kernel_breakpoint(struct perf_event_attr *attr)
-> +{
-> +       if (attr->type != PERF_TYPE_BREAKPOINT)
-> +               return false;
-> +
-> +       /*
-> +        * The sample may contain IPs, registers, or other information that may
-> +        * disclose kernel addresses or timing information. Disallow any kind of
-> +        * additional sample information.
-> +        */
-> +       if (attr->sample_type)
-> +               return false;
-> +
-> +       /*
-> +        * Only allow kernel breakpoints on user addresses.
-> +        */
-> +       return access_ok((void __user *)(unsigned long)attr->bp_addr, attr->bp_len);
-> +}
-> +
-> +int perf_allow_kernel(struct perf_event_attr *attr)
-> +{
-> +       if (sysctl_perf_event_paranoid > 1 && !perfmon_capable() &&
-> +           !perf_allow_kernel_breakpoint(attr))
-> +               return -EACCES;
-> +
-> +       return security_perf_event_open(attr, PERF_SECURITY_KERNEL);
-> +}
-> +
->  /**
->   * sys_perf_event_open - open a performance event, associate it to a task/cpu
->   *
-> --
-> 2.37.2.789.g6183377224-goog
->

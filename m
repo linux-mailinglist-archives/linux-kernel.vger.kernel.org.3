@@ -2,180 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F71A5AD1AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697BF5AD1A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237966AbiIELhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S238030AbiIELi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237055AbiIELhN (ORCPT
+        with ESMTP id S236898AbiIELi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:37:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997675C346
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:37:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3E8B95FD5D;
-        Mon,  5 Sep 2022 11:37:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662377831; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dpyXUkUsaaRutfqjV6W1iIcL178PpZOZ8fQb9Uq20uo=;
-        b=CyEfYSmg6Nrg/AeIHnfEJnMfA1qnHxap++qaR/tDcJvTLveJlp/LltGExMqGbceMGvVkPq
-        yXbvMlGmfuQUoYlyWNYQpNHtFptywHw9OD7VUFPk0es2oPIwLa6/XEhO2T2KNo8f7IrUgP
-        jKkPtSJr8aJpphURVg5+dgOKxhlVuhM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662377831;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dpyXUkUsaaRutfqjV6W1iIcL178PpZOZ8fQb9Uq20uo=;
-        b=ts/T2kms5SvTnn7K/kh0/TYHAgZOUfxBwOPQCt6dFsadz8Ax4cjs4dXd43tw/shEvDSI4m
-        1MqKJaOfO3KfX4DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1F6F6139C7;
-        Mon,  5 Sep 2022 11:37:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hFW1BmffFWOtaAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 05 Sep 2022 11:37:11 +0000
-Message-ID: <7e77aa04-8a0d-8d48-d156-2ed551d10e7c@suse.de>
-Date:   Mon, 5 Sep 2022 13:37:10 +0200
+        Mon, 5 Sep 2022 07:38:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F6C15C34E;
+        Mon,  5 Sep 2022 04:38:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49F60ED1;
+        Mon,  5 Sep 2022 04:38:31 -0700 (PDT)
+Received: from [10.57.16.151] (unknown [10.57.16.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E53D13F7B4;
+        Mon,  5 Sep 2022 04:38:22 -0700 (PDT)
+Message-ID: <bd37c722-3bfb-dfa8-d2ed-20a35f738393@arm.com>
+Date:   Mon, 5 Sep 2022 12:38:21 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] drm/simpledrm: Drop superfluous primary plane
- .atomic_check return logic
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 08/13] perf: cs-etm: Move mapping of Trace ID and cpu
+ into helper function
 Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org
-References: <20220831111243.1530620-1-javierm@redhat.com>
- <43e3dead-6089-c342-5050-34d7325bcb24@suse.de>
- <3cb956d7-aac0-6a1a-6be1-098057e2fd03@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <3cb956d7-aac0-6a1a-6be1-098057e2fd03@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------omzYe0mLMGP7iBaqYFIlsPt3"
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, linux-perf-users@vger.kernel.org,
+        quic_jinlmao@quicinc.com
+References: <20220823091009.14121-1-mike.leach@linaro.org>
+ <20220823091009.14121-9-mike.leach@linaro.org>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220823091009.14121-9-mike.leach@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------omzYe0mLMGP7iBaqYFIlsPt3
-Content-Type: multipart/mixed; boundary="------------mkeeQD290vK9QGE52fesv4R0";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
- dri-devel@lists.freedesktop.org
-Message-ID: <7e77aa04-8a0d-8d48-d156-2ed551d10e7c@suse.de>
-Subject: Re: [PATCH] drm/simpledrm: Drop superfluous primary plane
- .atomic_check return logic
-References: <20220831111243.1530620-1-javierm@redhat.com>
- <43e3dead-6089-c342-5050-34d7325bcb24@suse.de>
- <3cb956d7-aac0-6a1a-6be1-098057e2fd03@redhat.com>
-In-Reply-To: <3cb956d7-aac0-6a1a-6be1-098057e2fd03@redhat.com>
 
---------------mkeeQD290vK9QGE52fesv4R0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
 
-SGkNCg0KQW0gMDUuMDkuMjIgdW0gMTM6MDYgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IEhlbGxvIFRob21hcywNCj4gDQo+IE9uIDkvNS8yMiAxMjo1NywgVGhvbWFz
-IFppbW1lcm1hbm4gd3JvdGU6DQo+PiBIaSBKYXZpZXINCj4+DQo+PiBBbSAzMS4wOC4yMiB1
-bSAxMzoxMiBzY2hyaWViIEphdmllciBNYXJ0aW5leiBDYW5pbGxhczoNCj4+PiBUaGUgc2lt
-cGxlZHJtX3ByaW1hcnlfcGxhbmVfaGVscGVyX2F0b21pY19jaGVjaygpIGZ1bmN0aW9uIGlz
-IG1vcmUgY29tcGxleA0KPj4+IHRoYW4gbmVlZGVkLiBJdCBmaXJzdCBjaGVja3MgZHJtX2F0
-b21pY19oZWxwZXJfY2hlY2tfcGxhbmVfc3RhdGUoKSByZXR1cm5zDQo+Pj4gdmFsdWUgdG8g
-ZGVjaWRlIHdoZXRoZXIgdG8gcmV0dXJuIHRoaXMgb3IgemVyby4NCj4+Pg0KPj4+IEJ1dCBp
-dCBjb3VsZCBqdXN0IHJldHVybiB0aGF0IGZ1bmN0aW9uIHJldHVybiB2YWx1ZSBkaXJlY3Rs
-eS4gSXQgYWxzbyBkb2VzDQo+Pj4gYSBjaGVjayBpZiBuZXdfcGxhbmVfc3RhdGUtPnZpc2li
-bGUgaXNuJ3Qgc2V0LCBidXQgcmV0dXJucyB6ZXJvIHJlZ2FyZGxlc3MuDQo+Pj4NCj4+PiBT
-aWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0
-LmNvbT4NCj4+PiAtLS0NCj4+Pg0KPj4+ICAgIGRyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBs
-ZWRybS5jIHwgMTUgKysrKy0tLS0tLS0tLS0tDQo+Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDQg
-aW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pDQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9ncHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMgYi9kcml2ZXJzL2dwdS9kcm0vdGlu
-eS9zaW1wbGVkcm0uYw0KPj4+IGluZGV4IGE4MWY5MTgxNDU5NS4uMGJlNDdmNDAyNDdhIDEw
-MDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRybS5jDQo+Pj4g
-KysrIGIvZHJpdmVycy9ncHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMNCj4+PiBAQCAtNDg1LDIx
-ICs0ODUsMTQgQEAgc3RhdGljIGludCBzaW1wbGVkcm1fcHJpbWFyeV9wbGFuZV9oZWxwZXJf
-YXRvbWljX2NoZWNrKHN0cnVjdCBkcm1fcGxhbmUgKnBsYW5lLA0KPj4+ICAgIAlzdHJ1Y3Qg
-ZHJtX3BsYW5lX3N0YXRlICpuZXdfcGxhbmVfc3RhdGUgPSBkcm1fYXRvbWljX2dldF9uZXdf
-cGxhbmVfc3RhdGUobmV3X3N0YXRlLCBwbGFuZSk7DQo+Pj4gICAgCXN0cnVjdCBkcm1fY3J0
-YyAqbmV3X2NydGMgPSBuZXdfcGxhbmVfc3RhdGUtPmNydGM7DQo+Pj4gICAgCXN0cnVjdCBk
-cm1fY3J0Y19zdGF0ZSAqbmV3X2NydGNfc3RhdGUgPSBOVUxMOw0KPj4+IC0JaW50IHJldDsN
-Cj4+PiAgICANCj4+PiAgICAJaWYgKG5ld19jcnRjKQ0KPj4+ICAgIAkJbmV3X2NydGNfc3Rh
-dGUgPSBkcm1fYXRvbWljX2dldF9uZXdfY3J0Y19zdGF0ZShuZXdfc3RhdGUsIG5ld19jcnRj
-KTsNCj4+PiAgICANCj4+PiAtCXJldCA9IGRybV9hdG9taWNfaGVscGVyX2NoZWNrX3BsYW5l
-X3N0YXRlKG5ld19wbGFuZV9zdGF0ZSwgbmV3X2NydGNfc3RhdGUsDQo+Pj4gLQkJCQkJCSAg
-RFJNX1BMQU5FX05PX1NDQUxJTkcsDQo+Pj4gLQkJCQkJCSAgRFJNX1BMQU5FX05PX1NDQUxJ
-TkcsDQo+Pj4gLQkJCQkJCSAgZmFsc2UsIGZhbHNlKTsNCj4+PiAtCWlmIChyZXQpDQo+Pj4g
-LQkJcmV0dXJuIHJldDsNCj4+PiAtCWVsc2UgaWYgKCFuZXdfcGxhbmVfc3RhdGUtPnZpc2li
-bGUpDQo+Pj4gLQkJcmV0dXJuIDA7DQo+Pj4gLQ0KPj4+IC0JcmV0dXJuIDA7DQo+Pj4gKwly
-ZXR1cm4gZHJtX2F0b21pY19oZWxwZXJfY2hlY2tfcGxhbmVfc3RhdGUobmV3X3BsYW5lX3N0
-YXRlLCBuZXdfY3J0Y19zdGF0ZSwNCj4+PiArCQkJCQkJICAgRFJNX1BMQU5FX05PX1NDQUxJ
-TkcsDQo+Pj4gKwkJCQkJCSAgIERSTV9QTEFORV9OT19TQ0FMSU5HLA0KPj4+ICsJCQkJCQkg
-ICBmYWxzZSwgZmFsc2UpOw0KPj4NCj4+IEknbSB1bmRlY2lkZWQgb24gdGhpcyBjaGFuZ2Uu
-IEkga25vdyBpdCdzIGNvcnJlY3QgYW5kIG1vcmUgdG8gdGhlIHBvaW50Lg0KPj4gQnV0IHRo
-ZSBjYWxsJ3MgbG9naWMgaXMgbm9uLWludHVpdGl2ZTogdGhlIGNhbGwgZWl0aGVyIHJldHVy
-bnMgYW4gZXJyb3INCj4+IG9yIHdlIGhhdmUgdG8gdGVzdCAtPnZpc2libGUgYWZ0ZXJ3YXJk
-cy4gU28gSSB3cm90ZSBpdCBleHBsaWNpdGx5Lg0KPj4NCj4gDQo+IFllcywgYnV0IHRoZSBj
-aGVjayBoYXMgbm8gZWZmZWN0IHNvIEkgZm91bmQgaXQgZXZlbiBsZXNzIGludHVpdGl2ZS4g
-TWF5YmUNCj4gYWRkIGEgY29tbWVudCB0aGVuIGlmIHlvdSB3YW4gdG8ga2VlcCB0aGUgY3Vy
-cmVudCBjb2RlPw0KPiAgIA0KPj4gSSBzYXcgdGhhdCB5b3VyIGNoYW5nZSB0byBzc2QxMzB4
-IGFsc28gdXNlcyB0aGUgcGF0dGVybi4gSWYgd2UgZmluZCBtb3JlDQo+PiBzdWNoIGRyaXZl
-cnMsIHdlIGNvdWxkIGltcGxlbWVudCB0aGUgYXRvbWljIGNoZWNrIGFzIGEgaGVscGVyLiBJ
-IHN1Z2dlc3QNCj4+IGRybV9wbGFuZV9oZWxwZXJfYXRvbWljX2NoZWNrX2ZpeGVkKCkgaW4g
-ZHJtX3BsYW5lX2hlbHBlci5jDQo+Pg0KPiANCj4gU3VyZS4gSSBjYW4gYWRkIGEgcHJlcGFy
-YXRvcnkgY2hhbmdlIGluIHYyIHRoYXQgYWRkcyB0aGF0IGhlbHBlciBhbmQgdGhlbg0KPiB1
-c2UgaXQgaW4gdGhlIGZvbGxvdy11cCBwYXRjaC4NCj4gDQoNCk1heWJlIHdhaXQgZm9yIHlv
-dXIgc3NkMTMweCBjaGFuZ2VzIHRvIGxhbmQgYW5kIHRoZW4geW91IGNhbiBjb252ZXJ0IA0K
-Ym90aCBkcml2ZXJzIHRvIHRoZSBuZXcgaGVscGVyLg0KDQpCZXN0IHJlZ2FyZHMNClRob21h
-cw0KDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9w
-ZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4g
-NSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcp
-DQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+On 23/08/2022 10:10, Mike Leach wrote:
+> The information to associate Trace ID and CPU will be changing.
+> 
+> Drivers will start outputting this as a hardware ID packet in the data
+> file which if present will be used in preference to the AUXINFO values.
+> 
+> To prepare for this we provide a helper functions to do the individual ID
+> mapping, and one to extract the IDs from the completed metadata blocks.
+> 
+> Signed-off-by: Mike Leach <mike.leach@linaro.org>
 
---------------mkeeQD290vK9QGE52fesv4R0--
-
---------------omzYe0mLMGP7iBaqYFIlsPt3
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMV32YFAwAAAAAACgkQlh/E3EQov+Ai
-ahAAuiDhdKPCXsjm7Hra2eNZiOU33BvLXn4aSdTOZEgPBLeMo1FvoaUrl2+vUCANHjJGYcweZWBf
-z5ho8iYL/FexyGvJgPxey44gI5Vsut69vmiciuF4bL5z2OP0h4fe7aMHNuIlO/U0wQHnRwUVrl52
-2WN+Ih6lcQ5m2SsQvJ/8kn/zh9i5bfj9JoD8Y9iH1+1vLqgZ34uvp747XZ5fU2zYSaPXTpoZFzCC
-ElHXyL0VK2fMzHQEeqs89zLEpcMPNJBxx4yn7oq6XO8rlNW3ApAeOyS3H7Y5SwCT8Yv4mAedw83L
-+lXkyrR5ZfBJ5lp3RdAG9ZgFr1P+ucSjkrR/exhdtM0vN2LeIiJFF09WTk3dOG2IAlFQoHQsScOr
-pnMsX8LbgUc12l7SzVlyqyPEvNt6JDo+D0LHDwFWdEtQMgPyBYbtwgaDjmix1rzO5Cmwj9lcjWQ+
-ytL7P5sd6A8lcXx9+SECqCDMVnY0W3JReXm2OOLxIBEjLr7w7YvLLQbQMcpsfhB02Y+Rn5d0J7na
-NXfHkgwTADgnR8sIvMTFKSdPHQiUfk/hWkLGk8LbXc4a4coK2QpPUhpqEjr0akKHdnzHcGNBzIzi
-iuqUzpy2UVisNCbmbdnx44XGk6yzf2tXDKDqdLdIdgzQpJxdwUAM8/hb+oLRT4djhD8OwCQ1+T3Z
-Glo=
-=E1Zv
------END PGP SIGNATURE-----
-
---------------omzYe0mLMGP7iBaqYFIlsPt3--
+Reviewed-by: James Clark <james.clark@arm.com>
+> ---
+>  tools/include/linux/coresight-pmu.h |  5 ++
+>  tools/perf/util/cs-etm.c            | 92 +++++++++++++++++++----------
+>  tools/perf/util/cs-etm.h            | 14 ++++-
+>  3 files changed, 77 insertions(+), 34 deletions(-)
+> 
+> diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
+> index 6c2fd6cc5a98..db9c7c0abb6a 100644
+> --- a/tools/include/linux/coresight-pmu.h
+> +++ b/tools/include/linux/coresight-pmu.h
+> @@ -7,9 +7,14 @@
+>  #ifndef _LINUX_CORESIGHT_PMU_H
+>  #define _LINUX_CORESIGHT_PMU_H
+>  
+> +#include <linux/bits.h>
+> +
+>  #define CORESIGHT_ETM_PMU_NAME "cs_etm"
+>  #define CORESIGHT_ETM_PMU_SEED  0x10
+>  
+> +/* CoreSight trace ID is currently the bottom 7 bits of the value */
+> +#define CORESIGHT_TRACE_ID_VAL_MASK	GENMASK(6, 0)
+> +
+>  /*
+>   * Below are the definition of bit offsets for perf option, and works as
+>   * arbitrary values for all ETM versions.
+> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+> index 8b95fb3c4d7b..48aaa2843ee2 100644
+> --- a/tools/perf/util/cs-etm.c
+> +++ b/tools/perf/util/cs-etm.c
+> @@ -193,6 +193,30 @@ int cs_etm__get_pid_fmt(u8 trace_chan_id, u64 *pid_fmt)
+>  	return 0;
+>  }
+>  
+> +static int cs_etm__map_trace_id(u8 trace_chan_id, u64 *cpu_metadata)
+> +{
+> +	struct int_node *inode;
+> +
+> +	/* Get an RB node for this CPU */
+> +	inode = intlist__findnew(traceid_list, trace_chan_id);
+> +
+> +	/* Something went wrong, no need to continue */
+> +	if (!inode)
+> +		return -ENOMEM;
+> +
+> +	/*
+> +	 * The node for that CPU should not be taken.
+> +	 * Back out if that's the case.
+> +	 */
+> +	if (inode->priv)
+> +		return -EINVAL;
+> +
+> +	/* All good, associate the traceID with the metadata pointer */
+> +	inode->priv = cpu_metadata;
+> +
+> +	return 0;
+> +}
+> +
+>  void cs_etm__etmq_set_traceid_queue_timestamp(struct cs_etm_queue *etmq,
+>  					      u8 trace_chan_id)
+>  {
+> @@ -2881,18 +2905,47 @@ static int cs_etm__queue_aux_records(struct perf_session *session)
+>  	return 0;
+>  }
+>  
+> +/* map trace ids to correct metadata block, from information in metadata */
+> +static int cs_etm__map_trace_ids_metadata(int num_cpu, u64 **metadata)
+> +{
+> +	u64 cs_etm_magic;
+> +	u8 trace_chan_id;
+> +	int i, err;
+> +
+> +	for (i = 0; i < num_cpu; i++) {
+> +		cs_etm_magic = metadata[i][CS_ETM_MAGIC];
+> +		switch (cs_etm_magic) {
+> +		case __perf_cs_etmv3_magic:
+> +			trace_chan_id = (u8)((metadata[i][CS_ETM_ETMTRACEIDR]) &
+> +					     CORESIGHT_TRACE_ID_VAL_MASK);
+> +			break;
+> +		case __perf_cs_etmv4_magic:
+> +		case __perf_cs_ete_magic:
+> +			trace_chan_id = (u8)((metadata[i][CS_ETMV4_TRCTRACEIDR]) &
+> +					      CORESIGHT_TRACE_ID_VAL_MASK);
+> +			break;
+> +		default:
+> +			/* unknown magic number */
+> +			return -EINVAL;
+> +		}
+> +		err = cs_etm__map_trace_id(trace_chan_id, metadata[i]);
+> +		if (err)
+> +			return err;
+> +	}
+> +	return 0;
+> +}
+> +
+>  int cs_etm__process_auxtrace_info(union perf_event *event,
+>  				  struct perf_session *session)
+>  {
+>  	struct perf_record_auxtrace_info *auxtrace_info = &event->auxtrace_info;
+>  	struct cs_etm_auxtrace *etm = NULL;
+> -	struct int_node *inode;
+>  	unsigned int pmu_type;
+>  	int event_header_size = sizeof(struct perf_event_header);
+>  	int info_header_size;
+>  	int total_size = auxtrace_info->header.size;
+>  	int priv_size = 0;
+> -	int num_cpu, trcidr_idx;
+> +	int num_cpu;
+>  	int err = 0;
+>  	int i, j;
+>  	u64 *ptr, *hdr = NULL;
+> @@ -2962,23 +3015,13 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
+>  				cs_etm__create_meta_blk(ptr, &i,
+>  							CS_ETM_PRIV_MAX,
+>  							CS_ETM_NR_TRC_PARAMS_V0);
+> -
+> -			/* The traceID is our handle */
+> -			trcidr_idx = CS_ETM_ETMTRACEIDR;
+> -
+>  		} else if (ptr[i] == __perf_cs_etmv4_magic) {
+>  			metadata[j] =
+>  				cs_etm__create_meta_blk(ptr, &i,
+>  							CS_ETMV4_PRIV_MAX,
+>  							CS_ETMV4_NR_TRC_PARAMS_V0);
+> -
+> -			/* The traceID is our handle */
+> -			trcidr_idx = CS_ETMV4_TRCTRACEIDR;
+>  		} else if (ptr[i] == __perf_cs_ete_magic) {
+>  			metadata[j] = cs_etm__create_meta_blk(ptr, &i, CS_ETE_PRIV_MAX, -1);
+> -
+> -			/* ETE shares first part of metadata with ETMv4 */
+> -			trcidr_idx = CS_ETMV4_TRCTRACEIDR;
+>  		} else {
+>  			ui__error("CS ETM Trace: Unrecognised magic number %#"PRIx64". File could be from a newer version of perf.\n",
+>  				  ptr[i]);
+> @@ -2990,26 +3033,6 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
+>  			err = -ENOMEM;
+>  			goto err_free_metadata;
+>  		}
+> -
+> -		/* Get an RB node for this CPU */
+> -		inode = intlist__findnew(traceid_list, metadata[j][trcidr_idx]);
+> -
+> -		/* Something went wrong, no need to continue */
+> -		if (!inode) {
+> -			err = -ENOMEM;
+> -			goto err_free_metadata;
+> -		}
+> -
+> -		/*
+> -		 * The node for that CPU should not be taken.
+> -		 * Back out if that's the case.
+> -		 */
+> -		if (inode->priv) {
+> -			err = -EINVAL;
+> -			goto err_free_metadata;
+> -		}
+> -		/* All good, associate the traceID with the metadata pointer */
+> -		inode->priv = metadata[j];
+>  	}
+>  
+>  	/*
+> @@ -3090,6 +3113,11 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
+>  	if (err)
+>  		goto err_delete_thread;
+>  
+> +	/* before aux records are queued, need to map metadata to trace IDs */
+> +	err = cs_etm__map_trace_ids_metadata(num_cpu, metadata);
+> +	if (err)
+> +		goto err_delete_thread;
+> +
+>  	err = cs_etm__queue_aux_records(session);
+>  	if (err)
+>  		goto err_delete_thread;
+> diff --git a/tools/perf/util/cs-etm.h b/tools/perf/util/cs-etm.h
+> index 90c83f932d9a..712a6f855f0e 100644
+> --- a/tools/perf/util/cs-etm.h
+> +++ b/tools/perf/util/cs-etm.h
+> @@ -28,13 +28,17 @@ enum {
+>  /*
+>   * Update the version for new format.
+>   *
+> - * New version 1 format adds a param count to the per cpu metadata.
+> + * Version 1: format adds a param count to the per cpu metadata.
+>   * This allows easy adding of new metadata parameters.
+>   * Requires that new params always added after current ones.
+>   * Also allows client reader to handle file versions that are different by
+>   * checking the number of params in the file vs the number expected.
+> + *
+> + * Version 2: Drivers will use PERF_RECORD_AUX_OUTPUT_HW_ID to output
+> + * CoreSight Trace ID. ...TRACEIDR metadata will be set to unused ID.
+>   */
+> -#define CS_HEADER_CURRENT_VERSION 1
+> +#define CS_HEADER_CURRENT_VERSION	2
+> +#define CS_AUX_HW_ID_VERSION_MIN	2
+>  
+>  /* Beginning of header common to both ETMv3 and V4 */
+>  enum {
+> @@ -85,6 +89,12 @@ enum {
+>  	CS_ETE_PRIV_MAX
+>  };
+>  
+> +/*
+> + * Check for valid CoreSight trace ID. If an invalid value is present in the metadata,
+> + * then IDs are present in the hardware ID packet in the data file.
+> + */
+> +#define CS_IS_VALID_TRACE_ID(id) ((id > 0) && (id < 0x70))
+> +
+>  /*
+>   * ETMv3 exception encoding number:
+>   * See Embedded Trace Macrocell specification (ARM IHI 0014Q)

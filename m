@@ -2,129 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CF75AD855
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70B35AD860
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238037AbiIERYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
+        id S231630AbiIER1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 13:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiIERYh (ORCPT
+        with ESMTP id S230020AbiIER07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:24:37 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F43E64D7;
-        Mon,  5 Sep 2022 10:24:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BHCisw2yIBT6GPmMyudVIjAudq4uVfyPJB6kHIQMbbTZ6AgJSdpLDVHVEcsdfqbrysVMF1YxtolNWfKNXVwuPrBsL+EkqWRjI0UvIZn/LBag0NJsuM5qDmrUnxkQ6GjGx5QYd+6xzZb+d1Asm8xw4dYn6PiD6lLpSrj8Zr5Ei3GiV4DFt6UQpLDn51TC1eLc/UDxPDkIRkwAJSInK/wjT65eo1CPBFgNCq6bzwmQ4QzMXog9iDAPUiIIBHIlz0tSi58/VEbkWRIaV6qNGq3EHpUx1I4XOHpzqswHhbTS/LO0ITSi2jEaZS4fZzRVeJlMulgK29njuKXzQHIQnEL6uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X4Pt9yeMGXkD8y3QMXvO0d0w2llCU8Vu1dQvgQAouvI=;
- b=jGvf0jK84XROWEPJjila81G3Ujr13BR/Zf5+KbV2E8cdiF141wb4xAKS6TMsc2mH9GuQ3TvNvSCoMGT/6i8iGclkwavr92IE22VkKIoojgeve8XL4v3iaT8edRzSV9147LxO0m0og2nn3A2lptlx0M1lmD3LiW9yyMUAKPQp/EOLMOyow4F/dhma21Ob4s0KUBfMobUUdnrazmlo7gb7e2fqT+Ja7o9YGqXnAXZTlQEuAsKR5SUOOYWnhVG2j69ae52Fw4nF+8gdxAn84lO5yGrlMdSsPOhgYYXEQ5RIUhVaYKD07y2tH64mj+EOm3qkfnppSc4pKij7FsSfEGxelQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X4Pt9yeMGXkD8y3QMXvO0d0w2llCU8Vu1dQvgQAouvI=;
- b=S+h/beP98p+aWpaDnkW0NiUodaBhVJs69bz6Kj8HIBMZb/G7euwUFvcYiS0o292PggzCd1cJayd/HxEhXSYHit+d/J3s9jeYSQywI/Tid/pl4RITNHLuJTl1dJ7HV5LFclb17Nzq9yJTKp0iNRYVO/V2xYYkO9MdMUsWC+sIqvW50t3Jb7s24zRTRMm705CodBOWo/nkPq4nA3oony6c7ufM0x5tYTD4dhUNisjsHXjuXDrGSOcP82nG3s0ZqL4bqcST8JE31Cn+WOGMTJ7TQkdOCVZ/eANzVRLZd3YDuYs1N32/dDxnNszaG2iulabvgEmdbuhbV7qSHIMvjF2G7w==
-Received: from MW3PR05CA0014.namprd05.prod.outlook.com (2603:10b6:303:2b::19)
- by BN9PR12MB5258.namprd12.prod.outlook.com (2603:10b6:408:11f::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Mon, 5 Sep
- 2022 17:24:34 +0000
-Received: from CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2b:cafe::85) by MW3PR05CA0014.outlook.office365.com
- (2603:10b6:303:2b::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.5 via Frontend
- Transport; Mon, 5 Sep 2022 17:24:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- CO1NAM11FT016.mail.protection.outlook.com (10.13.175.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5588.10 via Frontend Transport; Mon, 5 Sep 2022 17:24:34 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.38; Mon, 5 Sep 2022 17:24:33 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 5 Sep 2022 10:24:33 -0700
-Received: from mkumard.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Mon, 5 Sep 2022 10:24:31 -0700
-From:   Mohan Kumar <mkumard@nvidia.com>
-To:     <tiwai@suse.com>, <perex@perex.cz>, <thierry.reding@gmail.com>
-CC:     <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        Mohan Kumar <mkumard@nvidia.com>
-Subject: [PATCH] ALSA: hda/tegra: Align BDL entry to 4KB boundary
-Date:   Mon, 5 Sep 2022 22:54:20 +0530
-Message-ID: <20220905172420.3801-1-mkumard@nvidia.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 5 Sep 2022 13:26:59 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F7B5E557
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 10:26:57 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11e9a7135easo22759958fac.6
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 10:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=wiTlUO4bKJB5mIc5pzysFouMdeYXvcZN+PGCeIOyA9o=;
+        b=gCr1hfUa+/WK1fmjnuj9/t4ayZdVUpXZDUtVROQ/WEHgZNLC7IGzx+3LKMtCELUT0H
+         plL3SC4s9Srr1XFrojvRjmQ3DOwIg7ZnG3TfJu1jMo8FOm16+xUdb3G5SEN8Zb4X6yux
+         BROrfWmDpVdP8goNUaOSq6OH/BfRGtUGfEmCDm4qoqFwuvLguU8ztSr6mZrdLQ8lbADW
+         Fc3PTDN9BbZ2GktdGTg7lTthBwKxsvhBkXLmlD3Qmd1u9gFL3qgvgEbXw8X1/8AGH1bM
+         ZYfX4QOHjr0tjNsaNehA+CjRO1qkrAwsmGJVT1LliFYKCmTe6dbmtjaAqynMg3M7SbHy
+         cN3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=wiTlUO4bKJB5mIc5pzysFouMdeYXvcZN+PGCeIOyA9o=;
+        b=SUFSLvAJEry+WZQZ6UD/h8jL2DYdLGxwoZuAq2XSmJMelUulWnPo0J/R8MmLvdZbg8
+         lfiWHCy/hNn9QheCzN+CbpK5Tgg/Y+v1U/Jxea1rhScjl/dRnOGDT5+Dy0oA4+XbRi52
+         RUFimxDWhTbQSYB0cKqnu+TQrIoa3zrSRke+NEIYZm7zSITk+sLgwuqvrq/SyEvtsvv0
+         Trkvxna5DTd+PQoHuqlYL3SCx9y6LMvHq7I9BZMKyVIU2CHzBA9DLYSuv6V5zZbi4Str
+         kt1E2SXEvJQJgB+lpfGK7BJvGA+QyQ1zqbqvU37AzJrM72AHhZUBSQPP/zd2vkBcrZoU
+         tL/g==
+X-Gm-Message-State: ACgBeo1Un7tkP7r++RFSPrirLMEJVaqByyCnPaoA+UjfFdPeyy5aqxqy
+        UEAg7QVmqNC3ifFkv5p00Zb0A8TduTfdCSriiHW74w==
+X-Google-Smtp-Source: AA6agR4Q4NmpbQLP9rhwXPUZUIYyMJksRer3zYTGX6tLakGrrlUJx6aeIIeJ1UogkUFjMJlVPnZRdG1x5PfYYNy2lhA=
+X-Received: by 2002:a05:6870:41d0:b0:126:5d06:28a5 with SMTP id
+ z16-20020a05687041d000b001265d0628a5mr5632497oac.181.1662398817061; Mon, 05
+ Sep 2022 10:26:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7fb08439-4c97-4814-c629-08da8f638075
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5258:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WtNHkicclGz9JFOsJskudLZfrMEXJ6CRlHWNw9scaBSy5nNLn6KOe6djc3sFmU4F5KcnS4ZdY8hKRSCfXEj7nhUzteJiodEhtZr1WrnKpqg8ki3czJi99+Wl7iwxrujPKembX2yrAQOkLJe6eVRoriYbeCN6Z/KC2TylQH167UIU6Nafoezk1VfVhlTOkHwX+KzSTqozqGwZQ4XtsoCAHewmCRsA2FHNmzUIEPibc6KAJAt6qUZFzRfeBxIA/IAHarTQse05OUDhqPNlhePke4VcHTIKgIRGgvly7q43LBVqucfQjXUyubzjDBh4bIJQoBfETtY3N563ShYNWLWXTj3w6EukiGMQNohjEHj6mCgajBoUfFZY7saV5WgVYvqU+StspB1amIjYcXj0MeNVeDx0iQwUrzDYWP+mDNCI4vh+iMQCFWAjCPwoxtNs1EknKEKokYNYaQzfigbTfXhFCUrO/lmsqsep9fIYjY/sIsDwARu2cUuUa74Byhjiaf48j69r48K+g3+m0uhY+WwXIulXTkfie7gCDAxrv/5xtDL+Fk70V24np4k25ztKUdGLHkyEvvB1B/QqL8cO2Z32NSMcVS1uZy0gyiNu6cFNifkr5wni0P7eB5MjUwLaRgNaEm2WNIexhMrwexm+CBgOUnT9nij5qHF0c9nOLz0kNgp+rrTI1lE4DhKAliInkTKDxQY+K4SGvHM6w7VzSZE2PQB5lwx4sMd8YvtPn8EkZkfzzotB9uBZmHGkoD8dsjjaSTBCXEOG4S1Ip06Yhmgg+w5RrI6Jyqb4bOOklWoYn8VXz9Uo9GjQW2XRiyhUP1lL
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(136003)(346002)(46966006)(36840700001)(40470700004)(5660300002)(36860700001)(83380400001)(316002)(110136005)(54906003)(36756003)(70586007)(4744005)(8676002)(8936002)(2906002)(4326008)(70206006)(478600001)(41300700001)(40480700001)(107886003)(6666004)(26005)(82310400005)(426003)(1076003)(336012)(186003)(2616005)(47076005)(86362001)(82740400003)(40460700003)(356005)(81166007)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 17:24:34.4989
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7fb08439-4c97-4814-c629-08da8f638075
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5258
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220905123946.95223-1-likexu@tencent.com> <20220905123946.95223-2-likexu@tencent.com>
+In-Reply-To: <20220905123946.95223-2-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 5 Sep 2022 10:26:45 -0700
+Message-ID: <CALMp9eR3qSVvVgCVq9qsZkFOxa1mHWaAhZimOd14j30_3fXsZg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] KVM: x86/svm/pmu: Limit the maximum number of
+ supported GP counters
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AZA HW may send a burst read/write request crossing 4K memory boundary.
-The 4KB boundary is not guaranteed by Tegra HDA HW. Make SW change to
-include the flag AZX_DCAPS_4K_BDLE_BOUNDARY to align BDLE to 4K
-boundary.
+On Mon, Sep 5, 2022 at 5:45 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> From: Like Xu <likexu@tencent.com>
+>
+> The AMD PerfMonV2 specification allows for a maximum of 16 GP counters,
+> which is clearly not supported with zero code effort in the current KVM.
+>
+> A local macro (named like INTEL_PMC_MAX_GENERIC) is introduced to
+> take back control of this virt capability, which also makes it easier to
+> statically partition all available counters between hosts and guests.
+>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/pmu.h     | 2 ++
+>  arch/x86/kvm/svm/pmu.c | 7 ++++---
+>  arch/x86/kvm/x86.c     | 2 ++
+>  3 files changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> index 847e7112a5d3..e3a3813b6a38 100644
+> --- a/arch/x86/kvm/pmu.h
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -18,6 +18,8 @@
+>  #define VMWARE_BACKDOOR_PMC_REAL_TIME          0x10001
+>  #define VMWARE_BACKDOOR_PMC_APPARENT_TIME      0x10002
+>
+> +#define KVM_AMD_PMC_MAX_GENERIC        AMD64_NUM_COUNTERS_CORE
+> +
+>  struct kvm_event_hw_type_mapping {
+>         u8 eventsel;
+>         u8 unit_mask;
+> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+> index 2ec420b85d6a..f99f2c869664 100644
+> --- a/arch/x86/kvm/svm/pmu.c
+> +++ b/arch/x86/kvm/svm/pmu.c
+> @@ -192,9 +192,10 @@ static void amd_pmu_init(struct kvm_vcpu *vcpu)
+>         struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>         int i;
+>
+> -       BUILD_BUG_ON(AMD64_NUM_COUNTERS_CORE > INTEL_PMC_MAX_GENERIC);
+> +       BUILD_BUG_ON(AMD64_NUM_COUNTERS_CORE > KVM_AMD_PMC_MAX_GENERIC);
+> +       BUILD_BUG_ON(KVM_AMD_PMC_MAX_GENERIC > INTEL_PMC_MAX_GENERIC);
+>
+> -       for (i = 0; i < AMD64_NUM_COUNTERS_CORE ; i++) {
+> +       for (i = 0; i < KVM_AMD_PMC_MAX_GENERIC ; i++) {
+>                 pmu->gp_counters[i].type = KVM_PMC_GP;
+>                 pmu->gp_counters[i].vcpu = vcpu;
+>                 pmu->gp_counters[i].idx = i;
+> @@ -207,7 +208,7 @@ static void amd_pmu_reset(struct kvm_vcpu *vcpu)
+>         struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>         int i;
+>
+> -       for (i = 0; i < AMD64_NUM_COUNTERS_CORE; i++) {
+> +       for (i = 0; i < KVM_AMD_PMC_MAX_GENERIC; i++) {
+>                 struct kvm_pmc *pmc = &pmu->gp_counters[i];
+>
+>                 pmc_stop_counter(pmc);
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 43a6a7efc6ec..b9738efd8425 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -1444,12 +1444,14 @@ static const u32 msrs_to_save_all[] = {
+>         MSR_ARCH_PERFMON_EVENTSEL0 + 16, MSR_ARCH_PERFMON_EVENTSEL0 + 17,
 
-Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
----
- sound/pci/hda/hda_tegra.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+IIRC, the effective maximum on the Intel side is 18, despite what
+INTEL_PMC_MAX_GENERIC says, due to collisions with other existing MSR
+indices. That's why the Intel list stops here. Should we introduce a
+KVM_INTEL_PMC_MAX_GENERIC as well?
 
-diff --git a/sound/pci/hda/hda_tegra.c b/sound/pci/hda/hda_tegra.c
-index 7debb2c76aa6..976a112c7d00 100644
---- a/sound/pci/hda/hda_tegra.c
-+++ b/sound/pci/hda/hda_tegra.c
-@@ -474,7 +474,8 @@ MODULE_DEVICE_TABLE(of, hda_tegra_match);
- static int hda_tegra_probe(struct platform_device *pdev)
- {
- 	const unsigned int driver_flags = AZX_DCAPS_CORBRP_SELF_CLEAR |
--					  AZX_DCAPS_PM_RUNTIME;
-+					  AZX_DCAPS_PM_RUNTIME |
-+					  AZX_DCAPS_4K_BDLE_BOUNDARY;
- 	struct snd_card *card;
- 	struct azx *chip;
- 	struct hda_tegra *hda;
--- 
-2.17.1
+>         MSR_IA32_PEBS_ENABLE, MSR_IA32_DS_AREA, MSR_PEBS_DATA_CFG,
+>
+> +       /* This part of MSRs should match KVM_AMD_PMC_MAX_GENERIC. */
 
+Perhaps the comment above should be moved down two lines, since the
+next two lines deal with the legacy counters.
+
+>         MSR_K7_EVNTSEL0, MSR_K7_EVNTSEL1, MSR_K7_EVNTSEL2, MSR_K7_EVNTSEL3,
+>         MSR_K7_PERFCTR0, MSR_K7_PERFCTR1, MSR_K7_PERFCTR2, MSR_K7_PERFCTR3,
+>         MSR_F15H_PERF_CTL0, MSR_F15H_PERF_CTL1, MSR_F15H_PERF_CTL2,
+>         MSR_F15H_PERF_CTL3, MSR_F15H_PERF_CTL4, MSR_F15H_PERF_CTL5,
+>         MSR_F15H_PERF_CTR0, MSR_F15H_PERF_CTR1, MSR_F15H_PERF_CTR2,
+>         MSR_F15H_PERF_CTR3, MSR_F15H_PERF_CTR4, MSR_F15H_PERF_CTR5,
+
+At some point, we may want to consider populating the PMU MSR list
+dynamically, rather than statically enumerating all of them (for both
+AMD and Intel).
+
+Reviewed-by: Jim Mattson <jmattson@google.com>

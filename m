@@ -2,146 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1AF5AD77B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0781A5AD77E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbiIEQcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 12:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S231794AbiIEQco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 12:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiIEQcU (ORCPT
+        with ESMTP id S231918AbiIEQch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 12:32:20 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D0A2A960
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:32:18 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id x10so9756562ljq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 09:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:from:to:cc:subject:date;
-        bh=8JQHR0mNkkvaucEp4HNFvrtWVwipxgdCyYirWkcxCuc=;
-        b=Ee8/zXiC17K5Rmn0dM8r0JytBnfg1FnzFfKZcmoJMYt08MtgAEUEjpKH7+0UHsqlkK
-         BZrCCHBnA1Je5o+/sxNlA3yrl0TxM37U7XpZXjbsaVxHKMl2x7PzYQchiiwPobO+z7V/
-         tYJCFJd1YCvEbeeLM6BvAS/M1DUr6tpSFJVdgoRwA8WStFNY9E6PPHdk4RZZCOrggakT
-         xyQ8/6DOwLr6S51gainQauwtIl7r4PsEHnn/94yga+F5jpf0cp7C0OxDPl+JWqQDMoGv
-         UZySK3bX2kiLPPNYAc06FY4U1q0dxZf5LlWu/claShZQeiMPrvC2bab0MTV9I+5YA40i
-         L12g==
+        Mon, 5 Sep 2022 12:32:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64711FCE1
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:32:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662395553;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nq/yrAoY/S8Xm7ZtUA1bcp3k0IAyIFeAXHDNpfXqDek=;
+        b=Sm1D0a8PSx8ruAgskFJVdUJ+0ForWRvQJdco56AslwhPO+jrc7YtBn1D9a3ACzHjJ5cycU
+        p0NDObCuNeAmpN7nngcztt/OqU8Hq43Dt0f+W597Z5x2RWCwsNFE+T1v93KUZDRQzt/6X7
+        dA0DDk5SULh0o50S5MFSsvcu817A4lk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-396-YMKTNtknOaGEFN_bE0UcEg-1; Mon, 05 Sep 2022 12:32:32 -0400
+X-MC-Unique: YMKTNtknOaGEFN_bE0UcEg-1
+Received: by mail-wm1-f70.google.com with SMTP id i132-20020a1c3b8a000000b003a537064611so5549882wma.4
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 09:32:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=8JQHR0mNkkvaucEp4HNFvrtWVwipxgdCyYirWkcxCuc=;
-        b=vddds149QsyZOeHcfeeZmchKo0g4tfCYKvmZnVk1bAu2oGhf7BdiB3HVM+PZ5f0xzk
-         HYC3fuS1Zxxm/Wa1tZmVe81yEk33o5nekYz++RAVcD0apY/H8JpgKC1hMBHnx4YW2sJQ
-         pVAcXkegW4DEoWlr4itnWoS/O8H0C5Eitc/1r5VrYQ18xXTaVnlU+ZZFfc4HUhVFJuU/
-         GszC1smxTVK5MaMIUjdQxiJMeLNx+i2TnmrAgrOSAY+H9opkxszoitgVPUAe6YWBYFx8
-         eYK20YvjSxbsxtUgDxykb8RSFAq3roDfNb8qAONTY6eNEwUM2VTd2GTCE41XI9HNzxl1
-         IPYA==
-X-Gm-Message-State: ACgBeo1bGSkGnspeFGAEKRiSeNKZX1sWBeFsTEq0XOGZLBHlCQMt+DyA
-        Gwh156snJpi44kJ5UMzsXsc=
-X-Google-Smtp-Source: AA6agR47yvdHHgnlIjy9Ip2njnz0g5/SwgXMzTGVjcmNgzpxzvtvdxNNmmfmzBYcTnu1KYoufiDMaA==
-X-Received: by 2002:a2e:88d2:0:b0:263:2c63:d784 with SMTP id a18-20020a2e88d2000000b002632c63d784mr11481762ljk.12.1662395536908;
-        Mon, 05 Sep 2022 09:32:16 -0700 (PDT)
-Received: from ?IPV6:2a02:a31a:a240:1700:9c45:8fa1:8ce7:8852? ([2a02:a31a:a240:1700:9c45:8fa1:8ce7:8852])
-        by smtp.googlemail.com with ESMTPSA id q13-20020a056512210d00b004946a758d21sm1235189lfr.161.2022.09.05.09.32.14
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=Nq/yrAoY/S8Xm7ZtUA1bcp3k0IAyIFeAXHDNpfXqDek=;
+        b=ZldEF5TFGeleS1UfpsuSjiePZ0UsENqufEqT/9+zAwAxiMSBSB82YkU5yTTYnSTQfQ
+         0IX6ARrYYl81qfwzZxYe9TM4oRMyDKtRgS1x5YSdHUf5xXs1TagMqwIZd/JKkQyLN8Ic
+         1B5Vp9YGNaeG8R1m6fn/919EjjI2M1cnhYTKWssrS5MrccL34oHbG12WriL0S1PBwD5W
+         hBndHPGU3OcpYwlrWbBDHObZNGDhkpU6Yt8mpIVPxCa0zCDWDRRhbjkiDgMmG8v01jDx
+         hveq1VlNTN1RabBFsxgfVn+36GCOTIo0ItUS49aadzklu8vMlEq5s49FAsIikXMGqmuv
+         kPkQ==
+X-Gm-Message-State: ACgBeo3Eg33LNdm9IdDI+BJW+GexlnwLwJQtf0uU9wPunZ/xDZi9e7at
+        tnkwq4Gm19Ro2AACZha38X1MGX/pKAQdnJxcvLELQvt2YgFHEpooItkrNX53Y3Y4Ylz3qkG/V/H
+        NzcXIksob3MMuVW0u1uL1f0Ql
+X-Received: by 2002:a05:600c:410c:b0:3ab:ac5:c126 with SMTP id j12-20020a05600c410c00b003ab0ac5c126mr10014971wmi.158.1662395551505;
+        Mon, 05 Sep 2022 09:32:31 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7UaTlgCWrird/WwC6iciEBOOSvADvM81ZF6WYU89A5DSeixda30BJUGqKXUQGmLy6BKMHOWQ==
+X-Received: by 2002:a05:600c:410c:b0:3ab:ac5:c126 with SMTP id j12-20020a05600c410c00b003ab0ac5c126mr10014954wmi.158.1662395551253;
+        Mon, 05 Sep 2022 09:32:31 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
+        by smtp.gmail.com with ESMTPSA id bd7-20020a05600c1f0700b003a331c6bffdsm11341158wmb.47.2022.09.05.09.32.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 09:32:16 -0700 (PDT)
-From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
-X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Message-ID: <6ac67d1f-e5b5-2687-372f-4146eed5cc5d@gmail.com>
-Date:   Mon, 5 Sep 2022 18:32:14 +0200
+        Mon, 05 Sep 2022 09:32:30 -0700 (PDT)
+Message-ID: <08c54ddd-b74e-9f6c-f5eb-13e994530ad6@redhat.com>
+Date:   Mon, 5 Sep 2022 18:32:29 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.1
-Subject: Re: [PATCH v2 10/41] drm/modes: Add a function to generate analog
- display modes
-Content-Language: pl
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nouveau Dev <nouveau@lists.freedesktop.org>,
-        linux-sunxi@lists.linux.dev
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
- <242d272b-5b79-986c-9aaf-64e62f6b37ff@gmail.com>
- <CAMuHMdWq3aOO4-2AReDeaC2VBJb=QJF2dTMZP=DGmwCg6ZOffA@mail.gmail.com>
- <20220905133251.js26hxdosibx4r4i@houat>
-In-Reply-To: <20220905133251.js26hxdosibx4r4i@houat>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, svens@linux.ibm.com
+References: <20220905084148.234821-1-pmorel@linux.ibm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] KVM: s390: vsie: fix crycb virtual vs physical usage
+In-Reply-To: <20220905084148.234821-1-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+On 05.09.22 10:41, Pierre Morel wrote:
+> Prepare VSIE for architectural changes where lowmem kernel real and
+> kernel virtual address are different.
 
-W dniu 5.09.2022 o 15:32, Maxime Ripard pisze:
-> Hi,
->
-> On Wed, Aug 31, 2022 at 10:14:28AM +0200, Geert Uytterhoeven wrote:
->>>> +enum drm_mode_analog {
->>>> +    DRM_MODE_ANALOG_NTSC,
->>>> +    DRM_MODE_ANALOG_PAL,
->>>> +};
->>>
->>> Using "NTSC" and "PAL" to describe the 50Hz and 60Hz analog TV modes is common,
->>> but strictly speaking a misnomer. Those are color encoding systems, and your
->>> patchset fully supports lesser used, but standard encodings for those (e.g.
->>> PAL-M for 60Hz and SECAM for 50Hz). I'd propose switching to some more neutral
->>> naming scheme. Some ideas:
->>>
->>> - DRM_MODE_ANALOG_60_HZ / DRM_MODE_ANALOG_50_HZ (after standard refresh rate)
->>> - DRM_MODE_ANALOG_525_LINES / DRM_MODE_ANALOG_625_LINES (after standard line
->>>   count)
->>
->> IMHO these are bad names, as e.g. VGA640x480@60 is also analog, using
->> 60 Hz and 525 lines.  Add "TV" to the name?
->>
->>> - DRM_MODE_ANALOG_JM / DRM_MODE_ANALOG_BDGHIKLN (after corresponding ITU System
->>>   Letter Designations)
->>
->> Or DRM_MODE_ITU_*?
->> But given the long list of letters, this looks fragile to me.
->
-> Does it matter at all? It's an internal API that isn't exposed at all.
-> I'd rather have a common name that everyone can understand in this case
-> rather than a *perfect* name where most will scratch their head
-> wondering what it's about.
+Bear with me, it used to be
 
-You may have a point. But in that case, maybe it'd make sense to at least add
-a short comment explaining what do you mean by "NTSC" and "PAL" in this context?
+	crycb = (struct kvm_s390_crypto_cb *) (unsigned long)crycb_o;
+	apcb_o = (unsigned long) &crycb->apcb0;
 
-Best regards,
-Mateusz Kwiatkowski
+and now it's
+
+	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb0);
+
+
+So the real issue seems to be
+
+	crycb = (struct kvm_s390_crypto_cb *) (unsigned long)crycb_o;
+
+because crycb_o actually is a guest address and not a host address.
+
+
+But now I'm confused, because I would have thought that the result 
+produced by both code would be identical (I completely agree that the 
+new variant is better).
+
+How does this interact with "lowmem kernel real and kernel virtual 
+address are different." -- I would have thought that &crycb->apcb0 
+doesn't actually access any memory and only performs arithmetical 
+operations?
+
+> 
+> When we get the original crycb from the guest crycb we can use the
+> phys_to_virt transformation, which will use the host transformations,
+> but we must use an offset to calculate the guest real address apcb
+> and give it to read_guest_real().
+
+Can you elaborate where phys_to_virt() comes into play?
+
+If this is an actual fix (as indicated in the patch subject), should 
+this carry a
+
+	Fixes: 56019f9aca22 ("KVM: s390: vsie: Allow CRYCB FORMAT-2")
+
+-- 
+Thanks,
+
+David / dhildenb
+

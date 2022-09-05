@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522BB5AD16D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78EB5AD16C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238207AbiIELNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
+        id S235421AbiIELNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236467AbiIELNr (ORCPT
+        with ESMTP id S236467AbiIELN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:13:47 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821C05A832;
-        Mon,  5 Sep 2022 04:13:45 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id d1so6244264qvs.0;
-        Mon, 05 Sep 2022 04:13:45 -0700 (PDT)
+        Mon, 5 Sep 2022 07:13:28 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3835AA39
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:13:26 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id t14so3607291wrx.8
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 04:13:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=7iAktJHc3w6rPsnzClYi6h63eWPfDzaVzHqTBIckRp4=;
-        b=R7t2Qcp1lBflY1vcWSAvFGDpL1wm70fCepnWH+zrAbiof4E0R0r6MaodmK99KC/uqU
-         lkRNi47VWEdS1Mh0Cq7rMIeuWmncJJ2cOty+OFE/rSCBYVUer1tDhNIt1xJajNoN+pha
-         9hYFjgcUDhUv9vg4Rsjx4Td0f/j+c8XAElCdXPkz1XbyGCnZFSRjvecB8Dt/V/2ytwns
-         pr0+QJCk5ml5PiGLXoq+OBMZT8nSbzyKkmBD4jlfWYYC6/a2AVD44sThrAdLIlOLbLDI
-         BjJuCJ4ppbMAAjAsrBVEK+NW8M6uu3+DQvsU1sl/6kNwDh7BxhDa793GpPoaKD+rDvK/
-         /Y2g==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=LV8awVGBrBoFFTStY/bfqmF59okNhYDKAb2JnNbcqRk=;
+        b=iozAkvCrxOiFDkYqlTXwHoisAM5wnOJptzMaV5reA35Qg1xNX2ZX08uMI+WXTjcUm3
+         U3StGjLs4i2S+mbXjiq1XDe4zekN3St4gMXBFXqrkrlxaLIBEubrgtlVOnWttz8P8OR0
+         nizRHwqUvV+w796vx1IoeRO2wCsvJH8ocjIzh6OfsdU4r0ug0LArZoIVigFLDm1h1jZA
+         P91vcKICEgPsOUsnJoDhBPu48oRHWMcCFjDDg+BLfVEAIZh9Y1vWb1ZXMuJ7d/Sy97Ac
+         ZwFp6mJSB8zz13QvnhkfC++eVG+4xdZhvd0OQ4Lu16Ec+xsg90jCPHLLWnS9xasAUw04
+         uIlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7iAktJHc3w6rPsnzClYi6h63eWPfDzaVzHqTBIckRp4=;
-        b=0NK01ckdL5j08V3YQTtYIo+1OBWkYlmtcmdswdYO+H7A5QSouGw0BokAEpXPvOHI/j
-         9UR9Hu15qKJstZLHr0/Nw4/hSgsRwZLzaXeE/zi76ph9hAAna5w9VWLslzkw5gmqkeQJ
-         bM2Z+MPrDcDeUPQ0HefwQ0EZ1t1zsyJ8gnOtqEmgTpOa125/bf/JQiYwYY8vM/rIXY3T
-         SxTZhKLCs6m+pVM81zZfnzruyNJUogTqaYa21kzWlVxBiTwev3n9PVT+373wABUO4k44
-         kgVjMuMHVKqk2d6IdogMm2gjevbFOZ+ZIH0/u4N9ZJL+dHrlC//y7g3S1eUQ8ljKZiQI
-         MJDQ==
-X-Gm-Message-State: ACgBeo0u/g86km4ZaPLA5q6xuhhjOs7ZlRawnPW+dndLmH6gbLVU8ddI
-        OJHwG50ko/PlU8FAOLy7Sn7XcrZnsTAEe2jQtMY=
-X-Google-Smtp-Source: AA6agR7NrRmeK1sjqt1ZjgVXwez7kxeuRCTCLwTPPcAUxaHLOiRLXkVvjX6xUtf8npwaMKmSjSHhnRIt4pJmIe7SA1s=
-X-Received: by 2002:a05:6214:19cf:b0:4a9:4241:2399 with SMTP id
- j15-20020a05621419cf00b004a942412399mr1093930qvc.64.1662376424240; Mon, 05
- Sep 2022 04:13:44 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=LV8awVGBrBoFFTStY/bfqmF59okNhYDKAb2JnNbcqRk=;
+        b=DsI/wNhBS9c19mBSoUgSTj8C3tY2OUeLeBelTGD+f3nDuyFGnlGqB06tVZMEgCwAT4
+         nLEejSho6tRwQ4u4L1UJHFa/mJLNPj2JLYYow7W8jAvBDf8b76v9ONH8WS3yTzop6YW9
+         GpCUR/nBIn6SDf9rGkfmL0dXmX1fmoRkFh7DlqZHGDTt+A4lQceOjMpG1hwSjDrdoIei
+         DWFMcGerThmB0STwPiPESIyuRGOOQL6yxc9+HG5YZDMOUoNxCTPepvyszytNYpXKuNRg
+         pCYHsftm3wtlICrToT1IwKOM9vlAOj6hMQ44eE1MiijSbXCykbK+J3X7sypLX5RL3E8I
+         2xAw==
+X-Gm-Message-State: ACgBeo0x0/Ym0GGJ+AIBcrg1DvqoK4g0u8YYcXtSFtGCm9PQduK6xK+O
+        vz3uIUmwHTzsD9qN2JuLz18Kyw==
+X-Google-Smtp-Source: AA6agR5lRPQZCfeVqRup/VzIC5xXBBPNumSHmBt/WI44+ukJhyH4aJNRU88M+dZKgRIgThOSdqHBXw==
+X-Received: by 2002:a5d:65c9:0:b0:228:8044:2fe4 with SMTP id e9-20020a5d65c9000000b0022880442fe4mr2870090wrw.457.1662376404837;
+        Mon, 05 Sep 2022 04:13:24 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id n34-20020a05600c3ba200b003a601707174sm10706298wms.33.2022.09.05.04.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 04:13:24 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 12:13:22 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Cory Maccarrone <darkstar6262@gmail.com>,
+        linux-omap@vger.kernel.org, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH] mfd/omap1: htc-i2cpld: Convert to a pure GPIO driver
+Message-ID: <YxXZ0u7nKd+j7Bys@google.com>
+References: <20220831085301.490906-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Sep 2022 14:13:08 +0300
-Message-ID: <CAHp75Vc5cEs6mPSL1fkHBT2hw-CbmbELFwkEGvwxkrdEVF2K_Q@mail.gmail.com>
-Subject: Re: [PATCH v1 00/11] Get rid of [devm_]gpiod_get_from_of_node()
- public APIs
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831085301.490906-1-linus.walleij@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> I would like to stop exporting OF-specific [devm_]gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit. We can do that by switching drivers
-> to use generic fwnode API ([devm_]fwnode_gpiod_get()). By doing so we open
-> the door to augmenting device tree and ACPI information through secondary
-> software properties (once we teach gpiolib how to handle those).
->
-> I hope that relevant maintainers will take patches through their trees and
-> then we could merge the last one some time after -rc1.
+On Wed, 31 Aug 2022, Linus Walleij wrote:
 
-I'm in favour of the series, but some comments would be good to be addressed.
+> Instead of passing GPIO numbers pertaining to ourselves through
+> platform data, just request GPIO descriptors from our own GPIO
+> chips and use them, and cut down on the unnecessary complexity.
+> 
+> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
+> Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Cory Maccarrone <darkstar6262@gmail.com>
+> Cc: linux-omap@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> If one of the OMAP1 people can provide an ACK then it's best
+> if Lee takes this into the MFD tree.
+
+If you haven't already, could you please resend this to my kernel.org
+account, as-per MAINTAINERS?  Thanks Linus.
+
+> ---
+>  arch/arm/mach-omap1/board-htcherald.c |  9 ----
+>  drivers/mfd/htc-i2cpld.c              | 59 ++++++++++++---------------
+>  include/linux/htcpld.h                |  2 -
+>  3 files changed, 26 insertions(+), 44 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+DEPRECATED: Please use lee@kernel.org

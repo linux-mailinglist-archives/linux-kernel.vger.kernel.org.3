@@ -2,51 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A665AC8B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202445AC8B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiIECMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 22:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
+        id S234853AbiIECNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 22:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiIECMe (ORCPT
+        with ESMTP id S230013AbiIECNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 22:12:34 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3705521E3F
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 19:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=UhOTn
-        q4LpbvawDLF/ipZQT+kbw2lua4Q89NZBtJL2a0=; b=bkaWnB+amf1tXndkSfjJb
-        Avi6GdYqf8cGTa9aUj1LP53dGWBpMeMcXWpk0MjAkLZktHwlpouV15tAfjYaTPux
-        8O10TRyeeiMMy9UHHMuR8VUIDXzZGC7DyvBTvccQXlpHSo9KEYMADVelwDU43hBK
-        H8+NIY0OGuGtTlHjehN0rs=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp3 (Coremail) with SMTP id G9xpCgDH9Ye1WhVjia_Kaw--.30864S2;
-        Mon, 05 Sep 2022 10:11:03 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     akpm@linux-foundation.org, keescook@chromium.org
-Cc:     gregkh@linuxfoundation.org, mingo@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] init.h: fix spelling typo in comment
-Date:   Mon,  5 Sep 2022 10:10:34 +0800
-Message-Id: <20220905021034.947701-1-13667453960@163.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 4 Sep 2022 22:13:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEBA21E3F;
+        Sun,  4 Sep 2022 19:13:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF4A161074;
+        Mon,  5 Sep 2022 02:13:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDF3C433D6;
+        Mon,  5 Sep 2022 02:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662344008;
+        bh=o3EvOFGLfgY+DdoQ9bNy26IsU0VEMoE+5gbAWp/Pq3Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QrJqXth0GQiXR0/n5wkJ7pPKyVtejSY4TYuQ5OIDeQEY/l8JDLGAytnIGvZnHgQUL
+         yCVgZYpV+IaYw0rFstpxS3hTs54J6aHad9+vDGDSczgk4g/HItvht5qUlcLRh2nBEp
+         YFFllmynz6s4fYOx6GKZKt0F4jXEqlexjltnjjRCdqspsaKZ4LvUtukxMNVqu1Yi76
+         LiwCtvH9w/vK6gmKFl+DdLn4cfD3IS38IXIZJ+JGhHx3yubo0sHFQ+/T9sFyfMmoDX
+         ZS9db5287K04OqWlgZwDUFNfcE1TmyJrYiKiqrleVv4w5qGMvB0QqBl0kCsCiuMi2I
+         iNOLpzTtdBtCQ==
+Date:   Mon, 5 Sep 2022 10:13:22 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
+        Sam Ravnborg <sam@ravnborg.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: Re: [PATCH v1 1/1] ARM: dts: imx6: skov: migrate to
+ resistive-adc-touch
+Message-ID: <20220905021322.GA1728671@dragon>
+References: <20220830112121.2059062-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgDH9Ye1WhVjia_Kaw--.30864S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5GF18GF1DGFg_yoW3urb_C3
-        W8Jr409rWxGF4Sva1vkF4avFyaga48KFWUWrn5JrnrXan7Zan8J397JrnFv3s7GrWvkF90
-        q3Z3WryIyw15ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU88R67UUUUU==
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbiVxBw+1etoJ76+QABsK
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830112121.2059062-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,33 +62,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Tue, Aug 30, 2022 at 01:21:21PM +0200, Oleksij Rempel wrote:
+> Start to use more generic resistive-adc-touch node. ti,tsc2046 is an ADC
+> controller used for resistive touchscreen. So, define it as ADC and
+> attach resistive-adc-touch to it.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Fix spelling typo in comment.
-
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- include/linux/init.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/init.h b/include/linux/init.h
-index baf0b29a7010..3254766ebbf2 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -134,7 +134,7 @@ static inline initcall_t initcall_from_entry(initcall_entry_t *entry)
- 
- extern initcall_entry_t __con_initcall_start[], __con_initcall_end[];
- 
--/* Used for contructor calls. */
-+/* Used for constructor calls. */
- typedef void (*ctor_fn_t)(void);
- 
- struct file_system_type;
--- 
-2.27.0
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
-
+Applied, thanks!

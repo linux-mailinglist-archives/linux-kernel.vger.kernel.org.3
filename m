@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA415AC8FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895D95AC8F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235960AbiIEDLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 23:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        id S235980AbiIEDLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 23:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235911AbiIEDKb (ORCPT
+        with ESMTP id S235922AbiIEDKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 23:10:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D38F21E15
+        Sun, 4 Sep 2022 23:10:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A45E21E18
         for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 20:10:30 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E35365FC5E;
-        Mon,  5 Sep 2022 03:10:28 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A0A4D38628;
+        Mon,  5 Sep 2022 03:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662347428; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1662347429; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lL95UP49eyMiT0mDlLezEno7T+Vwj4MaJYDWgGzY0sA=;
-        b=xmxC5alWRAh1ULHhHXNiMjhEMMXtpkeatIp52qVVssXWwzJkU7M/ZIdBzEHaSwv5Un0zXj
-        TptiyBqBaPxzrrnRQZw2x9fJHyMFNsdCeqwaXib8N7KavbvXZ9j2kQvUpYx8DfWAcDdCWH
-        fmBancaRyYRMtSiSOx+s4R9Fk89N4Aw=
+        bh=caEWLfqDu+y+boYO54sxVXmuA4zEki6s/GhDf6KoI7g=;
+        b=qerU60J2ja+QkuOEQnOHj7VzwgxB+GreeesUoWr3/T3n2ts0tRYlNWte1CAesoX15Kgiop
+        rIDJ61BB0UpW62TKmlgIPBtMeOCHLFr+u0Uxs0Nfn0nZmc4x7lye0Rrc24Y1lsMe2PoBK5
+        ZrZb6uoWSWsA8xBm7CmzgYjGFsEUPMU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662347428;
+        s=susede2_ed25519; t=1662347429;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lL95UP49eyMiT0mDlLezEno7T+Vwj4MaJYDWgGzY0sA=;
-        b=EkSlzIosXJUIOOwW7wTbSAoXoNfGTbF7U9XZesYYg0WH1ZefJZUPwlIg8gHYHFi3PyYffU
-        vk82KcAJ1S7UF3Cw==
+        bh=caEWLfqDu+y+boYO54sxVXmuA4zEki6s/GhDf6KoI7g=;
+        b=DHBa2kCPOTm3cEetEvm35ruFVo5yC5vvClo9Bhbdo0+Bzta7ytYXzl3gqtOtbQGk8Ew9il
+        9aqOs/1A9aTXFkCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26FDE139F9;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA7CF139F9;
         Mon,  5 Sep 2022 03:10:28 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id YErHBqRoFWMeHwAAMHmgww
+        id EEGCNqRoFWMeHwAAMHmgww
         (envelope-from <osalvador@suse.de>); Mon, 05 Sep 2022 03:10:28 +0000
 From:   Oscar Salvador <osalvador@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -61,9 +61,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrey Konovalov <andreyknvl@gmail.com>,
         Alexander Potapenko <glider@google.com>,
         Oscar Salvador <osalvador@suse.de>
-Subject: [PATCH v2 2/3] mm, page_owner: Add page_owner_stacks file to print out only stacks and their counter
-Date:   Mon,  5 Sep 2022 05:10:11 +0200
-Message-Id: <20220905031012.4450-3-osalvador@suse.de>
+Subject: [PATCH v2 3/3] mm,page_owner: Filter out stacks by a threshold counter
+Date:   Mon,  5 Sep 2022 05:10:12 +0200
+Message-Id: <20220905031012.4450-4-osalvador@suse.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220905031012.4450-1-osalvador@suse.de>
 References: <20220905031012.4450-1-osalvador@suse.de>
@@ -78,90 +78,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We might be only interested in knowing about stacks <-> count
-relationship, so instead of having to fiddle with page_owner
-output and screen through pfns, let us add a new file called
-'page_owner_stacks' that does just that.
-By cating such file, we will get all the stacktraces followed by
-its counter, so we can have a more global view.
+We want to be able to filter out the output on a threshold basis,
+in this way we can get rid of a lot of noise and focus only on those
+stacks which have an allegedly high counter.
+
+We can control the threshold value by a new file called
+'page_owner_threshold', which is 0 by default.
 
 Signed-off-by: Oscar Salvador <osalvador@suse.de>
 ---
- include/linux/stackdepot.h |  1 +
- lib/stackdepot.c           | 40 ++++++++++++++++++++++++++++++++++++++
- mm/page_owner.c            | 25 ++++++++++++++++++++++++
- 3 files changed, 66 insertions(+)
+ include/linux/stackdepot.h |  3 ++-
+ lib/stackdepot.c           |  6 +++--
+ mm/page_owner.c            | 51 +++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 56 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-index 4e3a88f135ee..19d3f8295df8 100644
+index 19d3f8295df8..742038216cd0 100644
 --- a/include/linux/stackdepot.h
 +++ b/include/linux/stackdepot.h
-@@ -25,6 +25,7 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+@@ -25,7 +25,8 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
  					gfp_t gfp_flags, bool can_alloc,
  					enum stack_depot_action action);
  void stack_depot_dec_count(depot_stack_handle_t handle);
-+int stack_depot_print_stacks_threshold(char *buf, size_t size, loff_t *pos);
+-int stack_depot_print_stacks_threshold(char *buf, size_t size, loff_t *pos);
++int stack_depot_print_stacks_threshold(char *buf, size_t size, loff_t *pos,
++				       unsigned long threshold);
  
  /*
   * Every user of stack depot has to call stack_depot_init() during its own init
 diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index a806ef58a385..a198b2dbe3fb 100644
+index a198b2dbe3fb..a31e882853ab 100644
 --- a/lib/stackdepot.c
 +++ b/lib/stackdepot.c
-@@ -565,3 +565,43 @@ depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
- 	return __stack_depot_save(entries, nr_entries, alloc_flags, true, action);
+@@ -566,7 +566,8 @@ depot_stack_handle_t stack_depot_save_action(unsigned long *entries,
  }
  EXPORT_SYMBOL_GPL(stack_depot_save_action);
-+
-+int stack_depot_print_stacks_threshold(char *buf, size_t size, loff_t *pos)
-+{
-+	int i = *pos, ret = 0;
-+	struct stack_record **stacks, *stack;
-+	static struct stack_record *last = NULL;
-+	unsigned long stack_table_entries = stack_hash_mask + 1;
-+
-+	/* Continue from the last stack if we have one */
-+	if (last) {
-+		stack = last->next;
-+	} else {
-+new_table:
-+		stacks = &stack_table[i];
-+		stack = (struct stack_record *)stacks;
-+	}
-+
-+	for (; stack; stack = stack->next) {
-+		if (!stack->size || stack->size < 0 ||
-+		    stack->size > size || stack->handle.valid != 1 ||
-+		    refcount_read(&stack->count) < 1)
-+			continue;
-+
-+		ret += stack_trace_snprint(buf, size, stack->entries, stack->size, 0);
-+		ret += scnprintf(buf + ret, size - ret, "stack count: %d\n\n",
-+				 refcount_read(&stack->count));
-+		last = stack;
-+		return ret;
-+	}
-+
-+	i++;
-+	*pos = i;
-+	last = NULL;
-+
-+	/* Keep looking all tables for valid stacks */
-+	if (i < stack_table_entries)
-+		goto new_table;
-+
-+	return 0;
-+}
+ 
+-int stack_depot_print_stacks_threshold(char *buf, size_t size, loff_t *pos)
++int stack_depot_print_stacks_threshold(char *buf, size_t size, loff_t *pos,
++				       unsigned long threshold)
+ {
+ 	int i = *pos, ret = 0;
+ 	struct stack_record **stacks, *stack;
+@@ -585,7 +586,8 @@ int stack_depot_print_stacks_threshold(char *buf, size_t size, loff_t *pos)
+ 	for (; stack; stack = stack->next) {
+ 		if (!stack->size || stack->size < 0 ||
+ 		    stack->size > size || stack->handle.valid != 1 ||
+-		    refcount_read(&stack->count) < 1)
++		    refcount_read(&stack->count) < 1 ||
++		    refcount_read(&stack->count) < threshold)
+ 			continue;
+ 
+ 		ret += stack_trace_snprint(buf, size, stack->entries, stack->size, 0);
 diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 8730f377fa91..d88e6b4aefa0 100644
+index d88e6b4aefa0..5b895d347c5f 100644
 --- a/mm/page_owner.c
 +++ b/mm/page_owner.c
-@@ -664,6 +664,29 @@ static void init_early_allocated_pages(void)
- 		init_zones_in_node(pgdat);
+@@ -43,6 +43,8 @@ static depot_stack_handle_t early_handle;
+ 
+ static void init_early_allocated_pages(void);
+ 
++static unsigned long threshold;
++
+ static int __init early_page_owner_param(char *buf)
+ {
+ 	int ret = kstrtobool(buf, &page_owner_enabled);
+@@ -675,7 +677,7 @@ static ssize_t read_page_owner_stacks(struct file *file, char __user *buf,
+ 	if (!kbuf)
+ 		return -ENOMEM;
+ 
+-	ret += stack_depot_print_stacks_threshold(kbuf, count, pos);
++	ret += stack_depot_print_stacks_threshold(kbuf, count, pos, threshold);
+ 	if (copy_to_user(buf, kbuf, ret))
+ 		ret = -EFAULT;
+ 
+@@ -683,6 +685,51 @@ static ssize_t read_page_owner_stacks(struct file *file, char __user *buf,
+ 	return ret;
  }
  
-+static ssize_t read_page_owner_stacks(struct file *file, char __user *buf,
-+				      size_t count, loff_t *pos)
++static int page_owner_threshold_show(struct seq_file *p, void *v)
++{
++	 seq_printf(p, "%lu\n", threshold);
++	return 0;
++}
++
++static ssize_t write_page_owner_threshold(struct file *file, const char __user *buf,
++					  size_t count, loff_t *pos)
 +{
 +	char *kbuf;
 +	int ret = 0;
@@ -171,27 +173,43 @@ index 8730f377fa91..d88e6b4aefa0 100644
 +	if (!kbuf)
 +		return -ENOMEM;
 +
-+	ret += stack_depot_print_stacks_threshold(kbuf, count, pos);
-+	if (copy_to_user(buf, kbuf, ret))
++	if (copy_from_user(kbuf, buf, count)) {
 +		ret = -EFAULT;
++		goto out;
++	}
 +
++	kbuf[count - 1] = '\0';
++
++	ret = kstrtoul(kbuf, 10, &threshold);
++
++out:
 +	kfree(kbuf);
-+	return ret;
++	return ret ? ret : count;
 +}
 +
-+static const struct file_operations proc_page_owner_stacks = {
-+	.read = read_page_owner_stacks,
++static int open_page_owner_threshold(struct inode *inode, struct file *file)
++{
++	return single_open(file, page_owner_threshold_show, NULL);
++}
++
++
++static const struct file_operations proc_page_owner_threshold = {
++	.open = open_page_owner_threshold,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.write = write_page_owner_threshold,
++	.release = single_release,
 +};
 +
- static const struct file_operations proc_page_owner_operations = {
- 	.read		= read_page_owner,
+ static const struct file_operations proc_page_owner_stacks = {
+ 	.read = read_page_owner_stacks,
  };
-@@ -677,6 +700,8 @@ static int __init pageowner_init(void)
- 
- 	debugfs_create_file("page_owner", 0400, NULL, NULL,
+@@ -702,6 +749,8 @@ static int __init pageowner_init(void)
  			    &proc_page_owner_operations);
-+	debugfs_create_file("page_owner_stacks", 0400, NULL, NULL,
-+			    &proc_page_owner_stacks);
+ 	debugfs_create_file("page_owner_stacks", 0400, NULL, NULL,
+ 			    &proc_page_owner_stacks);
++	debugfs_create_file("page_owner_threshold", 0600, NULL, NULL,
++			     &proc_page_owner_threshold);
  
  	return 0;
  }

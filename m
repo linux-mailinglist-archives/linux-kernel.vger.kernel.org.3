@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5D15ADB12
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E6B5ADB10
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbiIEWDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
+        id S232270AbiIEWD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 18:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiIEWDa (ORCPT
+        with ESMTP id S229733AbiIEWDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:03:30 -0400
-Received: from mail-wm1-x363.google.com (mail-wm1-x363.google.com [IPv6:2a00:1450:4864:20::363])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3046275C0
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 15:03:28 -0700 (PDT)
-Received: by mail-wm1-x363.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso6372043wmb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 15:03:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ptt-ie.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:reply-to:cc
-         :subject:to:from:from:to:cc:subject:date;
-        bh=Py2m2oTxzbBxRqJ2++cgbUo9iTBf41/OVDpXTx6j4Js=;
-        b=hkqSrW0Thrl0ZGo+7XXONUX8hcOegoNvWaAJvARuUNy4aODtL29AmdizosYf0UQjv/
-         J8A8tm9cm2cbFc1Zp0CmBiNcapNcYJKfAgBCiDFzcWDfyAbH4lV9prrfA0fndZ4mCPev
-         FfLOfs7zLjKnVhxLwtT3yOYEgzZtPDImYBSKM1Tu0W+uioQQvrPBxwv0J6himW7iP+fB
-         62uWafZ41F/NkORAze0jvA+5nPMeu2H83MkwMluMttbosDywehuj36grOv4k0MsAvjJx
-         XrpW/RIl7ZSi88viAmBT46y7T8RE55G84nNOQEmnV3mQiwYjTA1P0VPSDsnjeolO0M9m
-         RQtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:reply-to:cc
-         :subject:to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Py2m2oTxzbBxRqJ2++cgbUo9iTBf41/OVDpXTx6j4Js=;
-        b=x+e7LBuSN2dGKtBoMKiKC3u2iXtJ+qTfWssK/gUFIDYZZ5+N5zWPlZc/OnHAwN1l1O
-         DysAjTR9LRKzPpkdh6VW8cntNAAUP1hAOAh8uHAcLiYHd2zcU/Pg066JXQw4qHb9OCl2
-         wxfUvDinFBiL/lz7TRgJ3OIDjYYHV2xZg3hiasmH1hnKvfQy/UvoLghj47m1YfTtUwaK
-         bx6EniPBnQoWdtLfxWFMyrGmiedJZ9fUXIljQiAuFtwboEo9ICJtW8BpGvMfRJBj9Qva
-         MajKsqYXWHTZrSCq7rO227RnYlgYBX4QeB6AOuBBJLw6rsLHIQrfVr7eqh46LIxoAKzj
-         HIdg==
-X-Gm-Message-State: ACgBeo1LndPJ9I3inUj48OaF4d6XyiVo/d93IfvgWecZfXwkl7vR41pO
-        7CppKAweEdgsNbxN06mq70drgTzkdah5Mi++dQAYwHrZCA8O3g==
-X-Google-Smtp-Source: AA6agR7Gt6Rjo41fy/lpDE5z7iR98RXDi1T5WvccpFs0kmZSA3a2T5+zrlv3W9CzjoVbMnpD2t3aLxVgvvIN
-X-Received: by 2002:a05:600c:354a:b0:3a5:b01b:2ab0 with SMTP id i10-20020a05600c354a00b003a5b01b2ab0mr11587471wmq.61.1662415406087;
-        Mon, 05 Sep 2022 15:03:26 -0700 (PDT)
-Received: from jvdspc.jvds.net ([212.129.82.86])
-        by smtp-relay.gmail.com with ESMTPS id t14-20020a05600c128e00b003a64a1afe7esm442963wmd.43.2022.09.05.15.03.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 15:03:26 -0700 (PDT)
-X-Relaying-Domain: ptt.ie
-Received: from jvdspc.jvds.net (localhost.localdomain [127.0.0.1])
-        by jvdspc.jvds.net (8.17.1/8.17.1) with ESMTPS id 285M3OgA228056
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 5 Sep 2022 23:03:24 +0100
-Received: (from jvd@localhost)
-        by jvdspc.jvds.net (8.17.1/8.17.1/Submit) id 285M3NKf228055;
-        Mon, 5 Sep 2022 23:03:23 +0100
-From:   "Jason Vas Dias" <jason.vas.dias@ptt.ie>
-To:     David Howells <dhowells@redhat.com>
-Subject: SIGIO with si_code==POLL_HUP on read pipe FD with no writers? 
-cc:     linux-kernel@vger.kernel.org, jason.vas.dias@gmail.com
-Reply-To: "Jason Vas Dias" <jason.vas.dias@ptt.ie>
-Date:   Mon, 05 Sep 2022 23:03:23 +0100
-Message-ID: <hh8rmxiims.fsf@jvdspc.jvds.net>
+        Mon, 5 Sep 2022 18:03:53 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73F32B25B;
+        Mon,  5 Sep 2022 15:03:52 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 54FCC6BC;
+        Tue,  6 Sep 2022 00:03:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662415430;
+        bh=m4TKbAl1A87gPnt2CNIsocJYJ+XEr3vdGXNPIz1nCWg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jhOgkEZCkRWKa7EjpoLTZajFnDHNU8Z6k1YlaSOANVZNSwK9C6k6Y7GUm4SSzmVAX
+         mknI5mNl6Uw0iHRPmm7HixBcZ16nAQJWNuNLCEFNVUBVnHy/OuBcXRUJaGfwL2a7hQ
+         /sVG3XdD0QWx+1/+8Gmyayl0nQ5zf9V7QGrVL3G4=
+Date:   Tue, 6 Sep 2022 01:03:35 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        Max Krummenacher <max.oss.09@gmail.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] arm64: dts: imx8mp-verdin: add dsi to hdmi
+ functionality
+Message-ID: <YxZyN+ynx9q/3GK6@pendragon.ideasonboard.com>
+References: <20220901154051.1885509-1-max.oss.09@gmail.com>
+ <YxD09SqpcbB3dt8I@pendragon.ideasonboard.com>
+ <20220902155720.GB5699@francesco-nb.int.toradex.com>
+ <YxKe00H2S9AzF0Yi@pendragon.ideasonboard.com>
+ <YxNM75ZtHVKDjTa/@livingston.pivistrello.it>
+ <YxZNVoMKly9eQ2xE@pendragon.ideasonboard.com>
+ <20220905211703.GA6180@francesco-nb.int.toradex.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Disposition: inline
+In-Reply-To: <20220905211703.GA6180@francesco-nb.int.toradex.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,132 +64,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Francesco,
 
-Good day -
+On Mon, Sep 05, 2022 at 11:17:03PM +0200, Francesco Dolcini wrote:
+> On Mon, Sep 05, 2022 at 10:26:14PM +0300, Laurent Pinchart wrote:
+> > On Sat, Sep 03, 2022 at 02:47:43PM +0200, Francesco Dolcini wrote:
+> > > On Sat, Sep 03, 2022 at 03:24:51AM +0300, Laurent Pinchart wrote:
+> > > > On Fri, Sep 02, 2022 at 05:57:20PM +0200, Francesco Dolcini wrote:
+> > > > > On Thu, Sep 01, 2022 at 09:07:49PM +0300, Laurent Pinchart wrote:
+> > > > Someone can integrate a Verdin SoM with a carrier board that has no DSI
+> > > > to HDMI (or LVDS) bridge, there should thus be no such device in the
+> > > > device tree. The SoM has DSI signals present on its connector, that's
+> > > > what the SoM .dtsi should expose.
+> > > 
+> > > Just for the record Verdin i.MX8M Plus do have both HDMI and LVDS on the
+> > > connector (in addition to DSI) [1], of course we do have also the option to
+> > > have LVDS or HDMI using an external add-on DSI bridge as this patches are
+> > > about.
+> > > 
+> > > Said that it's true that sometime we describe peripherals that are part of the
+> > > SOM family into the SOM dtsi, this avoid quite a lot of duplications given the
+> > > amount of carrier board that are available on the market that use just the same
+> > > building blocks (and this was one of the 2 points I mentioned as a reasoning
+> > > for our current DTS files structure).
+> > 
+> > If those "SoM family" peripherals are on the carrier board, what's the
+> > issue with describing them in the carrier board .dtsi ? And if they're
+> > on an add-on board (such as, if I understand correctly, the DSI to HDMI
+> > encoder for the Dahlia carrier board), what's the issue with describing
+> > them in an overlay ?
+> 
+> These SOM family peripherals are in multiples(!) carrier boards AND on
+> accessories. The drawback of being strict as you are asking is that we
+> would end-up with a massive duplication of this small DTS building
+> blocks, therefore the decision in the past to put those in the base SOM
+> dtsi file.
 
-    To the last committer & maintainers of 'linux/fs/pipe.c' :
+OK, I got it now.
 
-    Why isn't a SIGIO signal with POLL_HUP in 'si_code'
-    raised on an O_ASYNC, F_SETOWN{,_EX} pid F_SETSIG
-    signal owning pipe read file descriptor ?
+> Maybe adding something like imx8mp-verdin-dsi-hdmi.dtsi and
+> imx8mp-verdin-dsi-lvds.dtsi that can be included by both overlay and
+> carrier dts files as needed would solve both the need of being strict on
+> the board definition in the dts file and avoid duplications?
+> Not sure if that would work smoothly, it looks like adding some
+> complexity and maintenance overhead, but maybe is the correct solution.
 
-    All that happens when the write end of a pipe is
-    closed is that a SIGIO gets raised with the
-    (struct siginfo* parameter)->si_code set
-    to 1 ( POLL_IN ) , and then=20
-     ioctl( fd, FIONREAD, &sz)
-    then returns with sz=3D=3D0 for that fd ;
-    a read() on that fd would then return 0.
+That sounds good to me. Would you be able to give it a try to see if it
+works well ?
 
-    Looking at pipe.c, the situation of no pipe writers
-    is detected and revents is set to contain EPOLLHUP
-    ONLY in pipe_poll(), not pipe_read() .
+> Anyway, while I fully understand your reasoning, I'm still not happy to
+> change this for the current toradex products, since users of
+> our dts file currently rely on the expectations I tried to explain in
+> this email thread and Max patches are implementing (and this is
+> currently uniform over the whole toradex product range).
 
-    pipe_read() (in version 5.19) DOES detect the
-    no writers situation :
+This sounds like a broader question, not specific to Toradex, opinions
+from Rob and Krzysztof would be useful.
 
-    fs/pipe.c, @line 255:
-	for (;;) {
-		/* Read ->head with a barrier vs post_one_notification() */
-        ...
-    @line 341:
-		if (!pipe->writers)
-			break;
-        ...
+> > Maybe I'm missing something ?
+> 
+> I tried to give more insights.
 
-    It would be quite easy to add after the pipe_read() loop quits a clause=
- as in
-    pipe_poll() , @ line 677:
-	mask =3D 0;
-	if (filp->f_mode & FMODE_READ) {
-		if (!pipe_empty(head, tail))
-			mask |=3D EPOLLIN | EPOLLRDNORM;
-		if (!pipe->writers && filp->f_version !=3D pipe->w_counter)
-			mask |=3D EPOLLHUP;
-	}
-=20=20=20
-    which does something like :
+Thank you, that's very appreciated.
 
-	if ( !pipe->writers )
-		kill_fasync(&pipe->fasync_readers, SIGIO, POLL_HUP);
+-- 
+Regards,
 
-=20=20=20=20
-    It is not nice to have to GUESS that just because=20
-        ioctl(fd, FIONREAD, &sz)=20
-    returns with sz=3D=3D0 immediately after a POLL_IN event,
-    that the pipe in fact has no writers, because the
-    signal could be blocked when the ioctl call happens.
-
-    And if one happens not to try to read 0 bytes from the pipe,
-    then one would never know that no writers exist on it, and
-    could pause() infinitely waiting for a signal.
-    Or why should I have to put the FD into O_NONBLOCK mode
-    (which mine was not in) and attempt a read to return
-    0 bytes, when I know 0 bytes are available to read ?
-=20=20=20=20
-    OR, maybe in pipe_write(), @ line 595 where it does :
-
-    	kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
-=20=20=20=20=20=20=20=20
-    (which is probably where the FINAL POLL_IN signal originates)=20=20=20=
-=20=20
-    it could instead do:
-        kill_fasync(&pipe->fasync_readers, SIGIO,=20
-                    ((ret=3D=3D0) && (pipe->fasync_writers <=3D 1))
-                    ? POLL_HUP
-                    : POLL_IN
-                   );
-
-     It seems there are several easy ways to fix this and
-     I believe that it would make processes wanting to
-     read pipes using SIGIO much more robust & simple to code.
-
-     Processes would still be able to rely on read()s returning
-     0 in this case, but please, why can't SIGIO using processes
-     also get a definitive SIGIO with si_code=3D=3DPOLL_HUP, not POLL_IN ?
-
-     There appears to be similar logic that does send
-     a final POLL_HUP SIGIO when the remote write end of
-     a readable socket closes - why not for pipes ?
-
-     And the sigaction manual page states:
-     "
-       The  following values can be placed in si_code for a SIGIO/SIGPOLL s=
-ig=E2=80=90
-       nal:
-
-           POLL_IN
-                  Data input available.
-
-           POLL_OUT
-                  Output buffers available.
-
-           POLL_MSG
-                  Input message available.
-
-           POLL_ERR
-                  I/O error.
-
-           POLL_PRI
-                  High priority input available.
-
-           POLL_HUP
-                  Device disconnected.
-     "
-     which suggests that these events should be raised for all devices -
-     it does not mention any special cases for pipe file descriptors,
-     so readers would reasonably expect a POLL_HUP event to be sent
-     on a read end of a pipe with no writers.
-=20
-     Please do something about this -=20
-     or would a patch from me that fixes this ever be
-     likely to be considered ?
-
-Thanks for any responses & Best Regards,
-Jason Vas Dias
-
-=20=20=20=20=20
-=20=20=20=20
-=20=20=20=20=20=20=20=20=20=20
-
-=20=20=20=20
+Laurent Pinchart

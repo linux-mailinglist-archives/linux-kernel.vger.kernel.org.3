@@ -2,132 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0E05AD1F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C2F5AD1E6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238078AbiIELzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
+        id S238030AbiIELzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237781AbiIELzV (ORCPT
+        with ESMTP id S237965AbiIELzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:55:21 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A1427170
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:55:19 -0700 (PDT)
-Received: from localhost.localdomain (unknown [182.2.42.181])
-        by gnuweeb.org (Postfix) with ESMTPSA id 74AE6804FD;
-        Mon,  5 Sep 2022 11:55:14 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1662378919;
-        bh=Ax3MC0XcIkDxhT39fYMzcJEvWVrtUjw9z/eRM8QtIpg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JqGZ4l+n16P9GGgKdRmQ+7QjZtwOHRXaFmjP6vP56fRD5aQ5OIxt+/xJhYLW3/Eb0
-         ilhOBVxCX+Sm4+ovQR7UKqg8+bMEQlw50dw3JSAfBJSsdvyiSuXJdsJ49moyTWqBl3
-         RHaE8u5fyGbUOM4aFwzj1BdQ5wg35RpuwDNwG3Cf5wBEDl58CzEWKUbyKNjdJs4xmb
-         pAzxAd9tRDMrkFpd/rCoWsK0DFQq+dxxAdIdfNn9t+72ZIa8AEJaaPNHG7hV0RWpyV
-         2+Dk97CrgJBIghgfjlv/KK5B5mOT2gPbDmq5L6jT5yJnBnZ7iiZienFCBFSsPgK8Ra
-         WqCk6vXoTCzRQ==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management Mailing List <linux-mm@kvack.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>
-Subject: Re: [PATCH v2 3/3] mm,page_owner: Filter out stacks by a threshold counter
-Date:   Mon,  5 Sep 2022 18:54:59 +0700
-Message-Id: <20220905115459.567583-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <YxXd9qXnIutFOQZY@dhcp22.suse.cz>
-References: <20220905031012.4450-1-osalvador@suse.de> <20220905031012.4450-4-osalvador@suse.de> <573c4049045a5ff342ff9998c69dfae7-ammarfaizi2@gnuweeb.org> <YxXd9qXnIutFOQZY@dhcp22.suse.cz>
+        Mon, 5 Sep 2022 07:55:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDF01D301
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662378905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dN+gArBAb1MXvGBnjXPIWD80ttEdRkSoYzrprgnDVV0=;
+        b=Bnz7BF9ftEfvzZbW6daHqN2+KfNprmDKdizRrKelY4v+hdIUInfzb9L09/6UHU20mMachk
+        5V0d/TIbIbAelwR9iB2MXwT6b8pY51JqRWw/zNyxyS+8WuEIRmZAU5fuAbDDd20MB0QYFH
+        j8+bXWEt9k27rCuFXtLlzNK3AEikI8Q=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-29-qkNlHJP_On2fA9i5Gld7cg-1; Mon, 05 Sep 2022 07:55:04 -0400
+X-MC-Unique: qkNlHJP_On2fA9i5Gld7cg-1
+Received: by mail-wm1-f72.google.com with SMTP id h133-20020a1c218b000000b003a5fa79008bso7359067wmh.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 04:55:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=dN+gArBAb1MXvGBnjXPIWD80ttEdRkSoYzrprgnDVV0=;
+        b=rofXdLx7DV7Q2Be8s/N3anqhIwLsicSXF46uLbnSyMUUiGLfoJ+iiEPUyQBB3R71Zn
+         RF2X7VAWnp7zMZoYf2/c4gYZyPmDQRXMB2e6Wb1JCu1MxWaPkUrZ/voPwnQPdQXvb414
+         VwvPoRwyOZQrrFRPFlGyOeQ328Nh9Njxfe9Da7W7IfXxkBcYTQ7IiRWNhBEhcHbjeaIV
+         xP4qUx0vVmT3K/6r2nX2/xrwCAqjfWbH5rJv9lqa//338d+FQYYyR0TFejTdhtU1Ljgm
+         Fd7+65ri1WP2HKcllEjOUTe3QdPnLs0sv8F6w0R2i6HZrscMpxpwmNisHK35RYXf9mXL
+         Cstw==
+X-Gm-Message-State: ACgBeo3wPv/Aylzc1i1YFjq20uGrnqPO6eufJAcGlMECoOsD1n9VNs8L
+        PCbucIccqeXfbe0BBG6TYBDg1SCH+6ol9CINm/gSoqwMQOBJnvKnP1fEc7oFUshlr/0X+XZYT9c
+        ZqZYcU0iir5SkfEmXvOtko+WE
+X-Received: by 2002:adf:d846:0:b0:226:defc:3a01 with SMTP id k6-20020adfd846000000b00226defc3a01mr18853182wrl.313.1662378903320;
+        Mon, 05 Sep 2022 04:55:03 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4KV4ZibjWbGN6YgO4KVDqVIO2XVkXWu4lHnfwaE7vitwyhRqHtdISnnm2nghZt1WcwxckCTA==
+X-Received: by 2002:adf:d846:0:b0:226:defc:3a01 with SMTP id k6-20020adfd846000000b00226defc3a01mr18853174wrl.313.1662378903090;
+        Mon, 05 Sep 2022 04:55:03 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id g11-20020a05600c310b00b003a5ea1cc63csm17694363wmo.39.2022.09.05.04.55.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 04:55:02 -0700 (PDT)
+Message-ID: <49b62a63-a1d7-ca3f-abfc-df08edb46da3@redhat.com>
+Date:   Mon, 5 Sep 2022 13:55:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_WEB,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] drm/ssd130x: Replace simple display helpers with the
+ atomic helpers
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+References: <20220828151114.1141510-1-javierm@redhat.com>
+ <6f499b1e-daa4-7de1-6ffc-151663807910@suse.de>
+ <03b207a8-e09c-2858-fd54-b95f2e8e8d11@redhat.com>
+ <bd987b93-ebcc-8fad-ee5e-2e25f4d64eaf@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <bd987b93-ebcc-8fad-ee5e-2e25f4d64eaf@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Sep 2022 13:31:02 +0200, Michal Hocko wrote:
-> On Mon 05-09-22 17:51:37, Ammar Faizi wrote:
-> > On Mon, 5 Sep 2022 05:10:12 +0200, Oscar Salvador wrote:
-> > > +static int page_owner_threshold_show(struct seq_file *p, void *v)
-> > > +{
-> > > +	 seq_printf(p, "%lu\n", threshold);
-> > 
-> > Remove a slipped leading 0x20 space here (before seq_printf()).
-> > 
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static ssize_t write_page_owner_threshold(struct file *file, const char __user *buf,
-> > > +					  size_t count, loff_t *pos)
-> > > +{
-> > > +	char *kbuf;
-> > > +	int ret = 0;
-> > > +
-> > > +	count = min_t(size_t, count, PAGE_SIZE);
-> > > +	kbuf = kmalloc(count, GFP_KERNEL);
-> > > +	if (!kbuf)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	if (copy_from_user(kbuf, buf, count)) {
-> > > +		ret = -EFAULT;
-> > > +		goto out;
-> > > +	}
-> > > +
-> > > +	kbuf[count - 1] = '\0';
-> > > +
-> > > +	ret = kstrtoul(kbuf, 10, &threshold);
-> > > +
-> > > +out:
-> > > +	kfree(kbuf);
-> > > +	return ret ? ret : count;
-> > > +}
-> > 
-> > Still the same comment on this, kmalloc() is not really needed here.
-> > Capping the size to PAGE_SIZE (usually 4K) is too big. `unsinged long`
-> > is 64-bit at most, this means the max val is 18446744073709551615
-> > (20 chars). The lifetime of @kbuf is very short as well, using a stack
-> > allocated array of chars is fine?
-> > 
-> > Untested:
-> > 
-> > static ssize_t write_page_owner_threshold(struct file *file, const char __user *buf,
-> > 					  size_t count, loff_t *pos)
-> > {
-> > 	char kbuf[21];
-> > 	int ret;
-> > 
-> > 	count = min_t(size_t, count, sizeof(kbuf));
-> > 	if (copy_from_user(kbuf, buf, count))
-> > 		return -EFAULT;
-> > 
-> > 	kbuf[count - 1] = '\0';
-> > 	ret = kstrtoul(kbuf, 10, &threshold);
-> > 	return ret ? ret : count;
-> > }
+On 9/5/22 13:34, Thomas Zimmermann wrote:
+
+[...]
+
+>>>
+>>
+>> Yes, I was abusing the concept of encoder here just to have a place where
+>> I could hook the enable / disable logic, since I was looking at the other
+>> DRM objects helper operations structures and found that these were only
+>> defined for the encoder.
 > 
-> Isn't there a proc_dointvec counterpart for debugfs?
+> I liked the idea of handling backlighting here. Power on/off also seems 
+> sensible.
+>
 
-Ah, well. If that's much simpler, we should go with that. I am not
-familiar proc_dointvec() interface, so I couldn't say about it.
+Ok. I'll keep that then.
+ 
+>>
+>> But there is technically no encoder on this device. As you can see, I was
+>> using DRM_MODE_ENCODER_NONE when the encoder is initialized.
+>>
+>> But I notice now that the struct drm_crtc_helper_funcs also have .enable
+>> and .disable callbacks, it seems I was just blind and didn't see before.
+> 
+> You certainly want to use atomic_enable/atomic_disable. They are 
+> mutually exclusive with the other enable/disable functions.
+> 
 
-Thanks for the comment. TIL.
+Ah, then I wasn't blind after all. It was because the encoder was the
+only DRM object that had .atomic_{en,dis}able. The CRTC only had some
+.{en,disable} helper callbacks.
+
+>>
+>> Would having the init and poweroff logic in the CRTC helpers be correct
+>> to you or was do you have in mind ?
+> 
+> There's quite a bit happening in the init function. Does it have to be 
+> re-initialized on each enable operation?  If it survives the power-off 
+> call, the initial init can be done in the CRTC reset function. It's 
+> purpose is to set hardware and software to a clean state.
+>
+
+I need to check if it survives a disable/enable cycle. Specially since
+on disable the VCC regulator is disabled, which might lead to the chip
+state to get lost.
+ 
+> Best regards
+> Thomas
+> 
+>>
+>>> Best regards
+>>> Thomas
+> 
 
 -- 
-Ammar Faizi
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 

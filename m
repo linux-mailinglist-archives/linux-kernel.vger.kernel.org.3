@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC42A5AD816
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAA65AD812
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237782AbiIERHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
+        id S237863AbiIERHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 13:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237660AbiIERHQ (ORCPT
+        with ESMTP id S230447AbiIERHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:07:16 -0400
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEEB4BD00;
-        Mon,  5 Sep 2022 10:07:15 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id bp20so11651906wrb.9;
-        Mon, 05 Sep 2022 10:07:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=b4juj7B2UONec9DN5R9H+S5J6rQPs3/+0cM2WjUaO5k=;
-        b=iFovOR/Wfh1IQeXRIxmdXPrwAhHTKj6ANR+tbCVF6tOoIO+5WWLxzFcbQJEA6ae7iG
-         j2bAzv+RS3H65Q2vSIfslGEc7pFaMBEBSoB4gNYi4vfa1mqAqk9n4jnJiNwVZTeJ3CwQ
-         rmOcdQocNxHTTv3h4tQuNrT777A4fpGoYrRaT/hx2u+XoFDoCaGGvD8qEXAONOouQ4Dc
-         qaQ+jNS2JM3Rb2VAfusoPJ2LxojYuUlbMgzNFFii65oFTYp5r5Yqwd+fghwUjqSh1/YK
-         UdWe8qpcsD1HGGP9QKZKdOQwscZRvbOnqjvvdLyQM558WSB4+HZfUYU59MOKT3uzD9tR
-         xBiA==
-X-Gm-Message-State: ACgBeo1H6VCBes4DG6EQEvevn8qXRkLvupHzD8fyby3tAGvIKdjsebF5
-        5B72i59tgXN0Hl+MRThXKPk/1TSGGB4=
-X-Google-Smtp-Source: AA6agR54pyDETu2sUWvvNJ9LGzrJCmE5taGD4owhWNoFpkTFhjbzyeLvcU3XR9YDt94/RKUzsbwUZw==
-X-Received: by 2002:adf:de01:0:b0:228:62ae:78bc with SMTP id b1-20020adfde01000000b0022862ae78bcmr5547587wrm.41.1662397633989;
-        Mon, 05 Sep 2022 10:07:13 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id bp8-20020a5d5a88000000b002252e5a6841sm9412547wrb.57.2022.09.05.10.07.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 10:07:13 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 17:07:09 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v6 03/33] KVM: x86: Zero out entire Hyper-V CPUID cache
- before processing entries
-Message-ID: <20220905170709.dn5zp6wq5vo4cq2c@liuwe-devbox-debian-v2>
-References: <20220830133737.1539624-1-vkuznets@redhat.com>
- <20220830133737.1539624-4-vkuznets@redhat.com>
+        Mon, 5 Sep 2022 13:07:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 187665E652
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 10:07:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1C39139F;
+        Mon,  5 Sep 2022 10:07:55 -0700 (PDT)
+Received: from bogus (unknown [10.57.45.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AD8B93F534;
+        Mon,  5 Sep 2022 10:07:47 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 18:07:23 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     vincent.guittot@linaro.org, ionela.voinescu@arm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, 21cnbao@gmail.com, jonathan.cameron@huawei.com,
+        linuxarm@huawei.com, prime.zeng@huawei.com,
+        yangyicong@hisilicon.com
+Subject: Re: [PATCH v3] arch_topology: Make cluster topology span at least
+ SMT CPUs
+Message-ID: <20220905170723.ppikgcjtjwe2nj63@bogus>
+References: <20220905122615.12946-1-yangyicong@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830133737.1539624-4-vkuznets@redhat.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220905122615.12946-1-yangyicong@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 03:37:07PM +0200, Vitaly Kuznetsov wrote:
-> Wipe the whole 'hv_vcpu->cpuid_cache' with memset() instead of having to
-> zero each particular member when the corresponding CPUID entry was not
-> found.
+On Mon, Sep 05, 2022 at 08:26:15PM +0800, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
 > 
-> No functional change intended.
+> Currently cpu_clustergroup_mask() will return CPU mask if cluster span more
+> or the same CPUs as cpu_coregroup_mask(). This will result topology borken
+> on non-Cluster SMT machines when building with CONFIG_SCHED_CLUSTER=y.
 > 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> [sean: split to separate patch]
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Test with:
+> qemu-system-aarch64 -enable-kvm -machine virt \
+>  -net none \
+>  -cpu host \
+>  -bios ./QEMU_EFI.fd \
+>  -m 2G \
+>  -smp 48,sockets=2,cores=12,threads=2 \
+>  -kernel $Image \
+>  -initrd $Rootfs \
+>  -nographic
+>  -append "rdinit=init console=ttyAMA0 sched_verbose loglevel=8"
+> 
+> We'll get below error:
+> [    3.084568] BUG: arch topology borken
+> [    3.084570]      the SMT domain not a subset of the CLS domain
+> 
+> Since cluster is a level higher than SMT, fix this by making cluster
+> spans at least SMT CPUs.
+> 
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
 
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
+Sorry for missing to figure this out earlier and thanks for fixing it.
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+-- 
+Regards,
+Sudeep

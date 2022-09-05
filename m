@@ -2,116 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4EB55AD83E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713E85AD84A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238017AbiIERQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S232401AbiIERT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 13:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237908AbiIERQR (ORCPT
+        with ESMTP id S230479AbiIERTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:16:17 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7065551A0D;
-        Mon,  5 Sep 2022 10:16:14 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id s23so5567690wmj.4;
-        Mon, 05 Sep 2022 10:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=18ALGCD6WSmdQYtbgKgYJ3c/Y319JyrAAYBhTvLvvok=;
-        b=dCaCHmkQglXigR5EbaN46Ul8WuySq57ZrfydsnXmgFhQPeC6ULMO4JaMId3ocEF5LI
-         iCqBml4rXzVvqmnpJ5oevfe1N14hZxyCWRoHZz8C8w1p2Iv1xIqxPIkswywlGwlncnqt
-         Ne4agLWxqSIN38EdnKZ+ofiqp0HgHWCUoT/DuuRUG63Lpw0y6z4BGDkITT+2yyIjNkn2
-         hjlFa1mqwQEySz/MfLeeECS8U9YWa0xITXKogpW1ocqtixc57twI3oJdGNHy1RLCmJlU
-         14xYBe8Yl57Ww2GOsSrgUeThd4gfUOn+h5H24O6yYctaKsIFP3tSBJo3hveCmZeijIuG
-         G60A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=18ALGCD6WSmdQYtbgKgYJ3c/Y319JyrAAYBhTvLvvok=;
-        b=II3mr4zRoR3id/WFOlR7KOIuVU11eInp1EemWYnSG6aUDZYcZEzKgHf2gZdMSWdUg4
-         uAXtOg+jzJ16BDWpGTfjNaU6qTLn6G2sOThM7sFWcU5LektPP0e9N73T4hhjQlJKJryD
-         hhnGreFD+Z8RNbnswQWbs37nGAAZK84EzyjcqOoKnvVmtGW8QFfXmygbpHlsefzHyByq
-         j0xplIwmt2AA5H2bR/NNy6mHMcSU+8z5Fo5hSGmR5uSJcC8kLPGJY5LsogmydCIED4M7
-         buHT+bFP/6ngksxpHSt01Vd6Wfcw9FBpsUY7qb1UFMOTJ5V7ZpEBsUBtTKk4WWXuAkn7
-         FHMg==
-X-Gm-Message-State: ACgBeo2eOlDAXllCWGrEV56uCh+onv5nZnneIWI2tckz4VCMz2p1ff3R
-        dcwG/P4IWAZz2Q9/mypNfw4=
-X-Google-Smtp-Source: AA6agR54ecwenjasPeGEFCVgQjyU7aJO+Mm8nCENH9ALVNOZ/I5Qzv047TlLm5g4Ws2SHr3qVjU4KA==
-X-Received: by 2002:a05:600c:2e03:b0:3a5:3928:7958 with SMTP id o3-20020a05600c2e0300b003a539287958mr11203715wmf.77.1662398172928;
-        Mon, 05 Sep 2022 10:16:12 -0700 (PDT)
-Received: from Clement-Blade14.home (2a01cb000c0d3d00995730c36491d21b.ipv6.abo.wanadoo.fr. [2a01:cb00:c0d:3d00:9957:30c3:6491:d21b])
-        by smtp.gmail.com with ESMTPSA id v22-20020a7bcb56000000b003a5ad7f6de2sm11437072wmj.15.2022.09.05.10.16.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 10:16:12 -0700 (PDT)
-From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Subject: [PATCH v3 5/5] arm64: dts: allwinner: beelink-gs1: Enable GPU OPP
-Date:   Mon,  5 Sep 2022 19:16:01 +0200
-Message-Id: <20220905171601.79284-6-peron.clem@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220905171601.79284-1-peron.clem@gmail.com>
-References: <20220905171601.79284-1-peron.clem@gmail.com>
+        Mon, 5 Sep 2022 13:19:53 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070ED1EC69;
+        Mon,  5 Sep 2022 10:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662398392; x=1693934392;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=H1x3D21Fgj3oIVsGcghx8kOsLr/B4ZFW56g8adE84zI=;
+  b=QCcjUe21IL33v8n9+6fJ2hC2sQ2X02M0WsJlA7jwWmuP7esoVZoMiYhB
+   sJWdwtdnQA9wv2Ej8VYAJj4wz479a4pNl5Chd8Miv4qbTaeTKqpi5+27G
+   Og5BeMkW8MqSoSpbvGsAG8y/KC5TM4D/2n9RFcenlXDBNLFq3KJqox2P5
+   /JWWhYBydIByslzvnTujshXA9Ty9IHHO4sS74QY4A4Omt4wBKSGdImPYw
+   m07KYctpFmbC+J64xOBrb6Jpk1ew60gIFqxQiiwUuyFRklPiHfiDyttV0
+   dEW1C3VUdoZAecWK60JBIVJb4vkWsdK5K2JzZZU15nZ6nVyjd+Ml68waA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="358143073"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="358143073"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 10:19:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="739647611"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 05 Sep 2022 10:19:50 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 76464101; Mon,  5 Sep 2022 20:20:05 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH v1 1/1] Input: icn8505 - Utilize acpi_get_subsystem_id()
+Date:   Mon,  5 Sep 2022 20:20:01 +0300
+Message-Id: <20220905172001.69244-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable GPU OPP table for Beelink GS1.
+Replace open coded variant of recently introduced acpi_get_subsystem_id().
 
-Signed-off-by: Clément Péron <peron.clem@gmail.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/input/touchscreen/chipone_icn8505.c | 29 ++++++---------------
+ 1 file changed, 8 insertions(+), 21 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-index 6249e9e02928..9ec49ac2f6fd 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-@@ -5,6 +5,7 @@
+diff --git a/drivers/input/touchscreen/chipone_icn8505.c b/drivers/input/touchscreen/chipone_icn8505.c
+index f9ca5502ac8c..bb5e63b87c5d 100644
+--- a/drivers/input/touchscreen/chipone_icn8505.c
++++ b/drivers/input/touchscreen/chipone_icn8505.c
+@@ -364,32 +364,19 @@ static irqreturn_t icn8505_irq(int irq, void *dev_id)
  
- #include "sun50i-h6.dtsi"
- #include "sun50i-h6-cpu-opp.dtsi"
-+#include "sun50i-h6-gpu-opp.dtsi"
+ static int icn8505_probe_acpi(struct icn8505_data *icn8505, struct device *dev)
+ {
+-	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+-	const char *subsys = "unknown";
+-	struct acpi_device *adev;
+-	union acpi_object *obj;
+-	acpi_status status;
+-
+-	adev = ACPI_COMPANION(dev);
+-	if (!adev)
+-		return -ENODEV;
++	const char *subsys;
  
- #include <dt-bindings/gpio/gpio.h>
+-	status = acpi_evaluate_object(adev->handle, "_SUB", NULL, &buffer);
+-	if (ACPI_SUCCESS(status)) {
+-		obj = buffer.pointer;
+-		if (obj->type == ACPI_TYPE_STRING)
+-			subsys = obj->string.pointer;
+-		else
+-			dev_warn(dev, "Warning ACPI _SUB did not return a string\n");
+-	} else {
+-		dev_warn(dev, "Warning ACPI _SUB failed: %#x\n", status);
+-		buffer.pointer = NULL;
+-	}
++	subsys = acpi_get_subsystem_id(ACPI_HANDLE(dev));
++	if (IS_ERR(subsys) && PTR_ERR(subsys) != -ENODATA)
++		return PTR_ERR(subsys);
++
++	if (IS_ERR(subsys) && PTR_ERR(subsys) == -ENODATA)
++		subsys = kstrdup_const("unknown", GFP_KERNEL);
+ 
+ 	snprintf(icn8505->firmware_name, sizeof(icn8505->firmware_name),
+ 		 "chipone/icn8505-%s.fw", subsys);
+ 
+-	kfree(buffer.pointer);
++	kfree_const(subsys);
+ 	return 0;
+ }
  
 -- 
-2.34.1
+2.35.1
 

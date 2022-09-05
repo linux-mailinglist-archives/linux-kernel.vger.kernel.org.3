@@ -2,149 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5E95AC85D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 02:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A535AC860
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234337AbiIEA6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 20:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S232085AbiIEBBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 21:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiIEA5s (ORCPT
+        with ESMTP id S229702AbiIEBBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 20:57:48 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2088.outbound.protection.outlook.com [40.107.21.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90F424BE7;
-        Sun,  4 Sep 2022 17:57:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=az3d5yLNbqs5rQqGE7B6GUMYWz1+SDRgMbxvx/G5maxWxLJY8XoZTBmjWG0GAOA1/NBdHygG931lhL29pDEv5yGe3Mw5JQr/UZ5ATVGPE+Zg8t+EkrtDLfVH9ZZHBXgkxmVHk85rpOSrA079upY/F0cbAd8FZJh4ytykM/1iLBOPPqOemGLr2lqb4cAbMKJBDfoRNpcEKLzRDwWL4cfevD8ruPJBoNzWVZKpmm9jOM9EReYkDl6BPu1rLF80S/AKhmAN7P6O8S4xVgbQpc/VO/uEw+uBYDwbM6TeqBLaarqdm21boebbhJ+o/16OIRSzbRJna+KGe5kEqarQFcr4Bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ifmd9oib4mskvhVJzY8pL5bsfWf3mGOZKF/1iiYxxPQ=;
- b=njxgs7OkKZZLOL5j4W4IFz8QdnKkAJmFWYecggl1qYZKvgsk/Uk24FODajPdN1z9lIer2Ch67eQ5yeUc56bXdljdtEOTUqOIqTD6sOtjJ8rGmyjkr+cP2Y2flSxa8ds4J1WWOV2h+Ccg3pLAmTiYM8S1tFNRGUfq2s/tVGu1dVt0XBAwadjSGwkGA+Bkh7onfMSx9dAJLE4c2d7p537607AGksxtWggF2Pz3JRcRv7JTy8lpC1niz0o1m939M32zM09ghkogL+SjoC2fd3OVOI16zYTySTEFOrN6X7PgLBcRdaPdmNx1F4WBdEjomSyx6lsg64LsoCI/6rofBQPchw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ifmd9oib4mskvhVJzY8pL5bsfWf3mGOZKF/1iiYxxPQ=;
- b=lX66JYZzlmbmIblciylqVPrfLXZvfcri2g9r3U8OZIMxVH/7x1C69zo2vYlEX81FRfSH15FW7zFhf6JS+6lzkID8SZQfYd+UsiZeufWsc6fKXkjwO2IrOhgVeZJJSlYFd8spSAkHIjhMMipvtfahDHg1E3HvpoqO0Pd1mlpP5nE=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
- 2022 00:57:43 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2d22:3315:6f9b:82c7]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2d22:3315:6f9b:82c7%5]) with mapi id 15.20.5588.017; Mon, 5 Sep 2022
- 00:57:43 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Rob Herring <robh@kernel.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-CC:     "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH V3 1/8] dt-bindings: soc: imx: add binding for i.MX93
- syscon
-Thread-Topic: [PATCH V3 1/8] dt-bindings: soc: imx: add binding for i.MX93
- syscon
-Thread-Index: AQHYvUO+WN9zC6gQlk2h4UEkedKcoa3MoqiAgANnibA=
-Date:   Mon, 5 Sep 2022 00:57:43 +0000
-Message-ID: <DU0PR04MB941764EE0415F4F8F059D5C0887F9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220831141418.38532-1-peng.fan@oss.nxp.com>
- <20220831141418.38532-2-peng.fan@oss.nxp.com>
- <20220902205721.GA399775-robh@kernel.org>
-In-Reply-To: <20220902205721.GA399775-robh@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 768e8116-4edc-4175-0b9d-08da8ed9a3db
-x-ms-traffictypediagnostic: DB9PR04MB9626:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4xrhcjBuDy9y2GTxPuhPGGStAZO2pZm6EDVwRzf+I4+ONb5B5cMkxGXRJ5+2MDV6iTG5gsLSQGLq2yZVM+DgLyD0BtNIiWAqNWk3JfOZeHgim0HPJ7r2Ag9b0ESIEjrHfaHE+0qu4Nv4YuwB7HtWv4bQMwg3Kw+YAWjIBZeJcTcwdyXnD74DHA5GcRVNkPS0+TXYMCuZMwd8dsY/wjCsKzOl5HXOAMlCod7WEl8Vr77eE1L4Drir4ePKdaz7/axtu0ehUDMcw42EDD2/NtHRxd5If3LbJVO0e7XPBseCssoZY753Sg2E/jp0QhtaIOjGzgoQeMxfDMRhujNMWjLcsOfxIWh91y1WnWqsnzG6encjgF6CiKHxnTSOH2JPy48clv/OM3iLAtlEUsOhxraNN3prQ/FFq80/sirmp65CTcMQ7QTEzkJn8+k0PE+KgulUzoRUfaLuKMt6Ic5HDp5ne2/l5Q/UwgNRClwGuON6R2o7LC51iQvRpUKWPrqZlAneJKtDExQap/elnjbwbLhcITM3Ym5l3bDPGbLgQEMZDMBmXP8ptfck934spZJXIpxoSxxSgcE8c3FEtT2QGVLCRP6sZQiEdARSO5+/jDETR3QCr626S8gWa8ro9MB0Pfet5Vh7n7FhCS+RuYrwnIdRx558ojidl92vqxFEhLI2Twt3M+wPnLN0WDtJl2hXtOVPHt3TDh5yPLlB02MTCcAZNLR4GGAIW3dIQ2ism0/uCkPhSEyLP7mODlkKjzibL58FBoVRFOJU6IlzGCIStANCWA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(376002)(396003)(39860400002)(346002)(66556008)(86362001)(66446008)(7696005)(122000001)(38070700005)(8676002)(66476007)(76116006)(8936002)(316002)(64756008)(4326008)(26005)(71200400001)(6506007)(52536014)(110136005)(55016003)(478600001)(38100700002)(54906003)(41300700001)(186003)(2906002)(66946007)(4744005)(9686003)(44832011)(5660300002)(33656002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kjAwMPNwN6wHmEP4p/C0cJUxbupcnum4mCaH+V4KcRFoddL5n+YYnCuoaIhH?=
- =?us-ascii?Q?Shss7buZIkXbjmK1KuI+LUzGiAgT3egpTktCsNyrsdjVSgD1YcIGDyUur7G9?=
- =?us-ascii?Q?bMlgWQ20FkGxIVgm4HqPROh+1c7QQw6myJLTAGZFANJgOqbY3DX2yVMZ98Cn?=
- =?us-ascii?Q?dC4+vwOCCQgac10AxU+co/G+Dd1bT664GPm9R7WN+UFPVF43Z8IQP59ywcBM?=
- =?us-ascii?Q?cwXHn9nSgOXMerzQRy+HK2jeDbrHyraa1BRV74Fe0hhRyuZAH4dM8S1EbdMl?=
- =?us-ascii?Q?1Vak6p9pHX8VppE75xlMs5gRLXXXktOgK7/ZFkVHfCkO4LuN1wQSf36w1Gnq?=
- =?us-ascii?Q?S8+B9rjpcMdFztPoEhmAL9MM9f59u7X+LVp+dMfq+unB7D3OhtJ0YKeHuZ0+?=
- =?us-ascii?Q?+rUfxnRCbXXoApGnEkpp5cKT8e4MaEfTEAG9BZmzLs1LRfBJX1ZJhKPTPm4V?=
- =?us-ascii?Q?8JWNY9dZpfwQbe+CK0+XXvyg1TGZSf+3uRXj3nzsaxNlq8YGkfIoKkED3Yvf?=
- =?us-ascii?Q?2d7AAyjOHBnIHLcjbVV+9Zmh3zSjF/+NQ+35zeaSDvfsvAXd9FYKT/j1QUcG?=
- =?us-ascii?Q?G0Ra9uzgbJhQGAqOXYt/9SBmDCz0/ojaI+War5QWsCukfoAXE4Zk+J5L4AXg?=
- =?us-ascii?Q?x5uHDrZkDKS7T3fLhcdVnt09u+TYgC88NUA2FbIZ9cR3PGjg++6ew9yQoY6L?=
- =?us-ascii?Q?D+i0J+zy/tKrUChmbVpyljvExAMc6xochwuEeo+mpNHI7U9TUBOJD1kgzfXD?=
- =?us-ascii?Q?F8Go8KYTNNGSDbKqB+p922qVDPNuxtigH1TJ/Vg7YnrMJJjgXJTCD/Uu3Eyg?=
- =?us-ascii?Q?kMaV0hDcSvXNThIDkrT3mouTYuOlCZ2eZdZ23WgsuwlgD86je6hrTlfuZnt8?=
- =?us-ascii?Q?9eqKKNX1gwsiql9Zka5BQ/tGrbI6l9YF2Wn8mNNYZzQ4NMJ3ep3xmgkXZbp2?=
- =?us-ascii?Q?CI/vvO7REB0wsfyG6oulRX0Mg5W1HdrElEk0tBKh1KOMz29yvMLaoTwfbLj3?=
- =?us-ascii?Q?Yi4/1iQpHTZmMqOSNhF67kj+105W52Xlxcem3Tw7QTR32fXUwmtVGsjPQKfA?=
- =?us-ascii?Q?fgJ2upqIogtlxvIFhvJV8rCZylxRpTtCQ+b8CvNa9zjULLXIGHcTPv1djxQW?=
- =?us-ascii?Q?O6GjbbPq8Ig9+hN0BfeB2xo7T37h6sDjZLunD0iyQqZkS4cc+VcFPCZNkJMl?=
- =?us-ascii?Q?ju6rLeTlM2uXgbLN+ObOiNPXXfbNsJxmjNgj/Cm2Sja9xOBRDC1r1st9DX6N?=
- =?us-ascii?Q?DGWj/zYLywwYDbrIh5syzwJExdftyJi+jV6vJxLBql485lCaCwIw3SMNGwIJ?=
- =?us-ascii?Q?5O7RknTfmqbbvMVf8PO/TIRlfEniIY+3qLJIrqEgkGO+wNTcN6PRYMV5lLTk?=
- =?us-ascii?Q?G/9he5+X5DRoQaqCgHn/DORQ+uda59Lgda/ZfUoZZ41duFgW+FNF1Yza5eg4?=
- =?us-ascii?Q?20bCBuBzXiCsLub7cKhOi7xCicc8T8F/cUcHTBVn3f1kmV3XzDEhpHzxSAOV?=
- =?us-ascii?Q?214iUqQbRKFTeLWDeNyjIdhXqQxvDxpv26FpR6RT509XzG/oKOGvUqzPdG5n?=
- =?us-ascii?Q?DlkehMTleXxXAg+camM=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 4 Sep 2022 21:01:18 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C83EA19286
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 18:01:15 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxBOJSShVjKlQRAA--.6168S3;
+        Mon, 05 Sep 2022 09:01:08 +0800 (CST)
+Subject: Re: [PATCH 1/3] LoongArch: Add kexec support
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <1661747823-23745-1-git-send-email-tangyouling@loongson.cn>
+ <1661747823-23745-2-git-send-email-tangyouling@loongson.cn>
+Cc:     Baoquan He <bhe@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>, Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kexec@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <c4dbb14a-5580-1e47-3d15-5d2079e88404@loongson.cn>
+Date:   Mon, 5 Sep 2022 09:01:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 768e8116-4edc-4175-0b9d-08da8ed9a3db
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2022 00:57:43.4278
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jWWcsNPMgUCQtR7IgI61mN7GhKEUHpqicGglx06CxOvoVDgCXT9aM2eQVkvFZ4SP2htcwuedoCyAHH8gQCxCnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9626
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1661747823-23745-2-git-send-email-tangyouling@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxBOJSShVjKlQRAA--.6168S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xw47WFW7Xr13AFy3uFWxJFb_yoWfGw1Dp3
+        WqkF4DKr4kXF1xtryFqw15Zr98Xw1kWa12g3W7Ka4rJFsFqrnxXrn7Xr9FqF4kK395KFWI
+        qF1S9asa9a1UG3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9vb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xK
+        xwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5s6pJUUUUU==
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH V3 1/8] dt-bindings: soc: imx: add binding for i.MX93
-> syscon
->=20
-> On Wed, Aug 31, 2022 at 10:14:11PM +0800, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > Add binding doc for i.MX93 blk_ctrl_ns_aonmix and blk_ctrl_wakeupmix
->=20
-> Is this complete or you expect to add to it? If complete, just add the
-> compatible strings to syscon.yaml. If not complete, why not?
 
-I was not aware i.MX93 blk ctrl could be added to common syscon.yaml.
-Fix in V4.
 
-Thanks,
-Peng.
->=20
-> Rob
+On 08/29/2022 12:37 PM, Youling Tang wrote:
+> Add three new files, kexec.h, machine_kexec.c and relocate_kernel.S to the
+> LoongArch architecture that add support for the kexec re-boot mechanis
+> (CONFIG_KEXEC) on LoongArch platforms.
+>
+> Supports loading vmlinux (vmlinux.elf) in ELF format and vmlinux.efi in
+> PE format.
+>
+> I tested this on  LoongArch 3A5000 machine and works as expected,
+>
+>  $ sudo kexec -l /boot/vmlinux.efi --reuse-cmdline
+>  $ sudo kexec -e
+>
+> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+> ---
+>  arch/loongarch/Kconfig                  |  11 ++
+>  arch/loongarch/include/asm/kexec.h      |  58 ++++++++
+>  arch/loongarch/kernel/Makefile          |   2 +
+>  arch/loongarch/kernel/head.S            |   7 +-
+>  arch/loongarch/kernel/machine_kexec.c   | 178 ++++++++++++++++++++++++
+>  arch/loongarch/kernel/relocate_kernel.S | 125 +++++++++++++++++
+>  6 files changed, 380 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/loongarch/include/asm/kexec.h
+>  create mode 100644 arch/loongarch/kernel/machine_kexec.c
+>  create mode 100644 arch/loongarch/kernel/relocate_kernel.S
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 45364cffc793..903c82fa958d 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -409,6 +409,17 @@ config FORCE_MAX_ZONEORDER
+>  	  The page size is not necessarily 4KB.  Keep this in mind
+>  	  when choosing a value for this option.
+>
+> +config KEXEC
+> +	bool "Kexec system call"
+> +	select KEXEC_CORE
+> +	help
+> +	  kexec is a system call that implements the ability to shutdown your
+> +	  current kernel, and to start another kernel.  It is like a reboot
+> +	  but it is independent of the system firmware.   And like a reboot
+> +	  you can start any kernel with it, not just Linux.
+> +
+> +	  The name comes from the similarity to the exec system call.
+> +
+>  config SECCOMP
+>  	bool "Enable seccomp to safely compute untrusted bytecode"
+>  	depends on PROC_FS
+> diff --git a/arch/loongarch/include/asm/kexec.h b/arch/loongarch/include/asm/kexec.h
+> new file mode 100644
+> index 000000000000..5c9e7b5eccb8
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/kexec.h
+> @@ -0,0 +1,58 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * kexec.h for kexec
+> + *
+> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#ifndef _ASM_KEXEC_H
+> +#define _ASM_KEXEC_H
+> +
+> +#include <asm/stacktrace.h>
+> +#include <asm/page.h>
+> +
+> +/* Maximum physical address we can use pages from */
+> +#define KEXEC_SOURCE_MEMORY_LIMIT (-1UL)
+> +/* Maximum address we can reach in physical address mode */
+> +#define KEXEC_DESTINATION_MEMORY_LIMIT (-1UL)
+> + /* Maximum address we can use for the control code buffer */
+> +#define KEXEC_CONTROL_MEMORY_LIMIT (-1UL)
+> +
+> +/* Reserve a page for the control code buffer */
+> +#define KEXEC_CONTROL_PAGE_SIZE PAGE_SIZE
+> +
+> +/* The native architecture */
+> +#define KEXEC_ARCH KEXEC_ARCH_LOONGARCH
+> +
+> +static inline void crash_setup_regs(struct pt_regs *newregs,
+> +				    struct pt_regs *oldregs)
+> +{
+> +	if (oldregs)
+> +		memcpy(newregs, oldregs, sizeof(*newregs));
+> +	else
+> +		prepare_frametrace(newregs);
+> +}
+> +
+> +#define ARCH_HAS_KIMAGE_ARCH
+> +
+> +struct kimage_arch {
+> +	unsigned long boot_flag;
+> +	unsigned long fdt_addr;
+> +};
+> +
+> +typedef void (*do_kexec_t)(unsigned long boot_flag,
+> +			   unsigned long fdt_addr,
+> +			   unsigned long first_ind_entry,
+> +			   unsigned long jump_addr);
+> +
+> +struct kimage;
+> +extern const unsigned char relocate_new_kernel[];
+> +extern const size_t relocate_new_kernel_size;
+> +
+> +#ifdef CONFIG_SMP
+> +extern atomic_t kexec_ready_to_reboot;
+> +extern const unsigned char kexec_smp_wait[];
+> +extern void kexec_reboot(void);
+> +#endif
+> +
+> +#endif /* !_ASM_KEXEC_H */
+> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+> index a213e994db68..20b64ac3f128 100644
+> --- a/arch/loongarch/kernel/Makefile
+> +++ b/arch/loongarch/kernel/Makefile
+> @@ -17,6 +17,8 @@ obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
+>  obj-$(CONFIG_MODULES)		+= module.o module-sections.o
+>  obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
+>
+> +obj-$(CONFIG_KEXEC)             += machine_kexec.o relocate_kernel.o
+> +
+>  obj-$(CONFIG_PROC_FS)		+= proc.o
+>
+>  obj-$(CONFIG_SMP)		+= smp.o
+> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+> index 01bac62a6442..22bdf4928325 100644
+> --- a/arch/loongarch/kernel/head.S
+> +++ b/arch/loongarch/kernel/head.S
+> @@ -20,7 +20,12 @@
+>
+>  _head:
+>  	.word	MZ_MAGIC		/* "MZ", MS-DOS header */
+> -	.org	0x3c			/* 0x04 ~ 0x3b reserved */
+> +	.org	0x8
+> +	.quad	0			/* Image load offset from start of RAM */
+> +	.dword	_end - _text		/* Effective size of kernel image */
+> +	.quad	0
+> +	.dword	kernel_entry		/* Kernel entry point */
+> +	.org	0x3c			/* 0x28 ~ 0x3b reserved */
+>  	.long	pe_header - _head	/* Offset to the PE header */
+>
+>  pe_header:
+> diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/kernel/machine_kexec.c
+> new file mode 100644
+> index 000000000000..4ffcd4cd9c8c
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/machine_kexec.c
+> @@ -0,0 +1,178 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * machine_kexec.c for kexec
+> + *
+> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+> + */
+> +#include <linux/compiler.h>
+> +#include <linux/cpu.h>
+> +#include <linux/kexec.h>
+> +#include <linux/mm.h>
+> +#include <linux/delay.h>
+> +#include <linux/libfdt.h>
+> +#include <linux/of_fdt.h>
+> +
+> +#include <asm/bootinfo.h>
+> +#include <asm/cacheflush.h>
+> +#include <asm/page.h>
+> +
+> +/* 0x100000 ~ 0x200000 is safe */
+> +#define KEXEC_CTRL_CODE	TO_CACHE(0x100000UL)
+> +#define KEXEC_BLOB_ADDR	TO_CACHE(0x108000UL)
+> +
+> +static unsigned long reboot_code_buffer;
+> +#ifdef CONFIG_SMP
+> +void (*relocated_kexec_smp_wait)(void *);
+> +atomic_t kexec_ready_to_reboot = ATOMIC_INIT(0);
+> +#endif
+> +
+> +static unsigned long jump_addr;
+> +static unsigned long first_ind_entry;
+> +static unsigned long boot_flag;
+> +static unsigned long fdt_addr;
+> +
+> +static void kexec_image_info(const struct kimage *kimage)
+> +{
+> +	unsigned long i;
+> +
+> +	pr_debug("kexec kimage info:\n");
+> +	pr_debug("\ttype:        %d\n", kimage->type);
+> +	pr_debug("\tstart:       %lx\n", kimage->start);
+> +	pr_debug("\thead:        %lx\n", kimage->head);
+> +	pr_debug("\tnr_segments: %lu\n", kimage->nr_segments);
+> +
+> +	for (i = 0; i < kimage->nr_segments; i++) {
+> +		pr_debug("\t    segment[%lu]: %016lx - %016lx", i,
+> +			kimage->segment[i].mem,
+> +			kimage->segment[i].mem + kimage->segment[i].memsz);
+> +		pr_debug("\t\t0x%lx bytes, %lu pages\n",
+> +			(unsigned long)kimage->segment[i].memsz,
+> +			(unsigned long)kimage->segment[i].memsz /  PAGE_SIZE);
+> +	}
+> +}
+> +
+> +int machine_kexec_prepare(struct kimage *kimage)
+> +{
+> +	int i;
+> +	void *dtb = (void *)KEXEC_BLOB_ADDR;
+> +
+> +	kexec_image_info(kimage);
+> +
+> +	/* Find the Flattened Device Tree */
+> +	for (i = 0; i < kimage->nr_segments; i++) {
+> +		if (!fdt_check_header(kimage->segment[i].buf)) {
+> +			memcpy(dtb, kimage->segment[i].buf, SZ_64K);
+> +			kimage->arch.boot_flag = fw_arg0;
+> +			kimage->arch.fdt_addr = (unsigned long) dtb;
+> +			break;
+> +		}
+> +		continue;
+> +	}
+> +
+> +	/* kexec need a safe page to save reboot_code_buffer */
+> +	kimage->control_code_page = virt_to_page((void *)KEXEC_CTRL_CODE);
+> +
+> +	reboot_code_buffer =
+> +	  (unsigned long)page_address(kimage->control_code_page);
+> +	memcpy((void *)reboot_code_buffer, relocate_new_kernel,
+> +	       relocate_new_kernel_size);
+> +
+> +	/* All secondary cpus now may jump to kexec_smp_wait cycle */
+> +	relocated_kexec_smp_wait = reboot_code_buffer +
+> +		(void *)(kexec_smp_wait - relocate_new_kernel);
+> +
+> +	return 0;
+> +}
+> +
+> +void machine_kexec_cleanup(struct kimage *kimage)
+> +{
+> +}
+> +
+> +#ifdef CONFIG_SMP
+> +void kexec_reboot(void)
+> +{
+> +	do_kexec_t do_kexec = NULL;
+> +
+> +	/* All secondary cpus go to kexec_smp_wait */
+> +	if (smp_processor_id() > 0) {
+> +		relocated_kexec_smp_wait(NULL);
+> +		unreachable();
+> +	}
+> +
+> +	do_kexec = (void *)reboot_code_buffer;
+> +	do_kexec(boot_flag, fdt_addr, first_ind_entry, jump_addr);
+> +
+> +	unreachable();
+> +}
+
+self-check,
+kexec_reboot() is in! SMP needs to be used, modified as follows:
+
+void kexec_reboot(void)
+{
+         do_kexec_t do_kexec = NULL;
+
+#ifdef CONFIG_SMP
+         /* All secondary cpus go to kexec_smp_wait */
+         if (smp_processor_id() > 0) {
+                 relocated_kexec_smp_wait(NULL);
+                 unreachable();
+         }
+#endif
+
+         do_kexec = (void *)reboot_code_buffer;
+         do_kexec(boot_flag, fdt_addr, first_ind_entry, jump_addr);
+
+         unreachable();
+}
+
+Youling
+

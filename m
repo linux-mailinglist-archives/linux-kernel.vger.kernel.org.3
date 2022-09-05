@@ -2,125 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DEB5ADA77
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4535ADA83
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbiIEVAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 17:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S232385AbiIEVD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 17:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIEVA1 (ORCPT
+        with ESMTP id S230315AbiIEVDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 17:00:27 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F17152FDB;
-        Mon,  5 Sep 2022 14:00:27 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9CD2A5C014E;
-        Mon,  5 Sep 2022 17:00:26 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 05 Sep 2022 17:00:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662411626; x=1662498026; bh=ShSceNjCXY
-        gqlgBupuWbsBOM3+5FczhjpSjrgN/tPBw=; b=hV+tg69dqWA+xmw0VuLGZ1wS0j
-        LQS9f5DNqUhkgxKBz+hC4abYW044ziml/s3nMwukDJtO3I9VJrR5YjyqQO00+zzc
-        B4nAPJ2JdDQoYLns+9oEB+RdSeunz/6dgLqIXBHjDV8wJx+casJ1pXJzGnrWFZAX
-        0uGnmPjNmhsisd3fqgTerkPAnDvDMgeSESqK235TN4kdGahU1RHUAS1T7xvjdPDQ
-        7TpAw6hRXo3YTHwVWK8YyDz+yR6itswAyyGStnN7s9Qq07kgmiozrIO9BhoKtnJc
-        5+S9aQl3U9mU+05CAfvNc0yKBSymjIa0ArQ6+rsO2TRmpFWHEQWKx+dOge9A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1662411626; x=
-        1662498026; bh=ShSceNjCXYgqlgBupuWbsBOM3+5FczhjpSjrgN/tPBw=; b=S
-        9RJDP3Hv+KNNm5TY/9KO/XrA/LX9KcuR8CqQ56bQrp5jezsc3g9RZLBUg3ZMamK0
-        ssE3PqG1UcUC/ZHvdUBOBxYOngmxzkiNzyBQyvFfCUtahNFpmD2l5ZFlUzUzHJLO
-        zCUmoo6TWFIAYydqVd2MEw2zEOm3VKnoBr121ZFXPNnFYsOQvH4PRofb0WhAEPxf
-        j5sEhGiOc2Xiveji53eMfeqXGZfLbk4vTZpfoacAGClEVibuLhM251yX7Ha17j0z
-        QZZnXoK/rTmYxMdGx1mOHKNCIBo85sCRFh+90+pHVc1yB8fR6m8nzFkMNn22fgyr
-        ml7oCiGrgkNJkO8BJrFAg==
-X-ME-Sender: <xms:amMWYxBWSgoM0nwamImilLGxTpw6eSDy_u980l9tIMY2gn-tvtCUrQ>
-    <xme:amMWY_ggr6mXUa6jBwVnafTdkQGicI049q1H-LpJbXBCUB5U2YKyy5TsGtv2RHcNR
-    RkPL-YJ6fsAsg4QOg>
-X-ME-Received: <xmr:amMWY8kxMAOMFMw2tbIDDKUREQ9ZdpctmP-CrDdOvbxgX7RSg0lfUCleYYYUgRUv1GaJo7oyZUrzBrELCELUnLGL>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeliedgudeiudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepvfho
-    mhcuhfhithiihhgvnhhrhicuoehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruh
-    hkqeenucggtffrrghtthgvrhhnpeetudelveejvdffjeevvdelvdffhefgueefgedtffev
-    geevudfgieegleeikeetudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruhhk
-X-ME-Proxy: <xmx:amMWY7w0byClwP9hCHFbHd6qSpM6iWzqgixAGov07PjC7IILgYwYfA>
-    <xmx:amMWY2QgTpojgUbCpgRzunuPhiv4B-J422HEbei2lHllaCGg8r6kxA>
-    <xmx:amMWY-Y-dPng0Dj4D3q4oHwz3oo-GoAJMSwDlRuGEfStZjzBYQm2sg>
-    <xmx:amMWY7KTzYdu8qq6Oke_X22ea1wf5IjO3fpQIl3ixJmHwvBi-VpIiA>
-Feedback-ID: iefc945ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Sep 2022 17:00:23 -0400 (EDT)
-Message-ID: <1da905ff-482e-2d78-ec5d-3c2f9c99f613@tom-fitzhenry.me.uk>
-Date:   Tue, 6 Sep 2022 07:00:22 +1000
+        Mon, 5 Sep 2022 17:03:54 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B6165575
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 14:03:51 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id fc24so10174435ejc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 14:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hoFfvxrcWLiLIIghJLr7YqFR/bl7ppCzpkpzcFf25Ks=;
+        b=RJtkdpcWwDCjdU//f+NiUTQJO5kz/J/LQ4Oeb8FsER0ooLc9TUWAVJHwh16h0rFR6k
+         jDNxcAT6fUKAWlYXkDzi9PRVLGCFhao6TAvvqUzCLnc6J1JgrkOg//ZWPBTqZXz06MLe
+         g/E79BtcrSCZXcou4vgp2IFBghrcFJpfeHS130JLJDTFGdRTjjJVv3m8lMFyySNYfbdn
+         zyHSJi+z2sGr74Gs8Ferhg3qHw1Rm2Rd7LpNg2QiPU+rsqNYeELsa2ObuGU9YVxZktXI
+         +EIJDXEMJp+8DP7PW/zCtw+WHI1pL0md9UYJvdO9U0CdYO9jo7gVaKjIjDEh/+/hHVoD
+         fvlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hoFfvxrcWLiLIIghJLr7YqFR/bl7ppCzpkpzcFf25Ks=;
+        b=3SY0kVfdHXJIgO3RQQz/NP4A7cFt9iFvmKhKvliSZlqE6tu7Nz0Rx171ceiK6Xi7tH
+         P0+6+S+PYEJfLDFHac5fAQWHaSkSdZeu2ZNItq3IYFsPC1H62hVSzrDRcpxkY7B8XgXI
+         9bCvZqUxWblj5zYKemjzs0kXPC7lXz33OYtrbPVwcktDfO1sbpHn47DungnYQeKJgiP7
+         eGAQ0Rxp5JUGWFMayUyZ7Zw/Ki+LImLP9YUX40UCgYHcEShplPCOpYhlaJ3fQvHlYodJ
+         RsDd4NP3//r+4HzTfQDCBCnFRTcC03/nPNWQd9oILQJyHgHI1TNEtI1cvhNibaX/voTr
+         ykgg==
+X-Gm-Message-State: ACgBeo2nmI+RU99bQrqn9XDTOJ5gXld8UflYKwITQszy0Ftrh4wK6R4o
+        BrsqFw7Y3Ie65jkx3E5UBqnAqerAPRAegCdT4E+HMg==
+X-Google-Smtp-Source: AA6agR4GWSThcRe2jCNjPhluqCCYiE882sQv//p+YmHWCdk54XKDzjUOkiYoAS2W+owpznoWxs2VPch3w1ZAdKXk+5E=
+X-Received: by 2002:a17:907:7242:b0:741:770b:dfc6 with SMTP id
+ ds2-20020a170907724200b00741770bdfc6mr28207413ejc.203.1662411830025; Mon, 05
+ Sep 2022 14:03:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Content-Language: en-US
-To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     phone-devel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220829050040.17330-1-tom@tom-fitzhenry.me.uk>
- <166231195330.2423948.5394487959576836993.b4-ty@sntech.de>
-From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-Subject: Re: [PATCH v5 0/1] Add support for the Pine64 PinePhone Pro phone
-In-Reply-To: <166231195330.2423948.5394487959576836993.b4-ty@sntech.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-2-b29adfb27a6c@gmail.com>
+ <CAHp75Vc4yfh0JcY0B-vNawHTay5QNuhd7GAm86QZZZvUnQaMzQ@mail.gmail.com> <YxZP/exeVD7DQ5Hx@google.com>
+In-Reply-To: <YxZP/exeVD7DQ5Hx@google.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 5 Sep 2022 23:03:38 +0200
+Message-ID: <CACRpkda0iUTV=71eQf5_FdKWLe3Bu=U+Zny9_uJJL=5xXtnrnQ@mail.gmail.com>
+Subject: Re: [PATCH v1 02/11] drm/tegra: switch to using devm_fwnode_gpiod_get
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 03:22, Heiko Stuebner wrote:
-> On Mon, 29 Aug 2022 15:00:39 +1000, Tom Fitzhenry wrote:
->> PinePhone Pro is a RK3399 based phone produced by Pine64.
->>
->> Add a basic DTS for it. This is a working base that will allow myself and
->> others to add more nodes.
->>
->> Relies on "dt-bindings: arm: rockchip: Add PinePhone Pro bindings"[0].
->>
->> [...]
-> 
-> Applied, thanks!
-> 
-> [1/1] arm64: dts: rockchip: Add initial support for Pine64 PinePhone Pro
->        commit: 78a21c7d59520e72ebea667fe8745a4371d9fe86
-> 
-> 
-> Why was the dt-binding addition missing?
-> I've pulled the binding from v3 now.
-> 
-> While it is true that you should not resend patches just to add Acks,
-> when re-sending a whole series that includes other changes it's still
-> necessary to keep all patches together ;-)
+On Mon, Sep 5, 2022 at 9:37 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+> On Mon, Sep 05, 2022 at 01:57:01PM +0300, Andy Shevchenko wrote:
+> > On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
+> > <dmitry.torokhov@gmail.com> wrote:
+> > >
+> > > I would like to limit (or maybe even remove) use of
+> > > [devm_]gpiod_get_from_of_node in drivers so that gpiolib can be cleaned
+> > > a bit, so let's switch to the generic device property API.
+> >
+> > > It may even
+> > > help with handling secondary fwnodes when gpiolib is taught to handle
+> > > gpios described by swnodes.
+> >
+> > I would remove this sentence from all commit messages since it's a
+> > debatable thing and might even not happen, so the above is a pure
+> > speculation.
+>
+> I have the patches. Granted, I had them since '19 ;) but I'm rebasing
+> them and going to push them. I need them to convert bunch of input
+> drivers away from platform data.
 
-Ah, I had misinterpreted previous advice on when it was necessary to 
-repost patches.
+That's good news!
 
-I did wonder how maintainers would then discover the set of patches, and 
-so included the "Relies on [..." text above.
+Are you referring to this patch set mentioned in a discussion
+from 2017 thru 2020?
+https://lore.kernel.org/linux-input/20200826161222.GA1665100@dtor-ws/
 
-I will ensure patch series are complete in future.
+I put aside GPIO descriptor conversion for input devices (keys, buttons)
+in board files anticipating a swnode mechanism.
 
-Thanks for your patience and review! :)
+Yours,
+Linus Walleij

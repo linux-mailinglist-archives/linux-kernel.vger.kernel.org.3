@@ -2,94 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9445AD2F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A975AD2A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238089AbiIEMeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
+        id S237987AbiIEMaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237980AbiIEMdF (ORCPT
+        with ESMTP id S237403AbiIEMaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:33:05 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F9B61B04
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:26:59 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id b13-20020a056402350d00b0043dfc84c533so5672505edd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:26:59 -0700 (PDT)
+        Mon, 5 Sep 2022 08:30:15 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F7F60693;
+        Mon,  5 Sep 2022 05:26:28 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so5587842wmb.4;
+        Mon, 05 Sep 2022 05:26:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=qWMR0SPZO0jqHHxoNfMsk5w/9uuaYeqiCUk8OeqbWGY=;
-        b=MCXD5lbAQVcPgT/EOdvK/WVt9NS7Tehk6H0aVaS8GX3ikViotqPCRrmdoTTCXIhr5J
-         N8bepvbPPvSbhZ8S0DmGK9sFHZlcXZ31hLA7G3xuzIyLsP7X5LFnKWatBqYu/WyuYeav
-         k7/a9IJ5CxBv/ClbXm8jzN0Wty3J801Voam2e3glQZTv/b9+9CyLW+e+qo77yLiBc3q4
-         tLOthnqhOsLvn/SWDpHT5+mmNbEUNHIB8pgYXGWJNleqraHhVXBzpssmWKCcJwIEj3HJ
-         SW6L9kIN8TBi8B5aJM7ga9767Q3PcHiJ21sor8antmuKraDCJSwCtpgLZh65GuT8gSnh
-         9ivg==
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date;
+        bh=tAW3My05WCTmzHfQ20v4+422b2rUR8g6mM7zB5mCK5c=;
+        b=H4qfO4cL2opf/Oims/aoUBSsApZKqNzReLWDBf21NNU3zOzkUVzYu9/ukGsOp7JdbB
+         9M+uMTZMSauTYXRMVl/5ps7yjrG3ZPGf1USr/PieL2z4r/6SWBSsARzsiKoNvrGMeLjf
+         gmdgtaoeoQub7Hh4wZ2FfJwsajmPfapVUgwNg/vJDkOZezFwWpa5ZpsrRWaGNI+cXoyE
+         mfCT48BrURA9yeWXhe+PmwQKxbEGHnc/j2xik+wbgRUFK9aoC/8IN/fwI9UmJxx3yCnw
+         GO3nw40TKiUQl89+pHR42XU5m6b5QmimoPYdkH3pQNfn9fxcNGU9oMQoroOPyMRUaNlZ
+         KRsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=qWMR0SPZO0jqHHxoNfMsk5w/9uuaYeqiCUk8OeqbWGY=;
-        b=i08pOofn8DueQAet9MNv8OXUIh/cslCOJRfMTGCph7UupDoKD7M+eLW+2hWS4dJbPO
-         B2E1hBDGGrJuc0TPZgY2JG/Ej21OIK8A1GTgyGbHjK/MKpRKok9d9smG0vMM2tX2f1aE
-         ZUUWHaqFQKld/oyOvLKJ1XJBIGUa8aHo0kvERw+s5lIl93EyKHH1V18zecmQBegK9305
-         BbucN55N7DpJdPzHejG5ZTTtLVgQ9de07cx+uRmsM9fZSTYSnkW7YEWsRkE5ncMLRCOl
-         Vck2D6JUcVmH65Zwfjjv1AJ/TYcmonn1AxdTcpHL8h/3J5GGQrDfW/x3G4lzBm9Ns6zc
-         Bo4Q==
-X-Gm-Message-State: ACgBeo2zcoOkJsP4CQNne+7ckHmvVa0wc40fUTBAqKVLHKmI31BCYNLD
-        NB3MQiTqZc0oYhUnpwRU3M0lPZdgXcs=
-X-Google-Smtp-Source: AA6agR5SRqMCINjkMuIrD7WXHVNS75SNahzGJoh0jVbnVtc6SNEh0M27/BA2cqVS6mxm7vNN9nbOSPJjvGE=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:b808:8d07:ab4a:554c])
- (user=glider job=sendgmr) by 2002:a17:907:2c74:b0:741:657a:89de with SMTP id
- ib20-20020a1709072c7400b00741657a89demr26824523ejc.58.1662380819269; Mon, 05
- Sep 2022 05:26:59 -0700 (PDT)
-Date:   Mon,  5 Sep 2022 14:24:52 +0200
-In-Reply-To: <20220905122452.2258262-1-glider@google.com>
-Mime-Version: 1.0
-References: <20220905122452.2258262-1-glider@google.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220905122452.2258262-45-glider@google.com>
-Subject: [PATCH v6 44/44] x86: kmsan: enable KMSAN builds for x86
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=tAW3My05WCTmzHfQ20v4+422b2rUR8g6mM7zB5mCK5c=;
+        b=RNwa+fezx0hZaoneXl67XYmysK/EuSwT0fzFPV8LLJ6Kq13ObFJ5ge0I8suD8Dr+DK
+         tVpZEb2yTVrAhva/o+OuAHfUzn4USty/GP+NhspJUWoMBYwcL1VC2V9FE6CG/TlBuozc
+         yzbtdEqhnR51jXXnRLC1CkhXiGppvnoKco6D34qxo2Cx3yu7/9PF6lWzxAqv47r/sOGa
+         23irtPyEQQry53aTxUmjlGNBbEG2ql6nxRHwAB4dn9WXHFmwvzTp9sNK9FlHXu5aY5Dt
+         PRNbWDbDaK4u/bumnabZZFkYipifl2rhEGoViqYcuQpOCoLnZd4cqXfrT5FL/8hqJ8hu
+         cIwg==
+X-Gm-Message-State: ACgBeo2mfz5jEiMGJuz0/Y+ohL4yhR2fmE0CbABftjUSag9uFy1TW+6K
+        I5sY+YjO+GxU2vWgwGu6WTU=
+X-Google-Smtp-Source: AA6agR5k4PoyPjWt82Qnzkt4tXrp7SK1j65iKZUj6dX3ITrjRqYQNa1z4jEW70ny5h5k3QSCdq4K2A==
+X-Received: by 2002:a05:600c:2193:b0:3a5:346f:57d0 with SMTP id e19-20020a05600c219300b003a5346f57d0mr10430095wme.124.1662380768536;
+        Mon, 05 Sep 2022 05:26:08 -0700 (PDT)
+Received: from [10.176.234.249] ([137.201.254.41])
+        by smtp.googlemail.com with ESMTPSA id c11-20020a5d528b000000b0021e42e7c7dbsm8441891wrv.83.2022.09.05.05.26.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 05:26:08 -0700 (PDT)
+Message-ID: <6e594dc2ce6103884b7768c2fed55eabec0d5ed8.camel@gmail.com>
+Subject: Re: [RFC PATCH v3 1/4] ufs: core: prepare ufs for multi circular
+ queue support
+From:   Bean Huo <huobean@gmail.com>
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_nguyenb@quicinc.com,
+        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
+        adrian.hunter@intel.com, bvanassche@acm.org, avri.altman@wdc.com,
+        mani@kernel.org, quic_cang@quicinc.com, beanhuo@micron.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Mon, 05 Sep 2022 14:26:06 +0200
+In-Reply-To: <757bbfe36629b7c31ef2630971f8678a7801223f.1662157846.git.quic_asutoshd@quicinc.com>
+References: <cover.1662157846.git.quic_asutoshd@quicinc.com>
+         <757bbfe36629b7c31ef2630971f8678a7801223f.1662157846.git.quic_asutoshd@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,97 +81,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make KMSAN usable by adding the necessary Kconfig bits.
-
-Also declare x86-specific functions checking address validity
-in arch/x86/include/asm/kmsan.h.
-
-Signed-off-by: Alexander Potapenko <glider@google.com>
----
-v4:
- -- per Marco Elver's request, create arch/x86/include/asm/kmsan.h
-    and move arch-specific inline functions there.
-
-Link: https://linux-review.googlesource.com/id/I1d295ce8159ce15faa496d20089d953a919c125e
----
- arch/x86/Kconfig             |  1 +
- arch/x86/include/asm/kmsan.h | 55 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 arch/x86/include/asm/kmsan.h
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 697da8dae1418..bd9436cd0f29b 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -168,6 +168,7 @@ config X86
- 	select HAVE_ARCH_KASAN			if X86_64
- 	select HAVE_ARCH_KASAN_VMALLOC		if X86_64
- 	select HAVE_ARCH_KFENCE
-+	select HAVE_ARCH_KMSAN			if X86_64
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_MMAP_RND_BITS		if MMU
- 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if MMU && COMPAT
-diff --git a/arch/x86/include/asm/kmsan.h b/arch/x86/include/asm/kmsan.h
-new file mode 100644
-index 0000000000000..a790b865d0a68
---- /dev/null
-+++ b/arch/x86/include/asm/kmsan.h
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * x86 KMSAN support.
-+ *
-+ * Copyright (C) 2022, Google LLC
-+ * Author: Alexander Potapenko <glider@google.com>
-+ */
-+
-+#ifndef _ASM_X86_KMSAN_H
-+#define _ASM_X86_KMSAN_H
-+
-+#ifndef MODULE
-+
-+#include <asm/processor.h>
-+#include <linux/mmzone.h>
-+
-+/*
-+ * Taken from arch/x86/mm/physaddr.h to avoid using an instrumented version.
-+ */
-+static inline bool kmsan_phys_addr_valid(unsigned long addr)
-+{
-+	if (IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT))
-+		return !(addr >> boot_cpu_data.x86_phys_bits);
-+	else
-+		return true;
-+}
-+
-+/*
-+ * Taken from arch/x86/mm/physaddr.c to avoid using an instrumented version.
-+ */
-+static inline bool kmsan_virt_addr_valid(void *addr)
-+{
-+	unsigned long x = (unsigned long)addr;
-+	unsigned long y = x - __START_KERNEL_map;
-+
-+	/* use the carry flag to determine if x was < __START_KERNEL_map */
-+	if (unlikely(x > y)) {
-+		x = y + phys_base;
-+
-+		if (y >= KERNEL_IMAGE_SIZE)
-+			return false;
-+	} else {
-+		x = y + (__START_KERNEL_map - PAGE_OFFSET);
-+
-+		/* carry flag will be set if starting x was >= PAGE_OFFSET */
-+		if ((x > y) || !kmsan_phys_addr_valid(x))
-+			return false;
-+	}
-+
-+	return pfn_valid(x >> PAGE_SHIFT);
-+}
-+
-+#endif /* !MODULE */
-+
-+#endif /* _ASM_X86_KMSAN_H */
--- 
-2.37.2.789.g6183377224-goog
+QXN1dG9zaCwKCgpPbiBGcmksIDIwMjItMDktMDIgYXQgMTU6NDEgLTA3MDAsIEFzdXRvc2ggRGFz
+IHdyb3RlOgo+IFByZXBhcmF0b3J5IGNoYW5nZXMgZm9yIHVwY29taW5nIG11bHRpIGNpcmN1bGFy
+IHF1ZXVlLgo+IAo+IENvLWRldmVsb3BlZC1ieTogQ2FuIEd1byA8cXVpY19jYW5nQHF1aWNpbmMu
+Y29tPgo+IFNpZ25lZC1vZmYtYnk6IENhbiBHdW8gPHF1aWNfY2FuZ0BxdWljaW5jLmNvbT4KPiBT
+aWduZWQtb2ZmLWJ5OiBBc3V0b3NoIERhcyA8cXVpY19hc3V0b3NoZEBxdWljaW5jLmNvbT4KPiAt
+LS0KPiDCoGRyaXZlcnMvdWZzL2NvcmUvdWZzaGNkLmMgfCA5OSArKysrKysrKysrKysrKysrKysr
+KysrKysrLS0tLS0tLS0tLS0tCj4gLS0tLS0tLS0tLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDUzIGlu
+c2VydGlvbnMoKyksIDQ2IGRlbGV0aW9ucygtKQo+IAo+IAo+IMKgCj4gQEAgLTIxMzQsMTQgKzIx
+MzUsMTQgQEAgc3RhdGljIHZvaWQgdWZzaGNkX3VwZGF0ZV9tb25pdG9yKHN0cnVjdAo+IHVmc19o
+YmEgKmhiYSwgY29uc3Qgc3RydWN0IHVmc2hjZF9scmIgKgo+IMKgICogQHRhc2tfdGFnOiBUYXNr
+IHRhZyBvZiB0aGUgY29tbWFuZAo+IMKgICovCgpZb3UgZGlkbid0IGNoYW5nZSBwYXJhbWV0ZXIg
+bmFtZSBpbiB0aGUgZnVuY3Rpb24gZGVzY3JpcHRpb24uCgo+IMKgc3RhdGljIGlubGluZQo+IC12
+b2lkIHVmc2hjZF9zZW5kX2NvbW1hbmQoc3RydWN0IHVmc19oYmEgKmhiYSwgdW5zaWduZWQgaW50
+IHRhc2tfdGFnKQo+ICt2b2lkIHVmc2hjZF9zZW5kX2NvbW1hbmQoc3RydWN0IHVmc19oYmEgKmhi
+YSwgc3RydWN0IHVmc2hjZF9scmIKPiAqbHJicCkKPiDCoHsKPiAtwqDCoMKgwqDCoMKgwqBzdHJ1
+Y3QgdWZzaGNkX2xyYiAqbHJicCA9ICZoYmEtPmxyYlt0YXNrX3RhZ107Cj4gK8KgwqDCoMKgwqDC
+oMKgaW50IHRhc2tfdGFnID0gbHJicC0+dGFza190YWc7Cj4gwqDCoMKgwqDCoMKgwqDCoHVuc2ln
+bmVkIGxvbmcgZmxhZ3M7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgbHJicC0+aXNzdWVfdGltZV9z
+dGFtcCA9IGt0aW1lX2dldCgpOwo+IMKgwqDCoMKgwqDCoMKgwqBscmJwLT5jb21wbF90aW1lX3N0
+YW1wID0ga3RpbWVfc2V0KDAsIDApOwo+IC3CoMKgwqDCoMKgwqDCoHVmc2hjZF9hZGRfY29tbWFu
+ZF90cmFjZShoYmEsIHRhc2tfdGFnLCBVRlNfQ01EX1NFTkQpOwo+ICvCoMKgwqDCoMKgwqDCoHVm
+c2hjZF9hZGRfY29tbWFuZF90cmFjZShoYmEsIGxyYnAsIFVGU19DTURfU0VORCk7Cj4gwqDCoMKg
+wqDCoMKgwqDCoHVmc2hjZF9jbGtfc2NhbGluZ19zdGFydF9idXN5KGhiYSk7Cj4gwqDCoMKgwqDC
+oMKgwqDCoGlmICh1bmxpa2VseSh1ZnNoY2Rfc2hvdWxkX2luZm9ybV9tb25pdG9yKGhiYSwgbHJi
+cCkpKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdWZzaGNkX3N0YXJ0X21vbml0
+b3IoaGJhLCBscmJwKTsKPiBAQCAtMjU1Myw5ICsyNTU0LDEwIEBAIHZvaWQgdWZzaGNkX3ByZXBh
+cmVfdXRwX3Njc2lfY21kX3VwaXUoc3RydWN0Cj4gdWZzaGNkX2xyYiAqbHJicCwgdTggdXBpdV9m
+bGFncykKPiDCoMKgwqDCoMKgwqDCoMKgLyogY29tbWFuZCBkZXNjcmlwdG9yIGZpZWxkcyAqLwo+
+IMKgwqDCoMKgwqDCoMKgwqB1Y2RfcmVxX3B0ci0+aGVhZGVyLmR3b3JkXzAgPSBVUElVX0hFQURF
+Ul9EV09SRCgKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgVVBJVV9UUkFOU0FDVElPTl9DT01NQU5ELCB1cGl1X2ZsYWdzLAo+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGxyYnAtPmx1biwgbHJicC0+dGFza190YWcpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGxyYnAtPmx1biwgbHJi
+cC0+dGFza190YWcgJiAweGZmKTsKPiDCoMKgwqDCoMKgwqDCoMKgdWNkX3JlcV9wdHItPmhlYWRl
+ci5kd29yZF8xID0gVVBJVV9IRUFERVJfRFdPUkQoCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgVVBJVV9DT01NQU5EX1NFVF9U
+WVBFX1NDU0ksIDAsIDAsIDApOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFVQSVVfQ09NTUFORF9TRVRfVFlQRV9TQ1NJLCAw
+LCAwLAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoChscmJwLT50YXNrX3RhZyAmIDB4ZjAwKSA8PCA0KTsKPiDCoAoKQXJlIHlv
+dSBzdXJlIGhlcmUgIihscmJwLT50YXNrX3RhZyAmIDB4ZjAwKSA8PCA0IiBpcyBjb3JyZWN0PyAK
+Cgp0aGlzIHdpbGwgb3ZlcndyaXRlIG90aGVyIGZpZWxkcywgc2VlIFVQSVVfSEVBREVSX0RXT1JE
+OgoKI2RlZmluZSBVUElVX0hFQURFUl9EV09SRChieXRlMywgYnl0ZTIsIGJ5dGUxLCBieXRlMClc
+CiAgICAgICAgICAgICAgICAgICAgICAgIGNwdV90b19iZTMyKChieXRlMyA8PCAyNCkgfCAoYnl0
+ZTIgPDwgMTYpIHxcCiAgICAgICAgICAgICAgICAgICAgICAgICAoYnl0ZTEgPDwgOCkgfCAoYnl0
+ZTApKQoKCgo+IAo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgdWZzaGNkX3NlbmRfY29tbWFuZChoYmEs
+IHRhZyk7Cj4gK8KgwqDCoMKgwqDCoMKgdWZzaGNkX3NlbmRfY29tbWFuZChoYmEsIGxyYnApOwo+
+IMKgwqDCoMKgwqDCoMKgwqBlcnIgPSB1ZnNoY2Rfd2FpdF9mb3JfZGV2X2NtZChoYmEsIGxyYnAs
+IHRpbWVvdXQpOwo+IMKgwqDCoMKgwqDCoMKgwqB1ZnNoY2RfYWRkX3F1ZXJ5X3VwaXVfdHJhY2Uo
+aGJhLCBlcnIgPyBVRlNfUVVFUllfRVJSIDoKPiBVRlNfUVVFUllfQ09NUCwKPiDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIChzdHJ1Y3QgdXRwX3VwaXVfcmVxICopbHJicC0KPiA+dWNkX3JzcF9wdHIpOwo+IEBAIC00
+NTEzLDYgKzQ1MTUsNyBAQCBpbnQgdWZzaGNkX21ha2VfaGJhX29wZXJhdGlvbmFsKHN0cnVjdCB1
+ZnNfaGJhCj4gKmhiYSkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBSRUdfVVRQX1RSQU5TRkVSX1JFUV9MSVNUX0JBU0VfTCk7Cj4gwqDCoMKgwqDCoMKg
+wqDCoHVmc2hjZF93cml0ZWwoaGJhLCB1cHBlcl8zMl9iaXRzKGhiYS0+dXRyZGxfZG1hX2FkZHIp
+LAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFJFR19V
+VFBfVFJBTlNGRVJfUkVRX0xJU1RfQkFTRV9IKTsKPiArCj4gwqDCoMKgwqDCoMKgwqDCoHVmc2hj
+ZF93cml0ZWwoaGJhLCBsb3dlcl8zMl9iaXRzKGhiYS0+dXRtcmRsX2RtYV9hZGRyKSwKPiDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBSRUdfVVRQX1RBU0tf
+UkVRX0xJU1RfQkFTRV9MKTsKPiDCoMKgwqDCoMKgwqDCoMKgdWZzaGNkX3dyaXRlbChoYmEsIHVw
+cGVyXzMyX2JpdHMoaGJhLT51dG1yZGxfZG1hX2FkZHIpLAo+IEBAIC01MzIwLDYgKzUzMjMsMzIg
+QEAgc3RhdGljIHZvaWQgdWZzaGNkX3JlbGVhc2Vfc2NzaV9jbWQoc3RydWN0Cj4gdWZzX2hiYSAq
+aGJhLAo+IMKgwqDCoMKgwqDCoMKgwqB1ZnNoY2RfY2xrX3NjYWxpbmdfdXBkYXRlX2J1c3koaGJh
+KTsKPiDCoH0KPiDCoAo+ICt2b2lkIHVmc2hjZF9jb21wbF9vbmVfY3FlKHN0cnVjdCB1ZnNfaGJh
+ICpoYmEsIGludCB0YXNrX3RhZykKClRoaXMgZnVuY3Rpb24gZG9lcyBvbmx5IGNvbXBsZXRlIG9u
+ZSB0YXNrLiBXaGF0IGRvZXMgY3FlIHN0YW5kIGZvcj8KCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBz
+dHJ1Y3QgdWZzaGNkX2xyYiAqbHJicDsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qgc2NzaV9jbW5k
+ICpjbWQ7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGxyYnAgPSAmaGJhLT5scmJbdGFza190YWddOwo+
+ICvCoMKgwqDCoMKgwqDCoGxyYnAtPmNvbXBsX3RpbWVfc3RhbXAgPSBrdGltZV9nZXQoKTsKPiAr
+wqDCoMKgwqDCoMKgwqBjbWQgPSBscmJwLT5jbWQ7Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKGNtZCkg
+ewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAodW5saWtlbHkodWZzaGNkX3No
+b3VsZF9pbmZvcm1fbW9uaXRvcihoYmEsCj4gbHJicCkpKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdWZzaGNkX3VwZGF0ZV9tb25pdG9yKGhiYSwgbHJi
+cCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHVmc2hjZF9hZGRfY29tbWFuZF90
+cmFjZShoYmEsIGxyYnAsIFVGU19DTURfQ09NUCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGNtZC0+cmVzdWx0ID0gdWZzaGNkX3RyYW5zZmVyX3JzcF9zdGF0dXMoaGJhLCBscmJw
+KTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdWZzaGNkX3JlbGVhc2Vfc2NzaV9j
+bWQoaGJhLCBscmJwKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLyogRG8gbm90
+IHRvdWNoIGxyYnAgYWZ0ZXIgc2NzaSBkb25lICovCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoHNjc2lfZG9uZShjbWQpOwo+ICvCoMKgwqDCoMKgwqDCoH0gZWxzZSBpZiAobHJicC0+
+Y29tbWFuZF90eXBlID09IFVUUF9DTURfVFlQRV9ERVZfTUFOQUdFIHx8Cj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgbHJicC0+Y29tbWFuZF90eXBlID09IFVUUF9DTURfVFlQ
+RV9VRlNfU1RPUkFHRSkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoaGJh
+LT5kZXZfY21kLmNvbXBsZXRlKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqB1ZnNoY2RfYWRkX2NvbW1hbmRfdHJhY2UoaGJhLCBscmJwLAo+IFVGU19E
+RVZfQ09NUCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBjb21wbGV0ZShoYmEtPmRldl9jbWQuY29tcGxldGUpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdWZzaGNkX2Nsa19zY2FsaW5nX3VwZGF0ZV9idXN5
+KGhiYSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0KPiArwqDCoMKgwqDCoMKg
+wqB9Cj4gK30KPiArCgoKS2luZCByZWdhcmRzLApCZWFuCgo=
 

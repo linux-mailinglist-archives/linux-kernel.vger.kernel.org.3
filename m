@@ -2,526 +2,994 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E195AC894
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3B25AC897
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235328AbiIEBi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 21:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S235407AbiIEBwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 21:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiIEBiY (ORCPT
+        with ESMTP id S230176AbiIEBwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 21:38:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827F125584
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 18:38:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B420B80E6F
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:38:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA74C4347C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:38:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662341899;
-        bh=UHudl16cELwuX7Z3/+rEMyKy63GhTzZ0tFNlT5OB+Hw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Hlqya0pPMvFo1gukdzyc74eSXq0h4DRL2qDKplIYmLRvNqExmE7cDWlD4o4JSFllt
-         ziUnL1RBr/8HXRBvv4smI/oIJBWVGGQ/jJJ3Bu3iRH/nexlrawPooXbaVEp0ozai8P
-         vu5CnZ61OVAUwIj39gs1k71NqoddzGKHMH4szGusPz+h7mji0sZPw4czKcpHaOmuTJ
-         aCaR0gon4I/FnJaQSSGF6GLLenPBnQ23SldXA6v/zppgVtSKGptxm07pZ8FBHDg0dk
-         AVMCiVkNjTxrmddMfKvpN2hrK/ytL4aCeJjrKgaxpkWw7kvXZCGb5gzoXGtX/+LDWR
-         4JfvfP4HxQbrA==
-Received: by mail-vs1-f49.google.com with SMTP id o123so7536460vsc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 18:38:19 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1pzGMww8GKmZ+r6U2n5Fc6Y3/UUqjiih+g1MEElTkJVje35K3E
-        sohwbQ21fxybS72AjFabwkOo+eF/Y1uHJvlzNxM=
-X-Google-Smtp-Source: AA6agR4wJSSFEzDVY3VKjhTnQg2KWQlj6tIHiaooMo/oFVZbP3V2WXszWukAMkdykxCpNptDnhOBCk/bWYOHe0GIkbg=
-X-Received: by 2002:a67:df81:0:b0:390:21a3:823a with SMTP id
- x1-20020a67df81000000b0039021a3823amr13291532vsk.70.1662341898497; Sun, 04
- Sep 2022 18:38:18 -0700 (PDT)
+        Sun, 4 Sep 2022 21:52:20 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1202612F;
+        Sun,  4 Sep 2022 18:52:16 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 09:51:48 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662342734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4nQsa3oiaIk/YUVTcvYYLKtT19SsbfAZHWkL3C6xYrQ=;
+        b=gYgq7bv3L/B0qCBV33aRENTZfVRHAcPHQTpihvJ4+cfR61hCpOlPqf1qX9tWvbDnonpJC1
+        8Hs6ahHyt6o88zCSHPOeUSFEWHm3Lsuf5wFbXcMSCM2+D/YCuzt0vC/8mS8+YhTn61U8N6
+        qh2VCnCLU7V+iVGb6sE4an7qyBfZfRw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <20220905015148.GA8139@chq-T47>
+References: <20220824140146.29140-1-cai.huoqing@linux.dev>
+ <20220830042422.GA11576@chq-T47>
+ <20220902230203.2bkh5zapfi3ae6v2@mobilestation>
 MIME-Version: 1.0
-References: <1661747823-23745-1-git-send-email-tangyouling@loongson.cn>
- <1661747823-23745-3-git-send-email-tangyouling@loongson.cn>
- <CAAhV-H6LkcnS4Z7YP=kfAkuDzKys57=6frsY0+T11ucKrWPuPw@mail.gmail.com> <ec447291-078f-d1ea-6c5a-21b092965e81@loongson.cn>
-In-Reply-To: <ec447291-078f-d1ea-6c5a-21b092965e81@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 5 Sep 2022 09:38:07 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4D60bGk7wr0oSw-5oJqTv_ntLtifHfdxLUdVA7ExDiLg@mail.gmail.com>
-Message-ID: <CAAhV-H4D60bGk7wr0oSw-5oJqTv_ntLtifHfdxLUdVA7ExDiLg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] LoongArch: Add kdump support
-To:     Youling Tang <tangyouling@loongson.cn>
-Cc:     Baoquan He <bhe@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kexec@lists.infradead.org, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220902230203.2bkh5zapfi3ae6v2@mobilestation>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Youling,
+On 03 9月 22 02:02:03, Serge Semin wrote:
+> Hello Cai
+> 
+> On Tue, Aug 30, 2022 at 12:24:22PM +0800, Cai Huoqing wrote:
+> > On 24 8月 22 22:01:44, Cai Huoqing wrote:
+> > > Add support for HDMA NATIVE, as long the IP design has set
+> > > the compatible register map parameter-HDMA_NATIVE,
+> > > which allows compatibility for native HDMA register configuration.
+> > > 
+> > > The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+> > > And the native HDMA registers are different from eDMA,
+> > > so this patch add support for HDMA NATIVE mode
+> > Just ping this patch
+> 
+> Thanks for the patchset. I have much doubts the driver maintainer
+> will pop up any time soon. My series has been on review for over
+> six months now. No messages from Gustavo have been received. I'll have
+> a look at your patch on the next week (or after it). Meanwhile could
+> you please rebase it on top of another DW eDMA-related series:
+> Link: https://lore.kernel.org/linux-pci/20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru/
+> and
+> Link: https://lore.kernel.org/dmaengine/20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru/
+> ?
+> The later patchset is at the final stage of review process. So you'll
+> need to have your work based on it anyway. After it's done just make
+> sure the driver still work and add a note to the patch log that your
+> patch is based on that patchset. Don't forget to add me to the Cc list
+> of next revision of your patch so I would be notified when you
+> resubmit it.
+> 
+> -Sergey
+Hi Sergey, thanks for your reply.
+I will rebase my patch and resend it.
+For NATIVE HDMA mode, I think it could added to dw-edma(like my patch)
+instead of creating a new dma driver, dw-hdma.. do you agree it? 
 
-On Mon, Sep 5, 2022 at 8:54 AM Youling Tang <tangyouling@loongson.cn> wrote:
->
-> Hi, Huacai
->
-> On 09/04/2022 08:21 PM, Huacai Chen wrote:
-> > Hi, Youling,
-> >
-> > I think crash.c can be merged into crash_dump.c
->
-> Most architectures only implement copy_oldmem_page() in crash_dump.c,
-> I'm not sure if merging crash.c into crash_dump.c will break its
-> consistency?
->
-> Thanks,
-> Youling
-Yes, you are right, crash.c cannot be merged into crash_dump.c, but it
-can be merged into machine_kexec.c, as arm64 and riscv do.
-
-Huacai
->
-> >
-> > Huacai
-> >
-> > On Mon, Aug 29, 2022 at 12:37 PM Youling Tang <tangyouling@loongson.cn> wrote:
-> >>
-> >> This patch adds support for kdump, the kernel will reserve a region
-> >> for the crash kernel and jump there on panic.
-> >>
-> >> Arch-specific functions are added to allow for implementing a crash
-> >> dump file interface, /proc/vmcore, which can be viewed as a ELF file.
-> >>
-> >> A user space tool, like kexec-tools, is responsible for allocating a
-> >> separate region for the core's ELF header within crash kdump kernel
-> >> memory and filling it in when executing kexec_load().
-> >>
-> >> Then, its location will be advertised to crash dump kernel via a new
-> >> device-tree property, "linux,elfcorehdr", and crash dump kernel preserves
-> >> the region for later use with fdt_reserve_elfcorehdr() at boot time.
-> >>
-> >> At the same time, it will also limit the crash kdump kernel to the
-> >> crashkernel area via a new device-tree property, "linux, usable-memory-range",
-> >> so as not to destroy the original kernel dump data.
-> >>
-> >> On crash dump kernel, /proc/vmcore will access the primary kernel's memory
-> >> with copy_oldmem_page().
-> >>
-> >> I tested this on  LoongArch 3A5000 machine and works as expected (Suggest
-> >> crashkernel parameter is "crashkernel=512M@2320M"), you may test it by
-> >> triggering a crash through /proc/sysrq_trigger:
-> >>
-> >>  $ sudo kexec -p /boot/vmlinux-kdump --reuse-cmdline --append="nr_cpus=1"
-> >>  # echo c > /proc/sysrq_trigger
-> >>
-> >> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-> >> ---
-> >>  arch/loongarch/Kconfig                  |  22 ++++++
-> >>  arch/loongarch/Makefile                 |   4 +
-> >>  arch/loongarch/kernel/Makefile          |   3 +-
-> >>  arch/loongarch/kernel/crash.c           | 100 ++++++++++++++++++++++++
-> >>  arch/loongarch/kernel/crash_dump.c      |  19 +++++
-> >>  arch/loongarch/kernel/machine_kexec.c   |  12 ++-
-> >>  arch/loongarch/kernel/mem.c             |   6 ++
-> >>  arch/loongarch/kernel/relocate_kernel.S |   6 ++
-> >>  arch/loongarch/kernel/setup.c           |  49 ++++++++++++
-> >>  arch/loongarch/kernel/traps.c           |   4 +
-> >>  10 files changed, 217 insertions(+), 8 deletions(-)
-> >>  create mode 100644 arch/loongarch/kernel/crash.c
-> >>  create mode 100644 arch/loongarch/kernel/crash_dump.c
-> >>
-> >> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> >> index 903c82fa958d..7c1b07a5b5bd 100644
-> >> --- a/arch/loongarch/Kconfig
-> >> +++ b/arch/loongarch/Kconfig
-> >> @@ -420,6 +420,28 @@ config KEXEC
-> >>
-> >>           The name comes from the similarity to the exec system call.
-> >>
-> >> +config CRASH_DUMP
-> >> +       bool "Build kdump crash kernel"
-> >> +       help
-> >> +         Generate crash dump after being started by kexec. This should
-> >> +         be normally only set in special crash dump kernels which are
-> >> +         loaded in the main kernel with kexec-tools into a specially
-> >> +         reserved region and then later executed after a crash by
-> >> +         kdump/kexec.
-> >> +
-> >> +         For more details see Documentation/admin-guide/kdump/kdump.rst
-> >> +
-> >> +config PHYSICAL_START
-> >> +       hex "Physical address where the kernel is loaded"
-> >> +       default "0x9000000091000000" if 64BIT
-> >> +       depends on CRASH_DUMP
-> >> +       help
-> >> +         This gives the XKPRANGE address where the kernel is loaded.
-> >> +         If you plan to use kernel for capturing the crash dump change
-> >> +         this value to start of the reserved region (the "X" value as
-> >> +         specified in the "crashkernel=YM@XM" command line boot parameter
-> >> +         passed to the panic-ed kernel).
-> >> +
-> >>  config SECCOMP
-> >>         bool "Enable seccomp to safely compute untrusted bytecode"
-> >>         depends on PROC_FS
-> >> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> >> index 4bc47f47cfd8..7dabd580426d 100644
-> >> --- a/arch/loongarch/Makefile
-> >> +++ b/arch/loongarch/Makefile
-> >> @@ -48,7 +48,11 @@ KBUILD_CFLAGS_MODULE         += -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
-> >>  cflags-y += -ffreestanding
-> >>  cflags-y += $(call cc-option, -mno-check-zero-division)
-> >>
-> >> +ifdef CONFIG_PHYSICAL_START
-> >> +load-y         = $(CONFIG_PHYSICAL_START)
-> >> +else
-> >>  load-y         = 0x9000000000200000
-> >> +endif
-> >>  bootvars-y     = VMLINUX_LOAD_ADDRESS=$(load-y)
-> >>
-> >>  drivers-$(CONFIG_PCI)          += arch/loongarch/pci/
-> >> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> >> index 20b64ac3f128..df5aea129364 100644
-> >> --- a/arch/loongarch/kernel/Makefile
-> >> +++ b/arch/loongarch/kernel/Makefile
-> >> @@ -17,7 +17,8 @@ obj-$(CONFIG_CPU_HAS_FPU)     += fpu.o
-> >>  obj-$(CONFIG_MODULES)          += module.o module-sections.o
-> >>  obj-$(CONFIG_STACKTRACE)       += stacktrace.o
-> >>
-> >> -obj-$(CONFIG_KEXEC)             += machine_kexec.o relocate_kernel.o
-> >> +obj-$(CONFIG_KEXEC)             += machine_kexec.o relocate_kernel.o crash.o
-> >> +obj-$(CONFIG_CRASH_DUMP)        += crash_dump.o
-> >>
-> >>  obj-$(CONFIG_PROC_FS)          += proc.o
-> >>
-> >> diff --git a/arch/loongarch/kernel/crash.c b/arch/loongarch/kernel/crash.c
-> >> new file mode 100644
-> >> index 000000000000..b4f249ec6301
-> >> --- /dev/null
-> >> +++ b/arch/loongarch/kernel/crash.c
-> >> @@ -0,0 +1,100 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * Copyright (C) 2022 Loongson Technology Corporation Limited
-> >> + *
-> >> + * Derived from MIPS
-> >> + */
-> >> +#include <linux/kernel.h>
-> >> +#include <linux/smp.h>
-> >> +#include <linux/reboot.h>
-> >> +#include <linux/crash_dump.h>
-> >> +#include <linux/delay.h>
-> >> +#include <linux/irq.h>
-> >> +#include <linux/types.h>
-> >> +#include <linux/sched.h>
-> >> +#include <linux/sched/task_stack.h>
-> >> +#include <asm/cacheflush.h>
-> >> +#include <asm/kexec.h>
-> >> +
-> >> +static cpumask_t cpus_in_crash = CPU_MASK_NONE;
-> >> +
-> >> +#ifdef CONFIG_SMP
-> >> +static void crash_shutdown_secondary(void *passed_regs)
-> >> +{
-> >> +       struct pt_regs *regs = passed_regs;
-> >> +       int cpu = smp_processor_id();
-> >> +
-> >> +       /*
-> >> +        * If we are passed registers, use those.  Otherwise get the
-> >> +        * regs from the last interrupt, which should be correct, as
-> >> +        * we are in an interrupt.  But if the regs are not there,
-> >> +        * pull them from the top of the stack.  They are probably
-> >> +        * wrong, but we need something to keep from crashing again.
-> >> +        */
-> >> +       if (!regs)
-> >> +               regs = get_irq_regs();
-> >> +       if (!regs)
-> >> +               regs = task_pt_regs(current);
-> >> +
-> >> +       local_irq_disable();
-> >> +       if (!cpumask_test_cpu(cpu, &cpus_in_crash))
-> >> +               crash_save_cpu(regs, cpu);
-> >> +       cpumask_set_cpu(cpu, &cpus_in_crash);
-> >> +
-> >> +       while (!atomic_read(&kexec_ready_to_reboot))
-> >> +               cpu_relax();
-> >> +
-> >> +       kexec_reboot();
-> >> +}
-> >> +
-> >> +/* Override the weak function in kernel/panic.c */
-> >> +void crash_smp_send_stop(void)
-> >> +{
-> >> +       static int cpus_stopped;
-> >> +       unsigned long timeout;
-> >> +       unsigned int ncpus;
-> >> +
-> >> +       /*
-> >> +        * This function can be called twice in panic path, but obviously
-> >> +        * we execute this only once.
-> >> +        */
-> >> +       if (cpus_stopped)
-> >> +               return;
-> >> +
-> >> +       cpus_stopped = 1;
-> >> +
-> >> +        /* Excluding the panic cpu */
-> >> +       ncpus = num_online_cpus() - 1;
-> >> +
-> >> +       smp_call_function(crash_shutdown_secondary, NULL, 0);
-> >> +       smp_wmb();
-> >> +
-> >> +       /*
-> >> +        * The crash CPU sends an IPI and wait for other CPUs to
-> >> +        * respond. Delay of at least 10 seconds.
-> >> +        */
-> >> +       pr_emerg("Sending IPI to other cpus...\n");
-> >> +       timeout = USEC_PER_SEC * 10;
-> >> +       while ((cpumask_weight(&cpus_in_crash) < ncpus) && timeout--) {
-> >> +               cpu_relax();
-> >> +               udelay(1);
-> >> +       }
-> >> +}
-> >> +
-> >> +#endif
-> >> +
-> >> +void machine_crash_shutdown(struct pt_regs *regs)
-> >> +{
-> >> +       int crashing_cpu;
-> >> +
-> >> +       local_irq_disable();
-> >> +
-> >> +       crashing_cpu = smp_processor_id();
-> >> +       crash_save_cpu(regs, crashing_cpu);
-> >> +
-> >> +       /* shutdown non-crashing cpus */
-> >> +       crash_smp_send_stop();
-> >> +       cpumask_set_cpu(crashing_cpu, &cpus_in_crash);
-> >> +
-> >> +       pr_info("Starting crashdump kernel...\n");
-> >> +}
-> >> diff --git a/arch/loongarch/kernel/crash_dump.c b/arch/loongarch/kernel/crash_dump.c
-> >> new file mode 100644
-> >> index 000000000000..13e5d2f7870d
-> >> --- /dev/null
-> >> +++ b/arch/loongarch/kernel/crash_dump.c
-> >> @@ -0,0 +1,19 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +#include <linux/highmem.h>
-> >> +#include <linux/crash_dump.h>
-> >> +#include <linux/io.h>
-> >> +
-> >> +ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn,
-> >> +                        size_t csize, unsigned long offset)
-> >> +{
-> >> +       void  *vaddr;
-> >> +
-> >> +       if (!csize)
-> >> +               return 0;
-> >> +
-> >> +       vaddr = kmap_local_pfn(pfn);
-> >> +       csize = copy_to_iter(vaddr + offset, csize, iter);
-> >> +       kunmap_local(vaddr);
-> >> +
-> >> +       return csize;
-> >> +}
-> >> diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/kernel/machine_kexec.c
-> >> index 4ffcd4cd9c8c..f793a3ff09a3 100644
-> >> --- a/arch/loongarch/kernel/machine_kexec.c
-> >> +++ b/arch/loongarch/kernel/machine_kexec.c
-> >> @@ -69,7 +69,7 @@ int machine_kexec_prepare(struct kimage *kimage)
-> >>                 continue;
-> >>         }
-> >>
-> >> -       /* kexec need a safe page to save reboot_code_buffer */
-> >> +       /* kexec/kdump need a safe page to save reboot_code_buffer */
-> >>         kimage->control_code_page = virt_to_page((void *)KEXEC_CTRL_CODE);
-> >>
-> >>         reboot_code_buffer =
-> >> @@ -113,10 +113,6 @@ static void kexec_shutdown_secondary(void *)
-> >>
-> >>         kexec_reboot();
-> >>  }
-> >> -
-> >> -void machine_crash_shutdown(struct pt_regs *regs)
-> >> -{
-> >> -}
-> >>  #endif
-> >>
-> >>  void machine_shutdown(void)
-> >> @@ -135,7 +131,8 @@ void machine_kexec(struct kimage *image)
-> >>
-> >>         jump_addr = (unsigned long)phys_to_virt(image->start);
-> >>
-> >> -       first_ind_entry = (unsigned long)phys_to_virt(image->head & PAGE_MASK);
-> >> +       if (image->type == KEXEC_TYPE_DEFAULT)
-> >> +               first_ind_entry = (unsigned long)phys_to_virt(image->head & PAGE_MASK);
-> >>
-> >>         /*
-> >>          * The generic kexec code builds a page list with physical
-> >> @@ -167,7 +164,8 @@ void machine_kexec(struct kimage *image)
-> >>
-> >>         /*
-> >>          * We know we were online, and there will be no incoming IPIs at
-> >> -        * this point.
-> >> +        * this point. Mark online again before rebooting so that the crash
-> >> +        * analysis tool will see us correctly.
-> >>          */
-> >>         set_cpu_online(smp_processor_id(), true);
-> >>
-> >> diff --git a/arch/loongarch/kernel/mem.c b/arch/loongarch/kernel/mem.c
-> >> index 7423361b0ebc..c6def6ff81c8 100644
-> >> --- a/arch/loongarch/kernel/mem.c
-> >> +++ b/arch/loongarch/kernel/mem.c
-> >> @@ -5,6 +5,7 @@
-> >>  #include <linux/efi.h>
-> >>  #include <linux/initrd.h>
-> >>  #include <linux/memblock.h>
-> >> +#include <linux/of_fdt.h>
-> >>
-> >>  #include <asm/bootinfo.h>
-> >>  #include <asm/loongson.h>
-> >> @@ -61,4 +62,9 @@ void __init memblock_init(void)
-> >>
-> >>         /* Reserve the initrd */
-> >>         reserve_initrd_mem();
-> >> +
-> >> +       /* Mainly reserved memory for the elf core head */
-> >> +       early_init_fdt_scan_reserved_mem();
-> >> +       /* Parse linux,usable-memory-range is for crash dump kernel */
-> >> +       early_init_dt_check_for_usable_mem_range();
-> >>  }
-> >> diff --git a/arch/loongarch/kernel/relocate_kernel.S b/arch/loongarch/kernel/relocate_kernel.S
-> >> index d1f242f74ea8..4ee5ac4ac2d7 100644
-> >> --- a/arch/loongarch/kernel/relocate_kernel.S
-> >> +++ b/arch/loongarch/kernel/relocate_kernel.S
-> >> @@ -28,6 +28,12 @@ SYM_CODE_START(relocate_new_kernel)
-> >>         move            s2, a2
-> >>         move            s3, a3
-> >>
-> >> +       /*
-> >> +        * In case of a kdump/crash kernel, the indirection page is not
-> >> +        * populated as the kernel is directly copied to a reserved location
-> >> +        */
-> >> +       beqz            s2, done
-> >> +
-> >>  process_entry:
-> >>         PTR_L           s4, s2, 0
-> >>         PTR_ADDI        s2, s2, SZREG
-> >> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-> >> index f938aae3e92c..ea34b77e402f 100644
-> >> --- a/arch/loongarch/kernel/setup.c
-> >> +++ b/arch/loongarch/kernel/setup.c
-> >> @@ -19,6 +19,8 @@
-> >>  #include <linux/memblock.h>
-> >>  #include <linux/initrd.h>
-> >>  #include <linux/ioport.h>
-> >> +#include <linux/kexec.h>
-> >> +#include <linux/crash_dump.h>
-> >>  #include <linux/root_dev.h>
-> >>  #include <linux/console.h>
-> >>  #include <linux/pfn.h>
-> >> @@ -186,6 +188,50 @@ static int __init early_parse_mem(char *p)
-> >>  }
-> >>  early_param("mem", early_parse_mem);
-> >>
-> >> +static void __init loongarch_parse_crashkernel(void)
-> >> +{
-> >> +#ifdef CONFIG_KEXEC
-> >> +       unsigned long long start;
-> >> +       unsigned long long total_mem;
-> >> +       unsigned long long crash_size, crash_base;
-> >> +       int ret;
-> >> +
-> >> +       total_mem = memblock_phys_mem_size();
-> >> +       ret = parse_crashkernel(boot_command_line, total_mem,
-> >> +                               &crash_size, &crash_base);
-> >> +       if (ret != 0 || crash_size <= 0)
-> >> +               return;
-> >> +
-> >> +
-> >> +       start = memblock_phys_alloc_range(crash_size, 1, crash_base,
-> >> +                                       crash_base + crash_size);
-> >> +       if (start != crash_base) {
-> >> +               pr_warn("Invalid memory region reserved for crash kernel\n");
-> >> +               return;
-> >> +       }
-> >> +
-> >> +       crashk_res.start = crash_base;
-> >> +       crashk_res.end   = crash_base + crash_size - 1;
-> >> +#endif
-> >> +}
-> >> +
-> >> +static void __init request_crashkernel(struct resource *res)
-> >> +{
-> >> +#ifdef CONFIG_KEXEC
-> >> +       int ret;
-> >> +
-> >> +       if (crashk_res.start == crashk_res.end)
-> >> +               return;
-> >> +
-> >> +       ret = request_resource(res, &crashk_res);
-> >> +       if (!ret)
-> >> +               pr_info("Reserving %ldMB of memory at %ldMB for crashkernel\n",
-> >> +                       (unsigned long)((crashk_res.end -
-> >> +                                        crashk_res.start + 1) >> 20),
-> >> +                       (unsigned long)(crashk_res.start  >> 20));
-> >> +#endif
-> >> +}
-> >> +
-> >>  void __init platform_init(void)
-> >>  {
-> >>         efi_init();
-> >> @@ -229,6 +275,8 @@ static void __init arch_mem_init(char **cmdline_p)
-> >>
-> >>         check_kernel_sections_mem();
-> >>
-> >> +       loongarch_parse_crashkernel();
-> >> +
-> >>         /*
-> >>          * In order to reduce the possibility of kernel panic when failed to
-> >>          * get IO TLB memory under CONFIG_SWIOTLB, it is better to allocate
-> >> @@ -290,6 +338,7 @@ static void __init resource_init(void)
-> >>                 request_resource(res, &code_resource);
-> >>                 request_resource(res, &data_resource);
-> >>                 request_resource(res, &bss_resource);
-> >> +               request_crashkernel(res);
-> >>         }
-> >>  }
-> >>
-> >> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-> >> index aa1c95aaf595..0e610872f3f4 100644
-> >> --- a/arch/loongarch/kernel/traps.c
-> >> +++ b/arch/loongarch/kernel/traps.c
-> >> @@ -10,6 +10,7 @@
-> >>  #include <linux/entry-common.h>
-> >>  #include <linux/init.h>
-> >>  #include <linux/kernel.h>
-> >> +#include <linux/kexec.h>
-> >>  #include <linux/module.h>
-> >>  #include <linux/extable.h>
-> >>  #include <linux/mm.h>
-> >> @@ -246,6 +247,9 @@ void __noreturn die(const char *str, struct pt_regs *regs)
-> >>
-> >>         oops_exit();
-> >>
-> >> +       if (regs && kexec_should_crash(current))
-> >> +               crash_kexec(regs);
-> >> +
-> >>         if (in_interrupt())
-> >>                 panic("Fatal exception in interrupt");
-> >>
-> >> --
-> >> 2.36.0
-> >>
->
+Thanks 
+Cai
+> 
+> > > 
+> > > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> > > ---
+> > >  drivers/dma/dw-edma/Makefile             |   4 +-
+> > >  drivers/dma/dw-edma/dw-edma-core.c       | 116 ++++++++---
+> > >  drivers/dma/dw-edma/dw-edma-pcie.c       |   5 +-
+> > >  drivers/dma/dw-edma/dw-edma-v0-core.c    |   3 +
+> > >  drivers/dma/dw-edma/dw-hdma-v0-core.c    | 236 +++++++++++++++++++++++
+> > >  drivers/dma/dw-edma/dw-hdma-v0-core.h    |  27 +++
+> > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 167 ++++++++++++++++
+> > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  25 +++
+> > >  drivers/dma/dw-edma/dw-hdma-v0-regs.h    |  94 +++++++++
+> > >  include/linux/dma/edma.h                 |   3 +-
+> > >  10 files changed, 646 insertions(+), 34 deletions(-)
+> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> > > 
+> > > diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
+> > > index 8d45c0d5689d..95c5ae760a64 100644
+> > > --- a/drivers/dma/dw-edma/Makefile
+> > > +++ b/drivers/dma/dw-edma/Makefile
+> > > @@ -1,7 +1,9 @@
+> > >  # SPDX-License-Identifier: GPL-2.0
+> > >  
+> > >  obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
+> > > -dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
+> > > +dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o \
+> > > +							   dw-hdma-v0-debugfs.o
+> > >  dw-edma-objs			:= dw-edma-core.o \
+> > > +						   dw-hdma-v0-core.o \
+> > >  					dw-edma-v0-core.o $(dw-edma-y)
+> > >  obj-$(CONFIG_DW_EDMA_PCIE)	+= dw-edma-pcie.o
+> > > diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> > > index 07f756479663..f0e44cb810d0 100644
+> > > --- a/drivers/dma/dw-edma/dw-edma-core.c
+> > > +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> > > @@ -19,6 +19,7 @@
+> > >  
+> > >  #include "dw-edma-core.h"
+> > >  #include "dw-edma-v0-core.h"
+> > > +#include "dw-hdma-v0-core.h"
+> > >  #include "../dmaengine.h"
+> > >  #include "../virt-dma.h"
+> > >  
+> > > @@ -176,6 +177,7 @@ static void dw_edma_start_transfer(struct dw_edma_chan *chan)
+> > >  	struct dw_edma_chunk *child;
+> > >  	struct dw_edma_desc *desc;
+> > >  	struct virt_dma_desc *vd;
+> > > +	struct dw_edma *dw = chan->dw;
+> > >  
+> > >  	vd = vchan_next_desc(&chan->vc);
+> > >  	if (!vd)
+> > > @@ -190,7 +192,11 @@ static void dw_edma_start_transfer(struct dw_edma_chan *chan)
+> > >  	if (!child)
+> > >  		return;
+> > >  
+> > > -	dw_edma_v0_core_start(child, !desc->xfer_sz);
+> > > +	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
+> > > +		dw_hdma_v0_core_start(child, !desc->xfer_sz);
+> > > +	else
+> > > +		dw_edma_v0_core_start(child, !desc->xfer_sz);
+> > > +
+> > >  	desc->xfer_sz += child->ll_region.sz;
+> > >  	dw_edma_free_burst(child);
+> > >  	list_del(&child->list);
+> > > @@ -248,8 +254,15 @@ static int dw_edma_device_resume(struct dma_chan *dchan)
+> > >  static int dw_edma_device_terminate_all(struct dma_chan *dchan)
+> > >  {
+> > >  	struct dw_edma_chan *chan = dchan2dw_edma_chan(dchan);
+> > > +	struct dw_edma *dw = chan->dw;
+> > > +	enum dma_status status;
+> > >  	int err = 0;
+> > >  
+> > > +	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
+> > > +		status = dw_hdma_v0_core_ch_status(chan);
+> > > +	else
+> > > +		status = dw_edma_v0_core_ch_status(chan);
+> > > +
+> > >  	if (!chan->configured) {
+> > >  		/* Do nothing */
+> > >  	} else if (chan->status == EDMA_ST_PAUSE) {
+> > > @@ -257,7 +270,7 @@ static int dw_edma_device_terminate_all(struct dma_chan *dchan)
+> > >  		chan->configured = false;
+> > >  	} else if (chan->status == EDMA_ST_IDLE) {
+> > >  		chan->configured = false;
+> > > -	} else if (dw_edma_v0_core_ch_status(chan) == DMA_COMPLETE) {
+> > > +	} else if (status == DMA_COMPLETE) {
+> > >  		/*
+> > >  		 * The channel is in a false BUSY state, probably didn't
+> > >  		 * receive or lost an interrupt
+> > > @@ -557,11 +570,15 @@ dw_edma_device_prep_interleaved_dma(struct dma_chan *dchan,
+> > >  
+> > >  static void dw_edma_done_interrupt(struct dw_edma_chan *chan)
+> > >  {
+> > > +	struct dw_edma *dw = chan->dw;
+> > >  	struct dw_edma_desc *desc;
+> > >  	struct virt_dma_desc *vd;
+> > >  	unsigned long flags;
+> > >  
+> > > -	dw_edma_v0_core_clear_done_int(chan);
+> > > +	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
+> > > +		dw_hdma_v0_core_clear_done_int(chan);
+> > > +	else
+> > > +		dw_edma_v0_core_clear_done_int(chan);
+> > >  
+> > >  	spin_lock_irqsave(&chan->vc.lock, flags);
+> > >  	vd = vchan_next_desc(&chan->vc);
+> > > @@ -601,9 +618,13 @@ static void dw_edma_done_interrupt(struct dw_edma_chan *chan)
+> > >  static void dw_edma_abort_interrupt(struct dw_edma_chan *chan)
+> > >  {
+> > >  	struct virt_dma_desc *vd;
+> > > +	struct dw_edma *dw = chan->dw;
+> > >  	unsigned long flags;
+> > >  
+> > > -	dw_edma_v0_core_clear_abort_int(chan);
+> > > +	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
+> > > +		dw_hdma_v0_core_clear_abort_int(chan);
+> > > +	else
+> > > +		dw_edma_v0_core_clear_abort_int(chan);
+> > >  
+> > >  	spin_lock_irqsave(&chan->vc.lock, flags);
+> > >  	vd = vchan_next_desc(&chan->vc);
+> > > @@ -620,9 +641,8 @@ static irqreturn_t dw_edma_interrupt(int irq, void *data, bool write)
+> > >  {
+> > >  	struct dw_edma_irq *dw_irq = data;
+> > >  	struct dw_edma *dw = dw_irq->dw;
+> > > -	unsigned long total, pos, val;
+> > > +	unsigned long total, pos, val, mask;
+> > >  	unsigned long off;
+> > > -	u32 mask;
+> > >  
+> > >  	if (write) {
+> > >  		total = dw->wr_ch_cnt;
+> > > @@ -634,24 +654,36 @@ static irqreturn_t dw_edma_interrupt(int irq, void *data, bool write)
+> > >  		mask = dw_irq->rd_mask;
+> > >  	}
+> > >  
+> > > -	val = dw_edma_v0_core_status_done_int(dw, write ?
+> > > -							  EDMA_DIR_WRITE :
+> > > -							  EDMA_DIR_READ);
+> > > -	val &= mask;
+> > > -	for_each_set_bit(pos, &val, total) {
+> > > -		struct dw_edma_chan *chan = &dw->chan[pos + off];
+> > > +	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE) {
+> > > +		for_each_set_bit(pos, &mask, total) {
+> > > +			struct dw_edma_chan *chan = &dw->chan[pos + off];
+> > >  
+> > > -		dw_edma_done_interrupt(chan);
+> > > -	}
+> > > +			val = dw_hdma_v0_core_status_int(chan);
+> > > +			if (dw_hdma_v0_core_check_done_int(val))
+> > > +				dw_edma_done_interrupt(chan);
+> > > +			if (dw_hdma_v0_core_check_abort_int(val))
+> > > +				dw_edma_abort_interrupt(chan);
+> > > +		}
+> > > +	} else {
+> > > +		val = dw_edma_v0_core_status_done_int(dw, write ?
+> > > +								EDMA_DIR_WRITE :
+> > > +								EDMA_DIR_READ);
+> > > +		val &= mask;
+> > > +		for_each_set_bit(pos, &val, total) {
+> > > +			struct dw_edma_chan *chan = &dw->chan[pos + off];
+> > > +
+> > > +			dw_edma_done_interrupt(chan);
+> > > +		}
+> > >  
+> > > -	val = dw_edma_v0_core_status_abort_int(dw, write ?
+> > > -							   EDMA_DIR_WRITE :
+> > > -							   EDMA_DIR_READ);
+> > > -	val &= mask;
+> > > -	for_each_set_bit(pos, &val, total) {
+> > > -		struct dw_edma_chan *chan = &dw->chan[pos + off];
+> > > +		val = dw_edma_v0_core_status_abort_int(dw, write ?
+> > > +								EDMA_DIR_WRITE :
+> > > +								EDMA_DIR_READ);
+> > > +		val &= mask;
+> > > +		for_each_set_bit(pos, &val, total) {
+> > > +			struct dw_edma_chan *chan = &dw->chan[pos + off];
+> > >  
+> > > -		dw_edma_abort_interrupt(chan);
+> > > +			dw_edma_abort_interrupt(chan);
+> > > +		}
+> > >  	}
+> > >  
+> > >  	return IRQ_HANDLED;
+> > > @@ -794,7 +826,10 @@ static int dw_edma_channel_setup(struct dw_edma *dw, bool write,
+> > >  			dt_region->sz = chip->dt_region_rd[j].sz;
+> > >  		}
+> > >  
+> > > -		dw_edma_v0_core_device_config(chan);
+> > > +		if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
+> > > +			dw_hdma_v0_core_device_config(chan);
+> > > +		else
+> > > +			dw_edma_v0_core_device_config(chan);
+> > >  	}
+> > >  
+> > >  	/* Set DMA channel capabilities */
+> > > @@ -937,13 +972,23 @@ int dw_edma_probe(struct dw_edma_chip *chip)
+> > >  
+> > >  	raw_spin_lock_init(&dw->lock);
+> > >  
+> > > -	dw->wr_ch_cnt = min_t(u16, chip->ll_wr_cnt,
+> > > -			      dw_edma_v0_core_ch_count(dw, EDMA_DIR_WRITE));
+> > > -	dw->wr_ch_cnt = min_t(u16, dw->wr_ch_cnt, EDMA_MAX_WR_CH);
+> > > +	if (chip->mf == EDMA_MF_HDMA_NATIVE) {
+> > > +		dw->wr_ch_cnt = min_t(u16, chip->ll_wr_cnt,
+> > > +					dw_hdma_v0_core_ch_count(dw, EDMA_DIR_WRITE));
+> > > +		dw->wr_ch_cnt = min_t(u16, dw->wr_ch_cnt, EDMA_MAX_WR_CH);
+> > >  
+> > > -	dw->rd_ch_cnt = min_t(u16, chip->ll_rd_cnt,
+> > > -			      dw_edma_v0_core_ch_count(dw, EDMA_DIR_READ));
+> > > -	dw->rd_ch_cnt = min_t(u16, dw->rd_ch_cnt, EDMA_MAX_RD_CH);
+> > > +		dw->rd_ch_cnt = min_t(u16, chip->ll_rd_cnt,
+> > > +					dw_hdma_v0_core_ch_count(dw, EDMA_DIR_READ));
+> > > +		dw->rd_ch_cnt = min_t(u16, dw->rd_ch_cnt, EDMA_MAX_RD_CH);
+> > > +	} else {
+> > > +		dw->wr_ch_cnt = min_t(u16, chip->ll_wr_cnt,
+> > > +					dw_edma_v0_core_ch_count(dw, EDMA_DIR_WRITE));
+> > > +		dw->wr_ch_cnt = min_t(u16, dw->wr_ch_cnt, EDMA_MAX_WR_CH);
+> > > +
+> > > +		dw->rd_ch_cnt = min_t(u16, chip->ll_rd_cnt,
+> > > +					dw_edma_v0_core_ch_count(dw, EDMA_DIR_READ));
+> > > +		dw->rd_ch_cnt = min_t(u16, dw->rd_ch_cnt, EDMA_MAX_RD_CH);
+> > > +	}
+> > >  
+> > >  	if (!dw->wr_ch_cnt && !dw->rd_ch_cnt)
+> > >  		return -EINVAL;
+> > > @@ -960,7 +1005,10 @@ int dw_edma_probe(struct dw_edma_chip *chip)
+> > >  	snprintf(dw->name, sizeof(dw->name), "dw-edma-core:%d", chip->id);
+> > >  
+> > >  	/* Disable eDMA, only to establish the ideal initial conditions */
+> > > -	dw_edma_v0_core_off(dw);
+> > > +	if (chip->mf == EDMA_MF_HDMA_NATIVE)
+> > > +		dw_hdma_v0_core_off(dw);
+> > > +	else
+> > > +		dw_edma_v0_core_off(dw);
+> > >  
+> > >  	/* Request IRQs */
+> > >  	err = dw_edma_irq_request(dw, &wr_alloc, &rd_alloc);
+> > > @@ -981,7 +1029,10 @@ int dw_edma_probe(struct dw_edma_chip *chip)
+> > >  	pm_runtime_enable(dev);
+> > >  
+> > >  	/* Turn debugfs on */
+> > > -	dw_edma_v0_core_debugfs_on(dw);
+> > > +	if (chip->mf == EDMA_MF_HDMA_NATIVE)
+> > > +		dw_hdma_v0_core_debugfs_on(dw);
+> > > +	else
+> > > +		dw_edma_v0_core_debugfs_on(dw);
+> > >  
+> > >  	chip->dw = dw;
+> > >  
+> > > @@ -1028,7 +1079,10 @@ int dw_edma_remove(struct dw_edma_chip *chip)
+> > >  	}
+> > >  
+> > >  	/* Turn debugfs off */
+> > > -	dw_edma_v0_core_debugfs_off(dw);
+> > > +	if (chip->mf == EDMA_MF_HDMA_NATIVE)
+> > > +		dw_hdma_v0_core_debugfs_off(dw);
+> > > +	else
+> > > +		dw_edma_v0_core_debugfs_off(dw);
+> > >  
+> > >  	return 0;
+> > >  }
+> > > diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
+> > > index d6b5e2463884..7cd2e045325d 100644
+> > > --- a/drivers/dma/dw-edma/dw-edma-pcie.c
+> > > +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
+> > > @@ -121,7 +121,8 @@ static void dw_edma_pcie_get_vsec_dma_data(struct pci_dev *pdev,
+> > >  	map = FIELD_GET(DW_PCIE_VSEC_DMA_MAP, val);
+> > >  	if (map != EDMA_MF_EDMA_LEGACY &&
+> > >  	    map != EDMA_MF_EDMA_UNROLL &&
+> > > -	    map != EDMA_MF_HDMA_COMPAT)
+> > > +	    map != EDMA_MF_HDMA_COMPAT &&
+> > > +		map != EDMA_MF_HDMA_NATIVE)
+> > >  		return;
+> > >  
+> > >  	pdata->mf = map;
+> > > @@ -277,6 +278,8 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
+> > >  		pci_dbg(pdev, "Version:\teDMA Unroll (0x%x)\n", chip->mf);
+> > >  	else if (chip->mf == EDMA_MF_HDMA_COMPAT)
+> > >  		pci_dbg(pdev, "Version:\tHDMA Compatible (0x%x)\n", chip->mf);
+> > > +	else if (chip->mf == EDMA_MF_HDMA_NATIVE)
+> > > +		pci_dbg(pdev, "Version:\tHDMA Native (0x%x)\n", chip->mf);
+> > >  	else
+> > >  		pci_dbg(pdev, "Version:\tUnknown (0x%x)\n", chip->mf);
+> > >  
+> > > diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
+> > > index 77e6cfe52e0a..167a2c4144dd 100644
+> > > --- a/drivers/dma/dw-edma/dw-edma-v0-core.c
+> > > +++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
+> > > @@ -12,6 +12,9 @@
+> > >  #include "dw-edma-v0-core.h"
+> > >  #include "dw-edma-v0-regs.h"
+> > >  #include "dw-edma-v0-debugfs.h"
+> > > +#include "dw-hdma-v0-core.h"
+> > > +#include "dw-hdma-v0-regs.h"
+> > > +#include "dw-hdma-v0-debugfs.h"
+> > >  
+> > >  enum dw_edma_control {
+> > >  	DW_EDMA_V0_CB					= BIT(0),
+> > > diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> > > new file mode 100644
+> > > index 000000000000..cd4746d98839
+> > > --- /dev/null
+> > > +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> > > @@ -0,0 +1,236 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Copyright (c) 2022 Cai Huoqing
+> > > + * Synopsys DesignWare HDMA v0 core
+> > > + */
+> > > +
+> > > +#include <linux/bitfield.h>
+> > > +
+> > > +#include "dw-edma-core.h"
+> > > +#include "dw-edma-v0-core.h"
+> > > +#include "dw-edma-v0-regs.h"
+> > > +#include "dw-hdma-v0-core.h"
+> > > +#include "dw-hdma-v0-regs.h"
+> > > +#include "dw-hdma-v0-debugfs.h"
+> > > +
+> > > +enum dw_hdma_control {
+> > > +	DW_HDMA_V0_CB					= BIT(0),
+> > > +	DW_HDMA_V0_TCB					= BIT(1),
+> > > +	DW_HDMA_V0_LLP					= BIT(2),
+> > > +	DW_HDMA_V0_LIE					= BIT(3),
+> > > +	DW_HDMA_V0_RIE					= BIT(4),
+> > > +	DW_HDMA_V0_CCS					= BIT(8),
+> > > +	DW_HDMA_V0_LLE					= BIT(9),
+> > > +};
+> > > +static inline struct dw_hdma_v0_regs __iomem *__dw_regs(struct dw_edma *dw)
+> > > +{
+> > > +	return dw->chip->reg_base;
+> > > +}
+> > > +
+> > > +static inline struct dw_hdma_v0_ch_regs __iomem *
+> > > +__dw_ch_regs(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch)
+> > > +{
+> > > +
+> > > +	if (dir == EDMA_DIR_WRITE)
+> > > +		return &(__dw_regs(dw)->ch[ch].wr);
+> > > +	else
+> > > +		return &(__dw_regs(dw)->ch[ch].rd);
+> > > +}
+> > > +
+> > > +#define SET_CH_32(dw, dir, ch, name, value) \
+> > > +	writel(value, &(__dw_ch_regs(dw, dir, ch)->name))
+> > > +
+> > > +#define GET_CH_32(dw, dir, ch, name) \
+> > > +	readl(&(__dw_ch_regs(dw, dir, ch)->name))
+> > > +
+> > > +#define SET_BOTH_CH_32(dw, ch, name, value) \
+> > > +	do {					\
+> > > +		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_WRITE, ch)->name));		\
+> > > +		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_READ, ch)->name));	\
+> > > +	} while (0)
+> > > +
+> > > +#define SET_LL_32(ll, value) \
+> > > +	writel(value, ll)
+> > > +
+> > > +/* HDMA management callbacks */
+> > > +void dw_hdma_v0_core_off(struct dw_edma *dw)
+> > > +{
+> > > +	int id;
+> > > +
+> > > +	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
+> > > +		SET_BOTH_CH_32(dw, id, int_setup,
+> > > +				HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK);
+> > > +		SET_BOTH_CH_32(dw, id, int_clear,
+> > > +				HDMA_V0_STOP_INT_MASK & HDMA_V0_ABORT_INT_MASK);
+> > > +		SET_BOTH_CH_32(dw, id, ch_en, 0);
+> > > +	}
+> > > +}
+> > > +
+> > > +u16 dw_hdma_v0_core_ch_count(struct dw_edma *dw, enum dw_edma_dir dir)
+> > > +{
+> > > +	u32 num_ch = 0;
+> > > +	int id;
+> > > +
+> > > +	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
+> > > +		if (GET_CH_32(dw, id, dir, ch_en) & BIT(0))
+> > > +			num_ch++;
+> > > +	}
+> > > +
+> > > +	if (num_ch > HDMA_V0_MAX_NR_CH)
+> > > +		num_ch = HDMA_V0_MAX_NR_CH;
+> > > +
+> > > +	return (u16)num_ch;
+> > > +}
+> > > +
+> > > +enum dma_status dw_hdma_v0_core_ch_status(struct dw_edma_chan *chan)
+> > > +{
+> > > +	struct dw_edma *dw = chan->dw;
+> > > +	u32 tmp;
+> > > +
+> > > +	tmp = FIELD_GET(HDMA_V0_CH_STATUS_MASK,
+> > > +			GET_CH_32(dw, chan->id, chan->dir, ch_stat));
+> > > +
+> > > +	if (tmp == 1)
+> > > +		return DMA_IN_PROGRESS;
+> > > +	else if (tmp == 3)
+> > > +		return DMA_COMPLETE;
+> > > +	else
+> > > +		return DMA_ERROR;
+> > > +}
+> > > +
+> > > +void dw_hdma_v0_core_clear_done_int(struct dw_edma_chan *chan)
+> > > +{
+> > > +	struct dw_edma *dw = chan->dw;
+> > > +
+> > > +	SET_CH_32(dw, chan->dir, chan->id, int_clear, HDMA_V0_STOP_INT_MASK);
+> > > +}
+> > > +
+> > > +void dw_hdma_v0_core_clear_abort_int(struct dw_edma_chan *chan)
+> > > +{
+> > > +	struct dw_edma *dw = chan->dw;
+> > > +
+> > > +	SET_CH_32(dw, chan->dir, chan->id, int_clear, HDMA_V0_ABORT_INT_MASK);
+> > > +}
+> > > +
+> > > +u32 dw_hdma_v0_core_status_int(struct dw_edma_chan *chan)
+> > > +{
+> > > +	struct dw_edma *dw = chan->dw;
+> > > +
+> > > +	return GET_CH_32(dw, chan->dir, chan->id, int_stat);
+> > > +}
+> > > +
+> > > +u32 dw_hdma_v0_core_check_done_int(u32 val)
+> > > +{
+> > > +	return (FIELD_GET(HDMA_V0_STOP_INT_MASK, val) == BIT(0));
+> > > +}
+> > > +
+> > > +u32 dw_hdma_v0_core_check_abort_int(u32 val)
+> > > +{
+> > > +	return (FIELD_GET(HDMA_V0_ABORT_INT_MASK, val) == BIT(0));
+> > > +}
+> > > +
+> > > +static void dw_hdma_v0_core_write_chunk(struct dw_edma_chunk *chunk)
+> > > +{
+> > > +	struct dw_edma_burst *child;
+> > > +	struct dw_edma_chan *chan = chunk->chan;
+> > > +	struct dw_edma_v0_lli __iomem *lli;
+> > > +	struct dw_edma_v0_llp __iomem *llp;
+> > > +	u32 control = 0, i = 0;
+> > > +	int j;
+> > > +
+> > > +	lli = chunk->ll_region.vaddr;
+> > > +
+> > > +	if (chunk->cb)
+> > > +		control = DW_HDMA_V0_CB;
+> > > +
+> > > +	j = chunk->bursts_alloc;
+> > > +	list_for_each_entry(child, &chunk->burst->list, list) {
+> > > +		j--;
+> > > +		if (!j) {
+> > > +			control |= DW_HDMA_V0_LIE;
+> > > +			if (!(chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL))
+> > > +				control |= DW_HDMA_V0_RIE;
+> > > +		}
+> > > +		/* Channel control */
+> > > +		SET_LL_32(&lli[i].control, control);
+> > > +		/* Transfer size */
+> > > +		SET_LL_32(&lli[i].transfer_size, child->sz);
+> > > +		/* SAR */
+> > > +		SET_LL_32(&lli[i].sar.lsb, lower_32_bits(child->sar));
+> > > +		SET_LL_32(&lli[i].sar.msb, upper_32_bits(child->sar));
+> > > +		/* DAR */
+> > > +		SET_LL_32(&lli[i].dar.lsb, lower_32_bits(child->dar));
+> > > +		SET_LL_32(&lli[i].dar.msb, upper_32_bits(child->dar));
+> > > +		i++;
+> > > +	}
+> > > +
+> > > +	llp = (void __iomem *)&lli[i];
+> > > +	control = DW_HDMA_V0_LLP | DW_HDMA_V0_TCB;
+> > > +	if (!chunk->cb)
+> > > +		control |= DW_HDMA_V0_CB;
+> > > +
+> > > +	/* Channel control */
+> > > +	SET_LL_32(&llp->control, control);
+> > > +	/* Linked list */
+> > > +	SET_LL_32(&llp->llp.lsb, lower_32_bits(chunk->ll_region.paddr));
+> > > +	SET_LL_32(&llp->llp.msb, upper_32_bits(chunk->ll_region.paddr));
+> > > +}
+> > > +
+> > > +void dw_hdma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
+> > > +{
+> > > +	struct dw_edma_chan *chan = chunk->chan;
+> > > +	struct dw_edma *dw = chan->dw;
+> > > +	u32 tmp;
+> > > +
+> > > +	dw_hdma_v0_core_write_chunk(chunk);
+> > > +
+> > > +	if (first) {
+> > > +		/* Enable engine */
+> > > +		SET_CH_32(dw, chan->dir, chan->id, ch_en, BIT(0));
+> > > +		/* Interrupt enable&unmask - done, abort */
+> > > +		tmp = GET_CH_32(dw, chan->dir, chan->id, int_setup);
+> > > +		tmp |= HDMA_V0_STOP_INT_MASK;
+> > > +		tmp |= HDMA_V0_ABORT_INT_MASK;
+> > > +		tmp |= HDMA_V0_LOCAL_ABORT_INT_EN;
+> > > +		tmp |= HDMA_V0_LOCAL_STOP_INT_EN;
+> > > +		SET_CH_32(dw, chan->dir, chan->id, int_setup, tmp);
+> > > +		/* Channel control */
+> > > +		SET_CH_32(dw, chan->dir, chan->id, control1, HDMA_V0_LINKLIST_EN);
+> > > +		/* Linked list */
+> > > +		/* llp is not aligned on 64bit -> keep 32bit accesses */
+> > > +		SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
+> > > +			  lower_32_bits(chunk->ll_region.paddr));
+> > > +		SET_CH_32(dw, chan->dir, chan->id, llp.msb,
+> > > +			  upper_32_bits(chunk->ll_region.paddr));
+> > > +	}
+> > > +	/* Doorbell */
+> > > +	SET_CH_32(dw, chan->dir, chan->id, doorbell, HDMA_V0_DOORBELL_START);
+> > > +}
+> > > +
+> > > +int dw_hdma_v0_core_device_config(struct dw_edma_chan *chan)
+> > > +{
+> > > +	struct dw_edma *dw = chan->dw;
+> > > +
+> > > +	/* MSI done addr - low, high */
+> > > +	SET_CH_32(dw, chan->dir, chan->id, msi_stop.lsb, chan->msi.address_lo);
+> > > +	SET_CH_32(dw, chan->dir, chan->id, msi_stop.msb, chan->msi.address_hi);
+> > > +	/* MSI abort addr - low, high */
+> > > +	SET_CH_32(dw, chan->dir, chan->id, msi_abort.lsb, chan->msi.address_lo);
+> > > +	SET_CH_32(dw, chan->dir, chan->id, msi_abort.msb, chan->msi.address_hi);
+> > > +	SET_CH_32(dw, chan->dir, chan->id, msi_abort.msb, chan->msi.address_hi);
+> > > +	/* config MSI data */
+> > > +	SET_CH_32(dw, chan->dir, chan->id, msi_msgdata, chan->msi.data);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +/* eDMA debugfs callbacks */
+> > > +void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
+> > > +{
+> > > +	dw_hdma_v0_debugfs_on(dw);
+> > > +}
+> > > +
+> > > +void dw_hdma_v0_core_debugfs_off(struct dw_edma *dw)
+> > > +{
+> > > +	dw_hdma_v0_debugfs_off(dw);
+> > > +}
+> > > diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.h b/drivers/dma/dw-edma/dw-hdma-v0-core.h
+> > > new file mode 100644
+> > > index 000000000000..61d3a6d9d024
+> > > --- /dev/null
+> > > +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.h
+> > > @@ -0,0 +1,27 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +/*
+> > > + * Copyright (c) 2022 Cai Huoqing
+> > > + * Synopsys DesignWare eDMA v0 core
+> > > + */
+> > > +
+> > > +#ifndef _DW_HDMA_V0_CORE_H
+> > > +#define _DW_HDMA_V0_CORE_H
+> > > +
+> > > +#include <linux/dma/edma.h>
+> > > +
+> > > +/* HDMA management callbacks */
+> > > +void dw_hdma_v0_core_off(struct dw_edma *chan);
+> > > +u16 dw_hdma_v0_core_ch_count(struct dw_edma *chan, enum dw_edma_dir dir);
+> > > +enum dma_status dw_hdma_v0_core_ch_status(struct dw_edma_chan *chan);
+> > > +void dw_hdma_v0_core_clear_done_int(struct dw_edma_chan *chan);
+> > > +void dw_hdma_v0_core_clear_abort_int(struct dw_edma_chan *chan);
+> > > +u32 dw_hdma_v0_core_status_int(struct dw_edma_chan *chan);
+> > > +u32 dw_hdma_v0_core_check_done_int(u32 val);
+> > > +u32 dw_hdma_v0_core_check_abort_int(u32 val);
+> > > +void dw_hdma_v0_core_start(struct dw_edma_chunk *chunk, bool first);
+> > > +int dw_hdma_v0_core_device_config(struct dw_edma_chan *chan);
+> > > +/* HDMA debug fs callbacks */
+> > > +void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw);
+> > > +void dw_hdma_v0_core_debugfs_off(struct dw_edma *dw);
+> > > +
+> > > +#endif /* _DW_HDMA_V0_CORE_H */
+> > > diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> > > new file mode 100644
+> > > index 000000000000..2f1ddac9513b
+> > > --- /dev/null
+> > > +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> > > @@ -0,0 +1,167 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Copyright (c) 2022 Cai Huoqing
+> > > + * Synopsys DesignWare HDMA v0 debugfs
+> > > + */
+> > > +
+> > > +#include <linux/debugfs.h>
+> > > +#include <linux/bitfield.h>
+> > > +
+> > > +#include "dw-hdma-v0-debugfs.h"
+> > > +#include "dw-hdma-v0-regs.h"
+> > > +#include "dw-edma-core.h"
+> > > +
+> > > +#define REGS_ADDR(name) \
+> > > +	((void __force *)&regs->name)
+> > > +
+> > > +#define REGISTER(name) \
+> > > +	{ #name, REGS_ADDR(name) }
+> > > +
+> > > +#define WRITE_STR				"write"
+> > > +#define READ_STR				"read"
+> > > +#define CHANNEL_STR				"channel"
+> > > +#define REGISTERS_STR				"registers"
+> > > +
+> > > +static struct dw_edma				*dw;
+> > > +static struct dw_hdma_v0_regs			__iomem *regs;
+> > > +struct debugfs_entries {
+> > > +	const char				*name;
+> > > +	dma_addr_t				*reg;
+> > > +};
+> > > +
+> > > +static int dw_hdma_debugfs_u32_get(void *data, u64 *val)
+> > > +{
+> > > +	void __iomem *reg = (void __force __iomem *)data;
+> > > +	*val = readl(reg);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_hdma_debugfs_u32_get, NULL, "0x%08llx\n");
+> > > +
+> > > +static void dw_hdma_debugfs_create_x32(const struct debugfs_entries entries[],
+> > > +				       int nr_entries, struct dentry *dir)
+> > > +{
+> > > +	int i;
+> > > +
+> > > +	for (i = 0; i < nr_entries; i++) {
+> > > +		if (!debugfs_create_file_unsafe(entries[i].name, 0444, dir,
+> > > +						entries[i].reg,	&fops_x32))
+> > > +			break;
+> > > +	}
+> > > +}
+> > > +
+> > > +static void dw_hdma_debugfs_regs_ch(struct dw_hdma_v0_ch_regs __iomem *regs,
+> > > +				    struct dentry *dir)
+> > > +{
+> > > +	int nr_entries;
+> > > +	const struct debugfs_entries debugfs_regs[] = {
+> > > +		REGISTER(ch_en),
+> > > +		REGISTER(doorbell),
+> > > +		REGISTER(llp.lsb),
+> > > +		REGISTER(llp.msb),
+> > > +		REGISTER(cycle_sync),
+> > > +		REGISTER(transfer_size),
+> > > +		REGISTER(sar.lsb),
+> > > +		REGISTER(sar.msb),
+> > > +		REGISTER(dar.lsb),
+> > > +		REGISTER(dar.msb),
+> > > +		REGISTER(control1),
+> > > +		REGISTER(ch_stat),
+> > > +		REGISTER(int_stat),
+> > > +		REGISTER(int_setup),
+> > > +		REGISTER(int_clear),
+> > > +		REGISTER(msi_stop.lsb),
+> > > +		REGISTER(msi_stop.msb),
+> > > +		REGISTER(msi_abort.lsb),
+> > > +		REGISTER(msi_abort.msb),
+> > > +		REGISTER(msi_msgdata),
+> > > +	};
+> > > +
+> > > +	nr_entries = ARRAY_SIZE(debugfs_regs);
+> > > +	dw_hdma_debugfs_create_x32(debugfs_regs, nr_entries, dir);
+> > > +}
+> > > +
+> > > +static void dw_hdma_debugfs_regs_wr(struct dentry *dir)
+> > > +{
+> > > +	struct dentry *regs_dir, *ch_dir;
+> > > +	int i;
+> > > +	char name[16];
+> > > +
+> > > +	regs_dir = debugfs_create_dir(WRITE_STR, dir);
+> > > +	if (!regs_dir)
+> > > +		return;
+> > > +
+> > > +	for (i = 0; i < dw->wr_ch_cnt; i++) {
+> > > +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+> > > +
+> > > +		ch_dir = debugfs_create_dir(name, regs_dir);
+> > > +		if (!ch_dir)
+> > > +			return;
+> > > +
+> > > +		dw_hdma_debugfs_regs_ch(&regs->ch[i].wr, ch_dir);
+> > > +	}
+> > > +}
+> > > +
+> > > +static void dw_hdma_debugfs_regs_rd(struct dentry *dir)
+> > > +{
+> > > +	struct dentry *regs_dir, *ch_dir;
+> > > +	int i;
+> > > +	char name[16];
+> > > +
+> > > +	regs_dir = debugfs_create_dir(READ_STR, dir);
+> > > +	if (!regs_dir)
+> > > +		return;
+> > > +
+> > > +	for (i = 0; i < dw->rd_ch_cnt; i++) {
+> > > +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
+> > > +
+> > > +		ch_dir = debugfs_create_dir(name, regs_dir);
+> > > +		if (!ch_dir)
+> > > +			return;
+> > > +
+> > > +		dw_hdma_debugfs_regs_ch(&regs->ch[i].rd, ch_dir);
+> > > +	}
+> > > +}
+> > > +
+> > > +static void dw_hdma_debugfs_regs(void)
+> > > +{
+> > > +	struct dentry *regs_dir;
+> > > +
+> > > +	regs_dir = debugfs_create_dir(REGISTERS_STR, dw->debugfs);
+> > > +	if (!regs_dir)
+> > > +		return;
+> > > +
+> > > +	dw_hdma_debugfs_regs_wr(regs_dir);
+> > > +	dw_hdma_debugfs_regs_rd(regs_dir);
+> > > +}
+> > > +
+> > > +void dw_hdma_v0_debugfs_on(struct dw_edma *_dw)
+> > > +{
+> > > +	dw = _dw;
+> > > +	if (!dw)
+> > > +		return;
+> > > +
+> > > +	regs = dw->chip->reg_base;
+> > > +	if (!regs)
+> > > +		return;
+> > > +
+> > > +	dw->debugfs = debugfs_create_dir(dw->name, NULL);
+> > > +	if (!dw->debugfs)
+> > > +		return;
+> > > +
+> > > +	debugfs_create_u32("mf", 0444, dw->debugfs, &dw->chip->mf);
+> > > +	debugfs_create_u16("wr_ch_cnt", 0444, dw->debugfs, &dw->wr_ch_cnt);
+> > > +	debugfs_create_u16("rd_ch_cnt", 0444, dw->debugfs, &dw->rd_ch_cnt);
+> > > +
+> > > +	dw_hdma_debugfs_regs();
+> > > +}
+> > > +
+> > > +void dw_hdma_v0_debugfs_off(struct dw_edma *_dw)
+> > > +{
+> > > +	dw = _dw;
+> > > +	if (!dw)
+> > > +		return;
+> > > +
+> > > +	debugfs_remove_recursive(dw->debugfs);
+> > > +	dw->debugfs = NULL;
+> > > +}
+> > > diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> > > new file mode 100644
+> > > index 000000000000..53bc7e93f4a0
+> > > --- /dev/null
+> > > +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> > > @@ -0,0 +1,25 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +/*
+> > > + * Copyright (c) 2022 Cai Huoqing
+> > > + * Synopsys DesignWare HDMA v0 debugfs
+> > > + */
+> > > +
+> > > +#ifndef _DW_HDMA_V0_DEBUG_FS_H
+> > > +#define _DW_HDMA_V0_DEBUG_FS_H
+> > > +
+> > > +#include <linux/dma/edma.h>
+> > > +
+> > > +#ifdef CONFIG_DEBUG_FS
+> > > +void dw_hdma_v0_debugfs_on(struct dw_edma *dw);
+> > > +void dw_hdma_v0_debugfs_off(struct dw_edma *dw);
+> > > +#else
+> > > +static inline void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
+> > > +{
+> > > +}
+> > > +
+> > > +static inline void dw_hdma_v0_debugfs_off(struct dw_edma *dw)
+> > > +{
+> > > +}
+> > > +#endif /* CONFIG_DEBUG_FS */
+> > > +
+> > > +#endif /* _DW_HDMA_V0_DEBUG_FS_H */
+> > > diff --git a/drivers/dma/dw-edma/dw-hdma-v0-regs.h b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> > > new file mode 100644
+> > > index 000000000000..2a2a3620d809
+> > > --- /dev/null
+> > > +++ b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> > > @@ -0,0 +1,94 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +/*
+> > > + * Copyright (c) 2022 Cai Huoqing
+> > > + * Synopsys DesignWare HDMA v0 reg
+> > > + */
+> > > +
+> > > +#ifndef _DW_HDMA_V0_REGS_H
+> > > +#define _DW_HDMA_V0_REGS_H
+> > > +
+> > > +#include <linux/dmaengine.h>
+> > > +
+> > > +#define HDMA_V0_MAX_NR_CH					8
+> > > +#define HDMA_V0_LOCAL_ABORT_INT_EN			BIT(6)
+> > > +#define HDMA_V0_REMOTE_ABORT_INT_EN			BIT(5)
+> > > +#define HDMA_V0_LOCAL_STOP_INT_EN			BIT(4)
+> > > +#define HDMA_V0_REMOTEL_STOP_INT_EN			BIT(3)
+> > > +#define HDMA_V0_ABORT_INT_MASK				BIT(2)
+> > > +#define HDMA_V0_STOP_INT_MASK				BIT(0)
+> > > +#define HDMA_V0_LINKLIST_EN					BIT(0)
+> > > +#define HDMA_V0_DOORBELL_START				BIT(0)
+> > > +#define HDMA_V0_CH_STATUS_MASK				GENMASK(1, 0)
+> > > +
+> > > +struct dw_hdma_v0_ch_regs {
+> > > +	u32 ch_en;					/* 0x0000 */
+> > > +	u32 doorbell;				/* 0x0004 */
+> > > +	u32 prefetch;				/* 0x0008 */
+> > > +	u32 handshake;				/* 0x000c */
+> > > +	union {
+> > > +		u64 reg;				/* 0x0010..0x0014 */
+> > > +		struct {
+> > > +			u32 lsb;			/* 0x0010 */
+> > > +			u32 msb;			/* 0x0014 */
+> > > +		};
+> > > +	} llp;
+> > > +	u32 cycle_sync;				/* 0x0018 */
+> > > +	u32 transfer_size;			/* 0x001c */
+> > > +	union {
+> > > +		u64 reg;				/* 0x0020..0x0024 */
+> > > +		struct {
+> > > +			u32 lsb;			/* 0x0020 */
+> > > +			u32 msb;			/* 0x0024 */
+> > > +		};
+> > > +	} sar;
+> > > +	union {
+> > > +		u64 reg;				/* 0x0028..0x002c */
+> > > +		struct {
+> > > +			u32 lsb;			/* 0x0028 */
+> > > +			u32 msb;			/* 0x002c */
+> > > +		};
+> > > +	} dar;
+> > > +
+> > > +	u32 watermark_en;			/* 0x0030 */
+> > > +	u32	control1;				/* 0x0034 */
+> > > +	u32	func_num;				/* 0x0038 */
+> > > +	u32	qos;					/* 0x003c */
+> > > +	u32	reserved;				/* 0x0040..0x007c */
+> > > +	u32 ch_stat;				/* 0x0080 */
+> > > +	u32 int_stat;				/* 0x0084 */
+> > > +	u32 int_setup;				/* 0x0088 */
+> > > +	u32 int_clear;				/* 0x008c */
+> > > +	union {
+> > > +		u64 reg;				/* 0x0090..0x0094 */
+> > > +		struct {
+> > > +			u32 lsb;			/* 0x0090 */
+> > > +			u32 msb;			/* 0x0094 */
+> > > +		};
+> > > +	} msi_stop;
+> > > +	union {
+> > > +		u64 reg;				/* 0x0098..0x009c */
+> > > +		struct {
+> > > +			u32 lsb;			/* 0x0098 */
+> > > +			u32 msb;			/* 0x009c */
+> > > +		};
+> > > +	} msi_watermark;
+> > > +	union {
+> > > +		u64 reg;				/* 0x00a0..0x00a4 */
+> > > +		struct {
+> > > +			u32 lsb;			/* 0x00a0 */
+> > > +			u32 msb;			/* 0x00a4 */
+> > > +		};
+> > > +	} msi_abort;
+> > > +	u32	msi_msgdata;			/* 0x00a8 */
+> > > +} __packed;
+> > > +
+> > > +struct dw_hdma_v0_ch {
+> > > +	struct dw_hdma_v0_ch_regs wr;			/* 0x0000 */
+> > > +	struct dw_hdma_v0_ch_regs rd;			/* 0x0100 */
+> > > +} __packed;
+> > > +
+> > > +struct dw_hdma_v0_regs {
+> > > +	struct dw_hdma_v0_ch ch[HDMA_V0_MAX_NR_CH]; /* 0x0000..0x0fa8 */
+> > > +} __packed;
+> > > +
+> > > +#endif /* _DW_HDMA_V0_REGS_H */
+> > > diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> > > index 7d8062e9c544..a379b599c7fa 100644
+> > > --- a/include/linux/dma/edma.h
+> > > +++ b/include/linux/dma/edma.h
+> > > @@ -30,7 +30,8 @@ struct dw_edma_core_ops {
+> > >  enum dw_edma_map_format {
+> > >  	EDMA_MF_EDMA_LEGACY = 0x0,
+> > >  	EDMA_MF_EDMA_UNROLL = 0x1,
+> > > -	EDMA_MF_HDMA_COMPAT = 0x5
+> > > +	EDMA_MF_HDMA_COMPAT = 0x5,
+> > > +	EDMA_MF_HDMA_NATIVE = 0x7
+> > >  };
+> > >  
+> > >  /**
+> > > -- 
+> > > 2.25.1
+> > > 

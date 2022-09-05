@@ -2,82 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395055AD227
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493815AD22E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbiIEMKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
+        id S236892AbiIEMMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236504AbiIEMKw (ORCPT
+        with ESMTP id S235207AbiIEMML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:10:52 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623755E329
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:10:51 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id se27so16666578ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:10:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=uyNua9RZQMBItV/dSaLLMta7RxU5C+SpWZWfOrY8VqE=;
-        b=CvZl2BNgxHZZJAaGpRdi91gjD9aZilrYGjQoVPw63tfBxHFTW5FAMCSdVAt/g4GyRt
-         AWvjsc0Lj5GB63nTVoHVs+203PpfqM60vQWfSJ2GkAKiT9tPxI/OP0v1ulvRgRrAPM6a
-         XuRg4MEofe677tHTiSGWuIdz2l7p0MfmV07RmYsgFVALm0AUUHvi3m3SA54ovXwsoJnu
-         n5dckUOMeiihWxYGODm7IuHSMRJNa04TgqG5CV+OopbzM9qqtKjLvttgIONTCmN4S8D0
-         Jw0un4REChwuseK3rjhSXk0YDQz8X6qG3SXORic09R1I/b/piUEnZ+Yz+XUycqEOuVma
-         TaKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=uyNua9RZQMBItV/dSaLLMta7RxU5C+SpWZWfOrY8VqE=;
-        b=dlxN9EpP0hC+63Q9DmqSDIiEyWIX1n6tJ2OXknSlzZRsRYuJaankFaUL2L5usPDrDw
-         h+Sq6c0VQ9Mue6Vr5gynmxY9tr8capemeZTxEdx63Hma64x2BAa6KvwPKEoDQnfT7Z3H
-         9AmJAZTajLtVOvUkEhWRZBwdSEMN0+9IDeZakUJ/yV9zwO3IebdcStzlsHXJKyhlnMTo
-         VscScTrFd5lnlQyb/jJea+ueSHluZN0Pnl9/TUiIpb1taZaRyPWVdRhrZHwvus/t1v/V
-         yOtlFXoGXWpFoSI0LJR0bTPo/z4NMOEmBZ5WEF6ixfc9tzaBmUrAVajF1grn0/YEcpyy
-         XKWA==
-X-Gm-Message-State: ACgBeo18gXXLrp+c7Z4fgXau5PPMxNtM8u3iJxnZhU3IS6wiSGwn7Gc0
-        DwjpfTb4BZVPS2D7y2FHacE8zpzFpWiHK1NIRrJj6w==
-X-Google-Smtp-Source: AA6agR7kIMLy48otphEzF4h+sD1WW5s5Tya3a+Km+N9oAqrNsvYl2+e+ii7HXFFJ6fs6JElYzHmj3EAC5JaFUCoRJWM=
-X-Received: by 2002:a17:907:2707:b0:741:7c18:4e76 with SMTP id
- w7-20020a170907270700b007417c184e76mr24283717ejk.690.1662379849958; Mon, 05
- Sep 2022 05:10:49 -0700 (PDT)
+        Mon, 5 Sep 2022 08:12:11 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846281D30A
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662379930; x=1693915930;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cESe8vq/hRJPKQcNPWYwY2QfT3DdGtul83c8mx+Y1T4=;
+  b=hI++BISFGXx5FZbFebyA3uhJWCo+JD6xoG8JsX9I949YG4AVkFP7H0TC
+   3j+i+CGaP/hVEYhmI2tc+U563vjXUgxHI3kExQl/4vE/t0fC1RW/YZse9
+   GTKGQl4SNyAxAuLO36WQZhTKiUMr7u+C6aQmKYNu2K1L7d9Ix2sSLT/IT
+   0pp5nZG76WZrZiWKILFjOwUlexa7/bS1zzhE+lvNBCwZ8ywbDlIe625Ce
+   tK/O9I2dp5x+jT1MrfJgW2uczRygLPh63KXXDWWkb/pdqH19L4sAcqbI/
+   c6XvJk9tU4KaVBw0zvSXCKGXzLHPlwh+sMBQvm91Ftgrv9fJYXdvYCD4V
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="295115062"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="295115062"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 05:12:10 -0700
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="643788389"
+Received: from jiebinsu-mobl.ccr.corp.intel.com (HELO [10.238.0.228]) ([10.238.0.228])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 05:12:06 -0700
+Message-ID: <f204eb92-d17d-9c6a-768c-5404f3363b5b@intel.com>
+Date:   Mon, 5 Sep 2022 20:12:04 +0800
 MIME-Version: 1.0
-References: <20220905071300.1832105-1-13667453960@163.com>
-In-Reply-To: <20220905071300.1832105-1-13667453960@163.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 5 Sep 2022 14:10:38 +0200
-Message-ID: <CACRpkda62=3ho+R4OzUYHXwrSDSBnqCOxhc4XVAe8i8nSHtvKA@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: berlin: fix spelling typo in comment
-To:     Jiangshan Yi <13667453960@163.com>
-Cc:     tangmeng@uniontech.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [PATCH] ipc/msg.c: mitigate the lock contention with percpu
+ counter
+Content-Language: en-US
+To:     Manfred Spraul <manfred@colorfullife.com>,
+        akpm@linux-foundation.org, vasily.averin@linux.dev,
+        shakeelb@google.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, ebiederm@xmission.com, legion@kernel.org,
+        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
+        tianyou.li@intel.com, wangyang.guo@intel.com, jiebin.sun@intel.com
+References: <20220902152243.479592-1-jiebin.sun@intel.com>
+ <ffe3f49c-55d7-3c28-78a2-7998fa3ee914@colorfullife.com>
+From:   "Sun, Jiebin" <jiebin.sun@intel.com>
+In-Reply-To: <ffe3f49c-55d7-3c28-78a2-7998fa3ee914@colorfullife.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 9:13 AM Jiangshan Yi <13667453960@163.com> wrote:
 
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On 9/4/2022 3:35 AM, Manfred Spraul wrote:
+> Hi Jiebin,
 >
-> Fix spelling typo in comment.
+> On 9/2/22 17:22, Jiebin Sun wrote:
+>> The msg_bytes and msg_hdrs atomic counters are frequently
+>> updated when IPC msg queue is in heavy use, causing heavy
+>> cache bounce and overhead. Change them to percpu_counters
+>> greatly improve the performance. Since there is one unique
+>> ipc namespace, additional memory cost is minimal.
 >
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+> With ipc namespaces, there is one struct per namespace, correct?
+>
+> The cost is probably still ok, but the change log should be correct.
+>
+Yes, that's what I want to summarize. The IPC msg namespace is unique
 
-Patch applied.
+and there is only one percpu counter in IPC msg namespace.
 
-Yours,
-Linus Walleij
+Thanks.
+
+>
+>> @@ -1303,14 +1305,16 @@ void msg_init_ns(struct ipc_namespace *ns)
+>>       ns->msg_ctlmnb = MSGMNB;
+>>       ns->msg_ctlmni = MSGMNI;
+>>   -    atomic_set(&ns->msg_bytes, 0);
+>> -    atomic_set(&ns->msg_hdrs, 0);
+>> +    percpu_counter_init(&ns->percpu_msg_bytes, 0, GFP_KERNEL);
+>> +    percpu_counter_init(&ns->percpu_msg_hdrs, 0, GFP_KERNEL);
+>>       ipc_init_ids(&ns->ids[IPC_MSG_IDS]);
+>
+> These calls can fail. You must add error handling.
+
+I have add error handling for percpu_counter_init.
+
+Thanks.
+
+>
+> -- 
+>
+>     Manfred
+>
+>

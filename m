@@ -2,123 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FD85ADB53
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9EB5ADB55
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiIEWRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
+        id S232034AbiIEWSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 18:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIEWRd (ORCPT
+        with ESMTP id S229577AbiIEWSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:17:33 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE20359267;
-        Mon,  5 Sep 2022 15:17:31 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id CC0F41237;
-        Tue,  6 Sep 2022 00:17:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1662416249;
+        Mon, 5 Sep 2022 18:18:43 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B46E6052B
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 15:18:40 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662416318;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IHqwoI5OJwucKGse+LfR+Krmr6ZZMdVFsaeSkgDsr3o=;
-        b=is7h4uz/R+0PDgRskheOgM5/6YA8uxXysj7m5fcncfbA4cy5K/7OjT1IGXWgLOOqwOR2gn
-        d40Bz2CE1pF0xzmCgwIsKeC7F9vfOeT5+3SlOnm9a2uAQh/T6h2fzFh5nqx54JXDWiVLFB
-        mrt9qVCalRIpRQVMx8Jd35O++/WVXFj4SzXS/DDG13hF3CriYXLfWJx2bC1tvvSxoJwk1V
-        fCDXxkqyFvq5cNucvdAstNyUoGlGAYcTeP4EPc2ae9VsEj4tFkmmx5C7FZy82uVqyEFi7S
-        vycjrzhHZ8dZM67AGgDgcAQCblpO5yGdxB0qCeV8Jh8u+9/qT98sdPd+ngfPNw==
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=86vkn1lngiubNGWHffOAiBFa/gjw4IKkbIc5Z1/odHo=;
+        b=foLluK7py9GlYQMWiiCW9yrRKmL3EzEmTMBqk1t5O7oE6DaN8lQWgoYZsmt0dGDhUxV7qq
+        1+L+v894GtqbQusBlw/tw3O+hE8QnqEmZbXqcCZOeuDmfkYQhC3MnRvTlGJ3dG5E1hNZvg
+        7IWj8x6um0xX64Yu+1Z6WKFGiYhpge0=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH] kasan: move tests to mm/kasan/
+Date:   Tue,  6 Sep 2022 00:18:36 +0200
+Message-Id: <676398f0aeecd47d2f8e3369ea0e95563f641a36.1662416260.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Date:   Tue, 06 Sep 2022 00:17:29 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH devicetree] arm64: dts: ls1028a-rdb: add more ethernet
- aliases
-In-Reply-To: <20220905212458.1549179-1-vladimir.oltean@nxp.com>
-References: <20220905212458.1549179-1-vladimir.oltean@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d00682d7e7aec2f979236338e7b3a688@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-09-05 23:24, schrieb Vladimir Oltean:
-> Commit "arm64: dts: ls1028a: enable swp5 and eno3 for all boards" which
-> Shawn declared as applied, but for which I can't find a sha1sum, has
-> enabled a new Ethernet port on the LS1028A-RDB (&enetc_port3), but
-> U-Boot, which passes a MAC address to Linux' device tree through the
-> /aliases node, fails to do this for this newly enabled port.
-> 
-> Fix that by adding more ethernet aliases in the only
-> backwards-compatible way possible: at the end of the current list.
-> 
-> And since it is possible to very easily convert either swp4 or swp5 to
-> DSA user ports now (which have a MAC address of their own), using these
-> U-Boot commands:
-> 
-> => fdt addr $fdt_addr_r
-> => fdt rm /soc/pcie@1f0000000/ethernet-switch@0,5/ports/port@4 ethernet
-> 
-> it would be good if those DSA user ports (swp4, swp5) gained a valid 
-> MAC
-> address from U-Boot as well. In order for that to work properly,
-> provision two more ethernet aliases for &mscc_felix_port{4,5} as well.
+From: Andrey Konovalov <andreyknvl@google.com>
 
-First, let me say, I'm fine with this patch. But I'm not sure,
-how many MAC addresses are actually reserved on your
-RDB/QDS boards? I guess, they being evaluation boards you
-don't care? ;)
-On the Kontron sl28 boards we reserve just 8 and that is
-already a lot for a board with max 6 out facing ports. 4 of
-these ports used to be a switch, so in theory it should work
-with 3 MAC addresses, right? Or even just 2 if there is no
-need to terminate any traffic on the switch interfaces.
+Move KASAN tests to mm/kasan/ to keep the test code alongside the
+implementation.
 
-Anyway, do we really need so many addresses? What are the
-configurations here? For what is the address of the
-internal ports used?
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ MAINTAINERS                                             | 1 -
+ lib/Makefile                                            | 5 -----
+ mm/kasan/Makefile                                       | 8 ++++++++
+ lib/test_kasan.c => mm/kasan/kasan_test.c               | 2 +-
+ lib/test_kasan_module.c => mm/kasan/kasan_test_module.c | 2 +-
+ 5 files changed, 10 insertions(+), 8 deletions(-)
+ rename lib/test_kasan.c => mm/kasan/kasan_test.c (99%)
+ rename lib/test_kasan_module.c => mm/kasan/kasan_test_module.c (99%)
 
-Let's say we are in the "port extender mode" and use the
-second internal port as an actual switch port, that would
-then be:
-2x external enetc
-1x internal enetc
-4x external switch ports in port extender mode
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 589517372408..31b3e4b11e01 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10938,7 +10938,6 @@ F:	arch/*/include/asm/*kasan.h
+ F:	arch/*/mm/kasan_init*
+ F:	include/linux/kasan*.h
+ F:	lib/Kconfig.kasan
+-F:	lib/test_kasan*.c
+ F:	mm/kasan/
+ F:	scripts/Makefile.kasan
+ 
+diff --git a/lib/Makefile b/lib/Makefile
+index ffabc30a27d4..928d7605c35c 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -65,11 +65,6 @@ obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
+ obj-$(CONFIG_TEST_SIPHASH) += test_siphash.o
+ obj-$(CONFIG_HASH_KUNIT_TEST) += test_hash.o
+ obj-$(CONFIG_TEST_IDA) += test_ida.o
+-obj-$(CONFIG_KASAN_KUNIT_TEST) += test_kasan.o
+-CFLAGS_test_kasan.o += -fno-builtin
+-CFLAGS_test_kasan.o += $(call cc-disable-warning, vla)
+-obj-$(CONFIG_KASAN_MODULE_TEST) += test_kasan_module.o
+-CFLAGS_test_kasan_module.o += -fno-builtin
+ obj-$(CONFIG_TEST_UBSAN) += test_ubsan.o
+ CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
+ UBSAN_SANITIZE_test_ubsan.o := y
+diff --git a/mm/kasan/Makefile b/mm/kasan/Makefile
+index 1f84df9c302e..d4837bff3b60 100644
+--- a/mm/kasan/Makefile
++++ b/mm/kasan/Makefile
+@@ -35,7 +35,15 @@ CFLAGS_shadow.o := $(CC_FLAGS_KASAN_RUNTIME)
+ CFLAGS_hw_tags.o := $(CC_FLAGS_KASAN_RUNTIME)
+ CFLAGS_sw_tags.o := $(CC_FLAGS_KASAN_RUNTIME)
+ 
++CFLAGS_KASAN_TEST := $(CFLAGS_KASAN) -fno-builtin $(call cc-disable-warning, vla)
++
++CFLAGS_kasan_test.o := $(CFLAGS_KASAN_TEST)
++CFLAGS_kasan_test_module.o := $(CFLAGS_KASAN_TEST)
++
+ obj-y := common.o report.o
+ obj-$(CONFIG_KASAN_GENERIC) += init.o generic.o report_generic.o shadow.o quarantine.o
+ obj-$(CONFIG_KASAN_HW_TAGS) += hw_tags.o report_hw_tags.o tags.o report_tags.o
+ obj-$(CONFIG_KASAN_SW_TAGS) += init.o report_sw_tags.o shadow.o sw_tags.o tags.o report_tags.o
++
++obj-$(CONFIG_KASAN_KUNIT_TEST) += kasan_test.o
++obj-$(CONFIG_KASAN_MODULE_TEST) += kasan_test_module.o
+diff --git a/lib/test_kasan.c b/mm/kasan/kasan_test.c
+similarity index 99%
+rename from lib/test_kasan.c
+rename to mm/kasan/kasan_test.c
+index 505f77ffad27..f25692def781 100644
+--- a/lib/test_kasan.c
++++ b/mm/kasan/kasan_test.c
+@@ -25,7 +25,7 @@
+ 
+ #include <kunit/test.h>
+ 
+-#include "../mm/kasan/kasan.h"
++#include "kasan.h"
+ 
+ #define OOB_TAG_OFF (IS_ENABLED(CONFIG_KASAN_GENERIC) ? 0 : KASAN_GRANULE_SIZE)
+ 
+diff --git a/lib/test_kasan_module.c b/mm/kasan/kasan_test_module.c
+similarity index 99%
+rename from lib/test_kasan_module.c
+rename to mm/kasan/kasan_test_module.c
+index b112cbc835e9..e4ca82dc2c16 100644
+--- a/lib/test_kasan_module.c
++++ b/mm/kasan/kasan_test_module.c
+@@ -13,7 +13,7 @@
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ 
+-#include "../mm/kasan/kasan.h"
++#include "kasan.h"
+ 
+ static noinline void __init copy_user_test(void)
+ {
+-- 
+2.25.1
 
-Which makes 7 addresses. The internal enetc port doesn't
-really make sense in a port extender mode, because there
-is no switching going on. So uhm, 6 addresses are the
-maximum?
-
-This is the MAC address distribution for now on the
-sl28 boards:
-https://lore.kernel.org/linux-devicetree/20220901221857.2600340-19-michael@walle.cc/
-
-Please tell me if I'm missing something here.
-
--michael
-
-> The resulting ordering is slightly unusual, but to me looks more 
-> natural
-> than eno0, eno2, swp0, swp1, swp2, swp3, eno3, swp4, swp5.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>

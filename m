@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBA75AD208
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147BD5AD214
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237057AbiIEMC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S237084AbiIEMHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237006AbiIEMC4 (ORCPT
+        with ESMTP id S235420AbiIEMHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:02:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281FA5D0D9;
-        Mon,  5 Sep 2022 05:02:55 -0700 (PDT)
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MLnB12zYqzjXf8;
-        Mon,  5 Sep 2022 19:59:21 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 20:02:53 +0800
-Received: from [10.67.103.212] (10.67.103.212) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 20:02:53 +0800
-Subject: Re: [PATCH v7 2/3] Documentation: add a isolation strategy sysfs node
- for uacce
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Eric Biggers <ebiggers@kernel.org>
-References: <20220806022943.47292-1-yekai13@huawei.com>
- <20220806022943.47292-3-yekai13@huawei.com> <YxDJ6PEWd/3c1jPd@kroah.com>
- <YxDlOFYih5tQ37Av@sol.localdomain> <YxD1byMGE03R8YWT@kroah.com>
-CC:     <herbert@gondor.apana.org.au>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wangzhou1@hisilicon.com>,
-        <liulongfang@huawei.com>
-From:   "yekai (A)" <yekai13@huawei.com>
-Message-ID: <58cecd16-c992-c6b0-76b1-0ba7f2ac4845@huawei.com>
-Date:   Mon, 5 Sep 2022 20:02:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Mon, 5 Sep 2022 08:07:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7C2402D1;
+        Mon,  5 Sep 2022 05:07:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8352D6120A;
+        Mon,  5 Sep 2022 12:07:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90DA6C433B5;
+        Mon,  5 Sep 2022 12:07:00 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AwQI3zXh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1662379617;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZDAdVMlFCiNAiNt/gDe4bwmhdOf+6WpnVaQhoNtIX9w=;
+        b=AwQI3zXhAs84MI5DuY4E5HTbVfYtRxaPXrwSWMmMg4TYqlHSg6H73uVNE139sPoXBYVvJO
+        dGU/LyhApx5Uk74WWQd+3cMZB4iUsNiqEZm6frbsTfAO6jCC2AHqr7igGE6CO4A5Om8mxd
+        N2Tqiw5N2z+ob4UZobo70nN47kcXzRk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3107f0bf (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 5 Sep 2022 12:06:57 +0000 (UTC)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-3450a7358baso40502307b3.13;
+        Mon, 05 Sep 2022 05:06:57 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1l+D8Ek6ad/OiCsFYJxxsBpk+M8eXo4DGB00hj85qnkqwspYHU
+        LVB02DUJnCv5ELvsi3lh/r13w6T6rq1Q7UyE0kQ=
+X-Google-Smtp-Source: AA6agR5X7dDkj/wLtvhnwZ797YyJChFFYEUZ25C9PbeN9mtjjfKPaq7Gnpog0gNLR7uO8ZVcW/8GIpuSdK/emysn2YU=
+X-Received: by 2002:a0d:f082:0:b0:31f:1d1d:118d with SMTP id
+ z124-20020a0df082000000b0031f1d1d118dmr38595397ywe.124.1662379616260; Mon, 05
+ Sep 2022 05:06:56 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YxD1byMGE03R8YWT@kroah.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.212]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220905101403.1435037-1-Jason@zx2c4.com> <87sfl6jbb3.wl-tiwai@suse.de>
+In-Reply-To: <87sfl6jbb3.wl-tiwai@suse.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 5 Sep 2022 14:06:45 +0200
+X-Gmail-Original-Message-ID: <CAHmME9rbqT=dAGU_oybHYH87qkwNNFizHsSyptZU1vKQMo9dgw@mail.gmail.com>
+Message-ID: <CAHmME9rbqT=dAGU_oybHYH87qkwNNFizHsSyptZU1vKQMo9dgw@mail.gmail.com>
+Subject: Re: [PATCH] ALSA: usb-audio: Don't refcount multiple accesses on the
+ single clock
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     alsa-devel@alsa-project.org, LKML <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        =?UTF-8?B?TmlrbMSBdnMgS2/EvGVzxYZpa292cw==?= 
+        <89q1r14hd@relay.firefox.com>, Wim Taymans <wtaymans@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,48 +68,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/9/2 2:09, Greg KH wrote:
-> On Thu, Sep 01, 2022 at 10:00:40AM -0700, Eric Biggers wrote:
->> On Thu, Sep 01, 2022 at 05:04:08PM +0200, Greg KH wrote:
->>> On Sat, Aug 06, 2022 at 10:29:42AM +0800, Kai Ye wrote:
->>>> Update documentation describing sysfs node that could help to
->>>> configure isolation strategy for users in the user space. And
->>>> describing sysfs node that could read the device isolated state.
->>>>
->>>> Signed-off-by: Kai Ye <yekai13@huawei.com>
->>>> ---
->>>>  Documentation/ABI/testing/sysfs-driver-uacce | 26 ++++++++++++++++++++
->>>>  1 file changed, 26 insertions(+)
->>>>
->>>> diff --git a/Documentation/ABI/testing/sysfs-driver-uacce b/Documentation/ABI/testing/sysfs-driver-uacce
->>>> index 08f2591138af..e09fd160d3fa 100644
->>>> --- a/Documentation/ABI/testing/sysfs-driver-uacce
->>>> +++ b/Documentation/ABI/testing/sysfs-driver-uacce
->>>> @@ -19,6 +19,32 @@ Contact:        linux-accelerators@lists.ozlabs.org
->>>>  Description:    Available instances left of the device
->>>>                  Return -ENODEV if uacce_ops get_available_instances is not provided
->>>>  
->>>> +What:           /sys/class/uacce/<dev_name>/isolate_strategy
->>>> +Date:           Jul 2022
->>> July was a while ago, you sent this patch in August :(
->>>
->> Does the date in the sysfs documentation files serve any purpose besides making
->> people have to update their patchsets every month?
->>
->> The kernel version number would be more useful to readers of the documentation,
->> and it wouldn't have to be updated quite as often.
-> True, I have seen people use that instead, or no date at all, I don't
-> require it.  But if you do put the field in there, it should at least be
-> correct :)
+On Mon, Sep 5, 2022 at 1:44 PM Takashi Iwai <tiwai@suse.de> wrote:
 >
-> thanks,
+> On Mon, 05 Sep 2022 12:14:03 +0200,
+> Jason A. Donenfeld wrote:
+> >
+> > This reverts commit 03a8b0df757f1beb21ba1626e23ca7412e48b525.
+> > This reverts commit c11117b634f4f832c4420d3cf41c44227f140ce1.
+> >
+> > Pipewire and PulseAudio start devices with 44.1khz before changing them
+> > to 48khz (or something different). By locking the rate, daemons are
+> > unable to enumerate possible rates, and so they never change them to a
+> > more optimal rate. This revert patch should allow 48khz audio again.
 >
-> greg k-h
-> .
->
-I have fixed the date in version v8
+> Well, in that case, the revert is no right solution, IMO.
+> If the patch caused a problem, it means that the application tries to
+> change the rate while it's being still running by another.  If it
+> worked, it worked just casually without noticing the bad behavior.
 
-thanks
-Kai
+Not sure this is really what's happening. I think the issue is that
+alsa reports that the device only supports a limited set of rates.
+Pipewire then doesn't see 48khz, so it doesn't try to
+stop,reclock,start.
+
+Maybe Wim or Niklavs can provide more info about this.
+
+Jason

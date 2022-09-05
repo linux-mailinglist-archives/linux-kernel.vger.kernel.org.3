@@ -2,183 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9045AD340
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAC05AD325
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235786AbiIEMtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S229888AbiIEMvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234228AbiIEMtH (ORCPT
+        with ESMTP id S237068AbiIEMum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:49:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0786E1FB;
-        Mon,  5 Sep 2022 05:49:06 -0700 (PDT)
+        Mon, 5 Sep 2022 08:50:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932D026D7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:50:40 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B065E388A0;
-        Mon,  5 Sep 2022 12:49:04 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D95BA5D021;
+        Mon,  5 Sep 2022 12:50:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662382144; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1662382238; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=R4M7Gfp3ULBZggWLo8mojaVJIBZ+WLvXUjQCIr0zMxE=;
-        b=vpEwmThvhZkMfOTkBel1SM5l543iK03L30ldcjElcqS1G50Wk4OrVdKqgHfXQesnSYXCZ3
-        QuF471iMZI//6YseFrXUeGsO8tSzu38gY/HAlm3ukY7S241mcbCCgSsAvjUTBeQaJnKp3M
-        yUFo+58fUqYYBXUerPFgnQsP0N7ukC8=
+        bh=k71P9I+tFuuKSlkWA9UOEi0aMlk2h1NjsEhUbbnSDWQ=;
+        b=fy4i7muYl/orzPk2EjHQRwSP0UOcANLzwVwMS4BbSzwBwPXqgpBC3Nfinwcc6a0ZKVA0Cw
+        0u6n6heWMcA9XCISitZXA5ZwFhM+y1r7CNu4UN8Yvs4x5XAElRUck0X0gWsna8FpEnjfV5
+        YdYVjU9nRgV2f0sknZBTHIruthGtqh8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662382144;
+        s=susede2_ed25519; t=1662382238;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=R4M7Gfp3ULBZggWLo8mojaVJIBZ+WLvXUjQCIr0zMxE=;
-        b=d+G748j3ueBj4OyFmdCoqK83vteex2i5HucxmvOMSueLGZhGplhoB4jOWr4YuV2K6uu12g
-        NmlWUJL1k3QQRYBA==
+        bh=k71P9I+tFuuKSlkWA9UOEi0aMlk2h1NjsEhUbbnSDWQ=;
+        b=H4NNiE1EJklb5XEWK7I450nlDyO/jRl4twyhXZMxIQboc3XiIhp8mfZOmueuwYlfA1MrjF
+        JtwtcJJV9ekevvDw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 944E313A66;
-        Mon,  5 Sep 2022 12:49:04 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B9F8013A66;
+        Mon,  5 Sep 2022 12:50:38 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id CAmGI0DwFWNADQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 05 Sep 2022 12:49:04 +0000
-Date:   Mon, 05 Sep 2022 14:49:03 +0200
-Message-ID: <87o7vuj8ao.wl-tiwai@suse.de>
+        id AGyXLJ7wFWMcDgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 05 Sep 2022 12:50:38 +0000
+Date:   Mon, 05 Sep 2022 14:50:38 +0200
+Message-ID: <87leqyj881.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        linux-sound@vger.kernel.org
-Subject: Re: [BUG] commit a8d302a0b77057568350fe0123e639d02dba0745 cause IO_PAGE_FAULT and a lot of errors
-In-Reply-To: <874jxml7a4.wl-tiwai@suse.de>
-References: <CABXGCsO+kB2t5QyHY-rUe76npr1m0-5JOtt8g8SiHUo34ur7Ww@mail.gmail.com>
-        <87ilm3vbzq.wl-tiwai@suse.de>
-        <875yi3froa.wl-tiwai@suse.de>
-        <CABXGCsMQ5H23np6fMN=58CZ6cBiHFF4WGdKdbtYLFyAAeAu5rQ@mail.gmail.com>
-        <874jxml7a4.wl-tiwai@suse.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Takashi Iwai <tiwai@suse.de>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/12] drm/udl: Drop unneeded alignment
+In-Reply-To: <05f4a358-70df-18f4-1672-f02c9eebe98f@suse.de>
+References: <20220816153655.27526-1-tiwai@suse.de>
+        <20220816153655.27526-9-tiwai@suse.de>
+        <05f4a358-70df-18f4-1672-f02c9eebe98f@suse.de>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Sep 2022 07:28:03 +0200,
-Takashi Iwai wrote:
+On Mon, 05 Sep 2022 10:40:58 +0200,
+Thomas Zimmermann wrote:
 > 
-> On Mon, 05 Sep 2022 00:40:48 +0200,
-> Mikhail Gavrilov wrote:
-> > 
-> > On Sun, Sep 4, 2022 at 1:51 PM Takashi Iwai <tiwai@suse.de> wrote:
-> > > Also, please check the patch below instead of the previous one, too.
-> > > If this one works, it'd be a better choice.
-> > >
-> > 
-> > I compiled the kernel only with the second patch.
-> > I confirm that patch fixed the described problem.
-> > No new problems were noticed during the day, thanks.
-> > 
-> > Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+> Hi
 > 
-> Awesome.
+> Am 16.08.22 um 17:36 schrieb Takashi Iwai:
+> > The alignment of damaged area was needed for the original udlfb driver
+> > that tried to trim the superfluous copies between front and backend
+> > buffers and handle data in long int.  It's not the case for udl DRM
+> > driver, hence we can omit the whole unneeded alignment, as well as the
+> > dead code.
+> > 
+> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> > ---
+> >   drivers/gpu/drm/udl/udl_modeset.c  | 34 ++++++-------------------
+> >   drivers/gpu/drm/udl/udl_transfer.c | 40 ------------------------------
+> >   2 files changed, 8 insertions(+), 66 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/udl/udl_modeset.c b/drivers/gpu/drm/udl/udl_modeset.c
+> > index c34d564773a3..bca31c890108 100644
+> > --- a/drivers/gpu/drm/udl/udl_modeset.c
+> > +++ b/drivers/gpu/drm/udl/udl_modeset.c
+> > @@ -243,28 +243,6 @@ static long udl_log_cpp(unsigned int cpp)
+> >   	return __ffs(cpp);
+> >   }
+> >   -static int udl_aligned_damage_clip(struct drm_rect *clip, int x,
+> > int y,
+> > -				   int width, int height)
+> > -{
+> > -	int x1, x2;
+> > -
+> > -	if (WARN_ON_ONCE(x < 0) ||
+> > -	    WARN_ON_ONCE(y < 0) ||
+> > -	    WARN_ON_ONCE(width < 0) ||
+> > -	    WARN_ON_ONCE(height < 0))
+> > -		return -EINVAL;
+> > -
+> > -	x1 = ALIGN_DOWN(x, sizeof(unsigned long));
+> > -	x2 = ALIGN(width + (x - x1), sizeof(unsigned long)) + x1;
+> > -
+> > -	clip->x1 = x1;
+> > -	clip->y1 = y;
+> > -	clip->x2 = x2;
+> > -	clip->y2 = y + height;
+> > -
+> > -	return 0;
+> > -}
+> > -
+> >   static int udl_handle_damage(struct drm_framebuffer *fb,
+> >   			     const struct iosys_map *map,
+> >   			     int x, int y, int width, int height)
+> > @@ -277,15 +255,19 @@ static int udl_handle_damage(struct drm_framebuffer *fb,
+> >   	struct drm_rect clip;
+> >   	int log_bpp;
+> >   +	if (width <= 0 || height <= 0)
+> > +		return 0;
+> > +
 > 
-> Could you try the below one instead?  It's a simplified version and
-> applies the workaround more consistently.  Once after it's confirmed
-> to work, I'm going to submit a proper patch and merge for the next 6.0
-> PR.
+> That shouldn't happen.
+> 
+> >   	ret = udl_log_cpp(fb->format->cpp[0]);
+> >   	if (ret < 0)
+> >   		return ret;
+> >   	log_bpp = ret;
+> >   -	ret = udl_aligned_damage_clip(&clip, x, y, width, height);
+> > -	if (ret)
+> > -		return ret;
+> > -	else if ((clip.x2 > fb->width) || (clip.y2 > fb->height))
+> > +	clip.x1 = x;
+> > +	clip.y1 = y;
+> > +	clip.x2 = x + width;
+> > +	clip.y2 = y + height;
+> 
+> drm_rect_init() please.
+> 
+> > +	if (clip.x2 > fb->width || clip.y2 > fb->height)
+> 
+> That's another thing that should not happen. The damage clips in the
+> plane state is what you what to copy. The DRM helpers ensure that
+> these various plane, fb and clip coordinates add up.
 
-Even a simpler one below with a proper changelog.
+OK, then we can drop those clip size checks completely.
+Will do that in v2 patch.
 
+
+thanks,
 
 Takashi
-
--- 8< --
-From: Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH] ALSA: hda: Once again fix regression of page allocations with
- IOMMU
-
-The last fix for trying to recover the regression on AMD platforms,
-unfortunately, leaded to yet another regression: it turned out that
-IOMMUs don't like the usage of raw page allocations.
-
-This is yet another attempt for addressing the log saga; at this time,
-we re-use the existing buffer allocation mechanism with SG-pages
-although we require only single pages.  The SG buffer allocation
-itself was confirmed to work for stream buffers, so it's relatively
-easy to adapt for other places.
-
-The only problem is: although the HD-audio code is accessing the
-address directly via dmab->address field, SG-pages don't set up it.
-For the ease of adaption, we now set up the dmab->addr field from the
-address of the first page as default, so that it can run with the
-HD-audio driver code as-is without the excessive call of
-snd_sgbuf_get_addr() multiple times; that's the only change in the
-memalloc helper side.  The rest is nothing but a flip of the dma_type
-field in the HD-audio side.
-
-Fixes: a8d302a0b770 ("ALSA: memalloc: Revive x86-specific WC page allocations again")
-Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/CABXGCsO+kB2t5QyHY-rUe76npr1m0-5JOtt8g8SiHUo34ur7Ww@mail.gmail.com
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216112
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216363
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- sound/core/memalloc.c     | 9 +++++++--
- sound/pci/hda/hda_intel.c | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/sound/core/memalloc.c b/sound/core/memalloc.c
-index 39561faef6e9..2c11413bea61 100644
---- a/sound/core/memalloc.c
-+++ b/sound/core/memalloc.c
-@@ -558,10 +558,13 @@ static void *snd_dma_noncontig_alloc(struct snd_dma_buffer *dmab, size_t size)
- 	dmab->dev.need_sync = dma_need_sync(dmab->dev.dev,
- 					    sg_dma_address(sgt->sgl));
- 	p = dma_vmap_noncontiguous(dmab->dev.dev, size, sgt);
--	if (p)
-+	if (p) {
- 		dmab->private_data = sgt;
--	else
-+		/* store the first page address for convenience */
-+		dmab->addr = snd_sgbuf_get_addr(dmab, 0);
-+	} else {
- 		dma_free_noncontiguous(dmab->dev.dev, size, sgt, dmab->dev.dir);
-+	}
- 	return p;
- }
- 
-@@ -763,6 +766,8 @@ static void *snd_dma_sg_fallback_alloc(struct snd_dma_buffer *dmab, size_t size)
- 	if (!p)
- 		goto error;
- 	dmab->private_data = sgbuf;
-+	/* store the first page address for convenience */
-+	dmab->addr = snd_sgbuf_get_addr(dmab, 0);
- 	return p;
- 
-  error:
-diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
-index bf9df9bc8f1b..7e605ce43f41 100644
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -1810,7 +1810,7 @@ static int azx_create(struct snd_card *card, struct pci_dev *pci,
- 
- 	/* use the non-cached pages in non-snoop mode */
- 	if (!azx_snoop(chip))
--		azx_bus(chip)->dma_type = SNDRV_DMA_TYPE_DEV_WC;
-+		azx_bus(chip)->dma_type = SNDRV_DMA_TYPE_DEV_WC_SG;
- 
- 	if (chip->driver_type == AZX_DRIVER_NVIDIA) {
- 		dev_dbg(chip->card->dev, "Enable delay in RIRB handling\n");
--- 
-2.35.3
-

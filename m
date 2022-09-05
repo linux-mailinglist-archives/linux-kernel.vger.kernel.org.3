@@ -2,86 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2310A5ACD8D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1EA5ACD9A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235644AbiIEIVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
+        id S236333AbiIEIWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbiIEIVf (ORCPT
+        with ESMTP id S235793AbiIEIWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:21:35 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AEF32073
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:21:23 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id u22so7797351plq.12
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 01:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=QJJrkpuUMAiWhW4XzbfzTI5fC6bC6BtFi/fBmxaoJTA=;
-        b=f6XX12/+aqewys372pQoz6A/jL49JWT+dr8npWMakmaFD+gfhU4xyR15G1USnL733p
-         IgWris/UsiHHuZj3ofYqdFhukzZSbA9CY150fSLJxtISrBKx32pf7B2oq9zrWr82lUws
-         t6Js1k2fxKpQWM9viuLXDmMUHA++QlY8B6O18=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=QJJrkpuUMAiWhW4XzbfzTI5fC6bC6BtFi/fBmxaoJTA=;
-        b=iIn6F0AICJyFpDncSVFrt4ZmXiFzWYVNokMwnyAD6CT4LjGfIs95AID6aPAuiPmJxW
-         Lx1gmSZNsRuH+O/2l7hlJMZe7KOIA12jGxEvAjJ1ClkJ3GGG9SXrTiM7+6QO8nSpl157
-         yyEV1QQBtWrvuri5w8pMNN7wNNhCk9RTWhtj1AYX+94uofQD1c9tNqOQFhqyfSUQyolO
-         ifCyF1n+cBlQJiEciD93JQfriQ6wJYFbsJe6e3zHZrQ2yAwYqEWwn7vy/zFXtAstxCW1
-         loDrN5Tc0tSLKIuZrdpLd+4bZ0ICuX4FWl5X8yzjASPkiCxch1h0sh33U5KYIS5Lok7q
-         7PGg==
-X-Gm-Message-State: ACgBeo0T+VUbXZxbs0tJ0bUj2QDBRiLu6Z7C2xi0HA51+JFHEFQAlTsh
-        RalevlJZU+1wII4gfmFcyHtt9Q==
-X-Google-Smtp-Source: AA6agR5AroDfDVIj7QlIYRSAnSG4/lXstugSOvJ/A+iboIXnwjzC5rplGgQkqK3HDdxa8WKlUobNZQ==
-X-Received: by 2002:a17:902:f549:b0:176:c033:db03 with SMTP id h9-20020a170902f54900b00176c033db03mr305456plf.109.1662366083214;
-        Mon, 05 Sep 2022 01:21:23 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:5167:aa6c:9829:64dd])
-        by smtp.gmail.com with ESMTPSA id z127-20020a626585000000b005380c555ba1sm7288708pfb.13.2022.09.05.01.21.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 01:21:22 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 17:21:18 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH RFC 0/7] zram: Support multiple compression streams
-Message-ID: <YxWxfkh3mElrDMuX@google.com>
-References: <20220905081552.2740917-1-senozhatsky@chromium.org>
+        Mon, 5 Sep 2022 04:22:39 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273B113CE2;
+        Mon,  5 Sep 2022 01:22:34 -0700 (PDT)
+X-UUID: 1ac821db2ecd409ba04f57062cb9ee4f-20220905
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=eiw6emVZ9qEv2Oxp5XFT5tubk1S02V4+Nexv28K6seQ=;
+        b=CRMvp08IkG+QDk0zIRTijQVtIm7RXRdTBTP/cokRgKpkH1dlImWUc2iKuvoV7dRbR4m5CPkwIvW+pCaVHKk4HBPA0tnOi4lFazerfQwq2IOmEwz0oRwHKHUOWB9HLYHLA2SeD4CDYYnXVDhn5+gkB5qdZnsDFysXxOQsYKWtfRk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:f319430f-b323-4ee1-b72d-4b85742dd405,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release
+        _Ham,ACTION:release,TS:-5
+X-CID-META: VersionHash:84eae18,CLOUDID:f727b4d0-20bd-4e5e-ace8-00692b7ab380,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 1ac821db2ecd409ba04f57062cb9ee4f-20220905
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <jing-ting.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1628344370; Mon, 05 Sep 2022 16:22:30 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 5 Sep 2022 16:22:29 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 5 Sep 2022 16:22:29 +0800
+Message-ID: <203d4614c1b2a498a240ace287156e9f401d5395.camel@mediatek.com>
+Subject: Re: BUG: HANG_DETECT waiting for migration_cpu_stop() complete
+From:   Jing-Ting Wu <jing-ting.wu@mediatek.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>
+CC:     <wsd_upstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Jonathan.JMChen@mediatek.com>,
+        "chris.redpath@arm.com" <chris.redpath@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Vincent Donnefort" <vdonnefort@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Christian Brauner <brauner@kernel.org>,
+        <cgroups@vger.kernel.org>, <lixiong.liu@mediatek.com>,
+        <wenju.xu@mediatek.com>
+Date:   Mon, 5 Sep 2022 16:22:29 +0800
+In-Reply-To: <b605c3ec-94ab-a55f-5825-9b370d77ecf3@quicinc.com>
+References: <88b2910181bda955ac46011b695c53f7da39ac47.camel@mediatek.com>
+         <b605c3ec-94ab-a55f-5825-9b370d77ecf3@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220905081552.2740917-1-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/05 17:15), Sergey Senozhatsky wrote:
-> Hello,
-> 
-> 	RFC series that adds support for multiple (per-CPU)
-> compression streams (at point only 2). The main idea is that
-> different compression algorithms have different characteristics
-> and zram may benefit when it uses a combination of algorithms:
-> a default algorithm that is faster but have lower compression
-> rate and a secondary algorithm that can use higher compression
-> rate at a price of slower compression/decompression.
-> 
-> 	There are several use-case for this functionality:
-> 
+Hi, Mukesh
 
-Please ignore this series. I had some extra patches in my
-"outgoing" directory. I'll resend.
+
+
+https://lore.kernel.org/lkml/YvrWaml3F+x9Dk+T@slm.duckdns.org/ is for
+fix cgroup_threadgroup_rwsem <-> cpus_read_lock() deadlock.
+But this issue is cgroup_threadgroup_rwsem <-> cpuset_rwsem deadlock.
+
+I think they are not same issue.
+Do the patch is useful for this issue?
+
+
+
+Best regards,
+Jing-Ting Wu
+
+
+On Mon, 2022-09-05 at 12:14 +0530, Mukesh Ojha wrote:
+> This is fixed by this.
+> 
+> https://lore.kernel.org/lkml/YvrWaml3F+x9Dk+T@slm.duckdns.org/
+> 
+> -Mukesh
+> 
+> On 9/5/2022 8:17 AM, Jing-Ting Wu wrote:
+> > Hi,
+> > 
+> > We meet the HANG_DETECT happened in T SW version with kernel-5.15.
+> > Many tasks have been blocked for a long time.
+> > 
+> > 
+> > Root cause:
+> > migration_cpu_stop() is not complete due to
+> > is_migration_disabled(p) is
+> > true, complete is false and complete_all() never get executed.
+> > It let other task wait the rwsem.
+> > 
+> > Detail:
+> > system_server waiting for cgroup_threadgroup_rwsem.
+> > OomAdjuster is holding the cgroup_threadgroup_rwsem and waiting for
+> > cpuset_rwsem.
+> > cpuset_hotplug_workfn is holding the cpuset_rwsem and waiting for
+> > affine_move_task() complete.
+> > affine_move_task() waiting for migration_cpu_stop() complete.
+> > 
+> > The backtrace of system_server:
+> > __switch_to
+> > __schedule
+> > schedule
+> > percpu_rwsem_wait
+> > __percpu_down_read
+> > cgroup_css_set_fork => wait for cgroup_threadgroup_rwsem
+> > cgroup_can_fork
+> > copy_process
+> > kernel_clone
+> > 
+> > The backtrace of OomAdjuster:
+> > __switch_to
+> > __schedule
+> > schedule
+> > percpu_rwsem_wait
+> > percpu_down_write
+> > cpuset_can_attach => wait for cpuset_rwsem
+> > cgroup_migrate_execute
+> > cgroup_attach_task
+> > __cgroup1_procs_write => hold cgroup_threadgroup_rwsem
+> > cgroup1_procs_write
+> > cgroup_file_write
+> > kernfs_fop_write_iter
+> > vfs_write
+> > ksys_write
+> > 
+> > The backtrace of cpuset_hotplug_workfn:
+> > __switch_to
+> > __schedule
+> > schedule
+> > schedule_timeout
+> > wait_for_common
+> > affine_move_task => wait for complete
+> > __set_cpus_allowed_ptr_locked
+> > update_tasks_cpumask
+> > cpuset_hotplug_update_tasks => hold cpuset_rwsem
+> > cpuset_hotplug_workfn
+> > process_one_work
+> > worker_thread
+> > kthread
+> > 
+> > 
+> > In affine_move_task() will call migration_cpu_stop() and wait for
+> > it
+> > complete.
+> > In normal case, if migration_cpu_stop() complete it will inform
+> > everyone that he is done.
+> > But there is an exception case that will not notify.
+> > If is_migration_disabled(p) is true and complete will always is
+> > false,
+> > then complete_all() never get executed.
+> > 
+> > static int migration_cpu_stop(void *data)
+> > {
+> > ...
+> >      bool complete = false;
+> > ...
+> > 
+> >      if (task_rq(p) == rq) {
+> >          if (is_migration_disabled(p))
+> >                goto out; => is_migration_disabled(p) = true,
+> >                             so complete = false.
+> >              ...
+> >          }
+> > ...
+> > 
+> > out:
+> > ...
+> >      if (complete) => complete = false,
+> >                       so complete_all() never get executed.
+> >          complete_all(&pending->done);
+> > 
+> >          return 0;
+> > }
+> > 
+> > 
+> > Review the code, we found that there are many places can change
+> > is_migration_disabled() value.
+> > (such as: __rt_spin_lock(), rt_read_lock(), rt_write_lock(), ...)
+> > 
+> > Do you have any suggestion for this issue?
+> > Thank you.
+> > 
+> > 
+> > 
+> > 
+> > Best regards,
+> > Jing-Ting Wu
+> > 
+> > 
+

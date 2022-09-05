@@ -2,154 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352145AD4C9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B71A5AD4D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237987AbiIEOaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S238097AbiIEOa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237704AbiIEOaY (ORCPT
+        with ESMTP id S237386AbiIEOa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:30:24 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84B91A073
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:30:22 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id k9so11659748wri.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ae8ML73FokTDdM56La2MyV/2p8hGMBN9srggFyjW8tQ=;
-        b=XwdlRG/EEWXKuCFQ376WfjDqS4YP5pf8yls07a1APgOhXHi1ywdPpHTzfl5TB3AS/K
-         9aMh7Zp2XBsnR/5kqXPQFDc5WZPibnZ2D4yTFrRnqykCtPzumY7DkD6JgRCUvd8TEp7+
-         eHs8+0AMNteH0KE4zVOBmyVjHqbIFM3lEveierW+stQOu3KT+8IECceY/KuDnLIjc9u1
-         GDMt1UXwwIp0Zt2s/N2EHS1sx+qWYhHWXZp7zbr44pJ4JsIYeliBaVxtMLC4z0fL34ys
-         ZfOTdrEA6ZHQh9irlVwGxvU/R+ZHXe0wGHpYgws+2PZLRlmte4YKDEFjiFEKooCyfYJU
-         +Dhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ae8ML73FokTDdM56La2MyV/2p8hGMBN9srggFyjW8tQ=;
-        b=POMtOG+Ooz2s2zEGIRC19G61qv8qBSYU6vou+5hkGSd4P/VEFHUZ9MzKIYQ3FPZyma
-         WpCAvlAjacpQTBLNgaXvetMHtCH7SIK83P7DMNg+aJEs7YvEhHWt1FWOAO8dzfAN4xMf
-         R2n9JIexwiiq+cLwPQyUdsROw2tOXDa5RFL80GPP6tf3G1yOa2L88WESfu5fqrkzG2RH
-         hO6qpqV5d0XJYhLS5WbC2fMJ8E+RWZdWT/eRSX5lVIqbZryz04Kn3ZrVrn6bZ6IKSWbQ
-         36ytDGHITSpJdyYEjgZm9fgWXewiHp9f3FY7jWbHUsxRKPvYvi2DPktt+0Xu36V5x5f3
-         p8YA==
-X-Gm-Message-State: ACgBeo08N1rXM2ngry+fERInF2y6ArfxEGY/YhDDkHyH2rxBLpksXrBQ
-        w0ZmV0jYmyMV4iyvDyyHxTC1A23xX8xEfLRV
-X-Google-Smtp-Source: AA6agR5II3gm4fhl+EhygViYnzygeCdom5mIuMOv9w3YZhJLJ9MuBe86Eb0qlYM+mpe5LOTceolmbg==
-X-Received: by 2002:a5d:574a:0:b0:228:b90c:e5ee with SMTP id q10-20020a5d574a000000b00228b90ce5eemr1682911wrw.328.1662388221254;
-        Mon, 05 Sep 2022 07:30:21 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id h21-20020a05600c351500b003a502c23f2asm18526327wmq.16.2022.09.05.07.30.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 07:30:20 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 17:30:19 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        David Heidelberg <david@ixit.cz>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        devicetree@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] dt-bindings: misc: fastrpc convert bindings to
- yaml
-Message-ID: <YxYH+3hGZ2fyUZpW@linaro.org>
-References: <20220905103715.955786-1-abel.vesa@linaro.org>
- <1662381657.354400.1957044.nullmailer@robh.at.kernel.org>
+        Mon, 5 Sep 2022 10:30:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502DE252BF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gxQZxrz6/Rmgmd2QHgOZBnPfQnJH2I/vdis+B00Izpw=; b=H8IdYE3vM9OygIjH6gEddeQqWy
+        wURL43ZQ8U8kNWUwDEejjJPrHRXxZ3ggxQZHq4KAiC+aNGO6znvPOaVK763MokIv2Ymd7//zyP9vk
+        ypyMIL2g+qmFvJseRroyyJoznSlSMDojJqRhjwfuaCh0CJ9F7+51GyIP2KQjgLo0SQWPq47nRXjoP
+        r7aJklZmeKbW9hwHotZwKhDj0LwH/PIPGyD7nJUOap0F/vQX583rwsco63KLWhQEF4GOog+upEduo
+        0vzd96rSxr2J8B1Y6LLoChzTkeZtXn0POrp7MciofPpcZGGELp+yWmQXIECm7c/6LnGkIMahLSdSR
+        lVUBnHwQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVD7M-009YGc-Tu; Mon, 05 Sep 2022 14:30:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8BE993002A3;
+        Mon,  5 Sep 2022 16:30:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6E2032B954D28; Mon,  5 Sep 2022 16:30:25 +0200 (CEST)
+Date:   Mon, 5 Sep 2022 16:30:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Bharata B Rao <bharata@amd.com>, ananth.narayan@amd.com,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
+Message-ID: <YxYIAVx2qJLMDJlC@hirez.programming.kicks-ass.net>
+References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
+ <20220904010001.knlcejmw4lg2uzy3@box.shutemov.name>
+ <64519d0b-b696-db47-52c2-303451e10c09@amd.com>
+ <20220905134457.a2f7uluq42frsgwe@box.shutemov.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1662381657.354400.1957044.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220905134457.a2f7uluq42frsgwe@box.shutemov.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-09-05 07:40:57, Rob Herring wrote:
-> On Mon, 05 Sep 2022 13:37:14 +0300, Abel Vesa wrote:
-> > Convert Qualcomm FastRPC bindings to yaml format, so that we could validate
-> > dt-entries correctly and any future additions can go into yaml format.
+On Mon, Sep 05, 2022 at 04:44:57PM +0300, Kirill A. Shutemov wrote:
+> On Mon, Sep 05, 2022 at 10:35:44AM +0530, Bharata B Rao wrote:
+> > Hi Kirill,
 > > 
-> > Use compute-cb@ subnodes instead of just cb@.
+> > On 9/4/2022 6:30 AM, Kirill A. Shutemov wrote:
+> > > On Tue, Aug 30, 2022 at 04:00:53AM +0300, Kirill A. Shutemov wrote:
+> > >> Linear Address Masking[1] (LAM) modifies the checking that is applied to
+> > >> 64-bit linear addresses, allowing software to use of the untranslated
+> > >> address bits for metadata.
+> > >>
+> > >> The patchset brings support for LAM for userspace addresses. Only LAM_U57 at
+> > >> this time.
+> > >>
+> > >> Please review and consider applying.
+> > >>
+> > >> git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+> > > 
+> > > +Bharata, Ananth.
+> > > 
+> > > Do you folks have any feedback on the patchset?
+> > > 
+> > > Looks like AMD version of the tagged pointers feature does not get
+> > > traction as of now, but I want to be sure that the interface introduced
+> > > here can be suitable for your future plans.
+> > > 
+> > > Do you see anything in the interface that can prevent it to be extended to
+> > > the AMD feature?
 > > 
-> > Also add qcom,non-secure-domain, qcom,glink-channels and
-> > qcom,smd-channels missing properties to make sure dtbs_check doesn't
-> > fail right off the bat.
+> > The arch_prctl() extensions is generic enough that it should be good.
 > > 
-> > Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> > Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> > Co-developed-by: David Heidelberg <david@ixit.cz>
-> > Signed-off-by: David Heidelberg <david@ixit.cz>
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
+> > The untagged_addr() macro looks like this from one of the callers:
 > > 
-> > Changes since v5:
-> >  * Removed the txt file
+> >         start = untagged_addr(mm, start);
+> > ffffffff814d39bb:       48 8b 8d 40 ff ff ff    mov    -0xc0(%rbp),%rcx
+> > ffffffff814d39c2:       48 89 f2                mov    %rsi,%rdx
+> > ffffffff814d39c5:       48 c1 fa 3f             sar    $0x3f,%rdx
+> > ffffffff814d39c9:       48 0b 91 50 03 00 00    or     0x350(%rcx),%rdx
+> > ffffffff814d39d0:       48 21 f2                and    %rsi,%rdx
+> > ffffffff814d39d3:       49 89 d6                mov    %rdx,%r14
 > > 
-> >  .../devicetree/bindings/misc/qcom,fastrpc.txt |  88 --------------
-> >  .../bindings/misc/qcom,fastrpc.yaml           | 108 ++++++++++++++++++
-> >  2 files changed, 108 insertions(+), 88 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-> >  create mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-> > 
+> > Can this overhead of a few additional instructions be removed for
+> > platforms that don't have LAM feature? I haven't measured how much
+> > overhead this effectively contributes to in real, but wonder if it is
+> > worth optimizing for non-LAM platforms.
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb: smd-edge: 'qcom,smd-edge' is a required property
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb: smd-edge: 'oneOf' conditional failed, one must be fixed:
-> 	'mboxes' is a required property
-> 	'qcom,ipc' is a required property
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb: smd-edge: 'oneOf' conditional failed, one must be fixed:
-> 	'interrupts' is a required property
-> 	'interrupts-extended' is a required property
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
+> I'm not sure how the optimization should look like. I guess we can stick
+> static_cpu_has() there, but I'm not convinced that adding jumps there will
+> be beneficial.
 
-Right.
-
-So actually, the parent node is glink-edge, not smd-edge.
-
-And there are some other required properties missing when switching to
-glink-edge.
-
-Will resend with glink-edge instead and add all the related missing
-properties.
-
-> 
-> doc reference errors (make refcheckdocs):
-> Documentation/devicetree/bindings/remoteproc/qcom,glink-edge.yaml: Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-> MAINTAINERS: Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-> 
-> See https://patchwork.ozlabs.org/patch/
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+I suppose the critical bit is the memory load. That can stall and then
+you're sad. A jump_label is easy enough to add.

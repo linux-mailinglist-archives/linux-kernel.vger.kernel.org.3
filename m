@@ -2,180 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CA55AD558
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 654CC5AD54F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbiIEOnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S238680AbiIEOnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238443AbiIEOmi (ORCPT
+        with ESMTP id S238423AbiIEOmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:42:38 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552285F13C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:40:06 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c2so8712704plo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:40:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=RYQnTXZZuWcGbpSqaq35fWZqtZ1qJ4UulAZxlrVbUnc=;
-        b=FmnhmNmCe/85eAvm6JEc6G9mLNA0RF3y9jR22W5oHBdwVIKaVMQcZrd427Iny3GYj2
-         YG3Sq7RSmjuqlupdSmd+SgW1N7L0KkT3Z0LhUeskHZUNCTGd/04qTjiuRPtuGzOmFx17
-         2Fum2DJIfKRbERXPd7mYFbsuJXpWpTJ+g0oNXv3xSocLRXKJv9i7jV5rB3bbU60dmTe4
-         wINF4D536t9zBdk6VUHOg8Ct1ZqS6oSvItJjcMZF1D5cBSXGrM1uh8tZRqpaC639Lvyi
-         aR+bAHgmY+AhaVdbQ2K3JfqZZ2hmortzeioFQUTZ8nca5zapzbhevoK8ubWMCJA1C0sj
-         SLZA==
+        Mon, 5 Sep 2022 10:42:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60165F208
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662388812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pMrUiWoeKOlNrXYiXtJEGKKB4GLuGljGkTeH1olJdtw=;
+        b=gDQ+usuV5cqGu7BTamyVZWGngpQbSHtsd/PxiGczX/fgPEAJbAHv0rG0wgQTbwAtbnLTW0
+        MtZeonc4JSPFNq40Dph1s8GnPPE6NgQU5DqVughIGePxj61+AyFQdsBeUkbT+g32wKKj47
+        SsT3GVi34dJG3CQHeYdn+OkBYKjp3Tw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-359-2VtLZBuGPHq9Wrh_0MLIxg-1; Mon, 05 Sep 2022 10:40:08 -0400
+X-MC-Unique: 2VtLZBuGPHq9Wrh_0MLIxg-1
+Received: by mail-wm1-f70.google.com with SMTP id i7-20020a1c3b07000000b003a534ec2570so7524814wma.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:40:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=RYQnTXZZuWcGbpSqaq35fWZqtZ1qJ4UulAZxlrVbUnc=;
-        b=fzOtmz5VUTcwwwwmA0rGi9kh2KJ/aOD9sKo+FkygpZLuqc61y9fHUbBwpZkDHAhFK4
-         MFT32IliP46sQ6MSITesMwh4fR5IqVaP5LS/d66ke8B9RAfxYLfDOBBwcxyhN5YAfMyi
-         /NZT9Jf/1lE2CgnXaCZxGm1eIRz05si9vI+eh9koPTmdyvi/c3xZGybjNtUYkwbeSbLZ
-         bozHcfo2zl9kohj3FbANBiTSKfCSmBhvAqrjOXGGKmFu2sTFufWz9D1gGPrCTIhdOxvS
-         RHS9mGuHdRNsEPE8YLclU9YubytjECTB4xdWOBK4dPHJ+e4ZtQR1R7Zzb0qFygQYPgD/
-         cXZg==
-X-Gm-Message-State: ACgBeo1e5gAszICGb4UBYanJM44BaMvJZv/3WpumH62To3H4UG0JNVX/
-        I9KsFi7sViOJx3E7kxao+rr6kw==
-X-Google-Smtp-Source: AA6agR7oR+wxM9Eh3rLCYVo+NMA3EMkITmNNgcLoUWAlvYnryd6xrFd1mnstgtcfCwiHF+kWMc8XVw==
-X-Received: by 2002:a17:90b:3ecb:b0:200:211:9bb1 with SMTP id rm11-20020a17090b3ecb00b0020002119bb1mr16206291pjb.4.1662388805573;
-        Mon, 05 Sep 2022 07:40:05 -0700 (PDT)
-Received: from [10.255.175.119] ([139.177.225.224])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0016d785ef6d2sm7636431plh.223.2022.09.05.07.40.02
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=pMrUiWoeKOlNrXYiXtJEGKKB4GLuGljGkTeH1olJdtw=;
+        b=xu6ey086njlFbf8w1zOOUcvvFTfo1SL3YgOYCs4hoT1RVF1Qa+NY3ZWAmqBfDTJDRw
+         y9tJjkyWz9NupbDulvGC50DEHY/sBfS/IhVFwvakUJpeLVSLBRYsVffw1QjEug2dmoLs
+         Z6MoMjmCERMN0ABIfqVanupMwKfPMagupyZBIN9l+T6UFs+18payPQS0iHiHj0JvJ3ah
+         VjmzrmoEAbDrNuDkDyScBrdawZDqdgkf0DYH6liqJGgROCTGRGKlnF0rrcDhxElzPVG6
+         xRYfwjkAKJiPAY22uTuFa53myGpweusrzHVusRJVq7ilX2pIKuwcpSw1r7DaqrzJYQpO
+         JqMQ==
+X-Gm-Message-State: ACgBeo0KMrg/0o6eYzG4rgW6gEHnpm6a4pFiWmO/DDMi/eCSdx6QtIGD
+        TNiAkzER0c/DCnP4E+EJbjomFJeR7xT3OYdTnd/E84NFl/yNx/2WXE/1o2bmiNBivH2iT4p8eWP
+        WYKb9y/v4P769ayL1Aw2/7RGB
+X-Received: by 2002:a05:6000:795:b0:226:d45a:ffe5 with SMTP id bu21-20020a056000079500b00226d45affe5mr23983279wrb.33.1662388807609;
+        Mon, 05 Sep 2022 07:40:07 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5dn0k6QYRWIIH7HDpYb4MyMaSTZLAkFGn8vbwSfMFZ7eNBwQq6UwIbMZYbJVEWty2/gk2nfA==
+X-Received: by 2002:a05:6000:795:b0:226:d45a:ffe5 with SMTP id bu21-20020a056000079500b00226d45affe5mr23983260wrb.33.1662388807307;
+        Mon, 05 Sep 2022 07:40:07 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
+        by smtp.gmail.com with ESMTPSA id g11-20020a05600c310b00b003a5ea1cc63csm18152971wmo.39.2022.09.05.07.40.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 07:40:05 -0700 (PDT)
-Message-ID: <1fc40679-b7c3-24f2-aa27-f1edab71228e@bytedance.com>
-Date:   Mon, 5 Sep 2022 22:40:00 +0800
+        Mon, 05 Sep 2022 07:40:06 -0700 (PDT)
+Message-ID: <27c814a5-03b1-9745-b7bb-c877adc0b810@redhat.com>
+Date:   Mon, 5 Sep 2022 16:40:05 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: Re: [PATCH 1/5] sched/fair: ignore SIS_UTIL when has idle core
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
 Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20220712082036.5130-1-wuyun.abel@bytedance.com>
- <20220712082036.5130-2-wuyun.abel@bytedance.com>
- <20220829130831.odhemmcmuecqxkbz@techsingularity.net>
- <51009414-5ffb-b6ec-a501-7b2514a0f3cc@bytedance.com>
- <20220829145621.7cxrywgxow5ov7ki@techsingularity.net>
- <0ffb0903-431f-88fe-3a56-150b283f5304@bytedance.com>
- <20220902102528.keooutttg3hq3sy5@techsingularity.net>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <20220902102528.keooutttg3hq3sy5@techsingularity.net>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>, peterx@redhat.com,
+        kirill.shutemov@linux.intel.com, jgg@nvidia.com, hughd@google.com,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220901222707.477402-1-shy828301@gmail.com>
+ <e6ad1084-c301-9f11-1fa7-7614bf859aaf@nvidia.com>
+ <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
+ <0c9d9774-77dd-fd93-b5b6-fc63f3d01b7f@linux.alibaba.com>
+ <383fec21-9801-9b60-7570-856da2133ea9@redhat.com>
+ <a7dd4376-bce2-ee79-623f-fa11d301b80d@redhat.com>
+ <9f098ff0-26d7-477c-13fa-cb878981e1ac@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <9f098ff0-26d7-477c-13fa-cb878981e1ac@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/2/22 6:25 PM, Mel Gorman Wrote:
-> For the simple case, I was expecting the static depth to *not* match load
-> because it's unclear what the scaling should be for load or if it had a
-> benefit. If investigating scaling the scan depth to load, it would still
-> make sense to compare it to a static depth. The depth of 2 cores was to
-> partially match the old SIS_PROP behaviour of the minimum depth to scan.
+On 05.09.22 16:35, Baolin Wang wrote:
 > 
->                  if (span_avg > 4*avg_cost)
->                          nr = div_u64(span_avg, avg_cost);
->                  else
->                          nr = 4;
 > 
-> nr is not proportional to cores although it could be
-> https://lore.kernel.org/all/20210726102247.21437-7-mgorman@techsingularity.net/
+> On 9/5/2022 7:11 PM, David Hildenbrand wrote:
+>> On 05.09.22 12:24, David Hildenbrand wrote:
+>>> On 05.09.22 12:16, Baolin Wang wrote:
+>>>>
+>>>>
+>>>> On 9/5/2022 3:59 PM, David Hildenbrand wrote:
+>>>>> On 05.09.22 00:29, John Hubbard wrote:
+>>>>>> On 9/1/22 15:27, Yang Shi wrote:
+>>>>>>> Since general RCU GUP fast was introduced in commit 2667f50e8b81
+>>>>>>> ("mm:
+>>>>>>> introduce a general RCU get_user_pages_fast()"), a TLB flush is no
+>>>>>>> longer
+>>>>>>> sufficient to handle concurrent GUP-fast in all cases, it only
+>>>>>>> handles
+>>>>>>> traditional IPI-based GUP-fast correctly.  On architectures that send
+>>>>>>> an IPI broadcast on TLB flush, it works as expected.  But on the
+>>>>>>> architectures that do not use IPI to broadcast TLB flush, it may have
+>>>>>>> the below race:
+>>>>>>>
+>>>>>>>        CPU A                                          CPU B
+>>>>>>> THP collapse                                     fast GUP
+>>>>>>>                                                   gup_pmd_range() <--
+>>>>>>> see valid pmd
+>>>>>>>                                                       gup_pte_range()
+>>>>>>> <-- work on pte
+>>>>>>> pmdp_collapse_flush() <-- clear pmd and flush
+>>>>>>> __collapse_huge_page_isolate()
+>>>>>>>         check page pinned <-- before GUP bump refcount
+>>>>>>>                                                           pin the page
+>>>>>>>                                                           check PTE
+>>>>>>> <--
+>>>>>>> no change
+>>>>>>> __collapse_huge_page_copy()
+>>>>>>>         copy data to huge page
+>>>>>>>         ptep_clear()
+>>>>>>> install huge pmd for the huge page
+>>>>>>>                                                           return the
+>>>>>>> stale page
+>>>>>>> discard the stale page
+>>>>>>
+>>>>>> Hi Yang,
+>>>>>>
+>>>>>> Thanks for taking the trouble to write down these notes. I always
+>>>>>> forget which race we are dealing with, and this is a great help. :)
+>>>>>>
+>>>>>> More...
+>>>>>>
+>>>>>>>
+>>>>>>> The race could be fixed by checking whether PMD is changed or not
+>>>>>>> after
+>>>>>>> taking the page pin in fast GUP, just like what it does for PTE.
+>>>>>>> If the
+>>>>>>> PMD is changed it means there may be parallel THP collapse, so GUP
+>>>>>>> should back off.
+>>>>>>>
+>>>>>>> Also update the stale comment about serializing against fast GUP in
+>>>>>>> khugepaged.
+>>>>>>>
+>>>>>>> Fixes: 2667f50e8b81 ("mm: introduce a general RCU
+>>>>>>> get_user_pages_fast()")
+>>>>>>> Signed-off-by: Yang Shi <shy828301@gmail.com>
+>>>>>>> ---
+>>>>>>>      mm/gup.c        | 30 ++++++++++++++++++++++++------
+>>>>>>>      mm/khugepaged.c | 10 ++++++----
+>>>>>>>      2 files changed, 30 insertions(+), 10 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/mm/gup.c b/mm/gup.c
+>>>>>>> index f3fc1f08d90c..4365b2811269 100644
+>>>>>>> --- a/mm/gup.c
+>>>>>>> +++ b/mm/gup.c
+>>>>>>> @@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int
+>>>>>>> *nr, int nr_start,
+>>>>>>>      }
+>>>>>>>      #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
+>>>>>>> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned
+>>>>>>> long end,
+>>>>>>> -             unsigned int flags, struct page **pages, int *nr)
+>>>>>>> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
+>>>>>>> +             unsigned long end, unsigned int flags,
+>>>>>>> +             struct page **pages, int *nr)
+>>>>>>>      {
+>>>>>>>          struct dev_pagemap *pgmap = NULL;
+>>>>>>>          int nr_start = *nr, ret = 0;
+>>>>>>> @@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned
+>>>>>>> long addr, unsigned long end,
+>>>>>>>                  goto pte_unmap;
+>>>>>>>              }
+>>>>>>> -        if (unlikely(pte_val(pte) != pte_val(*ptep))) {
+>>>>>>> +        /*
+>>>>>>> +         * THP collapse conceptually does:
+>>>>>>> +         *   1. Clear and flush PMD
+>>>>>>> +         *   2. Check the base page refcount
+>>>>>>> +         *   3. Copy data to huge page
+>>>>>>> +         *   4. Clear PTE
+>>>>>>> +         *   5. Discard the base page
+>>>>>>> +         *
+>>>>>>> +         * So fast GUP may race with THP collapse then pin and
+>>>>>>> +         * return an old page since TLB flush is no longer
+>>>>>>> sufficient
+>>>>>>> +         * to serialize against fast GUP.
+>>>>>>> +         *
+>>>>>>> +         * Check PMD, if it is changed just back off since it
+>>>>>>> +         * means there may be parallel THP collapse.
+>>>>>>> +         */
+>>>>>>
+>>>>>> As I mentioned in the other thread, it would be a nice touch to move
+>>>>>> such discussion into the comment header.
+>>>>>>
+>>>>>>> +        if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
+>>>>>>> +            unlikely(pte_val(pte) != pte_val(*ptep))) {
+>>>>>>
+>>>>>>
+>>>>>> That should be READ_ONCE() for the *pmdp and *ptep reads. Because this
+>>>>>> whole lockless house of cards may fall apart if we try reading the
+>>>>>> page table values without READ_ONCE().
+>>>>>
+>>>>> I came to the conclusion that the implicit memory barrier when grabbing
+>>>>> a reference on the page is sufficient such that we don't need READ_ONCE
+>>>>> here.
+>>>>
+>>>> IMHO the compiler may optimize the code 'pte_val(*ptep)' to be always
+>>>> get from a register, then we can get an old value if other thread did
+>>>> set_pte(). I am not sure how the implicit memory barrier can pervent the
+>>>> compiler optimization? Please correct me if I missed something.
+>>>
+>>> IIUC, an memory barrier always implies a compiler barrier.
+>>>
+>>
+>> To clarify what I mean, Documentation/atomic_t.txt documents
+>>
+>> NOTE: when the atomic RmW ops are fully ordered, they should also imply
+>> a compiler barrier.
 > 
-> This is not tested or properly checked for correctness but for
-> illustrative purposes something like this should conduct a limited scan when
-> overloaded. It has a side-effect that the has_idle_cores hint gets cleared
-> for a partial scan for idle cores but the hint is probably wrong anyway.
+> Right, I agree. That means the complier can not optimize the order of
+> the 'pte_val(*ptep)', however what I am confusing is that the complier
+> can still save the value of *ptep into a register or stack instead of
+> reloading from memory?
+
+After the memory+compiler barrier, the value has to be reloaded. 
+Documentation/memory-barriers.txt documents under "COMPILER BARRIERS":
+
+"READ_ONCE() and WRITE_ONCE() can be thought of as weak forms of 
+barrier() that affect only the specific accesses flagged by the 
+READ_ONCE() or WRITE_ONCE()."
+
+Consequently, if there already is a compile barrier, additional 
+READ_ONCE/WRITE_ONCE isn't required.
+
 > 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6089251a4720..59b27a2ef465 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6427,21 +6427,36 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->   		if (sd_share) {
->   			/* because !--nr is the condition to stop scan */
->   			nr = READ_ONCE(sd_share->nr_idle_scan) + 1;
-> -			/* overloaded LLC is unlikely to have idle cpu/core */
-> -			if (nr == 1)
-> -				return -1;
-> +
-> +			/*
-> +			 * Non-overloaded case: Scan full domain if there is
-> +			 * 	an idle core. Otherwise, scan for an idle
-> +			 * 	CPU based on nr_idle_scan
-> +			 * Overloaded case: Unlikely to have an idle CPU but
-> +			 * 	conduct a limited scan if there is potentially
-> +			 * 	an idle core.
-> +			 */
-> +			if (nr > 1) {
-> +				if (has_idle_core)
-> +					nr = sd->span_weight;
-> +			} else {
-> +				if (!has_idle_core)
-> +					return -1;
-> +				nr = 2;
-> +			}
->   		}
->   	}
->   
->   	for_each_cpu_wrap(cpu, cpus, target + 1) {
-> +		if (!--nr)
-> +			break;
-> +
->   		if (has_idle_core) {
->   			i = select_idle_core(p, cpu, cpus, &idle_cpu);
->   			if ((unsigned int)i < nr_cpumask_bits)
->   				return i;
->   
->   		} else {
-> -			if (!--nr)
-> -				return -1;
->   			idle_cpu = __select_idle_cpu(cpu, p);
->   			if ((unsigned int)idle_cpu < nr_cpumask_bits)
->   				break;
+> A similar issue in commit d6c1f098f2a7 ("mm/swap_state: fix a data race
+> in swapin_nr_pages").
+> 
+> --- a/mm/swap_state.c
+> +++ b/mm/swap_state.c
+> @@ -509,10 +509,11 @@ static unsigned long swapin_nr_pages(unsigned long
+> offset)
+>                   return 1;
+> 
+>           hits = atomic_xchg(&swapin_readahead_hits, 0);
+> -       pages = __swapin_nr_pages(prev_offset, offset, hits, max_pages,
+> +       pages = __swapin_nr_pages(READ_ONCE(prev_offset), offset, hits,
+> +                                 max_pages,
+>                                     atomic_read(&last_readahead_pages));
+>           if (!hits)
+> -               prev_offset = offset;
+> +               WRITE_ONCE(prev_offset, offset);
+>           atomic_set(&last_readahead_pages, pages);
+> 
+>           return pages;
+> 
 
-I spent last few days testing this, with 3 variations (assume
-has_idle_core):
+IIUC the difference here is that there is not other implicit 
+memory+compile barrier in between.
 
-  a) full or limited (2cores) scan when !nr_idle_scan
-  b) whether clear sds->has_idle_core when partial scan failed
-  c) scale scan depth with load or not
+-- 
+Thanks,
 
-some observations:
+David / dhildenb
 
-  1) It seems always bad if not clear sds->has_idle_core when
-     partial scan fails. It is due to over partially scanned
-     but still can not find an idle core. (Following ones are
-     based on clearing has_idle_core even in partial scans.)
-
-  2) Unconditionally full scan when has_idle_core is not good
-     for netperf_{udp,tcp} and tbench4. It is probably because
-     the SIS success rate of these workloads is already high
-     enough (netperf ~= 100%, tbench4 ~= 50%, compared to that
-     hackbench ~= 3.5%) which negate a lot of the benefit full
-     scan brings.
-
-  3) Scaling scan depth with load seems good for the hackbench
-     socket tests, and neutral in pipe tests. And I think this
-     is just the case you mentioned before, under fast wake-up
-     workloads the has_idle_core will become not that reliable,
-     so a full scan won't always win.
-
-Best Regards,
-Abel

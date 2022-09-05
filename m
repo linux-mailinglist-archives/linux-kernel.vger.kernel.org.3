@@ -2,64 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3510E5AC899
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05E35AC898
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235424AbiIEBwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 21:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
+        id S235432AbiIEBxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 21:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235432AbiIEBwa (ORCPT
+        with ESMTP id S231540AbiIEBxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 21:52:30 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC18926555
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 18:52:28 -0700 (PDT)
-Received: from [10.130.0.193] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOJUVhVjeVsRAA--.7257S3;
-        Mon, 05 Sep 2022 09:52:21 +0800 (CST)
-Subject: Re: [PATCH 1/3] LoongArch: tools: Add relocs tool support
-To:     Jinyang He <hejinyang@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
-        Huacai Chen <chenhuacai@kernel.org>
-References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
- <1662113335-14282-2-git-send-email-tangyouling@loongson.cn>
- <c9880165f0355fc3be3ec23153b43ad33e558b5d.camel@xry111.site>
- <4df8a26c49a35c1fce36d80c370f738fa71a2bef.camel@xry111.site>
- <f0e77716-9533-724a-2ea9-86bc5b52066c@loongson.cn>
- <78a4a6b0970c309daa336a2329e69d28df486552.camel@xry111.site>
- <fffdd2ac-4ba6-8eb3-f269-b22a3d9c32f6@loongson.cn>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <a4ca8831-74f5-1ecc-9f04-20aaee202626@loongson.cn>
-Date:   Mon, 5 Sep 2022 09:52:20 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Sun, 4 Sep 2022 21:53:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5511A2612F
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 18:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662342796; x=1693878796;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=3cGUgcQzZq9BOyICE83jr0jcitIR/Hn4WKTkEyaaacw=;
+  b=jvPU2t9NrgqAQ/LGjtRRYGXwQtdq58UfZMN1mDP7/OGew1yey8g2xFJt
+   RKqR3mocwN8sA2vClSJ7KBk8wi44xJo3890yLwfDz89Nfa35QFNy6jGU4
+   MZ6+6IWw4is+2Ebs4+fsPQgzJiNI8+bac2roFb/YJ21jKTfHx+wGI4qax
+   aeGsCeeg0uqADpM+RfaM8XqLNQjIDW9+cWAX7Cxkr9dkDlphBx7Xiw1t8
+   plBbbpqES+mYyfg0xkXUPbgqPtTDbpivLcNOig+mFp1hY4SglQg6Qj7P0
+   Uh6cM3HyDD3juQngndOnLORV24RcBSA0uf05ovq9xWIxe2W/I0NBuZGtu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="382587902"
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="382587902"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 18:53:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="643620420"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 18:53:09 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     Wei Xu <weixugc@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>,
+        Greg Thelen <gthelen@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
+ sysfs
+References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
+        <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <ad19e105-9290-922d-59e6-e6813a30f5f0@linux.ibm.com>
+        <87pmgezkhp.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAAPL-u8MEs04DkHy6kaS788VjdYZZjAYOgzMnioOzDXbc0ZhhQ@mail.gmail.com>
+        <d91beb53-e940-e02a-f9ca-3326bf914da7@linux.ibm.com>
+        <87fshaz63h.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <698120ce-d4df-3d13-dea9-a8f5c298783c@linux.ibm.com>
+        <87bkryz4nh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <2b4ddc45-74ae-27df-d973-6724f61f4e18@linux.ibm.com>
+        <877d2mz3c1.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <45488760-02b5-115b-c16d-5219303f2f33@linux.ibm.com>
+        <CAAPL-u_UoAQ9koo892sG-Tx4bi4xDRe9PUtjmFSsn90uU-n31g@mail.gmail.com>
+        <871qsuyzr2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <672e528d-40b7-fc12-9b0c-1591d586c079@linux.ibm.com>
+        <87wnamxi30.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <5aaf395d-514a-2717-58c6-3845b97692bd@linux.ibm.com>
+Date:   Mon, 05 Sep 2022 09:52:43 +0800
+In-Reply-To: <5aaf395d-514a-2717-58c6-3845b97692bd@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Fri, 2 Sep 2022 15:14:14 +0530")
+Message-ID: <87sfl6y4d0.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <fffdd2ac-4ba6-8eb3-f269-b22a3d9c32f6@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxYOJUVhVjeVsRAA--.7257S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrW8Cw18Kr1DCryxWFyDWrg_yoW5CFWxpr
-        W7KF4UKa1kGr1xZa1jqwnYgFyFg3y8WryfWrW5tryFv3Z09Fn3XF18ta1UuFy7Crn2yr1Y
-        vFWSyFn7Zr4YyFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
-        zVAYIcxG8wCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUHpB-UUUUU=
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,94 +92,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jinyang
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
-Thank you very much for some ideas.
-
-On 09/04/2022 12:23 AM, Jinyang He wrote:
-> On 2022/9/3 18:49, Xi Ruoyao wrote:
->
->> On Sat, 2022-09-03 at 09:57 +0800, Youling Tang wrote:
->>>>> Unlike (pre-r6) MIPS, LoongArch has a complete support for PIC, and
->>>>> currently LoongArch toolchain always produces PIC (except, if
->>>>> -Wa,-mla-
->>>>> {local,global}-with-abs or la.abs macros are used explicitly).
+> On 9/2/22 2:34 PM, Huang, Ying wrote:
+>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>> 
+>>> On 9/2/22 1:27 PM, Huang, Ying wrote:
+>>>> Wei Xu <weixugc@google.com> writes:
+>>>>
+>>>>> On Thu, Sep 1, 2022 at 11:44 PM Aneesh Kumar K V
+>>>>> <aneesh.kumar@linux.ibm.com> wrote:
+>>>>>>
+>>>>>> On 9/2/22 12:10 PM, Huang, Ying wrote:
+>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>>>>>>
+>>>>>>>> On 9/2/22 11:42 AM, Huang, Ying wrote:
+>>>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>>>>>>>>
+>>>>>>>>>> On 9/2/22 11:10 AM, Huang, Ying wrote:
+>>>>>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>>>>>>>>>>
+>>>>>>>>>>>> On 9/2/22 10:39 AM, Wei Xu wrote:
+>>>>>>>>>>>>> On Thu, Sep 1, 2022 at 5:33 PM Huang, Ying <ying.huang@intel.com> wrote:
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> On 9/1/22 12:31 PM, Huang, Ying wrote:
+>>>>>>>>>>>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
+>>>>>>>>>>>>>>>>> related details can be found. All allocated memory tiers will be listed
+>>>>>>>>>>>>>>>>> there as /sys/devices/virtual/memory_tiering/memory_tierN/
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> The nodes which are part of a specific memory tier can be listed via
+>>>>>>>>>>>>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>> I think "memory_tier" is a better subsystem/bus name than
+>>>>>>>>>>>>>>>> memory_tiering.  Because we have a set of memory_tierN devices inside.
+>>>>>>>>>>>>>>>> "memory_tier" sounds more natural.  I know this is subjective, just my
+>>>>>>>>>>>>>>>> preference.
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>> I missed replying to this earlier. I will keep memory_tiering as subsystem name in v4
+>>>>>>>>>>>> because we would want it to a susbsystem where all memory tiering related details can be found
+>>>>>>>>>>>> including memory type in the future. This is as per discussion
+>>>>>>>>>>>>
+>>>>>>>>>>>> https://lore.kernel.org/linux-mm/CAAPL-u9TKbHGztAF=r-io3gkX7gorUunS2UfstudCWuihrA=0g@mail.gmail.com
+>>>>>>>>>>>
+>>>>>>>>>>> I don't think that it's a good idea to mix 2 types of devices in one
+>>>>>>>>>>> subsystem (bus).  If my understanding were correct, that breaks the
+>>>>>>>>>>> driver core convention.
+>>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> All these are virtual devices .I am not sure i follow what you mean by 2 types of devices.
+>>>>>>>>>> memory_tiering is a subsystem that represents all the details w.r.t memory tiering. It shows
+>>>>>>>>>> details of memory tiers and can possibly contain details of different memory types .
+>>>>>>>>>
+>>>>>>>>> IMHO, memory_tier and memory_type are 2 kind of devices.  They have
+>>>>>>>>> almost totally different attributes (sysfs file).  So, we should create
+>>>>>>>>> 2 buses for them.  Each has its own attribute group.  "virtual" itself
+>>>>>>>>> isn't a subsystem.
+>>>>>>>>
+>>>>>>>> Considering both the details are related to memory tiering, wouldn't it be much simpler we consolidate
+>>>>>>>> them within the same subdirectory? I am still not clear why you are suggesting they need to be in different
+>>>>>>>> sysfs hierarchy.  It doesn't break any driver core convention as you mentioned earlier.
+>>>>>>>>
+>>>>>>>> /sys/devices/virtual/memory_tiering/memory_tierN
+>>>>>>>> /sys/devices/virtual/memory_tiering/memory_typeN
+>>>>>>>
+>>>>>>> I think we should add
+>>>>>>>
+>>>>>>>  /sys/devices/virtual/memory_tier/memory_tierN
+>>>>>>>  /sys/devices/virtual/memory_type/memory_typeN
+>>>>>>>
+>>>>>>
+>>>>>> I am trying to find if there is a technical reason to do the same?
+>>>>>>
+>>>>>>> I don't think this is complex.  Devices of same bus/subsystem should
+>>>>>>> have mostly same attributes.  This is my understanding of driver core
+>>>>>>> convention.
+>>>>>>>
+>>>>>>
+>>>>>> I was not looking at this from code complexity point. Instead of having multiple directories
+>>>>>> with details w.r.t memory tiering, I was looking at consolidating the details
+>>>>>> within the directory /sys/devices/virtual/memory_tiering. (similar to all virtual devices
+>>>>>> are consolidated within /sys/devics/virtual/).
+>>>>>>
+>>>>>> -aneesh
 >>>>>
->>>>> So would it be easier to review and correct the uses of "la.abs" in
->>>>> the
->>>>> code, and make the main kernel image a real PIE?  Then we can load it
->>>>> everywhere w/o any need to do relocation at load time.
->>> At the beginning I also wanted to make the main kernel image a real PIE
->>> and tried it, some of the "la.abs" can be modified, but I encountered
->>> difficulties in modifying the  exception handling code part, the kernel
->>> will not  boot after modification :(, I will continue to work hard try.
->> I just tried the same thing and get the same result :(.  Will spend
->> several hours reading the LoongArch manual about exception...
->>
-> Hi,
+>>>>> Here is an example of /sys/bus/nd/devices (I know it is not under
+>>>>> /sys/devices/virtual, but it can still serve as a reference):
+>>>>>
+>>>>> ls -1 /sys/bus/nd/devices
+>>>>>
+>>>>> namespace2.0
+>>>>> namespace3.0
+>>>>> ndbus0
+>>>>> nmem0
+>>>>> nmem1
+>>>>> region0
+>>>>> region1
+>>>>> region2
+>>>>> region3
+>>>>>
+>>>>> So I think it is not unreasonable if we want to group memory tiering
+>>>>> related interfaces within a single top directory.
+>>>>
+>>>> Thanks for pointing this out.  My original understanding of driver core
+>>>> isn't correct.
+>>>>
+>>>> But I still think it's better to separate instead of mixing memory_tier
+>>>> and memory_type.  Per my understanding, memory_type shows information
+>>>> (abstract distance, latency, bandwidth, etc.) of memory types (and
+>>>> nodes), it can be useful even without memory tiers.  That is, memory
+>>>> types describes the physical characteristics, while memory tier reflects
+>>>> the policy.
+>>>>
+>>>
+>>> The latency and bandwidth details are already exposed via 
+>>>
+>>> 	/sys/devices/system/node/nodeY/access0/initiators/
+>>>
+>>> Documentation/admin-guide/mm/numaperf.rst
+>>>
+>>> That is the interface that libraries like libmemkind will look at for finding
+>>> details w.r.t latency/bandwidth
+>> 
+>> Yes.  Only with that, it's still inconvenient to find out which nodes
+>> belong to same memory type (has same performance, same topology, managed
+>> by same driver, etc).  So memory types can still provide useful
+>> information even without memory tiering.
+>> 
 >
-> The following ideas are based on experience, without validation. Patches
-> show that three types of relocation are needed to be done.
-> 1, GOT is generated by toolchain, so  I think eliminating them by
-> toolchain is better.
-> 2, Ex_table is generated but striped relocation info. We can plays pcrel
-> way to resolve this problem. One of ways like follows, (pseudo-code)
->
-> arch/loongarch/copy_user.S
-> ...
-> .macro fixup_ex from, to, offset, fix
-> .if \fix
->         .section .fixup, "ax"
-> \to:    addi.d  a0, a2, \offset
->         jr      ra
->         .previous
-> .endif
->         .section __ex_table, "a"
->         PTR     \from\()b, \to\()b - \from\()b   # fixup use pcrel
->         .previous
-> .endm
-> ...
-> ...
->
-> arch/loongarch/mm/extable.c
->         ...
->         unsigned long era = exception_era(regs);
->         fixup = search_exception_tables(era - relocate_offset); //
-> Search by orig value
->         if (fixup) {
->                 regs->csr_era = fixup->fixup + era; // Fixup fixup address.
->                 return 1;
->         }
->
->         ...
-Yes, we might be able to make the exception table consists of pairs of
-relative offsets, like arm64 and riscv do.
+> I am not sure i quiet follow what to conclude from your reply. I used the subsystem name
+> "memory_tiering" so that all memory tiering related information can be consolidated there.
+> I guess you agreed to the above part that we can consolidated things like that. 
 
-Thanks,
-Youling.
->
-> 3, The left is the processed relocation table. It collect the relocation
-> type R_LARCH_ABS* (R_LARCH_MARK_LA?) and R_LARCH_64. Just do
-> as this patch does. The la.abs is used because of the different exception
-> entry on each CPUs and better NUMA performance IMHO. We can
-> do follows way to avoid R_LARCH_ABS* and produce R_LARCH_64, (data in text)
->
-> .text
-> la.pcrel t0,999f
-> ld.d t0,t0,0
-> ...
-> PTR do_vint
-> ...
->
-> *Not* important. For me, I really wish a bootstrap relocation while this
-> patch is KALSR. The bootstrap relocation meaning is the boot cpu enter
-> kernel_entry, check the real address itself, parse the cmdline whether
-> do kaslr, and then relocate itself. Then kdump capture process is easier.
-> Some past info links,
-> https://lore.kernel.org/loongarch/3002b2b3-2c2c-e32e-c474-d3876d3ef9b7@loongson.cn/
->
-> https://patchwork.kernel.org/project/linux-mips/patch/1618230494-6207-6-git-send-email-hejinyang@loongson.cn/
->
->
->
+I just prefer to separate memory_tier and memory_type sysfs directories
+personally.  Because memory_type describes the physical memory types and
+performance, while memory_tier is more about the policy to group
+memory_types.
 
+> We might end up adding memory_type there if we allow changing "abstract distance" of a
+> memory type from userspace later. Otherwise, I don't see a reason for memory type to be
+> exposed. But then we don't have to decide on this now. 
+
+As above, because I think memory_type can provide value even outside of
+memory_tier, I prefer to add memory_type sysfs interface anyway
+personally.
+
+Best Regards,
+Huang, Ying

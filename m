@@ -2,147 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A442C5AD554
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CA55AD558
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238646AbiIEOmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S238674AbiIEOnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238395AbiIEOm3 (ORCPT
+        with ESMTP id S238443AbiIEOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:42:29 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B6E5D0F9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:40:03 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id k18so9413647lji.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:40:03 -0700 (PDT)
+        Mon, 5 Sep 2022 10:42:38 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552285F13C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:40:06 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id c2so8712704plo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:40:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=INhSK7LXVVDaskTu6/00QJErD966u/7pw0hdfzEYJWg=;
-        b=Qb8c09iKkB1fVbjL/AHzIlkmAr6Y4pLSDFlotZFPJRWqBG928PVxOvR6GxtKtwbMT7
-         9sKPGiyfV5+nnjYsF8Xfhdvs1/OhBuOp2BOa0RZrBjbpgPfVX3TFPiTTMBuTbjngyKEk
-         GD6qP6mL7KHM+2tpDX4YeT/BdjSqHL/znY/WT2dEHyRb7N2+Fy/oypSllsV1g3oS4Bvm
-         ifSEG+TSpqMp0QAwbc12KtWpCyLOSpfzewdUdGyZZkwjfZrONj12+/8tvBVZl6cf/CA8
-         i6EXZHGISO00IaNUj0GUaCgypA2Fv30lyvSYzaUscxcKqK9Z0VLHDEu3yQB5vcVaimY9
-         hAFQ==
+        bh=RYQnTXZZuWcGbpSqaq35fWZqtZ1qJ4UulAZxlrVbUnc=;
+        b=FmnhmNmCe/85eAvm6JEc6G9mLNA0RF3y9jR22W5oHBdwVIKaVMQcZrd427Iny3GYj2
+         YG3Sq7RSmjuqlupdSmd+SgW1N7L0KkT3Z0LhUeskHZUNCTGd/04qTjiuRPtuGzOmFx17
+         2Fum2DJIfKRbERXPd7mYFbsuJXpWpTJ+g0oNXv3xSocLRXKJv9i7jV5rB3bbU60dmTe4
+         wINF4D536t9zBdk6VUHOg8Ct1ZqS6oSvItJjcMZF1D5cBSXGrM1uh8tZRqpaC639Lvyi
+         aR+bAHgmY+AhaVdbQ2K3JfqZZ2hmortzeioFQUTZ8nca5zapzbhevoK8ubWMCJA1C0sj
+         SLZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=INhSK7LXVVDaskTu6/00QJErD966u/7pw0hdfzEYJWg=;
-        b=FBVL5AhRkmpV1CBLRSspJQ6PEF3PomhFPgFA825ga4DRNqm0ZmLz+07+p+Xu87PdGs
-         UmJjKlw8cUzgBV8Gy25DEqIb5I0jUuFiLV/OmGH+xe4ZOFSVASFyNYUlQqYtmABvtfum
-         xG3KPHToeY1w7NklB3ObQc6Y9h4PuEIQ/jF/btsMJJD86BHYhd5FjYgZ0FnsmOzRKImc
-         RyVBDzJTz85xiT4xNJjGHVGgQdof65z/X8Y+0Xua1d2LNrg17Q5BMekQCta9jPGmj5Cj
-         TOZ8DB7ZAOsQjnVC9gbBoz+12TrWCbW93SuR56kyOCXHnuJNJrI/UTyLo15anAL/+fmZ
-         CYhA==
-X-Gm-Message-State: ACgBeo0ePDdI6d1UMaIAm5VUG7AKkYx1yApQA7wjmjg+936cD4P6d6Fa
-        BB/GT+7DSoZwwhq0XF6S/mxU9A==
-X-Google-Smtp-Source: AA6agR7hdr6wzS4L5wb5JGm+1Oatscya7lhcM/HJzwZeKmJb29LdFrIu7ziHYTAFlu65mtPF1f/LBw==
-X-Received: by 2002:a2e:3808:0:b0:268:f30d:a3e with SMTP id f8-20020a2e3808000000b00268f30d0a3emr4576031lja.486.1662388801204;
-        Mon, 05 Sep 2022 07:40:01 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c2-20020a056512324200b0048b08e25979sm1205662lfr.199.2022.09.05.07.39.59
+        bh=RYQnTXZZuWcGbpSqaq35fWZqtZ1qJ4UulAZxlrVbUnc=;
+        b=fzOtmz5VUTcwwwwmA0rGi9kh2KJ/aOD9sKo+FkygpZLuqc61y9fHUbBwpZkDHAhFK4
+         MFT32IliP46sQ6MSITesMwh4fR5IqVaP5LS/d66ke8B9RAfxYLfDOBBwcxyhN5YAfMyi
+         /NZT9Jf/1lE2CgnXaCZxGm1eIRz05si9vI+eh9koPTmdyvi/c3xZGybjNtUYkwbeSbLZ
+         bozHcfo2zl9kohj3FbANBiTSKfCSmBhvAqrjOXGGKmFu2sTFufWz9D1gGPrCTIhdOxvS
+         RHS9mGuHdRNsEPE8YLclU9YubytjECTB4xdWOBK4dPHJ+e4ZtQR1R7Zzb0qFygQYPgD/
+         cXZg==
+X-Gm-Message-State: ACgBeo1e5gAszICGb4UBYanJM44BaMvJZv/3WpumH62To3H4UG0JNVX/
+        I9KsFi7sViOJx3E7kxao+rr6kw==
+X-Google-Smtp-Source: AA6agR7oR+wxM9Eh3rLCYVo+NMA3EMkITmNNgcLoUWAlvYnryd6xrFd1mnstgtcfCwiHF+kWMc8XVw==
+X-Received: by 2002:a17:90b:3ecb:b0:200:211:9bb1 with SMTP id rm11-20020a17090b3ecb00b0020002119bb1mr16206291pjb.4.1662388805573;
+        Mon, 05 Sep 2022 07:40:05 -0700 (PDT)
+Received: from [10.255.175.119] ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0016d785ef6d2sm7636431plh.223.2022.09.05.07.40.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 07:40:00 -0700 (PDT)
-Message-ID: <0ab48493-cb9d-8760-d629-1ccd8c75b6f5@linaro.org>
-Date:   Mon, 5 Sep 2022 16:39:59 +0200
+        Mon, 05 Sep 2022 07:40:05 -0700 (PDT)
+Message-ID: <1fc40679-b7c3-24f2-aa27-f1edab71228e@bytedance.com>
+Date:   Mon, 5 Sep 2022 22:40:00 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v6 1/2] dt-bindings: misc: fastrpc convert bindings to
- yaml
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: Re: [PATCH 1/5] sched/fair: ignore SIS_UTIL when has idle core
 Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Rob Herring <robh@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        David Heidelberg <david@ixit.cz>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        devicetree@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org
-References: <20220905103715.955786-1-abel.vesa@linaro.org>
- <1662381657.354400.1957044.nullmailer@robh.at.kernel.org>
- <YxYH+3hGZ2fyUZpW@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YxYH+3hGZ2fyUZpW@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220712082036.5130-1-wuyun.abel@bytedance.com>
+ <20220712082036.5130-2-wuyun.abel@bytedance.com>
+ <20220829130831.odhemmcmuecqxkbz@techsingularity.net>
+ <51009414-5ffb-b6ec-a501-7b2514a0f3cc@bytedance.com>
+ <20220829145621.7cxrywgxow5ov7ki@techsingularity.net>
+ <0ffb0903-431f-88fe-3a56-150b283f5304@bytedance.com>
+ <20220902102528.keooutttg3hq3sy5@techsingularity.net>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <20220902102528.keooutttg3hq3sy5@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/09/2022 16:30, Abel Vesa wrote:
-> On 22-09-05 07:40:57, Rob Herring wrote:
->> On Mon, 05 Sep 2022 13:37:14 +0300, Abel Vesa wrote:
->>> Convert Qualcomm FastRPC bindings to yaml format, so that we could validate
->>> dt-entries correctly and any future additions can go into yaml format.
->>>
->>> Use compute-cb@ subnodes instead of just cb@.
->>>
->>> Also add qcom,non-secure-domain, qcom,glink-channels and
->>> qcom,smd-channels missing properties to make sure dtbs_check doesn't
->>> fail right off the bat.
->>>
->>> Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->>> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->>> Co-developed-by: David Heidelberg <david@ixit.cz>
->>> Signed-off-by: David Heidelberg <david@ixit.cz>
->>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->>> ---
->>>
->>> Changes since v5:
->>>  * Removed the txt file
->>>
->>>  .../devicetree/bindings/misc/qcom,fastrpc.txt |  88 --------------
->>>  .../bindings/misc/qcom,fastrpc.yaml           | 108 ++++++++++++++++++
->>>  2 files changed, 108 insertions(+), 88 deletions(-)
->>>  delete mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
->>>  create mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb: smd-edge: 'qcom,smd-edge' is a required property
->> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
->> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb: smd-edge: 'oneOf' conditional failed, one must be fixed:
->> 	'mboxes' is a required property
->> 	'qcom,ipc' is a required property
->> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
->> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb: smd-edge: 'oneOf' conditional failed, one must be fixed:
->> 	'interrupts' is a required property
->> 	'interrupts-extended' is a required property
->> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
+On 9/2/22 6:25 PM, Mel Gorman Wrote:
+> For the simple case, I was expecting the static depth to *not* match load
+> because it's unclear what the scaling should be for load or if it had a
+> benefit. If investigating scaling the scan depth to load, it would still
+> make sense to compare it to a static depth. The depth of 2 cores was to
+> partially match the old SIS_PROP behaviour of the minimum depth to scan.
 > 
-> Right.
+>                  if (span_avg > 4*avg_cost)
+>                          nr = div_u64(span_avg, avg_cost);
+>                  else
+>                          nr = 4;
 > 
-> So actually, the parent node is glink-edge, not smd-edge.
+> nr is not proportional to cores although it could be
+> https://lore.kernel.org/all/20210726102247.21437-7-mgorman@techsingularity.net/
 > 
-> And there are some other required properties missing when switching to
-> glink-edge.
+> This is not tested or properly checked for correctness but for
+> illustrative purposes something like this should conduct a limited scan when
+> overloaded. It has a side-effect that the has_idle_cores hint gets cleared
+> for a partial scan for idle cores but the hint is probably wrong anyway.
 > 
-> Will resend with glink-edge instead and add all the related missing
-> properties.
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 6089251a4720..59b27a2ef465 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6427,21 +6427,36 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>   		if (sd_share) {
+>   			/* because !--nr is the condition to stop scan */
+>   			nr = READ_ONCE(sd_share->nr_idle_scan) + 1;
+> -			/* overloaded LLC is unlikely to have idle cpu/core */
+> -			if (nr == 1)
+> -				return -1;
+> +
+> +			/*
+> +			 * Non-overloaded case: Scan full domain if there is
+> +			 * 	an idle core. Otherwise, scan for an idle
+> +			 * 	CPU based on nr_idle_scan
+> +			 * Overloaded case: Unlikely to have an idle CPU but
+> +			 * 	conduct a limited scan if there is potentially
+> +			 * 	an idle core.
+> +			 */
+> +			if (nr > 1) {
+> +				if (has_idle_core)
+> +					nr = sd->span_weight;
+> +			} else {
+> +				if (!has_idle_core)
+> +					return -1;
+> +				nr = 2;
+> +			}
+>   		}
+>   	}
+>   
+>   	for_each_cpu_wrap(cpu, cpus, target + 1) {
+> +		if (!--nr)
+> +			break;
+> +
+>   		if (has_idle_core) {
+>   			i = select_idle_core(p, cpu, cpus, &idle_cpu);
+>   			if ((unsigned int)i < nr_cpumask_bits)
+>   				return i;
+>   
+>   		} else {
+> -			if (!--nr)
+> -				return -1;
+>   			idle_cpu = __select_idle_cpu(cpu, p);
+>   			if ((unsigned int)idle_cpu < nr_cpumask_bits)
+>   				break;
 
-BTW, if you need more fixes, just take over the patchset and add
-co-developed-by.
+I spent last few days testing this, with 3 variations (assume
+has_idle_core):
 
-Best regards,
-Krzysztof
+  a) full or limited (2cores) scan when !nr_idle_scan
+  b) whether clear sds->has_idle_core when partial scan failed
+  c) scale scan depth with load or not
+
+some observations:
+
+  1) It seems always bad if not clear sds->has_idle_core when
+     partial scan fails. It is due to over partially scanned
+     but still can not find an idle core. (Following ones are
+     based on clearing has_idle_core even in partial scans.)
+
+  2) Unconditionally full scan when has_idle_core is not good
+     for netperf_{udp,tcp} and tbench4. It is probably because
+     the SIS success rate of these workloads is already high
+     enough (netperf ~= 100%, tbench4 ~= 50%, compared to that
+     hackbench ~= 3.5%) which negate a lot of the benefit full
+     scan brings.
+
+  3) Scaling scan depth with load seems good for the hackbench
+     socket tests, and neutral in pipe tests. And I think this
+     is just the case you mentioned before, under fast wake-up
+     workloads the has_idle_core will become not that reliable,
+     so a full scan won't always win.
+
+Best Regards,
+Abel

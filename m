@@ -2,223 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C835ACE1E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746A25ACDCE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237762AbiIEIfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
+        id S237767AbiIEIeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237402AbiIEIfB (ORCPT
+        with ESMTP id S238036AbiIEId4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:35:01 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9317F51434
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:32:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 38757386AA;
-        Mon,  5 Sep 2022 08:32:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662366776; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y1TtC5XkW046NlKazDvHi6pQkPpJhQJ/cqIh0ccWhV8=;
-        b=E4/y9QdBL+pkolyOpRlKb+MrYTf4SaqXtsmHyBOsd5672/fmOb97762eRLbaN2jAenxj3c
-        /Gi8nxbr2S08Lf2CPpU36I3DAqP+ZEnDO1+ElooTlYiAGNe1jusKFM9nvXiB7Q01LUPuiQ
-        RrmHz9WmoRz7qkGd1g/lbB7bePpccjQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662366776;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y1TtC5XkW046NlKazDvHi6pQkPpJhQJ/cqIh0ccWhV8=;
-        b=ZBUDQAO6/OhmbF7joDmjI5FTk1x2dxivVXQSTYPDDdfWfsHfaMPhSMVHd9lG4qW/CxrbjJ
-        TS6ADmJbA7SvyzBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 21480139C7;
-        Mon,  5 Sep 2022 08:32:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jHsIBzi0FWMiDwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 05 Sep 2022 08:32:56 +0000
-Message-ID: <5730ea32-caea-03db-c37c-658484c2f8f0@suse.de>
-Date:   Mon, 5 Sep 2022 10:32:55 +0200
+        Mon, 5 Sep 2022 04:33:56 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2055.outbound.protection.outlook.com [40.107.21.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5413F4DF02;
+        Mon,  5 Sep 2022 01:32:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lq+/wMGXNVSsEeViA4v4Ph44gJ6i8MPbVvFPHykYoTHRsfRLrX9A7swvhhBUfERmB7GrfGu2hqe3KHEO4TjfV3nM1RFa7MInEbM52Bqxth6KveaS84HU/Zc8m/M2aJhpxqn1cRTFpU6KBxDPCaTj/fmL8fNRkyFPzNglbm8t1m9vuDW0IaKBQelmBBCSdIDskZsky0fc+pGI+yNoYxZ2wDgkRPg6UqvLRIA4Wv3sdX0/He0NRbE8d/U24aJJ45lF6tM4R5KhpEHCQy/RbnZ6sUgFp9KXmAnqHaCGMxwPXzAyFx63H8QjQWRLuWYfWMyHGQM4EVI+2AzGP46bZLRWQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IT8qLsWtASgU+jrkmCjIv4P320Habx7fIb/JbroiA8E=;
+ b=U3VOzTas2OpTsl8yQZEAGuXfs46W57V7ogYZ1NRyZwi6zZrLyos3AkabEooOH3lvSGGCMGUxn//yH/UCM5QC27/3UkeOS2lMtkctFA+3Xc/Tc4e93enPQ2j0YzGTqEajhFjL7o+63krEWUOv1bfATem4Mqc9G27upWT/fM7dga7VWiuZaggG9c9+aitgomxyJjxP0sV31LS+Yanfp7krWodMo0XPzjE9/uaO/1tZOTjscu+z4guQLcp+1S8RKTQemWqv9JYeQhpVlRb3ronMNLoNNV9pCe9Mz8I4MODVL2aceegS9sKpe1KVlnVwVV3iD5/hTGGho+Dhl3zEvJSwCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IT8qLsWtASgU+jrkmCjIv4P320Habx7fIb/JbroiA8E=;
+ b=X9wauvfbqSkGvjFFQPgBk4ygO0OG05FYfYEJ75XJcUJSYokBCopS91IJg/do/+Dxd0yOd03xxaoKQ/WxYTk/l93lr8lFtXgq6hiDMqI08DaMcKmMeRZErnKW49AFS/A4aFl/FLKs+yKVbUheJlvKDYgt3B4EZpEbSTD7YROlOvc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB5925.eurprd04.prod.outlook.com (2603:10a6:20b:ab::19)
+ by AM8PR04MB7363.eurprd04.prod.outlook.com (2603:10a6:20b:1c7::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Mon, 5 Sep
+ 2022 08:32:26 +0000
+Received: from AM6PR04MB5925.eurprd04.prod.outlook.com
+ ([fe80::704a:fa82:a28e:d198]) by AM6PR04MB5925.eurprd04.prod.outlook.com
+ ([fe80::704a:fa82:a28e:d198%6]) with mapi id 15.20.5588.017; Mon, 5 Sep 2022
+ 08:32:26 +0000
+From:   Joy Zou <joy.zou@nxp.com>
+To:     krzysztof.kozlowski@linaro.org, vkoul@kernel.org
+Cc:     shengjiu.wang@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V5 2/4] dmaengine: imx-sdma: support hdmi audio
+Date:   Mon,  5 Sep 2022 16:33:52 +0800
+Message-Id: <20220905083352.89583-1-joy.zou@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0249.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::33) To AM6PR04MB5925.eurprd04.prod.outlook.com
+ (2603:10a6:20b:ab::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 10/12] drm/udl: Fix inconsistent urbs.count value during
- udl_free_urb_list()
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220816153655.27526-1-tiwai@suse.de>
- <20220816153655.27526-11-tiwai@suse.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220816153655.27526-11-tiwai@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------tykqsKa1tBnyipMnwsFI05g1"
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4354d69e-6f71-43ad-7e40-08da8f192962
+X-MS-TrafficTypeDiagnostic: AM8PR04MB7363:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nGI0tO5lqoZVggB5wTIFirpMKkvgvzqbc5OynHflHBQUhdTlGF2pASDRElUolW/n77aIFt7x+dbfl9pAmevZkQrOsLIu4lePTNPLnlYI9XDlA4uQ3ECWLA06po3Jmz3xIUQ4GxG4VRGbcGoBY+xe9zEY3qOnPthBTkMREuwUfcP5Onnlvq0VzjhA24Z9ZWzuJlD8myxbc+Mb8QAxfJV/8lHcHE1bBOGMuOLe05vhDnlcLm5V5UVf/Wtlnkfph+euAvx8zvg2JPod67V3EWEvVCk1Ol/Kg0WmNrv4eae6gnNGz4OnarnmFEtKlbs3fdHQWl5CX5Ca0cTwcU8/qrJoU/o8Ij1xaQ3bkU6vbwUoFoIC1+ADfUHyaVB5C7568EsBMVMeOtuLttVJDotKfzPv/SjGqT8kLbO12R5Si4u6WL2PciJD8WXDLDhz2ts2xqviVFFWUSmaX2epBdQxB4G5HydQNoQLAfRIY8mNGGtQ+FwR/FQHvUA+73yWvEPznIwFz19vzxAw3FxygGGUwho8wDRWduCrHzxqJVAkZRsYnsexKN3kNynQGPVMVRdXmp1oettSZ9FgXL1g0ELXpVRoN55TEf9wbchD0hxKliWM6NVNtRUOT1BmZO/LTgf77xXZIxk12YGVLi+yyscuMDkUEgy+seSqwtdJzwLbzlv9amvLWeWz3kSA4U+fzSGtYMiR+pT5tEIgdWAHVbbKzQDsS3a6TMBjmvXdWbSuJFv8I2nO2ecu/GbGPIS6JpolziacUZQqRedXmbuaAE4mu194aQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5925.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(346002)(136003)(396003)(39860400002)(186003)(1076003)(2616005)(83380400001)(316002)(8936002)(26005)(6486002)(2906002)(5660300002)(36756003)(6512007)(41300700001)(6506007)(52116002)(4326008)(8676002)(38100700002)(44832011)(38350700002)(478600001)(66946007)(86362001)(66476007)(66556008)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?F9HH20JrguEL+yAY7zYCRlWgnq+uW0UrY3fFAIPbKKFMpTg4Yb1jmbL4dguF?=
+ =?us-ascii?Q?Kcx9wAPy2qa79jleU9Kw4pcakUhSkWGGdFR7DtWcFS3kMoIMh5a9GFZaeoW7?=
+ =?us-ascii?Q?+J+UjpC2WXx8e9DMXluCI5Ur7EvaywvW55e2CqtKdQhS8QCTuRhUyFJhOixU?=
+ =?us-ascii?Q?lAvjLGjRYzgA1HvhNa7jZY2je/9Xg0MR1U/4uS5MY1sy49lhLztAvzdhJiel?=
+ =?us-ascii?Q?NlQrEbDdcEp3RoGyRlxIdEbvM42hoQ+LeaMBnvAtP82ENsK1kdD3M3zdnUv9?=
+ =?us-ascii?Q?t8+nfy6eqt/6lraG0Ks5c9CNp7NY0RxWTxscGsqQQPkZJbtqG1ljXoJjsPk5?=
+ =?us-ascii?Q?5Oj0e0FutTuOsw2URKLEnYJIhwjOkYZzEx2e9T5Oed4n6kAkjZkxJlB47vi/?=
+ =?us-ascii?Q?P0HAxOCRB+8xkH6AHIOU2xG1rTM0635guafxL2Uw3NY55EBSU3IQlGbj7wHy?=
+ =?us-ascii?Q?vEQnbet4VdMh6ZoRIk1NfOIm2chh4IP5WfjfVQtpjrq0/F88bqf9wRejrPA0?=
+ =?us-ascii?Q?XZp8GeoIqTTfpKd49v/uDIGqO8HOW53JRZJkYzDnzL/OlGhjZjFaSSYoHSQl?=
+ =?us-ascii?Q?q4I9E1LWcyGmJJaS4H/dWgviOWiriL7H4TJR9MOaokHd2tu6ZZjvoAun/aiG?=
+ =?us-ascii?Q?IB6XBf2cMAOscOGlPjKmD+PZwJc8XtUWUhXOwUuCLMlMKObjZnw/b6W3a2oW?=
+ =?us-ascii?Q?2aVrAzb7KBCPz2AtxRps4ilOxAGaRJ4FkrXT9udOzTOklR5pk4+pjOScx5hS?=
+ =?us-ascii?Q?34jRReQPITOlmDK4CRMWhR2gyDJXiyiRJ72lPn16ByFdMzbOxqM510wr4KAb?=
+ =?us-ascii?Q?RDjg6/WzGTMsBvhiY+f+nOH7eVNM4/wKXffqTvEn9f1UwAERa8tOFBGVF4Qz?=
+ =?us-ascii?Q?3EIsUcEZKEcIbfXoVqZ3MVwTDrlvA73ub+Yfgl/ahPCo4uUzE5ZlJfeldDfc?=
+ =?us-ascii?Q?DfoT9jnHtCCfXla2bvuFs/fIy6VtTTGbtpuH1YqS6yJ5bXE9EeJ7z32EaU3d?=
+ =?us-ascii?Q?RTJ80YfQ1rrQSnEU4xEGS5Dhi6RWe0glyLnA7VTpB+CQzF3+9iXCxYR9/NPi?=
+ =?us-ascii?Q?tNjowE0uFZ86+QQgV3tOth9nbio2mPscensXuJx6vTDmu2IY3YA3oN71ekGf?=
+ =?us-ascii?Q?769wowCc9jPKsGJaDknvSHGsmt+c1T1PIX4zswd6n0J0eernuaqh7SXg8Ozb?=
+ =?us-ascii?Q?A06KdJvjjkyju4rh7UuKP+ucoPCYfTr1/5HsUu/xY0srNs3L1K1p2SBP4mg2?=
+ =?us-ascii?Q?Oz7tw3kw2Z9iP+2lXufhrGI7jCm8UtFnpsu13Q/iwxlz0iGt2EUCUXkCmsBH?=
+ =?us-ascii?Q?pRJL+Ym7NepgTFQkknCVfCkLVOQgle5QSuDAa2cQX4+iTIP7clnTdLVda3VU?=
+ =?us-ascii?Q?q7EDivDjg1KiGR2Fp/gGjEF+EBtrx9UBN8W2SNDXWY12/Phvjhi3LJu1vcOy?=
+ =?us-ascii?Q?y40v+TojUZ9fr9wwvHmjwEfFJu6lOXwMlg9+E+PhkfSeIYDrOhcXuZIqB5Zz?=
+ =?us-ascii?Q?ZTsFydTOBZygQ/EjVrUzFgylvYAibZmjZZEf13rk7w/V8YxmBo94hqRjisb6?=
+ =?us-ascii?Q?R8ZbO+/nDeePnFoB53EZtRTY9lwy9sUpgLPvwKtz?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4354d69e-6f71-43ad-7e40-08da8f192962
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5925.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 08:32:26.0121
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /A6lAx2kg4drX+SZ74VkTM/kW4YpdJBTy+QrOclvePOKcw0hUsUFn3i5m+ABPB2H
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7363
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------tykqsKa1tBnyipMnwsFI05g1
-Content-Type: multipart/mixed; boundary="------------O0FlQpQtIQxi7Fgwuwk8FIM8";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Message-ID: <5730ea32-caea-03db-c37c-658484c2f8f0@suse.de>
-Subject: Re: [PATCH 10/12] drm/udl: Fix inconsistent urbs.count value during
- udl_free_urb_list()
-References: <20220816153655.27526-1-tiwai@suse.de>
- <20220816153655.27526-11-tiwai@suse.de>
-In-Reply-To: <20220816153655.27526-11-tiwai@suse.de>
+Add hdmi audio support in sdma.
 
---------------O0FlQpQtIQxi7Fgwuwk8FIM8
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Signed-off-by: Joy Zou <joy.zou@nxp.com>
+---
+ drivers/dma/imx-sdma.c      | 38 +++++++++++++++++++++++++++++--------
+ include/linux/dma/imx-dma.h |  1 +
+ 2 files changed, 31 insertions(+), 8 deletions(-)
 
-SGkNCg0KQW0gMTYuMDguMjIgdW0gMTc6MzYgc2NocmllYiBUYWthc2hpIEl3YWk6DQo+IElu
-IHRoZSBjdXJyZW50IGRlc2lnbiwgdWRsX2dldF91cmIoKSBtYXkgYmUgY2FsbGVkIGFzeW5j
-aHJvbm91c2x5DQo+IGR1cmluZyB0aGUgZHJpdmVyIGZyZWVpbmcgaXRzIFVSTCBsaXN0IHZp
-YSB1ZGxfZnJlZV91cmJfbGlzdCgpLg0KPiBUaGUgcHJvYmxlbSBpcyB0aGF0IHRoZSBzeW5j
-IGlzIGRldGVybWluZWQgYnkgY29tcGFyaW5nIHRoZSB1cmJzLmNvdW50DQo+IGFuZCB1cmJz
-LmF2YWlsYWJsZSBmaWVsZHMsIHdoaWxlIHdlIGNsZWFyIHVyYnMuY291bnQgZmllbGQgb25s
-eSBvbmNlDQo+IGFmdGVyIHVkbF9mcmVlX3VyYl9saXN0KCkgZmluaXNoZXMsIGkuZS4gZHVy
-aW5nIHVkbF9mcmVlX3VyYl9saXN0KCksDQo+IHRoZSBzdGF0ZSBiZWNvbWVzIGluY29uc2lz
-dGVudC4NCj4gDQo+IEZvciBmaXhpbmcgdGhpcyBpbmNvbnNpc3RlbmN5IGFuZCBhbHNvIGZv
-ciBoYXJkZW5pbmcgdGhlIGxvY2tpbmcNCj4gc2NoZW1lLCB0aGlzIHBhdGNoIGRvZXMgYSBz
-bGlnaHQgcmVmYWN0b3Jpbmcgb2YgdGhlIGNvZGUgYXJvdW5kDQo+IHVkbF9nZXRfdXJiKCkg
-YW5kIHVkbF9mcmVlX3VyYl9saXN0KCkuICBOb3cgdXJicy5jb3VudCBpcyB1cGRhdGVkIGlu
-DQo+IHRoZSBzYW1lIHNwaW5sb2NrIGF0IGV4dHJhY3RpbmcgYSBVUkIgZnJvbSB0aGUgbGlz
-dCBpbg0KPiB1ZGxfZnJlZV91cmxfbGlzdCgpLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogVGFr
-YXNoaSBJd2FpIDx0aXdhaUBzdXNlLmRlPg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0v
-dWRsL3VkbF9kcnYuaCAgfCAgOCArLS0tLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS91ZGwv
-dWRsX21haW4uYyB8IDM3ICsrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0NCj4g
-ICAyIGZpbGVzIGNoYW5nZWQsIDI3IGluc2VydGlvbnMoKyksIDE4IGRlbGV0aW9ucygtKQ0K
-PiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS91ZGwvdWRsX2Rydi5oIGIvZHJp
-dmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmgNCj4gaW5kZXggNTkyM2QyZTAyYmM4Li5kOTQz
-Njg0YjViYmIgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS91ZGwvdWRsX2Rydi5o
-DQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS91ZGwvdWRsX2Rydi5oDQo+IEBAIC03NCwxMyAr
-NzQsNyBAQCBzdGF0aWMgaW5saW5lIHN0cnVjdCB1c2JfZGV2aWNlICp1ZGxfdG9fdXNiX2Rl
-dmljZShzdHJ1Y3QgdWRsX2RldmljZSAqdWRsKQ0KPiAgIGludCB1ZGxfbW9kZXNldF9pbml0
-KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYpOw0KPiAgIHN0cnVjdCBkcm1fY29ubmVjdG9yICp1
-ZGxfY29ubmVjdG9yX2luaXQoc3RydWN0IGRybV9kZXZpY2UgKmRldik7DQo+ICAgDQo+IC1z
-dHJ1Y3QgdXJiICp1ZGxfZ2V0X3VyYl90aW1lb3V0KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYs
-IGxvbmcgdGltZW91dCk7DQo+IC0NCj4gLSNkZWZpbmUgR0VUX1VSQl9USU1FT1VUCUhaDQo+
-IC1zdGF0aWMgaW5saW5lIHN0cnVjdCB1cmIgKnVkbF9nZXRfdXJiKHN0cnVjdCBkcm1fZGV2
-aWNlICpkZXYpDQo+IC17DQo+IC0JcmV0dXJuIHVkbF9nZXRfdXJiX3RpbWVvdXQoZGV2LCBH
-RVRfVVJCX1RJTUVPVVQpOw0KPiAtfQ0KPiArc3RydWN0IHVyYiAqdWRsX2dldF91cmIoc3Ry
-dWN0IGRybV9kZXZpY2UgKmRldik7DQo+ICAgDQo+ICAgaW50IHVkbF9zdWJtaXRfdXJiKHN0
-cnVjdCBkcm1fZGV2aWNlICpkZXYsIHN0cnVjdCB1cmIgKnVyYiwgc2l6ZV90IGxlbik7DQo+
-ICAgaW50IHVkbF9zeW5jX3BlbmRpbmdfdXJicyhzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KTsN
-Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS91ZGwvdWRsX21haW4uYyBiL2RyaXZl
-cnMvZ3B1L2RybS91ZGwvdWRsX21haW4uYw0KPiBpbmRleCA4YmJiNGUyODYxZmIuLjE5ZGM4
-MzE3ZTg0MyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfbWFpbi5j
-DQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS91ZGwvdWRsX21haW4uYw0KPiBAQCAtMjgsNiAr
-MjgsOCBAQA0KPiAgIHN0YXRpYyB1aW50IHVkbF9udW1fdXJicyA9IFdSSVRFU19JTl9GTElH
-SFQ7DQo+ICAgbW9kdWxlX3BhcmFtX25hbWVkKG51bXVyYnMsIHVkbF9udW1fdXJicywgdWlu
-dCwgMDYwMCk7DQo+ICAgDQo+ICtzdGF0aWMgc3RydWN0IHVyYiAqX191ZGxfZ2V0X3VyYihz
-dHJ1Y3QgdWRsX2RldmljZSAqdWRsLCBsb25nIHRpbWVvdXQpOw0KPiArDQo+ICAgc3RhdGlj
-IGludCB1ZGxfcGFyc2VfdmVuZG9yX2Rlc2NyaXB0b3Ioc3RydWN0IHVkbF9kZXZpY2UgKnVk
-bCkNCj4gICB7DQo+ICAgCXN0cnVjdCB1c2JfZGV2aWNlICp1ZGV2ID0gdWRsX3RvX3VzYl9k
-ZXZpY2UodWRsKTsNCj4gQEAgLTE1MSwxNSArMTUzLDE3IEBAIHZvaWQgdWRsX3VyYl9jb21w
-bGV0aW9uKHN0cnVjdCB1cmIgKnVyYikNCj4gICBzdGF0aWMgdm9pZCB1ZGxfZnJlZV91cmJf
-bGlzdChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0KPiAgIHsNCj4gICAJc3RydWN0IHVkbF9k
-ZXZpY2UgKnVkbCA9IHRvX3VkbChkZXYpOw0KPiAtCWludCBjb3VudCA9IHVkbC0+dXJicy5j
-b3VudDsNCj4gICAJc3RydWN0IHVyYl9ub2RlICp1bm9kZTsNCj4gICAJc3RydWN0IHVyYiAq
-dXJiOw0KPiAgIA0KPiAgIAlEUk1fREVCVUcoIldhaXRpbmcgZm9yIGNvbXBsZXRlcyBhbmQg
-ZnJlZWluZyBhbGwgcmVuZGVyIHVyYnNcbiIpOw0KPiAgIA0KPiAgIAkvKiBrZWVwIHdhaXRp
-bmcgYW5kIGZyZWVpbmcsIHVudGlsIHdlJ3ZlIGdvdCAnZW0gYWxsICovDQo+IC0Jd2hpbGUg
-KGNvdW50LS0pIHsNCj4gLQkJdXJiID0gdWRsX2dldF91cmJfdGltZW91dChkZXYsIE1BWF9T
-Q0hFRFVMRV9USU1FT1VUKTsNCj4gKwl3aGlsZSAodWRsLT51cmJzLmNvdW50KSB7DQo+ICsJ
-CXNwaW5fbG9ja19pcnEoJnVkbC0+dXJicy5sb2NrKTsNCj4gKwkJdXJiID0gX191ZGxfZ2V0
-X3VyYih1ZGwsIE1BWF9TQ0hFRFVMRV9USU1FT1VUKTsNCj4gKwkJdWRsLT51cmJzLmNvdW50
-LS07DQo+ICsJCXNwaW5fdW5sb2NrX2lycSgmdWRsLT51cmJzLmxvY2spOw0KPiAgIAkJaWYg
-KFdBUk5fT04oIXVyYikpDQo+ICAgCQkJYnJlYWs7DQo+ICAgCQl1bm9kZSA9IHVyYi0+Y29u
-dGV4dDsNCj4gQEAgLTE2OSw3ICsxNzMsOCBAQCBzdGF0aWMgdm9pZCB1ZGxfZnJlZV91cmJf
-bGlzdChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0KPiAgIAkJdXNiX2ZyZWVfdXJiKHVyYik7
-DQo+ICAgCQlrZnJlZSh1bm9kZSk7DQo+ICAgCX0NCj4gLQl1ZGwtPnVyYnMuY291bnQgPSAw
-Ow0KPiArDQo+ICsJd2FrZV91cCgmdWRsLT51cmJzLnNsZWVwKTsNCg0KVGhlcmUncyBqdXN0
-IG9uZSB3YWl0ZXIsIGJ1dCBpdCdzIHRoZSBzaHV0ZG93biBjb2RlLiBNYXliZSB3YWtlX3Vw
-X2FsbCgpIA0Kd291bGQgbW9yZSBjbGVhcmx5IGNvbW11bmljYXRlIHRoZSBpbnRlbnRpb24u
-DQoNCj4gICB9DQo+ICAgDQo+ICAgc3RhdGljIGludCB1ZGxfYWxsb2NfdXJiX2xpc3Qoc3Ry
-dWN0IGRybV9kZXZpY2UgKmRldiwgaW50IGNvdW50LCBzaXplX3Qgc2l6ZSkNCj4gQEAgLTIz
-MywzMyArMjM4LDQzIEBAIHN0YXRpYyBpbnQgdWRsX2FsbG9jX3VyYl9saXN0KHN0cnVjdCBk
-cm1fZGV2aWNlICpkZXYsIGludCBjb3VudCwgc2l6ZV90IHNpemUpDQo+ICAgCXJldHVybiB1
-ZGwtPnVyYnMuY291bnQ7DQo+ICAgfQ0KPiAgIA0KPiAtc3RydWN0IHVyYiAqdWRsX2dldF91
-cmJfdGltZW91dChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LCBsb25nIHRpbWVvdXQpDQo+ICtz
-dGF0aWMgc3RydWN0IHVyYiAqX191ZGxfZ2V0X3VyYihzdHJ1Y3QgdWRsX2RldmljZSAqdWRs
-LCBsb25nIHRpbWVvdXQpDQoNCkkgdGhpbmsgaW4gRFJNLCB0aGUgY29ycmVjdCBuYW1lIGZv
-ciB0aGlzIGZ1bmN0aW9uIHdvdWxkIGJlIA0KdWRsX2dldF91cmJfbG9ja2VkKCkuDQoNCj4g
-ICB7DQo+IC0Jc3RydWN0IHVkbF9kZXZpY2UgKnVkbCA9IHRvX3VkbChkZXYpOw0KPiAtCXN0
-cnVjdCB1cmJfbm9kZSAqdW5vZGUgPSBOVUxMOw0KPiArCXN0cnVjdCB1cmJfbm9kZSAqdW5v
-ZGU7DQo+ICsNCj4gKwlhc3NlcnRfc3Bpbl9sb2NrZWQoJnVkbC0+dXJicy5sb2NrKTsNCj4g
-ICANCj4gICAJaWYgKCF1ZGwtPnVyYnMuY291bnQpDQo+ICAgCQlyZXR1cm4gTlVMTDsNCj4g
-ICANCj4gICAJLyogV2FpdCBmb3IgYW4gaW4tZmxpZ2h0IGJ1ZmZlciB0byBjb21wbGV0ZSBh
-bmQgZ2V0IHJlLXF1ZXVlZCAqLw0KPiAtCXNwaW5fbG9ja19pcnEoJnVkbC0+dXJicy5sb2Nr
-KTsNCj4gICAJaWYgKCF3YWl0X2V2ZW50X2xvY2tfaXJxX3RpbWVvdXQodWRsLT51cmJzLnNs
-ZWVwLA0KPiAgIAkJCQkJICFsaXN0X2VtcHR5KCZ1ZGwtPnVyYnMubGlzdCksDQoNClRoZSB1
-cmItZnJlZSBmdW5jdGlvbiB3aWxsIHdha2UgdXAgdGhpcyBjb2RlLCBidXQgdGhlIHVyYiBs
-aXN0IHNob3VsZCBiZSANCmVtcHR5IHRoZW4uIFNob3VsZCB3ZSB1cGRhdGUgdGhlIGNvbmRp
-dGlvbiB0byBzb21ldGhpbmcgbGlrZSANCid1ZGwtPnVyYnMuY291bnQgJiYgIWxpc3RfZW1w
-dHkoKScgPw0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+ICAgCQkJCQkgdWRsLT51cmJz
-LmxvY2ssIHRpbWVvdXQpKSB7DQo+ICAgCQlEUk1fSU5GTygid2FpdCBmb3IgdXJiIGludGVy
-cnVwdGVkOiBhdmFpbGFibGU6ICVkXG4iLA0KPiAgIAkJCSB1ZGwtPnVyYnMuYXZhaWxhYmxl
-KTsNCj4gLQkJZ290byB1bmxvY2s7DQo+ICsJCXJldHVybiBOVUxMOw0KPiAgIAl9DQo+ICAg
-DQo+ICAgCXVub2RlID0gbGlzdF9maXJzdF9lbnRyeSgmdWRsLT51cmJzLmxpc3QsIHN0cnVj
-dCB1cmJfbm9kZSwgZW50cnkpOw0KPiAgIAlsaXN0X2RlbF9pbml0KCZ1bm9kZS0+ZW50cnkp
-Ow0KPiAgIAl1ZGwtPnVyYnMuYXZhaWxhYmxlLS07DQo+ICAgDQo+IC11bmxvY2s6DQo+IC0J
-c3Bpbl91bmxvY2tfaXJxKCZ1ZGwtPnVyYnMubG9jayk7DQo+ICAgCXJldHVybiB1bm9kZSA/
-IHVub2RlLT51cmIgOiBOVUxMOw0KPiAgIH0NCj4gICANCj4gKyNkZWZpbmUgR0VUX1VSQl9U
-SU1FT1VUCUhaDQo+ICtzdHJ1Y3QgdXJiICp1ZGxfZ2V0X3VyYihzdHJ1Y3QgZHJtX2Rldmlj
-ZSAqZGV2KQ0KPiArew0KPiArCXN0cnVjdCB1ZGxfZGV2aWNlICp1ZGwgPSB0b191ZGwoZGV2
-KTsNCj4gKwlzdHJ1Y3QgdXJiICp1cmI7DQo+ICsNCj4gKwlzcGluX2xvY2tfaXJxKCZ1ZGwt
-PnVyYnMubG9jayk7DQo+ICsJdXJiID0gX191ZGxfZ2V0X3VyYih1ZGwsIEdFVF9VUkJfVElN
-RU9VVCk7DQo+ICsJc3Bpbl91bmxvY2tfaXJxKCZ1ZGwtPnVyYnMubG9jayk7DQo+ICsJcmV0
-dXJuIHVyYjsNCj4gK30NCj4gKw0KPiAgIGludCB1ZGxfc3VibWl0X3VyYihzdHJ1Y3QgZHJt
-X2RldmljZSAqZGV2LCBzdHJ1Y3QgdXJiICp1cmIsIHNpemVfdCBsZW4pDQo+ICAgew0KPiAg
-IAlzdHJ1Y3QgdWRsX2RldmljZSAqdWRsID0gdG9fdWRsKGRldik7DQoNCi0tIA0KVGhvbWFz
-IFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUg
-U29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJn
-LCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJl
-cjogSXZvIFRvdGV2DQo=
+diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+index fbea5f62dd98..ab877ceeac3f 100644
+--- a/drivers/dma/imx-sdma.c
++++ b/drivers/dma/imx-sdma.c
+@@ -954,7 +954,10 @@ static irqreturn_t sdma_int_handler(int irq, void *dev_id)
+ 		desc = sdmac->desc;
+ 		if (desc) {
+ 			if (sdmac->flags & IMX_DMA_SG_LOOP) {
+-				sdma_update_channel_loop(sdmac);
++				if (sdmac->peripheral_type != IMX_DMATYPE_HDMI)
++					sdma_update_channel_loop(sdmac);
++				else
++					vchan_cyclic_callback(&desc->vd);
+ 			} else {
+ 				mxc_sdma_handle_channel_normal(sdmac);
+ 				vchan_cookie_complete(&desc->vd);
+@@ -1074,6 +1077,10 @@ static int sdma_get_pc(struct sdma_channel *sdmac,
+ 		per_2_emi = sdma->script_addrs->sai_2_mcu_addr;
+ 		emi_2_per = sdma->script_addrs->mcu_2_sai_addr;
+ 		break;
++	case IMX_DMATYPE_HDMI:
++		emi_2_per = sdma->script_addrs->hdmi_dma_addr;
++		sdmac->is_ram_script = true;
++		break;
+ 	default:
+ 		dev_err(sdma->dev, "Unsupported transfer type %d\n",
+ 			peripheral_type);
+@@ -1125,11 +1132,16 @@ static int sdma_load_context(struct sdma_channel *sdmac)
+ 	/* Send by context the event mask,base address for peripheral
+ 	 * and watermark level
+ 	 */
+-	context->gReg[0] = sdmac->event_mask[1];
+-	context->gReg[1] = sdmac->event_mask[0];
+-	context->gReg[2] = sdmac->per_addr;
+-	context->gReg[6] = sdmac->shp_addr;
+-	context->gReg[7] = sdmac->watermark_level;
++	if (sdmac->peripheral_type == IMX_DMATYPE_HDMI) {
++		context->gReg[4] = sdmac->per_addr;
++		context->gReg[6] = sdmac->shp_addr;
++	} else {
++		context->gReg[0] = sdmac->event_mask[1];
++		context->gReg[1] = sdmac->event_mask[0];
++		context->gReg[2] = sdmac->per_addr;
++		context->gReg[6] = sdmac->shp_addr;
++		context->gReg[7] = sdmac->watermark_level;
++	}
+ 
+ 	bd0->mode.command = C0_SETDM;
+ 	bd0->mode.status = BD_DONE | BD_WRAP | BD_EXTD;
+@@ -1513,7 +1525,7 @@ static struct sdma_desc *sdma_transfer_init(struct sdma_channel *sdmac,
+ 	desc->sdmac = sdmac;
+ 	desc->num_bd = bds;
+ 
+-	if (sdma_alloc_bd(desc))
++	if (bds && sdma_alloc_bd(desc))
+ 		goto err_desc_out;
+ 
+ 	/* No slave_config called in MEMCPY case, so do here */
+@@ -1678,13 +1690,16 @@ static struct dma_async_tx_descriptor *sdma_prep_dma_cyclic(
+ {
+ 	struct sdma_channel *sdmac = to_sdma_chan(chan);
+ 	struct sdma_engine *sdma = sdmac->sdma;
+-	int num_periods = buf_len / period_len;
++	int num_periods = 0;
+ 	int channel = sdmac->channel;
+ 	int i = 0, buf = 0;
+ 	struct sdma_desc *desc;
+ 
+ 	dev_dbg(sdma->dev, "%s channel: %d\n", __func__, channel);
+ 
++	if (sdmac->peripheral_type != IMX_DMATYPE_HDMI)
++		num_periods = buf_len / period_len;
++
+ 	sdma_config_write(chan, &sdmac->slave_config, direction);
+ 
+ 	desc = sdma_transfer_init(sdmac, direction, num_periods);
+@@ -1701,6 +1716,9 @@ static struct dma_async_tx_descriptor *sdma_prep_dma_cyclic(
+ 		goto err_bd_out;
+ 	}
+ 
++	if (sdmac->peripheral_type == IMX_DMATYPE_HDMI)
++		return vchan_tx_prep(&sdmac->vc, &desc->vd, flags);
++
+ 	while (buf < buf_len) {
+ 		struct sdma_buffer_descriptor *bd = &desc->bd[i];
+ 		int param;
+@@ -1761,6 +1779,10 @@ static int sdma_config_write(struct dma_chan *chan,
+ 		sdmac->watermark_level |= (dmaengine_cfg->dst_maxburst << 16) &
+ 			SDMA_WATERMARK_LEVEL_HWML;
+ 		sdmac->word_size = dmaengine_cfg->dst_addr_width;
++	} else if (sdmac->peripheral_type == IMX_DMATYPE_HDMI) {
++		sdmac->per_address = dmaengine_cfg->dst_addr;
++		sdmac->per_address2 = dmaengine_cfg->src_addr;
++		sdmac->watermark_level = 0;
+ 	} else {
+ 		sdmac->per_address = dmaengine_cfg->dst_addr;
+ 		sdmac->watermark_level = dmaengine_cfg->dst_maxburst *
+diff --git a/include/linux/dma/imx-dma.h b/include/linux/dma/imx-dma.h
+index f487a4fa103a..cfec5f946e23 100644
+--- a/include/linux/dma/imx-dma.h
++++ b/include/linux/dma/imx-dma.h
+@@ -40,6 +40,7 @@ enum sdma_peripheral_type {
+ 	IMX_DMATYPE_ASRC_SP,	/* Shared ASRC */
+ 	IMX_DMATYPE_SAI,	/* SAI */
+ 	IMX_DMATYPE_MULTI_SAI,	/* MULTI FIFOs For Audio */
++	IMX_DMATYPE_HDMI,       /* HDMI Audio */
+ };
+ 
+ enum imx_dma_prio {
+-- 
+2.37.1
 
---------------O0FlQpQtIQxi7Fgwuwk8FIM8--
-
---------------tykqsKa1tBnyipMnwsFI05g1
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMVtDcFAwAAAAAACgkQlh/E3EQov+B5
-1Q//euNMVYeGEuQ1QqpB8W/0TefOlS18SgDz56rP7HHCpgOfRDfhvOgOOOv5P65bRr9TFSXBMtAx
-+U12FOUBbgXVpFfUovDkiW0nrgh3PxRplThy5rbwx0lqR00GYsUqYuCnRu4RYuBlnnE4qFfQTYJb
-1Ljr+mE6GPVhexqEiREnZX1gp1nPinXVtxLkEG0r+zo3ff7W5DeSW0IIs7jkcSETL7hoq+QPH7Gg
-KIba0wDAnpgXDAigY6JRKEsru2fDjvLL26iV5RyCz7eHAbGRFr8cTNHsqAEE3B0FG0wU6XVUlZsj
-0Oh3j0y5zc4Cr16KuAP495F8pnhuxcc4bE66MFFeZbdRJ+uNulLQo1orGNMtaOE+ataD4Gw6ipns
-qcbkOKqv00dXcQhb02ZDs6XObuhaEl5zxQ+g75+twVHRUvrKj2wF5okhx3aP4KhUyUGt9I+NyfK2
-7jMRAGNErBk5gfLjf0u56YuG3rnGee3gt4qP8lYDbfiAs8KCTwmpp9sXtZJZ2ThZpVrXUzlgCYa3
-fQE/9e1xIlxpY1tfR7MfcUWxregqLLptFFIDymaMnfpIQStPMy/VaFsYZIPfWeXZpuxrQdFt7b8E
-7/0ji6dSSiiu7E4GBFimQZq7yqUdwFgoWrXqs7xTreIFr8iudCQ6S9HxrNCvkOVNXg57pFj8iS87
-vWM=
-=eSTD
------END PGP SIGNATURE-----
-
---------------tykqsKa1tBnyipMnwsFI05g1--

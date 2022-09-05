@@ -2,177 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F225ADAD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672A85ADADF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbiIEVR0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Sep 2022 17:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
+        id S232190AbiIEVZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 17:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiIEVRW (ORCPT
+        with ESMTP id S230204AbiIEVZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 17:17:22 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE592A278
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 14:17:18 -0700 (PDT)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2048.outbound.protection.outlook.com [104.47.22.48]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-41-4-nydSdGN-Wfi091Q1beeA-1; Mon, 05 Sep 2022 23:17:05 +0200
-X-MC-Unique: 4-nydSdGN-Wfi091Q1beeA-1
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- GV0P278MB0148.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:2f::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5588.10; Mon, 5 Sep 2022 21:17:04 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::6c6d:333:ab23:3f5b]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::6c6d:333:ab23:3f5b%2]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
- 21:17:03 +0000
-Date:   Mon, 5 Sep 2022 23:17:03 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Max Krummenacher <max.oss.09@gmail.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
+        Mon, 5 Sep 2022 17:25:45 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140087.outbound.protection.outlook.com [40.107.14.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C75432A89;
+        Mon,  5 Sep 2022 14:25:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MU5Pb7ofg/X0vBbsyoRMUioc4ASWA13GfIqRSe8LxRwtqU6r7NnA9/g335yQ+B/gxnFtyoVRsNTT5f0Cgrz2UQM5fmYVS8NXW0L4Z8QfjMhFpftYYtvMlw8IX838sqDaxzs1phcQfH/DZ5LtceVabb09hRhASz9SpdHd98JfkjBMm3vZpNn26+t7452/uKEQQfHa4yQd7JIceLSCT730B8YL4mZdDlKR4XMdme+9K/C1+/L4zuz5vrMkI3UPpJF9g8kMV8sa3RtcSTwGNsOY13oR6Bv07HQUdpUU20rebkfEKjlBLIdOZYebOfCGboAHqy+i4KvUx4qHjnBeET4xxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=txUxmT44D2yEzSGyCrkjrRPchUYgcQ7NlSNL9uTQCcU=;
+ b=CVM9raee4EsUsd9xaTv+/6dg0DzTV9NOZRcjdqJ8DPAMo6qU7BuBsQhLJgGFfy4fvj6uR3hTeDX936ZRIKobrXXwo+m+5rA9XNMVt2ii+P66tgyZmCuU9Q9akGUuNoUc3KDbh95HMCt9u7Yq0rEa9lym/QNk9LE9kaqxTWaaLjxSQ121xKR1MnCFjHkBJfFJudQ/SKUZlpJR82XK7mU39Wdav9CJq8/0frgXuL6P6IsFvDHAFlniQJunKO5f+ZsJ2dkl8yAh1J4oBrR5kyn19au6ToRTbE//Bkmf5Un2C3+iLgeau1NFY0g9uXu0az1Mk+r1LLN9vGWwR99fIdDKrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=txUxmT44D2yEzSGyCrkjrRPchUYgcQ7NlSNL9uTQCcU=;
+ b=XgTu1CAnaw6o+uWkLP4P4z97YZGyawarNPEeRwyo5x1nxXx6C45yNKKpPxih71BmJKUJIQ9r6dyBXN6dILNhWLBzV9z3kYW5STlKJZrEf05BPsVQOK609weU7UB3iaevR7f4OVplCTuIaOobyTLM5Ytji/VZZ2mA/OobD4qw4R8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by DB7PR04MB5020.eurprd04.prod.outlook.com (2603:10a6:10:21::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Mon, 5 Sep
+ 2022 21:25:13 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3412:9d57:ec73:fef3]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3412:9d57:ec73:fef3%5]) with mapi id 15.20.5588.017; Mon, 5 Sep 2022
+ 21:25:12 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     devicetree@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: imx8mp-verdin: add dsi to hdmi
- functionality
-Message-ID: <20220905211703.GA6180@francesco-nb.int.toradex.com>
-References: <20220901154051.1885509-1-max.oss.09@gmail.com>
- <YxD09SqpcbB3dt8I@pendragon.ideasonboard.com>
- <20220902155720.GB5699@francesco-nb.int.toradex.com>
- <YxKe00H2S9AzF0Yi@pendragon.ideasonboard.com>
- <YxNM75ZtHVKDjTa/@livingston.pivistrello.it>
- <YxZNVoMKly9eQ2xE@pendragon.ideasonboard.com>
-In-Reply-To: <YxZNVoMKly9eQ2xE@pendragon.ideasonboard.com>
-X-ClientProxiedBy: ZR2P278CA0017.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:46::11) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH devicetree] arm64: dts: ls1028a-rdb: add more ethernet aliases
+Date:   Tue,  6 Sep 2022 00:24:58 +0300
+Message-Id: <20220905212458.1549179-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR0802CA0036.eurprd08.prod.outlook.com
+ (2603:10a6:800:a9::22) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e17bbf86-f956-4d1b-5f99-08da8f83fab0
-X-MS-TrafficTypeDiagnostic: GV0P278MB0148:EE_
+X-MS-Office365-Filtering-Correlation-Id: da8a36c0-a548-4d29-c9dc-08da8f851e27
+X-MS-TrafficTypeDiagnostic: DB7PR04MB5020:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: 5pOKL82w3G4zFICp5ECySGk0Euugzjv/iw5q55Io7+xpN3gCH0gFW920Ib6tTGxESQJ2Ga0XtTO7S6Aq1TF/tqyIAQhmHAVoLaGcvM8/N++r40Bv0019xhmLx3ioSAcmt90TO5LpP1dw+1jbNjmn4SKuPMy+CFCoKJQ0vLVXIj4joRaABrg0RyBzMw17YKGKiHyz9Hf9l9/YjmP2Vbi56hJtgYNJxdr8ukyhxr+cImySqd26Q8escOMxkdTKSnjYi5RLy4HT9iGUWsYjvvDg4Ks0x4HDVh+OR9BNvvi+az1qoR0ngRCVxgTDewfoo6Iy36He9oXlUuRJaUzBh2dS60hydDbww3okltT7X43I1GflMGVt0DI9SAErTM2dhCF89VvVsbIjKytaNJZMxbI6tqO7Gz4dy62oqqmSiEwyi2qEkGI+3b8GycHBq1rqzWEyqJKXneH+gP17ulIjYlKH8+VNSXsa1ZLlhL7MvvJ2AUPoyyyxUaqf15Sk4UJmFJDv1W3LP7Ugv0vurw4cA5gM4thTsPq1fLsL+FsCZZHk3gVZCdkwzKtPTFTwy27IUnxefJ8EJwCyTCu+FUaOHYIOk5Wq8/2Uv00gCyjbJZYYk0kcpyxjWokkcpE9lWUz2KsGNhwedfW29tCkvU/ov9eMIO0JEB/GBn36Rt/8fzRXw6SWXrN5Cswd/czZr13CQt62Oy2Ec77nL4BZRYCRz81uaeQkxEaa+mPQiyoMda+i1BDEvp05wTJCIEhIwGIFZfiM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39840400004)(136003)(366004)(376002)(346002)(396003)(4326008)(66556008)(8676002)(33656002)(66946007)(8936002)(5660300002)(7416002)(6506007)(83380400001)(52116002)(478600001)(6486002)(41300700001)(1076003)(186003)(86362001)(316002)(6916009)(54906003)(66476007)(2906002)(38100700002)(6512007)(44832011)(32563001);DIR:OUT;SFP:1102
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KlUZOSDDyCORyIfYm5X7q/mcH1uLBzjURghkjiZN3NtJjmyu5r8QlbQePYahQDPnTvGV9QgUx9hMiB8jl3qtREoO8FbaaPKyEiHmyGCJOVbp94X13UyKSt2Jb4/spgoWC6OMMvJOfta5qzYSLBYg4rJmN6vnpsFJzfrwMa4pQVSagKiGgvdFaG8cVXxHP9qy339pS7cmqBb3CBSXJYz8QrVjaCEsyayFgCQeNotdMWaiQQWD350dq0x+Wv6LUaSD3uKPJj2ivwiO17YrmXr6lpngDE3x4f105djR2oiQgtXwkQdGRIdwVo0Bq29LlQwC7mKMgJ6LeY9W/muWvGalzUck/QSSx+zP/lbWetV6gmQXOb2CZt9jypzPaynFE6rWswaKeX+mc3+dOPl3XiS3SI9IzIHhEp5Bz1hh812jR8w3dti2Ow1SoeUZ+ehe3yVK1Tu2Sd98435KtxqL+DORepzrANaBjx+U+1t9/9sHDJlLUI5z2fE9FkHrbDHfwDEmLdeLf5OCf0LXedYMlYbOYxck+uWq6S98/HxMgcw5shzh+9+RSegft4voGYGYdhrjKys6Ny+INE9/lEysaXlpvOR5Pl3iIS77zJ5QpQyries/3XjyVLaKsSwR0a+9qxa+9JQtDpyHjUTVm1PfoYODd+YS500cx9vYH296XjXzHdU7vrvFJEjRnNLwPCJAJ2b6J1NQksx3bDztnF4RxcmaroGuFl44azKEnQx1xvmvrsrQiePP+IepCluR6bo1pFJE3X+eZKY5hoZyvxOHxvSN32DvSzdpNvetTdLLBOsU1UAFA5dxxrTxNIIzruRPprSw
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(376002)(136003)(346002)(396003)(26005)(316002)(6916009)(54906003)(66556008)(36756003)(44832011)(5660300002)(2906002)(8676002)(8936002)(66946007)(66476007)(4326008)(478600001)(41300700001)(6506007)(1076003)(2616005)(186003)(38350700002)(83380400001)(6512007)(6666004)(6486002)(86362001)(52116002)(38100700002)(414714003)(473944003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NS2pg3e12TRoWLkNE96juh7Va/ghs3YfR9qbAdiDsqcO87MUcaC/XZu4hYrp?=
- =?us-ascii?Q?VHSG2YnhC5CRmDGsmkI0svDHAYu3KXSVHRREwX8UdyWugvL90T8nOKowaMB2?=
- =?us-ascii?Q?JaogMurWzMizd6g9eDuC/koA2NEiSgm24c+0pLQwjpU621acI68TJfbgqhot?=
- =?us-ascii?Q?PKG8BpTPc6k71yxLu+JYvntupQK3CPAxWKtqAcLadkPRVMqjoXkqZ3Qevdx6?=
- =?us-ascii?Q?8A8pnmOiTj+GzxgiYmNUy3+PITXoortg12vTnVadkgJMEqMSeW2b+GEv/z0a?=
- =?us-ascii?Q?WZ1Uyfc4OmQ7cVIbVxgF7XMCtIDLnIZPXaxzpf+45dwe+HiBoDYzsaV+gF+A?=
- =?us-ascii?Q?5gzRvp83BIKPzyjtMfHW0Hi0GZm9qrVKP/kyhSTVrlWDe2dvflwK2aN8ZhYQ?=
- =?us-ascii?Q?fh0WJuDurHMJ1CFRHpITzVfLpRc5gYly64HE7LXo5knjx8Yzlvwy4oPRYPkk?=
- =?us-ascii?Q?TufTum5sm+zpy8INYGdJ4/g9zKI6+HOjiefahoqM4OHrbh7jsbyuDD27S617?=
- =?us-ascii?Q?vJbEslNBiqTVBeQuXrW+PMH14KqpSHK3RcZ9ECIsZSPDd4h5onitgGt6udOH?=
- =?us-ascii?Q?65aIZfMVygM14qFZq0dqnvknQ9Tjdh/dczYGtsCVYk/beticMbGPV6u8N3FN?=
- =?us-ascii?Q?gyNst41Qu00ln4dRQ1/O+0rxLiM6GEiCQxeS1ItpCNKR5LaPE96r6r3B23rn?=
- =?us-ascii?Q?GzmJIDfVLlyEsz0CfoUKItZNZFBL7JhiFnUaS7pcoLGGSWnOwODp95yd/2PQ?=
- =?us-ascii?Q?Akk/ZB+zh4dGZXJ9s8bdZWJmqRTtBD05nLPQ0ovFMsFd3P5FCz8eyPqPVVpz?=
- =?us-ascii?Q?U0JP2NG77fVO73ykaiG/TVMgOPmPyWRQrvsCy4gBXUQWDmcDQaMsrZjpIhzH?=
- =?us-ascii?Q?fDCWTbKJYT9eEGX9SBS/rjFuz1qqotRzG7y/uWs1cn1q8IHSQ85TtNIuTLo5?=
- =?us-ascii?Q?HQbUiZVI4qQfeh3CLBZnXO8b8odb4Afwlrjo2t4xlW/25e+OMKEdeOsVe+no?=
- =?us-ascii?Q?A4IBDaeDt6JgP8yFfD2Xw2Q5k9A4LRwrGzzohxeoxh+2R8423B5a4zNTWUDx?=
- =?us-ascii?Q?s1U8hMzHvP8B2OJyx0G4dRq545G6qS0zhkF9AiYAUSXW4vFRGYdfxVLGNVyL?=
- =?us-ascii?Q?4l6UtA0+Rk0dH3D+VOnN5dhq3Qgz0eIZNqs3bhmEb1wSRIpHj3pYHzzqtubs?=
- =?us-ascii?Q?w66PfWSHTz536LUywu5Ap1lI9y0gP697gYqR5IyY7zYCn8KzSqz0Cn7VKbcV?=
- =?us-ascii?Q?VPx/b2XwpYDomSfm20v7JNOfYjasF/Iks+vR7LlyUyf9U+45rQ6a3invEZPz?=
- =?us-ascii?Q?hqdGPidAhqkil/0gMTHJB5VLfz0oUJb1gewsc44XdHaw5PUiF8GxVL5frd3q?=
- =?us-ascii?Q?rvlDqsvZMerLymOTFW2sX9IebvpTrFsQJTFjD0WQDTyESEyirFX6yGijSwG3?=
- =?us-ascii?Q?2FEwPI4bxVQ6asx1oJK3MdA5UsZMqo4CAEfMhSS5fJzQE8IXXFPuTnuM7+N8?=
- =?us-ascii?Q?O4seKTN6VX0Q8tzUfSkfi1p9Kc80CYmbcY/MVygW15sDu/eKa1TmzlZQtCOF?=
- =?us-ascii?Q?p3YNd7FKEDQK5nZAEV4VQQ8pbelA7kVEkM6rfjU2ZJNj+Or66ANjf0vOfuSP?=
- =?us-ascii?Q?C+G9+qikr5K+M428DU0pAuOQw3GfQ0pS06vGiKGr0ae+bNS79rP5rYMlhbvv?=
- =?us-ascii?Q?TDPfcw=3D=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e17bbf86-f956-4d1b-5f99-08da8f83fab0
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dHO03HSZ8luKYW8KtA9SGufsZzE6WQEZvR8F+z0aT03jeDZUW5jJY6sRd8g0?=
+ =?us-ascii?Q?Yr7HM++VvCgV81lbHSQPE2/dsjsCR6lifcM6Iae1fLhyuKgqw2VD5PVMihaX?=
+ =?us-ascii?Q?I1n5acfuux/0ejBdJliX2AQW508aDDU5GZMSZBB9AFjQ0Krk1Ui48XPqDdcH?=
+ =?us-ascii?Q?SWU2LXuouzOEZCI0PS49dk20VNfCD5ObhzkjNdhSOwo33vHVnXkinvreSaTQ?=
+ =?us-ascii?Q?/viich7VsckbKSrRy14VaN/W3wUNK2MMheTxMZrXfMaPRScd56qlueH8asBv?=
+ =?us-ascii?Q?voFU/NQr512wgC5V6n8UqHLDfA8TwSUfMSxEsfGdTMq40SIm9RCPH96h3JHG?=
+ =?us-ascii?Q?fO8qwpJ3KMqWXgy+S6zHxekNjIIS5uwcDUP93NT4BjBjF+tP18BSstD0lx9k?=
+ =?us-ascii?Q?zFo/lLIQp5nVFxAvc5ESi4N8yCrfcBECTYWgGq9aWaazPV/1qsfsmMr+x5kz?=
+ =?us-ascii?Q?IAPPZRH9wRn7ffty7wVmyDlDONw1Wy/qhRjMeW1Reu092FRrlslKxxoCYuSL?=
+ =?us-ascii?Q?SP+4NwaKHm/6gU6EfndkBKEiIK2CGrfLy0Od5kt1psQiVh/+seO+hdcSCWN0?=
+ =?us-ascii?Q?q6/wS+LVLtnONHEt5DfnQvcfJcPX+I1bMAactF0uYxKIJ9SBS+lfHBP5+mhs?=
+ =?us-ascii?Q?KLf6hQr4PuoLr9S58e68yR3hDugtUTjlSc3+MUba+UMnyQic+tyaiL+RGOUY?=
+ =?us-ascii?Q?80TsrvxAu3TD89MaCXVGoCFrZ3aRFm2kAwO1LsxmLk7Nxvo46fxkfOABwxzS?=
+ =?us-ascii?Q?KugVEfoLJFejQWCJxZybrhaDBkop0ecRo98PacJYx3ea+aJURLUmsJXnaPYs?=
+ =?us-ascii?Q?dKFVKLY37LMNxh0j7YbS4vm3Y6gwIweKRAFjX2Grqj6yrhPGtpRfUioTxQP+?=
+ =?us-ascii?Q?hQFqAYkRiQv8HnQenFE/FnYDz5p2BZI673a0Dn3QKgIzISZ83yugu3SgGYN/?=
+ =?us-ascii?Q?zdwjtNyJdyNpFfKcvEjWEU2VfIXmM6tWGswHr1fvqw3LJuite9knIWSEwMh5?=
+ =?us-ascii?Q?NVRK5S26vIP5qwNGShx1u/ZaMe4fY9++y6KNN32+HJMmmL4IPb9XGDF9lBQR?=
+ =?us-ascii?Q?MjY7duUpc28UJSgUmMnqv6mk24nYlPrlkJtttzWxsN0RTbocVTFVJtlPLdeW?=
+ =?us-ascii?Q?N7WA0rMx5YH3E7Jy20hr4gO0TNmtUvCbnZXIJT8N+kaSUpypYYlW8XPmGv2L?=
+ =?us-ascii?Q?OYh096hZfc3Ou8YjgGdyrT9cEXWW/BLjqm9oiXYnn57Rj4XiiNC7mpkR5F27?=
+ =?us-ascii?Q?aj6bvC2YaLCEqxxNEtcK/C5ZLh22AS/oKBc6XM7/qIIW4MhEdTV1IxEu2fyf?=
+ =?us-ascii?Q?QUs0H4uIUrXxMVk3XGYH7RnAtSIXdhYEJHqLayi0ppWejdJgwRmrzv2jDCvr?=
+ =?us-ascii?Q?ODnGSvbCVEgagQE7ElQFq/k+v9Q3Lpz4kBSjcptN59mqTu43Ty+nX034bk++?=
+ =?us-ascii?Q?ThLy7Kzc+TpKhta/B54jGoQ0PJE+ZoXah+c+AxkIZaOdn6XF0VwQBShB7Amb?=
+ =?us-ascii?Q?qw3It5FqctsD8678HfL6j+kFU67bXFcW7elTO+CiHJJL6w2f5UgY6eVMtJ91?=
+ =?us-ascii?Q?AV4Bw2+d9pxA8sKxobf+mcd7I+Yr0McXScx4M6aPhEAamYBsuQUNHQnlpGhA?=
+ =?us-ascii?Q?Yg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da8a36c0-a548-4d29-c9dc-08da8f851e27
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 21:17:03.7259
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 21:25:12.7567
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SHs6d1bf4y9HIzBh7Veb9We+OgnHjwvUwM2aFmfkTlvdIglkjril35n6MtxJCowlnUUFYwYME/oXfDE5O7HjrhCgy0D2Ca7fYlJhqvC2EL4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0148
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: j/h/eyVSsdOIGngHw1HLzEbAE+gOTxoKRvZ/ITMH1moTbYXCc8V+Hw9KjdxArUCtHHdOA6yM/K5algSxojCZtQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5020
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Laurent,
+Commit "arm64: dts: ls1028a: enable swp5 and eno3 for all boards" which
+Shawn declared as applied, but for which I can't find a sha1sum, has
+enabled a new Ethernet port on the LS1028A-RDB (&enetc_port3), but
+U-Boot, which passes a MAC address to Linux' device tree through the
+/aliases node, fails to do this for this newly enabled port.
 
-On Mon, Sep 05, 2022 at 10:26:14PM +0300, Laurent Pinchart wrote:
-> On Sat, Sep 03, 2022 at 02:47:43PM +0200, Francesco Dolcini wrote:
-> > On Sat, Sep 03, 2022 at 03:24:51AM +0300, Laurent Pinchart wrote:
-> > > On Fri, Sep 02, 2022 at 05:57:20PM +0200, Francesco Dolcini wrote:
-> > > > On Thu, Sep 01, 2022 at 09:07:49PM +0300, Laurent Pinchart wrote:
-> > > Someone can integrate a Verdin SoM with a carrier board that has no DSI
-> > > to HDMI (or LVDS) bridge, there should thus be no such device in the
-> > > device tree. The SoM has DSI signals present on its connector, that's
-> > > what the SoM .dtsi should expose.
-> > 
-> > Just for the record Verdin i.MX8M Plus do have both HDMI and LVDS on the
-> > connector (in addition to DSI) [1], of course we do have also the option to
-> > have LVDS or HDMI using an external add-on DSI bridge as this patches are
-> > about.
-> > 
-> > Said that it's true that sometime we describe peripherals that are part of the
-> > SOM family into the SOM dtsi, this avoid quite a lot of duplications given the
-> > amount of carrier board that are available on the market that use just the same
-> > building blocks (and this was one of the 2 points I mentioned as a reasoning
-> > for our current DTS files structure).
-> 
-> If those "SoM family" peripherals are on the carrier board, what's the
-> issue with describing them in the carrier board .dtsi ? And if they're
-> on an add-on board (such as, if I understand correctly, the DSI to HDMI
-> encoder for the Dahlia carrier board), what's the issue with describing
-> them in an overlay ?
+Fix that by adding more ethernet aliases in the only
+backwards-compatible way possible: at the end of the current list.
 
-These SOM family peripherals are in multiples(!) carrier boards AND on
-accessories. The drawback of being strict as you are asking is that we
-would end-up with a massive duplication of this small DTS building
-blocks, therefore the decision in the past to put those in the base SOM
-dtsi file.
+And since it is possible to very easily convert either swp4 or swp5 to
+DSA user ports now (which have a MAC address of their own), using these
+U-Boot commands:
 
-Maybe adding something like imx8mp-verdin-dsi-hdmi.dtsi and
-imx8mp-verdin-dsi-lvds.dtsi that can be included by both overlay and
-carrier dts files as needed would solve both the need of being strict on
-the board definition in the dts file and avoid duplications?
-Not sure if that would work smoothly, it looks like adding some
-complexity and maintenance overhead, but maybe is the correct solution.
+=> fdt addr $fdt_addr_r
+=> fdt rm /soc/pcie@1f0000000/ethernet-switch@0,5/ports/port@4 ethernet
 
-Anyway, while I fully understand your reasoning, I'm still not happy to
-change this for the current toradex products, since users of
-our dts file currently rely on the expectations I tried to explain in
-this email thread and Max patches are implementing (and this is
-currently uniform over the whole toradex product range).
+it would be good if those DSA user ports (swp4, swp5) gained a valid MAC
+address from U-Boot as well. In order for that to work properly,
+provision two more ethernet aliases for &mscc_felix_port{4,5} as well.
 
-> Maybe I'm missing something ?
-I tried to give more insights.
+The resulting ordering is slightly unusual, but to me looks more natural
+than eno0, eno2, swp0, swp1, swp2, swp3, eno3, swp4, swp5.
 
-Francesco
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+index e33725c60169..ecd2c1ea177f 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+@@ -29,6 +29,9 @@ aliases {
+ 		ethernet3 = &mscc_felix_port1;
+ 		ethernet4 = &mscc_felix_port2;
+ 		ethernet5 = &mscc_felix_port3;
++		ethernet6 = &mscc_felix_port4;
++		ethernet7 = &mscc_felix_port5;
++		ethernet8 = &enetc_port3;
+ 	};
+ 
+ 	chosen {
+-- 
+2.34.1
 

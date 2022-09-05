@@ -2,145 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85275ADB2D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888F55ADB34
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbiIEWJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S231928AbiIEWKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 18:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233064AbiIEWJK (ORCPT
+        with ESMTP id S229733AbiIEWKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:09:10 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24E351A0D;
-        Mon,  5 Sep 2022 15:09:09 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id r69so9003507pgr.2;
-        Mon, 05 Sep 2022 15:09:09 -0700 (PDT)
+        Mon, 5 Sep 2022 18:10:40 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5268AB1D6;
+        Mon,  5 Sep 2022 15:10:39 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso13137071pjh.5;
+        Mon, 05 Sep 2022 15:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=7X66Mhu89Nd1JC1tC2C3GiFsxMesGQdlZVFrlo9aYm8=;
-        b=b7jRxWPyK0Rq4w8FR9ZFdzOAagpu8Ly97+vIsJC3Zr3BYQL9lMVB+ShDYBZ2D8gDRn
-         iG42XCqTvMR/etwnUxtVq4dc6kjBUmYkBG8G+Uq0g4SiQD+aD7FdS44c68HxkrxInjmX
-         rQwIEiXivv7vBIj5Sf8Y65QbFkdKpO+b+xgFODtb9auHWLSyyRIc9buVgrGAtV6dAmSk
-         vw5WAxq8xcLg9s7lPX4OmewpOzfHhIQkLGIRLhUtapokGcK0j0Egcpyqr1AShiOI+SGy
-         eWqxW4Icxyq7dn3JsNejnG/2tlPR6tqehYrDr8AxyduISs7Ol7B5gyVkSMCzO9kplR/h
-         RRBA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=rHbwa+ETbtYUANsBTVWNjZWG0BkqdCsIfqhd9acGOgw=;
+        b=cjh6syUgRz97EiiPXr+qHE4yf0c4EUKusy+vZkNeNgcob8hqHjA2CgfDkQJLaY1ehV
+         pMwZCzMIiOAb18oWKGqRb5/rn10dnUFtsryv3qsaAAbM8QIRsH1SNT5w+Xtj27YT0VsA
+         XCjQRsiBbDne5BujCK1CmHSnIaLxTK3jaB/qI9oCA9Zdb3Kz25zZP0ZtrZDo/BSZGniV
+         RJAJqmfujcOhascsSK/d1yKixsbvyd1Nd0dfJouT7IrQZboeNiykpKaMDnicZnAii4vP
+         gF/BhFb+CPXW3ya2Ck55BwpNEPX3dvy0YtP24NGJJhau/a1agNxd7ySW1lbeKlnJTQ1Q
+         yxAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=7X66Mhu89Nd1JC1tC2C3GiFsxMesGQdlZVFrlo9aYm8=;
-        b=DeBANqo0eak8ewOZv7MDuBTc5gX4zDq2EnL/NztyRFAjwJ3C7CXRTxOzYwsrZ3itWe
-         UIVJ5H5IwJjIEhmMrBA6EYLJw2lpMPhtGCbFtl0E8+3COg/UorqmvSZml9Yu9XmJLRpp
-         5HeQRAnr4pazqoXtbLxGkOen1HpNBWWo58a47uaH0hbU4fsFWTS+R2BON8ba0rtKQ/1q
-         T0K1rtLDeXPAVFNwxtwYNp//GkLEq2/YoBkg7V+OszkI0xSiKKUosbYV374jnv2qwOzY
-         EQ7h5qmA6eudedi6F837KsCRjKRJ/69/6H43gYpqMoI+mH68dLtdncnQzsPM3dXyUVEf
-         X0Ow==
-X-Gm-Message-State: ACgBeo1WkHUh2xgsy86TkHTRqR+PGvaCgrYJAaDDC5YOU3SilSVk+iR0
-        ht94UXORt7mwoRkaUifYegI=
-X-Google-Smtp-Source: AA6agR6Eea0J+fyHn4cnB8pX01mZJQu8GcEqrT2a0QWMcFiUqA9q20U0tI3FWNDXq+ZYzlcm5H9Qbw==
-X-Received: by 2002:a63:6e09:0:b0:430:663:7757 with SMTP id j9-20020a636e09000000b0043006637757mr24953820pgc.340.1662415749460;
-        Mon, 05 Sep 2022 15:09:09 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f9-20020a170902ce8900b00176b8f587efsm2127192plg.148.2022.09.05.15.09.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 15:09:08 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=rHbwa+ETbtYUANsBTVWNjZWG0BkqdCsIfqhd9acGOgw=;
+        b=yUnKs1F50HIbWUN+OID+fVsTuJq2a+37FK9VzDp/oNq+rrfILNTSFrvQOqhKWEPelu
+         NucsmODhpBLYgBlgFNFNxLpUMv0hrj17bn6P6t5vMvP+ekM+LaoNozKTfRzYKvENgDYO
+         fwf14S6NA7x6gm9AyWBeLXsQ061gyALO0kLrZAspnQz/fVn9ad3nOjbx+Z5aDsAnsz6Y
+         iqlEBol/6YLp/z34xFjaGBFWYOl2PkgYZDtdtXwbVfL9+xOZbf3uKnHB8q7eKR+ZZGHh
+         0qm22t02mbmIV0c7sI4Efp+jGNBbaYQcOTiT4ws1qCKwsUTM/7IVJ1En5oIBDEnCck8S
+         YTBw==
+X-Gm-Message-State: ACgBeo2jWsOKQKEBa17W1N4sWqrbynZvWwCqishxY86iDS31lfS/3lAJ
+        Pf5BgCKBUD7wIxEId7Seo2o=
+X-Google-Smtp-Source: AA6agR5TpH1oRv3WHQn+TNNZ1cubaRlmz2AFvfZRkStlyJDL5bREK8hZM3eSs3Fb38I8cnVOE53zsw==
+X-Received: by 2002:a17:903:189:b0:176:861a:d4d1 with SMTP id z9-20020a170903018900b00176861ad4d1mr12779641plg.154.1662415838849;
+        Mon, 05 Sep 2022 15:10:38 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x16-20020aa79410000000b0053e19468443sm242628pfo.37.2022.09.05.15.10.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 15:10:38 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <73749107-35aa-0720-1a30-02a90c0540fa@roeck-us.net>
-Date:   Mon, 5 Sep 2022 15:09:05 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 10/11] watchdog: bd9576_wdt: switch to using
- devm_fwnode_gpiod_get()
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-10-b29adfb27a6c@gmail.com>
- <CAHp75Vd35EOy=mP25=9fmYfqQnbafgotHw1fxk-TdGk6Oc8g8Q@mail.gmail.com>
- <75e60144-9fa2-d6ba-bc92-edd23f7e7189@roeck-us.net>
- <CAHp75VcisCTYoRp-=713YKtwi7BQyPKGiUhF4DkpfAFtvDXCiQ@mail.gmail.com>
- <c696b9bf-d0ce-1c6a-0ee3-939b180891be@roeck-us.net>
- <YxZSUlCPEE9o/s4G@google.com>
+Date:   Mon, 5 Sep 2022 15:10:37 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YxZSUlCPEE9o/s4G@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+To:     Alexandru Gagniuc <mr.nuke.me@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, robert.marko@sartura.hr,
+        luka.perkov@sartura.hr, jdelvare@suse.com, dev@aboehler.at,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (tps23861) fix byte order in resistance
+ register
+Message-ID: <20220905221037.GA3694440@roeck-us.net>
+References: <20220905142806.110598-1-mr.nuke.me@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905142806.110598-1-mr.nuke.me@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/5/22 12:47, Dmitry Torokhov wrote:
-[ ... ]
->> We know that count is either 1 or 2 here, so strictly speaking
->> 	if (count == 1) {
->> 	} else {
->> 	}
->> would be sufficient. On the other side, that depends on ARRAY_SIZE() being
->> exactly 2, so
->> 	if (count == 1) {
->> 	} else if (count == 2) {
->> 	}
->> would also make sense. Either way is fine with me. I'll leave it up
->> to Dmitry to decide what he wants to do.
+On Mon, Sep 05, 2022 at 09:28:04AM -0500, Alexandru Gagniuc wrote:
+> The tps23861 registers are little-endian, and regmap_read_bulk() does
+> not do byte order conversion. On BE machines, the bytes were swapped,
+> and the interpretation of the resistance value was incorrect.
 > 
-> My goal is to drop usage of devm_gpiod_get_from_of_node(), beyond that I
-> do not have strong preferences either way really. It is probing code, so
-> performance is not critical, but I'm obviously satisfied with how the
-> code looks now, or I would not have sent it.
+> To make it work on both big and little-endian machines, use
+> le16_to_cpu() to convert the resitance register to host byte order.
 > 
+> Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
 
-Good point.
+Applied.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/tps23861.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
+> index 42762e87b014..f7c59ff7ae8e 100644
+> --- a/drivers/hwmon/tps23861.c
+> +++ b/drivers/hwmon/tps23861.c
+> @@ -493,18 +493,20 @@ static char *tps23861_port_poe_plus_status(struct tps23861_data *data, int port)
+>  
+>  static int tps23861_port_resistance(struct tps23861_data *data, int port)
+>  {
+> -	u16 regval;
+> +	unsigned int raw_val;
+> +	__le16 regval;
+>  
+>  	regmap_bulk_read(data->regmap,
+>  			 PORT_1_RESISTANCE_LSB + PORT_N_RESISTANCE_LSB_OFFSET * (port - 1),
+>  			 &regval,
+>  			 2);
+>  
+> -	switch (FIELD_GET(PORT_RESISTANCE_RSN_MASK, regval)) {
+> +	raw_val = le16_to_cpu(regval);
+> +	switch (FIELD_GET(PORT_RESISTANCE_RSN_MASK, raw_val)) {
+>  	case PORT_RESISTANCE_RSN_OTHER:
+> -		return (FIELD_GET(PORT_RESISTANCE_MASK, regval) * RESISTANCE_LSB) / 10000;
+> +		return (FIELD_GET(PORT_RESISTANCE_MASK, raw_val) * RESISTANCE_LSB) / 10000;
+>  	case PORT_RESISTANCE_RSN_LOW:
+> -		return (FIELD_GET(PORT_RESISTANCE_MASK, regval) * RESISTANCE_LSB_LOW) / 10000;
+> +		return (FIELD_GET(PORT_RESISTANCE_MASK, raw_val) * RESISTANCE_LSB_LOW) / 10000;
+>  	case PORT_RESISTANCE_RSN_SHORT:
+>  	case PORT_RESISTANCE_RSN_OPEN:
+>  	default:

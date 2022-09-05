@@ -2,330 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7464D5ACB78
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E525ACB7C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235911AbiIEGz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 02:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S237036AbiIEG4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 02:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236829AbiIEGz3 (ORCPT
+        with ESMTP id S236769AbiIEGza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 02:55:29 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB41C11A23;
-        Sun,  4 Sep 2022 23:55:17 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2855gvbD015576;
-        Mon, 5 Sep 2022 06:55:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=2EEEReGdL9RLJPyS0xMdsTucp7KL8VXMMmxiw0ZRMbY=;
- b=jblMqu12kUJYYP2rMnCyxAaY9+/DYldPQTTG/nVQXY3a69Z9ezhmSwqQe1DsUWsbcwvo
- +EUiSrWCYwPh5tH+8b8nemc9tlN5ChZxhSYIARrLQaZG/DSEpOQyitkXdH5zW1gEhHtJ
- dtuuzBM4p3DzHXf8PuETooZW0/H4WZnXkeKNgQ3i37KlcLDS7sAFaz1cERlI5BFaVjo6
- C4JSujlftG+G1fS9tyGEB/d09C/z5zIuF3LvzEQFQqQiu8pA9KSKqeLuehKVgJ/mSHOX
- h4to8mVq4SOxGnkfZyph9+rKfTpCrHjry5/XCN5NB2p47BuXhiukCsvTrooH9eIvuMfK Tg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jbypmkbtp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 06:54:59 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2856sxIU005379
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Sep 2022 06:54:59 GMT
-Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sun, 4 Sep 2022 23:54:54 -0700
-From:   Mao Jinlong <quic_jinlmao@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH v13 9/9] arm64: dts: qcom: sm8250: Add tpdm mm/prng
-Date:   Mon, 5 Sep 2022 14:53:57 +0800
-Message-ID: <20220905065357.1296-10-quic_jinlmao@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220905065357.1296-1-quic_jinlmao@quicinc.com>
-References: <20220905065357.1296-1-quic_jinlmao@quicinc.com>
+        Mon, 5 Sep 2022 02:55:30 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465861D0C5;
+        Sun,  4 Sep 2022 23:55:20 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9e:d400:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 2856t5FO876715
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 5 Sep 2022 07:55:07 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:961:910a:a293:6d6e:8bbf:c204])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 2856t0fO1042270
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 5 Sep 2022 08:55:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1662360900; bh=B8ds51VEQCz5E7/NG7drgSbJ23MaxqKfWsx4DbN9JtM=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=hnJa60PtRVy0j9Y7+kZGgs3afvqGApgD0Ic6z4z9qfFCszjcvjCcwnMkX1F/yFJFe
+         pFYcp9P7a/9mQcOq0xMFQHQVgxitiISdCy+ccAcEvjkkFBwzL1s9uOcWS+CrhYV/o4
+         LjvAhj4hJRruFTsSX0UfzhgxT4C4PWyHPtfeQSsQ=
+Received: (nullmailer pid 176082 invoked by uid 1000);
+        Mon, 05 Sep 2022 06:54:45 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     "jerry.meng" <jerry-meng@foxmail.com>
+Cc:     davem@davemloft.net, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: add Quectel RM520N
+Organization: m
+References: <tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com>
+Date:   Mon, 05 Sep 2022 08:54:45 +0200
+In-Reply-To: <tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com> (jerry
+        meng's message of "Mon, 5 Sep 2022 09:24:52 +0800")
+Message-ID: <874jxmfgzu.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Qlg8MjMdysB_DmwKEh5qeHGfJaeIYhFd
-X-Proofpoint-GUID: Qlg8MjMdysB_DmwKEh5qeHGfJaeIYhFd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-05_05,2022-09-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- phishscore=0 spamscore=0 mlxscore=0 bulkscore=0 adultscore=0
- suspectscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=851
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209050033
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.6 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tpdm mm and tpdm prng for sm8250.
+"jerry.meng" <jerry-meng@foxmail.com> writes:
 
-+---------------+                +-------------+
-|  tpdm@6c08000 |                |tpdm@684C000 |
-+-------|-------+                +------|------+
-        |                               |
-+-------|-------+                       |
-| funnel@6c0b000|                       |
-+-------|-------+                       |
-        |                               |
-+-------|-------+                       |
-|funnel@6c2d000 |                       |
-+-------|-------+                       |
-        |                               |
-        |    +---------------+          |
-        +----- tpda@6004000  -----------+
-             +-------|-------+
-                     |
-             +-------|-------+
-             |funnel@6005000 |
-             +---------------+
+> add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
+>
+> 0x0801: DIAG + NMEA + AT + MODEM + RMNET
+>
+> T:  Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D01 Cnt=3D02 Dev#=3D 10 Spd=3D480  =
+MxCh=3D 0
+> D:  Ver=3D 2.10 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
+> P:  Vendor=3D2c7c ProdID=3D0801 Rev=3D 5.04
+> S:  Manufacturer=3DQuectel
+> S:  Product=3DRM520N-GL
+> S:  SerialNumber=3D384af524
+> C:* #Ifs=3D 5 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
+> I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Driver=
+=3Doption
+> E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D40 Driver=
+=3Doption
+> E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+> E:  Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
+=3Doption
+> E:  Ad=3D85(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+> E:  Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
+=3Doption
+> E:  Ad=3D87(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+> E:  Ad=3D86(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 4 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
+=3Dqmi_wwan
+> E:  Ad=3D88(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D32ms
+> E:  Ad=3D8e(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D0f(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+>
+> Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
+> ---
+>  drivers/net/usb/qmi_wwan.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index 709e3c59e340..0cb187def5bc 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -1087,6 +1087,7 @@ static const struct usb_device_id products[] =3D {
+>  	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
+>  	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
+>  	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
+> +	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0801)},	/* Quectel RM520N */
+>=20=20
+>  	/* 3. Combined interface devices matching on interface number */
+>  	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
 
-Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 173 +++++++++++++++++++++++++++
- 1 file changed, 173 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 55c5ebc9f889..6344781c3647 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2738,6 +2738,76 @@
- 			};
- 		};
- 
-+		tpda@6004000 {
-+			compatible = "arm,primecell";
-+			reg = <0 0x06004000 0 0x1000>;
-+			reg-names = "tpda-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					tpda_out_funnel_qatb: endpoint {
-+						remote-endpoint = <&funnel_qatb_in_tpda>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@9 {
-+					reg = <9>;
-+					tpda_9_in_tpdm_mm: endpoint {
-+						remote-endpoint = <&tpdm_mm_out_tpda9>;
-+					};
-+				};
-+
-+				port@17 {
-+					reg = <23>;
-+					tpda_23_in_tpdm_prng: endpoint {
-+						remote-endpoint = <&tpdm_prng_out_tpda_23>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6005000 {
-+			compatible = "arm,primecell";
-+
-+			reg = <0 0x06005000 0 0x1000>;
-+			reg-names = "funnel-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_qatb_out_funnel_in0: endpoint {
-+						remote-endpoint = <&funnel_in0_in_funnel_qatb>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_qatb_in_tpda: endpoint {
-+						remote-endpoint = <&tpda_out_funnel_qatb>;
-+					};
-+				};
-+			};
-+		};
-+
- 		funnel@6041000 {
- 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
- 			reg = <0 0x06041000 0 0x1000>;
-@@ -2757,6 +2827,13 @@
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 
-+				port@6 {
-+					reg = <6>;
-+					funnel_in0_in_funnel_qatb: endpoint {
-+						remote-endpoint = <&funnel_qatb_out_funnel_in0>;
-+					};
-+				};
-+
- 				port@7 {
- 					reg = <7>;
- 					funnel0_in7: endpoint {
-@@ -2875,6 +2952,23 @@
- 			};
- 		};
- 
-+		tpdm@684c000 {
-+			compatible = "arm,primecell";
-+			reg = <0 0x0684c000 0 0x1000>;
-+			reg-names = "tpdm-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					tpdm_prng_out_tpda_23: endpoint {
-+						remote-endpoint = <&tpda_23_in_tpdm_prng>;
-+					};
-+				};
-+			};
-+		};
-+
- 		funnel@6b04000 {
- 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
- 			arm,primecell-periphid = <0x000bb908>;
-@@ -2959,6 +3053,85 @@
- 			};
- 		};
- 
-+		tpdm@6c08000 {
-+			compatible = "arm,primecell";
-+			reg = <0 0x06c08000 0 0x1000>;
-+			reg-names = "tpdm-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					tpdm_mm_out_funnel_dl_mm: endpoint {
-+						remote-endpoint = <&funnel_dl_mm_in_tpdm_mm>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6c0b000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+
-+			reg = <0 0x06c0b000 0 0x1000>;
-+			reg-names = "funnel-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_dl_mm_out_funnel_dl_center: endpoint {
-+					remote-endpoint = <&funnel_dl_center_in_funnel_dl_mm>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@3 {
-+					reg = <3>;
-+					funnel_dl_mm_in_tpdm_mm: endpoint {
-+						remote-endpoint = <&tpdm_mm_out_funnel_dl_mm>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6c2d000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+
-+			reg = <0 0x06c2d000 0 0x1000>;
-+			reg-names = "funnel-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				port {
-+					tpdm_mm_out_tpda9: endpoint {
-+						remote-endpoint = <&tpda_9_in_tpdm_mm>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@2 {
-+					reg = <2>;
-+					funnel_dl_center_in_funnel_dl_mm: endpoint {
-+					remote-endpoint = <&funnel_dl_mm_out_funnel_dl_center>;
-+					};
-+				};
-+			};
-+		};
-+
- 		etm@7040000 {
- 			compatible = "arm,coresight-etm4x", "arm,primecell";
- 			reg = <0 0x07040000 0 0x1000>;
--- 
-2.17.1
+Looks good!
 
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>

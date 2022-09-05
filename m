@@ -2,85 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797095AD823
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3845B5AD825
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237887AbiIERIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S231230AbiIERKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 13:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiIERI1 (ORCPT
+        with ESMTP id S229981AbiIERKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:08:27 -0400
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451505E652;
-        Mon,  5 Sep 2022 10:08:26 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id bz13so8722360wrb.2;
-        Mon, 05 Sep 2022 10:08:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=/ciryf8KmN21qOu4f8QcUm2dMJRaMEjVT+du8U+TPyQ=;
-        b=zpXWbHCEl3RCUl6ec2eei06NDuKUHZtz9+ApiSa0/thTlfGVJyZDo4Wb+4Jx/MWO2t
-         db8vPYDMMsC8RXjavtSZBjWN6fcTD0BAB4vSiPk2KEH5SQ07B+6ICdPn/P9MPDbp0LCQ
-         pEatOvv3NAQLjmK4o4vebtaQp0r/TlUoZ7wQqwA2mi4d0tedGZC+bXqyv7IWXV+cNIMZ
-         ClskvXU2aB+5HXcnVRLN6av//YEoi2JxPhDDL0Y6CGoMgtKzZWiiceQ0SdB8Acr8BcmO
-         M6vzhq72fmzehkJg8AGLdsgJnrvXXumxp8Juob455/DD0VNGS8ciIy30RIF+NkgCMs1T
-         tDDw==
-X-Gm-Message-State: ACgBeo3E36nRrnDK8rb7tWV6rQbexV3QDcQRx3S66uTpKcf6MhUpiTwF
-        08tJgqGZzoR2TqOlQEqhSSo=
-X-Google-Smtp-Source: AA6agR5HVWdK8tKcRbiNCcmb3AW06ynUo8cFY3mVxiuLC8hMFA/JDzXQmgW3FnlETt28s4SDYB9dKQ==
-X-Received: by 2002:adf:f642:0:b0:226:d4b1:8502 with SMTP id x2-20020adff642000000b00226d4b18502mr23753732wrp.553.1662397704895;
-        Mon, 05 Sep 2022 10:08:24 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id m18-20020adff392000000b00228b3ff1f5dsm2787331wro.117.2022.09.05.10.08.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 10:08:24 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 17:08:20 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v6 04/33] KVM: x86: Check for existing Hyper-V vCPU in
- kvm_hv_vcpu_init()
-Message-ID: <20220905170820.yivhrivabsixj3ca@liuwe-devbox-debian-v2>
-References: <20220830133737.1539624-1-vkuznets@redhat.com>
- <20220830133737.1539624-5-vkuznets@redhat.com>
+        Mon, 5 Sep 2022 13:10:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56281580F;
+        Mon,  5 Sep 2022 10:10:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5C03535025;
+        Mon,  5 Sep 2022 17:10:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662397803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3OBVlzrdocXXXTKTLgX42mUjjVVDDyYNMpF+eKmmtCQ=;
+        b=TI8brioUhcbTj37ERGLmMeQ2UJM6oYa0WDG5ztQJfuPzEBQ12TugPu5sLcrLplpMvQ7eS/
+        Kud9kF71PFFvZndsFipFQv52uLTLbx3TMiCwxg4XR2m3pPmsrHu2tcrH66+Wrp5CFYLIC0
+        uejAfimdJr9AN0+Uw9yU/5qKSRtuBfk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3DDD413A66;
+        Mon,  5 Sep 2022 17:10:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id D3VPDmstFmNmBwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 05 Sep 2022 17:10:03 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH] cgroup: Reorganize css_set_lock and kernfs path processing
+Date:   Mon,  5 Sep 2022 19:09:44 +0200
+Message-Id: <20220905170944.23071-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830133737.1539624-5-vkuznets@redhat.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 03:37:08PM +0200, Vitaly Kuznetsov wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> When potentially allocating/initializing the Hyper-V vCPU struct, check
-> for an existing instance in kvm_hv_vcpu_init() instead of requiring
-> callers to perform the check.  Relying on callers to do the check is
-> risky as it's all too easy for KVM to overwrite vcpu->arch.hyperv and
-> leak memory, and it adds additional burden on callers without much
-> benefit.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+The commit 74e4b956eb1c incorrectly wrapped kernfs_walk_and_get
+(might_sleep) under css_set_lock (spinlock). css_set_lock is needed by
+__cset_cgroup_from_root to ensure stable cset->cgrp_links. The returned
+cgroup object is pinned by the css_set (*).
 
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
+Because current cannot switch namespace asynchronously, the css_set is
+also pinned by ns_proxy->cgroup_ns (regardless of current's cgroup
+migration).
+
+Kernfs code that traverses paths with relative root_cgroup not need
+css_set_lock.
+
+(*) Except for root cgroups. The default hierarchy root (under which
+cgroup id and path resolution only happens) is eternal so it's moot.
+cgroup_show_path (VFS callback) is expected to be synchronized (**) wrt
+kill_sb (VFS callback) (mnt_namespace.list with namespace_sem).
+(**) If not, it's still an independent issue from this and the fixed one.
+
+Fixes: 74e4b956eb1c: ("cgroup: Honor caller's cgroup NS when resolving path")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ kernel/cgroup/cgroup.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+I considered adding get_cgroup() into current_cgns_cgroup_from_root to
+avoid reliance on the transitive pinning via css_set. 
+After reasoning about no asynchronous NS switch and v1 hiearchies kill_sb it
+didn't seem to bring that much benefit (it didn't compose well with
+BUG_ON(!cgrp) neither).
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index e0b72eb5d283..8c9497f01332 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -1391,11 +1391,16 @@ static void cgroup_destroy_root(struct cgroup_root *root)
+ 	cgroup_free_root(root);
+ }
+ 
++/*
++ * Returned cgroup is without refcount but it's valid as long as cset pins it.
++ */
+ static inline struct cgroup *__cset_cgroup_from_root(struct css_set *cset,
+ 					    struct cgroup_root *root)
+ {
+ 	struct cgroup *res_cgroup = NULL;
+ 
++	lockdep_assert_held(&css_set_lock);
++
+ 	if (cset == &init_css_set) {
+ 		res_cgroup = &root->cgrp;
+ 	} else if (root == &cgrp_dfl_root) {
+@@ -1426,8 +1431,6 @@ current_cgns_cgroup_from_root(struct cgroup_root *root)
+ 	struct cgroup *res = NULL;
+ 	struct css_set *cset;
+ 
+-	lockdep_assert_held(&css_set_lock);
+-
+ 	rcu_read_lock();
+ 
+ 	cset = current->nsproxy->cgroup_ns->root_cset;
+@@ -1446,7 +1449,6 @@ static struct cgroup *cset_cgroup_from_root(struct css_set *cset,
+ 	struct cgroup *res = NULL;
+ 
+ 	lockdep_assert_held(&cgroup_mutex);
+-	lockdep_assert_held(&css_set_lock);
+ 
+ 	res = __cset_cgroup_from_root(cset, root);
+ 
+@@ -1861,8 +1863,8 @@ int cgroup_show_path(struct seq_file *sf, struct kernfs_node *kf_node,
+ 
+ 	spin_lock_irq(&css_set_lock);
+ 	ns_cgroup = current_cgns_cgroup_from_root(kf_cgroot);
+-	len = kernfs_path_from_node(kf_node, ns_cgroup->kn, buf, PATH_MAX);
+ 	spin_unlock_irq(&css_set_lock);
++	len = kernfs_path_from_node(kf_node, ns_cgroup->kn, buf, PATH_MAX);
+ 
+ 	if (len >= PATH_MAX)
+ 		len = -ERANGE;
+@@ -6649,8 +6651,8 @@ struct cgroup *cgroup_get_from_path(const char *path)
+ 
+ 	spin_lock_irq(&css_set_lock);
+ 	root_cgrp = current_cgns_cgroup_from_root(&cgrp_dfl_root);
+-	kn = kernfs_walk_and_get(root_cgrp->kn, path);
+ 	spin_unlock_irq(&css_set_lock);
++	kn = kernfs_walk_and_get(root_cgrp->kn, path);
+ 	if (!kn)
+ 		goto out;
+ 
+
+base-commit: a8c52eba880a6e8c07fc2130604f8e386b90b763
+-- 
+2.37.0
+

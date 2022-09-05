@@ -2,333 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8745AD4CB
+	by mail.lfdr.de (Postfix) with ESMTP id 352145AD4C9
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236847AbiIEO3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        id S237987AbiIEOaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237870AbiIEO3n (ORCPT
+        with ESMTP id S237704AbiIEOaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:29:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22504261C;
-        Mon,  5 Sep 2022 07:29:39 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id F377038680;
-        Mon,  5 Sep 2022 14:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662388178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xy7njwcQGeP+otyXcMoBXsbQ4xfSpjO8lErq8eZ8WKk=;
-        b=sT8iCJF4guIG1kezYYFvmhs8sgeaTz6yT1lKKbP4s5pbyjbDEEZzTLUoW+rJQlXE3EBfHz
-        gxe9yb5sSide2IMvlavArv1QpYmBMr2+kgxpRVpoXr1mYm2q1n066fNVe9NDZ6yh+/6gkV
-        9myAAGXNCIMTv8KxD9qabDkzeYnZ00E=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D2F272C165;
-        Mon,  5 Sep 2022 14:29:37 +0000 (UTC)
-Date:   Mon, 5 Sep 2022 16:29:34 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mwilck@suse.com
-Subject: Re: [PATCH] module: Merge same-name module load requests
-Message-ID: <YxYHzp1D315RcA4h@alley>
-References: <20220905084131.14567-1-petr.pavlu@suse.com>
+        Mon, 5 Sep 2022 10:30:24 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84B91A073
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:30:22 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k9so11659748wri.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:30:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ae8ML73FokTDdM56La2MyV/2p8hGMBN9srggFyjW8tQ=;
+        b=XwdlRG/EEWXKuCFQ376WfjDqS4YP5pf8yls07a1APgOhXHi1ywdPpHTzfl5TB3AS/K
+         9aMh7Zp2XBsnR/5kqXPQFDc5WZPibnZ2D4yTFrRnqykCtPzumY7DkD6JgRCUvd8TEp7+
+         eHs8+0AMNteH0KE4zVOBmyVjHqbIFM3lEveierW+stQOu3KT+8IECceY/KuDnLIjc9u1
+         GDMt1UXwwIp0Zt2s/N2EHS1sx+qWYhHWXZp7zbr44pJ4JsIYeliBaVxtMLC4z0fL34ys
+         ZfOTdrEA6ZHQh9irlVwGxvU/R+ZHXe0wGHpYgws+2PZLRlmte4YKDEFjiFEKooCyfYJU
+         +Dhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ae8ML73FokTDdM56La2MyV/2p8hGMBN9srggFyjW8tQ=;
+        b=POMtOG+Ooz2s2zEGIRC19G61qv8qBSYU6vou+5hkGSd4P/VEFHUZ9MzKIYQ3FPZyma
+         WpCAvlAjacpQTBLNgaXvetMHtCH7SIK83P7DMNg+aJEs7YvEhHWt1FWOAO8dzfAN4xMf
+         R2n9JIexwiiq+cLwPQyUdsROw2tOXDa5RFL80GPP6tf3G1yOa2L88WESfu5fqrkzG2RH
+         hO6qpqV5d0XJYhLS5WbC2fMJ8E+RWZdWT/eRSX5lVIqbZryz04Kn3ZrVrn6bZ6IKSWbQ
+         36ytDGHITSpJdyYEjgZm9fgWXewiHp9f3FY7jWbHUsxRKPvYvi2DPktt+0Xu36V5x5f3
+         p8YA==
+X-Gm-Message-State: ACgBeo08N1rXM2ngry+fERInF2y6ArfxEGY/YhDDkHyH2rxBLpksXrBQ
+        w0ZmV0jYmyMV4iyvDyyHxTC1A23xX8xEfLRV
+X-Google-Smtp-Source: AA6agR5II3gm4fhl+EhygViYnzygeCdom5mIuMOv9w3YZhJLJ9MuBe86Eb0qlYM+mpe5LOTceolmbg==
+X-Received: by 2002:a5d:574a:0:b0:228:b90c:e5ee with SMTP id q10-20020a5d574a000000b00228b90ce5eemr1682911wrw.328.1662388221254;
+        Mon, 05 Sep 2022 07:30:21 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id h21-20020a05600c351500b003a502c23f2asm18526327wmq.16.2022.09.05.07.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 07:30:20 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 17:30:19 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        David Heidelberg <david@ixit.cz>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        devicetree@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] dt-bindings: misc: fastrpc convert bindings to
+ yaml
+Message-ID: <YxYH+3hGZ2fyUZpW@linaro.org>
+References: <20220905103715.955786-1-abel.vesa@linaro.org>
+ <1662381657.354400.1957044.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220905084131.14567-1-petr.pavlu@suse.com>
+In-Reply-To: <1662381657.354400.1957044.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-09-05 10:41:31, Petr Pavlu wrote:
-> During a system boot, it can happen that the kernel receives a burst of
-> requests to insert the same module but loading it eventually fails
-> during its init call. For instance, udev can make a request to insert
-> a frequency module for each individual CPU when another frequency module
-> is already loaded which causes the init function of the new module to
-> return an error.
->
-> The module loader currently serializes all such requests, with the
-> barrier in add_unformed_module(). This creates a lot of unnecessary work
-> and delays the boot.
+On 22-09-05 07:40:57, Rob Herring wrote:
+> On Mon, 05 Sep 2022 13:37:14 +0300, Abel Vesa wrote:
+> > Convert Qualcomm FastRPC bindings to yaml format, so that we could validate
+> > dt-entries correctly and any future additions can go into yaml format.
+> > 
+> > Use compute-cb@ subnodes instead of just cb@.
+> > 
+> > Also add qcom,non-secure-domain, qcom,glink-channels and
+> > qcom,smd-channels missing properties to make sure dtbs_check doesn't
+> > fail right off the bat.
+> > 
+> > Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> > Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> > Co-developed-by: David Heidelberg <david@ixit.cz>
+> > Signed-off-by: David Heidelberg <david@ixit.cz>
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> > 
+> > Changes since v5:
+> >  * Removed the txt file
+> > 
+> >  .../devicetree/bindings/misc/qcom,fastrpc.txt |  88 --------------
+> >  .../bindings/misc/qcom,fastrpc.yaml           | 108 ++++++++++++++++++
+> >  2 files changed, 108 insertions(+), 88 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
+> >  create mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb: smd-edge: 'qcom,smd-edge' is a required property
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb: smd-edge: 'oneOf' conditional failed, one must be fixed:
+> 	'mboxes' is a required property
+> 	'qcom,ipc' is a required property
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb: smd-edge: 'oneOf' conditional failed, one must be fixed:
+> 	'interrupts' is a required property
+> 	'interrupts-extended' is a required property
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
 
-Is it just an optimization or does it fix any real problem?
-It would be nice to provide some more details here.
-Otherwise, we do not know if the behavior change is worth it.
+Right.
 
+So actually, the parent node is glink-edge, not smd-edge.
 
-> This patch improves the behavior as follows:
-> * A check whether a module load matches an already loaded module is
->   moved right after a module name is determined.
-> * A new reference-counted shared_load_info structure is introduced to
->   keep track of duplicate load requests. Two loads are considered
->   equivalent if their module name matches. In case a load duplicates
->   another running insert, the code waits for its completion and then
->   returns -EEXIST or -ENODEV depending on whether it succeeded.
+And there are some other required properties missing when switching to
+glink-edge.
 
--ENODEV is strange, see https://www.gnu.org/software/libc/manual/html_node/Error-Codes.html
-
-   Macro: int ENODEV
-
-       “No such device.” The wrong type of device was given
-       to a function that expects a particular sort of device.
-
-IMHO, it does not fit here. What about -EBUSY?
-
-   Macro: int EBUSY
-
-       “Device or resource busy.” A system resource that can’t
-       be shared is already in use. For example, if you try
-       to delete a file that is the root of a currently mounted
-       filesystem, you get this error.
-
+Will resend with glink-edge instead and add all the related missing
+properties.
 
 > 
-> Note that prior to 6e6de3dee51a ("kernel/module.c: Only return -EEXIST
-> for modules that have finished loading"), the kernel already did merge
-> some of same load requests but it was more by accident and relied on
-> specific timing. The patch brings this behavior back in a more explicit
-> form.
->
-> ---
->  kernel/module/main.c | 207 ++++++++++++++++++++++++++++++-------------
->  1 file changed, 144 insertions(+), 63 deletions(-)
+> doc reference errors (make refcheckdocs):
+> Documentation/devicetree/bindings/remoteproc/qcom,glink-edge.yaml: Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
+> MAINTAINERS: Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
 > 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index a4e4d84b6f4e..24d0777c48e3 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2552,43 +2539,129 @@ static int may_init_module(void)
->  	return 0;
->  }
->  
-> +static struct shared_load_info *
-> +shared_load_info_alloc(const struct load_info *info)
-> +{
-> +	struct shared_load_info *shared_info =
-> +		kzalloc(sizeof(*shared_info), GFP_KERNEL);
-> +	if (shared_info == NULL)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	strscpy(shared_info->name, info->name, sizeof(shared_info->name));
-> +	refcount_set(&shared_info->refcnt, 1);
-> +	INIT_LIST_HEAD(&shared_info->list);
-> +	return shared_info;
-> +}
-> +
-> +static void shared_load_info_get(struct shared_load_info *shared_info)
-> +{
-> +	refcount_inc(&shared_info->refcnt);
-> +}
-> +
-> +static void shared_load_info_put(struct shared_load_info *shared_info)
-> +{
-> +	if (refcount_dec_and_test(&shared_info->refcnt))
-> +		kfree(shared_info);
-> +}
-> +
->  /*
-> - * We try to place it in the list now to make sure it's unique before
-> - * we dedicate too many resources.  In particular, temporary percpu
-> + * Check that the module load is unique and make it visible to others. The code
-> + * looks for parallel running inserts and already loaded modules. Two inserts
-> + * are considered equivalent if their module name matches. In case this load
-> + * duplicates another running insert, the code waits for its completion and
-> + * then returns -EEXIST or -ENODEV depending on whether it succeeded.
-> + *
-> + * Detecting early that a load is unique avoids dedicating too many cycles and
-> + * resources to bring up the module. In particular, it prevents temporary percpu
->   * memory exhaustion.
-> + *
-> + * Merging same load requests then primarily helps during the boot process. It
-> + * can happen that the kernel receives a burst of requests to load the same
-> + * module (for example, a same module for each individual CPU) and loading it
-> + * eventually fails during its init call. Merging the requests allows that only
-> + * one full attempt to load the module is made.
-> + *
-> + * On a non-error return, it is guaranteed that this load is unique.
->   */
-> -static int add_unformed_module(struct module *mod)
-> +static struct shared_load_info *add_running_load(const struct load_info *info)
->  {
-> -	int err;
->  	struct module *old;
-> +	struct shared_load_info *shared_info;
->  
-> -	mod->state = MODULE_STATE_UNFORMED;
-> -
-> -again:
->  	mutex_lock(&module_mutex);
-> -	old = find_module_all(mod->name, strlen(mod->name), true);
-> -	if (old != NULL) {
-> -		if (old->state != MODULE_STATE_LIVE) {
-> -			/* Wait in case it fails to load. */
-> +
-> +	/* Search if there is a running load of a module with the same name. */
-> +	list_for_each_entry(shared_info, &running_loads, list)
-> +		if (strcmp(shared_info->name, info->name) == 0) {
-> +			int err;
-> +
-> +			shared_load_info_get(shared_info);
->  			mutex_unlock(&module_mutex);
-> +
->  			err = wait_event_interruptible(module_wq,
-> -					       finished_loading(mod->name));
-> -			if (err)
-> -				goto out_unlocked;
-> -			goto again;
-> +						       shared_info->err != 0);
-> +			if (!err)
-> +				err = shared_info->err;
-
-The logic around shared_info->err is a bit tricky. The value 0
-means that the parallel load is still in progress. Any error
-value means that it has finished. Where -EEXIST means that
-the load actually succeeded.
-
-Such optimizations might make sense when they might safe a lot
-of memory. And even in these situations we should do out best
-to keep the logic straightforward.
-
-I suggest to set shared_info->err to the really returned value.
-And use another logic to check if the load finished. Either
-add a boolean. Or we might actually use shared_info->list.
-
-struct shared_info is removed from @running_loads list when
-the load finished. We could do in finalize_running_load():
-
-	list_del_init(&shared_info->list);
-
-and here:
-
-			err = wait_event_interruptible(module_wq,
-						       list_empty(&shared_info->list);
-
-			/*
-			 * Do not retry the module load when the parallel one
-			 * failed. But do not return the exact error code
-			 * because the parallel load might have used another
-			 * module parameters. Instead return -EBUSY.
-			 */
-			if (!err) {
-				err = shared_info->err ? -EBUSY : -EEXIST;
-[...]
-
-
-> +			shared_load_info_put(shared_info);
-> +			shared_info = ERR_PTR(err);
-> +			goto out_unlocked;
->  		}
-> -		err = -EEXIST;
-> +
-> +	/* Search if there is a live module with the given name already. */
-> +	old = find_module_all(info->name, strlen(info->name), true);
-> +	if (old != NULL) {
-> +		if (old->state == MODULE_STATE_LIVE) {
-> +			shared_info = ERR_PTR(-EEXIST);
-> +			goto out;
-> +		}
-> +
-> +		/*
-> +		 * Any active load always has its record in running_loads and so
-> +		 * would be found above. This applies independent whether such
-> +		 * a module is currently in MODULE_STATE_UNFORMED,
-> +		 * MODULE_STATE_COMING, or even in MODULE_STATE_GOING if its
-> +		 * initialization failed. It therefore means this must be an
-> +		 * older going module and the caller should try later once it is
-> +		 * gone.
-> +		 */
-> +		WARN_ON(old->state != MODULE_STATE_GOING);
-> +		shared_info = ERR_PTR(-EAGAIN);
-
-I would return -EBUSY here to avoid too many variants. The load failed because
-the same module was being loaded or unloaded.
-
-Anyway, it should be described in the commit message.
-
->  		goto out;
->  	}
-> -	mod_update_bounds(mod);
-> -	list_add_rcu(&mod->list, &modules);
-> -	mod_tree_insert(mod);
-> -	err = 0;
-> +
-> +	/* The load is unique, make it visible to others. */
-> +	shared_info = shared_load_info_alloc(info);
-> +	if (IS_ERR(shared_info))
-> +		goto out;
-> +	list_add(&shared_info->list, &running_loads);
->  
->  out:
->  	mutex_unlock(&module_mutex);
->  out_unlocked:
-> -	return err;
-> +	return shared_info;
-> +}
-> +
-> +/* Complete the running load and inform other duplicate inserts about it. */
-> +static void finalize_running_load(struct shared_load_info *shared_info, int err)
-> +{
-> +	mutex_lock(&module_mutex);
-> +	list_del(&shared_info->list);
-> +	shared_info->err = err == 0 ? -EEXIST : -ENODEV;
-
-As explained above, I suggest to use:
-
-	list_del_init(&shared_info->list);
-	shared_info->err = err;
-
-> +	mutex_unlock(&module_mutex);
-> +
-> +	wake_up_all(&module_wq);
-
-Heh, this should be wake_up_interruptible() to match
-the wait_event_interruptible().
-
-The _all() variant is used when there exclusive waiters. I have
-recently learned about it, see
-https://lore.kernel.org/all/CAHk-=wgC47n_7E6UtFx_agkJtLmWOXGsjdFjybBFYNA1AheQLQ@mail.gmail.com/
-
-But it should be fixed in a separate patch because the same mistake
-was there even before.
-
-
-Also it would make sense to add the wait queue head into struct
-shared_info to reduce spurious wakeups. The head is small,
-the struct is allocated anyway, and the lifecycle is the same.
-
-
-> +	shared_load_info_put(shared_info);
-> +}
-> +
-> +static void add_unformed_module(struct module *mod)
-> +{
-> +	mod->state = MODULE_STATE_UNFORMED;
-> +
-> +	mutex_lock(&module_mutex);
-> +	mod_update_bounds(mod);
-> +	list_add_rcu(&mod->list, &modules);
-> +	mod_tree_insert(mod);
-> +	mutex_unlock(&module_mutex);
->  }
->  
->  static int complete_formation(struct module *mod, struct load_info *info)
-
-Otherwise, the patch looks good to me.
-
-Best Regards,
-Petr
+> See https://patchwork.ozlabs.org/patch/
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 

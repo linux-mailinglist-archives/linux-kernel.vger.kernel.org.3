@@ -2,129 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7A95ADC01
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2865ADBFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiIEXvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 19:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
+        id S232515AbiIEXvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 19:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbiIEXvR (ORCPT
+        with ESMTP id S229546AbiIEXvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 19:51:17 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E8501B1;
-        Mon,  5 Sep 2022 16:51:12 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 19:50:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662421870;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L/QtR7clKwa18sm3kCbVwFkkFjR319r9zDLdSKgBl/k=;
-        b=K0AUlJQwh12ArX3Ivo5AajZFTOnj8fptPh9b/mWIPD8nscGPgO8kw0SNz+Kn/2nIaB9e9i
-        7R3FAk1ULpUqZb/f26WREIzq78CmF0IzVffZPJjJ7RbMsrYAMZ8f5FwzvnmygEisggBmw5
-        5Icx4XHaZKC0M/ASUBy2hcvuJroZdmk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220905235007.sc4uk6illlog62fl@kmo-framework>
-References: <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
- <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
- <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
- <YxEE1vOwRPdzKxoq@dhcp22.suse.cz>
- <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
- <20220905110713.27304149@gandalf.local.home>
- <CAJuCfpF-O6Gz2o7YqCgFHV+KEFuzC-PTUoBHj25DNRkkSmhbUg@mail.gmail.com>
- <20220905204229.xqrqxmaax37n3ody@moria.home.lan>
- <20220905181650.71e9d02c@gandalf.local.home>
+        Mon, 5 Sep 2022 19:51:00 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF0137F8C;
+        Mon,  5 Sep 2022 16:50:59 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MM4z45GYgz4x1d;
+        Tue,  6 Sep 2022 09:50:56 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662421857;
+        bh=iKkMD8pLUppKo4CrYvVP5qZqGbMH0rIbl8/NNluHiu8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=b2BeSDAi5r8XkUi/rG2xNHPQwidEYL6gLMoAutSNMQjMYY8YKsAwJjrT1tJgNWSzY
+         DxZLhuDXHTDbt1aJ5TuV1skdcqxsRU+7jY/M4xmnY1EeEr0MKqIG5OcGx44WIk93JU
+         6UZsOTymngfLYCRS47529pkhMv11nFjdNNlKl4IKi8c95y12AWVmnS8SMmXT1Bwpxh
+         V19w9NsrlV3bl8MhhVvnTn3IiV0MASivLmwNrGADMJJiRc9F9vlOPV+SO5O71LsKUn
+         EaYkORNOiI1DaWeMpMgLYx2uIguUVdgusdzir3O3EigUdL4w2UKIrCg/OhpJxtu8SB
+         YmuytE2YSMtIg==
+Date:   Tue, 6 Sep 2022 09:50:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     David Sterba <dsterba@suse.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the btrfs tree with the btrfs-fixes
+ tree
+Message-ID: <20220906095055.498d90ea@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220905181650.71e9d02c@gandalf.local.home>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+ZW8GY.DYKoImP.5RiOqcl+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 06:16:50PM -0400, Steven Rostedt wrote:
-> On Mon, 5 Sep 2022 16:42:29 -0400
-> Kent Overstreet <kent.overstreet@linux.dev> wrote:
-> 
-> > > Haven't tried that yet but will do. Thanks for the reference code!  
-> > 
-> > Is it really worth the effort of benchmarking tracing API overhead here?
-> > 
-> > The main cost of a tracing based approach is going to to be the data structure
-> > for remembering outstanding allocations so that free events can be matched to
-> > the appropriate callsite. Regardless of whether it's done with BFP or by
-> > attaching to the tracepoints directly, that's going to be the main overhead.
-> 
-> The point I was making here is that you do not need your own hooking
-> mechanism. You can get the information directly by attaching to the
-> tracepoint.
-> 
-> > > static void my_callback(void *data, unsigned long call_site,
-> > >                         const void *ptr, struct kmem_cache *s,
-> > >                         size_t bytes_req, size_t bytes_alloc,
-> > >                         gfp_t gfp_flags)
-> > > {
-> > >         struct my_data_struct *my_data = data;
-> > >
-> > >         { do whatever }
-> > > }
-> 
-> The "do whatever" is anything you want to do.
-> 
-> Or is the data structure you create with this approach going to be too much
-> overhead? How hard is it for a hash or binary search lookup?
+--Sig_/+ZW8GY.DYKoImP.5RiOqcl+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you don't think it's hard, go ahead and show us.
+Hi all,
+
+Today's linux-next merge of the btrfs tree got a conflict in:
+
+  fs/btrfs/zoned.c
+
+between commit:
+
+  6ca64ac27631 ("btrfs: zoned: fix mounting with conventional zones")
+
+from the btrfs-fixes tree and commit:
+
+  e5182af66852 ("btrfs: convert block group bit field to use bit helpers")
+
+from the btrfs tree.
+
+I fixed it up (the former removed some of the code modified by the latter)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+ZW8GY.DYKoImP.5RiOqcl+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMWi18ACgkQAVBC80lX
+0GyPBQf/fLS3R4N6ZMGkwDopaIPWD/0WInzWomaCfw5phpI0LaIG6Ke8aSPo+Sxk
+A8B32PFUbzKrRztMdcNjppChwD+tIHHYhOxF7P8BpQKBIGfm0lyJttsVmWZ4fVRi
+sAS/Wm+gsWzaM67bQoDxwmE9dGEt1/cKDtS/OONzUil+T/SdftYTrOEN80p35aTg
+OAvcJpVgdqKug2y9sIthx0JmGKpgoSb9+h64taSFY3LlaWCeuVHR3suifxRarKbA
+9vZ13z9J7n1R+YForP/Ec21u6LKReSN8l++POS+a1hqO5qy3lDAW5KxXFzL1S1MB
+SBh9wtEkrel45wpOJCQGZ4KNWmpjiA==
+=X7dK
+-----END PGP SIGNATURE-----
+
+--Sig_/+ZW8GY.DYKoImP.5RiOqcl+--

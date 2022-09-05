@@ -2,250 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2CC5AC91D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3465AC923
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235618AbiIEDaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 23:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
+        id S234932AbiIEDcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 23:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235617AbiIED3v (ORCPT
+        with ESMTP id S232183AbiIEDcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 23:29:51 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD64F5A0
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 20:29:47 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MLYnh5lvFz1N7rn;
-        Mon,  5 Sep 2022 11:26:00 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 11:29:37 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 11:29:36 +0800
-From:   Wupeng Ma <mawupeng1@huawei.com>
-To:     <akpm@linux-foundation.org>, <david@redhat.com>, <npiggin@suse.de>,
-        <ying.huang@intel.com>, <hannes@cmpxchg.org>
-CC:     <corbet@lwn.net>, <mcgrof@kernel.org>, <mgorman@suse.de>,
-        <keescook@chromium.org>, <yzaikin@google.com>,
-        <songmuchun@bytedance.com>, <mike.kravetz@oracle.com>,
-        <osalvador@suse.de>, <surenb@google.com>, <mawupeng1@huawei.com>,
-        <rppt@kernel.org>, <charante@codeaurora.org>, <jsavitz@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH -next v3 2/2] mm: sysctl: Introduce per zone watermark_scale_factor
-Date:   Mon, 5 Sep 2022 11:28:58 +0800
-Message-ID: <20220905032858.1462927-3-mawupeng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220905032858.1462927-1-mawupeng1@huawei.com>
-References: <20220905032858.1462927-1-mawupeng1@huawei.com>
+        Sun, 4 Sep 2022 23:32:14 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2072.outbound.protection.outlook.com [40.107.22.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BB72E9D5;
+        Sun,  4 Sep 2022 20:32:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lpK7ewZoOBf/1Bpz83vMB2kGr46mE+2ycKJwPyqfcvtjs0MYsk9CjMZfDhmBPuQXGmS9QMEHC2qJvZyjV6oiUeWNtu8n7+39UMjoGE7cFqnDtUo5G1P3ZRjUuD3+1UR+p+cqJOIJngmAJie2RqIJOM47DSChi7yfVlVgTLCRyReNG/8dAKXcnsdlT34/y+w7tF8cpkFrLhnfM4tjnHae5zpERS9QF4vhCbCbGKLCHWs1LHnQCJRV5Ll813MRDIrh7W2gE/1X5Awyv8zswKSz/FjG4UE6kcGtst2vnwl7jJu9LnO6K/IqgnyfzcxkAIh3tVFvdgIyaTC26Nv9hxuzPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YZO+dQ5SG7W64ahXB/cc5fA2rlRqgiKHOXCPBORiQRQ=;
+ b=Owa+18BaXmskPKA9SzcC0bE0I9bBgRrnXcXbgInuWIh5weJXHn0yOvQFoKYB2DjE8bQd7xm2v8t+W3rZYw6u85i2xPjokYaKlh35EaUgu1INOPXHDBYZYXX+oGf1YWDfPDHSB7+NZkkhh+KN89Um7AvQvjDC3ASrZ9vZoNNvK07VXH4JBn1gCV0g/IJcHc6oRy0/nCq9U5WHKjSp7QbZnh25rckMFxnMSMCcnajVgBVdFtQGl1/UdAqIjKKzjen0PkgR9NGXNaSg6A1jjJK8ZCwfbzz8d/VzSrSnk9tJ1Dn4lpI6tg5iYoEzFwRR8g9S+Oyg+Z6g7tCvNac+v/MHqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YZO+dQ5SG7W64ahXB/cc5fA2rlRqgiKHOXCPBORiQRQ=;
+ b=cZ4L9BEylZS9Ufe5gYywTqtqiPiUrexwMjrJOyAkBLZ0zMUV+SFBSNSzqSFEB34KYJ1swfFtq2qdM2k0Ft7vhHC3YLE8j9RR4xYFJ/SdZPse4xYgEyUexoGMpl+m3XYINg7vn7PA0NCwrHZAJQjcTcx0fFqCVQxjbfeJ0skhVVI=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS8PR04MB8231.eurprd04.prod.outlook.com (2603:10a6:20b:3ff::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Mon, 5 Sep
+ 2022 03:32:11 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::2d22:3315:6f9b:82c7]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::2d22:3315:6f9b:82c7%5]) with mapi id 15.20.5588.017; Mon, 5 Sep 2022
+ 03:32:11 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V2 2/6] arm64: dts: imx8ulp: correct the scmi sram node
+ name
+Thread-Topic: [PATCH V2 2/6] arm64: dts: imx8ulp: correct the scmi sram node
+ name
+Thread-Index: AQHYvUVerEhdkxZ7J0KD2PXOmnmPpq3QMmaAgAAChjA=
+Date:   Mon, 5 Sep 2022 03:32:11 +0000
+Message-ID: <DU0PR04MB9417B82900060E9BA6B2BAC3887F9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220831142552.43393-1-peng.fan@oss.nxp.com>
+ <20220831142552.43393-3-peng.fan@oss.nxp.com>
+ <20220905032039.GG1728671@dragon>
+In-Reply-To: <20220905032039.GG1728671@dragon>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0613fc39-bb95-43a7-36f8-08da8eef37e6
+x-ms-traffictypediagnostic: AS8PR04MB8231:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nkpFqebwxccCpFS/MBaeF9tNOxR05O+IWXpIqBhKWtmL4HFlO2IYyEshig5SeBp2QxKs8Vd1rgA8qT5UMnq7uVKTseZoL/HY7A0CyVdodPED0UgJwhOHqsXf4CK1/KQpp2wCb9KVTFXx11kO06quX9FVzMt1hRuuX1mvmP/NrO/XENLJufBPwMIQVUbSx8nmMvwhqYNAmxnMtTms1S73XhQQeon91tinaKLbpTBNchXCYZlPstB/q8hpbiv4T5n9UEKEqbgaCefKpFueqWpDlPivcmOGWSNryNV02XhAax3TcHAh1d0tmcUKSk4eqrAl+mNzcOWwI54VNqmBCyX2edrFqyqXwLF/AMf15Ntp1xTJplthcPbXxh6zhs/+BUN+I1LJh94tvoOIGfkevowHdB9TeZ8SUUGrncCc7VvkNGqhM7UnNc3wRHk31Bbv31SWiymfNyHBXvuvvs59cYeNYUAvtodBsoWI0iHC8sbwp1qzRvTrTQYtNzCZwkrcBL916T0Axjmitf/WveF13APCclLJebqMMZbNrM5RX/YnkHsdk9a5ylUiC8FLFk4xFEa0MmUeV2ewDhSU8j+nLRHXURH0sDHKTeL0u0uQ1/Lq6DytUkuzNtPHgwCvTw637MdZkWRGI9js7U5XZ4Sir0GyntP78EUcvcxaA6+7TNGDD0sLY/7zsONq827Ean/RSgWo957ZDKyBpUWIkSboVvBhWaqjoJ9tLn8WkuNiBsqr5Cv4EzugTVA0o1uf2tVczbQ7IvzaoouehCJFKhqJ/g8Aui+BlOGl9RHZwu2Pk6ucfNI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(396003)(39860400002)(136003)(376002)(71200400001)(26005)(9686003)(41300700001)(478600001)(6506007)(7696005)(83380400001)(186003)(2906002)(52536014)(8936002)(5660300002)(316002)(44832011)(55016003)(110136005)(54906003)(66476007)(66556008)(4326008)(8676002)(76116006)(64756008)(66946007)(33656002)(86362001)(38070700005)(122000001)(38100700002)(66446008)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ta/JafxF1fIXLWs1HoqZXUifGlINWI8huWoyag5XkYKUBEFKDyaJJNaugxsk?=
+ =?us-ascii?Q?jQH+jPdqh+vfYOpzvab0TPpdqD1EnU/x1mya1f3yGc7lx1dhQwwuJeBPYZEg?=
+ =?us-ascii?Q?RHmQMrmN/jolCgZcHACO9YTSEBpOSG2GvF18f93WPVnR+HXVuNW3peQVerWk?=
+ =?us-ascii?Q?8swoaFzCDiHvl5aDJXjFhmpjCJD76z7JNp86ewsqA/+DKVKHJl0L5wAwrwko?=
+ =?us-ascii?Q?X5M/QfV9Ovbl6uB1HrTw3cqzecKkOwE7SPxN7nwkMx0Sy31diTjz5MXU6stp?=
+ =?us-ascii?Q?vPn7feaCYdWtyatQdIv2WNOrRHniLA5zo6yWNRB6LTzGDFKvlKlRtJocCWzN?=
+ =?us-ascii?Q?dbWjvc93X0dxJH0G+LWRGVviphGMSoWJm965ci4yiqL2tl76lDbISaIH06FA?=
+ =?us-ascii?Q?yaezbyOilbMoTNJBxBecczRoi0PPa1D1HXXhssx7l22JIwKazE3KE+Oc65yP?=
+ =?us-ascii?Q?yPTaitT4zpkTMDYogKZFrx92aMgfx09ioLuct92UYid/Biuad+gclxRK1wzy?=
+ =?us-ascii?Q?rQecYeSzx8A1yVGtJQL0Dz5UEUMpKv6UGzgU4hU0eHInNIpEn8U9Ee5SVJXU?=
+ =?us-ascii?Q?bMmQYswD8tUTwMH5aX/5ta+H2RIunM0vI6WXZSpp9g/MgySByCXUIYceN8dD?=
+ =?us-ascii?Q?O5FTeaDfZGD1dvrqTZHjqoIRhQc41MapWqzaD9nKRH+/VLfdb6JJ7lseL/z9?=
+ =?us-ascii?Q?di7snvrMyZCIxvxQsWf2rgvHhlWdbEpCquw/oYHVwNoNyX3an0W5DSYxKbfz?=
+ =?us-ascii?Q?QDLzdxTRB27VUVl2Voj5+VeyOTFFpnxzTIO2Ev1/kkjdV3Xv2TqwUYeGNcDS?=
+ =?us-ascii?Q?IVp86mfN9Yp6uk+tPbhEAClZ7nGc5EpGWK3CAAsezjMstCHInUFqIUIacbzN?=
+ =?us-ascii?Q?JR7WqKIyto4v0RSdD79mhTnh1n3K1zDclI1wZvzwINsRgb2HXVm/PnuHwOHm?=
+ =?us-ascii?Q?xfUD738HYCVRgyDEURo6AXkTWoiodErQyXcPo2ovvhW+usBPqjmMzoompO9Z?=
+ =?us-ascii?Q?leFDayTZAhu16/1x9YrTbAj3XY4X/CGgOemKjULSxu5Ps8V+TzuVnV7PKB46?=
+ =?us-ascii?Q?Rf8nzc/Dl59Iif4J3NYnS5qe+3FhcFjdB853+xJB3Mj9Z4gMYTYYqVVgQ/qK?=
+ =?us-ascii?Q?mMdAMQ4roZFZLVT5TnXIFon3/20+CSHUs+IbB56uoATGziUgvSUUCrcNJwPV?=
+ =?us-ascii?Q?e8nprLR/U2NuC9l+oHgOWX04rEDAdqmGWTWNc0pkTGR7lc1gbbRb5z0i7eIM?=
+ =?us-ascii?Q?768sg1/7ch2PBpEiRU130tx15Lfh7pWI2bRyxR8n5vSUMToN9mATmGz2m6Jw?=
+ =?us-ascii?Q?LTNAsXrAMy6DPQqMIVl3DUGVyP+zHxsLY+iDONA9MB8zEV+vtW6DkNjU5VJH?=
+ =?us-ascii?Q?Pc33aju9mMTSAZbjX0LIx/4UHgmtDS2GsbfmI68BxPc5ssTkHvPLxyHDlTt7?=
+ =?us-ascii?Q?ZzTrUZygK8mZjsqJHofGmm7/R0xrBMYi71f5yaYOuVO1BVO1a3E0kH0HXJqa?=
+ =?us-ascii?Q?MdOAYj+HcJgfgidfdIAemomCfcmwqXr13yMR8qn8FqivHZRFPZr1/0QOCblO?=
+ =?us-ascii?Q?6EPx+GdcXiyM98xGLRE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0613fc39-bb95-43a7-36f8-08da8eef37e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2022 03:32:11.2039
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yzkR2N0kwh5rQtjswMyDWLoclxffPVFx80IyTVJX+jZZA9zjxBMFCL2yrBIt8eklVPDaBA5Mlg6jwd+AOjvcrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8231
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ma Wupeng <mawupeng1@huawei.com>
+Hi Shawn,
 
-System may have little normal zone memory and huge movable memory in the
-following situations:
-  - for system with kernelcore=nn% or kernelcore=mirror, movable zone will
-  be added and movable zone is bigger than normal zone in most cases.
-  - system with movable nodes, they will have multiple numa nodes with
-  only movable zone and movable zone will have plenty of memory.
+> Subject: Re: [PATCH V2 2/6] arm64: dts: imx8ulp: correct the scmi sram
+> node name
+>=20
+> On Wed, Aug 31, 2022 at 10:25:48PM +0800, Peng Fan (OSS) wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > Follow sram/sram.yaml to update the sram node name.
+> >
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> >  arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> > index 8460a3cba107..7a88d7016b49 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> > @@ -112,7 +112,7 @@ sram@2201f000 {
+> >  		#size-cells =3D <1>;
+> >  		ranges =3D <0 0x0 0x2201f000 0x1000>;
+> >
+> > -		scmi_buf: scmi-buf@0 {
+> > +		scmi_buf: scmi-sram-section@0 {
+>=20
+> While the commit log mentions sram/sram.yaml, the binding doc says:
+>=20
+>   $nodename:
+>     pattern: "^sram(@.*)?"
+>=20
+> Does scmi-sram-section match the pattern?
 
-Since kernel/driver can only use memory from non-movable zone in most
-cases, normal zone need to increase its watermark to reserve more memory.
+Yes, it match. See line 66:
+patternProperties:
+  "^([a-z0-9]*-)?sram(-section)?@[a-f0-9]+$":
 
-However, current watermark_scale_factor is used to control all zones
-at once and can't be set separately. To reserve memory in non-movable
-zones, the watermark is increased in movable zones as well. Which will
-lead to inefficient kswapd.
+I also checked
+Documentation/devicetree/bindings/firmware/arm,scmi.yaml
 
-To solve this problem, per zone watermark is introduced to tune each zone's
-watermark separately. This can bring the following advantages:
-  - each zone can set its own watermark which bring flexibility
-  - lead to more efficient kswapd if this watermark is set fine
+Thanks,
+Peng.
 
-Here is real watermark data in my qemu machine(with THP disabled).
-
-With watermark_scale_factor = 10, there is only 1440(772-68+807-71)
-pages(5.76M) reserved for a system with 96G of memory. However if the
-watermark is set to 100, the movable zone's watermark increased to
-231908(93M), which is too much.
-This situation is even worse with 32G of normal zone memory and 1T of
-movable zone memory.
-
-       Modified        | Vanilla wm_factor = 10 | Vanilla wm_factor = 30
-Node 0, zone      DMA  | Node 0, zone      DMA  | Node 0, zone      DMA
-        min      68    |         min      68    |         min      68
-        low      7113  |         low      772   |         low      7113
-        high **14158** |         high **1476**  |         high **14158**
-Node 0, zone   Normal  | Node 0, zone   Normal  | Node 0, zone   Normal
-        min      71    |         min      71    |         min      71
-        low      7438  |         low      807   |         low      7438
-        high     14805 |         high     1543  |         high     14805
-Node 0, zone  Movable  | Node 0, zone  Movable  | Node 0, zone  Movable
-        min      1455  |         min      1455  |         min      1455
-        low      16388 |         low      16386 |         low      150787
-        high **31321** |         high **31317** |         high **300119**
-Node 1, zone  Movable  | Node 1, zone  Movable  | Node 1, zone  Movable
-        min      804   |         min      804   |         min      804
-        low      9061  |         low      9061  |         low      83379
-        high **17318** |         high **17318** |         high **165954**
-
-With the modified per zone watermark_scale_factor, only dma/normal zone
-will increase its watermark via the following command which the huge
-movable zone stay the same.
-
-  % echo 100 100 100 10 > /proc/sys/vm/watermark_scale_factor
-
-The reason to disable THP is khugepaged_min_free_kbytes_update() will
-update min watermark.
-
-Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
- Documentation/admin-guide/sysctl/vm.rst |  6 ++++
- include/linux/mm.h                      |  2 +-
- kernel/sysctl.c                         |  2 --
- mm/page_alloc.c                         | 37 ++++++++++++++++++++-----
- 4 files changed, 37 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index 9b833e439f09..ec240aa45322 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -1002,6 +1002,12 @@ that the number of free pages kswapd maintains for latency reasons is
- too small for the allocation bursts occurring in the system. This knob
- can then be used to tune kswapd aggressiveness accordingly.
- 
-+The watermark_scale_factor is an array. You can set each zone's watermark
-+separately and can be seen by reading this file::
-+
-+	% cat /proc/sys/vm/watermark_scale_factor
-+	10	10	10	10
-+
- 
- zone_reclaim_mode
- =================
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 21f8b27bd9fd..b291c795f9db 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2532,7 +2532,7 @@ extern void setup_per_cpu_pageset(void);
- /* page_alloc.c */
- extern int min_free_kbytes;
- extern int watermark_boost_factor;
--extern int watermark_scale_factor;
-+extern int watermark_scale_factor[MAX_NR_ZONES];
- extern bool arch_has_descending_max_zone_pfns(void);
- 
- /* nommu.c */
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 205d605cacc5..d16d06c71e5a 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2251,8 +2251,6 @@ static struct ctl_table vm_table[] = {
- 		.maxlen		= sizeof(watermark_scale_factor),
- 		.mode		= 0644,
- 		.proc_handler	= watermark_scale_factor_sysctl_handler,
--		.extra1		= SYSCTL_ONE,
--		.extra2		= SYSCTL_THREE_THOUSAND,
- 	},
- 	{
- 		.procname	= "percpu_pagelist_high_fraction",
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index f1e4474879f1..7a6ac3b4ebb6 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -421,7 +421,6 @@ compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS] = {
- int min_free_kbytes = 1024;
- int user_min_free_kbytes = -1;
- int watermark_boost_factor __read_mostly = 15000;
--int watermark_scale_factor = 10;
- 
- static unsigned long nr_kernel_pages __initdata;
- static unsigned long nr_all_pages __initdata;
-@@ -449,6 +448,20 @@ EXPORT_SYMBOL(nr_online_nodes);
- 
- int page_group_by_mobility_disabled __read_mostly;
- 
-+int watermark_scale_factor[MAX_NR_ZONES] = {
-+#ifdef CONFIG_ZONE_DMA
-+	[ZONE_DMA] = 10,
-+#endif
-+#ifdef CONFIG_ZONE_DMA32
-+	[ZONE_DMA32] = 10,
-+#endif
-+	[ZONE_NORMAL] = 10,
-+#ifdef CONFIG_HIGHMEM
-+	[ZONE_HIGHMEM] = 10,
-+#endif
-+	[ZONE_MOVABLE] = 10,
-+};
-+
- #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
- /*
-  * During boot we initialize deferred pages on-demand, as needed, but once
-@@ -8643,6 +8656,7 @@ static void __setup_per_zone_wmarks(void)
- 	}
- 
- 	for_each_zone(zone) {
-+		int zone_wm_factor;
- 		u64 tmp;
- 
- 		spin_lock_irqsave(&zone->lock, flags);
-@@ -8676,9 +8690,10 @@ static void __setup_per_zone_wmarks(void)
- 		 * scale factor in proportion to available memory, but
- 		 * ensure a minimum size on small systems.
- 		 */
-+		zone_wm_factor = watermark_scale_factor[zone_idx(zone)];
- 		tmp = max_t(u64, tmp >> 2,
--			    mult_frac(zone_managed_pages(zone),
--				      watermark_scale_factor, 10000));
-+			    mult_frac(zone_managed_pages(zone), zone_wm_factor,
-+				      10000));
- 
- 		zone->watermark_boost = 0;
- 		zone->_watermark[WMARK_LOW]  = min_wmark_pages(zone) + tmp;
-@@ -8798,11 +8813,19 @@ int min_free_kbytes_sysctl_handler(struct ctl_table *table, int write,
- int watermark_scale_factor_sysctl_handler(struct ctl_table *table, int write,
- 		void *buffer, size_t *length, loff_t *ppos)
- {
--	int rc;
-+	int i;
- 
--	rc = proc_dointvec_minmax(table, write, buffer, length, ppos);
--	if (rc)
--		return rc;
-+	proc_dointvec_minmax(table, write, buffer, length, ppos);
-+
-+	/*
-+	 * The unit is in fractions of 10,000. The default value of 10
-+	 * means the distances between watermarks are 0.1% of the available
-+	 * memory in the node/system. The maximum value is 3000, or 30% of
-+	 * memory.
-+	 */
-+	for (i = 0; i < MAX_NR_ZONES; i++)
-+		watermark_scale_factor[i] =
-+			clamp(watermark_scale_factor[i], 1, 3000);
- 
- 	if (write)
- 		setup_per_zone_wmarks();
--- 
-2.25.1
-
+>=20
+> Shawn
+>=20
+> >  			compatible =3D "arm,scmi-shmem";
+> >  			reg =3D <0x0 0x400>;
+> >  		};
+> > --
+> > 2.37.1
+> >

@@ -2,131 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84DA5AD8AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA0E5AD8B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbiIESA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 14:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S231910AbiIESAq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Sep 2022 14:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiIESAY (ORCPT
+        with ESMTP id S231872AbiIESAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:00:24 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85FD2612D;
-        Mon,  5 Sep 2022 11:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662400822; x=1693936822;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Eh/xw1+J5xp9FOGQqFCGHq3ic13Sy42VEYyyfiqZmHo=;
-  b=PYRscV5kTmemC3paubJepjL7JS1eX3dF/4/0kAcUCE677f7LuHUUnNfM
-   QVNDYGAnFC7iwTpqW+cRo7FZeIywR6gWL7kp05NQpSQ/1PEhOe43PCeXt
-   uHbIRUZXrBs3RArZGahNJ/pm7mHf4T9ahhDeOH4GPMekLZ6U5+jDqYtQJ
-   rPh9TuctUiZz/aKDY0LK1mWVCs4TfE2jksvsMOp3eQNkruTmhNP6h/eyx
-   /H5L8FnzxtE49rD+9iZ3qUXSTY28SpFNFCtS5Zjq7GIy9tY5NFPhhXNDp
-   qRDnqEwJR7iM2i1LE6cZ9JszcL+3HROniHn0niqAR2kK6TTjyos/MHp+u
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="279446843"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="279446843"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 11:00:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="590991845"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 05 Sep 2022 11:00:19 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4E3D0101; Mon,  5 Sep 2022 21:00:35 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v1 1/1] pinctrl: meson: Switch to use fwnode instead of of_node
-Date:   Mon,  5 Sep 2022 21:00:34 +0300
-Message-Id: <20220905180034.73132-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 5 Sep 2022 14:00:41 -0400
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB7130F7E;
+        Mon,  5 Sep 2022 11:00:40 -0700 (PDT)
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay01.hostedemail.com (Postfix) with ESMTP id 0701E1C7378;
+        Mon,  5 Sep 2022 18:00:38 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 0D4F120027;
+        Mon,  5 Sep 2022 18:00:36 +0000 (UTC)
+Message-ID: <f550b468064c61e3550b50da37138802d7e9415a.camel@perches.com>
+Subject: Re: [PATCH] checkpatch: warn for non-standard fixes tag style
+From:   Joe Perches <joe@perches.com>
+To:     Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@corigine.com>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Louis Peens <louis.peens@corigine.com>
+Date:   Mon, 05 Sep 2022 11:00:35 -0700
+In-Reply-To: <YxXUHPWtyrt6kNI1@sleipner.dyn.berto.se>
+References: <20220829155358.2546732-1-niklas.soderlund@corigine.com>
+         <dc45a7021bb765ea34c5b9228454f255764c7bc9.camel@perches.com>
+         <YxXUHPWtyrt6kNI1@sleipner.dyn.berto.se>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: uncp4j6xx9jbwat6rjj9xty5a5f8dd17
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 0D4F120027
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+n5QMvrlHvXTuREULemMyhNEhC5t3e5V0=
+X-HE-Tag: 1662400836-313636
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO library now accepts fwnode as a firmware node, so
-switch the driver to use it.
+On Mon, 2022-09-05 at 12:49 +0200, Niklas Söderlund wrote:
+> Hi Joe,
+> 
+> Thanks for your feedback.
+> 
+> On 2022-08-29 23:06:43 -0400, Joe Perches wrote:
+> > > +			if ($line =~ 
+> > > /(fixes:)\s+([0-9a-f]{5,})\s+($balanced_parens)/i) {
+> > 
+> > Maybe use fixes:? so the colon is not required in poorly formed uses
+> 
+> I tried that but I think it brings more problems then it is worth. With 
+> that change the check would run for each line of the commit message that 
+> begins with the string 'fixes', not just in the tags section of the 
+> message. So it would warn for the commit message,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pinctrl/meson/pinctrl-meson.c | 7 +++----
- drivers/pinctrl/meson/pinctrl-meson.h | 4 +++-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+I think it's not a problem.
+Look at the results of:
 
-diff --git a/drivers/pinctrl/meson/pinctrl-meson.c b/drivers/pinctrl/meson/pinctrl-meson.c
-index cc2cd73ff8f9..530f3f934e19 100644
---- a/drivers/pinctrl/meson/pinctrl-meson.c
-+++ b/drivers/pinctrl/meson/pinctrl-meson.c
-@@ -608,6 +608,7 @@ static int meson_gpiolib_register(struct meson_pinctrl *pc)
- 
- 	pc->chip.label = pc->data->name;
- 	pc->chip.parent = pc->dev;
-+	pc->chip.fwnode = pc->fwnode;
- 	pc->chip.request = gpiochip_generic_request;
- 	pc->chip.free = gpiochip_generic_free;
- 	pc->chip.set_config = gpiochip_generic_config;
-@@ -619,8 +620,6 @@ static int meson_gpiolib_register(struct meson_pinctrl *pc)
- 	pc->chip.base = -1;
- 	pc->chip.ngpio = pc->data->num_pins;
- 	pc->chip.can_sleep = false;
--	pc->chip.of_node = pc->of_node;
--	pc->chip.of_gpio_n_cells = 2;
- 
- 	ret = gpiochip_add_data(&pc->chip, pc);
- 	if (ret) {
-@@ -678,8 +677,8 @@ static int meson_pinctrl_parse_dt(struct meson_pinctrl *pc)
- 		return -EINVAL;
- 	}
- 
--	gpio_np = to_of_node(gpiochip_node_get_first(pc->dev));
--	pc->of_node = gpio_np;
-+	pc->fwnode = gpiochip_node_get_first(pc->dev);
-+	gpio_np = to_of_node(pc->fwnode);
- 
- 	pc->reg_mux = meson_map_resource(pc, gpio_np, "mux");
- 	if (IS_ERR_OR_NULL(pc->reg_mux)) {
-diff --git a/drivers/pinctrl/meson/pinctrl-meson.h b/drivers/pinctrl/meson/pinctrl-meson.h
-index b197827027bd..34fc4e8612e4 100644
---- a/drivers/pinctrl/meson/pinctrl-meson.h
-+++ b/drivers/pinctrl/meson/pinctrl-meson.h
-@@ -12,6 +12,8 @@
- #include <linux/types.h>
- #include <linux/module.h>
- 
-+struct fwnode_handle;
-+
- struct meson_pinctrl;
- 
- /**
-@@ -131,7 +133,7 @@ struct meson_pinctrl {
- 	struct regmap *reg_gpio;
- 	struct regmap *reg_ds;
- 	struct gpio_chip chip;
--	struct device_node *of_node;
-+	struct fwnode_handle *fwnode;
- };
- 
- #define FUNCTION(fn)							\
--- 
-2.35.1
+$ git log -100000 --no-merges --format=email --grep="^fixes" -i | \
+  grep -i -P -oh '^fixes:?\s*[0-9a-f]{5,}\s*..' | \
+  sed -r -e 's/^(fixes:?\s*)[0-9a-f]+/\1/i' | \
+  sort | uniq -c | sort -rn | head -20
+  73974 Fixes:  ("
+   1345 Fixes:  ('
+    399 Fixes: 
+    246 Fixes:  (A
+    215 Fixes: ("
+    172 Fixes:  (c
+    121 Fixes:  (s
+    114 Fixes:  (d
+    110 Fixes:  (P
+     98 Fixes:  (i
+     90 Fixes:  (m
+     86 Fixes:  (n
+     78 Fixes: : 
+     57 Fixes  ("
+     51 Fixes:  "n
+     47 Fixes:  (a
+     46 Fixes:  (t
+     43 fixes:  ("
+     42 Fixes:  (p
+     41 Fixes: ('
+
 

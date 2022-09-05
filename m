@@ -2,109 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135965ADC09
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B209B5ADC0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiIEXyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 19:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S232355AbiIEX4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 19:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbiIEXyh (ORCPT
+        with ESMTP id S230139AbiIEX4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 19:54:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B592BDD;
-        Mon,  5 Sep 2022 16:54:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2716EB8076C;
-        Mon,  5 Sep 2022 23:54:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79235C433D7;
-        Mon,  5 Sep 2022 23:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662422070;
-        bh=oHvBd1ffjg/s99ZfllkCt1FwNVqrZNIyO0l4IQri3jg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p80gw7rQuiV6cd187I7r7hGa76cgPTs1uokk/W+dlXSP+2oLyl+DZ7YnfiZ81PmLn
-         laoROTnP/I6oBqwsJszakMj6pZPhUe5u9XB1WMsrbB/bN+sGppqs3m2YuVOtSZV8Ja
-         T7yHcM2s245THucsIg4hzW9sOGpbPlsnsSUoKVT5gnwQ0xezUqbOQtMiepAt/yLois
-         q1FlItvmEJplUNaEerZO4ljGeHrk8MtKib7GZX0yC7AQGSfWY7K+iWLorvFY4j2by0
-         KawqedoQfopcfxKqQBPD+XHkqSE8SqJyEt8aruYwXQxhFot/G1HpOXcy548FEwIGgD
-         NbM9FRuQJr++g==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
-        64-BIT))
-Subject: [PATCH v2 2/2] x86/sgx: Handle VA page allocation failure for EAUG on PF.
-Date:   Tue,  6 Sep 2022 02:54:15 +0300
-Message-Id: <20220905235415.9519-3-jarkko@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220905235415.9519-1-jarkko@kernel.org>
-References: <20220905235415.9519-1-jarkko@kernel.org>
+        Mon, 5 Sep 2022 19:56:47 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173EA5AA26;
+        Mon,  5 Sep 2022 16:56:47 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id r69so9160129pgr.2;
+        Mon, 05 Sep 2022 16:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date;
+        bh=yG2nsd5/34KZh2Ljv+YOVUI4bCWzz44qCZZJaZQXcIE=;
+        b=jwQ7xjGRpjqZBJX0RitfI2JOv3JRzOaCEou9RQnxmEomm8uZkMG+4mu9e+sPoJpI/L
+         /lI6ZAMYDXGUtEyUSquoiaqZ+j1EKewkC5I2uOv+awexiajeL93T1UaVNVLmQBVYVrcb
+         bnBzAuCji5LGJgQ1WCuR497gA9WwQVeuAqDyenytoOnGB5ZenLYmUXenXyyieaQAZfil
+         zjJg5QC5T+P7cojQyNL9yIOPLHXjmiwj2pzHdaXv/SJ79CQk4dM7bIOG0lZMPPvO6F6B
+         7Fc4Q6Ca3Wsqoo5JHdHgoa+f5cxDB0wu7E5n0IDkzKrk4CMcSqsOrfnouX5d0SJKgam+
+         vWaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=yG2nsd5/34KZh2Ljv+YOVUI4bCWzz44qCZZJaZQXcIE=;
+        b=UTL5FP8doLKjGLgks6J9SqtNxzpwpkTLirybSjS/mgpN6KkfCzyPIzSjg61JJhspu0
+         A2E1iOkgNsURoh0TuvjkTPJVjrae/pcg+SOgDNFdSEo9e0/+6TN8jhI+AWMWrv/K64A+
+         OfunzokTzSAmfy6gDVVAUx/PJUvN9gfRZQ2PxRUX7ODodcrViOszb5qFarBTl1mSAYS/
+         WTz0LjX6qUAvllZ4qiXq1JHODySYN/iXGz1oHRgRGPS66gSoF+RDyn7uuwipVBCed3R/
+         73TVJ9pBiP4yIzkSRb+9ikUEXjB7oYf87Aw1IGWf49XsEHzDgVzEDE/U8EhI692AMIeB
+         YW0A==
+X-Gm-Message-State: ACgBeo32Ah0TN14EdkLxBrOFgN80gXhObLcjGOCTbxBBshDUwNb5oauJ
+        M61dAuLVovkOufxlV+0Z/Jk=
+X-Google-Smtp-Source: AA6agR6AyDvPMSYp2d+Sum7aE/V0wjZupDIJx2E1mWHPq7oRrMlI7aTHTfXVrD6sMl2K6TZXzSB7Pg==
+X-Received: by 2002:a05:6a00:88a:b0:53a:b7a0:ea3a with SMTP id q10-20020a056a00088a00b0053ab7a0ea3amr29406689pfj.21.1662422206546;
+        Mon, 05 Sep 2022 16:56:46 -0700 (PDT)
+Received: from localhost.localdomain ([76.132.249.1])
+        by smtp.gmail.com with ESMTPSA id g26-20020aa79dda000000b00537f13d217bsm8405530pfq.76.2022.09.05.16.56.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 16:56:45 -0700 (PDT)
+From:   rentao.bupt@gmail.com
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heyi Guo <guoheyi@linux.alibaba.com>,
+        Dylan Hung <dylan_hung@aspeedtech.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Liang He <windhl@126.com>, Hao Chen <chenhao288@hisilicon.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/2] net: ftgmac100: support fixed link
+Date:   Mon,  5 Sep 2022 16:56:32 -0700
+Message-Id: <20220905235634.20957-1-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haitao Huang <haitao.huang@linux.intel.com>
+From: Tao Ren <taoren@fb.com>
 
-VM_FAULT_NOPAGE is expected behaviour for -EBUSY failure path, when
-augmenting a page, as this means that the reclaimer thread has been
-triggered, and the intention is just to round-trip in ring-3, and
-retry with a new page fault.
+The patch series adds fixed link support to ftgmac100 driver.
 
-Fixes: 5a90d2c3f5ef ("x86/sgx: Support adding of pages to an initialized enclave")
-Signed-off-by: Haitao Huang <haitao.huang@linux.intel.com>
-Tested-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v4:
-* Remove extra white space.
+Patch #1 adds fixed link logic into ftgmac100 driver.
 
-v3:
-* Added Reinette's ack.
+Patch #2 enables mac3 controller in Elbert dts, and mac3 is connected to
+the onboard switch directly.
 
-v2:
-* Removed reviewed-by, no other changes.
----
- arch/x86/kernel/cpu/sgx/encl.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Tao Ren (2):
+  net: ftgmac100: support fixed link
+  ARM: dts: aspeed: elbert: Enable mac3 controller
 
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index f40d64206ded..9f13d724172e 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -347,8 +347,11 @@ static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
- 	}
- 
- 	va_page = sgx_encl_grow(encl, false);
--	if (IS_ERR(va_page))
-+	if (IS_ERR(va_page)) {
-+		if (PTR_ERR(va_page) == -EBUSY)
-+			vmret = VM_FAULT_NOPAGE;
- 		goto err_out_epc;
-+	}
- 
- 	if (va_page)
- 		list_add(&va_page->list, &encl->va_pages);
+ .../boot/dts/aspeed-bmc-facebook-elbert.dts   | 11 +++++++++
+ drivers/net/ethernet/faraday/ftgmac100.c      | 24 +++++++++++++++++++
+ 2 files changed, 35 insertions(+)
+
 -- 
-2.37.2
+2.30.2
 

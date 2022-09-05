@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAB05ACCAA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DDA5ACC90
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236206AbiIEHYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S237364AbiIEHY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236534AbiIEHYM (ORCPT
+        with ESMTP id S237128AbiIEHY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:24:12 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D715143605;
-        Mon,  5 Sep 2022 00:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662362439; x=1693898439;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ssnL7BukIcEKP701lJ9e0HtLSQIorRf9JYoiz28yTvU=;
-  b=BWroLrIuRsIhgnE3JMgp9g9kipuDDGOVy9gJkzT7ujZlYnUMDst9VLan
-   zY77+n9u0BNA1bxcUjQ89l3Fhfj7HecAfjd4OLOwLF4TK5NScuhNA3Tb7
-   6PmxV8i5khdkH7Ky5Dq8kcyXI8ZCH2VmYlBlo7gZruQk7MAhO0/x4ATyg
-   Py5Btz4bFk1PwuxJZ8anPXc5GOvQHu9ytHzJCyWOMSjxCcQ3ow/2DudjM
-   PnwAXn9Bjt3dhfxvOF6wsnx0LTaShiqZm8Rz6R7C1NUKAHpIJEvaFFPGD
-   sOTBk2Jx7CBWcq4wIlIPxS+MjP4CFZWJNR1MBfS4JISOEdgFHysTouEhR
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="179049985"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Sep 2022 00:20:38 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 5 Sep 2022 00:20:37 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 5 Sep 2022 00:20:33 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <arun.ramadoss@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-Subject: [Patch net] net: phy: lan87xx: change interrupt src of link_up to comm_ready
-Date:   Mon, 5 Sep 2022 12:50:17 +0530
-Message-ID: <20220905072017.9839-1-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 5 Sep 2022 03:24:27 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52D03AE7D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:21:04 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id k18so8248194lji.13
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 00:21:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=iWSYfAe+ZBAzN6w79RBdI1fVbBj2jgpCJQhaKKBYR+0=;
+        b=MMmhYFmVICVP4I/qOgryd7a9jIaLVEn7NbqCRm5lUhvAgbNHLRWDUpqme6YhpflC88
+         nW7SLySArUYMbFIXtTyz+/JU8pyeOV/qg6jn1Q4iCCtXCFMUBqgxWlGl8clgPg+WmZrV
+         Rm6QhcUl85nyci4zZ2DmvtENV79pgDG/uammumk83bDDKwikDIcqkVmWY0AjJogzM9Sj
+         b9JEcZwZ2D1/vGXX3Ns4vwPGrnlNoQtuL7o68vtF/vyaqxL9qi70LVsLAFKcJNmfjmiz
+         rhQJ3oOQ2QA/xkhm5/ucWoEm/i9fVTIxTOgFx4cc3s0gZSOcYU5+Q1WZy3bK/KuxjPQX
+         6ApA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=iWSYfAe+ZBAzN6w79RBdI1fVbBj2jgpCJQhaKKBYR+0=;
+        b=L6AIc6ehUxMDy7pCf3D7JA8vM/8UQyXTX6ShF7dg/9vxo3EcmuqRme66fZ1sx1vum2
+         M/Th96R7bH8TRHd8dSfkQ2THzzWvKbmKT4X7ra1xVkfLqrK99a4Z00gXuhsYMi12Id4K
+         M6fgoPsp3X6BVnzB1lVxdduk6b88MefHQiIayYJNHWzXrFhzpwAed8Or5cY/CwiAx3zp
+         KV8qOCZNt++IqYBMgRtnDbiuaZGWTv8pajqMmWR7ySDUAYQFakHwwv1eEyrm8o4Moy9+
+         PlEvFfB6yFVM9dT9b/tjFhzOPM5mmqNOPFdWbEC/ot9sYJm/c9J2o+FPhU+lFGWgzAx5
+         G5qg==
+X-Gm-Message-State: ACgBeo1r3iL+EekSaE4cWs3sdzo8nOnEeftcVU9AyOdvDYv6WhjAwEMK
+        50kLebzxsGqirIx6dplC87GvTPEgvfE8y26iFNIbUcPN2rIB6uY8
+X-Google-Smtp-Source: AA6agR73e4mOHM6sbUiILl5wcfKNj1bo1d/MLrYoxMhu73O0LBY5qQPI0HwKxCKqVTfphC5EC1pxl4iY64VE7pyL70w=
+X-Received: by 2002:a2e:bd03:0:b0:261:8b4d:7c5c with SMTP id
+ n3-20020a2ebd03000000b002618b4d7c5cmr15122999ljq.194.1662362462756; Mon, 05
+ Sep 2022 00:21:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220902124032.788488-1-sudeep.holla@arm.com> <20220902124032.788488-8-sudeep.holla@arm.com>
+In-Reply-To: <20220902124032.788488-8-sudeep.holla@arm.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 5 Sep 2022 12:50:51 +0530
+Message-ID: <CAFA6WYOxBm-TYC4sOqWE__oJeimjmZDNZZW_h3X5CV-8bXhtMg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/10] firmware: arm_ffa: Rename ffa_dev_ops as ffa_ops
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org,
+        Marc Bonnici <marc.bonnici@arm.com>,
+        Achin Gupta <achin.gupta@arm.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Valentin Laurent <valentin.laurent@trustonic.com>,
+        Lukas Hanel <lukas.hanel@trustonic.com>,
+        Coboy Chen <coboy.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,131 +72,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently phy link up/down interrupt is enabled using the
-LAN87xx_INTERRUPT_MASK register. In the lan87xx_read_status function,
-phy link is determined using the T1_MODE_STAT_REG register comm_ready bit.
-comm_ready bit is set using the loc_rcvr_status & rem_rcvr_status.
-Whenever the phy link is up, LAN87xx_INTERRUPT_SOURCE link_up bit is set
-first but comm_ready bit takes some time to set based on local and
-remote receiver status.
-As per the current implementation, interrupt is triggered using link_up
-but the comm_ready bit is still cleared in the read_status function. So,
-link is always down.  Initially tested with the shared interrupt
-mechanism with switch and internal phy which is working, but after
-implementing interrupt controller it is not working.
-It can fixed either by updating the read_status function to read from
-LAN87XX_INTERRUPT_SOURCE register or enable the interrupt mask for
-comm_ready bit. But the validation team recommends the use of comm_ready
-for link detection.
-This patch fixes by enabling the comm_ready bit for link_up in the
-LAN87XX_INTERRUPT_MASK_2 register (MISC Bank) and link_down in
-LAN87xx_INTERRUPT_MASK register.
+On Fri, 2 Sept 2022 at 18:10, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> Except the message APIs, all other APIs are ffa_device independent and can
+> be used without any associated ffa_device from a non ffa_driver.
+>
+> In order to reflect the same, just rename ffa_dev_ops as ffa_ops to
+> avoid any confusion or to keep it simple.
+>
+> Suggested-by: Sumit Garg <sumit.garg@linaro.org>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/firmware/arm_ffa/bus.c    |  2 +-
+>  drivers/firmware/arm_ffa/driver.c |  2 +-
+>  drivers/tee/optee/ffa_abi.c       | 14 +++++++-------
+>  include/linux/arm_ffa.h           |  8 ++++----
+>  4 files changed, 13 insertions(+), 13 deletions(-)
+>
 
-Fixes: 8a1b415d70b7 ("net: phy: added ethtool master-slave configuration
-		     support")
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
- drivers/net/phy/microchip_t1.c | 58 +++++++++++++++++++++++++++++++---
- 1 file changed, 54 insertions(+), 4 deletions(-)
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
 
-diff --git a/drivers/net/phy/microchip_t1.c b/drivers/net/phy/microchip_t1.c
-index d4c93d59bc53..8569a545e0a3 100644
---- a/drivers/net/phy/microchip_t1.c
-+++ b/drivers/net/phy/microchip_t1.c
-@@ -28,12 +28,16 @@
- 
- /* Interrupt Source Register */
- #define LAN87XX_INTERRUPT_SOURCE                (0x18)
-+#define LAN87XX_INTERRUPT_SOURCE_2              (0x08)
- 
- /* Interrupt Mask Register */
- #define LAN87XX_INTERRUPT_MASK                  (0x19)
- #define LAN87XX_MASK_LINK_UP                    (0x0004)
- #define LAN87XX_MASK_LINK_DOWN                  (0x0002)
- 
-+#define LAN87XX_INTERRUPT_MASK_2                (0x09)
-+#define LAN87XX_MASK_COMM_RDY			BIT(10)
-+
- /* MISC Control 1 Register */
- #define LAN87XX_CTRL_1                          (0x11)
- #define LAN87XX_MASK_RGMII_TXC_DLY_EN           (0x4000)
-@@ -424,17 +428,55 @@ static int lan87xx_phy_config_intr(struct phy_device *phydev)
- 	int rc, val = 0;
- 
- 	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
--		/* unmask all source and clear them before enable */
--		rc = phy_write(phydev, LAN87XX_INTERRUPT_MASK, 0x7FFF);
-+		/* clear all interrupt */
-+		rc = phy_write(phydev, LAN87XX_INTERRUPT_MASK, val);
-+		if (rc < 0)
-+			return rc;
-+
- 		rc = phy_read(phydev, LAN87XX_INTERRUPT_SOURCE);
--		val = LAN87XX_MASK_LINK_UP | LAN87XX_MASK_LINK_DOWN;
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = access_ereg(phydev, PHYACC_ATTR_MODE_WRITE,
-+				 PHYACC_ATTR_BANK_MISC,
-+				 LAN87XX_INTERRUPT_MASK_2, val);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = access_ereg(phydev, PHYACC_ATTR_MODE_READ,
-+				 PHYACC_ATTR_BANK_MISC,
-+				 LAN87XX_INTERRUPT_SOURCE_2, 0);
-+		if (rc < 0)
-+			return rc;
-+
-+		/* enable link down and comm ready interrupt */
-+		val = LAN87XX_MASK_LINK_DOWN;
- 		rc = phy_write(phydev, LAN87XX_INTERRUPT_MASK, val);
-+		if (rc < 0)
-+			return rc;
-+
-+		val = LAN87XX_MASK_COMM_RDY;
-+		rc = access_ereg(phydev, PHYACC_ATTR_MODE_WRITE,
-+				 PHYACC_ATTR_BANK_MISC,
-+				 LAN87XX_INTERRUPT_MASK_2, val);
- 	} else {
- 		rc = phy_write(phydev, LAN87XX_INTERRUPT_MASK, val);
--		if (rc)
-+		if (rc < 0)
- 			return rc;
- 
- 		rc = phy_read(phydev, LAN87XX_INTERRUPT_SOURCE);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = access_ereg(phydev, PHYACC_ATTR_MODE_WRITE,
-+				 PHYACC_ATTR_BANK_MISC,
-+				 LAN87XX_INTERRUPT_MASK_2, val);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = access_ereg(phydev, PHYACC_ATTR_MODE_READ,
-+				 PHYACC_ATTR_BANK_MISC,
-+				 LAN87XX_INTERRUPT_SOURCE_2, 0);
- 	}
- 
- 	return rc < 0 ? rc : 0;
-@@ -444,6 +486,14 @@ static irqreturn_t lan87xx_handle_interrupt(struct phy_device *phydev)
- {
- 	int irq_status;
- 
-+	irq_status  = access_ereg(phydev, PHYACC_ATTR_MODE_READ,
-+				  PHYACC_ATTR_BANK_MISC,
-+				  LAN87XX_INTERRUPT_SOURCE_2, 0);
-+	if (irq_status < 0) {
-+		phy_error(phydev);
-+		return IRQ_NONE;
-+	}
-+
- 	irq_status = phy_read(phydev, LAN87XX_INTERRUPT_SOURCE);
- 	if (irq_status < 0) {
- 		phy_error(phydev);
+-Sumit
 
-base-commit: aa51b80e1af47b3781abb1fb1666445a7616f0cd
--- 
-2.36.1
-
+> diff --git a/drivers/firmware/arm_ffa/bus.c b/drivers/firmware/arm_ffa/bus.c
+> index 69328041fbc3..99d439480612 100644
+> --- a/drivers/firmware/arm_ffa/bus.c
+> +++ b/drivers/firmware/arm_ffa/bus.c
+> @@ -168,7 +168,7 @@ bool ffa_device_is_valid(struct ffa_device *ffa_dev)
+>  }
+>
+>  struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
+> -                                      const struct ffa_dev_ops *ops)
+> +                                      const struct ffa_ops *ops)
+>  {
+>         int ret;
+>         struct device *dev;
+> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+> index e4fd35773071..2532e0f16cc9 100644
+> --- a/drivers/firmware/arm_ffa/driver.c
+> +++ b/drivers/firmware/arm_ffa/driver.c
+> @@ -666,7 +666,7 @@ static int ffa_memory_lend(struct ffa_mem_ops_args *args)
+>         return ffa_memory_ops(FFA_MEM_LEND, args);
+>  }
+>
+> -static const struct ffa_dev_ops ffa_ops = {
+> +static const struct ffa_ops ffa_ops = {
+>         .api_version_get = ffa_api_version_get,
+>         .partition_info_get = ffa_partition_info_get,
+>         .mode_32bit_set = ffa_mode_32bit_set,
+> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+> index 7257b42d0545..2ce5b87dfb27 100644
+> --- a/drivers/tee/optee/ffa_abi.c
+> +++ b/drivers/tee/optee/ffa_abi.c
+> @@ -272,7 +272,7 @@ static int optee_ffa_shm_register(struct tee_context *ctx, struct tee_shm *shm,
+>  {
+>         struct optee *optee = tee_get_drvdata(ctx->teedev);
+>         struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
+> -       const struct ffa_dev_ops *ffa_ops = ffa_dev->ops;
+> +       const struct ffa_ops *ffa_ops = ffa_dev->ops;
+>         struct ffa_mem_region_attributes mem_attr = {
+>                 .receiver = ffa_dev->vm_id,
+>                 .attrs = FFA_MEM_RW,
+> @@ -315,7 +315,7 @@ static int optee_ffa_shm_unregister(struct tee_context *ctx,
+>  {
+>         struct optee *optee = tee_get_drvdata(ctx->teedev);
+>         struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
+> -       const struct ffa_dev_ops *ffa_ops = ffa_dev->ops;
+> +       const struct ffa_ops *ffa_ops = ffa_dev->ops;
+>         u64 global_handle = shm->sec_world_id;
+>         struct ffa_send_direct_data data = {
+>                 .data0 = OPTEE_FFA_UNREGISTER_SHM,
+> @@ -342,7 +342,7 @@ static int optee_ffa_shm_unregister_supp(struct tee_context *ctx,
+>                                          struct tee_shm *shm)
+>  {
+>         struct optee *optee = tee_get_drvdata(ctx->teedev);
+> -       const struct ffa_dev_ops *ffa_ops = optee->ffa.ffa_dev->ops;
+> +       const struct ffa_ops *ffa_ops = optee->ffa.ffa_dev->ops;
+>         u64 global_handle = shm->sec_world_id;
+>         int rc;
+>
+> @@ -530,7 +530,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
+>  {
+>         struct optee *optee = tee_get_drvdata(ctx->teedev);
+>         struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
+> -       const struct ffa_dev_ops *ffa_ops = ffa_dev->ops;
+> +       const struct ffa_ops *ffa_ops = ffa_dev->ops;
+>         struct optee_call_waiter w;
+>         u32 cmd = data->data0;
+>         u32 w4 = data->data1;
+> @@ -652,7 +652,7 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
+>   */
+>
+>  static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
+> -                                       const struct ffa_dev_ops *ops)
+> +                                       const struct ffa_ops *ops)
+>  {
+>         struct ffa_send_direct_data data = { OPTEE_FFA_GET_API_VERSION };
+>         int rc;
+> @@ -687,7 +687,7 @@ static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
+>  }
+>
+>  static bool optee_ffa_exchange_caps(struct ffa_device *ffa_dev,
+> -                                   const struct ffa_dev_ops *ops,
+> +                                   const struct ffa_ops *ops,
+>                                     u32 *sec_caps,
+>                                     unsigned int *rpc_param_count)
+>  {
+> @@ -783,7 +783,7 @@ static void optee_ffa_remove(struct ffa_device *ffa_dev)
+>
+>  static int optee_ffa_probe(struct ffa_device *ffa_dev)
+>  {
+> -       const struct ffa_dev_ops *ffa_ops;
+> +       const struct ffa_ops *ffa_ops;
+>         unsigned int rpc_param_count;
+>         struct tee_shm_pool *pool;
+>         struct tee_device *teedev;
+> diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
+> index eafab07c9f58..4c4b06783035 100644
+> --- a/include/linux/arm_ffa.h
+> +++ b/include/linux/arm_ffa.h
+> @@ -17,7 +17,7 @@ struct ffa_device {
+>         bool mode_32bit;
+>         uuid_t uuid;
+>         struct device dev;
+> -       const struct ffa_dev_ops *ops;
+> +       const struct ffa_ops *ops;
+>  };
+>
+>  #define to_ffa_dev(d) container_of(d, struct ffa_device, dev)
+> @@ -49,7 +49,7 @@ static inline void *ffa_dev_get_drvdata(struct ffa_device *fdev)
+>
+>  #if IS_REACHABLE(CONFIG_ARM_FFA_TRANSPORT)
+>  struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
+> -                                      const struct ffa_dev_ops *ops);
+> +                                      const struct ffa_ops *ops);
+>  void ffa_device_unregister(struct ffa_device *ffa_dev);
+>  int ffa_driver_register(struct ffa_driver *driver, struct module *owner,
+>                         const char *mod_name);
+> @@ -59,7 +59,7 @@ bool ffa_device_is_valid(struct ffa_device *ffa_dev);
+>  #else
+>  static inline
+>  struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
+> -                                      const struct ffa_dev_ops *ops)
+> +                                      const struct ffa_ops *ops)
+>  {
+>         return NULL;
+>  }
+> @@ -254,7 +254,7 @@ struct ffa_mem_ops_args {
+>         struct ffa_mem_region_attributes *attrs;
+>  };
+>
+> -struct ffa_dev_ops {
+> +struct ffa_ops {
+>         u32 (*api_version_get)(void);
+>         int (*partition_info_get)(const char *uuid_str,
+>                                   struct ffa_partition_info *buffer);
+> --
+> 2.37.3
+>

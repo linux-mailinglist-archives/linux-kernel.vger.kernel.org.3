@@ -2,68 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C8D5AC8B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A665AC8B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235232AbiIECJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 22:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
+        id S235195AbiIECMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 22:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235064AbiIECJc (ORCPT
+        with ESMTP id S230013AbiIECMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 22:09:32 -0400
-Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D9FF110E
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 19:09:30 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 162BB1E80D74;
-        Mon,  5 Sep 2022 10:08:36 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HiXgdR0GdOS1; Mon,  5 Sep 2022 10:08:33 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 876B51E80D59;
-        Mon,  5 Sep 2022 10:08:33 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     mike.kravetz@oracle.com, songmuchun@bytedance.com,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Li zeming <zeming@nfschina.com>
-Subject: [PATCH] mm: Remove unnecessary '0' values from err
-Date:   Mon,  5 Sep 2022 10:09:18 +0800
-Message-Id: <20220905020918.3552-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 4 Sep 2022 22:12:34 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3705521E3F
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 19:12:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=UhOTn
+        q4LpbvawDLF/ipZQT+kbw2lua4Q89NZBtJL2a0=; b=bkaWnB+amf1tXndkSfjJb
+        Avi6GdYqf8cGTa9aUj1LP53dGWBpMeMcXWpk0MjAkLZktHwlpouV15tAfjYaTPux
+        8O10TRyeeiMMy9UHHMuR8VUIDXzZGC7DyvBTvccQXlpHSo9KEYMADVelwDU43hBK
+        H8+NIY0OGuGtTlHjehN0rs=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp3 (Coremail) with SMTP id G9xpCgDH9Ye1WhVjia_Kaw--.30864S2;
+        Mon, 05 Sep 2022 10:11:03 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     akpm@linux-foundation.org, keescook@chromium.org
+Cc:     gregkh@linuxfoundation.org, mingo@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] init.h: fix spelling typo in comment
+Date:   Mon,  5 Sep 2022 10:10:34 +0800
+Message-Id: <20220905021034.947701-1-13667453960@163.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgDH9Ye1WhVjia_Kaw--.30864S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5GF18GF1DGFg_yoW3urb_C3
+        W8Jr409rWxGF4Sva1vkF4avFyaga48KFWUWrn5JrnrXan7Zan8J397JrnFv3s7GrWvkF90
+        q3Z3WryIyw15ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU88R67UUUUU==
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbiVxBw+1etoJ76+QABsK
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First execute the kstrtoul function and assign a value to err.
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
+Fix spelling typo in comment.
+
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
 ---
- mm/hugetlb.c | 2 +-
+ include/linux/init.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e070b8593b37..be7a2c4081fc 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -3714,7 +3714,7 @@ static ssize_t demote_store(struct kobject *kobj,
- 	unsigned long nr_available;
- 	nodemask_t nodes_allowed, *n_mask;
- 	struct hstate *h;
--	int err = 0;
-+	int err;
- 	int nid;
+diff --git a/include/linux/init.h b/include/linux/init.h
+index baf0b29a7010..3254766ebbf2 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -134,7 +134,7 @@ static inline initcall_t initcall_from_entry(initcall_entry_t *entry)
  
- 	err = kstrtoul(buf, 10, &nr_demote);
+ extern initcall_entry_t __con_initcall_start[], __con_initcall_end[];
+ 
+-/* Used for contructor calls. */
++/* Used for constructor calls. */
+ typedef void (*ctor_fn_t)(void);
+ 
+ struct file_system_type;
 -- 
-2.18.2
+2.27.0
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
 

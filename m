@@ -2,153 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02EC25AD098
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5795AD0A1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbiIEKsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S237725AbiIEKsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237521AbiIEKsE (ORCPT
+        with ESMTP id S237610AbiIEKsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:48:04 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32064C63C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:48:03 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 285AdB2T007177;
-        Mon, 5 Sep 2022 10:47:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=ufZB2BKxpQ8P5gYnBIYIG6KMKiIGNOURP18jVUHN2Vs=;
- b=DLUA+3Cax17gkGdimcZ+YWz0pUDXnmEb5EgRCUZhTActjT4aP94Easf6l023LfECe0IX
- PG+cqjzF3x9ihaPYFk8rRhflt2MgEa+HXpPGivALb2l88yCNrtEG3QVVy8Y/uK1o2tpa
- V8nnayIZC6TagPqhhhwFd84wyzJV5F5I6KQ5gadb1CV25/HdFX2/zNkG/ETU1E5sJG5w
- +xNUHf41yhdw94NRzuxagqgBtyHiQm3/BacJEsllRpzYwmMeBuTW+Yn33y13QVt8HVAC
- 1ioZkHL3ezM0pKRZ1uQLIJEc+e8tdpO0BMu/IhK3eWoRYDq1Jxm82g362Vikwc+n5d0i UQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jdf83rmcd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 10:47:47 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 285AeVMe012284;
-        Mon, 5 Sep 2022 10:47:46 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jdf83rmbn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 10:47:46 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 285AaH86008999;
-        Mon, 5 Sep 2022 10:47:43 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3jbxj8hpsx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 10:47:43 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 285AlfLO41156988
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 5 Sep 2022 10:47:41 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2FB204C040;
-        Mon,  5 Sep 2022 10:47:41 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA3174C044;
-        Mon,  5 Sep 2022 10:47:40 +0000 (GMT)
-Received: from localhost (unknown [9.43.114.209])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  5 Sep 2022 10:47:40 +0000 (GMT)
-Date:   Mon, 05 Sep 2022 16:17:39 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 05/16] powerpc: Skip objtool from running on
- drivers/crypto/vmx/aesp8-ppc.o
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     aik@ozlabs.ru, chenzhongjin@huawei.com,
-        christophe.leroy@csgroup.eu, jpoimboe@redhat.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mbenes@suse.cz, mingo@redhat.com, mpe@ellerman.id.au,
-        npiggin@gmail.com, rostedt@goodmis.org
-References: <20220829055223.24767-1-sv@linux.ibm.com>
-        <20220829055223.24767-6-sv@linux.ibm.com>
-        <YxEFZXCnCH7F8yku@hirez.programming.kicks-ass.net>
-In-Reply-To: <YxEFZXCnCH7F8yku@hirez.programming.kicks-ass.net>
+        Mon, 5 Sep 2022 06:48:19 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380424C63C;
+        Mon,  5 Sep 2022 03:48:18 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id cb8so5912944qtb.0;
+        Mon, 05 Sep 2022 03:48:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=ocC0mA23fnRz/a4YbrfNwFrDwQYg+GSA5oW5v/yTckg=;
+        b=KeR2rGIjPnYKiKG2aILzh6gWMDTnViE8fXPWXXXixLovTbpx00/oSEAU+Q4L2OCzAK
+         GRraxIbhCS4mi4IuRHOlRDlrrUGLqMd7GLM+J1Hc2/d7WSNIQDHGywQYnYEyBYPDgjiz
+         uY13i1u0RDIQGheVM8QVFqtoKIkC9biCE4wbzSZrKtBJ1m2pvxKw60ny4f6bBZ/B8u0u
+         Zr23UPD2YvAu/KuN+tEjHJX9M8xugOLPnNs4g2YR3PzTM6X60zVPevAOqAjIm6WKdYct
+         vHLBCofCn+v7V2zJuE2kdbx3Wmz7GLi7XsxEmH7dNee6uir7hoWh+8c0e9HZN2r8BTuM
+         JH4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ocC0mA23fnRz/a4YbrfNwFrDwQYg+GSA5oW5v/yTckg=;
+        b=YvFX5RbjHPTBGm8Zh/+eZsYQzqZbr8OFmbjZvFPwMg64o6gKe5a7kLYKWU6rgB7YBD
+         eyFjVDyli9GUkr/wp1T9T9+fogQ/ADCJwnOIO26VNOVywMbln7Q26KNqHyYBw0G7Xx7B
+         XucJ5npZiUv6ondFcyoxhEb1X6cPEIL4Zw33M6fHkqZ+Veek1dBvctWMfdy0TNFIdLdX
+         /1bvwoQQdZPIy5x3qa4dWzVZTGmYSCZYwkVtbQiiQz/uAa4FPqszHY8MY6rwnb7ZNij1
+         aSe7T7W/dED94rv0AdYOoKFYVhprP15mY34GJ6IvHcLN7Ez+q80TzSK3Fvq8/Zs39XDM
+         hT3A==
+X-Gm-Message-State: ACgBeo3c6rMIfD3/rgmFdG9ulu+1F+ViIiQpx1ebr4guykm/2P3O+Rb6
+        QXBfUQ8jkCYeNaI/Xqy31/nF1S3PsYjfjzfUIw4=
+X-Google-Smtp-Source: AA6agR6PNo2Qc8lpj2itrEExN36xqc7ZpSaZEm3ZnHtwljImH3P9PTPtYv87hNYI8E9dEPcysm+pNwOsTzObwqbdpdc=
+X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id
+ v6-20020ac85786000000b003433051170dmr38497148qta.429.1662374897323; Mon, 05
+ Sep 2022 03:48:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1662374747.rv53oucl9s.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-6-b29adfb27a6c@gmail.com> <20220905070046.46nlhczkck2ufr4x@pali>
+In-Reply-To: <20220905070046.46nlhczkck2ufr4x@pali>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 5 Sep 2022 13:47:41 +0300
+Message-ID: <CAHp75VcFv7ipLqXmOwbXpY-_ccYNA9PgF0h4T8RY1Z-UNNpaTg@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] PCI: aardvark: switch to using devm_gpiod_get_optional()
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: F8bGJIR7Ki-Y9FWBQDt-pGVTaYsOi46T
-X-Proofpoint-GUID: TFqjrs-Opq1fXXMxyqL7Q0Ss9lsud2r0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-05_07,2022-09-05_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 clxscore=1015 malwarescore=0 lowpriorityscore=0
- spamscore=0 adultscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209050051
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra wrote:
-> On Mon, Aug 29, 2022 at 11:22:12AM +0530, Sathvika Vasireddy wrote:
->> With objtool enabled, below warnings are seen when trying to build:
->>=20
->> drivers/crypto/vmx/aesp8-ppc.o: warning: objtool: aes_p8_set_encrypt_key=
-+0x44: unannotated intra-function call
->>=20
->> drivers/crypto/vmx/aesp8-ppc.o: warning: objtool: .text+0x2448: unannota=
-ted intra-function call
->>=20
->> drivers/crypto/vmx/aesp8-ppc.o: warning: objtool: .text+0x2d68: unannota=
-ted intra-function call
->>=20
->> Skip objtool from running on this file, for two main reasons:
->>=20
->> Since this file comes from OpenSSL, and since it is a perl file
->> which generates a .S file, it may not be the best choice to
->> make too many code changes to such files, unless absolutely
->> necessary.
->>=20
->> Second reason is that, at least as far as the objtool --mcount
->> functionality is concerned, we do not have to run objtool on
->> that file because that file does not have any calls to _mcount.
->>=20
->> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
->> ---
->>  drivers/crypto/vmx/Makefile | 2 ++
->>  1 file changed, 2 insertions(+)
->>=20
->> diff --git a/drivers/crypto/vmx/Makefile b/drivers/crypto/vmx/Makefile
->> index 2560cfea1dec..7b41f0da6807 100644
->> --- a/drivers/crypto/vmx/Makefile
->> +++ b/drivers/crypto/vmx/Makefile
->> @@ -9,3 +9,5 @@ targets +=3D aesp8-ppc.S ghashp8-ppc.S
->> =20
->>  $(obj)/aesp8-ppc.S $(obj)/ghashp8-ppc.S: $(obj)/%.S: $(src)/%.pl FORCE
->>  	$(call if_changed,perl)
->> +
->> +OBJECT_FILES_NON_STANDARD_aesp8-ppc.o :=3D y
->=20
-> Just be aware that the moment you start to run objtool on vmlinux.o this
-> annotation becomes unstuck.
->=20
-> Specifically things like LTO builds require this because there simply
-> isn't an object file before that.
+On Mon, Sep 5, 2022 at 10:02 AM Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> On Sunday 04 September 2022 23:30:58 Dmitry Torokhov wrote:
+> > I would like to stop exporting OF-specific devm_gpiod_get_from_of_node(=
+)
+> > so that gpiolib can be cleaned a bit, so let's switch to the generic
+> > device property API.
+> >
+> > I believe that the only reason the driver, instead of the standard
+> > devm_gpiod_get_optional(), used devm_gpiod_get_from_of_node() is
+> > because it wanted to set up a pretty consumer name for the GPIO,
+>
+> IIRC consumer name is not used at all.
 
-Good point. LTO isn't supported today with ftrace on powerpc, so I guess=20
-we are ok with this patch for now.
+It's. The user space tools use it as a label. So, GPIO line can have
+"name" (this is provider specific) and "label" (which is consumer
+specific, i.o.w. how we use this line).
 
-To add LTO support, I guess we will need to add some annotations to this=20
-file later on.
+...
+
+> > +             if (ret !=3D -EPROBE_DEFER)
+> > +                     dev_err(dev, "Failed to get reset-gpio: %i\n",
+> > +                             ret);
+> > +             return ret;
+
+I understand that in the input subsystem maintainer's hat you don't
+like dev_err_probe(), but it's a good case to have it here.
+
+...
+
+> > +     ret =3D gpiod_set_consumer_name(pcie->reset_gpio, "pcie1-reset");
+> > +     if (ret) {
+> > +             dev_err(dev, "Failed to set reset gpio name: %d\n", ret);
+> > +             return ret;
+> >       }
+
+Ditto.
 
 
-- Naveen
+--=20
+With Best Regards,
+Andy Shevchenko

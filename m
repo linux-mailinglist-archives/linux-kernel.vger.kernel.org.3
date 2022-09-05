@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DAA5AD509
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602105AD523
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbiIEOhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
+        id S238570AbiIEOiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238420AbiIEOg1 (ORCPT
+        with ESMTP id S238424AbiIEOhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:36:27 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597C917599
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:35:33 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id j11-20020a056e02218b00b002f17a1f9637so2071082ila.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:35:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=1eu12Y/7myvVTlijkPxBB986iRYCXXzL9QUqsoDSoRU=;
-        b=qUdK4BrQSxEsRm2tBLgR81cEQNPto7reIfy7nzNjyb5+VKFqkLsEZ1vPDZp8R84GTf
-         LoCVfDa40nRA7Nm2eKYAmpg9A44SF6801xjsJzec6hBfByftqoQFyIPxxo5u9jXw3sWp
-         WVnVICD+SiqyxOb2Fja7rk6XQmMYBP5vQkisT/rkYW+C52Jfb1QYhSci/2/ZWBHvBMeq
-         fJinK4K+BYJ4+xx2mAK+17/syFrGfKGLHKu2Flhr7qBFLAckT4yTWVUxxxvIKhqWpEbJ
-         hdgZNhH2h206AP4k+sulyI6yz7f5WZjtR/eZHRxe/EvdaQ9LQn4Jix3HhoV+uboSeQoW
-         2Jrw==
-X-Gm-Message-State: ACgBeo3t0riNWzR9tcALIjEsBEfJzVi2Z5eIH1Vg0fofrYDtvySnNxRT
-        KP1Bbmqc8ll5cpBtUeLC8fWEk+PZ4vKoBSWUMJd6hCq4ZdFP
-X-Google-Smtp-Source: AA6agR5ttrukC8L+K07DB/liSFE04gWoF92fJyZa6kcUmS5ZynOGvthyp5Mb3LrgWXAy5aTh6Xm/R8Cib7OuKz2L32AwJ6iyO2SA
+        Mon, 5 Sep 2022 10:37:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845B941D13;
+        Mon,  5 Sep 2022 07:36:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDC84B811DD;
+        Mon,  5 Sep 2022 14:36:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56768C433D6;
+        Mon,  5 Sep 2022 14:36:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662388567;
+        bh=An4UJcU7szR3Q74XA+9r8uY9luGHA9rcsWpB4IpI8xo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M0BH/8LicdfIdp6CNfq5JxKfhrZCzZPlwMXOjY9KnIl9DXY08fo84r+yWZKq3nm/K
+         3MWlzzFKr/S/f1xdenqOsmAulXU5+THYWcSi0bkYbxOHqZpT3pNl6IQ+WXpLSZp/PU
+         gN/a+hUOZzK0Rl47xVyfINqFv8fkRW+MnlnhjEQaY8G2/0BEs3EwXR9xNKS7XN3vwS
+         WotvOQPqXnMEY+BNgwRsAe6h0w9x2Z994kdT4fZL8h2CKzjkQC7IcTB0jePWsyW00e
+         Hpm/Z3KcPtGD306hsAZ3StMz4+eaYCfaTpLJ8LuJ3OcmBjnh12n95AEqwOTnlXgzO/
+         YFeyoXk8AGJ8w==
+Date:   Mon, 5 Sep 2022 15:35:57 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Matt Ranostay <mranostay@ti.com>
+Cc:     nm@ti.com, j-keerthy@ti.com, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/6] MFD: TPS6594x: Add new PMIC device driver for
+ TPS6594x chips
+Message-ID: <YxYJTU55VgoVYoLO@google.com>
+References: <20220812032242.564026-1-mranostay@ti.com>
+ <20220812032242.564026-3-mranostay@ti.com>
+ <YvX6sBMItZoAhLKe@google.com>
+ <Yw5t4G6hbn+mSD8y@ubuntu>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3043:b0:341:d8a4:73e8 with SMTP id
- u3-20020a056638304300b00341d8a473e8mr26455973jak.239.1662388530884; Mon, 05
- Sep 2022 07:35:30 -0700 (PDT)
-Date:   Mon, 05 Sep 2022 07:35:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dcb48a05e7eefddd@google.com>
-Subject: [syzbot] usb-testing boot error: general protection fault in kvmalloc_node
-From:   syzbot <syzbot+24e8438a720679b9b878@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yw5t4G6hbn+mSD8y@ubuntu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,116 +60,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 30 Aug 2022, Matt Ranostay wrote:
 
-syzbot found the following issue on:
+> On Fri, Aug 12, 2022 at 08:01:04AM +0100, Lee Jones wrote:
+> > On Thu, 11 Aug 2022, Matt Ranostay wrote:
+> > 
+> > > From: Keerthy <j-keerthy@ti.com>
+> > > 
+> > > The TPS6594x chip is a PMIC, and contains the following components:
+> > > 
+> > > - Regulators
+> > > - GPIO controller
+> > > - RTC
+> > > 
+> > > However initially only RTC is supported.
+> > > 
+> > > Signed-off-by: Keerthy <j-keerthy@ti.com>
+> > > Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> > > ---
+> > >  drivers/mfd/Kconfig          |  14 ++++
+> > >  drivers/mfd/Makefile         |   1 +
+> > >  drivers/mfd/tps6594x.c       | 121 +++++++++++++++++++++++++++++++++++
+> > >  include/linux/mfd/tps6594x.h |  84 ++++++++++++++++++++++++
+> > >  4 files changed, 220 insertions(+)
+> > >  create mode 100644 drivers/mfd/tps6594x.c
+> > >  create mode 100644 include/linux/mfd/tps6594x.h
+> > > 
+> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > > index abb58ab1a1a4..4845683ae1d0 100644
+> > > --- a/drivers/mfd/Kconfig
+> > > +++ b/drivers/mfd/Kconfig
+> > > @@ -1547,6 +1547,20 @@ config MFD_TI_LP873X
+> > >  	  This driver can also be built as a module. If so, the module
+> > >  	  will be called lp873x.
+> > >  
+> > > +config MFD_TPS6594X
+> > > +	tristate "TI TPS6594X Power Management IC"
+> > > +	depends on I2C && OF
+> > > +	select MFD_CORE
+> > > +	select REGMAP_I2C
+> > > +	help
+> > > +	  If you say yes here then you get support for the TPS6594X series of
+> > > +	  Power Management Integrated Circuits (PMIC).
+> > > +	  These include voltage regulators, RTS, configurable
+> > > +	  General Purpose Outputs (GPO) that are used in portable devices.
+> > > +
+> > > +	  This driver can also be built as a module. If so, the module
+> > > +	  will be called tps6594x.
+> > > +
+> > >  config MFD_TI_LP87565
+> > >  	tristate "TI LP87565 Power Management IC"
+> > >  	depends on I2C && OF
+> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > > index 858cacf659d6..7ff6a8a57d55 100644
+> > > --- a/drivers/mfd/Makefile
+> > > +++ b/drivers/mfd/Makefile
+> > > @@ -105,6 +105,7 @@ obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o
+> > >  obj-$(CONFIG_MFD_TPS65912)	+= tps65912-core.o
+> > >  obj-$(CONFIG_MFD_TPS65912_I2C)	+= tps65912-i2c.o
+> > >  obj-$(CONFIG_MFD_TPS65912_SPI)  += tps65912-spi.o
+> > > +obj-$(CONFIG_MFD_TPS6594X)	+= tps6594x.o
+> > >  obj-$(CONFIG_MENELAUS)		+= menelaus.o
+> > >  
+> > >  obj-$(CONFIG_TWL4030_CORE)	+= twl-core.o twl4030-irq.o twl6030-irq.o
+> > > diff --git a/drivers/mfd/tps6594x.c b/drivers/mfd/tps6594x.c
+> > > new file mode 100644
+> > > index 000000000000..ff265b91db3e
+> > > --- /dev/null
+> > > +++ b/drivers/mfd/tps6594x.c
+> > > @@ -0,0 +1,121 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > +/*
+> > > + * Driver for tps6594x PMIC chips
+> > > + *
+> > > + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+> > > + * Author: Keerthy <j-keerthy@ti.com>
+> > > + */
+> > > +
+> > > +#include <linux/of.h>
+> > > +#include <linux/of_device.h>
+> > > +#include <linux/mfd/core.h>
+> > > +#include <linux/mfd/tps6594x.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/i2c.h>
+> > > +#include <linux/regmap.h>
+> > > +
+> > > +static const struct regmap_config tps6594x_regmap_config = {
+> > > +	.reg_bits = 8,
+> > > +	.val_bits = 8,
+> > > +	.max_register = TPS6594X_REG_MAX,
+> > > +};
+> > > +
+> > > +static const struct mfd_cell tps6594x_cells[] = {
+> > > +	{ .name = "tps6594x-gpio" },
+> > > +	{ .name = "tps6594x-regulator" },
+> > > +	{ .name = "tps6594x-rtc" },
+> > > +};
+> > 
+> > Where are the device drivers for these?
+> >
+> 
+> They currently don't exist. Would these need to be merged/developed
+> before the acceptance of the mfd driver?
 
-HEAD commit:    10174220f55a usb: reduce kernel log spam on driver registr..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=131ee98b080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=24e8438a720679b9b878
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Yes, they would.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/cc623f81ac2e/disk-10174220.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d582f7185db2/vmlinux-10174220.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+24e8438a720679b9b878@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xffff0fff00000800: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0xfff89ff800004000-0xfff89ff800004007]
-CPU: 1 PID: 1149 Comm: mkdir Not tainted 6.0.0-rc1-syzkaller-00047-g10174220f55a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:__kmalloc_node+0x1dd/0x360 mm/slub.c:4468
-Code: 48 83 c4 18 44 89 e1 4c 89 ea 5b 4c 89 fe 48 89 ef 5d 41 5c 41 5d 41 5e 41 5f e9 6e 55 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 3d 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0018:ffffc900004e7c20 EFLAGS: 00010246
-RAX: ffff0fff00000000 RBX: 0000000000400cc0 RCX: 0000000000000800
-RDX: 0000000000000041 RSI: 0000000000400cc0 RDI: 000000000003b880
-RBP: ffff88810004c280 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000400cc0
-R13: 0000000000001000 R14: 0000000000000000 R15: ffffffff81632b1e
-FS:  00007fd7fef3f800(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd7ff039410 CR3: 000000010f2f0000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kmalloc_node include/linux/slab.h:623 [inline]
- kvmalloc_node+0x3e/0x190 mm/util.c:613
- kvmalloc include/linux/slab.h:750 [inline]
- seq_buf_alloc fs/seq_file.c:38 [inline]
- seq_read_iter+0x7f7/0x1280 fs/seq_file.c:210
- proc_reg_read_iter+0x1fb/0x2d0 fs/proc/inode.c:305
- call_read_iter include/linux/fs.h:2181 [inline]
- new_sync_read fs/read_write.c:389 [inline]
- vfs_read+0x67d/0x930 fs/read_write.c:470
- ksys_read+0x127/0x250 fs/read_write.c:607
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd7ff0cb8fe
-Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
-RSP: 002b:00007fff62d03468 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 000055cc8ec572a0 RCX: 00007fd7ff0cb8fe
-RDX: 0000000000000400 RSI: 000055cc8ec57500 RDI: 0000000000000003
-RBP: 00007fd7ff198380 R08: 0000000000000003 R09: 00007fd7ff19ba60
-R10: 000000000000005d R11: 0000000000000246 R12: 00007fff62d03530
-R13: 0000000000000d68 R14: 00007fd7ff197780 R15: 0000000000000d68
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:__kmalloc_node+0x1dd/0x360 mm/slub.c:4468
-Code: 48 83 c4 18 44 89 e1 4c 89 ea 5b 4c 89 fe 48 89 ef 5d 41 5c 41 5d 41 5e 41 5f e9 6e 55 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 3d 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0018:ffffc900004e7c20 EFLAGS: 00010246
-RAX: ffff0fff00000000 RBX: 0000000000400cc0 RCX: 0000000000000800
-RDX: 0000000000000041 RSI: 0000000000400cc0 RDI: 000000000003b880
-RBP: ffff88810004c280 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000400cc0
-R13: 0000000000001000 R14: 0000000000000000 R15: ffffffff81632b1e
-FS:  00007fd7fef3f800(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd7ff039410 CR3: 000000010f2f0000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	48 83 c4 18          	add    $0x18,%rsp
-   4:	44 89 e1             	mov    %r12d,%ecx
-   7:	4c 89 ea             	mov    %r13,%rdx
-   a:	5b                   	pop    %rbx
-   b:	4c 89 fe             	mov    %r15,%rsi
-   e:	48 89 ef             	mov    %rbp,%rdi
-  11:	5d                   	pop    %rbp
-  12:	41 5c                	pop    %r12
-  14:	41 5d                	pop    %r13
-  16:	41 5e                	pop    %r14
-  18:	41 5f                	pop    %r15
-  1a:	e9 6e 55 00 00       	jmpq   0x558d
-  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
-  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
-  26:	40 f6 c7 0f          	test   $0xf,%dil
-* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
-  2e:	0f 85 3d 01 00 00    	jne    0x171
-  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
-  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
-  3d:	0f 94 c0             	sete   %al
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Lee Jones [李琼斯]

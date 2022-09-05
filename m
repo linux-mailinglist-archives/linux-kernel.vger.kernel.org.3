@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C99D5AD225
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395055AD227
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236256AbiIEMK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S236693AbiIEMKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235938AbiIEMK1 (ORCPT
+        with ESMTP id S236504AbiIEMKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:10:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF981D30A;
-        Mon,  5 Sep 2022 05:10:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9242B81136;
-        Mon,  5 Sep 2022 12:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7BB89C433D6;
-        Mon,  5 Sep 2022 12:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662379816;
-        bh=eylQ0s2BbGYGUgUlOOMnOJccPXVbeBe07REu27ee0/s=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Ns1t5VghnfxehV1jEv633PDLOpY4KUQhwaQTsN595p6I0NTqOa/p0V5mFmqFRtlJ6
-         GgicmhSULwuTBctNebrdzyv6g1tQddbnQEKVPHYH5mpSOhD11VdNX2s/I1Px8aJIXv
-         NCbiOyEg6evhY29/oew416SOP629bhUzr0/KvW4nabQEYzpWoXAHTJO726Q5MTbZFl
-         niiHqd0JAwnadZ8jXOLAknnKuCnR5wjoGvYDvrU0eE3EfsBYcNPaGKUhdoLFdIII6t
-         yzhQ9ao0Y0eiF0LrsDUFAUj4xPT2D/vW22E6rag89OeQa33cpS51HtSV22Mlj0zNan
-         zAXhq+SRk+zAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60DD9C73FE0;
-        Mon,  5 Sep 2022 12:10:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 5 Sep 2022 08:10:52 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623755E329
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:10:51 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id se27so16666578ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=uyNua9RZQMBItV/dSaLLMta7RxU5C+SpWZWfOrY8VqE=;
+        b=CvZl2BNgxHZZJAaGpRdi91gjD9aZilrYGjQoVPw63tfBxHFTW5FAMCSdVAt/g4GyRt
+         AWvjsc0Lj5GB63nTVoHVs+203PpfqM60vQWfSJ2GkAKiT9tPxI/OP0v1ulvRgRrAPM6a
+         XuRg4MEofe677tHTiSGWuIdz2l7p0MfmV07RmYsgFVALm0AUUHvi3m3SA54ovXwsoJnu
+         n5dckUOMeiihWxYGODm7IuHSMRJNa04TgqG5CV+OopbzM9qqtKjLvttgIONTCmN4S8D0
+         Jw0un4REChwuseK3rjhSXk0YDQz8X6qG3SXORic09R1I/b/piUEnZ+Yz+XUycqEOuVma
+         TaKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=uyNua9RZQMBItV/dSaLLMta7RxU5C+SpWZWfOrY8VqE=;
+        b=dlxN9EpP0hC+63Q9DmqSDIiEyWIX1n6tJ2OXknSlzZRsRYuJaankFaUL2L5usPDrDw
+         h+Sq6c0VQ9Mue6Vr5gynmxY9tr8capemeZTxEdx63Hma64x2BAa6KvwPKEoDQnfT7Z3H
+         9AmJAZTajLtVOvUkEhWRZBwdSEMN0+9IDeZakUJ/yV9zwO3IebdcStzlsHXJKyhlnMTo
+         VscScTrFd5lnlQyb/jJea+ueSHluZN0Pnl9/TUiIpb1taZaRyPWVdRhrZHwvus/t1v/V
+         yOtlFXoGXWpFoSI0LJR0bTPo/z4NMOEmBZ5WEF6ixfc9tzaBmUrAVajF1grn0/YEcpyy
+         XKWA==
+X-Gm-Message-State: ACgBeo18gXXLrp+c7Z4fgXau5PPMxNtM8u3iJxnZhU3IS6wiSGwn7Gc0
+        DwjpfTb4BZVPS2D7y2FHacE8zpzFpWiHK1NIRrJj6w==
+X-Google-Smtp-Source: AA6agR7kIMLy48otphEzF4h+sD1WW5s5Tya3a+Km+N9oAqrNsvYl2+e+ii7HXFFJ6fs6JElYzHmj3EAC5JaFUCoRJWM=
+X-Received: by 2002:a17:907:2707:b0:741:7c18:4e76 with SMTP id
+ w7-20020a170907270700b007417c184e76mr24283717ejk.690.1662379849958; Mon, 05
+ Sep 2022 05:10:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/6] net: ipa: start using transaction IDs
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166237981638.17156.8447007118751978814.git-patchwork-notify@kernel.org>
-Date:   Mon, 05 Sep 2022 12:10:16 +0000
-References: <20220902210218.745873-1-elder@linaro.org>
-In-Reply-To: <20220902210218.745873-1-elder@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mka@chromium.org, evgreen@chromium.org,
-        bjorn.andersson@linaro.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220905071300.1832105-1-13667453960@163.com>
+In-Reply-To: <20220905071300.1832105-1-13667453960@163.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 5 Sep 2022 14:10:38 +0200
+Message-ID: <CACRpkda62=3ho+R4OzUYHXwrSDSBnqCOxhc4XVAe8i8nSHtvKA@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: berlin: fix spelling typo in comment
+To:     Jiangshan Yi <13667453960@163.com>
+Cc:     tangmeng@uniontech.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,42 +68,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, Sep 5, 2022 at 9:13 AM Jiangshan Yi <13667453960@163.com> wrote:
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+> From: Jiangshan Yi <yijiangshan@kylinos.cn>
+>
+> Fix spelling typo in comment.
+>
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-On Fri,  2 Sep 2022 16:02:12 -0500 you wrote:
-> A previous group of patches added ID fields to track the state of
-> transactions:
->   https://lore.kernel.org/netdev/20220831224017.377745-1-elder@linaro.org
-> 
-> This series starts using those IDs instead of the lists used
-> previously.  Most of this series involves reworking the function
-> that determines which transaction is the "last", which determines
-> when a channel has been quiesed.  The last patch is mainly used to
-> prove that the new index method of tracking transaction state is
-> equivalent to the previous use of lists.
-> 
-> [...]
+Patch applied.
 
-Here is the summary with links:
-  - [net-next,1/6] net: ipa: rework last transaction determination
-    https://git.kernel.org/netdev/net-next/c/b2abe33d23cf
-  - [net-next,2/6] net: ipa: use IDs for last allocated transaction
-    https://git.kernel.org/netdev/net-next/c/c30623ea0b3a
-  - [net-next,3/6] net: ipa: use IDs exclusively for last transaction
-    https://git.kernel.org/netdev/net-next/c/897c0ce665d6
-  - [net-next,4/6] net: ipa: simplify gsi_channel_trans_last()
-    https://git.kernel.org/netdev/net-next/c/e68d1d1591fd
-  - [net-next,5/6] net: ipa: further simplify gsi_channel_trans_last()
-    https://git.kernel.org/netdev/net-next/c/4601e75596cb
-  - [net-next,6/6] net: ipa: verify a few more IDs
-    https://git.kernel.org/netdev/net-next/c/8672bab7eb94
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Yours,
+Linus Walleij

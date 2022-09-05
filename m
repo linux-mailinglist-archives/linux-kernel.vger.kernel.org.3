@@ -2,131 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EB05AC873
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4BE5AC874
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234871AbiIEBMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 21:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        id S234778AbiIEBPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 21:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234311AbiIEBMe (ORCPT
+        with ESMTP id S230013AbiIEBPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 21:12:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E862715B;
-        Sun,  4 Sep 2022 18:12:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D04661042;
-        Mon,  5 Sep 2022 01:12:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C044C433C1;
-        Mon,  5 Sep 2022 01:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662340352;
-        bh=e3wD2zWI6m2XFpYjfPzWth/MkgFw8cN+IsG/hA2wv/c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JC4KW+tGyIPy10TQBMYG/60zs1yML+mm3ZunLfevMBOaN7AULR3n7YsWG39N8ixis
-         cWyfURyF0EWmUp8nnno6GGoVYL+C2SyiVVyT5H4kzsICktb17ulKVE9o1h5IOyHByd
-         mONeMDhf3ADBC2PjzdaNzOcxf3TbxBSPgEnAMV7DmnsjgeisONzyAmakHSw1eHB/RV
-         sWQVGtJXBHSFqx17iJAaoRKpKTs1iUPyGhITFIK2icqFsZFt1W05mR1tvd5xwD/n5R
-         TLscBX9FoC4XE14csTNE/qgyIWOm32uM3muFnXvaujn0flUSbum4g6rdmQmD0cyLZS
-         2MaiKxhzSVITQ==
-Date:   Mon, 5 Sep 2022 09:12:27 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Zhang Ying <ying.zhang22455@nxp.com>
-Subject: Re: [PATCH 7/9] arm64: dts: ls1046a: add gpios based i2c recovery
- information
-Message-ID: <20220905011227.GS1728671@dragon>
-References: <20220824231200.494-1-leoyang.li@nxp.com>
- <20220824231200.494-8-leoyang.li@nxp.com>
+        Sun, 4 Sep 2022 21:15:36 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D13827FE8
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 18:15:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=0UuRi
+        XnqG0+tWCBmLnMTBzneooWmRUaaLB3aIEKok50=; b=B/g2VYj4DClm3qOwnvLq7
+        tOxL++OAJdWE7KTFeqsCUVEYo46j2OWmSurWdTy0WBh2+zmzZuakLA1yF0F8poZ8
+        kfLoUppQgkPl4walQsJpDc5a8B7kq8SDHmbVTKEjph5kS+88Nb/hC5bplaMdMDkL
+        xmLVDdRtEcBdQL2Zk+hnG0=
+Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
+        by smtp12 (Coremail) with SMTP id EMCowAAncaJ8TRVj3hDsJg--.51831S4;
+        Mon, 05 Sep 2022 09:14:54 +0800 (CST)
+From:   Jingyu Wang <jingyuwang_vip@163.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        mario.limonciello@amd.com, hdegoede@redhat.com,
+        rafael.j.wysocki@intel.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Jingyu Wang <jingyuwang_vip@163.com>
+Subject: [PATCH] drm/amdgpu: cleanup coding style in amdgpu_acpi.c
+Date:   Mon,  5 Sep 2022 09:14:31 +0800
+Message-Id: <20220905011431.19818-1-jingyuwang_vip@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824231200.494-8-leoyang.li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EMCowAAncaJ8TRVj3hDsJg--.51831S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7trykur48Xw1rZrWUJrWrKrg_yoW8uF4fpF
+        ySqr1Fkry5uF12vFyjyFy8ZFn0yw4I934xWFWxZ34ag3W5ZFyrJa48Cw4Uur97JrZxua1x
+        JFZrJ3yUuF4jvw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEsXonUUUUU=
+X-Originating-IP: [1.203.67.201]
+X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/xtbCoAdzF1zmWEIQ-gAAsN
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 06:11:58PM -0500, Li Yang wrote:
-> Add scl-gpios property for i2c recovery and add SoC specific compatible
-> string for SoC specific fixup.
-> 
-> Signed-off-by: Zhang Ying <ying.zhang22455@nxp.com>
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> index c7c6c82626fd..c95a990e2edd 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> @@ -502,7 +502,7 @@ dspi: spi@2100000 {
->  		};
->  
->  		i2c0: i2c@2180000 {
-> -			compatible = "fsl,vf610-i2c";
-> +			compatible = "fsl,ls1046a-i2c", "fsl,vf610-i2c";
->  			#address-cells = <1>;
->  			#size-cells = <0>;
->  			reg = <0x0 0x2180000 0x0 0x10000>;
-> @@ -516,35 +516,38 @@ i2c0: i2c@2180000 {
->  		};
->  
->  		i2c1: i2c@2190000 {
-> -			compatible = "fsl,vf610-i2c";
-> +			compatible = "fsl,ls1046a-i2c", "fsl,vf610-i2c";
->  			#address-cells = <1>;
->  			#size-cells = <0>;
->  			reg = <0x0 0x2190000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
->  					    QORIQ_CLK_PLL_DIV(2)>;
-> +			scl-gpios = <&gpio3 2 0>;
+Fix everything checkpatch.pl complained about in amdgpu_acpi.c
 
-Use define for polarity cell?
+Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-Shawn
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+index 55402d238919..3da27436922c 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: MIT
+ /*
+  * Copyright 2012 Advanced Micro Devices, Inc.
+  *
+@@ -849,6 +850,7 @@ int amdgpu_acpi_init(struct amdgpu_device *adev)
+ 		if (amdgpu_device_has_dc_support(adev)) {
+ #if defined(CONFIG_DRM_AMD_DC)
+ 			struct amdgpu_display_manager *dm = &adev->dm;
++
+ 			if (dm->backlight_dev[0])
+ 				atif->bd = dm->backlight_dev[0];
+ #endif
+@@ -863,6 +865,7 @@ int amdgpu_acpi_init(struct amdgpu_device *adev)
+ 				if ((enc->devices & (ATOM_DEVICE_LCD_SUPPORT)) &&
+ 				    enc->enc_priv) {
+ 					struct amdgpu_encoder_atom_dig *dig = enc->enc_priv;
++
+ 					if (dig->bl_dev) {
+ 						atif->bd = dig->bl_dev;
+ 						break;
+@@ -919,9 +922,9 @@ static bool amdgpu_atif_pci_probe_handle(struct pci_dev *pdev)
+ 		return false;
+ 
+ 	status = acpi_get_handle(dhandle, "ATIF", &atif_handle);
+-	if (ACPI_FAILURE(status)) {
++	if (ACPI_FAILURE(status))
+ 		return false;
+-	}
++
+ 	amdgpu_acpi_priv.atif.handle = atif_handle;
+ 	acpi_get_name(amdgpu_acpi_priv.atif.handle, ACPI_FULL_PATHNAME, &buffer);
+ 	DRM_DEBUG_DRIVER("Found ATIF handle %s\n", acpi_method_name);
+@@ -954,9 +957,9 @@ static bool amdgpu_atcs_pci_probe_handle(struct pci_dev *pdev)
+ 		return false;
+ 
+ 	status = acpi_get_handle(dhandle, "ATCS", &atcs_handle);
+-	if (ACPI_FAILURE(status)) {
++	if (ACPI_FAILURE(status))
+ 		return false;
+-	}
++
+ 	amdgpu_acpi_priv.atcs.handle = atcs_handle;
+ 	acpi_get_name(amdgpu_acpi_priv.atcs.handle, ACPI_FULL_PATHNAME, &buffer);
+ 	DRM_DEBUG_DRIVER("Found ATCS handle %s\n", acpi_method_name);
 
->  			status = "disabled";
->  		};
->  
->  		i2c2: i2c@21a0000 {
-> -			compatible = "fsl,vf610-i2c";
-> +			compatible = "fsl,ls1046a-i2c", "fsl,vf610-i2c";
->  			#address-cells = <1>;
->  			#size-cells = <0>;
->  			reg = <0x0 0x21a0000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
->  					    QORIQ_CLK_PLL_DIV(2)>;
-> +			scl-gpios = <&gpio3 10 0>;
->  			status = "disabled";
->  		};
->  
->  		i2c3: i2c@21b0000 {
-> -			compatible = "fsl,vf610-i2c";
-> +			compatible = "fsl,ls1046a-i2c", "fsl,vf610-i2c";
->  			#address-cells = <1>;
->  			#size-cells = <0>;
->  			reg = <0x0 0x21b0000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
->  					    QORIQ_CLK_PLL_DIV(2)>;
-> +			scl-gpios = <&gpio3 12 0>;
->  			status = "disabled";
->  		};
->  
-> -- 
-> 2.37.1
-> 
+base-commit: e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+-- 
+2.34.1
+

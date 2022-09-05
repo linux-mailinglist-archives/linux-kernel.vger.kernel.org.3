@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E67A5ACCEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657365ACD37
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236417AbiIEHnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S237030AbiIEHyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiIEHne (ORCPT
+        with ESMTP id S236993AbiIEHyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:43:34 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A4620BE8
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662363814; x=1693899814;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e5QIpZBL/iSJnueuwkOHoNIM49dRADW4fRvNXZ3+bDs=;
-  b=ZEc+c5cb0Au9xZA5N359mwVzYvzS0RoUItczy+p0RpULQwcH5KSJpoDM
-   XxrBsugnOGVLD8jlpbhByW5GrnGxzeTXlsuJ0sNb3mo4W1hKuWU8z6UT+
-   v9b8a4GvETElpIqijfcTlVYMO1HGamV0xhFjQDwTpigPnp8rC8izM8/kb
-   dW9vJML8OBObw4Kq+s00hjzHQt3WOdIkEWWoS4xuI1zaEycgqFdaGhU5l
-   j4xUIOxGrJ/hZKtFY8emZP1ZI4Mx3KRFBESHhMCLqilns9l9P65Rh6eCL
-   JedaD5xYb/+lmTT+dnP1RB5rEDjT2yMEhF6HgATR0MMdtyEY+LjA/QEfY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="297117891"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="297117891"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 00:43:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="942007653"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Sep 2022 00:43:25 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oV6lR-0003wP-0d;
-        Mon, 05 Sep 2022 07:43:25 +0000
-Date:   Mon, 5 Sep 2022 15:43:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [char-misc:char-misc-next 20/24] ERROR: modpost:
- "auxiliary_device_init" [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.ko]
- undefined!
-Message-ID: <202209051534.wmaw4ovY-lkp@intel.com>
+        Mon, 5 Sep 2022 03:54:07 -0400
+X-Greylist: delayed 608 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Sep 2022 00:54:05 PDT
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0818944549
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1662364381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cXsJkI9uheokmDJdr4Al6h7pqoH+3TWVaaDrZ0MDZeY=;
+        b=b64WXEXL32FZt7IXnfMe6YgCo6URilexHHHUuFrvToC+selj++Ys4Pm4M+Vabfa/Bod2Yb
+        yWAFxN3mXVsCUCiswyukABfjhawxp4yXii20wnPSFvpo0OScjWYUakDJgtR9OVbhjfBn4b
+        0cv25/5arudpn8DacLZbQIkAFaZCmKHw/iECM/a3Fq2TrLdhngFQP9rKOju6jrvgQs+jS3
+        lF+yQJOxSIPl2XXxe1bfqBrsJmg/BkeLmMlNEvaFwzxucthMmtXovuw3r7nHTsDMGgrDxx
+        lecYWi4BjJPalUV2M08pI9w3CSoax6+TBKBumrnWwOebTriyGTHZu2Eogn13dg==
+Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ us-mta-86-t3i3N88IO3eHPMNn8pxtqw-1; Mon, 05 Sep 2022 03:43:54 -0400
+X-MC-Unique: t3i3N88IO3eHPMNn8pxtqw-1
+Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
+ mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
+ Mon, 5 Sep 2022 00:43:51 -0700
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     <sboyd@kernel.org>, <mturquette@baylibre.com>,
+        <linux-clk@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-lgm-soc@maxlinear.com>,
+        "Rahul Tanwar" <rtanwar@maxlinear.com>
+Subject: [PATCH v2 0/5] Modify MxL's CGU clk driver to make it secure boot compatible
+Date:   Mon, 5 Sep 2022 15:43:43 +0800
+Message-ID: <cover.1662363020.git.rtanwar@maxlinear.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-next
-head:   50e177c5bfd9abc3828cb57e14e6169170f6764a
-commit: 393fc2f5948fd340d016a9557eea6e1ac2f6c60c [20/24] misc: microchip: pci1xxxx: load auxiliary bus driver for the PIO function in the multi-function endpoint of pci1xxxx device.
-config: x86_64-randconfig-c042-20220905 (https://download.01.org/0day-ci/archive/20220905/202209051534.wmaw4ovY-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=393fc2f5948fd340d016a9557eea6e1ac2f6c60c
-        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
-        git fetch --no-tags char-misc char-misc-next
-        git checkout 393fc2f5948fd340d016a9557eea6e1ac2f6c60c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+MxL's CGU driver was found to be lacking below required features. Add these
+required lacking features:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+1. Since it is a core driver, it has to conform to secure boot & secure
+   access architecture. In order for the register accesses to be secure
+   access compliant, it needs regmap support as per our security architectu=
+re.
+   Hence, replace direct read/writel with regmap based IO. Also remove spin=
+locks
+   because they are no longer necessary because regmap uses its own lock.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+2. There are some gate clocks which are used by the power mgmt IP to gate w=
+hen
+   a certain power saving mode is activated. These gate clocks can also be=
+=20
+   gated from CGU clk driver. This creates a conflict. To avoid the conflic=
+t,
+   by default disable gating such gate registers from CGU clk driver. But k=
+eep
+   a flag to do so for other older IP's which uses same CGU clk IP but does=
+ not
+   use same power mgmt IP.
 
->> ERROR: modpost: "auxiliary_device_init" [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.ko] undefined!
->> ERROR: modpost: "__auxiliary_device_add" [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.ko] undefined!
+3. Fix two functional bugs found during testing.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+This patch series is based on below git tree:
+git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
+
+
+Rahul Tanwar (5):
+  clk: mxl: Switch from direct readl/writel based IO to regmap based IO
+  clk: mxl: Remove unnecessary spinlocks
+  clk: mxl: Avoid disabling gate clocks from clk driver
+  clk: mxl: Add validation for register reads/writes
+  clk: mxl: Add a missing flag to allow parent clock rate change
+
+ drivers/clk/x86/Kconfig       |   5 +-
+ drivers/clk/x86/clk-cgu-pll.c |  23 ++-----
+ drivers/clk/x86/clk-cgu.c     | 117 +++++++++++-----------------------
+ drivers/clk/x86/clk-cgu.h     |  71 +++++++++++++--------
+ drivers/clk/x86/clk-lgm.c     |  16 +++--
+ 5 files changed, 101 insertions(+), 131 deletions(-)
+
+--=20
+2.17.1
+

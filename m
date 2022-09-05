@@ -2,94 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDF25AD86B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE4E5AD872
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238015AbiIERdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S238021AbiIERhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 13:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbiIERdW (ORCPT
+        with ESMTP id S231658AbiIERhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:33:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3412C5A3FB;
-        Mon,  5 Sep 2022 10:33:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B96E461369;
-        Mon,  5 Sep 2022 17:33:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE7F6C433D6;
-        Mon,  5 Sep 2022 17:33:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662399201;
-        bh=fJl2loForj832KBRuUXO1rQdi1jQcxM/e8AQQzTuHYo=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=I73vtqRP5D3OpZADsGj16+2lyQtKBWSU66U5KTMIuET9gCbn3GP39nR7LRUMupe0/
-         3riKs0mbTQKuJS0+hFS/TWYxX5yIR5QXDW9KFNKT8p+huHZgPCodGHuR9LvyfOVEkH
-         LExEQrSmUQtKarJux/AAe/6Qfpe8wtLX5QzQbIN3KaQi0iZ/Mt7O3QK03aZFvU31ZR
-         /KGf+qkXqnTHK6i0h4X8aUKiVP9s7TE+CywPweBUaSabPKVAFShoDp3oipchrRYuCv
-         KO/ALv4vpBzWNTZp+HpUWvJFlDlnUFgCYEza2EWUYvfgtrwMyMIbTuZqF5xR++NBcq
-         NgDEm+iDbNqjg==
-From:   Mark Brown <broonie@kernel.org>
-To:     pramod.gurav@linaro.org, Xu Qiang <xuqiang36@huawei.com>,
-        konrad.dybcio@somainline.org, iivanov@mm-sol.com,
-        agross@kernel.org, bjorn.andersson@linaro.org
-Cc:     weiyongjun1@huawei.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        guohanjun@huawei.com
-In-Reply-To: <20220825065324.68446-1-xuqiang36@huawei.com>
-References: <20220825065324.68446-1-xuqiang36@huawei.com>
-Subject: Re: [PATCH -next 1/2] spi: qup: add missing clk_disable_unprepare on error in spi_qup_resume()
-Message-Id: <166239919867.807748.1227253290015300046.b4-ty@kernel.org>
-Date:   Mon, 05 Sep 2022 18:33:18 +0100
+        Mon, 5 Sep 2022 13:37:03 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA4B5EDEC
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 10:37:02 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-11eab59db71so22741840fac.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 10:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=a1Wl5OOBM+OdiCqwjpRNbQVvWBi9SOkRJQ7j+gqJGAI=;
+        b=omXxCPqBgDlAxdUX5U3YmgblCVqUcKpbsoTO+4DUk94Iq8Ti9QLdiueFbqZ+DgSlp1
+         V8iuStpxP2j4Ww3tI5mVwdlgs1zcuRT7t7INHg1D0a7/IAnd9sXOCdqgra40rPUE8wD0
+         cg4U3zqiRno6i+kIK7wfyr0jwxRhlU3xtFU/jTVDRYdedLsMRBHOcbn1RUKJY2Unmeeb
+         4iCsdLOAZ4xhRkAWzbOtmAMh4Fj2HMXy2Og0EuTF0lq0EjrIGgbFcqz+I3BrU271nVeH
+         fzkUWc7H43GObS8fzc6AQAbWhMpWmlJsPGwVRHukT8vRkg/NL9sNpwmkJRLBvILW1I/Q
+         3qpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=a1Wl5OOBM+OdiCqwjpRNbQVvWBi9SOkRJQ7j+gqJGAI=;
+        b=Fu8rBk8r5O6eRl0u/EsR5mMYG7UVlC1r0PagGu7ZESM82ozlgsNgqxaPh7INZQZ0/T
+         OWjGgSs4MswLEVVzcTy/hGhPSl13NFpZjXOjABEQJN8595O/870ABQ2WrRua2RtBMdbU
+         V0Yg5ggIa0sgVB8ncrQ2ZdrAqtM2nkmNf2+diESZmBoPmzoqmBjH3L8z8AdiNj08+B6n
+         XDqOpDvb5ks9sQ+vQdgQ8JcAVAqzs9kdE+S7nRUDpcI0/EGILgKEuJkcKmNMmivGD8Ui
+         jdBqxCVG/yLGPjMHvJt5AJifaXOiLy1zkj3euYP6Q8PDY/ceQ0i4nSbA7ogHeSjftX5Z
+         NdbQ==
+X-Gm-Message-State: ACgBeo0xD0e3wOmNYLqigviAGczYmB30o8suT/p/bblxjMu1zTTGS8JY
+        C2OWrg4WndhOvPDOSdApUOKVhCj/QLnSCjpQWKGcDA==
+X-Google-Smtp-Source: AA6agR5aL8W3+sousDudZxT+/nLQAmWyTAA2BbxmIIkDasYIK+tFHEa7u4ZnJLfSCaHD7jyPJkRRUB/yg6ndTpAc0Jk=
+X-Received: by 2002:a05:6808:150f:b0:343:3202:91cf with SMTP id
+ u15-20020a056808150f00b00343320291cfmr8032565oiw.112.1662399422082; Mon, 05
+ Sep 2022 10:37:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220905123946.95223-1-likexu@tencent.com> <20220905123946.95223-5-likexu@tencent.com>
+In-Reply-To: <20220905123946.95223-5-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 5 Sep 2022 10:36:51 -0700
+Message-ID: <CALMp9eQtjZ-iRiW5Jusa+NF-P0sdHtcoR8fPiBSKtNXKgstgVA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf 0x80000022
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 06:53:23 +0000, Xu Qiang wrote:
-> Add the missing clk_disable_unprepare() before return
-> from spi_qup_resume() in the error handling case.
-> 
-> 
+On Mon, Sep 5, 2022 at 5:45 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> From: Sandipan Das <sandipan.das@amd.com>
+>
+> CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some
+> new performance monitoring features for AMD processors.
+>
+> Bit 0 of EAX indicates support for Performance Monitoring
+> Version 2 (PerfMonV2) features. If found to be set during
+> PMU initialization, the EBX bits of the same CPUID function
+> can be used to determine the number of available PMCs for
+> different PMU types.
+>
+> Expose the relevant bits via KVM_GET_SUPPORTED_CPUID so
+> that guests can make use of the PerfMonV2 features.
+>
+> Co-developed-by: Like Xu <likexu@tencent.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> ---
+>  arch/x86/include/asm/perf_event.h |  8 ++++++++
+>  arch/x86/kvm/cpuid.c              | 21 ++++++++++++++++++++-
+>  2 files changed, 28 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+> index f6fc8dd51ef4..c848f504e467 100644
+> --- a/arch/x86/include/asm/perf_event.h
+> +++ b/arch/x86/include/asm/perf_event.h
+> @@ -214,6 +214,14 @@ union cpuid_0x80000022_ebx {
+>         unsigned int            full;
+>  };
+>
+> +union cpuid_0x80000022_eax {
+> +       struct {
+> +               /* Performance Monitoring Version 2 Supported */
+> +               unsigned int    perfmon_v2:1;
+> +       } split;
+> +       unsigned int            full;
+> +};
+> +
+>  struct x86_pmu_capability {
+>         int             version;
+>         int             num_counters_gp;
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 75dcf7a72605..08a29ab096d2 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -1094,7 +1094,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>                 entry->edx = 0;
+>                 break;
+>         case 0x80000000:
+> -               entry->eax = min(entry->eax, 0x80000021);
+> +               entry->eax = min(entry->eax, 0x80000022);
+>                 /*
+>                  * Serializing LFENCE is reported in a multitude of ways, and
+>                  * NullSegClearsBase is not reported in CPUID on Zen2; help
+> @@ -1203,6 +1203,25 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>                 if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
+>                         entry->eax |= BIT(6);
+>                 break;
+> +       /* AMD Extended Performance Monitoring and Debug */
+> +       case 0x80000022: {
+> +               union cpuid_0x80000022_eax eax;
+> +               union cpuid_0x80000022_ebx ebx;
+> +
+> +               entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+> +               if (!enable_pmu)
+> +                       break;
+> +
+> +               if (kvm_pmu_cap.version > 1) {
+> +                       /* AMD PerfMon is only supported up to V2 in the KVM. */
+> +                       eax.split.perfmon_v2 = 1;
+> +                       ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
+> +                                                    KVM_AMD_PMC_MAX_GENERIC);
 
-Applied to
+Note that the number of core PMCs has to be at least 6 if
+guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE). I suppose this leaf
+could claim fewer, but the first 6 PMCs must work, per the v1 PMU
+spec. That is, software that knows about PERFCTR_CORE, but not about
+PMU v2, can rightfully expect 6 PMCs.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thanks!
-
-[1/2] spi: qup: add missing clk_disable_unprepare on error in spi_qup_resume()
-      commit: 70034320fdc597b8f58b4a43bb547f17c4c5557a
-[2/2] spi: qup: add missing clk_disable_unprepare on error in spi_qup_pm_resume_runtime()
-      commit: 494a22765ce479c9f8ad181c5d24cffda9f534bb
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> +               }
+> +               entry->eax = eax.full;
+> +               entry->ebx = ebx.full;
+> +               break;
+> +       }
+>         /*Add support for Centaur's CPUID instruction*/
+>         case 0xC0000000:
+>                 /*Just support up to 0xC0000004 now*/
+> --
+> 2.37.3
+>

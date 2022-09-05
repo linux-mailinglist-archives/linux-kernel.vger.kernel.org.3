@@ -2,117 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1FF5AD42B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DBF5AD435
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238183AbiIENkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
+        id S237921AbiIENoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238230AbiIENk3 (ORCPT
+        with ESMTP id S237207AbiIENoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:40:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F95F4F189;
-        Mon,  5 Sep 2022 06:40:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEDD0B811AB;
-        Mon,  5 Sep 2022 13:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7B63CC43140;
-        Mon,  5 Sep 2022 13:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662385218;
-        bh=6OkNTRmZgp9w9Gp+m6vHUoevwgIKFYL8Zii/ZwPojUY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Sh4RtzZvi+GizYPg7PV2g9FMRtjd+Mkk4Q/0HelEX+759PzbasbrSubnRiIZ9BO1P
-         Dn32m3gt2GWkXsVTk3iLvvT5zQXXhxMsMxwOEHFq0DodysCkMEfI9NgEFOC5yoU0NU
-         jep/Qy9f5R2ThWeCT5kzfEbj2QcPVyRkGQ0LdMz6RlhbnUafWaH9JXdj/6GGtAM8dT
-         kl7GyN5Fn1+YXK1wiULWOe4K1F4W7+SHyU84Pm8s4kvqxMVLUZ1FfnlL2vCgc3esWS
-         z/ITpd4I22zVSHNucY2vySajmO/UABY1KOOgoE96FpUPhyRlE8ciMYSJZEQjDoupva
-         miZhTHv3m7fmg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5F17FC73FE0;
-        Mon,  5 Sep 2022 13:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        Mon, 5 Sep 2022 09:44:09 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F84B4DB03;
+        Mon,  5 Sep 2022 06:44:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kZn7vcvPqixnJdgWTIDFPiRf4DDC0/KLhR32Jnnt91376OMlXnudsKINM2B1dnkn8ztpW7RPZyCm3vzTFd/ZYOK+i8RP/mNnDhcHBFbOZBF7SlAbE0PIwhpbe861nQw/pdV7Lbhe8afQlU3M7od13IexqiG8JjzGGL3gBrxNYBNoJYuabays2REbDqeVDJczpfwkngcQeTs/JaYSG/qrbbJWwSCXs+n4wzlwdCsRMwySaRcP2o7U5C/Y6gM6baHVdLVHsJR1gc1R+biEnZlT6XPwq6fwBlC3BdDduuPhiy6010cQT4W5F8ECIKiwlAa+ei7dfLpZfdeMc8AxAh0+dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cid+8NWSvJ+eXJ6qlWu4YIkrdJL8/GvCc5XORUBydg4=;
+ b=JNkW5o3uykZjoVWH0h4q0GpnwPAP5wip1c4eGPVtg/400XLAzEahymtrGYqup1ZevdBtLag2fSAS5SZg9EeIkkYNikjRH6h76mpjTt01p6Hx1LcM1+tH95/x4Zq0DrD2vR0u1E0CMG1uH+R0Lm8tkVtw5wc9Pl6uq4kXa8TkCG5au0MD6Psyvar8aUY0hZGWvgp8YreQKeMMRfE0NGBImoyqoviNFURlLsGXbav/yGIk9Y93eZONk1ckIB9eQm0moCGQmeZBjHzz+QHbqJnVW0pFamXNGDgP/LGlm0u+WCSKn0upv7Q73eC94PvWo40xIuFBbVaE5STy13WWVRzjuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cid+8NWSvJ+eXJ6qlWu4YIkrdJL8/GvCc5XORUBydg4=;
+ b=Qlj5ZhyTapLYdiQEOaVPefQ6RhCwHrxq63uVsDMjJKgvXb3BIIB9wcnr7jSqPQElCkDknqxfLpZUDwFCD33Ae/7f8/labwHWf0MpZ9da+/EhHHoD6pJlnKVWUwOD9S9AdwQDODfV8Gng+h+oDhp6/mJW+z8Qy60drdbUjZK9vPc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15)
+ by MN0PR12MB6079.namprd12.prod.outlook.com (2603:10b6:208:3c9::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
+ 2022 13:44:05 +0000
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::2e8f:6161:3959:aa0c]) by PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::2e8f:6161:3959:aa0c%5]) with mapi id 15.20.5588.015; Mon, 5 Sep 2022
+ 13:44:04 +0000
+Message-ID: <f9042797-1c41-a4c2-fdd2-60feaf38e87a@amd.com>
+Date:   Mon, 5 Sep 2022 19:13:52 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 1/4] dma-buf: Check status of enable-signaling bit on
+ debug
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220905105653.13670-1-Arvind.Yadav@amd.com>
+ <20220905105653.13670-2-Arvind.Yadav@amd.com>
+ <0038fcff-35f1-87e3-aa26-cdd104a13628@amd.com>
+From:   "Yadav, Arvind" <arvyadav@amd.com>
+In-Reply-To: <0038fcff-35f1-87e3-aa26-cdd104a13628@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v5 00/14] net: dpaa: Cleanups in preparation for
- phylink conversion (part 2)
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166238521838.32478.17433933785506172537.git-patchwork-notify@kernel.org>
-Date:   Mon, 05 Sep 2022 13:40:18 +0000
-References: <20220902215737.981341-1-sean.anderson@seco.com>
-In-Reply-To: <20220902215737.981341-1-sean.anderson@seco.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org, camelia.groza@nxp.com,
-        madalin.bucur@nxp.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, leoyang.li@nxp.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: PN2PR01CA0147.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:6::32) To PH7PR12MB6000.namprd12.prod.outlook.com
+ (2603:10b6:510:1dc::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fb022abf-5b92-41c9-dc7d-08da8f44b2ac
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6079:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qeut4IHlVi0eoEqDpLklR2uZG4h+g8XrjwX70+Hypd3dfb7JuJrKuZxOMfNDMKiaZShObzLKEqJ8vMgvj4P5NfvBGPo1f684e2P5zRwHZOXZyXW5XSetUFHfxIws9ovtAipCdEplSl6Xsde4VDxNOhN2asuThenmkPZsUGe963JqHl71S7jgupk91JTO+X0GX3s6UXACDFmenKQUs1b/BV6bBW+v5xphkIrhJqAlk88ezl0u4iM6KrPRXgg0+Ee7FaBaqXDIJZvs0T5PggNQelpgP06dA4+/mZ5UlhIhYpRAdlABVakGf87uLJOEDwrYoRsATUyF1pxiZHJzA9LMARSkzHZkgQ2mN3pMBMyNIHPy2MQFoDuzbHhZJhCfa3fPRwnU7w9fLsOM21xAcrnDoBtdlSByyXwMT0S02qZXD4yLyQoHirPKBG6gEzCQv6c1qX17evlkv8V6skHPLMxTObzxDYEXzGu6xdqPZXe7xc3Ni/8QIbx431vHAMi19gnxTjle1k+hrsa5/L819tONhAAPEhyiwTRlY94qK/D5spY2NCJKGrZj1Bxi2ba73fyZWAZAixqrt9g2bIvtp5jK5Gy/kTezxbJrOiiEt+croRibgR4FqsyC49Wjjl1H9UXPEODkba+9fg+RATouNDwRuNzJT+TGYODNrcVm2vFt2hnu56m+i3n8/pc1VAKwGZwcNX+Iv+QTJ60xjeP5r+A9KN/HPVxFyZOFodnpNxoYy+SDJm5SgYe20RbYg6if4BOtDVh5qt4XMTtURoMn4qLIQy9mJEAwWnTFsqQfZidYfoxETV7odJZ2Em7mZXAYWEn6
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6000.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(39860400002)(366004)(396003)(6506007)(31696002)(83380400001)(38100700002)(921005)(316002)(110136005)(66476007)(8676002)(2906002)(66946007)(2616005)(66556008)(6512007)(53546011)(66574015)(8936002)(186003)(478600001)(6486002)(5660300002)(41300700001)(36756003)(31686004)(26005)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OTNIai9xSk04RFcvVnlWdDBsbVcxUEU5dU5FVno0b09iWXlYWkpQWkdYckpF?=
+ =?utf-8?B?endBdnF6ajk3QmRoOUtUclZ4Vmthcno5R1NVL0xaa25BcVZnRXREOG15Z0s3?=
+ =?utf-8?B?YzFkUm1QSkszS0UyajJmYTNkcldNOG1WNjB6REQwL1JCa0hMMWl6cjM0a0JJ?=
+ =?utf-8?B?MjlnZ291QVI2T0l3MXNkOHA4RlNFVTRWbytMZTJjWlp5aUhsRVBMY01hM3hL?=
+ =?utf-8?B?UDlCUk9TRHp1em9rbzZ0YUgwUHVpMFQ1WE1tS0p5ZU9US01tbW11WWtKaVFr?=
+ =?utf-8?B?MjJ1dVREYTc0dmEySUxuUUQ4Ynd5aGNYWElYZWJCcmpDYzBwa0FiTm5hMWlZ?=
+ =?utf-8?B?SUdncTQ3NDJ6Z1ZRNitUcXY3S1F1Yzd4UWVOdFBCMTU0VGN0SDBtbjJRMmJi?=
+ =?utf-8?B?aUkyaDhXM1dJcnBUVnZzT2dMcStDd09hNmRjSzBkQzhiK3FPN3hsd1lSc2Rz?=
+ =?utf-8?B?N1BPR2h2TC9VckE4elRaY053NDdYbTllQTQ1bXo2TkpyV3FPUi9ld3dQWFNU?=
+ =?utf-8?B?cnUrUEJqOEo5RDc2L00wQVZ4S3I5cjVsUEthQ0pDU05Ha01hSHNNWkgrVHpx?=
+ =?utf-8?B?azF5YVNtS2RqaytFRkRGRjRjSVBqTndNTlduKzBRZW5nb2Z1VTEyMnFzSmMx?=
+ =?utf-8?B?dk13V3FTMkJPT1RZWUVSd09veklwRFVYMFZZaXNiZ2UvcVJJaXNkb3VpZ3Jv?=
+ =?utf-8?B?Yy9nUUJacXozdGJ3TURiMHVNRWZ2Zm5HNTdiak56aGZpSzJrZlBhdTJXOVgy?=
+ =?utf-8?B?SS96bWpvZEg1K2crR2pBSGpNRk9WNWNnTnlmSkpWS1Fuc0JvVmNyaWRCd1Fs?=
+ =?utf-8?B?R09ldTNYRE5lSzYycm11c0tEWWF6dVVpSjlldEZxVlZ4TTJYZHYxOGdBaGI2?=
+ =?utf-8?B?WWg3alJWbDc2c3lrWkVyTGlyZG1qR3J1RTV0L0RUOENWYy9idE9KbktZZTVx?=
+ =?utf-8?B?NjdNcmo2RWgyY29XSVhoNmVtaWwzWnRHcit2OVBzNjZSeU1qYXNudm5JS3FH?=
+ =?utf-8?B?djM1Y3BDQzBmVHFkc0pVcS9uK1g4N2lpdjJwTmNJWllmM0wzUWU1RFZYS3Y3?=
+ =?utf-8?B?aVZWeXdnUTh3dEJDZUR1RWY5by9Ha2Jtb0hyMzBvb0tPbXpXTllPSURVTG1W?=
+ =?utf-8?B?OTJkdUtsR0EwNSs5YklrVkhTYkV6L2tIclluWVVNSm8zQTV0VG82dXJocU0y?=
+ =?utf-8?B?TE1nMFkrQ214TjljclZTQllBNVEzblpRV0tIQU1MRUZkRHh3WTAwendadGhy?=
+ =?utf-8?B?UVNTSkhOVXdJa3JBdUdKeWIrNmV6akFmN1NPckxuTWZTQ0FSVTB2NGFHcTlF?=
+ =?utf-8?B?V1djMVdORmZCK0hZYU9PTGdpMHhaNEhiNFZETkdoanNVZ1hKSEpwMjZ6bFVK?=
+ =?utf-8?B?NWZjM0crckNLL2grTmtCMm9BaG0xR3A2eU9sK2hHTjUwTFpsU3BCbzNHSDJO?=
+ =?utf-8?B?S05RT0h4UDZWZncydUNWbTM0WXA3OXoweDBQMWVsb3ZKZWJzRXVXTm5WUWhz?=
+ =?utf-8?B?NFRGVXNsMFFvSWZvOWVWNUVyRlZOa2FEZHcvb3BiTGxlREN2ditza25yYW0r?=
+ =?utf-8?B?QmNLMmEydkFmT0RKVjlzZ1ljdzFXcVZiNEFrblFCNWhtMkkySlRzVW5SNWtz?=
+ =?utf-8?B?UTNNL0o1ckxRbjJLZkpMdVJaOUowS3dpNUlQSWlRbk5DeEZXc1QxU1NsbU8v?=
+ =?utf-8?B?QUhuMy9CalVZN21tTXgzSkp3ck9meWpVYTFTMnpQVVA1MHFlVk9xUmRjOGRE?=
+ =?utf-8?B?NlExU2oyWGNSdHA2WnZ0N2lnVkw0bTR2VGtPSjc1U0FJbjZFS3FsMVM3UTd6?=
+ =?utf-8?B?Mm5ZblBXWlBzWDRCMUFuYjhHcm1CbnpQSDVlWCtFaUJVc1oyY1Z5S1BaY0tM?=
+ =?utf-8?B?RG1kZ3VXNWxoZDB4V0ZjQ0lsMDAyMDV2cDF0MkluM2xXZjN0VnlxWXYzRndh?=
+ =?utf-8?B?WklUZlUrbWZLQ0IzbTU0RUpIaEo1TktpQkR2TmYxTGp2dHYwOEFpaG1GVGo0?=
+ =?utf-8?B?Wk03VXR1WlRoQjh6d0t4K0F3ME9lSGRnTHAySE5SY2sxdStYV0FleGE4WnBV?=
+ =?utf-8?B?TmczNUVZSkpBek9zT1NiN0F4ajlpektRb2FoM2VzcjN4NEJCbFdrVldrZTFu?=
+ =?utf-8?Q?DWNF16cWEWYKPef5vN1YjQQxw?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb022abf-5b92-41c9-dc7d-08da8f44b2ac
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6000.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 13:44:04.8004
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fKHDNm/l1qKe0cdS98ujoIJf5cyhgdhrPgf2fneRWJ66otueqohj3DuRDHXt6RfBDueldcEzedixb6znC4BzqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6079
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+On 9/5/2022 4:51 PM, Christian König wrote:
+> Am 05.09.22 um 12:56 schrieb Arvind Yadav:
+>> The core DMA-buf framework needs to enable signaling
+>> before the fence is signaled. The core DMA-buf framework
+>> can forget to enable signaling before the fence is signaled.
+>> To avoid this scenario on the debug kernel, check the
+>> DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT status bit before checking
+>> the signaling bit status to confirm that enable_signaling
+>> is enabled.
+>
+> You might want to put this patch at the end of the series to avoid 
+> breaking the kernel in between.
+>
+sure, I will add this patch at end.
+>>
+>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>> ---
+>>   include/linux/dma-fence.h | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+>> index 775cdc0b4f24..60c0e935c0b5 100644
+>> --- a/include/linux/dma-fence.h
+>> +++ b/include/linux/dma-fence.h
+>> @@ -428,6 +428,11 @@ dma_fence_is_signaled_locked(struct dma_fence 
+>> *fence)
+>>   static inline bool
+>>   dma_fence_is_signaled(struct dma_fence *fence)
+>>   {
+>> +#ifdef CONFIG_DEBUG_FS
+>
+> CONFIG_DEBUG_FS is certainly wrong, probably better to check for 
+> CONFIG_DEBUG_WW_MUTEX_SLOWPATH here.
+>
+> Apart from that looks good to me,
+> Christian.
+>
+I will use CONFIG_DEBUG_WW_MUTEX_SLOWPATH instead of CONFIG_DEBUG_FS
 
-On Fri,  2 Sep 2022 17:57:22 -0400 you wrote:
-> This series contains several cleanup patches for dpaa/fman. While they
-> are intended to prepare for a phylink conversion, they stand on their
-> own. This series was originally submitted as part of [1].
-> 
-> [1] https://lore.kernel.org/netdev/20220715215954.1449214-1-sean.anderson@seco.com
-> 
-> Changes in v5:
-> - Reduce line length of tgec_config
-> - Reduce line length of qman_update_cgr_safe
-> - Rebase onto net-next/master
-> 
-> [...]
+~arvind
 
-Here is the summary with links:
-  - [net-next,v5,01/14] net: fman: Move initialization to mac-specific files
-    https://git.kernel.org/netdev/net-next/c/302376feec1d
-  - [net-next,v5,02/14] net: fman: Mark mac methods static
-    https://git.kernel.org/netdev/net-next/c/1257c9623deb
-  - [net-next,v5,03/14] net: fman: Inline several functions into initialization
-    (no matching commit)
-  - [net-next,v5,04/14] net: fman: Remove internal_phy_node from params
-    https://git.kernel.org/netdev/net-next/c/45fa34bfaa52
-  - [net-next,v5,05/14] net: fman: Map the base address once
-    https://git.kernel.org/netdev/net-next/c/262f2b782e25
-  - [net-next,v5,06/14] net: fman: Pass params directly to mac init
-    (no matching commit)
-  - [net-next,v5,07/14] net: fman: Use mac_dev for some params
-    https://git.kernel.org/netdev/net-next/c/19c788b144e2
-  - [net-next,v5,08/14] net: fman: Specify type of mac_dev for exception_cb
-    https://git.kernel.org/netdev/net-next/c/5b6acb554065
-  - [net-next,v5,09/14] net: fman: Clean up error handling
-    https://git.kernel.org/netdev/net-next/c/aedbeb4e597e
-  - [net-next,v5,10/14] net: fman: Change return type of disable to void
-    https://git.kernel.org/netdev/net-next/c/901bdff2f529
-  - [net-next,v5,11/14] net: dpaa: Use mac_dev variable in dpaa_netdev_init
-    https://git.kernel.org/netdev/net-next/c/fca4804f68cf
-  - [net-next,v5,12/14] soc: fsl: qbman: Add helper for sanity checking cgr ops
-    https://git.kernel.org/netdev/net-next/c/d0e17a4653ce
-  - [net-next,v5,13/14] soc: fsl: qbman: Add CGR update function
-    https://git.kernel.org/netdev/net-next/c/914f8b228ede
-  - [net-next,v5,14/14] net: dpaa: Adjust queue depth on rate change
-    https://git.kernel.org/netdev/net-next/c/ef2a8d5478b9
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
+>> +        return false;
+>> +#endif
+>> +
+>>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
+>>           return true;
+>

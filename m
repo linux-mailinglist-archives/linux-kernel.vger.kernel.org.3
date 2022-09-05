@@ -2,126 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907F05ACE1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CF95ACE32
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237916AbiIEIga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S238008AbiIEIiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237886AbiIEIgF (ORCPT
+        with ESMTP id S237001AbiIEIhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:36:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518CA11821;
-        Mon,  5 Sep 2022 01:34:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CE6261183;
-        Mon,  5 Sep 2022 08:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B817C43470;
-        Mon,  5 Sep 2022 08:34:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662366847;
-        bh=MFwr+ylrLqHsUdJos34a0n+CwOKCUfeTFHhIzjgR+eQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=j36VktyFiKHbg5ZEF7eYwQw14//bO1WbHu8aKGzTeWRY2j1Zt0QCjLlOkiP9s+DYN
-         56x38j43KsQwIm5I5734SyOvrRGvbdcy3709mYXgngkHE0GznBxnPOO0Pb6I5QV6gL
-         k6eraIABCQjLDq4W3clDn29nde1Lcb5JehshdjtMlSukBy6CUtdsHopsJ+df1pzB0S
-         leqQ1MkQ9MSzmQ82nHEidJ5l5tKuPVJxKfw6SCnFA3V77X4kTg5YTUM2IE3aMAyVb1
-         pzDYNpFf9Ar+yJ++X+4jR5k1kJkl1AdRkUNRq7N+0lV4qBpkoOHIBMNsGcarMxIIq4
-         1ZSsrLC67d8CA==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1274ec87ad5so5011351fac.0;
-        Mon, 05 Sep 2022 01:34:07 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3WP6pGCQK+AHttfilcGZBtW5QTsobY87WtXZGDXDDXbM9bHXOU
-        sb76jl0Yfrm7A7NTwKRuF2LYWkSayuZlvn6nYNM=
-X-Google-Smtp-Source: AA6agR5IglQGOyI7jNiRY0ei+A9SaaYr4Yxhd7s10i4P669D16mJGNnghE8P/xcvEucKgIbX3phIaTViycxWEFtW7D0=
-X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
- v18-20020a056870709200b0011eff3ad984mr8071019oae.19.1662366846586; Mon, 05
- Sep 2022 01:34:06 -0700 (PDT)
+        Mon, 5 Sep 2022 04:37:46 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 155EA19C20;
+        Mon,  5 Sep 2022 01:36:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=aoFbe
+        myDU+f+b3BvxYQMAAfqeFTJORyFpOVWGzC12nw=; b=YPnxvO1Bh6Fm3CpwKWzZ1
+        1AeAXCmPKbRHp/cKDik/DNzoJWNaZm7xzf8Qz6udj0x8ETQlp/cs54lbxzEG0fd1
+        gelmaG8pykOzv8dMreaw4K07pPbAZ0MKWwsfbuqe8dBt5qVGmAidpa1AbzxR+ZM1
+        L8gI5qw5XVQYbMArxAYm7Y=
+Received: from localhost.localdomain (unknown [36.112.3.113])
+        by smtp4 (Coremail) with SMTP id HNxpCgDnKLLwtBVjHqmWaQ--.30535S4;
+        Mon, 05 Sep 2022 16:36:08 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] PM: hibernate: Fix potential memory leak in hibernate_preallocate_memory() and prepare_highmem_image()
+Date:   Mon,  5 Sep 2022 16:35:59 +0800
+Message-Id: <20220905083559.49438-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220831175920.2806-1-jszhang@kernel.org> <20220831175920.2806-5-jszhang@kernel.org>
- <CAJF2gTQMM50TZZ95XOY+Rgvm2hZ3nLxkYfaSW_2MvPiJeqTtJw@mail.gmail.com> <YxWYh5C5swlyobi2@linutronix.de>
-In-Reply-To: <YxWYh5C5swlyobi2@linutronix.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 5 Sep 2022 16:33:54 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR=Cmcox5JrX2bB12MdmurY3vexSA6vw1cdXXbCNB8tXw@mail.gmail.com>
-Message-ID: <CAJF2gTR=Cmcox5JrX2bB12MdmurY3vexSA6vw1cdXXbCNB8tXw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] riscv: add lazy preempt support
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HNxpCgDnKLLwtBVjHqmWaQ--.30535S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7XrW3Jw1rCr1kWrWkXF48Xrb_yoW8JF1xpr
+        Z5KF4DGr1vywnrJ397tFn5Ca47ZwsYg345W39Ivw1kuF13WrnYva1rJrWjgr4xAry0g3W0
+        9FZ7Ww17XanFkw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziqXdrUUUUU=
+X-Originating-IP: [36.112.3.113]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiFRhzjF5mMdNJBQAAsk
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 2:34 PM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
->
-> On 2022-09-04 23:16:12 [+0800], Guo Ren wrote:
-> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > > index b9eda3fcbd6d..595100a4c2c7 100644
-> > > --- a/arch/riscv/kernel/entry.S
-> > > +++ b/arch/riscv/kernel/entry.S
-> > > @@ -361,9 +361,14 @@ restore_all:
-> > >  resume_kernel:
-> > >         REG_L s0, TASK_TI_PREEMPT_COUNT(tp)
-> > >         bnez s0, restore_all
-> > > -       REG_L s0, TASK_TI_FLAGS(tp)
-> > > -       andi s0, s0, _TIF_NEED_RESCHED
-> > > +       REG_L s1, TASK_TI_FLAGS(tp)
-> > > +       andi s0, s1, _TIF_NEED_RESCHED
-> > > +       bnez s0, 1f
-> > > +       REG_L s0, TASK_TI_PREEMPT_LAZY_COUNT(tp)
-> > > +       bnez s0, restore_all
-> > > +       andi s0, s1, _TIF_NEED_RESCHED_LAZY
-> > Can you tell me, who increased/decreased the PREEMPT_LAZY_COUNT? And
-> > who set NEED_RESCHED_LAZY?
->
-> There is "generic" code in the PREEMPT_RT patch doing that. The counter
-> is incremented/ decremented via preempt_lazy_enable()/disable() and one
-> of the user is migrate_disable()/enable().
-> Basically if a task is task_is_realtime() then NEED_RESCHED is set for
-> the wakeup. For the remaining states (SCHED_OTHER, =E2=80=A6) NEED_RESCHE=
-D_LAZY
-> is set for the wakeup. This can be delayed if the task is in a "preempt
-> disable lazy" section (similar to a preempt_disable() section) but a
-> task_is_realtime() can still be scheduled if needed.
-Okay, It should be [PATCH RT]. RISC-V would also move to GENERIC_ENTRY
-[1], so above assembly code would be replaced by generic one, right?
+hibernate_preallocate_memory() and prepare_highmem_image() allocates
+memory chunk with memory_bm_create(). When the function gets some error
+after memory_bm_create(), relavent memory should be released with
+memory_bm_free().
 
-[1]: https://lore.kernel.org/linux-riscv/20220904072637.8619-3-guoren@kerne=
-l.org/T/#u
+Fix it by calling memory_bm_free() at the right time.
 
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ kernel/power/snapshot.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> See details at
->         https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel=
-.git/plain/patches/sched__Add_support_for_lazy_preemption.patch?h=3Dlinux-6=
-.0.y-rt-patches
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 2a406753af90..15345ad0b319 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1752,6 +1752,7 @@ int hibernate_preallocate_memory(void)
+ 
+ 	error = memory_bm_create(&copy_bm, GFP_IMAGE, PG_ANY);
+ 	if (error) {
++		memory_bm_free(orig_bm, PG_UNSAFE_CLEAR);
+ 		pr_err("Cannot allocate copy bitmap\n");
+ 		goto err_out;
+ 	}
+@@ -2335,8 +2336,10 @@ static int prepare_highmem_image(struct memory_bitmap *bm,
+ 	if (memory_bm_create(bm, GFP_ATOMIC, PG_SAFE))
+ 		return -ENOMEM;
+ 
+-	if (get_highmem_buffer(PG_SAFE))
++	if (get_highmem_buffer(PG_SAFE)) {
++		memory_bm_free(bm, PG_UNSAFE_CLEAR);
+ 		return -ENOMEM;
++	}
+ 
+ 	to_alloc = count_free_highmem_pages();
+ 	if (to_alloc > *nr_highmem_p)
+-- 
+2.25.1
 
-
->
-> Sebastian
-
-
-
---=20
-Best Regards
- Guo Ren

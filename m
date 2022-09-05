@@ -2,100 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454B65AD954
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0830B5AD956
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 21:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbiIES51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 14:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        id S229866AbiIETAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 15:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiIES50 (ORCPT
+        with ESMTP id S231466AbiIETAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:57:26 -0400
-Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [IPv6:2a01:4f8:a0:821d::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CC102A42A;
-        Mon,  5 Sep 2022 11:57:24 -0700 (PDT)
-Received: from [192.168.0.10] (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net [86.14.22.118])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 97379140219;
-        Mon,  5 Sep 2022 18:57:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1662404241;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LBvAqqQOyOWJbCs1+9iccQj8h42oT69uG8pHawssG8k=;
-        b=bWEvj25cxDUevqNgHjeHPNntNLa7FVW97+Kuh41iluYM8+bU9GZAKGAInlZtOJ1LkyBWwt
-        AsKM0+qTDfhFep3xqAYvz8tf9fTMli5hifsgZ+fG2AMfInWvLgFTHvlqjN93bpf06iDnma
-        0EfoiidKVs2YT5N8wY04X8EF1a/uT1g=
-Message-ID: <23985fdd-c517-6883-6da4-2582655cc4d6@postmarketos.org>
-Date:   Mon, 5 Sep 2022 19:57:20 +0100
+        Mon, 5 Sep 2022 15:00:12 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938B33AE56
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 12:00:07 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oVHK7-0001BA-Tp; Mon, 05 Sep 2022 20:59:55 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Andreas Schwab <schwab@suse.de>
+Cc:     atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
+        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com
+Subject: Re: [PATCH v3] drivers/perf: riscv_pmu_sbi: add support for PMU variant on T-Head C9xx cores
+Date:   Mon, 05 Sep 2022 20:59:53 +0200
+Message-ID: <8712127.JRmrKFJ9eK@diego>
+In-Reply-To: <mvm4jxlao6f.fsf@suse.de>
+References: <20220905141644.2468891-1-heiko@sntech.de> <mvm4jxlao6f.fsf@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] arm64: dts: rockchip: Fix SD card controller probe on
- Pinephone Pro
-Content-Language: en-US
-To:     Ondrej Jirman <megi@xff.cz>, linux-rockchip@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Martijn Braam <martijn@brixit.nl>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Arnaud Ferraris <arnaud.ferraris@gmail.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <n@nfraprado.net>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220904233652.3197885-1-megi@xff.cz>
-From:   Caleb Connolly <kc@postmarketos.org>
-In-Reply-To: <20220904233652.3197885-1-megi@xff.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andreas,
+
+Am Montag, 5. September 2022, 16:30:48 CEST schrieb Andreas Schwab:
+> On Sep 05 2022, Heiko Stuebner wrote:
+> > To work properly, this requires a matching change in SBI, though the actual
+> > interface between kernel and SBI does not change.
+> 
+> What happens if you mix different kernel and SBI versions?
+
+The interface kernel <-> sbi itself is not changed at all and this of
+course only matters to t-head c9xx cpu cores, so I guess we have
+the cases:
+
+- non-t-head core:
+  no behaviour change independent of versions
 
 
-On 05/09/2022 00:36, Ondrej Jirman wrote:
-> Voltage constraints on vccio_sd are invalid. They don't match the voltages
-> that LDO9 can generate, and this causes rk808-regulator driver to fail
-> to probe with -EINVAL when it tries to apply the constraints during boot.
-> 
-> Fix the constraints to something that LDO9 can be actually configured for.
-> 
-> Fixes: 78a21c7d5952 ("arm64: dts: rockchip: Add initial support for Pine64 PinePhone Pro")
-> Signed-off-by: Ondrej Jirman <megi@xff.cz>
+- t-head core with everything "old":
+  would just uses the regular sbi pmu setup, but as the necessary
+  sbi-side pmu config for the c9xx isn't set from u-boot
+  (dt-properties mapping sbi-events to the values needed to be written
+   to mhpmevent*), this is broken anyway with standard sbi
+  
 
-Reviewed-by: Caleb Connolly <kc@postmarketos.org>
-> ---
->   arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-> index f00c80361377a..2e058c3150256 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-> @@ -253,8 +253,8 @@ regulator-state-mem {
->   
->   			vccio_sd: LDO_REG9 {
->   				regulator-name = "vccio_sd";
-> -				regulator-min-microvolt = <1710000>;
-> -				regulator-max-microvolt = <3150000>;
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <3300000>;
->   			};
->   
->   			vcc3v3_s0: SWITCH_REG {
+- t-head core with "old" kernel, "new" sbi:
+  kernel does not detect the extended features, so should fall back
+  to just use the standard pmu features
+  
+
+- t-head core with "new" kernel", "old" sbi:
+  Same as everything "old", pmu isn't setup correctly in sbi anyway
+  for the c9xx at the moment
+
+
+Heiko  
+
+

@@ -2,84 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602865AD49D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D67B5AD47A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237673AbiIEOSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
+        id S237738AbiIEOF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238237AbiIEOSc (ORCPT
+        with ESMTP id S229984AbiIEOFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:18:32 -0400
-X-Greylist: delayed 1306 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Sep 2022 07:18:31 PDT
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D73564D2;
-        Mon,  5 Sep 2022 07:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cSeRxyeOwAya6N44V5TNqcWN8HqSuTOMAR+yUi9raHk=; b=1GDR6mSXHjIsjp6vvCANmOC9Yi
-        D9u4cyGWWXpy9+Hby1QewMJMEGjIPXA2J+2nnVYfS08ciQN/LRj1vcV1xg3nlY5NN5nT78X+8lxhu
-        e2OO3WdJADpkuPjU9Sx2hDdBU9leX1R6PZvoWiluZbWWGLStnFq6CFfrt3RusNCZgqlV0SjDoFYgz
-        t2hRPa5hGEBCPCIU/E4rOFh6++HY7RPc7C/ViOnYo6CTVd0Toq4EwQvWqj0jvrHG3CyePtkLSrYMo
-        Xbw97KZEXEaGiCIYOwmRtNE/a4Ww3F03XHN4Ax+A4MxbNknjmclQ0dMSLEv6rpj4QpPL7y2FoYenB
-        BfMQ+tPg==;
-Received: from 108-198-5-147.lightspeed.okcbok.sbcglobal.net ([108.198.5.147]:36594 helo=[192.168.0.134])
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <david@lechnology.com>)
-        id 1oVCae-0004vI-Ai;
-        Mon, 05 Sep 2022 09:56:42 -0400
-Message-ID: <580dfcab-65b8-39a4-6042-36f54e8c7ea4@lechnology.com>
-Date:   Mon, 5 Sep 2022 08:56:38 -0500
+        Mon, 5 Sep 2022 10:05:24 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0FA1CB23
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:05:23 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id bp20so11048584wrb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=EWYn0J7WPavaTgTTHsAJLPPLXm3IrDBQA3Am2N9LKbc=;
+        b=RREVlJgowp20xJl611CUIlXXcHWKHX81piHaUH+iNRrbmdAxBqM+mRvPyqsTrJOVm5
+         rAEBj0DBvmLHM0bCNrTXZMo1uFl03j6iM4LnXnn/M+xhk3cP/UP5xBjm5bmyvy75ka2z
+         VN2iC1WjhEHAfV5axu40Bp1qqpewT5iQOrVTQK6JP9NxOsg23/IffVgW7Zwky3zHWhs7
+         MN4FqO632/rzrmpMcZXWux2L19LA5YhViqB+L+sObj3ICsQWSezoGIO9QW7zuzR9dy/H
+         tdSjzdfubmcwkvrSKY5dtDY+6LMhlw4RXXjrExSJOKqkzvxboDsV3tt/mmZLrXe0Bp1U
+         GA0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=EWYn0J7WPavaTgTTHsAJLPPLXm3IrDBQA3Am2N9LKbc=;
+        b=seF2WE1vOXogRtHF7lp5rHtAowp5wbSAUx8VzxMp3PoV2GoV+9dnUtW7PmU2RtLkSK
+         CNnSsDutWh1hVZMHKf8QZ0DqmlgOQEI4kVoDNM4NwxB6bp19HOHZsqOGsOhLhVAfTarz
+         Ugd1crtV9gc0T54lTNUqswDfyBb9ks3BSKqbUgJbTior3TlEpcAoXgYgBgtSeSNX/Ffx
+         ZsbYjHpWIrrWRvy7uoBnoZuXQJrHluLbcKEPKwIRo7mY3kbH23Kqm0fY5tbQbP/EACq8
+         h0Hwm4Gm7YgpEyArNkZJTYsM7Xsp3o43WItLFbzcOwkwITc8KFrxmjAX5yk+9M3bqYID
+         tuBw==
+X-Gm-Message-State: ACgBeo1tviBEIMevxnI+YE/l6kVYsTII3fRAtHHqLbOPVI6RS24qhqBx
+        lk/EQ4rhgEy1ixizwI7TjnxEKA==
+X-Google-Smtp-Source: AA6agR5n8mXcPAFDTtcz/LoCzBHOCGeMxpW/ITe1Ff6sdYJh6aJoz+VcFowQp3QZJds50a5RRueKrw==
+X-Received: by 2002:a05:6000:1d81:b0:226:fa3a:8721 with SMTP id bk1-20020a0560001d8100b00226fa3a8721mr11351511wrb.475.1662386721837;
+        Mon, 05 Sep 2022 07:05:21 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id i8-20020a5d5588000000b002258956f373sm9021634wrv.95.2022.09.05.07.05.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 07:05:21 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 16:05:20 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Svinval support for KVM RISC-V
+Message-ID: <20220905140520.dmpbbh5fkk634leg@kamzik>
+References: <20220902170131.32334-1-apatel@ventanamicro.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] clk: davinci: pll: fix spelling typo in comment
-Content-Language: en-US
-To:     Jiangshan Yi <13667453960@163.com>, mturquette@baylibre.com,
-        sboyd@kernel.org
-Cc:     nsekhar@ti.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-References: <20220905065833.1831473-1-13667453960@163.com>
-From:   David Lechner <david@lechnology.com>
-In-Reply-To: <20220905065833.1831473-1-13667453960@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902170131.32334-1-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/5/22 1:58 AM, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Fri, Sep 02, 2022 at 10:31:28PM +0530, Anup Patel wrote:
+> This series adds Svinval extension support for both Host hypervisor
+> and Guest.
 > 
-> Fix spelling typo in comment.
+> These patches can also be found in riscv_kvm_svinval_v1 branch at:
+> https://github.com/avpatel/linux.git
 > 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
-> ---
+> The corresponding KVMTOOL patches are available in riscv_svinval_v1
+> branch at: https://github.com/avpatel/kvmtool.git
+> 
+> Anup Patel (2):
+>   RISC-V: KVM: Use Svinval for local TLB maintenance when available
+>   RISC-V: KVM: Allow Guest use Svinval extension
+> 
+> Mayuresh Chitale (1):
+>   RISC-V: Probe Svinval extension form ISA string
+> 
+>  arch/riscv/include/asm/hwcap.h    |  4 +++
+>  arch/riscv/include/asm/insn-def.h | 20 +++++++++++
+>  arch/riscv/include/uapi/asm/kvm.h |  1 +
+>  arch/riscv/kernel/cpu.c           |  1 +
+>  arch/riscv/kernel/cpufeature.c    |  1 +
+>  arch/riscv/kvm/tlb.c              | 60 ++++++++++++++++++++++++-------
+>  arch/riscv/kvm/vcpu.c             |  2 ++
+>  7 files changed, 77 insertions(+), 12 deletions(-)
+> 
+> -- 
+> 2.34.1
 
-Reviewed-by: David Lechner <david@lechnology.com>
+For the series,
 
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>

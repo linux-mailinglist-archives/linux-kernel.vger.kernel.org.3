@@ -2,199 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8545AD8C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8905AD8C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbiIESDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 14:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
+        id S231981AbiIESEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 14:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiIESDt (ORCPT
+        with ESMTP id S232197AbiIESEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:03:49 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7B642ACA
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 11:03:47 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id r7so4931528ile.11
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 11:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=T67TRgbvL4Ai6kaNg3fck6vcoHVKT+0s4pwJ/NSZTGA=;
-        b=cPF8g7Tq5Xr7vWwWPXlAIGbvK841YSQ7JL9eISWcCc1GmuozWN4LmUfAHYFGsC3plp
-         xbkMUOOnQhpFxa0XIBosBwjnD4RAr2Kl5FqcTcUiqI63BnVfEWkAAfAMPK2+2D9jC4rI
-         SBcZs3gwdK8qGIp1MV9X/fGPGkKuR5qRQqaUNUEfXT08Tya/qRlmc89AlTJ5Ml7Xorrw
-         xo1/RpLc8BQEQ206qriFaMJIssLZDxhxOljYpigcvkdlTlPx06einaUW7/uPd1dNz5in
-         HXBRJcn7nXiV8BlMPqUAxSW6U9l+lE6gj/Oi85wJcyYJwIvqaZZYLOTvZP+kHnJ13k+5
-         7W5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=T67TRgbvL4Ai6kaNg3fck6vcoHVKT+0s4pwJ/NSZTGA=;
-        b=0WmBl72JB8cPB5STMHkW/Jif8X3V2vABP9Gl0pcE78Fr2E3iJILSTAfXMa/3oXc8bE
-         pg6YJS+8zbeeXlcxGigvYtG4cbvhcsbw+SLpIK3JXuH1OK0IqJYi4LOdUgD79IlZEdfV
-         GmrTuEXtagdJm3m00yRwADHQU6rzgVPgLqoQ6ISs4cr8KzUIvMs/Ut9wuIhquAOlPqjj
-         NOz2qfdelc1KSI82D0So8vAMsgMjs5caGBhhU28OnkolFpEI0tj622TKml2qtdKLANSG
-         LL2tqlAFRMFXZ29DN2xekXF5J8Lyl1I9Ma8kjNJjiJtqwn5lgJOpXi44sOLfs4XN2wyy
-         ZEPw==
-X-Gm-Message-State: ACgBeo3g+zJ9jBD/m41MwZE28uYpfpYTiQuGEu21R1JlZrafag+tsSKR
-        42JQU6rYQ+LGxzJw3gyPCXSOdPH4Y3Pz0dsqvqn+hA==
-X-Google-Smtp-Source: AA6agR4B7x+HXZFIStbcPiXGjinnhf/x5VSF8+h0pcx1isIR3eJmYhiMXqo5jfQScJCtZZmLuVhzCMYw0KB/RJ8mvlI=
-X-Received: by 2002:a05:6e02:1ba8:b0:2eb:7d50:5fb8 with SMTP id
- n8-20020a056e021ba800b002eb7d505fb8mr14014798ili.296.1662401026346; Mon, 05
- Sep 2022 11:03:46 -0700 (PDT)
+        Mon, 5 Sep 2022 14:04:47 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC94F580
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 11:04:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662401085; x=1693937085;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Keq2HmkPNuhlyDlSt+oyoxdGnyYeoDKYKTyZgz45wrI=;
+  b=K3pqVX/cxGeb1OkHI7L7if8CASSaO8kUFDzaIyX2H513MVRFffb5fshE
+   Zy4jJkYHVGRUh4jLB/EtIDcDQOeLmiwXDhLkwRpa/M7oRPiGvOOlmE59T
+   rzUUIGF89wmoj9BIRXWmZ8QdEqE1kgnD3thVk4W02utT/Yp67K+I3vAsc
+   4vFgY8zMIpiaSQ0xeoEinmcmaMTxLkMM0uFYsz/ZIGh1cjsMQrK5ZzmnI
+   lRCBXLGTRF4on4Md5l7wlpGFVhAVzrKl90icjDXWcov1BQFvRDBI99+wc
+   ixfJXGUop48fZkvpgGFLEm6SMwGWialhNmkOFmUrcQTe7DxC3GhIcINIu
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="276828889"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="276828889"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 11:04:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="590992934"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 05 Sep 2022 11:04:43 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVGSg-0004P3-2z;
+        Mon, 05 Sep 2022 18:04:42 +0000
+Date:   Tue, 6 Sep 2022 02:03:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Fangzhi Zuo <Jerry.Zuo@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c:117:18:
+ warning: variable 'channels' set but not used
+Message-ID: <202209060159.tIsVfTJM-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
- <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <YxBc1xuGbB36f8zC@dhcp22.suse.cz> <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
- <YxEE1vOwRPdzKxoq@dhcp22.suse.cz> <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
- <YxWvbMYLkPoJrQyr@dhcp22.suse.cz>
-In-Reply-To: <YxWvbMYLkPoJrQyr@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 5 Sep 2022 11:03:35 -0700
-Message-ID: <CAJuCfpHJsfe172YUQbOqkkpNEEF7B6pJZuWnMa2BsdZwwEGKmA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Sun 04-09-22 18:32:58, Suren Baghdasaryan wrote:
-> > On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
-> [...]
-> > > Yes, tracking back the call trace would be really needed. The question
-> > > is whether this is really prohibitively expensive. How much overhead are
-> > > we talking about? There is no free lunch here, really.  You either have
-> > > the overhead during runtime when the feature is used or on the source
-> > > code level for all the future development (with a maze of macros and
-> > > wrappers).
-> >
-> > As promised, I profiled a simple code that repeatedly makes 10
-> > allocations/frees in a loop and measured overheads of code tagging,
-> > call stack capturing and tracing+BPF for page and slab allocations.
-> > Summary:
-> >
-> > Page allocations (overheads are compared to get_free_pages() duration):
-> > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
-> > 8.8% lookup_page_ext
-> > 1237% call stack capture
-> > 139% tracepoint with attached empty BPF program
->
-> Yes, I am not surprised that the call stack capturing is really
-> expensive comparing to the allocator fast path (which is really highly
-> optimized and I suspect that with 10 allocation/free loop you mostly get
-> your memory from the pcp lists). Is this overhead still _that_ visible
-> for somehow less microoptimized workloads which have to take slow paths
-> as well?
+Hi Fangzhi,
 
-Correct, it's a comparison with the allocation fast path, so in a
-sense represents the worst case scenario. However at the same time the
-measurements are fair because they measure the overheads against the
-same meaningful baseline, therefore can be used for comparison.
+FYI, the error/warning still remains.
 
->
-> Also what kind of stack unwinder is configured (I guess ORC)? This is
-> not my area but from what I remember the unwinder overhead varies
-> between ORC and FP.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7e18e42e4b280c85b76967a9106a13ca61c16179
+commit: 61452908a79ec936660494fb4b9f2a35ee42e6e0 drm/amd/display: Add DP 2.0 Audio Package Generator
+date:   1 year ago
+config: i386-buildonly-randconfig-r004-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060159.tIsVfTJM-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=61452908a79ec936660494fb4b9f2a35ee42e6e0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 61452908a79ec936660494fb4b9f2a35ee42e6e0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
 
-I used whatever is default and didn't try other mechanisms. Don't
-think the difference would be orders of magnitude better though.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> And just to make it clear. I do realize that an overhead from the stack
-> unwinding is unavoidable. And code tagging would logically have lower
-> overhead as it performs much less work. But the main point is whether
-> our existing stack unwiding approach is really prohibitively expensive
-> to be used for debugging purposes on production systems. I might
-> misremember but I recall people having bigger concerns with page_owner
-> memory footprint than the actual stack unwinder overhead.
+All warnings (new ones prefixed by >>):
 
-That's one of those questions which are very difficult to answer (if
-even possible) because that would depend on the use scenario. If the
-workload allocates frequently then adding the overhead will likely
-affect it, otherwise might not be even noticeable. In general, in
-pre-production testing we try to minimize the difference in
-performance and memory profiles between the software we are testing
-and the production one. From that point of view, the smaller the
-overhead, the better. I know it's kinda obvious but unfortunately I
-have no better answer to that question.
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c: In function 'apg31_se_audio_setup':
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c:117:18: warning: variable 'channels' set but not used [-Wunused-but-set-variable]
+     117 |         uint32_t channels = 0;
+         |                  ^~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c:116:18: warning: variable 'speakers' set but not used [-Wunused-but-set-variable]
+     116 |         uint32_t speakers = 0;
+         |                  ^~~~~~~~
 
-For the memory overhead, in my early internal proposal with assumption
-of 10000 instrumented allocation call sites, I've made some
-calculations for an 8GB 8-core system (quite typical for Android) and
-ended up with the following:
 
-                                    per-cpu counters      atomic counters
-page_ext references     16MB                      16MB
-slab object references   10.5MB                   10.5MB
-alloc_tags                      900KB                    312KB
-Total memory overhead 27.4MB                  26.8MB
+vim +/channels +117 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c
 
-so, about 0.34% of the total memory. Our implementation has changed
-since then and the number might not be completely correct but it
-should be in the ballpark.
-I just checked the number of instrumented calls that we currently have
-in the 6.0-rc3 built with defconfig and it's 165 page allocation and
-2684 slab allocation sites. I readily accept that we are probably
-missing some allocations and additional modules can also contribute to
-these numbers but my guess it's still less than 10000 that I used in
-my calculations.
-I don't claim that 0.34% overhead is low enough to be always
-acceptable, just posting the numbers to provide some reference points.
+   108	
+   109	static void apg31_se_audio_setup(
+   110		struct apg *apg,
+   111		unsigned int az_inst,
+   112		struct audio_info *audio_info)
+   113	{
+   114		struct dcn31_apg *apg31 = DCN31_APG_FROM_APG(apg);
+   115	
+ > 116		uint32_t speakers = 0;
+ > 117		uint32_t channels = 0;
+   118	
+   119		ASSERT(audio_info);
+   120		/* This should not happen.it does so we don't get BSOD*/
+   121		if (audio_info == NULL)
+   122			return;
+   123	
+   124		speakers = audio_info->flags.info.ALLSPEAKERS;
+   125		channels = speakers_to_channels(audio_info->flags.speaker_flags).all;
+   126	
+   127		/* DisplayPort only allows for one audio stream with stream ID 0 */
+   128		REG_UPDATE(APG_CONTROL2, APG_DP_AUDIO_STREAM_ID, 0);
+   129	
+   130		/* When running in "pair mode", pairs of audio channels have their own enable
+   131		 * this is for really old audio drivers */
+   132		REG_UPDATE(APG_DBG_GEN_CONTROL, APG_DBG_AUDIO_CHANNEL_ENABLE, 0xF);
+   133		// REG_UPDATE(APG_DBG_GEN_CONTROL, APG_DBG_AUDIO_CHANNEL_ENABLE, channels);
+   134	
+   135		/* Disable forced mem power off */
+   136		REG_UPDATE(APG_MEM_PWR, APG_MEM_PWR_FORCE, 0);
+   137	
+   138		apg31_enable(apg);
+   139	}
+   140	
 
-> --
-> Michal Hocko
-> SUSE Labs
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

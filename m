@@ -2,191 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAA15AD436
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B65D5AD43A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238202AbiIENoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
+        id S238214AbiIENpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238060AbiIENo2 (ORCPT
+        with ESMTP id S237130AbiIENpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:44:28 -0400
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C77C6141;
-        Mon,  5 Sep 2022 06:44:26 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id s11so11396813edd.13;
-        Mon, 05 Sep 2022 06:44:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=eOfgeQnQ9LhjPeT1sUCEF5jyGKSmHYeqEshoHJc9BRI=;
-        b=b2zBi/MDu24APKNKQW279wY+HJr5a8I16+jXS2YKv3fRlE2SNANYnz+XthHFgL8BO5
-         GG7UqH3MpkIpTKdeYFBLmvow/9yuwj42bn5X/sBAGQri4sIJ/FTP7gt5e2e+cOgDrS94
-         LXANbIZ4MMuf6sjfD5gJTdH+jKmih/4VZoX5aYGYTeYf32Qj69DIpFnZisNLpcAFoqL8
-         Sr+sfNg6UmIMfwBO0kZoJBPj/xX6YQfzcmj10pLQCpVu/Ox1YNr4UnBIWzElYVYgCmCB
-         Z05AiVplbvOJ/RbBFLE4oY7dLEmKcjiGlFYIM+5JCA2ZV3VeNKpU7sCGI+1yMHKnL+cv
-         v1wg==
-X-Gm-Message-State: ACgBeo2WA5BcxaBVvT+7uDWWsJ5hj3wvxyu4dSkRsvl81tFyyV/zGvfS
-        RwXRk2ZMUmHLhphXgLumbJ0=
-X-Google-Smtp-Source: AA6agR45jiO8Yyj+s62ODWB0VQFamqiLaONUcR5S6g3Nn+19aR/KN2N+NWwUWmJfWOOK6iTVO7kVDA==
-X-Received: by 2002:a05:6402:501d:b0:443:1c7:ccb9 with SMTP id p29-20020a056402501d00b0044301c7ccb9mr43886761eda.101.1662385464528;
-        Mon, 05 Sep 2022 06:44:24 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-023.fbsv.net. [2a03:2880:31ff:17::face:b00c])
-        by smtp.gmail.com with ESMTPSA id b29-20020a50ccdd000000b0044ebf63d337sm28771edj.57.2022.09.05.06.44.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 06:44:24 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 06:44:22 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>, leit@fb.com,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RESEND net-next] tcp: socket-specific version of
- WARN_ON_ONCE()
-Message-ID: <YxX9NjhQlppDUMkE@gmail.com>
-References: <20220831133758.3741187-1-leitao@debian.org>
- <CANn89iLe9spogp7eaXPziA0L-FqJ0w=6VxdWDL6NKGobTyuQRw@mail.gmail.com>
+        Mon, 5 Sep 2022 09:45:07 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164E24E610
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 06:45:05 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id C6DD13200928;
+        Mon,  5 Sep 2022 09:45:02 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 05 Sep 2022 09:45:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1662385502; x=1662471902; bh=yg
+        aFQaIZgsPlCvGxBshcdt6jZDFSv4YrxILywAef6b8=; b=coAufvSS5LgJkML+Dv
+        lLyuYw/AKPUQP2GvZSgAeHrLKFkSEk7QGwlbpqCnjpNDhZ5daNWM3UWOwuTRi0sM
+        OfPO6MYqRUwp5K1W6cUpk6E3txlJW3bicoPGdy87xLZjYNbFr53oLPH1Gz01lAXd
+        /YUBGMSj9mvU8WjO5VcIFlTYFZmrqo/tEBrrnOEMQHYAZIPj44qYeHD2r/VIZwdw
+        6ZlIrOSlimsg5hCebvtECkBDm4HV7UvLngpOh6mxYH3IwVf2ACsdd5SbAPXHrXLs
+        atHkg579fM+vVpMQukXWDOoYtUd811JHAo0YySqXs6O5pqZMYfqMAzewAmVvKDzC
+        3zyw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1662385502; x=1662471902; bh=ygaFQaIZgsPlCvGxBshcdt6jZDFS
+        v4YrxILywAef6b8=; b=nFm8Mfc2DXB+9ZyKKBwZh78iHFJRJHN93G1ikx6tfDsi
+        Lvq8gtE+UpIavRFvoMwU8zNPmUbQRtXXwnT6KN8zOFGK72WXFJZPEcl7OS5LqKqo
+        fBDpgAdXHvsMvpou52fDMLmS6DsPCsUao7RqeDFOGI6dJ47MWQzwc1dok0w6OoUV
+        ppyijT6WzohX3BlO+ndF3YBsM9nf55We/O64qtdHwSnhL6udto8m7dDu7WdF21vS
+        pll2lZ/pXkgEjVRsgM1qRGL3l4r91QIEywa0AyOIQcFe6JEBmRx3TB/3y/OiYH/Z
+        X8evXWjq/DN7R42/3DcSS5SL8GQiF1GUieA8HBOoCQ==
+X-ME-Sender: <xms:Xf0VYxuT60pTvyFcH6w4Lgeis20TJjjSimBzC60dRM_fjHPP6IAhgw>
+    <xme:Xf0VY6cAUtuXr_s3ExUO4I8pJg6Sq-IS1s-vHaksqrafBNm8aCVRg4oVVCGSN4zFz
+    Y_mxwkF_GuJ-p6DIaY>
+X-ME-Received: <xmr:Xf0VY0yp1HFRwGFtL4dItbpV9gJG7HVuAasBivGUs9jK6bMOscCgTu3fM2-YJ0kU-5HYnA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeliedgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeelgffhfeetlefhveffleevfffgtefffeelfedu
+    udfhjeduteeggfeiheefteehjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
+    sehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:Xv0VY4PJmcalfS2PabQZMuCpNXGwRjl6eLkq2hQ5ZTFdLJXB1lSIrQ>
+    <xmx:Xv0VYx9DjlW7kFG8PrxvsnXK2hevXMMCVXwSIy4nR8sdJLyls6Muvw>
+    <xmx:Xv0VY4UKW4G8Sb0tW7OxYlz2lyv_imGDuZ-7XpUSLOAwKoGIG5jwAg>
+    <xmx:Xv0VY5MtUsJeiYDnV8BEysyb1t20LVr1zfBI3gZmnvY0ZWBWkAgRZA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Sep 2022 09:45:01 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id CC4821040BF; Mon,  5 Sep 2022 16:44:57 +0300 (+03)
+Date:   Mon, 5 Sep 2022 16:44:57 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Bharata B Rao <bharata@amd.com>
+Cc:     ananth.narayan@amd.com,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
+Message-ID: <20220905134457.a2f7uluq42frsgwe@box.shutemov.name>
+References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
+ <20220904010001.knlcejmw4lg2uzy3@box.shutemov.name>
+ <64519d0b-b696-db47-52c2-303451e10c09@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANn89iLe9spogp7eaXPziA0L-FqJ0w=6VxdWDL6NKGobTyuQRw@mail.gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <64519d0b-b696-db47-52c2-303451e10c09@amd.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Eric,
-
-On Sat, Sep 03, 2022 at 09:42:43AM -0700, Eric Dumazet wrote:
-> On Wed, Aug 31, 2022 at 6:38 AM Breno Leitao <leitao@debian.org> wrote:
-> >
-> > There are cases where we need information about the socket during a
-> > warning, so, it could help us to find bugs that happens that do not have
-> > a easily repro.
-> >
-> > BPF congestion control algorithms can change socket state in unexpected
-> > ways, leading to WARNings. Additional information about the socket state
-> > is useful to identify the culprit.
-
-A little bit of more context here. We hit this warning in production
-several hundred times a day. We don't know exactly where it is coming
-from, that is why this patch is being proposed.
-
-> Well, this suggests we need to fix BPF side ?
-
-This patch might help us to identify who is the culprit that is setting
-the wrong value in the congestion window. If the problem is on the BPF
-side, we probably need to Fix BPF side, for sure.
-
-> It seems you already found the issue in an eBPF CC, can you share the details ?
-
-Not really.  I've applied this patch into our internal kernel, and we
-might soon find more information of what is causing this warning.
-
-> > This diff creates a TCP socket-specific version of WARN_ON_ONCE(), and
-> > attaches it to tcp_snd_cwnd_set().
+On Mon, Sep 05, 2022 at 10:35:44AM +0530, Bharata B Rao wrote:
+> Hi Kirill,
 > 
-> Well, I feel this will need constant additions... the state of a
-> custom BPF CC is opaque to core TCP stack anyway ?
+> On 9/4/2022 6:30 AM, Kirill A. Shutemov wrote:
+> > On Tue, Aug 30, 2022 at 04:00:53AM +0300, Kirill A. Shutemov wrote:
+> >> Linear Address Masking[1] (LAM) modifies the checking that is applied to
+> >> 64-bit linear addresses, allowing software to use of the untranslated
+> >> address bits for metadata.
+> >>
+> >> The patchset brings support for LAM for userspace addresses. Only LAM_U57 at
+> >> this time.
+> >>
+> >> Please review and consider applying.
+> >>
+> >> git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+> > 
+> > +Bharata, Ananth.
+> > 
+> > Do you folks have any feedback on the patchset?
+> > 
+> > Looks like AMD version of the tagged pointers feature does not get
+> > traction as of now, but I want to be sure that the interface introduced
+> > here can be suitable for your future plans.
+> > 
+> > Do you see anything in the interface that can prevent it to be extended to
+> > the AMD feature?
 > 
-> >
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > ---
-> >  include/net/tcp.h       |  3 ++-
-> >  include/net/tcp_debug.h | 10 ++++++++++
-> >  net/ipv4/tcp.c          | 30 ++++++++++++++++++++++++++++++
-> >  3 files changed, 42 insertions(+), 1 deletion(-)
-> >  create mode 100644 include/net/tcp_debug.h
-> >
-> > diff --git a/include/net/tcp.h b/include/net/tcp.h
-> > index d10962b9f0d0..73c3970d8839 100644
-> > --- a/include/net/tcp.h
-> > +++ b/include/net/tcp.h
-> > @@ -40,6 +40,7 @@
-> >  #include <net/inet_ecn.h>
-> >  #include <net/dst.h>
-> >  #include <net/mptcp.h>
-> > +#include <net/tcp_debug.h>
-> >
-> >  #include <linux/seq_file.h>
-> >  #include <linux/memcontrol.h>
-> > @@ -1222,7 +1223,7 @@ static inline u32 tcp_snd_cwnd(const struct tcp_sock *tp)
-> >
-> >  static inline void tcp_snd_cwnd_set(struct tcp_sock *tp, u32 val)
-> >  {
-> > -       WARN_ON_ONCE((int)val <= 0);
-> > +       TCP_SOCK_WARN_ON_ONCE(tp, (int)val <= 0);
-> >         tp->snd_cwnd = val;
-> >  }
-> >
-> > diff --git a/include/net/tcp_debug.h b/include/net/tcp_debug.h
-> > new file mode 100644
-> > index 000000000000..50e96d87d335
-> > --- /dev/null
-> > +++ b/include/net/tcp_debug.h
-> > @@ -0,0 +1,10 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef _LINUX_TCP_DEBUG_H
-> > +#define _LINUX_TCP_DEBUG_H
-> > +
-> > +void tcp_sock_warn(const struct tcp_sock *tp);
-> > +
-> > +#define TCP_SOCK_WARN_ON_ONCE(tcp_sock, condition) \
-> > +               DO_ONCE_LITE_IF(condition, tcp_sock_warn, tcp_sock)
-> > +
-> > +#endif  /* _LINUX_TCP_DEBUG_H */
-> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> > index bbe218753662..71771fee72f7 100644
-> > --- a/net/ipv4/tcp.c
-> > +++ b/net/ipv4/tcp.c
-> > @@ -4684,6 +4684,36 @@ int tcp_abort(struct sock *sk, int err)
-> >  }
-> >  EXPORT_SYMBOL_GPL(tcp_abort);
-> >
-> > +void tcp_sock_warn(const struct tcp_sock *tp)
-> > +{
-> > +       const struct sock *sk = (const struct sock *)tp;
-> > +       struct inet_sock *inet = inet_sk(sk);
-> > +       struct inet_connection_sock *icsk = inet_csk(sk);
-> > +
-> > +       WARN_ON(1);
-> > +
-> > +       if (!tp)
-> > +               return;
-> > +
-> > +       pr_warn("Socket Info: family=%u state=%d sport=%u dport=%u ccname=%s cwnd=%u",
-> > +               sk->sk_family, sk->sk_state, ntohs(inet->inet_sport),
-> > +               ntohs(inet->inet_dport), icsk->icsk_ca_ops->name, tcp_snd_cwnd(tp));
-> > +
-> > +       switch (sk->sk_family) {
-> > +       case AF_INET:
-> > +               pr_warn("saddr=%pI4 daddr=%pI4", &inet->inet_saddr,
-> > +                       &inet->inet_daddr);
-> > +               break;
-> > +#if IS_ENABLED(CONFIG_IPV6)
-> > +       case AF_INET6:
-> > +               pr_warn("saddr=%pI6 daddr=%pI6", &sk->sk_v6_rcv_saddr,
-> > +                       &sk->sk_v6_daddr);
-> > +               break;
-> > +#endif
-> > +       }
-> > +}
-> > +EXPORT_SYMBOL_GPL(tcp_sock_warn);
-> > +
-> >  extern struct tcp_congestion_ops tcp_reno;
-> >
-> >  static __initdata unsigned long thash_entries;
-> > --
-> > 2.30.2
-> >
+> The arch_prctl() extensions is generic enough that it should be good.
+> 
+> The untagged_addr() macro looks like this from one of the callers:
+> 
+>         start = untagged_addr(mm, start);
+> ffffffff814d39bb:       48 8b 8d 40 ff ff ff    mov    -0xc0(%rbp),%rcx
+> ffffffff814d39c2:       48 89 f2                mov    %rsi,%rdx
+> ffffffff814d39c5:       48 c1 fa 3f             sar    $0x3f,%rdx
+> ffffffff814d39c9:       48 0b 91 50 03 00 00    or     0x350(%rcx),%rdx
+> ffffffff814d39d0:       48 21 f2                and    %rsi,%rdx
+> ffffffff814d39d3:       49 89 d6                mov    %rdx,%r14
+> 
+> Can this overhead of a few additional instructions be removed for
+> platforms that don't have LAM feature? I haven't measured how much
+> overhead this effectively contributes to in real, but wonder if it is
+> worth optimizing for non-LAM platforms.
+
+I'm not sure how the optimization should look like. I guess we can stick
+static_cpu_has() there, but I'm not convinced that adding jumps there will
+be beneficial.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov

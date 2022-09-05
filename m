@@ -2,180 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DED25ACE73
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BEA25ACE65
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237729AbiIEI7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
+        id S238019AbiIEJA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 05:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236808AbiIEI7j (ORCPT
+        with ESMTP id S238024AbiIEJAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:59:39 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10117.outbound.protection.outlook.com [40.107.1.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC8AA448;
-        Mon,  5 Sep 2022 01:59:37 -0700 (PDT)
+        Mon, 5 Sep 2022 05:00:23 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60045.outbound.protection.outlook.com [40.107.6.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BC4205F9;
+        Mon,  5 Sep 2022 02:00:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OEsohMb27fVEQkSryYILz+W2uyHvXDG17TO0ZnCNpzjJ3pkUdc0jwV3lV8hTe6xN/chu1xBJH4OEep+BU5yUyzfVwXxJG+Qg6bKBV5p3UaQWUZIfpEftGLWggQWVl6LUA2hp2DbkaCDpHo02m1eW6lI7Z0FmQjEBGrej9QhE7PeRfBLtA9R0T4WH8BZFHvUgBL2IPX/rDUQYcZJbJeJh7rppra/d6XWjDNpxrZBJN2eS+e1TvEuA2QAtXDMlCuxdxJkrdiCTMK7LCsJXwlMoTkbx+XCMAPVPBKssqQ4r3o9UxQ2A0y9i9XtdZz8SnpSoAr3yJMKNxDMSCfap7D7tJA==
+ b=gPdL9GkpIeL1TvjnGIN4tWQoFCxiyZ3+dh55noNumpUXTQdE4XJlm9j5ZZYeEfxhDcjkVvglaIPXQ/3k4Snk2Ut+K9jxVs54np5VD77QfyNBsanD0zMPn0wGthQjUMZebmDz9ihnso8dtqYBfcVavCVaWrn18LPUig6iXAWaGDoH+He9y60VLpU5oNSZmNcMUtoSHMYvj9QJ4yjaZSyB3DRa/33bq/KPVHaD8Sy/xqFhjZF/HfJqBUveo/hZ5pFgheR7m8rcHenQqXwndA3fjH8rKNatvsjC/nTlshBswLYJ2kUaAh2yKkr/HqqpuOoCQCv2Nr5rdvp0qg2xO0FmFg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E07Sad6LuuSxRVdlbLyA13Txd7yI5J6qnNm0QXcslDg=;
- b=LcT6TlFaRxvoZXQxmAQQeTyinupANT7eOXPQrrr/D+RyjFCzNJMero5cqAI0j6Hp3AD82uTl3Zg8vBh7oR2UVaBtlPwEJpSxTPhoDcBOOVXk+gPkfbHp3L+MSUVe/XBgZekC2aV25QLEmOLEpdwEO/AJEULXqnZEtOZN5PWI+mmNTn3kZCiAvPNMT1kIcFh0IyeIUkr09VpUtYNWEKu70KwOQYNbqjoVF2BhEG3HDnX/1KkICPKTJlPGHRMaDnsk3XgnHmcSdEIpkBsngB66upSM09WlNkF9u7B8WT/Sl1q2t0zR49zBlSJb6gU1QTsUGL9KFJiqpyPodgPmW3iImQ==
+ bh=UZIjIwJuTH7w4KSQZKGlA85lKpbyGz3FuYFb0/H7rD0=;
+ b=W4WgIeCXDBdtSSygxjmsp/BvN3kr923w+XLYhA5h/hFuuzHlTGwIAEqiCT6n4yqJHiEtFsJUNVTZVoD/OCQ1JcpEx5df2CdQOdd35ynj73ApszkyakRT38VgoC/nR3pv3mCkKi45iP90HWbhBbKlCvc2geomjgkMjTOoikHPLF7YbK8b98ECeDBQVXfh3y72WK73pM6jVF2meCt+sl7rNJF6UHOQDQTQJa4Q+t4CqH8xTkWICQ6zjnvUgmJ0KvRJ9jMlg2vV7Y8wy9Bn7DFrjzP69XvgZLgGSwi1KpljIFfDAzb4keuINBcsPjXdlZJAXiIf6O1eO0lAtDDB6CXWow==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E07Sad6LuuSxRVdlbLyA13Txd7yI5J6qnNm0QXcslDg=;
- b=O9vRuZODuHXZtgAycMDP+2Ra5qYGmtE9jdZVsuVNhMij6Aowzr/zLcXoP3vVfEQbK06hc35ysMStHATqY9CVbDbga/yQ9zTU97N1bcYVB2dQxejowC1+BzEgIgLOSsbHTJSYXl7C4Gi6y3ZLi/Oo2EhMGzEME3o4vKhXg17+GJypM2jFYPpq6kuBBaQP8fUxZOmms4arQ9sr0hkQ0C0RsEgK14x9WJAcODlKGmlyTHk57lERGC3MRZGSaY3D8daVwqSVD/DnHhdYoaLA6TL1oUzKi5heciWpKBDgsnn/cjfCu/oHjoHRQA/cNMY3vJGRJQD+Q0VquiZRCWR+ugKQEQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from PAXPR08MB6956.eurprd08.prod.outlook.com (2603:10a6:102:1db::9)
- by AS8PR08MB8222.eurprd08.prod.outlook.com (2603:10a6:20b:52a::12) with
+ bh=UZIjIwJuTH7w4KSQZKGlA85lKpbyGz3FuYFb0/H7rD0=;
+ b=g71a+D2QBPnqPhXIdbVfhFDEweodu9KlUyvbdJ9Vcf8yq/+v0T7VZ3uUVzYabfpMfnwwJgig+RxmGnBbtjyvlszUW/I5Klgqd5fH24CMJ22T1wxqRcH8XUsIwmsGG2h9elbj6Gxb4shF3KWtmHpfYpfEElA2yIOCXV159fMqg6c=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by VE1PR04MB7470.eurprd04.prod.outlook.com (2603:10a6:800:1a3::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
- 2022 08:59:34 +0000
-Received: from PAXPR08MB6956.eurprd08.prod.outlook.com
- ([fe80::5593:9fae:255d:ee6]) by PAXPR08MB6956.eurprd08.prod.outlook.com
- ([fe80::5593:9fae:255d:ee6%4]) with mapi id 15.20.5588.016; Mon, 5 Sep 2022
- 08:59:34 +0000
-Message-ID: <483cf471-6c12-51e0-4075-72d290055f47@virtuozzo.com>
-Date:   Mon, 5 Sep 2022 10:59:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/1] Create debugfs file with hyper-v balloon usage
- information
-Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "kernel@openvz.org" <kernel@openvz.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Mon, 5 Sep
+ 2022 09:00:16 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3412:9d57:ec73:fef3]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3412:9d57:ec73:fef3%5]) with mapi id 15.20.5588.017; Mon, 5 Sep 2022
+ 09:00:16 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <PH0PR21MB3025D1111824156FB6B9D0DCD7819@PH0PR21MB3025.namprd21.prod.outlook.com>
- <20220711181825.52318-1-alexander.atanasov@virtuozzo.com>
- <BY3PR21MB30335CDAD39F927427DEF4EAD7869@BY3PR21MB3033.namprd21.prod.outlook.com>
- <20220713151927.e6w5gcb67ffh4zlx@liuwe-devbox-debian-v2>
- <BYAPR21MB1688312AED65BEE290CF6C52D77D9@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   "Denis V. Lunev" <den@virtuozzo.com>
-In-Reply-To: <BYAPR21MB1688312AED65BEE290CF6C52D77D9@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VE1PR03CA0017.eurprd03.prod.outlook.com
- (2603:10a6:802:a0::29) To PAXPR08MB6956.eurprd08.prod.outlook.com
- (2603:10a6:102:1db::9)
+Subject: Re: [PATCH net 1/3] net: dsa: felix: allow small tc-taprio windows to
+ send at least some packets
+Thread-Topic: [PATCH net 1/3] net: dsa: felix: allow small tc-taprio windows
+ to send at least some packets
+Thread-Index: AQHYvxb2JnEUpt7Y8UKoLu9LT6DSNq3QdFsAgAAZSQA=
+Date:   Mon, 5 Sep 2022 09:00:16 +0000
+Message-ID: <20220905090014.w557vqbhb5oefupi@skbuf>
+References: <20220902215702.3895073-1-vladimir.oltean@nxp.com>
+ <20220902215702.3895073-2-vladimir.oltean@nxp.com>
+ <3fc12b67842d87a2fb8a5941c899c529@walle.cc>
+In-Reply-To: <3fc12b67842d87a2fb8a5941c899c529@walle.cc>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a58afb9e-1820-4dd7-eba0-08da8f1d0d06
+x-ms-traffictypediagnostic: VE1PR04MB7470:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: V0TVw6SPPJoaylsJLUg9mqMu2BU30StTdulVPAY3AXcvi2yMsL7TYo0g7oB6RnRPAk383bqfTuapDZXbwnIU7Uac+v6+VDcggZWsOL5zRquvPDqxfL6OM+j4zf8Gb2QtVtXtO61yrmCftAclwfrVM81Iyfs+B3vfoqVxZLmzXcDHrXYrgxPk0ETLz67H6PQ6HDAM8B2FO8nhbPR0tBkyh0PPGAU49Vc3oVKfJngRd23WnJH7E3+mHgsFHJIqDyjEiRUamFDeC3dP3JCmJWgdV5e9DM/d/5Vkkf7rY95wS9r6k+aAfFlAKf80pv+vTPQiI6gs1FuTH6C51eXBk9fnQbrP88JNdNTyrbLRpWzRFmsRvmTkCcXum8K3uWosw9Z4N+ZUY3Np7wSvxMreRoyHgBTCvm4R0PADTa0XCrdC7mPWJMRbkTdcE2pAKchDJVZ8qLg8WM/jzhIDCeQECt0/k1O2duDh9P2BRBjphqL0LOSNhqdfY5WpU7q0WdYQJ8x6J1owi5E09sUoHelO6InW3mKPVu+8QtByloi2CKmxzSIBGb5AQfMp3/Rmkcpkhfd2Ip65i+Oit3BjzpM1eEonVXIzJSti/8rhCUMAV7Z9f5JP44hwA0LYBGpdOhJl3/2crDeOlCJJmfXkGI5bspDNSPfBcJYSG8iJGfpYmN1BpUc2kYL1Q3/BsR5VBJBK+YnSKhYiPDTIgMppyQZ0H2Y5MbBgT0YdHaYfVd25GpKpa6AbtP4a/qBDLB5RemPEB5VgvCNqHLBi7BeSmwAayTG4GA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(39860400002)(396003)(346002)(366004)(376002)(136003)(6512007)(5660300002)(41300700001)(9686003)(8936002)(33716001)(2906002)(122000001)(26005)(6486002)(478600001)(38100700002)(44832011)(7416002)(66556008)(66946007)(76116006)(66446008)(66476007)(86362001)(64756008)(91956017)(6506007)(8676002)(4326008)(38070700005)(1076003)(54906003)(6916009)(186003)(71200400001)(316002)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tQPjIyd0O66wctHNz9eLwELF8AsLCY0hKl5wLGhCe0luhog0VL+W9RvHjKFn?=
+ =?us-ascii?Q?VRvD90sw22KZDROZJmIjxBWUo8rLUK25TxIAJPQV3pDB8QpLG7v08Ootp/cW?=
+ =?us-ascii?Q?1nLK+ABXl/gWRID/vvtT9saDZndlK4Orj+RtVa8GaLnUEMNyp/s/9bdeZdkW?=
+ =?us-ascii?Q?dXGOaWaZOLa6gWUQIwoMTYMWcT8GS261/BdfnSkYhhROUpASqGmkBC7HGE+S?=
+ =?us-ascii?Q?cEF6RH1yXT5HiiI1l/ny8MP1Gp1whUOr92alKO2mfYon/g3X/Xx0+gVO0i99?=
+ =?us-ascii?Q?NCh+p0tqoKwfnX+y6mhOyG6aYXHFTV5KHPma60twwii7H9kuJQHJRwUs8VAM?=
+ =?us-ascii?Q?kRmd8kEOyd6MdJlp+ymydeYDmGTg14Hcf5HN98V0zJmcXfnTIhpaQvsJJKum?=
+ =?us-ascii?Q?7Cl/o4HvcWrOJwZQibL29HcA0pT93TTGmGTsrObZnRRtM9j3SUv3sjVI6U50?=
+ =?us-ascii?Q?NLH/0XG0lSzNzd975QjfK/T3HQxuGopzE4CvGzh5NjLjm+3dJPTEPEPQNKvH?=
+ =?us-ascii?Q?UhBBJvP0oDsj0I97dasSTBgZwMcmJDiM7Eat48/Q8eFT8ud+kRCvvFq38iPR?=
+ =?us-ascii?Q?/c25hkDtgzBzarFAkpIkh7N+Sxh8wOKqhDHR80ngsWr0i+YpsmLcPRfi8Y0/?=
+ =?us-ascii?Q?f6gij7ryNvTi6YptTiC4r+a/y2PG+FOJ3TbsyWX+75VGBmW+2qcxrr8qgKdb?=
+ =?us-ascii?Q?hK8UJQeXuwSMK5uqU5rmBHX+dpwM0dU5PanEAdoihiu2L+GZIfZNKGnD0NJL?=
+ =?us-ascii?Q?sx8WHgksVvCxVCecNBJl5ACJ2qPPCqcJ/3tnt9fZoYCXbtGaA7bUn+9ctFxt?=
+ =?us-ascii?Q?/5YukPpRBuQkdz+D1n1dJEbK5VbpDstz/d8HvuuTa5ED2ik67fV8gulwi9IH?=
+ =?us-ascii?Q?57wZ1wmpVc4rxe72d/VvQxifbxgNXt9ba64ZBi6sCuWwx5lOYdHZSX6RSqnw?=
+ =?us-ascii?Q?vrWQHJE9j0CT/ORFviTQ9bsnO99BdljnqBRAwAmDzaZCeRUBVeceKL8EaJ/M?=
+ =?us-ascii?Q?gyuWB4/evyhXMKWMPWNgBJxEn+KRKFS2XZ7Py4L/tRpyOv/DOf83NNwdyzZW?=
+ =?us-ascii?Q?0eNkKeykwbJFO4t7xEaDshQ0vsCTG+WPGHnVLxxEEX6xGqGVYf69IcI2P1/H?=
+ =?us-ascii?Q?bbN/DylmF9WF7h7xvJVV+/bL2xhVz+ukf3pmqkT8x8Kn77e+QYCDTMiqwhRT?=
+ =?us-ascii?Q?IWJ4ToTKTajgjkgNnde4n8quPvqivAsdhf8ECYmnrY4qe4uJZd5W/r0EQDFp?=
+ =?us-ascii?Q?CcJmhHhKBqN5iu7+bLNypQR0MlcrBSM2UHqteekjQGKyhYJb9T5pvI77l4k5?=
+ =?us-ascii?Q?2UVK1LXiAFm3X6lkPnmhtToBHFCbyyoADhM0W2eontDMZbGdz7LBARh/XU+h?=
+ =?us-ascii?Q?6LCecI4cMn56xeQt7H06wRzRSmIMyNByliyUR+Dbo6RipFTv2+wCCHoRh05X?=
+ =?us-ascii?Q?9evQAlfwxY6o0UjKISnVCsdUDLVB+7XAymCH1AQF2A2b+4bBmxv6A1zu2o+s?=
+ =?us-ascii?Q?0+GWQqyYL1fWfgHLU8/X3b2RG5PutbtmjVASLD7y7b7VXbSyW04FSzUkAUp2?=
+ =?us-ascii?Q?YIYls7/hSMhAQc+HiopQQWIARLDexxZqTdH5g8+JhWQAwLIsEPGxRu5rFW1W?=
+ =?us-ascii?Q?Gw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1CC8230AA77D174F84F7BBC6101271D6@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 84819cfc-a182-4a6c-1a63-08da8f1cf40b
-X-MS-TrafficTypeDiagnostic: AS8PR08MB8222:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PoS+hMVl/ak0aCx/Fe5zClrhSF/sdFhfxNaz3+deA8u2JVfd6P3oL45HfFVdRGWpW37yQSyCT5IEjnlbUy/YHN8GWDw9bB8W8zg/ZWzW1SW1odNgEJa9HY7P0tjRgQlbN3i8L66IghpMiYyWjJVfQc9KGlyIy+IvF5VuuMaMBztETaRFRCIvBRhAQEOFvkzDvCovzBBf2Ow2WK/vKWnfcMV9JLy/oR7AkaVPYmxfL7Zbo8na7h+D76BqbsK8IbzIas3Ta6+YNpaleBVFDL9iP125CkI48uLqYWuVCx9tQsfYhPZTCGbFnFzFJOICWHmLFNoNZOZ0hIgmRvGV447/bCIjkbqg+g/ValG7llAo48IS6kPv1/UvjE5zPcgpbn9xMnuqAHNdjqPMHcRYX2fNYZO5cQt4gJeFeWKy48myDmSX2z6mUkIFPIt/3rnIAKQ4d+Y/+Wff6KIKFqXXaIRuaOqJ2D+fZLAzN/PFuwshkupxhvR9u/umZKcCzXKNozXYsV2doClbGqAOWdDJWRq93zVFk6QCkzndcsTIVajbDOQdp/p6G/b+4+P3znRecIbnGRCFd5jMiQlwcjW/AtW1U+O29CkuFHEGlSz54JxkJ3sXXfB5CkX+Ky9y/OxqYjyj4Mo2l2e7mvsIsuI5uL1egIIGQHRVmc+der0xvUfXp3S1WuHHg4/0WapamP5A55lBDhQf+52i7uv6hvJ/lPT3gOQtKrl+MP7mf/XNGumP4A4PP/GV/ITd26zZIWjb8+YTlzHoGonEswpuEl4ozaphKdeQBBjIm5CEkWaQ+tjYQ3TyvMPjBG23brzVymkyCr4gXiLcP5H/mYg+gh2clVpniA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR08MB6956.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(136003)(366004)(396003)(39850400004)(6486002)(83380400001)(31696002)(86362001)(186003)(31686004)(38350700002)(38100700002)(8936002)(5660300002)(66556008)(66476007)(6506007)(8676002)(6512007)(66946007)(2906002)(52116002)(53546011)(41300700001)(26005)(36756003)(6636002)(316002)(2616005)(110136005)(4326008)(54906003)(478600001)(45080400002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFFXZ3VLUUV2ZHJ1NXJ3OUZpbEx6cGxGUWxaczF1Ym42UDBmYkdXSEZtVVRJ?=
- =?utf-8?B?a0ZONXZOSTdSVlpsTFVucnNGRnlQejNTNExuODdWMmlWQ2dUb3BFcS96ZWp0?=
- =?utf-8?B?bXJuQ0p5MDE5bURULzBNWFF0SG9uRU1rK1Z2UFBMN09aMjhjektPWis1L3N1?=
- =?utf-8?B?Q2IxdVVidzNCWUhOYWZVOURqdlpTOGIyNExwVmV3RG1VcDhTNFRDakZlVTQy?=
- =?utf-8?B?WE9FZE0rUlE5SS9TMXpWYUd1YjRzU25mcGhiMktZb2ZCTEl0dHFzZXdWcjZV?=
- =?utf-8?B?dzIzR3BadjhWYnhQN0tLUUJ5dUpUTC9VYzUwOHhYZ1ZtYXU5bHRnMGxMV2dE?=
- =?utf-8?B?Z2V2U0x0SmpMTmZlWWdsbkg4NVdtZXJ4bG5yN1B1TmoycjdzUmdPUlU5Rk5B?=
- =?utf-8?B?NkpXZUFPbDJjMGJhdU5qOVJSVkt5Ri8wVU9tUDRubGdjNGlkZGRxdTNCKzFu?=
- =?utf-8?B?MEpLTEZ3L2syWTV4OXVlaXdjTWRkbnloV2YxWkJRazdmOXhUNTkzZU8xWjVL?=
- =?utf-8?B?OVF5aWxYaWcxVEdrZXZVMFM4eDZxaGw1bWZsekhweHkyLy9Cc2x6L0Urak5C?=
- =?utf-8?B?UUQzMDhvSlQ4VkFJWTJyRTR3Z1NJYUpBS3htMUErQ0JRNGtDRFdydEpUR3Fm?=
- =?utf-8?B?RnRjTEwwcEJEUXJOWFhWY00wR04yK2pFTXlWeW5LWlRTNjZQY3NYTkRNQnhv?=
- =?utf-8?B?YVRrMmhFVUhBRFBpY3UxNEU1V0NRVmZjRUxBc2ZYb2Njd2locEI3TkpYS1hu?=
- =?utf-8?B?cXZzMEQwSk1EbnNBanpYbWQyTzZGMDRoOHNWRHRZWmk1NENvamdUZ2NLeG5r?=
- =?utf-8?B?UTBkSFJmc1lrMXdWQXFxVHk2QldHb2JTY1B3MlVjNU1kT3BDVWx0b2hjSVMz?=
- =?utf-8?B?eUdvZVFtOHEyTXkxbFdobU9UMkRSODRtRXdGcUVCYzNxODhud1YxY0ZFYktM?=
- =?utf-8?B?cFJGZm9KNGJaWFk4YkhOTmJLYjlISi8vRCswNnhPeHJKZmN2dmNhL0FVVk9O?=
- =?utf-8?B?eTk3YmFpeFVKNlM4Q1V6b2ViVjZRQnlLdkFKWUFjVHRKNFZ4czF0Z25VaEJm?=
- =?utf-8?B?TzM0d1hzcm1uUDV2OTl1SGFTZHRlWFRWZDlma0FwLy9vditndmlzbFZYVWYv?=
- =?utf-8?B?dGU3RHpjTkdSVFExVVRmN1ZnOU5obHR1YktFQXN0Wlp6cER5di8zRFZGNkhl?=
- =?utf-8?B?M2dHMnhjZ2pjaGcyT1dkNzV2S3FRRGxDNXZIMjBDTEYzSTY3NVlzaDk2TzJG?=
- =?utf-8?B?QVVrWTA4TFdyakFoZzNEMEVtRUlYektDZE5TK0xVVXlYUDRjSUk5OW04Y2lP?=
- =?utf-8?B?NTZrWER2dVVRSys5cVVySlUyZ3BhS21qaDMvTGtsWGlUMC94NkV4SFhzcFZz?=
- =?utf-8?B?a0xmZzRrN0J4K1pGQVJ5QW9Ka1lhUXdmSlFCUFJMcEtvWDV2RU5tQTZONld2?=
- =?utf-8?B?R0NrZ3VZQ2ZyZXliUWtrTWhxS1o5aGI1N0Y1Sk9VZDMzemNSVnRjN0xVYWRS?=
- =?utf-8?B?RDExZk1OcEVUVFB1eGRjc21XblFuSitGdnJTNWltK1kwVk41TTdCM01CcHZK?=
- =?utf-8?B?NWQybmwyenJQZlRvdGhYdXFMejVTWFFDT08wRnFDWHdnSUlONUsxeG1ia09O?=
- =?utf-8?B?UnNmQVZGejlYSlZtRUdKZGxLQmpsdXNsRWUwM0FZZGZEL1JHSmhmeDI2OWRB?=
- =?utf-8?B?MFo3cmRWQWZxUmlWRjUxdERWWXZEc1ZMdzZEUHF5TGFTblUveEkzMDV1amNH?=
- =?utf-8?B?TXJ6R0wvY25qNFg4KzBZNThHeUp1VlFqenBUVWZXQTV1ZkJsYnFWVW9JYXgw?=
- =?utf-8?B?RCtaSFVEZWtJNndpaC9HWkhpa08rQUIrL1RIbFBITDYrUGZCQldiTmM1WUJQ?=
- =?utf-8?B?UC9RS2YrOWV5dTFONFdVNWUxcVVZN3JBTmkxOHg5ZXh0YTVHSThnQU9zakg3?=
- =?utf-8?B?TUd6SVk4T0laWG1LTjROdHVucXhURDFxOWx4V0hMK25rekYyUDA5eU9FLzFX?=
- =?utf-8?B?NWp2OEJkZitVWkdKTHdhTlZKWmFDQmtmRkY3QUxGaWNCQ3NRNDB4ZjVqUlF0?=
- =?utf-8?B?TUVtVms0SW5XS0hkeGhGSTRRSWhSdlhBYzRoTEdWRS8zeHVQbEZmUlVzWHRv?=
- =?utf-8?Q?yuzJ1LfwHQAPvaP+L+UAk9CGK?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84819cfc-a182-4a6c-1a63-08da8f1cf40b
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR08MB6956.eurprd08.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 08:59:34.4133
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a58afb9e-1820-4dd7-eba0-08da8f1d0d06
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2022 09:00:16.1571
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UUAKyNRtRgt06WfDA6LPunMSSNgU21VFiE5oTjrGXKUIV3hdtYv9yu8uOzTRIF/6vuRgN34Y6Yu2Mj3XyIZ5Pg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB8222
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: b/1Q4gfYgNJGl+qgq9f71dsbT5E8vP7I9hfwawalLZDf5w91PP0vN28JoSOVbU2EcznNpjjO5lKHrtCUM9ldpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7470
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.09.2022 06:37, Michael Kelley (LINUX) wrote:
-> From: Wei Liu <wei.liu@kernel.org> Sent: Wednesday, July 13, 2022 8:19 AM
->> On Tue, Jul 12, 2022 at 04:24:12PM +0000, Michael Kelley (LINUX) wrote:
->>> From: Alexander Atanasov <alexander.atanasov@virtuozzo.com> Sent: Monday, July
->> 11, 2022 11:18 AM
->>>> Allow the guest to know how much it is ballooned by the host.
->>>> It is useful when debugging out of memory conditions.
->>>>
->>>> When host gets back memory from the guest it is accounted
->>>> as used memory in the guest but the guest have no way to know
->>>> how much it is actually ballooned.
->>>>
->>>> Expose current state, flags and max possible memory to the guest.
->>>> While at it - fix a 10+ years old typo.
->>>>
->>>> Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
->>>> ---
->> [...]
->>> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
->> I added "Drivers: hv:" prefix to the subject line and applied it to
->> hyperv-next. Thanks.
-> Alexander -- I finally caught up on the long discussion of balloon
-> driver reporting that occurred over much of August.  I think your
-> original plan had been for each of the balloon driver to report
-> useful information in debugfs.  But as a result of the discussion,
-> it looks like virtio-balloon will be putting the information in
-> /proc/meminfo.  If that's the case, it seems like we should
-> drop these changes to the Hyper-V balloon driver,  and have
-> the Hyper-V balloon driver take the same approach as
-> virtio-balloon.
->
-> These Hyper-V balloon driver changes have already gone
-> into 6.0-rc1.  If we're going to drop them, we should do
-> the revert before 6.0 is done.
->
-> Thoughts?
->
-> Michael
-VMware balloon still has debugfs binging. I'd better keep something outside
-of meminfo as here we could keep much more useful information.
+On Mon, Sep 05, 2022 at 09:29:44AM +0200, Michael Walle wrote:
+> > 1 (before vsc9959_tas_guard_bands_update): QSYS_PORT_MAX_SDU defaults t=
+o
+> >   1518, and at gigabit this introduces a static guard band (independent
+> >   of packet sizes) of 12144 ns. But this is larger than the time window
+> >   itself, of 10000 ns. So, the queue system never considers a frame wit=
+h
+> >   TC 7 as eligible for transmission, since the gate practically never
+> >   opens, and these frames are forever stuck in the TX queues and hang
+> >   the port.
+>=20
+> IIRC we deliberately ignored that problem back then, because we couldn't
+> set the maxsdu.
 
-Den
+I don't remember exactly why that is. It seems stupid to ignore a
+condition that leads to the port hanging. I think part of the problem
+was that I didn't have a test setup at the time the guard band patches
+were proposed.
+
+> > The solution is to modify vsc9959_tas_guard_bands_update() to take into
+> > account that the static per-tc guard bands consume time out of our time
+> > window too, not just packet transmission. The unknown which needs to be
+> > determined is the max admissible frame size. Both the useful bit time
+> > and the guard band size will depend on this unknown variable, so
+> > dividing the available 10000 ns into 2 halves sounds like the ideal
+> > strategy. In this case, we will program QSYS_QMAXSDU_CFG_7 with a
+> > maximum frame length (and guard band size) of 605 octets (this includes
+> > FCS but not IPG and preamble/SFD). With this value, everything of L2
+> > size 601 (sans FCS) and higher is considered as oversized, and the guar=
+d
+> > band is low enough (605 + HSCH_MISC.FRM_ADJ, at 1Gbps =3D> 5000 ns) in
+> > order to not disturb the scheduling of any frame smaller than L2 size
+> > 601.
+>=20
+> So one drawback with this is that you limit the maxsdu to match a
+> frame half of the gate open time, right?
+
+Yes.
+
+> The switch just schedule the *start* event of the frame. So even if
+> the guard band takes 99% of the gate open time, it should be able
+> to send a frame regardless of it's length during the first 1% of
+> the period (and it doesn't limit the maxsdu by half). IIRC the guard
+> band is exactly for that, that is that you don't know the frame
+> length and you can still schedule the frame. I know of switches
+> which don't use a guard band but know the exact length and the
+> closing time of the queue and deduce by that if the frame can
+> still be queued.
+>=20
+> Actually, I'd expect it to work after your vsc9959_tas_guard_bands_update=
+.
+> Hmm.
+>=20
+> To quote from you above:
+> > min_gate_len[7] (10000 ns) - the guard band determined by
+> > QSYS_QMAXSDU_CFG_7 (1230 octets * 8 ns per octet =3D=3D 9840 ns) is sma=
+ller
+> > than their transmit time.
+>=20
+> Are you sure this is the case? There should be 160ns time to
+> schedule the start of the frame. Maybe the 160ns is just too
+> small.
+
+Yes, I'm absolutely sure that any packet gets dropped on egress with a
+10 us window, and I can see from my explanation why that is not obvious.
+The reason is because the guard band for tc 7 is not only determined by
+QSYS_QMAXSDU_CFG_7, but also by adding the L1 overhead configured
+through HSCH_MISC.FRM_ADJ (default 20 decimal).
+
+So from the remaining 160 ns, we also lose 20 * 8 =3D 160 ns to the L1
+overhead, and that's why the switch doesn't schedule anything.
+
+In fact now I finally understand the private message that Xiaoliang sent
+to me, where he said that he can make things work by making HSCH_MISC.FRM_A=
+DJ
+smaller than the default of 20. I initially didn't understand why you'd
+want to do that.
+
+The problem with HSCH_MISC.FRM_ADJ is that it's global to the switch,
+and it's also used for some other shaper computations, so altering it is
+not such a great idea.
+
+But you (and Xiaoliang) do raise a valid point that the switch doesn't
+need a full window size of open gate to schedule a full window size
+worth of packet. So cutting the available window size in half is a bit
+drastic. I'll think a bit more whether there is any smarter adjustment I
+can do to ensure that any window, after trimming the extended static
+guard band, still has 32 ns (IIRC, that's the minimum required) of time.
+That should still ensure we don't have overruns. If you have any idea,
+shoot.=

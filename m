@@ -2,90 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6505ACF5C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3435ACF62
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236982AbiIEJ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 05:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
+        id S237051AbiIEKAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236332AbiIEJ7C (ORCPT
+        with ESMTP id S236562AbiIEJ74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 05:59:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443D921E1F
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 02:59:01 -0700 (PDT)
+        Mon, 5 Sep 2022 05:59:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3719E17E31;
+        Mon,  5 Sep 2022 02:59:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4EF5B81012
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:58:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1808C433D6;
-        Mon,  5 Sep 2022 09:58:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="VWFHvdWM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1662371936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=djzuTynXF33xQt9q6oEjyvObywHD8Hr3NC7Wxk5AXsI=;
-        b=VWFHvdWMW4zOjNS0XpHuYj0C8Ifmw6QhsyJSAcgctde2p9CBH52A48LgfhTXfQtyaJz2Yf
-        WWfKoJnB7TVplT2la6th76L6BFK/hpCMlDKq35Znht5NX/S7zFO+R6twnFNXvFN18DSEIr
-        8unP9q4DYGX3c65pLM0vKVmj7+MrPIc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d15a05f2 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 5 Sep 2022 09:58:56 +0000 (UTC)
-Date:   Mon, 5 Sep 2022 11:58:50 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     alsa-devel@alsa-project.org, 89q1r14hd@relay.firefox.com,
-        linux-kernel@vger.kernel.org, Wim Taymans <wtaymans@redhat.com>
-Subject: Re: [PATCH] ALSA: usb-audio: Refcount multiple accesses on the
- single clock
-Message-ID: <YxXIWv8dYmg1tnXP@zx2c4.com>
-References: <20220516104807.16482-1-tiwai@suse.de>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7AF8B80F9F;
+        Mon,  5 Sep 2022 09:59:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AE9C433D6;
+        Mon,  5 Sep 2022 09:59:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662371992;
+        bh=m2tFKytoOyOHZ29GrB6wXIG/xB9cj2DAHqOf87NQtXw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hG5GOZX1YVFdccWZbshGeVejLjUK55i4IHcIjTRUp8b0rf9tvqDEgAxsQ7zBHfEd3
+         6wHTNIa1Svdrs3tiM/+vJTh2lg+8eAJZ26fECUenUvYxt7OILg0N+duemR3REdh1Ke
+         f0R0g5gdqdiyRazcRb9BaNm4eL89wxl/Iqg24yY4VYGxLNxjF6pJj4Kc8P8MH3Wc6x
+         YVTGkTyu5PtrugEVXRhuoZuNDc2pYa1jzCROdbf9GrPUFcPDgdNnjLEgsR1sJYe1bN
+         NUdFrUZ/a6bYZWFUPxMg5W8pCwdTqCOQz7kllGpObrKIGgUcMncOBchQOnDCW2TXrQ
+         ugi/4Wkn0aWiw==
+Received: by mail-lj1-f178.google.com with SMTP id by6so8659401ljb.11;
+        Mon, 05 Sep 2022 02:59:52 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2t3+kD0dp+6mJ1L5RsDHtyQKmIuoyzjXXNicxY7hAPGSqVTsf2
+        7nppCQzrZ70nrKX82RoEIbke5f2n5gV4pabpDT0=
+X-Google-Smtp-Source: AA6agR6RfMFdNjIfa/4/plGUoXI69OCUj+956xThbfqstx8duexSRcdULXdZOz++tXvAz63pw92zZe7O0Fy/yDlX+z0=
+X-Received: by 2002:a05:651c:1a0e:b0:268:94ad:85f8 with SMTP id
+ by14-20020a05651c1a0e00b0026894ad85f8mr6330107ljb.415.1662371990383; Mon, 05
+ Sep 2022 02:59:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220516104807.16482-1-tiwai@suse.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220904165321.1140894-1-Jason@zx2c4.com> <CAMj1kXHC9Wfr74761gPcG=N8OC2P76FqSb8FVGWM7x1p-4hQKg@mail.gmail.com>
+ <CAHmME9rAViyU3hCnziUkqGwtrOtu9oBOvniWV_uNCZ+TJGre5A@mail.gmail.com>
+In-Reply-To: <CAHmME9rAViyU3hCnziUkqGwtrOtu9oBOvniWV_uNCZ+TJGre5A@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 5 Sep 2022 11:59:39 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHPypCO5MNvFcw795LpZXPDRLjOdUJ4iRWxX7km7BF0ig@mail.gmail.com>
+Message-ID: <CAMj1kXHPypCO5MNvFcw795LpZXPDRLjOdUJ4iRWxX7km7BF0ig@mail.gmail.com>
+Subject: Re: [PATCH] efi: x86: Wipe setup_data on pure EFI boot
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Takashi,
+On Mon, 5 Sept 2022 at 11:57, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> On Mon, Sep 5, 2022 at 11:55 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Sun, 4 Sept 2022 at 18:53, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > >
+> > > From: Ard Biesheuvel <ardb@kernel.org>
+> > >
+> > > When booting the x86 kernel via EFI using the LoadImage/StartImage boot
+> > > services [as opposed to the deprecated EFI handover protocol], the setup
+> > > header is taken from the image directly, and given that EFI's LoadImage
+> > > has no Linux/x86 specific knowledge regarding struct bootparams or
+> > > struct setup_header, any absolute addresses in the setup header must
+> > > originate from the file and not from a prior loading stage.
+> > >
+> > > Since we cannot generally predict where LoadImage() decides to load an
+> > > image (*), such absolute addresses must be treated as suspect: even if a
+> > > prior boot stage intended to make them point somewhere inside the
+> > > [signed] image, there is no way to validate that, and if they point at
+> > > an arbitrary location in memory, the setup_data nodes will not be
+> > > covered by any signatures or TPM measurements either, and could be made
+> > > to contain an arbitrary sequence of SETUP_xxx nodes, which could
+> > > interfere quite badly with the early x86 boot sequence.
+> > >
+> > > (*) Note that, while LoadImage() does take a buffer/size tuple in
+> > > addition to a device path, which can be used to provide the image
+> > > contents directly, it will re-allocate such images, as the memory
+> > > footprint of an image is generally larger than the PE/COFF file
+> > > representation.
+> > >
+> > > Next, in order to allow hypervisors to still use setup_data in scenarios
+> > > where it may be useful, bump the x86 boot protocol version, so that
+> > > hypervisors, e.g. QEMU in the linked patch, can do the right thing
+> > > automatically depending on whether it is safe.
+> > >
+> > > Link: https://lore.kernel.org/qemu-devel/20220904165058.1140503-1-Jason@zx2c4.com/
+> > > Coauthored-by: Ard Biesheuvel <ardb@kernel.org>
+> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > > ---
+> > >  arch/x86/boot/header.S                  | 2 +-
+> > >  drivers/firmware/efi/libstub/x86-stub.c | 7 +++++++
+> > >  2 files changed, 8 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
+> > > index f912d7770130..e4e2d6e33924 100644
+> > > --- a/arch/x86/boot/header.S
+> > > +++ b/arch/x86/boot/header.S
+> > > @@ -307,7 +307,7 @@ _start:
+> > >         # Part 2 of the header, from the old setup.S
+> > >
+> > >                 .ascii  "HdrS"          # header signature
+> > > -               .word   0x020f          # header version number (>= 0x0105)
+> > > +               .word   0x0210          # header version number (>= 0x0105)
+> > >                                         # or else old loadlin-1.5 will fail)
+> > >                 .globl realmode_swtch
+> > >  realmode_swtch:        .word   0, 0            # default_switch, SETUPSEG
+> > > diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> > > index 05ae8bcc9d67..9780f32a9f24 100644
+> > > --- a/drivers/firmware/efi/libstub/x86-stub.c
+> > > +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> > > @@ -517,6 +517,13 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
+> > >         hdr->ramdisk_image = 0;
+> > >         hdr->ramdisk_size = 0;
+> > >
+> > > +       /*
+> > > +        * Disregard any setup data that was provided by the bootloader:
+> > > +        * setup_data could be pointing anywhere, and we have no way of
+> > > +        * authenticating or validating the payload.
+> > > +        */
+> > > +       hdr->setup_data = 0;
+> > > +
+> > >         efi_stub_entry(handle, sys_table_arg, boot_params);
+> > >         /* not reached */
+> > >
+> >
+> > if the x86 folks are ok with this, I would like to send this to
+> > cc:stable, but I imagine retroactively changing the header version
+> > number might be something they would prefer to avoid. In that case,
+> > better to split these up.
+>
+> Just FYI, the rng seed thing is new in 6.0 anyway. That still leaves
+> the more obscure dtb one, and whatever else is used, but at least
+> doing this for only 6.0+ would take care of the rng seed one.
+>
 
-On Mon, May 16, 2022 at 12:48:07PM +0200, Takashi Iwai wrote:
-> When a clock source is connected to multiple nodes / endpoints, the
-> current USB-audio driver tries to set up at each time one of them is
-> configured.  Although it reads the current rate and updates only if it
-> differs, some devices seem unhappy with this behavior and spew the
-> errors when reading/updating the rate unnecessarily.
-> 
-> This patch tries to reduce the redundant clock setup by introducing a
-> refcount for each clock source.  When the stream is actually running,
-> a clock rate is "locked", and it bypasses the clock and/or refuse to
-> change any longer.
-
-This breaks things on 5.19+. Specifically, it causes pipewire and
-pulseaudio to be stuck using 44.1khz rather than 48.0khz (or anything
-else). The reason is that initially devices are started at 44.1khz, and
-then the list of supported sample rates is read, and finally the best
-one is chosen. With this commit, the returned list of sample rates is
-locked at 44.1khz, which means pulseaudio and pipewire can't change it
-to 48.0khz (or anything else).
-
-This headscratcher is being tracked over at:
-https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/2620
-where I triaged it to this commit.
-
-Can we revert this for the time being and backport the revert to stable?
-Or might you have some other fix idea in mind?
-
-Thanks,
-Jason
+Sure, but there is also the -dtb thing which can already be used to
+crash the EFI stub. So even if this doesn't fix an issue occurring in
+the wild, I think it is cleaner to clear setup_data on the pure EFI
+entry path.

@@ -2,315 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987635AC939
+	by mail.lfdr.de (Postfix) with ESMTP id 501B85AC938
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235821AbiIEDub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 23:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S232094AbiIEDuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 23:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiIEDu0 (ORCPT
+        with ESMTP id S236073AbiIEDu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 23:50:26 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FE417582;
-        Sun,  4 Sep 2022 20:50:24 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso11003952pjk.0;
-        Sun, 04 Sep 2022 20:50:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=PzzlxoDD0gwMbgIt54iifLiktjUm4ME8kopVopYW44g=;
-        b=DbdhYATM1wJP4Tk73rr8pWbvq2OPyd/Dj1s9xBJzNLlXWTUK9xKqCqf35l+NwAyWXn
-         IYFpa/aVFUgKRjiR+6s9LEcjdHwFn6cFPuw3cD2oGPv61Wgj1vl977QohjG4IUvxCz8b
-         bvFDpV+Wg4ZGfSz9hSr3u8EYgYGRShqOsYWv7ln210ePKiQwjZTR8iLE8YqIqt/AKiW3
-         MgylES9M7c2pXHRFNp2miu/TgOmMo2dnZ3C88VqyAqlp0qwS87E/Il3lUF/RSF5CDwQv
-         1aPcHnCkVvIMsqySxqN1t2/rknzr0huhQY3rP8IwSvUcFBqB+TJF0pAFkeWprwrclrnS
-         a0VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=PzzlxoDD0gwMbgIt54iifLiktjUm4ME8kopVopYW44g=;
-        b=o9GA1IoxQ1Nl/8FQ6jCa95OGlexQSDdZe27nDORlaO91CW8URHuDS316wXRjdLSFLY
-         2GOydO14IlBZfRgec+7Ecf5QEw5fMUVRuMnBmTj4ysq814fCNM5K2lgKy9w2JNSogKYP
-         efmmz9htKQ57tzyV94kRgi8YcQ39YbVaGDp5naa09a+nWFFPrWKAtFvqbmCxtsVg3eR8
-         wnYH5UwtiTZNq5bMcsulYV0q5v48kBGTOiwTMxFm5V940v9GteDy1oH6LjgHOpyh+XHB
-         6g7FG8IprhH8gR2Oo/nuYwtglIZe/OQEa8Y5JjwfnVjzlasOoucOW7DydTbaJqNoBG0i
-         WELw==
-X-Gm-Message-State: ACgBeo2MIU5GFOjy9fLbc54DG5E4RZXaNUfjyCHPYkQKoYszP7dTdjMX
-        n4s15o6N0emaAX6CQsIGwsI=
-X-Google-Smtp-Source: AA6agR5QPUhDCuZ7OVO7f4zAAMkzkkzMXIJfS2I7H+BkaIO+mcAZeOUNMCCkE0jsFJPK0ZnJibCyiA==
-X-Received: by 2002:a17:902:f641:b0:172:e2f8:7efb with SMTP id m1-20020a170902f64100b00172e2f87efbmr45707640plg.140.1662349824317;
-        Sun, 04 Sep 2022 20:50:24 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.25])
-        by smtp.gmail.com with ESMTPSA id e126-20020a621e84000000b00535c4b7f1eesm6416663pfe.87.2022.09.04.20.50.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Sep 2022 20:50:23 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     edumazet@google.com, kuba@kernel.org
-Cc:     davem@davemloft.net, pabeni@redhat.com, rostedt@goodmis.org,
-        mingo@redhat.com, imagedong@tencent.com, dsahern@kernel.org,
-        flyingpeng@tencent.com, dongli.zhang@oracle.com, robh@kernel.org,
-        asml.silence@gmail.com, luiz.von.dentz@intel.com,
-        vasily.averin@linux.dev, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net v3] net: skb: export skb drop reaons to user by TRACE_DEFINE_ENUM
-Date:   Mon,  5 Sep 2022 11:50:15 +0800
-Message-Id: <20220905035015.1130730-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.37.2
+        Sun, 4 Sep 2022 23:50:28 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2113.outbound.protection.outlook.com [40.107.255.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988641403D;
+        Sun,  4 Sep 2022 20:50:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jnZUA//8Q+q08cVCpOMjcFVazhI2OdvZrote95crg1KE0876ITxnvDC2TF7TU9H4Qt4sLjChXkaHgaxFIaOLh3HFvYsXFsc9ls+ddQ0rfJwc3jClYch9iUgKyoo32Ys8bYq/l02zM87Otq/Lm6Hb10Pe4clLAsO5ezkuFsht860Y28VbuWE6ULso11SP9NbZb9tpSmV1k2fmyMA94AkkK4xewiaRUSa8A7Q6P0TP2NCE2yDabF1I2SfFFxogm3e23qlRNEGdhFz2O2sGj8QgmzKfFGE7nWpxglXdXu4NtErFRjVgOtfDnFi95/5vGe3d6FMuDd1MFO2+l1/mbL6jAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rG1N8fLAjc3jR4QLZ2zpEVz2Zua10dvwQPkcYThV00c=;
+ b=jUQrjx7mbaA4UgsSbJo4rlrX94OR3UhUkR5IYn9zA4iO+uOb+79vLoCL7UJCA1ZOuCnSlUkf8XI4sGJRjQbHEJobOvdMkCvZu1JyDqPi4W6WpcGA8FwvFBC984kymFlEsLj8Ry4ZWzfyKW1FCJwukg0IXWatiKzF67fYz1mXeLu+8WG6TM+yWRgTHk4GiAm15cViZovtQt4dhT/83x3dI5DBmgoJL+oewlX+VmVIrLgR7q7Wb1vD/1kbY9+cpLxnOhsohKub+h7JNUPSeEDaZql6myEz3VPNV4WbDPUJSUXf4/06KKsyoGkc5kI3yp5OW7Pi0YllKboCIt3glUNamw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rG1N8fLAjc3jR4QLZ2zpEVz2Zua10dvwQPkcYThV00c=;
+ b=syCUfFlBOh7f54h3v43AFePThDj7iFrYi6+O984PJE/aQwftpruqpzit9Q21b/5SSA7Nf7gA80Qo5iKcPe1maHSq6vd4o0NxXqAS/0bqDENH8weIbWAq90S9IMSJQm7zi6M0Ma/Rz9lpA8zkW7x8iN9vBTcr9xJsojvCeo4lAhDPGmN9dDluSH8lVqw576us7fFlXv6DTaCinAWKjCZyMPx10sSHqaYFS8NgyQdHmKaIWp5jaa+/iqVZatzcyExr9MG5/IwjUq8e4/UdQZyRJOlbS97kOIin6UeLKOpangJoIfTYfrC4DqAw0FhflS3RK/Opk1vYNtmbipCMWCulng==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by PSAPR06MB4440.apcprd06.prod.outlook.com (2603:1096:301:82::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
+ 2022 03:50:19 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c44:6fe1:af1:7b42]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c44:6fe1:af1:7b42%5]) with mapi id 15.20.5588.016; Mon, 5 Sep 2022
+ 03:50:19 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+CC:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>, kernel test robot <lkp@intel.com>
+Subject: RE: [PATCH] crypto: aspeed: fix format unexpected build warning
+Thread-Topic: [PATCH] crypto: aspeed: fix format unexpected build warning
+Thread-Index: AQHYwNebVB62DOkyw0uopHKaVmNtV63QL6gAgAADZIA=
+Date:   Mon, 5 Sep 2022 03:50:19 +0000
+Message-ID: <HK0PR06MB32029BFAB8A2F0E8E067E4C2807F9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20220905032838.1663510-1-neal_liu@aspeedtech.com>
+ <64caed2a-fafe-040d-c967-5eebaf6b144d@infradead.org>
+In-Reply-To: <64caed2a-fafe-040d-c967-5eebaf6b144d@infradead.org>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 01a508b2-b335-4b40-57ee-08da8ef1c07d
+x-ms-traffictypediagnostic: PSAPR06MB4440:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tDOiPaHa/EEPhxYugIKBOuWkryptOCJM8wg6kOUYsL1wP0nl6IzuKCkROh2iqQGaY/unUyV1JkH0Q6LLxdBQXnMGK+tY45Kw4yhVV+Otk8bZgTV1qGGUOPCDPO8d73k3398JpFEqa25PscmtQiNj0EVPsum0/55y1/1SbIICBrg9YUZn7nrHLww62BUCnzsdCXZJH9u2tFs95VhTSJlBDrajCHFmxiNd/vXt+5EtlZMC8ZMBNyoHx57LQPw8RoWhzuD10/pywSISJ2vMjebzRE+Ue65Sel7Q+QjVm3aorht5fTnQnTJimiS4auP6KKcNcv+f8Vce8g9kHYpst6B5OQ45MsXbLY/bE4UTbHQl0BXXt+v2F11VVeYjeLu9UJOzOeSo2AfoX9jLWAdY64F1xDA9KX3uAqt1DGK5FRohfNGtLcXWUk79PV2VQjS+Nswctn9k0uPkVeY8qYecASbGLBfpeMUrAoAdLSNklNwmkWc4ftxWO0u8FCD056ALQcCJ0icy0jSqru93KNKvEUEFi1BOoFGDHu3p7g6mXrWnTYlUPemKsBJCfQ/eKIIdBXD7HvlnCO7mgGzgJ1ExQci1lBnR7Yf9Jwxa5bZg0akL9ityBTqJ3tB8nmFvjey/y7BFgRfTjUVx8VdfYlLIFcYRNqwOfteaTWxIIWmW7ePZPs4xLoISNgXawdvC954ll8UzCrQtKSmL2RM9QHKqIA3VPzt345Lg16M8GcR0u1PunDgz0OFtr4zRA6on2sFE8Z1cD6UiLYoXwkJkfmyu0iFEYA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39830400003)(136003)(396003)(366004)(346002)(376002)(55016003)(66446008)(8676002)(66556008)(38070700005)(66476007)(66946007)(478600001)(76116006)(7696005)(2906002)(64756008)(33656002)(86362001)(53546011)(26005)(9686003)(6506007)(52536014)(38100700002)(4326008)(83380400001)(8936002)(5660300002)(7416002)(122000001)(186003)(110136005)(316002)(54906003)(41300700001)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M29yYWxmOGdCYWpuZTFCZ2VyNXFRR3JKaiswVFFJNSs2QU9ydzltN0p2b2l4?=
+ =?utf-8?B?ZEorV3lRVlZ1Q3pLeFVrL0Z1V1p0WElFU09QYWZ3eGRNYndNeXVmV0FNOW02?=
+ =?utf-8?B?Q1IzL0RORnFRM1dIRUdHM3NKdVdnVWN6TkpmUGJVZ1k3dXVYaHBoMGozc0s3?=
+ =?utf-8?B?UjVTZ3oyMiszRFQxSjhmVmtuVHRUTnBVV3NJRnRPUE1zUEhFT08zZGRYa3ZK?=
+ =?utf-8?B?WkF5UVlCa1ZCN0hOYVlIRnVWSmlqdWZyamh2M0tWVDNtMTB2WDZaOFBabHRD?=
+ =?utf-8?B?cStkV3g1VDEvNFkvSURhM2dxQndwRDlrK29SanFZN0JmaUxUeWMvMzFKUWJN?=
+ =?utf-8?B?M1VhMGFKdVl0TmZFVmhHL0w1V0txS0pSUmF3Mkp5cGNtZnNOZ3VnMG1QaitN?=
+ =?utf-8?B?NWNrNVNTUlhCU0RVMWJUeWhOOE12M1Y3Q2RqWjZidkcrVEV4cjVzem42UzVi?=
+ =?utf-8?B?d01tSXlpdmw0WTJSMXduQ0JRUXY1dTM0cTNrQU5EUTkxVzhxRFRqSDkzWlVF?=
+ =?utf-8?B?RkhhQnY2ZVpGSWNWVmUyUmVlU1ppU2RLWklpeFZicWYxZENJMUlJNlJRczgz?=
+ =?utf-8?B?SDZSdVcwcE9SWkFiVklaTndPU2g4VmVaaDUraHFjR0tqRWpQSlZsZnErenc1?=
+ =?utf-8?B?Q0V0OVdqdFdaOG1ialZDUGhIYlZSbmthQUJNVVRqQWhIZmdzaEFrWXpEaXBn?=
+ =?utf-8?B?TGZ0SmUvVGlDeDErc0NuMVpkQy9SV0VtTzJPRml3QjlxM0tFUXVRTUF2UWxX?=
+ =?utf-8?B?VUxVa3FsTWwzOEoxK1FmOVFuSnU4Sk9vKzBMcUZKNFhteEM1czR3ajVzTmIy?=
+ =?utf-8?B?ZHUremdPYzhOU3dmUjJxeWV1bTBBSXowWjRXS3NRUFdSb0lNZktnNEM5dW9w?=
+ =?utf-8?B?RzdmWnFiOXdFSDBKVVZxbkZkYlJOQUNZOGx0WWgzWXFZTDRQQnlOcTlKQTlF?=
+ =?utf-8?B?QWU5ejJRazdMa1ViamtTWWdvMHBYM2lPbFY3NVdXTUdob2R0VVJIeC95UlNX?=
+ =?utf-8?B?NmZqcm04ZldjTXNnTXFMcFg2aEVsYUlpM3hKbG00Sm9ZOFFMZkRKZFVvczJ5?=
+ =?utf-8?B?dFpmanEwWW9hbGU1LzJneTBLdjE4KzloczdKOThOb204dTlhLzd0VGV1R2Jx?=
+ =?utf-8?B?MHdEejlPQ1BOODYyTGxoeXVQMUVHYUs4YlpYREtnNHJ2Ung1a1dMd3EyOTRO?=
+ =?utf-8?B?Q01NQkdrbHNiV1BWb3JWVG03ME9Mb2JlTWdRUXArWkh2SC81NTNLZ3dwNFda?=
+ =?utf-8?B?K3hSR1ZtRGxoLzBjMFdkM3c5ak02d2dqRVdoenR4TnpCd3N1aEo0OENScURa?=
+ =?utf-8?B?WFFmRVJJY3ZLK2xXMFU4WGwzMEk4RURUeTQ2MmQvbmpmQ3VkRC9uQVdNRVUw?=
+ =?utf-8?B?VUtDV1M2UjNESk9QVFRzR0RWbWFCQ0FGUWxmelhkRWlPZmxTbytqY0x5dVJ3?=
+ =?utf-8?B?aDJvSjdCTmFFU2xYaS9YR1o0WWM0WkMzeWN4eGw3bEI5Q1RtQ1dQc3Q2eWw5?=
+ =?utf-8?B?ckFDYmJSQTk5WW41YXRROXBoNXBxaDZPZzJ0eVBRN0wvUjRHOFhVcStJYk5E?=
+ =?utf-8?B?b2tNOTFDbHNhZnlISW9MTHhjcE50M3VKUml0MjJWWmZ6cHBIOTVRaU4yS0h5?=
+ =?utf-8?B?ZW1qNUdyMWNVVWNqaWVlK2NUNkM4YWRiVHhhUjhuMWNkaFpJYXk0d0ZCOEtt?=
+ =?utf-8?B?UVB2aFJjbTk5VzVQVWc0Z0xvZ0hpSU9wcXA4eVpYeHI3L0JZcEE1ZkdPTDZI?=
+ =?utf-8?B?UlhQc0w1ejNmNXNkc25mU0NQeE5OYWNzSUh1VldYSWs4Q3Q1Ti8vVEVpRGRS?=
+ =?utf-8?B?UnhMeit2aE1ZclYyYmJxdUVGMllscVM5eUJmM1NSUUMxaEdQOEFnZlRTSzln?=
+ =?utf-8?B?ZlF1dkZRKzhSazJpdVh3S3BTRFdCd2RaaWFIK3B0Wkc0djFDQitRenhJd1JR?=
+ =?utf-8?B?VThXc0VhdFJvR3cyZjd4STFidFVRV0l5WDRkcFdZVEJFWDhsUnlaT3ZkYzVn?=
+ =?utf-8?B?SW5WaWt1SDdyOGdDcTRNSkQ5VEpCUkVVaXFZek5CRXoxS0J6KzByYnZYQkZk?=
+ =?utf-8?B?ZEtva2diSHBVUkFTcFFFWjNxYllKOUNJYlJXZFFKOFhTdVhKVjJYYjI4OVVo?=
+ =?utf-8?Q?OYxmIsJmSvHsaU5gErXbbkZWI?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01a508b2-b335-4b40-57ee-08da8ef1c07d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2022 03:50:19.3424
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bXkuDOcNgm4R99JlkX7GGRem9s2tp8v0rztAOg9KOJluotoD569OD3UBhvIOciMMsJFVK7Nt2WdMq3g7mdSL2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4440
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
-
-As Eric reported, the 'reason' field is not presented when trace the
-kfree_skb event by perf:
-
-$ perf record -e skb:kfree_skb -a sleep 10
-$ perf script
-  ip_defrag 14605 [021]   221.614303:   skb:kfree_skb:
-  skbaddr=0xffff9d2851242700 protocol=34525 location=0xffffffffa39346b1
-  reason:
-
-The cause seems to be passing kernel address directly to TP_printk(),
-which is not right. As the enum 'skb_drop_reason' is not exported to
-user space through TRACE_DEFINE_ENUM(), perf can't get the drop reason
-string from the 'reason' field, which is a number.
-
-Therefore, we introduce the macro DEFINE_DROP_REASON(), which is used
-to define the trace enum by TRACE_DEFINE_ENUM(). With the help of
-DEFINE_DROP_REASON(), now we can remove the auto-generate that we
-introduced in the commit ec43908dd556
-("net: skb: use auto-generation to convert skb drop reason to string"),
-and define the string array 'drop_reasons'.
-
-Hmmmm...now we come back to the situation that have to maintain drop
-reasons in both enum skb_drop_reason and DEFINE_DROP_REASON. But they
-are both in dropreason.h, which makes it easier.
-
-After this commit, now the format of kfree_skb is like this:
-
-$ cat /tracing/events/skb/kfree_skb/format
-name: kfree_skb
-ID: 1524
-format:
-        field:unsigned short common_type;       offset:0;       size:2; signed:0;
-        field:unsigned char common_flags;       offset:2;       size:1; signed:0;
-        field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
-        field:int common_pid;   offset:4;       size:4; signed:1;
-
-        field:void * skbaddr;   offset:8;       size:8; signed:0;
-        field:void * location;  offset:16;      size:8; signed:0;
-        field:unsigned short protocol;  offset:24;      size:2; signed:0;
-        field:enum skb_drop_reason reason;      offset:28;      size:4; signed:0;
-
-print fmt: "skbaddr=%p protocol=%u location=%p reason: %s", REC->skbaddr, REC->protocol, REC->location, __print_symbolic(REC->reason, { 1, "NOT_SPECIFIED" }, { 2, "NO_SOCKET" } ......
-
-Fixes: ec43908dd556 ("net: skb: use auto-generation to convert skb drop reason to string")
-Link: https://lore.kernel.org/netdev/CANn89i+bx0ybvE55iMYf5GJM48WwV1HNpdm9Q6t-HaEstqpCSA@mail.gmail.com/
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
-v3:
-- add missing Fixes and Link tags (Eric Dumazet)
-
-v2:
-- undef FN/FNe after use it (Jakub Kicinski)
----
- include/net/dropreason.h   | 67 ++++++++++++++++++++++++++++++++++++++
- include/trace/events/skb.h | 15 ++++++++-
- net/core/.gitignore        |  1 -
- net/core/Makefile          | 22 +------------
- net/core/skbuff.c          |  6 +++-
- 5 files changed, 87 insertions(+), 24 deletions(-)
- delete mode 100644 net/core/.gitignore
-
-diff --git a/include/net/dropreason.h b/include/net/dropreason.h
-index fae9b40e54fa..c1cbcdbaf149 100644
---- a/include/net/dropreason.h
-+++ b/include/net/dropreason.h
-@@ -3,6 +3,73 @@
- #ifndef _LINUX_DROPREASON_H
- #define _LINUX_DROPREASON_H
- 
-+#define DEFINE_DROP_REASON(FN, FNe)	\
-+	FN(NOT_SPECIFIED)		\
-+	FN(NO_SOCKET)			\
-+	FN(PKT_TOO_SMALL)		\
-+	FN(TCP_CSUM)			\
-+	FN(SOCKET_FILTER)		\
-+	FN(UDP_CSUM)			\
-+	FN(NETFILTER_DROP)		\
-+	FN(OTHERHOST)			\
-+	FN(IP_CSUM)			\
-+	FN(IP_INHDR)			\
-+	FN(IP_RPFILTER)			\
-+	FN(UNICAST_IN_L2_MULTICAST)	\
-+	FN(XFRM_POLICY)			\
-+	FN(IP_NOPROTO)			\
-+	FN(SOCKET_RCVBUFF)		\
-+	FN(PROTO_MEM)			\
-+	FN(TCP_MD5NOTFOUND)		\
-+	FN(TCP_MD5UNEXPECTED)		\
-+	FN(TCP_MD5FAILURE)		\
-+	FN(SOCKET_BACKLOG)		\
-+	FN(TCP_FLAGS)			\
-+	FN(TCP_ZEROWINDOW)		\
-+	FN(TCP_OLD_DATA)		\
-+	FN(TCP_OVERWINDOW)		\
-+	FN(TCP_OFOMERGE)		\
-+	FN(TCP_RFC7323_PAWS)		\
-+	FN(TCP_INVALID_SEQUENCE)	\
-+	FN(TCP_RESET)			\
-+	FN(TCP_INVALID_SYN)		\
-+	FN(TCP_CLOSE)			\
-+	FN(TCP_FASTOPEN)		\
-+	FN(TCP_OLD_ACK)			\
-+	FN(TCP_TOO_OLD_ACK)		\
-+	FN(TCP_ACK_UNSENT_DATA)		\
-+	FN(TCP_OFO_QUEUE_PRUNE)		\
-+	FN(TCP_OFO_DROP)		\
-+	FN(IP_OUTNOROUTES)		\
-+	FN(BPF_CGROUP_EGRESS)		\
-+	FN(IPV6DISABLED)		\
-+	FN(NEIGH_CREATEFAIL)		\
-+	FN(NEIGH_FAILED)		\
-+	FN(NEIGH_QUEUEFULL)		\
-+	FN(NEIGH_DEAD)			\
-+	FN(TC_EGRESS)			\
-+	FN(QDISC_DROP)			\
-+	FN(CPU_BACKLOG)			\
-+	FN(XDP)				\
-+	FN(TC_INGRESS)			\
-+	FN(UNHANDLED_PROTO)		\
-+	FN(SKB_CSUM)			\
-+	FN(SKB_GSO_SEG)			\
-+	FN(SKB_UCOPY_FAULT)		\
-+	FN(DEV_HDR)			\
-+	FN(DEV_READY)			\
-+	FN(FULL_RING)			\
-+	FN(NOMEM)			\
-+	FN(HDR_TRUNC)			\
-+	FN(TAP_FILTER)			\
-+	FN(TAP_TXFILTER)		\
-+	FN(ICMP_CSUM)			\
-+	FN(INVALID_PROTO)		\
-+	FN(IP_INADDRERRORS)		\
-+	FN(IP_INNOROUTES)		\
-+	FN(PKT_TOO_BIG)			\
-+	FNe(MAX)
-+
- /**
-  * enum skb_drop_reason - the reasons of skb drops
-  *
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index 45264e4bb254..50a974f7dfb4 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -9,6 +9,15 @@
- #include <linux/netdevice.h>
- #include <linux/tracepoint.h>
- 
-+#undef FN
-+#define FN(reason)	TRACE_DEFINE_ENUM(SKB_DROP_REASON_##reason);
-+DEFINE_DROP_REASON(FN, FN)
-+
-+#undef FN
-+#undef FNe
-+#define FN(reason)	{ SKB_DROP_REASON_##reason, #reason },
-+#define FNe(reason)	{ SKB_DROP_REASON_##reason, #reason }
-+
- /*
-  * Tracepoint for free an sk_buff:
-  */
-@@ -35,9 +44,13 @@ TRACE_EVENT(kfree_skb,
- 
- 	TP_printk("skbaddr=%p protocol=%u location=%p reason: %s",
- 		  __entry->skbaddr, __entry->protocol, __entry->location,
--		  drop_reasons[__entry->reason])
-+		  __print_symbolic(__entry->reason,
-+				   DEFINE_DROP_REASON(FN, FNe)))
- );
- 
-+#undef FN
-+#undef FNe
-+
- TRACE_EVENT(consume_skb,
- 
- 	TP_PROTO(struct sk_buff *skb),
-diff --git a/net/core/.gitignore b/net/core/.gitignore
-deleted file mode 100644
-index df1e74372cce..000000000000
---- a/net/core/.gitignore
-+++ /dev/null
-@@ -1 +0,0 @@
--dropreason_str.c
-diff --git a/net/core/Makefile b/net/core/Makefile
-index e8ce3bd283a6..5857cec87b83 100644
---- a/net/core/Makefile
-+++ b/net/core/Makefile
-@@ -5,7 +5,7 @@
- 
- obj-y := sock.o request_sock.o skbuff.o datagram.o stream.o scm.o \
- 	 gen_stats.o gen_estimator.o net_namespace.o secure_seq.o \
--	 flow_dissector.o dropreason_str.o
-+	 flow_dissector.o
- 
- obj-$(CONFIG_SYSCTL) += sysctl_net_core.o
- 
-@@ -40,23 +40,3 @@ obj-$(CONFIG_NET_SOCK_MSG) += skmsg.o
- obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
- obj-$(CONFIG_OF)	+= of_net.o
--
--clean-files := dropreason_str.c
--
--quiet_cmd_dropreason_str = GEN     $@
--cmd_dropreason_str = awk -F ',' 'BEGIN{ print "\#include <net/dropreason.h>\n"; \
--	print "const char * const drop_reasons[] = {" }\
--	/^enum skb_drop/ { dr=1; }\
--	/^\};/ { dr=0; }\
--	/^\tSKB_DROP_REASON_/ {\
--		if (dr) {\
--			sub(/\tSKB_DROP_REASON_/, "", $$1);\
--			printf "\t[SKB_DROP_REASON_%s] = \"%s\",\n", $$1, $$1;\
--		}\
--	}\
--	END{ print "};" }' $< > $@
--
--$(obj)/dropreason_str.c: $(srctree)/include/net/dropreason.h
--	$(call cmd,dropreason_str)
--
--$(obj)/dropreason_str.o: $(obj)/dropreason_str.c
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 48ecfbf29174..f1b8b20fc20b 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -91,7 +91,11 @@ static struct kmem_cache *skbuff_ext_cache __ro_after_init;
- int sysctl_max_skb_frags __read_mostly = MAX_SKB_FRAGS;
- EXPORT_SYMBOL(sysctl_max_skb_frags);
- 
--/* The array 'drop_reasons' is auto-generated in dropreason_str.c */
-+#undef FN
-+#define FN(reason) [SKB_DROP_REASON_##reason] = #reason,
-+const char * const drop_reasons[] = {
-+	DEFINE_DROP_REASON(FN, FN)
-+};
- EXPORT_SYMBOL(drop_reasons);
- 
- /**
--- 
-2.37.2
-
+PiBPbiA5LzQvMjIgMjA6MjgsIE5lYWwgTGl1IHdyb3RlOg0KPiA+IFRoaXMgZml4ZXMgdGhlIGZv
+bGxvd2luZyBzaW1pbGFyIGJ1aWxkIHdhcm5pbmcgd2hlbiBlbmFibGluZyBjb21waWxlDQo+ID4g
+dGVzdDoNCj4gPg0KPiA+IGFzcGVlZC1oYWNlLWhhc2guYzoxODg6OTogd2FybmluZzogZm9ybWF0
+ICcleCcgZXhwZWN0cyBhcmd1bWVudCBvZg0KPiA+IHR5cGUgJ3Vuc2lnbmVkIGludCcsIGJ1dCBh
+cmd1bWVudCA3IGhhcyB0eXBlICdzaXplX3QnIHtha2EgJ2xvbmcNCj4gPiB1bnNpZ25lZCBpbnQn
+fSBbLVdmb3JtYXQ9XQ0KPiA+DQo+ID4gUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxs
+a3BAaW50ZWwuY29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IE5lYWwgTGl1IDxuZWFsX2xpdUBhc3Bl
+ZWR0ZWNoLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9jcnlwdG8vYXNwZWVkL2FzcGVlZC1o
+YWNlLWhhc2guYyB8IDYgKysrLS0tDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMo
+KyksIDMgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9jcnlwdG8v
+YXNwZWVkL2FzcGVlZC1oYWNlLWhhc2guYw0KPiA+IGIvZHJpdmVycy9jcnlwdG8vYXNwZWVkL2Fz
+cGVlZC1oYWNlLWhhc2guYw0KPiA+IGluZGV4IDBhNDRmZmMwZTEzYi4uZDBmNjExNDlmZTI0IDEw
+MDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvY3J5cHRvL2FzcGVlZC9hc3BlZWQtaGFjZS1oYXNoLmMN
+Cj4gPiArKysgYi9kcml2ZXJzL2NyeXB0by9hc3BlZWQvYXNwZWVkLWhhY2UtaGFzaC5jDQo+ID4g
+QEAgLTE4Niw3ICsxODYsNyBAQCBzdGF0aWMgaW50IGFzcGVlZF9haGFzaF9kbWFfcHJlcGFyZV9z
+ZyhzdHJ1Y3QNCj4gYXNwZWVkX2hhY2VfZGV2ICpoYWNlX2RldikNCj4gPiAgCWxlbmd0aCA9IHJj
+dHgtPnRvdGFsICsgcmN0eC0+YnVmY250IC0gcmVtYWluOw0KPiA+DQo+ID4gIAlBSEFTSF9EQkco
+aGFjZV9kZXYsICIlczoweCV4LCAlczoweCV4LCAlczoweCV4LCAlczoweCV4XG4iLA0KPiA+IC0J
+CSAgInJjdHggdG90YWwiLCByY3R4LT50b3RhbCwgImJ1ZmNudCIsIHJjdHgtPmJ1ZmNudCwNCj4g
+PiArCQkgICJyY3R4IHRvdGFsIiwgcmN0eC0+dG90YWwsICJidWZjbnQiLCAodTMyKXJjdHgtPmJ1
+ZmNudCwNCj4gPiAgCQkgICJsZW5ndGgiLCBsZW5ndGgsICJyZW1haW4iLCByZW1haW4pOw0KPiA+
+DQo+ID4gIAlzZ19sZW4gPSBkbWFfbWFwX3NnKGhhY2VfZGV2LT5kZXYsIHJjdHgtPnNyY19zZywg
+cmN0eC0+c3JjX25lbnRzLCBAQA0KPiA+IC0zMjUsOCArMzI1LDggQEAgc3RhdGljIGludCBhc3Bl
+ZWRfaGFjZV9haGFzaF90cmlnZ2VyKHN0cnVjdA0KPiBhc3BlZWRfaGFjZV9kZXYgKmhhY2VfZGV2
+LA0KPiA+ICAJc3RydWN0IGFzcGVlZF9zaGFtX3JlcWN0eCAqcmN0eCA9IGFoYXNoX3JlcXVlc3Rf
+Y3R4KHJlcSk7DQo+ID4NCj4gPiAgCUFIQVNIX0RCRyhoYWNlX2RldiwgInNyY19kbWE6MHgleCwg
+ZGlnZXN0X2RtYToweCV4LA0KPiBsZW5ndGg6MHgleFxuIiwNCj4gPiAtCQkgIGhhc2hfZW5naW5l
+LT5zcmNfZG1hLCBoYXNoX2VuZ2luZS0+ZGlnZXN0X2RtYSwNCj4gPiAtCQkgIGhhc2hfZW5naW5l
+LT5zcmNfbGVuZ3RoKTsNCj4gPiArCQkgICh1MzIpaGFzaF9lbmdpbmUtPnNyY19kbWEsICh1MzIp
+aGFzaF9lbmdpbmUtPmRpZ2VzdF9kbWEsDQo+ID4gKwkJICAodTMyKWhhc2hfZW5naW5lLT5zcmNf
+bGVuZ3RoKTsNCj4gPg0KPiA+ICAJcmN0eC0+Y21kIHw9IEhBU0hfQ01EX0lOVF9FTkFCTEU7DQo+
+ID4gIAloYXNoX2VuZ2luZS0+cmVzdW1lID0gcmVzdW1lOw0KPiANCj4gTm8sIHNpemVfdCB2YWx1
+ZXMgc2hvdWxkIGJlIHByaW50ZWQgd2l0aCAlenUuDQo+IE5vIGNhc3QgbmVlZGVkLg0KPiANCj4g
+LS0NCj4gflJhbmR5DQoNCk9rYXksIEknbGwgc2VuZCBuZXh0IHBhdGNoIHdpdGhpbiB5b3VyIHN1
+Z2dlc3Rpb24sIHRoYW5rcy4NCg0K

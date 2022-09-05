@@ -2,45 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DA35AD68C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02E35AD692
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239061AbiIEPaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 11:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
+        id S239004AbiIEPcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 11:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239068AbiIEP3o (ORCPT
+        with ESMTP id S238986AbiIEPbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 11:29:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5626112C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 08:28:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C0C2B81200
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 15:28:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D405C433D6;
-        Mon,  5 Sep 2022 15:28:23 +0000 (UTC)
-Date:   Mon, 5 Sep 2022 11:29:00 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH 2/4] tracing/hist: Call hist functions directly via a
- switch statement
-Message-ID: <20220905112900.79c8a387@gandalf.local.home>
-In-Reply-To: <20220905224849.80af1cb24d9eed1c1cdbcaee@kernel.org>
-References: <20220823214606.344269352@goodmis.org>
-        <20220823215139.658601723@goodmis.org>
-        <20220905224849.80af1cb24d9eed1c1cdbcaee@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 5 Sep 2022 11:31:52 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E265924E;
+        Mon,  5 Sep 2022 08:30:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662391819; x=1693927819;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8mFpiMAF6eHHpFQcvhpWXup3tSDSzv5VQh4Nu0g1c1w=;
+  b=B+pQVkybqJ9hN1Z0qMbh3NCfUfVftCRHBDmuO8L2HMk2QZgakVT2FF8k
+   OU2JK9fd2PUrj/DO9hyizoTsj3JZeG9IFBKclAIY0/38pcnBtlFmWQmwk
+   NNEXK08oFtbGJa8XQ0XVBZkzEJn3nvPaULA7kQaMyspzmga5VFlOWZ1DK
+   ygD6PKYr78jA14UoCEJXxLaYqFfqyUe27IuZRvRLn627fBL8HkkVHQCac
+   YoXbqxIYP9+2jhQ32jy3ZXY9UBWwqMa9cOJ3NGhWBWBAw3DWBhIZToPK+
+   OlbP+be4p3E3tBNPDOhrCmMKWfKCxaOL+Hz8R/2hDeY+u+M/0XeJ1gdlo
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="297198163"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="297198163"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 08:30:19 -0700
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="756074824"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 08:30:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oVE3C-008jBK-0c;
+        Mon, 05 Sep 2022 18:30:14 +0300
+Date:   Mon, 5 Sep 2022 18:30:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 1/1] media: atomisp_gmin_platform: Unexport and split
+ camera_sensor_csi()
+Message-ID: <YxYWBSo+fceHCAOd@smile.fi.intel.com>
+References: <20220730162027.1011-1-andriy.shevchenko@linux.intel.com>
+ <Yud2cwiCCnq4x50L@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yud2cwiCCnq4x50L@paasikivi.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,47 +69,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Sep 2022 22:48:49 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
++Cc: Hans
 
-> Hi Steve,
-> 
-> I found this crashed the kernel if I ran 
-> 
->  # ftracetest test.d/trigger/trigger-hist-expressions.tc
-> 
-> More specifically, here is the minimum reproduce command.
-> 
->  # echo "hist:keys=common_pid:x=16-8-4" > events/sched/sched_process_fork/trigger 
-> [   75.874402] BUG: kernel NULL pointer dereference, address: 0000000000000038
-> [   75.875378] #PF: supervisor read access in kernel mode
-> 
-> I investigated it and found you missed to set correct fn_num for
-> combined constant field;
-> 
-> > @@ -2725,7 +2748,8 @@ static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
-> >  		if (var2)
-> >  			expr->operands[1] = var2;
-> >  
-> > -		expr->constant = op_fn(expr, NULL, NULL, NULL, NULL);
-> > +		expr->fn_num = op_fn;
-> > +		expr->constant = hist_fn_call(expr, NULL, NULL, NULL, NULL);
-> >  
-> >  		expr->operands[0] = NULL;
-> >  		expr->operands[1] = NULL;  
-> 
-> Here, we need this;
-> 
-> 		expr->fn_num = HIST_FIELD_FN_CONST;
-> 
-> Without this fix, the binary op_fn is kept on this const field and it
-> causes the problem because the const field doesn't have operands.
-> 
+On Mon, Aug 01, 2022 at 06:45:07AM +0000, Sakari Ailus wrote:
+> On Sat, Jul 30, 2022 at 07:20:27PM +0300, Andy Shevchenko wrote:
 
-Thanks Masami,
+...
 
-Today is a US holiday, and I'm only cleaning out some email (and working on
-my LPC presentation for tomorrow's speaker's training), but not doing any
-other work. I'll look at this tomorrow.
+> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
--- Steve
+Thanks!
+
+Hans, maybe you want to include this one into your bunch?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

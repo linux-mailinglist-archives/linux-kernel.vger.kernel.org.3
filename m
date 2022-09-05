@@ -2,105 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B7D5ADA4D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 22:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E385ADA4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 22:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbiIEUfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 16:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S232558AbiIEUfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 16:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbiIEUfS (ORCPT
+        with ESMTP id S232355AbiIEUfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 16:35:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5657D1261C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 13:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=l7UcNVrpXm037V4EUEfk1Aj+vY0nmWg8YyBiKhmf0KM=; b=oqww3YLbWzy/kIKf0QgIZB55yI
-        hGI9x3R1m01eENKIAgCCE1YPi+sZNb6MeQe4Q1k18z3PQjURe29cJXSE3vuNnRquoqaXETNaFRh+N
-        2XPUUn41SIkD2LE0dUnltBBua5c6hUdT0u+22IaDuzdhDvB6uZ13SdvB5irTb+cTXHCOwoGmhN9hX
-        WSyUHaDF7WYa49ebTM4rCY3Y0xV+tgMxv/DnS2xgKNs6sRLeqTEAm1WerUlGIhVsYhj4Oz5UeKep1
-        5IsbiisIj+Td2ha3K62sIQu0Kdyc5/He5vq946a+pv/RpsNAajMMZ1o6/SndlqL6pZ30nXc2Y2Ley
-        2AwPCSeg==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVIo4-00Ain8-5W; Mon, 05 Sep 2022 20:34:56 +0000
-Message-ID: <8d77cc18-3465-9f9c-e177-857fa6ec4d82@infradead.org>
-Date:   Mon, 5 Sep 2022 13:34:55 -0700
+        Mon, 5 Sep 2022 16:35:17 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CB41C10B
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 13:35:12 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 16:35:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662410110;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OpP1uXm6ca6XBc1ONEJL5gkifMHj5fs70rHCFRmvOy8=;
+        b=UY/kLXhSCop8V5EbyM6Vo2PNPn4IQk8/GFRnAap21SYUxPj2i6gjs8KI50f80Fsp8Xa6FE
+        uuVJigYWXX7+vuoCs4T9565L2O1YZd4x8iWg9nweGuKJUkJg7Zaus5YpeaFA7mCLzRdbg2
+        1pMuKrhGTAly+U+OkQj6pwMjKTI/v3w=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michel Lespinasse <michel@lespinasse.org>,
+        Jerome Glisse <jglisse@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Laurent Dufour <laurent.dufour@fr.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
+        Hugh Dickins <hughd@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Minchan Kim <minchan@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH RESEND 00/28] per-VMA locks proposal
+Message-ID: <20220905203503.tqtr36fsfg4guk4j@moria.home.lan>
+References: <20220901173516.702122-1-surenb@google.com>
+ <YxXsQKoQ0URIRuKi@dhcp22.suse.cz>
+ <CAJuCfpG3bMLzNhP5wt8my8j7_9wW=darLegd6WPV6tddtCKGAA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH RESEND] sched/topology: Add __init for init_defrootdomain
-Content-Language: en-US
-To:     Bing Huang <huangbing775@126.com>, rostedt@goodmis.org,
-        dietmar.eggemann@arm.com
-Cc:     brauner@kernel.org, bristot@redhat.com, bsegall@google.com,
-        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
-        mgorman@suse.de, mingo@redhat.com, peterz@infradead.org,
-        vincent.guittot@linaro.org
-References: <20220831093927.5904-1-huangbing775@126.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220831093927.5904-1-huangbing775@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpG3bMLzNhP5wt8my8j7_9wW=darLegd6WPV6tddtCKGAA@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/31/22 02:39, Bing Huang wrote:
-> From: Bing Huang <huangbing@kylinos.cn>
+On Mon, Sep 05, 2022 at 11:32:48AM -0700, Suren Baghdasaryan wrote:
+> On Mon, Sep 5, 2022 at 5:32 AM 'Michal Hocko' via kernel-team
+> <kernel-team@android.com> wrote:
+> >
+> > Unless I am missing something, this is not based on the Maple tree
+> > rewrite, right? Does the change in the data structure makes any
+> > difference to the approach? I remember discussions at LSFMM where it has
+> > been pointed out that some issues with the vma tree are considerably
+> > simpler to handle with the maple tree.
 > 
-> init_defrootdomain is only used in initialization
+> Correct, this does not use the Maple tree yet but once Maple tree
+> transition happens and it supports RCU-safe lookups, my code in
+> find_vma_under_rcu() becomes really simple.
 > 
-> Signed-off-by: Bing Huang <huangbing@kylinos.cn>
-
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  kernel/sched/sched.h    | 2 +-
->  kernel/sched/topology.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > On Thu 01-09-22 10:34:48, Suren Baghdasaryan wrote:
+> > [...]
+> > > One notable way the implementation deviates from the proposal is the way
+> > > VMAs are marked as locked. Because during some of mm updates multiple
+> > > VMAs need to be locked until the end of the update (e.g. vma_merge,
+> > > split_vma, etc).
+> >
+> > I think it would be really helpful to spell out those issues in a greater
+> > detail. Not everybody is aware of those vma related subtleties.
 > 
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index b0bf2287dd9d..cd761f1fc60c 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -883,7 +883,7 @@ struct root_domain {
->  	struct perf_domain __rcu *pd;
->  };
->  
-> -extern void init_defrootdomain(void);
-> +extern void __init init_defrootdomain(void);
->  extern int sched_init_domains(const struct cpumask *cpu_map);
->  extern void rq_attach_root(struct rq *rq, struct root_domain *rd);
->  extern void sched_get_rd(struct root_domain *rd);
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index 8739c2a5a54e..dea9fa39e7c0 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -578,7 +578,7 @@ static int init_rootdomain(struct root_domain *rd)
->   */
->  struct root_domain def_root_domain;
->  
-> -void init_defrootdomain(void)
-> +void __init init_defrootdomain(void)
->  {
->  	init_rootdomain(&def_root_domain);
->  
+> Ack. I'll expand the description of the cases when multiple VMAs need
+> to be locked in the same update. The main difficulties are:
+> 1. Multiple VMAs might need to be locked within one
+> mmap_write_lock/mmap_write_unlock session (will call it an update
+> transaction).
+> 2. Figuring out when it's safe to unlock a previously locked VMA is
+> tricky because that might be happening in different functions and at
+> different call levels.
+> 
+> So, instead of the usual lock/unlock pattern, the proposed solution
+> marks a VMA as locked and provides an efficient way to:
+> 1. Identify locked VMAs.
+> 2. Unlock all locked VMAs in bulk.
+> 
+> We also postpone unlocking the locked VMAs until the end of the update
+> transaction, when we do mmap_write_unlock. Potentially this keeps a
+> VMA locked for longer than is absolutely necessary but it results in a
+> big reduction of code complexity.
 
--- 
-~Randy
+Correct me if I'm wrong, but it looks like any time multiple VMAs need to be
+locked we need mmap_lock anyways, which is what makes your approach so sweet.
+
+If however we ever want to lock multiple VMAs without taking mmap_lock, then
+deadlock avoidance algorithms aren't that bad - there's the ww_mutex approach,
+which is simple and works well when there isn't much expected contention (the
+advantage of the ww_mutex approach is that it doesn't have to track all held
+locks). I've also written full cycle detection; that approcah gets you fewer
+restarts, at the cost of needing a list of all currently held locks.

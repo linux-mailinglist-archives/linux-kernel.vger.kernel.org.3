@@ -2,87 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBAD5ADB08
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22D55ADAFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiIEWAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
+        id S231264AbiIEV6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 17:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiIEWAA (ORCPT
+        with ESMTP id S229733AbiIEV6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:00:00 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E98719020;
-        Mon,  5 Sep 2022 14:59:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MM2Vv1NXCz4xG6;
-        Tue,  6 Sep 2022 07:59:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662415191;
-        bh=I7G2xctQ7/cWehxr33HzEMAYZCiDkhHylvVLOgUKzV0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=e/42SZkoDpcPmTdM1Cfs05Vi8R5/nudv3XoNAkOIEIPEuAI1PyKKmv/Ih4mTWQ+qt
-         kOovX6qDv8B/hHbnC07sbJarfCow6TzssGW/PzA6+Em3NnjokYCK+P6m8Y/USFfzFV
-         flVHMtVX+UEFlGj/caajJfHJAy706P2zgre79DKHTKGibSA66mRHpXwD+VdjcwuPiI
-         euQryvyeDYlupXxZ9uLsPV6ee5rL7vjR18MnuVO14xmXJXpxIeUCPJ9Gawm4eqqhDu
-         0iXnA8HaClYCRBzfkdRQP9I1SyYp/jmrnKDb5D6b4XUvNUmFf2ME0tFz+CfBWXOn3i
-         8d1b3GXSW5MLQ==
-Date:   Tue, 6 Sep 2022 07:54:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the bluetooth tree
-Message-ID: <20220906075407.21f408d1@canb.auug.org.au>
+        Mon, 5 Sep 2022 17:58:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E86055093
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 14:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662415098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y3nl9tCsqmEvjle0ma7YPgEK8txZe+k8HAvLSO7Q7mo=;
+        b=bGC6MdyB7FRsG/mqoL+gjDxM9IkN0++Rk6LHqa1nx9FrC/cXetUljvGeZ5rYfQokNkgTE6
+        yuxmbDW9h7mOs84/QdIe18h15+XuxTJg7RiANBfGVwQlinAMJg7pN+gro073i76Lke83AZ
+        tYmKVpRs2+x6v1f5RCLCxsHeSHhfXC0=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-359-H8HPSqBSP7um1ITHDeeq8g-1; Mon, 05 Sep 2022 17:58:17 -0400
+X-MC-Unique: H8HPSqBSP7um1ITHDeeq8g-1
+Received: by mail-ed1-f69.google.com with SMTP id f14-20020a0564021e8e00b00448da245f25so6338768edf.18
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 14:58:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Y3nl9tCsqmEvjle0ma7YPgEK8txZe+k8HAvLSO7Q7mo=;
+        b=g60lmNcZRqyBn8Nn5D7TD4i+s3YMa//FM4G7Owa2s5mc0INmy8UQfaXpom3q0RdyRq
+         0IpvKgriQY8xLRAPola37LeXpCxgJQEcCrW01/JIZj3yE7yZMxy6XJsqi9BWuLnZ9jwM
+         a1btOmM2rDqOAw32bvu3oKWt8qYIGcENTu9a4uCbGsA7SrIYLqnZXpo3zWxsdDK5f0vf
+         j/hkFWnOwgt6UoFYAQdcsl7q21Z5M9kv5OMu9bKpUrGF5UYUktRxBiNQ30XLm9WUaA3F
+         qp8360kf7hLU9ibaykBwVXC95wT0mrBMdxqJ+RdRqOLTiJPCqhfHL0Qlj0A+hT5/D8sE
+         8baQ==
+X-Gm-Message-State: ACgBeo3fTllDNAfgFYi/fSDENSN72LNPT6PjBaleoBgleijB3zHAgtJQ
+        aN5hSYtwP6YDswn5nZ/6IqtVo9BgjEOBZL3pIPs1VL2YY/DQU/OQ15Phv8bFeKTOUqpNV882RSQ
+        SBYZTQrrkboc1HfjCHOvBbCTn
+X-Received: by 2002:a05:6402:354f:b0:448:2385:b998 with SMTP id f15-20020a056402354f00b004482385b998mr36279106edd.57.1662415095944;
+        Mon, 05 Sep 2022 14:58:15 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5RI16k6sg5ULbSMla52BrJrq7wX0j6zZg29hKO5aWgejwOSqtB/KbvQbs0UbPZ5gri3CQW9w==
+X-Received: by 2002:a05:6402:354f:b0:448:2385:b998 with SMTP id f15-20020a056402354f00b004482385b998mr36279092edd.57.1662415095720;
+        Mon, 05 Sep 2022 14:58:15 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:e3ec:5559:7c5c:1928? ([2001:b07:6468:f312:e3ec:5559:7c5c:1928])
+        by smtp.googlemail.com with ESMTPSA id f18-20020a17090631d200b007336c3f05bdsm5638371ejf.178.2022.09.05.14.58.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 14:58:15 -0700 (PDT)
+Message-ID: <38f5cb16-84d3-d50c-7a85-c4940f3ef319@redhat.com>
+Date:   Mon, 5 Sep 2022 23:58:13 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/d=Ez8LWrj59Aaff1FxjOm_l";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2 01/23] KVM: x86: Purge "highest ISR" cache when
+ updating APICv state
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Li RongQing <lirongqing@baidu.com>
+References: <20220903002254.2411750-1-seanjc@google.com>
+ <20220903002254.2411750-2-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220903002254.2411750-2-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/d=Ez8LWrj59Aaff1FxjOm_l
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 9/3/22 02:22, Sean Christopherson wrote:
+> Purge the "highest ISR" cache when updating APICv state on a vCPU.  The
+> cache must not be used when APICv is active as hardware may emulate EOIs
+> (and other operations) without exiting to KVM.
+> 
+> This fixes a bug where KVM will effectively block IRQs in perpetuity due
+> to the "highest ISR" never getting reset if APICv is activated on a vCPU
+> while an IRQ is in-service.  Hardware emulates the EOI and KVM never gets
+> a chance to update its cache.
+> 
+> Fixes: b26a695a1d78 ("kvm: lapic: Introduce APICv update helper function")
+> Cc: stable@vger.kernel.org
+> Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/x86/kvm/lapic.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 9dda989a1cf0..38e9b8e5278c 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -2429,6 +2429,7 @@ void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
+>   		 */
+>   		apic->isr_count = count_vectors(apic->regs + APIC_ISR);
+>   	}
+> +	apic->highest_isr_cache = -1;
+>   }
+>   EXPORT_SYMBOL_GPL(kvm_apic_update_apicv);
+>   
+> @@ -2485,7 +2486,6 @@ void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
+>   		kvm_lapic_set_reg(apic, APIC_TMR + 0x10 * i, 0);
+>   	}
+>   	kvm_apic_update_apicv(vcpu);
+> -	apic->highest_isr_cache = -1;
+>   	update_divide_count(apic);
+>   	atomic_set(&apic->lapic_timer.pending, 0);
+>   
+> @@ -2772,7 +2772,6 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
+>   	__start_apic_timer(apic, APIC_TMCCT);
+>   	kvm_lapic_set_reg(apic, APIC_TMCCT, 0);
+>   	kvm_apic_update_apicv(vcpu);
+> -	apic->highest_isr_cache = -1;
+>   	if (apic->apicv_active) {
+>   		static_call_cond(kvm_x86_apicv_post_state_restore)(vcpu);
+>   		static_call_cond(kvm_x86_hwapic_irr_update)(vcpu, apic_find_highest_irr(apic));
 
-Hi all,
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
 
-Commits
-
-  45d33c081bcf ("Bluetooth: Add experimental wrapper for MGMT based mesh")
-  6db7da4c50f0 ("Bluetooth: Implement support for Mesh")
-
-are missing a Signed-off-by from their committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/d=Ez8LWrj59Aaff1FxjOm_l
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMWb/8ACgkQAVBC80lX
-0GyZgAf/RsEMqsgAJHWl8LoEngNutpZaxskttJ+SBpLL8eVbbknuB6KtyrV1yRYi
-hVhqQ5Hb0iSvQanCbJYzPECamyupTfHBUXh5zwsZQ8d/OOPzyp3Ujqs6Sfd2qJ5x
-/QCtPaqS8FJ/xawkAJOqJQOvn3CMg2jnMvl56aQZ4VQkxeOlMetNKz9srIUDrMGb
-eb56kq7snx1UdB8JdkGeWun10VEYxBfFNpl30I1mzZ7WuuY8hISy3ohTymvCLgfq
-Ni04xwdN9pS2N9Hshql73ZkJ0eCen7ViwB2n+o3ucp4u+3SKYviN5MrZrbpys1QE
-tZ+aXgRJwTHiQhyV5VJqQl8flg8ENA==
-=CFks
------END PGP SIGNATURE-----
-
---Sig_/d=Ez8LWrj59Aaff1FxjOm_l--

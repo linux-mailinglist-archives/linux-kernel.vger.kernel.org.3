@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78125AD2BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BA95AD2CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238078AbiIEMbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
+        id S238113AbiIEMcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237654AbiIEMaT (ORCPT
+        with ESMTP id S237881AbiIEMaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:30:19 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF12E5FF56
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:26:32 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id s19-20020a056402521300b00448954f38c9so5719474edd.14
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:26:32 -0700 (PDT)
+        Mon, 5 Sep 2022 08:30:23 -0400
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCDB606BF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:26:33 -0700 (PDT)
+Received: by mail-wr1-x44a.google.com with SMTP id r23-20020adfb1d7000000b002286358a916so420632wra.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:26:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=r3HZXk/BEn65kcaybENH+gdA6j04yycM3f96/pfDo3Y=;
-        b=ASzeAsbMOdZf4WYpGmHP1pAOfqzeXvi1/mYmjoy1+gLpo2mFVGXt7YkxHdn2cGG7Th
-         LhsyoqxduLzAWg9guBf7MeUGs5Sl556966lTsEax9VeA+GsBoCisGlbSkVEruCeqXdIL
-         pmn8EWbkEJjYIFVr9fHMcvJQS7hgukxapq/1AYQ4UGaMetmJBsMlft+caiJ7o6VTTsRO
-         /gBZA1HxzLhDIpKDjWeAuT4C4Rnv8Ae2OB/4lJ2Ca03N2vHUV4V1Gj7baRHl/poEsqyJ
-         jflQ8NkbH5DBqPL8/Jio1X1Vv9nc7m22bqOJom4ePsHMKcBTNXLmYOpZp6cjj1DVwhN9
-         4O5g==
+        bh=TqyxH/L5MkAtosS0jWqWllGGzUIesiLdVg3wG3p7XtY=;
+        b=SRHbIOUb4DGUSlckCuBIb5D5nY2hugScbD5wJSkj9+gz5MDYNGyreOoUjr426hDozZ
+         eIZwnOJAR9QbuL6MBljpr+ef5VyWMq7LE+MGIMu63m/ooGwVOtY9Wymo4x+ItRsbPuMF
+         3x3WktXqUtSalOy5ST4UA3C+QVvz/PUjD2mQzbD9n6SlVfmNFgRe+dRr3wA+uShralze
+         F5IELO9fjYSA2cgSGi/7JeC9JLPRXPbVVnHX/AfgjNsTAchbmP+32JYRVNVmU8xLiZ/2
+         5IjHNbRGxFz5C2uzmzWFN1Wc7yPI/jBEojh1hnBnCwk9zy4n2ozIysDaR+/OsHRccZvb
+         k9Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=r3HZXk/BEn65kcaybENH+gdA6j04yycM3f96/pfDo3Y=;
-        b=ohufOZJfQYro+ysD0lR6AqdQFgvRiTNd2NjLn5KtLJv8mS0HWcQnjfM8ZjuEp661Qs
-         LiPiASI3VoPjbj22vGK3caD597K7Pdwgb0d83xx2LiJVM2zkFgOJV6GgggSK73wE1W9B
-         fKHlutBS1pFx63mNXT2gZPH1vOREM79Du/4FKVB6rXs9GhbrH5PVKdExKAby4b6cq+XA
-         YjysRwrRCKFEJAYuSYj1kHbLoevVRrnKLaFCYP9BNEqPrhXDiU4UOLY4L9IOy9KU2PRL
-         wLe4SpR8cJSQlGy5xuZNuoaKoKTDiNVQBgVbgKVirc9rU/S1350SjUcOasj6wM9DpQwD
-         Wfrg==
-X-Gm-Message-State: ACgBeo3LFRElsVF73cA9HEV2gyoih3LRKRp+Phy62dj2y2gpbYOlW55M
-        ytEvqK8ykjaAIWFBmSLK4nmlmbZTsjg=
-X-Google-Smtp-Source: AA6agR4ywNo4RURTtgkJzNxgjjBzX0rpx4pVEpcnNVzzj6eodf3zbpdzsA8Tkeoavta9Gzz8OJ5GJVPldJ8=
+        bh=TqyxH/L5MkAtosS0jWqWllGGzUIesiLdVg3wG3p7XtY=;
+        b=RkURWVLdnicbi4MZhOG5l/15gRvAwlcMppJywGuYvkAdfZTcDDcV4/fOfYDJXPJ6IS
+         9jBLsjbr6cc8qWMc4xNOujGFpgJi7I3kjnIdZF+oqpIFjDYXKU41QEapLqbQ3zMIosbw
+         Ury/b6H88NKHeYslWkYwZv4iuvNzZ3o/ikzgKiKQozCRDX97L3sz8FOkTy3S5llxQs6Q
+         fgk6Xijy33+Tqyh+H35hHr+6L49uxSrINfhD6MEz0/4bi1jvmPzaCvI8ilH/jVeGkuHL
+         slfCN24JsOgpxiaJW8kGLmzSTUp6f+DTncaLx73e4s+37UAPZdtefRA9wTacSqojOdJO
+         tLpQ==
+X-Gm-Message-State: ACgBeo1FOF5FBkRfW852MfXErilG875mPCH41AgxHKIXKEK4amTmicSD
+        lWaWAjh6J9t+8tNTtxzrK7tu934WmMc=
+X-Google-Smtp-Source: AA6agR7gpIA9Ys+R+97x8E6SItr56wFcMnWLG4Y2aVvt4HKxaJejCTap6PHw9s2SK+DWSs3ZsGMtcLcy1oM=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:b808:8d07:ab4a:554c])
- (user=glider job=sendgmr) by 2002:a05:6402:348f:b0:448:6005:68af with SMTP id
- v15-20020a056402348f00b00448600568afmr32104195edc.184.1662380777495; Mon, 05
- Sep 2022 05:26:17 -0700 (PDT)
-Date:   Mon,  5 Sep 2022 14:24:37 +0200
+ (user=glider job=sendgmr) by 2002:a5d:584b:0:b0:220:7624:5aae with SMTP id
+ i11-20020a5d584b000000b0022076245aaemr24101908wrf.119.1662380780114; Mon, 05
+ Sep 2022 05:26:20 -0700 (PDT)
+Date:   Mon,  5 Sep 2022 14:24:38 +0200
 In-Reply-To: <20220905122452.2258262-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220905122452.2258262-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220905122452.2258262-30-glider@google.com>
-Subject: [PATCH v6 29/44] block: kmsan: skip bio block merging logic for KMSAN
+Message-ID: <20220905122452.2258262-31-glider@google.com>
+Subject: [PATCH v6 30/44] kcov: kmsan: unpoison area->list in kcov_remote_area_put()
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -85,7 +85,7 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vegard Nossum <vegard.nossum@oracle.com>,
         Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -97,41 +97,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KMSAN doesn't allow treating adjacent memory pages as such, if they were
-allocated by different alloc_pages() calls.
-The block layer however does so: adjacent pages end up being used
-together. To prevent this, make page_is_mergeable() return false under
-KMSAN.
+KMSAN does not instrument kernel/kcov.c for performance reasons (with
+CONFIG_KCOV=y virtually every place in the kernel invokes kcov
+instrumentation). Therefore the tool may miss writes from kcov.c that
+initialize memory.
 
-Suggested-by: Eric Biggers <ebiggers@google.com>
+When CONFIG_DEBUG_LIST is enabled, list pointers from kernel/kcov.c are
+passed to instrumented helpers in lib/list_debug.c, resulting in false
+positives.
+
+To work around these reports, we unpoison the contents of area->list after
+initializing it.
+
 Signed-off-by: Alexander Potapenko <glider@google.com>
-
 ---
 
 v4:
- -- swap block: and kmsan: in the subject
+ -- change sizeof(type) to sizeof(*ptr)
+ -- swap kcov: and kmsan: in the subject
 
-v5:
- -- address Marco Elver's comments
-
-Link: https://linux-review.googlesource.com/id/Ie29cc2464c70032347c32ab2a22e1e7a0b37b905
+Link: https://linux-review.googlesource.com/id/Ie17f2ee47a7af58f5cdf716d585ebf0769348a5a
 ---
- block/bio.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/kcov.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/block/bio.c b/block/bio.c
-index 3d3a2678fea25..106ef14f28c2a 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -869,6 +869,8 @@ static inline bool page_is_mergeable(const struct bio_vec *bv,
- 	*same_page = ((vec_end_addr & PAGE_MASK) == page_addr);
- 	if (*same_page)
- 		return true;
-+	else if (IS_ENABLED(CONFIG_KMSAN))
-+		return false;
- 	return (bv->bv_page + bv_end / PAGE_SIZE) == (page + off / PAGE_SIZE);
+diff --git a/kernel/kcov.c b/kernel/kcov.c
+index e19c84b02452e..e5cd09fd8a050 100644
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -11,6 +11,7 @@
+ #include <linux/fs.h>
+ #include <linux/hashtable.h>
+ #include <linux/init.h>
++#include <linux/kmsan-checks.h>
+ #include <linux/mm.h>
+ #include <linux/preempt.h>
+ #include <linux/printk.h>
+@@ -152,6 +153,12 @@ static void kcov_remote_area_put(struct kcov_remote_area *area,
+ 	INIT_LIST_HEAD(&area->list);
+ 	area->size = size;
+ 	list_add(&area->list, &kcov_remote_areas);
++	/*
++	 * KMSAN doesn't instrument this file, so it may not know area->list
++	 * is initialized. Unpoison it explicitly to avoid reports in
++	 * kcov_remote_area_get().
++	 */
++	kmsan_unpoison_memory(&area->list, sizeof(area->list));
  }
  
+ static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_struct *t)
 -- 
 2.37.2.789.g6183377224-goog
 

@@ -2,185 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019A85ACDB8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 541495ACDC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237569AbiIEI1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S237840AbiIEIaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237649AbiIEI0j (ORCPT
+        with ESMTP id S237838AbiIEI3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:26:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A002018E1C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662366395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fAeNPdvIGvr/nxKNL5n6SelzY22s+NzrRFLCjQ9oIaY=;
-        b=ULoW6d3gfc7FscSEufy8i5GxOWdQGoKUndwfi/LdVj9MTx39D2HG18MhD0JJ4AmgQlbYOB
-        1S3Popq1fxLHVFD7wmsMu85OddZZvE3r9Xz7hz1xBZIKua3u6F5gZdWb/C6swwG6nIVLOJ
-        h0nRQWP36qFmtsxOXvQN0YleaiS7aWM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-359-bO1MyxoGMl-Eih2bOIEysQ-1; Mon, 05 Sep 2022 04:26:33 -0400
-X-MC-Unique: bO1MyxoGMl-Eih2bOIEysQ-1
-Received: by mail-wm1-f69.google.com with SMTP id r83-20020a1c4456000000b003a7b679981cso7134307wma.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 01:26:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=fAeNPdvIGvr/nxKNL5n6SelzY22s+NzrRFLCjQ9oIaY=;
-        b=5w20FpibGjKTOWz54wiHrFMn8iyn2aMBXN8Y6CCRHIrhSlWYubNOxvor25jY12B/7x
-         9KVlg6QDZHzAWohdhd3HRlNfRnilnTfvyjtb7wwyX30xvN+aEB4T3H1mUsykDiXsvsP9
-         boV0cMwvIFjsZjisdoR4R4PtCywFZPoc3jOeVxDpJ0TnX1dGwop2W/Wxi54td3Mq+BNS
-         LCORnZbAAdiHsNR1YEWczz6cYEgRqx6dmKqQTeXbfz/n6NsdVy/MKnqhSzb7FkTsBqcJ
-         tuDz6i1fSJ8BHZJNuqIPZCTLfqU5pJkxseariUUlsq/Fiy6YEC9RhkVQRrmZ6DvX+I/F
-         irpw==
-X-Gm-Message-State: ACgBeo2zBeoMI3Sk4RUdOCm89ky+q7G6SdIDIZMCWfCAHndejgbgcO1D
-        9AEy1/LWf3D09HEe3FcUKGCPCATLY+ruFuLYbmwkvvArLo9kPaD4av6nRoHaofwMnwXY78iGwRj
-        MYYNx3X8hQ9Cwdm3WLCaZV4i4
-X-Received: by 2002:a05:600c:254:b0:3a5:a401:a1e2 with SMTP id 20-20020a05600c025400b003a5a401a1e2mr9629981wmj.14.1662366392821;
-        Mon, 05 Sep 2022 01:26:32 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4NVOMUCvaizvb26rANBB+lQiZc3OkLs5X1oe7PAUfIMZ0rWJCEMl/AfeZB4aFUEIf+M3E4pw==
-X-Received: by 2002:a05:600c:254:b0:3a5:a401:a1e2 with SMTP id 20-20020a05600c025400b003a5a401a1e2mr9629969wmj.14.1662366392548;
-        Mon, 05 Sep 2022 01:26:32 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-112-72.dyn.eolo.it. [146.241.112.72])
-        by smtp.gmail.com with ESMTPSA id ch13-20020a5d5d0d000000b00226d1711276sm8485733wrb.1.2022.09.05.01.26.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 01:26:32 -0700 (PDT)
-Message-ID: <da8998cba112cbdea9d403052732c794f3882bd2.camel@redhat.com>
-Subject: Re: [PATCH net] net: mptcp: fix unreleased socket in accept queue
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     menglong8.dong@gmail.com, mathew.j.martineau@linux.intel.com
-Cc:     matthieu.baerts@tessares.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Date:   Mon, 05 Sep 2022 10:26:30 +0200
-In-Reply-To: <20220905050400.1136241-1-imagedong@tencent.com>
-References: <20220905050400.1136241-1-imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Mon, 5 Sep 2022 04:29:52 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E5D4E864;
+        Mon,  5 Sep 2022 01:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1662366477;
+  x=1693902477;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tRFYGv84M2LaryAxLO+4jpAXwsqd1ialVQ9dqVpUd64=;
+  b=CvZLYj8XOiPcjtvbgFgaVsr2sG4JxTIlPlDCniQR4i4dZz91QlG2VW/6
+   Cme95nKkOkLlhGtu6zqjXE/6WQxl2CZlOwyYUrmY1OGBQlauRdV+6bOtj
+   U+Tubl0eu6xR8Mm1LTlbkCzgh5M2B9OZXozkrRz4fM6cqQPBVaSEG+Kwc
+   jMdcTF16H9JpVE+XtBdyTQA0oN4CoomH8ZPhraKulFHxn3M9c37RrGaLF
+   4oViz2HZsFrJQkXamV54uFzuPJ7rFSEdvWSmoTjq84MnCfXS2UEDODyKv
+   yC3rqY5EKsR7JuCWnGZqviiPS71I8rL1i1w8d9Zj0ErW6GagltDSUrzWg
+   Q==;
+Date:   Mon, 5 Sep 2022 10:27:51 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        kernel <kernel@axis.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/5] iio: adc: mcp320x: use callbacks for RX conversion
+Message-ID: <YxWzB/UdHYW6of/r@axis.com>
+References: <20220831100506.3368103-1-vincent.whitchurch@axis.com>
+ <20220831100506.3368103-2-vincent.whitchurch@axis.com>
+ <CAHp75Vek8tLnwYWZO91HHr1_i7G_F9tErnRsq-GwfQcpR0FaTw@mail.gmail.com>
+ <20220904171559.1bf77d42@jic23-huawei>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220904171559.1bf77d42@jic23-huawei>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Sep 04, 2022 at 06:15:59PM +0200, Jonathan Cameron wrote:
+> I'm not keen to push unrelated work onto someone doing good stuff
+> on a driver, but in this particular case it does seem reasonable to
+> tidy all this up given you are moving the code anyway.
 
-On Mon, 2022-09-05 at 13:04 +0800, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> The mptcp socket and its subflow sockets in accept queue can't be
-> released after the process exit.
-> 
-> While the release of a mptcp socket in listening state, the
-> corresponding tcp socket will be released too. Meanwhile, the tcp
-> socket in the unaccept queue will be released too. However, only init
-> subflow is in the unaccept queue, and the joined subflow is not in the
-> unaccept queue, which makes the joined subflow won't be released, and
-> therefore the corresponding unaccepted mptcp socket will not be released
-> to.
-> 
-> This can be reproduced easily with following steps:
-> 
-> 1. create 2 namespace and veth:
->    $ ip netns add mptcp-client
->    $ ip netns add mptcp-server
->    $ sysctl -w net.ipv4.conf.all.rp_filter=0
->    $ ip netns exec mptcp-client sysctl -w net.mptcp.enabled=1
->    $ ip netns exec mptcp-server sysctl -w net.mptcp.enabled=1
->    $ ip link add red-client netns mptcp-client type veth peer red-server \
->      netns mptcp-server
->    $ ip -n mptcp-server address add 10.0.0.1/24 dev red-server
->    $ ip -n mptcp-server address add 192.168.0.1/24 dev red-server
->    $ ip -n mptcp-client address add 10.0.0.2/24 dev red-client
->    $ ip -n mptcp-client address add 192.168.0.2/24 dev red-client
->    $ ip -n mptcp-server link set red-server up
->    $ ip -n mptcp-client link set red-client up
-> 
-> 2. configure the endpoint and limit for client and server:
->    $ ip -n mptcp-server mptcp endpoint flush
->    $ ip -n mptcp-server mptcp limits set subflow 2 add_addr_accepted 2
->    $ ip -n mptcp-client mptcp endpoint flush
->    $ ip -n mptcp-client mptcp limits set subflow 2 add_addr_accepted 2
->    $ ip -n mptcp-client mptcp endpoint add 192.168.0.2 dev red-client id \
->      1 subflow
-> 
-> 3. listen and accept on a port, such as 9999. The nc command we used
->    here is modified, which makes it uses mptcp protocol by default.
->    And the default backlog is 1:
->    ip netns exec mptcp-server nc -l -k -p 9999
-> 
-> 4. open another *two* terminal and connect to the server with the
->    following command:
->    $ ip netns exec mptcp-client nc 10.0.0.1 9999
->    input something after connect, to triger the connection of the second
->    subflow
-> 
-> 5. exit all the nc command, and check the tcp socket in server namespace.
->    And you will find that there is one tcp socket in CLOSE_WAIT state
->    and can't release forever.
+Well, even the moving of the code is unrelated to the original goal of
+adding triggered buffered support and isn't necessary for that.  The
+moving of the code was only to eliminate the use of the "device_index",
+which was already used in the existing code.
 
-Thank you for the report! 
+I'm of course happy to fix problems with the code I'm actually adding,
+but it seems to me that it would really be simpler for everyone if the
+trivial comments (especially the purely cosmetic ones) on the existing,
+unrelated code would be fixed by the people with the opinions about how
+the existing code should look like.  I don't have any special ability to
+test the dozen different chips this driver supports, so having me do it
+by proxy seems rather suboptimal.  I can only run it in roadtest, which
+anyone can do with the following commands (against v5.19 due to the
+regressions in mainline I mentioned in my other email), without special
+hardware:
 
-I have a doubt WRT the above scenario: AFAICS 'nc' will accept the
-incoming sockets ASAP, so the unaccepted queue should be empty at
-shutdown, but that does not fit with your description?!?
-
-> There are some solutions that I thought:
-> 
-> 1. release all unaccepted mptcp socket with mptcp_close() while the
->    listening tcp socket release in mptcp_subflow_queue_clean(). This is
->    what we do in this commit.
-> 2. release the mptcp socket with mptcp_close() in subflow_ulp_release().
-> 3. etc
-> 
-
-Can you please point to a commit introducing the issue?
-
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
->  net/mptcp/subflow.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-> index c7d49fb6e7bd..e39dff5d5d84 100644
-> --- a/net/mptcp/subflow.c
-> +++ b/net/mptcp/subflow.c
-> @@ -1770,6 +1770,10 @@ void mptcp_subflow_queue_clean(struct sock *listener_ssk)
->  		msk->first = NULL;
->  		msk->dl_next = NULL;
->  		unlock_sock_fast(sk, slow);
-> +
-> +		/*  */
-> +		sock_hold(sk);
-> +		sk->sk_prot->close(sk);
-
-You can call mptcp_close() directly here.
-
-Perhaps we could as well drop the mptcp_sock_destruct() hack?
-
-Perhpas even providing a __mptcp_close() variant not acquiring the
-socket lock and move such close call inside the existing sk socket lock
-above?
-
-Thanks,
-
-Paolo
-
+ git checkout v5.19
+ git remote add vwax https://github.com/vwax/linux.git
+ git fetch vwax 
+ git archive vwax/roadtest/mcp320x tools/testing/roadtest | tar xf -
+ make -C tools/testing/roadtest/ -j24 OPTS="-v -k 'mcp and not trigger'"

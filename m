@@ -2,86 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1EA15AD149
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 522BB5AD16D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236692AbiIELMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
+        id S238207AbiIELNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238250AbiIELLt (ORCPT
+        with ESMTP id S236467AbiIELNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:11:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444CE5AC4D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662376305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/9Cvtrw/U3C3PcZffSYCQWLqBd8d9T5JEME0S1hKNLk=;
-        b=aqS2woR9lsTJ60Ih7bZDl81mQq7GmUII3Rp1ZZOf0UWf0zNRyAYuxK9+SB0I2ZsOS8ALGp
-        P3zCAiG+yob6YHfTd0RzIJswir7PH/S2jtDOWrHJYvzgKZZUwVdx5T5s0V3hNGk43sont2
-        A5baWphVtXiu4b6vYAyENxKoqsM42P0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-513-4DW1PIdZPCi-wYIv7B1saQ-1; Mon, 05 Sep 2022 07:11:43 -0400
-X-MC-Unique: 4DW1PIdZPCi-wYIv7B1saQ-1
-Received: by mail-wm1-f72.google.com with SMTP id h133-20020a1c218b000000b003a5fa79008bso7313739wmh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 04:11:42 -0700 (PDT)
+        Mon, 5 Sep 2022 07:13:47 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821C05A832;
+        Mon,  5 Sep 2022 04:13:45 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id d1so6244264qvs.0;
+        Mon, 05 Sep 2022 04:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=7iAktJHc3w6rPsnzClYi6h63eWPfDzaVzHqTBIckRp4=;
+        b=R7t2Qcp1lBflY1vcWSAvFGDpL1wm70fCepnWH+zrAbiof4E0R0r6MaodmK99KC/uqU
+         lkRNi47VWEdS1Mh0Cq7rMIeuWmncJJ2cOty+OFE/rSCBYVUer1tDhNIt1xJajNoN+pha
+         9hYFjgcUDhUv9vg4Rsjx4Td0f/j+c8XAElCdXPkz1XbyGCnZFSRjvecB8Dt/V/2ytwns
+         pr0+QJCk5ml5PiGLXoq+OBMZT8nSbzyKkmBD4jlfWYYC6/a2AVD44sThrAdLIlOLbLDI
+         BjJuCJ4ppbMAAjAsrBVEK+NW8M6uu3+DQvsU1sl/6kNwDh7BxhDa793GpPoaKD+rDvK/
+         /Y2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=/9Cvtrw/U3C3PcZffSYCQWLqBd8d9T5JEME0S1hKNLk=;
-        b=M5dAk8Ttm99u/s2L0E0kM2Yc2uqprWByqHA6PTw9RRA693xin3xDXzT0Aa3h3MNhfO
-         ssdh9LEgOZPF/BCRpyeASP8uUF01zINZRBTeTWbPZJn1Mxw1x6VZfjSEuel4WLkomv3O
-         n3zMW5VA5Tld5NYp2wbGbZn1Gj87JQ9jJFzlPs8f51QvcEBE1yQMoQ6Z5McJ4oxVhPzS
-         5aHHHkegKf8LXV18MnahDAJcb0PFWKb34qxpV4W0DWNjgqgoI8Pct2FUsKujKSdhsoVY
-         OIthQjJgwK+1jc2sAgZ6a3KcL0KiHNAoFJpx6nkVvrGRnqzePTajxdUl6ROhHDHrEKlu
-         q6yQ==
-X-Gm-Message-State: ACgBeo03+PpEkpGvjREECyhS+X/KaCIeHC+XPYxbZ0Wuvr4/lPqTYmD7
-        HNwDV9JeQK1Fq2DEYTi+TDOPnWzeaNS31aRtZAMjgyaSwqvX0vnx4qAkA423k5rDSBcEP7X/xSk
-        IHgCFuiXjR17viWbR8bK/WVlY
-X-Received: by 2002:a5d:5407:0:b0:228:a79b:4432 with SMTP id g7-20020a5d5407000000b00228a79b4432mr1536887wrv.96.1662376301998;
-        Mon, 05 Sep 2022 04:11:41 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6F7nD49xRoK7hZXeL9vTPJlS8kXvvv7EvTNB1WIlh8ZYBXAJKS/gT0AlixZTaK7FaHas63tQ==
-X-Received: by 2002:a5d:5407:0:b0:228:a79b:4432 with SMTP id g7-20020a5d5407000000b00228a79b4432mr1536869wrv.96.1662376301662;
-        Mon, 05 Sep 2022 04:11:41 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
-        by smtp.gmail.com with ESMTPSA id a6-20020a056000050600b0021e519eba9bsm8611739wrf.42.2022.09.05.04.11.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 04:11:41 -0700 (PDT)
-Message-ID: <a7dd4376-bce2-ee79-623f-fa11d301b80d@redhat.com>
-Date:   Mon, 5 Sep 2022 13:11:40 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=7iAktJHc3w6rPsnzClYi6h63eWPfDzaVzHqTBIckRp4=;
+        b=0NK01ckdL5j08V3YQTtYIo+1OBWkYlmtcmdswdYO+H7A5QSouGw0BokAEpXPvOHI/j
+         9UR9Hu15qKJstZLHr0/Nw4/hSgsRwZLzaXeE/zi76ph9hAAna5w9VWLslzkw5gmqkeQJ
+         bM2Z+MPrDcDeUPQ0HefwQ0EZ1t1zsyJ8gnOtqEmgTpOa125/bf/JQiYwYY8vM/rIXY3T
+         SxTZhKLCs6m+pVM81zZfnzruyNJUogTqaYa21kzWlVxBiTwev3n9PVT+373wABUO4k44
+         kgVjMuMHVKqk2d6IdogMm2gjevbFOZ+ZIH0/u4N9ZJL+dHrlC//y7g3S1eUQ8ljKZiQI
+         MJDQ==
+X-Gm-Message-State: ACgBeo0u/g86km4ZaPLA5q6xuhhjOs7ZlRawnPW+dndLmH6gbLVU8ddI
+        OJHwG50ko/PlU8FAOLy7Sn7XcrZnsTAEe2jQtMY=
+X-Google-Smtp-Source: AA6agR7NrRmeK1sjqt1ZjgVXwez7kxeuRCTCLwTPPcAUxaHLOiRLXkVvjX6xUtf8npwaMKmSjSHhnRIt4pJmIe7SA1s=
+X-Received: by 2002:a05:6214:19cf:b0:4a9:4241:2399 with SMTP id
+ j15-20020a05621419cf00b004a942412399mr1093930qvc.64.1662376424240; Mon, 05
+ Sep 2022 04:13:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>, peterx@redhat.com,
-        kirill.shutemov@linux.intel.com, jgg@nvidia.com, hughd@google.com,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220901222707.477402-1-shy828301@gmail.com>
- <e6ad1084-c301-9f11-1fa7-7614bf859aaf@nvidia.com>
- <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
- <0c9d9774-77dd-fd93-b5b6-fc63f3d01b7f@linux.alibaba.com>
- <383fec21-9801-9b60-7570-856da2133ea9@redhat.com>
-Organization: Red Hat
-In-Reply-To: <383fec21-9801-9b60-7570-856da2133ea9@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 5 Sep 2022 14:13:08 +0300
+Message-ID: <CAHp75Vc5cEs6mPSL1fkHBT2hw-CbmbELFwkEGvwxkrdEVF2K_Q@mail.gmail.com>
+Subject: Re: [PATCH v1 00/11] Get rid of [devm_]gpiod_get_from_of_node()
+ public APIs
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,134 +104,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.09.22 12:24, David Hildenbrand wrote:
-> On 05.09.22 12:16, Baolin Wang wrote:
->>
->>
->> On 9/5/2022 3:59 PM, David Hildenbrand wrote:
->>> On 05.09.22 00:29, John Hubbard wrote:
->>>> On 9/1/22 15:27, Yang Shi wrote:
->>>>> Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
->>>>> introduce a general RCU get_user_pages_fast()"), a TLB flush is no
->>>>> longer
->>>>> sufficient to handle concurrent GUP-fast in all cases, it only handles
->>>>> traditional IPI-based GUP-fast correctly.  On architectures that send
->>>>> an IPI broadcast on TLB flush, it works as expected.  But on the
->>>>> architectures that do not use IPI to broadcast TLB flush, it may have
->>>>> the below race:
->>>>>
->>>>>       CPU A                                          CPU B
->>>>> THP collapse                                     fast GUP
->>>>>                                                  gup_pmd_range() <--
->>>>> see valid pmd
->>>>>                                                      gup_pte_range()
->>>>> <-- work on pte
->>>>> pmdp_collapse_flush() <-- clear pmd and flush
->>>>> __collapse_huge_page_isolate()
->>>>>        check page pinned <-- before GUP bump refcount
->>>>>                                                          pin the page
->>>>>                                                          check PTE <--
->>>>> no change
->>>>> __collapse_huge_page_copy()
->>>>>        copy data to huge page
->>>>>        ptep_clear()
->>>>> install huge pmd for the huge page
->>>>>                                                          return the
->>>>> stale page
->>>>> discard the stale page
->>>>
->>>> Hi Yang,
->>>>
->>>> Thanks for taking the trouble to write down these notes. I always
->>>> forget which race we are dealing with, and this is a great help. :)
->>>>
->>>> More...
->>>>
->>>>>
->>>>> The race could be fixed by checking whether PMD is changed or not after
->>>>> taking the page pin in fast GUP, just like what it does for PTE.  If the
->>>>> PMD is changed it means there may be parallel THP collapse, so GUP
->>>>> should back off.
->>>>>
->>>>> Also update the stale comment about serializing against fast GUP in
->>>>> khugepaged.
->>>>>
->>>>> Fixes: 2667f50e8b81 ("mm: introduce a general RCU
->>>>> get_user_pages_fast()")
->>>>> Signed-off-by: Yang Shi <shy828301@gmail.com>
->>>>> ---
->>>>>     mm/gup.c        | 30 ++++++++++++++++++++++++------
->>>>>     mm/khugepaged.c | 10 ++++++----
->>>>>     2 files changed, 30 insertions(+), 10 deletions(-)
->>>>>
->>>>> diff --git a/mm/gup.c b/mm/gup.c
->>>>> index f3fc1f08d90c..4365b2811269 100644
->>>>> --- a/mm/gup.c
->>>>> +++ b/mm/gup.c
->>>>> @@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int
->>>>> *nr, int nr_start,
->>>>>     }
->>>>>     #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
->>>>> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned
->>>>> long end,
->>>>> -             unsigned int flags, struct page **pages, int *nr)
->>>>> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
->>>>> +             unsigned long end, unsigned int flags,
->>>>> +             struct page **pages, int *nr)
->>>>>     {
->>>>>         struct dev_pagemap *pgmap = NULL;
->>>>>         int nr_start = *nr, ret = 0;
->>>>> @@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned
->>>>> long addr, unsigned long end,
->>>>>                 goto pte_unmap;
->>>>>             }
->>>>> -        if (unlikely(pte_val(pte) != pte_val(*ptep))) {
->>>>> +        /*
->>>>> +         * THP collapse conceptually does:
->>>>> +         *   1. Clear and flush PMD
->>>>> +         *   2. Check the base page refcount
->>>>> +         *   3. Copy data to huge page
->>>>> +         *   4. Clear PTE
->>>>> +         *   5. Discard the base page
->>>>> +         *
->>>>> +         * So fast GUP may race with THP collapse then pin and
->>>>> +         * return an old page since TLB flush is no longer sufficient
->>>>> +         * to serialize against fast GUP.
->>>>> +         *
->>>>> +         * Check PMD, if it is changed just back off since it
->>>>> +         * means there may be parallel THP collapse.
->>>>> +         */
->>>>
->>>> As I mentioned in the other thread, it would be a nice touch to move
->>>> such discussion into the comment header.
->>>>
->>>>> +        if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
->>>>> +            unlikely(pte_val(pte) != pte_val(*ptep))) {
->>>>
->>>>
->>>> That should be READ_ONCE() for the *pmdp and *ptep reads. Because this
->>>> whole lockless house of cards may fall apart if we try reading the
->>>> page table values without READ_ONCE().
->>>
->>> I came to the conclusion that the implicit memory barrier when grabbing
->>> a reference on the page is sufficient such that we don't need READ_ONCE
->>> here.
->>
->> IMHO the compiler may optimize the code 'pte_val(*ptep)' to be always
->> get from a register, then we can get an old value if other thread did
->> set_pte(). I am not sure how the implicit memory barrier can pervent the
->> compiler optimization? Please correct me if I missed something.
-> 
-> IIUC, an memory barrier always implies a compiler barrier.
-> 
+On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> I would like to stop exporting OF-specific [devm_]gpiod_get_from_of_node()
+> so that gpiolib can be cleaned a bit. We can do that by switching drivers
+> to use generic fwnode API ([devm_]fwnode_gpiod_get()). By doing so we open
+> the door to augmenting device tree and ACPI information through secondary
+> software properties (once we teach gpiolib how to handle those).
+>
+> I hope that relevant maintainers will take patches through their trees and
+> then we could merge the last one some time after -rc1.
 
-To clarify what I mean, Documentation/atomic_t.txt documents
-
-NOTE: when the atomic RmW ops are fully ordered, they should also imply 
-a compiler barrier.
+I'm in favour of the series, but some comments would be good to be addressed.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+With Best Regards,
+Andy Shevchenko

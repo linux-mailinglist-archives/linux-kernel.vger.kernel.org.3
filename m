@@ -2,140 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A547B5ACF3C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3305ACF44
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbiIEJza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 05:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        id S236937AbiIEJzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 05:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237361AbiIEJzM (ORCPT
+        with ESMTP id S237155AbiIEJzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 05:55:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972F815819;
-        Mon,  5 Sep 2022 02:55:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CB37611CF;
-        Mon,  5 Sep 2022 09:55:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 905A5C43149;
-        Mon,  5 Sep 2022 09:55:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662371705;
-        bh=p/hZZQfXVB53FJBWF7j3FpAyiHw5KDaNLiNMcE3mfIw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rq7gzcBgJ34JoEbTvJCVMmU2DjYBpUdsXZ9L4C3XmUsbdq8Kx66f7F8iWjjQJUgIl
-         xlX9iGBDdf47a+Pq1rzIqtSUUWDxZVxCKPfAsVzC9OGhm0eVPR/lsE3EouchsKpoxJ
-         dyR/+C0ktn39DtDb58JBHT7DiL7TqQhbdfro1la+pEP0uVBu0IlCE9W4B1Ku5PUHrR
-         s+JHmFobzPyXfVbOwCoP+Z/q6D8RFfAbf0jzYAWTbL14O51SGyzroonpjkw8Rx6Dhn
-         0NmVIMC+umwd7gCMAIFaT9smMYnR7Fm/ptaw4ups5CN5RlV2TwPmtA76gQw/zmHOcN
-         +qoxxzgUYIkRQ==
-Received: by mail-lj1-f177.google.com with SMTP id r27so8255109ljn.0;
-        Mon, 05 Sep 2022 02:55:05 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0HV13CriJzVkbC/s8Um/ZWIt2CMIQstTGMqD3VQ6WApeRINIx6
-        SX29rk5Okmd8ki65iKCiDH/AM1oNvrtSb1Bvazg=
-X-Google-Smtp-Source: AA6agR74qr/IhvSulb7MCEB2/G+zfUAzBmaVxPkTM6dWs5M5LaMwIOL6SxIu3GjCOD3z2kuoQMygclwTwrjb4YPV4KA=
-X-Received: by 2002:a2e:3006:0:b0:266:6677:5125 with SMTP id
- w6-20020a2e3006000000b0026666775125mr10170474ljw.352.1662371703513; Mon, 05
- Sep 2022 02:55:03 -0700 (PDT)
+        Mon, 5 Sep 2022 05:55:13 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55118186C2;
+        Mon,  5 Sep 2022 02:55:12 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3378303138bso65418257b3.9;
+        Mon, 05 Sep 2022 02:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=kZwowG+rRON5KFSUE0R9YJYWgBrkd2+kJINr3ZwEXZo=;
+        b=Vl1e3lhr4VBYOH0566THbq5E7P+PDrFu12F8dop24wzAOHlXYdtoS44xu2rgMicuvp
+         tA7YB486fFdpf8kVtFpNecJH1s4DXPlxHiW6LQkPh/LWtoRWVE5AHVHmq0SZwgAi87o9
+         wEXwyzgeEiMe9khhpJkOsw2zjnF+351IkAyQj1AQodm19bxNYQTuw2r3ZRJi19DQ8Rtx
+         3Om79/0Ta7Gr6MSxgSucqk93FAlG0v0w89dq18ngW9nbBb1AX7Z+BV6kOoLnB8YYNiK3
+         nKw+MnTtefiAlqU/F83VERFQTnah38RoRnpml3JJpVMCKDt8aMbdYtZDFbs1AYhOw90P
+         JVyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=kZwowG+rRON5KFSUE0R9YJYWgBrkd2+kJINr3ZwEXZo=;
+        b=Aou85Y4pfEUikvVnJTW1U5h5nhblCfNMUsQfwpAQfs9Vuk3JN35ObbK9lWDw9E+x2N
+         7sp7mewleAWPgUCLOkLb2xdoTwCF1koWTuK9eHdL3ZZibsBPRhHWYcGr4kmBe3WL1WXM
+         ywolwrvFjFpqz2Q4aLd3vVTK7lTdTh5IDoVwC3fM9Ye4bdkBU8WLgsApEXJBMPmJNkKF
+         I/CSWGSpQaehDKCrVwNNQ/uJY7xfCo0+RurMQekHR9Or2Tb9dQCr47/y166Db1J+vNO+
+         zzKAoPMd0v2KOMdxLPDPZW9uvZVmhDtFy8nOTLrOqV2n6Pcr4htZFv3zRjYQQwrUnmNw
+         xR/Q==
+X-Gm-Message-State: ACgBeo3aTQxB5+syGmR92iU8hCozY3mqPE0D8zY6ExqOgpdGFBIQQb63
+        YzehHL65uFJ730llXcv8JLA57qPluxtmJ/mvpXo=
+X-Google-Smtp-Source: AA6agR5VnQe4agp3+bventbZ7vQ9gI0u6eIpSo3fWiJh/oMJA6ijI89J9YKmciXOJw3L4bSRSWRikz9lWxdlZfz3zGk=
+X-Received: by 2002:a0d:f701:0:b0:32a:17d3:d189 with SMTP id
+ h1-20020a0df701000000b0032a17d3d189mr38205702ywf.401.1662371711515; Mon, 05
+ Sep 2022 02:55:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220904165321.1140894-1-Jason@zx2c4.com>
-In-Reply-To: <20220904165321.1140894-1-Jason@zx2c4.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 5 Sep 2022 11:54:52 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHC9Wfr74761gPcG=N8OC2P76FqSb8FVGWM7x1p-4hQKg@mail.gmail.com>
-Message-ID: <CAMj1kXHC9Wfr74761gPcG=N8OC2P76FqSb8FVGWM7x1p-4hQKg@mail.gmail.com>
-Subject: Re: [PATCH] efi: x86: Wipe setup_data on pure EFI boot
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, bp@alien8.de
+References: <20220905093546.19735-1-lukas.bulwahn@gmail.com> <4DB82E66-0BB9-4B43-917B-55E115994876@cutebit.org>
+In-Reply-To: <4DB82E66-0BB9-4B43-917B-55E115994876@cutebit.org>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Mon, 5 Sep 2022 11:55:00 +0200
+Message-ID: <CAKXUXMzGJv=Xvbv8VRqFfa=n-0D84Hk2FALqtyqmxD9ovDKCMw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: rectify entry in ARM/APPLE MACHINE SOUND DRIVERS
+To:     =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Mark Brown <broonie@kernel.org>, asahi@lists.linux.dev,
+        alsa-devel@alsa-project.org,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 4 Sept 2022 at 18:53, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Mon, Sep 5, 2022 at 11:44 AM Martin Povi=C5=A1er <povik+lin@cutebit.org>=
+ wrote:
 >
-> From: Ard Biesheuvel <ardb@kernel.org>
 >
-> When booting the x86 kernel via EFI using the LoadImage/StartImage boot
-> services [as opposed to the deprecated EFI handover protocol], the setup
-> header is taken from the image directly, and given that EFI's LoadImage
-> has no Linux/x86 specific knowledge regarding struct bootparams or
-> struct setup_header, any absolute addresses in the setup header must
-> originate from the file and not from a prior loading stage.
+> > On 5. 9. 2022, at 11:35, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> >
+> > Commit 3df5d0d97289 ("ASoC: apple: mca: Start new platform driver") add=
+s
+> > a new sound driver at the location "sound/soc/apple/", but it adds a fi=
+le
+> > entry referring to the non-existing location "drivers/sound/apple/*".
+> >
+> > Hence, ./scripts/get_maintainer.pl --self-test=3Dpatterns complains abo=
+ut a
+> > broken reference.
+> >
+> > Repair this file reference in ARM/APPLE MACHINE SOUND DRIVERS.
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> > Martin, please ack.
+> > Mark, please pick this patch on top of the commit above.
 >
-> Since we cannot generally predict where LoadImage() decides to load an
-> image (*), such absolute addresses must be treated as suspect: even if a
-> prior boot stage intended to make them point somewhere inside the
-> [signed] image, there is no way to validate that, and if they point at
-> an arbitrary location in memory, the setup_data nodes will not be
-> covered by any signatures or TPM measurements either, and could be made
-> to contain an arbitrary sequence of SETUP_xxx nodes, which could
-> interfere quite badly with the early x86 boot sequence.
->
-> (*) Note that, while LoadImage() does take a buffer/size tuple in
-> addition to a device path, which can be used to provide the image
-> contents directly, it will re-allocate such images, as the memory
-> footprint of an image is generally larger than the PE/COFF file
-> representation.
->
-> Next, in order to allow hypervisors to still use setup_data in scenarios
-> where it may be useful, bump the x86 boot protocol version, so that
-> hypervisors, e.g. QEMU in the linked patch, can do the right thing
-> automatically depending on whether it is safe.
->
-> Link: https://lore.kernel.org/qemu-devel/20220904165058.1140503-1-Jason@zx2c4.com/
-> Coauthored-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  arch/x86/boot/header.S                  | 2 +-
->  drivers/firmware/efi/libstub/x86-stub.c | 7 +++++++
->  2 files changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
-> index f912d7770130..e4e2d6e33924 100644
-> --- a/arch/x86/boot/header.S
-> +++ b/arch/x86/boot/header.S
-> @@ -307,7 +307,7 @@ _start:
->         # Part 2 of the header, from the old setup.S
->
->                 .ascii  "HdrS"          # header signature
-> -               .word   0x020f          # header version number (>= 0x0105)
-> +               .word   0x0210          # header version number (>= 0x0105)
->                                         # or else old loadlin-1.5 will fail)
->                 .globl realmode_swtch
->  realmode_swtch:        .word   0, 0            # default_switch, SETUPSEG
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 05ae8bcc9d67..9780f32a9f24 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -517,6 +517,13 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
->         hdr->ramdisk_image = 0;
->         hdr->ramdisk_size = 0;
->
-> +       /*
-> +        * Disregard any setup data that was provided by the bootloader:
-> +        * setup_data could be pointing anywhere, and we have no way of
-> +        * authenticating or validating the payload.
-> +        */
-> +       hdr->setup_data = 0;
-> +
->         efi_stub_entry(handle, sys_table_arg, boot_params);
->         /* not reached */
+> Hi Lukas, fixed here already:
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git/commit/=
+?id=3D55e2bd9c41e800638676dce3f19dcfd16b309a08
 >
 
-if the x86 folks are ok with this, I would like to send this to
-cc:stable, but I imagine retroactively changing the header version
-number might be something they would prefer to avoid. In that case,
-better to split these up.
+Great, thanks! Then, there is nothing more to do. Please ignore this patch =
+then.
 
-Also, care to update Documentation/x86/boot.rst to document the new behavior?
+Lukas

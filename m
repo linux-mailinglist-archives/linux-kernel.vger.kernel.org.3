@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7445ACE6C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BEB5ACE77
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238058AbiIEJA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 05:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S237256AbiIEJBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 05:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237338AbiIEJAs (ORCPT
+        with ESMTP id S238065AbiIEJB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 05:00:48 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5B832D8F;
-        Mon,  5 Sep 2022 02:00:42 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so4115911pjl.0;
-        Mon, 05 Sep 2022 02:00:42 -0700 (PDT)
+        Mon, 5 Sep 2022 05:01:26 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A13252BA;
+        Mon,  5 Sep 2022 02:01:25 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id x80so7638109pgx.0;
+        Mon, 05 Sep 2022 02:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=O5yNDW8gq4TOGDNM0FxBpVT4WeyabT0T2v8ISLdqFXw=;
-        b=W2IdgowNjSwepq3IUD0NLDF7NezaIWTQTxtO4CxoRGOqbZWhrrazd8zmFNjYZnY/fz
-         y6W5oFlPGRI0Cv0NbRLkOwK+qJw5EFi6577wTUuqB+NoyxugSfby1qQwvlB/l1gKoQKx
-         d3HKEw95T4GhXS4RdMAxIMq2FzDm62XTVvwh5zBKt9giQEQvKbYnk1sQYx3P7R2ogDDc
-         LW8JNpga1P91ZbEOQ3/XCToYOfKTM9wPunYFJhyrQNLpzOZRvpWRxaaU9llSLlMBzzWG
-         TzdmVWuNVvBUDvHPsvHmr6my5YuraF2+A49/vxuUcfX+YWf2a7lHy0xgcX1MEnWraXgg
-         pozA==
+        bh=CPGGum1MDN+pB+HXDP5MXslll6uCmqFxPIpknbF02gw=;
+        b=o8KqR9WhgbForHGilmBEfGdcPboFzgbTHbhcPuu+EI+oFveN32AgOGhxQAa+begKf3
+         t8BSokBBWiL3lWgtGPup7EtQiyklecnN4+AidwO/Xi8uEgfjjvFBsgfOU7Hbs47vrk2l
+         f2UBFkyMGaCzXHmL6rWSBpeHKiQT1LzTOZEbzyR55uUE5MWfdkF1pDoKD994jJuZaMU3
+         8xGtN92me0hQOn7/Y5BfDEqHLnv28i8WVZWLtE1ig1srKPnnaph2wsULxdaNvOm4gTsJ
+         slPxelEMQ33bDIfc1O8e5QwywvxOmP6tKahE2g06LAAEMJMfGfuqT7MKyR5MSdTsIhjv
+         Y1NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=O5yNDW8gq4TOGDNM0FxBpVT4WeyabT0T2v8ISLdqFXw=;
-        b=EOEp2gL71eDJL0d5FIe6t+X0HbU4qV1+TlLXSQZwNuwbEEGFtAgX7k2yKzwrKiqShf
-         2iSWSE7ck+rmB/F6rmS4K8dI23hNEVz+ryOuWlOkeNrqBCA9Cpbcz0yQXLnRevDLX1LP
-         cdXajgnfVmc/q7DuQxbr92/55duAyd2RDA0s951QxGllTTPSL0e3VgyA9VyhuENH9Iqp
-         kWwIb3MJBQporemm0KoicYt+mItwoIaqe8LnUSs3vwgacYJku1cxj9P3GK0iPzfMnGfy
-         eb5cfl3WO9lvZPqV7I0dDxJKIqz70Lr4MhZHiWJwumXpzCK1XB4lir4LdTBmyFR6UnGH
-         RorA==
-X-Gm-Message-State: ACgBeo0IUzxa24x2y7tNDrpjzyXMdjCMlgwHrgVKuKRVF61ewanqCZpL
-        bzf02VX2SpHeSriwaMvR65kcVxAzhqQ=
-X-Google-Smtp-Source: AA6agR5QtYRSaXdw2jhoG6yx+1Ml+qm6wyiLk2RuE0yXzUMGxGcej90wQ8bIOmW/ffx0Tpld28PnWQ==
-X-Received: by 2002:a17:903:11c7:b0:170:cde7:d24a with SMTP id q7-20020a17090311c700b00170cde7d24amr48336085plh.91.1662368442306;
-        Mon, 05 Sep 2022 02:00:42 -0700 (PDT)
+        bh=CPGGum1MDN+pB+HXDP5MXslll6uCmqFxPIpknbF02gw=;
+        b=A4c6pa9WpMGkAG67RGKM8VJI7fHaDQA9rzp1Pk6pjt61xU1A8RKXH+uAwXVjCOf2O8
+         dE5ZchfJs44lrEXKVr3WtoHaJAHxLYCYZF0l4OnjQ+3mqlG6uJGk5d44j+mDDPSGVemR
+         RA7LhnGJPqRG3Y08s4YWcVAIev3Thdq80239vxIMH+9/8XF2TwQZqX5JLM7N1jys13li
+         AaESWh0EAQR21bsAa8QhseuO50333X/ujZa/XQBS7tvd/aZvMt5NK0avi3WeG+gybzwh
+         v1DJuzxUMQJlwCDBgt8AQ8Pb1zKfyHdxj+GQ3tu1tYWQ9QaLCZ6fQ3OX+ylNSD5tIi0A
+         JGEQ==
+X-Gm-Message-State: ACgBeo1FnyKOwSvg1zijXAsY4472DE2thvKF/otSY6P3HjBbJdL4h8ST
+        Bm8fkQNfP8oB89LXtoKiEdj2XZC5aYU=
+X-Google-Smtp-Source: AA6agR5OTV2ApW7a35Iy7gFl0JtLj2i3ICXfyIXTSoj0yII/8ireAJylVlZpOWuQWPD6NGhBhCh1mw==
+X-Received: by 2002:a65:6d19:0:b0:42a:37d7:90da with SMTP id bf25-20020a656d19000000b0042a37d790damr41036462pgb.16.1662368485331;
+        Mon, 05 Sep 2022 02:01:25 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id d124-20020a621d82000000b0053dd1bba6a0sm1148192pfd.145.2022.09.05.02.00.40
+        by smtp.gmail.com with ESMTPSA id r12-20020aa7988c000000b0053612ec8859sm7089440pfl.209.2022.09.05.02.01.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 02:00:41 -0700 (PDT)
+        Mon, 05 Sep 2022 02:01:25 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     sathya.prakash@broadcom.com
-Cc:     sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+To:     alexandre.belloni@bootlin.com
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] scsi: message: Remove the unneeded result variable
-Date:   Mon,  5 Sep 2022 09:00:37 +0000
-Message-Id: <20220905090037.335055-1-ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] rtc: s35390a: Remove the unneeded result variable
+Date:   Mon,  5 Sep 2022 09:01:19 +0000
+Message-Id: <20220905090119.335121-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,38 +72,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Return the value mptctl_do_mpt_command() directly instead of storing it in
- another redundant variable.
+Return the value s35390a_set_reg() directly instead of storing it in
+another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/message/fusion/mptctl.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/rtc/rtc-s35390a.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/message/fusion/mptctl.c b/drivers/message/fusion/mptctl.c
-index f9ee957072c3..1e13c41fd58e 100644
---- a/drivers/message/fusion/mptctl.c
-+++ b/drivers/message/fusion/mptctl.c
-@@ -1702,8 +1702,6 @@ mptctl_mpt_command (MPT_ADAPTER *ioc, unsigned long arg)
+diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
+index 81d97b1d3159..b18daaf72b17 100644
+--- a/drivers/rtc/rtc-s35390a.c
++++ b/drivers/rtc/rtc-s35390a.c
+@@ -211,7 +211,7 @@ static int s35390a_rtc_set_time(struct device *dev, struct rtc_time *tm)
  {
- 	struct mpt_ioctl_command __user *uarg = (void __user *) arg;
- 	struct mpt_ioctl_command  karg;
--	int		rc;
--
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct s35390a	*s35390a = i2c_get_clientdata(client);
+-	int i, err;
++	int i;
+ 	char buf[7], status;
  
- 	if (copy_from_user(&karg, uarg, sizeof(struct mpt_ioctl_command))) {
- 		printk(KERN_ERR MYNAM "%s@%d::mptctl_mpt_command - "
-@@ -1712,9 +1710,7 @@ mptctl_mpt_command (MPT_ADAPTER *ioc, unsigned long arg)
- 		return -EFAULT;
- 	}
+ 	dev_dbg(&client->dev, "%s: tm is secs=%d, mins=%d, hours=%d mday=%d, "
+@@ -234,9 +234,7 @@ static int s35390a_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	for (i = 0; i < 7; ++i)
+ 		buf[i] = bitrev8(buf[i]);
  
--	rc = mptctl_do_mpt_command (ioc, karg, &uarg->MF);
+-	err = s35390a_set_reg(s35390a, S35390A_CMD_TIME1, buf, sizeof(buf));
 -
--	return rc;
-+	return mptctl_do_mpt_command(ioc, karg, &uarg->MF);
+-	return err;
++	return s35390a_set_reg(s35390a, S35390A_CMD_TIME1, buf, sizeof(buf));
  }
  
- /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ static int s35390a_rtc_read_time(struct device *dev, struct rtc_time *tm)
 -- 
 2.25.1

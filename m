@@ -2,515 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8995AC856
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 02:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5E95AC85D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 02:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiIEAyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 20:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
+        id S234337AbiIEA6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 20:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiIEAyq (ORCPT
+        with ESMTP id S229702AbiIEA5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 20:54:46 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4945211155
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 17:54:42 -0700 (PDT)
-Received: from [10.130.0.193] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxPGu7SBVjJlMRAA--.10715S3;
-        Mon, 05 Sep 2022 08:54:20 +0800 (CST)
-Subject: Re: [PATCH 2/3] LoongArch: Add kdump support
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <1661747823-23745-1-git-send-email-tangyouling@loongson.cn>
- <1661747823-23745-3-git-send-email-tangyouling@loongson.cn>
- <CAAhV-H6LkcnS4Z7YP=kfAkuDzKys57=6frsY0+T11ucKrWPuPw@mail.gmail.com>
-Cc:     Baoquan He <bhe@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kexec@lists.infradead.org, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <ec447291-078f-d1ea-6c5a-21b092965e81@loongson.cn>
-Date:   Mon, 5 Sep 2022 08:54:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Sun, 4 Sep 2022 20:57:48 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2088.outbound.protection.outlook.com [40.107.21.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90F424BE7;
+        Sun,  4 Sep 2022 17:57:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=az3d5yLNbqs5rQqGE7B6GUMYWz1+SDRgMbxvx/G5maxWxLJY8XoZTBmjWG0GAOA1/NBdHygG931lhL29pDEv5yGe3Mw5JQr/UZ5ATVGPE+Zg8t+EkrtDLfVH9ZZHBXgkxmVHk85rpOSrA079upY/F0cbAd8FZJh4ytykM/1iLBOPPqOemGLr2lqb4cAbMKJBDfoRNpcEKLzRDwWL4cfevD8ruPJBoNzWVZKpmm9jOM9EReYkDl6BPu1rLF80S/AKhmAN7P6O8S4xVgbQpc/VO/uEw+uBYDwbM6TeqBLaarqdm21boebbhJ+o/16OIRSzbRJna+KGe5kEqarQFcr4Bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ifmd9oib4mskvhVJzY8pL5bsfWf3mGOZKF/1iiYxxPQ=;
+ b=njxgs7OkKZZLOL5j4W4IFz8QdnKkAJmFWYecggl1qYZKvgsk/Uk24FODajPdN1z9lIer2Ch67eQ5yeUc56bXdljdtEOTUqOIqTD6sOtjJ8rGmyjkr+cP2Y2flSxa8ds4J1WWOV2h+Ccg3pLAmTiYM8S1tFNRGUfq2s/tVGu1dVt0XBAwadjSGwkGA+Bkh7onfMSx9dAJLE4c2d7p537607AGksxtWggF2Pz3JRcRv7JTy8lpC1niz0o1m939M32zM09ghkogL+SjoC2fd3OVOI16zYTySTEFOrN6X7PgLBcRdaPdmNx1F4WBdEjomSyx6lsg64LsoCI/6rofBQPchw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ifmd9oib4mskvhVJzY8pL5bsfWf3mGOZKF/1iiYxxPQ=;
+ b=lX66JYZzlmbmIblciylqVPrfLXZvfcri2g9r3U8OZIMxVH/7x1C69zo2vYlEX81FRfSH15FW7zFhf6JS+6lzkID8SZQfYd+UsiZeufWsc6fKXkjwO2IrOhgVeZJJSlYFd8spSAkHIjhMMipvtfahDHg1E3HvpoqO0Pd1mlpP5nE=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
+ 2022 00:57:43 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::2d22:3315:6f9b:82c7]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::2d22:3315:6f9b:82c7%5]) with mapi id 15.20.5588.017; Mon, 5 Sep 2022
+ 00:57:43 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Rob Herring <robh@kernel.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+CC:     "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V3 1/8] dt-bindings: soc: imx: add binding for i.MX93
+ syscon
+Thread-Topic: [PATCH V3 1/8] dt-bindings: soc: imx: add binding for i.MX93
+ syscon
+Thread-Index: AQHYvUO+WN9zC6gQlk2h4UEkedKcoa3MoqiAgANnibA=
+Date:   Mon, 5 Sep 2022 00:57:43 +0000
+Message-ID: <DU0PR04MB941764EE0415F4F8F059D5C0887F9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220831141418.38532-1-peng.fan@oss.nxp.com>
+ <20220831141418.38532-2-peng.fan@oss.nxp.com>
+ <20220902205721.GA399775-robh@kernel.org>
+In-Reply-To: <20220902205721.GA399775-robh@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 768e8116-4edc-4175-0b9d-08da8ed9a3db
+x-ms-traffictypediagnostic: DB9PR04MB9626:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4xrhcjBuDy9y2GTxPuhPGGStAZO2pZm6EDVwRzf+I4+ONb5B5cMkxGXRJ5+2MDV6iTG5gsLSQGLq2yZVM+DgLyD0BtNIiWAqNWk3JfOZeHgim0HPJ7r2Ag9b0ESIEjrHfaHE+0qu4Nv4YuwB7HtWv4bQMwg3Kw+YAWjIBZeJcTcwdyXnD74DHA5GcRVNkPS0+TXYMCuZMwd8dsY/wjCsKzOl5HXOAMlCod7WEl8Vr77eE1L4Drir4ePKdaz7/axtu0ehUDMcw42EDD2/NtHRxd5If3LbJVO0e7XPBseCssoZY753Sg2E/jp0QhtaIOjGzgoQeMxfDMRhujNMWjLcsOfxIWh91y1WnWqsnzG6encjgF6CiKHxnTSOH2JPy48clv/OM3iLAtlEUsOhxraNN3prQ/FFq80/sirmp65CTcMQ7QTEzkJn8+k0PE+KgulUzoRUfaLuKMt6Ic5HDp5ne2/l5Q/UwgNRClwGuON6R2o7LC51iQvRpUKWPrqZlAneJKtDExQap/elnjbwbLhcITM3Ym5l3bDPGbLgQEMZDMBmXP8ptfck934spZJXIpxoSxxSgcE8c3FEtT2QGVLCRP6sZQiEdARSO5+/jDETR3QCr626S8gWa8ro9MB0Pfet5Vh7n7FhCS+RuYrwnIdRx558ojidl92vqxFEhLI2Twt3M+wPnLN0WDtJl2hXtOVPHt3TDh5yPLlB02MTCcAZNLR4GGAIW3dIQ2ism0/uCkPhSEyLP7mODlkKjzibL58FBoVRFOJU6IlzGCIStANCWA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(376002)(396003)(39860400002)(346002)(66556008)(86362001)(66446008)(7696005)(122000001)(38070700005)(8676002)(66476007)(76116006)(8936002)(316002)(64756008)(4326008)(26005)(71200400001)(6506007)(52536014)(110136005)(55016003)(478600001)(38100700002)(54906003)(41300700001)(186003)(2906002)(66946007)(4744005)(9686003)(44832011)(5660300002)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kjAwMPNwN6wHmEP4p/C0cJUxbupcnum4mCaH+V4KcRFoddL5n+YYnCuoaIhH?=
+ =?us-ascii?Q?Shss7buZIkXbjmK1KuI+LUzGiAgT3egpTktCsNyrsdjVSgD1YcIGDyUur7G9?=
+ =?us-ascii?Q?bMlgWQ20FkGxIVgm4HqPROh+1c7QQw6myJLTAGZFANJgOqbY3DX2yVMZ98Cn?=
+ =?us-ascii?Q?dC4+vwOCCQgac10AxU+co/G+Dd1bT664GPm9R7WN+UFPVF43Z8IQP59ywcBM?=
+ =?us-ascii?Q?cwXHn9nSgOXMerzQRy+HK2jeDbrHyraa1BRV74Fe0hhRyuZAH4dM8S1EbdMl?=
+ =?us-ascii?Q?1Vak6p9pHX8VppE75xlMs5gRLXXXktOgK7/ZFkVHfCkO4LuN1wQSf36w1Gnq?=
+ =?us-ascii?Q?S8+B9rjpcMdFztPoEhmAL9MM9f59u7X+LVp+dMfq+unB7D3OhtJ0YKeHuZ0+?=
+ =?us-ascii?Q?+rUfxnRCbXXoApGnEkpp5cKT8e4MaEfTEAG9BZmzLs1LRfBJX1ZJhKPTPm4V?=
+ =?us-ascii?Q?8JWNY9dZpfwQbe+CK0+XXvyg1TGZSf+3uRXj3nzsaxNlq8YGkfIoKkED3Yvf?=
+ =?us-ascii?Q?2d7AAyjOHBnIHLcjbVV+9Zmh3zSjF/+NQ+35zeaSDvfsvAXd9FYKT/j1QUcG?=
+ =?us-ascii?Q?G0Ra9uzgbJhQGAqOXYt/9SBmDCz0/ojaI+War5QWsCukfoAXE4Zk+J5L4AXg?=
+ =?us-ascii?Q?x5uHDrZkDKS7T3fLhcdVnt09u+TYgC88NUA2FbIZ9cR3PGjg++6ew9yQoY6L?=
+ =?us-ascii?Q?D+i0J+zy/tKrUChmbVpyljvExAMc6xochwuEeo+mpNHI7U9TUBOJD1kgzfXD?=
+ =?us-ascii?Q?F8Go8KYTNNGSDbKqB+p922qVDPNuxtigH1TJ/Vg7YnrMJJjgXJTCD/Uu3Eyg?=
+ =?us-ascii?Q?kMaV0hDcSvXNThIDkrT3mouTYuOlCZ2eZdZ23WgsuwlgD86je6hrTlfuZnt8?=
+ =?us-ascii?Q?9eqKKNX1gwsiql9Zka5BQ/tGrbI6l9YF2Wn8mNNYZzQ4NMJ3ep3xmgkXZbp2?=
+ =?us-ascii?Q?CI/vvO7REB0wsfyG6oulRX0Mg5W1HdrElEk0tBKh1KOMz29yvMLaoTwfbLj3?=
+ =?us-ascii?Q?Yi4/1iQpHTZmMqOSNhF67kj+105W52Xlxcem3Tw7QTR32fXUwmtVGsjPQKfA?=
+ =?us-ascii?Q?fgJ2upqIogtlxvIFhvJV8rCZylxRpTtCQ+b8CvNa9zjULLXIGHcTPv1djxQW?=
+ =?us-ascii?Q?O6GjbbPq8Ig9+hN0BfeB2xo7T37h6sDjZLunD0iyQqZkS4cc+VcFPCZNkJMl?=
+ =?us-ascii?Q?ju6rLeTlM2uXgbLN+ObOiNPXXfbNsJxmjNgj/Cm2Sja9xOBRDC1r1st9DX6N?=
+ =?us-ascii?Q?DGWj/zYLywwYDbrIh5syzwJExdftyJi+jV6vJxLBql485lCaCwIw3SMNGwIJ?=
+ =?us-ascii?Q?5O7RknTfmqbbvMVf8PO/TIRlfEniIY+3qLJIrqEgkGO+wNTcN6PRYMV5lLTk?=
+ =?us-ascii?Q?G/9he5+X5DRoQaqCgHn/DORQ+uda59Lgda/ZfUoZZ41duFgW+FNF1Yza5eg4?=
+ =?us-ascii?Q?20bCBuBzXiCsLub7cKhOi7xCicc8T8F/cUcHTBVn3f1kmV3XzDEhpHzxSAOV?=
+ =?us-ascii?Q?214iUqQbRKFTeLWDeNyjIdhXqQxvDxpv26FpR6RT509XzG/oKOGvUqzPdG5n?=
+ =?us-ascii?Q?DlkehMTleXxXAg+camM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H6LkcnS4Z7YP=kfAkuDzKys57=6frsY0+T11ucKrWPuPw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxPGu7SBVjJlMRAA--.10715S3
-X-Coremail-Antispam: 1UD129KBjvAXoW3ZrW5tF48Ww45ZFyUWFy5XFb_yoW8Xr4fZo
-        WftF4xtw1xGry2yrs8Ca4jvFW3K3s8KrsxA3y3Aw43WFn0ya4Uury8KrWYyrW7J3WkWw4U
-        Ga43WrWjva97Xrn5n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUYm7k0a2IF6w4kM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
-        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
-        1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0
-        I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkI
-        wI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_twCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bruciUUUUU=
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 768e8116-4edc-4175-0b9d-08da8ed9a3db
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2022 00:57:43.4278
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jWWcsNPMgUCQtR7IgI61mN7GhKEUHpqicGglx06CxOvoVDgCXT9aM2eQVkvFZ4SP2htcwuedoCyAHH8gQCxCnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9626
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Huacai
+> Subject: Re: [PATCH V3 1/8] dt-bindings: soc: imx: add binding for i.MX93
+> syscon
+>=20
+> On Wed, Aug 31, 2022 at 10:14:11PM +0800, Peng Fan (OSS) wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > Add binding doc for i.MX93 blk_ctrl_ns_aonmix and blk_ctrl_wakeupmix
+>=20
+> Is this complete or you expect to add to it? If complete, just add the
+> compatible strings to syscon.yaml. If not complete, why not?
 
-On 09/04/2022 08:21 PM, Huacai Chen wrote:
-> Hi, Youling,
->
-> I think crash.c can be merged into crash_dump.c
-
-Most architectures only implement copy_oldmem_page() in crash_dump.c, 
-I'm not sure if merging crash.c into crash_dump.c will break its 
-consistency?
+I was not aware i.MX93 blk ctrl could be added to common syscon.yaml.
+Fix in V4.
 
 Thanks,
-Youling
-
->
-> Huacai
->
-> On Mon, Aug 29, 2022 at 12:37 PM Youling Tang <tangyouling@loongson.cn> wrote:
->>
->> This patch adds support for kdump, the kernel will reserve a region
->> for the crash kernel and jump there on panic.
->>
->> Arch-specific functions are added to allow for implementing a crash
->> dump file interface, /proc/vmcore, which can be viewed as a ELF file.
->>
->> A user space tool, like kexec-tools, is responsible for allocating a
->> separate region for the core's ELF header within crash kdump kernel
->> memory and filling it in when executing kexec_load().
->>
->> Then, its location will be advertised to crash dump kernel via a new
->> device-tree property, "linux,elfcorehdr", and crash dump kernel preserves
->> the region for later use with fdt_reserve_elfcorehdr() at boot time.
->>
->> At the same time, it will also limit the crash kdump kernel to the
->> crashkernel area via a new device-tree property, "linux, usable-memory-range",
->> so as not to destroy the original kernel dump data.
->>
->> On crash dump kernel, /proc/vmcore will access the primary kernel's memory
->> with copy_oldmem_page().
->>
->> I tested this on  LoongArch 3A5000 machine and works as expected (Suggest
->> crashkernel parameter is "crashkernel=512M@2320M"), you may test it by
->> triggering a crash through /proc/sysrq_trigger:
->>
->>  $ sudo kexec -p /boot/vmlinux-kdump --reuse-cmdline --append="nr_cpus=1"
->>  # echo c > /proc/sysrq_trigger
->>
->> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
->> ---
->>  arch/loongarch/Kconfig                  |  22 ++++++
->>  arch/loongarch/Makefile                 |   4 +
->>  arch/loongarch/kernel/Makefile          |   3 +-
->>  arch/loongarch/kernel/crash.c           | 100 ++++++++++++++++++++++++
->>  arch/loongarch/kernel/crash_dump.c      |  19 +++++
->>  arch/loongarch/kernel/machine_kexec.c   |  12 ++-
->>  arch/loongarch/kernel/mem.c             |   6 ++
->>  arch/loongarch/kernel/relocate_kernel.S |   6 ++
->>  arch/loongarch/kernel/setup.c           |  49 ++++++++++++
->>  arch/loongarch/kernel/traps.c           |   4 +
->>  10 files changed, 217 insertions(+), 8 deletions(-)
->>  create mode 100644 arch/loongarch/kernel/crash.c
->>  create mode 100644 arch/loongarch/kernel/crash_dump.c
->>
->> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->> index 903c82fa958d..7c1b07a5b5bd 100644
->> --- a/arch/loongarch/Kconfig
->> +++ b/arch/loongarch/Kconfig
->> @@ -420,6 +420,28 @@ config KEXEC
->>
->>           The name comes from the similarity to the exec system call.
->>
->> +config CRASH_DUMP
->> +       bool "Build kdump crash kernel"
->> +       help
->> +         Generate crash dump after being started by kexec. This should
->> +         be normally only set in special crash dump kernels which are
->> +         loaded in the main kernel with kexec-tools into a specially
->> +         reserved region and then later executed after a crash by
->> +         kdump/kexec.
->> +
->> +         For more details see Documentation/admin-guide/kdump/kdump.rst
->> +
->> +config PHYSICAL_START
->> +       hex "Physical address where the kernel is loaded"
->> +       default "0x9000000091000000" if 64BIT
->> +       depends on CRASH_DUMP
->> +       help
->> +         This gives the XKPRANGE address where the kernel is loaded.
->> +         If you plan to use kernel for capturing the crash dump change
->> +         this value to start of the reserved region (the "X" value as
->> +         specified in the "crashkernel=YM@XM" command line boot parameter
->> +         passed to the panic-ed kernel).
->> +
->>  config SECCOMP
->>         bool "Enable seccomp to safely compute untrusted bytecode"
->>         depends on PROC_FS
->> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
->> index 4bc47f47cfd8..7dabd580426d 100644
->> --- a/arch/loongarch/Makefile
->> +++ b/arch/loongarch/Makefile
->> @@ -48,7 +48,11 @@ KBUILD_CFLAGS_MODULE         += -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
->>  cflags-y += -ffreestanding
->>  cflags-y += $(call cc-option, -mno-check-zero-division)
->>
->> +ifdef CONFIG_PHYSICAL_START
->> +load-y         = $(CONFIG_PHYSICAL_START)
->> +else
->>  load-y         = 0x9000000000200000
->> +endif
->>  bootvars-y     = VMLINUX_LOAD_ADDRESS=$(load-y)
->>
->>  drivers-$(CONFIG_PCI)          += arch/loongarch/pci/
->> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
->> index 20b64ac3f128..df5aea129364 100644
->> --- a/arch/loongarch/kernel/Makefile
->> +++ b/arch/loongarch/kernel/Makefile
->> @@ -17,7 +17,8 @@ obj-$(CONFIG_CPU_HAS_FPU)     += fpu.o
->>  obj-$(CONFIG_MODULES)          += module.o module-sections.o
->>  obj-$(CONFIG_STACKTRACE)       += stacktrace.o
->>
->> -obj-$(CONFIG_KEXEC)             += machine_kexec.o relocate_kernel.o
->> +obj-$(CONFIG_KEXEC)             += machine_kexec.o relocate_kernel.o crash.o
->> +obj-$(CONFIG_CRASH_DUMP)        += crash_dump.o
->>
->>  obj-$(CONFIG_PROC_FS)          += proc.o
->>
->> diff --git a/arch/loongarch/kernel/crash.c b/arch/loongarch/kernel/crash.c
->> new file mode 100644
->> index 000000000000..b4f249ec6301
->> --- /dev/null
->> +++ b/arch/loongarch/kernel/crash.c
->> @@ -0,0 +1,100 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (C) 2022 Loongson Technology Corporation Limited
->> + *
->> + * Derived from MIPS
->> + */
->> +#include <linux/kernel.h>
->> +#include <linux/smp.h>
->> +#include <linux/reboot.h>
->> +#include <linux/crash_dump.h>
->> +#include <linux/delay.h>
->> +#include <linux/irq.h>
->> +#include <linux/types.h>
->> +#include <linux/sched.h>
->> +#include <linux/sched/task_stack.h>
->> +#include <asm/cacheflush.h>
->> +#include <asm/kexec.h>
->> +
->> +static cpumask_t cpus_in_crash = CPU_MASK_NONE;
->> +
->> +#ifdef CONFIG_SMP
->> +static void crash_shutdown_secondary(void *passed_regs)
->> +{
->> +       struct pt_regs *regs = passed_regs;
->> +       int cpu = smp_processor_id();
->> +
->> +       /*
->> +        * If we are passed registers, use those.  Otherwise get the
->> +        * regs from the last interrupt, which should be correct, as
->> +        * we are in an interrupt.  But if the regs are not there,
->> +        * pull them from the top of the stack.  They are probably
->> +        * wrong, but we need something to keep from crashing again.
->> +        */
->> +       if (!regs)
->> +               regs = get_irq_regs();
->> +       if (!regs)
->> +               regs = task_pt_regs(current);
->> +
->> +       local_irq_disable();
->> +       if (!cpumask_test_cpu(cpu, &cpus_in_crash))
->> +               crash_save_cpu(regs, cpu);
->> +       cpumask_set_cpu(cpu, &cpus_in_crash);
->> +
->> +       while (!atomic_read(&kexec_ready_to_reboot))
->> +               cpu_relax();
->> +
->> +       kexec_reboot();
->> +}
->> +
->> +/* Override the weak function in kernel/panic.c */
->> +void crash_smp_send_stop(void)
->> +{
->> +       static int cpus_stopped;
->> +       unsigned long timeout;
->> +       unsigned int ncpus;
->> +
->> +       /*
->> +        * This function can be called twice in panic path, but obviously
->> +        * we execute this only once.
->> +        */
->> +       if (cpus_stopped)
->> +               return;
->> +
->> +       cpus_stopped = 1;
->> +
->> +        /* Excluding the panic cpu */
->> +       ncpus = num_online_cpus() - 1;
->> +
->> +       smp_call_function(crash_shutdown_secondary, NULL, 0);
->> +       smp_wmb();
->> +
->> +       /*
->> +        * The crash CPU sends an IPI and wait for other CPUs to
->> +        * respond. Delay of at least 10 seconds.
->> +        */
->> +       pr_emerg("Sending IPI to other cpus...\n");
->> +       timeout = USEC_PER_SEC * 10;
->> +       while ((cpumask_weight(&cpus_in_crash) < ncpus) && timeout--) {
->> +               cpu_relax();
->> +               udelay(1);
->> +       }
->> +}
->> +
->> +#endif
->> +
->> +void machine_crash_shutdown(struct pt_regs *regs)
->> +{
->> +       int crashing_cpu;
->> +
->> +       local_irq_disable();
->> +
->> +       crashing_cpu = smp_processor_id();
->> +       crash_save_cpu(regs, crashing_cpu);
->> +
->> +       /* shutdown non-crashing cpus */
->> +       crash_smp_send_stop();
->> +       cpumask_set_cpu(crashing_cpu, &cpus_in_crash);
->> +
->> +       pr_info("Starting crashdump kernel...\n");
->> +}
->> diff --git a/arch/loongarch/kernel/crash_dump.c b/arch/loongarch/kernel/crash_dump.c
->> new file mode 100644
->> index 000000000000..13e5d2f7870d
->> --- /dev/null
->> +++ b/arch/loongarch/kernel/crash_dump.c
->> @@ -0,0 +1,19 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <linux/highmem.h>
->> +#include <linux/crash_dump.h>
->> +#include <linux/io.h>
->> +
->> +ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn,
->> +                        size_t csize, unsigned long offset)
->> +{
->> +       void  *vaddr;
->> +
->> +       if (!csize)
->> +               return 0;
->> +
->> +       vaddr = kmap_local_pfn(pfn);
->> +       csize = copy_to_iter(vaddr + offset, csize, iter);
->> +       kunmap_local(vaddr);
->> +
->> +       return csize;
->> +}
->> diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/kernel/machine_kexec.c
->> index 4ffcd4cd9c8c..f793a3ff09a3 100644
->> --- a/arch/loongarch/kernel/machine_kexec.c
->> +++ b/arch/loongarch/kernel/machine_kexec.c
->> @@ -69,7 +69,7 @@ int machine_kexec_prepare(struct kimage *kimage)
->>                 continue;
->>         }
->>
->> -       /* kexec need a safe page to save reboot_code_buffer */
->> +       /* kexec/kdump need a safe page to save reboot_code_buffer */
->>         kimage->control_code_page = virt_to_page((void *)KEXEC_CTRL_CODE);
->>
->>         reboot_code_buffer =
->> @@ -113,10 +113,6 @@ static void kexec_shutdown_secondary(void *)
->>
->>         kexec_reboot();
->>  }
->> -
->> -void machine_crash_shutdown(struct pt_regs *regs)
->> -{
->> -}
->>  #endif
->>
->>  void machine_shutdown(void)
->> @@ -135,7 +131,8 @@ void machine_kexec(struct kimage *image)
->>
->>         jump_addr = (unsigned long)phys_to_virt(image->start);
->>
->> -       first_ind_entry = (unsigned long)phys_to_virt(image->head & PAGE_MASK);
->> +       if (image->type == KEXEC_TYPE_DEFAULT)
->> +               first_ind_entry = (unsigned long)phys_to_virt(image->head & PAGE_MASK);
->>
->>         /*
->>          * The generic kexec code builds a page list with physical
->> @@ -167,7 +164,8 @@ void machine_kexec(struct kimage *image)
->>
->>         /*
->>          * We know we were online, and there will be no incoming IPIs at
->> -        * this point.
->> +        * this point. Mark online again before rebooting so that the crash
->> +        * analysis tool will see us correctly.
->>          */
->>         set_cpu_online(smp_processor_id(), true);
->>
->> diff --git a/arch/loongarch/kernel/mem.c b/arch/loongarch/kernel/mem.c
->> index 7423361b0ebc..c6def6ff81c8 100644
->> --- a/arch/loongarch/kernel/mem.c
->> +++ b/arch/loongarch/kernel/mem.c
->> @@ -5,6 +5,7 @@
->>  #include <linux/efi.h>
->>  #include <linux/initrd.h>
->>  #include <linux/memblock.h>
->> +#include <linux/of_fdt.h>
->>
->>  #include <asm/bootinfo.h>
->>  #include <asm/loongson.h>
->> @@ -61,4 +62,9 @@ void __init memblock_init(void)
->>
->>         /* Reserve the initrd */
->>         reserve_initrd_mem();
->> +
->> +       /* Mainly reserved memory for the elf core head */
->> +       early_init_fdt_scan_reserved_mem();
->> +       /* Parse linux,usable-memory-range is for crash dump kernel */
->> +       early_init_dt_check_for_usable_mem_range();
->>  }
->> diff --git a/arch/loongarch/kernel/relocate_kernel.S b/arch/loongarch/kernel/relocate_kernel.S
->> index d1f242f74ea8..4ee5ac4ac2d7 100644
->> --- a/arch/loongarch/kernel/relocate_kernel.S
->> +++ b/arch/loongarch/kernel/relocate_kernel.S
->> @@ -28,6 +28,12 @@ SYM_CODE_START(relocate_new_kernel)
->>         move            s2, a2
->>         move            s3, a3
->>
->> +       /*
->> +        * In case of a kdump/crash kernel, the indirection page is not
->> +        * populated as the kernel is directly copied to a reserved location
->> +        */
->> +       beqz            s2, done
->> +
->>  process_entry:
->>         PTR_L           s4, s2, 0
->>         PTR_ADDI        s2, s2, SZREG
->> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
->> index f938aae3e92c..ea34b77e402f 100644
->> --- a/arch/loongarch/kernel/setup.c
->> +++ b/arch/loongarch/kernel/setup.c
->> @@ -19,6 +19,8 @@
->>  #include <linux/memblock.h>
->>  #include <linux/initrd.h>
->>  #include <linux/ioport.h>
->> +#include <linux/kexec.h>
->> +#include <linux/crash_dump.h>
->>  #include <linux/root_dev.h>
->>  #include <linux/console.h>
->>  #include <linux/pfn.h>
->> @@ -186,6 +188,50 @@ static int __init early_parse_mem(char *p)
->>  }
->>  early_param("mem", early_parse_mem);
->>
->> +static void __init loongarch_parse_crashkernel(void)
->> +{
->> +#ifdef CONFIG_KEXEC
->> +       unsigned long long start;
->> +       unsigned long long total_mem;
->> +       unsigned long long crash_size, crash_base;
->> +       int ret;
->> +
->> +       total_mem = memblock_phys_mem_size();
->> +       ret = parse_crashkernel(boot_command_line, total_mem,
->> +                               &crash_size, &crash_base);
->> +       if (ret != 0 || crash_size <= 0)
->> +               return;
->> +
->> +
->> +       start = memblock_phys_alloc_range(crash_size, 1, crash_base,
->> +                                       crash_base + crash_size);
->> +       if (start != crash_base) {
->> +               pr_warn("Invalid memory region reserved for crash kernel\n");
->> +               return;
->> +       }
->> +
->> +       crashk_res.start = crash_base;
->> +       crashk_res.end   = crash_base + crash_size - 1;
->> +#endif
->> +}
->> +
->> +static void __init request_crashkernel(struct resource *res)
->> +{
->> +#ifdef CONFIG_KEXEC
->> +       int ret;
->> +
->> +       if (crashk_res.start == crashk_res.end)
->> +               return;
->> +
->> +       ret = request_resource(res, &crashk_res);
->> +       if (!ret)
->> +               pr_info("Reserving %ldMB of memory at %ldMB for crashkernel\n",
->> +                       (unsigned long)((crashk_res.end -
->> +                                        crashk_res.start + 1) >> 20),
->> +                       (unsigned long)(crashk_res.start  >> 20));
->> +#endif
->> +}
->> +
->>  void __init platform_init(void)
->>  {
->>         efi_init();
->> @@ -229,6 +275,8 @@ static void __init arch_mem_init(char **cmdline_p)
->>
->>         check_kernel_sections_mem();
->>
->> +       loongarch_parse_crashkernel();
->> +
->>         /*
->>          * In order to reduce the possibility of kernel panic when failed to
->>          * get IO TLB memory under CONFIG_SWIOTLB, it is better to allocate
->> @@ -290,6 +338,7 @@ static void __init resource_init(void)
->>                 request_resource(res, &code_resource);
->>                 request_resource(res, &data_resource);
->>                 request_resource(res, &bss_resource);
->> +               request_crashkernel(res);
->>         }
->>  }
->>
->> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
->> index aa1c95aaf595..0e610872f3f4 100644
->> --- a/arch/loongarch/kernel/traps.c
->> +++ b/arch/loongarch/kernel/traps.c
->> @@ -10,6 +10,7 @@
->>  #include <linux/entry-common.h>
->>  #include <linux/init.h>
->>  #include <linux/kernel.h>
->> +#include <linux/kexec.h>
->>  #include <linux/module.h>
->>  #include <linux/extable.h>
->>  #include <linux/mm.h>
->> @@ -246,6 +247,9 @@ void __noreturn die(const char *str, struct pt_regs *regs)
->>
->>         oops_exit();
->>
->> +       if (regs && kexec_should_crash(current))
->> +               crash_kexec(regs);
->> +
->>         if (in_interrupt())
->>                 panic("Fatal exception in interrupt");
->>
->> --
->> 2.36.0
->>
-
+Peng.
+>=20
+> Rob

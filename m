@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85165ACCF0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3915ACCE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236734AbiIEHoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        id S236474AbiIEHoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiIEHoK (ORCPT
+        with ESMTP id S235915AbiIEHom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:44:10 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D13237D6;
-        Mon,  5 Sep 2022 00:44:09 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 9170D1C0004; Mon,  5 Sep 2022 09:44:08 +0200 (CEST)
-Date:   Mon, 5 Sep 2022 09:44:08 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/56] 4.19.257-rc1 review
-Message-ID: <20220905074408.GB14983@duo.ucw.cz>
-References: <20220902121400.219861128@linuxfoundation.org>
+        Mon, 5 Sep 2022 03:44:42 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35A2B1DD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662363881; x=1693899881;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=fmTDU5mmsQOUkVEh8rl4DMITt8+ONDUTqrcU64oVD+U=;
+  b=dlhpZEPjAFPuokF7TmozFahHQsqASYWp2Gn6lqdeA9NkNeXr3016j79L
+   iOVOWIbot1R8tRD8ma9IIrY1atOqdpaJGyUN3TW+L2fGnL1uBr9DcEmie
+   arraNI+2jq36+1V8MrY05gdjXac4jtg1qvVFnMl9uy6idyOP0oeHAFLaj
+   BT9G+lAa9/1IBn5aw1ToOCK6nIqIohG7XdZNRipDHF8wyw48EgNlhAUuW
+   Ie53ZSzD87z5g8nKiguhQOzD410DrjQlLIDS8+fCVcax9uMopIi+0raUC
+   TC9X/YYL8MsOjD+0y7iK3J4oFySZ9FgDMwvVkUNkDaGNgXzijHswRSUpJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="297641023"
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="297641023"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 00:44:41 -0700
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="609598212"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.56.151])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 00:44:39 -0700
+Message-ID: <92890263-a876-0739-8ba2-e571a576c26c@intel.com>
+Date:   Mon, 5 Sep 2022 10:44:35 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="IiVenqGWf+H9Y6IX"
-Content-Disposition: inline
-In-Reply-To: <20220902121400.219861128@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] perf dlfilter: dlfilter-show-cycles: Fix types for print
+ format
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org
+References: <20220905074221.4262-1-adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220905074221.4262-1-adrian.hunter@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/09/22 10:42, Adrian Hunter wrote:
+> Avoid compiler warning about format %llu that expects long long unsigned
+> int but argument has type __u64.
+> 
 
---IiVenqGWf+H9Y6IX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: c3afd6e50fce ("perf dlfilter: Add dlfilter-show-cycles")
 
-Hi!
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/dlfilters/dlfilter-show-cycles.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/dlfilters/dlfilter-show-cycles.c b/tools/perf/dlfilters/dlfilter-show-cycles.c
+> index 9eccc97bff82..6d47298ebe9f 100644
+> --- a/tools/perf/dlfilters/dlfilter-show-cycles.c
+> +++ b/tools/perf/dlfilters/dlfilter-show-cycles.c
+> @@ -98,9 +98,9 @@ int filter_event_early(void *data, const struct perf_dlfilter_sample *sample, vo
+>  static void print_vals(__u64 cycles, __u64 delta)
+>  {
+>  	if (delta)
+> -		printf("%10llu %10llu ", cycles, delta);
+> +		printf("%10llu %10llu ", (unsigned long long)cycles, (unsigned long long)delta);
+>  	else
+> -		printf("%10llu %10s ", cycles, "");
+> +		printf("%10llu %10s ", (unsigned long long)cycles, "");
+>  }
+>  
+>  int filter_event(void *data, const struct perf_dlfilter_sample *sample, void *ctx)
 
-> This is the start of the stable review cycle for the 4.19.257 release.
-> There are 56 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-CIP testing did not find any problems here:                                =
-           =20
-                                                                           =
-           =20
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-4.19.y     =20
-                                                                           =
-           =20
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>                              =
-           =20
-                                                                           =
-           =20
-Best regards,                                                              =
-           =20
-                                                                Pavel      =
-           =20
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---IiVenqGWf+H9Y6IX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYxWoyAAKCRAw5/Bqldv6
-8gNMAJkByPArsITjuCA6aRlVsoQkGXm3MwCeMtGuHKBJejA89DJlGxqjRnTIBaA=
-=/xAu
------END PGP SIGNATURE-----
-
---IiVenqGWf+H9Y6IX--

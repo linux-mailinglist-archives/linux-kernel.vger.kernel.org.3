@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75BF5ADA9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC015ADA9E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbiIEVHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 17:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
+        id S232890AbiIEVHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 17:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbiIEVHD (ORCPT
+        with ESMTP id S232385AbiIEVHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Sep 2022 17:07:03 -0400
 Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BEB65240
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D2759258
         for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 14:07:02 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662412020;
+        t=1662412021;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KZj5Stmnr0/sWtO9VbN14ZS/87FVvMxPXaS8Nqcfb3w=;
-        b=plz4p63El+fn11bKJo5NeFsVPI7Pji5mjwBlFT6c5DzcyoxIcluNYX90f3iY3iD6xDiTFq
-        0t2tRRRcgDPINXDa/T8bjq8/BoOTAjFpl0zUGORRd74ftkKBOApI7J/ooGvP1cKn6mEyfN
-        cnCizZLy7ftBzGTFuSuM19lRp0r9fDk=
+        bh=snUut4Q4q+dUymH54JVYowFIFl//oD93Q0T08XoiwNc=;
+        b=tshzPPvnQJLzzS7rwtoPtEPCQmUW4py+AZlb3mgTV1F/1j6iB84itWf3biY55HquprhixV
+        w4BJsWEjGjpLLnzha+w5oKZObQkbUANuZuHQM1VU1CStGEZtw1q1i2c9AS+dXvlj4FHuq9
+        yNPWCH9YMVz7QHhA7wQ/8OJwE7Qp4V0=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -38,9 +38,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Florian Mayer <fmayer@google.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v3 10/34] kasan: move kasan_get_*_meta to generic.c
-Date:   Mon,  5 Sep 2022 23:05:25 +0200
-Message-Id: <ffcfc0ad654d78a2ef4ca054c943ddb4e5ca477b.1662411799.git.andreyknvl@google.com>
+Subject: [PATCH mm v3 11/34] kasan: introduce kasan_requires_meta
+Date:   Mon,  5 Sep 2022 23:05:26 +0200
+Message-Id: <cf837e9996246aaaeebf704ccf8ec26a34fcf64f.1662411799.git.andreyknvl@google.com>
 In-Reply-To: <cover.1662411799.git.andreyknvl@google.com>
 References: <cover.1662411799.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -59,110 +59,150 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Move the implementations of kasan_get_alloc/free_meta() to generic.c,
-as the common KASAN code does not use these functions anymore.
+Add a kasan_requires_meta() helper that indicates whether the enabled
+KASAN mode requires per-object metadata and use this helper in the common
+code.
 
-Also drop kasan_reset_tag() from the implementation, as the Generic
-mode does not tag pointers.
+Also hide kasan_init_object_meta() under CONFIG_KASAN_GENERIC ifdef check,
+as Generic is the only mode that uses per-object metadata.
+
+To allow for a potential future change that makes Generic KASAN support
+the kasan.stacktrace command-line parameter, let kasan_requires_meta()
+return kasan_stack_collection_enabled() instead of simply returning true.
 
 Reviewed-by: Marco Elver <elver@google.com>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/kasan/common.c  | 19 -------------------
- mm/kasan/generic.c | 17 +++++++++++++++++
- mm/kasan/kasan.h   | 14 +++++++-------
- 3 files changed, 24 insertions(+), 26 deletions(-)
+ mm/kasan/common.c | 13 +++++--------
+ mm/kasan/kasan.h  | 33 +++++++++++++++++++++++++++++----
+ mm/kasan/tags.c   |  4 ----
+ 3 files changed, 34 insertions(+), 16 deletions(-)
 
 diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index 18107675a7fe..19ddc0ed0e7b 100644
+index 19ddc0ed0e7b..d0300954d76b 100644
 --- a/mm/kasan/common.c
 +++ b/mm/kasan/common.c
-@@ -229,25 +229,6 @@ size_t __kasan_metadata_size(struct kmem_cache *cache)
- 		 sizeof(struct kasan_free_meta) : 0);
+@@ -88,13 +88,10 @@ asmlinkage void kasan_unpoison_task_stack_below(const void *watermark)
  }
+ #endif /* CONFIG_KASAN_STACK */
  
--struct kasan_alloc_meta *kasan_get_alloc_meta(struct kmem_cache *cache,
--					      const void *object)
--{
--	if (!cache->kasan_info.alloc_meta_offset)
--		return NULL;
--	return kasan_reset_tag(object) + cache->kasan_info.alloc_meta_offset;
--}
--
--#ifdef CONFIG_KASAN_GENERIC
--struct kasan_free_meta *kasan_get_free_meta(struct kmem_cache *cache,
--					    const void *object)
--{
--	BUILD_BUG_ON(sizeof(struct kasan_free_meta) > 32);
--	if (cache->kasan_info.free_meta_offset == KASAN_NO_FREE_META)
--		return NULL;
--	return kasan_reset_tag(object) + cache->kasan_info.free_meta_offset;
--}
--#endif
--
- void __kasan_poison_slab(struct slab *slab)
+-/*
+- * Only allow cache merging when stack collection is disabled and no metadata
+- * is present.
+- */
++/* Only allow cache merging when no per-object metadata is present. */
+ slab_flags_t __kasan_never_merge(void)
  {
- 	struct page *page = slab_page(slab);
-diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
-index 5462ddbc21e6..fa654cb96a0d 100644
---- a/mm/kasan/generic.c
-+++ b/mm/kasan/generic.c
-@@ -328,6 +328,23 @@ DEFINE_ASAN_SET_SHADOW(f3);
- DEFINE_ASAN_SET_SHADOW(f5);
- DEFINE_ASAN_SET_SHADOW(f8);
+-	if (kasan_stack_collection_enabled())
++	if (kasan_requires_meta())
+ 		return SLAB_KASAN;
+ 	return 0;
+ }
+@@ -152,7 +149,7 @@ void __kasan_cache_create(struct kmem_cache *cache, unsigned int *size,
+ 	 */
+ 	*flags |= SLAB_KASAN;
  
-+struct kasan_alloc_meta *kasan_get_alloc_meta(struct kmem_cache *cache,
-+					      const void *object)
-+{
-+	if (!cache->kasan_info.alloc_meta_offset)
-+		return NULL;
-+	return (void *)object + cache->kasan_info.alloc_meta_offset;
-+}
-+
-+struct kasan_free_meta *kasan_get_free_meta(struct kmem_cache *cache,
-+					    const void *object)
-+{
-+	BUILD_BUG_ON(sizeof(struct kasan_free_meta) > 32);
-+	if (cache->kasan_info.free_meta_offset == KASAN_NO_FREE_META)
-+		return NULL;
-+	return (void *)object + cache->kasan_info.free_meta_offset;
-+}
-+
- void kasan_init_object_meta(struct kmem_cache *cache, const void *object)
+-	if (!kasan_stack_collection_enabled())
++	if (!kasan_requires_meta())
+ 		return;
+ 
+ 	ok_size = *size;
+@@ -220,7 +217,7 @@ void __kasan_cache_create_kmalloc(struct kmem_cache *cache)
+ 
+ size_t __kasan_metadata_size(struct kmem_cache *cache)
  {
- 	struct kasan_alloc_meta *alloc_meta;
+-	if (!kasan_stack_collection_enabled())
++	if (!kasan_requires_meta())
+ 		return 0;
+ 	return (cache->kasan_info.alloc_meta_offset ?
+ 		sizeof(struct kasan_alloc_meta) : 0) +
+@@ -295,7 +292,7 @@ void * __must_check __kasan_init_slab_obj(struct kmem_cache *cache,
+ 						const void *object)
+ {
+ 	/* Initialize per-object metadata if it is present. */
+-	if (kasan_stack_collection_enabled())
++	if (kasan_requires_meta())
+ 		kasan_init_object_meta(cache, object);
+ 
+ 	/* Tag is ignored in set_tag() without CONFIG_KASAN_SW/HW_TAGS */
 diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index 2c8c3cce7bc6..fdd577f3eb9d 100644
+index fdd577f3eb9d..1736abd661b6 100644
 --- a/mm/kasan/kasan.h
 +++ b/mm/kasan/kasan.h
-@@ -209,13 +209,6 @@ struct kunit_kasan_status {
- };
+@@ -43,7 +43,7 @@ static inline bool kasan_sync_fault_possible(void)
+ 	return kasan_mode == KASAN_MODE_SYNC || kasan_mode == KASAN_MODE_ASYMM;
+ }
+ 
+-#else
++#else /* CONFIG_KASAN_HW_TAGS */
+ 
+ static inline bool kasan_stack_collection_enabled(void)
+ {
+@@ -60,7 +60,31 @@ static inline bool kasan_sync_fault_possible(void)
+ 	return true;
+ }
+ 
+-#endif
++#endif /* CONFIG_KASAN_HW_TAGS */
++
++#ifdef CONFIG_KASAN_GENERIC
++
++/* Generic KASAN uses per-object metadata to store stack traces. */
++static inline bool kasan_requires_meta(void)
++{
++	/*
++	 * Technically, Generic KASAN always collects stack traces right now.
++	 * However, let's use kasan_stack_collection_enabled() in case the
++	 * kasan.stacktrace command-line argument is changed to affect
++	 * Generic KASAN.
++	 */
++	return kasan_stack_collection_enabled();
++}
++
++#else /* CONFIG_KASAN_GENERIC */
++
++/* Tag-based KASAN modes do not use per-object metadata. */
++static inline bool kasan_requires_meta(void)
++{
++	return false;
++}
++
++#endif /* CONFIG_KASAN_GENERIC */
+ 
+ #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+ #define KASAN_GRANULE_SIZE	(1UL << KASAN_SHADOW_SCALE_SHIFT)
+@@ -272,13 +296,14 @@ void kasan_report_invalid_free(void *object, unsigned long ip, enum kasan_report
+ struct page *kasan_addr_to_page(const void *addr);
+ struct slab *kasan_addr_to_slab(const void *addr);
+ 
+-void kasan_init_object_meta(struct kmem_cache *cache, const void *object);
+-
+ #ifdef CONFIG_KASAN_GENERIC
++void kasan_init_object_meta(struct kmem_cache *cache, const void *object);
+ struct kasan_alloc_meta *kasan_get_alloc_meta(struct kmem_cache *cache,
+ 						const void *object);
+ struct kasan_free_meta *kasan_get_free_meta(struct kmem_cache *cache,
+ 						const void *object);
++#else
++static inline void kasan_init_object_meta(struct kmem_cache *cache, const void *object) { }
  #endif
  
--struct kasan_alloc_meta *kasan_get_alloc_meta(struct kmem_cache *cache,
--						const void *object);
--#ifdef CONFIG_KASAN_GENERIC
--struct kasan_free_meta *kasan_get_free_meta(struct kmem_cache *cache,
--						const void *object);
--#endif
--
- #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
- 
- static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
-@@ -281,6 +274,13 @@ struct slab *kasan_addr_to_slab(const void *addr);
- 
- void kasan_init_object_meta(struct kmem_cache *cache, const void *object);
- 
-+#ifdef CONFIG_KASAN_GENERIC
-+struct kasan_alloc_meta *kasan_get_alloc_meta(struct kmem_cache *cache,
-+						const void *object);
-+struct kasan_free_meta *kasan_get_free_meta(struct kmem_cache *cache,
-+						const void *object);
-+#endif
-+
  depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc);
- void kasan_set_track(struct kasan_track *track, gfp_t flags);
- void kasan_save_alloc_info(struct kmem_cache *cache, void *object, gfp_t flags);
+diff --git a/mm/kasan/tags.c b/mm/kasan/tags.c
+index f11c89505c77..4f24669085e9 100644
+--- a/mm/kasan/tags.c
++++ b/mm/kasan/tags.c
+@@ -17,10 +17,6 @@
+ 
+ #include "kasan.h"
+ 
+-void kasan_init_object_meta(struct kmem_cache *cache, const void *object)
+-{
+-}
+-
+ void kasan_save_alloc_info(struct kmem_cache *cache, void *object, gfp_t flags)
+ {
+ }
 -- 
 2.25.1
 

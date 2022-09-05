@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BAB5AD5D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670FD5AD5D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238830AbiIEPKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 11:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S238782AbiIEPKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 11:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238786AbiIEPKV (ORCPT
+        with ESMTP id S238774AbiIEPKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 11:10:21 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172D72AE0;
+        Mon, 5 Sep 2022 11:10:19 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185B7273C;
         Mon,  5 Sep 2022 08:09:25 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MLsMD3f3yzKGHV;
-        Mon,  5 Sep 2022 23:07:36 +0800 (CST)
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MLsMF4Tcxz6S312;
+        Mon,  5 Sep 2022 23:07:37 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.102.38])
-        by APP2 (Coremail) with SMTP id Syh0CgC3VW8hERZjhLKnAQ--.57944S4;
+        by APP2 (Coremail) with SMTP id Syh0CgC3VW8hERZjhLKnAQ--.57944S5;
         Mon, 05 Sep 2022 23:09:22 +0800 (CST)
 From:   Wei Yongjun <weiyongjun@huaweicloud.com>
 To:     Pavel Machek <pavel@ucw.cz>, Oleh Kravchenko <oleg@kaa.org.ua>
 Cc:     Wei Yongjun <weiyongjun1@huawei.com>, linux-leds@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] leds: cr0014114: silent no spi_device_id warning
-Date:   Mon,  5 Sep 2022 15:26:57 +0000
-Message-Id: <20220905152659.4152483-1-weiyongjun@huaweicloud.com>
+Subject: [PATCH 2/3] leds: el15203000: silent no spi_device_id warning
+Date:   Mon,  5 Sep 2022 15:26:58 +0000
+Message-Id: <20220905152659.4152483-2-weiyongjun@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220905152659.4152483-1-weiyongjun@huaweicloud.com>
+References: <20220905152659.4152483-1-weiyongjun@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgC3VW8hERZjhLKnAQ--.57944S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4kCryrtryrGr1fXFW8Zwb_yoWDCFc_CF
-        1xWry2vFWkCFy8Ja1j9F15Zr9aka1FgF1kXw4jva45Zr1Svr43ZasruF97A34Uuw17Aa48
-        u3Z8XF1UCF43tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUboxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Jr0_Jr4l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-        bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-        AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-        42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s
-        1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnI
-        WIevJa73UjIFyTuYvjxUrcTmDUUUU
+X-CM-TRANSID: Syh0CgC3VW8hERZjhLKnAQ--.57944S5
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4kCryrtrykCw13XryfXrb_yoWDurg_ua
+        4UXr4xWrWUGa1Fy3Wqvr45Zwn5uw42gr1DGr429ay5Zr1fXr1rGw4DAFWkAw18W3WxJFn8
+        CFn3XF18Cry7KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbskYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Jr0_Jr4l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r18M2
+        8IrcIa0xkI8VCY1x0267AKxVWUXVWUCwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
+        021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F
+        4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0
+        oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7V
+        C0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j
+        6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73Uj
+        IFyTuYvjxUrg4SDUUUU
 X-CM-SenderInfo: 5zhl50pqjm3046kxt4xhlfz01xgou0bp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
@@ -62,34 +65,34 @@ From: Wei Yongjun <weiyongjun1@huawei.com>
 
 Add spi_device_id entries to silent following SPI warning:
 
-SPI driver leds_cr0014114 has no spi_device_id for crane,cr0014114
+SPI driver leds_el15203000 has no spi_device_id for crane,el15203000
 
 Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 ---
- drivers/leds/leds-cr0014114.c | 7 +++++++
+ drivers/leds/leds-el15203000.c | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/drivers/leds/leds-cr0014114.c b/drivers/leds/leds-cr0014114.c
-index c87686bd7c18..095455163246 100644
---- a/drivers/leds/leds-cr0014114.c
-+++ b/drivers/leds/leds-cr0014114.c
-@@ -281,9 +281,16 @@ static const struct of_device_id cr0014114_dt_ids[] = {
+diff --git a/drivers/leds/leds-el15203000.c b/drivers/leds/leds-el15203000.c
+index 7e7b617bcd56..e24b4399176e 100644
+--- a/drivers/leds/leds-el15203000.c
++++ b/drivers/leds/leds-el15203000.c
+@@ -329,9 +329,16 @@ static const struct of_device_id el15203000_dt_ids[] = {
  
- MODULE_DEVICE_TABLE(of, cr0014114_dt_ids);
+ MODULE_DEVICE_TABLE(of, el15203000_dt_ids);
  
-+static const struct spi_device_id cr0014114_spi_ids[] = {
-+	{ "cr0014114" },
++static const struct spi_device_id el15203000_spi_ids[] = {
++	{ "el15203000" },
 +	{ },
 +};
-+MODULE_DEVICE_TABLE(spi, cr0014114_spi_ids);
++MODULE_DEVICE_TABLE(spi, el15203000_spi_ids);
 +
- static struct spi_driver cr0014114_driver = {
- 	.probe		= cr0014114_probe,
- 	.remove		= cr0014114_remove,
-+	.id_table	= cr0014114_spi_ids,
+ static struct spi_driver el15203000_driver = {
+ 	.probe		= el15203000_probe,
+ 	.remove		= el15203000_remove,
++	.id_table	= el15203000_spi_ids,
  	.driver = {
  		.name		= KBUILD_MODNAME,
- 		.of_match_table	= cr0014114_dt_ids,
+ 		.of_match_table	= el15203000_dt_ids,
 -- 
 2.34.1
 

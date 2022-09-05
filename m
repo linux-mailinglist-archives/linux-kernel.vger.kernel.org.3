@@ -2,82 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86ACE5ACE40
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18C15ACE18
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237820AbiIEIkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
+        id S236580AbiIEIlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237987AbiIEIjs (ORCPT
+        with ESMTP id S238169AbiIEIk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:39:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69514F77;
-        Mon,  5 Sep 2022 01:39:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8C07B80EFB;
-        Mon,  5 Sep 2022 08:39:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5793FC433D6;
-        Mon,  5 Sep 2022 08:39:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662367159;
-        bh=uUei9mdyrhLtKkVtWe0fW5YWmHh6AQZ22dmi4FRW6LM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=okZvnY8uvuq4qrI+2cj5k/t/HjGqcxfzGINM4i2aPAmem5pD7PEXyZp96mAvzMeHz
-         qYhvdKDP0BpInYNqPV/qeSTImkDmgA3ofaExX/1DCe0Vkt6SR7A6mI3Tmu2a3R8png
-         JTxD2Y8JblPYBzA/r0sbO4sM26Fd4/KKeZbBW9YJL1+hBtxKyx8Uu6/hFaID4vZYmT
-         Fj4FFebb0b/WQOVT/ar3mov06mYpZbDaP1fFp5ooeuzkBPhklPHSwPkYkY2a4V62v9
-         YF9rk+ppk6S9Z+8aDP4lqML27dZnN7Othjw5ipuOXb/f1IYspIKxz3ey+k5MhOGtZE
-         /UrH1cXm2r3WQ==
-Date:   Mon, 5 Sep 2022 10:39:14 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Oleksandr Tymoshenko <ovt@google.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] seccomp: fix refcounter leak if fork/clone is terminated
-Message-ID: <20220905083914.msdgd575tblq4syj@wittgenstein>
-References: <20220902034135.2853973-1-ovt@google.com>
+        Mon, 5 Sep 2022 04:40:58 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9B52654;
+        Mon,  5 Sep 2022 01:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662367221; x=1693903221;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=btdeNSlwm5b5+Fc8dEtnw3mA1Hti4hAjCaqKbQB4+Sc=;
+  b=ndpMLtLVJcnx5jeL235pCMi0g1rPKydsAtKhoKIqVGTeN2g17IIVy41/
+   0BrfknKM+nPjXCLlFNC8h6H5m9b4ihxX1BPpAdHorYvNZu57F+vcpOYcj
+   T0R8Gvqn5aox4Opd0tuV+gpU0T2hQj6FBcqsxAS6nUgC2B8lh/PX9xInU
+   0MH2pdZZnKr3OYIb7vOWCNSVpB3tvvwSgLrCyl3pA7yWUuj/ozHCYzUVE
+   2n0Hu8MBRXw4w60aDPE9zAuV4crtPqpwSz7xi3B7y9sxxCrriypZl8kvv
+   ZJqy3khR6JQtNA4u/BrCOd52tXTv3CfT9weF/PFQuTBQvdd5M61VD2qpR
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="322508352"
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="322508352"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 01:40:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="858885905"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by fmsmga006.fm.intel.com with ESMTP; 05 Sep 2022 01:40:15 -0700
+Date:   Mon, 5 Sep 2022 16:40:14 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     isaku.yamahata@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
+        Chao Gao <chao.gao@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH v3 09/22] KVM: Do processor compatibility check on resume
+Message-ID: <20220905084014.uanoazei77i3xjjo@yy-desk-7060>
+References: <cover.1662084396.git.isaku.yamahata@intel.com>
+ <b5bf18656469f667d1015cc1d62e5caba2f56e96.1662084396.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220902034135.2853973-1-ovt@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b5bf18656469f667d1015cc1d62e5caba2f56e96.1662084396.git.isaku.yamahata@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 03:41:35AM +0000, Oleksandr Tymoshenko wrote:
-> release_task, where the seccomp's filter refcounter is released, is not
-> called for the case when the fork/clone is terminated midway by a
-> signal. This leaves an extra reference that prevents filter from being
-> destroyed even after all processes using it exit leading to a BPF JIT
-> memory leak. Dereference the refcounter in the failure path of the
-> copy_process function.
-> 
-> Fixes: 3a15fb6ed92c ("seccomp: release filter after task is fully dead")
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Oleksandr Tymoshenko <ovt@google.com>
+On Thu, Sep 01, 2022 at 07:17:44PM -0700, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> So far the processor compatibility check is not done on resume. It should
+> be done.
+
+The resume happens for resuming from S3/S4, so the compatibility
+checking is used to detecte CPU replacement, or resume from S4 on an
+different machine ?
+
+>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 > ---
-
-Hey Oleksandr,
-
-Thanks for the patch! I'm really puzzled as to why we never noticed this
-and I'm trying to re-architect how this happend. But in any case,
-there's a patch in the seccomp tree that fixes this:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=6d17452707ca
-
-which is slighly different from your approach in that it moves
-copy_seccomp() after the point of no return. Let us know if you see any
-issues with this!
-
-Christian
+>  virt/kvm/kvm_main.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 0ac00c711384..fc55447c4dba 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5715,6 +5715,13 @@ static int kvm_suspend(void)
+>
+>  static void kvm_resume(void)
+>  {
+> +	if (kvm_arch_check_processor_compat())
+> +		/*
+> +		 * No warning here because kvm_arch_check_processor_compat()
+> +		 * would have warned with more information.
+> +		 */
+> +		return; /* FIXME: disable KVM */
+> +
+>  	if (kvm_usage_count) {
+>  		lockdep_assert_not_held(&kvm_count_lock);
+>  		hardware_enable_nolock((void *)__func__);
+> --
+> 2.25.1
+>

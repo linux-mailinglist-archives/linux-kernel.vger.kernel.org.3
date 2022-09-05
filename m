@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890275ADA13
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 22:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBD85ADA14
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 22:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiIEUSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 16:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
+        id S231958AbiIEUUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 16:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbiIEUSa (ORCPT
+        with ESMTP id S229546AbiIEUUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 16:18:30 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930614E617
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 13:18:25 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id a10so6858711qkl.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 13:18:25 -0700 (PDT)
+        Mon, 5 Sep 2022 16:20:08 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F16012631
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 13:20:07 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id v15so4239720qvi.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 13:20:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=2lKv+fdVam07HvfL+Ai9IQOMxrXcUFmXBIhanA2QXpU=;
-        b=uZg5HXTVMRfAZjNiDR7C8b9lmli1btoML921b2pMi59dgckdm/GhsR/39xTUWfUMi6
-         IQHO6552A8TWhKVZi4G+RmwYwJP7bbEadJ/6+2Cs5A70m2pYcoIa63nJsEosj76024HS
-         bBubpi0QjiPB7hO2T3a4GSRxTijc9pD/9MWy0=
+        bh=A7rOAmNlXCdkcDQTJzD9muqEqItMweVqNhp8pSdMDDE=;
+        b=ZLJtjk+519vUT/+rOJG0alJPgD9zGPCZtcZ96i73GiPxCIpSFDcIv58/jVr/K3OpT7
+         gpnutAgfqgOqB8d8WQFSmGQws5nOaGehcPqm7EQ9bfKHkrz7DIVU6vQJ1cfF3LnNJ2Fv
+         HZGS2tX8ZjopKaGPLJ784jzcP6pjaxgWeQPw4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=2lKv+fdVam07HvfL+Ai9IQOMxrXcUFmXBIhanA2QXpU=;
-        b=ukgZFugtrXFViLnn/jL5xGKIgLAJlS745qMVOZqpyf5ueJkrQuRKVoCGZG0s3s0nIa
-         I/FskYyQWNVRF8j5YPnM4oIRZkjBgDH4K5fqOyQyNtafWTm3ZASDZhSN7PT7NYOyd1EX
-         ByAWeO4fUAShRtmbk47TjySVEaW0Oy0MVL/SNXwGOmOoBXbx5HV3K3Zedk7RyNYgREuW
-         Ph3NpCYF1qpLUGE9CNF2B631yonm+MoiKhNBgiNraHOss5/MkBy1chD3rnzciLBMvevd
-         he5Z9TNq2WRC1sRcaXnY5IlWc/Kv/z+3GHbmYCpu/tqC3wEASPFaPoBnCQ1P6GfhBrmG
-         DMFA==
-X-Gm-Message-State: ACgBeo0BjHLzJSd7tgMw7hJ82Fz8Rot8Hu/1DOPFyL6Z2Em7txSdCOWL
-        E+yBg7xDC/foY4WIulregmT8sQ==
-X-Google-Smtp-Source: AA6agR6J2ktpx/nqQm82yqgi4YeExHNmpeA38kgFFVfMp0ktPpniEk9f7qkFDYJD0B7wDeApJzMKMg==
-X-Received: by 2002:a05:620a:101a:b0:6bb:e7de:791f with SMTP id z26-20020a05620a101a00b006bbe7de791fmr34281994qkj.463.1662409104568;
-        Mon, 05 Sep 2022 13:18:24 -0700 (PDT)
+        bh=A7rOAmNlXCdkcDQTJzD9muqEqItMweVqNhp8pSdMDDE=;
+        b=itpIS/8+U0ndhXbjYNME3ufysShzvQk+s5cSZ/w1ETAWovjCMj7vtKbjjWaKKeFOOw
+         xIo2f4ecbBKCzcRP9TubtlAsVP4wLjQtBWZi826On3uejhxoL+xWyvePYGAHCPqf6Uye
+         veIl2tuAJzgRlbB97ODI+7eWU0N11j8Rss2lG+CON89BZThKDvMJ1aa0FO95F6w2Ysw4
+         SoivcNEIc+dOYzveOL9PE3GOXl5bNlVib+Y+isImZrvQmWNUbdrpinc5sdajkhCHB26N
+         09OPcrQw5CLwHD+PzGiDLBzMUdEqJpohdfpnoj6rDZMRKCC+nb+X7flNY03lv7RJVRbY
+         GrlA==
+X-Gm-Message-State: ACgBeo3pCeK5ouliGyyW/nC7Q8TWPw22AtT7pp6Pr1RH6q0AnH66DpMa
+        e1qd/34AriPX4FTFCIpNLtX2mUcMfnExZQ==
+X-Google-Smtp-Source: AA6agR6UBa+GT8cbSN0/hcSYNvBCBXPm20T2wL5jgK/TjtWBrQcFkAL4gBwTvYBpTYs0dTJRLnjmtw==
+X-Received: by 2002:ad4:5d6c:0:b0:4aa:9dd7:4e0b with SMTP id fn12-20020ad45d6c000000b004aa9dd74e0bmr698161qvb.92.1662409206678;
+        Mon, 05 Sep 2022 13:20:06 -0700 (PDT)
 Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id dm34-20020a05620a1d6200b006bb024c5021sm9130732qkb.25.2022.09.05.13.18.22
+        by smtp.gmail.com with ESMTPSA id y13-20020a05620a25cd00b006b5e50057basm9212430qko.95.2022.09.05.13.20.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 13:18:23 -0700 (PDT)
-Message-ID: <bce9f5b5-860e-3364-7ee3-b24fdf8839b1@joelfernandes.org>
-Date:   Mon, 5 Sep 2022 16:18:22 -0400
+        Mon, 05 Sep 2022 13:20:05 -0700 (PDT)
+Message-ID: <e188418a-67a3-d0d4-8bf1-b6ad1e55fd6e@joelfernandes.org>
+Date:   Mon, 5 Sep 2022 16:20:04 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
@@ -62,16 +62,15 @@ Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
         vineeth@bitbyteword.org, boqun.feng@gmail.com
 References: <20220901221720.1105021-1-joel@joelfernandes.org>
  <20220901221720.1105021-7-joel@joelfernandes.org>
- <20220902152132.GA115525@lothringen>
- <67122ae3-d69e-438c-18fc-a8de6e40201e@joelfernandes.org>
- <20220905125949.GA173859@lothringen>
+ <20220902152132.GA115525@lothringen> <YxPOfVMzRWEa7xqf@google.com>
+ <20220904210133.GA149888@lothringen>
 From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220905125949.GA173859@lothringen>
+In-Reply-To: <20220904210133.GA149888@lothringen>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,80 +78,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frederick,
+Hi Frederic,
 
-On 9/5/2022 8:59 AM, Frederic Weisbecker wrote:
->>> Also that's a subtle change which purpose isn't explained. It means that
->>> rcu_barrier_entrain() used to wait for the bypass timer in the worst case
->>> but now we force rcuog into it immediately. Should that be a separate change?
->> It could be split, but it is laziness that amplifies the issue so I thought of
->> keeping it in the same patch. I don't mind one way or the other.
-> Ok then lets keep it here but please add a comment for the reason to
-> force wake here.
-
-Ok will do, thanks.
-
->>>> +	case RCU_NOCB_WAKE_BYPASS:
->>>> +		mod_jif = 2;
->>>> +		break;
->>>> +
->>>> +	case RCU_NOCB_WAKE:
->>>> +	case RCU_NOCB_WAKE_FORCE:
->>>> +		// For these, make it wake up the soonest if we
->>>> +		// were in a bypass or lazy sleep before.
->>>>  		if (rdp_gp->nocb_defer_wakeup < RCU_NOCB_WAKE)
->>>> -			mod_timer(&rdp_gp->nocb_timer, jiffies + 1);
->>>> -		if (rdp_gp->nocb_defer_wakeup < waketype)
->>>> -			WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
->>>> +			mod_jif = 1;
->>>> +		break;
->>>>  	}
->>>>  
->>>> +	if (mod_jif)
->>>> +		mod_timer(&rdp_gp->nocb_timer, jiffies + mod_jif);
->>>> +
->>>> +	if (rdp_gp->nocb_defer_wakeup < waketype)
->>>> +		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
->>> So RCU_NOCB_WAKE_BYPASS and RCU_NOCB_WAKE_LAZY don't override the timer state
->>> anymore? Looks like something is missing.
->> My goal was to make sure that NOCB_WAKE_LAZY wake keeps the timer lazy. If I
->> don't do this, then when CPU enters idle, it will immediately do a wake up via
->> this call:
->>
->> 	rcu_nocb_need_deferred_wakeup(rdp_gp, RCU_NOCB_WAKE)
-> But if the timer is in RCU_NOCB_WAKE_LAZY mode, that shouldn't be a problem.
+On 9/4/2022 5:01 PM, Frederic Weisbecker wrote:
+> On Sat, Sep 03, 2022 at 10:00:29PM +0000, Joel Fernandes wrote:
+>> On Fri, Sep 02, 2022 at 05:21:32PM +0200, Frederic Weisbecker wrote:
+>> +
+>> +	raw_spin_lock_irqsave(&my_rdp->nocb_gp_lock, flags);
 > 
->> That was almost always causing lazy CBs to be non-lazy thus negating all the
->> benefits.
->>
->> Note that bypass will also have same issue where the bypass CB will not wait for
->> intended bypass duration. To make it consistent with lazy, I made bypass also
->> not override nocb_defer_wakeup.
-> I'm surprised because rcu_nocb_flush_deferred_wakeup() should only do the wake up
-> if the timer is RCU_NOCB_WAKE or RCU_NOCB_WAKE_FORCE. Or is that code buggy
-> somehow?
-> Actually your change is modifying the timer delay without changing the timer
-> mode, which may shortcut rcu_nocb_flush_deferred_wakeup() check and actually
-> make it perform early upon idle loop entry.
+> This is locking during the whole group iteration potentially contending call_rcu(),
+> idle loop, resume to userspace on all rdp in the group...
 > 
-> Or am I missing something?
+> How about not overwriting timers instead and only set the RCU_NOCB_WAKE_LAZY
+> timer when it is previously in RCU_NOCB_WAKE_NOT state? After all if the timer is armed,
+> it's because we have regular callbacks queued and thus we don't need to wait
+> before processing the lazy callbacks since we are going to start a grace period
+> anyway.
 > 
+> Thanks.
 
-You could very well have a point and I am not sure now (I happen to 'forget' the
-issue once the code was working). I distinctly remember not being able to be
-lazy without doing this. Maybe there is some other path. I am kicking myself for
-not commenting in the code or change log enough about the issue.
-
-I will test again sync'ing the lazy timer and the ->nocb_defer_wakeup field
-properly and see if I can trigger the issue.
+I like your idea better. I think it will work well to resolve the race you
+described.
 
 Thanks!
 
  - Joel
 
 
-
-
-
-
-
+> 
+> 
+>>  	list_for_each_entry_rcu(rdp, &my_rdp->nocb_head_rdp, nocb_entry_rdp, 1) {
+>>  		bool needwake_state = false;
+>>  		bool flush_bypass = false;
+>> @@ -855,14 +870,15 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>>  		// If bypass list only has lazy CBs. Add a deferred
+>>  		// lazy wake up.
+>>  		if (lazy && !bypass) {
+>> -			wake_nocb_gp_defer(my_rdp, RCU_NOCB_WAKE_LAZY,
+>> +			wake_nocb_gp_defer_locked(my_rdp, RCU_NOCB_WAKE_LAZY,
+>>  					TPS("WakeLazyIsDeferred"));
+>>  		// Otherwise add a deferred bypass wake up.
+>>  		} else if (bypass) {
+>> -			wake_nocb_gp_defer(my_rdp, RCU_NOCB_WAKE_BYPASS,
+>> +			wake_nocb_gp_defer_locked(my_rdp, RCU_NOCB_WAKE_BYPASS,
+>>  					TPS("WakeBypassIsDeferred"));
+>>  		}
+>>  	}
+>> +	raw_spin_unlock_irqrestore(&my_rdp->nocb_gp_lock, flags);
+>>  
+>>  	if (rcu_nocb_poll) {
+>>  		/* Polling, so trace if first poll in the series. */
+>> -- 
+>> 2.37.2.789.g6183377224-goog
+>>

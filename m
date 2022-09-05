@@ -2,295 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 932505AC907
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7B65AC90A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235951AbiIEDTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 23:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S235548AbiIEDUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 23:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234382AbiIEDTQ (ORCPT
+        with ESMTP id S230013AbiIEDUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 23:19:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A0C2CCB7
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 20:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662347954;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJDDIimosi3B8c3BT1SCh9Tw4PhjFttJOuZMYJFM+vM=;
-        b=PfHNFzQ9rCBlVIO63OVqH47rvQEgXn8oCSbJfxKNQ89md4y1zGBWHxhXb10Dr4RB3IH8D3
-        kUq0ona/p75B9QgwRngG5sfd0tb0WRKQtyeu8AH+WXgCCYCC/PN0OHtt5PTlr03wDGtyq3
-        ccByb69WBbZeKqpcF6gelsTciZAv1Sc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-151-CBWU-I71PTmksMhS8Bk3tA-1; Sun, 04 Sep 2022 23:19:10 -0400
-X-MC-Unique: CBWU-I71PTmksMhS8Bk3tA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D14EC29AA2F5;
-        Mon,  5 Sep 2022 03:19:09 +0000 (UTC)
-Received: from localhost (ovpn-12-58.pek2.redhat.com [10.72.12.58])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 810A44010E4D;
-        Mon,  5 Sep 2022 03:19:08 +0000 (UTC)
-Date:   Mon, 5 Sep 2022 11:19:05 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v11 7/7] x86/crash: Add x86 crash hotplug support
-Message-ID: <YxVqqUICujTHnzsM@MiWiFi-R3L-srv>
-References: <20220826173704.1895-1-eric.devolder@oracle.com>
- <20220826173704.1895-8-eric.devolder@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826173704.1895-8-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 4 Sep 2022 23:20:48 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625F11903C
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 20:20:47 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 78so6966695pgb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 20:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=2x1CVvZwxtC17ybrCOH9iYJbvuWGYA3Itll1Ewytvd4=;
+        b=oTFlTm37bZl3LpcWRgucfMWbb9z1C0nHrnTqGnsvmCpkS2ETf4Ac3AoW1MnbgBbuwz
+         YYKcRZxMxFKDUvynOIP6nwyi4zFA2qjfGK0LkSYioUTkX0wZCYs/PlITA/YMFFTBPx+X
+         zs1y+lhGohKdJRfHrG5tbp08aMCO/fcEBTShyzolBooX/bgLDwSNBwBYn8JQQFtlpBz+
+         cUJNwIjz3UcU1WRWQyirpt4i8t7IHtjDiVMDnMyRGxDMd7M09wr1v0eYJn6/fbMVejjM
+         6oOQvXZHRXhavqIhar2AmGd0BpmpR3U9ZLmm8kD7AXnmoFJSt6dI9ChuC6G56Z7nH40H
+         wdig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=2x1CVvZwxtC17ybrCOH9iYJbvuWGYA3Itll1Ewytvd4=;
+        b=Bp4m3MeKU147znfTusr8ZoGAUnkexFi6SB5T3C46Qrd7Lru2tMbfVceIYeUPuwfIb3
+         +CaawSVGjede8BR/0/mduqfcmjDDP3oMDnRPAcFPtpBuQY5rFvLn7ctOpPECRq9vUtdC
+         kThZGgqZK+L2A1z66xbpkycda4ooX516y5h1Jl0HgySo0WqGgE0uYNu1+nzgssMWHqNN
+         CdCHLVoFvnQHVDhW6lfkuMWpfxTvHpK/HdFv1pyDAFyiu3jqkb/fb24kH9XAaaZWOeOt
+         0w7KDD7/MtseuhP99DVSflKHe6/bEjMoV8leMhXZRaeyDMGLfMwI5kkAoltknZ6YHbEE
+         RAnQ==
+X-Gm-Message-State: ACgBeo3vuRuy60MFEZiPyZ0UA4KgOttc04TfjfcXqDeVEPkTpfNANRR/
+        AVdDfAPVSmPtU+q9vAmP+lYHt37oHms=
+X-Google-Smtp-Source: AA6agR6/5UIS3BCdUojn5irM2bwVVjhd9IDnfVcSg8ZbgrhLuOrCpyZZ8KBXFPTxZG4JzRPjmyYF6g==
+X-Received: by 2002:a63:914a:0:b0:42b:4eaf:7c75 with SMTP id l71-20020a63914a000000b0042b4eaf7c75mr40042858pge.306.1662348046857;
+        Sun, 04 Sep 2022 20:20:46 -0700 (PDT)
+Received: from localhost.localdomain ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id w5-20020a17090ac98500b001f216407204sm5610265pjt.36.2022.09.04.20.20.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Sep 2022 20:20:46 -0700 (PDT)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     xiang@kernel.org, chao@kernel.org
+Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        zhangwen@coolpad.com, zbestahu@gmail.com,
+        Yue Hu <huyue2@coolpad.com>
+Subject: [RFC PATCH v3 0/2] erofs: support compressed fragments data
+Date:   Mon,  5 Sep 2022 11:20:06 +0800
+Message-Id: <cover.1662347031.git.huyue2@coolpad.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/26/22 at 01:37pm, Eric DeVolder wrote:
-> For x86_64, when CPU or memory is hot un/plugged, the crash
-> elfcorehdr, which describes the CPUs and memory in the system,
-> must also be updated.
-> 
-> When loading the crash kernel via kexec_load or kexec_file_load,
-> the elfcorehdr is identified at run time in
-> crash_core:handle_hotplug_event().
-> 
-> To update the elfcorehdr for x86_64, a new elfcorehdr must be
-> generated from the available CPUs and memory. The new elfcorehdr
-> is prepared into a buffer, and then installed over the top of
-> the existing elfcorehdr.
-> 
-> In the patch 'kexec: exclude elfcorehdr from the segment digest'
-> the need to update purgatory due to the change in elfcorehdr was
-> eliminated.  As a result, no changes to purgatory or boot_params
-> (as the elfcorehdr= kernel command line parameter pointer
-> remains unchanged and correct) are needed, just elfcorehdr.
-> 
-> To accommodate a growing number of resources via hotplug, the
-> elfcorehdr segment must be sufficiently large enough to accommodate
-> changes, see the CRASH_MAX_MEMORY_RANGES configure item.
-> 
-> With this change, crash hotplug for kexec_file_load syscall
-> is supported. The kexec_load is also supported, but also
-> requires a corresponding change to userspace kexec-tools.
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> ---
->  arch/x86/Kconfig             |  11 ++++
->  arch/x86/include/asm/kexec.h |  20 +++++++
->  arch/x86/kernel/crash.c      | 102 +++++++++++++++++++++++++++++++++++
->  3 files changed, 133 insertions(+)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index f9920f1341c8..cdfc9b2fdf98 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -2056,6 +2056,17 @@ config CRASH_DUMP
->  	  (CONFIG_RELOCATABLE=y).
->  	  For more details see Documentation/admin-guide/kdump/kdump.rst
->  
-> +config CRASH_MAX_MEMORY_RANGES
-> +	depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
-> +	int
-> +	default 32768
-> +	help
-> +	  For the kexec_file_load path, specify the maximum number of
-> +	  memory regions, eg. as represented by the 'System RAM' entries
-> +	  in /proc/iomem, that the elfcorehdr buffer/segment can accommodate.
-> +	  This value is combined with NR_CPUS and multiplied by Elf64_Phdr
-> +	  size to determine the final buffer size.
-> +
->  config KEXEC_JUMP
->  	bool "kexec jump"
->  	depends on KEXEC && HIBERNATION
-> diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
-> index a3760ca796aa..432073385b2d 100644
-> --- a/arch/x86/include/asm/kexec.h
-> +++ b/arch/x86/include/asm/kexec.h
-> @@ -212,6 +212,26 @@ typedef void crash_vmclear_fn(void);
->  extern crash_vmclear_fn __rcu *crash_vmclear_loaded_vmcss;
->  extern void kdump_nmi_shootdown_cpus(void);
->  
-> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size);
-> +#define arch_map_crash_pages arch_map_crash_pages
-> +
-> +void arch_unmap_crash_pages(void **ptr);
-> +#define arch_unmap_crash_pages arch_unmap_crash_pages
-> +
-> +void arch_crash_handle_hotplug_event(struct kimage *image,
-> +		unsigned int hp_action);
-> +#define arch_crash_handle_hotplug_event arch_crash_handle_hotplug_event
-> +
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +static inline int crash_hotplug_cpu_support(void) { return 1; }
-> +#define crash_hotplug_cpu_support crash_hotplug_cpu_support
-> +#endif
-> +
-> +#ifdef CONFIG_MEMORY_HOTPLUG
-> +static inline int crash_hotplug_memory_support(void) { return 1; }
-> +#define crash_hotplug_memory_support crash_hotplug_memory_support
-> +#endif
+From: Yue Hu <huyue2@coolpad.com>
 
-Check these two functions again, wonder whether this is a common usage
-to show support of a feature. I don't remember where we do like this. We
-usually define a global variable to mark it? Anyway, it works. See if
-other people have comments, I could be ignorant.
+This feature can merge tail of per-file or the whole files into a
+special inode to achieve greater compression ratio.
 
-Other than this tiny concern, this patch looks good to me:
+Meanwhile, also add a interlaced uncompressed data layout support for
+compressed files since fragments feature (and later) can use it.
 
-Acked-by: Baoquan He <bhe@redhat.com>
+mkfs v5: https://lore.kernel.org/all/cover.1661687617.git.huyue2@coolpad.com/
 
-> +
->  #endif /* __ASSEMBLY__ */
->  
->  #endif /* _ASM_X86_KEXEC_H */
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 9ceb93c176a6..8fc7d678ac72 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -25,6 +25,7 @@
->  #include <linux/slab.h>
->  #include <linux/vmalloc.h>
->  #include <linux/memblock.h>
-> +#include <linux/highmem.h>
->  
->  #include <asm/processor.h>
->  #include <asm/hardirq.h>
-> @@ -397,7 +398,18 @@ int crash_load_segments(struct kimage *image)
->  	image->elf_headers = kbuf.buffer;
->  	image->elf_headers_sz = kbuf.bufsz;
->  
-> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> +	/* Ensure elfcorehdr segment large enough for hotplug changes */
-> +	kbuf.memsz =
-> +		(CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) *
-> +			sizeof(Elf64_Phdr);
-> +	/* Mark as usable to crash kernel, else crash kernel fails on boot */
-> +	image->elf_headers_sz = kbuf.memsz;
-> +	image->elfcorehdr_index = image->nr_segments;
-> +	image->elfcorehdr_index_valid = true;
-> +#else
->  	kbuf.memsz = kbuf.bufsz;
-> +#endif
->  	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
->  	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
->  	ret = kexec_add_buffer(&kbuf);
-> @@ -412,3 +424,93 @@ int crash_load_segments(struct kimage *image)
->  	return ret;
->  }
->  #endif /* CONFIG_KEXEC_FILE */
-> +
-> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> +/*
-> + * NOTE: The addresses and sizes passed to this routine have
-> + * already been fully aligned on page boundaries. There is no
-> + * need for massaging the address or size.
-> + */
-> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size)
-> +{
-> +	void *ptr = NULL;
-> +
-> +	if (size > 0) {
-> +		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-> +
-> +		ptr = kmap_local_page(page);
-> +	}
-> +
-> +	return ptr;
-> +}
-> +
-> +void arch_unmap_crash_pages(void **ptr)
-> +{
-> +	if (ptr) {
-> +		if (*ptr)
-> +			kunmap_local(*ptr);
-> +		*ptr = NULL;
-> +	}
-> +}
-> +
-> +/**
-> + * arch_crash_handle_hotplug_event() - Handle hotplug elfcorehdr changes
-> + * @image: the active struct kimage
-> + * @hp_action: the hot un/plug action being handled
-> + *
-> + * To accurately reflect hot un/plug changes, the new elfcorehdr
-> + * is prepared in a kernel buffer, and then it is written on top
-> + * of the existing/old elfcorehdr.
-> + */
-> +void arch_crash_handle_hotplug_event(struct kimage *image,
-> +	unsigned int hp_action)
-> +{
-> +	struct kexec_segment *ksegment;
-> +	unsigned char *ptr = NULL;
-> +	unsigned long elfsz = 0;
-> +	void *elfbuf = NULL;
-> +	unsigned long mem, memsz;
-> +
-> +	/*
-> +	 * Elfcorehdr_index_valid checked in crash_core:handle_hotplug_event()
-> +	 */
-> +	ksegment = &image->segment[image->elfcorehdr_index];
-> +	mem = ksegment->mem;
-> +	memsz = ksegment->memsz;
-> +
-> +	/*
-> +	 * Create the new elfcorehdr reflecting the changes to CPU and/or
-> +	 * memory resources.
-> +	 */
-> +	if (prepare_elf_headers(image, &elfbuf, &elfsz)) {
-> +		pr_err("crash hp: unable to prepare elfcore headers");
-> +		goto out;
-> +	}
-> +	if (elfsz > memsz) {
-> +		pr_err("crash hp: update elfcorehdr elfsz %lu > memsz %lu",
-> +			elfsz, memsz);
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * At this point, we are all but assured of success.
-> +	 * Copy new elfcorehdr into destination.
-> +	 */
-> +	ptr = arch_map_crash_pages(mem, memsz);
-> +	if (ptr) {
-> +		/*
-> +		 * Temporarily invalidate the crash image while the
-> +		 * elfcorehdr is updated.
-> +		 */
-> +		xchg(&kexec_crash_image, NULL);
-> +		memcpy_flushcache((void *)ptr, elfbuf, elfsz);
-> +		xchg(&kexec_crash_image, image);
-> +	}
-> +	arch_unmap_crash_pages((void **)&ptr);
-> +	pr_debug("crash hp: re-loaded elfcorehdr at 0x%lx\n", mem);
-> +
-> +out:
-> +	if (elfbuf)
-> +		vfree(elfbuf);
-> +}
-> +#endif
-> -- 
-> 2.31.1
-> 
+changes from v2:
+ - enhance the condition to check if pcluster is interlaced or not;
+ - no typo.
+
+changes from v1:
+ - fix a compiling error without CONFIG_EROFS_FS_ZIP, reported by kernel test
+   robot <lkp@intel.com>;
+ - introduce the term 'interlaced' for patch 1/2 suggested by Xiang;
+ - fix packed inode failure path when read super pointed out by Xiang;
+ - use kmap_local_page instead of kmap_atomic pointed out by Xiang;
+ - use a simpler way to avoid call read fragment data twice suggested by Xiang;
+ - update commit message change.
+
+Yue Hu (2):
+  erofs: support interlaced uncompressed data for compressed files
+  erofs: support on-disk compressed fragments data
+
+ fs/erofs/compress.h     |  3 +++
+ fs/erofs/decompressor.c | 12 +++++----
+ fs/erofs/erofs_fs.h     | 28 ++++++++++++++-----
+ fs/erofs/internal.h     | 16 ++++++++---
+ fs/erofs/super.c        | 15 +++++++++++
+ fs/erofs/sysfs.c        |  2 ++
+ fs/erofs/zdata.c        | 60 +++++++++++++++++++++++++++++++++++++++--
+ fs/erofs/zdata.h        |  3 +++
+ fs/erofs/zmap.c         | 33 ++++++++++++++++++++++-
+ 9 files changed, 155 insertions(+), 17 deletions(-)
+
+-- 
+2.17.1
 

@@ -2,79 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D8A5AD742
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452385AD754
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiIEQVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 12:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
+        id S232013AbiIEQWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 12:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiIEQVa (ORCPT
+        with ESMTP id S232055AbiIEQVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 12:21:30 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA4B5AC61
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:21:27 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 95491580230;
-        Mon,  5 Sep 2022 12:21:24 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 05 Sep 2022 12:21:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1662394884; x=1662398484; bh=jPjDs/nQydsuWc7+zdDVn5uW0GkDc/+2RNe
-        DCYWA06w=; b=Qphw9wDlxkhAQXBemSjB/3oLF2NRdmS87Z3z8ajxxPS7ltzSMXB
-        xE+1XGjrVNuU+L5o6S1jcPJG2o7uUKqygfyuL3cx6AIPsWWXN2pKGW6ZN4YoDjM3
-        OxQsL0oWBE//I2gflWKOuIdIUml1q3E/D53rEEw4ST58M2gKIMy5vF819+7M0raq
-        76K6KMQ4bcB4G360WMqP158xQyM08FSTGRXcE+wn9sCG6nauK4Z4M09wNgOqnI78
-        ESMjuRuTXVOgwI5x+PICcsEtJ4NsP2WDbe242GG/jgcuNs2DtC9eLmECvuWcnVVA
-        bejYDgw4SfFSsn/FmHSxYbaveV3XKTC2anw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1662394884; x=
-        1662398484; bh=jPjDs/nQydsuWc7+zdDVn5uW0GkDc/+2RNeDCYWA06w=; b=w
-        lxB6DbFg30LASx6TCeUQHhDHKY7WJW50xfqFU4ew63URpbGOzsiZt8UuLD8AnB5J
-        baOy72lhYI/5Cc+gkavNl7zxPBBVYl4Pw5HkPqEvW4UGoBVfFQZ8TgV0J6Fc84V+
-        DVfWTBck645CARtiDfFSRyMRk8LwRgdZwSs+77JxwNO3MuGgx2SfggwkGFKD80wo
-        gYnE+JpHBQN4eTZXkSC6OcBJJ0cNtOY8WXhX7t2DdC5YDSa6cxC7PDQ3KjD077bN
-        7kXefintstc3jwEDlJqgtRFHV0CyuREM3ZEEkUrgIhCGIsVRRvyL4quz/j/CqBrw
-        4+2TmWOMapQs7g541G7og==
-X-ME-Sender: <xms:BCIWY6UHRoBfNn1vXUPn2TVjaQDPa7-vC3B4ynFdGil4Qo4Qwiymgw>
-    <xme:BCIWY2mbwfJ82POusnyjPNSZbiZrWNQwoTDrenE8Ddh4SEw-T8UtNew2nAm-u0W8j
-    xF5eV535lCHOm_htKA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeliedguddtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeelteelgefhvdejuefgieetkeehteevgfdvkeeiffdujefghedugeefjeeutdfg
-    geenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhlihhnrghrohdrohhrghdpghhith
-    hhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:BCIWY-bZO5gKIi_jfsabVCY5CucPaIczao_Ef-TYDGZ2w3X25LBZDw>
-    <xmx:BCIWYxXXKzBm_Er6Ri0ND399lAaKSDdye-3WsNF-GawfGeFxhjS5IA>
-    <xmx:BCIWY0k2h5-RyIlsWgwVqLd25emtMcE0i7rGkAfpbVSrME1nd85UKw>
-    <xmx:BCIWYwvQnKwlXo_GgIxioamiWpqEs1Y6zbFMjcqQz5wHpgs6VhN9FA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0169EB60083; Mon,  5 Sep 2022 12:21:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <d518e7f7-ea7a-4bff-aa8c-7786bed62d69@www.fastmail.com>
-Date:   Mon, 05 Sep 2022 18:21:03 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.0
+        Mon, 5 Sep 2022 12:21:55 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2113.outbound.protection.outlook.com [40.107.102.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90655AC7F;
+        Mon,  5 Sep 2022 09:21:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c2C+vteXQbk0qyZVby5N7x2n8k8HAUDPHJ2rw1OegpcFwNRZHXodC28ztGCGtY88dh1aroT/7UMedhDyyLb+WhD3O17yK0XiBOQv0pqH/KJc16LkL4Z5rz8DUYiNZIySuAYkGwTobYh8n+bbne63GROM3La3aVUqxK0NXvEKt0ZnnEspj8V9k2mhAJrRz+ExH6mp2Zrh2oxMQieIgEgg51MiupaCXBkB2ATvl8kUVRawE4DvPaYyprPk/UqmyoD7atN3Nar10Nq1W92UC7/Zhcm81ewsp/OKudhQFhkdcnGSloJHYXTY30jCPAO6QhvT/h1NTVTsSuuFk4wKQTGDlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4oChL1ri2hqgnQYaT8N4Isn8P7c3bAS4du7ETAoVQos=;
+ b=fobCKif6wspHvBL8iaCR8l27IW9GszBIsIz/4Zi9SFL7u8m7uJJHNpMSwn+kv/AFbNq1+4yDf17K33uvJUI1gsqO+L9h51ubmEN9Ty67dugoHJ3tOSfdz0OFNPKyunssdgnr3MGGBSqCmq8B5lLr0TSFEUcIv5zqSoxF1ZgjrCu9h+FcliqBEZuQukYhQ4gxeEmefpdUjCRt8Z/71R13lX+rIDx47Sfo8vXFFLzRgjpCfsSv6TejhXD3pPloEowWzAHmYL5/SM998dsfOfSp0eCfFdAVBovs5lb58bMk50l/UcBG7JUC3zeqh//7uvveuLWSyMtD0OSVEX6KGvdUEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4oChL1ri2hqgnQYaT8N4Isn8P7c3bAS4du7ETAoVQos=;
+ b=AKWS0zYo1RnzGwkgPQQqp81jZq4gX6qsU/aAU7OgW6lvTVjQ+QLkwD/uFIMUkNxZwk8cPuzdxRROfYwxZEs2pFfx5+mAVCajnWcwzoRln9FKyXyjEK3oiugN3tYBD3vu793q1nMih2z9ADkB/5eyey8EB/D8EPOktbTBdQUAJhk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by PH0PR10MB5848.namprd10.prod.outlook.com
+ (2603:10b6:510:149::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.14; Mon, 5 Sep
+ 2022 16:21:50 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::38ee:4bfb:c7b8:72e1]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::38ee:4bfb:c7b8:72e1%7]) with mapi id 15.20.5588.012; Mon, 5 Sep 2022
+ 16:21:50 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Terry Bowman <terry.bowman@amd.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        UNGLinuxDriver@microchip.com,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+        katie.morris@in-advantage.com
+Subject: [RESEND PATCH v16 mfd 0/8] add support for VSC7512 control over SPI
+Date:   Mon,  5 Sep 2022 09:21:24 -0700
+Message-Id: <20220905162132.2943088-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-ClientProxiedBy: MW4PR04CA0263.namprd04.prod.outlook.com
+ (2603:10b6:303:88::28) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 79418615-814d-46ef-d7f5-08da8f5abc92
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5848:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: J7HPFP5EnGYMCks8+Yqxtr3PtNVBi1kLTU7zRD4g7iAF6TsFl7BTmMmuZHQbFkVhZu1HhAC0wHqqEtwPD+2F0hKm/w9CiEQVgeMydK1iQXbqnxFJU6NcjXoVtB6kDUakNzEH/uu4dk5gB6lz051Z8DE1Hk2AT0vb4Y0uXTyJaQFHMe1otbZ1N1pj3DlCsk9JTEmkdFmfdE2QyvcI/tX6HRoolUXkU9w2zz+4FxnQ+mO7uVxQ86twDxlD7kSxSMpAwPyWLhLH2PFBCmBQk+pbiUwyT+z0U8xi/6QbJ1vOvd48IslMQzk1HYgs8b31LkUSTdzrXPDG6xZyx68/1mw9w+ZzHzfAF1ECEu7YAraaicqj/atIb9gQvoaEHmo8lyEYcxnHxKBzjNwm+ypzctOEFRAz9TT1SJI2jSk9FwlQGZUHpRbh9Rb9a6rogJVtbHvL3ru66vdqnKvGkj9v7BqnNc+gXuWtwwbcrbhE0ibuEtKKRtdlWvwc2kzTq7ChAmjKgrmFfMoG/yAEMJD3SDRlCauoge5yhuVF6oRTeN7UgeT9z3T5HTpQgYBzbZGHlOY/Jxx6uFprvZFqiRCeKu4WRshQHdzBti3A65poiVrIrkT3rBsOfz4suE4WgcUvd85wfWQojXN28ZlS5EppXFkM7cwUDETW/cfy1+tOYyHFd9ieLK6Vb85Ew7SE8YYf23AUvkik9lR6eGDpOhsfWKUDWxf4Cqcn6cIDTi27N/jijwyjgW1i+MRb4anYf40iNN/X4VD6KOGSmuQFltgKfwLBvQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(376002)(39830400003)(136003)(366004)(66946007)(5660300002)(8936002)(66556008)(54906003)(6486002)(41300700001)(6666004)(107886003)(52116002)(186003)(2906002)(1076003)(7416002)(2616005)(44832011)(6512007)(36756003)(6506007)(316002)(83380400001)(26005)(38350700002)(38100700002)(4326008)(86362001)(66476007)(8676002)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C9mWKt74npRH/iPafaRY+bBeSd3oAsiGIYAi78LsE6t+HHuo+QivQWgFeCE8?=
+ =?us-ascii?Q?w42D6mwuVv0Xo7i73Tf8Y6dMDR5Rw0eu7jpUtlzsEaenfz6wtzPe8TrwALdL?=
+ =?us-ascii?Q?md8sm8ES92Sz02VrdlNhPEC+nhMu1UaIcHa08YgWaDjoA2FY3nMWlmMhlPF7?=
+ =?us-ascii?Q?Axc23z4lXmHrTSFFQ7QQ+zxmgD3yTcs0wgk7ZyrmbD4auleXLEwZwRhEe4b7?=
+ =?us-ascii?Q?7EuMiqNf/yTZl/LvCGo/m2oGfyIoR21DDNZID4KuurOVvetW8RSS5kGoe5fy?=
+ =?us-ascii?Q?BQhGBEI9VxtwfxgbYoX0QDeRevCfTicxZXKLqQbUNNOJrSU8jE5dsFjy7ZVO?=
+ =?us-ascii?Q?/sapCR+cp2IB/HACIszilwgm1OapQvK13w2RuCwoMpXl66Bxf15yvyyNXCsv?=
+ =?us-ascii?Q?Z7vyq4JlxnZ+iutiUa/0bekLf8zquUTU7B4GG0xFQ6OnrcPBrSOow9G0jQQz?=
+ =?us-ascii?Q?7n2qe2UFebLPyrj7HR0apOFNzrF/pjZ1pggkwhtYD9lxjKlkBIV0iUtEaX8U?=
+ =?us-ascii?Q?k/qjRdgpW/18+wmW1qjPP/kfX41D2S3vJ03yyDHkW6j9cfD8krb2l3EMrOGz?=
+ =?us-ascii?Q?jgBq5fN7XQf2cjYzzTGaWHT18cUwL1WvmS86d08FMSFwYsVkdtLT79qdtP2T?=
+ =?us-ascii?Q?PWuNlxdITdvD/SBFO+QYOs1iKeCSeAzqbZdupVrWqoNpquv+gRJVGuWN7ESp?=
+ =?us-ascii?Q?JqHwMbQ5pARn1KG+x+/7XbJ1Qvb7xUdTW7NXjncEiZxMvGXhoZqLbyA9vrmO?=
+ =?us-ascii?Q?ghXMNyMSp2kKj5HNQCApdg4hfw4Mol+/2h8cIl3G/TIuKKWN0bKwZB6g0Y05?=
+ =?us-ascii?Q?TcjxuNB+bixqxG7HUwPvjoyACctPh0V/R4R031qULDUQTLdHXCmLFCB0Pblh?=
+ =?us-ascii?Q?3RIvUzU6LBFcGGQuHMa7DLpbMcMT3eKKRD0iJ0oJbjk4ZS/S7TEsdlCMIMub?=
+ =?us-ascii?Q?KOrvvUMj7cVNk0kO/YfWEaTaw9da54oQMkTs1zPSNd9DJI2Qnri+L4T9SobX?=
+ =?us-ascii?Q?tibolDz+hQpjiLHaULbdyctsZuAubRAx3M5bkmsTQBMLV1HWKUPFjlCeuKFp?=
+ =?us-ascii?Q?09cjE+7Yg2LE9jsLJykrEtlVxCQertJEWumXxJ3BsntF3voJF7WOia2/2uKm?=
+ =?us-ascii?Q?zSTTDYNVNFPkeSnvWkvRGAA9KebTTP7qs5SMcXwnmFXFEnRU8aeofigRKWkf?=
+ =?us-ascii?Q?C6bSLn1BynIS+IA+VP8ES3zRen39juAGs++lQ3qs62uSkPVTTMTfGSDA62R9?=
+ =?us-ascii?Q?OeK84vaGakhrQSQEGuHBwxIjWGvcZSwdXiD9Ug3xLXhCgcK13sMZZcneVrHn?=
+ =?us-ascii?Q?CDVo6GE2F1KvQjWyFosijpX+/8zNA0MDmxEdDFhaPJMKz0Csvjj33M1PMltE?=
+ =?us-ascii?Q?num3o2y1u3/Oo33Ef2YQxoYa882TJ3AUsjSpq+0pJiMpjG1Apz0S1UUx736a?=
+ =?us-ascii?Q?nfyZopa3qs5ZNwovOnnceMSxR0zCX58NLh4mihsqy9yirm4n6A3BVDM+B9Xy?=
+ =?us-ascii?Q?65gjXf74KEa9zSNgHCzSJ8MEcdGeBTTpLerb89eWGMZW+fApjZqf0CYpA4XM?=
+ =?us-ascii?Q?UnMX3dfszxq2wstE5KGnYkJDsT2b1vYOuON7uAdaY/NNwWvF5NK6Cf9Zcsod?=
+ =?us-ascii?Q?m8ICqL5kpdOHc7g/jtQSpYw=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79418615-814d-46ef-d7f5-08da8f5abc92
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 16:21:50.2571
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dIO0qsAn5/8al/HTysUvu2pNks63OUJMjAXpFs33fVMZKwBrqgtyqyH1N8vwR/GZzgmMKt9MU68Ue/4kgVfTp61Rqji+AVtQt3BQdJSwqYU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5848
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,176 +132,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
+The patch set in general is to add support for the VSC7512, and
+eventually the VSC7511, VSC7513 and VSC7514 devices controlled over
+SPI. Specifically this patch set enables pinctrl, serial gpio expander
+access, and control of an internal and an external MDIO bus.
 
-  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
+I have mentioned previously:
+The hardware setup I'm using for development is a beaglebone black, with
+jumpers from SPI0 to the microchip VSC7512 dev board. The microchip dev
+board has been modified to not boot from flash, but wait for SPI. An
+ethernet cable is connected from the beaglebone ethernet to port 0 of
+the dev board. Network functionality will be included in a future patch set.
 
-are available in the Git repository at:
+The device tree I'm using is included in the documentation, so I'll not
+include that in this cover letter. I have exported the serial GPIOs to the
+LEDs, and verified functionality via
+"echo heartbeat > sys/class/leds/port0led/trigger"
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.0-rc4
+/ {
+	vscleds {
+		compatible = "gpio-leds";
+		vscled@0 {
+			label = "port0led";
+			gpios = <&sgpio_out1 0 0 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
+		vscled@1 {
+			label = "port0led1";
+			gpios = <&sgpio_out1 0 1 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
+[ ... ]
+	};
+};
 
-for you to fetch changes up to 12f09234bde51810b3f7412b2b5c84af4c07cfb1:
+I verified module functionality with modprobe ocelot-soc;
+modprobe pinctrl-ocelot;
+modprobe pinctrl-microchip-sgpio;
 
-  Merge tag 'renesas-fixes-for-v6.0-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/fixes (2022-09-02 12:05:28 +0200)
+I only have hardware to test the last patch, so any testers are welcome.
+I've been extra cautious about the ocelot_regmap_from_resource helper
+function, both before and after the last patch. I accidentally broke it
+in the past and would like to avoid doing so again.
 
-----------------------------------------------------------------
-ARM: SoC fixes for 6.0
 
-These are the expected fixes for the SoC tree. I have let the
-patches pile up a little too long, so this is bigger than I
-would have liked.
+RFC history:
+v16
+    * Add reviewed-by tags (patches 1-6)
+    * Utilize resource_size() (patch 8/8)
+    * One more round of missed includes (patch 8/8)
+    * Remove pinctrl-ocelot module patch, which was applied in v6.0-rc1
 
- - Minor build fixes for Broadcom STB and NXP i.MX8M SoCs as well\
-   as TEE firmware
+v15
+    * Add missed includes
+    * Fix punctuation and function convention inside comments
+    * Utilize spi_message_init_with_transfers() instead of
+      spi_message_add_tail()
+    * Remove unnecessary "< 0" comparisons
+    * Utilize HZ_PER_MHZ instead of magic numbers
 
- - Updates to the MAINTAINERS file for the PolarFire SoC
+v14
+    * Add header guards to include/linux/mfd/ocelot.h and
+      drivers/mfd/ocelot.h
+    * Lines extended to 100 chars (patch 9/9)
+    * Remove unnecessary "dev" and "spi" elements from ocelot_ddata
+      structure
+    * Add doc comments for ocelot_ddata
+    * Add Reviewed and Acked tags
+    * Submit to MFD instead of net-next
 
- - Minor DT fixes for Renesas White Hawk and Arm Versatile and
-   Juno platforms
+v13
+    * Suggestions from Andy for code cleanup, missed includes, forward
+      declarations, module names.
+    * Fix x86 allmodconfig build
+    * MFD module name is now ocelot-soc
+    * Add module names to Kconfig for pinctrl changes
 
- - A fix for a missing dependnecy in the NXP DPIO driver
+v12
+    * Suggestions from Vladimir, Andy, Randy, and Rob. Thanks as always!
+    * Utilize dev_get_regmap to clean up interfaces
+    * MFD_OCELOT can be a module
 
- - Broadcom BCA fixes to the newly added devicetree files
+v11
+    * Suggestions from Rob and Andy. Thanks!
+    * Add pinctrl module functionality back and fixing those features
+    * Fix aarch64 compiler error
 
- - Multiple fixes for Microchip AT91 based SoCs, dealing with
-   self-refresh timings and regulator settings in DT
+v10
+    * Fix warning by removing unused function
 
- - Several DT fixes for NXP i.MX platforms, dealing with incorrect
-   GPIO settings, extraneous nodes, and a wrong clock setting.
+v9
+    * Submitting as a PATCH instead of an RFC
+    * Remove switch functionality - will be a separate patch set
+    * Remove Kconfig tristate module options
+    * Another round of suggestions from Lee, Vladimir, and Andy. Many
+      thanks!
+    * Add documentation
+    * Update maintainers
 
-----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: dts: imx8mq-tqma8mq: Remove superfluous interrupt-names
+v8
+    * Applied another round of suggestions from Lee and Vladimir
+    * Utilize regmap bus reads, which speeds bulk transfers up by an
+      order of magnitude
+    * Add two additional patches to utilize phylink_generic_validate
+    * Changed GPL V2 to GPL in licenses where applicable (checkpatch)
+    * Remove initial hsio/serdes changes from the RFC
 
-Andrejs Cainikovs (2):
-      arm64: dts: imx8mm-verdin: update CAN clock to 40MHz
-      arm64: dts: imx8mm-verdin: use level interrupt for mcp251xfd
+v7
+    * Applied as much as I could from Lee and Vladimir's suggestions. As
+      always, the feedback is greatly appreciated!
+    * Remove "ocelot_spi" container complication
+    * Move internal MDIO bus from ocelot_ext to MFD, with a devicetree
+      change to match
+    * Add initial HSIO support
+    * Switch to IORESOURCE_REG for resource definitions
 
-Arnd Bergmann (9):
-      Merge branch 'polarfire/fixes' into arm/fixes
-      Merge tag 'imx-fixes-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes
-      Merge tag 'versatile-dts-v6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator into arm/fixes
-      Merge tag 'tee-fix-for-v6.0' of https://git.linaro.org/people/jens.wiklander/linux-tee into arm/fixes
-      Merge tag 'juno-fixes-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
-      Merge tag 'arm-soc/for-6.0/devicetree' of https://github.com/Broadcom/stblinux into arm/fixes
-      Merge tag 'arm-soc/for-6.0/drivers-fixes' of https://github.com/Broadcom/stblinux into arm/fixes
-      Merge tag 'at91-fixes-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
-      Merge tag 'renesas-fixes-for-v6.0-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/fixes
+v6
+    * Applied several suggestions from the last RFC from Lee Jones. I
+      hope I didn't miss anything.
+    * Clean up MFD core - SPI interaction. They no longer use callbacks.
+    * regmaps get registered to the child device, and don't attempt to
+      get shared. It seems if a regmap is to be shared, that should be
+      solved with syscon, not dev or mfd.
 
-Claudiu Beznea (8):
-      ARM: configs: at91: remove CONFIG_MICROCHIP_PIT64B
-      ARM: at91: pm: fix self-refresh for sama7g5
-      ARM: at91: pm: fix DDR recalibration when resuming from backup and self-refresh
-      ARM: dts: at91: sama5d27_wlsom1: specify proper regulator output ranges
-      ARM: dts: at91: sama5d2_icp: specify proper regulator output ranges
-      ARM: dts: at91: sama7g5ek: specify proper regulator output ranges
-      ARM: dts: at91: sama5d27_wlsom1: don't keep ldo2 enabled all the time
-      ARM: dts: at91: sama5d2_icp: don't keep vdd_other enabled all the time
+v5
+    * Restructured to MFD
+    * Several commits were split out, submitted, and accepted
+    * pinctrl-ocelot believed to be fully functional (requires commits
+    from the linux-pinctrl tree)
+    * External MDIO bus believed to be fully functional
 
-Conor Dooley (2):
-      MAINTAINERS: add PolarFire SoC dt bindings
-      MAINTAINERS: add the Polarfire SoC's i2c driver
+v4
+    * Functional
+    * Device tree fixes
+    * Add hooks for pinctrl-ocelot - some functionality by way of sysfs
+    * Add hooks for pinctrl-microsemi-sgpio - not yet fully functional
+    * Remove lynx_pcs interface for a generic phylink_pcs. The goal here
+    is to have an ocelot_pcs that will work for each configuration of
+    every port.
 
-David Jander (1):
-      ARM: dts: imx6qdl-vicut1.dtsi: Fix node name backlight_led
+v3
+	* Functional
+	* Shared MDIO transactions routed through mdio-mscc-miim
+	* CPU / NPI port enabled by way of vsc7512_enable_npi_port /
+	felix->info->enable_npi_port
+	* NPI port tagging functional - Requires a CPU port driver that supports
+	frames of 1520 bytes. Verified with a patch to the cpsw driver
 
-Geert Uytterhoeven (1):
-      arm64: dts: renesas: r8a779g0: Fix HSCIF0 interrupt number
+v2
+	* Near functional. No CPU port communication, but control over all
+	external ports
+	* Cleaned up regmap implementation from v1
 
-Jassi Brar (1):
-      arm64: dts: juno: Add missing MHU secure-irq
+v1 (accidentally named vN)
+	* Initial architecture. Not functional
+	* General concepts laid out
 
-Jens Wiklander (1):
-      tee: fix compiler warning in tee_shm_register()
+Colin Foster (8):
+  mfd: ocelot: add helper to get regmap from a resource
+  net: mdio: mscc-miim: add ability to be used in a non-mmio
+    configuration
+  pinctrl: ocelot: add ability to be used in a non-mmio configuration
+  pinctrl: microchip-sgpio: allow sgpio driver to be used as a module
+  pinctrl: microchip-sgpio: add ability to be used in a non-mmio
+    configuration
+  resource: add define macro for register address resources
+  dt-bindings: mfd: ocelot: add bindings for VSC7512
+  mfd: ocelot: add support for the vsc7512 chip via spi
 
-Julia Lawall (1):
-      ARM: ixp4xx: fix typos in comments
+ .../devicetree/bindings/mfd/mscc,ocelot.yaml  | 160 ++++++++++
+ MAINTAINERS                                   |   7 +
+ drivers/mfd/Kconfig                           |  21 ++
+ drivers/mfd/Makefile                          |   3 +
+ drivers/mfd/ocelot-core.c                     | 161 ++++++++++
+ drivers/mfd/ocelot-spi.c                      | 299 ++++++++++++++++++
+ drivers/mfd/ocelot.h                          |  49 +++
+ drivers/net/mdio/mdio-mscc-miim.c             |  42 +--
+ drivers/pinctrl/Kconfig                       |   5 +-
+ drivers/pinctrl/pinctrl-microchip-sgpio.c     |  14 +-
+ drivers/pinctrl/pinctrl-ocelot.c              |  16 +-
+ include/linux/ioport.h                        |   5 +
+ include/linux/mfd/ocelot.h                    |  62 ++++
+ 13 files changed, 795 insertions(+), 49 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml
+ create mode 100644 drivers/mfd/ocelot-core.c
+ create mode 100644 drivers/mfd/ocelot-spi.c
+ create mode 100644 drivers/mfd/ocelot.h
+ create mode 100644 include/linux/mfd/ocelot.h
 
-Kuldeep Singh (3):
-      ARM: dts: integratorap: Update spi node properties
-      ARM: dts: realview: Update spi clock-names property
-      ARM: dts: versatile: Update spi clock-names property
+-- 
+2.25.1
 
-Liang He (1):
-      soc: brcmstb: pm-arm: Fix refcount leak and __iomem leak bugs
-
-Marcel Ziswiler (2):
-      arm64: dts: freescale: verdin-imx8mm: fix atmel_mxt_ts reset polarity
-      arm64: dts: freescale: verdin-imx8mp: fix atmel_mxt_ts reset polarity
-
-Marco Felsch (3):
-      Revert "soc: imx: imx8m-blk-ctrl: set power device name"
-      ARM: dts: imx6qdl-kontron-samx6i: remove duplicated node
-      ARM: dts: imx6qdl-kontron-samx6i: fix spi-flash compatible
-
-Marek Vasut (3):
-      arm64: dts: imx8mp: Adjust ECSPI1 pinmux on i.MX8M Plus DHCOM
-      soc: imx: gpcv2: Assert reset before ungating clock
-      arm64: dts: imx8mp: Fix I2C5 GPIO assignment on i.MX8M Plus DHCOM
-
-Mathew McBride (1):
-      soc: fsl: select FSL_GUTS driver for DPIO
-
-Peng Fan (1):
-      arm64: dts: imx8mp-venice-gw74xx: fix sai2 pin settings
-
-Philippe Schenker (1):
-      arm64: dts: verdin-imx8mm: add otg2 pd to usbphy
-
-Rob Herring (1):
-      arm64: dts: arm: juno: Remove legacy Coresight 'slave-mode' property
-
-Tim Harvey (1):
-      arm64: dts: imx8mm-venice-gw7901: fix port/phy validation
-
-Vladimir Oltean (1):
-      arm64: dts: ls1028a-qds-65bb: don't use in-band autoneg for 2500base-x
-
-William Zhang (9):
-      ARM: dts: bcmbca: bcm63178: fix timer node cpu mask flag
-      ARM: dts: bcmbca: bcm63178: clean up psci node
-      ARM: dts: bcmbca: bcm63178: fix interrupt controller node
-      ARM: dts: bcmbca: bcm63178: cosmetic change
-      ARM: dts: bcmbca: bcm6846: fix timer node cpu mask flag
-      ARM: dts: bcmbca: bcm6846: clean up psci node
-      ARM: dts: bcmbca: bcm6846: fix interrupt controller node
-      ARM: dts: bcmbca: bcm6878: fix timer node cpu mask flag
-      ARM: dts: bcmbca: bcm6878: cosmetic change
-
- MAINTAINERS                                        | 10 +++++
- arch/arm/boot/dts/arm-realview-eb.dtsi             |  2 +-
- arch/arm/boot/dts/arm-realview-pb1176.dts          |  2 +-
- arch/arm/boot/dts/arm-realview-pb11mp.dts          |  2 +-
- arch/arm/boot/dts/arm-realview-pbx.dtsi            |  2 +-
- arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi        | 21 +++++----
- arch/arm/boot/dts/at91-sama5d2_icp.dts             | 21 +++++----
- arch/arm/boot/dts/at91-sama7g5ek.dts               | 18 ++++----
- arch/arm/boot/dts/bcm63178.dtsi                    | 20 +++++----
- arch/arm/boot/dts/bcm6846.dtsi                     | 18 ++++----
- arch/arm/boot/dts/bcm6878.dtsi                     |  9 ++--
- arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi      | 12 +-----
- arch/arm/boot/dts/imx6qdl-vicut1.dtsi              |  2 +-
- arch/arm/boot/dts/integratorap-im-pd1.dts          |  4 +-
- arch/arm/boot/dts/versatile-ab.dts                 |  2 +-
- arch/arm/configs/at91_dt_defconfig                 |  1 -
- arch/arm/configs/sama7_defconfig                   |  1 -
- arch/arm/mach-at91/pm.c                            | 36 ++++++++++++++--
- arch/arm/mach-at91/pm_suspend.S                    | 24 ++++++++---
- arch/arm/mach-ixp4xx/ixp4xx-of.c                   |  2 +-
- arch/arm64/boot/dts/arm/juno-base.dtsi             |  3 +-
- arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi          |  2 -
- .../boot/dts/freescale/fsl-ls1028a-qds-65bb.dts    |  1 -
- .../boot/dts/freescale/imx8mm-venice-gw7901.dts    |  4 ++
- arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi   | 11 ++---
- .../arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 14 +++---
- .../boot/dts/freescale/imx8mp-venice-gw74xx.dts    |  8 ++--
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi   |  4 +-
- arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi  |  1 -
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          |  2 +-
- drivers/soc/bcm/brcmstb/pm/pm-arm.c                | 50 +++++++++++++++++-----
- drivers/soc/fsl/Kconfig                            |  1 +
- drivers/soc/imx/gpcv2.c                            |  5 ++-
- drivers/soc/imx/imx8m-blk-ctrl.c                   |  1 -
- drivers/tee/tee_shm.c                              |  1 +
- include/soc/at91/sama7-ddr.h                       |  8 ++++
- 36 files changed, 202 insertions(+), 123 deletions(-)

@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623C65AD5E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447735AD5F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238261AbiIEPN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 11:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
+        id S231618AbiIEPOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 11:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238297AbiIEPNx (ORCPT
+        with ESMTP id S238752AbiIEPOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 11:13:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE7D7676
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 08:13:52 -0700 (PDT)
+        Mon, 5 Sep 2022 11:14:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6B6B7D9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 08:14:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B67F61325
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 15:13:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A2C0C433B5;
-        Mon,  5 Sep 2022 15:13:50 +0000 (UTC)
-Date:   Mon, 5 Sep 2022 11:14:27 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Bernard Zhao <bernard@vivo.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, zhaojunkui2008@126.com
-Subject: Re: [PATCH] kernel/sched: fix KMSAN uninit-value error
-Message-ID: <20220905111427.57d3262b@gandalf.local.home>
-In-Reply-To: <20220905023715.1920088-1-bernard@vivo.com>
-References: <20220905023715.1920088-1-bernard@vivo.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D9B160F5B
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 15:14:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75EE3C433C1;
+        Mon,  5 Sep 2022 15:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662390870;
+        bh=CP4NcXDfCymQFvUZRnFGWcms/v7Hz+fmcT03tOXmkiM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gy66a6AZYzpOdaqzupomz3qx4JCM+cE1iAPogPai1oyAvfMtl5IP+1KCgOMuFyL9f
+         O4lgmpBdLCe6YrtNCpoHV1V9pPS4xlY9MFw/lZnNXRG7v+Jn53Lz3+0eKI0JhDe6Sl
+         bjjdMG3jAVE1SH62Y8+epSUV4Omo0HLQkrwXmgx1sBxnhIb51OfFhoLcyjHGdiPOEn
+         Ip+XDgX5jtQyz4gpVhqmMVm3xh2e76zsbVsMtJpYdnMAGgnhUpZCK+QhgoOFkr1JLl
+         a2Bx0UKJBVrjnJIeaxSvUXC83FJUemak9Xy7j62FG7WNe6MZqwlghAx34S+G53YwuC
+         DRwaqnj7pJohw==
+Message-ID: <977a4e45-43e7-485e-fb31-7fd0754f888d@kernel.org>
+Date:   Mon, 5 Sep 2022 23:14:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] erofs: fix pcluster use-after-free on UP platforms
+Content-Language: en-US
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <20220902045710.109530-1-hsiangkao@linux.alibaba.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220902045710.109530-1-hsiangkao@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun,  4 Sep 2022 19:37:14 -0700
-Bernard Zhao <bernard@vivo.com> wrote:
-
-> syzbot link:
-> https://syzkaller.appspot.com/bug?id=d04c5407207d11e46007775517b97764174bc45d
+On 2022/9/2 12:57, Gao Xiang wrote:
+> During stress testing with CONFIG_SMP disabled, KASAN reports as below:
 > 
-> Signed-off-by: Bernard Zhao <bernard@vivo.com>
-> ---
->  kernel/sched/psi.c | 3 +++
->  1 file changed, 3 insertions(+)
+> ==================================================================
+> BUG: KASAN: use-after-free in __mutex_lock+0xe5/0xc30
+> Read of size 8 at addr ffff8881094223f8 by task stress/7789
+> [ 3482.258885]
+> CPU: 0 PID: 7789 Comm: stress Not tainted 6.0.0-rc1-00002-g0d53d2e882f9 #3
+> Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+> Call Trace:
+>   <TASK>
+> ..
+>   __mutex_lock+0xe5/0xc30
+> ..
+>   z_erofs_do_read_page+0x8ce/0x1560
+> ..
+>   z_erofs_readahead+0x31c/0x580
+> ..
+> Freed by task 7787
+>   kasan_save_stack+0x1e/0x40
+>   kasan_set_track+0x20/0x30
+>   kasan_set_free_info+0x20/0x40
+>   __kasan_slab_free+0x10c/0x190
+>   kmem_cache_free+0xed/0x380
+>   rcu_core+0x3d5/0xc90
+>   __do_softirq+0x12d/0x389
+> [ 3482.295630]
+> Last potentially related work creation:
+>   kasan_save_stack+0x1e/0x40
+>   __kasan_record_aux_stack+0x97/0xb0
+>   call_rcu+0x3d/0x3f0
+>   erofs_shrink_workstation+0x11f/0x210
+>   erofs_shrink_scan+0xdc/0x170
+>   shrink_slab.constprop.0+0x296/0x530
+>   drop_slab+0x1c/0x70
+>   drop_caches_sysctl_handler+0x70/0x80
+>   proc_sys_call_handler+0x20a/0x2f0
+>   vfs_write+0x555/0x6c0
+>   ksys_write+0xbe/0x160
+>   do_syscall_64+0x3b/0x90
 > 
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index ecb4b4ff4ce0..46f048121520 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -195,6 +195,9 @@ static void group_init(struct psi_group *group)
->  	init_waitqueue_head(&group->poll_wait);
->  	timer_setup(&group->poll_timer, poll_timer_fn, 0);
->  	rcu_assign_pointer(group->poll_task, NULL);
-> +	memset(group->avg_total, 0, sizeof(group->avg_total));
-> +	memset(group->total, 0, sizeof(group->total));
-> +	memset(group->avg, 0, sizeof(group->avg));
->  }
+> The root cause is that erofs_workgroup_unfreeze() doesn't reset
+> to orig_val thus it causes a race that the pcluster reuses unexpectedly
+> before freeing.
+> 
+> Since UP platforms are quite rare now, such path becomes unnecessary.
+> Let's drop such specific-designed path directly instead.
+> 
+> Fixes: 73f5c66df3e2 ("staging: erofs: fix `erofs_workgroup_{try_to_freeze, unfreeze}'")
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-group_init() is only called in two places. One for a static variable which
-will already have all the non-set fields initialized to zero. The other can
-have kmalloc() converted to kzalloc() and not worry about zeroing any of
-the fields in initialization.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
--- Steve
-
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index ec66b40bdd40..00d62681ea6a 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -957,7 +957,7 @@ int psi_cgroup_alloc(struct cgroup *cgroup)
- 	if (static_branch_likely(&psi_disabled))
- 		return 0;
- 
--	cgroup->psi = kmalloc(sizeof(struct psi_group), GFP_KERNEL);
-+	cgroup->psi = kzalloc(sizeof(struct psi_group), GFP_KERNEL);
- 	if (!cgroup->psi)
- 		return -ENOMEM;
- 
+Thanks,

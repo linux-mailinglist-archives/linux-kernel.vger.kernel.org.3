@@ -2,115 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597B65ACCEC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3935ACD03
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236266AbiIEH3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S236337AbiIEH3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237280AbiIEH2B (ORCPT
+        with ESMTP id S237834AbiIEH3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:28:01 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7019338
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:26:47 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id k17so4768207wmr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 00:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=lnIlSEWqt2NuMr0K7xfjm9a6tpssYyqRvH3ULhoQs6E=;
-        b=EUI+aE5By8Fm45Y8d6L5isq9giQdqO2xEjrOpxA9/qsJFGKS0KWzRvv72P6F6VQdC4
-         FtWJ1HPSQ3R/HXPiL0FfRC/Qi+mYDb6QxD6bj8I0NPbTiWT1o+BQBTZZllIiyZGU9rJs
-         73V8ODYo2WmN5Eh5uFydeP1Zakyx/rScuuzFvl/VBVF7D3HfBd9Fi+T70LqG09GUHCWH
-         nU65d5GiBV4aHNIUEaZKmYbmLECM3B5RWTB0RflQQ3JK+mYnGncfmpJ700ImmjrELBNG
-         2lOjgR2LHVf1JkOB4BfGeH151hMJsCFzAzHotkYTFcZHgksAoMzk9H6rLOTGp8U9eFzm
-         7Otw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=lnIlSEWqt2NuMr0K7xfjm9a6tpssYyqRvH3ULhoQs6E=;
-        b=5vrKTUPiriGVmi282XtQlrQN8r2DS2Ar3XmlmEc8Z6YZTydXST/wWtRGFySTVHEaR3
-         FCXEbqvzBdqi7ElJGdD/8A4LIfHyOSg0vk9Tr4550tci9AfY4kmmW5CHLPTzMra2P6PX
-         We17je5Nijw5qSEbe6zq17O155tzJR5gMKQtXK44Ext91wpQtZ5wOdlEB83PjlHcxo4m
-         NCErls7R94GgW9kRcLOyH2scbSDUd7Gg0YfKchAjLjRwo6UwMgIIyFk8yllMweWewIbm
-         a/RdKcUTN17hifSv51ppTMLGvkYq6UvwcXakoy0mZEtVUwgJDvYEe721N+R85T3wkfxL
-         vu6g==
-X-Gm-Message-State: ACgBeo0hj/GF+nKIaV5xz/iqkOz5wb8qv54ecpeHBYZFeJZrNqr4VkDS
-        G/QaGUo6nmBxrHTAoySjbEFw1Q==
-X-Google-Smtp-Source: AA6agR7e3YZmCionyQgAwi+41U/5n8SW9PV18lBGEcpsXwbdFta/TDuiQqzLXJkQWdRl/uFr+MusIg==
-X-Received: by 2002:a1c:7907:0:b0:3a5:a965:95e6 with SMTP id l7-20020a1c7907000000b003a5a96595e6mr10026082wme.75.1662362806227;
-        Mon, 05 Sep 2022 00:26:46 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:982:cbb0:f365:27e9:453c:4c15])
-        by smtp.gmail.com with ESMTPSA id l17-20020a05600c1d1100b003a5fa79007fsm10521723wms.7.2022.09.05.00.26.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 00:26:45 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Furkan Kardame <furkan@fkardame.com>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: amlogic: add Beelink GT1 Ultimate binding
-Date:   Mon,  5 Sep 2022 09:26:44 +0200
-Message-Id: <166236280066.644940.15832711054372731780.b4-ty@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707093954.21716-1-christianshewitt@gmail.com>
-References: <20220707093954.21716-1-christianshewitt@gmail.com>
+        Mon, 5 Sep 2022 03:29:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5202CBF46;
+        Mon,  5 Sep 2022 00:29:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D26A26114F;
+        Mon,  5 Sep 2022 07:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1D2C43470;
+        Mon,  5 Sep 2022 07:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662362940;
+        bh=CFgCwLxabnSTm5t38K9gf4jhOrGuDxAkYE++1G/WjGM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JGKMySdkVYNsEEISdJeEgof2s7zUPB7MxIoc8NF0Ov0yUylKuxX9Zs89Zsc5jk9WM
+         5Q0Zo9qbNMH/4XRuWkVDa5GwP4Kcs/27OAT75QcgR11aIDsje7boiDSQHZuVVpyuNF
+         i3wokmslWR1HLMcQFXaxFD4lNFXzpxBnvGVSKftMFYpK4dPjIRkL5ptVURSnifMfTz
+         28/wIZO/Dc6MKonqAUymwd2Z9f+Y9+pnagL5DVK2k5GXMDlpUdCguDFPmb45Cjic3S
+         pkJLSsSq/LWishNQ3IOdosgRX33l70t4caPZXrt0S038a1MnVyQXgXECEFQtRGB50P
+         2vi92rF1uBY3Q==
+Received: by mail-lj1-f178.google.com with SMTP id b19so8302571ljf.8;
+        Mon, 05 Sep 2022 00:29:00 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0Py262bS4TJ7XU935PgRJ66a1GC2DORjO62e2zMyjc0QLqt586
+        DQ1mBandv7NqhT85CMwxEgBnznqQKb2+ixjHH7w=
+X-Google-Smtp-Source: AA6agR4DY2kw2V9VEj2BtgpQIUExjyF5ziSc8SPn9UWAk7xUpb9Cdk0NVBOi64KZOoSHNVCgaJ+6VjZLQP+Y2H9NLi0=
+X-Received: by 2002:a05:651c:11c6:b0:265:d1cb:b7b4 with SMTP id
+ z6-20020a05651c11c600b00265d1cbb7b4mr8755894ljo.69.1662362938224; Mon, 05 Sep
+ 2022 00:28:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220819102037.2697798-1-chenhuacai@loongson.cn>
+ <9b6f0aeaebbd36882b5b40d655f9ccd20c7be496.camel@xry111.site>
+ <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com>
+ <CAAhV-H6MR=rWhecY_uuiXAysED-BBJhKhGHj2cCkefJiPOo-ZQ@mail.gmail.com>
+ <CAAhV-H4KXVUBgNoQxOFiEj2AH-ojhnrEJ8QLvNrALY69MhXF3w@mail.gmail.com>
+ <CAMj1kXHJv_6mLhMikg+ic7=EUABLdrX3f__eBbHntrpGHjRfXg@mail.gmail.com>
+ <CAAhV-H4WTCRU9qShDp57AZ2DG1uz+=GTz14zyAUaqVDjXrNABA@mail.gmail.com>
+ <CAMj1kXFRsEJOS2Kim8T64rYF85_bmmZ5gW7kjb8eDXry5SA+cg@mail.gmail.com> <CAAhV-H4xDB6JPCEZqQ6+VadOPnzA3beguiuTRS-Ub=Ci5FgpPw@mail.gmail.com>
+In-Reply-To: <CAAhV-H4xDB6JPCEZqQ6+VadOPnzA3beguiuTRS-Ub=Ci5FgpPw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 5 Sep 2022 09:28:46 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEPpCPHe8ghOKcaGvuLjetP9WJbrMkLcqv_V+oRWeyLmw@mail.gmail.com>
+Message-ID: <CAMj1kXEPpCPHe8ghOKcaGvuLjetP9WJbrMkLcqv_V+oRWeyLmw@mail.gmail.com>
+Subject: Re: [PATCH V3] LoongArch: Add efistub booting support
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Xi Ruoyao <xry111@xry111.site>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, 5 Sept 2022 at 09:25, Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> Hi, Ard and Youling,
+>
+> On Mon, Sep 5, 2022 at 3:02 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Mon, 5 Sept 2022 at 05:51, Huacai Chen <chenhuacai@kernel.org> wrote:
+> > >
+> > > Hi, Ard,
+> > >
+> > > On Mon, Sep 5, 2022 at 5:59 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > >
+> > > > On Sun, 4 Sept 2022 at 15:24, Huacai Chen <chenhuacai@kernel.org> wrote:
+> > > > >
+> > > > > Hi, Ard,
+> > > > >
+> > > > > On Thu, Sep 1, 2022 at 6:40 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> > > > > >
+> > > > > > Hi, Ard,
+> > > > > >
+> > > > > > On Sat, Aug 27, 2022 at 3:14 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > >
+> > > > > > > On Sat, 27 Aug 2022 at 06:41, Xi Ruoyao <xry111@xry111.site> wrote:
+> > > > > > > >
+> > > > > > > > Tested V3 with the magic number check manually removed in my GRUB build.
+> > > > > > > > The system boots successfully.  I've not tested Arnd's zBoot patch yet.
+> > > > > > >
+> > > > > > > I am Ard not Arnd :-)
+> > > > > > >
+> > > > > > > Please use this branch when testing the EFI decompressor:
+> > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-decompressor-v4
+> > > > > > The root cause of LoongArch zboot boot failure has been found, it is a
+> > > > > > binutils bug, latest toolchain with the below patch can solve the
+> > > > > > problem.
+> > > > > >
+> > > > > > diff --git a/bfd/elfnn-loongarch.c b/bfd/elfnn-loongarch.c
+> > > > > > index 5b44901b9e0..fafdc7c7458 100644
+> > > > > > --- a/bfd/elfnn-loongarch.c
+> > > > > > +++ b/bfd/elfnn-loongarch.c
+> > > > > > @@ -2341,9 +2341,10 @@ loongarch_elf_relocate_section (bfd
+> > > > > > *output_bfd, struct bfd_link_info *info,
+> > > > > >      case R_LARCH_SOP_PUSH_PLT_PCREL:
+> > > > > >        unresolved_reloc = false;
+> > > > > >
+> > > > > > -      if (resolved_to_const)
+> > > > > > +      if (!is_undefweak && resolved_to_const)
+> > > > > >          {
+> > > > > >            relocation += rel->r_addend;
+> > > > > > +          relocation -= pc;
+> > > > > >            break;
+> > > > > >          }
+> > > > > >        else if (is_undefweak)
+> > > > > >
+> > > > > >
+> > > > > > Huacai
+> > > > > Now the patch is submitted here:
+> > > > > https://sourceware.org/pipermail/binutils/2022-September/122713.html
+> > > > >
+> > > >
+> > > > Great. Given the severity of this bug, I imagine that building the
+> > > > LoongArch kernel will require a version of binutils that carries this
+> > > > fix.
+> > > >
+> > > > Therefore, i will revert back to the original approach for accessing
+> > > > uncompressed_size, using an extern declaration with an __aligned(1)
+> > > > attribute.
+> > > >
+> > > > > And I have some other questions about kexec: kexec should jump to the
+> > > > > elf entry or the pe entry? I think is the elf entry, because if we
+> > > > > jump to the pe entry, then SVAM will be executed twice (but it should
+> > > > > be executed only once). However, how can we jump to the elf entry if
+> > > > > we use zboot? Maybe it is kexec-tool's responsibility to decompress
+> > > > > the zboot kernel image?
+> > > > >
+> > > >
+> > > > Yes, very good point. Kexec kernels cannot boot via the EFI entry
+> > > > point, as the boot services will already be shutdown. So the kexec
+> > > > kernel needs to boot via the same entrypoint in the core kernel that
+> > > > the EFI stub calls when it hands over.
+> > > >
+> > > > For the EFI zboot image in particular, we will need to teach kexec how
+> > > > to decompress them. The zboot image has a header that
+> > > > a) describes it as a EFI linux zimg
+> > > > b) describes the start and end offset of the compressed payload
+> > > > c) describes which compression algorithm was used.
+> > > >
+> > > > This means that any non-EFI loader (including kexec) should be able to
+> > > > extract the inner PE/COFF image and decompress it. For arm64 and
+> > > > RISC-V, this is sufficient as the EFI and raw images are the same. For
+> > > > LoongArch, I suppose it means we need a way to enter the core kernel
+> > > > directly via the entrypoint that the EFI stub uses when handing over
+> > > > (and pass the original DT argument so the kexec kernel has access to
+> > > > the EFI and ACPI firmware tables)
+> > > OK, then is this implementation [1] acceptable? I remember that you
+> > > said the MS-DOS header shouldn't contain other information, so I guess
+> > > this is unacceptable?
+> > >
+> >
+> > No, this looks reasonable to me. I objected to using magic numbers in
+> > the 'pure PE' view of the image, as it does not make sense for a pure
+> > PE loader such as GRUB to rely on such metadata.
+> >
+> > In this case (like on arm64), we are dealing with something else: we
+> > need to identify the image to the kernel itself, and here, using the
+> > unused space in the MS-DOS header is fine.
+> >
+> > > [1] https://lore.kernel.org/loongarch/c4dbb14a-5580-1e47-3d15-5d2079e88404@loongson.cn/T/#mb8c1dc44f7fa2d3ef638877f0cd3f958f0be96ad
+> OK, then there is no big problem here. And I found that arm64/riscv
+> don't need the kernel entry point in the header. I don't know why, but
+> I think it implies that a unified layout across architectures is
+> unnecessary, and I prefer to put the kernel entry point before
+> effective kernel size. :)
+>
 
-On Thu, 7 Jul 2022 09:39:53 +0000, Christian Hewitt wrote:
-> Add the board binding for the Shenzen AZW (Beelink) GT1 Ultimate
-> Android Set-Top Box device.
-> 
-> 
-
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.1/dt64)
-
-[1/2] dt-bindings: arm: amlogic: add Beelink GT1 Ultimate binding
-      https://git.kernel.org/amlogic/c/70bff3a65d4b974434b7f576f52a269fa4f0dd04
-[2/2] arm64: dts: meson: add support for Beelink GT1 Ultimate
-      https://git.kernel.org/amlogic/c/5b3a87a5c4f20da682d50dbaf8c4aa357cfd0d2d
-
-These changes has been applied on the intermediate git tree [1].
-
-The v6.1/dt64 branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
--- 
-Neil
+It is fine to put the entry point offset in the header. arm64 and
+RISC-V don't need this because the first instructions are a pseudo-NOP
+(an instruction that does nothing but its binary encoding looks like
+'MZ..') and a jump to the actual entry point.

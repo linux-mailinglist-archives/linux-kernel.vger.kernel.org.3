@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7375AC851
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 02:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722D25AC858
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 02:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbiIEAr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 20:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S231591AbiIEA4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 20:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIEArx (ORCPT
+        with ESMTP id S231814AbiIEA4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 20:47:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88C123142;
-        Sun,  4 Sep 2022 17:47:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7357260FCB;
-        Mon,  5 Sep 2022 00:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D338DC433D7;
-        Mon,  5 Sep 2022 00:47:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662338870;
-        bh=0ISkgDpBocmb554mn9Xsxf+y8I7y2rmxX94tQy2sVs0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sJtqSToupmQfMornX9qx6FLStcpWGdWe9rLce1pc+joAx7ilCtREWkmSVhOfVhY85
-         PvY4IQgoczSK8kqLi6eclk/Yr4XDNFz1eYLu3STlJdp6Zkx8lY7Idd01iPyjC9HlFq
-         WAp6Ex1WkwEUocgsfjW/z7Jd8sNbs0whRhgU1OEHB6lB5E/dDUGfffRcpWSFkayKx4
-         TGqmKXqfz+6OGbwWgPHRexxnbNMltcsmAtuBY2ca3OcXs8YdkObb6xr7goFHBU82L0
-         pduiOB0iBITga9Igd7fImu54YmUsZ0IIgl9XdDtQrlg9dRaIk5XDlfzgTTdsEEnG6D
-         dUHMe0jr6N/Cw==
-Date:   Mon, 5 Sep 2022 08:47:44 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Priyanka Jain <priyanka.jain@nxp.com>,
-        Santan Kumar <santan.kumar@nxp.com>,
-        Tao Yang <b31903@freescale.com>,
-        Yogesh Gaur <yogeshnarayan.gaur@nxp.com>,
-        Abhimanyu Saini <abhimanyu.saini@nxp.com>
-Subject: Re: [PATCH v3 3/5] arm64: dts: ls2081a-rdb: Add DTS for NXP
- LS2081ARDB
-Message-ID: <20220905004744.GN1728671@dragon>
-References: <20220823234913.30325-1-leoyang.li@nxp.com>
- <20220823234913.30325-4-leoyang.li@nxp.com>
+        Sun, 4 Sep 2022 20:56:09 -0400
+Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3903E24BE7
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 17:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=z9nvn
+        N5LMXDX8a7aP7btkSJDO5Ia4gaMEc/3ABW2E00=; b=FS6u3Ge7xHS2IfIB+2/4z
+        8u2tAV9kKJ37xsM2vPouNbmE1kRNxkCR9JzoHBVCUpmQqb8pNDaUxhCaolQqPEPD
+        hqeAT8RC2I557koy2doGFXTb9AXtBtnuU4iwZyFK2Ec2Pq3nqgUoYfLpMtlWPwdS
+        eUFKJrdpavAb3+HjZQ8XBU=
+Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
+        by smtp14 (Coremail) with SMTP id EsCowAD3c1mQSBVjtUhLDw--.19175S4;
+        Mon, 05 Sep 2022 08:54:51 +0800 (CST)
+From:   Jingyu Wang <jingyuwang_vip@163.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        isabbasso@riseup.net, Rodrigo.Siqueira@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Jingyu Wang <jingyuwang_vip@163.com>
+Subject: [PATCH] drm/amdgpu: cleanup coding style in amdgpu_atpx_handler.c
+Date:   Mon,  5 Sep 2022 08:53:29 +0800
+Message-Id: <20220905005329.19501-1-jingyuwang_vip@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823234913.30325-4-leoyang.li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EsCowAD3c1mQSBVjtUhLDw--.19175S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJF13CrWrCF17ArWkJFWrXwb_yoW5tF17pF
+        WSgr97tr1rZw18AFykAr4DZF1Ykws7ZFyUG3yDZ34Y9w4UJr1rJ348ta4jyrn5CrW7CFsa
+        vFZxXa45Aa9FyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEVc_7UUUUU=
+X-Originating-IP: [1.203.67.201]
+X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/1tbiyRtzF2I66w2tygAAsv
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,182 +53,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 06:49:11PM -0500, Li Yang wrote:
-> From: Priyanka Jain <priyanka.jain@nxp.com>
-> 
-> This patch adds support for NXP LS2081ARDB board which has LS2081A SoC.
-> 
-> LS2081A SoC is 40-pin derivative of LS2088A SoC. From functional
-> perspective both are same. Hence, LS2088a SoC dtsi file is included
-> from LS2081ARDB dts.
-> 
-> Signed-off-by: Priyanka Jain <priyanka.jain@nxp.com>
-> Signed-off-by: Santan Kumar <santan.kumar@nxp.com>
-> Signed-off-by: Tao Yang <b31903@freescale.com>
-> Signed-off-by: Yogesh Gaur <yogeshnarayan.gaur@nxp.com>
-> Signed-off-by: Abhimanyu Saini <abhimanyu.saini@nxp.com>
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/Makefile        |   1 +
->  .../boot/dts/freescale/fsl-ls2081a-rdb.dts    | 132 ++++++++++++++++++
->  2 files changed, 133 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls2081a-rdb.dts
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-> index 2cf55534c162..bf7c448fa817 100644
-> --- a/arch/arm64/boot/dts/freescale/Makefile
-> +++ b/arch/arm64/boot/dts/freescale/Makefile
-> @@ -36,6 +36,7 @@ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1088a-rdb.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1088a-ten64.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2080a-qds.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2080a-rdb.dtb
-> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2081a-rdb.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2080a-simu.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2088a-qds.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2088a-rdb.dtb
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2081a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls2081a-rdb.dts
-> new file mode 100644
-> index 000000000000..44e955d2db12
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls2081a-rdb.dts
-> @@ -0,0 +1,132 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Device Tree file for NXP LS2081A RDB Board.
-> + *
-> + * Copyright 2017 NXP
-> + *
-> + * Priyanka Jain <priyanka.jain@nxp.com>
-> + *
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "fsl-ls2088a.dtsi"
-> +
-> +/ {
-> +	model = "NXP Layerscape 2081A RDB Board";
-> +	compatible = "fsl,ls2081a-rdb", "fsl,ls2081a";
-> +
-> +	aliases {
-> +		serial0 = &serial0;
-> +		serial1 = &serial1;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial1:115200n8";
-> +	};
-> +};
-> +
-> +&dspi {
-> +	status = "okay";
-> +
-> +	n25q512a: flash@0 {
-> +		compatible = "jedec,spi-nor";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-max-frequency = <3000000>;
-> +		reg = <0>;
-> +	};
-> +};
-> +
-> +&esdhc {
-> +	status = "okay";
-> +};
-> +
-> +&ifc {
-> +	status = "disabled";
-> +};
-> +
-> +&i2c0 {
+Fix everything checkpatch.pl complained about in amdgpu_atpx_handler.c
 
-In alphabetic order, ifc should go after i2c0.
+Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
+---
+ .../gpu/drm/amd/amdgpu/amdgpu_atpx_handler.c  | 27 +++++++++++--------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
 
-Shawn
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_atpx_handler.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_atpx_handler.c
+index d6d986be906a..911d6a130ec5 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_atpx_handler.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_atpx_handler.c
+@@ -74,24 +74,29 @@ struct atpx_mux {
+ 	u16 mux;
+ } __packed;
+ 
+-bool amdgpu_has_atpx(void) {
++bool amdgpu_has_atpx(void)
++{
+ 	return amdgpu_atpx_priv.atpx_detected;
+ }
+ 
+-bool amdgpu_has_atpx_dgpu_power_cntl(void) {
++bool amdgpu_has_atpx_dgpu_power_cntl(void)
++{
+ 	return amdgpu_atpx_priv.atpx.functions.power_cntl;
+ }
+ 
+-bool amdgpu_is_atpx_hybrid(void) {
++bool amdgpu_is_atpx_hybrid(void)
++{
+ 	return amdgpu_atpx_priv.atpx.is_hybrid;
+ }
+ 
+-bool amdgpu_atpx_dgpu_req_power_for_displays(void) {
++bool amdgpu_atpx_dgpu_req_power_for_displays(void)
++{
+ 	return amdgpu_atpx_priv.atpx.dgpu_req_power_for_displays;
+ }
+ 
+ #if defined(CONFIG_ACPI)
+-void *amdgpu_atpx_get_dhandle(void) {
++void *amdgpu_atpx_get_dhandle(void)
++{
+ 	return amdgpu_atpx_priv.dhandle;
+ }
+ #endif
+@@ -134,7 +139,7 @@ static union acpi_object *amdgpu_atpx_call(acpi_handle handle, int function,
+ 
+ 	/* Fail only if calling the method fails and ATPX is supported */
+ 	if (ACPI_FAILURE(status) && status != AE_NOT_FOUND) {
+-		printk("failed to evaluate ATPX got %s\n",
++		DRM_WARN("failed to evaluate ATPX got %s\n",
+ 		       acpi_format_exception(status));
+ 		kfree(buffer.pointer);
+ 		return NULL;
+@@ -190,7 +195,7 @@ static int amdgpu_atpx_validate(struct amdgpu_atpx *atpx)
+ 
+ 		size = *(u16 *) info->buffer.pointer;
+ 		if (size < 10) {
+-			printk("ATPX buffer is too small: %zu\n", size);
++			DRM_WARN("ATPX buffer is too small: %zu\n", size);
+ 			kfree(info);
+ 			return -EINVAL;
+ 		}
+@@ -223,11 +228,11 @@ static int amdgpu_atpx_validate(struct amdgpu_atpx *atpx)
+ 	atpx->is_hybrid = false;
+ 	if (valid_bits & ATPX_MS_HYBRID_GFX_SUPPORTED) {
+ 		if (amdgpu_atpx_priv.quirks & AMDGPU_PX_QUIRK_FORCE_ATPX) {
+-			printk("ATPX Hybrid Graphics, forcing to ATPX\n");
++			DRM_WARN("ATPX Hybrid Graphics, forcing to ATPX\n");
+ 			atpx->functions.power_cntl = true;
+ 			atpx->is_hybrid = false;
+ 		} else {
+-			printk("ATPX Hybrid Graphics\n");
++			DRM_WARN("ATPX Hybrid Graphics\n");
+ 			/*
+ 			 * Disable legacy PM methods only when pcie port PM is usable,
+ 			 * otherwise the device might fail to power off or power on.
+@@ -269,7 +274,7 @@ static int amdgpu_atpx_verify_interface(struct amdgpu_atpx *atpx)
+ 
+ 	size = *(u16 *) info->buffer.pointer;
+ 	if (size < 8) {
+-		printk("ATPX buffer is too small: %zu\n", size);
++		DRM_WARN("ATPX buffer is too small: %zu\n", size);
+ 		err = -EINVAL;
+ 		goto out;
+ 	}
+@@ -278,7 +283,7 @@ static int amdgpu_atpx_verify_interface(struct amdgpu_atpx *atpx)
+ 	memcpy(&output, info->buffer.pointer, size);
+ 
+ 	/* TODO: check version? */
+-	printk("ATPX version %u, functions 0x%08x\n",
++	DRM_WARN("ATPX version %u, functions 0x%08x\n",
+ 	       output.version, output.function_bits);
+ 
+ 	amdgpu_atpx_parse_functions(&atpx->functions, output.function_bits);
 
-> +	status = "okay";
-> +
-> +	pca9547: mux@75 {
-> +		compatible = "nxp,pca9547";
-> +		reg = <0x75>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		i2c@1 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x1>;
-> +
-> +			rtc@51 {
-> +				compatible = "nxp,pcf2129";
-> +				reg = <0x51>;
-> +			};
-> +		};
-> +
-> +		i2c@2 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x2>;
-> +
-> +			ina220@40 {
-> +				compatible = "ti,ina220";
-> +				reg = <0x40>;
-> +				shunt-resistor = <500>;
-> +			};
-> +		};
-> +
-> +		i2c@3 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x3>;
-> +
-> +			adt7481@4c {
-> +				compatible = "adi,adt7461";
-> +				reg = <0x4c>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&qspi {
-> +	status = "okay";
-> +
-> +	s25fs512s0: flash@0 {
-> +		compatible = "jedec,spi-nor";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-rx-bus-width = <4>;
-> +		spi-tx-bus-width = <4>;
-> +		spi-max-frequency = <20000000>;
-> +		reg = <0>;
-> +	};
-> +
-> +	s25fs512s1: flash@1 {
-> +		compatible = "jedec,spi-nor";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-rx-bus-width = <4>;
-> +		spi-tx-bus-width = <4>;
-> +		spi-max-frequency = <20000000>;
-> +		reg = <1>;
-> +	};
-> +};
-> +
-> +&sata0 {
-> +	status = "okay";
-> +};
-> +
-> +&sata1 {
-> +	status = "okay";
-> +};
-> +
-> +&usb0 {
-> +	status = "okay";
-> +};
-> +
-> +&usb1 {
-> +	status = "okay";
-> +};
-> -- 
-> 2.37.1
-> 
+base-commit: e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+-- 
+2.34.1
+

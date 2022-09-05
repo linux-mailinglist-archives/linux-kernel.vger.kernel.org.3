@@ -2,106 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB035AD217
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD665AD22B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237386AbiIEMIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
+        id S235420AbiIEMKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiIEMI3 (ORCPT
+        with ESMTP id S229822AbiIEMKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:08:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846945E317
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:08:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662379707;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2nwyShCFZbZOZb3RqUUSZIoZqzOmpN20eUJtd5XLm+U=;
-        b=IwxRvA+oogGeE0U8nWzS656xNbGRCClfT5uyCkKTC8tzTFycf32ypUp/rW/RtgR7HMTTyF
-        SNTL3LtMEoU3IzIUnVHzM0mVYflcrw1iBS98WJCWd9SA6o35sRMEHx+yIjc4FciyN5d8Hj
-        dBVuFs9ohrWhhvZ6b3PCIhuWca3uxww=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-502-VPX3JYRiOW28KDwXPsBZ3g-1; Mon, 05 Sep 2022 08:08:22 -0400
-X-MC-Unique: VPX3JYRiOW28KDwXPsBZ3g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 869F880418F;
-        Mon,  5 Sep 2022 12:08:21 +0000 (UTC)
-Received: from localhost (ovpn-12-58.pek2.redhat.com [10.72.12.58])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C7B971121314;
-        Mon,  5 Sep 2022 12:08:20 +0000 (UTC)
-Date:   Mon, 5 Sep 2022 20:08:16 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, ardb@kernel.org,
-        guanghuifeng@linux.alibaba.com, mark.rutland@arm.com,
-        will@kernel.org, linux-mm@kvack.org, thunder.leizhen@huawei.com,
-        wangkefeng.wang@huawei.com, kexec@lists.infradead.org
-Subject: Re: [PATCH 1/2] arm64, kdump: enforce to take 4G as the crashkernel
- low memory end
-Message-ID: <YxXmsKYGTd1+/U12@MiWiFi-R3L-srv>
-References: <20220828005545.94389-1-bhe@redhat.com>
- <20220828005545.94389-2-bhe@redhat.com>
- <Yw8PvF5d2uuWy6Cl@kernel.org>
- <Yw9wU/S8cP0ntR3g@MiWiFi-R3L-srv>
- <YxBeS0G+F+fsBgod@kernel.org>
- <YxCk0mX5IzhvK9Pv@MiWiFi-R3L-srv>
- <YxXPannyTqBZInAt@kernel.org>
+        Mon, 5 Sep 2022 08:10:13 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713201A3B6
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:10:05 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id CACCB5C0116;
+        Mon,  5 Sep 2022 08:10:04 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 05 Sep 2022 08:10:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1662379804; x=
+        1662466204; bh=AZ4dQBzImW2tHrdACV6XOzXH3AtSXVLO9nUPVtHh6G4=; b=P
+        XNUMtZP/LQxf/pkq9rs5FPGGK6CaoE+XmwQMkCOmtnI7vHTzSaoVHgPDhY9QIuGo
+        DLF7S2VD9BaKiitRAhPOk4AyuU5dIomPsvJ8TrxVZcEy4dEArf1SOogUgiGdFS4V
+        KIz2o7Vfqv8PGEDOMEZHvDFOSraStSZFSI2hs8qjTLYhOUt48FVrGWL0Vt6Ck/OR
+        VoKRkTnCSDwVhrxuqi4rOXpU+vOczeXoLscdC8k07ndxg9CrsvAMVWm0cYo7LVOV
+        L6QfNhbcwndE3i9/SMnmkjvYlssTmhbqeL+s1NvwuxFnM7T3tlB2+QLaV/iDw8eZ
+        0gVR6jfJ8XSOy2GYobYJQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1662379804; x=
+        1662466204; bh=AZ4dQBzImW2tHrdACV6XOzXH3AtSXVLO9nUPVtHh6G4=; b=4
+        Xps4K7rSCVxlGOkgti8NiEDry/OecDw1B5af385Kn6/A7XVx4uaszCKZJTxlG+vM
+        N2X4b5Pq8SW0jWnOrrJRwDQzpIt938ta8Ojc+J+XWs0pUtdYzirowZJ8UKy3332r
+        ShJnb3OlJPZZrwOjPnCYvAeIv2YjM1AbuF2wyfeDR8tPtQxBHLyCJlJ0dV5yY0zz
+        XQsx6EROgNvfx8P4ysZNQZT4w/Aw0+PiPwlAmEKYJgv95y9XQUplxIzQU1XrEY1X
+        uCubWFSX/cODkbs3ltcbdhSXeMHSq0ZR4n2mYXmTyWAaO0v7dg6rL+SSjry9hdpB
+        Ur8Ezkurw2DdTYZrlc+kg==
+X-ME-Sender: <xms:G-cVY_dUypXZVeIhRkPpR0StdmG5mQwaLYn7oxHHw6wp6DnVAao4tQ>
+    <xme:G-cVY1MzJl2ZcW9itcF9tk5605ABHqc4MhOCqEyFLzRp58lOMfje0erZtzTCeYOyA
+    siZmj4ER898Zv2cWSc>
+X-ME-Received: <xmr:G-cVY4jERD0hsnOs8cT_Ah0pYvBaf2jwbmXka4Er9kMz6cIRoRoiA24GIYk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeliedghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttdejnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepudeikefffeegvddvfeetfeekkedvteffffehtddttdfgfeehlefgleev
+    udeviedvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
+    tghh
+X-ME-Proxy: <xmx:G-cVYw9KHUGIl3jCDIX0_emDrvZSH3vbI48zm5QIvu5g91lNCy4Glg>
+    <xmx:G-cVY7vGGY6EaRGHU9YQDggeo0KX8DlCHirg6Yj5Ltw4pnT8VYb1_A>
+    <xmx:G-cVY_E70Iiv_mmFRufCu-fM_HKsCpHy94zXyLGAMO7bs6bf2GlsGg>
+    <xmx:HOcVY2n_nAXQhqR2XTSLnVF6xHM5PW1_spth7epSxXZoTHVAdC8DjA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Sep 2022 08:10:03 -0400 (EDT)
+Date:   Mon, 5 Sep 2022 14:10:00 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 2/2] drm/tests: Change "igt_" prefix to "test_drm_"
+Message-ID: <20220905121000.m2xppgjlfjlmppfr@houat>
+References: <20220901124210.591994-1-mairacanal@riseup.net>
+ <20220901124210.591994-2-mairacanal@riseup.net>
+ <20220901125530.b56s4zisnkfuigvc@houat>
+ <04aeba53-793c-3196-3137-915f0640dc2a@riseup.net>
+ <87h71qfbi9.fsf@intel.com>
+ <20220902123400.5ljgc7z6zw34d64m@houat>
+ <87mtbidj3b.fsf@intel.com>
+ <20220902133828.ufwp6bgzd37yu6bv@nostramo.hardline.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YxXPannyTqBZInAt@kernel.org>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220902133828.ufwp6bgzd37yu6bv@nostramo.hardline.pl>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/22 at 01:28pm, Mike Rapoport wrote:
-> On Thu, Sep 01, 2022 at 08:25:54PM +0800, Baoquan He wrote:
-> > On 09/01/22 at 10:24am, Mike Rapoport wrote:
-> > 
-> > max_zone_phys() only handles cases when CONFIG_ZONE_DMA/DMA32 enabled,
-> > the disabledCONFIG_ZONE_DMA/DMA32 case is not included. I can change
-> > it like:
-> > 
-> > static phys_addr_t __init crash_addr_low_max(void)
-> > {
-> >         phys_addr_t low_mem_mask = U32_MAX;
-> >         phys_addr_t phys_start = memblock_start_of_DRAM();
-> > 
-> >         if ((!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) ||
-> >              (phys_start > U32_MAX))
-> >                 low_mem_mask = PHYS_ADDR_MAX;
-> > 
-> >         return low_mem_mast + 1;
-> > }
-> > 
-> > or add the disabled CONFIG_ZONE_DMA/DMA32 case into crash_addr_low_max()
-> > as you suggested. Which one do you like better?
-> > 
-> > static phys_addr_t __init crash_addr_low_max(void)
-> > {
-> >         if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
-> > 		return PHYS_ADDR_MAX + 1;
-> > 
-> >         return max_zone_phys(32);
-> > }
->  
-> I like the second variant better.
+On Fri, Sep 02, 2022 at 03:38:28PM +0200, Micha=C5=82 Winiarski wrote:
+> On Fri, Sep 02, 2022 at 04:03:20PM +0300, Jani Nikula wrote:
+> > On Fri, 02 Sep 2022, Maxime Ripard <maxime@cerno.tech> wrote:
+> > > On Fri, Sep 02, 2022 at 11:04:14AM +0300, Jani Nikula wrote:
+> > >> On Thu, 01 Sep 2022, Ma=C3=ADra Canal <mairacanal@riseup.net> wrote:
+> > >> > Hi Maxime,
+> > >> >
+> > >> > On 9/1/22 09:55, Maxime Ripard wrote:
+> > >> >> Hi,
+> > >> >>=20
+> > >> >> On Thu, Sep 01, 2022 at 09:42:10AM -0300, Ma=C3=ADra Canal wrote:
+> > >> >>> With the introduction of KUnit, IGT is no longer the only option=
+ to run
+> > >> >>> the DRM unit tests, as the tests can be run through kunit-tool o=
+r on
+> > >> >>> real hardware with CONFIG_KUNIT.
+> > >> >>>
+> > >> >>> Therefore, remove the "igt_" prefix from the tests and replace i=
+t with
+> > >> >>> the "test_drm_" prefix, making the tests' names independent from=
+ the tool
+> > >> >>> used.
+> > >> >>>
+> > >> >>> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+> > >> >>>
+> > >> >>> ---
+> > >> >>> v1 -> v2: https://lore.kernel.org/dri-devel/20220830211603.19173=
+4-1-mairacanal@riseup.net/
+> > >> >>> - Change "drm_" prefix to "test_drm_", as "drm_" can be a bit co=
+nfusing (Jani Nikula).
+> > >> >>=20
+> > >> >> I appreciate it's a bit of a bikeshed but I disagree with this. T=
+he
+> > >> >> majority of the kunit tests already out there start with the fram=
+ework
+> > >> >> name, including *all* the examples in the kunit doc. Plus, it's f=
+airly
+> > >> >> obvious that it's a test, kunit is only about running tests in th=
+e first
+> > >> >> place.
+> > >> >
+> > >> > Would it be better to keep it as "drm_"?
+> > >>=20
+> > >> That's not "keeping". That's renaming igt to drm.
+> > >
+> > > Well, there's like half the tests that are prefixed with drm, the oth=
+er
+> > > with igt, so it's both really
+> > >
+> > >> > Currently, I don't think it is appropriate to hold the "igt_" pref=
+ix, as
+> > >> > the tests are not IGT exclusive, but I don't have a strong opinion=
+ on
+> > >> > using the "drm_" or the "test_drm" prefixes.
+> > >>=20
+> > >> I repeat my stance that "drm_" alone is confusing.
+> > >
+> > > What are you confusing it with?
+> > >
+> > >> For the reason alone that it pollutes the code tagging tools, mixing
+> > >> actual drm_ types and functions with unit test functions.
+> > >
+> > > I don't get it, I'm sorry. All these functions are static and not part
+> > > of any API, so I can't see how it would pollute a code tagging tool. =
+Or
+> > > at least, not more than any driver does.
+> > >
+> > > And we're part of a larger project here, it's about consistency with =
+the
+> > > rest of the ecosystem.
+> >=20
+> > Okay, so I'm just going to explain what I mean, but say "whatever" right
+> > after and move on.
+> >=20
+> > For example, drm_buddy_test.c includes drm_buddy.h so with the igt_ ->
+> > drm_ rename none of the test functions may clash with the drm_buddy_
+> > prefixed existing functions. Ditto for all tests similarly.
+> >=20
+> > For example drm_buddy_alloc_range() as a name sounds like something that
+> > allocs a range, not something that tests range allocation. On the other
+> > hand, you have drm_buddy_alloc_blocks() which is actually a real
+> > drm_buddy function, not a test. What would you call a test that tests
+> > that? Here, we end up with names that are all prefixed drm_buddy and you
+> > won't know what's the actual function and what's the test unless you
+> > look it up.
+> >=20
+> > I use code tagging that I can use for finding and completing
+> > e.g. functions. Currently I have the following completions, for
+> > igt_buddy_ and drm_buddy_, respectively:
+> >=20
+> > Possible completions are:
+> > igt_buddy_alloc_limit 	igt_buddy_alloc_optimistic 	igt_buddy_alloc_path=
+ological
+> > igt_buddy_alloc_pessimistic 	igt_buddy_alloc_range 	igt_buddy_alloc_smo=
+ke
+> >=20
+> > Possible completions are:
+> > drm_buddy_alloc_blocks 	drm_buddy_block 	drm_buddy_block_is_allocated 	=
+drm_buddy_block_is_free
+> > drm_buddy_block_is_split 	drm_buddy_block_offset 	drm_buddy_block_order=
+ 	drm_buddy_block_print
+> > drm_buddy_block_size 	drm_buddy_block_state 	drm_buddy_block_trim 	drm_=
+buddy_fini
+> > drm_buddy_free_block 	drm_buddy_free_list 	drm_buddy_init 	drm_buddy_in=
+it_test
+> > drm_buddy_module_exit 	drm_buddy_module_init 	drm_buddy_print
+> >=20
+> > With the patch at hand, they'll all be lumped under drm_buddy_
+> > completions, and some of them will be actual drm buddy functions and
+> > some not.
+> >=20
+> > I just find it a very odd convention to name the tests in a way that's
+> > indistinguishable from the real things. Even *within* drm_buddy_test.c
+> > where you read the test code. Because currently you do have calls to
+> > igt_buddy_ prefixed functions from other igt_buddy_ prefixed functions,
+> > along with the drm_buddy_ prefixed calls. I think it's just going to be
+> > a mess.
+> >=20
+> > /rant
+> >=20
+> > Whatever. Moving on.
+>=20
+> KUnit docs [1] state:
+> https://docs.kernel.org/dev-tools/kunit/style.html#test-cases
+> "As tests are themselves functions, their names cannot conflict with other
+> C identifiers in the kernel. This may require some creative naming."
+> And give examples of names. But this should be local to individual test s=
+uite -
+> as long as the test is readable, and the name describes what it is testin=
+g, we
+> should be fine. We don't even need to pass drm_* prefix, as this conventi=
+on is
+> expected for test suites, not test cases [2].
+>=20
+> Having said that - I do believe that igt_* prefix don't belong here (whic=
+h is
+> why I'm progressively trying to get rid of in the patches that refactor s=
+ome of
+> the tests).
+> I agree with Jani - can we take it on a case-by-case basis?
+> If the test name is too similar to the function that it is testing, we co=
+uld go
+> with one of the following (taking igt_buddy_alloc_limit as example):
+> drm_buddy_test_alloc_limit
+> test_drm_buddy_alloc_limit
+> buddy_test_alloc_limit
+> test_buddy_alloc_limit
 
-Sure, will change to use the 2nd one . Thanks.
+We also have drm_test_buddy_alloc_limit, or drm_buddy_test_alloc_limit
 
+Both would be fine for me, with a small preference for the former, which
+should also address Jani's concerns?
+
+> And either of those is fine in my opinion (I'd personally go with
+> test_buddy_alloc_limit in this case).
+> We don't really need a DRM-wide (or worse, kernel wide) convention for te=
+st case
+> names (it's only really needed for test suites).
+
+Sure we do. kunit.py can take some filters too. Being able to only run
+DRM tests with a single filter is super convenient, and if we fail to
+provide a consistent naming we're pretty much sure people running the
+tests are going to miss some.
+
+Maxime

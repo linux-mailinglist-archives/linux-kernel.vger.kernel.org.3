@@ -2,61 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E6B5ADB10
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DFA5ADB1E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbiIEWD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S232416AbiIEWID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 18:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiIEWDx (ORCPT
+        with ESMTP id S231331AbiIEWH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:03:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73F32B25B;
-        Mon,  5 Sep 2022 15:03:52 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 54FCC6BC;
-        Tue,  6 Sep 2022 00:03:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662415430;
-        bh=m4TKbAl1A87gPnt2CNIsocJYJ+XEr3vdGXNPIz1nCWg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jhOgkEZCkRWKa7EjpoLTZajFnDHNU8Z6k1YlaSOANVZNSwK9C6k6Y7GUm4SSzmVAX
-         mknI5mNl6Uw0iHRPmm7HixBcZ16nAQJWNuNLCEFNVUBVnHy/OuBcXRUJaGfwL2a7hQ
-         /sVG3XdD0QWx+1/+8Gmyayl0nQ5zf9V7QGrVL3G4=
-Date:   Tue, 6 Sep 2022 01:03:35 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        Max Krummenacher <max.oss.09@gmail.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: imx8mp-verdin: add dsi to hdmi
- functionality
-Message-ID: <YxZyN+ynx9q/3GK6@pendragon.ideasonboard.com>
-References: <20220901154051.1885509-1-max.oss.09@gmail.com>
- <YxD09SqpcbB3dt8I@pendragon.ideasonboard.com>
- <20220902155720.GB5699@francesco-nb.int.toradex.com>
- <YxKe00H2S9AzF0Yi@pendragon.ideasonboard.com>
- <YxNM75ZtHVKDjTa/@livingston.pivistrello.it>
- <YxZNVoMKly9eQ2xE@pendragon.ideasonboard.com>
- <20220905211703.GA6180@francesco-nb.int.toradex.com>
+        Mon, 5 Sep 2022 18:07:58 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ADF51A0D;
+        Mon,  5 Sep 2022 15:07:53 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id h188so8956130pgc.12;
+        Mon, 05 Sep 2022 15:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=DI+EGf5Iiw4yLnQOM0iLSEUhYarB1qtVETYwX3ATTlI=;
+        b=KDxaSPeOmIAHodHZoxO7+rPppr+0nc84E7WjJr09aHXf0y70VUqQeiGwM4ZbMT1+IG
+         aswpW6qIia4RuP0oy/zixSqOkdUMGcBdQBZ+zCXrSbs5gzJjxQbyCJKm+qaEmHP0fbLr
+         p+VnLtgDb/UqRnZ5jH6rY49caFH+X+TV7pDArSwV7zY/jQ9Qvi10MQT7HP3yHqCz6Ymq
+         3ER0a2FyOYkl9+aJiUSNvNKZnQFKEXdO6qjVPIArqiSCS2eFf74FcrePSlFKeiFjZiPh
+         a3swNk1c3KCQbDFwBwgMcHrg1CM/Xc0KnXfSUNi2LqKeA1gvQb715UJnDwV5eFIZMn4E
+         JSRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DI+EGf5Iiw4yLnQOM0iLSEUhYarB1qtVETYwX3ATTlI=;
+        b=vBmhdeYALxw43twfMlS5Zd7LvvqaHOdzCCq/lo+5jKZWE+Sa/TE24Gbh9H3DLAnKXp
+         oiwpsuUHxJTxrtSdu+KB+CeZWkAwbMcjsHb5/4yo/gAt81l5XpmV5S2YaM6sG7G+oPpE
+         A48KR2KrVNuA3/DPyI35cAGYZzJHKGpNe8IJeKIT8FX8DnjfyOz7gDJ89OSEDg92BtRx
+         cSjTMKU9U1Nu4M9zfXzNQ0vMqTfLlwPCCYPVMnR18ZVxPID6wV2IQJCoc6d8tXFBfnXV
+         PCixZPH99k4zVdsSaVEcdPiKSFhRMOvzuWXHaPTbzsMRq5SODm7hgm5sfrrQHi3W+2TA
+         n3sA==
+X-Gm-Message-State: ACgBeo35q2vU7tTZkaJAOy4bwpZbvFRIudGhEALraggx/oIpYvzHLqHu
+        PXR2iKdPaPfzXAk8gFasguY=
+X-Google-Smtp-Source: AA6agR5VFvTDdUbzbYgkiV1tQs8QlnywRsbF0wBwVMI81k5tziGUND19h0NyYI/NQTVei/R57vjcgw==
+X-Received: by 2002:a63:2cc2:0:b0:41c:681d:60d2 with SMTP id s185-20020a632cc2000000b0041c681d60d2mr41816293pgs.502.1662415672598;
+        Mon, 05 Sep 2022 15:07:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m16-20020a170902db1000b00172dd10f64fsm8157821plx.263.2022.09.05.15.07.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 15:07:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4a0d089d-6ac6-b92e-6ac7-3d3de0144b4b@roeck-us.net>
+Date:   Mon, 5 Sep 2022 15:07:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220905211703.GA6180@francesco-nb.int.toradex.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-4-b29adfb27a6c@gmail.com>
+ <CAHp75VdMr7wru-2hD1HH3OS5JTNdzt6VRqB6OFoCp2JkiuiTjw@mail.gmail.com>
+ <YxZQj8bwJCx5rqDv@google.com>
+ <CAHp75VdHJS4YgrTK15OuY5sxodxKObUtzturL+YPXFQ3_wpxig@mail.gmail.com>
+ <YxZTS3Nl1YaMGoBC@google.com>
+ <CAHp75VeNajcf-Y6xvDDVwZijg6U53ggg1HQox1AZ74=wRut+1Q@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 04/11] usb: phy: tegra: switch to using
+ devm_gpiod_get()
+In-Reply-To: <CAHp75VeNajcf-Y6xvDDVwZijg6U53ggg1HQox1AZ74=wRut+1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,70 +121,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Francesco,
-
-On Mon, Sep 05, 2022 at 11:17:03PM +0200, Francesco Dolcini wrote:
-> On Mon, Sep 05, 2022 at 10:26:14PM +0300, Laurent Pinchart wrote:
-> > On Sat, Sep 03, 2022 at 02:47:43PM +0200, Francesco Dolcini wrote:
-> > > On Sat, Sep 03, 2022 at 03:24:51AM +0300, Laurent Pinchart wrote:
-> > > > On Fri, Sep 02, 2022 at 05:57:20PM +0200, Francesco Dolcini wrote:
-> > > > > On Thu, Sep 01, 2022 at 09:07:49PM +0300, Laurent Pinchart wrote:
-> > > > Someone can integrate a Verdin SoM with a carrier board that has no DSI
-> > > > to HDMI (or LVDS) bridge, there should thus be no such device in the
-> > > > device tree. The SoM has DSI signals present on its connector, that's
-> > > > what the SoM .dtsi should expose.
-> > > 
-> > > Just for the record Verdin i.MX8M Plus do have both HDMI and LVDS on the
-> > > connector (in addition to DSI) [1], of course we do have also the option to
-> > > have LVDS or HDMI using an external add-on DSI bridge as this patches are
-> > > about.
-> > > 
-> > > Said that it's true that sometime we describe peripherals that are part of the
-> > > SOM family into the SOM dtsi, this avoid quite a lot of duplications given the
-> > > amount of carrier board that are available on the market that use just the same
-> > > building blocks (and this was one of the 2 points I mentioned as a reasoning
-> > > for our current DTS files structure).
-> > 
-> > If those "SoM family" peripherals are on the carrier board, what's the
-> > issue with describing them in the carrier board .dtsi ? And if they're
-> > on an add-on board (such as, if I understand correctly, the DSI to HDMI
-> > encoder for the Dahlia carrier board), what's the issue with describing
-> > them in an overlay ?
+On 9/5/22 12:55, Andy Shevchenko wrote:
+> On Mon, Sep 5, 2022 at 10:51 PM Dmitry Torokhov
+> <dmitry.torokhov@gmail.com> wrote:
+>> On Mon, Sep 05, 2022 at 10:41:40PM +0300, Andy Shevchenko wrote:
+>>> On Mon, Sep 5, 2022 at 10:40 PM Dmitry Torokhov
+>>> <dmitry.torokhov@gmail.com> wrote:
+>>>> On Mon, Sep 05, 2022 at 01:59:44PM +0300, Andy Shevchenko wrote:
+>>>>> On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
+>>>>> <dmitry.torokhov@gmail.com> wrote:
 > 
-> These SOM family peripherals are in multiples(!) carrier boards AND on
-> accessories. The drawback of being strict as you are asking is that we
-> would end-up with a massive duplication of this small DTS building
-> blocks, therefore the decision in the past to put those in the base SOM
-> dtsi file.
-
-OK, I got it now.
-
-> Maybe adding something like imx8mp-verdin-dsi-hdmi.dtsi and
-> imx8mp-verdin-dsi-lvds.dtsi that can be included by both overlay and
-> carrier dts files as needed would solve both the need of being strict on
-> the board definition in the dts file and avoid duplications?
-> Not sure if that would work smoothly, it looks like adding some
-> complexity and maintenance overhead, but maybe is the correct solution.
-
-That sounds good to me. Would you be able to give it a try to see if it
-works well ?
-
-> Anyway, while I fully understand your reasoning, I'm still not happy to
-> change this for the current toradex products, since users of
-> our dts file currently rely on the expectations I tried to explain in
-> this email thread and Max patches are implementing (and this is
-> currently uniform over the whole toradex product range).
-
-This sounds like a broader question, not specific to Toradex, opinions
-from Rob and Krzysztof would be useful.
-
-> > Maybe I'm missing something ?
+> ...
 > 
-> I tried to give more insights.
+>>>>>> -               gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
+>>>>>> -                                                   "nvidia,phy-reset-gpio",
+>>>>>> -                                                   0, GPIOD_OUT_HIGH,
+>>>>>> -                                                   "ulpi_phy_reset_b");
+>>>>>> +               gpiod = devm_gpiod_get(&pdev->dev, "nvidia,phy-reset",
+>>>>>> +                                      GPIOD_OUT_HIGH);
+>>>>>>                  err = PTR_ERR_OR_ZERO(gpiod);
+>>>>>
+>>>>> What does _OR_ZERO mean now?
+>>>>
+>>>> This converts a pointer to an error code if a pointer represents
+>>>> ERR_PTR() encoded error, or 0 to indicate success.
+>>>
+>>> Yes, I know that. My point is, how is it useful now (or even before)?
+>>> I mean that devm_gpio_get() never returns NULL, right?
+>>
+>> What does returning NULL have to do with anything.
+> 
+> It has to do with a dead code. If defm_gpiod_get() does not return
+> NULL, then why do we even bother to check?
+> 
 
-Thank you, that's very appreciated.
+PTR_ERR_OR_ZERO() converts into an error code (if the pointer is an
+ERR_PTR) or 0 if it is a real pointer. Its purpose is not to convert
+NULL into 0, its purpose is to convert a pointer either into an error
+code or 0. That is what is done here, and it is done all over the place
+in the kernel. I don't see your problem with it. Care to explain ?
 
--- 
-Regards,
+>> It converts a pointer
+>> to a "classic" return code, with negative errors and 0 on success.
+>>
+>> It allows to not use multiple IS_ERR/PTR_ERR in the code (I'd need 1
+>> IS_ERR and 2 PTR_ERR, one in dev_err() and another to return).
+> 
+> I don't see how this is relevant.
+> 
 
-Laurent Pinchart
+You lost me. Really, please explain your problem with PTR_ERR_OR_ZERO().
+
+Thanks,
+Guenter

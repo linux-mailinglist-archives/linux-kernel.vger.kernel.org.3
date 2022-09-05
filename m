@@ -2,229 +2,544 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56475AC8BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497615AC8BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235606AbiIECOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 22:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
+        id S235500AbiIECOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 22:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiIECOE (ORCPT
+        with ESMTP id S234988AbiIECOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 22:14:04 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2051.outbound.protection.outlook.com [40.107.22.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3F424955;
-        Sun,  4 Sep 2022 19:14:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fQJlFrxe1TGFNLtRjNQ9rmLmMhIJYTGzdqA822/1PxQ/9OhYALGosnmn/FMVGpnE2WPp2RhRLKUMI8bpiAtd6jx85dhtPxNGHdfI1DnTHgWSJAiI+46D90B9mlUfV3V6B4lQuiZpOORXapbuGKgOXNn4N/DY0Qk7VTMIgOVkvRej++P9vyOz0noUYFM07A5ZqnBAPMJGFGAP/wrXZ54Uon4L8cRU11IR3VRQDC0lQocBp2gf7v4ztnMFvJUCWHyrq0RPgNti40S5FvC/7vX41H4hhK0ZnRZ0JuqXSSfFkBvbkZ/Fwr2HLx0m4W26HbvSy5ORxMFnKmO9uBS1LuMX5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l1Twd8i9zILxInLgMr386AWa3DuciwUY+HyzGLklbEs=;
- b=mFmIN3EnMcSSKCBNmyKy5QxZjEKVgDB0CMYp0z8qnhrw72qEYuXIUaaHqg7Ld0+uEnE5Vn3R5MFKno3Afj7vpfJmdDIRnRKXGGldcGfPhV4WeItr2pTuBVkIBtSnDAPtGmg2yQvxrzLHwaMgsDEArfOHNVTsqzMYaJcvbdYd1mbIcPXveH/Bnat8lZZVGG/IZOGWkDGubH96mXGDIh6/jDEokt/JCGbKyDnOZsa5Zl/zL3ZayZaUv3VPJoMlSE4XMxgnhbCjX4rYQDXSlJqPYgehjiZLajIg+a8m2W2THrxKzCdDdDoa4qkzF04z+IkBtj7FkXv2t+JW6/l5W8P/8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l1Twd8i9zILxInLgMr386AWa3DuciwUY+HyzGLklbEs=;
- b=T543/fxljjM57lTcDkABZC2Np1mGoEq9HRUjFYiI+NUnvXbscgy+hWlbAC0+iJXg8VjY91Ym+T5XqzIKGMF0MyHHf0IPAwI2hjQuv/pj8CeeqCSVjuLORQQcRaDY9Qcv8SB0BEFmsD1gei5uIBX8m/0hVb8rn+DiqlB7ya7IUF0=
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com (2603:10a6:20b:42b::10)
- by PAXPR04MB8319.eurprd04.prod.outlook.com (2603:10a6:102:1c3::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Mon, 5 Sep
- 2022 02:14:00 +0000
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::8574:efa7:38c8:3c05]) by AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::8574:efa7:38c8:3c05%5]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
- 02:14:00 +0000
-From:   Hongxing Zhu <hongxing.zhu@nxp.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH v2] phy: freescale: imx8m-pcie: Fix the wrong order of
- phy_init() and phy_power_on()
-Thread-Topic: [PATCH v2] phy: freescale: imx8m-pcie: Fix the wrong order of
- phy_init() and phy_power_on()
-Thread-Index: AQHYvQkyuEqLoGGxhkmFgmcnusCb6q3MYiWAgAO628A=
-Date:   Mon, 5 Sep 2022 02:14:00 +0000
-Message-ID: <AS8PR04MB86764686EC7F5F4D5BA55B6E8C7F9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-References: <1661928956-12727-1-git-send-email-hongxing.zhu@nxp.com>
- <20220902170449.GA354728@bhelgaas>
-In-Reply-To: <20220902170449.GA354728@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 21a2adea-ad06-4dd3-cfd9-08da8ee44c32
-x-ms-traffictypediagnostic: PAXPR04MB8319:EE_
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GVTSFKYYs/1RfyaBG9/YranfDtIW4UxdF2qlJdkd23Q6DzqPJMtCIFMkkNRGaBgFYOnQxrdK1UmzUKlZ28X2Kcb0A3/1ERHX8WSgWqEXfy/Xg1eu/cs0BFD6TIchaaR4Oma4ybv1Fpqu7jaDmlZ+HFasLgIYJRu1Gx2xpBNdZAWUeUv5rQMOi67Xs1KfwZ3iazYIjddPbAywlU8hKtpGNqEJkQi5kwKXj0WfxOo9ezDa2Q02ApG4I72NR0D7yLRe7Tdlvmw7X84zRO0UUNhT6sjU2nHbd+AvqZ3DmtGm7wa7CCMzaF4/KsSkGBZjVAzNlPOpwCwmAMi3ETe4dExDrIMvJmm8vHVrBrWM+4i9RO0F5xbOv5sz4P48wvQpO6FvwYBqUoDNfFmCnZv1HYWOStkXSaHUs6qLCfPz7bBagkPjGRSOxelCP0dnlaPKEEfzLi/U8ASbCLm/o9sZi7eDv7Ok8XPaOavun6nFuNICB4123Fd2qd/jsOcAHlQlVnHdZjgOva65k13lnCR0LVO376YnWmaWSAjg1fgLNDUdiOIWxBfUabwou8lRzni7y+LrVRs13j+x2EaoAdB4Rm4faO4omS522L2uUebAjzw67dPO+vsINNGCHwO3s6lHNIlMngt7Ccc4tdMxbdIHBdpA7o0dpFULbmzpVtPv1jAsloeaLrgNylTdYVWCsR1qHgqrZ++CqboVT7gTN4GxIVXt5TP3Kqs0sLAa44TojDq1KTBpbBfZI8gHxGnM/x65hT2GOPSBWj1UQ0lFREaJLLG599sWPi0Ca4FioOW4gjgWf95/hFJYcNFaIsTRQXGNkeQc
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8676.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(366004)(39860400002)(346002)(376002)(186003)(83380400001)(9686003)(55016003)(5660300002)(7416002)(2906002)(8936002)(52536014)(7696005)(53546011)(44832011)(33656002)(86362001)(26005)(966005)(6506007)(71200400001)(478600001)(41300700001)(38100700002)(122000001)(38070700005)(54906003)(66476007)(4326008)(8676002)(64756008)(66446008)(66946007)(76116006)(316002)(45080400002)(66556008)(6916009)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WU52OFExbndxbGJDbS9nb0E2bzZaTXRTOHc1bXQwYTFtMnNtRUo3cDNqcWRw?=
- =?utf-8?B?dnNmMzNlUjlFeDJUcXEyeHhDMlRRcmtZdlI5VW9CVDlNREtZbWxsVXg3Q1k4?=
- =?utf-8?B?TE9zZWZJdlVVL3BmMUpGdkhxMWxmSzlEeWxQSE5KTVdWaEV2c3drT0NzNVdt?=
- =?utf-8?B?dm9UcHNoVkJDNm5HUXJYQWpqQS9ncVNIaTFGUjU2dWpmeUl4ZXZxMzF3WjJP?=
- =?utf-8?B?ZFVadG9WQU41d3dEai9lZXR3RHpWQktGNENndnk0Ri82MjZ6aGd2VlB2YWFq?=
- =?utf-8?B?LzhRaStXOEIzYkRMdzV2YXZRMjRkN3JDSDRNcm4zbUdYZnRqdkQ4NUlFSXJ0?=
- =?utf-8?B?Uk42Z3cvSlpsOXFlWnJaY1dWWVdvU0VsZExoNGM5ZkJVU3BjWnp0c3dqWE10?=
- =?utf-8?B?Q3hpbnZzYVc1RHBYeVpHTlpWL1RjVVpXYTVaRGR0M3BZd1VHWmI0ZlBZMnNO?=
- =?utf-8?B?S0FJYjYvc0JyTjBKQkVLZUZzdFB4a1hrYWVPRFBPZEh2UHlSZ29qZWtQandw?=
- =?utf-8?B?MTZmVUlFS2QxejlKV3BjSXZwdW9QNzBKTjh2cmQrTW55cHliQm5YTFdPeTJX?=
- =?utf-8?B?VjNmck4vQ0FsQUZQeVZQTHI4NnBhS1krbzBSNmp6QUZTV2hsMXVDZTJvNzVk?=
- =?utf-8?B?K013USsxWDcyWHZPOEx1SG8rSlN6SDFRWnZ6cTMxMXB1bGxxeS9VL3Z1MWF1?=
- =?utf-8?B?UjZPWjdpVzJvWnBWOEYxcCt0NGdPMDJBSnlQZFFpOE1oWUt3L09vQ3pNd3JV?=
- =?utf-8?B?MXZNME9xdThmUHlOSmZqamRxYVUzeGJhZzc0OFQ0TWZlNC9nUnQ0RW1zdm10?=
- =?utf-8?B?NkNKRmR4Zm9vQ3NjM216a2NDWnFIWE5BUkRWdmZneWJzejVkSVBRZlU2TTNX?=
- =?utf-8?B?UUpENTFqV2NDTVhISWVCOXcxRXU0eWR3clBVQ3dJdVdmc1dJZExFUTZYWWh3?=
- =?utf-8?B?Ykxnei81RWVJYkw3SHErSDVwY29IM3NlZGVET081U3M0bWNuS1dlN3NCdS90?=
- =?utf-8?B?eG52ZXVmeEtnVDJ2Zk5PellOK3REVktDanFJZGxOa1RZbWZHZjdHeTQxWDk4?=
- =?utf-8?B?MW5DZHcrUnBVM3BXcDFTWS90ZEhxbWxQdmRpc294MklVbDBGMFJ4SVhVK0cy?=
- =?utf-8?B?cCsraGVINzJtN3g5Vkh0REpJT1VaL3Y0aHNLeENFMVpIWE42T0pwLzcrUlRZ?=
- =?utf-8?B?bmdEYXE5YnVwc0hjbHpwL040c0Y1TVM2OGNSYmdVT0ZMRzV5Y0dUeFNLTFpP?=
- =?utf-8?B?U0ZDQWQ0NW5tcnJvbzBZTG1sS3hqUDU5M3ViTVdrNk50bTJJM2tRZDBzeDc2?=
- =?utf-8?B?YnFQSmVONmpmU3NlV2tDT3NOVUVPQnZrUTJlS3Y2ZnNXNW5RTmFGSkZsUXpT?=
- =?utf-8?B?eUhzZWE1eUxKUFFJNERBMjZJRHd5c2U1NUM3Y0JGUlQvQUlXN0RUTE0xdzFC?=
- =?utf-8?B?dW15UWFVTW9zN3NsTFN1aVRrK0VNelkrZStOYy81end0RlQxS3RkYkNEYlJa?=
- =?utf-8?B?V0xFUzY2SGxnNkFnaDFFMzh4Y3JWR0tzcEM1eWlHL2FVMzVsYmNPUzVoMFM4?=
- =?utf-8?B?ajhYNExPa1djYWN6YjhQdXlCcmtQV0hHQmltL1hNMUdiOEhXSTVYbEU1M3pN?=
- =?utf-8?B?eXlrM1FMSEZTZjBJUVdoa1dMV0hpWWF6OWtMWTEzdEpaWTRyQmVTb0dEbFF6?=
- =?utf-8?B?VjRweXNTc1owK2ZpdGJNUnF6ZmtMNGlTdVBiT29yUXB5R09Pa3R6YStKT3Ay?=
- =?utf-8?B?clJpR1dEYitabyt0dFlFNkszczlBNDhGYXc2S1FIQWlwODBSUjgxVGpzTTRI?=
- =?utf-8?B?SThDZ3hRY2V4WVdWUStLVFhpK1N5VXBNTVhkdlJKREtSdmprVkl1SU1xdDBs?=
- =?utf-8?B?MG9qL21SSjF0V2J6aGZhZDhWUTRYWHBIREljalNyc2prbWdNVzJ6TDVBV2Ri?=
- =?utf-8?B?bXZ3M0pnYWV4NWo4SlArOXBZaWlWdjNjNG04Qkx6dUErRTRoUGdJMUhRK1Rz?=
- =?utf-8?B?VnRTekNYeDdhVlBZRld1dTZiQ05XMWZ0bHA3N2ZPQWlrWDhLMEh6YWRYV0Jn?=
- =?utf-8?B?cHRrUGtCdWh5dUg5OXY1bU1BWStwQWp0akJ0T2tPc3R0Z2dXRDVETmpyNXVT?=
- =?utf-8?Q?5N7fLiiNKl623HtiQEMAKurTH?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 4 Sep 2022 22:14:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6523E0A
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 19:14:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3188F61086
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 02:14:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F33BC43142
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 02:14:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662344067;
+        bh=raV8JoAT9OfnN7e10fjZGnNq2y+7qJLcoQcWRFtyncM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gONtZ9lnxTKshm/Ky+E6jeTQJcI4kBgOXUAUmPmr7VnrJV/YTCI+kJiXNE1aIWUDU
+         0a7AXbwR3bA729ZZDN0mn9wnDkcf6cCl8SDF8Xj66lDynqkJoBG0igNUf3a9n5bKPr
+         TgbU7bvSZEvxPxYSgTITO2PdDGTwhiU4wogmci95dVLwfKSLFfTbXUh89hv1wzuwNT
+         Y3I4idcLOV2iBXHZBO43T8QQworSrNrn2FW93CIwOFjWL1ISASFS5a2m5yrqTNaenk
+         4MtY19nfl0yZmWnzFwOq4it6DG8AfoJKSSx2GztujaPkeZ6VnQHQ/AV7dHpQWXs7Wa
+         EiLV48G3CgxOw==
+Received: by mail-vs1-f43.google.com with SMTP id v2so4004938vsb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 19:14:27 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1wb0Oj/0hHhQFfryv2fNOw+gQTr80sD8ialjyGvsUE3pCkibbj
+        BqnPb1kv8PSTAzRhynG/KFrE5Jdko5aJtlgdGvY=
+X-Google-Smtp-Source: AA6agR72SQ/0ioLSyZj+zawzOvIcTULr4BadOXxAT6xu53Xmsuh+LF6OJOO9bARlUj0oJB8ofEyxxemLNOi8Cr4uSVo=
+X-Received: by 2002:a67:df81:0:b0:390:21a3:823a with SMTP id
+ x1-20020a67df81000000b0039021a3823amr13311736vsk.70.1662344066307; Sun, 04
+ Sep 2022 19:14:26 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8676.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21a2adea-ad06-4dd3-cfd9-08da8ee44c32
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2022 02:14:00.8276
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1UE69yRvubYZNmPVIpYcajbB+09JU7zfpcajNDhIoKoTyguC7Si0YIhtXFbhAtCFg/tmOcpnM2ND2/8z/Z5/Nw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8319
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1661747823-23745-1-git-send-email-tangyouling@loongson.cn>
+ <1661747823-23745-3-git-send-email-tangyouling@loongson.cn>
+ <CAAhV-H6LkcnS4Z7YP=kfAkuDzKys57=6frsY0+T11ucKrWPuPw@mail.gmail.com>
+ <ec447291-078f-d1ea-6c5a-21b092965e81@loongson.cn> <CAAhV-H4D60bGk7wr0oSw-5oJqTv_ntLtifHfdxLUdVA7ExDiLg@mail.gmail.com>
+ <e76bcf5d-08c9-1d2f-8c04-149b17236929@loongson.cn>
+In-Reply-To: <e76bcf5d-08c9-1d2f-8c04-149b17236929@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 5 Sep 2022 10:14:15 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6fjumQesirDnOJYBMZoCQyK60WvviEw+QNnkd2wDJqdA@mail.gmail.com>
+Message-ID: <CAAhV-H6fjumQesirDnOJYBMZoCQyK60WvviEw+QNnkd2wDJqdA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] LoongArch: Add kdump support
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Baoquan He <bhe@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>, Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kexec@lists.infradead.org, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCam9ybiBIZWxnYWFzIDxoZWxn
-YWFzQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IDIwMjLlubQ55pyIM+aXpSAxOjA1DQo+IFRvOiBIb25n
-eGluZyBaaHUgPGhvbmd4aW5nLnpodUBueHAuY29tPg0KPiBDYzogYS5mYXRvdW1AcGVuZ3V0cm9u
-aXguZGU7IGwuc3RhY2hAcGVuZ3V0cm9uaXguZGU7IGJoZWxnYWFzQGdvb2dsZS5jb207DQo+IGxv
-cmVuem8ucGllcmFsaXNpQGFybS5jb207IHZrb3VsQGtlcm5lbC5vcmc7IE1hcmNlbCBaaXN3aWxl
-cg0KPiA8bWFyY2VsLnppc3dpbGVyQHRvcmFkZXguY29tPjsga2lzaG9uQHRpLmNvbTsgbGludXgt
-cGh5QGxpc3RzLmluZnJhZGVhZC5vcmc7DQo+IGxpbnV4LXBjaUB2Z2VyLmtlcm5lbC5vcmc7IGxp
-bnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIu
-a2VybmVsLm9yZzsga2VybmVsQHBlbmd1dHJvbml4LmRlOyBkbC1saW51eC1pbXgNCj4gPGxpbnV4
-LWlteEBueHAuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYyXSBwaHk6IGZyZWVzY2FsZTog
-aW14OG0tcGNpZTogRml4IHRoZSB3cm9uZyBvcmRlciBvZg0KPiBwaHlfaW5pdCgpIGFuZCBwaHlf
-cG93ZXJfb24oKQ0KPiANCj4gT24gV2VkLCBBdWcgMzEsIDIwMjIgYXQgMDI6NTU6NTZQTSArMDgw
-MCwgUmljaGFyZCBaaHUgd3JvdGU6DQo+ID4gUmVmZXIgdG8gcGh5X2NvcmUgZHJpdmVyLCBwaHlf
-aW5pdCgpIG11c3QgYmUgY2FsbGVkIGJlZm9yZSBwaHlfcG93ZXJfb24oKS4NCj4gPiBGaXggdGhl
-IHdyb25nIG9yZGVyIG9mIHBoeV9pbml0KCkgYW5kIHBoeV9wb3dlcl9vbigpIGhlcmUuDQo+IA0K
-PiA+IFNxdWFzaCB0aGUgY2hhbmdlcyBpbnRvIG9uZSBwYXRjaCB0byBhdm9pZCB0aGUgcG9zc2li
-bGUgYmktc2VjdGlvbiBob2xlLg0KPiANCj4gQXZvaWRpbmcgYmlzZWN0aW9uIGhvbGVzIGdvZXMg
-d2l0aG91dCBzYXlpbmcsIHNvIEkgZG9uJ3QgdGhpbmsgd2UgbmVlZCB0byBldmVuDQo+IG1lbnRp
-b24gaXQgOykNCkhpIEJqb3JuOg0KVW5kZXJzdG9vZCDwn5iKLiBUaGFua3MgZm9yIHlvdXIga2lu
-ZGx5IGhlbHAgb24gdGhpcyBmaXguDQpGb3IgZWFzZSBvZiBtZXJnaW5nLCBJIHdvdWxkIHJlbW92
-ZSB0aGF0IGxpbmUsIGFuZCByZS1zZW5kIHRoZSB2MyB3aXRoIFZpbm9kJ3MNCiBBQ0sgYWRkZWQu
-DQoNCkJlc3QgUmVnYXJkcw0KUmljaGFyZCBaaHUNCg0KPiANCj4gPiBGaXhlczogMWFhOTdiMDAy
-MjU4ICgicGh5OiBmcmVlc2NhbGU6IHBjaWU6IEluaXRpYWxpemUgdGhlIGlteDggcGNpZQ0KPiA+
-IHN0YW5kYWxvbmUgcGh5IGRyaXZlciIpDQo+ID4gU2lnbmVkLW9mZi1ieTogUmljaGFyZCBaaHUg
-PGhvbmd4aW5nLnpodUBueHAuY29tPg0KPiA+IFRlc3RlZC1ieTogQWxleGFuZGVyIFN0ZWluIDxh
-bGV4YW5kZXIuc3RlaW5AZXcudHEtZ3JvdXAuY29tPg0KPiANCj4gSSBwcm9wb3NlIG1lcmdpbmcg
-dGhpcyB2aWEgUENJLCBzaW5jZSBJIHN1c3BlY3QgcGNpLWlteDYuYyBpcyBtb3JlIGFjdGl2ZSB0
-aGFuDQo+IHBoeS1mc2wtaW14OG0tcGNpZS5jLg0KPiANCj4gVmlub2QsIGlmIHlvdSBhZ3JlZSwg
-SSdtIHN1cmUgTG9yZW56byB3aWxsIGxvb2sgZm9yIHlvdXIgYWNrLg0KPiANCj4gPiAtLS0NCj4g
-PiAgZHJpdmVycy9wY2kvY29udHJvbGxlci9kd2MvcGNpLWlteDYuYyAgICAgIHwgNiArKystLS0N
-Cj4gPiAgZHJpdmVycy9waHkvZnJlZXNjYWxlL3BoeS1mc2wtaW14OG0tcGNpZS5jIHwgOCArKysr
-LS0tLQ0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMo
-LSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2kt
-aW14Ni5jDQo+ID4gYi9kcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2ktaW14Ni5jDQo+ID4g
-aW5kZXggNmU1ZGViZGJjNTViLi5iNWYwZGU0NTVhN2IgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVy
-cy9wY2kvY29udHJvbGxlci9kd2MvcGNpLWlteDYuYw0KPiA+ICsrKyBiL2RyaXZlcnMvcGNpL2Nv
-bnRyb2xsZXIvZHdjL3BjaS1pbXg2LmMNCj4gPiBAQCAtOTM1LDcgKzkzNSw3IEBAIHN0YXRpYyBp
-bnQgaW14Nl9wY2llX2hvc3RfaW5pdChzdHJ1Y3QgZHdfcGNpZV9ycA0KPiAqcHApDQo+ID4gIAl9
-DQo+ID4NCj4gPiAgCWlmIChpbXg2X3BjaWUtPnBoeSkgew0KPiA+IC0JCXJldCA9IHBoeV9wb3dl
-cl9vbihpbXg2X3BjaWUtPnBoeSk7DQo+ID4gKwkJcmV0ID0gcGh5X2luaXQoaW14Nl9wY2llLT5w
-aHkpOw0KPiA+ICAJCWlmIChyZXQpIHsNCj4gPiAgCQkJZGV2X2VycihkZXYsICJwY2llIFBIWSBw
-b3dlciB1cCBmYWlsZWRcbiIpOw0KPiA+ICAJCQlnb3RvIGVycl9jbGtfZGlzYWJsZTsNCj4gPiBA
-QCAtOTQ5LDcgKzk0OSw3IEBAIHN0YXRpYyBpbnQgaW14Nl9wY2llX2hvc3RfaW5pdChzdHJ1Y3Qg
-ZHdfcGNpZV9ycA0KPiAqcHApDQo+ID4gIAl9DQo+ID4NCj4gPiAgCWlmIChpbXg2X3BjaWUtPnBo
-eSkgew0KPiA+IC0JCXJldCA9IHBoeV9pbml0KGlteDZfcGNpZS0+cGh5KTsNCj4gPiArCQlyZXQg
-PSBwaHlfcG93ZXJfb24oaW14Nl9wY2llLT5waHkpOw0KPiA+ICAJCWlmIChyZXQpIHsNCj4gPiAg
-CQkJZGV2X2VycihkZXYsICJ3YWl0aW5nIGZvciBQSFkgcmVhZHkgdGltZW91dCFcbiIpOw0KPiA+
-ICAJCQlnb3RvIGVycl9waHlfb2ZmOw0KPiA+IEBAIC05NjEsNyArOTYxLDcgQEAgc3RhdGljIGlu
-dCBpbXg2X3BjaWVfaG9zdF9pbml0KHN0cnVjdCBkd19wY2llX3JwDQo+ID4gKnBwKQ0KPiA+DQo+
-ID4gIGVycl9waHlfb2ZmOg0KPiA+ICAJaWYgKGlteDZfcGNpZS0+cGh5KQ0KPiA+IC0JCXBoeV9w
-b3dlcl9vZmYoaW14Nl9wY2llLT5waHkpOw0KPiA+ICsJCXBoeV9leGl0KGlteDZfcGNpZS0+cGh5
-KTsNCj4gPiAgZXJyX2Nsa19kaXNhYmxlOg0KPiA+ICAJaW14Nl9wY2llX2Nsa19kaXNhYmxlKGlt
-eDZfcGNpZSk7DQo+ID4gIGVycl9yZWdfZGlzYWJsZToNCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVy
-cy9waHkvZnJlZXNjYWxlL3BoeS1mc2wtaW14OG0tcGNpZS5jDQo+ID4gYi9kcml2ZXJzL3BoeS9m
-cmVlc2NhbGUvcGh5LWZzbC1pbXg4bS1wY2llLmMNCj4gPiBpbmRleCBhZDdkMmVkZmM0MTQuLmM5
-MzI4NjQ4M2I0MiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3BoeS9mcmVlc2NhbGUvcGh5LWZz
-bC1pbXg4bS1wY2llLmMNCj4gPiArKysgYi9kcml2ZXJzL3BoeS9mcmVlc2NhbGUvcGh5LWZzbC1p
-bXg4bS1wY2llLmMNCj4gPiBAQCAtNTksNyArNTksNyBAQCBzdHJ1Y3QgaW14OF9wY2llX3BoeSB7
-DQo+ID4gIAlib29sCQkJY2xrcmVxX3VudXNlZDsNCj4gPiAgfTsNCj4gPg0KPiA+IC1zdGF0aWMg
-aW50IGlteDhfcGNpZV9waHlfaW5pdChzdHJ1Y3QgcGh5ICpwaHkpDQo+ID4gK3N0YXRpYyBpbnQg
-aW14OF9wY2llX3BoeV9wb3dlcl9vbihzdHJ1Y3QgcGh5ICpwaHkpDQo+ID4gIHsNCj4gPiAgCWlu
-dCByZXQ7DQo+ID4gIAl1MzIgdmFsLCBwYWRfbW9kZTsNCj4gPiBAQCAtMTM3LDE0ICsxMzcsMTQg
-QEAgc3RhdGljIGludCBpbXg4X3BjaWVfcGh5X2luaXQoc3RydWN0IHBoeSAqcGh5KQ0KPiA+ICAJ
-cmV0dXJuIHJldDsNCj4gPiAgfQ0KPiA+DQo+ID4gLXN0YXRpYyBpbnQgaW14OF9wY2llX3BoeV9w
-b3dlcl9vbihzdHJ1Y3QgcGh5ICpwaHkpDQo+ID4gK3N0YXRpYyBpbnQgaW14OF9wY2llX3BoeV9p
-bml0KHN0cnVjdCBwaHkgKnBoeSkNCj4gPiAgew0KPiA+ICAJc3RydWN0IGlteDhfcGNpZV9waHkg
-KmlteDhfcGh5ID0gcGh5X2dldF9kcnZkYXRhKHBoeSk7DQo+ID4NCj4gPiAgCXJldHVybiBjbGtf
-cHJlcGFyZV9lbmFibGUoaW14OF9waHktPmNsayk7DQo+ID4gIH0NCj4gPg0KPiA+IC1zdGF0aWMg
-aW50IGlteDhfcGNpZV9waHlfcG93ZXJfb2ZmKHN0cnVjdCBwaHkgKnBoeSkNCj4gPiArc3RhdGlj
-IGludCBpbXg4X3BjaWVfcGh5X2V4aXQoc3RydWN0IHBoeSAqcGh5KQ0KPiA+ICB7DQo+ID4gIAlz
-dHJ1Y3QgaW14OF9wY2llX3BoeSAqaW14OF9waHkgPSBwaHlfZ2V0X2RydmRhdGEocGh5KTsNCj4g
-Pg0KPiA+IEBAIC0xNTUsOCArMTU1LDggQEAgc3RhdGljIGludCBpbXg4X3BjaWVfcGh5X3Bvd2Vy
-X29mZihzdHJ1Y3QgcGh5DQo+ID4gKnBoeSkNCj4gPg0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0
-IHBoeV9vcHMgaW14OF9wY2llX3BoeV9vcHMgPSB7DQo+ID4gIAkuaW5pdAkJPSBpbXg4X3BjaWVf
-cGh5X2luaXQsDQo+ID4gKwkuZXhpdAkJPSBpbXg4X3BjaWVfcGh5X2V4aXQsDQo+ID4gIAkucG93
-ZXJfb24JPSBpbXg4X3BjaWVfcGh5X3Bvd2VyX29uLA0KPiA+IC0JLnBvd2VyX29mZgk9IGlteDhf
-cGNpZV9waHlfcG93ZXJfb2ZmLA0KPiA+ICAJLm93bmVyCQk9IFRISVNfTU9EVUxFLA0KPiA+ICB9
-Ow0KPiA+DQo+ID4gLS0NCj4gPiAyLjI1LjENCj4gPg0KPiA+DQo+ID4gLS0NCj4gPiBsaW51eC1w
-aHkgbWFpbGluZyBsaXN0DQo+ID4gbGludXgtcGh5QGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gPiBo
-dHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMl
-M0ElMkYlMkZsaXN0DQo+ID4NCj4gcy5pbmZyYWRlYWQub3JnJTJGbWFpbG1hbiUyRmxpc3RpbmZv
-JTJGbGludXgtcGh5JmFtcDtkYXRhPTA1JTdDMDElN0MNCj4gaG8NCj4gPg0KPiBuZ3hpbmcuemh1
-JTQwbnhwLmNvbSU3Q2I4MTIwMWM4OTk0YzRlMmI4NzEyMDhkYThkMDU0MWExJTdDNjg2ZWENCj4g
-MWQzYmMyYg0KPiA+DQo+IDRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDMCU3QzAlN0M2Mzc5NzczNTA5
-NzIwMzAyNjUlN0NVbmtub3duJQ0KPiA3Q1RXRnBiR1pzDQo+ID4NCj4gYjNkOGV5SldJam9pTUM0
-d0xqQXdNREFpTENKUUlqb2lWMmx1TXpJaUxDSkJUaUk2SWsxaGFXd2lMQ0pYVkNJNk1uMA0KPiAl
-M0QNCj4gPiAlN0MzMDAwJTdDJTdDJTdDJmFtcDtzZGF0YT1nTVV6aGZsUXVFOTJORmxtQVAzR0JL
-aWpqdjZsaFFFWnh1DQo+IHh1WUZQZm9zdw0KPiA+ICUzRCZhbXA7cmVzZXJ2ZWQ9MA0K
+On Mon, Sep 5, 2022 at 10:04 AM Youling Tang <tangyouling@loongson.cn> wrote:
+>
+> Hi, Huacai
+>
+> On 09/05/2022 09:38 AM, Huacai Chen wrote:
+> > Hi, Youling,
+> >
+> > On Mon, Sep 5, 2022 at 8:54 AM Youling Tang <tangyouling@loongson.cn> wrote:
+> >>
+> >> Hi, Huacai
+> >>
+> >> On 09/04/2022 08:21 PM, Huacai Chen wrote:
+> >>> Hi, Youling,
+> >>>
+> >>> I think crash.c can be merged into crash_dump.c
+> >>
+> >> Most architectures only implement copy_oldmem_page() in crash_dump.c,
+> >> I'm not sure if merging crash.c into crash_dump.c will break its
+> >> consistency?
+> >>
+> >> Thanks,
+> >> Youling
+> > Yes, you are right, crash.c cannot be merged into crash_dump.c, but it
+> > can be merged into machine_kexec.c, as arm64 and riscv do.
+>
+> For arm64, machine_crash_shutdown() is placed in machine_kexec.c, and
+> crash_smp_send_stop is placed in smp.c. If crash.c needs to be merged
+> into machine_kexec.c, should crash_shutdown_secondary and
+> crash_smp_send_stop be placed in smp.c?
+I don't want to touch smp.c, all merged into machine_kexec.c seems reasonable.
+
+Huacai
+>
+> Youling.
+> >
+> > Huacai
+> >>
+> >>>
+> >>> Huacai
+> >>>
+> >>> On Mon, Aug 29, 2022 at 12:37 PM Youling Tang <tangyouling@loongson.cn> wrote:
+> >>>>
+> >>>> This patch adds support for kdump, the kernel will reserve a region
+> >>>> for the crash kernel and jump there on panic.
+> >>>>
+> >>>> Arch-specific functions are added to allow for implementing a crash
+> >>>> dump file interface, /proc/vmcore, which can be viewed as a ELF file.
+> >>>>
+> >>>> A user space tool, like kexec-tools, is responsible for allocating a
+> >>>> separate region for the core's ELF header within crash kdump kernel
+> >>>> memory and filling it in when executing kexec_load().
+> >>>>
+> >>>> Then, its location will be advertised to crash dump kernel via a new
+> >>>> device-tree property, "linux,elfcorehdr", and crash dump kernel preserves
+> >>>> the region for later use with fdt_reserve_elfcorehdr() at boot time.
+> >>>>
+> >>>> At the same time, it will also limit the crash kdump kernel to the
+> >>>> crashkernel area via a new device-tree property, "linux, usable-memory-range",
+> >>>> so as not to destroy the original kernel dump data.
+> >>>>
+> >>>> On crash dump kernel, /proc/vmcore will access the primary kernel's memory
+> >>>> with copy_oldmem_page().
+> >>>>
+> >>>> I tested this on  LoongArch 3A5000 machine and works as expected (Suggest
+> >>>> crashkernel parameter is "crashkernel=512M@2320M"), you may test it by
+> >>>> triggering a crash through /proc/sysrq_trigger:
+> >>>>
+> >>>>  $ sudo kexec -p /boot/vmlinux-kdump --reuse-cmdline --append="nr_cpus=1"
+> >>>>  # echo c > /proc/sysrq_trigger
+> >>>>
+> >>>> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+> >>>> ---
+> >>>>  arch/loongarch/Kconfig                  |  22 ++++++
+> >>>>  arch/loongarch/Makefile                 |   4 +
+> >>>>  arch/loongarch/kernel/Makefile          |   3 +-
+> >>>>  arch/loongarch/kernel/crash.c           | 100 ++++++++++++++++++++++++
+> >>>>  arch/loongarch/kernel/crash_dump.c      |  19 +++++
+> >>>>  arch/loongarch/kernel/machine_kexec.c   |  12 ++-
+> >>>>  arch/loongarch/kernel/mem.c             |   6 ++
+> >>>>  arch/loongarch/kernel/relocate_kernel.S |   6 ++
+> >>>>  arch/loongarch/kernel/setup.c           |  49 ++++++++++++
+> >>>>  arch/loongarch/kernel/traps.c           |   4 +
+> >>>>  10 files changed, 217 insertions(+), 8 deletions(-)
+> >>>>  create mode 100644 arch/loongarch/kernel/crash.c
+> >>>>  create mode 100644 arch/loongarch/kernel/crash_dump.c
+> >>>>
+> >>>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> >>>> index 903c82fa958d..7c1b07a5b5bd 100644
+> >>>> --- a/arch/loongarch/Kconfig
+> >>>> +++ b/arch/loongarch/Kconfig
+> >>>> @@ -420,6 +420,28 @@ config KEXEC
+> >>>>
+> >>>>           The name comes from the similarity to the exec system call.
+> >>>>
+> >>>> +config CRASH_DUMP
+> >>>> +       bool "Build kdump crash kernel"
+> >>>> +       help
+> >>>> +         Generate crash dump after being started by kexec. This should
+> >>>> +         be normally only set in special crash dump kernels which are
+> >>>> +         loaded in the main kernel with kexec-tools into a specially
+> >>>> +         reserved region and then later executed after a crash by
+> >>>> +         kdump/kexec.
+> >>>> +
+> >>>> +         For more details see Documentation/admin-guide/kdump/kdump.rst
+> >>>> +
+> >>>> +config PHYSICAL_START
+> >>>> +       hex "Physical address where the kernel is loaded"
+> >>>> +       default "0x9000000091000000" if 64BIT
+> >>>> +       depends on CRASH_DUMP
+> >>>> +       help
+> >>>> +         This gives the XKPRANGE address where the kernel is loaded.
+> >>>> +         If you plan to use kernel for capturing the crash dump change
+> >>>> +         this value to start of the reserved region (the "X" value as
+> >>>> +         specified in the "crashkernel=YM@XM" command line boot parameter
+> >>>> +         passed to the panic-ed kernel).
+> >>>> +
+> >>>>  config SECCOMP
+> >>>>         bool "Enable seccomp to safely compute untrusted bytecode"
+> >>>>         depends on PROC_FS
+> >>>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> >>>> index 4bc47f47cfd8..7dabd580426d 100644
+> >>>> --- a/arch/loongarch/Makefile
+> >>>> +++ b/arch/loongarch/Makefile
+> >>>> @@ -48,7 +48,11 @@ KBUILD_CFLAGS_MODULE         += -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
+> >>>>  cflags-y += -ffreestanding
+> >>>>  cflags-y += $(call cc-option, -mno-check-zero-division)
+> >>>>
+> >>>> +ifdef CONFIG_PHYSICAL_START
+> >>>> +load-y         = $(CONFIG_PHYSICAL_START)
+> >>>> +else
+> >>>>  load-y         = 0x9000000000200000
+> >>>> +endif
+> >>>>  bootvars-y     = VMLINUX_LOAD_ADDRESS=$(load-y)
+> >>>>
+> >>>>  drivers-$(CONFIG_PCI)          += arch/loongarch/pci/
+> >>>> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+> >>>> index 20b64ac3f128..df5aea129364 100644
+> >>>> --- a/arch/loongarch/kernel/Makefile
+> >>>> +++ b/arch/loongarch/kernel/Makefile
+> >>>> @@ -17,7 +17,8 @@ obj-$(CONFIG_CPU_HAS_FPU)     += fpu.o
+> >>>>  obj-$(CONFIG_MODULES)          += module.o module-sections.o
+> >>>>  obj-$(CONFIG_STACKTRACE)       += stacktrace.o
+> >>>>
+> >>>> -obj-$(CONFIG_KEXEC)             += machine_kexec.o relocate_kernel.o
+> >>>> +obj-$(CONFIG_KEXEC)             += machine_kexec.o relocate_kernel.o crash.o
+> >>>> +obj-$(CONFIG_CRASH_DUMP)        += crash_dump.o
+> >>>>
+> >>>>  obj-$(CONFIG_PROC_FS)          += proc.o
+> >>>>
+> >>>> diff --git a/arch/loongarch/kernel/crash.c b/arch/loongarch/kernel/crash.c
+> >>>> new file mode 100644
+> >>>> index 000000000000..b4f249ec6301
+> >>>> --- /dev/null
+> >>>> +++ b/arch/loongarch/kernel/crash.c
+> >>>> @@ -0,0 +1,100 @@
+> >>>> +// SPDX-License-Identifier: GPL-2.0
+> >>>> +/*
+> >>>> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+> >>>> + *
+> >>>> + * Derived from MIPS
+> >>>> + */
+> >>>> +#include <linux/kernel.h>
+> >>>> +#include <linux/smp.h>
+> >>>> +#include <linux/reboot.h>
+> >>>> +#include <linux/crash_dump.h>
+> >>>> +#include <linux/delay.h>
+> >>>> +#include <linux/irq.h>
+> >>>> +#include <linux/types.h>
+> >>>> +#include <linux/sched.h>
+> >>>> +#include <linux/sched/task_stack.h>
+> >>>> +#include <asm/cacheflush.h>
+> >>>> +#include <asm/kexec.h>
+> >>>> +
+> >>>> +static cpumask_t cpus_in_crash = CPU_MASK_NONE;
+> >>>> +
+> >>>> +#ifdef CONFIG_SMP
+> >>>> +static void crash_shutdown_secondary(void *passed_regs)
+> >>>> +{
+> >>>> +       struct pt_regs *regs = passed_regs;
+> >>>> +       int cpu = smp_processor_id();
+> >>>> +
+> >>>> +       /*
+> >>>> +        * If we are passed registers, use those.  Otherwise get the
+> >>>> +        * regs from the last interrupt, which should be correct, as
+> >>>> +        * we are in an interrupt.  But if the regs are not there,
+> >>>> +        * pull them from the top of the stack.  They are probably
+> >>>> +        * wrong, but we need something to keep from crashing again.
+> >>>> +        */
+> >>>> +       if (!regs)
+> >>>> +               regs = get_irq_regs();
+> >>>> +       if (!regs)
+> >>>> +               regs = task_pt_regs(current);
+> >>>> +
+> >>>> +       local_irq_disable();
+> >>>> +       if (!cpumask_test_cpu(cpu, &cpus_in_crash))
+> >>>> +               crash_save_cpu(regs, cpu);
+> >>>> +       cpumask_set_cpu(cpu, &cpus_in_crash);
+> >>>> +
+> >>>> +       while (!atomic_read(&kexec_ready_to_reboot))
+> >>>> +               cpu_relax();
+> >>>> +
+> >>>> +       kexec_reboot();
+> >>>> +}
+> >>>> +
+> >>>> +/* Override the weak function in kernel/panic.c */
+> >>>> +void crash_smp_send_stop(void)
+> >>>> +{
+> >>>> +       static int cpus_stopped;
+> >>>> +       unsigned long timeout;
+> >>>> +       unsigned int ncpus;
+> >>>> +
+> >>>> +       /*
+> >>>> +        * This function can be called twice in panic path, but obviously
+> >>>> +        * we execute this only once.
+> >>>> +        */
+> >>>> +       if (cpus_stopped)
+> >>>> +               return;
+> >>>> +
+> >>>> +       cpus_stopped = 1;
+> >>>> +
+> >>>> +        /* Excluding the panic cpu */
+> >>>> +       ncpus = num_online_cpus() - 1;
+> >>>> +
+> >>>> +       smp_call_function(crash_shutdown_secondary, NULL, 0);
+> >>>> +       smp_wmb();
+> >>>> +
+> >>>> +       /*
+> >>>> +        * The crash CPU sends an IPI and wait for other CPUs to
+> >>>> +        * respond. Delay of at least 10 seconds.
+> >>>> +        */
+> >>>> +       pr_emerg("Sending IPI to other cpus...\n");
+> >>>> +       timeout = USEC_PER_SEC * 10;
+> >>>> +       while ((cpumask_weight(&cpus_in_crash) < ncpus) && timeout--) {
+> >>>> +               cpu_relax();
+> >>>> +               udelay(1);
+> >>>> +       }
+> >>>> +}
+> >>>> +
+> >>>> +#endif
+> >>>> +
+> >>>> +void machine_crash_shutdown(struct pt_regs *regs)
+> >>>> +{
+> >>>> +       int crashing_cpu;
+> >>>> +
+> >>>> +       local_irq_disable();
+> >>>> +
+> >>>> +       crashing_cpu = smp_processor_id();
+> >>>> +       crash_save_cpu(regs, crashing_cpu);
+> >>>> +
+> >>>> +       /* shutdown non-crashing cpus */
+> >>>> +       crash_smp_send_stop();
+> >>>> +       cpumask_set_cpu(crashing_cpu, &cpus_in_crash);
+> >>>> +
+> >>>> +       pr_info("Starting crashdump kernel...\n");
+> >>>> +}
+> >>>> diff --git a/arch/loongarch/kernel/crash_dump.c b/arch/loongarch/kernel/crash_dump.c
+> >>>> new file mode 100644
+> >>>> index 000000000000..13e5d2f7870d
+> >>>> --- /dev/null
+> >>>> +++ b/arch/loongarch/kernel/crash_dump.c
+> >>>> @@ -0,0 +1,19 @@
+> >>>> +// SPDX-License-Identifier: GPL-2.0
+> >>>> +#include <linux/highmem.h>
+> >>>> +#include <linux/crash_dump.h>
+> >>>> +#include <linux/io.h>
+> >>>> +
+> >>>> +ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn,
+> >>>> +                        size_t csize, unsigned long offset)
+> >>>> +{
+> >>>> +       void  *vaddr;
+> >>>> +
+> >>>> +       if (!csize)
+> >>>> +               return 0;
+> >>>> +
+> >>>> +       vaddr = kmap_local_pfn(pfn);
+> >>>> +       csize = copy_to_iter(vaddr + offset, csize, iter);
+> >>>> +       kunmap_local(vaddr);
+> >>>> +
+> >>>> +       return csize;
+> >>>> +}
+> >>>> diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/kernel/machine_kexec.c
+> >>>> index 4ffcd4cd9c8c..f793a3ff09a3 100644
+> >>>> --- a/arch/loongarch/kernel/machine_kexec.c
+> >>>> +++ b/arch/loongarch/kernel/machine_kexec.c
+> >>>> @@ -69,7 +69,7 @@ int machine_kexec_prepare(struct kimage *kimage)
+> >>>>                 continue;
+> >>>>         }
+> >>>>
+> >>>> -       /* kexec need a safe page to save reboot_code_buffer */
+> >>>> +       /* kexec/kdump need a safe page to save reboot_code_buffer */
+> >>>>         kimage->control_code_page = virt_to_page((void *)KEXEC_CTRL_CODE);
+> >>>>
+> >>>>         reboot_code_buffer =
+> >>>> @@ -113,10 +113,6 @@ static void kexec_shutdown_secondary(void *)
+> >>>>
+> >>>>         kexec_reboot();
+> >>>>  }
+> >>>> -
+> >>>> -void machine_crash_shutdown(struct pt_regs *regs)
+> >>>> -{
+> >>>> -}
+> >>>>  #endif
+> >>>>
+> >>>>  void machine_shutdown(void)
+> >>>> @@ -135,7 +131,8 @@ void machine_kexec(struct kimage *image)
+> >>>>
+> >>>>         jump_addr = (unsigned long)phys_to_virt(image->start);
+> >>>>
+> >>>> -       first_ind_entry = (unsigned long)phys_to_virt(image->head & PAGE_MASK);
+> >>>> +       if (image->type == KEXEC_TYPE_DEFAULT)
+> >>>> +               first_ind_entry = (unsigned long)phys_to_virt(image->head & PAGE_MASK);
+> >>>>
+> >>>>         /*
+> >>>>          * The generic kexec code builds a page list with physical
+> >>>> @@ -167,7 +164,8 @@ void machine_kexec(struct kimage *image)
+> >>>>
+> >>>>         /*
+> >>>>          * We know we were online, and there will be no incoming IPIs at
+> >>>> -        * this point.
+> >>>> +        * this point. Mark online again before rebooting so that the crash
+> >>>> +        * analysis tool will see us correctly.
+> >>>>          */
+> >>>>         set_cpu_online(smp_processor_id(), true);
+> >>>>
+> >>>> diff --git a/arch/loongarch/kernel/mem.c b/arch/loongarch/kernel/mem.c
+> >>>> index 7423361b0ebc..c6def6ff81c8 100644
+> >>>> --- a/arch/loongarch/kernel/mem.c
+> >>>> +++ b/arch/loongarch/kernel/mem.c
+> >>>> @@ -5,6 +5,7 @@
+> >>>>  #include <linux/efi.h>
+> >>>>  #include <linux/initrd.h>
+> >>>>  #include <linux/memblock.h>
+> >>>> +#include <linux/of_fdt.h>
+> >>>>
+> >>>>  #include <asm/bootinfo.h>
+> >>>>  #include <asm/loongson.h>
+> >>>> @@ -61,4 +62,9 @@ void __init memblock_init(void)
+> >>>>
+> >>>>         /* Reserve the initrd */
+> >>>>         reserve_initrd_mem();
+> >>>> +
+> >>>> +       /* Mainly reserved memory for the elf core head */
+> >>>> +       early_init_fdt_scan_reserved_mem();
+> >>>> +       /* Parse linux,usable-memory-range is for crash dump kernel */
+> >>>> +       early_init_dt_check_for_usable_mem_range();
+> >>>>  }
+> >>>> diff --git a/arch/loongarch/kernel/relocate_kernel.S b/arch/loongarch/kernel/relocate_kernel.S
+> >>>> index d1f242f74ea8..4ee5ac4ac2d7 100644
+> >>>> --- a/arch/loongarch/kernel/relocate_kernel.S
+> >>>> +++ b/arch/loongarch/kernel/relocate_kernel.S
+> >>>> @@ -28,6 +28,12 @@ SYM_CODE_START(relocate_new_kernel)
+> >>>>         move            s2, a2
+> >>>>         move            s3, a3
+> >>>>
+> >>>> +       /*
+> >>>> +        * In case of a kdump/crash kernel, the indirection page is not
+> >>>> +        * populated as the kernel is directly copied to a reserved location
+> >>>> +        */
+> >>>> +       beqz            s2, done
+> >>>> +
+> >>>>  process_entry:
+> >>>>         PTR_L           s4, s2, 0
+> >>>>         PTR_ADDI        s2, s2, SZREG
+> >>>> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+> >>>> index f938aae3e92c..ea34b77e402f 100644
+> >>>> --- a/arch/loongarch/kernel/setup.c
+> >>>> +++ b/arch/loongarch/kernel/setup.c
+> >>>> @@ -19,6 +19,8 @@
+> >>>>  #include <linux/memblock.h>
+> >>>>  #include <linux/initrd.h>
+> >>>>  #include <linux/ioport.h>
+> >>>> +#include <linux/kexec.h>
+> >>>> +#include <linux/crash_dump.h>
+> >>>>  #include <linux/root_dev.h>
+> >>>>  #include <linux/console.h>
+> >>>>  #include <linux/pfn.h>
+> >>>> @@ -186,6 +188,50 @@ static int __init early_parse_mem(char *p)
+> >>>>  }
+> >>>>  early_param("mem", early_parse_mem);
+> >>>>
+> >>>> +static void __init loongarch_parse_crashkernel(void)
+> >>>> +{
+> >>>> +#ifdef CONFIG_KEXEC
+> >>>> +       unsigned long long start;
+> >>>> +       unsigned long long total_mem;
+> >>>> +       unsigned long long crash_size, crash_base;
+> >>>> +       int ret;
+> >>>> +
+> >>>> +       total_mem = memblock_phys_mem_size();
+> >>>> +       ret = parse_crashkernel(boot_command_line, total_mem,
+> >>>> +                               &crash_size, &crash_base);
+> >>>> +       if (ret != 0 || crash_size <= 0)
+> >>>> +               return;
+> >>>> +
+> >>>> +
+> >>>> +       start = memblock_phys_alloc_range(crash_size, 1, crash_base,
+> >>>> +                                       crash_base + crash_size);
+> >>>> +       if (start != crash_base) {
+> >>>> +               pr_warn("Invalid memory region reserved for crash kernel\n");
+> >>>> +               return;
+> >>>> +       }
+> >>>> +
+> >>>> +       crashk_res.start = crash_base;
+> >>>> +       crashk_res.end   = crash_base + crash_size - 1;
+> >>>> +#endif
+> >>>> +}
+> >>>> +
+> >>>> +static void __init request_crashkernel(struct resource *res)
+> >>>> +{
+> >>>> +#ifdef CONFIG_KEXEC
+> >>>> +       int ret;
+> >>>> +
+> >>>> +       if (crashk_res.start == crashk_res.end)
+> >>>> +               return;
+> >>>> +
+> >>>> +       ret = request_resource(res, &crashk_res);
+> >>>> +       if (!ret)
+> >>>> +               pr_info("Reserving %ldMB of memory at %ldMB for crashkernel\n",
+> >>>> +                       (unsigned long)((crashk_res.end -
+> >>>> +                                        crashk_res.start + 1) >> 20),
+> >>>> +                       (unsigned long)(crashk_res.start  >> 20));
+> >>>> +#endif
+> >>>> +}
+> >>>> +
+> >>>>  void __init platform_init(void)
+> >>>>  {
+> >>>>         efi_init();
+> >>>> @@ -229,6 +275,8 @@ static void __init arch_mem_init(char **cmdline_p)
+> >>>>
+> >>>>         check_kernel_sections_mem();
+> >>>>
+> >>>> +       loongarch_parse_crashkernel();
+> >>>> +
+> >>>>         /*
+> >>>>          * In order to reduce the possibility of kernel panic when failed to
+> >>>>          * get IO TLB memory under CONFIG_SWIOTLB, it is better to allocate
+> >>>> @@ -290,6 +338,7 @@ static void __init resource_init(void)
+> >>>>                 request_resource(res, &code_resource);
+> >>>>                 request_resource(res, &data_resource);
+> >>>>                 request_resource(res, &bss_resource);
+> >>>> +               request_crashkernel(res);
+> >>>>         }
+> >>>>  }
+> >>>>
+> >>>> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+> >>>> index aa1c95aaf595..0e610872f3f4 100644
+> >>>> --- a/arch/loongarch/kernel/traps.c
+> >>>> +++ b/arch/loongarch/kernel/traps.c
+> >>>> @@ -10,6 +10,7 @@
+> >>>>  #include <linux/entry-common.h>
+> >>>>  #include <linux/init.h>
+> >>>>  #include <linux/kernel.h>
+> >>>> +#include <linux/kexec.h>
+> >>>>  #include <linux/module.h>
+> >>>>  #include <linux/extable.h>
+> >>>>  #include <linux/mm.h>
+> >>>> @@ -246,6 +247,9 @@ void __noreturn die(const char *str, struct pt_regs *regs)
+> >>>>
+> >>>>         oops_exit();
+> >>>>
+> >>>> +       if (regs && kexec_should_crash(current))
+> >>>> +               crash_kexec(regs);
+> >>>> +
+> >>>>         if (in_interrupt())
+> >>>>                 panic("Fatal exception in interrupt");
+> >>>>
+> >>>> --
+> >>>> 2.36.0
+> >>>>
+> >>
+>

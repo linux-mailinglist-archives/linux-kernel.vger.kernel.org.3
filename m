@@ -2,195 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3935ACD03
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2773F5ACCE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236337AbiIEH3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S236396AbiIEHaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237834AbiIEH3P (ORCPT
+        with ESMTP id S237883AbiIEH33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:29:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5202CBF46;
-        Mon,  5 Sep 2022 00:29:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D26A26114F;
-        Mon,  5 Sep 2022 07:29:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1D2C43470;
-        Mon,  5 Sep 2022 07:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662362940;
-        bh=CFgCwLxabnSTm5t38K9gf4jhOrGuDxAkYE++1G/WjGM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JGKMySdkVYNsEEISdJeEgof2s7zUPB7MxIoc8NF0Ov0yUylKuxX9Zs89Zsc5jk9WM
-         5Q0Zo9qbNMH/4XRuWkVDa5GwP4Kcs/27OAT75QcgR11aIDsje7boiDSQHZuVVpyuNF
-         i3wokmslWR1HLMcQFXaxFD4lNFXzpxBnvGVSKftMFYpK4dPjIRkL5ptVURSnifMfTz
-         28/wIZO/Dc6MKonqAUymwd2Z9f+Y9+pnagL5DVK2k5GXMDlpUdCguDFPmb45Cjic3S
-         pkJLSsSq/LWishNQ3IOdosgRX33l70t4caPZXrt0S038a1MnVyQXgXECEFQtRGB50P
-         2vi92rF1uBY3Q==
-Received: by mail-lj1-f178.google.com with SMTP id b19so8302571ljf.8;
-        Mon, 05 Sep 2022 00:29:00 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0Py262bS4TJ7XU935PgRJ66a1GC2DORjO62e2zMyjc0QLqt586
-        DQ1mBandv7NqhT85CMwxEgBnznqQKb2+ixjHH7w=
-X-Google-Smtp-Source: AA6agR4DY2kw2V9VEj2BtgpQIUExjyF5ziSc8SPn9UWAk7xUpb9Cdk0NVBOi64KZOoSHNVCgaJ+6VjZLQP+Y2H9NLi0=
-X-Received: by 2002:a05:651c:11c6:b0:265:d1cb:b7b4 with SMTP id
- z6-20020a05651c11c600b00265d1cbb7b4mr8755894ljo.69.1662362938224; Mon, 05 Sep
- 2022 00:28:58 -0700 (PDT)
+        Mon, 5 Sep 2022 03:29:29 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47101B9B;
+        Mon,  5 Sep 2022 00:29:26 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id w2so10228354edc.0;
+        Mon, 05 Sep 2022 00:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=c8Fp7xbOBPiDPrMPRWEI6qZ2LdwuEUkMDG7mK0etL1w=;
+        b=mBcg+E2QMt+vbq77hTaeEwZbI7isR5fFJ9AcKdE7PabR9iPEeB9pBvPZB6u5z1bPWt
+         w6DGxEg/O3FFwZwb8Pr3PXeY1Ki+DilNKybSR6R310fAfiRF7xfW2mAlvLd0xPT3pHtx
+         fUuQ1b5liC+HOaQIZM0rtXHW+pQ8ftZ+NBnIerhICHPvWpqQOJamHGQSMN1oXCzg/6Qg
+         hnnqqQfkIGNeV+EQZj0BF1VtAt/j+BpXDxm8SpoTDwOBVhP4Spw/Lv5PbKm2PCxziDLw
+         g0w3c21MdX1rZAB8pgxYNHabow58GHY2nW7Q6Zd8dFpur41d9xNs3YLswTZMw1Rt+VwV
+         Z2yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=c8Fp7xbOBPiDPrMPRWEI6qZ2LdwuEUkMDG7mK0etL1w=;
+        b=gJC9mRRnl2SB/XRTnM3IzlV7KyIK05MQVo7EloPYli2L9oiMHRILRRdk6tPcRrapfE
+         pZUNxAFP80252bIc68AS+c+/i/a/HqgkaowGuyHF8+5hUwtyTk7rD4OSLBb+hQzffX2N
+         jqJuTvk0SVhunXHiYzb+GgXC30uhWnubw5OgdWQwle21wWRtdlpuNsHbycWYgio2hlrB
+         NecWzK6Nbt3iDl7seSanwD/iQ7u2uwGPuVDKEZeDJxWHJSFV2qm2T6pJVcPSfHfPSGZX
+         Ot5RyeJRUdQIfOy6QyoWfo0b6VbCA/51pETwxoWn24YzquH/qTnj8OSvMH/O51FQWQlb
+         2cbQ==
+X-Gm-Message-State: ACgBeo0cS4O2Hd9qBiMChSUvN7Wpqqo0SAWASaymBBngUAiclJa0SVXo
+        /IvQLcZWGPgAaw4Jk9V9juk=
+X-Google-Smtp-Source: AA6agR5XhI9SkUjAGjQeiLowNt+ajuGy8A24Y72F/JDl54cU7/bjBhLmv6/V+HDiSvoY0YvXqWwgbA==
+X-Received: by 2002:a05:6402:538b:b0:446:34f:2232 with SMTP id ew11-20020a056402538b00b00446034f2232mr40398081edb.4.1662362964700;
+        Mon, 05 Sep 2022 00:29:24 -0700 (PDT)
+Received: from [192.168.74.101] ([77.78.20.135])
+        by smtp.gmail.com with ESMTPSA id e5-20020a50d4c5000000b0044e983132c3sm831915edj.60.2022.09.05.00.29.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 00:29:23 -0700 (PDT)
+Message-ID: <72f86c4f-79fa-bff4-f14e-4cd7fa7ce41f@gmail.com>
+Date:   Mon, 5 Sep 2022 10:29:23 +0300
 MIME-Version: 1.0
-References: <20220819102037.2697798-1-chenhuacai@loongson.cn>
- <9b6f0aeaebbd36882b5b40d655f9ccd20c7be496.camel@xry111.site>
- <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com>
- <CAAhV-H6MR=rWhecY_uuiXAysED-BBJhKhGHj2cCkefJiPOo-ZQ@mail.gmail.com>
- <CAAhV-H4KXVUBgNoQxOFiEj2AH-ojhnrEJ8QLvNrALY69MhXF3w@mail.gmail.com>
- <CAMj1kXHJv_6mLhMikg+ic7=EUABLdrX3f__eBbHntrpGHjRfXg@mail.gmail.com>
- <CAAhV-H4WTCRU9qShDp57AZ2DG1uz+=GTz14zyAUaqVDjXrNABA@mail.gmail.com>
- <CAMj1kXFRsEJOS2Kim8T64rYF85_bmmZ5gW7kjb8eDXry5SA+cg@mail.gmail.com> <CAAhV-H4xDB6JPCEZqQ6+VadOPnzA3beguiuTRS-Ub=Ci5FgpPw@mail.gmail.com>
-In-Reply-To: <CAAhV-H4xDB6JPCEZqQ6+VadOPnzA3beguiuTRS-Ub=Ci5FgpPw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 5 Sep 2022 09:28:46 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEPpCPHe8ghOKcaGvuLjetP9WJbrMkLcqv_V+oRWeyLmw@mail.gmail.com>
-Message-ID: <CAMj1kXEPpCPHe8ghOKcaGvuLjetP9WJbrMkLcqv_V+oRWeyLmw@mail.gmail.com>
-Subject: Re: [PATCH V3] LoongArch: Add efistub booting support
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Xi Ruoyao <xry111@xry111.site>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 08/14] dt-bindings: ufs: qcom: Add sm6115 binding
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
+ <20220901072414.1923075-9-iskren.chernev@gmail.com>
+ <7804ffbe-4e27-d8bd-dbe2-75d1323da064@linaro.org>
+ <89e6a200-d9af-7263-5e09-d7d824277a30@gmail.com>
+ <199167f2-0420-8c56-5156-35005069549d@linaro.org>
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+In-Reply-To: <199167f2-0420-8c56-5156-35005069549d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Sept 2022 at 09:25, Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> Hi, Ard and Youling,
->
-> On Mon, Sep 5, 2022 at 3:02 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Mon, 5 Sept 2022 at 05:51, Huacai Chen <chenhuacai@kernel.org> wrote:
-> > >
-> > > Hi, Ard,
-> > >
-> > > On Mon, Sep 5, 2022 at 5:59 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > >
-> > > > On Sun, 4 Sept 2022 at 15:24, Huacai Chen <chenhuacai@kernel.org> wrote:
-> > > > >
-> > > > > Hi, Ard,
-> > > > >
-> > > > > On Thu, Sep 1, 2022 at 6:40 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > > > > >
-> > > > > > Hi, Ard,
-> > > > > >
-> > > > > > On Sat, Aug 27, 2022 at 3:14 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Sat, 27 Aug 2022 at 06:41, Xi Ruoyao <xry111@xry111.site> wrote:
-> > > > > > > >
-> > > > > > > > Tested V3 with the magic number check manually removed in my GRUB build.
-> > > > > > > > The system boots successfully.  I've not tested Arnd's zBoot patch yet.
-> > > > > > >
-> > > > > > > I am Ard not Arnd :-)
-> > > > > > >
-> > > > > > > Please use this branch when testing the EFI decompressor:
-> > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-decompressor-v4
-> > > > > > The root cause of LoongArch zboot boot failure has been found, it is a
-> > > > > > binutils bug, latest toolchain with the below patch can solve the
-> > > > > > problem.
-> > > > > >
-> > > > > > diff --git a/bfd/elfnn-loongarch.c b/bfd/elfnn-loongarch.c
-> > > > > > index 5b44901b9e0..fafdc7c7458 100644
-> > > > > > --- a/bfd/elfnn-loongarch.c
-> > > > > > +++ b/bfd/elfnn-loongarch.c
-> > > > > > @@ -2341,9 +2341,10 @@ loongarch_elf_relocate_section (bfd
-> > > > > > *output_bfd, struct bfd_link_info *info,
-> > > > > >      case R_LARCH_SOP_PUSH_PLT_PCREL:
-> > > > > >        unresolved_reloc = false;
-> > > > > >
-> > > > > > -      if (resolved_to_const)
-> > > > > > +      if (!is_undefweak && resolved_to_const)
-> > > > > >          {
-> > > > > >            relocation += rel->r_addend;
-> > > > > > +          relocation -= pc;
-> > > > > >            break;
-> > > > > >          }
-> > > > > >        else if (is_undefweak)
-> > > > > >
-> > > > > >
-> > > > > > Huacai
-> > > > > Now the patch is submitted here:
-> > > > > https://sourceware.org/pipermail/binutils/2022-September/122713.html
-> > > > >
-> > > >
-> > > > Great. Given the severity of this bug, I imagine that building the
-> > > > LoongArch kernel will require a version of binutils that carries this
-> > > > fix.
-> > > >
-> > > > Therefore, i will revert back to the original approach for accessing
-> > > > uncompressed_size, using an extern declaration with an __aligned(1)
-> > > > attribute.
-> > > >
-> > > > > And I have some other questions about kexec: kexec should jump to the
-> > > > > elf entry or the pe entry? I think is the elf entry, because if we
-> > > > > jump to the pe entry, then SVAM will be executed twice (but it should
-> > > > > be executed only once). However, how can we jump to the elf entry if
-> > > > > we use zboot? Maybe it is kexec-tool's responsibility to decompress
-> > > > > the zboot kernel image?
-> > > > >
-> > > >
-> > > > Yes, very good point. Kexec kernels cannot boot via the EFI entry
-> > > > point, as the boot services will already be shutdown. So the kexec
-> > > > kernel needs to boot via the same entrypoint in the core kernel that
-> > > > the EFI stub calls when it hands over.
-> > > >
-> > > > For the EFI zboot image in particular, we will need to teach kexec how
-> > > > to decompress them. The zboot image has a header that
-> > > > a) describes it as a EFI linux zimg
-> > > > b) describes the start and end offset of the compressed payload
-> > > > c) describes which compression algorithm was used.
-> > > >
-> > > > This means that any non-EFI loader (including kexec) should be able to
-> > > > extract the inner PE/COFF image and decompress it. For arm64 and
-> > > > RISC-V, this is sufficient as the EFI and raw images are the same. For
-> > > > LoongArch, I suppose it means we need a way to enter the core kernel
-> > > > directly via the entrypoint that the EFI stub uses when handing over
-> > > > (and pass the original DT argument so the kexec kernel has access to
-> > > > the EFI and ACPI firmware tables)
-> > > OK, then is this implementation [1] acceptable? I remember that you
-> > > said the MS-DOS header shouldn't contain other information, so I guess
-> > > this is unacceptable?
-> > >
-> >
-> > No, this looks reasonable to me. I objected to using magic numbers in
-> > the 'pure PE' view of the image, as it does not make sense for a pure
-> > PE loader such as GRUB to rely on such metadata.
-> >
-> > In this case (like on arm64), we are dealing with something else: we
-> > need to identify the image to the kernel itself, and here, using the
-> > unused space in the MS-DOS header is fine.
-> >
-> > > [1] https://lore.kernel.org/loongarch/c4dbb14a-5580-1e47-3d15-5d2079e88404@loongson.cn/T/#mb8c1dc44f7fa2d3ef638877f0cd3f958f0be96ad
-> OK, then there is no big problem here. And I found that arm64/riscv
-> don't need the kernel entry point in the header. I don't know why, but
-> I think it implies that a unified layout across architectures is
-> unnecessary, and I prefer to put the kernel entry point before
-> effective kernel size. :)
->
 
-It is fine to put the entry point offset in the header. arm64 and
-RISC-V don't need this because the first instructions are a pseudo-NOP
-(an instruction that does nothing but its binary encoding looks like
-'MZ..') and a jump to the actual entry point.
+
+On 9/4/22 22:10, Krzysztof Kozlowski wrote:
+> On 03/09/2022 19:54, Iskren Chernev wrote:
+>>
+>>
+>> On 9/1/22 19:11, Krzysztof Kozlowski wrote:
+>>> On 01/09/2022 10:24, Iskren Chernev wrote:
+>>>> Add SM6115 UFS to DT schema.
+>>>>
+>>>> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+>>>> ---
+>>>>  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 26 +++++++++++++++++++
+>>>>  1 file changed, 26 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>>>> index f2d6298d926c..7c5f6e2e6d4c 100644
+>>>> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>>>> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>>>> @@ -28,6 +28,7 @@ properties:
+>>>>            - qcom,msm8998-ufshc
+>>>>            - qcom,sc8280xp-ufshc
+>>>>            - qcom,sdm845-ufshc
+>>>> +          - qcom,sm6115-ufshc
+>>>>            - qcom,sm6350-ufshc
+>>>>            - qcom,sm8150-ufshc
+>>>>            - qcom,sm8250-ufshc
+>>>> @@ -178,6 +179,31 @@ allOf:
+>>>>            minItems: 1
+>>>>            maxItems: 1
+>>>>
+>>>> +  - if:
+>>>> +      properties:
+>>>> +        compatible:
+>>>> +          contains:
+>>>> +            enum:
+>>>> +              - qcom,sm6115-ufshc
+>>>> +    then:
+>>>> +      properties:
+>>>> +        clocks:
+>>>> +          minItems: 8
+>>>> +          maxItems: 8
+>>>> +        clock-names:
+>>>> +          items:
+>>>> +            - const: core_clk
+>>>> +            - const: bus_aggr_clk
+>>>> +            - const: iface_clk
+>>>> +            - const: core_clk_unipro
+>>>> +            - const: core_clk_ice
+>>>
+>>> Use existing name and put it in the same place as existing variant - sdm845:
+>>> ice_core_clk
+>>
+>> The only problem with sdm845 bindings is the presence of rx_lane1_sync_clk
+>> clock. I'm guessing I could pass zeros there, because it shouldn't be used. Or
+>> it could be moved to last property and then min/maxItems to guard, but that is
+>> a change to something more-or-less immutable.
+>
+> I don't understand - what is the problem here. How presence of some
+> clock affects name of other clock and its place/location in list of clocks?
+
+qcom,sdm845-ufshc has 9 clocks, one of which is rx_lane1_sync_clk.
+qcom,sm6115-ufshc has 8 clocks (all of the ones in sdm845 without
+rx_lane1_sync_clk). So if I'm understanding correctly, you want to put the
+sm6115 with sdm845, which means re-use the clocks and reg specification from
+sdm845, which means sm6115 will "inherit" this rx_lane1_sync_clk, and then
+I have to put it in DT (otherwise the schema would complain), and I'm asking if
+I can put an empty (i.e <0 0>) value, so schema is satisfied but clock is still
+not really passed.
+
+> Best regards,
+> Krzysztof

@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A152C5ACBD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B2D5ACBB7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236372AbiIEHAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        id S235590AbiIEG7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 02:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236269AbiIEHAW (ORCPT
+        with ESMTP id S235585AbiIEG7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:00:22 -0400
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE51822B14;
-        Mon,  5 Sep 2022 00:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=G9PRu
-        m1izor0nngmVMOFcOHtkmJgD11qKZ6kZyikhek=; b=FgfKLRQ8WjPqaOqWnvYPu
-        M7NLW0gX4jvMiAvSsSV+G9hVBY//eZF+k771vG5tbV8/wDa+B1O81BS9zdEmi6di
-        Aq5zR9F0+uFJdGCTnul0DnogisFYFiDLivQ7lPYHBIaFHQ6Q4BXecAZFkmMm8wKC
-        B0aK2QCivBL+fsWpdlt760=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp5 (Coremail) with SMTP id HdxpCgAnRDk7nhVjrtvGZw--.51372S2;
-        Mon, 05 Sep 2022 14:59:08 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     david@lechnology.com, mturquette@baylibre.com, sboyd@kernel.org
-Cc:     nsekhar@ti.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] clk: davinci: pll: fix spelling typo in comment
-Date:   Mon,  5 Sep 2022 14:58:33 +0800
-Message-Id: <20220905065833.1831473-1-13667453960@163.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 5 Sep 2022 02:59:42 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC1ABCAC;
+        Sun,  4 Sep 2022 23:59:34 -0700 (PDT)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B0F09100008;
+        Mon,  5 Sep 2022 06:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1662361173;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yy/0JQ9UNn1sE4XgrcjFzqB9YfrKrZm4GD6QD3XRCYY=;
+        b=QXzcMo73Zmy9eX7o2N3VM9sHsGCecvT0xRsFmNrlEdakFdB/SlXTmGOivt0F5SjHl8iGTF
+        uxwgVUIehlIlJ9Ag38HmRCVCSDSTsOxbtlFfDhyfF2R01JTn0/LDW+rfpoL+zu5zNJTudZ
+        g1uJrKc05TLcLQlUHWZukBc2tdRHv6pmx0iujQ/W6KrhTiYLodiEPhMJj+56DfF+VPw7Qe
+        3VPlfOzXLFPafPEa/vklY7dfhjEGmlLuYDkTjLbSz2goJp+VWuW7GfJTcjDTX0iW8Psz1c
+        mT3tDy0Dfs9mrauS1eoUCRlPwiwxJ95h0PMGgMUPZV74fp2mNX/8DI0qH0V1cA==
+Date:   Mon, 5 Sep 2022 08:59:29 +0200
+From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, Stephen Warren <swarren@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v2] dt-binding: gpio: publish binding IDs under dual
+ license
+Message-ID: <20220905085929.38c737fc@windsurf>
+In-Reply-To: <20220901163636.3930634-1-etienne.carriere@linaro.org>
+References: <20220901163636.3930634-1-etienne.carriere@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgAnRDk7nhVjrtvGZw--.51372S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Gr4ruF1Utrb_yoW3KFc_WF
-        W8W34DW398KFsav3Wjq3yFqFyFyFs5uF97W3WYva1fJ3y5Z39rG3yvqw1Iv342krWUWF9F
-        y3Wayr15Crn8ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbuOJ7UUUUU==
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbizRxz+1c7OAtEywAAsJ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Thu,  1 Sep 2022 18:36:36 +0200
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
-Fix spelling typo in comment.
+> Changes gpio.h DT binding header file to be published under GPLv2 or
+> BSD-3-Clause license terms. This change allows these GPIO generic
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/clk/davinci/pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You're actually changing to BSD-2-Clause. Your v1 changed to
+BSD-3-Clause, but following feedback, you change the SPDX code to
+BSD-2-Clause but forgot to update the commit log.
 
-diff --git a/drivers/clk/davinci/pll.c b/drivers/clk/davinci/pll.c
-index 0d750433eb42..c53dd4ff8530 100644
---- a/drivers/clk/davinci/pll.c
-+++ b/drivers/clk/davinci/pll.c
-@@ -98,7 +98,7 @@
-  * @hw: clk_hw for the pll
-  * @base: Base memory address
-  * @pllm_min: The minimum allowable PLLM[PLLM] value
-- * @pllm_max: The maxiumum allowable PLLM[PLLM] value
-+ * @pllm_max: The maximum allowable PLLM[PLLM] value
-  * @pllm_mask: Bitmask for PLLM[PLLM] value
-  */
- struct davinci_pll_clk {
+Best regards,
+
+Thomas
 -- 
-2.27.0
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com

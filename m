@@ -2,42 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515545ACADB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57665ACA8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbiIEG3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 02:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
+        id S236559AbiIEG0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 02:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbiIEG3l (ORCPT
+        with ESMTP id S234299AbiIEG0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 02:29:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02615BCD;
-        Sun,  4 Sep 2022 23:29:37 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MLdn90ZMdzkWx7;
-        Mon,  5 Sep 2022 14:25:49 +0800 (CST)
-Received: from huawei.com (10.67.174.96) by canpemm500005.china.huawei.com
- (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 5 Sep
- 2022 14:29:34 +0800
-From:   Zhang Jianhua <chris.zjh@huawei.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
-CC:     <chris.zjh@huawei.com>, <linux-rtc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next v3] rtc: fsl-ftm-alarm: Use module_init and add module_exit
-Date:   Mon, 5 Sep 2022 14:26:13 +0800
-Message-ID: <20220905062613.1119008-1-chris.zjh@huawei.com>
-X-Mailer: git-send-email 2.31.0
+        Mon, 5 Sep 2022 02:26:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819031FCD0;
+        Sun,  4 Sep 2022 23:26:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 103F4610E7;
+        Mon,  5 Sep 2022 06:26:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00AC6C433C1;
+        Mon,  5 Sep 2022 06:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662359178;
+        bh=J1sCmTfRKxfRS9ujjevBR+nlz4HWtgOOY/mt28Ykx6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UWjPF9CaSUoZyPXSvZwwJ6pjjt5WB/EVtodn2Jstkug5qqUwE9OhtlxvptEmvQEzA
+         P9dBlkErQI6ySB/jL3ZFLjcChBOcMz0C+EW+KN6jcp6+bDau3HrayXk5zNMYfzr1Fs
+         g6v/ix7n7vxTTPxma7QpfjTUYDCoYUqUIVpCmTe57/Iet75fyR8EcY93Htw3rt13d5
+         LgifdOyyw/O9XtMcU1dodz00hufbkcvI34XEYSA1JyQFUW5A3kXzuXrfQCBSCa+qzP
+         eMt2GPufO2KbDkf87ADdXMiFbc1PX4d8oCYP0FUPSSjRs9+58ATFe6XXBDzPcypgDy
+         MJ294qb9H4J3A==
+Date:   Mon, 5 Sep 2022 11:56:14 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc:     michal.simek@xilinx.com, m.tretter@pengutronix.de,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        git@amd.com, Shravya Kumbham <shravya.kumbham@xilinx.com>,
+        Harini Katakam <harini.katakam@xilinx.com>
+Subject: Re: [PATCH] dmaengine: zynqmp_dma: Typecast with enum to fix the
+ coverity warning
+Message-ID: <YxWWhov7bjz2J+Ur@matsya>
+References: <1653378553-28548-1-git-send-email-radhey.shyam.pandey@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.96]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1653378553-28548-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,43 +57,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fsl-ftm-alarm driver can be built out of tree, so change the
-macro device_initcall() to module_init() for standard usage.
+On 24-05-22, 13:19, Radhey Shyam Pandey wrote:
+> From: Shravya Kumbham <shravya.kumbham@xilinx.com>
+> 
+> Typecast the flags variable with (enum dma_ctrl_flags) in
+> zynqmp_dma_prep_memcpy function to fix the coverity warning.
 
-fsl-ftm-alarm registers a platform driver in module_init function,
-however there is no module_exit function to unregister it, and it will
-occur resource leak, so add ftm_alarm_exit() function for module_exit.
+Applied, thanks
 
-Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
----
-v3:
-- add semicolon after module_init and module_exit to keep the format
-consistent
-v2:
-- modify the commit message for more accurate description
----
- drivers/rtc/rtc-fsl-ftm-alarm.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> Addresses-Coverity: Event mixed_enum_type.
+> Signed-off-by: Shravya Kumbham <shravya.kumbham@xilinx.com>
+> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> ---
+> NOTE- This patch was sent to dmaengine mailing list[1] and
+> there was a suggestion from Michael Tretter to change the
+> signature of the dmaengine_prep_dma_memcpy() engine to accept
+> "enum dma_ctrl_flags flags" instead of "unsigned long flags".
+> 
+> All device_prep_dma_* API variants have ulong flags argument.
+> So this is a wider question if we want to change these APIs?
+> Also there are existing users of these public APIs.
 
-diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
-index c0df49fb978c..7fabfc098299 100644
---- a/drivers/rtc/rtc-fsl-ftm-alarm.c
-+++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
-@@ -332,7 +332,13 @@ static int __init ftm_alarm_init(void)
- 	return platform_driver_register(&ftm_rtc_driver);
- }
- 
--device_initcall(ftm_alarm_init);
-+static void __exit ftm_alarm_exit(void)
-+{
-+	platform_driver_unregister(&ftm_rtc_driver);
-+}
-+
-+module_init(ftm_alarm_init);
-+module_exit(ftm_alarm_exit);
- 
- MODULE_DESCRIPTION("NXP/Freescale FlexTimer alarm driver");
- MODULE_AUTHOR("Biwen Li <biwen.li@nxp.com>");
+It would be very nice to do this change but users would need to be
+updated as well, patches are welcome
+
 -- 
-2.31.0
-
+~Vinod

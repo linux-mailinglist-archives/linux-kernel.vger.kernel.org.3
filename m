@@ -2,127 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E405AC87A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95E25AC87B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 03:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234960AbiIEBUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 21:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
+        id S235039AbiIEBVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 21:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiIEBUH (ORCPT
+        with ESMTP id S230013AbiIEBV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 21:20:07 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF98E55;
-        Sun,  4 Sep 2022 18:20:04 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MLVv96XGZzZc9x;
-        Mon,  5 Sep 2022 09:15:33 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 09:20:01 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 09:20:01 +0800
-Subject: Re: [PATCH] livepatch: Move error print out of lock protection in
- klp_enable_patch()
-To:     Petr Mladek <pmladek@suse.com>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220901022706.813-1-thunder.leizhen@huawei.com>
- <YxC/L+fKInPWJPdy@alley> <c1f6c6ec-2681-8d7a-506a-4da72a963ce8@huawei.com>
- <20220902133628.GA29761@pathway.suse.cz>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <c5504552-dc31-2dc5-97a1-b08927900992@huawei.com>
-Date:   Mon, 5 Sep 2022 09:20:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20220902133628.GA29761@pathway.suse.cz>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 4 Sep 2022 21:21:29 -0400
+Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B046828E02
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 18:21:28 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 0B85E1E80D74;
+        Mon,  5 Sep 2022 09:20:34 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VlII1Ahj_rUB; Mon,  5 Sep 2022 09:20:31 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zeming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 680311E80D59;
+        Mon,  5 Sep 2022 09:20:31 +0800 (CST)
+From:   Li zeming <zeming@nfschina.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Li zeming <zeming@nfschina.com>
+Subject: [PATCH] proc/proc_sysctl: Remove unnecessary 'NULL' values from Pointer
+Date:   Mon,  5 Sep 2022 09:21:10 +0800
+Message-Id: <20220905012110.2946-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Pointer variables allocate memory first, and then judge. There is no
+need to initialize the assignment.
 
+Signed-off-by: Li zeming <zeming@nfschina.com>
+---
+ fs/proc/proc_sysctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2022/9/2 21:36, Petr Mladek wrote:
-> On Fri 2022-09-02 09:28:59, Leizhen (ThunderTown) wrote:
->>>> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
->>>> index 42f7e716d56bf72..cb7abc821a50584 100644
->>>> --- a/kernel/livepatch/core.c
->>>> +++ b/kernel/livepatch/core.c
->>>> @@ -1041,9 +1041,9 @@ int klp_enable_patch(struct klp_patch *patch)
->>>>  	mutex_lock(&klp_mutex);
->>>>  
->>>>  	if (!klp_is_patch_compatible(patch)) {
->>>> +		mutex_unlock(&klp_mutex);
->>>>  		pr_err("Livepatch patch (%s) is not compatible with the already installed livepatches.\n",
->>>>  			patch->mod->name);
->>>> -		mutex_unlock(&klp_mutex);
->>>
->>> I do not see how this change could reliably reduce the code size.
->>>
->>> As Joe wrote, it looks like a random effect that is specific to a
->>> particular compiler version, compilation options, and architecture.
->>>
->>> I am against these kind of random microptimizations. It is just a call
->>> for problems. If you move printk() outside of a lock, you need to make
->>> sure that the information is not racy.
->>
->> OK.
->>
->> 	mutex_lock(&klp_mutex);
->>         if (!klp_is_patch_compatible(patch)) {
->>                 mutex_unlock(&klp_mutex);
->> 			<--------- Do you mean the incompatible patches maybe disabled at this point?
-> 
-> This particular change is safe in the current design.
-> klp_enable_patch() is called from the module_init() callback
-> where patch->mod->name is defined. So it can't change.
-> 
-> The problem is that it is not obvious that it is safe. One has to
-> think about it. Also it might become dangerous when someone
-> tries to call klp_enable_livepatch() for another livepatch module.
-
-OK, I got it, thanks.
-
-> 
->>                 pr_err("Livepatch patch (%s) ...\n", patch->mod->name);
->>                 return -EINVAL;
->>         }
->>
->>>
->>> It might be safe in this particular case. But it is a bad practice.
->>> It adds an extra work. It is error-prone with questionable gain.
->>>
->>> I am sorry but I NACK this patch. There must be better ways to
->>
->> OK
-> 
-> Thanks for understanding.
-> 
-> Best Regards,
-> Petr
-> .
-> 
-
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 021e83fe831f..50ba9e4fb284 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -1246,7 +1246,7 @@ static bool get_links(struct ctl_dir *dir,
+ static int insert_links(struct ctl_table_header *head)
+ {
+ 	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
+-	struct ctl_dir *core_parent = NULL;
++	struct ctl_dir *core_parent;
+ 	struct ctl_table_header *links;
+ 	int err;
+ 
 -- 
-Regards,
-  Zhen Lei
+2.18.2
+

@@ -2,170 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B660F5ADBE2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5135ADBE4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232168AbiIEXYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 19:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S231966AbiIEX2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 19:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiIEXYA (ORCPT
+        with ESMTP id S229619AbiIEX2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 19:24:00 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D7D564F5
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 16:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1662420238; x=1693956238;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xzJjcEQ6nwbRfcAe2RWK+6911ZZFQnH0zlriKMmSkiM=;
-  b=eN3gGRpUq/wpxAKy0hRhCKWMhw1b3+1ub8niuiOBjAE4NheoGwHJ1FYf
-   4qI7fBmYZX+oSWd84l4xemcGmZZOuhxKFTLTNXSQmM58c9qP5hcKnAQsZ
-   kg90AmVEfeOgwpvYpu95WkgtIWXZsWSjdA7n6CVEfRyskGSCzMH/dkr4a
-   D7aRKgWECwXxF+peUWDdTK0HNR1z5QaSQ8Lo3VaNIatMtpgl+lN+XFThF
-   g5m1liwl9tIkWdaeA8r00EXP/llygq75Ghu4iY2nm73ipqaRM4roz7z/L
-   Ina6PjrO9gAHtoip3OZ+ylcww7QgugZ7Vahy5FBgANXKtFa/StrCeBgZO
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,292,1654531200"; 
-   d="scan'208";a="210560218"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Sep 2022 07:23:57 +0800
-IronPort-SDR: 6wr8axaauB9WPyA7o9s1RWf4l6O0fgfwRpLHwMcTepSOF33lpekhjb7EwbQVqfiQqxOOqY0/9P
- SOBTE0ylkgZuJM404wIq9IP3udhlRucvUB7cz84EsuwqXUnma2yuxX+sVSS9zOVO/bcVLuJnwG
- Y/YM2/mpIIJuN6xxbF6B0Q3n416JmzDc4euNSGAsv5OE884nxNImQKypbvIQjNObNzwwSEkoB6
- HOGZlwXA/LdFrXNbMn9fSVntmpSuGblsrIlNpEyNfs1vMeaJsf2C5gUt9WLiv6Jsn7rFKAp9B8
- IiBECI+Ded6ScvRIz9BRwUNj
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Sep 2022 15:38:57 -0700
-IronPort-SDR: PnJHSdcvilVMLVnz2CT/Bs6QjMreamRw59vLKq6M/+XnMg6Jr2SaKEYdHfbGDmntLYz0cvWLo5
- 4ceZKwk4fyM/1y0cSlwsXoLv2zFNW70dz84jRWVVx/aCwf9GNuL6pBhOJlRVOwImhEt+mBneBx
- lkTwlOxYzaxKoM4s/HKIv+Hjx1hVUZ0tcoScc5fKomR7qHwSioE+MXzcGHMNAk5/A7ualQkHIb
- umrqeR6noA2jPTZvvPKtUhjRTtbRniT9EjmMlcnVZ/xQcessqOZGw7ct5yPelAHLao5FXEMhjw
- yv0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Sep 2022 16:23:58 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MM4Mx5cxJz1RvTp
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 16:23:57 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1662420237; x=1665012238; bh=xzJjcEQ6nwbRfcAe2RWK+6911ZZFQnH0zlr
-        iKMmSkiM=; b=U7NOAUKosav0Z5e6Kn6yvqKSnUNNEOvf+ZEsYOoS6p0/DdzlF4o
-        wgCd/7PsDo4I5opwebI54VL1+MyL0qdXBE8z1MCBaoC3XgLdUH4JH6jNml7FtDaO
-        g12gpLrPMoL4ozuP0LRTGoHPsOYdFxY9+cWdulNUZC9VAXrSmu8mZM7s/hntkyNa
-        Ge12dbuReoLEQs2XrCO2oKdbec+1r77I51GyW3aSMDw45cgahjvlX9B5Q2DjeTgU
-        RHJ56+vNzg8YZ8s7BlmSrxbpwSBkyrG/G6a6Mhps8tOElxh1s3jebQV9IKQz4U/C
-        GKEh/f8U3AFxUfDSPRm9hrtDf3PVB+26cSg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id BEebEVe02oj6 for <linux-kernel@vger.kernel.org>;
-        Mon,  5 Sep 2022 16:23:57 -0700 (PDT)
-Received: from [10.225.163.60] (unknown [10.225.163.60])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MM4Mv5lg0z1RvLy;
-        Mon,  5 Sep 2022 16:23:55 -0700 (PDT)
-Message-ID: <3105a674-f976-95c8-f1d9-35034d91c5d4@opensource.wdc.com>
-Date:   Tue, 6 Sep 2022 08:23:54 +0900
+        Mon, 5 Sep 2022 19:28:05 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A849258DEF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 16:28:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662420483; x=1693956483;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zxh+oOorwr2X74jc3gzeWqpVrVOTyGXFjScPKn6QTUI=;
+  b=VnpnaPEU51KyfNcRIYB42tklqPXeB7BfknLxwsbrvwL2vghct90AsrG1
+   EqDbdl5W9dtFPBkF1yg/OKvUbWVmjOPBEiOVqZorb5ovciXuyMzs20mOH
+   QIms+bk2wqvINMDovCe6mcRv/baDMhP7n6ASAFPlQ+sY9NUUOSl+qyEpL
+   q7wWcdNu8dMhctmv4nJs4wtydj7nbx302bx+wZjX1xO86gjO/0xAMxnSr
+   nSkgBdawSEYHSLG+EJzAUdkpY+qVE10x4n+Tui2A9PySN4eqc88dyfgSB
+   nPQL25PLxj8XyC3057H2ZI5uhRjbRW1jDBB/I2r4NuYK0EYt6ztLJnDso
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="276202470"
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="276202470"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 16:28:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="682188538"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 16:28:02 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVLVZ-0004d1-2r;
+        Mon, 05 Sep 2022 23:28:01 +0000
+Date:   Tue, 6 Sep 2022 07:27:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 21/41] include/linux/cpuhotplug.h:287:
+ undefined reference to `ipi_mux_create'
+Message-ID: <202209060754.NTMLgEr3-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 2/6] scsi: libsas: Add sas_ata_device_link_abort()
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
-        yangxingui@huawei.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, hare@suse.de
-References: <1660747934-60059-1-git-send-email-john.garry@huawei.com>
- <1660747934-60059-3-git-send-email-john.garry@huawei.com>
- <0bb6b134-7bad-7c39-ad6d-25d57bd343eb@opensource.wdc.com>
- <018080d5-fbc4-7f04-0d3f-587f2397cd20@huawei.com>
- <baf63982-810c-85eb-b28f-99ab0517c6ba@opensource.wdc.com>
- <eb3465a2-335e-a605-ba8a-4cce790b5b02@huawei.com>
- <4b471300-a912-c3c0-ead4-7165c57cbbf8@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <4b471300-a912-c3c0-ead4-7165c57cbbf8@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/3/22 01:19, John Garry wrote:
-> Hi Damien,
-> 
->>>>
->>>> But the pm8001 manual and current driver indicate that the
->>>> OPC_INB_SATA_ABORT command should be sent after read log ext when
->>>> handling NCQ error, regardless of an autopsy. I send OPC_INB_SATA_ABORT
->>>> in ata_eh_reset() -> pm8001_I_T_nexus_reset() -> pm8001_send_abort_all()
->>> You lost me: ata_eh_recover() will call ata_eh_reset() only if the 
->>> ATA_EH_RESET
->>> action flag is set. So are you saying that even though it is not 
->>> needed, you
->>> still need to set ATA_EH_RESET for pm8001 ?
->>
->> As below, it was the only location I found suitable to call 
->> pm8001_send_abort_all().
->>
->> However I am not really sure it is required now. For pm8001 NCQ error 
->> handling we require 2x steps:
->> - read log ext
->> - Send OPC_INB_SATA_ABORT - we do this in pm8001_send_abort_all()
->>
->> pm8001_send_abort_all() sends OPC_INB_SATA_ABORT in "device abort all" 
->> mode, meaning any IO in the HBA is aborted for the device. But we are 
->> also earlier in EH sending OPC_INB_SATA_ABORT for individual IOs in 
->> sas_eh_handle_sas_errors() -> sas_scsi_find_task() -> 
->> pm8001_abort_task() -> sas_execute_internal_abort_single() -> ... 
->> send_abort_task()
->>
->> So I don't think that the pm8001_send_abort_all() call has any effect, 
->> as we're already aborting any outstanding IO earlier.
->>
->> Admittedly the order of the 2x steps is different, but 
->> OPC_INB_SATA_ABORT does not send any protocol message to the disk, so 
->> would not affect anything subsequently read with read log ext.
->>
->> Having said all that, it may be wise to still send 
->> pm8001_send_abort_all()..
-> 
-> Have you had a chance to consider all this yet?
-> 
-> I am now starting to think that it is not necessary to call 
-> pm8001_send_abort_all(), and instead rely only on 
-> sas_eh_handle_sas_errors() -> sas_scsi_find_task() -> 
-> pm8001_abort_task() -> sas_execute_internal_abort_single() -> ... -> 
-> send_abort_task() to abort each outstanding IO. Then we would not have 
-> the issue of forcing the reset in $subject (to lead to calling 
-> pm8001_send_abort_all()).
-> 
-> This idea could simply be tested by stubbing pm8001_send_abort_all()
-> (and dropping the |= ATA_EH_RESET in $subject).
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   98a7169ff2516ac22eecb21f2267097400d67ea9
+commit: 7a7eae3dbc24b9a2169dc19a742f0e6da65fe69b [21/41] RISC-V: Treat IPIs as normal Linux IRQs
+config: riscv-randconfig-c003-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060754.NTMLgEr3-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/avpatel/linux/commit/7a7eae3dbc24b9a2169dc19a742f0e6da65fe69b
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout 7a7eae3dbc24b9a2169dc19a742f0e6da65fe69b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Send a re-spinned patch and I will test :)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> Thanks,
-> John
-> 
+All errors (new ones prefixed by >>):
+
+   riscv64-linux-ld: drivers/clocksource/timer-clint.o: in function `cpuhp_setup_state':
+>> include/linux/cpuhotplug.h:287: undefined reference to `ipi_mux_create'
+
+
+vim +287 include/linux/cpuhotplug.h
+
+cff7d378d3fdbb Thomas Gleixner           2016-02-26  261  
+5b7aa87e0482be Thomas Gleixner           2016-02-26  262  int __cpuhp_setup_state(enum cpuhp_state state,	const char *name, bool invoke,
+5b7aa87e0482be Thomas Gleixner           2016-02-26  263  			int (*startup)(unsigned int cpu),
+cf392d10b69e6e Thomas Gleixner           2016-08-12  264  			int (*teardown)(unsigned int cpu), bool multi_instance);
+5b7aa87e0482be Thomas Gleixner           2016-02-26  265  
+71def423fe3da0 Sebastian Andrzej Siewior 2017-05-24  266  int __cpuhp_setup_state_cpuslocked(enum cpuhp_state state, const char *name,
+71def423fe3da0 Sebastian Andrzej Siewior 2017-05-24  267  				   bool invoke,
+71def423fe3da0 Sebastian Andrzej Siewior 2017-05-24  268  				   int (*startup)(unsigned int cpu),
+71def423fe3da0 Sebastian Andrzej Siewior 2017-05-24  269  				   int (*teardown)(unsigned int cpu),
+71def423fe3da0 Sebastian Andrzej Siewior 2017-05-24  270  				   bool multi_instance);
+5b7aa87e0482be Thomas Gleixner           2016-02-26  271  /**
+c9871c800f65ff Thomas Gleixner           2021-09-09  272   * cpuhp_setup_state - Setup hotplug state callbacks with calling the @startup
+c9871c800f65ff Thomas Gleixner           2021-09-09  273   *                     callback
+5b7aa87e0482be Thomas Gleixner           2016-02-26  274   * @state:	The state for which the calls are installed
+5b7aa87e0482be Thomas Gleixner           2016-02-26  275   * @name:	Name of the callback (will be used in debug output)
+c9871c800f65ff Thomas Gleixner           2021-09-09  276   * @startup:	startup callback function or NULL if not required
+c9871c800f65ff Thomas Gleixner           2021-09-09  277   * @teardown:	teardown callback function or NULL if not required
+5b7aa87e0482be Thomas Gleixner           2016-02-26  278   *
+c9871c800f65ff Thomas Gleixner           2021-09-09  279   * Installs the callback functions and invokes the @startup callback on
+c9871c800f65ff Thomas Gleixner           2021-09-09  280   * the online cpus which have already reached the @state.
+5b7aa87e0482be Thomas Gleixner           2016-02-26  281   */
+5b7aa87e0482be Thomas Gleixner           2016-02-26  282  static inline int cpuhp_setup_state(enum cpuhp_state state,
+5b7aa87e0482be Thomas Gleixner           2016-02-26  283  				    const char *name,
+5b7aa87e0482be Thomas Gleixner           2016-02-26  284  				    int (*startup)(unsigned int cpu),
+5b7aa87e0482be Thomas Gleixner           2016-02-26  285  				    int (*teardown)(unsigned int cpu))
+5b7aa87e0482be Thomas Gleixner           2016-02-26  286  {
+cf392d10b69e6e Thomas Gleixner           2016-08-12 @287  	return __cpuhp_setup_state(state, name, true, startup, teardown, false);
+5b7aa87e0482be Thomas Gleixner           2016-02-26  288  }
+5b7aa87e0482be Thomas Gleixner           2016-02-26  289  
+
+:::::: The code at line 287 was first introduced by commit
+:::::: cf392d10b69e6e6c57ceea48b347a2ab1a4b75b2 cpu/hotplug: Add multi instance support
+
+:::::: TO: Thomas Gleixner <tglx@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

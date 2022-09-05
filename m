@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81725AD561
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F785AD55C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238706AbiIEOoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
+        id S238730AbiIEOpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238860AbiIEOn6 (ORCPT
+        with ESMTP id S238615AbiIEOoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:43:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC8712766;
-        Mon,  5 Sep 2022 07:42:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C053CB811E1;
-        Mon,  5 Sep 2022 14:42:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D008C433D7;
-        Mon,  5 Sep 2022 14:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662388943;
-        bh=NlStXV7wed6wVtep3wZsd1cQTElbxZKc0QNhM8aDIIc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uvG1+XkIDZiThWQpsvnEX5k7bxs9uQACJiHfklgXMBg2ORQYwHVNChUmJM5Cz+UWk
-         Re82+7o7zJIE+aXzZk4Taax4nFYPEQuEJSRIQu71sIHzp+Kn+POsN10dKFJ/393d3I
-         lswwdEUGQADCeSeclJrLsodf0EIrAX+WfItAu5+HLBb9ZuVPAKbASMQ/nb8gYSlkbq
-         dKMtrKrGSriNmPQddIaz/AJC9hDYQ3amEpR/AJrn5cAAuwCZ2/tdTH69+N5lmoTQEv
-         8tXFu3G3TDyTOl2E5OtPXmJyy18qqucVBINYg/Ao5RvGG5icJvwp2R5QdWSy1DkANh
-         gK5Xevt92mNqQ==
-Received: by mail-vs1-f42.google.com with SMTP id o123so9042187vsc.3;
-        Mon, 05 Sep 2022 07:42:23 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3NOkR5kr7RXV2jM/Mbe0+fjWmFX5hHhvezyJQy8uZKHDqmmXj2
-        c1/SghUH4qJQxj5NGIlJ/UoVJfLgjEy/go0HGZI=
-X-Google-Smtp-Source: AA6agR7sqaivV1IawE/7cTWY9j7vY23902xeea9967TaCk0gJUQNpNzQlk3v8WRDNV+1c2oX7k52hU/kKvkvQ1PUAGc=
-X-Received: by 2002:a67:d582:0:b0:390:d6dd:5612 with SMTP id
- m2-20020a67d582000000b00390d6dd5612mr13853625vsj.78.1662388942430; Mon, 05
- Sep 2022 07:42:22 -0700 (PDT)
+        Mon, 5 Sep 2022 10:44:14 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE694DF48
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:43:55 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id lx1so17499730ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=/K//7CyyIk6mTUm6I5PG1r35sm06kAazu5QFLJvFTiw=;
+        b=mrX+nhJpmARTFimfcBwelfCUZnkHIZnphKWk7QT8Y16GEtZbQQ6kqdFfLWlYpRljAF
+         vKyGUwYK3ZpJRQHB6awUpaebXHBi4+2Zvw0tCTM64sq58Nlpaef6vyj0DDHH7oSDMBZI
+         LRgi6YLupayfGBPdtn1p0BrVjnwUiBDpmb0Ms=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/K//7CyyIk6mTUm6I5PG1r35sm06kAazu5QFLJvFTiw=;
+        b=oLV9buF7NrwWy0j6mk7HJQZnKM2+6XpNtWkgJ1mnfXddADP7aMb+V/yxrV0Fih0Qk2
+         aFj6OViWuMZWJJLSbpuGEshQVudmOR9M8veweo9jfMI2EdSx9MXx1iHNUKfZHYItJCUU
+         6ycnH8+ZWyKlYhuRuqzJ9uTlZnIt0OulFJPAAlokHZO/V5oG6FYemzibZJ3XOCbTKxD6
+         jiEaOL24YvHByHtHwYMuo7zZOuCqdxaxfVdpTcN6rBW2S29dabhWmuoVAsx6fIUz3Lv0
+         QK6AwvGm+wn3EFsNyVoJJ7CJHK/KaHdnQ2f709Tlpb3egHUt7u6dux30/v0hazqQUQpE
+         JcCQ==
+X-Gm-Message-State: ACgBeo1I217FuEpVHzHRKiPHwiylESjbeoBgLDBv9IyIglwDuCs7GqJ0
+        eSA14puiSorR+gBL7ihLP/SypTkMIkgXbA==
+X-Google-Smtp-Source: AA6agR4vC0ENwqITqmAsOVlAKPL/vhKWMxI8wzd+jL+RRlSXAuhqNcWfNMrviUChCcSXuWt3rfFTjg==
+X-Received: by 2002:a17:907:75c6:b0:741:75a0:b82b with SMTP id jl6-20020a17090775c600b0074175a0b82bmr11207385ejc.465.1662389034165;
+        Mon, 05 Sep 2022 07:43:54 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:400::5:902a])
+        by smtp.gmail.com with ESMTPSA id dv25-20020a170906b81900b0074a8293424esm5170931ejb.53.2022.09.05.07.43.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 07:43:53 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 15:43:53 +0100
+From:   Chris Down <chris@chrisdown.name>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
+Subject: Re: [PATCH v3 1/2] printk: console: Create console= parser that
+ supports named options
+Message-ID: <YxYLKU8TWZ4T5ONF@chrisdown.name>
+References: <cover.1658339046.git.chris@chrisdown.name>
+ <732ee897b2bd49ada3f7dee396475c5a2195071b.1658339046.git.chris@chrisdown.name>
+ <Yw80MmyBl4js09If@alley>
 MIME-Version: 1.0
-References: <20220830030139.29899-1-lvjianmin@loongson.cn> <20220830030139.29899-3-lvjianmin@loongson.cn>
-In-Reply-To: <20220830030139.29899-3-lvjianmin@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 5 Sep 2022 22:42:09 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4P=MsH2B29U+x4TWJpN4s_2ZYLsX5_rfaapPxx9+UmPQ@mail.gmail.com>
-Message-ID: <CAAhV-H4P=MsH2B29U+x4TWJpN4s_2ZYLsX5_rfaapPxx9+UmPQ@mail.gmail.com>
-Subject: Re: [PATCH V3 2/2] LoongArch: Remove ARCH_HAS_PHYS_TO_DMA
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     lpieralisi@kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Yw80MmyBl4js09If@alley>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,189 +76,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jianmin,
+Hi Petr,
 
-The title can be "LoongArch: Use acpi_arch_dma_setup() and remove
-ARCH_HAS_PHYS_TO_DMA", and please use resource_size() as arm64.
+Thanks a lot for looking this over!
 
-Acked-by: Huacai Chen <chenhuacai@loongson.cn>
+Petr Mladek writes:
+>I think that the function does not work as expected.
+>
+>> +	bool seen_serial_opts = false;
+>> +	char *key;
+>> +
+>> +	while ((key = strsep(&options, ",")) != NULL) {
+>> +		char *value;
+>
+>strsep() replaces ',' with '\0'.
+>
+>> +
+>> +		value = strchr(key, ':');
+>> +		if (value)
+>> +			*(value++) = '\0';
+>
+>This replaces ':' with '\0'.
+>
+>> +
+>> +		if (!seen_serial_opts && isdigit(key[0]) && !value) {
+>
+>This catches the classic options in the format "bbbbpnf".
+>
+>> +			seen_serial_opts = true;
+>> +			c->options = key;
+>> +			continue;
+>> +		}
+>> +
+>> +		pr_err("ignoring invalid console option: '%s%s%s'\n", key,
+>> +		       value ? ":" : "", value ?: "");
+>
+>IMHO, this would warn even about "io", "mmio", ...  that are used by:
 
+Oh dear, I should have known it won't be that simple :-D
 
-Huacai
+>
+>		console=uart[8250],io,<addr>[,options]
+>		console=uart[8250],mmio,<addr>[,options]
+>
+>Warning: I am not completely sure about this. It seems that
+>	 this format is handled by univ8250_console_match().
+>
+>	 IMHO, the "8250" is taken as "idx" in console_setup().
+>	 And "idx" parameter is ignored by univ8250_console_match().
+>	 This probably explains why "8250" is optional in console=
+>	 parameter.
+>
+>> +	}
+>> +}
+>
+>Sigh, the parsing of console= parameter is really hacky. Very old code.
+>The name and idx is handled in console_setup(). The rest
+>is handled by particular drivers via "options".
+>
+>This patch makes it even more tricky. It tries to handle some
+>*options in add_preferred_console(). But it replaces all ','
+>and ':' by '\0' so that drivers do not see the original *options
+>any longer.
 
+Other than the mmio/io stuff, I think it works properly, right? Maybe I'm 
+missing something? :-)
 
-On Tue, Aug 30, 2022 at 11:01 AM Jianmin Lv <lvjianmin@loongson.cn> wrote:
+Here's a userspace test for the parser that seems to work.  
+parse_console_cmdline_options() should also ignore empty options instead of 
+warning, but it still functions correctly in that case, it's just noisy right 
+now.
+
+---
+
+/* Only change is pr_err to fprintf */
+
+#define _DEFAULT_SOURCE
+
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+#define clamp(a, b, c) (a)
+#define CON_LOGLEVEL 128
+
+struct console_cmdline {
+	char *options;
+	int level;
+	short flags;
+};
+
+static void parse_console_cmdline_options(struct console_cmdline *c,
+					  char *options)
+{
+	bool seen_serial_opts = false;
+	char *key;
+
+	while ((key = strsep(&options, ",")) != NULL) {
+		char *value;
+
+		value = strchr(key, ':');
+		if (value)
+			*(value++) = '\0';
+
+		if (strcmp(key, "loglevel") == 0 && value &&
+		    isdigit(value[0]) && strlen(value) == 1) {
+			c->level = clamp(value[0] - '0', LOGLEVEL_EMERG,
+					 LOGLEVEL_DEBUG + 1);
+			c->flags |= CON_LOGLEVEL;
+			continue;
+		}
+
+		if (!seen_serial_opts && isdigit(key[0]) && !value) {
+			seen_serial_opts = true;
+			c->options = key;
+			continue;
+		}
+
+		fprintf(stderr,
+			"ignoring invalid console option: '%s%s%s'\n", key,
+			value ? ":" : "", value ?: "");
+	}
+}
+
+int main(int argc, char *argv[])
+{
+	struct console_cmdline con = { 0 };
+
+	if (argc != 2)
+		return EXIT_FAILURE;
+
+	parse_console_cmdline_options(&con, argv[1]);
+	printf("options: %s\n", con.options);
+	printf("level: %d\n", con.level);
+}
+
+---
+
+% make CFLAGS='-Wall -Wextra -Werror' loglevel
+cc -Wall -Wextra -Werror    loglevel.c   -o loglevel
+% ./loglevel 9600n8
+options: 9600n8
+level: 0
+level set: 0
+% ./loglevel 9600n8,loglevel:3
+options: 9600n8
+level: 3
+level set: 1
+% ./loglevel 9600n8,loglevel:123
+ignoring invalid console option: 'loglevel:123'
+options: 9600n8
+level: 0
+level set: 0
+% ./loglevel 9600n8,loglevel:3,foo:bar
+ignoring invalid console option: 'foo:bar'
+options: 9600n8
+level: 3
+level set: 1
+% ./loglevel 9600n8,loglevel
+ignoring invalid console option: 'loglevel'
+options: 9600n8
+level: 0
+level set: 0
+% ./loglevel loglevel
+ignoring invalid console option: 'loglevel'
+options: (null)
+level: 0
+level set: 0
+% ./loglevel loglevel:7
+options: (null)
+level: 7
+level set: 1
+
+---
+
+Seems to work ok as far as I can tell, maybe I've misunderstood your concern?  
+Or maybe your concern is just about the mmio/io case where the driver wants 
+that as part of the options?
+
+>I thought a lot how to do it a clean way. IMHO, it would be great to
+>parse everything at a single place but it might require updating
+>all drivers. I am not sure if it is worth it.
 >
-> Use _DMA defined in ACPI spec for translation between
-> DMA address and CPU address, and implement acpi_arch_dma_setup
-> for initializing dev->dma_range_map, where acpi_dma_get_range
-> is called for parsing _DMA.
+>So, I suggest to do it another way. We could implement a generic
+>function to find in the new key[:value] format. It would check
+>if the given option (key) exists and read the optional value.
 >
-> e.g.
-> If we have two dma ranges:
-> cpu address      dma address    size         offset
-> 0x200080000000   0x2080000000   0x400000000  0x1fe000000000
-> 0x400080000000   0x4080000000   0x400000000  0x3fc000000000
->
-> _DMA for pci devices should be declared in host bridge as
-> flowing:
->
-> Name (_DMA, ResourceTemplate() {
->         QWordMemory (ResourceProducer,
->             PosDecode,
->             MinFixed,
->             MaxFixed,
->             NonCacheable,
->             ReadWrite,
->             0x0,
->             0x4080000000,
->             0x447fffffff,
->             0x3fc000000000,
->             0x400000000,
->             ,
->             ,
->             )
->
->         QWordMemory (ResourceProducer,
->             PosDecode,
->             MinFixed,
->             MaxFixed,
->             NonCacheable,
->             ReadWrite,
->             0x0,
->             0x2080000000,
->             0x247fffffff,
->             0x1fe000000000,
->             0x400000000,
->             ,
->             ,
->             )
->     })
->
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> ---
->  arch/loongarch/Kconfig        |  1 -
->  arch/loongarch/kernel/dma.c   | 52 +++++++++++++++++--------------------------
->  arch/loongarch/kernel/setup.c |  2 +-
->  include/linux/acpi.h          |  9 +++++---
->  4 files changed, 28 insertions(+), 36 deletions(-)
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index b57daee..9dedcf9 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -7,7 +7,6 @@ config LOONGARCH
->         select ARCH_ENABLE_MEMORY_HOTPLUG
->         select ARCH_ENABLE_MEMORY_HOTREMOVE
->         select ARCH_HAS_ACPI_TABLE_UPGRADE      if ACPI
-> -       select ARCH_HAS_PHYS_TO_DMA
->         select ARCH_HAS_PTE_SPECIAL
->         select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->         select ARCH_INLINE_READ_LOCK if !PREEMPTION
-> diff --git a/arch/loongarch/kernel/dma.c b/arch/loongarch/kernel/dma.c
-> index 8c9b531..7a9c6a9 100644
-> --- a/arch/loongarch/kernel/dma.c
-> +++ b/arch/loongarch/kernel/dma.c
-> @@ -2,39 +2,29 @@
->  /*
->   * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
->   */
-> -#include <linux/init.h>
-> +#include <linux/acpi.h>
->  #include <linux/dma-direct.h>
-> -#include <linux/dma-mapping.h>
-> -#include <linux/dma-map-ops.h>
-> -#include <linux/swiotlb.h>
->
-> -#include <asm/bootinfo.h>
-> -#include <asm/dma.h>
-> -#include <asm/loongson.h>
-> -
-> -/*
-> - * We extract 4bit node id (bit 44~47) from Loongson-3's
-> - * 48bit physical address space and embed it into 40bit.
-> - */
-> -
-> -static int node_id_offset;
-> -
-> -dma_addr_t phys_to_dma(struct device *dev, phys_addr_t paddr)
-> -{
-> -       long nid = (paddr >> 44) & 0xf;
-> -
-> -       return ((nid << 44) ^ paddr) | (nid << node_id_offset);
-> -}
-> -
-> -phys_addr_t dma_to_phys(struct device *dev, dma_addr_t daddr)
-> +void acpi_arch_dma_setup(struct device *dev)
->  {
-> -       long nid = (daddr >> node_id_offset) & 0xf;
-> +       int ret;
-> +       u64 mask, end = 0;
-> +       const struct bus_dma_region *map = NULL;
-> +
-> +       ret = acpi_dma_get_range(dev, &map);
-> +       if (!ret && map) {
-> +               const struct bus_dma_region *r = map;
-> +
-> +               for (end = 0; r->size; r++) {
-> +                       if (r->dma_start + r->size - 1 > end)
-> +                               end = r->dma_start + r->size - 1;
-> +               }
-> +
-> +               mask = DMA_BIT_MASK(ilog2(end) + 1);
-> +               dev->bus_dma_limit = end;
-> +               dev->dma_range_map = map;
-> +               dev->coherent_dma_mask = min(dev->coherent_dma_mask, mask);
-> +               *dev->dma_mask = min(*dev->dma_mask, mask);
-> +       }
->
-> -       return ((nid << node_id_offset) ^ daddr) | (nid << 44);
-> -}
-> -
-> -void __init plat_swiotlb_setup(void)
-> -{
-> -       swiotlb_init(true, SWIOTLB_VERBOSE);
-> -       node_id_offset = ((readl(LS7A_DMA_CFG) & LS7A_DMA_NODE_MASK) >> LS7A_DMA_NODE_SHF) + 36;
->  }
-> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-> index c74860b..974f085 100644
-> --- a/arch/loongarch/kernel/setup.c
-> +++ b/arch/loongarch/kernel/setup.c
-> @@ -247,7 +247,7 @@ static void __init arch_mem_init(char **cmdline_p)
->         sparse_init();
->         memblock_set_bottom_up(true);
->
-> -       plat_swiotlb_setup();
-> +       swiotlb_init(true, SWIOTLB_VERBOSE);
->
->         dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
->
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 34e0545..33977b87 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -278,14 +278,17 @@ int acpi_table_parse_madt(enum acpi_madt_type id,
->
->  void acpi_numa_x2apic_affinity_init(struct acpi_srat_x2apic_cpu_affinity *pa);
->
-> +#if defined(CONFIG_ARM64) || defined(CONFIG_LOONGARCH)
-> +void acpi_arch_dma_setup(struct device *dev);
-> +#else
-> +static inline void acpi_arch_dma_setup(struct device *dev) { }
-> +#endif
-> +
->  #ifdef CONFIG_ARM64
->  void acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa);
-> -void acpi_arch_dma_setup(struct device *dev);
->  #else
->  static inline void
->  acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa) { }
-> -static inline void
-> -acpi_arch_dma_setup(struct device *dev) { }
->  #endif
->
->  int acpi_numa_memory_affinity_init (struct acpi_srat_mem_affinity *ma);
-> --
-> 1.8.3.1
->
->
+>The optional value would allow to define another new options
+>that would not need any value, e.g. "kthread" or "atomic" that
+>might be used in the upcoming code that allows to offload
+>console handling to kthreads.
+
+This could also work, and avoids the current null pointer shoving. It also can 
+make the ordering less strict, which seems like a good thing.
+
+I will think about it some more. I'm curious about your comments on the above 
+test still though.
+
+Thanks a lot for the detailed review and ideas!
+
+Chris

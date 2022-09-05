@@ -2,182 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0325AD3F8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D745AD3F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237891AbiIENdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S237646AbiIENdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237907AbiIENdk (ORCPT
+        with ESMTP id S237705AbiIENdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:33:40 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1A24A13F;
-        Mon,  5 Sep 2022 06:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=PuPLL0CONGpVXEiqjDZEK8eY52IwnN+4YFhtPkE5SvE=;
-        b=BKi//YxMV5MEBr/sr2A7s6/4wulB43AJWIr89tz46MUmXFelLfBsLMocNu23FkgRiiCB+Uxfgav/R
-         WQ7fCMs+KHWjOcj0Baf+Gstec1/oEyWrNyZ5Q2mlZAXIlcWMd0ZfX3m4l8QwDfLIGn2J/MRm6FoHAE
-         L7pXNzAq6ALOTmzTrL0RUODZgo3Ms0VEK6qNFZT4DgTpgsk5o4KC1EnsJOfmF5EZFM6HoZ/p/GSVoT
-         Ci//8/LLpTR4f3npVrtO48c/EkmkhMJjMNjJ9nLCEwhRXhBwd0E10zgyP4Wl6yE5iAekaZaTcY1UNF
-         K73GS0KNa6wx9OBF0fKpFAASZB/8lYQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000010,0.014927)], BW: [Enabled, t: (0.000018,0.000001)], RTDA: [Enabled, t: (0.078016), Hit: No, Details: v2.41.0; Id: 15.52k1e7.1gc6tmdrm.cj; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Mon, 5 Sep 2022 16:33:31 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        system@metrotek.ru,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v10 2/2] dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
-Date:   Mon,  5 Sep 2022 16:32:05 +0300
-Message-Id: <20220905133205.17039-3-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220905133205.17039-1-i.bornyakov@metrotek.ru>
-References: <20220905133205.17039-1-i.bornyakov@metrotek.ru>
+        Mon, 5 Sep 2022 09:33:06 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1B74A12B
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 06:32:59 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 052A0580222;
+        Mon,  5 Sep 2022 09:32:56 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 05 Sep 2022 09:32:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1662384775; x=1662391975; bh=BndZD3o0f1
+        E/yy3CgHU6/gGUoZque82OSFD4UL+mJ2w=; b=EO51DpMNeWzuyeJKd9el0Z+cLH
+        NUdELGUgfHmAmQwc9bO1eHIsyTCjVb6fKeXAsOOP0ooT7ZtS2CvRU3B6PonShX5s
+        uR1ZZJCbH9yQLk6K7VKSGB0tZzBOR3Jlv5eAjhNha5mscFH185qRmHsoEf9c+4uo
+        Wklciyf30h9oq+Q1YRb7azkX0Ij2Pu+51iPcbqca2LJUTAXwKgwvEM1lPI8x3QbT
+        YGUgQzEKtEgQEHFNV8Q99Xoh3iP8e2e1GWifyq6iCSJ9pG5v9BLg9b9zwlXEz+uz
+        4cffC29v8jg8wdVkqY0Mm42LGPU8Bl0mUMLOg3+sgCmCurF2BMm7Lcx0DkFA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1662384775; x=1662391975; bh=BndZD3o0f1E/yy3CgHU6/gGUoZqu
+        e82OSFD4UL+mJ2w=; b=eU6yw1G07vynu4cue4gKD5m5vvy2eoMhdBh/KSUVFtrn
+        OUHh1USV2SgljBW7GMgHjMVt1pViT9lTam3HwIj+hEA+6zBGFGRYdXyQzNUaR+P1
+        s+Vw/H5yGqPzR8nsRpmlqTwvnfOcemY9NIcLfzzj4uy5i7AUbqZXWLxdQkOLY7Po
+        ajXvr2CJAnU3Nw8C28s5CvVrLWnyOlrg1GnRLgKn0ODjH1LwOVW5d1gYYexnKnWr
+        wiB1smyxmMIORDxbolYI3+7smjffMX8HE/C8SGJlp29qtKsYk0QXBdYWxLGiK/hN
+        yUZG8hJ6HVustSYeynQVK7Ceq0Tcxc0erG6EqlYr6A==
+X-ME-Sender: <xms:h_oVY3ntSP4q_zNMDo5xX_moISXZo_3a78JIoPIkWjpzZtplMSiF6A>
+    <xme:h_oVY63u6evuIVUF6Y36KuJoCroqVm1wNJGkDxHFkFsgAGgkTY_pBB26geJa1KOQM
+    OiVcTfteeITkIwmKAU>
+X-ME-Received: <xmr:h_oVY9pl5qN70CXGDREiRUgiL9wEzYSC0SEmuWMrKPJ-jErkIkktumflK6E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeliedgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:h_oVY_mldv5lSIFtb7mKoEW2f0hlNSlAc-J18EeAua7zN2oMUkSQVw>
+    <xmx:h_oVY10lch1CZ3LlXmV-mLsgR6-5czKaO49jNv1oc1WXeW4MSawITw>
+    <xmx:h_oVY-sSzq_ImTLpiuqqa5s1CXxjawZc82_NlD6orN-th3Uf9_2_yw>
+    <xmx:h_oVYzERo3S5Dd--_eLY6ZmpwGdnUPC48g_gkuWxbcQVfLpC5gZLnw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Sep 2022 09:32:54 -0400 (EDT)
+Date:   Mon, 5 Sep 2022 15:32:51 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Mateusz Kwiatkowski <kfyatek@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nouveau Dev <nouveau@lists.freedesktop.org>,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 10/41] drm/modes: Add a function to generate analog
+ display modes
+Message-ID: <20220905133251.js26hxdosibx4r4i@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
+ <242d272b-5b79-986c-9aaf-64e62f6b37ff@gmail.com>
+ <CAMuHMdWq3aOO4-2AReDeaC2VBJb=QJF2dTMZP=DGmwCg6ZOffA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="33jm6ubzzouafw3w"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWq3aOO4-2AReDeaC2VBJb=QJF2dTMZP=DGmwCg6ZOffA@mail.gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for configuring Lattice ECP5 and MachXO2
-FPGAs over Slave SPI sysCONFIG interface.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/fpga/lattice,sysconfig.yaml      | 102 ++++++++++++++++++
- 1 file changed, 102 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+--33jm6ubzzouafw3w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-new file mode 100644
-index 000000000000..17f1e0c50bc4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-@@ -0,0 +1,102 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/lattice,sysconfig.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Lattice Slave SPI sysCONFIG FPGA manager
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description: |
-+  Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-+  have Slave Serial Peripheral Interface. Only full reconfiguration is
-+  supported.
-+
-+  Programming of ECP5 is done by writing uncompressed bitstream image in .bit
-+  format into FPGA's SRAM configuration memory.
-+
-+  Programming of MachXO2 is done by writing configuration data into device's
-+  internal non-volatile Flash memory, then Self-Download of data from Flash
-+  into SRAM is issued.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - lattice,ecp5-fpga-mgr
-+      - lattice,machxo2-fpga-mgr
-+
-+  reg:
-+    maxItems: 1
-+
-+  program-gpios:
-+    description:
-+      A GPIO line connected to PROGRAMN (active low) pin of the device.
-+      Initiates configuration sequence.
-+    maxItems: 1
-+
-+  init-gpios:
-+    description:
-+      A GPIO line connected to INITN (active low) pin of the device.
-+      Indicates that the FPGA is ready to be configured.
-+    maxItems: 1
-+
-+  done-gpios:
-+    description:
-+      A GPIO line connected to DONE (active high) pin of the device.
-+      Indicates that the configuration sequence is complete.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,machxo2-fpga-mgr
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 66000000
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,ecp5-fpga-mgr
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 60000000
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fpga-mgr@0 {
-+            compatible = "lattice,ecp5-fpga-mgr";
-+            reg = <0>;
-+            spi-max-frequency = <20000000>;
-+            program-gpios = <&gpio3 4 GPIO_ACTIVE_LOW>;
-+            init-gpios = <&gpio3 3 GPIO_ACTIVE_LOW>;
-+            done-gpios = <&gpio3 2 GPIO_ACTIVE_HIGH>;
-+        };
-+
-+        fpga-mgr@1 {
-+            compatible = "lattice,machxo2-fpga-mgr";
-+            reg = <1>;
-+            spi-max-frequency = <20000000>;
-+        };
-+    };
--- 
-2.37.2
+Hi,
 
+On Wed, Aug 31, 2022 at 10:14:28AM +0200, Geert Uytterhoeven wrote:
+> > > +enum drm_mode_analog {
+> > > +    DRM_MODE_ANALOG_NTSC,
+> > > +    DRM_MODE_ANALOG_PAL,
+> > > +};
+> >
+> > Using "NTSC" and "PAL" to describe the 50Hz and 60Hz analog TV modes is=
+ common,
+> > but strictly speaking a misnomer. Those are color encoding systems, and=
+ your
+> > patchset fully supports lesser used, but standard encodings for those (=
+e.g.
+> > PAL-M for 60Hz and SECAM for 50Hz). I'd propose switching to some more =
+neutral
+> > naming scheme. Some ideas:
+> >
+> > - DRM_MODE_ANALOG_60_HZ / DRM_MODE_ANALOG_50_HZ (after standard refresh=
+ rate)
+> > - DRM_MODE_ANALOG_525_LINES / DRM_MODE_ANALOG_625_LINES (after standard=
+ line
+> >   count)
+>=20
+> IMHO these are bad names, as e.g. VGA640x480@60 is also analog, using
+> 60 Hz and 525 lines.  Add "TV" to the name?
+>=20
+> > - DRM_MODE_ANALOG_JM / DRM_MODE_ANALOG_BDGHIKLN (after corresponding IT=
+U System
+> >   Letter Designations)
+>=20
+> Or DRM_MODE_ITU_*?
+> But given the long list of letters, this looks fragile to me.
 
+Does it matter at all? It's an internal API that isn't exposed at all.
+I'd rather have a common name that everyone can understand in this case
+rather than a *perfect* name where most will scratch their head
+wondering what it's about.
+
+Maxime
+
+--33jm6ubzzouafw3w
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxX6gwAKCRDj7w1vZxhR
+xRY+APwO4YqnioLJFYdWxGYCqIG80ImumXUFbL0Tx5/LHpbRnAD9GcSO3ME950qT
+a6PSCUqylWFq013v3epQ49LG4896+QQ=
+=dwqa
+-----END PGP SIGNATURE-----
+
+--33jm6ubzzouafw3w--

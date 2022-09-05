@@ -2,124 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D741B5AD07B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C945AD0A0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237215AbiIEKrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S237616AbiIEKs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236854AbiIEKrC (ORCPT
+        with ESMTP id S237521AbiIEKsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:47:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC7D64C60C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:46:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A86F7D6E;
-        Mon,  5 Sep 2022 03:47:05 -0700 (PDT)
-Received: from [10.57.15.199] (unknown [10.57.15.199])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E80E3F7B4;
-        Mon,  5 Sep 2022 03:46:57 -0700 (PDT)
-Message-ID: <696a1a53-87b5-7517-3c05-82217c8eb190@arm.com>
-Date:   Mon, 5 Sep 2022 11:46:50 +0100
+        Mon, 5 Sep 2022 06:48:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21D44C63C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662374892; x=1693910892;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZJQiYw3bQrc4/+dvLKFmUeDrSnc2G4Jtg9vxg1wuj78=;
+  b=kCBjLJnzuJnA1vyVRcIxdSg1WXQQUGS2l/UXaMMmhmMhx4xtB/a5x2PK
+   a35J1YdStuXxYyvu2+IHFFRMf4kCYLyWHBzdVNYRNVTEVhQ0id5lM3oj+
+   A5eA9onIxGwritozRrQxsKZc8/873rsKosIFBGMCpuZoGluOxqbPk1Hpz
+   2YB/ZT10jnCzyjiNFYeB5jZam8TDBlcjpS73bC/pRErQtvZNwzSt9Nwc4
+   GtJzVFnbQDaJKGVywlIp7P4AZuAJQn5wQU6UbU93ZD55MrWQi/Tu/AdEz
+   5yx6H/l9S+gwbf+JiWuj/vtFTBPFP1w2vuZRRYRlHM/hkt3fL0cUxq46S
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="297674622"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="297674622"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 03:48:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="682021391"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 03:48:11 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oV9eE-00043b-1i;
+        Mon, 05 Sep 2022 10:48:10 +0000
+Date:   Mon, 5 Sep 2022 18:47:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype
+ for function 'mpc52xx_psc_spi_transfer_one_message'
+Message-ID: <202209051823.XJdrEu9F-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] arm64: Remove d-cache clean operation at
- preserve_boot_args().
-Content-Language: en-GB
-To:     Jeungwoo Yoo <casionwoo@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Sangyun Kim <sangyun.kim@snu.ac.kr>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220904193020.65556-1-casionwoo@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220904193020.65556-1-casionwoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-04 20:30, Jeungwoo Yoo wrote:
-> Kernel expects only the clean operation as a booting requirement in
-> arm64 architecture [1], therefore, the kernel has to invalidate any
-> cache entries after accessing a memory in the booting time (before
-> enabling D-cache and MMU) not to overwrite the memory with the stale
-> cache entry.
-> 
-> Same applied in preserve_boot_args(), kernel saves boot arguments into
-> 'boot_args' and invalidates the corresponding cache entry. However,
-> according to the 'dcache_inval_poc()' implementation, the cache entry
-> will be not only invalidated but also cleaned. That means if there is a
-> stale cache entry corresponding to the address of the 'boot_args', the
-> saved boot arguments in 'boot_args' will be overwritten by the stale
-> cache entry. Therefore, it uses 'dv ivac' instruction directly instead
-> of calling 'dcache_inval_poc()'.
+Hi Mark,
 
-You've already said in the first paragraph that we expect these 
-locations to be clean. Clean lines are not written back, so your 
-reasoning here is spurious. If boot_args has somehow become dirtied such 
-that the clean operation *would* write back to memory, that can only 
-mean one of two things: either the kernel image was not cleaned per the 
-boot protocol, in which case there's every chance that other things will 
-also go wrong elsewhere and there's not much we can do, or the prior 
-stores hit in the cache (either unexpectedly or because the MMU was left 
-on), in which case we almost certainly *would* want writeback here anyway.
+FYI, the error/warning still remains.
 
-> The address of the 'boot_args' is aligned to the cache line size and the
-> size of 'boot_args' is 32 byte (8 byte * 4), therefore, a single
-> invalidate operation is enough to invalidate the cache line belonging to
-> the 'boot_args'.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7e18e42e4b280c85b76967a9106a13ca61c16179
+commit: 145cfc3840e5931a789a8e2e76af841ab4cad44b spi: mpc52xx-psc: Switch to using core message queue
+date:   2 months ago
+config: powerpc-randconfig-r026-20220905 (https://download.01.org/0day-ci/archive/20220905/202209051823.XJdrEu9F-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=145cfc3840e5931a789a8e2e76af841ab4cad44b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 145cfc3840e5931a789a8e2e76af841ab4cad44b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
 
-The architecture allows the CWG to be as small as 2 words, so this is 
-clearly untrue.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Robin.
+All warnings (new ones prefixed by >>):
 
-> Sometimes clean operation is required not to lose any contents in the
-> cache entry but not the target of the invalidation. However, in this
-> case, there is no valid cache entries at a very early booting stage and
-> preserve_boot_args() is not called by any other (non-primary) CPUs.
-> Therefore, this invalidation operation will not introduce any problems.
-> 
-> [1] in Documentation/arm64/booting.rst:
-> The address range corresponding to the loaded kernel image must be
-> cleaned to the PoC.
-> 
-> Co-developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> 
-> Co-developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-> Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-> 
-> Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
-> ---
->   arch/arm64/kernel/head.S | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-> index cefe6a73ee54..916227666b07 100644
-> --- a/arch/arm64/kernel/head.S
-> +++ b/arch/arm64/kernel/head.S
-> @@ -121,9 +121,7 @@ SYM_CODE_START_LOCAL(preserve_boot_args)
->   
->   	dmb	sy				// needed before dc ivac with
->   						// MMU off
-> -
-> -	add	x1, x0, #0x20			// 4 x 8 bytes
-> -	b	dcache_inval_poc		// tail call
-> +	dc	ivac, x0			// Invalidate potentially stale cache line
->   SYM_CODE_END(preserve_boot_args)
->   
->   SYM_FUNC_START_LOCAL(clear_page_tables)
+>> drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for function 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
+   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+       ^
+   drivers/spi/spi-mpc52xx-psc.c:195:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/mpc52xx_psc_spi_transfer_one_message +195 drivers/spi/spi-mpc52xx-psc.c
+
+   194	
+ > 195	int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+   196						 struct spi_message *m)
+   197	{
+   198		struct spi_device *spi;
+   199		struct spi_transfer *t = NULL;
+   200		unsigned cs_change;
+   201		int status;
+   202	
+   203		spi = m->spi;
+   204		cs_change = 1;
+   205		status = 0;
+   206		list_for_each_entry (t, &m->transfers, transfer_list) {
+   207			if (t->bits_per_word || t->speed_hz) {
+   208				status = mpc52xx_psc_spi_transfer_setup(spi, t);
+   209				if (status < 0)
+   210					break;
+   211			}
+   212	
+   213			if (cs_change)
+   214				mpc52xx_psc_spi_activate_cs(spi);
+   215			cs_change = t->cs_change;
+   216	
+   217			status = mpc52xx_psc_spi_transfer_rxtx(spi, t);
+   218			if (status)
+   219				break;
+   220			m->actual_length += t->len;
+   221	
+   222			spi_transfer_delay_exec(t);
+   223	
+   224			if (cs_change)
+   225				mpc52xx_psc_spi_deactivate_cs(spi);
+   226		}
+   227	
+   228		m->status = status;
+   229		if (status || !cs_change)
+   230			mpc52xx_psc_spi_deactivate_cs(spi);
+   231	
+   232		mpc52xx_psc_spi_transfer_setup(spi, NULL);
+   233	
+   234		spi_finalize_current_message(ctlr);
+   235	
+   236		return 0;
+   237	}
+   238	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,171 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6B25AC942
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107855AC943
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235779AbiIEDyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 23:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        id S236087AbiIEDyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 23:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbiIEDyH (ORCPT
+        with ESMTP id S234742AbiIEDyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 23:54:07 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3881A3BA;
-        Sun,  4 Sep 2022 20:54:06 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id bx38so7917149ljb.10;
-        Sun, 04 Sep 2022 20:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=EO9cXvZpaINegPiNkQW8Jq/6uz9vUDKC0ucIfZt4MuU=;
-        b=DuE+pMDxJr8BWfHfLyiVSf4CHnvzuqVwOt1OoxmkJKqIko2jTVqD3AWm6u/33u1mWG
-         YBnzCGA+wfjkRIuwuMsHLSZU3mIcHFnZS2SMsPQahbWlhD6c4zbRhRBXzACX7Z9rAVJi
-         P3pDjqJKjpRM9mN7BVx2QUnn5eBT8y89LpJCBcghUGm6qmlNZwBV8T2RrX86DlqyO1W+
-         uuzczll5JmQqHOJ7wnX+13Gik+zhquZ5PQhvlE7hIRyiPetv7rMEkP43AP3RTBtY9NE1
-         xCswrqCgAhV3OkxTzm2UwgqWHSqmprJWIs4eoG4c+uuUvmCK8uInJgkhoXp+9wCIwnQ4
-         x+iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=EO9cXvZpaINegPiNkQW8Jq/6uz9vUDKC0ucIfZt4MuU=;
-        b=eRuMKXbi8FSd5LUXkGUrCeg8S+YttIsQW+3ZUNPuBk1QDvuKfy5fhj5j/ffzytFzGb
-         irLhKfBfhtN0XIzUTwxmugsOvjgFFLvICQy58b5qCTX+STmRDVBygC3gs5MR5Ef4ZcXs
-         cd+YHt4GlaIwOYEkGhyupSda0kfD4AfOW8Nog+U4QwTXKQ2Ht8MQNiuGCzJgb6lcpsxI
-         I9VUmvg7nBYIrfmWWqEvmJofHrjPv+U+H2bsFwud83u84a6n5C21h5B9+absQaO9oph7
-         J7nAL0LymcxvDdPnUzohiL7VLy8rwtfWkHblEwrzQ2AFOz4ZkXaAjpIny5kPQ9yNucK0
-         Cp7A==
-X-Gm-Message-State: ACgBeo0HSNPW6OX9gBxE5YNXNsBRO2pQBp4igZyj8evWkoQoICbymviz
-        SDXTrxgLqr3s7n2zFLgXg3aDRK7iyamfpTXGAa/17J8BJ7py
-X-Google-Smtp-Source: AA6agR7ofiw+M0kfm5zOIunpVJxULlxJQ/yEwVOxRIUYlRpULWr8k5W1qtf4lXQffluXHuitUXkdecmo1MQPzd/8lh8=
-X-Received: by 2002:a05:651c:1112:b0:268:a0ad:ac1d with SMTP id
- e18-20020a05651c111200b00268a0adac1dmr5494717ljo.261.1662350044124; Sun, 04
- Sep 2022 20:54:04 -0700 (PDT)
+        Sun, 4 Sep 2022 23:54:31 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F0F2B8
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 20:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1662350068; x=1693886068;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CgWI7pXo/iFPZ6k4JkJ0VyK0XDakMC57Y0/q2O6Q7+Y=;
+  b=A8VZf0yT3BgT2Cu2EjD10i/ZN7H4tiuxdOJTVc9aCg+fV6uPdghQgPM/
+   rJA3qMHwD5sVh0vIesjx9LX0QwWl95Iow3MNPoDb6sACN4bIKZhsLAYGD
+   Nd5EsurljRaawN0koWT9oNN7QvXKmSgekIticC/86/MQI2qoo7TamV4s5
+   xOq30/4ti+H3iVEdmVeDRXBWO1nbk6CBw43s5Q0lKEsTGNMbMwvJa7W6r
+   A2UfvsbJN5WmZD8OlNgOE96QLOEY6LK4JBTH4i8UW6sP+ATuc57WLDWfA
+   8VxWjDtrvPPcBYv6cfZ/v/8iViPDDYrAWm48H9jxNfNIKP3azHtiYTgKU
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,290,1654531200"; 
+   d="scan'208";a="210977848"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 05 Sep 2022 11:54:22 +0800
+IronPort-SDR: z/dmezlIQTUrN/O4uNZ3XRkBXx8u8OHnKg1JokTw1VSvQ72wcrs7q2SAwTXDVak5PehbLghxNH
+ rp0gjxh1inU23Oiu4ymzV8Gvgban3nGgbdKwR/jHeASeipumbm1YgcJSt/ksCkvMdl3jyFe6OZ
+ e/bYenhkTTWDjxgQF0xD+cGeefLwuZ/w4zALPt+PKqsaVQwjSExG5T/Hz2p1mcEoPPmLtDzpWW
+ O1HpjE/uHv/n9WlUSd493d0FnUcwpfhD0L7/uVnXrd8z4V3B2VI3e1RelCUWlz0BiqUhUBBs+M
+ 1F/QQgvhYOhxUTb8hIY0vOpb
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Sep 2022 20:14:46 -0700
+IronPort-SDR: 4qho7bycIXaQvj/Xz+abHR46sgJhWmDQdBpOQ5p2FFLt6YiTaKFIvnldwxPb1EMMnOuI+FY3+J
+ BNhbuA0+zC2vjC3TYhDvOOAWgC/DrkvPH7oY86VdxWZoo4zR5v9RLENOe0lDS2iHEDiRA70aPW
+ rZrBk7CsvkcmIsx3yYQItRayNBMXaMJ/ZwUW4H3b4ICRpwk2ukI19yJen5HxLxM9OC/szTEXdf
+ zdWvpB8GcQPStcJAQJJMwzDtT+Ie/9qdYrPS84DT1qroG2GvqSSbWQRTRD3cfANANOLaqkvPC5
+ 37E=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Sep 2022 20:54:22 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MLZQQ2DFQz1RvTr
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 20:54:22 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1662350061; x=1664942062; bh=CgWI7pXo/iFPZ6k4JkJ0VyK0XDakMC57Y0/
+        q2O6Q7+Y=; b=an25YydaQGwwCDDtb0A16UCvnEVVBD1BNr2csbHOZCAfNePowTA
+        2FuyJqosaLx0vu89m8BiXWrQFi3eXYLe0n8FHTvegKd492Efkg36bV0B8znkHTCT
+        cm1c8P2QCSA7Q4+udePuHFYg8bJ2bO+WhAfPiD/QJvt2mfPVJ2j41gJuWfoaB4sD
+        AuKiV/ckIXpBDG2NSyzRUcP5Hd2u085BNQNZph5AIV7E6jaGMLad4KiFlnClaPGb
+        lSvpecyUpyMi7VkH5nw9A3XXTVGS/X6g1nMqmAv2tlT4srwX/6pWYs+HyNK6EKh3
+        CyRvQBah66e5r6Q31FUJ4yCCm/mdIDOjutA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hwkYt6VDQI_A for <linux-kernel@vger.kernel.org>;
+        Sun,  4 Sep 2022 20:54:21 -0700 (PDT)
+Received: from [10.225.163.60] (unknown [10.225.163.60])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MLZQN5P4nz1RvLy;
+        Sun,  4 Sep 2022 20:54:20 -0700 (PDT)
+Message-ID: <ea747f8e-257c-a4f6-6dce-5ea26de4083f@opensource.wdc.com>
+Date:   Mon, 5 Sep 2022 12:54:19 +0900
 MIME-Version: 1.0
-References: <20220822021520.6996-1-kernelfans@gmail.com> <20220822021520.6996-7-kernelfans@gmail.com>
- <20220822024528.GC6159@paulmck-ThinkPad-P17-Gen-1> <YwQygLBtzqwxuMIJ@piliu.users.ipa.redhat.com>
- <20220823030125.GJ6159@paulmck-ThinkPad-P17-Gen-1> <CAFgQCTup0uTqnKi79Tu+5Q0POYVdcE4UkGes8KfHXBd6VR552A@mail.gmail.com>
- <20220824162050.GA6159@paulmck-ThinkPad-P17-Gen-1> <20220831161522.GA2582451@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220831161522.GA2582451@paulmck-ThinkPad-P17-Gen-1>
-From:   Pingfan Liu <kernelfans@gmail.com>
-Date:   Mon, 5 Sep 2022 11:53:52 +0800
-Message-ID: <CAFgQCTuNw3sdO=X1KNHkTZW8YvK8xo4bmTxyN_uJ9=kkWOW=zw@mail.gmail.com>
-Subject: Re: [RFC 06/10] rcu/hotplug: Make rcutree_dead_cpu() parallel
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Price <steven.price@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, boqun.feng@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] block/blk-map: Remove set but unused variable 'added'
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220905022553.77178-1-jiapeng.chong@linux.alibaba.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220905022553.77178-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 12:15 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Wed, Aug 24, 2022 at 09:20:50AM -0700, Paul E. McKenney wrote:
-> > On Wed, Aug 24, 2022 at 09:53:11PM +0800, Pingfan Liu wrote:
-> > > On Tue, Aug 23, 2022 at 11:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > On Tue, Aug 23, 2022 at 09:50:56AM +0800, Pingfan Liu wrote:
-> > > > > On Sun, Aug 21, 2022 at 07:45:28PM -0700, Paul E. McKenney wrote:
-> > > > > > On Mon, Aug 22, 2022 at 10:15:16AM +0800, Pingfan Liu wrote:
-> > > > > > > In order to support parallel, rcu_state.n_online_cpus should be
-> > > > > > > atomic_dec()
-> > > > > > >
-> > > > > > > Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> > > > > >
-> > > > > > I have to ask...  What testing have you subjected this patch to?
-> > > > > >
-> > > > >
-> > > > > This patch subjects to [1]. The series aims to enable kexec-reboot in
-> > > > > parallel on all cpu. As a result, the involved RCU part is expected to
-> > > > > support parallel.
-> > > >
-> > > > I understand (and even sympathize with) the expectation.  But results
-> > > > sometimes diverge from expectations.  There have been implicit assumptions
-> > > > in RCU about only one CPU going offline at a time, and I am not sure
-> > > > that all of them have been addressed.  Concurrent CPU onlining has
-> > > > been looked at recently here:
-> > > >
-> > > > https://docs.google.com/document/d/1jymsaCPQ1PUDcfjIKm0UIbVdrJAaGX-6cXrmcfm0PRU/edit?usp=sharing
-> > > >
-> > > > You did us atomic_dec() to make rcu_state.n_online_cpus decrementing be
-> > > > atomic, which is good.  Did you look through the rest of RCU's CPU-offline
-> > > > code paths and related code paths?
-> > >
-> > > I went through those codes at a shallow level, especially at each
-> > > cpuhp_step hook in the RCU system.
-> >
-> > And that is fine, at least as a first step.
-> >
-> > > But as you pointed out, there are implicit assumptions about only one
-> > > CPU going offline at a time, I will chew the google doc which you
-> > > share.  Then I can come to a final result.
-> >
-> > Boqun Feng, Neeraj Upadhyay, Uladzislau Rezki, and I took a quick look,
-> > and rcu_boost_kthread_setaffinity() seems to need some help.  As it
-> > stands, it appears that concurrent invocations of this function from the
-> > CPU-offline path will cause all but the last outgoing CPU's bit to be
-> > (incorrectly) set in the cpumask_var_t passed to set_cpus_allowed_ptr().
-> >
-> > This should not be difficult to fix, for example, by maintaining a
-> > separate per-leaf-rcu_node-structure bitmask of the concurrently outgoing
-> > CPUs for that rcu_node structure.  (Similar in structure to the
-> > ->qsmask field.)
-> >
+On 9/5/22 11:25, Jiapeng Chong wrote:
+> The variable added is not effectively used in the function, so delete
+> it.
+> 
+> block/blk-map.c:273:16: warning: variable 'added' set but not used.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2049
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  block/blk-map.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/block/blk-map.c b/block/blk-map.c
+> index 2fbe298d3822..a06919822a73 100644
+> --- a/block/blk-map.c
+> +++ b/block/blk-map.c
+> @@ -270,7 +270,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+>  	while (iov_iter_count(iter)) {
+>  		struct page **pages, *stack_pages[UIO_FASTIOV];
+>  		ssize_t bytes;
+> -		size_t offs, added = 0;
+> +		size_t offs = 0;
 
-Sorry to reply late, since I am interrupted by some other things.
-I have took a different way and posted a series ([PATCH 1/3] rcu:
-remove redundant cpu affinity setting during teardown) for that on
-https://lore.kernel.org/rcu/20220905033852.18988-1-kernelfans@gmail.com/T/#t
+offs is initialized with the call to iov_iter_get_pages_alloc2() so I do
+not think it needs to be initialized to 0 here, unless you have a compiler
+or sparse warning. If that is the case, this should be mentioned in the
+commit message too.
 
-Besides, for the integration of the concurrency cpu hot-removing into
-the rcu torture test, I begin to do it.
+>  		int npages;
+>  
+>  		if (nr_vecs <= ARRAY_SIZE(stack_pages)) {
+> @@ -306,7 +306,6 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+>  					break;
+>  				}
+>  
+> -				added += n;
+>  				bytes -= n;
+>  				offs = 0;
+>  			}
 
-> > There are probably more where that one came from.  ;-)
->
-> And here is one more from this week's session.
->
+-- 
+Damien Le Moal
+Western Digital Research
 
-Thanks for the update.
-
-> The calls to tick_dep_set() and tick_dep_clear() use atomic operations,
-> but they operate on a global variable.  This means that the first call
-> to rcutree_offline_cpu() would enable the tick and the first call to
-> rcutree_dead_cpu() would disable the tick.  This might be OK, but it
-> is at the very least bad practice.  There needs to be a counter
-> mediating these calls.
->
-
-I will see what I can do here.
-
-> For more detail, please see the Google document:
->
-> https://docs.google.com/document/d/1jymsaCPQ1PUDcfjIKm0UIbVdrJAaGX-6cXrmcfm0PRU/edit?usp=sharing
->
-
-Have read it and hope that both online and offline concurrency can
-come to true in near future.
-
-Thanks,
-
-    Pingfan

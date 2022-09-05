@@ -2,98 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FF45AD3B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4C65AD3C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237659AbiIENUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
+        id S237725AbiIENVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237183AbiIENUT (ORCPT
+        with ESMTP id S237621AbiIENVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:20:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605003C15A;
-        Mon,  5 Sep 2022 06:20:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 137E5B8119C;
-        Mon,  5 Sep 2022 13:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B142EC43141;
-        Mon,  5 Sep 2022 13:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662384015;
-        bh=szAT6+dGFI+pJU9JhkQozMXyv0TluMnN2z3VZBNzSMU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=GIUjLk30wORS/+0g7AYumuV1UnABCPWTuhHD57kNbJZFMsRJNmlKkTjnkrLRYuRax
-         7f+V+qLt2b/Oe2PmEYOY1ltvtKBhTZCN5L35JMdtyY66czsekgNBCpnGG/LhZNycFO
-         Tpxu0z6BDOfSTYVoZYi9EIn3JOTQrRVzhstJaSvC8lP+6WHvz6n1ACTh3wJhiDxLOV
-         8efPjrQ1O0mdmMnacRENm8J+mexGVVAuENme6OQbTM49TS5oKAR8MIf1CmTlmyS7hc
-         gMSejwyg0eRWbNNZDAr70w2z8C7CYtnQXogyvqXdjKZEPgc4xrfxuPB01UQy5xLuYJ
-         JMhJjBIgpoS3w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9B7F0E1CABF;
-        Mon,  5 Sep 2022 13:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 5 Sep 2022 09:21:11 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C041547BBF;
+        Mon,  5 Sep 2022 06:20:57 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 285CXuOL022519;
+        Mon, 5 Sep 2022 09:20:53 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jc3u5vt6t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 09:20:53 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 285DKpTk029090
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 5 Sep 2022 09:20:51 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 5 Sep 2022 09:20:50 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 5 Sep 2022 09:20:50 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 5 Sep 2022 09:20:50 -0400
+Received: from george-precision5560.ad.analog.com ([10.48.65.141])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 285DKaY8000352;
+        Mon, 5 Sep 2022 09:20:39 -0400
+From:   George Mois <george.mois@analog.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <lucas.p.stankus@gmail.com>, George Mois <george.mois@analog.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 1/2] dt-bindings: iio: accel: adxl313: Add compatibles for adxl312 and adxl314
+Date:   Mon, 5 Sep 2022 16:20:17 +0300
+Message-ID: <20220905132018.364900-1-george.mois@analog.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [Patch net-next 0/3] net: dsa: microchip: lan937x: enable interrupt
- for internal phy link detection
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166238401563.22589.9260356369397863227.git-patchwork-notify@kernel.org>
-Date:   Mon, 05 Sep 2022 13:20:15 +0000
-References: <20220902103210.10743-1-arun.ramadoss@microchip.com>
-In-Reply-To: <20220902103210.10743-1-arun.ramadoss@microchip.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: Rp_oEBMQY74BU084GlBYQo_k-cW6Gr3V
+X-Proofpoint-ORIG-GUID: Rp_oEBMQY74BU084GlBYQo_k-cW6Gr3V
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-05_09,2022-09-05_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ phishscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0
+ mlxscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209050063
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Extend the adi,adxl313.yaml file with information regrding the
+ADXL312 and ADXL314 devices.
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Signed-off-by: George Mois <george.mois@analog.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+changes in v4:
+ - rename patch title to comply with dt-bindings patches title format
+ .../devicetree/bindings/iio/accel/adi,adxl313.yaml     | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-On Fri, 2 Sep 2022 16:02:07 +0530 you wrote:
-> This patch series enables the internal phy link detection for lan937x using the
-> interrupt method. lan937x acts as the interrupt controller for the internal
-> ports and phy, the irq_domain is registered for the individual ports and in
-> turn for the individual port interrupts.
-> 
-> RFC v3 -> Patch v1
-> - Removed the RFC v3 1/3 from the series - changing exit from reset
-> - Changed the variable name in ksz_port from irq to pirq
-> - Added the check for return value of irq_find_mapping during phy irq
->   registeration.
-> - Moved the clearing of POR_READY_INT from girq_thread_fn to
->   lan937x_reset_switch
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/3] net: dsa: microchip: add reference to ksz_device inside the ksz_port
-    https://git.kernel.org/netdev/net-next/c/f3c165459c51
-  - [net-next,2/3] net: dsa: microchip: lan937x: clear the POR_READY_INT status bit
-    https://git.kernel.org/netdev/net-next/c/f313936261ac
-  - [net-next,3/3] net: dsa: microchip: lan937x: add interrupt support for port phy link
-    https://git.kernel.org/netdev/net-next/c/c9cd961c0d43
-
-You are awesome, thank you!
+diff --git a/Documentation/devicetree/bindings/iio/accel/adi,adxl313.yaml b/Documentation/devicetree/bindings/iio/accel/adi,adxl313.yaml
+index d6afc1b8c272..59d48ff1a16c 100644
+--- a/Documentation/devicetree/bindings/iio/accel/adi,adxl313.yaml
++++ b/Documentation/devicetree/bindings/iio/accel/adi,adxl313.yaml
+@@ -4,20 +4,24 @@
+ $id: http://devicetree.org/schemas/iio/accel/adi,adxl313.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Analog Devices ADXL313 3-Axis Digital Accelerometer
++title: Analog Devices ADXL312, ADXL313, and ADXL314 3-Axis Digital Accelerometers
+ 
+ maintainers:
+   - Lucas Stankus <lucas.p.stankus@gmail.com>
+ 
+ description: |
+-  Analog Devices ADXL313 3-Axis Digital Accelerometer that supports
+-  both I2C & SPI interfaces.
++  Analog Devices ADXL312, ADXL313, and ADXL314 3-Axis Digital Accelerometer that
++  support both I2C & SPI interfaces.
++    https://www.analog.com/en/products/adxl312.html
+     https://www.analog.com/en/products/adxl313.html
++    https://www.analog.com/en/products/adxl314.html
+ 
+ properties:
+   compatible:
+     enum:
++      - adi,adxl312
+       - adi,adxl313
++      - adi,adxl314
+ 
+   reg:
+     maxItems: 1
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 

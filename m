@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F6B5AD489
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9735AD48A
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237199AbiIEOKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S238049AbiIEOKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236506AbiIEOKH (ORCPT
+        with ESMTP id S237415AbiIEOKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:10:07 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9313A24BE3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:10:04 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b19so9367563ljf.8
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=FKN1JOpDZtlbeNH8OIC4d4elRGYKKYcfRFewHUVoXLQ=;
-        b=nhCfu42JMTUoCYmeHuznAOkwdGoFHHmYtyOQsi0ncymt29bL0tZXsWJUKM6d96wpre
-         VgluOotao0toEOAe1h3R7rChL5HrvPKvMtHLTznzsBbbLvZ0gQY6jKVLtXt1FDquRtHV
-         kaSi4FGa2RH9Mz9rbtg4T02rAsO8vjxfMN4rQBAUSSLMMX3ki5DqgvO9BTnfeCv4zoOB
-         ai2E5pPSDB2wvgPGRV7W6pPcqb9JchZ6vHz3MwEtJomobJ3GL++ImY+OpWL1eByTLnns
-         0CNMzvPPK5JZiCwo+tpOpUNpiIohfNjeMAo7OtjbzZEEiAVlPdONjEjMAQ74qaaW2WGg
-         3hmw==
+        Mon, 5 Sep 2022 10:10:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A43F27DDF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:10:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662387015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/aM9Hz/CxTU/5IZIiOb0wSytjLDU1CYz4f/uZlzEYfY=;
+        b=WXhE9tE+lWskXL7dnxRIFOx82M1hrtyWC1zMSjoHGv+JpsLFoAduU4XWYEOByeCoMYIC7/
+        7XBDNz8gfqUeOXwJPLKEcM3HTA63IHoRDKgCWlxianshklmZW4oqlVRJIhc2w4xvaOWG/v
+        scfBuFAyCrPa1mN5TgQrb6ClPeB9J3U=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-3-spKonLifNr6Ql3-DIQhixw-1; Mon, 05 Sep 2022 10:10:14 -0400
+X-MC-Unique: spKonLifNr6Ql3-DIQhixw-1
+Received: by mail-pl1-f200.google.com with SMTP id q8-20020a170902dac800b001753aa66955so6092412plx.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:10:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FKN1JOpDZtlbeNH8OIC4d4elRGYKKYcfRFewHUVoXLQ=;
-        b=T4sIRS62Xtzz//PN6CGpaXSIlzEAAMEstQmLe9gPa8T6vsIldbp/Xgsq9pV12myYc6
-         nE6HVlpIBBfporlElWae7tu1SVXZY1BwO1lRAh0aii4KXrodRwmkgtUqXgwDk1+kVW3K
-         u1cj3z6rEwt0kKmYCCarDsQZGeQXYKwnyIbLqqjPNnJEsEIFZgsrCYLyj16UE9ni7Ee0
-         UOxk0MsVdCE7YKx2wzBcHCo+57EcKX5yY81cYUG4mwAks0rPedmUoj/hI66DSvtTFLA2
-         9S0XbxH2ZxLLmmvPPPLBzM9pR0OlSpvCDeBzGUzIpNwgBfXKszkBYj5UvZEd7EXe/7wi
-         cwDw==
-X-Gm-Message-State: ACgBeo0qMZP0H2Dkvp1JZA3+HX+j0+jyau7rEQqjewMs4LwNSFrARJoU
-        EeFFt1gKY1ytCqMPgYIuqbUHqQ==
-X-Google-Smtp-Source: AA6agR4El7y4IT4lAlgQXtAOsrOIz7IkrRHCkD/A2S4p+/9tQvKZXU0lvZ2Q4JJsjuVfDdd/htYFGg==
-X-Received: by 2002:a2e:b5d3:0:b0:267:4da0:ce3b with SMTP id g19-20020a2eb5d3000000b002674da0ce3bmr8215983ljn.420.1662387002553;
-        Mon, 05 Sep 2022 07:10:02 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id e27-20020a05651c039b00b00264bb2351e8sm1436823ljp.7.2022.09.05.07.10.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 07:10:02 -0700 (PDT)
-Message-ID: <1ea02712-eb1e-ca68-b954-c7d59a74926d@linaro.org>
-Date:   Mon, 5 Sep 2022 16:10:00 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=/aM9Hz/CxTU/5IZIiOb0wSytjLDU1CYz4f/uZlzEYfY=;
+        b=LN0P6jNVC3zER4/Jbyz94GaBDyM8mgOFuqWb4pqmEdEps2rDARzmgtS8WnTx4za5br
+         HVUWjTHfplxmz90s+GCT9Zg+uKyS3L4PTvAWrlteOTrIXfBM3CVzabFN3QgdPCufNuo1
+         USDx9uwgLjFRKDN/0z9FAglAmehBKNCSHSRcdT5DDLmljI0fMGxRZL6opLxYjiMS08wC
+         c98UmIrbyHhK62KS3FpY3nqMKT6cITrsgS5BlRVaaeefdiyFKbK82BQdkSWMofwNWlJ0
+         ugZCSO0GAhv1DC90i/f+ZQ0hhV//bzFJNAQU5uwXWZ6baI4jsualUMrjC/qUAD7JwDCF
+         FMpg==
+X-Gm-Message-State: ACgBeo3vdF+IctP5oLWPj3cIHh9sKatUQnhxQtgIYJC0twMho+PAoZAo
+        hZQtKa+kcVt5YTRBXyPIhSbno07SRnzBTkLqXyjOlTQzj9a0GqYk/EfX4krPT0K9Hvw4OsJCrp+
+        eTE6MKDvP4uyN394ukgf3uIJ3gnGOaUIzOvVSWLRz
+X-Received: by 2002:a65:6e49:0:b0:429:cae6:aac6 with SMTP id be9-20020a656e49000000b00429cae6aac6mr41418489pgb.268.1662387013101;
+        Mon, 05 Sep 2022 07:10:13 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6Mbj0cnXfyvltZuZyI75OnAiCy5kv581MclsxMj6AKJtQBQIL0bE5MAfuVXEL2TcdEimwBiyT3tt6LHh8ASBA=
+X-Received: by 2002:a65:6e49:0:b0:429:cae6:aac6 with SMTP id
+ be9-20020a656e49000000b00429cae6aac6mr41418453pgb.268.1662387012811; Mon, 05
+ Sep 2022 07:10:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH RESEND] dt-bindings: leds: qcom-wled: fix number of
- addresses
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kiran Gunda <kgunda@codeaurora.org>,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, Lee Jones <lee@kernel.org>
-References: <20220720163720.7099-1-krzysztof.kozlowski@linaro.org>
- <5db5da26-3689-928b-433e-72c690014b64@linaro.org>
- <YxYACwJmo/FlbVgk@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YxYACwJmo/FlbVgk@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220901133505.2510834-1-yi.zhang@huawei.com> <20220901133505.2510834-5-yi.zhang@huawei.com>
+In-Reply-To: <20220901133505.2510834-5-yi.zhang@huawei.com>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Mon, 5 Sep 2022 16:10:01 +0200
+Message-ID: <CAHc6FU4XqSxUr3CS8zxu=Fh_kHytJbzezim0ie_cxdioW5R=FA@mail.gmail.com>
+Subject: Re: [PATCH v2 04/14] gfs2: replace ll_rw_block()
+To:     Zhang Yi <yi.zhang@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cluster-devel@redhat.com,
+        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, jack@suse.cz, tytso@mit.edu,
+        akpm@linux-foundation.org, axboe@kernel.dk,
+        viro@zeniv.linux.org.uk, rpeterso@redhat.com,
+        almaz.alexandrovich@paragon-software.com, mark@fasheh.com,
+        dushistov@mail.ru, hch@infradead.org, chengzhihao1@huawei.com,
+        yukuai3@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,30 +79,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/09/2022 15:56, Lee Jones wrote:
-> On Thu, 25 Aug 2022, Krzysztof Kozlowski wrote:
-> 
->> On 20/07/2022 19:37, Krzysztof Kozlowski wrote:
->>> On PM660L, PMI8994 and PMI8998, the WLED has two address spaces.  This
->>> also fixes dtbs_check warnings like:
->>>
->>>   arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dtb: leds@d800: reg: [[55296], [55552]] is too long
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Reviewed-by: Rob Herring <robh@kernel.org>
->>> ---
->>>  .../devicetree/bindings/leds/backlight/qcom-wled.yaml    | 9 ++++++++-
->>>  1 file changed, 8 insertions(+), 1 deletion(-)
->>
->>
->> The resent was a month ago. I assume this won't go via LEDs tree, so I
->> will resend (again) without Rob's review, so it could go via Rob's tree.
-> 
-> If you have not already done so, please resend this and Cc my
-> kernel.org address, as per MAINTAINERS.  Thanks Krzysztof.
-> 
+On Thu, Sep 1, 2022 at 3:24 PM Zhang Yi <yi.zhang@huawei.com> wrote:
+> ll_rw_block() is not safe for the sync read path because it cannot
+> guarantee that always submitting read IO if the buffer has been locked,
+> so stop using it. We also switch to new bh_readahead() helper for the
+> readahead path.
+>
+> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+> ---
+>  fs/gfs2/meta_io.c | 7 ++-----
+>  fs/gfs2/quota.c   | 8 ++------
+>  2 files changed, 4 insertions(+), 11 deletions(-)
+>
+> diff --git a/fs/gfs2/meta_io.c b/fs/gfs2/meta_io.c
+> index 7e70e0ba5a6c..6ed728aae9a5 100644
+> --- a/fs/gfs2/meta_io.c
+> +++ b/fs/gfs2/meta_io.c
+> @@ -525,8 +525,7 @@ struct buffer_head *gfs2_meta_ra(struct gfs2_glock *gl, u64 dblock, u32 extlen)
+>
+>         if (buffer_uptodate(first_bh))
+>                 goto out;
+> -       if (!buffer_locked(first_bh))
+> -               ll_rw_block(REQ_OP_READ | REQ_META | REQ_PRIO, 1, &first_bh);
+> +       bh_read_nowait(first_bh, REQ_META | REQ_PRIO);
+>
+>         dblock++;
+>         extlen--;
+> @@ -534,9 +533,7 @@ struct buffer_head *gfs2_meta_ra(struct gfs2_glock *gl, u64 dblock, u32 extlen)
+>         while (extlen) {
+>                 bh = gfs2_getbuf(gl, dblock, CREATE);
+>
+> -               if (!buffer_uptodate(bh) && !buffer_locked(bh))
+> -                       ll_rw_block(REQ_OP_READ | REQ_RAHEAD | REQ_META |
+> -                                   REQ_PRIO, 1, &bh);
+> +               bh_readahead(bh, REQ_RAHEAD | REQ_META | REQ_PRIO);
+>                 brelse(bh);
+>                 dblock++;
+>                 extlen--;
+> diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
+> index f201eaf59d0d..1ed17226d9ed 100644
+> --- a/fs/gfs2/quota.c
+> +++ b/fs/gfs2/quota.c
+> @@ -745,12 +745,8 @@ static int gfs2_write_buf_to_page(struct gfs2_inode *ip, unsigned long index,
+>                 }
+>                 if (PageUptodate(page))
+>                         set_buffer_uptodate(bh);
+> -               if (!buffer_uptodate(bh)) {
+> -                       ll_rw_block(REQ_OP_READ | REQ_META | REQ_PRIO, 1, &bh);
+> -                       wait_on_buffer(bh);
+> -                       if (!buffer_uptodate(bh))
+> -                               goto unlock_out;
+> -               }
+> +               if (bh_read(bh, REQ_META | REQ_PRIO) < 0)
+> +                       goto unlock_out;
+>                 if (gfs2_is_jdata(ip))
+>                         gfs2_trans_add_data(ip->i_gl, bh);
+>                 else
+> --
+> 2.31.1
+>
 
-Thanks, I resent and Rob already took it.
+Thanks for this fix; looking good.
 
-Best regards,
-Krzysztof
+Reviewed-by: Andreas Gruenbacher <agruenba@redhat.com>
+
+Andreas
+

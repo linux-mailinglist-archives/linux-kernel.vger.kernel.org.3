@@ -2,102 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0026C5AD046
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28135AD04C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236317AbiIEKhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
+        id S236437AbiIEKjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235960AbiIEKh3 (ORCPT
+        with ESMTP id S235960AbiIEKj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:37:29 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428AA30F52
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:37:26 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id n17so10772652wrm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 03:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=VI4B7mmcq6Q3smkTsTKpCOJlZRwUBcOPUAzD1sYZxCE=;
-        b=JyqPehizxeveGl2aXEy+CBjBaabYIvxdl31puYBqc3gtlJCLq3qFt0hdijKxbuFGVK
-         AMg5HtDfCsuUTWS4wHQm/klZP81V+KM8GKjqV5VGk/Xn3DSUgPu7p9UD+tqFsM4FzLf7
-         Vg8dg3w6UgEcxXX2xeXw/TSGwA1nQ1S7oP6BDS/WQQOy7+nVseYUt0coYiMQSfHoZWzu
-         r9OMa/vaQyWkOf3nAExqae6zI9/qJKSgo1klouFcIjirvhC9yDcXZo0BaHf8PdBkhrWW
-         U75zI0dOTYPWYNLrWy+ZKMnNwWzInw2g603YP9a0GhTUI0Lzua+VcGv+tYAJIBAhOOQX
-         ujiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=VI4B7mmcq6Q3smkTsTKpCOJlZRwUBcOPUAzD1sYZxCE=;
-        b=Ql3FBlXNI2eJllcpk8GfOCYYDUwLdBfpFK0dKvo+bXNtdltozvbhpFrG3qN7ugT2fa
-         N6AMwK7EnCzN5bM7xOTYesr+zd6p6VOAkLQGhfe6QS2yS4SOzCcZ1ef6GFUYy8PNJiJZ
-         1uOvI3apiiSYD0lnp/ksJz9T5AANiQkjrcg1GoqQgpBhCJDeDZj/algLbmy19ZomwBxb
-         YlU235g9Yy2r936NCCTOKfVWJMod8qTd50I+EjoRZbZ861c+ZboN2qB2/qnN3/YLJOYs
-         qfJLFQn/hVsQKkVaz1teQFXxWtBKlu6yGZqZFqz+ahTPTCcev8sRxyLXnPY5IvUYhpMB
-         eHlg==
-X-Gm-Message-State: ACgBeo3OxS5vRuTlbzlOlu0PN7X+yAlZ9lU4X9XJ+ONBmu94U4fka8Xy
-        vsrRmkY08tfADnmxYd00Ds4DAw==
-X-Google-Smtp-Source: AA6agR5WyesUmbHHOtfIoJeaQwdtaZXuydLC4N1/liflEKJoqBCEs/yCceP9AfG4VX8BxR/VnCTUZg==
-X-Received: by 2002:adf:eb02:0:b0:227:1c:e760 with SMTP id s2-20020adfeb02000000b00227001ce760mr9098694wrn.635.1662374244612;
-        Mon, 05 Sep 2022 03:37:24 -0700 (PDT)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id z7-20020a05600c0a0700b003a5c1e916c8sm31765894wmp.1.2022.09.05.03.37.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 03:37:23 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 2/2] MAINTAINERS: Update fastrpc documentation file from txt to yaml
-Date:   Mon,  5 Sep 2022 13:37:15 +0300
-Message-Id: <20220905103715.955786-2-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220905103715.955786-1-abel.vesa@linaro.org>
-References: <20220905103715.955786-1-abel.vesa@linaro.org>
+        Mon, 5 Sep 2022 06:39:29 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901CF13DCD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:39:28 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2858uIq9028977;
+        Mon, 5 Sep 2022 10:38:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=GBTY4FYcuHfI5ueJVBWzYH7Pdxgm9BwW83RFqwxuwTM=;
+ b=B/aniOivLHgu+Gt43dEPhqyrNK0eExt7f+Bfswv7tYF09LJWiSI6ocEq5taoGZfyZW2X
+ CC2CscMXFaLppEALKf4Ctqt4miTp34L7nuTqD1usNYW6fQEpU8JX6TVafBUaxuxUHQYK
+ pSy+pKnu+gmkV/cNFuC66g9qzHyCk6vm0+Z8c3KX6JKjbVnWzDnE4/CLpKycH9cOy0i3
+ +0xwFi3IBAj5IeQUmr8HqRW5vlQcF9qgoHcHyebc6aji/G4EagT8i6ZuLq8CCxcAMPp5
+ /Z75U2SYHWsIy6Sf5ypUTtVW4dVKcDICEbpRQQGPa1yRgYQATK7Cju7yoIA/jqqi+k/r mw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jde1sb5dg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 10:38:02 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2859pIaZ026973;
+        Mon, 5 Sep 2022 10:38:02 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jde1sb5c2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 10:38:01 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 285Aa3Ma030440;
+        Mon, 5 Sep 2022 10:38:00 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma01fra.de.ibm.com with ESMTP id 3jbxj8spn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 10:37:59 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 285AYVtT38601170
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 5 Sep 2022 10:34:31 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A7A0A405B;
+        Mon,  5 Sep 2022 10:37:57 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E5AEBA4059;
+        Mon,  5 Sep 2022 10:37:56 +0000 (GMT)
+Received: from localhost (unknown [9.43.114.209])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  5 Sep 2022 10:37:56 +0000 (GMT)
+Date:   Mon, 05 Sep 2022 16:07:55 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 15/16] objtool/powerpc: Enable objtool to be built on
+ ppc
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>
+References: <20220829055223.24767-1-sv@linux.ibm.com>
+        <20220829055223.24767-16-sv@linux.ibm.com>
+        <33924523-5437-eb9a-116a-8e249ce99bd2@csgroup.eu>
+In-Reply-To: <33924523-5437-eb9a-116a-8e249ce99bd2@csgroup.eu>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1662373828.xrnduc1uco.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jgjlZb4ObY8iiB9fAnBgAt3jhZYYSwtD
+X-Proofpoint-GUID: iF1ZGt_6bnuxfTVL8qnCUkP4fSCCh0Tv
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-05_07,2022-09-05_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=939
+ adultscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209050051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The documentation for fastrpc bingings is now YAML. So update the
-MAINTAINERS file.
+Christophe Leroy wrote:
+>=20
+>=20
+> Le 29/08/2022 =C3=A0 07:52, Sathvika Vasireddy a =C3=A9crit=C2=A0:
+>>=20
+>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>> index 4c466acdc70d..dc05cd23c233 100644
+>> --- a/arch/powerpc/Kconfig
+>> +++ b/arch/powerpc/Kconfig
+>> @@ -237,6 +237,7 @@ config PPC
+>>   	select HAVE_MOD_ARCH_SPECIFIC
+>>   	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
+>>   	select HAVE_OPTPROBES
+>> +	select HAVE_OBJTOOL			if PPC32 || MPROFILE_KERNEL
+>=20
+> Why restrict it to MPROFILE_KERNEL ? In your RFC it was for all PPC64.
+>=20
+> Recent discussion on the list shows new problem with recordmcount, see=20
+> https://lore.kernel.org/all/MW5PR84MB184250EA1CAE04497C1E7CE9AB769@MW5PR8=
+4MB1842.NAMPRD84.PROD.OUTLOOK.COM/
+>=20
+> Those ones are with ppc64 big endian, so objtool would be welcome here=20
+> as well.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't think adding support for objtool on ppc64 elfv1 is a good idea.=20
+While it might solve the immediate issue with recordmcount, I worry that=20
+the function descriptors and dot symbols in ppc64 elfv1 might throw up=20
+issues in the future causing maintenance overhead.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 96f47a7865d6..ad697195fc59 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16863,7 +16863,7 @@ M:	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
- M:	Amol Maheshwari <amahesh@qti.qualcomm.com>
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-+F:	Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
- F:	drivers/misc/fastrpc.c
- F:	include/uapi/misc/fastrpc.h
- 
--- 
-2.34.1
 
+- Naveen

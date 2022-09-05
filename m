@@ -2,133 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A115ACCF8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FF35ACD04
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237030AbiIEHfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S236095AbiIEHhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237017AbiIEHfb (ORCPT
+        with ESMTP id S231540AbiIEHhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:35:31 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E783C3A4B5
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:35:18 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id u6so10120691eda.12
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 00:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=/sDanSkrLwd36MY8AyWYKOjcXxKpP3tgOSmTp+6QTpA=;
-        b=D/bBnkuE93UwNwWjPCKQjpa3enQb+Sk7crUitNvT11RCoUTD1MApkmLPiuIK2sUgqJ
-         bAdjS05gx0CiHnYRVMBYm0/WDjVbvF23aA4eT0RFe/i/vuE7d7C1TFwk0arifEV1PgUK
-         GwKTtJz2NnWBJxRVx8r6/5+idCJ3UdvRDEe9afXkxTdjZ2R/43YAqisRJshgwGhVzYOf
-         dCez6/QWlMAYS4m2r0URGkWY6gmPiY19KGn03Ajj8XzJ6V4EYN/wNaIobWVuQ9gbS1Zh
-         H5zHbyi8PBS+I7MiyWHlG6zbUNR0647HM7YPjyQHIdA8X1jps/pECgr6sVL/Ai8l0m2j
-         p1rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/sDanSkrLwd36MY8AyWYKOjcXxKpP3tgOSmTp+6QTpA=;
-        b=kmULrrhYUJR1mWAjHvnoKzYADVl8/0/yltKn6Ue0FOK4a2qjpw3loSNACxfvDe0HqW
-         GzHr9aKqKZnQeDoGAPDUgxAgGpCVG44eQJ2IcrK8aXmmLHulVn/ALD7cZg60HNDvU0aQ
-         j5Uf/RqVE3+zVY+sYpvAhe/X8sapAnKIc+BkxhykVAMo62hpW8WTddqKnoJdRBsJy8C5
-         SQlG0bq3E0RZb1SomtJaAA0b6Dbg/HIvPqqOG+n6vew5M31Zb0LoBEvJVx0djTTsZT36
-         /IPZQ5pXf4bfvE0RgeHHo0JoSvSj7uckfI+ym7VKWFhBO+JH/06AKkJlPkLyq2/jb2qC
-         j5lg==
-X-Gm-Message-State: ACgBeo0ernfXmjGBzGad1EeWdBBbybfrVDhhv768TGGTTOYk0JNC2lhb
-        H1s1WfIYke5TpIPAKQLxdR4HrFdgP4dTIMnTgDY=
-X-Google-Smtp-Source: AA6agR41iyuJkZAANMHnLfL8buddmIIsx+cWKwI51aE5VjNWB3uDrqvsCwjulFFkiVv6eU+BBcwjlyGi514bcEIlYok=
-X-Received: by 2002:a50:ef03:0:b0:44e:82bf:28e6 with SMTP id
- m3-20020a50ef03000000b0044e82bf28e6mr3074811eds.270.1662363316620; Mon, 05
- Sep 2022 00:35:16 -0700 (PDT)
+        Mon, 5 Sep 2022 03:37:11 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5172010549
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:37:09 -0700 (PDT)
+Received: from [10.28.39.72] (10.28.39.72) by mail-sz.amlogic.com (10.28.11.5)
+ with Microsoft SMTP Server id 15.1.2507.6; Mon, 5 Sep 2022 15:37:06 +0800
+Message-ID: <9119f4d6-f9d4-e5e0-3536-95d5a6405cbe@amlogic.com>
+Date:   Mon, 5 Sep 2022 15:37:05 +0800
 MIME-Version: 1.0
-References: <tencent_E1BBF05904DFB73C478DCD592740AAE0780A@qq.com> <CAJedcCxVW++iH49UFZp9ruUuTcNubWCH6Wsqe11K4COB3E8msg@mail.gmail.com>
-In-Reply-To: <CAJedcCxVW++iH49UFZp9ruUuTcNubWCH6Wsqe11K4COB3E8msg@mail.gmail.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Mon, 5 Sep 2022 15:35:05 +0800
-Message-ID: <CAJedcCw1eJqjSK+yR7eQMDheNtH3Mjm+viwt00xAhnmrfpq2pw@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry.
-To:     xmzyshypnc <1002992920@qq.com>
-Cc:     airlied@linux.ie, daniel@ffwll.ch, zhenyuw@linux.intel.com,
-        zhi.a.wang@intel.com, alex000young@gmail.com,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, security@kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH RESEND v8 4/5] dt-bindings: nand: meson: convert txt to
+ yaml
+Content-Language: en-US
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-mtd@lists.infradead.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20220822091838.18528-1-liang.yang@amlogic.com>
+ <20220822091838.18528-5-liang.yang@amlogic.com>
+ <0ad6a792-74c2-9957-ee56-f183dcd75c58@baylibre.com>
+From:   Liang Yang <liang.yang@amlogic.com>
+In-Reply-To: <0ad6a792-74c2-9957-ee56-f183dcd75c58@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.28.39.72]
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone,
-Now the letter is really plain-text now :)
-Thanks Greg
+Hi Neil,
 
-Regards,
-Zheng Wang
+Thanks for your remind.
+I will add the ML in next resend version quickly.
 
-Zheng Hacker <hackerzheng666@gmail.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=885=
-=E6=97=A5=E5=91=A8=E4=B8=80 12:47=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hello everyone,
->
-> I'm Zheng Wang. I found a potential double-free bug in drivers/gpu/drm/i9=
-15/gvt/gtt.c. I haven't been replied for a long time. So I decided to send =
-it to more relavent supporters and developers to help to solve the problem.
->
-> Best regards,
-> Zheng Wang.
->
-> xmzyshypnc <1002992920@qq.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=884=E6=97=A5=
-=E5=91=A8=E6=97=A5 20:32=E5=86=99=E9=81=93=EF=BC=9A
+On 2022/9/5 15:22, Neil Armstrong wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> +CC [devicetree@vger.kernel.org]
+> 
+> Please Add this ML to CC if you resend, it's the last patch of the serie 
+> that haven't got a proper review.
+> 
+> On 22/08/2022 11:18, Liang Yang wrote:
+>> convert the amlogic,meson-name.txt to amlogic,meson-nand.yaml
 >>
->> There is a double-free security bug in split_2MB_gtt_entry.
->>
->> Here is a calling chain : ppgtt_populate_spt->ppgtt_populate_shadow_entr=
-y->split_2MB_gtt_entry. If intel_gvt_dma_map_guest_page failed, it will cal=
-l  ppgtt_invalidate_spt, which will finally call ppgtt_free_spt and kfree(s=
-pt). But the caller does not notice that, and it will call ppgtt_free_spt a=
-gain in error path.
->>
->> Fix this by returning the result of ppgtt_invalidate_spt to split_2MB_gt=
-t_entry.
->>
->> Signed-off-by: Zheng Wang <1002992920@qq.com>
+>> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
 >> ---
->>  drivers/gpu/drm/i915/gvt/gtt.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>   .../bindings/mtd/amlogic,meson-nand.txt       | 55 ------------
+>>   .../bindings/mtd/amlogic,meson-nand.yaml      | 88 +++++++++++++++++++
+>>   2 files changed, 88 insertions(+), 55 deletions(-)
+>>   delete mode 100644 
+>> Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
 >>
->> diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/g=
-tt.c
->> index ce0eb03709c3..9f14fded8c0c 100644
->> --- a/drivers/gpu/drm/i915/gvt/gtt.c
->> +++ b/drivers/gpu/drm/i915/gvt/gtt.c
->> @@ -1215,7 +1215,7 @@ static int split_2MB_gtt_entry(struct intel_vgpu *=
-vgpu,
->>                 ret =3D intel_gvt_dma_map_guest_page(vgpu, start_gfn + s=
-ub_index,
->>                                                    PAGE_SIZE, &dma_addr)=
-;
->>                 if (ret) {
->> -                       ppgtt_invalidate_spt(spt);
->> +                       ret =3D ppgtt_invalidate_spt(spt);
->>                         return ret;
->>                 }
->>                 sub_se.val64 =3D se->val64;
->> --
->> 2.25.1
->>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt 
+>> b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+>> deleted file mode 100644
+>> index 5d5cdfef417f..000000000000
+>> --- a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+>> +++ /dev/null
+>> @@ -1,55 +0,0 @@
+>> -Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
+>> -
+>> -This file documents the properties in addition to those available in
+>> -the MTD NAND bindings.
+>> -
+>> -Required properties:
+>> -- compatible : contains one of:
+>> -  - "amlogic,meson-gxl-nfc"
+>> -  - "amlogic,meson-axg-nfc"
+>> -
+>> -- reg        : Offset and length of the register set
+>> -
+>> -- reg-names  : "nfc" is the register set for NFC controller and "emmc"
+>> -        is the register set for MCI controller.
+>> -
+>> -- clocks     :
+>> -    A list of phandle + clock-specifier pairs for the clocks listed
+>> -    in clock-names.
+>> -
+>> -- clock-names: Should contain the following:
+>> -    "core" - NFC module gate clock
+>> -    "device" - parent clock for internal NFC
+>> -
+>> -Optional children nodes:
+>> -Children nodes represent the available nand chips.
+>> -
+>> -Other properties:
+>> -see Documentation/devicetree/bindings/mtd/nand-controller.yaml for 
+>> generic bindings.
+>> -
+>> -Example demonstrate on AXG SoC:
+>> -
+>> -    nand-controller@7800 {
+>> -        compatible = "amlogic,meson-axg-nfc";
+>> -        reg = <0x0 0x7800 0x0 0x100>,
+>> -              <0x0 0x7000 0x0 0x800>;
+>> -        reg-names = "nfc", "emmc";
+>> -        #address-cells = <1>;
+>> -        #size-cells = <0>;
+>> -        interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
+>> -
+>> -        clocks = <&clkc CLKID_SD_EMMC_C>,
+>> -             <&clkc CLKID_FCLK_DIV2>;
+>> -        clock-names = "core", "device";
+>> -
+>> -        pinctrl-names = "default";
+>> -        pinctrl-0 = <&nand_pins>;
+>> -
+>> -        nand@0 {
+>> -            reg = <0>;
+>> -            #address-cells = <1>;
+>> -            #size-cells = <1>;
+>> -
+>> -            nand-on-flash-bbt;
+>> -        };
+>> -    };
+>> diff --git 
+>> a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml 
+>> b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+>> new file mode 100644
+>> index 000000000000..42634e9c0d3c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+>> @@ -0,0 +1,88 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mtd/amlogic,meson-nand.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
+>> +
+>> +allOf:
+>> +  - $ref: "nand-controller.yaml"
+>> +
+>> +maintainers:
+>> +  - liang.yang@amlogic.com
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - "amlogic,meson-gxl-nfc"
+>> +      - "amlogic,meson-axg-nfc"
+>> +
+>> +  reg:
+>> +    maxItems: 2
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    minItems: 2
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: core
+>> +      - const: device
+>> +
+>> +patternProperties:
+>> +  "^nand@[0-7]$":
+>> +    type: object
+>> +    properties:
+>> +      reg:
+>> +        minimum: 0
+>> +        maximum: 1
+>> +
+>> +      nand-ecc-mode:
+>> +        const: hw
+>> +
+>> +      nand-ecc-step-size:
+>> +        const: 1024
+>> +
+>> +      nand-ecc-strength:
+>> +        enum: [8, 16, 24, 30, 40, 50, 60]
+>> +        description: |
+>> +          The ECC configurations that can be supported are as follows.
+>> +            meson-gxl-nfc 8, 16, 24, 30, 40, 50, 60
+>> +            meson-axg-nfc 8
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/axg-clkc.h>
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    nand-controller@ffe07800 {
+>> +      compatible = "amlogic,meson-axg-nfc";
+>> +      reg = <0xffe07800 0x100>, <0xffe07000 0x800>;
+>> +      reg-names = "nfc", "emmc";
+>> +      interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
+>> +      clocks = <&clkc CLKID_SD_EMMC_C>,  <&clkc CLKID_FCLK_DIV2>;
+>> +      clock-names = "core", "device";
+>> +
+>> +      pinctrl-0 = <&nand_pins>;
+>> +      pinctrl-names = "default";
+>> +
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      nand@0 {
+>> +        reg = <0>;
+>> +      };
+>> +    };
+>> +
+>> +...
+> 
+> Thanks,
+> Neil
+> 
+> .

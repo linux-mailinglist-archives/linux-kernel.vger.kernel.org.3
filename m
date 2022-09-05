@@ -2,224 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A025AD947
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59AE55AD950
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbiIESwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 14:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S232328AbiIES4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 14:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiIESwR (ORCPT
+        with ESMTP id S231383AbiIESz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:52:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEDF614C;
-        Mon,  5 Sep 2022 11:52:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D2661467;
-        Mon,  5 Sep 2022 18:52:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93853C433D6;
-        Mon,  5 Sep 2022 18:52:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662403936;
-        bh=uYXn4ODMewN8FNKLW3ITPu9bWfeJ/vLE7EUtvluPaPc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UCKVrG6+DJD8gwdNjZb3JANtK+l84hxHKutZTIzGJOh9M22VuPsJndi5vzXac3M6a
-         NgIAGG3Rft51H7//DAyD+p0UQSvNze2kRV5D4fF/xQyqDt+3N2EjYVLCueTTlsPftk
-         FOvW/Zoz1AABIkj2q8whQVpeDmTdDCcwzHnemlwv1+YakCw5WGK4JqJry2N+s8OJnh
-         9AgfEkkKGB6JQ+2kv3j+BfgmUDJF+KVWey2xd6KaGv9uIgbP2c5YWdZ8vikRJa456N
-         d0SFBWy2rdGTwrQmKAd4R5FocJ1DVgveEBE/LpmAk3KtnCZCUjbQhSJ+gZHhkhtnCC
-         NgYbk4fduCP1Q==
-Received: by pali.im (Postfix)
-        id D863820B1; Mon,  5 Sep 2022 20:52:12 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/2] PCI: mvebu: For consistency add _OFF suffix to all registers
-Date:   Mon,  5 Sep 2022 20:51:50 +0200
-Message-Id: <20220905185150.22220-2-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220905185150.22220-1-pali@kernel.org>
-References: <20220905185150.22220-1-pali@kernel.org>
+        Mon, 5 Sep 2022 14:55:58 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34112A426;
+        Mon,  5 Sep 2022 11:55:56 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 285IpOor013121;
+        Mon, 5 Sep 2022 18:55:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=xokcUehziQh2CEwSHfQ5j2vgoUPPaEwvs3OtXW+Uar0=;
+ b=JR/KXZ2m2Nhpy8lxogeXae0gulwt8SFTp9g3JJlTtKOog9FA6SsINSeBfuSvhTPm2NxM
+ WHi7DxBQqqv+e6g0iqRCMJzTxtOqb8YsplYDbNb7ecSYQsepWttqTKwvzdxLDQ00IeDs
+ nWOiAR9CahN6dbbo1rfa9sgzW94aokWtPxExYFYukpMB6cQrdmeeLIT7bhS56mVGpiL1
+ 9uUOwxhGV1bSn+I4I0I23OLsvfxgJW4G8/AdIKiYlNUXeSyBGlHRTJ0pNhNlDUcZM3Lo
+ sZk52iv+qBpQfpdus63GRTHFaJVRi0OFKKAKHMBvRrk64OgHJQ1S1HNtc0P412WGgL+Y rQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jby58w0ca-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 18:55:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 285ItrZ5001203
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 5 Sep 2022 18:55:53 GMT
+Received: from deesin-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 5 Sep 2022 11:55:50 -0700
+From:   Deepak Kumar Singh <quic_deesin@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <swboyd@chromium.org>,
+        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>
+Subject: [PATCH V2 1/2] rpmsg: glink: Add lock to avoid race when rpmsg device is released
+Date:   Tue, 6 Sep 2022 00:25:19 +0530
+Message-ID: <1662404120-24338-1-git-send-email-quic_deesin@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BkxiAMGpwY7PJly-e8-Cc14p3Y3KqlFo
+X-Proofpoint-GUID: BkxiAMGpwY7PJly-e8-Cc14p3Y3KqlFo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-05_14,2022-09-05_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 malwarescore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1011 suspectscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209050092
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
-This patch depends on now accepted patch:
-"PCI: pci-bridge-emul: Set position of PCI capabilities to real HW value"
-https://lore.kernel.org/linux-pci/20220824112124.21675-1-pali@kernel.org/
----
- drivers/pci/controller/pci-mvebu.c | 40 +++++++++++++++---------------
- 1 file changed, 20 insertions(+), 20 deletions(-)
+When remote host goes down glink char device channel is freed,
+At the same time user space apps can still try to open/poll rpmsg
+char device which will result in calling rpmsg_create_ept. This may
+cause reference to already freed context of glink chardev channel and
+result in below crash signatures -
 
-diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-index c222dc189567..6ef8c1ee4cbb 100644
---- a/drivers/pci/controller/pci-mvebu.c
-+++ b/drivers/pci/controller/pci-mvebu.c
-@@ -34,7 +34,7 @@
- #define PCIE_BAR_LO_OFF(n)	(0x0010 + ((n) << 3))
- #define PCIE_BAR_HI_OFF(n)	(0x0014 + ((n) << 3))
- #define PCIE_SSDEV_ID_OFF	0x002c
--#define PCIE_CAP_PCIEXP		0x0060
-+#define PCIE_CAP_PCIEXP_OFF	0x0060
- #define PCIE_CAP_PCIERR_OFF	0x0100
- #define PCIE_BAR_CTRL_OFF(n)	(0x1804 + (((n) - 1) * 4))
- #define PCIE_WIN04_CTRL_OFF(n)	(0x1820 + ((n) << 4))
-@@ -83,8 +83,8 @@
- #define  PCIE_SSPL_SCALE_SHIFT		8
- #define  PCIE_SSPL_SCALE_MASK		GENMASK(9, 8)
- #define  PCIE_SSPL_ENABLE		BIT(16)
--#define PCIE_RC_RTSTA		0x1a14
--#define PCIE_DEBUG_CTRL         0x1a60
-+#define PCIE_RC_RTSTA_OFF	0x1a14
-+#define PCIE_DEBUG_CTRL_OFF	0x1a60
- #define  PCIE_DEBUG_SOFT_RESET		BIT(20)
+1)
+rpmsg_create_ept+0x40/0xa0
+rpmsg_eptdev_open+0x88/0x138
+chrdev_open+0xc4/0x1c8
+do_dentry_open+0x230/0x378
+
+2)
+rpmsg_poll+0x5c/0x80
+rpmsg_eptdev_poll+0x84/0xa4
+do_sys_poll+0x22c/0x5c8
+
+This patch adds proper lock and check condition to avoid such crash.
+
+Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+---
+ drivers/rpmsg/rpmsg_char.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+index 4f21891..5500dc0 100644
+--- a/drivers/rpmsg/rpmsg_char.c
++++ b/drivers/rpmsg/rpmsg_char.c
+@@ -75,6 +75,7 @@ int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
+ 	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
  
- struct mvebu_pcie_port;
-@@ -296,10 +296,10 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
- 	 * be set to number of SerDes PCIe lanes (1 or 4). If this register is
- 	 * not set correctly then link with endpoint card is not established.
- 	 */
--	lnkcap = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCAP);
-+	lnkcap = mvebu_readl(port, PCIE_CAP_PCIEXP_OFF + PCI_EXP_LNKCAP);
- 	lnkcap &= ~PCI_EXP_LNKCAP_MLW;
- 	lnkcap |= (port->is_x4 ? 4 : 1) << 4;
--	mvebu_writel(port, lnkcap, PCIE_CAP_PCIEXP + PCI_EXP_LNKCAP);
-+	mvebu_writel(port, lnkcap, PCIE_CAP_PCIEXP_OFF + PCI_EXP_LNKCAP);
+ 	mutex_lock(&eptdev->ept_lock);
++	eptdev->rpdev = NULL;
+ 	if (eptdev->ept) {
+ 		rpmsg_destroy_ept(eptdev->ept);
+ 		eptdev->ept = NULL;
+@@ -126,6 +127,11 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
+ 		return -EBUSY;
+ 	}
  
- 	/* Disable Root Bridge I/O space, memory space and bus mastering. */
- 	cmd = mvebu_readl(port, PCIE_CMD_OFF);
-@@ -690,11 +690,11 @@ mvebu_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
++	if (!eptdev->rpdev) {
++		mutex_unlock(&eptdev->ept_lock);
++		return -ENETRESET;
++	}
++
+ 	get_device(dev);
  
- 	switch (reg) {
- 	case PCI_EXP_DEVCAP:
--		*value = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_DEVCAP);
-+		*value = mvebu_readl(port, PCIE_CAP_PCIEXP_OFF + PCI_EXP_DEVCAP);
- 		break;
+ 	/*
+@@ -277,7 +283,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
+ 	if (!skb_queue_empty(&eptdev->queue))
+ 		mask |= EPOLLIN | EPOLLRDNORM;
  
- 	case PCI_EXP_DEVCTL:
--		*value = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_DEVCTL);
-+		*value = mvebu_readl(port, PCIE_CAP_PCIEXP_OFF + PCI_EXP_DEVCTL);
- 		break;
++	mutex_lock(&eptdev->ept_lock);
+ 	mask |= rpmsg_poll(eptdev->ept, filp, wait);
++	mutex_unlock(&eptdev->ept_lock);
  
- 	case PCI_EXP_LNKCAP:
-@@ -704,13 +704,13 @@ mvebu_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
- 		 * Additionally enable Data Link Layer Link Active Reporting
- 		 * Capable bit as DL_Active indication is provided too.
- 		 */
--		*value = (mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCAP) &
-+		*value = (mvebu_readl(port, PCIE_CAP_PCIEXP_OFF + PCI_EXP_LNKCAP) &
- 			  ~PCI_EXP_LNKCAP_CLKPM) | PCI_EXP_LNKCAP_DLLLARC;
- 		break;
- 
- 	case PCI_EXP_LNKCTL:
- 		/* DL_Active indication is provided via PCIE_STAT_OFF */
--		*value = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL) |
-+		*value = mvebu_readl(port, PCIE_CAP_PCIEXP_OFF + PCI_EXP_LNKCTL) |
- 			 (mvebu_pcie_link_up(port) ?
- 			  (PCI_EXP_LNKSTA_DLLLA << 16) : 0);
- 		break;
-@@ -748,19 +748,19 @@ mvebu_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
- 		break;
- 
- 	case PCI_EXP_RTSTA:
--		*value = mvebu_readl(port, PCIE_RC_RTSTA);
-+		*value = mvebu_readl(port, PCIE_RC_RTSTA_OFF);
- 		break;
- 
- 	case PCI_EXP_DEVCAP2:
--		*value = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_DEVCAP2);
-+		*value = mvebu_readl(port, PCIE_CAP_PCIEXP_OFF + PCI_EXP_DEVCAP2);
- 		break;
- 
- 	case PCI_EXP_DEVCTL2:
--		*value = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_DEVCTL2);
-+		*value = mvebu_readl(port, PCIE_CAP_PCIEXP_OFF + PCI_EXP_DEVCTL2);
- 		break;
- 
- 	case PCI_EXP_LNKCTL2:
--		*value = mvebu_readl(port, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL2);
-+		*value = mvebu_readl(port, PCIE_CAP_PCIEXP_OFF + PCI_EXP_LNKCTL2);
- 		break;
- 
- 	default:
-@@ -902,7 +902,7 @@ mvebu_pci_bridge_emul_pcie_conf_write(struct pci_bridge_emul *bridge,
- 
- 	switch (reg) {
- 	case PCI_EXP_DEVCTL:
--		mvebu_writel(port, new, PCIE_CAP_PCIEXP + PCI_EXP_DEVCTL);
-+		mvebu_writel(port, new, PCIE_CAP_PCIEXP_OFF + PCI_EXP_DEVCTL);
- 		break;
- 
- 	case PCI_EXP_LNKCTL:
-@@ -913,7 +913,7 @@ mvebu_pci_bridge_emul_pcie_conf_write(struct pci_bridge_emul *bridge,
- 		 */
- 		new &= ~PCI_EXP_LNKCTL_CLKREQ_EN;
- 
--		mvebu_writel(port, new, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL);
-+		mvebu_writel(port, new, PCIE_CAP_PCIEXP_OFF + PCI_EXP_LNKCTL);
- 		/*
- 		 * When dropping to Detect via Hot Reset, Disable Link
- 		 * or Loopback states, the Link Failure interrupt is not
-@@ -953,7 +953,7 @@ mvebu_pci_bridge_emul_pcie_conf_write(struct pci_bridge_emul *bridge,
- 
- 	case PCI_EXP_RTSTA:
- 		/*
--		 * PME Status bit in Root Status Register (PCIE_RC_RTSTA)
-+		 * PME Status bit in Root Status Register (PCIE_RC_RTSTA_OFF)
- 		 * is read-only and can be cleared only by writing 0b to the
- 		 * Interrupt Cause RW0C register (PCIE_INT_CAUSE_OFF). So
- 		 * clear PME via Interrupt Cause and also set port->pme_pending
-@@ -978,11 +978,11 @@ mvebu_pci_bridge_emul_pcie_conf_write(struct pci_bridge_emul *bridge,
- 		break;
- 
- 	case PCI_EXP_DEVCTL2:
--		mvebu_writel(port, new, PCIE_CAP_PCIEXP + PCI_EXP_DEVCTL2);
-+		mvebu_writel(port, new, PCIE_CAP_PCIEXP_OFF + PCI_EXP_DEVCTL2);
- 		break;
- 
- 	case PCI_EXP_LNKCTL2:
--		mvebu_writel(port, new, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL2);
-+		mvebu_writel(port, new, PCIE_CAP_PCIEXP_OFF + PCI_EXP_LNKCTL2);
- 		break;
- 
- 	default:
-@@ -1042,7 +1042,7 @@ static int mvebu_pci_bridge_emul_init(struct mvebu_pcie_port *port)
- 	u32 dev_id = mvebu_readl(port, PCIE_DEV_ID_OFF);
- 	u32 dev_rev = mvebu_readl(port, PCIE_DEV_REV_OFF);
- 	u32 ssdev_id = mvebu_readl(port, PCIE_SSDEV_ID_OFF);
--	u32 pcie_cap = mvebu_readl(port, PCIE_CAP_PCIEXP);
-+	u32 pcie_cap = mvebu_readl(port, PCIE_CAP_PCIEXP_OFF);
- 	u8 pcie_cap_ver = ((pcie_cap >> 16) & PCI_EXP_FLAGS_VERS);
- 
- 	bridge->conf.vendor = cpu_to_le16(dev_id & 0xffff);
-@@ -1103,7 +1103,7 @@ static int mvebu_pci_bridge_emul_init(struct mvebu_pcie_port *port)
- 	bridge->subsystem_vendor_id = ssdev_id & 0xffff;
- 	bridge->subsystem_id = ssdev_id >> 16;
- 	bridge->has_pcie = true;
--	bridge->pcie_start = PCIE_CAP_PCIEXP;
-+	bridge->pcie_start = PCIE_CAP_PCIEXP_OFF;
- 	bridge->data = port;
- 	bridge->ops = &mvebu_pci_bridge_emul_ops;
- 
+ 	return mask;
+ }
 -- 
-2.20.1
+2.7.4
 

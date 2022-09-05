@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C545ADAF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BEE5ADAF6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbiIEVqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 17:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S237743AbiIEVxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 17:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiIEVqF (ORCPT
+        with ESMTP id S233073AbiIEVx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 17:46:05 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3966C647D1;
-        Mon,  5 Sep 2022 14:46:04 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o4so9360365pjp.4;
-        Mon, 05 Sep 2022 14:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ffwlkhbya70pTRv/fpfe5oWt5Mb2pirf/lA8pBTQyDM=;
-        b=lY1XwgXxMlS2BTmCTMapK/tq3+fDmhpyu3d2PUY0jjRfkG1Od68Y3dw4T35DDNTTx4
-         TVIIKu5wWf41RwMlBzKNotkCUjuYfZCjf5RQyv2kDrplK6ruS+XUx/EZIVm1lxQQg8S5
-         tPZ8qwPCWa83o1BqhjBaMQizXvLzcTddng+7Zq+MKjFkgDTd7JYWbSPgMtfAsmYnFz++
-         meHOlymzsCRIzJ8Dn7bSpdjBCRZv57nSO0MTOZozNntPRdo2akNSnCNvTuzKnQ36FEcy
-         2xajCYUQl5RFbve3ySfxmtNo4An2em5UOrFxPb0jgx/Vd+TMAcxML2L+Hp5XQxegjrAq
-         nBqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ffwlkhbya70pTRv/fpfe5oWt5Mb2pirf/lA8pBTQyDM=;
-        b=y1XMHT5ykoiViBfjnG9DvbUeTJprjUWQmNCaitpMWnmdPzEgkXPXBG0Z4cS8z7F2d6
-         dBCnHp2Dj7Cp+uBOGMeRd3SBxKnhi9HDEG8aOunU09VdZqayCHLEOjDxU7ssWSOWZAxs
-         tegSvxgzwyHwuQHhALxDg/3BlFsF+7weZWMjT1qkxezQPI9chp7GF0IX+K3CqQnnyQNo
-         jYSD8FN4xSpg2ckAjWLtO3nhxsEnrpscnPH6v1bt+IThMHPmu0SaUcFRhTSxmryNC9Kd
-         ErhzllvQeC6b9yu8TldpDIeMWdt18PGOObP2Q0f329Z4a4MLn2DHG0pVKE9fyPpenhYr
-         X5Rg==
-X-Gm-Message-State: ACgBeo0irWdgPRNreG/F3DNYu3QAitLGfvw/OFpB7IUAPxUmdThwPj8t
-        wDShe3lD9aAIHYEzLd9rrHU=
-X-Google-Smtp-Source: AA6agR4MhvcgjsvSNve5IhswU6lghB0tnilpoqrbT4W/5EwR87thdNK4DMdRUqC7TTv0aAOry4XjQw==
-X-Received: by 2002:a17:90b:388d:b0:1ff:f17b:244d with SMTP id mu13-20020a17090b388d00b001fff17b244dmr21609542pjb.231.1662414363674;
-        Mon, 05 Sep 2022 14:46:03 -0700 (PDT)
-Received: from vmfolio.. (c-73-189-111-8.hsd1.ca.comcast.net. [73.189.111.8])
-        by smtp.googlemail.com with ESMTPSA id c11-20020a170903234b00b0016ed5266a5csm3906793plh.170.2022.09.05.14.46.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 14:46:03 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        akpm@linux-foundation.org, willy@infradead.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH] filemap: Convert filemap_range_has_writeback() to use folios
-Date:   Mon,  5 Sep 2022 14:45:57 -0700
-Message-Id: <20220905214557.868606-1-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Sep 2022 17:53:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783C765257
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 14:53:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64DFC60CEE
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 21:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19563C4347C;
+        Mon,  5 Sep 2022 21:53:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1662414803;
+        bh=AKN1Agn0Tca6FkpXEwU5FrzZmOkXj0VB4xT45aQM93Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LcbiTqV5sTp3yI0mWjjB7JBMUl2kFdVNwvP1A1eT3jjJ4gJ0jP8Vci9fVxuTWxxSU
+         0QANgF+gFm0Vy74tRf1joY9vlUmObLhNyFwo196L6z578gWOhpcm6Z9Xj/tSOX8Jh/
+         DaMfYNBogIl9nxju0OgWh7kX5mVt7BKTTYgk16rI=
+Date:   Mon, 5 Sep 2022 14:53:22 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     HORIGUCHI =?ISO-8859-1?Q?NAOYA?= (=?UTF-8?Q?=E5=A0=80=E5=8F=A3_?=
+        =?UTF-8?Q?=E7=9B=B4=E4=B9=9F?=) <naoya.horiguchi@nec.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/6] mm, hwpoison: use __PageMovable() to detect non-lru
+ movable pages
+Message-Id: <20220905145322.42d218d0d7d32d3c5f515027@linux-foundation.org>
+In-Reply-To: <f2a52dd2-5792-0c45-3ae6-c1bcf547762c@huawei.com>
+References: <20220830123604.25763-1-linmiaohe@huawei.com>
+        <20220830123604.25763-3-linmiaohe@huawei.com>
+        <20220905052243.GA1355682@hori.linux.bs1.fc.nec.co.jp>
+        <1f7ee86e-7d28-0d8c-e0de-b7a5a94519e8@huawei.com>
+        <20220905071542.GA1364147@hori.linux.bs1.fc.nec.co.jp>
+        <f2a52dd2-5792-0c45-3ae6-c1bcf547762c@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removes 3 calls to compound_head().
+On Mon, 5 Sep 2022 15:29:34 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> The above code change could be applied to the mm-tree directly. Or should I resend
+> the v2 series? Which one is more convenient for you? They're all fine to me. ;)
+
+I got it, thanks.
+
+From: Miaohe Lin <linmiaohe@huawei.com>
+Subject: mm-hwpoison-use-__pagemovable-to-detect-non-lru-movable-pages-fix
+Date: Mon, 5 Sep 2022 14:53:41 +0800
+
+fixes per Naoya Horiguchi
+
+Link: https://lkml.kernel.org/r/1f7ee86e-7d28-0d8c-e0de-b7a5a94519e8@huawei.com
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- mm/filemap.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 15800334147b..a4c71b90491c 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -632,22 +632,23 @@ bool filemap_range_has_writeback(struct address_space *mapping,
+ mm/memory-failure.c |   16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+--- a/mm/memory-failure.c~mm-hwpoison-use-__pagemovable-to-detect-non-lru-movable-pages-fix
++++ a/mm/memory-failure.c
+@@ -2404,24 +2404,26 @@ EXPORT_SYMBOL(unpoison_memory);
+ static bool isolate_page(struct page *page, struct list_head *pagelist)
  {
- 	XA_STATE(xas, &mapping->i_pages, start_byte >> PAGE_SHIFT);
- 	pgoff_t max = end_byte >> PAGE_SHIFT;
--	struct page *page;
-+	struct folio *folio;
+ 	bool isolated = false;
+-	bool lru = !__PageMovable(page);
  
- 	if (end_byte < start_byte)
- 		return false;
+ 	if (PageHuge(page)) {
+ 		isolated = !isolate_hugetlb(page, pagelist);
+ 	} else {
++		bool lru = !__PageMovable(page);
++
+ 		if (lru)
+ 			isolated = !isolate_lru_page(page);
+ 		else
+-			isolated = !isolate_movable_page(page, ISOLATE_UNEVICTABLE);
++			isolated = !isolate_movable_page(page,
++							 ISOLATE_UNEVICTABLE);
  
- 	rcu_read_lock();
--	xas_for_each(&xas, page, max) {
--		if (xas_retry(&xas, page))
-+	xas_for_each(&xas, folio, max) {
-+		if (xas_retry(&xas, folio))
- 			continue;
--		if (xa_is_value(page))
-+		if (xa_is_value(folio))
- 			continue;
--		if (PageDirty(page) || PageLocked(page) || PageWriteback(page))
-+		if (folio_test_dirty(folio) || folio_test_locked(folio) ||
-+				folio_test_writeback(folio))
- 			break;
+-		if (isolated)
++		if (isolated) {
+ 			list_add(&page->lru, pagelist);
++			if (lru)
++				inc_node_page_state(page, NR_ISOLATED_ANON +
++						    page_is_file_lru(page));
++		}
  	}
- 	rcu_read_unlock();
--	return page != NULL;
-+	return folio != NULL;
- }
- EXPORT_SYMBOL_GPL(filemap_range_has_writeback);
  
--- 
-2.36.1
+-	if (isolated && lru)
+-		inc_node_page_state(page, NR_ISOLATED_ANON +
+-				    page_is_file_lru(page));
+-
+ 	/*
+ 	 * If we succeed to isolate the page, we grabbed another refcount on
+ 	 * the page, so we can safely drop the one we got from get_any_pages().
+_
 

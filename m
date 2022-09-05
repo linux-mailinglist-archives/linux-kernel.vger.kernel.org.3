@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB3A5ACE1A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FA55ACE4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236914AbiIEIp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S237059AbiIEIqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236812AbiIEIpy (ORCPT
+        with ESMTP id S236650AbiIEIqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:45:54 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B024330D;
-        Mon,  5 Sep 2022 01:45:51 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R521e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VOP0IXE_1662367547;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VOP0IXE_1662367547)
-          by smtp.aliyun-inc.com;
-          Mon, 05 Sep 2022 16:45:48 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     zohar@linux.ibm.com
-Cc:     dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] security: Fix some kernel-doc comments
-Date:   Mon,  5 Sep 2022 16:45:46 +0800
-Message-Id: <20220905084546.21692-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Mon, 5 Sep 2022 04:46:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32874D4CE;
+        Mon,  5 Sep 2022 01:46:45 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 10:46:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1662367603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=99mp8geWAAkeObjUx/ShqenPtDH+4Vzc9b2C8frtuew=;
+        b=3bgyMX1lfzvfLarSqLyYkBCf05nax7ELI5WVXvk1hzcHWL3HXmWCpcCxKLcmuv2gR8sRZn
+        RHdw5gXiNUuHF3/PVdkQ3fUBvKJO/cxGaKUIZWnnyTdu1MgjxLpiFtquoPvaIdp3pS2IYr
+        m3857wZ06SavUl7uqfovdfNTPCaHHOM4+mJPbkIbrg30XnJfLJN93rOP+SatK7ktzNcXfq
+        Zk5gIO5ksGB6T0LVVgVSjFY7a/Qh3BXGZTyculFX/sos0I+vjkNAiSygogFRBrYSitGIaF
+        gEvWWEpTlEDtB2C311WfB34PB4yW9jSDozAe7Rq9lzuNNKqADOD2gMJKVtFy6g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1662367603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=99mp8geWAAkeObjUx/ShqenPtDH+4Vzc9b2C8frtuew=;
+        b=lwBLiyEYMKYIix4ELUfOpUUN1tyc5gpqkoZJfN8EeqhJcnSRXA7QFrq0gLcanRbscYXn8w
+        c10xR98CcEPnifBg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 4/5] riscv: add lazy preempt support
+Message-ID: <YxW3cZEhEideZon2@linutronix.de>
+References: <20220831175920.2806-1-jszhang@kernel.org>
+ <20220831175920.2806-5-jszhang@kernel.org>
+ <CAJF2gTQMM50TZZ95XOY+Rgvm2hZ3nLxkYfaSW_2MvPiJeqTtJw@mail.gmail.com>
+ <YxWYh5C5swlyobi2@linutronix.de>
+ <CAJF2gTR=Cmcox5JrX2bB12MdmurY3vexSA6vw1cdXXbCNB8tXw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAJF2gTR=Cmcox5JrX2bB12MdmurY3vexSA6vw1cdXXbCNB8tXw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix some kernel-doc comments:
-1.Remove the description of @inode in evm_read_protected_xattrs();
-2.Add the description of @iint in integrity_status();
-3.Add the description of @mnt_userns and @attr in evm_inode_setattr().
+On 2022-09-05 16:33:54 [+0800], Guo Ren wrote:
+> > There is "generic" code in the PREEMPT_RT patch doing that. The counter
+> > is incremented/ decremented via preempt_lazy_enable()/disable() and one
+> > of the user is migrate_disable()/enable().
+> > Basically if a task is task_is_realtime() then NEED_RESCHED is set for
+> > the wakeup. For the remaining states (SCHED_OTHER, =E2=80=A6) NEED_RESC=
+HED_LAZY
+> > is set for the wakeup. This can be delayed if the task is in a "preempt
+> > disable lazy" section (similar to a preempt_disable() section) but a
+> > task_is_realtime() can still be scheduled if needed.
+> Okay, It should be [PATCH RT]. RISC-V would also move to GENERIC_ENTRY
+> [1], so above assembly code would be replaced by generic one, right?
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2054
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- security/integrity/evm/evm_main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+correct.
 
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 23d484e05e6f..2172fe46e907 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -318,7 +318,6 @@ int evm_protected_xattr_if_enabled(const char *req_xattr_name)
- /**
-  * evm_read_protected_xattrs - read EVM protected xattr names, lengths, values
-  * @dentry: dentry of the read xattrs
-- * @inode: inode of the read xattrs
-  * @buffer: buffer xattr names, lengths or values are copied to
-  * @buffer_size: size of buffer
-  * @type: n: names, l: lengths, v: values
-@@ -390,6 +389,7 @@ int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
-  * @xattr_name: requested xattr
-  * @xattr_value: requested xattr value
-  * @xattr_value_len: requested xattr value length
-+ * @iint: integrity data associated with an inode
-  *
-  * Calculate the HMAC for the given dentry and verify it against the stored
-  * security.evm xattr. For performance, use the xattr value and length
-@@ -776,7 +776,9 @@ static int evm_attr_change(struct user_namespace *mnt_userns,
- 
- /**
-  * evm_inode_setattr - prevent updating an invalid EVM extended attribute
-+ * @mnt_userns: user namespace of the idmapped mount
-  * @dentry: pointer to the affected dentry
-+ * @attr: new inode attributes
-  *
-  * Permit update of file attributes when files have a valid EVM signature,
-  * except in the case of them having an immutable portable signature.
--- 
-2.20.1.7.g153144c
-
+Sebastian

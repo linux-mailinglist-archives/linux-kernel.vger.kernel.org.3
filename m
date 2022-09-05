@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3385ACD38
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248C05ACD2D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237001AbiIEHzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
+        id S236417AbiIEHxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236396AbiIEHzJ (ORCPT
+        with ESMTP id S236058AbiIEHxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:55:09 -0400
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F060175B1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:55:01 -0700 (PDT)
+        Mon, 5 Sep 2022 03:53:03 -0400
+X-Greylist: delayed 346 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Sep 2022 00:53:02 PDT
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4240913CDC
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:53:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1662364501;
+        s=selector; t=1662364381;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AdS8+B/O/n4mduTrHxo0RL4fuHx8wGK9eiouBtBzHLE=;
-        b=nq/Sz1Z7EABiXwAHZKYqd+Carge9I9yVZMSrZasFXAw5iMpT+xL9kqBYBTKsCI8emXOaRC
-        5xCEosXDh7yh+gs1cEXpOuWwwHrKFYVAY/VyKrZCrCRA2eLG1YteZC6HSimHW+M8hkzSoT
-        hfnEk80xbK9/LKXf3idMg72/DBI7bOunHmfFZI/80nEZLEEApsMvcIWLzYISLffCKGyhvo
-        3DfhZzTTcIsXS4yYs39KKDk5D1fQ9GzRkypE9APQ5big6pfaA2eSxVsvYB6ckwU6IBBjSm
-        IZzeUfz8NuF28TcUzgFk4FX4zQtHEFz3FUG2SYjl4bc6r56As52GzF5VbngPNw==
+        bh=m+UK/3xmvV65NQU0nckZ1VWPUugzCRzrBeOVEtHB3BM=;
+        b=gmgunwUWUBAu8zuRyXzOtUua3D7bN4yBkVVgxo/++XljQ51NzPEqFwJhqsZepV4Y49RjNR
+        Urwwjg+iLwf/JOolesYooIUE3QWzTjspppW2OocsmZ0ZAnYDbr2MeSQP9mI4n+XR2GmEfd
+        dWSpkmPBzUNpy+JwwgHGHBgO9tLHYl2tbucYRc/09wJ4ygQDd0igysUSKZd4b8bQ3HZrQq
+        NV8vHBamJI8c36BtCAog0CTG6vYyAIe/aGLmOxwAeyMVvBYeeQvmmES1DM5FHaTAPnLddY
+        vMMVOUHjufLUKnL6hXhae9Vnb3DhdcyGmMNyNXx8GgNlXIGD5uqJfdIxVRaozw==
 Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
  by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-354-xdhXJq8hOTmBhXYhWCcCPw-1; Mon, 05 Sep 2022 03:44:03 -0400
-X-MC-Unique: xdhXJq8hOTmBhXYhWCcCPw-1
+ us-mta-230-8p819PzjPSCMsQ4KzKoqSg-1; Mon, 05 Sep 2022 03:44:05 -0400
+X-MC-Unique: 8p819PzjPSCMsQ4KzKoqSg-1
 Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
  mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
- Mon, 5 Sep 2022 00:43:59 -0700
+ Mon, 5 Sep 2022 00:44:02 -0700
 From:   Rahul Tanwar <rtanwar@maxlinear.com>
 To:     <sboyd@kernel.org>, <mturquette@baylibre.com>,
         <linux-clk@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <linux-lgm-soc@maxlinear.com>,
         "Rahul Tanwar" <rtanwar@maxlinear.com>
-Subject: [PATCH v2 3/5] clk: mxl: Avoid disabling gate clocks from clk driver
-Date:   Mon, 5 Sep 2022 15:43:46 +0800
-Message-ID: <496372f326760be1b997ae2aabd1999627f7376d.1662363020.git.rtanwar@maxlinear.com>
+Subject: [PATCH v2 4/5] clk: mxl: Add validation for register reads/writes
+Date:   Mon, 5 Sep 2022 15:43:47 +0800
+Message-ID: <09c3b98ba9f74719b02e1b5153c3e639cb8d34ca.1662363020.git.rtanwar@maxlinear.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1662363020.git.rtanwar@maxlinear.com>
 References: <cover.1662363020.git.rtanwar@maxlinear.com>
@@ -51,117 +52,88 @@ X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: maxlinear.com
 Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In MxL's LGM SoC, gate clocks are supposed to be enabled or disabled
-from EPU (power management IP) in certain power saving modes. If gate
-clocks are allowed to be enabled/disabled from CGU clk driver, then
-there arises a conflict where in case clk driver disables a gate clk,
-and then EPU tries to disable the same gate clk, then it will hang
-polling for the clk gated successful status.
-
-To avoid such a conflict, disable gate clocks enabling/disabling from
-CGU clk driver. But add a GATE_CLK_HW flag to control this in order to
-be backward compatible with other SoCs which share the same CGU IP but
-not the same EPU IP.
+Some clocks support parent clock dividers but they do not
+support clock gating (clk enable/disable). Such types of
+clocks might call API's for get/set_reg_val routines with
+width as 0 during clk_prepare_enable() call. Handle such
+cases by first validating width during clk_prepare_enable()
+while still supporting clk_set_rate() correctly.
 
 Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
 ---
- drivers/clk/x86/clk-cgu.c | 32 ++++++++++++++++++++++++--------
- drivers/clk/x86/clk-cgu.h |  1 +
- 2 files changed, 25 insertions(+), 8 deletions(-)
+ drivers/clk/x86/clk-cgu.h | 30 ++++++++++++++++++++++++++----
+ 1 file changed, 26 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/x86/clk-cgu.c b/drivers/clk/x86/clk-cgu.c
-index 1f7e93de67bc..d24173cfe0b0 100644
---- a/drivers/clk/x86/clk-cgu.c
-+++ b/drivers/clk/x86/clk-cgu.c
-@@ -258,8 +258,12 @@ static int lgm_clk_gate_enable(struct clk_hw *hw)
- =09struct lgm_clk_gate *gate =3D to_lgm_clk_gate(hw);
- =09unsigned int reg;
-=20
--=09reg =3D GATE_HW_REG_EN(gate->reg);
--=09lgm_set_clk_val(gate->membase, reg, gate->shift, 1, 1);
-+=09if (gate->flags & GATE_CLK_HW) {
-+=09=09reg =3D GATE_HW_REG_EN(gate->reg);
-+=09=09lgm_set_clk_val(gate->membase, reg, gate->shift, 1, 1);
-+=09} else {
-+=09=09gate->reg =3D 1;
-+=09}
-=20
- =09return 0;
- }
-@@ -269,8 +273,12 @@ static void lgm_clk_gate_disable(struct clk_hw *hw)
- =09struct lgm_clk_gate *gate =3D to_lgm_clk_gate(hw);
- =09unsigned int reg;
-=20
--=09reg =3D GATE_HW_REG_DIS(gate->reg);
--=09lgm_set_clk_val(gate->membase, reg, gate->shift, 1, 1);
-+=09if (gate->flags & GATE_CLK_HW) {
-+=09=09reg =3D GATE_HW_REG_DIS(gate->reg);
-+=09=09lgm_set_clk_val(gate->membase, reg, gate->shift, 1, 1);
-+=09} else {
-+=09=09gate->reg =3D 0;
-+=09}
- }
-=20
- static int lgm_clk_gate_is_enabled(struct clk_hw *hw)
-@@ -278,8 +286,12 @@ static int lgm_clk_gate_is_enabled(struct clk_hw *hw)
- =09struct lgm_clk_gate *gate =3D to_lgm_clk_gate(hw);
- =09unsigned int reg, ret;
-=20
--=09reg =3D GATE_HW_REG_STAT(gate->reg);
--=09ret =3D lgm_get_clk_val(gate->membase, reg, gate->shift, 1);
-+=09if (gate->flags & GATE_CLK_HW) {
-+=09=09reg =3D GATE_HW_REG_STAT(gate->reg);
-+=09=09ret =3D lgm_get_clk_val(gate->membase, reg, gate->shift, 1);
-+=09} else {
-+=09=09ret =3D gate->reg;
-+=09}
-=20
- =09return ret;
- }
-@@ -315,7 +327,8 @@ lgm_clk_register_gate(struct lgm_clk_provider *ctx,
- =09init.num_parents =3D pname ? 1 : 0;
-=20
- =09gate->membase =3D ctx->membase;
--=09gate->reg =3D reg;
-+=09if (cflags & GATE_CLK_HW)
-+=09=09gate->reg =3D reg;
- =09gate->shift =3D shift;
- =09gate->flags =3D cflags;
- =09gate->hw.init =3D &init;
-@@ -326,7 +339,10 @@ lgm_clk_register_gate(struct lgm_clk_provider *ctx,
- =09=09return ERR_PTR(ret);
-=20
- =09if (cflags & CLOCK_FLAG_VAL_INIT) {
--=09=09lgm_set_clk_val(gate->membase, reg, shift, 1, list->gate_val);
-+=09=09if (cflags & GATE_CLK_HW)
-+=09=09=09lgm_set_clk_val(gate->membase, reg, shift, 1, list->gate_val);
-+=09=09else
-+=09=09=09gate->reg =3D 1;
- =09}
-=20
- =09return hw;
 diff --git a/drivers/clk/x86/clk-cgu.h b/drivers/clk/x86/clk-cgu.h
-index 0aa0f35d63a0..73ce84345f81 100644
+index 73ce84345f81..46daf9ebd6c9 100644
 --- a/drivers/clk/x86/clk-cgu.h
 +++ b/drivers/clk/x86/clk-cgu.h
-@@ -197,6 +197,7 @@ struct lgm_clk_branch {
- /* clock flags definition */
- #define CLOCK_FLAG_VAL_INIT=09BIT(16)
- #define MUX_CLK_SW=09=09BIT(17)
-+#define GATE_CLK_HW=09=09BIT(18)
+@@ -299,29 +299,51 @@ struct lgm_clk_branch {
+ static inline void lgm_set_clk_val(struct regmap *membase, u32 reg,
+ =09=09=09=09   u8 shift, u8 width, u32 set_val)
+ {
+-=09u32 mask =3D (GENMASK(width - 1, 0) << shift);
++=09u32 mask;
 =20
- #define LGM_MUX(_id, _name, _pdata, _f, _reg,=09=09\
- =09=09_shift, _width, _cf, _v)=09=09\
++=09/*
++=09 * Some clocks support parent clock dividers but they do not
++=09 * support clock gating (clk enable/disable). Such types of
++=09 * clocks might call this function with width as 0 during
++=09 * clk_prepare_enable() call. Handle such cases by not doing
++=09 * anything during clk_prepare_enable() but handle clk_set_rate()
++=09 * correctly
++=09 */
++=09if (!width)
++=09=09return;
++
++=09mask =3D (GENMASK(width - 1, 0) << shift);
+ =09regmap_update_bits(membase, reg, mask, set_val << shift);
+ }
+=20
+ static inline u32 lgm_get_clk_val(struct regmap *membase, u32 reg,
+ =09=09=09=09  u8 shift, u8 width)
+ {
+-=09u32 mask =3D (GENMASK(width - 1, 0) << shift);
++=09u32 mask;
+ =09u32 val;
+=20
++=09/*
++=09 * Some clocks support parent clock dividers but they do not
++=09 * support clock gating (clk enable/disable). Such types of
++=09 * clocks might call this function with width as 0 during
++=09 * clk_prepare_enable() call. Handle such cases by not doing
++=09 * anything during clk_prepare_enable() but handle clk_set_rate()
++=09 * correctly
++=09 */
++=09if (!width)
++=09=09return 0;
++
+ =09if (regmap_read(membase, reg, &val)) {
+ =09=09WARN_ONCE(1, "Failed to read clk reg: 0x%x\n", reg);
+ =09=09return 0;
+ =09}
+=20
++=09mask =3D (GENMASK(width - 1, 0) << shift);
+ =09val =3D (val & mask) >> shift;
+=20
+ =09return val;
+ }
+=20
+-
+-
+ int lgm_clk_register_branches(struct lgm_clk_provider *ctx,
+ =09=09=09      const struct lgm_clk_branch *list,
+ =09=09=09      unsigned int nr_clk);
 --=20
 2.17.1
 

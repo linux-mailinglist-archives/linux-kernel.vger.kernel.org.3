@@ -2,233 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D9D5ACA64
+	by mail.lfdr.de (Postfix) with ESMTP id 7025F5ACA63
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236391AbiIEGKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 02:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
+        id S235747AbiIEGJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 02:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiIEGKB (ORCPT
+        with ESMTP id S231272AbiIEGJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 02:10:01 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76D5713DF3
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 23:09:58 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.48:60476.944095620
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-110.188.55.54 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id 9CB262800B3;
-        Mon,  5 Sep 2022 14:09:53 +0800 (CST)
-X-189-SAVE-TO-SEND: +lic121@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id a25791cbf4fa4f0aa6e5b46cd6815d0a for mike.kravetz@oracle.com;
-        Mon, 05 Sep 2022 14:09:58 CST
-X-Transaction-ID: a25791cbf4fa4f0aa6e5b46cd6815d0a
-X-Real-From: lic121@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: lic121@chinatelecom.cn
-From:   Cheng Li <lic121@chinatelecom.cn>
-To:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Cheng Li <lic121@chinatelecom.cn>
-Subject: [PATCH v2] mm: use mem_map_offset instead of mem_map_next
-Date:   Mon,  5 Sep 2022 06:09:19 +0000
-Message-Id: <1662358159-22780-1-git-send-email-lic121@chinatelecom.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Sep 2022 02:09:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84B25F93;
+        Sun,  4 Sep 2022 23:09:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7867B80ECE;
+        Mon,  5 Sep 2022 06:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE24C433D7;
+        Mon,  5 Sep 2022 06:09:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662358169;
+        bh=ged1Iuc/8Vkmz5SoOQAQ9hvKuGOuVj7be3WgcFAK3U4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F4VbMIQZek37mJxYhL8WdQTgRXWJuBWqqgQrEmuzdd3N7J8vj8wt2V9fDvJCkUwVR
+         0fpljKOKmVhFpvD73RCZMbB7cmGNVaYIYmTYBnkZ23U8u9Xm5c4o8Kmz4In3SpNgb/
+         8QgWtGcM4sXmJv0Euu7yoOlhe+Gj4ysaYMvBaK/k=
+Date:   Mon, 5 Sep 2022 08:09:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "jerry.meng" <jerry-meng@foxmail.com>
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Quectel RM520N
+Message-ID: <YxWSlsA3Klg/LmjB@kroah.com>
+References: <tencent_3F0D3FA6C173619315358082BA45961FD008@qq.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_3F0D3FA6C173619315358082BA45961FD008@qq.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To handle discontiguity case, mem_map_next() has a parameter named
-`offset`. As a function caller, one would be confused why "get
-next entry" needs a parameter named "offset". The other drawback of
-mem_map_next() is that the callers must take care of the map between
-parameter "iter" and "offset", otherwise we may get an hole or
-duplication during iteration. So we use mem_map_offset instead of
-mem_map_next.
+On Mon, Sep 05, 2022 at 09:19:38AM +0800, jerry.meng wrote:
+> add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
+> 
+> 0x0801: DIAG + NMEA + AT + MODEM + RMNET
+> 
+> T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
+> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=2c7c ProdID=0801 Rev= 5.04
+> S:  Manufacturer=Quectel
+> S:  Product=RM520N-GL
+> S:  SerialNumber=384af524
+> C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
 
-Signed-off-by: Cheng Li <lic121@chinatelecom.cn>
-Fixes: 69d177c2fc70 ("hugetlbfs: handle pages higher order than MAX_ORDER")
----
+I doubt that you have a "." in your name that you sign documents with,
+so can you please resend this with the proper name you use?
 
-Notes:
-    v2:
-      - fix build error
+thanks,
 
- mm/hugetlb.c  | 25 +++++++++++++++----------
- mm/internal.h | 16 ++--------------
- mm/memory.c   | 21 ++++++++++-----------
- 3 files changed, 27 insertions(+), 35 deletions(-)
-
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e070b8593b37..a9592f69bf82 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1308,12 +1308,13 @@ static void __destroy_compound_gigantic_page(struct page *page,
- {
- 	int i;
- 	int nr_pages = 1 << order;
--	struct page *p = page + 1;
-+	struct page *p;
- 
- 	atomic_set(compound_mapcount_ptr(page), 0);
- 	atomic_set(compound_pincount_ptr(page), 0);
- 
--	for (i = 1; i < nr_pages; i++, p = mem_map_next(p, page, i)) {
-+	for (i = 1; i < nr_pages; i++) {
-+		p = mem_map_offset(page, i);
- 		p->mapping = NULL;
- 		clear_compound_head(p);
- 		if (!demote)
-@@ -1530,7 +1531,7 @@ static void add_hugetlb_page(struct hstate *h, struct page *page,
- static void __update_and_free_page(struct hstate *h, struct page *page)
- {
- 	int i;
--	struct page *subpage = page;
-+	struct page *subpage;
- 
- 	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
- 		return;
-@@ -1561,8 +1562,8 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
- 	if (unlikely(PageHWPoison(page)))
- 		hugetlb_clear_page_hwpoison(page);
- 
--	for (i = 0; i < pages_per_huge_page(h);
--	     i++, subpage = mem_map_next(subpage, page, i)) {
-+	for (i = 0; i < pages_per_huge_page(h); i++) {
-+		subpage = mem_map_offset(page, i);
- 		subpage->flags &= ~(1 << PG_locked | 1 << PG_error |
- 				1 << PG_referenced | 1 << PG_dirty |
- 				1 << PG_active | 1 << PG_private |
-@@ -1769,13 +1770,15 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
- {
- 	int i, j;
- 	int nr_pages = 1 << order;
--	struct page *p = page + 1;
-+	struct page *p;
- 
- 	/* we rely on prep_new_huge_page to set the destructor */
- 	set_compound_order(page, order);
- 	__ClearPageReserved(page);
- 	__SetPageHead(page);
--	for (i = 1; i < nr_pages; i++, p = mem_map_next(p, page, i)) {
-+	for (i = 1; i < nr_pages; i++) {
-+		p = mem_map_offset(page, i);
-+
- 		/*
- 		 * For gigantic hugepages allocated through bootmem at
- 		 * boot, it's safer to be consistent with the not-gigantic
-@@ -1822,14 +1825,16 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
- 
- out_error:
- 	/* undo tail page modifications made above */
--	p = page + 1;
--	for (j = 1; j < i; j++, p = mem_map_next(p, page, j)) {
-+	for (j = 1; j < i; j++) {
-+		p = mem_map_offset(page, j);
- 		clear_compound_head(p);
- 		set_page_refcounted(p);
- 	}
- 	/* need to clear PG_reserved on remaining tail pages  */
--	for (; j < nr_pages; j++, p = mem_map_next(p, page, j))
-+	for (; j < nr_pages; j++) {
-+		p = mem_map_offset(page, j);
- 		__ClearPageReserved(p);
-+	}
- 	set_compound_order(page, 0);
- #ifdef CONFIG_64BIT
- 	page[1].compound_nr = 0;
-diff --git a/mm/internal.h b/mm/internal.h
-index 785409805ed7..1012a305a60f 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -646,25 +646,13 @@ static inline void vunmap_range_noflush(unsigned long start, unsigned long end)
-  */
- static inline struct page *mem_map_offset(struct page *base, int offset)
- {
--	if (unlikely(offset >= MAX_ORDER_NR_PAGES))
--		return nth_page(base, offset);
--	return base + offset;
--}
--
--/*
-- * Iterator over all subpages within the maximally aligned gigantic
-- * page 'base'.  Handle any discontiguity in the mem_map.
-- */
--static inline struct page *mem_map_next(struct page *iter,
--						struct page *base, int offset)
--{
--	if (unlikely((offset & (MAX_ORDER_NR_PAGES - 1)) == 0)) {
-+	if (unlikely(offset >= MAX_ORDER_NR_PAGES)) {
- 		unsigned long pfn = page_to_pfn(base) + offset;
- 		if (!pfn_valid(pfn))
- 			return NULL;
- 		return pfn_to_page(pfn);
- 	}
--	return iter + 1;
-+	return base + offset;
- }
- 
- /* Memory initialisation debug and verification */
-diff --git a/mm/memory.c b/mm/memory.c
-index 4ba73f5aa8bb..32179c4fd1a5 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5637,11 +5637,11 @@ static void clear_gigantic_page(struct page *page,
- 				unsigned int pages_per_huge_page)
- {
- 	int i;
--	struct page *p = page;
-+	struct page *p;
- 
- 	might_sleep();
--	for (i = 0; i < pages_per_huge_page;
--	     i++, p = mem_map_next(p, page, i)) {
-+	for (i = 0; i < pages_per_huge_page; i++) {
-+		p = mem_map_offset(page, i);
- 		cond_resched();
- 		clear_user_highpage(p, addr + i * PAGE_SIZE);
- 	}
-@@ -5677,13 +5677,12 @@ static void copy_user_gigantic_page(struct page *dst, struct page *src,
- 	struct page *dst_base = dst;
- 	struct page *src_base = src;
- 
--	for (i = 0; i < pages_per_huge_page; ) {
-+	for (i = 0; i < pages_per_huge_page; i++) {
-+		dst = mem_map_offset(dst_base, i);
-+		src = mem_map_offset(src_base, i);
-+
- 		cond_resched();
- 		copy_user_highpage(dst, src, addr + i*PAGE_SIZE, vma);
--
--		i++;
--		dst = mem_map_next(dst, dst_base, i);
--		src = mem_map_next(src, src_base, i);
- 	}
- }
- 
-@@ -5730,10 +5729,10 @@ long copy_huge_page_from_user(struct page *dst_page,
- 	void *page_kaddr;
- 	unsigned long i, rc = 0;
- 	unsigned long ret_val = pages_per_huge_page * PAGE_SIZE;
--	struct page *subpage = dst_page;
-+	struct page *subpage;
- 
--	for (i = 0; i < pages_per_huge_page;
--	     i++, subpage = mem_map_next(subpage, dst_page, i)) {
-+	for (i = 0; i < pages_per_huge_page; i++) {
-+		subpage = mem_map_offset(dst_page, i);
- 		if (allow_pagefault)
- 			page_kaddr = kmap(subpage);
- 		else
--- 
-1.8.3.1
-
+greg k-h

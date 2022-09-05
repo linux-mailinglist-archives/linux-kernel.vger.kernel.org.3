@@ -2,45 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7963B5AD2AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369E85AD2C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238408AbiIEMfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
+        id S238382AbiIEMe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238363AbiIEMew (ORCPT
+        with ESMTP id S237880AbiIEMeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:34:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CF363F28
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:28:36 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MLnkY5L3xzZcNK;
-        Mon,  5 Sep 2022 20:24:05 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 20:28:33 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <sudeep.holla@arm.com>, <vincent.guittot@linaro.org>,
-        <ionela.voinescu@arm.com>, <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <rafael@kernel.org>, <21cnbao@gmail.com>,
-        <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
-        <prime.zeng@huawei.com>, <yangyicong@hisilicon.com>
-Subject: [PATCH v3] arch_topology: Make cluster topology span at least SMT CPUs
-Date:   Mon, 5 Sep 2022 20:26:15 +0800
-Message-ID: <20220905122615.12946-1-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
+        Mon, 5 Sep 2022 08:34:08 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483545508A
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:27:52 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id b26so9045680ljk.12
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=VjT77Y8+HEIuNnjusk1YftNIVA1QWJZI3Mf5HLrrrls=;
+        b=i3oFSwWW81UGXG0vxzOX1hV6+X74ouF8oVIDzczn3fjuwfzDMtGdzsTwCry4yHZ9Uf
+         cQWfJyt1YUcXiVJJDT6c7Dv6waLUiJN/6Gf9BSkUJ9NSqsXBNh9//u4rpCViELfa1F2e
+         pxn02clW9d+O/XCwTj5dvCViS67Rzyt+lAbz72kKenXKc043PamA+BmPfHnui2uFe+n0
+         JS9CLPofidCxHzuhFmCjoeFVCLRHUgLs7OUG8Q5l1zZXIKkkOKz/l1Gex4swGpAgksJW
+         Kv9d4DtQUPWSv1lXK6vn1c86I87eIhaJO/ITd1h227fbsHSu+qkS/ULetod9qi0jz6ze
+         BHJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=VjT77Y8+HEIuNnjusk1YftNIVA1QWJZI3Mf5HLrrrls=;
+        b=SieRijhZM0EXGS63H25wD3E+Gq/aSBHU0OPKQHytGR8RgCmfw+/rOtinQPTq17T2/z
+         V4mri9ggFbM3RSa+CubuHp8cYWzx/zKv0o+WXe1zuAN5z662U17sd7j1EQ22p8VBF4yx
+         L4pNn6FU+hbsXVTw5pBmRGsoa54fbmKoMkWpgieFU8Y4KBVeExuEr7Q3d7NgGnpS6hne
+         UWFOO8p92qb/EUU5WVdEk+RTLESiRqFaeIxSEhVW8WE2NArvjahIhPH3SoTer2+OTJcy
+         +4G7zJwB/yMOu5PewlOrzxwNOqSW4Gjus49bDVOCSCmJGTXoGaooW5Q44JiXeX9txIK/
+         sUQA==
+X-Gm-Message-State: ACgBeo0K7JDP+ggnHacim8p7Oa6HsQsZ6pcdvJQjVbJhNmRXGt2jmzxX
+        qVrE+nIS5GB9XlsvHN0cbjd2eQ==
+X-Google-Smtp-Source: AA6agR7veY/y2QHPF3TywjCqgZpMb5Y9lO1EP2k3n/xbHw+CDZpSB1UqQoWqHbDb+EAofuD7w1fyGA==
+X-Received: by 2002:a05:651c:178d:b0:261:bd23:a5f8 with SMTP id bn13-20020a05651c178d00b00261bd23a5f8mr13588955ljb.411.1662380871019;
+        Mon, 05 Sep 2022 05:27:51 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id be11-20020a05651c170b00b00261800f0e02sm1397822ljb.26.2022.09.05.05.27.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 05:27:50 -0700 (PDT)
+Message-ID: <1c69c2b7-dc9c-f3e2-796c-0310b94b1ff7@linaro.org>
+Date:   Mon, 5 Sep 2022 14:27:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH net-next v4 1/5] dt-bindings: net: Convert Altera TSE
+ bindings to yaml
+Content-Language: en-US
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220902083205.483438-1-maxime.chevallier@bootlin.com>
+ <20220902083205.483438-2-maxime.chevallier@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220902083205.483438-2-maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,64 +85,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yicong Yang <yangyicong@hisilicon.com>
+On 02/09/2022 10:32, Maxime Chevallier wrote:
+> Convert the bindings for the Altera Triple-Speed Ethernet to yaml.
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-Currently cpu_clustergroup_mask() will return CPU mask if cluster span more
-or the same CPUs as cpu_coregroup_mask(). This will result topology borken
-on non-Cluster SMT machines when building with CONFIG_SCHED_CLUSTER=y.
+Your messages ended up in spam:
+DMARC:	'FAIL'
+dmarc=fail (p=REJECT sp=REJECT dis=QUARANTINE) header.from=bootlin.com
 
-Test with:
-qemu-system-aarch64 -enable-kvm -machine virt \
- -net none \
- -cpu host \
- -bios ./QEMU_EFI.fd \
- -m 2G \
- -smp 48,sockets=2,cores=12,threads=2 \
- -kernel $Image \
- -initrd $Rootfs \
- -nographic
- -append "rdinit=init console=ttyAMA0 sched_verbose loglevel=8"
+> ---
+> V3->V4 : No changes
+> V2->V3:
+>  - Moved allOf below required
+>  - Removed unnedded reg/reg-names in the properties section
+>  - Removed stray minItems
+> 
+> V1->V2:
+>  - Removed unnedded maxItems
+>  - Added missing minItems
+>  - Fixed typos in some properties names
+>  - Fixed the mdio subnode definition
 
-We'll get below error:
-[    3.084568] BUG: arch topology borken
-[    3.084570]      the SMT domain not a subset of the CLS domain
+The patchset was applied without waiting for DT maintainers review, so
+not much to do here for me...
 
-Since cluster is a level higher than SMT, fix this by making cluster
-spans at least SMT CPUs.
 
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Fixes: bfcc4397435d ("arch_topology: Limit span of cpu_clustergroup_mask()")
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
-Change since v2:
-- Use topology_sibling_cpumask() instead of cpu_smt_mask(), which is unavailable
-  when CONFIG_SCHED_SMT=n. Sorry for the build regression.
-- Drop RB from Ionela and Sudeep since code changed. Expect a regain. Thanks!
-Link: https://lore.kernel.org/lkml/20220825092007.8129-1-yangyicong@huawei.com/
-
-Change since v1:
-- mention the kernel config CONFIG_SCHED_CLUSTER=y, per Ionela
-Link:https://lore.kernel.org/lkml/20220823073044.58697-1-yangyicong@huawei.com/
-
- drivers/base/arch_topology.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 0424b59b695e..7e7e373ffab2 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -724,7 +724,7 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
- 	 */
- 	if (cpumask_subset(cpu_coregroup_mask(cpu),
- 			   &cpu_topology[cpu].cluster_sibling))
--		return get_cpu_mask(cpu);
-+		return topology_sibling_cpumask(cpu);
- 
- 	return &cpu_topology[cpu].cluster_sibling;
- }
--- 
-2.24.0
-
+Best regards,
+Krzysztof

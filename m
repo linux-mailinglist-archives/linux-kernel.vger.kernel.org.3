@@ -2,140 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4535ADA83
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049F95ADA8E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 23:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbiIEVD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 17:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S230115AbiIEVGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 17:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiIEVDy (ORCPT
+        with ESMTP id S231475AbiIEVF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 17:03:54 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B6165575
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 14:03:51 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id fc24so10174435ejc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 14:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=hoFfvxrcWLiLIIghJLr7YqFR/bl7ppCzpkpzcFf25Ks=;
-        b=RJtkdpcWwDCjdU//f+NiUTQJO5kz/J/LQ4Oeb8FsER0ooLc9TUWAVJHwh16h0rFR6k
-         jDNxcAT6fUKAWlYXkDzi9PRVLGCFhao6TAvvqUzCLnc6J1JgrkOg//ZWPBTqZXz06MLe
-         g/E79BtcrSCZXcou4vgp2IFBghrcFJpfeHS130JLJDTFGdRTjjJVv3m8lMFyySNYfbdn
-         zyHSJi+z2sGr74Gs8Ferhg3qHw1Rm2Rd7LpNg2QiPU+rsqNYeELsa2ObuGU9YVxZktXI
-         +EIJDXEMJp+8DP7PW/zCtw+WHI1pL0md9UYJvdO9U0CdYO9jo7gVaKjIjDEh/+/hHVoD
-         fvlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hoFfvxrcWLiLIIghJLr7YqFR/bl7ppCzpkpzcFf25Ks=;
-        b=3SY0kVfdHXJIgO3RQQz/NP4A7cFt9iFvmKhKvliSZlqE6tu7Nz0Rx171ceiK6Xi7tH
-         P0+6+S+PYEJfLDFHac5fAQWHaSkSdZeu2ZNItq3IYFsPC1H62hVSzrDRcpxkY7B8XgXI
-         9bCvZqUxWblj5zYKemjzs0kXPC7lXz33OYtrbPVwcktDfO1sbpHn47DungnYQeKJgiP7
-         eGAQ0Rxp5JUGWFMayUyZ7Zw/Ki+LImLP9YUX40UCgYHcEShplPCOpYhlaJ3fQvHlYodJ
-         RsDd4NP3//r+4HzTfQDCBCnFRTcC03/nPNWQd9oILQJyHgHI1TNEtI1cvhNibaX/voTr
-         ykgg==
-X-Gm-Message-State: ACgBeo2nmI+RU99bQrqn9XDTOJ5gXld8UflYKwITQszy0Ftrh4wK6R4o
-        BrsqFw7Y3Ie65jkx3E5UBqnAqerAPRAegCdT4E+HMg==
-X-Google-Smtp-Source: AA6agR4GWSThcRe2jCNjPhluqCCYiE882sQv//p+YmHWCdk54XKDzjUOkiYoAS2W+owpznoWxs2VPch3w1ZAdKXk+5E=
-X-Received: by 2002:a17:907:7242:b0:741:770b:dfc6 with SMTP id
- ds2-20020a170907724200b00741770bdfc6mr28207413ejc.203.1662411830025; Mon, 05
- Sep 2022 14:03:50 -0700 (PDT)
+        Mon, 5 Sep 2022 17:05:56 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DD459258
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 14:05:54 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662411953;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=74N21uct3fvXsjJmGGSQz3ciXrjD4YvE3S6ir9HUu9Y=;
+        b=qOtF8iDAO8Cp4f2y3BNXd0R8lD2ALMm80GxqthWJHesHpjKT5RiarWSi93n6mP7GZXg6Ec
+        6YXbAbgIMAeSGOIn5FOzv7K7YGTIZMxcxjd+051Nb/4qR8GzYAm6+nIuuKAdTJRrlY6dFr
+        wJi/QtM4QcjL/9AtUA5J3W0DUyuVQzs=
+From:   andrey.konovalov@linux.dev
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH mm v3 00/34] kasan: switch tag-based modes to stack ring from per-object metadata
+Date:   Mon,  5 Sep 2022 23:05:15 +0200
+Message-Id: <cover.1662411799.git.andreyknvl@google.com>
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-2-b29adfb27a6c@gmail.com>
- <CAHp75Vc4yfh0JcY0B-vNawHTay5QNuhd7GAm86QZZZvUnQaMzQ@mail.gmail.com> <YxZP/exeVD7DQ5Hx@google.com>
-In-Reply-To: <YxZP/exeVD7DQ5Hx@google.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 5 Sep 2022 23:03:38 +0200
-Message-ID: <CACRpkda0iUTV=71eQf5_FdKWLe3Bu=U+Zny9_uJJL=5xXtnrnQ@mail.gmail.com>
-Subject: Re: [PATCH v1 02/11] drm/tegra: switch to using devm_fwnode_gpiod_get
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 9:37 PM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
-> On Mon, Sep 05, 2022 at 01:57:01PM +0300, Andy Shevchenko wrote:
-> > On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
-> > >
-> > > I would like to limit (or maybe even remove) use of
-> > > [devm_]gpiod_get_from_of_node in drivers so that gpiolib can be cleaned
-> > > a bit, so let's switch to the generic device property API.
-> >
-> > > It may even
-> > > help with handling secondary fwnodes when gpiolib is taught to handle
-> > > gpios described by swnodes.
-> >
-> > I would remove this sentence from all commit messages since it's a
-> > debatable thing and might even not happen, so the above is a pure
-> > speculation.
->
-> I have the patches. Granted, I had them since '19 ;) but I'm rebasing
-> them and going to push them. I need them to convert bunch of input
-> drivers away from platform data.
+From: Andrey Konovalov <andreyknvl@google.com>
 
-That's good news!
+This series makes the tag-based KASAN modes use a ring buffer for storing
+stack depot handles for alloc/free stack traces for slab objects instead
+of per-object metadata. This ring buffer is referred to as the stack ring.
 
-Are you referring to this patch set mentioned in a discussion
-from 2017 thru 2020?
-https://lore.kernel.org/linux-input/20200826161222.GA1665100@dtor-ws/
+On each alloc/free of a slab object, the tagged address of the object and
+the current stack trace are recorded in the stack ring.
 
-I put aside GPIO descriptor conversion for input devices (keys, buttons)
-in board files anticipating a swnode mechanism.
+On each bug report, if the accessed address belongs to a slab object, the
+stack ring is scanned for matching entries. The newest entries are used to
+print the alloc/free stack traces in the report: one entry for alloc and
+one for free.
 
-Yours,
-Linus Walleij
+The advantages of this approach over storing stack trace handles in
+per-object metadata with the tag-based KASAN modes:
+
+- Allows to find relevant stack traces for use-after-free bugs without
+  using quarantine for freed memory. (Currently, if the object was
+  reallocated multiple times, the report contains the latest alloc/free
+  stack traces, not necessarily the ones relevant to the buggy allocation.)
+- Allows to better identify and mark use-after-free bugs, effectively
+  making the CONFIG_KASAN_TAGS_IDENTIFY functionality always-on.
+- Has fixed memory overhead.
+
+The disadvantage:
+
+- If the affected object was allocated/freed long before the bug happened
+  and the stack trace events were purged from the stack ring, the report
+  will have no stack traces.
+
+Discussion
+==========
+
+The proposed implementation of the stack ring uses a single ring buffer for
+the whole kernel. This might lead to contention due to atomic accesses to
+the ring buffer index on multicore systems.
+
+At this point, it is unknown whether the performance impact from this
+contention would be significant compared to the slowdown introduced by
+collecting stack traces due to the planned changes to the latter part,
+see the section below.
+
+For now, the proposed implementation is deemed to be good enough, but this
+might need to be revisited once the stack collection becomes faster.
+
+A considered alternative is to keep a separate ring buffer for each CPU
+and then iterate over all of them when printing a bug report. This approach
+requires somehow figuring out which of the stack rings has the freshest
+stack traces for an object if multiple stack rings have them.
+
+Further plans
+=============
+
+This series is a part of an effort to make KASAN stack trace collection
+suitable for production. This requires stack trace collection to be fast
+and memory-bounded.
+
+The planned steps are:
+
+1. Speed up stack trace collection (potentially, by using SCS;
+   patches on-hold until steps #2 and #3 are completed).
+2. Keep stack trace handles in the stack ring (this series).
+3. Add a memory-bounded mode to stack depot or provide an alternative
+   memory-bounded stack storage.
+4. Potentially, implement stack trace collection sampling to minimize
+   the performance impact.
+
+Thanks!
+
+---
+
+Changes v2->v3:
+- Addressed Marco's comments, see the last 3 patches for list of changes.
+
+Changes v1->v2:
+- Rework synchronization in the stack ring implementation.
+- Dynamically allocate stack ring based on the kasan.stack_ring_size
+  command-line parameter.
+- Multiple less significant changes, see the notes in patches for details.
+
+Andrey Konovalov (34):
+  kasan: check KASAN_NO_FREE_META in __kasan_metadata_size
+  kasan: rename kasan_set_*_info to kasan_save_*_info
+  kasan: move is_kmalloc check out of save_alloc_info
+  kasan: split save_alloc_info implementations
+  kasan: drop CONFIG_KASAN_TAGS_IDENTIFY
+  kasan: introduce kasan_print_aux_stacks
+  kasan: introduce kasan_get_alloc_track
+  kasan: introduce kasan_init_object_meta
+  kasan: clear metadata functions for tag-based modes
+  kasan: move kasan_get_*_meta to generic.c
+  kasan: introduce kasan_requires_meta
+  kasan: introduce kasan_init_cache_meta
+  kasan: drop CONFIG_KASAN_GENERIC check from kasan_init_cache_meta
+  kasan: only define kasan_metadata_size for Generic mode
+  kasan: only define kasan_never_merge for Generic mode
+  kasan: only define metadata offsets for Generic mode
+  kasan: only define metadata structs for Generic mode
+  kasan: only define kasan_cache_create for Generic mode
+  kasan: pass tagged pointers to kasan_save_alloc/free_info
+  kasan: move kasan_get_alloc/free_track definitions
+  kasan: cosmetic changes in report.c
+  kasan: use virt_addr_valid in kasan_addr_to_page/slab
+  kasan: use kasan_addr_to_slab in print_address_description
+  kasan: make kasan_addr_to_page static
+  kasan: simplify print_report
+  kasan: introduce complete_report_info
+  kasan: fill in cache and object in complete_report_info
+  kasan: rework function arguments in report.c
+  kasan: introduce kasan_complete_mode_report_info
+  kasan: implement stack ring for tag-based modes
+  kasan: support kasan.stacktrace for SW_TAGS
+  kasan: dynamically allocate stack ring entries
+  kasan: better identify bug types for tag-based modes
+  kasan: add another use-after-free test
+
+ Documentation/dev-tools/kasan.rst |  17 ++-
+ include/linux/kasan.h             |  55 ++++------
+ include/linux/slab.h              |   2 +-
+ lib/Kconfig.kasan                 |   8 --
+ lib/test_kasan.c                  |  24 ++++
+ mm/kasan/common.c                 | 175 +++---------------------------
+ mm/kasan/generic.c                | 154 ++++++++++++++++++++++++--
+ mm/kasan/hw_tags.c                |  39 +------
+ mm/kasan/kasan.h                  | 171 ++++++++++++++++++++---------
+ mm/kasan/report.c                 | 117 +++++++++-----------
+ mm/kasan/report_generic.c         |  45 +++++++-
+ mm/kasan/report_tags.c            | 123 ++++++++++++++++-----
+ mm/kasan/sw_tags.c                |   5 +-
+ mm/kasan/tags.c                   | 141 +++++++++++++++++++-----
+ 14 files changed, 642 insertions(+), 434 deletions(-)
+
+-- 
+2.25.1
+

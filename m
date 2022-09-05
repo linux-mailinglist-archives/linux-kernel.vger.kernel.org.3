@@ -2,128 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD365AD1DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0E05AD1F1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiIELyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S238078AbiIELzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236214AbiIELyo (ORCPT
+        with ESMTP id S237781AbiIELzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:54:44 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EC6DF2C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662378881; x=1693914881;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IJhTAgu2cxNzpV0h3DX4P61WCYhZ95uQuCPblFmdGpk=;
-  b=SLvBXuURR9kPbtGVDvvNuBBJEnOinBPaGDVb048CqKFnS07tEbwBU34g
-   jAJX3fE8LV+Jn4KxyluK6zpnMrOqoDiThOSqChE5iVlO1dPgVKkYo9yBh
-   B0TkCVbOS7WtK9I1FtQGLnH0LGY8pqGTBJzThKoViO2nTyIKTvyvnXsVK
-   +7HLVGFZN3gp6PfaydzCvIIDNHGfaa6bbEg7niN3oDNJelpuxyEGFkMNB
-   9NWjd7aSNoEfGit/VSSZHBcTmc0vAtoxsFgNKB9hCU9rUSqL2Uv5NTrRY
-   lsJzqZpwnf2wIdeHdoNbyU6Z4eYpVvOx9zMA9RKoEiUq1vFGCU3SqeKCE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="276115325"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="276115325"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 04:54:41 -0700
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="643784115"
-Received: from jiebinsu-mobl.ccr.corp.intel.com (HELO [10.238.0.228]) ([10.238.0.228])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 04:54:37 -0700
-Message-ID: <da91f763-b74b-68d9-312b-1bc86179273f@intel.com>
-Date:   Mon, 5 Sep 2022 19:54:35 +0800
+        Mon, 5 Sep 2022 07:55:21 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A1427170
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:55:19 -0700 (PDT)
+Received: from localhost.localdomain (unknown [182.2.42.181])
+        by gnuweeb.org (Postfix) with ESMTPSA id 74AE6804FD;
+        Mon,  5 Sep 2022 11:55:14 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1662378919;
+        bh=Ax3MC0XcIkDxhT39fYMzcJEvWVrtUjw9z/eRM8QtIpg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JqGZ4l+n16P9GGgKdRmQ+7QjZtwOHRXaFmjP6vP56fRD5aQ5OIxt+/xJhYLW3/Eb0
+         ilhOBVxCX+Sm4+ovQR7UKqg8+bMEQlw50dw3JSAfBJSsdvyiSuXJdsJ49moyTWqBl3
+         RHaE8u5fyGbUOM4aFwzj1BdQ5wg35RpuwDNwG3Cf5wBEDl58CzEWKUbyKNjdJs4xmb
+         pAzxAd9tRDMrkFpd/rCoWsK0DFQq+dxxAdIdfNn9t+72ZIa8AEJaaPNHG7hV0RWpyV
+         2+Dk97CrgJBIghgfjlv/KK5B5mOT2gPbDmq5L6jT5yJnBnZ7iiZienFCBFSsPgK8Ra
+         WqCk6vXoTCzRQ==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management Mailing List <linux-mm@kvack.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>
+Subject: Re: [PATCH v2 3/3] mm,page_owner: Filter out stacks by a threshold counter
+Date:   Mon,  5 Sep 2022 18:54:59 +0700
+Message-Id: <20220905115459.567583-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <YxXd9qXnIutFOQZY@dhcp22.suse.cz>
+References: <20220905031012.4450-1-osalvador@suse.de> <20220905031012.4450-4-osalvador@suse.de> <573c4049045a5ff342ff9998c69dfae7-ammarfaizi2@gnuweeb.org> <YxXd9qXnIutFOQZY@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.1
-Subject: Re: [PATCH] ipc/msg.c: mitigate the lock contention with percpu
- counter
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     vasily.averin@linux.dev, shakeelb@google.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, ebiederm@xmission.com,
-        legion@kernel.org, manfred@colorfullife.com,
-        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, tim.c.chen@intel.com,
-        feng.tang@intel.com, ying.huang@intel.com, tianyou.li@intel.com,
-        wangyang.guo@intel.com
-References: <20220902152243.479592-1-jiebin.sun@intel.com>
- <20220902090659.28829853543cac3f3f725df5@linux-foundation.org>
-From:   "Sun, Jiebin" <jiebin.sun@intel.com>
-In-Reply-To: <20220902090659.28829853543cac3f3f725df5@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_WEB,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 5 Sep 2022 13:31:02 +0200, Michal Hocko wrote:
+> On Mon 05-09-22 17:51:37, Ammar Faizi wrote:
+> > On Mon, 5 Sep 2022 05:10:12 +0200, Oscar Salvador wrote:
+> > > +static int page_owner_threshold_show(struct seq_file *p, void *v)
+> > > +{
+> > > +	 seq_printf(p, "%lu\n", threshold);
+> > 
+> > Remove a slipped leading 0x20 space here (before seq_printf()).
+> > 
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static ssize_t write_page_owner_threshold(struct file *file, const char __user *buf,
+> > > +					  size_t count, loff_t *pos)
+> > > +{
+> > > +	char *kbuf;
+> > > +	int ret = 0;
+> > > +
+> > > +	count = min_t(size_t, count, PAGE_SIZE);
+> > > +	kbuf = kmalloc(count, GFP_KERNEL);
+> > > +	if (!kbuf)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	if (copy_from_user(kbuf, buf, count)) {
+> > > +		ret = -EFAULT;
+> > > +		goto out;
+> > > +	}
+> > > +
+> > > +	kbuf[count - 1] = '\0';
+> > > +
+> > > +	ret = kstrtoul(kbuf, 10, &threshold);
+> > > +
+> > > +out:
+> > > +	kfree(kbuf);
+> > > +	return ret ? ret : count;
+> > > +}
+> > 
+> > Still the same comment on this, kmalloc() is not really needed here.
+> > Capping the size to PAGE_SIZE (usually 4K) is too big. `unsinged long`
+> > is 64-bit at most, this means the max val is 18446744073709551615
+> > (20 chars). The lifetime of @kbuf is very short as well, using a stack
+> > allocated array of chars is fine?
+> > 
+> > Untested:
+> > 
+> > static ssize_t write_page_owner_threshold(struct file *file, const char __user *buf,
+> > 					  size_t count, loff_t *pos)
+> > {
+> > 	char kbuf[21];
+> > 	int ret;
+> > 
+> > 	count = min_t(size_t, count, sizeof(kbuf));
+> > 	if (copy_from_user(kbuf, buf, count))
+> > 		return -EFAULT;
+> > 
+> > 	kbuf[count - 1] = '\0';
+> > 	ret = kstrtoul(kbuf, 10, &threshold);
+> > 	return ret ? ret : count;
+> > }
+> 
+> Isn't there a proc_dointvec counterpart for debugfs?
 
-On 9/3/2022 12:06 AM, Andrew Morton wrote:
-> On Fri,  2 Sep 2022 23:22:43 +0800 Jiebin Sun <jiebin.sun@intel.com> wrote:
->
->> The msg_bytes and msg_hdrs atomic counters are frequently
->> updated when IPC msg queue is in heavy use, causing heavy
->> cache bounce and overhead. Change them to percpu_counters
->> greatly improve the performance. Since there is one unique
->> ipc namespace, additional memory cost is minimal. Reading
->> of the count done in msgctl call, which is infrequent. So
->> the need to sum up the counts in each CPU is infrequent.
->>
->> Apply the patch and test the pts/stress-ng-1.4.0
->> -- system v message passing (160 threads).
->>
->> Score gain: 3.38x
-> So this test became 3x faster?
+Ah, well. If that's much simpler, we should go with that. I am not
+familiar proc_dointvec() interface, so I couldn't say about it.
 
-Yes. It is from the phoronix test suite stress-ng-1.4.0 -- system v message
-passing with dual sockets ICX servers. In this benchmark, there are 160
-pairs of threads, which do msgsnd and msgrcv. The patch benefit more as the
-threads of workload increase.
+Thanks for the comment. TIL.
 
->
->> CPU: ICX 8380 x 2 sockets
->> Core number: 40 x 2 physical cores
->> Benchmark: pts/stress-ng-1.4.0
->> -- system v message passing (160 threads)
->>
->> ...
->>
->> @@ -138,6 +139,14 @@ percpu_counter_add(struct percpu_counter *fbc, s64 amount)
->>   	preempt_enable();
->>   }
->>   
->> +static inline void
->> +percpu_counter_add_local(struct percpu_counter *fbc, s64 amount)
->> +{
->> +	preempt_disable();
->> +	fbc->count += amount;
->> +	preempt_enable();
->> +}
-> What's this and why is it added?
->
-> It would be best to propose this as a separate preparatory patch.
-> Fully changelogged and perhaps even with a code comment explaining why
-> and when it should be used.
->
-> Thanks.
-
-As it will always do sum in msgctl_info, there is no need to use
-percpu_counter_add_batch. It will do global updating when the counter reach
-the batch size. So we add percpu_counter_add_local for smp and non_smp,
-which will only do local adding to the percpu counter.
-I have separate the original patch into two patches.
-
-Thanks.
+-- 
+Ammar Faizi
 

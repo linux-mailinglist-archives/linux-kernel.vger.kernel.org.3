@@ -2,100 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FD65AD88B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4835AD88D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbiIERob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
+        id S231296AbiIERpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 13:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiIERo1 (ORCPT
+        with ESMTP id S231468AbiIERo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:44:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFE7302
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 10:44:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7884461451
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 17:44:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19E8C433D6;
-        Mon,  5 Sep 2022 17:44:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662399860;
-        bh=S0siCZf1fplDVdZQaH2EOINhg0VPl81P6I2vcDAk3Jw=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=aY934ob2giC8uRrh3q7gcCs6uiRCzelK43Kh8urk1UZFHy6f5hmf7NXs363jM4evY
-         lj0trfKLu+AD91b2lNpA3p1/if9QhmI61LO2IDfDDMv8AYicDIqAIGCZ8KgZ2a+sqT
-         7xKq4RLfEmwauWev+UXVMMNez/cqgcTnl+TKyt3dk9aOnuPwhZzAAziSaAElAURpt3
-         ScNNXJs/IJUdNBuUkQ6nAwtq+f1yUc3etByvIqv6C/0P6xh/q0HlDYu/9k2QuJFh+s
-         rEzKw6QdlewOCwZCcar2fnG00sKmXz07NxUjHPBSfm/v+H7Ellz/wBiIeMyjwLFr87
-         9bOD7+qfzXBgA==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-In-Reply-To: <20220901132336.33234-1-andriy.shevchenko@linux.intel.com>
-References: <20220901132336.33234-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/3] regmap: trace: Remove useless check for NULL for bulk ops
-Message-Id: <166239985949.822508.8248374962835676727.b4-ty@kernel.org>
-Date:   Mon, 05 Sep 2022 18:44:19 +0100
+        Mon, 5 Sep 2022 13:44:58 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE8115A39
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 10:44:57 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id io18so373106plb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 10:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date;
+        bh=Kdy7srNKCtjeqbxb9BysqC1LCV20DOnAdYhn3wpUgz4=;
+        b=xS/5n775MFoxRJcoj6fIp9Z/Y1S/RZ13V1LaX5TDHTIjCGHkrnnFN1M6XKJPYOZvY0
+         uvNhozEkZV0q0+hJbiSp8h6L6t+bi8QoAOoteh8Br01AgaDSWze+c61NbmVyiyDuuxKY
+         yECQNSGs+pdanmOFcpN8yAUfkiFZdJy/OQfxJvKe1GR110ci+vlk4u995uB4yC9Jav8U
+         tDSmCPeVlnW28ZshErkbiT7Pys26f3Sev4jwT9OfZVsXCuUl6iEFmviTGyFiABbLjagQ
+         k5bWhRhS3QQzRW3ToGbH9yxhKtidgcKsKV0HsNEWlwauEmcOyHEzQAj4srpFzNlb9K/K
+         dDlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Kdy7srNKCtjeqbxb9BysqC1LCV20DOnAdYhn3wpUgz4=;
+        b=dqpHoV/9hmkckRBxZfqgsntm4u4N66dIcGl95KJX5EeeBSZrmdwW63GdaL7e9+b3F9
+         mbkGrgzVf1W58P45EdYyExROvUWVclLpPz+wMGmN9+95UiY9PMthF1Ly2QqtBprBCtPO
+         CXmsuf3Upq0yfwvUSVCAhNlbgpT6yXDjucXQx4FELQX0pKX/EGyDlv+thfPuI2d2GK6w
+         cx28uxO452E1Saur7rpDgNBQ04ViDtntcBzmBQnFkmprq3FDYS9Cs3zSefw7Z81JVMyU
+         ZEyDpW45br9byiehhuPn9rn/5lMUNyRrYTxziY6pkyTSGz1NaDYGMqLcsxRyP4cRc/wu
+         Mu4g==
+X-Gm-Message-State: ACgBeo0opovUsYW93+oXcOqK2P+6xVupd3Rd1B7cGvyRc8DPPxPWSY/j
+        V687Qyj66qBQCoCY6yPDU0gPB2WQdAIBbg==
+X-Google-Smtp-Source: AA6agR7gZ8e1eP+vIxgWOjpFysLPO8oTFhYe41YOx2ZynSWONvcXp6us67T35FK2FML2yjA4z5ud6Q==
+X-Received: by 2002:a17:90a:8911:b0:1fa:c8f7:1450 with SMTP id u17-20020a17090a891100b001fac8f71450mr19984246pjn.123.1662399897297;
+        Mon, 05 Sep 2022 10:44:57 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id t18-20020a170902e85200b001753eb6668csm7877143plg.251.2022.09.05.10.44.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 10:44:56 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-block@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220905063253.120082-1-jiapeng.chong@linux.alibaba.com>
+References: <20220905063253.120082-1-jiapeng.chong@linux.alibaba.com>
+Subject: Re: [PATCH v2] block/blk-map: Remove set but unused variable 'added'
+Message-Id: <166239989655.374444.6422945735649090194.b4-ty@kernel.dk>
+Date:   Mon, 05 Sep 2022 11:44:56 -0600
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.10.0-dev-65ba7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Sep 2022 16:23:34 +0300, Andy Shevchenko wrote:
-> If the buffer pointer is NULL we already are in troubles since
-> regmap bulk API expects caller to provide valid parameters,
-> it dereferences that without any checks before we call for
-> traces.
+On Mon, 5 Sep 2022 14:32:53 +0800, Jiapeng Chong wrote:
+> The variable added is not effectively used in the function, so delete
+> it.
 > 
-> Moreover, the current code will print garbage in the case of
-> buffer is NULL and length is not 0.
+> block/blk-map.c:273:16: warning: variable 'added' set but not used.
 > 
-> [...]
+> 
 
-Applied to
+Applied, thanks!
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+[1/1] block/blk-map: Remove set but unused variable 'added'
+      commit: 91e5adda5cf4e3bf21c46eaa2ae7ee2cb6058126
 
-Thanks!
+Best regards,
+-- 
+Jens Axboe
 
-[1/3] regmap: trace: Remove useless check for NULL for bulk ops
-      commit: f78d5e1168e08429bc948d09b6dc11fec5e019f7
-[2/3] regmap: trace: Remove explicit castings
-      commit: d10268a50bdbc03ebb6d340d63bf78c44d7c66a8
-[3/3] regmap: trace: Remove unneeded blank lines
-      commit: 6ed406ef9f74372282c3b515e64986120823f769
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4176F5ADBB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589C45ADBB6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbiIEXJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 19:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        id S232560AbiIEXJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 19:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiIEXIi (ORCPT
+        with ESMTP id S230005AbiIEXIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 19:08:38 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2079269F69
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 16:08:28 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id m5so7100065qkk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 16:08:28 -0700 (PDT)
+        Mon, 5 Sep 2022 19:08:40 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B78B6A488
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 16:08:29 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id m9so4564841qvv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 16:08:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=5nia01YVD1nOxZpuw1Ju3+MSuIMcZP6UORERwrWolic=;
-        b=Hcj7b7/mvchl/778193I7X2cHOU66rPsy7p0dNS9j8Gi3qP9idutbicIcbR+6j0op0
-         nF1C02g+0KMG/tbH/e1NnKiJvUPilOaJbLGJw8/XM3ttHJSpRCC5QdIPiMYmAb6ZAAjI
-         qk06hGPXUQnasmdjdkKSqpgBCqnrSabABX2FOaOaRBgYFc2hygQBy8tDmps797rdfX2m
-         QSf5ckbUXWlIKWyykf0dQo7K2nbRR6KB2+O4ZVDQD3G8xeSy0ryTFffmjfUyja8/EYcY
-         AgqhmEszZgWYj4V6z6HKlnfeP255UZw4k+x73+bpGnuS1kSDl3oDVG2Wpj8mFsMmJHUb
-         htxQ==
+        bh=O4yRGqEn6L/4OFD6cxa3VXtqQyIbnJ79Kwqapqi4kFI=;
+        b=JJwG3wZl+3v7TyUrdNN78c67d0VjSAHn0E2H2AEfKVcLs07nDDFnz0mp35a1sklXlp
+         MOkYRV4lGznqDAwiJh7cvoRUpLohHpYJm/CCFvsICkN3+Uvn6Nt8OWffVyjNpAePuuJH
+         +YuPNoYWEr+UN224P5VnXRpl3kEIpcgip5j1YQIFOmEYmPK15ThPo/pnMTl3QX/+/G0l
+         4iKyTUZI5CQ1CRtCoQfogIP3bVTKl441e2wymERu/Cz5SvDvVpFJe+Hy+0CcRqMMvgIU
+         JeOzcAhNzPyEpFIaxZLbU6oohO9b3Fy7P4piH815ZO2N6BlazgxJIVkrVf0hVXKsP6ot
+         QNiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=5nia01YVD1nOxZpuw1Ju3+MSuIMcZP6UORERwrWolic=;
-        b=En8JA61nokFpZ4Tl3bT3yWzErm6zBQA/bybdWi/+KVwPV1yUUzRcYOf2xXAgftLVCZ
-         hJZvSRdBW9dlaFnvyOocUHn5ecJoEpB0N6t2HOB5fJJfij9x5Dg7e5OKHOMQN7FRTp+X
-         Fak8e8WReGu6qclhedqo8RMhjxmIBoR217D6khRD+ex3rTjHAMlL6JfqCDt83bxLR9rh
-         14otGCSG8fTmzS2vj5lLnaTwH4SskbefSJJb84Z1PaR4TeuMIXPS+15TQ+NlUuVrmc9W
-         /F0fG+fD+r14APsS7thZD320rGYUkqfB8jhegZqjESLaVplzHZfmMs8WXMKBjfNOTjEg
-         ddsA==
-X-Gm-Message-State: ACgBeo0pfS7+Q7/hHtFA9Qrt84smvcnfF/y/xKYRk5yE2czJf1Wq/nHu
-        Dc9iFuBE1JEJpLSg/sEOrOPyVF2MfBs=
-X-Google-Smtp-Source: AA6agR6TyDOcWsBx7ANttUfOkGRDfVaPJJ6/zKxgOsfByiGkVBlSfVsUnp/Z3X+WlI2U5osgYW+6vA==
-X-Received: by 2002:a05:620a:69c:b0:6bb:ebec:39c1 with SMTP id f28-20020a05620a069c00b006bbebec39c1mr33966927qkh.600.1662419307078;
-        Mon, 05 Sep 2022 16:08:27 -0700 (PDT)
+        bh=O4yRGqEn6L/4OFD6cxa3VXtqQyIbnJ79Kwqapqi4kFI=;
+        b=teV3EjSYigrq8/e66Gexs5K1gpq9DgUKp3P1R9Sm3a4rJ8RX+DQxfLMBDgQeIoq/e+
+         kWIh6b1YWlu8w2oDFyn0Kbw+YRJBpEe84q2IrwH3FuD21hAZfNgZDJ59CQAaCW4rAObE
+         jYa0kXg/6bqYE0q3XRPWdJkHePNffOKniQ6Smw2rksHv4UYoOe60nQ1EWm8MQBDq00QT
+         50H83K3ZOk3X36HuAQ9ZpBB4VO8937fC3amZbM5WSWz33cj6E+dK6YAfO3WkgKsA842a
+         gP/8gSdY9/qRHuiWy8QKibqZeCmGbkOd+G1TOFwI6zDcCjgMVxsIsk3DP2biRa9pfx+X
+         zHKw==
+X-Gm-Message-State: ACgBeo2G6kW64+W1y7AvA4mfBjeQniCYdzMi/ycSBwdnaGWkozjDguxW
+        d/fTWg77S1afM09Y8yDXGMRnxlZIA0o=
+X-Google-Smtp-Source: AA6agR6dh4igMPx1JjrupJhhmgnLE84HKJdEzxqcVsLZquVcZL+yCpw3prOLIvk5CN3f5ECJecMaSw==
+X-Received: by 2002:a05:6214:20a8:b0:477:1882:3e7 with SMTP id 8-20020a05621420a800b00477188203e7mr42914082qvd.44.1662419308057;
+        Mon, 05 Sep 2022 16:08:28 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:2270:dde1:6b3e:62e9:1461])
-        by smtp.gmail.com with ESMTPSA id o11-20020ac872cb000000b003422c7ccbc5sm7954128qtp.59.2022.09.05.16.08.26
+        by smtp.gmail.com with ESMTPSA id d3-20020a05620a166300b006b5c061844fsm8916289qko.49.2022.09.05.16.08.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 16:08:26 -0700 (PDT)
+        Mon, 05 Sep 2022 16:08:27 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Yury Norov <yury.norov@gmail.com>,
@@ -65,9 +65,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Sander Vanheule <sander@svanheule.net>,
         Alexey Klimov <klimov.linux@gmail.com>,
         Eric Biggers <ebiggers@google.com>
-Subject: [PATCH v2 4/5] lib/cpumask: deprecate nr_cpumask_bits
-Date:   Mon,  5 Sep 2022 16:08:19 -0700
-Message-Id: <20220905230820.3295223-5-yury.norov@gmail.com>
+Subject: [PATCH v2 5/5] lib/cpumask: add FORCE_NR_CPUS config option
+Date:   Mon,  5 Sep 2022 16:08:20 -0700
+Message-Id: <20220905230820.3295223-6-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220905230820.3295223-1-yury.norov@gmail.com>
 References: <20220905230820.3295223-1-yury.norov@gmail.com>
@@ -83,57 +83,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cpumask code is written in assumption that when CONFIG_CPUMASK_OFFSTACK
-is enabled, all cpumasks have boot-time defined size, otherwise the size
-is always NR_CPUS.
+The size of cpumasks is hard-limited by compile-time parameter NR_CPUS,
+but defined at boot-time when kernel parses ACPI/DT tables, and stored in
+nr_cpu_ids. In many practical cases, number of CPUs for a target is known
+at compile time, and can be provided with NR_CPUS.
 
-The latter is wrong because the number of possible cpus is always
-calculated on boot, and it may be less than NR_CPUS.
+In that case, compiler may be instructed to rely on NR_CPUS as on actual
+number of CPUs, not an upper limit. It allows to optimize many cpumask
+routines and significantly shrink size of the kernel image.
 
-On my 4-cpu arm64 VM the nr_cpu_ids is 4, as expected, and nr_cpumask_bits
-is 256, which corresponds to NR_CPUS. This not only leads to useless
-traversing of cpumask bits greater than 4, this also makes some cpumask
-routines fail.
+This patch adds FORCE_NR_CPUS option to teach the compiler to rely on
+NR_CPUS and enable corresponding optimizations.
 
-For example, cpumask_full(0b1111000..000) would erroneously return false
-in the example above because tail bits in the mask are all unset.
+If FORCE_NR_CPUS=y, kernel will not set nr_cpu_ids at boot, but only check
+that the actual number of possible CPUs is equal to NR_CPUS, and WARN if
+that doesn't hold.
 
-This patch deprecates nr_cpumask_bits and wires it to nr_cpu_ids
-unconditionally, so that cpumask routines will not waste time traversing
-unused part of cpu masks. It also fixes cpumask_full() and similar
-routines.
+The new option is especially useful in embedded applications because
+kernel configurations are unique for each SoC, the number of CPUs is
+constant and known well, and memory limitations are typically harder.
 
-As a side effect, because now a length of cpumasks is defined at run-time
-even if CPUMASK_OFFSTACK is disabled, compiler can't optimize corresponding
-functions.
-
-It increases kernel size by ~2.5KB if OFFSTACK is off. This is addressed in
-the following patch.
+For my 4-CPU ARM64 build with NR_CPUS=4, FORCE_NR_CPUS=y saves 46KB:
+  add/remove: 3/4 grow/shrink: 46/729 up/down: 652/-46952 (-46300)
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/linux/cpumask.h | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ include/linux/cpumask.h | 10 +++++++---
+ kernel/smp.c            |  2 +-
+ lib/Kconfig             |  9 +++++++++
+ 3 files changed, 17 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 8bac1dee8448..e01fba8ecc27 100644
+index e01fba8ecc27..0753202819e5 100644
 --- a/include/linux/cpumask.h
 +++ b/include/linux/cpumask.h
-@@ -46,13 +46,8 @@ static inline void set_nr_cpu_ids(unsigned int nr)
- }
+@@ -35,16 +35,20 @@ typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS); } cpumask_t;
+  */
+ #define cpumask_pr_args(maskp)		nr_cpu_ids, cpumask_bits(maskp)
+ 
+-#if NR_CPUS == 1
+-#define nr_cpu_ids		1U
++#if (NR_CPUS == 1) || defined(CONFIG_FORCE_NR_CPUS)
++#define nr_cpu_ids ((unsigned int)NR_CPUS)
+ #else
+ extern unsigned int nr_cpu_ids;
++#endif
+ 
+ static inline void set_nr_cpu_ids(unsigned int nr)
+ {
++#if (NR_CPUS == 1) || defined(CONFIG_FORCE_NR_CPUS)
++	WARN_ON(nr != nr_cpu_ids);
++#else
+ 	nr_cpu_ids = nr;
+-}
  #endif
++}
  
--#ifdef CONFIG_CPUMASK_OFFSTACK
--/* Assuming NR_CPUS is huge, a runtime limit is more efficient.  Also,
-- * not all bits may be allocated. */
-+/* Deprecated. Always use nr_cpu_ids. */
+ /* Deprecated. Always use nr_cpu_ids. */
  #define nr_cpumask_bits	nr_cpu_ids
--#else
--#define nr_cpumask_bits	((unsigned int)NR_CPUS)
--#endif
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 150310a0947a..661d09ae5d6a 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -1088,7 +1088,7 @@ static int __init maxcpus(char *str)
  
- /*
-  * The following particular system cpumasks and operations manage
+ early_param("maxcpus", maxcpus);
+ 
+-#if (NR_CPUS > 1)
++#if (NR_CPUS > 1) && !defined(CONFIG_FORCE_NR_CPUS)
+ /* Setup number of possible processor ids */
+ unsigned int nr_cpu_ids __read_mostly = NR_CPUS;
+ EXPORT_SYMBOL(nr_cpu_ids);
+diff --git a/lib/Kconfig b/lib/Kconfig
+index dc1ab2ed1dc6..77ead982c8b9 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -527,6 +527,15 @@ config CPUMASK_OFFSTACK
+ 	  them on the stack.  This is a bit more expensive, but avoids
+ 	  stack overflow.
+ 
++config FORCE_NR_CPUS
++       bool "NR_CPUS is set to an actual number of CPUs"
++       depends on SMP
++       help
++         Say Yes if you have NR_CPUS set to an actual number of possible
++         CPUs in your system, not to a default value. This forces the core
++         code to rely on compile-time value and optimize kernel routines
++         better.
++
+ config CPU_RMAP
+ 	bool
+ 	depends on SMP
 -- 
 2.34.1
 

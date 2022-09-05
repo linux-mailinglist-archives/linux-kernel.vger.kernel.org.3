@@ -2,125 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B71A5AD4D3
+	by mail.lfdr.de (Postfix) with ESMTP id E582A5AD4D4
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238097AbiIEOa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237386AbiIEOa4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S237058AbiIEOa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 5 Sep 2022 10:30:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502DE252BF
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:30:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gxQZxrz6/Rmgmd2QHgOZBnPfQnJH2I/vdis+B00Izpw=; b=H8IdYE3vM9OygIjH6gEddeQqWy
-        wURL43ZQ8U8kNWUwDEejjJPrHRXxZ3ggxQZHq4KAiC+aNGO6znvPOaVK763MokIv2Ymd7//zyP9vk
-        ypyMIL2g+qmFvJseRroyyJoznSlSMDojJqRhjwfuaCh0CJ9F7+51GyIP2KQjgLo0SQWPq47nRXjoP
-        r7aJklZmeKbW9hwHotZwKhDj0LwH/PIPGyD7nJUOap0F/vQX583rwsco63KLWhQEF4GOog+upEduo
-        0vzd96rSxr2J8B1Y6LLoChzTkeZtXn0POrp7MciofPpcZGGELp+yWmQXIECm7c/6LnGkIMahLSdSR
-        lVUBnHwQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVD7M-009YGc-Tu; Mon, 05 Sep 2022 14:30:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8BE993002A3;
-        Mon,  5 Sep 2022 16:30:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6E2032B954D28; Mon,  5 Sep 2022 16:30:25 +0200 (CEST)
-Date:   Mon, 5 Sep 2022 16:30:25 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Bharata B Rao <bharata@amd.com>, ananth.narayan@amd.com,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
-Message-ID: <YxYIAVx2qJLMDJlC@hirez.programming.kicks-ass.net>
-References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
- <20220904010001.knlcejmw4lg2uzy3@box.shutemov.name>
- <64519d0b-b696-db47-52c2-303451e10c09@amd.com>
- <20220905134457.a2f7uluq42frsgwe@box.shutemov.name>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237179AbiIEOax (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 5 Sep 2022 10:30:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86653D5BE
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:30:52 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2EC911F9ED;
+        Mon,  5 Sep 2022 14:30:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662388251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QZY74CtrE2fNgBYPVcD9k7Aap6fAvNiS5mnQBJZXgfk=;
+        b=Y/sqvnNEb0jqjQip4GXS88Ch8H/DcZq7iVMHNE55WU6sJEmuy80sE2hSUZzklm47Vud7Tv
+        GaYLg9C/znmcnt40i6HNIirNichH0DDFmZcJstBQk+KznnSIlSLtXNKh3gqFQcM23c3YHM
+        usntVtX+azNzsWOe/Vhq5X+Pl62xyVQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662388251;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QZY74CtrE2fNgBYPVcD9k7Aap6fAvNiS5mnQBJZXgfk=;
+        b=JuuVPbKcN+146YtgSa5ELPUX+CWIK61n5BXmhJTwNDw/+cjRDPry6M5iM0kdQR1lmidbGQ
+        c+VZXhF3nKuL3SCg==
+Received: from hawking.suse.de (unknown [10.168.4.11])
+        by relay2.suse.de (Postfix) with ESMTP id 83EC32C141;
+        Mon,  5 Sep 2022 14:30:50 +0000 (UTC)
+Received: by hawking.suse.de (Postfix, from userid 17005)
+        id 92308444AFD; Mon,  5 Sep 2022 16:30:48 +0200 (CEST)
+From:   Andreas Schwab <schwab@suse.de>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
+        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com
+Subject: Re: [PATCH v3] drivers/perf: riscv_pmu_sbi: add support for PMU
+ variant on T-Head C9xx cores
+References: <20220905141644.2468891-1-heiko@sntech.de>
+X-Yow:  Everybody gets free BORSCHT!
+Date:   Mon, 05 Sep 2022 16:30:48 +0200
+In-Reply-To: <20220905141644.2468891-1-heiko@sntech.de> (Heiko Stuebner's
+        message of "Mon, 5 Sep 2022 16:16:44 +0200")
+Message-ID: <mvm4jxlao6f.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220905134457.a2f7uluq42frsgwe@box.shutemov.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 04:44:57PM +0300, Kirill A. Shutemov wrote:
-> On Mon, Sep 05, 2022 at 10:35:44AM +0530, Bharata B Rao wrote:
-> > Hi Kirill,
-> > 
-> > On 9/4/2022 6:30 AM, Kirill A. Shutemov wrote:
-> > > On Tue, Aug 30, 2022 at 04:00:53AM +0300, Kirill A. Shutemov wrote:
-> > >> Linear Address Masking[1] (LAM) modifies the checking that is applied to
-> > >> 64-bit linear addresses, allowing software to use of the untranslated
-> > >> address bits for metadata.
-> > >>
-> > >> The patchset brings support for LAM for userspace addresses. Only LAM_U57 at
-> > >> this time.
-> > >>
-> > >> Please review and consider applying.
-> > >>
-> > >> git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
-> > > 
-> > > +Bharata, Ananth.
-> > > 
-> > > Do you folks have any feedback on the patchset?
-> > > 
-> > > Looks like AMD version of the tagged pointers feature does not get
-> > > traction as of now, but I want to be sure that the interface introduced
-> > > here can be suitable for your future plans.
-> > > 
-> > > Do you see anything in the interface that can prevent it to be extended to
-> > > the AMD feature?
-> > 
-> > The arch_prctl() extensions is generic enough that it should be good.
-> > 
-> > The untagged_addr() macro looks like this from one of the callers:
-> > 
-> >         start = untagged_addr(mm, start);
-> > ffffffff814d39bb:       48 8b 8d 40 ff ff ff    mov    -0xc0(%rbp),%rcx
-> > ffffffff814d39c2:       48 89 f2                mov    %rsi,%rdx
-> > ffffffff814d39c5:       48 c1 fa 3f             sar    $0x3f,%rdx
-> > ffffffff814d39c9:       48 0b 91 50 03 00 00    or     0x350(%rcx),%rdx
-> > ffffffff814d39d0:       48 21 f2                and    %rsi,%rdx
-> > ffffffff814d39d3:       49 89 d6                mov    %rdx,%r14
-> > 
-> > Can this overhead of a few additional instructions be removed for
-> > platforms that don't have LAM feature? I haven't measured how much
-> > overhead this effectively contributes to in real, but wonder if it is
-> > worth optimizing for non-LAM platforms.
-> 
-> I'm not sure how the optimization should look like. I guess we can stick
-> static_cpu_has() there, but I'm not convinced that adding jumps there will
-> be beneficial.
+On Sep 05 2022, Heiko Stuebner wrote:
 
-I suppose the critical bit is the memory load. That can stall and then
-you're sad. A jump_label is easy enough to add.
+> To work properly, this requires a matching change in SBI, though the actual
+> interface between kernel and SBI does not change.
+
+What happens if you mix different kernel and SBI versions?
+
+-- 
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."

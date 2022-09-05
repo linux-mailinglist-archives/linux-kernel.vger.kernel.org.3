@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6EE5ACCF3
+	by mail.lfdr.de (Postfix) with ESMTP id 83AC95ACCF2
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236632AbiIEHfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S237041AbiIEHfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236624AbiIEHez (ORCPT
+        with ESMTP id S236903AbiIEHfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:34:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C90140ED
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662363293; x=1693899293;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+nTHFuemR5oM1NhPlF1zfB39r/A8m5ItXCejZ9C21So=;
-  b=cjmQDzmvbQGWpAiu/d0m96tQYspuEDhtkPX0R1CjtUUERWkqlf3h7oe1
-   LpKrrSnYGSmXVkmVwKj/1FRqaSxkhb6uJuyn2kgV5ZjHH+q5GMNcbn3ML
-   aPkFJ/vSf/Xf0pedkGvjq0VtATMRyYMTkQJuqRpnfHeKAtIzMKrsWjGpm
-   0/zXbIRvViyxsvP/ggjLmgHeTCwmbRmc2ijGTHy8BMIn7jKWKpa62zhek
-   /tISp8YoXWk1xEasa/jJlvluzGlv8/TCUripftpcgyVINir1oWcuX5Vuy
-   fu3ThHHdt/x1uhhQIAeisu64YQ9EYmRaqQp5qhv8BKZDGzMqvNx54rrK6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="296332713"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="296332713"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 00:34:52 -0700
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="609595403"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.56.151])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 00:34:50 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 6/6] perf intel-pt: Remove first line of log dumped on error
-Date:   Mon,  5 Sep 2022 10:34:24 +0300
-Message-Id: <20220905073424.3971-7-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220905073424.3971-1-adrian.hunter@intel.com>
-References: <20220905073424.3971-1-adrian.hunter@intel.com>
+        Mon, 5 Sep 2022 03:35:24 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5F831A3B3;
+        Mon,  5 Sep 2022 00:35:02 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxX+CWphVjdJgRAA--.7347S3;
+        Mon, 05 Sep 2022 15:34:47 +0800 (CST)
+Subject: Re: [PATCH V3] LoongArch: Add efistub booting support
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+References: <20220819102037.2697798-1-chenhuacai@loongson.cn>
+ <9b6f0aeaebbd36882b5b40d655f9ccd20c7be496.camel@xry111.site>
+ <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com>
+ <CAAhV-H6MR=rWhecY_uuiXAysED-BBJhKhGHj2cCkefJiPOo-ZQ@mail.gmail.com>
+ <CAAhV-H4KXVUBgNoQxOFiEj2AH-ojhnrEJ8QLvNrALY69MhXF3w@mail.gmail.com>
+ <CAMj1kXHJv_6mLhMikg+ic7=EUABLdrX3f__eBbHntrpGHjRfXg@mail.gmail.com>
+ <CAAhV-H4WTCRU9qShDp57AZ2DG1uz+=GTz14zyAUaqVDjXrNABA@mail.gmail.com>
+ <CAMj1kXFRsEJOS2Kim8T64rYF85_bmmZ5gW7kjb8eDXry5SA+cg@mail.gmail.com>
+ <CAAhV-H4xDB6JPCEZqQ6+VadOPnzA3beguiuTRS-Ub=Ci5FgpPw@mail.gmail.com>
+Cc:     Xi Ruoyao <xry111@xry111.site>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <aecbb170-d351-f6a1-57f5-f17415017dbb@loongson.cn>
+Date:   Mon, 5 Sep 2022 15:34:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAAhV-H4xDB6JPCEZqQ6+VadOPnzA3beguiuTRS-Ub=Ci5FgpPw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxX+CWphVjdJgRAA--.7347S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Wry5uryxGrW7tw4rtr4Dtwb_yoW7Xryxp3
+        4xGFW8tF4DJr1rGwn2q3WUua42vw13Ar17Xrn8try8Awn0vrnIqr1Iqr45uFyUZw1Ikw12
+        vF4jq347uF15ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_GF4l42xK82IYc2Ij64vIr4
+        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
+        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUeeOJUUUUU
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,71 +75,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of printing "(first line may be sliced)", always remove the
-first line of the debug log if the buffer has wrapped when dumping on
-error.
+Hi, Huacai
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
+On 09/05/2022 03:24 PM, Huacai Chen wrote:
+> Hi, Ard and Youling,
+>
+> On Mon, Sep 5, 2022 at 3:02 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>>
+>> On Mon, 5 Sept 2022 at 05:51, Huacai Chen <chenhuacai@kernel.org> wrote:
+>>>
+>>> Hi, Ard,
+>>>
+>>> On Mon, Sep 5, 2022 at 5:59 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+>>>>
+>>>> On Sun, 4 Sept 2022 at 15:24, Huacai Chen <chenhuacai@kernel.org> wrote:
+>>>>>
+>>>>> Hi, Ard,
+>>>>>
+>>>>> On Thu, Sep 1, 2022 at 6:40 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+>>>>>>
+>>>>>> Hi, Ard,
+>>>>>>
+>>>>>> On Sat, Aug 27, 2022 at 3:14 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>>>>>>>
+>>>>>>> On Sat, 27 Aug 2022 at 06:41, Xi Ruoyao <xry111@xry111.site> wrote:
+>>>>>>>>
+>>>>>>>> Tested V3 with the magic number check manually removed in my GRUB build.
+>>>>>>>> The system boots successfully.  I've not tested Arnd's zBoot patch yet.
+>>>>>>>
+>>>>>>> I am Ard not Arnd :-)
+>>>>>>>
+>>>>>>> Please use this branch when testing the EFI decompressor:
+>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-decompressor-v4
+>>>>>> The root cause of LoongArch zboot boot failure has been found, it is a
+>>>>>> binutils bug, latest toolchain with the below patch can solve the
+>>>>>> problem.
+>>>>>>
+>>>>>> diff --git a/bfd/elfnn-loongarch.c b/bfd/elfnn-loongarch.c
+>>>>>> index 5b44901b9e0..fafdc7c7458 100644
+>>>>>> --- a/bfd/elfnn-loongarch.c
+>>>>>> +++ b/bfd/elfnn-loongarch.c
+>>>>>> @@ -2341,9 +2341,10 @@ loongarch_elf_relocate_section (bfd
+>>>>>> *output_bfd, struct bfd_link_info *info,
+>>>>>>      case R_LARCH_SOP_PUSH_PLT_PCREL:
+>>>>>>        unresolved_reloc = false;
+>>>>>>
+>>>>>> -      if (resolved_to_const)
+>>>>>> +      if (!is_undefweak && resolved_to_const)
+>>>>>>          {
+>>>>>>            relocation += rel->r_addend;
+>>>>>> +          relocation -= pc;
+>>>>>>            break;
+>>>>>>          }
+>>>>>>        else if (is_undefweak)
+>>>>>>
+>>>>>>
+>>>>>> Huacai
+>>>>> Now the patch is submitted here:
+>>>>> https://sourceware.org/pipermail/binutils/2022-September/122713.html
+>>>>>
+>>>>
+>>>> Great. Given the severity of this bug, I imagine that building the
+>>>> LoongArch kernel will require a version of binutils that carries this
+>>>> fix.
+>>>>
+>>>> Therefore, i will revert back to the original approach for accessing
+>>>> uncompressed_size, using an extern declaration with an __aligned(1)
+>>>> attribute.
+>>>>
+>>>>> And I have some other questions about kexec: kexec should jump to the
+>>>>> elf entry or the pe entry? I think is the elf entry, because if we
+>>>>> jump to the pe entry, then SVAM will be executed twice (but it should
+>>>>> be executed only once). However, how can we jump to the elf entry if
+>>>>> we use zboot? Maybe it is kexec-tool's responsibility to decompress
+>>>>> the zboot kernel image?
+>>>>>
+>>>>
+>>>> Yes, very good point. Kexec kernels cannot boot via the EFI entry
+>>>> point, as the boot services will already be shutdown. So the kexec
+>>>> kernel needs to boot via the same entrypoint in the core kernel that
+>>>> the EFI stub calls when it hands over.
+>>>>
+>>>> For the EFI zboot image in particular, we will need to teach kexec how
+>>>> to decompress them. The zboot image has a header that
+>>>> a) describes it as a EFI linux zimg
+>>>> b) describes the start and end offset of the compressed payload
+>>>> c) describes which compression algorithm was used.
+>>>>
+>>>> This means that any non-EFI loader (including kexec) should be able to
+>>>> extract the inner PE/COFF image and decompress it. For arm64 and
+>>>> RISC-V, this is sufficient as the EFI and raw images are the same. For
+>>>> LoongArch, I suppose it means we need a way to enter the core kernel
+>>>> directly via the entrypoint that the EFI stub uses when handing over
+>>>> (and pass the original DT argument so the kexec kernel has access to
+>>>> the EFI and ACPI firmware tables)
+>>> OK, then is this implementation [1] acceptable? I remember that you
+>>> said the MS-DOS header shouldn't contain other information, so I guess
+>>> this is unacceptable?
+>>>
+>>
+>> No, this looks reasonable to me. I objected to using magic numbers in
+>> the 'pure PE' view of the image, as it does not make sense for a pure
+>> PE loader such as GRUB to rely on such metadata.
+>>
+>> In this case (like on arm64), we are dealing with something else: we
+>> need to identify the image to the kernel itself, and here, using the
+>> unused space in the MS-DOS header is fine.
+>>
+>>> [1] https://lore.kernel.org/loongarch/c4dbb14a-5580-1e47-3d15-5d2079e88404@loongson.cn/T/#mb8c1dc44f7fa2d3ef638877f0cd3f958f0be96ad
+> OK, then there is no big problem here. And I found that arm64/riscv
+> don't need the kernel entry point in the header. I don't know why, but
+> I think it implies that a unified layout across architectures is
+> unnecessary, and I prefer to put the kernel entry point before
+> effective kernel size. :)
 
+The kernel entry point is added because LoongArch has not implemented
+purgatory in kexec-tools, so I want to get it from the head through a
+simpler method, similar to the elf image operation.
 
-Changes in V2:
+Youling.
 
-	Remove first line only if the buffer has wrapped.
-
-
- .../perf/util/intel-pt-decoder/intel-pt-log.c | 33 ++++++++++++++++---
- 1 file changed, 28 insertions(+), 5 deletions(-)
-
-diff --git a/tools/perf/util/intel-pt-decoder/intel-pt-log.c b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
-index 24684edc49f7..ef55d6232cf0 100644
---- a/tools/perf/util/intel-pt-decoder/intel-pt-log.c
-+++ b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
-@@ -143,16 +143,39 @@ static FILE *log_buf__open(struct log_buf *b, FILE *backend, unsigned int sz)
- 	return file;
- }
- 
-+static bool remove_first_line(const char **p, size_t *n)
-+{
-+	for (; *n && **p != '\n'; ++*p, --*n)
-+		;
-+	if (*n) {
-+		*p += 1;
-+		*n -= 1;
-+		return true;
-+	}
-+	return false;
-+}
-+
-+static void write_lines(const char *p, size_t n, FILE *fp, bool *remove_first)
-+{
-+	if (*remove_first)
-+		*remove_first = !remove_first_line(&p, &n);
-+	fwrite(p, n, 1, fp);
-+}
-+
- static void log_buf__dump(struct log_buf *b)
- {
-+	bool remove_first = false;
-+
- 	if (!b->buf)
- 		return;
- 
--	fflush(f);
--	fprintf(b->backend, "Dumping debug log buffer (first line may be sliced)\n");
--	if (b->wrapped)
--		fwrite(b->buf + b->head, b->buf_sz - b->head, 1, b->backend);
--	fwrite(b->buf, b->head, 1, b->backend);
-+	fflush(f); /* Could update b->head and b->wrapped */
-+	fprintf(b->backend, "Dumping debug log buffer\n");
-+	if (b->wrapped) {
-+		remove_first = true;
-+		write_lines(b->buf + b->head, b->buf_sz - b->head, b->backend, &remove_first);
-+	}
-+	write_lines(b->buf, b->head, b->backend, &remove_first);
- 	fprintf(b->backend, "End of debug log buffer dump\n");
- 
- 	b->head = 0;
--- 
-2.25.1
+>
+> Huacai
+>
+>>>
+>>> Huacai
 

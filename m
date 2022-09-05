@@ -2,101 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743875AD109
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA355AD111
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238211AbiIELBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S238111AbiIELBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238194AbiIELA4 (ORCPT
+        with ESMTP id S238074AbiIELA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:00:56 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CA052FC0;
-        Mon,  5 Sep 2022 04:00:21 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id f4so6074068qkl.7;
-        Mon, 05 Sep 2022 04:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ZeMo2PWVWCCE4kicxMFOEAyAOyDB4gnn7oyqH8IifhU=;
-        b=CTOoiLvwwBkvtH32c6w60zEVvHcTnoXO3ACu0Ys4kWjZ2v5rcWsBDH+vdDx4TQZ9hd
-         zoXITcV3yQclTjF5bSmp+qDBSGLQc9kK7p/Q6MVruLaf+yQ2ieawJUD0vtr6jFmlqqb5
-         VM0HxdCbbCyt9e3B0tD+nb2kHG9B39a4RXdVZ+gBaJ13JI/Bhg4cILs9FZoegyTQ+F+6
-         8fPJkAuVnPubU2LSPwAtno5IP1SguIVrVU1uTopFif2u8b6jICrnPWEduG2jMRNf+dw3
-         TOSVD6xw70ivt4BkffpLzGj1KiFTvRTD6M32zkdDHIex4lTV6wIEhedGMFPH+v+dK0yQ
-         6+JA==
+        Mon, 5 Sep 2022 07:00:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C638113D50
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 04:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662375620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2pfJJRiSb2ZSlfeZzAVjNGCSUsiw68cMF8aCQiIWPoI=;
+        b=AjbyhOHejhICeubRAvszkHBfj2MDM0UOB4oljauwy30vSpb0VWp3UMHDLQ2Pz1Xs7GsE/u
+        oRw5IgIoPfil//tZjwhXSaqOgPS2nf3UzXKR9gHlY72AgfkwGC2mhGKC9sG6j9ZK9qOgHr
+        Js7w0ymZG80se+27jnDJWuXxX8U4oEM=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-38-eJZBsvS7Pvu59DZWghQk_Q-1; Mon, 05 Sep 2022 07:00:19 -0400
+X-MC-Unique: eJZBsvS7Pvu59DZWghQk_Q-1
+Received: by mail-wr1-f71.google.com with SMTP id v15-20020adf8b4f000000b002285ec61b3aso681746wra.6
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 04:00:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZeMo2PWVWCCE4kicxMFOEAyAOyDB4gnn7oyqH8IifhU=;
-        b=ID92ImmyxY0COELUroDibC5SKWV7+XouiP+dUQ8KZU4XR4iRRmZ5L2mFhBHOrYTBev
-         c+/S8AHasfjjynWxAH+6quE6nKUVk+RMhNcBOKEZ7/hlr9xpzXoNz3wdrpsnIyWKsZ3H
-         aMnDtjcNlYFSKyk1IIAVOn7reJVoaK2qfRHozwoWs5r+lww3Eq9AeLasXd9cphc9A/AB
-         vkfDE9MWlrHfC12CThsgnnMtgwR6PqoYSmhkRPaZ7h9/jVHw84ccBlgmlh3SsVezrJJq
-         fqqNNNRStmWa49v/MUZmfPeuPakS2QrO0D+38W35gguIZPhK6yqvRtd1Z3GVQEhPNuuA
-         MX1w==
-X-Gm-Message-State: ACgBeo0wQw6Q+I300V/d4+Y5eAH1s6TPLkKdnwspDkpJk/vrBt1JznS+
-        yutQ5fd/PS2bULzANnZM+DrmEZBWPqXipJpkAcU=
-X-Google-Smtp-Source: AA6agR5QfYlB3faOXg1Xo9fT2kr66lBEoMt1tUwQEmf4Hjj69mFUh3WyFYB6EU5cllnnLi+qXnfCb/Dp4e9d3zghof0=
-X-Received: by 2002:a05:620a:288a:b0:6b8:fcfe:db02 with SMTP id
- j10-20020a05620a288a00b006b8fcfedb02mr32736370qkp.504.1662375620030; Mon, 05
- Sep 2022 04:00:20 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2pfJJRiSb2ZSlfeZzAVjNGCSUsiw68cMF8aCQiIWPoI=;
+        b=18eWm6jQu/o4JaXZG02pv89uNCjZkB4Qzj+3FjJfJXJpGO76ppMaEFDesqLtaQAp57
+         0j39Jt4bb13v/UfOJHlxRsngmjINblGEIMVNELnHcfToEoSJbZgMndEbC5Zi6O7z6DCL
+         zpnO1LImKC+hi7dtoTIjbU4hCxYiw+Gv53Hdi4q/J951WKvLhQc+etJvxN+Tg4/106Eq
+         /vGAef1nXv35JF/o7FtR6vCaoLfp0RfeEYtnXKAsQStbesdQZqfr+rb6xLINta1jK/dJ
+         LxDqepudmuVEmeVJnRu2MHqtIW79vVIzhojt1mPSaDpfKICwsF4cFvK2BJsf9xm3wHvk
+         klOQ==
+X-Gm-Message-State: ACgBeo2RMfeGcNjNB9+U0SytI6+fIBF2tfVC7Vt/lghvCYzVcx2jphUC
+        2iakD7qlykmbOOVXdMMVZIXqEqaDQ4gkDcGKKlGGm+iqaoihMzh/es9Gvr92tG/Q2foxRmz5mXw
+        Aa4kv9eE3qjIw8QV/3JOpCSlL
+X-Received: by 2002:a05:600c:29ca:b0:3a6:75fe:82af with SMTP id s10-20020a05600c29ca00b003a675fe82afmr10609470wmd.3.1662375618003;
+        Mon, 05 Sep 2022 04:00:18 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6sUmAHALGImsHXJaABta/ZqzyFke4VjRbqissy/caXyq3Iv6Hb+qDZ/L/rDzGBEi1YbgIjQw==
+X-Received: by 2002:a05:600c:29ca:b0:3a6:75fe:82af with SMTP id s10-20020a05600c29ca00b003a675fe82afmr10609448wmd.3.1662375617734;
+        Mon, 05 Sep 2022 04:00:17 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b0021e4829d359sm8661665wrs.39.2022.09.05.04.00.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 04:00:17 -0700 (PDT)
+Message-ID: <03b207a8-e09c-2858-fd54-b95f2e8e8d11@redhat.com>
+Date:   Mon, 5 Sep 2022 13:00:16 +0200
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-4-b29adfb27a6c@gmail.com>
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-4-b29adfb27a6c@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Sep 2022 13:59:44 +0300
-Message-ID: <CAHp75VdMr7wru-2hD1HH3OS5JTNdzt6VRqB6OFoCp2JkiuiTjw@mail.gmail.com>
-Subject: Re: [PATCH v1 04/11] usb: phy: tegra: switch to using devm_gpiod_get()
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] drm/ssd130x: Replace simple display helpers with the
+ atomic helpers
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+References: <20220828151114.1141510-1-javierm@redhat.com>
+ <6f499b1e-daa4-7de1-6ffc-151663807910@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <6f499b1e-daa4-7de1-6ffc-151663807910@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,38 +83,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+Hello Thomas,
+
+Thanks for your feedback and comments.
+
+On 9/5/22 12:41, Thomas Zimmermann wrote:
+> Hi Javier
+> 
+> Am 28.08.22 um 17:11 schrieb Javier Martinez Canillas:
+>> The simple display pipeline is a set of helpers that can be used by DRM
+>> drivers to avoid dealing with all the needed components and just define
+>> a few functions to operate a simple display device with one full-screen
+>> scanout buffer feeding a single output.
+>>
+>> But it is arguable that this provides the correct level of abstraction
+>> for simple drivers, and recently some have been ported from using these
+>> simple display helpers to use the regular atomic helpers instead.
+>>
+>> The rationale for this is that the simple display pipeline helpers don't
+>> hide that much of the DRM complexity, while adding an indirection layer
+>> that conflates the concepts of CRTCs and planes. This makes the helpers
+>> less flexible and harder to be reused among different graphics drivers.
+>>
+>> Also, for simple drivers, using the full atomic helpers doesn't require
+>> a lot of additional code. So adding a simple display pipeline layer may
+>> not be worth it.
+>>
+>> For these reasons, let's follow that trend and make ssd130x a plain DRM
+>> driver that creates its own primary plane, CRTC, enconder and connector.
+> 
+> Thanks for considering this change.
 >
-> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> device property API.
+
+You are welcome and thanks to you for mentioning this to me. After doing
+this I'm convinced as well that the simple-KMS / simple display pipeline
+abstraction doesn't add any value and we should just drop it in favor of
+the full atomic helpers.
+
+>>
+>> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> 
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 >
-> I believe that the only reason the driver, instead of the standard
-> devm_gpiod_get(), used devm_gpiod_get_from_of_node() is because it
-> wanted to set up a pretty consumer name for the GPIO, and we now have
-> a special API for that.
 
-...
+Thanks!
+ 
+> There are a few questions below.
+> 
 
-> -               gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
-> -                                                   "nvidia,phy-reset-gpio",
-> -                                                   0, GPIOD_OUT_HIGH,
-> -                                                   "ulpi_phy_reset_b");
-> +               gpiod = devm_gpiod_get(&pdev->dev, "nvidia,phy-reset",
-> +                                      GPIOD_OUT_HIGH);
->                 err = PTR_ERR_OR_ZERO(gpiod);
+[...]
 
-What does _OR_ZERO mean now?
+>> +static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
+>> +						       struct drm_atomic_state *old_state)
+>>   {
+>> -	struct ssd130x_device *ssd130x = drm_to_ssd130x(pipe->crtc.dev);
+>> +	struct drm_plane_state *plane_state = plane->state;
+>> +	struct drm_plane_state *old_plane_state = drm_atomic_get_old_plane_state(old_state, plane);
+>>   	struct drm_shadow_plane_state *shadow_plane_state = to_drm_shadow_plane_state(plane_state);
+>> -	struct drm_device *drm = &ssd130x->drm;
+>> -	int idx, ret;
+>> +	struct drm_framebuffer *fb = plane_state->fb;
+>> +	struct drm_device *drm = plane->dev;
+>> +	struct drm_rect src_clip, dst_clip;
+>> +	int idx;
+>>   
+>> -	ret = ssd130x_power_on(ssd130x);
+>> -	if (ret)
+>> +	if (!fb)
+> 
+> I know that some other drivers do this check. But from reading 
+> drm_atomic_helper.c, it shouldn't be necesary. If !fb, the plane has 
+> been disabled. And because there's an implementation of atomic_disable, 
+> the helpers should never call atomic_update on disabled planes. I think 
+> the test can be removed.
+>
 
->                 if (err) {
->                         dev_err(&pdev->dev,
->                                 "Request failed for reset GPIO: %d\n", err);
->                         return err;
->                 }
+Yes, I just added because noticed that others drivers did. I'll drop it
+when posting a v2.
 
+[...]
 
+>> +static void ssd130x_encoder_helper_atomic_enable(struct drm_encoder *encoder,
+>> +						 struct drm_atomic_state *state)
+>> +{
+>> +	struct drm_device *drm = encoder->dev;
+>> +	struct ssd130x_device *ssd130x = drm_to_ssd130x(drm);
+>> +	int ret;
+>> +
+>> +	ret = ssd130x_power_on(ssd130x);
+>> +	if (ret)
+>>   		return;
+>>   
+>> -	ssd130x_fb_blit_rect(plane_state->fb, &shadow_plane_state->data[0], &dst_clip);
+>> +	ret = ssd130x_init(ssd130x);
+>> +	if (ret)
+>> +		return ssd130x_power_off(ssd130x);
+> 
+> It returns a value from a function returning 'void'?
+>
 
+Right. I'll fix it in v2 as well.
+ 
+> Is this function the correct place for ssd130x_init() ? It looks a bit 
+> heavy for a simple enable operation.
+> 
+
+Yes, I was abusing the concept of encoder here just to have a place where
+I could hook the enable / disable logic, since I was looking at the other
+DRM objects helper operations structures and found that these were only
+defined for the encoder.
+
+But there is technically no encoder on this device. As you can see, I was
+using DRM_MODE_ENCODER_NONE when the encoder is initialized.
+
+But I notice now that the struct drm_crtc_helper_funcs also have .enable
+and .disable callbacks, it seems I was just blind and didn't see before.
+
+Would having the init and poweroff logic in the CRTC helpers be correct
+to you or was do you have in mind ?
+
+> Best regards
+> Thomas
 -- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+

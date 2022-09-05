@@ -2,61 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF425AD856
+	by mail.lfdr.de (Postfix) with ESMTP id 093F15AD854
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237933AbiIERWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        id S238015AbiIERXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 13:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiIERWq (ORCPT
+        with ESMTP id S230479AbiIERXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:22:46 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D180252FD0;
-        Mon,  5 Sep 2022 10:22:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662398563; x=1693934563;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VHH0iXPIX4RQv5nKag2XfhZJ5wpVhFh6hH2lnW4mlUg=;
-  b=ZCkP9EdtphARuBBK/XzrJSC3BQZz9cJ5Ib9u0477YdnRN7a+fFoZIbVe
-   p+7C6P84fY0sEpeaHp/lRnaXDhVnAvR5BiZj1TzQva4CsqE8AAJYFzGYF
-   TgUxbFSwLwHdcDKaocGGSP4xnHS3eccoHBvrpc+d38f6uaGiQXqdKk40x
-   JbBv3AFivuO4TWo0/CDaS1aWybQ4joWCpThdzLZxtmKeWLxa8zVS6nRqP
-   L1VjmKH7YKyNPA1vaWc4Zf0c1LSaFckvX7drBjWSc87CEPNZoxykqwv/c
-   qTKVGw9zMEznlkUZzGDsW5lFGhCnNYsm6TxsyVihkpFWqbwC5H8x4p8cd
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="276823629"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="276823629"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 10:22:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="646965566"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 05 Sep 2022 10:22:41 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVFo0-0004NV-1n;
-        Mon, 05 Sep 2022 17:22:40 +0000
-Date:   Tue, 6 Sep 2022 01:22:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: drivers/dma/ppc4xx/adma.c:1329: warning: expecting prototype for
- ppc440spe_adma_device_estimate(). Prototype was for
- ppc440spe_adma_estimate() instead
-Message-ID: <202209060123.uhjAWgYf-lkp@intel.com>
+        Mon, 5 Sep 2022 13:23:18 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1219852FC4;
+        Mon,  5 Sep 2022 10:23:17 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id gb36so18281826ejc.10;
+        Mon, 05 Sep 2022 10:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=3g5pXO8vt8VikNU0nvZUDcJj8Xo4WnKc2gEqOdfk/2Q=;
+        b=kMTQO0WUPetKeIUvcWZYfOX/DronrP0ofp64pmqZgKYCc0kUackunOXwB4iHEeqOyH
+         CfavNCA+7H6XKO3VvCOJ/R6dsoRzdJrPTTjKXyNKUSquYd+u80h3DQdTIQTeCYymaS/b
+         88trMIUvJgHYJgRd1SULijR8wyvxd9HcssorkQripYdLDxrGpKxzGnEifUWjDo9Iflm5
+         BMUHeZ8tvzZsSBnuzKuft+KeU3XLBCDLjG3VfSoy+n+zKLJ5flEoU+8+s+MhpvsktleV
+         ZinXicUkywI0oDWEgr4o/7QmSDaiHRjNTRgU3tzBLdW9Uwb5GPJxWV4XlXrcwbt+Grb7
+         a8dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=3g5pXO8vt8VikNU0nvZUDcJj8Xo4WnKc2gEqOdfk/2Q=;
+        b=rHn6dL+hyHL/FkcyAA5Wi4gKCppLld4rCUuBQrycXRKDfMIc2YjPH1lpQ/RPHJbq0v
+         eETSFi8GM6+cGfOBnEo3aIBfHbUUVqIKMAva+OwC0yf/Mb/0QAkqEFG07vIo0c5gbjac
+         ds9XL3I3H2CBsNSoFB4DXOTMQlzdNhFnpR1RPO6a980EnxuNAqEKXhkq3UPq1DBRsNXj
+         FI7TeHMXlJHZEahPpVs5h8Q66xvJPuUn5ugARqoINBLwIYA2JZZJrR4gY5bIrhTYqZ79
+         wROn4tRXP/9L9wnVw2kSOmy9Kvu+MLHVBUe0DIqUCZoMAwhd3MuO1+PnL7pgqFnAdi6o
+         pUZA==
+X-Gm-Message-State: ACgBeo2tR/tgzfyhyZini7bHAyEwdALq6dZzBvkefsLrIVFuZKlRf/+I
+        k/G5xrH2AInwvKLFRbjRl6k=
+X-Google-Smtp-Source: AA6agR5mO71WxQwcBosJgPPuyOgbeJkdL8BB5q4tXfaGtIduchOQwHXDPDKlqipYIz267eLU8kBI3Q==
+X-Received: by 2002:a17:907:7fa5:b0:730:5d54:4c24 with SMTP id qk37-20020a1709077fa500b007305d544c24mr36795658ejc.641.1662398595531;
+        Mon, 05 Sep 2022 10:23:15 -0700 (PDT)
+Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
+        by smtp.gmail.com with ESMTPSA id r21-20020aa7d595000000b0043cc2c9f5adsm2699473edq.40.2022.09.05.10.23.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 10:23:15 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        =?ISO-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        =?ISO-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Subject: Re: [PATCH v3 2/5] arm64: dts: allwinner: h6: Add cooling map for GPU
+Date:   Mon, 05 Sep 2022 19:23:13 +0200
+Message-ID: <5855006.lOV4Wx5bFT@kista>
+In-Reply-To: <20220905171601.79284-3-peron.clem@gmail.com>
+References: <20220905171601.79284-1-peron.clem@gmail.com> <20220905171601.79284-3-peron.clem@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,297 +92,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+Dne ponedeljek, 05. september 2022 ob 19:15:58 CEST je Cl=E9ment P=E9ron=20
+napisal(a):
+> Add a simple cooling map for the GPU.
+>=20
+> This cooling map come from the vendor kernel 4.9 with a
+> 2=B0C hysteresis added.
+>=20
+> Signed-off-by: Cl=E9ment P=E9ron <peron.clem@gmail.com>
+> ---
+>  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 51 +++++++++++++++++++-
+>  1 file changed, 49 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi index
+> 5a28303d3d4c..1259ab0c3956 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> @@ -186,6 +186,7 @@ gpu: gpu@1800000 {
+>  			clocks =3D <&ccu CLK_GPU>, <&ccu CLK_BUS_GPU>;
+>  			clock-names =3D "core", "bus";
+>  			resets =3D <&ccu RST_BUS_GPU>;
+> +			#cooling-cells =3D <2>;
+>  			status =3D "disabled";
+>  		};
+>=20
+> @@ -1072,9 +1073,55 @@ map0 {
+>  		};
+>=20
+>  		gpu-thermal {
+> -			polling-delay-passive =3D <0>;
+> -			polling-delay =3D <0>;
+> +			polling-delay-passive =3D <1000>;
+> +			polling-delay =3D <2000>;
+>  			thermal-sensors =3D <&ths 1>;
+> +
+> +			trips {
+> +				gpu_alert0: gpu-alert-0 {
+> +					temperature =3D <95000>;
+> +					hysteresis =3D <2000>;
+> +					type =3D "passive";
+> +				};
+> +
+> +				gpu_alert1: gpu-alert-1 {
+> +					temperature =3D=20
+> <100000>;
+> +					hysteresis =3D <2000>;
+> +					type =3D "passive";
+> +				};
+> +
+> +				gpu_alert2: gpu-alert-2 {
+> +					temperature =3D=20
+> <105000>;
+> +					hysteresis =3D <2000>;
+> +					type =3D "passive";
+> +				};
+> +
+> +				gpu-crit {
+> +					temperature =3D=20
+> <115000>;
+> +					hysteresis =3D <0>;
+> +					type =3D "critical";
+> +				};
+> +			};
+> +
+> +			cooling-maps {
+> +				// Fordid the GPU to go over=20
+756MHz
 
-FYI, the error/warning still remains.
+Typo: Fordid -> Forbid
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7e18e42e4b280c85b76967a9106a13ca61c16179
-commit: 52042e2db45290f6a512d525518488b7bf143531 scripts: kernel-doc: validate kernel-doc markup with the actual names
-date:   1 year, 8 months ago
-config: powerpc-randconfig-r012-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060123.uhjAWgYf-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=52042e2db45290f6a512d525518488b7bf143531
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 52042e2db45290f6a512d525518488b7bf143531
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/dma/ppc4xx/
+Also next below.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Best regards,
+Jernej
 
-All warnings (new ones prefixed by >>):
-
-   drivers/dma/ppc4xx/adma.c:233: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_init_interrupt'
-   drivers/dma/ppc4xx/adma.c:233: warning: Function parameter or member 'chan' not described in 'ppc440spe_desc_init_interrupt'
-   drivers/dma/ppc4xx/adma.c:261: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_init_null_xor'
-   drivers/dma/ppc4xx/adma.c:273: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_init_xor'
-   drivers/dma/ppc4xx/adma.c:273: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_desc_init_xor'
-   drivers/dma/ppc4xx/adma.c:273: warning: Function parameter or member 'flags' not described in 'ppc440spe_desc_init_xor'
-   drivers/dma/ppc4xx/adma.c:293: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_init_dma2pq'
-   drivers/dma/ppc4xx/adma.c:293: warning: Function parameter or member 'dst_cnt' not described in 'ppc440spe_desc_init_dma2pq'
-   drivers/dma/ppc4xx/adma.c:293: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_desc_init_dma2pq'
-   drivers/dma/ppc4xx/adma.c:293: warning: Function parameter or member 'flags' not described in 'ppc440spe_desc_init_dma2pq'
-   drivers/dma/ppc4xx/adma.c:320: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_init_dma01pq'
-   drivers/dma/ppc4xx/adma.c:320: warning: Function parameter or member 'dst_cnt' not described in 'ppc440spe_desc_init_dma01pq'
-   drivers/dma/ppc4xx/adma.c:320: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_desc_init_dma01pq'
-   drivers/dma/ppc4xx/adma.c:320: warning: Function parameter or member 'flags' not described in 'ppc440spe_desc_init_dma01pq'
-   drivers/dma/ppc4xx/adma.c:320: warning: Function parameter or member 'op' not described in 'ppc440spe_desc_init_dma01pq'
-   drivers/dma/ppc4xx/adma.c:433: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_init_dma01pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:433: warning: Function parameter or member 'dst_cnt' not described in 'ppc440spe_desc_init_dma01pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:433: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_desc_init_dma01pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:503: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_init_memcpy'
-   drivers/dma/ppc4xx/adma.c:503: warning: Function parameter or member 'flags' not described in 'ppc440spe_desc_init_memcpy'
-   drivers/dma/ppc4xx/adma.c:526: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_set_src_addr'
-   drivers/dma/ppc4xx/adma.c:526: warning: Function parameter or member 'chan' not described in 'ppc440spe_desc_set_src_addr'
-   drivers/dma/ppc4xx/adma.c:526: warning: Function parameter or member 'src_idx' not described in 'ppc440spe_desc_set_src_addr'
-   drivers/dma/ppc4xx/adma.c:526: warning: Function parameter or member 'addrh' not described in 'ppc440spe_desc_set_src_addr'
-   drivers/dma/ppc4xx/adma.c:526: warning: Function parameter or member 'addrl' not described in 'ppc440spe_desc_set_src_addr'
-   drivers/dma/ppc4xx/adma.c:560: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_set_src_mult'
-   drivers/dma/ppc4xx/adma.c:560: warning: Function parameter or member 'chan' not described in 'ppc440spe_desc_set_src_mult'
-   drivers/dma/ppc4xx/adma.c:560: warning: Function parameter or member 'mult_index' not described in 'ppc440spe_desc_set_src_mult'
-   drivers/dma/ppc4xx/adma.c:560: warning: Function parameter or member 'sg_index' not described in 'ppc440spe_desc_set_src_mult'
-   drivers/dma/ppc4xx/adma.c:560: warning: Function parameter or member 'mult_value' not described in 'ppc440spe_desc_set_src_mult'
-   drivers/dma/ppc4xx/adma.c:605: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_set_dest_addr'
-   drivers/dma/ppc4xx/adma.c:605: warning: Function parameter or member 'chan' not described in 'ppc440spe_desc_set_dest_addr'
-   drivers/dma/ppc4xx/adma.c:605: warning: Function parameter or member 'addrh' not described in 'ppc440spe_desc_set_dest_addr'
-   drivers/dma/ppc4xx/adma.c:605: warning: Function parameter or member 'addrl' not described in 'ppc440spe_desc_set_dest_addr'
-   drivers/dma/ppc4xx/adma.c:605: warning: Function parameter or member 'dst_idx' not described in 'ppc440spe_desc_set_dest_addr'
-   drivers/dma/ppc4xx/adma.c:645: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_set_byte_count'
-   drivers/dma/ppc4xx/adma.c:645: warning: Function parameter or member 'chan' not described in 'ppc440spe_desc_set_byte_count'
-   drivers/dma/ppc4xx/adma.c:645: warning: Function parameter or member 'byte_count' not described in 'ppc440spe_desc_set_byte_count'
-   drivers/dma/ppc4xx/adma.c:666: warning: Function parameter or member 'byte_count' not described in 'ppc440spe_desc_set_rxor_block_size'
-   drivers/dma/ppc4xx/adma.c:679: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_set_dcheck'
-   drivers/dma/ppc4xx/adma.c:679: warning: Function parameter or member 'chan' not described in 'ppc440spe_desc_set_dcheck'
-   drivers/dma/ppc4xx/adma.c:679: warning: Function parameter or member 'qword' not described in 'ppc440spe_desc_set_dcheck'
-   drivers/dma/ppc4xx/adma.c:701: warning: Function parameter or member 'prev_desc' not described in 'ppc440spe_xor_set_link'
-   drivers/dma/ppc4xx/adma.c:701: warning: Function parameter or member 'next_desc' not described in 'ppc440spe_xor_set_link'
-   drivers/dma/ppc4xx/adma.c:724: warning: Function parameter or member 'chan' not described in 'ppc440spe_desc_set_link'
-   drivers/dma/ppc4xx/adma.c:724: warning: Function parameter or member 'prev_desc' not described in 'ppc440spe_desc_set_link'
-   drivers/dma/ppc4xx/adma.c:724: warning: Function parameter or member 'next_desc' not described in 'ppc440spe_desc_set_link'
-   drivers/dma/ppc4xx/adma.c:771: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_get_link'
-   drivers/dma/ppc4xx/adma.c:771: warning: Function parameter or member 'chan' not described in 'ppc440spe_desc_get_link'
-   drivers/dma/ppc4xx/adma.c:783: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_is_aligned'
-   drivers/dma/ppc4xx/adma.c:783: warning: Function parameter or member 'num_slots' not described in 'ppc440spe_desc_is_aligned'
-   drivers/dma/ppc4xx/adma.c:793: warning: Function parameter or member 'len' not described in 'ppc440spe_chan_xor_slot_count'
-   drivers/dma/ppc4xx/adma.c:793: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_chan_xor_slot_count'
-   drivers/dma/ppc4xx/adma.c:793: warning: Function parameter or member 'slots_per_op' not described in 'ppc440spe_chan_xor_slot_count'
-   drivers/dma/ppc4xx/adma.c:814: warning: Function parameter or member 'srcs' not described in 'ppc440spe_dma2_pq_slot_count'
-   drivers/dma/ppc4xx/adma.c:814: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_dma2_pq_slot_count'
-   drivers/dma/ppc4xx/adma.c:814: warning: Function parameter or member 'len' not described in 'ppc440spe_dma2_pq_slot_count'
-   drivers/dma/ppc4xx/adma.c:898: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_device_clear_eot_status'
-   drivers/dma/ppc4xx/adma.c:1017: warning: Function parameter or member 'chan' not described in 'ppc440spe_chan_is_busy'
-   drivers/dma/ppc4xx/adma.c:1050: warning: Function parameter or member 'chan' not described in 'ppc440spe_chan_set_first_xor_descriptor'
-   drivers/dma/ppc4xx/adma.c:1050: warning: Function parameter or member 'next_desc' not described in 'ppc440spe_chan_set_first_xor_descriptor'
-   drivers/dma/ppc4xx/adma.c:1076: warning: Function parameter or member 'chan' not described in 'ppc440spe_dma_put_desc'
-   drivers/dma/ppc4xx/adma.c:1076: warning: Function parameter or member 'desc' not described in 'ppc440spe_dma_put_desc'
-   drivers/dma/ppc4xx/adma.c:1095: warning: Function parameter or member 'chan' not described in 'ppc440spe_chan_append'
-   drivers/dma/ppc4xx/adma.c:1174: warning: Function parameter or member 'chan' not described in 'ppc440spe_chan_get_current_descriptor'
-   drivers/dma/ppc4xx/adma.c:1198: warning: Function parameter or member 'chan' not described in 'ppc440spe_chan_run'
-   drivers/dma/ppc4xx/adma.c:1252: warning: Function parameter or member 'srcs' not described in 'ppc440spe_can_rxor'
-   drivers/dma/ppc4xx/adma.c:1252: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_can_rxor'
-   drivers/dma/ppc4xx/adma.c:1252: warning: Function parameter or member 'len' not described in 'ppc440spe_can_rxor'
->> drivers/dma/ppc4xx/adma.c:1329: warning: expecting prototype for ppc440spe_adma_device_estimate(). Prototype was for ppc440spe_adma_estimate() instead
-   drivers/dma/ppc4xx/adma.c:1422: warning: Function parameter or member 'entry_idx' not described in 'ppc440spe_get_group_entry'
-   drivers/dma/ppc4xx/adma.c:1446: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_free_slots'
-   drivers/dma/ppc4xx/adma.c:1465: warning: Function parameter or member 'desc' not described in 'ppc440spe_adma_run_tx_complete_actions'
-   drivers/dma/ppc4xx/adma.c:1465: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_run_tx_complete_actions'
-   drivers/dma/ppc4xx/adma.c:1465: warning: Function parameter or member 'cookie' not described in 'ppc440spe_adma_run_tx_complete_actions'
-   drivers/dma/ppc4xx/adma.c:1489: warning: Function parameter or member 'desc' not described in 'ppc440spe_adma_clean_slot'
-   drivers/dma/ppc4xx/adma.c:1489: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_clean_slot'
-   drivers/dma/ppc4xx/adma.c:1534: warning: Function parameter or member 'chan' not described in '__ppc440spe_adma_slot_cleanup'
-   drivers/dma/ppc4xx/adma.c:1662: warning: Function parameter or member 't' not described in 'ppc440spe_adma_tasklet'
-   drivers/dma/ppc4xx/adma.c:1674: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_slot_cleanup'
-   drivers/dma/ppc4xx/adma.c:1686: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_alloc_slots'
-   drivers/dma/ppc4xx/adma.c:1686: warning: Function parameter or member 'num_slots' not described in 'ppc440spe_adma_alloc_slots'
-   drivers/dma/ppc4xx/adma.c:1686: warning: Function parameter or member 'slots_per_op' not described in 'ppc440spe_adma_alloc_slots'
-   drivers/dma/ppc4xx/adma.c:1765: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_alloc_chan_resources'
-   drivers/dma/ppc4xx/adma.c:1846: warning: Function parameter or member 'desc' not described in 'ppc440spe_rxor_set_region'
-   drivers/dma/ppc4xx/adma.c:1846: warning: Function parameter or member 'xor_arg_no' not described in 'ppc440spe_rxor_set_region'
-   drivers/dma/ppc4xx/adma.c:1846: warning: Function parameter or member 'mask' not described in 'ppc440spe_rxor_set_region'
->> drivers/dma/ppc4xx/adma.c:1846: warning: expecting prototype for ppc440spe_rxor_set_region_data(). Prototype was for ppc440spe_rxor_set_region() instead
-   drivers/dma/ppc4xx/adma.c:1857: warning: Function parameter or member 'desc' not described in 'ppc440spe_rxor_set_src'
-   drivers/dma/ppc4xx/adma.c:1857: warning: Function parameter or member 'xor_arg_no' not described in 'ppc440spe_rxor_set_src'
-   drivers/dma/ppc4xx/adma.c:1857: warning: Function parameter or member 'addr' not described in 'ppc440spe_rxor_set_src'
-   drivers/dma/ppc4xx/adma.c:1869: warning: Function parameter or member 'desc' not described in 'ppc440spe_rxor_set_mult'
-   drivers/dma/ppc4xx/adma.c:1869: warning: Function parameter or member 'xor_arg_no' not described in 'ppc440spe_rxor_set_mult'
-   drivers/dma/ppc4xx/adma.c:1869: warning: Function parameter or member 'idx' not described in 'ppc440spe_rxor_set_mult'
-   drivers/dma/ppc4xx/adma.c:1869: warning: Function parameter or member 'mult' not described in 'ppc440spe_rxor_set_mult'
-   drivers/dma/ppc4xx/adma.c:1880: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_check_threshold'
-   drivers/dma/ppc4xx/adma.c:1896: warning: Function parameter or member 'tx' not described in 'ppc440spe_adma_tx_submit'
-   drivers/dma/ppc4xx/adma.c:1946: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_prep_dma_interrupt'
-   drivers/dma/ppc4xx/adma.c:1946: warning: Function parameter or member 'flags' not described in 'ppc440spe_adma_prep_dma_interrupt'
-   drivers/dma/ppc4xx/adma.c:1978: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_prep_dma_memcpy'
-   drivers/dma/ppc4xx/adma.c:1978: warning: Function parameter or member 'dma_dest' not described in 'ppc440spe_adma_prep_dma_memcpy'
-   drivers/dma/ppc4xx/adma.c:1978: warning: Function parameter or member 'dma_src' not described in 'ppc440spe_adma_prep_dma_memcpy'
-   drivers/dma/ppc4xx/adma.c:1978: warning: Function parameter or member 'len' not described in 'ppc440spe_adma_prep_dma_memcpy'
-   drivers/dma/ppc4xx/adma.c:1978: warning: Function parameter or member 'flags' not described in 'ppc440spe_adma_prep_dma_memcpy'
-   drivers/dma/ppc4xx/adma.c:2020: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_prep_dma_xor'
-   drivers/dma/ppc4xx/adma.c:2020: warning: Function parameter or member 'dma_dest' not described in 'ppc440spe_adma_prep_dma_xor'
-   drivers/dma/ppc4xx/adma.c:2020: warning: Function parameter or member 'dma_src' not described in 'ppc440spe_adma_prep_dma_xor'
-   drivers/dma/ppc4xx/adma.c:2020: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_adma_prep_dma_xor'
-   drivers/dma/ppc4xx/adma.c:2020: warning: Function parameter or member 'len' not described in 'ppc440spe_adma_prep_dma_xor'
-   drivers/dma/ppc4xx/adma.c:2020: warning: Function parameter or member 'flags' not described in 'ppc440spe_adma_prep_dma_xor'
-   drivers/dma/ppc4xx/adma.c:2069: warning: Function parameter or member 'desc' not described in 'ppc440spe_adma_init_dma2rxor_slot'
-   drivers/dma/ppc4xx/adma.c:2069: warning: Function parameter or member 'src' not described in 'ppc440spe_adma_init_dma2rxor_slot'
-   drivers/dma/ppc4xx/adma.c:2069: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_adma_init_dma2rxor_slot'
-   drivers/dma/ppc4xx/adma.c:2087: warning: Function parameter or member 'ppc440spe_chan' not described in 'ppc440spe_dma01_prep_mult'
-   drivers/dma/ppc4xx/adma.c:2087: warning: Function parameter or member 'dst' not described in 'ppc440spe_dma01_prep_mult'
-   drivers/dma/ppc4xx/adma.c:2087: warning: Function parameter or member 'dst_cnt' not described in 'ppc440spe_dma01_prep_mult'
-   drivers/dma/ppc4xx/adma.c:2087: warning: Function parameter or member 'src' not described in 'ppc440spe_dma01_prep_mult'
-   drivers/dma/ppc4xx/adma.c:2087: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_dma01_prep_mult'
-   drivers/dma/ppc4xx/adma.c:2087: warning: Function parameter or member 'scf' not described in 'ppc440spe_dma01_prep_mult'
-   drivers/dma/ppc4xx/adma.c:2087: warning: Function parameter or member 'len' not described in 'ppc440spe_dma01_prep_mult'
-   drivers/dma/ppc4xx/adma.c:2087: warning: Function parameter or member 'flags' not described in 'ppc440spe_dma01_prep_mult'
-   drivers/dma/ppc4xx/adma.c:2173: warning: Function parameter or member 'ppc440spe_chan' not described in 'ppc440spe_dma01_prep_sum_product'
-   drivers/dma/ppc4xx/adma.c:2173: warning: Function parameter or member 'dst' not described in 'ppc440spe_dma01_prep_sum_product'
-   drivers/dma/ppc4xx/adma.c:2173: warning: Function parameter or member 'src' not described in 'ppc440spe_dma01_prep_sum_product'
-   drivers/dma/ppc4xx/adma.c:2173: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_dma01_prep_sum_product'
-   drivers/dma/ppc4xx/adma.c:2173: warning: Function parameter or member 'scf' not described in 'ppc440spe_dma01_prep_sum_product'
-   drivers/dma/ppc4xx/adma.c:2173: warning: Function parameter or member 'len' not described in 'ppc440spe_dma01_prep_sum_product'
-   drivers/dma/ppc4xx/adma.c:2173: warning: Function parameter or member 'flags' not described in 'ppc440spe_dma01_prep_sum_product'
-   drivers/dma/ppc4xx/adma.c:2511: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_prep_dma_pq'
-   drivers/dma/ppc4xx/adma.c:2511: warning: Function parameter or member 'dst' not described in 'ppc440spe_adma_prep_dma_pq'
-   drivers/dma/ppc4xx/adma.c:2511: warning: Function parameter or member 'src' not described in 'ppc440spe_adma_prep_dma_pq'
-   drivers/dma/ppc4xx/adma.c:2511: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_adma_prep_dma_pq'
-   drivers/dma/ppc4xx/adma.c:2511: warning: Function parameter or member 'scf' not described in 'ppc440spe_adma_prep_dma_pq'
-   drivers/dma/ppc4xx/adma.c:2511: warning: Function parameter or member 'len' not described in 'ppc440spe_adma_prep_dma_pq'
-   drivers/dma/ppc4xx/adma.c:2511: warning: Function parameter or member 'flags' not described in 'ppc440spe_adma_prep_dma_pq'
-   drivers/dma/ppc4xx/adma.c:2587: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_prep_dma_pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:2587: warning: Function parameter or member 'pq' not described in 'ppc440spe_adma_prep_dma_pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:2587: warning: Function parameter or member 'src' not described in 'ppc440spe_adma_prep_dma_pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:2587: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_adma_prep_dma_pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:2587: warning: Function parameter or member 'scf' not described in 'ppc440spe_adma_prep_dma_pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:2587: warning: Function parameter or member 'len' not described in 'ppc440spe_adma_prep_dma_pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:2587: warning: Function parameter or member 'pqres' not described in 'ppc440spe_adma_prep_dma_pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:2587: warning: Function parameter or member 'flags' not described in 'ppc440spe_adma_prep_dma_pqzero_sum'
-   drivers/dma/ppc4xx/adma.c:2765: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_prep_dma_xor_zero_sum'
-   drivers/dma/ppc4xx/adma.c:2765: warning: Function parameter or member 'src' not described in 'ppc440spe_adma_prep_dma_xor_zero_sum'
-   drivers/dma/ppc4xx/adma.c:2765: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_adma_prep_dma_xor_zero_sum'
-   drivers/dma/ppc4xx/adma.c:2765: warning: Function parameter or member 'len' not described in 'ppc440spe_adma_prep_dma_xor_zero_sum'
-   drivers/dma/ppc4xx/adma.c:2765: warning: Function parameter or member 'result' not described in 'ppc440spe_adma_prep_dma_xor_zero_sum'
-   drivers/dma/ppc4xx/adma.c:2765: warning: Function parameter or member 'flags' not described in 'ppc440spe_adma_prep_dma_xor_zero_sum'
-   drivers/dma/ppc4xx/adma.c:2785: warning: Function parameter or member 'sw_desc' not described in 'ppc440spe_adma_set_dest'
-   drivers/dma/ppc4xx/adma.c:2785: warning: Function parameter or member 'addr' not described in 'ppc440spe_adma_set_dest'
-   drivers/dma/ppc4xx/adma.c:2785: warning: Function parameter or member 'index' not described in 'ppc440spe_adma_set_dest'
-   drivers/dma/ppc4xx/adma.c:2832: warning: Function parameter or member 'sw_desc' not described in 'ppc440spe_adma_pq_set_dest'
-   drivers/dma/ppc4xx/adma.c:2832: warning: Function parameter or member 'addrs' not described in 'ppc440spe_adma_pq_set_dest'
-   drivers/dma/ppc4xx/adma.c:2832: warning: Function parameter or member 'flags' not described in 'ppc440spe_adma_pq_set_dest'
-   drivers/dma/ppc4xx/adma.c:3022: warning: Function parameter or member 'sw_desc' not described in 'ppc440spe_adma_pqzero_sum_set_dest'
-   drivers/dma/ppc4xx/adma.c:3022: warning: Function parameter or member 'paddr' not described in 'ppc440spe_adma_pqzero_sum_set_dest'
-   drivers/dma/ppc4xx/adma.c:3022: warning: Function parameter or member 'qaddr' not described in 'ppc440spe_adma_pqzero_sum_set_dest'
->> drivers/dma/ppc4xx/adma.c:3022: warning: expecting prototype for ppc440spe_adma_pq_zero_sum_set_dest(). Prototype was for ppc440spe_adma_pqzero_sum_set_dest() instead
-   drivers/dma/ppc4xx/adma.c:3086: warning: Function parameter or member 'desc' not described in 'ppc440spe_desc_set_xor_src_cnt'
-   drivers/dma/ppc4xx/adma.c:3086: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_desc_set_xor_src_cnt'
-   drivers/dma/ppc4xx/adma.c:3098: warning: Function parameter or member 'sw_desc' not described in 'ppc440spe_adma_pq_set_src'
-   drivers/dma/ppc4xx/adma.c:3098: warning: Function parameter or member 'addr' not described in 'ppc440spe_adma_pq_set_src'
-   drivers/dma/ppc4xx/adma.c:3098: warning: Function parameter or member 'index' not described in 'ppc440spe_adma_pq_set_src'
-   drivers/dma/ppc4xx/adma.c:3208: warning: Function parameter or member 'sw_desc' not described in 'ppc440spe_adma_memcpy_xor_set_src'
-   drivers/dma/ppc4xx/adma.c:3208: warning: Function parameter or member 'addr' not described in 'ppc440spe_adma_memcpy_xor_set_src'
-   drivers/dma/ppc4xx/adma.c:3208: warning: Function parameter or member 'index' not described in 'ppc440spe_adma_memcpy_xor_set_src'
-   drivers/dma/ppc4xx/adma.c:3224: warning: Function parameter or member 'desc' not described in 'ppc440spe_adma_dma2rxor_inc_addr'
-   drivers/dma/ppc4xx/adma.c:3224: warning: Function parameter or member 'cursor' not described in 'ppc440spe_adma_dma2rxor_inc_addr'
-   drivers/dma/ppc4xx/adma.c:3224: warning: Function parameter or member 'index' not described in 'ppc440spe_adma_dma2rxor_inc_addr'
-   drivers/dma/ppc4xx/adma.c:3224: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_adma_dma2rxor_inc_addr'
-   drivers/dma/ppc4xx/adma.c:3242: warning: Function parameter or member 'hdesc' not described in 'ppc440spe_adma_dma2rxor_prep_src'
-   drivers/dma/ppc4xx/adma.c:3242: warning: Function parameter or member 'cursor' not described in 'ppc440spe_adma_dma2rxor_prep_src'
-   drivers/dma/ppc4xx/adma.c:3242: warning: Function parameter or member 'index' not described in 'ppc440spe_adma_dma2rxor_prep_src'
-   drivers/dma/ppc4xx/adma.c:3242: warning: Function parameter or member 'src_cnt' not described in 'ppc440spe_adma_dma2rxor_prep_src'
-   drivers/dma/ppc4xx/adma.c:3242: warning: Function parameter or member 'addr' not described in 'ppc440spe_adma_dma2rxor_prep_src'
-   drivers/dma/ppc4xx/adma.c:3361: warning: Function parameter or member 'desc' not described in 'ppc440spe_adma_dma2rxor_set_src'
-   drivers/dma/ppc4xx/adma.c:3361: warning: Function parameter or member 'index' not described in 'ppc440spe_adma_dma2rxor_set_src'
-   drivers/dma/ppc4xx/adma.c:3361: warning: Function parameter or member 'addr' not described in 'ppc440spe_adma_dma2rxor_set_src'
-   drivers/dma/ppc4xx/adma.c:3402: warning: Function parameter or member 'desc' not described in 'ppc440spe_adma_dma2rxor_set_mult'
-   drivers/dma/ppc4xx/adma.c:3402: warning: Function parameter or member 'index' not described in 'ppc440spe_adma_dma2rxor_set_mult'
-   drivers/dma/ppc4xx/adma.c:3402: warning: Function parameter or member 'mult' not described in 'ppc440spe_adma_dma2rxor_set_mult'
-   drivers/dma/ppc4xx/adma.c:3438: warning: Function parameter or member 'cursor' not described in 'ppc440spe_init_rxor_cursor'
-   drivers/dma/ppc4xx/adma.c:3450: warning: Function parameter or member 'sw_desc' not described in 'ppc440spe_adma_pq_set_src_mult'
-   drivers/dma/ppc4xx/adma.c:3450: warning: Function parameter or member 'mult' not described in 'ppc440spe_adma_pq_set_src_mult'
-   drivers/dma/ppc4xx/adma.c:3450: warning: Function parameter or member 'index' not described in 'ppc440spe_adma_pq_set_src_mult'
-   drivers/dma/ppc4xx/adma.c:3450: warning: Function parameter or member 'dst_pos' not described in 'ppc440spe_adma_pq_set_src_mult'
-   drivers/dma/ppc4xx/adma.c:3534: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_free_chan_resources'
-   drivers/dma/ppc4xx/adma.c:3594: warning: Function parameter or member 'irq' not described in 'ppc440spe_adma_eot_handler'
-   drivers/dma/ppc4xx/adma.c:3594: warning: Function parameter or member 'data' not described in 'ppc440spe_adma_eot_handler'
-   drivers/dma/ppc4xx/adma.c:3611: warning: Function parameter or member 'irq' not described in 'ppc440spe_adma_err_handler'
-   drivers/dma/ppc4xx/adma.c:3611: warning: Function parameter or member 'data' not described in 'ppc440spe_adma_err_handler'
-   drivers/dma/ppc4xx/adma.c:3627: warning: Function parameter or member 'unused' not described in 'ppc440spe_test_callback'
-   drivers/dma/ppc4xx/adma.c:3635: warning: Function parameter or member 'chan' not described in 'ppc440spe_adma_issue_pending'
-   drivers/dma/ppc4xx/adma.c:3655: warning: Function parameter or member 'chan' not described in 'ppc440spe_chan_start_null_xor'
-   drivers/dma/ppc4xx/adma.c:3701: warning: Function parameter or member 'chan' not described in 'ppc440spe_test_raid6'
-   drivers/dma/ppc4xx/adma.c:4006: warning: Function parameter or member 'ofdev' not described in 'ppc440spe_adma_probe'
-   drivers/dma/ppc4xx/adma.c:4235: warning: Function parameter or member 'ofdev' not described in 'ppc440spe_adma_remove'
+> +				map0 {
+> +					trip =3D <&gpu_alert0>;
+> +					cooling-device =3D <&gpu
+>  1 THERMAL_NO_LIMIT>;
+> +				};
+> +
+> +				// Fordid the GPU to go over
+> 624MHz
+> +				map1 {
+> +					trip =3D <&gpu_alert1>;
+> +					cooling-device =3D <&gpu=20
+> 2 THERMAL_NO_LIMIT>;
+> +				};
+> +
+> +				// Fordid the GPU to go over=20
+> 576MHz
+> +				map2 {
+> +					trip =3D <&gpu_alert2>;
+> +					cooling-device =3D <&gpu=20
+> 3 THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  	};
+>  };
+> --
+> 2.34.1
 
 
-vim +1329 drivers/dma/ppc4xx/adma.c
-
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1313  
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1314  /**
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1315   * ppc440spe_adma_device_estimate - estimate the efficiency of processing
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1316   *	the operation given on this channel. It's assumed that 'chan' is
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1317   *	capable to process 'cap' type of operation.
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1318   * @chan: channel to use
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1319   * @cap: type of transaction
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1320   * @dst_lst: array of destination pointers
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1321   * @dst_cnt: number of destination operands
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1322   * @src_lst: array of source pointers
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1323   * @src_cnt: number of source operands
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1324   * @src_sz: size of each source operand
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1325   */
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1326  static int ppc440spe_adma_estimate(struct dma_chan *chan,
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1327  	enum dma_transaction_type cap, struct page **dst_lst, int dst_cnt,
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1328  	struct page **src_lst, int src_cnt, size_t src_sz)
-12458ea06efd7b Anatolij Gustschin 2009-12-11 @1329  {
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1330  	int ef = 1;
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1331  
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1332  	if (cap == DMA_PQ || cap == DMA_PQ_VAL) {
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1333  		/* If RAID-6 capabilities were not activated don't try
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1334  		 * to use them
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1335  		 */
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1336  		if (unlikely(!ppc440spe_r6_enabled))
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1337  			return -1;
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1338  	}
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1339  	/*  In the current implementation of ppc440spe ADMA driver it
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1340  	 * makes sense to pick out only pq case, because it may be
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1341  	 * processed:
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1342  	 * (1) either using Biskup method on DMA2;
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1343  	 * (2) or on DMA0/1.
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1344  	 *  Thus we give a favour to (1) if the sources are suitable;
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1345  	 * else let it be processed on one of the DMA0/1 engines.
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1346  	 *  In the sum_product case where destination is also the
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1347  	 * source process it on DMA0/1 only.
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1348  	 */
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1349  	if (cap == DMA_PQ && chan->chan_id == PPC440SPE_XOR_ID) {
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1350  
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1351  		if (dst_cnt == 1 && src_cnt == 2 && dst_lst[0] == src_lst[1])
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1352  			ef = 0; /* sum_product case, process on DMA0/1 */
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1353  		else if (ppc440spe_can_rxor(src_lst, src_cnt, src_sz))
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1354  			ef = 3; /* override (DMA0/1 + idle) */
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1355  		else
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1356  			ef = 0; /* can't process on DMA2 if !rxor */
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1357  	}
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1358  
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1359  	/* channel idleness increases the priority */
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1360  	if (likely(ef) &&
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1361  	    !ppc440spe_chan_is_busy(to_ppc440spe_adma_chan(chan)))
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1362  		ef++;
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1363  
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1364  	return ef;
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1365  }
-12458ea06efd7b Anatolij Gustschin 2009-12-11  1366  
-
-:::::: The code at line 1329 was first introduced by commit
-:::::: 12458ea06efd7b44281e68fe59c950ec7d59c649 ppc440spe-adma: adds updated ppc440spe adma driver
-
-:::::: TO: Anatolij Gustschin <agust@denx.de>
-:::::: CC: Dan Williams <dan.j.williams@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,188 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678775AC8E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 956955AC8E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235739AbiIECrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 22:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S235651AbiIECxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 22:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIECrt (ORCPT
+        with ESMTP id S229480AbiIECxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 22:47:49 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE5D2559C;
-        Sun,  4 Sep 2022 19:47:44 -0700 (PDT)
-X-UUID: b5f5a10eed7d4697826513eff8415680-20220905
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:Date:CC:To:From:Subject:Message-ID; bh=SPZom6e4m2DwhVGUgCYsOooFFaI6jPFzv+CbKS3SeiE=;
-        b=FuOO+lR0kcjnnoOqg8R88BKGO4Ch702JrZNpT41Il53R5YqzmMyAr+YfTxwu49cWoHTsXdWSha8PM4HgtI9iKHm/3TzfysGIaTdyIwc2QGcWgD4ProghQqFVzEa8veZyYmDxGfDF9FjvAWp4XyHeBk503uTP8eNa8ZOsDzOY+CA=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:ea4544cb-fa61-4382-80fd-f08e63aec98d,OB:10,
-        LOB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Releas
-        e_Ham,ACTION:release,TS:95
-X-CID-INFO: VERSION:1.1.10,REQID:ea4544cb-fa61-4382-80fd-f08e63aec98d,OB:10,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS9
-        81B3D,ACTION:quarantine,TS:95
-X-CID-META: VersionHash:84eae18,CLOUDID:db8e2621-1c20-48a5-82a0-25f9c331906d,C
-        OID:d1b7296c41ce,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: b5f5a10eed7d4697826513eff8415680-20220905
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <jing-ting.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1858471057; Mon, 05 Sep 2022 10:47:37 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 5 Sep 2022 10:47:36 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 5 Sep 2022 10:47:36 +0800
-Message-ID: <88b2910181bda955ac46011b695c53f7da39ac47.camel@mediatek.com>
-Subject: BUG: HANG_DETECT waiting for migration_cpu_stop() complete
-From:   Jing-Ting Wu <jing-ting.wu@mediatek.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>
-CC:     <wsd_upstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Jonathan.JMChen@mediatek.com>,
-        "chris.redpath@arm.com" <chris.redpath@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Vincent Donnefort" <vdonnefort@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Christian Brauner <brauner@kernel.org>,
-        <cgroups@vger.kernel.org>, <lixiong.liu@mediatek.com>,
-        <wenju.xu@mediatek.com>
-Date:   Mon, 5 Sep 2022 10:47:36 +0800
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 4 Sep 2022 22:53:01 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DCF825C51
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 19:52:53 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxkOB6ZBVj72YRAA--.6983S3;
+        Mon, 05 Sep 2022 10:52:43 +0800 (CST)
+Subject: Re: [PATCH 1/3] LoongArch: tools: Add relocs tool support
+To:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
+ <1662113335-14282-2-git-send-email-tangyouling@loongson.cn>
+ <c9880165f0355fc3be3ec23153b43ad33e558b5d.camel@xry111.site>
+ <4df8a26c49a35c1fce36d80c370f738fa71a2bef.camel@xry111.site>
+ <f0e77716-9533-724a-2ea9-86bc5b52066c@loongson.cn>
+ <78a4a6b0970c309daa336a2329e69d28df486552.camel@xry111.site>
+ <fffdd2ac-4ba6-8eb3-f269-b22a3d9c32f6@loongson.cn>
+ <0b2d115c42ff6cb9b8c65d852ec2f0746ca6e8d9.camel@xry111.site>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <d852f590-95b4-3fd1-924a-68c0a6bb1b1b@loongson.cn>
+Date:   Mon, 5 Sep 2022 10:52:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
+In-Reply-To: <0b2d115c42ff6cb9b8c65d852ec2f0746ca6e8d9.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxkOB6ZBVj72YRAA--.6983S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrW8Cw18tw4kCr17WrWfKrg_yoW5Ar45pr
+        W5Ka1qqws7GF17ZF10vw1I9FW3K3ykG3W3Wan8trWFy3ZIvr93tw1UKa13WFy2krn3tF4j
+        vrWYq3WxWF1YyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
+        zVAYIcxG8wCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUO_MaUUUUU
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi, Ruoyao
 
-We meet the HANG_DETECT happened in T SW version with kernel-5.15.
-Many tasks have been blocked for a long time.
+On 09/04/2022 12:53 AM, Xi Ruoyao wrote:
+> On Sun, 2022-09-04 at 00:23 +0800, Jinyang He wrote:
+>> On 2022/9/3 18:49, Xi Ruoyao wrote:
+>>
+>>> On Sat, 2022-09-03 at 09:57 +0800, Youling Tang wrote:
+>>>>>> Unlike (pre-r6) MIPS, LoongArch has a complete support for PIC, and
+>>>>>> currently LoongArch toolchain always produces PIC (except, if -Wa,-mla-
+>>>>>> {local,global}-with-abs or la.abs macros are used explicitly).
+>>>>>>
+>>>>>> So would it be easier to review and correct the uses of "la.abs" in the
+>>>>>> code, and make the main kernel image a real PIE?  Then we can load it
+>>>>>> everywhere w/o any need to do relocation at load time.
+>>>> At the beginning I also wanted to make the main kernel image a real PIE
+>>>> and tried it, some of the "la.abs" can be modified, but I encountered
+>>>> difficulties in modifying the  exception handling code part, the kernel
+>>>> will not  boot after modification :(, I will continue to work hard try.
+>
+>>> I just tried the same thing and get the same result :(.  Will spend
+>>> several hours reading the LoongArch manual about exception...
+>
+> The reason is the handler code is not executed in linker address, but
+> copied elsewhere.  Then PC-relative offset is broken.  I managed to work
+> around it by creating a trampoline and jump into the handler, instead of
+> copy the handler code.  Then I could remove most "la.abs" occurrence
+> (except two in kernel entry point, which seem deliberately used):
+>
+> - https://github.com/xry111/linux/commit/56a433f
+> - https://github.com/xry111/linux/commit/48203e6
+>
 
+Thank you very much.
 
-Root cause:
-migration_cpu_stop() is not complete due to is_migration_disabled(p) is
-true, complete is false and complete_all() never get executed.
-It let other task wait the rwsem.
+After applying the above two patches and the following modifications,
+the relocation can be successful after removing the
+apply_r_loongarch_la_rel (for la.abs relocation) implementation. I
+tested it in the qemu environment.
 
-Detail:
-system_server waiting for cgroup_threadgroup_rwsem.
-OomAdjuster is holding the cgroup_threadgroup_rwsem and waiting for
-cpuset_rwsem.
-cpuset_hotplug_workfn is holding the cpuset_rwsem and waiting for
-affine_move_task() complete.
-affine_move_task() waiting for migration_cpu_stop() complete.
+--- a/arch/loongarch/kernel/head.S
++++ b/arch/loongarch/kernel/head.S
+@@ -113,9 +113,11 @@ SYM_CODE_START(smpboot_entry)
+         li.d            t0, CSR_DMW1_INIT       # CA, PLV0
+         csrwr           t0, LOONGARCH_CSR_DMWIN1
 
-The backtrace of system_server:
-__switch_to
-__schedule
-schedule
-percpu_rwsem_wait
-__percpu_down_read
-cgroup_css_set_fork => wait for cgroup_threadgroup_rwsem
-cgroup_can_fork
-copy_process
-kernel_clone
+-       la.abs          t0, 0f
+-       jr              t0
+-0:
++       li.d            t0, CACHE_BASE
++       pcaddi          t1, 0
++       or              t0, t0, t1
++       jirl            zero, t0, 0xc
 
-The backtrace of OomAdjuster:
-__switch_to
-__schedule
-schedule
-percpu_rwsem_wait
-percpu_down_write
-cpuset_can_attach => wait for cpuset_rwsem
-cgroup_migrate_execute
-cgroup_attach_task
-__cgroup1_procs_write => hold cgroup_threadgroup_rwsem
-cgroup1_procs_write
-cgroup_file_write
-kernfs_fop_write_iter
-vfs_write
-ksys_write
+Youling.
 
-The backtrace of cpuset_hotplug_workfn:
-__switch_to
-__schedule
-schedule
-schedule_timeout
-wait_for_common
-affine_move_task => wait for complete
-__set_cpus_allowed_ptr_locked
-update_tasks_cpumask
-cpuset_hotplug_update_tasks => hold cpuset_rwsem
-cpuset_hotplug_workfn
-process_one_work
-worker_thread
-kthread
-
-
-In affine_move_task() will call migration_cpu_stop() and wait for it
-complete.
-In normal case, if migration_cpu_stop() complete it will inform
-everyone that he is done.
-But there is an exception case that will not notify.
-If is_migration_disabled(p) is true and complete will always is false,
-then complete_all() never get executed.
-
-static int migration_cpu_stop(void *data)
-{
-...
-    bool complete = false;
-...
-
-    if (task_rq(p) == rq) {
-        if (is_migration_disabled(p))
-              goto out; => is_migration_disabled(p) = true,
-                           so complete = false.
-            ...
-        }
-...
-
-out:
-...
-    if (complete) => complete = false,
-                     so complete_all() never get executed.
-        complete_all(&pending->done);
-
-        return 0;
-}
-
-
-Review the code, we found that there are many places can change
-is_migration_disabled() value.
-(such as: __rt_spin_lock(), rt_read_lock(), rt_write_lock(), ...)
-
-Do you have any suggestion for this issue?
-Thank you.
-
-
-
-
-Best regards,
-Jing-Ting Wu
-
+> Using the trampoline in handler table will definitely lead to sub-
+> optimal performance. I just use it as a proof-of-concept. Later we may
+> use some assembler trick to generate hard-coded handler table with
+> correct PC-relative offsets.
+>
+>> The following ideas are based on experience, without validation. Patches
+>> show that three types of relocation are needed to be done.
+>> 1, GOT is generated by toolchain, so  I think eliminating them by
+>> toolchain is better.
+>
+> https://gcc.gnu.org/pipermail/gcc-patches/2022-September/600797.html
+>
+> I stop to read the mail here because it's 00:52 AM now :).
+>
+>> 2, Ex_table is generated but striped relocation info. We can plays pcrel
+>> way to resolve this problem. One of ways like follows, (pseudo-code)
+>
+> /* snip */
+>
+>
 

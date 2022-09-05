@@ -2,114 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C665ACFF9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512955ACFD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237895AbiIEKRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
+        id S236832AbiIEKTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237908AbiIEKQ6 (ORCPT
+        with ESMTP id S236413AbiIEKSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:16:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AC254CB6
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662372914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MSP7nxlZMdVy1XY332EieoPjlkoDCB95TOL/13xEK/o=;
-        b=U2mxWtGLmEAq4ZB7tK3hWeieARI10GPfGBUBPb9FqCZ3upEgKKQXbfnUh4fOv73a3Kms30
-        Y8UnA0ClIV6eFneClsNFLuLSSdd28M2VESkbU7BetaTE8McP0RGOJjutrwdz2mlI5Mm0yd
-        ONi64Wrwdmtj5qWkqSsIshrBzUPuBzQ=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-216-ePGWrB7bO6qXvEwp77I6vg-1; Mon, 05 Sep 2022 06:15:13 -0400
-X-MC-Unique: ePGWrB7bO6qXvEwp77I6vg-1
-Received: by mail-pl1-f199.google.com with SMTP id m5-20020a170902f64500b0016d313f3ce7so5921306plg.23
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 03:15:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=MSP7nxlZMdVy1XY332EieoPjlkoDCB95TOL/13xEK/o=;
-        b=uc5AlUsNQK/cvpXJIobzvkluc9pMNHZCDufLZdy4ZIwvkC1cO4OleU6yCj/ruRe06I
-         O6Riww/f6pAC342at2thSDVsmlYYLY4qzbd3AhilAt/6JcaUs2eLeHagCH03QE45rJXj
-         +812Hnylt2quPczlgvbWVW1/IH4zqpOUhgEfD4i/IO2CNHGccnKl8rVl11rZ4Wn/Ck5O
-         bVEt/Du9hwUF7bsrJ1URzo1q3whx1AvRD9xC4g1xF6fDCd4OqAPDsDGOGc5ohHbcdjfr
-         DePa98MFUhnYP8uLBcXX45h4dwhn5FUtT+U2yPzDaESuovY9Gp6ecN8kJbkDIuTJbehN
-         sFhQ==
-X-Gm-Message-State: ACgBeo3Fuf63iDzjKG+wgc3G+Vq1dstiGKDdKNu38xg2B56OfUKhUxc/
-        7W9MGT0YzSVygeHP3lHtDD58SnQHc5PWBS1Qvludgq6UyT0sF5jvEPSFiVPyR0BYzeDNSnhiBy2
-        9FRnkfZmcWupUc45mQonRq8Us7Jem3wYpAO07E6ow
-X-Received: by 2002:a63:1a53:0:b0:41f:5298:9b5f with SMTP id a19-20020a631a53000000b0041f52989b5fmr40538769pgm.244.1662372912672;
-        Mon, 05 Sep 2022 03:15:12 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6Tx02dLJJPBEF5iEuwkRvzHVzfPWHXhezKY1SrBF19i/Y78aVKPcFtIbx5YArUH92QYIk6bCU8DWnCMmzhW34=
-X-Received: by 2002:a63:1a53:0:b0:41f:5298:9b5f with SMTP id
- a19-20020a631a53000000b0041f52989b5fmr40538753pgm.244.1662372912450; Mon, 05
- Sep 2022 03:15:12 -0700 (PDT)
+        Mon, 5 Sep 2022 06:18:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CD55464C;
+        Mon,  5 Sep 2022 03:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662373044; x=1693909044;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=PbFMApXZgw+38bgGm8dKdd9ii/xxRNRjkKs3anjHN+g=;
+  b=mQGKsPu4pnN6i1n5bwLFpr4dRZjSusptueuU7pIP5jf+pM1ZIS0pWMyc
+   P9em7OEOrjMsOq9xXdOQnO/WEckpGQrBbPrdBKUyev00obq5+xvzq52H1
+   y7CKoJRjfcaPoNT4HKxkGCFfRmaEz9RMmxWpoGOFlPVJLSf1zLrkDQ10d
+   kaxPOTetcHQpc/oo0X1BkMwbbFLsh5DGzVxVOmY6SOKzSn9R4JrGD68fq
+   9bBB9EZ7r8tIGwO3LASM27MA/sa9Jjej7N3tV8EPC9gFDmabOlj4X48m/
+   ecLoCUcriePf7f+/GN7yyX2g5DMeR+SLww0Pfj0YXAlLz+wjAeFZonAQu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="358073048"
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="358073048"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 03:17:09 -0700
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="675231205"
+Received: from lpontegg-mobl.ger.corp.intel.com ([10.249.45.111])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 03:16:51 -0700
+Date:   Mon, 5 Sep 2022 13:16:46 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Li Zhong <floridsleeves@gmail.com>
+cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Subject: Re: [PATCH v3] drivers/tty/serial: check the return value of
+ uart_port_check()
+In-Reply-To: <20220904004524.2281227-1-floridsleeves@gmail.com>
+Message-ID: <acf3b04e-14f7-030-bdf9-3427bbb688@linux.intel.com>
+References: <20220904004524.2281227-1-floridsleeves@gmail.com>
 MIME-Version: 1.0
-References: <20220901152632.970018-1-omosnace@redhat.com> <20220905090811.ocnnc53y2bow7m3i@wittgenstein>
-In-Reply-To: <20220905090811.ocnnc53y2bow7m3i@wittgenstein>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Mon, 5 Sep 2022 12:15:01 +0200
-Message-ID: <CAFqZXNu_jf0D8LQLc15+ZrFne5F5F5PFNbkT-EkfqXvNdSKKsQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] fs: fix capable() call in simple_xattr_list()
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        SElinux list <selinux@vger.kernel.org>, rcu@vger.kernel.org,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        Martin Pitt <mpitt@redhat.com>, Vasily Averin <vvs@openvz.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 11:08 AM Christian Brauner <brauner@kernel.org> wrote:
-> On Thu, Sep 01, 2022 at 05:26:30PM +0200, Ondrej Mosnacek wrote:
-> > The goal of these patches is to avoid calling capable() unconditionally
-> > in simple_xattr_list(), which causes issues under SELinux (see
-> > explanation in the second patch).
-> >
-> > The first patch tries to make this change safer by converting
-> > simple_xattrs to use the RCU mechanism, so that capable() is not called
-> > while the xattrs->lock is held. I didn't find evidence that this is an
-> > issue in the current code, but it can't hurt to make that change
-> > either way (and it was quite straightforward).
->
-> Hey Ondrey,
->
-> There's another patchset I'd like to see first which switches from a
-> linked list to an rbtree to get rid of performance issues in this code
-> that can be used to dos tmpfs in containers:
->
-> https://lore.kernel.org/lkml/d73bd478-e373-f759-2acb-2777f6bba06f@openvz.org
->
-> I don't think Vasily has time to continue with this so I'll just pick it
-> up hopefully this or the week after LPC.
+On Sat, 3 Sep 2022, Li Zhong wrote:
 
-Hm... does rbtree support lockless traversal? Because if not, that
-would make it impossible to fix the issue without calling capable()
-inside the critical section (or doing something complicated), AFAICT.
-Would rhashtable be a workable alternative to rbtree for this use
-case? Skimming <linux/rhashtable.h> it seems to support both lockless
-lookup and traversal using RCU. And according to its manpage,
-*listxattr(2) doesn't guarantee that the returned names are sorted.
+> uart_port_check() will return NULL pointer when state->uart_port is
+> NULL. Check the return value before dereference it to avoid
+> null-pointer-dereference error
 
---
-Ondrej Mosnacek
-Senior Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
+> because the locking does not guarantee the return value is not NULL.
+
+Please include also the answer to the "Why it doesn't guarantee?"
+question.
+
+In addition, it's expected you'll keep the people who have expressed 
+interest in your patch among the receipients for any new version you 
+send out. Thank you.
+
+-- 
+ i.
+
+> Here we do not need unlock in the error
+> handling because the mutex_unlock() is called in callers.
+> 
+> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+> ---
+> 
+> v3: Add the reason why we need to check the NULL value in the commit
+> message.  The bug is detected by static analysis.
+> 
+> ---
+>  drivers/tty/serial/serial_core.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 12c87cd201a7..760e177166cf 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -194,6 +194,9 @@ static int uart_port_startup(struct tty_struct *tty, struct uart_state *state,
+>  	unsigned long page;
+>  	int retval = 0;
+>  
+> +	if (!uport)
+> +		return -EIO;
+> +
+>  	if (uport->type == PORT_UNKNOWN)
+>  		return 1;
+>  
+> @@ -498,6 +501,8 @@ static void uart_change_speed(struct tty_struct *tty, struct uart_state *state,
+>  	struct ktermios *termios;
+>  	int hw_stopped;
+>  
+> +	if (!uport)
+> +		return;
+>  	/*
+>  	 * If we have no tty, termios, or the port does not exist,
+>  	 * then we can't set the parameters for this port.
+> @@ -1045,6 +1050,8 @@ static int uart_get_lsr_info(struct tty_struct *tty,
+>  	struct uart_port *uport = uart_port_check(state);
+>  	unsigned int result;
+>  
+> +	if (!uport)
+> +		return -EIO;
+>  	result = uport->ops->tx_empty(uport);
+>  
+>  	/*
+> 
 

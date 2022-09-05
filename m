@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D7D5AD9A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 21:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8505AD9B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 21:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbiIETcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 15:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S232267AbiIETfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 15:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiIETcE (ORCPT
+        with ESMTP id S229757AbiIETfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 15:32:04 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FA619287
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 12:32:03 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id b14-20020a056902030e00b006a827d81fd8so4538271ybs.17
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 12:32:02 -0700 (PDT)
+        Mon, 5 Sep 2022 15:35:47 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56508192A1;
+        Mon,  5 Sep 2022 12:35:46 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso12907779pjh.5;
+        Mon, 05 Sep 2022 12:35:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=nzYPTXzWW9nmntWCV8Vh/LKoFqcXyIKvmgnu1hGqu7k=;
-        b=WjbKtL1D/4BXosFYcBo3Si+QUfuKWnKSWJbeLnRZnaybjfLdGcEJjjFW57YuBXnd7j
-         VG3d7Mmo3qrYy0ZyW1mYkiDPH1xODzNXv7eE2AL+LxXcuucTAmmD8nt80QxlxPYdTItP
-         GF5/MRKziOzianOw+Uxq4CNNYNO2p3srplb3WOIVzrEHuBdy5569DMrcyeNyaIaz6ryv
-         YofbNi4e2vtlS0wPOj8QD36kSGIZirDb7K45pWi1bHqv+cALIJ5RizNMyfHcuVKAbONz
-         zgdCwUZq5aIx3WjrC0EddIwXSy9UHyfMOQgIbSLAJRqN5g2RspVR/JJVASoMFonflc2L
-         EtTQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=7aEZor/0qSkVunoEHgQL2gSUt5mSZZxwcIrLRXXUv74=;
+        b=kRz+EoKgbH/v5V+kWM9vI7suLFWPqh1wudHhCQsgYyToXNdfTMF3zkd+cxvGSDzDMg
+         aV6HTEv+679+PSU/eajuEECNA5Tzi63P2u7ABofOyv+D57Tac8hnxfRh1VQhASbh+H2T
+         cXTOTBvHFjMjMQWlLbr7neEN9hS+5zCzekuUSZjeKCJ5iPKlrTViWBE6u6+1xHBDqacf
+         qr87isKsFggMsY4gH6JVNBJhTsBX7r2Op1Wwlzvm9hfMwa/iBu3UAFi08/6ylcVtvF9Y
+         RdblgSyTuBK8BKb4mUwnden63M+73w2Cz4cZ3zSynyWKOsNJDLPHGEM5bUsuwOD4IzAc
+         e3cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nzYPTXzWW9nmntWCV8Vh/LKoFqcXyIKvmgnu1hGqu7k=;
-        b=xZmW21fCkSvKiNFweFt+L93os3yKErN2EAdsOCvd5eIml78wlHbRge7O8e4VuGjooW
-         naw5crsEdh4iLa4/YO8GX1mBwYRMPzz/5PuGHXXuEdGC1T94kej7xi18UYkyrLHPXRPL
-         EaNPhS2/k1wWmeAo0Q9e3JQ8DuKk8W6/8HT6treB4MtmsDPV7q56DcK1iOjUtr4sopUT
-         MRUFCxq/WvgkOMX0pO1iszmQL8b+6YcaREkdN3/BQS7FUE69SLLd3pK5D8hJYlLtfSmM
-         WNRgnXxExuUwlnH+oPEUn/QvIG76O34K3g0ymKCTIKwdJWQl+e+p/27zvieI0ihRF+C9
-         VG9g==
-X-Gm-Message-State: ACgBeo2bLgQcU0PI+flxjwhvN14N/Lr5Nwb5sTj/EdZWH51v3d44Dn2T
-        uEVEd1KnjIddl0pDPhSHP4iyNcjV+R6iXg==
-X-Google-Smtp-Source: AA6agR45LtLtFdonuDVQF86B/UUUAlIaw1OBFliTILqCjdA5n/Kgr/GmjivDnXK1JxcUbWbLC/ps6jCHTlNz9A==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a0d:d2c1:0:b0:33e:e1f4:4bb0 with SMTP id
- u184-20020a0dd2c1000000b0033ee1f44bb0mr38132884ywd.234.1662406322246; Mon, 05
- Sep 2022 12:32:02 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 19:31:59 +0000
-In-Reply-To: <20220905193516.846647-3-jiebin.sun@intel.com>
-Mime-Version: 1.0
-References: <20220902152243.479592-1-jiebin.sun@intel.com> <20220905193516.846647-1-jiebin.sun@intel.com>
- <20220905193516.846647-3-jiebin.sun@intel.com>
-Message-ID: <20220905193159.eeu2xmqj6743kzxv@google.com>
-Subject: Re: [PATCH v2 1/2] percpu: Add percpu_counter_add_local
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Jiebin Sun <jiebin.sun@intel.com>
-Cc:     akpm@linux-foundation.org, vasily.averin@linux.dev,
-        dennis@kernel.org, tj@kernel.org, cl@linux.com,
-        ebiederm@xmission.com, legion@kernel.org, manfred@colorfullife.com,
-        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, tim.c.chen@intel.com,
-        feng.tang@intel.com, ying.huang@intel.com, tianyou.li@intel.com,
-        wangyang.guo@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=7aEZor/0qSkVunoEHgQL2gSUt5mSZZxwcIrLRXXUv74=;
+        b=hOhlAiPJZk9r0jPioRD+AnpnkO8yMRN7B1jIlC29rqVdJMmh9Kf7+ihhA3HKjKGqIU
+         tDrqdJXT1hFVRh2RZq8toMB98eQjRJe7mfCD9CXmiZ1GejZ05sWUu1yfTuU4JOtYPewM
+         bp7fxNQ41BRBbQNRhDMW5Z9ZLYMVnhqGIdAAWMfGrslE+eIIv13vFgiws+kdHqY7wfR5
+         dV/CRtwtLPa5PFsvsn8vyPNCgtf1tbirm7vvdU8PCkmMu7TJ0E6UvzT/T58dauwuSzzJ
+         zMX19ttvlIbYMEt3OdRksT53n95QqaNltSd551xRXXI6Ry5mXdrERu3/sn8i7+Bh+0nA
+         AYoQ==
+X-Gm-Message-State: ACgBeo0+ckiURzZgiqCYej8/eUCtIDkO5UOwl6Bm9+gJY7ioQNwmr4hc
+        w5QsuJqbQz/6MDBEw72nrqs=
+X-Google-Smtp-Source: AA6agR4nlC4q69eore5Hr67VeZeR0yfg6hIFeNYOz0SHVfhiZE5g9P4b0kNnrVIkGs2dos0edLe7LA==
+X-Received: by 2002:a17:90a:cf06:b0:200:22cc:9380 with SMTP id h6-20020a17090acf0600b0020022cc9380mr13257332pju.43.1662406545578;
+        Mon, 05 Sep 2022 12:35:45 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:7332:f188:2984:5930])
+        by smtp.gmail.com with ESMTPSA id z127-20020a623385000000b0053abb15b3d9sm8433309pfz.19.2022.09.05.12.35.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 12:35:45 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 12:35:42 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v1 1/1] Input: icn8505 - Utilize acpi_get_subsystem_id()
+Message-ID: <YxZPjsRJXJijZ/K3@google.com>
+References: <20220905172001.69244-1-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905172001.69244-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,37 +70,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:35:16AM +0800, Jiebin Sun wrote:
-> Add percpu_counter_add_local for only updating local counter
-> without aggregating to global counter.
+Hi Andy,
 
-Please add why do we need this. Who should use this and who shouldn't.
-
+On Mon, Sep 05, 2022 at 08:20:01PM +0300, Andy Shevchenko wrote:
+> Replace open coded variant of recently introduced acpi_get_subsystem_id().
 > 
-> Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
-
-[...]
-
-> diff --git a/lib/percpu_counter.c b/lib/percpu_counter.c
-> index ed610b75dc32..d33cb750962a 100644
-> --- a/lib/percpu_counter.c
-> +++ b/lib/percpu_counter.c
-> @@ -72,6 +72,12 @@ void percpu_counter_set(struct percpu_counter *fbc, s64 amount)
->  }
->  EXPORT_SYMBOL(percpu_counter_set);
->
-
-Add a doc comment here on why someone want to use this?
-
-> +void percpu_counter_add_local(struct percpu_counter *fbc, s64 amount)
-> +{
-> +	this_cpu_add(*fbc->counters, amount);
-> +}
-> +EXPORT_SYMBOL(percpu_counter_add_local);
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/input/touchscreen/chipone_icn8505.c | 29 ++++++---------------
+>  1 file changed, 8 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/input/touchscreen/chipone_icn8505.c b/drivers/input/touchscreen/chipone_icn8505.c
+> index f9ca5502ac8c..bb5e63b87c5d 100644
+> --- a/drivers/input/touchscreen/chipone_icn8505.c
+> +++ b/drivers/input/touchscreen/chipone_icn8505.c
+> @@ -364,32 +364,19 @@ static irqreturn_t icn8505_irq(int irq, void *dev_id)
+>  
+>  static int icn8505_probe_acpi(struct icn8505_data *icn8505, struct device *dev)
+>  {
+> -	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> -	const char *subsys = "unknown";
+> -	struct acpi_device *adev;
+> -	union acpi_object *obj;
+> -	acpi_status status;
+> -
+> -	adev = ACPI_COMPANION(dev);
+> -	if (!adev)
+> -		return -ENODEV;
+> +	const char *subsys;
+>  
+> -	status = acpi_evaluate_object(adev->handle, "_SUB", NULL, &buffer);
+> -	if (ACPI_SUCCESS(status)) {
+> -		obj = buffer.pointer;
+> -		if (obj->type == ACPI_TYPE_STRING)
+> -			subsys = obj->string.pointer;
+> -		else
+> -			dev_warn(dev, "Warning ACPI _SUB did not return a string\n");
+> -	} else {
+> -		dev_warn(dev, "Warning ACPI _SUB failed: %#x\n", status);
+> -		buffer.pointer = NULL;
+> -	}
+> +	subsys = acpi_get_subsystem_id(ACPI_HANDLE(dev));
+> +	if (IS_ERR(subsys) && PTR_ERR(subsys) != -ENODATA)
+> +		return PTR_ERR(subsys);
 > +
->  /*
->   * This function is both preempt and irq safe. The former is due to explicit
->   * preemption disable. The latter is guaranteed by the fact that the slow path
-> -- 
-> 2.31.1
-> 
+> +	if (IS_ERR(subsys) && PTR_ERR(subsys) == -ENODATA)
+> +		subsys = kstrdup_const("unknown", GFP_KERNEL);
+
+Do we really need kstrdup_const() here? This makes me wonder if we need
+to also have error handling here, and if we going to tip some automated
+tools by not having it. Why can't we simply assign the constant here
+(and continue using kfree_const() below)?
+
+I think this is the case where PTR_ERR_OR_ZERO() might help avoid
+multiple IS_ERR/PTR_ERR:
+
+	subsys = acpi_get_subsystem_id(ACPI_HANDLE(dev));
+	error = PTR_ERR_OR_ZERO(subsys);
+	if (error == -ENODATA)
+		subsys = "unknown";
+	else if (error)
+		return error;
+
+>  
+>  	snprintf(icn8505->firmware_name, sizeof(icn8505->firmware_name),
+>  		 "chipone/icn8505-%s.fw", subsys);
+>  
+> -	kfree(buffer.pointer);
+> +	kfree_const(subsys);
+>  	return 0;
+>  }
+>  
+
+Thanks.
+
+-- 
+Dmitry

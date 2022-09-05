@@ -2,113 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523FB5AD691
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF755AD6A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239103AbiIEPcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 11:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
+        id S238773AbiIEPd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 11:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239022AbiIEPb7 (ORCPT
+        with ESMTP id S239007AbiIEPdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 11:31:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0ED62AB6;
-        Mon,  5 Sep 2022 08:30:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A987B611AE;
-        Mon,  5 Sep 2022 15:30:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38C1C433D6;
-        Mon,  5 Sep 2022 15:30:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662391842;
-        bh=FBB3egLAbT/Wars2QJ98mK1mQITaziItgBSg6v71lRU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tkn0FggiODveo+KmJCKDg8hZYAdT5D/8egABC8FrKyAGQdYZGgCibJCzCf387xhha
-         qftckA5y5+dMU4Qs7yGwRCk3BvqYtmzosjp/gMVdSpubLZ0DY6lO8jFUTuIbPuMEiI
-         AU1yzxxcw1qAssDMma4+kQz1GMDuuR+HWdfe6tdyS2o8sbSEKptl7yW9vyBe3uAOX4
-         lO0g06poGpspSzs5YCzhUqfGyxPE+KsP94QMWPgYDsnvan5cKLREGg6e3/xv6sCUqA
-         2LbVxGfrpMoAM/TLNgZChnmaw6l2Ve5PTQQDNpeZUNyYbix+ckfibEYMZfMYT6/jKp
-         ymLsYHLtqdrEw==
-Date:   Mon, 5 Sep 2022 17:30:36 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        SElinux list <selinux@vger.kernel.org>, rcu@vger.kernel.org,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        Martin Pitt <mpitt@redhat.com>, Vasily Averin <vvs@openvz.org>
-Subject: Re: [PATCH 0/2] fs: fix capable() call in simple_xattr_list()
-Message-ID: <20220905153036.zzcovknz7ntgcn5f@wittgenstein>
-References: <20220901152632.970018-1-omosnace@redhat.com>
- <20220905090811.ocnnc53y2bow7m3i@wittgenstein>
- <CAFqZXNu_jf0D8LQLc15+ZrFne5F5F5PFNbkT-EkfqXvNdSKKsQ@mail.gmail.com>
+        Mon, 5 Sep 2022 11:33:20 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237FD642CD;
+        Mon,  5 Sep 2022 08:32:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N7bKt4QQC33KY8/t2BES5avqCxN8RDX8LIP4oE9P9fCaJ+Q0D3Ow9piN0oNdJXhkznYzDZjba5yV5nzJo8vkiQuSlu2MLwEusUr0xnQ+ccfWSR5tmcqIxjVU/yqMe1w054S1qFHf6VCccFE6Uo/Asfw6aoKthgy4DS7PRSoZlE5mlNYbqCUDP4J6LX2LyOttoeHZl82Jag96uVE/ka3mcDap+7rPp7vQk5Q8cO+nkmPdTA/SrItnZyaEgJ1b2EH3t9fL+0xd9MIH3oM7TqrQJLtWOoVuOOPKjQNqGxt4rGSMOvhzqEhV2IQ6W4wo6fIsECalv+RW2TVRS2OPc+R9Rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yPcAxiR3eQg5ZV43nywZlrZzLuwPPSKfyhjh1V+9NBI=;
+ b=FxCk2y3kJshucWT1TQhK7gx+r1MeKEZQseHtIS9raljWwf8oc361kHIJW4ZKXbnjz6hgFmysPfaiaibIZXTesbZtkWhZgE67v/TGNP2O96oaFJeSjGApVWBukNuCbuFYBSRVhHhP5n7zkqZSteu4vrdzJ5KqTBFiPhIxUF8qwF8+QynziJz8kViwE7ESXHF/KKbPYSD2Ig5VRnuMMjP/RK5sbukn8+dLitRh7IQDScsPSmZXzphoyvzC3RqLYlXIDGpXdy5MJZELGyGBCluS9CS+qKqGtTFq+CtGOoZ0fkS0dOVbrALsUUaIjQ8ZpELFCTvokSpSEqLzCjQao7No+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yPcAxiR3eQg5ZV43nywZlrZzLuwPPSKfyhjh1V+9NBI=;
+ b=NzCfcFvnJJ+kB+eFkasmGmP0zRMmHVde6ppoGYJH81NK5zaAyIKagh71od2tSj1HApESrQZxDLu+y/PVam8cseipLdsfglVdeO1m9V5QmqEBWIuWxTWs/q2Q/DpY5ZB0+s9L1IePbyI59Gt3d7xpBkitOT+ZCJGQVL04PTmpHwg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MW4PR12MB7384.namprd12.prod.outlook.com (2603:10b6:303:22b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.15; Mon, 5 Sep
+ 2022 15:32:24 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
+ 15:32:24 +0000
+Message-ID: <46ae09bb-2514-94b9-4497-e275bcc5f1ee@amd.com>
+Date:   Mon, 5 Sep 2022 17:32:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/4] drm/sched: Add callback and enable signaling on debug
+Content-Language: en-US
+To:     "Yadav, Arvind" <arvyadav@amd.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220905105653.13670-1-Arvind.Yadav@amd.com>
+ <20220905105653.13670-3-Arvind.Yadav@amd.com>
+ <96d14c8a-e3de-fcea-b3b1-434bc6a78ae4@amd.com>
+ <5b84f7c1-99a6-02c8-2606-8986891a95b0@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <5b84f7c1-99a6-02c8-2606-8986891a95b0@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS9PR06CA0574.eurprd06.prod.outlook.com
+ (2603:10a6:20b:486::12) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAFqZXNu_jf0D8LQLc15+ZrFne5F5F5PFNbkT-EkfqXvNdSKKsQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 36f422ba-b6e1-4977-2c0e-08da8f53d4c6
+X-MS-TrafficTypeDiagnostic: MW4PR12MB7384:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MD8Emrq1nqzhABNuHr5qIIcw3Z16fojCbJmHAgAVOKIPXQqVE2F5YeXzu0cgbU7DeURk417kG5ltweJLv+D9qgSg1vHG4utdVjDYRdeQsyjLKnj+v6GdvXS/TlcJbF11EwJRKKWE8qkkskvCZksb70Wny5LpmU12SMhEqrcg6aeG3L8utqBMnYWswZlB0apfySMQ71nHMULP35ba7T75UUOJr8DDc6yQL0eobV6KRzLlc0L2DutHtLded3AgLCPTVGkluvsNZ8BYDSMiULMls3kGACvJ7VgkZyfB6FybT6SJZBnv4/tPsCvOTsCqgryKIuMF2vXAoe8Vyb9ablVofq96lqh0UyBP3ziAyRuPcbAKBdTFWiLp+tdV740x/VTGP6fa1BpFbEkKumBDsHg5XbIwaFfevKZ+/g6UZYlirdmFWZQMoCCfN3PGG9/y8KPaiIt6CpsfODHjw1sPC02hwdovMPiERipe0++GLf+Cl33qSRWlFWJdjlZKA6SW0uCPPdoa1Y2oMoxo1o9hlV4yB1CEwxJK1sKg8+l2H/CprRrhwMqNZWZA21axyRchD9nIaImXPwhW6eVzjz8blB/N/UjCqEiZqI4rvsu/B17PN5xij8gKWxckTsVsZiPRe5AD72fEfn8maJjI7l5jfT46mR/h6DS2YFb1ocr142N9KY6CmKA/i5g9NpGZPN3i9wO/MGI/GrEdI71YIUZyAgGvNNanYzT1ebRb/URmfe1OslFsLF4fJeylrRlIuIRUQjXcMy//roWogqJ3uabAEvFApOoCqi+hRGu2aq3NTaxJCOBKXaiuHm3qTDVruueaXkMv
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39860400002)(136003)(346002)(376002)(396003)(921005)(110136005)(316002)(2906002)(31686004)(66476007)(66556008)(66946007)(8676002)(478600001)(6506007)(53546011)(6486002)(41300700001)(8936002)(36756003)(6666004)(5660300002)(38100700002)(186003)(66574015)(6512007)(86362001)(2616005)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Uy8zR2FQMHZPcS9YZkZaV1lCcE11N2hXWk4zQ3hCSjlPTmJmU1dQVEVocjlI?=
+ =?utf-8?B?eGUyT0tES1hXZkhFVTJoQ21yRHZpbTFtVW9SMmw5dWdVRERiZ3AxS3pLUWx0?=
+ =?utf-8?B?MHhZVmVGelhzMDQwN1cvVDdzdzBIMFpMWFFmQzFWZ3J2WGVtanRQelE1U0dI?=
+ =?utf-8?B?azI3bEUwSnRJdHREUm9jOVAyemk1am9yVVBqdzJMcGorSFRYWjNTK2hrNlQw?=
+ =?utf-8?B?OE8xSkNWQ1U4cXVHdVE1RHJrUnEyOFdCc3Zid0pla3hlNTAyM0Nxb1E1T1RY?=
+ =?utf-8?B?amRQTXRhKzVESGRsNVRiS3BJMlhsZkl3OGVXWktWNzE4Ti9ISlFGNXNuY0ov?=
+ =?utf-8?B?YXgxUGthOVg5TDFYNngxamQwcmgvSG5ZbkpLNldSQ0hWVGd4RnBadFNkZktO?=
+ =?utf-8?B?V1o0VWs3NUhDb0Y2TnFrTkVWY2JJV3VKdDNHRUhVdlJTYVhreFZJU3MwY0U4?=
+ =?utf-8?B?U2pYZjN4Q2pvck1iZkd3bEFyNDNweHpFQ3pwczFjNlFBNE5DQ3BraHlXREhp?=
+ =?utf-8?B?QWttVGdlZTIvVU5mOS9wN0Roa1d6MkgwbWR1NUNEc0MzRThDdVdpcXFJaG1n?=
+ =?utf-8?B?OWo1Mks2QWVIdFNwUmUyTE9CZmZUa2l2dWtrTnoyTmJKRXhMWUpySk9ZSVJj?=
+ =?utf-8?B?eDR6VDhuT1IzNVRBeEhaMzZHNzNMcjNGaWRjbzlPK01QdnFDVHA4TG1EbU1U?=
+ =?utf-8?B?bjJaVm1HU3l5OXNMQlE2blcrSnp0TkZZZUsvWXNUdHN0K0lWa3R0dGplSG9Y?=
+ =?utf-8?B?SHFIRUx4K3hiNG9tRmZJbTArc2RKWG90eU11UUVNNytRNCtaZm4vdjBkc3k1?=
+ =?utf-8?B?bEU4U3hRL2txb3J1TEl5cFoxaGRVK3JsMjZwcytHVEN5YXJLN0pJM0QwWXpi?=
+ =?utf-8?B?a0xzaVdjNUpnNkpUaktONUdiaVhJV2I1eERERlFXaG9VMGhjTTZESXlvUDA0?=
+ =?utf-8?B?aWE1ekI3emdLOTIyU0RUT1hQODEzaUorZ25LNTFPK283V1JweHhTclcyUDlC?=
+ =?utf-8?B?d1c2d29QcHJ5NnRRUVFrTjlxYStVaDFwTEorRTAzQkVMdzM4OHZzT2hoejNC?=
+ =?utf-8?B?K3gwTSszOCs3d051UjlSYldOWXpKa0ErWHdPamxpVFpvcTNWK2RabmdZTTEv?=
+ =?utf-8?B?V0tjN2VQVE8wNlp2TVNXaFFPaTc2UVhRNFRlalI5Zk83cFNrdUVDcjg3Qnpw?=
+ =?utf-8?B?eFhvSDUwMDR0Y3k3RURzZTZRSkxYSVlSTzhFL2Y0SVhsOG9EUExXdldwZHl5?=
+ =?utf-8?B?eWVXQVdISmI4ejVIeFdBOFFOeCs4c2tjV0RJQ25BM1o4ZFhGSnVWYVdoeXIv?=
+ =?utf-8?B?VS9XTW5qR0dUcHBRUUhBbGtZVXVaYWpHSTlVaFBHMFlFQVhFQnZ0clRSdW1W?=
+ =?utf-8?B?dFdkN29ENThVQjU4Zy9PZUh3SE5EWVU1UDlMc2pVOGNGVEJwLzNFZ2Z0RkFi?=
+ =?utf-8?B?dnZNUHFkL1ZhblVBNHBjM1oxK1EwZGIrWGpkSlcyUE5pQi9VQ3BGeVBRMlpm?=
+ =?utf-8?B?ckpBSktsa3Nub0ljRSs4WjZRNXZpM0tPY3VSYWlRd1hzYTVEbzhWU09UdjQy?=
+ =?utf-8?B?eU5Oa0dQZnd6UytrZDByTGdvUzJZN2ZSMlhvUG01RzZ3c3AzTnVsQjkyRTFp?=
+ =?utf-8?B?OGw3WEp4MWVVN1BHdnBiT3B3SzB4U2ZSOVhBUEtySmlMSHIyc0dDVHJ4VXRy?=
+ =?utf-8?B?ZUp2cDhWYVF1MDVWQTgzRDd6TmEzNndteUoxYjFDQ005MG5lQnFzdGJiU2NO?=
+ =?utf-8?B?TzhKcUtubStYdXNIWU5xSjlodG9lRksySGlGRW9FY1JxTmpUQmFpNER0QUU2?=
+ =?utf-8?B?L2pIMSt1aTZqVzFqUGtuc1NWai9PTkN2dUN4QjRVTWhabXF2OVh1ZzNaVVN1?=
+ =?utf-8?B?a20rYlNiVlI3NEQ2K2ZHQlc2Uk9HN09udUhRL2VicFRLWkp5Ymk4MXNXaE5W?=
+ =?utf-8?B?SWU2Umg2Ui9UTndLUEZyQThiT2I2ZitIWXdiYzJXS21RUnBIWjR1NEpHejNl?=
+ =?utf-8?B?WUZtdlY2NURGZEk0ZkhYZ1lmajlidmpxY0VXQnRnMWhhT0wxZ2tYYTFiTEVt?=
+ =?utf-8?B?S0xSaVl6UlZXUnEwblRWUzA3VXhTcnIwQmZFSHdwNUFxMTVpNlZHbG5qOHNy?=
+ =?utf-8?B?RCtHVGhTd3h2bDdRZ3JZOXh4LzBBUVZhNjZXd0tqKzZDaFBKZGFuRUhBWThJ?=
+ =?utf-8?Q?JLjXknh0uaZ9/0Y8RtUu3KNMc4pPrnbTw9zMMFtHwcvb?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36f422ba-b6e1-4977-2c0e-08da8f53d4c6
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 15:32:24.4598
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z7DYDqeZRIYPI7txKobZe4iUGold0IRO01BCu6Jy+m7h7Q3GaFVL4LzH+5GrMvyC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7384
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 12:15:01PM +0200, Ondrej Mosnacek wrote:
-> On Mon, Sep 5, 2022 at 11:08 AM Christian Brauner <brauner@kernel.org> wrote:
-> > On Thu, Sep 01, 2022 at 05:26:30PM +0200, Ondrej Mosnacek wrote:
-> > > The goal of these patches is to avoid calling capable() unconditionally
-> > > in simple_xattr_list(), which causes issues under SELinux (see
-> > > explanation in the second patch).
-> > >
-> > > The first patch tries to make this change safer by converting
-> > > simple_xattrs to use the RCU mechanism, so that capable() is not called
-> > > while the xattrs->lock is held. I didn't find evidence that this is an
-> > > issue in the current code, but it can't hurt to make that change
-> > > either way (and it was quite straightforward).
-> >
-> > Hey Ondrey,
-> >
-> > There's another patchset I'd like to see first which switches from a
-> > linked list to an rbtree to get rid of performance issues in this code
-> > that can be used to dos tmpfs in containers:
-> >
-> > https://lore.kernel.org/lkml/d73bd478-e373-f759-2acb-2777f6bba06f@openvz.org
-> >
-> > I don't think Vasily has time to continue with this so I'll just pick it
-> > up hopefully this or the week after LPC.
-> 
-> Hm... does rbtree support lockless traversal? Because if not, that
+Am 05.09.22 um 15:46 schrieb Yadav, Arvind:
+> On 9/5/2022 4:55 PM, Christian König wrote:
+>> [SNIP]
+>>
+>> Am 05.09.22 um 12:56 schrieb Arvind Yadav:
+>>>       .release = drm_sched_fence_release_finished,
+>>>   };
+>>>   diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
+>>> b/drivers/gpu/drm/scheduler/sched_main.c
+>>> index e0ab14e0fb6b..140e3d8646e2 100644
+>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>>> @@ -961,7 +961,9 @@ static int drm_sched_main(void *param)
+>>>               s_fence->parent = dma_fence_get(fence);
+>>>               /* Drop for original kref_init of the fence */
+>>>               dma_fence_put(fence);
+>>
+>> Uff, not related to your patch but that looks wrong to me. The 
+>> reference can only be dropped after the call to 
+>> dma_fence_add_callback().
+>>
+> Shall I take care with this patch or I will submit separate one ?
 
-The rfc that Vasily sent didn't allow for that at least.
 
-> would make it impossible to fix the issue without calling capable()
-> inside the critical section (or doing something complicated), AFAICT.
-> Would rhashtable be a workable alternative to rbtree for this use
-> case? Skimming <linux/rhashtable.h> it seems to support both lockless
-> lookup and traversal using RCU. And according to its manpage,
-> *listxattr(2) doesn't guarantee that the returned names are sorted.
+Separate one. It's probably no big deal since we grab another reference 
+right before, but still quite some broken coding.
 
-I've never used the rhashtable infrastructure in any meaningful way. All
-I can say from looking at current users that it looks like it could work
-well for us here:
+Thanks,
+Christian.
 
-struct simple_xattr {
-	struct rhlist_head rhlist_head;
-	char *name;
-	size_t size;
-	char value[];
-};
+>
+>>> -
+>>> +#ifdef CONFIG_DEBUG_FS
+>>> + dma_fence_enable_sw_signaling(&s_fence->finished);
+>>> +#endif
+>>
+>> This should always be called, independent of the config options set.
+>>
+>> Christian.
+>
+> sure, I will remove the Config check.
+>
+> ~arvind
+>
+>>
+>>>               r = dma_fence_add_callback(fence, &sched_job->cb,
+>>>                              drm_sched_job_done_cb);
+>>>               if (r == -ENOENT)
+>>
 
-static const struct rhashtable_params simple_xattr_rhashtable = {
-	.head_offset = offsetof(struct simple_xattr, rhlist_head),
-	.key_offset = offsetof(struct simple_xattr, name),
-
-or sm like this.

@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A2E5AD1B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA49D5AD1BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238117AbiIELmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 07:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
+        id S238243AbiIELoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 07:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbiIELmW (ORCPT
+        with ESMTP id S238216AbiIELoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 07:42:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618C35A8A9;
-        Mon,  5 Sep 2022 04:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662378141; x=1693914141;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CK6a+K6xVlEufmYnfhljih8pAOpl8B6zMfeDVzimZHM=;
-  b=SfO0vGxtN+T7Zh6tCmxyEaGbRvOSlHl1xMCvVp3ERcFkwB4X1mZSECCj
-   Swxiw2KzBWHV1gettJejL9a2oGV+igin1RFJjMVLJ54da+YZW4A6fiWfN
-   ubLhsYuswMTDfLeJRt5sa/zJ0Unu3krYCLsWZ62P+kBplRX81yLsz0F7o
-   rdYW5vI1nvr5F4HwIrd7I9Y0oiSMlKqLmt7P8QsJHTPMuEkzOhn8/zyEP
-   wJwj3YpxgdjLuQfxbhZ0EzniDgk+HC0d11NJbzcXXk+8USXIoeuITUGlj
-   1X1vlHJcpf6A9una5Z2HJu0yjK9hIk0vvFEpAmVNp5BPWBZW+S/z6YSn4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="297159210"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="297159210"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 04:42:21 -0700
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="609653245"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.56.151])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 04:42:18 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH V2] libperf evlist: Fix per-thread mmaps for multi-threaded targets
-Date:   Mon,  5 Sep 2022 14:42:09 +0300
-Message-Id: <20220905114209.8389-1-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+        Mon, 5 Sep 2022 07:44:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D545788A;
+        Mon,  5 Sep 2022 04:44:02 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DF89220E8E;
+        Mon,  5 Sep 2022 11:44:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662378240; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pdjvV5vVZbGw/kdAksGm6cLcJpOHeP3800cvgy6tsTs=;
+        b=vNFl6wQYvAOm14d29IqL3inQp0PzKgBlQBqlxrT1KiF8tZ96lJNK8i+zKVRbmizHBYQu/r
+        bSyfRMicACpUc4EscfMjhlFOEK+RTTR3ulj/Ff3wgtUJobzEVrHFPu4xks6MjzsQ8MxOwa
+        cl4UEFiFvtG4VBo1lcMvKAnUbM2iviA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662378240;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pdjvV5vVZbGw/kdAksGm6cLcJpOHeP3800cvgy6tsTs=;
+        b=OsJPV8DRncMYyeMDdS7YXbXEn8BfgB8fWqgmBEEB8Ftv0DTawKsjg3qEiSikQOJGcZDzrE
+        kzXtQ5Oq3rv8oDAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BDA6F139C7;
+        Mon,  5 Sep 2022 11:44:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vYybLQDhFWOxawAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 05 Sep 2022 11:44:00 +0000
+Date:   Mon, 05 Sep 2022 13:44:00 +0200
+Message-ID: <87sfl6jbb3.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        =?ISO-8859-4?Q?Nikl=E0vs_Ko=B6es=F1ikovs?= 
+        <89q1r14hd@relay.firefox.com>, Wim Taymans <wtaymans@redhat.com>
+Subject: Re: [PATCH] ALSA: usb-audio: Don't refcount multiple accesses on the single clock
+In-Reply-To: <20220905101403.1435037-1-Jason@zx2c4.com>
+References: <20220905101403.1435037-1-Jason@zx2c4.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-4
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,208 +73,299 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The offending commit removed mmap_per_thread(), which did not consider
-the different set-output rules for per-thread mmaps i.e. in the per-thread
-case set-output is used for file descriptors of the same thread not the
-same cpu.
+On Mon, 05 Sep 2022 12:14:03 +0200,
+Jason A. Donenfeld wrote:
+> 
+> This reverts commit 03a8b0df757f1beb21ba1626e23ca7412e48b525.
+> This reverts commit c11117b634f4f832c4420d3cf41c44227f140ce1.
+> 
+> Pipewire and PulseAudio start devices with 44.1khz before changing them
+> to 48khz (or something different). By locking the rate, daemons are
+> unable to enumerate possible rates, and so they never change them to a
+> more optimal rate. This revert patch should allow 48khz audio again.
 
-This was not immediately noticed because it only happens with
-multi-threaded targets and we do not have a test for that yet.
+Well, in that case, the revert is no right solution, IMO.
+If the patch caused a problem, it means that the application tries to
+change the rate while it's being still running by another.  If it
+worked, it worked just casually without noticing the bad behavior.
+That said, changing the rate for a tied stream with a different rate
+while another is actually running is anyway no-go.  Maybe it should
+have better PCM hw constraint for covering this.  We need to check
+more details.
 
-Reinstate mmap_per_thread() expanding it to cover also system-wide per-cpu
-events i.e. to continue to allow the mixing of per-thread and per-cpu
-mmaps.
-
-Debug messages (with -vv) show the file descriptors that are opened with
-sys_perf_event_open. New debug messages are added (needs -vvv) that show
-also which file descriptors are mmapped and which are redirected with
-set-output.
-
-In the per-cpu case (cpu != -1) file descriptors for the same CPU are
-set-output to the first file descriptor for that CPU.
-
-In the per-thread case (cpu == -1) file descriptors for the same thread are
-set-output to the first file descriptor for that thread.
-
-Example (process 17489 has 2 threads):
-
- Before (but with new debug prints):
-
-   $ perf record --no-bpf-event -vvv --per-thread -p 17489
-   <SNIP>
-   sys_perf_event_open: pid 17489  cpu -1  group_fd -1  flags 0x8 = 5
-   sys_perf_event_open: pid 17490  cpu -1  group_fd -1  flags 0x8 = 6
-   <SNIP>
-   libperf: idx 0: mmapping fd 5
-   libperf: idx 0: set output fd 6 -> 5
-   failed to mmap with 22 (Invalid argument)
-
- After:
-
-   $ perf record --no-bpf-event -vvv --per-thread -p 17489
-   <SNIP>
-   sys_perf_event_open: pid 17489  cpu -1  group_fd -1  flags 0x8 = 5
-   sys_perf_event_open: pid 17490  cpu -1  group_fd -1  flags 0x8 = 6
-   <SNIP>
-   libperf: mmap_per_thread: nr cpu values (may include -1) 1 nr threads 2
-   libperf: idx 0: mmapping fd 5
-   libperf: idx 1: mmapping fd 6
-   <SNIP>
-   [ perf record: Woken up 2 times to write data ]
-   [ perf record: Captured and wrote 0.018 MB perf.data (15 samples) ]
-
-Per-cpu example (process 20341 has 2 threads, same as above):
-
-   $ perf record --no-bpf-event -vvv -p 20341
-   <SNIP>
-   sys_perf_event_open: pid 20341  cpu 0  group_fd -1  flags 0x8 = 5
-   sys_perf_event_open: pid 20342  cpu 0  group_fd -1  flags 0x8 = 6
-   sys_perf_event_open: pid 20341  cpu 1  group_fd -1  flags 0x8 = 7
-   sys_perf_event_open: pid 20342  cpu 1  group_fd -1  flags 0x8 = 8
-   sys_perf_event_open: pid 20341  cpu 2  group_fd -1  flags 0x8 = 9
-   sys_perf_event_open: pid 20342  cpu 2  group_fd -1  flags 0x8 = 10
-   sys_perf_event_open: pid 20341  cpu 3  group_fd -1  flags 0x8 = 11
-   sys_perf_event_open: pid 20342  cpu 3  group_fd -1  flags 0x8 = 12
-   sys_perf_event_open: pid 20341  cpu 4  group_fd -1  flags 0x8 = 13
-   sys_perf_event_open: pid 20342  cpu 4  group_fd -1  flags 0x8 = 14
-   sys_perf_event_open: pid 20341  cpu 5  group_fd -1  flags 0x8 = 15
-   sys_perf_event_open: pid 20342  cpu 5  group_fd -1  flags 0x8 = 16
-   sys_perf_event_open: pid 20341  cpu 6  group_fd -1  flags 0x8 = 17
-   sys_perf_event_open: pid 20342  cpu 6  group_fd -1  flags 0x8 = 18
-   sys_perf_event_open: pid 20341  cpu 7  group_fd -1  flags 0x8 = 19
-   sys_perf_event_open: pid 20342  cpu 7  group_fd -1  flags 0x8 = 20
-   <SNIP>
-   libperf: mmap_per_cpu: nr cpu values 8 nr threads 2
-   libperf: idx 0: mmapping fd 5
-   libperf: idx 0: set output fd 6 -> 5
-   libperf: idx 1: mmapping fd 7
-   libperf: idx 1: set output fd 8 -> 7
-   libperf: idx 2: mmapping fd 9
-   libperf: idx 2: set output fd 10 -> 9
-   libperf: idx 3: mmapping fd 11
-   libperf: idx 3: set output fd 12 -> 11
-   libperf: idx 4: mmapping fd 13
-   libperf: idx 4: set output fd 14 -> 13
-   libperf: idx 5: mmapping fd 15
-   libperf: idx 5: set output fd 16 -> 15
-   libperf: idx 6: mmapping fd 17
-   libperf: idx 6: set output fd 18 -> 17
-   libperf: idx 7: mmapping fd 19
-   libperf: idx 7: set output fd 20 -> 19
-   <SNIP>
-   [ perf record: Woken up 7 times to write data ]
-   [ perf record: Captured and wrote 0.020 MB perf.data (17 samples) ]
-
-Fixes: ae4f8ae16a07 ("libperf evlist: Allow mixing per-thread and per-cpu mmaps")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
+When you load snd-usb-audio with dyndbg=+p option, does it show the
+new error message "Mismatched sample rate xxx"?
 
 
-Changes in V2:
+thanks,
 
-	Expand commit message.
-	White-space fixups.
+Takashi
 
-
- tools/lib/perf/evlist.c | 50 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
-
-diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-index e6c98a6e3908..6b1bafe267a4 100644
---- a/tools/lib/perf/evlist.c
-+++ b/tools/lib/perf/evlist.c
-@@ -486,6 +486,7 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
- 			if (ops->idx)
- 				ops->idx(evlist, evsel, mp, idx);
- 
-+			pr_debug("idx %d: mmapping fd %d\n", idx, *output);
- 			if (ops->mmap(map, mp, *output, evlist_cpu) < 0)
- 				return -1;
- 
-@@ -494,6 +495,7 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
- 			if (!idx)
- 				perf_evlist__set_mmap_first(evlist, map, overwrite);
- 		} else {
-+			pr_debug("idx %d: set output fd %d -> %d\n", idx, fd, *output);
- 			if (ioctl(fd, PERF_EVENT_IOC_SET_OUTPUT, *output) != 0)
- 				return -1;
- 
-@@ -519,6 +521,48 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
- 	return 0;
- }
- 
-+static int
-+mmap_per_thread(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
-+		struct perf_mmap_param *mp)
-+{
-+	int nr_threads = perf_thread_map__nr(evlist->threads);
-+	int nr_cpus    = perf_cpu_map__nr(evlist->all_cpus);
-+	int cpu, thread, idx = 0;
-+	int nr_mmaps = 0;
-+
-+	pr_debug("%s: nr cpu values (may include -1) %d nr threads %d\n",
-+		 __func__, nr_cpus, nr_threads);
-+
-+	/* per-thread mmaps */
-+	for (thread = 0; thread < nr_threads; thread++, idx++) {
-+		int output = -1;
-+		int output_overwrite = -1;
-+
-+		if (mmap_per_evsel(evlist, ops, idx, mp, 0, thread, &output,
-+				   &output_overwrite, &nr_mmaps))
-+			goto out_unmap;
-+	}
-+
-+	/* system-wide mmaps i.e. per-cpu */
-+	for (cpu = 1; cpu < nr_cpus; cpu++, idx++) {
-+		int output = -1;
-+		int output_overwrite = -1;
-+
-+		if (mmap_per_evsel(evlist, ops, idx, mp, cpu, 0, &output,
-+				   &output_overwrite, &nr_mmaps))
-+			goto out_unmap;
-+	}
-+
-+	if (nr_mmaps != evlist->nr_mmaps)
-+		pr_err("Miscounted nr_mmaps %d vs %d\n", nr_mmaps, evlist->nr_mmaps);
-+
-+	return 0;
-+
-+out_unmap:
-+	perf_evlist__munmap(evlist);
-+	return -1;
-+}
-+
- static int
- mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
- 	     struct perf_mmap_param *mp)
-@@ -528,6 +572,8 @@ mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
- 	int nr_mmaps = 0;
- 	int cpu, thread;
- 
-+	pr_debug("%s: nr cpu values %d nr threads %d\n", __func__, nr_cpus, nr_threads);
-+
- 	for (cpu = 0; cpu < nr_cpus; cpu++) {
- 		int output = -1;
- 		int output_overwrite = -1;
-@@ -569,6 +615,7 @@ int perf_evlist__mmap_ops(struct perf_evlist *evlist,
- 			  struct perf_evlist_mmap_ops *ops,
- 			  struct perf_mmap_param *mp)
- {
-+	const struct perf_cpu_map *cpus = evlist->all_cpus;
- 	struct perf_evsel *evsel;
- 
- 	if (!ops || !ops->get || !ops->mmap)
-@@ -588,6 +635,9 @@ int perf_evlist__mmap_ops(struct perf_evlist *evlist,
- 	if (evlist->pollfd.entries == NULL && perf_evlist__alloc_pollfd(evlist) < 0)
- 		return -ENOMEM;
- 
-+	if (perf_cpu_map__empty(cpus))
-+		return mmap_per_thread(evlist, ops, mp);
-+
- 	return mmap_per_cpu(evlist, ops, mp);
- }
- 
--- 
-2.25.1
-
+> 
+> Fixes: c11117b634f4 ("ALSA: usb-audio: Refcount multiple accesses on the single clock")
+> Cc: stable@vger.kernel.org
+> Cc: Takashi Iwai <tiwai@suse.de>
+> Cc: Niklàvs Ko¶esñikovs <89q1r14hd@relay.firefox.com>
+> Cc: Wim Taymans <wtaymans@redhat.com>
+> Link: https://lore.kernel.org/all/YxXIWv8dYmg1tnXP@zx2c4.com/
+> Link: https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/2620
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  sound/usb/card.c     |  1 -
+>  sound/usb/card.h     |  3 +-
+>  sound/usb/endpoint.c | 90 +++++---------------------------------------
+>  sound/usb/usbaudio.h |  1 -
+>  4 files changed, 10 insertions(+), 85 deletions(-)
+> 
+> diff --git a/sound/usb/card.c b/sound/usb/card.c
+> index d356743de2ff..12bca2e85505 100644
+> --- a/sound/usb/card.c
+> +++ b/sound/usb/card.c
+> @@ -643,7 +643,6 @@ static int snd_usb_audio_create(struct usb_interface *intf,
+>  	INIT_LIST_HEAD(&chip->pcm_list);
+>  	INIT_LIST_HEAD(&chip->ep_list);
+>  	INIT_LIST_HEAD(&chip->iface_ref_list);
+> -	INIT_LIST_HEAD(&chip->clock_ref_list);
+>  	INIT_LIST_HEAD(&chip->midi_list);
+>  	INIT_LIST_HEAD(&chip->mixer_list);
+>  
+> diff --git a/sound/usb/card.h b/sound/usb/card.h
+> index ca75f2206170..87f042d06ce0 100644
+> --- a/sound/usb/card.h
+> +++ b/sound/usb/card.h
+> @@ -44,7 +44,6 @@ struct audioformat {
+>  
+>  struct snd_usb_substream;
+>  struct snd_usb_iface_ref;
+> -struct snd_usb_clock_ref;
+>  struct snd_usb_endpoint;
+>  struct snd_usb_power_domain;
+>  
+> @@ -63,7 +62,6 @@ struct snd_urb_ctx {
+>  struct snd_usb_endpoint {
+>  	struct snd_usb_audio *chip;
+>  	struct snd_usb_iface_ref *iface_ref;
+> -	struct snd_usb_clock_ref *clock_ref;
+>  
+>  	int opened;		/* open refcount; protect with chip->mutex */
+>  	atomic_t running;	/* running status */
+> @@ -140,6 +138,7 @@ struct snd_usb_endpoint {
+>  	unsigned int cur_period_frames;
+>  	unsigned int cur_period_bytes;
+>  	unsigned int cur_buffer_periods;
+> +	unsigned char cur_clock;
+>  
+>  	spinlock_t lock;
+>  	struct list_head list;
+> diff --git a/sound/usb/endpoint.c b/sound/usb/endpoint.c
+> index 0d7b73bf7945..0f5e9224a799 100644
+> --- a/sound/usb/endpoint.c
+> +++ b/sound/usb/endpoint.c
+> @@ -35,14 +35,6 @@ struct snd_usb_iface_ref {
+>  	struct list_head list;
+>  };
+>  
+> -/* clock refcounting */
+> -struct snd_usb_clock_ref {
+> -	unsigned char clock;
+> -	atomic_t locked;
+> -	int rate;
+> -	struct list_head list;
+> -};
+> -
+>  /*
+>   * snd_usb_endpoint is a model that abstracts everything related to an
+>   * USB endpoint and its streaming.
+> @@ -599,25 +591,6 @@ iface_ref_find(struct snd_usb_audio *chip, int iface)
+>  	return ip;
+>  }
+>  
+> -/* Similarly, a refcount object for clock */
+> -static struct snd_usb_clock_ref *
+> -clock_ref_find(struct snd_usb_audio *chip, int clock)
+> -{
+> -	struct snd_usb_clock_ref *ref;
+> -
+> -	list_for_each_entry(ref, &chip->clock_ref_list, list)
+> -		if (ref->clock == clock)
+> -			return ref;
+> -
+> -	ref = kzalloc(sizeof(*ref), GFP_KERNEL);
+> -	if (!ref)
+> -		return NULL;
+> -	ref->clock = clock;
+> -	atomic_set(&ref->locked, 0);
+> -	list_add_tail(&ref->list, &chip->clock_ref_list);
+> -	return ref;
+> -}
+> -
+>  /*
+>   * Get the existing endpoint object corresponding EP
+>   * Returns NULL if not present.
+> @@ -795,14 +768,6 @@ snd_usb_endpoint_open(struct snd_usb_audio *chip,
+>  			goto unlock;
+>  		}
+>  
+> -		if (fp->protocol != UAC_VERSION_1) {
+> -			ep->clock_ref = clock_ref_find(chip, fp->clock);
+> -			if (!ep->clock_ref) {
+> -				ep = NULL;
+> -				goto unlock;
+> -			}
+> -		}
+> -
+>  		ep->cur_audiofmt = fp;
+>  		ep->cur_channels = fp->channels;
+>  		ep->cur_rate = params_rate(params);
+> @@ -812,6 +777,7 @@ snd_usb_endpoint_open(struct snd_usb_audio *chip,
+>  		ep->cur_period_frames = params_period_size(params);
+>  		ep->cur_period_bytes = ep->cur_period_frames * ep->cur_frame_bytes;
+>  		ep->cur_buffer_periods = params_periods(params);
+> +		ep->cur_clock = fp->clock;
+>  
+>  		if (ep->type == SND_USB_ENDPOINT_TYPE_SYNC)
+>  			endpoint_set_syncinterval(chip, ep);
+> @@ -928,8 +894,8 @@ void snd_usb_endpoint_close(struct snd_usb_audio *chip,
+>  		ep->altsetting = 0;
+>  		ep->cur_audiofmt = NULL;
+>  		ep->cur_rate = 0;
+> +		ep->cur_clock = 0;
+>  		ep->iface_ref = NULL;
+> -		ep->clock_ref = NULL;
+>  		usb_audio_dbg(chip, "EP 0x%x closed\n", ep->ep_num);
+>  	}
+>  	mutex_unlock(&chip->mutex);
+> @@ -941,8 +907,6 @@ void snd_usb_endpoint_suspend(struct snd_usb_endpoint *ep)
+>  	ep->need_setup = true;
+>  	if (ep->iface_ref)
+>  		ep->iface_ref->need_setup = true;
+> -	if (ep->clock_ref)
+> -		ep->clock_ref->rate = 0;
+>  }
+>  
+>  /*
+> @@ -1350,33 +1314,6 @@ static int snd_usb_endpoint_set_params(struct snd_usb_audio *chip,
+>  	return 0;
+>  }
+>  
+> -static int init_sample_rate(struct snd_usb_audio *chip,
+> -			    struct snd_usb_endpoint *ep)
+> -{
+> -	struct snd_usb_clock_ref *clock = ep->clock_ref;
+> -	int err;
+> -
+> -	if (clock) {
+> -		if (atomic_read(&clock->locked))
+> -			return 0;
+> -		if (clock->rate == ep->cur_rate)
+> -			return 0;
+> -		if (clock->rate && clock->rate != ep->cur_rate) {
+> -			usb_audio_dbg(chip, "Mismatched sample rate %d vs %d for EP 0x%x\n",
+> -				      clock->rate, ep->cur_rate, ep->ep_num);
+> -			return -EINVAL;
+> -		}
+> -	}
+> -
+> -	err = snd_usb_init_sample_rate(chip, ep->cur_audiofmt, ep->cur_rate);
+> -	if (err < 0)
+> -		return err;
+> -
+> -	if (clock)
+> -		clock->rate = ep->cur_rate;
+> -	return 0;
+> -}
+> -
+>  /*
+>   * snd_usb_endpoint_configure: Configure the endpoint
+>   *
+> @@ -1406,7 +1343,8 @@ int snd_usb_endpoint_configure(struct snd_usb_audio *chip,
+>  		 * to update at each EP configuration
+>  		 */
+>  		if (ep->cur_audiofmt->protocol == UAC_VERSION_1) {
+> -			err = init_sample_rate(chip, ep);
+> +			err = snd_usb_init_sample_rate(chip, ep->cur_audiofmt,
+> +						       ep->cur_rate);
+>  			if (err < 0)
+>  				goto unlock;
+>  		}
+> @@ -1436,7 +1374,7 @@ int snd_usb_endpoint_configure(struct snd_usb_audio *chip,
+>  	if (err < 0)
+>  		goto unlock;
+>  
+> -	err = init_sample_rate(chip, ep);
+> +	err = snd_usb_init_sample_rate(chip, ep->cur_audiofmt, ep->cur_rate);
+>  	if (err < 0)
+>  		goto unlock;
+>  
+> @@ -1469,15 +1407,15 @@ int snd_usb_endpoint_configure(struct snd_usb_audio *chip,
+>  /* get the current rate set to the given clock by any endpoint */
+>  int snd_usb_endpoint_get_clock_rate(struct snd_usb_audio *chip, int clock)
+>  {
+> -	struct snd_usb_clock_ref *ref;
+> +	struct snd_usb_endpoint *ep;
+>  	int rate = 0;
+>  
+>  	if (!clock)
+>  		return 0;
+>  	mutex_lock(&chip->mutex);
+> -	list_for_each_entry(ref, &chip->clock_ref_list, list) {
+> -		if (ref->clock == clock) {
+> -			rate = ref->rate;
+> +	list_for_each_entry(ep, &chip->ep_list, list) {
+> +		if (ep->cur_clock == clock && ep->cur_rate) {
+> +			rate = ep->cur_rate;
+>  			break;
+>  		}
+>  	}
+> @@ -1518,9 +1456,6 @@ int snd_usb_endpoint_start(struct snd_usb_endpoint *ep)
+>  	if (atomic_inc_return(&ep->running) != 1)
+>  		return 0;
+>  
+> -	if (ep->clock_ref)
+> -		atomic_inc(&ep->clock_ref->locked);
+> -
+>  	ep->active_mask = 0;
+>  	ep->unlink_mask = 0;
+>  	ep->phase = 0;
+> @@ -1630,9 +1565,6 @@ void snd_usb_endpoint_stop(struct snd_usb_endpoint *ep, bool keep_pending)
+>  		if (ep->sync_source)
+>  			WRITE_ONCE(ep->sync_source->sync_sink, NULL);
+>  		stop_urbs(ep, false, keep_pending);
+> -		if (ep->clock_ref)
+> -			if (!atomic_dec_return(&ep->clock_ref->locked))
+> -				ep->clock_ref->rate = 0;
+>  	}
+>  }
+>  
+> @@ -1659,16 +1591,12 @@ void snd_usb_endpoint_free_all(struct snd_usb_audio *chip)
+>  {
+>  	struct snd_usb_endpoint *ep, *en;
+>  	struct snd_usb_iface_ref *ip, *in;
+> -	struct snd_usb_clock_ref *cp, *cn;
+>  
+>  	list_for_each_entry_safe(ep, en, &chip->ep_list, list)
+>  		kfree(ep);
+>  
+>  	list_for_each_entry_safe(ip, in, &chip->iface_ref_list, list)
+>  		kfree(ip);
+> -
+> -	list_for_each_entry_safe(cp, cn, &chip->clock_ref_list, list)
+> -		kfree(cp);
+>  }
+>  
+>  /*
+> diff --git a/sound/usb/usbaudio.h b/sound/usb/usbaudio.h
+> index ffbb4b0d09a0..044cd7ab27cb 100644
+> --- a/sound/usb/usbaudio.h
+> +++ b/sound/usb/usbaudio.h
+> @@ -45,7 +45,6 @@ struct snd_usb_audio {
+>  	struct list_head pcm_list;	/* list of pcm streams */
+>  	struct list_head ep_list;	/* list of audio-related endpoints */
+>  	struct list_head iface_ref_list; /* list of interface refcounts */
+> -	struct list_head clock_ref_list; /* list of clock refcounts */
+>  	int pcm_devs;
+>  
+>  	struct list_head midi_list;	/* list of midi interfaces */
+> -- 
+> 2.37.3
+> 

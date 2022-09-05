@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E495AD2AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F9B5AD2D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238136AbiIEMcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
+        id S238164AbiIEMc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237793AbiIEMa0 (ORCPT
+        with ESMTP id S237813AbiIEMa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:30:26 -0400
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BAC6111F
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:26:37 -0700 (PDT)
-Received: by mail-wr1-x44a.google.com with SMTP id t12-20020adfa2cc000000b00224f577fad1so1233458wra.4
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:26:37 -0700 (PDT)
+        Mon, 5 Sep 2022 08:30:29 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102702317C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:26:39 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id hp14-20020a1709073e0e00b00741a2093c4aso2312207ejc.20
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=VswCSWA+rV4PC5eDv8SsttMbBbTb1fmAEKvfw1RwEtM=;
-        b=FaysfHPUHEI9xDQ+DizkafuJSz2Euxr4w8pch7JyeIF7w+mm9SpixN7VAttRnhIcf1
-         iHLsEV9jw/pLNwUY4C8KGw1A06689EYkbOQFe18iHyK1OO4vYcFXMfZ5ltlCGAVJ5Riu
-         XG1siZwi0o/mlCR+V64/HPoH407x/VrsCnkDyjBQzBqc2hGL0yRU8s5mEz8P1N59BhTg
-         hzG3VGefRSfd/eN++lt3E3Gg+z8Tl5riHtwzfLnKb+uWX3YCISAS21Fwh0ERlJq81TyF
-         KZxD8W4yBHXpc4Lq6Y1MBvt4ESwZqiGITUw1+GV0SilDaebvQNF1YZTejeneVonkFaZs
-         QPng==
+        bh=yflFKH40jmwCCGQluWMEQ//gU/gWIMkmRe3xdXByGVQ=;
+        b=fAxph5Y6U04CXZrajhFkL+LMhlfmAqX1mOptfFGFa+34F1+59OCoqL+hyS00yE9PU3
+         JiQF8Q7PP63alm8LFCcaO0ZZHzZ5WxGFto4GmMcgZr9o9k0lEZRIQVzzKRElWx4oA9Ez
+         7ZjbmW+o8zPS23NFbXCbrLPnQaO1lqjWBLYh2MePrjtDiEAPdC3lrLsuRUbPOH3mzVEQ
+         PgdyG8vgJN4Qnre4Ot1waLJj7+TH2C6/GbnJwovqjOPhmu9jof0uYhctQHZkHtEoZesE
+         L4Z7jgUgDUS3X3M2bfaQgTzxuHr1pPSXpKXdHYlPC0r3legvJZAdTPNLBXX4Lymsq/aN
+         mAFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=VswCSWA+rV4PC5eDv8SsttMbBbTb1fmAEKvfw1RwEtM=;
-        b=GDwUDLZei5lRhXXIJL01p7/72FpxBg0HtJobzU8qxPpQn8KLA5jJ6N98Mcbxb1pV4/
-         hc6pMJC4AK3o3Z0fHDLvWh8P5EgrebOUSwXobxL5GYJQ9GSAaquKD4LaWblh4Nh/FSKZ
-         jXCSSztFubGI3rZGuI4VHOY9ZpzPlfPJFboqzyUoV2pBp2XJlQoMLXABk/U2QDR4n/4t
-         xJAk5MWwup1l5CyagvCTOzInjkJV+T0Neio/565Pn+PLUZlhQa59PjO8sYgI0OIH2OAG
-         EKITDK3DF+36jPauC7Hb1TfuRRZBNAM69O689fXet+k4aWg27+XeIwchUV5t9bKeoVeY
-         PhMg==
-X-Gm-Message-State: ACgBeo0qv8HIHQLbWPxWmMyVHeKTrgGla2QF69ypy70w6VB1OacNFP75
-        V42RXSDVHWmsMc5cYof3SnvVm8Znn8I=
-X-Google-Smtp-Source: AA6agR4gbeELzWeJ61Je42r5xKh3pLfxGhHrG+p/6kCfXsLn7Q35sPMS2Mz+9NAgIsEblPfRPD+7AHIMdIQ=
+        bh=yflFKH40jmwCCGQluWMEQ//gU/gWIMkmRe3xdXByGVQ=;
+        b=pXsHzJvyLxFrFzxJUE4fkUuPU2kU86KsDiO9kgksN83yYLZlhSKOFNkNq5JCezbv8K
+         xJ1WxZUTazjEA5QWkbwMjFcJpoBrMXYdIP4cNJIzPrXZVaz9+9P4E1xpsBVxjrEtFFVb
+         03Z07IP60faRQur1i1D7cVhntWMR/HTOe+ZFprH2PUm1kxGMmHC5Vhe98cOgyTyLIC7q
+         Y1lVDruQjIoCBFRwFquGKsESVr07/5mILP3VKGnaswKbAUBoAZ4iqVW0GHIZRsLgJG11
+         EmTeZRZSFvyBhPQQEkRGz3sEOUXFzxYHjmcR0aGxuQjn/NFqp0htildTQV7LRU8wbMTv
+         RUmw==
+X-Gm-Message-State: ACgBeo02sslZYbZOPAsxQYZByliECOMLwpmggh947OMrzsXkQM7v1Eg/
+        pwuKb6/FMDH09vBhqpJEFe5tcEE7Akk=
+X-Google-Smtp-Source: AA6agR7p8f0oX7Qv/mGgEi+wXgphK2AAXJizc5KwHHFoVlbMDXfcad2dvQIIPWVBGG5QIQ/9evyI4QEPVGs=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:b808:8d07:ab4a:554c])
- (user=glider job=sendgmr) by 2002:a5d:4448:0:b0:226:82ff:f3e6 with SMTP id
- x8-20020a5d4448000000b0022682fff3e6mr25180706wrr.115.1662380790918; Mon, 05
- Sep 2022 05:26:30 -0700 (PDT)
-Date:   Mon,  5 Sep 2022 14:24:42 +0200
+ (user=glider job=sendgmr) by 2002:a17:907:2722:b0:731:2aeb:7942 with SMTP id
+ d2-20020a170907272200b007312aeb7942mr35645383ejl.734.1662380793723; Mon, 05
+ Sep 2022 05:26:33 -0700 (PDT)
+Date:   Mon,  5 Sep 2022 14:24:43 +0200
 In-Reply-To: <20220905122452.2258262-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220905122452.2258262-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220905122452.2258262-35-glider@google.com>
-Subject: [PATCH v6 34/44] x86: kmsan: skip shadow checks in __switch_to()
+Message-ID: <20220905122452.2258262-36-glider@google.com>
+Subject: [PATCH v6 35/44] x86: kmsan: handle open-coded assembly in lib/iomem.c
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -90,63 +90,54 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When instrumenting functions, KMSAN obtains the per-task state (mostly
-pointers to metadata for function arguments and return values) once per
-function at its beginning, using the `current` pointer.
+KMSAN cannot intercept memory accesses within asm() statements.
+That's why we add kmsan_unpoison_memory() and kmsan_check_memory() to
+hint it how to handle memory copied from/to I/O memory.
 
-Every time the instrumented function calls another function, this state
-(`struct kmsan_context_state`) is updated with shadow/origin data of the
-passed and returned values.
-
-When `current` changes in the low-level arch code, instrumented code can
-not notice that, and will still refer to the old state, possibly corrupting
-it or using stale data. This may result in false positive reports.
-
-To deal with that, we need to apply __no_kmsan_checks to the functions
-performing context switching - this will result in skipping all KMSAN
-shadow checks and marking newly created values as initialized,
-preventing all false positive reports in those functions. False negatives
-are still possible, but we expect them to be rare and impersistent.
-
-Suggested-by: Marco Elver <elver@google.com>
 Signed-off-by: Alexander Potapenko <glider@google.com>
-
 ---
-v2:
- -- This patch was previously called "kmsan: skip shadow checks in files
-    doing context switches". Per Mark Rutland's suggestion, we now only
-    skip checks in low-level arch-specific code, as context switches in
-    common code should be invisible to KMSAN. We also apply the checks
-    to precisely the functions performing the context switch instead of
-    the whole file.
-
-v5:
- -- Replace KMSAN_ENABLE_CHECKS_process_64.o with __no_kmsan_checks
-
-Link: https://linux-review.googlesource.com/id/I45e3ed9c5f66ee79b0409d1673d66ae419029bcb
+Link: https://linux-review.googlesource.com/id/Icb16bf17269087e475debf07a7fe7d4bebc3df23
 ---
- arch/x86/kernel/process_64.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/lib/iomem.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 1962008fe7437..6b3418bff3261 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -553,6 +553,7 @@ void compat_start_thread(struct pt_regs *regs, u32 new_ip, u32 new_sp, bool x32)
-  * Kprobes not supported here. Set the probe on schedule instead.
-  * Function graph tracer not supported too.
-  */
-+__no_kmsan_checks
- __visible __notrace_funcgraph struct task_struct *
- __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
- {
+diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
+index 3e2f33fc33de2..e0411a3774d49 100644
+--- a/arch/x86/lib/iomem.c
++++ b/arch/x86/lib/iomem.c
+@@ -1,6 +1,7 @@
+ #include <linux/string.h>
+ #include <linux/module.h>
+ #include <linux/io.h>
++#include <linux/kmsan-checks.h>
+ 
+ #define movs(type,to,from) \
+ 	asm volatile("movs" type:"=&D" (to), "=&S" (from):"0" (to), "1" (from):"memory")
+@@ -37,6 +38,8 @@ static void string_memcpy_fromio(void *to, const volatile void __iomem *from, si
+ 		n-=2;
+ 	}
+ 	rep_movs(to, (const void *)from, n);
++	/* KMSAN must treat values read from devices as initialized. */
++	kmsan_unpoison_memory(to, n);
+ }
+ 
+ static void string_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+@@ -44,6 +47,8 @@ static void string_memcpy_toio(volatile void __iomem *to, const void *from, size
+ 	if (unlikely(!n))
+ 		return;
+ 
++	/* Make sure uninitialized memory isn't copied to devices. */
++	kmsan_check_memory(from, n);
+ 	/* Align any unaligned destination IO */
+ 	if (unlikely(1 & (unsigned long)to)) {
+ 		movs("b", to, from);
 -- 
 2.37.2.789.g6183377224-goog
 

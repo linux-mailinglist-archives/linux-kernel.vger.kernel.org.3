@@ -2,141 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36105AD7B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730B45AD7B6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbiIEQjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 12:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S232019AbiIEQlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 12:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiIEQjq (ORCPT
+        with ESMTP id S231715AbiIEQlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 12:39:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E3813E83;
-        Mon,  5 Sep 2022 09:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662395985; x=1693931985;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=UYJEY/SQG8QDZBOYJJY4nO80O+kbgOS3Lid6Gc+CEbQ=;
-  b=HfMPQRyfhuRDOI5rGuO9GFZbTCR5+BewYlAbZTfnJPs3Ux/MSeNADNvB
-   cOhco0AYrvRyfuFv9zSZlcJZt3EdHxDLtzLrbYcCXRuB+JiLJQCEMdIUP
-   7fi0H+J3Y3g9+E+IEtv1AZuMUVG3tyjyRgvzAEpG0Id9xn80efgfRs+DI
-   GoqwPP8Xer9JCe/Tg+loPgskynjlbyUMERtRSpJBg8dcOMvx899+DlGOz
-   UvTcYhhlSXEwl6qOkLnf/s3iTmBqiUOECSkx1xrRkeEVzbZb67bg81lMO
-   ePe4pWYkIXejpUg75m0BN4q7WAmKpVfyp/C9NB2Lb6KnJyfAdQp4bG8Kv
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="360373417"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="360373417"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 09:39:43 -0700
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="675346621"
-Received: from hpigot-mobl1.ger.corp.intel.com (HELO [10.213.237.107]) ([10.213.237.107])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 09:39:40 -0700
-Message-ID: <3c702549-75f4-c640-9f9c-37d7fcbb1645@linux.intel.com>
-Date:   Mon, 5 Sep 2022 17:39:39 +0100
+        Mon, 5 Sep 2022 12:41:04 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F765F233
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:41:02 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id b19so9759340ljf.8
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 09:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=lUVY9wLQD/KhYbvUWN5fb2ErW+DbSkU8EoAMBzx1S5U=;
+        b=WC1h+oYOSZiMWUOdunF0j0EDSmX15JVM2O79DuI38xjocndQ6kMJQ16P39uIzVRh4h
+         WqY+C+gkZstzumL2q66wpLvwl7pFGU+fDbfpmLJ7MkD7lZMhBkQ/DUV6lBeEql2N5j4V
+         qOoJNBdMoxVeziWPoHYlbxKatnRHcmKCN7nB8G9AB9JEcHlYsdvnWEsPDk+g2fRU89e1
+         tyenC9hjxteWi5vOkYPTb6trUJ9NrwKSARrrbiMOMciQ3G71h07GhVO67m8OivtRq7ab
+         EjqXohSPn3IcWEB5LHRjeE6j88lN5xh1fAuSY5t6KrCgtbnBAa+BufI849Z0xDmLlNlp
+         tyRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=lUVY9wLQD/KhYbvUWN5fb2ErW+DbSkU8EoAMBzx1S5U=;
+        b=5gzq7t6fc7Dj8lLrDcxskGUJqsZsOTUb/iq8IJAOVln4DOOcqi85WgQaVIaZiWqvCM
+         r+9Fcc6tH5bnSeAtKy7uT1yxm8wKcdIHY0eCi8lkaCQSflf8vDBdtw1BIRjh+0bumEWx
+         IV92BwVHDOCsPd9zjyE5pTs8NK/XjZIn+iVsJ2716lad/9hyOIDCOeHxyhoLzvMruC6n
+         GhJWN/KZEWMFgB7piOWXKDFQnoVsV9Hox66iHOzlHRa/X+gXyZSc5kLN2Jyrd3Bf0qG0
+         zA4w+Of9l289clYRs6gjKprsW8BUuJitw9GfO7OiZLjlYd78Bw0nAIPaHhUoCkDwUT9R
+         ZHUw==
+X-Gm-Message-State: ACgBeo3VG3zW3q4FykL+yjLJoK96+DXFrG0dvTK0kRoRUOYOAzeiXw9S
+        i+IKGgIHMh3wHdpm0+nSjRV8Lw==
+X-Google-Smtp-Source: AA6agR6HLS4+eFG4fIaVMDGpISoxeLNvbeLnz1eGC4tU9uQhcoLlsR1quf0rWJIWZHNMR7k7Q+FPhA==
+X-Received: by 2002:a2e:a913:0:b0:25d:3128:21af with SMTP id j19-20020a2ea913000000b0025d312821afmr14872323ljq.58.1662396061335;
+        Mon, 05 Sep 2022 09:41:01 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id t18-20020a192d52000000b0048af749c060sm1236556lft.157.2022.09.05.09.40.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 09:41:00 -0700 (PDT)
+Message-ID: <84095d0e-28a1-885b-8217-f787c4cf338d@linaro.org>
+Date:   Mon, 5 Sep 2022 18:40:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH 1/4] dma-buf: Check status of enable-signaling bit on
- debug
+Subject: Re: [PATCH v5 1/2] dt-bindings: arm: qcom: document sc7280 and evoker
+ board
 Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220905105653.13670-1-Arvind.Yadav@amd.com>
- <20220905105653.13670-2-Arvind.Yadav@amd.com>
- <0038fcff-35f1-87e3-aa26-cdd104a13628@amd.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <0038fcff-35f1-87e3-aa26-cdd104a13628@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     mka@chromium.org, dianders@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220902080912.118592-1-sheng-liang.pan@quanta.corp-partner.google.com>
+ <20220902160845.v5.1.Ief93544cd0cbfa412092f5de92de10d59a2a5b3a@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220902160845.v5.1.Ief93544cd0cbfa412092f5de92de10d59a2a5b3a@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 05/09/2022 12:21, Christian König wrote:
-> Am 05.09.22 um 12:56 schrieb Arvind Yadav:
->> The core DMA-buf framework needs to enable signaling
->> before the fence is signaled. The core DMA-buf framework
->> can forget to enable signaling before the fence is signaled.
->> To avoid this scenario on the debug kernel, check the
->> DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT status bit before checking
->> the signaling bit status to confirm that enable_signaling
->> is enabled.
+On 02/09/2022 10:09, Sheng-Liang Pan wrote:
+> This adds Chromebook Evoker to the yaml.
 > 
-> You might want to put this patch at the end of the series to avoid 
-> breaking the kernel in between.
-> 
->>
->> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->> ---
->>   include/linux/dma-fence.h | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->> index 775cdc0b4f24..60c0e935c0b5 100644
->> --- a/include/linux/dma-fence.h
->> +++ b/include/linux/dma-fence.h
->> @@ -428,6 +428,11 @@ dma_fence_is_signaled_locked(struct dma_fence 
->> *fence)
->>   static inline bool
->>   dma_fence_is_signaled(struct dma_fence *fence)
->>   {
->> +#ifdef CONFIG_DEBUG_FS
-> 
-> CONFIG_DEBUG_FS is certainly wrong, probably better to check for 
-> CONFIG_DEBUG_WW_MUTEX_SLOWPATH here.
-> 
-> Apart from that looks good to me,
+> Signed-off-by: Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
 
-What's the full story in this series - I'm afraid the cover letter does not make it clear to a casual reader like myself? Where does the difference between debug and non debug kernel come from?
 
-And how do the proposed changes relate to the following kerneldoc excerpt:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-	 * Since many implementations can call dma_fence_signal() even when before
-	 * @enable_signaling has been called there's a race window, where the
-	 * dma_fence_signal() might result in the final fence reference being
-	 * released and its memory freed. To avoid this, implementations of this
-	 * callback should grab their own reference using dma_fence_get(), to be
-	 * released when the fence is signalled (through e.g. the interrupt
-	 * handler).
-	 *
-	 * This callback is optional. If this callback is not present, then the
-	 * driver must always have signaling enabled.
 
-Is it now an error, or should be impossible condition, for "is signaled" to return true _unless_ signaling has been enabled?
-
-If the statement (in a later patch) is signalling should always be explicitly enabled by the callers of dma_fence_add_callback, then what about the existing call to __dma_fence_enable_signaling from dma_fence_add_callback?
-
-Or if the rules are changing shouldn't kerneldoc be updated as part of the series?
-
-Regards,
-
-Tvrtko
-
-> Christian.
-> 
->> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
->> +        return false;
->> +#endif
->> +
->>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>           return true;
-> 
+Best regards,
+Krzysztof

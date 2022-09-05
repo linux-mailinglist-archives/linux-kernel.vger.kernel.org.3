@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94AD65AD4E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC455AD4FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238304AbiIEOeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S238365AbiIEOef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbiIEOeJ (ORCPT
+        with ESMTP id S238333AbiIEOe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:34:09 -0400
+        Mon, 5 Sep 2022 10:34:27 -0400
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B16E5A883;
-        Mon,  5 Sep 2022 07:34:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8B6BDA;
+        Mon,  5 Sep 2022 07:34:23 -0700 (PDT)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 3D51A68AFE; Mon,  5 Sep 2022 16:34:05 +0200 (CEST)
-Date:   Mon, 5 Sep 2022 16:34:05 +0200
+        id 1AF9D68BEB; Mon,  5 Sep 2022 16:34:20 +0200 (CEST)
+Date:   Mon, 5 Sep 2022 16:34:19 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Logan Gunthorpe <logang@deltatee.com>
 Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
@@ -42,13 +42,14 @@ Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
         Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
         Ralph Campbell <rcampbell@nvidia.com>,
         Stephen Bates <sbates@raithlin.com>
-Subject: Re: [PATCH v9 3/8] block: add check when merging zone device pages
-Message-ID: <20220905143405.GB5813@lst.de>
-References: <20220825152425.6296-1-logang@deltatee.com> <20220825152425.6296-4-logang@deltatee.com>
+Subject: Re: [PATCH v9 4/8] lib/scatterlist: add check when merging zone
+ device pages
+Message-ID: <20220905143419.GC5813@lst.de>
+References: <20220825152425.6296-1-logang@deltatee.com> <20220825152425.6296-5-logang@deltatee.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220825152425.6296-4-logang@deltatee.com>
+In-Reply-To: <20220825152425.6296-5-logang@deltatee.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -58,19 +59,6 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-
-On Thu, Aug 25, 2022 at 09:24:20AM -0600, Logan Gunthorpe wrote:
-> Consecutive zone device pages should not be merged into the same sgl
-> or bvec segment with other types of pages or if they belong to different
-> pgmaps. Otherwise getting the pgmap of a given segment is not possible
-> without scanning the entire segment. This helper returns true either if
-> both pages are not zone device pages or both pages are zone device
-> pages with the same pgmap.
-> 
-> Add a helper to determine if zone device pages are mergeable and use
-> this helper in page_is_mergeable().
-> 
-> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 
 Looks good:
 

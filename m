@@ -2,125 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E172C5AC9DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 07:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6888E5AC9E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 07:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235793AbiIEFsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 01:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
+        id S235922AbiIEFsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 01:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235396AbiIEFsE (ORCPT
+        with ESMTP id S235865AbiIEFsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 01:48:04 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679972CDF5
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 22:48:02 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id b144so2856631pfb.7
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Sep 2022 22:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/MSOkfzcFDVOwb+RS/ivu6q81kMf5WeXuE6nXo0vYzw=;
-        b=z3ENzGxwfrHKOJ5hIrRFfQWdK9HQXJE5wEl8yca9odjvcVDKEcwYNuUQ3saqPr7miW
-         mF1QpmiMkHGRlte9vIKhtmyw2Sy/HYPnEB5l0DmukbwwXSe65i0rP4myTJdEuHIc8eew
-         eg4Pp3shVhpYya+HcE4TMqeHHN2YkxsnnQyE1vCdRqRHKk/IZPAgjYQk89zKrYpsOgPr
-         T5f+vNtYlsyArA59WQpUBxxxduffw2jFMe5SJht4yBkvdRTU6ERnGc4kb1cY7ltXE7ez
-         FcxSkF4tbvV3aOJoPepuFApEU/5nyYdY6p1jX6nPvao9IYNwByFu4lTIFjDyxueR/5mp
-         p67Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/MSOkfzcFDVOwb+RS/ivu6q81kMf5WeXuE6nXo0vYzw=;
-        b=mUHX4plJwU2Ntzqcbk2+a51KhelLhJcnnYa5ACxNn9vVw2JFPU/wlW/9/L5F4Yc6j4
-         Gzq13sBWzmIXANwSDeWktIdPWkQAbRT90j6YSECJoxHxoPvYYMnVP0qxuE6ALicR3HA2
-         myP9JC7tlPGP+8QojhiyLrLk0tw5VixwVGrj4E/5OQplu4yue1elbxGyuIJI4sMVIi5W
-         fdPHc1LaYygFgTlzygAEBHjaMFCOHyvlFV+iph6eC8yV/xzgHxvvZgEnAjeBmDe9poZ/
-         mEZ2XFd8aGd5AGNsIwcIMI0kcn8NsfXr/PSMaFpi4zHP6/I7IjnhbwY8kTmgD/WziQ13
-         3k1g==
-X-Gm-Message-State: ACgBeo27UbwVPFtZwTglIFUfgixTgbjR5PuNNUOfyeUmQW9DLSDZcjgJ
-        Fb36UrUCZzJy+VB3jS1mFJvNNA==
-X-Google-Smtp-Source: AA6agR5F/Rwe8lQfPR84iEIKaj/8EdP4mhMjo5k43tg2ef1dm6TqvKoSPlvY/+MuNlwrFUeNHpymPg==
-X-Received: by 2002:a05:6a00:1c90:b0:537:e144:4481 with SMTP id y16-20020a056a001c9000b00537e1444481mr43747206pfw.24.1662356881806;
-        Sun, 04 Sep 2022 22:48:01 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
-        by smtp.gmail.com with ESMTPSA id a6-20020a1709027d8600b00176b63535ccsm636924plm.193.2022.09.04.22.47.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Sep 2022 22:48:01 -0700 (PDT)
-Message-ID: <66eaf16e-cb7c-a0b4-9ce5-02611308b0e6@linaro.org>
-Date:   Mon, 5 Sep 2022 11:17:55 +0530
+        Mon, 5 Sep 2022 01:48:16 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3A72FFC5;
+        Sun,  4 Sep 2022 22:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662356891; x=1693892891;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fTe8CDyhScv9KyvqN2vhwn8+FsEj93tIn1+Tv7eoqqE=;
+  b=eCsR+zdVUBvaNKgw5eZmCqKRC2gz2tdqGZGYbPRaRm3DXvhLzNB0GnFc
+   DgSUjSpImGp/JOcPoG9KoFFGAN2uuSQYdXMnAAOEkS1nz23c8f+15oTdi
+   epcSUj3Tu16/U2NEFiJBFEje8AqOoSl++OZBNSwURAsO2bIjxzH88Ntj6
+   +P4bu2nsg9TDTW2hxeTXOcvOUAfvvnZcpIRq7jhVHb5ycuIvsV4OCZrHE
+   o3rCQxbj7oCPDs0H+IvzQiPS6hNl5q32b2aluvpdEKYJvbNuGlLS6h+ez
+   ozgnWqOtnDWUpG094Bo6Kep0lZ5DOfhalHVD3HL9X0UJ/l84VBMHYDzcn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="360265627"
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="360265627"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 22:48:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="675136231"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Sep 2022 22:48:04 -0700
+Date:   Mon, 5 Sep 2022 13:48:04 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     isaku.yamahata@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
+        Chao Gao <chao.gao@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Anup Patel <anup@brainfault.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: Re: [PATCH v3 04/22] Partially revert "KVM: Pass kvm_init()'s opaque
+ param to additional arch funcs"
+Message-ID: <20220905054804.5yvmkhp2jgg5br3w@yy-desk-7060>
+References: <cover.1662084396.git.isaku.yamahata@intel.com>
+ <dc34f52f5177156e4755ae3feb78b661386b1677.1662084396.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-pmics: Remove reg entry for
- pmc8280c_lpg node
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, agross@kernel.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <20220903084440.1509562-1-bhupesh.sharma@linaro.org>
- <42790a40-458a-55ff-7e4b-796e72f474ac@kernel.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <42790a40-458a-55ff-7e4b-796e72f474ac@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dc34f52f5177156e4755ae3feb78b661386b1677.1662084396.git.isaku.yamahata@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Thu, Sep 01, 2022 at 07:17:39PM -0700, isaku.yamahata@intel.com wrote:
+> From: Chao Gao <chao.gao@intel.com>
+>
+> This partially reverts commit b99040853738 ("KVM: Pass kvm_init()'s opaque
+> param to additional arch funcs") remove opaque from
+> kvm_arch_check_processor_compat because no one uses this opaque now.
+> Address conflicts for ARM (due to file movement) and manually handle RISC-V
+> which comes after the commit.
+>
+> And changes about kvm_arch_hardware_setup() in original commit are still
+> needed so they are not reverted.
+>
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Acked-by: Anup Patel <anup@brainfault.org>
+> Acked-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Link: https://lore.kernel.org/r/20220216031528.92558-3-chao.gao@intel.com
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Kai Huang <kai.huang@intel.com>
 
-On 9/5/22 12:52 AM, Krzysztof Kozlowski wrote:
-> On 03/09/2022 11:44, Bhupesh Sharma wrote:
->> Commit eeca7d46217c ("arm64: dts: qcom: pm8350c: Drop PWM reg declaration")
->> dropped PWM reg declaration for pm8350c pwm(s), but there is a leftover
->> 'reg' entry inside the lpg/pwm node in sc8280xp dts file. Remove the same.
->>
->> While at it, also remove the unused unit address in the node
->> label.
->>
->> Fixes: eeca7d46217c ("arm64: dts: qcom: pm8350c: Drop PWM reg declaration")
->> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Cc: Bjorn Andersson <andersson@kernel.org>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
->> index ae90b97aecb8..2e5cf55afdd5 100644
->> --- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
->> @@ -60,9 +60,8 @@ pmc8280c_gpios: gpio@8800 {
->>   			#interrupt-cells = <2>;
->>   		};
->>   
->> -		pmc8280c_lpg: lpg@e800 {
->> +		pmc8280c_lpg: lpg {
-> 
-> I wonder why I did not see the errors when testing all DTSes for
-> https://lore.kernel.org/all/20220828084341.112146-9-krzysztof.kozlowski@linaro.org/
+Reviewed-by: Yuan Yao <yuan.yao@intel.com>
 
-I did not see the error while running the 'make dtbs_check' locally, so 
-may be something to improve in 'make dtbs_check' infrastructure there.
-
-> Anyway, it cannot be lpg - binding requires "pwm".
-
-I think that should be a separate patch. It does not seem related to 
-this change anyways - which fixes eeca7d46217c . I will send a v2 soon.
-
-Thanks,
-Bhupesh
+> ---
+>  arch/arm64/kvm/arm.c       |  2 +-
+>  arch/mips/kvm/mips.c       |  2 +-
+>  arch/powerpc/kvm/powerpc.c |  2 +-
+>  arch/riscv/kvm/main.c      |  2 +-
+>  arch/s390/kvm/kvm-s390.c   |  2 +-
+>  arch/x86/kvm/x86.c         |  2 +-
+>  include/linux/kvm_host.h   |  2 +-
+>  virt/kvm/kvm_main.c        | 16 +++-------------
+>  8 files changed, 10 insertions(+), 20 deletions(-)
+>
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 2ff0ef62abad..3385fb57c11a 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -68,7 +68,7 @@ int kvm_arch_hardware_setup(void *opaque)
+>  	return 0;
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>  	return 0;
+>  }
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index a25e0b73ee70..092d09fb6a7e 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -140,7 +140,7 @@ int kvm_arch_hardware_setup(void *opaque)
+>  	return 0;
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>  	return 0;
+>  }
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index fb1490761c87..7b56d6ccfdfb 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -447,7 +447,7 @@ int kvm_arch_hardware_setup(void *opaque)
+>  	return 0;
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>  	return kvmppc_core_check_processor_compat();
+>  }
+> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+> index 1549205fe5fe..f8d6372d208f 100644
+> --- a/arch/riscv/kvm/main.c
+> +++ b/arch/riscv/kvm/main.c
+> @@ -20,7 +20,7 @@ long kvm_arch_dev_ioctl(struct file *filp,
+>  	return -EINVAL;
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>  	return 0;
+>  }
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index edfd4bbd0cba..e26d4dd85668 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -254,7 +254,7 @@ int kvm_arch_hardware_enable(void)
+>  	return 0;
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>  	return 0;
+>  }
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 5f12a7ed6f94..53c8ee677f16 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11998,7 +11998,7 @@ void kvm_arch_hardware_unsetup(void)
+>  	static_call(kvm_x86_hardware_unsetup)();
+>  }
+>
+> -int kvm_arch_check_processor_compat(void *opaque)
+> +int kvm_arch_check_processor_compat(void)
+>  {
+>  	struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index f4519d3689e1..eab352902de7 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1438,7 +1438,7 @@ int kvm_arch_hardware_enable(void);
+>  void kvm_arch_hardware_disable(void);
+>  int kvm_arch_hardware_setup(void *opaque);
+>  void kvm_arch_hardware_unsetup(void);
+> -int kvm_arch_check_processor_compat(void *opaque);
+> +int kvm_arch_check_processor_compat(void);
+>  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
+>  bool kvm_arch_vcpu_in_kernel(struct kvm_vcpu *vcpu);
+>  int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu);
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 584a5bab3af3..4243a9541543 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5799,22 +5799,14 @@ void kvm_unregister_perf_callbacks(void)
+>  }
+>  #endif
+>
+> -struct kvm_cpu_compat_check {
+> -	void *opaque;
+> -	int *ret;
+> -};
+> -
+> -static void check_processor_compat(void *data)
+> +static void check_processor_compat(void *rtn)
+>  {
+> -	struct kvm_cpu_compat_check *c = data;
+> -
+> -	*c->ret = kvm_arch_check_processor_compat(c->opaque);
+> +	*(int *)rtn = kvm_arch_check_processor_compat();
+>  }
+>
+>  int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+>  		  struct module *module)
+>  {
+> -	struct kvm_cpu_compat_check c;
+>  	int r;
+>  	int cpu;
+>
+> @@ -5842,10 +5834,8 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
+>  	if (r < 0)
+>  		goto out_free_1;
+>
+> -	c.ret = &r;
+> -	c.opaque = opaque;
+>  	for_each_online_cpu(cpu) {
+> -		smp_call_function_single(cpu, check_processor_compat, &c, 1);
+> +		smp_call_function_single(cpu, check_processor_compat, &r, 1);
+>  		if (r < 0)
+>  			goto out_free_2;
+>  	}
+> --
+> 2.25.1
+>

@@ -2,146 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A059E5AD99D
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5F55AD99C
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 21:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbiIET12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 15:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
+        id S232095AbiIET1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 15:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiIET1I (ORCPT
+        with ESMTP id S232304AbiIET1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 15:27:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF5A2A40A;
-        Mon,  5 Sep 2022 12:26:32 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 75CB26BC;
-        Mon,  5 Sep 2022 21:26:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662405989;
-        bh=izZvMBjhr/bvNoYQGDtF2V3g+eGXqt7u558BOi7zzh4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o+X+vJW8hZaFFG6GuYfb8yA+ApbPr801obKPxgfofa5BhL0dumnOH/8rkgB+JFRdf
-         a6RcVNtIShr2rQ9ifr+3TfCt0/OmkubtPNHf0OOshh950odmH/j0RY8m13X6Cb3MWl
-         4R7H4YRilHsKo+VuFBdldnshTX/Y7iB1TziRSBJ8=
-Date:   Mon, 5 Sep 2022 22:26:14 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Max Krummenacher <max.oss.09@gmail.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: imx8mp-verdin: add dsi to hdmi
- functionality
-Message-ID: <YxZNVoMKly9eQ2xE@pendragon.ideasonboard.com>
-References: <20220901154051.1885509-1-max.oss.09@gmail.com>
- <YxD09SqpcbB3dt8I@pendragon.ideasonboard.com>
- <20220902155720.GB5699@francesco-nb.int.toradex.com>
- <YxKe00H2S9AzF0Yi@pendragon.ideasonboard.com>
- <YxNM75ZtHVKDjTa/@livingston.pivistrello.it>
+        Mon, 5 Sep 2022 15:27:14 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3812622512;
+        Mon,  5 Sep 2022 12:27:02 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id s3so3049241ilv.4;
+        Mon, 05 Sep 2022 12:27:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=okbKeeBWBjVpIAJiPzx493ODGSDGbaRaZtMV6fwikf4=;
+        b=DZVQ7G1dtNGpG2nPDFL5GYqXFWFqPGklfB9ivgGQ2aCtoZSVxhOJyyuxYcx/PLshpS
+         eSj9Sv5axF7UzOIXn9yXOaw+jPNw992t4wHUi2xwtOYQ6ox9jnaWWL9usAll9xELHad1
+         ibWS4xJpQp9tAZ8kebQ7eS9h7d6ap6iFpnqnq39WDERLgwlpZ8FpEQ388Iz3s+jowlTz
+         9qOONIiPtusL21h0GTRdwelC5MkTob0xEq8QeK73WPkLq+LQ2+vg9p0eeGGJttA5J8i5
+         i27lgI87U0M0oz4nAyDEW+uUPERt27Js/x+KR0XoGCcOdzx/k5hu9mQLAQCdxJuytVe1
+         glFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=okbKeeBWBjVpIAJiPzx493ODGSDGbaRaZtMV6fwikf4=;
+        b=dRF98ZEm7djJegh6Uh5Wp9dCzJKbHY2OaVOoF9W6uGtJaaGpQ4bgzRfl+TCV/0IhBR
+         +iqj38DxLw4oXcHTQ7POHEikmOjCWlSMxFlF9T0Oto+jmucsU5jQJ9QbtSgfAXACgYZc
+         JHOdyUiuH1M+DzRSNNX7pIAGO0/DAdeA7B9pI4iof4pKTjNsjwmnQtTwk3/3tHc9ju9U
+         ToMUAx0c8ioijhFwBIP+aegQuYSF32Jk4pNNNFyiChqxcLov2q8YWZ+gWfzB+WgteWwX
+         IYNMIxKYbrdEpS4iUPNy8kDx1CcRKq/g+Rh9hl5QPpw02/iLXmrkmbFE8tZ9EZc58+HJ
+         KQvQ==
+X-Gm-Message-State: ACgBeo0D2axlqFNtdqpgJ8sTI8ynX4mYkVOX7Tpmc9T1GBdH07jVYtEZ
+        NzwVdmbnRWA7FBKIQPel35osCJfVRG7cKwhglCIXh+uO794=
+X-Google-Smtp-Source: AA6agR4UHGlM1wnVx+7B4pMceGklI3ut/1Hp4jDMKF72vpHZsmVqw49fXPSrCWb1lWNFsrLNyVlaIRExi0CYCpBsOyo=
+X-Received: by 2002:a05:6e02:170f:b0:2f1:6cdf:6f32 with SMTP id
+ u15-20020a056e02170f00b002f16cdf6f32mr3321677ill.216.1662406021617; Mon, 05
+ Sep 2022 12:27:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YxNM75ZtHVKDjTa/@livingston.pivistrello.it>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Mon, 5 Sep 2022 21:26:25 +0200
+Message-ID: <CAP01T77aq-UP02JYp1Vu-LE--K1ieCyfKfyZPw-a7DDKQ7_F+g@mail.gmail.com>
+Subject: Re: [PATCH v16 00/12] bpf: Add kfuncs for PKCS#7 signature verification
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Francesco,
+On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> One of the desirable features in security is the ability to restrict import
+> of data to a given system based on data authenticity. If data import can be
+> restricted, it would be possible to enforce a system-wide policy based on
+> the signing keys the system owner trusts.
+>
+> This feature is widely used in the kernel. For example, if the restriction
+> is enabled, kernel modules can be plugged in only if they are signed with a
+> key whose public part is in the primary or secondary keyring.
+>
+> For eBPF, it can be useful as well. For example, it might be useful to
+> authenticate data an eBPF program makes security decisions on.
+>
+> [...]
 
-On Sat, Sep 03, 2022 at 02:47:43PM +0200, Francesco Dolcini wrote:
-> On Sat, Sep 03, 2022 at 03:24:51AM +0300, Laurent Pinchart wrote:
-> > On Fri, Sep 02, 2022 at 05:57:20PM +0200, Francesco Dolcini wrote:
-> > > Hello Laurent,
-> > > answering here for both patches (1/2 and 2/2).
-> > > 
-> > > On Thu, Sep 01, 2022 at 09:07:49PM +0300, Laurent Pinchart wrote:
-> > > > On Thu, Sep 01, 2022 at 05:40:50PM +0200, Max Krummenacher wrote:
-> > > > > From: Max Krummenacher <max.krummenacher@toradex.com>
-> > > > > 
-> > > > > Add the hdmi connector present on the dsi to hdmi adapter now
-> > > > > required by the upstream lontium bridge driver.
-> > > > > The dsi to hdmi adapter is enabled in an device tree overlay.
-> > > > 
-> > > > Shouldn't the connector also be in the overlay ? There's certainly no
-> > > > physical HDMI connector on the i.MX8MP Verdin SoM :-)
-> > > 
-> > > Toradex DTS include and overlay files structure so far has been a little
-> > > bit different and not following the expectation you just stated here,
-> > > you can just check the current *toradex*dts* files and you'll see that there
-> > > is other stuff that is not strictly part of the module.
-> > > 
-> > > Copying from a previous email thread on a very similar discussion [0]
-> > > some of the reasons:
-> > > 
-> > >  - The SoM dtsi representing not only the functionality implemented into
-> > >    the SoM, but the whole connector pinout to the carrier makes very easy
-> > >    to just include a different som.dtsi in the carrier board dts and just
-> > >    switch SoM, for example from a colibri-imx6 to a colibri-imx7.
-> > 
-> > That's fine, but I don't see how that's related to the issue at hand.
-> > The DSI to HDMI bridge wouldn't be present on either SoM, would it ?
-> > 
-> > >  - We avoid code duplication
-> > > 
-> > > This is working for us pretty well so far and the majority of the users
-> > > of ours modules rely on this structure, we would prefer not to change that.
-> > 
-> > It may work for your current use cases, but it doesn't make it right :-)
-> 
-> Most of engineering is about compromise, being consistent with what we
-> did so far and the end-user experience need to be taken into account.
+CI is crashing with NULL deref for test_progs-no_alu32 with llvm-16,
+but I don't think the problem is in this series. This is most likely
+unrelated to BPF, as the crash happens inside
+kernel/time/tick-sched.c:tick_nohz_restart_sched_tick.
 
-Sure, and so do mainline requirements :-)
+This was the same case in
+https://lore.kernel.org/bpf/CAP01T74steDfP6O8QOshoto3e3RnHhKtAeTbnrPBZS3YJXjvbA@mail.gmail.com.
 
-> > Someone can integrate a Verdin SoM with a carrier board that has no DSI
-> > to HDMI (or LVDS) bridge, there should thus be no such device in the
-> > device tree. The SoM has DSI signals present on its connector, that's
-> > what the SoM .dtsi should expose.
-> 
-> Just for the record Verdin i.MX8M Plus do have both HDMI and LVDS on the
-> connector (in addition to DSI) [1], of course we do have also the option to
-> have LVDS or HDMI using an external add-on DSI bridge as this patches are
-> about.
-> 
-> Said that it's true that sometime we describe peripherals that are part of the
-> SOM family into the SOM dtsi, this avoid quite a lot of duplications given the
-> amount of carrier board that are available on the market that use just the same
-> building blocks (and this was one of the 2 points I mentioned as a reasoning
-> for our current DTS files structure).
+So, https://github.com/kernel-patches/bpf/runs/8194263557?check_suite_focus=true
+and https://github.com/kernel-patches/bpf/runs/7982907380?check_suite_focus=true
 
-If those "SoM family" peripherals are on the carrier board, what's the
-issue with describing them in the carrier board .dtsi ? And if they're
-on an add-on board (such as, if I understand correctly, the DSI to HDMI
-encoder for the Dahlia carrier board), what's the issue with describing
-them in an overlay ?
-
-> Of course, we keep these stuff disabled by default, so apart for some small size
-> increase I do not see a real issue.
-
-It's the same issue as adding any DT node for peripherals that do not
-exist, I fail to see a compelling reason to do so here, given that this
-seems to be easy to handle in the carrier board .dtsi or in overlays.
-Maybe I'm missing something ?
-
-> [1] https://docs.toradex.com/110977-verdin_imx8m_plus_v1.1_datasheet.pdf
-
--- 
-Regards,
-
-Laurent Pinchart
+look similar to me, and may not be related to BPF. They only trigger
+during runs compiled using LLVM 16, so maybe some compiler
+transformation is surfacing the problem?

@@ -2,289 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1AF5AD8FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A7D5AD901
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbiIESY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 14:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S231259AbiIES0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 14:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiIESYx (ORCPT
+        with ESMTP id S229915AbiIES0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:24:53 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437C113E9E;
-        Mon,  5 Sep 2022 11:24:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662402291; x=1693938291;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CxRyLZFpzNJgRD8JEVnKifggxfl/jfPeJoUCS/Yew7M=;
-  b=W9C+T+9gMZR/jvQrl+xMlptJ9T6eUhWwcOPn5t+xfoMsofGcHPTMDN7/
-   6LLcFGODYZCMuWZ513qBHT73bAht5wPKtjkjlwF1AhX7VSrLz59kxlp0m
-   GlMroU9N7lBqlZgazPPCi/W0L/K63Rz6RFUSaNK1yBG8bjv7QmRXYtyPO
-   uDh2rEqK4sGFYKz4a4btTMBP+W0WTwBVbxK8m/4cvMVv3f/XFNPS6u570
-   /G6ngl+agh7qKOLRGDu5ADsDGR4RpRLbaetxZhOJWMjoSE19qCODNSwD6
-   9RQi0rmZw79fgjJelKW/BmUnZfruZBd+TlQVChLjBZp0ZwEC+/wX+MMkA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="297223835"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="297223835"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 11:24:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="643883081"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 05 Sep 2022 11:24:49 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVGm8-0004QL-1V;
-        Mon, 05 Sep 2022 18:24:48 +0000
-Date:   Tue, 6 Sep 2022 02:24:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jianglei Nie <niejianglei2021@163.com>, rafael@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: Re: [PATCH] PM: hibernate: Fix potential memory leak in
- hibernate_preallocate_memory() and prepare_highmem_image()
-Message-ID: <202209060246.TutWrNwg-lkp@intel.com>
-References: <20220905083559.49438-1-niejianglei2021@163.com>
+        Mon, 5 Sep 2022 14:26:51 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F56652805;
+        Mon,  5 Sep 2022 11:26:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k5sU+SxfTVR/L2ga1+9lOmkBfRiw1C+CD452mCykTma0rr9dkqbXTd1B499jLCwwToyPxx7qDvY/dUqLrwFTwyg8HYwQSBlKEitAe6/NpvldftKYH6LiV3gTQOevTl3nRhmoMauys9Z6Sc+JncbPEL1OUAjXhgm8bAId4SoMLM0MIkvZUgXH4/bAHUOVaSrp+kRpFcGWTf1EPCCGqua0EAdo9PcyFZddbd2lgD4NlLJkciMfdSP09RjXBZhiIPLQ3P/JHH+Ktb3NU2u5N8upsnp+Lq8TvU+cGPMamPx0yPlN6WMgBF2uLTBQrwye5QN5WlcdpoLQ0SHEvZ8j9h98zA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=poSojd5kbTekZqSfy8QCPrycXD96N8UxYkoF+PazzD4=;
+ b=EY0zFA6htxTqeyR9XGpspUIPAufg+w6bCQjXSH/LU+Oqamd5XrDJ4dpbsjlAs1xLmcij+dSvkDfeltL0tMWhRyB1Syk8C4oTuv+uKLUiJCRt0fRXceaEtxxKuC0b2toJFwumaI3hgan371E3kn4dfGar1ste5tOqZqBq90BAfEjXdRmmDLXnr96pNvt+yk951Jxxn7DvhtJuOnnRcgjXLsFNK/fNksUSylV3GMThSDO67BNQw5305dhgGpeRzfYWhwtcgRbDt8si+MzHGzaww0Q3ePop5QwWDKEZ39Cu8u6ZT0DuwIFytF1w28xUQR2I4EpeVpj6LZxAmh/X70pxHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=poSojd5kbTekZqSfy8QCPrycXD96N8UxYkoF+PazzD4=;
+ b=2vEAlp1k3EvycXPxiwwEKbYtONiui88AekinCV8kyxPjOhqUzoF7i9g6D6KpNLQrNVon15jM8O/wCHkRlZIk5X1Z9IpSDscNgXwo791jZGBYfeYbZ2OUsioM/3fy5nKGKDAto9gf6XAlHuefdf0qS8AKH+aUiZopjSsG8yUONiI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MN2PR12MB4485.namprd12.prod.outlook.com (2603:10b6:208:269::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Mon, 5 Sep
+ 2022 18:26:47 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
+ 18:26:47 +0000
+Message-ID: <3da7b3c2-737e-a067-9018-8e743e59ef65@amd.com>
+Date:   Mon, 5 Sep 2022 20:26:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/4] dma-buf: Check status of enable-signaling bit on
+ debug
+Content-Language: en-US
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220905105653.13670-1-Arvind.Yadav@amd.com>
+ <20220905105653.13670-2-Arvind.Yadav@amd.com>
+ <0038fcff-35f1-87e3-aa26-cdd104a13628@amd.com>
+ <3c702549-75f4-c640-9f9c-37d7fcbb1645@linux.intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <3c702549-75f4-c640-9f9c-37d7fcbb1645@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0144.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:96::19) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220905083559.49438-1-niejianglei2021@163.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 58a2fea0-7a65-490d-019b-08da8f6c3131
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4485:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tj4DW1lQ+s+sSZoQnV+Y1xE9LeXE+kirZWlzuAI4sIwReJWSP5yOFk7XgKo6wqd8rx+KZ9FLlHzhJH9CarZViz6TH8rf1wzhlWD/S0OPFyZaiJA0M+NCqq5MhIOEM7MQHYhMCY00KSCnxkVvov7hX1BIx4U3NKTodhoCsmATyht86d9FzXk9KPA3K692IkAP1BM440AQY2bf9185QCAlydu7xSfbmbCE3U2JI9gXB4fD5V6TOTIcT/3xI4XtA4o3XRjlpREcDLjvWJfcuZIFyd+rW42uXE0z2x3jfMgEcRGBSLcn4bQrWa9U7nA2UcIEjF4RLlsLhEB6U5/Lw65EmmoLLpQCa/Nu/cwt+QrOl2+UnxzEjuKrFxbhDXvpOL+digHrRnb3KYjxrRXfFzAH5/v8nRHIj9ydOF1W6L7TOrbrPU1OzU9KgUVm1IFfiU+4aCiYZioAJ2lnWbG65n3yhhPgTkyUhpHFcxwwxxwV87vDcuIWxNfeasvljlYXtE3I/NcY/lYcWcbR30VkwvAL74ig49hO3Jym0p3NOdX8Q0/mGUy4VtTKdD+EQR7UEZwAEorWqmHemhYLlBoWEnYauEZEV4BDfmpj0EmoLI1xzz7vdOtWsupCu4ljhf76uyp1yCmrUsAY+s1KTSNAM2tEqK8bi+b5J0GUT0dQv80jKw/PV9xCYZHwawOr/SjeQ+wOFTUMstX05tu9tLkQPzm5AYeB6hAIOXbMuEjtQyEcxF9jwjJr2k6ynCSQJHGsEjKzXeehm4LeoODyplmOsC8u3Ln5nb7eLA4oKBNopLisggRdaaR2g0VjmJCf6pGtnCSn
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(376002)(396003)(136003)(346002)(8676002)(83380400001)(66476007)(66574015)(66946007)(8936002)(66556008)(5660300002)(6506007)(478600001)(53546011)(6486002)(41300700001)(186003)(6666004)(6512007)(2616005)(316002)(86362001)(110136005)(31696002)(36756003)(31686004)(38100700002)(921005)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L3F4SjdmQ2NpVDZSSXFGR2o3SHkvcDNCclZYa1NFSVJnbWRwVWR5MWZ2K29x?=
+ =?utf-8?B?alNkUHBJQmY1ME5DRFdnSDdzdmIvMldCalNyQnduMFBpWTJVdDEzbms1MXVN?=
+ =?utf-8?B?SWQzY002RzZXb3FoZXRKeDVKTFNzbWhsdzRLNExTOTVNN2VWZUM1V2xRRU0y?=
+ =?utf-8?B?NkJnUklYQmpZdUE1K3lJYkNlRTl3SzcyRWhxZ1lEOGVwSDZpdjBzNWVpSGky?=
+ =?utf-8?B?TlVZeE0zTGppRFNvNHJzTERHVkVRMERZTk9aWWRobDM4M1BuWXN5UU52ei9T?=
+ =?utf-8?B?WkpaTkF0S2pBMWd5VjRsYWV1S2JJV0Z3N1N6YUZzUXNmbjNoTU1BSnRXZTdr?=
+ =?utf-8?B?ZW11cno2U21rVHlrQUVnUStSclVneWh4TmV3VmNqY1dnb1NmMXlSSkZ5RkFq?=
+ =?utf-8?B?SzJrSjZMeE5NYWxSa0l2RXl0YlBwbWZMcU5xcHRaNEVyUEtJVDJWaWZwcWNP?=
+ =?utf-8?B?Ti9mZzU5L04vNTNtM0R0TWJVTTdkRnB5SnR0enhIaW03T0FLTlBhdDNaRHUv?=
+ =?utf-8?B?d3g5NmJkTUJFS3BDZWRIOUlnQ0hhU3E5QjkyUWdnWkFUUU5udW5HcWxiemJU?=
+ =?utf-8?B?VkxIRUgxcmdpYXRodGsrL2R3N0ZBcHpUdzVjMWZheThDV3h4Ylg1N1oyNHV2?=
+ =?utf-8?B?NDJVdVFuaWd1bTRsVXRUcFYzUWhlS2pCQ2FwNjd0aXRheFBiVndvMjczWjcv?=
+ =?utf-8?B?enBIRHpwRlQ0WlpySTlBSk55bGNvUncydTBnSy9IY0FyQkhzTkNiNzZPSGpO?=
+ =?utf-8?B?WWtJdDhqLzVEdHNieTZlVkNyUThyWGdOeWZBZithek5vR1BoOFNqWVVkUDdw?=
+ =?utf-8?B?WFAvOEhrZm9nN1dWaFZxL0tVMUJlemllYlRIcWdmK2d1ME5UTmNHZU1kYTRD?=
+ =?utf-8?B?WlhYMkxSNElqeHJOMFlaVzlLdEcraTN2QlE4K3RNMlhXeGRURFYvSEF3cFpv?=
+ =?utf-8?B?enBtcktwbFlMSWw4a3lWV251V0p5SHdyTEJjb0xhcUxSbkFqbzZySDBqaVFG?=
+ =?utf-8?B?TlZoVGkzYk1Sc1JVdjE4dHhLMlQxcTlLWGJyL0FXL2MwRGhLRmFYS1RpK2Mv?=
+ =?utf-8?B?cjY3aHVIdTdjZmlFdmdDcEh6ZjBtQStkSjFVY2pwaGlUVWNta3E1NE9OdDRD?=
+ =?utf-8?B?OEh6N1d0c2dDY2NQSEZLc2laNmdsY0pHanNIK2VraUgzM3hEM2syVWFtVkc5?=
+ =?utf-8?B?cDdrZzVyaDlmTlVUNTlSOWZPeEEyK2xjaVNiZjljL210ZzRONGpFMU9Wdi9N?=
+ =?utf-8?B?eXRsWk16WnZPV1pkVnA3c1pUUHJpZXBBSitzdWdZK0VvV0twcTRkOEo3a1Rj?=
+ =?utf-8?B?d3RtWlBDUld4TUJzUUNLRis4Y0xJby85VmRYcjJ5WlZPdE00anN4TStYTnhT?=
+ =?utf-8?B?eW1sUDJCQUh0OElUR29oZXpzZ2hJTGhzalJWeFJSRzd3KzBWMkZpRUJMSnZO?=
+ =?utf-8?B?by8wRDRDZ1Q1c1NqTVlVTWRmWTl1RkoxNm9NcFRzcU5iVXh2VS9VeUpIMTZ2?=
+ =?utf-8?B?cjV4TFRhSjMzTXZPeG5aaUc3NEZrTWlsdEx6Lyt6NDRBbGdkR0F4RGc2N1E0?=
+ =?utf-8?B?OEwzNkExWDdlRkhuYkNQRGZtamZZQUVqUE1qMnBwRmJCYk5sS1piTERmS3lp?=
+ =?utf-8?B?ZFpvR3pZK1JnbUVsZmsxUGthS1lNOVdJSzBKZUpGUEdRaHMzSDBSYmp3Y1Zj?=
+ =?utf-8?B?MUI1ckhIN1JOQkdYaXdFaTEyVDhidExQdjBRVGdNSVBXcHRoNDZyZTdyRTJM?=
+ =?utf-8?B?RTBqcFVBaExZWXdTQWJ4bDR4anZFVW9NeHNpMnlxaXdFYUxUKzlOVmpubzBB?=
+ =?utf-8?B?d2FSK05ERFdlRjJ2RjFaOHQyZGM3TzFBS3gwd0I2TEd2RHBoY0pzdjZWSEtn?=
+ =?utf-8?B?eGlRd1hpcEJEU3lVN0JhbDZheUNoN1A4UlByMVhKcmx6SHhxdkFCbHdFc1NB?=
+ =?utf-8?B?QmM5ak53dlljT0N3VnNBZVlrWjNkdjBOYlg1U1hSUXIyekxlVnBJa2tGUWU0?=
+ =?utf-8?B?S2hQYUhuY2g0MU8xRUtCNEF1dk5URUFwM3BkdWhRb2pMU2J1aUMyaFRqa3lU?=
+ =?utf-8?B?U2dtMnlITjVSQlJjYUpGUWszTkFhd0I5OHdCSVBkTitCOG40TFZNTFRSMkp4?=
+ =?utf-8?B?N1NNSVd1eERKVFB5L3dRdFcyck5NSUJqRW1hYWc2SFJOMFMzdnVMRTJxa0hK?=
+ =?utf-8?Q?NR36zzsc+5AIzb34udo7qtZkTy+VsDr3iwLtmnWTrqjT?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58a2fea0-7a65-490d-019b-08da8f6c3131
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 18:26:47.3693
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /+mmSSUxF8Ny4Qk/IpGZJiFqUWrbZYg8k5enzf7AXUwWU3fNpHyj3eqxDc+SooK4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4485
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jianglei,
+Am 05.09.22 um 18:39 schrieb Tvrtko Ursulin:
+>
+> On 05/09/2022 12:21, Christian König wrote:
+>> Am 05.09.22 um 12:56 schrieb Arvind Yadav:
+>>> The core DMA-buf framework needs to enable signaling
+>>> before the fence is signaled. The core DMA-buf framework
+>>> can forget to enable signaling before the fence is signaled.
+>>> To avoid this scenario on the debug kernel, check the
+>>> DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT status bit before checking
+>>> the signaling bit status to confirm that enable_signaling
+>>> is enabled.
+>>
+>> You might want to put this patch at the end of the series to avoid 
+>> breaking the kernel in between.
+>>
+>>>
+>>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>>> ---
+>>>   include/linux/dma-fence.h | 5 +++++
+>>>   1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+>>> index 775cdc0b4f24..60c0e935c0b5 100644
+>>> --- a/include/linux/dma-fence.h
+>>> +++ b/include/linux/dma-fence.h
+>>> @@ -428,6 +428,11 @@ dma_fence_is_signaled_locked(struct dma_fence 
+>>> *fence)
+>>>   static inline bool
+>>>   dma_fence_is_signaled(struct dma_fence *fence)
+>>>   {
+>>> +#ifdef CONFIG_DEBUG_FS
+>>
+>> CONFIG_DEBUG_FS is certainly wrong, probably better to check for 
+>> CONFIG_DEBUG_WW_MUTEX_SLOWPATH here.
+>>
+>> Apart from that looks good to me,
+>
+> What's the full story in this series - I'm afraid the cover letter 
+> does not make it clear to a casual reader like myself? Where does the 
+> difference between debug and non debug kernel come from?
 
-Thank you for the patch! Yet something to improve:
+We have a bug that the drm_sync file doesn't properly enable signaling 
+leading to an igt test failure.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc4 next-20220901]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> And how do the proposed changes relate to the following kerneldoc 
+> excerpt:
+>
+>      * Since many implementations can call dma_fence_signal() even 
+> when before
+>      * @enable_signaling has been called there's a race window, where the
+>      * dma_fence_signal() might result in the final fence reference being
+>      * released and its memory freed. To avoid this, implementations 
+> of this
+>      * callback should grab their own reference using dma_fence_get(), 
+> to be
+>      * released when the fence is signalled (through e.g. the interrupt
+>      * handler).
+>      *
+>      * This callback is optional. If this callback is not present, 
+> then the
+>      * driver must always have signaling enabled.
+>
+> Is it now an error, or should be impossible condition, for "is 
+> signaled" to return true _unless_ signaling has been enabled?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jianglei-Nie/PM-hibernate-Fix-potential-memory-leak-in-hibernate_preallocate_memory-and-prepare_highmem_image/20220905-163900
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 7e18e42e4b280c85b76967a9106a13ca61c16179
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220906/202209060246.TutWrNwg-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/e7861e5c6a8fa89ecf844515db5843131bb0412c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jianglei-Nie/PM-hibernate-Fix-potential-memory-leak-in-hibernate_preallocate_memory-and-prepare_highmem_image/20220905-163900
-        git checkout e7861e5c6a8fa89ecf844515db5843131bb0412c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+That's neither an error nor impossible. For debugging we just never 
+return signaled from the dma_fence_is_signaled() function when signaling 
+was not enabled before.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I also plan to remove the return value from the enable_signaling 
+callback. That was just not very well designed.
 
-All errors (new ones prefixed by >>):
+>
+> If the statement (in a later patch) is signalling should always be 
+> explicitly enabled by the callers of dma_fence_add_callback, then what 
+> about the existing call to __dma_fence_enable_signaling from 
+> dma_fence_add_callback?
 
-   kernel/power/snapshot.c: In function 'hibernate_preallocate_memory':
->> kernel/power/snapshot.c:1755:32: error: incompatible type for argument 1 of 'memory_bm_free'
-    1755 |                 memory_bm_free(orig_bm, PG_UNSAFE_CLEAR);
-         |                                ^~~~~~~
-         |                                |
-         |                                struct memory_bitmap
-   kernel/power/snapshot.c:723:50: note: expected 'struct memory_bitmap *' but argument is of type 'struct memory_bitmap'
-     723 | static void memory_bm_free(struct memory_bitmap *bm, int clear_nosave_free)
-         |                            ~~~~~~~~~~~~~~~~~~~~~~^~
+Oh, good point. That sounds like we have some bug in the core dma_fence 
+code as well.
 
+Calls to dma_fence_add_callback() and dma_fence_wait() should enable 
+signaling implicitly and don't need an extra call for that.
 
-vim +/memory_bm_free +1755 kernel/power/snapshot.c
+Only dma_fence_is_signaled() needs this explicit enabling of signaling 
+through dma_fence_enable_sw_signaling().
 
-  1713	
-  1714	/**
-  1715	 * hibernate_preallocate_memory - Preallocate memory for hibernation image.
-  1716	 *
-  1717	 * To create a hibernation image it is necessary to make a copy of every page
-  1718	 * frame in use.  We also need a number of page frames to be free during
-  1719	 * hibernation for allocations made while saving the image and for device
-  1720	 * drivers, in case they need to allocate memory from their hibernation
-  1721	 * callbacks (these two numbers are given by PAGES_FOR_IO (which is a rough
-  1722	 * estimate) and reserved_size divided by PAGE_SIZE (which is tunable through
-  1723	 * /sys/power/reserved_size, respectively).  To make this happen, we compute the
-  1724	 * total number of available page frames and allocate at least
-  1725	 *
-  1726	 * ([page frames total] + PAGES_FOR_IO + [metadata pages]) / 2
-  1727	 *  + 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
-  1728	 *
-  1729	 * of them, which corresponds to the maximum size of a hibernation image.
-  1730	 *
-  1731	 * If image_size is set below the number following from the above formula,
-  1732	 * the preallocation of memory is continued until the total number of saveable
-  1733	 * pages in the system is below the requested image size or the minimum
-  1734	 * acceptable image size returned by minimum_image_size(), whichever is greater.
-  1735	 */
-  1736	int hibernate_preallocate_memory(void)
-  1737	{
-  1738		struct zone *zone;
-  1739		unsigned long saveable, size, max_size, count, highmem, pages = 0;
-  1740		unsigned long alloc, save_highmem, pages_highmem, avail_normal;
-  1741		ktime_t start, stop;
-  1742		int error;
-  1743	
-  1744		pr_info("Preallocating image memory\n");
-  1745		start = ktime_get();
-  1746	
-  1747		error = memory_bm_create(&orig_bm, GFP_IMAGE, PG_ANY);
-  1748		if (error) {
-  1749			pr_err("Cannot allocate original bitmap\n");
-  1750			goto err_out;
-  1751		}
-  1752	
-  1753		error = memory_bm_create(&copy_bm, GFP_IMAGE, PG_ANY);
-  1754		if (error) {
-> 1755			memory_bm_free(orig_bm, PG_UNSAFE_CLEAR);
-  1756			pr_err("Cannot allocate copy bitmap\n");
-  1757			goto err_out;
-  1758		}
-  1759	
-  1760		alloc_normal = 0;
-  1761		alloc_highmem = 0;
-  1762	
-  1763		/* Count the number of saveable data pages. */
-  1764		save_highmem = count_highmem_pages();
-  1765		saveable = count_data_pages();
-  1766	
-  1767		/*
-  1768		 * Compute the total number of page frames we can use (count) and the
-  1769		 * number of pages needed for image metadata (size).
-  1770		 */
-  1771		count = saveable;
-  1772		saveable += save_highmem;
-  1773		highmem = save_highmem;
-  1774		size = 0;
-  1775		for_each_populated_zone(zone) {
-  1776			size += snapshot_additional_pages(zone);
-  1777			if (is_highmem(zone))
-  1778				highmem += zone_page_state(zone, NR_FREE_PAGES);
-  1779			else
-  1780				count += zone_page_state(zone, NR_FREE_PAGES);
-  1781		}
-  1782		avail_normal = count;
-  1783		count += highmem;
-  1784		count -= totalreserve_pages;
-  1785	
-  1786		/* Compute the maximum number of saveable pages to leave in memory. */
-  1787		max_size = (count - (size + PAGES_FOR_IO)) / 2
-  1788				- 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
-  1789		/* Compute the desired number of image pages specified by image_size. */
-  1790		size = DIV_ROUND_UP(image_size, PAGE_SIZE);
-  1791		if (size > max_size)
-  1792			size = max_size;
-  1793		/*
-  1794		 * If the desired number of image pages is at least as large as the
-  1795		 * current number of saveable pages in memory, allocate page frames for
-  1796		 * the image and we're done.
-  1797		 */
-  1798		if (size >= saveable) {
-  1799			pages = preallocate_image_highmem(save_highmem);
-  1800			pages += preallocate_image_memory(saveable - pages, avail_normal);
-  1801			goto out;
-  1802		}
-  1803	
-  1804		/* Estimate the minimum size of the image. */
-  1805		pages = minimum_image_size(saveable);
-  1806		/*
-  1807		 * To avoid excessive pressure on the normal zone, leave room in it to
-  1808		 * accommodate an image of the minimum size (unless it's already too
-  1809		 * small, in which case don't preallocate pages from it at all).
-  1810		 */
-  1811		if (avail_normal > pages)
-  1812			avail_normal -= pages;
-  1813		else
-  1814			avail_normal = 0;
-  1815		if (size < pages)
-  1816			size = min_t(unsigned long, pages, max_size);
-  1817	
-  1818		/*
-  1819		 * Let the memory management subsystem know that we're going to need a
-  1820		 * large number of page frames to allocate and make it free some memory.
-  1821		 * NOTE: If this is not done, performance will be hurt badly in some
-  1822		 * test cases.
-  1823		 */
-  1824		shrink_all_memory(saveable - size);
-  1825	
-  1826		/*
-  1827		 * The number of saveable pages in memory was too high, so apply some
-  1828		 * pressure to decrease it.  First, make room for the largest possible
-  1829		 * image and fail if that doesn't work.  Next, try to decrease the size
-  1830		 * of the image as much as indicated by 'size' using allocations from
-  1831		 * highmem and non-highmem zones separately.
-  1832		 */
-  1833		pages_highmem = preallocate_image_highmem(highmem / 2);
-  1834		alloc = count - max_size;
-  1835		if (alloc > pages_highmem)
-  1836			alloc -= pages_highmem;
-  1837		else
-  1838			alloc = 0;
-  1839		pages = preallocate_image_memory(alloc, avail_normal);
-  1840		if (pages < alloc) {
-  1841			/* We have exhausted non-highmem pages, try highmem. */
-  1842			alloc -= pages;
-  1843			pages += pages_highmem;
-  1844			pages_highmem = preallocate_image_highmem(alloc);
-  1845			if (pages_highmem < alloc) {
-  1846				pr_err("Image allocation is %lu pages short\n",
-  1847					alloc - pages_highmem);
-  1848				goto err_out;
-  1849			}
-  1850			pages += pages_highmem;
-  1851			/*
-  1852			 * size is the desired number of saveable pages to leave in
-  1853			 * memory, so try to preallocate (all memory - size) pages.
-  1854			 */
-  1855			alloc = (count - pages) - size;
-  1856			pages += preallocate_image_highmem(alloc);
-  1857		} else {
-  1858			/*
-  1859			 * There are approximately max_size saveable pages at this point
-  1860			 * and we want to reduce this number down to size.
-  1861			 */
-  1862			alloc = max_size - size;
-  1863			size = preallocate_highmem_fraction(alloc, highmem, count);
-  1864			pages_highmem += size;
-  1865			alloc -= size;
-  1866			size = preallocate_image_memory(alloc, avail_normal);
-  1867			pages_highmem += preallocate_image_highmem(alloc - size);
-  1868			pages += pages_highmem + size;
-  1869		}
-  1870	
-  1871		/*
-  1872		 * We only need as many page frames for the image as there are saveable
-  1873		 * pages in memory, but we have allocated more.  Release the excessive
-  1874		 * ones now.
-  1875		 */
-  1876		pages -= free_unnecessary_pages();
-  1877	
-  1878	 out:
-  1879		stop = ktime_get();
-  1880		pr_info("Allocated %lu pages for snapshot\n", pages);
-  1881		swsusp_show_speed(start, stop, pages, "Allocated");
-  1882	
-  1883		return 0;
-  1884	
-  1885	 err_out:
-  1886		swsusp_free();
-  1887		return -ENOMEM;
-  1888	}
-  1889	
+>
+> Or if the rules are changing shouldn't kerneldoc be updated as part of 
+> the series?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I think the kerneldoc is just a bit misleading. The point is that when 
+you need to call dma_fence_enable_sw_signaling() you must hold a 
+reference to the fence object.
+
+But that's true for all the dma_fence_* functions. The race described in 
+the comment is just nonsense because you need to hold that reference anyway.
+
+Regards,
+Christian.
+
+>
+> Regards,
+>
+> Tvrtko
+>
+>> Christian.
+>>
+>>> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
+>>> +        return false;
+>>> +#endif
+>>> +
+>>>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
+>>>           return true;
+>>
+

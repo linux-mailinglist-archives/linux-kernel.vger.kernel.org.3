@@ -2,213 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926055AD506
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DAA5AD509
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238498AbiIEOgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
+        id S238355AbiIEOhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238446AbiIEOgQ (ORCPT
+        with ESMTP id S238420AbiIEOg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:36:16 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3582F5C977
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:35:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VOUw8Ef_1662388503;
-Received: from 30.32.67.179(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VOUw8Ef_1662388503)
-          by smtp.aliyun-inc.com;
-          Mon, 05 Sep 2022 22:35:09 +0800
-Message-ID: <9f098ff0-26d7-477c-13fa-cb878981e1ac@linux.alibaba.com>
-Date:   Mon, 5 Sep 2022 22:35:13 +0800
+        Mon, 5 Sep 2022 10:36:27 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597C917599
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:35:33 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id j11-20020a056e02218b00b002f17a1f9637so2071082ila.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:35:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=1eu12Y/7myvVTlijkPxBB986iRYCXXzL9QUqsoDSoRU=;
+        b=qUdK4BrQSxEsRm2tBLgR81cEQNPto7reIfy7nzNjyb5+VKFqkLsEZ1vPDZp8R84GTf
+         LoCVfDa40nRA7Nm2eKYAmpg9A44SF6801xjsJzec6hBfByftqoQFyIPxxo5u9jXw3sWp
+         WVnVICD+SiqyxOb2Fja7rk6XQmMYBP5vQkisT/rkYW+C52Jfb1QYhSci/2/ZWBHvBMeq
+         fJinK4K+BYJ4+xx2mAK+17/syFrGfKGLHKu2Flhr7qBFLAckT4yTWVUxxxvIKhqWpEbJ
+         hdgZNhH2h206AP4k+sulyI6yz7f5WZjtR/eZHRxe/EvdaQ9LQn4Jix3HhoV+uboSeQoW
+         2Jrw==
+X-Gm-Message-State: ACgBeo3t0riNWzR9tcALIjEsBEfJzVi2Z5eIH1Vg0fofrYDtvySnNxRT
+        KP1Bbmqc8ll5cpBtUeLC8fWEk+PZ4vKoBSWUMJd6hCq4ZdFP
+X-Google-Smtp-Source: AA6agR5ttrukC8L+K07DB/liSFE04gWoF92fJyZa6kcUmS5ZynOGvthyp5Mb3LrgWXAy5aTh6Xm/R8Cib7OuKz2L32AwJ6iyO2SA
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
-To:     David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>, peterx@redhat.com,
-        kirill.shutemov@linux.intel.com, jgg@nvidia.com, hughd@google.com,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220901222707.477402-1-shy828301@gmail.com>
- <e6ad1084-c301-9f11-1fa7-7614bf859aaf@nvidia.com>
- <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
- <0c9d9774-77dd-fd93-b5b6-fc63f3d01b7f@linux.alibaba.com>
- <383fec21-9801-9b60-7570-856da2133ea9@redhat.com>
- <a7dd4376-bce2-ee79-623f-fa11d301b80d@redhat.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <a7dd4376-bce2-ee79-623f-fa11d301b80d@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:3043:b0:341:d8a4:73e8 with SMTP id
+ u3-20020a056638304300b00341d8a473e8mr26455973jak.239.1662388530884; Mon, 05
+ Sep 2022 07:35:30 -0700 (PDT)
+Date:   Mon, 05 Sep 2022 07:35:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dcb48a05e7eefddd@google.com>
+Subject: [syzbot] usb-testing boot error: general protection fault in kvmalloc_node
+From:   syzbot <syzbot+24e8438a720679b9b878@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    10174220f55a usb: reduce kernel log spam on driver registr..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=131ee98b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=24e8438a720679b9b878
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/cc623f81ac2e/disk-10174220.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d582f7185db2/vmlinux-10174220.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+24e8438a720679b9b878@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xffff0fff00000800: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff89ff800004000-0xfff89ff800004007]
+CPU: 1 PID: 1149 Comm: mkdir Not tainted 6.0.0-rc1-syzkaller-00047-g10174220f55a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:__kmalloc_node+0x1dd/0x360 mm/slub.c:4468
+Code: 48 83 c4 18 44 89 e1 4c 89 ea 5b 4c 89 fe 48 89 ef 5d 41 5c 41 5d 41 5e 41 5f e9 6e 55 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 3d 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0018:ffffc900004e7c20 EFLAGS: 00010246
+RAX: ffff0fff00000000 RBX: 0000000000400cc0 RCX: 0000000000000800
+RDX: 0000000000000041 RSI: 0000000000400cc0 RDI: 000000000003b880
+RBP: ffff88810004c280 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000400cc0
+R13: 0000000000001000 R14: 0000000000000000 R15: ffffffff81632b1e
+FS:  00007fd7fef3f800(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd7ff039410 CR3: 000000010f2f0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kmalloc_node include/linux/slab.h:623 [inline]
+ kvmalloc_node+0x3e/0x190 mm/util.c:613
+ kvmalloc include/linux/slab.h:750 [inline]
+ seq_buf_alloc fs/seq_file.c:38 [inline]
+ seq_read_iter+0x7f7/0x1280 fs/seq_file.c:210
+ proc_reg_read_iter+0x1fb/0x2d0 fs/proc/inode.c:305
+ call_read_iter include/linux/fs.h:2181 [inline]
+ new_sync_read fs/read_write.c:389 [inline]
+ vfs_read+0x67d/0x930 fs/read_write.c:470
+ ksys_read+0x127/0x250 fs/read_write.c:607
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd7ff0cb8fe
+Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+RSP: 002b:00007fff62d03468 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 000055cc8ec572a0 RCX: 00007fd7ff0cb8fe
+RDX: 0000000000000400 RSI: 000055cc8ec57500 RDI: 0000000000000003
+RBP: 00007fd7ff198380 R08: 0000000000000003 R09: 00007fd7ff19ba60
+R10: 000000000000005d R11: 0000000000000246 R12: 00007fff62d03530
+R13: 0000000000000d68 R14: 00007fd7ff197780 R15: 0000000000000d68
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:__kmalloc_node+0x1dd/0x360 mm/slub.c:4468
+Code: 48 83 c4 18 44 89 e1 4c 89 ea 5b 4c 89 fe 48 89 ef 5d 41 5c 41 5d 41 5e 41 5f e9 6e 55 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 3d 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0018:ffffc900004e7c20 EFLAGS: 00010246
+RAX: ffff0fff00000000 RBX: 0000000000400cc0 RCX: 0000000000000800
+RDX: 0000000000000041 RSI: 0000000000400cc0 RDI: 000000000003b880
+RBP: ffff88810004c280 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000400cc0
+R13: 0000000000001000 R14: 0000000000000000 R15: ffffffff81632b1e
+FS:  00007fd7fef3f800(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd7ff039410 CR3: 000000010f2f0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 83 c4 18          	add    $0x18,%rsp
+   4:	44 89 e1             	mov    %r12d,%ecx
+   7:	4c 89 ea             	mov    %r13,%rdx
+   a:	5b                   	pop    %rbx
+   b:	4c 89 fe             	mov    %r15,%rsi
+   e:	48 89 ef             	mov    %rbp,%rdi
+  11:	5d                   	pop    %rbp
+  12:	41 5c                	pop    %r12
+  14:	41 5d                	pop    %r13
+  16:	41 5e                	pop    %r14
+  18:	41 5f                	pop    %r15
+  1a:	e9 6e 55 00 00       	jmpq   0x558d
+  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
+  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 3d 01 00 00    	jne    0x171
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
 
 
-On 9/5/2022 7:11 PM, David Hildenbrand wrote:
-> On 05.09.22 12:24, David Hildenbrand wrote:
->> On 05.09.22 12:16, Baolin Wang wrote:
->>>
->>>
->>> On 9/5/2022 3:59 PM, David Hildenbrand wrote:
->>>> On 05.09.22 00:29, John Hubbard wrote:
->>>>> On 9/1/22 15:27, Yang Shi wrote:
->>>>>> Since general RCU GUP fast was introduced in commit 2667f50e8b81 
->>>>>> ("mm:
->>>>>> introduce a general RCU get_user_pages_fast()"), a TLB flush is no
->>>>>> longer
->>>>>> sufficient to handle concurrent GUP-fast in all cases, it only 
->>>>>> handles
->>>>>> traditional IPI-based GUP-fast correctly.  On architectures that send
->>>>>> an IPI broadcast on TLB flush, it works as expected.  But on the
->>>>>> architectures that do not use IPI to broadcast TLB flush, it may have
->>>>>> the below race:
->>>>>>
->>>>>>       CPU A                                          CPU B
->>>>>> THP collapse                                     fast GUP
->>>>>>                                                  gup_pmd_range() <--
->>>>>> see valid pmd
->>>>>>                                                      gup_pte_range()
->>>>>> <-- work on pte
->>>>>> pmdp_collapse_flush() <-- clear pmd and flush
->>>>>> __collapse_huge_page_isolate()
->>>>>>        check page pinned <-- before GUP bump refcount
->>>>>>                                                          pin the page
->>>>>>                                                          check PTE 
->>>>>> <--
->>>>>> no change
->>>>>> __collapse_huge_page_copy()
->>>>>>        copy data to huge page
->>>>>>        ptep_clear()
->>>>>> install huge pmd for the huge page
->>>>>>                                                          return the
->>>>>> stale page
->>>>>> discard the stale page
->>>>>
->>>>> Hi Yang,
->>>>>
->>>>> Thanks for taking the trouble to write down these notes. I always
->>>>> forget which race we are dealing with, and this is a great help. :)
->>>>>
->>>>> More...
->>>>>
->>>>>>
->>>>>> The race could be fixed by checking whether PMD is changed or not 
->>>>>> after
->>>>>> taking the page pin in fast GUP, just like what it does for PTE.  
->>>>>> If the
->>>>>> PMD is changed it means there may be parallel THP collapse, so GUP
->>>>>> should back off.
->>>>>>
->>>>>> Also update the stale comment about serializing against fast GUP in
->>>>>> khugepaged.
->>>>>>
->>>>>> Fixes: 2667f50e8b81 ("mm: introduce a general RCU
->>>>>> get_user_pages_fast()")
->>>>>> Signed-off-by: Yang Shi <shy828301@gmail.com>
->>>>>> ---
->>>>>>     mm/gup.c        | 30 ++++++++++++++++++++++++------
->>>>>>     mm/khugepaged.c | 10 ++++++----
->>>>>>     2 files changed, 30 insertions(+), 10 deletions(-)
->>>>>>
->>>>>> diff --git a/mm/gup.c b/mm/gup.c
->>>>>> index f3fc1f08d90c..4365b2811269 100644
->>>>>> --- a/mm/gup.c
->>>>>> +++ b/mm/gup.c
->>>>>> @@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int
->>>>>> *nr, int nr_start,
->>>>>>     }
->>>>>>     #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
->>>>>> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned
->>>>>> long end,
->>>>>> -             unsigned int flags, struct page **pages, int *nr)
->>>>>> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
->>>>>> +             unsigned long end, unsigned int flags,
->>>>>> +             struct page **pages, int *nr)
->>>>>>     {
->>>>>>         struct dev_pagemap *pgmap = NULL;
->>>>>>         int nr_start = *nr, ret = 0;
->>>>>> @@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned
->>>>>> long addr, unsigned long end,
->>>>>>                 goto pte_unmap;
->>>>>>             }
->>>>>> -        if (unlikely(pte_val(pte) != pte_val(*ptep))) {
->>>>>> +        /*
->>>>>> +         * THP collapse conceptually does:
->>>>>> +         *   1. Clear and flush PMD
->>>>>> +         *   2. Check the base page refcount
->>>>>> +         *   3. Copy data to huge page
->>>>>> +         *   4. Clear PTE
->>>>>> +         *   5. Discard the base page
->>>>>> +         *
->>>>>> +         * So fast GUP may race with THP collapse then pin and
->>>>>> +         * return an old page since TLB flush is no longer 
->>>>>> sufficient
->>>>>> +         * to serialize against fast GUP.
->>>>>> +         *
->>>>>> +         * Check PMD, if it is changed just back off since it
->>>>>> +         * means there may be parallel THP collapse.
->>>>>> +         */
->>>>>
->>>>> As I mentioned in the other thread, it would be a nice touch to move
->>>>> such discussion into the comment header.
->>>>>
->>>>>> +        if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
->>>>>> +            unlikely(pte_val(pte) != pte_val(*ptep))) {
->>>>>
->>>>>
->>>>> That should be READ_ONCE() for the *pmdp and *ptep reads. Because this
->>>>> whole lockless house of cards may fall apart if we try reading the
->>>>> page table values without READ_ONCE().
->>>>
->>>> I came to the conclusion that the implicit memory barrier when grabbing
->>>> a reference on the page is sufficient such that we don't need READ_ONCE
->>>> here.
->>>
->>> IMHO the compiler may optimize the code 'pte_val(*ptep)' to be always
->>> get from a register, then we can get an old value if other thread did
->>> set_pte(). I am not sure how the implicit memory barrier can pervent the
->>> compiler optimization? Please correct me if I missed something.
->>
->> IIUC, an memory barrier always implies a compiler barrier.
->>
-> 
-> To clarify what I mean, Documentation/atomic_t.txt documents
-> 
-> NOTE: when the atomic RmW ops are fully ordered, they should also imply 
-> a compiler barrier.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Right, I agree. That means the complier can not optimize the order of 
-the 'pte_val(*ptep)', however what I am confusing is that the complier 
-can still save the value of *ptep into a register or stack instead of 
-reloading from memory?
-
-A similar issue in commit d6c1f098f2a7 ("mm/swap_state: fix a data race 
-in swapin_nr_pages").
-
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -509,10 +509,11 @@ static unsigned long swapin_nr_pages(unsigned long 
-offset)
-                 return 1;
-
-         hits = atomic_xchg(&swapin_readahead_hits, 0);
--       pages = __swapin_nr_pages(prev_offset, offset, hits, max_pages,
-+       pages = __swapin_nr_pages(READ_ONCE(prev_offset), offset, hits,
-+                                 max_pages,
-                                   atomic_read(&last_readahead_pages));
-         if (!hits)
--               prev_offset = offset;
-+               WRITE_ONCE(prev_offset, offset);
-         atomic_set(&last_readahead_pages, pages);
-
-         return pages;
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

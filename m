@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0577A5AD2E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466A85AD2A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238067AbiIEMbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S238050AbiIEMbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237863AbiIEMaS (ORCPT
+        with ESMTP id S237650AbiIEMaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Sep 2022 08:30:18 -0400
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E59606AC
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EC5606AD
         for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:26:31 -0700 (PDT)
-Received: by mail-wr1-x44a.google.com with SMTP id k17-20020adfb351000000b00228853e5d71so546388wrd.17
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:26:30 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id sh44-20020a1709076eac00b00741a01e2aafso2295715ejc.22
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:26:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=YUiFcVJy4Yf/nhkRGOhECdnAl5j2ey18UxYwbxsEwuI=;
-        b=EuJefT6pFI1SfJ1MHzNVEtL/D1nKROem7gBcZZNWm+tmUjIlm6XlXML4r/Ulb6F8Oi
-         7JZcAeqwIFv11ItGjGtVY+2vAoI145sAHWAJ2eCCgc9gmOJQ+rJxoOxi4IxQuKOqo9Xs
-         jwJqNPHrB7IP6p+X7A89Sq60etOBYFLCpzyG1ZEogPtR1XI1hN447p2zQBgEEyXxDXjB
-         1ueq55cwIKpWhpvImTkpLZb0xUfSkeDqxz8hzbFPpqjbXx8+aAig55o5wiquAxAR3RQy
-         vct2tlYLX55zgMwv7nfI7KoeAFF3ZoNEKvex9CtBI8yLfc403GWeouQugJijjiHsxxof
-         X/Gg==
+        bh=T4yulc1U4RDI/lAlxqlpzG4AIUYO9fQrzg+B84ydySw=;
+        b=gykJQm16KBq2G1POc9yawl2YF5uKFWxrq5CWIWwQMtdL8/Y4B0bJfVbxJTszw18YVx
+         4E7qTI7rzio5nRVJ1FODUAtp/gLZ4JUBLm7SxRqEGBezrmCDsaRdu10ahEbwyMKOHAnS
+         mL4d3XS2YrrbBWzFaHkAc86d82LPVwuZr9FNhGX9lMdqGF26zvlVbpRXEh8qRgLj77Y8
+         76yFFAvEbnv46jD2CZU9sNo1Vk3UkvA6lYT1fvAVGXzAfOyNN03DhtVyXZh9WTPSiISL
+         CK6qhGXl1pCPNGjaBDhupNrDjetS7nAg6yMvS2fe8SlPKpaw/+edKhLnuNlgtl8KA9cs
+         5eVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=YUiFcVJy4Yf/nhkRGOhECdnAl5j2ey18UxYwbxsEwuI=;
-        b=laoOCJk1wGQ64qRLK+zxDsgTJgYVZRTQLKVBKhYayIlS4C9TkJxHdMDxN3N4N/eO1C
-         /fkH8GOWlSDf7kUXTh5A3MLgJ7aQUi40OmhO7Ut+4ewymkgqIybSjTF12kxBCB/lx2WY
-         CPqcaRO0gmBrAFsleLKyLVsJh299ogceDh+wqEKIYAm1/ogrqIfE31nkNy/ctSlxijdb
-         S+wFnXACNVze7QM4iEGAw+H3s/4D6X8ia/VM4zXDJy/Jgo+J83QK+Uvsv5afYGst/sfC
-         nehSuwIDdhzYvd3G1YeaaH1jbI8d8PpbEAAkK9d3PxWfYQXjaBdccfj1/heSkY/9NXCR
-         9+Tw==
-X-Gm-Message-State: ACgBeo3n/9bc0GcB0/IDreukSzfJO0NkPPYW1bLn/XiHpeorZ1q72Y9j
-        YxkjPZyDFE7wbDLtOvmGnDP0n3IN21U=
-X-Google-Smtp-Source: AA6agR5XcljDqREXz5yOy07HcvY+X3l1ismgSiUmdI4a6SdYPcZywBoA3OLSshLNFBaU4Mi1hXiZhhBtJnA=
+        bh=T4yulc1U4RDI/lAlxqlpzG4AIUYO9fQrzg+B84ydySw=;
+        b=5bidj3ihAz9hbzlHpvtMQWx/l+BeBrpOAbMGpTv87HiQVe2JmZWaoJvq5ukN9/pgAG
+         PAgS1/F+u/YQK4xCQBoYia4QMWBSPDepNRO3RspzBdD8hSMJlRhFpMohs6IovGEHMC9s
+         VkhH9MDJ3vppbyBWGZQi73DZDVaN+bLIucSmrzyJIIb2Cv6Pv/6zRiMlm8WX87y+mdes
+         cWJ/Sq/wPX9b8J6xb4RglzaILndPkD5kzrXWPW+EAaVRwZ/470d9FEeTATu/9HPRNNDN
+         3fhKa7QBgrMDE6xTNYCS7MXgkBZA/91ZBlLyd9QZxYfOMVyT8hQztH0Zd81BCfLZaEXf
+         Mc/Q==
+X-Gm-Message-State: ACgBeo1Ekl64FUhVgOXv1oQ7pbAOYuSc1C5BQrCVDNKptfjGMognIpX+
+        pjfBD1TGV9cZ0phL3IHc/Iu2HqlOVI0=
+X-Google-Smtp-Source: AA6agR7Zjm0a6dDy47TgZFwFrLnSH1RBWiJEP1JF2+WzkJzs2a7pahrySQrFD9Id5uBQt5d7er7XAKepdQM=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:b808:8d07:ab4a:554c])
- (user=glider job=sendgmr) by 2002:a05:6000:713:b0:226:ea6c:2d7d with SMTP id
- bs19-20020a056000071300b00226ea6c2d7dmr14917835wrb.293.1662380772234; Mon, 05
- Sep 2022 05:26:12 -0700 (PDT)
-Date:   Mon,  5 Sep 2022 14:24:35 +0200
+ (user=glider job=sendgmr) by 2002:a17:906:cc13:b0:73d:d22d:63cd with SMTP id
+ ml19-20020a170906cc1300b0073dd22d63cdmr36111625ejb.741.1662380774896; Mon, 05
+ Sep 2022 05:26:14 -0700 (PDT)
+Date:   Mon,  5 Sep 2022 14:24:36 +0200
 In-Reply-To: <20220905122452.2258262-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220905122452.2258262-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220905122452.2258262-28-glider@google.com>
-Subject: [PATCH v6 27/44] crypto: kmsan: disable accelerated configs under KMSAN
+Message-ID: <20220905122452.2258262-29-glider@google.com>
+Subject: [PATCH v6 28/44] kmsan: disable physical page merging in biovec
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -90,281 +90,44 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KMSAN is unable to understand when initialized values come from assembly.
-Disable accelerated configs in KMSAN builds to prevent false positive
-reports.
+KMSAN metadata for adjacent physical pages may not be adjacent,
+therefore accessing such pages together may lead to metadata
+corruption.
+We disable merging pages in biovec to prevent such corruptions.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
-
 ---
 
-Link: https://linux-review.googlesource.com/id/Idb2334bf3a1b68b31b399709baefaa763038cc50
+Link: https://linux-review.googlesource.com/id/Iece16041be5ee47904fbc98121b105e5be5fea5c
 ---
- crypto/Kconfig      | 30 ++++++++++++++++++++++++++++++
- drivers/net/Kconfig |  1 +
- 2 files changed, 31 insertions(+)
+ block/blk.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index bb427a835e44a..182fb817ebb52 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -319,6 +319,7 @@ config CRYPTO_CURVE25519
- config CRYPTO_CURVE25519_X86
- 	tristate "x86_64 accelerated Curve25519 scalar multiplication library"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_LIB_CURVE25519_GENERIC
- 	select CRYPTO_ARCH_HAVE_LIB_CURVE25519
+diff --git a/block/blk.h b/block/blk.h
+index d7142c4d2fefb..af02b93c1dba5 100644
+--- a/block/blk.h
++++ b/block/blk.h
+@@ -88,6 +88,13 @@ static inline bool biovec_phys_mergeable(struct request_queue *q,
+ 	phys_addr_t addr1 = page_to_phys(vec1->bv_page) + vec1->bv_offset;
+ 	phys_addr_t addr2 = page_to_phys(vec2->bv_page) + vec2->bv_offset;
  
-@@ -367,11 +368,13 @@ config CRYPTO_AEGIS128
- config CRYPTO_AEGIS128_SIMD
- 	bool "Support SIMD acceleration for AEGIS-128"
- 	depends on CRYPTO_AEGIS128 && ((ARM || ARM64) && KERNEL_MODE_NEON)
-+	depends on !KMSAN # avoid false positives from assembly
- 	default y
- 
- config CRYPTO_AEGIS128_AESNI_SSE2
- 	tristate "AEGIS-128 AEAD algorithm (x86_64 AESNI+SSE2 implementation)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_AEAD
- 	select CRYPTO_SIMD
- 	help
-@@ -517,6 +520,7 @@ config CRYPTO_NHPOLY1305
- config CRYPTO_NHPOLY1305_SSE2
- 	tristate "NHPoly1305 hash function (x86_64 SSE2 implementation)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_NHPOLY1305
- 	help
- 	  SSE2 optimized implementation of the hash function used by the
-@@ -525,6 +529,7 @@ config CRYPTO_NHPOLY1305_SSE2
- config CRYPTO_NHPOLY1305_AVX2
- 	tristate "NHPoly1305 hash function (x86_64 AVX2 implementation)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_NHPOLY1305
- 	help
- 	  AVX2 optimized implementation of the hash function used by the
-@@ -649,6 +654,7 @@ config CRYPTO_CRC32C
- config CRYPTO_CRC32C_INTEL
- 	tristate "CRC32c INTEL hardware acceleration"
- 	depends on X86
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_HASH
- 	help
- 	  In Intel processor with SSE4.2 supported, the processor will
-@@ -689,6 +695,7 @@ config CRYPTO_CRC32
- config CRYPTO_CRC32_PCLMUL
- 	tristate "CRC32 PCLMULQDQ hardware acceleration"
- 	depends on X86
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_HASH
- 	select CRC32
- 	help
-@@ -748,6 +755,7 @@ config CRYPTO_BLAKE2B
- config CRYPTO_BLAKE2S_X86
- 	bool "BLAKE2s digest algorithm (x86 accelerated version)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_LIB_BLAKE2S_GENERIC
- 	select CRYPTO_ARCH_HAVE_LIB_BLAKE2S
- 
-@@ -762,6 +770,7 @@ config CRYPTO_CRCT10DIF
- config CRYPTO_CRCT10DIF_PCLMUL
- 	tristate "CRCT10DIF PCLMULQDQ hardware acceleration"
- 	depends on X86 && 64BIT && CRC_T10DIF
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_HASH
- 	help
- 	  For x86_64 processors with SSE4.2 and PCLMULQDQ supported,
-@@ -831,6 +840,7 @@ config CRYPTO_POLY1305
- config CRYPTO_POLY1305_X86_64
- 	tristate "Poly1305 authenticator algorithm (x86_64/SSE2/AVX2)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_LIB_POLY1305_GENERIC
- 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	help
-@@ -920,6 +930,7 @@ config CRYPTO_SHA1
- config CRYPTO_SHA1_SSSE3
- 	tristate "SHA1 digest algorithm (SSSE3/AVX/AVX2/SHA-NI)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SHA1
- 	select CRYPTO_HASH
- 	help
-@@ -931,6 +942,7 @@ config CRYPTO_SHA1_SSSE3
- config CRYPTO_SHA256_SSSE3
- 	tristate "SHA256 digest algorithm (SSSE3/AVX/AVX2/SHA-NI)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SHA256
- 	select CRYPTO_HASH
- 	help
-@@ -943,6 +955,7 @@ config CRYPTO_SHA256_SSSE3
- config CRYPTO_SHA512_SSSE3
- 	tristate "SHA512 digest algorithm (SSSE3/AVX/AVX2)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SHA512
- 	select CRYPTO_HASH
- 	help
-@@ -1168,6 +1181,7 @@ config CRYPTO_WP512
- config CRYPTO_GHASH_CLMUL_NI_INTEL
- 	tristate "GHASH hash function (CLMUL-NI accelerated)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_CRYPTD
- 	help
- 	  This is the x86_64 CLMUL-NI accelerated implementation of
-@@ -1228,6 +1242,7 @@ config CRYPTO_AES_TI
- config CRYPTO_AES_NI_INTEL
- 	tristate "AES cipher algorithms (AES-NI)"
- 	depends on X86
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_AEAD
- 	select CRYPTO_LIB_AES
- 	select CRYPTO_ALGAPI
-@@ -1369,6 +1384,7 @@ config CRYPTO_BLOWFISH_COMMON
- config CRYPTO_BLOWFISH_X86_64
- 	tristate "Blowfish cipher algorithm (x86_64)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_BLOWFISH_COMMON
- 	imply CRYPTO_CTR
-@@ -1399,6 +1415,7 @@ config CRYPTO_CAMELLIA
- config CRYPTO_CAMELLIA_X86_64
- 	tristate "Camellia cipher algorithm (x86_64)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	imply CRYPTO_CTR
- 	help
-@@ -1415,6 +1432,7 @@ config CRYPTO_CAMELLIA_X86_64
- config CRYPTO_CAMELLIA_AESNI_AVX_X86_64
- 	tristate "Camellia cipher algorithm (x86_64/AES-NI/AVX)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_CAMELLIA_X86_64
- 	select CRYPTO_SIMD
-@@ -1433,6 +1451,7 @@ config CRYPTO_CAMELLIA_AESNI_AVX_X86_64
- config CRYPTO_CAMELLIA_AESNI_AVX2_X86_64
- 	tristate "Camellia cipher algorithm (x86_64/AES-NI/AVX2)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_CAMELLIA_AESNI_AVX_X86_64
- 	help
- 	  Camellia cipher algorithm module (x86_64/AES-NI/AVX2).
-@@ -1478,6 +1497,7 @@ config CRYPTO_CAST5
- config CRYPTO_CAST5_AVX_X86_64
- 	tristate "CAST5 (CAST-128) cipher algorithm (x86_64/AVX)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_CAST5
- 	select CRYPTO_CAST_COMMON
-@@ -1501,6 +1521,7 @@ config CRYPTO_CAST6
- config CRYPTO_CAST6_AVX_X86_64
- 	tristate "CAST6 (CAST-256) cipher algorithm (x86_64/AVX)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_CAST6
- 	select CRYPTO_CAST_COMMON
-@@ -1534,6 +1555,7 @@ config CRYPTO_DES_SPARC64
- config CRYPTO_DES3_EDE_X86_64
- 	tristate "Triple DES EDE cipher algorithm (x86-64)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_LIB_DES
- 	imply CRYPTO_CTR
-@@ -1604,6 +1626,7 @@ config CRYPTO_CHACHA20
- config CRYPTO_CHACHA20_X86_64
- 	tristate "ChaCha stream cipher algorithms (x86_64/SSSE3/AVX2/AVX-512VL)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_LIB_CHACHA_GENERIC
- 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
-@@ -1674,6 +1697,7 @@ config CRYPTO_SERPENT
- config CRYPTO_SERPENT_SSE2_X86_64
- 	tristate "Serpent cipher algorithm (x86_64/SSE2)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_SERPENT
- 	select CRYPTO_SIMD
-@@ -1693,6 +1717,7 @@ config CRYPTO_SERPENT_SSE2_X86_64
- config CRYPTO_SERPENT_SSE2_586
- 	tristate "Serpent cipher algorithm (i586/SSE2)"
- 	depends on X86 && !64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_SERPENT
- 	select CRYPTO_SIMD
-@@ -1712,6 +1737,7 @@ config CRYPTO_SERPENT_SSE2_586
- config CRYPTO_SERPENT_AVX_X86_64
- 	tristate "Serpent cipher algorithm (x86_64/AVX)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_SERPENT
- 	select CRYPTO_SIMD
-@@ -1732,6 +1758,7 @@ config CRYPTO_SERPENT_AVX_X86_64
- config CRYPTO_SERPENT_AVX2_X86_64
- 	tristate "Serpent cipher algorithm (x86_64/AVX2)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SERPENT_AVX_X86_64
- 	help
- 	  Serpent cipher algorithm, by Anderson, Biham & Knudsen.
-@@ -1876,6 +1903,7 @@ config CRYPTO_TWOFISH_586
- config CRYPTO_TWOFISH_X86_64
- 	tristate "Twofish cipher algorithm (x86_64)"
- 	depends on (X86 || UML_X86) && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_ALGAPI
- 	select CRYPTO_TWOFISH_COMMON
- 	imply CRYPTO_CTR
-@@ -1893,6 +1921,7 @@ config CRYPTO_TWOFISH_X86_64
- config CRYPTO_TWOFISH_X86_64_3WAY
- 	tristate "Twofish cipher algorithm (x86_64, 3-way parallel)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_TWOFISH_COMMON
- 	select CRYPTO_TWOFISH_X86_64
-@@ -1913,6 +1942,7 @@ config CRYPTO_TWOFISH_X86_64_3WAY
- config CRYPTO_TWOFISH_AVX_X86_64
- 	tristate "Twofish cipher algorithm (x86_64/AVX)"
- 	depends on X86 && 64BIT
-+	depends on !KMSAN # avoid false positives from assembly
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_SIMD
- 	select CRYPTO_TWOFISH_COMMON
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index 94c889802566a..2aaf02bfe6f7e 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -76,6 +76,7 @@ config WIREGUARD
- 	tristate "WireGuard secure network tunnel"
- 	depends on NET && INET
- 	depends on IPV6 || !IPV6
-+	depends on !KMSAN # KMSAN doesn't support the crypto configs below
- 	select NET_UDP_TUNNEL
- 	select DST_CACHE
- 	select CRYPTO
++	/*
++	 * Merging adjacent physical pages may not work correctly under KMSAN
++	 * if their metadata pages aren't adjacent. Just disable merging.
++	 */
++	if (IS_ENABLED(CONFIG_KMSAN))
++		return false;
++
+ 	if (addr1 + vec1->bv_len != addr2)
+ 		return false;
+ 	if (xen_domain() && !xen_biovec_phys_mergeable(vec1, vec2->bv_page))
 -- 
 2.37.2.789.g6183377224-goog
 

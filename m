@@ -2,120 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2565ACD18
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DC35ACD24
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236850AbiIEHuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S236395AbiIEHwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236721AbiIEHuZ (ORCPT
+        with ESMTP id S236559AbiIEHvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:50:25 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560B61BE9D;
-        Mon,  5 Sep 2022 00:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662364221; x=1693900221;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rY1TCG8yN4ejyittlrT4eiFuc0Mo/U8I/RU+8hrtv2c=;
-  b=IaldhKnjFj2Z735w4m+DRkx6nvpI87IBESH10rKbuD0FkeSC0QRrWtG7
-   BR2y9Hj1LK4hDynz6HJcEd3dXdnclqvENOBp+fUoCz/I32ohqsA+gT4Pe
-   lGMpt9PP8jRRlqzxplCdqg3W9zGNkxQOTkHEFutlFtYxBX2kE0xFilkjI
-   SKeWS40jb4HfFtjes+UzPGr/dFv4af8mL/zQtKj7j6bOjcDYIMYZwd3w9
-   Bq2Pe0KjqhFCm0Rv65yQUdY4O4XkRbr6aB7qDz2wyJPirHm2fUoyGfTx8
-   h7cuHglrA9gbxjb0bfeOvhvAlsdwZF21Brk9GMtjzfzw2wk6AZFu3wBQU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="382630819"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="382630819"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 00:50:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="609599751"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 05 Sep 2022 00:50:18 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 71CC586; Mon,  5 Sep 2022 10:50:33 +0300 (EEST)
-Date:   Mon, 5 Sep 2022 10:50:33 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, sanju.mehta@amd.com,
-        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found
- on AMD USB4 controller
-Message-ID: <YxWqSYDWe0NitSkL@black.fi.intel.com>
-References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
- <YxWgGKIAvsxwSz85@black.fi.intel.com>
- <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
+        Mon, 5 Sep 2022 03:51:43 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F52145987
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:51:33 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id a22so5620082qtw.10
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 00:51:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mBdQmRWDY8ne5gcCWgnGXajv2wyTqqdjxhtd10+W++I=;
+        b=S2/GlHbGzoSFNj/2wSFFP3CXlweDwcN2bOfcUi7WcJqMTjKzD1ZZptS+Vh/v/NSFLw
+         v52DgGxkbaN42SwtAKGU957hmoD370XR7AvD+YPv5M3jL4VhlTh35JTre5Hux1c6XcoO
+         in/tMppeK33ZYWCHdoJd+fIogOu2MXbfCl+sEzfWscjhS2yEwE6cifjBl19jPit1k70v
+         jn9iCTzSPHsxE2FrEEA0hvb9KcGAFyHTdh+tVuKlvvXaGhJNItbXbBVzOscGk4b4gYIg
+         xOwFxW4Eho8r4qNibF8EfCvQhZ21XXBIODJXl7LvRaY+6b5tJ0GVmLjIHNXK/O3/sQF7
+         j5cg==
+X-Gm-Message-State: ACgBeo1ZVAjooWKSUdy+irtemoLggDv/VjZIKueMt4lXKQzj9hxn9lbv
+        HZSZyUVP7QS6NgSY5KLRb3JTYQHl+87esg==
+X-Google-Smtp-Source: AA6agR6s2zNoI2IgySttHHm5oHvYkXbk2dYW9UFdWVQFlF7U/dY7565ZllfomYnHtoQYm51zRXVEog==
+X-Received: by 2002:ac8:5755:0:b0:343:560d:f4e1 with SMTP id 21-20020ac85755000000b00343560df4e1mr37690062qtx.630.1662364291602;
+        Mon, 05 Sep 2022 00:51:31 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id q2-20020a05620a0d8200b006b555509398sm8096332qkl.136.2022.09.05.00.51.31
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 00:51:31 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-3450a7358baso35090037b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 00:51:31 -0700 (PDT)
+X-Received: by 2002:a81:1691:0:b0:345:17df:4fc6 with SMTP id
+ 139-20020a811691000000b0034517df4fc6mr6428879yww.502.1662364290829; Mon, 05
+ Sep 2022 00:51:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <202209031414.Y8YCEjmI-lkp@intel.com> <YxL9qpQ2YcvC4sjh@kroah.com> <BN8PR11MB3668BC26BC1B17B09A888271E97D9@BN8PR11MB3668.namprd11.prod.outlook.com>
+In-Reply-To: <BN8PR11MB3668BC26BC1B17B09A888271E97D9@BN8PR11MB3668.namprd11.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 5 Sep 2022 09:51:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV6oTkv-UACsAjp5t4o4GpPz_YqhdjDdfD4tQsvcjGuBA@mail.gmail.com>
+Message-ID: <CAMuHMdV6oTkv-UACsAjp5t4o4GpPz_YqhdjDdfD4tQsvcjGuBA@mail.gmail.com>
+Subject: Re: [char-misc:char-misc-testing 20/24] kismet: WARNING: unmet direct
+ dependencies detected for GPIOLIB_IRQCHIP when selected by GP_PCI1XXXX
+To:     Kumaravel Thiagarajan <Kumaravel.Thiagarajan@microchip.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        kbuild test robot <lkp@intel.com>, paul@pgazz.com,
+        fazilyildiran@gmail.com, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 03:26:28PM +0800, Kai-Heng Feng wrote:
-> Hi Mika,
-> 
-> On Mon, Sep 5, 2022 at 3:06 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
+Hi Kumaravel,
+
+On Sat, Sep 3, 2022 at 12:29 PM <Kumaravel.Thiagarajan@microchip.com> wrote:
+> > -----Original Message-----
+> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Sent: Saturday, September 3, 2022 12:40 PM
+> > To: kernel test robot <lkp@intel.com>; Kumaravel Thiagarajan - I21417
+> > <Kumaravel.Thiagarajan@microchip.com>; Paul Gazzillo <paul@pgazz.com>;
+> > Necip Fazil Yildiran <fazilyildiran@gmail.com>; kbuild-all@lists.01.org; linux-
+> > kernel@vger.kernel.org
+> > Subject: Re: [char-misc:char-misc-testing 20/24] kismet: WARNING: unmet
+> > direct dependencies detected for GPIOLIB_IRQCHIP when selected by
+> > GP_PCI1XXXX
 > >
-> > Hi,
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
+> > content is safe
 > >
-> > On Mon, Sep 05, 2022 at 02:56:22PM +0800, Kai-Heng Feng wrote:
-> > > AMD USB4 can not detect external PCIe devices like external NVMe when
-> > > it's hotplugged, because card/link are not up:
+> > On Sat, Sep 03, 2022 at 02:12:13PM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-
+> > misc.git char-misc-testing
+> > > head:   4ec7ac90ff399b7d9af81cc8afd430a22786c61b
+> > > commit: 393fc2f5948fd340d016a9557eea6e1ac2f6c60c [20/24] misc:
+> > microchip: pci1xxxx: load auxiliary bus driver for the PIO function in the multi-
+> > function endpoint of pci1xxxx device.
+> > > config: x86_64-kismet-CONFIG_GPIOLIB_IRQCHIP-CONFIG_GP_PCI1XXXX-
+> > 0-0
+> > > (https://download.01.org/0day-
+> > ci/archive/20220903/202209031414.Y8YCEjm
+> > > I-lkp@intel.com/config)
+> > > reproduce:
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-
+> > misc.git/commit/?id=393fc2f5948fd340d016a9557eea6e1ac2f6c60c
+> > >         git remote add char-misc
+> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
+> > >         git fetch --no-tags char-misc char-misc-testing
+> > >         git checkout 393fc2f5948fd340d016a9557eea6e1ac2f6c60c
+> > >         # 1. reproduce by kismet
+> > >            # install kmax per
+> > https://github.com/paulgazz/kmax/blob/master/README.md
+> > >            kismet --linux-ksrc=linux --selectees CONFIG_GPIOLIB_IRQCHIP --
+> > selectors CONFIG_GP_PCI1XXXX -a=x86_64
+> > >         # 2. reproduce by make
+> > >            # save the config file to linux source tree
+> > >            cd linux
+> > >            make ARCH=x86_64 olddefconfig
 > > >
-> > > pcieport 0000:00:04.1: pciehp: pciehp_check_link_active: lnk_status = 1101
-> >
-> > I think the correct solution is then to block them from runtime
-> > suspending entirely.
-> 
-> Do you mean disable runtime suspend completely? Or just block runtime
-> suspend for a period?
-
-Completely. The port should enter D3 if it cannot wake up and Linux does
-not even enable runtime PM for such ports unless they declare
-"HotPlugSupportInD3" in their ACPI description:
-
-https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3
-
-So that property should not be there if they cannot wake up.
-
-> > > Use `lspci` to resume pciehp bridges can find external devices.
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
 > > >
-> > > A long delay before checking card/link presence doesn't help, either.
-> > > The only way to make the hotplug work is to enable pciehp interrupt and
-> > > check card presence after the TB switch is added.
+> > > kismet warnings: (new ones prefixed by >>)
+> > > >> kismet: WARNING: unmet direct dependencies detected for
+> > > >> GPIOLIB_IRQCHIP when selected by GP_PCI1XXXX
 > > >
-> > > Since the topology of USB4 and its PCIe bridges are siblings, hardcode
-> > > the bridge ID so TBT driver can wake them up to check presence.
+> > >    WARNING: unmet direct dependencies detected for GPIOLIB_IRQCHIP
+> > >      Depends on [n]: GPIOLIB [=n]
+> > >      Selected by [y]:
+> > >      - GP_PCI1XXXX [=y] && PCI [=y]
 > >
-> > Let's not add PCI things into TBT driver unless absolutely necessary.
-> 
-> OK. It's getting harder as different components are intertwined
-> together on new hardwares...
-> 
-> >
-> > At least on Intel hardware the PCIe hotplug is signaled by SCI when the
-> > root port is in D3, I wonder if AMD has something similar.
-> 
-> Yes those root ports are resumed to D0 when something is plugged. They
-> however fail to detect any externel PCIe devices.
+> > Ick, I missed this before in review.  Kumaravel, any chance you can make this
+> > a "depends" issue instead of a select one?
+>
+> Greg, can I select both GPIOLIB & GPIOLIB_IRQCHIP like below?
+>
+> config GP_PCI1XXXX
+>        tristate "Microchip PCI1XXXX PCIe to GPIO Expander + OTP/EEPROM manager"
+>        depends on PCI
+>        select GPIOLIB
+>        select GPIOLIB_IRQCHIP
+>        help
+>          PCI1XXXX is a PCIe GEN 3 switch with one of the endpoints having
+>          multiple functions and one of the functions is a GPIO controller
+>          which also has registers to interface with the OTP and EEPROM.
+>          Select yes, no or module here to include or exclude the driver
+>          for the GPIO function.
+>
+> or replace "select GPIOLIB_IRQCHIP" with "depends on GPIOLIB_IRQCHIP" like you mentioned?
+>
+> Please advise.
 
-Hmm, so you see the actual hotplug but the tunneled PCIe link may not be
-detected? Does the PCIe "Card Present" (or Data Link Layer Active)
-status change at all or is it always 0?
+I think you want to use
+
+    depends on GPIOLIB
+    select GPIOLIB_IRQCHIP
+
+The former is a visible symbol, under full user control.
+The latter is an invisible symbol, to be selected by drivers that need it.
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

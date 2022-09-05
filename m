@@ -2,125 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1139D5AD7CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17ECC5AD7CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbiIEQqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 12:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S231715AbiIEQrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 12:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237386AbiIEQpw (ORCPT
+        with ESMTP id S230051AbiIEQrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 12:45:52 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAB2580A2
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:45:40 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id z25so13872001lfr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 09:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=OlUT4VdL+//Vhfi8q6/DNyDdCq5azFht1vrO2HgtYLE=;
-        b=CQBnZEjL7WB8lSHzHSoMLBLX1voBnKHff+0cjJz47KCq6VWU4bnBJU+M75So2ExRuJ
-         NqQIWdxrqOddIBiioPPV9pRU8iX+7uaJKIyyzPHG54SWRbIsF3nQyo0Gf5PYWhjTUW9h
-         tQstS7iyOT9jCL8qi+O3atgA5Lr407JlTYKFK70GXbe+slSvtMVWnHHWQgYWwnH12NCz
-         9UFNHewZTmYPF8T9wkGjAtJc5HQiPVSrr1EJ47ZbysUP0vicqmnjkgBTt7Jch9sOCXjl
-         4tu7D5G0tLhaMk8ya24YfGQ8UhAf7cYWFLw/4b6NXw+OThKvWHYttdMUYKBH/myQrUVo
-         1EKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=OlUT4VdL+//Vhfi8q6/DNyDdCq5azFht1vrO2HgtYLE=;
-        b=LMVi+XLhqiRRUBy5RPHiy0w831ye5fRqkAregrw2LaiBL5Lvq10XHe5p4WaRwKmfQQ
-         PNqq9pFh3YphAXaENfR8N0ST32+6y/2ajGpbv7U+fM8TTj0SLx/XFKBzdhQN6USH/jK4
-         9/YEDmvBwNVJ1enasCZizuyWNFyJtqBzHTCMAzkvnldsGnzqjcp4N/FXp2Hib7iYwjpx
-         NO0lTdNglIaUdRelkFRkWJVGEvJYiJZLTzK17lgScrqrjP8sXun7l+RNn4ObeAS8hk0L
-         zM2mIElffJQyDPjgvwGBO8O9vL14aWLZbljSnE4yphy6vwKjHjaVPt2nqsxYzPIs8FEi
-         uzmg==
-X-Gm-Message-State: ACgBeo2PySdXmZFqvttd/12ABd51EhwzVXidYDL8inTBWc2ej2OChdzh
-        t2Tv+iW7IIPPaZXrEoZ5cJ7FSQ==
-X-Google-Smtp-Source: AA6agR4UevrG27Uu49Q/jGiyg03BymCordDnWhyqLd9fYgY59+36kp0qXQCJZJTC7NbuyrZh05j3ZA==
-X-Received: by 2002:a05:6512:3281:b0:496:f9b5:eb55 with SMTP id p1-20020a056512328100b00496f9b5eb55mr5833lfe.279.1662396339100;
-        Mon, 05 Sep 2022 09:45:39 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z4-20020ac24f84000000b0048cc076a03dsm1237973lfs.237.2022.09.05.09.45.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 09:45:38 -0700 (PDT)
-Message-ID: <33c19838-2e44-2164-11c7-b14be5908809@linaro.org>
-Date:   Mon, 5 Sep 2022 18:45:37 +0200
+        Mon, 5 Sep 2022 12:47:15 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A5952E6A
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:47:14 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id E6A1E3200922;
+        Mon,  5 Sep 2022 12:47:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 05 Sep 2022 12:47:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1662396431; x=1662482831; bh=pp
+        gpksPj3y7l/SkP6fbnYixZ5NsMp5i64ReQbaQaQMA=; b=yyKUbp7mX1moIfaL+p
+        Xj8tS/Nfe1V1QB/SGnLAtDucoXuFalE54Hph/uQ5pG0G1QX8uJPbzUwN1j0P7iRf
+        xHdEJYNmUhTQLECwNXPlBcddlmYT+L1SXkpbwGMelKrPhEbG9eHQLVsDGsl3O+sC
+        znNaZKihayL6z6K6JELs6AoHmtTThG2SS959Qci7Tc++fGNCalZKfx63W2VQBtgb
+        cQK4x+X9tzVnECI792C0A/mKnU0QzpeamMHSp9sdpadU4xe+O03Zfa431VL/ZTBS
+        2BaUy2Af6rETdTspOpioZ5VkcYZbBazLhx8A/cvTh8wQhuQoztrnW4S4qwDv3HlT
+        V0Uw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1662396431; x=1662482831; bh=ppgpksPj3y7l/SkP6fbnYixZ5NsM
+        p5i64ReQbaQaQMA=; b=PSxp21Edx/pX3ATvS2mm73/xkrQZtdTqPFBm18B07LwD
+        3JA7dcjM8/4cx5hFRLIebxHTnU9ie7IG87yHrgaieVsLPktHh5FKNU3ccrUnxp7d
+        EG/t2GbACzpJr4GmZvLo0h+ya4u5eNLuZ/rtPyE5vozlshabPeusk2K0yWwj7Xo0
+        G5zDHRhvekVEU3pyaT5Z9iN08BkkqeJBaWxoQhohYf93/ScEOJUYHIC0t/OU1U0D
+        HVkTuwRZtCOcE8EGZA7iNLeAXcnc8qhU3ZGNdtT6gNJOzIHkUx2XB+D1oOvTN0RJ
+        JMwT2C9n/911A4FS4ulJvYah7QtUmQwqnWK12dk4Ng==
+X-ME-Sender: <xms:DygWY0v8UGChFUFDzbIoUWSiY5tc3Nk7U-hgqipvUi9zMO0MXWRNTQ>
+    <xme:DygWYxfqQKzsPVa5mlReUvY_v_85uJTSU2-W9YFv-9uF3JGiDKryCgs6gng4jOW3l
+    UP6W91e3fRXgNcDOYE>
+X-ME-Received: <xmr:DygWY_ytiGCPWplltKLBmoLcsjz-xp7-Vqq7RfgE1tXslznm3RRHji8IZESrlqyvhePN1g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeliedguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
+    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
+    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:DygWY3PotRfgutHzKLtRTrdeg2PLPqjT78Skdq2Layr8FQx2MEXzyQ>
+    <xmx:DygWY08Pk8ezq-YroNLsLSe3jubZtJiYDxFxB12Dk6oM-oJ0OP3aFg>
+    <xmx:DygWY_UaGTmhININo1VE8CluM4H7h6Pl_fotPrq1j9Iau_L8aKtl5g>
+    <xmx:DygWY0Mk8Coqs_3KGKTOkvZJ9-6pqrYlt7AT78CPKUvwQcsbB_P5gg>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Sep 2022 12:47:11 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 0ED0E1044CD; Mon,  5 Sep 2022 19:47:08 +0300 (+03)
+Date:   Mon, 5 Sep 2022 19:47:08 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Bharata B Rao <bharata@amd.com>, ananth.narayan@amd.com,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
+Message-ID: <20220905164708.ewx5lulbqdjrk3mx@box.shutemov.name>
+References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
+ <20220904010001.knlcejmw4lg2uzy3@box.shutemov.name>
+ <64519d0b-b696-db47-52c2-303451e10c09@amd.com>
+ <20220905134457.a2f7uluq42frsgwe@box.shutemov.name>
+ <YxYIAVx2qJLMDJlC@hirez.programming.kicks-ass.net>
+ <20220905153517.k6ctaqqtkcyu2zmn@box.shutemov.name>
+ <YxYZ6Q+JVg79aDNS@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/3] regulator: dt-bindings: qcom,rpmh: Use
- additionalProperties
-Content-Language: en-US
-To:     Andrew Halaney <ahalaney@redhat.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dianders@chromium.org, johan@kernel.org
-References: <20220902185148.635292-1-ahalaney@redhat.com>
- <20220902185148.635292-2-ahalaney@redhat.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220902185148.635292-2-ahalaney@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxYZ6Q+JVg79aDNS@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/09/2022 20:51, Andrew Halaney wrote:
-> Right now, running make dt_binding_check results in this snippet:
+On Mon, Sep 05, 2022 at 05:46:49PM +0200, Peter Zijlstra wrote:
+> On Mon, Sep 05, 2022 at 06:35:17PM +0300, Kirill A. Shutemov wrote:
+> > What about something like this?
+> > 
+> > diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+> > index 803241dfc473..868d2730884b 100644
+> > --- a/arch/x86/include/asm/uaccess.h
+> > +++ b/arch/x86/include/asm/uaccess.h
+> > @@ -30,8 +30,10 @@ static inline bool pagefault_disabled(void);
+> >   */
+> >  #define untagged_addr(mm, addr)	({					\
+> >  	u64 __addr = (__force u64)(addr);				\
+> > -	s64 sign = (s64)__addr >> 63;					\
+> > -	__addr &= (mm)->context.untag_mask | sign;			\
+> > +	if (static_cpu_has(X86_FEATURE_LAM)) {				\
+> > +		s64 sign = (s64)__addr >> 63;				\
+> > +		__addr &= (mm)->context.untag_mask | sign;		\
+> > +	}								\
+> >  	(__force __typeof__(addr))__addr;				\
+> >  })
 > 
->     /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml: 'additionalProperties' is a required property
->             hint: A schema without a "$ref" to another schema must define all properties and use "additionalProperties"
->             from schema $id: http://devicetree.org/meta-schemas/base.yaml#
->       SCHEMA  Documentation/devicetree/bindings/processed-schema.json
->     <snip..>
->     /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml: ignoring, error in schema:
-> 
-> Which results in the schema not being properly evaluated. Swap out
-> unevaluatedProperties which doesn't seem to be doing anything for
-> additionalProperties.
+> Well, if you go throught the trouble of adding it, might as well use a
+> regular static branch and only enable it once there's an actual user,
+> no?
 
-unevaluatedProperties were required due to usage of defs-allOf
-(ba5d99609a5e ("regulator: dt-bindings: qcom,rpmh: document supplies per
-variant")
-).
+Fair enough. How about this?
 
-Are you sure that it works correctly with additionalProperties?
-
-Judging by errors it doesn't....
-
-> 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> ---
->  .../devicetree/bindings/regulator/qcom,rpmh-regulator.yaml    | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-> index 9a36bee750af..b3fd60b21610 100644
-> --- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-> @@ -106,6 +106,8 @@ patternProperties:
->      $ref: "regulator.yaml#"
->      description: smps/ldo regulator nodes(s).
->  
-> +additionalProperties: false
-> +
-
-Don't move the location. The proper one is above examples.
-
-Best regards,
-Krzysztof
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index 803241dfc473..1a03c65a9c0f 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -22,6 +22,8 @@ static inline bool pagefault_disabled(void);
+ #endif
+ 
+ #ifdef CONFIG_X86_64
++DECLARE_STATIC_KEY_FALSE(tagged_addr_key);
++
+ /*
+  * Mask out tag bits from the address.
+  *
+@@ -30,8 +32,10 @@ static inline bool pagefault_disabled(void);
+  */
+ #define untagged_addr(mm, addr)	({					\
+ 	u64 __addr = (__force u64)(addr);				\
+-	s64 sign = (s64)__addr >> 63;					\
+-	__addr &= (mm)->context.untag_mask | sign;			\
++	if (static_branch_unlikely(&tagged_addr_key)) {			\
++		s64 sign = (s64)__addr >> 63;				\
++		__addr &= (mm)->context.untag_mask | sign;		\
++	}								\
+ 	(__force __typeof__(addr))__addr;				\
+ })
+ 
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 337f80a0862f..63194bf43c9a 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -742,6 +742,9 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
+ }
+ #endif
+ 
++DEFINE_STATIC_KEY_FALSE(tagged_addr_key);
++EXPORT_SYMBOL_GPL(tagged_addr_key);
++
+ static void enable_lam_func(void *mm)
+ {
+ 	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
+@@ -813,6 +816,7 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
+ 	}
+ 
+ 	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
++	static_branch_enable(&tagged_addr_key);
+ out:
+ 	mutex_unlock(&mm->context.lock);
+ 	mmap_write_unlock(mm);
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov

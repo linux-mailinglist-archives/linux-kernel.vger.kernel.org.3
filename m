@@ -2,113 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375405ACA49
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849735ACA57
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 08:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235983AbiIEGFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 02:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
+        id S236134AbiIEGGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 02:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbiIEGFD (ORCPT
+        with ESMTP id S231883AbiIEGGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 02:05:03 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660341A3AE;
-        Sun,  4 Sep 2022 23:05:02 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2DFA75C00D9;
-        Mon,  5 Sep 2022 02:04:59 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 05 Sep 2022 02:04:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662357899; x=1662444299; bh=9rwen180LD
-        zZkPZ/tp66Cb5V6hBq8lpuh4wpolRlS8c=; b=ABO7UC5o2e3QKa8CtyH2uXGZlu
-        ReZDE8KAxS31qGLIN1mjNT3QJhxJRv54KPK++zu1+2nBjsyFrEew1cOlrSVqJIyL
-        669ujOAT/C08Sv8wl6PDxGLubmULkcyXDEWqBD80ZMeRBq1MeETTg17E0wkdp6Jr
-        ea6fvlgKUmmqZ0UZy1gfQqNhaSQtLF43i/4vVfmQEZ4N4KbT/ANBS5SnGJeXIVoI
-        1SFKW9lJ8TfDUMpjCVVxDlgBt1aFq6iHw/ic1fGsiyfkCydpuh8o1BRhpWCB1iuj
-        UTcaMwO3E/eKAYcWbV62YGQB2q00Zd6SVTW18316dtZD03Fs4R+E0pUGWYfA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1662357899; x=1662444299; bh=9rwen180LDzZkPZ/tp66Cb5V6hBq
-        8lpuh4wpolRlS8c=; b=A74SvdjwRTYL2Z4LHuR7BagTAvo5/gA49tM0888usoFF
-        iHacArVvNH+ilEqByFNjNcdwfpeXwvldx9EkVvYLQ2DlF9okXOGirl+/VQzdEURP
-        h2zQuu9QCsKpVIuc29uTu3zoq6q2Pm0T3GUG2oXPhqnRmmsBQQUL60QYpLEDJYd6
-        YJPC8pN3FLaAcNwYC0qmM+DuNBTFIt9G/2pHPrUwbuRtv52TXTz0RFUFUceMO/6b
-        1h9c82EGueRJ/ye3PAFPYsptAt0gg0reQdJfL+ouSgegk3/17QTqsDIFXlwGA+/w
-        FpomSU53TMS2PbXG0jR+CtHEN+sR9mGSCYAc9h5eIg==
-X-ME-Sender: <xms:ipEVYyQtiCZOqSH9_wv5HDM5rtBVLV3ITFCQrnWe7zLwIkKK_2-krQ>
-    <xme:ipEVY3ysr91yR-p6HRfIAhpTuiuxcrLWzDiac7akjy0v9JH8zIz8fVA7uFHRbyL8P
-    OusZiPafYuPRw>
-X-ME-Received: <xmr:ipEVY_0wdLqmoe2mu9syalj5_alS6SyqqO2wZ_BJ_zXwSpvpm8dIuS3PeZUgbMnf9XuEPoJ7NSl9w0tvVOLFwXIdghK4_1eQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelhedguddtfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:ipEVY-CVm5uKh1Vfyh-brQ79OLxU2OYpOo8Zx_UaSRIxIFB5vUuHvg>
-    <xmx:ipEVY7jUqbAmPLBHvteT-lQM9ksDh68FJQOGdy2Pn5sgKuLLs2pCzw>
-    <xmx:ipEVY6p-8_dpWoHhfVxwlPaA2t8moxwcdIGcI5qBjavnCmT88fXSZQ>
-    <xmx:i5EVY2Ujq3gQuV6418EUV3c3J_zUGqHiJJuX4CFrw4q_fH7ySyCmog>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Sep 2022 02:04:58 -0400 (EDT)
-Date:   Mon, 5 Sep 2022 08:04:55 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <YxWRh434D2FIE+WX@kroah.com>
-References: <20220901135230.37584d32@canb.auug.org.au>
+        Mon, 5 Sep 2022 02:06:06 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2071.outbound.protection.outlook.com [40.107.94.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E662AE0E
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 23:06:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RpVcT5pvX/qYM3mXpi+GWsuT8dgyybrc3t2+HTFhetZP4EmqoFMtvG4Ijdj8L9fWZS4K70JIYt9jjXUbWo8zMGJZK9IxBx1fhMf285L8K1M/F01gqNa3bWMwkT5ZVZyHceIUp7KVo8Z+M1ZkyY85LE9Fv/pLQNcflGDFd32rDH0MvbtM9mVSqm9cGbThhOWlI2H5pfF+CyqkwblC+df//ZaZOnQ+OmRt+Toumq3DQoNnHrQMwjPOyzD3eGhGy94ZQsP43hgNSdZziexoYwmk0KpwFCgJWBm8ArfpBzdU0EBJbBJ/MlCG+CEqNvdtisdjssC7YrVETVS8Xa5cPpgLtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RNnAT+WVhYNuGkD+rHXv/qu6ylNi+Jzed4P0KiGlGhc=;
+ b=HVXn+h27gquYNZTbIv/ncmbyXmbQPdAB1Rr9+/phYpElUP0J7JMmenp2DqOf/eiJB5ECdqvCdHtSOp3GPEYy/IrBBeUeqoGb/5PNoXxtPFvA8sBDc04HdkZHItuH/JMXLLt4lmjxJ+LBYYNVdR7pNBdyU/YZKRDDCwDeDrWuIcDDieIJH6PERcvjQmSSM6OZ42Q1wM+UVUsFKprsiC7bRukuOtjWiBvZiVdjgaGjdW9Luk+j8thvPOQt9zNWtH4XQQ1SxBkGd0UCf6qy73nX3N2tH46A/hvrVeUvVw6/JeVS87KXRYfHma8E0nRa7RS3FbtR7jPi4Vw3b5SZHGoOrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RNnAT+WVhYNuGkD+rHXv/qu6ylNi+Jzed4P0KiGlGhc=;
+ b=dZgpRDapoPjmNIliKkrxZj03fwFT80GzAsOdeezobH7VYtRaYoEEVXC9XmiRspYu1Phd3Z6EhjEiD+oYMq5Jb6O98xVTk7Y1IIMfpLz4vqpvtMuVx7rqhw0hjVYsU2U7f43O4srOhycJnrv86kllW8DYi4tTb/ZljpskbKBg3OE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM6PR12MB4515.namprd12.prod.outlook.com (2603:10b6:5:2a1::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
+ 2022 06:06:02 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
+ 06:06:02 +0000
+Message-ID: <2f793737-17a1-7497-27c1-3feec713114b@amd.com>
+Date:   Mon, 5 Sep 2022 08:05:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm:Fix the blank screen problem of some 1920x1080 75Hz
+ monitors using R520 graphics card
+Content-Language: en-US
+To:     zhongpei <zhongpei@kylinos.cn>, alexander.deucher@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        isabbasso@riseup.net
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220905032307.1519169-1-zhongpei@kylinos.cn>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220905032307.1519169-1-zhongpei@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR06CA0225.eurprd06.prod.outlook.com
+ (2603:10a6:20b:45e::13) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901135230.37584d32@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d535175f-aa0a-4690-c70e-08da8f04b5e6
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4515:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4AhlogUsfyJDMmfNpoWSyTt6u09CiTwGcfBCopJwtiEbRnKQtfBbeTJp493k50JsA60v+1nSlh07l8AoVTP5knoezwAqB5UcepDdHWXtZ20nM3B+/uFI3D5bJzDOwROKWjUyW0uQxKrnLZAqKTfJdeHYKD1E5eQrXUGwikOSlWA72w03qHQLhzliunGzSpdvZVJpoIAnacSGQ7w8TEeBxg2Z4AvpPXhnzjNSyKjj5QJFSWX9Q0t531sZuUaGHsJ/HJBmJg8CLZs6FfYbhvACrxQe9hVsFqTG/cPBjdHixjmFXv/uC9PWPkYf3Rtz0FmJo88hUVRMB2req6HmCvoer7LJisS5C0694oAFBFJfn9GQI39iWYfMPvSIdN1M5n/eOn+/fyacWKvySoNYj8tCumf+Nl5l1nO6gr7oPMSG5DZKDbjbnADHLoGneRhq549VNQvLEFI8YrISXoQg2VfUY5geMKt4wATEHpeaulqJ8bgLPwD2z9+ojGBsCadUIAG75sNf+4X6E2sAhzL1AOE0GDiVZRQGuRtNi0ho2RY5miWPk5e6ejqR13BISMqtw4ox8zZgpGFF2NS9C37w+gF80kQ3y+6X8Oq+yQNSSvQu8HqC03Y1noaSvyXVqK3Je2hSZb6DQ7B9SJq0nDnt6oVAr26K6jYk3HCMDUbTOaMRqpsvJkCDAp8DVN7LvV1ynuXh38SZK05r60qcJQbaZPfUA+2cpCOLBXKqr7ByBS0hAqE7X+MbvovzjIcD/SPl7pe5dyyqMZH9/xoVwtTJSO/1rdA4vpq9AJHa7qIWW2nCNKo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(346002)(136003)(396003)(39860400002)(31686004)(186003)(83380400001)(316002)(2616005)(6486002)(26005)(2906002)(5660300002)(8936002)(36756003)(6512007)(41300700001)(4326008)(8676002)(31696002)(6506007)(38100700002)(478600001)(66946007)(66556008)(86362001)(66476007)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UjVOeHZIUUV3KzFndzZlbHJHbCs1MVh4N0ZiVStISkMyT3o2SlRXM1dyekIv?=
+ =?utf-8?B?dXJMWDA5WG5OdU5VZGhudmUxTGlSdHNPd0hpb2VqdjcyM1owVDRiUzdOZTVo?=
+ =?utf-8?B?dXNHZnc2anRyaFkxbXZodTdkZTRHZ3pDOXlJUG8rMU15d3VoOGhDcTRBT2V0?=
+ =?utf-8?B?T0hHMEVuSE9HWnlySWs3L01XZ1N5NXExRkxZclVOMW9WV1dNYUg2azhhK0Rq?=
+ =?utf-8?B?NVB4U0RNOWc4SWlOVFZYSzUvcTU3RGFLc1IybE9MK0x6eHhzRGw4eGtVOUJR?=
+ =?utf-8?B?dkFZOGM3S0tTcG9HV250azg2YXhENzlENHdjNEQvRmQ5YjRzTnY3djJxWXkv?=
+ =?utf-8?B?VSs0N05VTU1oRFFzM2NFOFZwUHNaV25BcWpxRzRZcWlEeVlPOUR1Si9xNTZW?=
+ =?utf-8?B?bzJTdThwWTFPeGNJVGlaWldvL3V1NVBoR3dGSzNvMWZCTEZ4QWlhemxwaGcr?=
+ =?utf-8?B?YzVwU0xqaUVCMm9uQVNzRW9aVFFhTXlTMmpJYkNSQzA3Z2NvWEVjUEVYOHNl?=
+ =?utf-8?B?NVIvc2lYQ3RFYmNpaWdHV0NKUzlzNWRGMXM4QmtMQVFJMFIva29KTzFabW1o?=
+ =?utf-8?B?NFV4MG1LZHF4OEw0anJnTjRLRmY1MWlKVW5RY0dxVTcrRkV5d05mYW9zQzJT?=
+ =?utf-8?B?eUZ2eGkvSjhZSXk4L2x4Y2JReWZoaVlWaHZPQXRYTWtqMjBKb2hUMGxZUHVs?=
+ =?utf-8?B?OUtySFVCODlna1NBMEQrY3FJOGdMTEZOTkkzZFRaN1k5V0J2WGR4L3Q3eS9E?=
+ =?utf-8?B?Q3ZVM2NHV2FHeXlHNzRDVFhSTHpPaE5iWlZ6em0wRDhISldTY1ZTS3BIYnFD?=
+ =?utf-8?B?S1IrN0Q5aXNiOGU2bHJNZ1lyMVpNZG9LREdCa1Q0WE0wU2RwSkRqRXJ0elBm?=
+ =?utf-8?B?b2I5SFlsaWpVV3NiTG5EMXJrZUlIWHJ4ZDBERXFvbDU3NjlrS0RFYUxuSWpk?=
+ =?utf-8?B?ZnNyalNVS0kyWmFJekJVVzVjK09oOWxuajM5dndWOUY1Q2E4Q21JLzZZNWdO?=
+ =?utf-8?B?RDVzcDI3UTdrS092YUVta2cybFF3Z1FzWUY1MFJySHpidHB3bmdHaVh3cGhv?=
+ =?utf-8?B?em8zd1FuUWVQanIzNmRBejZNeEdiYTVjcWlvRTRoajFOdWlzM0xLVkRzWEZy?=
+ =?utf-8?B?TVFVT0pYbTQ5ZWNLNWJrL0Q5TlNib2xwV0h1bDlmdFFtY2lMYUFmMldyNkZx?=
+ =?utf-8?B?SkdobW9neXQrUW50LzFFUkZyeXduYVRwMmJkRGt2cUg5bGhUNFJQZlQ2U1hN?=
+ =?utf-8?B?RjFXcjFybFdpN2g0eWVMOHo0Y1o3TEhRNGRBNmN4RmhKcG4rVDJoR0VITGpy?=
+ =?utf-8?B?bjdhVjk3aStMTUtZak1uemRmV1R2NnpIQ21ncmFYay9nQWNLTVRoTy9DK0k3?=
+ =?utf-8?B?enlJNGJCcm9Hdm5iZmU3UlpVZ1JLTWJ5enFjN0lyQVFYUTUyT0FQckdkeDFu?=
+ =?utf-8?B?d3VwYzRHUE5QY291aGxhZmZCZ241elpEM1lhdnNabXdoT0xhSGQzZ2Q5WGxB?=
+ =?utf-8?B?UVl0S0xSQ2ZQeTNqaHNJUjhSQWJrSWJmSGFZU29wRjVjYytiV29RZG5IL2xp?=
+ =?utf-8?B?L0dWRFhPNy9yN2YvQlFJckRiLzBMenJHM0JBa21aYzZLUGlWRllxNGZHcG8v?=
+ =?utf-8?B?MForOHZDWndSTWI1cmZqUlRwR3FOMGlodFZ4Q090VUNwd3c2SHZnSXllRjhW?=
+ =?utf-8?B?U09jQ1ZIRS95OWtDbDMwK0pLSmx2OG5ESVdxeVNlckloeEp0blBrY0t2YTlk?=
+ =?utf-8?B?QStyUHBvR1RiUkFhM3l5OFNmTFRYSll6U1dyOUhTZmpQb1g3OUdZTEtTRzgv?=
+ =?utf-8?B?VlFKd3hlV0FHdDZWVG5qQllYeHNtdGlFMUtQUUpVeHh4Qmwrc083akZKbHpj?=
+ =?utf-8?B?NmJoOGMza2pvOEdzK3BKR2h0eDJJYnJDRzZWWFRwek9keGtCblF3dThrQS9P?=
+ =?utf-8?B?REhFU3VoUmZjNzQ4cUlVYzErVDAzQnVDSTdVd3ZIaFAzWC82UisxRFJsS0U5?=
+ =?utf-8?B?NzAvenFDQzhjY211NW90L1lNZlFnWjhlRWd2dkVWVVhzcUxrK25SZGF4eGhN?=
+ =?utf-8?B?SG94SVFxNHhUQ1ZZRThDSUJFZ3lGQTFFQWo2YXBocmkwK0d5T1BoQnZERUhw?=
+ =?utf-8?Q?Wl9O01kIRU0I1brgzUgJaXyaW?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d535175f-aa0a-4690-c70e-08da8f04b5e6
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 06:06:02.2194
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: r/TC/CG9xdbdee/6h2K5FtUP9DKb1yJg/sYt1Z7MWWocRJrmtMmeMxQ6DkDexIIp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4515
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 01:52:30PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   drivers/usb/dwc3/gadget.c
-> 
-> between commit:
-> 
->   040f2dbd2010 ("usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop")
-> 
-> from the usb.current tree and commit:
-> 
->   9711c67de748 ("usb: dwc3: gadget: Synchronize IRQ between soft connect/disconnect")
-> 
-> from the usb tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Am 05.09.22 um 05:23 schrieb zhongpei:
+> We found that in the scenario of AMD R520 graphics card
+> and some 1920x1080 monitors,when we switch the refresh rate
+> of the monitor to 75Hz,the monitor will have a blank screen problem,
+> and the restart cannot be restored.After testing, it is found that
+> when we limit the maximum value of ref_div_max to 128,
+> the problem can be solved.In order to keep the previous modification
+> to be compatible with other monitors,we added a judgment
+> when finding the minimum diff value in the loop of the
+> amdgpu_pll_compute/radeon_compute_pll_avivo function.
+> If no diff value of 0 is found when the maximum value of ref_div_max
+> is limited to 100,continue to search when it is 128,
+> and take the parameter with the smallest diff value.
 
-Now fixed up in my tree as well, thanks!
+Well that's at least better than what I've seen in previous tries to fix 
+this.
 
-greg k-h
+But as far as I can see this will certainly break some other monitors, 
+so that is pretty much a NAK.
+
+Regards,
+Christian.
+
+>
+> Signed-off-by: zhongpei <zhongpei@kylinos.cn>
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c | 17 +++++++++++++----
+>   drivers/gpu/drm/radeon/radeon_display.c | 15 +++++++++++----
+>   2 files changed, 24 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c
+> index 0bb2466d539a..0c298faa0f94 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_pll.c
+> @@ -84,12 +84,13 @@ static void amdgpu_pll_reduce_ratio(unsigned *nom, unsigned *den,
+>   static void amdgpu_pll_get_fb_ref_div(struct amdgpu_device *adev, unsigned int nom,
+>   				      unsigned int den, unsigned int post_div,
+>   				      unsigned int fb_div_max, unsigned int ref_div_max,
+> -				      unsigned int *fb_div, unsigned int *ref_div)
+> +				      unsigned int ref_div_limit, unsigned int *fb_div,
+> +				      unsigned int *ref_div)
+>   {
+>   
+>   	/* limit reference * post divider to a maximum */
+>   	if (adev->family == AMDGPU_FAMILY_SI)
+> -		ref_div_max = min(100 / post_div, ref_div_max);
+> +		ref_div_max = min(ref_div_limit / post_div, ref_div_max);
+>   	else
+>   		ref_div_max = min(128 / post_div, ref_div_max);
+>   
+> @@ -136,6 +137,7 @@ void amdgpu_pll_compute(struct amdgpu_device *adev,
+>   	unsigned ref_div_min, ref_div_max, ref_div;
+>   	unsigned post_div_best, diff_best;
+>   	unsigned nom, den;
+> +	unsigned ref_div_limit, ref_limit_best;
+>   
+>   	/* determine allowed feedback divider range */
+>   	fb_div_min = pll->min_feedback_div;
+> @@ -204,11 +206,12 @@ void amdgpu_pll_compute(struct amdgpu_device *adev,
+>   	else
+>   		post_div_best = post_div_max;
+>   	diff_best = ~0;
+> +	ref_div_limit = ref_limit_best = 100;
+>   
+>   	for (post_div = post_div_min; post_div <= post_div_max; ++post_div) {
+>   		unsigned diff;
+>   		amdgpu_pll_get_fb_ref_div(adev, nom, den, post_div, fb_div_max,
+> -					  ref_div_max, &fb_div, &ref_div);
+> +					  ref_div_max, ref_div_limit, &fb_div, &ref_div);
+>   		diff = abs(target_clock - (pll->reference_freq * fb_div) /
+>   			(ref_div * post_div));
+>   
+> @@ -217,13 +220,19 @@ void amdgpu_pll_compute(struct amdgpu_device *adev,
+>   
+>   			post_div_best = post_div;
+>   			diff_best = diff;
+> +			ref_limit_best = ref_div_limit;
+>   		}
+> +		if (post_div >= post_div_max && diff_best != 0 && ref_div_limit != 128) {
+> +			ref_div_limit = 128;
+> +			post_div = post_div_min - 1;
+> +		}
+> +
+>   	}
+>   	post_div = post_div_best;
+>   
+>   	/* get the feedback and reference divider for the optimal value */
+>   	amdgpu_pll_get_fb_ref_div(adev, nom, den, post_div, fb_div_max, ref_div_max,
+> -				  &fb_div, &ref_div);
+> +				  ref_limit_best, &fb_div, &ref_div);
+>   
+>   	/* reduce the numbers to a simpler ratio once more */
+>   	/* this also makes sure that the reference divider is large enough */
+> diff --git a/drivers/gpu/drm/radeon/radeon_display.c b/drivers/gpu/drm/radeon/radeon_display.c
+> index f12675e3d261..0fcbf45a68db 100644
+> --- a/drivers/gpu/drm/radeon/radeon_display.c
+> +++ b/drivers/gpu/drm/radeon/radeon_display.c
+> @@ -925,10 +925,10 @@ static void avivo_reduce_ratio(unsigned *nom, unsigned *den,
+>    */
+>   static void avivo_get_fb_ref_div(unsigned nom, unsigned den, unsigned post_div,
+>   				 unsigned fb_div_max, unsigned ref_div_max,
+> -				 unsigned *fb_div, unsigned *ref_div)
+> +				 unsigned ref_div_limit, unsigned *fb_div, unsigned *ref_div)
+>   {
+>   	/* limit reference * post divider to a maximum */
+> -	ref_div_max = max(min(100 / post_div, ref_div_max), 1u);
+> +	ref_div_max = max(min(ref_div_limit / post_div, ref_div_max), 1u);
+>   
+>   	/* get matching reference and feedback divider */
+>   	*ref_div = min(max(den/post_div, 1u), ref_div_max);
+> @@ -971,6 +971,7 @@ void radeon_compute_pll_avivo(struct radeon_pll *pll,
+>   	unsigned ref_div_min, ref_div_max, ref_div;
+>   	unsigned post_div_best, diff_best;
+>   	unsigned nom, den;
+> +	unsigned ref_div_limit, ref_limit_best;
+>   
+>   	/* determine allowed feedback divider range */
+>   	fb_div_min = pll->min_feedback_div;
+> @@ -1042,11 +1043,12 @@ void radeon_compute_pll_avivo(struct radeon_pll *pll,
+>   	else
+>   		post_div_best = post_div_max;
+>   	diff_best = ~0;
+> +	ref_div_limit = ref_limit_best = 100;
+>   
+>   	for (post_div = post_div_min; post_div <= post_div_max; ++post_div) {
+>   		unsigned diff;
+>   		avivo_get_fb_ref_div(nom, den, post_div, fb_div_max,
+> -				     ref_div_max, &fb_div, &ref_div);
+> +				     ref_div_max, ref_div_limit, &fb_div, &ref_div);
+>   		diff = abs(target_clock - (pll->reference_freq * fb_div) /
+>   			(ref_div * post_div));
+>   
+> @@ -1055,13 +1057,18 @@ void radeon_compute_pll_avivo(struct radeon_pll *pll,
+>   
+>   			post_div_best = post_div;
+>   			diff_best = diff;
+> +			ref_limit_best = ref_div_limit;
+> +		}
+> +		if (post_div >= post_div_max && diff_best != 0 && ref_div_limit != 128) {
+> +			ref_div_limit = 128;
+> +			post_div = post_div_min - 1;
+>   		}
+>   	}
+>   	post_div = post_div_best;
+>   
+>   	/* get the feedback and reference divider for the optimal value */
+>   	avivo_get_fb_ref_div(nom, den, post_div, fb_div_max, ref_div_max,
+> -			     &fb_div, &ref_div);
+> +			     ref_limit_best, &fb_div, &ref_div);
+>   
+>   	/* reduce the numbers to a simpler ratio once more */
+>   	/* this also makes sure that the reference divider is large enough */
+

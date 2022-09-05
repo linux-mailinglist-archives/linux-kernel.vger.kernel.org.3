@@ -2,284 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68D55ACBC2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FBF5ACBE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237012AbiIEHFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S237048AbiIEHFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236854AbiIEHFR (ORCPT
+        with ESMTP id S236854AbiIEHFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:05:17 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E615930F7A;
-        Mon,  5 Sep 2022 00:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662361515; x=1693897515;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dSaImXYJDFJBjVkAy9D9i/aVykAxDgVnwzzvJ+cCifE=;
-  b=caaVPj9U2W+gjdGcviWv1oL7xoABbkUz0qMJn7UUkt68VsMYYi+UhCMk
-   Qtz10BQ4wNukKrqHaiP3AILdWQue6xv5nexnidmhOqd45Je1L2S8GiH+k
-   W6MfYS32hh++6cDrmE4UJkgYkUX2JzvZiDtjTqvZ9NFM7B3Au0oI1IyqM
-   Nxv1gbLDMT7gmM/p8lx2viF1hTkVT+afYX2LZQagdlEaeOjKo8f2v4vBp
-   8GZiIlJAs4b/k6UB5hv+YCx9NfnDk5XoLMqAflzWPoteNc7wrITYn8SZf
-   R6Z+TiWjTCO2fdke3pIPXZdUCwMcm0Og/zxyWxsm0l40C+uJt/10tO4Oq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="293908122"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="293908122"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 00:05:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="643690288"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga008.jf.intel.com with ESMTP; 05 Sep 2022 00:05:10 -0700
-Date:   Mon, 5 Sep 2022 15:05:09 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        John Garry <john.garry@huawei.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v3 06/22] KVM: arm64: Simplify the CPUHP logic
-Message-ID: <20220905070509.f5neutyqgvbklefi@yy-desk-7060>
-References: <cover.1662084396.git.isaku.yamahata@intel.com>
- <72481a7bc0ff08093f4f0f04cece877ee82de0cf.1662084396.git.isaku.yamahata@intel.com>
+        Mon, 5 Sep 2022 03:05:37 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175993D5AB
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:05:36 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id fs14so2785600pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 00:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=hCoU6yFiUUQwKXB+c9+cZmF5PiP+rY4cM9qprj6opUU=;
+        b=IGmOuB6R6WVg3gNfqQRU/bmYV1HfOPwq2zYxglr5CKA2awT7tqRVFo8FyhE9MwR/sz
+         CFlXBYRA3RO4PA634JvYIzD84ViFVPiAj+ecYN2wQjKJSpP1TnWgOnZ9FuvVG26orGhf
+         a4x9CriuNWP1+LNYADpNeHkcVhyrSFFingmnjIaZ8pJwY8AnpgO2vdiU5ay3RH7bOPFc
+         xOQxEHpC57R/1GEGAUw5oWI5L0tfEzLxM6HjMbXXP2BkMOCK7jUm92DmMjrt5lG1i4BI
+         tezW9nuo8R7c4TAQhD/GigSDPdPuIuFZfwcxdEBQyZBIoZ8hwsy7IkeLBJl+/5Wn3MpN
+         vwlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=hCoU6yFiUUQwKXB+c9+cZmF5PiP+rY4cM9qprj6opUU=;
+        b=Rb926a92nkZv5qY05I9RrVS98hf053MpmFmwAgN9FLLqNb4utvv6FlZ7jZX1HyXcBU
+         MnWuMEC6awKOt1r3+kugjxuI4PVJgjg5mRNYZzGBg5caCZfyI9ht1AzlyPLwBoRHyTLV
+         fiDlgeTn5TL0UhjN5R7+qfZ76Oaes2KkgqK9CE5Sz1mbz0HRk8HvMLQwTL79vBcU8S3F
+         8CkXn+x3lE6UHCIeB7KWOsWm7Z5jiPoTi6oDRDH76H6Fb0hi46vRHxkRaWeHdC+TNvic
+         LHxDcvbToR5WxZWgYWdJ9NE17GByRitBFoDA7RCLoIgyvbrQCJ9WuS6hwO18Aig54kMe
+         9eFA==
+X-Gm-Message-State: ACgBeo2PkbhUNI1DgZBBvX0yK8xpZ86rNYmTcFYr8JXWOo78z/BjUWOU
+        eHPa9f54lfhwk/ROup6Ab+JYDQ==
+X-Google-Smtp-Source: AA6agR4mUAPOQvLH0bbeLZS8HC/Lp0yTm8lJbBhnoM+lZJqjHtwulUnvZV5V2MRvghPN8RrEgpVMow==
+X-Received: by 2002:a17:90a:4d82:b0:1fb:6497:e071 with SMTP id m2-20020a17090a4d8200b001fb6497e071mr18036121pjh.166.1662361535185;
+        Mon, 05 Sep 2022 00:05:35 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:5362:9d7f:2354:1d0a:78e3? ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170902bd4800b00172c7dee22fsm617731plx.236.2022.09.05.00.05.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 00:05:34 -0700 (PDT)
+Message-ID: <3668ec5c-becf-2cac-c647-e20fb2156d8f@linaro.org>
+Date:   Mon, 5 Sep 2022 12:35:30 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <72481a7bc0ff08093f4f0f04cece877ee82de0cf.1662084396.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-pmics: Remove reg entry for
+ pmc8280c_lpg node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, agross@kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>
+References: <20220903084440.1509562-1-bhupesh.sharma@linaro.org>
+ <42790a40-458a-55ff-7e4b-796e72f474ac@kernel.org>
+ <66eaf16e-cb7c-a0b4-9ce5-02611308b0e6@linaro.org>
+ <6b845257-e8e5-92e4-8cf1-f3e394cbc59e@kernel.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <6b845257-e8e5-92e4-8cf1-f3e394cbc59e@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 07:17:41PM -0700, isaku.yamahata@intel.com wrote:
-> From: Marc Zyngier <maz@kernel.org>
->
-> For a number of historical reasons, the KVM/arm64 hotplug setup is pretty
-> complicated, and we have two extra CPUHP notifiers for vGIC and timers.
->
-> It looks pretty pointless, and gets in the way of further changes.
-> So let's just expose some helpers that can be called from the core
-> CPUHP callback, and get rid of everything else.
->
-> This gives us the opportunity to drop a useless notifier entry,
-> as well as tidy-up the timer enable/disable, which was a bit odd.
->
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> Reviewed-by: Oliver Upton <oupton@google.com>
-> Link: https://lore.kernel.org/r/20220216031528.92558-5-chao.gao@intel.com
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/arm64/kvm/arch_timer.c     | 27 ++++++++++-----------------
->  arch/arm64/kvm/arm.c            |  4 ++++
->  arch/arm64/kvm/vgic/vgic-init.c | 19 ++-----------------
->  include/kvm/arm_arch_timer.h    |  4 ++++
->  include/kvm/arm_vgic.h          |  4 ++++
->  include/linux/cpuhotplug.h      |  3 ---
->  6 files changed, 24 insertions(+), 37 deletions(-)
->
-> diff --git a/arch/arm64/kvm/arch_timer.c b/arch/arm64/kvm/arch_timer.c
-> index bb24a76b4224..33fca1a691a5 100644
-> --- a/arch/arm64/kvm/arch_timer.c
-> +++ b/arch/arm64/kvm/arch_timer.c
-> @@ -811,10 +811,18 @@ void kvm_timer_vcpu_init(struct kvm_vcpu *vcpu)
->  	ptimer->host_timer_irq_flags = host_ptimer_irq_flags;
->  }
->
-> -static void kvm_timer_init_interrupt(void *info)
-> +void kvm_timer_cpu_up(void)
->  {
->  	enable_percpu_irq(host_vtimer_irq, host_vtimer_irq_flags);
-> -	enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
-> +	if (host_ptimer_irq)
-> +		enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
-> +}
-> +
-> +void kvm_timer_cpu_down(void)
-> +{
-> +	disable_percpu_irq(host_vtimer_irq);
-> +	if (host_ptimer_irq)
-> +		disable_percpu_irq(host_ptimer_irq);
->  }
 
-Should "host_vtimer_irq" be checked yet as host_ptimer_irq ?  Because
-the host_{v,p}timer_irq is set in same function kvm_irq_init() which
-called AFTER the on_each_cpu(_kvm_arch_hardware_enable, NULL, 1) from
-init_subsystems():
 
-kvm_init()
-  kvm_arch_init()
-    init_subsystems()
-      on_each_cpu(_kvm_arch_hardware_enable, NULL, 1);
-      kvm_timer_hyp_init()
-        kvm_irq_init()
-          host_vtimer_irq = info->virtual_irq;
-          host_ptimer_irq = info->physical_irq;
-  hardware_enable_all()
+On 9/5/22 12:08 PM, Krzysztof Kozlowski wrote:
+> On 05/09/2022 08:47, Bhupesh Sharma wrote:
+>> Hi Krzysztof,
+>>
+>> On 9/5/22 12:52 AM, Krzysztof Kozlowski wrote:
+>>> On 03/09/2022 11:44, Bhupesh Sharma wrote:
+>>>> Commit eeca7d46217c ("arm64: dts: qcom: pm8350c: Drop PWM reg declaration")
+>>>> dropped PWM reg declaration for pm8350c pwm(s), but there is a leftover
+>>>> 'reg' entry inside the lpg/pwm node in sc8280xp dts file. Remove the same.
+>>>>
+>>>> While at it, also remove the unused unit address in the node
+>>>> label.
+>>>>
+>>>> Fixes: eeca7d46217c ("arm64: dts: qcom: pm8350c: Drop PWM reg declaration")
+>>>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>>>> Cc: Bjorn Andersson <andersson@kernel.org>
+>>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>>>> ---
+>>>>    arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 3 +--
+>>>>    1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+>>>> index ae90b97aecb8..2e5cf55afdd5 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+>>>> @@ -60,9 +60,8 @@ pmc8280c_gpios: gpio@8800 {
+>>>>    			#interrupt-cells = <2>;
+>>>>    		};
+>>>>    
+>>>> -		pmc8280c_lpg: lpg@e800 {
+>>>> +		pmc8280c_lpg: lpg {
+>>>
+>>> I wonder why I did not see the errors when testing all DTSes for
+>>> https://lore.kernel.org/all/20220828084341.112146-9-krzysztof.kozlowski@linaro.org/
+>>
+>> I did not see the error while running the 'make dtbs_check' locally, so
+>> may be something to improve in 'make dtbs_check' infrastructure there.
+>>
+>>> Anyway, it cannot be lpg - binding requires "pwm".
+>>
+>> I think that should be a separate patch. It does not seem related to
+>> this change anyways - which fixes eeca7d46217c . I will send a v2 soon.
+> 
+> You would be changing same line twice and eeca7d46217c is not going to
+> be backported, so I am no sure if there is benefit to make two patches.
 
->
->  int kvm_arm_timer_set_reg(struct kvm_vcpu *vcpu, u64 regid, u64 value)
-> @@ -976,18 +984,6 @@ void kvm_arm_timer_write_sysreg(struct kvm_vcpu *vcpu,
->  	preempt_enable();
->  }
->
-> -static int kvm_timer_starting_cpu(unsigned int cpu)
-> -{
-> -	kvm_timer_init_interrupt(NULL);
-> -	return 0;
-> -}
-> -
-> -static int kvm_timer_dying_cpu(unsigned int cpu)
-> -{
-> -	disable_percpu_irq(host_vtimer_irq);
-> -	return 0;
-> -}
-> -
->  static int timer_irq_set_vcpu_affinity(struct irq_data *d, void *vcpu)
->  {
->  	if (vcpu)
-> @@ -1185,9 +1181,6 @@ int kvm_timer_hyp_init(bool has_gic)
->  		goto out_free_irq;
->  	}
->
-> -	cpuhp_setup_state(CPUHP_AP_KVM_ARM_TIMER_STARTING,
-> -			  "kvm/arm/timer:starting", kvm_timer_starting_cpu,
-> -			  kvm_timer_dying_cpu);
->  	return 0;
->  out_free_irq:
->  	free_percpu_irq(host_vtimer_irq, kvm_get_running_vcpus());
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 3385fb57c11a..0a2f616c4d63 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -1670,6 +1670,8 @@ static void _kvm_arch_hardware_enable(void *discard)
->  {
->  	if (!__this_cpu_read(kvm_arm_hardware_enabled)) {
->  		cpu_hyp_reinit();
-> +		kvm_vgic_cpu_up();
-> +		kvm_timer_cpu_up();
->  		__this_cpu_write(kvm_arm_hardware_enabled, 1);
->  	}
->  }
-> @@ -1683,6 +1685,8 @@ int kvm_arch_hardware_enable(void)
->  static void _kvm_arch_hardware_disable(void *discard)
->  {
->  	if (__this_cpu_read(kvm_arm_hardware_enabled)) {
-> +		kvm_timer_cpu_down();
-> +		kvm_vgic_cpu_down();
->  		cpu_hyp_reset();
->  		__this_cpu_write(kvm_arm_hardware_enabled, 0);
->  	}
-> diff --git a/arch/arm64/kvm/vgic/vgic-init.c b/arch/arm64/kvm/vgic/vgic-init.c
-> index f6d4f4052555..6c7f6ae21ec0 100644
-> --- a/arch/arm64/kvm/vgic/vgic-init.c
-> +++ b/arch/arm64/kvm/vgic/vgic-init.c
-> @@ -465,17 +465,15 @@ int kvm_vgic_map_resources(struct kvm *kvm)
->
->  /* GENERIC PROBE */
->
-> -static int vgic_init_cpu_starting(unsigned int cpu)
-> +void kvm_vgic_cpu_up(void)
->  {
->  	enable_percpu_irq(kvm_vgic_global_state.maint_irq, 0);
-> -	return 0;
->  }
->
->
-> -static int vgic_init_cpu_dying(unsigned int cpu)
-> +void kvm_vgic_cpu_down(void)
->  {
->  	disable_percpu_irq(kvm_vgic_global_state.maint_irq);
-> -	return 0;
->  }
->
->  static irqreturn_t vgic_maintenance_handler(int irq, void *data)
-> @@ -584,19 +582,6 @@ int kvm_vgic_hyp_init(void)
->  		return ret;
->  	}
->
-> -	ret = cpuhp_setup_state(CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
-> -				"kvm/arm/vgic:starting",
-> -				vgic_init_cpu_starting, vgic_init_cpu_dying);
-> -	if (ret) {
-> -		kvm_err("Cannot register vgic CPU notifier\n");
-> -		goto out_free_irq;
-> -	}
-> -
->  	kvm_info("vgic interrupt IRQ%d\n", kvm_vgic_global_state.maint_irq);
->  	return 0;
-> -
-> -out_free_irq:
-> -	free_percpu_irq(kvm_vgic_global_state.maint_irq,
-> -			kvm_get_running_vcpus());
-> -	return ret;
->  }
-> diff --git a/include/kvm/arm_arch_timer.h b/include/kvm/arm_arch_timer.h
-> index cd6d8f260eab..1638418f72dd 100644
-> --- a/include/kvm/arm_arch_timer.h
-> +++ b/include/kvm/arm_arch_timer.h
-> @@ -104,4 +104,8 @@ void kvm_arm_timer_write_sysreg(struct kvm_vcpu *vcpu,
->  u32 timer_get_ctl(struct arch_timer_context *ctxt);
->  u64 timer_get_cval(struct arch_timer_context *ctxt);
->
-> +/* CPU HP callbacks */
-> +void kvm_timer_cpu_up(void);
-> +void kvm_timer_cpu_down(void);
-> +
->  #endif
-> diff --git a/include/kvm/arm_vgic.h b/include/kvm/arm_vgic.h
-> index 4df9e73a8bb5..fc4acc91ba06 100644
-> --- a/include/kvm/arm_vgic.h
-> +++ b/include/kvm/arm_vgic.h
-> @@ -431,4 +431,8 @@ int vgic_v4_load(struct kvm_vcpu *vcpu);
->  void vgic_v4_commit(struct kvm_vcpu *vcpu);
->  int vgic_v4_put(struct kvm_vcpu *vcpu, bool need_db);
->
-> +/* CPU HP callbacks */
-> +void kvm_vgic_cpu_up(void);
-> +void kvm_vgic_cpu_down(void);
-> +
->  #endif /* __KVM_ARM_VGIC_H */
-> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-> index f61447913db9..7337414e4947 100644
-> --- a/include/linux/cpuhotplug.h
-> +++ b/include/linux/cpuhotplug.h
-> @@ -186,9 +186,6 @@ enum cpuhp_state {
->  	CPUHP_AP_TI_GP_TIMER_STARTING,
->  	CPUHP_AP_HYPERV_TIMER_STARTING,
->  	CPUHP_AP_KVM_STARTING,
-> -	CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
-> -	CPUHP_AP_KVM_ARM_VGIC_STARTING,
-> -	CPUHP_AP_KVM_ARM_TIMER_STARTING,
->  	/* Must be the last timer callback */
->  	CPUHP_AP_DUMMY_TIMER_STARTING,
->  	CPUHP_AP_ARM_XEN_STARTING,
-> --
-> 2.25.1
->
+Ok. v2 sent accordingly 
+(https://lore.kernel.org/linux-arm-msm/20220905070240.1634997-1-bhupesh.sharma@linaro.org/)
+
+Please help review.
+
+Thanks.

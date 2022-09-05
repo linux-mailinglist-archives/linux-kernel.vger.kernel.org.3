@@ -2,148 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5795AD0A1
+	by mail.lfdr.de (Postfix) with ESMTP id 1A44B5AD09F
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237725AbiIEKsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S237510AbiIEKtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237610AbiIEKsT (ORCPT
+        with ESMTP id S236173AbiIEKtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:48:19 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380424C63C;
-        Mon,  5 Sep 2022 03:48:18 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id cb8so5912944qtb.0;
-        Mon, 05 Sep 2022 03:48:18 -0700 (PDT)
+        Mon, 5 Sep 2022 06:49:14 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2110.outbound.protection.outlook.com [40.107.244.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1305281F;
+        Mon,  5 Sep 2022 03:49:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IsshZMDQmVW3w6kUa+dN4T1D7bcAdI0+/pAfx7GfO1AWuAHmxGa49Yl/EMcCfG7N+tuJF3EgC2j+Ao32NzTqljV65qqrQDBdHLwqrv/tX6oFcH/ubtzLKiwAAmXxW9udfJt+jX4+sRUL7nABc+S5nERc/RELEifLsMzmrYZcFMB0x7yYNRtv/9fRzQLkqFz29TMVC2YazQXm3oBJaHTEh3LFtJZSTwJgt9wqBYs8xY9jdN4yyBZxT0Ze0loF5wLsW/Odcwfvrqhm1ZdFEYLAGS/2c5ePj9ThLDbgOguyC49POKNHbXh+GTXlI6ezvgbq/mxtzOMYjn63SZRGDUtfcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LEN6qAFzdComiHtKOF+IGK2fkQqMvp2gFOny938E+UQ=;
+ b=b5phhIkyHIlws7P3s2z+vszHJAbar4aOQd8WGybFppQ57TJQBFMK+z7PVEQLXioK8B/JmKPsJo+0iAlhfcrmueQb+WiA4iVuHixv6wrwm/9e6ut5YAUgs6un8NCVYIfMHHfamgiZIjUYBWaXzCbQOzPK2GHPC59A2rKzq+kbq/1ENzg3YQZQD0pTc/vLiChSETiyKJCHEJSNJN9ElN1Wpx1BeR6c6dmP1z5R/DmEAPXQfuON66mXqt4mgRmWzQD/PmuC2ciGQiH1sQfUzuDj3uX5pRwZr++P45e8bIaZcDGoiF8ACXNZomDD3YGgFs741ZJX1PWDn8ccBs+CmK3h9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=ocC0mA23fnRz/a4YbrfNwFrDwQYg+GSA5oW5v/yTckg=;
-        b=KeR2rGIjPnYKiKG2aILzh6gWMDTnViE8fXPWXXXixLovTbpx00/oSEAU+Q4L2OCzAK
-         GRraxIbhCS4mi4IuRHOlRDlrrUGLqMd7GLM+J1Hc2/d7WSNIQDHGywQYnYEyBYPDgjiz
-         uY13i1u0RDIQGheVM8QVFqtoKIkC9biCE4wbzSZrKtBJ1m2pvxKw60ny4f6bBZ/B8u0u
-         Zr23UPD2YvAu/KuN+tEjHJX9M8xugOLPnNs4g2YR3PzTM6X60zVPevAOqAjIm6WKdYct
-         vHLBCofCn+v7V2zJuE2kdbx3Wmz7GLi7XsxEmH7dNee6uir7hoWh+8c0e9HZN2r8BTuM
-         JH4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ocC0mA23fnRz/a4YbrfNwFrDwQYg+GSA5oW5v/yTckg=;
-        b=YvFX5RbjHPTBGm8Zh/+eZsYQzqZbr8OFmbjZvFPwMg64o6gKe5a7kLYKWU6rgB7YBD
-         eyFjVDyli9GUkr/wp1T9T9+fogQ/ADCJwnOIO26VNOVywMbln7Q26KNqHyYBw0G7Xx7B
-         XucJ5npZiUv6ondFcyoxhEb1X6cPEIL4Zw33M6fHkqZ+Veek1dBvctWMfdy0TNFIdLdX
-         /1bvwoQQdZPIy5x3qa4dWzVZTGmYSCZYwkVtbQiiQz/uAa4FPqszHY8MY6rwnb7ZNij1
-         aSe7T7W/dED94rv0AdYOoKFYVhprP15mY34GJ6IvHcLN7Ez+q80TzSK3Fvq8/Zs39XDM
-         hT3A==
-X-Gm-Message-State: ACgBeo3c6rMIfD3/rgmFdG9ulu+1F+ViIiQpx1ebr4guykm/2P3O+Rb6
-        QXBfUQ8jkCYeNaI/Xqy31/nF1S3PsYjfjzfUIw4=
-X-Google-Smtp-Source: AA6agR6PNo2Qc8lpj2itrEExN36xqc7ZpSaZEm3ZnHtwljImH3P9PTPtYv87hNYI8E9dEPcysm+pNwOsTzObwqbdpdc=
-X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id
- v6-20020ac85786000000b003433051170dmr38497148qta.429.1662374897323; Mon, 05
- Sep 2022 03:48:17 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LEN6qAFzdComiHtKOF+IGK2fkQqMvp2gFOny938E+UQ=;
+ b=uxIkNOPgXpPo7fmSF3gzvSLZV1E9vYjxapZoqZpDEushXK6QGMCpaKj2PKmYoJ+44qNWh+vn1JMqLXkuN6bXBptSawBHCSgYtjBQIcRy47jqAoZxYVXwr9Fn3floCUkr1ylpIm9RMz3IT+0R20+8Gh0R0T7Tvl1edXAdyEic3t4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from DM6PR13MB4431.namprd13.prod.outlook.com (2603:10b6:5:1bb::21)
+ by MW3PR13MB4108.namprd13.prod.outlook.com (2603:10b6:303:5b::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Mon, 5 Sep
+ 2022 10:49:11 +0000
+Received: from DM6PR13MB4431.namprd13.prod.outlook.com
+ ([fe80::2944:20ba:ee80:b9c7]) by DM6PR13MB4431.namprd13.prod.outlook.com
+ ([fe80::2944:20ba:ee80:b9c7%3]) with mapi id 15.20.5612.011; Mon, 5 Sep 2022
+ 10:49:11 +0000
+Date:   Mon, 5 Sep 2022 12:49:00 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@corigine.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Louis Peens <louis.peens@corigine.com>
+Subject: Re: [PATCH] checkpatch: warn for non-standard fixes tag style
+Message-ID: <YxXUHPWtyrt6kNI1@sleipner.dyn.berto.se>
+References: <20220829155358.2546732-1-niklas.soderlund@corigine.com>
+ <dc45a7021bb765ea34c5b9228454f255764c7bc9.camel@perches.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dc45a7021bb765ea34c5b9228454f255764c7bc9.camel@perches.com>
+X-ClientProxiedBy: AS9PR07CA0021.eurprd07.prod.outlook.com
+ (2603:10a6:20b:46c::26) To DM6PR13MB4431.namprd13.prod.outlook.com
+ (2603:10b6:5:1bb::21)
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-6-b29adfb27a6c@gmail.com> <20220905070046.46nlhczkck2ufr4x@pali>
-In-Reply-To: <20220905070046.46nlhczkck2ufr4x@pali>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Sep 2022 13:47:41 +0300
-Message-ID: <CAHp75VcFv7ipLqXmOwbXpY-_ccYNA9PgF0h4T8RY1Z-UNNpaTg@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] PCI: aardvark: switch to using devm_gpiod_get_optional()
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR13MB4431:EE_|MW3PR13MB4108:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62f7ab38-7d7c-4fcc-a43b-08da8f2c4426
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7GaEZf7MSMUtvfggLAQrUU3wiQXqHJ0HDVgP/YZx50qIkfYhHT24eOAkW1WvFtO/z+7I++fSCrWWPDnytLA3jIGgoTvY4F3ceZz4TLjLSyLfclxwO1vIkbOZIEmE8zih+s41Shi2sS51/AnDugpL08xZGXYAKzWo9Lru4xJjGlbCWXscDmi14hPlMz+QFTdNsfDMnx2g3toC8lMwBQo9O6BjGH+q2LSpkaMuvMoM8t2RHd1JGothguvN5Y40YktPgaOtt+rT9c/D7GXfqTpTt/Zou74KrkW2zIYxTWyU1V1FPw8KFn7+W40ZRd2CMgmKtf+0FhuAr+4ey4FWkHXb2s40b+hn0v00XGAd4mZAB6MyYqspvdu2n+NVEI5DNNu6MEuWF8IbCszMJPAgOtpNeXcabAJx5GCZS4lPXO7X832+szAQug4Abe3g3+EMTJjkBxMh1WbQchNMRv1P1X/X4gQqmMOjtbo1FnvzTc+DmDgTPWFj91TpvI/WaSJcIkfK/Qkk6J+mY3zErkZfUj1cX+fcXJbCenos31QI2XAFHdlqZeOaoUqNSYuTuNOjK7jWibMPdbSk38YODCUtP7PLxwRYoOy/eOUHK2HjrkdcJbK1KoCNS8r+F4mSoO/IlderDCIW0Ruo+cX0FyYogWpLMXycrhyyyRPpDH9E1cVNvl5ZBIvfuMNbFdxuaYiWGUycfLkDe2Jk7WQpoI/ph8rRfxqsYTEzsNj6D58BOq4vVnOTFVxQwRovOKpaoeCoxt6g
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR13MB4431.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(376002)(366004)(39840400004)(38350700002)(6486002)(38100700002)(186003)(9686003)(6512007)(2906002)(5660300002)(478600001)(8936002)(26005)(4326008)(8676002)(6916009)(66476007)(86362001)(66946007)(66556008)(54906003)(6666004)(107886003)(41300700001)(316002)(52116002)(53546011)(83380400001)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?/yQmA7EWAsPD4XX9nLSDKo545KaS5XKCyWLKgP+vo+DLofaUdrUX9CIjjd?=
+ =?iso-8859-1?Q?Z0RY+fkpnl1pu2PrRNgLNoQHnH8p+h0w/PSoOK3xfX2kntXMg25Dte1iGX?=
+ =?iso-8859-1?Q?QpncVORG9BRg2xlIBeY+qiogOpbZ1yZT0MsFDJVctk3zLnJr6Sgs7Kj1X+?=
+ =?iso-8859-1?Q?gbhOdxAJ+Wyexn5zb940ZUJZMJj/2nVcE7VGfaxbHzhVRdwTTytjgQaFHd?=
+ =?iso-8859-1?Q?pNkePfNkgtT9nqXKbCt/SVrim6Seu7vjFGfp5Gfeye48xTXN1wtPcC9Ghl?=
+ =?iso-8859-1?Q?hwvaV/qeSPsIdoN9XikyN0ONWm5okxc3O7uFwDi4Q2X6xRsspg0+NVyvxa?=
+ =?iso-8859-1?Q?vxLaZrOW4C7WL9M7kqHAgEQC1PWv1yxuxeTW8HimYdiedUPVGSLYeEUWAe?=
+ =?iso-8859-1?Q?yAyQk0U9hG3OSb+QELhvoAckhdYQexMh22fQ6b+Iu4seW98ERTRNJ+8FMe?=
+ =?iso-8859-1?Q?4n/X8cGUqYQNn/M6kEtOC5rnrGd3baAWvE7cDqL0kTPXKlGYYoiZYLXFSX?=
+ =?iso-8859-1?Q?HSwhk2JXBR+8wdwe7Ltrodw7wUHsJQJ3diT6RHOgnXMqy5hVy8/etLSWFu?=
+ =?iso-8859-1?Q?GoVmMTZd9vijmzaodI6ptM5dQXFHt0xVlkpQIcri1O+24l5Vw+GE+cxcqg?=
+ =?iso-8859-1?Q?9fAjB76AZVxAWL5LBHzyfr5RZRMGwvMZRbu4FpvSpkLU8bGSCp2wB1MaXR?=
+ =?iso-8859-1?Q?9xLSMGy00FPm+p9YOcB74XWoA448BwJt7kyf7iRssk+ieGwAiPC4ChliQJ?=
+ =?iso-8859-1?Q?llbkTUPvFyz1GsZKERmkn/sNplm1rFSR9FrawQ1Q60b0PCXocTIrrCRt/B?=
+ =?iso-8859-1?Q?xA9Ci8U8PpdN7z8+TcAYQciNcJII92s6zX+Eei0WzXiOqA3UBIKQ8fODuQ?=
+ =?iso-8859-1?Q?LmKwd2ay7fQpZ7ZGtoI+EAwNbb1AUh0KuZhEOwClyo1KbWouojqfOMmrFL?=
+ =?iso-8859-1?Q?58gFCQs5fYQh9jBaqTw+Kvmh1jN+jorUnRsGMEaVkpfsz0IRNHN1e9FIfR?=
+ =?iso-8859-1?Q?pmM2g64HO25vt10utiWtUTc7L4pb61/QgLBtG0+3XkheSypi+AECCGS2LN?=
+ =?iso-8859-1?Q?seAc4sT3rQabFzYO8IjX0zM5Q0SliApErPur4wh4tWhxB9ZG3rplC61ylL?=
+ =?iso-8859-1?Q?OCRYCqUpGdPGkSZUebedzD6wz6oP4LNOZ+yCV33p9Xbz0Vy4KB1HBWxiLe?=
+ =?iso-8859-1?Q?L61DmQUUbjFYxrdwOaLocClP3VTeTZ+nKuxwHNTlhtpel5Zcfx2+XHEE5D?=
+ =?iso-8859-1?Q?ki8oFM6es4Db9Q1KDtlYCjnjeZG30Exo/bpNsE0+ex34WK1DXAmQG1X/Gy?=
+ =?iso-8859-1?Q?aCebM0nFxAQ8RoGxVzZ0rQwF1GdHx5KfHbluODaf47c1LJUOXFu5yUoYN7?=
+ =?iso-8859-1?Q?KSV/P1XM7KbwSU8aIKgWar3Tq2GfDEu/BanJadVjTBDgPTzMHOQsDtmnbr?=
+ =?iso-8859-1?Q?Fdxacn+b+NnSniiCBXcQUFhdT+AeOPvrrFyLG8w4kVIhgJ+DIYWgRJ+ZMu?=
+ =?iso-8859-1?Q?9+CvZDIbCxJ2tqd0pgm+ZSbqwTH0lfAy5ldpyvmn2PKsrs70bk6q7Yd+Br?=
+ =?iso-8859-1?Q?aCVJs3fII6p8mpKn9MOFx9/iDM1iWS0m+Bqlm4xkPQUMOwalL1QWZ39TuB?=
+ =?iso-8859-1?Q?i8lRA6MZVsDFUDNwvy/Pjd7fLTDB0Ffs0vDIX8EsPi7PnRO18tnrkuMw?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR13MB4108
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 10:02 AM Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> On Sunday 04 September 2022 23:30:58 Dmitry Torokhov wrote:
-> > I would like to stop exporting OF-specific devm_gpiod_get_from_of_node(=
-)
-> > so that gpiolib can be cleaned a bit, so let's switch to the generic
-> > device property API.
-> >
-> > I believe that the only reason the driver, instead of the standard
-> > devm_gpiod_get_optional(), used devm_gpiod_get_from_of_node() is
-> > because it wanted to set up a pretty consumer name for the GPIO,
->
-> IIRC consumer name is not used at all.
+Hi Joe,
 
-It's. The user space tools use it as a label. So, GPIO line can have
-"name" (this is provider specific) and "label" (which is consumer
-specific, i.o.w. how we use this line).
+Thanks for your feedback.
 
-...
+On 2022-08-29 23:06:43 -0400, Joe Perches wrote:
+> > +			if ($line =~ 
+> > /(fixes:)\s+([0-9a-f]{5,})\s+($balanced_parens)/i) {
+> 
+> Maybe use fixes:? so the colon is not required in poorly formed uses
 
-> > +             if (ret !=3D -EPROBE_DEFER)
-> > +                     dev_err(dev, "Failed to get reset-gpio: %i\n",
-> > +                             ret);
-> > +             return ret;
+I tried that but I think it brings more problems then it is worth. With 
+that change the check would run for each line of the commit message that 
+begins with the string 'fixes', not just in the tags section of the 
+message. So it would warn for the commit message,
 
-I understand that in the input subsystem maintainer's hat you don't
-like dev_err_probe(), but it's a good case to have it here.
+    The work on foo and bar introduced a bug that can be
+    fixed by doing baz.
 
-...
+I think it's for this reason other checks for tags include the ':'.
 
-> > +     ret =3D gpiod_set_consumer_name(pcie->reset_gpio, "pcie1-reset");
-> > +     if (ret) {
-> > +             dev_err(dev, "Failed to set reset gpio name: %d\n", ret);
-> > +             return ret;
-> >       }
+> 
+> > +				my $tag = $1;
+> > +				$orig_commit = $2;
+> > +				$title = $3;
+> > +
+> > +				$tag_case = 0 if $tag eq "Fixes:";
+> > +				$tag_space = 0 if ($line =~ /^fixes: [0-9a-f]{5,} ($balanced_parens)/i);
+> 
+> fixes:? here too
+> 
+> Pity there's no simple way to consolidate this git commit test block
+> with the existing git id commit block.
 
-Ditto.
+I agree.
 
-
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+Kind Regards,
+Niklas Söderlund

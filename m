@@ -2,177 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A595ADB9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B989D5ADBA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbiIEWzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
+        id S232499AbiIEXE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 19:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232960AbiIEWy7 (ORCPT
+        with ESMTP id S232002AbiIEXEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:54:59 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE13F22B30;
-        Mon,  5 Sep 2022 15:54:58 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id fv3so3366158pjb.0;
-        Mon, 05 Sep 2022 15:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=QRQkxIGFI3OF3amcRlbkZf4vgkek6ggFXyd9zidvB8c=;
-        b=gsorC9ciDElqLq5gq0tq73oj5nMDX/AJm+EMEt5M9j7Nw6OucD0+TVGBzuQn+rrtls
-         0loRnw7UzHrgMM28KIGVLo7qn/bZoumg2qTw3CfDMDdQmf0bgbzpShi+kGjU7raGyx6P
-         sToiGUYujxqPyCybICNsYdfYAa2jOurTif72VImXpZhCttvifys7wIqhFIW1PJR8dY03
-         UzvU99z5GubsoABcuAk5rbAMv44acUIXmY5P0ep133FiqLgOHtVg+wzuulxPweHG+ula
-         IzdWZ5ta3aGiqrNbwgZATXaEEWNGQRgzb+HrP6NXzuvsc0zd1wPa546sY9tkILtVErqR
-         hUbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=QRQkxIGFI3OF3amcRlbkZf4vgkek6ggFXyd9zidvB8c=;
-        b=M/s7BGVStwTv9m1z4cz9YNSchNnSk3fSsWDH1/fgS2sWgVeZdVoC2nwqtt0CPiC/7K
-         xRh8xEllVZMVWT67rD6tjFOeK9c/5s2kxu3snlB9r4WUd3IxbXXJAEfmzdkP8eyRTxb2
-         wNBnlIKZhsF+qIZfNq52SAqzFyu95VYuIE2c+Qr3qRg2kVr3tASNLPMAdBBC/Se02IqW
-         ix6j3OKkc0Se3DtuMQtk8gANujy0aWN5KHACJAEGidhgzzY3KdGFiNfr+n+GIbYBcaVA
-         HftmH7DY+OR4wSqDjJ/BYngSFkg3w/DEYgV15YIVyWz9KVNyhiPqRpMH11dbZf3o2tnk
-         u3qQ==
-X-Gm-Message-State: ACgBeo3JaZi5sZV5UPunvS4jfAmDDqOyv2SpN9eiyZ24atF7DyPGd1s7
-        nzZ8dKH+axeq0Xn3NpZ2KUU=
-X-Google-Smtp-Source: AA6agR6BVwijybUmJvKefzrwHZ9dDsULsMfqVmOf8/ecx+Q6qQipxqieCoJRYSCXP05TF0ANy6CnCA==
-X-Received: by 2002:a17:902:be03:b0:175:6397:9425 with SMTP id r3-20020a170902be0300b0017563979425mr21493671pls.26.1662418498231;
-        Mon, 05 Sep 2022 15:54:58 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:1190:fbfa:ae95:111c])
-        by smtp.gmail.com with ESMTPSA id d21-20020a630e15000000b0042c2def703asm6833366pgl.22.2022.09.05.15.54.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 15:54:57 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 15:54:53 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 06/11] PCI: aardvark: switch to using
- devm_gpiod_get_optional()
-Message-ID: <YxZ+PSDRYZnVKfFO@google.com>
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-6-b29adfb27a6c@gmail.com>
- <20220905070046.46nlhczkck2ufr4x@pali>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220905070046.46nlhczkck2ufr4x@pali>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Sep 2022 19:04:55 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9885013DC8;
+        Mon,  5 Sep 2022 16:04:49 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.93,292,1654527600"; 
+   d="scan'208";a="133796439"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 06 Sep 2022 08:04:48 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id D3D40410101B;
+        Tue,  6 Sep 2022 08:04:43 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 0/4] Add driver for CSI2 and CRU modules found on Renesas RZ/G2L SoC
+Date:   Tue,  6 Sep 2022 00:04:02 +0100
+Message-Id: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 09:00:46AM +0200, Pali Rohár wrote:
-> On Sunday 04 September 2022 23:30:58 Dmitry Torokhov wrote:
-> > I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> > so that gpiolib can be cleaned a bit, so let's switch to the generic
-> > device property API.
-> > 
-> > I believe that the only reason the driver, instead of the standard
-> > devm_gpiod_get_optional(), used devm_gpiod_get_from_of_node() is
-> > because it wanted to set up a pretty consumer name for the GPIO,
-> 
-> IIRC consumer name is not used at all.
-> 
-> The reason was to specify full name of DTS property, for easier
-> identification of the code. DTS property is "reset-gpios" but API
-> specify only "reset".
+Hi All,
 
-I see. Do you want me to reset the patch with updated desctiption as to
-the reason devm_gpiod_get_from_of_node() was used?
+This patch series aims to add driver support to CRU module found
+on Renesas RZ/G2L SoC.
 
-> 
-> > and we now have a special API for that.
-> > 
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > 
-> > diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-> > index 4834198cc86b..4a8a4a8522cb 100644
-> > --- a/drivers/pci/controller/pci-aardvark.c
-> > +++ b/drivers/pci/controller/pci-aardvark.c
-> > @@ -1856,20 +1856,19 @@ static int advk_pcie_probe(struct platform_device *pdev)
-> >  		return ret;
-> >  	}
-> >  
-> > -	pcie->reset_gpio = devm_gpiod_get_from_of_node(dev, dev->of_node,
-> > -						       "reset-gpios", 0,
-> > -						       GPIOD_OUT_LOW,
-> > -						       "pcie1-reset");
-> > +	pcie->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-> >  	ret = PTR_ERR_OR_ZERO(pcie->reset_gpio);
-> >  	if (ret) {
-> > -		if (ret == -ENOENT) {
-> > -			pcie->reset_gpio = NULL;
-> > -		} else {
-> > -			if (ret != -EPROBE_DEFER)
-> > -				dev_err(dev, "Failed to get reset-gpio: %i\n",
-> > -					ret);
-> > -			return ret;
-> > -		}
-> > +		if (ret != -EPROBE_DEFER)
-> > +			dev_err(dev, "Failed to get reset-gpio: %i\n",
-> > +				ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = gpiod_set_consumer_name(pcie->reset_gpio, "pcie1-reset");
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to set reset gpio name: %d\n", ret);
-> > +		return ret;
-> >  	}
-> >  
-> >  	ret = of_pci_get_max_link_speed(dev->of_node);
-> > 
-> > -- 
-> > b4 0.10.0-dev-fc921
+The Camera Data Receiving Unit (CRU) consists of a MIPI CSI-2
+block and an Image Processing block. The Image Processing block
+can receive video data received from the external Digital Parallel
+Interface or MIPI CSI-2 block, and perform appropriate image
+processing for each.
 
-Thanks.
+More details:
+* https://renesas.info/wiki/File:CRU.png
+* https://www.renesas.com/document/mah/rzg2l-group-rzg2lc-group-users-manual-hardware-0?language=en&r=1467981
+
+Currently the driver has been tested using yavta and Gstreamer
+on RZ/G2L SMARC EVK using the ov5645 sensor on CSI2 interface
+only.
+
+v1 -> v2:
+* Dropped media prefix from subject
+* Renamed node name csi20 -> csi
+* Used 4 spaces for indentation in example node
+* Dropped reset-names and interrupt-names properties
+* Dropped oneOf from compatible
+* Included RB tags from Laurent
+* Marked port0/1 as required for cru node
+* Sorted Kconfig select
+* Prefixed generic names for struct/variables with rzg2_csi2
+* Dropped unnecessary checks for remote source
+* Dropped exporting functions
+* Moved lane validation to probe
+* Split up rzg2l_csi2_dphy_setting() and rzg2l_csi2_mipi_link_setting()
+* Used rzg2l_csi2_write() wherever possible
+* Dropped stream_count/lock members from csi2 struct
+* Used active subdev state instead of manually storing format in driver
+* Implemented init_cfg/enum_frame_size/enum_mbus_code callbacks
+* Dropped check for bus_type of remote source
+* Switched to manually turning ON/OFF the clocks instead of pm_runtime so that
+  the mipi/dhpy initialization happens as per the HW manual
+* Hardcoded VC0 usage for now as streams API is under development
+
+v1:
+- https://patchwork.kernel.org/project/linux-renesas-soc/cover/20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+RFC v2:
+- https://patchwork.kernel.org/project/linux-renesas-soc/cover/20220121010543.31385-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+RFC v1:
+- https://patchwork.kernel.org/project/linux-renesas-soc/cover/20211207012351.15754-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,
+Prabhakar
+
+
+Lad Prabhakar (4):
+  media: dt-bindings: Document Renesas RZ/G2L CSI-2 block
+  media: dt-bindings: Document Renesas RZ/G2L CRU block
+  media: platform: Add Renesas RZ/G2L MIPI CSI-2 receiver driver
+  media: platform: Add Renesas RZ/G2L CRU driver
+
+ .../bindings/media/renesas,rzg2l-cru.yaml     | 157 ++++
+ .../bindings/media/renesas,rzg2l-csi2.yaml    | 140 ++++
+ drivers/media/platform/renesas/Kconfig        |   1 +
+ drivers/media/platform/renesas/Makefile       |   1 +
+ .../media/platform/renesas/rzg2l-cru/Kconfig  |  34 +
+ .../media/platform/renesas/rzg2l-cru/Makefile |   6 +
+ .../platform/renesas/rzg2l-cru/rzg2l-core.c   | 395 +++++++++
+ .../platform/renesas/rzg2l-cru/rzg2l-cru.h    | 152 ++++
+ .../platform/renesas/rzg2l-cru/rzg2l-csi2.c   | 761 ++++++++++++++++++
+ .../platform/renesas/rzg2l-cru/rzg2l-csi2.h   |  46 ++
+ .../platform/renesas/rzg2l-cru/rzg2l-dma.c    | 734 +++++++++++++++++
+ .../platform/renesas/rzg2l-cru/rzg2l-v4l2.c   | 368 +++++++++
+ 12 files changed, 2795 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/Kconfig
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/Makefile
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.h
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-dma.c
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-v4l2.c
 
 -- 
-Dmitry
+2.25.1
+

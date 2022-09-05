@@ -2,153 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A44B5AD09F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432485AD08F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237510AbiIEKtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S237597AbiIEKuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236173AbiIEKtO (ORCPT
+        with ESMTP id S236609AbiIEKuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:49:14 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2110.outbound.protection.outlook.com [40.107.244.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1305281F;
-        Mon,  5 Sep 2022 03:49:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IsshZMDQmVW3w6kUa+dN4T1D7bcAdI0+/pAfx7GfO1AWuAHmxGa49Yl/EMcCfG7N+tuJF3EgC2j+Ao32NzTqljV65qqrQDBdHLwqrv/tX6oFcH/ubtzLKiwAAmXxW9udfJt+jX4+sRUL7nABc+S5nERc/RELEifLsMzmrYZcFMB0x7yYNRtv/9fRzQLkqFz29TMVC2YazQXm3oBJaHTEh3LFtJZSTwJgt9wqBYs8xY9jdN4yyBZxT0Ze0loF5wLsW/Odcwfvrqhm1ZdFEYLAGS/2c5ePj9ThLDbgOguyC49POKNHbXh+GTXlI6ezvgbq/mxtzOMYjn63SZRGDUtfcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LEN6qAFzdComiHtKOF+IGK2fkQqMvp2gFOny938E+UQ=;
- b=b5phhIkyHIlws7P3s2z+vszHJAbar4aOQd8WGybFppQ57TJQBFMK+z7PVEQLXioK8B/JmKPsJo+0iAlhfcrmueQb+WiA4iVuHixv6wrwm/9e6ut5YAUgs6un8NCVYIfMHHfamgiZIjUYBWaXzCbQOzPK2GHPC59A2rKzq+kbq/1ENzg3YQZQD0pTc/vLiChSETiyKJCHEJSNJN9ElN1Wpx1BeR6c6dmP1z5R/DmEAPXQfuON66mXqt4mgRmWzQD/PmuC2ciGQiH1sQfUzuDj3uX5pRwZr++P45e8bIaZcDGoiF8ACXNZomDD3YGgFs741ZJX1PWDn8ccBs+CmK3h9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Mon, 5 Sep 2022 06:50:00 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B926D29C9F;
+        Mon,  5 Sep 2022 03:49:58 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id g4so3682298qvo.5;
+        Mon, 05 Sep 2022 03:49:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LEN6qAFzdComiHtKOF+IGK2fkQqMvp2gFOny938E+UQ=;
- b=uxIkNOPgXpPo7fmSF3gzvSLZV1E9vYjxapZoqZpDEushXK6QGMCpaKj2PKmYoJ+44qNWh+vn1JMqLXkuN6bXBptSawBHCSgYtjBQIcRy47jqAoZxYVXwr9Fn3floCUkr1ylpIm9RMz3IT+0R20+8Gh0R0T7Tvl1edXAdyEic3t4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from DM6PR13MB4431.namprd13.prod.outlook.com (2603:10b6:5:1bb::21)
- by MW3PR13MB4108.namprd13.prod.outlook.com (2603:10b6:303:5b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Mon, 5 Sep
- 2022 10:49:11 +0000
-Received: from DM6PR13MB4431.namprd13.prod.outlook.com
- ([fe80::2944:20ba:ee80:b9c7]) by DM6PR13MB4431.namprd13.prod.outlook.com
- ([fe80::2944:20ba:ee80:b9c7%3]) with mapi id 15.20.5612.011; Mon, 5 Sep 2022
- 10:49:11 +0000
-Date:   Mon, 5 Sep 2022 12:49:00 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@corigine.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
-        Simon Horman <simon.horman@corigine.com>,
-        Louis Peens <louis.peens@corigine.com>
-Subject: Re: [PATCH] checkpatch: warn for non-standard fixes tag style
-Message-ID: <YxXUHPWtyrt6kNI1@sleipner.dyn.berto.se>
-References: <20220829155358.2546732-1-niklas.soderlund@corigine.com>
- <dc45a7021bb765ea34c5b9228454f255764c7bc9.camel@perches.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dc45a7021bb765ea34c5b9228454f255764c7bc9.camel@perches.com>
-X-ClientProxiedBy: AS9PR07CA0021.eurprd07.prod.outlook.com
- (2603:10a6:20b:46c::26) To DM6PR13MB4431.namprd13.prod.outlook.com
- (2603:10b6:5:1bb::21)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=c2nRQWb+fQUQq5AQnrIySgvmnHVhBaOL/o7B8oGby/I=;
+        b=bJcqTGACtFXLmXsUFqpw+PFDufx4FlXQ9j/RFhHUQVHKZqoTndY/JkV19g6BLOeeUo
+         4hwSoSeec32Tbw+OMHEGG0r6M3e1GMJ/NJcg/FZwHW1SClzced4lWIu+/ZShrdu3JDTD
+         V762GqyZZIhqeYexr860HlDH8BBXqi/Xiv+2j3KgGGGsMmOP08meZgz/a8ltQBauY42v
+         3tIliUsfRb5Lb2wvCwZlmuODmHlyxQTZ+r40eHwZ7AsK+hrNiFx9jEpz+HZY8XcSMnnB
+         5QEIV3Pay913kDLF3Na3+KE+sGrpwp4YFq2VvbdqUoXS9I37A0JHt+Mwwdcik+o8Vvzp
+         uBaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=c2nRQWb+fQUQq5AQnrIySgvmnHVhBaOL/o7B8oGby/I=;
+        b=rsZtkOuls+CtRdDM2lsXT/JDBraVTCPpRpDQwdd/grk40urKoLmJoUGkhP1gZrX3QX
+         wFcFL7K+8n+VyPkoqOIMmgl3KWb79AmYFvBjrqmRIlyo1Uq6uidEOObYkKWsetBI2gQ3
+         DNi0mohtozgaDYrwWWBTq4y1pFsDEnQfgLvRURg/FqlqqYa8SqaTCzl/+efKVbx/sD0u
+         lFIqjZVd72QPmKcMyMMrhRep20Jv3j8qlnD+esnk48KxZSKv6iiDpRoCHaM7bTsAGnmw
+         9BLdjo5SRGltnritBMn9wy6gyqOF9WaQhAtbpUj7kegttalqMp9s4sSZXtpnZ7wl3RVB
+         Z0YQ==
+X-Gm-Message-State: ACgBeo07f8dScQHXkO/HLJH3RTv3vrIGn65BsXcw7wfze5gzDnpdj/4p
+        2P4k3nTeDq/SIR7IhBroar+Qn3QYK5DqrfPe8vFaYtXkZ7w=
+X-Google-Smtp-Source: AA6agR4zgtLgNA+6EPAv70W9Z01Gulpe7vTobIsUEmKS5Gup9hLVk95/eNnOn1IhVSGIautSBTqi9ZJMAl53duUVpgY=
+X-Received: by 2002:ad4:5f8f:0:b0:4a9:b75a:e33c with SMTP id
+ jp15-20020ad45f8f000000b004a9b75ae33cmr746972qvb.82.1662374997159; Mon, 05
+ Sep 2022 03:49:57 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR13MB4431:EE_|MW3PR13MB4108:EE_
-X-MS-Office365-Filtering-Correlation-Id: 62f7ab38-7d7c-4fcc-a43b-08da8f2c4426
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7GaEZf7MSMUtvfggLAQrUU3wiQXqHJ0HDVgP/YZx50qIkfYhHT24eOAkW1WvFtO/z+7I++fSCrWWPDnytLA3jIGgoTvY4F3ceZz4TLjLSyLfclxwO1vIkbOZIEmE8zih+s41Shi2sS51/AnDugpL08xZGXYAKzWo9Lru4xJjGlbCWXscDmi14hPlMz+QFTdNsfDMnx2g3toC8lMwBQo9O6BjGH+q2LSpkaMuvMoM8t2RHd1JGothguvN5Y40YktPgaOtt+rT9c/D7GXfqTpTt/Zou74KrkW2zIYxTWyU1V1FPw8KFn7+W40ZRd2CMgmKtf+0FhuAr+4ey4FWkHXb2s40b+hn0v00XGAd4mZAB6MyYqspvdu2n+NVEI5DNNu6MEuWF8IbCszMJPAgOtpNeXcabAJx5GCZS4lPXO7X832+szAQug4Abe3g3+EMTJjkBxMh1WbQchNMRv1P1X/X4gQqmMOjtbo1FnvzTc+DmDgTPWFj91TpvI/WaSJcIkfK/Qkk6J+mY3zErkZfUj1cX+fcXJbCenos31QI2XAFHdlqZeOaoUqNSYuTuNOjK7jWibMPdbSk38YODCUtP7PLxwRYoOy/eOUHK2HjrkdcJbK1KoCNS8r+F4mSoO/IlderDCIW0Ruo+cX0FyYogWpLMXycrhyyyRPpDH9E1cVNvl5ZBIvfuMNbFdxuaYiWGUycfLkDe2Jk7WQpoI/ph8rRfxqsYTEzsNj6D58BOq4vVnOTFVxQwRovOKpaoeCoxt6g
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR13MB4431.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(376002)(366004)(39840400004)(38350700002)(6486002)(38100700002)(186003)(9686003)(6512007)(2906002)(5660300002)(478600001)(8936002)(26005)(4326008)(8676002)(6916009)(66476007)(86362001)(66946007)(66556008)(54906003)(6666004)(107886003)(41300700001)(316002)(52116002)(53546011)(83380400001)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?/yQmA7EWAsPD4XX9nLSDKo545KaS5XKCyWLKgP+vo+DLofaUdrUX9CIjjd?=
- =?iso-8859-1?Q?Z0RY+fkpnl1pu2PrRNgLNoQHnH8p+h0w/PSoOK3xfX2kntXMg25Dte1iGX?=
- =?iso-8859-1?Q?QpncVORG9BRg2xlIBeY+qiogOpbZ1yZT0MsFDJVctk3zLnJr6Sgs7Kj1X+?=
- =?iso-8859-1?Q?gbhOdxAJ+Wyexn5zb940ZUJZMJj/2nVcE7VGfaxbHzhVRdwTTytjgQaFHd?=
- =?iso-8859-1?Q?pNkePfNkgtT9nqXKbCt/SVrim6Seu7vjFGfp5Gfeye48xTXN1wtPcC9Ghl?=
- =?iso-8859-1?Q?hwvaV/qeSPsIdoN9XikyN0ONWm5okxc3O7uFwDi4Q2X6xRsspg0+NVyvxa?=
- =?iso-8859-1?Q?vxLaZrOW4C7WL9M7kqHAgEQC1PWv1yxuxeTW8HimYdiedUPVGSLYeEUWAe?=
- =?iso-8859-1?Q?yAyQk0U9hG3OSb+QELhvoAckhdYQexMh22fQ6b+Iu4seW98ERTRNJ+8FMe?=
- =?iso-8859-1?Q?4n/X8cGUqYQNn/M6kEtOC5rnrGd3baAWvE7cDqL0kTPXKlGYYoiZYLXFSX?=
- =?iso-8859-1?Q?HSwhk2JXBR+8wdwe7Ltrodw7wUHsJQJ3diT6RHOgnXMqy5hVy8/etLSWFu?=
- =?iso-8859-1?Q?GoVmMTZd9vijmzaodI6ptM5dQXFHt0xVlkpQIcri1O+24l5Vw+GE+cxcqg?=
- =?iso-8859-1?Q?9fAjB76AZVxAWL5LBHzyfr5RZRMGwvMZRbu4FpvSpkLU8bGSCp2wB1MaXR?=
- =?iso-8859-1?Q?9xLSMGy00FPm+p9YOcB74XWoA448BwJt7kyf7iRssk+ieGwAiPC4ChliQJ?=
- =?iso-8859-1?Q?llbkTUPvFyz1GsZKERmkn/sNplm1rFSR9FrawQ1Q60b0PCXocTIrrCRt/B?=
- =?iso-8859-1?Q?xA9Ci8U8PpdN7z8+TcAYQciNcJII92s6zX+Eei0WzXiOqA3UBIKQ8fODuQ?=
- =?iso-8859-1?Q?LmKwd2ay7fQpZ7ZGtoI+EAwNbb1AUh0KuZhEOwClyo1KbWouojqfOMmrFL?=
- =?iso-8859-1?Q?58gFCQs5fYQh9jBaqTw+Kvmh1jN+jorUnRsGMEaVkpfsz0IRNHN1e9FIfR?=
- =?iso-8859-1?Q?pmM2g64HO25vt10utiWtUTc7L4pb61/QgLBtG0+3XkheSypi+AECCGS2LN?=
- =?iso-8859-1?Q?seAc4sT3rQabFzYO8IjX0zM5Q0SliApErPur4wh4tWhxB9ZG3rplC61ylL?=
- =?iso-8859-1?Q?OCRYCqUpGdPGkSZUebedzD6wz6oP4LNOZ+yCV33p9Xbz0Vy4KB1HBWxiLe?=
- =?iso-8859-1?Q?L61DmQUUbjFYxrdwOaLocClP3VTeTZ+nKuxwHNTlhtpel5Zcfx2+XHEE5D?=
- =?iso-8859-1?Q?ki8oFM6es4Db9Q1KDtlYCjnjeZG30Exo/bpNsE0+ex34WK1DXAmQG1X/Gy?=
- =?iso-8859-1?Q?aCebM0nFxAQ8RoGxVzZ0rQwF1GdHx5KfHbluODaf47c1LJUOXFu5yUoYN7?=
- =?iso-8859-1?Q?KSV/P1XM7KbwSU8aIKgWar3Tq2GfDEu/BanJadVjTBDgPTzMHOQsDtmnbr?=
- =?iso-8859-1?Q?Fdxacn+b+NnSniiCBXcQUFhdT+AeOPvrrFyLG8w4kVIhgJ+DIYWgRJ+ZMu?=
- =?iso-8859-1?Q?9+CvZDIbCxJ2tqd0pgm+ZSbqwTH0lfAy5ldpyvmn2PKsrs70bk6q7Yd+Br?=
- =?iso-8859-1?Q?aCVJs3fII6p8mpKn9MOFx9/iDM1iWS0m+Bqlm4xkPQUMOwalL1QWZ39TuB?=
- =?iso-8859-1?Q?i8lRA6MZVsDFUDNwvy/Pjd7fLTDB0Ffs0vDIX8EsPi7PnRO18tnrkuMw?=
- =?iso-8859-1?Q?=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR13MB4108
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-1-b29adfb27a6c@gmail.com> <20220905071902.fv4uozrsttk3mosu@pali>
+In-Reply-To: <20220905071902.fv4uozrsttk3mosu@pali>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 5 Sep 2022 13:49:21 +0300
+Message-ID: <CAHp75Vf5R03nq6JmpVcVNX9L5CwM-uOmF39oHSZFP3QJe+GExQ@mail.gmail.com>
+Subject: Re: [PATCH v1 01/11] PCI: tegra: switch to using devm_fwnode_gpiod_get
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joe,
+On Mon, Sep 5, 2022 at 10:23 AM Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> On Sunday 04 September 2022 23:30:53 Dmitry Torokhov wrote:
 
-Thanks for your feedback.
+...
 
-On 2022-08-29 23:06:43 -0400, Joe Perches wrote:
-> > +			if ($line =~ 
-> > /(fixes:)\s+([0-9a-f]{5,})\s+($balanced_parens)/i) {
-> 
-> Maybe use fixes:? so the colon is not required in poorly formed uses
+> > -             rp->reset_gpio =3D devm_gpiod_get_from_of_node(dev, port,
+> > -                                                          "reset-gpios=
+", 0,
+> > -                                                          GPIOD_OUT_LO=
+W,
+> > -                                                          label);
+> > +             rp->reset_gpio =3D devm_fwnode_gpiod_get(dev,
+> > +                                                    of_fwnode_handle(p=
+ort),
+> > +                                                    "reset",
+> > +                                                    GPIOD_OUT_LOW,
+> > +                                                    label);
+>
+> Why in pci-aardvark.c for PERST# reset-gpio you have used
+> devm_gpiod_get_optional() and here in pci-tegra.c you have used
+> devm_fwnode_gpiod_get()? I think that PERST# logic is same in both
+> drivers.
 
-I tried that but I think it brings more problems then it is worth. With 
-that change the check would run for each line of the commit message that 
-begins with the string 'fixes', not just in the tags section of the 
-message. So it would warn for the commit message,
+It's not the same dev and its node in this case. There is one reset
+for _all_ ports, here is the reset on _per port_ basis.
 
-    The work on foo and bar introduced a bug that can be
-    fixed by doing baz.
-
-I think it's for this reason other checks for tags include the ':'.
-
-> 
-> > +				my $tag = $1;
-> > +				$orig_commit = $2;
-> > +				$title = $3;
-> > +
-> > +				$tag_case = 0 if $tag eq "Fixes:";
-> > +				$tag_space = 0 if ($line =~ /^fixes: [0-9a-f]{5,} ($balanced_parens)/i);
-> 
-> fixes:? here too
-> 
-> Pity there's no simple way to consolidate this git commit test block
-> with the existing git id commit block.
-
-I agree.
-
--- 
-Kind Regards,
-Niklas Söderlund
+--=20
+With Best Regards,
+Andy Shevchenko

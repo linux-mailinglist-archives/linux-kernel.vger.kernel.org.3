@@ -2,121 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7E15ACCF9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597B65ACCEC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbiIEH3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S236266AbiIEH3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237196AbiIEH16 (ORCPT
+        with ESMTP id S237280AbiIEH2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:27:58 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686B82BFC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:26:42 -0700 (PDT)
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 93A183F0ED
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:26:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1662362800;
-        bh=ThEpzsYAWPQ+vR3sDdfrBp9HRNSWWVxORABQ85lL8jw=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=eV2uhXLOpxGUULj2Yzz2jNEPRsyQDdGr0JVp5uqPT73FTVH3krEPGEJLAxzdUfdwe
-         isoP00W8KCTLOOosdMiBe3MF2ELrV0EASyKphi4Fdbdo5L8VJuBHqf4ypfIW4CdX4i
-         NL3R/d95RshwMz72Q3t15KpmwMkx2USHxlStjSctSpbcctQhW9FJkC1zMVg2syzN9u
-         zKolb1miQDxT2n+TW6og2ap+6qpQdYmYdhSu9trwte0KEh4MzGlN57uIGrM/NJVzCE
-         xbCq0/1CP3OWjmveZGj9MeqiviJgIVAAlinRa36PSeMd1gGm01FBJ/Fkimc14N0BAP
-         V2+QseehD9E+w==
-Received: by mail-wr1-f69.google.com with SMTP id d30-20020adfa41e000000b00228c0e80c49so177866wra.21
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 00:26:40 -0700 (PDT)
+        Mon, 5 Sep 2022 03:28:01 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7019338
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:26:47 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id k17so4768207wmr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 00:26:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=lnIlSEWqt2NuMr0K7xfjm9a6tpssYyqRvH3ULhoQs6E=;
+        b=EUI+aE5By8Fm45Y8d6L5isq9giQdqO2xEjrOpxA9/qsJFGKS0KWzRvv72P6F6VQdC4
+         FtWJ1HPSQ3R/HXPiL0FfRC/Qi+mYDb6QxD6bj8I0NPbTiWT1o+BQBTZZllIiyZGU9rJs
+         73V8ODYo2WmN5Eh5uFydeP1Zakyx/rScuuzFvl/VBVF7D3HfBd9Fi+T70LqG09GUHCWH
+         nU65d5GiBV4aHNIUEaZKmYbmLECM3B5RWTB0RflQQ3JK+mYnGncfmpJ700ImmjrELBNG
+         2lOjgR2LHVf1JkOB4BfGeH151hMJsCFzAzHotkYTFcZHgksAoMzk9H6rLOTGp8U9eFzm
+         7Otw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ThEpzsYAWPQ+vR3sDdfrBp9HRNSWWVxORABQ85lL8jw=;
-        b=q7PNeEJcACoIp4/ZEHfUpK6bvu21vmS49uYJZWootKL6ZdTgoYePYQfzhwl0wEVBdL
-         lC6dfqPquyub2UU37nvGsjc7j3kj8YjabNbQtQasz8jhD+F4iAJT+XNG4yTUHq7bJOgc
-         BfS8IlaALSoVwquK9k8npXuxwu7pUvWCaBfodNll4QRdQLDhtynv5A7IvdrvfocGSbLM
-         Uf7Sr2lsNdzYcc9RAKu60nMAvRgdRO5bdoajt+2HfK2yTjrqxhdxPmnM3FGCFYcP7v3P
-         OdFA76jDX1AtC6TcnosGTSFTwQ2OycrJzkkpJMmq6bUU5ezsU/kHMZurDEz8y204eUDT
-         byMA==
-X-Gm-Message-State: ACgBeo0FEC4PASqK/rl7cI6srNn9SizT1hjRnNQTVl/ug9QwVuD6KGxy
-        r+ZSp1+TVB7B7hVleZIpW0rzyJTPoNITvRF4r5v7KMUX/wRJswaY3KzmYA2a4P5MH/SlwXB8NtM
-        0r7SnHzJmXGHkTNlfYAebfNs/txIuvR4BsCh+r7X0Et9cjkI/NKbruYtWQg==
-X-Received: by 2002:a05:6000:2c5:b0:225:618e:1708 with SMTP id o5-20020a05600002c500b00225618e1708mr24710033wry.510.1662362800176;
-        Mon, 05 Sep 2022 00:26:40 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5DNgFlxvyoZfpOOUELTnOafjMuqQXkJ0hW4QhgYWzp8crxxH1IY+naMUchHq1loiOEaiVzWAi+X0elo/b3/Oc=
-X-Received: by 2002:a05:6000:2c5:b0:225:618e:1708 with SMTP id
- o5-20020a05600002c500b00225618e1708mr24710018wry.510.1662362799922; Mon, 05
- Sep 2022 00:26:39 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=lnIlSEWqt2NuMr0K7xfjm9a6tpssYyqRvH3ULhoQs6E=;
+        b=5vrKTUPiriGVmi282XtQlrQN8r2DS2Ar3XmlmEc8Z6YZTydXST/wWtRGFySTVHEaR3
+         FCXEbqvzBdqi7ElJGdD/8A4LIfHyOSg0vk9Tr4550tci9AfY4kmmW5CHLPTzMra2P6PX
+         We17je5Nijw5qSEbe6zq17O155tzJR5gMKQtXK44Ext91wpQtZ5wOdlEB83PjlHcxo4m
+         NCErls7R94GgW9kRcLOyH2scbSDUd7Gg0YfKchAjLjRwo6UwMgIIyFk8yllMweWewIbm
+         a/RdKcUTN17hifSv51ppTMLGvkYq6UvwcXakoy0mZEtVUwgJDvYEe721N+R85T3wkfxL
+         vu6g==
+X-Gm-Message-State: ACgBeo0hj/GF+nKIaV5xz/iqkOz5wb8qv54ecpeHBYZFeJZrNqr4VkDS
+        G/QaGUo6nmBxrHTAoySjbEFw1Q==
+X-Google-Smtp-Source: AA6agR7e3YZmCionyQgAwi+41U/5n8SW9PV18lBGEcpsXwbdFta/TDuiQqzLXJkQWdRl/uFr+MusIg==
+X-Received: by 2002:a1c:7907:0:b0:3a5:a965:95e6 with SMTP id l7-20020a1c7907000000b003a5a96595e6mr10026082wme.75.1662362806227;
+        Mon, 05 Sep 2022 00:26:46 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:982:cbb0:f365:27e9:453c:4c15])
+        by smtp.gmail.com with ESMTPSA id l17-20020a05600c1d1100b003a5fa79007fsm10521723wms.7.2022.09.05.00.26.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 00:26:45 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Furkan Kardame <furkan@fkardame.com>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: amlogic: add Beelink GT1 Ultimate binding
+Date:   Mon,  5 Sep 2022 09:26:44 +0200
+Message-Id: <166236280066.644940.15832711054372731780.b4-ty@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220707093954.21716-1-christianshewitt@gmail.com>
+References: <20220707093954.21716-1-christianshewitt@gmail.com>
 MIME-Version: 1.0
-References: <20220905065622.1573811-1-kai.heng.feng@canonical.com> <YxWgGKIAvsxwSz85@black.fi.intel.com>
-In-Reply-To: <YxWgGKIAvsxwSz85@black.fi.intel.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 5 Sep 2022 15:26:28 +0800
-Message-ID: <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
-Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found on
- AMD USB4 controller
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, sanju.mehta@amd.com,
-        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mika,
+Hi,
 
-On Mon, Sep 5, 2022 at 3:06 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi,
->
-> On Mon, Sep 05, 2022 at 02:56:22PM +0800, Kai-Heng Feng wrote:
-> > AMD USB4 can not detect external PCIe devices like external NVMe when
-> > it's hotplugged, because card/link are not up:
-> >
-> > pcieport 0000:00:04.1: pciehp: pciehp_check_link_active: lnk_status = 1101
->
-> I think the correct solution is then to block them from runtime
-> suspending entirely.
+On Thu, 7 Jul 2022 09:39:53 +0000, Christian Hewitt wrote:
+> Add the board binding for the Shenzen AZW (Beelink) GT1 Ultimate
+> Android Set-Top Box device.
+> 
+> 
 
-Do you mean disable runtime suspend completely? Or just block runtime
-suspend for a period?
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.1/dt64)
 
->
-> > Use `lspci` to resume pciehp bridges can find external devices.
-> >
-> > A long delay before checking card/link presence doesn't help, either.
-> > The only way to make the hotplug work is to enable pciehp interrupt and
-> > check card presence after the TB switch is added.
-> >
-> > Since the topology of USB4 and its PCIe bridges are siblings, hardcode
-> > the bridge ID so TBT driver can wake them up to check presence.
->
-> Let's not add PCI things into TBT driver unless absolutely necessary.
+[1/2] dt-bindings: arm: amlogic: add Beelink GT1 Ultimate binding
+      https://git.kernel.org/amlogic/c/70bff3a65d4b974434b7f576f52a269fa4f0dd04
+[2/2] arm64: dts: meson: add support for Beelink GT1 Ultimate
+      https://git.kernel.org/amlogic/c/5b3a87a5c4f20da682d50dbaf8c4aa357cfd0d2d
 
-OK. It's getting harder as different components are intertwined
-together on new hardwares...
+These changes has been applied on the intermediate git tree [1].
 
->
-> At least on Intel hardware the PCIe hotplug is signaled by SCI when the
-> root port is in D3, I wonder if AMD has something similar.
+The v6.1/dt64 branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
 
-Yes those root ports are resumed to D0 when something is plugged. They
-however fail to detect any externel PCIe devices.
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
 
-Kai-Heng
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil

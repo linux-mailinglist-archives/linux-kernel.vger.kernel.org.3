@@ -2,119 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A45E5AD24C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8425AD285
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237542AbiIEMXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S236817AbiIEMZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237516AbiIEMXq (ORCPT
+        with ESMTP id S236720AbiIEMZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:23:46 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10444B0C8
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1662380625; x=1693916625;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZUsJNKl9kM4XrO+bzq6rMd4l+h94hGBCGq7tktFiIIQ=;
-  b=Cjx1s/DoN1GQmFDeln88NTLAuCAXOP6slCqrvUonnOuPYFvQOETYel21
-   EHrHh8fpQF7orWaXMVgKgqCwUmTiPkstXUCYSCQUPRUCVfNf3JR0C3Woc
-   5fMG/I6zCyGoced/CWNz49oWm4mFMk/z45DApR1ujX7T6KWgxDp/yCgmj
-   bnA5Y5Yab+8r/FS+gnI/SADLtvIPtLWG42BuyG9biuNQkPlQLJ0A7FE3s
-   Itc/Me9hAAZ4QdI7ir3CsYNadfD53XMEtfxB1TVqZucZSPSTIiofIkFh+
-   BY82LultKK8crxZh1I0ffS+OPQj3g6l2reBhtIdCCDVP1ov2LoO9/eBRA
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,291,1654531200"; 
-   d="scan'208";a="215694369"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Sep 2022 20:23:44 +0800
-IronPort-SDR: M79f1SmzuCwMNXJRzYzQAwMWX8tiRvDBToKyNBR9uB0WSmyahwbOZj1Q1rF5NxZrPw8DyzTTmV
- eIZxemfvP7OD40kWma539d7GVuLD60xK4+3Czhi5Alhxd4FxD/1vnCZXh0ASRx1Zxf2qW+qKHP
- u4M5r6IxzWGjgT/LcBHqCRDEMg9GfXNsuwkwU+M1ZlI65XhT59TQkmE0fIaIv8ZD7GdDIovQZh
- tD/Shpm8EvKOXPAUpK++D+Rv9LHliRr0uP7Kc+i8n2MTc0R8nYGzk2Q+sWd06bmJXjx4Kc8J8D
- SYFWdx3lHb8haQMjJpZV6R/I
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Sep 2022 04:38:45 -0700
-IronPort-SDR: 8dcfSLnIvZGdzY/wgFlmxn9ul7k1JgAU4lPkFxVrWiWs3OHLEzJMFKX+hCGBOxrZJxSe98SF+i
- kOgib49keGaFjuR5lmQKiPLm+Iq+mvm2JU4aCaAIqchI60k15kdGtpNTXn+GY2cu638ZWtNyrD
- YHMldbx7IZv8fUtGtVBsZ1ETnfvs7+eY9qMVm5D+9L/HCJVKY7kXyhXoIHxgtYhDkRN2eQCtMe
- CHclfAFhL/PGcmTBrowym8Rw0WO7kQgsXTxTKHeEneqzoAad46MNzi+xqqG3rNbGRZBlyRSXAL
- 1qs=
-WDCIronportException: Internal
-Received: from dellx5.wdc.com (HELO dellx4.cphwdc) ([10.200.210.81])
-  by uls-op-cesaip02.wdc.com with ESMTP; 05 Sep 2022 05:23:44 -0700
-From:   Dennis Maisenbacher <Dennis.Maisenbacher@wdc.com>
-To:     linux-nvme@lists.infradead.org
-Cc:     Dennis Maisenbacher <dennis.maisenbacher@wdc.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
+        Mon, 5 Sep 2022 08:25:01 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F5613F12
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:24:58 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id qw34-20020a1709066a2200b00730ca5a94bfso2268466ejc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=RhEZT1SNq0NPBQzxON055CwG2z9S9v0DBpHgk5coq2c=;
+        b=qIFPN9OkzbOXH72mlR5LagOU4V2Qu36zJP5msaFIgWYYDUTG8GebJGj+NaMbBrjOB3
+         Eu7cF3S15gWKxMeiFsUeb/z157gaywe/W0TOpKR640uyP92I1KjqZZt2A5xSCA3uGVzF
+         ZNCqp2qAM75fQMu+M5Enm/g2VzcAq4oMIywB3HK2fwuKrdL37dPS+tFwswYE+9xcczWg
+         CgDILcnihYZfi8cIyMyVX2HxhZcf6avr3r0h3BGIAiAQ+V0kbxrwuKvuid4by0IGVE0x
+         mgphjNAkQBRHWKkxyCqm2ECrhuPWrGjt4l1S7ekyJ+t9jk7xZQ39N1GT/3oSImf4pMx6
+         5sSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=RhEZT1SNq0NPBQzxON055CwG2z9S9v0DBpHgk5coq2c=;
+        b=2Z0UCrVJv3OTMLjRfCTvqdK+4aenhod2drZ8T4fkTvE7KvecSTL5GaVmOUV1Q8n6Pn
+         Ie9d1oHqlobp2Jn/0Ofc0JOCoGTnfKHT7L1abp7EMwf7lwxggwHoF4iI+AgObXA2lpTD
+         XVvpNDNJXw+O8uwG3lshg8vARMinR0hvhTvmzRlMswSj8QdUVxEFT7+dAaBeG5O3MBvT
+         4G6HWTftrl5yuzqd2pdU05AhJXrs81ySQRHHqQxRttoQ9DMw6nsw7P3FNoFS0FLD7d24
+         jDtislDb93MUKSAJZOmTkNlbJ25+Uf77y4m6wSvNXvVeyRWnGpoMdzyShK16xGtgqvGO
+         ZZqw==
+X-Gm-Message-State: ACgBeo0BF0ufB9qkw7fM9fVAeHKQPbhw2332EkuwzePbjx2Gmy2Ece/B
+        9lENMe1Um/VZcDkKLYxko0Za2HqV6qI=
+X-Google-Smtp-Source: AA6agR7SB58mX8bJV9iQaIevq7gEVvfFs+GKe61XMA10PewWZxWsr24Xg2Hj7RE7Y/avsZrMyDz7q0ZIq1s=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:b808:8d07:ab4a:554c])
+ (user=glider job=sendgmr) by 2002:a17:907:3dab:b0:741:9a23:eb01 with SMTP id
+ he43-20020a1709073dab00b007419a23eb01mr25839379ejc.26.1662380696610; Mon, 05
+ Sep 2022 05:24:56 -0700 (PDT)
+Date:   Mon,  5 Sep 2022 14:24:08 +0200
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220905122452.2258262-1-glider@google.com>
+Subject: [PATCH v6 00/44] Add KernelMemorySanitizer infrastructure
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] nvmet: fix mar and mor off-by-one errors
-Date:   Mon,  5 Sep 2022 14:21:16 +0200
-Message-Id: <20220905122116.2678206-1-Dennis.Maisenbacher@wdc.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dennis Maisenbacher <dennis.maisenbacher@wdc.com>
+KernelMemorySanitizer (KMSAN) is a detector of errors related to uses of
+uninitialized memory. It relies on compile-time Clang instrumentation
+(similar to MSan in the userspace [1]) and tracks the state of every bit
+of kernel memory, being able to report an error if uninitialized value
+is used in a condition, dereferenced, or escapes to userspace, USB or
+DMA.
 
-Maximum Active Resources (MAR) and Maximum Open Resources (MOR) are 0's
-based vales where a value of 0xffffffff indicates that there is no limit.
+KMSAN has reported more than 300 bugs in the past few years (recently
+fixed bugs: [2]), most of them with the help of syzkaller. Such bugs
+keep getting introduced into the kernel despite new compiler warnings
+and other analyses (the 6.0 cycle already resulted in several
+KMSAN-reported bugs, e.g. [3]). Mitigations like total stack and heap
+initialization are unfortunately very far from being deployable.
 
-Cast the unsigned int values that are returned by bdev_max_open_zones and
-bdev_max_active_zones into u32 vales which need to be decremented as the
-returned values of the block layer helpers are not 0's based.
-The cast to u32 is necessary because the size of unsigned int is
-architecture dependent and a 0 reported by the block layer helpers
-indicates no limit, thus it needs to be converted to 0xffffffff which
-happens by underflowing the u32.
+The proposed patchset contains KMSAN runtime implementation together
+with small changes to other subsystems needed to make KMSAN work.
 
-Suggested-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Dennis Maisenbacher <dennis.maisenbacher@wdc.com>
----
- drivers/nvme/target/zns.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+The latter changes fall into several categories:
 
-diff --git a/drivers/nvme/target/zns.c b/drivers/nvme/target/zns.c
-index c7ef69f29fe4..606f21ee21bf 100644
---- a/drivers/nvme/target/zns.c
-+++ b/drivers/nvme/target/zns.c
-@@ -100,6 +100,7 @@ void nvmet_execute_identify_cns_cs_ns(struct nvmet_req *req)
- 	struct nvme_id_ns_zns *id_zns;
- 	u64 zsze;
- 	u16 status;
-+	u32 mar, mor;
- 
- 	if (le32_to_cpu(req->cmd->identify.nsid) == NVME_NSID_ALL) {
- 		req->error_loc = offsetof(struct nvme_identify, nsid);
-@@ -130,8 +131,10 @@ void nvmet_execute_identify_cns_cs_ns(struct nvmet_req *req)
- 	zsze = (bdev_zone_sectors(req->ns->bdev) << 9) >>
- 					req->ns->blksize_shift;
- 	id_zns->lbafe[0].zsze = cpu_to_le64(zsze);
--	id_zns->mor = cpu_to_le32(bdev_max_open_zones(req->ns->bdev));
--	id_zns->mar = cpu_to_le32(bdev_max_active_zones(req->ns->bdev));
-+	mor = bdev_max_open_zones(req->ns->bdev);
-+	id_zns->mor = cpu_to_le32(--mor);
-+	mar = bdev_max_active_zones(req->ns->bdev);
-+	id_zns->mar = cpu_to_le32(--mar);
- 
- done:
- 	status = nvmet_copy_to_sgl(req, 0, id_zns, sizeof(*id_zns));
+1. Changes and refactorings of existing code required to add KMSAN:
+ - [01/44] x86: add missing include to sparsemem.h
+ - [02/44] stackdepot: reserve 5 extra bits in depot_stack_handle_t
+ - [03/44] instrumented.h: allow instrumenting both sides of copy_from_user()
+ - [04/44] x86: asm: instrument usercopy in get_user() and __put_user_size()
+ - [05/44] asm-generic: instrument usercopy in cacheflush.h
+ - [10/44] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
+
+2. KMSAN-related declarations in generic code, KMSAN runtime library,
+   docs and configs:
+ - [06/44] kmsan: add ReST documentation
+ - [07/44] kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
+ - [09/44] x86: kmsan: pgtable: reduce vmalloc space
+ - [11/44] kmsan: add KMSAN runtime core
+ - [13/44] MAINTAINERS: add entry for KMSAN
+ - [25/44] kmsan: add tests for KMSAN
+ - [32/44] objtool: kmsan: list KMSAN API functions as uaccess-safe
+ - [36/44] x86: kmsan: use __msan_ string functions where possible
+ - [44/44] x86: kmsan: enable KMSAN builds for x86
+
+3. Adding hooks from different subsystems to notify KMSAN about memory
+   state changes:
+ - [14/44] mm: kmsan: maintain KMSAN metadata for page
+ - [15/44] mm: kmsan: call KMSAN hooks from SLUB code
+ - [16/44] kmsan: handle task creation and exiting
+ - [17/44] init: kmsan: call KMSAN initialization routines
+ - [18/44] instrumented.h: add KMSAN support
+ - [20/44] kmsan: add iomap support
+ - [21/44] Input: libps2: mark data received in __ps2_command() as initialized
+ - [22/44] dma: kmsan: unpoison DMA mappings
+ - [35/44] x86: kmsan: handle open-coded assembly in lib/iomem.c
+ - [37/43] x86: kmsan: sync metadata pages on page fault
+
+4. Changes that prevent false reports by explicitly initializing memory,
+   disabling optimized code that may trick KMSAN, selectively skipping
+   instrumentation:
+ - [08/44] kmsan: mark noinstr as __no_sanitize_memory
+ - [12/44] kmsan: disable instrumentation of unsupported common kernel code
+ - [19/44] kmsan: unpoison @tlb in arch_tlb_gather_mmu()
+ - [23/44] virtio: kmsan: check/unpoison scatterlist in vring_map_one_sg()
+ - [24/44] kmsan: handle memory sent to/from USB
+ - [26/44] kmsan: disable strscpy() optimization under KMSAN
+ - [27/44] crypto: kmsan: disable accelerated configs under KMSAN
+ - [28/44] kmsan: disable physical page merging in biovec
+ - [29/44] block: kmsan: skip bio block merging logic for KMSAN
+ - [30/44] kcov: kmsan: unpoison area->list in kcov_remote_area_put()
+ - [31/44] security: kmsan: fix interoperability with auto-initialization
+ - [33/44] x86: kmsan: disable instrumentation of unsupported code
+ - [34/44] x86: kmsan: skip shadow checks in __switch_to()
+ - [38/44] x86: kasan: kmsan: support CONFIG_GENERIC_CSUM on x86, enable it for KASAN/KMSAN
+ - [39/44] x86: fs: kmsan: disable CONFIG_DCACHE_WORD_ACCESS
+ - [40/44] x86: kmsan: don't instrument stack walking functions
+ - [41/44] entry: kmsan: introduce kmsan_unpoison_entry_regs()
+
+5. Fixes for bugs detected with CONFIG_KMSAN_CHECK_PARAM_RETVAL:
+ - [42/44] bpf: kmsan: initialize BPF registers with zeroes
+ - [43/44] mm: fs: initialize fsdata passed to write_begin/write_end interface
+
+
+This patchset allows one to boot and run a defconfig+KMSAN kernel on a
+QEMU without known false positives. It however doesn't guarantee there
+are no false positives in drivers of certain devices or less tested
+subsystems, although KMSAN is actively tested on syzbot with a large
+config.
+
+By default, KMSAN enforces conservative checks of most kernel function
+parameters passed by value (via CONFIG_KMSAN_CHECK_PARAM_RETVAL, which
+maps to the -fsanitize-memory-param-retval compiler flag). As discussed
+in [4] and [5], passing uninitialized values as function parameters is
+considered undefined behavior, therefore KMSAN now reports such cases as
+errors. Several newly added patches fix known manifestations of these
+errors.
+
+The patchset was generated relative to Linux v6.0-rc4. The most
+up-to-date KMSAN tree currently resides at
+https://github.com/google/kmsan/. One may find it handy to review these
+patches in Gerrit [6].
+
+A huge thanks goes to the reviewers of the RFC patch series sent to LKML
+in 2020 ([7]).
+
+[1] https://clang.llvm.org/docs/MemorySanitizer.html
+[2] https://syzkaller.appspot.com/upstream/fixed?manager=ci-upstream-kmsan-gce
+[3] https://lore.kernel.org/all/0000000000002c7abf05e721698d@google.com/
+[4] https://lore.kernel.org/all/20220614144853.3693273-1-glider@google.com/ 
+[5] https://lore.kernel.org/linux-mm/20220701142310.2188015-45-glider@google.com/
+[6] https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/12604/ 
+[7] https://lore.kernel.org/all/20200325161249.55095-1-glider@google.com/
+
+Alexander Potapenko (43):
+  stackdepot: reserve 5 extra bits in depot_stack_handle_t
+  instrumented.h: allow instrumenting both sides of copy_from_user()
+  x86: asm: instrument usercopy in get_user() and put_user()
+  asm-generic: instrument usercopy in cacheflush.h
+  kmsan: add ReST documentation
+  kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
+  kmsan: mark noinstr as __no_sanitize_memory
+  x86: kmsan: pgtable: reduce vmalloc space
+  libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
+  kmsan: add KMSAN runtime core
+  kmsan: disable instrumentation of unsupported common kernel code
+  MAINTAINERS: add entry for KMSAN
+  mm: kmsan: maintain KMSAN metadata for page operations
+  mm: kmsan: call KMSAN hooks from SLUB code
+  kmsan: handle task creation and exiting
+  init: kmsan: call KMSAN initialization routines
+  instrumented.h: add KMSAN support
+  kmsan: unpoison @tlb in arch_tlb_gather_mmu()
+  kmsan: add iomap support
+  Input: libps2: mark data received in __ps2_command() as initialized
+  dma: kmsan: unpoison DMA mappings
+  virtio: kmsan: check/unpoison scatterlist in vring_map_one_sg()
+  kmsan: handle memory sent to/from USB
+  kmsan: add tests for KMSAN
+  kmsan: disable strscpy() optimization under KMSAN
+  crypto: kmsan: disable accelerated configs under KMSAN
+  kmsan: disable physical page merging in biovec
+  block: kmsan: skip bio block merging logic for KMSAN
+  kcov: kmsan: unpoison area->list in kcov_remote_area_put()
+  security: kmsan: fix interoperability with auto-initialization
+  objtool: kmsan: list KMSAN API functions as uaccess-safe
+  x86: kmsan: disable instrumentation of unsupported code
+  x86: kmsan: skip shadow checks in __switch_to()
+  x86: kmsan: handle open-coded assembly in lib/iomem.c
+  x86: kmsan: use __msan_ string functions where possible.
+  x86: kmsan: sync metadata pages on page fault
+  x86: kasan: kmsan: support CONFIG_GENERIC_CSUM on x86, enable it for
+    KASAN/KMSAN
+  x86: fs: kmsan: disable CONFIG_DCACHE_WORD_ACCESS
+  x86: kmsan: don't instrument stack walking functions
+  entry: kmsan: introduce kmsan_unpoison_entry_regs()
+  bpf: kmsan: initialize BPF registers with zeroes
+  mm: fs: initialize fsdata passed to write_begin/write_end interface
+  x86: kmsan: enable KMSAN builds for x86
+
+Dmitry Vyukov (1):
+  x86: add missing include to sparsemem.h
+
+ Documentation/dev-tools/index.rst       |   1 +
+ Documentation/dev-tools/kmsan.rst       | 427 ++++++++++++++++++
+ MAINTAINERS                             |  13 +
+ Makefile                                |   1 +
+ arch/s390/lib/uaccess.c                 |   3 +-
+ arch/x86/Kconfig                        |   9 +-
+ arch/x86/boot/Makefile                  |   1 +
+ arch/x86/boot/compressed/Makefile       |   1 +
+ arch/x86/entry/vdso/Makefile            |   3 +
+ arch/x86/include/asm/checksum.h         |  16 +-
+ arch/x86/include/asm/kmsan.h            |  55 +++
+ arch/x86/include/asm/page_64.h          |   7 +
+ arch/x86/include/asm/pgtable_64_types.h |  47 +-
+ arch/x86/include/asm/sparsemem.h        |   2 +
+ arch/x86/include/asm/string_64.h        |  23 +-
+ arch/x86/include/asm/uaccess.h          |  22 +-
+ arch/x86/kernel/Makefile                |   2 +
+ arch/x86/kernel/cpu/Makefile            |   1 +
+ arch/x86/kernel/dumpstack.c             |   6 +
+ arch/x86/kernel/process_64.c            |   1 +
+ arch/x86/kernel/unwind_frame.c          |  11 +
+ arch/x86/lib/Makefile                   |   2 +
+ arch/x86/lib/iomem.c                    |   5 +
+ arch/x86/mm/Makefile                    |   2 +
+ arch/x86/mm/fault.c                     |  23 +-
+ arch/x86/mm/init_64.c                   |   2 +-
+ arch/x86/mm/ioremap.c                   |   3 +
+ arch/x86/realmode/rm/Makefile           |   1 +
+ block/bio.c                             |   2 +
+ block/blk.h                             |   7 +
+ crypto/Kconfig                          |  30 ++
+ drivers/firmware/efi/libstub/Makefile   |   1 +
+ drivers/input/serio/libps2.c            |   5 +-
+ drivers/net/Kconfig                     |   1 +
+ drivers/nvdimm/nd.h                     |   2 +-
+ drivers/nvdimm/pfn_devs.c               |   2 +-
+ drivers/usb/core/urb.c                  |   2 +
+ drivers/virtio/virtio_ring.c            |  10 +-
+ fs/buffer.c                             |   4 +-
+ fs/namei.c                              |   2 +-
+ include/asm-generic/cacheflush.h        |  14 +-
+ include/linux/compiler-clang.h          |  23 +
+ include/linux/compiler-gcc.h            |   6 +
+ include/linux/compiler_types.h          |   3 +-
+ include/linux/fortify-string.h          |   2 +
+ include/linux/highmem.h                 |   3 +
+ include/linux/instrumented.h            |  59 ++-
+ include/linux/kmsan-checks.h            |  83 ++++
+ include/linux/kmsan.h                   | 330 ++++++++++++++
+ include/linux/kmsan_types.h             |  35 ++
+ include/linux/mm_types.h                |  12 +
+ include/linux/sched.h                   |   5 +
+ include/linux/stackdepot.h              |   8 +
+ include/linux/uaccess.h                 |  19 +-
+ init/main.c                             |   3 +
+ kernel/Makefile                         |   1 +
+ kernel/bpf/core.c                       |   2 +-
+ kernel/dma/mapping.c                    |  10 +-
+ kernel/entry/common.c                   |   5 +
+ kernel/exit.c                           |   2 +
+ kernel/fork.c                           |   2 +
+ kernel/kcov.c                           |   7 +
+ kernel/locking/Makefile                 |   3 +-
+ lib/Kconfig.debug                       |   1 +
+ lib/Kconfig.kmsan                       |  62 +++
+ lib/Makefile                            |   3 +
+ lib/iomap.c                             |  44 ++
+ lib/iov_iter.c                          |   9 +-
+ lib/stackdepot.c                        |  29 +-
+ lib/string.c                            |   8 +
+ lib/usercopy.c                          |   3 +-
+ mm/Makefile                             |   1 +
+ mm/filemap.c                            |   2 +-
+ mm/internal.h                           |   6 +
+ mm/kasan/common.c                       |   2 +-
+ mm/kmsan/Makefile                       |  28 ++
+ mm/kmsan/core.c                         | 458 ++++++++++++++++++++
+ mm/kmsan/hooks.c                        | 384 +++++++++++++++++
+ mm/kmsan/init.c                         | 235 ++++++++++
+ mm/kmsan/instrumentation.c              | 307 +++++++++++++
+ mm/kmsan/kmsan.h                        | 208 +++++++++
+ mm/kmsan/kmsan_test.c                   | 552 ++++++++++++++++++++++++
+ mm/kmsan/report.c                       | 211 +++++++++
+ mm/kmsan/shadow.c                       | 294 +++++++++++++
+ mm/memory.c                             |   2 +
+ mm/mmu_gather.c                         |  10 +
+ mm/page_alloc.c                         |  19 +
+ mm/slab.h                               |   1 +
+ mm/slub.c                               |  17 +
+ mm/vmalloc.c                            |  20 +-
+ scripts/Makefile.kmsan                  |   8 +
+ scripts/Makefile.lib                    |   9 +
+ security/Kconfig.hardening              |   4 +
+ tools/objtool/check.c                   |  20 +
+ 94 files changed, 4296 insertions(+), 56 deletions(-)
+ create mode 100644 Documentation/dev-tools/kmsan.rst
+ create mode 100644 arch/x86/include/asm/kmsan.h
+ create mode 100644 include/linux/kmsan-checks.h
+ create mode 100644 include/linux/kmsan.h
+ create mode 100644 include/linux/kmsan_types.h
+ create mode 100644 lib/Kconfig.kmsan
+ create mode 100644 mm/kmsan/Makefile
+ create mode 100644 mm/kmsan/core.c
+ create mode 100644 mm/kmsan/hooks.c
+ create mode 100644 mm/kmsan/init.c
+ create mode 100644 mm/kmsan/instrumentation.c
+ create mode 100644 mm/kmsan/kmsan.h
+ create mode 100644 mm/kmsan/kmsan_test.c
+ create mode 100644 mm/kmsan/report.c
+ create mode 100644 mm/kmsan/shadow.c
+ create mode 100644 scripts/Makefile.kmsan
+
 -- 
-2.25.1
+2.37.2.789.g6183377224-goog
 

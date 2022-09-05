@@ -2,127 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA28A5AD43C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC04D5AD43F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238210AbiIENqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
+        id S238237AbiIENsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237084AbiIENqf (ORCPT
+        with ESMTP id S237049AbiIENsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:46:35 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2056.outbound.protection.outlook.com [40.107.101.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928D157246;
-        Mon,  5 Sep 2022 06:46:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=byr+4kUrDvpPezNMRwar3Vo+W+MlZ/M549VPOrYVx/PnlbLJF7i8yJIEoVKzm0kXwHmZ1Nq7jCHaDJTJ9oQLt/kibaMoQ/lYtZ01VXIOSjKkgt6ypsapR4rTnnaBauCBfpy8tvJCoqDfDXQr5rJA7M/MZNXDde8bNrP0nrqTwsHDGNjpxoA/lBDcDJbEt/8oBQsmcF0Ry1WmDk/EciiferOb6M9sR0t0O1raDC6pYh8IyOAiQaz8bRWbWhoX5aSLINGCQLDNkkteQUFGihMFA8fCabw4t4MOGvqi8eiSz3f+BaqyPkf1VC3RCmbdJ1E3RBkFuja9dk2qwpn3rqrGpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lcPplKUDEjgINzdCtUs89a9QyZXpiG00bMXBwbd+XpI=;
- b=Sd9Bz+JLSYa1O9d3Efcl7qIGHqXtvRPSi2WX8Euo1cvApM618z5VMCfKMHGJmDVew0M5Ot3GY9973UF8lH7lTm9TA7UQbYlKwKQG6PYIgNOD13l2oKaAESpSc3kbOAUhkWyBF5snZhdy+yJylI5ISF3dNeuhY0D8lOv/bOKxMt4qVapIZUstYhGwCH1KbNjRHdXXhh0lyhvNIhhffIgnW40F47t9l+kYfxcPz7jT84eh143ZWiw3PDYN5pe+PJmzOuLF6NfPKoWai5ODvYQtSJbB7nl7DuBsxbB5j251lPIiYzI45vUO29v0htQQClt10WxlRkKPKCrEI0mSiB/Xow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lcPplKUDEjgINzdCtUs89a9QyZXpiG00bMXBwbd+XpI=;
- b=v62AZ6Pe5LLh8jzELQNAMDRTRe7Bpf23tuhTlMOp8xaeg04dPXqma1sBupioqiR6NOfRu8yU/v/evEaZ9buSRv92LlSD6HKvMNSlb4+J5bOHV7hzxAOOugACWV7N18ZC18RksoPyiu01tknH9KU9EyVANlAD092BdtUu6PFpGOQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15)
- by DM6PR12MB4076.namprd12.prod.outlook.com (2603:10b6:5:213::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Mon, 5 Sep
- 2022 13:46:32 +0000
-Received: from PH7PR12MB6000.namprd12.prod.outlook.com
- ([fe80::2e8f:6161:3959:aa0c]) by PH7PR12MB6000.namprd12.prod.outlook.com
- ([fe80::2e8f:6161:3959:aa0c%5]) with mapi id 15.20.5588.015; Mon, 5 Sep 2022
- 13:46:32 +0000
-Message-ID: <5b84f7c1-99a6-02c8-2606-8986891a95b0@amd.com>
-Date:   Mon, 5 Sep 2022 19:16:19 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 2/4] drm/sched: Add callback and enable signaling on debug
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220905105653.13670-1-Arvind.Yadav@amd.com>
- <20220905105653.13670-3-Arvind.Yadav@amd.com>
- <96d14c8a-e3de-fcea-b3b1-434bc6a78ae4@amd.com>
-From:   "Yadav, Arvind" <arvyadav@amd.com>
-In-Reply-To: <96d14c8a-e3de-fcea-b3b1-434bc6a78ae4@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN3PR01CA0124.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:96::12) To PH7PR12MB6000.namprd12.prod.outlook.com
- (2603:10b6:510:1dc::15)
+        Mon, 5 Sep 2022 09:48:20 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0225808D;
+        Mon,  5 Sep 2022 06:48:19 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id m3-20020a05600c3b0300b003a5e0557150so7006752wms.0;
+        Mon, 05 Sep 2022 06:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date;
+        bh=43AvYQ84NFT79c+Ju8v9NNSFk2SIfrXKvCx9jT0QbhA=;
+        b=WKNu9B//fqfkM1kDyDqJCJWfKEwh0jyI0j0NPX7UQMJkcx70R8+X5BtZMTae9LcvM5
+         X8s4VWNlQVy810TG2MQlVbPq5AuBLRDwnOt0/ngywqR0rTulz2tlt7FI8i3LEYIwtfln
+         xEOIVn5LBU1eGeQN+qcKryU/9jzXO0U7S2mjVUxw0J+1MyPfmfnDCl8uGwi68+f4Zztl
+         2bFYaIEenyQ6+vcd0ocygmtUWxlioZF9lflgVFRmVvQr5wxJOctM3NlQEY5D0rKKbPer
+         h47OI6hWoJQjn1ctG8k6DJi9AEzCUTTqaUwBDgsZ+LVWHvLLfYVISZDH+tr8xGIXxGVm
+         P7vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=43AvYQ84NFT79c+Ju8v9NNSFk2SIfrXKvCx9jT0QbhA=;
+        b=KAjKE6YfxeIP4Ks5+Ki4SwR49LYt2n2D4mCzdW52sVCBJGfFI0bnPJdCtX6AOniq6m
+         rjbscxrVkQJe4P9wt1XKAmpjhgA060ijZhz8fZH10g8qNqm4us1BDjnqxRzjsCyQstji
+         76JF+r2pOqtsnFkCzj7nGsSIu9UHjLxMaaCeQgwBDeYqXlQO5IQQWG0V/nl/laEaumwp
+         Mn1FvKCpT4HvxtS/vOjcFodd1xR0hMxbgYSUsfE0tWG2HF2XpqyU5taKztbbUo4sjCuu
+         /thecsEZ8zRmPJ03Kik04gNixN4rN3VxlgIkKqpfFgoN4CnRW7WurRtEQ7nN5gd5yxhK
+         dNzA==
+X-Gm-Message-State: ACgBeo0FSVDLI51etEnnTjGxogbanDF6IOwfNeiteYr2TIJ+IrrEkyqp
+        u1RSIVhcgV1UloySzQLoWZ4=
+X-Google-Smtp-Source: AA6agR4M7AySTt4LkNjPWBw4DZOxQSHw37OYVM4zSSHqUTvhndukRk6Xrh1mAbdcwXAvMD93hJDvSw==
+X-Received: by 2002:a05:600c:410d:b0:3a6:1db8:b419 with SMTP id j13-20020a05600c410d00b003a61db8b419mr10853587wmi.119.1662385697499;
+        Mon, 05 Sep 2022 06:48:17 -0700 (PDT)
+Received: from [10.176.234.249] ([137.201.254.41])
+        by smtp.googlemail.com with ESMTPSA id l6-20020a05600c4f0600b003a3170a7af9sm11795424wmq.4.2022.09.05.06.48.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 06:48:17 -0700 (PDT)
+Message-ID: <748f9c294e304cc5b5ccd9804fa647afc39c8bc3.camel@gmail.com>
+Subject: Re: [RFC PATCH v3 2/4] ufs: core: mcq: Adds Multi-Circular Queue
+ support
+From:   Bean Huo <huobean@gmail.com>
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_nguyenb@quicinc.com,
+        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
+        adrian.hunter@intel.com, bvanassche@acm.org, avri.altman@wdc.com,
+        mani@kernel.org, quic_cang@quicinc.com, beanhuo@micron.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Mon, 05 Sep 2022 15:48:15 +0200
+In-Reply-To: <04f4949e4dea991a93bdf6727bf12948ecc586be.1662157846.git.quic_asutoshd@quicinc.com>
+References: <cover.1662157846.git.quic_asutoshd@quicinc.com>
+         <04f4949e4dea991a93bdf6727bf12948ecc586be.1662157846.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 30e2f401-affd-410f-12cb-08da8f450a69
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4076:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NSjuUShio2ILT0zk62TYe5TONYQt77Hk/ZHETT28HMIdp9+QpriKb00M5PvrBMPLldT5l1mosvUOB/thkBQvzMp2BmSkz9WXwJbvClyTjrDRdoyreBYw1d3SRhsN8hN/7ey9adgONo8CThHIDH6HRzToTziEur826EbIbKN5eG8hfQ5Ydnv2t6z2/UrOwVLkHx5CtNANoUtEknM4OFjYRxMCUPAYotyGLOZ3thIao3kXf0nszupgRy9L1w97rlScRckJAWl9vNCpUzYid/fGXF8OCVugpHZNqU7rAO2XkGSAC6nes7CSg02HR1iHtK+Y2gDM90l+wailTQRcTjeGcRao3j6up/vfh35+63hMD1oGaEIGJsH1y4SyyKRzgIC3BbakXrPV0kDnt+wvD7oqxlrdNMsit2DkTbRFmSsDj+3VFIcRPRmq/4it6lPAOz6GdYDJKQQR6tC3rpUGpISGnhT/ptznJ5KGqW8/m4Mq02LL5FwhtUbAyr52C29/ssLOHcziFSuaWhqBbvVVfbquX8GFb8GICPBmi0frbi3C3hiOQ0b0WtUVEC863UDqO1TzDWyuuoTVx3Jg2ICbzC9kuj8hQz/ajFgWEky0WHM3F4DVG+wOW6cDNVgyxnthsDMdvFXalsRjN4iKNrtEZMY1AwnlDyYYSq/Gi/xdbOTTx6OgM8Suf3ya3gX4t/rYX3AOvYonejNkcfSGheWGQbjqPymZZG8EZG4u/fEiMa8vpEl3qZUOVjodis5DYRliGG4M3tOfuBT3miQzDzAqH3sThspfgqlYdFqw2NJy45WitXLdSSE43EzaBAKD2O+XKkkj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6000.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39860400002)(346002)(376002)(396003)(136003)(8676002)(83380400001)(66476007)(66574015)(66946007)(8936002)(66556008)(5660300002)(6506007)(478600001)(26005)(53546011)(6486002)(6666004)(41300700001)(186003)(2616005)(6512007)(316002)(110136005)(31696002)(36756003)(31686004)(921005)(38100700002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RW5Pb0xGZndnTlRrYjJuQVpWZjI0TzJtN0M0RVhSamo3dWNnUnhuaW9HSElm?=
- =?utf-8?B?S3IvMXpxbHd2ZjNMaDJ1ZjVESUd4SDB2SFpmSGlDY3R6amtlcXBWK2JqaWhY?=
- =?utf-8?B?VVhwOXpWeEZuRk9NRkRNcTUycXRHcEUyd3Q4VFdLR2g3NEp4ck5pazJQR3BL?=
- =?utf-8?B?RHB0VXBBZmlwaWFBS1RRbzdHREI1RXJja1pZWFhWdkNJOSszZUJYZyttTFpv?=
- =?utf-8?B?aVZUWW1nRmNEUmxONnVyWndRNWJKZ21uSDZkS3JxNi9Hc3dCcmd2RVJ3VWli?=
- =?utf-8?B?OXlDVWNieGNSVmxyalJveUN0K3ZGOVVMSU5vdHRBaXR0cmdLSFYwd25KZFpK?=
- =?utf-8?B?YVRuTW9Dam9keSt1VDhFNVdlcmNYYVl4UjRaZk4xbjJIR0JnaVByMjJQZS95?=
- =?utf-8?B?YlVoQVlLQS8wbkNvaHZxZWg1SzVVWHJmOHhLUUtuTER3ZzJ0ZktFTDhPMzgz?=
- =?utf-8?B?Q0ZqOUZqWWMxbllkQ2tZS3BYa28xb1NGVTB1T0xxQXBqeW9YSEJiODRSMFlL?=
- =?utf-8?B?UVlqalptdnFNM1d4b0NHYURrOVg4emxzZlYzMWRlVzd4NzcydjY5eW5aR2Jk?=
- =?utf-8?B?Y3VLOHMzcXAycTNtRjVtVFlNcWdjU1d2bnBVdlNRRVlDQmRHcGZqSDZHU2Zy?=
- =?utf-8?B?WHNIVk1tNkhYZDZrdkdyTlloYjR3YkRTTnI0bERtQzJ6VnphZ0MwKzBGb1E3?=
- =?utf-8?B?dCtCcDFFelFzRWR1UUJScFlXNkVVelBUYjE5bGJmQ3ZKTnhlK2RFZWdpM1dG?=
- =?utf-8?B?azB3RXJyeXE3ak01ek1zU05wcVFaT0h4MllNWHNaK2Z2V1dWMlhGdjh4QXhy?=
- =?utf-8?B?bnlhMU9xSm9lZjc5TTRFcWJqeG5ab2dQT2o4bjYyZDBFNnNtU0xNcU9OeUNJ?=
- =?utf-8?B?ZU1PNVBYc2FCRE51Q3BSU3QzdDNsMFNubC9zZzNWQUVuU3V4VlhjME5CTk5a?=
- =?utf-8?B?RTR6ZnpuWFZ6Rmo3SlJpMk1qZk5Wb3B3cUE5QVQwdVJLYXFOeHM3bkJieDQv?=
- =?utf-8?B?dzRLYm9VdmUxTjV5REppb3ZzZHhLL1pRangyeDF3dmRGZm8rdllYNUlnS3Zv?=
- =?utf-8?B?bzBFdzJrbTc0clNhRDU3TStEbXQrTzh4bE5xeEZxOE9PUzZsc3U1ekVROEwy?=
- =?utf-8?B?VVVaY0Q3RFJGOGozOElJSFcyL25LK1lweEFSb3lhZDNBczh4MlA5UnRpRDFq?=
- =?utf-8?B?MTdKSnhybGN6Z2w2cmowc1FpNmZocVRTand1QjNnZVFZSlhIS0RzRi82MGpL?=
- =?utf-8?B?TEZ1WGFrdVQ1M0lITEUyTWNiYW5WY2tVbXQzOXlVYWt1aVRSS3RjL3c2V2s3?=
- =?utf-8?B?ZEE1TFhma1ZvTS8wblA0U04vWEhjdDQrR2J4bEhmVFZ4cE9aejhVdkVURjdV?=
- =?utf-8?B?eGp4YTBIVWxwUUVKQXZJdHZZNG90YU5GSUdudzVyNWxLNmMzRnUyandaVlI1?=
- =?utf-8?B?RWxGeCsyKy9pYlZGY3J6cEdJd3E4cDZrV1IvMVVRRk1iUWRnMnJmSnNDTUFy?=
- =?utf-8?B?dnl2TzAreFgvUzNBNmFXN2hRM1BWYlcvekpzZ3hXR1d1TjNlZEhMeE1lS0M5?=
- =?utf-8?B?V1lsWWVibDVnTVRFYkpoUVlYRjFxak1WSzRVd1hpeW1XUkJwU0lYUTVWV0t5?=
- =?utf-8?B?OXF4WWVVcENGZWZIbUlnbm1mR2xnSzhPT1g5T1JnVnBtQWhrbi93dndSUS9q?=
- =?utf-8?B?TVk2amJkM1dFUDFsTWUzQS8ra0U4OUJXbXB4S0lFTHBlSjZ0aXpGM003NmZ5?=
- =?utf-8?B?bHNKa0RveG5sVEdzSG1ZeU5rL2hZRVdqdXZpSG1BQXZkY0VoQzNTbHdjVzd2?=
- =?utf-8?B?UkJvYVBNdFFTcjZmYUJUNmlnSWxTcEg1Y1Q1NmJBUDQ0cDB5aWN0RVEwdGI1?=
- =?utf-8?B?QWZlUUkzZ1Bmb2lwTVVVQmJYNWgwdWc5WVNFaGhOdXBYL0phL0xsS2I0Tng1?=
- =?utf-8?B?ZUNwTVZMNUtCTXFyM2NhRk1YRU9veFhLM0tNV0JmYXNjWnJmR20vaUpCazhB?=
- =?utf-8?B?SXc3VkhTaHVhQ2oxeVhoSHROUGw0RWtsTmxBb2h1c0VIbWdiUTBTZm91WU5w?=
- =?utf-8?B?Y2NMbzUwdWNHeVdjUUFpek41THlWUlgxRnJHcUJTYm1PQ2pxRlJjelVSalB5?=
- =?utf-8?Q?wVCcWDhTMAtnTpHTmI3o9NNpF?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30e2f401-affd-410f-12cb-08da8f450a69
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6000.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 13:46:31.9538
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A3stqcI/vNP/B/x10L2HyNZgjzxXFXVYChKj7Nz3AUMqiCwXA9DuSZ1SjbNqQ5sILuIzU+tQhCQ/1pw2Cc1mJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4076
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,84 +84,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+T24gRnJpLCAyMDIyLTA5LTAyIGF0IDE1OjQxIC0wNzAwLCBBc3V0b3NoIERhcyB3cm90ZToKPiAr
+LyoqCj4gKyAqIHVmc2hjZF9tY3FfZGVjaWRlX3F1ZXVlX2RlcHRoIC0gZGVjaWRlIHRoZSBxdWV1
+ZSBkZXB0aAo+ICsgKiBAaGJhIC0gcGVyIGFkYXB0ZXIgaW5zdGFuY2UKPiArICoKPiArICogTUFD
+IC0gTWF4LiBBY3RpdmUgQ29tbWFuZCBvZiB0aGUgSG9zdCBDb250cm9sbGVyIChIQykKPiArICog
+SEMgd291bGRuJ3Qgc2VuZCBtb3JlIHRoYW4gdGhpcyBjb21tYW5kcyB0byB0aGUgZGV2aWNlLgo+
+ICsgKiBUaGUgZGVmYXVsdCBNQUMgaXMgMzIsIGJ1dCB0aGUgbWF4LiB2YWx1ZSBtYXkgdmFyeSB3
+aXRoCj4gKyAqIHZlbmRvciBpbXBsZW1lbnRhdGlvbi4KPiArICogQ2FsY3VsYXRlcyBhbmQgYWRq
+dXN0cyB0aGUgcXVldWUgZGVwdGggYmFzZWQgb24gdGhlIGRlcHRoCj4gKyAqIHN1cHBvcnRlZCBi
+eSB0aGUgSEMsIHVmcyBkZXZpY2UgYW5kIGlmIGV4dF9paWQgaXMgc3VwcG9ydGVkLgo+ICsgKi8K
+PiArdTMyIHVmc2hjZF9tY3FfZGVjaWRlX3F1ZXVlX2RlcHRoKHN0cnVjdCB1ZnNfaGJhICpoYmEp
+Cj4gK3sKPiArwqDCoMKgwqDCoMKgwqB1MzIgcWQsIHZhbDsKPiArwqDCoMKgwqDCoMKgwqBpbnQg
+bWFjOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBtYWMgPSB1ZnNoY2RfbWNxX3ZvcHNfZ2V0X2hiYV9t
+YWMoaGJhKTsKPiArwqDCoMKgwqDCoMKgwqBpZiAobWFjIDwgMCkgewo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqB2YWwgPSB1ZnNoY2RfcmVhZGwoaGJhLCBSRUdfVUZTX01DUV9DRkcp
+Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBtYWMgPSAodmFsICYgTUNRX0NGR19N
+QUNfTUFTSykgPj4gTUNRX0NGR19NQUNfT0ZGU0VUOwo+ICvCoMKgwqDCoMKgwqDCoH0KPiArCj4g
+K8KgwqDCoMKgwqDCoMKgLyrCoCBNQUMgaXMgYSAwIGJhc2VkIHZhbHVlLiAqLwo+ICvCoMKgwqDC
+oMKgwqDCoG1hYyArPSAxOwo+ICvCoMKgwqDCoMKgwqDCoHFkID0gbWluX3QodTMyLCBtYWMsIGhi
+YS0+ZGV2X2luZm8uYnF1ZXVlZGVwdGgpOwo+ICvCoMKgwqDCoMKgwqDCoGlmICghcWQpCj4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHFkID0gbWFjOwo+ICsKPiArwqDCoMKgwqDCoMKg
+wqAvKiBBZGp1c3QgcXVldWUgZGVwdGggYmFzZWQgb24gZXh0X2lpZCBzdXBwb3J0LiAqLwo+ICvC
+oMKgwqDCoMKgwqDCoGlmIChxZCA+IDI1NiAmJiAoIWhiYS0+ZXh0X2lpZF9zdXAgfHwgIWhiYS0K
+PiA+ZGV2X2luZm8uYl9leHRfaWlkX2VuKSkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgcWQgPSAyNTY7Cj4gK8KgwqDCoMKgwqDCoMKgZWxzZSBpZiAocWQgPiA0MDk2ICYmIGhiYS0+
+ZXh0X2lpZF9zdXAgJiYgaGJhLQo+ID5kZXZfaW5mby5iX2V4dF9paWRfZW4pCj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoHFkID0gNDA5NjsKPiArCgpBc3Rvc2gsCgpJIGRvbid0IHVu
+ZGVyc3RhbmQgaGVyZS4gIEhvdyBjYW4gcWQgYmUgNDA5Nj8gIE1BQyBpbiBVRlNIQ0kgIGlzIDkg
+Yml0cwp3aWR0aCwgdGhlIG1heGltdW0gZGVwdGggd2lsbCBiZSA1MTIsIGFuZCBoYmEtPmRldl9p
+bmZvLmJxdWV1ZWRlcHRoIGlzCm9uZSBieXRlIHdpZHRoLCBtYXhpbXVtIHdpbGwgYmUgMjU2LgoK
+S2luZCByZWdhcmRzLApCZWFuCgo=
 
-On 9/5/2022 4:55 PM, Christian König wrote:
->
->
-> Am 05.09.22 um 12:56 schrieb Arvind Yadav:
->> Here's on debug adding an enable_signaling callback for finished
->> fences and enabling software signaling for finished fence.
->>
->> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->> ---
->>   drivers/gpu/drm/scheduler/sched_fence.c | 12 ++++++++++++
->>   drivers/gpu/drm/scheduler/sched_main.c  |  4 +++-
->>   2 files changed, 15 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/scheduler/sched_fence.c 
->> b/drivers/gpu/drm/scheduler/sched_fence.c
->> index 7fd869520ef2..ebd26cdb79a0 100644
->> --- a/drivers/gpu/drm/scheduler/sched_fence.c
->> +++ b/drivers/gpu/drm/scheduler/sched_fence.c
->> @@ -122,16 +122,28 @@ static void 
->> drm_sched_fence_release_finished(struct dma_fence *f)
->>         dma_fence_put(&fence->scheduled);
->>   }
->> +#ifdef CONFIG_DEBUG_FS
->> +static bool drm_sched_enable_signaling(struct dma_fence *f)
->> +{
->> +    return true;
->> +}
->> +#endif
->>     static const struct dma_fence_ops drm_sched_fence_ops_scheduled = {
->>       .get_driver_name = drm_sched_fence_get_driver_name,
->>       .get_timeline_name = drm_sched_fence_get_timeline_name,
->> +#ifdef CONFIG_DEBUG_FS
->> +    .enable_signaling = drm_sched_enable_signaling,
->> +#endif
->>       .release = drm_sched_fence_release_scheduled,
->>   };
->>     static const struct dma_fence_ops drm_sched_fence_ops_finished = {
->>       .get_driver_name = drm_sched_fence_get_driver_name,
->>       .get_timeline_name = drm_sched_fence_get_timeline_name,
->> +#ifdef CONFIG_DEBUG_FS
->> +    .enable_signaling = drm_sched_enable_signaling,
->> +#endif
->
-> Adding the callback should not be necessary.
-sure, I will remove this change.
->
->>       .release = drm_sched_fence_release_finished,
->>   };
->>   diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
->> b/drivers/gpu/drm/scheduler/sched_main.c
->> index e0ab14e0fb6b..140e3d8646e2 100644
->> --- a/drivers/gpu/drm/scheduler/sched_main.c
->> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->> @@ -961,7 +961,9 @@ static int drm_sched_main(void *param)
->>               s_fence->parent = dma_fence_get(fence);
->>               /* Drop for original kref_init of the fence */
->>               dma_fence_put(fence);
->
-> Uff, not related to your patch but that looks wrong to me. The 
-> reference can only be dropped after the call to dma_fence_add_callback().
->
-Shall I take care with this patch or I will submit separate one ?
->> -
->> +#ifdef CONFIG_DEBUG_FS
->> + dma_fence_enable_sw_signaling(&s_fence->finished);
->> +#endif
->
-> This should always be called, independent of the config options set.
->
-> Christian.
-
-sure, I will remove the Config check.
-
-~arvind
-
->
->>               r = dma_fence_add_callback(fence, &sched_job->cb,
->>                              drm_sched_job_done_cb);
->>               if (r == -ENOENT)
->

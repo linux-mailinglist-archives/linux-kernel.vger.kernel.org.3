@@ -2,146 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C7E5AC8F8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02FD5AC8FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 05:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235920AbiIEDKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 23:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
+        id S235931AbiIEDKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 23:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235911AbiIEDKR (ORCPT
+        with ESMTP id S235901AbiIEDKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 23:10:17 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7039F1CFE2
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 20:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662347416; x=1693883416;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+pWEk4rY6xlC1Kq+N6uT1/KgGQz+2KW6sD2sIkWVS7c=;
-  b=Ce5yvkXvKiZly1DFO9xyXzfW/OOjmOgfKV6dLi/6qEgMEVbxXAkanISc
-   t9ekInqDKjh8B8TPqeBZTkfe8Oa7j5tPihrjVGjkiXMuesvjNHgW/oDlG
-   chPqutBGy46pWi1Zkjqrc1/cCy8p5dowv87jQv5XiYyxDJzhGqZAAntVb
-   cV4tFHh6UdWJYzH/YfMGL4OBYaVPvMpBiyo1ltT7+XNQchM7sFVnbYHWq
-   XE4LmpMasdPhlvrh37D+jSDmkSdv7vuUO/UaE0nfcDIRQfcVCu5w/Oii2
-   iVApz2EKfO4nSQJOEazUEC7tO8h5lK0vch5eFFyeZx9mf2ILZT27T2+6q
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="283289278"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="283289278"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 20:10:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="941946866"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Sep 2022 20:10:13 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oV2V3-0003lF-0R;
-        Mon, 05 Sep 2022 03:10:13 +0000
-Date:   Mon, 5 Sep 2022 11:09:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/lazy.2022.09.03b 38/40]
- include/net/dst.h:230:2: error: call to __compiletime_assert_401 declared
- with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct dst_entry,
- __refcnt) & 63
-Message-ID: <202209051011.pAmcAnkK-lkp@intel.com>
+        Sun, 4 Sep 2022 23:10:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B180C1114B
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Sep 2022 20:10:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4458A38625;
+        Mon,  5 Sep 2022 03:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662347427; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=W/MLllXjzybsXPJWu2E4vY9RqlvmdcidUV1t25DTGms=;
+        b=QE2kWbLlqrC1kyK3ai3F1jPIROFXMtp0/0GDGS9a8KBRtsEVxDu+l9XGsPK1iBYOMCLtOe
+        GpGLWbJwR2i+NCzn0ZjUoPTZPCXmZ/ElFbcnlQ8TlX6I/JuNlvYhrXPG1fKhCHe54Bk6sA
+        aQl4gPWN1B16yEZZXKDyTfQy6zbdVqo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662347427;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=W/MLllXjzybsXPJWu2E4vY9RqlvmdcidUV1t25DTGms=;
+        b=KpfxdY3TW/Xrugb7T4FShDjUqtfv+Y9Ciss5tKJ8qJa6RcGk1SpcnRZZeiBxmOQ7VrsxvF
+        lwkvd9lFcrGEGKAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7DA5A139F9;
+        Mon,  5 Sep 2022 03:10:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id a7jcG6JoFWMeHwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Mon, 05 Sep 2022 03:10:26 +0000
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: [PATCH v2 0/3] page_owner: print stacks and their counter
+Date:   Mon,  5 Sep 2022 05:10:09 +0200
+Message-Id: <20220905031012.4450-1-osalvador@suse.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/lazy.2022.09.03b
-head:   485ca0ab99b3e10ff521fff226c3c8fe48fad488
-commit: c944944108dcac62942ab154ce09e96afcd190c5 [38/40] rcu: Add per-CB tracing for queuing, flush and invocation.
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220905/202209051011.pAmcAnkK-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/c944944108dcac62942ab154ce09e96afcd190c5
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/lazy.2022.09.03b
-        git checkout c944944108dcac62942ab154ce09e96afcd190c5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash net/sched/
+Changes v1 -> v2:
+	- Add feedback from Michal, Marco and Ammar (Thanks!)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi,
 
-All errors (new ones prefixed by >>):
+page_owner is a great debug functionality tool that gets us to know
+about all pages that have been allocated/freed and their stacktrace.
+This comes very handy when e.g: debugging leaks, as with some scripting
+we might be able to see those stacktraces that are allocating pages
+but not freeing theme.
 
-   In file included from net/sched/act_tunnel_key.c:12:
-   In file included from include/net/geneve.h:5:
-   In file included from include/net/udp_tunnel.h:5:
-   In file included from include/net/ip_tunnels.h:13:
-   In file included from include/net/dsfield.h:12:
-   In file included from include/linux/ipv6.h:93:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:66:
->> include/net/dst.h:230:2: error: call to __compiletime_assert_401 declared with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct dst_entry, __refcnt) & 63
-           BUILD_BUG_ON(offsetof(struct dst_entry, __refcnt) & 63);
-           ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:354:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:342:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:335:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:218:1: note: expanded from here
-   __compiletime_assert_401
-   ^
-   1 error generated.
+In my experience, that is one of the most useful cases, but it can get
+really tedious to screen through all pages aand try to reconstruct the
+stack <-> allocated/freed relationship. There is a lot of noise
+to cancel off.
 
+This patch aims to fix that by adding a new functionality into page_owner.
+What this does is to create a new read-only file "page_owner_stacks",
+which prints only the allocating stacktraces and their counting, being that
+the times the stacktrace has allocated - the times it has freed.
 
-vim +/error +230 include/net/dst.h
+So we have a clear overview of stacks <-> allocated/freed relationship
+without the need to fiddle with pages and trying to match free stacktraces
+with allocated stacktraces.
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16  223  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  224  static inline void dst_hold(struct dst_entry *dst)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  225  {
-5635c10d976716 Eric Dumazet   2008-11-16  226  	/*
-5635c10d976716 Eric Dumazet   2008-11-16  227  	 * If your kernel compilation stops here, please check
-8b207e7374c244 David Miller   2017-11-28  228  	 * the placement of __refcnt in struct dst_entry
-5635c10d976716 Eric Dumazet   2008-11-16  229  	 */
-5635c10d976716 Eric Dumazet   2008-11-16 @230  	BUILD_BUG_ON(offsetof(struct dst_entry, __refcnt) & 63);
-44ebe79149ff41 Wei Wang       2017-06-17  231  	WARN_ON(atomic_inc_not_zero(&dst->__refcnt) == 0);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  232  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  233  
+This is achieved by adding a new refcount_t field in the stack_record struct,
+incrementing that refcount_t everytime the same stacktrace allocates,
+and decrementing it when it frees a page. Details can be seen in the
+respective patches.
 
-:::::: The code at line 230 was first introduced by commit
-:::::: 5635c10d976716ef47ae441998aeae144c7e7387 net: make sure struct dst_entry refcount is aligned on 64 bytes
+We also create another file called "page_owner_threshold", which let us
+specify a threshold, so when when reading from "page_owner_stacks",
+we will only see those stacktraces which counting goes beyond the
+threshold we specified.
 
-:::::: TO: Eric Dumazet <dada1@cosmosbay.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+A PoC can be found below:
+
+# cat /sys/kernel/debug/page_owner_threshold
+ 0
+# cat /sys/kernel/debug/page_owner_stacks > stacks_full.txt
+# head -32 stacks_full.txt
+ prep_new_page+0x10d/0x180
+ get_page_from_freelist+0x1bd6/0x1e10
+ __alloc_pages+0x194/0x360
+ alloc_page_interleave+0x13/0x90
+ new_slab+0x31d/0x530
+ ___slab_alloc+0x5d7/0x720
+ __slab_alloc.isra.85+0x4a/0x90
+ kmem_cache_alloc+0x455/0x4a0
+ acpi_ps_alloc_op+0x57/0x8f
+ acpi_ps_create_scope_op+0x12/0x23
+ acpi_ps_execute_method+0x102/0x2c1
+ acpi_ns_evaluate+0x343/0x4da
+ acpi_evaluate_object+0x1cb/0x392
+ acpi_run_osc+0x135/0x260
+ acpi_init+0x165/0x4ed
+ do_one_initcall+0x3e/0x200
+stack count: 2
+
+ free_pcp_prepare+0x287/0x5c0
+ free_unref_page+0x1c/0xd0
+ __mmdrop+0x50/0x160
+ finish_task_switch+0x249/0x2b0
+ __schedule+0x2c3/0x960
+ schedule+0x44/0xb0
+ futex_wait_queue+0x70/0xd0
+ futex_wait+0x160/0x250
+ do_futex+0x11c/0x1b0
+ __x64_sys_futex+0x5e/0x1d0
+ do_syscall_64+0x37/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+stack count: 1
+
+ 
+
+# echo 10000 > /sys/kernel/debug/page_owner_threshold
+# cat /sys/kernel/debug/page_owner_stacks > stacks_10000.txt
+# cat stacks_10000.txt 
+ prep_new_page+0x10d/0x180
+ get_page_from_freelist+0x1bd6/0x1e10
+ __alloc_pages+0x194/0x360
+ folio_alloc+0x17/0x40
+ page_cache_ra_unbounded+0x96/0x170
+ filemap_get_pages+0x23d/0x5e0
+ filemap_read+0xbf/0x3a0
+ __kernel_read+0x136/0x2f0
+ kernel_read_file+0x197/0x2d0
+ kernel_read_file_from_fd+0x54/0x90
+ __do_sys_finit_module+0x89/0x120
+ do_syscall_64+0x37/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+stack count: 36195
+
+ prep_new_page+0x10d/0x180
+ get_page_from_freelist+0x1bd6/0x1e10
+ __alloc_pages+0x194/0x360
+ folio_alloc+0x17/0x40
+ page_cache_ra_unbounded+0x96/0x170
+ filemap_get_pages+0x23d/0x5e0
+ filemap_read+0xbf/0x3a0
+ new_sync_read+0x106/0x180
+ vfs_read+0x16f/0x190
+ ksys_read+0xa5/0xe0
+ do_syscall_64+0x37/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+stack count: 44484
+
+ prep_new_page+0x10d/0x180
+ get_page_from_freelist+0x1bd6/0x1e10
+ __alloc_pages+0x194/0x360
+ folio_alloc+0x17/0x40
+ page_cache_ra_unbounded+0x96/0x170
+ filemap_get_pages+0xdd/0x5e0
+ filemap_read+0xbf/0x3a0
+ new_sync_read+0x106/0x180
+ vfs_read+0x16f/0x190
+ ksys_read+0xa5/0xe0
+ do_syscall_64+0x37/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+stack count: 17874
+
+Oscar Salvador (3):
+  lib/stackdepot: Add a refcount field in stack_record
+  mm, page_owner: Add page_owner_stacks file to print out only stacks
+    and their counter
+  mm,page_owner: Filter out stacks by a threshold counter
+
+ include/linux/stackdepot.h |  15 ++++-
+ lib/stackdepot.c           | 121 ++++++++++++++++++++++++++++++++-----
+ mm/kasan/common.c          |   3 +-
+ mm/page_owner.c            |  88 +++++++++++++++++++++++++--
+ 4 files changed, 207 insertions(+), 20 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.3
+

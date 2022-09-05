@@ -2,225 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F955ACE45
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFB35ACE15
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236695AbiIEImC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
+        id S236657AbiIEImL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236779AbiIEIl5 (ORCPT
+        with ESMTP id S236115AbiIEImJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:41:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796A7FFA;
-        Mon,  5 Sep 2022 01:41:56 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2858Qrud015938;
-        Mon, 5 Sep 2022 08:41:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=9UVYFgAh52ib3j1YI92FCeEQVdbURKw9mP4lweIvr0k=;
- b=DxM5DSlf0liBUCP0qKi5JSYwrrHVviKSNkLQsH7Oq669nrMypLkj00+3w1jmfMLlpo+H
- kgbI70QpevVaVV1B+HbYoSmtSmKrI4ZS2Ol3GAB4ITQ05U2WtXwPzEddXa0PRiPcxYM9
- oVzVuANphJbK77wQzzXuOZU4Y7ey+Z6SgHtLg2t8ytTDjnsKTDi52c1+OVTCJFS4mHST
- AJSvNNmmHJgfWy8/UoJnQGvhPuSWNNUpviHLJMz8qHA01nl70r2NjoO8JokVTRjn3Wus
- d49OIcfNYRPsugHoZxY67ZnfSCXmkOAlh2JwBwOFK0M+ndTLqLUstZmRqGAdk6xdYV4k ug== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jddkxrcdw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 08:41:56 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2858S6Xi020143;
-        Mon, 5 Sep 2022 08:41:55 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jddkxrcd4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 08:41:55 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2858a6Yw012606;
-        Mon, 5 Sep 2022 08:41:53 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3jbxj8t5dx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 08:41:53 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2858foZj43123062
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 5 Sep 2022 08:41:50 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 11368A4051;
-        Mon,  5 Sep 2022 08:41:50 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 75506A4040;
-        Mon,  5 Sep 2022 08:41:49 +0000 (GMT)
-Received: from li-c6ac47cc-293c-11b2-a85c-d421c8e4747b.ibm.com.com (unknown [9.171.66.232])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  5 Sep 2022 08:41:49 +0000 (GMT)
-From:   Pierre Morel <pmorel@linux.ibm.com>
-To:     kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, svens@linux.ibm.com
-Subject: [PATCH] KVM: s390: vsie: fix crycb virtual vs physical usage
-Date:   Mon,  5 Sep 2022 10:41:48 +0200
-Message-Id: <20220905084148.234821-1-pmorel@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 5 Sep 2022 04:42:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029A313D12
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:42:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 33D885FCEA;
+        Mon,  5 Sep 2022 08:42:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662367326; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9cc8jXMXq+VJC2r3/qujYRpXcnXfJqIxBUW+wzkamH4=;
+        b=qf/ZGiG4gMPlQj0AV4Xc7iRzlifaGgIelGPhY240Nhv/BE4Z2H/UnTZfFiGieAHFRrXLa2
+        5CpNc66fXnoP5GRDnQazM1QnVEF0/g6kPQm08fAQN6+kiG+W5IqxQU+ZqOBTmj3HKHPO/j
+        GNDCxX90QLHWkAG2SneLqM//GlA2o1c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662367326;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9cc8jXMXq+VJC2r3/qujYRpXcnXfJqIxBUW+wzkamH4=;
+        b=5A2UkiOXsyB+LpFSG7lgJSeayBGtMBU9SgpITbyv7h8BSB3dpS8d7ELJAV6f+jysgoUemq
+        B5CpncrwMUAmv6Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1D61D139C7;
+        Mon,  5 Sep 2022 08:42:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eeM6Bl62FWNvEwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 05 Sep 2022 08:42:06 +0000
+Message-ID: <293a35ea-332f-3ed6-8060-bbde3ac53fa6@suse.de>
+Date:   Mon, 5 Sep 2022 10:42:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qzyyhsdbhk_HKC3RJSbea-c0eDXaVkWo
-X-Proofpoint-GUID: _dYIp8JSws_NfReCVE7EP-nm6mZwofKx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-05_05,2022-09-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209050040
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 11/12] drm/udl: Don't re-initialize stuff at retrying the
+ URB list allocation
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220816153655.27526-1-tiwai@suse.de>
+ <20220816153655.27526-12-tiwai@suse.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220816153655.27526-12-tiwai@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------uUZ8zSrEp9CNOJe2a8igipW0"
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prepare VSIE for architectural changes where lowmem kernel real and
-kernel virtual address are different.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------uUZ8zSrEp9CNOJe2a8igipW0
+Content-Type: multipart/mixed; boundary="------------rpmQu0OUpKS0BH0rKyEHbUUr";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Message-ID: <293a35ea-332f-3ed6-8060-bbde3ac53fa6@suse.de>
+Subject: Re: [PATCH 11/12] drm/udl: Don't re-initialize stuff at retrying the
+ URB list allocation
+References: <20220816153655.27526-1-tiwai@suse.de>
+ <20220816153655.27526-12-tiwai@suse.de>
+In-Reply-To: <20220816153655.27526-12-tiwai@suse.de>
 
-When we get the original crycb from the guest crycb we can use the
-phys_to_virt transformation, which will use the host transformations,
-but we must use an offset to calculate the guest real address apcb
-and give it to read_guest_real().
+--------------rpmQu0OUpKS0BH0rKyEHbUUr
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
----
- arch/s390/kvm/vsie.c | 37 ++++++++++++++++++++++---------------
- 1 file changed, 22 insertions(+), 15 deletions(-)
+DQoNCkFtIDE2LjA4LjIyIHVtIDE3OjM2IHNjaHJpZWIgVGFrYXNoaSBJd2FpOg0KPiB1ZGxf
+YWxsb2NfdXJiX2xpc3QoKSByZXRpcmVzIHRoZSBhbGxvY2F0aW9uIGlmIHRoZXJlIGlzIG5v
+IGVub3VnaCByb29tDQo+IGxlZnQsIGFuZCBpdCByZWluaXRpYWxpemVzIHRoZSBzdHVmZiB1
+bm5lY2Vzc2FyaWx5IHN1Y2ggYXMgdGhlIGxpbmtlZA0KPiBsaXN0IGhlYWQgYW5kIHRoZSB3
+YWl0cXVldWUsIHdoaWNoIGNvdWxkIGJlIGhhcm1mdWwuICBUaG9zZSBzaG91bGQgYmUNCj4g
+b3V0c2lkZSB0aGUgcmV0cnkgbG9vcC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFRha2FzaGkg
+SXdhaSA8dGl3YWlAc3VzZS5kZT4NCg0KQWNrZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0
+emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS91ZGwv
+dWRsX21haW4uYyB8IDcgKysrLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlv
+bnMoKyksIDQgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUv
+ZHJtL3VkbC91ZGxfbWFpbi5jIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfbWFpbi5jDQo+
+IGluZGV4IDE5ZGM4MzE3ZTg0My4uYzFmNGI2MTk5OTQ5IDEwMDY0NA0KPiAtLS0gYS9kcml2
+ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3Vk
+bC91ZGxfbWFpbi5jDQo+IEBAIC0xODcsMTUgKzE4NywxNCBAQCBzdGF0aWMgaW50IHVkbF9h
+bGxvY191cmJfbGlzdChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LCBpbnQgY291bnQsIHNpemVf
+dCBzaXplKQ0KPiAgIAlzdHJ1Y3QgdXNiX2RldmljZSAqdWRldiA9IHVkbF90b191c2JfZGV2
+aWNlKHVkbCk7DQo+ICAgDQo+ICAgCXNwaW5fbG9ja19pbml0KCZ1ZGwtPnVyYnMubG9jayk7
+DQo+IC0NCj4gLXJldHJ5Og0KPiAtCXVkbC0+dXJicy5zaXplID0gc2l6ZTsNCj4gICAJSU5J
+VF9MSVNUX0hFQUQoJnVkbC0+dXJicy5saXN0KTsNCj4gLQ0KPiAgIAlpbml0X3dhaXRxdWV1
+ZV9oZWFkKCZ1ZGwtPnVyYnMuc2xlZXApOw0KPiAgIAl1ZGwtPnVyYnMuY291bnQgPSAwOw0K
+PiAgIAl1ZGwtPnVyYnMuYXZhaWxhYmxlID0gMDsNCj4gICANCj4gK3JldHJ5Og0KPiArCXVk
+bC0+dXJicy5zaXplID0gc2l6ZTsNCj4gKw0KPiAgIAl3aGlsZSAodWRsLT51cmJzLmNvdW50
+ICogc2l6ZSA8IHdhbnRlZF9zaXplKSB7DQo+ICAgCQl1bm9kZSA9IGt6YWxsb2Moc2l6ZW9m
+KHN0cnVjdCB1cmJfbm9kZSksIEdGUF9LRVJORUwpOw0KPiAgIAkJaWYgKCF1bm9kZSkNCg0K
+LS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VT
+RSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQw
+OSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2No
+w6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
-index 94138f8f0c1c..f37851c9b1ab 100644
---- a/arch/s390/kvm/vsie.c
-+++ b/arch/s390/kvm/vsie.c
-@@ -138,9 +138,12 @@ static int prepare_cpuflags(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
- }
- /* Copy to APCB FORMAT1 from APCB FORMAT0 */
- static int setup_apcb10(struct kvm_vcpu *vcpu, struct kvm_s390_apcb1 *apcb_s,
--			unsigned long apcb_o, struct kvm_s390_apcb1 *apcb_h)
-+			unsigned long crycb_o, struct kvm_s390_apcb1 *apcb_h)
- {
- 	struct kvm_s390_apcb0 tmp;
-+	unsigned long apcb_o;
-+
-+	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb0);
- 
- 	if (read_guest_real(vcpu, apcb_o, &tmp, sizeof(struct kvm_s390_apcb0)))
- 		return -EFAULT;
-@@ -157,14 +160,18 @@ static int setup_apcb10(struct kvm_vcpu *vcpu, struct kvm_s390_apcb1 *apcb_s,
-  * setup_apcb00 - Copy to APCB FORMAT0 from APCB FORMAT0
-  * @vcpu: pointer to the virtual CPU
-  * @apcb_s: pointer to start of apcb in the shadow crycb
-- * @apcb_o: pointer to start of original apcb in the guest2
-+ * @crycb_o: real guest address to start of original guest crycb
-  * @apcb_h: pointer to start of apcb in the guest1
-  *
-  * Returns 0 and -EFAULT on error reading guest apcb
-  */
- static int setup_apcb00(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
--			unsigned long apcb_o, unsigned long *apcb_h)
-+			unsigned long crycb_o, unsigned long *apcb_h)
- {
-+	unsigned long apcb_o;
-+
-+	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb0);
-+
- 	if (read_guest_real(vcpu, apcb_o, apcb_s,
- 			    sizeof(struct kvm_s390_apcb0)))
- 		return -EFAULT;
-@@ -178,15 +185,19 @@ static int setup_apcb00(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
-  * setup_apcb11 - Copy the FORMAT1 APCB from the guest to the shadow CRYCB
-  * @vcpu: pointer to the virtual CPU
-  * @apcb_s: pointer to start of apcb in the shadow crycb
-- * @apcb_o: pointer to start of original guest apcb
-+ * @crycb_o: real guest address to start of original guest crycb
-  * @apcb_h: pointer to start of apcb in the host
-  *
-  * Returns 0 and -EFAULT on error reading guest apcb
-  */
- static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
--			unsigned long apcb_o,
-+			unsigned long crycb_o,
- 			unsigned long *apcb_h)
- {
-+	unsigned long apcb_o;
-+
-+	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb1);
-+
- 	if (read_guest_real(vcpu, apcb_o, apcb_s,
- 			    sizeof(struct kvm_s390_apcb1)))
- 		return -EFAULT;
-@@ -200,7 +211,7 @@ static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
-  * setup_apcb - Create a shadow copy of the apcb.
-  * @vcpu: pointer to the virtual CPU
-  * @crycb_s: pointer to shadow crycb
-- * @crycb_o: pointer to original guest crycb
-+ * @crycb_o: real address of original guest crycb
-  * @crycb_h: pointer to the host crycb
-  * @fmt_o: format of the original guest crycb.
-  * @fmt_h: format of the host crycb.
-@@ -215,10 +226,6 @@ static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
- 	       struct kvm_s390_crypto_cb *crycb_h,
- 	       int fmt_o, int fmt_h)
- {
--	struct kvm_s390_crypto_cb *crycb;
--
--	crycb = (struct kvm_s390_crypto_cb *) (unsigned long)crycb_o;
--
- 	switch (fmt_o) {
- 	case CRYCB_FORMAT2:
- 		if ((crycb_o & PAGE_MASK) != ((crycb_o + 256) & PAGE_MASK))
-@@ -226,18 +233,18 @@ static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
- 		if (fmt_h != CRYCB_FORMAT2)
- 			return -EINVAL;
- 		return setup_apcb11(vcpu, (unsigned long *)&crycb_s->apcb1,
--				    (unsigned long) &crycb->apcb1,
-+				    crycb_o,
- 				    (unsigned long *)&crycb_h->apcb1);
- 	case CRYCB_FORMAT1:
- 		switch (fmt_h) {
- 		case CRYCB_FORMAT2:
- 			return setup_apcb10(vcpu, &crycb_s->apcb1,
--					    (unsigned long) &crycb->apcb0,
-+					    crycb_o,
- 					    &crycb_h->apcb1);
- 		case CRYCB_FORMAT1:
- 			return setup_apcb00(vcpu,
- 					    (unsigned long *) &crycb_s->apcb0,
--					    (unsigned long) &crycb->apcb0,
-+					    crycb_o,
- 					    (unsigned long *) &crycb_h->apcb0);
- 		}
- 		break;
-@@ -248,13 +255,13 @@ static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
- 		switch (fmt_h) {
- 		case CRYCB_FORMAT2:
- 			return setup_apcb10(vcpu, &crycb_s->apcb1,
--					    (unsigned long) &crycb->apcb0,
-+					    crycb_o,
- 					    &crycb_h->apcb1);
- 		case CRYCB_FORMAT1:
- 		case CRYCB_FORMAT0:
- 			return setup_apcb00(vcpu,
- 					    (unsigned long *) &crycb_s->apcb0,
--					    (unsigned long) &crycb->apcb0,
-+					    crycb_o,
- 					    (unsigned long *) &crycb_h->apcb0);
- 		}
- 	}
--- 
-2.31.1
+--------------rpmQu0OUpKS0BH0rKyEHbUUr--
 
+--------------uUZ8zSrEp9CNOJe2a8igipW0
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMVtl0FAwAAAAAACgkQlh/E3EQov+B/
+MxAAumV6LAPveYKLPGYTpSNj8WJkx1LX+3MdQ3RSTsSmR69A8V/MnyZ7h5fHc1flu/FvD9fqfpE8
+vl8l2oGH4FCqex+QoUHJTmg+8ddDCyF4xdtmfpz1ocl9Yjqv5y+0b5U50uUtS4lYZvewBLESpXCU
+MXML+tnzDwtP3u2r3AOUqs1pAlDaDLX4q3cgEgG3s903FbG7aGj/13RsVolauVFZ/Ib+JcVxVAY3
+wAP434yGArPYQrihWSOgSFRSql3zdQksi90jrkXmZ9YjtaHTk2LgDjL7rttDTEuc74DjEJzQKd9a
+W8hsABhJFBvW8ZFa9qrHJV9i9S7efJP2fWzHechEHmDkQO4s2Wff261ywjbbx0v57IAY2Oef2Vah
+yvTcMYQDuK3lw7QhQo0n0ROV9JP3bMB/QFGDfcIuC32QAhh/+XxHoB9ufrQ9NvDkjgkC6GgLGKqZ
+tjaaXlX2SfQcL/OU9sgUxLzRiOtc1luIz3qRuWaTHCJjk3URUnqR6rGgsdScatmY1VcuuG/yeWd1
+B8O26WI9zzReoI/qcsvbz5/YO3eWC6tiGHZsbH471VcDtKOifOOfTKIc7QU4sEtck9JZTfZ7grRz
+2YJ3CbT4WYZgTN03X/qoMsTxdJ0NCayHxmo9KaV3AVQiM734DHmUgC/GVrLCy/uYb5kjFOEx4uxA
+/nw=
+=duDI
+-----END PGP SIGNATURE-----
+
+--------------uUZ8zSrEp9CNOJe2a8igipW0--

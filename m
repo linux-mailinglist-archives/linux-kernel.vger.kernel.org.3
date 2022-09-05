@@ -2,124 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672205AD0C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2E45AD0C7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237913AbiIEKz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
+        id S237659AbiIEKzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237258AbiIEKzP (ORCPT
+        with ESMTP id S237975AbiIEKys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:55:15 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2E1422EE;
-        Mon,  5 Sep 2022 03:55:12 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id m5so6089163qkk.1;
-        Mon, 05 Sep 2022 03:55:12 -0700 (PDT)
+        Mon, 5 Sep 2022 06:54:48 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B4420BE0
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:54:43 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bq23so12574391lfb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 03:54:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=u5wXdybY4V4FdQrWKDhVN8YtAVKPzLButJ1sTRP8l1Y=;
-        b=fN9ls9YPkyuUBAxr4wBmegmBCd5C9P/xaFPwXqy2FgkVzhIWNFNVR0bIehn1eXCf3d
-         zobAQyMxj0Z6zjuSqQChSLqXx/lGBZnOoXZuh0swZ9USSGOks25+oXU6FAesXBD3v2DQ
-         L68l4C/DyY0LtBFJIREWTz0QAYiKWOW4FJBp9fKNmjWxzb09XWs8F+aM06q4SUWIESBO
-         xHTM6IpS/sM1qQMre3AApRlHWbfBdhbDuAOnnGrdzMosW5f0QYLusQvgZq38fCbtCj8+
-         st+OCZ16eP1EI4yU9tRWvtbyzF+xtAD5mGA4eMQrLw3MtKQV7zXu1TtVJ7pKICr8G27y
-         D+Cg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=3EON71xpMwuE31HszjcxT0gv8fFt5vL8HY5cDtEoyUE=;
+        b=U1rmQSpkYInIJ/w1y8qPLW9s27eUufq+xhfDRiiOgutlRZ8eSnIVG0cyxQc6PX7PZq
+         V/B/5YEQNA1Xa1SLFx3AbD1wUDkbR11eIGe5mIE2HphZxL5FwvlluUgRoscbGHUiL37I
+         90zmwQ0nZFyBBWp+VIkCARI20ma06uBcRk0nVB2kMBjRC1YgN8TXwv/73t0WQSlNKM3V
+         6v6SunHROv1+f93O7tIPgkfNKneq6bpx0SHa2I+uA8PpugEhFt2QC451keADaOsUSXDt
+         NL2E9ykTKxGL4JyXKMBdGaQqgTvkf2LJ4dVQDTmL982JmKtFoF3qZkQjiCI9aq5M683Y
+         UJzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=u5wXdybY4V4FdQrWKDhVN8YtAVKPzLButJ1sTRP8l1Y=;
-        b=iCF+vFyW1X0U5onqqsgr4WsMGvgQc8QdesqcUTSXerfcDdDTdP+BHyAHrkvJJmJVmw
-         7gmYHEsmRvaYihzi/LOTQ1wK7NhiGLL68nV1Tob0bvzvrfeNO0QeCTfBaUStLn1LX8QC
-         JyKEWD5DrH+zo7QoiLjBIHtaX561FaQVYxG8JikTiudYBRJGmG1FaZqOSEK5N+Qwoqd2
-         xnwpbht2Z3qLzlEhiOIDMevMkuMbTJHQ8EfqyKIsR1ly/1CTNJP9n1golQWQ0GIyAaFR
-         ihIQ7Y2+GM6H1/KAj3Mfc1zB3sTwnzn99vD5xl58i8knNEwZDPizWHdR1cAVBRYpB4+c
-         VvhQ==
-X-Gm-Message-State: ACgBeo3PEoA0wyl9AnwO90gb2PLcVqzya8eCKckLHIcLbfN+GkyOWR5R
-        Sv9oIjoYodvjpUT/OK90SdzSaL3hcl9mevGSE2g=
-X-Google-Smtp-Source: AA6agR4kYjGXWf3gIvqIWbBUJGizexBviWISl//lL9gbx6ZDHQvEVsxtbzoy40VfO0zOsVmlCvX9hRiizwzJ1xcnYOU=
-X-Received: by 2002:a05:620a:2987:b0:6ba:dc04:11ae with SMTP id
- r7-20020a05620a298700b006badc0411aemr31582222qkp.748.1662375311598; Mon, 05
- Sep 2022 03:55:11 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=3EON71xpMwuE31HszjcxT0gv8fFt5vL8HY5cDtEoyUE=;
+        b=yQcN5d0qWz1y1G1cNSk+hcdZpoG4qkhdpX0rKRrr5iE8rvG2FRNVzN15Bqaju+cG9c
+         A6tF/KjpmVPXNadOMdH+ICioSKOJHMwvUdamECfiW+ylU639J/QW4UGjknHlHShC61cj
+         HwOds8gWBkgaSlT0OkzE95Y8qWi/Z4+Vx/rWKJ5qUmEYB/GwZdPsvcbc9kAtHw8061DX
+         bPJKpT3mQWU1TZu1teMHtXNqM3ResCrbC/Bi6Xh+vkC4DBua89IggoxZ1hW/2ac9wksg
+         rIGTMfTrTLVp4SfH8AWnZQsYsTKYVwahOce0xLczJsubSSjT4Aw+xUAlaG0YkbVODl9/
+         HHaA==
+X-Gm-Message-State: ACgBeo2nFi9CHI72XbpeRJyUbxAJoyz3bo7TCjlWSqqyT7Y1bTZn7wt6
+        MqTWBPe1qFCX44q+Xy/MAMeK7A==
+X-Google-Smtp-Source: AA6agR4HAtf2siphc2MwmgM2lBhxpekezqteaTDXFaXJ9HVvuX+dtGDD8Bie5+TFY2HMGRqAUk6zxw==
+X-Received: by 2002:a05:6512:39c6:b0:48b:9d1d:fd9c with SMTP id k6-20020a05651239c600b0048b9d1dfd9cmr17826526lfu.633.1662375281813;
+        Mon, 05 Sep 2022 03:54:41 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id c5-20020ac25f65000000b0048a9603399csm1158685lfc.116.2022.09.05.03.54.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 03:54:41 -0700 (PDT)
+Message-ID: <3933cc0c-a99c-7bda-bbb2-c7b2e9f84cf5@linaro.org>
+Date:   Mon, 5 Sep 2022 12:54:39 +0200
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-1-b29adfb27a6c@gmail.com>
- <20220905071902.fv4uozrsttk3mosu@pali> <CAHp75Vf5R03nq6JmpVcVNX9L5CwM-uOmF39oHSZFP3QJe+GExQ@mail.gmail.com>
- <20220905105341.z2pjlpljitws3j6l@pali>
-In-Reply-To: <20220905105341.z2pjlpljitws3j6l@pali>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Sep 2022 13:54:35 +0300
-Message-ID: <CAHp75VedhWXbEG6kpObbpnyPE3M3dCM7nEyupJr+rwKj0kVC8w@mail.gmail.com>
-Subject: Re: [PATCH v1 01/11] PCI: tegra: switch to using devm_fwnode_gpiod_get
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 09/14] arm64: dts: qcom: sm6115: Add UFS nodes
+Content-Language: en-US
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Dechesne <nicolas.dechesne@linaro.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
+ <20220901072414.1923075-10-iskren.chernev@gmail.com>
+ <a0204dc3-af13-6b0b-d779-0f207d1aff7e@linaro.org>
+ <488be3d3-d4c4-6200-be99-b85e6ac72c34@gmail.com>
+ <180f706d-3304-3a5a-82b7-f37948e5d100@linaro.org>
+ <b6424212-75c1-4f42-da01-ae4ce5dc1b68@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b6424212-75c1-4f42-da01-ae4ce5dc1b68@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 1:53 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> On Monday 05 September 2022 13:49:21 Andy Shevchenko wrote:
+On 05/09/2022 12:45, Iskren Chernev wrote:
+> 
+>>>
+>>> I'll list all remaining issues with description/explanation in v2. The fact
+>>> that some bindings break on all DTBs present doesn't help either.
+>>
+>> We're working on this... It's quite a lot of effort, especially when new
+>> warnings are being added. :)
+> 
+> I understand. Is there an up-for-grabs list, or any schema fixes are welcome?
 
-...
+Any fixes are welcomed, but check if someone did not post it. For
+bindings conversion, the easiest is with "dfn:old-schema.txt" on
+https://lore.kernel.org/all/.
 
-> > It's not the same dev and its node in this case. There is one reset
-> > for _all_ ports, here is the reset on _per port_ basis.
->
-> aardvark is single port controller. So it is basically same.
+We have some Linaro internal tracking, but maybe it would be useful to
+expose it to avoid duplication of work and to track better what is still
+to do/fix.
 
-Yep, just replied to my message.
++Cc Nicolas,
+Are we interested in some public tracking not only upstream status but
+also actual things to do (like DTS fixes, DT schema conversions)? It
+might be quite a lot of effort for us, but if community is engaged, they
+would offload us in task tracking system.
 
---=20
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Krzysztof

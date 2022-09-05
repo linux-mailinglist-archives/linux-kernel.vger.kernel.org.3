@@ -2,130 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7255F5AD8A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 19:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84DA5AD8AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiIER5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 13:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S231416AbiIESA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 14:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiIER5a (ORCPT
+        with ESMTP id S229518AbiIESAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 13:57:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FED63FA18;
-        Mon,  5 Sep 2022 10:57:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0E8561454;
-        Mon,  5 Sep 2022 17:57:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA8CC433D7;
-        Mon,  5 Sep 2022 17:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662400648;
-        bh=jqNKDLC/PXJE+UoPBPoIoMdMLlWH+aYP+LxAm3vOm5Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s0CeVAtrx5xVylj0Q5omR37zCgiYccLxm3fUHuOt7j6AG2JFLoH3gl9lQnR/djDey
-         rmc7lpNYRHqYM06v2MOk1iU7L8vYWkzPOpf8aqGJXf/mnmyYKjhBr5OBfqXcNnuMZQ
-         9O4dPHeMltYjsYhJJLfs2ko6S1lwdDk+IIZgX150=
-Date:   Mon, 5 Sep 2022 19:57:25 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>, stable-commits@vger.kernel.org,
-        johan+linaro@kernel.org, Felipe Balbi <balbi@kernel.org>
-Subject: Re: Patch "usb: dwc3: qcom: fix peripheral and OTG suspend" has been
- added to the 5.19-stable tree
-Message-ID: <YxY4hbjs0Y0877Ns@kroah.com>
-References: <20220905125309.1037700-1-sashal@kernel.org>
- <YxXyd5H9TLWKUbWy@hovoldconsulting.com>
- <YxXz7LBh5Y4DSd4W@sashalap>
- <YxX15QkMDV+0amk8@hovoldconsulting.com>
- <YxX29eiH0qyyRk9x@sashalap>
- <YxX4QT6eeRiatmX+@hovoldconsulting.com>
- <YxX7R/EAynZC/iGr@sashalap>
- <YxYO+u0rAg029yNl@hovoldconsulting.com>
- <YxYrS3z/nYFYzoTh@sashalap>
+        Mon, 5 Sep 2022 14:00:24 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85FD2612D;
+        Mon,  5 Sep 2022 11:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662400822; x=1693936822;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Eh/xw1+J5xp9FOGQqFCGHq3ic13Sy42VEYyyfiqZmHo=;
+  b=PYRscV5kTmemC3paubJepjL7JS1eX3dF/4/0kAcUCE677f7LuHUUnNfM
+   QVNDYGAnFC7iwTpqW+cRo7FZeIywR6gWL7kp05NQpSQ/1PEhOe43PCeXt
+   uHbIRUZXrBs3RArZGahNJ/pm7mHf4T9ahhDeOH4GPMekLZ6U5+jDqYtQJ
+   rPh9TuctUiZz/aKDY0LK1mWVCs4TfE2jksvsMOp3eQNkruTmhNP6h/eyx
+   /H5L8FnzxtE49rD+9iZ3qUXSTY28SpFNFCtS5Zjq7GIy9tY5NFPhhXNDp
+   qRDnqEwJR7iM2i1LE6cZ9JszcL+3HROniHn0niqAR2kK6TTjyos/MHp+u
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="279446843"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="279446843"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 11:00:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="590991845"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 05 Sep 2022 11:00:19 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4E3D0101; Mon,  5 Sep 2022 21:00:35 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v1 1/1] pinctrl: meson: Switch to use fwnode instead of of_node
+Date:   Mon,  5 Sep 2022 21:00:34 +0300
+Message-Id: <20220905180034.73132-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxYrS3z/nYFYzoTh@sashalap>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 01:00:59PM -0400, Sasha Levin wrote:
-> On Mon, Sep 05, 2022 at 05:00:10PM +0200, Johan Hovold wrote:
-> > On Mon, Sep 05, 2022 at 09:36:07AM -0400, Sasha Levin wrote:
-> > > On Mon, Sep 05, 2022 at 03:23:13PM +0200, Johan Hovold wrote:
-> > > >On Mon, Sep 05, 2022 at 09:17:41AM -0400, Sasha Levin wrote:
-> > > >> On Mon, Sep 05, 2022 at 03:13:09PM +0200, Johan Hovold wrote:
-> > > >> >On Mon, Sep 05, 2022 at 09:04:44AM -0400, Sasha Levin wrote:
-> > > >> >> On Mon, Sep 05, 2022 at 02:58:31PM +0200, Johan Hovold wrote:
-> > > >> >> >On Mon, Sep 05, 2022 at 08:53:09AM -0400, Sasha Levin wrote:
-> > > >> >> >>     Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> > > >> >> >
-> > > >> >> >This commit doesn't exist in 5.19 (and earlier trees), shouldn't your
-> > > >> >> >scripts check for that?
-> > > >> >>
-> > > >> >> They do - it was backported to 5.19.
-> > > >> >
-> > > >> >What?! Why on earth would 6895ea55c385 ("usb: dwc3: qcom: Configure
-> > > >> >wakeup interrupts during suspend") be backported to stable?
-> > > >> >
-> > > >> >Please drop that patch instead. It's essentially a new feature and is in
-> > > >> >any case in no way stable material.
-> > > >>
-> > > >> Right, it was picked up as a dependency of a872ab303d5d ("usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup")
-> > > >
-> > > >That's wrong too, it's not a dependency for that fix.
-> > > 
-> > > Right, it may not strictly be one, but we're trying to bring in
-> > > dependencies as is without modifying the patch is it's far less error
-> > > prone, and keeps future backports easy, as long as backporting those
-> > > isn't riskier.
-> > 
-> > It should only be some context that have changed. Backporting a known
-> > broken and non-trivial feature patch for that can't be right. It is
-> > certainly riskier.
-> > 
-> > > In this case, if I were to drop a872ab303d5d I'd also need to drop:
-> > > 
-> > > a872ab303d5d ("usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup")
-> > > 6498a96c8c9c ("usb: dwc3: qcom: fix runtime PM wakeup")
-> > > 
-> > > >So does this mean you're dropping the patches that should not be
-> > > >backported?
-> > > 
-> > > Having said the above, at the end it's your patches and your call, let
-> > > me know if you're okay with dropping a872ab303d5d, a872ab303d5d, and
-> > 
-> > You mentioned a872ab303d5d twice here.
-> > 
-> > > 6498a96c8c9c from all trees and I'll do that.
-> > 
-> > This one didn't have a CC stable tag so not sure why you're backporting
-> > that one either.
-> > 
-> > Just pick
-> > 
-> > 	a872ab303d5d ("usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup")
-> > 
-> > which was the only patch I had marked for stable and fix up the trivial
-> > context change (an unrelated function has been added after the new
-> > helper in mainline).
-> 
-> Okay, this should be done. Please take a look at the queue to confirm.
+GPIO library now accepts fwnode as a firmware node, so
+switch the driver to use it.
 
-At a quick glance, looks good to me.  I'll go through the other USB cc:
-stable patches tomorrow and make sure.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/meson/pinctrl-meson.c | 7 +++----
+ drivers/pinctrl/meson/pinctrl-meson.h | 4 +++-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-thanks,
+diff --git a/drivers/pinctrl/meson/pinctrl-meson.c b/drivers/pinctrl/meson/pinctrl-meson.c
+index cc2cd73ff8f9..530f3f934e19 100644
+--- a/drivers/pinctrl/meson/pinctrl-meson.c
++++ b/drivers/pinctrl/meson/pinctrl-meson.c
+@@ -608,6 +608,7 @@ static int meson_gpiolib_register(struct meson_pinctrl *pc)
+ 
+ 	pc->chip.label = pc->data->name;
+ 	pc->chip.parent = pc->dev;
++	pc->chip.fwnode = pc->fwnode;
+ 	pc->chip.request = gpiochip_generic_request;
+ 	pc->chip.free = gpiochip_generic_free;
+ 	pc->chip.set_config = gpiochip_generic_config;
+@@ -619,8 +620,6 @@ static int meson_gpiolib_register(struct meson_pinctrl *pc)
+ 	pc->chip.base = -1;
+ 	pc->chip.ngpio = pc->data->num_pins;
+ 	pc->chip.can_sleep = false;
+-	pc->chip.of_node = pc->of_node;
+-	pc->chip.of_gpio_n_cells = 2;
+ 
+ 	ret = gpiochip_add_data(&pc->chip, pc);
+ 	if (ret) {
+@@ -678,8 +677,8 @@ static int meson_pinctrl_parse_dt(struct meson_pinctrl *pc)
+ 		return -EINVAL;
+ 	}
+ 
+-	gpio_np = to_of_node(gpiochip_node_get_first(pc->dev));
+-	pc->of_node = gpio_np;
++	pc->fwnode = gpiochip_node_get_first(pc->dev);
++	gpio_np = to_of_node(pc->fwnode);
+ 
+ 	pc->reg_mux = meson_map_resource(pc, gpio_np, "mux");
+ 	if (IS_ERR_OR_NULL(pc->reg_mux)) {
+diff --git a/drivers/pinctrl/meson/pinctrl-meson.h b/drivers/pinctrl/meson/pinctrl-meson.h
+index b197827027bd..34fc4e8612e4 100644
+--- a/drivers/pinctrl/meson/pinctrl-meson.h
++++ b/drivers/pinctrl/meson/pinctrl-meson.h
+@@ -12,6 +12,8 @@
+ #include <linux/types.h>
+ #include <linux/module.h>
+ 
++struct fwnode_handle;
++
+ struct meson_pinctrl;
+ 
+ /**
+@@ -131,7 +133,7 @@ struct meson_pinctrl {
+ 	struct regmap *reg_gpio;
+ 	struct regmap *reg_ds;
+ 	struct gpio_chip chip;
+-	struct device_node *of_node;
++	struct fwnode_handle *fwnode;
+ };
+ 
+ #define FUNCTION(fn)							\
+-- 
+2.35.1
 
-greg k-h

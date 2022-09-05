@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DB45AD400
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB1B5AD409
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238069AbiIENfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
+        id S238103AbiIENfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238040AbiIENfG (ORCPT
+        with ESMTP id S238052AbiIENfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:35:06 -0400
+        Mon, 5 Sep 2022 09:35:08 -0400
 Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60047.outbound.protection.outlook.com [40.107.6.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1966322295
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 06:35:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66594A823
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 06:35:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YsY/IdH4GAzPp096gB1L844rFrv9BuWpY7He4caaoj6Vg7nAmM8FAaIKZ5gmzk5/f4QY9V0mIIKlmeFFj00ALE0eEiQQGeQZ0glrqzh2akYPWeYxpN396oHf4JMIGOno0vKvRMA9i3w7VQHTXflxDvM3NlGvF2BV8i71zbtxfW6JowBCJThrjNdqlz7lTDPjFv7cpxxHzGaf37k9/cMIbboDb07F4MHft9A47cCX7LFGFYhj/Tx7tl7kY5pKqlKgve9bVrRfoHIwDJJ45lP6CtdzlnueSHbG1rKiHQ7jQc8jfT2/rUoPHTv/njuEZqB7O4R/JTvl/VDPi6CZfpYMXg==
+ b=RZ5AC86Ywwn8Hf1T4PKaMc+Fw4ofq0mP8n1nsI1Y/2vD1hPhEesk69ZQABQ/qd2v4MliMajxn9/plpuVoFLBawzEHO+bb0ZJ3FhQ4PKIa8rqJGrfSFmK8YuJNkuEQWLrjzv8OVZeWkMJUp/Jy05D27Tqapn4rsE6kcHLUisAzIzOK2Y2osxbH4Ca2uiC8RQp69+KdN8P0gsDuUdbOsPoZ/qIVvw3CfpStseTseRzJrgxjN887yyNpk0IxD0+79RWDesTR7iOO57ILPVMFcWTG9NADCWRVLS4QdCsjcBSP5JfyQ26RUiRLEQTz60jxMRD8pY4JhIwquxf+/WLvMUfUQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xcCLvgTpwkHq1/FO0qm84w6sR6hR0QNPu4jIAmnLxJw=;
- b=BiQ2n8IKlOf1l8b8ni5loIpkGgvM9mRpFnf2liE7IJgR3GU1UfYQPKtIWjMImdsj1Liw+gssSfZs0fKRtcVLyOK7OGYpfxR3flivCp5a9DWirErqwaLJwQud60D0L9+w9ttY1XXbZ03Ds905byqNxjWw0MP76jY7p+R710Bxr90W2Y6CKJAtn6W9AWxCrE9Pl6MeE2feGdz8kvlVYILAi5sg6/sXOf8f2f8qwTwp903SmCbOV8wzCrZBANGF6/c7H2AX+CcTkE+x9rv3vgdH8LsNlGx56PNE6vTVGearwBtsoSLb1ijLPDWy73BlhLWycOAYMof9nWu3weff3dcx3g==
+ bh=c6FQW9hNUjaVzqCmSWBiXp+ijFABj5QYHO3sceWPnqI=;
+ b=MVJnLOOuCSIKEM8qdoDghaBjEQc818Lixi8FlDZOmZ0DauHIwdtmNS+G6XkBR0/jswp0kXQeQ6EMc+xOJsbXfjSGA7dRaGiVV0Fs7HjnHtjb1CYCZEymB+1tKYWyfKsgGpBOfVUz1d+AuBaBVxgF4klAT66xXi/aTwtsq4SN+MD8bobn+fwby7Ex0Zmhtz2VnMcXum7AG4lu5OazSyRT9ALqm6Xg/wZ9zMRg4rXaf0ey/7Pch9IuLKvQlhdeF88OU56zlIqBWIsdKNFi8LzgRnl9nQu4kquV1xpWFBXyzmfrfDvmshUPbdeAE111c/GvjFBpQUp+yHnv2LdLBVAnnw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xcCLvgTpwkHq1/FO0qm84w6sR6hR0QNPu4jIAmnLxJw=;
- b=oCR1cQxThsQKLxusaUYVq38XLPYAtDtInhJsw3VprTPVNrl5ugf9sgl3Qbknxs2n+gNiKJBrG0us/M2bAu0XTcWI1NHMScWH0N73vkA2LlAlyevwLKiGN1DEL/GSC9KH8xCu9+pe/q3jUr0mXh3cbd0duBb7jYXt9Xgqr9o8Tfc=
+ bh=c6FQW9hNUjaVzqCmSWBiXp+ijFABj5QYHO3sceWPnqI=;
+ b=jewVn4cBl5ae/UwtQgfo85bKnVhRS4uOT/RB5d+mT1uQQPXJjazqKBVpRxKYc55QZPfHngPbBJApITTA2dWHd4XnjHwxDL//Qx8s/UyV+Uio3PXpQhP5WJv3eL/DpWy0MUYFO44hdNEQIy36s5m+gMex3+9QXduhMrGnrgKko44=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
  by AM0PR04MB5585.eurprd04.prod.outlook.com (2603:10a6:208:133::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Mon, 5 Sep
- 2022 13:35:01 +0000
+ 2022 13:35:04 +0000
 Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
  ([fe80::6cde:8704:ed0a:c87b]) by DU2PR04MB8630.eurprd04.prod.outlook.com
  ([fe80::6cde:8704:ed0a:c87b%4]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
- 13:35:01 +0000
+ 13:35:04 +0000
 From:   Pankaj Gupta <pankaj.gupta@nxp.com>
 To:     gaurav.jain@nxp.com, sahil.malhotra@nxp.com,
         kshitiz.varshney@nxp.com, horia.geanta@nxp.com,
         linux-kernel@vger.kernel.org, V.Sethi@nxp.com
 Cc:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Subject: [RFC PATCH HBK: 6/8] KEYS: trusted: caam based black key
-Date:   Mon,  5 Sep 2022 20:06:29 +0530
-Message-Id: <20220905143631.2832-7-pankaj.gupta@nxp.com>
+Subject: [RFC PATCH HBK: 7/8] caam alg: symmetric key ciphers are updated
+Date:   Mon,  5 Sep 2022 20:06:30 +0530
+Message-Id: <20220905143631.2832-8-pankaj.gupta@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220905143631.2832-1-pankaj.gupta@nxp.com>
 References: <20220905143631.2832-1-pankaj.gupta@nxp.com>
@@ -56,51 +56,51 @@ X-ClientProxiedBy: SG2PR04CA0173.apcprd04.prod.outlook.com (2603:1096:4::35)
  To DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3898c21e-45df-4ed9-5bdb-08da8f436f05
+X-MS-Office365-Filtering-Correlation-Id: 2efeaea3-1928-4f7c-2542-08da8f4370a4
 X-MS-TrafficTypeDiagnostic: AM0PR04MB5585:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oMtBugOOwgSE4BglKUrfDniJAbSxwpt0IvBHHaaxJblTfqIA0qu0yyfS4ARB0khvGrvNQLuMv0m82t9tJEW7d4XH7slzkx2hE6iKUe7Ab08Q0gaTSXtFu4m1mtbcTV2fiSunjX/5hmU7juF3VRwYlB1rL/sBmIvVYq67viR4A2edUM3DJh0/qUopxPthW/Q8RNQUdbLFjnVdAoJUmuNJwuNGH2XrB3RCEQCJuqR54wFv+vt1kYkGEsiZMziYB5W3o9iRuK29GhQ9/k8N0iO+MCYlhqX3RW4M20Dz4aQr5Ok/dsmAh4WvKWQCJbGcHHchM6roOiDou2dCqAz6EisxIPJd3+O5KxYjNHUWq9NovuBnRoFkrQvJF0WSR2GyIFCiuJgGG5gppqj/FatbxEfyBAJ0KdogbIqNQIvYG8CjiOdrbE5iCoW3k721dEvY9LLDsHFYYqIIxuPA4LjXruX+eXnv+aBDOFPJ70sb7lin71KC/q3aS/9KCNLWaLPxeNoU+oMFn0hyKfeqPademXk2O+KCVvHrceFCaYu49zmOKTL7trokPlXXwIigrojSIRshPlcTUKf4Eg4rSspeqNDRb/z73BvDUdBmp/mGsxOB9kf6mNI3sVhsxJEe20FuFWXHWM7uuilWoWO12WhcQgE9+1LiepQUYLK1BP//lpA3T/zYWZuoqbxHPHhnhLacXTU8IgpSiRW86+yw55BGyxUaOSVlxZo1BV8Fvw+qNwOz/40wxiixu1Y3qlRMLdDKJS/6sxz+iP/GcpSZE7eYAbVdSQ==
+X-Microsoft-Antispam-Message-Info: VUyd8wIkuOcXVIzFu/7UihEegU5Qpq1kvScwAzNAooOQoe55ABSUGNgeXdkPIrtoC/Bq/aiBIE5Ykd06PrrdZk59ntf1xUr5m/8vYcEOgwHKyCeAHx++O64ZzQmeeU6n9+1kvQV5PsNU24HdnTIveDANOEgz33vA8ZcJ0VIJSUCv/aU8w4AzpGozgvibYZFY3Z7IZFN24fNC4P/OROEcKFz42p2jf3aL1wzvcoBQqLMCrtzok3PPORg+LcQObfV5nRFz+S+mG2uHI2Gp14ZlwB0SccKEcdWQpRFTXJ9iGFt5h6spxvn33HyWQa1b0MxljVwtGhv2xTXQFOES6G0mJHZv2Mzk5yU9FIMCvW36jAWCTG7O3tRGsGbnOo3NCXi82+T1XpGYhI5996FaKI5jLH8DiJmxX5oXmFxNK8Nc7tX7XykQdCZSN28Ks0QMwdv4HoxlJfbdTA+f20tYNEZoHMxZ3YbZxJux6F8s/BYV/J5JPJrGVJNLUtZLQVO9rdn+M4w3FZDi5bexkDFaqRBecFJ4+1ScHAHDbFV+BLoV8/qxC7WfNj+rf+wN5l2nD7a+e/N2oGzD7dxDtPT6BAVt8b5NJyKmEghqR12hKNhggSEN3mY5I+DNk69pmgCLml/1qOmTjBWxEG46UyyzMM3fV1F85s+w2320cmii2R/jHS1eU0HY+lh7bMO34vY7UPWOeO5iJSfx/fwAL5wRR7n02iYf79jFKDOoMTKxBZCenTAk3l3gszDGnUwCEl/gdzHltMFjXMSe8aIEhRoU2IaA3w==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(376002)(346002)(39860400002)(366004)(316002)(86362001)(6636002)(36756003)(2906002)(38350700002)(38100700002)(44832011)(8936002)(5660300002)(8676002)(4326008)(83380400001)(66476007)(66946007)(6512007)(41300700001)(6486002)(2616005)(1076003)(186003)(6666004)(6506007)(478600001)(66556008)(26005)(52116002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d9kkCtj9mJvCxyhfWDlfuhyWT6bpMTni8Mqy2Hu2bCIs5G5dGiWk1LCKe7VE?=
- =?us-ascii?Q?HizPJCqUbJ8Y1TBJaEkZb0fUgVoZIMO0v/rxoLmgyNRmIc6Vw4xYsJVJbX3h?=
- =?us-ascii?Q?/PpI57C4QMKpwejf+BvGuzoPL9Hnc+xr+MMFOysS/C3aBxPLeZG6U1Sx1+/O?=
- =?us-ascii?Q?203r/pC6+SonsLdyzssQ36z4JyyHwPPOhoLwtj8zL/1h5X4jK2YlyfQ5bDhT?=
- =?us-ascii?Q?E3Zg2uqN3MrbJjfv1dLxTQff/Ftw3N/z0IXJl39vrJmna8rd1aHRsOmNfwlE?=
- =?us-ascii?Q?1Z1QZUvhBGE+7bpTd0Ve3TWI/XPYj96qw4/jZH6iz4NcjOsmVvdZlWGE+s9w?=
- =?us-ascii?Q?lyVGeGP+pPwg6xp8FHQu5db01A3Xp6pO1zFcpgTqx+JebtKGk75XHSfcVJi0?=
- =?us-ascii?Q?BPiguLA5zZ+MvSxVGz66oX1ti2vpzdoDEucBffpY50/rd5Hf7f3sxGXOtcgo?=
- =?us-ascii?Q?CK14QGCJGBzftRIfkWBWw1FmL++dBQlFeWf7ZWChegqMUAMILsDXp6XHqYRE?=
- =?us-ascii?Q?Bx5OXC/LVjVt5Ife0ZRQ/5f5laBkkra5l2hDilq0xviFVcgELJacB8mBtxvk?=
- =?us-ascii?Q?v7r3BrhfYk1/JGeOrdoMNZztT3FGOFdGy+sd5SCWptyaCkE6g2R5p7RVawqt?=
- =?us-ascii?Q?fFe6YNLd4gKp84sFP3hNQB1Mtv3K4QMwgXsLBjuCe8kPKsWy8lV2ABGYCLE7?=
- =?us-ascii?Q?MkigQIHLhesP4B2FY1To3J/XNXWfxJulkwNAye861Tq0NM9pkF8M1Eg0Mzxt?=
- =?us-ascii?Q?nCejbsrD7GBCc51CloqlasvB/XhNDI6mUE2zV8h+eb5nuk2MuH4DAfIP5ndI?=
- =?us-ascii?Q?TJKq4LKON/rmvi4l5l7+/sZpmNMyqmi0CXBJVJXiU/oifr4NZ+UHNYaBbwpf?=
- =?us-ascii?Q?uEtWZcaK8ccXJ7q+YH2GupAWydTp9ARJX8SjfzqmNRzshjexc8GTGgGh0Zzl?=
- =?us-ascii?Q?6+FOKoZp/DsZB85ZxfarTgZdzWQ18Jt+wNc6s/L3FnooMdkt7LRXMbgIJsUw?=
- =?us-ascii?Q?apdGcLAPTX4YjRbQzYmJnX8pzxDAKJ0sqDFF7Zj0kQjghO0FYMvafuDQfCmF?=
- =?us-ascii?Q?j1C8UM9homQPKWtf2TFkhv8ceBDAqm3l6JCy9l94DtO0B2kSs8nviv5MVgKy?=
- =?us-ascii?Q?sKJvFKvoUHf1dDM9yK/aRD080mRm5kMTkrqhPvjvOxBiiEEOJQOc/S76yolL?=
- =?us-ascii?Q?GlKG2XB+IiRaOziNymgaCy0FaFzHZNwltLXsyZ/WerfiftoL4c8eDBAB7kTP?=
- =?us-ascii?Q?MIkgGJv/NGlV1NEB+j7w/SxADSWcIRA3f/Urn9FhT9Rfh69C//CRAct2Oz4Q?=
- =?us-ascii?Q?h6176TVRlNQ/uKFC3+3rOvip2qQZSevV/75u77tzPZ/wSS9wWWGBf5L6IuXd?=
- =?us-ascii?Q?kS3OdNcBiuvV/BWSuqA7+yFLZHjrbR2CUF0EfTLUem9X4BwEst1j5xPp4m1H?=
- =?us-ascii?Q?HAxPyJrwLn0DUbvXT3kiokK+zIR1mYkQZkXJ8Z579A62uSLUEsn2nVIVOx6q?=
- =?us-ascii?Q?VjxLs/vnTSlM4JQsngvUDwyDynz4XWAAK96KlEq/ARDmKj1uC3hMBJbklgJl?=
- =?us-ascii?Q?fdRhvD3OQ/3ffTtWcr32AHjz4xbPiVhJU4ExSK/q?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bOm6J4A5mxHNHwLo6RhcrLl6c7w91SqU17vnpjq94ux7bhwo+fUa9ijYkz7m?=
+ =?us-ascii?Q?h/k6U7LtwEF4TI2Xq7Sh0c+IXH1wIpk+3Q11ywH7MkrSCZfH8y3G2NNloyMG?=
+ =?us-ascii?Q?2gNjduuB7lCTmnpsCegTkA4yl18td+grGiCr21bh/XHKUHE0+zgMgTIzYEqm?=
+ =?us-ascii?Q?FmEHkvWm9X5+I650pLLsPPGvZh5/FmfN5AP9cFci2Vc209BNSsfAcFxYyJqU?=
+ =?us-ascii?Q?qj4h1YWphPnKnhjVqkxyrbvrHmXg4cvZs5AO8VWtYYzvJonquagHNk4w/+n2?=
+ =?us-ascii?Q?tUrdsJkaWG+AuRWGXMrBg5nyvfP+kYJiLYKBNRl69bSJHQP6sj3KOQJmyKey?=
+ =?us-ascii?Q?f4nKxXcexN9AuPoIrEQZ7K21443/t6SNRoxiT3+oSFRzQg/FvtKGXUES7Bsg?=
+ =?us-ascii?Q?LHd54tELEhSrxsAE2IFR95ZKfRFqX8q+yujX+59node07NWtOdjVfvFpU877?=
+ =?us-ascii?Q?P+GQlMukBFFMOtO1OfBwtPNsTWJ0An3LHYiGmpczywF7tRH7dJlhkghgPIBB?=
+ =?us-ascii?Q?5yeEzsO6kVu1tWOKNGHlH9vFN+ny+KXRE2VGmMn6pH+4T8yKpHsKLeDobN6x?=
+ =?us-ascii?Q?33qSzrJA94I8zxe4BqBVANJ6QE8LmqVal4b0LVefcUCv4OmUx9Td7cBzfVDN?=
+ =?us-ascii?Q?C+HNWukAYTQEF6E7sejSCVzHGZ/lWzL5DAUnHbQ8boBM5z2R4jKXE7RXO8lk?=
+ =?us-ascii?Q?3KJeJqUV0Zdbnwr0ktI5i7P1PFlF3EwntMJzt9Smmj/LZtTxM0p0LwBCbquE?=
+ =?us-ascii?Q?41c5lhwjQI0X5UpiOWQNBwy/O9DuojD1g1gA3QIioZWEiYZvOUcrO+5Rky6A?=
+ =?us-ascii?Q?HCTBtmNnnILXf+SerTwJpn3KVQEQSwZKf1vmVrv7OtfdPeuh05KPUhsxJ0WS?=
+ =?us-ascii?Q?erOdbHXO/uDJAFL/KRcpBeN+zMSl6wVnAi5kW3lxRspVF60hJKbIBr+1ayX0?=
+ =?us-ascii?Q?AhxONIyjakn+tJ3Gjn7yV8qz9lUgl2C5Bss2HP3xrafMA9u0BrQBQbRXRLyM?=
+ =?us-ascii?Q?0SHdalBdSAK89KwnqZMdvuXxtnyy/ER/7UEjtnjOlisIgC+SyzLvtlTaFnfU?=
+ =?us-ascii?Q?OicXcnWxeAWDID2yM9LBkpfD4bNLXKC/7PcUVYXLi4PD4HMJB4N/SqPsVBRl?=
+ =?us-ascii?Q?oY2ZkJxM09M79sWJtwAF2Gv6cSZYOnD0oPmnW0SklAvMuGCJ9Yw8KSVqOTda?=
+ =?us-ascii?Q?DmOV/i9uALeiI5GT3wSq6cCgcYouu0tPUxLD4Ih+yK5hvuID9LvugeFaUnX7?=
+ =?us-ascii?Q?QGd94iNbCgONVtyNY8uKchOSQ1U4QeOA/oDZF4Z5LmtL39hz5uxjIzfaqkvg?=
+ =?us-ascii?Q?WLtCQwyLdTWIXC0XtCvCZxFCB4jGh6d7uiKflX0QZmExLfst9oCdsBDA/pDF?=
+ =?us-ascii?Q?j9LlqJ/MpZqLGpwuSSPi8Wa5r3MFR0FTOXZmjLklK01GDKYKj6jB+95VC9++?=
+ =?us-ascii?Q?oL+VND6aHuu5EAyeJuEmf3I4n0cY9hvK82XPKBVp+gWnxXfU58KQFhAXwFPA?=
+ =?us-ascii?Q?cvMc1FC772/HHBflOPpp3JPXbWWW9rhDCBgMLgip/EEHPPNIDbbyl+lfAgQ5?=
+ =?us-ascii?Q?HYZ3g3envpaj9rWT+bbIno13G3vsp4c4w3VqPYd2?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3898c21e-45df-4ed9-5bdb-08da8f436f05
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2efeaea3-1928-4f7c-2542-08da8f4370a4
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8630.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 13:35:01.7673
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 13:35:04.3451
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VIlZhWEDGVzADgOUNSv9HDGi5DfW4YoNIuKwE7G4RhIbA6BYUZt/uCBLLy5lhOkHAiZ7YI7sJZ266/UL9vbojA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: x0W6MeQrqP7BZRILmieH/2ZVOV/LlE/w9EdUiAEHmemRKzHXsC3aR/7AYcefVqy8zvW0bNDw3sF2m+kZMk6ISQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5585
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -112,339 +112,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- CAAM supports two types of black keys:
-  -- Plain key encrypted with ECB
-  -- Plain key encrypted with CCM
-  Note: Due to robustness, default encytption used for black key is CCM.
-
-- A black key blob is generated, and added to trusted key payload.
-  This is done as part of sealing operation, that was triggered as a result of:
-  -- new key generation
-  -- load key,
+Changes to enable:
+- To work both with black key and plain key.
+- It is supported in context of symmetric key ciphers only.
+- Based on as crypto layer's flag: tfm->is_hbk, handling for
+  h/w bound key is done.
+- Otherwise, work as previously.
 
 Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
 ---
- drivers/crypto/caam/blob_gen.c | 132 +++++++++++++++++++++++++++++----
- drivers/crypto/caam/desc.h     |   8 +-
- include/soc/fsl/caam-blob.h    |  16 ++++
- 3 files changed, 140 insertions(+), 16 deletions(-)
+ drivers/crypto/caam/caamalg.c      | 37 ++++++++++++++++++++++++++++--
+ drivers/crypto/caam/caamalg_desc.c |  8 ++++---
+ drivers/crypto/caam/desc_constr.h  |  6 ++++-
+ 3 files changed, 45 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/crypto/caam/blob_gen.c b/drivers/crypto/caam/blob_gen.c
-index 5164e62f9596..2354e3c6fc61 100644
---- a/drivers/crypto/caam/blob_gen.c
-+++ b/drivers/crypto/caam/blob_gen.c
-@@ -8,6 +8,7 @@
- #define pr_fmt(fmt) "caam blob_gen: " fmt
- 
- #include <linux/device.h>
-+#include <keys/trusted-type.h>
- #include <soc/fsl/caam-blob.h>
- 
- #include "compat.h"
-@@ -74,8 +75,16 @@ int caam_encap_blob(struct caam_blob_priv *priv,
- 	dma_addr_t dma_in, dma_out;
- 	int op = OP_PCLID_BLOB;
- 	size_t output_len;
-+	dma_addr_t dma_blk;
-+	u8 *input = info->input;
-+	u8 *blk_out;
-+	size_t input_len = info->input_len;
- 	u32 *desc;
- 	int ret;
-+	int hwbk_caam_ovhd = 0;
-+
-+	if (info->output_len < info->input_len + CAAM_BLOB_OVERHEAD)
-+		return -EINVAL;
- 
- 	if (info->key_mod_len > CAAM_BLOB_KEYMOD_LENGTH)
- 		return -EINVAL;
-@@ -83,11 +92,33 @@ int caam_encap_blob(struct caam_blob_priv *priv,
- 	op |= OP_TYPE_ENCAP_PROTOCOL;
- 	output_len = info->input_len + CAAM_BLOB_OVERHEAD;
- 
-+	if (info->is_hw_bound == 1) {
-+		op |= OP_PCL_BLOB_BLACK;
-+		if (priv->hbk_flags & HWBK_FLAGS_CAAM_CCM_ALGO_MASK) {
-+			op |= OP_PCL_BLOB_EKT;
-+			hwbk_caam_ovhd = CCM_OVERHEAD;
-+		}
-+
-+		if ((input_len + hwbk_caam_ovhd) > MAX_KEY_SIZE)
-+			return -EINVAL;
-+
-+		/* create copy of input buffer */
-+		input = kzalloc(info->input_len, GFP_KERNEL | GFP_DMA);
-+		if (!input)
-+			return -ENOMEM;
-+		memcpy(input, info->input, info->input_len);
-+
-+		/* create hw bound key on input buffer reference */
-+		blk_out = info->input;
-+
-+		info->input_len = input_len + hwbk_caam_ovhd;
-+	}
-+
- 	desc = kzalloc(CAAM_BLOB_DESC_BYTES_MAX, GFP_KERNEL | GFP_DMA);
- 	if (!desc)
- 		return -ENOMEM;
- 
--	dma_in = dma_map_single(jrdev, info->input, info->input_len,
-+	dma_in = dma_map_single(jrdev, input, input_len,
- 				DMA_TO_DEVICE);
- 	if (dma_mapping_error(jrdev, dma_in)) {
- 		dev_err(jrdev, "unable to map input DMA buffer\n");
-@@ -95,12 +126,26 @@ int caam_encap_blob(struct caam_blob_priv *priv,
- 		goto out_free;
- 	}
- 
-+	if (info->is_hw_bound == 1) {
-+		dma_blk = dma_map_single(jrdev, blk_out,
-+					 input_len + hwbk_caam_ovhd,
-+					 DMA_FROM_DEVICE);
-+		if (dma_mapping_error(jrdev, dma_out)) {
-+			dev_err(jrdev, "unable to map output DMA buffer\n");
-+			ret = -ENOMEM;
-+			goto out_unmap_in;
-+		}
-+	}
-+
- 	dma_out = dma_map_single(jrdev, info->output, output_len,
- 				 DMA_FROM_DEVICE);
- 	if (dma_mapping_error(jrdev, dma_out)) {
- 		dev_err(jrdev, "unable to map output DMA buffer\n");
- 		ret = -ENOMEM;
--		goto out_unmap_in;
-+		if (info->is_hw_bound == 1)
-+			goto out_unmap_blk;
-+		else
-+			goto out_unmap_in;
- 	}
- 
- 	/*
-@@ -112,15 +157,40 @@ int caam_encap_blob(struct caam_blob_priv *priv,
- 	 */
- 
- 	init_job_desc(desc, 0);
-+
-+	if (info->is_hw_bound == 1) {
-+		/*!1. key command used to load class 1 key register
-+		 *    from input plain key.
-+		 */
-+		append_key(desc, dma_in, input_len,
-+						CLASS_1 | KEY_DEST_CLASS_REG);
-+
-+		/*!2. Fifostore to store black key from class 1 key register. */
-+		append_fifo_store(desc, dma_blk, input_len,
-+				  LDST_CLASS_1_CCB | FIFOST_TYPE_KEY_CCM_JKEK);
-+
-+		append_jump(desc, JUMP_COND_NOP | 1);
-+	}
-+	/*!3. Load class 2 key with key modifier. */
- 	append_key_as_imm(desc, info->key_mod, info->key_mod_len,
- 			  info->key_mod_len, CLASS_2 | KEY_DEST_CLASS_REG);
--	append_seq_in_ptr_intlen(desc, dma_in, info->input_len, 0);
-+
-+	/*!4. SEQ IN PTR Command. */
-+	if (info->is_hw_bound == 1) {
-+		append_seq_in_ptr_intlen(desc, dma_blk, input_len, 0);
-+	} else {
-+		append_seq_in_ptr_intlen(desc, dma_in, input_len, 0);
-+	}
-+
-+	/*!5. SEQ OUT PTR Command. */
- 	append_seq_out_ptr_intlen(desc, dma_out, output_len, 0);
-+
-+	/*!6. BlackBlob encapsulation PROTOCOL Command. */
- 	append_operation(desc, op);
- 
- 	print_hex_dump_debug("data@"__stringify(__LINE__)": ",
--			     DUMP_PREFIX_ADDRESS, 16, 1, info->input,
--			     info->input_len, false);
-+			     DUMP_PREFIX_ADDRESS, 16, 1, input,
-+			     input_len + hwbk_caam_ovhd, false);
- 	print_hex_dump_debug("jobdesc@"__stringify(__LINE__)": ",
- 			     DUMP_PREFIX_ADDRESS, 16, 1, desc,
- 			     desc_bytes(desc), false);
-@@ -136,15 +206,19 @@ int caam_encap_blob(struct caam_blob_priv *priv,
- 				     DUMP_PREFIX_ADDRESS, 16, 1, info->output,
- 				     output_len, false);
- 	}
--
--	if (ret == 0)
-+	if (ret == 0) {
- 		info->output_len = output_len;
--
-+	}
- 	dma_unmap_single(jrdev, dma_out, output_len, DMA_FROM_DEVICE);
-+out_unmap_blk:
-+	if (info->is_hw_bound == 1) {
-+		dma_unmap_single(jrdev, dma_blk, info->input_len, DMA_TO_DEVICE);
-+	}
- out_unmap_in:
- 	dma_unmap_single(jrdev, dma_in, info->input_len, DMA_TO_DEVICE);
- out_free:
- 	kfree(desc);
-+	kfree(input);
- 
- 	return ret;
- }
-@@ -168,13 +242,41 @@ int caam_decap_blob(struct caam_blob_priv *priv,
- 	int op = OP_PCLID_BLOB;
- 	size_t output_len;
- 	u32 *desc;
-+	u8 *output = info->output;
- 	int ret;
-+	int hwbk_caam_ovhd = 0;
-+
-+	if (info->input_len < CAAM_BLOB_OVERHEAD)
-+		return -EINVAL;
- 
- 	if (info->key_mod_len > CAAM_BLOB_KEYMOD_LENGTH)
- 		return -EINVAL;
- 
- 	op |= OP_TYPE_DECAP_PROTOCOL;
- 	output_len = info->input_len - CAAM_BLOB_OVERHEAD;
-+	info->output_len = output_len;
-+
-+	if (info->is_hw_bound == 1) {
-+		op |= OP_PCL_BLOB_BLACK;
-+		if (priv->hbk_flags & HWBK_FLAGS_CAAM_CCM_ALGO_MASK) {
-+			op |= OP_PCL_BLOB_EKT;
-+			hwbk_caam_ovhd = CCM_OVERHEAD;
-+		}
-+
-+		if ((output_len + hwbk_caam_ovhd) > MAX_KEY_SIZE)
-+			return -EINVAL;
-+
-+		/* In case of HW Bound Key, lengths have different purpose:
-+		 * -       output_len = HW encrypted key length.
-+		 * - info->output_len = Length of HW Bound Key Payload
-+		 *                     (Payload = Header + outlen)
-+		 */
-+		info->output_len = output_len + hwbk_caam_ovhd;
-+
-+		output_len += hwbk_caam_ovhd;
-+
-+		output = info->output;
-+	}
- 
- 	desc = kzalloc(CAAM_BLOB_DESC_BYTES_MAX, GFP_KERNEL | GFP_DMA);
- 	if (!desc)
-@@ -188,7 +290,7 @@ int caam_decap_blob(struct caam_blob_priv *priv,
- 		goto out_free;
- 	}
- 
--	dma_out = dma_map_single(jrdev, info->output, output_len,
-+	dma_out = dma_map_single(jrdev, output, output_len,
- 				 DMA_FROM_DEVICE);
- 	if (dma_mapping_error(jrdev, dma_out)) {
- 		dev_err(jrdev, "unable to map output DMA buffer\n");
-@@ -207,8 +309,8 @@ int caam_decap_blob(struct caam_blob_priv *priv,
- 	init_job_desc(desc, 0);
- 	append_key_as_imm(desc, info->key_mod, info->key_mod_len,
- 			  info->key_mod_len, CLASS_2 | KEY_DEST_CLASS_REG);
--	append_seq_in_ptr_intlen(desc, dma_in, info->input_len, 0);
--	append_seq_out_ptr_intlen(desc, dma_out, output_len, 0);
-+	append_seq_in_ptr(desc, dma_in, info->input_len, 0);
-+	append_seq_out_ptr(desc, dma_out, output_len, 0);
- 	append_operation(desc, op);
- 
- 	print_hex_dump_debug("data@"__stringify(__LINE__)": ",
-@@ -226,13 +328,10 @@ int caam_decap_blob(struct caam_blob_priv *priv,
- 		wait_for_completion(&testres.completion);
- 		ret = testres.err;
- 		print_hex_dump_debug("output@"__stringify(__LINE__)": ",
--				     DUMP_PREFIX_ADDRESS, 16, 1, info->output,
-+				     DUMP_PREFIX_ADDRESS, 16, 1, output,
- 				     output_len, false);
- 	}
- 
--	if (ret == 0)
--		info->output_len = output_len;
--
- 	dma_unmap_single(jrdev, dma_out, output_len, DMA_FROM_DEVICE);
- out_unmap_in:
- 	dma_unmap_single(jrdev, dma_in, info->input_len, DMA_TO_DEVICE);
-@@ -267,6 +366,9 @@ struct caam_blob_priv *caam_blob_gen_init(void)
- 		return ERR_PTR(-ENODEV);
- 	}
- 
-+	ctrlpriv->blob_priv.hbk_flags = HWBK_FLAGS_CAAM_CCM_ALGO_MASK;
-+	ctrlpriv->blob_priv.jrdev = jrdev;
-+
- 	return &ctrlpriv->blob_priv;
- }
- EXPORT_SYMBOL(caam_blob_gen_init);
-diff --git a/drivers/crypto/caam/desc.h b/drivers/crypto/caam/desc.h
-index e13470901586..41b2d0226bdf 100644
---- a/drivers/crypto/caam/desc.h
-+++ b/drivers/crypto/caam/desc.h
-@@ -4,7 +4,7 @@
-  * Definitions to support CAAM descriptor instruction generation
+diff --git a/drivers/crypto/caam/caamalg.c b/drivers/crypto/caam/caamalg.c
+index d3d8bb0a6990..2c96aecab627 100644
+--- a/drivers/crypto/caam/caamalg.c
++++ b/drivers/crypto/caam/caamalg.c
+@@ -3,7 +3,7 @@
+  * caam - Freescale FSL CAAM support for crypto API
   *
   * Copyright 2008-2011 Freescale Semiconductor, Inc.
-- * Copyright 2018 NXP
-+ * Copyright 2018-2022 NXP
+- * Copyright 2016-2019 NXP
++ * Copyright 2016-2022 NXP
+  *
+  * Based on talitos crypto API driver.
+  *
+@@ -59,6 +59,7 @@
+ #include <crypto/engine.h>
+ #include <crypto/xts.h>
+ #include <asm/unaligned.h>
++#include <soc/fsl/caam-blob.h>
+ 
+ /*
+  * crypto alg
+@@ -734,6 +735,7 @@ static int skcipher_setkey(struct crypto_skcipher *skcipher, const u8 *key,
+ 		container_of(crypto_skcipher_alg(skcipher), typeof(*alg),
+ 			     skcipher);
+ 	struct device *jrdev = ctx->jrdev;
++	struct caam_drv_private *ctrlpriv;
+ 	unsigned int ivsize = crypto_skcipher_ivsize(skcipher);
+ 	u32 *desc;
+ 	const bool is_rfc3686 = alg->caam.rfc3686;
+@@ -741,9 +743,26 @@ static int skcipher_setkey(struct crypto_skcipher *skcipher, const u8 *key,
+ 	print_hex_dump_debug("key in @"__stringify(__LINE__)": ",
+ 			     DUMP_PREFIX_ADDRESS, 16, 4, key, keylen, 1);
+ 
++	/* Here keylen is actual key length */
+ 	ctx->cdata.keylen = keylen;
+ 	ctx->cdata.key_virt = key;
+ 	ctx->cdata.key_inline = true;
++	/* Here real key len is plain key length */
++	ctx->cdata.key_real_len = keylen;
++	ctx->cdata.key_cmd_opt = 0;
++
++	/* check if the key is HBK */
++	if (skcipher->base.is_hbk) {
++		ctrlpriv = dev_get_drvdata(jrdev->parent);
++		ctx->cdata.key_cmd_opt |= KEY_ENC;
++
++		/* check if the HBK is CCM key */
++		if (ctrlpriv->blob_priv.hbk_flags
++				& HWBK_FLAGS_CAAM_CCM_ALGO_MASK) {
++			ctx->cdata.key_cmd_opt |= KEY_EKT;
++			ctx->cdata.key_real_len = keylen - CCM_OVERHEAD;
++		}
++	}
+ 
+ 	/* skcipher_encrypt shared descriptor */
+ 	desc = ctx->sh_desc_enc;
+@@ -766,8 +785,22 @@ static int aes_skcipher_setkey(struct crypto_skcipher *skcipher,
+ 			       const u8 *key, unsigned int keylen)
+ {
+ 	int err;
++	int overhead = 0;
++	struct caam_ctx *ctx;
++	struct device *jrdev;
++	struct caam_drv_private *ctrlpriv;
++
++	if (skcipher->base.is_hbk) {
++		ctx = crypto_skcipher_ctx(skcipher);
++		jrdev = ctx->jrdev;
++		ctrlpriv = dev_get_drvdata(jrdev->parent);
++		if (ctrlpriv->blob_priv.hbk_flags
++				& HWBK_FLAGS_CAAM_CCM_ALGO_MASK)
++			overhead += CCM_OVERHEAD;
++	}
++
++	err = aes_check_keylen((keylen - overhead));
+ 
+-	err = aes_check_keylen(keylen);
+ 	if (err)
+ 		return err;
+ 
+diff --git a/drivers/crypto/caam/caamalg_desc.c b/drivers/crypto/caam/caamalg_desc.c
+index 7571e1ac913b..784acae8c9b7 100644
+--- a/drivers/crypto/caam/caamalg_desc.c
++++ b/drivers/crypto/caam/caamalg_desc.c
+@@ -2,7 +2,7 @@
+ /*
+  * Shared descriptors for aead, skcipher algorithms
+  *
+- * Copyright 2016-2019 NXP
++ * Copyright 2016-2022 NXP
   */
  
- #ifndef DESC_H
-@@ -403,6 +403,7 @@
- #define FIFOST_TYPE_PKHA_N	 (0x08 << FIFOST_TYPE_SHIFT)
- #define FIFOST_TYPE_PKHA_A	 (0x0c << FIFOST_TYPE_SHIFT)
- #define FIFOST_TYPE_PKHA_B	 (0x0d << FIFOST_TYPE_SHIFT)
-+#define FIFOST_TYPE_KEY_CCM_JKEK (0x14 << FIFOST_TYPE_SHIFT)
- #define FIFOST_TYPE_AF_SBOX_JKEK (0x20 << FIFOST_TYPE_SHIFT)
- #define FIFOST_TYPE_AF_SBOX_TKEK (0x21 << FIFOST_TYPE_SHIFT)
- #define FIFOST_TYPE_PKHA_E_JKEK	 (0x22 << FIFOST_TYPE_SHIFT)
-@@ -1001,6 +1002,11 @@
- #define OP_PCL_TLS12_AES_256_CBC_SHA384		 0xff63
- #define OP_PCL_TLS12_AES_256_CBC_SHA512		 0xff65
+ #include "compat.h"
+@@ -1391,7 +1391,8 @@ void cnstr_shdsc_skcipher_encap(u32 * const desc, struct alginfo *cdata,
  
-+/* Blob protocol protinfo bits */
-+
-+#define OP_PCL_BLOB_BLACK                        0x0004
-+#define OP_PCL_BLOB_EKT                          0x0100
-+
- /* For DTLS - OP_PCLID_DTLS */
+ 	/* Load class1 key only */
+ 	append_key_as_imm(desc, cdata->key_virt, cdata->keylen,
+-			  cdata->keylen, CLASS_1 | KEY_DEST_CLASS_REG);
++			  cdata->key_real_len, CLASS_1 | KEY_DEST_CLASS_REG
++					       | cdata->key_cmd_opt);
  
- #define OP_PCL_DTLS_AES_128_CBC_SHA		 0x002f
-diff --git a/include/soc/fsl/caam-blob.h b/include/soc/fsl/caam-blob.h
-index 380b0bcb79dc..ae2c2a6c8c23 100644
---- a/include/soc/fsl/caam-blob.h
-+++ b/include/soc/fsl/caam-blob.h
-@@ -10,12 +10,26 @@
- #include <linux/types.h>
- #include <linux/errno.h>
+ 	/* Load nonce into CONTEXT1 reg */
+ 	if (is_rfc3686) {
+@@ -1466,7 +1467,8 @@ void cnstr_shdsc_skcipher_decap(u32 * const desc, struct alginfo *cdata,
  
-+#define HWBK_FLAGS_CAAM_CCM_ALGO_MASK   0x01
-+
-+/*
-+ * CCM-Black Key will always be at least 12 bytes longer,
-+ * since the encapsulation uses a 6-byte nonce and adds
-+ * a 6-byte ICV. But first, the key is padded as necessary so
-+ * that CCM-Black Key is a multiple of 8 bytes long.
-+ */
-+#define NONCE_SIZE 6
-+#define ICV_SIZE 6
-+#define CCM_OVERHEAD (NONCE_SIZE + ICV_SIZE)
- #define CAAM_BLOB_KEYMOD_LENGTH		16
- #define CAAM_BLOB_OVERHEAD		(32 + 16)
- #define CAAM_BLOB_MAX_LEN		4096
+ 	/* Load class1 key only */
+ 	append_key_as_imm(desc, cdata->key_virt, cdata->keylen,
+-			  cdata->keylen, CLASS_1 | KEY_DEST_CLASS_REG);
++			  cdata->key_real_len, CLASS_1 | KEY_DEST_CLASS_REG
++					       | cdata->key_cmd_opt);
  
- struct caam_blob_priv {
- 	struct device *jrdev;
-+	/* Flags: whether generated trusted key, is ECB or CCM encrypted.*/
-+	uint8_t hbk_flags;
-+	uint8_t rsv[3];
- };
+ 	/* Load nonce into CONTEXT1 reg */
+ 	if (is_rfc3686) {
+diff --git a/drivers/crypto/caam/desc_constr.h b/drivers/crypto/caam/desc_constr.h
+index 62ce6421bb3f..d652bdbf3f91 100644
+--- a/drivers/crypto/caam/desc_constr.h
++++ b/drivers/crypto/caam/desc_constr.h
+@@ -3,7 +3,7 @@
+  * caam descriptor construction helper functions
+  *
+  * Copyright 2008-2012 Freescale Semiconductor, Inc.
+- * Copyright 2019 NXP
++ * Copyright 2019-2022 NXP
+  */
  
- 
-@@ -38,6 +52,8 @@ struct caam_blob_info {
- 
- 	const void *key_mod;
- 	size_t key_mod_len;
-+
-+	const char is_hw_bound;
+ #ifndef DESC_CONSTR_H
+@@ -500,6 +500,8 @@ do { \
+  * @key_virt: virtual address where algorithm key resides
+  * @key_inline: true - key can be inlined in the descriptor; false - key is
+  *              referenced by the descriptor
++ * @key_real_len: size of the key to be loaded by the CAAM
++ * @key_cmd_opt: optional parameters for KEY command
+  */
+ struct alginfo {
+ 	u32 algtype;
+@@ -508,6 +510,8 @@ struct alginfo {
+ 	dma_addr_t key_dma;
+ 	const void *key_virt;
+ 	bool key_inline;
++	u32 key_real_len;
++	u32 key_cmd_opt;
  };
  
  /**

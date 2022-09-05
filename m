@@ -2,126 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEA65ADBB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08B45ADBB3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 01:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiIEXHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 19:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        id S229733AbiIEXIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 19:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiIEXHC (ORCPT
+        with ESMTP id S229817AbiIEXIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 19:07:02 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D437C46DBD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 16:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662419219; x=1693955219;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0yEG+yi6czSDfdTB7591loWdi0xHHXveLYPJO6usfLQ=;
-  b=AozR//eqO/dgTfIdIf33q20WL6XXo/XF763+75OT+bzt5YETYBsIab9m
-   ghU6nNimFs6fqM6WGdjRgHWNqCQxU6+RgTqqm2gdFIj/G3FQC/oTh3SH5
-   FA5ciPYzdvO3dp5TWDyxfHzpDcqRj9ozHN5z7DIDSUO+DR2BtmpnpOvlb
-   4ngq3XiRxRL9WEiJTwo44KqxESIIv/UmwoLikh8kBRBrce7eU1Y9kmQbU
-   LO6zwHHV4wdXIk1m0kichBSpRTcHNw3H5upiVxPKMSA9RS9z7pxLMi4J9
-   ZOD1UAf4N70z51iU4dJyajuaSrei0jCaJW7N+AmE62SW+mWpZQCn8kAfP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="360411351"
-X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
-   d="scan'208";a="360411351"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 16:06:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
-   d="scan'208";a="756162528"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Sep 2022 16:06:57 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVLBB-0004bN-0S;
-        Mon, 05 Sep 2022 23:06:57 +0000
-Date:   Tue, 6 Sep 2022 07:06:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhan Liu <zhan.liu@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Charlene Liu <charlene.liu@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:88:14:
- warning: variable 'is_in_uma' set but not used
-Message-ID: <202209060730.VeXAC3Z7-lkp@intel.com>
+        Mon, 5 Sep 2022 19:08:37 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BF067CA8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 16:08:23 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id a15so7083459qko.4
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 16:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=PXDyNYAp8OMxsVSHWjGo5Scrwxu72x89/SDYjoWilCk=;
+        b=pmmJwWs1yIczqiHgmAH6VF4Q8GewCKk7x+LpyS+k6b6kOsOi6JOZ8UuXje3m9BWxas
+         5MRx2oN0S5l5YT2V2bombkIxnqURh/XihpSMFeo6y4obEx0epsjB7nnazZBxyyG/Uoxs
+         EYh00n9pkoa4sad7uZEhtNCGQ+oWy9uhMONYmFo33C73bZNjsyyFCvhZjGlg57pPnuZu
+         Kfq7hV24M6H6cZgT99O/zeTwB4H5CLY7rkdBdlny4UPwGrxeh5zJ0T1OoDnTeLuTWx28
+         qVRN8389YzHcFPXMkZsYFLAvvjAf5eUpaF0/7osmV/lb1+4EHYNPbSZvbpzZ2Weawz1V
+         /PCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=PXDyNYAp8OMxsVSHWjGo5Scrwxu72x89/SDYjoWilCk=;
+        b=pj/VA9ASUAJp+V7Z/72SQlbIvwb+LBEpKzXDXsDSluF2UhgikcutkYdjoK5g9dUL/f
+         Q1neWR3b3j4OTMF/0V9dHC30kwjtXLzrT2HFQG/ThrHQYZ99Z2SiMYrQav5vIyRsqICJ
+         H4Sheulwft4dmDaMEdRbNCDxyKn94tZY/RT/1k574JxDIYUZQHME6+TkYF4XSfNGfUhH
+         OQQ+3C08mVXIw9XXsgBmKpsYHTOA0BkkH+X2PxrlaMhvo6e7q60r1TcQEnV4JeLY6lLl
+         gizrK3kuQfGTS7kg21ABOJZ4OKJa7WtiEd3WventHpJwV9eKuJefERToQeuzTmrIx+Jb
+         OATw==
+X-Gm-Message-State: ACgBeo2wkettlZB+vmomJNCj6jqTH4wYby1FyM8GRQElFcE6px4oMeGE
+        YStVFf9BH6KgNHvXYYPMHyo/LQN/p5U=
+X-Google-Smtp-Source: AA6agR4xlXwJXHbEjBgYaYyixegauoapofWxJF7lSedDYjp7FruVEy1NwsnNAztbbl+PVjCb9S8QUw==
+X-Received: by 2002:a05:620a:4512:b0:6bb:7db2:3600 with SMTP id t18-20020a05620a451200b006bb7db23600mr32536370qkp.299.1662419302477;
+        Mon, 05 Sep 2022 16:08:22 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:2270:dde1:6b3e:62e9:1461])
+        by smtp.gmail.com with ESMTPSA id s8-20020a05620a0bc800b006bba46e5eeasm9566369qki.37.2022.09.05.16.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 16:08:22 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Eric Biggers <ebiggers@google.com>
+Subject: [PATCH v2 0/5] cpumask: cleanup nr_cpu_ids vs nr_cpumask_bits mess
+Date:   Mon,  5 Sep 2022 16:08:15 -0700
+Message-Id: <20220905230820.3295223-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
-commit: 3f68c01be9a2227de1e190317fe34a6fb835a094 drm/amd/display: add cyan_skillfish display support
-date:   11 months ago
-config: i386-buildonly-randconfig-r004-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060730.VeXAC3Z7-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3f68c01be9a2227de1e190317fe34a6fb835a094
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3f68c01be9a2227de1e190317fe34a6fb835a094
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
+cpumask subsystem uses nr_cpu_ids and nr_cpumask_bits interchangeably
+despite that the variables have different meaning and purpose. It makes
+some cpumask functions broken.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This series cleans that mess and adds new config FORCE_NR_CPUS that
+allows to optimize cpumask subsystem if the number of CPUs is known
+at compile-time.
 
-All warnings (new ones prefixed by >>):
+After some testing I found build broken when SMP is on and NR_CPUS == 1.
+This is addressed in a new patch #1, and in the following patch #2 that
+now declares set_nr_cpu_ids in cpumask.h (was in smp.h).
 
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c: In function 'gpu_addr_to_uma':
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:88:14: warning: variable 'is_in_uma' set but not used [-Wunused-but-set-variable]
-      88 |         bool is_in_uma;
-         |              ^~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c: In function 'dcn201_pipe_control_lock':
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:544:22: warning: variable 'hubp' set but not used [-Wunused-but-set-variable]
-     544 |         struct hubp *hubp = NULL;
-         |                      ^~~~
---
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_dpp.c: In function 'dpp201_get_optimal_number_of_taps':
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_dpp.c:185:18: warning: variable 'pixel_width' set but not used [-Wunused-but-set-variable]
-     185 |         uint32_t pixel_width;
-         |                  ^~~~~~~~~~~
+v1: https://lore.kernel.org/lkml/20220829165748.1008477-1-yury.norov@gmail.com/T/#mecbd787f8d1bff1454a4ec2fe46ad6dc168df695
+v2:
+ - don't declare nr_cpu_ids if NR_CPUS == 1;
+ - move set_nr_cpu_ids() from smp.h to cpumask.h to avoid errors in some
+   inclusion paths;
+ - drop 'default n' in FORCE_NR_CPUS option description;
+ - rebase on top of v6.0-rc4.
 
+Yury Norov (5):
+  smp: don't declare nr_cpu_ids if NR_CPUS == 1
+  smp: add set_nr_cpu_ids()
+  lib/cpumask: delete misleading comment
+  lib/cpumask: deprecate nr_cpumask_bits
+  lib/cpumask: add FORCE_NR_CPUS config option
 
-vim +/is_in_uma +88 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c
-
-    84	
-    85	static void gpu_addr_to_uma(struct dce_hwseq *hwseq,
-    86			PHYSICAL_ADDRESS_LOC *addr)
-    87	{
-  > 88		bool is_in_uma;
-    89	
-    90		if (hwseq->fb_base.quad_part <= addr->quad_part &&
-    91				addr->quad_part < hwseq->fb_top.quad_part) {
-    92			addr->quad_part -= hwseq->fb_base.quad_part;
-    93			addr->quad_part += hwseq->fb_offset.quad_part;
-    94			is_in_uma = true;
-    95		} else if (hwseq->fb_offset.quad_part <= addr->quad_part &&
-    96				addr->quad_part <= hwseq->uma_top.quad_part) {
-    97			is_in_uma = true;
-    98		} else if (addr->quad_part == 0) {
-    99			is_in_uma = false;
-   100		} else {
-   101			is_in_uma = false;
-   102		}
-   103	}
-   104	
+ arch/loongarch/kernel/setup.c |  2 +-
+ arch/mips/kernel/setup.c      |  2 +-
+ arch/x86/kernel/smpboot.c     |  4 ++--
+ arch/x86/xen/smp_pv.c         |  2 +-
+ include/linux/cpumask.h       | 22 +++++++++++-----------
+ kernel/smp.c                  |  6 ++++--
+ lib/Kconfig                   |  9 +++++++++
+ 7 files changed, 29 insertions(+), 18 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

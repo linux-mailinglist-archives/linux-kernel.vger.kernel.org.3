@@ -2,183 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091025AD92E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D235AD931
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbiIESpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 14:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S231562AbiIESp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 14:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbiIESpG (ORCPT
+        with ESMTP id S229692AbiIESpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:45:06 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DB11EAD6;
-        Mon,  5 Sep 2022 11:45:01 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id 145so9264911pfw.4;
-        Mon, 05 Sep 2022 11:45:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=bp7uubPhvNdLHMSt0aPBCCek7261kdyNq09tUdxS+hw=;
-        b=piwDQu/IQn+iTyDmrFAKLLGug2/KVIY0wExpws2cTzWbVzQSAeP21bPvOiuaRqDs2W
-         JQoerfe3i4QQz7Cj1GsYnZVIR1xKCKWMECDAl3eXr+TOFn09Ud17TXz2OPRBNMzXaQ00
-         bRAB2djvvnCoTXv68Ow/gDY8gNR87B3UphTOmg/nkljGpBLK2Kru1ca9zKlDPQvntNjO
-         mMIzgSHR8yf5hPReChlBzaYVsZgAt1UFpnPZ3NTnb1GPzkwb3HG7zv/BZtSipedU5QQ3
-         aVcP2YbTWfY0XZEJvLhnxRCKUAZXjcy0d3SAOSR8rLFHgESMgNsb387q+JmPGxUvicyP
-         hisw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=bp7uubPhvNdLHMSt0aPBCCek7261kdyNq09tUdxS+hw=;
-        b=pv8M6OMlkxMUvla4xOHTdhCTZ0jY7h9PT0oZeMjlpgZ9Xj49WB1ecxCKqeEmrZc9Y3
-         30H13ObTX5wZWkjARbZ3g4B8iSGdycvH7XxtBNs21hEhA4edBJkZ/XSrly6YBPD1LYak
-         xPJBzK0zfFluuyC0jBPbpTKQv4c7LvAjYLl8jrJOKsYhvypBxnOvp8UzzDc5aL4+adM6
-         XdXQnA5yP21z/+vrOPJXaaeouQLJe9//UoASTQQwQhB0YyFCWqB6yXJNMmQViIDQSywE
-         ckOvheDkcw4QcMmp6mg5VkTx8sxxrk9DC1KrolVE6LXe7aK59t4I0Y2q18LPzIQc3x6R
-         w6lQ==
-X-Gm-Message-State: ACgBeo1BJyvFLExgzzBywBO0vW+cnuoWWBxCIV7nsRPYBftqOwQ9fgKs
-        c9s9AuY3DaJEz8DWJXFCtMs=
-X-Google-Smtp-Source: AA6agR5Z0n78WBJ+tl3rvbtMAHs4LRm2iBpVTL/7lQ4Vdk+FtE7G2db+zR5YWnYqEMH87O6DNCB35w==
-X-Received: by 2002:a65:6cc8:0:b0:3fe:2b89:cc00 with SMTP id g8-20020a656cc8000000b003fe2b89cc00mr43555470pgw.599.1662403500241;
-        Mon, 05 Sep 2022 11:45:00 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id u15-20020a170903124f00b00176ba091cd3sm1910534plh.196.2022.09.05.11.44.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Sep 2022 11:44:59 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220831101948.f3etturccmp5ovkl@suse.de>
-Date:   Mon, 5 Sep 2022 11:44:55 -0700
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>, roman.gushchin@linux.dev,
-        dave@stgolabs.net, Matthew Wilcox <willy@infradead.org>,
-        liam.howlett@oracle.com, void@manifault.com, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
-        cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
-        42.hyeyoo@gmail.com, glider@google.com,
-        Marco Elver <elver@google.com>, dvyukov@google.com,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Arnd Bergmann <arnd@arndb.de>, jbaron@akamai.com,
-        David Rientjes <rientjes@google.com>, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        Linux MM <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
-        linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8EB7F2CE-2C8E-47EA-817F-6DE2D95F0A8B@gmail.com>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
-To:     Mel Gorman <mgorman@suse.de>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Sep 2022 14:45:53 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C925AC7F;
+        Mon,  5 Sep 2022 11:45:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662403552; x=1693939552;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EY1MjljdPNHLKX836Z9FTt6MJpjyoZ0H1rkOtcYPbbQ=;
+  b=Y5q6ojAgKp82DAFVdFm7zUX3foqm/W9z4WQML/0IkDi+/irHHs8zjKmP
+   DuPZyywTyBegQg9sjITCk6q0QSg+eXy/KsKZEPdPw3GOBiJE+DU21cJ/y
+   6H4pHI9raEBcXHOSUr6JddPsj0qq1LHim6PRNjeqPK2HH/IA5DiueIsMo
+   y7ILYyKA7lEbQqXS6A4HKrtHLPMmJOY5Ws4d7cGHruuaK4wMSCbUIfnSm
+   tOx0J1o31XjINWCaebKfKuCSp2mWuOLr5rwUVO7vsaTcryy9RZQhvElRK
+   Bf3bRr08uNUqZiopBGloP/l6H8N3dyj/VaCMljtEeeJVcRQTDADtkGFgk
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="296443327"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="296443327"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 11:45:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="682143149"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 11:45:50 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVH6T-0004RJ-1N;
+        Mon, 05 Sep 2022 18:45:49 +0000
+Date:   Tue, 6 Sep 2022 02:45:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Shixin <liushixin2@huawei.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Liu Shixin <liushixin2@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH] kernel/sysctl-test: use SYSCTL_{ZERO/ONE_HUNDRED}
+ instead of i_{zero/one_hundred}
+Message-ID: <202209060226.JaYG1goK-lkp@intel.com>
+References: <20220905124856.2233973-1-liushixin2@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905124856.2233973-1-liushixin2@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Aug 31, 2022, at 3:19 AM, Mel Gorman <mgorman@suse.de> wrote:
+Hi Liu,
 
-> On Wed, Aug 31, 2022 at 04:42:30AM -0400, Kent Overstreet wrote:
->> On Wed, Aug 31, 2022 at 09:38:27AM +0200, Peter Zijlstra wrote:
->>> On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
->>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
->>>> Code tagging framework
->>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
->>>> Code tag is a structure identifying a specific location in the =
-source code
->>>> which is generated at compile time and can be embedded in an =
-application-
->>>> specific structure. Several applications of code tagging are =
-included in
->>>> this RFC, such as memory allocation tracking, dynamic fault =
-injection,
->>>> latency tracking and improved error code reporting.
->>>> Basically, it takes the old trick of "define a special elf section =
-for
->>>> objects of a given type so that we can iterate over them at =
-runtime" and
->>>> creates a proper library for it.
->>>=20
->>> I might be super dense this morning, but what!? I've skimmed through =
-the
->>> set and I don't think I get it.
->>>=20
->>> What does this provide that ftrace/kprobes don't already allow?
->>=20
->> You're kidding, right?
->=20
-> It's a valid question. =46rom the description, it main addition that =
-would
-> be hard to do with ftrace or probes is catching where an error code is
-> returned. A secondary addition would be catching all historical state =
-and
-> not just state since the tracing started.
->=20
-> It's also unclear *who* would enable this. It looks like it would =
-mostly
-> have value during the development stage of an embedded platform to =
-track
-> kernel memory usage on a per-application basis in an environment where =
-it
-> may be difficult to setup tracing and tracking. Would it ever be =
-enabled
-> in production? Would a distribution ever enable this? If it's enabled, =
-any
-> overhead cannot be disabled/enabled at run or boot time so anyone =
-enabling
-> this would carry the cost without never necessarily consuming the =
-data.
->=20
-> It might be an ease-of-use thing. Gathering the information from =
-traces
-> is tricky and would need combining multiple different elements and =
-that
-> is development effort but not impossible.
->=20
-> Whatever asking for an explanation as to why equivalent functionality
-> cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
+Thank you for the patch! Yet something to improve:
 
-I would note that I have a solution in the making (which pretty much =
-works)
-for this matter, and does not require any kernel changes. It produces a
-call stack that leads to the code that lead to syscall failure.
+[auto build test ERROR on kees/for-next/pstore]
+[also build test ERROR on linus/master v6.0-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The way it works is by using seccomp to trap syscall failures, and then
-setting ftrace function filters and kprobes on conditional branches,
-indirect branch targets and function returns.
+url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Shixin/kernel-sysctl-test-use-SYSCTL_-ZERO-ONE_HUNDRED-instead-of-i_-zero-one_hundred/20220905-201642
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
+config: m68k-randconfig-r015-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060226.JaYG1goK-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/798f337855db358192d52c40620c4646856d19bb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liu-Shixin/kernel-sysctl-test-use-SYSCTL_-ZERO-ONE_HUNDRED-instead-of-i_-zero-one_hundred/20220905-201642
+        git checkout 798f337855db358192d52c40620c4646856d19bb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-Using symbolic execution, backtracking is performed and the condition =
-that
-lead to the failure is then pin-pointed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I hope to share the code soon.
+All errors (new ones prefixed by >>):
 
+   m68k-linux-ld: section .rodata VMA [0000000000002000,000000000096449f] overlaps section .text VMA [0000000000000400,0000000000a7156f]
+   m68k-linux-ld: kernel/sysctl-test.o: in function `sysctl_test_dointvec_read_happy_single_positive':
+>> kernel/sysctl-test.c:185: undefined reference to `sysctl_vals'
+   m68k-linux-ld: kernel/sysctl-test.o: in function `sysctl_test_dointvec_read_happy_single_negative':
+   kernel/sysctl-test.c:216: undefined reference to `sysctl_vals'
+   m68k-linux-ld: kernel/sysctl-test.o: in function `sysctl_test_dointvec_write_happy_single_positive':
+   kernel/sysctl-test.c:245: undefined reference to `sysctl_vals'
+   m68k-linux-ld: kernel/sysctl-test.o: in function `sysctl_test_dointvec_write_happy_single_negative':
+   kernel/sysctl-test.c:275: undefined reference to `sysctl_vals'
+   m68k-linux-ld: kernel/sysctl-test.o: in function `sysctl_test_api_dointvec_null_tbl_data':
+   kernel/sysctl-test.c:18: undefined reference to `sysctl_vals'
+   m68k-linux-ld: kernel/sysctl-test.o:kernel/sysctl-test.c:18: more undefined references to `sysctl_vals' follow
+   `.exit.text' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
+
+
+vim +185 kernel/sysctl-test.c
+
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  176  
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  177  /*
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  178   * Test that we can read a two digit number in a sufficiently size buffer.
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  179   * Nothing fancy.
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  180   */
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  181  static void sysctl_test_dointvec_read_happy_single_positive(struct kunit *test)
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  182  {
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  183  	int data = 0;
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  184  	/* Good table. */
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23 @185  	struct ctl_table table = {
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  186  		.procname = "foo",
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  187  		.data		= &data,
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  188  		.maxlen		= sizeof(int),
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  189  		.mode		= 0644,
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  190  		.proc_handler	= proc_dointvec,
+798f337855db358 Liu Shixin   2022-09-05  191  		.extra1		= SYSCTL_ZERO,
+798f337855db358 Liu Shixin   2022-09-05  192  		.extra2         = SYSCTL_ONE_HUNDRED,
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  193  	};
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  194  	size_t len = 4;
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  195  	loff_t pos = 0;
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  196  	char *buffer = kunit_kzalloc(test, len, GFP_USER);
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  197  	char __user *user_buffer = (char __user *)buffer;
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  198  	/* Store 13 in the data field. */
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  199  	*((int *)table.data) = 13;
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  200  
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  201  	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, KUNIT_PROC_READ,
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  202  					       user_buffer, &len, &pos));
+388ca2e024dd5e6 David Gow    2021-05-13  203  	KUNIT_ASSERT_EQ(test, 3, len);
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  204  	buffer[len] = '\0';
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  205  	/* And we read 13 back out. */
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  206  	KUNIT_EXPECT_STREQ(test, "13\n", buffer);
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  207  }
+2cb80dbbbaba4f2 Iurii Zaikin 2019-09-23  208  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

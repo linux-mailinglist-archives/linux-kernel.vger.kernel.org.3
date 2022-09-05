@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953985AD48F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008A45AD492
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238067AbiIEOMu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Sep 2022 10:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
+        id S238049AbiIEOP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237528AbiIEOMp (ORCPT
+        with ESMTP id S236468AbiIEOPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:12:45 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CDF3D5B4
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:12:43 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oVCpw-0006go-Bt; Mon, 05 Sep 2022 16:12:28 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, Conor.Dooley@microchip.com
-Cc:     guoren@kernel.org, apatel@ventanamicro.com, atishp@rivosinc.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] riscv: use BIT() marco for cpufeature probing
-Date:   Mon, 05 Sep 2022 16:12:26 +0200
-Message-ID: <13885578.y0N7aAr316@diego>
-In-Reply-To: <7693745.aoefvbuG5b@diego>
-References: <20220905111027.2463297-1-heiko@sntech.de> <1e61d31a-9bf5-af79-dbc4-87d63d24b497@microchip.com> <7693745.aoefvbuG5b@diego>
+        Mon, 5 Sep 2022 10:15:47 -0400
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDA427B37
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 07:15:44 -0700 (PDT)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-345528ceb87so14246407b3.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 07:15:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=f8+wkscY0Mz9WNFd9ZPJmFW4bAcsP+7zRqQ/fyjtbFrj9O0NHuDG+8Xo6YRqoedIqv
+         0vVnvFx3DmOSvCT3n0b8La5scXT4lG7JrkuAs1euKuVYBLFvUCqCUSzAN8MGSSh7zLiz
+         7xeuVLzzWymd9vX9L1QInNsEMkrEEMB/9cWWibMrThxBeKZuELSK9iBPbWDv9LzNRBYY
+         OaeqPflnVnpf4WCnIO0UEG/5u/legpk7bx8Fc3J43t7xdFwpdWGo/cCSJlPBYBxSnEN0
+         oH8ge2+J20ELaYe1YwJngTfgXIEidu3s17Tbaa1EoYTCIJyXSIfXWnJlqqu4MroXKtnF
+         U7uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=4xp+LGfpjQZ08IqL7/blzW03GuJQk+2P32nh0BzZtR0hV40EwNSN/lV6hPAbQtSdbh
+         uZrxKB7xioaGIR4C0HSjragsehpPAgux8OFhhB+aYhqUZ19hsdtlk4oiULAt5d/guoo8
+         J82y3POkVfDH7gSgV1fzUqPCD4ts3W6BoqyDGdyD6TKDjYmUoTEDiyXaJLMb96bIAu17
+         OihE0xxKwV0hfoPM8fRYucH2MaD+BboVgDaQK9IRGk+Ure/fmTncNDdQZmMV2vRRRFwo
+         69QcTPM9MZk+OxCQXq6xSa8SWliwk8EIZTFrpb1x7ieMHbEjt9dmNSZ5IEZxtoadBOtS
+         pY6Q==
+X-Gm-Message-State: ACgBeo2VDnqK5SGnkrAp17u20RJ58yG7i3OiBpPIizPMlMD3JoybKVyx
+        kvIg1JgjiQ2tcy5a8cuXhpzO1gdAIdEwF0OoXTowEvGfmag=
+X-Google-Smtp-Source: AA6agR5QY2I/2to+GpJC+yxgLLCYsS7mbQv3EEJ5EwtnDQqpnV8MVQYgqVfc44Ne/IApaAhXzmOnzgcdrMEAbTm9/Us=
+X-Received: by 2002:a81:c0a:0:b0:341:44bb:d640 with SMTP id
+ 10-20020a810c0a000000b0034144bbd640mr31149360ywm.372.1662387343771; Mon, 05
+ Sep 2022 07:15:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a25:fb0c:0:0:0:0:0 with HTTP; Mon, 5 Sep 2022 07:15:43 -0700 (PDT)
+Reply-To: maryalbert00045@gmail.com
+From:   Mary Albert <ourogounimouhamed@gmail.com>
+Date:   Mon, 5 Sep 2022 15:15:43 +0100
+Message-ID: <CAHwLVq6UdCwjD8Xojx1wAOMKrrCBPyof5CtyU5KhzUOA-Ma65g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1141 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6852]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [maryalbert00045[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ourogounimouhamed[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 5. September 2022, 13:23:01 CEST schrieb Heiko Stübner:
-> Am Montag, 5. September 2022, 13:19:41 CEST schrieb Conor.Dooley@microchip.com:
-> > On 05/09/2022 12:10, Heiko Stuebner wrote:
-> > > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > > 
-> > > Using the appropriate BIT macro makes the code better readable.
-> > > 
-> > > Suggested-by: Conor Dooley <conor.dooley@microchip.com>
-> > > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> > 
-> > Missing the cover-letter with the changelog?
-> > At least, I didn't get it in my inbox.
-> 
-> darn git send-email and its automatic selection ;-)
-> 
-> I.e. I _should_ have added you to the hard recipient list for my series
-> in the first place, but instead git send-email selected you based on
-> the Suggested-by ... but it looks like these selectoions don't get
-> applied to the cover-letter ... sorry about that
-
-For the record, the series is here:
-https://lore.kernel.org/all/20220905111027.2463297-1-heiko@sntech.de/
-
-Though right now, I don't see it in the linux-riscv list-archive or my
-own inbox of that list. Maybe infradead has some issue today.
-
-
-
-> 
-> 
-> Heiko
-> 
-> 
-> > Either way,
-> > 
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > > ---
-> > >   arch/riscv/kernel/cpufeature.c | 4 ++--
-> > >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > > index 729f7a218093..08f7445985dc 100644
-> > > --- a/arch/riscv/kernel/cpufeature.c
-> > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > @@ -289,10 +289,10 @@ static u32 __init_or_module cpufeature_probe(unsigned int stage)
-> > >          u32 cpu_req_feature = 0;
-> > > 
-> > >          if (cpufeature_probe_svpbmt(stage))
-> > > -               cpu_req_feature |= (1U << CPUFEATURE_SVPBMT);
-> > > +               cpu_req_feature |= BIT(CPUFEATURE_SVPBMT);
-> > > 
-> > >          if (cpufeature_probe_zicbom(stage))
-> > > -               cpu_req_feature |= (1U << CPUFEATURE_ZICBOM);
-> > > +               cpu_req_feature |= BIT(CPUFEATURE_ZICBOM);
-> > > 
-> > >          return cpu_req_feature;
-> > >   }
-> > > --
-> > > 2.35.1
-> > > 
-> > 
-> > 
-> 
-> 
-
-
-
-
+-- 
+Hello,
+how are you?

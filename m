@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AA15AD53F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1398E5AD539
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 16:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238097AbiIEOkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 10:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
+        id S238534AbiIEOkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 10:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238608AbiIEOkS (ORCPT
+        with ESMTP id S238536AbiIEOj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EE013E29;
-        Mon,  5 Sep 2022 07:37:58 -0700 (PDT)
+        Mon, 5 Sep 2022 10:39:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432FB5D12D;
+        Mon,  5 Sep 2022 07:37:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B274661156;
-        Mon,  5 Sep 2022 14:37:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB7DC433C1;
-        Mon,  5 Sep 2022 14:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662388677;
-        bh=6Q7HGVentmMLXaWL6fgIUTQqVOYenukFu1wRiem/7c0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nzGBB0kSd3hjZ2BLzPKk37c5MFBDOf/nMPBlb7HtAY1VQjVzURA82sNB4MgIn/Ki9
-         wAYrVrWI/6dKa1ltDrB554HAzB495oveTWmLG+AEV+ZWzykZ76FX/OQWSokX8Bnxn4
-         3PQ+EJwbpY0/G5DN/kTLBH6wiKMQ1/G7xcyUXG/FoBsJinqPvjYekpd/E2FqgdX1QF
-         lPE/qF3IH12XheVji2m6wMlg3TSG5ewZflr3lyFonsAfenAU3DM7COsthRW+IjTlME
-         wivAsQ1pE6pwrG9QaaRZlyuUzhoSTqnoDXZeHPauYRAfevVJX3uK0Q+MscvJ91KYYs
-         zXIQ23P6tOeUA==
-Date:   Mon, 5 Sep 2022 15:37:37 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Sergiu.Moga@microchip.com
-Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
- json-schema
-Message-ID: <YxYI8/bprIV2wd1c@google.com>
-References: <20220817075517.49575-1-sergiu.moga@microchip.com>
- <20220817075517.49575-3-sergiu.moga@microchip.com>
- <942accc5-70aa-3bb2-63dd-306a39ee5ea4@linaro.org>
- <d1aad8ea-3852-f36b-366b-7aa67d2dd9d5@microchip.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B1BCB81148;
+        Mon,  5 Sep 2022 14:37:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D51EC433D6;
+        Mon,  5 Sep 2022 14:37:31 +0000 (UTC)
+Date:   Mon, 5 Sep 2022 10:38:08 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Menglong Dong <menglong8.dong@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        Hao Peng <flyingpeng@tencent.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>, robh@kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH net-next v2] net: skb: export skb drop reaons to user by
+ TRACE_DEFINE_ENUM
+Message-ID: <20220905103808.434f6909@gandalf.local.home>
+In-Reply-To: <CANn89iK7Mm4aPpr1-VM5OgicuHrHjo9nm9P9bYgOKKH9yczFzg@mail.gmail.com>
+References: <20220902141715.1038615-1-imagedong@tencent.com>
+        <CANn89iK7Mm4aPpr1-VM5OgicuHrHjo9nm9P9bYgOKKH9yczFzg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d1aad8ea-3852-f36b-366b-7aa67d2dd9d5@microchip.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022, Sergiu.Moga@microchip.com wrote:
+On Fri, 2 Sep 2022 08:43:07 -0700
+Eric Dumazet <edumazet@google.com> wrote:
 
-> On 18.08.2022 11:39, Krzysztof Kozlowski wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > On 17/08/2022 10:55, Sergiu Moga wrote:
-> >> Convert at91 USART DT Binding for Atmel/Microchip SoCs to
-> >> json-schema format.
-> >>
-> >> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> >> ---
-> >>   .../bindings/mfd/atmel,at91-usart.yaml        | 190 ++++++++++++++++++
-> >>   .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ---------
-> >>   2 files changed, 190 insertions(+), 98 deletions(-)
-> >>   create mode 100644 Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
-> >>   delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
-> >> new file mode 100644
-> >> index 000000000000..cf15d73fa1e8
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
-> > One more thing - I think this should be in serial directory, not mfd,
-> > even though it includes SPI. MFD is just a Linux naming/wrapper device.
-> >
-> > Best regards,
-> > Krzysztof
+> > ---
+> > v2:
+> > - undef FN/FNe after use it (Jakub Kicinski)  
 > 
-> I would rather keep it in this directory, since its corresponding driver 
-> is also in the mfd directory.
+> I would love some feedback from Steven :)
 
-Looks like a UART driver to me.
+The undef should be fine. I usually do not, but that's more of a preference
+than a rule.
 
-Which MFD driver does this pertain to?
+As long as the undef is done after the C portion of where the macro is used:
 
--- 
-Lee Jones [李琼斯]
++#undef FN
++#define FN(reason)	TRACE_DEFINE_ENUM(SKB_DROP_REASON_##reason);
++DEFINE_DROP_REASON(FN, FN) <<<--- C portion
+
++#undef FN
++#undef FNe
++#define FN(reason)	{ SKB_DROP_REASON_##reason, #reason },
++#define FNe(reason)	{ SKB_DROP_REASON_##reason, #reason }
++
+ /*
+  * Tracepoint for free an sk_buff:
+  */
+@@ -35,9 +44,13 @@ TRACE_EVENT(kfree_skb,
+ 
+ 	TP_printk("skbaddr=%p protocol=%u location=%p reason: %s",
+ 		  __entry->skbaddr, __entry->protocol, __entry->location,
+-		  drop_reasons[__entry->reason])
++		  __print_symbolic(__entry->reason,
++				   DEFINE_DROP_REASON(FN, FNe)))  <<<--- C portion
+ );
+ 
++#undef FN
++#undef FNe
+
+So for this part: Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve

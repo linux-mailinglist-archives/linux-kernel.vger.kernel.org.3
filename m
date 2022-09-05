@@ -2,170 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218A45ADB61
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB1E5ADB63
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiIEWYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S231851AbiIEWYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 18:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiIEWX7 (ORCPT
+        with ESMTP id S229453AbiIEWYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:23:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DAD67157
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 15:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662416638; x=1693952638;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9WHEDLEn2qT0OC6p9LQemxRiFViekrQAQVRDrvUJEi0=;
-  b=fnrG7BSYwD6i1bSNtByVZ6mqQErLYPF75orIbukunPzIs7ip4PqhbjAl
-   eoLzg3I97R8Oyxk/yVS6yXtFibMZCSOxJ3avZGW7mROrKhV7xPuXu7kpf
-   W7dNLZxnbb33rF2D12MqcP8U2i5O+z9UUY4oTGGv81+2qF1Y5UgV8Z2yS
-   k93LiXUrxW1K7+JbApFCCvwryPLCzZwsSNhdIFzd9HDHl96jo/WJW394N
-   8SwDbQq+7XGJBv8wTSgaIO1x3boaFGdiWh9cSNf0+eX60nF5rkFhdwyWB
-   HJffQd/ReukKjbnto2vm7TSOHEy8SNHjwEMZVNhRjZaXUgMLPTA5lF3r3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="276198508"
-X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
-   d="scan'208";a="276198508"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 15:23:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
-   d="scan'208";a="643925354"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 05 Sep 2022 15:23:56 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVKVY-0004a5-0X;
-        Mon, 05 Sep 2022 22:23:56 +0000
-Date:   Tue, 6 Sep 2022 06:23:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 38/41] arch/riscv/kvm/aia_aplic.c:264:6:
- warning: variable 'inject' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202209060634.EweHFdGr-lkp@intel.com>
+        Mon, 5 Sep 2022 18:24:46 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D762D12638
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 15:24:45 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id A29BA1272;
+        Tue,  6 Sep 2022 00:24:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1662416683;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dOe8jPTKzzR6NB+CPpTCTcs7fzAc/wUD0hvNTkIAjx4=;
+        b=l0wd3KRnAaq/djXMKKkNH0O5+fxVQbAM6isQbfJx02bKb6H0WWeNycly19Qra7IDqGGXSo
+        5rpDuiHuzKsJdHvJ9h4c/0MPrOh+0X9JjDSeh9FR6MvufA1Fujt9J47vmKi5wmpClqGd6b
+        VXCRDtAXZdlYgHzWwkj0KspGAJsPrlR6zg1iDdWifJHtPcITABg/aXwsA4OCDGjkVr9PFh
+        uAN0qQ8zIqhPne35J5lLounzVAwPD6QGg7G2/vm61AqAzYOco8nQapVgcMm/xqJwVaj+Lw
+        aoKhNlGJBP+YYv790DyaB3gL9jmtwkUtfc41T4YYey+na7PkHmKH2GD5ueu5wQ==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Tue, 06 Sep 2022 00:24:43 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v1 1/1] pinctr: microchip-sgpio: Correct the
+ fwnode_irq_get() return value check
+In-Reply-To: <20220905190849.73194-1-andriy.shevchenko@linux.intel.com>
+References: <20220905190849.73194-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <21f2241f19003a1210bd475883ee077b@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   98a7169ff2516ac22eecb21f2267097400d67ea9
-commit: fabb171eee1d233d70a60f54acf5327d3682d964 [38/41] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r021-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060634.EweHFdGr-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/avpatel/linux/commit/fabb171eee1d233d70a60f54acf5327d3682d964
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout fabb171eee1d233d70a60f54acf5327d3682d964
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+Am 2022-09-05 21:08, schrieb Andy Shevchenko:
+> fwnode_irq_get() may return all possible signed values, such as Linux
+> error code. Fix the code to handle this properly.
+> 
+> Fixes: be2dc859abd4 ("pinctrl: pinctrl-microchip-sgpio: Add irq
+> support (for sparx5)")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Michael Walle <michael@walle.cc>
 
-All warnings (new ones prefixed by >>):
+Btw. do we care about EPROBE_DEFER?
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
-
-
-vim +264 arch/riscv/kvm/aia_aplic.c
-
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-michael

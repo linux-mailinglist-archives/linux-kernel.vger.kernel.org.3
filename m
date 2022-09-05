@@ -2,163 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59F65ACE2E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33125ACE36
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238217AbiIEItr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
+        id S237958AbiIEIxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238211AbiIEItl (ORCPT
+        with ESMTP id S237920AbiIEIxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:49:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C084DE86;
-        Mon,  5 Sep 2022 01:49:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5B8A120161;
-        Mon,  5 Sep 2022 08:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662367779; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xc3ngfTbFfRO12fCwmaAUkvuolnuXfU1jb4qhmTTa9o=;
-        b=naI5Af2DTLvKC4tKL0EBn4HU/6OQwcnrc/MJPo/U5PoHZEMiHEK3C1cS+Jz7y89mgJJnMC
-        z4jnqVmLLkQjrc+tpmfFOBAXeR1gseGMvPLn7HvDrPqqcrAwnvNF+LnPu4gXLWFn7NidMW
-        POtBx+boR1rnp6IBK7NcOwLS94FYp8I=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2A198139C7;
-        Mon,  5 Sep 2022 08:49:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UM+9CSO4FWMqFwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 05 Sep 2022 08:49:39 +0000
-Date:   Mon, 5 Sep 2022 10:49:38 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
-References: <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
- <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
- <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
- <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
- <YxEE1vOwRPdzKxoq@dhcp22.suse.cz>
- <CAJuCfpHuzJGTA_-m0Jfawc7LgJLt4GztUUY4K9N9-7bFqJuXnw@mail.gmail.com>
- <20220901201502.sn6223bayzwferxv@moria.home.lan>
+        Mon, 5 Sep 2022 04:53:42 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA0A3E740
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:53:41 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 123so11843778ybv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 01:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=/pV2O0LzRWD83l6/jD0rtHLxlqUObMDm7uvvnSIQmGc=;
+        b=JKD28+KNbsLLTDcJUSuELgoPlKu5YIRp5QZSmrEOFawOF6K5/5DChQtAhhxGF8ONCn
+         +QRJ7TgPO7CQOHuoeTcAfrnr2OigYoscUzd3BOTJwSVJdttD3w+6V4pkabYRKuQbiu6Y
+         WW7VVU/LS8FX76Q3i45nCYnAd3FiYxTLpGEwoZ8GPZD4jXg7s/rl7x2tYCkzjRAhtXgF
+         z/CbHtbJYrM8B5PERGv4gQZaJ2lJ9PoTPvPaYwYaDXEBXtg1w6CRbo4XY4+8HGBU4G/N
+         UZ/uyEZSDfPrjimlDN9R8dw4mswE59Y7MnANy1BpyQxR9mEpTTeAOPakRIAOqpWD9jLN
+         12Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/pV2O0LzRWD83l6/jD0rtHLxlqUObMDm7uvvnSIQmGc=;
+        b=f6B/FXFMbcnQJdY0Ho1zQq1duPRutD4bfm77rd5xRnDWoK7qh+Arpmn7CA0lm9896f
+         x1uPjv9oAi+BZ/KZInTFnCQuP6DmlN148TNRYxECNEoAfTu0cJqZd6c9qjbHuJrjk0U4
+         gX3v2Zha8SxM+TXbdqC8rMqyXm74tJB6BV/wE8d+9VjrPjGvH0/gEBqNPWyu8G8YxnEp
+         Ogt7qOngc+nKYenlSNvGHS/Mor/e6HkzTnTKcpeAjQmX/R7pf19izrSc0nZsAuM0fFMp
+         hfTuR7txD++uaKCWU78Uj1j4YCado5YcJ3+ofdwshVNzUklHxrpETZc7IbWWxGnY0GTv
+         ePzA==
+X-Gm-Message-State: ACgBeo36R28m57efOsDLbSATfhVyGydx3U+UbDIV78KvXj9pRFjkABFn
+        48MW073k+7UDqnYWKmGeAVjqzna4teYCsoPaZYc=
+X-Google-Smtp-Source: AA6agR5ZoT8N/kx3Hp+YXfHmKmfG/qcnkF+Mi6m8yvrs5x8843emp7V1dIC4jkLetItugqNAEs6WUpxoVUdeZuRVj2U=
+X-Received: by 2002:a25:d087:0:b0:6a9:1991:d3fb with SMTP id
+ h129-20020a25d087000000b006a91991d3fbmr3544564ybg.130.1662368020106; Mon, 05
+ Sep 2022 01:53:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901201502.sn6223bayzwferxv@moria.home.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <tencent_E1BBF05904DFB73C478DCD592740AAE0780A@qq.com>
+ <CAJedcCxVW++iH49UFZp9ruUuTcNubWCH6Wsqe11K4COB3E8msg@mail.gmail.com>
+ <CAJedcCw1eJqjSK+yR7eQMDheNtH3Mjm+viwt00xAhnmrfpq2pw@mail.gmail.com>
+ <CAJedcCweHjD78F7iydiq6Xc2iH=t_3m=H9JKnaCooToUk32FvQ@mail.gmail.com> <YxWtfjfpNsoPUrgh@kroah.com>
+In-Reply-To: <YxWtfjfpNsoPUrgh@kroah.com>
+From:   Alex Young <alex000young@gmail.com>
+Date:   Mon, 5 Sep 2022 16:53:28 +0800
+Message-ID: <CAFC++j0_11fpgGaAdDsQUyTzCG8KU0cO1ufMYFzACWquJALuZg@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry.
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zheng Hacker <hackerzheng666@gmail.com>,
+        xmzyshypnc <1002992920@qq.com>, airlied@linux.ie,
+        daniel@ffwll.ch, zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, security@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 01-09-22 16:15:02, Kent Overstreet wrote:
-> On Thu, Sep 01, 2022 at 12:39:11PM -0700, Suren Baghdasaryan wrote:
-> > kmemleak is known to be slow and it's even documented [1], so I hope I
-> > can skip that part. For page_owner to provide the comparable
-> > information we would have to capture the call stacks for all page
-> > allocations unlike our proposal which allows to do that selectively
-> > for specific call sites. I'll post the overhead numbers of call stack
-> > capturing once I'm finished with profiling the latest code, hopefully
-> > sometime tomorrow, in the worst case after the long weekend.
-> 
-> To expand on this further: we're stashing a pointer to the alloc_tag, which is
-> defined at the allocation callsite. That's how we're able to decrement the
-> proper counter on free, and why this beats any tracing based approach - with
-> tracing you'd instead have to correlate allocate/free events. Ouch.
-> 
-> > > Yes, tracking back the call trace would be really needed. The question
-> > > is whether this is really prohibitively expensive. How much overhead are
-> > > we talking about? There is no free lunch here, really.  You either have
-> > > the overhead during runtime when the feature is used or on the source
-> > > code level for all the future development (with a maze of macros and
-> > > wrappers).
-> 
-> The full call stack is really not what you want in most applications - that's
-> what people think they want at first, and why page_owner works the way it does,
-> but it turns out that then combining all the different but related stack traces
-> _sucks_ (so why were you saving them in the first place?), and then you have to
-> do a separate memory allocate for each stack track, which destroys performance.
+Thanks for your reply.
 
-I do agree that the full stack trace is likely not what you need. But
-the portion of the stack that you need is not really clear because the
-relevant part might be on a different level of the calltrace depending
-on the allocation site. Take this as an example:
-{traverse, seq_read_iter, single_open_size}->seq_buf_alloc -> kvmalloc -> kmalloc
+We think that when intel_gvt_dma_map_guest_page() fails,
+ppgtt_invalidate_spt is called to handle this error.
 
-This whole part of the stack is not really all that interesting and you
-would have to allocate pretty high at the API layer to catch something
-useful. And please remember that seq_file interface is heavily used in
-throughout the kernel. I wouldn't suspect seq_file itself to be buggy,
-that is well exercised code but its users can botch things and that is
-where the leak would happen. There are many other examples like that
-where the allocation is done at a lib/infrastructure layer (sysfs
-framework, mempools network pool allocators and whatnot). We do care
-about those users, really. Ad-hoc pool allocators built on top of the
-core MM allocators are not really uncommon. And I am really skeptical we
-really want to add all the tagging source code level changes to each and
-every one of them.
+If the ppgtt_invalidate_spt is successful to kfree the spt object,
+then in the ppgtt_populate_spt function there  is no need to kfree the
+spt again.
 
-This is really my main concern about this whole work. Not only it adds a
-considerable maintenance burden to the core MM because it adds on top of
-our existing allocator layers complexity but it would need to spread beyond
-MM to be useful because it is usually outside of MM where leaks happen.
--- 
-Michal Hocko
-SUSE Labs
+And if the ppgtt_invalidate_spt failed, then in the ppgtt_populate_spt
+function there is need to kfree the spt for error handling.
+
+This is our fix, if it's not right, we are glad to discuss with you.
+
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B49=E6=9C=885=E6=
+=97=A5=E5=91=A8=E4=B8=80 16:04=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, Sep 05, 2022 at 03:46:09PM +0800, Zheng Hacker wrote:
+> > I rewrote the letter. Hope it works.
+> >
+> > There is a double-free security bug in split_2MB_gtt_entry.
+> >
+> > Here is a calling chain :
+> > ppgtt_populate_spt->ppgtt_populate_shadow_entry->split_2MB_gtt_entry.
+> > If intel_gvt_dma_map_guest_page failed, it will call
+> > ppgtt_invalidate_spt, which will finally call ppgtt_free_spt and
+> > kfree(spt). But the caller does not notice that, and it will call
+> > ppgtt_free_spt again in error path.
+> >
+> > Fix this by returning the result of ppgtt_invalidate_spt to split_2MB_g=
+tt_entry.
+> >
+> > Signed-off-by: Zheng Wang
+> >
+> > ---
+> >  drivers/gpu/drm/i915/gvt/gtt.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/=
+gtt.c
+> > index ce0eb03709c3..9f14fded8c0c 100644
+> > --- a/drivers/gpu/drm/i915/gvt/gtt.c
+> > +++ b/drivers/gpu/drm/i915/gvt/gtt.c
+> > @@ -1215,7 +1215,7 @@ static int split_2MB_gtt_entry(struct intel_vgpu =
+*vgpu,
+> >                 ret =3D intel_gvt_dma_map_guest_page(vgpu, start_gfn + =
+sub_index,
+> >                                                    PAGE_SIZE, &dma_addr=
+);
+> >                 if (ret) {
+> > -                       ppgtt_invalidate_spt(spt);
+> > +                       ret =3D ppgtt_invalidate_spt(spt);
+> >                         return ret;
+>
+> But now you just lost the original error, shouldn't this succeed even if
+> intel_gvt_dma_map_guest_page() failed?
+>
+> And how are you causing intel_gvt_dma_map_guest_page() to fail in a real
+> system?
+>
+> thanks,
+>
+> greg k-h

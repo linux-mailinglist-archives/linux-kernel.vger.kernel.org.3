@@ -2,57 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492A45AD7BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE655AD7C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbiIEQnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 12:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S235938AbiIEQoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 12:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbiIEQm5 (ORCPT
+        with ESMTP id S231296AbiIEQoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 12:42:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BCC61705
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:42:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C4966139D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 16:42:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F4FC433D6;
-        Mon,  5 Sep 2022 16:42:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662396175;
-        bh=ofMIlFd626hGnUnboJkZEEUtEXPdrkIL6ZPCOm2bYOg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rpo8q0KBfj9SC5purKcAV+ErKFencFzGfWmknDo9og64dr2jBJegpm2rdeznXuq3g
-         owtZQNlnD311DWhaS967QHhrXLDojjdgCB32jL4NWLEsApWt1z+Mgknpqz6E2DgTT5
-         W71WSgccfp+AHKV/QZwccQv73T7IX6m2xhT+Gkp58EPf7VlNL98B0seSJiB4XvVRCI
-         FrIGGF3HXw2VA4bqFZ4J5f5k8ufkEEcNEjgsJshC4tE5z37awXo0xxT3LU08jTRzU6
-         zbmKEq8pMjb4rLC4mBraTuxus7i5p8WX+cIQTCg9fuw36cwgLBFNvetTtSE4uYJNQE
-         lMDllkoy/kqww==
-Date:   Mon, 5 Sep 2022 17:42:50 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, Stephen Kitt <steve@sk2.org>,
-        raphael-xu@ti.com, alsa-devel@alsa-project.org, asyrus@ti.com,
-        Charles Keepax <ckeepax@opensource.cirrus.com>, navada@ti.com,
-        linux-kernel@vger.kernel.org, shenghao-ding@ti.com
-Subject: Re: [PATCH 0/2] Untested TAS2562 power setting fixes
-Message-ID: <YxYnCoWzCzMCGpEQ@sirena.org.uk>
-References: <20220825142226.80929-1-povik+lin@cutebit.org>
- <166239232739.736206.17258746656389143736.b4-ty@kernel.org>
- <C600ACEB-C64F-4501-94E4-17B4FD0A8918@cutebit.org>
+        Mon, 5 Sep 2022 12:44:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B10261B16
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662396249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rFN8kU4pPUwKGAD0Wxcp7MwYS+FD1wiqpVVQEqbcbG4=;
+        b=fF3DXUzYx4eFEBYdRplycS7CGVFDFoI93+ghfm67c00j2TkWi+7cSKmXh5ylphwCM8DeUQ
+        xzN9Sm98MUMO/LVLzzkSEBUf4hHIukCQTuAp6Xft74qhBZ8svX5dG2wQjTnktcbWRN5PLE
+        PZM8DDM7Is13VzkHZnL/B0GlGY0ebkw=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-79-MNutk--AN0m72-mMI_dM2A-1; Mon, 05 Sep 2022 12:44:08 -0400
+X-MC-Unique: MNutk--AN0m72-mMI_dM2A-1
+Received: by mail-wr1-f69.google.com with SMTP id d30-20020adfa41e000000b00228c0e80c49so626620wra.21
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 09:44:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=rFN8kU4pPUwKGAD0Wxcp7MwYS+FD1wiqpVVQEqbcbG4=;
+        b=chBFt9azJN2rvfa6WHb+6PR6a02q+rfRza4uh0eLyD6PXBDSyAV2h4yD+AfK9oFkR5
+         DruVZnOqgR9eiIPA/NhQOmqDieYte3GugNkqN1lNlAT/pnjYDnM23rtNwP2K6LEYbX5P
+         Dv6Gyoj2cNaq3lX6MldlumxgXOHno4gmTdoxdMeks8i8qDAh4QtFXm1KQk4WIVUmrwiO
+         K7C90tIbfXlP0jswss2QxmGt4mX4DKE8JqjGaeklQ4IRX9hokF/FGb8ueNLj0T3IPHDK
+         Ic58sdtXtc/x2Vrgzp6I6zMxqoHIJ73l95AvaarkTUtsBRxERTjhQtat2IHeXyC6NT+L
+         HVlg==
+X-Gm-Message-State: ACgBeo3rWq007hpXtaHcSSDICY6Hj46O99KeZhvtLelMQ3NUtx6Gw9x+
+        R6iVW629p5rrzUfQ1BfSnZesFJmLjaWrnX+S5Ev1c6U9+RLEwsPeiYl/jsEzqHjA+oPNHT01BE2
+        iFaKP7eV1n7cKoZ3RsgkKi0FX
+X-Received: by 2002:adf:f54a:0:b0:228:951a:2949 with SMTP id j10-20020adff54a000000b00228951a2949mr2874152wrp.240.1662396246969;
+        Mon, 05 Sep 2022 09:44:06 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5IxX+rZOV0sxAdwQEggf0zCPW4siPm15jli7Tzs7+LElEdo/Qe1BbBn5i3TVU8J39X2eN/yg==
+X-Received: by 2002:adf:f54a:0:b0:228:951a:2949 with SMTP id j10-20020adff54a000000b00228951a2949mr2874125wrp.240.1662396246798;
+        Mon, 05 Sep 2022 09:44:06 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id k27-20020a05600c1c9b00b003a845fa1edfsm29552176wms.3.2022.09.05.09.44.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 09:44:06 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: Re: [PATCH v3 4/9] cpumask: Introduce for_each_cpu_andnot()
+In-Reply-To: <YwfmIDEbRT4JfsZp@yury-laptop>
+References: <20220825181210.284283-1-vschneid@redhat.com>
+ <20220825181210.284283-5-vschneid@redhat.com>
+ <YwfmIDEbRT4JfsZp@yury-laptop>
+Date:   Mon, 05 Sep 2022 17:44:05 +0100
+Message-ID: <xhsmh5yi1db56.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EoXYJhccnS9/KYaw"
-Content-Disposition: inline
-In-Reply-To: <C600ACEB-C64F-4501-94E4-17B4FD0A8918@cutebit.org>
-X-Cookie: What's so funny?
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,34 +97,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 25/08/22 14:14, Yury Norov wrote:
+> On Thu, Aug 25, 2022 at 07:12:05PM +0100, Valentin Schneider wrote:
+>> +#define for_each_cpu_andnot(cpu, mask1, mask2)				\
+>> +	for ((cpu) = -1;						\
+>> +		(cpu) = cpumask_next_andnot((cpu), (mask1), (mask2)),	\
+>> +		(cpu) < nr_cpu_ids;)
+>
+> The standard doesn't guarantee the order of execution of last 2 lines,
+> so you might end up with unreliable code. Can you do it in a more
+> conventional style:
+>    #define for_each_cpu_andnot(cpu, mask1, mask2)			\
+>       for ((cpu) = cpumask_next_andnot(-1, (mask1), (mask2));         \
+>               (cpu) < nr_cpu_ids;                                     \
+>               (cpu) = cpumask_next_andnot((cpu), (mask1), (mask2)))
+>
 
---EoXYJhccnS9/KYaw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+IIUC the order of execution *is* guaranteed as this is a comma operator,
+not argument passing:
 
-On Mon, Sep 05, 2022 at 05:45:09PM +0200, Martin Povi=C5=A1er wrote:
+  6.5.17 Comma operator
 
-> Texas Instruments is shipping me samples of the affected
-> codecs, so I should be able to test the changes on hardware soon.
+  The left operand of a comma operator is evaluated as a void expression;
+  there is a sequence point after its evaluation. Then the right operand is
+  evaluated; the result has its type and value.
 
-> Should I find regressions, I will report back.
+for_each_cpu{_and}() uses the same pattern (which I simply copied here).
 
-Ah, that's great news.
+Still, I'd be up for making this a bit more readable. I did a bit of
+digging to figure out how we ended up with that pattern, and found
 
---EoXYJhccnS9/KYaw
-Content-Type: application/pgp-signature; name="signature.asc"
+  7baac8b91f98 ("cpumask: make for_each_cpu_mask a bit smaller")
 
------BEGIN PGP SIGNATURE-----
+so this appears to have been done to save up on generated instructions.
+*if* it is actually OK standard-wise, I'd vote to leave it as-is.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMWJwkACgkQJNaLcl1U
-h9D33Af/QSb6Pe1owP1mrK1vVJUDtrHI6iUyUdFHPK24FwuUl4JkDGiHhWaaA0xn
-kP24h+f3Kad02l5UM02y1IwVJipW7J7/VmPOrdi4evrNQ6qdXAeiEauHhAMsnRnO
-9HGdCnqaGytdYK8Q01ZN0zuYq4QEOTIDCMXgWgwIjEPgPH4kdEe4KXeAjdn9ks+T
-oIrequRljgRTyhoj1+s2J2Hj9Cm+KJXOJBlhxr3HkVWftWztKT+GP6MipBwXJcmk
-2gf21m0YM7MRY1dWNZEEjeHLPUGl4f8QRikx2gRqbgV8uOS7YihpCs4vAclTZ2y8
-Es3gD+1UVr5RTCVZyRFQXT5ZWXFU1w==
-=4sYU
------END PGP SIGNATURE-----
+>> +
+>>  /**
+>>   * cpumask_any_but - return a "random" in a cpumask, but not this one.
+>>   * @mask: the cpumask to search
+>> --
+>> 2.31.1
 
---EoXYJhccnS9/KYaw--

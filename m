@@ -2,151 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CEC5ACCDE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9255ACD01
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236199AbiIEHkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
+        id S236272AbiIEHkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiIEHkN (ORCPT
+        with ESMTP id S229598AbiIEHkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:40:13 -0400
-Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EA7217AB4
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=EMi/Z
-        gj9wd3UokgHoYhHpcxMljDXWLwRjVfKKXNyK5s=; b=oJYVB6zEjq6n/zMRqvrNO
-        fo0T/l2Aa8VtEAM1PbND93ajzc13kl9hgahDn/mXxgNwzr5vnyWM88kzcLYhu6GB
-        YrRs0AOghQIX0VOBwJKgXs95WiXBAhQmhsTFTNslKEE5k1BkHiI0zdhsRmN5rmnQ
-        DzV+xmhDdDrELet9Wh6cHk=
-Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
-        by smtp13 (Coremail) with SMTP id EcCowADXupuspxVjn6FyaA--.43620S4;
-        Mon, 05 Sep 2022 15:39:35 +0800 (CST)
-From:   Jingyu Wang <jingyuwang_vip@163.com>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        andrey.grodzovsky@amd.com, ray.huang@amd.com,
-        Hawking.Zhang@amd.com, Likun.Gao@amd.com, Jack.Xiao@amd.com,
-        len.brown@intel.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jingyu Wang <jingyuwang_vip@163.com>
-Subject: [PATCH] drm/amdgpu: recleanup coding style in amdgpu_fence.c
-Date:   Mon,  5 Sep 2022 15:39:22 +0800
-Message-Id: <20220905073922.22738-1-jingyuwang_vip@163.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 5 Sep 2022 03:40:39 -0400
+Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B2B193DE
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:40:34 -0700 (PDT)
+From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1662363632; bh=Gk6dEkmexN5Kop02Qn4R9tfpOM6x14dDFliZdEGF2zM=;
+        h=From:To:Cc:Subject:Date;
+        b=pkvEix9aoTFu/QcfBiqWiEmCJguW54koyoqICeEoFy9RBfHLveNVaFDSK6w/0sXQa
+         lPMMALfz52ZYLxK04G51/Mw10pH0Hjx5EvCg/gq62+jbSVPNQvhj77KTaiiuQ/XwOo
+         8i8nTwqlJ75L4yyDAN31HiYQz4MLSFIgY5x44WlI=
+To:     =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     asahi@lists.linux.dev, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: apple: mca: Postpone requesting of DMA channels
+Date:   Mon,  5 Sep 2022 09:40:30 +0200
+Message-Id: <20220905074030.1293-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EcCowADXupuspxVjn6FyaA--.43620S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCr17KFyDWFWxCw1xGw1xXwb_yoW5Zr1kpF
-        4fKry5KrWDZF1UWrW8AF1vvFnxKw10qF10grW7A34Sgwn8ZF15K3WIyrWjqrWDCF4kur4a
-        kFW7Za45ZF1jqF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zMzuAUUUUUU=
-X-Originating-IP: [1.203.67.201]
-X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/1tbishhzF1UMWQynIQAAsE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix everything checkpatch.pl complained about in amdgpu_fence.c,
-modified use "} else {", sent it again, thx.
+Move the requesting of DMA channels further down from 'probe' to
+'pcm_new'. This is to spare the allocated DMA channel resources as we
+typically only ever use one or two of the clusters for PCM streaming.
+Before we would request DMA channels for all clusters.
 
-Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
+(This is prompted by a change in the Audio DMA Controller driver, which
+will now be allocating cache SRAM to channels.)
+
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ sound/soc/apple/mca.c | 79 +++++++++++++++++++++++++------------------
+ 1 file changed, 46 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-index 8adeb7469f1e..0759d86d92da 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: MIT
- /*
-  * Copyright 2009 Jerome Glisse.
-  * All Rights Reserved.
-@@ -42,7 +43,6 @@
- #include "amdgpu_reset.h"
+diff --git a/sound/soc/apple/mca.c b/sound/soc/apple/mca.c
+index aa67d57c9a9b..69643524796e 100644
+--- a/sound/soc/apple/mca.c
++++ b/sound/soc/apple/mca.c
+@@ -885,6 +885,43 @@ static snd_pcm_uframes_t mca_pointer(struct snd_soc_component *component,
+ 	return snd_dmaengine_pcm_pointer(substream);
+ }
  
- /*
-- * Fences
-  * Fences mark an event in the GPUs pipeline and are used
-  * for GPU/CPU synchronization.  When the fence is written,
-  * it is expected that all buffers associated with that fence
-@@ -139,7 +139,7 @@ static u32 amdgpu_fence_read(struct amdgpu_ring *ring)
-  * Returns 0 on success, -ENOMEM on failure.
-  */
- int amdgpu_fence_emit(struct amdgpu_ring *ring, struct dma_fence **f, struct amdgpu_job *job,
--		      unsigned flags)
-+		      unsigned int flags)
++static struct dma_chan *mca_request_dma_channel(struct mca_cluster *cl, unsigned int stream)
++{
++	bool is_tx = (stream == SNDRV_PCM_STREAM_PLAYBACK);
++#ifndef USE_RXB_FOR_CAPTURE
++	char *name = devm_kasprintf(cl->host->dev, GFP_KERNEL,
++				    is_tx ? "tx%da" : "rx%da", cl->no);
++#else
++	char *name = devm_kasprintf(cl->host->dev, GFP_KERNEL,
++				    is_tx ? "tx%da" : "rx%db", cl->no);
++#endif
++	return of_dma_request_slave_channel(cl->host->dev->of_node, name);
++
++}
++
++static void mca_pcm_free(struct snd_soc_component *component,
++			 struct snd_pcm *pcm)
++{
++	struct snd_soc_pcm_runtime *rtd = snd_pcm_chip(pcm);
++	struct mca_cluster *cl = mca_dai_to_cluster(asoc_rtd_to_cpu(rtd, 0));
++	unsigned int i;
++
++	if (rtd->dai_link->no_pcm)
++		return;
++
++	for_each_pcm_streams(i) {
++		struct snd_pcm_substream *substream =
++			rtd->pcm->streams[i].substream;
++
++		if (!substream || !cl->dma_chans[i])
++			continue;
++
++		dma_release_channel(cl->dma_chans[i]);
++		cl->dma_chans[i] = NULL;
++	}
++}
++
++
+ static int mca_pcm_new(struct snd_soc_component *component,
+ 		       struct snd_soc_pcm_runtime *rtd)
  {
- 	struct amdgpu_device *adev = ring->adev;
- 	struct dma_fence *fence;
-@@ -173,11 +173,11 @@ int amdgpu_fence_emit(struct amdgpu_ring *ring, struct dma_fence **f, struct amd
- 				       adev->fence_context + ring->idx, seq);
- 			/* Against remove in amdgpu_job_{free, free_cb} */
- 			dma_fence_get(fence);
+@@ -897,17 +934,21 @@ static int mca_pcm_new(struct snd_soc_component *component,
+ 	for_each_pcm_streams(i) {
+ 		struct snd_pcm_substream *substream =
+ 			rtd->pcm->streams[i].substream;
+-		struct dma_chan *chan = cl->dma_chans[i];
++		struct dma_chan *chan;
+ 
+ 		if (!substream)
+ 			continue;
+ 
+-		if (!chan) {
+-			dev_err(component->dev, "missing DMA channel for stream %d on SERDES %d\n",
+-				i, cl->no);
++		chan = mca_request_dma_channel(cl, i);
++
++		if (IS_ERR_OR_NULL(chan)) {
++			dev_err(component->dev, "unable to obtain DMA channel (stream %d cluster %d): %pe\n",
++				i, cl->no, chan);
++			mca_pcm_free(component, rtd->pcm);
+ 			return -EINVAL;
+ 		}
+ 
++		cl->dma_chans[i] = chan;
+ 		snd_pcm_set_managed_buffer(substream, SNDRV_DMA_TYPE_DEV_IRAM,
+ 					   chan->device->dev, 512 * 1024 * 6,
+ 					   SIZE_MAX);
+@@ -924,6 +965,7 @@ static const struct snd_soc_component_driver mca_component = {
+ 	.trigger = mca_trigger,
+ 	.pointer = mca_pointer,
+ 	.pcm_construct = mca_pcm_new,
++	.pcm_destruct = mca_pcm_free,
+ };
+ 
+ static void apple_mca_release(struct mca_data *mca)
+@@ -1019,7 +1061,6 @@ static int apple_mca_probe(struct platform_device *pdev)
+ 		struct snd_soc_dai_driver *fe =
+ 			&dai_drivers[mca->nclusters + i];
+ 		struct snd_soc_dai_driver *be = &dai_drivers[i];
+-		int stream;
+ 
+ 		cl->host = mca;
+ 		cl->no = i;
+@@ -1041,34 +1082,6 @@ static int apple_mca_probe(struct platform_device *pdev)
+ 			goto err_release;
+ 		}
+ 
+-		for_each_pcm_streams(stream) {
+-			struct dma_chan *chan;
+-			bool is_tx = (stream == SNDRV_PCM_STREAM_PLAYBACK);
+-#ifndef USE_RXB_FOR_CAPTURE
+-			char *name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+-						    is_tx ? "tx%da" : "rx%da",
+-						    i);
+-#else
+-			char *name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+-						    is_tx ? "tx%da" : "rx%db",
+-						    i);
+-#endif
+-
+-			chan = of_dma_request_slave_channel(pdev->dev.of_node,
+-							    name);
+-			if (IS_ERR(chan)) {
+-				if (PTR_ERR(chan) != -EPROBE_DEFER)
+-					dev_err(&pdev->dev,
+-						"no %s DMA channel: %ld\n",
+-						name, PTR_ERR(chan));
+-
+-				ret = PTR_ERR(chan);
+-				goto err_release;
+-			}
+-
+-			cl->dma_chans[stream] = chan;
 -		}
--		else
-+		} else {
- 			dma_fence_init(fence, &amdgpu_fence_ops,
- 				       &ring->fence_drv.lock,
- 				       adev->fence_context + ring->idx, seq);
-+		}
- 	}
- 
- 	amdgpu_ring_emit_fence(ring, ring->fence_drv.gpu_addr,
-@@ -393,7 +393,7 @@ signed long amdgpu_fence_wait_polling(struct amdgpu_ring *ring,
-  * Returns the number of emitted fences on the ring.  Used by the
-  * dynpm code to ring track activity.
-  */
--unsigned amdgpu_fence_count_emitted(struct amdgpu_ring *ring)
-+unsigned int amdgpu_fence_count_emitted(struct amdgpu_ring *ring)
- {
- 	uint64_t emitted;
- 
-@@ -422,7 +422,7 @@ unsigned amdgpu_fence_count_emitted(struct amdgpu_ring *ring)
-  */
- int amdgpu_fence_driver_start_ring(struct amdgpu_ring *ring,
- 				   struct amdgpu_irq_src *irq_src,
--				   unsigned irq_type)
-+				   unsigned int irq_type)
- {
- 	struct amdgpu_device *adev = ring->adev;
- 	uint64_t index;
-@@ -594,6 +594,7 @@ void amdgpu_fence_driver_hw_init(struct amdgpu_device *adev)
- 
- 	for (i = 0; i < AMDGPU_MAX_RINGS; i++) {
- 		struct amdgpu_ring *ring = adev->rings[i];
-+
- 		if (!ring || !ring->fence_drv.initialized)
- 			continue;
- 
-@@ -772,6 +773,7 @@ static int amdgpu_debugfs_fence_info_show(struct seq_file *m, void *unused)
- 
- 	for (i = 0; i < AMDGPU_MAX_RINGS; ++i) {
- 		struct amdgpu_ring *ring = adev->rings[i];
-+
- 		if (!ring || !ring->fence_drv.initialized)
- 			continue;
- 
-@@ -845,6 +847,7 @@ static void amdgpu_debugfs_reset_work(struct work_struct *work)
- 						  reset_work);
- 
- 	struct amdgpu_reset_context reset_context;
-+
- 	memset(&reset_context, 0, sizeof(reset_context));
- 
- 	reset_context.method = AMD_RESET_METHOD_NONE;
-
-base-commit: e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+-
+ 		fe->id = i;
+ 		fe->name =
+ 			devm_kasprintf(&pdev->dev, GFP_KERNEL, "mca-pcm-%d", i);
 -- 
-2.34.1
+2.33.0
 

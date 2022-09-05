@@ -2,94 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9135ACF1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3529D5ACF1A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236562AbiIEJqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 05:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        id S237269AbiIEJq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 05:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236751AbiIEJqj (ORCPT
+        with ESMTP id S236485AbiIEJqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 05:46:39 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6712051410;
-        Mon,  5 Sep 2022 02:46:37 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id az27so10572830wrb.6;
-        Mon, 05 Sep 2022 02:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=9eP10jBttfX7JFaGq3cafWCXOAtwK03QR6MASyS0HOM=;
-        b=nYhXuSM7xuJMcmMto19qavPBc8Df1xvm67JFmo5Yv8Bc+eD9+rLeLU8s5tGUqLhyb2
-         K840RtPbhlY9D9tT2MaywRZahsGA33CfLs0lUrRu4msixNtRHsiGaK0sEkCMbvVbA+Xe
-         /I7EBmEBgRZfYpWKe+Fk9DeOUFskXKa4GJ6R9ZgSFG25m5pOZbip3Qby8GxCLeVlM2+5
-         Q2S432QXNcv1In+N30oLGMlrm41IrIwLfXpoRi6+qik5gdAdVBFR4CKWXg8w3jNOEANy
-         tLTffDP4TKNpULyKIHjqtR1SGFpP3bGH6nubKgiQStp6N8bJIGViIKWH55KBVQd/weC3
-         5nHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=9eP10jBttfX7JFaGq3cafWCXOAtwK03QR6MASyS0HOM=;
-        b=VHwOkgS5HcwLunhf7X3Xw9g1EWIea774IopHnEUupjL+LqDuaU0XDTlI7LGn6PY6lt
-         KP0TM5gGgFEnIapH3BtyBKsYkAT7+UIUyTBdzzo28nn8j5KSOQpwO7FGGQsLj8Pfl9fI
-         yVnlCBN3f9X7wglgNcI7xWl5cRb2AC6FHugCXHuLzjwi0Ph7wlwrbaWSkTIahhbM7RGU
-         7p7cTwCwE1bysJBgRmRSzIggcwyDxRPe1yB2JBSwhKSddYpx34XVvuDvHfTe1MnufwWJ
-         wiWZm0OzpEaW9xm6RVyo+E94pg/FhA4LTXIB9O1V5aVv4BbJH9Fo0H6amUHQ6JPZYex9
-         xbZA==
-X-Gm-Message-State: ACgBeo2UQTydzKErryskjjly8fCvpmBki1o/B7w6/knrLVzjVoJSIk7H
-        QR3RNVDGKIGgbIhJ2BolDu0=
-X-Google-Smtp-Source: AA6agR7GujTzGQOYadqeZp0fdwlqL4KI2sWdgFDF9ahNeO0Ar5cAr2lTXVDaK5Eik232Wz1WP7dFEQ==
-X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id a8-20020a056000188800b00222ca41dc26mr22626610wri.442.1662371195803;
-        Mon, 05 Sep 2022 02:46:35 -0700 (PDT)
-Received: from [192.168.0.104] ([77.126.166.31])
-        by smtp.gmail.com with ESMTPSA id i18-20020a5d5592000000b0022878c0cc5esm3224680wrv.69.2022.09.05.02.46.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 02:46:35 -0700 (PDT)
-Message-ID: <b5ce51e6-976b-1729-3023-c4c4deb36f14@gmail.com>
-Date:   Mon, 5 Sep 2022 12:46:28 +0300
+        Mon, 5 Sep 2022 05:46:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E55352089;
+        Mon,  5 Sep 2022 02:46:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33595D6E;
+        Mon,  5 Sep 2022 02:46:58 -0700 (PDT)
+Received: from [10.57.15.199] (unknown [10.57.15.199])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4C99B3F7B4;
+        Mon,  5 Sep 2022 02:46:49 -0700 (PDT)
+Message-ID: <ca1ba9d8-8d68-5869-9905-fce431ca14f8@arm.com>
+Date:   Mon, 5 Sep 2022 10:46:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 8/9] sched/topology: Introduce for_each_numa_hop_cpu()
-Content-Language: en-US
-To:     Valentin Schneider <vschneid@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-References: <20220825181210.284283-1-vschneid@redhat.com>
- <20220825181210.284283-9-vschneid@redhat.com>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20220825181210.284283-9-vschneid@redhat.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v4 1/2] iommu/s390: Fix race with release_device ops
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     iommu@lists.linux.dev,
+        Alex Williamson <alex.williamson@redhat.com>,
+        linux-s390@vger.kernel.org, schnelle@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, joro@8bytes.org,
+        will@kernel.org, linux-kernel@vger.kernel.org
+References: <20220831201236.77595-1-mjrosato@linux.ibm.com>
+ <20220831201236.77595-2-mjrosato@linux.ibm.com>
+ <3b065fb5-3ca7-8f48-bdf7-daf7604312df@arm.com>
+ <369ad331-8bdc-d385-a227-f674bd410599@linux.ibm.com>
+ <YxEYAcFK0EdahXzJ@nvidia.com>
+ <273fdd58-549c-30d4-39a9-85fe631162ba@linux.ibm.com>
+ <YxI7kzuchcJz8sRX@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YxI7kzuchcJz8sRX@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,79 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/25/2022 9:12 PM, Valentin Schneider wrote:
-> The recently introduced sched_numa_hop_mask() exposes cpumasks of CPUs
-> reachable within a given distance budget, but this means each successive
-> cpumask is a superset of the previous one.
+On 2022-09-02 18:21, Jason Gunthorpe wrote:
+> On Fri, Sep 02, 2022 at 01:11:09PM -0400, Matthew Rosato wrote:
+>> On 9/1/22 4:37 PM, Jason Gunthorpe wrote:
+>>> On Thu, Sep 01, 2022 at 12:14:24PM -0400, Matthew Rosato wrote:
+>>>> On 9/1/22 6:25 AM, Robin Murphy wrote:
+>>>>> On 2022-08-31 21:12, Matthew Rosato wrote:
+>>>>>> With commit fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev
+>>>>>> calls") s390-iommu is supposed to handle dynamic switching between IOMMU
+>>>>>> domains and the DMA API handling.  However, this commit does not
+>>>>>> sufficiently handle the case where the device is released via a call
+>>>>>> to the release_device op as it may occur at the same time as an opposing
+>>>>>> attach_dev or detach_dev since the group mutex is not held over
+>>>>>> release_device.  This was observed if the device is deconfigured during a
+>>>>>> small window during vfio-pci initialization and can result in WARNs and
+>>>>>> potential kernel panics.
+>>>>>
+>>>>> Hmm, the more I think about it, something doesn't sit right about this whole situation... release_device is called via the notifier from device_del() after the device has been removed from its parent bus and largely dismantled; it should definitely not still have a driver bound by that point, so how is VFIO doing things that manage to race at all?
+>>>>>
+>>>>> Robin.
+>>>>
+>>>> So, I generally have seen the issue manifest as one of the calls
+>>>> into the iommu core from __vfio_group_unset_container
+>>>> (e.g. iommu_deatch_group via vfio_type1_iommu) failing with a WARN.
+>>>> This happens when the vfio group fd is released, which could be
+>>>> coming e.g. from a userspace ioctl VFIO_GROUP_UNSET_CONTAINER.
+>>>> AFAICT there's nothing serializing the notion of calling into the
+>>>> iommu core here against a device that is simultaneously going
+>>>> through release_device (because we don't enter release_device with
+>>>> the group mutex held), resulting in unpredictable behavior between
+>>>> the dueling attach_dev/detach_dev and the release_device for
+>>>> s390-iommu at least.
+>>>
+>>> Oh, this is a vfio bug.
+>>
+>> I've been running with your diff applied today on s390 and this
+>> indeed fixes the issue by preventing the detach-after-release coming
+>> out of vfio.
 > 
-> Code wanting to allocate one item per CPU (e.g. IRQs) at increasing
-> distances would thus need to allocate a temporary cpumask to note which
-> CPUs have already been visited. This can be prevented by leveraging
-> for_each_cpu_andnot() - package all that logic into one ugl^D fancy macro.
+> Heh, I'm shocked it worked at all
 > 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> ---
->   include/linux/topology.h | 37 +++++++++++++++++++++++++++++++++++++
->   1 file changed, 37 insertions(+)
-> 
-> diff --git a/include/linux/topology.h b/include/linux/topology.h
-> index 13b82b83e547..6c671dc3252c 100644
-> --- a/include/linux/topology.h
-> +++ b/include/linux/topology.h
-> @@ -254,5 +254,42 @@ static inline const struct cpumask *sched_numa_hop_mask(int node, int hops)
->   }
->   #endif	/* CONFIG_NUMA */
->   
-> +/**
-> + * for_each_numa_hop_cpu - iterate over CPUs by increasing NUMA distance,
-> + *                         starting from a given node.
-> + * @cpu: the iteration variable.
-> + * @node: the NUMA node to start the search from.
-> + *
-> + * Requires rcu_lock to be held.
-> + * Careful: this is a double loop, 'break' won't work as expected.
-> + *
-> + *
-> + * Implementation notes:
-> + *
-> + * Providing it is valid, the mask returned by
-> + *  sched_numa_hop_mask(node, hops+1)
-> + * is a superset of the one returned by
-> + *   sched_numa_hop_mask(node, hops)
-> + * which may not be that useful for drivers that try to spread things out and
-> + * want to visit a CPU not more than once.
-> + *
-> + * To accommodate for that, we use for_each_cpu_andnot() to iterate over the cpus
-> + * of sched_numa_hop_mask(node, hops+1) with the CPUs of
-> + * sched_numa_hop_mask(node, hops) removed, IOW we only iterate over CPUs
-> + * a given distance away (rather than *up to* a given distance).
-> + *
-> + * hops=0 forces us to play silly games: we pass cpu_none_mask to
-> + * for_each_cpu_andnot(), which turns it into for_each_cpu().
-> + */
-> +#define for_each_numa_hop_cpu(cpu, node)				       \
-> +	for (struct { const struct cpumask *curr, *prev; int hops; } __v =     \
-> +		     { sched_numa_hop_mask(node, 0), NULL, 0 };		       \
-> +	     !IS_ERR_OR_NULL(__v.curr);					       \
-> +	     __v.hops++,                                                       \
-> +	     __v.prev = __v.curr,					       \
-> +	     __v.curr = sched_numa_hop_mask(node, __v.hops))                   \
-> +		for_each_cpu_andnot(cpu,				       \
-> +				    __v.curr,				       \
-> +				    __v.hops ? __v.prev : cpu_none_mask)
->   
+> I've been trying to understand Robin's latest remarks because maybe I
+> don't really understand your situation right.
 
-Hiding two nested loops together in one for_each_* macro leads to 
-unexpected behavior for the standard usage of 'break/continue'.
+That was really just me thinking out loud to guess at how it must be 
+happening - I wasn't sure whether VFIO is actually intended to allow 
+that or not, so if not then by all means let's look at fixing that, but 
+as I say I think we're only seeing it provoke a problem at the driver 
+level because of 9ac8545199a1, and fixing VFIO doesn't fix that in 
+general. And conversely if we *can* fix that properly at the IOMMU API 
+level then the current VFIO behaviour should become benign again anyway.
 
-for_each_numa_hop_cpu(cpu, node) {
-     if (condition)
-         break; <== will terminate the inner loop only, but it's 
-invisible to the human developer/reviewer.
-}
+> IMHO this is definately a VFIO bug, because in a single-device group
+> we must not allow the domain to remain attached past remove(). Or more
+> broadly we shouldn't be holding ownership of a group without also
+> having a driver attached.
 
-These bugs will not be easy to spot in code review.
+FWIW I was assuming it might be fine for a VFIO user to hold the group 
+open if they expect the device to come back again and re-bind (for 
+example, perhaps over some reconfiguration that requires turning SR-IOV 
+off and on again?)
 
->   #endif /* _LINUX_TOPOLOGY_H */
+Cheers,
+Robin.

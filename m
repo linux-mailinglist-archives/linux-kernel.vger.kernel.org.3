@@ -2,88 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425995ADB46
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FD85ADB53
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231392AbiIEWQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S231821AbiIEWRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 18:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIEWQW (ORCPT
+        with ESMTP id S229577AbiIEWRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:16:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B59559253;
-        Mon,  5 Sep 2022 15:16:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 5 Sep 2022 18:17:33 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE20359267;
+        Mon,  5 Sep 2022 15:17:31 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1675FB81598;
-        Mon,  5 Sep 2022 22:16:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D5E2C433C1;
-        Mon,  5 Sep 2022 22:16:13 +0000 (UTC)
-Date:   Mon, 5 Sep 2022 18:16:50 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220905181650.71e9d02c@gandalf.local.home>
-In-Reply-To: <20220905204229.xqrqxmaax37n3ody@moria.home.lan>
-References: <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
-        <20220831101948.f3etturccmp5ovkl@suse.de>
-        <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
-        <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
-        <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
-        <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
-        <YxEE1vOwRPdzKxoq@dhcp22.suse.cz>
-        <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
-        <20220905110713.27304149@gandalf.local.home>
-        <CAJuCfpF-O6Gz2o7YqCgFHV+KEFuzC-PTUoBHj25DNRkkSmhbUg@mail.gmail.com>
-        <20220905204229.xqrqxmaax37n3ody@moria.home.lan>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mail.3ffe.de (Postfix) with ESMTPSA id CC0F41237;
+        Tue,  6 Sep 2022 00:17:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1662416249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IHqwoI5OJwucKGse+LfR+Krmr6ZZMdVFsaeSkgDsr3o=;
+        b=is7h4uz/R+0PDgRskheOgM5/6YA8uxXysj7m5fcncfbA4cy5K/7OjT1IGXWgLOOqwOR2gn
+        d40Bz2CE1pF0xzmCgwIsKeC7F9vfOeT5+3SlOnm9a2uAQh/T6h2fzFh5nqx54JXDWiVLFB
+        mrt9qVCalRIpRQVMx8Jd35O++/WVXFj4SzXS/DDG13hF3CriYXLfWJx2bC1tvvSxoJwk1V
+        fCDXxkqyFvq5cNucvdAstNyUoGlGAYcTeP4EPc2ae9VsEj4tFkmmx5C7FZy82uVqyEFi7S
+        vycjrzhHZ8dZM67AGgDgcAQCblpO5yGdxB0qCeV8Jh8u+9/qT98sdPd+ngfPNw==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Date:   Tue, 06 Sep 2022 00:17:29 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH devicetree] arm64: dts: ls1028a-rdb: add more ethernet
+ aliases
+In-Reply-To: <20220905212458.1549179-1-vladimir.oltean@nxp.com>
+References: <20220905212458.1549179-1-vladimir.oltean@nxp.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <d00682d7e7aec2f979236338e7b3a688@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,36 +61,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Sep 2022 16:42:29 -0400
-Kent Overstreet <kent.overstreet@linux.dev> wrote:
-
-> > Haven't tried that yet but will do. Thanks for the reference code!  
+Am 2022-09-05 23:24, schrieb Vladimir Oltean:
+> Commit "arm64: dts: ls1028a: enable swp5 and eno3 for all boards" which
+> Shawn declared as applied, but for which I can't find a sha1sum, has
+> enabled a new Ethernet port on the LS1028A-RDB (&enetc_port3), but
+> U-Boot, which passes a MAC address to Linux' device tree through the
+> /aliases node, fails to do this for this newly enabled port.
 > 
-> Is it really worth the effort of benchmarking tracing API overhead here?
+> Fix that by adding more ethernet aliases in the only
+> backwards-compatible way possible: at the end of the current list.
 > 
-> The main cost of a tracing based approach is going to to be the data structure
-> for remembering outstanding allocations so that free events can be matched to
-> the appropriate callsite. Regardless of whether it's done with BFP or by
-> attaching to the tracepoints directly, that's going to be the main overhead.
+> And since it is possible to very easily convert either swp4 or swp5 to
+> DSA user ports now (which have a MAC address of their own), using these
+> U-Boot commands:
+> 
+> => fdt addr $fdt_addr_r
+> => fdt rm /soc/pcie@1f0000000/ethernet-switch@0,5/ports/port@4 ethernet
+> 
+> it would be good if those DSA user ports (swp4, swp5) gained a valid 
+> MAC
+> address from U-Boot as well. In order for that to work properly,
+> provision two more ethernet aliases for &mscc_felix_port{4,5} as well.
 
-The point I was making here is that you do not need your own hooking
-mechanism. You can get the information directly by attaching to the
-tracepoint.
+First, let me say, I'm fine with this patch. But I'm not sure,
+how many MAC addresses are actually reserved on your
+RDB/QDS boards? I guess, they being evaluation boards you
+don't care? ;)
+On the Kontron sl28 boards we reserve just 8 and that is
+already a lot for a board with max 6 out facing ports. 4 of
+these ports used to be a switch, so in theory it should work
+with 3 MAC addresses, right? Or even just 2 if there is no
+need to terminate any traffic on the switch interfaces.
 
-> > static void my_callback(void *data, unsigned long call_site,
-> >                         const void *ptr, struct kmem_cache *s,
-> >                         size_t bytes_req, size_t bytes_alloc,
-> >                         gfp_t gfp_flags)
-> > {
-> >         struct my_data_struct *my_data = data;
-> >
-> >         { do whatever }
-> > }
+Anyway, do we really need so many addresses? What are the
+configurations here? For what is the address of the
+internal ports used?
 
-The "do whatever" is anything you want to do.
+Let's say we are in the "port extender mode" and use the
+second internal port as an actual switch port, that would
+then be:
+2x external enetc
+1x internal enetc
+4x external switch ports in port extender mode
 
-Or is the data structure you create with this approach going to be too much
-overhead? How hard is it for a hash or binary search lookup?
+Which makes 7 addresses. The internal enetc port doesn't
+really make sense in a port extender mode, because there
+is no switching going on. So uhm, 6 addresses are the
+maximum?
 
+This is the MAC address distribution for now on the
+sl28 boards:
+https://lore.kernel.org/linux-devicetree/20220901221857.2600340-19-michael@walle.cc/
 
--- Steve
+Please tell me if I'm missing something here.
+
+-michael
+
+> The resulting ordering is slightly unusual, but to me looks more 
+> natural
+> than eno0, eno2, swp0, swp1, swp2, swp3, eno3, swp4, swp5.
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>

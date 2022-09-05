@@ -2,154 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3435ACF62
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8DE5ACF76
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237051AbiIEKAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
+        id S236382AbiIEKBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236562AbiIEJ74 (ORCPT
+        with ESMTP id S235591AbiIEKBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 05:59:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3719E17E31;
-        Mon,  5 Sep 2022 02:59:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7AF8B80F9F;
-        Mon,  5 Sep 2022 09:59:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AE9C433D6;
-        Mon,  5 Sep 2022 09:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662371992;
-        bh=m2tFKytoOyOHZ29GrB6wXIG/xB9cj2DAHqOf87NQtXw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hG5GOZX1YVFdccWZbshGeVejLjUK55i4IHcIjTRUp8b0rf9tvqDEgAxsQ7zBHfEd3
-         6wHTNIa1Svdrs3tiM/+vJTh2lg+8eAJZ26fECUenUvYxt7OILg0N+duemR3REdh1Ke
-         f0R0g5gdqdiyRazcRb9BaNm4eL89wxl/Iqg24yY4VYGxLNxjF6pJj4Kc8P8MH3Wc6x
-         YVTGkTyu5PtrugEVXRhuoZuNDc2pYa1jzCROdbf9GrPUFcPDgdNnjLEgsR1sJYe1bN
-         NUdFrUZ/a6bYZWFUPxMg5W8pCwdTqCOQz7kllGpObrKIGgUcMncOBchQOnDCW2TXrQ
-         ugi/4Wkn0aWiw==
-Received: by mail-lj1-f178.google.com with SMTP id by6so8659401ljb.11;
-        Mon, 05 Sep 2022 02:59:52 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2t3+kD0dp+6mJ1L5RsDHtyQKmIuoyzjXXNicxY7hAPGSqVTsf2
-        7nppCQzrZ70nrKX82RoEIbke5f2n5gV4pabpDT0=
-X-Google-Smtp-Source: AA6agR6RfMFdNjIfa/4/plGUoXI69OCUj+956xThbfqstx8duexSRcdULXdZOz++tXvAz63pw92zZe7O0Fy/yDlX+z0=
-X-Received: by 2002:a05:651c:1a0e:b0:268:94ad:85f8 with SMTP id
- by14-20020a05651c1a0e00b0026894ad85f8mr6330107ljb.415.1662371990383; Mon, 05
- Sep 2022 02:59:50 -0700 (PDT)
+        Mon, 5 Sep 2022 06:01:07 -0400
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6C2B1F2F3;
+        Mon,  5 Sep 2022 03:01:05 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowADHQ1PeyBVjDZynAQ--.30103S2;
+        Mon, 05 Sep 2022 18:01:03 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH v3] USB: serial: ftdi_sio: Convert to use dev_groups
+Date:   Mon,  5 Sep 2022 18:01:01 +0800
+Message-Id: <20220905100101.343861-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220904165321.1140894-1-Jason@zx2c4.com> <CAMj1kXHC9Wfr74761gPcG=N8OC2P76FqSb8FVGWM7x1p-4hQKg@mail.gmail.com>
- <CAHmME9rAViyU3hCnziUkqGwtrOtu9oBOvniWV_uNCZ+TJGre5A@mail.gmail.com>
-In-Reply-To: <CAHmME9rAViyU3hCnziUkqGwtrOtu9oBOvniWV_uNCZ+TJGre5A@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 5 Sep 2022 11:59:39 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHPypCO5MNvFcw795LpZXPDRLjOdUJ4iRWxX7km7BF0ig@mail.gmail.com>
-Message-ID: <CAMj1kXHPypCO5MNvFcw795LpZXPDRLjOdUJ4iRWxX7km7BF0ig@mail.gmail.com>
-Subject: Re: [PATCH] efi: x86: Wipe setup_data on pure EFI boot
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowADHQ1PeyBVjDZynAQ--.30103S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urW3Zw48uF47trW5uFyUWrg_yoW8tFWfpF
+        43JayakFWkJFnxX342vw45X3s3tw4kJryfGr4ft34rWwn8J347GFW8Ja4UC3W8Jry8G3W7
+        XF4kurZIkFWrArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4D
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXAw3UUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Sept 2022 at 11:57, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> On Mon, Sep 5, 2022 at 11:55 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Sun, 4 Sept 2022 at 18:53, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > >
-> > > From: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > When booting the x86 kernel via EFI using the LoadImage/StartImage boot
-> > > services [as opposed to the deprecated EFI handover protocol], the setup
-> > > header is taken from the image directly, and given that EFI's LoadImage
-> > > has no Linux/x86 specific knowledge regarding struct bootparams or
-> > > struct setup_header, any absolute addresses in the setup header must
-> > > originate from the file and not from a prior loading stage.
-> > >
-> > > Since we cannot generally predict where LoadImage() decides to load an
-> > > image (*), such absolute addresses must be treated as suspect: even if a
-> > > prior boot stage intended to make them point somewhere inside the
-> > > [signed] image, there is no way to validate that, and if they point at
-> > > an arbitrary location in memory, the setup_data nodes will not be
-> > > covered by any signatures or TPM measurements either, and could be made
-> > > to contain an arbitrary sequence of SETUP_xxx nodes, which could
-> > > interfere quite badly with the early x86 boot sequence.
-> > >
-> > > (*) Note that, while LoadImage() does take a buffer/size tuple in
-> > > addition to a device path, which can be used to provide the image
-> > > contents directly, it will re-allocate such images, as the memory
-> > > footprint of an image is generally larger than the PE/COFF file
-> > > representation.
-> > >
-> > > Next, in order to allow hypervisors to still use setup_data in scenarios
-> > > where it may be useful, bump the x86 boot protocol version, so that
-> > > hypervisors, e.g. QEMU in the linked patch, can do the right thing
-> > > automatically depending on whether it is safe.
-> > >
-> > > Link: https://lore.kernel.org/qemu-devel/20220904165058.1140503-1-Jason@zx2c4.com/
-> > > Coauthored-by: Ard Biesheuvel <ardb@kernel.org>
-> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > ---
-> > >  arch/x86/boot/header.S                  | 2 +-
-> > >  drivers/firmware/efi/libstub/x86-stub.c | 7 +++++++
-> > >  2 files changed, 8 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
-> > > index f912d7770130..e4e2d6e33924 100644
-> > > --- a/arch/x86/boot/header.S
-> > > +++ b/arch/x86/boot/header.S
-> > > @@ -307,7 +307,7 @@ _start:
-> > >         # Part 2 of the header, from the old setup.S
-> > >
-> > >                 .ascii  "HdrS"          # header signature
-> > > -               .word   0x020f          # header version number (>= 0x0105)
-> > > +               .word   0x0210          # header version number (>= 0x0105)
-> > >                                         # or else old loadlin-1.5 will fail)
-> > >                 .globl realmode_swtch
-> > >  realmode_swtch:        .word   0, 0            # default_switch, SETUPSEG
-> > > diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> > > index 05ae8bcc9d67..9780f32a9f24 100644
-> > > --- a/drivers/firmware/efi/libstub/x86-stub.c
-> > > +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> > > @@ -517,6 +517,13 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
-> > >         hdr->ramdisk_image = 0;
-> > >         hdr->ramdisk_size = 0;
-> > >
-> > > +       /*
-> > > +        * Disregard any setup data that was provided by the bootloader:
-> > > +        * setup_data could be pointing anywhere, and we have no way of
-> > > +        * authenticating or validating the payload.
-> > > +        */
-> > > +       hdr->setup_data = 0;
-> > > +
-> > >         efi_stub_entry(handle, sys_table_arg, boot_params);
-> > >         /* not reached */
-> > >
-> >
-> > if the x86 folks are ok with this, I would like to send this to
-> > cc:stable, but I imagine retroactively changing the header version
-> > number might be something they would prefer to avoid. In that case,
-> > better to split these up.
->
-> Just FYI, the rng seed thing is new in 6.0 anyway. That still leaves
-> the more obscure dtb one, and whatever else is used, but at least
-> doing this for only 6.0+ would take care of the rng seed one.
->
+On Fri, Sep 02, 2022 at 10:52:52PM +0800, Greg KH wrote:
+>>>>  drivers/usb/serial/ftdi_sio.c | 101 +++++++++++++++++-----------------
+>>>>  1 file changed, 51 insertions(+), 50 deletions(-)
+>>>> 
+>>>> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+>>>> index d5a3986dfee7..479c3a5caaf8 100644
+>>>> --- a/drivers/usb/serial/ftdi_sio.c
+>>>> +++ b/drivers/usb/serial/ftdi_sio.c
+>>>> @@ -1107,11 +1107,40 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base);
+>>>>  static u32 ftdi_232bm_baud_to_divisor(int baud);
+>>>>  static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
+>>>>  static u32 ftdi_2232h_baud_to_divisor(int baud);
+>>>> +static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
+>>>> +					 struct attribute *attr, int idx);
+>>>> +static ssize_t latency_timer_store(struct device *dev,
+>>>> +				   struct device_attribute *attr,
+>>>> +				   const char *valbuf, size_t count);
+>>>> +static ssize_t event_char_store(struct device *dev,
+>>>> +	struct device_attribute *attr, const char *valbuf, size_t count);
+>>>> +static ssize_t latency_timer_show(struct device *dev,
+>>>> +				  struct device_attribute *attr, char *buf);
+>>>> +
+>>> 
+>>> Please work with the code so that you do not have to pre-define these
+>>> functions.  It should be possible.  Worst case, you pre-define the
+>>> structure for the driver, that should be it.
+>> 
+>> Without pre-definition of the functions, compilation errors will occur,
+>> such as 'ftdi_sio_attr_is_visible' undeclared here.
+>> I have no idea why they are not necessary.
+> 
+> If you move the code around that asks for those functions, you will not
+> need to define them.
+> 
 
-Sure, but there is also the -dtb thing which can already be used to
-crash the EFI stub. So even if this doesn't fix an issue occurring in
-the wild, I think it is cleaner to clear setup_data on the pure EFI
-entry path.
+Fine, I have already revised the patch and submitted a v4.
+
+>>> And again, have you tested this change?
+>> 
+>> Every time I change the code, I recomplie it and check whether there are
+>> errors.
+>> Are there any other tests I need to do?
+> 
+> Yes, boot with the device and make sure that the sysfs files are still
+> there.  You do have access to one of these devices, right?  They are
+> very very common.
+
+Sorry, I still have no idea how to boot with the device.
+But if there is any wrong with the patch, you can tell me and I will continue
+to revise it.
+
+Thanks,
+Jiang
+

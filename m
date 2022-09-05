@@ -2,187 +2,431 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4DF5ACE16
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EACB5ACE49
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236947AbiIEImb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S236239AbiIEImi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235191AbiIEIm2 (ORCPT
+        with ESMTP id S237034AbiIEIme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:42:28 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319932BB
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:42:27 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2858QjhW015626;
-        Mon, 5 Sep 2022 08:41:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=91lRCYFJmEiq8wadcEKGgbR+p3CuqJdwATguCeH8GtA=;
- b=c1hEl3nfdK5Lfi/4iF44G5lg8FfV7EcDDYG1SsVyXexSM7uUvCnxLc3W4q/DCH6++ihn
- AUpYwl4LhQG0Z0ZFS/NofA+6BDC+VOdEj66L9Q+PLd9DncqvA5my29bo4FBAZh6cMU9a
- 2up30STiBmHeFtTHBVhhWqUG5/HdJ0qfwmyD1hFEPXzZrIdm6c91pgwMZcJHkKrWz2vk
- 4XidU1lX5zAZhsQO48tjEJ30OLUQsCSx1h2Ddi2KpSOOMJS/wqgLnERvgc17WMszid5i
- xcbkozEI34ZPV65GyLkRdh7yZ32LszMDHBY82Ljh0yJv4hLh3QrtYiemRYt1x/z7rJ28 Qw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jddkxrbxg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 08:41:19 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2858RIl6017410;
-        Mon, 5 Sep 2022 08:41:18 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jddkxrbw1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 08:41:17 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2858Zv5O012552;
-        Mon, 5 Sep 2022 08:41:15 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3jbxj8t5d0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 08:41:15 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2858fD4141222454
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 5 Sep 2022 08:41:13 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EDA1F42042;
-        Mon,  5 Sep 2022 08:41:12 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B0BC542045;
-        Mon,  5 Sep 2022 08:41:08 +0000 (GMT)
-Received: from [9.43.107.234] (unknown [9.43.107.234])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  5 Sep 2022 08:41:08 +0000 (GMT)
-Message-ID: <64faaca6-bbcf-bbfb-66c8-b8e80fcdc6bd@linux.ibm.com>
-Date:   Mon, 5 Sep 2022 14:11:07 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Jerome Marchand <jmarchan@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>
-References: <20220901072119.37588-1-david@redhat.com>
- <YxDdycTur733hMgt@xz-m1.local>
- <fa0bb4b1-3edd-eb5a-7ad6-dff785d88d8f@redhat.com>
- <YxDghv54uHYMGCfG@xz-m1.local>
- <c9dc3f22-4a72-9b9d-7a74-ad77fe4f3b6e@redhat.com>
- <CAHbLzkpdUMq2fMxqx-NgSZ2VLBU5RGqSpJRWH6eRrYymErAbaw@mail.gmail.com>
- <YxD00K1lv151X/eq@xz-m1.local>
- <CAHbLzkrA-jKzTBq_Mn3NZYc91exovv1gH2LNzetCNiVu8+W6Kg@mail.gmail.com>
- <2368d91f-8442-076f-f33a-64b51b44825c@redhat.com>
- <e87bad0c-47fa-5e6d-9c43-f2f66da32a76@linux.ibm.com>
- <8e1aaa19-0d28-3381-3ec6-920a474f5f3f@redhat.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <8e1aaa19-0d28-3381-3ec6-920a474f5f3f@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LBHboaHYTCbFC3V1F64zdMmSYGct1sUK
-X-Proofpoint-GUID: USZsLXGhUNo4jj4GYycrjD0PC_HSyl26
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 5 Sep 2022 04:42:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEA5165B2;
+        Mon,  5 Sep 2022 01:42:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C036A387C1;
+        Mon,  5 Sep 2022 08:42:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662367351; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=HbWaoNdP2toM16lcXgeM6vS2i0ALZk2x+6JC5BCoCmU=;
+        b=hMZZnJrjHF5Bc/U7bPSDE2gcDTQBzNq8g3JAknWcYKkoFV8toka5re4tx5Pg1ZEFfKLx6C
+        rGtc1arfPS6mUQOPr+GnF9JUAxCWWbA0nIE3330HiUmn58erlpzBhpevs9TkC52EFSh657
+        wRdoOsqLtWdQcGqC5MGi0dVxY7wndxI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96AF8139C7;
+        Mon,  5 Sep 2022 08:42:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id T0K/I3e2FWOgEwAAMHmgww
+        (envelope-from <petr.pavlu@suse.com>); Mon, 05 Sep 2022 08:42:31 +0000
+From:   Petr Pavlu <petr.pavlu@suse.com>
+To:     mcgrof@kernel.org
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, mwilck@suse.com, Petr Pavlu <petr.pavlu@suse.com>
+Subject: [PATCH] module: Merge same-name module load requests
+Date:   Mon,  5 Sep 2022 10:41:31 +0200
+Message-Id: <20220905084131.14567-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-05_05,2022-09-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209050040
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/5/22 2:08 PM, David Hildenbrand wrote:
-> On 04.09.22 18:52, Aneesh Kumar K V wrote:
->> On 9/2/22 12:02 PM, David Hildenbrand wrote:
->>> On 01.09.22 20:35, Yang Shi wrote:
->>>> On Thu, Sep 1, 2022 at 11:07 AM Peter Xu <peterx@redhat.com> wrote:
->>>>>
->>>>> On Thu, Sep 01, 2022 at 10:50:48AM -0700, Yang Shi wrote:
->>>>>> Yeah, because THP collapse does copy the data before clearing pte. If
->>>>>> we want to remove pmdp_collapse_flush() by just clearing pmd, we
->>>>>> should clear *AND* flush pte before copying the data IIRC.
->>>>>
->>>>> Yes tlb flush is still needed.  IIUC the generic pmdp_collapse_flush() will
->>>>> still be working (with the pte level flushing there) but it should just
->>>>> start to work for all archs, so potentially we could drop the arch-specific
->>>>> pmdp_collapse_flush()s, mostly the ppc impl.
->>>>
->>>> I'm don't know why powperpc needs to have its specific
->>>> pmdp_collapse_flush() in the first place, not only the mandatory IPI
->>>> broadcast, but also the specific implementation of pmd tlb flush. But
->>>> anyway the IPI broadcast could be removed at least IMO.
->>>>
->>>
->>> pmdp_collapse_flush() is overwritten on book3s only. It either translates
->>> to radix__pmdp_collapse_flush() or hash__pmdp_collapse_flush().
->>>
->>>
->>> radix__pmdp_collapse_flush() has a comment explaining the situation:
->>>
->>>
->>> +       /*
->>> +        * pmdp collapse_flush need to ensure that there are no parallel gup
->>> +        * walk after this call. This is needed so that we can have stable
->>> +        * page ref count when collapsing a page. We don't allow a collapse page
->>> +        * if we have gup taken on the page. We can ensure that by sending IPI
->>> +        * because gup walk happens with IRQ disabled.
->>> +        */
->>>
->>>
->>> The comment for hash__pmdp_collapse_flush() is a bit more involved:
->>>
->>>     /*
->>>      * Wait for all pending hash_page to finish. This is needed
->>>      * in case of subpage collapse. When we collapse normal pages
->>>      * to hugepage, we first clear the pmd, then invalidate all
->>>      * the PTE entries. The assumption here is that any low level
->>>      * page fault will see a none pmd and take the slow path that
->>>      * will wait on mmap_lock. But we could very well be in a
->>>      * hash_page with local ptep pointer value. Such a hash page
->>>      * can result in adding new HPTE entries for normal subpages.
->>>      * That means we could be modifying the page content as we
->>>      * copy them to a huge page. So wait for parallel hash_page
->>>      * to finish before invalidating HPTE entries. We can do this
->>>      * by sending an IPI to all the cpus and executing a dummy
->>>      * function there.
->>>      */
->>>
->>> I'm not sure if that implies that the IPI is needed for some other hash-magic.
->>>
->>> Maybe Aneesh can clarify.
->>>
->>
->> We still need the IPI for the hash. Another reason for architecture to override that
->> function is to help them use the right page size when flushing the TLB.
-> 
-> Thanks for clarifying. So the radix variant wouldn't need the IPI anymore, once GUP-fast is handled differently, correct?
-> 
+During a system boot, it can happen that the kernel receives a burst of
+requests to insert the same module but loading it eventually fails
+during its init call. For instance, udev can make a request to insert
+a frequency module for each individual CPU when another frequency module
+is already loaded which causes the init function of the new module to
+return an error.
 
-yes. With this patch https://lkml.kernel.org/r/20220901222707.477402-1-shy828301@gmail.com we can remove the
-serialize_against_pte_lookup(vma->vm_mm); in radix__pmdp_collapse_flush()
+The module loader currently serializes all such requests, with the
+barrier in add_unformed_module(). This creates a lot of unnecessary work
+and delays the boot.
 
--aneesh
+This patch improves the behavior as follows:
+* A check whether a module load matches an already loaded module is
+  moved right after a module name is determined.
+* A new reference-counted shared_load_info structure is introduced to
+  keep track of duplicate load requests. Two loads are considered
+  equivalent if their module name matches. In case a load duplicates
+  another running insert, the code waits for its completion and then
+  returns -EEXIST or -ENODEV depending on whether it succeeded.
 
+Note that prior to 6e6de3dee51a ("kernel/module.c: Only return -EEXIST
+for modules that have finished loading"), the kernel already did merge
+some of same load requests but it was more by accident and relied on
+specific timing. The patch brings this behavior back in a more explicit
+form.
+
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+ kernel/module/main.c | 207 ++++++++++++++++++++++++++++++-------------
+ 1 file changed, 144 insertions(+), 63 deletions(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index a4e4d84b6f4e..24d0777c48e3 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -61,14 +61,28 @@
+ 
+ /*
+  * Mutex protects:
+- * 1) List of modules (also safely readable with preempt_disable),
++ * 1) list of modules (also safely readable with preempt_disable, delete and add
++ *    uses RCU list operations).
+  * 2) module_use links,
+- * 3) mod_tree.addr_min/mod_tree.addr_max.
+- * (delete and add uses RCU list operations).
++ * 3) mod_tree.addr_min/mod_tree.addr_max,
++ * 4) list of unloaded_tainted_modules.
++ * 5) list of running_loads.
+  */
+ DEFINE_MUTEX(module_mutex);
+ LIST_HEAD(modules);
+ 
++/* Shared information to track duplicate module loads. */
++struct shared_load_info {
++	char name[MODULE_NAME_LEN];
++	refcount_t refcnt;
++	struct list_head list;
++	int err;
++};
++LIST_HEAD(running_loads);
++
++/* Waiting for a module to finish loading? */
++static DECLARE_WAIT_QUEUE_HEAD(module_wq);
++
+ /* Work queue for freeing init sections in success case */
+ static void do_free_init(struct work_struct *w);
+ static DECLARE_WORK(init_free_wq, do_free_init);
+@@ -122,9 +136,6 @@ static void mod_update_bounds(struct module *mod)
+ int modules_disabled;
+ core_param(nomodule, modules_disabled, bint, 0);
+ 
+-/* Waiting for a module to finish initializing? */
+-static DECLARE_WAIT_QUEUE_HEAD(module_wq);
+-
+ static BLOCKING_NOTIFIER_HEAD(module_notify_list);
+ 
+ int register_module_notifier(struct notifier_block *nb)
+@@ -762,8 +773,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+ 	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false), sizeof(last_unloaded_module.taints));
+ 
+ 	free_module(mod);
+-	/* someone could wait for the module in add_unformed_module() */
+-	wake_up_all(&module_wq);
+ 	return 0;
+ out:
+ 	mutex_unlock(&module_mutex);
+@@ -2374,26 +2383,6 @@ static int post_relocation(struct module *mod, const struct load_info *info)
+ 	return module_finalize(info->hdr, info->sechdrs, mod);
+ }
+ 
+-/* Is this module of this name done loading?  No locks held. */
+-static bool finished_loading(const char *name)
+-{
+-	struct module *mod;
+-	bool ret;
+-
+-	/*
+-	 * The module_mutex should not be a heavily contended lock;
+-	 * if we get the occasional sleep here, we'll go an extra iteration
+-	 * in the wait_event_interruptible(), which is harmless.
+-	 */
+-	sched_annotate_sleep();
+-	mutex_lock(&module_mutex);
+-	mod = find_module_all(name, strlen(name), true);
+-	ret = !mod || mod->state == MODULE_STATE_LIVE;
+-	mutex_unlock(&module_mutex);
+-
+-	return ret;
+-}
+-
+ /* Call module constructors. */
+ static void do_mod_ctors(struct module *mod)
+ {
+@@ -2524,7 +2513,6 @@ static noinline int do_init_module(struct module *mod)
+ 		schedule_work(&init_free_wq);
+ 
+ 	mutex_unlock(&module_mutex);
+-	wake_up_all(&module_wq);
+ 
+ 	return 0;
+ 
+@@ -2540,7 +2528,6 @@ static noinline int do_init_module(struct module *mod)
+ 	klp_module_going(mod);
+ 	ftrace_release_mod(mod);
+ 	free_module(mod);
+-	wake_up_all(&module_wq);
+ 	return ret;
+ }
+ 
+@@ -2552,43 +2539,129 @@ static int may_init_module(void)
+ 	return 0;
+ }
+ 
++static struct shared_load_info *
++shared_load_info_alloc(const struct load_info *info)
++{
++	struct shared_load_info *shared_info =
++		kzalloc(sizeof(*shared_info), GFP_KERNEL);
++	if (shared_info == NULL)
++		return ERR_PTR(-ENOMEM);
++
++	strscpy(shared_info->name, info->name, sizeof(shared_info->name));
++	refcount_set(&shared_info->refcnt, 1);
++	INIT_LIST_HEAD(&shared_info->list);
++	return shared_info;
++}
++
++static void shared_load_info_get(struct shared_load_info *shared_info)
++{
++	refcount_inc(&shared_info->refcnt);
++}
++
++static void shared_load_info_put(struct shared_load_info *shared_info)
++{
++	if (refcount_dec_and_test(&shared_info->refcnt))
++		kfree(shared_info);
++}
++
+ /*
+- * We try to place it in the list now to make sure it's unique before
+- * we dedicate too many resources.  In particular, temporary percpu
++ * Check that the module load is unique and make it visible to others. The code
++ * looks for parallel running inserts and already loaded modules. Two inserts
++ * are considered equivalent if their module name matches. In case this load
++ * duplicates another running insert, the code waits for its completion and
++ * then returns -EEXIST or -ENODEV depending on whether it succeeded.
++ *
++ * Detecting early that a load is unique avoids dedicating too many cycles and
++ * resources to bring up the module. In particular, it prevents temporary percpu
+  * memory exhaustion.
++ *
++ * Merging same load requests then primarily helps during the boot process. It
++ * can happen that the kernel receives a burst of requests to load the same
++ * module (for example, a same module for each individual CPU) and loading it
++ * eventually fails during its init call. Merging the requests allows that only
++ * one full attempt to load the module is made.
++ *
++ * On a non-error return, it is guaranteed that this load is unique.
+  */
+-static int add_unformed_module(struct module *mod)
++static struct shared_load_info *add_running_load(const struct load_info *info)
+ {
+-	int err;
+ 	struct module *old;
++	struct shared_load_info *shared_info;
+ 
+-	mod->state = MODULE_STATE_UNFORMED;
+-
+-again:
+ 	mutex_lock(&module_mutex);
+-	old = find_module_all(mod->name, strlen(mod->name), true);
+-	if (old != NULL) {
+-		if (old->state != MODULE_STATE_LIVE) {
+-			/* Wait in case it fails to load. */
++
++	/* Search if there is a running load of a module with the same name. */
++	list_for_each_entry(shared_info, &running_loads, list)
++		if (strcmp(shared_info->name, info->name) == 0) {
++			int err;
++
++			shared_load_info_get(shared_info);
+ 			mutex_unlock(&module_mutex);
++
+ 			err = wait_event_interruptible(module_wq,
+-					       finished_loading(mod->name));
+-			if (err)
+-				goto out_unlocked;
+-			goto again;
++						       shared_info->err != 0);
++			if (!err)
++				err = shared_info->err;
++			shared_load_info_put(shared_info);
++			shared_info = ERR_PTR(err);
++			goto out_unlocked;
+ 		}
+-		err = -EEXIST;
++
++	/* Search if there is a live module with the given name already. */
++	old = find_module_all(info->name, strlen(info->name), true);
++	if (old != NULL) {
++		if (old->state == MODULE_STATE_LIVE) {
++			shared_info = ERR_PTR(-EEXIST);
++			goto out;
++		}
++
++		/*
++		 * Any active load always has its record in running_loads and so
++		 * would be found above. This applies independent whether such
++		 * a module is currently in MODULE_STATE_UNFORMED,
++		 * MODULE_STATE_COMING, or even in MODULE_STATE_GOING if its
++		 * initialization failed. It therefore means this must be an
++		 * older going module and the caller should try later once it is
++		 * gone.
++		 */
++		WARN_ON(old->state != MODULE_STATE_GOING);
++		shared_info = ERR_PTR(-EAGAIN);
+ 		goto out;
+ 	}
+-	mod_update_bounds(mod);
+-	list_add_rcu(&mod->list, &modules);
+-	mod_tree_insert(mod);
+-	err = 0;
++
++	/* The load is unique, make it visible to others. */
++	shared_info = shared_load_info_alloc(info);
++	if (IS_ERR(shared_info))
++		goto out;
++	list_add(&shared_info->list, &running_loads);
+ 
+ out:
+ 	mutex_unlock(&module_mutex);
+ out_unlocked:
+-	return err;
++	return shared_info;
++}
++
++/* Complete the running load and inform other duplicate inserts about it. */
++static void finalize_running_load(struct shared_load_info *shared_info, int err)
++{
++	mutex_lock(&module_mutex);
++	list_del(&shared_info->list);
++	shared_info->err = err == 0 ? -EEXIST : -ENODEV;
++	mutex_unlock(&module_mutex);
++
++	wake_up_all(&module_wq);
++	shared_load_info_put(shared_info);
++}
++
++static void add_unformed_module(struct module *mod)
++{
++	mod->state = MODULE_STATE_UNFORMED;
++
++	mutex_lock(&module_mutex);
++	mod_update_bounds(mod);
++	list_add_rcu(&mod->list, &modules);
++	mod_tree_insert(mod);
++	mutex_unlock(&module_mutex);
+ }
+ 
+ static int complete_formation(struct module *mod, struct load_info *info)
+@@ -2674,6 +2747,7 @@ static void cfi_init(struct module *mod);
+ static int load_module(struct load_info *info, const char __user *uargs,
+ 		       int flags)
+ {
++	struct shared_load_info *shared_info;
+ 	struct module *mod;
+ 	long err = 0;
+ 	char *after_dashes;
+@@ -2711,38 +2785,43 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 		goto free_copy;
+ 
+ 	/*
+-	 * Now that we know we have the correct module name, check
+-	 * if it's blacklisted.
++	 * Now that we know we have the correct module name, check if there is
++	 * another load of the same name in progress.
+ 	 */
++	shared_info = add_running_load(info);
++	if (IS_ERR(shared_info)) {
++		err = PTR_ERR(shared_info);
++		goto free_copy;
++	}
++
++	/* Check if the module is blacklisted. */
+ 	if (blacklisted(info->name)) {
+ 		err = -EPERM;
+ 		pr_err("Module %s is blacklisted\n", info->name);
+-		goto free_copy;
++		goto free_shared;
+ 	}
+ 
+ 	err = rewrite_section_headers(info, flags);
+ 	if (err)
+-		goto free_copy;
++		goto free_shared;
+ 
+ 	/* Check module struct version now, before we try to use module. */
+ 	if (!check_modstruct_version(info, info->mod)) {
+ 		err = -ENOEXEC;
+-		goto free_copy;
++		goto free_shared;
+ 	}
+ 
+ 	/* Figure out module layout, and allocate all the memory. */
+ 	mod = layout_and_allocate(info, flags);
+ 	if (IS_ERR(mod)) {
+ 		err = PTR_ERR(mod);
+-		goto free_copy;
++		goto free_shared;
+ 	}
+ 
+ 	audit_log_kern_module(mod->name);
+ 
+ 	/* Reserve our place in the list. */
+-	err = add_unformed_module(mod);
+-	if (err)
+-		goto free_module;
++	add_unformed_module(mod);
+ 
+ #ifdef CONFIG_MODULE_SIG
+ 	mod->sig_ok = info->sig_ok;
+@@ -2852,7 +2931,9 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	/* Done! */
+ 	trace_module_load(mod);
+ 
+-	return do_init_module(mod);
++	err = do_init_module(mod);
++	finalize_running_load(shared_info, err);
++	return err;
+ 
+  sysfs_cleanup:
+ 	mod_sysfs_teardown(mod);
+@@ -2886,15 +2967,15 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	/* Unlink carefully: kallsyms could be walking list. */
+ 	list_del_rcu(&mod->list);
+ 	mod_tree_remove(mod);
+-	wake_up_all(&module_wq);
+ 	/* Wait for RCU-sched synchronizing before releasing mod->list. */
+ 	synchronize_rcu();
+ 	mutex_unlock(&module_mutex);
+- free_module:
+ 	/* Free lock-classes; relies on the preceding sync_rcu() */
+ 	lockdep_free_key_range(mod->data_layout.base, mod->data_layout.size);
+ 
+ 	module_deallocate(mod, info);
++ free_shared:
++	finalize_running_load(shared_info, err);
+  free_copy:
+ 	free_copy(info, flags);
+ 	return err;
+-- 
+2.35.3
 

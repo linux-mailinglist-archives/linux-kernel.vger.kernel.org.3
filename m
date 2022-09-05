@@ -2,56 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D440D5AD442
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5155AD446
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238049AbiIENtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S238260AbiIENub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236987AbiIENs6 (ORCPT
+        with ESMTP id S237940AbiIENuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:48:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8E45808D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 06:48:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D074BB81148
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 13:48:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C683DC433D7;
-        Mon,  5 Sep 2022 13:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662385733;
-        bh=L9raCAjSMjHtpB6PHVS6V7GRmNiA2yKFajgbs2ucCec=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=i5LZHltw1qjvajU+WUuBQIT1xKhWMn623wlI0rXry3ElJvzQDFqzbs7R4y6me/upL
-         4sUgiUdMQLlzS7Eo7O6W46AYFnoO/BHZiW9+FNB5oFYY8RTcfD+IHVOMvLrPLYCyHP
-         Fh703KS1psgqMPPAOMjsAEyXSaMHp5NFWcU7Mqgx1t3VwerzcMa6nEYWEnY+Q4mCxd
-         IDRcF+ySveYJZ0xRogloDpMeFxK3wE5GzOOzLoC6Ir3SAbMJyw26YcJB435qDNxYjQ
-         CiBSmCMa6btqcUwR6++l7yuABwblZfMNPVNJc3JVKOkVWqujlkXvmGVG3L0V50mlOX
-         CMI7sI4CF5v6g==
-Date:   Mon, 5 Sep 2022 22:48:49 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH 2/4] tracing/hist: Call hist functions directly via a
- switch statement
-Message-Id: <20220905224849.80af1cb24d9eed1c1cdbcaee@kernel.org>
-In-Reply-To: <20220823215139.658601723@goodmis.org>
-References: <20220823214606.344269352@goodmis.org>
-        <20220823215139.658601723@goodmis.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 5 Sep 2022 09:50:24 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2043.outbound.protection.outlook.com [40.107.93.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E0F286FF;
+        Mon,  5 Sep 2022 06:50:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G3x/vg9Vd2IA9gV/HbEho1RWJkMlNpsNX27m1NkmjD3LF/IJ09qmeZDJJesQLFFKvRyayTrKFIucto5d5dgxNNmeSD76AAFUBwEGtnAy7CUuU786u7X9bPAGCUjStgC8WoXkJ4rBlEpNX1YJJwoAsI9S7X5vYUGQUnOGmScAC4ikH6VXCkxdjYpVXTZiRH63LHrAyBgN5a09hOFHs10djuIOewmQyRtOm0Z+ESjq53wUpUPf/sdcUmYSQhgNKzDTMwjXEpmFFEO4M0610D6KiZmKxmXU83NdkHJAhRHNpB+nAGWJeedXFpliJeNsMNiTa0diOW6er+/p7cDJBde2ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iDVr77z/lBvaY5ggSYdWov7wrnngYiW92g2jspttE0Q=;
+ b=JxAGN5dsbyD/aOyhAU4F7ZAfb31RciXfPLgUS6VQCAFo0O2i5jD/SgUzA7pDEZ8t5hFcXapBeOtUXZa5aNOX3tCPQDTPi74NgOANMf1ptYIlnrsHXzAraUt+sODsM9YrPVezHM5SxbuLm8Fbg8fljiXpRLBdIJRFl9oyInEEuV64noOOjuuEIhGZPxQblmGZ8lLoWFzkOGmP290kaBGISzrH1VM7Jlq2oNk16bnqo85GtwnVSc9qRO6IoUR9xPNTNGQGWw5f4t76wUxVoxgSaz8qC3jQh2GUgASlMjQ/QgmmJQr6j3E3AMn802qV12kz5Zddml2GDA17aLu44dCLfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iDVr77z/lBvaY5ggSYdWov7wrnngYiW92g2jspttE0Q=;
+ b=rJ0hZoLumd+4tNJArqS/WBQjvnV+6x0MdV8SewzKHnRsZSqhGwCrNoI8ziKHFO0DQIMM56fc8t/4zQeKiS4o+9EeHv1jqJNXLOhvW3tzvZhUVufCppLMzSgiJ51NW10Dlvr6qFnzHKPCsJqIrxXVlpIO4/gIz6BSEov++l0w7eo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15)
+ by BL3PR12MB6474.namprd12.prod.outlook.com (2603:10b6:208:3ba::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Mon, 5 Sep
+ 2022 13:50:15 +0000
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::2e8f:6161:3959:aa0c]) by PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::2e8f:6161:3959:aa0c%5]) with mapi id 15.20.5588.015; Mon, 5 Sep 2022
+ 13:50:15 +0000
+Message-ID: <0ce528c5-dbeb-4bad-9bfb-68decb46a1a8@amd.com>
+Date:   Mon, 5 Sep 2022 19:20:03 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 3/4] dma-buf: Add callback and enable signaling on debug
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220905105653.13670-1-Arvind.Yadav@amd.com>
+ <20220905105653.13670-4-Arvind.Yadav@amd.com>
+ <47d30adc-00ac-75ad-106b-18010d8083c5@amd.com>
+From:   "Yadav, Arvind" <arvyadav@amd.com>
+In-Reply-To: <47d30adc-00ac-75ad-106b-18010d8083c5@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN2PR01CA0237.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:eb::19) To PH7PR12MB6000.namprd12.prod.outlook.com
+ (2603:10b6:510:1dc::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a50b0c58-149c-4541-a4d5-08da8f458fba
+X-MS-TrafficTypeDiagnostic: BL3PR12MB6474:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wxWVehsDFkDTpAPsSPkDdHkhJ48wDlUL2zycCo1nm0KNJ5MUFW34I097Jg1trccu/XaPW4imrLZj1QaPNBGHciwhybzxYbMJVFvT7DhE1sr1+5PF1DdHr2/bkSeeWDpE6HhaERYa20c3iln/UczmdCp9ieDcleb2Kd+5b65NwFeY9KDaodSKuP4j/N8Nzfw8F5l+MObkCJTeOU4izPKdhYNV8RwvMakTc7PVWhEGzc05mDdIInE2Eo+oAuaXrBKVPsgHSagVv+7pzscvxMrKUTNmHXQ1MG4pROyz04yDv5X6edoXrj2pQIG26oqqWpHKNOK44nboHZEj1GUdEqrDSfE1IeT8PiuW2PByzKRZzy54Kx617y/sA1NYe+qRSYK+ribfbD4+jbjGH6wAcMyMzvEA9SLj4UFNR74uDE1p6AxkhgxA2I4C4wnfzx3iBTE0kWwgL62GT3lA659s8i+XmsPisP6QNnhJTrPFWO/8uPrZzwZVt1AlTHj/Fp/ii+zbfhnFMXCw1jGcip0bdm4Vc488Pv1SmEESg3+o0E7k8QrtGUtge7niWsPmFa1txmClnDC7NmZVbKYSKJf3s8vmjzflb4SiPuIMR34X59D7uvrMLXZ9GrLKJKd2eeGrEgT3HeZCHSty0IVgo8Rl2Q3rHwLN+XOG6oUKtcCtmCfNGFbkx6UZHqmCWJOC3tWfF5XH32CYyiILq325HYyNRuEdo81IOR4WbA7cEPpLJdfX5eIB47arDdHcYXCkQ0F1FEPncPIs0rtJHmXIiGs9Kxxpu+SPyIWv1r33kqynGJKJ4hynVPc5RdX3w1eGNv3hvFYT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6000.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(346002)(376002)(39860400002)(366004)(316002)(31686004)(36756003)(478600001)(110136005)(66946007)(66476007)(66556008)(38100700002)(6486002)(8676002)(921005)(41300700001)(8936002)(2616005)(5660300002)(31696002)(53546011)(6506007)(26005)(83380400001)(6512007)(2906002)(66574015)(6666004)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Tmp3RUIrK1Y3a1dodU4rVzFWMGJrTnEzamxwK2JlMDgxYnNXMEE5ZnNTdytq?=
+ =?utf-8?B?czNMbnUvVlBPeHdLdjNIdER6aytjMW9LK3laZmR3bnVFVkx3cm5jU2dsaURp?=
+ =?utf-8?B?Qzg3alBFNVlnYnBtM0c4b2R4ak50U3E0bDhFQ0Fwd3FqRW9iREsyZytZdnhJ?=
+ =?utf-8?B?NzJhdzBkbEhYZFhvSDN0THNEMXFQTHFiOFBjS3NzNHJJbFlCanVRbVB2RzZk?=
+ =?utf-8?B?b0JIcFRRcWJXSDQ2Vyt1VFNmTUhEL3MyQ2pibkRKMkttMlBPZHlmNm90QUNo?=
+ =?utf-8?B?RWlUbEUzYXVlaGxiNjVDMndxNUlqcms3M1RLOUlRVW9BMVUrQmhpb2VMTG1I?=
+ =?utf-8?B?b1E1WSt1b0twTEV4MGFCa3B4Y05yc25lOXE3amNHYUdJaDdPeWFZOVB0cmNz?=
+ =?utf-8?B?c3ZYRzkxRnFwdTVmaW42MzJlRlZ4L29RYm5zWjc2Zlh5Vi9mT0c1dTlibVlR?=
+ =?utf-8?B?L2V1QndiMzFkM2hkN0toT2toK1NxMkFqRWxuRGZQSXdNcGtuemxRVSt1VDl1?=
+ =?utf-8?B?bDVjbFkzRk1mRUJoaUdicDU5OWluVllVWjN6dnFVVFUxUERJSk1zZ1ZyN3Fp?=
+ =?utf-8?B?TkJOUkVLc3hxVzhTUHFYVC8rMmhibjhaWFVSelFGaG1XaFpzTXdDbk9MZmw2?=
+ =?utf-8?B?VkYyK1A0SklHOVdLN0FjRm10alJzRytIbW84WHZVakdIMDNUT3IxSk5ndkQ5?=
+ =?utf-8?B?N1J2K0lkeDRLRElDQUZPejV0WmNjZmk1SENKSUNNVXVqQ2dhSGZ5ZXBmamRQ?=
+ =?utf-8?B?WE1UUFE5MU9seXJlUU9uSFliQUdiQkhmU2lkZHAvRVlCWEl3bU02ZGhFaUQz?=
+ =?utf-8?B?cHZWZnRucU5oZEhVYk1BS1o0NnRUclcwcVBkc2UxZ05wMld5MXdLSi9zTENG?=
+ =?utf-8?B?aHA2cnNLd0xzRmtkMjdaTUpncG93TElST3Y0Y1R4UnhqN0lhbkphb283Tllt?=
+ =?utf-8?B?V28rU0V5ZUNxWkdPb1RKc0xXcHFhR3NoeEFtS2hJZGxFTHYrcDFoRkZTdlhS?=
+ =?utf-8?B?anNpSTV6N0M4dC85WTR5NzZSSFRmK3p2WUk5VExBL0x1czRnbnVHZTU0R3NH?=
+ =?utf-8?B?UERQa3VBNFpKWkpTa2Q4cjlSb2x1VEhTODA0Wk1kc2hTUEJVeENqZGlXZ1ZB?=
+ =?utf-8?B?bFgvUTA2Nkp1QjYrYVV1ei81b1RTdFJwczVEUG1oR0RQYWhTMTFGYmMwRFM3?=
+ =?utf-8?B?VlRYaVhrdGlXVFhiQVJya0VlYStyeE1zUU5tbk5IUjJYSkhkUDkyT3B5VHE1?=
+ =?utf-8?B?MHhSVm1HcDluelRtWDB3TnVpUHhiazAyUFZuTmRLemtZQWVmMVl0cDNvSDBR?=
+ =?utf-8?B?a1R1OGFxZ1JOWUQyemVlVkFUOEhmZGdpUmlmTTYzQ0pINmRnNVZFL3RHVmdr?=
+ =?utf-8?B?M2kwUWhEbkJSTGZqOEphdmJYcWo5UUhnZDNCMTBjZ21DeTZ1UW9NRnFxS21s?=
+ =?utf-8?B?ZGR2SGRmaDgzWGlCOUFGM0Ric3JmVzh1aEtGaG5NS01ZS1llemx2eW9nU1dz?=
+ =?utf-8?B?UVA2RWtFeWdvRmZ5ektNaE11UUw3NXQ4eVd1QlJKWnJIODYyR1F5UlAyTThJ?=
+ =?utf-8?B?TGw1NDB1U0t1SVo1K25VY3lDbTdFMVI3Q2lYWEd1dytUOHpBcUNoUUQ1dHlZ?=
+ =?utf-8?B?S2RNcTB1L01mc0Zyc2lNKzc4dWsxT2V0d09wK0J1MjVWYkJZM0xuYlRyMC9K?=
+ =?utf-8?B?WFlZYjlBMEZwMFR1SGhSTUlQNTR3TU5DYlJuMWdzeUZBd0NKcWJCVFVxOUw2?=
+ =?utf-8?B?b2lEYjVnWnFXQ215Sk80Sm1xOUxQQVFFUzZZeWtpVFRFZWNDS1JoTnRQdjdV?=
+ =?utf-8?B?TjZCTklYVUozcEtRSTdTdWJFdnBwMTArVlBPSytBL0VPUmRiN2didlZDaDUy?=
+ =?utf-8?B?S2RWOUhUanpWTEFVdmZ6Q09WMXoxQUNiTVhCOTd4bVRQOVZYbWppV2ZzdjNy?=
+ =?utf-8?B?Q0FTUGFlcW5VN1ZiOFdWTWFXQlY2QkFEM1NySUhmVXFFQUJJditQUEZuY3dB?=
+ =?utf-8?B?N3E5elE3eDFLTUlmeTgxcnYybVdVMkxBdmR1QkpMRUxhU1A3UU01T3Y5Rzc1?=
+ =?utf-8?B?QmhUdzJqanlNcjY5QW1FTWJYQmRGdm1iVFJMa1dicHBzakdBS0tVVEd2NlBi?=
+ =?utf-8?Q?lOETh3Xb5PNuQmPYHAZ6BTibr?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a50b0c58-149c-4541-a4d5-08da8f458fba
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6000.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 13:50:15.6360
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dwMHNPo3Iy9CKGTi21aP9ZYdFdfwSdh83i/pSWl4ORifGpXLjR35ymKTIKhKifkDHYepU+8w3sFVdtv37hVLzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6474
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,677 +130,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
 
-I found this crashed the kernel if I ran 
+On 9/5/2022 4:56 PM, Christian König wrote:
+>
+>
+> Am 05.09.22 um 12:56 schrieb Arvind Yadav:
+>> Here's on debug adding an enable_signaling callback for the stub
+>> fences and enabling software signaling for the stub fence which
+>> is always signaled. This fence should enable software signaling
+>> otherwise the AMD GPU scheduler will cause a GPU reset due to a
+>> GPU scheduler cleanup activity timeout.
+>>
+>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>> ---
+>>   drivers/dma-buf/dma-fence.c | 17 +++++++++++++++++
+>>   1 file changed, 17 insertions(+)
+>>
+>> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+>> index 066400ed8841..0a67af945ef8 100644
+>> --- a/drivers/dma-buf/dma-fence.c
+>> +++ b/drivers/dma-buf/dma-fence.c
+>> @@ -27,6 +27,10 @@ EXPORT_TRACEPOINT_SYMBOL(dma_fence_signaled);
+>>   static DEFINE_SPINLOCK(dma_fence_stub_lock);
+>>   static struct dma_fence dma_fence_stub;
+>>   +#ifdef CONFIG_DEBUG_FS
+>> +static bool __dma_fence_enable_signaling(struct dma_fence *fence);
+>> +#endif
+>> +
+>>   /*
+>>    * fence context counter: each execution context should have its own
+>>    * fence context, this allows checking if fences belong to the same
+>> @@ -116,9 +120,19 @@ static const char 
+>> *dma_fence_stub_get_name(struct dma_fence *fence)
+>>           return "stub";
+>>   }
+>>   +#ifdef CONFIG_DEBUG_FS
+>> +static bool dma_fence_stub_enable_signaling(struct dma_fence *f)
+>> +{
+>> +    return true;
+>> +}
+>> +#endif
+>
+> Again, adding the callback is unnecessary.
 
- # ftracetest test.d/trigger/trigger-hist-expressions.tc
+sure, I will remove callback from here and other patch also.
 
-More specifically, here is the minimum reproduce command.
+~arvind
 
- # echo "hist:keys=common_pid:x=16-8-4" > events/sched/sched_process_fork/trigger 
-[   75.874402] BUG: kernel NULL pointer dereference, address: 0000000000000038
-[   75.875378] #PF: supervisor read access in kernel mode
-
-I investigated it and found you missed to set correct fn_num for
-combined constant field;
-
-> @@ -2725,7 +2748,8 @@ static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
->  		if (var2)
->  			expr->operands[1] = var2;
->  
-> -		expr->constant = op_fn(expr, NULL, NULL, NULL, NULL);
-> +		expr->fn_num = op_fn;
-> +		expr->constant = hist_fn_call(expr, NULL, NULL, NULL, NULL);
->  
->  		expr->operands[0] = NULL;
->  		expr->operands[1] = NULL;
-
-Here, we need this;
-
-		expr->fn_num = HIST_FIELD_FN_CONST;
-
-Without this fix, the binary op_fn is kept on this const field and it
-causes the problem because the const field doesn't have operands.
-
-Thank you,
-
-
-On Tue, 23 Aug 2022 17:46:08 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> Due to retpolines, indirect calls are much more expensive than direct
-> calls. The histograms have a select set of functions it uses for the
-> histograms, instead of using function pointers to call them, create a
-> hist_fn_call() function that uses a switch statement to call the histogram
-> functions directly. This gives a 13% speedup to the histogram logic.
-> 
-> Using the histogram benchmark:
-> 
-> Before:
-> 
->  # event histogram
->  #
->  # trigger info: hist:keys=delta:vals=hitcount:sort=delta:size=2048 if delta > 0 [active]
->  #
-> 
-> { delta:        129 } hitcount:       2213
-> { delta:        130 } hitcount:     285965
-> { delta:        131 } hitcount:    1146545
-> { delta:        132 } hitcount:    5185432
-> { delta:        133 } hitcount:   19896215
-> { delta:        134 } hitcount:   53118616
-> { delta:        135 } hitcount:   83816709
-> { delta:        136 } hitcount:   68329562
-> { delta:        137 } hitcount:   41859349
-> { delta:        138 } hitcount:   46257797
-> { delta:        139 } hitcount:   54400831
-> { delta:        140 } hitcount:   72875007
-> { delta:        141 } hitcount:   76193272
-> { delta:        142 } hitcount:   49504263
-> { delta:        143 } hitcount:   38821072
-> { delta:        144 } hitcount:   47702679
-> { delta:        145 } hitcount:   41357297
-> { delta:        146 } hitcount:   22058238
-> { delta:        147 } hitcount:    9720002
-> { delta:        148 } hitcount:    3193542
-> { delta:        149 } hitcount:     927030
-> { delta:        150 } hitcount:     850772
-> { delta:        151 } hitcount:    1477380
-> { delta:        152 } hitcount:    2687977
-> { delta:        153 } hitcount:    2865985
-> { delta:        154 } hitcount:    1977492
-> { delta:        155 } hitcount:    2475607
-> { delta:        156 } hitcount:    3403612
-> 
-> After:
-> 
->  # event histogram
->  #
->  # trigger info: hist:keys=delta:vals=hitcount:sort=delta:size=2048 if delta > 0 [active]
->  #
-> 
-> { delta:        113 } hitcount:        272
-> { delta:        114 } hitcount:        840
-> { delta:        118 } hitcount:        344
-> { delta:        119 } hitcount:      25428
-> { delta:        120 } hitcount:     350590
-> { delta:        121 } hitcount:    1892484
-> { delta:        122 } hitcount:    6205004
-> { delta:        123 } hitcount:   11583521
-> { delta:        124 } hitcount:   37590979
-> { delta:        125 } hitcount:  108308504
-> { delta:        126 } hitcount:  131672461
-> { delta:        127 } hitcount:   88700598
-> { delta:        128 } hitcount:   65939870
-> { delta:        129 } hitcount:   45055004
-> { delta:        130 } hitcount:   33174464
-> { delta:        131 } hitcount:   31813493
-> { delta:        132 } hitcount:   29011676
-> { delta:        133 } hitcount:   22798782
-> { delta:        134 } hitcount:   22072486
-> { delta:        135 } hitcount:   17034113
-> { delta:        136 } hitcount:    8982490
-> { delta:        137 } hitcount:    2865908
-> { delta:        138 } hitcount:     980382
-> { delta:        139 } hitcount:    1651944
-> { delta:        140 } hitcount:    4112073
-> { delta:        141 } hitcount:    3963269
-> { delta:        142 } hitcount:    1712508
-> { delta:        143 } hitcount:     575941
-> { delta:        144 } hitcount:     351427
-> { delta:        145 } hitcount:     218077
-> { delta:        146 } hitcount:     167297
-> { delta:        147 } hitcount:     146198
-> { delta:        148 } hitcount:     116122
-> { delta:        149 } hitcount:      58993
-> { delta:        150 } hitcount:      40228
-> 
-> The delta above is in nanoseconds. It brings the fastest time down from
-> 129ns to 113ns, and the peak from 141ns to 126ns.
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  kernel/trace/trace_events_hist.c | 244 +++++++++++++++++++++----------
->  1 file changed, 168 insertions(+), 76 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-> index fdf784620c28..92fbd72b6408 100644
-> --- a/kernel/trace/trace_events_hist.c
-> +++ b/kernel/trace/trace_events_hist.c
-> @@ -104,6 +104,38 @@ enum field_op_id {
->  	FIELD_OP_MULT,
->  };
->  
-> +enum hist_field_fn {
-> +	HIST_FIELD_FN_NOP,
-> +	HIST_FIELD_FN_VAR_REF,
-> +	HIST_FIELD_FN_COUNTER,
-> +	HIST_FIELD_FN_CONST,
-> +	HIST_FIELD_FN_LOG2,
-> +	HIST_FIELD_FN_BUCKET,
-> +	HIST_FIELD_FN_TIMESTAMP,
-> +	HIST_FIELD_FN_CPU,
-> +	HIST_FIELD_FN_STRING,
-> +	HIST_FIELD_FN_DYNSTRING,
-> +	HIST_FIELD_FN_RELDYNSTRING,
-> +	HIST_FIELD_FN_PSTRING,
-> +	HIST_FIELD_FN_S64,
-> +	HIST_FIELD_FN_U64,
-> +	HIST_FIELD_FN_S32,
-> +	HIST_FIELD_FN_U32,
-> +	HIST_FIELD_FN_S16,
-> +	HIST_FIELD_FN_U16,
-> +	HIST_FIELD_FN_S8,
-> +	HIST_FIELD_FN_U8,
-> +	HIST_FIELD_FN_UMINUS,
-> +	HIST_FIELD_FN_MINUS,
-> +	HIST_FIELD_FN_PLUS,
-> +	HIST_FIELD_FN_DIV,
-> +	HIST_FIELD_FN_MULT,
-> +	HIST_FIELD_FN_DIV_POWER2,
-> +	HIST_FIELD_FN_DIV_NOT_POWER2,
-> +	HIST_FIELD_FN_DIV_MULT_SHIFT,
-> +	HIST_FIELD_FN_EXECNAME,
-> +};
-> +
->  /*
->   * A hist_var (histogram variable) contains variable information for
->   * hist_fields having the HIST_FIELD_FL_VAR or HIST_FIELD_FL_VAR_REF
-> @@ -123,15 +155,15 @@ struct hist_var {
->  struct hist_field {
->  	struct ftrace_event_field	*field;
->  	unsigned long			flags;
-> -	hist_field_fn_t			fn;
-> -	unsigned int			ref;
-> -	unsigned int			size;
-> -	unsigned int			offset;
-> -	unsigned int                    is_signed;
->  	unsigned long			buckets;
->  	const char			*type;
->  	struct hist_field		*operands[HIST_FIELD_OPERANDS_MAX];
->  	struct hist_trigger_data	*hist_data;
-> +	enum hist_field_fn		fn_num;
-> +	unsigned int			ref;
-> +	unsigned int			size;
-> +	unsigned int			offset;
-> +	unsigned int                    is_signed;
->  
->  	/*
->  	 * Variable fields contain variable-specific info in var.
-> @@ -166,14 +198,11 @@ struct hist_field {
->  	u64				div_multiplier;
->  };
->  
-> -static u64 hist_field_none(struct hist_field *field,
-> -			   struct tracing_map_elt *elt,
-> -			   struct trace_buffer *buffer,
-> -			   struct ring_buffer_event *rbe,
-> -			   void *event)
-> -{
-> -	return 0;
-> -}
-> +static u64 hist_fn_call(struct hist_field *hist_field,
-> +			struct tracing_map_elt *elt,
-> +			struct trace_buffer *buffer,
-> +			struct ring_buffer_event *rbe,
-> +			void *event);
->  
->  static u64 hist_field_const(struct hist_field *field,
->  			   struct tracing_map_elt *elt,
-> @@ -250,7 +279,7 @@ static u64 hist_field_log2(struct hist_field *hist_field,
->  {
->  	struct hist_field *operand = hist_field->operands[0];
->  
-> -	u64 val = operand->fn(operand, elt, buffer, rbe, event);
-> +	u64 val = hist_fn_call(operand, elt, buffer, rbe, event);
->  
->  	return (u64) ilog2(roundup_pow_of_two(val));
->  }
-> @@ -264,7 +293,7 @@ static u64 hist_field_bucket(struct hist_field *hist_field,
->  	struct hist_field *operand = hist_field->operands[0];
->  	unsigned long buckets = hist_field->buckets;
->  
-> -	u64 val = operand->fn(operand, elt, buffer, rbe, event);
-> +	u64 val = hist_fn_call(operand, elt, buffer, rbe, event);
->  
->  	if (WARN_ON_ONCE(!buckets))
->  		return val;
-> @@ -285,8 +314,8 @@ static u64 hist_field_plus(struct hist_field *hist_field,
->  	struct hist_field *operand1 = hist_field->operands[0];
->  	struct hist_field *operand2 = hist_field->operands[1];
->  
-> -	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
-> -	u64 val2 = operand2->fn(operand2, elt, buffer, rbe, event);
-> +	u64 val1 = hist_fn_call(operand1, elt, buffer, rbe, event);
-> +	u64 val2 = hist_fn_call(operand2, elt, buffer, rbe, event);
->  
->  	return val1 + val2;
->  }
-> @@ -300,8 +329,8 @@ static u64 hist_field_minus(struct hist_field *hist_field,
->  	struct hist_field *operand1 = hist_field->operands[0];
->  	struct hist_field *operand2 = hist_field->operands[1];
->  
-> -	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
-> -	u64 val2 = operand2->fn(operand2, elt, buffer, rbe, event);
-> +	u64 val1 = hist_fn_call(operand1, elt, buffer, rbe, event);
-> +	u64 val2 = hist_fn_call(operand2, elt, buffer, rbe, event);
->  
->  	return val1 - val2;
->  }
-> @@ -315,8 +344,8 @@ static u64 hist_field_div(struct hist_field *hist_field,
->  	struct hist_field *operand1 = hist_field->operands[0];
->  	struct hist_field *operand2 = hist_field->operands[1];
->  
-> -	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
-> -	u64 val2 = operand2->fn(operand2, elt, buffer, rbe, event);
-> +	u64 val1 = hist_fn_call(operand1, elt, buffer, rbe, event);
-> +	u64 val2 = hist_fn_call(operand2, elt, buffer, rbe, event);
->  
->  	/* Return -1 for the undefined case */
->  	if (!val2)
-> @@ -338,7 +367,7 @@ static u64 div_by_power_of_two(struct hist_field *hist_field,
->  	struct hist_field *operand1 = hist_field->operands[0];
->  	struct hist_field *operand2 = hist_field->operands[1];
->  
-> -	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
-> +	u64 val1 = hist_fn_call(operand1, elt, buffer, rbe, event);
->  
->  	return val1 >> __ffs64(operand2->constant);
->  }
-> @@ -352,7 +381,7 @@ static u64 div_by_not_power_of_two(struct hist_field *hist_field,
->  	struct hist_field *operand1 = hist_field->operands[0];
->  	struct hist_field *operand2 = hist_field->operands[1];
->  
-> -	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
-> +	u64 val1 = hist_fn_call(operand1, elt, buffer, rbe, event);
->  
->  	return div64_u64(val1, operand2->constant);
->  }
-> @@ -366,7 +395,7 @@ static u64 div_by_mult_and_shift(struct hist_field *hist_field,
->  	struct hist_field *operand1 = hist_field->operands[0];
->  	struct hist_field *operand2 = hist_field->operands[1];
->  
-> -	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
-> +	u64 val1 = hist_fn_call(operand1, elt, buffer, rbe, event);
->  
->  	/*
->  	 * If the divisor is a constant, do a multiplication and shift instead.
-> @@ -400,8 +429,8 @@ static u64 hist_field_mult(struct hist_field *hist_field,
->  	struct hist_field *operand1 = hist_field->operands[0];
->  	struct hist_field *operand2 = hist_field->operands[1];
->  
-> -	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
-> -	u64 val2 = operand2->fn(operand2, elt, buffer, rbe, event);
-> +	u64 val1 = hist_fn_call(operand1, elt, buffer, rbe, event);
-> +	u64 val2 = hist_fn_call(operand2, elt, buffer, rbe, event);
->  
->  	return val1 * val2;
->  }
-> @@ -414,7 +443,7 @@ static u64 hist_field_unary_minus(struct hist_field *hist_field,
->  {
->  	struct hist_field *operand = hist_field->operands[0];
->  
-> -	s64 sval = (s64)operand->fn(operand, elt, buffer, rbe, event);
-> +	s64 sval = (s64)hist_fn_call(operand, elt, buffer, rbe, event);
->  	u64 val = (u64)-sval;
->  
->  	return val;
-> @@ -657,19 +686,19 @@ struct snapshot_context {
->   * Returns the specific division function to use if the divisor
->   * is constant. This avoids extra branches when the trigger is hit.
->   */
-> -static hist_field_fn_t hist_field_get_div_fn(struct hist_field *divisor)
-> +static enum hist_field_fn hist_field_get_div_fn(struct hist_field *divisor)
->  {
->  	u64 div = divisor->constant;
->  
->  	if (!(div & (div - 1)))
-> -		return div_by_power_of_two;
-> +		return HIST_FIELD_FN_DIV_POWER2;
->  
->  	/* If the divisor is too large, do a regular division */
->  	if (div > (1 << HIST_DIV_SHIFT))
-> -		return div_by_not_power_of_two;
-> +		return HIST_FIELD_FN_DIV_NOT_POWER2;
->  
->  	divisor->div_multiplier = div64_u64((u64)(1 << HIST_DIV_SHIFT), div);
-> -	return div_by_mult_and_shift;
-> +	return HIST_FIELD_FN_DIV_MULT_SHIFT;
->  }
->  
->  static void track_data_free(struct track_data *track_data)
-> @@ -1334,38 +1363,32 @@ static const char *hist_field_name(struct hist_field *field,
->  	return field_name;
->  }
->  
-> -static hist_field_fn_t select_value_fn(int field_size, int field_is_signed)
-> +static enum hist_field_fn select_value_fn(int field_size, int field_is_signed)
->  {
-> -	hist_field_fn_t fn = NULL;
-> -
->  	switch (field_size) {
->  	case 8:
->  		if (field_is_signed)
-> -			fn = hist_field_s64;
-> +			return HIST_FIELD_FN_S64;
->  		else
-> -			fn = hist_field_u64;
-> -		break;
-> +			return HIST_FIELD_FN_U64;
->  	case 4:
->  		if (field_is_signed)
-> -			fn = hist_field_s32;
-> +			return HIST_FIELD_FN_S32;
->  		else
-> -			fn = hist_field_u32;
-> -		break;
-> +			return HIST_FIELD_FN_U32;
->  	case 2:
->  		if (field_is_signed)
-> -			fn = hist_field_s16;
-> +			return HIST_FIELD_FN_S16;
->  		else
-> -			fn = hist_field_u16;
-> -		break;
-> +			return HIST_FIELD_FN_U16;
->  	case 1:
->  		if (field_is_signed)
-> -			fn = hist_field_s8;
-> +			return HIST_FIELD_FN_S8;
->  		else
-> -			fn = hist_field_u8;
-> -		break;
-> +			return HIST_FIELD_FN_U8;
->  	}
->  
-> -	return fn;
-> +	return HIST_FIELD_FN_NOP;
->  }
->  
->  static int parse_map_size(char *str)
-> @@ -1922,19 +1945,19 @@ static struct hist_field *create_hist_field(struct hist_trigger_data *hist_data,
->  		goto out; /* caller will populate */
->  
->  	if (flags & HIST_FIELD_FL_VAR_REF) {
-> -		hist_field->fn = hist_field_var_ref;
-> +		hist_field->fn_num = HIST_FIELD_FN_VAR_REF;
->  		goto out;
->  	}
->  
->  	if (flags & HIST_FIELD_FL_HITCOUNT) {
-> -		hist_field->fn = hist_field_counter;
-> +		hist_field->fn_num = HIST_FIELD_FN_COUNTER;
->  		hist_field->size = sizeof(u64);
->  		hist_field->type = "u64";
->  		goto out;
->  	}
->  
->  	if (flags & HIST_FIELD_FL_CONST) {
-> -		hist_field->fn = hist_field_const;
-> +		hist_field->fn_num = HIST_FIELD_FN_CONST;
->  		hist_field->size = sizeof(u64);
->  		hist_field->type = kstrdup("u64", GFP_KERNEL);
->  		if (!hist_field->type)
-> @@ -1943,14 +1966,14 @@ static struct hist_field *create_hist_field(struct hist_trigger_data *hist_data,
->  	}
->  
->  	if (flags & HIST_FIELD_FL_STACKTRACE) {
-> -		hist_field->fn = hist_field_none;
-> +		hist_field->fn_num = HIST_FIELD_FN_NOP;
->  		goto out;
->  	}
->  
->  	if (flags & (HIST_FIELD_FL_LOG2 | HIST_FIELD_FL_BUCKET)) {
->  		unsigned long fl = flags & ~(HIST_FIELD_FL_LOG2 | HIST_FIELD_FL_BUCKET);
-> -		hist_field->fn = flags & HIST_FIELD_FL_LOG2 ? hist_field_log2 :
-> -			hist_field_bucket;
-> +		hist_field->fn_num = flags & HIST_FIELD_FL_LOG2 ? HIST_FIELD_FN_LOG2 :
-> +			HIST_FIELD_FN_BUCKET;
->  		hist_field->operands[0] = create_hist_field(hist_data, field, fl, NULL);
->  		hist_field->size = hist_field->operands[0]->size;
->  		hist_field->type = kstrdup_const(hist_field->operands[0]->type, GFP_KERNEL);
-> @@ -1960,14 +1983,14 @@ static struct hist_field *create_hist_field(struct hist_trigger_data *hist_data,
->  	}
->  
->  	if (flags & HIST_FIELD_FL_TIMESTAMP) {
-> -		hist_field->fn = hist_field_timestamp;
-> +		hist_field->fn_num = HIST_FIELD_FN_TIMESTAMP;
->  		hist_field->size = sizeof(u64);
->  		hist_field->type = "u64";
->  		goto out;
->  	}
->  
->  	if (flags & HIST_FIELD_FL_CPU) {
-> -		hist_field->fn = hist_field_cpu;
-> +		hist_field->fn_num = HIST_FIELD_FN_CPU;
->  		hist_field->size = sizeof(int);
->  		hist_field->type = "unsigned int";
->  		goto out;
-> @@ -1987,14 +2010,14 @@ static struct hist_field *create_hist_field(struct hist_trigger_data *hist_data,
->  			goto free;
->  
->  		if (field->filter_type == FILTER_STATIC_STRING) {
-> -			hist_field->fn = hist_field_string;
-> +			hist_field->fn_num = HIST_FIELD_FN_STRING;
->  			hist_field->size = field->size;
->  		} else if (field->filter_type == FILTER_DYN_STRING) {
-> -			hist_field->fn = hist_field_dynstring;
-> +			hist_field->fn_num = HIST_FIELD_FN_DYNSTRING;
->  		} else if (field->filter_type == FILTER_RDYN_STRING)
-> -			hist_field->fn = hist_field_reldynstring;
-> +			hist_field->fn_num = HIST_FIELD_FN_RELDYNSTRING;
->  		else
-> -			hist_field->fn = hist_field_pstring;
-> +			hist_field->fn_num = HIST_FIELD_FN_PSTRING;
->  	} else {
->  		hist_field->size = field->size;
->  		hist_field->is_signed = field->is_signed;
-> @@ -2002,9 +2025,9 @@ static struct hist_field *create_hist_field(struct hist_trigger_data *hist_data,
->  		if (!hist_field->type)
->  			goto free;
->  
-> -		hist_field->fn = select_value_fn(field->size,
-> -						 field->is_signed);
-> -		if (!hist_field->fn) {
-> +		hist_field->fn_num = select_value_fn(field->size,
-> +						     field->is_signed);
-> +		if (hist_field->fn_num == HIST_FIELD_FN_NOP) {
->  			destroy_hist_field(hist_field, 0);
->  			return NULL;
->  		}
-> @@ -2340,7 +2363,7 @@ static struct hist_field *create_alias(struct hist_trigger_data *hist_data,
->  	if (!alias)
->  		return NULL;
->  
-> -	alias->fn = var_ref->fn;
-> +	alias->fn_num = var_ref->fn_num;
->  	alias->operands[0] = var_ref;
->  
->  	if (init_var_ref(alias, var_ref, var_ref->system, var_ref->event_name)) {
-> @@ -2523,7 +2546,7 @@ static struct hist_field *parse_unary(struct hist_trigger_data *hist_data,
->  
->  	expr->flags |= operand1->flags &
->  		(HIST_FIELD_FL_TIMESTAMP | HIST_FIELD_FL_TIMESTAMP_USECS);
-> -	expr->fn = hist_field_unary_minus;
-> +	expr->fn_num = HIST_FIELD_FN_UMINUS;
->  	expr->operands[0] = operand1;
->  	expr->size = operand1->size;
->  	expr->is_signed = operand1->is_signed;
-> @@ -2595,7 +2618,7 @@ static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
->  	unsigned long operand_flags, operand2_flags;
->  	int field_op, ret = -EINVAL;
->  	char *sep, *operand1_str;
-> -	hist_field_fn_t op_fn;
-> +	enum hist_field_fn op_fn;
->  	bool combine_consts;
->  
->  	if (*n_subexprs > 3) {
-> @@ -2654,16 +2677,16 @@ static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
->  
->  	switch (field_op) {
->  	case FIELD_OP_MINUS:
-> -		op_fn = hist_field_minus;
-> +		op_fn = HIST_FIELD_FN_MINUS;
->  		break;
->  	case FIELD_OP_PLUS:
-> -		op_fn = hist_field_plus;
-> +		op_fn = HIST_FIELD_FN_PLUS;
->  		break;
->  	case FIELD_OP_DIV:
-> -		op_fn = hist_field_div;
-> +		op_fn = HIST_FIELD_FN_DIV;
->  		break;
->  	case FIELD_OP_MULT:
-> -		op_fn = hist_field_mult;
-> +		op_fn = HIST_FIELD_FN_MULT;
->  		break;
->  	default:
->  		ret = -EINVAL;
-> @@ -2725,7 +2748,8 @@ static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
->  		if (var2)
->  			expr->operands[1] = var2;
->  
-> -		expr->constant = op_fn(expr, NULL, NULL, NULL, NULL);
-> +		expr->fn_num = op_fn;
-> +		expr->constant = hist_fn_call(expr, NULL, NULL, NULL, NULL);
->  
->  		expr->operands[0] = NULL;
->  		expr->operands[1] = NULL;
-> @@ -2739,7 +2763,7 @@ static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
->  
->  		expr->name = expr_str(expr, 0);
->  	} else {
-> -		expr->fn = op_fn;
-> +		expr->fn_num = op_fn;
->  
->  		/* The operand sizes should be the same, so just pick one */
->  		expr->size = operand1->size;
-> @@ -3065,7 +3089,7 @@ static inline void __update_field_vars(struct tracing_map_elt *elt,
->  		struct hist_field *var = field_var->var;
->  		struct hist_field *val = field_var->val;
->  
-> -		var_val = val->fn(val, elt, buffer, rbe, rec);
-> +		var_val = hist_fn_call(val, elt, buffer, rbe, rec);
->  		var_idx = var->var.idx;
->  
->  		if (val->flags & HIST_FIELD_FL_STRING) {
-> @@ -4186,6 +4210,74 @@ static u64 hist_field_execname(struct hist_field *hist_field,
->  	return (u64)(unsigned long)(elt_data->comm);
->  }
->  
-> +static u64 hist_fn_call(struct hist_field *hist_field,
-> +			struct tracing_map_elt *elt,
-> +			struct trace_buffer *buffer,
-> +			struct ring_buffer_event *rbe,
-> +			void *event)
-> +{
-> +	switch (hist_field->fn_num) {
-> +	case HIST_FIELD_FN_VAR_REF:
-> +		return hist_field_var_ref(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_COUNTER:
-> +		return hist_field_counter(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_CONST:
-> +		return hist_field_const(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_LOG2:
-> +		return hist_field_log2(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_BUCKET:
-> +		return hist_field_bucket(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_TIMESTAMP:
-> +		return hist_field_timestamp(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_CPU:
-> +		return hist_field_cpu(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_STRING:
-> +		return hist_field_string(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_DYNSTRING:
-> +		return hist_field_dynstring(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_RELDYNSTRING:
-> +		return hist_field_reldynstring(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_PSTRING:
-> +		return hist_field_pstring(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_S64:
-> +		return hist_field_s64(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_U64:
-> +		return hist_field_u64(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_S32:
-> +		return hist_field_s32(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_U32:
-> +		return hist_field_u32(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_S16:
-> +		return hist_field_s16(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_U16:
-> +		return hist_field_u16(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_S8:
-> +		return hist_field_s8(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_U8:
-> +		return hist_field_u8(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_UMINUS:
-> +		return hist_field_unary_minus(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_MINUS:
-> +		return hist_field_minus(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_PLUS:
-> +		return hist_field_plus(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_DIV:
-> +		return hist_field_div(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_MULT:
-> +		return hist_field_mult(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_DIV_POWER2:
-> +		return div_by_power_of_two(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_DIV_NOT_POWER2:
-> +		return div_by_not_power_of_two(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_DIV_MULT_SHIFT:
-> +		return div_by_mult_and_shift(hist_field, elt, buffer, rbe, event);
-> +	case HIST_FIELD_FN_EXECNAME:
-> +		return hist_field_execname(hist_field, elt, buffer, rbe, event);
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
->  /* Convert a var that points to common_pid.execname to a string */
->  static void update_var_execname(struct hist_field *hist_field)
->  {
-> @@ -4197,7 +4289,7 @@ static void update_var_execname(struct hist_field *hist_field)
->  	kfree_const(hist_field->type);
->  	hist_field->type = "char[]";
->  
-> -	hist_field->fn = hist_field_execname;
-> +	hist_field->fn_num = HIST_FIELD_FN_EXECNAME;
->  }
->  
->  static int create_var_field(struct hist_trigger_data *hist_data,
-> @@ -4956,7 +5048,7 @@ static void hist_trigger_elt_update(struct hist_trigger_data *hist_data,
->  
->  	for_each_hist_val_field(i, hist_data) {
->  		hist_field = hist_data->fields[i];
-> -		hist_val = hist_field->fn(hist_field, elt, buffer, rbe, rec);
-> +		hist_val = hist_fn_call(hist_field, elt, buffer, rbe, rec);
->  		if (hist_field->flags & HIST_FIELD_FL_VAR) {
->  			var_idx = hist_field->var.idx;
->  
-> @@ -4987,7 +5079,7 @@ static void hist_trigger_elt_update(struct hist_trigger_data *hist_data,
->  	for_each_hist_key_field(i, hist_data) {
->  		hist_field = hist_data->fields[i];
->  		if (hist_field->flags & HIST_FIELD_FL_VAR) {
-> -			hist_val = hist_field->fn(hist_field, elt, buffer, rbe, rec);
-> +			hist_val = hist_fn_call(hist_field, elt, buffer, rbe, rec);
->  			var_idx = hist_field->var.idx;
->  			tracing_map_set_var(elt, var_idx, hist_val);
->  		}
-> @@ -5062,7 +5154,7 @@ static void event_hist_trigger(struct event_trigger_data *data,
->  					 HIST_STACKTRACE_SKIP);
->  			key = entries;
->  		} else {
-> -			field_contents = key_field->fn(key_field, elt, buffer, rbe, rec);
-> +			field_contents = hist_fn_call(key_field, elt, buffer, rbe, rec);
->  			if (key_field->flags & HIST_FIELD_FL_STRING) {
->  				key = (void *)(unsigned long)field_contents;
->  				use_compound_key = true;
-> -- 
-> 2.35.1
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>
+>> +
+>>   static const struct dma_fence_ops dma_fence_stub_ops = {
+>>       .get_driver_name = dma_fence_stub_get_name,
+>>       .get_timeline_name = dma_fence_stub_get_name,
+>> +#ifdef CONFIG_DEBUG_FS
+>> +    .enable_signaling =  dma_fence_stub_enable_signaling,
+>> +#endif
+>>   };
+>>     /**
+>> @@ -136,6 +150,9 @@ struct dma_fence *dma_fence_get_stub(void)
+>>                      &dma_fence_stub_ops,
+>>                      &dma_fence_stub_lock,
+>>                      0, 0);
+>> +#ifdef CONFIG_DEBUG_FS
+>> +        __dma_fence_enable_signaling(&dma_fence_stub);
+>> +#endif
+>>           dma_fence_signal_locked(&dma_fence_stub);
+>>       }
+>>       spin_unlock(&dma_fence_stub_lock);
+>

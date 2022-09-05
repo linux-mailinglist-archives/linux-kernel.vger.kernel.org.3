@@ -2,106 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F065ACF61
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90F65ACF5F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 12:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbiIEJ4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 05:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S236507AbiIEJ5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 05:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236780AbiIEJ4f (ORCPT
+        with ESMTP id S232053AbiIEJ5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 05:56:35 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A066322295;
-        Mon,  5 Sep 2022 02:56:32 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id z6so12339667lfu.9;
-        Mon, 05 Sep 2022 02:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=RdubYDDix+oOh2a0h//nboO40BpZ5xfyyxVZCNAs3B0=;
-        b=et2BStfuMMuGC6Hmc0ahP2YMtl2IOvVs82z7fBLtShtRiNOLZEUcKr2FN+yvHNZxWj
-         hUQof0CelJPy6k645QZnNEtobw55lyLfO/xzbj7BHjhPUtrr6ZyyJrZD5+wJPU8x4s/V
-         wDTG6XP1BvwPE/YT5IW93WWtvTubg44nQ/U2m0Ukxn8zuXPeusqOLZkrZIQo7BaTII3T
-         tjpw7YIxVKZOVR6ozOO29YwJBQZS8KoqWz1HV/AEJBiJwCnjVlLgAcdY8jrwxwGrjJtw
-         gmvPsEX0owb2idPOc8tLiT8uceUOa827MJ139sBCmc4Km7ZtH35OknAdtVpmn61dpmua
-         LvYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=RdubYDDix+oOh2a0h//nboO40BpZ5xfyyxVZCNAs3B0=;
-        b=XYe7falFuPUINq8OKUEiYQ/aI22NbiDQESAyt22FWHsr87GRz2RcqhWsDaxMf1aVr8
-         thgcr5kuWwdUrZgSdTPdJ7d6L+i+4zpF+pScv5hKuMuCywrL+CpV+rdkj+tU8DPgUvOM
-         gWw12+JHT56Z/c4rGvu00Nf5QCtV4YHwnw+XXlX+110JvshiG8dUafvR4f47bPfo1awW
-         CWALFDi6dos16Xgl/xfB5w9hGdK2ySxicAAEV1WZz3Gbk3xJPYWynvp8JF0SDciRjzLS
-         kVdGUAE9gXO9X6LbViXBrGyHpKuhY1r39uTYOLLrft+xGrSJTFq2YqCaVO01eI71rBW1
-         9eWg==
-X-Gm-Message-State: ACgBeo2pPnYz468gee9hV+C8+BJwBXFDL28E4YJEKiFTtGrec4zzqbWm
-        /xiOMD+UeVlwiZ46k9Atk2Q=
-X-Google-Smtp-Source: AA6agR49m1znt1xCwEgykIjaaYQRJwjqD0WPTDOx4N16eYQFUBRnr5DGteFNKPh7H42GT7aHHRsE7g==
-X-Received: by 2002:a05:6512:13a4:b0:479:3b9f:f13c with SMTP id p36-20020a05651213a400b004793b9ff13cmr15342515lfa.380.1662371790521;
-        Mon, 05 Sep 2022 02:56:30 -0700 (PDT)
-Received: from [172.16.194.136] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id o4-20020ac25e24000000b004965e80b761sm40259lfg.224.2022.09.05.02.56.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 02:56:30 -0700 (PDT)
-Message-ID: <0b051f7e-1754-cb69-c0df-0bae08c967fd@gmail.com>
-Date:   Mon, 5 Sep 2022 12:56:28 +0300
+        Mon, 5 Sep 2022 05:57:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADC922295;
+        Mon,  5 Sep 2022 02:56:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A60B611C1;
+        Mon,  5 Sep 2022 09:56:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 098B0C433C1;
+        Mon,  5 Sep 2022 09:56:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ffTozCsh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1662371816;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G0xUJpHCvj6dcmuD1L3m00W5pShTtxZ/8dhiLkjhh7A=;
+        b=ffTozCshLLJhBlEoCQResz35JS1tqUKDrnBSghFf/+QMR8ioxqNrsnm+20qce5AvKmsLnt
+        4eGjJ2FCQSZIkhJaNolij0s5jBk4GW4jNZiHjhufib9csAh15bZNvv01JyhTIDxgeC9pXm
+        U5Y6apytQ9bT3eLVv9W7vxYuT95SnTw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8af1fd2b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 5 Sep 2022 09:56:56 +0000 (UTC)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-3450a7358baso37629247b3.13;
+        Mon, 05 Sep 2022 02:56:55 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2/rQDhk1bHT7oeqc0XKXsWJyF7x7HWMF0+kj/ir/wm/flZas+n
+        JDtjlua5cPvEjUboxTgiOelpCjXnddupVDZpM+w=
+X-Google-Smtp-Source: AA6agR4iVDkplzJzcYgy43yAtLXyBGu8Ac4sFoSAwGu9Aruj3JkjCmwOcF8dFPbdvFmRZG7xVWfCsS1oICGsCPmHrKg=
+X-Received: by 2002:a81:6141:0:b0:328:30e0:a6ca with SMTP id
+ v62-20020a816141000000b0032830e0a6camr40140841ywb.454.1662371815299; Mon, 05
+ Sep 2022 02:56:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 09/11] regulator: bd9576: switch to using
- devm_fwnode_gpiod_get()
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-9-b29adfb27a6c@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-9-b29adfb27a6c@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220904165321.1140894-1-Jason@zx2c4.com> <CAMj1kXHC9Wfr74761gPcG=N8OC2P76FqSb8FVGWM7x1p-4hQKg@mail.gmail.com>
+In-Reply-To: <CAMj1kXHC9Wfr74761gPcG=N8OC2P76FqSb8FVGWM7x1p-4hQKg@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 5 Sep 2022 11:56:44 +0200
+X-Gmail-Original-Message-ID: <CAHmME9rAViyU3hCnziUkqGwtrOtu9oBOvniWV_uNCZ+TJGre5A@mail.gmail.com>
+Message-ID: <CAHmME9rAViyU3hCnziUkqGwtrOtu9oBOvniWV_uNCZ+TJGre5A@mail.gmail.com>
+Subject: Re: [PATCH] efi: x86: Wipe setup_data on pure EFI boot
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,24 +66,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/5/22 09:31, Dmitry Torokhov wrote:
-> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> fwnode property API.
-> 
-> While at it switch the rest of the calls to read properties in
-> bd957x_probe() to the generic device property API as well.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+On Mon, Sep 5, 2022 at 11:55 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Sun, 4 Sept 2022 at 18:53, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > When booting the x86 kernel via EFI using the LoadImage/StartImage boot
+> > services [as opposed to the deprecated EFI handover protocol], the setup
+> > header is taken from the image directly, and given that EFI's LoadImage
+> > has no Linux/x86 specific knowledge regarding struct bootparams or
+> > struct setup_header, any absolute addresses in the setup header must
+> > originate from the file and not from a prior loading stage.
+> >
+> > Since we cannot generally predict where LoadImage() decides to load an
+> > image (*), such absolute addresses must be treated as suspect: even if a
+> > prior boot stage intended to make them point somewhere inside the
+> > [signed] image, there is no way to validate that, and if they point at
+> > an arbitrary location in memory, the setup_data nodes will not be
+> > covered by any signatures or TPM measurements either, and could be made
+> > to contain an arbitrary sequence of SETUP_xxx nodes, which could
+> > interfere quite badly with the early x86 boot sequence.
+> >
+> > (*) Note that, while LoadImage() does take a buffer/size tuple in
+> > addition to a device path, which can be used to provide the image
+> > contents directly, it will re-allocate such images, as the memory
+> > footprint of an image is generally larger than the PE/COFF file
+> > representation.
+> >
+> > Next, in order to allow hypervisors to still use setup_data in scenarios
+> > where it may be useful, bump the x86 boot protocol version, so that
+> > hypervisors, e.g. QEMU in the linked patch, can do the right thing
+> > automatically depending on whether it is safe.
+> >
+> > Link: https://lore.kernel.org/qemu-devel/20220904165058.1140503-1-Jason@zx2c4.com/
+> > Coauthored-by: Ard Biesheuvel <ardb@kernel.org>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> >  arch/x86/boot/header.S                  | 2 +-
+> >  drivers/firmware/efi/libstub/x86-stub.c | 7 +++++++
+> >  2 files changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
+> > index f912d7770130..e4e2d6e33924 100644
+> > --- a/arch/x86/boot/header.S
+> > +++ b/arch/x86/boot/header.S
+> > @@ -307,7 +307,7 @@ _start:
+> >         # Part 2 of the header, from the old setup.S
+> >
+> >                 .ascii  "HdrS"          # header signature
+> > -               .word   0x020f          # header version number (>= 0x0105)
+> > +               .word   0x0210          # header version number (>= 0x0105)
+> >                                         # or else old loadlin-1.5 will fail)
+> >                 .globl realmode_swtch
+> >  realmode_swtch:        .word   0, 0            # default_switch, SETUPSEG
+> > diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> > index 05ae8bcc9d67..9780f32a9f24 100644
+> > --- a/drivers/firmware/efi/libstub/x86-stub.c
+> > +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> > @@ -517,6 +517,13 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
+> >         hdr->ramdisk_image = 0;
+> >         hdr->ramdisk_size = 0;
+> >
+> > +       /*
+> > +        * Disregard any setup data that was provided by the bootloader:
+> > +        * setup_data could be pointing anywhere, and we have no way of
+> > +        * authenticating or validating the payload.
+> > +        */
+> > +       hdr->setup_data = 0;
+> > +
+> >         efi_stub_entry(handle, sys_table_arg, boot_params);
+> >         /* not reached */
+> >
+>
+> if the x86 folks are ok with this, I would like to send this to
+> cc:stable, but I imagine retroactively changing the header version
+> number might be something they would prefer to avoid. In that case,
+> better to split these up.
 
+Just FYI, the rng seed thing is new in 6.0 anyway. That still leaves
+the more obscure dtb one, and whatever else is used, but at least
+doing this for only 6.0+ would take care of the rng seed one.
 
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-Thanks!
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+Jason

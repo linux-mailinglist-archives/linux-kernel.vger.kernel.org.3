@@ -2,134 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A485AD3C8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C365AD3D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 15:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237692AbiIENXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 09:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S237528AbiIEN1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 09:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237774AbiIENXn (ORCPT
+        with ESMTP id S230314AbiIEN1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:23:43 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0C043E6C;
-        Mon,  5 Sep 2022 06:23:42 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id a10so6256336qkl.13;
-        Mon, 05 Sep 2022 06:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xqnaWRmSxWCHIXi5Qlq2gni2AdAVZeps2ahh12VkulY=;
-        b=nOletpYDW/GRPvkaWSlAC0rzt34URfVHbiUKwVMsxFl09VUwy8XOqhWqRsptamq/Dg
-         II+253/l3T6DgJP066py1bWTdICT2vRCXvzy2Ur+pO4VC493+7Sqn84yvDmlJFGAVdYl
-         5PZSVDMi1QDxBMQa2pV/FSXYTAwvX/lFVcFPmgHoO3U8MnbkwA9h7jonAO1nFwBsGmoW
-         q5f2ZglIOVt/xEgJLA6EBKdc3gOuFnoMDDVILIKTeoTg7qTOPypEYwVwaO1cq1N6YfbI
-         me+dt6lOnpM5B3FzI09ooPbgjOvgXIow30OcLwUv/NaL/eE7AkZh0zMQ2HIMHBfa4q7S
-         WwgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xqnaWRmSxWCHIXi5Qlq2gni2AdAVZeps2ahh12VkulY=;
-        b=jqQdg8BxLosraqQCfd9lNYRj44R8VGOYDLtQkmJNyGTN8C81d2BO20UqvTzU0j0DYw
-         BAvksOa1oZjPRPIRA0sMTE3lnFJn4W76aeFW0sjQjGBpVNc6kENdK8cQwt0XTjjXhOcg
-         8n5iw7mkFHa9+CWmh36xGFjnXZqL94zHzcOYOd8XnyZaQmk99bZkXe0Rrn6+kZjTZBvC
-         fDKp18Cr9zomFfwHfuXOsIximcIF9ivWpfT32vyyn8JMzrIpZ4e5l/+mm8xnA989rTJV
-         sPjGWdI1ACS4MLN9SUCQcVdVvz26obXpPILihd3g2tiVFTWHYyV9AwQDdQAduLvS7CB/
-         vNwg==
-X-Gm-Message-State: ACgBeo07YvOXT2oBdHAvPvRlA1VRBDOTiB4LAt5/lj3sVstnukwhjeaq
-        4yEwJtBNPotuAkXmBQlNv4STLWjSTV98ZECDKn4=
-X-Google-Smtp-Source: AA6agR5sttgUX/02ygd4oRH8E7CwuO10nDnWttnl6PSpdnCic7gOwb1KDafibQkxIBgdBbgVXC2AwvPX08spe4Hyycw=
-X-Received: by 2002:a05:620a:288a:b0:6b8:fcfe:db02 with SMTP id
- j10-20020a05620a288a00b006b8fcfedb02mr33223900qkp.504.1662384221554; Mon, 05
- Sep 2022 06:23:41 -0700 (PDT)
+        Mon, 5 Sep 2022 09:27:04 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E942D40BD2;
+        Mon,  5 Sep 2022 06:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=mdWCP2Z4OGF3Cn0l3It6siclPH5+K+Wk+JlGp94/LHY=; b=SjXigyoVpYE3wZDUd4goTLXLLV
+        1vuDQQoXFwZkJcIrZ3EQA3aeF976bizaFA/kTIeVHwPq+/SA4ZXyz1hSYI9M/rklHGGmMtW5lxMdJ
+        RJfZXsvkIfmsQZI8O0NpIgqVWOKv1/62NVKftQmcrkPSKEBRAqzd/bqf0PH5FLcUA0S4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oVC7x-00FePq-Lu; Mon, 05 Sep 2022 15:27:01 +0200
+Date:   Mon, 5 Sep 2022 15:27:01 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Subject: Re: [Patch net] net: phy: lan87xx: change interrupt src of link_up
+ to comm_ready
+Message-ID: <YxX5JaRfyvKLrHw5@lunn.ch>
+References: <20220905072017.9839-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-9-b29adfb27a6c@gmail.com>
- <CAHp75VeA+oVPmsEOg+y0cvRcTU5qA+Y+9=Byp0C982EB7SAArQ@mail.gmail.com> <0fa0c09f-c801-a0c7-1f6e-b6cc8b45d961@gmail.com>
-In-Reply-To: <0fa0c09f-c801-a0c7-1f6e-b6cc8b45d961@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Sep 2022 16:23:05 +0300
-Message-ID: <CAHp75Vek1WOyEdkfCgrcH2FL6GA5gTtxXaV5Qy9aJMCQ3qGxyg@mail.gmail.com>
-Subject: Re: [PATCH v1 09/11] regulator: bd9576: switch to using devm_fwnode_gpiod_get()
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905072017.9839-1-arun.ramadoss@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 4:19 PM Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> On 9/5/22 13:40, Andy Shevchenko wrote:
-> > On Mon, Sep 5, 2022 at 9:33 AM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
+On Mon, Sep 05, 2022 at 12:50:17PM +0530, Arun Ramadoss wrote:
+> Currently phy link up/down interrupt is enabled using the
+> LAN87xx_INTERRUPT_MASK register. In the lan87xx_read_status function,
+> phy link is determined using the T1_MODE_STAT_REG register comm_ready bit.
+> comm_ready bit is set using the loc_rcvr_status & rem_rcvr_status.
+> Whenever the phy link is up, LAN87xx_INTERRUPT_SOURCE link_up bit is set
+> first but comm_ready bit takes some time to set based on local and
+> remote receiver status.
+> As per the current implementation, interrupt is triggered using link_up
+> but the comm_ready bit is still cleared in the read_status function. So,
+> link is always down.  Initially tested with the shared interrupt
+> mechanism with switch and internal phy which is working, but after
+> implementing interrupt controller it is not working.
+> It can fixed either by updating the read_status function to read from
+> LAN87XX_INTERRUPT_SOURCE register or enable the interrupt mask for
+> comm_ready bit. But the validation team recommends the use of comm_ready
+> for link detection.
+> This patch fixes by enabling the comm_ready bit for link_up in the
+> LAN87XX_INTERRUPT_MASK_2 register (MISC Bank) and link_down in
+> LAN87xx_INTERRUPT_MASK register.
+> 
+> Fixes: 8a1b415d70b7 ("net: phy: added ethtool master-slave configuration
+> 		     support")
 
-...
+Please don't wrap such lines, even when they are longer than 80
+characters. They are used by tooling during back porting.
 
-> >> +       vout_mode = device_property_read_bool(pdev->dev.parent,
-> >> +                                             "rohm,vout1-en-low");
-> >
-> > They all using parent device and you may make code neater by adding
-> >
-> >    struct device *parent = pdev->dev.parent;
->
-> This is a matter of personal preference. I prefer seeing
-> pdev->dev.parent - as it is more obvious (to me) what the 'pdev' is than
-> what 'parent' would be.
->
-> I'd use the local variable only when it shortens at least one of the
-> lines so that we avoid splitting it. After that being said - I'm not
-> going to argue over this change either if one who is improving the
-> driver wants to use the "helper" variable here.
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
 
-And I believe the quoted one is exactly the case of what you are saying above.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+
+    Andrew

@@ -2,170 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40ADC5AD79B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7425AD7AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiIEQe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 12:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
+        id S231593AbiIEQfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 12:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiIEQey (ORCPT
+        with ESMTP id S229875AbiIEQfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 12:34:54 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACA215FD2
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 09:34:52 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id p16so13817462lfd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 09:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=yEx5//ShOkRRoNBbjByMt9QJ4HAKCceTerVbLkUZNS0=;
-        b=YCVRx8gQfAYB5aIBO0aXUKLZ9+k/xRezTGzMgKHcG24UJ1GbD5Tl5KG6D2mdawmk2f
-         BhWRDjhAzaclJ7UjxMH/leRbobEnfmggKAMt84+WNf/MLTrk6sRW0H5oQJdv3oUWSym5
-         hdModvgiD0st7x4PFTXabjQaNRC8YEs7bLEwaap2jKGDbcx2RoNWno9tFMJ7JRTpG3Nh
-         IEqXMEvR1lf4JnxU7sXzsMR4cCq0u8XItFvzPKhX03p+k9Do2GT40+OK8BI4A37GfqZs
-         /0UxdWUGwpeN+T7y66Rx6GgCCMohunTocVMQCXgYY4mJltzV7Z5IfyudU6fFXTaIZ6D2
-         Le+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=yEx5//ShOkRRoNBbjByMt9QJ4HAKCceTerVbLkUZNS0=;
-        b=oeFFKQc4fDqY9or5jjmxMCmSnIFlXaDRmOc/LvdPYqN7AnveS6CIvlPRnAhD+Nx3uF
-         4svh/8nSjGC1uojt0+bLLVqb+jZ7iRArZUs+vq3F8uMNpnfX5QMZN0tbOX6YmkuKqlMl
-         BOf2UelH5K8lEf3jWQ1T6lORly2TNbH8ISW6X80OJ4qZMXp6zm/16c/YcY9DJOpsyS1T
-         mvCLb2BbY9KkVRfjO+nosI5t7TKDt/JOoxdbO7U2SxT4Cgwrn60xcxKocq1V6x0EE6vu
-         L02pxM+4PK5Sp3p49cv7Qo2hSkYnjj5intIrrQj4ob9LX+cXedJ+9sXr8RARql2qnPKB
-         0Ybg==
-X-Gm-Message-State: ACgBeo1gkzLfHpkTXuZDstpg2xw/xA5zXLz3xoQRkYQ2JEDfNl0ukRaD
-        eu42p7bBacN6NaxMdnjwzrtLqg==
-X-Google-Smtp-Source: AA6agR4+el+HYyKgzhzy2PPDNyV6fBi7zJXtMYVBVPN/XFLUFV5k3+b1idELLg20DQ3NwBTTPHVhEw==
-X-Received: by 2002:a05:6512:12cc:b0:494:b251:5b0f with SMTP id p12-20020a05651212cc00b00494b2515b0fmr4146602lfg.111.1662395690791;
-        Mon, 05 Sep 2022 09:34:50 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id j12-20020a056512344c00b0047f8e9826a1sm1239112lfr.31.2022.09.05.09.34.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 09:34:50 -0700 (PDT)
-Message-ID: <7a43aa79-9c40-867c-c585-3bb448a54647@linaro.org>
-Date:   Mon, 5 Sep 2022 18:34:48 +0200
+        Mon, 5 Sep 2022 12:35:40 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2058.outbound.protection.outlook.com [40.107.237.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E3827CC2;
+        Mon,  5 Sep 2022 09:35:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LEpLeTfoNX2AJLidXGOJxlEymCFhtWnWIbZ4gUWBwcV/+YTwqKOofhDW2mlKfPpvqlb9sowNszdcb7uhKtqAZTvB9HPi0xckMbzuQg88LnQZhBWClN2r7YbUv5KWdK8xF2CmmCgVkp/s2bp3xjSSFmq8mRDsk5qK4WkSR4ZqYcFO1akO4GoS2UGy+J2CCkdtC5lt5sT9hUO6BgkmGKBRDmyWwELkCNths5kI0bMPdCJuGCKLYiJ005si2f+b0kdvDgl6a2pLrzG2DOvNdBqua3/De5AdbhejDfQUP71/UG+sR8k54qH7SoreMbPoiC1XAHaSVNZtMkQJGaalAeeMaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Je78deXMKT2fn6zFo/xx4UZymz9aqFvRovpe8pddmZ0=;
+ b=DUcj0ENn4AHKyeuzBRsFfZbMzNw5LL9W1R8ed198p0wF2l0Y0zbu31XIEbtkoK21bQM203bx7QyOsgM/pgvUOUWq9WxFkbDDOt1a0Dq9+N0wBsLrFHsZd752juuMGCaK4/d76xK9x99JpWrKIs8RjBZweSwT14t0NDDAyAdMjc9RfBeSZ3X8qxbxp4Z/hH1WUZD1nn/I6NtFEKOlLIVn/uC/En44X8zXPOwawrqeBpKESj/hOL+CaanGO7W+X6mMl6893Yy1u0dhia2qlnNu1b2WE3Pewde9ncL/qhdbmwxmXM/R81xq8oPLmANb9L1xy/qMMDIGfrLhn+Q3ppp15w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Je78deXMKT2fn6zFo/xx4UZymz9aqFvRovpe8pddmZ0=;
+ b=kVgAANCihInNUZ7JR9Yf8kfBgngLhY4SgEoOv4BhrEMRLfgRd4f2Gs0dOR15upvv2Ub8xCuxehOePAPcTqgovvvGkugQPtNgvsYHnVhiEvOVCKSsxINSpdDWG698YtTEf2nXMeVkMhPFZ0X/oNk3xk03AtExAAumk6qfbkAlWCc=
+Received: from BN0PR03CA0044.namprd03.prod.outlook.com (2603:10b6:408:e7::19)
+ by MN2PR12MB4456.namprd12.prod.outlook.com (2603:10b6:208:266::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.15; Mon, 5 Sep
+ 2022 16:35:36 +0000
+Received: from BL02EPF0000C402.namprd05.prod.outlook.com
+ (2603:10b6:408:e7:cafe::83) by BN0PR03CA0044.outlook.office365.com
+ (2603:10b6:408:e7::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10 via Frontend
+ Transport; Mon, 5 Sep 2022 16:35:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0000C402.mail.protection.outlook.com (10.167.241.4) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5612.10 via Frontend Transport; Mon, 5 Sep 2022 16:35:36 +0000
+Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 5 Sep
+ 2022 11:35:31 -0500
+From:   Arvind Yadav <Arvind.Yadav@amd.com>
+To:     <Christian.Koenig@amd.com>, <andrey.grodzovsky@amd.com>,
+        <shashank.sharma@amd.com>, <amaranath.somalapuram@amd.com>,
+        <Arunpravin.PaneerSelvam@amd.com>, <sumit.semwal@linaro.org>,
+        <gustavo@padovan.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>
+CC:     Arvind Yadav <Arvind.Yadav@amd.com>
+Subject: [PATCH v2 0/4] dma-buf: To check enable signaling before signaled
+Date:   Mon, 5 Sep 2022 22:04:58 +0530
+Message-ID: <20220905163502.4032-1-Arvind.Yadav@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] ARM: dts: turris-omnia: Add mcu node
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Behun <marek.behun@nic.cz>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220819131152.6513-1-pali@kernel.org>
- <20220831142809.lcmnv3l4rnulo522@pali> <YxE2JqJutZ0ilghH@lunn.ch>
- <20220903152735.2ga3iwrivh6zhibf@pali>
- <30d3f753-187f-4a3f-c14a-f3b003f23773@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <30d3f753-187f-4a3f-c14a-f3b003f23773@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0000C402:EE_|MN2PR12MB4456:EE_
+X-MS-Office365-Filtering-Correlation-Id: a1c7b0ec-6356-4afb-f38a-08da8f5ca946
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hae0J8TA5AlhxAwbhUOClcoTqX0Hik6VcWBF8FWVsobT0vjd/pQbs9jDBOnaTvSi6fFUxa2lrGsNvvkqcu/lZkImHZO0F0b+HvqzZTzyXj3cN9Wd8zlHZVr4+4erQnzVyeArU2aEweB1FFjRUVJQb7i4q06/7Z2y//1/gWM1Hlhi35s2UCtbM5Lul8Q+4AZAOd+6DCT//QT7FJRDuyR5tc0X9lcL+lmNSGpPodCaGL1CfsgKu6oFzPg9OsE6Frqkth7B7kU8gHMpas6rVJLJQuBQO+IGcgn8faGuaU4RfTa8g9lC/48xjq+4WZNPfNHmDB1ROihxwTuaG505NE4olFMrfsuQiAeRNqsdNhm10YvIYIPJCI+AuGaQ/Pa89Njk1hOdaZQryCdMtXM7ml0E3q8gnhOXWSuyBWDIowM1Ku6aTuToNuvpoIY59XPIrctnHJZwWBOgpXElHyWdB8EhfZc4ZE9jf30tciByoJen1kL2PyNVYpkRhNOe4muQY8yd5lIQYhAsv7FR5ohXCJzm9ZpTqc5jAoCIXG25ncGrW7Ps/Qiw42qYHAYTjcdC+TcNyIGnGupES7KECNBt/RiOaZRYqGvuPBxb8MmPAqLALSPo5F5JierJlacEQ8mYGf6xUtgFoSvxCQzxTX7zUp4pPkSFtVVd1teBxqgaEYVNvRDqEQwXIhJrCv5syhU4ORCEWnrNiLLUIOJd9TLz94P/xEtbvl6z9zVB7uQfnpCrNNgTsHOSY53ku4r000RYKmTv1xbmQQ2iCZ67Fa8sWLaZtP7Ky0KKda2RbKy/Dr3XXi7tDTwI675O0Kw0bzeHIAJjUZd4sV8qjMnn3Q7oq7QzQ+B4Pe5mgN3BVL7KWSTe948okvnnBWmHu3qiUV8KHOT2
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(376002)(136003)(346002)(40470700004)(46966006)(36840700001)(186003)(1076003)(26005)(426003)(83380400001)(82310400005)(2616005)(336012)(16526019)(40480700001)(41300700001)(478600001)(7696005)(47076005)(6666004)(86362001)(921005)(356005)(82740400003)(40460700003)(81166007)(36756003)(8936002)(2906002)(110136005)(70206006)(316002)(36860700001)(70586007)(8676002)(5660300002)(4326008)(2101003)(83996005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 16:35:36.5327
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1c7b0ec-6356-4afb-f38a-08da8f5ca946
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C402.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4456
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/09/2022 18:19, Florian Fainelli wrote:
-> 
-> 
-> On 9/3/2022 8:27 AM, Pali Rohár wrote:
->> On Friday 02 September 2022 00:45:58 Andrew Lunn wrote:
->>> On Wed, Aug 31, 2022 at 04:28:09PM +0200, Pali Rohár wrote:
->>>> PING?
->>>>
->>>> On Friday 19 August 2022 15:11:52 Pali Rohár wrote:
->>>>> At i2c address 0x2a is MCU command interface which provides access to GPIOs
->>>>> connected to Turris Omnia MCU. So define mcu node in Turris Omnia DTS file.
->>>>>
->>>>> Signed-off-by: Pali Rohár <pali@kernel.org>
->>>>>
->>>>> ---
->>>>> Same change was already sent to U-Boot project together with driver. As
->>>>> Turris Omnia DTS file is shared between Linux kernel U-Boot, I'm sending
->>>>> this change also in Linux. There is a plan to write also Linux driver for
->>>>> Turris Omnia MCU, like there is already in U-Boot.
->>>>>
->>>>> https://source.denx.de/u-boot/u-boot/-/commit/832738974806e6264a3d0ac2aaa92d0f662fd128
->>>>> https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/gpio/turris_omnia_mcu.c
->>>>> ---
->>>>>   arch/arm/boot/dts/armada-385-turris-omnia.dts | 8 +++++++-
->>>>>   1 file changed, 7 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
->>>>> index f4878df39753..f655e9229d68 100644
->>>>> --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
->>>>> +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
->>>>> @@ -184,7 +184,13 @@
->>>>>   			#size-cells = <0>;
->>>>>   			reg = <0>;
->>>>>   
->>>>> -			/* STM32F0 command interface at address 0x2a */
->>>>> +			/* MCU command i2c API */
->>>>> +			mcu: mcu@2a {
->>>>> +				compatible = "cznic,turris-omnia-mcu";
->>>>> +				reg = <0x2a>;
->>>>> +				gpio-controller;
->>>>> +				#gpio-cells = <3>;
->>>>> +			};
->>>
->>> Please document the binding, preferably in yaml.
->>
->> I'm not going to send any new yaml dt binding document as I see that
->> dt bindings is clearly deprecated project. Either patches for dt
->> bindings are waiting without any answer for months (maybe year?) or
->> patches are ignored/not accepted by beyond reasons or there are request
->> for changes which cannot work on the real hardware or that new yaml
->> cannot be parsed/validated due to ton of bugs in other schemas.
-> 
-> These are some pretty hard statements that are not nearly true, maybe 
-> they are based upon your past experience, but Rob and Krysztof provide 
-> feedback within a few days at most on DT bindings and DTS files.
+TTM, GEM, DRM or the core DMA-buf framework are needs
+to enable software signaling before the fence is signaled.
+The core DMA-buf framework software can forget to call
+enable_signaling before the fence is signaled. It means
+framework code can forget to call dma_fence_enable_sw_signaling()
+before calling dma_fence_is_signaled(). To avoid this scenario
+on debug kernel, check the DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT bit
+status before checking the MA_FENCE_FLAG_SIGNALED_BIT bit status
+to confirm that software signaling is enabled.
 
-Pali, you wrote in the past that you cannot run one command to install
-dtschema ("pip") thus for you this automated testing is
-difficult/broken/non working. If running one "pip" command is not
-possible, what I can say more? Shall I login to your machine and set it
-up? Or did you configure your machine that way, that it is not possible
-to run one pip command?
 
-Whether the patches are waiting for months and years is difficult to
-address to, without actual links. Because for sure you will be able to
-find one patch which was missed in our inboxes and you did not get an
-answer...  With Rob we both work much more than reasonable/healthy 8h
-per day... Yet I recall you always received feedback, just not always
-what you expected or wanted.
+Arvind Yadav (4):
+  [PATCH v2 1/4] drm/sched: Enable signaling for finished fence
+  [PATCH v2 2/4] dma-buf: enable signaling for the stub fence on debug
+  [PATCH v2 3/4] dma-buf: enable signaling for selftest fence on debug
+  [PATCH v2 4/4] dma-buf: Check status of enable-signaling bit on debug
 
-This binding here was never sent to mailing list:
-https://lore.kernel.org/all/?q=cznic%2Cturris-omnia-mcu
+ drivers/dma-buf/dma-fence.c            |  7 ++++
+ drivers/dma-buf/st-dma-fence-chain.c   |  8 +++++
+ drivers/dma-buf/st-dma-fence-unwrap.c  | 44 ++++++++++++++++++++++++++
+ drivers/dma-buf/st-dma-fence.c         | 25 ++++++++++++++-
+ drivers/dma-buf/st-dma-resv.c          | 20 ++++++++++++
+ drivers/gpu/drm/scheduler/sched_main.c |  2 ++
+ include/linux/dma-fence.h              |  5 +++
+ 7 files changed, 110 insertions(+), 1 deletion(-)
 
->> Sorry, this is just a waste of time and energy to write new those yamls
->> as it does not bring any value.
+-- 
+2.25.1
 
-It brings quite nice value - allows to check whether your bindings and
-your DTS are correct. Any difficulty to install and run dtschema is not
-equal to "does not bring any value"...
-
-Anyway devices cannot go without bindings, thus it's a NAK.
-
-Best regards,
-Krzysztof

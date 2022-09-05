@@ -2,112 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C262F5ACDFF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 10:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12475ACE6A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 11:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237953AbiIEIyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 04:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S236854AbiIEI4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 04:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237375AbiIEIyV (ORCPT
+        with ESMTP id S236110AbiIEI4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 04:54:21 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515D8481EC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:54:19 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id k22so8529706ljg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 01:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=GOZXSDgSS6XVNIuSP6172uHE9FFSP1ygKgT21xJv4Pw=;
-        b=y28Ow2gncnAb/WStbDPAzIRSfBO1sJIG6c/hL4IZsqFQkw8DiiGt+/1+8r/Sar73DW
-         GwrA6BZftRN7uGAeZkSt037gMcsCPPNJayjXHDGLYelvbH63ilWTVdF7lJlXWk27tGZa
-         Y2OScSdaV41kWaytvyOq6O634tWFvNft9qrEtafx0reImK3dlGEnOM2K7JfvylEut6Lz
-         lA2VEKeuqRarXskEud8wNggns9EHnQ3pWgJbZ0s/NdOYBhpMZ9YZeqi4Tl4VEevdtOX0
-         MvYwlvnxeYiG0pu66vl+ZJ+yCgqcYcvWp/d0MTAhqMEgHL0Y9XDWKJz1YN+UTCm6pVSO
-         OHCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=GOZXSDgSS6XVNIuSP6172uHE9FFSP1ygKgT21xJv4Pw=;
-        b=vUzOBfd9lKgKCfHiHIiNrbhXVOFOxP6xekxsWL9TB3dtNLS3nA54QbMenXNYqSr7Mo
-         DjP3V8PhBXdobdBeP595m60bGIhUa1IKMLuTD2Kq1WrrekzJST/L1yP/VwRxG//NkM1O
-         QDaWH+NTczP2Gf4yYOnJk79/gwdXO5kKTvbg13cBvmfBbzdddB/vweK9FJcx4x/m4B3y
-         y1kURuN3FpVDeMAAdkEf3LksK0A8cZ7wW7zrTEtAIdfvrTs2UX0sWD+esa34CR5mpOVC
-         xD9qVQJQy8butdG/lI+gcunAtNVVPLb3kFV/6KrXGFNhf8WYIMnP6mjgt3Q5nbPo3zRo
-         t0yg==
-X-Gm-Message-State: ACgBeo1DZeFFjcqG9eTq6goV/WwtYCdiQ9jFx9bbZum2yjaDdQS86HHZ
-        su1zGmz0RwoVyOSHdpDpeaAhCQ==
-X-Google-Smtp-Source: AA6agR4idNGK5YJuqnmH0xwk36aAANdU7yZpSyEgTcEYlRhbOPGO+Rg04B+ZQ0Nt9T0pCqdTNfrGLQ==
-X-Received: by 2002:a2e:b894:0:b0:25e:cb1f:365d with SMTP id r20-20020a2eb894000000b0025ecb1f365dmr13835706ljp.285.1662368057594;
-        Mon, 05 Sep 2022 01:54:17 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o16-20020ac24350000000b0048fdb3efa20sm1121336lfl.185.2022.09.05.01.54.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 01:54:17 -0700 (PDT)
-Message-ID: <0d523880-9214-7b9b-ce1a-d06d4d5fbdf1@linaro.org>
-Date:   Mon, 5 Sep 2022 10:54:15 +0200
+        Mon, 5 Sep 2022 04:56:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A234C605
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 01:56:12 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2858J2uF010390;
+        Mon, 5 Sep 2022 08:56:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=Hh2YO9yVS+kW0sHOZqKUc6hEYBGRxWLnulWEBjNRqR0=;
+ b=StmTMXjmeofnLXUlVnrPEQsgtmUj2LzAVl/89riw6py7mHExE4pPvnjNnSPxCQU5PuY+
+ XLWp1Q7CoGwJUuFwq+nCqi7oxsgQ+56OmrnY2GGjwgFR2sCoHaFGJkCtKcIsPXcA9+Mx
+ 99gjawSch76piReK7JHuFLcoKsBf3KO1AaF2zecAAWQe34X99KkZZMxMILq4LeQWsEZr
+ lQEs+x+4TzwC3vn/A7xWMIbkaTxg75aeMY3W4Kp/QNOXlQfsoQ2R7efYbxh8jsYE4hfF
+ Cf6EzXRQ1l2JggA7nji+dW8ycnoLtVMsOOECZmzCxJeOOytiT3XUF2DEUJxDaiEgpeRi sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jddgch2ce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 08:56:07 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2858LD7H018464;
+        Mon, 5 Sep 2022 08:56:07 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jddgch2bt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 08:56:07 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2858pK6n014757;
+        Mon, 5 Sep 2022 08:55:05 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma01dal.us.ibm.com with ESMTP id 3jbxj9f0b1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 08:55:05 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2858t5j424379660
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 5 Sep 2022 08:55:05 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D9356A047;
+        Mon,  5 Sep 2022 08:55:04 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9A41A6A04D;
+        Mon,  5 Sep 2022 08:55:00 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.107.234])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  5 Sep 2022 08:55:00 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>
+Cc:     david@redhat.com, kirill.shutemov@linux.intel.com,
+        jhubbard@nvidia.com, jgg@nvidia.com, hughd@google.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
+In-Reply-To: <CAHbLzkqGdnwY4P8jKQR0ojm6QV6b3dBi5pwrC1UJ4dqi3EqS4w@mail.gmail.com>
+References: <20220901222707.477402-1-shy828301@gmail.com>
+ <YxE/vuQlWJCJMuG2@xz-m1.local>
+ <CAHbLzkqjZ_UhUbJ_f9Br7WCAgQvjrm5bMPRsKYvaFc2bzSuzrw@mail.gmail.com>
+ <YxIofPiI8jvGzcjC@xz-m1.local>
+ <CAHbLzkqGdnwY4P8jKQR0ojm6QV6b3dBi5pwrC1UJ4dqi3EqS4w@mail.gmail.com>
+Date:   Mon, 05 Sep 2022 14:24:58 +0530
+Message-ID: <87ilm2jj4t.fsf@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [EXT] Re: [PATCH V4 2/4] dmaengine: imx-sdma: support hdmi audio
-Content-Language: en-US
-To:     Joy Zou <joy.zou@nxp.com>, Vinod Koul <vkoul@kernel.org>
-Cc:     "S.J. Wang" <shengjiu.wang@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220901020059.50099-1-joy.zou@nxp.com> <YxTPTnrJst9aNpsl@matsya>
- <AM6PR04MB59253DD6C91D41344C08C175E17F9@AM6PR04MB5925.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <AM6PR04MB59253DD6C91D41344C08C175E17F9@AM6PR04MB5925.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: TYwweh_lIbIQnOHbjhgd7nL2N9pdarBo
+X-Proofpoint-GUID: dqhajY8Ol1QP1NZA0GsNIMRToT7jeJtu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-05_05,2022-09-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 adultscore=0 impostorscore=0
+ mlxlogscore=776 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209050040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/09/2022 09:01, Joy Zou wrote:
-> 
->> -----Original Message-----
->> From: Vinod Koul <vkoul@kernel.org>
->> Sent: 2022年9月5日 0:16
->> To: Joy Zou <joy.zou@nxp.com>
->> Cc: krzysztof.kozlowski@linaro.org; S.J. Wang <shengjiu.wang@nxp.com>;
->> shawnguo@kernel.org; s.hauer@pengutronix.de; kernel@pengutronix.de;
->> festevam@gmail.com; dl-linux-imx <linux-imx@nxp.com>;
->> dmaengine@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
->> linux-kernel@vger.kernel.org
->> Subject: [EXT] Re: [PATCH V4 2/4] dmaengine: imx-sdma: support hdmi audio
->>
->> Caution: EXT Email
->>
->> On 01-09-22, 10:00, Joy Zou wrote:
->>> Add hdmi audio support in sdma.
->>
->> Pls make sure you thread your patches properly! They are broken threads!
-> I am trying to support for hdmi audio feature on community driver drivers/gpu/drm/bridge/synopsys/.
+Yang Shi <shy828301@gmail.com> writes:
 
-This does not answer to the problem you patches do not compose proper
-thread. v5 which you sent now is also broken. Supporting HDMI audio
-feature does not prevent you to send patches correctly, right?
+>
+> On Fri, Sep 2, 2022 at 9:00 AM Peter Xu <peterx@redhat.com> wrote:
+>>
+>> On Thu, Sep 01, 2022 at 04:50:45PM -0700, Yang Shi wrote:
+>> > On Thu, Sep 1, 2022 at 4:26 PM Peter Xu <peterx@redhat.com> wrote:
+>> > >
+>> > > Hi, Yang,
+>> > >
+>> > > On Thu, Sep 01, 2022 at 03:27:07PM -0700, Yang Shi wrote:
+>> > > > Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
+>> > > > introduce a general RCU get_user_pages_fast()"), a TLB flush is no longer
+>> > > > sufficient to handle concurrent GUP-fast in all cases, it only handles
+>> > > > traditional IPI-based GUP-fast correctly.
+>> > >
+>> > > If TLB flush (or, IPI broadcasts) used to work to protect against gup-fast,
+>> > > I'm kind of confused why it's not sufficient even if with RCU gup?  Isn't
+>> > > that'll keep working as long as interrupt disabled (which current fast-gup
+>> > > will still do)?
+>> >
+>> > Actually the wording was copied from David's commit log for his
+>> > PageAnonExclusive fix. My understanding is the IPI broadcast still
+>> > works, but it may not be supported by all architectures and not
+>> > preferred anymore. So we should avoid depending on IPI broadcast IIUC.
+>> >
+>> > >
+>> > > IIUC the issue is you suspect not all archs correctly implemented
+>> > > pmdp_collapse_flush(), or am I wrong?
+>> >
+>> > This is a possible fix, please see below for details.
+>> >
+>> > >
+>> > > > On architectures that send
+>> > > > an IPI broadcast on TLB flush, it works as expected.  But on the
+>> > > > architectures that do not use IPI to broadcast TLB flush, it may have
+>> > > > the below race:
+>> > > >
+>> > > >    CPU A                                          CPU B
+>> > > > THP collapse                                     fast GUP
+>> > > >                                               gup_pmd_range() <-- see valid pmd
+>> > > >                                                   gup_pte_range() <-- work on pte
+>> > > > pmdp_collapse_flush() <-- clear pmd and flush
+>> > > > __collapse_huge_page_isolate()
+>> > > >     check page pinned <-- before GUP bump refcount
+>> > > >                                                       pin the page
+>> > > >                                                       check PTE <-- no change
+>> > > > __collapse_huge_page_copy()
+>> > > >     copy data to huge page
+>> > > >     ptep_clear()
+>> > > > install huge pmd for the huge page
+>> > > >                                                       return the stale page
+>> > > > discard the stale page
+>> > > >
+>> > > > The race could be fixed by checking whether PMD is changed or not after
+>> > > > taking the page pin in fast GUP, just like what it does for PTE.  If the
+>> > > > PMD is changed it means there may be parallel THP collapse, so GUP
+>> > > > should back off.
+>> > >
+>> > > Could the race also be fixed by impl pmdp_collapse_flush() correctly for
+>> > > the archs that are missing? Do you know which arch(s) is broken with it?
+>> >
+>> > Yes, and this was suggested by me in the first place, but per the
+>> > suggestion from John and David, this is not the preferred way. I think
+>> > it is because:
+>> >
+>> > Firstly, using IPI to serialize against fast GUP is not recommended
+>> > anymore since fast GUP does check PTE then back off so we should avoid
+>> > it.
+>> > Secondly, if checking PMD then backing off could solve the problem,
+>> > why do we still need broadcast IPI? It doesn't sound performant.
+>> >
+>> > >
+>> > > It's just not clear to me whether this patch is an optimization or a fix,
+>> > > if it's a fix whether the IPI broadcast in ppc pmdp_collapse_flush() would
+>> > > still be needed.
+>> >
+>> > It is a fix and the fix will make IPI broadcast not useful anymore.
+>>
+>> How about another patch to remove the ppc impl too?  Then it can be a two
+>> patches series.
+>
+> BTW, I don't think we could remove the ppc implementation since it is
+> different from the generic pmdp_collapse_flush(), particularly for the
+> hash part IIUC.
+>
+> The generic version calls flush_tlb_range() -> hash__flush_tlb_range()
+> for hash, but the hash call is actually no-op. The ppc version calls
+> hash__pmdp_collapse_flush() -> flush_tlb_pmd_range(), which does
+> something useful.
+>
 
-Best regards,
-Krzysztof
+We should actually rename flush_tlb_pmd_range(). It actually flush the
+hash page table entries.
+
+I will do the below patch for ppc64 to clarify this better
+
+diff --git a/arch/powerpc/include/asm/book3s/64/tlbflush-hash.h b/arch/powerpc/include/asm/book3s/64/tlbflush-hash.h
+index 8b762f282190..fd30fa20c392 100644
+--- a/arch/powerpc/include/asm/book3s/64/tlbflush-hash.h
++++ b/arch/powerpc/include/asm/book3s/64/tlbflush-hash.h
+@@ -112,13 +112,12 @@ static inline void hash__flush_tlb_kernel_range(unsigned long start,
+ 
+ struct mmu_gather;
+ extern void hash__tlb_flush(struct mmu_gather *tlb);
+-void flush_tlb_pmd_range(struct mm_struct *mm, pmd_t *pmd, unsigned long addr);
+ 
+ #ifdef CONFIG_PPC_64S_HASH_MMU
+ /* Private function for use by PCI IO mapping code */
+ extern void __flush_hash_table_range(unsigned long start, unsigned long end);
+-extern void flush_tlb_pmd_range(struct mm_struct *mm, pmd_t *pmd,
+-				unsigned long addr);
++extern void flush_hash_table_pmd_range(struct mm_struct *mm, pmd_t *pmd,
++				       unsigned long addr);
+ #else
+ static inline void __flush_hash_table_range(unsigned long start, unsigned long end) { }
+ #endif
+diff --git a/arch/powerpc/mm/book3s64/hash_pgtable.c b/arch/powerpc/mm/book3s64/hash_pgtable.c
+index ae008b9df0e6..f30131933a01 100644
+--- a/arch/powerpc/mm/book3s64/hash_pgtable.c
++++ b/arch/powerpc/mm/book3s64/hash_pgtable.c
+@@ -256,7 +256,7 @@ pmd_t hash__pmdp_collapse_flush(struct vm_area_struct *vma, unsigned long addres
+ 	 * the __collapse_huge_page_copy can result in copying
+ 	 * the old content.
+ 	 */
+-	flush_tlb_pmd_range(vma->vm_mm, &pmd, address);
++	flush_hash_table_pmd_range(vma->vm_mm, &pmd, address);
+ 	return pmd;
+ }
+ 
+diff --git a/arch/powerpc/mm/book3s64/hash_tlb.c b/arch/powerpc/mm/book3s64/hash_tlb.c
+index eb0bccaf221e..a64ea0a7ef96 100644
+--- a/arch/powerpc/mm/book3s64/hash_tlb.c
++++ b/arch/powerpc/mm/book3s64/hash_tlb.c
+@@ -221,7 +221,7 @@ void __flush_hash_table_range(unsigned long start, unsigned long end)
+ 	local_irq_restore(flags);
+ }
+ 
+-void flush_tlb_pmd_range(struct mm_struct *mm, pmd_t *pmd, unsigned long addr)
++void flush_hash_table_pmd_range(struct mm_struct *mm, pmd_t *pmd, unsigned long addr)
+ {
+ 	pte_t *pte;
+ 	pte_t *start_pte;
+

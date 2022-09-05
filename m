@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602CC5AD281
+	by mail.lfdr.de (Postfix) with ESMTP id 1826C5AD280
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 14:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiIEMZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 08:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
+        id S237628AbiIEMZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 08:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237126AbiIEMZK (ORCPT
+        with ESMTP id S237347AbiIEMZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:25:10 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8335713F12
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:25:09 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id y12-20020a056402358c00b00448898f1c33so5690392edc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:25:09 -0700 (PDT)
+        Mon, 5 Sep 2022 08:25:13 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFF61C92D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 05:25:12 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id f14-20020a0564021e8e00b00448da245f25so5685627edf.18
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 05:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=gSZzwrXvhkj2wpolUx3YVTouxdXHw9PaTEDZ4n2e3I0=;
-        b=tGEGAx8uMhsDCwjOO4YeavI0k5QsjHgjDrM4zDrLN5sS9ToamP5OIkdyf8ZLJoQyOw
-         e2LoiIBveMGNkL1Elhx+wY4FUi2lWQYPS946Ofc2zpeiYXDghDghxvMhyBVvvt9lMxWQ
-         vgiRcYONLBIiMgCzXeNVdaYQRCNi3V8gspn7+0+/HuYQO9Jmovxsizf4gqTMVYmCS/BT
-         3wSbxDLRcA/TelDo7MMeZ9iCCDJ/9i/v/s7AvSw7tPA5gGWT+7eyJ7eSlRgra5ZKcjZj
-         wqC4BAaZNeAxQzofrZ1I/wGoXPlrz8wTvBufMgNH8R9/2cyykGlVsTniZ4E04Wlp4Kq1
-         6j4Q==
+        bh=fFq4uMFAQOrpNZLU6ydmQ4L19fVmnSZ8zUbgI7i1GQ4=;
+        b=cCxag6KhRzMmnFVgfur/MISL9l4M5Ts+EjiLMP524JfvXCm4VLcLN7LzmXBjiZcaXb
+         tlmiubyC93h17zTr+LO/dsylFcdxii7RwDPGn7qVnv6xTfjMkw0Cmoc7esbeBQP5TY9I
+         YMNzkKVgI5RiZP85BOt8+Kx6fVfZgqQPOft+QNgQuRzLtUpRoXrN0PbcsG9nX9970XBG
+         IBzqQiigJF2SIPyYv8PSiIFJrlq4x8iKcxDedH268UB7rpLHat8Rs+Z89FEg2QhX2aCA
+         UNpAZdA9qSiszdY2MHTipaEnHXo6YveoRZNUVH6fz9F+WSwEd/H/4G01oo+H2EC8PkLV
+         j68A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=gSZzwrXvhkj2wpolUx3YVTouxdXHw9PaTEDZ4n2e3I0=;
-        b=IrE43lE8tRokYHF1xQWgZbLpcnFmVzmwqyE6p6XAX/PWKPh9HqIj2VHYcSRx6NiH/d
-         iCXg3xQ/VJLRc5+ce86JhIaA4Y0fNJ0vnq3ksUJjw8v4heialT+o8AU1M2MIn3j3BuKt
-         0m/ZnvKbc+YZPbjUy4JiBBoLRY7Be3kpQyz1oz7TJQtuLhfn2YZkTAR+UYtlBVBQu9YE
-         3tKVnLazagCzHFKtSu/ol4N68nwtLSCjStJYTCyQ7HhxN9mTGqQ95ZIJPYTTuw+F8MMc
-         6aW/rYWLBixEKPDd8fDWjgaSYewafT/EjXw8qc3YaxBoQObngBz8Jb5E3oDD3XNdqUuG
-         Wdtg==
-X-Gm-Message-State: ACgBeo37LlpovMfxCfL5kEzFHNzurG07cKE5n8h6L3bmWDrlTlNLweG+
-        N/2pZZOzCDsZjIHljqYfk2Qw4CYdHkM=
-X-Google-Smtp-Source: AA6agR7uZSb4I8x12+mloMHQ0B/R9zNrKGyUDj6RqUDl0l3ypI90dtuco15DreoHh/j3D7zLcpHmCF1MiQM=
+        bh=fFq4uMFAQOrpNZLU6ydmQ4L19fVmnSZ8zUbgI7i1GQ4=;
+        b=6DOfEpYNosuP9hqNw7bKwk84RrPeBGxBdEAL9ApNMjQO+9+axAQVT2s5dWz/yla4LC
+         HMnnJBBSJvmAMABgZjrTmx+VaHOGv9p1iYjGAnVa56b0ocK4R1j5fhzlhnUQxAY5sj8V
+         t6Pt8DtvKV7uetF/94CwgJe0l/UDvrZJBZiYJHL7LxOg8ofb7oNwTUo42SPF7ly2uVGz
+         qzHOb9QwV6e67AN6+TrnRi4RJv61C03XYh2RIlZn7EVAhWZ6tYTVhiw+dZj7en1m3XXM
+         qJFd5FeOcnRNkcO0vF/VVEMQSTVTidscdan5lrkgRh8UFZp+tkR6N0g2uvVzVHl2c/5c
+         vfNQ==
+X-Gm-Message-State: ACgBeo061+RNAbq9s5jDpPYXnJmJOANqKO+hq5N2KSBKftUwE1dBUV6k
+        kUScRCgBmtQDwATQ1E3ZwJeQOLlQOBE=
+X-Google-Smtp-Source: AA6agR6U2run9tld0JOCd4AYP6RzPopWiBDxZtk42V7MPQ3Pjs2lgYt8aiDTWOU8Ssa/Mvqp6YaAqq5ka0Y=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:b808:8d07:ab4a:554c])
- (user=glider job=sendgmr) by 2002:a05:6402:4414:b0:434:f58c:ee2e with SMTP id
- y20-20020a056402441400b00434f58cee2emr43097203eda.362.1662380707978; Mon, 05
- Sep 2022 05:25:07 -0700 (PDT)
-Date:   Mon,  5 Sep 2022 14:24:12 +0200
+ (user=glider job=sendgmr) by 2002:a17:907:2c5b:b0:741:6b8f:d3ab with SMTP id
+ hf27-20020a1709072c5b00b007416b8fd3abmr26797162ejc.447.1662380710753; Mon, 05
+ Sep 2022 05:25:10 -0700 (PDT)
+Date:   Mon,  5 Sep 2022 14:24:13 +0200
 In-Reply-To: <20220905122452.2258262-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220905122452.2258262-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220905122452.2258262-5-glider@google.com>
-Subject: [PATCH v6 04/44] x86: asm: instrument usercopy in get_user() and put_user()
+Message-ID: <20220905122452.2258262-6-glider@google.com>
+Subject: [PATCH v6 05/44] asm-generic: instrument usercopy in cacheflush.h
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -97,142 +97,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use hooks from instrumented.h to notify bug detection tools about
-usercopy events in variations of get_user() and put_user().
+Notify memory tools about usercopy events in copy_to_user_page() and
+copy_from_user_page().
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
+Reviewed-by: Marco Elver <elver@google.com>
+
 ---
 v5:
- -- handle put_user(), make sure to not evaluate pointer/value twice
+ -- cast user pointers to `void __user *`
 
-v6:
- -- add missing empty definitions of instrument_get_user() and
-    instrument_put_user()
-
-Link: https://linux-review.googlesource.com/id/Ia9f12bfe5832623250e20f1859fdf5cc485a2fce
+Link: https://linux-review.googlesource.com/id/Ic1ee8da1886325f46ad67f52176f48c2c836c48f
 ---
- arch/x86/include/asm/uaccess.h | 22 +++++++++++++++-------
- include/linux/instrumented.h   | 28 ++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+), 7 deletions(-)
+ include/asm-generic/cacheflush.h | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 913e593a3b45f..c1b8982899eca 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -5,6 +5,7 @@
-  * User space memory access functions
-  */
- #include <linux/compiler.h>
+diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
+index 4f07afacbc239..f46258d1a080f 100644
+--- a/include/asm-generic/cacheflush.h
++++ b/include/asm-generic/cacheflush.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_GENERIC_CACHEFLUSH_H
+ #define _ASM_GENERIC_CACHEFLUSH_H
+ 
 +#include <linux/instrumented.h>
- #include <linux/kasan-checks.h>
- #include <linux/string.h>
- #include <asm/asm.h>
-@@ -103,6 +104,7 @@ extern int __get_user_bad(void);
- 		     : "=a" (__ret_gu), "=r" (__val_gu),		\
- 			ASM_CALL_CONSTRAINT				\
- 		     : "0" (ptr), "i" (sizeof(*(ptr))));		\
-+	instrument_get_user(__val_gu);					\
- 	(x) = (__force __typeof__(*(ptr))) __val_gu;			\
- 	__builtin_expect(__ret_gu, 0);					\
- })
-@@ -192,9 +194,11 @@ extern void __put_user_nocheck_8(void);
- 	int __ret_pu;							\
- 	void __user *__ptr_pu;						\
- 	register __typeof__(*(ptr)) __val_pu asm("%"_ASM_AX);		\
--	__chk_user_ptr(ptr);						\
--	__ptr_pu = (ptr);						\
--	__val_pu = (x);							\
-+	__typeof__(*(ptr)) __x = (x); /* eval x once */			\
-+	__typeof__(ptr) __ptr = (ptr); /* eval ptr once */		\
-+	__chk_user_ptr(__ptr);						\
-+	__ptr_pu = __ptr;						\
-+	__val_pu = __x;							\
- 	asm volatile("call __" #fn "_%P[size]"				\
- 		     : "=c" (__ret_pu),					\
- 			ASM_CALL_CONSTRAINT				\
-@@ -202,6 +206,7 @@ extern void __put_user_nocheck_8(void);
- 		       "r" (__val_pu),					\
- 		       [size] "i" (sizeof(*(ptr)))			\
- 		     :"ebx");						\
-+	instrument_put_user(__x, __ptr, sizeof(*(ptr)));		\
- 	__builtin_expect(__ret_pu, 0);					\
- })
- 
-@@ -248,23 +253,25 @@ extern void __put_user_nocheck_8(void);
- 
- #define __put_user_size(x, ptr, size, label)				\
- do {									\
-+	__typeof__(*(ptr)) __x = (x); /* eval x once */			\
- 	__chk_user_ptr(ptr);						\
- 	switch (size) {							\
- 	case 1:								\
--		__put_user_goto(x, ptr, "b", "iq", label);		\
-+		__put_user_goto(__x, ptr, "b", "iq", label);		\
- 		break;							\
- 	case 2:								\
--		__put_user_goto(x, ptr, "w", "ir", label);		\
-+		__put_user_goto(__x, ptr, "w", "ir", label);		\
- 		break;							\
- 	case 4:								\
--		__put_user_goto(x, ptr, "l", "ir", label);		\
-+		__put_user_goto(__x, ptr, "l", "ir", label);		\
- 		break;							\
- 	case 8:								\
--		__put_user_goto_u64(x, ptr, label);			\
-+		__put_user_goto_u64(__x, ptr, label);			\
- 		break;							\
- 	default:							\
- 		__put_user_bad();					\
- 	}								\
-+	instrument_put_user(__x, ptr, size);				\
- } while (0)
- 
- #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
-@@ -305,6 +312,7 @@ do {									\
- 	default:							\
- 		(x) = __get_user_bad();					\
- 	}								\
-+	instrument_get_user(x);						\
- } while (0)
- 
- #define __get_user_asm(x, addr, itype, ltype, label)			\
-diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-index ee8f7d17d34f5..9f1dba8f717b0 100644
---- a/include/linux/instrumented.h
-+++ b/include/linux/instrumented.h
-@@ -153,4 +153,32 @@ instrument_copy_from_user_after(const void *to, const void __user *from,
- {
- }
- 
-+/**
-+ * instrument_get_user() - add instrumentation to get_user()-like macros
-+ *
-+ * get_user() and friends are fragile, so it may depend on the implementation
-+ * whether the instrumentation happens before or after the data is copied from
-+ * the userspace.
-+ *
-+ * @to destination variable, may not be address-taken
-+ */
-+#define instrument_get_user(to)                         \
-+({                                                      \
-+})
 +
-+/**
-+ * instrument_put_user() - add instrumentation to put_user()-like macros
-+ *
-+ * put_user() and friends are fragile, so it may depend on the implementation
-+ * whether the instrumentation happens before or after the data is copied from
-+ * the userspace.
-+ *
-+ * @from source address
-+ * @ptr userspace pointer to copy to
-+ * @size number of bytes to copy
-+ */
-+#define instrument_put_user(from, ptr, size)                    \
-+({                                                              \
-+})
+ struct mm_struct;
+ struct vm_area_struct;
+ struct page;
+@@ -105,14 +107,22 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
+ #ifndef copy_to_user_page
+ #define copy_to_user_page(vma, page, vaddr, dst, src, len)	\
+ 	do { \
++		instrument_copy_to_user((void __user *)dst, src, len); \
+ 		memcpy(dst, src, len); \
+ 		flush_icache_user_page(vma, page, vaddr, len); \
+ 	} while (0)
+ #endif
+ 
 +
- #endif /* _LINUX_INSTRUMENTED_H */
+ #ifndef copy_from_user_page
+-#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
+-	memcpy(dst, src, len)
++#define copy_from_user_page(vma, page, vaddr, dst, src, len)		  \
++	do {								  \
++		instrument_copy_from_user_before(dst, (void __user *)src, \
++						 len);			  \
++		memcpy(dst, src, len);					  \
++		instrument_copy_from_user_after(dst, (void __user *)src, len, \
++						0);			  \
++	} while (0)
+ #endif
+ 
+ #endif /* _ASM_GENERIC_CACHEFLUSH_H */
 -- 
 2.37.2.789.g6183377224-goog
 

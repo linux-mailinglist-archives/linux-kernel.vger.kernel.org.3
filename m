@@ -2,253 +2,502 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D7D5ADB67
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E005ADB68
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiIEW1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
+        id S232168AbiIEW2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 18:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbiIEW1W (ORCPT
+        with ESMTP id S229762AbiIEW2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:27:22 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2089.outbound.protection.outlook.com [40.107.244.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AA52FFD8;
-        Mon,  5 Sep 2022 15:27:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KIuZSN7bignulWmTYqMH/A8nW+rPgwPgSllIjEAhAe2AMij53ob3FxLS6wO04aegn9YklrGFBRCmwEamraQK5+Hx8g1PyeWrZaQFOyqmLDyosOtkkrpronC0uf/P1KaFhGXvvVhZRlDaV4x38yxZnPNATTkic4dbS+F/3k5XCRdSr2xgC24nrLrH4SNd6fgxsR95ecZ2Yy/5hSj9UvP6ZNmV7QiIcyQQVqatuNBzyB2zDlixABVTUDvXDAn+wrUuGw0yMd23GrE3Ap2fbjcs+QLEaBCwciMo9HfIaam2NDgc2QUp1gi+rU2bWhltBfW/donKY9d7OIsODLsZ8eEqgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9o+ZEsj4u+Mr2O36ppY/6DvuowU/2UX2TvICgOENCZk=;
- b=G/yWmNS4w9y1yixo5PXA0UWS7jShwYCgDa2H92aaQnJX7OjL5AWzIQ1q+bj9NPqaSVbIEBiEY4FOW9XikxnWXzwisTrcFjyrlPfZPQ4AXbNvUrRD2u1LCu7lrgGQtZskMDlAMASUW9FXYbAxBVyec9YLTKsaLqmo+nBU7KzVlXIKhx0TnLB7J45qQ+0dK8z9WPkv1h8ampaldpHXlUfb6GFFT5RN4sdfkW2jQJ1PrrH4iTxYZKyERECWq98YsvXB3D4yhX8Ma4gwlzTTvx10y12zmbowOx1vbthGCZpBX85w/tsaaBSTLQ6IAbThDMIZsY9SJ/OUlB3eK6ob5lcGvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9o+ZEsj4u+Mr2O36ppY/6DvuowU/2UX2TvICgOENCZk=;
- b=N28YYmEO1j39N0CIvDWW5AVRmfCyzG86ZKHTjSQziHPhryezJYo7Bck6aTLutdSSQAzGq8niYyVdyNr8T2rBxMfM9fadR/iLWnJXV1beYCEbczRdr/SEb6x9tiOJhMWa3tu4uetZcXng/M1pNs5/Qi8yWVqnxPMDH5oCAbvpiGMVvfY8q564dUyymNMQTNoPkp5I2SSoCfJ/GjY5YVCo2Fmo9Hfc4RsIbSVjDtcsXaatwwZO6b0h8zRe2dDTWFip5wgvJwF2h6+WblSX42P9MP/D7VSVpdm841COAxkOwxzIgLF4PCwHIlmpLWfuAjAIXDbuWfWTt3T2+2pMKESHTQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by PH8PR12MB6938.namprd12.prod.outlook.com (2603:10b6:510:1bd::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Mon, 5 Sep
- 2022 22:27:19 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5%9]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
- 22:27:19 +0000
-Message-ID: <cb59ea58-062d-6a3f-c3f6-69d9cfff1484@nvidia.com>
-Date:   Mon, 5 Sep 2022 15:27:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v9 1/8] mm: introduce FOLL_PCI_P2PDMA to gate getting PCI
- P2PDMA pages
-Content-Language: en-US
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>
-References: <20220825152425.6296-1-logang@deltatee.com>
- <20220825152425.6296-2-logang@deltatee.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20220825152425.6296-2-logang@deltatee.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR07CA0063.namprd07.prod.outlook.com
- (2603:10b6:a03:60::40) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Mon, 5 Sep 2022 18:28:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF362FFD8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 15:28:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662416887;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/detDVQZknlSNWFk7loCBRlBVn0q3tjbmtTr+O34rak=;
+        b=IMEhYLTUgngQxgGt21EKJMM6oo1ZL3w3+bcyMg6h1rz71H/qxvjKtER2O6E4SMDxXG3Chy
+        A4iEwX5VRbaSAv7hDvay7+fgPeL0B0xKRJQMgOW6rpgxRZhhxwRZtyPVG0AouLZOE7Q7ip
+        CRjQWNUtrW9DsWpqhJR/zgoKo2T5+4U=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-602-GlyGCqaUMkK3cXs6P07jBg-1; Mon, 05 Sep 2022 18:28:06 -0400
+X-MC-Unique: GlyGCqaUMkK3cXs6P07jBg-1
+Received: by mail-wr1-f69.google.com with SMTP id d16-20020adfa350000000b00228628ff913so1000262wrb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 15:28:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/detDVQZknlSNWFk7loCBRlBVn0q3tjbmtTr+O34rak=;
+        b=MfI4NdKMJ721WDOugJC3VW8Vl3zplODM6Ssm44NmcfkGqWwdAtkguLpzMkD56W0YvB
+         Wn8eOCZz+KWE9KxFBmcaB9ESGyxG5XrpCjPVPx0X7JeO6NZCz24HhUowhWg+ANWdL2cu
+         BXMihpYeeMO7EXQWTtx1U6DGYLjxp/+aKevFnVYt5OvMllG9obCjz64En4VL/MobZb0i
+         +7CBMGCP4vDiM1vrc12bkA4DCuUogNcdB+kvP4Ui1gQ0QbF9kqVZswRrzXJVlZHotlU0
+         lMVrnDIyrYPV5pL7hW4/I/aYRfT2LtS7YNVHNO41EH+WPejkIJToyrStAsiakdVCY8C/
+         ESLw==
+X-Gm-Message-State: ACgBeo00WdigCDG3CuroMf2s0tEalfZJlKTi3B3lBSG4P2jz+zhni99T
+        SvDPZ340Valqj13xkGWcvinGYSBd4mxnEQx35sP4hsmhpVa+g+1NodrZUwrJCSxhqO6J9t0xrFt
+        hlWN2R3hALYp7T2I7v3MzNsfbDIt7L6WeukWMZjdYB10f45lzINJpN9RTsNRswPe4Qd9ulRVsqE
+        8=
+X-Received: by 2002:a1c:7703:0:b0:3a5:aefa:68e3 with SMTP id t3-20020a1c7703000000b003a5aefa68e3mr12403399wmi.158.1662416884476;
+        Mon, 05 Sep 2022 15:28:04 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6J8VszMfDy9FNJSXHKDx6EtgcyzMsCtvJg90tzF2fBov7d6G6Nq98S+/qeSs+V8dFiCuN4LA==
+X-Received: by 2002:a1c:7703:0:b0:3a5:aefa:68e3 with SMTP id t3-20020a1c7703000000b003a5aefa68e3mr12403387wmi.158.1662416884077;
+        Mon, 05 Sep 2022 15:28:04 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id r9-20020adff709000000b0022862fd933asm6476190wrp.96.2022.09.05.15.28.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 15:28:03 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2] drm/ssd130x: Replace simple display helpers with the atomic helpers
+Date:   Tue,  6 Sep 2022 00:27:59 +0200
+Message-Id: <20220905222759.2597186-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c768b4b0-2eb2-4f06-d780-08da8f8dcafc
-X-MS-TrafficTypeDiagnostic: PH8PR12MB6938:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pH/sOfCyCo7TS8tjhKGrfCuMPQAqHbdPFihOzpq90ZjRkSi7R0UAj1jPHEG9d/Q1d9Sy9HLx763RVKQ3CpYDbJhCqCBk0ZbDfJJDVLJtCJwSMNd+LSmNofP6+Xhz4SYzcAu4cmfKpISWxgNu2XNe6WqBE74SjbrabXvJqNYOqeQKdmdVAMOW6ntYceb6wvP4TzTH4OnJoE4/NqBuWJPKJrY50zB/Czh45lc01bsvKDxKV9kVENNubPNUOPlHf5Etnw/ikQhF7uslNbN37IcxsnXoGFo1miPekTvfbftg9GOTyRZvyLlPcbWZMdh9iViqO5Omp4WnhkAHV8hXoENWrLCwixH5gnwz1CekOR569jgXdT97rtIvNuMhSIYBnfpj76NKxUkFMHnfWquBbji/X3OhsGsO3X1D57/8INBXuIwIqLn1zDVlgK0OMemT9w8haEKzZMKUWtm6esDYcS7OTZqp+msF9iqDLAXYaiAITKGmlZoe3ax+UKggxqp8Qd/2qJI50piBMzaegPSbE33GArSglLqXjrDJrlvK0MiFvP1ZX/xLok6dZgRK4TzkttIA9B1bURrx4z82EDgbTp2QiXgb1wfzj79BJVPcvjQqMXTzrDtjPbSCJqUTogoasIHZe7NCFl0APjZPQfnTgv8iGaH9K/n2sJI02eLrgRHtD3HrKS2hLow6aiH3vH0w/9fH3HR10ph0j5kHXRhgDpF6tFK2CKJ2mGrvemKOmjsK4RBRGRpwt2FGo5ZIyCQVE/VMVPbj6NNGVAQJiX4dFFBujZhv+MqH72SAM1mr9UYI6mY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(366004)(396003)(346002)(39860400002)(8676002)(66946007)(54906003)(66556008)(7416002)(66476007)(8936002)(36756003)(31686004)(5660300002)(4326008)(6486002)(2906002)(316002)(478600001)(83380400001)(41300700001)(6506007)(26005)(6512007)(86362001)(6666004)(2616005)(53546011)(31696002)(186003)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eHpHTnZRQ1ljNEhFeGZ5YVRaT3lkeXFmZVcyQnp4ZlA4RzdBbzYyMUx3bU4y?=
- =?utf-8?B?bHlsUUgxN2gvRHlnTFkxSGJmOXpvSStWVndFVHY2ZnNXMW1UeGwwYzVwNHVj?=
- =?utf-8?B?ZGlrNXMxd0JHQUF1YUEzR1pEakg4V3Bwamt3TVVZUk04WTVPUysvZnhLbkVO?=
- =?utf-8?B?bXN4cEI1WEl2R2xQNlZ3NVNGUkpjbERKb3JGTFdXNDdhVUlSczZiS3hTWkg1?=
- =?utf-8?B?MW9uR3l5b3Bya0JrMGZHcFhqaEt0dnhTMW9XYzJjVmxIblA2WTJMZDNYMmJL?=
- =?utf-8?B?elVzNGhFRlNIUTA4SEd6ZmNSK0tzVjlnWFFSWGV5bE1qUzQ5Nlc0bWpRVk8v?=
- =?utf-8?B?VjlMMGthTUh4TDBhakZYbU93aXIyUVlGSkdVY0UxaVBqL3RnV0JLTHpTU2pC?=
- =?utf-8?B?V01YQ0lodlpmTHF2NlBQNmgybUR2bGpQQTF4MXJWbWVwbGQ2M0s1MkwwQ1Vp?=
- =?utf-8?B?L3ExMi9WWDlndlduWWtDeUZxUEsycDJtN0lQMTV4YUlWbVEvTWVRWWcwbFR1?=
- =?utf-8?B?SXVMZFEvTzdYalBiQjZZU0VkcWRwWTI0ay93TUp2V1dHNFJBanZ0ZnZZckZi?=
- =?utf-8?B?RXV4cGROMHpGejdFdFVKS0ljdTBWYlpXc3poYjBESU5xYzhQSVFoazlSa2l2?=
- =?utf-8?B?aVkvanBWbWlJakJYdWZUY3p5eVlrYVM2YnRmTTFoSmFQMGM5ZjBSSnNYc1Ni?=
- =?utf-8?B?RHpzMHRzTGx5aFNaM1NPYUgyTjc3QmJlbkN6ak9PWVh1Q3lVRWtTRG00dDVX?=
- =?utf-8?B?VENvNUF2UWovYUNmYWx4Zk5aSW1GK0VtYkhxMzAyTHB5enJ1WEhjZURtSW9K?=
- =?utf-8?B?aVhQNk9scHRoMUgrRVp2eVp5TGtoakk1TVdlNmYrUWtUVGN3TnNNdUYvZE5k?=
- =?utf-8?B?TDF0TVBOejFNOEEvd0NUUDh4SzI3UXI1bkZ6ZnRrR0JvcmFJUXNGcktXdEhQ?=
- =?utf-8?B?SEZPdGFiSDNncERtK3pNMGFXbWhvWHl0ZTRZSHIzdEw0K1VoVUc4cU40eFo0?=
- =?utf-8?B?bjRtOGd2blMvVVRla3ZOMks1Q2NhWnA5UDFEcjFCak1UQmhJQlAxUXdGdzY0?=
- =?utf-8?B?MDhValFNNXBCWDlUVEd6a0RRRitGQzJESDhVY09aTVU3d0w5RHJVRUZlenlx?=
- =?utf-8?B?WCtQTEFkUHphSkpVMDVNazlRdzkyTzlhYzRGb3ZUSjFmaDhJYWhnSWtFUk9h?=
- =?utf-8?B?eHFHdEJkOHpqZEN5ejQ3K3RmYjZ5d1hZS1B6TlpCMUorbjJOT3hjbENtQ3Vp?=
- =?utf-8?B?QkRBeDZyS2VTdE03MFg0T2YvcWwrRmpmaFlKUVBCa2tyTUFmeVBhZU5BNGVs?=
- =?utf-8?B?NHlDc0JtR2lMY0V0aFp3UGVNVnhHOTNnVzJOdm5Gd3JqZWhMeCtvVzg2SVk0?=
- =?utf-8?B?emcvKzArTW1VcktvVkNacGN0SjVTQWwwYU1FbG9vRmxNWm9ybXk1NHd4MmdG?=
- =?utf-8?B?UFpIMHFYcHJBM0crUGc1aXVJbHNEeWQ4SUlCQURpQnozQjVORUJvMEM2Rnlj?=
- =?utf-8?B?QzgyUHVPY0xUOUNac1FORVBFczdlTkhGTDQ0L3B6azVqRmZuT01VUWVMdEI3?=
- =?utf-8?B?cnBjbUc2NmJmQzl2Yi9hOGQyT0MvSWdzS0pHWHBBVGVJZEVpUGFsUEpsa0FN?=
- =?utf-8?B?VUN1UzZDc1FwRmtXaUZPU2hXMk0wVGpUaFdQUzRxSEhtK0VFQWc5L215bThJ?=
- =?utf-8?B?MU50T01JZWhXOWZSbDFHTkxWVk1uOUd2U2pIUHI1bDFYS3RXa3NxWndoYXBD?=
- =?utf-8?B?UkRPa1QrSmtTRUpkblF1Ynl1Y05qcGg1NFpIcTNRZGQvL0U5djN5cHVKTGFM?=
- =?utf-8?B?ZDNPOXRQclg1aEpDTkJmVDVRMHhucUxrY0tScS92V0pGVjJmbjdDZW1hWXhP?=
- =?utf-8?B?WHRVSUtabVB0ZjByUVkrSVQ5ZWNLMFpOdlZXM1BOZnZxQ0Y5VjFjL2VvV3pP?=
- =?utf-8?B?Q2tEOWRlbUt2QmZoMjYzcmxCUVdsNGpTY3RtQXlucFg0Zkc2L3JXZktKMXRT?=
- =?utf-8?B?MmZSa1RlVWcvTllyTlFZc3F5WlYyN0FXd3g4RGpSUTBNK3FKTEJZalF0Z0ZO?=
- =?utf-8?B?dFR3VDBQODNWUDhtYzVyN1dpY28wQ2VjT1FBL2xFZG9RYzB5LzlrbUszRHVp?=
- =?utf-8?Q?9L9HOAhRiyvzkcxox35G1ch8W?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c768b4b0-2eb2-4f06-d780-08da8f8dcafc
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 22:27:18.7106
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DXuFLw46o6h3Q2RJySBheOQfyH62aM44OOcLIK0SUMrZXe4rrimH5khc5SPk7mfDD499rELSnT5TTSrYNNUkYA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6938
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/25/22 08:24, Logan Gunthorpe wrote:
-> GUP Callers that expect PCI P2PDMA pages can now set FOLL_PCI_P2PDMA to
-> allow obtaining P2PDMA pages. If GUP is called without the flag and a
-> P2PDMA page is found, it will return an error.
-> 
-> FOLL_PCI_P2PDMA cannot be set if FOLL_LONGTERM is set.
-> 
-> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> ---
->  include/linux/mm.h |  1 +
->  mm/gup.c           | 22 +++++++++++++++++++++-
->  2 files changed, 22 insertions(+), 1 deletion(-)
-> 
+The simple display pipeline is a set of helpers that can be used by DRM
+drivers to avoid dealing with all the needed components and just define
+a few functions to operate a simple display device with one full-screen
+scanout buffer feeding a single output.
 
-Looks good. And I see that Dan Williams' upcoming "Fix the DAX-gup
-mistake" series will remove the need for most (all?) of the
-undo_dev_pagemap() calls that you have to make here, so the end result
-will be even simpler.
+But it is arguable that this provides the correct level of abstraction
+for simple drivers, and recently some have been ported from using these
+simple display helpers to use the regular atomic helpers instead.
 
+The rationale for this is that the simple display pipeline helpers don't
+hide that much of the DRM complexity, while adding an indirection layer
+that conflates the concepts of CRTCs and planes. This makes the helpers
+less flexible and harder to be reused among different graphics drivers.
 
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Also, for simple drivers, using the full atomic helpers doesn't require
+a lot of additional code. So adding a simple display pipeline layer may
+not be worth it.
 
-thanks,
+For these reasons, let's follow that trend and make ssd130x a plain DRM
+driver that creates its own primary plane, CRTC, enconder and connector.
 
+Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+---
+
+Changes in v2:
+- Remove plane_state->fb check in struct drm_plane_helper_funcs .atomic_update
+  callback function (Thomas Zimmermann).
+- Move ssd130x_init() call to struct drm_crtc_funcs .reset callback instead of
+  having in struct drm_encoder_helper_funcs .enable_atomic (Thomas Zimmermann).
+
+ drivers/gpu/drm/solomon/ssd130x.c | 260 +++++++++++++++++++++---------
+ drivers/gpu/drm/solomon/ssd130x.h |   9 +-
+ 2 files changed, 189 insertions(+), 80 deletions(-)
+
+diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+index f87f5443e714..79e8e2017c68 100644
+--- a/drivers/gpu/drm/solomon/ssd130x.c
++++ b/drivers/gpu/drm/solomon/ssd130x.c
+@@ -18,6 +18,7 @@
+ #include <linux/pwm.h>
+ #include <linux/regulator/consumer.h>
+ 
++#include <drm/drm_atomic.h>
+ #include <drm/drm_atomic_helper.h>
+ #include <drm/drm_damage_helper.h>
+ #include <drm/drm_edid.h>
+@@ -564,61 +565,52 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
+ 	return ret;
+ }
+ 
+-static int ssd130x_display_pipe_mode_valid(struct drm_simple_display_pipe *pipe,
+-					   const struct drm_display_mode *mode)
++static int ssd130x_primary_plane_helper_atomic_check(struct drm_plane *plane,
++						     struct drm_atomic_state *new_state)
+ {
+-	struct ssd130x_device *ssd130x = drm_to_ssd130x(pipe->crtc.dev);
++	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
++	struct drm_crtc *new_crtc = new_plane_state->crtc;
++	struct drm_crtc_state *new_crtc_state = NULL;
+ 
+-	if (mode->hdisplay != ssd130x->mode.hdisplay &&
+-	    mode->vdisplay != ssd130x->mode.vdisplay)
+-		return MODE_ONE_SIZE;
+-
+-	if (mode->hdisplay != ssd130x->mode.hdisplay)
+-		return MODE_ONE_WIDTH;
+-
+-	if (mode->vdisplay != ssd130x->mode.vdisplay)
+-		return MODE_ONE_HEIGHT;
++	if (new_crtc)
++		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+ 
+-	return MODE_OK;
++	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
++						   DRM_PLANE_NO_SCALING,
++						   DRM_PLANE_NO_SCALING,
++						   false, false);
+ }
+ 
+-static void ssd130x_display_pipe_enable(struct drm_simple_display_pipe *pipe,
+-					struct drm_crtc_state *crtc_state,
+-					struct drm_plane_state *plane_state)
++static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
++						       struct drm_atomic_state *old_state)
+ {
+-	struct ssd130x_device *ssd130x = drm_to_ssd130x(pipe->crtc.dev);
++	struct drm_plane_state *plane_state = plane->state;
++	struct drm_plane_state *old_plane_state = drm_atomic_get_old_plane_state(old_state, plane);
+ 	struct drm_shadow_plane_state *shadow_plane_state = to_drm_shadow_plane_state(plane_state);
+-	struct drm_device *drm = &ssd130x->drm;
+-	int idx, ret;
++	struct drm_device *drm = plane->dev;
++	struct drm_rect src_clip, dst_clip;
++	int idx;
+ 
+-	ret = ssd130x_power_on(ssd130x);
+-	if (ret)
++	if (!drm_atomic_helper_damage_merged(old_plane_state, plane_state, &src_clip))
+ 		return;
+ 
+-	ret = ssd130x_init(ssd130x);
+-	if (ret)
+-		goto out_power_off;
++	dst_clip = plane_state->dst;
++	if (!drm_rect_intersect(&dst_clip, &src_clip))
++		return;
+ 
+ 	if (!drm_dev_enter(drm, &idx))
+-		goto out_power_off;
+-
+-	ssd130x_fb_blit_rect(plane_state->fb, &shadow_plane_state->data[0], &plane_state->dst);
+-
+-	ssd130x_write_cmd(ssd130x, 1, SSD130X_DISPLAY_ON);
++		return;
+ 
+-	backlight_enable(ssd130x->bl_dev);
++	ssd130x_fb_blit_rect(plane_state->fb, &shadow_plane_state->data[0], &dst_clip);
+ 
+ 	drm_dev_exit(idx);
+-
+-	return;
+-out_power_off:
+-	ssd130x_power_off(ssd130x);
+ }
+ 
+-static void ssd130x_display_pipe_disable(struct drm_simple_display_pipe *pipe)
++static void ssd130x_primary_plane_helper_atomic_disable(struct drm_plane *plane,
++							struct drm_atomic_state *old_state)
+ {
+-	struct ssd130x_device *ssd130x = drm_to_ssd130x(pipe->crtc.dev);
+-	struct drm_device *drm = &ssd130x->drm;
++	struct drm_device *drm = plane->dev;
++	struct ssd130x_device *ssd130x = drm_to_ssd130x(drm);
+ 	int idx;
+ 
+ 	if (!drm_dev_enter(drm, &idx))
+@@ -626,56 +618,120 @@ static void ssd130x_display_pipe_disable(struct drm_simple_display_pipe *pipe)
+ 
+ 	ssd130x_clear_screen(ssd130x);
+ 
+-	backlight_disable(ssd130x->bl_dev);
++	drm_dev_exit(idx);
++}
+ 
+-	ssd130x_write_cmd(ssd130x, 1, SSD130X_DISPLAY_OFF);
++static const struct drm_plane_helper_funcs ssd130x_primary_plane_helper_funcs = {
++	DRM_GEM_SHADOW_PLANE_HELPER_FUNCS,
++	.atomic_check = ssd130x_primary_plane_helper_atomic_check,
++	.atomic_update = ssd130x_primary_plane_helper_atomic_update,
++	.atomic_disable = ssd130x_primary_plane_helper_atomic_disable,
++};
+ 
+-	ssd130x_power_off(ssd130x);
++static const struct drm_plane_funcs ssd130x_primary_plane_funcs = {
++	.update_plane = drm_atomic_helper_update_plane,
++	.disable_plane = drm_atomic_helper_disable_plane,
++	.destroy = drm_plane_cleanup,
++	DRM_GEM_SHADOW_PLANE_FUNCS,
++};
+ 
+-	drm_dev_exit(idx);
++static enum drm_mode_status ssd130x_crtc_helper_mode_valid(struct drm_crtc *crtc,
++							   const struct drm_display_mode *mode)
++{
++	struct ssd130x_device *ssd130x = drm_to_ssd130x(crtc->dev);
++
++	if (mode->hdisplay != ssd130x->mode.hdisplay &&
++	    mode->vdisplay != ssd130x->mode.vdisplay)
++		return MODE_ONE_SIZE;
++	else if (mode->hdisplay != ssd130x->mode.hdisplay)
++		return MODE_ONE_WIDTH;
++	else if (mode->vdisplay != ssd130x->mode.vdisplay)
++		return MODE_ONE_HEIGHT;
++
++	return MODE_OK;
+ }
+ 
+-static void ssd130x_display_pipe_update(struct drm_simple_display_pipe *pipe,
+-					struct drm_plane_state *old_plane_state)
++static int ssd130x_crtc_helper_atomic_check(struct drm_crtc *crtc,
++					    struct drm_atomic_state *new_state)
+ {
+-	struct ssd130x_device *ssd130x = drm_to_ssd130x(pipe->crtc.dev);
+-	struct drm_plane_state *plane_state = pipe->plane.state;
+-	struct drm_shadow_plane_state *shadow_plane_state = to_drm_shadow_plane_state(plane_state);
+-	struct drm_framebuffer *fb = plane_state->fb;
+-	struct drm_device *drm = &ssd130x->drm;
+-	struct drm_rect src_clip, dst_clip;
+-	int idx;
++	struct drm_crtc_state *new_crtc_state = drm_atomic_get_new_crtc_state(new_state, crtc);
++	int ret;
+ 
+-	if (!fb)
+-		return;
++	ret = drm_atomic_helper_check_crtc_state(new_crtc_state, false);
++	if (ret)
++		return ret;
+ 
+-	if (!pipe->crtc.state->active)
+-		return;
++	return drm_atomic_add_affected_planes(new_state, crtc);
++}
+ 
+-	if (!drm_atomic_helper_damage_merged(old_plane_state, plane_state, &src_clip))
+-		return;
++/*
++ * The CRTC is always enabled. Screen updates are performed by
++ * the primary plane's atomic_update function. Disabling clears
++ * the screen in the primary plane's atomic_disable function.
++ */
++static const struct drm_crtc_helper_funcs ssd130x_crtc_helper_funcs = {
++	.mode_valid = ssd130x_crtc_helper_mode_valid,
++	.atomic_check = ssd130x_crtc_helper_atomic_check,
++};
+ 
+-	dst_clip = plane_state->dst;
+-	if (!drm_rect_intersect(&dst_clip, &src_clip))
+-		return;
++static void ssd130x_crtc_reset(struct drm_crtc *crtc)
++{
++	struct drm_device *drm = crtc->dev;
++	struct ssd130x_device *ssd130x = drm_to_ssd130x(drm);
+ 
+-	if (!drm_dev_enter(drm, &idx))
++	ssd130x_init(ssd130x);
++
++	drm_atomic_helper_crtc_reset(crtc);
++}
++
++static const struct drm_crtc_funcs ssd130x_crtc_funcs = {
++	.reset = ssd130x_crtc_reset,
++	.destroy = drm_crtc_cleanup,
++	.set_config = drm_atomic_helper_set_config,
++	.page_flip = drm_atomic_helper_page_flip,
++	.atomic_duplicate_state = drm_atomic_helper_crtc_duplicate_state,
++	.atomic_destroy_state = drm_atomic_helper_crtc_destroy_state,
++};
++
++static void ssd130x_encoder_helper_atomic_enable(struct drm_encoder *encoder,
++						 struct drm_atomic_state *state)
++{
++	struct drm_device *drm = encoder->dev;
++	struct ssd130x_device *ssd130x = drm_to_ssd130x(drm);
++	int ret;
++
++	ret = ssd130x_power_on(ssd130x);
++	if (ret)
+ 		return;
+ 
+-	ssd130x_fb_blit_rect(plane_state->fb, &shadow_plane_state->data[0], &dst_clip);
++	ssd130x_write_cmd(ssd130x, 1, SSD130X_DISPLAY_ON);
+ 
+-	drm_dev_exit(idx);
++	backlight_enable(ssd130x->bl_dev);
+ }
+ 
+-static const struct drm_simple_display_pipe_funcs ssd130x_pipe_funcs = {
+-	.mode_valid = ssd130x_display_pipe_mode_valid,
+-	.enable = ssd130x_display_pipe_enable,
+-	.disable = ssd130x_display_pipe_disable,
+-	.update = ssd130x_display_pipe_update,
+-	DRM_GEM_SIMPLE_DISPLAY_PIPE_SHADOW_PLANE_FUNCS,
++static void ssd130x_encoder_helper_atomic_disable(struct drm_encoder *encoder,
++						  struct drm_atomic_state *state)
++{
++	struct drm_device *drm = encoder->dev;
++	struct ssd130x_device *ssd130x = drm_to_ssd130x(drm);
++
++	backlight_disable(ssd130x->bl_dev);
++
++	ssd130x_write_cmd(ssd130x, 1, SSD130X_DISPLAY_OFF);
++
++	ssd130x_power_off(ssd130x);
++}
++
++static const struct drm_encoder_helper_funcs ssd130x_encoder_helper_funcs = {
++	.atomic_enable = ssd130x_encoder_helper_atomic_enable,
++	.atomic_disable = ssd130x_encoder_helper_atomic_disable,
++};
++
++static const struct drm_encoder_funcs ssd130x_encoder_funcs = {
++	.destroy = drm_encoder_cleanup,
+ };
+ 
+-static int ssd130x_connector_get_modes(struct drm_connector *connector)
++static int ssd130x_connector_helper_get_modes(struct drm_connector *connector)
+ {
+ 	struct ssd130x_device *ssd130x = drm_to_ssd130x(connector->dev);
+ 	struct drm_display_mode *mode;
+@@ -695,7 +751,7 @@ static int ssd130x_connector_get_modes(struct drm_connector *connector)
+ }
+ 
+ static const struct drm_connector_helper_funcs ssd130x_connector_helper_funcs = {
+-	.get_modes = ssd130x_connector_get_modes,
++	.get_modes = ssd130x_connector_helper_get_modes,
+ };
+ 
+ static const struct drm_connector_funcs ssd130x_connector_funcs = {
+@@ -806,8 +862,16 @@ static int ssd130x_init_modeset(struct ssd130x_device *ssd130x)
+ 	struct device *dev = ssd130x->dev;
+ 	struct drm_device *drm = &ssd130x->drm;
+ 	unsigned long max_width, max_height;
++	struct drm_plane *primary_plane;
++	struct drm_crtc *crtc;
++	struct drm_encoder *encoder;
++	struct drm_connector *connector;
+ 	int ret;
+ 
++	/*
++	 * Modesetting
++	 */
++
+ 	ret = drmm_mode_config_init(drm);
+ 	if (ret) {
+ 		dev_err(dev, "DRM mode config init failed: %d\n", ret);
+@@ -833,25 +897,65 @@ static int ssd130x_init_modeset(struct ssd130x_device *ssd130x)
+ 	drm->mode_config.preferred_depth = 32;
+ 	drm->mode_config.funcs = &ssd130x_mode_config_funcs;
+ 
+-	ret = drm_connector_init(drm, &ssd130x->connector, &ssd130x_connector_funcs,
++	/* Primary plane */
++
++	primary_plane = &ssd130x->primary_plane;
++	ret = drm_universal_plane_init(drm, primary_plane, 0, &ssd130x_primary_plane_funcs,
++				       ssd130x_formats, ARRAY_SIZE(ssd130x_formats),
++				       NULL, DRM_PLANE_TYPE_PRIMARY, NULL);
++	if (ret) {
++		dev_err(dev, "DRM primary plane init failed: %d\n", ret);
++		return ret;
++	}
++
++	drm_plane_helper_add(primary_plane, &ssd130x_primary_plane_helper_funcs);
++
++	drm_plane_enable_fb_damage_clips(primary_plane);
++
++	/* CRTC */
++
++	crtc = &ssd130x->crtc;
++	ret = drm_crtc_init_with_planes(drm, crtc, primary_plane, NULL,
++					&ssd130x_crtc_funcs, NULL);
++	if (ret) {
++		dev_err(dev, "DRM crtc init failed: %d\n", ret);
++		return ret;
++	}
++
++	drm_crtc_helper_add(crtc, &ssd130x_crtc_helper_funcs);
++
++	/* Encoder */
++
++	encoder = &ssd130x->encoder;
++	ret = drm_encoder_init(drm, encoder, &ssd130x_encoder_funcs,
++			       DRM_MODE_ENCODER_NONE, NULL);
++	if (ret) {
++		dev_err(dev, "DRM encoder init failed: %d\n", ret);
++		return ret;
++	}
++
++	drm_encoder_helper_add(encoder, &ssd130x_encoder_helper_funcs);
++
++	encoder->possible_crtcs = drm_crtc_mask(crtc);
++
++	/* Connector */
++
++	connector = &ssd130x->connector;
++	ret = drm_connector_init(drm, connector, &ssd130x_connector_funcs,
+ 				 DRM_MODE_CONNECTOR_Unknown);
+ 	if (ret) {
+ 		dev_err(dev, "DRM connector init failed: %d\n", ret);
+ 		return ret;
+ 	}
+ 
+-	drm_connector_helper_add(&ssd130x->connector, &ssd130x_connector_helper_funcs);
++	drm_connector_helper_add(connector, &ssd130x_connector_helper_funcs);
+ 
+-	ret = drm_simple_display_pipe_init(drm, &ssd130x->pipe, &ssd130x_pipe_funcs,
+-					   ssd130x_formats, ARRAY_SIZE(ssd130x_formats),
+-					   NULL, &ssd130x->connector);
++	ret = drm_connector_attach_encoder(connector, encoder);
+ 	if (ret) {
+-		dev_err(dev, "DRM simple display pipeline init failed: %d\n", ret);
++		dev_err(dev, "DRM attach connector to encoder failed: %d\n", ret);
+ 		return ret;
+ 	}
+ 
+-	drm_plane_enable_fb_damage_clips(&ssd130x->pipe.plane);
+-
+ 	drm_mode_config_reset(drm);
+ 
+ 	return 0;
+diff --git a/drivers/gpu/drm/solomon/ssd130x.h b/drivers/gpu/drm/solomon/ssd130x.h
+index 4c4a84e962e7..03038c1b6476 100644
+--- a/drivers/gpu/drm/solomon/ssd130x.h
++++ b/drivers/gpu/drm/solomon/ssd130x.h
+@@ -13,8 +13,11 @@
+ #ifndef __SSD1307X_H__
+ #define __SSD1307X_H__
+ 
++#include <drm/drm_connector.h>
++#include <drm/drm_crtc.h>
+ #include <drm/drm_drv.h>
+-#include <drm/drm_simple_kms_helper.h>
++#include <drm/drm_encoder.h>
++#include <drm/drm_plane_helper.h>
+ 
+ #include <linux/regmap.h>
+ 
+@@ -42,8 +45,10 @@ struct ssd130x_deviceinfo {
+ struct ssd130x_device {
+ 	struct drm_device drm;
+ 	struct device *dev;
+-	struct drm_simple_display_pipe pipe;
+ 	struct drm_display_mode mode;
++	struct drm_plane primary_plane;
++	struct drm_crtc crtc;
++	struct drm_encoder encoder;
+ 	struct drm_connector connector;
+ 	struct i2c_client *client;
+ 
 -- 
-John Hubbard
-NVIDIA
-
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 3bedc449c14d..37a3e91e6e77 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2891,6 +2891,7 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
->  #define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
->  #define FOLL_PIN	0x40000	/* pages must be released via unpin_user_page */
->  #define FOLL_FAST_ONLY	0x80000	/* gup_fast: prevent fall-back to slow gup */
-> +#define FOLL_PCI_P2PDMA	0x100000 /* allow returning PCI P2PDMA pages */
->  
->  /*
->   * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 732825157430..79aea452619e 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -566,6 +566,12 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
->  		goto out;
->  	}
->  
-> +	if (unlikely(!(flags & FOLL_PCI_P2PDMA) &&
-> +		     is_pci_p2pdma_page(page))) {
-> +		page = ERR_PTR(-EREMOTEIO);
-> +		goto out;
-> +	}
-> +
->  	VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
->  		       !PageAnonExclusive(page), page);
->  
-> @@ -1015,6 +1021,9 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
->  	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
->  		return -EOPNOTSUPP;
->  
-> +	if ((gup_flags & FOLL_LONGTERM) && (gup_flags & FOLL_PCI_P2PDMA))
-> +		return -EOPNOTSUPP;
-> +
->  	if (vma_is_secretmem(vma))
->  		return -EFAULT;
->  
-> @@ -2359,6 +2368,10 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->  		VM_BUG_ON(!pfn_valid(pte_pfn(pte)));
->  		page = pte_page(pte);
->  
-> +		if (unlikely(!(flags & FOLL_PCI_P2PDMA) &&
-> +			     is_pci_p2pdma_page(page)))
-> +			goto pte_unmap;
-> +
->  		folio = try_grab_folio(page, 1, flags);
->  		if (!folio)
->  			goto pte_unmap;
-> @@ -2438,6 +2451,12 @@ static int __gup_device_huge(unsigned long pfn, unsigned long addr,
->  			undo_dev_pagemap(nr, nr_start, flags, pages);
->  			break;
->  		}
-> +
-> +		if (!(flags & FOLL_PCI_P2PDMA) && is_pci_p2pdma_page(page)) {
-> +			undo_dev_pagemap(nr, nr_start, flags, pages);
-> +			break;
-> +		}
-> +
->  		SetPageReferenced(page);
->  		pages[*nr] = page;
->  		if (unlikely(!try_grab_page(page, flags))) {
-> @@ -2926,7 +2945,8 @@ static int internal_get_user_pages_fast(unsigned long start,
->  
->  	if (WARN_ON_ONCE(gup_flags & ~(FOLL_WRITE | FOLL_LONGTERM |
->  				       FOLL_FORCE | FOLL_PIN | FOLL_GET |
-> -				       FOLL_FAST_ONLY | FOLL_NOFAULT)))
-> +				       FOLL_FAST_ONLY | FOLL_NOFAULT |
-> +				       FOLL_PCI_P2PDMA)))
->  		return -EINVAL;
->  
->  	if (gup_flags & FOLL_PIN)
-
+2.37.1
 

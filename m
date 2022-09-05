@@ -2,97 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823AA5ACCAD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709405ACC5F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 09:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbiIEHWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 03:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
+        id S236166AbiIEHWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 03:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236305AbiIEHVX (ORCPT
+        with ESMTP id S236157AbiIEHVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:21:23 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442044361D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 00:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=t2PBhD4tG/Sd24mg1y9JF8kau2tsDVuXNdrrbtxRewM=; b=IVfI9ofbUPorJudsRSnYUmlPQb
-        +DRzmycivKykc+D3XRRW7S3HoB9XAEKk8HM0xkyWfW2YyrvPvnXqzC+43jA6rVL25ZXgALFdeLxX5
-        paqeqJrU0ORJBXh9l/OjrUrKTmaBqcnTbHJGSZz6lpC4QtvOayEktfHUGMDnrhmrSD4yQu+QcsxEX
-        h/nvEwMXa3h8mDe8oOlhpRYqQkFr8iLtTGZ308//XRUm1q6L6ku7ABbga4kBYveJ8+zgSqsJwIg8O
-        3wYt84jFZ5S8kr7ujom/9JX6PDszuThwbpQ0c9Hg6NatiwcatjzgNjWC/hZzeR1lL0+BKLjqdcgX7
-        CHnqcm2A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oV6Le-009Sra-9A; Mon, 05 Sep 2022 07:16:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BCA203001FD;
-        Mon,  5 Sep 2022 09:16:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 79AF42B63D24B; Mon,  5 Sep 2022 09:16:43 +0200 (CEST)
-Date:   Mon, 5 Sep 2022 09:16:43 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v2 37/59] x86/putuser: Provide room for padding
-Message-ID: <YxWiW97HPV6kWjgz@hirez.programming.kicks-ass.net>
-References: <20220902130625.217071627@infradead.org>
- <20220902130950.205726504@infradead.org>
- <CAHk-=wig7_=CpkvZXrbcM97pBGk5MCbVkA0yBGP2moiho-XS_Q@mail.gmail.com>
- <YxI3Zf5drSHAkBL3@hirez.programming.kicks-ass.net>
- <YxJmdG9Ug7euJdZS@hirez.programming.kicks-ass.net>
- <CAHk-=wj-njE+DwycFcVQ=ouXZpgKU2rjG3G0keNXSFWa_etrEA@mail.gmail.com>
- <CAHk-=whbunYr933WanyFxjp_WkT-NWNtSE6pt5A9Jq9_DjymEw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whbunYr933WanyFxjp_WkT-NWNtSE6pt5A9Jq9_DjymEw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Sep 2022 03:21:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1128743E6C;
+        Mon,  5 Sep 2022 00:17:53 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28579MxE014670;
+        Mon, 5 Sep 2022 07:17:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=ex4xX9XfdG8q4J9ida3IVOdGi65E2yi+3EIwfXfaLLQ=;
+ b=ZpxOic5MohHcJw+QqjfqbXLSpKNRVtCtQo3n3t3TW4T2ybUy7MoSqKzVV8KfPhljf/uC
+ 8B7kHGw8ACWthkSIV2VCN2jL3bH/F7jxHtKqa/dczTiLl1NsS0udQqPRB4Xe3+g574do
+ TPx4U+h00jStDZqJsPJAFFFJ/kvt//p/Fb8JshJR+0rbRxbocvh1NAMiC1Z164HDhMnz
+ ooa2SjbuxyHB19W+ZwX6pijlxA9s5E3Raib2MauFd16HbPMlntQI73pUYsAwR8wa1cc+
+ rsGkdNclMxWBT5R+O7X0JnRZoasUrZ9Q4TGCvfYrdNelIcY3/wxXEpL4ZIcjFiBpzwF1 6g== 
+Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jbypmkd14-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Sep 2022 07:17:51 +0000
+Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2857Hl83020975;
+        Mon, 5 Sep 2022 07:17:47 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 3jc00ndyt3-1;
+        Mon, 05 Sep 2022 07:17:47 +0000
+Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2857HlZx020966;
+        Mon, 5 Sep 2022 07:17:47 GMT
+Received: from maow2-gv.ap.qualcomm.com (maow2-gv.qualcomm.com [10.232.193.133])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 2857HkfW020964;
+        Mon, 05 Sep 2022 07:17:47 +0000
+Received: by maow2-gv.ap.qualcomm.com (Postfix, from userid 399080)
+        id 519DD2102E38; Mon,  5 Sep 2022 15:17:45 +0800 (CST)
+From:   Kassey Li <quic_yingangl@quicinc.com>
+To:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org
+Cc:     Kassey Li <quic_yingangl@quicinc.com>, quic_maow@quicinc.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fuse: fix the deadlock in race of reclaim path with kswapd
+Date:   Mon,  5 Sep 2022 15:17:44 +0800
+Message-Id: <20220905071744.8350-1-quic_yingangl@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7ur43WgbJS1G_aJxSf8daCtddNbyNJvi
+X-Proofpoint-GUID: 7ur43WgbJS1G_aJxSf8daCtddNbyNJvi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-05_05,2022-09-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ phishscore=0 spamscore=0 mlxscore=0 bulkscore=0 adultscore=0
+ suspectscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=644
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209050035
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 03, 2022 at 10:26:45AM -0700, Linus Torvalds wrote:
-> On Fri, Sep 2, 2022 at 2:46 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > Hmm. It doesn't look too horrible, but yeah, fi it still ends up
-> > getting the same padding overhead I'm not sure it ends up really
-> > mattering.
-> 
-> Oh, and I think it's buggy anyway.
-> 
-> If there are any tail-calls to a leaf function, the tracking now gets
-> out of whack. So it's no longer a "don't bother counting the last
-> level", now it ends up being a "count got off by one".
+Task A wait for writeback, while writeback Task B send request to fuse.
+Task C is expected to serve this request, here it is in direct reclaim
+path cause deadlock when system is in low memory.
 
-See validate_sibling_call(), it too calls validate_call().
+without __GFP_FS in Task_C break throttle_direct_reclaim with an
+HZ timeout.
 
-(Although prehaps I should go s/sibling/tail/ on all that for clarity)
+kswpad (Task_A):                    writeback(Task_B):
+    __switch_to+0x14c			schedule+0x70
+    __schedule+0xb5c			__fuse_request_send+0x154
+    schedule+0x70			fuse_simple_request+0x184
+    bit_wait+0x18			fuse_flush_times+0x114
+    __wait_on_bit+0x74			fuse_write_inode+0x60
+    inode_wait_for_writeback+0xa4	__writeback_single_inode+0x3d8
+    evict+0xa8				writeback_sb_inodes+0x4c0
+    iput+0x248				__writeback_inodes_wb+0xb0
+    dentry_unlink_inode+0xdc		wb_writeback+0x270
+    __dentry_kill[jt]+0x110		wb_workfn+0x37c
+    shrink_dentry_list+0x17c		process_one_work+0x284
+    prune_dcache_sb+0x5c
+    super_cache_scan+0x11c
+    do_shrink_slab+0x248
+    shrink_slab+0x260
+    shrink_node+0x678
+    kswapd+0x8ec
+    kthread+0x140
+    ret_from_fork+0x10
+
+Task_C:
+    __switch_to+0x14c
+    __schedule+0xb5c
+    schedule+0x70
+    throttle_direct_reclaim
+    try_to_free_pages
+    __perform_reclaim
+    __alloc_pages_direct_reclaim
+    __alloc_pages_slowpath
+    __alloc_pages_nodemask
+    alloc_pages
+    fuse_copy_fill+0x168
+    fuse_dev_do_read+0x37c
+    fuse_dev_splice_read+0x94
+
+Suggested-by: Wang Mao <quic_maow@quicinc.com>
+Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+---
+ fs/fuse/dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+index 51897427a534..0df7234840c3 100644
+--- a/fs/fuse/dev.c
++++ b/fs/fuse/dev.c
+@@ -713,7 +713,7 @@ static int fuse_copy_fill(struct fuse_copy_state *cs)
+ 			if (cs->nr_segs >= cs->pipe->max_usage)
+ 				return -EIO;
+ 
+-			page = alloc_page(GFP_HIGHUSER);
++			page = alloc_page(GFP_HIGHUSER & ~__GFP_FS);
+ 			if (!page)
+ 				return -ENOMEM;
+ 
+-- 
+2.17.1
+

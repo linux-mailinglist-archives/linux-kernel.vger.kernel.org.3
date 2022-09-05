@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279B65AD738
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442425AD73E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 18:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiIEQPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 12:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
+        id S231734AbiIEQTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 12:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiIEQPJ (ORCPT
+        with ESMTP id S229828AbiIEQTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 12:15:09 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432F91EC78;
-        Mon,  5 Sep 2022 09:15:06 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso4080490pjd.4;
-        Mon, 05 Sep 2022 09:15:06 -0700 (PDT)
+        Mon, 5 Sep 2022 12:19:13 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130FA54CB2;
+        Mon,  5 Sep 2022 09:19:10 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id w4so2627974qvp.2;
+        Mon, 05 Sep 2022 09:19:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=GSz8QcnAF3KVd+oYRHdCdNqyO/6sC9qiC/oawbq6vX0=;
-        b=TZlspr0pqC2LgAzFjuWe4hTt2KUJ4JXaZhVc97pt14ru5A7+owVex9/HAE7cIKz5Jz
-         UMOivxgzlnQ+1ldJyqEJ2EZCqbC15900NmBQKqE4mor/fPRtzZ4t4vGm4PsRQVb9mD27
-         nPpg6eqkGVGT4kJX0t6Bo4JKFoWRFzmHN3naf7v5LIDEKD83UVYJP/e70P27NYnf5UpU
-         gfqp4uyhs8Y6EPUSYszMQxSRmxVyurTGqqEeX83PVQFSU13neePKB3MjxYFuOix57JD+
-         aIbbA8cMHFT7NUE9Qo0nioOQD4G/Qp5THv624d9YDb76JfcRT0uPwt+Q5FJH/b9ZicLM
-         +Bwg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=uhRqw8EqRi+lEySsOz/4qBzr6CVwtQdAYLBsx5kklCA=;
+        b=p46B1b/QZs1GQ1tq8aypEYLTnKEC4iX6EHzXcQ59pLNEw3VGb58iP9BuykUu/xl5XB
+         4ISoH3/KlB07AW30sucKVshpCUTC6g0oqKZh6V+sSXRSneIaHXTtqUjtD5Xj7s0AaCj6
+         VYSOc3n5i44kGNhJcuTgBMgVORHCPSSBKc9CUzIox4ywkMY/Ti+QXxhgh9JLRB9QnBVC
+         WrJa+4mjUZaFsReYojvUmkZSrssntsQKzY+N29HWlymSlTfR3E1FAfXmNtshT0/D64bS
+         v85qYeQ13x4ZNxEydaoJSYKkajcNH0sOqfqitfIACeVR4w+xNyH4oCu6Mf4T+MQxo9E0
+         Y0gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=GSz8QcnAF3KVd+oYRHdCdNqyO/6sC9qiC/oawbq6vX0=;
-        b=syKEUbrKZsbnWAnpwMuAqlRnNJwCBW8JyGFSOGWapqU5iOZB5iXTSQH4vrLlU9KYHu
-         jK1cAuW+huyzjWc5N145+Sn1mLLWF7Ww0IkPyERBGIKerw2NTShGuKcd6tHmMqMZe3k9
-         sUfMGg9H2NhlpwcPCq5tdLFcOi1O8C4UMNcsL0jGXurugtrongsvC3d2zBGQps6URHge
-         os9TxHBGTbP0AfTOmoXwHj/Ma5t+TskJpWW04NxM/dKSCrxp76PHSeHWBB931LrYrQur
-         PlHUKPEtKFq2TAvJrsfL6jpg6BksLjrzJfgTzw+vQQLJhUvWvTlfAMXDFHnzXAwQhxuj
-         8f5w==
-X-Gm-Message-State: ACgBeo1NEJrF568ZIEDk2SOoG5VENXejeRW8ANDfE4dniqebwj6/bG3S
-        v+B0RF3RqAMN+ilsyCzEnNR5SLPPl8A=
-X-Google-Smtp-Source: AA6agR6pRp+Oljy6r7Avsn/FovLn/AmM5J1ds+hM+Vy7Ewdg2DvGlA3YA4fF/rJfyRId1YnjOJ0oyQ==
-X-Received: by 2002:a17:902:f787:b0:172:f321:2fd1 with SMTP id q7-20020a170902f78700b00172f3212fd1mr48939853pln.121.1662394505225;
-        Mon, 05 Sep 2022 09:15:05 -0700 (PDT)
-Received: from 7YHHR73.igp.broadcom.net (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id t12-20020a170902e84c00b0016d5b7fb02esm7817622plg.60.2022.09.05.09.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 09:15:04 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM IPROC ARM
-        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] clk: iproc: Do not rely on node name for correct PLL setup
-Date:   Mon,  5 Sep 2022 09:15:03 -0700
-Message-Id: <20220905161504.1526-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=uhRqw8EqRi+lEySsOz/4qBzr6CVwtQdAYLBsx5kklCA=;
+        b=LcF4NXkYgQebRDo15uc4eP5lnohYTvuxtsFWo1PtKt4ZHMFhMXDuEoEKQAFfq6v++H
+         hDFR60+ztTT4sE8CdPi3n22LS5AZdGjh+jmQZjnsxoScO3f55cRefTvmzF6N9ThiV2LV
+         AVQ2WDG5pRowcqVVM3O+mfwJSGRfGI0ctZtkeT3/lMKGxAEqsx15IrWr0D5lXIvaCeMS
+         UXcK1qfH4pcXCor9HlL/oIjwWGuh33MJ9cIirHPjdnRjF6lBZB+3LKQhMb4yUw9gh98l
+         F+uWOg1Yb1Y9CshiJvUljxjBsrDjCnVQuQ65yrg2fDYwKk+hpf5XuBoimqCabXo2mrAk
+         439A==
+X-Gm-Message-State: ACgBeo3iLGuUBcTBAI2ZeTLqI2m3IZ6BDHOB5D4WrFUGAtqeVf0yFHTD
+        5c2FMfrzK0L5RsSLUSUem28=
+X-Google-Smtp-Source: AA6agR6hrZw+mQNfPBoAYB1l7x3IaubOHFaNtcMY3M3RYXt3dlGoh1+gdbHl9KNSFnvS1Kbd6SLuFw==
+X-Received: by 2002:a05:6214:d61:b0:499:6d:9e82 with SMTP id 1-20020a0562140d6100b00499006d9e82mr34420545qvs.20.1662394749119;
+        Mon, 05 Sep 2022 09:19:09 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id l14-20020ac84a8e000000b00341a807ed21sm7296111qtq.72.2022.09.05.09.19.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 09:19:08 -0700 (PDT)
+Message-ID: <30d3f753-187f-4a3f-c14a-f3b003f23773@gmail.com>
+Date:   Mon, 5 Sep 2022 09:19:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] ARM: dts: turris-omnia: Add mcu node
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Behun <marek.behun@nic.cz>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220819131152.6513-1-pali@kernel.org>
+ <20220831142809.lcmnv3l4rnulo522@pali> <YxE2JqJutZ0ilghH@lunn.ch>
+ <20220903152735.2ga3iwrivh6zhibf@pali>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220903152735.2ga3iwrivh6zhibf@pali>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,77 +83,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
-description") a warning from clk-iproc-pll.c was generated due to a
-duplicate PLL name as well as the console stopped working. Upon closer
-inspection it became clear that iproc_pll_clk_setup() used the Device
-Tree node unit name as an unique identifier as well as a parent name to
-parent all clocks under the PLL.
-
-BCM5301X was the first platform on which that got noticed because of the
-DT node unit name renaming but the same assumptions hold true for any
-user of the iproc_pll_clk_setup() function.
-
-The first 'clock-output-names' property is always guaranteed to be
-unique as well as providing the actual desired PLL clock name, so we
-utilize that to register the PLL and as a parent name of all children
-clock.
-
-Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Acked-by: Rafał Miłecki <rafal@milecki.pl>
----
-Changes in v2:
-
-- added Acked-by
-- remove empty newline
 
 
+On 9/3/2022 8:27 AM, Pali Rohár wrote:
+> On Friday 02 September 2022 00:45:58 Andrew Lunn wrote:
+>> On Wed, Aug 31, 2022 at 04:28:09PM +0200, Pali Rohár wrote:
+>>> PING?
+>>>
+>>> On Friday 19 August 2022 15:11:52 Pali Rohár wrote:
+>>>> At i2c address 0x2a is MCU command interface which provides access to GPIOs
+>>>> connected to Turris Omnia MCU. So define mcu node in Turris Omnia DTS file.
+>>>>
+>>>> Signed-off-by: Pali Rohár <pali@kernel.org>
+>>>>
+>>>> ---
+>>>> Same change was already sent to U-Boot project together with driver. As
+>>>> Turris Omnia DTS file is shared between Linux kernel U-Boot, I'm sending
+>>>> this change also in Linux. There is a plan to write also Linux driver for
+>>>> Turris Omnia MCU, like there is already in U-Boot.
+>>>>
+>>>> https://source.denx.de/u-boot/u-boot/-/commit/832738974806e6264a3d0ac2aaa92d0f662fd128
+>>>> https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/gpio/turris_omnia_mcu.c
+>>>> ---
+>>>>   arch/arm/boot/dts/armada-385-turris-omnia.dts | 8 +++++++-
+>>>>   1 file changed, 7 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+>>>> index f4878df39753..f655e9229d68 100644
+>>>> --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
+>>>> +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+>>>> @@ -184,7 +184,13 @@
+>>>>   			#size-cells = <0>;
+>>>>   			reg = <0>;
+>>>>   
+>>>> -			/* STM32F0 command interface at address 0x2a */
+>>>> +			/* MCU command i2c API */
+>>>> +			mcu: mcu@2a {
+>>>> +				compatible = "cznic,turris-omnia-mcu";
+>>>> +				reg = <0x2a>;
+>>>> +				gpio-controller;
+>>>> +				#gpio-cells = <3>;
+>>>> +			};
+>>
+>> Please document the binding, preferably in yaml.
+> 
+> I'm not going to send any new yaml dt binding document as I see that
+> dt bindings is clearly deprecated project. Either patches for dt
+> bindings are waiting without any answer for months (maybe year?) or
+> patches are ignored/not accepted by beyond reasons or there are request
+> for changes which cannot work on the real hardware or that new yaml
+> cannot be parsed/validated due to ton of bugs in other schemas.
 
- drivers/clk/bcm/clk-iproc-pll.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+These are some pretty hard statements that are not nearly true, maybe 
+they are based upon your past experience, but Rob and Krysztof provide 
+feedback within a few days at most on DT bindings and DTS files.
 
-diff --git a/drivers/clk/bcm/clk-iproc-pll.c b/drivers/clk/bcm/clk-iproc-pll.c
-index 1a098db12062..680f9d8d357c 100644
---- a/drivers/clk/bcm/clk-iproc-pll.c
-+++ b/drivers/clk/bcm/clk-iproc-pll.c
-@@ -726,6 +726,7 @@ void iproc_pll_clk_setup(struct device_node *node,
- 	const char *parent_name;
- 	struct iproc_clk *iclk_array;
- 	struct clk_hw_onecell_data *clk_data;
-+	const char *clk_name;
- 
- 	if (WARN_ON(!pll_ctrl) || WARN_ON(!clk_ctrl))
- 		return;
-@@ -773,7 +774,12 @@ void iproc_pll_clk_setup(struct device_node *node,
- 	iclk = &iclk_array[0];
- 	iclk->pll = pll;
- 
--	init.name = node->name;
-+	ret = of_property_read_string_index(node, "clock-output-names",
-+					    0, &clk_name);
-+	if (WARN_ON(ret))
-+		goto err_pll_register;
-+
-+	init.name = clk_name;
- 	init.ops = &iproc_pll_ops;
- 	init.flags = 0;
- 	parent_name = of_clk_get_parent_name(node, 0);
-@@ -793,13 +799,11 @@ void iproc_pll_clk_setup(struct device_node *node,
- 		goto err_pll_register;
- 
- 	clk_data->hws[0] = &iclk->hw;
-+	parent_name = clk_name;
- 
- 	/* now initialize and register all leaf clocks */
- 	for (i = 1; i < num_clks; i++) {
--		const char *clk_name;
--
- 		memset(&init, 0, sizeof(init));
--		parent_name = node->name;
- 
- 		ret = of_property_read_string_index(node, "clock-output-names",
- 						    i, &clk_name);
+> 
+> Sorry, this is just a waste of time and energy to write new those yamls
+> as it does not bring any value.
+
+So you say.
 -- 
-2.25.1
-
+Florian

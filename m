@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B22F5AC8C7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31CC5AC8CC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 04:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235585AbiIEC0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Sep 2022 22:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
+        id S229480AbiIECaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Sep 2022 22:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbiIEC0U (ORCPT
+        with ESMTP id S231820AbiIECaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Sep 2022 22:26:20 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBD0275E9;
-        Sun,  4 Sep 2022 19:26:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VOJODjO_1662344755;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VOJODjO_1662344755)
-          by smtp.aliyun-inc.com;
-          Mon, 05 Sep 2022 10:26:16 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] block/blk-map: Remove set but unused variable 'added'
-Date:   Mon,  5 Sep 2022 10:25:53 +0800
-Message-Id: <20220905022553.77178-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Sun, 4 Sep 2022 22:30:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BC72A273;
+        Sun,  4 Sep 2022 19:30:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1072B80E7E;
+        Mon,  5 Sep 2022 02:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C23DC433D6;
+        Mon,  5 Sep 2022 02:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662345003;
+        bh=GUv3cHTZYqaziju52Y1+ZmSvfImbkNQ+/vGCkNqAPQo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VPOK8wqNjqiGe5RcB2YIIBjPuqgJdLiCYpaZTl4HnOFltcQGeIkVKuDhNxUFNsscH
+         37dSe23yogr+Srpt1rh8ONmO1VY7EpW3xnAEAappoV0BRTqZ3kJxyV5x2apURHvvSZ
+         +Yz7QvyQ2WXcqe7+jsJbc2TP13Krba8mhqMn/K4iPZE+uKX/Hk1VzVnifEG0biv/DD
+         yRSQP0M0fITNi0uak5FOgWPwje1zy82OEmI3F7lJptfDP4bSaqTOsM7OyzfcpG+Kl6
+         p9K9l36r3zBGS+Pj0Eg6qreTdy/w2Zy5078X87bVddWp1/dIizoYq4HTDhRqKiuUGK
+         bE7EV7iK4djDg==
+Date:   Mon, 5 Sep 2022 10:29:56 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        vkoul@kernel.org, alexander.stein@ew.tq-group.com, marex@denx.de,
+        richard.leitner@linux.dev, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: Re: [PATCH v7 5/7] soc: imx: imx8mp-blk-ctrl: handle PCIe PHY resets
+Message-ID: <20220905022956.GC1728671@dragon>
+References: <1662109086-15881-1-git-send-email-hongxing.zhu@nxp.com>
+ <1662109086-15881-6-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1662109086-15881-6-git-send-email-hongxing.zhu@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable added is not effectively used in the function, so delete
-it.
+On Fri, Sep 02, 2022 at 04:58:04PM +0800, Richard Zhu wrote:
+> From: Lucas Stach <l.stach@pengutronix.de>
+> 
+> Dessert the PHY reset when powering up the domain and put it back
+> into reset when the domain is powered down.
+> 
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
 
-block/blk-map.c:273:16: warning: variable 'added' set but not used.
-
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2049
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- block/blk-map.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 2fbe298d3822..a06919822a73 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -270,7 +270,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 	while (iov_iter_count(iter)) {
- 		struct page **pages, *stack_pages[UIO_FASTIOV];
- 		ssize_t bytes;
--		size_t offs, added = 0;
-+		size_t offs = 0;
- 		int npages;
- 
- 		if (nr_vecs <= ARRAY_SIZE(stack_pages)) {
-@@ -306,7 +306,6 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 					break;
- 				}
- 
--				added += n;
- 				bytes -= n;
- 				offs = 0;
- 			}
--- 
-2.20.1.7.g153144c
-
+Applied, thanks!

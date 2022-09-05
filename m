@@ -2,165 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C615ADB8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56385ADB8F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 00:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbiIEWx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 18:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
+        id S232772AbiIEWyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 18:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiIEWxX (ORCPT
+        with ESMTP id S232763AbiIEWyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 18:53:23 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD74696FE;
-        Mon,  5 Sep 2022 15:53:22 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 9A0AF1237;
-        Tue,  6 Sep 2022 00:53:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1662418400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/By73UdS4I5mXEc+O0lv8vgBFlHY3Pw70xtrxrWK0x0=;
-        b=uqIwMHV5QXcnmwPSQQFAGiGSIpvCewYSE95VUUm7vli6FaCVmqoEBkzLaStZ5E3ssMoXN8
-        gUFNsTKZEOTasqeL8B4aU/0DlQZtZ4JrTi1ikPo8SxJc+htVmrzHQ2p4KZwHKOySw5NEXg
-        UK+hs34g6mR+b9JXAGvGADxYDTW8w4CnyIf/9z9qg1WnLzPG2u+YCPxXhIw9uSvflOCeuP
-        IRbHF68NE8ZRfndEEzwt+AtPdoqoMmIpv3i9IgXeSAVHOUP5jjtIcGmVTMVTpEPqIa99eS
-        /MOJR8km43shSZE4wCpD6ErddsvLdbtdDhVEhOGlkWst8R+wMIKNCeVoNhSFNQ==
+        Mon, 5 Sep 2022 18:54:07 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0DF69F48
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 15:54:06 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id w63so581602pgb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 15:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=48qJgrxCEf3JYYmjsBGoS8jX6ALhpP8RedKEGxQ2qws=;
+        b=RjbqBoTNkberUr5FewsblIi04URaOKDWlGUvM7CCAq9EXZqWh9HxvbFTHUqHk33qB2
+         DqYRhmiTP1ZFWyNDkzs0AUHiD6XKdR1zdmVK0EwoxnDNtsJUEri3pr78nm2yS3HAWw5y
+         8/Y/r+Kgi5CxwiS4SmwLb0xBioP1ZwRUA8sUBHsJQ2nPviJJX6+B0V8STLfPKqX8wAJT
+         y1j7IyC/KYyJZZrHGo/wiCVo07buCxX9V+sOEG+De1ocLINiNohMwy4duhbPZE1J4FbZ
+         +DWspcX9UGrtoLiR2VCVa9yNzX2c8sDMxT/AXJbp0PWgSZSbZzLg1IHx2sDlskmpHIfJ
+         V3zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=48qJgrxCEf3JYYmjsBGoS8jX6ALhpP8RedKEGxQ2qws=;
+        b=rG0gtNY66vy/AiUX3f4efpX4onIy/sAy9QF3yRkdeAca+LL886bq0XXcx2TxleOhdg
+         cLLr1XdI52SAshz05sNQIgyixHklW8yUm6RiLv90DrAXhu8b9MFMrjO+A8gRgddQcCSL
+         cvaKBR66j0QtmUoLAB5mHBs5VFvA/7aH8+L08Hd8Wh/1jTXzSpbHJkStPzzJXe1vRZ+m
+         w2YMNBnY/tUFNsn/VQfaSOrwPEio+sHYV3ZfIs15MW13srzLwF1QHWQ4zCfKLY8mm9wI
+         Si4UdeuGyZEzvyNBzfzyJ0EoxMoqI52Op+EASKaHIBKoMwttvNjK1kqFlzRzSu5ZPNt/
+         GcRA==
+X-Gm-Message-State: ACgBeo3fmWLs0GX++UkXGj7Syj8mUejrBiD6WsbTRTQBdisqTvTizzWU
+        4BhOVnSQhNJbo1zeLRsQ8AN2BEJQsG+M+ECKpboepA==
+X-Google-Smtp-Source: AA6agR4OTz/WZfQ5bcZyNyg1Sw3LLZURm6sIins3i9ghQvhwOSZAofuhJKeBOhxdkdOw4KMhK/c/+I6Xv8HYnOW129k=
+X-Received: by 2002:a63:d55:0:b0:41c:86b0:59b5 with SMTP id
+ 21-20020a630d55000000b0041c86b059b5mr43333165pgn.351.1662418445605; Mon, 05
+ Sep 2022 15:54:05 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Tue, 06 Sep 2022 00:53:20 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net 1/3] net: dsa: felix: tc-taprio intervals smaller
- than MTU should send at least one packet
-In-Reply-To: <20220905170125.1269498-2-vladimir.oltean@nxp.com>
-References: <20220905170125.1269498-1-vladimir.oltean@nxp.com>
- <20220905170125.1269498-2-vladimir.oltean@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d50be0e224c70453e1a4a7d690cfdf1b@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220902034135.2853973-1-ovt@google.com> <20220905083914.msdgd575tblq4syj@wittgenstein>
+In-Reply-To: <20220905083914.msdgd575tblq4syj@wittgenstein>
+From:   Oleksandr Tymoshenko <ovt@google.com>
+Date:   Mon, 5 Sep 2022 15:53:54 -0700
+Message-ID: <CACGj0CgTVVAhBrL7DsP_fL7R9EhZUwu+MkQ1_GpPEtHQW4ojOQ@mail.gmail.com>
+Subject: Re: [PATCH] seccomp: fix refcounter leak if fork/clone is terminated
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-09-05 19:01, schrieb Vladimir Oltean:
-> The blamed commit broke tc-taprio schedules such as this one:
-> 
-> tc qdisc replace dev $swp1 root taprio \
->         num_tc 8 \
->         map 0 1 2 3 4 5 6 7 \
->         queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
->         base-time 0 \
->         sched-entry S 0x7f 990000 \
->         sched-entry S 0x80  10000 \
->         flags 0x2
-> 
-> because the gate entry for TC 7 (S 0x80 10000 ns) now has a static 
-> guard
-> band added earlier than its 'gate close' event, such that packet
-> overruns won't occur in the worst case of the largest packet possible.
-> 
-> Since guard bands are statically determined based on the per-tc
-> QSYS_QMAXSDU_CFG_* with a fallback on the port-based QSYS_PORT_MAX_SDU,
-> we need to discuss what happens with TC 7 depending on kernel version,
-> since the driver, prior to commit 55a515b1f5a9 ("net: dsa: felix: drop
-> oversized frames with tc-taprio instead of hanging the port"), did not
-> touch QSYS_QMAXSDU_CFG_*, and therefore relied on QSYS_PORT_MAX_SDU.
-> 
-> 1 (before vsc9959_tas_guard_bands_update): QSYS_PORT_MAX_SDU defaults 
-> to
->   1518, and at gigabit this introduces a static guard band (independent
->   of packet sizes) of 12144 ns, plus QSYS::HSCH_MISC_CFG.FRM_ADJ (bit
->   time of 20 octets => 160 ns). But this is larger than the time window
->   itself, of 10000 ns. So, the queue system never considers a frame 
-> with
->   TC 7 as eligible for transmission, since the gate practically never
->   opens, and these frames are forever stuck in the TX queues and hang
->   the port.
-> 
-> 2 (after vsc9959_tas_guard_bands_update): Under the sole goal of
->   enabling oversized frame dropping, we make an effort to set
->   QSYS_QMAXSDU_CFG_7 to 1230 bytes. But QSYS_QMAXSDU_CFG_7 plays
->   one more role, which we did not take into account: per-tc static 
-> guard
->   band, expressed in L2 byte time (auto-adjusted for FCS and L1 
-> overhead).
->   There is a discrepancy between what the driver thinks (that there is
->   no guard band, and 100% of min_gate_len[tc] is available for egress
->   scheduling) and what the hardware actually does (crops the equivalent
->   of QSYS_QMAXSDU_CFG_7 ns out of min_gate_len[tc]). In practice, this
->   means that the hardware thinks it has exactly 0 ns for scheduling tc 
-> 7.
-> 
-> In both cases, even minimum sized Ethernet frames are stuck on egress
-> rather than being considered for scheduling on TC 7, even if they would
-> fit given a proper configuration. Considering the current situation,
-> with vsc9959_tas_guard_bands_update(), frames between 60 octets and 
-> 1230
-> octets in size are not eligible for oversized dropping (because they 
-> are
-> smaller than QSYS_QMAXSDU_CFG_7), but won't be considered as eligible
-> for scheduling either, because the min_gate_len[7] (10000 ns) minus the
-> guard band determined by QSYS_QMAXSDU_CFG_7 (1230 octets * 8 ns per
-> octet == 9840 ns) minus the guard band auto-added for L1 overhead by
-> QSYS::HSCH_MISC_CFG.FRM_ADJ (20 octets * 8 ns per octet == 160 octets)
-> leaves 0 ns for scheduling in the queue system proper.
-> 
-> Investigating the hardware behavior, it becomes apparent that the queue
-> system needs precisely 33 ns of 'gate open' time in order to consider a
-> frame as eligible for scheduling to a tc. So the solution to this
-> problem is to amend vsc9959_tas_guard_bands_update(), by giving the
-> per-tc guard bands less space by exactly 33 ns, just enough for one
-> frame to be scheduled in that interval. This allows the queue system to
-> make forward progress for that port-tc, and prevents it from hanging.
-> 
-> Fixes: 297c4de6f780 ("net: dsa: felix: re-enable TAS guard band mode")
-> Reported-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Hi Christian,
 
-I haven't looked at the overall code, but the solution described
-above sounds good.
+The patch in the seccomp tree, adapted to 5.10 branch, fixed the
+memory leak in my reproducer.
+Thanks for working on this, I should have checked the seccomp tree first :)
+Please disregard the patch in my submission.
 
-FWIW, I don't think such a schedule, where exactly one frame
-can be sent, is very likely in the wild though. Imagine a piece
-of software is generating one frame per cycle. It might happen
-that during one (hardware) cycle there is no frame ready (because
-it is software and it jitters), but then in the next cycle, there
-are now two frames ready. In that case you'll always lag one frame
-behind and you'll never recover from it.
+Thank you
 
-Either I'd make sure I can send at two frames in one cycle, or
-my software would only send a frame every other cycle.
-
-Thanks for taking care of this!
-
--michael
+On Mon, Sep 5, 2022 at 1:39 AM Christian Brauner <brauner@kernel.org> wrote:
+>
+> On Fri, Sep 02, 2022 at 03:41:35AM +0000, Oleksandr Tymoshenko wrote:
+> > release_task, where the seccomp's filter refcounter is released, is not
+> > called for the case when the fork/clone is terminated midway by a
+> > signal. This leaves an extra reference that prevents filter from being
+> > destroyed even after all processes using it exit leading to a BPF JIT
+> > memory leak. Dereference the refcounter in the failure path of the
+> > copy_process function.
+> >
+> > Fixes: 3a15fb6ed92c ("seccomp: release filter after task is fully dead")
+> > Cc: Christian Brauner <brauner@kernel.org>
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Oleksandr Tymoshenko <ovt@google.com>
+> > ---
+>
+> Hey Oleksandr,
+>
+> Thanks for the patch! I'm really puzzled as to why we never noticed this
+> and I'm trying to re-architect how this happend. But in any case,
+> there's a patch in the seccomp tree that fixes this:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=6d17452707ca
+>
+> which is slighly different from your approach in that it moves
+> copy_seccomp() after the point of no return. Let us know if you see any
+> issues with this!
+>
+> Christian

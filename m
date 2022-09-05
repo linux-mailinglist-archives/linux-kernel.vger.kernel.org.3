@@ -2,130 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A7D5AD901
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390505AD908
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 20:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiIES0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 14:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S231745AbiIESdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 14:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiIES0v (ORCPT
+        with ESMTP id S229915AbiIESdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:26:51 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F56652805;
-        Mon,  5 Sep 2022 11:26:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k5sU+SxfTVR/L2ga1+9lOmkBfRiw1C+CD452mCykTma0rr9dkqbXTd1B499jLCwwToyPxx7qDvY/dUqLrwFTwyg8HYwQSBlKEitAe6/NpvldftKYH6LiV3gTQOevTl3nRhmoMauys9Z6Sc+JncbPEL1OUAjXhgm8bAId4SoMLM0MIkvZUgXH4/bAHUOVaSrp+kRpFcGWTf1EPCCGqua0EAdo9PcyFZddbd2lgD4NlLJkciMfdSP09RjXBZhiIPLQ3P/JHH+Ktb3NU2u5N8upsnp+Lq8TvU+cGPMamPx0yPlN6WMgBF2uLTBQrwye5QN5WlcdpoLQ0SHEvZ8j9h98zA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=poSojd5kbTekZqSfy8QCPrycXD96N8UxYkoF+PazzD4=;
- b=EY0zFA6htxTqeyR9XGpspUIPAufg+w6bCQjXSH/LU+Oqamd5XrDJ4dpbsjlAs1xLmcij+dSvkDfeltL0tMWhRyB1Syk8C4oTuv+uKLUiJCRt0fRXceaEtxxKuC0b2toJFwumaI3hgan371E3kn4dfGar1ste5tOqZqBq90BAfEjXdRmmDLXnr96pNvt+yk951Jxxn7DvhtJuOnnRcgjXLsFNK/fNksUSylV3GMThSDO67BNQw5305dhgGpeRzfYWhwtcgRbDt8si+MzHGzaww0Q3ePop5QwWDKEZ39Cu8u6ZT0DuwIFytF1w28xUQR2I4EpeVpj6LZxAmh/X70pxHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=poSojd5kbTekZqSfy8QCPrycXD96N8UxYkoF+PazzD4=;
- b=2vEAlp1k3EvycXPxiwwEKbYtONiui88AekinCV8kyxPjOhqUzoF7i9g6D6KpNLQrNVon15jM8O/wCHkRlZIk5X1Z9IpSDscNgXwo791jZGBYfeYbZ2OUsioM/3fy5nKGKDAto9gf6XAlHuefdf0qS8AKH+aUiZopjSsG8yUONiI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MN2PR12MB4485.namprd12.prod.outlook.com (2603:10b6:208:269::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Mon, 5 Sep
- 2022 18:26:47 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.018; Mon, 5 Sep 2022
- 18:26:47 +0000
-Message-ID: <3da7b3c2-737e-a067-9018-8e743e59ef65@amd.com>
-Date:   Mon, 5 Sep 2022 20:26:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/4] dma-buf: Check status of enable-signaling bit on
- debug
-Content-Language: en-US
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220905105653.13670-1-Arvind.Yadav@amd.com>
- <20220905105653.13670-2-Arvind.Yadav@amd.com>
- <0038fcff-35f1-87e3-aa26-cdd104a13628@amd.com>
- <3c702549-75f4-c640-9f9c-37d7fcbb1645@linux.intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <3c702549-75f4-c640-9f9c-37d7fcbb1645@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0144.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:96::19) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 5 Sep 2022 14:33:01 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1EA52805
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 11:33:00 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id d68so7282343iof.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 11:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=FNv/KEMtf5XOtkND3AyjhcP/3pLjOBMwZm4O4kjr360=;
+        b=i5KCDSUH/dFt94fpjc7Fphku0Tn3reBabaBpFtdU+oRbFh+e8Cx/DMlqQivEg1MZjm
+         7FbOvlY6Y9f+9LZ9N+zgTB71z3cagQ2sGfp1oudx0Kv1xpUW6Up8K51vig+01CsmnL3L
+         C3xCWMqLQrpYBGvHC0UNi+yNQ6XvxIjh2dsHMNd34BBtJz1xyaPEvWMxsK55kusb2lJe
+         FYhU7ADU9KYt1l8KwJpBXu48E1hUBJcr2CIqnesgVXkiai+CuNr/V0a+QqiqySxoUimH
+         yIvsq78rMCW0kTv83Fiph1I394+CJ8Hgoqi6ZFAZmMb3pGsqLwLA4vfAoG5DeUW7LJqa
+         cUpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=FNv/KEMtf5XOtkND3AyjhcP/3pLjOBMwZm4O4kjr360=;
+        b=mQ7S+59FA8Qgp/dZvrlb9nu3nGnKIA2zX/5Q8jAyOEKLiZHnLOBYij7ZHAAiZuN7zo
+         NmqFXa2JIjs42V0d+DCn3rRgsJpg24Z63QCWIqNFQen2IRE6VxWnRI/Ys9C72bRaBcoG
+         TWIf2orifCA/DotlvKs2R2odFLsGqAWZq87JdjlNVD83n+vVIYQH5nOKXAr8r7NZsDCo
+         Oyb1057fCsN70WygDRjk43uE1A2ivVO3KuFAUeQnHONLbH+s5swjiMHmDi/dicQPRDgZ
+         UVwCciG5QjLe9e93vAM+N8KDrCQwzSB5+xR/z9dVQ0TsDiedsa3CpHW3gcj/JPGav81W
+         1Jog==
+X-Gm-Message-State: ACgBeo0GlNVBcX0MyxUl3IyEXI0xUV6aosSPKQ4Bsfg2wT0Ww+QxVEJe
+        H/tA53i+ENzZDOkaxyplU0Jw74hIs254ClvBMWr6CQ==
+X-Google-Smtp-Source: AA6agR7tgjJDEPLfwwS1LRrijFcmlJFxoiqhAebJjxrWU7CYsmX7SoR6nKTNAJ7nNJVYWRRFlsmMoE7vtwAV8983goQ=
+X-Received: by 2002:a02:740b:0:b0:349:bcdd:ca20 with SMTP id
+ o11-20020a02740b000000b00349bcddca20mr28183219jac.110.1662402779688; Mon, 05
+ Sep 2022 11:32:59 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 58a2fea0-7a65-490d-019b-08da8f6c3131
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4485:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tj4DW1lQ+s+sSZoQnV+Y1xE9LeXE+kirZWlzuAI4sIwReJWSP5yOFk7XgKo6wqd8rx+KZ9FLlHzhJH9CarZViz6TH8rf1wzhlWD/S0OPFyZaiJA0M+NCqq5MhIOEM7MQHYhMCY00KSCnxkVvov7hX1BIx4U3NKTodhoCsmATyht86d9FzXk9KPA3K692IkAP1BM440AQY2bf9185QCAlydu7xSfbmbCE3U2JI9gXB4fD5V6TOTIcT/3xI4XtA4o3XRjlpREcDLjvWJfcuZIFyd+rW42uXE0z2x3jfMgEcRGBSLcn4bQrWa9U7nA2UcIEjF4RLlsLhEB6U5/Lw65EmmoLLpQCa/Nu/cwt+QrOl2+UnxzEjuKrFxbhDXvpOL+digHrRnb3KYjxrRXfFzAH5/v8nRHIj9ydOF1W6L7TOrbrPU1OzU9KgUVm1IFfiU+4aCiYZioAJ2lnWbG65n3yhhPgTkyUhpHFcxwwxxwV87vDcuIWxNfeasvljlYXtE3I/NcY/lYcWcbR30VkwvAL74ig49hO3Jym0p3NOdX8Q0/mGUy4VtTKdD+EQR7UEZwAEorWqmHemhYLlBoWEnYauEZEV4BDfmpj0EmoLI1xzz7vdOtWsupCu4ljhf76uyp1yCmrUsAY+s1KTSNAM2tEqK8bi+b5J0GUT0dQv80jKw/PV9xCYZHwawOr/SjeQ+wOFTUMstX05tu9tLkQPzm5AYeB6hAIOXbMuEjtQyEcxF9jwjJr2k6ynCSQJHGsEjKzXeehm4LeoODyplmOsC8u3Ln5nb7eLA4oKBNopLisggRdaaR2g0VjmJCf6pGtnCSn
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(376002)(396003)(136003)(346002)(8676002)(83380400001)(66476007)(66574015)(66946007)(8936002)(66556008)(5660300002)(6506007)(478600001)(53546011)(6486002)(41300700001)(186003)(6666004)(6512007)(2616005)(316002)(86362001)(110136005)(31696002)(36756003)(31686004)(38100700002)(921005)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L3F4SjdmQ2NpVDZSSXFGR2o3SHkvcDNCclZYa1NFSVJnbWRwVWR5MWZ2K29x?=
- =?utf-8?B?alNkUHBJQmY1ME5DRFdnSDdzdmIvMldCalNyQnduMFBpWTJVdDEzbms1MXVN?=
- =?utf-8?B?SWQzY002RzZXb3FoZXRKeDVKTFNzbWhsdzRLNExTOTVNN2VWZUM1V2xRRU0y?=
- =?utf-8?B?NkJnUklYQmpZdUE1K3lJYkNlRTl3SzcyRWhxZ1lEOGVwSDZpdjBzNWVpSGky?=
- =?utf-8?B?TlVZeE0zTGppRFNvNHJzTERHVkVRMERZTk9aWWRobDM4M1BuWXN5UU52ei9T?=
- =?utf-8?B?WkpaTkF0S2pBMWd5VjRsYWV1S2JJV0Z3N1N6YUZzUXNmbjNoTU1BSnRXZTdr?=
- =?utf-8?B?ZW11cno2U21rVHlrQUVnUStSclVneWh4TmV3VmNqY1dnb1NmMXlSSkZ5RkFq?=
- =?utf-8?B?SzJrSjZMeE5NYWxSa0l2RXl0YlBwbWZMcU5xcHRaNEVyUEtJVDJWaWZwcWNP?=
- =?utf-8?B?Ti9mZzU5L04vNTNtM0R0TWJVTTdkRnB5SnR0enhIaW03T0FLTlBhdDNaRHUv?=
- =?utf-8?B?d3g5NmJkTUJFS3BDZWRIOUlnQ0hhU3E5QjkyUWdnWkFUUU5udW5HcWxiemJU?=
- =?utf-8?B?VkxIRUgxcmdpYXRodGsrL2R3N0ZBcHpUdzVjMWZheThDV3h4Ylg1N1oyNHV2?=
- =?utf-8?B?NDJVdVFuaWd1bTRsVXRUcFYzUWhlS2pCQ2FwNjd0aXRheFBiVndvMjczWjcv?=
- =?utf-8?B?enBIRHpwRlQ0WlpySTlBSk55bGNvUncydTBnSy9IY0FyQkhzTkNiNzZPSGpO?=
- =?utf-8?B?WWtJdDhqLzVEdHNieTZlVkNyUThyWGdOeWZBZithek5vR1BoOFNqWVVkUDdw?=
- =?utf-8?B?WFAvOEhrZm9nN1dWaFZxL0tVMUJlemllYlRIcWdmK2d1ME5UTmNHZU1kYTRD?=
- =?utf-8?B?WlhYMkxSNElqeHJOMFlaVzlLdEcraTN2QlE4K3RNMlhXeGRURFYvSEF3cFpv?=
- =?utf-8?B?enBtcktwbFlMSWw4a3lWV251V0p5SHdyTEJjb0xhcUxSbkFqbzZySDBqaVFG?=
- =?utf-8?B?TlZoVGkzYk1Sc1JVdjE4dHhLMlQxcTlLWGJyL0FXL2MwRGhLRmFYS1RpK2Mv?=
- =?utf-8?B?cjY3aHVIdTdjZmlFdmdDcEh6ZjBtQStkSjFVY2pwaGlUVWNta3E1NE9OdDRD?=
- =?utf-8?B?OEh6N1d0c2dDY2NQSEZLc2laNmdsY0pHanNIK2VraUgzM3hEM2syVWFtVkc5?=
- =?utf-8?B?cDdrZzVyaDlmTlVUNTlSOWZPeEEyK2xjaVNiZjljL210ZzRONGpFMU9Wdi9N?=
- =?utf-8?B?eXRsWk16WnZPV1pkVnA3c1pUUHJpZXBBSitzdWdZK0VvV0twcTRkOEo3a1Rj?=
- =?utf-8?B?d3RtWlBDUld4TUJzUUNLRis4Y0xJby85VmRYcjJ5WlZPdE00anN4TStYTnhT?=
- =?utf-8?B?eW1sUDJCQUh0OElUR29oZXpzZ2hJTGhzalJWeFJSRzd3KzBWMkZpRUJMSnZO?=
- =?utf-8?B?by8wRDRDZ1Q1c1NqTVlVTWRmWTl1RkoxNm9NcFRzcU5iVXh2VS9VeUpIMTZ2?=
- =?utf-8?B?cjV4TFRhSjMzTXZPeG5aaUc3NEZrTWlsdEx6Lyt6NDRBbGdkR0F4RGc2N1E0?=
- =?utf-8?B?OEwzNkExWDdlRkhuYkNQRGZtamZZQUVqUE1qMnBwRmJCYk5sS1piTERmS3lp?=
- =?utf-8?B?ZFpvR3pZK1JnbUVsZmsxUGthS1lNOVdJSzBKZUpGUEdRaHMzSDBSYmp3Y1Zj?=
- =?utf-8?B?MUI1ckhIN1JOQkdYaXdFaTEyVDhidExQdjBRVGdNSVBXcHRoNDZyZTdyRTJM?=
- =?utf-8?B?RTBqcFVBaExZWXdTQWJ4bDR4anZFVW9NeHNpMnlxaXdFYUxUKzlOVmpubzBB?=
- =?utf-8?B?d2FSK05ERFdlRjJ2RjFaOHQyZGM3TzFBS3gwd0I2TEd2RHBoY0pzdjZWSEtn?=
- =?utf-8?B?eGlRd1hpcEJEU3lVN0JhbDZheUNoN1A4UlByMVhKcmx6SHhxdkFCbHdFc1NB?=
- =?utf-8?B?QmM5ak53dlljT0N3VnNBZVlrWjNkdjBOYlg1U1hSUXIyekxlVnBJa2tGUWU0?=
- =?utf-8?B?S2hQYUhuY2g0MU8xRUtCNEF1dk5URUFwM3BkdWhRb2pMU2J1aUMyaFRqa3lU?=
- =?utf-8?B?U2dtMnlITjVSQlJjYUpGUWszTkFhd0I5OHdCSVBkTitCOG40TFZNTFRSMkp4?=
- =?utf-8?B?N1NNSVd1eERKVFB5L3dRdFcyck5NSUJqRW1hYWc2SFJOMFMzdnVMRTJxa0hK?=
- =?utf-8?Q?NR36zzsc+5AIzb34udo7qtZkTy+VsDr3iwLtmnWTrqjT?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58a2fea0-7a65-490d-019b-08da8f6c3131
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2022 18:26:47.3693
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /+mmSSUxF8Ny4Qk/IpGZJiFqUWrbZYg8k5enzf7AXUwWU3fNpHyj3eqxDc+SooK4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4485
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220901173516.702122-1-surenb@google.com> <YxXsQKoQ0URIRuKi@dhcp22.suse.cz>
+In-Reply-To: <YxXsQKoQ0URIRuKi@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 5 Sep 2022 11:32:48 -0700
+Message-ID: <CAJuCfpG3bMLzNhP5wt8my8j7_9wW=darLegd6WPV6tddtCKGAA@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND 00/28] per-VMA locks proposal
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michel Lespinasse <michel@lespinasse.org>,
+        Jerome Glisse <jglisse@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Laurent Dufour <laurent.dufour@fr.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
+        Hugh Dickins <hughd@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Minchan Kim <minchan@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,120 +93,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 05.09.22 um 18:39 schrieb Tvrtko Ursulin:
+On Mon, Sep 5, 2022 at 5:32 AM 'Michal Hocko' via kernel-team
+<kernel-team@android.com> wrote:
 >
-> On 05/09/2022 12:21, Christian König wrote:
->> Am 05.09.22 um 12:56 schrieb Arvind Yadav:
->>> The core DMA-buf framework needs to enable signaling
->>> before the fence is signaled. The core DMA-buf framework
->>> can forget to enable signaling before the fence is signaled.
->>> To avoid this scenario on the debug kernel, check the
->>> DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT status bit before checking
->>> the signaling bit status to confirm that enable_signaling
->>> is enabled.
->>
->> You might want to put this patch at the end of the series to avoid 
->> breaking the kernel in between.
->>
->>>
->>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->>> ---
->>>   include/linux/dma-fence.h | 5 +++++
->>>   1 file changed, 5 insertions(+)
->>>
->>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->>> index 775cdc0b4f24..60c0e935c0b5 100644
->>> --- a/include/linux/dma-fence.h
->>> +++ b/include/linux/dma-fence.h
->>> @@ -428,6 +428,11 @@ dma_fence_is_signaled_locked(struct dma_fence 
->>> *fence)
->>>   static inline bool
->>>   dma_fence_is_signaled(struct dma_fence *fence)
->>>   {
->>> +#ifdef CONFIG_DEBUG_FS
->>
->> CONFIG_DEBUG_FS is certainly wrong, probably better to check for 
->> CONFIG_DEBUG_WW_MUTEX_SLOWPATH here.
->>
->> Apart from that looks good to me,
->
-> What's the full story in this series - I'm afraid the cover letter 
-> does not make it clear to a casual reader like myself? Where does the 
-> difference between debug and non debug kernel come from?
+> Unless I am missing something, this is not based on the Maple tree
+> rewrite, right? Does the change in the data structure makes any
+> difference to the approach? I remember discussions at LSFMM where it has
+> been pointed out that some issues with the vma tree are considerably
+> simpler to handle with the maple tree.
 
-We have a bug that the drm_sync file doesn't properly enable signaling 
-leading to an igt test failure.
+Correct, this does not use the Maple tree yet but once Maple tree
+transition happens and it supports RCU-safe lookups, my code in
+find_vma_under_rcu() becomes really simple.
 
 >
-> And how do the proposed changes relate to the following kerneldoc 
-> excerpt:
+> On Thu 01-09-22 10:34:48, Suren Baghdasaryan wrote:
+> [...]
+> > One notable way the implementation deviates from the proposal is the way
+> > VMAs are marked as locked. Because during some of mm updates multiple
+> > VMAs need to be locked until the end of the update (e.g. vma_merge,
+> > split_vma, etc).
 >
->      * Since many implementations can call dma_fence_signal() even 
-> when before
->      * @enable_signaling has been called there's a race window, where the
->      * dma_fence_signal() might result in the final fence reference being
->      * released and its memory freed. To avoid this, implementations 
-> of this
->      * callback should grab their own reference using dma_fence_get(), 
-> to be
->      * released when the fence is signalled (through e.g. the interrupt
->      * handler).
->      *
->      * This callback is optional. If this callback is not present, 
-> then the
->      * driver must always have signaling enabled.
->
-> Is it now an error, or should be impossible condition, for "is 
-> signaled" to return true _unless_ signaling has been enabled?
+> I think it would be really helpful to spell out those issues in a greater
+> detail. Not everybody is aware of those vma related subtleties.
 
-That's neither an error nor impossible. For debugging we just never 
-return signaled from the dma_fence_is_signaled() function when signaling 
-was not enabled before.
+Ack. I'll expand the description of the cases when multiple VMAs need
+to be locked in the same update. The main difficulties are:
+1. Multiple VMAs might need to be locked within one
+mmap_write_lock/mmap_write_unlock session (will call it an update
+transaction).
+2. Figuring out when it's safe to unlock a previously locked VMA is
+tricky because that might be happening in different functions and at
+different call levels.
 
-I also plan to remove the return value from the enable_signaling 
-callback. That was just not very well designed.
+So, instead of the usual lock/unlock pattern, the proposed solution
+marks a VMA as locked and provides an efficient way to:
+1. Identify locked VMAs.
+2. Unlock all locked VMAs in bulk.
 
->
-> If the statement (in a later patch) is signalling should always be 
-> explicitly enabled by the callers of dma_fence_add_callback, then what 
-> about the existing call to __dma_fence_enable_signaling from 
-> dma_fence_add_callback?
-
-Oh, good point. That sounds like we have some bug in the core dma_fence 
-code as well.
-
-Calls to dma_fence_add_callback() and dma_fence_wait() should enable 
-signaling implicitly and don't need an extra call for that.
-
-Only dma_fence_is_signaled() needs this explicit enabling of signaling 
-through dma_fence_enable_sw_signaling().
+We also postpone unlocking the locked VMAs until the end of the update
+transaction, when we do mmap_write_unlock. Potentially this keeps a
+VMA locked for longer than is absolutely necessary but it results in a
+big reduction of code complexity.
 
 >
-> Or if the rules are changing shouldn't kerneldoc be updated as part of 
-> the series?
+> Thanks for working on this Suren!
 
-I think the kerneldoc is just a bit misleading. The point is that when 
-you need to call dma_fence_enable_sw_signaling() you must hold a 
-reference to the fence object.
+Thanks for reviewing!
+Suren.
 
-But that's true for all the dma_fence_* functions. The race described in 
-the comment is just nonsense because you need to hold that reference anyway.
-
-Regards,
-Christian.
-
+> --
+> Michal Hocko
+> SUSE Labs
 >
-> Regards,
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
 >
-> Tvrtko
->
->> Christian.
->>
->>> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
->>> +        return false;
->>> +#endif
->>> +
->>>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>>           return true;
->>
-

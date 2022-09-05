@@ -2,80 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A145AD6A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232D95AD6AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 17:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238996AbiIEPgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 11:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
+        id S237251AbiIEPiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 11:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238930AbiIEPgS (ORCPT
+        with ESMTP id S239035AbiIEPiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 11:36:18 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3ED64055C;
-        Mon,  5 Sep 2022 08:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662392177; x=1693928177;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WhUNghi/IiZ0aS9sedOc5de6KPGY/YFtu9yZreNVi54=;
-  b=RNv70RiMcI6n7bgW7cvN5uJi5tRvDJY2lhuGRYIuik4iBWANjHq0ho6m
-   mIBPl3ijkguA2oaPTLMgmATo/OlAF+MRlYJx1XI0fVvKlfkKDvjrdDlY5
-   id3iluJ+6Kzkpd82Qc3g9VfpQwLscW/gBTNdFdIUokkAL82H3NRlzz9i+
-   J94R4rgU6Uls7x/4MXNjE/6DFWAVr1EodjbYxDIUN723RbrCjkzDmdtCU
-   YmqIN+sNy60wWhctoZC+cpJF/BxtpAFv4YJMauuI/c72N5Q/gPsl/Hovi
-   v3VRRIteAsMtNH7nn0zNBe7IRvOgc9kvL/sEAFFZCbsxGXvrBmOrAD4Q4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="293997725"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="293997725"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 08:36:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="616443041"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Sep 2022 08:36:15 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id E8D1114F; Mon,  5 Sep 2022 18:36:30 +0300 (EEST)
-Date:   Mon, 5 Sep 2022 18:36:30 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, sanju.mehta@amd.com,
-        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found
- on AMD USB4 controller
-Message-ID: <YxYXfhCCaj6tGAx7@black.fi.intel.com>
-References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
- <YxWgGKIAvsxwSz85@black.fi.intel.com>
- <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
- <YxWqSYDWe0NitSkL@black.fi.intel.com>
- <YxX3JeQLbciJ+hhc@black.fi.intel.com>
- <CAAd53p5hjmPgPNifo-QV9KU4DFbvPnrYV-YD2b6cSXNN=5GLWQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p5hjmPgPNifo-QV9KU4DFbvPnrYV-YD2b6cSXNN=5GLWQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Sep 2022 11:38:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E485640E11;
+        Mon,  5 Sep 2022 08:38:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78AA3B811F0;
+        Mon,  5 Sep 2022 15:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B671C433C1;
+        Mon,  5 Sep 2022 15:38:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662392322;
+        bh=mnbQ4LQki0oGNRbOw3qBGCOFYGhJfzPcJRy55oW3Afo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XJLnUxEFvylm7wrZfcsYjvym60RAg6HFwdm4lXYpiAQWJGMZrG/b3FIr2buarWis/
+         EYg2CDO8Mwsyv2+C7GY4qX9ptFXQJihS4tgL0ZxwA6SxAe7gcZVfiiL2XZ3ztaXrgx
+         OdktzM2+kPPfHRNYDVLWYqPt98FK2/Km8fJSPzQNx4uDdNlwLrut2wXSfw34QXuSF2
+         GnardonQpM+qjQh+uXgoP5X0Q3uFPZtIp0X9nNxrORvBw1GX7QrL7m0UzKOmh+dtRH
+         Lz2FUahGXj77GVLWvmkIk8KTxKMI7ZfTj8rPEIBCF3IjbvGT2/ePAmUyEXZKQd1Afl
+         /oi3zpO84L3Xg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oVEBL-00875U-SV;
+        Mon, 05 Sep 2022 16:38:39 +0100
+Date:   Mon, 05 Sep 2022 16:38:39 +0100
+Message-ID: <87tu5lvnk0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     isaku.yamahata@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, isaku.yamahata@gmail.com,
+        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH v3 00/22] KVM: hardware enable/disable reorganize
+In-Reply-To: <cover.1662084396.git.isaku.yamahata@intel.com>
+References: <cover.1662084396.git.isaku.yamahata@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: isaku.yamahata@intel.com, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, pbonzini@redhat.com, seanjc@google.com, tglx@linutronix.de, will@kernel.org, isaku.yamahata@gmail.com, kai.huang@intel.com, chao.gao@intel.com, atishp@atishpatra.org, zhangshaokun@hisilicon.com, john.garry@huawei.com, daniel.lezcano@linaro.org, ying.huang@intel.com, chenhuacai@kernel.org, dave.hansen@linux.intel.com, bp@alien8.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 11:24:26PM +0800, Kai-Heng Feng wrote:
-> > can you check if that is happening? It should show up in the dmesg when
-> > CONFIG_PCI_DEBUG=y but I don't see it in yours.
+On Fri, 02 Sep 2022 03:17:35 +0100,
+isaku.yamahata@intel.com wrote:
 > 
-> That's because there isn't any child device yet, so the function bails early:
-> if (!dev->subordinate || list_empty(&dev->subordinate->devices))
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> Changes from v2:
+> - Replace the first patch("KVM: x86: Drop kvm_user_return_msr_cpu_online()")
+>   with Sean's implementation
+> - Included all patches of "Improve KVM's interaction with CPU hotplug" [2]
+>   Until v2, Tried to cherry-pick the least patches of it. It turned out that
+>   all the patches are desirable.
+> 
+> This patch series is to implement the suggestion by Sean Christopherson [1]
+> to reorganize enable/disable cpu virtualization feature by replacing
+> the arch-generic current enable/disable logic with PM related hooks. And
+> convert kvm/x86 to use new hooks.
 
-Ah, of course I forgot that this is hotplug case so there are no need
-for the delays :/
+This series totally breaks on arm64 when playing with CPU hotplug. It
+very much looks like preemption is now enabled in situations where we
+don't expect it to (see below for the full-blown horror show). And
+given the way it shows up in common code, I strongly suspect this
+affects other architectures too.
+
+Note that if I only take patch #6 (with the subsequent fix that I
+posted this morning), the system is perfectly happy with CPUs being
+hotplugged on/off ad-nauseam.
+
+Thanks,
+
+	M.
+
+[  108.213362] WARNING: CPU: 1 PID: 18 at arch/arm64/kvm/../../../virt/kvm/kvm_arch.c:38 hardware_disable+0x40/0x5c
+[  108.222403] Modules linked in: macvtap(E) macvlan(E) tap(E) nls_ascii(E) nls_cp437(E) vfat(E) fat(E) hci_uart(E) btqca(E) btrtl(E) aes_ce_blk(E) btbcm(E) btintel(E) aes_ce_cipher(E) ghash_ce(E) gf128mul(E) sha2_ce(E) sha256_arm64(E) bluetooth(E) sha1_ce(E) meson_saradc(E) panfrost(E) ecdh_generic(E) ecc(E) gpu_sched(E) rfkill(E) drm_shmem_helper(E) industrialio(E) meson_drm(E) meson_rng(E) rng_core(E) meson_dw_hdmi(E) dw_hdmi(E) drm_display_helper(E) meson_canvas(E) cec(E) display_connector(E) drm_cma_helper(E) pwm_meson(E) efi_pstore(E) drm_kms_helper(E) leds_gpio(E) cpufreq_dt(E) fuse(E) drm(E) configfs(E) efivarfs(E) ip_tables(E) x_tables(E) autofs4(E) xhci_plat_hcd(E) meson_gxl(E) realtek(E) dwmac_generic(E) dwc3(E) dwc2(E) ulpi(E) udc_core(E) rtc_hym8563(E) nvme(E) dwmac_meson8b(E) stmmac_platform(E) nvme_core(E) t10_pi(E) mdio_mux_meson_g12a(E) dwc3_meson_g12a(E) i2c_meson(E) mdio_mux(E) meson_gx_mmc(E) stmmac(E) pcs_xpcs(E) phylink(E) of_mdio(E) crc64_rocksoft(E) crc64(E)
+[  108.222572]  fixed_phy(E) fwnode_mdio(E) libphy(E) pwm_regulator(E)
+[  108.314691] CPU: 1 PID: 18 Comm: cpuhp/1 Tainted: G            E      6.0.0-rc4-00024-g202b793c12e7 #125
+[  108.324090] Hardware name:  , BIOS 2021.01-rc2-00012-gde865f7ee1 11/16/2020
+[  108.330992] pstate: a0400009 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  108.337890] pc : hardware_disable+0x40/0x5c
+[  108.342031] lr : kvm_arch_offline_cpu+0x2c/0x40
+[  108.346515] sp : ffff8000080cbd20
+[  108.349793] x29: ffff8000080cbd20 x28: 0000000000000001 x27: ffff909c1f1d9000
+[  108.356865] x26: 0000000000000000 x25: 0000000000000000 x24: ffff418c3f985768
+[  108.363938] x23: ffffb0f0207ac768 x22: ffffb0f01f33e180 x21: 00000000000002f3
+[  108.371010] x20: 0000000000000001 x19: ffffb0f020d09598 x18: 0000000000000000
+[  108.378083] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[  108.385155] x14: 0000000000000032 x13: 0000000000000000 x12: 0000000000000000
+[  108.392228] x11: ffff418bc0503f50 x10: 0000000000000bc0 x9 : ffffb0f01f34b55c
+[  108.399300] x8 : ffff418bc029bce0 x7 : ffff418bc7a1a098 x6 : ffffb0f020d0f3a8
+[  108.406373] x5 : ffffb0f020cfd000 x4 : 0000000000000000 x3 : ffffb0f020d09598
+[  108.413445] x2 : ffff418bc029b0c0 x1 : 0000000000000000 x0 : 0000000000000000
+[  108.420519] Call trace:
+[  108.422933]  hardware_disable+0x40/0x5c
+[  108.426729]  kvm_arch_offline_cpu+0x2c/0x40
+[  108.430868]  kvm_offline_cpu+0x40/0x60
+[  108.434577]  cpuhp_invoke_callback+0x16c/0x5b0
+[  108.438976]  cpuhp_thread_fun+0xdc/0x194
+[  108.442857]  smpboot_thread_fn+0x244/0x270
+[  108.446911]  kthread+0xf8/0x100
+[  108.450015]  ret_from_fork+0x10/0x20
+[  108.453554] ---[ end trace 0000000000000000 ]---
+[  108.458406] IRQ24: set affinity failed(-22).
+[  108.458424] IRQ29: set affinity failed(-22).
+[  108.458911] psci: CPU1 killed (polled 0 ms)
+[  109.533677] Detected VIPT I-cache on CPU1
+[  109.533817] CPU1: Booted secondary processor 0x0000000100 [0x411fd050]
+[  109.533886] ------------[ cut here ]------------
+[  109.543308] WARNING: CPU: 1 PID: 18 at arch/arm64/kvm/../../../virt/kvm/kvm_arch.c:19 __hardware_enable+0x54/0x80
+[  109.553482] Modules linked in: macvtap(E) macvlan(E) tap(E) nls_ascii(E) nls_cp437(E) vfat(E) fat(E) hci_uart(E) btqca(E) btrtl(E) aes_ce_blk(E) btbcm(E) btintel(E) aes_ce_cipher(E) ghash_ce(E) gf128mul(E) sha2_ce(E) sha256_arm64(E) bluetooth(E) sha1_ce(E) meson_saradc(E) panfrost(E) ecdh_generic(E) ecc(E) gpu_sched(E) rfkill(E) drm_shmem_helper(E) industrialio(E) meson_drm(E) meson_rng(E) rng_core(E) meson_dw_hdmi(E) dw_hdmi(E) drm_display_helper(E) meson_canvas(E) cec(E) display_connector(E) drm_cma_helper(E) pwm_meson(E) efi_pstore(E) drm_kms_helper(E) leds_gpio(E) cpufreq_dt(E) fuse(E) drm(E) configfs(E) efivarfs(E) ip_tables(E) x_tables(E) autofs4(E) xhci_plat_hcd(E) meson_gxl(E) realtek(E) dwmac_generic(E) dwc3(E) dwc2(E) ulpi(E) udc_core(E) rtc_hym8563(E) nvme(E) dwmac_meson8b(E) stmmac_platform(E) nvme_core(E) t10_pi(E) mdio_mux_meson_g12a(E) dwc3_meson_g12a(E) i2c_meson(E) mdio_mux(E) meson_gx_mmc(E) stmmac(E) pcs_xpcs(E) phylink(E) of_mdio(E) crc64_rocksoft(E) crc64(E)
+[  109.553657]  fixed_phy(E) fwnode_mdio(E) libphy(E) pwm_regulator(E)
+[  109.645771] CPU: 1 PID: 18 Comm: cpuhp/1 Tainted: G        W   E      6.0.0-rc4-00024-g202b793c12e7 #125
+[  109.655170] Hardware name:  , BIOS 2021.01-rc2-00012-gde865f7ee1 11/16/2020
+[  109.662071] pstate: a0400009 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  109.668970] pc : __hardware_enable+0x54/0x80
+[  109.673196] lr : kvm_arch_online_cpu+0x4c/0x5c
+[  109.677594] sp : ffff8000080cbd00
+[  109.680872] x29: ffff8000080cbd00 x28: 0000000000000001 x27: ffff909c1f1d9000
+[  109.687944] x26: 0000000000000000 x25: 0000000000000000 x24: ffff418c3f985768
+[  109.695016] x23: ffffb0f0207ac768 x22: ffffb0f01f33e1e0 x21: 00000000000002f3
+[  109.702089] x20: ffffb0f01ffdc700 x19: 0000000000000001 x18: 0000000000000000
+[  109.709161] x17: 000000006a7316ce x16: 00000000dee945dd x15: 0000000000000030
+[  109.716234] x14: 0000000000000001 x13: 5d30353064663131 x12: 3478305b20303031
+[  109.723306] x11: 3030303030303078 x10: 0000000000000bc0 x9 : ffffb0f01f34b520
+[  109.730379] x8 : ffff418bc029bce0 x7 : 0000000000000003 x6 : ffffb0f020d0f3a8
+[  109.737452] x5 : ffffb0f020cfd000 x4 : 0000000000000000 x3 : ffffb0f020d09598
+[  109.744524] x2 : ffff418bc029b0c0 x1 : 0000000000000000 x0 : 0000000000000000
+[  109.751598] Call trace:
+[  109.754012]  __hardware_enable+0x54/0x80
+[  109.757894]  kvm_arch_online_cpu+0x4c/0x5c
+[  109.761947]  kvm_online_cpu+0x40/0x60
+[  109.765569]  cpuhp_invoke_callback+0x16c/0x5b0
+[  109.769968]  cpuhp_thread_fun+0xdc/0x194
+[  109.773849]  smpboot_thread_fn+0x244/0x270
+[  109.777903]  kthread+0xf8/0x100
+[  109.781009]  ret_from_fork+0x10/0x20
+[  109.784545] ---[ end trace 0000000000000000 ]---
+[  109.789178] ------------[ cut here ]------------
+[  109.793694] kernel BUG at arch/arm64/kvm/vgic/vgic-init.c:507!
+[  109.799467] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[  109.804901] Modules linked in: macvtap(E) macvlan(E) tap(E) nls_ascii(E) nls_cp437(E) vfat(E) fat(E) hci_uart(E) btqca(E) btrtl(E) aes_ce_blk(E) btbcm(E) btintel(E) aes_ce_cipher(E) ghash_ce(E) gf128mul(E) sha2_ce(E) sha256_arm64(E) bluetooth(E) sha1_ce(E) meson_saradc(E) panfrost(E) ecdh_generic(E) ecc(E) gpu_sched(E) rfkill(E) drm_shmem_helper(E) industrialio(E) meson_drm(E) meson_rng(E) rng_core(E) meson_dw_hdmi(E) dw_hdmi(E) drm_display_helper(E) meson_canvas(E) cec(E) display_connector(E) drm_cma_helper(E) pwm_meson(E) efi_pstore(E) drm_kms_helper(E) leds_gpio(E) cpufreq_dt(E) fuse(E) drm(E) configfs(E) efivarfs(E) ip_tables(E) x_tables(E) autofs4(E) xhci_plat_hcd(E) meson_gxl(E) realtek(E) dwmac_generic(E) dwc3(E) dwc2(E) ulpi(E) udc_core(E) rtc_hym8563(E) nvme(E) dwmac_meson8b(E) stmmac_platform(E) nvme_core(E) t10_pi(E) mdio_mux_meson_g12a(E) dwc3_meson_g12a(E) i2c_meson(E) mdio_mux(E) meson_gx_mmc(E) stmmac(E) pcs_xpcs(E) phylink(E) of_mdio(E) crc64_rocksoft(E) crc64(E)
+[  109.805056]  fixed_phy(E) fwnode_mdio(E) libphy(E) pwm_regulator(E)
+[  109.897189] CPU: 1 PID: 18 Comm: cpuhp/1 Tainted: G        W   E      6.0.0-rc4-00024-g202b793c12e7 #125
+[  109.906588] Hardware name:  , BIOS 2021.01-rc2-00012-gde865f7ee1 11/16/2020
+[  109.913490] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  109.920388] pc : kvm_vgic_init_cpu_hardware+0x94/0xa0
+[  109.925391] lr : _kvm_arch_hardware_enable+0xa0/0xb0
+[  109.930307] sp : ffff8000080cbcc0
+[  109.933584] x29: ffff8000080cbcc0 x28: 0000000000000001 x27: ffff909c1f1d9000
+[  109.940657] x26: 0000000000000000 x25: 0000000000000000 x24: ffff418c3f985768
+[  109.947729] x23: ffffb0f0207ac768 x22: ffffb0f01f33e1e0 x21: 00000000000002f3
+[  109.954802] x20: ffffb0f01ffdc700 x19: ffffb0f0207ab8b8 x18: 0000000000000000
+[  109.961874] x17: 000000006a7316ce x16: 00000000dee945dd x15: 0000000000000030
+[  109.968947] x14: 0000000000000001 x13: 5d30353064663131 x12: 3478305b20303031
+[  109.976019] x11: 3030303030303078 x10: 0000000000000bc0 x9 : ffffb0f01f350c30
+[  109.983092] x8 : ffff418bc029bce0 x7 : 0000000000000003 x6 : ffffb0f020d0f3a8
+[  109.990164] x5 : ffffb0f020cfd000 x4 : ffff909c1f1d9000 x3 : ffffb0f020d09598
+[  109.997237] x2 : ffffb0f0207ab8c8 x1 : 0000000000000000 x0 : 0000000000000000
+[  110.004311] Call trace:
+[  110.006725]  kvm_vgic_init_cpu_hardware+0x94/0xa0
+[  110.011384]  kvm_arch_hardware_enable+0x38/0x70
+[  110.015867]  __hardware_enable+0x2c/0x80
+[  110.019748]  kvm_arch_online_cpu+0x4c/0x5c
+[  110.023802]  kvm_online_cpu+0x40/0x60
+[  110.027424]  cpuhp_invoke_callback+0x16c/0x5b0
+[  110.031823]  cpuhp_thread_fun+0xdc/0x194
+[  110.035704]  smpboot_thread_fn+0x244/0x270
+[  110.039758]  kthread+0xf8/0x100
+[  110.042864]  ret_from_fork+0x10/0x20
+[  110.046406] Code: 17fffff2 d53b4221 12190020 35fffc40 (d4210000) 
+[  110.052440] ---[ end trace 0000000000000000 ]---
+[  110.057009] note: cpuhp/1[18] exited with preempt_count 1
+[  110.062537] ------------[ cut here ]------------
+[  110.066932] WARNING: CPU: 1 PID: 0 at kernel/context_tracking.c:128 ct_kernel_exit.constprop.0+0x98/0xa0
+[  110.076330] Modules linked in: macvtap(E) macvlan(E) tap(E) nls_ascii(E) nls_cp437(E) vfat(E) fat(E) hci_uart(E) btqca(E) btrtl(E) aes_ce_blk(E) btbcm(E) btintel(E) aes_ce_cipher(E) ghash_ce(E) gf128mul(E) sha2_ce(E) sha256_arm64(E) bluetooth(E) sha1_ce(E) meson_saradc(E) panfrost(E) ecdh_generic(E) ecc(E) gpu_sched(E) rfkill(E) drm_shmem_helper(E) industrialio(E) meson_drm(E) meson_rng(E) rng_core(E) meson_dw_hdmi(E) dw_hdmi(E) drm_display_helper(E) meson_canvas(E) cec(E) display_connector(E) drm_cma_helper(E) pwm_meson(E) efi_pstore(E) drm_kms_helper(E) leds_gpio(E) cpufreq_dt(E) fuse(E) drm(E) configfs(E) efivarfs(E) ip_tables(E) x_tables(E) autofs4(E) xhci_plat_hcd(E) meson_gxl(E) realtek(E) dwmac_generic(E) dwc3(E) dwc2(E) ulpi(E) udc_core(E) rtc_hym8563(E) nvme(E) dwmac_meson8b(E) stmmac_platform(E) nvme_core(E) t10_pi(E) mdio_mux_meson_g12a(E) dwc3_meson_g12a(E) i2c_meson(E) mdio_mux(E) meson_gx_mmc(E) stmmac(E) pcs_xpcs(E) phylink(E) of_mdio(E) crc64_rocksoft(E) crc64(E)
+[  110.076588]  fixed_phy(E) fwnode_mdio(E) libphy(E) pwm_regulator(E)
+[  110.168618] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G      D W   E      6.0.0-rc4-00024-g202b793c12e7 #125
+[  110.178103] Hardware name:  , BIOS 2021.01-rc2-00012-gde865f7ee1 11/16/2020
+[  110.185005] pstate: 204003c9 (nzCv DAIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  110.191904] pc : ct_kernel_exit.constprop.0+0x98/0xa0
+[  110.196906] lr : ct_idle_enter+0x10/0x20
+[  110.200787] sp : ffff8000080abda0
+[  110.204064] x29: ffff8000080abda0 x28: 0000000000000000 x27: 0000000000000000
+[  110.211137] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+[  110.218209] x23: 0000000000000000 x22: ffff909c1f1d9000 x21: ffff418bc029d140
+[  110.225281] x20: ffffb0f0207aa008 x19: ffff418c3f992b78 x18: 0000000000000001
+[  110.232354] x17: 3030303030303030 x16: 3030303030303020 x15: 0000000000000030
+[  110.239426] x14: 0000000000000012 x13: 0000000000000000 x12: 0000000000000000
+[  110.246499] x11: ffff418bc0449e60 x10: 0000000000000bc0 x9 : ffffb0f01f3eb3c0
+[  110.253572] x8 : ffff418bc029dd60 x7 : 0000000000000025 x6 : 00000000ac17d5b7
+[  110.260644] x5 : 00ffffffffffffff x4 : 4000000000000002 x3 : ffff8000080abda0
+[  110.267716] x2 : 4000000000000000 x1 : ffffb0f0207b9b78 x0 : ffffb0f0207b9b78
+[  110.274790] Call trace:
+[  110.277205]  ct_kernel_exit.constprop.0+0x98/0xa0
+[  110.281863]  ct_idle_enter+0x10/0x20
+[  110.285398]  default_idle_call+0x58/0x198
+[  110.289366]  cpuidle_idle_call+0x170/0x1c0
+[  110.293420]  do_idle+0xb4/0x110
+[  110.296525]  cpu_startup_entry+0x30/0x40
+[  110.300405]  secondary_start_kernel+0xf0/0x144
+[  110.304805]  __secondary_switched+0xb0/0xb4
+[  110.308946] ---[ end trace 0000000000000000 ]---
+
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,124 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B235AD101
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6D05AD0FB
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Sep 2022 13:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237258AbiIEK5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 06:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
+        id S237934AbiIEK6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 06:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbiIEK5j (ORCPT
+        with ESMTP id S237864AbiIEK6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 06:57:39 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D1A4363A;
-        Mon,  5 Sep 2022 03:57:38 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id cr9so5845617qtb.13;
-        Mon, 05 Sep 2022 03:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=SceFooGsQvk4/DBXpk/M7nv2E1Tqfm+MkuaSRZ3qev8=;
-        b=QgN1fKt4DP2kb7sAiv+5KFok8U8dxv0x5611ZTop3HKEETihbtz9RufJ5RUJvT6oy3
-         NsDYXvFgWk/79gT0t031cWuTJ9+0anNKT0/QMVUymrmw27VD2+Q9Fvf/a4F1TUNnaeSG
-         rqxNiZxP2226FfdS2mZJiVeLEcQ2F7NOQTCivGpJw3EJafbSCKZtnmajkVfO//JmwESc
-         OQ+A5m2uZ9uWB9V0ddapJ9/fH/JlBtRhD0Pv/BF1sgrOUoMmJeKFvXNsijHb3izSghCC
-         dWQbrWPcWtAWtUFpsLJaj3WsvtsNYlDXfe5EMqd/eXC/8JZqf2A/mHdQZ+FdhXMyXOQX
-         cbsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=SceFooGsQvk4/DBXpk/M7nv2E1Tqfm+MkuaSRZ3qev8=;
-        b=GDkYK206D1NTUpXQXPtAGeJT8YJxC8XI6e4VXWkPrLsdM7NAmOA+B4fB/IODN1qCL0
-         dGgFnuI+ru876fJ5/pZot4/4yLeZHYbsvLI3/wZuojabqf6F93xkGnMWtHr0HBxB/Mr3
-         fHUrHHpMyfpgzi+ywxaJz94cFtHrOBE6bsJ70lXPY4g2kZcUotLA7DfzF1LgqzDXR009
-         lrFxBLOCmZOhlZABZGIwd/Yb5bTzcfUnuAae78pBHgRGT2wiAs951Nb608R8pjxrrPMs
-         ABedwI5QV+uLe9OiVoIB8vKI4aWrVkJHTV4RLjB+C2B1dEseBci9hPSyCDzat2OJSgUO
-         hfYQ==
-X-Gm-Message-State: ACgBeo0MNNxdvkE4hxd06zN6DTKQplCyvb/710rPR4rFFlmH6gdfTjJc
-        tgnS+lUR3HUvrKYmundjxarRpnQ94iQo8gQiglA=
-X-Google-Smtp-Source: AA6agR60W0s2Xg2TAEJ7W+zD52eGjGAMZEZ33WklScUG5wc6dHREuBxFFHnQsCibmN0jWps5VKuSjG68kRfEhV6Vu4I=
-X-Received: by 2002:a05:622a:40a:b0:343:77ba:727f with SMTP id
- n10-20020a05622a040a00b0034377ba727fmr39279991qtx.481.1662375457185; Mon, 05
- Sep 2022 03:57:37 -0700 (PDT)
+        Mon, 5 Sep 2022 06:58:01 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E960A57541
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 03:58:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5D3005F7F3;
+        Mon,  5 Sep 2022 10:57:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662375479; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2H00c0/BXWo+WWiT/xWuj//ItLop5u+QtC70MjUaVLw=;
+        b=vp4NkvRVNaoqAxpTTqrGyvn4ycNyy6VCOu3PWpshLSgJVYO8Dgpq2iYYABBQDd1+CUVNj8
+        6PdvvwSsliaSaXL9moLuw1r5+g6J2EbQfnWRF8DK8xB+TsuDJdI4EjC+Tx1bdRGmwJWY9K
+        llkIwTsLXlJT78+gUdjUkHJFbsI/+P4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662375479;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2H00c0/BXWo+WWiT/xWuj//ItLop5u+QtC70MjUaVLw=;
+        b=Gahc9kcUdi0xAqJ6Uk0w8zlIZssdta0zvr1MLLlzAHnI9W5qkAKT2qA0v8t7S6qzDbt3Z9
+        oxFzt/w9KvS0zZDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 42FCE139C7;
+        Mon,  5 Sep 2022 10:57:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uHaIDzfWFWM5VQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 05 Sep 2022 10:57:59 +0000
+Message-ID: <43e3dead-6089-c342-5050-34d7325bcb24@suse.de>
+Date:   Mon, 5 Sep 2022 12:57:58 +0200
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-2-b29adfb27a6c@gmail.com>
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-2-b29adfb27a6c@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Sep 2022 13:57:01 +0300
-Message-ID: <CAHp75Vc4yfh0JcY0B-vNawHTay5QNuhd7GAm86QZZZvUnQaMzQ@mail.gmail.com>
-Subject: Re: [PATCH v1 02/11] drm/tegra: switch to using devm_fwnode_gpiod_get
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] drm/simpledrm: Drop superfluous primary plane
+ .atomic_check return logic
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+References: <20220831111243.1530620-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220831111243.1530620-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------eH0JlHo9LqVVTwAfaxMgH0hW"
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> I would like to limit (or maybe even remove) use of
-> [devm_]gpiod_get_from_of_node in drivers so that gpiolib can be cleaned
-> a bit, so let's switch to the generic device property API.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------eH0JlHo9LqVVTwAfaxMgH0hW
+Content-Type: multipart/mixed; boundary="------------yZ9kezxGfEZhlpsxCe0SkGlO";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+ dri-devel@lists.freedesktop.org
+Message-ID: <43e3dead-6089-c342-5050-34d7325bcb24@suse.de>
+Subject: Re: [PATCH] drm/simpledrm: Drop superfluous primary plane
+ .atomic_check return logic
+References: <20220831111243.1530620-1-javierm@redhat.com>
+In-Reply-To: <20220831111243.1530620-1-javierm@redhat.com>
 
-> It may even
-> help with handling secondary fwnodes when gpiolib is taught to handle
-> gpios described by swnodes.
+--------------yZ9kezxGfEZhlpsxCe0SkGlO
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I would remove this sentence from all commit messages since it's a
-debatable thing and might even not happen, so the above is a pure
-speculation.
+SGkgSmF2aWVyDQoNCkFtIDMxLjA4LjIyIHVtIDEzOjEyIHNjaHJpZWIgSmF2aWVyIE1hcnRp
+bmV6IENhbmlsbGFzOg0KPiBUaGUgc2ltcGxlZHJtX3ByaW1hcnlfcGxhbmVfaGVscGVyX2F0
+b21pY19jaGVjaygpIGZ1bmN0aW9uIGlzIG1vcmUgY29tcGxleA0KPiB0aGFuIG5lZWRlZC4g
+SXQgZmlyc3QgY2hlY2tzIGRybV9hdG9taWNfaGVscGVyX2NoZWNrX3BsYW5lX3N0YXRlKCkg
+cmV0dXJucw0KPiB2YWx1ZSB0byBkZWNpZGUgd2hldGhlciB0byByZXR1cm4gdGhpcyBvciB6
+ZXJvLg0KPiANCj4gQnV0IGl0IGNvdWxkIGp1c3QgcmV0dXJuIHRoYXQgZnVuY3Rpb24gcmV0
+dXJuIHZhbHVlIGRpcmVjdGx5LiBJdCBhbHNvIGRvZXMNCj4gYSBjaGVjayBpZiBuZXdfcGxh
+bmVfc3RhdGUtPnZpc2libGUgaXNuJ3Qgc2V0LCBidXQgcmV0dXJucyB6ZXJvIHJlZ2FyZGxl
+c3MuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGph
+dmllcm1AcmVkaGF0LmNvbT4NCj4gLS0tDQo+IA0KPiAgIGRyaXZlcnMvZ3B1L2RybS90aW55
+L3NpbXBsZWRybS5jIHwgMTUgKysrKy0tLS0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQs
+IDQgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9ncHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMgYi9kcml2ZXJzL2dwdS9kcm0vdGlu
+eS9zaW1wbGVkcm0uYw0KPiBpbmRleCBhODFmOTE4MTQ1OTUuLjBiZTQ3ZjQwMjQ3YSAxMDA2
+NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMNCj4gKysrIGIv
+ZHJpdmVycy9ncHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMNCj4gQEAgLTQ4NSwyMSArNDg1LDE0
+IEBAIHN0YXRpYyBpbnQgc2ltcGxlZHJtX3ByaW1hcnlfcGxhbmVfaGVscGVyX2F0b21pY19j
+aGVjayhzdHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSwNCj4gICAJc3RydWN0IGRybV9wbGFuZV9z
+dGF0ZSAqbmV3X3BsYW5lX3N0YXRlID0gZHJtX2F0b21pY19nZXRfbmV3X3BsYW5lX3N0YXRl
+KG5ld19zdGF0ZSwgcGxhbmUpOw0KPiAgIAlzdHJ1Y3QgZHJtX2NydGMgKm5ld19jcnRjID0g
+bmV3X3BsYW5lX3N0YXRlLT5jcnRjOw0KPiAgIAlzdHJ1Y3QgZHJtX2NydGNfc3RhdGUgKm5l
+d19jcnRjX3N0YXRlID0gTlVMTDsNCj4gLQlpbnQgcmV0Ow0KPiAgIA0KPiAgIAlpZiAobmV3
+X2NydGMpDQo+ICAgCQluZXdfY3J0Y19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19jcnRj
+X3N0YXRlKG5ld19zdGF0ZSwgbmV3X2NydGMpOw0KPiAgIA0KPiAtCXJldCA9IGRybV9hdG9t
+aWNfaGVscGVyX2NoZWNrX3BsYW5lX3N0YXRlKG5ld19wbGFuZV9zdGF0ZSwgbmV3X2NydGNf
+c3RhdGUsDQo+IC0JCQkJCQkgIERSTV9QTEFORV9OT19TQ0FMSU5HLA0KPiAtCQkJCQkJICBE
+Uk1fUExBTkVfTk9fU0NBTElORywNCj4gLQkJCQkJCSAgZmFsc2UsIGZhbHNlKTsNCj4gLQlp
+ZiAocmV0KQ0KPiAtCQlyZXR1cm4gcmV0Ow0KPiAtCWVsc2UgaWYgKCFuZXdfcGxhbmVfc3Rh
+dGUtPnZpc2libGUpDQo+IC0JCXJldHVybiAwOw0KPiAtDQo+IC0JcmV0dXJuIDA7DQo+ICsJ
+cmV0dXJuIGRybV9hdG9taWNfaGVscGVyX2NoZWNrX3BsYW5lX3N0YXRlKG5ld19wbGFuZV9z
+dGF0ZSwgbmV3X2NydGNfc3RhdGUsDQo+ICsJCQkJCQkgICBEUk1fUExBTkVfTk9fU0NBTElO
+RywNCj4gKwkJCQkJCSAgIERSTV9QTEFORV9OT19TQ0FMSU5HLA0KPiArCQkJCQkJICAgZmFs
+c2UsIGZhbHNlKTsNCg0KSSdtIHVuZGVjaWRlZCBvbiB0aGlzIGNoYW5nZS4gSSBrbm93IGl0
+J3MgY29ycmVjdCBhbmQgbW9yZSB0byB0aGUgcG9pbnQuIA0KQnV0IHRoZSBjYWxsJ3MgbG9n
+aWMgaXMgbm9uLWludHVpdGl2ZTogdGhlIGNhbGwgZWl0aGVyIHJldHVybnMgYW4gZXJyb3Ig
+DQpvciB3ZSBoYXZlIHRvIHRlc3QgLT52aXNpYmxlIGFmdGVyd2FyZHMuIFNvIEkgd3JvdGUg
+aXQgZXhwbGljaXRseS4NCg0KSSBzYXcgdGhhdCB5b3VyIGNoYW5nZSB0byBzc2QxMzB4IGFs
+c28gdXNlcyB0aGUgcGF0dGVybi4gSWYgd2UgZmluZCBtb3JlIA0Kc3VjaCBkcml2ZXJzLCB3
+ZSBjb3VsZCBpbXBsZW1lbnQgdGhlIGF0b21pYyBjaGVjayBhcyBhIGhlbHBlci4gSSBzdWdn
+ZXN0IA0KZHJtX3BsYW5lX2hlbHBlcl9hdG9taWNfY2hlY2tfZml4ZWQoKSBpbiBkcm1fcGxh
+bmVfaGVscGVyLmMNCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiAgIH0NCj4gICANCj4g
+ICBzdGF0aWMgdm9pZCBzaW1wbGVkcm1fcHJpbWFyeV9wbGFuZV9oZWxwZXJfYXRvbWljX3Vw
+ZGF0ZShzdHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSwNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFu
+bg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMg
+R2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkN
+CihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90
+ZXYNCg==
 
+--------------yZ9kezxGfEZhlpsxCe0SkGlO--
 
--- 
-With Best Regards,
-Andy Shevchenko
+--------------eH0JlHo9LqVVTwAfaxMgH0hW
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMV1jYFAwAAAAAACgkQlh/E3EQov+Ad
+yA//WNTxjCFksNK0MN68U6VkpWnZD/mFgLYhCrga1PqE6p8sc0pSL12ll4SO5im51Ym/pCrWhN8J
+D6hhWnFmuV717A/jDgb0G6Hqfqj8I/jAHTWvjr2ZjuhGzfjt1EybdEv2FRLoUMCaA9gZGOI5U94p
+n31dDxSBmxRzbc8Rf3Alevl/dRdzRy8SBs7hQMKiAuUq82SHhG+cCKIT+9HipZyVpABnQM1BualE
+pyQyXeXLvUDpYufwuER0sxaVAhNK0MAU1wClMsdFJILfQsT83fFCKbEuTu46ylJZ1XZSUcpVkDZm
+Rw2yi9N8ut+GKSwBE2jrGW7NQ0H1NbgTEFIMC5av6yoUL+Knvda+PyqdwUOryd3vhGFm70ZnwZZp
+ASbPUJFaluaYEWg4x0dZ4RuTrU0G6W3wVOjr+MrCqR5BrZeFfK22OAXqLXJqLYi63D/s7F7jYSrk
+kCiTXeZcCltGeLDZ3qAnQkg/Sh7AnNf0Cw8Q2dC+bmSWJs8BSgK3V9gzDmKxZqX6aabQnL5X9Ru7
+9TV4HedxKUpfO6nNRcekIkIiRvj2l94cT/HwAF9kIaH2yr1LJf/KnJPFfdchKSoEgz6pftRt5P4O
+I5vK568hhckA+MsI0pO8nsWXGQxZlwIRPq5yj+y9KEad342cTtkydHFhFYwfdJN26fFzQgmFI3sH
+1k4=
+=1QSj
+-----END PGP SIGNATURE-----
+
+--------------eH0JlHo9LqVVTwAfaxMgH0hW--

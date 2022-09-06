@@ -2,95 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641E95AF1DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8F05AF1ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbiIFRHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S234529AbiIFRHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237503AbiIFRGw (ORCPT
+        with ESMTP id S233777AbiIFRG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:06:52 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54C36331;
-        Tue,  6 Sep 2022 09:54:26 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id h21so8511615qta.3;
-        Tue, 06 Sep 2022 09:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=8dbQyHCu1yUG6MqKf6B5J5Y+kikYmzozJcdzAh5pp2w=;
-        b=cLHLdu+WtHynjewHz0ueniqEkBOxx5LzyOOHVoJZC46st+tZlVLBRoYscklBmI8eCs
-         c/JOSkqFSCHfW86Ezs3gNEBXpYNosUZxJPBYYa8VgWB5wSTJoW3qejCT0cwycWVRTSzv
-         sU6cbLf33tWEE7KKiWJDIKmzxoZDZ8sRRA0aTSZ6UIy6yznqthw4EDkMaYDVxMnn+bfJ
-         Uyku3ZVtn6IXzIUWHG1q6A+42Ogm6huI7sV8JG2FKijEzU2QhqYDr444nZ83SD+lmGIP
-         bz2cSms2yk2cyk8R2IfYHVr0WODoJLMo2HrVC0CqAF45umIv5ebCzhcWPbdRzquRHRgw
-         3eKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8dbQyHCu1yUG6MqKf6B5J5Y+kikYmzozJcdzAh5pp2w=;
-        b=XaAxHgd7RtjMpB0/zGRHAhiZEz38i+Br6PPB88KoSWwvlzMfhQ510JaaQhNoDoCpKo
-         ojku8nJHFfcOqOPJ4o5RqoMzvCMoSjb+XUJhnAEiXLU+09ea4yIb6Kv8DoDLcWH2OUM7
-         Y0If0SXG0g4XmI5eAeuhug/9fTDRR8JKlQuBGeKIqDTyexIy9VQaLg0a9wTxIHqb1KQA
-         CSu2+ClBuzzCgbtJi3gHB0uhCps7XFT/RwCoR1M6FPKruHKqnz4Tr7Dl3A27qOHhb/sQ
-         611fcvprNsvk9SymorrrjDtoig5Mqb14Tos/panYQms+69muGCLltUujVIOPAE5ervG4
-         GVPA==
-X-Gm-Message-State: ACgBeo3hLacF8rftUVLnV63lr2QdY/xGUt/zp7BnmkkpDUTDkJkH8qMN
-        gvoO01U4ORLyMGXBAO+KF/uwyESMlA4=
-X-Google-Smtp-Source: AA6agR7nBGTeGL6Qh93WBhMzS8BOzmYFh7FXALUJYIuP+oVOC1Mg+INd2OiY6nC9eNvuMSZD+s62rg==
-X-Received: by 2002:ac8:7f45:0:b0:343:70a2:ecb4 with SMTP id g5-20020ac87f45000000b0034370a2ecb4mr45380049qtk.553.1662483263775;
-        Tue, 06 Sep 2022 09:54:23 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id 21-20020ac85915000000b00338ae1f5421sm10872491qty.0.2022.09.06.09.54.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 09:54:23 -0700 (PDT)
-Message-ID: <d6e2e857-9e3b-3d26-a444-559668a50bc8@gmail.com>
-Date:   Tue, 6 Sep 2022 09:54:22 -0700
+        Tue, 6 Sep 2022 13:06:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0E4186F7;
+        Tue,  6 Sep 2022 09:54:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25ECE615D3;
+        Tue,  6 Sep 2022 16:54:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C67EC43148;
+        Tue,  6 Sep 2022 16:54:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662483279;
+        bh=dlrLPJ9VW2sLiclVTeLOaDTCcrNnK0V5SGX9NqEZ+bQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mSScNXV5eNPo8Q03hxNBF1E7GxbLAdR4dQrRxWkLjglRTK1xh+T/4rqOjmigwjTY8
+         gqSPY7pxM2Ggi0f2szfwrD3iVoWzDhGiGopM1Z0DZ7FgzkuBRRMu/ufwHNQr3lGO7j
+         /bkDMZKGzDzt/B1TAdERWfCMAbQS3UYGOsU/xKBZKEhubggqoxorkrPeHBQQKTlyPd
+         npaAXKqlrsRd5G9PKa1D94x4RQ6LtShUNfs0BPs3MrpeW0KfYSXtMfF21voGUHmoTV
+         bKiCT3FrX8wBWHqftjbcK61d54GS/r0D9M9Z3nC68WpMODqU0FdeTJ6FFOtAEjC9Ln
+         IDwSJC/VY+Big==
+Received: by mail-lf1-f53.google.com with SMTP id bq23so18315491lfb.7;
+        Tue, 06 Sep 2022 09:54:39 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2h9Bjy83Bq1Js+bL7jx7EklI+g3ln/wafF3nQTFGWnb+vMEse0
+        6DomiANrPTYqE2KRWiAj2OB5aIptzKDCQiXg4OM=
+X-Google-Smtp-Source: AA6agR4ZsAa0US91WfUU+IaEHtFS7q8sGZYyOWOHOoq1tpEGuakqhXudOy2kGnEsGzQpN8MaarQDnosu8Aj4ieKBKDQ=
+X-Received: by 2002:a05:6512:2294:b0:494:8dc5:10af with SMTP id
+ f20-20020a056512229400b004948dc510afmr9295038lfu.426.1662483277282; Tue, 06
+ Sep 2022 09:54:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH linux-next] PCI: iproc: Remove the unneeded result
- variable
-Content-Language: en-US
-To:     cgel.zte@gmail.com, lpieralisi@kernel.org
-Cc:     robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220906071636.336853-1-ye.xingchen@zte.com.cn>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220906071636.336853-1-ye.xingchen@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220806163255.10404-1-markuss.broks@gmail.com>
+In-Reply-To: <20220806163255.10404-1-markuss.broks@gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 6 Sep 2022 18:54:26 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHWWciFcO-ub4U4MB1VDifD_=bxiTVaTcBjTvYXzVTkgQ@mail.gmail.com>
+Message-ID: <CAMj1kXHWWciFcO-ub4U4MB1VDifD_=bxiTVaTcBjTvYXzVTkgQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Add generic framebuffer support to EFI earlycon driver
+To:     Markuss Broks <markuss.broks@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tony Lindgren <tony@atomide.com>, linux-doc@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 6 Aug 2022 at 18:34, Markuss Broks <markuss.broks@gmail.com> wrote:
+>
+> Make the EFI earlycon driver be suitable for any linear framebuffers.
+> This should be helpful for early porting of boards with no other means of
+> output, like smartphones/tablets. There seems to be an issue with early_ioremap
+> function on ARM32, but I am unable to find the exact cause. It appears the mappings
+> returned by it are somehow incorrect, thus the driver is disabled on ARM. EFI early
+> console was disabled on IA64 previously because of missing early_memremap_prot,
+> and this is inherited to this driver.
+>
+> This patch also changes behavior on EFI systems, by selecting the mapping type
+> based on if the framebuffer region intersects with system RAM. If it does, it's
+> common sense that it should be in RAM as a whole, and so the system RAM mapping is
+> used. It was tested to be working on my PC (Intel Z490 platform), as well as several
+> ARM64 boards (Samsung Galaxy S9 (Exynos), iPad Air 2, Xiaomi Mi Pad 4, ...).
+>
+> Markuss Broks (2):
+>   drivers: serial: earlycon: Pass device-tree node
+>   efi: earlycon: Add support for generic framebuffers and move to fbdev
+>     subsystem
+>
+>
+> v1 -> v2:
+>
+> - a new patch correcting serial/earlycon.c argument name to "offset" instead
+>   of "node"
+> - move IA64 exclusion from EFI earlycon Kconfig to earlycon driver Kconfig
+>   (IA64 has no early_memremap_prot)
+> - move driver from fbdev to console subsystem
+> - select EFI earlycon by default
 
+Wasn't EFI earlycon already enabled by default?
 
-On 9/6/2022 12:16 AM, cgel.zte@gmail.com wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Return the value iproc_pcie_setup_ib() directly instead of storing it in
-> another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> - fetch stride manually from device-tree, as on some devices it seems stride
+>   doesn't match the horizontal resolution * bpp.
+> - use saner format (e.g. 1920x1080x32 instead of 1920,1080,32).
+>
+>  .../admin-guide/kernel-parameters.txt         |  12 +-
+>  MAINTAINERS                                   |   5 +
+>  drivers/firmware/efi/Kconfig                  |   6 +-
+>  drivers/firmware/efi/Makefile                 |   1 -
+>  drivers/firmware/efi/earlycon.c               | 246 --------------
+>  drivers/tty/serial/earlycon.c                 |   3 +
+>  drivers/video/fbdev/Kconfig                   |  11 +
+>  drivers/video/fbdev/Makefile                  |   1 +
+>  drivers/video/fbdev/earlycon.c                | 301 ++++++++++++++++++
+>  include/linux/serial_core.h                   |   1 +
+>  10 files changed, 331 insertions(+), 256 deletions(-)
+>  delete mode 100644 drivers/firmware/efi/earlycon.c
+>  create mode 100644 drivers/video/fbdev/earlycon.c
+>
+> --
+> 2.37.0
+>

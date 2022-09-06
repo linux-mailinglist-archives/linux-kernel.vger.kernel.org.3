@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EDF55AEAF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461375AEA85
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238880AbiIFNu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S238962AbiIFNvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238798AbiIFNso (ORCPT
+        with ESMTP id S238953AbiIFNsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:48:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3240C305;
-        Tue,  6 Sep 2022 06:39:23 -0700 (PDT)
+        Tue, 6 Sep 2022 09:48:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606DAE29;
+        Tue,  6 Sep 2022 06:39:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B2EC61512;
-        Tue,  6 Sep 2022 13:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 391C6C433C1;
-        Tue,  6 Sep 2022 13:38:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D2B9B81636;
+        Tue,  6 Sep 2022 13:38:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 187D3C433C1;
+        Tue,  6 Sep 2022 13:38:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471523;
-        bh=d26EVLVrHPX12agKoCugH6EPQD71Fn7V1IhijrMbiFE=;
+        s=korg; t=1662471526;
+        bh=EEkfio4F+FBhnwD246mpIC89DDxuLpXQr24hAmgWR1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZkeQwM2WfpqSjYQVhCwgTwlda8yImCcaxLIW+bhFvseP7+OtwYf8bluqgEIii1SCN
-         7KIbMwJw2klocBpJp9LsXvucxZ2Ujwg07FQ4e3ksQt1VL2ECHyeTqY9hSnMohoUaLT
-         RI+yyHo1w++A7ux4fyyELvyP8dWL7silyVZJQngs=
+        b=vPjjlNWMmhQV5ucSTzkhcG62CTDVU6bWQqWLEzlcMSc8q/S0oqAC/qy+VQZ02y5FF
+         1T81eUKe5k5vq0Iwl4eEwIXcuTUlXti6y0RZ14UEjQ2+aafadaNvxxEDh+YUBYZd8m
+         loMM6uwhQ8m9XWEt9dvv8xVvKhijx+4lAS5mY4nQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 055/107] clk: bcm: rpi: Fix error handling of raspberrypi_fw_get_rate
-Date:   Tue,  6 Sep 2022 15:30:36 +0200
-Message-Id: <20220906132824.162228810@linuxfoundation.org>
+Subject: [PATCH 5.15 056/107] clk: bcm: rpi: Use correct order for the parameters of devm_kcalloc()
+Date:   Tue,  6 Sep 2022 15:30:37 +0200
+Message-Id: <20220906132824.202555298@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
 References: <20220906132821.713989422@linuxfoundation.org>
@@ -56,19 +56,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Wahren <stefan.wahren@i2se.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 35f73cca1cecda0c1f8bb7d8be4ce5cd2d46ae8c ]
+[ Upstream commit b7fa6242f3e035308a76284560e4f918dad9b017 ]
 
-The function raspberrypi_fw_get_rate (e.g. used for the recalc_rate
-hook) can fail to get the clock rate from the firmware. In this case
-we cannot return a signed error value, which would be casted to
-unsigned long. Fix this by returning 0 instead.
+We should have 'n', then 'size', not the opposite.
+This is harmless because the 2 values are just multiplied, but having
+the correct order silence a (unpublished yet) smatch warning.
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Link: https://lore.kernel.org/r/20220625083643.4012-1-stefan.wahren@i2se.com
-Fixes: 4e85e535e6cc ("clk: bcm283x: add driver interfacing with Raspberry Pi's firmware")
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/49d726d11964ca0e3757bdb5659e3b3eaa1572b5.1653081643.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
@@ -76,18 +73,18 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
-index dd3b71eafabf3..fda78a2f9ac50 100644
+index fda78a2f9ac50..97612860ce0e1 100644
 --- a/drivers/clk/bcm/clk-raspberrypi.c
 +++ b/drivers/clk/bcm/clk-raspberrypi.c
-@@ -139,7 +139,7 @@ static unsigned long raspberrypi_fw_get_rate(struct clk_hw *hw,
- 	ret = raspberrypi_clock_property(rpi->firmware, data,
- 					 RPI_FIRMWARE_GET_CLOCK_RATE, &val);
- 	if (ret)
--		return ret;
-+		return 0;
+@@ -252,7 +252,7 @@ static int raspberrypi_discover_clocks(struct raspberrypi_clk *rpi,
+ 	int ret;
  
- 	return val;
- }
+ 	clks = devm_kcalloc(rpi->dev,
+-			    sizeof(*clks), RPI_FIRMWARE_NUM_CLK_ID,
++			    RPI_FIRMWARE_NUM_CLK_ID, sizeof(*clks),
+ 			    GFP_KERNEL);
+ 	if (!clks)
+ 		return -ENOMEM;
 -- 
 2.35.1
 

@@ -2,294 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D222F5AF405
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5725AF40C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiIFTBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 15:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        id S229770AbiIFTCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 15:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIFTBC (ORCPT
+        with ESMTP id S229674AbiIFTBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 15:01:02 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B7383F39
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:00:59 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id r141so9708548iod.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:00:59 -0700 (PDT)
+        Tue, 6 Sep 2022 15:01:52 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446138B2EC
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:01:49 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c2so12210742plo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=VZWfKkBjgWu+gLzzTMPZReTUPnxocF2s2gADqtxYuc4=;
-        b=IJClkJZA2ci9X9YudNpotHQ2jHP9kri5ddYGJUdBbxArAYAFuAVNpwyi0s3x2GDssE
-         wKlyoqG+UBUO81USH5es0irAMzX6EFRrghUs1JE+MnRT/e+EpqHnfVk4E9YlsCNYKSZR
-         Xl/zBXPiLh9E3zBsrJo+zynSOWH0uE160CEF9eobQTk+DSbznkbFMDIZX6ryEvldAITQ
-         rGd7A4QdHAe65SeKpekqDuZxrEzMMNC8Uh0XEMVhqGWbIum8wwMgpRB0uFJeatcHhbst
-         7ZYGUBjpSVmToOuJcW+bSV+1ks9AULpHqc28iGBCjEreYwuWq9VPoAmFhemRoaSqPBCN
-         1QYw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=AZu8Usw5qGBv2bCC+wGyzG/1jgo5UGZVkgClI5nAtmY=;
+        b=jldjQaSzVBJgrETu/whlKsfKw96xbVi+rWmVCTjfuP86WuGBAmjqV5OzhTwp9Mt22e
+         a7NK/CEXb+za4jthYO2k1p0jVyue+3A8zL5eNyUfzaaywchWmGHn8xT/3lHE1ESPwHJV
+         zcRchhRgpzpu2K2k0Ssvv7TcGEa6VKB2Qk840pzhdc6VP+VqzMgDi4EGzwK5GIrNcolj
+         gaBCDGB9BQLo1NLPZDic+Q2UgECrSlwCUlU3a8KUKn2Ft8p7zupQLT3uSBQ3wGF/Zpfm
+         VaYJNFaxAA47sLm5wIKQwnbuNZJopF7t7JVlyFKruY8UREgX/A7piwIW1d4bH+Tt5Xo/
+         3t0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=VZWfKkBjgWu+gLzzTMPZReTUPnxocF2s2gADqtxYuc4=;
-        b=Fm9LH+lE8M17LDYYAhTQUONlx26r3syqZyfMdqeJ9YBzaq9TMInhWPP9S8GkDrWsMq
-         rh//VvY6naDEqFKexdXoBzE6e5HNSD5EeLR1gytT1NOVLsly+j51rtM6H5NOibH5u1CC
-         1AOdewFjPk9ZF1Im5rP2UBtSZmheLB32Osg966diCMe9wxU7i8vyq50tSKowWhg+gS0G
-         UQXL05BJ/TYA18e3H3Vg83n9XylFB+vU08rHE851wXU6Dco+6kzvIa++DyUDUqjVJ35o
-         gg2gjUfqeke1lY8i1VkKAS1OomuruoAF71jQqOY7lqFQa1500Bzb5GgA7/hHtWL5u9Ie
-         ekHA==
-X-Gm-Message-State: ACgBeo0urDABpK3HYMt4u/utVfdgsMIxKbjRsNLBsTXle9YeJHX4qONl
-        rlxrINYkDr4ucv14Y4Pb3pZo72EFm7El6zCQy1kLLA==
-X-Google-Smtp-Source: AA6agR7xDh5HT5Y9eMResmshIM/DOvn/mOOq2ia7QJOQf/o2UTiVbl/Ns26hFBPH0Ki7mcr19c0jix+nJSfeWWZE0GE=
-X-Received: by 2002:a6b:2a88:0:b0:68a:e898:2822 with SMTP id
- q130-20020a6b2a88000000b0068ae8982822mr24499577ioq.75.1662490858786; Tue, 06
- Sep 2022 12:00:58 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=AZu8Usw5qGBv2bCC+wGyzG/1jgo5UGZVkgClI5nAtmY=;
+        b=GTAlbjJvcfH5BLlzvW+HImbebR+1Cl0Tninp60soaIDub6Aa29eYsVwX8NfHeMRrEF
+         ZRqTJVCTmmNadEHrvv/fUIOIIIigo4OUyokciDKNNMZmDksstEzsPsxCB28gr8TzMoPd
+         NUkHDxnLaF4mEXUXylCwUrkTU/zkbBoYVO6Ey4CVooRSnAgdRDJNOgtZjGTK0N6pbGHA
+         mxqkW4WhZxzK4q04eeEUWwym+6IYIP1mQlUXTt/cOxGdZFIPvOmQWjzPUqdu8s1eYSbn
+         Fu4GIIBkqo3S2ysNw5q1nTZSA5mqf5evUtIEoKPO1UIITCmpL//K2Enaj7S69IzabhUP
+         iflA==
+X-Gm-Message-State: ACgBeo1IovIBrGWjbDyanKbCQmhYFMBDs8Hk+m0MxUuEd3qPkmJWq9II
+        J59S1H1krkBodX9kgex51oy2y+26DISFI+I1/Ao=
+X-Google-Smtp-Source: AA6agR5O5m4bkA66nDVs0wlihn8Tn+UVeUFnkjlLNTilBW3AnZeEG7oVg0s3bWwf0/1IQQvPDr4JzZ3c1xTQx2duBuc=
+X-Received: by 2002:a17:902:be03:b0:175:6397:9425 with SMTP id
+ r3-20020a170902be0300b0017563979425mr25636541pls.26.1662490909335; Tue, 06
+ Sep 2022 12:01:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-7-surenb@google.com>
- <1624be86-4c17-46e5-fafc-eb8afb7b9b4a@linux.ibm.com>
-In-Reply-To: <1624be86-4c17-46e5-fafc-eb8afb7b9b4a@linux.ibm.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 6 Sep 2022 12:00:47 -0700
-Message-ID: <CAJuCfpFi07ZpAuSLwADGO0mfu2Hon9jWb0hsCytorchQ=cgK3Q@mail.gmail.com>
-Subject: Re: [RFC PATCH RESEND 06/28] mm: mark VMA as locked whenever
- vma->vm_flags are modified
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michel Lespinasse <michel@lespinasse.org>,
-        Jerome Glisse <jglisse@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Laurent Dufour <laurent.dufour@fr.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
-        Hugh Dickins <hughd@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Minchan Kim <minchan@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220901222707.477402-1-shy828301@gmail.com> <e6ad1084-c301-9f11-1fa7-7614bf859aaf@nvidia.com>
+ <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
+In-Reply-To: <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 6 Sep 2022 12:01:36 -0700
+Message-ID: <CAHbLzkq+BKxCyPNgCXhhqeS=12ww+W3XMMSOr5GaQedb_pPLtA@mail.gmail.com>
+Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
+To:     David Hildenbrand <david@redhat.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>, peterx@redhat.com,
+        kirill.shutemov@linux.intel.com, jgg@nvidia.com, hughd@google.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 7:27 AM Laurent Dufour <ldufour@linux.ibm.com> wrote=
-:
+On Mon, Sep 5, 2022 at 12:59 AM David Hildenbrand <david@redhat.com> wrote:
 >
-> Le 01/09/2022 =C3=A0 19:34, Suren Baghdasaryan a =C3=A9crit :
-> > VMA flag modifications should be done under VMA lock to prevent concurr=
-ent
-> > page fault handling in that area.
+> On 05.09.22 00:29, John Hubbard wrote:
+> > On 9/1/22 15:27, Yang Shi wrote:
+> >> Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
+> >> introduce a general RCU get_user_pages_fast()"), a TLB flush is no longer
+> >> sufficient to handle concurrent GUP-fast in all cases, it only handles
+> >> traditional IPI-based GUP-fast correctly.  On architectures that send
+> >> an IPI broadcast on TLB flush, it works as expected.  But on the
+> >> architectures that do not use IPI to broadcast TLB flush, it may have
+> >> the below race:
+> >>
+> >>     CPU A                                          CPU B
+> >> THP collapse                                     fast GUP
+> >>                                                gup_pmd_range() <-- see valid pmd
+> >>                                                    gup_pte_range() <-- work on pte
+> >> pmdp_collapse_flush() <-- clear pmd and flush
+> >> __collapse_huge_page_isolate()
+> >>      check page pinned <-- before GUP bump refcount
+> >>                                                        pin the page
+> >>                                                        check PTE <-- no change
+> >> __collapse_huge_page_copy()
+> >>      copy data to huge page
+> >>      ptep_clear()
+> >> install huge pmd for the huge page
+> >>                                                        return the stale page
+> >> discard the stale page
 > >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  fs/proc/task_mmu.c | 1 +
-> >  fs/userfaultfd.c   | 6 ++++++
-> >  mm/madvise.c       | 1 +
-> >  mm/mlock.c         | 2 ++
-> >  mm/mmap.c          | 1 +
-> >  mm/mprotect.c      | 1 +
-> >  6 files changed, 12 insertions(+)
+> > Hi Yang,
+> >
+> > Thanks for taking the trouble to write down these notes. I always
+> > forget which race we are dealing with, and this is a great help. :)
+> >
+> > More...
+> >
+> >>
+> >> The race could be fixed by checking whether PMD is changed or not after
+> >> taking the page pin in fast GUP, just like what it does for PTE.  If the
+> >> PMD is changed it means there may be parallel THP collapse, so GUP
+> >> should back off.
+> >>
+> >> Also update the stale comment about serializing against fast GUP in
+> >> khugepaged.
+> >>
+> >> Fixes: 2667f50e8b81 ("mm: introduce a general RCU get_user_pages_fast()")
+> >> Signed-off-by: Yang Shi <shy828301@gmail.com>
+> >> ---
+> >>   mm/gup.c        | 30 ++++++++++++++++++++++++------
+> >>   mm/khugepaged.c | 10 ++++++----
+> >>   2 files changed, 30 insertions(+), 10 deletions(-)
+> >>
+> >> diff --git a/mm/gup.c b/mm/gup.c
+> >> index f3fc1f08d90c..4365b2811269 100644
+> >> --- a/mm/gup.c
+> >> +++ b/mm/gup.c
+> >> @@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int *nr, int nr_start,
+> >>   }
+> >>
+> >>   #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
+> >> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
+> >> -                     unsigned int flags, struct page **pages, int *nr)
+> >> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
+> >> +                     unsigned long end, unsigned int flags,
+> >> +                     struct page **pages, int *nr)
+> >>   {
+> >>      struct dev_pagemap *pgmap = NULL;
+> >>      int nr_start = *nr, ret = 0;
+> >> @@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
+> >>                      goto pte_unmap;
+> >>              }
+> >>
+> >> -            if (unlikely(pte_val(pte) != pte_val(*ptep))) {
+> >> +            /*
+> >> +             * THP collapse conceptually does:
+> >> +             *   1. Clear and flush PMD
+> >> +             *   2. Check the base page refcount
+> >> +             *   3. Copy data to huge page
+> >> +             *   4. Clear PTE
+> >> +             *   5. Discard the base page
+> >> +             *
+> >> +             * So fast GUP may race with THP collapse then pin and
+> >> +             * return an old page since TLB flush is no longer sufficient
+> >> +             * to serialize against fast GUP.
+> >> +             *
+> >> +             * Check PMD, if it is changed just back off since it
+> >> +             * means there may be parallel THP collapse.
+> >> +             */
+> >
+> > As I mentioned in the other thread, it would be a nice touch to move
+> > such discussion into the comment header.
+> >
+> >> +            if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
+> >> +                unlikely(pte_val(pte) != pte_val(*ptep))) {
+> >
+> >
+> > That should be READ_ONCE() for the *pmdp and *ptep reads. Because this
+> > whole lockless house of cards may fall apart if we try reading the
+> > page table values without READ_ONCE().
 >
-> There are few changes also done in the driver's space, for instance:
+> I came to the conclusion that the implicit memory barrier when grabbing
+> a reference on the page is sufficient such that we don't need READ_ONCE
+> here.
 >
-> *** arch/x86/kernel/cpu/sgx/driver.c:
-> sgx_mmap[98]                   vma->vm_flags |=3D VM_PFNMAP | VM_DONTEXPA=
-ND |
-> VM_DONTDUMP | VM_IO;
-> *** arch/x86/kernel/cpu/sgx/virt.c:
-> sgx_vepc_mmap[108]             vma->vm_flags |=3D VM_PFNMAP | VM_IO |
-> VM_DONTDUMP | VM_DONTCOPY;
-> *** drivers/dax/device.c:
-> dax_mmap[311]                  vma->vm_flags |=3D VM_HUGEPAGE;
+> If we still intend to change that code, we should fixup all GUP-fast
+> functions in a similar way. But again, I don't think we need a change here.
 >
-> I guess these changes to vm_flags should be protected as well, or to be
-> checked one by one.
+>
+> >> -     * After this gup_fast can't run anymore. This also removes
+> >> -     * any huge TLB entry from the CPU so we won't allow
+> >> -     * huge and small TLB entries for the same virtual address
+> >> -     * to avoid the risk of CPU bugs in that area.
+> >> +     * This removes any huge TLB entry from the CPU so we won't allow
+> >> +     * huge and small TLB entries for the same virtual address to
+> >> +     * avoid the risk of CPU bugs in that area.
+> >> +     *
+> >> +     * Parallel fast GUP is fine since fast GUP will back off when
+> >> +     * it detects PMD is changed.
+> >>       */
+> >>      _pmd = pmdp_collapse_flush(vma, address, pmd);
+> >
+> > To follow up on David Hildenbrand's note about this in the nearby thread...
+> > I'm also not sure if pmdp_collapse_flush() implies a memory barrier on
+> > all arches. It definitely does do an atomic op with a return value on x86,
+> > but that's just one arch.
+> >
+>
+> I think a ptep/pmdp clear + TLB flush really has to imply a memory
+> barrier, otherwise TLB flushing code might easily mess up with
+> surrounding code. But we should better double-check.
+>
+> s390x executes an IDTE instruction, which performs serialization (->
+> memory barrier). arm64 seems to use DSB instructions to enforce memory
+> ordering.
 
-Thanks for noting these! I'll add necessary locking here and will look
-for other places I might have missed.
+IIUC we just need to care about the architectures which support both
+THP and fast-GUP, right? If so I got the below list:
+
+Loongarch - I didn't see explicit memory barrier, but it does IPI
+MIPS - as same as Loongarch
+PowerPC - has memory barrier
+x86 - atomic operations imply memory barrier
+Arm - I didn't see explicit memory barrier, not sure if ARM's tlb
+flush instructions imply memory barrier or not, but it does IPI
+Arm64 - uses DSB as David mentioned
+s390 - executes IDTE as David mentioned
+
+So I think the questionable architectures are Loongarch, MIPS and ARM.
+And IPI is not called if the PMD entry is not present on a remote CPU.
+So they may have race against fast GUP IIUC. But we'd better double
+check with the maintainers.
 
 >
-> >
-> > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > index 4e0023643f8b..ceffa5c2c650 100644
-> > --- a/fs/proc/task_mmu.c
-> > +++ b/fs/proc/task_mmu.c
-> > @@ -1285,6 +1285,7 @@ static ssize_t clear_refs_write(struct file *file=
-, const char __user *buf,
-> >                       for (vma =3D mm->mmap; vma; vma =3D vma->vm_next)=
- {
-> >                               if (!(vma->vm_flags & VM_SOFTDIRTY))
-> >                                       continue;
-> > +                             vma_mark_locked(vma);
-> >                               vma->vm_flags &=3D ~VM_SOFTDIRTY;
-> >                               vma_set_page_prot(vma);
-> >                       }
-> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > index 175de70e3adf..fe557b3d1c07 100644
-> > --- a/fs/userfaultfd.c
-> > +++ b/fs/userfaultfd.c
-> > @@ -620,6 +620,7 @@ static void userfaultfd_event_wait_completion(struc=
-t userfaultfd_ctx *ctx,
-> >               mmap_write_lock(mm);
-> >               for (vma =3D mm->mmap; vma; vma =3D vma->vm_next)
-> >                       if (vma->vm_userfaultfd_ctx.ctx =3D=3D release_ne=
-w_ctx) {
-> > +                             vma_mark_locked(vma);
-> >                               vma->vm_userfaultfd_ctx =3D NULL_VM_UFFD_=
-CTX;
-> >                               vma->vm_flags &=3D ~__VM_UFFD_FLAGS;
-> >                       }
-> > @@ -653,6 +654,7 @@ int dup_userfaultfd(struct vm_area_struct *vma, str=
-uct list_head *fcs)
-> >
-> >       octx =3D vma->vm_userfaultfd_ctx.ctx;
-> >       if (!octx || !(octx->features & UFFD_FEATURE_EVENT_FORK)) {
-> > +             vma_mark_locked(vma);
-> >               vma->vm_userfaultfd_ctx =3D NULL_VM_UFFD_CTX;
-> >               vma->vm_flags &=3D ~__VM_UFFD_FLAGS;
-> >               return 0;
-> > @@ -734,6 +736,7 @@ void mremap_userfaultfd_prep(struct vm_area_struct =
-*vma,
-> >               atomic_inc(&ctx->mmap_changing);
-> >       } else {
-> >               /* Drop uffd context if remap feature not enabled */
-> > +             vma_mark_locked(vma);
-> >               vma->vm_userfaultfd_ctx =3D NULL_VM_UFFD_CTX;
-> >               vma->vm_flags &=3D ~__VM_UFFD_FLAGS;
-> >       }
-> > @@ -891,6 +894,7 @@ static int userfaultfd_release(struct inode *inode,=
- struct file *file)
-> >                       vma =3D prev;
-> >               else
-> >                       prev =3D vma;
-> > +             vma_mark_locked(vma);
-> >               vma->vm_flags =3D new_flags;
-> >               vma->vm_userfaultfd_ctx =3D NULL_VM_UFFD_CTX;
-> >       }
-> > @@ -1449,6 +1453,7 @@ static int userfaultfd_register(struct userfaultf=
-d_ctx *ctx,
-> >                * the next vma was merged into the current one and
-> >                * the current one has not been updated yet.
-> >                */
-> > +             vma_mark_locked(vma);
-> >               vma->vm_flags =3D new_flags;
-> >               vma->vm_userfaultfd_ctx.ctx =3D ctx;
-> >
-> > @@ -1630,6 +1635,7 @@ static int userfaultfd_unregister(struct userfaul=
-tfd_ctx *ctx,
-> >                * the next vma was merged into the current one and
-> >                * the current one has not been updated yet.
-> >                */
-> > +             vma_mark_locked(vma);
-> >               vma->vm_flags =3D new_flags;
-> >               vma->vm_userfaultfd_ctx =3D NULL_VM_UFFD_CTX;
-> >
-> > diff --git a/mm/madvise.c b/mm/madvise.c
-> > index 5f0f0948a50e..a173f0025abd 100644
-> > --- a/mm/madvise.c
-> > +++ b/mm/madvise.c
-> > @@ -181,6 +181,7 @@ static int madvise_update_vma(struct vm_area_struct=
- *vma,
-> >       /*
-> >        * vm_flags is protected by the mmap_lock held in write mode.
-> >        */
-> > +     vma_mark_locked(vma);
-> >       vma->vm_flags =3D new_flags;
-> >       if (!vma->vm_file) {
-> >               error =3D replace_anon_vma_name(vma, anon_name);
-> > diff --git a/mm/mlock.c b/mm/mlock.c
-> > index b14e929084cc..f62e1a4d05f2 100644
-> > --- a/mm/mlock.c
-> > +++ b/mm/mlock.c
-> > @@ -380,6 +380,7 @@ static void mlock_vma_pages_range(struct vm_area_st=
-ruct *vma,
-> >        */
-> >       if (newflags & VM_LOCKED)
-> >               newflags |=3D VM_IO;
-> > +     vma_mark_locked(vma);
-> >       WRITE_ONCE(vma->vm_flags, newflags);
-> >
-> >       lru_add_drain();
-> > @@ -456,6 +457,7 @@ static int mlock_fixup(struct vm_area_struct *vma, =
-struct vm_area_struct **prev,
-> >
-> >       if ((newflags & VM_LOCKED) && (oldflags & VM_LOCKED)) {
-> >               /* No work to do, and mlocking twice would be wrong */
-> > +             vma_mark_locked(vma);
-> >               vma->vm_flags =3D newflags;
-> >       } else {
-> >               mlock_vma_pages_range(vma, start, end, newflags);
-> > diff --git a/mm/mmap.c b/mm/mmap.c
-> > index 693e6776be39..f89c9b058105 100644
-> > --- a/mm/mmap.c
-> > +++ b/mm/mmap.c
-> > @@ -1818,6 +1818,7 @@ unsigned long mmap_region(struct file *file, unsi=
-gned long addr,
-> >  out:
-> >       perf_event_mmap(vma);
-> >
-> > +     vma_mark_locked(vma);
-> >       vm_stat_account(mm, vm_flags, len >> PAGE_SHIFT);
-> >       if (vm_flags & VM_LOCKED) {
-> >               if ((vm_flags & VM_SPECIAL) || vma_is_dax(vma) ||
+> --
+> Thanks,
 >
-> I guess, this doesn't really impact, but the call to vma_mark_locked(vma)
-> may be done only in the case the vm_flags field is touched.
-> Something like this:
->
->         vm_stat_account(mm, vm_flags, len >> PAGE_SHIFT);
->         if (vm_flags & VM_LOCKED) {
->                 if ((vm_flags & VM_SPECIAL) || vma_is_dax(vma) ||
->                                         is_vm_hugetlb_page(vma) ||
-> -                                       vma =3D=3D get_gate_vma(current->=
-mm))
-> +                                       vma =3D=3D get_gate_vma(current->=
-mm)) {
-> +                       vma_mark_locked(vma);
->                         vma->vm_flags &=3D VM_LOCKED_CLEAR_MASK;
-> -               else
-> +               } else
->                         mm->locked_vm +=3D (len >> PAGE_SHIFT);
->         }
->
->
-> > diff --git a/mm/mprotect.c b/mm/mprotect.c
-> > index bc6bddd156ca..df47fc21b0e4 100644
-> > --- a/mm/mprotect.c
-> > +++ b/mm/mprotect.c
-> > @@ -621,6 +621,7 @@ mprotect_fixup(struct mmu_gather *tlb, struct vm_ar=
-ea_struct *vma,
-> >        * vm_flags and vm_page_prot are protected by the mmap_lock
-> >        * held in write mode.
-> >        */
-> > +     vma_mark_locked(vma);
-> >       vma->vm_flags =3D newflags;
-> >       /*
-> >        * We want to check manually if we can change individual PTEs wri=
-table
+> David / dhildenb
 >

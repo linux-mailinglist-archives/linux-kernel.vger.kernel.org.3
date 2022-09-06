@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256A05AE9F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9FD5AEAFE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240814AbiIFNhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S239149AbiIFNxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240736AbiIFNf6 (ORCPT
+        with ESMTP id S239686AbiIFNtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:35:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA327B1F9;
-        Tue,  6 Sep 2022 06:34:14 -0700 (PDT)
+        Tue, 6 Sep 2022 09:49:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749B02A737;
+        Tue,  6 Sep 2022 06:40:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A40AB6154C;
-        Tue,  6 Sep 2022 13:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF47C43141;
-        Tue,  6 Sep 2022 13:34:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4215961548;
+        Tue,  6 Sep 2022 13:39:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D949C433D6;
+        Tue,  6 Sep 2022 13:39:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471253;
-        bh=Unvm6YalzWDic2YXkfOETJ8fzpdBmgnYX4i/izRFHJQ=;
+        s=korg; t=1662471598;
+        bh=15MwJgeHSfXwo35UCPM9zI6FArWH9SUDs8GxNfRMjvQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JpKKCfG9JUmGtnl51Hp/ICa4UwQ34j+Z8XIs1LpZdSk6fKzXNW4l9N3JT7KbOtoTX
-         2RSICcl3HAIow9TuOrqnjJG0lpWwXZw5iCSEES30IJveLxDHsqkrd2yWZ6+wIVL0Jw
-         yo5IVOW4m1mmYfcKAfwZmow1JTrTtsJKb2uiuc0U=
+        b=W4lY0clMPrQCjSVGHTXjixJbfa7KTrux3e/vRdexW6iJQONmHphKmUiXbaph/n3Gd
+         o75MUKbftcRoen/BhJzrZAFyAAimixfxr9MTNb0viS83s7vGQuf7ghRQOgZ+ju8eF4
+         g9XcPd75lx2O5Z3eMQUZbTq7WoPO0s0q2LP/KLbQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         SeongJae Park <sj@kernel.org>,
         =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
         <marmarek@invisiblethingslab.com>
-Subject: [PATCH 5.10 47/80] xen-blkback: Advertise feature-persistent as user requested
-Date:   Tue,  6 Sep 2022 15:30:44 +0200
-Message-Id: <20220906132818.966641001@linuxfoundation.org>
+Subject: [PATCH 5.15 064/107] xen-blkback: Advertise feature-persistent as user requested
+Date:   Tue,  6 Sep 2022 15:30:45 +0200
+Message-Id: <20220906132824.540502433@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
-References: <20220906132816.936069583@linuxfoundation.org>
+In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
+References: <20220906132821.713989422@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -101,7 +101,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  };
 --- a/drivers/block/xen-blkback/xenbus.c
 +++ b/drivers/block/xen-blkback/xenbus.c
-@@ -911,7 +911,7 @@ again:
+@@ -910,7 +910,7 @@ again:
  	xen_blkbk_barrier(xbt, be, be->blkif->vbd.flush_support);
  
  	err = xenbus_printf(xbt, dev->nodename, "feature-persistent", "%u",
@@ -110,7 +110,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	if (err) {
  		xenbus_dev_fatal(dev, err, "writing %s/feature-persistent",
  				 dev->nodename);
-@@ -1089,7 +1089,9 @@ static int connect_ring(struct backend_i
+@@ -1088,7 +1088,9 @@ static int connect_ring(struct backend_i
  		return -ENOSYS;
  	}
  

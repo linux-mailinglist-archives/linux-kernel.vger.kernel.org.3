@@ -2,57 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71ECA5ADE86
+	by mail.lfdr.de (Postfix) with ESMTP id BA7175ADE87
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 06:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbiIFETO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 00:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S232413AbiIFEZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 00:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiIFETM (ORCPT
+        with ESMTP id S229766AbiIFEZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 00:19:12 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF912717C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 21:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662437950; x=1693973950;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=k2YfQ+d0zveQEXwYZuF1QR9LokcOIGHbAE13EXsZB+E=;
-  b=SyNQygu8jxrVFkRWXPKV0maxsS/0GZzbkgRr2lznlTZksblljwQOnjfI
-   56iTCuxY090X8KOoS7Dl1cy7wztx3qr+0e7b7Iv46rTqvVSTcYc3vggre
-   v0Oh+08A2hydXnFlTclBsNPqdn6ofdGdCFPRC+f5qaLFMfCmERxKW+4Xb
-   QSKds5HQEAd1AQXCqZXjf5U40jkvd0fpDSX4y2966tmYq403uypU3AVfa
-   LHI6IWSKKePzF4QGxZtLIwy44HJE9mThXvW4uYXrFMXFO2yLyilqDcXeP
-   CbEBdbRXvf9noCyQ3c1kGFUWsaccvH9t2NHrxEfY5cv481m6jkpto6kNN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="295234205"
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="295234205"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 21:19:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="591115890"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Sep 2022 21:19:08 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVQ3I-0004nd-10;
-        Tue, 06 Sep 2022 04:19:08 +0000
-Date:   Tue, 6 Sep 2022 12:18:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 21/41] timer-clint.c:undefined reference
- to `ipi_mux_create'
-Message-ID: <202209061231.mLdi9QLh-lkp@intel.com>
+        Tue, 6 Sep 2022 00:25:42 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E6A28E0C;
+        Mon,  5 Sep 2022 21:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=KjGpnaOCoiegcftfzU0dj0F2Me4aFhhK3DZjFApXZm8=; b=zb+LxBkfN6fMtDfzMz18/kuVNr
+        IQPwEBNu0xJKIj4at/oCNSMojQGn8qRP1p2xw67S1SQlArvCNhLnuL0nb3s2R1USbaKdgkOiv8dw2
+        +nFlRQHDUB8dW/kgm3sOzjJ/BBsE54SIaE3w99cAkBkceRrYyHaS/uh2CcYSJDqdf7P/0ro+V2bIK
+        jPsoJmiuoYk8DI+TWhZelI9NZ6XqE+rjxG9SEOGFEp2nIZe/tdelTXE67E3SywxdlMB27IzrT1npY
+        vowQYKNIPnF1kzmFkFwxBXq1sIl8a5CSVgZAaQL21lxwGujANqWN0IXy+sQiYb76Usavm9t/CaOAt
+        3qI3RwsA==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVQ9T-005wFF-F0; Tue, 06 Sep 2022 04:25:31 +0000
+Message-ID: <5c2049f2-8bb8-8626-0ed0-433c202227fd@infradead.org>
+Date:   Mon, 5 Sep 2022 21:25:29 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2] fs/nfs/pnfs_nfs.c: fix spelling typo and syntax error
+ in comment
+Content-Language: en-US
+To:     Jiangshan Yi <13667453960@163.com>,
+        trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+References: <20220906024119.424210-1-13667453960@163.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220906024119.424210-1-13667453960@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,30 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   98a7169ff2516ac22eecb21f2267097400d67ea9
-commit: 7a7eae3dbc24b9a2169dc19a742f0e6da65fe69b [21/41] RISC-V: Treat IPIs as normal Linux IRQs
-config: riscv-randconfig-c023-20220905 (https://download.01.org/0day-ci/archive/20220906/202209061231.mLdi9QLh-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/avpatel/linux/commit/7a7eae3dbc24b9a2169dc19a742f0e6da65fe69b
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout 7a7eae3dbc24b9a2169dc19a742f0e6da65fe69b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+On 9/5/22 19:41, Jiangshan Yi wrote:
+> From: Jiangshan Yi <yijiangshan@kylinos.cn>
+> 
+> Fix spelling typo and syntax error in comment.
+> 
+> Suggested-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-   riscv64-linux-ld: drivers/clocksource/timer-clint.o: in function `.L47':
->> timer-clint.c:(.init.text+0x3f4): undefined reference to `ipi_mux_create'
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  fs/nfs/pnfs_nfs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/nfs/pnfs_nfs.c b/fs/nfs/pnfs_nfs.c
+> index 657c242a18ff..987c88ddeaf0 100644
+> --- a/fs/nfs/pnfs_nfs.c
+> +++ b/fs/nfs/pnfs_nfs.c
+> @@ -374,12 +374,12 @@ pnfs_bucket_search_commit_reqs(struct pnfs_commit_bucket *buckets,
+>  	return NULL;
+>  }
+>  
+> -/* pnfs_generic_search_commit_reqs - Search lists in @cinfo for the head reqest
+> +/* pnfs_generic_search_commit_reqs - Search lists in @cinfo for the head request
+>   *				   for @page
+>   * @cinfo - commit info for current inode
+>   * @page - page to search for matching head request
+>   *
+> - * Returns a the head request if one is found, otherwise returns NULL.
+> + * Return: the head request if one is found, otherwise %NULL.
+>   */
+>  struct nfs_page *
+>  pnfs_generic_search_commit_reqs(struct nfs_commit_info *cinfo, struct page *page)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy

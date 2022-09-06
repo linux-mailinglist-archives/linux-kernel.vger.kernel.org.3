@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0785A5AEB8C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862795AECF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240833AbiIFOAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
+        id S241622AbiIFOQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238766AbiIFN4y (ORCPT
+        with ESMTP id S241440AbiIFOND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:56:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79F28284C;
-        Tue,  6 Sep 2022 06:42:15 -0700 (PDT)
+        Tue, 6 Sep 2022 10:13:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351B986B7E;
+        Tue,  6 Sep 2022 06:48:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DDEF61522;
-        Tue,  6 Sep 2022 13:41:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4E8C433D6;
-        Tue,  6 Sep 2022 13:41:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE44861548;
+        Tue,  6 Sep 2022 13:47:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE321C433C1;
+        Tue,  6 Sep 2022 13:47:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471680;
-        bh=WWBpEBgGbLn1OtTd2WHdWdJPMCWZnYiluw2vB4+EhjU=;
+        s=korg; t=1662472079;
+        bh=Gfywe9qxq7daSu4zk1d5hkH3EOrwQyHSFDW+d/FZwBY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZIeuk5ELm5cQvx5JR7AEqODQIKsBGdub/9HqsCyhnKB7AcNwJIR7wJAezvEAA9thD
-         opftjXG43yV1MfJ9vt+ZKWw79sUp/O66JIwHLJWYKxT0Gw+xOGkceGGqoSOeo5oWC8
-         WrEcDtCeBGLTcnBzh3S656o9MtDIdvaL81AlIlu4=
+        b=tMmuPuQz+UyrGtg2FoXZWzp8fajFL4P//gDBbNzD6K0Leyg/mxUiqzwGt6ZDleukd
+         XvOAF9DkC+uCmL5iHcaJ/9eavA1sliqGxZdRSm3mffxqkt4ZhesfRUcLvVj/GBDuF0
+         Jsa4xhvsJbHojdDNMpzMjGtR7T/XFslSweugg1yM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: [PATCH 5.15 099/107] drm/i915: Skip wm/ddb readout for disabled pipes
-Date:   Tue,  6 Sep 2022 15:31:20 +0200
-Message-Id: <20220906132826.037779606@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Jing Leng <jleng@ambarella.com>,
+        Jack Pham <quic_jackp@quicinc.com>
+Subject: [PATCH 5.19 133/155] usb: gadget: f_uac2: fix superspeed transfer
+Date:   Tue,  6 Sep 2022 15:31:21 +0200
+Message-Id: <20220906132835.085790305@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
+References: <20220906132829.417117002@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,54 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+From: Jing Leng <jleng@ambarella.com>
 
-commit 0211c2a0ea600e25db3044daaeff4fe41c3ed6d9 upstream.
+commit f511aef2ebe5377d4c263842f2e0c0b8e274e8e5 upstream.
 
-The stuff programmed into the wm/ddb registers of planes
-on disabled pipes doesn't matter. So during readout just
-leave our software state tracking for those zeroed.
+On page 362 of the USB3.2 specification (
+https://usb.org/sites/default/files/usb_32_20210125.zip),
+The 'SuperSpeed Endpoint Companion Descriptor' shall only be returned
+by Enhanced SuperSpeed devices that are operating at Gen X speed.
+Each endpoint described in an interface is followed by a 'SuperSpeed
+Endpoint Companion Descriptor'.
 
-This should avoid us trying too hard to clean up after
-whatever mess the VBIOS/GOP left in there. The actual
-hardware state will get cleaned up if/when we enable
-the pipe anyway.
+If users use SuperSpeed UDC, host can't recognize the device if endpoint
+doesn't have 'SuperSpeed Endpoint Companion Descriptor' followed.
 
-Cc: stable@vger.kernel.org
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/5711
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220617195948.24007-1-ville.syrjala@linux.intel.com
-Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
-(cherry picked from commit b183db8f4783ca2efc9b47734f15aad9477a108a)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Currently in the uac2 driver code:
+1. ss_epout_desc_comp follows ss_epout_desc;
+2. ss_epin_fback_desc_comp follows ss_epin_fback_desc;
+3. ss_epin_desc_comp follows ss_epin_desc;
+4. Only ss_ep_int_desc endpoint doesn't have 'SuperSpeed Endpoint
+Companion Descriptor' followed, so we should add it.
+
+Fixes: eaf6cbe09920 ("usb: gadget: f_uac2: add volume and mute support")
+Cc: stable <stable@kernel.org>
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
+Link: https://lore.kernel.org/r/20220721014815.14453-1-quic_jackp@quicinc.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_uac2.c |   16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -6638,7 +6638,10 @@ void skl_wm_get_hw_state(struct drm_i915
- 		enum plane_id plane_id;
- 		u8 slices;
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -291,6 +291,12 @@ static struct usb_endpoint_descriptor ss
+ 	.bInterval = 4,
+ };
  
--		skl_pipe_wm_get_hw_state(crtc, &crtc_state->wm.skl.optimal);
-+		memset(&crtc_state->wm.skl.optimal, 0,
-+		       sizeof(crtc_state->wm.skl.optimal));
-+		if (crtc_state->hw.active)
-+			skl_pipe_wm_get_hw_state(crtc, &crtc_state->wm.skl.optimal);
- 		crtc_state->wm.skl.raw = crtc_state->wm.skl.optimal;
- 
- 		memset(&dbuf_state->ddb[pipe], 0, sizeof(dbuf_state->ddb[pipe]));
-@@ -6649,6 +6652,9 @@ void skl_wm_get_hw_state(struct drm_i915
- 			struct skl_ddb_entry *ddb_uv =
- 				&crtc_state->wm.skl.plane_ddb_uv[plane_id];
- 
-+			if (!crtc_state->hw.active)
-+				continue;
++static struct usb_ss_ep_comp_descriptor ss_ep_int_desc_comp = {
++	.bLength = sizeof(ss_ep_int_desc_comp),
++	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
++	.wBytesPerInterval = cpu_to_le16(6),
++};
 +
- 			skl_ddb_get_hw_plane_state(dev_priv, crtc->pipe,
- 						   plane_id, ddb_y, ddb_uv);
+ /* Audio Streaming OUT Interface - Alt0 */
+ static struct usb_interface_descriptor std_as_out_if0_desc = {
+ 	.bLength = sizeof std_as_out_if0_desc,
+@@ -604,7 +610,8 @@ static struct usb_descriptor_header *ss_
+ 	(struct usb_descriptor_header *)&in_feature_unit_desc,
+ 	(struct usb_descriptor_header *)&io_out_ot_desc,
  
+-  (struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc_comp,
+ 
+ 	(struct usb_descriptor_header *)&std_as_out_if0_desc,
+ 	(struct usb_descriptor_header *)&std_as_out_if1_desc,
+@@ -800,6 +807,7 @@ static void setup_headers(struct f_uac2_
+ 	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_fback_desc_comp = NULL;
++	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
+ 	struct usb_endpoint_descriptor *epout_desc;
+ 	struct usb_endpoint_descriptor *epin_desc;
+ 	struct usb_endpoint_descriptor *epin_fback_desc;
+@@ -827,6 +835,7 @@ static void setup_headers(struct f_uac2_
+ 		epin_fback_desc = &ss_epin_fback_desc;
+ 		epin_fback_desc_comp = &ss_epin_fback_desc_comp;
+ 		ep_int_desc = &ss_ep_int_desc;
++		ep_int_desc_comp = &ss_ep_int_desc_comp;
+ 	}
+ 
+ 	i = 0;
+@@ -855,8 +864,11 @@ static void setup_headers(struct f_uac2_
+ 	if (EPOUT_EN(opts))
+ 		headers[i++] = USBDHDR(&io_out_ot_desc);
+ 
+-	if (FUOUT_EN(opts) || FUIN_EN(opts))
++	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
+ 		headers[i++] = USBDHDR(ep_int_desc);
++		if (ep_int_desc_comp)
++			headers[i++] = USBDHDR(ep_int_desc_comp);
++	}
+ 
+ 	if (EPOUT_EN(opts)) {
+ 		headers[i++] = USBDHDR(&std_as_out_if0_desc);
 
 

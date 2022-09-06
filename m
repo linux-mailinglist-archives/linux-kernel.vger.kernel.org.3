@@ -2,91 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D16C5ADCF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42A15ADCF9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbiIFBhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 21:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S236506AbiIFBi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 21:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232900AbiIFBhQ (ORCPT
+        with ESMTP id S232371AbiIFBiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 21:37:16 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F86440BF3;
-        Mon,  5 Sep 2022 18:37:06 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id 123so507511pfy.2;
-        Mon, 05 Sep 2022 18:37:06 -0700 (PDT)
+        Mon, 5 Sep 2022 21:38:24 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EEC41D17;
+        Mon,  5 Sep 2022 18:38:23 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id g1so2146783iob.13;
+        Mon, 05 Sep 2022 18:38:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Rliz2J/fL/mT/nveVEiYF2XOZEPNoVbCQ7gKvs6TmIk=;
-        b=dyZxo/QNxSEmfklK5GtIfepHhpi/gcIrEQ/36n0Xh43mPKhLod+8VsIZDA/600z5br
-         CegJjhn4YMetXny/afIO+CT8u4rOROGbhISNUME6+ve55EOx/bfe/wnFcymzDWGZIgiV
-         6410z3Nkmdik728SN0AoVP/B1RWscTOUCDY3Dh+M22sV8brD2Wgo/vNE3ttSlWJkQDNi
-         1z/k+a+StVXzGtgBpSb8z6LmTDtgPYSz8X7Cu7VUXTydOwh/s6eTIAF2DXLMkeY8gIgE
-         p6VFbzLH6F4YXYwUi1PNnvb3KQAzFzP1izcqFmHqjSHmRH6Lf/pmvxe8P8YcWb7sORd/
-         R9Bg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=GJEP/iVPvYxmtbWHaBUVoD5GwAJSKprJOAI/GNdvJWQ=;
+        b=W15Ev3r0KlGw/5uuAOSgYh0lZOVrDoqyQzbu0Lv4ZC8FjdoAJM9yjz9xKqfKuri+ot
+         PkBfO/ogqR1JPNpRlxUutJ1xTMUejyeQLaUYwlnwb+SV8+dh06kUoPPwBP0RnT+d7Gp3
+         ox0hrBjbI97Z1gcCEMTYLZfarWhAL/M7HcPZpAto7qqEHuZxgRanEmILuIDoe6eNG2gm
+         u0xsuGoNbpkqqZGNA9XHaeQcqHqyD0TGR8q3dWBhNAQt2CXpOYTV/T55h0asX9nKlGUR
+         1UtAQqGPM39sl+naY/oqbBWff5pxdbttwzzcwHmIp23XdabbcT1n+oalhEkQGXLC8bVm
+         zMUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Rliz2J/fL/mT/nveVEiYF2XOZEPNoVbCQ7gKvs6TmIk=;
-        b=0GEFIE+QjrCZ1o3uTOUAYCH0TO6SDibx+DMZBlBurtiVHEIbUJgJl+EZ+eomZxLMov
-         +/Kme2CSwV5E7SsB0Ud8DJt/heViZGSp7gP+kYwQb1xt59PnFKZCt1R8iLtib63xfbhh
-         WHNDuBz9WJ/taezu/Bay+V0tnbRRLEckxNln7rp7FhUdfbLzfbMMO5whm9jxxc9WSGeK
-         Orz1qolPNZDAypg9hPmWUhlP6eyyNprj6YULYnF5/BkbY1godp6ZmQnZdk63K83KtDKM
-         2PmIgqlPU1MAL4CDFG9CWbhr8T8UAiVc+dUNRzCm6SNpqTTpgA9GlNu0e90XYVtPfJjU
-         N5mw==
-X-Gm-Message-State: ACgBeo2eFezimX4Oypd62HUYvW9I7gASn4WL5gA0ugr83GcghNoCsiKh
-        W3IK0QziKOkyQlJxA+M/0kk=
-X-Google-Smtp-Source: AA6agR6GiPB6m9Uu6wCaPkJluTD1w4fYadPNmDx1bmbbFooklisV9LCCT66FaFzn48+loAp3mYDmdg==
-X-Received: by 2002:a63:da49:0:b0:434:459:307e with SMTP id l9-20020a63da49000000b004340459307emr12360634pgj.105.1662428225949;
-        Mon, 05 Sep 2022 18:37:05 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-83.three.co.id. [180.214.233.83])
-        by smtp.gmail.com with ESMTPSA id e11-20020a170902784b00b001769ee307d8sm332884pln.59.2022.09.05.18.37.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 18:37:05 -0700 (PDT)
-Message-ID: <0131b046-a891-2fae-d2a5-6510455c3449@gmail.com>
-Date:   Tue, 6 Sep 2022 08:37:00 +0700
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=GJEP/iVPvYxmtbWHaBUVoD5GwAJSKprJOAI/GNdvJWQ=;
+        b=ULJIqXIbq2NCWkp6ITL2eVQgruo7d/e9paw7IjLxIuLJJ72V64QflwhLS0asN8v5ZG
+         jLXo0PVXQYXNZd/xFDViGftjmM1g7SuBxpsgpOJ5cJxzMw6OQrF3U1NPWkBz7Q7/6XNA
+         2FCNocnEbTSIqPvVfpChOwDmStXyOKTqbqVsQW1CSKQcQqPxdkfr1K8P1SxBECyRGEp4
+         fvL8bS1oHg/ZAmr1zHQ5lXKjwKWtPV0gQ4eun6/hVwKLF0JHVzsZIDRcKwaT9kpKIqoC
+         THwerusquZYKXtRmebOBzz15dqY9Vd4XLdEM44PnL1N0z4Fc0ngv0jrt2uZ2LYcXlQVU
+         Lsyw==
+X-Gm-Message-State: ACgBeo0QQpIiFyv/41NowNNiNslxgfd4/ulCPvPP4kXr9GOeRfXB8sH7
+        QM7izDRB/SXr26BBs0b9i6q2ljlsswPHlWQiA6KAHGMS
+X-Google-Smtp-Source: AA6agR4V2e1Ge5uXhw4Ptpim3ZA2pdfnnYdoi0fxbpqfbRDsSMT/0wAqhWFa96iFfjT0GY8Qkw32NhdzXFc0fuW+rNE=
+X-Received: by 2002:a05:6638:3047:b0:341:de2b:e489 with SMTP id
+ u7-20020a056638304700b00341de2be489mr27895263jak.273.1662428302536; Mon, 05
+ Sep 2022 18:38:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] drm/doc: Custom Kconfig for KUnit is no longer needed
-Content-Language: en-US
-To:     =?UTF-8?Q?Micha=c5=82_Winiarski?= <michal.winiarski@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-References: <20220905184711.391022-1-michal.winiarski@intel.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220905184711.391022-1-michal.winiarski@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220905083125.29426-1-zong.li@sifive.com> <20220905083125.29426-6-zong.li@sifive.com>
+ <74571708-be33-bee2-fdc2-01492f121cda@microchip.com>
+In-Reply-To: <74571708-be33-bee2-fdc2-01492f121cda@microchip.com>
+From:   Zong Li <zongbox@gmail.com>
+Date:   Tue, 6 Sep 2022 09:38:10 +0800
+Message-ID: <CA+ZOyahFAQGPb4Ffqb_6NcaoxNLCdyBEeoY=ySJ4zLK8bhqWkg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] soc: sifive: ccache: use pr_fmt() to remove
+ CCACHE: prefixes
+To:     Conor.Dooley@microchip.com
+Cc:     zong.li@sifive.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        greentime.hu@sifive.com, ben.dooks@sifive.com, bp@alien8.de,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/6/22 01:47, Michał Winiarski wrote:
-> References: commit 6fc3a8636a7b ("kunit: tool: Enable virtio/PCI by default on UML")
+<Conor.Dooley@microchip.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=886=E6=97=A5 =
+=E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A82:47=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 05/09/2022 09:31, Zong Li wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
+the content is safe
+> >
+> > From: Ben Dooks <ben.dooks@sifive.com>
+> >
+> > Use the pr_fmt() macro to prefix all the output with "CCACHE:"
+> > to avoid having to write it out each time, or make a large diff
+> > when the next change comes along.
+> >
+> > Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>
+> Missing your SoB again here Zong Li btw, other than that:
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Use Fixes: tag for bugfix patches instead.
+Thanks, I would add it in V3.
 
--- 
-An old man doll... just what I always wanted! - Clara
+>
+> > ---
+> >  drivers/soc/sifive/sifive_ccache.c | 15 +++++++++------
+> >  1 file changed, 9 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/si=
+five_ccache.c
+> > index 401c67a485e2..d749600c0bf8 100644
+> > --- a/drivers/soc/sifive/sifive_ccache.c
+> > +++ b/drivers/soc/sifive/sifive_ccache.c
+> > @@ -5,6 +5,9 @@
+> >   * Copyright (C) 2018-2022 SiFive, Inc.
+> >   *
+> >   */
+> > +
+> > +#define pr_fmt(fmt) "CCACHE: " fmt
+> > +
+> >  #include <linux/debugfs.h>
+> >  #include <linux/interrupt.h>
+> >  #include <linux/of_irq.h>
+> > @@ -85,13 +88,13 @@ static void ccache_config_read(void)
+> >
+> >         cfg =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+> >
+> > -       pr_info("CCACHE: %u banks, %u ways, sets/bank=3D%llu, bytes/blo=
+ck=3D%llu\n",
+> > +       pr_info("%u banks, %u ways, sets/bank=3D%llu, bytes/block=3D%ll=
+u\n",
+> >                 (cfg & 0xff), (cfg >> 8) & 0xff,
+> >                 BIT_ULL((cfg >> 16) & 0xff),
+> >                 BIT_ULL((cfg >> 24) & 0xff));
+> >
+> >         cfg =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+> > -       pr_info("CCACHE: Index of the largest way enabled: %d\n", cfg);
+> > +       pr_info("Index of the largest way enabled: %d\n", cfg);
+> >  }
+> >
+> >  static const struct of_device_id sifive_ccache_ids[] =3D {
+> > @@ -154,7 +157,7 @@ static irqreturn_t ccache_int_handler(int irq, void=
+ *device)
+> >         if (irq =3D=3D g_irq[DIR_CORR]) {
+> >                 add_h =3D readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_H=
+IGH);
+> >                 add_l =3D readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_L=
+OW);
+> > -               pr_err("CCACHE: DirError @ 0x%08X.%08X\n", add_h, add_l=
+);
+> > +               pr_err("DirError @ 0x%08X.%08X\n", add_h, add_l);
+> >                 /* Reading this register clears the DirError interrupt =
+sig */
+> >                 readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_COUNT);
+> >                 atomic_notifier_call_chain(&ccache_err_chain, SIFIVE_CC=
+ACHE_ERR_TYPE_CE,
+> > @@ -172,7 +175,7 @@ static irqreturn_t ccache_int_handler(int irq, void=
+ *device)
+> >         if (irq =3D=3D g_irq[DATA_CORR]) {
+> >                 add_h =3D readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_H=
+IGH);
+> >                 add_l =3D readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_L=
+OW);
+> > -               pr_err("CCACHE: DataError @ 0x%08X.%08X\n", add_h, add_=
+l);
+> > +               pr_err("DataError @ 0x%08X.%08X\n", add_h, add_l);
+> >                 /* Reading this register clears the DataError interrupt=
+ sig */
+> >                 readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_COUNT);
+> >                 atomic_notifier_call_chain(&ccache_err_chain, SIFIVE_CC=
+ACHE_ERR_TYPE_CE,
+> > @@ -181,7 +184,7 @@ static irqreturn_t ccache_int_handler(int irq, void=
+ *device)
+> >         if (irq =3D=3D g_irq[DATA_UNCORR]) {
+> >                 add_h =3D readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_=
+HIGH);
+> >                 add_l =3D readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_=
+LOW);
+> > -               pr_err("CCACHE: DataFail @ 0x%08X.%08X\n", add_h, add_l=
+);
+> > +               pr_err("DataFail @ 0x%08X.%08X\n", add_h, add_l);
+> >                 /* Reading this register clears the DataFail interrupt =
+sig */
+> >                 readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_COUNT);
+> >                 atomic_notifier_call_chain(&ccache_err_chain, SIFIVE_CC=
+ACHE_ERR_TYPE_UE,
+> > @@ -221,7 +224,7 @@ static int __init sifive_ccache_init(void)
+> >                 g_irq[i] =3D irq_of_parse_and_map(np, i);
+> >                 rc =3D request_irq(g_irq[i], ccache_int_handler, 0, "cc=
+ache_ecc", NULL);
+> >                 if (rc) {
+> > -                       pr_err("CCACHE: Could not request IRQ %d\n", g_=
+irq[i]);
+> > +                       pr_err("Could not request IRQ %d\n", g_irq[i]);
+> >                         return rc;
+> >                 }
+> >         }
+> > --
+> > 2.17.1
+> >
+>

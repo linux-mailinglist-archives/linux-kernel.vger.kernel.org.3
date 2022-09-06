@@ -2,54 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BE45AEEED
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1735AEEB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbiIFPeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        id S239582AbiIFP1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240355AbiIFPdn (ORCPT
+        with ESMTP id S238862AbiIFP11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:33:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ABA9C482A;
-        Tue,  6 Sep 2022 07:44:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26AC81AED;
-        Tue,  6 Sep 2022 07:37:10 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CAEE03F7B4;
-        Tue,  6 Sep 2022 07:37:00 -0700 (PDT)
-Message-ID: <caaf43aa-6c36-b263-30ba-7a4d3edd4e20@arm.com>
-Date:   Tue, 6 Sep 2022 15:36:55 +0100
+        Tue, 6 Sep 2022 11:27:27 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D12A205F9;
+        Tue,  6 Sep 2022 07:38:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1662475117; x=1694011117;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eGlwV1W60OyjywuT+JtyuC8RgGJf3Lk2jwy3im1Vvvw=;
+  b=mdTAgDnZpLbB0AlDu9FCas+DViUFFtOrHndgMU8hkZYPKTLpW2pgmZs3
+   11ERY8bJPSz/z5GttSqbr6iSY9aWpvgmaoXiMkefsLWl5tJgKqOAwPLDI
+   khAQyJsbqELPbTkPs+o720IvdXX6bG+tenxT/QGe0zGAHs1hjArzwjBAX
+   Ikg9MhzBOmfWWgKaN8ZqJaUIiAeKHp50LSg+twr4iijw6K/oRgoibHGEC
+   tyK4rszX6ZVIrU2GyAP+xZyL2F7JmwxXXDCdMvudagohjfD6uoRjrXahF
+   ObRWjURz2fpXnprBKPLSYeYzjtF0hgdlM7KKP+RKB5S23Ok3tIh3f0+n/
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,294,1654552800"; 
+   d="scan'208";a="26020282"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 06 Sep 2022 16:37:05 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 06 Sep 2022 16:37:05 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 06 Sep 2022 16:37:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1662475025; x=1694011025;
+  h=from:to:cc:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding:subject;
+  bh=eGlwV1W60OyjywuT+JtyuC8RgGJf3Lk2jwy3im1Vvvw=;
+  b=jDZE/UmLv7ybxoJl9RQd8fPP81ei63EbZ3rrzHjpBL51L3HyviVK1n5C
+   rkLYNsw8dt9b9hCVmbS2r0cWZiuWTncpKCIIyWjaQScdmE7gpS/TkQIpd
+   nPSIfH23LG15ZaBUkIUky9EKqkw5V87f8sIRmHOuPCRQ6LIyzjRFqPw5U
+   T0jv372bqZhENctFcsUSPimZVMtrt0kjLOCz03kAfqqBrL7LhwbUuCJMV
+   2N3m5IZ8iqiumMp9HspBnZxViK2TMc4Ow8G/RRDPNv6VcIKDc9VqZ5Lvd
+   gtipL6F+JsBllGZj/vRZ/N7VyuLQOHHcOm2emzWDcUUVtD+xJuq9TFbVw
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,294,1654552800"; 
+   d="scan'208";a="26020281"
+Subject: Re: [PATCH V5 5/8] soc: imx: add i.MX8MP HDMI blk ctrl HDCP/HRV_MWR
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 06 Sep 2022 16:37:05 +0200
+Received: from steina-w.localnet (unknown [10.123.49.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 27CDA280056;
+        Tue,  6 Sep 2022 16:37:04 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        m.felsch@pengutronix.de, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Date:   Tue, 06 Sep 2022 16:37:04 +0200
+Message-ID: <2849448.e9J7NaK4W3@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20220822064536.3947512-6-peng.fan@oss.nxp.com>
+References: <20220822064536.3947512-1-peng.fan@oss.nxp.com> <20220822064536.3947512-6-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] perf vendor events: Update events for Neoverse E1
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Nick Forrington <nick.forrington@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220905153020.1792-1-nick.forrington@arm.com>
- <YxdGFAYHeO/j5uJF@kernel.org>
- <496f98ce-a0c4-9587-853c-9ba05323523a@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <496f98ce-a0c4-9587-853c-9ba05323523a@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,591 +87,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-06 14:22, John Garry wrote:
-> On 06/09/2022 14:07, Arnaldo Carvalho de Melo wrote:
->> Em Mon, Sep 05, 2022 at 04:30:19PM +0100, Nick Forrington escreveu:
->>> Based on updated data from:
->>> https://github.com/ARM-software/data/blob/master/pmu/neoverse-e1.json
->>>
->>> which is based on PMU event descriptions from the Arm Neoverse E1
->>> Technical Reference Manual.
->>>
->>> This includes additional implementation defined fields not previously
->>> included, and removes unimplemented events related to Arm's Statistical
->>> Profiling Extension (SPE).
->>
->> Applied locally, would be good to have an Acked-by or Reviewed-by, John?
-> 
-> Regardless of comment, below:
-> Reviewed-by: John Garry <john.garry@huawei.com>
-> 
->>
->> - Arnaldo
->>> Signed-off-by: Nick Forrington <nick.forrington@arm.com>
->>> ---
->>>   .../arch/arm64/arm/neoverse-e1/cache.json     | 132 ++++++++++++++++++
->>>   .../arch/arm64/arm/neoverse-e1/dpu.json       |  32 +++++
->>>   .../arch/arm64/arm/neoverse-e1/ifu.json       | 122 ++++++++++++++++
->>>   .../arm64/arm/neoverse-e1/instruction.json    |   6 +
->>>   .../arch/arm64/arm/neoverse-e1/memory.json    |  12 ++
->>>   .../arch/arm64/arm/neoverse-e1/spe.json       |  14 --
->>>   6 files changed, 304 insertions(+), 14 deletions(-)
->>>   create mode 100644 
->>> tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/dpu.json
->>>   create mode 100644 
->>> tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/ifu.json
->>>   delete mode 100644 
->>> tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json
->>>
->>> diff --git 
->>> a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json 
->>> b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json
->>> index 3ad15e3a93a9..92406bc7b945 100644
->>> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json
->>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json
->>> @@ -103,5 +103,137 @@
->>>       },
->>>       {
->>>           "ArchStdEvent": "L3D_CACHE_REFILL_RD"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Merge in the store buffer",
->>> +        "EventCode": "0xC0",
->>> +        "EventName": "STB_STALL",
->>> +        "BriefDescription": "Merge in the store buffer"
-> 
-> 
-> This looks the same as an a65 event. And more similar cases below, at a 
-> glance.
+Hello,
 
-According to Anandtech, E1 is to A65 what N1 is to A76, and if they say 
-so then it must be true :)
+Am Montag, 22. August 2022, 08:45:33 CEST schrieb Peng Fan (OSS):
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> i.MX8MP HDMI supports HDCP and HRV_MWR(HDMI RX Video Memory Write Master
+> for RXRX validation), so add them.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/soc/imx/imx8mp-blk-ctrl.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/drivers/soc/imx/imx8mp-blk-ctrl.c
+> b/drivers/soc/imx/imx8mp-blk-ctrl.c index 6f983adcb47c..527d45d12a54 100644
+> --- a/drivers/soc/imx/imx8mp-blk-ctrl.c
+> +++ b/drivers/soc/imx/imx8mp-blk-ctrl.c
+> @@ -235,6 +235,13 @@ static void imx8mp_hdmi_blk_ctrl_power_on(struct
+> imx8mp_blk_ctrl *bc, regmap_set_bits(bc->regmap, HDMI_RTX_RESET_CTL0,
+> BIT(12));
+>  		regmap_clear_bits(bc->regmap, HDMI_TX_CONTROL0, BIT(3));
+>  		break;
+> +	case IMX8MP_HDMIBLK_PD_HDCP:
+> +		regmap_set_bits(bc->regmap, HDMI_RTX_CLK_CTL0, BIT(11));
+> +		break;
+> +	case IMX8MP_HDMIBLK_PD_HRV:
+> +		regmap_set_bits(bc->regmap, HDMI_RTX_CLK_CTL1, BIT(3) | 
+BIT(4) | BIT(5));
+> +		regmap_set_bits(bc->regmap, HDMI_RTX_RESET_CTL0, 
+BIT(15));
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> @@ -283,6 +290,13 @@ static void imx8mp_hdmi_blk_ctrl_power_off(struct
+> imx8mp_blk_ctrl *bc, regmap_clear_bits(bc->regmap, HDMI_RTX_RESET_CTL0,
+> BIT(12));
+>  		regmap_clear_bits(bc->regmap, HDMI_RTX_CLK_CTL1, BIT(22) 
+| BIT(24));
+>  		break;
+> +	case IMX8MP_HDMIBLK_PD_HDCP:
+> +		regmap_clear_bits(bc->regmap, HDMI_RTX_CLK_CTL0, 
+BIT(11));
+> +		break;
+> +	case IMX8MP_HDMIBLK_PD_HRV:
+> +		regmap_clear_bits(bc->regmap, HDMI_RTX_RESET_CTL0, 
+BIT(15));
+> +		regmap_clear_bits(bc->regmap, HDMI_RTX_CLK_CTL1, BIT(3) 
+| BIT(4) |
+> BIT(5)); +		break;
+>  	default:
+>  		break;
+>  	}
+> @@ -365,6 +379,22 @@ static const struct imx8mp_blk_ctrl_domain_data
+> imx8mp_hdmi_domain_data[] = { .num_clks = 2,
+>  		.gpc_name = "hdmi-tx-phy",
+>  	},
+> +	[IMX8MP_HDMIBLK_PD_HRV] = {
+> +		.name = "hdmiblk-hrv",
+> +		.clk_names = (const char *[]){ "axi", "apb" },
+> +		.num_clks = 2,
+> +		.gpc_name = "hrv",
+> +		.path_names = (const char *[]){"hrv"},
+> +		.num_paths = 1,
+> +	},
+> +	[IMX8MP_HDMIBLK_PD_HDCP] = {
+> +		.name = "hdmiblk-hdcp",
+> +		.clk_names = (const char *[]){ "axi", "apb" },
+> +		.num_clks = 2,
+> +		.gpc_name = "hdcp",
+> +		.path_names = (const char *[]){"hdcp"},
+> +		.num_paths = 1,
+> +	},
+>  };
+> 
+>  static const struct imx8mp_blk_ctrl_data imx8mp_hdmi_blk_ctl_dev_data = {
 
-Robin.
+Something is missing here. Iget the following error during boot:
+[    0.886211] Unable to handle kernel NULL pointer dereference at virtual 
+address 0000000000000000
+[    0.895043] Mem abort info:
+[    0.897841]   ESR = 0x0000000096000004
+[    0.901606]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    0.906942]   SET = 0, FnV = 0
+[    0.910003]   EA = 0, S1PTW = 0
+[    0.913159]   FSC = 0x04: level 0 translation fault
+[    0.918054] Data abort info:
+[    0.920943]   ISV = 0, ISS = 0x00000004
+[    0.924791]   CM = 0, WnR = 0
+[    0.927761] [0000000000000000] user address but active_mm is swapper
+[    0.934157] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[    0.939749] Modules linked in:
+[    0.942813] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc4-
+next-20220906+ #674 2c55fa642ba20b0dbb66c0e78dacc9ca96d5e733
+[    0.954099] Hardware name: TQ-Systems i.MX8MPlus TQMa8MPxL on MBa8MPxL (DT)
+[    0.961100] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.968099] pc : kobject_set_name_vargs+0x10/0xd0
+[    0.972823] lr : dev_set_name+0x58/0x80
+[    0.976674] sp : ffff800009c7b860
+[    0.979997] x29: ffff800009c7b860 x28: ffff000002d728f8 x27: 
+0000000000000150
+[    0.987172] x26: 0000000000000009 x25: 0000000000000007 x24: 
+ffff800009ab8958
+[    0.994347] x23: ffff0000000a0000 x22: ffff800008eb77d8 x21: 
+ffff000000225410
+[    1.001524] x20: ffff800008eb7808 x19: 0000000000000000 x18: 
+0000000000000000
+[    1.008697] x17: 702d78742d696d64 x16: 682d6b6c62696d64 x15: 
+68203a656d616e3e
+[    1.015872] x14: 0000000000000000 x13: 70636468203a656d x12: 
+616e5f6370673e2d
+[    1.023047] x11: 61746164203a6c72 x10: 74632d6b6c622e30 x9 : 
+7274632d6b6c622e
+[    1.030222] x8 : 3030303063663233 x7 : 205d353039393738 x6 : 
+ffff800009a240e0
+[    1.037397] x5 : 00000000ffffffd0 x4 : ffff800009c7b920 x3 : 
+00000000ffffffd0
+[    1.044572] x2 : ffff800009c7b8d0 x1 : ffff80000936ca78 x0 : 
+0000000000000000
+[    1.051749] Call trace:
+[    1.054199]  kobject_set_name_vargs+0x10/0xd0
+[    1.058574]  dev_set_name+0x58/0x80
+[    1.062072]  imx8mp_blk_ctrl_probe+0x5c0/0x660
+[    1.066534]  platform_probe+0x64/0x100
+[    1.070297]  call_driver_probe+0x28/0x140
+[    1.074322]  really_probe+0xc0/0x334
+[    1.077909]  __driver_probe_device+0x84/0x144
+[    1.082284]  driver_probe_device+0x38/0x130
+[    1.086486]  __driver_attach+0xac/0x244
+[    1.090334]  bus_for_each_dev+0x6c/0xc0
+[    1.094184]  driver_attach+0x20/0x30
+[    1.097772]  bus_add_driver+0x174/0x244
+[    1.101622]  driver_register+0x74/0x120
+[    1.105474]  __platform_driver_register+0x24/0x30
+[    1.110197]  imx8mp_blk_ctrl_driver_init+0x18/0x20
+[    1.115009]  do_one_initcall+0x58/0x200
+[    1.118861]  do_initcalls+0x164/0x19c
+[    1.122534]  kernel_init_freeable+0x134/0x17c
+[    1.126909]  kernel_init+0x2c/0x150
+[    1.130411]  ret_from_fork+0x10/0x20
+[    1.134003] Code: a9bb7bfd 910003fd a90153f3 aa0003f3 (f9400000) 
+[    1.140127] ---[ end trace 0000000000000000 ]---
 
-> Even though this is not a std or recommended event from the arch 
-> reference manual, I don't see a reason why we can't put this as a 
-> "armltd_common_impdef_events.json" and make a ArchStdEvent but maybe a 
-> distinct name, like "STB_STALL_ARMLTD".
-> 
-> Nick, Can you please consider at factoring these out also?
-> 
-> Cheers,
-> John
-> 
-> EOM
-> 
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 1 data cache refill started due 
->>> to prefetch. Counts any linefills from the prefetcher which cause an 
->>> allocation into the L1 D-cache",
->>> +        "EventCode": "0xC3",
->>> +        "EventName": "L1D_PREF_LINE_FILL",
->>> +        "BriefDescription": "Level 1 data cache refill started due 
->>> to prefetch. Counts any linefills from the prefetcher which cause an 
->>> allocation into the L1 D-cache"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 2 cache refill due to prefetch. 
->>> +ICI If the core is configured with a per-core L2 cache: This event 
->>> does not count. +ICI If the core is configured without a per-core L2 
->>> cache: This event counts the cluster cache event, as defined by 
->>> L3_PREF_LINE_FILL. +ICI If there is neither a per-core cache nor a 
->>> cluster cache configured, this event is not implemented",
->>> +        "EventCode": "0xC4",
->>> +        "EventName": "L2D_PREF_LINE_FILL",
->>> +        "BriefDescription": "Level 2 cache refill due to prefetch. 
->>> +ICI If the core is configured with a per-core L2 cache: This event 
->>> does not count. +ICI If the core is configured without a per-core L2 
->>> cache: This event counts the cluster cache event, as defined by 
->>> L3_PREF_LINE_FILL. +ICI If there is neither a per-core cache nor a 
->>> cluster cache configured, this event is not implemented"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 3 cache refill due to prefetch. 
->>> This event counts any linefills from the hardware prefetcher which 
->>> cause an allocation into the L3 cache. Note It might not be possible 
->>> to distinguish between both hardware and software prefetches and also 
->>> which prefetches cause an allocation. If so, only hardware prefetches 
->>> should be counted, regardless of whether they allocate. If either the 
->>> core is configured without a per-core L2 or the cluster is configured 
->>> without an L3 cache, this event is not implemented",
->>> +        "EventCode": "0xC5",
->>> +        "EventName": "L3_PREF_LINE_FILL",
->>> +        "BriefDescription": "Level 3 cache refill due to prefetch. 
->>> This event counts any linefills from the hardware prefetcher which 
->>> cause an allocation into the L3 cache. Note It might not be possible 
->>> to distinguish between both hardware and software prefetches and also 
->>> which prefetches cause an allocation. If so, only hardware prefetches 
->>> should be counted, regardless of whether they allocate. If either the 
->>> core is configured without a per-core L2 or the cluster is configured 
->>> without an L3 cache, this event is not implemented"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "L1D entering write stream mode",
->>> +        "EventCode": "0xC6",
->>> +        "EventName": "L1D_WS_MODE_ENTER",
->>> +        "BriefDescription": "L1D entering write stream mode"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "L1D is in write stream mode",
->>> +        "EventCode": "0xC7",
->>> +        "EventName": "L1D_WS_MODE",
->>> +        "BriefDescription": "L1D is in write stream mode"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 2 cache write streaming mode. 
->>> This event counts for each cycle where the core is in write-streaming 
->>> mode and not allocating writes into the L2 cache",
->>> +        "EventCode": "0xC8",
->>> +        "EventName": "L2D_WS_MODE",
->>> +        "BriefDescription": "Level 2 cache write streaming mode. 
->>> This event counts for each cycle where the core is in write-streaming 
->>> mode and not allocating writes into the L2 cache"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 3 cache write streaming mode. 
->>> This event counts for each cycle where the core is in write-streaming 
->>> mode and not allocating writes into the L3 cache",
->>> +        "EventCode": "0xC9",
->>> +        "EventName": "L3D_WS_MODE",
->>> +        "BriefDescription": "Level 3 cache write streaming mode. 
->>> This event counts for each cycle where the core is in write-streaming 
->>> mode and not allocating writes into the L3 cache"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 2 TLB last-level walk cache 
->>> access. This event does not count if the MMU is disabled",
->>> +        "EventCode": "0xCA",
->>> +        "EventName": "TLB_L2TLB_LLWALK_ACCESS",
->>> +        "BriefDescription": "Level 2 TLB last-level walk cache 
->>> access. This event does not count if the MMU is disabled"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 2 TLB last-level walk cache 
->>> refill. This event does not count if the MMU is disabled",
->>> +        "EventCode": "0xCB",
->>> +        "EventName": "TLB_L2TLB_LLWALK_REFILL",
->>> +        "BriefDescription": "Level 2 TLB last-level walk cache 
->>> refill. This event does not count if the MMU is disabled"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 2 TLB level-2 walk cache access. 
->>> This event counts accesses to the level-2 walk cache where the 
->>> last-level walk cache has missed. The event only counts when the 
->>> translation regime of the pagewalk uses level 2 descriptors. This 
->>> event does not count if the MMU is disabled",
->>> +        "EventCode": "0xCC",
->>> +        "EventName": "TLB_L2TLB_L2WALK_ACCESS",
->>> +        "BriefDescription": "Level 2 TLB level-2 walk cache access. 
->>> This event counts accesses to the level-2 walk cache where the 
->>> last-level walk cache has missed. The event only counts when the 
->>> translation regime of the pagewalk uses level 2 descriptors. This 
->>> event does not count if the MMU is disabled"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 2 TLB level-2 walk cache refill. 
->>> This event does not count if the MMU is disabled",
->>> +        "EventCode": "0xCD",
->>> +        "EventName": "TLB_L2TLB_L2WALK_REFILL",
->>> +        "BriefDescription": "Level 2 TLB level-2 walk cache refill. 
->>> This event does not count if the MMU is disabled"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 2 TLB IPA cache access. This 
->>> event counts on each access to the IPA cache. +ICI If a single 
->>> pagewalk needs to make multiple accesses to the IPA cache, each 
->>> access is counted. +ICI If stage 2 translation is disabled, this 
->>> event does not count",
->>> +        "EventCode": "0xCE",
->>> +        "EventName": "TLB_L2TLB_S2_ACCESS",
->>> +        "BriefDescription": "Level 2 TLB IPA cache access. This 
->>> event counts on each access to the IPA cache. +ICI If a single 
->>> pagewalk needs to make multiple accesses to the IPA cache, each 
->>> access is counted. +ICI If stage 2 translation is disabled, this 
->>> event does not count"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 2 TLB IPA cache refill. This 
->>> event counts on each refill of the IPA cache. +ICI If a single 
->>> pagewalk needs to make multiple accesses to the IPA cache, each 
->>> access which causes a refill is counted. +ICI If stage 2 translation 
->>> is disabled, this event does not count",
->>> +        "EventCode": "0xCF",
->>> +        "EventName": "TLB_L2TLB_S2_REFILL",
->>> +        "BriefDescription": "Level 2 TLB IPA cache refill. This 
->>> event counts on each refill of the IPA cache. +ICI If a single 
->>> pagewalk needs to make multiple accesses to the IPA cache, each 
->>> access which causes a refill is counted. +ICI If stage 2 translation 
->>> is disabled, this event does not count"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Unattributable Level 1 data cache 
->>> write-back. This event occurs when a requestor outside the PE makes a 
->>> coherency request that results in writeback",
->>> +        "EventCode": "0xF0",
->>> +        "EventName": "L2_L1D_CACHE_WB_UNATT",
->>> +        "BriefDescription": "Unattributable Level 1 data cache 
->>> write-back. This event occurs when a requestor outside the PE makes a 
->>> coherency request that results in writeback"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Unattributable Level 2 unified cache 
->>> access. This event occurs when a requestor outside the PE makes a 
->>> coherency request that results in level 2 unified cache access",
->>> +        "EventCode": "0xF1",
->>> +        "EventName": "L2_L2D_CACHE_UNATT",
->>> +        "BriefDescription": "Unattributable Level 2 unified cache 
->>> access. This event occurs when a requestor outside the PE makes a 
->>> coherency request that results in level 2 unified cache access"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Unattributable Level 2 unified cache 
->>> access, read. This event occurs when a requestor outside the PE makes 
->>> a coherency request that results in level 2 unified cache read access",
->>> +        "EventCode": "0xF2",
->>> +        "EventName": "L2_L2D_CACHE_RD_UNATT",
->>> +        "BriefDescription": "Unattributable Level 2 unified cache 
->>> access, read. This event occurs when a requestor outside the PE makes 
->>> a coherency request that results in level 2 unified cache read access"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Unattributable Level 3 unified cache 
->>> access. This event occurs when a requestor outside the PE makes a 
->>> coherency request that results in level 3 unified cache read access",
->>> +        "EventCode": "0xF3",
->>> +        "EventName": "L2_L3D_CACHE_UNATT",
->>> +        "BriefDescription": "Unattributable Level 3 unified cache 
->>> access. This event occurs when a requestor outside the PE makes a 
->>> coherency request that results in level 3 unified cache read access"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Unattributable Level 3 unified cache 
->>> access, read. This event occurs when a requestor outside the PE makes 
->>> a coherency request that results in level 3 unified cache read access",
->>> +        "EventCode": "0xF4",
->>> +        "EventName": "L2_L3D_CACHE_RD_UNATT",
->>> +        "BriefDescription": "Unattributable Level 3 unified cache 
->>> access, read. This event occurs when a requestor outside the PE makes 
->>> a coherency request that results in level 3 unified cache read access"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Unattributable Level 3 unified cache 
->>> allocation without refill. This event occurs when a requestor outside 
->>> the PE makes a coherency request that results in level 3 cache 
->>> allocate without refill",
->>> +        "EventCode": "0xF5",
->>> +        "EventName": "L2_L3D_CACHE_ALLOC_UNATT",
->>> +        "BriefDescription": "Unattributable Level 3 unified cache 
->>> allocation without refill. This event occurs when a requestor outside 
->>> the PE makes a coherency request that results in level 3 cache 
->>> allocate without refill"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Unattributable Level 3 unified cache 
->>> refill. This event occurs when a requestor outside the PE makes a 
->>> coherency request that results in level 3 cache refill",
->>> +        "EventCode": "0xF6",
->>> +        "EventName": "L2_L3D_CACHE_REFILL_UNATT",
->>> +        "BriefDescription": "Unattributable Level 3 unified cache 
->>> refill. This event occurs when a requestor outside the PE makes a 
->>> coherency request that results in level 3 cache refill"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Level 2 cache stash dropped. This 
->>> event counts on each stash request received from the interconnect or 
->>> ACP, that is targeting L2 and gets dropped due to lack of buffer 
->>> space to hold the request",
->>> +        "EventCode": "0xF7",
->>> +        "EventName": "L2D_CACHE_STASH_DROPPED",
->>> +        "BriefDescription": "Level 2 cache stash dropped. This event 
->>> counts on each stash request received from the interconnect or ACP, 
->>> that is targeting L2 and gets dropped due to lack of buffer space to 
->>> hold the request"
->>>       }
->>>   ]
->>> diff --git 
->>> a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/dpu.json 
->>> b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/dpu.json
->>> new file mode 100644
->>> index 000000000000..b8e402a91bdd
->>> --- /dev/null
->>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/dpu.json
->>> @@ -0,0 +1,32 @@
->>> +[
->>> +    {
->>> +        "PublicDescription": "Instruction retired, indirect branch, 
->>> mispredicted",
->>> +        "EventCode": "0xE9",
->>> +        "EventName": "DPU_BR_IND_MIS",
->>> +        "BriefDescription": "Instruction retired, indirect branch, 
->>> mispredicted"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Instruction retired, conditional 
->>> branch, mispredicted",
->>> +        "EventCode": "0xEA",
->>> +        "EventName": "DPU_BR_COND_MIS",
->>> +        "BriefDescription": "Instruction retired, conditional 
->>> branch, mispredicted"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Memory error (any type) from IFU",
->>> +        "EventCode": "0xEB",
->>> +        "EventName": "DPU_MEM_ERR_IFU",
->>> +        "BriefDescription": "Memory error (any type) from IFU"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Memory error (any type) from DCU",
->>> +        "EventCode": "0xEC",
->>> +        "EventName": "DPU_MEM_ERR_DCU",
->>> +        "BriefDescription": "Memory error (any type) from DCU"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Memory error (any type) from TLB",
->>> +        "EventCode": "0xED",
->>> +        "EventName": "DPU_MEM_ERR_TLB",
->>> +        "BriefDescription": "Memory error (any type) from TLB"
->>> +    }
->>> +]
->>> diff --git 
->>> a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/ifu.json 
->>> b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/ifu.json
->>> new file mode 100644
->>> index 000000000000..13178c5dca14
->>> --- /dev/null
->>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/ifu.json
->>> @@ -0,0 +1,122 @@
->>> +[
->>> +    {
->>> +        "PublicDescription": "I-Cache miss on an access from the 
->>> prefetch block",
->>> +        "EventCode": "0xD0",
->>> +        "EventName": "IFU_IC_MISS_WAIT",
->>> +        "BriefDescription": "I-Cache miss on an access from the 
->>> prefetch block"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Counts the cycles spent on a request 
->>> for Level 2 TLB lookup after a Level 1l ITLB miss",
->>> +        "EventCode": "0xD1",
->>> +        "EventName": "IFU_IUTLB_MISS_WAIT",
->>> +        "BriefDescription": "Counts the cycles spent on a request 
->>> for Level 2 TLB lookup after a Level 1l ITLB miss"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Micro-predictor conditional/direction 
->>> mispredict, with respect to. if3/if4 predictor",
->>> +        "EventCode": "0xD2",
->>> +        "EventName": "IFU_MICRO_COND_MISPRED",
->>> +        "BriefDescription": "Micro-predictor conditional/direction 
->>> mispredict, with respect to. if3/if4 predictor"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Micro-predictor address mispredict, 
->>> with respect to if3/if4 predictor",
->>> +        "EventCode": "0xD3",
->>> +        "EventName": "IFU_MICRO_CADDR_MISPRED",
->>> +        "BriefDescription": "Micro-predictor address mispredict, 
->>> with respect to if3/if4 predictor"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Micro-predictor hit with immediate 
->>> redirect",
->>> +        "EventCode": "0xD4",
->>> +        "EventName": "IFU_MICRO_HIT",
->>> +        "BriefDescription": "Micro-predictor hit with immediate 
->>> redirect"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Micro-predictor negative cache hit",
->>> +        "EventCode": "0xD6",
->>> +        "EventName": "IFU_MICRO_NEG_HIT",
->>> +        "BriefDescription": "Micro-predictor negative cache hit"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Micro-predictor correction",
->>> +        "EventCode": "0xD7",
->>> +        "EventName": "IFU_MICRO_CORRECTION",
->>> +        "BriefDescription": "Micro-predictor correction"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "A 2nd instruction could have been 
->>> pushed but was not because it was nonsequential",
->>> +        "EventCode": "0xD8",
->>> +        "EventName": "IFU_MICRO_NO_INSTR1",
->>> +        "BriefDescription": "A 2nd instruction could have been 
->>> pushed but was not because it was nonsequential"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Micro-predictor miss",
->>> +        "EventCode": "0xD9",
->>> +        "EventName": "IFU_MICRO_NO_PRED",
->>> +        "BriefDescription": "Micro-predictor miss"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Thread flushed due to TLB miss",
->>> +        "EventCode": "0xDA",
->>> +        "EventName": "IFU_FLUSHED_TLB_MISS",
->>> +        "BriefDescription": "Thread flushed due to TLB miss"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Thread flushed due to reasons other 
->>> than TLB miss",
->>> +        "EventCode": "0xDB",
->>> +        "EventName": "IFU_FLUSHED_EXCL_TLB_MISS",
->>> +        "BriefDescription": "Thread flushed due to reasons other 
->>> than TLB miss"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "This thread and the other thread both 
->>> ready for scheduling in if0",
->>> +        "EventCode": "0xDC",
->>> +        "EventName": "IFU_ALL_THRDS_RDY",
->>> +        "BriefDescription": "This thread and the other thread both 
->>> ready for scheduling in if0"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "This thread was arbitrated when the 
->>> other thread was also ready for scheduling",
->>> +        "EventCode": "0xDD",
->>> +        "EventName": "IFU_WIN_ARB_OTHER_RDY",
->>> +        "BriefDescription": "This thread was arbitrated when the 
->>> other thread was also ready for scheduling"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "This thread was arbitrated when the 
->>> other thread was also active, but not necessarily ready. For example, 
->>> waiting for I-Cache or TLB",
->>> +        "EventCode": "0xDE",
->>> +        "EventName": "IFU_WIN_ARB_OTHER_ACT",
->>> +        "BriefDescription": "This thread was arbitrated when the 
->>> other thread was also active, but not necessarily ready. For example, 
->>> waiting for I-Cache or TLB"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "This thread was not arbitrated because 
->>> it was not ready for scheduling. For example, due to a cache miss or 
->>> TLB miss",
->>> +        "EventCode": "0xDF",
->>> +        "EventName": "IFU_NOT_RDY_FOR_ARB",
->>> +        "BriefDescription": "This thread was not arbitrated because 
->>> it was not ready for scheduling. For example, due to a cache miss or 
->>> TLB miss"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "The thread moved from an active state 
->>> to an inactive state (long-term sleep state, causing deallocation of 
->>> some resources)",
->>> +        "EventCode": "0xE0",
->>> +        "EventName": "IFU_GOTO_IDLE",
->>> +        "BriefDescription": "The thread moved from an active state 
->>> to an inactive state (long-term sleep state, causing deallocation of 
->>> some resources)"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "I-Cache lookup under miss from other 
->>> thread",
->>> +        "EventCode": "0xE1",
->>> +        "EventName": "IFU_IC_LOOKUP_UNDER_MISS",
->>> +        "BriefDescription": "I-Cache lookup under miss from other 
->>> thread"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "I-Cache miss under miss from other 
->>> thread",
->>> +        "EventCode": "0xE2",
->>> +        "EventName": "IFU_IC_MISS_UNDER_MISS",
->>> +        "BriefDescription": "I-Cache miss under miss from other thread"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "This thread pushed an instruction into 
->>> the IQ",
->>> +        "EventCode": "0xE3",
->>> +        "EventName": "IFU_INSTR_PUSHED",
->>> +        "BriefDescription": "This thread pushed an instruction into 
->>> the IQ"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "I-Cache Speculative line fill",
->>> +        "EventCode": "0xE4",
->>> +        "EventName": "IFU_IC_LF_SP",
->>> +        "BriefDescription": "I-Cache Speculative line fill"
->>> +    }
->>> +]
->>> diff --git 
->>> a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json 
->>> b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json
->>> index 6c3b8f772e7f..2e0d60779dce 100644
->>> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json
->>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json
->>> @@ -61,5 +61,11 @@
->>>       },
->>>       {
->>>           "ArchStdEvent": "ISB_SPEC"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "Instruction retired, conditional branch",
->>> +        "EventCode": "0xE8",
->>> +        "EventName": "DPU_BR_COND_RETIRED",
->>> +        "BriefDescription": "Instruction retired, conditional branch"
->>>       }
->>>   ]
->>> diff --git 
->>> a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json 
->>> b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json
->>> index 78ed6dfcedc1..18d527f7fad4 100644
->>> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json
->>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json
->>> @@ -19,5 +19,17 @@
->>>       },
->>>       {
->>>           "ArchStdEvent": "UNALIGNED_LDST_SPEC"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "External memory request",
->>> +        "EventCode": "0xC1",
->>> +        "EventName": "BIU_EXT_MEM_REQ",
->>> +        "BriefDescription": "External memory request"
->>> +    },
->>> +    {
->>> +        "PublicDescription": "External memory request to 
->>> non-cacheable memory",
->>> +        "EventCode": "0xC2",
->>> +        "EventName": "BIU_EXT_MEM_REQ_NC",
->>> +        "BriefDescription": "External memory request to 
->>> non-cacheable memory"
->>>       }
->>>   ]
->>> diff --git 
->>> a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json 
->>> b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json
->>> deleted file mode 100644
->>> index 20f2165c85fe..000000000000
->>> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json
->>> +++ /dev/null
->>> @@ -1,14 +0,0 @@
->>> -[
->>> -    {
->>> -        "ArchStdEvent": "SAMPLE_POP"
->>> -    },
->>> -    {
->>> -        "ArchStdEvent": "SAMPLE_FEED"
->>> -    },
->>> -    {
->>> -        "ArchStdEvent": "SAMPLE_FILTRATE"
->>> -    },
->>> -    {
->>> -        "ArchStdEvent": "SAMPLE_COLLISION"
->>> -    }
->>> -]
->>> -- 
->>> 2.25.1
->>
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Adding some debug out shows:
+[    0.866795] imx8mp-blk-ctrl 32fc0000.blk-ctrl: domain->power_dev: 0x0
+[    0.873257] imx8mp-blk-ctrl 32fc0000.blk-ctrl: data->name: hdmiblk-hdcp
+[    0.879905] imx8mp-blk-ctrl 32fc0000.blk-ctrl: data->gpc_name: hdcp
+
+AFAICS the power domains 'hrv' and 'hdcp' are missing in the 'hdmi_blk_ctrl: 
+blk-ctrl@32fc0000' node thus resulting in a NULL pointer from calling 
+dev_pm_domain_attach_by_name().
+
+Is there a patch I am missing.
+
+Best regards,
+Alexander
+
+

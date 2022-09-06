@@ -2,120 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E215ADD54
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D945ADD58
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbiIFCaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 22:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S236288AbiIFCa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 22:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiIFCaA (ORCPT
+        with ESMTP id S230377AbiIFCaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 22:30:00 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A49F13D13;
-        Mon,  5 Sep 2022 19:30:00 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-11f34610d4aso25092334fac.9;
-        Mon, 05 Sep 2022 19:30:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=bgR9Dm7RR5gy3vWeeBp7FcKJWvBmN2YdFy8Dv8gJKQE=;
-        b=XRSD/tHu3mDbAYLrqQkykRrKB4dgcOx5QOHshQLu84iBVPsW1EIBHmd1ecMaJ0o8AE
-         6eeQJwS0VtM8YjtOAnYST5fdYc1MgHrZ7Ow/6KO71j/VzKXhxq1EaKVpK30781061LQ9
-         kc4KR/bNert1+OtLaNbl4Ht6XjApUJXIR5vtu0xAFigRCs1PmTgaRzp2AzhNSpIef+rO
-         ZhAltJY+vtitIfKhva/Q6QsyKz2ZDVLjP+LEtgIlX+SisOSL+TGw9USgUsWkvPAm+01Y
-         N0z2i/v2AcOfHOEUYTRwSzUaRPJ7e4xat+7VgNbTV26eemZvMPKIldSMYe4Wb5IXlbii
-         m5xA==
-X-Gm-Message-State: ACgBeo0FbgXWZHWSaKSOoyGcT/ko21X1qA3Fs0NCtr/95fmRUPnaQVGF
-        nNPG9/X6cKQW6el3/I61SxXtW8FQ6w==
-X-Google-Smtp-Source: AA6agR453kgOl7QJNbxXMSvEeEKK/ga5wy8mSasvv0WthRCBCxzzWFERYf/TOjtk9667ew6xSZLW4Q==
-X-Received: by 2002:a05:6870:4410:b0:122:520b:2159 with SMTP id u16-20020a056870441000b00122520b2159mr10794228oah.27.1662431399440;
-        Mon, 05 Sep 2022 19:29:59 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k12-20020a056870818c00b00127a91041a9sm846270oae.38.2022.09.05.19.29.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 19:29:59 -0700 (PDT)
-Received: (nullmailer pid 3334458 invoked by uid 1000);
-        Tue, 06 Sep 2022 02:29:58 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        David Heidelberg <david@ixit.cz>
-In-Reply-To: <20220905144554.1772073-1-abel.vesa@linaro.org>
-References: <20220905144554.1772073-1-abel.vesa@linaro.org>
-Subject: Re: [PATCH v7 1/2] dt-bindings: misc: fastrpc convert bindings to yaml
-Date:   Mon, 05 Sep 2022 21:29:58 -0500
-Message-Id: <1662431398.288835.3334457.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 5 Sep 2022 22:30:24 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFB41EC4C;
+        Mon,  5 Sep 2022 19:30:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662431423; x=1693967423;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=G15JBOOK8EI0eKdSgCyHHPZ83FHdpeAzR9JiZNu8Z80=;
+  b=ctWO8hLyA7EwoykAyUfgcO7CLnzbn5WXDrrbhGZhd9Bh0ocUdSu4K02W
+   RdufqUSzCKyzvj5vFYndAxxGBNqUj7qkKE8ZlgnKmQinBmU0E0roafWrq
+   FQ6FpyVGD5HLAW1+rOxD4QWuX1sFfnJzwbqAiXyULtCYo2/cfSLxdGuxX
+   yj7bkeRYJYxZLDN6/ol0+UkIlpoqyUrXRp2PBqCRs5WW6YqD0iDC4Uipo
+   INMvloUCaGJX73bLh6EvRV2o+RHORxKwweoU9lAsQGog+SwlWVjKQqnqI
+   JdoKywYJJtI4ZLESDFsaGN5qb/jMOJbG5HWA72Ln6/6YJSCaIfvXNQGjl
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="283480856"
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="283480856"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 19:30:22 -0700
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="643983689"
+Received: from chenchar-mobl1.amr.corp.intel.com (HELO [10.212.193.190]) ([10.212.193.190])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 19:30:22 -0700
+Message-ID: <0ce441af-c825-3061-ad92-c360c339e924@intel.com>
+Date:   Mon, 5 Sep 2022 19:30:21 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH Part2 v6 09/49] x86/fault: Add support to handle the RMP
+ fault for user address
+Content-Language: en-US
+To:     Ashish Kalra <Ashish.Kalra@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, jroedel@suse.de,
+        thomas.lendacky@amd.com, hpa@zytor.com, ardb@kernel.org,
+        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        jmattson@google.com, luto@kernel.org, dave.hansen@linux.intel.com,
+        slp@redhat.com, pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Sep 2022 17:45:53 +0300, Abel Vesa wrote:
-> Convert Qualcomm FastRPC bindings to yaml format, so that we could validate
-> dt-entries correctly and any future additions can go into yaml format.
+On 6/20/22 16:03, Ashish Kalra wrote:
 > 
-> Use compute-cb@ subnodes instead of just cb@.
+> When SEV-SNP is enabled globally, a write from the host goes through the
+> RMP check. When the host writes to pages, hardware checks the following
+> conditions at the end of page walk:
 > 
-> Also add qcom,non-secure-domain, qcom,glink-channels and
-> qcom,smd-channels missing properties to make sure dtbs_check doesn't
-> fail right off the bat.
+> 1. Assigned bit in the RMP table is zero (i.e page is shared).
+> 2. If the page table entry that gives the sPA indicates that the target
+>    page size is a large page, then all RMP entries for the 4KB
+>    constituting pages of the target must have the assigned bit 0.
+> 3. Immutable bit in the RMP table is not zero.
 > 
-> Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Co-developed-by: David Heidelberg <david@ixit.cz>
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> Changes since v6:
->  * renamed the parent node name in the example from smd-edge to glink-edge
-> 
->  .../devicetree/bindings/misc/qcom,fastrpc.txt |  88 -------------
->  .../bindings/misc/qcom,fastrpc.yaml           | 118 ++++++++++++++++++
->  2 files changed, 118 insertions(+), 88 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
->  create mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-> 
+> The hardware will raise page fault if one of the above conditions is not
+> met. Try resolving the fault instead of taking fault again and again. If
+> the host attempts to write to the guest private memory then send the
+> SIGBUS signal to kill the process. If the page level between the host and
+> RMP entry does not match, then split the address to keep the RMP and host
+> page levels in sync.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+When you're working on this changelog for Borislav, I'd like to make one
+other suggestion:  Please write it more logically and _less_ about what
+the hardware is doing.  We don't need about the internal details of what
+hardware is doing in the changelog.  Mentioning whether an RMP bit is 0
+or 1 is kinda silly unless it matters to the code.
 
-yamllint warnings/errors:
+For instance, what does the immutable bit have to do with all of this?
+There's no specific handling for it.  There are really only faults that
+you can handle and faults that you can't.
 
-dtschema/dtc warnings/errors:
+There's also some major missing context here about how it guarantees
+that pages that can't be handled *CAN* be split.  I think it has to do
+with disallowing hugetlbfs which implies that the only pages that might
+need splitting are THP's.+	/*
+> +	 * If its an RMP violation, try resolving it.
+> +	 */
+> +	if (error_code & X86_PF_RMP) {
+> +		if (handle_user_rmp_page_fault(regs, error_code, address))
+> +			return;
+> +
+> +		/* Ask to split the page */
+> +		flags |= FAULT_FLAG_PAGE_SPLIT;
+> +	}
 
-
-doc reference errors (make refcheckdocs):
-Documentation/devicetree/bindings/remoteproc/qcom,glink-edge.yaml: Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-MAINTAINERS: Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+This also needs some chatter about why any failure to handle the fault
+automatically means splitting a page.

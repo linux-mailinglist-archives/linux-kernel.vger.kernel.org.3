@@ -2,137 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659315AE097
+	by mail.lfdr.de (Postfix) with ESMTP id B0F745AE098
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238789AbiIFHJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S233525AbiIFHJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233428AbiIFHJS (ORCPT
+        with ESMTP id S232675AbiIFHJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:09:18 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFD562A98;
-        Tue,  6 Sep 2022 00:09:13 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MMGZP1d3Cz9v7QZ;
-        Tue,  6 Sep 2022 15:03:41 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBX0lzs8RZjHR0nAA--.22279S2;
-        Tue, 06 Sep 2022 08:08:43 +0100 (CET)
-Message-ID: <394ed3b5f96afd3cf39e99675be1a32c89c8080d.camel@huaweicloud.com>
-Subject: Re: [PATCH v16 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
- and define KEY_LOOKUP_ALL
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 06 Sep 2022 09:08:23 +0200
-In-Reply-To: <YxZsbLIAcR4/bScc@kernel.org>
-References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
-         <20220905143318.1592015-6-roberto.sassu@huaweicloud.com>
-         <YxZsbLIAcR4/bScc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 6 Sep 2022 03:09:15 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2075.outbound.protection.outlook.com [40.107.94.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0297565663;
+        Tue,  6 Sep 2022 00:09:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dY1wPXHnrMEnxZciiGfS4XSgRUh/IXWahcmOFtN/+OdybMsqd+W9x/lxWaIUsqZoTHsH4rsItI3kf/WVJyG9N4L1/3650PE0b5ekY7q7/TkyYk1kaFTRV71pcqZg0cYrsNOH50wqJfo+3oaq1+hLEdabZ+g0ZXt8ot9tZR/4nLnlzrX7nNcByzU06t59VYkKLaeR5Ca7notRErd3djgctnEd0RhZjM82yjSahbJ+wXD8lh6GP3XvVrWWQZ0NK6ie5ynRxZ4jtoffE5znaOCBXc1E5adrXc9H20HBkP+h+M2P4AsoPbXJZVz0STnp89ZuoKucMcF56QktfLboXeanuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tVqjBGkFgXrs31AA2OHw7MU01gBpvRs6t5y6CM6f2Tg=;
+ b=lOjDBVufiEWaMCHFThqVBpo69/Ca31qNmAVV5ydA1N/za1AnL70f597eaeTUBLXh7c5GOQ8Cx1iP3NgeHOT/gpLn9pkmeyCzmcVRxIDxq3GRLtBeaYyTT+bQZt4vVfZGcjnMHn5XMX5nisIerqCYxNqztaQBm686q3OA1EwFNuEh4Uo0fxQoJN1wvBrLQcVSnIaEJZLsd+aYS94sZ8qLcjGPPwAKg/8L83hf9DmRz+kTHdVJEaVbrIdJxk9/TIuA21lA8Db30Mp7jWNW0m40fbeWAT4dB4iZbyzWe270UXcfEKsTJfKpSGMP7n8rD821EzIvoB4/5Vw7pE3xM0srww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tVqjBGkFgXrs31AA2OHw7MU01gBpvRs6t5y6CM6f2Tg=;
+ b=zn+MsRJlDS55rB9koppwTf9JIKLqRyfwc9/3fsa+EyQq1LsG/Ej88qKLWxqlQ9HMBg9TQdzHm5bHYB8dNb5HZ77UVn+5BWw2vEp6rM6MeB/yDVsMEcgd9VZRx+u8GRb4FhMwPCoBW+1jbfjxu8akK3rfxsEI3r68Bek3vxInxPI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
+ by DM6PR05MB4970.namprd05.prod.outlook.com (2603:10b6:5:31::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.5; Tue, 6 Sep
+ 2022 07:09:11 +0000
+Received: from PH0PR05MB8703.namprd05.prod.outlook.com
+ ([fe80::95af:33a4:b350:c335]) by PH0PR05MB8703.namprd05.prod.outlook.com
+ ([fe80::95af:33a4:b350:c335%8]) with mapi id 15.20.5612.012; Tue, 6 Sep 2022
+ 07:09:11 +0000
+From:   Ajay Kaher <akaher@vmware.com>
+To:     helgaas@kernel.org, bhelgaas@google.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com
+Cc:     x86@kernel.org, hpa@zytor.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
+        srivatsab@vmware.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        vsirnapalli@vmware.com, er.ajay.kaher@gmail.com,
+        willy@infradead.org, namit@vmware.com,
+        linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
+        jailhouse-dev@googlegroups.com, xen-devel@lists.xenproject.org,
+        acrn-dev@lists.projectacrn.org
+Subject: [PATCH v2] x86/PCI: Prefer MMIO over PIO on VMware hypervisor
+Date:   Tue,  6 Sep 2022 12:38:37 +0530
+Message-Id: <1662448117-10807-1-git-send-email-akaher@vmware.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR05CA0061.namprd05.prod.outlook.com
+ (2603:10b6:a03:74::38) To PH0PR05MB8703.namprd05.prod.outlook.com
+ (2603:10b6:510:bd::5)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwBX0lzs8RZjHR0nAA--.22279S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF15JryDWFyfXF47Ww15Jwb_yoW8uF17pF
-        WkJ3WFkr18JryxAwn7G3Wayw1rta9xKr17XFZ2gw1kZayFqr1vgrn7GF4a9F1FyrWq9F42
-        9rW7uF1Uua1DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj4KlcQADsm
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR05MB8703:EE_|DM6PR05MB4970:EE_
+X-MS-Office365-Filtering-Correlation-Id: 361688ab-6f30-4422-58aa-08da8fd6b2f1
+X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rpEmG/ZTZD41ci8rzga319nfcfWs6F4whtCEkJI1igtHShj/5o1VLFdArTGqtjMdJUQ3j1333o5vV/Px1O0GG2Uj3zj4cq7EBbEGguwtuYnG5WIzK014XG1a0SNRRgHxy+QGhgx78DPW/4hP/rPKdkm46Fq32f/JlnYXfu9fAgz3YWw6gWVRZ1uLE9Wk41ANTglPoqfvyd1FcExNpN3JePJe4sH7NLghX6okgRdiytGbNtziY91ftsvWi29UMKDMINRi6zUmWJZpuv5MPmedTsHEu0m1L1QttboRINoi06f0XUdZXfLYw5MTbIsktHtLW33/6Y46vb4nt2jCe269qOC9cXOy4nQHmZTBL7j4jq4mYUEtRuiKN51HVsLHxts5DVJxTmG3pK/89SJKCisLEDJ6zIC/ib/p3bZ2vvQyJKUfxzcfkErOwElh4SEXu5yJ7swQ8PiEghfIm0g2kc8nFLG3skw8+p01cV3BkoKkxArc7qtWQUDYczpG+TJEs+gZXNp2TfgFvX69zGcuhV16L05T83k9fi5MHBweme39oWZYLD1PXSJ4DBHvkTEXmMrK+OPt6NjIbuCdWOty8rltMwG+zYD4+ZaCzZobICxj/++mWLqADs7AixCOHeN9sNIplsC374NGmwCnH1vmWGSVj29LORst5AuIwRxWUKbF92Q4ee4VRAjEGZOlb+Qd5wTOhuAtFMiJrTWcvOMzkK/VbE/ocOYSloUCw7SUZd4AUcgfrKYFhnkJgpTdnwMIh3oVz6eR6dz2TT9zucNl6YOmTGKhfQFshJnL4y0VEi1NzK3XWey4TwqPevATsZhAuBHb
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(366004)(376002)(136003)(396003)(38350700002)(38100700002)(4326008)(8676002)(66946007)(66556008)(66476007)(316002)(2906002)(7416002)(26005)(5660300002)(8936002)(6512007)(52116002)(83380400001)(2616005)(186003)(6666004)(41300700001)(6486002)(6506007)(86362001)(36756003)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmthdHdLNFUwaVhQU08zS2ZzaUQwd3ppUUpKM3BFeVVnTDZYTzRjZGQ5NHcy?=
+ =?utf-8?B?Y0kyRWhmVkY3dTZyd1VnWVEyNkNBM3VnU1ZvZE1ZMmFTWDM5Q2l0dGs1WWk0?=
+ =?utf-8?B?UU5zWTVGMU1ianJsdldkNHk2elk0K0xHcEZEWXNrQndlZFV1cmhyeHhVcGhR?=
+ =?utf-8?B?NjRjQnh2MUhkKzRFSThZT093M0U1MUR3OVZhUkFTWmdaSTg1SmUrT3EzYWpz?=
+ =?utf-8?B?cE9oaUdJWjZtb2IrZ1h6SERzSDI2Ni9oaGVaNHBIS1RRNC9YNHAyamNSSjIw?=
+ =?utf-8?B?cHpNaXpsU25RaFJBY0lZcGFkS2JIU2xDNFdvSHpWTjJVcVJsMmZURHBNSWJU?=
+ =?utf-8?B?NjI0NVFSS0NyOGFBdWdBU1pQRTB6eDZZdG1HbzRUdjZQZWVFWExxVlBaMklB?=
+ =?utf-8?B?L3gyNDc5a1ZoczAraXc5d1E4ZDNPYkJhOG1FejNXMFBieEcrVG1zQzg3RkxZ?=
+ =?utf-8?B?VWYxNFM3QnN2QkZTZEg4WWJuUXRrUHJYdTZwYy9GM2JjL1pLNTdtcW5JaVZn?=
+ =?utf-8?B?RkRPTnQ0a1ptKzhuTDdldUhXWk9XNFdXSVpYTWpJSW8rdHBQcno5MEg0MzVX?=
+ =?utf-8?B?bzk3RTBCazl1eFpyTGl0WHFvcnFTaGVqS1pSOUFGWE1KNm9CVWY4Y1hpRVJ3?=
+ =?utf-8?B?VVoxZ1ZzaHliR0VNWW4xTGk3VHRLZnV0djVjVnJTRUUvUmJXNnVUZnpBNGQv?=
+ =?utf-8?B?bEY5QWZQNzRYc2JRdzhQUDNYY2xyVHhJQWsyb1o0QzQ2YlBma3JWUy8rZzdu?=
+ =?utf-8?B?ZGMycC9YRjZTTGsrKzVaTGVaRmIvRlNiaVl0SGVrckRoY2R5cndpVjFoZ2k1?=
+ =?utf-8?B?N3RSQmFBSEpNR2s4QnoySVNOdGFFR0VnOEFTOTB6Q01tZWF4bFRwRTZwaFdv?=
+ =?utf-8?B?Zkl1ZzRNZXZiNS8rSHFESmpZMSt1bUEzUExKUUtPRFpQUzNkaWFQaDUvQnFE?=
+ =?utf-8?B?WXNJa1ZGcndETUkzTmgxem1QUlJWMDhOb2k1R0xTNytwWmh4cXo5d0xvcW9k?=
+ =?utf-8?B?enVhVFFPcndROGliRHlOaXMzdUZiSmFyNFZ3dVptbW82dWg1Q0N6NFNXeHFx?=
+ =?utf-8?B?NHFMazJuSHR5QU8xNXUrNThURTQxV2YzcHFJMWhSN2w5TlV6RklscVVQSTBX?=
+ =?utf-8?B?bUN0aytXbjV4cnpSWDkweXhNOW02UTNMdHZSSFJxN1Z4QmFyQ3FnMFo4bU1i?=
+ =?utf-8?B?c2NVeEp5NlBJR2xlemJ0U2xtUUl1S3RUOG90VUgxck1OeGU4RVZHL2RXL3hJ?=
+ =?utf-8?B?T2duVnJOTWE0Wmt5aUNEYlhWZ1A0Sm4yL3JXdWFiYU9VVGhTUU5iQ2hORUVG?=
+ =?utf-8?B?QWNueGlEVGZsOHpwVnU1cTZQRTZET3l4Z2VaY3VKQy8vRE9Hd2gxaU1HYzIr?=
+ =?utf-8?B?OGMrNHhVOTJETkFxUkpyT2hlSEZqT1ZFeHpFTGxpb0pkSG9tWXA0cHpxcEIv?=
+ =?utf-8?B?NmFiZzVYaWYxM212L01YRFJVR1NiZVNaaTFrOUlUcjk1ZDgzRE00ZWRKazVm?=
+ =?utf-8?B?TTBHeFBqb1ArMEMzSHNOWUlHYmxPM3Z0TlRLUGxoNDNkd3BjWjc1M1NrN2U0?=
+ =?utf-8?B?VjFuK1JYQWt4ZWphSU90TWxIYmhLVGpoWTlpSlhrbWNrWjVWSWllemIzMVF0?=
+ =?utf-8?B?ZnFqcVJ6alFhWVhvVE1DUlE5TmJYWndzc3l2cW1VNVJQSVNhZXNlR3FkVW9k?=
+ =?utf-8?B?WnY2aTRjbWNiZmdVNWlvS3dMdXhndVZxYU13ZEQvc2hLSDFnWG9sZXpDTVB0?=
+ =?utf-8?B?V1FtUHBTcy9RNHRNbzBkSWlENk9CWGFoUjVYWXRWa2hzWkdCeEtnNFhKSjJ2?=
+ =?utf-8?B?VEMxT0Z3QXEySTBjZmppRTBOVlpHQjhKL2VEd3lSY2I2SmpyejRRRElOKzR4?=
+ =?utf-8?B?eHRRZWwwZG1zcHRobDhOVkNIL3dEWGtUSlZ5ZDhEQXFlRG9rY05BR2NhYjVM?=
+ =?utf-8?B?WWpQbUlsckhyb1NZRGxrVXlhTHBzYktvQTVzeWc0MG9JMUg3QzBFVW9qaTJ3?=
+ =?utf-8?B?eTVOUVZjQnI1VmJwQjZIQ1M2YVpVTVA3MW9GWnM2eW1MZ0p0dmUzSzFmZzY1?=
+ =?utf-8?B?ckdBY0FibkhWUHVydFFZVFhtTDZLZDV6emQ0SE5UZVBRVFFBSHdWRDV5ZDh0?=
+ =?utf-8?Q?3d+euH4uv/iBa1JTsHAqiuoX8?=
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR05MB4970
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-06 at 00:38 +0300, Jarkko Sakkinen wrote:
-> On Mon, Sep 05, 2022 at 04:33:11PM +0200, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > In preparation for the patch that introduces the
-> > bpf_lookup_user_key() eBPF
-> > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
-> > able to
-> > validate the kfunc parameters. Add them to enum key_lookup_flag, so
-> > that
-> > all the current ones and the ones defined in the future are
-> > automatically
-> > exported through BTF and available to eBPF programs.
-> > 
-> > Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking
-> > whether a
-> > variable contains only defined flags.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Reviewed-by: KP Singh <kpsingh@kernel.org>
-> > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> You should remove ack if there is any substantial change.
+During boot-time there are many PCI config reads, these could be performed
+either using Port IO instructions (PIO) or memory mapped I/O (MMIO).
 
-Yes, sorry. I thought you were fine with the change due to:
+PIO are less efficient than MMIO, they require twice as many PCI accesses
+and PIO instructions are serializing. As a result, MMIO should be preferred
+when possible over PIO.
 
-https://lore.kernel.org/bpf/YxF4H9MTDj+PnJ+V@kernel.org/
+Virtual Machine test result using VMware hypervisor
+1 hundred thousand reads using raw_pci_read() took:
+PIO: 12.809 seconds
+MMIO: 8.517 seconds (~33.5% faster then PIO)
 
-> 
-> > ---
-> >  include/linux/key.h      | 6 ++++++
-> >  security/keys/internal.h | 2 --
-> >  2 files changed, 6 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/linux/key.h b/include/linux/key.h
-> > index 7febc4881363..d84171f90cbd 100644
-> > --- a/include/linux/key.h
-> > +++ b/include/linux/key.h
-> > @@ -88,6 +88,12 @@ enum key_need_perm {
-> >  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
-> > deferred */
-> >  };
-> >  
-> > +enum key_lookup_flag {
-> > +	KEY_LOOKUP_CREATE = 0x01,	/* Create special keyrings if they
-> > don't exist */
-> > +	KEY_LOOKUP_PARTIAL = 0x02,	/* Permit partially constructed
-> > keys to be found */
-> > +	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL), /*
-> > OR of previous flags */
-> 
-> Drop the comments (should be reviewed separately + out of context).
+Currently, when these reads are performed by a virtual machine, they all
+cause a VM-exit, and therefore each one of them induces a considerable
+overhead.
 
-The same style is used for many definitions in include/linux/key.h
+This overhead can be further improved, by mapping MMIO region of virtual
+machine to memory area that holds the values that the “emulated hardware”
+is supposed to return. The memory region is mapped as "read-only” in the
+NPT/EPT, so reads from these regions would be treated as regular memory
+reads. Writes would still be trapped and emulated by the hypervisor.
 
-No problem to remove them, please just let me know where they should
-be. Often, eBPF maintainers asked me to add a description to the code
-to explain how new definitions should be used.
+Virtual Machine test result with above changes in VMware hypervisor
+1 hundred thousand read using raw_pci_read() took:
+PIO: 12.809 seconds
+MMIO: 0.010 seconds
 
-Thanks
+This helps to reduce virtual machine PCI scan and initialization time by
+~65%. In our case it reduced to ~18 mSec from ~55 mSec.
 
-Roberto
+MMIO is also faster than PIO on bare-metal systems, but due to some bugs
+with legacy hardware and the smaller gains on bare-metal, it seems prudent
+not to change bare-metal behavior.
+
+Signed-off-by: Ajay Kaher <akaher@vmware.com>
+---
+v1 -> v2:
+Limit changes to apply only to VMs [Matthew W.]
+---
+ arch/x86/pci/common.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
+diff --git a/arch/x86/pci/common.c b/arch/x86/pci/common.c
+index ddb7986..1e5a8f7 100644
+--- a/arch/x86/pci/common.c
++++ b/arch/x86/pci/common.c
+@@ -20,6 +20,7 @@
+ #include <asm/pci_x86.h>
+ #include <asm/setup.h>
+ #include <asm/irqdomain.h>
++#include <asm/hypervisor.h>
+ 
+ unsigned int pci_probe = PCI_PROBE_BIOS | PCI_PROBE_CONF1 | PCI_PROBE_CONF2 |
+ 				PCI_PROBE_MMCONF;
+@@ -57,14 +58,58 @@ int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
+ 	return -EINVAL;
+ }
+ 
++#ifdef CONFIG_HYPERVISOR_GUEST
++static int vm_raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
++						int reg, int len, u32 *val)
++{
++	if (raw_pci_ext_ops)
++		return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
++	if (domain == 0 && reg < 256 && raw_pci_ops)
++		return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
++	return -EINVAL;
++}
++
++static int vm_raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
++						int reg, int len, u32 val)
++{
++	if (raw_pci_ext_ops)
++		return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
++	if (domain == 0 && reg < 256 && raw_pci_ops)
++		return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
++	return -EINVAL;
++}
++#endif /* CONFIG_HYPERVISOR_GUEST */
++
+ static int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *value)
+ {
++#ifdef CONFIG_HYPERVISOR_GUEST
++	/*
++	 * MMIO is faster than PIO, but due to some bugs with legacy
++	 * hardware, it seems prudent to prefer MMIO for VMs and PIO
++	 * for bare-metal.
++	 */
++	if (!hypervisor_is_type(X86_HYPER_NATIVE))
++		return vm_raw_pci_read(pci_domain_nr(bus), bus->number,
++					 devfn, where, size, value);
++#endif /* CONFIG_HYPERVISOR_GUEST */
++
+ 	return raw_pci_read(pci_domain_nr(bus), bus->number,
+ 				 devfn, where, size, value);
+ }
+ 
+ static int pci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 value)
+ {
++#ifdef CONFIG_HYPERVISOR_GUEST
++	/*
++	 * MMIO is faster than PIO, but due to some bugs with legacy
++	 * hardware, it seems prudent to prefer MMIO for VMs and PIO
++	 * for bare-metal.
++	 */
++	if (!hypervisor_is_type(X86_HYPER_NATIVE))
++		return vm_raw_pci_write(pci_domain_nr(bus), bus->number,
++					  devfn, where, size, value);
++#endif /* CONFIG_HYPERVISOR_GUEST */
++
+ 	return raw_pci_write(pci_domain_nr(bus), bus->number,
+ 				  devfn, where, size, value);
+ }
+-- 
+2.7.4
 

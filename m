@@ -2,83 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE7C5AEF4E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0DB5AEF58
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234203AbiIFPsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
+        id S233743AbiIFPt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233149AbiIFPrO (ORCPT
+        with ESMTP id S233854AbiIFPrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:47:14 -0400
-Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8E5861D3;
-        Tue,  6 Sep 2022 07:57:31 -0700 (PDT)
-Received: from [10.2.11.251] (unknown [10.2.11.251])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 6 Sep 2022 11:47:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5236A6C7F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 07:57:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662476277;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uYOnT3WdHbcwCr8H+t7+tWjbf0atY1c9YvOA6+hgbSo=;
+        b=RjGFvg8y7LdOxKtY8SSlQcZo90aboDDyS4fSMv2DVxE17U2CN8ak3Jbht2bN1wN0sGTs2E
+        bnsJdgLHFgUdOSKN+WgFSwpbE6KUE9kPX08xnNgUMLk1UnkEYC8+NdCbbBFYp8ixtLSb3h
+        UUkUwXuxq+L3329amCPaCcOyhaapXNM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-457-_IgzUhngPAiRRZqjq7yHDw-1; Tue, 06 Sep 2022 10:57:54 -0400
+X-MC-Unique: _IgzUhngPAiRRZqjq7yHDw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by 7of9.schinagl.nl (Postfix) with ESMTPSA id E981C186DB58;
-        Tue,  6 Sep 2022 16:57:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
-        t=1662476249; bh=26S2U724s7f4DM/gBAKidyozMiGXmfCW23f0ZmJvOfc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=NZ1CkwwnEW3KQfVpLyAMOhrPw3FwVbqMS7aDMSwJAPl1ooCYDbpwuUXfW3M3rYILG
-         WzfMmtGas74EMQtEh6EN2zdf1AsHZC9+HVL9iADniXlX58SJGamOLBIBsav6VHymAO
-         z4QdrI5appMZCbcwiUKSRjdN49rYRl13Fwj0GQQ4=
-Message-ID: <098a4abd-32fa-ce02-7d6d-aa3db6c7fceb@schinagl.nl>
-Date:   Tue, 6 Sep 2022 16:57:28 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8C1B1C0BDEA;
+        Tue,  6 Sep 2022 14:57:53 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 120181410F3C;
+        Tue,  6 Sep 2022 14:57:52 +0000 (UTC)
+Message-ID: <323f6375-0e1b-8326-2c74-b7a4db4693a1@redhat.com>
+Date:   Tue, 6 Sep 2022 10:57:51 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH] linkstate: Add macros for link state up/down
-Content-Language: nl
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Olliver Schinagl <oliver+list@schinagl.nl>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <20220906083754.2183092-1-oliver@schinagl.nl>
- <Yxc6o+6u2zlPxU3a@lunn.ch>
-From:   Olliver Schinagl <oliver@schinagl.nl>
-In-Reply-To: <Yxc6o+6u2zlPxU3a@lunn.ch>
+Subject: Re: [PATCH v12 09/10] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20220901205745.323326-1-longman@redhat.com>
+ <20220901205745.323326-10-longman@redhat.com> <YxRfy/SaKkJSm5jY@debian.me>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YxRfy/SaKkJSm5jY@debian.me>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Andrew,
 
-On 06-09-2022 14:18, Andrew Lunn wrote:
-> On Tue, Sep 06, 2022 at 10:37:54AM +0200, Olliver Schinagl wrote:
->> The phylink_link_state.state property can be up or down, via 1 and 0.
->>
->> The other link state's (speed, duplex) are defined in ethtool.h so lets
->> add defines for the link-state there as well so we can use macro's to
->> define our up/down states.
-> Hi Olliver
+On 9/4/22 04:20, Bagas Sanjaya wrote:
+> On Thu, Sep 01, 2022 at 04:57:44PM -0400, Waiman Long wrote:
+>>   	It accepts only the following input values when written to.
+>>   
+>>   	  ========	================================
+>> -	  "root"	a partition root
+>> -	  "member"	a non-root member of a partition
+>> +	  "member"	Non-root member of a partition
+>> +	  "root"	Partition root
+>> +	  "isolated"	Partition root without load balancing
+>>   	  ========	================================
+>>   
+>> <snipped>
+>> +	On read, the "cpuset.cpus.partition" file can show the following
+>> +	values.
+>> +
+>> +	  ======================	==============================
+>> +	  "member"			Non-root member of a partition
+>> +	  "root"			Partition root
+>> +	  "isolated"			Partition root without load balancing
+>> +	  "root invalid (<reason>)"	Invalid partition root
+>> +	  "isolated invalid (<reason>)"	Invalid isolated partition root
+>> +	  ======================	==============================
+>> +
+> These tables above produced htmldocs warnings:
 >
-> The change itself is fine, but we don't add to the API without
-> users. Please make use of these two new values somewhere, to show they
-> are really useful.
+> Documentation/admin-guide/cgroup-v2.rst:2191: WARNING: Malformed table.
+> Text in column margin in table line 4.
 >
->      Andrew
+> ========      ================================
+> "member"      Non-root member of a partition
+> "root"        Partition root
+> "isolated"    Partition root without load balancing
+> ========      ================================
+> Documentation/admin-guide/cgroup-v2.rst:2229: WARNING: Malformed table.
+> Text in column margin in table line 5.
+>
+> ======================        ==============================
+> "member"                      Non-root member of a partition
+> "root"                        Partition root
+> "isolated"                    Partition root without load balancing
+> "root invalid (<reason>)"     Invalid partition root
+> "isolated invalid (<reason>)" Invalid isolated partition root
+> ======================        ==============================
+>
+> I have applied the fixup:
+>
+> ---- >8 ----
+>
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 76b3ea9fd5c560..77b6faecf066cb 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -2185,11 +2185,11 @@ Cpuset Interface Files
+>   
+>   	It accepts only the following input values when written to.
+>   
+> -	  ========	================================
+> +	  ==========	================================
+>   	  "member"	Non-root member of a partition
+>   	  "root"	Partition root
+>   	  "isolated"	Partition root without load balancing
+> -	  ========	================================
+> +	  ==========	================================
+>   
+>   	The root cgroup is always a partition root and its state
+>   	cannot be changed.  All other non-root cgroups start out as
+> @@ -2222,13 +2222,13 @@ Cpuset Interface Files
+>   	On read, the "cpuset.cpus.partition" file can show the following
+>   	values.
+>   
+> -	  ======================	==============================
+> +	  =============================	=====================================
+>   	  "member"			Non-root member of a partition
+>   	  "root"			Partition root
+>   	  "isolated"			Partition root without load balancing
+>   	  "root invalid (<reason>)"	Invalid partition root
+>   	  "isolated invalid (<reason>)"	Invalid isolated partition root
+> -	  ======================	==============================
+> +	  =============================	=====================================
+>   
+>   	In the case of an invalid partition root, a descriptive string on
+>   	why the partition is invalid is included within parentheses.
+>
+> Thanks.
 
-So I've found quite a lot of users, which I suppose is good. I've since 
-decided to turn it into an enum, and refer in the structs as `enum 
-phy_linkstate link:1` (is this even legal?) Would that ok for v2?
+Thanks for the fixes. Will apply that.
 
-
-Olliver
+Cheers,
+Longman
 

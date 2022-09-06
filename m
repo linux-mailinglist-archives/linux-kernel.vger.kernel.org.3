@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F3B5AF0E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E0E5AF0E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234780AbiIFQnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S233116AbiIFQoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiIFQnD (ORCPT
+        with ESMTP id S232975AbiIFQnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:43:03 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6277B8E4FC;
-        Tue,  6 Sep 2022 09:20:53 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1279948d93dso9597984fac.10;
-        Tue, 06 Sep 2022 09:20:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=rR2dGcgU3Avgajl3EcMm1g9CpPk21WU3ulLPg/s1H+E=;
-        b=ahICpWPRPpHorg4yNx6eI2hwy0It2HGi6CQ7M+M+XuzqRxl7gue0QPIS3q90Zn2csr
-         5kgR/KwK5k75RjUUINJp6NW4TtHO1AzvAGPMotV1yTo8CSf1xtCtktBQysYPEn7SHKqh
-         GYYQdajsZY4qUwlKwdC3SdrG7ih7Akdu3xUs3Mib/uKS3OnFLVqtd/oxezZeYf5coZd6
-         wI+DNDx/q6vNSsZVe0qCH7qPHaJKg2svtZG1QL2uL6lSPqXWoVTxX+zlRuPWugz4C2Aw
-         uR5wkdN4cnXtfyM4sN+0/vBocHLhRx/3yObdjeTR0Ov/1MjsSYDJeb4pmfJb/DDStx6s
-         c84Q==
-X-Gm-Message-State: ACgBeo2DrfqOCs/3GkY+5B7BeQ0adCd7/0lfMmgibnbrsvUO3JB9Q6Yp
-        +CHjlig1KzFnEpcNiwrVgw==
-X-Google-Smtp-Source: AA6agR7ETGljIxyZ8Bqaz4EhxbTTRfSdRZsDUoPt2jX5fmeviQtE2SfVJoSd+GnJVKGVA8X1y+j5fw==
-X-Received: by 2002:a05:6870:888a:b0:127:2c9e:e73b with SMTP id m10-20020a056870888a00b001272c9ee73bmr6838486oam.220.1662481253253;
-        Tue, 06 Sep 2022 09:20:53 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n3-20020a9d7403000000b00636956b3080sm6118676otk.43.2022.09.06.09.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 09:20:52 -0700 (PDT)
-Received: (nullmailer pid 636194 invoked by uid 1000);
-        Tue, 06 Sep 2022 16:20:52 -0000
-Date:   Tue, 6 Sep 2022 11:20:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mauri Sandberg <maukka@ext.kapsi.fi>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 3/7] dt-bindings: PCI: mvebu: Add orion5x compatible
-Message-ID: <20220906162052.GA636104-robh@kernel.org>
-References: <20220718202843.6766-1-maukka@ext.kapsi.fi>
- <20220905192310.22786-1-pali@kernel.org>
- <20220905192310.22786-4-pali@kernel.org>
+        Tue, 6 Sep 2022 12:43:33 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A22959E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1662481298;
+        bh=uz87CgceYBbO2OhWDcPevEI1vdwZq53H6Z0g3t5ePO4=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date;
+        b=PrYFJsmdD5GB0hsm8t5MyUVBYc1AFD78TPva5a61EaCBoxo8OVwIb/JxQVdsUNf2h
+         ob3FJCoZxVnH26tqCacelqBiMCoGup6dVRcTFxYv/cdii+vvelq3Q8+8IsWAajxP+B
+         A9GqSvMdYZBS6pNbbPdC1tEwEwGzBmVjYVhFrLto=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from homer.fritz.box ([185.221.150.184]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MNsw4-1okvHu2Yem-00OJSZ; Tue, 06
+ Sep 2022 18:21:38 +0200
+Message-ID: <9f593b8ac1b731cbbf92dc1c7b497b668752b325.camel@gmx.de>
+Subject: 307af6c879377 "mbcache: automatically delete entries from cache on
+ freeing" ==> PREEMPT_RT grumble
+From:   Mike Galbraith <efault@gmx.de>
+To:     Jan Kara <jack@suse.cz>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Date:   Tue, 06 Sep 2022 18:21:37 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220905192310.22786-4-pali@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Ae1N0W/StEUfza6/Jal2zXaHgK509gqRdVi7l8Ey93lKUsgSOve
+ 05mP4I/V8cBZhjUgrTZaVH7W0insSFdqrfgR4jSQDGZvu7cnzwV8LwfeBaVnefa9IVletgL
+ xW/PyY7tM7a2X1NUMveoFiC9FGB62jnHcaZSSUzB2zirZu9TIHJpe5wdlAInL+pX1lhhX6+
+ MGLOUUCVrE6uRDtr3fwWw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xl0kwGdufbw=:FofzA+lKQhgNb6DPjAStB0
+ p72IdW0iNSzEuQZz4PokQzcEJAb3sb2WbJCgY4YkJr/EQ5cISnf/MZXtsSUHd+Kb2Ydu5k0Y9
+ KgybUlxYBmno6GST5n/fhM7YXR1lgUUCqgfxxLEqPhWuUeQPMfMgrtRF2+xroDLxrrQvPqP5h
+ eKedFecU4GRcEs1ItycX3cU8FjIyaIYRuJXQDvteMssx6X2zrzJFXIUrqYY2pURZNMyZKUBXp
+ EgB4YYmb2PXFrF1/zJ4QwqV3oDR020hywHVAhMh0NFkFm/+HHzGK5uv07iTKpgcONF/oEXfXj
+ F2hw6UqkeVJutid7FvyJtiB2rGDIyYM4w1OcLv9fMNxxJSxZAhl2ts07sX1zjR2mCbEKcz+Ci
+ vpEBvFQLoiEzOuytqdF1s73Yac7Cjo0+HToHjhjCpKo4SYNvV4JlQNVK4wk0D1rV9051kkizQ
+ xVj+NhzTJgj9HuyCmIDSlyAM/e9O3XbOo81dDFqOKlqRWXje6TsN5Tb1dvs/GrpOigah+/iUq
+ vmS9Fx1vsCNvbVTgHOrWpXMeLzTOPigqBBXtgq33idbAseMzwz/3nfFsowwEF3xaIGDDowlvy
+ ImFWtq84fusfqFZD0whr0rUmFZ3tnRd2P31aPoDKrZP9ltClFgHtxiJp+NN83KPMbC/x2y0M9
+ CNN2vdBqpkhBU3KB9dVOcEQ1dVVtGi6hS/uWmv8iHaQGmzTv+k5bgbnl3OMPyvhhbSRpXoSk6
+ qJeBOw0RtCm6I+x0/q3Svlg9W/dOZZmTp5c8pIymQ/uZ9RdfFka5qe2tEGTJj6f6/H3dtbF4K
+ fO3sUpenfQthP2wbAcxTRIkwQE3bSi2pu9v5KvvUyT40S+i8lTd0422NJAcs7eLinZQXz0c4C
+ 5jRf/jcwvEDvNwFrvkkiEC2ZKeFwVqBvtwxTqyTtnLW4WTmT9mD3LMAePJdE8zmlWztLhIEaM
+ w+P3T/nQp1kmBhlj4Tt6JBEWABPgmw3E4ARC1Hw7ipzFTI0mNZE3PdJywa6PvDWkfKP1EnKRq
+ nNiYfhgw45+QImjx5g06RwT/p64ufRyz0lBs9tVq2UKz6LU5t86isXwiPMi9nqo7mlOC31Xyz
+ czrA8FvqWRIzzA35aI+Ns7FmllR2TQ9icMvuHYx8u5crP+PE77hooJxIufVYYnuC2zVLm24H8
+ AVfv2JzuPCEg1jKVH9DUoOiKmx
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,21 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Sep 2022 21:23:06 +0200, Pali Rohár wrote:
-> From: Mauri Sandberg <maukka@ext.kapsi.fi>
-> 
-> Add a compatible string to bindings to indicate that orion5x PCIe is
-> supported too. Orion requires additional bindings for config space
-> registers.
-> 
-> Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
-> Changes in v3:
-> * Add more detailed information about MMIO registers
-> ---
->  Documentation/devicetree/bindings/pci/mvebu-pci.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+Hi Jan,
 
-Acked-by: Rob Herring <robh@kernel.org>
+diff --git a/fs/mbcache.c b/fs/mbcache.c
+index d1ebb5df2856..96f1d49d30a5 100644
+=2D-- a/fs/mbcache.c
++++ b/fs/mbcache.c
+@ -106,21 +106,28 @@ int mb_cache_entry_create(struct mb_cache *cache, gfp=
+_t mask, u32 key,
+ 		}
+ 	}
+ 	hlist_bl_add_head(&entry->e_hash_list, head);
+-	hlist_bl_unlock(head);
+-
++	/*
++	 * Add entry to LRU list before it can be found by
++	 * mb_cache_entry_delete() to avoid races
++	 */
+ 	spin_lock(&cache->c_list_lock);
+ 	list_add_tail(&entry->e_list, &cache->c_list);
+-	/* Grab ref for LRU list */
+-	atomic_inc(&entry->e_refcnt);
+ 	cache->c_entry_count++;
+ 	spin_unlock(&cache->c_list_lock);
++	hlist_bl_unlock(head);
+
+ 	return 0;
+ }
+ EXPORT_SYMBOL(mb_cache_entry_create);
+
+The above movement of hlist_bl_unlock() is a problem for RT wrt both
+taking and releasing of ->c_list_lock, it becoming an rtmutex in RT and
+hlist_bl_unlock() taking a preemption blocking bit spinlock.
+
+Is that scope increase necessary?  If so, looks like ->c_list_lock
+could probably become a raw_spinlock_t without anyone noticing.
+
+	-Mike

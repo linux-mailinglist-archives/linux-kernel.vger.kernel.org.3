@@ -2,201 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A785AF56A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61275AF585
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiIFUH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S230124AbiIFUIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiIFUHD (ORCPT
+        with ESMTP id S230052AbiIFUIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:07:03 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D90AA375
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:02:29 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id h1so7443065wmd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:02:29 -0700 (PDT)
+        Tue, 6 Sep 2022 16:08:00 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E5BBFE91
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:03:24 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id b16so16623398edd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:03:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date;
-        bh=O5EcAc3lvXGI4JQrr9YrLyEGo4R9/Yu+CBbQ8ensU3s=;
-        b=OJjVDKh3fcI/VQtO8L3fMXmkefvnaZ2TPXs4g3bDwXhiEMKG2tIGFa9WR1Rh+3uUBR
-         zdGGM9Rmc74vfA+iORlSEN0n6yp66wZtNXZv0fPfYCTohNw3OZcMD+6dfcpdnPYyiwnh
-         QoNnAEdgtugwvr2kaVFYcJT6RkBCn/qtM199k=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=F6ib7HMkD8OZCaZPl3GcVqEvWmm4ctxdEGHR+aqIKVc=;
+        b=ArRU4YWH8hE+2Z1UVe6QOKE5hPjwCYDsbvdE1/PUCWN56FAMQZ/4zqvMIxfOOB2keG
+         VETEDtrmessAghGKMzFBp8CyQVDdAQqU4x+gj9gaRUZoj5nIhCcQp0TbKqYFac2p/l7c
+         s8E+JhqrISyguo1blQmfoTPAnbUnCSoWPxO87AW5Jnu7jG9ZsEG2SFveoy3yVuaEmC/j
+         AJGJVNakAM7s7v3qVwNh9qCbZDvWMeFX5CX+Yh1J7gk3RyIO+elUjPVl8TzAtf+ajC+9
+         gJrzytdJaqd/ImlOWyICFY6pKT6Gkrs3MV9zjaV5uubNzgLGsQ1rDLq1Oj3ES5Fk9n3N
+         yT3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=O5EcAc3lvXGI4JQrr9YrLyEGo4R9/Yu+CBbQ8ensU3s=;
-        b=ZkJmxQIeGE1+aj3zztfuSV9d7m4D/6Ues0YsAeJ06bIxFu/zaCJAG8075gK6cPY9bk
-         AtkzGD3cH+hNk5pLORYdJVBDa1fLDrW7cnnPMXv/L8d3r5v8D/wfaEqDp31u6fBRQRLl
-         WjO8j48DvAsbf6egODfEJLMSwAMtpAKjw9WbFcVrLBRfnwH6HZBZKL98H0zTKFS13Vdm
-         ZmzCky4bUwBNRHvB6RivhvaukI2SQF45z2i3UL1bu6j+SAP3JwlJmvLGFrTk75jFfu2z
-         7obQpAo3pFxS8b7N7bHtCimcoswLNe62f6gkdWrx3s0AvJKT4gNAgtIuU5dNv5g/d/KL
-         zg8A==
-X-Gm-Message-State: ACgBeo2Wmjh5M+EigQvUCw+UHdxMnRPJSt5/COt3NXgT2EAddPqLQKgN
-        Z+2B2JaIokK7nuyhlTFtVS65Gg==
-X-Google-Smtp-Source: AA6agR65s22H1tafLgmg1vAilgOCZbkdlz33Ij5qA3Rkmxo9dxUOa6iRjfhaDOHPYMF30Bz5WXKt1A==
-X-Received: by 2002:a05:600c:34d2:b0:3a5:afe5:3eb5 with SMTP id d18-20020a05600c34d200b003a5afe53eb5mr14724108wmq.122.1662494510204;
-        Tue, 06 Sep 2022 13:01:50 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id y2-20020adfd082000000b0021d6924b777sm13896061wrh.115.2022.09.06.13.01.49
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=F6ib7HMkD8OZCaZPl3GcVqEvWmm4ctxdEGHR+aqIKVc=;
+        b=Hc+fW7dqLceGxrTuuhBcPS5eqWWDfz4zXK40AtJTc0+BVNLMpds6B29gKTQaJP14E+
+         8ZMZUE29sYTzGU9D0UDdnz65bnNXmkLX/hmlzT6xKe0ikjJvYY1bJHQyCN+bGiIgnfMy
+         8DMuReuWFj33hwjjL2MpVm5M+PwiV/0DUHbnAQukUZkmTqJIbHzL4BYs5oJ+3mYUmyJA
+         E06rHjbuQlyGrwFkFRqjv3AMTeRSG27ELnedpyBSB6RZx5IX3UM5jwmCe/BuCi6mYPmT
+         4qdo618QjjlsovukhMU/+zJnrkT51gQRE7uq1yCvgj8jpfb9ksNfHFUlba1KFLF8X57c
+         RPww==
+X-Gm-Message-State: ACgBeo2ET9H27zTuVIgoT82ZWoN3qtKt9XgQOFUJz7bdZ+udO8WoMID0
+        sHJdZBob/5DXKp+4SwuG9gk=
+X-Google-Smtp-Source: AA6agR5gwvJ8nN16z0kDOnfFe8gSYaFolah5D1v/bfxdS5M65ePk383S/fOmy1b3my8s0GvcbJd5jQ==
+X-Received: by 2002:a05:6402:2499:b0:440:942a:40c2 with SMTP id q25-20020a056402249900b00440942a40c2mr225612eda.37.1662494582166;
+        Tue, 06 Sep 2022 13:03:02 -0700 (PDT)
+Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
+        by smtp.gmail.com with ESMTPSA id b2-20020a1709062b4200b006fee7b5dff2sm7207555ejg.143.2022.09.06.13.03.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 13:01:49 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 22:01:47 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Message-ID: <YxenK8xZHC6Q4Eu4@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
- <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
+        Tue, 06 Sep 2022 13:03:01 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Maxime Ripard <mripard@kernel.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?ISO-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v2 35/41] drm/sun4i: tv: Convert to atomic hooks
+Date:   Tue, 06 Sep 2022 22:02:59 +0200
+Message-ID: <3192228.44csPzL39Z@kista>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v2-35-459522d653a7@cerno.tech>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech> <20220728-rpi-analog-tv-properties-v2-35-459522d653a7@cerno.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
-X-Operating-System: Linux phenom 5.18.0-4-amd64 
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 12:05:19PM +0200, Christian König wrote:
-> Am 15.08.22 um 11:54 schrieb Dmitry Osipenko:
-> > Higher order pages allocated using alloc_pages() aren't refcounted and they
-> > need to be refcounted, otherwise it's impossible to map them by KVM. This
-> > patch sets the refcount of the tail pages and fixes the KVM memory mapping
-> > faults.
-> > 
-> > Without this change guest virgl driver can't map host buffers into guest
-> > and can't provide OpenGL 4.5 profile support to the guest. The host
-> > mappings are also needed for enabling the Venus driver using host GPU
-> > drivers that are utilizing TTM.
-> > 
-> > Based on a patch proposed by Trigger Huang.
+Dne ponedeljek, 29. avgust 2022 ob 15:11:49 CEST je Maxime Ripard napisal(a):
+> The sun4i TV driver still uses legacy enable and disable hook
+> implementation. Let's convert to the atomic variants.
 > 
-> Well I can't count how often I have repeated this: This is an absolutely
-> clear NAK!
-> 
-> TTM pages are not reference counted in the first place and because of this
-> giving them to virgl is illegal.
-> 
-> Please immediately stop this completely broken approach. We have discussed
-> this multiple times now.
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-Yeah we need to get this stuff closed for real by tagging them all with
-VM_IO or VM_PFNMAP asap.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-It seems ot be a recurring amount of fun that people try to mmap dma-buf
-and then call get_user_pages on them.
+BTW, I suggest you merge fixes/cleanups, no need to drag them in this super 
+long series.
 
-Which just doesn't work. I guess this is also why Rob Clark send out that
-dma-buf patch to expos mapping information (i.e. wc vs wb vs uncached).
+Best regards,
+Jernej
 
-There seems to be some serious bonghits going on :-/
--Daniel
 
-> 
-> Regards,
-> Christian.
-> 
-> > 
-> > Cc: stable@vger.kernel.org
-> > Cc: Trigger Huang <Trigger.Huang@gmail.com>
-> > Link: https://www.collabora.com/news-and-blog/blog/2021/11/26/venus-on-qemu-enabling-new-virtual-vulkan-driver/#qcom1343
-> > Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com> # AMDGPU (Qemu and crosvm)
-> > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> > ---
-> >   drivers/gpu/drm/ttm/ttm_pool.c | 25 ++++++++++++++++++++++++-
-> >   1 file changed, 24 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/ttm/ttm_pool.c b/drivers/gpu/drm/ttm/ttm_pool.c
-> > index 21b61631f73a..11e92bb149c9 100644
-> > --- a/drivers/gpu/drm/ttm/ttm_pool.c
-> > +++ b/drivers/gpu/drm/ttm/ttm_pool.c
-> > @@ -81,6 +81,7 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
-> >   	unsigned long attr = DMA_ATTR_FORCE_CONTIGUOUS;
-> >   	struct ttm_pool_dma *dma;
-> >   	struct page *p;
-> > +	unsigned int i;
-> >   	void *vaddr;
-> >   	/* Don't set the __GFP_COMP flag for higher order allocations.
-> > @@ -93,8 +94,10 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
-> >   	if (!pool->use_dma_alloc) {
-> >   		p = alloc_pages(gfp_flags, order);
-> > -		if (p)
-> > +		if (p) {
-> >   			p->private = order;
-> > +			goto ref_tail_pages;
-> > +		}
-> >   		return p;
-> >   	}
-> > @@ -120,6 +123,23 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
-> >   	dma->vaddr = (unsigned long)vaddr | order;
-> >   	p->private = (unsigned long)dma;
-> > +
-> > +ref_tail_pages:
-> > +	/*
-> > +	 * KVM requires mapped tail pages to be refcounted because put_page()
-> > +	 * is invoked on them in the end of the page fault handling, and thus,
-> > +	 * tail pages need to be protected from the premature releasing.
-> > +	 * In fact, KVM page fault handler refuses to map tail pages to guest
-> > +	 * if they aren't refcounted because hva_to_pfn_remapped() checks the
-> > +	 * refcount specifically for this case.
-> > +	 *
-> > +	 * In particular, unreferenced tail pages result in a KVM "Bad address"
-> > +	 * failure for VMMs that use VirtIO-GPU when guest's Mesa VirGL driver
-> > +	 * accesses mapped host TTM buffer that contains tail pages.
-> > +	 */
-> > +	for (i = 1; i < 1 << order; i++)
-> > +		page_ref_inc(p + i);
-> > +
-> >   	return p;
-> >   error_free:
-> > @@ -133,6 +153,7 @@ static void ttm_pool_free_page(struct ttm_pool *pool, enum ttm_caching caching,
-> >   {
-> >   	unsigned long attr = DMA_ATTR_FORCE_CONTIGUOUS;
-> >   	struct ttm_pool_dma *dma;
-> > +	unsigned int i;
-> >   	void *vaddr;
-> >   #ifdef CONFIG_X86
-> > @@ -142,6 +163,8 @@ static void ttm_pool_free_page(struct ttm_pool *pool, enum ttm_caching caching,
-> >   	if (caching != ttm_cached && !PageHighMem(p))
-> >   		set_pages_wb(p, 1 << order);
-> >   #endif
-> > +	for (i = 1; i < 1 << order; i++)
-> > +		page_ref_dec(p + i);
-> >   	if (!pool || !pool->use_dma_alloc) {
-> >   		__free_pages(p, order);
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch

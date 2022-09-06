@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E086C5ADEAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 06:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DBF5ADEB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 06:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiIFEyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 00:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S230189AbiIFE6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 00:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiIFEyr (ORCPT
+        with ESMTP id S229499AbiIFE6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 00:54:47 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2FC12A98;
-        Mon,  5 Sep 2022 21:54:45 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 05:54:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662440083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hEQ8207Wqe20jUMzx18IBRP3OCnR8vMZaKCXgkLkmoI=;
-        b=cpKKgUdkl1pr2b5NAK+po55wTT4lLZFVj2qXXrk+tQJtYXNItl2oTLRu2W5BbAdhXBxw2d
-        zVPdqLj35UVIKoqWdjwC+LOeaHmkB4MQkY09RikH1UtRHMJYcb+LiGFTEEvAfDSNba37CD
-        z91nYZEs/rqeI0hbE1URG2e9enSD2Vs=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Andrew Jones <andrew.jones@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Reiji Watanabe <reijiw@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] KVM: selftests: Add test for RAZ/WI AArch32 ID
- registers
-Message-ID: <YxbSkCMxZdwKGqQM@google.com>
-References: <20220902154804.1939819-1-oliver.upton@linux.dev>
- <20220902154804.1939819-8-oliver.upton@linux.dev>
- <20220905073140.lrsrbyu2zhkiki5a@kamzik>
+        Tue, 6 Sep 2022 00:58:20 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1138769F58
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 21:58:18 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R671e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VObAuyh_1662440294;
+Received: from 30.240.120.121(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VObAuyh_1662440294)
+          by smtp.aliyun-inc.com;
+          Tue, 06 Sep 2022 12:58:16 +0800
+Message-ID: <8b35da5c-3a1b-0edb-d35c-026081864092@linux.alibaba.com>
+Date:   Tue, 6 Sep 2022 12:58:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220905073140.lrsrbyu2zhkiki5a@kamzik>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH v4 0/3] drivers/perf: add DDR Sub-System Driveway PMU
+ driver for Yitian 710 SoC
+Content-Language: en-US
+To:     will@kernel.org, Jonathan.Cameron@Huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     rdunlap@infradead.org, robin.murphy@arm.com, mark.rutland@arm.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20220617111825.92911-1-xueshuai@linux.alibaba.com>
+ <20220818031822.38415-1-xueshuai@linux.alibaba.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20220818031822.38415-1-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Drew,
 
-On Mon, Sep 05, 2022 at 09:31:40AM +0200, Andrew Jones wrote:
-
-[...]
-
-> > +static uint64_t reg_ids[] = {
-> > +	KVM_ARM64_SYS_REG(SYS_ID_PFR0_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_PFR1_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_DFR0_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_MMFR0_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_MMFR1_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_MMFR2_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_MMFR3_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_ISAR0_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_ISAR1_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_ISAR2_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_ISAR3_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_ISAR4_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_ISAR5_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_MMFR4_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_ISAR6_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_MVFR0_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_MVFR1_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_MVFR2_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_PFR2_EL1),
-> > +	KVM_ARM64_SYS_REG(SYS_ID_MMFR5_EL1),
+在 2022/8/18 AM11:18, Shuai Xue 写道:
+> Hi, Will,
 > 
-> Hi Oliver,
+> I am wondering that do you have any comments to this patch set? If/when you're
+> happy with them, cloud you please queue them up?
 > 
-> I see all the hidden and unallocated registers have been filtered out of
-> the test lists. They should also behave as RAZ, right? Maybe we should
-> keep them in the lists here for consistency and to test them as well.
+> Thank you :)
+> 
+> Cheers,
+> Shuai.
 
-Sure, can do. The reason I only tested these registers is because they
-have RAZ/WI behavior with this series, whereas the rest are RAZ +
-invariant. Should be easy enough to cover the whole range, though.
+Gentle ping. Any comment or suggestion is appreciated.
 
---
-Thanks,
-Oliver
+Best Regards,
+Shuai
+
+> 
+> Changes since v3:
+> - add Reviewed-by of Baolin
+> - Rebase on Linux v6.0 rc1
+> 
+> Changes since v2:
+> - relaxe build constraints and add COMPILE_TEST
+> - explicitly include dependent headers
+> - add Reviewed-by, thanks Jonathan Cameron and Randy Dunlap for their
+>   valuable review and comments
+> - Link: https://lore.kernel.org/linux-arm-kernel/20220715151310.90091-4-xueshuai@linux.alibaba.com/T/#m1116abc4b0bda1943ab436a45d95359f9bbe0858
+> 
+> Changes since v1:
+> - add high level workflow about DDRC so that user cloud better understand
+>   the PMU hardware mechanism
+> - rewrite patch description and add interrupt sharing constraints
+> - delete event perf prefix
+> - add a condition to fix bug in ali_drw_pmu_isr
+> - perfer CPU in the same Node when migrating irq
+> - use FIELD_PREP and FIELD_GET to make code more readable
+> - add T-Head HID and leave ARMHD700 as CID for compatibility
+> - Link: https://lore.kernel.org/linux-arm-kernel/eb50310d-d4a0-c7ff-7f1c-b4ffd919b10c@linux.alibaba.com/T/
+> 
+> This patchset adds support for Yitian 710 DDR Sub-System Driveway PMU driver,
+> which custom-built by Alibaba Group's chip development business, T-Head.
+> 
+> Shuai Xue (3):
+>   docs: perf: Add description for Alibaba's T-Head PMU driver
+>   drivers/perf: add DDR Sub-System Driveway PMU driver for Yitian 710
+>     SoC
+>   MAINTAINERS: add maintainers for Alibaba' T-Head PMU driver
+> 
+>  .../admin-guide/perf/alibaba_pmu.rst          | 100 +++
+>  Documentation/admin-guide/perf/index.rst      |   1 +
+>  MAINTAINERS                                   |   6 +
+>  drivers/perf/Kconfig                          |   7 +
+>  drivers/perf/Makefile                         |   1 +
+>  drivers/perf/alibaba_uncore_drw_pmu.c         | 810 ++++++++++++++++++
+>  6 files changed, 925 insertions(+)
+>  create mode 100644 Documentation/admin-guide/perf/alibaba_pmu.rst
+>  create mode 100644 drivers/perf/alibaba_uncore_drw_pmu.c
+> 

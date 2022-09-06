@@ -2,363 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA81F5AED06
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437265AEBA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241532AbiIFOUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S241358AbiIFOEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241578AbiIFOSB (ORCPT
+        with ESMTP id S240950AbiIFOBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:18:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3E8165A0;
-        Tue,  6 Sep 2022 06:49:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FF91B81632;
-        Tue,  6 Sep 2022 13:48:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED70C43144;
-        Tue,  6 Sep 2022 13:48:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662472121;
-        bh=Xspf1siNA2veFERk5oxaz29o37YRB94lEUsASX0GoWE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kJf6kE8qXZTvHjXPrzwQRjUpkuoPYFI1kKaTKLhDpXj1klT1bZCo2lOwQzE6YBigR
-         WLvy7rZEUOxJ1pV0bdnMz8AUo2mqT/enysgpqFLWwfEr+ImVigcB11yGOylhr2kFdM
-         kt3PXG7hvzoZoUrF0kvhunT54JQ989pV4NNzUwk0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Fedor Pchelkin <pchelkin@ispras.ru>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH 5.19 155/155] tty: n_gsm: avoid call of sleeping functions from atomic context
-Date:   Tue,  6 Sep 2022 15:31:43 +0200
-Message-Id: <20220906132835.931990078@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
-References: <20220906132829.417117002@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 6 Sep 2022 10:01:33 -0400
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8D01057F;
+        Tue,  6 Sep 2022 06:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1662471339; bh=CGyEzQ7Ohr5A/cWCuHJ4L2zyjQiyb+aYxH/EYO9OTGU=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=PvaKeuuyqsDS6jTFvvDc+oQyBZ900VRvVuiY9zEzWgmQT2bghS1tGDnZtAfNrqt7m
+         4RmcEsomUuSZM/1n/E7qULITo1PFJMgVP95voEjg4QO00/noepJqEaKyKXghW8eI2O
+         K2NtwwAVGZ8J/TnTs+7PaCHZGbTUqfeR2mGac+CI=
+Date:   Tue, 6 Sep 2022 15:35:39 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: rockchip: add BT/wifi nodes to Pinephone Pro
+Message-ID: <20220906133539.6ghjlzbs2ozgsa7v@core>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20220906124713.1683587-1-tom@tom-fitzhenry.me.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220906124713.1683587-1-tom@tom-fitzhenry.me.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fedor Pchelkin <pchelkin@ispras.ru>
+Hello Tom,
 
-commit 902e02ea9385373ce4b142576eef41c642703955 upstream.
+On Tue, Sep 06, 2022 at 10:47:13PM +1000, Tom Fitzhenry wrote:
+> Pinephone Pro includes a AzureWave AW-CM256SM wifi (sdio0) and
+> bt (uart0) combo module, which is based on Cypress
+> CYP43455 (BCM43455).
+> 
+> Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+> ---
+>  .../dts/rockchip/rk3399-pinephone-pro.dts     | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> index 2e058c3150256..096238126e4c1 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> @@ -43,6 +43,20 @@ key-power {
+>  		};
+>  	};
+>  
+> +	/* Power sequence for SDIO WiFi module */
+> +	sdio_pwrseq: sdio-pwrseq {
+> +		compatible = "mmc-pwrseq-simple";
+> +		clocks = <&rk818 1>;
+> +		clock-names = "ext_clock";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&wifi_enable_h_pin>;
+> +		post-power-on-delay-ms = <100>;
+> +		power-off-delay-us = <500000>;
 
-Syzkaller reports the following problem:
+Do we really need such long delays? Almost no boards in rockchip/ use such
+delays at all, and if they do they don't usually use power off delay.
 
-BUG: sleeping function called from invalid context at kernel/printk/printk.c:2347
-in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1105, name: syz-executor423
-3 locks held by syz-executor423/1105:
- #0: ffff8881468b9098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x90 drivers/tty/tty_ldisc.c:266
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: tty_write_lock drivers/tty/tty_io.c:952 [inline]
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: do_tty_write drivers/tty/tty_io.c:975 [inline]
- #1: ffff8881468b9130 (&tty->atomic_write_lock){+.+.}-{3:3}, at: file_tty_write.constprop.0+0x2a8/0x8e0 drivers/tty/tty_io.c:1118
- #2: ffff88801b06c398 (&gsm->tx_lock){....}-{2:2}, at: gsmld_write+0x5e/0x150 drivers/tty/n_gsm.c:2717
-irq event stamp: 3482
-hardirqs last  enabled at (3481): [<ffffffff81d13343>] __get_reqs_available+0x143/0x2f0 fs/aio.c:946
-hardirqs last disabled at (3482): [<ffffffff87d39722>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (3482): [<ffffffff87d39722>] _raw_spin_lock_irqsave+0x52/0x60 kernel/locking/spinlock.c:159
-softirqs last  enabled at (3408): [<ffffffff87e01002>] asm_call_irq_on_stack+0x12/0x20
-softirqs last disabled at (3401): [<ffffffff87e01002>] asm_call_irq_on_stack+0x12/0x20
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 2 PID: 1105 Comm: syz-executor423 Not tainted 5.10.137-syzkaller #0
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x167 lib/dump_stack.c:118
- ___might_sleep.cold+0x1e8/0x22e kernel/sched/core.c:7304
- console_lock+0x19/0x80 kernel/printk/printk.c:2347
- do_con_write+0x113/0x1de0 drivers/tty/vt/vt.c:2909
- con_write+0x22/0xc0 drivers/tty/vt/vt.c:3296
- gsmld_write+0xd0/0x150 drivers/tty/n_gsm.c:2720
- do_tty_write drivers/tty/tty_io.c:1028 [inline]
- file_tty_write.constprop.0+0x502/0x8e0 drivers/tty/tty_io.c:1118
- call_write_iter include/linux/fs.h:1903 [inline]
- aio_write+0x355/0x7b0 fs/aio.c:1580
- __io_submit_one fs/aio.c:1952 [inline]
- io_submit_one+0xf45/0x1a90 fs/aio.c:1999
- __do_sys_io_submit fs/aio.c:2058 [inline]
- __se_sys_io_submit fs/aio.c:2028 [inline]
- __x64_sys_io_submit+0x18c/0x2f0 fs/aio.c:2028
- do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> +		/* WL_REG_ON on module */
+> +		reset-gpios = <&gpio0 RK_PB2 GPIO_ACTIVE_LOW>;
+> +	};
+> +
+>  	vcc_sys: vcc-sys-regulator {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "vcc_sys";
+> @@ -360,11 +374,31 @@ vsel2_pin: vsel2-pin {
+>  		};
+>  	};
+>  
+> +	sdio-pwrseq {
+> +		wifi_enable_h_pin: wifi-enable-h-pin {
+> +			rockchip,pins = <0 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
+> +		};
+> +	};
+> +
+>  	sound {
+>  		vcc1v8_codec_en: vcc1v8-codec-en {
+>  			rockchip,pins = <3 RK_PA4 RK_FUNC_GPIO &pcfg_pull_down>;
+>  		};
+>  	};
+> +
+> +	wireless-bluetooth {
+> +		bt_wake_pin: bt-wake-pin {
+> +			rockchip,pins = <2 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>;
+> +		};
+> +
+> +		bt_host_wake_pin: bt-host-wake-pin {
+> +			rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>;
+> +		};
+> +
+> +		bt_reset_pin: bt-reset-pin {
+> +			rockchip,pins = <0 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
+> +		};
+> +	};
+>  };
+>  
+>  &sdmmc {
 
-The problem happens in the following control flow:
+see below
 
-gsmld_write(...)
-spin_lock_irqsave(&gsm->tx_lock, flags) // taken a spinlock on TX data
- con_write(...)
-  do_con_write(...)
-   console_lock()
-    might_sleep() // -> bug
+> @@ -380,6 +414,20 @@ &sdmmc {
+>  	status = "okay";
+>  };
+>  
+> +&sdio0 {
 
-As far as console_lock() might sleep it should not be called with
-spinlock held.
+sd'i'o0 comes before 'm' in the alphabet.
 
-The patch replaces tx_lock spinlock with mutex in order to avoid the
-problem.
+> +	bus-width = <4>;
+> +	cap-sd-highspeed;
+> +	cap-sdio-irq;
+> +	disable-wp;
+> +	keep-power-in-suspend;
+> +	mmc-pwrseq = <&sdio_pwrseq>;
+> +	non-removable;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&sdio0_bus4 &sdio0_cmd &sdio0_clk>;
+> +	sd-uhs-sdr104;
+> +	status = "okay";
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+It might also be good to add the wifi node, and hookup the interrupt line and
+pinctrls, so that WoW works, while you're at it.
 
-Fixes: 32dd59f96924 ("tty: n_gsm: fix race condition in gsmld_write()")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Link: https://lore.kernel.org/r/20220829131640.69254-3-pchelkin@ispras.ru
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/tty/n_gsm.c |   53 +++++++++++++++++++++++-----------------------------
- 1 file changed, 24 insertions(+), 29 deletions(-)
+See eg. https://elixir.bootlin.com/linux/v5.19.7/source/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b-plus.dts#L30
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -248,7 +248,7 @@ struct gsm_mux {
- 	bool constipated;		/* Asked by remote to shut up */
- 	bool has_devices;		/* Devices were registered */
- 
--	spinlock_t tx_lock;
-+	struct mutex tx_mutex;
- 	unsigned int tx_bytes;		/* TX data outstanding */
- #define TX_THRESH_HI		8192
- #define TX_THRESH_LO		2048
-@@ -680,7 +680,6 @@ static int gsm_send(struct gsm_mux *gsm,
- 	struct gsm_msg *msg;
- 	u8 *dp;
- 	int ocr;
--	unsigned long flags;
- 
- 	msg = gsm_data_alloc(gsm, addr, 0, control);
- 	if (!msg)
-@@ -702,10 +701,10 @@ static int gsm_send(struct gsm_mux *gsm,
- 
- 	gsm_print_packet("Q->", addr, cr, control, NULL, 0);
- 
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	list_add_tail(&msg->list, &gsm->tx_ctrl_list);
- 	gsm->tx_bytes += msg->len;
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 	gsmld_write_trigger(gsm);
- 
- 	return 0;
-@@ -730,7 +729,7 @@ static void gsm_dlci_clear_queues(struct
- 	spin_unlock_irqrestore(&dlci->lock, flags);
- 
- 	/* Clear data packets in MUX write queue */
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	list_for_each_entry_safe(msg, nmsg, &gsm->tx_data_list, list) {
- 		if (msg->addr != addr)
- 			continue;
-@@ -738,7 +737,7 @@ static void gsm_dlci_clear_queues(struct
- 		list_del(&msg->list);
- 		kfree(msg);
- 	}
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- }
- 
- /**
-@@ -1024,10 +1023,9 @@ static void __gsm_data_queue(struct gsm_
- 
- static void gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- {
--	unsigned long flags;
--	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
-+	mutex_lock(&dlci->gsm->tx_mutex);
- 	__gsm_data_queue(dlci, msg);
--	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
-+	mutex_unlock(&dlci->gsm->tx_mutex);
- }
- 
- /**
-@@ -1039,7 +1037,7 @@ static void gsm_data_queue(struct gsm_dl
-  *	is data. Keep to the MRU of the mux. This path handles the usual tty
-  *	interface which is a byte stream with optional modem data.
-  *
-- *	Caller must hold the tx_lock of the mux.
-+ *	Caller must hold the tx_mutex of the mux.
-  */
- 
- static int gsm_dlci_data_output(struct gsm_mux *gsm, struct gsm_dlci *dlci)
-@@ -1099,7 +1097,7 @@ static int gsm_dlci_data_output(struct g
-  *	is data. Keep to the MRU of the mux. This path handles framed data
-  *	queued as skbuffs to the DLCI.
-  *
-- *	Caller must hold the tx_lock of the mux.
-+ *	Caller must hold the tx_mutex of the mux.
-  */
- 
- static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
-@@ -1115,7 +1113,7 @@ static int gsm_dlci_data_output_framed(s
- 	if (dlci->adaption == 4)
- 		overhead = 1;
- 
--	/* dlci->skb is locked by tx_lock */
-+	/* dlci->skb is locked by tx_mutex */
- 	if (dlci->skb == NULL) {
- 		dlci->skb = skb_dequeue_tail(&dlci->skb_list);
- 		if (dlci->skb == NULL)
-@@ -1169,7 +1167,7 @@ static int gsm_dlci_data_output_framed(s
-  *	Push an empty frame in to the transmit queue to update the modem status
-  *	bits and to transmit an optional break.
-  *
-- *	Caller must hold the tx_lock of the mux.
-+ *	Caller must hold the tx_mutex of the mux.
-  */
- 
- static int gsm_dlci_modem_output(struct gsm_mux *gsm, struct gsm_dlci *dlci,
-@@ -1283,13 +1281,12 @@ static int gsm_dlci_data_sweep(struct gs
- 
- static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
- {
--	unsigned long flags;
- 	int sweep;
- 
- 	if (dlci->constipated)
- 		return;
- 
--	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
-+	mutex_lock(&dlci->gsm->tx_mutex);
- 	/* If we have nothing running then we need to fire up */
- 	sweep = (dlci->gsm->tx_bytes < TX_THRESH_LO);
- 	if (dlci->gsm->tx_bytes == 0) {
-@@ -1300,7 +1297,7 @@ static void gsm_dlci_data_kick(struct gs
- 	}
- 	if (sweep)
- 		gsm_dlci_data_sweep(dlci->gsm);
--	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
-+	mutex_unlock(&dlci->gsm->tx_mutex);
- }
- 
- /*
-@@ -1994,14 +1991,13 @@ static void gsm_dlci_command(struct gsm_
- static void gsm_kick_timeout(struct work_struct *work)
- {
- 	struct gsm_mux *gsm = container_of(work, struct gsm_mux, kick_timeout.work);
--	unsigned long flags;
- 	int sent = 0;
- 
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	/* If we have nothing running then we need to fire up */
- 	if (gsm->tx_bytes < TX_THRESH_LO)
- 		sent = gsm_dlci_data_sweep(gsm);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 
- 	if (sent && debug & 4)
- 		pr_info("%s TX queue stalled\n", __func__);
-@@ -2531,6 +2527,7 @@ static void gsm_free_mux(struct gsm_mux
- 			break;
- 		}
- 	}
-+	mutex_destroy(&gsm->tx_mutex);
- 	mutex_destroy(&gsm->mutex);
- 	kfree(gsm->txframe);
- 	kfree(gsm->buf);
-@@ -2602,6 +2599,7 @@ static struct gsm_mux *gsm_alloc_mux(voi
- 	}
- 	spin_lock_init(&gsm->lock);
- 	mutex_init(&gsm->mutex);
-+	mutex_init(&gsm->tx_mutex);
- 	kref_init(&gsm->ref);
- 	INIT_LIST_HEAD(&gsm->tx_ctrl_list);
- 	INIT_LIST_HEAD(&gsm->tx_data_list);
-@@ -2610,7 +2608,6 @@ static struct gsm_mux *gsm_alloc_mux(voi
- 	INIT_WORK(&gsm->tx_work, gsmld_write_task);
- 	init_waitqueue_head(&gsm->event);
- 	spin_lock_init(&gsm->control_lock);
--	spin_lock_init(&gsm->tx_lock);
- 
- 	gsm->t1 = T1;
- 	gsm->t2 = T2;
-@@ -2635,6 +2632,7 @@ static struct gsm_mux *gsm_alloc_mux(voi
- 	}
- 	spin_unlock(&gsm_mux_lock);
- 	if (i == MAX_MUX) {
-+		mutex_destroy(&gsm->tx_mutex);
- 		mutex_destroy(&gsm->mutex);
- 		kfree(gsm->txframe);
- 		kfree(gsm->buf);
-@@ -2790,17 +2788,16 @@ static void gsmld_write_trigger(struct g
- static void gsmld_write_task(struct work_struct *work)
- {
- 	struct gsm_mux *gsm = container_of(work, struct gsm_mux, tx_work);
--	unsigned long flags;
- 	int i, ret;
- 
- 	/* All outstanding control channel and control messages and one data
- 	 * frame is sent.
- 	 */
- 	ret = -ENODEV;
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	if (gsm->tty)
- 		ret = gsm_data_kick(gsm);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 
- 	if (ret >= 0)
- 		for (i = 0; i < NUM_DLCI; i++)
-@@ -3008,7 +3005,6 @@ static ssize_t gsmld_write(struct tty_st
- 			   const unsigned char *buf, size_t nr)
- {
- 	struct gsm_mux *gsm = tty->disc_data;
--	unsigned long flags;
- 	int space;
- 	int ret;
- 
-@@ -3016,13 +3012,13 @@ static ssize_t gsmld_write(struct tty_st
- 		return -ENODEV;
- 
- 	ret = -ENOBUFS;
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	space = tty_write_room(tty);
- 	if (space >= nr)
- 		ret = tty->ops->write(tty, buf, nr);
- 	else
- 		set_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- 
- 	return ret;
- }
-@@ -3319,14 +3315,13 @@ static struct tty_ldisc_ops tty_ldisc_pa
- static void gsm_modem_upd_via_data(struct gsm_dlci *dlci, u8 brk)
- {
- 	struct gsm_mux *gsm = dlci->gsm;
--	unsigned long flags;
- 
- 	if (dlci->state != DLCI_OPEN || dlci->adaption != 2)
- 		return;
- 
--	spin_lock_irqsave(&gsm->tx_lock, flags);
-+	mutex_lock(&gsm->tx_mutex);
- 	gsm_dlci_modem_output(gsm, dlci, brk);
--	spin_unlock_irqrestore(&gsm->tx_lock, flags);
-+	mutex_unlock(&gsm->tx_mutex);
- }
- 
- /**
+Looks like WIFI_HOST_WAKE_L is hooked to GPIO4_D0/PCIE_CLKREQnB_u according
+to the schematic. Let's hope GPIO4_D will consider 1.8V as high, because SoC
+GPIO4_D is in 3.0V domain and VDDIO of wifi chip is 1.8V.
 
+Other than that,
 
+Reviewed-by: Ondřej Jirman <megi@xff.cz>
+
+Thank you and kind regards,
+	o.

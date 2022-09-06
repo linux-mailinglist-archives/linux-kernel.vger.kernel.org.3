@@ -2,74 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D925AE375
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708BA5AE37C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239592AbiIFIu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 04:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S238813AbiIFIw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239553AbiIFIu3 (ORCPT
+        with ESMTP id S231739AbiIFIwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:50:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433671E1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 01:49:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CBFBB8164F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:49:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69793C433D6;
-        Tue,  6 Sep 2022 08:49:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662454159;
-        bh=maF/8doVyrhITy6wMH5ABApLAJPcAaF+21+F+N5hksk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JsmDjuV5Ty55bsUm6AoQmlD8xUBf1LW1meRiRljc8NDDfXcpLyzxNaISgKEusUIsc
-         aS9PC738BldYqFjYsv246tV0q/Y0NAxBeCoC22CUJFyg+wtMRHv6cGlh3Si0apDh43
-         KGTBiBQPoPUbafrI+XrMQV5GjifYk4d1VmKA5TRc=
-Date:   Tue, 6 Sep 2022 10:49:16 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, kbuild-all@lists.01.org,
-        lkp@intel.com
-Subject: Re: [PATCH char-misc-next] misc: microchip: pci1xxxx: Include
- depends on PCI & select AUXILIARY_BUS  in the Kconfig file to resolve build
- issues.
-Message-ID: <YxcJjNwL3/TxYhPc@kroah.com>
-References: <20220906083555.475103-1-kumaravel.thiagarajan@microchip.com>
+        Tue, 6 Sep 2022 04:52:23 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A695FBBC;
+        Tue,  6 Sep 2022 01:52:22 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MMJyy1CdHz687SK;
+        Tue,  6 Sep 2022 16:51:38 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Sep 2022 10:52:20 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 6 Sep
+ 2022 09:52:19 +0100
+Date:   Tue, 6 Sep 2022 09:52:18 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Robert Richter <rrichter@amd.com>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH 03/15] cxl: Unify debug messages when calling
+ devm_cxl_add_port()
+Message-ID: <20220906095218.0000046c@huawei.com>
+In-Reply-To: <Yxb3HQVr5BJzxedj@rric.localdomain>
+References: <20220831081603.3415-1-rrichter@amd.com>
+        <20220831081603.3415-4-rrichter@amd.com>
+        <20220831105945.00004668@huawei.com>
+        <Yxb3HQVr5BJzxedj@rric.localdomain>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906083555.475103-1-kumaravel.thiagarajan@microchip.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Your subject line is way too long :(
+On Tue, 6 Sep 2022 09:30:37 +0200
+Robert Richter <rrichter@amd.com> wrote:
 
+> On 31.08.22 10:59:45, Jonathan Cameron wrote:
+> > On Wed, 31 Aug 2022 10:15:51 +0200
+> > Robert Richter <rrichter@amd.com> wrote:
+> >   
+> > > CXL ports are added in a couple of code paths using
+> > > devm_cxl_add_port(). Debug messages are individually generated, but
+> > > are incomplete and inconsistent. Change this by moving its generation
+> > > to devm_cxl_add_port(). This unifies the messages and reduces code
+> > > duplication. Also, generate messages on failure.
+> > > 
+> > > Signed-off-by: Robert Richter <rrichter@amd.com>  
+> > 
+> > This is one for Dan etc as it is mostly a question of how verbose we want
+> > the debug prints to be plus preference for caller or callee being
+> > responsible for outputting this sort of message.
+> > 
+> > Patch looks good to me if we want to make this sort of change.  
+> 
+> Should I take this as a Reviewed-by?
 
-On Tue, Sep 06, 2022 at 02:05:55PM +0530, Kumaravel Thiagarajan wrote:
-> Some build errors were reported by kernel test robot <lkp@intel.com> on
-> the char-misc-next branch. This add-on patch will fix the errors.
+Hmm. I guess I could go that far as its a policy decision rather than correctness
 
-You should list the errors here so that we know what they are. 
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 > 
-> Fixes: 393fc2f5948fd340d016a9557eea6e1ac2f6c60c
+> Thanks,
+> 
+> -Robert
 
-As per the kernel documentation, this should be:
-Fixes: 393fc2f5948f ("misc: microchip: pci1xxxx: load auxiliary bus driver for the PIO function in the multi-function endpoint of pci1xxxx device.")
-
-Can you fix this up and send a v2?
-
-thanks,
-
-greg k-h

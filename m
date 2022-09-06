@@ -2,108 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DA65AE0FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E62D5AE104
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238915AbiIFHXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S238452AbiIFHZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238597AbiIFHX2 (ORCPT
+        with ESMTP id S238917AbiIFHXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:23:28 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694CB74B8C;
-        Tue,  6 Sep 2022 00:23:27 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id s14so866462plr.4;
-        Tue, 06 Sep 2022 00:23:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Pl2h4vsOG6M23r0OQYHFMQdM5uk7PYJhc61vxoQT21c=;
-        b=eGNHHLgF8zyFPeewUENbB1grkS03THyOUmOlJTrQn+rOcbwtQDKW5nO3JmXhFOBvyR
-         KegkNcCOrh7q02gATNVGh4mxS/4T3R4iuOCJ/7KErb1XmZgnwutu6VMCzizcS9JOL94m
-         KlCEfTSwsyjVEH2wY349FHw/CofAtJ9FDtkzIpvTQ/FBAnpLJCOWSeVOfZYuEoTGV7E0
-         LQzZQZsVnLEAfJfrnh/Cd75NDcVSNcdSSaKw8RjMeD8CDw89+0ASmudxMZJK3eo1Xpf2
-         bzWlayvaigu8aoLth3chhXm7cbfIlsPfN+/7mdAQc6V1/T39svb1baC1pZ2MTx8v9+Q/
-         BL6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Pl2h4vsOG6M23r0OQYHFMQdM5uk7PYJhc61vxoQT21c=;
-        b=B/khAyVUy6PVspoz0UAsmcbYyKEEorVKZ/D4irvdNj6nccp+sz0fgqmKOHU/FOttEy
-         7QrXJkomCpvF5tP5IdNTv5iAxSTda8tsCApXy+zny8S3Ox0Xf2WCHIMp039hsxpwoVxn
-         nyeuv0SZW68IGUivQmyjtsQkQOfer0Ob5Uky3JPXUJFRKxOmQnGc2D8uB+BOzE+fQigu
-         D37J80K7cdwJtAcPrxm58dsia8WC2VCp80ZcFKv4QBdDcBfQb5yjLoL9UnoaarCXyoZb
-         SaUWG5tNXU8lw2SAMK1zYb7J2riXRfOuj5UX1kWfC3Tvzg6NPa+XN5iiMjhvSSXU7oeM
-         V1eg==
-X-Gm-Message-State: ACgBeo05BiGZ1TdIdsWgQnn3/4sAVvabszYJuRCI4uc4jAKG08vzbLC1
-        G1tYKAW3UqGbncNOYiGgibY8M/fYQ7s=
-X-Google-Smtp-Source: AA6agR6te5AVdii7ND3kEy0cpnjV6KwARvvupDHtVidonGpWY/dIx7N441f7I8vr3iire1XAzotuKw==
-X-Received: by 2002:a17:90b:3a8e:b0:200:78b2:d8d9 with SMTP id om14-20020a17090b3a8e00b0020078b2d8d9mr7589737pjb.152.1662449006905;
-        Tue, 06 Sep 2022 00:23:26 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id r22-20020a63ce56000000b0041d95d805d6sm7778541pgi.57.2022.09.06.00.23.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 00:23:26 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     sboyd@kernel.org
-Cc:     mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] clk: mvebu: armada-37xx-tbg: Remove the unneeded result variable
-Date:   Tue,  6 Sep 2022 07:23:22 +0000
-Message-Id: <20220906072322.337253-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Sep 2022 03:23:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F4274BAA;
+        Tue,  6 Sep 2022 00:23:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4FBD51F965;
+        Tue,  6 Sep 2022 07:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662449012; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yWige9mo0MBBtPav5dIlbqrSvO7RJRBpbBUTOf+sq9M=;
+        b=WccstuGcN1E1smf3eeXr4m/9pomQg8ST93ACF2vvMP9mGzR6axKEmCztIjBdCY0kE1ePhF
+        qp1K5CsZswV66J5NVNekoHzxPlFalOoi6cZRPYDHsBj6ywB2YlS1u9Xkk+KAWE0r4Pl9uD
+        W0z/Db1D98aMVW/f++pbHZ2Vb4C25hg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2160313A7A;
+        Tue,  6 Sep 2022 07:23:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id f8r7BnT1FmOCNAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 06 Sep 2022 07:23:32 +0000
+Date:   Tue, 6 Sep 2022 09:23:31 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
+References: <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+ <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
+ <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
+ <YxEE1vOwRPdzKxoq@dhcp22.suse.cz>
+ <CAJuCfpHuzJGTA_-m0Jfawc7LgJLt4GztUUY4K9N9-7bFqJuXnw@mail.gmail.com>
+ <20220901201502.sn6223bayzwferxv@moria.home.lan>
+ <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
+ <20220905234649.525vorzx27ybypsn@kmo-framework>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905234649.525vorzx27ybypsn@kmo-framework>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Mon 05-09-22 19:46:49, Kent Overstreet wrote:
+> On Mon, Sep 05, 2022 at 10:49:38AM +0200, Michal Hocko wrote:
+> > This is really my main concern about this whole work. Not only it adds a
+> > considerable maintenance burden to the core MM because
+> 
+> [citation needed]
 
-Return the value of_clk_add_hw_provider() directly instead of storing it
-in another redundant variable.
+I thought this was clear from the email content (the part you haven't
+quoted here). But let me be explicit one more time for you.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/clk/mvebu/armada-37xx-tbg.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+I hope we can agree that in order for this kind of tracking to be useful
+you need to cover _callers_ of the allocator or in the ideal world
+the users/owner of the tracked memory (the later is sometimes much
+harder/impossible to track when the memory is handed over from one peer
+to another).
 
-diff --git a/drivers/clk/mvebu/armada-37xx-tbg.c b/drivers/clk/mvebu/armada-37xx-tbg.c
-index 585a02e0b330..fc403ad735ad 100644
---- a/drivers/clk/mvebu/armada-37xx-tbg.c
-+++ b/drivers/clk/mvebu/armada-37xx-tbg.c
-@@ -87,7 +87,7 @@ static int armada_3700_tbg_clock_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	struct clk *parent;
- 	void __iomem *reg;
--	int i, ret;
-+	int i;
- 
- 	hw_tbg_data = devm_kzalloc(&pdev->dev,
- 				   struct_size(hw_tbg_data, hws, NUM_TBG),
-@@ -123,9 +123,7 @@ static int armada_3700_tbg_clock_probe(struct platform_device *pdev)
- 			dev_err(dev, "Can't register TBG clock %s\n", name);
- 	}
- 
--	ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, hw_tbg_data);
--
--	return ret;
-+	return of_clk_add_hw_provider(np, of_clk_hw_onecell_get, hw_tbg_data);
- }
- 
- static int armada_3700_tbg_clock_remove(struct platform_device *pdev)
+It is not particularly useful IMO to see that a large portion of the
+memory has been allocated by say vmalloc or kvmalloc, right?  How
+much does it really tell you that a lot of memory has been allocated
+by kvmalloc or vmalloc? Yet, neither of the two is handled by the
+proposed tracking and it would require additional code to be added and
+_maintained_ to cover them. But that would be still far from complete,
+we have bulk allocator, mempools etc.
+
+If that was not enough some of those allocators are used by library code
+like seq_file, networking pools, module loader and whatnot. So this
+grows and effectively doubles the API space for many allocators as they
+need both normal API and the one which can pass the tracking context
+down the path to prevent double tracking. Right?
+
+This in my book is a considerable maintenance burden. And especially for
+the MM subsystem this means additional burden because we have a very
+rich allocators APIs.
+
+You are absolutely right that processing stack traces is PITA but that
+allows to see the actual callers irrespectively how many layers of
+indirection or library code it goes.
+
+> > it adds on top of
+> > our existing allocator layers complexity but it would need to spread beyond
+> > MM to be useful because it is usually outside of MM where leaks happen.
+> 
+> If you want the tracking to happen at a different level of the call stack, just
+> call _kmalloc() directly and call alloc_tag_add()/sub() yourself.
+
+As pointed above this just scales poorly and adds to the API space. Not
+to mention that direct use of alloc_tag_add can just confuse layers
+below which rely on the same thing.
+
+Hope this makes it clearer.
 -- 
-2.25.1
+Michal Hocko
+SUSE Labs

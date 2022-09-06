@@ -2,128 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA20B5AEF7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0745AEDA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiIFPzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
+        id S237615AbiIFOi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbiIFPya (ORCPT
+        with ESMTP id S234075AbiIFOiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:54:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B408B2E8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662477138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GesI69YyBCVOELWdci2COwV5wfsC9CiwSBWxkans3kQ=;
-        b=HlRT/qAUczR5l6rvM4K+ng6Oze0lBGwSjUHMLcXSNRCbMhiiVts0kCCPm+a4UsePeZcmOC
-        tHDByUkgBLpvQQqXc5k7R4PqKPV/D4NECTmQirJ4vt3FRfNZVKDYaT12l+84TbEqp+Mn6T
-        wcZLwQcYyoUYdDB5wfxadFqv55DpBpU=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589-ViJNUfFuPYm9BaikDtLg2w-1; Tue, 06 Sep 2022 09:57:32 -0400
-X-MC-Unique: ViJNUfFuPYm9BaikDtLg2w-1
-Received: by mail-wr1-f69.google.com with SMTP id u27-20020adfa19b000000b0022863c08ac4so1848437wru.11
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 06:57:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=GesI69YyBCVOELWdci2COwV5wfsC9CiwSBWxkans3kQ=;
-        b=6p+s/L/dfu3QhmnSK9ZMcYq3I6k9r/NyXDVDDXghshL86jNDw4woHTKbrMx6UNYr9P
-         LJScrLFL6LIlf1dDCkVVB7lSVUyrHCAWCkziV+t/kjlEEJyNpBVNWdYmDTh8AbkwAREL
-         MWm7/o1BeiaBMAHfjRMTt81r7bF48gSMvGZH8hA3FuWdYiR9eW7xasKVYVr9vx5Xo6qA
-         ODqEWQWvFE3U8RE9sgXUJj3ObN5BsRsvwsJ36rAx9sETELS8gnOa+nmxMVwVLwz2MYiL
-         Eur/QJuMPuMIEK3TcFN8CldrqyzC0kJs+nBDWpLTkVwvk2aclqYezOMTpbC/o+ybY9VV
-         OQyg==
-X-Gm-Message-State: ACgBeo38sEpYza/IkJn4CSvq4IGeDLhW4TLHU29EzdmRd1oq5K873Tti
-        IA2eoaYWM6hDfe12N9u7S8LOPx4syTw9o/v3JoofWsuRuRgk6Q3PuhC+sVpMIwhHKCVSeoZTPmW
-        AyoUa8k1aL5EMz2o6Mhzce2Qw
-X-Received: by 2002:a5d:620f:0:b0:225:32fc:cea3 with SMTP id y15-20020a5d620f000000b0022532fccea3mr28879744wru.270.1662472651754;
-        Tue, 06 Sep 2022 06:57:31 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7eSynrXPsi+KuH/gzENB5rhLBgeEcaH1gNRTh72DAT2eCUNGmvUgoO7mPK83bTeUzoRBEKiQ==
-X-Received: by 2002:a5d:620f:0:b0:225:32fc:cea3 with SMTP id y15-20020a5d620f000000b0022532fccea3mr28879731wru.270.1662472651469;
-        Tue, 06 Sep 2022 06:57:31 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
-        by smtp.gmail.com with ESMTPSA id t12-20020a05600c198c00b003a2e92edeccsm22530563wmq.46.2022.09.06.06.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 06:57:30 -0700 (PDT)
-Message-ID: <4516a349-49cb-fd7b-176a-f1a9479906d9@redhat.com>
-Date:   Tue, 6 Sep 2022 15:57:30 +0200
+        Tue, 6 Sep 2022 10:38:01 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82DD81B0C;
+        Tue,  6 Sep 2022 07:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662472813; x=1694008813;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jgV2lWWjq/uG5FoAvxLpsU0/ppNVg7RQVY9CZ4CndCM=;
+  b=QWsTLFVxvCrEHGn/8G/cudWmai0MRXrAoPO4oM78wCo8l/T7De7eXIQ3
+   Nghz1yCicOk1AMt3hbjBfNF2JQH+8IQzW5yahhwWKtflQpFVCeIT7x0dw
+   jauZd+d1Gg7b50aayw4qVOHIWWo8cbo2crFXDHIouHyyDlmTBmkrxsz0s
+   vcCrRoH9vMrtID2rsvTXAAkS9VVlS4s/DPT088H5rCHY+An6RQpZWHTLS
+   9TGkjcT89Ra3QU8JnV0mki0GAX+iQdX3PDiqUiRaGerFgRDE5I8VNc3Ds
+   iNNTGIJl5fOnE2Ty0b7hc/mRCtNww1EJeb5W3HK0vBLLKzWSNa24adv0O
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="279612176"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="279612176"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 06:57:35 -0700
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="565100120"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 06:57:34 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oVZ51-009909-1d;
+        Tue, 06 Sep 2022 16:57:31 +0300
+Date:   Tue, 6 Sep 2022 16:57:31 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v2 1/4] pwm: sysfs: Switch to DEFINE_SIMPLE_DEV_PM_OPS()
+ and pm_sleep_ptr()
+Message-ID: <YxdRy5NRRUkXU156@smile.fi.intel.com>
+References: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     John Hubbard <jhubbard@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        peterx@redhat.com, kirill.shutemov@linux.intel.com,
-        hughd@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220901222707.477402-1-shy828301@gmail.com>
- <e6ad1084-c301-9f11-1fa7-7614bf859aaf@nvidia.com>
- <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
- <YxdPi2E63aO0Dgyd@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YxdPi2E63aO0Dgyd@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.09.22 15:47, Jason Gunthorpe wrote:
-> On Mon, Sep 05, 2022 at 09:59:47AM +0200, David Hildenbrand wrote:
-> 
->>> That should be READ_ONCE() for the *pmdp and *ptep reads. Because this
->>> whole lockless house of cards may fall apart if we try reading the
->>> page table values without READ_ONCE().
->>
->> I came to the conclusion that the implicit memory barrier when grabbing a
->> reference on the page is sufficient such that we don't need READ_ONCE here.
-> 
-> READ_ONCE is not about barriers or ordering, you still need the
-> acquire inside the atomic to make the algorithm work.
+On Fri, Aug 26, 2022 at 08:07:13PM +0300, Andy Shevchenko wrote:
+> Using these newer macros allows the compiler to remove the unused
+> structure and functions when !CONFIG_PM_SLEEP + removes the need to
+> mark pm functions __maybe_unused.
 
-
-While I don't disagree with what say is, I'll refer to 
-Documentation/memory-barriers.txt "COMPILER BARRIER".
-
-As discussed somewhere in this thread, if we already have an atomic RWM 
-that implies a full ordering, it implies a compile barrier.
-
-
-> 
-> READ_ONCE primarily is a marker that the data being read is unstable
-> and that the compiler must avoid all instability when reading it. eg
-> in this case the compiler could insanely double read the value, even
-> though the 'if' requires only a single read. This would result in
-> corrupt calculation.
-
-As we have a full memory barrier + compile barrier, the compiler might 
-indeed do double reads and all that stuff. BUT, it has to re-read after 
-we incremented the refcount, and IMHO that's the important part to 
-detect the change.
-
-
+Anything I should have done for this to be applied?
 
 -- 
-Thanks,
+With Best Regards,
+Andy Shevchenko
 
-David / dhildenb
 

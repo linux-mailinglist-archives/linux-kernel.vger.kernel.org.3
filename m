@@ -2,115 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CDD5ADD32
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A132B5ADD35
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbiIFCPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 22:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
+        id S232901AbiIFCQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 22:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiIFCP2 (ORCPT
+        with ESMTP id S230116AbiIFCQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 22:15:28 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C6F40E10;
-        Mon,  5 Sep 2022 19:15:27 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 145so9985389pfw.4;
-        Mon, 05 Sep 2022 19:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=C9UwLm1DYBumnQhb+UjocjdgHmiXC2aRgzJr3+8Kerw=;
-        b=i3rfiuKw6JULWz7xyYKov+awXpPNftyMMsivqL8Jp4hdwm7p0gIzE+NRnsqV1f8RZv
-         KiTcN0/EyY8pcDogrXBkEGiXlqafR/jgamQ3FlTKrHURBgKKlt942d90JYPrpmxvOAKt
-         fxlXpt6d9hiqunak5njz0pFGQunmK+bLrPaU84NljKupXaSf4Zhm6IMHPU0comDRH1Z+
-         TCV28tSgZZTkhYpjssaZdrQo1x9K+x4mc+wptEnXV6G9EgmMlM4TaZL8lQuPDj3FCGjC
-         p9CxsugmbOGNp1gOgz2F3w8/BeM+sQpdfQKKehYzJC0lYizZmjO4UEnsNh1MqtC/sGlg
-         gwqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=C9UwLm1DYBumnQhb+UjocjdgHmiXC2aRgzJr3+8Kerw=;
-        b=7/yhHPCeX1TIuSaYFH9wkCemF5HLRB9tka0Ey4JsHknswziWpTJ/tFAKjKUXWPZ10p
-         oP2AZZpeB8yL9jdJ9T2vrs8wDx1tPKKuPXDiDqdLDJW8R4BkDhiaIyZheOST65x6AQYy
-         vHuUV6Cflsi8CdDRtaOJnUx8FBbjcn7Nqq4kQxxDHd7OHzb9Sd2o4rb3Pfr3d6y6Sq5V
-         J1UBb4zzVRD3egbwNTyJU5qkBtzi0s3GntOoJrxrV8OzBORmhDPD0mU3/56OLpFAyMJu
-         dLnub/nw9DExYuhtd715VX7+dpDL7qAH2VDbfyudlRl1WyCDrA55e5j3L4ic9lY0by4k
-         7HWQ==
-X-Gm-Message-State: ACgBeo2BxMKTgQmvBEYoC+Ntwzae0PKFtXfEpFbFroI3ts3Pqu1ivzd6
-        FCQ7z1ISV2qoeLM/MYP2RcM=
-X-Google-Smtp-Source: AA6agR5VnBhpmecaiXIyHAsX/1VxUCgsnPEfoC61ckOOpFJd01VF8Et0zHTd1xh5BDm7t0D5giLiOg==
-X-Received: by 2002:a62:ed08:0:b0:537:17a6:57aa with SMTP id u8-20020a62ed08000000b0053717a657aamr53444529pfh.6.1662430526683;
-        Mon, 05 Sep 2022 19:15:26 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:1190:fbfa:ae95:111c])
-        by smtp.gmail.com with ESMTPSA id x29-20020aa7957d000000b00528bd940390sm8537108pfq.153.2022.09.05.19.15.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 19:15:26 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 19:15:23 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: apple: do not leak reset GPIO on unbind/unload/error
-Message-ID: <YxatO5OaI2RpxQ2M@google.com>
+        Mon, 5 Sep 2022 22:16:47 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7D894DB73
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 19:16:43 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxBOKArRZjpVISAA--.9201S3;
+        Tue, 06 Sep 2022 10:16:33 +0800 (CST)
+Subject: Re: [PATCH 1/3] LoongArch: tools: Add relocs tool support
+To:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
+ <1662113335-14282-2-git-send-email-tangyouling@loongson.cn>
+ <c9880165f0355fc3be3ec23153b43ad33e558b5d.camel@xry111.site>
+ <4df8a26c49a35c1fce36d80c370f738fa71a2bef.camel@xry111.site>
+ <f0e77716-9533-724a-2ea9-86bc5b52066c@loongson.cn>
+ <78a4a6b0970c309daa336a2329e69d28df486552.camel@xry111.site>
+ <fffdd2ac-4ba6-8eb3-f269-b22a3d9c32f6@loongson.cn>
+ <0b2d115c42ff6cb9b8c65d852ec2f0746ca6e8d9.camel@xry111.site>
+ <d852f590-95b4-3fd1-924a-68c0a6bb1b1b@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <29cd929b-185b-1c4b-f200-08f2a724b59d@loongson.cn>
+Date:   Tue, 6 Sep 2022 10:16:32 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d852f590-95b4-3fd1-924a-68c0a6bb1b1b@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxBOKArRZjpVISAA--.9201S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrW8GFWxAr15AF4rur4rKrg_yoWrJry5pr
+        W5GayUKFsrJF17ZFW0vw10qFWSg3ykGr13Wa1rtry0yF9IvF93tw4Utr43CFy29r1ktF4j
+        vrWYqa4I9r1rAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
+        zVAYIcxG8wCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUHWlkUUUUU=
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver allocates reset GPIO in apple_pcie_setup_port() but neither
-releases the resource, nor uses devm API to have it released
-automatically.
+Hi, Ruoyao & Jinyang
 
-Let's fix this by switching to devm API. While at it let's use generic
-devm_fwnode_gpiod_get() instead of OF-specific gpiod_get_from_of_node()
-- this will allow us top stop exporting the latter down the road.
+On 09/05/2022 10:52 AM, Youling Tang wrote:
+> Hi, Ruoyao
+>
+> On 09/04/2022 12:53 AM, Xi Ruoyao wrote:
+>> On Sun, 2022-09-04 at 00:23 +0800, Jinyang He wrote:
+>>> On 2022/9/3 18:49, Xi Ruoyao wrote:
+>>>
+>>>> On Sat, 2022-09-03 at 09:57 +0800, Youling Tang wrote:
+>>>>>>> Unlike (pre-r6) MIPS, LoongArch has a complete support for PIC, and
+>>>>>>> currently LoongArch toolchain always produces PIC (except, if
+>>>>>>> -Wa,-mla-
+>>>>>>> {local,global}-with-abs or la.abs macros are used explicitly).
+>>>>>>>
+>>>>>>> So would it be easier to review and correct the uses of "la.abs"
+>>>>>>> in the
+>>>>>>> code, and make the main kernel image a real PIE?  Then we can
+>>>>>>> load it
+>>>>>>> everywhere w/o any need to do relocation at load time.
+>>>>> At the beginning I also wanted to make the main kernel image a real
+>>>>> PIE
+>>>>> and tried it, some of the "la.abs" can be modified, but I encountered
+>>>>> difficulties in modifying the  exception handling code part, the
+>>>>> kernel
+>>>>> will not  boot after modification :(, I will continue to work hard
+>>>>> try.
+>>
+>>>> I just tried the same thing and get the same result :(.  Will spend
+>>>> several hours reading the LoongArch manual about exception...
+>>
+>> The reason is the handler code is not executed in linker address, but
+>> copied elsewhere.  Then PC-relative offset is broken.  I managed to work
+>> around it by creating a trampoline and jump into the handler, instead of
+>> copy the handler code.  Then I could remove most "la.abs" occurrence
+>> (except two in kernel entry point, which seem deliberately used):
+>>
+>> - https://github.com/xry111/linux/commit/56a433f
+>> - https://github.com/xry111/linux/commit/48203e6
+>>
+>
+> Thank you very much.
+>
+> After applying the above two patches and the following modifications,
+> the relocation can be successful after removing the
+> apply_r_loongarch_la_rel (for la.abs relocation) implementation. I
+> tested it in the qemu environment.
+>
+> --- a/arch/loongarch/kernel/head.S
+> +++ b/arch/loongarch/kernel/head.S
+> @@ -113,9 +113,11 @@ SYM_CODE_START(smpboot_entry)
+>         li.d            t0, CSR_DMW1_INIT       # CA, PLV0
+>         csrwr           t0, LOONGARCH_CSR_DMWIN1
+>
+> -       la.abs          t0, 0f
+> -       jr              t0
+> -0:
+> +       li.d            t0, CACHE_BASE
+> +       pcaddi          t1, 0
+> +       or              t0, t0, t1
+> +       jirl            zero, t0, 0xc
+>
+> Youling.
+>
+>> Using the trampoline in handler table will definitely lead to sub-
+>> optimal performance. I just use it as a proof-of-concept. Later we may
+>> use some assembler trick to generate hard-coded handler table with
+>> correct PC-relative offsets.
+>>
+>>> The following ideas are based on experience, without validation. Patches
+>>> show that three types of relocation are needed to be done.
+>>> 1, GOT is generated by toolchain, so  I think eliminating them by
+>>> toolchain is better.
+>>
+>> https://gcc.gnu.org/pipermail/gcc-patches/2022-September/600797.html
+>>
+>> I stop to read the mail here because it's 00:52 AM now :).
+>>
+>>> 2, Ex_table is generated but striped relocation info. We can plays pcrel
+>>> way to resolve this problem. One of ways like follows, (pseudo-code)
 
-Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
+Switch to relative exception tables:
 
-This patch has been pulled out of the series
-https://lore.kernel.org/all/20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com/
-with updated justification (leak fix vs pure API deprecation).
+https://github.com/tangyouling/linux/commit/6525b8da
+https://github.com/tangyouling/linux/commit/b6ac0827
 
- drivers/pci/controller/pcie-apple.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Will switch to the relative exception tables after applying the above
+two patches. So there is no need to relocate the exception table
+(remove relocate_exception_table).
 
-diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
-index a2c3c207a04b..66f37e403a09 100644
---- a/drivers/pci/controller/pcie-apple.c
-+++ b/drivers/pci/controller/pcie-apple.c
-@@ -516,8 +516,8 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
- 	u32 stat, idx;
- 	int ret, i;
- 
--	reset = gpiod_get_from_of_node(np, "reset-gpios", 0,
--				       GPIOD_OUT_LOW, "PERST#");
-+	reset = devm_fwnode_gpiod_get(pcie->dev, of_fwnode_handle(np), "reset",
-+				      GPIOD_OUT_LOW, "PERST#");
- 	if (IS_ERR(reset))
- 		return PTR_ERR(reset);
- 
--- 
-2.37.2.789.g6183377224-goog
+Now we can remove the relocation of la.abs , got and ex_table, but
+still need to relocate LARCH_64. Is there anything else that needs to
+be modified to eliminate this relocation?
 
+Thanks,
+Youling.
 
--- 
-Dmitry
+>>
+>> /* snip */
+>>
+>>
+>
+

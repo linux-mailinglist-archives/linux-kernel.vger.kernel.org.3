@@ -2,141 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7C25AF6E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088455AF6F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiIFVf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S229801AbiIFVhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiIFVfy (ORCPT
+        with ESMTP id S229447AbiIFVhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:35:54 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E949E0FA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:35:53 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id h204-20020a1c21d5000000b003a5b467c3abso10439156wmh.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 14:35:52 -0700 (PDT)
+        Tue, 6 Sep 2022 17:37:53 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94A59E2DE;
+        Tue,  6 Sep 2022 14:37:52 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id m5so9231163qkk.1;
+        Tue, 06 Sep 2022 14:37:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=sR4MT10eKHhIVG2U6bD+uIMSzEVSnVDpJcLJ+SBSU/s=;
-        b=cxvtWAjBYoEpUJxSiWS7AfLsCwWfpK9imxeDR5nZIU4ZjuYzLiAFHS0+9TzGEeojwQ
-         mWIG427aEoJvB6gsed1m7r4hK7snMG+QKCME1m2v3wBIncorbHbPcEPVvEtJ/3VRdXP+
-         QJJy7gT0s7piwIcKO7SGxr8TJJpEwFwDaQLv66iclbQaRsjgT2mkhOKrhjVD0QE9ZSyb
-         YYTRrktm6/WG2mvL3CtFmF+0JzFAwT2GZP0kEeysbF4u90L5GIwES8KzvTEt84EhdoHu
-         gNXtGIGoY0XT4UXgnwNRy1blbH52lZSoBol+rjZJR2r+EXzuOs2LvRQc26To5kkCqeED
-         9asw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=DHX1HSLOHo9Z/nGtQGSoEFCNbitNhP6bU01rtWegVaM=;
+        b=nZO42iFp+TVsIXrFMoRJ6RcOkMgzUk5royDEvAP9gzp7J46eVh8Q1tn0P3wqXsn2ZY
+         mqDs5av6WDG9g/rGHO1TeWTlq0rshWusz+AcYhDyc7iazYi/kUI8DAGafUHtk/pjYpcl
+         b8FvoMremNvg3JII+4DiZzcr4WiMMbTQC38xQec4jbYFYIZz86MnI20VdblnXDevLBJe
+         eWUQ0Jnz+vmbMFYcLo+paHRPyp0ycAFMzX4NZCidys1jfhJ3seVNz45eiozl2W6dvZIT
+         GtekMScqm+Bs8Ff0MjNmRTXalSf85hFwMs7+V1CEC5pTTZUpJO7mBCQaQZ9k4xbyUtBr
+         6WWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=sR4MT10eKHhIVG2U6bD+uIMSzEVSnVDpJcLJ+SBSU/s=;
-        b=wMX1MN1bkDuC3QI3fzjKKCKCpIFk7ea2wGE0jtVG5Tr5KeWbPgyDLSQ+H+9/7LsaK5
-         KWj1jea+2P2xjqpcMzWnMaFKiBjiXT42IF2UksevmkEOX2gQb6zVf290kwmMUHz5DY/D
-         MULs/OWBOLqx2PET4sGllnwYinJkfkN4DLFaiN11ZCC6G5imXZ8SYBifRnG0vbcxr4R2
-         GBsPRDneDh44WqlaOvhWzhJ/MyjWJMjB8ivMstzv6VSRkf+MfMqcywxRCoZ1iCBoiy9D
-         eo3gf8eypypuslUdy17ysZiJEhoL9aLdluTJPJRhst8JN2feGk+MMFjiiMtJTEI4ntT1
-         v7yg==
-X-Gm-Message-State: ACgBeo3uyLwEgnTpnRrkFXcO2JevS+9haTp5/zxni0PI6sOVWdeLcQYa
-        wQzg5nDovE2FUDL08XysUiO2TFkH7T4QniO4UDzkVw==
-X-Google-Smtp-Source: AA6agR4MXJa4fD8c9dto8Q/b/Ndb9B4dxTB/k0UBO0uHkojX2yRN4+4P8O1AicE75lbXkISbrKXhEhntE+5vsYia2mo=
-X-Received: by 2002:a1c:3b04:0:b0:3a5:487c:6240 with SMTP id
- i4-20020a1c3b04000000b003a5487c6240mr14808609wma.152.1662500151465; Tue, 06
- Sep 2022 14:35:51 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DHX1HSLOHo9Z/nGtQGSoEFCNbitNhP6bU01rtWegVaM=;
+        b=bvqz+jq39KTPFYJjz+iBi63JmJrHkdxNNcx9j3B/JoHrvDKtee77oTNblCu9x4BvNm
+         ztg5y1XR+yw/hHn3rXkjRee7gZ8hFDJGOsrxQaQFUnmSm3YrFuVvkaZBOVOzHRCkXvS0
+         vYM4vuFpyVtwYzIpnYMZNsEP0+6duX/DLb0LxoNkkQLenEqe190OTaU5YYQFABnU7079
+         j4h4ITJEx1eQROo7qjGheryXRlF7HtZ1Rlvn9ELaXmmTxOv5EiQyfaY7Tk3hldKRLlAk
+         2FyQg3dcSbzJEIiMZamrsb6LM83yE/So7JqH8OEhPpc3NgcaR7DsDqKfgIokcFzLAuZ6
+         lppQ==
+X-Gm-Message-State: ACgBeo3EQv3C24eJNyD4jxlYNAlj2a3sfqBeplWr5E1JAVPvoCJzv3nQ
+        7yVjat6pGfveTnT/EiHQiC4=
+X-Google-Smtp-Source: AA6agR63LhMW7qT4SeyFeq6A1YKRxkQWyEEerUaLVY8XEbSiDWeqHx0DWtvJa/J9Q4FQhTEGRBn3Wg==
+X-Received: by 2002:a05:620a:c4b:b0:6b6:5a6d:6d2d with SMTP id u11-20020a05620a0c4b00b006b65a6d6d2dmr508196qki.441.1662500271791;
+        Tue, 06 Sep 2022 14:37:51 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id w15-20020a05620a424f00b006bbdcb3fff7sm13005923qko.69.2022.09.06.14.37.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 14:37:51 -0700 (PDT)
+Message-ID: <cd65ca29-1e24-1064-ccd4-160dbd041036@gmail.com>
+Date:   Tue, 6 Sep 2022 14:37:47 -0700
 MIME-Version: 1.0
-References: <20220826230639.1249436-1-yosryahmed@google.com>
- <CA+khW7iN6hyyBBR+4ey+9pNmEyKPZS82-C9kZ2NRXKMEOXHrng@mail.gmail.com>
- <CAJD7tkYKYv+SKhCJs2281==55sALTX_DXifaWPv1w5=xrJjqQA@mail.gmail.com>
- <CAJD7tkZg2jzDDR6vn5=-TS93Tm3P-YEQ+06KDsjg=Mzkt5LqsA@mail.gmail.com>
- <CA+khW7g-jeiXMM-K+KK7L3tzG0catFSM+x5vHKMs=PF=s+=Pag@mail.gmail.com> <CAJD7tkZ77JDt62CMw2AmpvTJ5fpVs0mkPdVqMJm8X8zCBq=LhA@mail.gmail.com>
-In-Reply-To: <CAJD7tkZ77JDt62CMw2AmpvTJ5fpVs0mkPdVqMJm8X8zCBq=LhA@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 6 Sep 2022 14:35:15 -0700
-Message-ID: <CAJD7tkZz52GkTr+TuZnArEOsyxxMPnE5A1AKZfY-gjx0tUW6dQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: simplify cgroup_hierarchical_stats selftest
-To:     Hao Luo <haoluo@google.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH linux-next] PCI: iproc: Remove the unneeded result
+ variable
+Content-Language: en-US
+To:     Scott Branden <scott.branden@broadcom.com>,
+        Bjorn Helgaas <helgaas@kernel.org>, cgel.zte@gmail.com
+Cc:     lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220906212520.GA45166@bhelgaas>
+ <5cbe247d-f9a3-4770-1ca7-5ba5097451ba@broadcom.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <5cbe247d-f9a3-4770-1ca7-5ba5097451ba@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 6:50 PM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> On Mon, Aug 29, 2022 at 6:42 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Mon, Aug 29, 2022 at 6:07 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > >
-> > > On Mon, Aug 29, 2022 at 3:15 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > > >
-> > > > On Mon, Aug 29, 2022 at 1:08 PM Hao Luo <haoluo@google.com> wrote:
-> > > > >
-> > > > > On Fri, Aug 26, 2022 at 4:06 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > > > > >
-> > [...]
-> > > > > >
-> > > > > > -SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
-> > > > > > -int BPF_PROG(vmscan_start, int order, gfp_t gfp_flags)
-> > > > > > +SEC("fentry/cgroup_attach_task")
-> > > > >
-> > > > > Can we select an attachpoint that is more stable? It seems
-> > > > > 'cgroup_attach_task' is an internal helper function in cgroup, and its
-> > > > > signature can change. I'd prefer using those commonly used tracepoints
-> > > > > and EXPORT'ed functions. IMHO their interfaces are more stable.
-> > > > >
-> > > >
-> > > > Will try to find a more stable attach point. Thanks!
-> > >
-> > > Hey Hao,
-> > >
-> > > I couldn't find any suitable stable attach points under kernel/cgroup.
-> > > Most tracepoints are created using TRACE_CGROUP_PATH which only
-> > > invokes the tracepoint if the trace event is enabled, which I assume
-> > > is not something we can rely on. Otherwise, there is only
-> >
-> > Can we explicitly enable the cgroup_attach_task event, just for this
-> > test? If it's not easy, I am fine with using fentry.
->
-> I see a couple of tests that read from /sys/kernel/debug/tracing, but
-> they are mostly reading event ids, I don't see any tests enabling or
-> disabling a tracing event, so I am not sure if that's an accepted
-> pattern. Also I am not sure if we can rely on tracefs being in that
-> path. Andrii, is this considered acceptable?
->
 
-Anyone with thoughts here? Is it acceptable to explicitly enable a
-trace event in a BPF selftest to attach to a tracepoint that is only
-invoked if the trace event is enabled (e.g. cgroup_attach_task) ?
-Otherwise the test program would attach to the fentry of an internal
-function, which is more vulnerable to being changed and breaking the
-test (until someone updates the test with the new signature).
 
-> >
-> > > trace_cgroup_setup_root() and trace_cgroup_destroy_root() which are
-> > > irrelevant here. A lot of EXPORT'ed functions are not called in the
-> > > kernel, or cannot be invoked from userspace (the test) in a
-> > > straightforward way. Even if they did, future changes to such code
-> > > paths can also change in the future, so I don't think there is really
-> > > a way to guarantee that future changes don't break the test.
-> > >
-> > > Let me know what you think.
-> > >
+On 9/6/2022 2:27 PM, Scott Branden wrote:
+> 
+> 
+> On 2022-09-06 14:25, Bjorn Helgaas wrote:
+>> On Tue, Sep 06, 2022 at 07:16:36AM +0000, cgel.zte@gmail.com wrote:
+>>> From: ye xingchen <ye.xingchen@zte.com.cn>
+>>>
+>>> Return the value iproc_pcie_setup_ib() directly instead of storing it in
+>>> another redundant variable.
+>>>
+>>> Reported-by: Zeal Robot <zealci@zte.com.cn>
+>>> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+>>
+>> This patch itself is fine,
+> Does the patch serve any real use though?
+
+Not really though if we don't accept it, then someone else will submit a 
+similar patch later, since it is obviously correct, might as well accept it?
+-- 
+Florian

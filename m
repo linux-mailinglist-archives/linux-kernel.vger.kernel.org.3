@@ -2,72 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF255AE9D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E17A5AEA06
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240685AbiIFNgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        id S232521AbiIFNjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240681AbiIFNfS (ORCPT
+        with ESMTP id S240806AbiIFNhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:35:18 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1940875FD2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:33:48 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id fg1so1181478ejc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 06:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=YG81fsrgVvtbiqNYNBZnqjl/kHiLEsWdD0wbROrMHQI=;
-        b=CM2gzKkGrZAirkis7zZWySHvo3koLz+Flptuhq4k+FAbtvqnjCVv8lFcFCyLc0EnU5
-         gUv5rzrNgm3Ofu4x2a0ATbiZ/KaHh7xnWWMrKnRQb9SAkns6X0kRhKarftovu5cGYKZk
-         /8KT61ZTXg4XzZTUy0iff3or9U2KP84m2hh1lDqgnmKjf18geSSoF/MU4lVMsNx/Mgc/
-         m14jTtEK9FRMPrvNJ98E8sCC998TkQQ+iD2Y/LpaVQ6EELbjK1n+kY/3oIojdR5NwfjO
-         ecPVAAUdkKW2wGzbck1q+GsQCnPC483nqohQztM8nt/eUWbT5EdZwhPWrSmU9evTDc/c
-         P9SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=YG81fsrgVvtbiqNYNBZnqjl/kHiLEsWdD0wbROrMHQI=;
-        b=NKE2Pv/iUQJDnbOQcvTZPtoiptjHBCi3ttyK+S1LAsWqtXz0fzyMrl7gfjWozYQJ78
-         kwcaewWQPt7I7JQwdOaKxHu4a1lmTU1XVuhcAYIvtrhNHp68XnSb4b/KaHvxPXNEhDyO
-         jN+6Cd/3stZv5iDSYBFaOb/VXDR/gdwNKPEtk/veq8U6H1KAVNOWgE3UotvleaGzWKbO
-         FKZ/donmYWgKY+ygEJDVrehVKZfS2qjnN5xjK1RkfCDvRy+3bUnRwjH4XlWSj+49LEe7
-         5HJf3lutmIhdok0eszr08qL43DNv/mmGMHAP3Xs0bvSKc0fy5vx30X0ut/xZ1iMYzBEk
-         mGSQ==
-X-Gm-Message-State: ACgBeo3s2lR3LT3O6ixRt0itlgPls3K90LtEOWCOXHOXmm52rG1uE3QE
-        gVteiL/F6dlH8TjmCK15MBDqLVPM3LM6d27xlFj7vA==
-X-Google-Smtp-Source: AA6agR7PEn/0mTIlPjGhwc5a6em6dF4E52w+glg7yEh5IWQZV4Gj384gvHyGZlFTJ4HCWrWMw6A5C+h+IgO4qr2XvFQ=
-X-Received: by 2002:a17:907:a420:b0:765:70a4:c101 with SMTP id
- sg32-20020a170907a42000b0076570a4c101mr9117964ejc.526.1662471226679; Tue, 06
- Sep 2022 06:33:46 -0700 (PDT)
+        Tue, 6 Sep 2022 09:37:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC841EEFE;
+        Tue,  6 Sep 2022 06:34:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D78D8B81632;
+        Tue,  6 Sep 2022 13:34:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B533C433C1;
+        Tue,  6 Sep 2022 13:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662471275;
+        bh=HVSPuHlBxoDidAzhvR+Mhm54R/4PBLFeNLr76nrdaRk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YtvTgbI7bKz8Z/ntOzCICPkh8uB53xZU3ojxz/0DRcMfdVnCKKFaLiduD+1GZ02fk
+         I+TgdEhD0BqsGGl+jzV/LK9ZUY0DR+dFnvc/5RHGL4v5keRtwaQIzsXh5WktaSsQZA
+         0j2BeYaRO6nWdgrI6U4F+Do1JhqfUcBnWogkXLx3Pz22/E8j7QP7PrM/O+VCEB2uqo
+         mm905A57ZdBCcRX1EQ7pVy1rHRe3YwPIkEMPNdAkcynoGP1XYyVG6ZUAoF6TlE3kal
+         J0TzxOf6hp6Ztu7Jb/Vjs114dVbnLO4yb49+x2su2CKjLLrFXNrgAY50kBknXheXEk
+         yeJCNZgBLOWQQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oVYis-0006sv-B4; Tue, 06 Sep 2022 15:34:39 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH stable-5.4 0/3] USB: stable backports to 5.4
+Date:   Tue,  6 Sep 2022 15:34:32 +0200
+Message-Id: <20220906133435.26452-1-johan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220906082820.4030401-1-martyn.welch@collabora.co.uk>
- <20220906082820.4030401-2-martyn.welch@collabora.co.uk> <Yxc6zptiJEf2TzP5@smile.fi.intel.com>
- <CACRpkdZHKEW+WJAdCCf2DN7gN+ZM7pFpeSXfccB508N4=-LkoQ@mail.gmail.com> <YxdI/TLBrzJP3RKi@smile.fi.intel.com>
-In-Reply-To: <YxdI/TLBrzJP3RKi@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 6 Sep 2022 15:33:34 +0200
-Message-ID: <CACRpkdaQ+0wbreyCEaoBnjKT0rtgPEnotZQw_Eh=y4xktwrwHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] dt-bindings: gpio: pca95xx: add entry for pcal6534
- and PI4IOE5V6534Q
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Martyn Welch <martyn.welch@collabora.co.uk>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,66 +55,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 3:20 PM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
-> On Tue, Sep 06, 2022 at 03:08:00PM +0200, Linus Walleij wrote:
-> > On Tue, Sep 6, 2022 at 2:19 PM Andy Shevchenko
-> > <andriy.shevchenko@intel.com> wrote:
-> > > On Tue, Sep 06, 2022 at 09:28:16AM +0100, Martyn Welch wrote:
-> > > > From: Martyn Welch <martyn.welch@collabora.com>
-> > > >
-> > > > The NXP PCAL6534 is a 34-bit I2C I/O expander similar to the PCAL6524. The
-> > > > Diodes PI4IOE5V6534Q is a functionally identical chip provided by Diodes
-> > > > Inc.
-> > >
-> > > ...
-> > >
-> > > > +    oneOf:
-> > > > +      - items:
-> > > > +        - const: diodes,pi4ioe5v6534q
-> > > > +        - const: nxp,pcal6534
-> > >
-> > > ^^^
-> > >
-> > > > +      - items:
-> > > > +        - enum:
-> > >
-> > > > +          - nxp,pcal6534
-> > >
-> > > ^^^
-> > >
-> > > Not sure why is this dup?
-> >
-> > No that is how DT compatibles work. One version of the component,
-> > bought from NXP will look like this:
-> >
-> > compatible = "nxp,pcal6534";
-> >
-> > Another version bought from diodes will look like this:
-> >
-> > compatible = "diodes,pi4ioe5v6534q", "nxp,pcal6534";
-> >
-> > Then the drivers are probed matching from left to right,
-> > with the "most compatible" matching first.
-> >
-> > This also answers your question on the implementation.
->
-> Then I don't understand why the const list above is only for new chips
-> and not for the old one where the same can be applied.
+Here are backports of the three patches that didn't apply to 5.4.
 
-That's YAML. It's because the const list is the most compact way
-to express two precise items following after each other, and the enum
-list is an implicit list of single-item const:s, as you cannot enum
-tuples.
+Johan
 
-> Mysterious ways of DT...
 
-It's not DT, it's YAML that is mysterious. DT itself is a pretty
-straight-forward
-grammar, while YAML is a meta-grammar describing the DT grammar
-(ML stands for Meta Language).
+Johan Hovold (3):
+  usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup
+  USB: serial: ch341: fix lost character on LCR updates
+  USB: serial: ch341: fix disabled rx timer on older devices
 
-All meta languages are mysterious.
+ drivers/usb/dwc3/dwc3-qcom.c | 14 +++++++++++++-
+ drivers/usb/dwc3/host.c      |  1 +
+ drivers/usb/serial/ch341.c   | 15 +++++++++++++--
+ 3 files changed, 27 insertions(+), 3 deletions(-)
 
-Yours,
-Linus Walleij
+-- 
+2.35.1
+

@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E3D5AE906
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48875AE90A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240225AbiIFNE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S240247AbiIFNFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240191AbiIFNEz (ORCPT
+        with ESMTP id S240191AbiIFNFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:04:55 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7510E1E3C0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:04:53 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1274ec87ad5so13047750fac.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 06:04:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=melexis.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=7Haewm4pcI6ughQ1h8d6eCH0y+Fa4YzQ3XWrFfPFHdM=;
-        b=gZ1NSeFPE+0lZGlav/wzFNn/dSqU/yNEuwpQNNs0Nt55bsLZoMeJWS1/CQjYcGUbFE
-         dzhWj5EOasmyF5MoUzSG632ZX9kIvuof3pTMMq4CLyF1LDCoXZBjA71zLJimTWpyuA6o
-         jSAp+m3l7226UqJgAF7kldOPfXx4JiMwHq2LDJTG2yyIWo5dcyE7mhodkTF9uPaFdFlv
-         hC7ZSYWwVVpoMhesTgy2Ta/E54WY8/BeewR+QOBuVx/WvmUZjzSY1Pcx54TyG84y8pm+
-         82fr1EpeW8VcejHmBrvL0EaXNX24lwevhxeVvUtRk5Cl2Y7C9WSOLgX+S41ZUYeuZ5dW
-         F72Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7Haewm4pcI6ughQ1h8d6eCH0y+Fa4YzQ3XWrFfPFHdM=;
-        b=n3a7uHx6xtfBxrRHwpDSMR6WA5z7k4xmnluwo+i0Hm0N6J1zW72fwzgb+KpDOpkJb4
-         mkzf4969/3HwSKIiMGINS9lgp3M7ugvBjFsaOQG6u1vrcNStRcmLStC5cq7+OvB3eYlk
-         Ydl0DsH9pNO1oZR/GgkiWFpOJPv/24VtkqLaOr55e88waNC9VlaNPdc4BBdzpKP7EGlA
-         Nh275YLgS9oaDFA5xtQmuXzOXR0vxp2nltTd2sVyooNCIXqcXazjGn6lNdbCS8HLmqV/
-         IB45CwBfBGZRHTrvBHwVOprGm4CYsfDEV9OfWmbQTIBkRPm8G3HEYMRTh/iNtmh8CTcn
-         ucsg==
-X-Gm-Message-State: ACgBeo2UR1p2pCFrxU1jVHfHOhkwTsptr66b0cQIeJDeor6NzDtq7qQ3
-        zkJw7+Z/rY27vJijmR1YHH5Q1RpCiUlq52iObGQyJw==
-X-Google-Smtp-Source: AA6agR6B6YeRaWAlddT2IpJ3b2YefZvlzZju/DNCIjrQ3U9qB9vM+iWjlJiKiS/BIaTrwzI8b92Tgus8vmDxx/umhEQ=
-X-Received: by 2002:a05:6808:e90:b0:345:49f2:a112 with SMTP id
- k16-20020a0568080e9000b0034549f2a112mr10039724oil.7.1662469492642; Tue, 06
- Sep 2022 06:04:52 -0700 (PDT)
+        Tue, 6 Sep 2022 09:05:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CDA28E13
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:05:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7164D6151E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:05:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08ACC433D6;
+        Tue,  6 Sep 2022 13:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662469503;
+        bh=aJ/ggvrr1g/FXyRjt5ZZskpEza67VcSQAtaqzjZ3K78=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eJ/9CcwD5GXX7BNonXoZo2bL1kmptEgn7JqMDnj+/tTEzom/kEcBdRNWC9zt8JGmM
+         6QgumB9IcNatIRqjWO/xa/rwYx1WXJRIygaWJjqmwg91nBBcr4V/SqVmmzHObV60fi
+         CdxK955+iya2sk9J/rz4i5kh4mXFRg+nk2zEVkVpIU72Ch3PvPcGrYId+PoVtijpeO
+         3uXI2/bMp7fDN2iMKr3w1r7aFXBdtEdsfBzos3rtdvk1g/5XM3bncPuCWjtzsQ/ZfF
+         T7jRL1cuJ6TctU+BFsXomg8+sI3Qq3IS66GjlIBKvg1N0+OfxURdg91kyZG+DBSZIy
+         1Rb0cJ8WXCb7A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 30E2B404A1; Tue,  6 Sep 2022 10:05:01 -0300 (-03)
+Date:   Tue, 6 Sep 2022 10:05:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 0/6] perf intel-pt: Support itrace option flag d+e to
+ log on error
+Message-ID: <YxdFfVbDcwnT7DXm@kernel.org>
+References: <20220905073424.3971-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
-References: <cover.1662454215.git.cmo@melexis.com> <32c4b72624e4a3480b202f24f506ca91029e47f7.1662454215.git.cmo@melexis.com>
- <CAHp75VezNufWGW6sC+ALmX9H4yavWRCmpHuv9ZVoRycQxZ-uQg@mail.gmail.com>
- <CAKv63utD2NzbUYR2=rrmZtkdtwOzoQBW7dZ5yzNa-r8uKmqXaw@mail.gmail.com> <CAHp75Vc1a1bguLxX7Laewa9f2k9c38KeOD1zsikmC+3=21MnyQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vc1a1bguLxX7Laewa9f2k9c38KeOD1zsikmC+3=21MnyQ@mail.gmail.com>
-From:   Crt Mori <cmo@melexis.com>
-Date:   Tue, 6 Sep 2022 15:04:16 +0200
-Message-ID: <CAKv63utCSXVgOP4JkEBQSzDWF_s443a-ZbCd8V4tP9=z461McA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] iio: temperature: mlx90632 Add runtime
- powermanagement modes
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905073424.3971-1-adrian.hunter@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,25 +59,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sept 2022 at 14:37, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Sep 6, 2022 at 1:52 PM Crt Mori <cmo@melexis.com> wrote:
-> > On Tue, 6 Sept 2022 at 12:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > >
-> > > Very good and documented code, thanks!
-> > > I believe you better to use DEFINE_.*_PM_OPS instead of legacy ones
-> > > (due to pm_ptr() usage).
-> > > Otherwise, with some nitpicks that wouldn't prevent a green light,
-> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > >
-> > I checked DEFINE_.*_PM_OPS usage around drivers and you either have
-> > SIMPLE (where you define suspend/resume) or you have RUNTIME (for
-> > runtime suspend/resume), but never are those two together. So I am a
-> > bit puzzled how to get this working.
->
-> The one which suits here is called _DEFINE_DEV_PM_OPS(). But it's
-> basically the same what you put here with the possible unused case.
->
-I thought underscore prefixed macros are the ones not to be used
-directly by drivers. I also found no occurrence in current drivers, so
-it was not something that was done so far?
+Em Mon, Sep 05, 2022 at 10:34:18AM +0300, Adrian Hunter escreveu:
+> Hi
+> 
+> Here are a few patches to add the ability to output the decoding debug log
+> only when there are decoding errors.
+> 
+> This is motivated by the fact that a full log can be very large, so just
+> getting interesting bits is useful for analyzing errors.
+> 
+> If necessary, the size of output on error is configurable via perf config,
+> and perf_config_scan() was added in the 1st patch to make that simpler.
+> 
+> The 2nd patch adds the new option flag to auxtrace.
+> 
+> There are a couple of very minor and essentially unrelated changes in
+> patches 3 and 4.
+> 
+> The main Intel PT change is in patch 5 and there is a small example in the
+> commit message.
+> 
+> 
+> Changes in V2:
+> 
+>       perf intel-pt: Support itrace option flag d+e to log on error
+> 	Ensure log_buf is defined before use
+> 
+>       perf intel-pt: Remove first line of log dumped on error
+> 	Remove first line only if the buffer has wrapped
+
+Applied locally, Namhyung: I think your review comment was addressed,
+right? If so can I add your Reviewed-by to all the patches in this
+series?
+
+- Arnaldo
+ 
+> 
+> Adrian Hunter (6):
+>       perf tools: Add perf_config_scan()
+>       perf auxtrace: Add itrace option flag d+e to log on error
+>       perf intel-pt: Improve man page layout slightly
+>       perf intel-pt: Improve object code read error message
+>       perf intel-pt: Support itrace option flag d+e to log on error
+>       perf intel-pt: Remove first line of log dumped on error
+> 
+>  tools/perf/Documentation/itrace.txt             |   1 +
+>  tools/perf/Documentation/perf-config.txt        |   7 ++
+>  tools/perf/Documentation/perf-intel-pt.txt      |  13 ++-
+>  tools/perf/util/auxtrace.c                      |  13 +++
+>  tools/perf/util/auxtrace.h                      |   3 +
+>  tools/perf/util/config.c                        |  31 +++++++
+>  tools/perf/util/config.h                        |   1 +
+>  tools/perf/util/intel-pt-decoder/intel-pt-log.c | 117 +++++++++++++++++++++++-
+>  tools/perf/util/intel-pt-decoder/intel-pt-log.h |   3 +-
+>  tools/perf/util/intel-pt.c                      |  23 ++++-
+>  10 files changed, 206 insertions(+), 6 deletions(-)
+> 
+> 
+> Regards
+> Adrian
+
+-- 
+
+- Arnaldo

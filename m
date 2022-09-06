@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302BF5AEB0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C2E5AEAAA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239115AbiIFNzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
+        id S233442AbiIFNov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239280AbiIFNw1 (ORCPT
+        with ESMTP id S233220AbiIFNl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:52:27 -0400
+        Tue, 6 Sep 2022 09:41:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83377D1ED;
-        Tue,  6 Sep 2022 06:40:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B5DB871;
+        Tue,  6 Sep 2022 06:37:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 345D661522;
-        Tue,  6 Sep 2022 13:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38B51C433C1;
-        Tue,  6 Sep 2022 13:40:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 042106155A;
+        Tue,  6 Sep 2022 13:35:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B785C433C1;
+        Tue,  6 Sep 2022 13:35:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471610;
-        bh=sV7Zzwsgv7jEr/5Sh6JPZHIyhwFzhNhQlibot0Yg4is=;
+        s=korg; t=1662471320;
+        bh=nKt8BINwsriO2U5YaxpzkTJv944Hfj7oKjZ7BG6GbjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pu5OeRmXJAVmjn/roa78o1SAhFulKbCrHe8QpbKfohQOCCuOM9dLaLGRMe2AfEUpG
-         ed15VEb6xxzDkOzDf2sFEsKHGEJrEiXZ+B9C3ut/yozL5q0QhX3A/5WTXXduRgV8Pm
-         oTQBigMEvbfaA0RJpQ9UHeNgUXElZJ7vtZgUf1G0=
+        b=dh2hFdertiKaAP5FTaZhPPCDoUo7kpsj6ae3gynmEHLx1vd8SALp265IuLL+TDiol
+         uzniTYnSNOrdLv+EKCV5Skmh7pyi/Yoc7zEJBv6Xx+RA3rBTgwE8ng8B1OrQbWvilV
+         1epab4B4jsvJHX7jpMc41hAvr5oMT775FBFRDTDo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Rondreis <linhaoguo86@gmail.com>
-Subject: [PATCH 5.15 085/107] USB: core: Prevent nested device-reset calls
-Date:   Tue,  6 Sep 2022 15:31:06 +0200
-Message-Id: <20220906132825.410596842@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 70/80] ALSA: hda/realtek: Add speaker AMP init for Samsung laptops with ALC298
+Date:   Tue,  6 Sep 2022 15:31:07 +0200
+Message-Id: <20220906132820.045952602@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
+References: <20220906132816.936069583@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,130 +55,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Kacper Michajłow <kasper93@gmail.com>
 
-commit 9c6d778800b921bde3bff3cff5003d1650f942d1 upstream.
+commit a2d57ebec1e15f0ac256eb8397e82b07adfaaacc upstream.
 
-Automatic kernel fuzzing revealed a recursive locking violation in
-usb-storage:
+Magic initialization sequence was extracted from Windows driver and
+cleaned up manually.
 
-============================================
-WARNING: possible recursive locking detected
-5.18.0 #3 Not tainted
---------------------------------------------
-kworker/1:3/1205 is trying to acquire lock:
-ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
-usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+Fixes internal speakers output.
 
-but task is already holding lock:
-ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
-usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
-
-...
-
-stack backtrace:
-CPU: 1 PID: 1205 Comm: kworker/1:3 Not tainted 5.18.0 #3
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-<TASK>
-__dump_stack lib/dump_stack.c:88 [inline]
-dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
-check_deadlock kernel/locking/lockdep.c:3031 [inline]
-validate_chain kernel/locking/lockdep.c:3816 [inline]
-__lock_acquire.cold+0x152/0x3ca kernel/locking/lockdep.c:5053
-lock_acquire kernel/locking/lockdep.c:5665 [inline]
-lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5630
-__mutex_lock_common kernel/locking/mutex.c:603 [inline]
-__mutex_lock+0x14f/0x1610 kernel/locking/mutex.c:747
-usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
-usb_reset_device+0x37d/0x9a0 drivers/usb/core/hub.c:6109
-r871xu_dev_remove+0x21a/0x270 drivers/staging/rtl8712/usb_intf.c:622
-usb_unbind_interface+0x1bd/0x890 drivers/usb/core/driver.c:458
-device_remove drivers/base/dd.c:545 [inline]
-device_remove+0x11f/0x170 drivers/base/dd.c:537
-__device_release_driver drivers/base/dd.c:1222 [inline]
-device_release_driver_internal+0x1a7/0x2f0 drivers/base/dd.c:1248
-usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:627
-usb_forced_unbind_intf+0x4d/0xa0 drivers/usb/core/driver.c:1118
-usb_reset_device+0x39b/0x9a0 drivers/usb/core/hub.c:6114
-
-This turned out not to be an error in usb-storage but rather a nested
-device reset attempt.  That is, as the rtl8712 driver was being
-unbound from a composite device in preparation for an unrelated USB
-reset (that driver does not have pre_reset or post_reset callbacks),
-its ->remove routine called usb_reset_device() -- thus nesting one
-reset call within another.
-
-Performing a reset as part of disconnect processing is a questionable
-practice at best.  However, the bug report points out that the USB
-core does not have any protection against nested resets.  Adding a
-reset_in_progress flag and testing it will prevent such errors in the
-future.
-
-Link: https://lore.kernel.org/all/CAB7eexKUpvX-JNiLzhXBDWgfg2T9e9_0Tw4HQ6keN==voRbP0g@mail.gmail.com/
-Cc: stable@vger.kernel.org
-Reported-and-tested-by: Rondreis <linhaoguo86@gmail.com>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/YwkflDxvg0KWqyZK@rowland.harvard.edu
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=207423
+Link: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1851518
+Signed-off-by: Kacper Michajłow <kasper93@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220827203328.30363-1-kasper93@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/hub.c |   10 ++++++++++
- include/linux/usb.h    |    2 ++
- 2 files changed, 12 insertions(+)
+ sound/pci/hda/patch_realtek.c |   63 +++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 56 insertions(+), 7 deletions(-)
 
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -6043,6 +6043,11 @@ re_enumerate_no_bos:
-  * the reset is over (using their post_reset method).
-  *
-  * Return: The same as for usb_reset_and_verify_device().
-+ * However, if a reset is already in progress (for instance, if a
-+ * driver doesn't have pre_ or post_reset() callbacks, and while
-+ * being unbound or re-bound during the ongoing reset its disconnect()
-+ * or probe() routine tries to perform a second, nested reset), the
-+ * routine returns -EINPROGRESS.
-  *
-  * Note:
-  * The caller must own the device lock.  For example, it's safe to use
-@@ -6076,6 +6081,10 @@ int usb_reset_device(struct usb_device *
- 		return -EISDIR;
- 	}
- 
-+	if (udev->reset_in_progress)
-+		return -EINPROGRESS;
-+	udev->reset_in_progress = 1;
-+
- 	port_dev = hub->ports[udev->portnum - 1];
- 
- 	/*
-@@ -6140,6 +6149,7 @@ int usb_reset_device(struct usb_device *
- 
- 	usb_autosuspend_device(udev);
- 	memalloc_noio_restore(noio_flag);
-+	udev->reset_in_progress = 0;
- 	return ret;
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -4628,6 +4628,48 @@ static void alc236_fixup_hp_mute_led_mic
+ 	alc236_fixup_hp_micmute_led_vref(codec, fix, action);
  }
- EXPORT_SYMBOL_GPL(usb_reset_device);
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -575,6 +575,7 @@ struct usb3_lpm_parameters {
-  * @devaddr: device address, XHCI: assigned by HW, others: same as devnum
-  * @can_submit: URBs may be submitted
-  * @persist_enabled:  USB_PERSIST enabled for this device
-+ * @reset_in_progress: the device is being reset
-  * @have_langid: whether string_langid is valid
-  * @authorized: policy has said we can use it;
-  *	(user space) policy determines if we authorize this device to be
-@@ -661,6 +662,7 @@ struct usb_device {
  
- 	unsigned can_submit:1;
- 	unsigned persist_enabled:1;
-+	unsigned reset_in_progress:1;
- 	unsigned have_langid:1;
- 	unsigned authorized:1;
- 	unsigned authenticated:1;
++static inline void alc298_samsung_write_coef_pack(struct hda_codec *codec,
++						  const unsigned short coefs[2])
++{
++	alc_write_coef_idx(codec, 0x23, coefs[0]);
++	alc_write_coef_idx(codec, 0x25, coefs[1]);
++	alc_write_coef_idx(codec, 0x26, 0xb011);
++}
++
++struct alc298_samsung_amp_desc {
++	unsigned char nid;
++	unsigned short init_seq[2][2];
++};
++
++static void alc298_fixup_samsung_amp(struct hda_codec *codec,
++				     const struct hda_fixup *fix, int action)
++{
++	int i, j;
++	static const unsigned short init_seq[][2] = {
++		{ 0x19, 0x00 }, { 0x20, 0xc0 }, { 0x22, 0x44 }, { 0x23, 0x08 },
++		{ 0x24, 0x85 }, { 0x25, 0x41 }, { 0x35, 0x40 }, { 0x36, 0x01 },
++		{ 0x38, 0x81 }, { 0x3a, 0x03 }, { 0x3b, 0x81 }, { 0x40, 0x3e },
++		{ 0x41, 0x07 }, { 0x400, 0x1 }
++	};
++	static const struct alc298_samsung_amp_desc amps[] = {
++		{ 0x3a, { { 0x18, 0x1 }, { 0x26, 0x0 } } },
++		{ 0x39, { { 0x18, 0x2 }, { 0x26, 0x1 } } }
++	};
++
++	if (action != HDA_FIXUP_ACT_INIT)
++		return;
++
++	for (i = 0; i < ARRAY_SIZE(amps); i++) {
++		alc_write_coef_idx(codec, 0x22, amps[i].nid);
++
++		for (j = 0; j < ARRAY_SIZE(amps[i].init_seq); j++)
++			alc298_samsung_write_coef_pack(codec, amps[i].init_seq[j]);
++
++		for (j = 0; j < ARRAY_SIZE(init_seq); j++)
++			alc298_samsung_write_coef_pack(codec, init_seq[j]);
++	}
++}
++
+ #if IS_REACHABLE(CONFIG_INPUT)
+ static void gpio2_mic_hotkey_event(struct hda_codec *codec,
+ 				   struct hda_jack_callback *event)
+@@ -6787,6 +6829,7 @@ enum {
+ 	ALC236_FIXUP_HP_GPIO_LED,
+ 	ALC236_FIXUP_HP_MUTE_LED,
+ 	ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF,
++	ALC298_FIXUP_SAMSUNG_AMP,
+ 	ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
+ 	ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
+ 	ALC295_FIXUP_ASUS_MIC_NO_PRESENCE,
+@@ -8140,6 +8183,12 @@ static const struct hda_fixup alc269_fix
+ 		.type = HDA_FIXUP_FUNC,
+ 		.v.func = alc236_fixup_hp_mute_led_micmute_vref,
+ 	},
++	[ALC298_FIXUP_SAMSUNG_AMP] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc298_fixup_samsung_amp,
++		.chained = true,
++		.chain_id = ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET
++	},
+ 	[ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET] = {
+ 		.type = HDA_FIXUP_VERBS,
+ 		.v.verbs = (const struct hda_verb[]) {
+@@ -8914,13 +8963,13 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x10ec, 0x1254, "Intel Reference board", ALC295_FIXUP_CHROME_BOOK),
+ 	SND_PCI_QUIRK(0x10f7, 0x8338, "Panasonic CF-SZ6", ALC269_FIXUP_HEADSET_MODE),
+ 	SND_PCI_QUIRK(0x144d, 0xc109, "Samsung Ativ book 9 (NP900X3G)", ALC269_FIXUP_INV_DMIC),
+-	SND_PCI_QUIRK(0x144d, 0xc169, "Samsung Notebook 9 Pen (NP930SBE-K01US)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+-	SND_PCI_QUIRK(0x144d, 0xc176, "Samsung Notebook 9 Pro (NP930MBE-K04US)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+-	SND_PCI_QUIRK(0x144d, 0xc189, "Samsung Galaxy Flex Book (NT950QCG-X716)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+-	SND_PCI_QUIRK(0x144d, 0xc18a, "Samsung Galaxy Book Ion (NP930XCJ-K01US)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
++	SND_PCI_QUIRK(0x144d, 0xc169, "Samsung Notebook 9 Pen (NP930SBE-K01US)", ALC298_FIXUP_SAMSUNG_AMP),
++	SND_PCI_QUIRK(0x144d, 0xc176, "Samsung Notebook 9 Pro (NP930MBE-K04US)", ALC298_FIXUP_SAMSUNG_AMP),
++	SND_PCI_QUIRK(0x144d, 0xc189, "Samsung Galaxy Flex Book (NT950QCG-X716)", ALC298_FIXUP_SAMSUNG_AMP),
++	SND_PCI_QUIRK(0x144d, 0xc18a, "Samsung Galaxy Book Ion (NP930XCJ-K01US)", ALC298_FIXUP_SAMSUNG_AMP),
+ 	SND_PCI_QUIRK(0x144d, 0xc740, "Samsung Ativ book 8 (NP870Z5G)", ALC269_FIXUP_ATIV_BOOK_8),
+-	SND_PCI_QUIRK(0x144d, 0xc812, "Samsung Notebook Pen S (NT950SBE-X58)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+-	SND_PCI_QUIRK(0x144d, 0xc830, "Samsung Galaxy Book Ion (NT950XCJ-X716A)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
++	SND_PCI_QUIRK(0x144d, 0xc812, "Samsung Notebook Pen S (NT950SBE-X58)", ALC298_FIXUP_SAMSUNG_AMP),
++	SND_PCI_QUIRK(0x144d, 0xc830, "Samsung Galaxy Book Ion (NT950XCJ-X716A)", ALC298_FIXUP_SAMSUNG_AMP),
+ 	SND_PCI_QUIRK(0x144d, 0xc832, "Samsung Galaxy Book Flex Alpha (NP730QCJ)", ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+ 	SND_PCI_QUIRK(0x1458, 0xfa53, "Gigabyte BXBT-2807", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1462, 0xb120, "MSI Cubi MS-B120", ALC283_FIXUP_HEADSET_MIC),
+@@ -9280,7 +9329,7 @@ static const struct hda_model_fixup alc2
+ 	{.id = ALC299_FIXUP_PREDATOR_SPK, .name = "predator-spk"},
+ 	{.id = ALC298_FIXUP_HUAWEI_MBX_STEREO, .name = "huawei-mbx-stereo"},
+ 	{.id = ALC256_FIXUP_MEDION_HEADSET_NO_PRESENCE, .name = "alc256-medion-headset"},
+-	{.id = ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc298-samsung-headphone"},
++	{.id = ALC298_FIXUP_SAMSUNG_AMP, .name = "alc298-samsung-amp"},
+ 	{.id = ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc256-samsung-headphone"},
+ 	{.id = ALC255_FIXUP_XIAOMI_HEADSET_MIC, .name = "alc255-xiaomi-headset"},
+ 	{.id = ALC274_FIXUP_HP_MIC, .name = "alc274-hp-mic-detect"},
 
 

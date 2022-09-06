@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255295AEA47
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3F05AEB20
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233409AbiIFNmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
+        id S233612AbiIFNpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiIFNkn (ORCPT
+        with ESMTP id S238506AbiIFNnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:40:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA0A7B790;
-        Tue,  6 Sep 2022 06:37:26 -0700 (PDT)
+        Tue, 6 Sep 2022 09:43:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9929F7EFCB;
+        Tue,  6 Sep 2022 06:37:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF17DB816A0;
-        Tue,  6 Sep 2022 13:36:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2C4C433D7;
-        Tue,  6 Sep 2022 13:35:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C54261548;
+        Tue,  6 Sep 2022 13:36:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4B0C433D6;
+        Tue,  6 Sep 2022 13:36:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471360;
-        bh=4i5sYG49tf9dNz8KHpFIUCVSBk6MKdxITrMG9BQRhAw=;
+        s=korg; t=1662471363;
+        bh=3UcOXbWyeA5C56jtAvIiTnIveZqbtE8vO+hT19Hbj7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MlzPyB5ubxp+Gz/ZWyId053Kxi7c3nGcldE7Iq8R/sCiJcc/kUZMi9N41St//ZUx7
-         eJBcb3OW8+9VQLvymr9sHeQjZ4rOJYuyHpqhFP0vlLEJv5814Y/vNq1W2CxTtKrI4T
-         +e/Az7RXX4GD14Exw9OuZ5hobgnCl5dl4gVYQCNU=
+        b=hz9vafWgl03zghHclU12JY4HR1eBhGN50bwHNsmvB/4gtCyxOhg+VOiNaN/9DHyZy
+         sgi+C7igfa+QOphAIYcZzD6pEPtiYKi+Hh8+0Psdgor6jHd3MayHhkOR2EEoGje3eV
+         IeQyHdvWu35fJtE95Nf6jTDADcBsdpuQccMx8JNQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Ranquet <granquet@baylibre.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-Subject: [PATCH 5.10 56/80] usb: typec: altmodes/displayport: correct pin assignment for UFP receptacles
-Date:   Tue,  6 Sep 2022 15:30:53 +0200
-Message-Id: <20220906132819.395576458@linuxfoundation.org>
+        stable@vger.kernel.org, Minas Harutyunyan <hminas@synopsys.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH 5.10 57/80] usb: dwc2: fix wrong order of phy_power_on and phy_init
+Date:   Tue,  6 Sep 2022 15:30:54 +0200
+Message-Id: <20220906132819.443987276@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
 References: <20220906132816.936069583@linuxfoundation.org>
@@ -56,74 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Sun <pablo.sun@mediatek.com>
+From: Heiner Kallweit <hkallweit1@gmail.com>
 
-commit c1e5c2f0cb8a22ec2e14af92afc7006491bebabb upstream.
+commit f9b995b49a07bd0d43b0e490f59be84415c745ae upstream.
 
-Fix incorrect pin assignment values when connecting to a monitor with
-Type-C receptacle instead of a plug.
+Since 1599069a62c6 ("phy: core: Warn when phy_power_on is called before
+phy_init") the driver complains. In my case (Amlogic SoC) the warning
+is: phy phy-fe03e000.phy.2: phy_power_on was called before phy_init
+So change the order of the two calls. The same change has to be done
+to the order of phy_exit() and phy_power_off().
 
-According to specification, an UFP_D receptacle's pin assignment
-should came from the UFP_D pin assignments field (bit 23:16), while
-an UFP_D plug's assignments are described in the DFP_D pin assignments
-(bit 15:8) during Mode Discovery.
-
-For example the LG 27 UL850-W is a monitor with Type-C receptacle.
-The monitor responds to MODE DISCOVERY command with following
-DisplayPort Capability flag:
-
-        dp->alt->vdo=0x140045
-
-The existing logic only take cares of UPF_D plug case,
-and would take the bit 15:8 for this 0x140045 case.
-
-This results in an non-existing pin assignment 0x0 in
-dp_altmode_configure.
-
-To fix this problem a new set of macros are introduced
-to take plug/receptacle differences into consideration.
-
-Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
+Fixes: 09a75e857790 ("usb: dwc2: refactor common low-level hw code to platform.c")
 Cc: stable@vger.kernel.org
-Co-developed-by: Pablo Sun <pablo.sun@mediatek.com>
-Co-developed-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Reviewed-by: Guillaume Ranquet <granquet@baylibre.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Link: https://lore.kernel.org/r/20220804034803.19486-1-macpaul.lin@mediatek.com
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Link: https://lore.kernel.org/r/dfcc6b40-2274-4e86-e73c-5c5e6aa3e046@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/typec/altmodes/displayport.c |    4 ++--
- include/linux/usb/typec_dp.h             |    5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/usb/dwc2/platform.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -88,8 +88,8 @@ static int dp_altmode_configure(struct d
- 	case DP_STATUS_CON_UFP_D:
- 	case DP_STATUS_CON_BOTH: /* NOTE: First acting as DP source */
- 		conf |= DP_CONF_UFP_U_AS_UFP_D;
--		pin_assign = DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo) &
--			     DP_CAP_UFP_D_PIN_ASSIGN(dp->port->vdo);
-+		pin_assign = DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo) &
-+				 DP_CAP_PIN_ASSIGN_DFP_D(dp->port->vdo);
- 		break;
- 	default:
- 		break;
---- a/include/linux/usb/typec_dp.h
-+++ b/include/linux/usb/typec_dp.h
-@@ -73,6 +73,11 @@ enum {
- #define DP_CAP_USB			BIT(7)
- #define DP_CAP_DFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(15, 8)) >> 8)
- #define DP_CAP_UFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(23, 16)) >> 16)
-+/* Get pin assignment taking plug & receptacle into consideration */
-+#define DP_CAP_PIN_ASSIGN_UFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
-+			DP_CAP_UFP_D_PIN_ASSIGN(_cap_) : DP_CAP_DFP_D_PIN_ASSIGN(_cap_))
-+#define DP_CAP_PIN_ASSIGN_DFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
-+			DP_CAP_DFP_D_PIN_ASSIGN(_cap_) : DP_CAP_UFP_D_PIN_ASSIGN(_cap_))
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -154,9 +154,9 @@ static int __dwc2_lowlevel_hw_enable(str
+ 	} else if (hsotg->plat && hsotg->plat->phy_init) {
+ 		ret = hsotg->plat->phy_init(pdev, hsotg->plat->phy_type);
+ 	} else {
+-		ret = phy_power_on(hsotg->phy);
++		ret = phy_init(hsotg->phy);
+ 		if (ret == 0)
+-			ret = phy_init(hsotg->phy);
++			ret = phy_power_on(hsotg->phy);
+ 	}
  
- /* DisplayPort Status Update VDO bits */
- #define DP_STATUS_CONNECTION(_status_)	((_status_) & 3)
+ 	return ret;
+@@ -188,9 +188,9 @@ static int __dwc2_lowlevel_hw_disable(st
+ 	} else if (hsotg->plat && hsotg->plat->phy_exit) {
+ 		ret = hsotg->plat->phy_exit(pdev, hsotg->plat->phy_type);
+ 	} else {
+-		ret = phy_exit(hsotg->phy);
++		ret = phy_power_off(hsotg->phy);
+ 		if (ret == 0)
+-			ret = phy_power_off(hsotg->phy);
++			ret = phy_exit(hsotg->phy);
+ 	}
+ 	if (ret)
+ 		return ret;
 
 

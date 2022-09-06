@@ -2,163 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1732C5AF003
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54385AF002
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234035AbiIFQLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S234795AbiIFQLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234022AbiIFQLY (ORCPT
+        with ESMTP id S231812AbiIFQLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:11:24 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1CA7968D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:36:01 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286FBeIG026050;
-        Tue, 6 Sep 2022 15:35:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=CCB/9B/VGZcYjAW4bol02QJau+ML8Cq+ut7fJ+/BiSM=;
- b=g9MNvbWktlc31b831uGmdlHB6E3iLzyOpXNM0yDWQowDNDvDQ1TxNlvUcMO2qOzIATQ8
- sdISgiuBZdHWGLf/siyQlkB2M9Cd6JW8olL1S7B7f9wxI8EhNoE8Td1YdVTxsb4QC5F9
- HPNBHbx+5V841eWqM4nrztaSR2HtDRCAz2bcenhK6vGoKsmjvaC0+E4nMazPR4U59vSs
- aL1EYv77NKxmF0KGbHC53igSHvIKSw0/KpvdfzjbQAFFjZmDIkz0Y+tdtZDl3LNFOUzA
- y3SoKLecxAZgGri64LSrKoBHUZ94iZd6HhtycS1Sfb/CaLn3sVTnttNn014UrZOJeNsk XA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je8ms0xg1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 15:35:29 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 286FCEZj030062;
-        Tue, 6 Sep 2022 15:35:29 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je8ms0xeg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 15:35:29 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 286FM3T7015755;
-        Tue, 6 Sep 2022 15:35:26 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3jbxj8uxxf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 15:35:26 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 286FZmpk41943462
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 6 Sep 2022 15:35:48 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7149CA405B;
-        Tue,  6 Sep 2022 15:35:24 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4DAD3A4054;
-        Tue,  6 Sep 2022 15:35:23 +0000 (GMT)
-Received: from [9.101.4.33] (unknown [9.101.4.33])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  6 Sep 2022 15:35:23 +0000 (GMT)
-Message-ID: <bb5e3ab8-9c47-7d01-cdaa-1b4231312f67@linux.ibm.com>
-Date:   Tue, 6 Sep 2022 17:35:22 +0200
+        Tue, 6 Sep 2022 12:11:14 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411209DF85
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:35:52 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id c4so9217230iof.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 08:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=GqM67eToD1ny8VVx70XQz+yqa9cCdNaLyhnIUfKzWx0=;
+        b=o3N3QM1fYFh9QHqMEdh1kjn5ZTr3F8RtlpM5O2++y+WOWtF5VqFnmXM7INH/3C3eUV
+         rtXiQP5g7p+1RoMGkcw8HpDxL1pIoLr71CH6AjbQWmEBhVb8u4LGn4/JVRQUuf+w77de
+         2tDN6e9GHnPV23R5EjAA9O+pg1qluKyo7jxsmW8SNYXPzCoVSh4f84J4gtZ4tZnhWZiK
+         26iwawWesNsxFg0dhAaf6JAFTmg9hfjLKKg0EVBzsaVgBhhTWcI8VbgoxxYwcOBeZkXo
+         2Fqq2sP/TfasoLql4YXx1PjqBffK+ktlknPqDflzAqCaK7N0WDBoy9seeNTqaG/m1+h6
+         JdKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=GqM67eToD1ny8VVx70XQz+yqa9cCdNaLyhnIUfKzWx0=;
+        b=OkT3hbw5kGTMmfWTnb1lgHuLCvQNBe0kjJJ1LWGB9aACqeIpwItNBFVk8+AT2f3I98
+         SaK5bOfnDXPJpYnvAwv3LbwsRmpuKYqNXbM78KUjPi8GPG+xkSVJoCs5+CZ1daN09Jbi
+         hAljtfIAR3uhg0RpbOMQu14aqizER5DUWTTKtzpdcGEz348v3jxEdNX227q32OXZlx3g
+         p0Pywbe6dJqzoZ7RsRpPJ4V1OiIGdlpf/6v/e2zNOY1bWVJbEK0qsv6Y1393ThrW7Gw/
+         OzRKyAq8hlV+DjboQ8RHHGQ0Tp6NRaD+4332U+n0EudLsT1eysr15AMkIlpX61hYnIPq
+         GKeQ==
+X-Gm-Message-State: ACgBeo2pWcVPUog9yvXJCg14Nw3bSXInRMeiuFOPqmQ6MO5okIJeZ62m
+        u0z3/SAb7pmu2U1FFLtL5sGt9rdYtCGBEHDp+1aYTA==
+X-Google-Smtp-Source: AA6agR7WoNKp8qX4Lx0DqP9V0mYU3T/qwubSi65FPamgmh5UtOzupuJjLfCYByP2mN5n26WVgQyFhPUIZ+awIHTyQbo=
+X-Received: by 2002:a02:740b:0:b0:349:bcdd:ca20 with SMTP id
+ o11-20020a02740b000000b00349bcddca20mr30610852jac.110.1662478551322; Tue, 06
+ Sep 2022 08:35:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.0
-Subject: Re: [RFC PATCH RESEND 10/28] mm/mmap: mark VMAs as locked in
- vma_adjust
-Content-Language: fr
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        rientjes@google.com, axelrasmussen@google.com, joelaf@google.com,
-        minchan@google.com, kernel-team@android.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220901173516.702122-1-surenb@google.com>
- <20220901173516.702122-11-surenb@google.com>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <20220901173516.702122-11-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RPviPaQg9ufmkDmm23mjHAa54D3aXI3j
-X-Proofpoint-GUID: ims9kwP10imrbQrjpniggmamS9Hw3mcB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-06_07,2022-09-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 clxscore=1015 malwarescore=0 priorityscore=1501 mlxscore=0
- suspectscore=0 spamscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209060073
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
+ <20220831101948.f3etturccmp5ovkl@suse.de> <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+ <20220831190154.qdlsxfamans3ya5j@moria.home.lan> <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
+ <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
+ <YxEE1vOwRPdzKxoq@dhcp22.suse.cz> <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
+ <YxWvbMYLkPoJrQyr@dhcp22.suse.cz> <CAJuCfpHJsfe172YUQbOqkkpNEEF7B6pJZuWnMa2BsdZwwEGKmA@mail.gmail.com>
+ <Yxb+PWN9kbfHSN8T@dhcp22.suse.cz>
+In-Reply-To: <Yxb+PWN9kbfHSN8T@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 6 Sep 2022 08:35:40 -0700
+Message-ID: <CAJuCfpGeEc9_fTCCRj9DtwQEu3u0fecc4DJuOjZzrTPfnNbOKw@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 01/09/2022 à 19:34, Suren Baghdasaryan a écrit :
-> vma_adjust modifies a VMA and possibly its neighbors. Mark them as locked
-> before making the modifications.
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  mm/mmap.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index f89c9b058105..ed58cf0689b2 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -710,6 +710,10 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
->  	long adjust_next = 0;
->  	int remove_next = 0;
->  
-> +	vma_mark_locked(vma);
-> +	if (next)
-> +		vma_mark_locked(next);
-> +
+On Tue, Sep 6, 2022 at 1:01 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 05-09-22 11:03:35, Suren Baghdasaryan wrote:
+> > On Mon, Sep 5, 2022 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Sun 04-09-22 18:32:58, Suren Baghdasaryan wrote:
+> > > > On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > [...]
+> > > > > Yes, tracking back the call trace would be really needed. The question
+> > > > > is whether this is really prohibitively expensive. How much overhead are
+> > > > > we talking about? There is no free lunch here, really.  You either have
+> > > > > the overhead during runtime when the feature is used or on the source
+> > > > > code level for all the future development (with a maze of macros and
+> > > > > wrappers).
+> > > >
+> > > > As promised, I profiled a simple code that repeatedly makes 10
+> > > > allocations/frees in a loop and measured overheads of code tagging,
+> > > > call stack capturing and tracing+BPF for page and slab allocations.
+> > > > Summary:
+> > > >
+> > > > Page allocations (overheads are compared to get_free_pages() duration):
+> > > > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
+> > > > 8.8% lookup_page_ext
+> > > > 1237% call stack capture
+> > > > 139% tracepoint with attached empty BPF program
+> > >
+> > > Yes, I am not surprised that the call stack capturing is really
+> > > expensive comparing to the allocator fast path (which is really highly
+> > > optimized and I suspect that with 10 allocation/free loop you mostly get
+> > > your memory from the pcp lists). Is this overhead still _that_ visible
+> > > for somehow less microoptimized workloads which have to take slow paths
+> > > as well?
+> >
+> > Correct, it's a comparison with the allocation fast path, so in a
+> > sense represents the worst case scenario. However at the same time the
+> > measurements are fair because they measure the overheads against the
+> > same meaningful baseline, therefore can be used for comparison.
+>
+> Yes, I am not saying it is an unfair comparision. It is just not a
+> particularly practical one for real life situations. So I am not sure
+> you can draw many conclusions from that. Or let me put it differently.
+> There is not real point comparing the code tagging and stack unwiding
+> approaches because the later is simply more complex because it collects
+> more state. The main question is whether that additional state
+> collection is too expensive to be practically used.
 
-I was wondering if the VMAs insert and expand should be locked too.
+You asked me to provide the numbers in one of your replies, that's what I did.
 
-For expand, I can't see any valid reason, but for insert, I'm puzzled.
-I would think that it is better to lock the VMA to be inserted but I can't
-really justify that.
+>
+> > > Also what kind of stack unwinder is configured (I guess ORC)? This is
+> > > not my area but from what I remember the unwinder overhead varies
+> > > between ORC and FP.
+> >
+> > I used whatever is default and didn't try other mechanisms. Don't
+> > think the difference would be orders of magnitude better though.
+> >
+> > >
+> > > And just to make it clear. I do realize that an overhead from the stack
+> > > unwinding is unavoidable. And code tagging would logically have lower
+> > > overhead as it performs much less work. But the main point is whether
+> > > our existing stack unwiding approach is really prohibitively expensive
+> > > to be used for debugging purposes on production systems. I might
+> > > misremember but I recall people having bigger concerns with page_owner
+> > > memory footprint than the actual stack unwinder overhead.
+> >
+> > That's one of those questions which are very difficult to answer (if
+> > even possible) because that would depend on the use scenario. If the
+> > workload allocates frequently then adding the overhead will likely
+> > affect it, otherwise might not be even noticeable. In general, in
+> > pre-production testing we try to minimize the difference in
+> > performance and memory profiles between the software we are testing
+> > and the production one. From that point of view, the smaller the
+> > overhead, the better. I know it's kinda obvious but unfortunately I
+> > have no better answer to that question.
+>
+> This is clear but it doesn't really tell whether the existing tooling is
+> unusable for _your_ or any specific scenarios. Because when we are
+> talking about adding quite a lot of code and make our allocators APIs
+> more complicated to track the state then we should carefully weigh the
+> benefit and the cost. As replied to other email I am really skeptical
+> this patchset is at the final stage and the more allocators get covered
+> the more code we have to maintain. So there must be a very strong reason
+> to add it.
 
-It may be nice to detail why this is not need to lock insert and expand here.
+The patchset is quite complete at this point. Instrumenting new
+allocators takes 3 lines of code, see how kmalloc_hooks macro is used
+in https://lore.kernel.org/all/20220830214919.53220-17-surenb@google.com/
 
->  	if (next && !insert) {
->  		struct vm_area_struct *exporter = NULL, *importer = NULL;
->  
-> @@ -754,8 +758,11 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
->  			 * If next doesn't have anon_vma, import from vma after
->  			 * next, if the vma overlaps with it.
->  			 */
-> -			if (remove_next == 2 && !next->anon_vma)
-> +			if (remove_next == 2 && !next->anon_vma) {
->  				exporter = next->vm_next;
-> +				if (exporter)
-> +					vma_mark_locked(exporter);
-> +			}
->  
->  		} else if (end > next->vm_start) {
->  			/*
-> @@ -931,6 +938,8 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
->  			 * "vma->vm_next" gap must be updated.
->  			 */
->  			next = vma->vm_next;
-> +			if (next)
-> +				vma_mark_locked(next);
->  		} else {
->  			/*
->  			 * For the scope of the comment "next" and
+>
+> > For the memory overhead, in my early internal proposal with assumption
+> > of 10000 instrumented allocation call sites, I've made some
+> > calculations for an 8GB 8-core system (quite typical for Android) and
+> > ended up with the following:
+> >
+> >                                     per-cpu counters      atomic counters
+> > page_ext references     16MB                      16MB
+> > slab object references   10.5MB                   10.5MB
+> > alloc_tags                      900KB                    312KB
+> > Total memory overhead 27.4MB                  26.8MB
+>
+> I do not really think this is all that interesting because the major
+> memory overhead contributors (page_ext and objcg are going to be there
+> with other approaches that want to match alloc and free as that clearly
+> requires to store the allocator objects somewhere).
 
+You mentioned that memory consumption in the page_owner approach was
+more important overhead, so I provided the numbers for that part of
+the discussion.
+
+>
+> > so, about 0.34% of the total memory. Our implementation has changed
+> > since then and the number might not be completely correct but it
+> > should be in the ballpark.
+> > I just checked the number of instrumented calls that we currently have
+> > in the 6.0-rc3 built with defconfig and it's 165 page allocation and
+> > 2684 slab allocation sites. I readily accept that we are probably
+> > missing some allocations and additional modules can also contribute to
+> > these numbers but my guess it's still less than 10000 that I used in
+> > my calculations.
+>
+> yes, in the current implementation you are missing most indirect users
+> of the page allocator as stated elsewhere so the usefulness can be
+> really limited. A better coverege will not increase the memory
+> consumption much but it will add an additional maintenance burden that
+> will scale with different usecases.
+
+Your comments in the last two letters about needing the stack tracing
+and covering indirect users of the allocators makes me think that you
+missed my reply here:
+https://lore.kernel.org/all/CAJuCfpGZ==v0HGWBzZzHTgbo4B_ZBe6V6U4T_788LVWj8HhCRQ@mail.gmail.com/.
+I messed up with formatting but hopefully it's still readable. The
+idea of having two stage tracking - first one very cheap and the
+second one more in-depth I think should address your concerns about
+indirect users.
+Thanks,
+Suren.
+
+> --
+> Michal Hocko
+> SUSE Labs

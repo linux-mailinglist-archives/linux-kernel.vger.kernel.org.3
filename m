@@ -2,429 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C6B5AE8DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5B95AE8DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239847AbiIFMyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S240344AbiIFMy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240445AbiIFMx4 (ORCPT
+        with ESMTP id S240472AbiIFMyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:53:56 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE8374E0D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662468806; x=1694004806;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6TbReH72SUPOamzSGR3FcLhEAd1HtZtPrDdk5H2ksAg=;
-  b=X1shcFpWIst1EdMsqIoJlsmHcB+kTIZ56UEwqbvqEigLajXnTjitM21+
-   PopGOqikhg1A6UYYuEBb6JDTUu4rz5ndH4LZL7NW8djlro2NJWo5y6WXs
-   82ZlBC36mNvtKHkJ3XqGfSMsWK4OgHiJXyO1WT3SIg4tNqadJiwm4Ya37
-   7CWIMPC7W3ZeSCfR6GEh2yUyS3RQciYK15Oxvy0vjQjFgr1BnCcRJ9Tpy
-   qMeuwSmFW8xeBsdO+drrQXWyVnrEwvU6BbvjWkzGvJ1shmvZGG5diqlIl
-   epcXFvd5joH9TwdNp90zIfGJYRBdCh9N3VKtEsAMErE/x58+9zzfj1v3S
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="322757662"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="322757662"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:53:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="565081713"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 06 Sep 2022 05:53:22 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVY4v-00057D-1E;
-        Tue, 06 Sep 2022 12:53:21 +0000
-Date:   Tue, 6 Sep 2022 20:53:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [pinchartl-media:streams/v6.0/v11 49/49]
- include/linux/container_of.h:17:42: error: returning 'struct iss_pipeline *'
- from a function with incompatible return type 'struct media_pipeline *'
-Message-ID: <202209062003.eFiRJ8vz-lkp@intel.com>
+        Tue, 6 Sep 2022 08:54:03 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38C76C120;
+        Tue,  6 Sep 2022 05:53:30 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id z187so11260059pfb.12;
+        Tue, 06 Sep 2022 05:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=WH0PAglD7NlW66HOCEb44ocuUbYF/1F/c9xurb0cOJE=;
+        b=U/6HFqn10+uX/wVJbOqwNuNVkJ+Zg4eAolFO7k7wAZi4f+FOurGqVxC3d3eSuHc1OL
+         EETBOfIg6VcqD9HB9pVlfTwus1LVyJRsWJgmyHhraxVNctIVBha2ZIM5wugFaO31yYFd
+         2vHSwjDYEBmOPkiOYNfyXLdWoT6BWCMQTG2QltKfat4xf3XAbnxPZMdGxBeQopNBUndf
+         m3ZXs8WKux8MAel6eXR0zV+JUiuDXfOVyE4eM6zG243X96Ljj1uxN7q9Cn/hKQwthDV3
+         QZRuQFBlKGjnrLtnVbpHXZeXwVvQVMs0QYcqJz697JXfzxTqkL0NOIl50zcqkWJiHxFJ
+         cfrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=WH0PAglD7NlW66HOCEb44ocuUbYF/1F/c9xurb0cOJE=;
+        b=GKFdH6lfMTufXmcHu/XV3ZFqp1Yd3Bu9H+kISowc6wCtFGwyyn16eh3ig9ZTUc4NY1
+         OTn+x7X3bEJoHsvXjqIyyp+ZgGaPIlCZRsT84FN5W7TfSO4KT/MaLx/zYlLQi39nTUUQ
+         uhPvN6TKWYusns7vRRQeW0Hpb5j3I6x2w/lIjW7gGHvVlFr88wkumYOD+1/2IiA45ngI
+         s6Q7SsOcyWKYQJX3TJcyHjAHsogMDCemZFB+W4VbduwYBcFP8sc9DolqePuymLitHFz0
+         cGzEh/HMwSDv6MKzvr8RKNRnK8rHnwTNA2n29pwQJpcy2NhzAahN+Y2mc4AiP6tTRkJ4
+         Vyhg==
+X-Gm-Message-State: ACgBeo1HnY3seotmzK9y6MHBO3pY59eq3WxK68I8gGdSvtKSIAthfFMm
+        xm4C9X/rlTERQSBYOPGtDaM=
+X-Google-Smtp-Source: AA6agR4AtsVERb8PXWVX6GRxRyZxRaFhECrFJTLLNPOXGOD1UbC4nF4zxVK3bjI7/R2cfRF0viewIg==
+X-Received: by 2002:a63:f313:0:b0:434:346b:d074 with SMTP id l19-20020a63f313000000b00434346bd074mr11587027pgh.298.1662468809479;
+        Tue, 06 Sep 2022 05:53:29 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id b130-20020a621b88000000b0052dbad1ea2esm10067976pfb.6.2022.09.06.05.53.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 05:53:29 -0700 (PDT)
+Message-ID: <0e0f773b-0dde-2282-c2d0-fad2311f59a7@gmail.com>
+Date:   Tue, 6 Sep 2022 20:53:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH 4/4] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf
+ 0x80000022
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220905123946.95223-1-likexu@tencent.com>
+ <20220905123946.95223-5-likexu@tencent.com>
+ <CALMp9eQtjZ-iRiW5Jusa+NF-P0sdHtcoR8fPiBSKtNXKgstgVA@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <CALMp9eQtjZ-iRiW5Jusa+NF-P0sdHtcoR8fPiBSKtNXKgstgVA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/pinchartl/media.git streams/v6.0/v11
-head:   c8cf58f00bee6d4f43462b3e3f83ef516c594d61
-commit: c8cf58f00bee6d4f43462b3e3f83ef516c594d61 [49/49] media: mc: entity: Add media_entity_pipeline() to access the media pipeline
-config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20220906/202209062003.eFiRJ8vz-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add pinchartl-media git://linuxtv.org/pinchartl/media.git
-        git fetch --no-tags pinchartl-media streams/v6.0/v11
-        git checkout c8cf58f00bee6d4f43462b3e3f83ef516c594d61
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/staging/
+On 6/9/2022 1:36 am, Jim Mattson wrote:
+> On Mon, Sep 5, 2022 at 5:45 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>>
+>> From: Sandipan Das <sandipan.das@amd.com>
+>>
+>> CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some
+>> new performance monitoring features for AMD processors.
+>>
+>> Bit 0 of EAX indicates support for Performance Monitoring
+>> Version 2 (PerfMonV2) features. If found to be set during
+>> PMU initialization, the EBX bits of the same CPUID function
+>> can be used to determine the number of available PMCs for
+>> different PMU types.
+>>
+>> Expose the relevant bits via KVM_GET_SUPPORTED_CPUID so
+>> that guests can make use of the PerfMonV2 features.
+>>
+>> Co-developed-by: Like Xu <likexu@tencent.com>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+>> ---
+>>   arch/x86/include/asm/perf_event.h |  8 ++++++++
+>>   arch/x86/kvm/cpuid.c              | 21 ++++++++++++++++++++-
+>>   2 files changed, 28 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+>> index f6fc8dd51ef4..c848f504e467 100644
+>> --- a/arch/x86/include/asm/perf_event.h
+>> +++ b/arch/x86/include/asm/perf_event.h
+>> @@ -214,6 +214,14 @@ union cpuid_0x80000022_ebx {
+>>          unsigned int            full;
+>>   };
+>>
+>> +union cpuid_0x80000022_eax {
+>> +       struct {
+>> +               /* Performance Monitoring Version 2 Supported */
+>> +               unsigned int    perfmon_v2:1;
+>> +       } split;
+>> +       unsigned int            full;
+>> +};
+>> +
+>>   struct x86_pmu_capability {
+>>          int             version;
+>>          int             num_counters_gp;
+>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>> index 75dcf7a72605..08a29ab096d2 100644
+>> --- a/arch/x86/kvm/cpuid.c
+>> +++ b/arch/x86/kvm/cpuid.c
+>> @@ -1094,7 +1094,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>>                  entry->edx = 0;
+>>                  break;
+>>          case 0x80000000:
+>> -               entry->eax = min(entry->eax, 0x80000021);
+>> +               entry->eax = min(entry->eax, 0x80000022);
+>>                  /*
+>>                   * Serializing LFENCE is reported in a multitude of ways, and
+>>                   * NullSegClearsBase is not reported in CPUID on Zen2; help
+>> @@ -1203,6 +1203,25 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>>                  if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
+>>                          entry->eax |= BIT(6);
+>>                  break;
+>> +       /* AMD Extended Performance Monitoring and Debug */
+>> +       case 0x80000022: {
+>> +               union cpuid_0x80000022_eax eax;
+>> +               union cpuid_0x80000022_ebx ebx;
+>> +
+>> +               entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+>> +               if (!enable_pmu)
+>> +                       break;
+>> +
+>> +               if (kvm_pmu_cap.version > 1) {
+>> +                       /* AMD PerfMon is only supported up to V2 in the KVM. */
+>> +                       eax.split.perfmon_v2 = 1;
+>> +                       ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
+>> +                                                    KVM_AMD_PMC_MAX_GENERIC);
+> 
+> Note that the number of core PMCs has to be at least 6 if
+> guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE). I suppose this leaf
+> could claim fewer, but the first 6 PMCs must work, per the v1 PMU
+> spec. That is, software that knows about PERFCTR_CORE, but not about
+> PMU v2, can rightfully expect 6 PMCs.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I thought the NumCorePmc number would only make sense if 
+CPUID.80000022.eax.perfmon_v2
+bit was present, but considering that the user space is perfectly fine with just 
+configuring the
+NumCorePmc number without setting perfmon_v2 bit at all, so how about:
 
-All error/warnings (new ones prefixed by >>):
+	/* AMD Extended Performance Monitoring and Debug */
+	case 0x80000022: {
+		union cpuid_0x80000022_eax eax;
+		union cpuid_0x80000022_ebx ebx;
+		bool perfctr_core;
 
-   In file included from include/linux/kernel.h:21,
-                    from include/linux/clk.h:13,
-                    from drivers/staging/media/omap4iss/iss.c:10:
-   drivers/staging/media/omap4iss/iss_video.h: In function 'to_iss_pipeline':
->> include/linux/container_of.h:17:42: error: returning 'struct iss_pipeline *' from a function with incompatible return type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-      17 | #define container_of(ptr, type, member) ({                              \
-         |                                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      18 |         void *__mptr = (void *)(ptr);                                   \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      20 |                       __same_type(*(ptr), void),                        \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      21 |                       "pointer type mismatch in container_of()");       \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      22 |         ((type *)(__mptr - offsetof(type, member))); })
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/media/omap4iss/iss_video.h:100:16: note: in expansion of macro 'container_of'
-     100 |         return container_of(pipe, struct iss_pipeline, pipe);
-         |                ^~~~~~~~~~~~
-   drivers/staging/media/omap4iss/iss.c: In function 'iss_pipeline_is_last':
->> drivers/staging/media/omap4iss/iss.c:551:14: error: assignment to 'struct iss_pipeline *' from incompatible pointer type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-     551 |         pipe = to_iss_pipeline(me);
-         |              ^
-   drivers/staging/media/omap4iss/iss.c: In function 'omap4iss_module_sync_idle':
->> drivers/staging/media/omap4iss/iss.c:624:37: error: initialization of 'struct iss_pipeline *' from incompatible pointer type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-     624 |         struct iss_pipeline *pipe = to_iss_pipeline(me);
-         |                                     ^~~~~~~~~~~~~~~
-   {standard input}: Assembler messages:
-   {standard input}:977: Error: Register number out of range 0..3
-   {standard input}:977: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:977: Warning: Only the first path encountering the conflict is reported
-   {standard input}:972: Warning: This is the location of the conflicting usage
-   {standard input}:978: Error: Register number out of range 0..3
-   {standard input}:978: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:978: Warning: Only the first path encountering the conflict is reported
-   {standard input}:972: Warning: This is the location of the conflicting usage
-   {standard input}:978: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:978: Warning: Only the first path encountering the conflict is reported
-   {standard input}:977: Warning: This is the location of the conflicting usage
-   {standard input}:981: Error: Register number out of range 0..3
-   {standard input}:982: Error: Register number out of range 0..3
-   {standard input}:982: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:982: Warning: Only the first path encountering the conflict is reported
-   {standard input}:981: Warning: This is the location of the conflicting usage
-   {standard input}:2630: Error: Register number out of range 0..2
-   {standard input}:2632: Error: Register number out of range 0..2
-   {standard input}:2632: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:2632: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2630: Warning: This is the location of the conflicting usage
-   {standard input}:2633: Error: Register number out of range 0..2
-   {standard input}:2633: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:2633: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2630: Warning: This is the location of the conflicting usage
-   {standard input}:2633: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:2633: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2632: Warning: This is the location of the conflicting usage
-   {standard input}:2634: Error: Register number out of range 0..2
-   {standard input}:2634: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:2634: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2630: Warning: This is the location of the conflicting usage
-   {standard input}:2634: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:2634: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2632: Warning: This is the location of the conflicting usage
-   {standard input}:2634: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:2634: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2633: Warning: This is the location of the conflicting usage
-   {standard input}:2638: Error: Register number out of range 0..2
-   {standard input}:3883: Error: Register number out of range 0..0
-   {standard input}:3883: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3883: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3882: Warning: This is the location of the conflicting usage
-   {standard input}:3884: Error: Register number out of range 0..0
-   {standard input}:3884: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3884: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3882: Warning: This is the location of the conflicting usage
-   {standard input}:3884: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3884: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3883: Warning: This is the location of the conflicting usage
-   {standard input}:3886: Error: Register number out of range 0..0
-   {standard input}:3886: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3886: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3882: Warning: This is the location of the conflicting usage
-   {standard input}:3886: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3886: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3883: Warning: This is the location of the conflicting usage
-   {standard input}:3886: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3886: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3884: Warning: This is the location of the conflicting usage
-   {standard input}:3887: Error: Register number out of range 0..0
-   {standard input}:3887: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3887: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3882: Warning: This is the location of the conflicting usage
-   {standard input}:3887: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3887: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3883: Warning: This is the location of the conflicting usage
-   {standard input}:3887: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3887: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3884: Warning: This is the location of the conflicting usage
-   {standard input}:3887: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3887: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3886: Warning: This is the location of the conflicting usage
-   {standard input}:3888: Error: Register number out of range 0..0
-   {standard input}:3888: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3888: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3882: Warning: This is the location of the conflicting usage
-   {standard input}:3888: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3888: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3883: Warning: This is the location of the conflicting usage
-   {standard input}:3888: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3888: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3884: Warning: This is the location of the conflicting usage
-   {standard input}:3888: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3888: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3886: Warning: This is the location of the conflicting usage
-   {standard input}:3888: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3888: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3887: Warning: This is the location of the conflicting usage
-   {standard input}:3891: Error: Register number out of range 0..0
-   {standard input}:3892: Error: Register number out of range 0..0
-   {standard input}:3892: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:3892: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3891: Warning: This is the location of the conflicting usage
-   {standard input}:5338: Error: Register number out of range 0..3
-   {standard input}:5338: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 38
-   {standard input}:5338: Warning: Only the first path encountering the conflict is reported
---
-   In file included from include/linux/list.h:5,
-                    from include/linux/rculist.h:10,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/delay.h:23,
-                    from drivers/staging/media/omap4iss/iss_csi2.c:10:
-   drivers/staging/media/omap4iss/iss_video.h: In function 'to_iss_pipeline':
->> include/linux/container_of.h:17:42: error: returning 'struct iss_pipeline *' from a function with incompatible return type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-      17 | #define container_of(ptr, type, member) ({                              \
-         |                                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      18 |         void *__mptr = (void *)(ptr);                                   \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      20 |                       __same_type(*(ptr), void),                        \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      21 |                       "pointer type mismatch in container_of()");       \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      22 |         ((type *)(__mptr - offsetof(type, member))); })
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/media/omap4iss/iss_video.h:100:16: note: in expansion of macro 'container_of'
-     100 |         return container_of(pipe, struct iss_pipeline, pipe);
-         |                ^~~~~~~~~~~~
-   drivers/staging/media/omap4iss/iss_csi2.c: In function 'csi2_isr_ctx':
-   drivers/staging/media/omap4iss/iss_csi2.c:679:38: error: initialization of 'struct iss_pipeline *' from incompatible pointer type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-     679 |                                      to_iss_pipeline(&csi2->subdev.entity);
-         |                                      ^~~~~~~~~~~~~~~
-   drivers/staging/media/omap4iss/iss_csi2.c: In function 'omap4iss_csi2_isr':
-   drivers/staging/media/omap4iss/iss_csi2.c:742:37: error: initialization of 'struct iss_pipeline *' from incompatible pointer type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-     742 |         struct iss_pipeline *pipe = to_iss_pipeline(&csi2->subdev.entity);
-         |                                     ^~~~~~~~~~~~~~~
-   drivers/staging/media/omap4iss/iss_csi2.c: In function 'csi2_link_validate':
-   drivers/staging/media/omap4iss/iss_csi2.c:1025:37: error: initialization of 'struct iss_pipeline *' from incompatible pointer type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-    1025 |         struct iss_pipeline *pipe = to_iss_pipeline(&csi2->subdev.entity);
-         |                                     ^~~~~~~~~~~~~~~
-   {standard input}: Assembler messages:
-   {standard input}:2581: Error: Register number out of range 0..3
-   {standard input}:2581: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:2581: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2576: Warning: This is the location of the conflicting usage
-   {standard input}:2582: Error: Register number out of range 0..3
-   {standard input}:2582: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:2582: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2576: Warning: This is the location of the conflicting usage
-   {standard input}:2582: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:2582: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2581: Warning: This is the location of the conflicting usage
-   {standard input}:2585: Error: Register number out of range 0..3
-   {standard input}:2586: Error: Register number out of range 0..3
-   {standard input}:2586: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:2586: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2585: Warning: This is the location of the conflicting usage
-   {standard input}:2927: Error: Register number out of range 0..3
-   {standard input}:2928: Error: Register number out of range 0..3
-   {standard input}:2928: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:2927: Warning: This is the location of the conflicting usage
-   {standard input}:2929: Error: Register number out of range 0..3
-   {standard input}:2929: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:2927: Warning: This is the location of the conflicting usage
-   {standard input}:2929: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:2928: Warning: This is the location of the conflicting usage
-   {standard input}:2933: Error: Register number out of range 0..3
-   {standard input}:3168: Error: Register number out of range 0..3
-   {standard input}:3168: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 43
-   {standard input}:3168: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3163: Warning: This is the location of the conflicting usage
-   {standard input}:3169: Error: Register number out of range 0..3
-   {standard input}:3169: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 43
-   {standard input}:3169: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3163: Warning: This is the location of the conflicting usage
-   {standard input}:3169: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 43
-   {standard input}:3169: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3168: Warning: This is the location of the conflicting usage
-   {standard input}:3172: Error: Register number out of range 0..3
-   {standard input}:3173: Error: Register number out of range 0..3
-   {standard input}:3173: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 43
-   {standard input}:3173: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3172: Warning: This is the location of the conflicting usage
-   {standard input}:4933: Error: Register number out of range 0..3
-   {standard input}:4934: Error: Register number out of range 0..3
-   {standard input}:4934: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:4934: Warning: Only the first path encountering the conflict is reported
-   {standard input}:4933: Warning: This is the location of the conflicting usage
-   {standard input}:4935: Error: Register number out of range 0..3
-   {standard input}:4935: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:4935: Warning: Only the first path encountering the conflict is reported
-   {standard input}:4933: Warning: This is the location of the conflicting usage
-   {standard input}:4935: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 39
-   {standard input}:4935: Warning: Only the first path encountering the conflict is reported
-   {standard input}:4934: Warning: This is the location of the conflicting usage
-   {standard input}:4939: Error: Register number out of range 0..3
-   cc1: some warnings being treated as errors
---
-   In file included from include/linux/list.h:5,
-                    from include/linux/rculist.h:10,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/delay.h:23,
-                    from drivers/staging/media/omap4iss/iss_csiphy.c:10:
-   drivers/staging/media/omap4iss/iss_video.h: In function 'to_iss_pipeline':
->> include/linux/container_of.h:17:42: error: returning 'struct iss_pipeline *' from a function with incompatible return type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-      17 | #define container_of(ptr, type, member) ({                              \
-         |                                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      18 |         void *__mptr = (void *)(ptr);                                   \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      20 |                       __same_type(*(ptr), void),                        \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      21 |                       "pointer type mismatch in container_of()");       \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      22 |         ((type *)(__mptr - offsetof(type, member))); })
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/media/omap4iss/iss_video.h:100:16: note: in expansion of macro 'container_of'
-     100 |         return container_of(pipe, struct iss_pipeline, pipe);
-         |                ^~~~~~~~~~~~
-   drivers/staging/media/omap4iss/iss_csiphy.c: In function 'omap4iss_csiphy_config':
-   drivers/staging/media/omap4iss/iss_csiphy.c:119:37: error: initialization of 'struct iss_pipeline *' from incompatible pointer type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-     119 |         struct iss_pipeline *pipe = to_iss_pipeline(&csi2_subdev->entity);
-         |                                     ^~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
---
-   In file included from include/linux/list.h:5,
-                    from include/linux/module.h:12,
-                    from drivers/staging/media/omap4iss/iss_ipipeif.c:10:
-   drivers/staging/media/omap4iss/iss_video.h: In function 'to_iss_pipeline':
->> include/linux/container_of.h:17:42: error: returning 'struct iss_pipeline *' from a function with incompatible return type 'struct media_pipeline *' [-Werror=incompatible-pointer-types]
-      17 | #define container_of(ptr, type, member) ({                              \
-         |                                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      18 |         void *__mptr = (void *)(ptr);                                   \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      20 |                       __same_type(*(ptr), void),                        \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      21 |                       "pointer type mismatch in container_of()");       \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      22 |         ((type *)(__mptr - offsetof(type, member))); })
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/media/omap4iss/iss_video.h:100:16: note: in expansion of macro 'container_of'
-     100 |         return container_of(pipe, struct iss_pipeline, pipe);
-         |                ^~~~~~~~~~~~
-   {standard input}: Assembler messages:
-   {standard input}:2314: Error: Register number out of range 0..3
-   {standard input}:2314: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:2314: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2309: Warning: This is the location of the conflicting usage
-   {standard input}:2315: Error: Register number out of range 0..3
-   {standard input}:2315: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:2315: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2309: Warning: This is the location of the conflicting usage
-   {standard input}:2315: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:2315: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2314: Warning: This is the location of the conflicting usage
-   {standard input}:2318: Error: Register number out of range 0..3
-   {standard input}:2319: Error: Register number out of range 0..3
-   {standard input}:2319: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 36
-   {standard input}:2319: Warning: Only the first path encountering the conflict is reported
-   {standard input}:2318: Warning: This is the location of the conflicting usage
-   {standard input}:3122: Error: Register number out of range 0..3
-   {standard input}:3123: Error: Register number out of range 0..3
-   {standard input}:3123: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 38
-   {standard input}:3123: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3122: Warning: This is the location of the conflicting usage
-   {standard input}:3124: Error: Register number out of range 0..3
-   {standard input}:3124: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 38
-   {standard input}:3124: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3122: Warning: This is the location of the conflicting usage
-   {standard input}:3124: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 38
-   {standard input}:3124: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3123: Warning: This is the location of the conflicting usage
-   {standard input}:3128: Error: Register number out of range 0..3
-   {standard input}:3448: Error: Register number out of range 0..3
-   {standard input}:3448: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 43
-   {standard input}:3448: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3443: Warning: This is the location of the conflicting usage
-   {standard input}:3449: Error: Register number out of range 0..3
-   {standard input}:3449: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 43
-   {standard input}:3449: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3443: Warning: This is the location of the conflicting usage
-   {standard input}:3449: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 43
-   {standard input}:3449: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3448: Warning: This is the location of the conflicting usage
-   {standard input}:3452: Error: Register number out of range 0..3
-   {standard input}:3453: Error: Register number out of range 0..3
-   {standard input}:3453: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 43
-   {standard input}:3453: Warning: Only the first path encountering the conflict is reported
-   {standard input}:3452: Warning: This is the location of the conflicting usage
-   cc1: some warnings being treated as errors
-..
+		entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+		if (!enable_pmu)
+			break;
 
+		perfctr_core = kvm_cpu_cap_has(X86_FEATURE_PERFCTR_CORE);
+		if (!perfctr_core)
+			ebx.split.num_core_pmc = AMD64_NUM_COUNTERS;
+		if (kvm_pmu_cap.version > 1) {
+			/* AMD PerfMon is only supported up to V2 in the KVM. */
+			eax.split.perfmon_v2 = 1;
+			ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
+						     KVM_AMD_PMC_MAX_GENERIC);
+		}
+		if (perfctr_core) {
+			ebx.split.num_core_pmc = max(ebx.split.num_core_pmc,
+						     AMD64_NUM_COUNTERS_CORE);
+		}
 
-vim +17 include/linux/container_of.h
+		entry->eax = eax.full;
+		entry->ebx = ebx.full;
+		break;
+	}
 
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08   9  
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  10  /**
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  11   * container_of - cast a member of a structure out to the containing structure
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  12   * @ptr:	the pointer to the member.
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  13   * @type:	the type of the container struct this is embedded in.
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  14   * @member:	the name of the member within the struct.
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  15   *
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  16   */
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08 @17  #define container_of(ptr, type, member) ({				\
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  18  	void *__mptr = (void *)(ptr);					\
-e1edc277e6f6df Rasmus Villemoes 2021-11-08  19  	static_assert(__same_type(*(ptr), ((type *)0)->member) ||	\
-e1edc277e6f6df Rasmus Villemoes 2021-11-08  20  		      __same_type(*(ptr), void),			\
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  21  		      "pointer type mismatch in container_of()");	\
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  22  	((type *)(__mptr - offsetof(type, member))); })
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  23  
+?
 
-:::::: The code at line 17 was first introduced by commit
-:::::: d2a8ebbf8192b84b11f1b204c4f7c602df32aeac kernel.h: split out container_of() and typeof_member() macros
+Once 0x80000022 appears, ebx.split.num_core_pmc will report only
+the real "Number of Core Performance Counters" regardless of perfmon_v2.
 
-:::::: TO: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> 
+>> +               }
+>> +               entry->eax = eax.full;
+>> +               entry->ebx = ebx.full;
+>> +               break;
+>> +       }
+>>          /*Add support for Centaur's CPUID instruction*/
+>>          case 0xC0000000:
+>>                  /*Just support up to 0xC0000004 now*/
+>> --
+>> 2.37.3
+>>

@@ -2,116 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0A65AE502
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C74E5AE50E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbiIFKHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S233743AbiIFKLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233120AbiIFKHu (ORCPT
+        with ESMTP id S233256AbiIFKLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:07:50 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2376123BF4;
-        Tue,  6 Sep 2022 03:07:44 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id b19so11701103ljf.8;
-        Tue, 06 Sep 2022 03:07:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=VkmV4Mbbakibw1YvOFS3OF9fAcQ2su7P2rixwdKsjEY=;
-        b=q3V5/J5f7c4axYAYccSfJ3we12lZbBEBnYkWxbyb5cml0xXtlNPfKOHvP3jYJjp7Pf
-         t7mxomOPI12/IWn8CmvRjtNIexK8awZXBXvs+n8l52BHJqyvUeyRvE8SqSKWiQ9+8S87
-         6WNp3T4oK3JO+BjhdFxR3OLoFsyi1+K8IY0ccDzdVUso8mfEDdnFWH6M5aeJ2xr9WXJT
-         /XVXKdW3jeB/Vuw5/XW6hMg+MJt34GyFaOwhEuNmba4J6JclQ7OSfUpdJADQ+OjqTG6w
-         OeDhyaXQN2stl2aEVoxl0UOeZ7TNuHoxj5Gbkeo0v7Jlb3uLhGOBtLSQIZ6a4+8FrQoa
-         8xhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=VkmV4Mbbakibw1YvOFS3OF9fAcQ2su7P2rixwdKsjEY=;
-        b=XjrSb4WTdmb5fs6+duP7mfbWiEnXpXcplejI2gJB1+e2T25qNkQQEKYsiyksKzANKe
-         zbekg/VXCO2m3BvA63c+yFAcVGJ2EkUHLBtrCokngefsSbLYVIRB0bze4IB/A0l5f0V1
-         9PcOvhWXzOO9f/4d9ZGEd6vGQcUEJuuYrRQ80QWN3nBzkJ8QUOias4B4Qc8LZrBJ5WIs
-         Yx7Qj/5P/sActJwCvo8MYbH3mbbYWCrCu/l535lpF1ql6saK/l3GNaV2a6bz9MVkd0Go
-         sFL1UwWgVRUGAb0hKVze8e2+zZ4z15UFYNFFLL/XBB/c8wxW1YZ7mdpkOIl0NtpmkLGW
-         C6Xg==
-X-Gm-Message-State: ACgBeo05yVS5GMcm3RY9JyL+JzyJMvIgfx1tvhfHItFtd/j5mWeiRyp+
-        zcFJp8sxBlFx0+L5D5RbTc11ktJC2GDlHQ==
-X-Google-Smtp-Source: AA6agR65QbEfb31NvTuL5YMee3ygqPMXMYaDRosDOXZNcMOpmKgIPQC1Xex1ZykSacZcnv9DKGSjbw==
-X-Received: by 2002:a05:651c:2205:b0:25f:dda5:1e65 with SMTP id y5-20020a05651c220500b0025fdda51e65mr17074691ljq.240.1662458862279;
-        Tue, 06 Sep 2022 03:07:42 -0700 (PDT)
-Received: from ubuntu.armcompdev.pub.tds.tieto.com ([89.46.86.70])
-        by smtp.gmail.com with ESMTPSA id c16-20020ac25f70000000b00492e10b1723sm1640514lfc.139.2022.09.06.03.07.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 03:07:41 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 10:07:35 +0000
-From:   Marek Bykowski <marek.bykowski@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] of/fdt: Don't calculate initrd_start from the DT if
- 'linux,initrd-end' is 0
-Message-ID: <20220906100735.7a226942@ubuntu.armcompdev.pub.tds.tieto.com>
-In-Reply-To: <20220830153500.49206b5a@ubuntu.armcompdev.pub.tds.tieto.com>
-References: <20220826220017.188066-1-marek.bykowski@gmail.com>
-        <CAL_JsqKGgZOSdWQ2ithipvrRAYwt-vOL1z9-RM++-_h6pA=C_Q@mail.gmail.com>
-        <20220830153500.49206b5a@ubuntu.armcompdev.pub.tds.tieto.com>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 6 Sep 2022 06:11:24 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC3B1E3EC;
+        Tue,  6 Sep 2022 03:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oyzRgO+160xovDVemVwmeVt1HmM9L/O1qSGDU54zVFc=; b=VvQ7TGRoxa2LP5V0+kVwtwEiJU
+        uIrDlPOaIGlyizQuG+rTXLceNDZFIWfWT7K+uyYpbDtrtb7wyokt9jLFyTHkPtbh9hjEYdt2YRK1j
+        oxOm6uhF253+4zAylyVRoQaR2/rE8urqf5ekxqNyFs29oUXuXMI5mdWr8xp2YDGNI89jrurWTtvhu
+        QkmGuVH/UAWh6Gi10ou+Gp7n+XZHATqJ1B5QKS85MWvtFOwUicKtQn0Rdfl9xouCe1BmeYcE2dvFu
+        /4DsygL9BXoekvIyF36yUNE/+4/O4kaR4myPbtx7Gj20ChXu5OktKN9ccYPW1rmqbR4MA0jV7GBDM
+        uT3P99HA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVVW6-00A8BS-Uc; Tue, 06 Sep 2022 10:11:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B2E0F300348;
+        Tue,  6 Sep 2022 12:09:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6BAFA2B656AD4; Tue,  6 Sep 2022 12:09:13 +0200 (CEST)
+Date:   Tue, 6 Sep 2022 12:09:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [PATCH] perf: Consolidate branch sample filter helpers
+Message-ID: <YxccSZOGAwdiYrsj@hirez.programming.kicks-ass.net>
+References: <20220906084414.396220-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906084414.396220-1-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Aug 2022 15:35:00 +0000
-Marek Bykowski <marek.bykowski@gmail.com> wrote:
+On Tue, Sep 06, 2022 at 02:14:14PM +0530, Anshuman Khandual wrote:
+> Besides the branch type filtering requests, 'event.attr.branch_sample_type'
+> also contains various flags indicating which additional information should
+> be captured, along with the base branch record. These flags help configure
+> the underlying hardware, and capture the branch records appropriately when
+> required e.g after PMU interrupt. But first, this moves an existing helper
+> perf_sample_save_hw_index() into the header before adding some more helpers
+> for other branch sample filter flags.
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: linux-perf-users@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+> Hello Peter,
+> 
+> Could you please consider taking this patch along with others on the perf
+> ABI series. This patch has been part of the original BRBE driver series,
+> which will have one less patch to include going forward. Thank you.
+> 
+> - Anshuman
+> 
+> This applies on v6.0-rc4 but after applying the following patch series
+> 
+> https://lore.kernel.org/all/20220824044822.70230-1-anshuman.khandual@arm.com/
+> 
 
-> On Sun, 28 Aug 2022 20:12:41 -0500
-> Rob Herring <robh+dt@kernel.org> wrote:
-> 
-> > 
-> > Shouldn't we just check that start < end?
-> > 
-> > Can we check this somewhere not DT specific (and also not arch
-> > specific)? Then we don't have to worry if any other method of
-> > setting initrd could have the same error.
-> 
-> Yes, we can switch from checking on the end being 0 to that proposed:
-> - if (!end)
-> -     return;
-> + if (start >= end)
-> +     return;
-> 
-> Then the check would even go further as would also catch cases where
-> end < start.
-> 
-> My taking is early_init_dt_scan_chosen() that sets initrd size
-> incorrectly is DT specific but generic/arch agnostic. So that if
-> the error got introduced by a bootloader/U-Boot through the DT
-> chosen node, we should catch it in DT and react.
-> 
-> ARM64, for example, before going down for mapping for the incorrect
-> address (some extra large address resulting from the negative to
-> positive value conversion), has a check after DT parsing if
-> phys_initrd_size is other than 0 to proceed, and it is so that it
-> passes or in other words it doesn't catch the error.
-> 
-> Marek
+Yeah, but it doesn't cleanly apply to tip/perf/core....
 
-Hello Rob and others,
-
-Any updates on it?
-
-Marek
+The conflict looks trivial, let me stomp on it to make it fit :-)

@@ -2,241 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FE35AF727
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4E45AF726
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiIFVlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
+        id S229912AbiIFVld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiIFVlR (ORCPT
+        with ESMTP id S229993AbiIFVlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:41:17 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616A28A6EE;
-        Tue,  6 Sep 2022 14:41:10 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-127f5411b9cso148174fac.4;
-        Tue, 06 Sep 2022 14:41:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FbKPQXfgOSHzOYW0WiEuQn3YF7xR5w7WxlOeboF7hFg=;
-        b=G4TLyzu5Y/BxI9LIuFEsYvS51xSa1mzUR2TALMF8RQnWuwPf5nV7qRNjVwZw11Ysiq
-         aCQLetA1k6euY/RtboBxGops/LaHIb4HCvk0j2ww5bvxbJLbWlJIqqyhPjU6BRJBqjCl
-         42CSIlzJuVtsMpS0SR0oHVewpNh8cT50reHrm7MAYt663G1j2vBMPMdLEaP0qHkktx/O
-         CnrkoUvKP5BO4UU46nGrW6skxxcTAE8zzxIYMSGo+Dpxzl9AWb7lK/x7J8bVtI2AzGp9
-         ZwmRXwG1Ec4Z6YpPqO3NRHiCP43p6aP+5MrgjCD1qRtmPn7DHnDcuKaHkbYrdZmRza1P
-         s6hA==
-X-Gm-Message-State: ACgBeo21zb5jO80LJ/OI1VdoWwL3VxEWrU0sdV6G6q2+4sLZ8/SiXYZQ
-        wo7bH6bS6Qkj1JX4NUcC+Q==
-X-Google-Smtp-Source: AA6agR6frPS+sWwOl68vgFD6HQuEoYRcMk19NM5wPt3pojgx36cNn0sP9Jv9fT72zxeJwTOBOou6zg==
-X-Received: by 2002:a05:6870:a188:b0:126:444d:743d with SMTP id a8-20020a056870a18800b00126444d743dmr149386oaf.111.1662500469213;
-        Tue, 06 Sep 2022 14:41:09 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id be36-20020a05687058a400b000f5e89a9c60sm7649013oab.3.2022.09.06.14.41.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 14:41:08 -0700 (PDT)
-Received: (nullmailer pid 1224963 invoked by uid 1000);
-        Tue, 06 Sep 2022 21:41:00 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        linux-arm-msm@vger.kernel.org, johan@kernel.org,
-        lgirdwood@gmail.com, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, broonie@kernel.org
-In-Reply-To: <20220906201959.69920-1-ahalaney@redhat.com>
-References: <20220906201959.69920-1-ahalaney@redhat.com>
-Subject: Re: [PATCH v2] regulator: dt-bindings: qcom,rpmh: Indicate regulator-allow-set-load dependencies
-Date:   Tue, 06 Sep 2022 16:41:00 -0500
-Message-Id: <1662500460.139898.1224962.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 17:41:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD769A94E;
+        Tue,  6 Sep 2022 14:41:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E077A6132D;
+        Tue,  6 Sep 2022 21:41:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE9AC433D6;
+        Tue,  6 Sep 2022 21:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662500477;
+        bh=N0fu/LaDE7dpXyg6luFZfut8ErmDDGy5tJDTaRcczMg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OEYc1l0CS9kSg82p1ze3SX/w67w7CYHrW6vW8oEyTpW55vlA+raDO8CKlJCFVor83
+         vDEwSptDYn0KScw7+8NYClJ/DX4nMTLt542dQQ4mlr3nIC4zeqRy7ieDMdXw0bszQF
+         M3AIVPdEJLJDNZf0m52PEHe6K5C88nFlpqurd+qx2K3kFRGOeD+K5SiWXbrgPf5Lyw
+         IxXipwla1QHQcEsAgWfd/xziF8iDTw16m9/1R2UpZN8tbttDkLyovUWqzi6hJGb7wb
+         r/wEbcEMVVkHj0G1crK3HRLR/Qchx/SamMf6mDMWaQH2Ry/oPYMgr0wX5NoEPf2rUx
+         ErBRDoe+kgpvg==
+Received: by pali.im (Postfix)
+        id 3FCA8742; Tue,  6 Sep 2022 23:41:14 +0200 (CEST)
+Date:   Tue, 6 Sep 2022 23:41:14 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
+Message-ID: <20220906214114.vj3v32dzwxz6uqik@pali>
+References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+ <20220906204301.3736813-2-dmitry.torokhov@gmail.com>
+ <20220906211628.6u4hbpn4shjcvqel@pali>
+ <Yxe7CJnIT5AiUilL@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yxe7CJnIT5AiUilL@google.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Sep 2022 15:19:59 -0500, Andrew Halaney wrote:
-> For RPMH regulators it doesn't make sense to indicate
-> regulator-allow-set-load without saying what modes you can switch to,
-> so be sure to indicate a dependency on regulator-allowed-modes.
+On Tuesday 06 September 2022 14:26:32 Dmitry Torokhov wrote:
+> Hi Pali,
 > 
-> With this in place devicetree validation can catch issues like this:
+> On Tue, Sep 06, 2022 at 11:16:28PM +0200, Pali Rohár wrote:
+> > Hello!
+> > 
+> > On Tuesday 06 September 2022 13:43:01 Dmitry Torokhov wrote:
+> > > This patch switches the driver away from legacy gpio/of_gpio API to
+> > > gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+> > > make private to gpiolib.
+> > 
+> > There are many pending pci-mvebu.c patches waiting for review and merge,
+> > so I would suggest to wait until all other mvebu patches are processed
+> > and then process this one... longer waiting period :-(
 > 
->     /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
->             From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+> OK, it is not super urgent. OTOH it is a very simple patch :)
+
+In the worst case, I will take it into my pending list of pci-mvebu.c
+patches, so it would not be lost. Just yesterday I collected patches and
+created pending list:
+https://git.kernel.org/pub/scm/linux/kernel/git/pali/linux.git/log/?h=pci-mvebu-pending
+
+> > 
+> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > ---
+> > >  drivers/pci/controller/pci-mvebu.c | 48 +++++++++---------------------
+> > >  1 file changed, 14 insertions(+), 34 deletions(-)
+> > > 
+> > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > > index 1ced73726a26..a54beb8f611c 100644
+> > > --- a/drivers/pci/controller/pci-mvebu.c
+> > > +++ b/drivers/pci/controller/pci-mvebu.c
+> > > @@ -11,14 +11,13 @@
+> > >  #include <linux/bitfield.h>
+> > >  #include <linux/clk.h>
+> > >  #include <linux/delay.h>
+> > > -#include <linux/gpio.h>
+> > > +#include <linux/gpio/consumer.h>
+> > >  #include <linux/init.h>
+> > >  #include <linux/mbus.h>
+> > >  #include <linux/slab.h>
+> > >  #include <linux/platform_device.h>
+> > >  #include <linux/of_address.h>
+> > >  #include <linux/of_irq.h>
+> > > -#include <linux/of_gpio.h>
+> > >  #include <linux/of_pci.h>
+> > >  #include <linux/of_platform.h>
+> > >  
+> > > @@ -1261,9 +1260,8 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
+> > >  	struct mvebu_pcie_port *port, struct device_node *child)
+> > >  {
+> > >  	struct device *dev = &pcie->pdev->dev;
+> > > -	enum of_gpio_flags flags;
+> > >  	u32 slot_power_limit;
+> > > -	int reset_gpio, ret;
+> > > +	int ret;
+> > >  	u32 num_lanes;
+> > >  
+> > >  	port->pcie = pcie;
+> > > @@ -1327,40 +1325,22 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
+> > >  			 port->name, child);
+> > >  	}
+> > >  
+> > > -	reset_gpio = of_get_named_gpio_flags(child, "reset-gpios", 0, &flags);
+> > > -	if (reset_gpio == -EPROBE_DEFER) {
+> > > -		ret = reset_gpio;
+> > > +	port->reset_name = devm_kasprintf(dev, GFP_KERNEL, "%s-reset",
+> > > +					  port->name);
+> > > +	if (!port->reset_name) {
+> > > +		ret = -ENOMEM;
+> > >  		goto err;
+> > >  	}
+> > >  
+> > > -	if (gpio_is_valid(reset_gpio)) {
+> > > -		unsigned long gpio_flags;
+> > > -
+> > > -		port->reset_name = devm_kasprintf(dev, GFP_KERNEL, "%s-reset",
+> > > -						  port->name);
+> > > -		if (!port->reset_name) {
+> > > -			ret = -ENOMEM;
+> > > +	port->reset_gpio = devm_fwnode_gpiod_get(dev, of_fwnode_handle(child),
+> > > +						 "reset", GPIOD_OUT_HIGH,
+> > 
+> > What does it mean that there is a new GPIOD_OUT_HIGH flag passed to the
+> > devm_fwnode_gpiod_get() function?
 > 
-> Suggested-by: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> ---
+> This means that we drive the line as "active" as soon as we successfully
+> grab GPIO. This is the same as we had with devm_gpio_request_one(), but
+
+Ah :-( Another thing to fix. Driver should not change the signal line at
+this stage, but only when it is explicitly asked - at later stage. Some
+PCIe card do not like flipping reset line too quick. I see this fix
+would not be such easy as during startup we need to reset endpoint card.
+Normally just putting it from reset, but if card was not reset state
+prior probing driver then it is needed to first put it into reset...
+
+I would fix it this issue after your patch is merged to prevent any
+other merge conflicts.
+
+How to tell devm_fwnode_gpiod_get() function that caller is not
+interested in changing signal line? Just by changing GPIOD_OUT_HIGH to 0?
+
+> we do not need to figure out actual polarity.
 > 
-> v1: https://lore.kernel.org/linux-arm-msm/20220902185148.635292-1-ahalaney@redhat.com/
-> Changes since v1:
->   - Dropped first two patches in the series as they were user error
->     (thanks Krzysztof for highlighting this!)
->   - No change in the remaining patch
+> > 
+> > > +						 port->name);
+> > > +	ret = PTR_ERR_OR_ZERO(port->reset_gpio);
+> > > +	if (ret) {
+> > > +		if (ret	!= -ENOENT)
+
+Just one check, I think that between "ret" and "!=" is TAB instead of
+space. But I'm not sure if it was mangled by email client or of there is
+really TAB.
+
+> > >  			goto err;
+> > > -		}
+> > > -
+> > > -		if (flags & OF_GPIO_ACTIVE_LOW) {
+> > > -			dev_info(dev, "%pOF: reset gpio is active low\n",
+> > > -				 child);
+> > > -			gpio_flags = GPIOF_ACTIVE_LOW |
+> > > -				     GPIOF_OUT_INIT_LOW;
+> > > -		} else {
+> > > -			gpio_flags = GPIOF_OUT_INIT_HIGH;
+> > > -		}
+> > > -
+> > > -		ret = devm_gpio_request_one(dev, reset_gpio, gpio_flags,
+> > > -					    port->reset_name);
+> > > -		if (ret) {
+> > > -			if (ret == -EPROBE_DEFER)
+> > > -				goto err;
+> > > -			goto skip;
+> > > -		}
+> > > -
+> > > -		port->reset_gpio = gpio_to_desc(reset_gpio);
+> > > +		/* reset gpio is optional */
+> > > +		port->reset_gpio = NULL;
+> > 
+> > Maybe you can also release port->reset_name as it is not used at this
+> > stage?
 > 
-> Krzysztof also asked if this patch in particular should apply to other
-> regulators, which I think it should for those regulator's who implement
-> set_mode(). Unfortunately I don't know of a good way to get that
-> information in order to apply it at a broader scope for devicetree
-> regulator validation. At least with this in place RPMH users can get
-> better coverage... if someone has suggestions for how to broaden the
-> scope I'm all ears!
+> OK, I figured it was just a few bytes, but sure, I'll add devm_kfree().
 > 
-> Thanks,
-> Andrew
+> Thanks for the review.
 > 
->  .../devicetree/bindings/regulator/qcom,rpmh-regulator.yaml    | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
-
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/patch/
-
-
-pm8150l-rpmh-regulators: ldo6: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-bahamut.dtb
-	arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dtb
-	arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx203.dtb
-	arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx206.dtb
-
-pm8150l-rpmh-regulators: ldo9: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-bahamut.dtb
-	arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dtb
-	arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx203.dtb
-	arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo-pdx206.dtb
-
-pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sm8350-hdk.dtb
-
-pm8350-rpmh-regulators: ldo6: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sm8350-hdk.dtb
-
-pm8350-rpmh-regulators: ldo7: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sm8350-hdk.dtb
-
-pm8350-rpmh-regulators: ldo9: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sm8350-hdk.dtb
-
-pmc8280-1-rpmh-regulators: ldo3: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280-1-rpmh-regulators: ldo4: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280-1-rpmh-regulators: ldo6: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280-2-rpmh-regulators: ldo3: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280-2-rpmh-regulators: ldo4: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280-2-rpmh-regulators: ldo6: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-
-pmc8280-2-rpmh-regulators: ldo7: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280-2-rpmh-regulators: ldo9: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280c-rpmh-regulators: ldo12: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280c-rpmh-regulators: ldo13: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280c-rpmh-regulators: ldo1: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-pmc8280c-rpmh-regulators: ldo7: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-
-pmm8155au-1-rpmh-regulators: ldo10: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8155p-adp.dtb
-
-pmm8155au-1-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8155p-adp.dtb
-
-pmm8155au-2-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8155p-adp.dtb
-
-pmm8155au-2-rpmh-regulators: ldo8: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8155p-adp.dtb
-
-pmm8540-a-regulators: ldo13: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-a-regulators: ldo3: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-a-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-a-regulators: ldo7: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-c-regulators: ldo10: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-c-regulators: ldo17: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-c-regulators: ldo1: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-c-regulators: ldo2: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-c-regulators: ldo3: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-c-regulators: ldo4: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-c-regulators: ldo6: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-c-regulators: ldo7: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-g-regulators: ldo3: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-g-regulators: ldo7: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-g-regulators: ldo8: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-g-regulators: qcom,pmic-id:0: 'g' is not one of ['a', 'b', 'c', 'd', 'e', 'f', 'h', 'k']
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
-pmm8540-g-regulators: Unevaluated properties are not allowed ('qcom,pmic-id' was unexpected)
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-
+> -- 
+> Dmitry

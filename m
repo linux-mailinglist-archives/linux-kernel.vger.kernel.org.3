@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B5D5AEB43
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8165AEB46
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240266AbiIFN4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S240544AbiIFN5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239967AbiIFNyT (ORCPT
+        with ESMTP id S240214AbiIFNyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:54:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D65580E8B;
-        Tue,  6 Sep 2022 06:41:14 -0700 (PDT)
+        Tue, 6 Sep 2022 09:54:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7067C1A4;
+        Tue,  6 Sep 2022 06:41:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B7CD61557;
-        Tue,  6 Sep 2022 13:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D51CC433D7;
-        Tue,  6 Sep 2022 13:41:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 820C0B818C2;
+        Tue,  6 Sep 2022 13:41:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3349C433C1;
+        Tue,  6 Sep 2022 13:41:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471663;
-        bh=ukZHzAK8yit5XCRC9rR2fHxaBzbUEnfYDN+GanPODBc=;
+        s=korg; t=1662471677;
+        bh=1StxdWEfLHHT7B0TPQARbP42UKuJAzjduxckLtCTBu4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tl/U+b3JjckLmHIJVmgyqAXb6WSD+30dWzKBmcV4G5473wioreZNb3G3r0ihMDSp7
-         0dx/DLXFnPsR6kruLt9TDkh6gblrifEIR9Uc1OWp4UqKsMDwd9GHubvB2Q7gKMWAfQ
-         BA3Z2qHGvZpTt1Z3uHGJPGYJx+wv+bMzz95PkkH4=
+        b=RmVwb5TAyIYPtTzIIB7BNljlUTg4s6mJ+qmg12hhZF28zrhaQhHK7qMmdFR6UF32e
+         PWdcW8PIwWF5pFyoyynXuF6aoMclRAdyVwOL7v+sz36rM79/gFKsDez0cmSh2GAaTH
+         Zu3EHQBkCn9sEXEb6Im7ZzTVj/3MnD5UfNq1QgF4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abhishek Shah <abhishek.shah@columbia.edu>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 096/107] ALSA: seq: oss: Fix data-race for max_midi_devs access
-Date:   Tue,  6 Sep 2022 15:31:17 +0200
-Message-Id: <20220906132825.903040453@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Diego Santa Cruz <Diego.SantaCruz@spinetix.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: [PATCH 5.15 098/107] drm/i915/glk: ECS Liva Q2 needs GLK HDMI port timing quirk
+Date:   Tue,  6 Sep 2022 15:31:19 +0200
+Message-Id: <20220906132825.990362449@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
 References: <20220906132821.713989422@linuxfoundation.org>
@@ -54,44 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
 
-commit 22dec134dbfa825b963f8a1807ad19b943e46a56 upstream.
+commit 919bef7a106ade2bda73681bbc2f3678198f44fc upstream.
 
-ALSA OSS sequencer refers to a global variable max_midi_devs at
-creating a new port, storing it to its own field.  Meanwhile this
-variable may be changed by other sequencer events at
-snd_seq_oss_midi_check_exit_port() in parallel, which may cause a data
-race.
+The quirk added in upstream commit 90c3e2198777 ("drm/i915/glk: Add
+Quirk for GLK NUC HDMI port issues.") is also required on the ECS Liva
+Q2.
 
-OTOH, this data race itself is almost harmless, as the access to the
-MIDI device is done via get_mdev() and it's protected with a refcount,
-hence its presence is guaranteed.
+Note: Would be nicer to figure out the extra delay required for the
+retimer without quirks, however don't know how to check for that.
 
-Though, it's sill better to address the data-race from the code sanity
-POV, and this patch adds the proper spinlock for the protection.
-
-Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/CAEHB2493pZRXs863w58QWnUTtv3HHfg85aYhLn5HJHCwxqtHQg@mail.gmail.com
-Link: https://lore.kernel.org/r/20220823072717.1706-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Cc: stable@vger.kernel.org
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/1326
+Signed-off-by: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220616124137.3184371-1-jani.nikula@intel.com
+(cherry picked from commit 08e9505fa8f9aa00072a47b6f234d89b6b27a89c)
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/seq/oss/seq_oss_midi.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/i915/display/intel_quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/sound/core/seq/oss/seq_oss_midi.c
-+++ b/sound/core/seq/oss/seq_oss_midi.c
-@@ -270,7 +270,9 @@ snd_seq_oss_midi_clear_all(void)
- void
- snd_seq_oss_midi_setup(struct seq_oss_devinfo *dp)
- {
-+	spin_lock_irq(&register_lock);
- 	dp->max_mididev = max_midi_devs;
-+	spin_unlock_irq(&register_lock);
- }
+--- a/drivers/gpu/drm/i915/display/intel_quirks.c
++++ b/drivers/gpu/drm/i915/display/intel_quirks.c
+@@ -190,6 +190,9 @@ static struct intel_quirk intel_quirks[]
+ 	/* ASRock ITX*/
+ 	{ 0x3185, 0x1849, 0x2212, quirk_increase_ddi_disabled_time },
+ 	{ 0x3184, 0x1849, 0x2212, quirk_increase_ddi_disabled_time },
++	/* ECS Liva Q2 */
++	{ 0x3185, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time },
++	{ 0x3184, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time },
+ };
  
- /*
+ void intel_init_quirks(struct drm_i915_private *i915)
 
 

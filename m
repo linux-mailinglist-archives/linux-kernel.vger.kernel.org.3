@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA63C5AEDCC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1713D5AEB8F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242191AbiIFOkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S241319AbiIFOOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbiIFOjd (ORCPT
+        with ESMTP id S241089AbiIFONK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:39:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736399BB5D;
-        Tue,  6 Sep 2022 07:01:33 -0700 (PDT)
+        Tue, 6 Sep 2022 10:13:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F12895C6;
+        Tue,  6 Sep 2022 06:48:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 606D8B818B8;
-        Tue,  6 Sep 2022 13:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C76C4347C;
-        Tue,  6 Sep 2022 13:36:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E06B061566;
+        Tue,  6 Sep 2022 13:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB82C433D7;
+        Tue,  6 Sep 2022 13:46:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471370;
-        bh=0IlhPDcg+N1l9IGYJ4pYlrDwi/O4Kivf2evnYygpIEQ=;
+        s=korg; t=1662471988;
+        bh=aJr5uafAwXxRhLodNKlTHkBERlazyfZKxrU1FJNbSt4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dtR+MG61L2oATo4SBaQaPlpb7wHgoSvOXghCl85+eZk64jo3hs1MX6iplh9UjgXu9
-         zQ0+E+ya2ZJ5UkCI6pjuLHq4cBrgE09oxPr2hK3CuC/Kwp+E8CmpFSS3bvUAEUgw+G
-         fOVPAiBoG9y1d4o685nL/UklvIL9W4aTR5p1v1fA=
+        b=qdIJcJjmhg6jhgGtpNhFSSzGWwzNZeIlDP3uCyoPBaBgP/N/xAZzKZpqlw219mYuB
+         qjeaGFHDRJ6QODaNDwa2LYm1ZAt23NGR/9EG2MrWze/DH0fCkbw9kZOFFMn0EpZfEh
+         4oA6uRH6nHYNVZ6HMI/inljgSmsbltnQZX1m6se4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        stable <stable@kernel.org>,
-        Witold Lipieta <witold.lipieta@thaumatec.com>
-Subject: [PATCH 5.10 59/80] usb-storage: Add ignore-residue quirk for NXP PN7462AU
-Date:   Tue,  6 Sep 2022 15:30:56 +0200
-Message-Id: <20220906132819.513583504@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 5.19 109/155] xhci: Add grace period after xHC start to prevent premature runtime suspend.
+Date:   Tue,  6 Sep 2022 15:30:57 +0200
+Message-Id: <20220906132834.094842342@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
-References: <20220906132816.936069583@linuxfoundation.org>
+In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
+References: <20220906132829.417117002@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Witold Lipieta <witold.lipieta@thaumatec.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-commit 2aa48857ad52236a9564c71183d6cc8893becd41 upstream.
+commit 33e321586e37b642ad10594b9ef25a613555cd08 upstream.
 
-This is USB mass storage primary boot loader for code download on
-NXP PN7462AU.
+After xHC controller is started, either in probe or resume, it can take
+a while before any of the connected usb devices are visible to the roothub
+due to link training.
 
-Without the quirk it is impossible to write whole memory at once as
-device restarts during the write due to bogus residue values reported.
+It's possible xhci driver loads, sees no acivity and suspends the host
+before the USB device is visible.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Witold Lipieta <witold.lipieta@thaumatec.com>
-Link: https://lore.kernel.org/r/20220809112911.462776-1-witold.lipieta@thaumatec.com
+In one testcase with a hotplugged xHC controller the host finally detected
+the connected USB device and generated a wake 500ms after host initial
+start.
+
+If hosts didn't suspend the device duringe training it probablty wouldn't
+take up to 500ms to detect it, but looking at specs reveal USB3 link
+training has a couple long timeout values, such as 120ms
+RxDetectQuietTimeout, and 360ms PollingLFPSTimeout.
+
+So Add a 500ms grace period that keeps polling the roothub for 500ms after
+start, preventing runtime suspend until USB devices are detected.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20220825150840.132216-3-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/storage/unusual_devs.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/usb/host/xhci-hub.c |   11 +++++++++++
+ drivers/usb/host/xhci.c     |    4 +++-
+ drivers/usb/host/xhci.h     |    2 +-
+ 3 files changed, 15 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -2294,6 +2294,13 @@ UNUSUAL_DEV( 0x1e74, 0x4621, 0x0000, 0x0
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_BULK_IGNORE_TAG | US_FL_MAX_SECTORS_64 ),
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1648,6 +1648,17 @@ int xhci_hub_status_data(struct usb_hcd
  
-+/* Reported by Witold Lipieta <witold.lipieta@thaumatec.com> */
-+UNUSUAL_DEV( 0x1fc9, 0x0117, 0x0100, 0x0100,
-+		"NXP Semiconductors",
-+		"PN7462AU",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_RESIDUE ),
+ 	status = bus_state->resuming_ports;
+ 
++	/*
++	 * SS devices are only visible to roothub after link training completes.
++	 * Keep polling roothubs for a grace period after xHC start
++	 */
++	if (xhci->run_graceperiod) {
++		if (time_before(jiffies, xhci->run_graceperiod))
++			status = 1;
++		else
++			xhci->run_graceperiod = 0;
++	}
 +
- /* Supplied with some Castlewood ORB removable drives */
- UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x9999,
- 		"Double-H Technology",
+ 	mask = PORT_CSC | PORT_PEC | PORT_OCC | PORT_PLC | PORT_WRC | PORT_CEC;
+ 
+ 	/* For each port, did anything change?  If so, set that bit in buf. */
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -151,9 +151,11 @@ int xhci_start(struct xhci_hcd *xhci)
+ 		xhci_err(xhci, "Host took too long to start, "
+ 				"waited %u microseconds.\n",
+ 				XHCI_MAX_HALT_USEC);
+-	if (!ret)
++	if (!ret) {
+ 		/* clear state flags. Including dying, halted or removing */
+ 		xhci->xhc_state = 0;
++		xhci->run_graceperiod = jiffies + msecs_to_jiffies(500);
++	}
+ 
+ 	return ret;
+ }
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1826,7 +1826,7 @@ struct xhci_hcd {
+ 
+ 	/* Host controller watchdog timer structures */
+ 	unsigned int		xhc_state;
+-
++	unsigned long		run_graceperiod;
+ 	u32			command;
+ 	struct s3_save		s3;
+ /* Host controller is dying - not responding to commands. "I'm not dead yet!"
 
 

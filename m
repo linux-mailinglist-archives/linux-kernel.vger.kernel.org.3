@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6475ADFFB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1525AE002
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238593AbiIFGiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 02:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
+        id S233259AbiIFGl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 02:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238319AbiIFGiR (ORCPT
+        with ESMTP id S231836AbiIFGlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 02:38:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24C722286;
-        Mon,  5 Sep 2022 23:38:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94278B8161C;
-        Tue,  6 Sep 2022 06:38:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A81FAC433D6;
-        Tue,  6 Sep 2022 06:38:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662446294;
-        bh=QsCDlqO4tjSBHwaY1BpaR2HUe1nmWPIOovcOuwER1F0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YBSs4dEHzflv4FTctNetNLXgdPKv5Hqe+R/BB1M9gAM5+84WiarO4LPC+Ya3Zn9JM
-         GwjUeuXMi/iCXJYbX0JLzs6ebCB6XxE+nWEJARGKdcy+dBWfOqGiTXED+cTPQ6gZ7v
-         Q8DmXDYsuVmPfRNQuJAdaysTt583Ugr2z7WxUd8s=
-Date:   Tue, 6 Sep 2022 08:38:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vincent Shih <vincent.sunplus@gmail.com>
-Cc:     kishon@ti.com, vkoul@kernel.org, linux-usb@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wells.lu@sunplus.com
-Subject: Re: [PATCH] phy: usb: free the buffer after reading a given nvmem
- cell
-Message-ID: <Yxbq0ynfdsKNAySv@kroah.com>
-References: <1662445382-29879-1-git-send-email-vincent.sunplus@gmail.com>
+        Tue, 6 Sep 2022 02:41:23 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 832851F635;
+        Mon,  5 Sep 2022 23:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=rHS2Z
+        Bylmoj1eBUVZMlFgyd3inWGdLuGTp2PlEkLBeQ=; b=BszX9hwZzlqNkiGDS95J6
+        X90OresLDIKoTjZzu1HN3QEhadAWrWD52b9I3slnqS/BueUp0irfW1Gm/PjdApUW
+        eUs+dAk49AaPuzQn4OrSH9QwLyHuU6bjrAd/ZG6+uGweDL6CFKZe3wiaF/TArvbG
+        C2cy+IKSWsSLfYhkAy5YZs=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp2 (Coremail) with SMTP id GtxpCgBXKgVa6xZj0OLUbA--.23536S2;
+        Tue, 06 Sep 2022 14:40:28 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     richard.genoud@gmail.com, gregkh@linuxfoundation.org
+Cc:     jirislaby@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] tty: serial: atmel: fix spelling typo in comment
+Date:   Tue,  6 Sep 2022 14:39:57 +0800
+Message-Id: <20220906063957.2951323-1-13667453960@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1662445382-29879-1-git-send-email-vincent.sunplus@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GtxpCgBXKgVa6xZj0OLUbA--.23536S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5GFWkKw48JFb_yoWftFcEg3
+        Z7Ww4DJrW8uF4FyrnxCrW5uFy5Kw1DuF1rGFn0v3sxX39rJa1kG34q9rnFyrn8CrW8XF98
+        X3ZxGFyfAayDXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbtkuDUUUUU==
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbivhx0+1ZcenAOMQAAsS
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,60 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 02:23:02PM +0800, Vincent Shih wrote:
-> Use kfree() to free the buffer after calling nvmem_cell_read() to
-> read a given nvmem cell.
-> 
-> Fixes:99d9ccd97385("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-This is not a commit in Linus's tree, are you sure it is right?
+Fix spelling typo in comment.
 
-And the format is not quite correct, you need some spaces in the line.
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ drivers/tty/serial/atmel_serial.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
-> ---
->  drivers/phy/sunplus/phy-sunplus-usb2.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> index 5269968..c8540e1 100644
-> --- a/drivers/phy/sunplus/phy-sunplus-usb2.c
-> +++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> @@ -13,6 +13,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
-> +#include <linux/err.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
->  #include <linux/nvmem-consumer.h>
-> @@ -92,13 +93,15 @@ static int update_disc_vol(struct sp_usbphy *usbphy)
->  	otp_v = nvmem_cell_read(cell, &otp_l);
->  	nvmem_cell_put(cell);
->  
-> -	if (otp_v) {
-> +	if (!IS_ERR(otp_v)) {
->  		set = *(otp_v + 1);
->  		set = (set << (sizeof(char) * 8)) | *otp_v;
->  		set = (set >> usbphy->disc_vol_addr_off) & J_DISC;
-> +		
-> +		kfree(otp_v);
->  	}
-> -
-> -	if (!otp_v || set == 0)
-> +	
-> +	if (IS_ERR(otp_v) || (set == 0))
->  		set = OTP_DISC_LEVEL_DEFAULT;
->  
->  	val = readl(usbphy->phy_regs + CONFIG7);
-> @@ -294,3 +297,4 @@ module_platform_driver(sunplus_usb_phy_driver);
->  MODULE_AUTHOR("Vincent Shih <vincent.shih@sunplus.com>");
->  MODULE_DESCRIPTION("Sunplus USB 2.0 phy driver");
->  MODULE_LICENSE("GPL");
-> +
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index 7450d3853031..7f8af2ea3fa5 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -40,7 +40,7 @@
+ /* Revisit: We should calculate this based on the actual port settings */
+ #define PDC_RX_TIMEOUT		(3 * 10)		/* 3 bytes */
+ 
+-/* The minium number of data FIFOs should be able to contain */
++/* The minimum number of data FIFOs should be able to contain */
+ #define ATMEL_MIN_FIFO_SIZE	8
+ /*
+  * These two offsets are substracted from the RX FIFO size to define the RTS
+-- 
+2.25.1
 
-Why the extra blank line?
 
-thanks,
+No virus found
+		Checked by Hillstone Network AntiVirus
 
-greg k-h

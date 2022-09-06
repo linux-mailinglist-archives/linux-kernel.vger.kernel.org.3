@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121775AED0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435745AECC7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbiIFNxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S241151AbiIFOLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237618AbiIFNuS (ORCPT
+        with ESMTP id S241403AbiIFOJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:50:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F677C74E;
-        Tue,  6 Sep 2022 06:40:06 -0700 (PDT)
+        Tue, 6 Sep 2022 10:09:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5236E86B6D;
+        Tue,  6 Sep 2022 06:46:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9AAF3CE177D;
-        Tue,  6 Sep 2022 13:40:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D49EC433C1;
-        Tue,  6 Sep 2022 13:40:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D024B818E1;
+        Tue,  6 Sep 2022 13:46:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E635CC433C1;
+        Tue,  6 Sep 2022 13:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471601;
-        bh=0IlhPDcg+N1l9IGYJ4pYlrDwi/O4Kivf2evnYygpIEQ=;
+        s=korg; t=1662472005;
+        bh=U0qsK8SxRCTrLsb8Jih3HYgPeYD34y5sNOWFiYeUkks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H6t61uZp2boqp9SDiZiqU35TA7AaJJnUqUDv55thGGV+ZJRxusquRpCNRCTugMZWH
-         ejyqOor5TzxsQXsG3E8fuyy3BoR8i9lgqXvfexEY40/kCsFEKoeMM8A5F26m7x/L2R
-         IIAcp6vjNf5sIVO3lCqeWsBn2XKQjseKweC5Udng=
+        b=dkwE8X2oK1hCc4paIdc+Zp/VD60ubfboNANKqGIsguu4dhFcclm3JMZIgk2MrMSSV
+         2F2aQUr8qDxAKqqnljbqbHf3RaBQcb5ka84IIGtBEHDXVipGbv7lgKTfTseH4Nrtlj
+         82O9pGwuUyB5/G6rU91kEndaLqJ7dCKr9iIgjOXs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        stable <stable@kernel.org>,
-        Witold Lipieta <witold.lipieta@thaumatec.com>
-Subject: [PATCH 5.15 082/107] usb-storage: Add ignore-residue quirk for NXP PN7462AU
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.19 115/155] USB: serial: cp210x: add Decagon UCA device id
 Date:   Tue,  6 Sep 2022 15:31:03 +0200
-Message-Id: <20220906132825.284801541@linuxfoundation.org>
+Message-Id: <20220906132834.313039078@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
+References: <20220906132829.417117002@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Witold Lipieta <witold.lipieta@thaumatec.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit 2aa48857ad52236a9564c71183d6cc8893becd41 upstream.
+commit ceb4038472a4803e7046ed488b03d11551991514 upstream.
 
-This is USB mass storage primary boot loader for code download on
-NXP PN7462AU.
+Add the device id for Decagon Devices USB Cable Adapter.
 
-Without the quirk it is impossible to write whole memory at once as
-device restarts during the write due to bogus residue values reported.
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Witold Lipieta <witold.lipieta@thaumatec.com>
-Link: https://lore.kernel.org/r/20220809112911.462776-1-witold.lipieta@thaumatec.com
+Link: https://lore.kernel.org/r/trinity-819f9db2-d3e1-40e9-a669-9c245817c046-1661523546680@msvc-mesg-web108
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/storage/unusual_devs.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/usb/serial/cp210x.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -2294,6 +2294,13 @@ UNUSUAL_DEV( 0x1e74, 0x4621, 0x0000, 0x0
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_BULK_IGNORE_TAG | US_FL_MAX_SECTORS_64 ),
- 
-+/* Reported by Witold Lipieta <witold.lipieta@thaumatec.com> */
-+UNUSUAL_DEV( 0x1fc9, 0x0117, 0x0100, 0x0100,
-+		"NXP Semiconductors",
-+		"PN7462AU",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_RESIDUE ),
-+
- /* Supplied with some Castlewood ORB removable drives */
- UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x9999,
- 		"Double-H Technology",
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -130,6 +130,7 @@ static const struct usb_device_id id_tab
+ 	{ USB_DEVICE(0x10C4, 0x83AA) }, /* Mark-10 Digital Force Gauge */
+ 	{ USB_DEVICE(0x10C4, 0x83D8) }, /* DekTec DTA Plus VHF/UHF Booster/Attenuator */
+ 	{ USB_DEVICE(0x10C4, 0x8411) }, /* Kyocera GPS Module */
++	{ USB_DEVICE(0x10C4, 0x8414) }, /* Decagon USB Cable Adapter */
+ 	{ USB_DEVICE(0x10C4, 0x8418) }, /* IRZ Automation Teleport SG-10 GSM/GPRS Modem */
+ 	{ USB_DEVICE(0x10C4, 0x846E) }, /* BEI USB Sensor Interface (VCP) */
+ 	{ USB_DEVICE(0x10C4, 0x8470) }, /* Juniper Networks BX Series System Console */
 
 

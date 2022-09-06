@@ -2,214 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B455AE50B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E546F5AE511
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbiIFKLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S234066AbiIFKLj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Sep 2022 06:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbiIFKLV (ORCPT
+        with ESMTP id S233774AbiIFKLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:11:21 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A549DECF;
-        Tue,  6 Sep 2022 03:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662459080; x=1693995080;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oB1TtPVVHc8wxkEfbkl6xSPnmmpiaRnJ3fakqY2gLXM=;
-  b=An/Lnnx0rFicz9vaii4iHNllhXvcpS4JZMcXtY85zKNHWJ6h5WDDwIQo
-   4VVUvZa44usw4yCHeoCPkSi9SJtg3RSs7gdw7Pc3ddZA0qtE95cJ0l2HI
-   MCYmBMd7pMRqwQbSaY76iU5JdKo2Inl8p0lw8Kvwqd3ZSblCIAaM9nNSs
-   JWSIWqiKKzTA7+2jN8sShMS29XrTYXyc/7lFgKSU3mmwSgpfhgyPvGH69
-   EPTDMyAq6SXrRYdyUYItLgdLfT5weI6XKr5RIj4W6MpYvwtPYFZGFIoae
-   8A0qSMWnBrSLdgF/Gh427Aj03FE8zAscs+aI+SBaOLmW0p4lUeX9Tg4b1
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="283550683"
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="283550683"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 03:11:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="565041316"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 06 Sep 2022 03:11:17 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVVY4-0004zl-2N;
-        Tue, 06 Sep 2022 10:11:16 +0000
-Date:   Tue, 6 Sep 2022 18:10:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Deming Wang <wangdeming@inspur.com>, vgoyal@redhat.com,
-        stefanha@redhat.com, miklos@szeredi.hu
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Deming Wang <wangdeming@inspur.com>
-Subject: Re: [PATCH] virtiofs: Drop unnecessary initialization in
- send_forget_request and virtio_fs_get_tree
-Message-ID: <202209061738.Epufa2eF-lkp@intel.com>
-References: <20220906053848.2503-1-wangdeming@inspur.com>
+        Tue, 6 Sep 2022 06:11:35 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3046C326C0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:11:33 -0700 (PDT)
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
+ (mail-zr0che01lp2111.outbound.protection.outlook.com [104.47.22.111]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-54-8ipGG-8tNcKaQQcKb3yxGw-1; Tue, 06 Sep 2022 12:11:28 +0200
+X-MC-Unique: 8ipGG-8tNcKaQQcKb3yxGw-1
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ GVAP278MB0906.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:55::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.10; Tue, 6 Sep 2022 10:11:27 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b%2]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 10:11:27 +0000
+Date:   Tue, 6 Sep 2022 12:11:26 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: stmpe: switch to using gpiod API
+Message-ID: <20220906101126.GA8061@francesco-nb.int.toradex.com>
+References: <YxbUO7WM0TbUBatv@google.com>
+In-Reply-To: <YxbUO7WM0TbUBatv@google.com>
+X-ClientProxiedBy: ZR0P278CA0005.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:16::15) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ba1a3756-333f-458a-b19d-08da8ff028f0
+X-MS-TrafficTypeDiagnostic: GVAP278MB0906:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: iUxjzJBt5i2dUyCdoaWoIoUJwnoENqKMNzjoKd0XXdE/XWPofCqd0Drg4Mf0k2M6iWZuHBVwZZtlakaJI+lW2hW7w1k5yueE+yJVltr+9pYzaDtI/CvgLQ7D+QjxtOT6JGYOm/Dz725AkH4IlKwxUWkjjvxn4KzzEVN1OWDtIuRxQGAFNk1IYanWweKCmGZ0lmSB2UBJ/jOA2OeNoHDSverbpQWdgeIUecxzhGqGwinarhYG8RUXHnuy8eVDfB5G/sG1APxupJWvVjMrJ5DKQ1aYNeFgnB2rSnR/cPBLe1gJ/Id1NkAVdvhY5ukqavtHjIFjSfxC+Nq1vp0FRzrOaoumJGJvgxRnFb8Df2bycvnpIEFfVLuVti0eiUXGPwScDCP1xqK1Ax/uIcVaMlJixi69PvtSB0BjyqibKY9u0ughJLNvojRzAihRKgL+Jr9w2RM4UOdPhOOwJU9A3J1sC5Cv5xRYdWFMy+5POFsZDzF3ApF0SXAyofvYwFY/3Tqo7d6vUt34YB2n2pa3aBWXFdOtiq1kFAx73Z6vYXL5qp3wPbj2jdblHUlUZPDjiIcU6YPE4picTGESJMLNH7Mcgl77EVgvYYEP9/SlJe54WMPwYsFiYC1AmlZD0f0roX5ss3bf0Pvh7KuUcdbDv0fzs6xbwITK5FUAspnzMauKsxz204GMSbrMyVVwVctc255BRjJo2Z2q/Hk8K9gtvokwhNZddFfcY43k23z0lQ65tP2jAnUlcPqSCQUjzv1yBSmLChobHE1PUCmy23Snv1IHXg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39840400004)(376002)(346002)(396003)(366004)(38100700002)(6512007)(6486002)(1076003)(41300700001)(186003)(86362001)(478600001)(6506007)(38350700002)(83380400001)(52116002)(26005)(4326008)(66946007)(66556008)(8676002)(66476007)(2906002)(54906003)(6916009)(316002)(33656002)(8936002)(5660300002)(44832011)(4744005);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RV/YK+EmYG61kyIk+XkQ+en/iHw7uIPxEI+kAt58IK0bxXHWizeQ3xrx9Tp1?=
+ =?us-ascii?Q?1p4a5i3/IFwvru23Y8TDo7v+FLEkW8rVqWZs5qzsFSERiguzUlY7nXA3BeRr?=
+ =?us-ascii?Q?yhErlnsfy1uYPzD0m5XNFmFh4oWQRdWmtyNJkmpMekT/SRiohZ6xsW8FxvGF?=
+ =?us-ascii?Q?C7VP5Vk/d23eu5hsgQ07ylIW9YZ3oClhuKG78TX8Kjnc3MKuGRfrsvgtHIXO?=
+ =?us-ascii?Q?IkigOJBLGCsjlDxV9OGdG7SXRfuJ8Gie76iiykJKRvo5WBUhYJ7gI2Bt7qI1?=
+ =?us-ascii?Q?D9pbcmYXXb6mPtPNARvaeYcnPiTw2txDlBkzWXBGU/Ja+NHdVqZ9lUXVrEoH?=
+ =?us-ascii?Q?ZaZKu7MKH3HChXKpn9tRZDSDvPYeQo6V+MY19d1/TQSA/NvutC4/ClKcXHqU?=
+ =?us-ascii?Q?EIHC+IlqcN9maB11Ur3tF+SaN8mFVnFnOMoOjfhrMOGa/7ZbXkEoovhRzD7T?=
+ =?us-ascii?Q?FQynNlWjBriorVklVyHVH+PU+dtjEqXKa9aMZC21K/CHq8hiwaK0bSukL3GR?=
+ =?us-ascii?Q?pUElAz+t7dE3+sJIlUIg6j2spfCxt25zBNjyWo/MeSZ4xzi8j5hLyzX5AFt7?=
+ =?us-ascii?Q?nIphuEfdeORsdon/ZU/X9EVuluogPiFKxe8ZaRr4ftK8pqSLdzpChNqTnhuv?=
+ =?us-ascii?Q?E57VXESgKutUm4alhGt2ZbgwCPhyfTVxCG5MQBdyQxaybrI5ObX5mQDlvRIN?=
+ =?us-ascii?Q?Tnfsch9vykaOd6foU3yC9xE+k65YIQlmJBCea2aoNCp+omnqLd/68e9NcxUi?=
+ =?us-ascii?Q?zcUtIjwGnuXJX8MxgbE4xY0SyCUQE8rwy36BtCwW47dDHh6bWzqC8GB1Kbip?=
+ =?us-ascii?Q?3aRq6Own4lJptoi0zwf/Z13jFymAQIC9Unp/CdMa/ZewLaBvVy5vMKwXENOB?=
+ =?us-ascii?Q?HOPFACbvVjsCBOPThmX+U3dPMPrPDsLMRrZTj8HJaU5FfwdmjJd6JMVRf16W?=
+ =?us-ascii?Q?qIC0WeSWNwiKMneRjjtv97PNq6VT4XvDdkgatpmOtoBeqqS9bJW6yHGOF1qY?=
+ =?us-ascii?Q?u1pE4EbGQ97EcA7B+X12XXAlKE32BY3TkYOdb60Y/d98402qb/8XHI0DmiTf?=
+ =?us-ascii?Q?JzdKMz/eHhWnC2um/Ap99J2Mz6zSCDMnzi5kmVeJTUF+YP/z1Vihr74Z5e6+?=
+ =?us-ascii?Q?ziv1qVDb9nFPstmi80BuQh1l/9sRZoSd5V63pkKJpINOBwBIQTK9Lx0TU5Oo?=
+ =?us-ascii?Q?v3iXEczUHIRWdLWm5CeaHwHM67ulV2ALCAYP9Ar7tLz1Mjrl12bs2smXB56y?=
+ =?us-ascii?Q?iPOParQiKX1/srfgF7Qfw8UXY4EPoTILKrm3X1A/3X5S47ZenMDsjxM4ZFOG?=
+ =?us-ascii?Q?+oYVE9K/SlhwvLbslL9LEfaMxEst4YskKHVNzf1971Xu5vZLxv4YzIk4IVzD?=
+ =?us-ascii?Q?r4cuehzK5nwK8WUOWp38UZo9Nfh0nfDNz86TqrvSIkMVPXD+X0vInct2qqeD?=
+ =?us-ascii?Q?GTPmuYvJrOWKbsPr24Ui8bjVXwSsupdf9jobWLcTZO5eb1VFGHu4/gqAnGsX?=
+ =?us-ascii?Q?4z+Yp4yMzS1MRppInno3rM/97rkY/Cpc6wL28/S86/BgBsbLyfkCLyEMf2ZO?=
+ =?us-ascii?Q?CoQTD6lmtM1FnZX4kUvEbFrbSKZA+vlRlUj2f6+OoKcf86ZBb65RQBchQc4k?=
+ =?us-ascii?Q?5A=3D=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba1a3756-333f-458a-b19d-08da8ff028f0
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 10:11:26.9537
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4WOumnhx2BH6bA0fxYcb3IxkDMny6FgdHeNkIpt0heRWx0MBnEbNtX3OS0jjMXPwLae2aO9IKnQ0O/2Nx6z+6aBvO33k6uWdr88f4j2aVNk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0906
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
 Content-Disposition: inline
-In-Reply-To: <20220906053848.2503-1-wangdeming@inspur.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Deming,
+On Mon, Sep 05, 2022 at 10:01:47PM -0700, Dmitry Torokhov wrote:
+> This patch switches the driver away from legacy gpio/of_gpio API to
+> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+> make private to gpiolib.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>  drivers/mfd/stmpe.c | 36 +++++++++++++-----------------------
+>  1 file changed, 13 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/mfd/stmpe.c b/drivers/mfd/stmpe.c
+> index 987e251d90ae..0c4f74197d3e 100644
+> --- a/drivers/mfd/stmpe.c
+> +++ b/drivers/mfd/stmpe.c
+> @@ -8,14 +8,13 @@
+>   */
+>  
 
-Thank you for the patch! Perhaps something to improve:
+<snip>
 
-[auto build test WARNING on v6.0-rc4]
-[also build test WARNING on linus/master next-20220901]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> -	pdata->irq_gpio = of_get_named_gpio_flags(np, "irq-gpio", 0,
+<snip>
+> +	irq_gpio = devm_gpiod_get_optional(ci->dev, "irq", GPIOD_ASIS);
+isn't this changing from irq-gpio to irq-gpios property name?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Deming-Wang/virtiofs-Drop-unnecessary-initialization-in-send_forget_request-and-virtio_fs_get_tree/20220906-135058
-base:    7e18e42e4b280c85b76967a9106a13ca61c16179
-config: hexagon-randconfig-r035-20220906 (https://download.01.org/0day-ci/archive/20220906/202209061738.Epufa2eF-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a61f879fdb56490afddb6ddea4a9d57226f339f3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Deming-Wang/virtiofs-Drop-unnecessary-initialization-in-send_forget_request-and-virtio_fs_get_tree/20220906-135058
-        git checkout a61f879fdb56490afddb6ddea4a9d57226f339f3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/fuse/
+in the DTS files we do have something like that:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/fuse/virtio_fs.c:422:2: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!fsvq->connected) {
-           ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/fuse/virtio_fs.c:465:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   fs/fuse/virtio_fs.c:422:2: note: remove the 'if' if its condition is always false
-           if (!fsvq->connected) {
-           ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   fs/fuse/virtio_fs.c:417:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
->> fs/fuse/virtio_fs.c:1433:2: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (WARN_ON(virtqueue_size <= FUSE_HEADER_OVERHEAD))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/fuse/virtio_fs.c:1481:9: note: uninitialized use occurs here
-           return err;
-                  ^~~
-   fs/fuse/virtio_fs.c:1433:2: note: remove the 'if' if its condition is always false
-           if (WARN_ON(virtqueue_size <= FUSE_HEADER_OVERHEAD))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   fs/fuse/virtio_fs.c:1420:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   2 warnings generated.
+ irq-gpio = <&gpio TEGRA_GPIO(V, 0) IRQ_TYPE_LEVEL_LOW>;
 
 
-vim +422 fs/fuse/virtio_fs.c
+Francesco
 
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  406  
-58ada94f95f71d Vivek Goyal     2019-10-30  407  /*
-58ada94f95f71d Vivek Goyal     2019-10-30  408   * Returns 1 if queue is full and sender should wait a bit before sending
-58ada94f95f71d Vivek Goyal     2019-10-30  409   * next request, 0 otherwise.
-58ada94f95f71d Vivek Goyal     2019-10-30  410   */
-58ada94f95f71d Vivek Goyal     2019-10-30  411  static int send_forget_request(struct virtio_fs_vq *fsvq,
-58ada94f95f71d Vivek Goyal     2019-10-30  412  			       struct virtio_fs_forget *forget,
-58ada94f95f71d Vivek Goyal     2019-10-30  413  			       bool in_flight)
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  414  {
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  415  	struct scatterlist sg;
-58ada94f95f71d Vivek Goyal     2019-10-30  416  	struct virtqueue *vq;
-a61f879fdb5649 Deming Wang     2022-09-06  417  	int ret;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  418  	bool notify;
-1efcf39eb62757 Vivek Goyal     2019-10-30  419  	struct virtio_fs_forget_req *req = &forget->req;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  420  
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  421  	spin_lock(&fsvq->lock);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12 @422  	if (!fsvq->connected) {
-58ada94f95f71d Vivek Goyal     2019-10-30  423  		if (in_flight)
-c17ea009610366 Vivek Goyal     2019-10-15  424  			dec_in_flight_req(fsvq);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  425  		kfree(forget);
-58ada94f95f71d Vivek Goyal     2019-10-30  426  		goto out;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  427  	}
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  428  
-1efcf39eb62757 Vivek Goyal     2019-10-30  429  	sg_init_one(&sg, req, sizeof(*req));
-58ada94f95f71d Vivek Goyal     2019-10-30  430  	vq = fsvq->vq;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  431  	dev_dbg(&vq->vdev->dev, "%s\n", __func__);
-58ada94f95f71d Vivek Goyal     2019-10-30  432  
-58ada94f95f71d Vivek Goyal     2019-10-30  433  	ret = virtqueue_add_outbuf(vq, &sg, 1, forget, GFP_ATOMIC);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  434  	if (ret < 0) {
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  435  		if (ret == -ENOMEM || ret == -ENOSPC) {
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  436  			pr_debug("virtio-fs: Could not queue FORGET: err=%d. Will try later\n",
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  437  				 ret);
-58ada94f95f71d Vivek Goyal     2019-10-30  438  			list_add_tail(&forget->list, &fsvq->queued_reqs);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  439  			schedule_delayed_work(&fsvq->dispatch_work,
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  440  					      msecs_to_jiffies(1));
-58ada94f95f71d Vivek Goyal     2019-10-30  441  			if (!in_flight)
-58ada94f95f71d Vivek Goyal     2019-10-30  442  				inc_in_flight_req(fsvq);
-58ada94f95f71d Vivek Goyal     2019-10-30  443  			/* Queue is full */
-58ada94f95f71d Vivek Goyal     2019-10-30  444  			ret = 1;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  445  		} else {
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  446  			pr_debug("virtio-fs: Could not queue FORGET: err=%d. Dropping it.\n",
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  447  				 ret);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  448  			kfree(forget);
-58ada94f95f71d Vivek Goyal     2019-10-30  449  			if (in_flight)
-58ada94f95f71d Vivek Goyal     2019-10-30  450  				dec_in_flight_req(fsvq);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  451  		}
-58ada94f95f71d Vivek Goyal     2019-10-30  452  		goto out;
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  453  	}
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  454  
-58ada94f95f71d Vivek Goyal     2019-10-30  455  	if (!in_flight)
-58ada94f95f71d Vivek Goyal     2019-10-30  456  		inc_in_flight_req(fsvq);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  457  	notify = virtqueue_kick_prepare(vq);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  458  	spin_unlock(&fsvq->lock);
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  459  
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  460  	if (notify)
-a62a8ef9d97da2 Stefan Hajnoczi 2018-06-12  461  		virtqueue_notify(vq);
-58ada94f95f71d Vivek Goyal     2019-10-30  462  	return ret;
-58ada94f95f71d Vivek Goyal     2019-10-30  463  out:
-58ada94f95f71d Vivek Goyal     2019-10-30  464  	spin_unlock(&fsvq->lock);
-58ada94f95f71d Vivek Goyal     2019-10-30  465  	return ret;
-58ada94f95f71d Vivek Goyal     2019-10-30  466  }
-58ada94f95f71d Vivek Goyal     2019-10-30  467  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

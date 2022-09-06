@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7885AF390
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A965AF396
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiIFS1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 14:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
+        id S229821AbiIFS3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 14:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiIFS1c (ORCPT
+        with ESMTP id S229557AbiIFS3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 14:27:32 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305CE9AFF6
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 11:27:31 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bt10so18703064lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 11:27:31 -0700 (PDT)
+        Tue, 6 Sep 2022 14:29:53 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDA64D253;
+        Tue,  6 Sep 2022 11:29:51 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 29so11219659edv.2;
+        Tue, 06 Sep 2022 11:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=ZUpzMHvchnbWsqxJeFoXp/P2C7rf8MP7y5MO8R3SUlg=;
-        b=evVapLaaGlVqqY/j8Gbn/X1kndSZrQhs5Lna2QWGqYVrzb2qwk3oWh03Zfl3RstmE8
-         mD5KYILVb8zBPNZlpkRj/PfH09eLqiLeQyUxd5GE1F9JaTeWg/9G27i9JQTxsNdaFRsF
-         U0/C0ZOzeMa46PtXqc2g2GN8Dhr8IzFsmqHwsmOZcb16mc15wdAOOrAkJQ00ADf/0NfW
-         R78camhq2XuD5rJnuHKbIE6kXICzs76RqtVlOyBbuyRrWaMUvjlLGeuSk2nhtTxCO0z0
-         MLyybXhPfk38/XNYb+oW428CP3UVHYjTvKL3VrIUY9PI0dGDV/3Xn9WJ9pdGJNBQenf+
-         UD3Q==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=nnW0gh4/5RbElboZnDeZlyzS1e6LNOQ80svTWGcDjDo=;
+        b=Qe+vUnlQNcxNOXltmkpjWbPqfsi1WAYaUaKTSmIpEUgzBt2Iyw+UgHMTwaIbwMfVa6
+         7T5SH0nEkcAt0NPEuJ4G45WjTDAuRCFwUmWFPqDjx7NaPIMEebV6KBVGWSU9H9N4hf/3
+         d/xVA5SaMOMZ9pzEmxF9qXCASQUYSf6WQ7raxslLgXRcbGtI+tG2HUvA3e+3rrsv4Ox8
+         QYo57B0UBTrQ1lVOa1K4FeXOTy3zKJoEmRnbqCXN/MLg5u1cxWNcQgctJYCT+i3p93p8
+         dY9Nm91Cv0enJUuPePggqO6DAUtapN1BZKEdeWhiChApbsrQaHnZeBr3so7nhMbOfPif
+         31iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZUpzMHvchnbWsqxJeFoXp/P2C7rf8MP7y5MO8R3SUlg=;
-        b=1XdBZckvPw7kZZJuMGG1nLWJRaUFQuDgIZHCGJn896K0cyJI/aosnSDlwfyNcNMwVZ
-         dORMSpTW5sHKZJYvokjI10sejZNYI7sI89kqOg5omNr8yQEfFXzetCKLu3cNpa9D9OZR
-         3AHlM9m5BdJeYBbPAdDgJX08QORK/JoYF9RabgjBSztKWHulPzcRT7pmWwSgiqeoC4he
-         u2hOzmfgavkPG6VPkHY7AM3tlbMAyEMDopVFV/vsisk+MO6j5ZnYSviVMYCSINauAVfb
-         smSal3h0mnVaXRm+/P4iEI7UI6Q9xNo3H9oh6ug8N+G7F2zFIOJKECqvuTDi5H6fy6AU
-         aygA==
-X-Gm-Message-State: ACgBeo16B9rd2Tk9RfW9TcislAa3tzrLMPSqmQdnrtwPF12Du5ljukuD
-        4EG7oh1oR58WGYlr5ZJMrwQ=
-X-Google-Smtp-Source: AA6agR41sXkcrlFUvaDZz3CT3CfJxkJn7FWtdUKQQVWcjNmsBlr/xcVF925VCaBcqDb1oIFYUQN74Q==
-X-Received: by 2002:a05:6512:158b:b0:48b:38:cff8 with SMTP id bp11-20020a056512158b00b0048b0038cff8mr17134954lfb.100.1662488849452;
-        Tue, 06 Sep 2022 11:27:29 -0700 (PDT)
-Received: from pc636 ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id a3-20020a056512200300b0049306939413sm1888852lfb.211.2022.09.06.11.27.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 11:27:28 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 6 Sep 2022 20:27:26 +0200
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Baoquan He <bhe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2] mm/vmalloc: Extend find_vmap_lowest_match_check with
- extra arguments
-Message-ID: <YxeRDjJfYhXp+kE5@pc636>
-References: <20220906060548.1127396-1-song@kernel.org>
- <75CD7F46-F419-4D93-B59D-A8C0F942BB91@fb.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=nnW0gh4/5RbElboZnDeZlyzS1e6LNOQ80svTWGcDjDo=;
+        b=VXfsYO7MumH3j67zfNy4HKqvEHXd1xOFFdcxLwicoiQ/m+izJxleeRQBNRwxzZcUpB
+         dReLqEVy5fxHdDESbPWIdFtPBVnWX/foopSUYZ8vIS9zyDPMkTLFt94tQjNd1wfAvZfm
+         swAI62Qk8uGdcGG1yl/4QTaPNqYo8GlDexg0ImkAZO9kfBvgAn9MUAgsc82tR9i/IaNN
+         XqDnt021l8yPfdy9lCtzDCRzAI0K2Xv7SRAQTesP1lvAKr9QRKzwo8RK3Otpv5xKJA7G
+         Vs1iiVY0Patp3MH8XTlLb9fEAfCDurJ7mViPPOadcOHigwWlO9ZLOtmf6UVIkJ3Qg5lJ
+         1B4g==
+X-Gm-Message-State: ACgBeo1V8BkZ+n5sJgETyrjaY9tku4lgbVCmLaRJbtRG5WDc+rragwX2
+        ndtlxaKtNDc3bGdIg55ugnXPFvUqgK9B3KSFb0g=
+X-Google-Smtp-Source: AA6agR4NkWtq2/uhaWboxw9xhu+6q4snk8/x91hcRywIQjE3vHFuj2tfC8DUMELuZHxJOlhCQcbbL88BAEDJimSiajs=
+X-Received: by 2002:a05:6402:28cb:b0:43b:c6d7:ef92 with SMTP id
+ ef11-20020a05640228cb00b0043bc6d7ef92mr48859651edb.333.1662488990119; Tue, 06
+ Sep 2022 11:29:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75CD7F46-F419-4D93-B59D-A8C0F942BB91@fb.com>
+References: <YxOkt4An+u1azlvG@playground>
+In-Reply-To: <YxOkt4An+u1azlvG@playground>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 6 Sep 2022 11:29:38 -0700
+Message-ID: <CAADnVQLvVBKkeGXp5PBKHVNDwfsV7T5YmMtqEexZqjFK3Kz_=w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] bpf: Fix warning of incorrect type in return expression
+To:     Jules Irenge <jbi.octave@gmail.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Elana.Copperman@mobileye.com, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,57 +74,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> 
-> > On Sep 5, 2022, at 11:05 PM, Song Liu <song@kernel.org> wrote:
-> > 
-> > find_vmap_lowest_match() is now able to handle different roots. With
-> > DEBUG_AUGMENT_LOWEST_MATCH_CHECK enabled as:
-> > 
-> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > index e68c0081e861..7552f1f8350e 100644
-> > --- a/mm/vmalloc.c
-> > +++ b/mm/vmalloc.c
-> > @@ -713,7 +713,7 @@ EXPORT_SYMBOL(vmalloc_to_pfn);
-> > /*** Global kva allocator ***/
-> > 
-> > -#define DEBUG_AUGMENT_LOWEST_MATCH_CHECK 0
-> > +#define DEBUG_AUGMENT_LOWEST_MATCH_CHECK 1
-> > 
-> > compilation failed as:
-> > 
-> > mm/vmalloc.c: In function 'find_vmap_lowest_match_check':
-> > mm/vmalloc.c:1328:32: warning: passing argument 1 of 'find_vmap_lowest_match' makes pointer from integer without a cast [-Wint-conversion]
-> > 1328 |  va_1 = find_vmap_lowest_match(size, align, vstart, false);
-> >     |                                ^~~~
-> >     |                                |
-> >     |                                long unsigned int
-> > mm/vmalloc.c:1236:40: note: expected 'struct rb_root *' but argument is of type 'long unsigned int'
-> > 1236 | find_vmap_lowest_match(struct rb_root *root, unsigned long size,
-> >     |                        ~~~~~~~~~~~~~~~~^~~~
-> > mm/vmalloc.c:1328:9: error: too few arguments to function 'find_vmap_lowest_match'
-> > 1328 |  va_1 = find_vmap_lowest_match(size, align, vstart, false);
-> >     |         ^~~~~~~~~~~~~~~~~~~~~~
-> > mm/vmalloc.c:1236:1: note: declared here
-> > 1236 | find_vmap_lowest_match(struct rb_root *root, unsigned long size,
-> >     | ^~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > Extend find_vmap_lowest_match_check() and find_vmap_lowest_linear_match()
-> > with extra arguments to fix this.
-> > 
-> > Fixes: f9863be49312 ("mm/vmalloc: extend __alloc_vmap_area() with extra arguments")
-> > Cc: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > Cc: Baoquan He <bhe@redhat.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Signed-off-by: Song Liu <song@kernel.org>
-> 
-> Forgot to add the following from v1:
-> 
-> Reviewed-by: Baoquan He <bhe@redhat.com>
-> Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> 
+On Sat, Sep 3, 2022 at 12:02 PM Jules Irenge <jbi.octave@gmail.com> wrote:
+>
+> Sparse reports a warning at bpf_array_map_seq_start()
+>
+> "warning: incorrect type in return expression (different address spaces)"
+>
+> The root cause is the function expect a return of type void *
+> but instead got a percpu value in one of the return.
+>
+> To fix this a variable of type void * is created
+> and the complainining return value is saved into the variable and return.
+>
+> Fix incorrect type in return expression
+>
+> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+> ---
+>  kernel/bpf/arraymap.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+> index 624527401d4d..b1914168c23a 100644
+> --- a/kernel/bpf/arraymap.c
+> +++ b/kernel/bpf/arraymap.c
+> @@ -548,6 +548,7 @@ static void *bpf_array_map_seq_start(struct seq_file *seq, loff_t *pos)
+>         struct bpf_map *map = info->map;
+>         struct bpf_array *array;
+>         u32 index;
+> +       void *pptrs;
+>
+>         if (info->index >= map->max_entries)
+>                 return NULL;
+> @@ -556,8 +557,10 @@ static void *bpf_array_map_seq_start(struct seq_file *seq, loff_t *pos)
+>                 ++*pos;
+>         array = container_of(map, struct bpf_array, map);
+>         index = info->index & array->index_mask;
+> -       if (info->percpu_value_buf)
+> -              return array->pptrs[index];
+> +       if (info->percpu_value_buf) {
+> +               pptrs = &array->pptrs[index];
+> +               return pptrs;
+> +       }
 
-Works great to me. Appreciate it!
-
---
-Uladzislau Rezki
+Somebody will surely send a patch to optimize above back
+to original code.
+Please find a different way to shut up sparse or just ignore it.

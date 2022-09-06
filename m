@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBD35AE570
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282A75AE578
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238508AbiIFKgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
+        id S238420AbiIFKhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239297AbiIFKgT (ORCPT
+        with ESMTP id S233801AbiIFKha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:36:19 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC5550054
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662460578; x=1693996578;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ERKopaaWi+K6cNHT3ZbESo7Lv25nO4+oZ5ztwe9K7dI=;
-  b=opBkYFYdwWV1OcMBP1IpWyQahcJpDm485ymq9foRuLeQ1EgQdShcsSPQ
-   zACNRLf1WG+0jSDw0/oAZqvUdvZ2Q7nuK0YE1iPbya+YNaLPvN+rk4F7M
-   hBx676yuT0bz2f1cfL1IJ+hs+Umv6EGWDs6k2Llqf0GfgLyat4GT2wTZK
-   jOKPrm1tPiTDqRqWXhoJdOtErFrpZIU/nHYCzuVaQbZ4I4oQjfaeKbDL7
-   YgeOLU7cnzRPuOsoazWHl56O7DJC2C6DF6DLRrXB5RjgbQncze3++3+nA
-   et7jCHP/puVbTXk9qNrp9dq2lJUPrtWrGeYLZgYPOq/6qBIqGWVf7po+o
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="112344816"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 03:36:17 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 6 Sep 2022 03:36:14 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 03:36:12 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <kbuild-all@lists.01.org>,
-        <lkp@intel.com>, <gregkh@linuxfoundation.org>,
-        <kumaravel.thiagarajan@microchip.com>
-Subject: [PATCH v2 char-misc-next] misc: microchip: pci1xxxx: fix dependency issues in building the pci1xxxx's aux bus driver.
-Date:   Tue, 6 Sep 2022 16:06:58 +0530
-Message-ID: <20220906103658.681751-1-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Sep 2022 06:37:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03FD50054;
+        Tue,  6 Sep 2022 03:37:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86124B8169E;
+        Tue,  6 Sep 2022 10:37:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7504C433C1;
+        Tue,  6 Sep 2022 10:37:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662460647;
+        bh=BuxP8jb9h9jN0GwTnwe4RVFoi8sw11ZHMZvZH1y85ug=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dOXUAO02eBSo6akp7bs6auFNRuH/3OjhChGKIBZl00SaSPNBFAsHHE7IVnRan+Rpt
+         5Y091I+Igj9nKbB78xXfw4sNs2tsYmaobrsA5fUERV60piERPeJNh+ZH6v1beZnHbq
+         ymY9BsSkfPSYaE7n2Gg+5mwvE+QVn7G51oZfWRh4ZNeTM1mL7HY0QGDGrMGlXW5jXL
+         oT+VpStV3zdKqGazFJWgby5CVvWGnFy5leod+8a/K1ed1qn78Artd3pypLY9JzkItB
+         fKPOGYnjQmbhOLjI7OZq+vbjvXJ9zUncgvaby+BVS0hS/HP0ZyE0u1t38nITrci0O6
+         8MbKtlWIA17PQ==
+Date:   Tue, 6 Sep 2022 13:37:23 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v16 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and define KEY_LOOKUP_ALL
+Message-ID: <Yxci4yrV5OcMnTNi@kernel.org>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+ <20220905143318.1592015-6-roberto.sassu@huaweicloud.com>
+ <YxZsbLIAcR4/bScc@kernel.org>
+ <394ed3b5f96afd3cf39e99675be1a32c89c8080d.camel@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <394ed3b5f96afd3cf39e99675be1a32c89c8080d.camel@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,61 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-build errors and warnings listed below and reported by kernel
-test robot <lkp@intel.com> on the char-misc-next branch are
-fixed in this add-on patch.
+On Tue, Sep 06, 2022 at 09:08:23AM +0200, Roberto Sassu wrote:
+> On Tue, 2022-09-06 at 00:38 +0300, Jarkko Sakkinen wrote:
+> > On Mon, Sep 05, 2022 at 04:33:11PM +0200, Roberto Sassu wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > In preparation for the patch that introduces the
+> > > bpf_lookup_user_key() eBPF
+> > > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
+> > > able to
+> > > validate the kfunc parameters. Add them to enum key_lookup_flag, so
+> > > that
+> > > all the current ones and the ones defined in the future are
+> > > automatically
+> > > exported through BTF and available to eBPF programs.
+> > > 
+> > > Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking
+> > > whether a
+> > > variable contains only defined flags.
+> > > 
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > Reviewed-by: KP Singh <kpsingh@kernel.org>
+> > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > 
+> > You should remove ack if there is any substantial change.
+> 
+> Yes, sorry. I thought you were fine with the change due to:
+> 
+> https://lore.kernel.org/bpf/YxF4H9MTDj+PnJ+V@kernel.org/
 
-errors:
-ERROR: modpost: "auxiliary_device_init"
- [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.ko] undefined!
-ERROR: modpost: "__auxiliary_device_add"
- [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.ko] undefined!
-ERROR: modpost: "auxiliary_driver_unregister"
- [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.ko] undefined!
-ERROR: modpost: "__auxiliary_driver_register"
- [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.ko] undefined!
-ia64-linux-ld: drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.o:
- in function `gp_aux_bus_probe.part.0':
-mchp_pci1xxxx_gp.c:(.text+0x342): undefined reference to
- `auxiliary_device_init'
-ia64-linux-ld: mchp_pci1xxxx_gp.c:(.text+0x392):
- undefined reference to `__auxiliary_device_add'
-ia64-linux-ld: mchp_pci1xxxx_gp.c:(.text+0x5c2):
- undefined reference to `auxiliary_device_init'
-ia64-linux-ld: mchp_pci1xxxx_gp.c:(.text+0x612):
- undefined reference to `__auxiliary_device_add'
-ia64-linux-ld: drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.o:
- in function `pci1xxxx_gpio_driver_init':
- mchp_pci1xxxx_gpio.c:(.init.text+0x42): undefined reference to
- `__auxiliary_driver_register'
+It was the documentation part, not really the enum change.
 
-warnings:
-unmet direct dependencies detected for GPIOLIB_IRQCHIP when selected by
- GP_PCI1XXXX
-
-Fixes: 393fc2f5948f ("misc: microchip: pci1xxxx: load auxiliary bus driver
- for the PIO function in the multi-function endpoint of pci1xxxx device.")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
----
- drivers/misc/mchp_pci1xxxx/Kconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/misc/mchp_pci1xxxx/Kconfig b/drivers/misc/mchp_pci1xxxx/Kconfig
-index f6a6970d2a59..4abb47de7219 100644
---- a/drivers/misc/mchp_pci1xxxx/Kconfig
-+++ b/drivers/misc/mchp_pci1xxxx/Kconfig
-@@ -1,7 +1,9 @@
- config GP_PCI1XXXX
-        tristate "Microchip PCI1XXXX PCIe to GPIO Expander + OTP/EEPROM manager"
--       depends on PCI	
-+       depends on PCI
-+       depends on GPIOLIB
-        select GPIOLIB_IRQCHIP
-+       select AUXILIARY_BUS
-        help
-          PCI1XXXX is a PCIe GEN 3 switch with one of the endpoints having
-          multiple functions and one of the functions is a GPIO controller
--- 
-2.25.1
-
+BR, Jarkko

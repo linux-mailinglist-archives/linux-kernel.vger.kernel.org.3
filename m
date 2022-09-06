@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B5F5AEB83
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86EF5AEE14
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241448AbiIFO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S233727AbiIFOvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241815AbiIFOWL (ORCPT
+        with ESMTP id S239092AbiIFOum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:22:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCCD7CB42;
-        Tue,  6 Sep 2022 06:52:11 -0700 (PDT)
+        Tue, 6 Sep 2022 10:50:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11994A260C;
+        Tue,  6 Sep 2022 07:07:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E5AFB818C4;
-        Tue,  6 Sep 2022 13:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C52DC433C1;
-        Tue,  6 Sep 2022 13:37:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D04B761557;
+        Tue,  6 Sep 2022 13:46:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD11C433C1;
+        Tue,  6 Sep 2022 13:46:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471473;
-        bh=083OfJKByJziQrYc13jloizTv4GyIcdcB08yBp/+ttU=;
+        s=korg; t=1662471974;
+        bh=qi279q5RAq2VFb7xHmWu8Mea+WWb0KcBgfWZrnBh1Dk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iJKII7rIlvJxFxkS8eBqzB5aDXQIrkEZhmqtWZTb97CH11mDH/BoXpj+HJI2RZ7Kc
-         MqdHUDosnyZ7mgze0h3qkBMrNv3pEMwdGAVcb59jTJXdLaekKPiH5r2Mk0SPcHni+Q
-         hvWLst/LhO5R+N8LXN+BQekY6lkeyca6WRpLt3Iw=
+        b=s+haFtz3lcB6WK0KOcrhER71E8rBw21m52j1j11OaZQKV3mi39FFPviUfkJJOGNbr
+         Bg5O/VVT3QX0oKJPYKfloLGFXt3AgqHstXD7WmBlmputKEclM2gTQhuE1/Zpdfbj3d
+         75kgz3pTMW6FDXor1jyPnpmXpaptyPSeRUlQzcoI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matti Vaittinen <mazziesaccount@gmail.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.15 039/107] iio: ad7292: Prevent regulator double disable
-Date:   Tue,  6 Sep 2022 15:30:20 +0200
-Message-Id: <20220906132823.461582332@linuxfoundation.org>
+        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 5.19 073/155] misc: fastrpc: fix memory corruption on open
+Date:   Tue,  6 Sep 2022 15:30:21 +0200
+Message-Id: <20220906132832.511628952@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
+References: <20220906132829.417117002@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +53,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matti Vaittinen <mazziesaccount@gmail.com>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-commit 22b4277641c6823ec03d5b1cd82628e5e53e75b7 upstream.
+commit d245f43aab2b61195d8ebb64cef7b5a08c590ab4 upstream.
 
-The ad7292 tries to add an devm_action for disabling a regulator at
-device detach using devm_add_action_or_reset(). The
-devm_add_action_or_reset() does call the release function should adding
-action fail. The driver inspects the value returned by
-devm_add_action_or_reset() and manually calls regulator_disable() if
-adding the action has failed. This leads to double disable and messes
-the enable count for regulator.
+The probe session-duplication overflow check incremented the session
+count also when there were no more available sessions so that memory
+beyond the fixed-size slab-allocated session array could be corrupted in
+fastrpc_session_alloc() on open().
 
-Do not manually call disable if devm_add_action_or_reset() fails.
-
-Fixes: 506d2e317a0a ("iio: adc: Add driver support for AD7292")
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Tested-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Link: https://lore.kernel.org/r/Yv9O+9sxU7gAv3vM@fedora
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: f6f9279f2bf0 ("misc: fastrpc: Add Qualcomm fastrpc basic driver model")
+Cc: stable@vger.kernel.org      # 5.1
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20220829080531.29681-3-johan+linaro@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/ad7292.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/misc/fastrpc.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
---- a/drivers/iio/adc/ad7292.c
-+++ b/drivers/iio/adc/ad7292.c
-@@ -287,10 +287,8 @@ static int ad7292_probe(struct spi_devic
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -1948,7 +1948,7 @@ static int fastrpc_cb_probe(struct platf
+ 		spin_unlock_irqrestore(&cctx->lock, flags);
+ 		return -ENOSPC;
+ 	}
+-	sess = &cctx->session[cctx->sesscount];
++	sess = &cctx->session[cctx->sesscount++];
+ 	sess->used = false;
+ 	sess->valid = true;
+ 	sess->dev = dev;
+@@ -1961,13 +1961,12 @@ static int fastrpc_cb_probe(struct platf
+ 		struct fastrpc_session_ctx *dup_sess;
  
- 		ret = devm_add_action_or_reset(&spi->dev,
- 					       ad7292_regulator_disable, st);
--		if (ret) {
--			regulator_disable(st->reg);
-+		if (ret)
- 			return ret;
--		}
- 
- 		ret = regulator_get_voltage(st->reg);
- 		if (ret < 0)
+ 		for (i = 1; i < sessions; i++) {
+-			if (cctx->sesscount++ >= FASTRPC_MAX_SESSIONS)
++			if (cctx->sesscount >= FASTRPC_MAX_SESSIONS)
+ 				break;
+-			dup_sess = &cctx->session[cctx->sesscount];
++			dup_sess = &cctx->session[cctx->sesscount++];
+ 			memcpy(dup_sess, sess, sizeof(*dup_sess));
+ 		}
+ 	}
+-	cctx->sesscount++;
+ 	spin_unlock_irqrestore(&cctx->lock, flags);
+ 	rc = dma_set_mask(dev, DMA_BIT_MASK(32));
+ 	if (rc) {
 
 

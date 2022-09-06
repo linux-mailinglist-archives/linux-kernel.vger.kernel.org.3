@@ -2,134 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFF15AF7FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F495AF7F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiIFW14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 18:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S229686AbiIFW1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 18:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiIFW1x (ORCPT
+        with ESMTP id S230013AbiIFW06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 18:27:53 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC21DF7A;
-        Tue,  6 Sep 2022 15:27:52 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id h27so9289745qkk.9;
-        Tue, 06 Sep 2022 15:27:52 -0700 (PDT)
+        Tue, 6 Sep 2022 18:26:58 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005D7272A
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 15:26:55 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id u6so16978183eda.12
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 15:26:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date;
-        bh=0QAInJ0rO3zMboDJklVEn7XuhNzPndw7J1Dim+/9qYU=;
-        b=q5fqXrb83oFF0SHKb5t4llQCJugKT3iuOfMKSlMiEURbJknWMLUg7UMbrauEDn8gkB
-         YU+4Z5Auy4EYBPNyX0C5CpceW8p+xHj+9zWigB5J7nZCWwsPI/Y93+i8qrtxwLQWguiA
-         FfFQFZBUKJbYTKpCKmiSR0eQOkquH29sZLWsWGGFEjwsteFEgc7MUiupsar0PmIM9Su4
-         u0hP+lJcZx67/dlodScBq7exYxJMLlSpHm6zGDk8D9OPX+T3Dms9y92uY+ZcA9WF0qcv
-         wAqcKsjH+z4gfiLPbJJP63LfN20A3XLPnrFPfuPjnzg2sxg7S+MkIHxvDsbVhP4X7nex
-         K3YA==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=a+Vs+P0ciT3P+roY2k8XBdIwCVWYhAwaTZ/i25+tK1Q=;
+        b=G38S/EqecQ8sQP0LzugoHuJ4vO5tGIs1Irzd5Df2yBAJ60O5P5fac0bguYHaOigTSZ
+         /8feiG7RBqs6a7WUgyG0z8RRq/IbpO2nf9njQRB0Vd5FXLenlPVPCSvkNxR3B5IQSHnP
+         fGvhZTNH64t4bL+IDvTHVbgt/2/KnS70+CCcA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=0QAInJ0rO3zMboDJklVEn7XuhNzPndw7J1Dim+/9qYU=;
-        b=VK8c6Ocsb+2McojbU91vZ97YwBPo/P+9uIR9xlrtDHalgB9KmMEq7RctVEbv3E6eOK
-         o1vKiwdSSfPlZzfvbA1Wrd1ogFV5hYbL/9YQskfb3BSop9HC2uJb+Y/icOc/Z8fKqMry
-         mR4msXJv6awNx7tDeuhNt1ph/9+m70gmbmj5cfvg2SwtqYxhB4V7n3/sgRXhLe3CmQ8K
-         ZKjbag63p2rJ1Se113T/NJ0eX+kJhdYq5CARQ7l1vkHlJvVYLTC60j4Bs/+RiK0RUSQz
-         PppPPbiFSxr9MFlWhFAGFKtZqlvNdRRQbGQwwUSGE4CGFRnB5ErP3z8bm+wjsivgmo7D
-         JXwg==
-X-Gm-Message-State: ACgBeo3H/bac+q18U/cqPNsbJMe0xBJN/I9HN7Nalr38SGBCc8wft6Bz
-        6MpzsElBTuqGPkXqAiUD8Ng=
-X-Google-Smtp-Source: AA6agR7k88P3nJjkeozrP/du1MqKUB0DDDznKJoQNOg8jKu2y1mOgggV2i+eymc/QNK1JCtipn8yTA==
-X-Received: by 2002:a05:620a:1468:b0:6bb:822d:2c48 with SMTP id j8-20020a05620a146800b006bb822d2c48mr709502qkl.393.1662503271853;
-        Tue, 06 Sep 2022 15:27:51 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id q2-20020a05620a0d8200b006b555509398sm12967840qkl.136.2022.09.06.15.27.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 15:27:51 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id A50D627C0054;
-        Tue,  6 Sep 2022 18:27:50 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 06 Sep 2022 18:27:50 -0400
-X-ME-Sender: <xms:ZskXY_p6gCKU4PVFFRL59-GRrZvVI3V5kg-DJU8NV5JSG5jsStEYAQ>
-    <xme:ZskXY5oUn5FFrcr4VUtHs5KnfuYLT-EVUfgo0Nlqk2sKvZo5My3YXnuOl1zz6bDl_
-    tx1NF94UAGXaWPfjg>
-X-ME-Received: <xmr:ZskXY8N5lm7dGSScDvgMyQ4YVo5DFT5nM0DTfUzADNOd6rxzltFuqNdlfts>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelledguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:ZskXYy52HubPOOE9AH8OU_IVCYR4yXQdxWppOJpbYcUuhOu1ubpTBg>
-    <xmx:ZskXY-5p0WsYo7YqxKkAJnvuY6WQydxt7Iryb2LYGmmkEYOI9wfCZQ>
-    <xmx:ZskXY6iKpJnFJgu5jCV3-FnrQhSq3b9iS9R2hF-_W2F7GPcV3Y1kfQ>
-    <xmx:ZskXY3F-lZRXEbiAW_oOWdEpzKpiqfV8Nv46WAbdXV9Ih7Pr8ppWyw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Sep 2022 18:27:49 -0400 (EDT)
-Date:   Tue, 6 Sep 2022 15:26:33 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, paulmck@kernel.org,
-        rostedt@goodmis.org, vineeth@bitbyteword.org
-Subject: Re: [PATCH v5 03/18] rcu/tree: Use READ_ONCE() for lockless read of
- rnp->qsmask
-Message-ID: <YxfJGYP2l0xbxxdr@boqun-archlinux>
-References: <20220901221720.1105021-1-joel@joelfernandes.org>
- <20220901221720.1105021-4-joel@joelfernandes.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=a+Vs+P0ciT3P+roY2k8XBdIwCVWYhAwaTZ/i25+tK1Q=;
+        b=6OpFTLtE77mxoU/gUEbvcYQmWV/hSLxlHFlhvuM+m3wXCWU1R/ryPOxcY30LJYOrhW
+         6aSCpINW3Wy97n4lFzsN7siwaT5T4GCGd4+mPHaWgF5yvWYsiFMmBAiOugzGWBH3MmJq
+         Iy+decAe+KdFkF4RXjk0eDMIoRsObOEO20VE0U6bJ2KzQpeJpRfArkco30WFkYuN9F9K
+         2tq8Z5jPpV44pu349t7pH02295he3h/SYnrGPRWi63GihOHmJ1ciWkn45Bie5BHyEqDZ
+         lQ3fLoIGiV0bPpro62j5Cp3G4vxBNwzbwxJqhkVFtYNSW2ds+JOD95T/LWl/eJkQuIh7
+         2EtQ==
+X-Gm-Message-State: ACgBeo1W0+Vc+a1vX2P6esMtSvlq9VUhDha0NPK7VCYYtx+hul80ATZD
+        4heNgBK0IzlrbGUGqthXyPNNYTGxb2+2BT4s
+X-Google-Smtp-Source: AA6agR4yyho5gsHD2tv38sqyJT9+NBEnD1+iZirCFToRwlwxbgyKkDM/Jtoqy10tErN9hU+byITZ1g==
+X-Received: by 2002:a05:6402:4003:b0:448:4c79:45e2 with SMTP id d3-20020a056402400300b004484c7945e2mr610636eda.376.1662503214350;
+        Tue, 06 Sep 2022 15:26:54 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id f2-20020a05640214c200b0044eb4227bf6sm3232136edx.63.2022.09.06.15.26.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 15:26:53 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id d5so7624916wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 15:26:53 -0700 (PDT)
+X-Received: by 2002:a05:600c:22d3:b0:3a8:424d:f386 with SMTP id
+ 19-20020a05600c22d300b003a8424df386mr280546wmg.57.1662503212860; Tue, 06 Sep
+ 2022 15:26:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901221720.1105021-4-joel@joelfernandes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220901024827.v3.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
+In-Reply-To: <20220901024827.v3.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 6 Sep 2022 15:26:41 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wf2gPHzSXh_2bKe+KgYVhKDUgmEtx2nnBrQ9FawqxH9Q@mail.gmail.com>
+Message-ID: <CAD=FV=Wf2gPHzSXh_2bKe+KgYVhKDUgmEtx2nnBrQ9FawqxH9Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: arm: qcom: Document additional skus
+ for sc7180 pazquel360
+To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moragues <moragues@chromium.org>,
+        Henry Sun <henrysun@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:17:05PM +0000, Joel Fernandes (Google) wrote:
-> The rnp->qsmask is locklessly accessed from rcutree_dying_cpu(). This
-> may help avoid load/store tearing due to concurrent access, KCSAN
+Bjorn,
 
-Nit: you can avoid only load tearing with READ_ONCE().
-
-Regards,
-Boqun
-
-> issues, and preserve sanity of people reading the mask in tracing.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+On Wed, Aug 31, 2022 at 7:50 PM Yunlong Jia
+<yunlong.jia@ecs.corp-partner.google.com> wrote:
+>
+> pazquel360 is an extension project based on pazquel.
+> We create 3 sku on pazquel360:
+>    sku 20 for LTE with physical SIM _and_ eSIM and WiFi
+>    sku 21 for WiFi only
+>    sku 22 for LTE with only a physical SIM
+>  Both sku20 and sku22 are LTE SKUs.
+>  One has the eSIM stuffed and one doesn't.
+>  There is a single shared device tree for the two.
+>
+> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>
 > ---
->  kernel/rcu/tree.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 0ca21ac0f064..5ec97e3f7468 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2106,7 +2106,7 @@ int rcutree_dying_cpu(unsigned int cpu)
->  	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU))
->  		return 0;
->  
-> -	blkd = !!(rnp->qsmask & rdp->grpmask);
-> +	blkd = !!(READ_ONCE(rnp->qsmask) & rdp->grpmask);
->  	trace_rcu_grace_period(rcu_state.name, READ_ONCE(rnp->gp_seq),
->  			       blkd ? TPS("cpuofl-bgp") : TPS("cpuofl"));
->  	return 0;
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+>
+> Changes in v3:
+>  1. Adjust the format of the changelog.
+>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+
+I think these two patches are ready to land if now is a good time. Thanks!
+
+-Doug

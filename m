@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C715AF041
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20005AF042
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233269AbiIFQUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S233661AbiIFQUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbiIFQT6 (ORCPT
+        with ESMTP id S233276AbiIFQUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:19:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F3D326DA;
-        Tue,  6 Sep 2022 08:49:17 -0700 (PDT)
+        Tue, 6 Sep 2022 12:20:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF3086FF6
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:49:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1F49B818C2;
-        Tue,  6 Sep 2022 15:49:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 603B1C433D6;
-        Tue,  6 Sep 2022 15:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662479354;
-        bh=HyOzm5VMGmYJGCUZJSGax0V3uAmkTmNzZyIR1FAA+RQ=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BDF661479
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 15:49:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 044A3C433D7;
+        Tue,  6 Sep 2022 15:49:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662479357;
+        bh=/bYSUBxiS/WRbTkvLJc3pRlr8II9MNaiuiZYqjjRNbM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OB6QEsUCynTHvPxAqfPNLKgNfjrOnGNuCsjcCMghiOVfEjqklmu+JjF1pE6s740tR
-         o73CbEg5qg4GocYd4ffIXKqn2Vn374C0VE8irVivL//j0IM8oXHcQzfyzS4ff7zLTn
-         0SF6aY/qx6kzV0f8dBPG8p9iYJiu272Hw8LCBiPwZWHLjQ4tFH2Ysv6JOROT/tfRi9
-         LsFO2D59VxPZo7JsdEkoJMXCQ82H2gPyFjaiTftXzSBGdw0oL1DIUoIfeoZq7lRk91
-         7Teieml4YBhcnYEPOdflYkLXh+krGUQfR9276k2zwRoLAzAVEYpig0v2XAA/PtLHWV
-         EpC+kNT2h9nNw==
-Date:   Tue, 6 Sep 2022 16:49:03 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sergiu.Moga@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
- json-schema
-Message-ID: <Yxdr76d2KVdUDfpW@google.com>
-References: <20220817075517.49575-1-sergiu.moga@microchip.com>
- <20220817075517.49575-3-sergiu.moga@microchip.com>
- <942accc5-70aa-3bb2-63dd-306a39ee5ea4@linaro.org>
- <d1aad8ea-3852-f36b-366b-7aa67d2dd9d5@microchip.com>
- <YxYI8/bprIV2wd1c@google.com>
- <d6a498e7-838b-addf-bc7f-81e6805806d3@microchip.com>
- <80abf192-0313-aade-7780-604f4c9c6810@linaro.org>
+        b=SWkQtzUdMSpQhI24kRSAcctKM38+euqqU0QgokzDtCIibpEuNGXxYxIPQs3Ncwarn
+         7zgeDQ3Rh0AnyF5jMrswoIdmLBL6BF2BEPDErZ3reBnk+NF4pdht33BVNOK3NviuRa
+         ClFX44OCzgq14sgNhT05h7cZQ28DqHFeI1/KCXfE=
+Date:   Tue, 6 Sep 2022 17:49:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deuc her <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Xinhui.Pan@amd.com, linux-kernel@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Wayne Lin <Wayne.Lin@amd.com>,
+        hersen wu <hersenxs.wu@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Thelford Williams <tdwilliamsiv@gmail.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Yongzhi Liu <lyz_cs@pku.edu.cn>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Bhanuprakash Modem <bhanuprakash.modem@intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/amd/display: fix memory leak when using
+ debugfs_lookup()
+Message-ID: <Yxdr+tMkpEK4HHJT@kroah.com>
+References: <20220902130105.139138-1-gregkh@linuxfoundation.org>
+ <YxIAvHOK7uNum9VI@kroah.com>
+ <5f29a2e1-4ecb-9f94-1e57-f7d8d3c7afb2@amd.com>
+ <YxdiBRCmhlrRxAz5@kroah.com>
+ <67fe15fc-bd6a-5eee-4359-5d6244db54ef@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <80abf192-0313-aade-7780-604f4c9c6810@linaro.org>
+In-Reply-To: <67fe15fc-bd6a-5eee-4359-5d6244db54ef@amd.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,64 +73,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Sep 2022, Krzysztof Kozlowski wrote:
-
-> On 05/09/2022 17:22, Sergiu.Moga@microchip.com wrote:
-> > On 05.09.2022 17:37, Lee Jones wrote:
-> >>
-> >> On Fri, 19 Aug 2022, Sergiu.Moga@microchip.com wrote:
-> >>
-> >>> On 18.08.2022 11:39, Krzysztof Kozlowski wrote:
-> >>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>>>
-> >>>> On 17/08/2022 10:55, Sergiu Moga wrote:
-> >>>>> Convert at91 USART DT Binding for Atmel/Microchip SoCs to
-> >>>>> json-schema format.
-> >>>>>
-> >>>>> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> >>>>> ---
-> >>>>>    .../bindings/mfd/atmel,at91-usart.yaml        | 190 ++++++++++++++++++
-> >>>>>    .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ---------
-> >>>>>    2 files changed, 190 insertions(+), 98 deletions(-)
-> >>>>>    create mode 100644 Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
-> >>>>>    delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
-> >>>>> new file mode 100644
-> >>>>> index 000000000000..cf15d73fa1e8
-> >>>>> --- /dev/null
-> >>>>> +++ b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
-> >>>> One more thing - I think this should be in serial directory, not mfd,
-> >>>> even though it includes SPI. MFD is just a Linux naming/wrapper device.
-> >>>>
-> >>>> Best regards,
-> >>>> Krzysztof
-> >>>
-> >>> I would rather keep it in this directory, since its corresponding driver
-> >>> is also in the mfd directory.
-> >>
-> >> Looks like a UART driver to me.
-> >>
-> >> Which MFD driver does this pertain to?
-> >>
-> > 
-> > Hi,
-> > 
-> > It's this one: drivers/mfd/at91-usart.c[1]
-> > 
-> > 
-> > [1] 
-> > https://elixir.bootlin.com/linux/v6.0-rc4/source/drivers/mfd/at91-usart.c
+On Tue, Sep 06, 2022 at 11:39:44AM -0400, Rodrigo Siqueira Jordao wrote:
 > 
-> Which is not a "real MFD driver" because it probes exactly one child
-> (depending on the chosen serial protocol). Aren't MFD supposed to have
-> more then one child?
+> 
+> On 2022-09-06 11:06, Greg Kroah-Hartman wrote:
+> > On Tue, Sep 06, 2022 at 10:52:28AM -0400, Rodrigo Siqueira Jordao wrote:
+> > > 
+> > > 
+> > > On 2022-09-02 09:10, Greg Kroah-Hartman wrote:
+> > > > On Fri, Sep 02, 2022 at 03:01:05PM +0200, Greg Kroah-Hartman wrote:
+> > > > > When calling debugfs_lookup() the result must have dput() called on it,
+> > > > > otherwise the memory will leak over time.  Fix this up by properly
+> > > > > calling dput().
+> > > > > 
+> > > > > Cc: Harry Wentland <harry.wentland@amd.com>
+> > > > > Cc: Leo Li <sunpeng.li@amd.com>
+> > > > > Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> > > > > Cc: Alex Deucher <alexander.deucher@amd.com>
+> > > > > Cc: "Christian K�nig" <christian.koenig@amd.com>
+> > > > > Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+> > > > > Cc: David Airlie <airlied@linux.ie>
+> > > > > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > > > > Cc: Wayne Lin <Wayne.Lin@amd.com>
+> > > > > Cc: hersen wu <hersenxs.wu@amd.com>
+> > > > > Cc: Wenjing Liu <wenjing.liu@amd.com>
+> > > > > Cc: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+> > > > > Cc: Thelford Williams <tdwilliamsiv@gmail.com>
+> > > > > Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
+> > > > > Cc: Yongzhi Liu <lyz_cs@pku.edu.cn>
+> > > > > Cc: Mikita Lipski <mikita.lipski@amd.com>
+> > > > > Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > > > > Cc: Bhanuprakash Modem <bhanuprakash.modem@intel.com>
+> > > > > Cc: Sean Paul <seanpaul@chromium.org>
+> > > > > Cc: amd-gfx@lists.freedesktop.org
+> > > > > Cc: dri-devel@lists.freedesktop.org
+> > > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > ---
+> > > > 
+> > > > Despite a zillion cc: items, I forgot to cc: stable on this.  Can the
+> > > > maintainer add that here, or do you all want me to resend it with that
+> > > > item added?
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > greg k-h
+> > > 
+> > > Hi Greg,
+> > > 
+> > > Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> > > 
+> > > Is 'Cc: stable@vger.kernel.org' enough here? I can make this change before I
+> > > merge it into amd-staging-drm-next.
+> > 
+> > Yes, please add the cc: stable@ line to the body of the patch, sorry I
+> > forgot that.
+> > 
+> 
+> Change applied to amd-staging-drm-next, with the Cc to the stable branch.
 
-It's a single piece of silicon which supports multiple functions.
-
-There is no stipulation detailing simultaneous usage.
-
-Still, happy to receive suggestions on implementing this differently.
-
--- 
-Lee Jones [李琼斯]
+Wonderful, thanks!

@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB185AE3F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAEA5AE3FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239609AbiIFJPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 05:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S239170AbiIFJSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 05:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234253AbiIFJPE (ORCPT
+        with ESMTP id S234501AbiIFJRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 05:15:04 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B63183AD;
-        Tue,  6 Sep 2022 02:15:02 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MMKPX6xnXz1P6pc;
-        Tue,  6 Sep 2022 17:11:12 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 6 Sep 2022 17:14:59 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 6 Sep 2022 17:14:59 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <edumazet@google.com>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <huangguangbin2@huawei.com>, <lipeng321@huawei.com>,
-        <lanhao@huawei.com>
-Subject: [PATCH V2 net-next 5/5] net: hns3: add support to query and set lane number by ethtool
-Date:   Tue, 6 Sep 2022 17:12:23 +0800
-Message-ID: <20220906091223.46142-6-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220906091223.46142-1-huangguangbin2@huawei.com>
-References: <20220906091223.46142-1-huangguangbin2@huawei.com>
+        Tue, 6 Sep 2022 05:17:45 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC67F42AF0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:17:35 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id i14-20020a5d934e000000b006892db5bcd4so6347916ioo.22
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 02:17:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=o5vt6n5uzHRV2inRdRYFbMurcSeLU1gt/8WKOwM5t0c=;
+        b=kn40XcVg1iibkKEb6Fp+VIbBE3182Gu2YcqBP6NZkuG2uXxiRgAyK7/a0P6EDBjQnV
+         3hcrEwxcg75Km5eH8tTNSWOYEl24Y7i61jYuekgmK2FZgXat4WNE/T4QayJpjDnNlMKn
+         ODAVufxH+1qMV6zwUhuRPIfZUeE0Hq+hWppUjs/Qmq3jGpQoNkI5d4SqaTKmvPzCrhYW
+         8pU0o7GYh8k2ES+t+JvWbRkvAD3W50XPdwgyxrudnCmnVSCNMD7y3OiDu7+2wkovFKdU
+         2SByuv4WaAISNX+OYa8rVNhUSM9xx8jNnbOVkI2yJyqpfx7Iofhe5S29wvZluDP4vBte
+         8ilQ==
+X-Gm-Message-State: ACgBeo1p9W3qgI3KoEPiwugBDMSmqltKAFMmSeTMI+KV2JC2UWTvGgNR
+        8FMqVhf2ed11RxtXi7ynZ6ZTtWzcwpLhAxpeIlza+aPL621a
+X-Google-Smtp-Source: AA6agR6YZSrwStnQboormTshqosM2hBUjQBPLaGZ9yO7a4dmXOD3SWEn448ese0D8eC7FB/8TA3Mao728LwF3vRc3E+8yDmDZRay
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:ca4e:0:b0:2ee:bf22:630f with SMTP id
+ q14-20020a92ca4e000000b002eebf22630fmr9639140ilo.287.1662455854696; Tue, 06
+ Sep 2022 02:17:34 -0700 (PDT)
+Date:   Tue, 06 Sep 2022 02:17:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ac8efa05e7feaa1f@google.com>
+Subject: [syzbot] WARNING in erofs_iget
+From:   syzbot <syzbot+f966c13b1b4fc0403b19@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,357 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Chen <chenhao418@huawei.com>
+Hello,
 
-When serdes lane support setting 25Gb/s or 50Gb/s speed and user wants to
-set port speed as 50Gb/s, it can be setted as one 50Gb/s serdes lane or
-two 25Gb/s serdes lanes.
+syzbot found the following issue on:
 
-So, this patch adds support to query and set lane number by ethtool
-to satisfy this scenario.
+HEAD commit:    42cf58c272ee Merge tag 'tty-6.0-rc4' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16fd661b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=892a57667b7af6cf
+dashboard link: https://syzkaller.appspot.com/bug?extid=f966c13b1b4fc0403b19
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16fea393080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1501b0c5080000
 
-Signed-off-by: Hao Chen <chenhao418@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0cddb4889822/disk-42cf58c2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/86b24f0bd2f9/vmlinux-42cf58c2.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f966c13b1b4fc0403b19@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 4
+Dev loop0: unable to read RDB block 4
+ loop0: unable to read partition table
+loop0: partition table beyond EOD, truncated
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3611 at mm/page_alloc.c:5491 __alloc_pages+0x39e/0x510 mm/page_alloc.c:5491
+Modules linked in:
+CPU: 0 PID: 3611 Comm: syz-executor339 Not tainted 6.0.0-rc3-syzkaller-00328-g42cf58c272ee #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+RIP: 0010:__alloc_pages+0x39e/0x510 mm/page_alloc.c:5491
+Code: ff ff 00 0f 84 33 fe ff ff 80 ce 01 e9 2b fe ff ff 83 fe 0a 0f 86 3e fd ff ff 80 3d 28 9c 0b 0c 00 75 09 c6 05 1f 9c 0b 0c 01 <0f> 0b 45 31 f6 e9 8d fe ff ff 65 ff 05 a1 76 44 7e 48 c7 c0 a0 21
+RSP: 0018:ffffc9000396f8c0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 1ffff9200072df19 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000034 RDI: 0000000000000000
+RBP: 0000000000040cc0 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000055 R12: 0000000000000034
+R13: 0000000000000000 R14: 0000000000000000 R15: 1ffff9200072df57
+FS:  0000555556730300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffde3e9b000 CR3: 00000000732b1000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ alloc_pages+0x1a6/0x270 mm/mempolicy.c:2270
+ kmalloc_order+0x34/0xf0 mm/slab_common.c:930
+ kmalloc_order_trace+0x13/0x120 mm/slab_common.c:946
+ kmalloc include/linux/slab.h:605 [inline]
+ erofs_fill_symlink fs/erofs/inode.c:222 [inline]
+ erofs_fill_inode fs/erofs/inode.c:273 [inline]
+ erofs_iget+0x187c/0x26f0 fs/erofs/inode.c:351
+ erofs_fc_fill_super+0x114b/0x21b0 fs/erofs/super.c:755
+ get_tree_bdev+0x440/0x760 fs/super.c:1323
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fee22a3317a
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffde3e9a378 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffde3e9a3d0 RCX: 00007fee22a3317a
+RDX: 0000000020000000 RSI: 0000000020000040 RDI: 00007ffde3e9a390
+RBP: 00007ffde3e9a390 R08: 00007ffde3e9a3d0 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000020000230
+R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000002
+ </TASK>
+
+
 ---
- drivers/net/ethernet/hisilicon/hns3/hnae3.h   |  9 +++++--
- .../hns3/hns3_common/hclge_comm_cmd.c         |  1 +
- .../hns3/hns3_common/hclge_comm_cmd.h         |  1 +
- .../ethernet/hisilicon/hns3/hns3_debugfs.c    |  3 +++
- .../ethernet/hisilicon/hns3/hns3_ethtool.c    | 19 +++++++++-----
- .../hisilicon/hns3/hns3pf/hclge_cmd.h         |  7 +++--
- .../hisilicon/hns3/hns3pf/hclge_main.c        | 26 ++++++++++++-------
- .../hisilicon/hns3/hns3pf/hclge_main.h        |  3 ++-
- .../hisilicon/hns3/hns3pf/hclge_mdio.c        |  2 +-
- .../hisilicon/hns3/hns3vf/hclgevf_main.c      |  2 +-
- 10 files changed, 50 insertions(+), 23 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hnae3.h b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-index 74f7395a36a6..9fb4cc303301 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-@@ -98,6 +98,7 @@ enum HNAE3_DEV_CAP_BITS {
- 	HNAE3_DEV_SUPPORT_MC_MAC_MNG_B,
- 	HNAE3_DEV_SUPPORT_CQ_B,
- 	HNAE3_DEV_SUPPORT_FEC_STATS_B,
-+	HNAE3_DEV_SUPPORT_LANE_NUM_B,
- };
- 
- #define hnae3_ae_dev_fd_supported(ae_dev) \
-@@ -163,6 +164,9 @@ enum HNAE3_DEV_CAP_BITS {
- #define hnae3_ae_dev_fec_stats_supported(ae_dev) \
- 	test_bit(HNAE3_DEV_SUPPORT_FEC_STATS_B, (ae_dev)->caps)
- 
-+#define hnae3_ae_dev_lane_num_supported(ae_dev) \
-+	test_bit(HNAE3_DEV_SUPPORT_LANE_NUM_B, (ae_dev)->caps)
-+
- enum HNAE3_PF_CAP_BITS {
- 	HNAE3_PF_SUPPORT_VLAN_FLTR_MDF_B = 0,
- };
-@@ -572,10 +576,11 @@ struct hnae3_ae_ops {
- 	void (*client_stop)(struct hnae3_handle *handle);
- 	int (*get_status)(struct hnae3_handle *handle);
- 	void (*get_ksettings_an_result)(struct hnae3_handle *handle,
--					u8 *auto_neg, u32 *speed, u8 *duplex);
-+					u8 *auto_neg, u32 *speed, u8 *duplex,
-+					u32 *lane_num);
- 
- 	int (*cfg_mac_speed_dup_h)(struct hnae3_handle *handle, int speed,
--				   u8 duplex);
-+				   u8 duplex, u8 lane_num);
- 
- 	void (*get_media_type)(struct hnae3_handle *handle, u8 *media_type,
- 			       u8 *module_type);
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_cmd.c b/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_cmd.c
-index ca4efdd6e018..f671a63cecde 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_cmd.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_cmd.c
-@@ -154,6 +154,7 @@ static const struct hclge_comm_caps_bit_map hclge_pf_cmd_caps[] = {
- 	{HCLGE_COMM_CAP_GRO_B, HNAE3_DEV_SUPPORT_GRO_B},
- 	{HCLGE_COMM_CAP_FD_B, HNAE3_DEV_SUPPORT_FD_B},
- 	{HCLGE_COMM_CAP_FEC_STATS_B, HNAE3_DEV_SUPPORT_FEC_STATS_B},
-+	{HCLGE_COMM_CAP_LANE_NUM_B, HNAE3_DEV_SUPPORT_LANE_NUM_B},
- };
- 
- static const struct hclge_comm_caps_bit_map hclge_vf_cmd_caps[] = {
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_cmd.h b/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_cmd.h
-index 5b66c7d8246d..b1f9383b418f 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_cmd.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_cmd.h
-@@ -344,6 +344,7 @@ enum HCLGE_COMM_CAP_BITS {
- 	HCLGE_COMM_CAP_GRO_B = 20,
- 	HCLGE_COMM_CAP_FD_B = 21,
- 	HCLGE_COMM_CAP_FEC_STATS_B = 25,
-+	HCLGE_COMM_CAP_LANE_NUM_B = 27,
- };
- 
- enum HCLGE_COMM_API_CAP_BITS {
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-index a3d47724742b..66feb23f7b7b 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-@@ -405,6 +405,9 @@ static struct hns3_dbg_cap_info hns3_dbg_cap[] = {
- 	}, {
- 		.name = "support FEC statistics",
- 		.cap_bit = HNAE3_DEV_SUPPORT_FEC_STATS_B,
-+	}, {
-+		.name = "support lane num",
-+		.cap_bit = HNAE3_DEV_SUPPORT_LANE_NUM_B,
- 	}
- };
- 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-index 31d181118be1..45cd19ef3c5b 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-@@ -712,7 +712,8 @@ static void hns3_get_ksettings(struct hnae3_handle *h,
- 		ops->get_ksettings_an_result(h,
- 					     &cmd->base.autoneg,
- 					     &cmd->base.speed,
--					     &cmd->base.duplex);
-+					     &cmd->base.duplex,
-+					     &cmd->lanes);
- 
- 	/* 2.get link mode */
- 	if (ops->get_link_mode)
-@@ -794,6 +795,7 @@ static int hns3_check_ksettings_param(const struct net_device *netdev,
- 	const struct hnae3_ae_ops *ops = handle->ae_algo->ops;
- 	u8 module_type = HNAE3_MODULE_TYPE_UNKNOWN;
- 	u8 media_type = HNAE3_MEDIA_TYPE_UNKNOWN;
-+	u32 lane_num;
- 	u8 autoneg;
- 	u32 speed;
- 	u8 duplex;
-@@ -806,9 +808,9 @@ static int hns3_check_ksettings_param(const struct net_device *netdev,
- 		return 0;
- 
- 	if (ops->get_ksettings_an_result) {
--		ops->get_ksettings_an_result(handle, &autoneg, &speed, &duplex);
-+		ops->get_ksettings_an_result(handle, &autoneg, &speed, &duplex, &lane_num);
- 		if (cmd->base.autoneg == autoneg && cmd->base.speed == speed &&
--		    cmd->base.duplex == duplex)
-+		    cmd->base.duplex == duplex && cmd->lanes == lane_num)
- 			return 0;
- 	}
- 
-@@ -845,10 +847,14 @@ static int hns3_set_link_ksettings(struct net_device *netdev,
- 	if (cmd->base.speed == SPEED_1000 && cmd->base.duplex == DUPLEX_HALF)
- 		return -EINVAL;
- 
-+	if (cmd->lanes && !hnae3_ae_dev_lane_num_supported(ae_dev))
-+		return -EOPNOTSUPP;
-+
- 	netif_dbg(handle, drv, netdev,
--		  "set link(%s): autoneg=%u, speed=%u, duplex=%u\n",
-+		  "set link(%s): autoneg=%u, speed=%u, duplex=%u, lanes=%u\n",
- 		  netdev->phydev ? "phy" : "mac",
--		  cmd->base.autoneg, cmd->base.speed, cmd->base.duplex);
-+		  cmd->base.autoneg, cmd->base.speed, cmd->base.duplex,
-+		  cmd->lanes);
- 
- 	/* Only support ksettings_set for netdev with phy attached for now */
- 	if (netdev->phydev) {
-@@ -886,7 +892,7 @@ static int hns3_set_link_ksettings(struct net_device *netdev,
- 
- 	if (ops->cfg_mac_speed_dup_h)
- 		ret = ops->cfg_mac_speed_dup_h(handle, cmd->base.speed,
--					       cmd->base.duplex);
-+					       cmd->base.duplex, (u8)(cmd->lanes));
- 
- 	return ret;
- }
-@@ -2067,6 +2073,7 @@ static const struct ethtool_ops hns3vf_ethtool_ops = {
- static const struct ethtool_ops hns3_ethtool_ops = {
- 	.supported_coalesce_params = HNS3_ETHTOOL_COALESCE,
- 	.supported_ring_params = HNS3_ETHTOOL_RING,
-+	.cap_link_lanes_supported = true,
- 	.self_test = hns3_self_test,
- 	.get_drvinfo = hns3_get_drvinfo,
- 	.get_link = hns3_get_link,
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_cmd.h b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_cmd.h
-index 7461b7ecf716..43cada51d8cb 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_cmd.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_cmd.h
-@@ -321,7 +321,9 @@ struct hclge_config_mac_speed_dup_cmd {
- 
- #define HCLGE_CFG_MAC_SPEED_CHANGE_EN_B	0
- 	u8 mac_change_fec_en;
--	u8 rsv[22];
-+	u8 rsv[4];
-+	u8 lane_num;
-+	u8 rsv1[17];
- };
- 
- #define HCLGE_TQP_ENABLE_B		0
-@@ -348,7 +350,8 @@ struct hclge_sfp_info_cmd {
- 	__le32 speed_ability; /* speed ability for current media */
- 	__le32 module_type;
- 	u8 fec_ability;
--	u8 rsv[7];
-+	u8 lane_num;
-+	u8 rsv[6];
- };
- 
- #define HCLGE_MAC_CFG_FEC_AUTO_EN_B	0
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index a0136e234a08..c760fed50da2 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -2615,7 +2615,7 @@ static int hclge_convert_to_fw_speed(u32 speed_drv, u32 *speed_fw)
- }
- 
- static int hclge_cfg_mac_speed_dup_hw(struct hclge_dev *hdev, int speed,
--				      u8 duplex)
-+				      u8 duplex, u8 lane_num)
- {
- 	struct hclge_config_mac_speed_dup_cmd *req;
- 	struct hclge_desc desc;
-@@ -2639,6 +2639,7 @@ static int hclge_cfg_mac_speed_dup_hw(struct hclge_dev *hdev, int speed,
- 			speed_fw);
- 	hnae3_set_bit(req->mac_change_fec_en, HCLGE_CFG_MAC_SPEED_CHANGE_EN_B,
- 		      1);
-+	req->lane_num = lane_num;
- 
- 	ret = hclge_cmd_send(&hdev->hw, &desc, 1);
- 	if (ret) {
-@@ -2650,33 +2651,35 @@ static int hclge_cfg_mac_speed_dup_hw(struct hclge_dev *hdev, int speed,
- 	return 0;
- }
- 
--int hclge_cfg_mac_speed_dup(struct hclge_dev *hdev, int speed, u8 duplex)
-+int hclge_cfg_mac_speed_dup(struct hclge_dev *hdev, int speed, u8 duplex, u8 lane_num)
- {
- 	struct hclge_mac *mac = &hdev->hw.mac;
- 	int ret;
- 
- 	duplex = hclge_check_speed_dup(duplex, speed);
- 	if (!mac->support_autoneg && mac->speed == speed &&
--	    mac->duplex == duplex)
-+	    mac->duplex == duplex && (mac->lane_num == lane_num || lane_num == 0))
- 		return 0;
- 
--	ret = hclge_cfg_mac_speed_dup_hw(hdev, speed, duplex);
-+	ret = hclge_cfg_mac_speed_dup_hw(hdev, speed, duplex, lane_num);
- 	if (ret)
- 		return ret;
- 
- 	hdev->hw.mac.speed = speed;
- 	hdev->hw.mac.duplex = duplex;
-+	if (!lane_num)
-+		hdev->hw.mac.lane_num = lane_num;
- 
- 	return 0;
- }
- 
- static int hclge_cfg_mac_speed_dup_h(struct hnae3_handle *handle, int speed,
--				     u8 duplex)
-+				     u8 duplex, u8 lane_num)
- {
- 	struct hclge_vport *vport = hclge_get_vport(handle);
- 	struct hclge_dev *hdev = vport->back;
- 
--	return hclge_cfg_mac_speed_dup(hdev, speed, duplex);
-+	return hclge_cfg_mac_speed_dup(hdev, speed, duplex, lane_num);
- }
- 
- static int hclge_set_autoneg_en(struct hclge_dev *hdev, bool enable)
-@@ -2976,7 +2979,7 @@ static int hclge_mac_init(struct hclge_dev *hdev)
- 	hdev->support_sfp_query = true;
- 	hdev->hw.mac.duplex = HCLGE_MAC_FULL;
- 	ret = hclge_cfg_mac_speed_dup_hw(hdev, hdev->hw.mac.speed,
--					 hdev->hw.mac.duplex);
-+					 hdev->hw.mac.duplex, hdev->hw.mac.lane_num);
- 	if (ret)
- 		return ret;
- 
-@@ -3301,6 +3304,7 @@ static int hclge_get_sfp_info(struct hclge_dev *hdev, struct hclge_mac *mac)
- 		mac->autoneg = resp->autoneg;
- 		mac->support_autoneg = resp->autoneg_ability;
- 		mac->speed_type = QUERY_ACTIVE_SPEED;
-+		mac->lane_num = resp->lane_num;
- 		if (!resp->active_fec)
- 			mac->fec_mode = 0;
- 		else
-@@ -3485,13 +3489,13 @@ static int hclge_update_port_info(struct hclge_dev *hdev)
- 			return 0;
- 		}
- 		return hclge_cfg_mac_speed_dup(hdev, mac->speed,
--					       HCLGE_MAC_FULL);
-+					       HCLGE_MAC_FULL, mac->lane_num);
- 	} else {
- 		if (speed == HCLGE_MAC_SPEED_UNKNOWN)
- 			return 0; /* do nothing if no SFP */
- 
- 		/* must config full duplex for SFP */
--		return hclge_cfg_mac_speed_dup(hdev, speed, HCLGE_MAC_FULL);
-+		return hclge_cfg_mac_speed_dup(hdev, speed, HCLGE_MAC_FULL, 0);
- 	}
- }
- 
-@@ -10985,7 +10989,7 @@ static int hclge_set_pauseparam(struct hnae3_handle *handle, u32 auto_neg,
- }
- 
- static void hclge_get_ksettings_an_result(struct hnae3_handle *handle,
--					  u8 *auto_neg, u32 *speed, u8 *duplex)
-+					  u8 *auto_neg, u32 *speed, u8 *duplex, u32 *lane_num)
- {
- 	struct hclge_vport *vport = hclge_get_vport(handle);
- 	struct hclge_dev *hdev = vport->back;
-@@ -10996,6 +11000,8 @@ static void hclge_get_ksettings_an_result(struct hnae3_handle *handle,
- 		*duplex = hdev->hw.mac.duplex;
- 	if (auto_neg)
- 		*auto_neg = hdev->hw.mac.autoneg;
-+	if (lane_num)
-+		*lane_num = hdev->hw.mac.lane_num;
- }
- 
- static void hclge_get_media_type(struct hnae3_handle *handle, u8 *media_type,
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h
-index ef0f67ed60c9..163240adbcce 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h
-@@ -259,6 +259,7 @@ struct hclge_mac {
- 	u8 duplex;
- 	u8 support_autoneg;
- 	u8 speed_type;	/* 0: sfp speed, 1: active speed */
-+	u8 lane_num;
- 	u32 speed;
- 	u32 max_speed;
- 	u32 speed_ability; /* speed ability supported by current media */
-@@ -1096,7 +1097,7 @@ static inline int hclge_get_queue_id(struct hnae3_queue *queue)
- }
- 
- int hclge_inform_reset_assert_to_vf(struct hclge_vport *vport);
--int hclge_cfg_mac_speed_dup(struct hclge_dev *hdev, int speed, u8 duplex);
-+int hclge_cfg_mac_speed_dup(struct hclge_dev *hdev, int speed, u8 duplex, u8 lane_num);
- int hclge_set_vlan_filter(struct hnae3_handle *handle, __be16 proto,
- 			  u16 vlan_id, bool is_kill);
- int hclge_en_hw_strip_rxvtag(struct hnae3_handle *handle, bool enable);
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c
-index 03d63b6a9b2b..85fb11de43a1 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c
-@@ -187,7 +187,7 @@ static void hclge_mac_adjust_link(struct net_device *netdev)
- 	speed = netdev->phydev->speed;
- 	duplex = netdev->phydev->duplex;
- 
--	ret = hclge_cfg_mac_speed_dup(hdev, speed, duplex);
-+	ret = hclge_cfg_mac_speed_dup(hdev, speed, duplex, 0);
- 	if (ret)
- 		netdev_err(netdev, "failed to adjust link.\n");
- 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
-index 14e338fbf1eb..34ac33783e97 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
-@@ -3177,7 +3177,7 @@ static int hclgevf_get_status(struct hnae3_handle *handle)
- 
- static void hclgevf_get_ksettings_an_result(struct hnae3_handle *handle,
- 					    u8 *auto_neg, u32 *speed,
--					    u8 *duplex)
-+					    u8 *duplex, u32 *lane_num)
- {
- 	struct hclgevf_dev *hdev = hclgevf_ae_get_hdev(handle);
- 
--- 
-2.33.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

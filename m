@@ -2,135 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465605AF043
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE915AEFCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238863AbiIFQU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
+        id S238522AbiIFQC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233825AbiIFQUD (ORCPT
+        with ESMTP id S233615AbiIFQCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:20:03 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C1AB02
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:49:21 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286EgFNa022749;
-        Tue, 6 Sep 2022 14:43:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=QuvjyXhwXDinpisjO+yl4VyEGU5BS4zofifyeBh4iwI=;
- b=J1FqD1G2VKm6hrkmlXw2pfyTtPQEvgFq46wM8eZ/7yHU0aYjq9ngLwsoeKfJvQucyAIr
- WDjpbYmqzJXX7y4Z3WjeYHycM4bJcIPOVUkBWuVTZH97+0uv2ZYYYM925Jny/qMkMPNH
- yecANwdNDoomn9b/skW29llxR9McbqeQiYdjex1D1CfXE+o5g1SfDIKIK8GwpeK/zjDs
- a/6pRnIGmcea4GkLGrW1IcDvPzuUUEiiIxF1MGBEhRipXAuUgFi1Vjoubru/ZWmOlLk/
- xZ14xBjhGbOXuePgbf721kTKHJ+G/oILbg/O+p+a+HRLQLpTa/X7hCMTW8HfZhqPiglw 6A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je86w02h4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 14:43:40 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 286EhH0Q027612;
-        Tue, 6 Sep 2022 14:43:39 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je86w02b5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 14:43:39 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 286EYW5a025865;
-        Tue, 6 Sep 2022 14:43:36 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3jbxj8tvgx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 14:43:36 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 286EhXmP22085968
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 6 Sep 2022 14:43:33 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C67E4A4060;
-        Tue,  6 Sep 2022 14:43:33 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A0FCDA4054;
-        Tue,  6 Sep 2022 14:43:32 +0000 (GMT)
-Received: from [9.101.4.33] (unknown [9.101.4.33])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  6 Sep 2022 14:43:32 +0000 (GMT)
-Message-ID: <dcefc6dd-f8eb-945e-37ab-3c0c4e4e20f2@linux.ibm.com>
-Date:   Tue, 6 Sep 2022 16:43:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.0
-Subject: Re: [RFC PATCH RESEND 08/28] mm/khugepaged: mark VMA as locked while
- collapsing a hugepage
-Content-Language: fr
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        rientjes@google.com, axelrasmussen@google.com, joelaf@google.com,
-        minchan@google.com, kernel-team@android.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        Tue, 6 Sep 2022 12:02:07 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BE392F44;
+        Tue,  6 Sep 2022 08:22:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662477735; x=1694013735;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pvrR9AaLZeSwwdJMT20ILWHfqE4EnXxLAynRB+jX/wQ=;
+  b=Um8gNvqCvUVyx8LaKk16gyE6h8lS6nQ7vGfMfL0UD0FBVyU/oMurtOlr
+   QAiMwMq7Mm6Da8SmBKQmU9Y74lkA9RrpTKboCyLYf/0las1kh59hM0u0N
+   18NozXJRxTQ3GiQtrPE+FtOFdV8GWP9oes4yuZVuaMpfvfWsEPLfIuZf7
+   MEEDBTtvuzk17MvnzjE0zVsbXYq1CMOv8ym4LBhP5Ts5Hf4MXIelCB1sk
+   1vYaqIVbIVodGKyn1NVtG/HHnd5fgHnWB6kENpI8QV23RipOr2VywMmwm
+   qRKYVdQ6ejLrmDL+TXtolWBmtZlOCHF0jPM65miwngnBlQi7TsSk38pY6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297405550"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="297405550"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:22:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="675734200"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Sep 2022 08:22:11 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 5BF0586; Tue,  6 Sep 2022 18:22:27 +0300 (EEST)
+Date:   Tue, 6 Sep 2022 18:22:27 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, sanju.mehta@amd.com,
+        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220901173516.702122-1-surenb@google.com>
- <20220901173516.702122-9-surenb@google.com>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <20220901173516.702122-9-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HAsvOrmXhzmMe1mizRzjteVCQHSodYnt
-X-Proofpoint-ORIG-GUID: X4lgGR3UYbHPHIYuWj46oO-L8lLKddx-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-06_07,2022-09-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 mlxlogscore=878 suspectscore=0 mlxscore=0 phishscore=0
- adultscore=0 clxscore=1015 impostorscore=0 malwarescore=0
- priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2209060070
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found
+ on AMD USB4 controller
+Message-ID: <Yxdls5XlZ0EBGfON@black.fi.intel.com>
+References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
+ <YxWgGKIAvsxwSz85@black.fi.intel.com>
+ <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
+ <YxWqSYDWe0NitSkL@black.fi.intel.com>
+ <CAAd53p6bSmTPavjA0v6tybc6=HrwiDn0JGzXwVOG_m5EVw1p1w@mail.gmail.com>
+ <YxYXH5dqKqPANeVX@black.fi.intel.com>
+ <CAAd53p5tYG=mAR-RSr1g_iznmmcCy1QpthG5vQzr99AP4QLJyg@mail.gmail.com>
+ <YxdNKx1OFKsgBUBu@black.fi.intel.com>
+ <CAAd53p6nNh1nUSfJgj5db+2B=eOCfiKta5aRiGsE4N0teL9cPQ@mail.gmail.com>
+ <YxdgZavuLU78lqIL@black.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxdgZavuLU78lqIL@black.fi.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 01/09/2022 à 19:34, Suren Baghdasaryan a écrit :
-> Protect VMA from concurrent page fault handler while modifying it in
-> collapse_huge_page.
+On Tue, Sep 06, 2022 at 05:59:49PM +0300, Mika Westerberg wrote:
+> This reminded me that in Intel hardware there is an ACPI power resource that is
+> shared between related devices. IIRC there is _PR0() method under the root
+> port, xHCI and the TBT NHI that returns the same power resource. Now, when the
+> power resource is turned on for any of the devices the kernel wakes up the rest
+> too to make sure they get properly re-initialized if they went into
+> D0unitialized or something like that. The commit that added this is
+> 4533771c1e53 ("ACPI / PM: Introduce concept of a _PR0 dependent device").
 
-Is the goal to protect changes in the anon_vma structure?
-
-AFAICS, the vma it self is not impacted here, only the anon_vma and the
-PMD/PTE are touched, and they have their own protection mechanism, isn't it?
-
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  mm/khugepaged.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 01f71786d530..030680633989 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1072,6 +1072,7 @@ static void collapse_huge_page(struct mm_struct *mm,
->  	if (mm_find_pmd(mm, address) != pmd)
->  		goto out_up_write;
->  
-> +	vma_mark_locked(vma);
->  	anon_vma_lock_write(vma->anon_vma);
->  
->  	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, NULL, mm,
-
+Probably has nothing to do with this actually.

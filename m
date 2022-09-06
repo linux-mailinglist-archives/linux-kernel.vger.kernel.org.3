@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A215AEFC6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF1D5AF327
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238451AbiIFQAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
+        id S229529AbiIFRxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbiIFQAJ (ORCPT
+        with ESMTP id S229477AbiIFRxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:00:09 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C632C83F3D;
-        Tue,  6 Sep 2022 08:19:11 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id fg1so1952572ejc.2;
-        Tue, 06 Sep 2022 08:19:11 -0700 (PDT)
+        Tue, 6 Sep 2022 13:53:14 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0719A6A3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:53:10 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso15798616pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 10:53:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Ma2iDt0aE81Ahc9ZUJZycp2jvO5tJvy1n9qVt6gCQwI=;
-        b=mZ+FcifZ+4aqabfna498JJgJVm7ZJdYQe8WPPtTpmukN0ltsFgbqVaNbL1sFWPnx0F
-         +kFG3VCNFENVAovNsysmwpOZ9RuJ0ufsyH/pTm2Y0z5gRcOpO/R+heCj40VC0B/407ah
-         gIy12X9ei8z3+szxvE4NyRdxrjANyShKAEl2/x/Zm5O/QSiE8OYXer9bdBZdxhHaAE7q
-         f4tiV5HYLbiMy7AqJzsjwqwX5vSbICO2tfPlRmT+E50cm2MApRR8eNqmx5TuhyMcbdUY
-         7WrJdlicqbcwsKebKLfXD1Wod6uRLkMhZP+32t59uXM5n6TIYOGjSb2jPimnfwACXEvM
-         IUDQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=flM6z/aZfaObx6vFxYOPjGjlbxViOKss6sBC4Qc+hjQ=;
+        b=eFIZwLRx3uLBvbGaNPmxLmj0jp/S5xhwz/osy9fHPsxPkSMZNlVz8VI4St7EPXzsnJ
+         6j2G1qPE1odjUdAb+1lWOC1WtIFUHhPWDzmo/dm5Na6d47C9xnxdeq1vGzlI5LIdWO2y
+         z3hOr49qqCF0PRowYLjSMzptiRPHzdVcK1N5xUHNxY1slofijTNjrYi7U5bqAF7kH6Dt
+         i5MMFM2Q/OaPVGg4Q5w2ceLvKrHL3oC0QhOcuM0WaSzEnLtMkILC8fVYEf536gQiMtKL
+         XI051Ld1yHsk67f/c6HKTa0LvF0j1rHavTHcemF2mZFf1WHpLd/ha7lrVJnbfNTR3EZ1
+         U82w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ma2iDt0aE81Ahc9ZUJZycp2jvO5tJvy1n9qVt6gCQwI=;
-        b=QH4OiwHDUmSV5zbjGts8jFsfEsjPJy8my6Y58o3F0l05IgPR3o9NrNwBtGFY6aQ48W
-         IXTH+NPQ/Mo0c9mymKo0BcfB20okmT3c0ZQTj52Eu8TTxs5exf0dj/8wLdvnKSzxXtEj
-         bZzUz/WD6ZS0eLKIJrN9OKxENRQy/zGiSU8HTikjywdchJ0U+rCnHmizDuSJFKiIPYtn
-         D3vr/2aGJ26S4ruj0ZemXKpjiP/d6x5mSZ5TCcO1DEDhUOpEzmZ+UrveL3hpJCxDod5d
-         2x4lZb91CQo5hwNI00Va9x1VCf2E6LFgFTmKWjzp/4quKqhoXbhR3Rvki0aoC7Wq0qW0
-         gEPg==
-X-Gm-Message-State: ACgBeo1CXck8HreLTMMATX3x1WXuulmWxjPTlvGkevh5pTOuuyAocotS
-        NqYOQj3Q0qDah5YLcctkhX9NAbDI0br2mVOBf7A=
-X-Google-Smtp-Source: AA6agR5G9HfMrf0VgwjZaDpL+Bw3LD81rl/8ufqZpYLsPbGzQjkQjICo51PcirHskBDNf2s6ND3MqbShzMKHHJ8IDw0=
-X-Received: by 2002:a17:907:2ce7:b0:741:6e62:4558 with SMTP id
- hz7-20020a1709072ce700b007416e624558mr31784827ejc.273.1662477550254; Tue, 06
- Sep 2022 08:19:10 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=flM6z/aZfaObx6vFxYOPjGjlbxViOKss6sBC4Qc+hjQ=;
+        b=sdG38X+Cuw/OhSEZF7yCjNyAl89hNj4VeHL9NhAoPyPSweGsgI3mJ5zAHmLMlRgdUd
+         iSYkifnmV1lg325CqVVVt/SLKc3344njAUg4YRaEICFblFceRsjJCDwysjCF522XQTKQ
+         r9JSx4NX8ZJEDeRbyXzK0undhgRd5AChlMXpKjfBOrDQSLeu9S++FKVAkn4BCmpkr+fF
+         HpV0yEJzqjx4CSG8MlKkjcK/Ze0FH8tEwkFTH6MvguVx+r25QS0fjTnXSIJ/vX+rHZcu
+         4r+EvdHTkKA3+6NG/Ej6mSbgkyv5bvh3QvOQJuiB0/hIF0/CDG34/jc4OleOQJYjS6Xt
+         gzQg==
+X-Gm-Message-State: ACgBeo1RJlsrQWpr8j3yj0aEKqg8jG5PUwwvCFYktCD6pBYsgEhCmFo6
+        YIoIOJvZJUyk6EUvwYXzMHs=
+X-Google-Smtp-Source: AA6agR77VJGd9XphIhSwKRClsidOdx1OdfrRael+fgw+iMaS7Xf9mpXfj8X9627uG2+4eJHFqfJe5w==
+X-Received: by 2002:a17:90b:1a91:b0:1fd:c26c:a3bf with SMTP id ng17-20020a17090b1a9100b001fdc26ca3bfmr26499106pjb.213.1662486788617;
+        Tue, 06 Sep 2022 10:53:08 -0700 (PDT)
+Received: from 7YHHR73.igp.broadcom.net (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id v65-20020a622f44000000b00539aa7f0b53sm10404244pfv.104.2022.09.06.10.53.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 10:53:08 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     soc@kernel.org, michael@walle.cc,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] arm64: defconfig: enable ARCH_BCM
+Date:   Mon,  5 Sep 2022 20:39:56 -0700
+Message-Id: <20220906033957.4377-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220829151536.8578-1-jandryuk@gmail.com> <20220902165921.GA354189@bhelgaas>
-In-Reply-To: <20220902165921.GA354189@bhelgaas>
-From:   Jason Andryuk <jandryuk@gmail.com>
-Date:   Tue, 6 Sep 2022 11:18:58 -0400
-Message-ID: <CAKf6xpt9DDjQoMsu9e09Gq_Bb_VFe2gzU9faARTsfS6c45E0bg@mail.gmail.com>
-Subject: Re: [PATCH] xen-pcifront: Handle missed Connected state
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        linux-pci@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 12:59 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> The conventional style for subject (from "git log --oneline") is:
->
->   xen/pcifront: Handle ...
->
-> On Mon, Aug 29, 2022 at 11:15:36AM -0400, Jason Andryuk wrote:
-> > An HVM guest with linux stubdom and 2 PCI devices failed to start as
->
-> "stubdom" might be handy shorthand in the Xen world, but I think
-> it would be nice to consistently spell out "stubdomain" since you use
-> both forms randomly in this commit log and newbies like me have to
-> wonder whether they're the same or different.
->
-> > libxl timed out waiting for the PCI devices to be added.  It happens
-> > intermittently but with some regularity.  libxl wrote the two xenstore
-> > entries for the devices, but then timed out waiting for backend state 4
-> > (Connected) - the state stayed at 7 (Reconfiguring).  (PCI passthrough
-> > to an HVM with stubdomain is PV passthrough to the stubdomain and then
-> > HVM passthrough with the QEMU inside the stubdomain.)
-> >
-> > The stubdom kernel never printed "pcifront pci-0: Installing PCI
-> > frontend", so it seems to have missed state 4 which would have
-> > called pcifront_try_connect -> pcifront_connect_and_init_dma
->
-> Add "()" after function names for clarity.
->
-> > Have pcifront_detach_devices special-case state Initialised and call
-> > pcifront_connect_and_init_dma.  Don't use pcifront_try_connect because
-> > that sets the xenbus state which may throw off the backend.  After
-> > connecting, skip the remainder of detach_devices since none have been
-> > initialized yet.  When the backend switches to Reconfigured,
-> > pcifront_attach_devices will pick them up again.
+Commit 96796c914b84 ("arm64: Kconfig.platforms: Re-organized Broadcom
+menu") introduced a new symbol ARCH_BCM and made all of the Broadcom
+SoCs Kconfig depend on it, but did not enable it in the defconfig.
+Thus, now the defconfig doesn't include support for any Broadcom
+architectures anymore. Fix it.
 
-Thanks for taking a look, Bjorn.  That all sounds good.  I'll wait a
-little longer to see if there is any more feedback before sending a
-v2.
+Fixes: 96796c914b84 ("arm64: Kconfig.platforms: Re-organized Broadcom menu")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Jason
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 91e58cf59c99..4c8b09c6b49f 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -33,6 +33,7 @@ CONFIG_ARCH_ACTIONS=y
+ CONFIG_ARCH_SUNXI=y
+ CONFIG_ARCH_ALPINE=y
+ CONFIG_ARCH_APPLE=y
++CONFIG_ARCH_BCM=y
+ CONFIG_ARCH_BCM2835=y
+ CONFIG_ARCH_BCMBCA=y
+ CONFIG_ARCH_BCM_IPROC=y
+-- 
+2.25.1
+

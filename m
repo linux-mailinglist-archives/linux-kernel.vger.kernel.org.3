@@ -2,60 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5AF5ADD0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA61E5ADD0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbiIFBqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 21:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        id S232684AbiIFBqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 21:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiIFBqI (ORCPT
+        with ESMTP id S232640AbiIFBqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 21:46:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C318357E2B
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 18:46:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662428767; x=1693964767;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YodHDRDOBgMRijcvZRR1raq5O85utTYgLLNsrFmAScs=;
-  b=G+aFmXwquWeZ6Z5khksLMvFx1nyy1ONYw2Ttf0V24LLGwPWG9IE6YMq0
-   wdiUqZTAb+qBeaJDmRuySeyvRe3hL0ILnhlpLuLqJeVXqY5JmcCqvEVJ3
-   Wu4eEGNV9TRPBWibjJ3Anvcx39eiXxkeJ4+w0hRruqf4oVhE0BgMO8fCM
-   tRns03g6zvReA08Dojkkf07KfuSYT9EDOC97d66fhOP8C21jWjEqGwi6L
-   pQmL/dIsLN2cdS07nM29Hn8+QqhglWOzVCQm1DuJj8SB34eG7VkJgpEbM
-   7eyxMFp3jM+nHzZ2XC2qZsGCXG/qHld0Pr/SG2edZVG/nLQ4spe+AmtVC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="276216380"
-X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
-   d="scan'208";a="276216380"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 18:46:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
-   d="scan'208";a="643973597"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 05 Sep 2022 18:46:06 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVNfB-0004jB-1O;
-        Tue, 06 Sep 2022 01:46:05 +0000
-Date:   Tue, 6 Sep 2022 09:45:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool:
- vmw_port_hb_in+0xe2: stack state mismatch: cfa1=5+16 cfa2=4+8
-Message-ID: <202209060939.Aa20lxSi-lkp@intel.com>
+        Mon, 5 Sep 2022 21:46:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9326F65550;
+        Mon,  5 Sep 2022 18:46:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02739B815CE;
+        Tue,  6 Sep 2022 01:46:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 924C2C43143;
+        Tue,  6 Sep 2022 01:46:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662428778;
+        bh=xs4xCHPpRTSPH1q5xqbVYT0d5Xh7RHhnV/wtT03qh9o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bm0qjyC2t9TwGwEG24yn5DgveTfSTLhfHEAIhHPyWVHs5IujJtgloa9bLyT8PGsAp
+         Y2deaM+vuMaSfJUUuZN2olk2QgX7fzARBfTeAxI3+k3ofdvt7yKL8sZS/72uEVa6UP
+         mfnVNtMossvMA9z5Eu11si7P1+lWKTHWiTu0WeS8i8QmUdgevP4vCX8I0t93Bz0ZaQ
+         UpBBSDjZ2IlRa9BKft/sfJEafi2pHU7RrmdimbnyrGWpORCOweKwcgoyu5acYCGJGX
+         otwfmTxF0tCSpmlp3q1lKLTZXTHcA+HvF+A0689X4Lq0bQ81E3KJocAjy1lsZhk6D+
+         8iW7KwNrfFFgw==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1278624b7c4so6732248fac.5;
+        Mon, 05 Sep 2022 18:46:18 -0700 (PDT)
+X-Gm-Message-State: ACgBeo00HcmmJHRcBWJ+kfVoiuZgsgsjUi2rb76fW3V91z6brpOk8l3r
+        AwxUJCOH2pYtMMSVozAGlb44DNxgMpWqDuXciKA=
+X-Google-Smtp-Source: AA6agR7rQMCHzliXpvc366478Lt3HDQkS0AJxe6688qZr6jFNV0WLHEbuu6BgOf1F0gYkq5AKEjr6QkCE3JufBBZ0vk=
+X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
+ ba22-20020a056870c59600b001016409ae62mr10373144oab.112.1662428777684; Mon, 05
+ Sep 2022 18:46:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220831175920.2806-1-jszhang@kernel.org> <20220831175920.2806-5-jszhang@kernel.org>
+ <CAJF2gTQMM50TZZ95XOY+Rgvm2hZ3nLxkYfaSW_2MvPiJeqTtJw@mail.gmail.com>
+ <YxWYh5C5swlyobi2@linutronix.de> <CAJF2gTR=Cmcox5JrX2bB12MdmurY3vexSA6vw1cdXXbCNB8tXw@mail.gmail.com>
+ <YxW3cZEhEideZon2@linutronix.de>
+In-Reply-To: <YxW3cZEhEideZon2@linutronix.de>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 6 Sep 2022 09:46:05 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSuLNxUD=Kdn+3o6Jj_bv+X4pntvUHCsXXD5AgcVjj0pQ@mail.gmail.com>
+Message-ID: <CAJF2gTSuLNxUD=Kdn+3o6Jj_bv+X4pntvUHCsXXD5AgcVjj0pQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] riscv: add lazy preempt support
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,29 +74,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
-commit: c25e1c55822f9b3b53ccbf88b85644317a525752 kbuild: do not create *.prelink.o for Clang LTO or IBT
-date:   3 months ago
-config: x86_64-buildonly-randconfig-r001-20220905 (https://download.01.org/0day-ci/archive/20220906/202209060939.Aa20lxSi-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c25e1c55822f9b3b53ccbf88b85644317a525752
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c25e1c55822f9b3b53ccbf88b85644317a525752
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/vmwgfx/ drivers/spmi/
+On Mon, Sep 5, 2022 at 4:46 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> On 2022-09-05 16:33:54 [+0800], Guo Ren wrote:
+> > > There is "generic" code in the PREEMPT_RT patch doing that. The count=
+er
+> > > is incremented/ decremented via preempt_lazy_enable()/disable() and o=
+ne
+> > > of the user is migrate_disable()/enable().
+> > > Basically if a task is task_is_realtime() then NEED_RESCHED is set fo=
+r
+> > > the wakeup. For the remaining states (SCHED_OTHER, =E2=80=A6) NEED_RE=
+SCHED_LAZY
+> > > is set for the wakeup. This can be delayed if the task is in a "preem=
+pt
+> > > disable lazy" section (similar to a preempt_disable() section) but a
+> > > task_is_realtime() can still be scheduled if needed.
+> > Okay, It should be [PATCH RT]. RISC-V would also move to GENERIC_ENTRY
+> > [1], so above assembly code would be replaced by generic one, right?
+>
+> correct.
+Maybe TIF_XXX_RESCHED also could be merged into GENERIC_ENTRY, just
+like what you've done in syscall.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+struct thread_info {
+          unsigned long           flags;
+          unsigned long           syscall_work;   /* SYSCALL_WORK_ flags */
++        unsigned long           resched_work;   /* RESCHED flags */
 
-All warnings (new ones prefixed by >>):
+Or merge them into one:
+struct thread_info {
+          unsigned long           flags;
+-         unsigned long           syscall_work;   /* SYSCALL_WORK_ flags */
++         unsigned long           ge_flags; /* GENERIC_ENTRY flags */
 
->> drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_in+0xe2: stack state mismatch: cfa1=5+16 cfa2=4+8
->> drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_out+0xe5: stack state mismatch: cfa1=5+16 cfa2=4+8
+>
+> Sebastian
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+
+--=20
+Best Regards
+ Guo Ren

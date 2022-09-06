@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6735AECAC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9245AEB76
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241120AbiIFORQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
+        id S240709AbiIFNzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241446AbiIFONI (ORCPT
+        with ESMTP id S239208AbiIFNwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:13:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3ADA7F256;
-        Tue,  6 Sep 2022 06:48:06 -0700 (PDT)
+        Tue, 6 Sep 2022 09:52:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1DE80025;
+        Tue,  6 Sep 2022 06:40:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C37D6155C;
-        Tue,  6 Sep 2022 13:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F55DC433C1;
-        Tue,  6 Sep 2022 13:46:58 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EB099CE1784;
+        Tue,  6 Sep 2022 13:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E80C433C1;
+        Tue,  6 Sep 2022 13:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662472019;
-        bh=rmr0OPXIcl+mgDzTOS7iRtKs6jMeOuYNXsRGEAfxmQw=;
+        s=korg; t=1662471613;
+        bh=3wsj5esTvo6viuU3KgaxbK82FTQMpAjVMt8kheUTXX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LlfANH3/+vn6WCy1kiBTwV0x3OCFcGLApveyaiPLF39VjrL8ZuVYIhou8IS34eE5g
-         vl36mcEIhfOmnsq6yDFU+VTQ5A6hOSaQe2lZIUt4aMrj9e4o2sH5VJ/Go0sO1YBKms
-         B1ZJ2VIJVgfZxGXZn/UqB6Vysxtj3cGv5+4p3xzU=
+        b=BQtqwCX+BrygWuYiBBQn1//BasIMslpuc88jn8IMQ2gPO6AawxC9NpnZcLaIyLpGK
+         3gnP6DJIhdA+x74jNCDcaRUo7P7YYsHABC6h/hENRTyNzKEDsJ87lWJz4vRmtjqQHO
+         XnIKmWppMNrbOeRGsqz5TAi58OIHjgn8dWeb43K4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.19 119/155] Revert "usb: typec: ucsi: add a common function ucsi_unregister_connectors()"
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        stable <stable@kernel.org>
+Subject: [PATCH 5.15 086/107] usb: xhci-mtk: relax TT periodic bandwidth allocation
 Date:   Tue,  6 Sep 2022 15:31:07 +0200
-Message-Id: <20220906132834.486466315@linuxfoundation.org>
+Message-Id: <20220906132825.451104476@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
-References: <20220906132829.417117002@linuxfoundation.org>
+In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
+References: <20220906132821.713989422@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,128 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-commit 5f73aa2cf8bef4a39baa1591c3144ede4788826e upstream.
+commit 8b13ea05117ffad4727b0971ed09122d5c91c4dc upstream.
 
-The recent commit 87d0e2f41b8c ("usb: typec: ucsi: add a common
-function ucsi_unregister_connectors()") introduced a regression that
-caused NULL dereference at reading the power supply sysfs.  It's a
-stale sysfs entry that should have been removed but remains with NULL
-ops.  The commit changed the error handling to skip the entries after
-a NULL con->wq, and this leaves the power device unreleased.
+Currently uses the worst case byte budgets on FS/LS bus bandwidth,
+for example, for an isochronos IN endpoint with 192 bytes budget, it
+will consume the whole 5 uframes(188 * 5) while the actual FS bus
+budget should be just 192 bytes. It cause that many usb audio headsets
+with 3 interfaces (audio input, audio output, and HID) cannot be
+configured.
+To improve it, changes to use "approximate" best case budget for FS/LS
+bandwidth management. For the same endpoint from the above example,
+the approximate best case budget is now reduced to (188 * 2) bytes.
 
-For addressing the regression, the straight revert is applied here.
-Further code improvements can be done from the scratch again.
-
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1202386
-Link: https://lore.kernel.org/r/87r11cmbx0.wl-tiwai@suse.de
-Fixes: 87d0e2f41b8c ("usb: typec: ucsi: add a common function ucsi_unregister_connectors()")
-Cc: <stable@vger.kernel.org>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/20220823065455.32579-1-tiwai@suse.de
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220819080556.32215-1-chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/typec/ucsi/ucsi.c |   53 +++++++++++++++++++-----------------------
- 1 file changed, 24 insertions(+), 29 deletions(-)
+ drivers/usb/host/xhci-mtk-sch.c |   11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1200,32 +1200,6 @@ out_unlock:
- 	return ret;
- }
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -476,7 +476,6 @@ static int check_fs_bus_bw(struct mu3h_s
  
--static void ucsi_unregister_connectors(struct ucsi *ucsi)
--{
--	struct ucsi_connector *con;
--	int i;
--
--	if (!ucsi->connector)
--		return;
--
--	for (i = 0; i < ucsi->cap.num_connectors; i++) {
--		con = &ucsi->connector[i];
--
--		if (!con->wq)
--			break;
--
--		cancel_work_sync(&con->work);
--		ucsi_unregister_partner(con);
--		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
--		ucsi_unregister_port_psy(con);
--		destroy_workqueue(con->wq);
--		typec_unregister_port(con->port);
--	}
--
--	kfree(ucsi->connector);
--	ucsi->connector = NULL;
--}
--
- /**
-  * ucsi_init - Initialize UCSI interface
-  * @ucsi: UCSI to be initialized
-@@ -1234,6 +1208,7 @@ static void ucsi_unregister_connectors(s
-  */
- static int ucsi_init(struct ucsi *ucsi)
+ static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
  {
-+	struct ucsi_connector *con;
- 	u64 command;
- 	int ret;
- 	int i;
-@@ -1264,7 +1239,7 @@ static int ucsi_init(struct ucsi *ucsi)
- 	}
+-	u32 extra_cs_count;
+ 	u32 start_ss, last_ss;
+ 	u32 start_cs, last_cs;
  
- 	/* Allocate the connectors. Released in ucsi_unregister() */
--	ucsi->connector = kcalloc(ucsi->cap.num_connectors,
-+	ucsi->connector = kcalloc(ucsi->cap.num_connectors + 1,
- 				  sizeof(*ucsi->connector), GFP_KERNEL);
- 	if (!ucsi->connector) {
- 		ret = -ENOMEM;
-@@ -1288,7 +1263,15 @@ static int ucsi_init(struct ucsi *ucsi)
- 	return 0;
+@@ -512,18 +511,12 @@ static int check_sch_tt(struct mu3h_sch_
+ 		if (last_cs > 7)
+ 			return -ESCH_CS_OVERFLOW;
  
- err_unregister:
--	ucsi_unregister_connectors(ucsi);
-+	for (con = ucsi->connector; con->port; con++) {
-+		ucsi_unregister_partner(con);
-+		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
-+		ucsi_unregister_port_psy(con);
-+		if (con->wq)
-+			destroy_workqueue(con->wq);
-+		typec_unregister_port(con->port);
-+		con->port = NULL;
-+	}
+-		if (sch_ep->ep_type == ISOC_IN_EP)
+-			extra_cs_count = (last_cs == 7) ? 1 : 2;
+-		else /*  ep_type : INTR IN / INTR OUT */
+-			extra_cs_count = 1;
+-
+-		cs_count += extra_cs_count;
+ 		if (cs_count > 7)
+ 			cs_count = 7; /* HW limit */
  
- err_reset:
- 	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
-@@ -1402,6 +1385,7 @@ EXPORT_SYMBOL_GPL(ucsi_register);
- void ucsi_unregister(struct ucsi *ucsi)
- {
- 	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
-+	int i;
+ 		sch_ep->cs_count = cs_count;
+-		/* one for ss, the other for idle */
+-		sch_ep->num_budget_microframes = cs_count + 2;
++		/* ss, idle are ignored */
++		sch_ep->num_budget_microframes = cs_count;
  
- 	/* Make sure that we are not in the middle of driver initialization */
- 	cancel_delayed_work_sync(&ucsi->work);
-@@ -1409,7 +1393,18 @@ void ucsi_unregister(struct ucsi *ucsi)
- 	/* Disable notifications */
- 	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
- 
--	ucsi_unregister_connectors(ucsi);
-+	for (i = 0; i < ucsi->cap.num_connectors; i++) {
-+		cancel_work_sync(&ucsi->connector[i].work);
-+		ucsi_unregister_partner(&ucsi->connector[i]);
-+		ucsi_unregister_altmodes(&ucsi->connector[i],
-+					 UCSI_RECIPIENT_CON);
-+		ucsi_unregister_port_psy(&ucsi->connector[i]);
-+		if (ucsi->connector[i].wq)
-+			destroy_workqueue(ucsi->connector[i].wq);
-+		typec_unregister_port(ucsi->connector[i].port);
-+	}
-+
-+	kfree(ucsi->connector);
- }
- EXPORT_SYMBOL_GPL(ucsi_unregister);
- 
+ 		/*
+ 		 * if interval=1, maxp >752, num_budge_micoframe is larger
 
 

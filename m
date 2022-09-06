@@ -2,93 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8654E5AF81C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EE05AF81D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiIFWsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 18:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S229706AbiIFWsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 18:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiIFWsJ (ORCPT
+        with ESMTP id S229472AbiIFWsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 18:48:09 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A1998D2F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 15:48:07 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id nc14so26469104ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 15:48:07 -0700 (PDT)
+        Tue, 6 Sep 2022 18:48:40 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1959A9A1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 15:48:39 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id v4so11874026pgi.10
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 15:48:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=c0YMp7uUNJ8VX80tzikEyZ18fVbZxRq+/0RRSygWun0=;
-        b=i2xifLi81jQUR6j2eM6J5pMZzoLSXSSQCTE9cSVu7548RZTviW1YOQaTkmMBxJzXCK
-         l5q3ZQrfkq2Wfo0BMEMSjVDpGcEdHIOc9qOkyus87LNdtMsTAmjppY2fN5clAZWU8K0c
-         2c4rXSkp4HjI9ESQL8A/Dvi60qywFAt4LYdJw=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=rOiaJADgh36Nl6+5Yk+6tnFh6F6MctRkw6enAUS/Q0w=;
+        b=ZhLxHhf2O9zAE4iA4AOa/6Q9ENPkNae9PE/ZvK3k/PGxPwMvQihxpKAkubttgODLPG
+         bwl/xZ5+PDffT1iOA9X92UKsRr2bQ3THjV0lI33kStevsvpNCzUG/qZTfqP3u2rvMMWN
+         s42gp1sF1l8uqOCBqMnylL3u2V2oVCDHYsHGTF8Lii0flrr6dmv3+nr/tD9i+Ysrx5io
+         g/yWz5FR2+4fgfyYSHpDFFeP0mElBOBaK9Hv9Q6rpGNqyL1jaaDTuUTQL34KDMO8mTPZ
+         95K9TSvV4pu7/ANiQQS23gosV1q+B5KhuQJrhA47j02xo06UUW9lpHEbGTbjlmMzRPpd
+         3RfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=c0YMp7uUNJ8VX80tzikEyZ18fVbZxRq+/0RRSygWun0=;
-        b=BwX+zlT+YAV4Cp/tDhNJe9rKaCWWU79oaTGsHlxEfp8L3TQLbYjSDJgTc/6jhmzURN
-         KkndFuzk1Wq6KiMDwx7VWs+sFuQM9iN4IZhaP2tWcR3gBUfgMsUYxZ+KaKE6bUKdexgA
-         hUSzo7UrLevz+KNd4Y7tYCZLGczIbFMznO6tJU7nuDiEYHzgHyOcnB1j/k3FK0jbCPlI
-         HFYz+5JybLv8HPp6J+gzBfLMtPbXOBoP/FGQQJVkjEhq9j6JTfnnzjg0JnVUO4MXas3H
-         45JGaoNcf2M9h095ysxOqfH0VUT7CRNGvpbL45MpSYaBtC/9WaSRHNaa+66/GJ3QfR0i
-         PhhA==
-X-Gm-Message-State: ACgBeo091dJIcDPZ2WH7Gi526JdD/c/kOy3NeEwFvBOshVm3u+M/cdvm
-        qwMbtL4FjU+U+BfPi4lrGvANNTRrNVhMPDrU
-X-Google-Smtp-Source: AA6agR4/bGq4Zko4QWr22bYG/tancogTIxOOIdX5lMEmAY2IBguPqjIJyBUoRHSrpmArlgY/6wJqeQ==
-X-Received: by 2002:a17:907:96a2:b0:741:4bf7:ec18 with SMTP id hd34-20020a17090796a200b007414bf7ec18mr429534ejc.95.1662504486551;
-        Tue, 06 Sep 2022 15:48:06 -0700 (PDT)
-Received: from [192.168.1.149] ([80.208.71.65])
-        by smtp.gmail.com with ESMTPSA id ed3-20020a056402294300b0044f02c3d3bdsm543967edb.32.2022.09.06.15.48.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 15:48:05 -0700 (PDT)
-Message-ID: <c8023c22-d3a1-f7de-0d86-0f06c60bc165@rasmusvillemoes.dk>
-Date:   Wed, 7 Sep 2022 00:48:05 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=rOiaJADgh36Nl6+5Yk+6tnFh6F6MctRkw6enAUS/Q0w=;
+        b=5+9Ajuhei+WQpfewxvnZVxOzTxxaH36/U92MsnfU+9hLUAnFlokB71/DWd8Hnhq1X9
+         5O01XL//scSnhpR3J/aEYvUEI223uWqiiHHbcjQVkX4NN7UwO5h5nDrw2+gmUdCFaId7
+         KtGg7cRmlQxeX6oxacH1zvthwEQSiFjv+OQ1zwwYr/orw8LP2aJaN+g6mGgaY0cfO1vy
+         wYHD1RfKbaMB+J4VLCBtvIeSUIxqKq+qdgNve+AqZYwbDR//h+7/IwOTqx7QkEx46kmc
+         eNCsagHieOjcDfYal5znp8dBQb38TlEz00vPfeLxHCYwnJnQvG5l43smft1JN/BCiXjj
+         HYeA==
+X-Gm-Message-State: ACgBeo3HWvXG8mUsa+zqfIhCFU/jHP5b8GhOOv9oEUc+kXTFC2TVFuSL
+        vUeZ9EmcBk6vhu6YL5PgY9r0bk/NbfFNvoC4SGMjfA==
+X-Google-Smtp-Source: AA6agR6ayjA9kHK8UdphQGfYeNZk6AAcj3QEos1OjluB4ADy4xnwjM60v2A3WubD/z3eD+tOWC+JWY1i6uVzqV5Re2o=
+X-Received: by 2002:a62:e91a:0:b0:537:e307:fab0 with SMTP id
+ j26-20020a62e91a000000b00537e307fab0mr885302pfh.37.1662504518627; Tue, 06 Sep
+ 2022 15:48:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] testing/selftests: Add tests for the is_signed_type()
- macro
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20220826162116.1050972-1-bvanassche@acm.org>
- <20220826162116.1050972-2-bvanassche@acm.org>
- <d2399574-ec64-7765-b6ef-1e792a7e0d5c@rasmusvillemoes.dk>
- <481c1c85-3af8-da6f-b532-598a004b102d@acm.org>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <481c1c85-3af8-da6f-b532-598a004b102d@acm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220819174659.2427983-1-vannapurve@google.com>
+ <20220819174659.2427983-5-vannapurve@google.com> <Ywa9T+jKUpaHLu/l@google.com>
+In-Reply-To: <Ywa9T+jKUpaHLu/l@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Tue, 6 Sep 2022 15:48:27 -0700
+Message-ID: <CAGtprH9zVDP4ur2mStDVAPU3M1MmvdgFQz7uTh6hAWjRL0Xbcw@mail.gmail.com>
+Subject: Re: [RFC V3 PATCH 4/6] selftests: kvm: x86: Execute hypercall as per
+ the cpu
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        dave.hansen@linux.intel.com, "H . Peter Anvin" <hpa@zytor.com>,
+        shuah <shuah@kernel.org>, yang.zhong@intel.com,
+        drjones@redhat.com, Ricardo Koller <ricarkol@google.com>,
+        Aaron Lewis <aaronlewis@google.com>, wei.w.wang@intel.com,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Jun Nakajima <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Quentin Perret <qperret@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Marc Orr <marcorr@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Gonda <pgonda@google.com>,
+        "Nikunj A. Dadhania" <nikunj@amd.com>,
+        Austin Diviness <diviness@google.com>, maz@kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        maciej.szmigiero@oracle.com, Mingwei Zhang <mizhang@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 00.42, Bart Van Assche wrote:
+On Wed, Aug 24, 2022 at 5:07 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Fri, Aug 19, 2022, Vishal Annapurve wrote:
+> > Add support for executing vmmcall/vmcall instruction on amd/intel cpus.
+> > In general kvm patches the instruction according to the cpu
+> > implementation at runtime. While executing selftest vms from private
+> > memory KVM will not be able to update the private memory of the guest.
+> >
+> > Hypercall parameters are fixed to explicitly populate hypercall number
+> > in eax. Otherwise inlined function calls to kvm_hypercall would call
+> > vmmcall/vmcall instruction without updating eax with hypercall number.
+>
+> Can you send a seperate non-RFC series to clean up the selftests mess?  kvm_hypercall()
+> isn't the only culprit.
+>
+>   git grep \"vmcall | wc -l
+>   16
+>
+> I'm pretty sure things work only because of KVM's dubious behavior of patching
+> VMCALL/VMMCALL by default.
+>
+> Note, svm_vmcall_test.c intentionally uses the wrong instructions and shouldn't
+> be converted.  Actually, we can and should just delete that test, it's superseded
+> by the wonderfully named fix_hypercall_test.
+>
+> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> > ---
+> >  .../testing/selftests/kvm/lib/x86_64/processor.c  | 15 +++++++++++++--
+> >  1 file changed, 13 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > index 53b115876417..09d757a0b148 100644
+> > --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > @@ -1254,10 +1254,21 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+> >                      uint64_t a3)
+> >  {
+> >       uint64_t r;
+> > +     static bool is_cpu_checked;
+> > +     static bool is_cpu_amd;
+> >
+> > -     asm volatile("vmcall"
+> > +     if (!is_cpu_checked)
+> > +             is_cpu_amd = is_amd_cpu();
+>
+> This can be done using a single int, e.g.
+>
+>         static bool is_cpu_amd = -1;
+>
+>         if (is_cpu_amd < 0)
+>                 is_cpu_amd = is_amd_cpu();
+>
+> Although... what if we declare main() in lib/kvm_util.c (or maybe a dedicated
+> file?) and rename all tests to use __main()?  Then add an arch hook to do global
+> initialization and avoid the "did we check CPUID?!?!?" altogether.
+>
+> That would allow us to dedup all of the hilarious copy paste:
+>
+>         /* Tell stdout not to buffer its content */
+>         setbuf(stdout, NULL);
+>
+> and we could turn is_amd_cpu() and is_intel_cpu() into bools.
+>
+> E.g.
+>
+> int main(int argc, char *argv[])
+> {
+>         /* Tell stdout not to buffer its content */
+>         setbuf(stdout, NULL);
+>
+>         kvm_arch_main();
+>
+>         return __main(argc, argv);
+> }
+>
+> void kvm_arch_main(void)
+> {
+>         is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
+>         is_cpu_intel = cpu_vendor_string_is("AuthenticAMD");
+> }
+>
+>
+> And then we just need macro magic to emit the right VMCALL/VMMCALL instruction.
 
-> Since I would like to implement the above suggestion I tried to look up
-> other uses of the __UNSIGNED_CHAR__ macro. However, I couldn't find any.
-> Did I perhaps do something wrong?
->  $ git grep -w __UNSIGNED_CHAR__ origin/master | wc
->       0       0       0
+Thanks Sean for the feedback here. I have posted a separate series
+addressing your comments:
+https://lore.kernel.org/all/20220903012849.938069-4-vannapurve@google.com/T/
 
-No, sorry, I did. It's __CHAR_UNSIGNED__ . Here's the description from
-'info cpp':
-
-'__CHAR_UNSIGNED__'
-     GCC defines this macro if and only if the data type 'char' is
-     unsigned on the target machine.
-
-Rasmus
+Regards,
+Vishal

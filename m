@@ -2,132 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97C15AE367
+	by mail.lfdr.de (Postfix) with ESMTP id 409245AE365
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239570AbiIFIrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 04:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
+        id S239259AbiIFIrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239315AbiIFIqw (ORCPT
+        with ESMTP id S239501AbiIFIr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:46:52 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BE578BCE;
-        Tue,  6 Sep 2022 01:42:59 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id b16so14186390edd.4;
-        Tue, 06 Sep 2022 01:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=tP5HePAM+ajxYSe0bk8z7pkG3VRLXsVkQqpZO2Z6iCs=;
-        b=cg37L4Xf6MHEQ5UsGmC374ty8ZFu/cwYIOiE6D86wCjCJ5gXtGccpY3Zt2OsFeacBY
-         +5j+mpIE7guBk5ukQLA3aVlTCHL06B4bNI6G9RG4s/fR3NvxUYtogVHFQTBdr8EDW3YJ
-         XA29EJ/VDnWTYJ0MZp0ntC7Tpg8ipPbezaSXMzhrYKpNbfCMsxU0swVHNPN+aO/ADBg8
-         LqR7FLsi1+Wee96hx8dKLIzTqNEAotlyc0c9LhoUlPGe6pTM/gRpPOghzmUkLZN5CNxw
-         w/FekFeb21GTV0nI6/7UiXT/5ctdGMENQfXigX8vjm1nfGnB1D9b9q2jAyhxSDEPfpNv
-         sFTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=tP5HePAM+ajxYSe0bk8z7pkG3VRLXsVkQqpZO2Z6iCs=;
-        b=nov9pV9OX2FOp1zGigrgB15W7bpdWF0SkmlfLgiVf5sEYm83ehElPZNzJv3fICtUzG
-         OTD7ojZDjOAh82YcBs9I3sAcllf0dcroeMJyOhL3jz1mFZ6fYz9KjgUOIWT/AkHuwflS
-         TIH0GD0+KlK4avSdXrJhEdDo45gmVBfBmTsJOphC1tx3Qusz4HaJziIGsy+hVpirDsIr
-         LT8wIHod9DmqRjPBK4WhbSQvxCjf+UHJH3HIMkxr5404WzPu38UMO2Mw1w3SY0pJwZv9
-         ktyhZY15CJNVs4wqFhqTkCCja4J2gOrrQoofrOvbz5SU7tnKDKRrsH3x5mzcbjFxUAT8
-         sLtg==
-X-Gm-Message-State: ACgBeo18/gVMqdcSiYpnP6rQiJqUFgUprMjGZ/f5JjHn1WEnkdB2WQtN
-        kLyV2w7SsBejOL8ITcO5jkA=
-X-Google-Smtp-Source: AA6agR5bS+4j8YwEOyVkGGsIIAHnsSrC6HHryFZeb/Zdcirth3itz7A7cjQlXUl/gL6+JEFOkNzAHw==
-X-Received: by 2002:a05:6402:294c:b0:446:fb0:723b with SMTP id ed12-20020a056402294c00b004460fb0723bmr47480266edb.258.1662453773901;
-        Tue, 06 Sep 2022 01:42:53 -0700 (PDT)
-Received: from [192.168.74.101] ([77.78.20.135])
-        by smtp.gmail.com with ESMTPSA id ka15-20020a170907920f00b0073d68db09ecsm6197261ejb.23.2022.09.06.01.42.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 01:42:53 -0700 (PDT)
-Message-ID: <da038cb1-bb4b-4e7c-f17d-99e179c61741@gmail.com>
-Date:   Tue, 6 Sep 2022 11:42:53 +0300
+        Tue, 6 Sep 2022 04:47:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1398D19C21
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 01:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2Bbm1s4tGmDwrvOXctiEn8DCONI5zA4ymbplPiGKl7g=; b=fTY3AicCz/iJ6M/ACyUBU1cF3G
+        5K/9gNAkvGSnn6V0wOh9V3x37SeDqEwiGm2sqO00OzDRE6Pp1RebFfrqPgawrLcUzZ8p6j380BR/g
+        XDaLCmeBonTKixdsqd9i1c4NLrt+i2XoX8d/noIZYlU/aynyKafXBFY8oN7zYb3SuHMIbe5gAPXSX
+        +qUJHfkuAMan7h22A76G++UyNrbxfQVhsApX0FfKuRCV4t+NEFaB9BzdUdww6N0t717360RjrJRFR
+        S7lIG8COLK3H1cMEx6qkhFK1YFxIrxkUwHZGSlcDpDMWWVUJo8n5TercB2uAPMXRBN1odJ7gxE9nj
+        lPFmiv5g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVUBm-00AEwS-Fa; Tue, 06 Sep 2022 08:44:10 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8084730030F;
+        Tue,  6 Sep 2022 10:44:08 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2DFDD2012A05B; Tue,  6 Sep 2022 10:44:08 +0200 (CEST)
+Date:   Tue, 6 Sep 2022 10:44:08 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Borislav Petkov <bp@suse.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: CONFIG_RETHUNK int3 filling prevents kprobes in function body
+Message-ID: <YxcIWIK4MTd1EohH@hirez.programming.kicks-ass.net>
+References: <20220904230713.a461f8fe85329663226c755f@kernel.org>
+ <YxYRHHuTHjzgCuE8@hirez.programming.kicks-ass.net>
+ <YxYbPTmN1TCp4En5@hirez.programming.kicks-ass.net>
+ <20220906103329.a2e79b1763bad299c0e1f11e@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 9/9] arm64: dts: qcom: sm4250: Add support for
- oneplus-billie2
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org
-References: <20220903174150.3566935-1-iskren.chernev@gmail.com>
- <20220903174150.3566935-10-iskren.chernev@gmail.com>
- <e655cddd-677b-f277-667f-48107671db2a@linaro.org>
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-In-Reply-To: <e655cddd-677b-f277-667f-48107671db2a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906103329.a2e79b1763bad299c0e1f11e@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 06, 2022 at 10:33:29AM +0900, Masami Hiramatsu wrote:
+> On Mon, 5 Sep 2022 17:52:29 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > On Mon, Sep 05, 2022 at 05:09:16PM +0200, Peter Zijlstra wrote:
+> > 
+> > > > This is because kprobes decodes function body to ensure the probed address
+> > > > is an instruction boundary, and if it finds the 0xcc (int3), it stops
+> > > > decoding and reject probing because the int3 is usually used for a
+> > > > software breakpoint and is replacing some other instruction. Without
+> > > > recovering the instruction, it can not continue decoding safely.
+> > > 
+> > > I can't follow this logic. Decoding the single byte int3 instruction is
+> > > trivial. If you want a sanity check, follow the branches you found while
+> > > decoding the instruction starting at +0.
+> > 
+> > Specifically, kprobe is the only one scribbling random [*] instructions
+> > with int3 in kernel text, so if kprobes doesn't know about the int3, it
+> > must be padding.
+> 
+> No, kgdb is also handles int3 for its breakpoint. Of course we can
+> ignore it or ask kgdb to expose the API to decode it.
 
-
-On 9/6/22 11:33, Krzysztof Kozlowski wrote:
-> On 03/09/2022 19:41, Iskren Chernev wrote:
->> Add initial support for OnePlus Nord N100, based on SM4250. Currently
->> working:
->> - boots
->> - usb
->> - buildin flash storage (UFS)
->> - SD card reader
->>
->> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
->> ---
->> Remaining issues from make dtbs_check:
->> - rpm-requests: it doesn't like the pm6125-regulators subnode. Every other
->>   DTS I checked is written in this way.
->
-> Yes, I sent patches for it, already merged, so please rebase on linux-next.
->
-> https://lore.kernel.org/all/20220828084341.112146-1-krzysztof.kozlowski@linaro.org/
-
-Great, thanks!
-
->> +
->> +	clocks {
->> +		xo-board {
->
-> These should be overridden by label, not full node path.
-
-Will do.
-
->> +&rpm_requests {
->> +	pm6125-regulators {
->
-> Please rebase and test with
-> Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-
-I will, I'm just waiting for Konrad to say what to do about the reserved-memory
-nodes. For some reason mainline doesn't use alloc-ranges (dynamic) regions. On
-the other hand all of the dynamic ranges are not used ATM, so I can just drop
-them?
-
-> Best regards,
-> Krzysztof
+I'm thinking kgdb has worse issues anyway. Much of it seems to be
+wishful thinking.

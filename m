@@ -2,70 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157915AE66A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996615AE67C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239371AbiIFLVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 07:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S239712AbiIFLWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 07:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239081AbiIFLVr (ORCPT
+        with ESMTP id S239667AbiIFLWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 07:21:47 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8743491DD;
-        Tue,  6 Sep 2022 04:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662463306; x=1693999306;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=3ZFIWu1iVTrSZh9swgEip3UeXgSl7SQaM85kMXnUI04=;
-  b=PEQF6nsdxKlfhRhl75RTpa2gVhAX0ynjXbhyxy9rbQTHrpmTaZf2bCrS
-   Eya6AwoNFJbAhjhbFvDUf21IW5pjz1BPSd63p9+eBa1d3cJBFk3Ed6SeA
-   DAov27PhQNR6M9mklD54ooDjIJQsYbEZah9sAfpfHehViFV1lX8oDjbQh
-   uE7DyLM8o6EndAwF/6rlO2qZ6t0oqEFOMcWhF6HxnR4GXVPprx13Ma7K5
-   NaiedF1aKzIsdgtYxVPeoWNP54P+TdTkXLXyopcnD5nAtQM9//mHGFK5J
-   uZBnggahPYWrBizKJvze7s5c8cvnnCznvicLrQrc1yAd6v1z3boOlfgWa
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="297353054"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="297353054"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 04:21:46 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="644132421"
-Received: from holmesda-mobl.ger.corp.intel.com (HELO [10.213.204.21]) ([10.213.204.21])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 04:21:43 -0700
-Message-ID: <691e636f-07d6-f4d3-6d83-29a3834ac1a2@linux.intel.com>
-Date:   Tue, 6 Sep 2022 12:21:41 +0100
+        Tue, 6 Sep 2022 07:22:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765D272FE0;
+        Tue,  6 Sep 2022 04:22:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35A95B815F8;
+        Tue,  6 Sep 2022 11:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96AB8C433D6;
+        Tue,  6 Sep 2022 11:22:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662463363;
+        bh=LcA5wsbnQSAf4Q35s/BMNpU/e5dnpMXBEsorcDQH50Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=asT2PZ9Sz8C18pY+JCsK8zkaNDM6v5Yr6yCEQhtkzzQhvdTJ2FnwRoU4QWqogxRF4
+         JNXZ5P7+xcwmsTeelHAVZKYKxyRewATLvH45HnWPpJM6cUJCC781IEaAqVl2z5rBpj
+         jKzJEoWjRhelCC2nn/wEXZOKmQciA7SsalUDq9ks=
+Date:   Tue, 6 Sep 2022 13:22:40 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Sasha Levin <sashal@kernel.org>, stable-commits@vger.kernel.org,
+        johan+linaro@kernel.org, Felipe Balbi <balbi@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Patch "usb: dwc3: qcom: fix peripheral and OTG suspend" has been
+ added to the 5.19-stable tree
+Message-ID: <YxctgOXYI3FcXv4H@kroah.com>
+References: <YxXz7LBh5Y4DSd4W@sashalap>
+ <YxX15QkMDV+0amk8@hovoldconsulting.com>
+ <YxX29eiH0qyyRk9x@sashalap>
+ <YxX4QT6eeRiatmX+@hovoldconsulting.com>
+ <YxX7R/EAynZC/iGr@sashalap>
+ <YxYO+u0rAg029yNl@hovoldconsulting.com>
+ <YxYrS3z/nYFYzoTh@sashalap>
+ <YxbfJqPb8x0WjmqR@hovoldconsulting.com>
+ <YxbsvTeuodsiMiop@kroah.com>
+ <YxbwMJkMuz7PDX1l@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 4/4] dma-buf: Check status of enable-signaling bit on
- debug
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220905163502.4032-1-Arvind.Yadav@amd.com>
- <20220905163502.4032-5-Arvind.Yadav@amd.com>
- <f2e1367f-b056-b2af-365c-8ae4ef03f008@amd.com>
- <ec41b299-4280-d8e4-7ab0-23b5ea6ad401@linux.intel.com>
- <de799b93-1b55-c420-61d9-ad8fa926c7d2@amd.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <de799b93-1b55-c420-61d9-ad8fa926c7d2@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxbwMJkMuz7PDX1l@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,176 +62,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 06/09/2022 11:43, Christian König wrote:
-> Am 06.09.22 um 12:20 schrieb Tvrtko Ursulin:
->>
->> On 06/09/2022 09:39, Christian König wrote:
->>> Am 05.09.22 um 18:35 schrieb Arvind Yadav:
->>>> The core DMA-buf framework needs to enable signaling
->>>> before the fence is signaled. The core DMA-buf framework
->>>> can forget to enable signaling before the fence is signaled.
->>>
->>> This sentence is a bit confusing. I'm not a native speaker of English 
->>> either, but I suggest something like:
->>>
->>> "Fence signaling must be enable to make sure that the 
->>> dma_fence_is_signaled() function ever returns true."
->>>
->>>> To avoid this scenario on the debug kernel, check the
->>>> DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT status bit before checking
->>>> the signaling bit status to confirm that enable_signaling
->>>> is enabled.
->>>
->>> This describes the implementation, but we should rather describe the 
->>> background of the change. The implementation should be obvious. 
->>> Something like this maybe:
->>>
->>> "
->>> Since drivers and implementations sometimes mess this up enforce 
->>> correct behavior when DEBUG_WW_MUTEX_SLOWPATH is used during debugging.
->>>
->>> This should make any implementations bugs resulting in not signaled 
->>> fences much more obvious.
->>> "
->>
->> I think I follow the idea but am not sure coupling (well "coupling".. 
->> not really, but cross-contaminating in a way) dma-fence.c with a 
->> foreign and effectively unrelated concept of a ww mutex is the best way.
->>
->> Instead, how about a dma-buf specific debug kconfig option?
+On Tue, Sep 06, 2022 at 09:01:04AM +0200, Johan Hovold wrote:
+> On Tue, Sep 06, 2022 at 08:46:21AM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Sep 06, 2022 at 07:48:22AM +0200, Johan Hovold wrote:
+> > > On Mon, Sep 05, 2022 at 01:00:59PM -0400, Sasha Levin wrote:
+> > > > On Mon, Sep 05, 2022 at 05:00:10PM +0200, Johan Hovold wrote:
 > 
-> Yeah, I was thinking about that as well.
-
-Cool, lets see about the specifics below and then decide.
-  
-> The slowpath config option was just at hand because when you want to 
-> test the slowpath you want to test this here as well.
+> > > > >Just pick
+> > > > >
+> > > > >	a872ab303d5d ("usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup")
+> > > > >
+> > > > >which was the only patch I had marked for stable and fix up the trivial
+> > > > >context change (an unrelated function has been added after the new
+> > > > >helper in mainline).
+> > > > 
+> > > > Okay, this should be done. Please take a look at the queue to confirm.
+> > > 
+> > > I only checked the pending-5.19 branch, but that one still has 
+> > > 
+> > > 	360e8230516d ("usb: dwc3: qcom: Add helper functions to enable,disable wake irqs")
+> > > 
+> > > which should be dropped as well.
+> > 
+> > Now dropped.  It was needed for a different dwc3 patch, so I dropped
+> > that too and will figure them out later today...
 > 
->>
->> Condition would then be, according to my understanding of the rules 
->> and expectations, along the lines of:
->>
->> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->> index 775cdc0b4f24..147a9df2c9d0 100644
->> --- a/include/linux/dma-fence.h
->> +++ b/include/linux/dma-fence.h
->> @@ -428,6 +428,17 @@ dma_fence_is_signaled_locked(struct dma_fence 
->> *fence)
->>  static inline bool
->>  dma_fence_is_signaled(struct dma_fence *fence)
->>  {
->> +#ifdef CONFIG_DEBUG_DMAFENCE
->> +       /*
->> +        * Implementations not providing the enable_signaling callback 
->> are
->> +        * required to always have signaling enabled or fences are not
->> +        * guaranteed to ever signal.
->> +        */
+> I believe that wasn't a real dependency either and only changed the
+> context somewhat.
 > 
-> Well that comment is a bit misleading. The intention of the extra check 
-> is to find bugs in the frontend and not the backend.
-
-By backend you mean drivers/dma-buf/dma-fence.c and by front end driver specific implementations? Or simply users for dma-fence?
-
-Could be that I got confused.. I was reading these two:
-
-
-	 * This callback is optional. If this callback is not present, then the
-	 * driver must always have signaling enabled.
-	 */
-	bool (*enable_signaling)(struct dma_fence *fence);
-
-And dma_fence_is_signaled:
-
-  * Returns true if the fence was already signaled, false if not. Since this
-  * function doesn't enable signaling, it is not guaranteed to ever return
-  * true if dma_fence_add_callback(), dma_fence_wait() or
-  * dma_fence_enable_sw_signaling() haven't been called before.
-
-Right, I think I did get confused, apologies. What I was thinking was probably two separate conditions:
-
-  static inline bool
-  dma_fence_is_signaled(struct dma_fence *fence)
-  {
-+#ifdef CONFIG_DEBUG_DMAFENCE
-+       if (WARN_ON_ONCE(!fence->ops->enable_signaling &&
-+                        !test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags)))
-+               return false;
-+
-+       if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
-+               return false;
-+#endif
-+
-         if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
-                 return true;
-
-Not sure "is signaled" is the best place for the first one or that it should definitely be added.
-
-Regards,
-
-Tvrtko
-
-> In other words somewhere in the drm_syncobj code we have a 
-> dma_fence_is_signaled() call without matching 
-> dma_fence_enable_sw_signaling().
+> The only dwc3 fix that should be needed is the one mentioned above:
 > 
-> Regards,
-> Christian.
+> 	a872ab303d5d ("usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup")
 > 
->> + if (!fence->ops->enable_signaling &&
->> +           !test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
->> +               return false;
->> +#endif
->> +
->>         if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>                 return true;
->>
->> Thoughts?
->>
->> Regards,
->>
->> Tvrtko
->>
->>>
->>>>
->>>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->>>
->>> With the improved commit message this patch is Reviewed-by: Christian 
->>> König <christian.koenig@amd.com>
->>>
->>> Regards,
->>> Christian.
->>>
->>>> ---
->>>>
->>>> Changes in v1 :
->>>> 1- Addressing Christian's comment to replace
->>>> CONFIG_DEBUG_WW_MUTEX_SLOWPATH instead of CONFIG_DEBUG_FS.
->>>> 2- As per Christian's comment moving this patch at last so
->>>> The version of this patch is also changed and previously
->>>> it was [PATCH 1/4]
->>>>
->>>>
->>>> ---
->>>>   include/linux/dma-fence.h | 5 +++++
->>>>   1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->>>> index 775cdc0b4f24..ba1ddc14c5d4 100644
->>>> --- a/include/linux/dma-fence.h
->>>> +++ b/include/linux/dma-fence.h
->>>> @@ -428,6 +428,11 @@ dma_fence_is_signaled_locked(struct dma_fence 
->>>> *fence)
->>>>   static inline bool
->>>>   dma_fence_is_signaled(struct dma_fence *fence)
->>>>   {
->>>> +#ifdef CONFIG_DEBUG_WW_MUTEX_SLOWPATH
->>>> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
->>>> +        return false;
->>>> +#endif
->>>> +
->>>>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>>>           return true;
->>>
-> 
+> which is self-contained, even if the context (as in unrelated functions
+> following the helper) may need to be adjusted.
+
+Ok, I've tried to apply the dwc3 patches that were tagged for stable
+now, and you should have some FAILED emails showing what did not apply.
+
+thanks,
+
+greg k-h

@@ -2,264 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE2B5AE1F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BCA5AE218
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233612AbiIFIJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 04:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
+        id S233430AbiIFILI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238774AbiIFIIc (ORCPT
+        with ESMTP id S233951AbiIFIKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:08:32 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5BB6D555;
-        Tue,  6 Sep 2022 01:08:31 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gb36so21329023ejc.10;
-        Tue, 06 Sep 2022 01:08:31 -0700 (PDT)
+        Tue, 6 Sep 2022 04:10:31 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7498E7539F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 01:10:29 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-334dc616f86so88501717b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 01:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=ixcTJEmX6ojSJFpffdmxDEeT09//71awlYUYMTCkQ2k=;
-        b=ZEw2t8eu/IGDJPWWS2O9AIx5J+sVDehAoSc0jwGGUi62VfOxEv0EBn/OlitZ+YCeRf
-         PR7LKeKeVrdvAjyp8thX5wqf3UHxdpDl/5T0XW+lG1qku5rK3Hmmkzjsm47nUXSsg7+J
-         8Q8z8iDRqSYxh3qlGRknUNhrP+SLOPhXZYUqTDAd5ceCxMn3My+V9VqLUS81gaE+cIXs
-         9GfSR3XtxUG6oomZZeXFRlN68cuesq9Zl6Ovhe3SK7WEcHMxmTFlxs4Xjq5ADtAWyUOX
-         oVY5p05K7+V5XUbz+R/MJUb0BWZLhdSpttHWjB9fbbrIPyoqqov5dyuatCRJqfNPHBKQ
-         mU6A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=kD16B7J90qYAXN9Q4HkNuXZa7up8m5iSAliPqwB9ybs=;
+        b=k7tpAULwhwiYd7jdd42DgZeTPzKor5vWWgisFVqvcdDn7+RokQmbvpkWcSE1cBoFue
+         Yta838q0NF2x/LtpsNsDEcwK7m40iRP4goOuLMlJuZLLSTmkOrTQd0tWqxZPthV6bOio
+         OZZOqmh0/WgXthKJRU2gC2kDhZ5qWFh+96puxjwzgjfDPzcU6DAuS+Zcy+jmgJBO4aKM
+         TX+XAhifYq1bakcKIuvKCJDh2qolkHOPEcpJ5IHcrcWaROV5uHS2EKaprA3YEEf7O/bR
+         gsJNoYuOkaFuNv5eLll5WEQcdIUqS+TQNRkQVWFoRI330yhTQvw3Tgsf+sguLkBUXePJ
+         mA8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ixcTJEmX6ojSJFpffdmxDEeT09//71awlYUYMTCkQ2k=;
-        b=q1Oc9B2rNSeUbfBTuh7vdkbKep0iTlYrepaAyezIjs4vdgfUdfaGvkSvheVeDUqi5X
-         nwmsPaAQqFi1J/PLPERVCnNBPUeJ6j8njYXT0OQ3NMzLugCRSqXFRB+VjU9xFy7NAPWN
-         xd6rYioE+HBGu7sE+2Kre+XXWTlTGyjdDSSm+fItLt616VUjhSFwJ2YxNPuEUmorVrfn
-         vE1PA89x4qoXeIQ/eXEcOt7PJV8qtID3sXtUFomulnrnj2Y6mXxLtcINz68NTQJoHpK4
-         Vfr88WXA5PUbSt5GA1MC8SASBNGsxN8Da7qk03gJsAc1cNzuCGHwoO/VYJxZoaOOZw7b
-         LwSg==
-X-Gm-Message-State: ACgBeo2yIU+pMEox/bVAowz1l+nZuJJIPfxvSaOnXDm3xfChmX1bb5PS
-        mjuLHqTI8+Oz/eGadwfx0iob1FpHTLQQv2WUCCYrrDBsSAs=
-X-Google-Smtp-Source: AA6agR7l2FBAWvpWs6dGX+cL9sjarYnZLQUBlXz3+1QQvQp7fIsevP7hAeerxFCrUwKA5g5IT5oDby9FydR2xo3Y+I4=
-X-Received: by 2002:a17:906:8450:b0:741:5b1b:5c7f with SMTP id
- e16-20020a170906845000b007415b1b5c7fmr30767205ejy.766.1662451709902; Tue, 06
- Sep 2022 01:08:29 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=kD16B7J90qYAXN9Q4HkNuXZa7up8m5iSAliPqwB9ybs=;
+        b=wXsJesRmdPdkkvyZXRHs1PTxIwFFBbK6KMtEDDhr4VXNaLM9aTt/9941dxm9KlvXC2
+         GiGLg9UVUnO3EujJXaO9kHunRuBT53RDSIgTMRe9FXfG4GfdMOqSmoCu+NNzIpHh6RBe
+         HlWjTjkWqyS9xpFNQYT7LtZ3EbWRXkf7Pdlh3rac8LU/N2mavPyZ0oItPVo8GQkHtbqw
+         6YFD4yRtxvZwp3Y6ch1sn8Uwocqmc8acMz4fZ14NfYYxGnuwI9gz6r9Td4Jb+Nxv8fGj
+         INVvBcOkfNjLf14fcqYN9aG7eXCqUXmJjgK+9z2lf/lMQrLVMDw0v4gpzveuTT9Cthln
+         SumQ==
+X-Gm-Message-State: ACgBeo0a5VSK7TiXI65J8gdKhxgfvU44lfqd5s2TJEKcZbS1JtQuVuDG
+        LIYfoP+Bt7UQhDWr8QJYMc1w0JyZQu/bfvjdmkUdFg==
+X-Google-Smtp-Source: AA6agR4rIBbhGutrY9653MGpGLNzg1oKFDAbztQtqd8svJfF3wfx0wW+q2YV3yoZDJrO5T19oIugu+V32AMyTDTSo7Y=
+X-Received: by 2002:a81:92c4:0:b0:340:bd1f:3e35 with SMTP id
+ j187-20020a8192c4000000b00340bd1f3e35mr37658681ywg.324.1662451828519; Tue, 06
+ Sep 2022 01:10:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220905171601.79284-1-peron.clem@gmail.com> <20220905171601.79284-5-peron.clem@gmail.com>
- <OS0PR01MB5922142861E78A1DD81AD1C9867F9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAJiuCceGZJr24hVjpP0ptOkG8bMFKr=QLj0LcyDX4fUy7Rr2xA@mail.gmail.com>
- <OS0PR01MB5922EE3F6CDD827919A7763E867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAJiuCcd7upgT6vQWHos-X1-89+Z-5xxDe2SMCdC2=_LgZaVMiw@mail.gmail.com> <OS0PR01MB5922240073630A409D67ED03867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922240073630A409D67ED03867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Tue, 6 Sep 2022 10:08:18 +0200
-Message-ID: <CAJiuCcddO9m3L2--rycO9TVtoELy24OMb9NRdpin2mbokm=Hog@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the recommended
- one to configure and enable regulator
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+References: <20220906075253.28491-1-alexander.sverdlin@nokia.com>
+In-Reply-To: <20220906075253.28491-1-alexander.sverdlin@nokia.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 6 Sep 2022 02:09:52 -0600
+Message-ID: <CAOUHufacHqka5NgpZ5ztd5Ur_B=AKU4DWEYwWjCWBVK-8x+h3A@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: octeon: Get rid of preprocessor directives around RESERVE32
+To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
+Cc:     Joe Perches <joe@perches.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Corey Minyard <cminyard@mvista.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Sep 6, 2022 at 1:53 AM Alexander A Sverdlin
+<alexander.sverdlin@nokia.com> wrote:
+>
+> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+>
+> Some of them were pointless because CONFIG_CAVIUM_RESERVE32 is now always
+> defined, some were not enough (Yu Zhao reported [1]
+> "Failed to allocate CAVIUM_RESERVE32 memory area" error).
+>
+> Removing (in contrast to proposal [2] though) the directives allows for
+> compiler coverage of RESERVE32 code and replacing one of [always-true]
+> "ifdef" with a compiler conditional fixes the [cosmetic] error message.
+>
+> Couple of variables doesn't justify preprocessor ugliness and none of this
+> code is in a hot-path.
+>
+> Link: https://lore.kernel.org/lkml/20220830030259.3503212-1-yuzhao@google.com/
+> Link: https://lore.kernel.org/lkml/d5f8d6b58a32cdbf6326ccef7d46a58ba753edc7.camel@perches.com/
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> ---
+>  arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c |  4 ----
+>  arch/mips/cavium-octeon/setup.c                    | 25 +++++++++-------------
+>  2 files changed, 10 insertions(+), 19 deletions(-)
+>
+> diff --git a/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c b/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
+> index bf13e35..aa7bbf8 100644
+> --- a/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
+> +++ b/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
+> @@ -57,14 +57,11 @@ EXPORT_SYMBOL_GPL(__cvmx_cmd_queue_state_ptr);
+>  static cvmx_cmd_queue_result_t __cvmx_cmd_queue_init_state_ptr(void)
+>  {
+>         char *alloc_name = "cvmx_cmd_queues";
+> -#if defined(CONFIG_CAVIUM_RESERVE32) && CONFIG_CAVIUM_RESERVE32
+>         extern uint64_t octeon_reserve32_memory;
+> -#endif
+>
+>         if (likely(__cvmx_cmd_queue_state_ptr))
+>                 return CVMX_CMD_QUEUE_SUCCESS;
+>
+> -#if defined(CONFIG_CAVIUM_RESERVE32) && CONFIG_CAVIUM_RESERVE32
+>         if (octeon_reserve32_memory)
+>                 __cvmx_cmd_queue_state_ptr =
+>                     cvmx_bootmem_alloc_named_range(sizeof(*__cvmx_cmd_queue_state_ptr),
+> @@ -73,7 +70,6 @@ static cvmx_cmd_queue_result_t __cvmx_cmd_queue_init_state_ptr(void)
+>                                                    (CONFIG_CAVIUM_RESERVE32 <<
+>                                                     20) - 1, 128, alloc_name);
+>         else
+> -#endif
+>                 __cvmx_cmd_queue_state_ptr =
+>                     cvmx_bootmem_alloc_named(sizeof(*__cvmx_cmd_queue_state_ptr),
+>                                             128,
+> diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
+> index cbd8320..df45f76 100644
+> --- a/arch/mips/cavium-octeon/setup.c
+> +++ b/arch/mips/cavium-octeon/setup.c
+> @@ -284,10 +284,8 @@ void octeon_crash_smp_send_stop(void)
+>
+>  #endif /* CONFIG_KEXEC */
+>
+> -#ifdef CONFIG_CAVIUM_RESERVE32
+>  uint64_t octeon_reserve32_memory;
+>  EXPORT_SYMBOL(octeon_reserve32_memory);
+> -#endif
+>
+>  #ifdef CONFIG_KEXEC
+>  /* crashkernel cmdline parameter is parsed _after_ memory setup
+> @@ -666,9 +664,7 @@ void __init prom_init(void)
+>         int i;
+>         u64 t;
+>         int argc;
+> -#ifdef CONFIG_CAVIUM_RESERVE32
+>         int64_t addr = -1;
+> -#endif
 
-On Tue, 6 Sept 2022 at 10:06, Biju Das <biju.das.jz@bp.renesas.com> wrote:
->
-> Hi Clement,
->
-> > Subject: Re: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the
-> > recommended one to configure and enable regulator
-> >
-> > Hi Biju,
-> >
-> > On Tue, 6 Sept 2022 at 08:42, Biju Das <biju.das.jz@bp.renesas.com>
-> > wrote:
-> > >
-> > > Hi Clement,
-> > >
-> > > >
-> > > > Hi,
-> > > >
-> > > > On Mon, 5 Sept 2022 at 20:17, Biju Das <biju.das.jz@bp.renesas.com>
-> > > > wrote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > Thanks for the patch.
-> > > > >
-> > > > > > Subject: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the
-> > > > > > recommended one to configure and enable regulator
-> > > > > >
-> > > > > > devm_pm_opp_set_regulators() doesn't enable regulator, which
-> > > > > > make regulator framework switching it off during
-> > regulator_late_cleanup().
-> > > > >
-> > > > > In that case, why not regulator_get()for Dynamic regulator(non
-> > > > > fixed regulator)??
-> > > >
-> > > > Sorry I don't understand, what do you mean?
-> > >
-> > > Normally we need to turn on regulator and clock only when needed.
-> > > I am not sure with your new code, will make it always on and drains
-> > > the power unnecessarily and does it set lower opp or higher opp at th=
-e
-> > > start??
-> >
-> > The code doesn't make it always on, it makes it how it should be at the
-> > recommended OPP which is the "start point".
-> >
-> > If the recommended OPP says to switch off the regulator then it will.
-> >
-> > >
-> > > Compared to the fixed regulator, you have voltage regulator to contro=
-l
-> > > that is the difference between my environment and Your environment.
-> > >
-> > > I am not sure any other SoC is using voltage regulator??
-> > > If yes, thenthere should be some bug or some difference in HW which i=
-s
-> > > giving different behaviour??
-> > >
-> > > If you are the first one using voltage regulator with mali gpu, Then
-> > > Your implementation may be correct, as you have proper HW to check.
-> >
-> > The issue is that my regulator is not marked as "always-on", if no OPP =
-is
-> > called before regulator_late_cleanup() then nobody sets the
-> > regulator_enable() and the regulator is switched off, which makes my
-> > board hang.
->
-> Cool, From your testing looks like no one tested this feature with
-> mali GPU on mainline??
+Nit: `addr` can be moved into the `if` block below.
 
-Or no one without always-on.
+>         /*
+>          * The bootloader passes a pointer to the boot descriptor in
+>          * $a3, this is available as fw_arg3.
+> @@ -783,7 +779,7 @@ void __init prom_init(void)
+>                 cvmx_write_csr(CVMX_LED_UDD_DATX(1), 0);
+>                 cvmx_write_csr(CVMX_LED_EN, 1);
+>         }
+> -#ifdef CONFIG_CAVIUM_RESERVE32
+> +
+>         /*
+>          * We need to temporarily allocate all memory in the reserve32
+>          * region. This makes sure the kernel doesn't allocate this
+> @@ -794,14 +790,15 @@ void __init prom_init(void)
+>          * Allocate memory for RESERVED32 aligned on 2MB boundary. This
+>          * is in case we later use hugetlb entries with it.
+>          */
+> -       addr = cvmx_bootmem_phy_named_block_alloc(CONFIG_CAVIUM_RESERVE32 << 20,
+> -                                               0, 0, 2 << 20,
+> -                                               "CAVIUM_RESERVE32", 0);
+> -       if (addr < 0)
+> -               pr_err("Failed to allocate CAVIUM_RESERVE32 memory area\n");
+> -       else
+> -               octeon_reserve32_memory = addr;
+> -#endif
+> +       if (CONFIG_CAVIUM_RESERVE32) {
+> +               addr = cvmx_bootmem_phy_named_block_alloc(CONFIG_CAVIUM_RESERVE32 << 20,
+> +                                                         0, 0, 2 << 20,
+> +                                                         "CAVIUM_RESERVE32", 0);
 
-Clement
+I.e., `int64_t addr = cvmx_...`.
 
->
-> Cheers,
-> Biju
->
->
-> >
-> > Like Viresh recommends I will send an update with more details in the
-> > commit log.
-> >
-> > Regards,
-> > Clement
-> >
-> >
-> > >
-> > > >
-> > > > >
-> > > > > >
-> > > > > > Call dev_pm_opp_set_opp() with the recommend OPP in
-> > > > > > panfrost_devfreq_init() to enable the regulator and avoid any
-> > > > > > switch off by regulator_late_cleanup().
-> > > > > >
-> > > > > > Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > > > > Signed-off-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
-> > > > > > ---
-> > > > > >  drivers/gpu/drm/panfrost/panfrost_devfreq.c | 8 ++++++++
-> > > > > >  1 file changed, 8 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > > > > > b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > > > > > index 5110cd9b2425..67b242407156 100644
-> > > > > > --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > > > > > +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > > > > > @@ -131,6 +131,14 @@ int panfrost_devfreq_init(struct
-> > > > > > panfrost_device
-> > > > > > *pfdev)
-> > > > > >               return PTR_ERR(opp);
-> > > > > >
-> > > > > >       panfrost_devfreq_profile.initial_freq =3D cur_freq;
-> > > > > > +
-> > > > > > +     /* Setup and enable regulator */
-> > > > > > +     ret =3D dev_pm_opp_set_opp(dev, opp);
-> > > > > > +     if (ret) {
-> > > > > > +             DRM_DEV_ERROR(dev, "Couldn't set recommended
-> > OPP\n");
-> > > > > > +             return ret;
-> > > > > > +     }
-> > > > >
-> > > > >
-> > > > > FYI,
-> > > > > On RZ/G2L mali gpu, we have fixed regulator and I was able to do
-> > > > > GPU OPP transition without any issues previously.
-> > > >
-> > > > rzg2l-smarc-som.dtsi uses regulator reg_1p1v; which is marked as
-> > > > regulator-always-on; that's why
-> > > > regulator_late_cleanup() doesn't switch it off.
-> > >
-> > > Yes that is correct. It is fixed regulator and always on.
-> > > We control only frequency.
-> > >
-> > > Cheers,
-> > > Biju
-> > >
-> > > >
-> > > > >
-> > > > > root@smarc-rzg2l:~# cat /sys/class/devfreq/11840000.gpu/trans_sta=
-t
-> > > > >      From  :   To
-> > > > >            :  50000000  62500000 100000000 125000000 200000000
-> > > > 250000000 400000000 500000000   time(ms)
-> > > > > *  50000000:         0         0         0         0         0
-> > > > 0         0         1       144
-> > > > >    62500000:         0         0         0         0         0
-> > > > 0         0         0         0
-> > > > >   100000000:         0         0         0         0         0
-> > > > 0         0         9       524
-> > > > >   125000000:         0         0         9         0         0
-> > > > 0         0         3      2544
-> > > > >   200000000:         0         0         0        11         0
-> > > > 0         0        46      3304
-> > > > >   250000000:         1         0         0         0        33
-> > > > 0         0         0      7496
-> > > > >   400000000:         0         0         0         0        16
-> > > > 19         0         0      2024
-> > > > >   500000000:         1         0         0         1         8
-> > > > 15        35         0      4032
-> > > > > Total transition : 208
-> > > > >
-> > > > > Cheers,
-> > > > > Biju
-> > > > >
+> +               if (addr < 0)
+> +                       pr_err("Failed to allocate CAVIUM_RESERVE32 memory area\n");
+> +               else
+> +                       octeon_reserve32_memory = addr;
+> +       }
+
+Acked-by: Yu Zhao <yuzhao@google.com>

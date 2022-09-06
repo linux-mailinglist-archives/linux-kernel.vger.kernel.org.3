@@ -2,183 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793765AF254
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F605AF1EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237290AbiIFRWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S234183AbiIFRF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234270AbiIFRVs (ORCPT
+        with ESMTP id S232675AbiIFRFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:21:48 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CFFDEAE
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:10:33 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 988E04C3F37;
-        Tue,  6 Sep 2022 17:10:25 +0000 (UTC)
-Received: from pdx1-sub0-mail-a211 (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id C5BB24C3C6C;
-        Tue,  6 Sep 2022 17:10:24 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1662484224; a=rsa-sha256;
-        cv=none;
-        b=zgAHNbYC5FrdP4VVP2MorpEO+ZIPdsUeR5GDpNTmiYBBNjbWXaSi1FJn4Fea/8SBYhAALo
-        s3XfvfoK36cAswBRR6jPCocWVV6QpHZSj5jJArYExjKBMYRKBZG3cEtk/8n7ST/uyFdzkN
-        A0BErhGlk57wgl+B9pMouzD6T94enefvgNdDMOKxMt9ew3LHTSQAyXvNNMLs062oDDvdBu
-        yA75kww9U0LSL/6RzCtV8dFRcLCAcrOtUJThuMC8Q2QsnjBC2zKyXuoXJH7lpBRrUwk/U9
-        Nz+1Ep6Q6hmL87lttfHSWQ5sScTx0zKh74nC6JRee4J19WhVpv7rihk2bngP3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1662484224;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=lGvdrXQWsfc/OsusfvanHUHGYlpiTvqUNzHfFJSSOVA=;
-        b=Oy1+1qrWpegx52bHWzXZGdKdqwfkWQ8zufOOSJYPWjkf7YxCFIR9fJR7odEoEjPrAjV4Ap
-        W4Zy9dYem2bfRzVxyqART/XJppRnrhJWtGS2oJehTY19uyvoNHLYoHzOXrUN4jcXZKdHVt
-        tnGZSGvRCZDPxVu1zricmW/7j6SCjbFAYjvuXVbFqqHnXqsrUkdlQaPVPTmrtt0vS9v/ft
-        Ch8J3Bc7n3Vvi6einUd8f6XxApdats6/QFQM9lWlLZPglOKD/xDTU5lqw1X1lsd9enkk6K
-        8GlgO4Nkz29D76iJTGJkANwRroWvZy9JXbotDY+3zTrxEriKoJs8AqajKF4FuQ==
-ARC-Authentication-Results: i=1;
-        rspamd-686945db84-dxs52;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Exultant-Befitting: 0b92a02e7ea825cf_1662484225163_2280857564
-X-MC-Loop-Signature: 1662484225163:2261953375
-X-MC-Ingress-Time: 1662484225163
-Received: from pdx1-sub0-mail-a211 (pop.dreamhost.com [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.126.240.197 (trex/6.7.1);
-        Tue, 06 Sep 2022 17:10:25 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a211 (Postfix) with ESMTPSA id 4MMX2R4kskz90;
-        Tue,  6 Sep 2022 10:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1662484224;
-        bh=lGvdrXQWsfc/OsusfvanHUHGYlpiTvqUNzHfFJSSOVA=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=kMikivsUxbzpvh9f4LHgHoXliUnVV74+xEfbwSs6189+ZQvH3G8YVrt0oxgU0UWms
-         5iSIhbyIvIUz/PPiFGGewfe6LlWU/xpphUWjoFbl9Jd39+torUPAhE5eqltYRA5hn2
-         DfILM5zuRi4RGDRPb7Idt27T8YovMDNYHC29RgFXXuW4BFgk9gIS3Kvbe0z/ycegKK
-         0rpf/TjWHt/0OdGoB+a5bng2kYqMOr970mAawOXqgQe9D1BTFKGQ9IlQrVvYBeNhht
-         u2bmYsc50POUSieJN3/fxZdb9z5PO4JlVwmyBn3OdiMxHf8DbUTOPdtSeZHIZgzIrM
-         oIAWeUCExNp2w==
-Date:   Tue, 6 Sep 2022 09:51:32 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: Re: [PATCH v13 52/70] mm/khugepaged: stop using vma linked list
-Message-ID: <20220906165132.jv6y6if6t576wdjl@offworld>
-Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
- <20220822150128.1562046-53-Liam.Howlett@oracle.com>
+        Tue, 6 Sep 2022 13:05:32 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F431DF7F;
+        Tue,  6 Sep 2022 09:52:32 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id x19so11990874pfr.1;
+        Tue, 06 Sep 2022 09:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=ClsUxNWUlr9YbZdE+mBsdmX6Ii6dUBfM2rBrEWed8FM=;
+        b=ZD657V+czK2A/LT1vcZmFRCURy17vlQAFGimz4Jd5d/IPRsSAMXR07XLUZXZme8gIq
+         x8x555YqBk4OCpHs6IQj7S179VJTHqGdegJGcaRE5r+ek2tYWjbdydM9q1OBwvfzCI4n
+         bSZJOjvQZP+pBItAudmKakhqdhhPPYPgcbrwOT976LYefXLkXzXokgEek4uTaHZ1S9PR
+         xFkrbnTcWPICMZTZl5e4YXNHbBGyDZBOgyZW9I+XErl1IJhSfyMf6ngWZsgP47k88O/L
+         x+SNt+lr+F9iQRTTMfGbnZLgUzoIm73JH4KM8Mvxj9djD+GXsblryciSK75z/F029/HE
+         gCxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ClsUxNWUlr9YbZdE+mBsdmX6Ii6dUBfM2rBrEWed8FM=;
+        b=NNPNmYs021vuxXRWYRxgDcsaszqCsac3ypodux18rPHb5xbbhkqL1B957BkP8vGsHt
+         rcxV6JlQy2a6p8bmB4jeCJseIcoKLOE8ft6Krlr3iBWwGaVw7yiM9fP5CbpjtaFA+BlO
+         HRQna2ZaysAugiMblwxYolENEKldO3oOgLwv4JAAl77FULd+2XcfYUyC1/U8d9lapYfn
+         oXJIY4HWK22KJCrkI4aNx0LiU9CrNN9npgsCGhrSuJnnwnRASZHIfwRVazcSiN/5e5e2
+         71b9TTQ8p/yKKvRlXb95XxBnQQGGjoES0iqb77gfgek8eUNRT6xtw+AXii46+lU5ld0V
+         HL5g==
+X-Gm-Message-State: ACgBeo1oPAZppJNs5F+8iXNoy2ipM984owZuK6p35soHZ2icuY39/9e0
+        5tUO6WwC71sde7KimJkkuUQ=
+X-Google-Smtp-Source: AA6agR7slyrhF09ZZ0GyrgwjiB2Ccf7IGqljYtzz29C9BmNLvx4Eqxw4/ky7biMQJ1KKhfmPq4ftGw==
+X-Received: by 2002:a05:6a00:14c7:b0:52e:efb7:bd05 with SMTP id w7-20020a056a0014c700b0052eefb7bd05mr54838752pfu.24.1662483151937;
+        Tue, 06 Sep 2022 09:52:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bi10-20020a170902bf0a00b00174e5fe9ce1sm1906391plb.159.2022.09.06.09.52.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 09:52:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 6 Sep 2022 09:52:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
+        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hhhawa@amazon.com, jonnyc@amazon.com, andriy.shevchenko@intel.com
+Subject: Re: [PATCH v4 01/21] hwmon: (mr75203) fix coding style space errors
+Message-ID: <20220906165229.GA594012@roeck-us.net>
+References: <20220906083356.21067-1-farbere@amazon.com>
+ <20220906083356.21067-2-farbere@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822150128.1562046-53-Liam.Howlett@oracle.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220906083356.21067-2-farbere@amazon.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022, Liam Howlett wrote:
+On Tue, Sep 06, 2022 at 08:33:36AM +0000, Eliav Farber wrote:
+> Fix: "ERROR: space required before the open parenthesis '('"
+> 
+> Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for Moortec MR75203 PVT controller")
 
->From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
->
->Use vma iterator & find_vma() instead of vma linked list.
->
->Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
->Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Coding style "fixes" do not fix the code. I consider using the Fixes: tag
+for those to close to an abuse of that tag (and it would be great if that
+was spelled out somewhere). As it is, I can not with good conscience apply
+this patch to the mainline kernel (especially not for -rc5), meaning the
+entire series will have to wait for the next release window unless there
+are no conflicts.
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Guenter
 
->---
-> mm/huge_memory.c |  4 ++--
-> mm/khugepaged.c  | 11 ++++++++---
-> 2 files changed, 10 insertions(+), 5 deletions(-)
->
->diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->index 83c47a989260..6c5c23ef658a 100644
->--- a/mm/huge_memory.c
->+++ b/mm/huge_memory.c
->@@ -2339,11 +2339,11 @@ void vma_adjust_trans_huge(struct vm_area_struct *vma,
->	split_huge_pmd_if_needed(vma, end);
->
->	/*
->-	 * If we're also updating the vma->vm_next->vm_start,
->+	 * If we're also updating the next vma vm_start,
->	 * check if we need to split it.
->	 */
->	if (adjust_next > 0) {
->-		struct vm_area_struct *next = vma->vm_next;
->+		struct vm_area_struct *next = find_vma(vma->vm_mm, vma->vm_end);
->		unsigned long nstart = next->vm_start;
->		nstart += adjust_next;
->		split_huge_pmd_if_needed(next, nstart);
->diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->index d3313b7a8fe5..d8e388106322 100644
->--- a/mm/khugepaged.c
->+++ b/mm/khugepaged.c
->@@ -2053,10 +2053,12 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages, int *result,
->	__releases(&khugepaged_mm_lock)
->	__acquires(&khugepaged_mm_lock)
-> {
->+	struct vma_iterator vmi;
->	struct mm_slot *mm_slot;
->	struct mm_struct *mm;
->	struct vm_area_struct *vma;
->	int progress = 0;
->+	unsigned long address;
-
-Nit: just use khugepaged_scan.address.
-
->
->	VM_BUG_ON(!pages);
->	lockdep_assert_held(&khugepaged_mm_lock);
->@@ -2081,11 +2083,14 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages, int *result,
->	vma = NULL;
->	if (unlikely(!mmap_read_trylock(mm)))
->		goto breakouterloop_mmap_lock;
->-	if (likely(!hpage_collapse_test_exit(mm)))
->-		vma = find_vma(mm, khugepaged_scan.address);
->
->	progress++;
->-	for (; vma; vma = vma->vm_next) {
->+	if (unlikely(hpage_collapse_test_exit(mm)))
->+		goto breakouterloop;
->+
->+	address = khugepaged_scan.address;
->+	vma_iter_init(&vmi, mm, address);
->+	for_each_vma(vmi, vma) {
->		unsigned long hstart, hend;
->
->		cond_resched();
->
->--
->2.35.1
->
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>  drivers/hwmon/mr75203.c | 40 ++++++++++++++++++++--------------------
+>  1 file changed, 20 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 046523d47c29..8adfbb15453f 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -155,7 +155,7 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
+>  			return ret;
+>  
+>  		ret = regmap_read(t_map, SDIF_DATA(channel), &nbs);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		nbs &= SAMPLE_DATA_MSK;
+> @@ -197,7 +197,7 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+>  			return ret;
+>  
+>  		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx), &n);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		n &= SAMPLE_DATA_MSK;
+> @@ -291,19 +291,19 @@ static int pvt_init(struct pvt_device *pvt)
+>  
+>  	if (t_num) {
+>  		ret = regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(t_map, SDIF_HALT, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(t_map, CLK_SYNTH, clk_synth);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(t_map, SDIF_DISABLE, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+> @@ -316,7 +316,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		val = CFG0_MODE_2 | CFG0_PARALLEL_OUT | CFG0_12_BIT |
+>  		      IP_CFG << SDIF_ADDR_SFT | SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(t_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+> @@ -329,7 +329,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		val = POWER_DELAY_CYCLE_256 | IP_TMR << SDIF_ADDR_SFT |
+>  			      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(t_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+> @@ -343,39 +343,39 @@ static int pvt_init(struct pvt_device *pvt)
+>  		      IP_CTRL << SDIF_ADDR_SFT |
+>  		      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(t_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  	}
+>  
+>  	if (p_num) {
+>  		ret = regmap_write(p_map, SDIF_HALT, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(p_map, SDIF_DISABLE, BIT(p_num) - 1);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(p_map, CLK_SYNTH, clk_synth);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  	}
+>  
+>  	if (v_num) {
+>  		ret = regmap_write(v_map, SDIF_SMPL_CTRL, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(v_map, SDIF_HALT, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(v_map, CLK_SYNTH, clk_synth);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_write(v_map, SDIF_DISABLE, 0x0);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> @@ -389,7 +389,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		      CFG1_14_BIT | IP_CFG << SDIF_ADDR_SFT |
+>  		      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(v_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> @@ -402,7 +402,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		val = POWER_DELAY_CYCLE_64 | IP_TMR << SDIF_ADDR_SFT |
+>  		      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(v_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  
+>  		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> @@ -416,7 +416,7 @@ static int pvt_init(struct pvt_device *pvt)
+>  		      IP_CTRL << SDIF_ADDR_SFT |
+>  		      SDIF_WRN_W | SDIF_PROG;
+>  		ret = regmap_write(v_map, SDIF_W, val);
+> -		if(ret < 0)
+> +		if (ret < 0)
+>  			return ret;
+>  	}
+>  
+> @@ -535,7 +535,7 @@ static int mr75203_probe(struct platform_device *pdev)
+>  		return dev_err_probe(dev, ret, "cannot deassert reset control\n");
+>  
+>  	ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
+> -	if(ret < 0)
+> +	if (ret < 0)
+>  		return ret;
+>  
+>  	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;

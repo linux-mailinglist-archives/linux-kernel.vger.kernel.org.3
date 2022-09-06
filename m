@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31635AEB3F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440245AEB41
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240075AbiIFN4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S233325AbiIFN4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239836AbiIFNyN (ORCPT
+        with ESMTP id S239895AbiIFNyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:54:13 -0400
+        Tue, 6 Sep 2022 09:54:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6ECD804A2;
-        Tue,  6 Sep 2022 06:41:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7B580B7F;
+        Tue,  6 Sep 2022 06:41:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 786DE614C9;
-        Tue,  6 Sep 2022 13:41:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85019C433D6;
-        Tue,  6 Sep 2022 13:41:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42B9E61539;
+        Tue,  6 Sep 2022 13:41:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F39DC433D7;
+        Tue,  6 Sep 2022 13:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471665;
-        bh=hu6botTHiQm8Tl+D3CgsImgm+NidKmwEjsE9sSec0lo=;
+        s=korg; t=1662471668;
+        bh=2kANwVg4Rl6NnGBq0LzTxlY7t3U55WnFxJwykv2/8uQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U3G9xZ63km0sebwUu5G+HNxBA0+uv/f5lZbXkC1t9ihWU5r1Asno/CThA1kyz+us+
-         uKYiU9YMP+WnC1mUQaUnB+3CYSpQfKwCy6XHGsQgzsOkbz6w52ClxXVI+V9OhBGWVe
-         hTPyCr/3HG5FN+huAmTIkptxXI5Mncj4hi9hO04M=
+        b=Kyqv3ddOMZVySw5y3d7F16FsSS8QSUx2SfMvNYOjHY1ZghUZu4UvgL9DPBMJfaE6Q
+         fxvTdPQGR12Sg5tdxIizAouA8IfTyw59/IhsUAtozq+zHC3GP/Lq1Ruv+k7qV0X1wQ
+         mlkiu0n2/2sRQlphY8RcvrPCXvD1E5dvcJcFzjU4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
-        stable <stable@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 5.15 105/107] usb: dwc3: disable USB core PHY management
-Date:   Tue,  6 Sep 2022 15:31:26 +0200
-Message-Id: <20220906132826.312588809@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan Woithe <jwoithe@just42.net>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.15 106/107] USB: serial: ch341: fix lost character on LCR updates
+Date:   Tue,  6 Sep 2022 15:31:27 +0200
+Message-Id: <20220906132826.361860150@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
 References: <20220906132821.713989422@linuxfoundation.org>
@@ -55,60 +54,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Johan Hovold <johan@kernel.org>
 
-commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
+commit 8e83622ae7ca481c76c8fd9579877f6abae64ca2 upstream.
 
-The dwc3 driver manages its PHYs itself so the USB core PHY management
-needs to be disabled.
+Disable LCR updates for pre-0x30 devices which use a different (unknown)
+protocol for line control and where the current register write causes
+the next received character to be lost.
 
-Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
-host: xhci-plat: add platform data support") and f768e718911e ("usb:
-host: xhci-plat: add priv quirk for skip PHY initialization") to
-propagate the setting for now.
+Note that updating LCR using the INIT command has no effect on these
+devices either.
 
-Fixes: 4e88d4c08301 ("usb: add a flag to skip PHY initialization to struct usb_hcd")
-Fixes: 178a0bce05cb ("usb: core: hcd: integrate the PHY wrapper into the HCD core")
-Tested-by: Matthias Kaehlcke <mka@chromium.org>
-Cc: stable <stable@kernel.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20220825131836.19769-1-johan+linaro@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Jonathan Woithe <jwoithe@just42.net>
+Tested-by: Jonathan Woithe <jwoithe@just42.net>
+Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
+Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
+Fixes: 55fa15b5987d ("USB: serial: ch341: fix baud rate and line-control handling")
+Cc: stable@vger.kernel.org      # 4.10
+Signed-off-by: Johan Hovold <johan@kernel.org>
 [ johan: adjust context to 5.15 ]
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/host.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/usb/serial/ch341.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -10,8 +10,13 @@
- #include <linux/acpi.h>
- #include <linux/platform_device.h>
- 
-+#include "../host/xhci-plat.h"
- #include "core.h"
- 
-+static const struct xhci_plat_priv dwc3_xhci_plat_priv = {
-+	.quirks = XHCI_SKIP_PHY_INIT,
-+};
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -97,7 +97,10 @@ struct ch341_private {
+ 	u8 mcr;
+ 	u8 msr;
+ 	u8 lcr;
 +
- static int dwc3_host_get_irq(struct dwc3 *dwc)
- {
- 	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
-@@ -87,6 +92,11 @@ int dwc3_host_init(struct dwc3 *dwc)
- 		goto err;
- 	}
- 
-+	ret = platform_device_add_data(xhci, &dwc3_xhci_plat_priv,
-+					sizeof(dwc3_xhci_plat_priv));
-+	if (ret)
-+		goto err;
+ 	unsigned long quirks;
++	u8 version;
 +
- 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
+ 	unsigned long break_end;
+ };
  
- 	if (dwc->usb3_lpm_capable)
+@@ -271,6 +274,9 @@ static int ch341_set_baudrate_lcr(struct
+ 	 * (stop bits, parity and word length). Version 0x30 and above use
+ 	 * CH341_REG_LCR only and CH341_REG_LCR2 is always set to zero.
+ 	 */
++	if (priv->version < 0x30)
++		return 0;
++
+ 	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
+ 			      CH341_REG_LCR2 << 8 | CH341_REG_LCR, lcr);
+ 	if (r)
+@@ -323,7 +329,9 @@ static int ch341_configure(struct usb_de
+ 	r = ch341_control_in(dev, CH341_REQ_READ_VERSION, 0, 0, buffer, size);
+ 	if (r < 0)
+ 		goto out;
+-	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", buffer[0]);
++
++	priv->version = buffer[0];
++	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", priv->version);
+ 
+ 	r = ch341_control_out(dev, CH341_REQ_SERIAL_INIT, 0, 0);
+ 	if (r < 0)
 
 

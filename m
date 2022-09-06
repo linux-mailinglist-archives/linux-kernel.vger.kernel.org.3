@@ -2,108 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B140F5ADD76
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B2D5ADD73
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237361AbiIFClH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 22:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
+        id S232626AbiIFCjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 22:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236847AbiIFClF (ORCPT
+        with ESMTP id S229916AbiIFCjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 22:41:05 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDF665555
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 19:41:03 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MM8hP0FfLznV6N;
-        Tue,  6 Sep 2022 10:38:29 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 6 Sep 2022 10:40:59 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 6 Sep 2022 10:40:58 +0800
-From:   Chen Wandun <chenwandun@huawei.com>
-To:     <joro@8bytes.org>, <will@kernel.org>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
-CC:     <wangkefeng.wang@huawei.com>, <chenwandun@huawei.com>
-Subject: [PATCH] iommu/dma: speedup memory allocation in __iommu_dma_alloc_pages
-Date:   Tue, 6 Sep 2022 10:39:02 +0800
-Message-ID: <20220906023902.133103-1-chenwandun@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 5 Sep 2022 22:39:15 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A544D642CB;
+        Mon,  5 Sep 2022 19:39:13 -0700 (PDT)
+X-UUID: 5ee4d9244ea4438e86c1181dfc0ed1b8-20220906
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Dn9b59ppNNvHD6c39h1V+jJIS09fOkViOiiBcMeql2I=;
+        b=BLM7rAdiywad7MgsI7+N30y4AC0wDH3+sF2futYcmp3KzN+euTavAlPUfL3yVwhfFg0myFcZRx/Nat//nIdqKjxcUiXa++H9wJI+q74ou7dRbCNxHBdzG9M2i9pvuSdrJQ2NtljzwkEhNaVxJDxOvoBKw3el8pY//GzfS75mR0E=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:43115ed2-4c30-4fdc-afa7-430e5326ab35,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release
+        _Ham,ACTION:release,TS:-5
+X-CID-META: VersionHash:84eae18,CLOUDID:430dcbd0-20bd-4e5e-ace8-00692b7ab380,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
+        nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 5ee4d9244ea4438e86c1181dfc0ed1b8-20220906
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <nathan.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 806183322; Tue, 06 Sep 2022 10:39:07 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 6 Sep 2022 10:39:06 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 6 Sep 2022 10:39:06 +0800
+Message-ID: <d2f89e0b4929c6c37f5effe002cdc15b7475e500.camel@mediatek.com>
+Subject: Re: [PATCH v1 4/4] drm/mediatek: add mediatek-drm of vdosys0
+ support for mt8188
+From:   Nathan Lu <nathan.lu@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Moudy Ho <moudy.ho@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <wsd_upstream@mediatek.com>,
+        <lancelot.wu@mediatek.com>, amy zhang <Amy.Zhang@mediatek.com>
+Date:   Tue, 6 Sep 2022 10:39:06 +0800
+In-Reply-To: <805b7dd82e86e6c2297a5ffbd23be2c568ca29b3.camel@mediatek.com>
+References: <20220822033213.15769-1-nathan.lu@mediatek.com>
+         <20220822033213.15769-5-nathan.lu@mediatek.com>
+         <805b7dd82e86e6c2297a5ffbd23be2c568ca29b3.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We found kcompactd was excessively running in Android, after
-some debug, found some order-9 allocations in iommu/dma.
+Hi CK,
 
-It splits contiguous page to single page in dma allocation,
-that means it is not necessary to alloc contiguous page, what
-is more, allocation for high order may cause direct memory
-reclaim and compaction, result in poor performance.
+Thanks for your review, and appreciate for all comments and sugestions.
+I'll remove io_start variable at next version.
+It will be upstream with vdosys1 patch later.
 
-In this patch, try to alloc memory by alloc_pages_bulk_array_node
-first, speedup memory allocation by saving unnecessary direct
-memory reclaim and compaction, fallback to original path when
-failed, beside remove __GFP_DIRECT_RECLAIM for costly order.
-
-Signed-off-by: Chen Wandun <chenwandun@huawei.com>
----
- drivers/iommu/dma-iommu.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index f90251572a5d..b8463934d806 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -720,7 +720,7 @@ static struct page **__iommu_dma_alloc_pages(struct device *dev,
- 		unsigned int count, unsigned long order_mask, gfp_t gfp)
- {
- 	struct page **pages;
--	unsigned int i = 0, nid = dev_to_node(dev);
-+	unsigned int i, nid = dev_to_node(dev);
- 
- 	order_mask &= (2U << MAX_ORDER) - 1;
- 	if (!order_mask)
-@@ -736,6 +736,11 @@ static struct page **__iommu_dma_alloc_pages(struct device *dev,
- 	/* It makes no sense to muck about with huge pages */
- 	gfp &= ~__GFP_COMP;
- 
-+	i = alloc_pages_bulk_array_node(gfp, nid, count, pages);
-+	if (count == i)
-+		return pages;
-+	count -= i;
-+
- 	while (count) {
- 		struct page *page = NULL;
- 		unsigned int order_size;
-@@ -753,6 +758,10 @@ static struct page **__iommu_dma_alloc_pages(struct device *dev,
- 			order_size = 1U << order;
- 			if (order_mask > order_size)
- 				alloc_flags |= __GFP_NORETRY;
-+
-+			if (order > PAGE_ALLOC_COSTLY_ORDER)
-+				alloc_flags &= ~__GFP_DIRECT_RECLAIM;
-+
- 			page = alloc_pages_node(nid, alloc_flags, order);
- 			if (!page)
- 				continue;
--- 
-2.25.1
+On Mon, 2022-08-22 at 13:50 +0800, CK Hu wrote:
+> Hi, Nathan:
+> 
+> On Mon, 2022-08-22 at 11:32 +0800, nathan.lu wrote:
+> > From: Nathan Lu <nathan.lu@mediatek.com>
+> > 
+> > add driver data of mt8188 vdosys0 to mediatek-drm and the sub
+> > driver.
+> > 
+> > Signed-off-by: amy zhang <Amy.Zhang@mediatek.com>
+> > Signed-off-by: Nathan Lu <nathan.lu@mediatek.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 30
+> > ++++++++++++++++++++++++++
+> >  1 file changed, 30 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> > b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> > index d72263c8a621..260514006093 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> > @@ -178,6 +178,18 @@ static const unsigned int mt8186_mtk_ddp_ext[]
+> > =
+> > {
+> >  	DDP_COMPONENT_DPI0,
+> >  };
+> >  
+> > +static const unsigned int mt8188_mtk_ddp_main[] = {
+> > +	DDP_COMPONENT_OVL0,
+> > +	DDP_COMPONENT_RDMA0,
+> > +	DDP_COMPONENT_COLOR0,
+> > +	DDP_COMPONENT_CCORR,
+> > +	DDP_COMPONENT_AAL0,
+> > +	DDP_COMPONENT_GAMMA,
+> > +	DDP_COMPONENT_POSTMASK0,
+> > +	DDP_COMPONENT_DITHER0,
+> > +	DDP_COMPONENT_DP_INTF0,
+> > +};
+> > +
+> >  static const unsigned int mt8192_mtk_ddp_main[] = {
+> >  	DDP_COMPONENT_OVL0,
+> >  	DDP_COMPONENT_OVL_2L0,
+> > @@ -323,6 +335,20 @@ static const struct mtk_mmsys_match_data
+> > mt8186_mmsys_match_data = {
+> >  	},
+> >  };
+> >  
+> > +static const struct mtk_mmsys_driver_data
+> > mt8188_vdosys0_driver_data
+> > = {
+> > +	.io_start = 0x1c01d000,
+> 
+> For only one mmsys, it's not necessary to set io_start.
+> 
+> Regards,
+> CK
+> 
+> > +	.main_path = mt8188_mtk_ddp_main,
+> > +	.main_len = ARRAY_SIZE(mt8188_mtk_ddp_main),
+> > +	.mmsys_dev_num = 1,
+> > +};
+> > +
+> > +static const struct mtk_mmsys_match_data mt8188_mmsys_match_data =
+> > {
+> > +	.num_drv_data = 1,
+> > +	.drv_data = {
+> > +		&mt8188_vdosys0_driver_data,
+> > +	},
+> > +};
+> > +
+> >  static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data
+> > =
+> > {
+> >  	.main_path = mt8192_mtk_ddp_main,
+> >  	.main_len = ARRAY_SIZE(mt8192_mtk_ddp_main),
+> > @@ -376,6 +402,8 @@ static const struct of_device_id
+> > mtk_drm_of_ids[]
+> > = {
+> >  	  .data = &mt8183_mmsys_match_data},
+> >  	{ .compatible = "mediatek,mt8186-mmsys",
+> >  	  .data = &mt8186_mmsys_match_data},
+> > +	{ .compatible = "mediatek,mt8188-mmsys",
+> > +	  .data = &mt8188_mmsys_match_data},
+> >  	{ .compatible = "mediatek,mt8192-mmsys",
+> >  	  .data = &mt8192_mmsys_match_data},
+> >  	{ .compatible = "mediatek,mt8195-mmsys",
+> > @@ -734,6 +762,8 @@ static const struct of_device_id
+> > mtk_ddp_comp_dt_ids[] = {
+> >  	  .data = (void *)MTK_DISP_MUTEX },
+> >  	{ .compatible = "mediatek,mt8186-disp-mutex",
+> >  	  .data = (void *)MTK_DISP_MUTEX },
+> > +	{ .compatible = "mediatek,mt8188-disp-mutex",
+> > +	  .data = (void *)MTK_DISP_MUTEX },
+> >  	{ .compatible = "mediatek,mt8192-disp-mutex",
+> >  	  .data = (void *)MTK_DISP_MUTEX },
+> >  	{ .compatible = "mediatek,mt8195-disp-mutex",
+> 
+> 
 

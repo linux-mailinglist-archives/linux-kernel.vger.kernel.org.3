@@ -2,132 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21345AE12D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AFA5AE133
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238597AbiIFHfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S238939AbiIFHgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiIFHfr (ORCPT
+        with ESMTP id S238921AbiIFHgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:35:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE96913DDE
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:35:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B4B0C33756;
-        Tue,  6 Sep 2022 07:35:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662449742; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aMlGqlnQ04JpTCGyz8Bgtjox+j1YdblTUnCI6z5C09I=;
-        b=S36G2qUkHSLI+DSrxUIL+5u1S7DL2CSRctUzbiZ6dItoP0G0FlBXlo726UDvA4+A5TZDrw
-        SSjaksADSLg3ye7OpO7VEmP/2Ii7wx/1wSWkmuRch1EpnhUO8uaI4PDY1HFo1pjViV7sGk
-        +blFRGsRK5MvybcM2UF6x5a7W9YSWds=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 95BE113A7A;
-        Tue,  6 Sep 2022 07:35:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6A6FIk74FmNLOQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 06 Sep 2022 07:35:42 +0000
-Date:   Tue, 6 Sep 2022 09:35:41 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Mel Gorman <mgorman@suse.de>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH] MM: discard __GFP_ATOMIC
-Message-ID: <Yxb4TQ0WDa85uurY@dhcp22.suse.cz>
-References: <163712397076.13692.4727608274002939094@noble.neil.brown.name>
- <YZvItUOgTgD11etC@dhcp22.suse.cz>
- <163764199967.7248.2528204111227925210@noble.neil.brown.name>
- <YZzvcjRYTL+XEHHz@dhcp22.suse.cz>
- <20220430113028.9daeebeedf679aa384da5945@linux-foundation.org>
+        Tue, 6 Sep 2022 03:36:41 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0AA54659;
+        Tue,  6 Sep 2022 00:36:38 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MMHCf3DkZz9v7cH;
+        Tue,  6 Sep 2022 15:32:30 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwB3pF5Y+BZjCS8nAA--.46254S2;
+        Tue, 06 Sep 2022 08:36:08 +0100 (CET)
+Message-ID: <b846cedb14235db6950a55e7eec2eff9e9ab56ec.camel@huaweicloud.com>
+Subject: Re: [PATCH v16 00/12] bpf: Add kfuncs for PKCS#7 signature
+ verification
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 06 Sep 2022 09:35:49 +0200
+In-Reply-To: <CAP01T77aq-UP02JYp1Vu-LE--K1ieCyfKfyZPw-a7DDKQ7_F+g@mail.gmail.com>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+         <CAP01T77aq-UP02JYp1Vu-LE--K1ieCyfKfyZPw-a7DDKQ7_F+g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220430113028.9daeebeedf679aa384da5945@linux-foundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwB3pF5Y+BZjCS8nAA--.46254S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFykXF18ZrykKw1UWw4xCrg_yoW8Ar4fpF
+        W0yFy5KFWDtF17C3yfK3yfGFW5t395G3W2gwnYy34YvFn0gr1SkrWxtr43WFWj9rykCrya
+        v39xKFy7ArWDAa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj4KmIwAAs0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 30-04-22 11:30:28, Andrew Morton wrote:
+On Mon, 2022-09-05 at 21:26 +0200, Kumar Kartikeya Dwivedi wrote:
+> On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > One of the desirable features in security is the ability to
+> > restrict import
+> > of data to a given system based on data authenticity. If data
+> > import can be
+> > restricted, it would be possible to enforce a system-wide policy
+> > based on
+> > the signing keys the system owner trusts.
+> > 
+> > This feature is widely used in the kernel. For example, if the
+> > restriction
+> > is enabled, kernel modules can be plugged in only if they are
+> > signed with a
+> > key whose public part is in the primary or secondary keyring.
+> > 
+> > For eBPF, it can be useful as well. For example, it might be useful
+> > to
+> > authenticate data an eBPF program makes security decisions on.
+> > 
+> > [...]
+> 
+> CI is crashing with NULL deref for test_progs-no_alu32 with llvm-16,
+> but I don't think the problem is in this series. This is most likely
+> unrelated to BPF, as the crash happens inside
+> kernel/time/tick-sched.c:tick_nohz_restart_sched_tick.
+> 
+> This was the same case in
+> https://lore.kernel.org/bpf/CAP01T74steDfP6O8QOshoto3e3RnHhKtAeTbnrPBZS3YJXjvbA@mail.gmail.com.
+> 
+> So, 
+> https://github.com/kernel-patches/bpf/runs/8194263557?check_suite_focus=true
+> and 
+> https://github.com/kernel-patches/bpf/runs/7982907380?check_suite_focus=true
+> 
+> look similar to me, and may not be related to BPF. They only trigger
+> during runs compiled using LLVM 16, so maybe some compiler
+> transformation is surfacing the problem?
 
-Sorry, this got lost in my inbox. Thanks Andrew for poking me.
+Yes, I saw that too. Not sure what the cause could be.
 
-> From: "NeilBrown" <neilb@suse.de>
-> Subject: mm: discard __GFP_ATOMIC
-> 
-> __GFP_ATOMIC serves little purpose.  Its main effect is to set
-> ALLOC_HARDER which adds a few little boosts to increase the chance of an
-> allocation succeeding, one of which is to lower the water-mark at which it
-> will succeed.
-> 
-> It is *always* paired with __GFP_HIGH which sets ALLOC_HIGH which also
-> adjusts this watermark.  It is probable that other users of __GFP_HIGH
-> should benefit from the other little bonuses that __GFP_ATOMIC gets.
-> 
-> __GFP_ATOMIC also gives a warning if used with __GFP_DIRECT_RECLAIM. 
-> There is little point to this.  We already get a might_sleep() warning if
-> __GFP_DIRECT_RECLAIM is set.
-> 
-> __GFP_ATOMIC allows the "watermark_boost" to be side-stepped.  It is
-> probable that testing ALLOC_HARDER is a better fit here.
-> 
-> __GFP_ATOMIC is used by tegra-smmu.c to check if the allocation might
-> sleep.  This should test __GFP_DIRECT_RECLAIM instead.
-> 
-> This patch:
->  - removes __GFP_ATOMIC
->  - causes __GFP_HIGH to set ALLOC_HARDER unless __GFP_NOMEMALLOC is set
->    (as well as ALLOC_HIGH).
->  - makes other adjustments as suggested by the above.
-> 
-> The net result is not change to GFP_ATOMIC allocations.  Other
-> allocations that use __GFP_HIGH will benefit from a few different extra
-> privileges.  This affects:
->   xen, dm, md, ntfs3
->   the vermillion frame buffer
->   hibernation
->   ksm
->   swap
-> all of which likely produce more benefit than cost if these selected
-> allocation are more likely to succeed quickly.
+Thanks
 
-This is a good summary of the current usage and existing issues. It also
-shows that the naming is tricky and allows people to make wrong calls
-(tegra-smmu.c). I also thing that it is wrong to couple memory reserves
-access to the reclaim constrains/expectations of the caller.
+Roberto
 
-> Link: https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-
-Yes, I am all for dropping the gfp flag. One thing that is not really
-entirely clear to me, though, is whether we still need 3 levels of
-memory reserves access. Can we just drop ALLOC_HARDER? With this patch
-applied it serves RT tasks and conflates it with __GFP_HIGH users
-essentially. So why do we need that additional level of reserves?
--- 
-Michal Hocko
-SUSE Labs

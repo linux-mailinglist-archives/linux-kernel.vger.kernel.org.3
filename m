@@ -2,73 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A3C5AE16F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88BA5AE176
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbiIFHoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S233845AbiIFHok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiIFHoH (ORCPT
+        with ESMTP id S232975AbiIFHof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:44:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADE024082;
-        Tue,  6 Sep 2022 00:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662450245; x=1693986245;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R5xzWexhSf1yziuZvkVA5C0xpF5xnNIJck/fKwV0YOE=;
-  b=VyuNY1QzrZiJNGhJDNgsNV7PPUQxF55oiHinzc1A/eaiKXG0VW0tvsA5
-   eDNFMowBbmvGj9M1DSam7bHJdna1UHrTu2nkkoCUEvpW+Xmu904Rbre7B
-   ZHn6G6MrR4CTNbgiPmeXElNUsAuaTOx6JVSQ2u2XaXl7ppNDbfF3Jzes5
-   CBFXBNtSLzfGaSytTJyFoBgWgSiD5gEH6as2zJvlUF3RjlukZaGfS04ee
-   HXYlaHMBwNJxbLfDLNWASNo91NKiNHvEMw6wQvUT8mCISRceo24eK5C3K
-   GVmjjkqEOixWUQLHqQkOaMJ83H2nRDqHxBR38ENXfLYtTEZ+2VJVrmo7c
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="296530710"
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="296530710"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 00:44:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="644060081"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga008.jf.intel.com with ESMTP; 06 Sep 2022 00:43:59 -0700
-Date:   Tue, 6 Sep 2022 15:43:58 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        John Garry <john.garry@huawei.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v3 14/22] KVM: Move out KVM arch PM hooks and hardware
- enable/disable logic
-Message-ID: <20220906074358.hwchunz6vdxefzb6@yy-desk-7060>
-References: <cover.1662084396.git.isaku.yamahata@intel.com>
- <1c0165a7d2dd22810d9ae2cf8cf474a2e6dcb6d7.1662084396.git.isaku.yamahata@intel.com>
+        Tue, 6 Sep 2022 03:44:35 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F48260B;
+        Tue,  6 Sep 2022 00:44:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jf7WTs85nmBQQDphE1fPQSXBxYXyyoo1wxHAOpEJzs4geGG5kC1zmN6x3PEZZHZlk6/Q5oj8ON1TcsmUK7bbKJPVKJrvs0mSj52uNPHiFb2xppN0BTzwvDQxUdlWgbjNTQdyV0Hgn+HzgGTxS0fnF9hMpD0eo/dxVFzBxi/bvsGiOZJ2LApexouHLA+ZIsu3mLD6QK/fBB/9I1lWjcP/GBt2O0EpADghhNmuJDkGN/PwgjNkvfGlfrNo5rVUNu/+WqVmdjuYgHvXG+6f/kEDrfsKLfI/e5rqqe1Arw4JNsIE30JeTXt2rH/eGRxSQoMwe+u0DIyEb9VEbXLft5htsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TbAokJjUtHMVxnua1mldM4sX1inHsMPSVwO2d6dFY6I=;
+ b=DnsiK6cTWSgVuhiVBQ05/N93todCHksEOolsu7PPvwpI2tR25RDOfTVFrQLJ33HWtRaZ5Rj97fi7GTstTo7GB04F7UmzYuWOFfF0VijCYhLHZsIN62/nnrefehI8AeyQ+hPAzJni8hQVtnKZxF0E5zyOATLKWkZl7gpUqfAo3MEr4rSVBTeQF72feGCEPzbO4yOaK9zSJDBmGbNK9FQZ7YXD1FX07Ab0CtJ/zqNabvzX7n4NiP1/o5hSdnzdBNKPWpLiI8xTVefcIPjec+5felj60+dTy82XZegTDZXAhFAA8if/8Gt0+ptBPjneKPBgxVokxvNJhO/5uyg82um30A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TbAokJjUtHMVxnua1mldM4sX1inHsMPSVwO2d6dFY6I=;
+ b=Z/qbii1Leh8ZaI/sCrcN+BZ8pfz8HoSqU9DDft0sjPL2AUYyIy8mkmnrRUwmjHYBtbOky9vx89myQ0WgYNqR51D4oZDcrxFLo7p804fVaRh7AT9SMWwSwk3M9X2EWjgun1BQh+ougKgbIJ53YLQHMFpqA8Y93ovyCNhvbNjPfqCih3J10mVoWsrVKugoy8ToNXy1bcjaAb0DG64HPodAhajx0mrRYbUEk5fGaZ6LOm3slydUsCPljBDZLaLi2a6+waWLPLfW7CW4y3ZXVuMlbwLk/q5/yvHSJzfXdehaNSTHrJ6HFNaxYgPGNx9FF044nFeXZFXoQVSXmW4h9N/ntA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com (2603:10b6:5:221::13)
+ by MW3PR12MB4442.namprd12.prod.outlook.com (2603:10b6:303:55::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Tue, 6 Sep
+ 2022 07:44:32 +0000
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::e0c5:bb15:a743:7ddb]) by DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::e0c5:bb15:a743:7ddb%3]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 07:44:32 +0000
+Message-ID: <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
+Date:   Tue, 6 Sep 2022 00:44:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+References: <20220831041843.973026-1-jhubbard@nvidia.com>
+ <20220831041843.973026-5-jhubbard@nvidia.com>
+ <YxbtF1O8+kXhTNaj@infradead.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <YxbtF1O8+kXhTNaj@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR04CA0020.namprd04.prod.outlook.com
+ (2603:10b6:a03:40::33) To DM6PR12MB4140.namprd12.prod.outlook.com
+ (2603:10b6:5:221::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1c0165a7d2dd22810d9ae2cf8cf474a2e6dcb6d7.1662084396.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0cbe3573-9a6a-4b04-d8a0-08da8fdba2e8
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4442:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i9drnai1j58XioXUeG3VyzdG1tCfrQ4LQTF8IDUvQ6b+nQjKAfydUOQgvyxVZUkqWpyoaSdOjex6KCj2HtANpArsz1nNUAixL9nYF9fhTfWlUTawGABilqA6lFCP46TB0LNOFUI8VX79lrBUR4E8LAoNcOte1Gnj7h4Ed0qkmmD+ChlWjffsvTh0oml/OS7njw5ZFVrorygrHmHVbhGBrcwPPusLSHsWDgM+oPYte11ZMVsETCo44Ig8+vM5RHjfXrG7YdoCNKhhTcou7CZZdOg8FJ9KDWujkT170yXhTqOVJJKL1ZX0Jw5npi/RdVepoMYw5vnZj08Jh9GbY/NZq3m8v4YrxrInK4d5ePbLH255cigO81Fht1HrvuwKRo+bLEAELqe5KpQJ9szNMUyV2e+/i4gMo1NzvL5BGZdRCypfh4rbh6jXFeSbv81yqB5B6iMrz2/x93F7xxPY3GoTxk2cUAscW7Z/d/tigScgzvU5jTXbkypzxEyrB7YgZRc6r5aea5AoHPHl34AjBhtw6Q+NEozYessZ3M6euWmtZd0iGN3x4cz3D7rBYsUd/NnsNcWb7F1gGZsCt42y15G2JvsNdMRua7Js2kX6O41kkZkkx5K70guIGkzr+c50ZiZhC9B9HFsTYW3kNC+TKI3xaLx+18o8vtbBDMeHj2rQ+B+cenCFQ0/Vgqeful0c1OPBDfPeFs8H9gWcWe2siXLIeKVhcbgnBcpvnKmgDZGm+HiRPTjmcMr0MA/M+Q79q4aI13jKDz3Y7UK8b13XtbE2BgsuMYuiO3N5MVdHbmY3orY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4140.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(376002)(366004)(346002)(31696002)(36756003)(31686004)(86362001)(66476007)(66556008)(8676002)(4326008)(66946007)(38100700002)(2616005)(26005)(6666004)(41300700001)(6506007)(83380400001)(478600001)(316002)(6486002)(6916009)(6512007)(53546011)(2906002)(186003)(7416002)(54906003)(5660300002)(4744005)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Zmd0ZVdjaDZGTmVYb2d6VGl1Qk1MamxPTDhSNUdlQ1p3bDNSbUozSzVjcDQ5?=
+ =?utf-8?B?WkJJd1R0UjVTSFJldzJJeUJWMHU5NTVSZkluVUV6SW5WckFtRTJpZEJkV051?=
+ =?utf-8?B?dWNLTmpNOWFjMi8xWWlGcHRnYlB6WTNEMmxZVnpHek5YY1ZSaG1yaXFpMTB6?=
+ =?utf-8?B?QmRSbHMxdmttdDdRcXFMWGdoQVVDUEhEL0RUVXZJYkxNK09JdzhHOUVMRUow?=
+ =?utf-8?B?YzZOOVNoNVBvd0pXREpNNXE1OUF2bmthLzRpOWVRK2YyaGZaTzM5TjBOYXpR?=
+ =?utf-8?B?dUJIeWdMMXMrRE0zR1VpeDU2Wm9EMFFJb2dyTFU4YkRtNCtybUpCNVd4WjRp?=
+ =?utf-8?B?ZkpuTUFjdjhkK3lraklpUEU3Z0w1RVZ4OTdFbnZnTVhMTXMxUzdDTlhRNUZL?=
+ =?utf-8?B?TEFBZ0k0MmQvNGxWQ1JlM2xvN1Z6eWlnT05TWm1LWmZTUDFpRVdUNGxPUnFj?=
+ =?utf-8?B?endCS0Nic0pDSXhZNVV0WVRpTXArOEZvWTNPeWtsbWFic28xQW5FUjVDeUFr?=
+ =?utf-8?B?bVV5RmFGMDU3NnpJNTZsY3NYVGV6WmtkY1dibGdxMTZXcEJuSzVXOThHTWJh?=
+ =?utf-8?B?NFFONS9EeldqUFp3QTYzK21YTDdKbElFS0l3NWpqRXN1ZEkvNnN3dXhJS2F5?=
+ =?utf-8?B?SkFoOXozcUIzSWFaa0FmZzFqVCtZUG5sVHlRenB2NGxiZldoTElSODQ3ODlQ?=
+ =?utf-8?B?SjJEaWZXL0k4b04yNXY3Qnp2bUtCZHplT2Uzd2pRbmlORnByMFZrbmd1QzR5?=
+ =?utf-8?B?bzBVU25ldUt3UzIwWEFPTG9pNkFReDh0NitGTzhYMEJTcEhFbkp2Z212Rytk?=
+ =?utf-8?B?SkZsN3JzclRRODM3MXRodnhCL1NVNXFSQUpQVnhuT1ZLS0Q4OFd2QnRJbDZW?=
+ =?utf-8?B?WFg5czdlVEtRWXhyajJ4ZGxxZmwxZjdWQXpROVJSdVdWRkphc29hOHJ5NWNB?=
+ =?utf-8?B?a2ZZZ1RSTHBBUFZKZnNMb2wzY2dkUXlXRTZFOC9BV081dlp3WWR5bno3cUJi?=
+ =?utf-8?B?NEd4amFBbWVkTUhpVEowdC9EdnpETEt0MTdpWE4vMllZNzA1bENCYjVNbzNa?=
+ =?utf-8?B?c1U1andaS3dkTEdqdEd2d2pkc1ZjZy9hT2Jhb2diYVNvb1N4K3UzbHJSOUVq?=
+ =?utf-8?B?QmcwUUhacVZ2dTJZc3cvUlFXYnVZYXVRU0Q2ZmRVNUNWcGlMcGEyMnptWmdB?=
+ =?utf-8?B?RGh4OFBkSHd3dG5XUjE2TDlOVStpdzV2QTB4TXpERUhFYTFzekVBV09aemN3?=
+ =?utf-8?B?SXBtd1RIMW9CL1prRndNTWh5cStHb3ZFRmI0bmx2OTdJQWg0TUQwY3NXVWVH?=
+ =?utf-8?B?STJyem9RZTIrcE0xQ3dPZVI2NkdZbDdSUkVPbE9UeGVSQk5jNUNWMC85OVU3?=
+ =?utf-8?B?clJ1R2pwenkvRTV6dzJ0TXA4Z2RUQ20yS2tKV1U5VC9FRm43VjBHbHQ2N3Qr?=
+ =?utf-8?B?dG52dFhjWkZISjAvemJEVHFoTHgwYjg0Ukg2em5ZL0NycUVkWWlMRDdnc25H?=
+ =?utf-8?B?Ri9DSFlJMEtzNFlpalFLN1lnY00yamFQam1sOHdaRnhDR0JQY2VJb3dBZ2Rr?=
+ =?utf-8?B?bm15QzNqZU9jaStIUlZ1REhxQmRyMXE1Z1c5c2Vvc2U2STcyQTZzYWt0RjBr?=
+ =?utf-8?B?YW8yZkgwV1d5cWVjcmt3blRRTFBZSUZNUEF2dUIrdDhlTFNBSXFPalhNcWlt?=
+ =?utf-8?B?R0cvVnJlRURJRFhQdnhseVJtWDJCY2lZeDFiVkZ6cHFYMFJUTThmWnVkbk1F?=
+ =?utf-8?B?NDU1L1NDQktGVUM4Z203V0dvZ1doZEU0SlUrWjRSZzN1RENtckV4VFV5Nm5K?=
+ =?utf-8?B?a0JLelpQYysrcVczaE1pZWozc1ozZ3o5cjNVYlJaOU5yUHAvUnI0Y3ljUUw5?=
+ =?utf-8?B?K3V6QUNYNFNqeS83dW9mVzNaQnFxdEhuZzFWNlNKSHk1ZktUbzBTMWVHR0d0?=
+ =?utf-8?B?NkwveVY0Y25UN0IrMG5QTXFPOWtJTXRPR0toa2plU1VjVGdWOThmZDR2cWZW?=
+ =?utf-8?B?WWcvdEF3N29iR3dOMUsyWE9KcGticVdPVXluK01jZGtKaitNb1VOVzVLV1Q0?=
+ =?utf-8?B?OFoyRytmMWc3RW9Sek5CVC9YNXRuYTVrVUp5NVpzOFJ3OTdwSWdZcXZKcnRN?=
+ =?utf-8?Q?GmnIqZY4wLafQUDBHn4w+Hcj7?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0cbe3573-9a6a-4b04-d8a0-08da8fdba2e8
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4140.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 07:44:32.1531
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Tdh8vmgfpT7nsRBffShnYudZw24wEYaktN8LJnvH3PEYDoeQ5+OAKE50Lbdw+QLULBWHe3I0o013Jkg5cgNRJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4442
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,523 +138,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 07:17:49PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> To make clear that those files are default implementation that KVM/x86 (and
-> other KVM arch in future) will override them, split out those into a single
-> file. Once conversions for all kvm archs are done, the file will be
-> deleted.  kvm_arch_pre_hardware_unsetup() is introduced to avoid cross-arch
-> code churn for now.  Once it's settled down,
-> kvm_arch_pre_hardware_unsetup() can be merged into
-> kvm_arch_hardware_unsetup() in each arch code.
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  include/linux/kvm_host.h |   1 +
->  virt/kvm/kvm_arch.c      | 103 ++++++++++++++++++++++-
->  virt/kvm/kvm_main.c      | 172 +++++----------------------------------
->  3 files changed, 124 insertions(+), 152 deletions(-)
->
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index f78364e01ca9..60f4ae9d6f48 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1437,6 +1437,7 @@ static inline void kvm_create_vcpu_debugfs(struct kvm_vcpu *vcpu) {}
->  int kvm_arch_hardware_enable(void);
->  void kvm_arch_hardware_disable(void);
->  int kvm_arch_hardware_setup(void *opaque);
-> +void kvm_arch_pre_hardware_unsetup(void);
->  void kvm_arch_hardware_unsetup(void);
->  int kvm_arch_check_processor_compat(void);
->  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
-> diff --git a/virt/kvm/kvm_arch.c b/virt/kvm/kvm_arch.c
-> index 0eac996f4981..0648d4463d9e 100644
-> --- a/virt/kvm/kvm_arch.c
-> +++ b/virt/kvm/kvm_arch.c
-> @@ -6,49 +6,148 @@
->   * Author:
->   *   Isaku Yamahata <isaku.yamahata@intel.com>
->   *                  <isaku.yamahata@gmail.com>
-> + *
-> + * TODO: Delete this file once the conversion of all KVM arch is done.
->   */
->
->  #include <linux/kvm_host.h>
->
-> +static cpumask_t cpus_hardware_enabled = CPU_MASK_NONE;
-> +static atomic_t hardware_enable_failed;
-> +
->  __weak int kvm_arch_post_init_vm(struct kvm *kvm)
->  {
->  	return 0;
->  }
->
-> +static void hardware_enable_nolock(void *caller_name)
-> +{
-> +	int cpu = raw_smp_processor_id();
-> +	int r;
-> +
-> +	WARN_ON_ONCE(preemptible());
-> +
-> +	if (cpumask_test_cpu(cpu, &cpus_hardware_enabled))
-> +		return;
-> +
-> +	cpumask_set_cpu(cpu, &cpus_hardware_enabled);
-> +
-> +	r = kvm_arch_hardware_enable();
-> +
-> +	if (r) {
-> +		cpumask_clear_cpu(cpu, &cpus_hardware_enabled);
-> +		atomic_inc(&hardware_enable_failed);
-> +		pr_warn("kvm: enabling virtualization on CPU%d failed during %s()\n",
-> +			cpu, (const char *)caller_name);
-> +	}
-> +}
-> +
-> +static void hardware_disable_nolock(void *junk)
-> +{
-> +	int cpu = raw_smp_processor_id();
-> +
-> +	WARN_ON_ONCE(preemptible());
-> +
-> +	if (!cpumask_test_cpu(cpu, &cpus_hardware_enabled))
-> +		return;
-> +	cpumask_clear_cpu(cpu, &cpus_hardware_enabled);
-> +	kvm_arch_hardware_disable();
-> +}
-> +
-> +__weak void kvm_arch_pre_hardware_unsetup(void)
-> +{
-> +	on_each_cpu(hardware_disable_nolock, NULL, 1);
-> +}
-> +
->  /*
->   * Called after the VM is otherwise initialized, but just before adding it to
->   * the vm_list.
->   */
->  __weak int kvm_arch_add_vm(struct kvm *kvm, int usage_count)
->  {
-> -	return kvm_arch_post_init_vm(kvm);
-> +	int r = 0;
-> +
-> +	if (usage_count != 1)
-> +		return 0;
-> +
-> +	atomic_set(&hardware_enable_failed, 0);
-> +	on_each_cpu(hardware_enable_nolock, (void *)__func__, 1);
+On 9/5/22 23:47, Christoph Hellwig wrote:
+> I'd it one step back.  For BVECS we never need a get or pin.  The
+> block layer already does this, an the other callers should as well.
+> For KVEC the same is true.  For PIPE and xarray as you pointed out
+> we can probably just do the pin, it is not like these are performance
+> paths.
+> 
+> So, I'd suggest to:
+> 
+>  - factor out the user backed and bvec cases from
+>    __iov_iter_get_pages_alloc into helper just to keep
+>    __iov_iter_get_pages_alloc readable.
 
+OK, that part is clear.
 
-This function is called in kvm_create_vm:
+>  - for the pin case don't use the existing bvec helper at all, but
+>    copy the logic for the block layer for not pinning.
 
- kvm_create_vm {
- ...
-   enable_hardware_all()
- ...
-   kvm_arch_add_vm()
- ...
-}
+I'm almost, but not quite sure I get the idea above. Overall, what
+happens to bvec pages? Leave the get_page() pin in place for FOLL_GET
+(or USE_FOLL_GET), I suppose, but do...what, for FOLL_PIN callers?
 
-so don't need on_each_cpu(enable_hardware_nolock) here, or the
-enable_hardware_all() shuold be removed from kvm_create_vm().
+thanks,
 
-> +
-> +	if (atomic_read(&hardware_enable_failed)) {
-> +		r = -EBUSY;
-> +		goto err;
-> +	}
-> +
-> +	r = kvm_arch_post_init_vm(kvm);
-> +err:
-> +	if (r)
-> +		on_each_cpu(hardware_disable_nolock, NULL, 1);
-> +	return r;
->  }
->
->  __weak int kvm_arch_del_vm(int usage_count)
->  {
-> +	if (usage_count)
-> +		return 0;
-> +
-> +	on_each_cpu(hardware_disable_nolock, NULL, 1);
+-- 
+John Hubbard
+NVIDIA
 
-Same pattern as above:
-
- kvm_destory_vm {
- ...
-   disable_hardware_all()
- ...
-   kvm_arch_del_vm()
- ...
-}
-
->  	return 0;
->  }
->
->  __weak int kvm_arch_online_cpu(unsigned int cpu, int usage_count)
->  {
-> -	return 0;
-> +	int ret = 0;
-> +
-> +	ret = kvm_arch_check_processor_compat();
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Abort the CPU online process if hardware virtualization cannot
-> +	 * be enabled. Otherwise running VMs would encounter unrecoverable
-> +	 * errors when scheduled to this CPU.
-> +	 */
-> +	if (usage_count) {
-> +		WARN_ON_ONCE(atomic_read(&hardware_enable_failed));
-> +
-> +		hardware_enable_nolock((void *)__func__);
-> +		if (atomic_read(&hardware_enable_failed)) {
-> +			atomic_set(&hardware_enable_failed, 0);
-> +			ret = -EIO;
-> +		}
-> +	}
-> +	return ret;
->  }
->
->  __weak int kvm_arch_offline_cpu(unsigned int cpu, int usage_count)
->  {
-> +	if (usage_count)
-> +		hardware_disable_nolock(NULL);
->  	return 0;
->  }
->
->  __weak int kvm_arch_reboot(int val)
->  {
-> +	on_each_cpu(hardware_disable_nolock, NULL, 1);
->  	return NOTIFY_OK;
->  }
->
->  __weak int kvm_arch_suspend(int usage_count)
->  {
-> +	if (usage_count)
-> +		hardware_disable_nolock(NULL);
->  	return 0;
->  }
->
->  __weak void kvm_arch_resume(int usage_count)
->  {
-> +	if (kvm_arch_check_processor_compat())
-> +		/*
-> +		 * No warning here because kvm_arch_check_processor_compat()
-> +		 * would have warned with more information.
-> +		 */
-> +		return; /* FIXME: disable KVM */
-> +
-> +	if (usage_count)
-> +		hardware_enable_nolock((void *)__func__);
->  }
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 90e1dcfc9ace..5373127dcdb6 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -102,9 +102,7 @@ EXPORT_SYMBOL_GPL(halt_poll_ns_shrink);
->  DEFINE_MUTEX(kvm_lock);
->  LIST_HEAD(vm_list);
->
-> -static cpumask_var_t cpus_hardware_enabled;
->  static int kvm_usage_count;
-> -static atomic_t hardware_enable_failed;
->
->  static struct kmem_cache *kvm_vcpu_cache;
->
-> @@ -142,9 +140,6 @@ static int kvm_no_compat_open(struct inode *inode, struct file *file)
->  #define KVM_COMPAT(c)	.compat_ioctl	= kvm_no_compat_ioctl,	\
->  			.open		= kvm_no_compat_open
->  #endif
-> -static int hardware_enable_all(void);
-> -static void hardware_disable_all(void);
-> -static void hardware_disable_nolock(void *junk);
->  static void kvm_del_vm(void);
->
->  static void kvm_io_bus_destroy(struct kvm_io_bus *bus);
-> @@ -1196,10 +1191,6 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
->  	if (r)
->  		goto out_err_no_arch_destroy_vm;
->
-> -	r = hardware_enable_all();
-> -	if (r)
-> -		goto out_err_no_disable;
-> -
->  #ifdef CONFIG_HAVE_KVM_IRQFD
->  	INIT_HLIST_HEAD(&kvm->irq_ack_notifier_list);
->  #endif
-> @@ -1216,14 +1207,28 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
->  	if (r)
->  		goto out_err_no_debugfs;
->
-> +	/*
-> +	 * During onlining a CPU, cpu_online_mask is set before kvm_online_cpu()
-> +	 * is called. on_each_cpu() between them includes the CPU. As a result,
-> +	 * hardware_enable_nolock() may get invoked before kvm_online_cpu().
-> +	 * This would enable hardware virtualization on that cpu without
-> +	 * compatibility checks, which can potentially crash system or break
-> +	 * running VMs.
-> +	 *
-> +	 * Disable CPU hotplug to prevent this case from happening.
-> +	 */
-> +	cpus_read_lock();
->  	mutex_lock(&kvm_lock);
-> +	kvm_usage_count++;
->  	r = kvm_arch_add_vm(kvm, kvm_usage_count);
->  	if (r) {
-> +		/* the following kvm_del_vm() decrements kvm_usage_count. */
->  		mutex_unlock(&kvm_lock);
->  		goto out_err;
->  	}
->  	list_add(&kvm->vm_list, &vm_list);
->  	mutex_unlock(&kvm_lock);
-> +	cpus_read_unlock();
->
->  	preempt_notifier_inc();
->  	kvm_init_pm_notifier(kvm);
-> @@ -1240,9 +1245,7 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
->  		mmu_notifier_unregister(&kvm->mmu_notifier, current->mm);
->  #endif
->  out_err_no_mmu_notifier:
-> -	hardware_disable_all();
->  	kvm_del_vm();
-> -out_err_no_disable:
->  	kvm_arch_destroy_vm(kvm);
->  out_err_no_arch_destroy_vm:
->  	WARN_ON_ONCE(!refcount_dec_and_test(&kvm->users_count));
-> @@ -1321,7 +1324,6 @@ static void kvm_destroy_vm(struct kvm *kvm)
->  	cleanup_srcu_struct(&kvm->srcu);
->  	kvm_arch_free_vm(kvm);
->  	preempt_notifier_dec();
-> -	hardware_disable_all();
->  	kvm_del_vm();
->  	mmdrop(mm);
->  	module_put(kvm_chardev_ops.owner);
-> @@ -4986,149 +4988,37 @@ static struct miscdevice kvm_dev = {
->  	&kvm_chardev_ops,
->  };
->
-> -static void hardware_enable_nolock(void *caller_name)
-> -{
-> -	int cpu = raw_smp_processor_id();
-> -	int r;
-> -
-> -	WARN_ON_ONCE(preemptible());
-> -
-> -	if (cpumask_test_cpu(cpu, cpus_hardware_enabled))
-> -		return;
-> -
-> -	cpumask_set_cpu(cpu, cpus_hardware_enabled);
-> -
-> -	r = kvm_arch_hardware_enable();
-> -
-> -	if (r) {
-> -		cpumask_clear_cpu(cpu, cpus_hardware_enabled);
-> -		atomic_inc(&hardware_enable_failed);
-> -		pr_warn("kvm: enabling virtualization on CPU%d failed during %s()\n",
-> -			cpu, (const char *)caller_name);
-> -	}
-> -}
-> -
->  static int kvm_online_cpu(unsigned int cpu)
->  {
->  	int ret;
->
-> -	ret = kvm_arch_check_processor_compat();
-> -	if (ret)
-> -		return ret;
-> -
->  	mutex_lock(&kvm_lock);
-> -	/*
-> -	 * Abort the CPU online process if hardware virtualization cannot
-> -	 * be enabled. Otherwise running VMs would encounter unrecoverable
-> -	 * errors when scheduled to this CPU.
-> -	 */
-> -	if (kvm_usage_count) {
-> -		WARN_ON_ONCE(atomic_read(&hardware_enable_failed));
-> -
-> -		hardware_enable_nolock((void *)__func__);
-> -		if (atomic_read(&hardware_enable_failed)) {
-> -			atomic_set(&hardware_enable_failed, 0);
-> -			ret = -EIO;
-> -		} else {
-> -			ret = kvm_arch_online_cpu(cpu, kvm_usage_count);
-> -			if (ret)
-> -				hardware_disable_nolock(NULL);
-> -		}
-> -	}
-> +	ret = kvm_arch_online_cpu(cpu, kvm_usage_count);
->  	mutex_unlock(&kvm_lock);
->  	return ret;
->  }
->
-> -static void hardware_disable_nolock(void *junk)
-> -{
-> -	int cpu = raw_smp_processor_id();
-> -
-> -	WARN_ON_ONCE(preemptible());
-> -
-> -	if (!cpumask_test_cpu(cpu, cpus_hardware_enabled))
-> -		return;
-> -	cpumask_clear_cpu(cpu, cpus_hardware_enabled);
-> -	kvm_arch_hardware_disable();
-> -}
-> -
->  static int kvm_offline_cpu(unsigned int cpu)
->  {
-> -	int ret = 0;
-> +	int ret;
->
->  	mutex_lock(&kvm_lock);
-> -	if (kvm_usage_count) {
-> -		hardware_disable_nolock(NULL);
-> -		ret = kvm_arch_offline_cpu(cpu, kvm_usage_count);
-> -		if (ret) {
-> -			(void)hardware_enable_nolock(NULL);
-> -			atomic_set(&hardware_enable_failed, 0);
-> -		}
-> -	}
-> +	ret = kvm_arch_offline_cpu(cpu, kvm_usage_count);
->  	mutex_unlock(&kvm_lock);
->  	return ret;
->  }
->
-> -static void hardware_disable_all_nolock(void)
-> -{
-> -	BUG_ON(!kvm_usage_count);
-> -
-> -	kvm_usage_count--;
-> -	if (!kvm_usage_count)
-> -		on_each_cpu(hardware_disable_nolock, NULL, 1);
-> -}
-> -
-> -static void hardware_disable_all(void)
-> -{
-> -	cpus_read_lock();
-> -	mutex_lock(&kvm_lock);
-> -	hardware_disable_all_nolock();
-> -	mutex_unlock(&kvm_lock);
-> -	cpus_read_unlock();
-> -}
-> -
->  static void kvm_del_vm(void)
->  {
->  	cpus_read_lock();
->  	mutex_lock(&kvm_lock);
-> +	WARN_ON_ONCE(!kvm_usage_count);
-> +	kvm_usage_count--;
->  	kvm_arch_del_vm(kvm_usage_count);
->  	mutex_unlock(&kvm_lock);
->  	cpus_read_unlock();
->  }
->
-> -static int hardware_enable_all(void)
-> -{
-> -	int r = 0;
-> -
-> -	/*
-> -	 * During onlining a CPU, cpu_online_mask is set before kvm_online_cpu()
-> -	 * is called. on_each_cpu() between them includes the CPU. As a result,
-> -	 * hardware_enable_nolock() may get invoked before kvm_online_cpu().
-> -	 * This would enable hardware virtualization on that cpu without
-> -	 * compatibility checks, which can potentially crash system or break
-> -	 * running VMs.
-> -	 *
-> -	 * Disable CPU hotplug to prevent this case from happening.
-> -	 */
-> -	cpus_read_lock();
-> -	mutex_lock(&kvm_lock);
-> -
-> -	kvm_usage_count++;
-> -	if (kvm_usage_count == 1) {
-> -		atomic_set(&hardware_enable_failed, 0);
-> -		on_each_cpu(hardware_enable_nolock, (void *)__func__, 1);
-> -
-> -		if (atomic_read(&hardware_enable_failed)) {
-> -			hardware_disable_all_nolock();
-> -			r = -EBUSY;
-> -		}
-> -	}
-> -
-> -	mutex_unlock(&kvm_lock);
-> -	cpus_read_unlock();
-> -
-> -	return r;
-> -}
-> -
->  static int kvm_reboot(struct notifier_block *notifier, unsigned long val,
->  		      void *v)
->  {
-> @@ -5146,7 +5036,6 @@ static int kvm_reboot(struct notifier_block *notifier, unsigned long val,
->  	/* This hook is called without cpuhotplug disabled.  */
->  	cpus_read_lock();
->  	mutex_lock(&kvm_lock);
-> -	on_each_cpu(hardware_disable_nolock, NULL, 1);
->  	r = kvm_arch_reboot(val);
->  	mutex_unlock(&kvm_lock);
->  	cpus_read_unlock();
-> @@ -5745,24 +5634,13 @@ static int kvm_suspend(void)
->  	 * locking.
->  	 */
->  	lockdep_assert_not_held(&kvm_lock);
-> -	if (kvm_usage_count)
-> -		hardware_disable_nolock(NULL);
->  	return kvm_arch_suspend(kvm_usage_count);
->  }
->
->  static void kvm_resume(void)
->  {
-> -	if (kvm_arch_check_processor_compat())
-> -		/*
-> -		 * No warning here because kvm_arch_check_processor_compat()
-> -		 * would have warned with more information.
-> -		 */
-> -		return; /* FIXME: disable KVM */
-> -
->  	lockdep_assert_not_held(&kvm_lock);
->  	kvm_arch_resume(kvm_usage_count);
-> -	if (kvm_usage_count)
-> -		hardware_enable_nolock((void *)__func__);
->  }
->
->  static struct syscore_ops kvm_syscore_ops = {
-> @@ -5900,11 +5778,6 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
->  	if (r)
->  		goto out_irqfd;
->
-> -	if (!zalloc_cpumask_var(&cpus_hardware_enabled, GFP_KERNEL)) {
-> -		r = -ENOMEM;
-> -		goto out_free_0;
-> -	}
-> -
->  	r = kvm_arch_hardware_setup(opaque);
->  	if (r < 0)
->  		goto out_free_1;
-> @@ -5981,8 +5854,6 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
->  out_free_2:
->  	kvm_arch_hardware_unsetup();
->  out_free_1:
-> -	free_cpumask_var(cpus_hardware_enabled);
-> -out_free_0:
->  	kvm_irqfd_exit();
->  out_irqfd:
->  	kvm_arch_exit();
-> @@ -6004,11 +5875,12 @@ void kvm_exit(void)
->  	unregister_syscore_ops(&kvm_syscore_ops);
->  	unregister_reboot_notifier(&kvm_reboot_notifier);
->  	cpuhp_remove_state_nocalls(CPUHP_AP_KVM_ONLINE);
-> -	on_each_cpu(hardware_disable_nolock, NULL, 1);
-> +	cpus_read_lock();
-> +	kvm_arch_pre_hardware_unsetup();
->  	kvm_arch_hardware_unsetup();
-> +	cpus_read_unlock();
->  	kvm_arch_exit();
->  	kvm_irqfd_exit();
-> -	free_cpumask_var(cpus_hardware_enabled);
->  	kvm_vfio_ops_exit();
->  }
->  EXPORT_SYMBOL_GPL(kvm_exit);
-> --
-> 2.25.1
->

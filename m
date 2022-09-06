@@ -2,96 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AE15AE920
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EC15AE924
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbiIFNJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S240131AbiIFNLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbiIFNJw (ORCPT
+        with ESMTP id S240145AbiIFNLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:09:52 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F17E25C7B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:09:49 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id z20so12258805ljq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 06:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=fvyT04/Nvz6zIBROEx0pz0Zydf7Sgv0iL5DNAFgL4FU=;
-        b=Eb8korZ58eeMIMkzxU6/1wJdDv22JYU4eF2jFdj31Lh/ZwoSw3bL1z3nrSmkpE3Qwi
-         DMv9xYjP38OZHvsfkcBUxHyIOnBKOWzO7Ji3g/lh9XT9jXbx6yrSUj+3fbbqgWswuYuF
-         V1MBR1RSIW6kYFt7kFRTukEkysOo4vbGLpxju4wBxPKwA6pTGqisuU+OoUcwh1g8sHnQ
-         rY1ZB+hJL3YCtDMMQXrkxYnU/ClJOkvmCqMHc/Qd0kwZ56YRcTkRArs+kDxYuY9Uz4xH
-         ov/gw5uou4V5nItHtiC8XBCyJkGJ89rl5uKvbQsW9Rz7CWMFO0go3HtxW/RWNI3Z3GHb
-         eyIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=fvyT04/Nvz6zIBROEx0pz0Zydf7Sgv0iL5DNAFgL4FU=;
-        b=fn6xuQ+G91sCAX8b9rDKM93BwBhmv3zDDJ/DHqiAIk7FV2K1da8sHdbkBc4sUpvdmn
-         TOkmgIo1hvs2c2KzM2egIWpG/SmXOV6Jn/IeJOunqDt5u6+L/0h1U6vtvY6b7+9d18uI
-         Vsp7vjVZbtuUwwFku3sHcEb/RRCZOCV0u5665sG8BVTrqHBdNXXeUC2Ns+zMr4iifLq5
-         d0+6wsn45SrMHwCKsETrUD+weYrJABTnEnR8QvabT7UMiM1bIYsFjoxRz8RtokBK2O69
-         7CUfatKyJILCfyfIBBQCqTCk52cgw7Avge5ggNZPeUjOH7doOpWKXx0x4qAM4HzoxGog
-         p5AQ==
-X-Gm-Message-State: ACgBeo3NN5TLD2DCMI8FrpzRIUt2xPBQ+gu7IdjeJITIZwbFzE+Hewwq
-        hIQ7043YKsTBPFgrpXMwvVZCXQ==
-X-Google-Smtp-Source: AA6agR7TPR/1qR1gU1UY2pYSeskuowrn9cvcmJrC+PYB3PBzsn9GjzfaEpEe2lc+gpGAh82YoIE12Q==
-X-Received: by 2002:a2e:b819:0:b0:26a:a531:da36 with SMTP id u25-20020a2eb819000000b0026aa531da36mr950357ljo.141.1662469789411;
-        Tue, 06 Sep 2022 06:09:49 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v27-20020ac258fb000000b0048b13d0b896sm1731567lfo.141.2022.09.06.06.09.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 06:09:48 -0700 (PDT)
-Message-ID: <45b6f444-b8d1-740a-81a2-b464f71f2a15@linaro.org>
-Date:   Tue, 6 Sep 2022 15:09:47 +0200
+        Tue, 6 Sep 2022 09:11:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831C3659F8;
+        Tue,  6 Sep 2022 06:11:11 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B80DF660037F;
+        Tue,  6 Sep 2022 14:11:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662469869;
+        bh=5QO1SLp5eg80ObSSt8FLqmBTFoFhiD0BogISlBa9BUQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mOY7c50kE5+Xmrb35k079cHSMFkYyUhYJe+5NjUUjK8ZUXDK2Cj5ao5UFUt6ANYUq
+         MbENZTEK+MC3hZgppOROxiXeWrvpQjkxT6YjcoMgmWubysUlbKG77vCqaEkWRDRal9
+         XXpS0HpF4+46bmoLB10JvyBEUVX9ZdQGSREbTyPXFsZn6YfaEG5VzCQDo8FnzKShL+
+         XBdK7rg58ksb9EzHK9Ozg4bd0EY8Yc3pKrEVM3aopMr0XqtFVapzbd8WRV3eV8G+7D
+         kXDLzfz9Muog+VR73hD4bNVxPc1EBMTiMUwEjla1rHk5Sro9Q91O0seQeTlmhd+iQq
+         3CWCI7wojCwxQ==
+Message-ID: <efe46a7d-89b7-2465-e593-8383d1546c16@collabora.com>
+Date:   Tue, 6 Sep 2022 16:11:03 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 2/3] dt-bindings: riscv: microchip: document the Aldec
- TySoM
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5 07/33] thermal/drivers/tegra: Switch to new of API
 Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daire McNamara <daire.mcnamara@microchip.com>
-Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220906121525.3212705-1-conor.dooley@microchip.com>
- <20220906121525.3212705-3-conor.dooley@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220906121525.3212705-3-conor.dooley@microchip.com>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
+        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
+        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220804224349.1926752-8-daniel.lezcano@linexp.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220804224349.1926752-8-daniel.lezcano@linexp.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 14:15, Conor Dooley wrote:
-> The TySOM-M-MPFS250 is a compact SoC prototyping board featuring
-> a Microchip PolarFire SoC MPFS250T-FCG1152.
-> 
-> Link: https://www.aldec.com/en/products/emulation/tysom_boards/polarfire_microchip/tysom_m_mpfs250
+On 8/5/22 01:43, Daniel Lezcano wrote:
+> diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
+> index 05886684f429..c34501287e96 100644
+> --- a/drivers/thermal/tegra/tegra30-tsensor.c
+> +++ b/drivers/thermal/tegra/tegra30-tsensor.c
+> @@ -159,9 +159,9 @@ static void devm_tegra_tsensor_hw_disable(void *data)
+>  	tegra_tsensor_hw_disable(ts);
+>  }
+>  
+> -static int tegra_tsensor_get_temp(void *data, int *temp)
+> +static int tegra_tsensor_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -	const struct tegra_tsensor_channel *tsc = data;
+> +	const struct tegra_tsensor_channel *tsc = tz->devdata;
+>  	const struct tegra_tsensor *ts = tsc->ts;
+>  	int err, c1, c2, c3, c4, counter;
+>  	u32 val;
+> @@ -217,9 +217,9 @@ static int tegra_tsensor_temp_to_counter(const struct tegra_tsensor *ts, int tem
+>  	return DIV_ROUND_CLOSEST(c2 * 1000000 - ts->calib.b, ts->calib.a);
+>  }
+>  
+> -static int tegra_tsensor_set_trips(void *data, int low, int high)
+> +static int tegra_tsensor_set_trips(struct thermal_zone_device *tz, int low, int high)
+>  {
+> -	const struct tegra_tsensor_channel *tsc = data;
+> +	const struct tegra_tsensor_channel *tsc = tz->devdata;
+>  	const struct tegra_tsensor *ts = tsc->ts;
+>  	u32 val;
+>  
+> @@ -240,7 +240,7 @@ static int tegra_tsensor_set_trips(void *data, int low, int high)
+>  	return 0;
+>  }
+>  
+> -static const struct thermal_zone_of_device_ops ops = {
+> +static const struct thermal_zone_device_ops ops = {
+>  	.get_temp = tegra_tsensor_get_temp,
+>  	.set_trips = tegra_tsensor_set_trips,
+>  };
+> @@ -516,7 +516,7 @@ static int tegra_tsensor_register_channel(struct tegra_tsensor *ts,
+>  	tsc->id = id;
+>  	tsc->regs = ts->regs + 0x40 * (hw_id + 1);
+>  
+> -	tsc->tzd = devm_thermal_zone_of_sensor_register(ts->dev, id, tsc, &ops);
+> +	tsc->tzd = devm_thermal_of_zone_register(ts->dev, id, tsc, &ops);
+>  	if (IS_ERR(tsc->tzd)) {
+>  		if (PTR_ERR(tsc->tzd) != -ENODEV)
+>  			return dev_err_probe(ts->dev, PTR_ERR(tsc->tzd),
 
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com> # Nexus7
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
+-- 
 Best regards,
-Krzysztof
+Dmitry

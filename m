@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E19A5AE157
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681725AE166
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238993AbiIFHka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
+        id S239057AbiIFHku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiIFHj5 (ORCPT
+        with ESMTP id S233797AbiIFHj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:39:57 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084761F61B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:39:56 -0700 (PDT)
+        Tue, 6 Sep 2022 03:39:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD52023161
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:39:58 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 706121F965;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8FDBC337A8;
         Tue,  6 Sep 2022 07:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1662449995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rLonqVoT3RhXGKfCH51i6qJuANJGJL+Z/J3Zqw4wpys=;
-        b=mA+Azmsj6RVfqfntuJN4Ua22jn3F2ku8heMqrzOzyRaJB9eIa/TE/zMhGcaT7wSZxJ2Vy7
-        ZjmrFZTKV391BrMzFDorHOUW/CchW7yhto5FMioDJjChPLPo2HQmBC0ns6jAv5PVm5d7wc
-        yiMUpIRUmXFMWTuwtaq6GMfFA9id50g=
+        bh=Bh+E7R1HGe5EZgG23eyCtbShTB7coPIuMbejQLp56a8=;
+        b=yooRTCnToo/T7kFxK7/r63DKRTEtpzEPcNKTSHbbORAqeMpUEvZaFBHkUDzsUctkp6oLQ7
+        560SNnUW/89XiJ7gWg5U5IbGumi0CXdOScWGAON/uyhAthoWSy2vhhmx2iWGdgBjBVIq5u
+        p70Be1vHIdjM16VI1dCNrBW2E9z7Sk0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1662449995;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rLonqVoT3RhXGKfCH51i6qJuANJGJL+Z/J3Zqw4wpys=;
-        b=PfiERV6sIphkq6cE4IL8a5/RfstnudD7h4I7A+MFkKdYOJCl0BQifwk+IkgaCY7eR4Hx1m
-        3sMNDQr1PXMrRLBA==
+        bh=Bh+E7R1HGe5EZgG23eyCtbShTB7coPIuMbejQLp56a8=;
+        b=RYVEXwXhzocUxhs26Zb6eHQw5Jd8S5cdXk9Nq9buMlYuDqvccmAMkh8howiohqsbgTh6i+
+        IdZFSnEjth5OmLAw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5064013A7A;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7160413A93;
         Tue,  6 Sep 2022 07:39:55 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id GAn0Ekv5FmPeOgAAMHmgww
+        id uLO/Gkv5FmPeOgAAMHmgww
         (envelope-from <tiwai@suse.de>); Tue, 06 Sep 2022 07:39:55 +0000
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Thomas Zimmermann <tzimmermann@suse.de>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 06/11] drm/udl: Increase the default URB list size to 20
-Date:   Tue,  6 Sep 2022 09:39:46 +0200
-Message-Id: <20220906073951.2085-7-tiwai@suse.de>
+Subject: [PATCH v2 07/11] drm/udl: Drop unneeded alignment
+Date:   Tue,  6 Sep 2022 09:39:47 +0200
+Message-Id: <20220906073951.2085-8-tiwai@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220906073951.2085-1-tiwai@suse.de>
 References: <20220906073951.2085-1-tiwai@suse.de>
@@ -69,29 +69,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems that the current size (4) for the URB list is too small on
-some devices, and it resulted in the occasional stalls.  Increase the
-default URB list size to 20 for working around it.
+The alignment of damaged area was needed for the original udlfb driver
+that tried to trim the superfluous copies between front and backend
+buffers and handle data in long int.  It's not the case for udl DRM
+driver, hence we can omit the whole unneeded alignment, as well as the
+dead code.
 
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/gpu/drm/udl/udl_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/udl/udl_modeset.c  | 28 +--------------------
+ drivers/gpu/drm/udl/udl_transfer.c | 40 ------------------------------
+ 2 files changed, 1 insertion(+), 67 deletions(-)
 
-diff --git a/drivers/gpu/drm/udl/udl_main.c b/drivers/gpu/drm/udl/udl_main.c
-index 6aed6e0f669c..2b7eafd48ec2 100644
---- a/drivers/gpu/drm/udl/udl_main.c
-+++ b/drivers/gpu/drm/udl/udl_main.c
-@@ -20,7 +20,7 @@
- #define NR_USB_REQUEST_CHANNEL 0x12
+diff --git a/drivers/gpu/drm/udl/udl_modeset.c b/drivers/gpu/drm/udl/udl_modeset.c
+index c34d564773a3..9896c16c74f5 100644
+--- a/drivers/gpu/drm/udl/udl_modeset.c
++++ b/drivers/gpu/drm/udl/udl_modeset.c
+@@ -243,28 +243,6 @@ static long udl_log_cpp(unsigned int cpp)
+ 	return __ffs(cpp);
+ }
  
- #define MAX_TRANSFER (PAGE_SIZE*16 - BULK_SIZE)
--#define WRITES_IN_FLIGHT (4)
-+#define WRITES_IN_FLIGHT (20)
- #define MAX_VENDOR_DESCRIPTOR_SIZE 256
+-static int udl_aligned_damage_clip(struct drm_rect *clip, int x, int y,
+-				   int width, int height)
+-{
+-	int x1, x2;
+-
+-	if (WARN_ON_ONCE(x < 0) ||
+-	    WARN_ON_ONCE(y < 0) ||
+-	    WARN_ON_ONCE(width < 0) ||
+-	    WARN_ON_ONCE(height < 0))
+-		return -EINVAL;
+-
+-	x1 = ALIGN_DOWN(x, sizeof(unsigned long));
+-	x2 = ALIGN(width + (x - x1), sizeof(unsigned long)) + x1;
+-
+-	clip->x1 = x1;
+-	clip->y1 = y;
+-	clip->x2 = x2;
+-	clip->y2 = y + height;
+-
+-	return 0;
+-}
+-
+ static int udl_handle_damage(struct drm_framebuffer *fb,
+ 			     const struct iosys_map *map,
+ 			     int x, int y, int width, int height)
+@@ -282,11 +260,7 @@ static int udl_handle_damage(struct drm_framebuffer *fb,
+ 		return ret;
+ 	log_bpp = ret;
  
- static int udl_parse_vendor_descriptor(struct udl_device *udl)
+-	ret = udl_aligned_damage_clip(&clip, x, y, width, height);
+-	if (ret)
+-		return ret;
+-	else if ((clip.x2 > fb->width) || (clip.y2 > fb->height))
+-		return -EINVAL;
++	drm_rect_init(&clip, x, y, width, height);
+ 
+ 	ret = drm_gem_fb_begin_cpu_access(fb, DMA_FROM_DEVICE);
+ 	if (ret)
+diff --git a/drivers/gpu/drm/udl/udl_transfer.c b/drivers/gpu/drm/udl/udl_transfer.c
+index 176ef2a6a731..a431208dda85 100644
+--- a/drivers/gpu/drm/udl/udl_transfer.c
++++ b/drivers/gpu/drm/udl/udl_transfer.c
+@@ -25,46 +25,6 @@
+ #define MIN_RAW_PIX_BYTES	2
+ #define MIN_RAW_CMD_BYTES	(RAW_HEADER_BYTES + MIN_RAW_PIX_BYTES)
+ 
+-/*
+- * Trims identical data from front and back of line
+- * Sets new front buffer address and width
+- * And returns byte count of identical pixels
+- * Assumes CPU natural alignment (unsigned long)
+- * for back and front buffer ptrs and width
+- */
+-#if 0
+-static int udl_trim_hline(const u8 *bback, const u8 **bfront, int *width_bytes)
+-{
+-	int j, k;
+-	const unsigned long *back = (const unsigned long *) bback;
+-	const unsigned long *front = (const unsigned long *) *bfront;
+-	const int width = *width_bytes / sizeof(unsigned long);
+-	int identical = width;
+-	int start = width;
+-	int end = width;
+-
+-	for (j = 0; j < width; j++) {
+-		if (back[j] != front[j]) {
+-			start = j;
+-			break;
+-		}
+-	}
+-
+-	for (k = width - 1; k > j; k--) {
+-		if (back[k] != front[k]) {
+-			end = k+1;
+-			break;
+-		}
+-	}
+-
+-	identical = start + (width - end);
+-	*bfront = (u8 *) &front[start];
+-	*width_bytes = (end - start) * sizeof(unsigned long);
+-
+-	return identical * sizeof(unsigned long);
+-}
+-#endif
+-
+ static inline u16 pixel32_to_be16(const uint32_t pixel)
+ {
+ 	return (((pixel >> 3) & 0x001f) |
 -- 
 2.35.3
 

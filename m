@@ -2,77 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCC75AF7F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFF15AF7FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiIFW04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 18:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
+        id S229940AbiIFW14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 18:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiIFW0g (ORCPT
+        with ESMTP id S229627AbiIFW1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 18:26:36 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB84D1106;
-        Tue,  6 Sep 2022 15:26:00 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso16427738pjk.0;
-        Tue, 06 Sep 2022 15:26:00 -0700 (PDT)
+        Tue, 6 Sep 2022 18:27:53 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC21DF7A;
+        Tue,  6 Sep 2022 15:27:52 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id h27so9289745qkk.9;
+        Tue, 06 Sep 2022 15:27:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=4L5OM+4nHsHAFuitjpat6Ve05SKglqmd1Yj6EfO0tM0=;
-        b=Ie8fDhm02XtEFf+eMaHwY9b/Tc6pi7XmSmNw7XEpM8A4m4Nk1RyjRl5Y5436UU7axE
-         fkDMQFN33QwfKXMGkUGQrgb435gqWVCiaf5CAz+mKvLUIxXWuXA+BW2VWBWgo1kNAlTg
-         r+eTw+2zOaD82Ri7nqh0xEXGzvyBF25q0AcvUb4S2cu7Ev1Jnie7TJh6X5228aNcLtgo
-         luGiPB6/GyfPNy+2ZNRXsa6x5L0HOwJQu9l23I1/XcBoF2CooJpPFfMPE69JZjgsVBDD
-         +dIQLxBklIkTKpD75VDqxBaMqmRJDVDFoHF1YcRqdODTX6SdJJgnFaCJYoAXR2F/p1Pp
-         dvBw==
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date;
+        bh=0QAInJ0rO3zMboDJklVEn7XuhNzPndw7J1Dim+/9qYU=;
+        b=q5fqXrb83oFF0SHKb5t4llQCJugKT3iuOfMKSlMiEURbJknWMLUg7UMbrauEDn8gkB
+         YU+4Z5Auy4EYBPNyX0C5CpceW8p+xHj+9zWigB5J7nZCWwsPI/Y93+i8qrtxwLQWguiA
+         FfFQFZBUKJbYTKpCKmiSR0eQOkquH29sZLWsWGGFEjwsteFEgc7MUiupsar0PmIM9Su4
+         u0hP+lJcZx67/dlodScBq7exYxJMLlSpHm6zGDk8D9OPX+T3Dms9y92uY+ZcA9WF0qcv
+         wAqcKsjH+z4gfiLPbJJP63LfN20A3XLPnrFPfuPjnzg2sxg7S+MkIHxvDsbVhP4X7nex
+         K3YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4L5OM+4nHsHAFuitjpat6Ve05SKglqmd1Yj6EfO0tM0=;
-        b=SD3qiAPbZkcn9EbQ4kXtG94BIrhtf/8yfyHaObrPXnkM5IMeGjK43dTbg1sq3hZc7Z
-         FLHiDPDYjqxqYrpI+EHVYOaUNPEDASzrEzyuolNEE4QZ2QhvpPMiOsoQhU/8+tHABjWD
-         ivOvl//6Lhg6giS1DKxbeEcAFxSORLYOSDNwG7AfVcda403nR5lzh3woErD4/w1mihAD
-         jdvLzyqTukY2CDqOPU0waGKDsYXHyc5Tcunjgq6fQdaeABf2LGfrHgl6XQfSpGV4Z9Pk
-         kxeNbn0EqpVhTZ+4+Vg7rqZnJ4LbuQ3/WhdPwNzU+TERRqs/vh5bvyePh8P3EF5dJHIs
-         Vw2A==
-X-Gm-Message-State: ACgBeo28pYngmJ65fFnbRY/HBQJUJ1aoDUVen2rBmcDl64bfFyZfhW6D
-        46SQpZ8NZTYsyn+eciLIdj74ImA7Dnk47Q==
-X-Google-Smtp-Source: AA6agR6d/uZWXiTHy1kujjJk0MeqsQ2wpg8I3r2Vp4chA/Q4rHd0dg6FNgZnobOCbxAScF4H+rjOaw==
-X-Received: by 2002:a17:902:cec1:b0:172:e677:553b with SMTP id d1-20020a170902cec100b00172e677553bmr448297plg.99.1662503159489;
-        Tue, 06 Sep 2022 15:25:59 -0700 (PDT)
-Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id p123-20020a625b81000000b0053670204aeasm10741248pfb.161.2022.09.06.15.25.58
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=0QAInJ0rO3zMboDJklVEn7XuhNzPndw7J1Dim+/9qYU=;
+        b=VK8c6Ocsb+2McojbU91vZ97YwBPo/P+9uIR9xlrtDHalgB9KmMEq7RctVEbv3E6eOK
+         o1vKiwdSSfPlZzfvbA1Wrd1ogFV5hYbL/9YQskfb3BSop9HC2uJb+Y/icOc/Z8fKqMry
+         mR4msXJv6awNx7tDeuhNt1ph/9+m70gmbmj5cfvg2SwtqYxhB4V7n3/sgRXhLe3CmQ8K
+         ZKjbag63p2rJ1Se113T/NJ0eX+kJhdYq5CARQ7l1vkHlJvVYLTC60j4Bs/+RiK0RUSQz
+         PppPPbiFSxr9MFlWhFAGFKtZqlvNdRRQbGQwwUSGE4CGFRnB5ErP3z8bm+wjsivgmo7D
+         JXwg==
+X-Gm-Message-State: ACgBeo3H/bac+q18U/cqPNsbJMe0xBJN/I9HN7Nalr38SGBCc8wft6Bz
+        6MpzsElBTuqGPkXqAiUD8Ng=
+X-Google-Smtp-Source: AA6agR7k88P3nJjkeozrP/du1MqKUB0DDDznKJoQNOg8jKu2y1mOgggV2i+eymc/QNK1JCtipn8yTA==
+X-Received: by 2002:a05:620a:1468:b0:6bb:822d:2c48 with SMTP id j8-20020a05620a146800b006bb822d2c48mr709502qkl.393.1662503271853;
+        Tue, 06 Sep 2022 15:27:51 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id q2-20020a05620a0d8200b006b555509398sm12967840qkl.136.2022.09.06.15.27.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 15:25:58 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 15:25:57 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     isaku.yamahata@intel.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, isaku.yamahata@gmail.com,
-        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v3 00/22] KVM: hardware enable/disable reorganize
-Message-ID: <20220906222557.GB443010@ls.amr.corp.intel.com>
-References: <cover.1662084396.git.isaku.yamahata@intel.com>
- <87tu5lvnk0.wl-maz@kernel.org>
+        Tue, 06 Sep 2022 15:27:51 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id A50D627C0054;
+        Tue,  6 Sep 2022 18:27:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 06 Sep 2022 18:27:50 -0400
+X-ME-Sender: <xms:ZskXY_p6gCKU4PVFFRL59-GRrZvVI3V5kg-DJU8NV5JSG5jsStEYAQ>
+    <xme:ZskXY5oUn5FFrcr4VUtHs5KnfuYLT-EVUfgo0Nlqk2sKvZo5My3YXnuOl1zz6bDl_
+    tx1NF94UAGXaWPfjg>
+X-ME-Received: <xmr:ZskXY8N5lm7dGSScDvgMyQ4YVo5DFT5nM0DTfUzADNOd6rxzltFuqNdlfts>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelledguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:ZskXYy52HubPOOE9AH8OU_IVCYR4yXQdxWppOJpbYcUuhOu1ubpTBg>
+    <xmx:ZskXY-5p0WsYo7YqxKkAJnvuY6WQydxt7Iryb2LYGmmkEYOI9wfCZQ>
+    <xmx:ZskXY6iKpJnFJgu5jCV3-FnrQhSq3b9iS9R2hF-_W2F7GPcV3Y1kfQ>
+    <xmx:ZskXY3F-lZRXEbiAW_oOWdEpzKpiqfV8Nv46WAbdXV9Ih7Pr8ppWyw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 6 Sep 2022 18:27:49 -0400 (EDT)
+Date:   Tue, 6 Sep 2022 15:26:33 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, paulmck@kernel.org,
+        rostedt@goodmis.org, vineeth@bitbyteword.org
+Subject: Re: [PATCH v5 03/18] rcu/tree: Use READ_ONCE() for lockless read of
+ rnp->qsmask
+Message-ID: <YxfJGYP2l0xbxxdr@boqun-archlinux>
+References: <20220901221720.1105021-1-joel@joelfernandes.org>
+ <20220901221720.1105021-4-joel@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87tu5lvnk0.wl-maz@kernel.org>
+In-Reply-To: <20220901221720.1105021-4-joel@joelfernandes.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -83,40 +101,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 04:38:39PM +0100,
-Marc Zyngier <maz@kernel.org> wrote:
+On Thu, Sep 01, 2022 at 10:17:05PM +0000, Joel Fernandes (Google) wrote:
+> The rnp->qsmask is locklessly accessed from rcutree_dying_cpu(). This
+> may help avoid load/store tearing due to concurrent access, KCSAN
 
-> On Fri, 02 Sep 2022 03:17:35 +0100,
-> isaku.yamahata@intel.com wrote:
-> > 
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > 
-> > Changes from v2:
-> > - Replace the first patch("KVM: x86: Drop kvm_user_return_msr_cpu_online()")
-> >   with Sean's implementation
-> > - Included all patches of "Improve KVM's interaction with CPU hotplug" [2]
-> >   Until v2, Tried to cherry-pick the least patches of it. It turned out that
-> >   all the patches are desirable.
-> > 
-> > This patch series is to implement the suggestion by Sean Christopherson [1]
-> > to reorganize enable/disable cpu virtualization feature by replacing
-> > the arch-generic current enable/disable logic with PM related hooks. And
-> > convert kvm/x86 to use new hooks.
-> 
-> This series totally breaks on arm64 when playing with CPU hotplug. It
-> very much looks like preemption is now enabled in situations where we
-> don't expect it to (see below for the full-blown horror show). And
-> given the way it shows up in common code, I strongly suspect this
-> affects other architectures too.
-> 
-> Note that if I only take patch #6 (with the subsequent fix that I
-> posted this morning), the system is perfectly happy with CPUs being
-> hotplugged on/off ad-nauseam.
-> 
+Nit: you can avoid only load tearing with READ_ONCE().
 
-Thanks for testing. As the discussion in 10/22, it seems like we need to relax
-the condition of WARN_ON or BUG_ON of preemptible(). Let me cook a version
-to relax it.
+Regards,
+Boqun
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+> issues, and preserve sanity of people reading the mask in tracing.
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  kernel/rcu/tree.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 0ca21ac0f064..5ec97e3f7468 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -2106,7 +2106,7 @@ int rcutree_dying_cpu(unsigned int cpu)
+>  	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU))
+>  		return 0;
+>  
+> -	blkd = !!(rnp->qsmask & rdp->grpmask);
+> +	blkd = !!(READ_ONCE(rnp->qsmask) & rdp->grpmask);
+>  	trace_rcu_grace_period(rcu_state.name, READ_ONCE(rnp->gp_seq),
+>  			       blkd ? TPS("cpuofl-bgp") : TPS("cpuofl"));
+>  	return 0;
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 

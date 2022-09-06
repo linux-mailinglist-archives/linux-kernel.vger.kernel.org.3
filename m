@@ -2,217 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006175AF1D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1665AF208
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234689AbiIFRIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
+        id S234611AbiIFRLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbiIFRHo (ORCPT
+        with ESMTP id S240148AbiIFRJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:07:44 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095F780B4D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:55:31 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id b21-20020a5d8915000000b0068aaf634432so7253872ion.20
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 09:55:31 -0700 (PDT)
+        Tue, 6 Sep 2022 13:09:29 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110432186;
+        Tue,  6 Sep 2022 09:58:29 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id w63so2704191pgb.7;
+        Tue, 06 Sep 2022 09:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date;
+        bh=dyT2g59rUzulB+5aRGJcwTyIEc/5vl4B4tRvr2YBao4=;
+        b=NfbjvVMxPPL7Dy613X81VrnkQmnmjHUtnljibbjjtpTvw9wvfljsZw5JSjDsxdaB8K
+         WU4wUYSV50CRpMj5k/n0BYFscvLZWYkqcG7TeArCU85/Co+VjMEj6XSZhknRUmggElDB
+         p0n5uVQl6z4Xvqx5V4nBG7iwfNq29Wx8dAF8cH53rtLsVCOpRUB/i1sxvOdIXp9XimXK
+         GFRWkwrEwcDGPwCr37vthmcvu2NDvzFLHuB/SiFfC2C9DqD6rGUPAxntv8gaObjpTS7b
+         HoDomdGTOnPNdcRK3Jr9Y4aCFXhY2/nUgt9brp/jhDRXRsO1EfAjf2L3xhVWCePjRlfe
+         TS0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=r0CYA6h8y7DkAH+00GIM/04OP4+0TB3o7uk98HZnHx8=;
-        b=EcgLfJTgl0TbR63uLDUfQSmyo2LhzWMc4Dfl/RgRRNFVuX7Oel+2XU0BsuBv8micrK
-         LtWlyq/QT2A8TVH3tCHr5sXJohluP95F1rmXqgjRSWfqGsV20/PZ6Ggz3sMMCiKtXWaZ
-         46NefwvXX6qnWArx1gP6IP0WfdTiND4cP44swaf/QJmLY5ei2CkxkirOCILo17j71ZyN
-         JCNVGwcO9R58mrPJ9GrGH7mRfWLlg3xNOpTI3j0WQyU9UnjyTE6AGpnf+dxitkNYiBQb
-         CXyDVPwvJvSRnFvGiIpUGF/3lAfhzbk0W6DUL0mNKxepaxJyApjVFMdv7VN64GsTA5Dq
-         Cmfg==
-X-Gm-Message-State: ACgBeo0l6FaSUJFJvM1qYIRrj0QlXqjL9LqUsqx2aRit9ml0CKNhgOd7
-        zle+Sm4WDxOw6B+me0rzOS8nD3OJUh+pI7X4S57TsaMB6+nu
-X-Google-Smtp-Source: AA6agR4JhOfkvA7arGJnMykHXQ1ynQBBlJ4cdtTLgM4F+EqHRy9HpOok0nbyt8MTiOZ31aWMXc2b0eYL8Rl3evykAuVplL+PBA3+
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=dyT2g59rUzulB+5aRGJcwTyIEc/5vl4B4tRvr2YBao4=;
+        b=pjBNIrEzV1niV7u99kU0yBjdpSxwd/DRreBT8CFgGZCK8oIKLJFnSai9QG5GrfohFm
+         LzlY+0WkTFUifFVnPSe5QFDKKRmSR7gIoMH9cTGFcXPMHZaNxz9PTLrdIEHQ96BES+QA
+         A0RtC875bjzHmhpI7wI6KLHaT61qikfvge3SP6figsLI3rsBlZYCtp3e2iOUBQmClljV
+         rTcTTo6xFYnhmlPx7P68aAYdJveY0ngSYsmmtkZkqzVDTWgsXwwLvIYDKX7qOqdqWARD
+         ZmehZ6Edad3X8KgSpMInkM2znfb4f+wrKOPsKb70l4EAA7EbGjMj8oYq6Ndl6BsrZyQF
+         Zxlw==
+X-Gm-Message-State: ACgBeo2Fm3RR4nLo3Jqj0OcVvOGBZtdnoUD/GDzRFyXcEWpT5ZVHginR
+        rwp1oN69TSbOPLu2Yc+iaaeBkFBNKp4=
+X-Google-Smtp-Source: AA6agR5vtSP8ZqKMGMUDDMOtCISEty6QH2BzmD2PcJKmjuPExQEy2OuWN/d1+gOIF9+BmTd2cwotow==
+X-Received: by 2002:a63:2c47:0:b0:434:4bb3:de35 with SMTP id s68-20020a632c47000000b004344bb3de35mr10060159pgs.444.1662483508006;
+        Tue, 06 Sep 2022 09:58:28 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id v63-20020a622f42000000b0053e20a0333fsm2318318pfv.93.2022.09.06.09.58.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 09:58:27 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 6 Sep 2022 06:58:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     cgroups@vger.kernel.org
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH cgroup/for-6.0-fixes] cpuset: Add Waiman Long as a cpuset
+ maintainer
+Message-ID: <Yxd8MUTOPbxvZVOk@slm.duckdns.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a6f:b0:2e9:e161:b56d with SMTP id
- w15-20020a056e021a6f00b002e9e161b56dmr27197744ilv.62.1662483330429; Tue, 06
- Sep 2022 09:55:30 -0700 (PDT)
-Date:   Tue, 06 Sep 2022 09:55:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005af92105e80510f2@google.com>
-Subject: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_get_ea
-From:   syzbot <syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Waiman has been very active with cpuset recently and I've been cc'ing him
+for cpuset related changes for a while now. Let's make him a cpuset
+maintainer.
 
-syzbot found the following issue on:
-
-HEAD commit:    e47eb90a0a9a Add linux-next specific files for 20220901
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13a9f455080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7933882276523081
-dashboard link: https://syzkaller.appspot.com/bug?extid=c4d950787fd5553287b7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1550d5e5080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=173664d7080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com
-
-ntfs3: loop0: Different NTFS' sector size (4096) and media sector size (512)
-ntfs3: loop0: Mark volume as dirty due to NTFS errors
-ntfs3: loop0: Failed to load $Extend.
-==================================================================
-BUG: KASAN: slab-out-of-bounds in unpacked_ea_size fs/ntfs3/xattr.c:26 [inline]
-BUG: KASAN: slab-out-of-bounds in unpacked_ea_size fs/ntfs3/xattr.c:23 [inline]
-BUG: KASAN: slab-out-of-bounds in find_ea fs/ntfs3/xattr.c:54 [inline]
-BUG: KASAN: slab-out-of-bounds in find_ea fs/ntfs3/xattr.c:44 [inline]
-BUG: KASAN: slab-out-of-bounds in ntfs_get_ea+0x5ca/0x620 fs/ntfs3/xattr.c:230
-Read of size 1 at addr ffff88801b66abbd by task syz-executor378/3604
-
-CPU: 0 PID: 3604 Comm: syz-executor378 Not tainted 6.0.0-rc3-next-20220901-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- unpacked_ea_size fs/ntfs3/xattr.c:26 [inline]
- unpacked_ea_size fs/ntfs3/xattr.c:23 [inline]
- find_ea fs/ntfs3/xattr.c:54 [inline]
- find_ea fs/ntfs3/xattr.c:44 [inline]
- ntfs_get_ea+0x5ca/0x620 fs/ntfs3/xattr.c:230
- ntfs_get_wsl_perm+0x117/0x360 fs/ntfs3/xattr.c:973
- ntfs_read_mft fs/ntfs3/inode.c:355 [inline]
- ntfs_iget5+0xe65/0x3280 fs/ntfs3/inode.c:501
- dir_search_u+0x36a/0x3f0 fs/ntfs3/dir.c:264
- ntfs_lookup+0x174/0x1e0 fs/ntfs3/namei.c:83
- __lookup_slow+0x24c/0x460 fs/namei.c:1685
- lookup_slow fs/namei.c:1702 [inline]
- walk_component+0x33f/0x5a0 fs/namei.c:1993
- lookup_last fs/namei.c:2450 [inline]
- path_lookupat+0x1ba/0x840 fs/namei.c:2474
- filename_lookup+0x1ce/0x590 fs/namei.c:2503
- vfs_statx+0x148/0x390 fs/stat.c:228
- do_statx+0xd9/0x160 fs/stat.c:629
- __do_sys_statx fs/stat.c:656 [inline]
- __se_sys_statx fs/stat.c:647 [inline]
- __x64_sys_statx+0x157/0x1b0 fs/stat.c:647
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0f3fb82519
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcc68ced18 EFLAGS: 00000246 ORIG_RAX: 000000000000014c
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0f3fb82519
-RDX: 0000000000000000 RSI: 0000000020003c40 RDI: 0000000000000005
-RBP: 00007f0f3fb41d10 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000080 R11: 0000000000000246 R12: 00007f0f3fb41da0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-Allocated by task 3604:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
- kasan_kmalloc include/linux/kasan.h:234 [inline]
- __do_kmalloc_node mm/slab_common.c:930 [inline]
- __kmalloc+0x54/0xc0 mm/slab_common.c:943
- kmalloc include/linux/slab.h:564 [inline]
- ntfs_read_ea+0x3e4/0x850 fs/ntfs3/xattr.c:110
- ntfs_get_ea+0x1ad/0x620 fs/ntfs3/xattr.c:222
- ntfs_get_wsl_perm+0x117/0x360 fs/ntfs3/xattr.c:973
- ntfs_read_mft fs/ntfs3/inode.c:355 [inline]
- ntfs_iget5+0xe65/0x3280 fs/ntfs3/inode.c:501
- dir_search_u+0x36a/0x3f0 fs/ntfs3/dir.c:264
- ntfs_lookup+0x174/0x1e0 fs/ntfs3/namei.c:83
- __lookup_slow+0x24c/0x460 fs/namei.c:1685
- lookup_slow fs/namei.c:1702 [inline]
- walk_component+0x33f/0x5a0 fs/namei.c:1993
- lookup_last fs/namei.c:2450 [inline]
- path_lookupat+0x1ba/0x840 fs/namei.c:2474
- filename_lookup+0x1ce/0x590 fs/namei.c:2503
- vfs_statx+0x148/0x390 fs/stat.c:228
- do_statx+0xd9/0x160 fs/stat.c:629
- __do_sys_statx fs/stat.c:656 [inline]
- __se_sys_statx fs/stat.c:647 [inline]
- __x64_sys_statx+0x157/0x1b0 fs/stat.c:647
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff88801b66ab80
- which belongs to the cache kmalloc-64 of size 64
-The buggy address is located 61 bytes inside of
- 64-byte region [ffff88801b66ab80, ffff88801b66abc0)
-
-The buggy address belongs to the physical page:
-page:ffffea00006d9a80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1b66a
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea0001fc0040 dead000000000002 ffff888011841640
-raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 2, tgid 2 (kthreadd), ts 6668566803, free_ts 0
- prep_new_page mm/page_alloc.c:2534 [inline]
- get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4284
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5542
- alloc_pages+0x1a6/0x270 mm/mempolicy.c:2280
- alloc_slab_page mm/slub.c:1721 [inline]
- allocate_slab+0x228/0x370 mm/slub.c:1866
- new_slab mm/slub.c:1919 [inline]
- ___slab_alloc+0xad0/0x1440 mm/slub.c:3100
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3198
- slab_alloc_node mm/slub.c:3283 [inline]
- __kmem_cache_alloc_node+0x18a/0x3d0 mm/slub.c:3356
- __do_kmalloc_node mm/slab_common.c:929 [inline]
- __kmalloc+0x44/0xc0 mm/slab_common.c:943
- kmalloc include/linux/slab.h:564 [inline]
- kzalloc include/linux/slab.h:695 [inline]
- lsm_task_alloc security/security.c:615 [inline]
- security_task_alloc+0x10b/0x250 security/security.c:1655
- copy_process+0x23de/0x7120 kernel/fork.c:2240
- kernel_clone+0xe7/0xab0 kernel/fork.c:2678
- kernel_thread+0xb5/0xf0 kernel/fork.c:2738
- create_kthread kernel/kthread.c:399 [inline]
- kthreadd+0x4ea/0x750 kernel/kthread.c:746
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff88801b66aa80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- ffff88801b66ab00: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->ffff88801b66ab80: 00 00 00 00 00 00 00 04 fc fc fc fc fc fc fc fc
-                                        ^
- ffff88801b66ac00: fa fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- ffff88801b66ac80: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
-==================================================================
-
-
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Waiman Long <longman@redhat.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d30f26e07cd3..336bf8b97123 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5245,6 +5245,7 @@ F:	block/blk-throttle.c
+ F:	include/linux/blk-cgroup.h
+ 
+ CONTROL GROUP - CPUSET
++M:	Waiman Long <longman@redhat.com>
+ M:	Zefan Li <lizefan.x@bytedance.com>
+ L:	cgroups@vger.kernel.org
+ S:	Maintained
+-- 
+2.37.3
+

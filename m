@@ -2,192 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B555AF736
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD815AF739
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiIFVop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
+        id S229853AbiIFVqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiIFVol (ORCPT
+        with ESMTP id S229673AbiIFVqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:44:41 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B9CBE5;
-        Tue,  6 Sep 2022 14:44:36 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id q3so12634599pjg.3;
-        Tue, 06 Sep 2022 14:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=x8mslKOrxerhZBDf4i4WSowK5e3x1XEu6u13ONoa8jA=;
-        b=UNlD2dFaVpNWRabByhOpoAOnY4KdLLodXqVurRZ0nr9zCTfFRB8OSaEnnHIJ76+aJP
-         j8R2wDrO6plS2KABdsGKPUwM+e/WlegpR3VRN7pAVl88P7qWWlg1UTNZzMo39i67fX5S
-         R1x2yLAI2a+CAkPp/fR1Lxmijlli7rgjbdJ8WvGumzKmvjj1GyPDRHJi1Q0mp/E2AWOH
-         Hf5MXnE6L3lFyr7xuvpKuEB3vigY+RvjhURPvsIbvkmqm81P1Wn2vncPfzmhkWGB0NdG
-         sSITWT4kBTJzAXS6CtePjBow4/W8km43vQ5n6WHygLJohxejc7l0edWqQKkwhl+Nv5jx
-         8XjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=x8mslKOrxerhZBDf4i4WSowK5e3x1XEu6u13ONoa8jA=;
-        b=s9IHcBs8wWmbJ2mFNyxG4AKBhR3HTq3BrRbyFdtzuvtln2ZcPYFh4jI2uygqdvysgN
-         4ZwQEbUrDH730blnrY6+mmqh6L1XWk5lQWVwwRf4nglWuuXSKTycdmZz3gb7lNVWBgWQ
-         NHtQZ4w8hDyCt4LWDkYi3coKBzgpjNoZcpxWMiUCKLDQfEHjlrM4nsaQzQsLZG90mKD0
-         4V/tV5NRD2WcoljqEpt4AagUM78z9kKCgHvVLTpR2173Lh5AxtBg+KGdYuswpxWCcaQv
-         AhGX/dvO8cRE4lJBT+ojmSmVjWmv8wV+WNLRQeQtvfD6nqb3mOOdhNM8dl12vNBlEsuU
-         m8iA==
-X-Gm-Message-State: ACgBeo2DgH9JvagVV7FpAy01KNy8k3kZQDsBAKgs9YcRhQMncdq0S0ia
-        1XKdvtB8rfzTLEMdhKSbc1g=
-X-Google-Smtp-Source: AA6agR6NPiHCYHAti9Y0sb6IRQjGKv1+B5CoxngMhjEdMhjwpIt9RtbH31pXy6RZn4Mxr7kmhDJArw==
-X-Received: by 2002:a17:902:e80a:b0:176:e6a6:a17d with SMTP id u10-20020a170902e80a00b00176e6a6a17dmr297283plg.171.1662500676219;
-        Tue, 06 Sep 2022 14:44:36 -0700 (PDT)
-Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id e16-20020aa798d0000000b005360da6b26bsm10618103pfm.159.2022.09.06.14.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 14:44:35 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 14:44:34 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Yuan Yao <yuan.yao@linux.intel.com>, isaku.yamahata@intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, isaku.yamahata@gmail.com,
-        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        John Garry <john.garry@huawei.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v3 10/22] KVM: Drop kvm_count_lock and instead protect
- kvm_usage_count with kvm_lock
-Message-ID: <20220906214434.GA443010@ls.amr.corp.intel.com>
-References: <cover.1662084396.git.isaku.yamahata@intel.com>
- <20212af31729ba27e29c3856b78975c199b5365c.1662084396.git.isaku.yamahata@intel.com>
- <20220906024643.ti66dw2y6m6jgch2@yy-desk-7060>
- <87pmg9ui6h.wl-maz@kernel.org>
+        Tue, 6 Sep 2022 17:46:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A23F7B293;
+        Tue,  6 Sep 2022 14:46:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6590616EF;
+        Tue,  6 Sep 2022 21:46:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F046AC433D6;
+        Tue,  6 Sep 2022 21:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662500772;
+        bh=t669WiXDoTikYWP/P6pn5svximbzMJMemRpEmdcmFs8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zu5442/LXJMRa8CviQJgQ8L10lM91D8mwWWvtWjV1EUDx4dM6PRurgwFNVqGZSqHq
+         C/wVFZ2zdQSnkwoEjOdqWoJpffF4pVFYJixEV3elhgb3gZ0LZbSA2YKkzG6mCU9stA
+         Dl7dilZdyVGfVseR9Ww8yVs8k7Ips05MtZ6NW0RFEnO2OSZN4MW2eOvOIN6G0crpDj
+         I30yufddnNe+QTyGSzUXEBuOGw8XkaQzRJhRSUPjolddWFGmtwaV6fHUA87g86nu7l
+         14MtBmtR9kJNl7vArhgpnQ/4sTEHDz9V0K1vs+8oPukmf3j3Yb4szUJxTIcI9z72OB
+         e+7yv94a9L8Kg==
+Received: by pali.im (Postfix)
+        id 29F79742; Tue,  6 Sep 2022 23:46:09 +0200 (CEST)
+Date:   Tue, 6 Sep 2022 23:46:09 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] PCI: histb: switch to using gpiod API
+Message-ID: <20220906214609.pp5rp7ixor6koku2@pali>
+References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+ <20220906210811.5kzdq66eeeauk2d3@pali>
+ <Yxe+gPl5qeqJuC4Z@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87pmg9ui6h.wl-maz@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yxe+gPl5qeqJuC4Z@google.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 07:32:22AM +0100,
-Marc Zyngier <maz@kernel.org> wrote:
-
-> On Tue, 06 Sep 2022 03:46:43 +0100,
-> Yuan Yao <yuan.yao@linux.intel.com> wrote:
+On Tuesday 06 September 2022 14:41:20 Dmitry Torokhov wrote:
+> On Tue, Sep 06, 2022 at 11:08:11PM +0200, Pali Rohár wrote:
+> > On Tuesday 06 September 2022 13:43:00 Dmitry Torokhov wrote:
+> > > +	ret = gpiod_set_consumer_name(hipcie->reset_gpio,
+> > > +				      "PCIe device power control");
 > > 
-> > On Thu, Sep 01, 2022 at 07:17:45PM -0700, isaku.yamahata@intel.com wrote:
-> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > >
-> > > Because kvm_count_lock unnecessarily complicates the KVM locking convention
-> > > Drop kvm_count_lock and instead protect kvm_usage_count with kvm_lock for
-> > > simplicity.
-> > >
-> > > Opportunistically add some comments on locking.
-> > >
-> > > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > > ---
-> > >  Documentation/virt/kvm/locking.rst | 14 +++++-------
-> > >  virt/kvm/kvm_main.c                | 34 ++++++++++++++++++++----------
-> > >  2 files changed, 28 insertions(+), 20 deletions(-)
-> > >
-> > > diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
-> > > index 845a561629f1..8957e32aa724 100644
-> > > --- a/Documentation/virt/kvm/locking.rst
-> > > +++ b/Documentation/virt/kvm/locking.rst
-> > > @@ -216,15 +216,11 @@ time it will be set using the Dirty tracking mechanism described above.
-> > >  :Type:		mutex
-> > >  :Arch:		any
-> > >  :Protects:	- vm_list
-> > > -
-> > > -``kvm_count_lock``
-> > > -^^^^^^^^^^^^^^^^^^
-> > > -
-> > > -:Type:		raw_spinlock_t
-> > > -:Arch:		any
-> > > -:Protects:	- hardware virtualization enable/disable
-> > > -:Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
-> > > -		migration.
-> > > +                - kvm_usage_count
-> > > +                - hardware virtualization enable/disable
-> > > +:Comment:	Use cpus_read_lock() for hardware virtualization enable/disable
-> > > +                because hardware enabling/disabling must be atomic /wrt
-> > > +                migration.  The lock order is cpus lock => kvm_lock.
-> > >
-> > >  ``kvm->mn_invalidate_lock``
-> > >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > index fc55447c4dba..082d5dbc8d7f 100644
-> > > --- a/virt/kvm/kvm_main.c
-> > > +++ b/virt/kvm/kvm_main.c
-> > > @@ -100,7 +100,6 @@ EXPORT_SYMBOL_GPL(halt_poll_ns_shrink);
-> > >   */
-> > >
-> > >  DEFINE_MUTEX(kvm_lock);
-> > > -static DEFINE_RAW_SPINLOCK(kvm_count_lock);
-> > >  LIST_HEAD(vm_list);
-> > >
-> > >  static cpumask_var_t cpus_hardware_enabled;
-> > > @@ -4996,6 +4995,8 @@ static void hardware_enable_nolock(void *caller_name)
-> > >  	int cpu = raw_smp_processor_id();
-> > >  	int r;
-> > >
-> > > +	WARN_ON_ONCE(preemptible());
+> > Just unrelated thing, I know it was there before, but I saw it just now
+> > and have to comment it: This is absolute nonsense name. "reset-gpios"
+> > device tree property specifies PERST# signal pin (PciE ReSeT) as defined
+> > in PCIe CEM (Card ElectroMagnetic) specification and it has absolute
+> > nothing with PCIe power control.
 > > 
-> > This looks incorrect, it may triggers everytime when online CPU.
-> > Because patch 7 moved CPUHP_AP_KVM_STARTING *AFTER*
-> > CPUHP_AP_ONLINE_IDLE as CPUHP_AP_KVM_ONLINE, then cpuhp_thread_fun()
-> > runs the new CPUHP_AP_KVM_ONLINE in *non-atomic* context:
-> > 
-> > cpuhp_thread_fun(unsigned int cpu) {
-> > ...
-> > 	if (cpuhp_is_atomic_state(state)) {
-> > 		local_irq_disable();
-> > 		st->result = cpuhp_invoke_callback(cpu, state, bringup, st->node, &st->last);
-> > 		local_irq_enable();
-> > 
-> > 		WARN_ON_ONCE(st->result);
-> > 	} else {
-> > 		st->result = cpuhp_invoke_callback(cpu, state, bringup, st->node, &st->last);
-> > 	}
-> > ...
-> > }
-> > 
-> > static bool cpuhp_is_atomic_state(enum cpuhp_state state)
-> > {
-> > 	return CPUHP_AP_IDLE_DEAD <= state && state < CPUHP_AP_ONLINE;
-> > }
-> > 
-> > The hardware_enable_nolock() now is called in 2 cases:
-> > 1. in atomic context by on_each_cpu().
-> > 2. From non-atomic context by CPU hotplug thread.
-> > 
-> > so how about "WARN_ONCE(preemptible() && cpu_active(cpu))" ?
+> > My suggestion for maintainers would be to remove this critic name at
+> > all as it would just mislead other people reading that code.
 > 
-> I suspect similar changes must be applied to the arm64 side (though
-> I'm still looking for a good definition of cpu_active()).
+> I can respin the patch is you suggest a more sensible label...
 
-It seems plausible. I tested cpu online/offline on x86. Let me update arm64 code
-too.
+Lets do renaming in different/separate patch. It is better to split API
+change patch (which should have any visible functional changes) and
+fixups (which will have some visible changes) in separate patches.
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Lorenzo, Bjorn, Krzysztof: This is something for you... Do you have any
+ideas or suggestions in unifying or fixing these names? I guess more
+drivers have misleading names and it is better to do any such changes
+globally and not just in one driver.
+
+> > 
+> > > +	if (ret) {
+> > > +		dev_err(dev, "unable to set reset gpio name: %d\n", ret);
+> > > +		return ret;
+> > >  	}
+> 
+> Thanks.
+> 
+> -- 
+> Dmitry

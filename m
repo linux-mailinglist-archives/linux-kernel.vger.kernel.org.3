@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028435AE833
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973A45AE841
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbiIFMcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S232608AbiIFMdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240224AbiIFMbb (ORCPT
+        with ESMTP id S237809AbiIFMdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:31:31 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD27AF2E;
-        Tue,  6 Sep 2022 05:29:41 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MMPh837Wmz9v7Nk;
-        Tue,  6 Sep 2022 20:24:08 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwA3ZV8KPRdjOwYoAA--.51363S2;
-        Tue, 06 Sep 2022 13:29:12 +0100 (CET)
-Message-ID: <455d80a39b2bf87c58dae9b6035f8cabb4455639.camel@huaweicloud.com>
-Subject: Re: [PATCH v17 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
- and define KEY_LOOKUP_ALL
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     kpsingh@kernel.org
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
-        haoluo@google.com, jmorris@namei.org, john.fastabend@gmail.com,
-        jolsa@kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
-        memxor@gmail.com, mingo@redhat.com, mykolal@fb.com,
-        paul@paul-moore.com, roberto.sassu@huawei.com, rostedt@goodmis.org,
-        sdf@google.com, serge@hallyn.com, shuah@kernel.org,
-        song@kernel.org, yhs@fb.com, Jarkko Sakkinen <jarkko@kernel.org>
-Date:   Tue, 06 Sep 2022 14:28:55 +0200
-In-Reply-To: <Yxc8fwOgZ+UY0jiX@kernel.org>
-References: <YxcyeZBHGPNQB+qJ@kernel.org>
-         <20220906121506.165001-1-roberto.sassu@huaweicloud.com>
-         <Yxc8fwOgZ+UY0jiX@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 6 Sep 2022 08:33:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6364D218;
+        Tue,  6 Sep 2022 05:33:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1347F33939;
+        Tue,  6 Sep 2022 12:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662467614; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WJ2hDmw9JyVIDJ8sx54ryU/U8R/CYAaL47eDHzs+5iE=;
+        b=al1qbdZOXhLv+Fvm/FIs/YRWj8fPc0Y4yzJiuX0pkO8cfK41Y6mVQR84DTVvOLCg+6cz8c
+        bBab7jdlicHYdwUBzFcVIdsyPkNIWPrvTEkbJStX/wT9mVKDnGHI9o7TdbRnBk7eC+02LC
+        ODvL7sSEOpXak0rE4eYSYaJKDTYTYH4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E99DD13A7A;
+        Tue,  6 Sep 2022 12:33:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BJ4YNh0+F2PORQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 06 Sep 2022 12:33:33 +0000
+Date:   Tue, 6 Sep 2022 14:33:33 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
+Cc:     hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, lizefan.x@bytedance.com,
+        wuyun.abel@bytedance.com
+Subject: Re: [External] Re: [PATCH] cgroup/cpuset: Add a new isolated
+ mems.policy type.
+Message-ID: <Yxc+HZ6rjcR535oN@dhcp22.suse.cz>
+References: <20220904040241.1708-1-hezhongkun.hzk@bytedance.com>
+ <YxWbBYZKDTrkmlOe@dhcp22.suse.cz>
+ <0e5f380b-9201-0f56-9144-ce8449491fc8@bytedance.com>
+ <YxXUjvWmZoG9vVNV@dhcp22.suse.cz>
+ <ca5e57fd-4699-2cec-b328-3d6bac43c8ef@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwA3ZV8KPRdjOwYoAA--.51363S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1ftr15Xw4UZF1fZFyfXrb_yoW8tFy8pF
-        WDG3W8KryUtry2gw1DJwsFyw1Sk3y3Kr17WrnrKwn8Zana9r97tr1xtF13ur1FyrWUuw12
-        qr4293WDur4DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAHBF1jj36rwAABsk
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca5e57fd-4699-2cec-b328-3d6bac43c8ef@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,79 +68,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-06 at 15:26 +0300, Jarkko Sakkinen wrote:
-> On Tue, Sep 06, 2022 at 02:15:06PM +0200, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
+On Tue 06-09-22 18:37:40, Zhongkun He wrote:
+> > On Mon 05-09-22 18:30:55, Zhongkun He wrote:
+> > > Hi Michal, thanks for your reply.
+> > > 
+> > > The current 'mempolicy' is hierarchically independent. The default value of
+> > > the child is to inherit from the parent. The modification of the child
+> > > policy will not be restricted by the parent.
 > > 
-> > In preparation for the patch that introduces the
-> > bpf_lookup_user_key() eBPF
-> > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
-> > able to
-> > validate the kfunc parameters. Add them to enum key_lookup_flag, so
-> > that
-> > all the current ones and the ones defined in the future are
-> > automatically
-> > exported through BTF and available to eBPF programs.
+> > This breaks cgroup fundamental property of hierarchical enforcement of
+> > each property. And as such it is a no go.
 > > 
-> > Also, add KEY_LOOKUP_ALL to the enum, with the logical OR of
-> > currently
-> > defined flags as value, to facilitate checking whether a variable
-> > contains
-> > only those flags.
+> > > Of course, there are other options, such as the child's policy mode must be
+> > > the same as the parent's. node can be the subset of parent's, but the
+> > > interleave type will be complicated, that's why hierarchy independence is
+> > > used. It would be better if you have other suggestions?
 > > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  include/linux/key.h      | 6 ++++++
-> >  security/keys/internal.h | 2 --
-> >  2 files changed, 6 insertions(+), 2 deletions(-)
+> > Honestly, I am not really sure cgroup cpusets is a great fit for this
+> > usecase. It would be probably better to elaborate some more what are the
+> > existing shortcomings and what you would like to achieve. Just stating
+> > the syscall is a hard to use interface is not quite clear on its own.
 > > 
-> > diff --git a/include/linux/key.h b/include/linux/key.h
-> > index 7febc4881363..d27477faf00d 100644
-> > --- a/include/linux/key.h
-> > +++ b/include/linux/key.h
-> > @@ -88,6 +88,12 @@ enum key_need_perm {
-> >  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
-> > deferred */
-> >  };
-> >  
-> > +enum key_lookup_flag {
-> > +	KEY_LOOKUP_CREATE = 0x01,
-> > +	KEY_LOOKUP_PARTIAL = 0x02,
-> > +	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL),
-> > +};
-> > +
-> >  struct seq_file;
-> >  struct user_struct;
-> >  struct signal_struct;
-> > diff --git a/security/keys/internal.h b/security/keys/internal.h
-> > index 9b9cf3b6fcbb..3c1e7122076b 100644
-> > --- a/security/keys/internal.h
-> > +++ b/security/keys/internal.h
-> > @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct
-> > key_type *type,
-> >  
-> >  extern bool lookup_user_key_possessed(const struct key *key,
-> >  				      const struct key_match_data
-> > *match_data);
-> > -#define KEY_LOOKUP_CREATE	0x01
-> > -#define KEY_LOOKUP_PARTIAL	0x02
-> >  
-> >  extern long join_session_keyring(const char *name);
-> >  extern void key_change_session_keyring(struct callback_head
-> > *twork);
-> > -- 
-> > 2.25.1
+> > Btw. have you noticed this question?
+> > 
+> > > > What is the hierarchical behavior of the policy? Say parent has a
+> > > > stronger requirement (say bind) than a child (prefer)?
+> > > > > How to use the mempolicy interface:
+> > > > > 	echo prefer:2 > /sys/fs/cgroup/zz/cpuset.mems.policy
+> > > > > 	echo bind:1-3 > /sys/fs/cgroup/zz/cpuset.mems.policy
+> > > > >           echo interleave:0,1,2,3 >/sys/fs/cgroup/zz/cpuset.mems.policy
+> > > > 
+> > > > Am I just confused or did you really mean to combine all these
+> > > > together?
 > > 
 > 
-> Thanks,
+> Hi Michal, thanks for your reply.
 > 
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> >>Say parent has a stronger requirement (say bind) than a child(prefer)?
+> 
+> Yes, combine all these together.
 
-Thanks Jarkko.
+What is the semantic of the resulting policy?
 
-KP, ok also for you?
+> The parent's task will use 'bind', child's
+> use 'prefer'.This is the current implementation, and we can discuss and
+> modify it together if there are other suggestions.
+>
+> 1:Existing shortcomings
+> 
+> In our use case, the application and the control plane are two separate
+> systems. When the application is created, it doesn't know how to use memory,
+> and it doesn't care. The control plane will decide the memory usage policy
+> based on different reasons (the attributes of the application itself, the
+> priority, the remaining resources of the system). Currently, numactl is used
+> to set it at program startup, and the child process will inherit the
+> mempolicy.
 
-Thanks
+Yes this is common practice I have seen so far.
 
-Roberto
+> But we can't dynamically adjust the memory policy, except
+> restart, the memory policy will not change.
 
+Do you really need to change the policy itself or only the effective
+nodemask? I mean what is your usecase to go from say mbind to preferred
+policy?  Do you need any other policy than bind and preferred?
+ 
+> 2:Our goals
+> 
+> For the above reasons, we want to create a mempolicy at the cgroup level.
+> Usually processes under a cgroup have the same priority and attributes, and
+> we can dynamically adjust the memory allocation strategy according to the
+> remaining resources of the system. For example, a low-priority cgroup uses
+> the 'bind:2-3' policy, and a high-priority cgroup uses bind:0-1. When
+> resources are insufficient, it will be changed to bind:3, bind:0-2 by
+> control plane, etc.Further more, more mempolicy can be extended, such as
+> allocating memory according to node weight, etc.
+
+Yes, I do understand that you want to change the node affinity and that
+is already possible with cpuset cgroup. The existing constrain is that
+the policy is hardcoded mbind IIRC. So you cannot really implement a dynamic
+preferred policy which would make some sense to me. The question is how
+to implement that with a sensible semantic. It is hard to partition the
+system into several cgroups if subset allows to spill over to others.
+Say something like the following
+	root (nodes=0-3)
+       /    \
+A (0, 1)     B (2, 3)
+
+if both are MBIND then this makes sense because they are kinda isolated
+(at least for user allocations) but if B is PREFERRED and therefore
+allowed to use nodes 0 and 1 then it can deplete the memory from A and
+therefore isolation doesn't work at all.
+
+I can imagine that the all cgroups would use PREFERRED policy and then
+nobody can expect anything and the configuration is mostly best effort.
+But it feels like this is an abuse of the cgroup interface and a proper
+syscall interface is likely due. Would it make more sense to add
+pidfd_set_mempolicy and allow sufficiently privileged process to
+manipulate default memory policy of a remote process?
+-- 
+Michal Hocko
+SUSE Labs

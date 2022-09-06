@@ -2,136 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192D85ADC5B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 02:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BCD5ADC68
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 02:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbiIFA32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 20:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S232204AbiIFAcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 20:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiIFA3V (ORCPT
+        with ESMTP id S229575AbiIFAcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 20:29:21 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D62A67C97;
-        Mon,  5 Sep 2022 17:29:19 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2860PN84029388;
-        Tue, 6 Sep 2022 00:29:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=uoUrYGZzi+3lSG2HVCqGrSprixecUzyMBFpaMPP/HDI=;
- b=CdBJFs7Wmbr2Uzueb6exfhqNDJTk+c6uE8PHebVUAbul6nVJ86PHGCt9PtmAjopVwgry
- 5bDPExXYuzlNHITEaKYUL1+ggpil7VLO0kZSg4JrWNMAY5/1Nnm5OHk/zxEWx/o8R+PK
- Hb/yyloG2CSwaUWp3m5Xc070gCH1RWFfXaIFEf19xHDeOmIsBWtsLwbeg+B2U7NnTtIr
- +98fBsQr1Qp3Q4H86yW+jcS81Wi4FzgobVhQICtdhIC4kPGwGZkOxc+T347T9X3Qw7mC
- l7dFXO4e8aIC+Nzh8dZTTjUFpzDaH9gEPIBUqWJVlS25hfx6IpFvl+xNkYu4hwZpnPQp xQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jcgu4uqg0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 00:29:16 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2860TFDt001872
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Sep 2022 00:29:15 GMT
-Received: from [10.232.65.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 5 Sep 2022
- 17:29:14 -0700
-Message-ID: <29577961-be15-3c33-c8db-5a92405a87f8@quicinc.com>
-Date:   Tue, 6 Sep 2022 08:29:11 +0800
+        Mon, 5 Sep 2022 20:32:20 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4708867C97
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 17:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1662424337;
+        bh=tnkg6NDxCuY/leErq28zhAiAg1e8lpHeUNO0dIKqK9k=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Icsh2aKiMJaRvYwsBLvliJiM6JvC0BpVyKB7ha/7oyBcYjXPnao5sqrOpv6gQL2/T
+         HK0VesT/Fb+Zur1m4JUpyHqIiCJy4Z7sckeiewcdVRxN5QwpM0S9Uzdjfq2vx1EgKt
+         ZRYC3e0OEvDzc3pdqGKHKL+QaYr9C6Hoj30wPJhI=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id B70B265A9D;
+        Mon,  5 Sep 2022 20:32:15 -0400 (EDT)
+Message-ID: <ae2652c5e140d407d523d7f35bee672cebe1b7a2.camel@xry111.site>
+Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation
+ types
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>
+Date:   Tue, 06 Sep 2022 08:32:13 +0800
+In-Reply-To: <CAAhV-H6wzw-MV+h225rM4PfK_HY0tAdSXcUG-2Hx+_gfhzQ4_g@mail.gmail.com>
+References: <20220830104806.128365-1-xry111@xry111.site>
+         <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
+         <c0ba2e23-5be3-924d-554a-2f10272c05bc@xen0n.name>
+         <CAAhV-H7Dz21qRgwkMcJ0SnA9FNDN19E6mpa7C25LUitrO9LGeA@mail.gmail.com>
+         <5b87173faeef587a2ffaaa6f58d34e0940231067.camel@xry111.site>
+         <c53303bf-a5d2-098f-8975-efadbe0b2f2e@loongson.cn>
+         <bc323d8578d2f6ec580066bab181788b305ae3c3.camel@xry111.site>
+         <CAAhV-H4N_XvmP9KA1M5crU44kHr33MZUVSsMY4Ugu5wQSv_LOQ@mail.gmail.com>
+         <97291c0fe5a660c844475ff019c8db6af77ecf86.camel@xry111.site>
+         <CAAhV-H6wzw-MV+h225rM4PfK_HY0tAdSXcUG-2Hx+_gfhzQ4_g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.45.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH] fuse: fix the deadlock in race of reclaim path with
- kswapd
-To:     Miklos Szeredi <miklos@szeredi.hu>
-CC:     <linux-fsdevel@vger.kernel.org>, <quic_maow@quicinc.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220905071744.8350-1-quic_yingangl@quicinc.com>
- <CAJfpegs6Jbr8eF9ZNycEjfCtJNVQJECjFnOC9-v8WSXHvpWxCg@mail.gmail.com>
-Content-Language: en-US
-From:   Kassey Li <quic_yingangl@quicinc.com>
-In-Reply-To: <CAJfpegs6Jbr8eF9ZNycEjfCtJNVQJECjFnOC9-v8WSXHvpWxCg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ojOd_1wwjhAHQb9mvvW03n801jW1Wy_t
-X-Proofpoint-ORIG-GUID: ojOd_1wwjhAHQb9mvvW03n801jW1Wy_t
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-05_16,2022-09-05_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 clxscore=1015 mlxlogscore=576
- adultscore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209060000
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-09-01 at 10:17 +0800, Huacai Chen wrote:
 
+> Now all global variable accesses are via got, I think the performance
+> may be much worse than before when we didn't use explicit-relocs.
+> I don't know whether "a new code model" or your "(1)(2)(3)" is easier
+> to implement, but I think it is better to solve the performance issue
+> before 6.1-rc1.
 
-On 9/5/2022 9:28 PM, Miklos Szeredi wrote:
-> On Mon, 5 Sept 2022 at 09:17, Kassey Li <quic_yingangl@quicinc.com> wrote:
->>
->> Task A wait for writeback, while writeback Task B send request to fuse.
->> Task C is expected to serve this request, here it is in direct reclaim
->> path cause deadlock when system is in low memory.
->>
->> without __GFP_FS in Task_C break throttle_direct_reclaim with an
->> HZ timeout.
->>
->> kswpad (Task_A):                    writeback(Task_B):
->>      __switch_to+0x14c                   schedule+0x70
->>      __schedule+0xb5c                    __fuse_request_send+0x154
->>      schedule+0x70                       fuse_simple_request+0x184
->>      bit_wait+0x18                       fuse_flush_times+0x114
->>      __wait_on_bit+0x74                  fuse_write_inode+0x60
->>      inode_wait_for_writeback+0xa4       __writeback_single_inode+0x3d8
->>      evict+0xa8                          writeback_sb_inodes+0x4c0
->>      iput+0x248                          __writeback_inodes_wb+0xb0
->>      dentry_unlink_inode+0xdc            wb_writeback+0x270
->>      __dentry_kill[jt]+0x110             wb_workfn+0x37c
->>      shrink_dentry_list+0x17c            process_one_work+0x284
->>      prune_dcache_sb+0x5c
->>      super_cache_scan+0x11c
->>      do_shrink_slab+0x248
->>      shrink_slab+0x260
->>      shrink_node+0x678
->>      kswapd+0x8ec
->>      kthread+0x140
->>      ret_from_fork+0x10
->>
->> Task_C:
->>      __switch_to+0x14c
->>      __schedule+0xb5c
->>      schedule+0x70
->>      throttle_direct_reclaim
->>      try_to_free_pages
->>      __perform_reclaim
->>      __alloc_pages_direct_reclaim
->>      __alloc_pages_slowpath
->>      __alloc_pages_nodemask
->>      alloc_pages
->>      fuse_copy_fill+0x168
->>      fuse_dev_do_read+0x37c
->>      fuse_dev_splice_read+0x94
-> 
-> Should already be fixed in v5.16 by commit 5c791fe1e2a4 ("fuse: make
-> sure reclaim doesn't write the inode").
-   thanks for this info.
-> 
-> Thanks,
-> Miklos
+Hi Huacai,
+
+We've added a GCC option for this at https://gcc.gnu.org/r13-2433.  On
+the kernel side we need a one-line change:
+
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index 92c4a52c4c3e..69b39ba3a09d 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -54,6 +54,7 @@ LDFLAGS_vmlinux                       +=3D -G0 -static -n=
+ -nostdlib
+ # upgrade the compiler or downgrade the assembler.
+ ifdef CONFIG_AS_HAS_EXPLICIT_RELOCS
+ cflags-y                       +=3D -mexplicit-relocs
++KBUILD_CFLAGS_KERNEL           +=3D -mdirect-extern-access
+ else
+ cflags-y                       +=3D $(call cc-option,-mno-explicit-relocs)
+ KBUILD_AFLAGS_KERNEL           +=3D -Wa,-mla-global-with-pcrel
+
+And we also need a one-line change in the EFI stub patch (under review):
+
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/l=
+ibstub/Makefile
+index 8931ed24379e..8c1225b92492 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -27,7 +27,7 @@ cflags-$(CONFIG_ARM)          :=3D $(subst $(CC_FLAGS_FTR=
+ACE),,$(KBUILD_CFLAGS)) \
+ cflags-$(CONFIG_RISCV)         :=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_C=
+FLAGS)) \
+                                   -fpic
+ cflags-$(CONFIG_LOONGARCH)     :=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_C=
+FLAGS)) \
+-                                  -fpic
++                                  -fpie
+=20
+ cflags-$(CONFIG_EFI_GENERIC_STUB) +=3D -I$(srctree)/scripts/dtc/libfdt
+
+(Some explanation: -fpic does not only mean "generate position-
+independent code", but "generate position-independent code *suitable for
+use in a shared library*".  On LoongArch -mdirect-extern-access cannot
+work for a shared library so the "-fpic -mdirect-extern-access"
+combination is rejected deliberately.)
+
+Not sure how to submit these changes properly...  Do you prefer me to
+send V8 of this series or a single patch on top of your tree on GitHub?
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

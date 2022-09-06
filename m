@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDA25AECB1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE4F5AEBFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240882AbiIFOBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S241621AbiIFOVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240593AbiIFN5V (ORCPT
+        with ESMTP id S241679AbiIFOSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:57:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D4082D1C;
-        Tue,  6 Sep 2022 06:42:24 -0700 (PDT)
+        Tue, 6 Sep 2022 10:18:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DCB192BA;
+        Tue,  6 Sep 2022 06:49:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C923AB818B9;
-        Tue,  6 Sep 2022 13:41:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB8BC433D7;
-        Tue,  6 Sep 2022 13:41:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C04C160F89;
+        Tue,  6 Sep 2022 13:48:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56F4C433D6;
+        Tue,  6 Sep 2022 13:48:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471691;
-        bh=64mhxJz/tEUOud2e6JWyA2SXsj1p7Pe8tb2x/rQJw9c=;
+        s=korg; t=1662472130;
+        bh=bOH//3r1sn7VoNf/+feYB6lm64dlFs6/NrJkt6m8cEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RhVOp1M8bkrRYolJN2bSxpVeUVPT6EUy+WA4n0SpeTZtXFgQInBXSmwrXgDULiXX3
-         IGe0vVlzzFWiF0mHqeiW7QysWSJigMh4D0WHEZFPkHVbdxtF8OLPA8Sd2dneQ9+tG0
-         95HXAn9yAWhwmaWTxBgt3hDJeUMrCasCLaJ8OtM4=
+        b=qTquXGC9A7IIyXWlinWLEiFburh+3ankMPuKGV999maRfVXTIbHty5hwCpeE4oIsX
+         tDb7adnWRtC2slJgxzCoN7qVf5Bbcuc9/rrrnBzpMDouYACn4Gr1aEiJ+tqqK2nfdr
+         ZAVs+BRohGxi8TYtRFTQHFAAONJG8rQC7NIlsfgI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 5.15 103/107] usb: dwc3: fix PHY disable sequence
-Date:   Tue,  6 Sep 2022 15:31:24 +0200
-Message-Id: <20220906132826.231202201@linuxfoundation.org>
+        stable@vger.kernel.org, Levi Yun <ppbuk5246@gmail.com>,
+        Baoquan He <bhe@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH 5.19 137/155] arm64/kexec: Fix missing extra range for crashkres_low.
+Date:   Tue,  6 Sep 2022 15:31:25 +0200
+Message-Id: <20220906132835.261723901@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
+References: <20220906132829.417117002@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,81 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Levi Yun <ppbuk5246@gmail.com>
 
-commit d2ac7bef95c9ead307801ccb6cb6dfbeb14247bf upstream.
+commit 4831be702b95047c89b3fa5728d07091e9e9f7c9 upstream.
 
-Generic PHYs must be powered-off before they can be tore down.
+Like crashk_res, Calling crash_exclude_mem_range function with
+crashk_low_res area would need extra crash_mem range too.
 
-Similarly, suspending legacy PHYs after having powered them off makes no
-sense.
+Add one more extra cmem slot in case of crashk_low_res is used.
 
-Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
-dwc3_probe() error-path sequences that got this wrong.
-
-Note that this makes dwc3_core_exit() match the dwc3_core_init() error
-path with respect to powering off the PHYs.
-
-Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
-Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
-Cc: stable@vger.kernel.org      # 4.8
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20220804151001.23612-2-johan+linaro@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-[ johan: adjust context to 5.15 ]
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
+Fixes: 944a45abfabc ("arm64: kdump: Reimplement crashkernel=X")
+Cc: <stable@vger.kernel.org> # 5.19.x
+Acked-by: Baoquan He <bhe@redhat.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Link: https://lore.kernel.org/r/20220831103913.12661-1-ppbuk5246@gmail.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/core.c |   19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ arch/arm64/kernel/machine_kexec_file.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -731,15 +731,16 @@ static void dwc3_core_exit(struct dwc3 *
- {
- 	dwc3_event_buffers_cleanup(dwc);
+--- a/arch/arm64/kernel/machine_kexec_file.c
++++ b/arch/arm64/kernel/machine_kexec_file.c
+@@ -47,7 +47,7 @@ static int prepare_elf_headers(void **ad
+ 	u64 i;
+ 	phys_addr_t start, end;
  
-+	usb_phy_set_suspend(dwc->usb2_phy, 1);
-+	usb_phy_set_suspend(dwc->usb3_phy, 1);
-+	phy_power_off(dwc->usb2_generic_phy);
-+	phy_power_off(dwc->usb3_generic_phy);
-+
- 	usb_phy_shutdown(dwc->usb2_phy);
- 	usb_phy_shutdown(dwc->usb3_phy);
- 	phy_exit(dwc->usb2_generic_phy);
- 	phy_exit(dwc->usb3_generic_phy);
+-	nr_ranges = 1; /* for exclusion of crashkernel region */
++	nr_ranges = 2; /* for exclusion of crashkernel region */
+ 	for_each_mem_range(i, &start, &end)
+ 		nr_ranges++;
  
--	usb_phy_set_suspend(dwc->usb2_phy, 1);
--	usb_phy_set_suspend(dwc->usb3_phy, 1);
--	phy_power_off(dwc->usb2_generic_phy);
--	phy_power_off(dwc->usb3_generic_phy);
- 	clk_bulk_disable_unprepare(dwc->num_clks, dwc->clks);
- 	reset_control_assert(dwc->reset);
- }
-@@ -1662,16 +1663,16 @@ err5:
- 	dwc3_debugfs_exit(dwc);
- 	dwc3_event_buffers_cleanup(dwc);
- 
--	usb_phy_shutdown(dwc->usb2_phy);
--	usb_phy_shutdown(dwc->usb3_phy);
--	phy_exit(dwc->usb2_generic_phy);
--	phy_exit(dwc->usb3_generic_phy);
--
- 	usb_phy_set_suspend(dwc->usb2_phy, 1);
- 	usb_phy_set_suspend(dwc->usb3_phy, 1);
- 	phy_power_off(dwc->usb2_generic_phy);
- 	phy_power_off(dwc->usb3_generic_phy);
- 
-+	usb_phy_shutdown(dwc->usb2_phy);
-+	usb_phy_shutdown(dwc->usb3_phy);
-+	phy_exit(dwc->usb2_generic_phy);
-+	phy_exit(dwc->usb3_generic_phy);
-+
- 	dwc3_ulpi_exit(dwc);
- 
- err4:
 
 

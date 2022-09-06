@@ -2,114 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59F65AF5DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ACD5AF5DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiIFU3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        id S231236AbiIFU3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbiIFU3H (ORCPT
+        with ESMTP id S230474AbiIFU33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:29:07 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2A2A260A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:28:57 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id jm11so12360084plb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:28:57 -0700 (PDT)
+        Tue, 6 Sep 2022 16:29:29 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AECBC6A;
+        Tue,  6 Sep 2022 13:29:24 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id fg1so3746707ejc.2;
+        Tue, 06 Sep 2022 13:29:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date;
-        bh=SApL559VYDv9mxhkQIS6YUpqlo0DYsAvN9Xj3AgwwP4=;
-        b=KKciEglp50UDtPQYV1U8Si6GNn/Hiq/jaSfPNvLXNp45LRMYss6qcUPsOuVDncEgnD
-         nCUXZXyifNEA7Nv/zmWpkbd9HMUTgbQdvVwVKcI++L8HysUmzVI9ByHbx7EImHttaRZy
-         TwRLBY4XxU4hQKME1v4sjFq/H/6XkoLI2tGx1hur+O4g0dJXTH/X5rhEUtc3k9T/Bw4a
-         uRE9ryzV9h/vSbR7GOFIFsSueYy6dlEVGhccIIKX6SBLhT+fGNtxUkMfv0X6CrxS+0rI
-         4DQEVyEXVWusMqXEFw9/vGKsPVfnIaMUWHj5dAockg1Iuzm1bKr0sl24+ARnaAuGr55r
-         9uzA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=XVGUqqzM3n2D/4jJV0ZKcJTbVHjL4eVdejQAA4KKYRk=;
+        b=H7ZInpF2UhWzzqrCBfmLLea7RMaRc0IsqTMdPjIoCV1dXteLuEZBPlQdCtrM6GRXoR
+         z5SBRgeL0CsNRhmwTOlQLCTOluaJwA9GbW9p+eMbx3M4UdIS2eNmqyA9acjEis1earyB
+         zdzagIbpXgK4GubL47JJjwenXNMMK2GmLT+RzZTqADNemTR9KVZQV0SnXZFH4uTeUSit
+         kF50jBT/hTurNyat3APUOfcRLe8s3tFloDtyzmMKuusTxds7H32K89qYfhzsLsth3+hT
+         T+umwiaem8KGg4A7Qgb3pFYsTU3xKRBPr+JyQnwVUCL/dECBqxqIHc07rFvExPTiHVBe
+         owxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=SApL559VYDv9mxhkQIS6YUpqlo0DYsAvN9Xj3AgwwP4=;
-        b=jEat5AS6Qia73o1EwFtlHDEbCZ1MWNtajTA+T3wkSLYHOPJzptIHjifpOOitGRZtzw
-         uFVfRitEgdGqK+n55jn/3KMUWcIW+71N2KUopySL0rLXjyPI8t0p1h3LzwqZSLnZXCn/
-         GPxr6jHa/orjKd759iSbHKZSpnkyi1DEAn5mw2p2Mm0S/pyOCxItUF9mXv+MWiwEsbeU
-         oRrat1iIRd24Mo+tVNQZQuAWpZwIPCi//DrH22hTBAKH1X/MFozu/S6C7kfhAgXzFFUw
-         bptVcyvQrX1BWitWWMFxIQf9cLOO64P+Ka+TGsZSULwVqu4w3IuJgOVa0vsvVPMsf94U
-         sNXw==
-X-Gm-Message-State: ACgBeo0XNZU8QP+lKlK3HjIl3m7ZDoraoHBq1Z3Pn94f6AVPQXCHcigM
-        VKYb2B5CUnsxV5EY/ndL419Xyw==
-X-Google-Smtp-Source: AA6agR7OW3M4SN20bl/4uQ8Fo/RbeMbkiE0/fFGk7TUUcm3CNeoFe4xJ5BTKhJI7f9u9sEOHi4BfrQ==
-X-Received: by 2002:a17:902:a704:b0:174:3ad5:30b8 with SMTP id w4-20020a170902a70400b001743ad530b8mr257196plq.14.1662496137190;
-        Tue, 06 Sep 2022 13:28:57 -0700 (PDT)
-Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
-        by smtp.gmail.com with ESMTPSA id h4-20020a170902f54400b001715a939ac5sm10412275plf.295.2022.09.06.13.28.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Sep 2022 13:28:56 -0700 (PDT)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'srinivas pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        <lenb@kernel.org>, "'Rafael J. Wysocki'" <rafael@kernel.org>
-Cc:     <linux-pm@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "Doug Smythies" <dsmythies@telus.net>,
-        "'M. Cagri Ari'" <cagriari@pm.me>
-References: <003901d8c22d$02447f70$06cd7e50$@telus.net>
-In-Reply-To: <003901d8c22d$02447f70$06cd7e50$@telus.net>
-Subject: [PATCH] cpufreq: intel_pstate: Add Tigerlake support in no-HWP mode
-Date:   Tue, 6 Sep 2022 13:28:57 -0700
-Message-ID: <003c01d8c22f$4a8e2270$dfaa6750$@telus.net>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=XVGUqqzM3n2D/4jJV0ZKcJTbVHjL4eVdejQAA4KKYRk=;
+        b=xiOBqkm51MrH45GHRZZ4kkErrRuSeBSNgiZLK7iDyBF1fNNFrZ+n0S36WbLcZKT3wU
+         qGzRq258ccohVfXWoJZUKbM9Ig+kzETDy8mpefuzfpwp1MUCdlolg29qGH4sq63eLq+l
+         9pBIUcKgJO9rBVdm4TiZCrxHPquXXrYr5jm6SuODD6I94ej65tW1nPtBB1FxVfIBcM6h
+         vAM1NOPtfW/N2M/eFcNd1IidlHnNPvHl2NeD4VHlyTtxCiXSGB8nK0lT76Ey4Gmz9G85
+         6GOYUrfKKtgb5AS9bIy1kOsF8vte/vm+tLXTqKEwY4nU9i/oA0G0fHflCwuClDI3Wm87
+         ODRQ==
+X-Gm-Message-State: ACgBeo2kohxwCJa5tHJIXSdw1ZOfkjOgUtBaM/AFNse7XZSoLT4PG+yg
+        p8MJJ1E07ODYDOSACr59jpY=
+X-Google-Smtp-Source: AA6agR5FzHvOY7Bnao9g05Gz0yuvtXm27oREQpQ1b11WFGKhTmMQYjJTsyqae2G6XuQedGzvSAP07A==
+X-Received: by 2002:a17:906:ef8c:b0:73d:db10:8825 with SMTP id ze12-20020a170906ef8c00b0073ddb108825mr139433ejb.445.1662496162405;
+        Tue, 06 Sep 2022 13:29:22 -0700 (PDT)
+Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
+        by smtp.gmail.com with ESMTPSA id da8-20020a056402176800b004477c582ffdsm5585194edb.80.2022.09.06.13.29.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 13:29:21 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     samuel@sholland.org, Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     wens@csie.org, linux-sunxi@lists.linux.dev,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        samuel@sholland.org
+Subject: Re: Re: [PATCH 00/12] riscv: Allwinner D1 platform support
+Date:   Tue, 06 Sep 2022 22:29:20 +0200
+Message-ID: <7423117.EvYhyI6sBW@kista>
+In-Reply-To: <mhng-d98d3324-5f4b-4cb0-a116-522b124dcdea@palmer-ri-x1c9>
+References: <mhng-d98d3324-5f4b-4cb0-a116-522b124dcdea@palmer-ri-x1c9>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQKqNjiovqToChG3xUCNkHPXWq7dTqwv7neQ
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Users may disable HWP in firmware, in which case intel_pstate wouldn't load
-unless the CPU model is explicitly supported.
+Dne =C4=8Detrtek, 01. september 2022 ob 20:10:13 CEST je Palmer Dabbelt nap=
+isal(a):
+> On Sun, 14 Aug 2022 22:08:03 PDT (-0700), samuel@sholland.org wrote:
+> > This series adds the Kconfig/defconfig plumbing and devicetrees for a
+> > range of Allwinner D1-based boards. Many features are already enabled,
+> > including USB, Ethernet, and WiFi.
+> >=20
+> > The SoC devicetree uses bindings from the following series which have
+> > not yet been merged:
+> >=20
+> > - SRAM controller:
+> >   https://lore.kernel.org/lkml/20220815041248.53268-1-samuel@sholland.o=
+rg/
+> >=20
+> > - NVMEM cell bits property change:
+> >   https://lore.kernel.org/lkml/20220814173656.11856-1-samuel@sholland.o=
+rg/
+> >=20
+> > - In-package LDO regulators:
+> >   https://lore.kernel.org/lkml/20220815043436.20170-1-samuel@sholland.o=
+rg/
+> >=20
+> > All three of these are required to set the correct I/O domain voltages
+> > in the pin controller, which I would consider important to have in the
+> > initial version of the devicetree.
+> >=20
+> > The SoC devicetree does contain one small hack to avoid a dependency on
+> > the audio codec binding, since that is not ready yet: the codec node
+> > uses a bare "simple-mfd", "syscon" compatible.
+> >=20
+> > Samuel Holland (12):
+> >   MAINTAINERS: Match the sun20i family of Allwinner SoCs
+> >   dt-bindings: riscv: Add T-HEAD C906 and C910 compatibles
+> >   dt-bindings: vendor-prefixes: Add Allwinner D1 board vendors
+> >   dt-bindings: riscv: Add Allwinner D1 board compatibles
+> >   riscv: Add the Allwinner SoC family Kconfig option
+> >   riscv: dts: allwinner: Add the D1 SoC base devicetree
+> >   riscv: dts: allwinner: Add Allwinner D1 Nezha devicetree
+> >   riscv: dts: allwinner: Add Sipeed Lichee RV devicetrees
+> >   riscv: dts: allwinner: Add MangoPi MQ Pro devicetree
+> >   riscv: dts: allwinner: Add Dongshan Nezha STU devicetree
+> >   riscv: dts: allwinner: Add ClockworkPi and DevTerm devicetrees
+> >   riscv: defconfig: Enable the Allwinner D1 platform and drivers
+> > =20
+> >  .../devicetree/bindings/riscv/cpus.yaml       |   2 +
+> >  .../devicetree/bindings/riscv/sunxi.yaml      |  64 ++
+> >  .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+> >  MAINTAINERS                                   |   2 +-
+> >  arch/riscv/Kconfig.socs                       |   9 +
+> >  arch/riscv/boot/dts/Makefile                  |   1 +
+> >  arch/riscv/boot/dts/allwinner/Makefile        |  10 +
+> >  .../allwinner/sun20i-d1-clockworkpi-v3.14.dts | 242 +++++
+> >  .../sun20i-d1-common-regulators.dtsi          |  51 +
+> >  .../dts/allwinner/sun20i-d1-devterm-v3.14.dts |  37 +
+> >  .../sun20i-d1-dongshan-nezha-stu.dts          | 114 +++
+> >  .../sun20i-d1-lichee-rv-86-panel-480p.dts     |  29 +
+> >  .../sun20i-d1-lichee-rv-86-panel-720p.dts     |  10 +
+> >  .../sun20i-d1-lichee-rv-86-panel.dtsi         |  92 ++
+> >  .../allwinner/sun20i-d1-lichee-rv-dock.dts    |  74 ++
+> >  .../dts/allwinner/sun20i-d1-lichee-rv.dts     |  84 ++
+> >  .../allwinner/sun20i-d1-mangopi-mq-pro.dts    | 128 +++
+> >  .../boot/dts/allwinner/sun20i-d1-nezha.dts    | 171 ++++
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi  | 900 ++++++++++++++++++
+> >  arch/riscv/configs/defconfig                  |  23 +-
+> >  20 files changed, 2045 insertions(+), 2 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/riscv/sunxi.yaml
+> >  create mode 100644 arch/riscv/boot/dts/allwinner/Makefile
+> >  create mode 100644
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1-clockworkpi-v3.14.dts create
+> >  mode 100644
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1-common-regulators.dtsi create
+> >  mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-devterm-v3.14.dts
+> >  create mode 100644
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts create
+> >  mode 100644
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-480p.dts
+> >  create mode 100644
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-720p.dts
+> >  create mode 100644
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel.dtsi create
+> >  mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
+> >  create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv.d=
+ts
+> >  create mode 100644
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts create mode
+> >  100644 arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts create mode
+> >  100644 arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi
+>=20
+> I'm assuming these are aimed at the RISC-V tree?  I'm generally OK with
+> that, though the DT folks have pointed out a handful of issues that look
+> pretty reasonable to me.
 
-Add TIGERLAKE to the list of CPUs that can register intel_pstate while not
-advertising the HWP capability. Without this change, an TIGERLAKE in no-HWP
-mode could only use the acpi_cpufreq frequency scaling driver.
+DT changes for Allwinner ARM SoCs go trough sunxi tree. Should this be hand=
+led=20
+differently for RISC-V?
 
-See also commits:
-d8de7a44e11f: cpufreq: intel_pstate: Add Skylake servers support
-fbdc21e9b038: cpufreq: intel_pstate: Add Icelake servers support in no-HWP mode
-706c5328851d: cpufreq: intel_pstate: Add Cometlake support in no-HWP mode
+Best regards,
+Jernej
 
-Reported by: M. Cargi Ari <cagriari@pm.me>
-Signed-off-by: Doug Smythies <dsmythies@telus.net>
----
- drivers/cpufreq/intel_pstate.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 57cdb3679885..fc3ebeb0bbe5 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2416,6 +2416,7 @@ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
- 	X86_MATCH(SKYLAKE_X,		core_funcs),
- 	X86_MATCH(COMETLAKE,		core_funcs),
- 	X86_MATCH(ICELAKE_X,		core_funcs),
-+	X86_MATCH(TIGERLAKE,		core_funcs),
- 	{}
- };
- MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
---
-2.25.1
+>=20
+> I can't find a v2, not sure if I missed it.  No rush on my end, just
+> want to make sure I'm not dropping the ball on anything.
+>=20
+> Thanks!
 
 

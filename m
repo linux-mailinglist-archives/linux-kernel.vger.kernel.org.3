@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C9E5AE9A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33175AE9A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239788AbiIFNcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
+        id S240011AbiIFNcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239033AbiIFNcH (ORCPT
+        with ESMTP id S239866AbiIFNcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:32:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C018753AC;
-        Tue,  6 Sep 2022 06:32:07 -0700 (PDT)
+        Tue, 6 Sep 2022 09:32:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174F2760E1;
+        Tue,  6 Sep 2022 06:32:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8D11B818C2;
-        Tue,  6 Sep 2022 13:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31EAC433D6;
-        Tue,  6 Sep 2022 13:32:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F13960F89;
+        Tue,  6 Sep 2022 13:32:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2CBFC433C1;
+        Tue,  6 Sep 2022 13:32:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471124;
-        bh=PUGgoVZZTJScvvtPoB/2rewiBTZxS5R7xBg7g7fXaeE=;
+        s=korg; t=1662471128;
+        bh=ZKmUbdDwejXSkwgft8nsKPNTXVa5RDRarrObMQNeIME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ICsyXcfGQLnxo8x72dWh32sWRKhKL6X8F/hHLrrKexu4aXpWzvmLqRQxxAAEOKJY4
-         aa4RIzCQjjqdYWwL/Ihz32z1NP4OevgTVSRzvsCHF5X/ICuv/k54wRpBvzZPzg1Bbh
-         SQ+9zl6CRsKPzeB9Bx3WPKmVfZc+HLtJubwP7HRk=
+        b=fvPPERfY8JqCRC99hOkxW3AonOcPkFPMOn/3cPvxX38v5HdhncuBp7Ke7ba5HkiyJ
+         lYuVxqKgcRWbTyGUrdxW24Sclu/V5KJ0tRzAKWkgx3mcJybpC5uDy6ZKdmXnUvvLoX
+         3C97+mQd2q1zx66zpQjKxghjS4N6YxWv4gs77Qyw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Jaska Uimonen <jaska.uimonen@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 10/80] ALSA: hda: intel-nhlt: Correct the handling of fmt_config flexible array
-Date:   Tue,  6 Sep 2022 15:30:07 +0200
-Message-Id: <20220906132817.359003122@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 11/80] wifi: cfg80211: debugfs: fix return type in ht40allow_map_read()
+Date:   Tue,  6 Sep 2022 15:30:08 +0200
+Message-Id: <20220906132817.397814900@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
 References: <20220906132816.936069583@linuxfoundation.org>
@@ -57,54 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 2e6481a3f3ee6234ce577454e1d88aca55f51d47 ]
+[ Upstream commit d776763f48084926b5d9e25507a3ddb7c9243d5e ]
 
-The struct nhlt_format's fmt_config is a flexible array, it must not be
-used as normal array.
-When moving to the next nhlt_fmt_cfg we need to take into account the data
-behind the ->config.caps (indicated by ->config.size).
+The return type is supposed to be ssize_t, which is signed long,
+but "r" was declared as unsigned int.  This means that on 64 bit systems
+we return positive values instead of negative error codes.
 
-Fixes: a864e8f159b13 ("ALSA: hda: intel-nhlt: verify config type")
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Jaska Uimonen <jaska.uimonen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220823122405.18464-1-peter.ujfalusi@linux.intel.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 80a3511d70e8 ("cfg80211: add debugfs HT40 allow map")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/YutvOQeJm0UjLhwU@kili
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/hda/intel-nhlt.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ net/wireless/debugfs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/hda/intel-nhlt.c b/sound/hda/intel-nhlt.c
-index 5e04fedaec49e..8714891f50b0a 100644
---- a/sound/hda/intel-nhlt.c
-+++ b/sound/hda/intel-nhlt.c
-@@ -55,16 +55,22 @@ int intel_nhlt_get_dmic_geo(struct device *dev, struct nhlt_acpi_table *nhlt)
+diff --git a/net/wireless/debugfs.c b/net/wireless/debugfs.c
+index 76b845f68ac89..d80b06d669593 100644
+--- a/net/wireless/debugfs.c
++++ b/net/wireless/debugfs.c
+@@ -65,9 +65,10 @@ static ssize_t ht40allow_map_read(struct file *file,
+ {
+ 	struct wiphy *wiphy = file->private_data;
+ 	char *buf;
+-	unsigned int offset = 0, buf_size = PAGE_SIZE, i, r;
++	unsigned int offset = 0, buf_size = PAGE_SIZE, i;
+ 	enum nl80211_band band;
+ 	struct ieee80211_supported_band *sband;
++	ssize_t r;
  
- 		/* find max number of channels based on format_configuration */
- 		if (fmt_configs->fmt_count) {
-+			struct nhlt_fmt_cfg *fmt_cfg = fmt_configs->fmt_config;
-+
- 			dev_dbg(dev, "found %d format definitions\n",
- 				fmt_configs->fmt_count);
- 
- 			for (i = 0; i < fmt_configs->fmt_count; i++) {
- 				struct wav_fmt_ext *fmt_ext;
- 
--				fmt_ext = &fmt_configs->fmt_config[i].fmt_ext;
-+				fmt_ext = &fmt_cfg->fmt_ext;
- 
- 				if (fmt_ext->fmt.channels > max_ch)
- 					max_ch = fmt_ext->fmt.channels;
-+
-+				/* Move to the next nhlt_fmt_cfg */
-+				fmt_cfg = (struct nhlt_fmt_cfg *)(fmt_cfg->config.caps +
-+								  fmt_cfg->config.size);
- 			}
- 			dev_dbg(dev, "max channels found %d\n", max_ch);
- 		} else {
+ 	buf = kzalloc(buf_size, GFP_KERNEL);
+ 	if (!buf)
 -- 
 2.35.1
 

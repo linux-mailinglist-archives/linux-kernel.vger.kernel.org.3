@@ -2,136 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEDD5ADF9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904855ADFA1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238483AbiIFGPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 02:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
+        id S238543AbiIFGRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 02:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238477AbiIFGOg (ORCPT
+        with ESMTP id S238506AbiIFGQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 02:14:36 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2078.outbound.protection.outlook.com [40.107.113.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F00A6F577
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 23:14:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E8HtBYnHWz1qi1eVCZFA6qd5Ytc7U5JWqfXRmLNXig1+6xs5Jlvvoj+1q/AXTEbs/lGfJcTuH/5NvfBWVc/PEMBoCSdU6OYpwuEOzV3aCdPaZJikGbw1bd+A3bgRFA5o88Ws0L8PJHZKCSRbvu5nbgcRkbZxT7xtEawOsrV5nCR+dt3mokb1y41G7LeXghFr5BlVY6h4ucTR1WCgCGAEQjS8X9kaS60SsGx8fcrpgNDERM4kH6E1wcF6GrtLXVQ9NBirsxmsoAIc69+wsj3nhj3nwc5IZDel1HBU2ZgQ15wcsl1vI2xXAfuj+sM9jaHs8Qi5GmizrfJQND2CaThn+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x9Yn2dAJ2/oVcyiuJphpShHT3aoXmEe8uy2o3x/WawI=;
- b=EnTzkRzDjzYIwH+g348BxObNenFSS5lXtpZInzXtMGOKNaU3mkDV7ZzUktupro/DtwmQ8pNYetTE2G7Hd672UFW0vn62lc/Tlb36qjqsmh3XUtFEiDquprxtmvI02H+xrgH6KOzrc7lPIE73KrXs8qoJLihRkLkcCQELAbHpGxUQx5kqneV2+LRazvYkJQpIb6ILW9utcBvWdYZR9PQ+K/gNzXBz7b3J9NGEYHegHNWbhX3O5u9Du7oKA6VNhrTGVZQNIIQLmk3GvlcxGbPwwUNAwPFS4NYwd5G//ubiSy0ga6th5c463Ermhd8WKoGn8YGzWAm5JRTv99cGrcNKWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x9Yn2dAJ2/oVcyiuJphpShHT3aoXmEe8uy2o3x/WawI=;
- b=YPv6lWfTBhnIRcx4FN+aumNrPNgVdibo99eoFOJ0LqoiVZLgAvZvPbVOA7Sv9J0KeBxoGwiomVnPeW/GBgvdFrozL0atjnEUjXe0WN21Vq7EQ8GsJekYH/nW5k4G6EbVqc/xdJy8d4n9IHCcQkfORaXIUfoIUXoSU332Pkrzyww=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TYCPR01MB10510.jpnprd01.prod.outlook.com (2603:1096:400:307::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Tue, 6 Sep
- 2022 06:14:18 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::442c:db3a:80:287a]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::442c:db3a:80:287a%6]) with mapi id 15.20.5588.011; Tue, 6 Sep 2022
- 06:14:18 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jane Chu <jane.chu@oracle.com>,
+        Tue, 6 Sep 2022 02:16:39 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83C170E44;
+        Mon,  5 Sep 2022 23:15:21 -0700 (PDT)
+X-UUID: b2bb39e2250644ed8ece4dd29a00f116-20220906
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=j4MN08XblrDSbxE0fXBIA+Mpq1rxLZoCqtsuW3ROu2g=;
+        b=M9sgsEaLyYFa6fW2UoOPDZSWMR3Nv/QJszDorkKgJwfperfUFGAVrHRMw9SU5gnAlNjlMNdUjWVDrw1IrfcuIZfE5GszICxZVotu53vqbFLFtY8x2umw0krQvD0OOYD5XpKuCdAhRePrJZdyd157VXRgJbhud1IkI68CVrYqWlI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:a687a147-6a6e-499a-a663-106e64a7be9e,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:84eae18,CLOUDID:a1015221-1c20-48a5-82a0-25f9c331906d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
+        nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: b2bb39e2250644ed8ece4dd29a00f116-20220906
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <edward-jw.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1589515334; Tue, 06 Sep 2022 14:15:16 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 6 Sep 2022 14:15:15 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 6 Sep 2022 14:15:15 +0800
+Message-ID: <4f12f2b254a5ea795720052cb1c58e59abe9b9ce.camel@mediatek.com>
+Subject: Re: [PATCH 3/4] clk: mediatek: Add new clock driver to handle FHCTL
+ hardware
+From:   Edward-JW Yang <edward-jw.yang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Johnson Wang =?UTF-8?Q?=28=E7=8E=8B=E8=81=96=E9=91=AB=29?= 
+        <Johnson.Wang@mediatek.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>
+CC:     "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v2 1/4] mm,hwpoison,hugetlb,memory_hotplug: hotremove
- memory section with hwpoisoned hugepage
-Thread-Topic: [PATCH v2 1/4] mm,hwpoison,hugetlb,memory_hotplug: hotremove
- memory section with hwpoisoned hugepage
-Thread-Index: AQHYwO/cKEdKHklTv0a9v9Lcn1gcJK3Rt58AgAA2SoA=
-Date:   Tue, 6 Sep 2022 06:14:18 +0000
-Message-ID: <20220906061417.GA1406504@hori.linux.bs1.fc.nec.co.jp>
-References: <20220905062137.1455537-1-naoya.horiguchi@linux.dev>
- <20220905062137.1455537-2-naoya.horiguchi@linux.dev>
- <3e302aa5-d63d-097e-2cb7-831b7c99e736@huawei.com>
-In-Reply-To: <3e302aa5-d63d-097e-2cb7-831b7c99e736@huawei.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f6d37287-1532-4443-a565-08da8fcf0824
-x-ms-traffictypediagnostic: TYCPR01MB10510:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /mr6WATWEHV0l+InJ7LfwbGpWQKW6DlOLP+JkPmlGxIY2vvxHG74UZTlGKye2IiSf2X3Yri9q/BrzjKCMDkF+aSTRmX6au+3p5fkshEsrOZTRNWc+eWF2Mi8uwml6eoVv9LR1+YLBmccrToYsHzSKR5XbxbtHsuUDRf6E0q2xd/z+dncslTzKmw4MEUx7zI1r0vDraBMfeHYSyGYQszjyyG3R+X3YwVqpNsoVRz+H3quFoxP7PxkKGVNMe7cVV582jwKnG9nMyUM57Y+H7KBp8+7ePKfD7Hiwzr0tDncWUthccbHbbObIPHpF1uDB6MtvI8GVVB9EZb43hXBx56SUqQIRZedzhXHSW3IOh8r66jK4P/Ymwze8CTDxPnvG8YsGqoV2TGKvpTdflBq8W4+L8nuAbEFbo0GGzNaC0lZ79z2I/aA9V9Y7yuJpmSHMrCrtSYb1cu2cJ7r3Wi6BKOZOuJOrIQljiDX/DiKN8S8TcL/UNH2h3KaWKKsmrLvahWbmOMIMPxEhelXz8Ke1fZcHByVy81PO2+O9DhyHCMeMU4ORjjmgJp6JxTkKq0NxcxOVlZpcWayFtF1nguiZVBvP62Y5Bzck6j8iXaWBeXeSb3XYCrHCbtqs1cxNpwmkZZI+xcIk6m5192kT/6FWxLV8RR71s7ukapNocYsJ27MmvHWrN+b1o+/TnXlWVQUkhyggJIVFN9tIzJaLyD0kUaH9YDZAnpwS9Eswv6mPhH4mbI4Fn7vvDvfvfP/qWwOAX6C79PnSWrD7GaaDFb4z2tnrqkEzKpfYNtZob8R7qHwbGU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(376002)(346002)(396003)(136003)(39860400002)(38070700005)(316002)(966005)(6916009)(54906003)(2906002)(71200400001)(82960400001)(53546011)(41300700001)(38100700002)(64756008)(6506007)(66476007)(33656002)(6486002)(66556008)(8676002)(66446008)(4326008)(478600001)(86362001)(8936002)(5660300002)(7416002)(76116006)(1076003)(186003)(85182001)(66946007)(83380400001)(122000001)(26005)(9686003)(6512007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RUZtWVpOcGtFNVMxeEx6c0w2RlVKblBiMmpKVm8xZVB1Z3NPK3pjelFEc3lv?=
- =?utf-8?B?YU9XZjk2WEsvU0t6ZUJiNTIwaU8xUlA3ZmRUN0c3MEJORGFVZG81UGxJNTlC?=
- =?utf-8?B?RFVLejNaTkt5UWloYjhzSFdqVCtSM2RKc1pJL2xpODRoSnliWnVnbGlDU285?=
- =?utf-8?B?dElxN3BXd21vbG9nQ0VETkl2MUtFUEhNRjRoSmhpbkgySm1hK0puWHBVTVBy?=
- =?utf-8?B?UDBST1hDeWZYb2dsYStpMGFtL0ljUkd3QTZmWlpLcytUVkR0R0NTOVZlL2hi?=
- =?utf-8?B?T0cxZWc5aDRjMEZhSGpQeTNzYTM4Z0lGUUcvOE1iMHFhWDNoaThvMXlKc2FX?=
- =?utf-8?B?Wk5zT2JYaWZ0clNwOXlGbzFDTEpvNW9lWVEvYWZRQmRkc0toRUtpSGVDRm5r?=
- =?utf-8?B?V0c2UkNzZnlHbHlxRHRjd0xrUnJwa3o0MjVnSGdEdThSZHRLRllBaC9QRFQ1?=
- =?utf-8?B?VDFvY1dtVWt3M3huM2dQR2I5cml5SzNGSlNWSUZlYS9tSE01V0EzNzQyek9F?=
- =?utf-8?B?dW04UWJicHlwZzZnWVN5QWpFcGhsRlZIREVLVlN0WDc3TWt4R2czL2FScjFq?=
- =?utf-8?B?ZlRxVWtoOVBDYzMyNi9wTEpIRW9nbk04TjVIMzF1MWE1eFpIYitRS0U1R09t?=
- =?utf-8?B?NTMrenRGUVhJbkNDVVM3UUZrdnlHbUdrSlBKT20yNGpOYmJURFYzeWMwdENL?=
- =?utf-8?B?cTZIcjZONkd5aFZVYnoyZURURGJ0a3R1VGo1SHg0UDNvWFdRTERwUWlRcWU5?=
- =?utf-8?B?aWFwaFhnWndmN28ydjNWRWRzbi9LZmVYdXBqMjRjMG5PZ3RZa1NJVzF3U3Uv?=
- =?utf-8?B?ZTFNK1pvOW5tdk1Lb205cG1RWGpvaytvNXcvSFBZTnUrZFFNUGdDYVM2S3ZC?=
- =?utf-8?B?MmNSeFoyQUxwK1RPVUpJY3d1bU0wU2JWWUQrTkZ1L0NzclZIUk5ENHdmbXFy?=
- =?utf-8?B?M2lGcXd3NklnWjZnVTBvSTdndlUxUXl0Y3JmTDlCQXBmVDRiZVpzRjRIaEVY?=
- =?utf-8?B?ajhOakRObzFKcmJYcytLWU4wM00yM0ZZbGlaR3R6Sk8ycGpyeWU0RTVqRjZx?=
- =?utf-8?B?bjRXTjFGMlpFTGJ2cE1EckJLakFDdms2RU1qYnBJQ3UvZFREcDNNSS9sSS9n?=
- =?utf-8?B?dmxmeUc5bllFdXdQUkh3TVh1QUliMFdZTHZaTjh4SHprNTNSZXJ6ZGNZbGdT?=
- =?utf-8?B?UXloM0pDQ29kdjNqclNKMmNVQTFqNUdUR29hck90Qnh5eXZFQ0lwMG9qaFdv?=
- =?utf-8?B?OGRxajA0MFFMR2tMYWYzSXk4ZTVoQ0JXbExuUXVIOTZldFpMMDNzcE1vRXMw?=
- =?utf-8?B?QVdvNVk5UWYyWUdxWjB1K2tybTZidjJRZ1VRKzNiTW1EaE95Q2wrUW9NRGk4?=
- =?utf-8?B?SVZJdGpLVFZ0Q0w0SHpxSGwzeGJDRFpJNjVZLzM4KzUvcm4xWDhWS2VUdFlu?=
- =?utf-8?B?QTVqSVN0c2dWUzFFVXkrdnc0NlFjM2hiSTlpeEY1NHhjdFl2MDFiUlRQR0xH?=
- =?utf-8?B?bmo4OVU3VnBhaHNsZlQyUGdnUis2YUk4THVrSU1MYzlEbTAxcWtnK09DbkpY?=
- =?utf-8?B?MXNwajc4aFhHQTRhVndqMCtjRVlBS0djc0syOE14cFEzUHRCd3ZzSmR0MHlD?=
- =?utf-8?B?d2JmUHRuU2l2VkhVMVdUNHBENkMzYllkL0E4Y2ZHMFp5RFMvVHFRZ0JiLzJz?=
- =?utf-8?B?ZHdwTmpVc0pEYXFXMXVGMG52cHdkVmhQdjVyZGtCd2lPbTRFeUo2OEg4MnVl?=
- =?utf-8?B?YTV3aW1DZzFvYnU4NzNOUVVXZldaNEFjUk5IY1FGb0lKNUlTYkhOQXVjazdB?=
- =?utf-8?B?VGJ3Um9BSVRha2Jpb0RmVHJ2RjFPcHZocGxoVVV6RHQrcnp1YjVubkRrTmNF?=
- =?utf-8?B?OVl2d1J0QytzZ2FtZXBnSHp4bXF1bEsxNnNDRE0zZUk2d05Cb1pqcEx0blgw?=
- =?utf-8?B?SDZlNnR2TlQ5VUI0UVhVR01KUmRUeGZTZCtDNHIxd2NLNE9UdVpheHF6bnpY?=
- =?utf-8?B?V3FjblYrYk9vdm00VXRLQnd5RU8yVlNnd0pVVEVzTjJvSEwrNDJuVy9jenp1?=
- =?utf-8?B?R0VLTS9HNXg1ZkorOWw1dTJISVRwa01kMHJCcFVCZzA2NVpMWXh2Yk9LaTNi?=
- =?utf-8?B?cnpwVHpiTlJKK0RrNDYxQldOMVkzY2VmSEJwbmo5ZURNZTlrRnZqZ1cybTRN?=
- =?utf-8?B?ZkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <773C39DA1D31C747A8A74CCDCC7BCFA3@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 6 Sep 2022 14:15:15 +0800
+In-Reply-To: <d2abe2d3-f17c-6c22-ccae-514fe196441e@collabora.com>
+References: <20220831124850.7748-1-johnson.wang@mediatek.com>
+         <20220831124850.7748-4-johnson.wang@mediatek.com>
+         <d2abe2d3-f17c-6c22-ccae-514fe196441e@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6d37287-1532-4443-a565-08da8fcf0824
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2022 06:14:18.3575
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Nk1Le/BddJ08Msly1E1pW/rH2KsDJEtb72qW7sy96sxOrMt2UeAvQk8IPuKoDdq+c9sizPzqpdv8/3m6C/Gw9g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB10510
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,58 +79,499 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBTZXAgMDYsIDIwMjIgYXQgMTA6NTk6NThBTSArMDgwMCwgTWlhb2hlIExpbiB3cm90
-ZToNCj4gT24gMjAyMi85LzUgMTQ6MjEsIE5hb3lhIEhvcmlndWNoaSB3cm90ZToNCj4gPiBGcm9t
-OiBOYW95YSBIb3JpZ3VjaGkgPG5hb3lhLmhvcmlndWNoaUBuZWMuY29tPg0KPiA+IA0KPiA+IEhX
-UG9pc29uZWQgcGFnZSBpcyBub3Qgc3VwcG9zZWQgdG8gYmUgYWNjZXNzZWQgb25jZSBtYXJrZWQs
-IGJ1dCBjdXJyZW50bHkNCj4gPiBzdWNoIGFjY2Vzc2VzIGNhbiBoYXBwZW4gZHVyaW5nIG1lbW9y
-eSBob3RyZW1vdmUgYmVjYXVzZSBkb19taWdyYXRlX3JhbmdlKCkNCj4gPiBjYW4gYmUgY2FsbGVk
-IGJlZm9yZSBkaXNzb2x2ZV9mcmVlX2h1Z2VfcGFnZXMoKSBpcyBjYWxsZWQuDQo+ID4gDQo+ID4g
-TW92ZSBkaXNzb2x2ZV9mcmVlX2h1Z2VfcGFnZXMoKSBiZWZvcmUgc2Nhbl9tb3ZhYmxlX3BhZ2Vz
-KCkuIFJlY2VudGx5DQo+ID4gZGVsYXllZCBkaXNzb2x2ZSBoYXMgYmVlbiBpbXBsZW1lbnRlZCwg
-c28gdGhlIGRpc3NvbHZpbmcgY2FuIHR1cm4NCj4gPiBhIGh3cG9pc29uZWQgaHVnZXBhZ2UgaW50
-byA0a0IgaHdwb2lzb24gcGFnZSwgd2hpY2ggbWVtb3J5IGhvdHBsdWcgY2FuDQo+ID4gaGFuZGxl
-IHNhZmVseS4NCj4gDQo+IFllcywgdGhhbmtzIGZvciB5b3VyIHdvcmssIE5hb3lhLiA7KQ0KPiAN
-Cj4gPiANCj4gPiBSZXBvcnRlZC1ieTogTWlhb2hlIExpbiA8bGlubWlhb2hlQGh1YXdlaS5jb20+
-DQo+ID4gU2lnbmVkLW9mZi1ieTogTmFveWEgSG9yaWd1Y2hpIDxuYW95YS5ob3JpZ3VjaGlAbmVj
-LmNvbT4NCj4gPiAtLS0NCj4gPiAgbW0vbWVtb3J5X2hvdHBsdWcuYyB8IDIyICsrKysrKysrKysr
-LS0tLS0tLS0tLS0NCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDExIGRl
-bGV0aW9ucygtKQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9tbS9tZW1vcnlfaG90cGx1Zy5jIGIv
-bW0vbWVtb3J5X2hvdHBsdWcuYw0KPiA+IGluZGV4IGZhZDZkMWYyMjYyYS4uYzI0NzM1ZDYzYjI1
-IDEwMDY0NA0KPiA+IC0tLSBhL21tL21lbW9yeV9ob3RwbHVnLmMNCj4gPiArKysgYi9tbS9tZW1v
-cnlfaG90cGx1Zy5jDQo+ID4gQEAgLTE4ODAsNiArMTg4MCwxNyBAQCBpbnQgX19yZWYgb2ZmbGlu
-ZV9wYWdlcyh1bnNpZ25lZCBsb25nIHN0YXJ0X3BmbiwgdW5zaWduZWQgbG9uZyBucl9wYWdlcywN
-Cj4gPiAgDQo+ID4gIAkJCWNvbmRfcmVzY2hlZCgpOw0KPiA+ICANCj4gPiArCQkJLyoNCj4gPiAr
-CQkJICogRGlzc29sdmUgZnJlZSBodWdlcGFnZXMgaW4gdGhlIG1lbW9yeSBibG9jayBiZWZvcmUg
-ZG9pbmcNCj4gPiArCQkJICogb2ZmbGluaW5nIGFjdHVhbGx5IGluIG9yZGVyIHRvIG1ha2UgaHVn
-ZXRsYmZzJ3Mgb2JqZWN0DQo+ID4gKwkJCSAqIGNvdW50aW5nIGNvbnNpc3RlbnQuDQo+ID4gKwkJ
-CSAqLw0KPiA+ICsJCQlyZXQgPSBkaXNzb2x2ZV9mcmVlX2h1Z2VfcGFnZXMoc3RhcnRfcGZuLCBl
-bmRfcGZuKTsNCj4gPiArCQkJaWYgKHJldCkgew0KPiA+ICsJCQkJcmVhc29uID0gImZhaWx1cmUg
-dG8gZGlzc29sdmUgaHVnZSBwYWdlcyI7DQo+ID4gKwkJCQlnb3RvIGZhaWxlZF9yZW1vdmFsX2lz
-b2xhdGVkOw0KPiA+ICsJCQl9DQo+IA0KPiBUaGlzIGNoYW5nZSBoYXMgYSBzaWRlLWVmZmVjdC4g
-SWYgaHVnZXRsYiBwYWdlcyBhcmUgaW4tdXNlLCBkaXNzb2x2ZV9mcmVlX2h1Z2VfcGFnZXMoKSB3
-aWxsIGFsd2F5cyByZXR1cm4gLUVCVVNZDQo+IGV2ZW4gaWYgdGhvc2UgcGFnZXMgY2FuIGJlIG1p
-Z3JhdGVkLiBTbyB3ZSBmYWlsIHRvIGhvdHJlbW92ZSB0aGUgbWVtb3J5IGV2ZW4gaWYgdGhleSBj
-b3VsZCBiZSBvZmZsaW5lZC4NCj4gT3IgYW0gSSBtaXNzIHNvbWV0aGluZz8NCg0KVGhhbmsgeW91
-IGZvciB0aGUgY29tbWVudCwgeW91J3JlIHJpZ2h0LiAgKFRha2luZyBhIGxvb2sgb3ZlciBteSB0
-ZXN0IHJlc3VsdA0KY2FyZWZ1bGx5LCBpdCBzaG93ZWQgZmFpbHVyZXMgZm9yIHRoZSByZWxhdGVk
-IGNhc2VzLCBJIHNvbWVob3cgb3Zlcmxvb2tlZA0KdGhlbSwgcmVhbGx5IHNvcnJ5LikgIFNvIG15
-IHNlY29uZCB0aG91Z2h0IGlzIHRoYXQgd2Uga2VlcCBvZmZsaW5lX3BhZ2VzKCkNCmFzIGlzLCBh
-bmQgaW5zZXJ0IGEgZmV3IGxpbmUgaW4gZG9fbWlncmF0ZV9yYW5nZSgpIHRvIGhhbmRsZSB0aGUg
-Y2FzZSBvZg0KaHdwb2lzb25lZCBodWdlcGFnZSBsaWtlIGJlbG93Og0KDQpAQCAtMTY0Miw2ICsx
-NjQyLDggQEAgZG9fbWlncmF0ZV9yYW5nZSh1bnNpZ25lZCBsb25nIHN0YXJ0X3BmbiwgdW5zaWdu
-ZWQgbG9uZyBlbmRfcGZuKQ0KDQogICAgICAgICAgICAgICAgaWYgKFBhZ2VIdWdlKHBhZ2UpKSB7
-DQogICAgICAgICAgICAgICAgICAgICAgICBwZm4gPSBwYWdlX3RvX3BmbihoZWFkKSArIGNvbXBv
-dW5kX25yKGhlYWQpIC0gMTsNCisgICAgICAgICAgICAgICAgICAgICAgIGlmIChQYWdlSFdQb2lz
-b24oaGVhZCkpDQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVlOw0KICAg
-ICAgICAgICAgICAgICAgICAgICAgaXNvbGF0ZV9odWdldGxiKGhlYWQsICZzb3VyY2UpOw0KICAg
-ICAgICAgICAgICAgICAgICAgICAgY29udGludWU7DQogICAgICAgICAgICAgICAgfSBlbHNlIGlm
-IChQYWdlVHJhbnNIdWdlKHBhZ2UpKQ0KDQpUaGlzIGlzIHNsaWdodGx5IGRpZmZlcmVudCBmcm9t
-IHlvdXIgb3JpZ2luYWwgc3VnZ2VzdGlvbg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgt
-bW0vMjAyMjA0MjExMzUxMjkuMTk3NjctMS1saW5taWFvaGVAaHVhd2VpLmNvbS9UDQosIGFzIGRp
-c2N1c3NlZCBpbiB0aGUgdGhyZWFkIGV4aXN0aW5nICJpZiAoUGFnZUhXUG9pc29uKHBhZ2UpKSIg
-YnJhbmNoIGluDQp0aGlzIGZ1bmN0aW9uIGNhbid0IGJlIHVzZWQgZm9yIGh1Z2V0bGIuICBXZSBj
-b3VsZCBhZGp1c3QgdGhlbSB0byBoYW5kbGUNCmh1Z2V0bGIsIGJ1dCBtYXliZSBzZXBhcmF0aW5n
-IGNvZGUgZm9yIGh1Z2V0bGIgZmlyc3QgZnJvbSB0aGUgb3RoZXJzIGxvb2tzDQpsZXNzIGNvbXBp
-Y2F0ZWQgdG8gbWUuDQoNCklmIHlvdSBoYXZlIGFueSBzdWdnZXN0aW9uIG9uIHRoaXMsIHBsZWFz
-ZSBsZXQgbWUga25vdy4NCg0KVGhhbmtzLA0KTmFveWEgSG9yaWd1Y2hp
+Hi Angelo,
+
+Thanks for suggestions.
+
+On Thu, 2022-09-01 at 16:05 +0800, AngeloGioacchino Del Regno wrote:
+> Il 31/08/22 14:48, Johnson Wang ha scritto:
+> > To implement frequency hopping and spread spectrum clocking
+> > function, we introduce new clock type and APIs to handle
+> > FHCTL hardware.
+> > 
+> > Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> > Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > ---
+> >   drivers/clk/mediatek/Makefile    |   2 +-
+> >   drivers/clk/mediatek/clk-fhctl.c | 258 +++++++++++++++++++++++++++++
+> >   drivers/clk/mediatek/clk-fhctl.h |  27 +++
+> >   drivers/clk/mediatek/clk-pllfh.c | 271 +++++++++++++++++++++++++++++++
+> >   drivers/clk/mediatek/clk-pllfh.h |  81 +++++++++
+> >   5 files changed, 638 insertions(+), 1 deletion(-)
+> >   create mode 100644 drivers/clk/mediatek/clk-fhctl.c
+> >   create mode 100644 drivers/clk/mediatek/clk-fhctl.h
+> >   create mode 100644 drivers/clk/mediatek/clk-pllfh.c
+> >   create mode 100644 drivers/clk/mediatek/clk-pllfh.h
+> > 
+> > diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
+> > index caf2ce93d666..0e674a55e51e 100644
+> > --- a/drivers/clk/mediatek/Makefile
+> > +++ b/drivers/clk/mediatek/Makefile
+> > @@ -1,5 +1,5 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> > -obj-$(CONFIG_COMMON_CLK_MEDIATEK) += clk-mtk.o clk-pll.o clk-gate.o clk-apmixed.o clk-cpumux.o reset.o clk-mux.o
+> > +obj-$(CONFIG_COMMON_CLK_MEDIATEK) += clk-mtk.o clk-pll.o clk-gate.o clk-apmixed.o clk-cpumux.o reset.o clk-mux.o clk-fhctl.o clk-pllfh.o
+> >   
+> >   obj-$(CONFIG_COMMON_CLK_MT6765) += clk-mt6765.o
+> >   obj-$(CONFIG_COMMON_CLK_MT6765_AUDIOSYS) += clk-mt6765-audio.o
+> > diff --git a/drivers/clk/mediatek/clk-fhctl.c b/drivers/clk/mediatek/clk-fhctl.c
+> > new file mode 100644
+> > index 000000000000..69bd4ce2bc72
+> > --- /dev/null
+> > +++ b/drivers/clk/mediatek/clk-fhctl.c
+> > @@ -0,0 +1,258 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (c) 2022 MediaTek Inc.
+> > + * Author: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> > + */
+> > +
+> 
+> #include <linux/io.h>
+> 
+> Please don't rely on implicit header inclusion.
+
+OK, I'll fix it. Thanks.
+
+> 
+> > +#include <linux/iopoll.h>
+> > +
+> > +#include "clk-mtk.h"
+> > +#include "clk-pllfh.h"
+> > +#include "clk-fhctl.h"
+> > +
+> > +#define PERCENT_TO_DDSLMT(dds, percent_m10) \
+> > +	((((dds) * (percent_m10)) >> 5) / 100)
+> > +
+> > +static const struct fhctl_offset fhctl_offset = {
+> > +	.offset_hp_en = 0x0,
+> > +	.offset_clk_con = 0x8,
+> > +	.offset_rst_con = 0xc,
+> > +	.offset_slope0 = 0x10,
+> > +	.offset_slope1 = 0x14,
+> > +	.offset_cfg = 0x0,
+> > +	.offset_updnlmt = 0x4,
+> > +	.offset_dds = 0x8,
+> > +	.offset_dvfs = 0xc,
+> > +	.offset_mon = 0x10,
+> > +};
+> > +
+> > +const struct fhctl_offset *fhctl_get_offset_table(void)
+> > +{
+> > +	return &fhctl_offset;
+> > +}
+> > +
+> > +static void dump_hw(struct mtk_clk_pll *pll, struct fh_pll_regs *regs,
+> > +		    const struct fh_pll_data *data)
+> > +{
+> > +	pr_info("hp_en<%x>,clk_con<%x>,slope0<%x>,slope1<%x>\n",
+> > +		readl(regs->reg_hp_en), readl(regs->reg_clk_con),
+> > +		readl(regs->reg_slope0), readl(regs->reg_slope1));
+> > +	pr_info("cfg<%x>,lmt<%x>,dds<%x>,dvfs<%x>,mon<%x>\n",
+> > +		readl(regs->reg_cfg), readl(regs->reg_updnlmt),
+> > +		readl(regs->reg_dds), readl(regs->reg_dvfs),
+> > +		readl(regs->reg_mon));
+> > +	pr_info("pcw<%x>\n", readl(pll->pcw_addr));
+> > +}
+> > +
+> > +static int fhctl_set_ssc_regs(struct mtk_clk_pll *pll, struct fh_pll_regs *regs,
+> > +			      const struct fh_pll_data *data, u32 rate)
+> > +{
+> > +	u32 updnlmt_val, r;
+> > +
+> > +	writel((readl(regs->reg_cfg) & ~(data->frddsx_en)), regs->reg_cfg);
+> > +	writel((readl(regs->reg_cfg) & ~(data->sfstrx_en)), regs->reg_cfg);
+> > +	writel((readl(regs->reg_cfg) & ~(data->fhctlx_en)), regs->reg_cfg);
+> > +
+> > +	if (rate > 0) {
+> > +		/* Set the relative parameter registers (dt/df/upbnd/downbnd) */
+> > +		r = readl(regs->reg_cfg);
+> > +		r &= ~(data->msk_frddsx_dys);
+> > +		r |= (data->df_val << (ffs(data->msk_frddsx_dys) - 1));
+> > +		writel(r, regs->reg_cfg);
+> > +
+> > +		r = readl(regs->reg_cfg);
+> > +		r &= ~(data->msk_frddsx_dts);
+> > +		r |= (data->dt_val << (ffs(data->msk_frddsx_dts) - 1));
+> > +		writel(r, regs->reg_cfg);
+> > +
+> > +		writel((readl(pll->pcw_addr) & data->dds_mask) | data->tgl_org,
+> > +			regs->reg_dds);
+> > +
+> > +		/* Calculate UPDNLMT */
+> > +		updnlmt_val = PERCENT_TO_DDSLMT((readl(regs->reg_dds) &
+> > +						 data->dds_mask), rate) <<
+> > +						 data->updnlmt_shft;
+> > +
+> > +		writel(updnlmt_val, regs->reg_updnlmt);
+> > +		writel(readl(regs->reg_hp_en) | BIT(data->fh_id),
+> > +		       regs->reg_hp_en);
+> > +		/* Enable SSC */
+> > +		writel(readl(regs->reg_cfg) | data->frddsx_en, regs->reg_cfg);
+> > +		/* Enable Hopping control */
+> > +		writel(readl(regs->reg_cfg) | data->fhctlx_en, regs->reg_cfg);
+> > +
+> > +	} else {
+> > +		/* Switch to APMIXEDSYS control */
+> > +		writel(readl(regs->reg_hp_en) & ~BIT(data->fh_id),
+> > +		       regs->reg_hp_en);
+> > +		/* Wait for DDS to be stable */
+> > +		udelay(30);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int hopping_hw_flow(struct mtk_clk_pll *pll, struct fh_pll_regs *regs,
+> > +			   const struct fh_pll_data *data,
+> > +			   struct fh_pll_state *state, unsigned int new_dds)
+> > +{
+> > +	u32 dds_mask = data->dds_mask;
+> > +	u32 mon_dds = 0;
+> > +	u32 con_pcw_tmp;
+> > +	int ret;
+> > +
+> > +	if (state->ssc_rate)
+> > +		fhctl_set_ssc_regs(pll, regs, data, 0);
+> > +
+> > +	writel((readl(pll->pcw_addr) & dds_mask) | data->tgl_org,
+> > +		regs->reg_dds);
+> > +
+> > +	writel(readl(regs->reg_cfg) | data->sfstrx_en, regs->reg_cfg);
+> > +	writel(readl(regs->reg_cfg) | data->fhctlx_en, regs->reg_cfg);
+> > +	writel(data->slope0_value, regs->reg_slope0);
+> > +	writel(data->slope1_value, regs->reg_slope1);
+> > +
+> > +	writel(readl(regs->reg_hp_en) | BIT(data->fh_id), regs->reg_hp_en);
+> > +	writel((new_dds) | (data->dvfs_tri), regs->reg_dvfs);
+> > +
+> > +	/* Wait 1000 us until DDS stable */
+> > +	ret = readl_poll_timeout_atomic(regs->reg_mon, mon_dds,
+> > +				       (mon_dds & dds_mask) == new_dds,
+> > +					10, 1000);
+> > +	if (ret) {
+> > +		pr_warn("%s: FHCTL hopping timeout\n", pll->data->name);
+> > +		dump_hw(pll, regs, data);
+> > +	}
+> > +
+> > +	con_pcw_tmp = readl(pll->pcw_addr) & (~dds_mask);
+> > +	con_pcw_tmp = (con_pcw_tmp | (readl(regs->reg_mon) & dds_mask) |
+> > +		       data->pcwchg);
+> > +
+> > +	writel(con_pcw_tmp, pll->pcw_addr);
+> > +	writel(readl(regs->reg_hp_en) & ~BIT(data->fh_id), regs->reg_hp_en);
+> > +
+> > +	if (state->ssc_rate)
+> > +		fhctl_set_ssc_regs(pll, regs, data, state->ssc_rate);
+> 
+> Does it really make sense to set the SSC registers if the FH operation times out?
+
+FH opration times out means DDS doesn't reach the target dds value but the de-sense issue
+may still exist. We can still base on current dds_mon value to do SSC.
+
+> 
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static unsigned int __get_postdiv(struct mtk_clk_pll *pll,
+> > +				  struct fh_pll_regs *regs,
+> > +				  const struct fh_pll_data *fh_data)
+> 
+> You don't need regs, nor fh_data, so this can be as simple as
+> 
+> static unsigned int __get_postdiv(struct mtk_clk_pll *pll)
+
+OK, I'll fix it. Thanks.
+
+> 
+> > +{
+> > +	unsigned int regval;
+> > +
+> > +	regval = readl(pll->pd_addr) >> pll->data->pd_shift;
+> > +	regval &= POSTDIV_MASK;
+> > +
+> 
+> 	return BIT(regval);
+
+OK, I'll fix it. Thanks.
+
+> 
+> > +	return (1 << regval);
+> > +}
+> > +
+> > +static void __set_postdiv(struct mtk_clk_pll *pll, struct fh_pll_regs *regs,
+> > +			  const struct fh_pll_data *data, int postdiv)
+> 
+> static void __set_postdiv(struct mtk_clk_pll *pll, unsigned int val)
+
+OK, I'll fix it. Thanks.
+
+> 
+> > +{
+> > +	unsigned int regval;
+> > +
+> > +	regval = readl(pll->pd_addr);
+> > +	regval &= ~(POSTDIV_MASK << pll->data->pd_shift);
+> > +	regval |= (ffs(postdiv) - 1) << pll->data->pd_shift;
+> > +	writel(regval, pll->pd_addr);
+> > +}
+> > +
+> > +static int fhctl_hopping(struct mtk_fh *fh, unsigned int new_dds, int postdiv)
+> 
+> The postdiv cannot ever be negative, so you can change it to an unsigned type...
+> 
+> static int fhctl_hopping(struct mtk_fh *fh, unsigned int new_dds,
+> 			 unsigned int postdiv)
+
+OK, I'll fix it. Thanks.
+
+> 
+> > +{
+> > +	const struct fh_pll_data *data = &fh->pllfh_data->data;
+> > +	struct fh_pll_state *state = &fh->pllfh_data->state;
+> > +	struct fh_pll_regs *regs = &fh->regs;
+> > +	struct mtk_clk_pll *pll = &fh->clk_pll;
+> > +	spinlock_t *lock = fh->lock;
+> > +	unsigned int pll_postdiv;
+> > +	unsigned long flags = 0;
+> > +	int ret;
+> > +
+> 
+> ...so since postdiv is unsigned, we can write this conditional as
+> 
+> 	if (postdiv)
+
+OK, I'll fix it. Thanks.
+
+> 
+> > +	if (postdiv > 0) {
+> > +		pll_postdiv = __get_postdiv(pll, regs, data);
+> > +
+> > +		if (postdiv > pll_postdiv)
+> > +			__set_postdiv(pll, regs, data, postdiv);
+> > +	}
+> > +
+> > +	spin_lock_irqsave(lock, flags);
+> > +
+> > +	ret = hopping_hw_flow(pll, regs, data, state, new_dds);
+> > +
+> > +	spin_unlock_irqrestore(lock, flags);
+> > +
+> > +	if (postdiv > 0) {
+> > +		if (postdiv < pll_postdiv)
+> 
+> ...and this one as
+> 
+> if (postdiv && postdiv < pll_postdiv)
+
+OK, I'll fix it. Thanks.
+
+> 
+> > +			__set_postdiv(pll, regs, data, postdiv);
+> > +	}
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int __fhctl_ssc_enable(struct mtk_fh *fh, u32 rate)
+> > +{
+> > +	const struct fh_pll_data *data = &fh->pllfh_data->data;
+> > +	struct fh_pll_state *state = &fh->pllfh_data->state;
+> > +	struct fh_pll_regs *regs = &fh->regs;
+> > +	struct mtk_clk_pll *pll = &fh->clk_pll;
+> > +	spinlock_t *lock = fh->lock;
+> > +	unsigned long flags = 0;
+> > +
+> > +	spin_lock_irqsave(lock, flags);
+> > +
+> > +	fhctl_set_ssc_regs(pll, regs, data, rate);
+> > +	state->ssc_rate = rate;
+> > +
+> > +	spin_unlock_irqrestore(lock, flags);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int fhctl_ssc_enable(struct mtk_fh *fh, u32 rate)
+> > +{
+> > +	return __fhctl_ssc_enable(fh, rate);
+> > +}
+> > +
+> > +static int fhctl_ssc_disable(struct mtk_fh *fh)
+> > +{
+> > +	return __fhctl_ssc_enable(fh, 0);
+> > +}
+> > +
+> > +static const struct fh_operation fhctl_ops = {
+> > +	.hopping = fhctl_hopping,
+> > +	.ssc_enable = fhctl_ssc_enable,
+> 
+> Just one callback for ssc_enable is enough, it's fine to keep the logic as
+> ssc_enable(fh, >0) to enable and ssc_enable(fh <=0) to disable.
+
+OK, I'll drop ssc_disable callback.
+
+> 
+> > +	.ssc_disable = fhctl_ssc_disable,
+> > +};
+> > +
+> > +const struct fh_operation *fhctl_get_ops(void)
+> > +{
+> > +	return &fhctl_ops;
+> > +}
+> > +
+> > +void fhctl_hw_init(struct mtk_fh *fh)
+> > +{
+> > +	const struct fh_pll_data data = fh->pllfh_data->data;
+> > +	struct fh_pll_state state = fh->pllfh_data->state;
+> > +	struct fh_pll_regs regs = fh->regs;
+> > +	u32 val;
+> > +
+> > +	/* initial hw register */
+> > +	val = readl(regs.reg_clk_con) | BIT(data.fh_id);
+> > +	writel(val, regs.reg_clk_con);
+> > +
+> > +	val = readl(regs.reg_rst_con) & ~BIT(data.fh_id);
+> > +	writel(val, regs.reg_rst_con);
+> > +	val = readl(regs.reg_rst_con) | BIT(data.fh_id);
+> > +	writel(val, regs.reg_rst_con);
+> > +
+> > +	writel(0x0, regs.reg_cfg);
+> > +	writel(0x0, regs.reg_updnlmt);
+> > +	writel(0x0, regs.reg_dds);
+> > +
+> > +	/* enable ssc if needed */
+> > +	if (state.ssc_rate)
+> > +		fh->ops->ssc_enable(fh, state.ssc_rate);
+> > +}
+> > diff --git a/drivers/clk/mediatek/clk-fhctl.h b/drivers/clk/mediatek/clk-fhctl.h
+> > new file mode 100644
+> > index 000000000000..3cd4921c39e9
+> > --- /dev/null
+> > +++ b/drivers/clk/mediatek/clk-fhctl.h
+> > @@ -0,0 +1,27 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (c) 2022 MediaTek Inc.
+> > + * Author: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> > + */
+> > +
+> > +#ifndef __CLK_FHCTL_H
+> > +#define __CLK_FHCTL_H
+> > +
+> 
+> One blank line is enough.
+
+OK, I'll fix it. Thanks
+
+> 
+> > +
+> > +struct fhctl_offset {
+> > +	u32 offset_hp_en;
+> > +	u32 offset_clk_con;
+> > +	u32 offset_rst_con;
+> > +	u32 offset_slope0;
+> > +	u32 offset_slope1;
+> > +	u32 offset_cfg;
+> > +	u32 offset_updnlmt;
+> > +	u32 offset_dds;
+> > +	u32 offset_dvfs;
+> > +	u32 offset_mon;
+> > +};
+> > +const struct fhctl_offset *fhctl_get_offset_table(void);
+> > +const struct fh_operation *fhctl_get_ops(void);
+> > +void fhctl_hw_init(struct mtk_fh *fh);
+> > +
+> > +#endif
+> > diff --git a/drivers/clk/mediatek/clk-pllfh.c b/drivers/clk/mediatek/clk-pllfh.c
+> > new file mode 100644
+> > index 000000000000..71b35323b526
+> > --- /dev/null
+> > +++ b/drivers/clk/mediatek/clk-pllfh.c
+> > @@ -0,0 +1,271 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (c) 2022 MediaTek Inc.
+> > + * Author: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> > + */
+> > +
+> > +#include <linux/of.h>
+> > +#include <linux/of_address.h>
+> > +#include <linux/io.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/clkdev.h>
+> > +#include <linux/delay.h>
+> > +
+> > +#include "clk-mtk.h"
+> > +#include "clk-pllfh.h"
+> > +#include "clk-fhctl.h"
+> > +
+> > +static DEFINE_SPINLOCK(pllfh_lock);
+> > +
+> > +inline struct mtk_fh *to_mtk_fh(struct clk_hw *hw)
+> > +{
+> > +	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
+> > +
+> > +	return container_of(pll, struct mtk_fh, clk_pll);
+> > +}
+> > +
+> > +static int mtk_fhctl_set_rate(struct clk_hw *hw, unsigned long rate,
+> > +			      unsigned long parent_rate)
+> > +{
+> > +	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
+> > +	struct mtk_fh *fh = to_mtk_fh(hw);
+> > +	u32 pcw = 0;
+> > +	u32 postdiv;
+> > +
+> > +	mtk_pll_calc_values(pll, &pcw, &postdiv, rate, parent_rate);
+> > +	fh->ops->hopping(fh, pcw, postdiv);
+> 
+> return fh->ops->hopping(....);
+
+OK, I'll fix it. Thanks.
+
+> 
+> > +
+> > +	return 0;
+> > +}
+> > +
+> 
+> ..snip..
+> 
+> > diff --git a/drivers/clk/mediatek/clk-pllfh.h b/drivers/clk/mediatek/clk-pllfh.h
+> > new file mode 100644
+> > index 000000000000..d9f7c8527548
+> > --- /dev/null
+> > +++ b/drivers/clk/mediatek/clk-pllfh.h
+> > @@ -0,0 +1,81 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (c) 2022 MediaTek Inc.
+> > + * Author: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> > + */
+> > +
+> > +#ifndef __DRV_CLKFH_H
+> > +#define __DRV_CLKFH_H
+> > +
+> > +#include "clk-pll.h"
+> > +
+> > +struct fh_pll_state {
+> 
+> Please, base as first member.
+
+OK, I'll modify it.
+
+> 
+> > +	u32 fh_enable;
+> > +	u32 ssc_rate;
+> > +	void __iomem *base;
+> > +};
+> > +
+> 
+> Regards,
+> Angelo
+> 
+> 
+

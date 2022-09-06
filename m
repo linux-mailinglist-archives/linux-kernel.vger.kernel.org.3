@@ -2,99 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8DC5AF2C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC51A5AF2C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiIFRiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40006 "EHLO
+        id S230280AbiIFRiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiIFRhS (ORCPT
+        with ESMTP id S230045AbiIFRhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:37:18 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3500C8A7D7;
-        Tue,  6 Sep 2022 10:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662485618; x=1694021618;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s9gZ2XoICzxug5E8CZrxYGQ5div98Sn+DFN1sd0gc/8=;
-  b=XrdLy11yHzX/wQB9w1Kzwjsg2dTb7WXtKGIC33FQjqdjk7IbBqcTxOR3
-   eKFIN8XWTNGxKRnFhP8N8iBnJrvFtewEJPniNxO24U5WVvUqAxenDya5i
-   B3lhk0skVB5YLJ41c8FbAy6vToKZdnbOS9YyDdsa7i9zMtIf9fW7Yp++I
-   GmHZi/TXhDno+1aGUUcwVjMV06kv7SK08oMh0eSqXFoHP1hD65KPXFdLl
-   gmwJBLjx571v4gL7JqTOciIlTfOTNxn9c+4memnPS+W2vBfY7ccKYjBUg
-   AVajUR6bo/AUOQA5uY8qyxPyjv7c7KUawrq8MfsTNmHpsq+cLctRTq3Yj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="360606039"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="360606039"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 10:33:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="644258976"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 06 Sep 2022 10:33:36 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVcS7-0005Ov-1H;
-        Tue, 06 Sep 2022 17:33:35 +0000
-Date:   Wed, 7 Sep 2022 01:32:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Namjae Jeon <linkinjeon@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steve French <stfrench@microsoft.com>,
-        linux-doc@vger.kernel.org
-Subject: [samba-ksmbd:ksmbd-for-next-next 3/3] htmldocs:
- Documentation/filesystems/cifs/ksmbd.rst:123: WARNING: Unexpected
- indentation.
-Message-ID: <202209070129.JKu6GWs2-lkp@intel.com>
+        Tue, 6 Sep 2022 13:37:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67761327
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:34:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 057A1615CE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:34:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCECC433D6;
+        Tue,  6 Sep 2022 17:34:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662485647;
+        bh=c78Ljv59LKjc8ajv0M146fZb7j7a0Cv8JLzlWL1IQTY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=U75+qXeCQBd7r6wuzBPzNQqALZiRKM4ycWzPHEK2F42soPoH/mzoLeKT0bZHfytHB
+         8qnJ+ml1JiOHURgXY12EE2bfhRxU7SO6UoVFalVbvTWdoYlP+I3EDIILYBytMsZhwu
+         zQnLOY/kV3ffMCDaiEn4tQJfNZjTuE6vop6bm6CLg7JP8R4goElK/FBPpcr30Veycj
+         kd40927bvp1wLv7Jt4sC4yCiUT/A7Kk2y8O4OXHIWwjmJbU+IKRdd29MU+zuv6zMBY
+         a4HwydQ1UerI5CFQ1nHLtUsgua2tNTLX5F3rG8Jy9KDlaPuVlUo2zE+Iu1h/IFpeA/
+         tkx9eJHNYYlhg==
+Message-ID: <5a1cb21c-61f4-8ae6-8689-126ed85891ee@kernel.org>
+Date:   Tue, 6 Sep 2022 19:34:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2] rv/reactor: add __init/__exit annotations to module
+ init/exit funcs
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, rostedt@goodmis.org,
+        mingo@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20220906141210.132607-1-xiujianfeng@huawei.com>
+Content-Language: en-US
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20220906141210.132607-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.samba.org/ksmbd.git ksmbd-for-next-next
-head:   61f596cda9f2d4d6b068f5226b2e2bc9478fa873
-commit: 61f596cda9f2d4d6b068f5226b2e2bc9478fa873 [3/3] ksmbd: update documentation
-reproduce:
-        git remote add samba-ksmbd git://git.samba.org/ksmbd.git
-        git fetch --no-tags samba-ksmbd ksmbd-for-next-next
-        git checkout 61f596cda9f2d4d6b068f5226b2e2bc9478fa873
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+On 9/6/22 16:12, Xiu Jianfeng wrote:
+> Add missing __init/__exit annotations to module init/exit funcs.
+> 
+> Fixes: 135b881ea885 ("rv/reactor: Add the printk reactor")
+> Fixes: e88043c0ac16 ("rv/reactor: Add the panic reactor")
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-All warnings (new ones prefixed by >>):
+Thanks!
+-- Daniel
+> ---
+>  kernel/trace/rv/reactor_panic.c  | 4 ++--
+>  kernel/trace/rv/reactor_printk.c | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/trace/rv/reactor_panic.c b/kernel/trace/rv/reactor_panic.c
+> index b698d05dd069..d65f6c25a87c 100644
+> --- a/kernel/trace/rv/reactor_panic.c
+> +++ b/kernel/trace/rv/reactor_panic.c
+> @@ -24,13 +24,13 @@ static struct rv_reactor rv_panic = {
+>  	.react = rv_panic_reaction
+>  };
+>  
+> -static int register_react_panic(void)
+> +static int __init register_react_panic(void)
+>  {
+>  	rv_register_reactor(&rv_panic);
+>  	return 0;
+>  }
+>  
+> -static void unregister_react_panic(void)
+> +static void __exit unregister_react_panic(void)
+>  {
+>  	rv_unregister_reactor(&rv_panic);
+>  }
+> diff --git a/kernel/trace/rv/reactor_printk.c b/kernel/trace/rv/reactor_printk.c
+> index 31899f953af4..4b6b7106a477 100644
+> --- a/kernel/trace/rv/reactor_printk.c
+> +++ b/kernel/trace/rv/reactor_printk.c
+> @@ -23,13 +23,13 @@ static struct rv_reactor rv_printk = {
+>  	.react = rv_printk_reaction
+>  };
+>  
+> -static int register_react_printk(void)
+> +static int __init register_react_printk(void)
+>  {
+>  	rv_register_reactor(&rv_printk);
+>  	return 0;
+>  }
+>  
+> -static void unregister_react_printk(void)
+> +static void __exit unregister_react_printk(void)
+>  {
+>  	rv_unregister_reactor(&rv_printk);
+>  }
 
->> Documentation/filesystems/cifs/ksmbd.rst:123: WARNING: Unexpected indentation.
-
-vim +123 Documentation/filesystems/cifs/ksmbd.rst
-
-   120	
-   121	1. Download ksmbd-tools(https://github.com/cifsd-team/ksmbd-tools/releases) and compile them.
-   122	   - Refer README(https://github.com/cifsd-team/ksmbd-tools/blob/master/README.md)
- > 123	     to know how to use ksmbd.<foo> utils
-   124	
-   125	     $ ./autogen.sh
-   126	     $ ./configure --with-rundir=/run
-   127	     $ make && sudo make install
-   128	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

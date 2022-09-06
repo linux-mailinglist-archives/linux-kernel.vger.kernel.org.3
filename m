@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ECE5AE9F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D955AE9F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240777AbiIFNgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
+        id S240783AbiIFNgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240692AbiIFNf0 (ORCPT
+        with ESMTP id S240546AbiIFNfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:35:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563087AC22;
-        Tue,  6 Sep 2022 06:33:58 -0700 (PDT)
+        Tue, 6 Sep 2022 09:35:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA06278238;
+        Tue,  6 Sep 2022 06:34:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6F1D61549;
-        Tue,  6 Sep 2022 13:33:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFDC7C433D6;
-        Tue,  6 Sep 2022 13:33:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06B4DB81632;
+        Tue,  6 Sep 2022 13:34:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69551C433C1;
+        Tue,  6 Sep 2022 13:34:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471237;
-        bh=2U7iI0nmhUphuAQOvU5vkJ0Ft2zgRmZO5Dr6eh1Hc7g=;
+        s=korg; t=1662471240;
+        bh=4r3L8Kgj4XHwUPeiSaPM69bu/XKXyX6+HgO0Mr+HtLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q9DbzcK5WMb60WBsHidxsIwhlEc+w4WfrcYoWuIoyztHrBOdvEI/1vGA1BBTAnPU0
-         dRbYJsxeRdXLQuL6/MyA1WokSrhMpC5+zXTk+2lNfvCZruMQaQadHwr546tRv7X6LO
-         77g+hGNHHhY0IDi9go1/hclC2Ofw4uTrdN6W7Fl8=
+        b=mis1Wp35feNKUH6jUC58hr2BoW6X/oNNJ6uuXstBzt1rPl255yH0e79DW20z39XRk
+         xqeJQjtvh2XBSL4isACXTshZnetX09u2ha09J52cPucDyxQKYeWHX4k7vFq1nZ/+uA
+         EAr9a4bHphXAtfQIOJzsPSaVPQMZzPIJ7eGgI0iU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 43/80] gpio: pca953x: Add mutex_lock for regcache sync in PM
-Date:   Tue,  6 Sep 2022 15:30:40 +0200
-Message-Id: <20220906132818.811111055@linuxfoundation.org>
+Subject: [PATCH 5.10 44/80] KVM: x86: Mask off unsupported and unknown bits of IA32_ARCH_CAPABILITIES
+Date:   Tue,  6 Sep 2022 15:30:41 +0200
+Message-Id: <20220906132818.848719304@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
 References: <20220906132816.936069583@linuxfoundation.org>
@@ -55,63 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Jim Mattson <jmattson@google.com>
 
-[ Upstream commit 518e26f11af2fe4f5bebf9a0351595d508c7077f ]
+[ Upstream commit 0204750bd4c6ccc2fb7417618477f10373b33f56 ]
 
-The regcache sync will set the cache_bypass = true, at that
-time, when there is regmap write operation, it will bypass
-the regmap cache, then the regcache sync will write back the
-value from cache to register, which is not as our expectation.
+KVM should not claim to virtualize unknown IA32_ARCH_CAPABILITIES
+bits. When kvm_get_arch_capabilities() was originally written, there
+were only a few bits defined in this MSR, and KVM could virtualize all
+of them. However, over the years, several bits have been defined that
+KVM cannot just blindly pass through to the guest without additional
+work (such as virtualizing an MSR promised by the
+IA32_ARCH_CAPABILITES feature bit).
 
-Though regmap already use its internal lock to avoid such issue,
-but this driver force disable the regmap internal lock in its
-regmap config: disable_locking = true
+Define a mask of supported IA32_ARCH_CAPABILITIES bits, and mask off
+any other bits that are set in the hardware MSR.
 
-To avoid this issue, use the driver's own lock to do the protect
-in system PM.
-
-Fixes: b76574300504 ("gpio: pca953x: Restore registers after suspend/resume cycle")
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: 5b76a3cff011 ("KVM: VMX: Tell the nested hypervisor to skip L1D flush on vmentry")
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Reviewed-by: Vipin Sharma <vipinsh@google.com>
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+Message-Id: <20220830174947.2182144-1-jmattson@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-pca953x.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/kvm/x86.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index 957be5f69406a..3ad1a9e432c8a 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -1162,7 +1162,9 @@ static int pca953x_suspend(struct device *dev)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 5f4f855bb3b10..c5a08ec348e6f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1364,12 +1364,32 @@ static const u32 msr_based_features_all[] = {
+ static u32 msr_based_features[ARRAY_SIZE(msr_based_features_all)];
+ static unsigned int num_msr_based_features;
+ 
++/*
++ * Some IA32_ARCH_CAPABILITIES bits have dependencies on MSRs that KVM
++ * does not yet virtualize. These include:
++ *   10 - MISC_PACKAGE_CTRLS
++ *   11 - ENERGY_FILTERING_CTL
++ *   12 - DOITM
++ *   18 - FB_CLEAR_CTRL
++ *   21 - XAPIC_DISABLE_STATUS
++ *   23 - OVERCLOCKING_STATUS
++ */
++
++#define KVM_SUPPORTED_ARCH_CAP \
++	(ARCH_CAP_RDCL_NO | ARCH_CAP_IBRS_ALL | ARCH_CAP_RSBA | \
++	 ARCH_CAP_SKIP_VMENTRY_L1DFLUSH | ARCH_CAP_SSB_NO | ARCH_CAP_MDS_NO | \
++	 ARCH_CAP_PSCHANGE_MC_NO | ARCH_CAP_TSX_CTRL_MSR | ARCH_CAP_TAA_NO | \
++	 ARCH_CAP_SBDR_SSDP_NO | ARCH_CAP_FBSDP_NO | ARCH_CAP_PSDP_NO | \
++	 ARCH_CAP_FB_CLEAR | ARCH_CAP_RRSBA | ARCH_CAP_PBRSB_NO)
++
+ static u64 kvm_get_arch_capabilities(void)
  {
- 	struct pca953x_chip *chip = dev_get_drvdata(dev);
+ 	u64 data = 0;
  
-+	mutex_lock(&chip->i2c_lock);
- 	regcache_cache_only(chip->regmap, true);
-+	mutex_unlock(&chip->i2c_lock);
- 
- 	if (atomic_read(&chip->wakeup_path))
- 		device_set_wakeup_path(dev);
-@@ -1185,13 +1187,17 @@ static int pca953x_resume(struct device *dev)
- 		}
- 	}
- 
-+	mutex_lock(&chip->i2c_lock);
- 	regcache_cache_only(chip->regmap, false);
- 	regcache_mark_dirty(chip->regmap);
- 	ret = pca953x_regcache_sync(dev);
--	if (ret)
-+	if (ret) {
-+		mutex_unlock(&chip->i2c_lock);
- 		return ret;
+-	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES))
++	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES)) {
+ 		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, data);
++		data &= KVM_SUPPORTED_ARCH_CAP;
 +	}
  
- 	ret = regcache_sync(chip->regmap);
-+	mutex_unlock(&chip->i2c_lock);
- 	if (ret) {
- 		dev_err(dev, "Failed to restore register map: %d\n", ret);
- 		return ret;
+ 	/*
+ 	 * If nx_huge_pages is enabled, KVM's shadow paging will ensure that
+@@ -1417,9 +1437,6 @@ static u64 kvm_get_arch_capabilities(void)
+ 		 */
+ 	}
+ 
+-	/* Guests don't need to know "Fill buffer clear control" exists */
+-	data &= ~ARCH_CAP_FB_CLEAR_CTRL;
+-
+ 	return data;
+ }
+ 
 -- 
 2.35.1
 

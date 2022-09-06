@@ -2,192 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74415AF052
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933FB5AF05C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238789AbiIFQYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S234984AbiIFQ0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239312AbiIFQYE (ORCPT
+        with ESMTP id S234181AbiIFQ0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:24:04 -0400
+        Tue, 6 Sep 2022 12:26:02 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F58E1C938;
-        Tue,  6 Sep 2022 08:54:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175E28D3DB
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:56:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662479699; x=1694015699;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tRDDwlBvhb9wfFnESgr5RVzsnPEhi2kS4BUN6UgEBYs=;
-  b=eswtDM8z5xtNm1KZQZ53wC4Nvy1pArIgKgsz68y/jsCO1FeVXJ0GlWC+
-   +8wjy6IT2NZzs2eiwe3o9NLITXRqgpMaOPWaTfwVtAMSdPnGzfgV0ZnJA
-   G35dtW50UKmZw3E1APinJ/DCspGX6u1581yFd1eM252KY+1AjCriP/xmd
-   7bo0LA6xfDrHa8JSjnvgbhzyYJk6vJN+QfIEaLAtS9Y8ouk12wOxDsE6W
-   S9EJ+T3cOAcKKO6+pHkxzafoTbtvuU4+J93r14ESWLSwO9DJkRmXuEN5h
-   ZyHo8eOStIOYiTHkix47od5XaQO8hx9puv2p2TJeIImDoSxc9W+foBpF+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="295365042"
+  t=1662479792; x=1694015792;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TveXyTDhU66MKy7jMjsqcd7ts3XwD81we927NjLTj+Q=;
+  b=XxeojAEJj2ayx1oC1S+l2OWMfpKJtARG+fgwK3NH2MunVkkQZ+MGteo2
+   PV23o/zH0NLY63yDLlrZotdm/T480E0agiKhG2Ew9TbEnIZfgnDz4WBAk
+   f0tHgRTOcy9fbx/XMt8lZgnciwrAxIdkbJH5xXbuPQ2QA762z6acdveTe
+   rPStUkRDCfWG32yh7wY0va/FaszgoPBSAelGXzhEi/X5lEinouiESjfdX
+   aKNq1STAE1CBmYy/KXoViXlUpUT0E91AS2pIh9MYiomssusr1cmJ/bKJ4
+   COVJkmgkhITN55OIa0Nl7bxG/K8FqI9S48GC/6/T6xoY4k31sIOQJm/na
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="295365508"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="295365042"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:54:57 -0700
+   d="scan'208";a="295365508"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:56:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="703257518"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 Sep 2022 08:54:56 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EF92A86; Tue,  6 Sep 2022 18:55:11 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Josef Johansson <josef@oderland.se>
-Subject: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
-Date:   Tue,  6 Sep 2022 18:55:07 +0300
-Message-Id: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+   d="scan'208";a="647274358"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 06 Sep 2022 08:56:29 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVaw9-0005Hn-06;
+        Tue, 06 Sep 2022 15:56:29 +0000
+Date:   Tue, 6 Sep 2022 23:56:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: kernel/kexec_file.c:320:1: sparse: sparse: Using plain integer as
+ NULL pointer
+Message-ID: <202209062300.3X2vOEnE-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ACPI core in conjunction with platform driver core provides
-an infrastructure to enumerate ACPI devices. Use it in order
-to remove a lot of boilerplate code.
+Hi Jason,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/busses/i2c-scmi.c | 48 ++++++++++++++---------------------
- 1 file changed, 19 insertions(+), 29 deletions(-)
+First bad commit (maybe != root cause):
 
-diff --git a/drivers/i2c/busses/i2c-scmi.c b/drivers/i2c/busses/i2c-scmi.c
-index 6746aa46d96c..0239e134b90f 100644
---- a/drivers/i2c/busses/i2c-scmi.c
-+++ b/drivers/i2c/busses/i2c-scmi.c
-@@ -6,15 +6,13 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/kernel.h>
- #include <linux/stddef.h>
- #include <linux/i2c.h>
- #include <linux/acpi.h>
- 
--#define ACPI_SMBUS_HC_CLASS		"smbus"
--#define ACPI_SMBUS_HC_DEVICE_NAME	"cmi"
--
- /* SMBUS HID definition as supported by Microsoft Windows */
- #define ACPI_SMBUS_MS_HID		"SMB0001"
- 
-@@ -30,7 +28,7 @@ struct acpi_smbus_cmi {
- 	u8 cap_info:1;
- 	u8 cap_read:1;
- 	u8 cap_write:1;
--	struct smbus_methods_t *methods;
-+	const struct smbus_methods_t *methods;
- };
- 
- static const struct smbus_methods_t smbus_methods = {
-@@ -358,29 +356,25 @@ static acpi_status acpi_smbus_cmi_query_methods(acpi_handle handle, u32 level,
- 	return AE_OK;
- }
- 
--static int acpi_smbus_cmi_add(struct acpi_device *device)
-+static int smbus_cmi_probe(struct platform_device *device)
- {
-+	struct device *dev = &device->dev;
- 	struct acpi_smbus_cmi *smbus_cmi;
--	const struct acpi_device_id *id;
- 	int ret;
- 
- 	smbus_cmi = kzalloc(sizeof(struct acpi_smbus_cmi), GFP_KERNEL);
- 	if (!smbus_cmi)
- 		return -ENOMEM;
- 
--	smbus_cmi->handle = device->handle;
--	strcpy(acpi_device_name(device), ACPI_SMBUS_HC_DEVICE_NAME);
--	strcpy(acpi_device_class(device), ACPI_SMBUS_HC_CLASS);
--	device->driver_data = smbus_cmi;
-+	smbus_cmi->handle = ACPI_HANDLE(dev);
-+	smbus_cmi->methods = device_get_match_data(dev);
-+
-+	platform_set_drvdata(device, smbus_cmi);
-+
- 	smbus_cmi->cap_info = 0;
- 	smbus_cmi->cap_read = 0;
- 	smbus_cmi->cap_write = 0;
- 
--	for (id = acpi_smbus_cmi_ids; id->id[0]; id++)
--		if (!strcmp(id->id, acpi_device_hid(device)))
--			smbus_cmi->methods =
--				(struct smbus_methods_t *) id->driver_data;
--
- 	acpi_walk_namespace(ACPI_TYPE_METHOD, smbus_cmi->handle, 1,
- 			    acpi_smbus_cmi_query_methods, NULL, smbus_cmi, NULL);
- 
-@@ -390,8 +384,7 @@ static int acpi_smbus_cmi_add(struct acpi_device *device)
- 	}
- 
- 	snprintf(smbus_cmi->adapter.name, sizeof(smbus_cmi->adapter.name),
--		"SMBus CMI adapter %s",
--		acpi_device_name(device));
-+		 "SMBus CMI adapter %s", dev_name(dev));
- 	smbus_cmi->adapter.owner = THIS_MODULE;
- 	smbus_cmi->adapter.algo = &acpi_smbus_cmi_algorithm;
- 	smbus_cmi->adapter.algo_data = smbus_cmi;
-@@ -408,31 +401,28 @@ static int acpi_smbus_cmi_add(struct acpi_device *device)
- 
- err:
- 	kfree(smbus_cmi);
--	device->driver_data = NULL;
- 	return ret;
- }
- 
--static int acpi_smbus_cmi_remove(struct acpi_device *device)
-+static int smbus_cmi_remove(struct platform_device *device)
- {
--	struct acpi_smbus_cmi *smbus_cmi = acpi_driver_data(device);
-+	struct acpi_smbus_cmi *smbus_cmi = platform_get_drvdata(device);
- 
- 	i2c_del_adapter(&smbus_cmi->adapter);
- 	kfree(smbus_cmi);
--	device->driver_data = NULL;
- 
- 	return 0;
- }
- 
--static struct acpi_driver acpi_smbus_cmi_driver = {
--	.name = ACPI_SMBUS_HC_DEVICE_NAME,
--	.class = ACPI_SMBUS_HC_CLASS,
--	.ids = acpi_smbus_cmi_ids,
--	.ops = {
--		.add = acpi_smbus_cmi_add,
--		.remove = acpi_smbus_cmi_remove,
-+static struct platform_driver smbus_cmi_driver = {
-+	.probe = smbus_cmi_probe,
-+	.remove = smbus_cmi_remove,
-+	.driver = {
-+		.name   = "smbus_cmi",
-+		.acpi_match_table = acpi_smbus_cmi_ids,
- 	},
- };
--module_acpi_driver(acpi_smbus_cmi_driver);
-+module_platform_driver(smbus_cmi_driver);
- 
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Crane Cai <crane.cai@amd.com>");
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
+commit: b7133757da4c4c17d625970f6da3d76af12a8867 crypto: s390 - do not depend on CRYPTO_HW for SIMD implementations
+date:   9 weeks ago
+config: s390-randconfig-s051-20220906 (https://download.01.org/0day-ci/archive/20220906/202209062300.3X2vOEnE-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b7133757da4c4c17d625970f6da3d76af12a8867
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b7133757da4c4c17d625970f6da3d76af12a8867
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+>> kernel/kexec_file.c:320:1: sparse: sparse: Using plain integer as NULL pointer
+>> kernel/kexec_file.c:320:1: sparse: sparse: Using plain integer as NULL pointer
+
+vim +320 kernel/kexec_file.c
+
+a43cac0d9dc207 Dave Young     2015-09-09  319  
+a43cac0d9dc207 Dave Young     2015-09-09 @320  SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
+a43cac0d9dc207 Dave Young     2015-09-09  321  		unsigned long, cmdline_len, const char __user *, cmdline_ptr,
+a43cac0d9dc207 Dave Young     2015-09-09  322  		unsigned long, flags)
+a43cac0d9dc207 Dave Young     2015-09-09  323  {
+a43cac0d9dc207 Dave Young     2015-09-09  324  	int ret = 0, i;
+a43cac0d9dc207 Dave Young     2015-09-09  325  	struct kimage **dest_image, *image;
+a43cac0d9dc207 Dave Young     2015-09-09  326  
+a43cac0d9dc207 Dave Young     2015-09-09  327  	/* We only trust the superuser with rebooting the system. */
+a43cac0d9dc207 Dave Young     2015-09-09  328  	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
+a43cac0d9dc207 Dave Young     2015-09-09  329  		return -EPERM;
+a43cac0d9dc207 Dave Young     2015-09-09  330  
+a43cac0d9dc207 Dave Young     2015-09-09  331  	/* Make sure we have a legal set of flags */
+a43cac0d9dc207 Dave Young     2015-09-09  332  	if (flags != (flags & KEXEC_FILE_FLAGS))
+a43cac0d9dc207 Dave Young     2015-09-09  333  		return -EINVAL;
+a43cac0d9dc207 Dave Young     2015-09-09  334  
+a43cac0d9dc207 Dave Young     2015-09-09  335  	image = NULL;
+a43cac0d9dc207 Dave Young     2015-09-09  336  
+a43cac0d9dc207 Dave Young     2015-09-09  337  	if (!mutex_trylock(&kexec_mutex))
+a43cac0d9dc207 Dave Young     2015-09-09  338  		return -EBUSY;
+a43cac0d9dc207 Dave Young     2015-09-09  339  
+a43cac0d9dc207 Dave Young     2015-09-09  340  	dest_image = &kexec_image;
+9b492cf58077a0 Xunlei Pang    2016-05-23  341  	if (flags & KEXEC_FILE_ON_CRASH) {
+a43cac0d9dc207 Dave Young     2015-09-09  342  		dest_image = &kexec_crash_image;
+9b492cf58077a0 Xunlei Pang    2016-05-23  343  		if (kexec_crash_image)
+9b492cf58077a0 Xunlei Pang    2016-05-23  344  			arch_kexec_unprotect_crashkres();
+9b492cf58077a0 Xunlei Pang    2016-05-23  345  	}
+a43cac0d9dc207 Dave Young     2015-09-09  346  
+a43cac0d9dc207 Dave Young     2015-09-09  347  	if (flags & KEXEC_FILE_UNLOAD)
+a43cac0d9dc207 Dave Young     2015-09-09  348  		goto exchange;
+a43cac0d9dc207 Dave Young     2015-09-09  349  
+a43cac0d9dc207 Dave Young     2015-09-09  350  	/*
+a43cac0d9dc207 Dave Young     2015-09-09  351  	 * In case of crash, new kernel gets loaded in reserved region. It is
+a43cac0d9dc207 Dave Young     2015-09-09  352  	 * same memory where old crash kernel might be loaded. Free any
+a43cac0d9dc207 Dave Young     2015-09-09  353  	 * current crash dump kernel before we corrupt it.
+a43cac0d9dc207 Dave Young     2015-09-09  354  	 */
+a43cac0d9dc207 Dave Young     2015-09-09  355  	if (flags & KEXEC_FILE_ON_CRASH)
+a43cac0d9dc207 Dave Young     2015-09-09  356  		kimage_free(xchg(&kexec_crash_image, NULL));
+a43cac0d9dc207 Dave Young     2015-09-09  357  
+a43cac0d9dc207 Dave Young     2015-09-09  358  	ret = kimage_file_alloc_init(&image, kernel_fd, initrd_fd, cmdline_ptr,
+a43cac0d9dc207 Dave Young     2015-09-09  359  				     cmdline_len, flags);
+a43cac0d9dc207 Dave Young     2015-09-09  360  	if (ret)
+a43cac0d9dc207 Dave Young     2015-09-09  361  		goto out;
+a43cac0d9dc207 Dave Young     2015-09-09  362  
+a43cac0d9dc207 Dave Young     2015-09-09  363  	ret = machine_kexec_prepare(image);
+a43cac0d9dc207 Dave Young     2015-09-09  364  	if (ret)
+a43cac0d9dc207 Dave Young     2015-09-09  365  		goto out;
+a43cac0d9dc207 Dave Young     2015-09-09  366  
+1229384f5b856d Xunlei Pang    2017-07-12  367  	/*
+1229384f5b856d Xunlei Pang    2017-07-12  368  	 * Some architecture(like S390) may touch the crash memory before
+1229384f5b856d Xunlei Pang    2017-07-12  369  	 * machine_kexec_prepare(), we must copy vmcoreinfo data after it.
+1229384f5b856d Xunlei Pang    2017-07-12  370  	 */
+1229384f5b856d Xunlei Pang    2017-07-12  371  	ret = kimage_crash_copy_vmcoreinfo(image);
+1229384f5b856d Xunlei Pang    2017-07-12  372  	if (ret)
+1229384f5b856d Xunlei Pang    2017-07-12  373  		goto out;
+1229384f5b856d Xunlei Pang    2017-07-12  374  
+a43cac0d9dc207 Dave Young     2015-09-09  375  	ret = kexec_calculate_store_digests(image);
+a43cac0d9dc207 Dave Young     2015-09-09  376  	if (ret)
+a43cac0d9dc207 Dave Young     2015-09-09  377  		goto out;
+a43cac0d9dc207 Dave Young     2015-09-09  378  
+a43cac0d9dc207 Dave Young     2015-09-09  379  	for (i = 0; i < image->nr_segments; i++) {
+a43cac0d9dc207 Dave Young     2015-09-09  380  		struct kexec_segment *ksegment;
+a43cac0d9dc207 Dave Young     2015-09-09  381  
+a43cac0d9dc207 Dave Young     2015-09-09  382  		ksegment = &image->segment[i];
+a43cac0d9dc207 Dave Young     2015-09-09  383  		pr_debug("Loading segment %d: buf=0x%p bufsz=0x%zx mem=0x%lx memsz=0x%zx\n",
+a43cac0d9dc207 Dave Young     2015-09-09  384  			 i, ksegment->buf, ksegment->bufsz, ksegment->mem,
+a43cac0d9dc207 Dave Young     2015-09-09  385  			 ksegment->memsz);
+a43cac0d9dc207 Dave Young     2015-09-09  386  
+a43cac0d9dc207 Dave Young     2015-09-09  387  		ret = kimage_load_segment(image, &image->segment[i]);
+a43cac0d9dc207 Dave Young     2015-09-09  388  		if (ret)
+a43cac0d9dc207 Dave Young     2015-09-09  389  			goto out;
+a43cac0d9dc207 Dave Young     2015-09-09  390  	}
+a43cac0d9dc207 Dave Young     2015-09-09  391  
+a43cac0d9dc207 Dave Young     2015-09-09  392  	kimage_terminate(image);
+a43cac0d9dc207 Dave Young     2015-09-09  393  
+de68e4daea9084 Pavel Tatashin 2019-12-04  394  	ret = machine_kexec_post_load(image);
+de68e4daea9084 Pavel Tatashin 2019-12-04  395  	if (ret)
+de68e4daea9084 Pavel Tatashin 2019-12-04  396  		goto out;
+de68e4daea9084 Pavel Tatashin 2019-12-04  397  
+a43cac0d9dc207 Dave Young     2015-09-09  398  	/*
+a43cac0d9dc207 Dave Young     2015-09-09  399  	 * Free up any temporary buffers allocated which are not needed
+a43cac0d9dc207 Dave Young     2015-09-09  400  	 * after image has been loaded
+a43cac0d9dc207 Dave Young     2015-09-09  401  	 */
+a43cac0d9dc207 Dave Young     2015-09-09  402  	kimage_file_post_load_cleanup(image);
+a43cac0d9dc207 Dave Young     2015-09-09  403  exchange:
+a43cac0d9dc207 Dave Young     2015-09-09  404  	image = xchg(dest_image, image);
+a43cac0d9dc207 Dave Young     2015-09-09  405  out:
+9b492cf58077a0 Xunlei Pang    2016-05-23  406  	if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image)
+9b492cf58077a0 Xunlei Pang    2016-05-23  407  		arch_kexec_protect_crashkres();
+9b492cf58077a0 Xunlei Pang    2016-05-23  408  
+a43cac0d9dc207 Dave Young     2015-09-09  409  	mutex_unlock(&kexec_mutex);
+a43cac0d9dc207 Dave Young     2015-09-09  410  	kimage_free(image);
+a43cac0d9dc207 Dave Young     2015-09-09  411  	return ret;
+a43cac0d9dc207 Dave Young     2015-09-09  412  }
+a43cac0d9dc207 Dave Young     2015-09-09  413  
+
+:::::: The code at line 320 was first introduced by commit
+:::::: a43cac0d9dc2073ff2245a171429ddbe1accece7 kexec: split kexec_file syscall code to kexec_file.c
+
+:::::: TO: Dave Young <dyoung@redhat.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

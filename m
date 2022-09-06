@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD1C5AF20E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC1E5AF206
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239511AbiIFRKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
+        id S232827AbiIFRM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240174AbiIFRJc (ORCPT
+        with ESMTP id S239063AbiIFRMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:09:32 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028F7B2A;
-        Tue,  6 Sep 2022 09:58:50 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 123so2583246pfy.2;
-        Tue, 06 Sep 2022 09:58:49 -0700 (PDT)
+        Tue, 6 Sep 2022 13:12:41 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C63F8C451
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:02:10 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id az24-20020a05600c601800b003a842e4983cso7851813wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 10:02:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=XjgZYFNOvrIhYZ3W1M3muFB2Y46u3ki4tze0cD2gLBc=;
-        b=ouk+eTxl/O/1JqFYWDJvPJNXiyQ5m25943fmAjXirSUWWjqkhRjxfDq+7RNzmciuSr
-         yUZjs545kA7NztlBMf5GNnN5KBFOxBK7KUVMYdkVeHatFQdVY7JmNlH5mgTyeYyWDVXk
-         GHtVen0zUJEj6WOf1o1I9vsAnpA5Cdpn0tnJb2UYehMtDs1FZHl1qs15jt3xsNR8gD5R
-         tFeuYTsj55zKEmB/pK97yGltxAgftipubcdfap3GvDFtZ0gCpC1yo/IR7Hr94LkJACek
-         /wR5ySbLcxLsTkCQHbhrf6Jlmh/ZC8L9ASoNDuJ5VkDU8WLpShI0mna/QGevaLWHrmTV
-         RQFQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=fqbVR0/pYtalFeUPIEz7ZYhuS1uYGPBfqPC7dvf/8Hc=;
+        b=TXRn4OzRw1fW++9vKnMzH+g/r7f1EyS/oo2E42frNUymESrW0Rx2Qs3BXnJwfx4bQy
+         klg55C8eq/bYCnVJtQ/swaUqk8OcT9bEQvyBYYYLnPviHdazRh8v8fwIkzAwIA5WuUql
+         x0bNITJCBHyu2KH8zle3uP4dfZgy4qyp2Nsd4apH44v/nzhAKjJDT+NDHZ3ptm7Q6Nx6
+         vZcDsXh72RKtRs3PxeResEgHH7jO5PWGKcoDtWd8lo6NcCRJ+v0xTHQuQIsuPrPyLlaJ
+         8qifHRitEsP4UZAyU+/OsAcWMMteFQq4R7lqruAfXl+KINuly74EtLVTjCBLqGwsVJvT
+         Tfyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=XjgZYFNOvrIhYZ3W1M3muFB2Y46u3ki4tze0cD2gLBc=;
-        b=WrCloHbPGe2xlFVKXuVFkx1hlPAkvF2lC2dINK8ITyj2t2W/v/K98iPTc9QD96zffT
-         QX2bi2BAo9STVotG6lidT2dBy15rgqh2Ay8cSXSO76o4y0UfeV/KqD1vUrcUd6kONwSD
-         NBdFn6uTN7ri/TlLFXvvY+4rzHqr0tVlMTaycgWtkQJqPRw24jzwzZ2U4Jy05duLjx1k
-         pSWkNNs1fFwFs5tihELxMsZAewUioyM4T8U6w0fcF7x8FamCrDZ9sAFpzzzXzV3ICSes
-         SFbrndO3Ex6OlJ1HSNjc7Q6CJCAttLE2HeHQq5zJdGM0PKgGIKShbUVoeoil1nr5wiRW
-         YpzA==
-X-Gm-Message-State: ACgBeo3K4I0XkxszMpcZTVxxkkTrmdIwwx/FjA+DeZH730/KK9MdFQUm
-        MP5/YfxzkKHuZwT7MFiSDgssJsDCvdY=
-X-Google-Smtp-Source: AA6agR7fFN6HwW9TVFDKjD67QX7bBbjkk+n3g9IJWmgeruCvlQobsvp/z+vIjLXz7yT7K5l+9FC9LA==
-X-Received: by 2002:a65:6048:0:b0:412:73c7:cca9 with SMTP id a8-20020a656048000000b0041273c7cca9mr48303700pgp.257.1662483529204;
-        Tue, 06 Sep 2022 09:58:49 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090322c800b0016f85feae65sm10163589plg.87.2022.09.06.09.58.48
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=fqbVR0/pYtalFeUPIEz7ZYhuS1uYGPBfqPC7dvf/8Hc=;
+        b=Gkd8lgjYmqC10XJ6jp7Iy9ILmtV04uq9eQuTxtQ098SIyCRXW+8EBgBZuhcsLeGq5f
+         U9114Wz/Q6bc83KYc1HeVcbnJ1dMmqn+7INXSNi9yookxzRia3/fYCuN3Q2I3i6MaiV2
+         /rOdXcNAl6Qzrn9tE85eCRgXc6lS0iQMk9UAjXxCGhWWyU8yr2bXBGXbCUyVxeM04cf1
+         mGnCALtvYhcnpf8vpuclY0X1REFMzH1ZiTkaqGwYBEbNGw2FwVuIbGnVxkHnSEiJJfMc
+         EIA7i3TOlaE2bkuPPck1XoOwGdKR4GjNgulzwa6UNiQdazDK4H6P564M2Bx59i1ztphE
+         eLsg==
+X-Gm-Message-State: ACgBeo1AO//oV4jBrvG3RjXbI7ZAWVdOnp42S8aqNZyFZrtkNaWhjx8a
+        Y9yuoPyDMjV8UqO/2bp25w/+Aw==
+X-Google-Smtp-Source: AA6agR7ggY+xobY1zkdFdqFhBWr7EgzRCH5ej/RpqXkiV++HXnF1gxlVAHP2RSaBTqtJIxuAwC8x8A==
+X-Received: by 2002:a05:600c:4148:b0:3a5:4f94:577b with SMTP id h8-20020a05600c414800b003a54f94577bmr14683472wmm.167.1662483726815;
+        Tue, 06 Sep 2022 10:02:06 -0700 (PDT)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id x13-20020a1c7c0d000000b003a5ca627333sm21085967wmc.8.2022.09.06.10.02.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 09:58:48 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 6 Sep 2022 06:58:47 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     cgroups@vger.kernel.org
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH cgroup/for-6.0-fixes] cpuset: Add Waiman Long as a cpuset
- maintainer
-Message-ID: <Yxd8R2VJFM44Hy6M@slm.duckdns.org>
-References: <Yxd8MUTOPbxvZVOk@slm.duckdns.org>
+        Tue, 06 Sep 2022 10:02:06 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bgoswami@quicinc.com,
+        perex@perex.cz, tiwai@suse.com, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 00/12] ASoC: codecs: qcom add support for SM8450 and SC8280XP
+Date:   Tue,  6 Sep 2022 18:01:00 +0100
+Message-Id: <20220906170112.1984-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxd8MUTOPbxvZVOk@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 06:58:25AM -1000, Tejun Heo wrote:
-> Waiman has been very active with cpuset recently and I've been cc'ing him
-> for cpuset related changes for a while now. Let's make him a cpuset
-> maintainer.
-> 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Cc: Zefan Li <lizefan.x@bytedance.com>
-> Cc: Waiman Long <longman@redhat.com>
+This patchset adds support for SM8450 and SC8280XP SoC and also some of
+the fixes requried to get stable audio on X13s.
 
-Applying to cgroup/for-6.0-fixes.
+Tested SmartSpeakers and Headset on SM8450 MTP and
+Lenovo Thinkpad X13s.
 
-Thanks.
+Changes since v1:
+- moved va-macro from using of_device_is_compatible to compatible data
+- added some fixes for qcom codecs.
+
+Srinivas Kandagatla (12):
+  ASoC: codecs: wsa-macro: handle swr_reset correctly
+  ASoC: codecs: rx-macro: handle swr_reset correctly
+  ASoC: codecs: tx-macro: handle swr_reset correctly
+  ASoC: codecs: tx-macro: fix active_decimator array
+  ASoC: codecs: tx-macro: fix kcontrol put
+  ASoC: codecs: wsa883x: add clock stop support
+  ASoC: qcom: dt-bindings: add sm8450 and sc8280xp compatibles
+  ASoC: codecs: wsa-macro: add support for sm8450 and sc8280xp
+  ASoC: codecs: tx-macro: add support for sm8450 and sc8280xp
+  ASoC: codecs: rx-macro: add support for sm8450 and sc8280xp
+  ASoC: codecs: va-macro: clear the frame sync counter before enabling
+  ASoC: codecs: va-macro: add support for sm8450 and sc8280xp
+
+ .../bindings/sound/qcom,lpass-rx-macro.yaml   |  2 +
+ .../bindings/sound/qcom,lpass-tx-macro.yaml   |  2 +
+ .../bindings/sound/qcom,lpass-va-macro.yaml   |  2 +
+ .../bindings/sound/qcom,lpass-wsa-macro.yaml  |  2 +
+ sound/soc/codecs/lpass-rx-macro.c             | 18 ++--
+ sound/soc/codecs/lpass-tx-macro.c             | 36 ++++----
+ sound/soc/codecs/lpass-va-macro.c             | 82 +++++++++++++++++--
+ sound/soc/codecs/lpass-wsa-macro.c            | 19 ++---
+ sound/soc/codecs/wsa883x.c                    | 28 +------
+ 9 files changed, 120 insertions(+), 71 deletions(-)
 
 -- 
-tejun
+2.21.0
+

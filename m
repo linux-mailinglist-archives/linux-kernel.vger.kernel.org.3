@@ -2,106 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B035AE043
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386575AE046
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238265AbiIFGv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 02:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
+        id S238711AbiIFGwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 02:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiIFGvz (ORCPT
+        with ESMTP id S238714AbiIFGwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 02:51:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E09472ECF;
-        Mon,  5 Sep 2022 23:51:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMGJl3Mjjz4xDK;
-        Tue,  6 Sep 2022 16:51:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662447112;
-        bh=jAQSRQbl/FxCWX10tZ95H26D984hSmBHzQXJ/ihW0OY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dJ4R4NsjJckjgAZggi4UXjriIkP9DuOScvCDzt6HPX3ZHEOZTGZ3io+Ax1ZMLcBOk
-         fwWaaCMAdi28SFLzYcflXQII8GI6Qzx0T104mxr+vkKhuzQCMgEsPdcc9KX2Az30XJ
-         1qwIMT7jrE92XzxQ5ShmiRL8tp+MDrVlA5viFLIBX3R6AcZ7ob571dTi9ZcJROfi+X
-         Ek5zGwh8HkMAfHAcxkgDkAbXHiXTcv9+AgQvSP4fupoZp+6YI6jVMmRLki9HODEhMu
-         hxigyxh1VlkK5PCyj0pMaKOVFVgd1lSGgatWrK1Kd+0a6XgEQCwideOHSC7RqUSmyy
-         hDBq6Tko8ujAg==
-Date:   Tue, 6 Sep 2022 16:51:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the slab tree
-Message-ID: <20220906165131.59f395a9@canb.auug.org.au>
+        Tue, 6 Sep 2022 02:52:14 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100A972EC6
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 23:52:10 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id k18so11188331lji.13
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 23:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=pg/k2BKeuoUb9BSQqMtaRqCPumr70GT5UhAxF2oEgQM=;
+        b=HktmtzseBu9APk/Y/0Enxh3WilmA1qFkbnVK6HrsFvBI/HALpUtAkYwHtx1e7KFdPQ
+         CiTKoCDCTqznqfPoHCO8+XHDjN1Ls11iNAR+BgyxUwha3cDk+lhoYnnsFKqxI6IdDdkg
+         ZkLfVNZoG+ej2R9DEI3nVjBEkVZoN1FyOOYpuThHUFlBbGpvXxmTaNNzf6f+ONeIrLwO
+         yQN0miPVnzPMZvNpEveAgbZMHtZnXxAaATZDMXI3PtJEljUS71gnCywFBYB0u7r7xlYP
+         VbWMSFEAgJdONFa/du8UGDM1XUT+WYICUb0DeGauyMd/lcoeS8bHzT/Cvm4o3/ZqbUhc
+         4frQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=pg/k2BKeuoUb9BSQqMtaRqCPumr70GT5UhAxF2oEgQM=;
+        b=b3PPcoCV1VDVeVjcrlGlx9y2YsZKI8s+iMVsWstjAsk428aPSyZygurE2CbLtqEkOU
+         r4RslPwQo0mAFy2oB0Pkdf3uGOXON3fLF4VLZdhrbqLCke3bYfAgOkQyFLssiTwP9abk
+         q0LPWnLVid6s9gDexfSm8tvqh95vYt7dqKChCWAIal5C9u1C+NFsOjmMdePXtgWJSnEg
+         2bxYYPWkZ7ENeMq6hQAUoClISmmkUcpb632E0AZ8XU0bzqhNFAuz1XAnTFV2v2OLMvN6
+         lPgq6uLE31PiY6VfnvPOhQBcOzT4LZUd+POliqaf6A1njBT/5xxhXuWJhOewkoH7+jkH
+         HBPQ==
+X-Gm-Message-State: ACgBeo0piWK0pfo1h0HkVB0It2Dyi+T2Gcn7wjp6zbA4WSE9YBn8ciSP
+        lm4ZIsBYZPdp5b9jAn25aO2VKu8jF/1X/PN1+Nc1Zw==
+X-Google-Smtp-Source: AA6agR6AVqVzW2ydtHH70ol33I0L7Cv0YvSK+JMvHBhL0OMazBsLyNbNZkfG0NYuQjNFPFGxqBsRHGebHlq4QT18KF4=
+X-Received: by 2002:a05:651c:1047:b0:264:f7bb:7b6 with SMTP id
+ x7-20020a05651c104700b00264f7bb07b6mr12695077ljm.275.1662447129027; Mon, 05
+ Sep 2022 23:52:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oPe39KmfZ5fb/VpMS=68hiI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220905083125.29426-1-zong.li@sifive.com> <20220905083125.29426-3-zong.li@sifive.com>
+ <2a22c6ac-dc0e-7066-8f5f-04c428c77ee2@microchip.com> <CA+ZOyah199Vsa9haepO=uizymy947aLv3tMoO=5ye=FHqhkYCA@mail.gmail.com>
+ <048bb217-e91e-b727-fcd1-e55755a87d0d@microchip.com>
+In-Reply-To: <048bb217-e91e-b727-fcd1-e55755a87d0d@microchip.com>
+From:   Zong Li <zong.li@sifive.com>
+Date:   Tue, 6 Sep 2022 14:51:57 +0800
+Message-ID: <CANXhq0prxrXYOson4pQBq6_cWSTcZ5CZs7JyOfsFuQE8oc2pwA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] soc: sifive: ccache: Rename SiFive L2 cache to
+ Composable cache.
+To:     Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     Zong Li <zongbox@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Ben Dooks <ben.dooks@sifive.com>, bp@alien8.de,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-edac@vger.kernel.org,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/oPe39KmfZ5fb/VpMS=68hiI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Sep 6, 2022 at 2:23 PM <Conor.Dooley@microchip.com> wrote:
+>
+> On 06/09/2022 02:44, Zong Li wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
+the content is safe
+> >
+> > <Conor.Dooley@microchip.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=886=E6=97=
+=A5 =E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A82:48=E5=AF=AB=E9=81=93=EF=BC=9A
+> >>
+> >> Noticed a another thing, sorry..
+> >>
+> >> On 05/09/2022 09:31, Zong Li wrote:
+> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you kno=
+w the content is safe
+> >>>
+> >>> From: Greentime Hu <greentime.hu@sifive.com>
+> >>>
+> >>> Since composable cache may be L3 cache if pL2 cache exists, we should=
+ use
+> >>> its original name composable cache to prevent confusion.
+> >>>
+> >>> Apart from renaming, we also add the compatible "sifive,ccache0" into=
+ ID
+> >>> table.
+> >>>
+> >>> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> >>> Signed-off-by: Zong Li <zong.li@sifive.com>
+> >>> ---
+> >>>   drivers/soc/sifive/Kconfig                    |   6 +-
+> >>>   drivers/soc/sifive/Makefile                   |   2 +-
+> >>>   .../{sifive_l2_cache.c =3D> sifive_ccache.c}    | 163 +++++++++----=
+-----
+> >>>   .../{sifive_l2_cache.h =3D> sifive_ccache.h}    |  16 +-
+> >>>   4 files changed, 94 insertions(+), 93 deletions(-)
+> >>>   rename drivers/soc/sifive/{sifive_l2_cache.c =3D> sifive_ccache.c} =
+(35%)
+> >>>   rename include/soc/sifive/{sifive_l2_cache.h =3D> sifive_ccache.h} =
+(12%)
+> >>>
+> >>
+> >>> -static ssize_t l2_write(struct file *file, const char __user *data,
+> >>> +static ssize_t ccache_write(struct file *file, const char __user *da=
+ta,
+> >>>                          size_t count, loff_t *ppos)
+> >>
+> >> You need to fix the alignment here as per checkpatch:
+> >> CHECK: Alignment should match open parenthesis
+> >> #112: FILE: drivers/soc/sifive/sifive_ccache.c:53:
+> >> +static ssize_t ccache_write(struct file *file, const char __user *dat=
+a,
+> >> +                       size_t count, loff_t *ppos)
+> >>
+> >
+> > I'm not sure why I don't see that by checkpatch, but it looks that it
+> > is actually misalignment there, I would re-check all indents in
+> > source. Thanks.
+>
+> You need to pass --strict to checkpatch to see it.
 
-Hi all,
+Many thanks for the tip, I can see the message after applying the option.
 
-After merging the slab tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
-
-kernel/bpf/memalloc.c: In function 'bpf_mem_free':
-kernel/bpf/memalloc.c:613:33: error: implicit declaration of function '__ks=
-ize'; did you mean 'ksize'? [-Werror=3Dimplicit-function-declaration]
-  613 |         idx =3D bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE_SZ));
-      |                                 ^~~~~~~
-      |                                 ksize
-
-Caused by commit
-
-  8dfa9d554061 ("mm/slab_common: move declaration of __ksize() to mm/slab.h=
-")
-
-interacting with commit
-
-  7c8199e24fa0 ("bpf: Introduce any context BPF specific memory allocator.")
-
-from the bpf-next tree.
-
-I have reverted the slab tree commit for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/oPe39KmfZ5fb/VpMS=68hiI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMW7fMACgkQAVBC80lX
-0Gw5xQf/XxNg8gI2jZ27P7PtnWXdLktWhD5AXMuJIcKk/NrL3rj+rEW570Ft0m2A
-DkUHjWtgOvQxYwQz9ie6PuA4mk1nVM3agTkadcLx6hxGn8z7sHr3P3rlSH9Huf+t
-CEjgj+xNTI0Ev4tJbISyz2NIkpgyK0kmfirYm4VN6ZWjeYe05M3S+LAfMhxjBq67
-VN62CVhi+ALsoiHyk74KLsziJKom6P7PBYEGJzYPbgqpVFCodWlf3cAGOf3W9ktU
-7yjlvVa3mAVp0zXmasDZuPVe55mu6VFllE02Gq0q1qBNwTHSbfwC34QLvHvTOKTR
-+/5qh8IL24Lzl7JBgTj5KNlllLi1KQ==
-=2mSP
------END PGP SIGNATURE-----
-
---Sig_/oPe39KmfZ5fb/VpMS=68hiI--
+>
+> >
+> >>>   {
+> >>>          unsigned int val;
+> >>> @@ -57,75 +57,76 @@ static ssize_t l2_write(struct file *file, const =
+char __user *data,
+> >>>          if (kstrtouint_from_user(data, count, 0, &val))
+> >>>                  return -EINVAL;
+> >>>          if ((val < 0xFF) || (val >=3D 0x10000 && val < 0x100FF))
+> >>> -               writel(val, l2_base + SIFIVE_L2_ECCINJECTERR);
+> >>> +               writel(val, ccache_base + SIFIVE_CCACHE_ECCINJECTERR)=
+;
+> >>>          else
+> >>>                  return -EINVAL;
+> >>>          return count;
+> >>>   }
+> >>>
+>

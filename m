@@ -2,323 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090745AEE7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFB25AED50
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiIFPSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S234056AbiIFOaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234270AbiIFPRe (ORCPT
+        with ESMTP id S242419AbiIFO3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:17:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA9B4C601;
-        Tue,  6 Sep 2022 07:30:22 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MMRWp3yCHzkWyN;
-        Tue,  6 Sep 2022 21:47:02 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 6 Sep 2022 21:50:47 +0800
-Received: from [10.67.102.67] (10.67.102.67) by kwepemm600016.china.huawei.com
- (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 6 Sep
- 2022 21:50:46 +0800
-Subject: Re: [PATCH net-next 1/5] net: hns3: add support config dscp map to tc
-To:     Paolo Abeni <pabeni@redhat.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-CC:     <edumazet@google.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lipeng321@huawei.com>,
-        <lanhao@huawei.com>
-References: <20220905081539.62131-1-huangguangbin2@huawei.com>
- <20220905081539.62131-2-huangguangbin2@huawei.com>
- <624262faa90a788ba37f8cb3df50895d13fa8eaf.camel@redhat.com>
-From:   "huangguangbin (A)" <huangguangbin2@huawei.com>
-Message-ID: <6c540cdf-e02e-fba8-ce1a-c2ffb8ee7c1c@huawei.com>
-Date:   Tue, 6 Sep 2022 21:50:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Tue, 6 Sep 2022 10:29:13 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060f.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::60f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D38D90C6F;
+        Tue,  6 Sep 2022 06:55:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AwmcgaHosj32WcCXocjJ6LNjuLbCSv5VuY/VVqAkPvUZWGri5aIJ4rflrNwBd/LlyKAhrmS9dVDheeWRfgH07YtwrZs7jinktSXjFwNz3CWSvNwg3UcOjCHjK0CZaWzRQ9k5VQC12yL11xJb4NkMpULjOxaEPlMHqgb2Lq+h+jeqor7DMvWPNksG8jwqwLenrr1PsB/N1Zxlqpa6NNv2KhYi37Eiga9tslmOPUg9zTRzrK23gw6H/lpnQpNwTFYeTC6REFRPtd9tMmXf5VaZgqUCFNuA65TzYuE3ppyx+za9ay9G/7s0BVdFwWXKxxd1NZOfAgQ2tK7NbkiYJ5Xm1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=N47Nf/3XmUtQI0vjqs2VhVAY+i2L6i3w33rZ6Lpb+ig=;
+ b=gzt+9IpmJiJVHia1r+4Qmex0UYxwsUToYjaCvGt8Dqwed0QPClqN8+w6DPySDemowb0cCM5AoMjC7M+XUk5MJZsSaeNeSdozWpsXSmPDSpeWbe7/7FGU1Vy4xoyeXg7JYHs+/rrgs49p2HYVQPN2zGwoAtALzZqMGdYV5gGjN5Gwv4SEAimbsC6C9Kbe2B520YOXgUGAruXLX/5U2xk3AEK5N760+OKykh4F4bsiLsRYxav9MvPOvjxAGY5wd7rddfUEJLpaNodFpJAYDWDUBJY2Ae01os0DOMj02Y6Q0zMCugZOH0k7nH45CX5SKV9GeNoF6KDJYXWtSt9chZUamA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=linux.dev smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N47Nf/3XmUtQI0vjqs2VhVAY+i2L6i3w33rZ6Lpb+ig=;
+ b=B/zc6kQ5XTXuyGSqv/or9IOuSa00FJsj98VPpWyOkWpjmYInbJzI+AkO3I2sVcjaGmSCheQu75Xtc8ukMICNbP0i9CiPARl60SoNAmv4s0Nrjf5RTEFCRK+5zZ0zbQn1u0dbdaLn3SE+YtDKZzXeSv0+H/VKwu0WmXWy2KMkwGAIUkQ5fVk0VVzbMKZctTD2lIZVhcmxt64BzQLVgnpU5ZJnLN3MCaffelTF1lAzHX0MO7L04BVADbW/B/Z+vl+B+5rzAc+z16M5EOJys4nhChs1J7E6x81F4Zt4hwxtHHQYZq74XKbNV7ZVFjPNg5FLMVYT/iKAn9F4BR9C3GN0ig==
+Received: from DM6PR07CA0086.namprd07.prod.outlook.com (2603:10b6:5:337::19)
+ by MW3PR12MB4377.namprd12.prod.outlook.com (2603:10b6:303:55::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Tue, 6 Sep
+ 2022 13:51:25 +0000
+Received: from DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:337:cafe::55) by DM6PR07CA0086.outlook.office365.com
+ (2603:10b6:5:337::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11 via Frontend
+ Transport; Tue, 6 Sep 2022 13:51:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.236) by
+ DM6NAM11FT107.mail.protection.outlook.com (10.13.172.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5588.10 via Frontend Transport; Tue, 6 Sep 2022 13:51:24 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.38; Tue, 6 Sep 2022 13:51:23 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 6 Sep 2022 06:51:22 -0700
+Received: from build-petlozup-20220627T000321362.nvidia.com (10.127.8.12) by
+ mail.nvidia.com (10.126.190.182) with Microsoft SMTP Server id 15.2.986.29
+ via Frontend Transport; Tue, 6 Sep 2022 06:51:22 -0700
+From:   Petlozu Pravareshwar <petlozup@nvidia.com>
+To:     <jonathanh@nvidia.com>, <thierry.reding@gmail.com>,
+        <p.zabel@pengutronix.de>, <dmitry.osipenko@collabora.com>,
+        <ulf.hansson@linaro.org>, <kkartik@nvidia.com>,
+        <cai.huoqing@linux.dev>, <spatra@nvidia.com>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <petlozup@nvidia.com>, Manish Bhardwaj <mbhardwaj@nvidia.com>
+Subject: [PATCH] soc/tegra: pmc: Check device node status property
+Date:   Tue, 6 Sep 2022 13:51:17 +0000
+Message-ID: <20220906135117.341529-1-petlozup@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <624262faa90a788ba37f8cb3df50895d13fa8eaf.camel@redhat.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.67]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5d35beff-be06-49ef-9132-08da900ee372
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4377:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dAyTuT5S62s6G2ELgbAJHGY5W9P3FdO7ymJ7Kz26pddwbRKXGMBpXNkWzYQQ6QOYUAJCzujbWWFLQ3zSXre+auqs9aKp0j3g3v2fYERjXr/Ozf7ZK4cJ0Szz97n6ifLOx4ocyXokOpE1GcJu8f7x/d8FqyEODbuWQSh4vbqAknJBoo2F9tyFwpZFFEdu43lHqxcRNm2lnge5Nc91n7RB2/VENicHCB+b5tI99v+qWUjAClR/+L1Fe13PQtOzmIt3SLR0UWWJt2B68O9q9XerYDSWLf660SDf3uK7iuJlW1H8qywk+3bK2VjyXDWMaqxdzep0Z+MTq+5C84U/rsTsbnHJbqrmxPZbljFnB2/X/qE+RDxbAt/nl1rnahmygFe7P4ntC/pJsuM30vrYIax9navuJ5RPK54yd800bLa9tF0ACuNNJzaS+3xngHaxOvqIGY4SiMvIGoSxr22whgxQxTdODsSoAJLPcM5wn26JiS1r93XKi1UI+Fb726xQuTe+LbLfFxiBXCTNUyzqzZC6WKjo5tBxfuash6FLyySFB5VVtyggtz0IYhTsJb/Gzi9LfIkV94+LPsIb+gdscz70rCQHW5Age+5r/uZllwcufRNNJ67CRfKfOPeRqUlT/z7VDIO7dfVudOYH51nThpbqIQsoEopAG+7DuXsB3t1GWDjC3O/doZuIFdHcA2iLL2O4IQjS1HQyXpySShIPBcWrPMM3ux4tdMbDAIiIFR5KMjLBv422tCCPFCumrP+Pwg9LIckuBLwoWkIYUOWe5JXhEDFH2linKwUfjXZw4iFH9mjb8DVY2mb82utdMBk6g9oC
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(136003)(39860400002)(346002)(40470700004)(36840700001)(46966006)(54906003)(70206006)(478600001)(110136005)(2906002)(316002)(70586007)(36756003)(356005)(81166007)(921005)(86362001)(82740400003)(36860700001)(2616005)(1076003)(107886003)(7696005)(26005)(6666004)(336012)(4326008)(186003)(5660300002)(8676002)(41300700001)(82310400005)(40460700003)(83380400001)(426003)(40480700001)(47076005)(4744005)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 13:51:24.4974
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d35beff-be06-49ef-9132-08da900ee372
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4377
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In early_initcall, check if PMC device is available for use
+and avoid accessing PMC resources if the device node status
+property is set to disabled.
 
+Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
+Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
+---
+ drivers/soc/tegra/pmc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2022/9/6 21:12, Paolo Abeni wrote:
-> On Mon, 2022-09-05 at 16:15 +0800, Guangbin Huang wrote:
->> This patch add support config dscp map to tc by implementing ieee_setapp
->> and ieee_delapp of struct dcbnl_rtnl_ops. Driver will convert mapping
->> relationship from dscp-prio to dscp-tc.
->>
->> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
->> ---
->>   drivers/net/ethernet/hisilicon/hns3/hnae3.h   |  10 ++
->>   .../net/ethernet/hisilicon/hns3/hns3_dcbnl.c  |  28 +++++
->>   .../hisilicon/hns3/hns3pf/hclge_dcb.c         | 107 ++++++++++++++++++
->>   .../hisilicon/hns3/hns3pf/hclge_dcb.h         |   3 +
->>   .../hisilicon/hns3/hns3pf/hclge_main.c        |   1 +
->>   .../hisilicon/hns3/hns3pf/hclge_main.h        |   4 +
->>   .../ethernet/hisilicon/hns3/hns3pf/hclge_tm.c |  50 +++++++-
->>   .../ethernet/hisilicon/hns3/hns3pf/hclge_tm.h |   5 +
->>   8 files changed, 207 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/ethernet/hisilicon/hns3/hnae3.h b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
->> index 795df7111119..33b5ac47f342 100644
->> --- a/drivers/net/ethernet/hisilicon/hns3/hnae3.h
->> +++ b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
->> @@ -310,6 +310,11 @@ enum hnae3_dbg_cmd {
->>   	HNAE3_DBG_CMD_UNKNOWN,
->>   };
->>   
->> +enum hnae3_tc_map_mode {
->> +	HNAE3_TC_MAP_MODE_PRIO,
->> +	HNAE3_TC_MAP_MODE_DSCP,
->> +};
->> +
->>   struct hnae3_vector_info {
->>   	u8 __iomem *io_addr;
->>   	int vector;
->> @@ -739,6 +744,8 @@ struct hnae3_ae_ops {
->>   	int (*get_link_diagnosis_info)(struct hnae3_handle *handle,
->>   				       u32 *status_code);
->>   	void (*clean_vf_config)(struct hnae3_ae_dev *ae_dev, int num_vfs);
->> +	int (*get_dscp_prio)(struct hnae3_handle *handle, u8 dscp,
->> +			     u8 *tc_map_mode, u8 *priority);
->>   };
->>   
->>   struct hnae3_dcb_ops {
->> @@ -747,6 +754,8 @@ struct hnae3_dcb_ops {
->>   	int (*ieee_setets)(struct hnae3_handle *, struct ieee_ets *);
->>   	int (*ieee_getpfc)(struct hnae3_handle *, struct ieee_pfc *);
->>   	int (*ieee_setpfc)(struct hnae3_handle *, struct ieee_pfc *);
->> +	int (*ieee_setapp)(struct hnae3_handle *h, struct dcb_app *app);
->> +	int (*ieee_delapp)(struct hnae3_handle *h, struct dcb_app *app);
->>   
->>   	/* DCBX configuration */
->>   	u8   (*getdcbx)(struct hnae3_handle *);
->> @@ -786,6 +795,7 @@ struct hnae3_knic_private_info {
->>   	u32 tx_spare_buf_size;
->>   
->>   	struct hnae3_tc_info tc_info;
->> +	u8 tc_map_mode;
->>   
->>   	u16 num_tqps;		  /* total number of TQPs in this handle */
->>   	struct hnae3_queue **tqp;  /* array base of all TQPs in this instance */
->> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_dcbnl.c b/drivers/net/ethernet/hisilicon/hns3/hns3_dcbnl.c
->> index d2ec4c573bf8..3b6dbf158b98 100644
->> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_dcbnl.c
->> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_dcbnl.c
->> @@ -56,6 +56,32 @@ static int hns3_dcbnl_ieee_setpfc(struct net_device *ndev, struct ieee_pfc *pfc)
->>   	return -EOPNOTSUPP;
->>   }
->>   
->> +static int hns3_dcbnl_ieee_setapp(struct net_device *ndev, struct dcb_app *app)
->> +{
->> +	struct hnae3_handle *h = hns3_get_handle(ndev);
->> +
->> +	if (hns3_nic_resetting(ndev))
->> +		return -EBUSY;
->> +
->> +	if (h->kinfo.dcb_ops->ieee_setapp)
->> +		return h->kinfo.dcb_ops->ieee_setapp(h, app);
->> +
->> +	return -EOPNOTSUPP;
->> +}
->> +
->> +static int hns3_dcbnl_ieee_delapp(struct net_device *ndev, struct dcb_app *app)
->> +{
->> +	struct hnae3_handle *h = hns3_get_handle(ndev);
->> +
->> +	if (hns3_nic_resetting(ndev))
->> +		return -EBUSY;
->> +
->> +	if (h->kinfo.dcb_ops->ieee_setapp)
->> +		return h->kinfo.dcb_ops->ieee_delapp(h, app);
->> +
->> +	return -EOPNOTSUPP;
->> +}
->> +
->>   /* DCBX configuration */
->>   static u8 hns3_dcbnl_getdcbx(struct net_device *ndev)
->>   {
->> @@ -83,6 +109,8 @@ static const struct dcbnl_rtnl_ops hns3_dcbnl_ops = {
->>   	.ieee_setets	= hns3_dcbnl_ieee_setets,
->>   	.ieee_getpfc	= hns3_dcbnl_ieee_getpfc,
->>   	.ieee_setpfc	= hns3_dcbnl_ieee_setpfc,
->> +	.ieee_setapp    = hns3_dcbnl_ieee_setapp,
->> +	.ieee_delapp    = hns3_dcbnl_ieee_delapp,
->>   	.getdcbx	= hns3_dcbnl_getdcbx,
->>   	.setdcbx	= hns3_dcbnl_setdcbx,
->>   };
->> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_dcb.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_dcb.c
->> index 69b8673436ca..7fcacc76e749 100644
->> --- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_dcb.c
->> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_dcb.c
->> @@ -359,6 +359,111 @@ static int hclge_ieee_setpfc(struct hnae3_handle *h, struct ieee_pfc *pfc)
->>   	return hclge_notify_client(hdev, HNAE3_UP_CLIENT);
->>   }
->>   
->> +static int hclge_ieee_setapp(struct hnae3_handle *h, struct dcb_app *app)
->> +{
->> +	struct hclge_vport *vport = hclge_get_vport(h);
->> +	struct net_device *netdev = h->kinfo.netdev;
->> +	struct hclge_dev *hdev = vport->back;
->> +	struct dcb_app old_app;
->> +	int ret;
->> +
->> +	if (app->selector != IEEE_8021QAZ_APP_SEL_DSCP ||
->> +	    app->protocol >= HCLGE_MAX_DSCP ||
->> +	    app->priority >= HNAE3_MAX_USER_PRIO)
->> +		return -EINVAL;
->> +
->> +	dev_info(&hdev->pdev->dev, "setapp dscp=%u priority=%u\n",
->> +		 app->protocol, app->priority);
->> +
->> +	if (app->priority == hdev->tm_info.dscp_prio[app->protocol])
->> +		return 0;
->> +
->> +	ret = dcb_ieee_setapp(netdev, app);
->> +	if (ret)
->> +		return ret;
->> +
->> +	old_app.selector = IEEE_8021QAZ_APP_SEL_DSCP;
->> +	old_app.protocol = app->protocol;
->> +	old_app.priority = hdev->tm_info.dscp_prio[app->protocol];
->> +
->> +	hdev->tm_info.dscp_prio[app->protocol] = app->priority;
->> +	ret = hclge_dscp_to_tc_map(hdev);
->> +	if (ret) {
->> +		dev_err(&hdev->pdev->dev,
->> +			"failed to set dscp to tc map, ret = %d\n", ret);
->> +		hdev->tm_info.dscp_prio[app->protocol] = old_app.priority;
->> +		(void)dcb_ieee_delapp(netdev, app);
->> +		return ret;
->> +	}
->> +
->> +	vport->nic.kinfo.tc_map_mode = HNAE3_TC_MAP_MODE_DSCP;
->> +	if (old_app.priority == HCLGE_PRIO_ID_INVALID)
->> +		hdev->tm_info.dscp_app_cnt++;
->> +	else
->> +		ret = dcb_ieee_delapp(netdev, &old_app);
->> +
->> +	return ret;
->> +}
->> +
->> +static int hclge_ieee_delapp(struct hnae3_handle *h, struct dcb_app *app)
->> +{
->> +	struct hclge_vport *vport = hclge_get_vport(h);
->> +	struct net_device *netdev = h->kinfo.netdev;
->> +	struct hclge_dev *hdev = vport->back;
->> +	int ret;
->> +
->> +	if (app->selector != IEEE_8021QAZ_APP_SEL_DSCP ||
->> +	    app->protocol >= HCLGE_MAX_DSCP ||
->> +	    app->priority >= HNAE3_MAX_USER_PRIO ||
->> +	    app->priority != hdev->tm_info.dscp_prio[app->protocol])
->> +		return -EINVAL;
->> +
->> +	dev_info(&hdev->pdev->dev, "delapp dscp=%u priority=%u\n",
->> +		 app->protocol, app->priority);
->> +
->> +	ret = dcb_ieee_delapp(netdev, app);
->> +	if (ret)
->> +		return ret;
->> +
->> +	hdev->tm_info.dscp_prio[app->protocol] = HCLGE_PRIO_ID_INVALID;
->> +	ret = hclge_dscp_to_tc_map(hdev);
->> +	if (ret) {
->> +		dev_err(&hdev->pdev->dev,
->> +			"failed to del dscp to tc map, ret = %d\n", ret);
->> +		hdev->tm_info.dscp_prio[app->protocol] = app->priority;
->> +		(void)dcb_ieee_setapp(netdev, app);
->> +		return ret;
->> +	}
->> +
->> +	if (hdev->tm_info.dscp_app_cnt)
->> +		hdev->tm_info.dscp_app_cnt--;
->> +
->> +	if (!hdev->tm_info.dscp_app_cnt) {
->> +		vport->nic.kinfo.tc_map_mode = HNAE3_TC_MAP_MODE_PRIO;
->> +		ret = hclge_up_to_tc_map(hdev);
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->> +int hclge_get_dscp_prio(struct hnae3_handle *h, u8 dscp, u8 *tc_mode,
->> +			u8 *priority)
->> +{
->> +	struct hclge_vport *vport = hclge_get_vport(h);
->> +	struct hclge_dev *hdev = vport->back;
->> +
->> +	if (dscp >= HCLGE_MAX_DSCP)
->> +		return -EINVAL;
->> +
->> +	if (tc_mode)
->> +		*tc_mode = vport->nic.kinfo.tc_map_mode;
->> +	if (priority)
->> +		*priority = hdev->tm_info.dscp_prio[dscp] == HCLGE_PRIO_ID_INVALID ? 0 :
->> +			    hdev->tm_info.dscp_prio[dscp];
->> +
->> +	return 0;
->> +}
->> +
->>   /* DCBX configuration */
->>   static u8 hclge_getdcbx(struct hnae3_handle *h)
->>   {
->> @@ -543,6 +648,8 @@ static const struct hnae3_dcb_ops hns3_dcb_ops = {
->>   	.ieee_setets	= hclge_ieee_setets,
->>   	.ieee_getpfc	= hclge_ieee_getpfc,
->>   	.ieee_setpfc	= hclge_ieee_setpfc,
->> +	.ieee_setapp    = hclge_ieee_setapp,
->> +	.ieee_delapp    = hclge_ieee_delapp,
->>   	.getdcbx	= hclge_getdcbx,
->>   	.setdcbx	= hclge_setdcbx,
->>   	.setup_tc	= hclge_setup_tc,
->> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_dcb.h b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_dcb.h
->> index b04702e65689..17a5460e7ea9 100644
->> --- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_dcb.h
->> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_dcb.h
->> @@ -12,4 +12,7 @@ void hclge_dcb_ops_set(struct hclge_dev *hdev);
->>   static inline void hclge_dcb_ops_set(struct hclge_dev *hdev) {}
->>   #endif
->>   
->> +int hclge_get_dscp_prio(struct hnae3_handle *h, u8 dscp, u8 *tc_mode,
->> +			u8 *priority);
->> +
->>   #endif /* __HCLGE_DCB_H__ */
->> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
->> index fcdc978379ff..f43c7d392d1a 100644
->> --- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
->> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
->> @@ -12907,6 +12907,7 @@ static const struct hnae3_ae_ops hclge_ops = {
->>   	.get_ts_info = hclge_ptp_get_ts_info,
->>   	.get_link_diagnosis_info = hclge_get_link_diagnosis_info,
->>   	.clean_vf_config = hclge_clean_vport_config,
->> +	.get_dscp_prio = hclge_get_dscp_prio,
-> 
-> This brings in an implicit dependency on CONFIG_HNS3_DCB, causing the
-> build error reported by the intel bot.
-> 
-> Please, address the above, thanks!
-> 
-> Paolo
-> 
-> .
-> 
-Ok, I have modified in V2.
+diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+index 6a86961477e8..8c7b46ac6ad6 100644
+--- a/drivers/soc/tegra/pmc.c
++++ b/drivers/soc/tegra/pmc.c
+@@ -4295,7 +4295,7 @@ static int __init tegra_pmc_early_init(void)
+ 		return -ENXIO;
+ 	}
+ 
+-	if (np) {
++	if (of_device_is_available(np)) {
+ 		pmc->soc = match->data;
+ 
+ 		if (pmc->soc->maybe_tz_only)
+-- 
+2.17.1
+

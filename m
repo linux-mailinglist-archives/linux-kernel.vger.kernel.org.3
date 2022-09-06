@@ -2,144 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E546F5AE511
+	by mail.lfdr.de (Postfix) with ESMTP id 54E595AE50F
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234066AbiIFKLj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Sep 2022 06:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S234353AbiIFKLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233774AbiIFKLf (ORCPT
+        with ESMTP id S233687AbiIFKLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:11:35 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3046C326C0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:11:33 -0700 (PDT)
-Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
- (mail-zr0che01lp2111.outbound.protection.outlook.com [104.47.22.111]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-54-8ipGG-8tNcKaQQcKb3yxGw-1; Tue, 06 Sep 2022 12:11:28 +0200
-X-MC-Unique: 8ipGG-8tNcKaQQcKb3yxGw-1
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- GVAP278MB0906.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:55::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5588.10; Tue, 6 Sep 2022 10:11:27 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::6c6d:333:ab23:3f5b]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::6c6d:333:ab23:3f5b%2]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
- 10:11:27 +0000
-Date:   Tue, 6 Sep 2022 12:11:26 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: stmpe: switch to using gpiod API
-Message-ID: <20220906101126.GA8061@francesco-nb.int.toradex.com>
-References: <YxbUO7WM0TbUBatv@google.com>
-In-Reply-To: <YxbUO7WM0TbUBatv@google.com>
-X-ClientProxiedBy: ZR0P278CA0005.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:16::15) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+        Tue, 6 Sep 2022 06:11:37 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD243845C;
+        Tue,  6 Sep 2022 03:11:36 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id n65-20020a17090a5ac700b001fbb4fad865so10893042pji.1;
+        Tue, 06 Sep 2022 03:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=iwwaWYZrU4MnC67ORkK5zfgJ2Q9qlIgxiiXYGlPwwqg=;
+        b=gneEe0ydyjv1KFHAggp+CMbuA0inNa2XgG1LLcUcnz4ETIg49v2igTE3XOx0oC9B37
+         KI9lLakkajrr7WMLVTTnceXXDaw6fTp1t8yCw+zdT0EqZtUNQ3kCuRapUkxdjk6cBIuI
+         61K6UKaXYM1Qm19pPzBsqOdn517ZocVYJkyn4B1wT35kGY3rEJUKrkFZK+ohI0XTQS1V
+         FxujH0NUWCd6c6EsjaaU5OP53YxQG/8Py1ILA3LKOfFPMaR/xFfAkEtsZtpxhJ7zC4v9
+         PQhUO4EUdQNs8ws6foAt2dN87KnYyzy5b0cPYOxHtC51cpj3h4Lp7cbYNgft+NMn79qG
+         msCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=iwwaWYZrU4MnC67ORkK5zfgJ2Q9qlIgxiiXYGlPwwqg=;
+        b=AHY5rZNb3VLIzZqZzWuz8HtI91S/1tvzVA1BZk2/f6wulBaPZXAu+xftCjBktGJYAm
+         5LavpPRYifGZeUTBngKfvK9yNxIL4JGkDYUGxJKKiw83rvsv1lok2XLiQWNfpZKuJuCY
+         xTEHXGRy39f/vXr1p8zmfDJlSr/2sTz6zO4LV7dDEFpqrGFSB9r1B+R5Znbd1kIqtwA+
+         /FWFlwQH25eyakEKEDQcylvhNg35Oz0gu3oqC4EDqC5T65PR+PfHVknCvJx7r062sSok
+         iTvj1jcitEL3Su2zPjXiAgJRtuHWuIX7W5SsqTsAASW2JvWJLQcKe67shQhYCUGldqXx
+         ipig==
+X-Gm-Message-State: ACgBeo2w1K8+c5wNa8mzXHy23IcF5raZopxitlH6YVKHl4U4fR5kRL7X
+        qcHWGazorXn2ElnDSiLuQnU=
+X-Google-Smtp-Source: AA6agR4bBOwTkPzCqEuChdVijgeEOS7ERN+2TjbgH/bPDFNqEvijFUjlmzKRoKd8W1SjG2vPe9svpg==
+X-Received: by 2002:a17:90b:4a87:b0:1fd:f44a:1d9e with SMTP id lp7-20020a17090b4a8700b001fdf44a1d9emr23967857pjb.241.1662459095288;
+        Tue, 06 Sep 2022 03:11:35 -0700 (PDT)
+Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
+        by smtp.gmail.com with ESMTPSA id e10-20020a17090301ca00b0016c9e5f290esm9510965plh.10.2022.09.06.03.11.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 03:11:34 -0700 (PDT)
+From:   Szuying Chen <chensiying21@gmail.com>
+To:     mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
+        Richard_Hsu@asmedia.com.tw
+Subject: RE: [PATCH v9 6/6] thunderbolt: Add support for ASMedia image format
+Date:   Tue,  6 Sep 2022 18:11:28 +0800
+Message-Id: <20220906101128.6504-1-chensiying21@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ba1a3756-333f-458a-b19d-08da8ff028f0
-X-MS-TrafficTypeDiagnostic: GVAP278MB0906:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: iUxjzJBt5i2dUyCdoaWoIoUJwnoENqKMNzjoKd0XXdE/XWPofCqd0Drg4Mf0k2M6iWZuHBVwZZtlakaJI+lW2hW7w1k5yueE+yJVltr+9pYzaDtI/CvgLQ7D+QjxtOT6JGYOm/Dz725AkH4IlKwxUWkjjvxn4KzzEVN1OWDtIuRxQGAFNk1IYanWweKCmGZ0lmSB2UBJ/jOA2OeNoHDSverbpQWdgeIUecxzhGqGwinarhYG8RUXHnuy8eVDfB5G/sG1APxupJWvVjMrJ5DKQ1aYNeFgnB2rSnR/cPBLe1gJ/Id1NkAVdvhY5ukqavtHjIFjSfxC+Nq1vp0FRzrOaoumJGJvgxRnFb8Df2bycvnpIEFfVLuVti0eiUXGPwScDCP1xqK1Ax/uIcVaMlJixi69PvtSB0BjyqibKY9u0ughJLNvojRzAihRKgL+Jr9w2RM4UOdPhOOwJU9A3J1sC5Cv5xRYdWFMy+5POFsZDzF3ApF0SXAyofvYwFY/3Tqo7d6vUt34YB2n2pa3aBWXFdOtiq1kFAx73Z6vYXL5qp3wPbj2jdblHUlUZPDjiIcU6YPE4picTGESJMLNH7Mcgl77EVgvYYEP9/SlJe54WMPwYsFiYC1AmlZD0f0roX5ss3bf0Pvh7KuUcdbDv0fzs6xbwITK5FUAspnzMauKsxz204GMSbrMyVVwVctc255BRjJo2Z2q/Hk8K9gtvokwhNZddFfcY43k23z0lQ65tP2jAnUlcPqSCQUjzv1yBSmLChobHE1PUCmy23Snv1IHXg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39840400004)(376002)(346002)(396003)(366004)(38100700002)(6512007)(6486002)(1076003)(41300700001)(186003)(86362001)(478600001)(6506007)(38350700002)(83380400001)(52116002)(26005)(4326008)(66946007)(66556008)(8676002)(66476007)(2906002)(54906003)(6916009)(316002)(33656002)(8936002)(5660300002)(44832011)(4744005);DIR:OUT;SFP:1102
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RV/YK+EmYG61kyIk+XkQ+en/iHw7uIPxEI+kAt58IK0bxXHWizeQ3xrx9Tp1?=
- =?us-ascii?Q?1p4a5i3/IFwvru23Y8TDo7v+FLEkW8rVqWZs5qzsFSERiguzUlY7nXA3BeRr?=
- =?us-ascii?Q?yhErlnsfy1uYPzD0m5XNFmFh4oWQRdWmtyNJkmpMekT/SRiohZ6xsW8FxvGF?=
- =?us-ascii?Q?C7VP5Vk/d23eu5hsgQ07ylIW9YZ3oClhuKG78TX8Kjnc3MKuGRfrsvgtHIXO?=
- =?us-ascii?Q?IkigOJBLGCsjlDxV9OGdG7SXRfuJ8Gie76iiykJKRvo5WBUhYJ7gI2Bt7qI1?=
- =?us-ascii?Q?D9pbcmYXXb6mPtPNARvaeYcnPiTw2txDlBkzWXBGU/Ja+NHdVqZ9lUXVrEoH?=
- =?us-ascii?Q?ZaZKu7MKH3HChXKpn9tRZDSDvPYeQo6V+MY19d1/TQSA/NvutC4/ClKcXHqU?=
- =?us-ascii?Q?EIHC+IlqcN9maB11Ur3tF+SaN8mFVnFnOMoOjfhrMOGa/7ZbXkEoovhRzD7T?=
- =?us-ascii?Q?FQynNlWjBriorVklVyHVH+PU+dtjEqXKa9aMZC21K/CHq8hiwaK0bSukL3GR?=
- =?us-ascii?Q?pUElAz+t7dE3+sJIlUIg6j2spfCxt25zBNjyWo/MeSZ4xzi8j5hLyzX5AFt7?=
- =?us-ascii?Q?nIphuEfdeORsdon/ZU/X9EVuluogPiFKxe8ZaRr4ftK8pqSLdzpChNqTnhuv?=
- =?us-ascii?Q?E57VXESgKutUm4alhGt2ZbgwCPhyfTVxCG5MQBdyQxaybrI5ObX5mQDlvRIN?=
- =?us-ascii?Q?Tnfsch9vykaOd6foU3yC9xE+k65YIQlmJBCea2aoNCp+omnqLd/68e9NcxUi?=
- =?us-ascii?Q?zcUtIjwGnuXJX8MxgbE4xY0SyCUQE8rwy36BtCwW47dDHh6bWzqC8GB1Kbip?=
- =?us-ascii?Q?3aRq6Own4lJptoi0zwf/Z13jFymAQIC9Unp/CdMa/ZewLaBvVy5vMKwXENOB?=
- =?us-ascii?Q?HOPFACbvVjsCBOPThmX+U3dPMPrPDsLMRrZTj8HJaU5FfwdmjJd6JMVRf16W?=
- =?us-ascii?Q?qIC0WeSWNwiKMneRjjtv97PNq6VT4XvDdkgatpmOtoBeqqS9bJW6yHGOF1qY?=
- =?us-ascii?Q?u1pE4EbGQ97EcA7B+X12XXAlKE32BY3TkYOdb60Y/d98402qb/8XHI0DmiTf?=
- =?us-ascii?Q?JzdKMz/eHhWnC2um/Ap99J2Mz6zSCDMnzi5kmVeJTUF+YP/z1Vihr74Z5e6+?=
- =?us-ascii?Q?ziv1qVDb9nFPstmi80BuQh1l/9sRZoSd5V63pkKJpINOBwBIQTK9Lx0TU5Oo?=
- =?us-ascii?Q?v3iXEczUHIRWdLWm5CeaHwHM67ulV2ALCAYP9Ar7tLz1Mjrl12bs2smXB56y?=
- =?us-ascii?Q?iPOParQiKX1/srfgF7Qfw8UXY4EPoTILKrm3X1A/3X5S47ZenMDsjxM4ZFOG?=
- =?us-ascii?Q?+oYVE9K/SlhwvLbslL9LEfaMxEst4YskKHVNzf1971Xu5vZLxv4YzIk4IVzD?=
- =?us-ascii?Q?r4cuehzK5nwK8WUOWp38UZo9Nfh0nfDNz86TqrvSIkMVPXD+X0vInct2qqeD?=
- =?us-ascii?Q?GTPmuYvJrOWKbsPr24Ui8bjVXwSsupdf9jobWLcTZO5eb1VFGHu4/gqAnGsX?=
- =?us-ascii?Q?4z+Yp4yMzS1MRppInno3rM/97rkY/Cpc6wL28/S86/BgBsbLyfkCLyEMf2ZO?=
- =?us-ascii?Q?CoQTD6lmtM1FnZX4kUvEbFrbSKZA+vlRlUj2f6+OoKcf86ZBb65RQBchQc4k?=
- =?us-ascii?Q?5A=3D=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba1a3756-333f-458a-b19d-08da8ff028f0
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 10:11:26.9537
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4WOumnhx2BH6bA0fxYcb3IxkDMny6FgdHeNkIpt0heRWx0MBnEbNtX3OS0jjMXPwLae2aO9IKnQ0O/2Nx6z+6aBvO33k6uWdr88f4j2aVNk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0906
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 10:01:47PM -0700, Dmitry Torokhov wrote:
-> This patch switches the driver away from legacy gpio/of_gpio API to
-> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
-> make private to gpiolib.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
->  drivers/mfd/stmpe.c | 36 +++++++++++++-----------------------
->  1 file changed, 13 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/mfd/stmpe.c b/drivers/mfd/stmpe.c
-> index 987e251d90ae..0c4f74197d3e 100644
-> --- a/drivers/mfd/stmpe.c
-> +++ b/drivers/mfd/stmpe.c
-> @@ -8,14 +8,13 @@
->   */
+From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+
+Hi,
+
 >  
+> +static int asmedia_switch_nvm_version(struct tb_nvm *nvm) {
+> +	struct tb_switch *sw = tb_to_switch(nvm->dev);
+> +	u32 val;
+> +	int ret;
+> +
+> +	ret = tb_switch_nvm_read(sw, ASMEDIA_NVM_VERSION, &val, sizeof(val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	nvm->major = (val << 16) & 0xff0000;
+> +	nvm->minor |= val & 0x00ff00;
 
-<snip>
+	nvm->major
 
-> -	pdata->irq_gpio = of_get_named_gpio_flags(np, "irq-gpio", 0,
-<snip>
-> +	irq_gpio = devm_gpiod_get_optional(ci->dev, "irq", GPIOD_ASIS);
-isn't this changing from irq-gpio to irq-gpios property name?
+> +	nvm->major |= (val >> 16) & 0x0000ff;
+> +
+> +	ret = tb_switch_nvm_read(sw, ASMEDIA_NVM_DATE, &val, sizeof(val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	nvm->minor = (val << 16) & 0xff0000;
+> +	nvm->minor |= val & 0x00ff00;
+> +	nvm->minor |= (val >> 16) & 0x0000ff;
+> +
+> +	/* ASMedia NVM size is fixed to 512k */
+> +	nvm->active_size = SZ_512K;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct tb_nvm_vendor_ops asmedia_switch_nvm_ops = {
+> +	.read_version = asmedia_switch_nvm_version, };
+> +
+>  /* Router vendor NVM support table */
+>  static const struct tb_nvm_vendor switch_nvm_vendors[] = {
+> +	{ 0x174c, &asmedia_switch_nvm_ops },
+>  	{ PCI_VENDOR_ID_INTEL, &intel_switch_nvm_ops },
+>  	{ 0x8087, &intel_switch_nvm_ops },
+>  };
+> --
 
-in the DTS files we do have something like that:
-
- irq-gpio = <&gpio TEGRA_GPIO(V, 0) IRQ_TYPE_LEVEL_LOW>;
-
-
-Francesco
+Thanks!
 

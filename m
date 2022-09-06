@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C844F5AED28
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777E65AED0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240644AbiIFN5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        id S241899AbiIFORL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240723AbiIFNzN (ORCPT
+        with ESMTP id S241435AbiIFONC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:55:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E097781B21;
-        Tue,  6 Sep 2022 06:41:57 -0700 (PDT)
+        Tue, 6 Sep 2022 10:13:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF8D1D30F;
+        Tue,  6 Sep 2022 06:47:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82A34B818D4;
-        Tue,  6 Sep 2022 13:41:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB576C433C1;
-        Tue,  6 Sep 2022 13:41:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25ADF60F89;
+        Tue,  6 Sep 2022 13:47:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32880C433D6;
+        Tue,  6 Sep 2022 13:47:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471674;
-        bh=K4dGkykxDeQfgG8iJRdoD0/3YR3v+GjHk/N6AhY71Gw=;
+        s=korg; t=1662472056;
+        bh=UzlkVzbW/FBS9IjBbS65LIgBC1gJ99a04EZ6jP5G9+Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zg06TbA5WHmlIZA/4oEEvlNvYeZnOewiO1SpsmkERhSuHBR7mPUVBMggooCFL23E8
-         S8bD5ZvBGG6/lEqUZUe3GCF84LUZiiJDkI4pkSnKo7TcRRLOYWzbkKgFqBYKg1rwIE
-         LYpzIQruJ6yc+AgBWbDQOkerH3zPOVIaxJtrRnY0=
+        b=Y2MId8KNppZr3lcAAlUE8y+ArwC0s8xB1cSPAxQQzxekkQTtL1vCjbVNSZRms9dsH
+         CZ/R7VRrbL9d6ucWG2r4ATyGIu1g1/eZ9+HbJnfeEU2/J1hF1CQb4wQ/HaKEbHhZEw
+         jfVY9rplU1BKxxnh3WR240zaHwpOiIXQWZoW5gFo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abhishek Shah <abhishek.shah@columbia.edu>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 097/107] ALSA: seq: Fix data-race at module auto-loading
-Date:   Tue,  6 Sep 2022 15:31:18 +0200
-Message-Id: <20220906132825.950816326@linuxfoundation.org>
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        stable <stable@kernel.org>
+Subject: [PATCH 5.19 131/155] usb: xhci-mtk: relax TT periodic bandwidth allocation
+Date:   Tue,  6 Sep 2022 15:31:19 +0200
+Message-Id: <20220906132834.998809553@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
+References: <20220906132829.417117002@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,62 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-commit 3e7e04b747adea36f349715d9f0998eeebf15d72 upstream.
+commit 8b13ea05117ffad4727b0971ed09122d5c91c4dc upstream.
 
-It's been reported that there is a possible data-race accessing to the
-global card_requested[] array at ALSA sequencer core, which is used
-for determining whether to call request_module() for the card or not.
-This data race itself is almost harmless, as it might end up with one
-extra request_module() call for the already loaded module at most.
-But it's still better to fix.
+Currently uses the worst case byte budgets on FS/LS bus bandwidth,
+for example, for an isochronos IN endpoint with 192 bytes budget, it
+will consume the whole 5 uframes(188 * 5) while the actual FS bus
+budget should be just 192 bytes. It cause that many usb audio headsets
+with 3 interfaces (audio input, audio output, and HID) cannot be
+configured.
+To improve it, changes to use "approximate" best case budget for FS/LS
+bandwidth management. For the same endpoint from the above example,
+the approximate best case budget is now reduced to (188 * 2) bytes.
 
-This patch addresses the possible data race of card_requested[] and
-client_requested[] arrays by replacing them with bitmask.
-It's an atomic operation and can work without locks.
-
-Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/CAEHB24_ay6YzARpA1zgCsE7=H9CSJJzux618E=Ka4h0YdKn=qA@mail.gmail.com
-Link: https://lore.kernel.org/r/20220823072717.1706-2-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220819080556.32215-1-chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/seq/seq_clientmgr.c |   12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/usb/host/xhci-mtk-sch.c |   11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
---- a/sound/core/seq/seq_clientmgr.c
-+++ b/sound/core/seq/seq_clientmgr.c
-@@ -121,13 +121,13 @@ struct snd_seq_client *snd_seq_client_us
- 	spin_unlock_irqrestore(&clients_lock, flags);
- #ifdef CONFIG_MODULES
- 	if (!in_interrupt()) {
--		static char client_requested[SNDRV_SEQ_GLOBAL_CLIENTS];
--		static char card_requested[SNDRV_CARDS];
-+		static DECLARE_BITMAP(client_requested, SNDRV_SEQ_GLOBAL_CLIENTS);
-+		static DECLARE_BITMAP(card_requested, SNDRV_CARDS);
-+
- 		if (clientid < SNDRV_SEQ_GLOBAL_CLIENTS) {
- 			int idx;
- 			
--			if (!client_requested[clientid]) {
--				client_requested[clientid] = 1;
-+			if (!test_and_set_bit(clientid, client_requested)) {
- 				for (idx = 0; idx < 15; idx++) {
- 					if (seq_client_load[idx] < 0)
- 						break;
-@@ -142,10 +142,8 @@ struct snd_seq_client *snd_seq_client_us
- 			int card = (clientid - SNDRV_SEQ_GLOBAL_CLIENTS) /
- 				SNDRV_SEQ_CLIENTS_PER_CARD;
- 			if (card < snd_ecards_limit) {
--				if (! card_requested[card]) {
--					card_requested[card] = 1;
-+				if (!test_and_set_bit(card, card_requested))
- 					snd_request_card(card);
--				}
- 				snd_seq_device_load_drivers();
- 			}
- 		}
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -425,7 +425,6 @@ static int check_fs_bus_bw(struct mu3h_s
+ 
+ static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
+ {
+-	u32 extra_cs_count;
+ 	u32 start_ss, last_ss;
+ 	u32 start_cs, last_cs;
+ 
+@@ -461,18 +460,12 @@ static int check_sch_tt(struct mu3h_sch_
+ 		if (last_cs > 7)
+ 			return -ESCH_CS_OVERFLOW;
+ 
+-		if (sch_ep->ep_type == ISOC_IN_EP)
+-			extra_cs_count = (last_cs == 7) ? 1 : 2;
+-		else /*  ep_type : INTR IN / INTR OUT */
+-			extra_cs_count = 1;
+-
+-		cs_count += extra_cs_count;
+ 		if (cs_count > 7)
+ 			cs_count = 7; /* HW limit */
+ 
+ 		sch_ep->cs_count = cs_count;
+-		/* one for ss, the other for idle */
+-		sch_ep->num_budget_microframes = cs_count + 2;
++		/* ss, idle are ignored */
++		sch_ep->num_budget_microframes = cs_count;
+ 
+ 		/*
+ 		 * if interval=1, maxp >752, num_budge_micoframe is larger
 
 

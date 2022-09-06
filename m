@@ -2,160 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F99D5AF62F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734BA5AF631
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiIFUhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S230446AbiIFUiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiIFUhG (ORCPT
+        with ESMTP id S230166AbiIFUiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:37:06 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B993285AA4;
-        Tue,  6 Sep 2022 13:37:05 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id b9so9121785qka.2;
-        Tue, 06 Sep 2022 13:37:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=DZ0dxIN9tQK5jdKb/Xo71csBd9+xaWx/Qph+h8QMcik=;
-        b=bJkWA3f3zbGryciCNoKYUZlQ8sPDE+uuaOiPCWFKDnPVPKv0wE7qYv5u+fHKMffuZJ
-         VFdcDtR2OzCOOfHo0KXJgnO0tdOtWCWbzMD1ElXi2F9YaOdDwPggx+dQL0k8BRLGIjOZ
-         vOli4dJgZdMHMWwwbMXWkGtAm/5LhFPJ2fZXkjLn2dJ+C28NmnNMGMfWNG0g8/yW/KHk
-         muDpL8HhnNz3ndKUfiEstOy49yG8uhY9raY4CjLf2YIQEOJy6UR0kiWPjGc8RKzzfhBP
-         LVU8BzBddM9aE+hr2f58b/n5MH0OXT0yEdYbVDQ2cR0bsdII352N110l2obNfhvELGBj
-         YBKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=DZ0dxIN9tQK5jdKb/Xo71csBd9+xaWx/Qph+h8QMcik=;
-        b=qWYTorenEWGpdzFXiILBsZkKTIaV+MyG7tZQ25EZLprUpvQ5SI49X8utHFeAm29oyP
-         mtTKGlJy7ZLzrxczdDuumMBKxzh1/aaDTW6plN37vapJJI5PPxGfU7Vq1V25AhhQ36EV
-         EAdysjWcBclHnqn919+3oe5CBlwArpwq6FAs4FiS4SHzPgVhHxt2AJ9SF375pzxbkGSb
-         atNLN/ce8MyQbAnX9ucnI8Qg9/K3VklOYGSPxJfhQ84zq8cUdVknfZlE6KSbF+vB5+sg
-         fOu8Uer50dds0DoKEapiNixYqNiuzltOjUMd2Zj0IJ2ryug14vMxhoYHDZpVACSQdQnn
-         6hhg==
-X-Gm-Message-State: ACgBeo3aUKtRK/J4lgDxoBdKUOTSZ9HPLl3IAWoFPOJvOaNckO5D/Xux
-        g9O1UtG5RdFT5hMYNQut+RlBoAhBbtv+ILh2PKs=
-X-Google-Smtp-Source: AA6agR63gznhVonHJLFX9gUvtxHuMgp+NLO9da5Bjo90Te+ONTh0M1bKQ3ojMMU78IKD8Q9xatAvVSxsdXt8TMuc2AY=
-X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
- v17-20020ae9e311000000b006bae711fb27mr384530qkf.320.1662496624827; Tue, 06
- Sep 2022 13:37:04 -0700 (PDT)
+        Tue, 6 Sep 2022 16:38:15 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC2B876AC;
+        Tue,  6 Sep 2022 13:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DmGvl3uZQB8/M8fW3mjXEVral7dNpov0geEOt0uqNnA=; b=jPxkDIeusjNzbIYNQI1gH+MPWw
+        iptDBqorWRN298K3hEbKBLsGbuVfGBAqKQKk3tFj5nryUmK4f7y0dqQiltgRjfg+WktHaUJxYmCnK
+        hvV9E/qPf8FSGDDqFvNL+KuVkMfTIQ8wzFfe5QyTqRVX8UneXmDCDfDM7zdEioHiFaktmV01RqHfy
+        MmEM64l1Zmi8jBUIA0CvNApfss0x/JkLDlit3Zmu6C8fZ/g/5B/QxPfptpL/aTrK6e99G8/QiaQtj
+        4WxVTPHG06Sxcz/5tMrjfIc8UkRoPG8cczT3TXEhL/0KXSMyL/fSvavQOR404DLlbCZAGzBeY+x5q
+        JXpPVR1A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVfKd-00AkKB-AJ; Tue, 06 Sep 2022 20:38:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 61BB4300244;
+        Tue,  6 Sep 2022 22:38:00 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3D7AB2B929A27; Tue,  6 Sep 2022 22:38:00 +0200 (CEST)
+Date:   Tue, 6 Sep 2022 22:38:00 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
+        Jann Horn <jannh@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] perf: Allow restricted kernel breakpoints on user
+ addresses
+Message-ID: <YxevqB2OpJ9BLE+s@hirez.programming.kicks-ass.net>
+References: <20220902100057.404817-1-elver@google.com>
 MIME-Version: 1.0
-References: <20220906200535.1919398-1-eajames@linux.ibm.com> <20220906200535.1919398-3-eajames@linux.ibm.com>
-In-Reply-To: <20220906200535.1919398-3-eajames@linux.ibm.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 6 Sep 2022 23:36:28 +0300
-Message-ID: <CAHp75VcLiCRy_m35Sd4AGpOKQ+5WTXMzHZA7hcwDR-t1v46t2Q@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] iio: pressure: dps310: Reset chip after timeout
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joel Stanley <joel@jms.id.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902100057.404817-1-elver@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 11:05 PM Eddie James <eajames@linux.ibm.com> wrote:
->
-> The DPS310 chip has been observed to get "stuck" such that pressure
-> and temperature measurements are never indicated as "ready" in the
-> MEAS_CFG register. The only solution is to reset the device and try
-> again. In order to avoid continual failures, use a boolean flag to
-> only try the reset after timeout once if errors persist.
+On Fri, Sep 02, 2022 at 12:00:57PM +0200, Marco Elver wrote:
+> Allow the creation of restricted breakpoint perf events that also fire
+> in the kernel (!exclude_kernel), if:
+> 
+>   1. No sample information is requested; samples may contain IPs,
+>      registers, or other information that may disclose kernel addresses.
+> 
+>   2. The breakpoint (viz. data watchpoint) is on a user address.
+> 
+> The rules constrain the allowable perf events such that no sensitive
+> kernel information can be disclosed.
+> 
+> Despite no explicit kernel information disclosure, the following
+> questions may need answers:
+> 
+>  1. Is obtaining information that the kernel accessed a particular
+>     user's known memory location revealing new information?
+>     Given the kernel's user space ABI, there should be no "surprise
+>     accesses" to user space memory in the first place.
+> 
+>  2. Does causing breakpoints on user memory accesses by the kernel
+>     potentially impact timing in a sensitive way?
+>     Since hardware breakpoints trigger regardless of the state of
+>     perf_event_attr::exclude_kernel, but are filtered in the perf
+>     subsystem, this possibility already exists independent of the
+>     proposed change.
+> 
 
-If the previous patch is a dependency to this one, you need to use its
-Subject in a Cc: stable@ tag as it's pointed out in the documentation.
-Otherwise, Fixes go first in the series.
+Changelog forgot to tell us why you want this :-)
 
-...
-
-> +static int dps310_reset_reinit(struct dps310_data *data)
-> +{
-> +       int rc;
-> +
-> +       rc = dps310_reset_wait(data);
-> +       if (rc)
-> +               return rc;
-
-> +       rc = dps310_startup(data);
-> +       if (rc)
-> +               return rc;
-> +
-> +       return 0;
-
-Can be simply return _startup(...);
-
-> +}
-
-...
-
-Can it be a helper here?
-
-int dps310_get_ready_status(data, ready_bit, timeout)
-{
-  sleep = ...
-  int ready;
-
- return regmap_read_poll_timeout(...);
-
-}
-
-> +static int dps310_ready(struct dps310_data *data, int ready_bit, int timeout)
-> +{
-> +       int rc;
-> +       int ready;
-> +       int sleep = DPS310_POLL_SLEEP_US(timeout);
-
-> +       rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready, ready & ready_bit,
-> +                                     sleep, timeout);
-
-rc = dps310_get_ready_status(...);
-
-> +       if (rc) {
-> +               if (rc == -ETIMEDOUT && !data->timeout_recovery_failed) {
-> +                       int rc2;
-> +
-> +                       /* Reset and reinitialize the chip. */
-> +                       rc2 = dps310_reset_reinit(data);
-> +                       if (rc2) {
-> +                               data->timeout_recovery_failed = true;
-> +                       } else {
-
-> +                               /* Try again to get sensor ready status. */
-> +                               rc2 = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
-> +                                                              ready, ready & ready_bit, sleep,
-> +                                                              timeout);
-
-rc2 = dps310_get_ready_status(...);
-
-> +                               if (rc2)
-> +                                       data->timeout_recovery_failed = true;
-> +                               else
-> +                                       return 0;
-> +                       }
-> +               }
-> +
-> +               return rc;
-> +       }
-> +
-> +       data->timeout_recovery_failed = false;
-> +       return 0;
-> +}
-
---
-With Best Regards,
-Andy Shevchenko
+I don't see any immediate concerns, but it's late so who knows..

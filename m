@@ -2,100 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282A75AE578
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA215AE57A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238420AbiIFKhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S233256AbiIFKh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233801AbiIFKha (ORCPT
+        with ESMTP id S233801AbiIFKhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:37:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03FD50054;
-        Tue,  6 Sep 2022 03:37:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86124B8169E;
-        Tue,  6 Sep 2022 10:37:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7504C433C1;
-        Tue,  6 Sep 2022 10:37:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662460647;
-        bh=BuxP8jb9h9jN0GwTnwe4RVFoi8sw11ZHMZvZH1y85ug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dOXUAO02eBSo6akp7bs6auFNRuH/3OjhChGKIBZl00SaSPNBFAsHHE7IVnRan+Rpt
-         5Y091I+Igj9nKbB78xXfw4sNs2tsYmaobrsA5fUERV60piERPeJNh+ZH6v1beZnHbq
-         ymY9BsSkfPSYaE7n2Gg+5mwvE+QVn7G51oZfWRh4ZNeTM1mL7HY0QGDGrMGlXW5jXL
-         oT+VpStV3zdKqGazFJWgby5CVvWGnFy5leod+8a/K1ed1qn78Artd3pypLY9JzkItB
-         fKPOGYnjQmbhOLjI7OZq+vbjvXJ9zUncgvaby+BVS0hS/HP0ZyE0u1t38nITrci0O6
-         8MbKtlWIA17PQ==
-Date:   Tue, 6 Sep 2022 13:37:23 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v16 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
- and define KEY_LOOKUP_ALL
-Message-ID: <Yxci4yrV5OcMnTNi@kernel.org>
-References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
- <20220905143318.1592015-6-roberto.sassu@huaweicloud.com>
- <YxZsbLIAcR4/bScc@kernel.org>
- <394ed3b5f96afd3cf39e99675be1a32c89c8080d.camel@huaweicloud.com>
+        Tue, 6 Sep 2022 06:37:55 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3C950048
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:37:54 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id q3so10796959pjg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 03:37:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=Xz8bdPgR7exYL3R9SL9LcFFqWqgFZVil8ZYBWFtqEUU=;
+        b=cA7Hl5ls5U/OscRp4DobHKMQjNA6D5C4jKC+7Av/PRDOkYb+XEGwmPKNz+0wLOS61X
+         fhy0qVVTI5ldKJ0RhCmSDZqq/RQePtu4iAEe6umgDYn0MBNIb9KyPYXriWh+6o/CF8Ev
+         0SP2kzY3jn3Ut7Uwr3OOVvEv5KLxDMgFehbIVflowPFwUBRRMOLtK6Poj76c5WL10QlO
+         UZZU0VV5LbhyEHUDIUhN0ptJM5SMq1MRRmLd4NfX9PAtqxwkwlH2NCOb6SDzLvD0tb4k
+         HBIsZ8wCBCeGVl7izNloEowlXHHdNdvPd5dTbNnKUop2/NhG/cwTOuW0nFYVuh7pSAbQ
+         i+6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=Xz8bdPgR7exYL3R9SL9LcFFqWqgFZVil8ZYBWFtqEUU=;
+        b=oB2ReD9I8mu7V2Be5FsG78mSyD87DpKhPtdFlMOMnBGtZlEAtc48qiaZg7gsqsO8KX
+         IJJpF1++GExWW3clOeoqbicIxNHoNEEb9kZVNJ6Ol2FWbTNVMIMfO/fSC1aDxbxApwB8
+         kD+8CP/PC45KDZA0R45KhXyNtHbbbRPHw/fENYcQt9N6dbWNresL1Jl17ukC0n2owniG
+         2kEPWU0tPlm0/WDr/EOmt6o1Et7Ft+uo1ux05/zAPzZPUK5jEvES3OUIFzIjr5fo3y8B
+         qjXseQLuEv/E22Iv/O05rwh4StQdvZWHuuN3UJh8AzVTEwbM8+7pMp4mvMEP+AkS9p1F
+         /fIQ==
+X-Gm-Message-State: ACgBeo1EZ5EeTx6awPO1T04+eheqQtZhOYY4y7QtyniOZvfyuYrQcU+U
+        QNEkYJI51To2+LLg/rC7P8hy1g==
+X-Google-Smtp-Source: AA6agR58jEPcuQgEpaDM12qAcr3UOiSCl01qGenKN5dkhfPeBha2n6tYh8xoaVvbyMRX8m7ZKFA5dQ==
+X-Received: by 2002:a17:903:228c:b0:16e:df74:34e5 with SMTP id b12-20020a170903228c00b0016edf7434e5mr53043766plh.49.1662460673860;
+        Tue, 06 Sep 2022 03:37:53 -0700 (PDT)
+Received: from [10.4.233.171] ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id a16-20020a170902ecd000b00176db67ce98sm442737plh.3.2022.09.06.03.37.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 03:37:53 -0700 (PDT)
+Message-ID: <ca5e57fd-4699-2cec-b328-3d6bac43c8ef@bytedance.com>
+Date:   Tue, 6 Sep 2022 18:37:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <394ed3b5f96afd3cf39e99675be1a32c89c8080d.camel@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [External] Re: [PATCH] cgroup/cpuset: Add a new isolated
+ mems.policy type.
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, lizefan.x@bytedance.com,
+        wuyun.abel@bytedance.com
+References: <20220904040241.1708-1-hezhongkun.hzk@bytedance.com>
+ <YxWbBYZKDTrkmlOe@dhcp22.suse.cz>
+ <0e5f380b-9201-0f56-9144-ce8449491fc8@bytedance.com>
+ <YxXUjvWmZoG9vVNV@dhcp22.suse.cz>
+From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
+In-Reply-To: <YxXUjvWmZoG9vVNV@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 09:08:23AM +0200, Roberto Sassu wrote:
-> On Tue, 2022-09-06 at 00:38 +0300, Jarkko Sakkinen wrote:
-> > On Mon, Sep 05, 2022 at 04:33:11PM +0200, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > In preparation for the patch that introduces the
-> > > bpf_lookup_user_key() eBPF
-> > > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
-> > > able to
-> > > validate the kfunc parameters. Add them to enum key_lookup_flag, so
-> > > that
-> > > all the current ones and the ones defined in the future are
-> > > automatically
-> > > exported through BTF and available to eBPF programs.
-> > > 
-> > > Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking
-> > > whether a
-> > > variable contains only defined flags.
-> > > 
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > Reviewed-by: KP Singh <kpsingh@kernel.org>
-> > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > 
-> > You should remove ack if there is any substantial change.
+> On Mon 05-09-22 18:30:55, Zhongkun He wrote:
+>> Hi Michal, thanks for your reply.
+>>
+>> The current 'mempolicy' is hierarchically independent. The default value of
+>> the child is to inherit from the parent. The modification of the child
+>> policy will not be restricted by the parent.
 > 
-> Yes, sorry. I thought you were fine with the change due to:
+> This breaks cgroup fundamental property of hierarchical enforcement of
+> each property. And as such it is a no go.
 > 
-> https://lore.kernel.org/bpf/YxF4H9MTDj+PnJ+V@kernel.org/
+>> Of course, there are other options, such as the child's policy mode must be
+>> the same as the parent's. node can be the subset of parent's, but the
+>> interleave type will be complicated, that's why hierarchy independence is
+>> used. It would be better if you have other suggestions?
+> 
+> Honestly, I am not really sure cgroup cpusets is a great fit for this
+> usecase. It would be probably better to elaborate some more what are the
+> existing shortcomings and what you would like to achieve. Just stating
+> the syscall is a hard to use interface is not quite clear on its own.
+> 
+> Btw. have you noticed this question?
+> 
+>>> What is the hierarchical behavior of the policy? Say parent has a
+>>> stronger requirement (say bind) than a child (prefer)?
+>>>> How to use the mempolicy interface:
+>>>> 	echo prefer:2 > /sys/fs/cgroup/zz/cpuset.mems.policy
+>>>> 	echo bind:1-3 > /sys/fs/cgroup/zz/cpuset.mems.policy
+>>>>           echo interleave:0,1,2,3 >/sys/fs/cgroup/zz/cpuset.mems.policy
+>>>
+>>> Am I just confused or did you really mean to combine all these
+>>> together?
+>
 
-It was the documentation part, not really the enum change.
+Hi Michal, thanks for your reply.
 
-BR, Jarkko
+ >>Say parent has a stronger requirement (say bind) than a child(prefer)?
+
+Yes, combine all these together. The parent's task will use 'bind', 
+child's use 'prefer'.This is the current implementation, and we can 
+discuss and modify it together if there are other suggestions.
+
+1:Existing shortcomings
+
+In our use case, the application and the control plane are two separate 
+systems. When the application is created, it doesn't know how to use 
+memory, and it doesn't care. The control plane will decide the memory 
+usage policy based on different reasons (the attributes of the 
+application itself, the priority, the remaining resources of the 
+system). Currently, numactl is used to set it at program startup, and 
+the child process will inherit the mempolicy. But we can't dynamically 
+adjust the memory policy, except restart, the memory policy will not change.
+
+2:Our goals
+
+For the above reasons, we want to create a mempolicy at the cgroup 
+level. Usually processes under a cgroup have the same priority and 
+attributes, and we can dynamically adjust the memory allocation strategy 
+according to the remaining resources of the system. For example, a 
+low-priority cgroup uses the 'bind:2-3' policy, and a high-priority 
+cgroup uses bind:0-1. When resources are insufficient, it will be 
+changed to bind:3, bind:0-2 by control plane, etc.Further more, more 
+mempolicy can be extended, such as allocating memory according to node 
+weight, etc.
+
+Thanks.
+
+
+
+	
+
+
+

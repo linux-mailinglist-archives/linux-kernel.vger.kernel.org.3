@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6115AF32B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B085AF329
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiIFRyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S229669AbiIFRya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiIFRyd (ORCPT
+        with ESMTP id S229528AbiIFRy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:54:33 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A068165A1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GiUXHVc1KGNBibjdaKh+j2gIWazpgOCP8xIokdYlFQM=; b=QQLrDYzV9wr4utEH9S2536+iTk
-        tD10XRPwpcK63Nbc7cNBic/QE+NKY51nfBRi+2T9fmZtpjweSqHxuojRioKp6WpUUKx6vZe/D9WhT
-        CaPpNJzD2NzhTqxD/EFK8Ja0tx7ipNvN02Z2Ay3JUl+MWh4U1RJ4OdvOk4QClo+JIbQgjH9309hwQ
-        ZipxdF91K4MwkSJsClUM1nl71UhJIkD0r1+JIkdj7iqy9FlhM6Dn0b9MJpAxNFb0yprl9m39sIR/1
-        cEkE9Zn7bV8B29wp2/UCwtaq1kyKCUC1ovm3MoM7Km1FD+b62LqH7hNK0iRUMSoqPp7U+sUBCeAzI
-        QVoZoC9g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVclu-00Adcv-CD; Tue, 06 Sep 2022 17:54:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 66626300023;
-        Tue,  6 Sep 2022 19:53:57 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C1AA32B94A784; Tue,  6 Sep 2022 19:53:57 +0200 (CEST)
-Date:   Tue, 6 Sep 2022 19:53:57 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Eric Biggers <ebiggers@google.com>
-Subject: Re: [PATCH v2 1/5] smp: don't declare nr_cpu_ids if NR_CPUS == 1
-Message-ID: <YxeJNXBeQRAAP15o@hirez.programming.kicks-ass.net>
-References: <20220905230820.3295223-1-yury.norov@gmail.com>
- <20220905230820.3295223-2-yury.norov@gmail.com>
- <YxcKoaVGD+sTBjjG@hirez.programming.kicks-ass.net>
- <YxdT5w9Qd5SxK1wl@yury-laptop>
- <Yxda9/XP85D1sR39@hirez.programming.kicks-ass.net>
- <Yxdgrbvtv36C4zcJ@smile.fi.intel.com>
+        Tue, 6 Sep 2022 13:54:27 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025D79C214
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:54:16 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id cu2so25171571ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 10:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=K59f1Tpfob9n/llY6HrAt9pBw7AZwp44Lr77rOcXPy4=;
+        b=PDObf7vFCbGSWNV4kWnyUou5IM7KJ+sNRDRNRPdolWMsXhi2ITI6riQuQHZJR/DNum
+         Gh2esEm4P8TOkV7teSdUKVd7CBRxdcI1p1yIPXCc3OR1iCbd4EXCQWi1QSkgv1r4ysSk
+         cJ1/hZgyeL0d+xXFJQsai89xsYBc54GD2jy4wfjFW/h+Mu75dTqLzJimHqLDrjLcsj7Y
+         W2ae0YMJCUP7LEO6idA3NtuAI0F51t5Q06IwQb4j9jMQ70WfJ0qFy662jS/EAyvbNdlY
+         vDs0IjqJxhVAOu4JQGrNhlD2BUuo88/A8C/lOKWDN2R22qswy3sXWF092F9IuZewBUOF
+         RM3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=K59f1Tpfob9n/llY6HrAt9pBw7AZwp44Lr77rOcXPy4=;
+        b=AiXxbSkkEWIC3IsHnsVjy2xQhOD0fR9B2xhtsgh9FRDSEZgLzQyRyjj7tBBGyrKzSh
+         /SRXwhq4h1R1NE4FvfyP4aVMJ3i/2pCW9oIfHancP7QVsPHcC01TFnY0P6q6fM+OmkSA
+         1VMnXnWkHzyzuKsO8NWF3KBXsCbYV8iWnzzz+BjIGR1n790TZzVmJz5s8D4TdCFeRmgV
+         rFcEnBwBsDQbSlqsOTlBqzTNBcAF9u5mSUVdX8Up4sJg9S7MADeq4HCZiIgwV7igIpQ7
+         TrsS3HCJDYCFjVP9qQChFcBWONC6jqy10a2HC2Z4CJfarBbROKzYVwfKY35AdCOqViwk
+         7AgA==
+X-Gm-Message-State: ACgBeo2IDP7yikka8a7k3IqLcai84dm6Ca8GwCkFf1Xq1bC3m5hz3p/F
+        adDkxKX1UR3PIKo+zCC4w0LVHfjbEpxj2S1kAKpfcUsbPVd7eA==
+X-Google-Smtp-Source: AA6agR51MYsEt6ivwSqpu6UMxCLznx2GE3B6Uyw2AaskZ4nTVXSeOt7nArLSeVttRGegolcDERQ7UTEeV1U5ZoeeZBg=
+X-Received: by 2002:a17:907:d0c:b0:741:6115:a69 with SMTP id
+ gn12-20020a1709070d0c00b0074161150a69mr32162441ejc.325.1662486854579; Tue, 06
+ Sep 2022 10:54:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxdgrbvtv36C4zcJ@smile.fi.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220818172852.3548-1-isaacmanjarres@google.com> <094b6125-6b3e-1b8e-024f-a924e4775305@gmail.com>
+In-Reply-To: <094b6125-6b3e-1b8e-024f-a924e4775305@gmail.com>
+From:   Isaac Manjarres <isaacmanjarres@google.com>
+Date:   Tue, 6 Sep 2022 10:54:03 -0700
+Message-ID: <CABfwK12ChYDmhvR2EO1q2NUS4Zhd1WO8UWWoSVNY331wwbKS0w@mail.gmail.com>
+Subject: Re: [PATCH v2] amba: Fix use-after-free in amba_read_periphid()
+To:     Gabriel Francisco <frc.gabriel@gmail.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Saravana Kannan <saravanak@google.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        patches@armlinux.org.uk, Guenter Roeck <linux@roeck-us.net>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 06:01:01PM +0300, Andy Shevchenko wrote:
+On Sun, Sep 4, 2022 at 4:15 AM Gabriel Francisco <frc.gabriel@gmail.com> wrote:
+>
+> This patch alone on top of v6.0-rc2 still gives me the null pointer.
+>
+> But combining it with Zhen Lei's patch (from
+> https://lkml.org/lkml/2022/8/27/164) my device boots successfully.
 
-> For the record, Intel produced somewhat a volume of Intel Quark chips [1],
-> that are UP (in 2013-2019).
+Hi Gabriel,
 
-The day we drop 32bit x86 support can't be soon enough ;-)
+Thanks for your e-mail. I think my AMBA bus patch and
+https://lore.kernel.org/all/20220817184026.3468620-1-isaacmanjarres@google.com/
+(merged in 6.0-rc4), instead of Zhen Lei's patch, should fix the
+problem entirely.
+
+Thanks,
+Isaac

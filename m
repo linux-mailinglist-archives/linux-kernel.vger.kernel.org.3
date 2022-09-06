@@ -2,62 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B195AE5D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67DB5AE5E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239944AbiIFKro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S239910AbiIFKua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239833AbiIFKqd (ORCPT
+        with ESMTP id S239897AbiIFKtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:46:33 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8F275CCA;
-        Tue,  6 Sep 2022 03:45:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662461126; x=1693997126;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nAdc8Rr843R6WJOu79NKjIig8n6+aOXK81VmIUMIj3g=;
-  b=M0Vy69RMHMHQN2GsgOb9w/bZh5RFY5aBqudnM0EftW5rHxW2VfFDPDWo
-   QVNCoPMi38tOEu2uTlCGU1Ip23q3FZ5ZyhM03w05No8lyTJwCm9UuTBwX
-   z+TON5R+hmumaEVvvjEmWBkgMk+XBAhe+WBh3LsxuE9J+UJ4clhyhGCfY
-   pIe6KohlRXipDDN8KbTrEEBdI458x//SH8rrgaV7dgLcg/QwZViqaIEjY
-   uBd0qFCYJXnp6xyaYhb+Y5pqHIk4JZBXeL1dXB2dm7L4FYwqi4HP+7bNJ
-   QGoh/eP67X1l+hS/6YGvAoruJBhk9RZI1EQSOtAeew1EtyWm7Beq4XrUZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="358277620"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="358277620"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 03:45:12 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="644121884"
-Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 03:45:09 -0700
-Date:   Tue, 6 Sep 2022 12:45:00 +0200
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [Intel-wired-lan] [PATCH] ice: switch: Simplify memory allocation
-Message-ID: <YxckrI4ZWgBybPK5@localhost.localdomain>
-References: <55ff1825aee6e655c41cb6770ca44f0fbdbfec00.1662301068.git.christophe.jaillet@wanadoo.fr>
+        Tue, 6 Sep 2022 06:49:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3C37C1C5;
+        Tue,  6 Sep 2022 03:48:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8E7951F9BC;
+        Tue,  6 Sep 2022 10:48:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662461291; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q3rkXIagMmmA69aWcds1BM5RGdYgpYHt9G+1K9Bag0Y=;
+        b=z2hW9YJjVsEZuFUGGaJpT6YCB5+9ddQ0vw9X3t7zqXq92Nz3wVEjvckg9K/zDvcqw+EC9w
+        8jLSx9ftLtXvz0U3vuKs9bkTfI6pslJ5y+bcD8Gvu3QTuL10L73IG2RXe290hWnVo/J4yg
+        F7aYT6ljOK3YunyYmsrtT+VO0dqMAzc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662461291;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q3rkXIagMmmA69aWcds1BM5RGdYgpYHt9G+1K9Bag0Y=;
+        b=alY8JjNRmhYSNjggnEtvcyU219S6dGl4LGO4N6cOKf3MQ1eUOaNJdYtHQ5JeceWWkeURId
+        6dH6wqNnTzozJTAw==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DF9E12C141;
+        Tue,  6 Sep 2022 10:48:08 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v3 0/4] tty: TX helpers
+Date:   Tue,  6 Sep 2022 12:48:01 +0200
+Message-Id: <20220906104805.23211-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <55ff1825aee6e655c41cb6770ca44f0fbdbfec00.1662301068.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,53 +89,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 04, 2022 at 04:18:02PM +0200, Christophe JAILLET wrote:
-> 'rbuf' is locale to the ice_get_initial_sw_cfg() function.
-> There is no point in using devm_kzalloc()/devm_kfree().
-> 
-> use kzalloc()/kfree() instead.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> As a side effect, it also require less memory. devm_kzalloc() has a small
-> memory overhead, and requesting ICE_SW_CFG_MAX_BUF_LEN (i.e. 2048) bytes,
-> 4096 are really allocated.
-> ---
->  drivers/net/ethernet/intel/ice/ice_switch.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_switch.c b/drivers/net/ethernet/intel/ice/ice_switch.c
-> index 697feb89188c..eb6e19deb70d 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_switch.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_switch.c
-> @@ -2274,9 +2274,7 @@ int ice_get_initial_sw_cfg(struct ice_hw *hw)
->  	int status;
->  	u16 i;
->  
-> -	rbuf = devm_kzalloc(ice_hw_to_dev(hw), ICE_SW_CFG_MAX_BUF_LEN,
-> -			    GFP_KERNEL);
-> -
-> +	rbuf = kzalloc(ICE_SW_CFG_MAX_BUF_LEN, GFP_KERNEL);
->  	if (!rbuf)
->  		return -ENOMEM;
->  
-> @@ -2324,7 +2322,7 @@ int ice_get_initial_sw_cfg(struct ice_hw *hw)
->  		}
->  	} while (req_desc && !status);
->  
-> -	devm_kfree(ice_hw_to_dev(hw), rbuf);
-> +	kfree(rbuf);
->  	return status;
->  }
->  
-> -- 
-> 2.34.1
-> 
+This series introduces DEFINE_UART_PORT_TX_HELPER +
+DEFINE_UART_PORT_TX_HELPER_LIMITED TX helpers. See PATCH 2/4 for the
+details. Comments welcome.
 
-Thanks for catching that
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Then it switches drivers to use them. First, to
+DEFINE_UART_PORT_TX_HELPER() in 3/4 and then
+DEFINE_UART_PORT_TX_HELPER_LIMITED() in 4/4.
 
-> _______________________________________________
-> Intel-wired-lan mailing list
-> Intel-wired-lan@osuosl.org
-> https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
+The diffstat of patches 3+4 is as follows:
+ 26 files changed, 191 insertions(+), 823 deletions(-)
+which appears to be nice.
+
+Cc: Tobias Klauser <tklauser@distanz.ch>
+Cc: Richard Genoud <richard.genoud@gmail.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: "Andreas Färber" <afaerber@suse.de>
+Cc: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: "Pali Rohár" <pali@kernel.org>
+Cc: Kevin Cernekee <cernekee@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Orson Zhai <orsonzhai@gmail.com>
+Cc: Baolin Wang <baolin.wang7@gmail.com>
+Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: linux-riscv@lists.infradead.org
+
+Jiri Slaby (4):
+  tty: serial: move and cleanup vt8500_tx_empty()
+  tty: serial: introduce transmit helper generators
+  tty: serial: use DEFINE_UART_PORT_TX_HELPER()
+  tty: serial: use DEFINE_UART_PORT_TX_HELPER_LIMITED()
+
+ Documentation/driver-api/serial/driver.rst |  3 +
+ drivers/tty/serial/21285.c                 | 33 ++-------
+ drivers/tty/serial/altera_jtaguart.c       | 42 +++--------
+ drivers/tty/serial/altera_uart.c           | 37 ++--------
+ drivers/tty/serial/amba-pl010.c            | 37 ++--------
+ drivers/tty/serial/apbuart.c               | 36 ++--------
+ drivers/tty/serial/atmel_serial.c          | 29 ++------
+ drivers/tty/serial/bcm63xx_uart.c          | 47 +++----------
+ drivers/tty/serial/fsl_lpuart.c            | 38 +++-------
+ drivers/tty/serial/lantiq.c                | 44 ++++--------
+ drivers/tty/serial/lpc32xx_hs.c            | 38 ++--------
+ drivers/tty/serial/mcf.c                   | 27 ++------
+ drivers/tty/serial/mpc52xx_uart.c          | 43 +-----------
+ drivers/tty/serial/mps2-uart.c             | 29 +-------
+ drivers/tty/serial/mux.c                   | 46 ++++--------
+ drivers/tty/serial/mvebu-uart.c            | 40 ++---------
+ drivers/tty/serial/mxs-auart.c             | 31 ++-------
+ drivers/tty/serial/omap-serial.c           | 47 ++++---------
+ drivers/tty/serial/owl-uart.c              | 35 +---------
+ drivers/tty/serial/pxa.c                   | 39 +++--------
+ drivers/tty/serial/rp2.c                   | 36 ++--------
+ drivers/tty/serial/sa1100.c                | 49 +++++--------
+ drivers/tty/serial/serial_txx9.c           | 37 ++--------
+ drivers/tty/serial/sifive.c                | 45 ++----------
+ drivers/tty/serial/sprd_serial.c           | 38 ++--------
+ drivers/tty/serial/st-asc.c                | 50 ++-----------
+ drivers/tty/serial/vt8500_serial.c         | 40 ++---------
+ include/linux/serial_core.h                | 81 ++++++++++++++++++++++
+ 28 files changed, 275 insertions(+), 822 deletions(-)
+
+-- 
+2.37.3
+

@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2605AF74E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4E65AF759
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiIFVub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S230020AbiIFVuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiIFVu1 (ORCPT
+        with ESMTP id S229892AbiIFVui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:50:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FC574CDC
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662501024;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zwvFhPvKtvilznQKajYnoXzh1pGf+L3B/vF7sjwMGQA=;
-        b=ENSy8A2aHMU25YrQBXaahVPAJ5CENy6SEnNTvGoVx/fuIZDIDljMbTT+NGZ0S71nO3s9Be
-        t0qAwoHvjTYopGfoyjpK3gVlhtl5wVThkaYdF9kkNAiL8KhkmqKTp2OKTaC/KeYQvSTSh7
-        g3z8RT/DlW4kYtcK9MoZkDbFa9xoa6o=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-593-5xfNJyJeMbC4CxwtDqYrrA-1; Tue, 06 Sep 2022 17:50:23 -0400
-X-MC-Unique: 5xfNJyJeMbC4CxwtDqYrrA-1
-Received: by mail-qk1-f200.google.com with SMTP id f1-20020a05620a280100b006bc4966f463so10353128qkp.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 14:50:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=zwvFhPvKtvilznQKajYnoXzh1pGf+L3B/vF7sjwMGQA=;
-        b=ValdIZ6xg7rSt5bzxftYek+RdKjBlGrB1Kb4GdArgMYqrPOg94dHgp58rBIFvbi72W
-         r2kIBMjWtsHZhQlgL2CWzOMwtncf75vApp49vbwarec415h16NBdVCwsXFPjxdlb5EWq
-         xqlDevKulF6WYp1fVMDf7UlhzBwI/Q2UmMnhZeON8aB7vAfu2GjgcruxJDli8KVq+SQS
-         qRRriAsokp6E4PbG05wH4oEg5LF4jW/YOqo/a1hqSHsTKQ0w1eyj8gVACg4+KX7xuimm
-         Z6tl5w3tvX2+1ndiXbNkTdz5WSp2EuiLfvKO6YadWSkoB6UlqPlTA4qwth0rVJwhXJJq
-         wKCg==
-X-Gm-Message-State: ACgBeo0iliQsLdYT6reR2VcxsbB5p/LGC/dN6lzEPxJWde067EKgKxcB
-        LnWsrbnjOrZXVz+YXxD6Gv04tjcMhQfm0dobKW2JQqzH+Dl6TZKtyq+F4UwfdcsR5EK+wpgJcYH
-        F27KY4SmDGQ4zVCndNOTNDQQ1
-X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id v6-20020ac85786000000b003433051170dmr588594qta.429.1662501023158;
-        Tue, 06 Sep 2022 14:50:23 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR79T3LmyqmdTcNPv4LymbPlxF6iExv08J532N/Q2bCHBhnmUIrEyOP/O8n8G9aGclC2TQxQTQ==
-X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id v6-20020ac85786000000b003433051170dmr588584qta.429.1662501022944;
-        Tue, 06 Sep 2022 14:50:22 -0700 (PDT)
-Received: from halaneylaptop ([2600:1700:1ff0:d0e0::a])
-        by smtp.gmail.com with ESMTPSA id l3-20020ac80783000000b00342fcdc2d46sm11175488qth.56.2022.09.06.14.50.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 14:50:22 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 16:50:20 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        linux-arm-msm@vger.kernel.org, johan@kernel.org,
-        lgirdwood@gmail.com, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, broonie@kernel.org
-Subject: Re: [PATCH v2] regulator: dt-bindings: qcom,rpmh: Indicate
- regulator-allow-set-load dependencies
-Message-ID: <20220906215020.igxpywsdlmzpt7fp@halaneylaptop>
-References: <20220906201959.69920-1-ahalaney@redhat.com>
- <1662500460.139898.1224962.nullmailer@robh.at.kernel.org>
+        Tue, 6 Sep 2022 17:50:38 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA7C8169D;
+        Tue,  6 Sep 2022 14:50:36 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286JpqwO024241;
+        Tue, 6 Sep 2022 14:50:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
+ cc : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=pfpt0220; bh=jQU6reTeYH+IJprwVs9mmFbt7uN5byGxcZN1tT/HGfU=;
+ b=SDsdukzkFs4WA8U76J3JkrWSz18SUTkwZdQngfzMlNc0P018ax1y/eLTgAaE7QV51TVp
+ L+M3cYwBzEaVz4ajcCC3YWUjFQbLZq7mEVEwPo1iYeJz6gryonq7r07mJwdkpranSGLL
+ m+kJrYxUIQ8ItKXIx47zXqXkx1COrqxzRX8k3gkrfrmbXXUVRa20te0omht8hLlHYJme
+ VqA97QiNRQK7O0PwVW2Et1iwhFGLR22R84ivoCGKvXMNxl2L7bD8WtJ7tZm7WhdJnNxL
+ VV7b6KHPuCTpXxAXGCm0rcoTb8F/r3+z9L5N/X8dSVeRhTF1NJCnXzF1+9bjUz/7iwMc Lg== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3jc6epua5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 14:50:34 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 6 Sep
+ 2022 14:50:31 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Tue, 6 Sep 2022 14:50:31 -0700
+Received: from mvluser05.qlc.com (unknown [10.112.10.135])
+        by maili.marvell.com (Postfix) with ESMTP id B1A9A3F7096;
+        Tue,  6 Sep 2022 14:50:31 -0700 (PDT)
+Received: from localhost (aeasi@localhost)
+        by mvluser05.qlc.com (8.14.4/8.14.4/Submit) with ESMTP id 286LoVcH024613;
+        Tue, 6 Sep 2022 14:50:31 -0700
+X-Authentication-Warning: mvluser05.qlc.com: aeasi owned process doing -bs
+Date:   Tue, 6 Sep 2022 14:50:30 -0700
+From:   Arun Easi <aeasi@marvell.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: [EXT] build failure of next-20220906 due to 8bfc149ba24c ("scsi:
+ qla2xxx: Enhance driver tracing with separate tunable and more")
+In-Reply-To: <20220906174140.41b46a5f@gandalf.local.home>
+Message-ID: <4f075c88-19b4-f0fd-a735-90a072c70879@marvell.com>
+References: <YxdZ/9XOsWilvVSd@debian>
+ <44fe9ca0-e1d7-1e4f-9fd8-0f48a84dca72@marvell.com>
+ <CADVatmMsYk+tgJDASx2uoskLzY=b4m7SNo+3R6SXT=0vEnu+vA@mail.gmail.com>
+ <20220906170346.52c3f592@gandalf.local.home>
+ <e9f5eb5e-3830-d19b-dcb0-05f7a36fcb2d@marvell.com>
+ <20220906174140.41b46a5f@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1662500460.139898.1224962.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="US-ASCII"
+X-Proofpoint-ORIG-GUID: zfBspUCi02Zf9F2IFyByeMPkiCRqAJOK
+X-Proofpoint-GUID: zfBspUCi02Zf9F2IFyByeMPkiCRqAJOK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,74 +81,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 04:41:00PM -0500, Rob Herring wrote:
-> On Tue, 06 Sep 2022 15:19:59 -0500, Andrew Halaney wrote:
-> > For RPMH regulators it doesn't make sense to indicate
-> > regulator-allow-set-load without saying what modes you can switch to,
-> > so be sure to indicate a dependency on regulator-allowed-modes.
-> > 
-> > With this in place devicetree validation can catch issues like this:
-> > 
-> >     /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-> >             From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-> > 
-> > Suggested-by: Johan Hovold <johan@kernel.org>
-> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> > ---
-> > 
-> > v1: https://lore.kernel.org/linux-arm-msm/20220902185148.635292-1-ahalaney@redhat.com/
-> > Changes since v1:
-> >   - Dropped first two patches in the series as they were user error
-> >     (thanks Krzysztof for highlighting this!)
-> >   - No change in the remaining patch
-> > 
-> > Krzysztof also asked if this patch in particular should apply to other
-> > regulators, which I think it should for those regulator's who implement
-> > set_mode(). Unfortunately I don't know of a good way to get that
-> > information in order to apply it at a broader scope for devicetree
-> > regulator validation. At least with this in place RPMH users can get
-> > better coverage... if someone has suggestions for how to broaden the
-> > scope I'm all ears!
-> > 
-> > Thanks,
-> > Andrew
-> > 
-> >  .../devicetree/bindings/regulator/qcom,rpmh-regulator.yaml    | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
+On Tue, 6 Sep 2022, 2:41pm, Steven Rostedt wrote:
+
+> On Tue, 6 Sep 2022 14:26:31 -0700
+> Arun Easi <aeasi@marvell.com> wrote:
 > 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
+> > Steve, I was thinking both the fixes stay at least for a short 
+> > term the one in qla2xxx to avoid tree dependencies.
+> > 
+> > Since, the qla_def.h change goes as:
+> > 
+> > +#ifndef CONFIG_TRACING
+> > +#ifndef trace_array_get_by_name
+> > 
+> > ..it should co-exist when the "#define trace_array_get_by_name" gets 
+> > merged in include/linux/trace.h. BTW, I will send out the changes to 
+> > trace.h today.
+> > 
+> > Other alternatives/suggestions welcome.
 > 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
+> I doubt I'll have anything that conflicts with an update to
+> include/linux/trace.h, as it is seldom modified.
 > 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
+> Just sent a patch out that updates that file and I'll review it, and then
+> you can push it through your tree.
 > 
 
-<snip>
+Sounds good. Thanks Steve.
 
-> 
-> pmm8540-g-regulators: ldo8: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-> 	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-> 
-> pmm8540-g-regulators: qcom,pmic-id:0: 'g' is not one of ['a', 'b', 'c', 'd', 'e', 'f', 'h', 'k']
-> 	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-> 
-> pmm8540-g-regulators: Unevaluated properties are not allowed ('qcom,pmic-id' was unexpected)
-> 	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-> 
-
-Please note in case I didn't make it obvious in the commit message, the
-regulator-allowed-modes dependency warning is the intent of this commit,
-and those warnings go away once this patch series is applied:
-
-    https://lore.kernel.org/all/20220829164952.2672848-1-dianders@chromium.org/
-
-The last two are old warnings (that I have yet to look into).
-
-Thanks,
-Andrew
-
+Regards,
+-Arun

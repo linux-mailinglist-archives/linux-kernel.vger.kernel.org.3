@@ -2,108 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447875AF72A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CED5AF71A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiIFVln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S229910AbiIFVlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiIFVl3 (ORCPT
+        with ESMTP id S229546AbiIFVlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:41:29 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049F09CCE1;
-        Tue,  6 Sep 2022 14:41:24 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id pj10so2203717pjb.2;
-        Tue, 06 Sep 2022 14:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=KXWoT9EuSbOt9nePjiUUdf0oshHpDWDtGCi8pF2h50U=;
-        b=L/ZW1aQIc7XbaIj/P2WsdtKQeUZstgyo46isMATHBR3E3MqQvPC7yPtIVGzFDYqqqx
-         6EFL5KIgCXLe6zm1oKyQbiHxz5YDJvct4VS1H0VYbBJ7Csil4/yKKvQ08PljHOlG2XEC
-         kFRMbcYNIfwum6pp6BgryfSBaof3oNoRry95NgzwDMvTtjh5LFV9iVWYDOoLHYwOxOmc
-         BC6hDD32EFH4+Wvi9LLzMOfL4Io0jLT3E9zJ0YfBquFpfR78RXBt0M7TFnTpU2MsxACy
-         ygOJqCRZZslXIbA50dkkY29KCBmu5hpHV4mQBpWf5lg2ddoB8toR23cEZrX/RrJ58G/m
-         yS7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=KXWoT9EuSbOt9nePjiUUdf0oshHpDWDtGCi8pF2h50U=;
-        b=u35zl9QSgchMzhwLuMNbZmFL8x86vxep42EsIpOCpQ6xy2k/kNv+1ka+OUphdyNsnZ
-         E15ZPgWHkIiwL9uXqu3n1atnKOi15Arc65/Ftaey8BwfnEXzvgS6MQ3RmsqL+gC1TnoP
-         wVKnue15ohpnGl4HzHmoTGLtg3W1/sljFKryrFl284d3XG2KtpOnotM52AL3XWteufx8
-         5W8HB5EnieGyFyB2PCvc46ikk6gSqTNBRY82nxqKI+7mcFfh7CQSV+r799v9lZo3PrYS
-         cpOnenX8TKlFOhC7vH9Q2RFcxua8FRrlOgK/OaFaQWe0RkOZ5w91tEsix/IJjOdAOt9c
-         E5Aw==
-X-Gm-Message-State: ACgBeo3hCw6LdQJo++SsO/pWe4LcXA52pVYcO6vDTNdr5RnjsFDdr02A
-        aspcHFgTqhOcbfCARizFHf8=
-X-Google-Smtp-Source: AA6agR7xRMfCeJ8pXahcgMxPoFOWsnEGzC98sW+t/jWKHmRwoTPEsvKLL1qsbs4pGkus/FeiFWqGog==
-X-Received: by 2002:a17:903:248b:b0:172:a790:3206 with SMTP id p11-20020a170903248b00b00172a7903206mr465623plw.139.1662500483979;
-        Tue, 06 Sep 2022 14:41:23 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:abc4:5d24:5a73:a96b])
-        by smtp.gmail.com with ESMTPSA id w13-20020a1709027b8d00b0016c0eb202a5sm10392565pll.225.2022.09.06.14.41.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 14:41:23 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 14:41:20 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Shawn Guo <shawn.guo@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] PCI: histb: switch to using gpiod API
-Message-ID: <Yxe+gPl5qeqJuC4Z@google.com>
-References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
- <20220906210811.5kzdq66eeeauk2d3@pali>
+        Tue, 6 Sep 2022 17:41:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454BA8671E;
+        Tue,  6 Sep 2022 14:41:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D56F06132D;
+        Tue,  6 Sep 2022 21:41:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EEFCC433C1;
+        Tue,  6 Sep 2022 21:41:01 +0000 (UTC)
+Date:   Tue, 6 Sep 2022 17:41:40 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Arun Easi <aeasi@marvell.com>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: [EXT] build failure of next-20220906 due to 8bfc149ba24c
+ ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more")
+Message-ID: <20220906174140.41b46a5f@gandalf.local.home>
+In-Reply-To: <e9f5eb5e-3830-d19b-dcb0-05f7a36fcb2d@marvell.com>
+References: <YxdZ/9XOsWilvVSd@debian>
+        <44fe9ca0-e1d7-1e4f-9fd8-0f48a84dca72@marvell.com>
+        <CADVatmMsYk+tgJDASx2uoskLzY=b4m7SNo+3R6SXT=0vEnu+vA@mail.gmail.com>
+        <20220906170346.52c3f592@gandalf.local.home>
+        <e9f5eb5e-3830-d19b-dcb0-05f7a36fcb2d@marvell.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220906210811.5kzdq66eeeauk2d3@pali>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 11:08:11PM +0200, Pali Rohár wrote:
-> On Tuesday 06 September 2022 13:43:00 Dmitry Torokhov wrote:
-> > +	ret = gpiod_set_consumer_name(hipcie->reset_gpio,
-> > +				      "PCIe device power control");
+On Tue, 6 Sep 2022 14:26:31 -0700
+Arun Easi <aeasi@marvell.com> wrote:
+
+> Steve, I was thinking both the fixes stay at least for a short 
+> term the one in qla2xxx to avoid tree dependencies.
 > 
-> Just unrelated thing, I know it was there before, but I saw it just now
-> and have to comment it: This is absolute nonsense name. "reset-gpios"
-> device tree property specifies PERST# signal pin (PciE ReSeT) as defined
-> in PCIe CEM (Card ElectroMagnetic) specification and it has absolute
-> nothing with PCIe power control.
+> Since, the qla_def.h change goes as:
 > 
-> My suggestion for maintainers would be to remove this critic name at
-> all as it would just mislead other people reading that code.
-
-I can respin the patch is you suggest a more sensible label...
-
+> +#ifndef CONFIG_TRACING
+> +#ifndef trace_array_get_by_name
 > 
-> > +	if (ret) {
-> > +		dev_err(dev, "unable to set reset gpio name: %d\n", ret);
-> > +		return ret;
-> >  	}
+> ..it should co-exist when the "#define trace_array_get_by_name" gets 
+> merged in include/linux/trace.h. BTW, I will send out the changes to 
+> trace.h today.
+> 
+> Other alternatives/suggestions welcome.
 
-Thanks.
+I doubt I'll have anything that conflicts with an update to
+include/linux/trace.h, as it is seldom modified.
 
--- 
-Dmitry
+Just sent a patch out that updates that file and I'll review it, and then
+you can push it through your tree.
+
+-- Steve

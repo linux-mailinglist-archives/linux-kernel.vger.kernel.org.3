@@ -2,77 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386575AE046
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10475AE052
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238711AbiIFGwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 02:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        id S233288AbiIFGz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 02:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238714AbiIFGwO (ORCPT
+        with ESMTP id S232690AbiIFGz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 02:52:14 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100A972EC6
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 23:52:10 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id k18so11188331lji.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 23:52:10 -0700 (PDT)
+        Tue, 6 Sep 2022 02:55:27 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B61222AB
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 23:55:24 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id q7so15930274lfu.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 23:55:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=pg/k2BKeuoUb9BSQqMtaRqCPumr70GT5UhAxF2oEgQM=;
-        b=HktmtzseBu9APk/Y/0Enxh3WilmA1qFkbnVK6HrsFvBI/HALpUtAkYwHtx1e7KFdPQ
-         CiTKoCDCTqznqfPoHCO8+XHDjN1Ls11iNAR+BgyxUwha3cDk+lhoYnnsFKqxI6IdDdkg
-         ZkLfVNZoG+ej2R9DEI3nVjBEkVZoN1FyOOYpuThHUFlBbGpvXxmTaNNzf6f+ONeIrLwO
-         yQN0miPVnzPMZvNpEveAgbZMHtZnXxAaATZDMXI3PtJEljUS71gnCywFBYB0u7r7xlYP
-         VbWMSFEAgJdONFa/du8UGDM1XUT+WYICUb0DeGauyMd/lcoeS8bHzT/Cvm4o3/ZqbUhc
-         4frQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=wh3DrshFuMrtCLf0BuRQmMVBCMCXL0RvjOcQdTVJyLE=;
+        b=nUXufdMgiWM6zDHuYCC3ppeM71QKns8eddubLSl/ELC1dCJ9d2BHO8lsm97i9NiVX8
+         5tN0FI6S9apPwpq0auM99UuiKFk13F6y7F2cQ0zFbPx1vq58/g9/I7Fic0tx/rk2zKzg
+         7XlEenipV9+gLslX8aYvYlO7Cy+nVBcoSgWh7r7oDi0JTCUaz3+YpxhNUvAt91KCGMdY
+         gbSCO6/rrUnIa/XnNsG2+aNz1Vm3SVmYKkJiEcUCpz19U3xP6P7W53RTlFYOPTmGK3rN
+         xmh2wDRkHwuc2tbMXTu+zWlwkRJk6ukunH0uhWN2mHOaoLRVyZm4KK0Xh7wh9GnWchMb
+         NUTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=pg/k2BKeuoUb9BSQqMtaRqCPumr70GT5UhAxF2oEgQM=;
-        b=b3PPcoCV1VDVeVjcrlGlx9y2YsZKI8s+iMVsWstjAsk428aPSyZygurE2CbLtqEkOU
-         r4RslPwQo0mAFy2oB0Pkdf3uGOXON3fLF4VLZdhrbqLCke3bYfAgOkQyFLssiTwP9abk
-         q0LPWnLVid6s9gDexfSm8tvqh95vYt7dqKChCWAIal5C9u1C+NFsOjmMdePXtgWJSnEg
-         2bxYYPWkZ7ENeMq6hQAUoClISmmkUcpb632E0AZ8XU0bzqhNFAuz1XAnTFV2v2OLMvN6
-         lPgq6uLE31PiY6VfnvPOhQBcOzT4LZUd+POliqaf6A1njBT/5xxhXuWJhOewkoH7+jkH
-         HBPQ==
-X-Gm-Message-State: ACgBeo0piWK0pfo1h0HkVB0It2Dyi+T2Gcn7wjp6zbA4WSE9YBn8ciSP
-        lm4ZIsBYZPdp5b9jAn25aO2VKu8jF/1X/PN1+Nc1Zw==
-X-Google-Smtp-Source: AA6agR6AVqVzW2ydtHH70ol33I0L7Cv0YvSK+JMvHBhL0OMazBsLyNbNZkfG0NYuQjNFPFGxqBsRHGebHlq4QT18KF4=
-X-Received: by 2002:a05:651c:1047:b0:264:f7bb:7b6 with SMTP id
- x7-20020a05651c104700b00264f7bb07b6mr12695077ljm.275.1662447129027; Mon, 05
- Sep 2022 23:52:09 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=wh3DrshFuMrtCLf0BuRQmMVBCMCXL0RvjOcQdTVJyLE=;
+        b=xFXm4qxIWe01klq5Eq2AMq9d/wJZVJQH6h4NF2CIU9kr1G4AjsT1VdY4XVkvxBgM5e
+         zUGwvnvim7+0MXj0X0mn6hJZPG4u5EmsVR0yjA7GMQ/JI+3ctOmdhpXD3pNyIZ03ciU/
+         fU7M/BLYImfIMHgCPZvQ3GS+/13XrSm9dqoiKqm+Gm9LZPlx2Cs/xGy7bjb1vS2jpt6f
+         rF+/ePnMvGOrLAZ0akQZNtiKQjmTee0pzCmrrd4oj6425O0PD0jpOe1X8j2s2B3rY54R
+         Z1QVrRh/FLF+WFqQnvgBIyTJhdGoLRSNnMXYw7uXOMCJZQ/CQWZ265suMX5EoY3gSSWe
+         PCPg==
+X-Gm-Message-State: ACgBeo0Fqw4wJdRxzEwHAlC9O264vOWYYj08rbxlCGeHpJK4DlCib+K5
+        55tTFlfUKYbFEP11XLyRtajH2A==
+X-Google-Smtp-Source: AA6agR7LdYH34j63SniI1HczQAV0VgAxa7UpGGHIt2TnTdCXpcOGSNJ3eDQUhnFuLDNSe7/zFmgs7g==
+X-Received: by 2002:a05:6512:401d:b0:496:9971:78c5 with SMTP id br29-20020a056512401d00b00496997178c5mr1268770lfb.337.1662447322997;
+        Mon, 05 Sep 2022 23:55:22 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id c14-20020ac25f6e000000b004948b61f780sm1534603lfc.144.2022.09.05.23.55.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 23:55:22 -0700 (PDT)
+Message-ID: <8712e2ff-80e1-02e9-974a-c9ffcf83ffab@linaro.org>
+Date:   Tue, 6 Sep 2022 08:55:19 +0200
 MIME-Version: 1.0
-References: <20220905083125.29426-1-zong.li@sifive.com> <20220905083125.29426-3-zong.li@sifive.com>
- <2a22c6ac-dc0e-7066-8f5f-04c428c77ee2@microchip.com> <CA+ZOyah199Vsa9haepO=uizymy947aLv3tMoO=5ye=FHqhkYCA@mail.gmail.com>
- <048bb217-e91e-b727-fcd1-e55755a87d0d@microchip.com>
-In-Reply-To: <048bb217-e91e-b727-fcd1-e55755a87d0d@microchip.com>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Tue, 6 Sep 2022 14:51:57 +0800
-Message-ID: <CANXhq0prxrXYOson4pQBq6_cWSTcZ5CZs7JyOfsFuQE8oc2pwA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] soc: sifive: ccache: Rename SiFive L2 cache to
- Composable cache.
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Zong Li <zongbox@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Ben Dooks <ben.dooks@sifive.com>, bp@alien8.de,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-edac@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RFC PATCH v2 1/6] Documentation: DT: Add entry for CDX
+ controller
+Content-Language: en-US
+To:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Cc:     "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+ <20220817150542.483291-1-nipun.gupta@amd.com>
+ <20220817150542.483291-2-nipun.gupta@amd.com>
+ <93f080cd-e586-112f-bac8-fa2a7f69efb3@linaro.org>
+ <DM6PR12MB308211F26296F3B816F3F005E87F9@DM6PR12MB3082.namprd12.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DM6PR12MB308211F26296F3B816F3F005E87F9@DM6PR12MB3082.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,82 +105,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 2:23 PM <Conor.Dooley@microchip.com> wrote:
->
-> On 06/09/2022 02:44, Zong Li wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
-the content is safe
-> >
-> > <Conor.Dooley@microchip.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=886=E6=97=
-=A5 =E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A82:48=E5=AF=AB=E9=81=93=EF=BC=9A
-> >>
-> >> Noticed a another thing, sorry..
-> >>
-> >> On 05/09/2022 09:31, Zong Li wrote:
-> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you kno=
-w the content is safe
-> >>>
-> >>> From: Greentime Hu <greentime.hu@sifive.com>
-> >>>
-> >>> Since composable cache may be L3 cache if pL2 cache exists, we should=
- use
-> >>> its original name composable cache to prevent confusion.
-> >>>
-> >>> Apart from renaming, we also add the compatible "sifive,ccache0" into=
- ID
-> >>> table.
-> >>>
-> >>> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-> >>> Signed-off-by: Zong Li <zong.li@sifive.com>
-> >>> ---
-> >>>   drivers/soc/sifive/Kconfig                    |   6 +-
-> >>>   drivers/soc/sifive/Makefile                   |   2 +-
-> >>>   .../{sifive_l2_cache.c =3D> sifive_ccache.c}    | 163 +++++++++----=
------
-> >>>   .../{sifive_l2_cache.h =3D> sifive_ccache.h}    |  16 +-
-> >>>   4 files changed, 94 insertions(+), 93 deletions(-)
-> >>>   rename drivers/soc/sifive/{sifive_l2_cache.c =3D> sifive_ccache.c} =
-(35%)
-> >>>   rename include/soc/sifive/{sifive_l2_cache.h =3D> sifive_ccache.h} =
-(12%)
-> >>>
-> >>
-> >>> -static ssize_t l2_write(struct file *file, const char __user *data,
-> >>> +static ssize_t ccache_write(struct file *file, const char __user *da=
-ta,
-> >>>                          size_t count, loff_t *ppos)
-> >>
-> >> You need to fix the alignment here as per checkpatch:
-> >> CHECK: Alignment should match open parenthesis
-> >> #112: FILE: drivers/soc/sifive/sifive_ccache.c:53:
-> >> +static ssize_t ccache_write(struct file *file, const char __user *dat=
-a,
-> >> +                       size_t count, loff_t *ppos)
-> >>
-> >
-> > I'm not sure why I don't see that by checkpatch, but it looks that it
-> > is actually misalignment there, I would re-check all indents in
-> > source. Thanks.
->
-> You need to pass --strict to checkpatch to see it.
+On 05/09/2022 16:05, Gupta, Nipun wrote:
+>>> +
+>>> +    cdxbus: cdxbus@@4000000 {
+>>
+>> Node names should be generic, so "cdx"
+> 
+> Would be using bus: cdxbus@4000000.
+> Kindly correct me if this does not seem to be correct.
 
-Many thanks for the tip, I can see the message after applying the option.
+I don't understand it. I asked to change cdxbus to cdx, but you said you
+will be using "bus" and "cdxbus"? So what exactly are you going to use?
+And how does it match generic node name recommendation?
 
->
-> >
-> >>>   {
-> >>>          unsigned int val;
-> >>> @@ -57,75 +57,76 @@ static ssize_t l2_write(struct file *file, const =
-char __user *data,
-> >>>          if (kstrtouint_from_user(data, count, 0, &val))
-> >>>                  return -EINVAL;
-> >>>          if ((val < 0xFF) || (val >=3D 0x10000 && val < 0x100FF))
-> >>> -               writel(val, l2_base + SIFIVE_L2_ECCINJECTERR);
-> >>> +               writel(val, ccache_base + SIFIVE_CCACHE_ECCINJECTERR)=
-;
-> >>>          else
-> >>>                  return -EINVAL;
-> >>>          return count;
-> >>>   }
-> >>>
->
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+Do you see any other buses named "xxxbus"?
+
+Best regards,
+Krzysztof

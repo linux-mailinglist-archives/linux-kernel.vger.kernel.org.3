@@ -2,86 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000C25ADF56
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1875ADF55
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiIFGEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 02:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S232380AbiIFGD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 02:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbiIFGEG (ORCPT
+        with ESMTP id S230249AbiIFGDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 02:04:06 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC48A6E2C3;
-        Mon,  5 Sep 2022 23:04:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Qqyu/
-        lLVEOfgUBpB9+9CFRj1uBU4T1fbhSIWkzeQAeg=; b=TPJv7187fsTz9LlTu4oB4
-        HjbV22w/YQNsb55um8P6Rf3fZ2COwnMubqtF0sbCvNxk4x2skrUCZhnq0jCcfL63
-        Z6bKPnq/Iz7UTNMOpQ8vsSUHxwsXHTpyL9FYdDSQBxBnzB7Q8HSOBDLeL968phYm
-        eXrdkYtb9RZmM1vlcO8RKg=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp4 (Coremail) with SMTP id HNxpCgCXbtbD4hZj5Dqrag--.37305S2;
-        Tue, 06 Sep 2022 14:03:48 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     martin.petersen@oracle.com, jejb@linux.ibm.com
-Cc:     skashyap@marvell.com, jhasan@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] scsi: qedf: qedf_hsi: fix spelling typo in comment
-Date:   Tue,  6 Sep 2022 14:03:27 +0800
-Message-Id: <20220906060327.2304049-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Sep 2022 02:03:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C51E5FF6E;
+        Mon,  5 Sep 2022 23:03:49 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMFFD1PcQz4xG6;
+        Tue,  6 Sep 2022 16:03:44 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662444225;
+        bh=7b3+ngxkhtctM0vO5oZZexv2rCQUoxKySEH/G9AyXno=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cUJcsytbLe6u4Djfoq7YbaJpqa44v4D9iOJcdZ2/vQbVBW0O1qXg8jG9jXqhH/4BS
+         y7XsjkWWog8iViM7gh017dwBDBSktrJIGKXayYM+2W7StTuoqN2hS0vpJ8VE5idwHb
+         I+ee9RVKS6PqknCnVO4rP9n5VkcqLde9xQ+wyIsiGzkqrTsT8QU6VEM1MFIahhPKz9
+         8csu9FyNEcXAf2qu4r0XbL5gm0ZLjpADjDKj4eXWMLh1uKdbQCiKXaVQ5j5DOb+mCj
+         Vcn0RWnoUzyC3n3GskS7bXbTDRTtNztGGcQnKmVWTtkyb1UypBJ9VEZxSpUf16wsPs
+         mGrmabJmbpExg==
+Date:   Tue, 6 Sep 2022 16:03:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shuah Khan <shuah@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>, Perry Yuan <Perry.Yuan@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: linux-next: manual merge of the kselftest tree with the pm tree
+Message-ID: <20220906160342.0dbb0f5f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgCXbtbD4hZj5Dqrag--.37305S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5GFy8Jw1xAFb_yoWftrcEgF
-        yjqw42gryjvF9avr4Utr43WFy0kF48Cr4xuFsYqw4Fv39Yyw4DJa95XF1jvw4qyrWDX3Z8
-        Xw18ZrykGwnrtjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU1Tmh3UUUUU==
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbivgV0+1Zcem+zvgAAsm
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/GuM3VoUxrOVUxgH2w.hhhW8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+--Sig_/GuM3VoUxrOVUxgH2w.hhhW8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fix spelling typo in comment.
+Hi all,
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/scsi/qedf/qedf_hsi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Today's linux-next merge of the kselftest tree got a conflict in:
 
-diff --git a/drivers/scsi/qedf/qedf_hsi.h b/drivers/scsi/qedf/qedf_hsi.h
-index ecd5cb53b750..36a8a53e859d 100644
---- a/drivers/scsi/qedf/qedf_hsi.h
-+++ b/drivers/scsi/qedf/qedf_hsi.h
-@@ -300,7 +300,7 @@ struct fcoe_respqe {
- /* PARAM that is located in the FCP_RSP FC header */
- #define FCOE_RESPQE_PARAM_MASK            0xFFFFFF
- #define FCOE_RESPQE_PARAM_SHIFT           0
--/* Indication whther its Target-auto-rsp mode or not */
-+/* Indication whether its Target-auto-rsp mode or not */
- #define FCOE_RESPQE_TARGET_AUTO_RSP_MASK  0xFF
- #define FCOE_RESPQE_TARGET_AUTO_RSP_SHIFT 24
- };
--- 
-2.25.1
+  drivers/cpufreq/amd-pstate.c
 
+between commit:
 
-No virus found
-		Checked by Hillstone Network AntiVirus
+  d8bee41db83e ("cpufreq: amd-pstate: fix white-space")
 
+from the pm tree and commit:
+
+  8c766b24ee62 ("cpufreq: amd-pstate: Expose struct amd_cpudata")
+
+from the kselftest tree.
+
+I fixed it up (some of the code updated by the former has been moved,
+and fixed up, by the latter) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/GuM3VoUxrOVUxgH2w.hhhW8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMW4r4ACgkQAVBC80lX
+0GwaOAf/WdNEg7C5gkUzn07zstBG3E50TuVQU97LfGw2DfI70shd0tc4+aKGpg41
+dBjfO+mIl4gFv48qXmvW0b8LuFTBTkz1W5Xb1UgbofUxi4kyiZ/BlY6clGE5NvG5
+FdEcCANGAB2vhmvldITgYkn/gPZ9LUxhrmM7YBZrBFz2NFcapbJzjN0yqjWkjuqn
+elu9IJwXbueKaAd9WjN/ahPdArctrBEzp0t8ZYhjoK/i+VFxe5u4UxZ3yG7b1chI
+wWp5FcJR/XTO15BAJ2PIvsUJzif3zBt0xMxMwJZbJJEeht4yRqVXtAUokQo8/Wry
+8p5sMZ4FR/pPzloumEQMhivfCXq8bw==
+=ge5F
+-----END PGP SIGNATURE-----
+
+--Sig_/GuM3VoUxrOVUxgH2w.hhhW8--

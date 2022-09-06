@@ -2,109 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC2E5AF575
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A785AF56A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiIFUKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S231277AbiIFUH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiIFUJx (ORCPT
+        with ESMTP id S231214AbiIFUHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:09:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F9232AB3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662494664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2kt6CEFAueWK0HKI9UIQ8H4IFzaooggSyLPO1T4AFfQ=;
-        b=KYKiBqwfhlhgPozOCwwmDmEmsG8sigl1tT631aw7FrY4WBxTDLXULvOqi3nVKALCMm6Hp8
-        iLodO8aSeFblUqZ07v+BjWG63nf942rRWyI5zKNAYZnMEnX6vAG1VR7gRYiRNzHjorm7gs
-        0IQCuOwOqWRoxS5JMUtt3JysOBCGnNU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-95P6QindO7OjDY5gAuEzBA-1; Tue, 06 Sep 2022 16:01:12 -0400
-X-MC-Unique: 95P6QindO7OjDY5gAuEzBA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CA503C138A2;
-        Tue,  6 Sep 2022 20:01:07 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8EA191121315;
-        Tue,  6 Sep 2022 20:01:06 +0000 (UTC)
-Message-ID: <02b8e7b3-941d-8bb9-cd0e-992738893ba3@redhat.com>
-Date:   Tue, 6 Sep 2022 16:01:06 -0400
+        Tue, 6 Sep 2022 16:07:03 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D90AA375
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:02:29 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id h1so7443065wmd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date;
+        bh=O5EcAc3lvXGI4JQrr9YrLyEGo4R9/Yu+CBbQ8ensU3s=;
+        b=OJjVDKh3fcI/VQtO8L3fMXmkefvnaZ2TPXs4g3bDwXhiEMKG2tIGFa9WR1Rh+3uUBR
+         zdGGM9Rmc74vfA+iORlSEN0n6yp66wZtNXZv0fPfYCTohNw3OZcMD+6dfcpdnPYyiwnh
+         QoNnAEdgtugwvr2kaVFYcJT6RkBCn/qtM199k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=O5EcAc3lvXGI4JQrr9YrLyEGo4R9/Yu+CBbQ8ensU3s=;
+        b=ZkJmxQIeGE1+aj3zztfuSV9d7m4D/6Ues0YsAeJ06bIxFu/zaCJAG8075gK6cPY9bk
+         AtkzGD3cH+hNk5pLORYdJVBDa1fLDrW7cnnPMXv/L8d3r5v8D/wfaEqDp31u6fBRQRLl
+         WjO8j48DvAsbf6egODfEJLMSwAMtpAKjw9WbFcVrLBRfnwH6HZBZKL98H0zTKFS13Vdm
+         ZmzCky4bUwBNRHvB6RivhvaukI2SQF45z2i3UL1bu6j+SAP3JwlJmvLGFrTk75jFfu2z
+         7obQpAo3pFxS8b7N7bHtCimcoswLNe62f6gkdWrx3s0AvJKT4gNAgtIuU5dNv5g/d/KL
+         zg8A==
+X-Gm-Message-State: ACgBeo2Wmjh5M+EigQvUCw+UHdxMnRPJSt5/COt3NXgT2EAddPqLQKgN
+        Z+2B2JaIokK7nuyhlTFtVS65Gg==
+X-Google-Smtp-Source: AA6agR65s22H1tafLgmg1vAilgOCZbkdlz33Ij5qA3Rkmxo9dxUOa6iRjfhaDOHPYMF30Bz5WXKt1A==
+X-Received: by 2002:a05:600c:34d2:b0:3a5:afe5:3eb5 with SMTP id d18-20020a05600c34d200b003a5afe53eb5mr14724108wmq.122.1662494510204;
+        Tue, 06 Sep 2022 13:01:50 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id y2-20020adfd082000000b0021d6924b777sm13896061wrh.115.2022.09.06.13.01.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 13:01:49 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 22:01:47 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Trigger Huang <Trigger.Huang@gmail.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Antonio Caggiano <antonio.caggiano@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
+Message-ID: <YxenK8xZHC6Q4Eu4@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
+        Trigger Huang <Trigger.Huang@gmail.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Antonio Caggiano <antonio.caggiano@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
+ <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: BUG: HANG_DETECT waiting for migration_cpu_stop() complete
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>, Jing-Ting Wu <jing-ting.wu@mediatek.com>
-Cc:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        wsd_upstream@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Jonathan.JMChen@mediatek.com,
-        "chris.redpath@arm.com" <chris.redpath@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Donnefort <vdonnefort@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Christian Brauner <brauner@kernel.org>,
-        cgroups@vger.kernel.org, lixiong.liu@mediatek.com,
-        wenju.xu@mediatek.com
-References: <88b2910181bda955ac46011b695c53f7da39ac47.camel@mediatek.com>
- <b605c3ec-94ab-a55f-5825-9b370d77ecf3@quicinc.com>
- <203d4614c1b2a498a240ace287156e9f401d5395.camel@mediatek.com>
- <YxeR0RoiTdm8sWCJ@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YxeR0RoiTdm8sWCJ@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
+X-Operating-System: Linux phenom 5.18.0-4-amd64 
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/6/22 14:30, Tejun Heo wrote:
-> Hello,
->
-> (cc'ing Waiman in case he has a better idea)
->
-> On Mon, Sep 05, 2022 at 04:22:29PM +0800, Jing-Ting Wu wrote:
->> https://lore.kernel.org/lkml/YvrWaml3F+x9Dk+T@slm.duckdns.org/ is for
->> fix cgroup_threadgroup_rwsem <-> cpus_read_lock() deadlock.
->> But this issue is cgroup_threadgroup_rwsem <-> cpuset_rwsem deadlock.
-> If I'm understanding what you're writing correctly, this isn't a deadlock.
-> The cpuset_hotplug_workfn simply isn't being woken up while holding
-> cpuset_rwsem and others are just waiting for that lock to be released.
+On Mon, Aug 15, 2022 at 12:05:19PM +0200, Christian König wrote:
+> Am 15.08.22 um 11:54 schrieb Dmitry Osipenko:
+> > Higher order pages allocated using alloc_pages() aren't refcounted and they
+> > need to be refcounted, otherwise it's impossible to map them by KVM. This
+> > patch sets the refcount of the tail pages and fixes the KVM memory mapping
+> > faults.
+> > 
+> > Without this change guest virgl driver can't map host buffers into guest
+> > and can't provide OpenGL 4.5 profile support to the guest. The host
+> > mappings are also needed for enabling the Venus driver using host GPU
+> > drivers that are utilizing TTM.
+> > 
+> > Based on a patch proposed by Trigger Huang.
+> 
+> Well I can't count how often I have repeated this: This is an absolutely
+> clear NAK!
+> 
+> TTM pages are not reference counted in the first place and because of this
+> giving them to virgl is illegal.
+> 
+> Please immediately stop this completely broken approach. We have discussed
+> this multiple times now.
 
-I believe it is probably a bug in the scheduler core code. 
-__set_cpus_allowed_ptr_locked() calls affine_move_task() to move to a 
-random cpu within the new set allowable CPUs. However, if migration is 
-disabled, it shouldn't call affine_move_task() at all. Instead, I would 
-suggest that if the current cpu is within the new allowable cpus, it 
-should just skip doing affine_move_task(). Otherwise, it should fail 
-__set_cpus_allowed_ptr_locked().
+Yeah we need to get this stuff closed for real by tagging them all with
+VM_IO or VM_PFNMAP asap.
 
-My 2 cents.
+It seems ot be a recurring amount of fun that people try to mmap dma-buf
+and then call get_user_pages on them.
 
-Cheers,
-Longman
+Which just doesn't work. I guess this is also why Rob Clark send out that
+dma-buf patch to expos mapping information (i.e. wc vs wb vs uncached).
 
+There seems to be some serious bonghits going on :-/
+-Daniel
+
+> 
+> Regards,
+> Christian.
+> 
+> > 
+> > Cc: stable@vger.kernel.org
+> > Cc: Trigger Huang <Trigger.Huang@gmail.com>
+> > Link: https://www.collabora.com/news-and-blog/blog/2021/11/26/venus-on-qemu-enabling-new-virtual-vulkan-driver/#qcom1343
+> > Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com> # AMDGPU (Qemu and crosvm)
+> > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> > ---
+> >   drivers/gpu/drm/ttm/ttm_pool.c | 25 ++++++++++++++++++++++++-
+> >   1 file changed, 24 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/ttm/ttm_pool.c b/drivers/gpu/drm/ttm/ttm_pool.c
+> > index 21b61631f73a..11e92bb149c9 100644
+> > --- a/drivers/gpu/drm/ttm/ttm_pool.c
+> > +++ b/drivers/gpu/drm/ttm/ttm_pool.c
+> > @@ -81,6 +81,7 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+> >   	unsigned long attr = DMA_ATTR_FORCE_CONTIGUOUS;
+> >   	struct ttm_pool_dma *dma;
+> >   	struct page *p;
+> > +	unsigned int i;
+> >   	void *vaddr;
+> >   	/* Don't set the __GFP_COMP flag for higher order allocations.
+> > @@ -93,8 +94,10 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+> >   	if (!pool->use_dma_alloc) {
+> >   		p = alloc_pages(gfp_flags, order);
+> > -		if (p)
+> > +		if (p) {
+> >   			p->private = order;
+> > +			goto ref_tail_pages;
+> > +		}
+> >   		return p;
+> >   	}
+> > @@ -120,6 +123,23 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+> >   	dma->vaddr = (unsigned long)vaddr | order;
+> >   	p->private = (unsigned long)dma;
+> > +
+> > +ref_tail_pages:
+> > +	/*
+> > +	 * KVM requires mapped tail pages to be refcounted because put_page()
+> > +	 * is invoked on them in the end of the page fault handling, and thus,
+> > +	 * tail pages need to be protected from the premature releasing.
+> > +	 * In fact, KVM page fault handler refuses to map tail pages to guest
+> > +	 * if they aren't refcounted because hva_to_pfn_remapped() checks the
+> > +	 * refcount specifically for this case.
+> > +	 *
+> > +	 * In particular, unreferenced tail pages result in a KVM "Bad address"
+> > +	 * failure for VMMs that use VirtIO-GPU when guest's Mesa VirGL driver
+> > +	 * accesses mapped host TTM buffer that contains tail pages.
+> > +	 */
+> > +	for (i = 1; i < 1 << order; i++)
+> > +		page_ref_inc(p + i);
+> > +
+> >   	return p;
+> >   error_free:
+> > @@ -133,6 +153,7 @@ static void ttm_pool_free_page(struct ttm_pool *pool, enum ttm_caching caching,
+> >   {
+> >   	unsigned long attr = DMA_ATTR_FORCE_CONTIGUOUS;
+> >   	struct ttm_pool_dma *dma;
+> > +	unsigned int i;
+> >   	void *vaddr;
+> >   #ifdef CONFIG_X86
+> > @@ -142,6 +163,8 @@ static void ttm_pool_free_page(struct ttm_pool *pool, enum ttm_caching caching,
+> >   	if (caching != ttm_cached && !PageHighMem(p))
+> >   		set_pages_wb(p, 1 << order);
+> >   #endif
+> > +	for (i = 1; i < 1 << order; i++)
+> > +		page_ref_dec(p + i);
+> >   	if (!pool || !pool->use_dma_alloc) {
+> >   		__free_pages(p, order);
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

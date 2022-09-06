@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22915AEBC5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AA25AEBA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241489AbiIFORq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S240626AbiIFN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241394AbiIFOOh (ORCPT
+        with ESMTP id S240674AbiIFNzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:14:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7CA79A78;
-        Tue,  6 Sep 2022 06:49:02 -0700 (PDT)
+        Tue, 6 Sep 2022 09:55:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D635B81B11;
+        Tue,  6 Sep 2022 06:41:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B6D0B818CB;
-        Tue,  6 Sep 2022 13:47:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 713C4C433C1;
-        Tue,  6 Sep 2022 13:47:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 547316155C;
+        Tue,  6 Sep 2022 13:36:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576CBC433D7;
+        Tue,  6 Sep 2022 13:36:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662472067;
-        bh=Iuy7BZ0X0UGXwqnlqbPz/nd5nuA2OnCTcw//Ec+dP1c=;
+        s=korg; t=1662471366;
+        bh=m7E2xCpUTwx5ukiumKOf6GtjH3UZa4HIGrQLeDUOP18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y6+002eVTqzbOn/wHKZxRNZVhz1YEDIOv1A4FQx136TQOAIP/CxmNEY2KbSN9k1KN
-         AZWfn3LzQ6YFHpIuhHNxAmGW/Uj4TNIdukOZ2ysXVeo14s3PmqWZx4ERv4goEEzaZj
-         LT2MV3TvuEPN7euVhE5p/cnj12xDAaDAtCNugPqA=
+        b=Wvn30BCp7ilgeR9ZAe9j4k257OFN5BxySayEwwGrGFwHC2k5JV527s0pgejijmupD
+         WMwQ7FYCQ+2OeMW/PkSDAfs/obr17kh4HRy54oZbjsd8WpkMsKGV0bTdujLrvXh9Li
+         Dm3l3MwQ3L16GEcbnlAh747WCRr56BuA52V9PBBI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 5.19 106/155] thunderbolt: Check router generation before connecting xHCI
-Date:   Tue,  6 Sep 2022 15:30:54 +0200
-Message-Id: <20220906132833.953858129@linuxfoundation.org>
+        Thierry GUIBERT <thierry.guibert@croix-rouge.fr>,
+        stable <stable@kernel.org>
+Subject: [PATCH 5.10 58/80] USB: cdc-acm: Add Icom PMR F3400 support (0c26:0020)
+Date:   Tue,  6 Sep 2022 15:30:55 +0200
+Message-Id: <20220906132819.474096379@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
-References: <20220906132829.417117002@linuxfoundation.org>
+In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
+References: <20220906132816.936069583@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +55,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+From: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
 
-commit 93a3c0d4e8bfbb15145e5dd7da68a3de4b904aba upstream.
+commit a10bc71729b236fe36de0d8e4d35c959fd8dec3a upstream.
 
-Only Thunderbolt 3 routers need the xHCI connection flow. This also
-ensures the router actually has both lane adapters (1 and 3). While
-there move declaration of the boolean variables inside the block where
-they are being used.
+Supports for ICOM F3400 and ICOM F4400 PMR radios in CDC-ACM driver
+enabling the AT serial port.
+The Vendor Id is 0x0C26
+The Product ID is 0x0020
 
-Fixes: 30a4eca69b76 ("thunderbolt: Add internal xHCI connect flows for Thunderbolt 3 devices")
-Cc: stable@vger.kernel.org
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Output of lsusb :
+Bus 001 Device 009: ID 0c26:0020 Prolific Technology Inc. ICOM Radio
+Couldn't open device, some information will be missing
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            2 Communications
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x0c26 Prolific Technology Inc.
+  idProduct          0x0020
+  bcdDevice            0.00
+  iManufacturer           1 ICOM Inc.
+  iProduct                2 ICOM Radio
+  iSerial                 3 *obfuscated*
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0030
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval              12
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+
+Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220819081702.84118-1-thierry.guibert@croix-rouge.fr
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thunderbolt/switch.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/usb/class/cdc-acm.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -3781,14 +3781,18 @@ int tb_switch_pcie_l1_enable(struct tb_s
-  */
- int tb_switch_xhci_connect(struct tb_switch *sw)
- {
--	bool usb_port1, usb_port3, xhci_port1, xhci_port3;
- 	struct tb_port *port1, *port3;
- 	int ret;
- 
-+	if (sw->generation != 3)
-+		return 0;
-+
- 	port1 = &sw->ports[1];
- 	port3 = &sw->ports[3];
- 
- 	if (tb_switch_is_alpine_ridge(sw)) {
-+		bool usb_port1, usb_port3, xhci_port1, xhci_port3;
-+
- 		usb_port1 = tb_lc_is_usb_plugged(port1);
- 		usb_port3 = tb_lc_is_usb_plugged(port3);
- 		xhci_port1 = tb_lc_is_xhci_connected(port1);
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1830,6 +1830,9 @@ static const struct usb_device_id acm_id
+ 	{ USB_DEVICE(0x09d8, 0x0320), /* Elatec GmbH TWN3 */
+ 	.driver_info = NO_UNION_NORMAL, /* has misplaced union descriptor */
+ 	},
++	{ USB_DEVICE(0x0c26, 0x0020), /* Icom ICF3400 Serie */
++	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
++	},
+ 	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles VEGA3000 */
+ 	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
+ 	},
 
 

@@ -2,215 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FF75ADE8F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 06:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21EA5ADEA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 06:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbiIFEfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 00:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
+        id S231874AbiIFEkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 00:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbiIFEe7 (ORCPT
+        with ESMTP id S232367AbiIFEkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 00:34:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA94D13E3E
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 21:34:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E243CB8161C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:34:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06745C433B5;
-        Tue,  6 Sep 2022 04:34:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662438893;
-        bh=M87zvDUxLrG8grmam+DgD3GHwqA0JmATZJWNyH1twYk=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=PzNZBbzNmhyd8B8YD3/S/IV98+Q190OIEDi7eZ+ma0YHFlG5Jp9yJ3j9jo95Uv0/F
-         OmvFbDEY3QJGSMjyw60Sw8m7jzvHkofqXjozzBR7toKyyPuNJ4/02SzKh1BjeeUF3c
-         qZHyFzfqqycOl99D82sXJ6gsHKrMdR+MyiRf23mgTq0JpIt4wsHBq3k3dhNgegLIvo
-         mgcN4QC9S0r9tN14mLvOIZv1IhynczO45FfEW0ftxBwIDw9jm5fu/jWc5wWbMrKAoz
-         gN8r3cehOqU17YxHj1ACgomPAzSEmJ+dpFuuDnM/hfL7xS9VvUmr6yyFfG88j+lXOI
-         njKhgI1CRccgQ==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id D4A3627C0054;
-        Tue,  6 Sep 2022 00:34:51 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Tue, 06 Sep 2022 00:34:51 -0400
-X-ME-Sender: <xms:680WY7BfmLwziWei7hkHzyHZZj1kIC5HTiei75ZU-kTApcxSLdSxBA>
-    <xme:680WYxj6DlHzbPzC3TEgMeHaQVPMJRSW1w9iDlOUGuj5toMhitQIk5wy1SScPQKIi
-    liUKzZBjaibm6WopDk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeljedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
-    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:680WY2lkkk1G5yyFMq68x04_xUmGzaWgskljyUlxzlji9vcjeOZQGQ>
-    <xmx:680WY9yCOnGV9t6SgYW6Mck2qIcln2zz7_uE8tabpWJU8Y7IM9oDiA>
-    <xmx:680WYwQkj24uuQdw55uXFB-s5aLANAQmXsGMlSMsSrjzzwfhncmOtg>
-    <xmx:680WY2P3lJEh8yovaLCm6lY-pXR0qZLGgWniz9PTzIKTsrvNqiAKew>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5DCD631A0062; Tue,  6 Sep 2022 00:34:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <e1c67217-1143-4643-a7a3-ca3f34f28d30@www.fastmail.com>
-In-Reply-To: <20220903001412.17015-1-yangff1@gmail.com>
-References: <b4f0dca5-1d15-67f7-4600-9a0a91e9d0bd@intel.com>
- <20220903001412.17015-1-yangff1@gmail.com>
-Date:   Mon, 05 Sep 2022 21:34:30 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Fangfei Yang" <yangff1@gmail.com>,
-        "Dave Hansen" <dave.hansen@intel.com>
-Cc:     "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: PKU usage improvements for threads
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 00:40:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E195EDF1
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 21:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662439211; x=1693975211;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i6pviLp47wGKYv2ksbQeKhlS6DOKuqKfVvzrpAUU+F4=;
+  b=cYvSeIbc9k93KJjQUAHyqtY24F2WomMJeVB4h0kyL/GHbA9OaUl6BERd
+   9cR+mnMtcQOW8707CJYooeytDG7EM5AF9Tq1XSDJ1sjykCVqxpgkcmUbH
+   Y3S52KiKQOZgnMkUB/XzQbhIN1AbYDeJoNyW4uvkReVk10rGO4E/CDw3r
+   oywql1YcCGeoVUzQOJ4gMwvHulKE5msIoZ+hYagg5lYDdo9oQvw1oTyct
+   KhK7NMQz7lRE7ofqAYoE18q+uhAOwftoElVX0ovkhX6TPujfIWMBUWUBc
+   KLe1sqlCluV9vr9XJgObISHHRZ49GstyyBuzOoVf+nM82wN9Pb4+v9acX
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="297813450"
+X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
+   d="scan'208";a="297813450"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 21:40:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
+   d="scan'208";a="682258984"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Sep 2022 21:40:09 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVQNc-0004o5-2L;
+        Tue, 06 Sep 2022 04:40:08 +0000
+Date:   Tue, 6 Sep 2022 12:39:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: warning:
+ unannotated fall-through between switch labels
+Message-ID: <202209061224.KxORRGVg-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
+commit: dee2b702bcf067d7b6b62c18bdd060ff0810a800 kconfig: Add support for -Wimplicit-fallthrough
+date:   10 months ago
+config: powerpc-randconfig-r004-20220906 (https://download.01.org/0day-ci/archive/20220906/202209061224.KxORRGVg-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dee2b702bcf067d7b6b62c18bdd060ff0810a800
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dee2b702bcf067d7b6b62c18bdd060ff0810a800
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/85xx/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+                   default:
+                   ^
+   arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: note: insert 'break;' to avoid fall-through
+                   default:
+                   ^
+                   break; 
+   arch/powerpc/platforms/85xx/mpc85xx_cds.c:184:6: warning: no previous prototype for function 'mpc85xx_cds_fixup_bus' [-Wmissing-prototypes]
+   void mpc85xx_cds_fixup_bus(struct pci_bus *bus)
+        ^
+   arch/powerpc/platforms/85xx/mpc85xx_cds.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mpc85xx_cds_fixup_bus(struct pci_bus *bus)
+   ^
+   static 
+   2 warnings generated.
 
 
-On Fri, Sep 2, 2022, at 5:14 PM, Fangfei Yang wrote:
-> I guess the question here is whether the code to call sigaltstack and=20
-> signal handler is considered part of the security code (sigreturn=20
-> obviously has to be, since the kernel has to restore the PKRU based on=20
-> the saved fpu).
-> I think to a large extent this is necessary, at least for the signal=20
-> handler to be able to access the relevant registers at the time of the=20
-> interrupt, which may contain data that the handler should not have=20
-> access to. Even specifying a PKRU at the time of signal registration=20
-> would make the system functionally sound and safe since the relevant=20
-> calls must be protected.
->
-> It's just that the design here should be such as to minimize the ways=20
-> in which the interface can be abused (e.g., accidental override access=
-)=20
-> as well as to simplify the difficulty of writing secure code. It might=20
-> be reasonable, then, to save the PKRU when the `sigaltstack` is called.
->
-> The main purpose is to simplify the design of the handler entry point=20
-> without adding new system calls, while not accidentally gaining=20
-> privileges that do not belong to the current PKRU because of the syste=
-m=20
-> call, whether immediately, or later in signal delivery.
+vim +161 arch/powerpc/platforms/85xx/mpc85xx_cds.c
 
-I think you might be so much more familiar with the system you=E2=80=99r=
-e working on than anyone else that you=E2=80=99re not explaining some ba=
-sics and we=E2=80=99re all lost.
+7120438e5d82f4 Andrey Smirnov 2016-07-28  125  
+7120438e5d82f4 Andrey Smirnov 2016-07-28  126  
+749e80810d26c8 Roy Zang       2007-06-01  127  static void __init mpc85xx_cds_pci_irq_fixup(struct pci_dev *dev)
+591f0a4287d0de Andy Fleming   2006-04-02  128  {
+591f0a4287d0de Andy Fleming   2006-04-02  129  	u_char c;
+749e80810d26c8 Roy Zang       2007-06-01  130  	if (dev->vendor == PCI_VENDOR_ID_VIA) {
+749e80810d26c8 Roy Zang       2007-06-01  131  		switch (dev->device) {
+749e80810d26c8 Roy Zang       2007-06-01  132  		case PCI_DEVICE_ID_VIA_82C586_1:
+591f0a4287d0de Andy Fleming   2006-04-02  133  			/*
+591f0a4287d0de Andy Fleming   2006-04-02  134  			 * U-Boot does not set the enable bits
+591f0a4287d0de Andy Fleming   2006-04-02  135  			 * for the IDE device. Force them on here.
+591f0a4287d0de Andy Fleming   2006-04-02  136  			 */
+591f0a4287d0de Andy Fleming   2006-04-02  137  			pci_read_config_byte(dev, 0x40, &c);
+591f0a4287d0de Andy Fleming   2006-04-02  138  			c |= 0x03; /* IDE: Chip Enable Bits */
+591f0a4287d0de Andy Fleming   2006-04-02  139  			pci_write_config_byte(dev, 0x40, c);
+591f0a4287d0de Andy Fleming   2006-04-02  140  
+591f0a4287d0de Andy Fleming   2006-04-02  141  			/*
+591f0a4287d0de Andy Fleming   2006-04-02  142  			 * Since only primary interface works, force the
+591f0a4287d0de Andy Fleming   2006-04-02  143  			 * IDE function to standard primary IDE interrupt
+591f0a4287d0de Andy Fleming   2006-04-02  144  			 * w/ 8259 offset
+591f0a4287d0de Andy Fleming   2006-04-02  145  			 */
+591f0a4287d0de Andy Fleming   2006-04-02  146  			dev->irq = 14;
+591f0a4287d0de Andy Fleming   2006-04-02  147  			pci_write_config_byte(dev, PCI_INTERRUPT_LINE, dev->irq);
+749e80810d26c8 Roy Zang       2007-06-01  148  			break;
+591f0a4287d0de Andy Fleming   2006-04-02  149  		/*
+591f0a4287d0de Andy Fleming   2006-04-02  150  		 * Force legacy USB interrupt routing
+591f0a4287d0de Andy Fleming   2006-04-02  151  		 */
+749e80810d26c8 Roy Zang       2007-06-01  152  		case PCI_DEVICE_ID_VIA_82C586_2:
+749e80810d26c8 Roy Zang       2007-06-01  153  		/* There are two USB controllers.
+749e80810d26c8 Roy Zang       2007-06-01  154  		 * Identify them by functon number
+749e80810d26c8 Roy Zang       2007-06-01  155  		 */
+8d7bc8f9d1c23f Randy Vinson   2007-07-19  156  			if (PCI_FUNC(dev->devfn) == 3)
+749e80810d26c8 Roy Zang       2007-06-01  157  				dev->irq = 11;
+749e80810d26c8 Roy Zang       2007-06-01  158  			else
+591f0a4287d0de Andy Fleming   2006-04-02  159  				dev->irq = 10;
+749e80810d26c8 Roy Zang       2007-06-01  160  			pci_write_config_byte(dev, PCI_INTERRUPT_LINE, dev->irq);
+749e80810d26c8 Roy Zang       2007-06-01 @161  		default:
+749e80810d26c8 Roy Zang       2007-06-01  162  			break;
+591f0a4287d0de Andy Fleming   2006-04-02  163  		}
+591f0a4287d0de Andy Fleming   2006-04-02  164  	}
+591f0a4287d0de Andy Fleming   2006-04-02  165  }
+ddd64159eb0d09 Andy Fleming   2006-08-17  166  
 
-How is PKRU a =E2=80=9Cprivilege=E2=80=9D and what do you mean my =E2=80=
-=9Cimmediately=E2=80=9D?  I can=E2=80=99t follow this.
+:::::: The code at line 161 was first introduced by commit
+:::::: 749e80810d26c8d522b089718f22bb92d7834a37 [POWERPC] Remove redundant pci_read_irq_line() function for 85xx platform
 
->
-> This is because this part of the design can be largely made easier if=20
-> additional source checking and PKRU switching by the handler at the=20
-> entry point can be avoided.
+:::::: TO: Roy Zang <tie-fei.zang@freescale.com>
+:::::: CC: Kumar Gala <galak@kernel.crashing.org>
 
-Why would the entry point check a source?  Or change PKRU?  What would i=
-ts PKRU logic be and why?
-
-As I see it, the handler can (awkwardly, perhaps) manage PKRU just fine =
-for all purposes except kernel access to the signal stack.
-
->
-> As `WRPKRU` can be abused, if the handler uses this instruction,=20
-> additional SP as well as PKRU checks must be performed to prevent=20
-> malicious programs from forging signals, and the check must get=20
-> multiplex among all threads. However, for the kernel, it takes very=20
-> little code to avoid these checks by giving the handler the PKRU it=20
-> wants.
-
-Can you elaborate?  Of course WRPKRU can be abused to fully bypass PKRU =
-protection.
-
->
-> If only one PKEY is specified, then it is likely that `WRPKRU` is stil=
-l=20
-> needed, since the TCB itself may occupy multiple PKEYs, or, the handle=
-r=20
-> need to access the memory of other PKEYs (e.g., complex multi-domain=20
-> signal designs).
->
-> And, logically, it makes sense for a signal context (sigaltstack) to=20
-> have the same PKRU when it is registered, and when it is used in the=20
-> future. Thus, a special flag in `ss_flags & SS_SAVEPKRU` to ask the=20
-> kernel to save the current PKRU would be sufficient.
-
-This isn=E2=80=99t logical at all to me. It makes some sense as an API s=
-implification to avoid a new syscall, and it makes sense in a bizarre (t=
-o me) world in which user code can control access to PKRU but not to sig=
-altstack(), but why do we live in that world?
-
->
-> From the security side, if the current PKRU does not have access to th=
-e=20
-> signal stack, then a future signal occurring when the kernel uses this=20
-> PKRU to write will also result in an segfault, thus avoiding unwanted=20
-> access through sigaltstack.
-
-Do you mean in current kernels?
-
-> This is also more accurate than checking the PKEY of the page when=20
-> registering the signal stack (if we restricted the PKRU when=20
-
-What do you mean =E2=80=9Caccurate=E2=80=9D?
-
-
-> registering the sigaltstack). Consider a possible error: a page is=20
-> accidentally unmaped after being registered as a signal stack, and the=
-n=20
-> another page that should not have been accessed by this PKRU is mapped=20
-> to the same location, thus causing an override during signal delivery.
->
->> I also bet we could do this with minimal new ABI.  There's already a
->> ->ss_flags field.  We could assign a flag to mean that stack_t doesn't
->> end at '->ss_size' and that there's a pkey value *after* ss_size.  I =
-do
->> think having a single pkey that is made accessible before signal entry
->> is a more flexible ABI than taking an explicit PKRU value.
->
-> Agreed, the most flexible way should be allow setting the PKRU to any=20
-> subset of the current PKRU. So we can check `(~new_pkru) & current_pkr=
-u=20
-> =3D=3D 0` when calling sigaltstack.=20
->
-> However, no matter how it is done, one of the more disgusting thing is=20
-> that code like this appears in the program that handles the signal.
-> ```
-> old_pkru =3D read_pkru();
-> write_pkru(stack_pkru);
-> do_xsave();=20
-> *(fpu_saved + pkru_offset()) =3D old_pkru; // this may be an argument =
-of=20
-> fpu function call
-> ```
-> And when restoring, you also need
-> ```
-> old_pkru =3D *(fpu_saved + pkru_offset());
-> *(fpu_saved + pkru_offset()) =3D stack_pkru;
-> do_xstor();
-> write_pkru(old_pkru);
-
-Sorry, what code does XSAVE here?
-
-> ```
-> These plus the testing of the current runtime environment (MPK) are=20
-> truly disgusting. It's just structually ugly.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

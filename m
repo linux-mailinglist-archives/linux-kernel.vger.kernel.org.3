@@ -2,110 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA8B5ADFD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010F95ADFD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238407AbiIFGd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 02:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S238390AbiIFGeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 02:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231901AbiIFGdY (ORCPT
+        with ESMTP id S229531AbiIFGeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 02:33:24 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D0C6B16F;
-        Mon,  5 Sep 2022 23:33:23 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id v4so9749691pgi.10;
-        Mon, 05 Sep 2022 23:33:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=zvrfH4l9+LLpmGb/+NWA6GwTCCQXPsaauZkSnlCapaY=;
-        b=hZ/dzDRq5G4WmUz1ONKN7zmYqZYMPaxMQgd8xuWpa3E7uVveuvbej0gFljqv+AODSn
-         M4JDCwOHfhdI6b/OcXIUZVxDutfW6ymVfmdUOYG7y9EC+gdl6ht6I2ZSXJPoGa4KG2aW
-         Qjr5DPHyDbY8YBVsVZJRFYATPDaj/CET7g8qOjaXSEHSHN8I9YoLCDTkVPl3xLGNNobR
-         0QMByO/L0tHlUlqR92EhFZH8EuPf4VBd/j3XwQmRwLX+nL8wGSoJMzfuv7STJ+neo1yE
-         bIkfbd2+n6OJU7Zg3i64MZNK5zsWIZiavOA1Tm4K5B/em5U3b/PG/y5hQzgghC0sdLmV
-         PF7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=zvrfH4l9+LLpmGb/+NWA6GwTCCQXPsaauZkSnlCapaY=;
-        b=bIQeD82rer8ju/OQpnuw/YOW/lM+ERKQh60ol8J7vOIe2vhBzMtUCz/RUzXGmIgTar
-         ryAcPUDHJvRlX2Bb3pSOP/vCLshG0AqeyZEK1M3qdL6vTK4mRNoBSJkz0oqmjHge71fQ
-         Yz9jKiZz+VvWE5VtaH+bNXUXBhmG+zHE4ZKyhns3egKyq9wSPvrwTD17DabsnYyw6m9P
-         2y1YPlv8myXddyDVN/1/UnPdqdLLgZc/SFn5CvbqmrTXh6ZdxUTLRkuYj2H5kY8lmfoH
-         be9YmUm7Sdkt3xx2qxdLO3nkpPEBh0pWTz/cFmDv3HXvt5SF1BqNIxxWukgBlNzSKdEx
-         w8uw==
-X-Gm-Message-State: ACgBeo0RnXlYLaeHRnwbRFYgh/g4WSeHuOd+5splpenhMKIlcj4cl9Yx
-        X4ajfsUcxnB50E1UjRziqeI=
-X-Google-Smtp-Source: AA6agR4wQ6WwNUX/EghUykxH9pNTjoTZRnLxanZrz1SMxSv/1T5qMVxyCJC4tElWoD9sJo7X0fmCLg==
-X-Received: by 2002:a63:6d0f:0:b0:434:a752:8389 with SMTP id i15-20020a636d0f000000b00434a7528389mr1776782pgc.210.1662446003223;
-        Mon, 05 Sep 2022 23:33:23 -0700 (PDT)
-Received: from localhost ([166.111.139.139])
-        by smtp.gmail.com with ESMTPSA id e19-20020aa79813000000b0052dce4edceesm9090702pfl.169.2022.09.05.23.33.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 23:33:22 -0700 (PDT)
-From:   Zixuan Fu <r33s3n6@gmail.com>
-To:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: [BUG] scsi: megaraid_sas: possible use-after-free caused by bad error handling in megasas_probe_one()
-Date:   Tue,  6 Sep 2022 14:33:18 +0800
-Message-Id: <20220906063318.2745858-1-r33s3n6@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Tue, 6 Sep 2022 02:34:17 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2085.outbound.protection.outlook.com [40.107.96.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840376B167;
+        Mon,  5 Sep 2022 23:34:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ndsm9xR1SnAInqTtljsA0Plrhf75eS3AtzWHEXrftSSVYiNmrQGwbbyJ4I8LROn0uI4L+68x0WzCV5JkbvvCnbI8Sym1MCc061wijmlFqbdYbI/mp6w6B9IuG82efLH+8GhW2dD+ifzLvBsiJSD+z572jSaO3zrd7a1yf4ygCIyEFis1L57g3bcsEUO9bMPcx/BSrxtCUxIiVQwVCQjvKnECkJy9bNyGM7Nd9yQAgwoFnb605ODgTKKmb8VWj61qwwmv9q+05F6uViNelTCkG51tTNe4+8IEUqEpm9N+czi432cJLqvh2Ha4CUsmBFdhjYcKUIzSZKnYaoBiVCHy0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=unpovRgVykmyXBcqOISSIJeS+NqAtp9fThXQw+eT2Wc=;
+ b=X7Q1IzjK4wp84qkp1uN3ph+jA4knnzKCKp/19EsqY9eSaUtlElx4GXEa5uXcfqaUKigd5qNiqdJTHnYYMLq4cWRA8hFzBVbQ6h6bOwUmMZc2QvMlzV2NZA5JmrFtMUEu+VWn1PAklu/vltNELmzI7B9NC9kQntNTQmFwDd9znpmsO2YYsJb7ngi276q3p5898cWBuVif1xa9I5zin5fjeBrMvSr7tLBwp2E9CaYT7toryg949O90idUp3XQY6mUgR/xoSCcklDrbUJw2CkIW4Es2kJTK+GtxRBu2pyudomtgebBcp30/q7i+EblAuy1ofM6t9jTPwAJIiL1qxd6ywA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=unpovRgVykmyXBcqOISSIJeS+NqAtp9fThXQw+eT2Wc=;
+ b=OymRNjPcvIyjCZrSIt2cDQAZaa161ITjLlDQV+IFM3pCF7Ff6BPSVtMiGY2dHQiWlg31onxBg/zPNffH2aRNMjzRWl70hv0L+IaZBeIaoA1TUkAiX2mGloaDORpl1xJNGbLivIO5yOJmTdN/dGSkQvASICEQoo7TxMfPF+eI9Xc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
+ by CH0PR12MB5236.namprd12.prod.outlook.com (2603:10b6:610:d3::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Tue, 6 Sep
+ 2022 06:34:14 +0000
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::a997:c7f:aea0:764a]) by BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::a997:c7f:aea0:764a%4]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 06:34:14 +0000
+Message-ID: <5568fad0-1503-a0f3-222e-c238fd4eefdd@amd.com>
+Date:   Tue, 6 Sep 2022 08:34:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/4] drm/sched: Enable signaling for finished fence
+Content-Language: en-US
+To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220905163502.4032-1-Arvind.Yadav@amd.com>
+ <20220905163502.4032-2-Arvind.Yadav@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220905163502.4032-2-Arvind.Yadav@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR3P281CA0156.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::17) To BYAPR12MB3589.namprd12.prod.outlook.com
+ (2603:10b6:a03:df::29)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8bfaacaf-9905-4831-0b8b-08da8fd1d0a1
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5236:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TxpxU/d+toPLFSeVpLzBxh0gC5qWBAsx1IOBgFbZImrB3iBR5sHIconVWlPQF2HEXgnFs3f9LPRVCvCn1GjhbcaGX01wGz3jyPGVlpDC59Mm5U+aC9l8KdkAG51J0qkrumDZMFihXPBp65g9gAt5UHGUoTvDpQJpRLZepm84+u/d6wL55mH4nPo3FUoHFTv0A0wtMr2JZODU7bpSuUQhLvwUA9lOBERVQxfmvunfW+msLUo1PE9xkOOFHP9ym9AbFkno+kpvMuHyIK8YpUoh7OJBzu9TJyJQADIFaPgfWbbIr5sVZCMFZCL+rCZ/fzMmmXdfJlk33RqVizkjq7iAzY/YDNtC5c/eEg0nWAEs9nSSh7IAkvNOlJLf9g+gu24E8t2uGZKK2uYyIbfpIg+fKOxsl0GTylTp6zCNuH+Pa3mVfB5T+3gkns+n+UK6XsGQQZti7c2vQqU1g68+UkAbiVc+JFIgx04EL94Q4ZmgWBFaUd2mt0dEcCn6L1rNR4im2crDzAUyCTwuewu1SZrYIFNINkVQ7Uu0Vtni6uwbXKqWBImsNZfsBz0ezsYnNs6rGYqwjjqHgnTIbkvKUWx6v5VxGwetwfKHRFfTgzfWXICXwZ397Fv3HzBIPszYKn8P0QBnSNo2+mqlFtQQtIuqvuZBo+Gmgb6vLA4VZLmK6J24mcuK6IixPyGrWMZDXJWXGauKdzhWMG2HDIQ5YG6TzRkPJLleZ1RgY7Qq0i7ZquLEd+VquG2hIX/kQnE1V174K1mDK240jBs3b7eEGsl281LKJoVYAo5qVd7z1MmjwZ5LJ57eSUb8GukVVRb5I0Tb
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(366004)(396003)(346002)(39860400002)(36756003)(6512007)(5660300002)(41300700001)(6486002)(8936002)(2906002)(38100700002)(6666004)(66556008)(66476007)(66946007)(86362001)(8676002)(31696002)(6506007)(478600001)(921005)(31686004)(186003)(2616005)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzJUbHhVTk5yNHNTUk1tUmc5eHJtZUNNKzBBbUR2R1gzR0RzaUZNSmF4UzRU?=
+ =?utf-8?B?bDdXdGR3ck9uelNDTFpMZ1NKcFhlaFVNSWFtbTVLQWsvUnFyUHZ6Z2E4cFQw?=
+ =?utf-8?B?OVd1WXEzSndpaXVveUJEcGREcXNzN09UK2VvbW9va0dFdzEwdFBUaWhUcTRX?=
+ =?utf-8?B?VExBMkJUNUJpR1Q3VktrTFNWR05ZMHJ4c1E0SWZMZVBVMlhlWTJZYkR1dGx5?=
+ =?utf-8?B?LzVNbEY1RmtRd0F6SEc4V0pGYlV0RGdLc0FJREpMeG5hdlF2bjdyS1BtMVlp?=
+ =?utf-8?B?RmYyVzRoOER5RzQ1U0JIN25SQzZMeHFHVmpvWlV6VnVueGd3dGRoR3daYUd6?=
+ =?utf-8?B?dnNaTzdaUGVha1R3bGoyc29TYUtPZEVWWm1VeExremlzRFNCTkc2bWFrRHpu?=
+ =?utf-8?B?T1o2UFhqTkkvRGNCcTdDZXRyYXEyUFdBUGJJNElmV1Q4cGxaYU1YZDhSeGNI?=
+ =?utf-8?B?K2ZzQy9KVEk0Y2QzcVpsajdMNjFEQ2JzVUFyZ0ZZQ3VVR2dPMjUrczhTWVNN?=
+ =?utf-8?B?Q2hhREdhRkZaUHhJSC9XVE45MWczM3Zya29TK29WaC9hWGd6NE5Rb3VZeHp6?=
+ =?utf-8?B?UTJrbm04SDJuRkhiMGdSMjl0UDBPK0dteUFpbGVqTWdDRk54ZEhlOCtFbXY4?=
+ =?utf-8?B?bXF3RG1hczRlZktBOWtTMDdZTjdiWUw4NmowUFBoVm8wRVRaOEpRNHUvV2Vy?=
+ =?utf-8?B?Qy93a3NiYXBaMjdUT1ZaREhFU0JYbnlMWitHQjkya0x6R0lEMnhzNUk2MWNV?=
+ =?utf-8?B?ekdLOWZvRlFVVThHTXRPand4WlhLWGFHYzlqQW9Pdm9xM0FNcitRS3FlZ0Z2?=
+ =?utf-8?B?L0xIL25OYTE4aXJEVVY4NlNORnFMb09VTmlCMjFlZllvZ0tRNmdSRis1d0lP?=
+ =?utf-8?B?TVY0ZmoxWVlISzdJQzBQSm44TW4zOVFyR21HdlI2UGpYNGdBcFJobWFMOTdq?=
+ =?utf-8?B?Ky8vQ1RKZjZiUTduZ2M2bngzOHdjSHVSRXhXTDVHTjVkamNzY1A5VE9yamZH?=
+ =?utf-8?B?anZkeWRkWnA4UUtsSjQrUEczRjFGaWpzNmlIMjh3ejFjdjNSdVdTaFZGK2Ns?=
+ =?utf-8?B?MzNKWmlNQ2dJMmVjRDgxWUVWQjlEYUpERy9TQVZQOUZ4R0x3QnF2clFKcHc0?=
+ =?utf-8?B?UmdZNnpVWkpYeFl6RFpLQ3hHMjhYMTA0UDFVaTY0UTh5a25IWlo5SkkzQ3g0?=
+ =?utf-8?B?cmk1SzdHWlkwQWh1VkJNWkd6REl0QkpSZ3RhK2NrUytnK1J0TlB2bEdTVmZ6?=
+ =?utf-8?B?NlFyRG9sOEloa3ZpOTgrVkZvc2VnKy9xTWMyVlBtSm5iVUM0ck43enhEeHR3?=
+ =?utf-8?B?Z0tBY3diWGlxSTgxQjd2K2NMeEVLQVZ2NDNNZnJrSkQwQlhSSk9VK1VPSFRk?=
+ =?utf-8?B?RklSRXdxbVZ5WVVJQURJNHVwdEQxU0JFazJ0ZmZRek5qNVoxMWlJeWFOcE9k?=
+ =?utf-8?B?ZkFueUg3ZnZ3ZllDc1dVRXUwNXZWN0cxditLWU9SM2FKL1FmV3BaMHFPb0pX?=
+ =?utf-8?B?OWt4U3NQK3MreGxFZTVqdG9YbnZ1Q3llMEhCSEhpT3JTRHhsVEhHN2R5TWc0?=
+ =?utf-8?B?TGJvbzhlTzZsakoyOE54OUFKcEYwbzc2NkVwOFFPeEpCRVl6bW5KbHFzMzJT?=
+ =?utf-8?B?ZGhjMXFWSC9YU0k0d0Z1YTBORVhaUWRBajcwdTlqdVdOdDBEeWMzMStSYnlV?=
+ =?utf-8?B?L0p4bGxPMENZbGRQWjI3cFRLWmxoL1dtQWJ2NE1DTVNiTzh2REtxZFV5RDFt?=
+ =?utf-8?B?MEo5L1RqRzFhZDJpTURlczNrTjVUQ2NVN1ora1RJV3daTFJHSEdYL3VkaG5h?=
+ =?utf-8?B?LytYM1REZmI2NXN4bWROM04rYzM1eVg1RnNLUllwUGZyTFNTYVV6bHhTd3N2?=
+ =?utf-8?B?R01GZ05RV3Q5NkF6RXdDY0JJc0NiZGdCYURnNVpFUGFpcVZieTEvSFNWTjla?=
+ =?utf-8?B?S3JYamNBVUNTN0gvU2x5eUxGUnpnT1R6aEVCMmw3ZDNQeDF0U3lBd2J3ZU1C?=
+ =?utf-8?B?TlZCb2ljYUdhdmJCWFB2dDBSd2FySCtNbERoTFR3dlpVYlIyR3RXM29HUmFU?=
+ =?utf-8?B?d2x3cldTOGdqVVJ5Mmdkd1VlMTlBVHNkK3RBVlBsR1ZVeEFxUm9EVnBTYkNr?=
+ =?utf-8?B?aFFVMlRFYmo5eTZtM0ZWcVcxMmFoeVVyUldoOTBiVnY2NWNVUzF0L1MwNkdG?=
+ =?utf-8?Q?73lydpUOkDZpeGRLZT6/IVU=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bfaacaf-9905-4831-0b8b-08da8fd1d0a1
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 06:34:14.0935
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jHyz2+BWKOsngCCEigA6Wbh+aIxtoYfhrQbS5UdStG0vOnkb+ErbRfmPyoaTSPvk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5236
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Am 05.09.22 um 18:34 schrieb Arvind Yadav:
+> Here's enabling software signaling for finished fence.
+>
+> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+> ---
+>
+> Changes in v1 :
+> 1- Addressing Christian's comment to remove CONFIG_DEBUG_FS check from
+> this patch.
+> 2- The version of this patch is also changed and previously
+> it was [PATCH 2/4]
+>
+> ---
+>   drivers/gpu/drm/scheduler/sched_main.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> index e0ab14e0fb6b..fe72de0e2911 100644
+> --- a/drivers/gpu/drm/scheduler/sched_main.c
+> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> @@ -962,6 +962,8 @@ static int drm_sched_main(void *param)
+>   			/* Drop for original kref_init of the fence */
+>   			dma_fence_put(fence);
+>   
+> +			dma_fence_enable_sw_signaling(&s_fence->finished);
 
-Our fault injection tool finds a possible use-after-free in the 
-megaraid_sas driver in Linux 5.10.0:
+Ok, this makes it a lot clearer. Previously I though that we have some 
+bug in dma_fence_add_callback().
 
-In the file drivers/scsi/megaraid/megaraid_sas_base.c:
-In megasas_io_attach(), the call to scsi_add_host() may fail: 
-6814:	if (scsi_add_host(host, &instance->pdev->dev)) {
-            ...
-6818:		return -ENODEV;
-6819:	}
+This is essentially the wrong place to call this, the finished fence 
+should be enabled by the caller and not here.
 
-This error is then propagated to its caller megasas_probe_one().
-7414:	if (megasas_io_attach(instance))
-7415:   	goto fail_io_attach;
+There is also another problem in dma_fence_enable_sw_signaling(), it 
+returns early when the fence is already signaled:
 
-In error handling code of megasas_probe_one(), it calls scsi_host_put():
-7457:   scsi_host_put(host);
+         if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
+                 return;
 
-The function scsi_host_put() calls scsi_host_dev_release() to free `host`,
-which contains a variable `instance`.
+Please remove that one first.
 
-But megasas_probe_one() calls megasas_init_fw() before:
-7372: 	if (megasas_init_fw(instance))
+Thanks,
+Christian.
 
-In megasas_init_fw(), it starts a timer:
-6369:   megasas_start_timer(instance);
 
-And megasas_probe_one() does nothing about it in error handling code. When
-the timer expires, it accesses `instance`, causing a use-after-free bug.
+> +
+>   			r = dma_fence_add_callback(fence, &sched_job->cb,
+>   						   drm_sched_job_done_cb);
+>   			if (r == -ENOENT)
 
-I am not quite sure how to fix this possible bug. Any feedback would be
-appreciated, thanks!
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-
-Best wishes,
-Zixuan Fu

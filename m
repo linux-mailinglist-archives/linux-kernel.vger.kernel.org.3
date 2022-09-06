@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD935AEDF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31FC5AEDBC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242440AbiIFOjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S238338AbiIFOjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239754AbiIFOi0 (ORCPT
+        with ESMTP id S242215AbiIFOir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:38:26 -0400
+        Tue, 6 Sep 2022 10:38:47 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0D49A6A8;
-        Tue,  6 Sep 2022 07:00:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1F49A964;
+        Tue,  6 Sep 2022 07:00:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662472848; x=1694008848;
+  t=1662472857; x=1694008857;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=X/ar3dqdTBAXl4yVl+JbHybkXPhhp+6FzbNlV23f2H0=;
-  b=TumRLoQuuJJGOSgu5XUdHvbxCU81El62UYukzwZ2RD3Y0VARXe7cy5au
-   mXzwgzoFaOq2PHoHcq1PlTl/d8WMNx5kSU63gfn3ivP+jMw32GlKf723i
-   9tRE9y0YUTNRwA5ORFUzLOEaFKQxw9NnwHmcFvPr+ObHC834rwh8GKeNT
-   pB+rj8yr5Xmck3lgTETTVLRduny4QbdBytBtdwd4nbQ/nP2ALsu2J0WQT
-   SU7Mp3IxeexXEcK4zV9UTW4j4J5sbyQD6EFyrQgi9Xy/OXvsXhdyAqDNj
-   LFkit6NuAab6TWe5xitAPo+PU6eoZ5LBYabT/1Ht26WsjcnIm9YaBXLG6
-   g==;
+  bh=pk0hBeRzv9yrSvjx77z7pR8KMLbpypDtOQMtHWLcCCU=;
+  b=OWPO9sIzkxP4jocz/tYqCEZPLZBqAyq6myzvB1OVIVjJN+6TmZhgdVBH
+   uCGp7bXKA4cMtUf1S3g6cthOgsgMnpjpEqNV+xqVVCva96n3Hk6JROMxv
+   UOleduYl7jCJ7jYwGEH7s3HgFoSef66iEN3cHXJrekfkbDoZ0b1mT4Xfh
+   ylfBkPI8pAYIeWkXLrpYkvJUjpWM8LIPmVLSlm4RoWvB4nWp6YPKUNmOj
+   KOWvK7xVqrs6MSGKfMyw57daMPKUT3CTuZG5bW+6dcnX8TaGIOIGTvcPl
+   neJdUZz7k9+inxZjsLicfSRfCuh3zv2HyFKGOv4NEKx4InCS5DmRT6poh
+   w==;
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="175830153"
+   d="scan'208";a="175830165"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 06:57:30 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 06:57:31 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 6 Sep 2022 06:57:21 -0700
+ 15.1.2507.12; Tue, 6 Sep 2022 06:57:26 -0700
 Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 06:57:16 -0700
+ 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 06:57:21 -0700
 From:   Sergiu Moga <sergiu.moga@microchip.com>
 To:     <lee@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
@@ -53,9 +53,9 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v2 09/13] tty: serial: atmel: Define BRSRCCK bitmask of UART IP's Mode Register
-Date:   Tue, 6 Sep 2022 16:55:08 +0300
-Message-ID: <20220906135511.144725-10-sergiu.moga@microchip.com>
+Subject: [PATCH v2 10/13] tty: serial: atmel: Only divide Clock Divisor if the IP is USART
+Date:   Tue, 6 Sep 2022 16:55:09 +0300
+Message-ID: <20220906135511.144725-11-sergiu.moga@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906135511.144725-1-sergiu.moga@microchip.com>
 References: <20220906135511.144725-1-sergiu.moga@microchip.com>
@@ -72,36 +72,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add definitions for the Baud Rate Source Clock bitmask of the
-Mode Register of UART IP's and its bitfields.
+Make sure that the driver only divides the clock divisor if the
+IP handled at that point is USART, since UART IP's do not support
+implicit peripheral clock division. Instead, in the case of UART,
+go with the highest possible clock divisor.
 
 Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
 ---
 
 
-
 v1 -> v2:
-- Nothing, this patch was not here before
+- Nothing, this patch was not here before and is mainly meant as both cleanup
+and as a way to introduce a new field into struct atmel_uart_port that will be
+used by the last patch to diferentiate between USART and UART regarding the
+location of the Baudrate Clock Source bitmask.
 
 
 
- drivers/tty/serial/atmel_serial.h | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/serial/atmel_serial.h b/drivers/tty/serial/atmel_serial.h
-index 70d0611e56fd..ed64035ba6c3 100644
---- a/drivers/tty/serial/atmel_serial.h
-+++ b/drivers/tty/serial/atmel_serial.h
-@@ -68,6 +68,9 @@
- #define		ATMEL_US_NBSTOP_1		(0 << 12)
- #define		ATMEL_US_NBSTOP_1_5		(1 << 12)
- #define		ATMEL_US_NBSTOP_2		(2 << 12)
-+#define	ATMEL_UA_BRSRCCK	GENMASK(13, 12)	/* Clock Selection for UART */
-+#define		ATMEL_UA_BRSRCCK_PERIPH_CLK	(0 << 12)
-+#define		ATMEL_UA_BRSRCCK_GCLK		(1 << 12)
- #define	ATMEL_US_CHMODE		GENMASK(15, 14)	/* Channel Mode */
- #define		ATMEL_US_CHMODE_NORMAL		(0 << 14)
- #define		ATMEL_US_CHMODE_ECHO		(1 << 14)
+ drivers/tty/serial/atmel_serial.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index 7450d3853031..6aa01ca5489c 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -150,6 +150,7 @@ struct atmel_uart_port {
+ 	u32			rts_low;
+ 	bool			ms_irq_enabled;
+ 	u32			rtor;	/* address of receiver timeout register if it exists */
++	bool			is_usart;
+ 	bool			has_frac_baudrate;
+ 	bool			has_hw_timer;
+ 	struct timer_list	uart_timer;
+@@ -1825,6 +1826,7 @@ static void atmel_get_ip_name(struct uart_port *port)
+ 	 */
+ 	atmel_port->has_frac_baudrate = false;
+ 	atmel_port->has_hw_timer = false;
++	atmel_port->is_usart = false;
+ 
+ 	if (name == new_uart) {
+ 		dev_dbg(port->dev, "Uart with hw timer");
+@@ -1834,6 +1836,7 @@ static void atmel_get_ip_name(struct uart_port *port)
+ 		dev_dbg(port->dev, "Usart\n");
+ 		atmel_port->has_frac_baudrate = true;
+ 		atmel_port->has_hw_timer = true;
++		atmel_port->is_usart = true;
+ 		atmel_port->rtor = ATMEL_US_RTOR;
+ 		version = atmel_uart_readl(port, ATMEL_US_VERSION);
+ 		switch (version) {
+@@ -1863,6 +1866,7 @@ static void atmel_get_ip_name(struct uart_port *port)
+ 			dev_dbg(port->dev, "This version is usart\n");
+ 			atmel_port->has_frac_baudrate = true;
+ 			atmel_port->has_hw_timer = true;
++			atmel_port->is_usart = true;
+ 			atmel_port->rtor = ATMEL_US_RTOR;
+ 			break;
+ 		case 0x203:
+@@ -2282,10 +2286,17 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
+ 		cd = uart_get_divisor(port, baud);
+ 	}
+ 
+-	if (cd > 65535) {	/* BRGR is 16-bit, so switch to slower clock */
++	/*
++	 * BRGR is 16-bit, so switch to slower clock.
++	 * Otherwise, keep the highest possible value for the clock divisor.
++	 */
++	if (atmel_port->is_usart && cd > 65535) {
+ 		cd /= 8;
+ 		mode |= ATMEL_US_USCLKS_MCK_DIV8;
++	} else {
++		cd &= 65535;
+ 	}
++
+ 	quot = cd | fp << ATMEL_US_FP_OFFSET;
+ 
+ 	if (!(port->iso7816.flags & SER_ISO7816_ENABLED))
 -- 
 2.25.1
 

@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0505AE71B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B985C5AE719
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiIFMBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
+        id S234119AbiIFMBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233980AbiIFMBN (ORCPT
+        with ESMTP id S234355AbiIFMBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:01:13 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 414C67755B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:01:07 -0700 (PDT)
-Received: from lichenyang$loongson.cn ( [10.20.42.75] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Tue, 6 Sep 2022 20:00:30
- +0800 (GMT+08:00)
-X-Originating-IP: [10.20.42.75]
-Date:   Tue, 6 Sep 2022 20:00:30 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5p2O5pmo6Ziz?= <lichenyang@loongson.cn>
-To:     "Maxime Ripard" <mripard@kernel.org>,
-        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Dan Carpenter" <dan.carpenter@oracle.com>,
-        "David Airlie" <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
-        devel@linuxdriverproject.org
-Cc:     "Sam Ravnborg" <sam@ravnborg.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 4/4] drm/loongson: Use acpi to get video bios.
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
- Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
-In-Reply-To: <20220625090715.3663-1-lichenyang@loongson.cn>
-References: <20220625090715.3663-1-lichenyang@loongson.cn>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: RQV3fmZvb3Rlcl90eHQ9NTI3NTo2MTI=
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <4d2ef343.6329.18312ac6195.Coremail.lichenyang@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAf8BxJeJeNhdjZbcSAA--.4021W
-X-CM-SenderInfo: xolfxvxq1d0wo6or00hjvr0hdfq/1tbiAQABA2MV5tsWagADs3
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Tue, 6 Sep 2022 08:01:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFD2785A2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:01:29 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 681171F9DD;
+        Tue,  6 Sep 2022 12:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662465688; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VYd9KqtaGym9N3B6x/APXqGLrtikSgVt1GlBl0IGkU4=;
+        b=DZ2b6xOZZtc4ZDcz/zCUSoe+wKo85hlzdMySiorZVds83DEyIn78jjZuhybxTgHfELxOZ5
+        d/DJPKSpYIVJaa7uPV5z+nFuRndO4K7D2Ew3qtd5IplVUHB2TIUrAYbIRwhRPgP+aosCfz
+        Cjho+/vHn95mpkQVjl5LngRUf4Wh6nc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662465688;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VYd9KqtaGym9N3B6x/APXqGLrtikSgVt1GlBl0IGkU4=;
+        b=pRLA/3gHiN0EMikTKvqnBghBMpKB3/9Ilfax9dnMyTmxA/xZWzA7TZ/L6eEWF3QCe1lQXD
+        QNlGwht7qrYJVVAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3981D13A7A;
+        Tue,  6 Sep 2022 12:01:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8pBBDZg2F2NnNgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 06 Sep 2022 12:01:28 +0000
+Date:   Tue, 06 Sep 2022 14:01:27 +0200
+Message-ID: <875yi0hfu0.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Lucas Tanure <tanureal@opensource.cirrus.com>,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org,
+        James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH v1 1/2] ALSA: hda: cs35l41: Call put_device() in the scope of get_device()
+In-Reply-To: <20220905165826.35979-1-andriy.shevchenko@linux.intel.com>
+References: <20220905165826.35979-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,111 +74,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QWRkIGdldCB2aWRlbyBiaW9zIGZyb20gdGhlIEFDUEkgdGFibGUuCkRlZmluZSBuZXcgYWNwaSB0
-YWJsZSAiVklBVCIgZm9yIGxvb25nc29uIHZpZGVvIGJpb3MuCgpTaWduZWQtb2ZmLWJ5OiBDaGVu
-eWFuZyBMaSA8bGljaGVueWFuZ0Bsb29uZ3Nvbi5jbj4KLS0tCiBkcml2ZXJzL2dwdS9kcm0vbG9v
-bmdzb24vTWFrZWZpbGUgICAgICAgICB8ICAzICstCiBkcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24v
-bG9vbmdzb25fZHJ2LmMgICB8IDIxICsrKysrKystCiBkcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24v
-bG9vbmdzb25fZHJ2LmggICB8ICAxICsKIGRyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9sb29uZ3Nv
-bl92Ymlvcy5jIHwgNjIgKysrKysrKysrKysrKysrKysrKysrKysKIGRyaXZlcnMvZ3B1L2RybS9s
-b29uZ3Nvbi9sb29uZ3Nvbl92Ymlvcy5oIHwgMjkgKysrKysrKysrKysKIDUgZmlsZXMgY2hhbmdl
-ZCwgMTEzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQg
-ZHJpdmVycy9ncHUvZHJtL2xvb25nc29uL2xvb25nc29uX3ZiaW9zLmMKIGNyZWF0ZSBtb2RlIDEw
-MDY0NCBkcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24vbG9vbmdzb25fdmJpb3MuaAoKZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9NYWtlZmlsZSBiL2RyaXZlcnMvZ3B1L2RybS9s
-b29uZ3Nvbi9NYWtlZmlsZQppbmRleCBiMDgzODU0ZDc4OWIuLmI3NzRhOTEwMDNkOSAxMDA2NDQK
-LS0tIGEvZHJpdmVycy9ncHUvZHJtL2xvb25nc29uL01ha2VmaWxlCisrKyBiL2RyaXZlcnMvZ3B1
-L2RybS9sb29uZ3Nvbi9NYWtlZmlsZQpAQCAtMTEsNSArMTEsNiBAQCBsb29uZ3Nvbi15IDo9IGxv
-b25nc29uX2Nvbm5lY3Rvci5vIFwKIAlsb29uZ3Nvbl9lbmNvZGVyLm8gXAogCWxvb25nc29uX2ky
-Yy5vIFwKIAlsb29uZ3Nvbl9pcnEubyBcCi0JbG9vbmdzb25fcGxhbmUubworCWxvb25nc29uX3Bs
-YW5lLm8gXAorCWxvb25nc29uX3ZiaW9zLm8KIG9iai0kKENPTkZJR19EUk1fTE9PTkdTT04pICs9
-IGxvb25nc29uLm8KZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9sb29uZ3Nv
-bl9kcnYuYyBiL2RyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9sb29uZ3Nvbl9kcnYuYwppbmRleCAx
-ZDZmMzVlNzg4MTMuLjFjMjEyMjAwZjA4OCAxMDA2NDQKLS0tIGEvZHJpdmVycy9ncHUvZHJtL2xv
-b25nc29uL2xvb25nc29uX2Rydi5jCisrKyBiL2RyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9sb29u
-Z3Nvbl9kcnYuYwpAQCAtMTksMTQgKzE5LDI4IEBACiAjaW5jbHVkZSA8ZHJtL2RybV9wcm9iZV9o
-ZWxwZXIuaD4KCiAjaW5jbHVkZSAibG9vbmdzb25fZHJ2LmgiCisjaW5jbHVkZSAibG9vbmdzb25f
-dmJpb3MuaCIKKworLyoKKyAqIENvbXBsZXRlZAorICogMS5EaXNwbGF5cyBjb250cm9sbGVyIGRl
-dmljZSBpbml0aWFsaXphdGlvbiBhbmQgZGlzcGxheSBmdW5jaXRvbnMKKyAqIDIuSTJjIGJ1cyBk
-cml2ZXIgYW5kIEREQyBmdW5jdGlvbnMKKyAqIDMuVmJsYW5rIGFuZCB2c3luYyBpbnRlcnJ1cHQg
-c3VwcG9ydAorICogNC5Vc2UgYWNwaSB0byBnZXQgdmlkZW8gYmlvcworICogVG9kbworICogMS5W
-aWRlbyBiaW9zIHBhcnNlIGZ1bmN0aW9ucworICogMi5IYXJkd2FyZSBjdXJzb3IgZHJpdmVyCisg
-KiAzLk5ldyBkZXZpY2Ugc3VwcG9ydCBhcyB3ZWxsIGFzIExvb25nc29uIEdQVQorICovCgogLyog
-SW50ZXJmYWNlIGhpc3Rvcnk6CiAgKiAwLjEgLSBvcmlnaW5hbC4KICAqIDAuMiAtIGFkZCBpMmMg
-YW5kIGNvbm5lY3RvciBkZXRlY3QuCiAgKiAwLjMgLSBWYmxhbmsgYW5kIHZzeW5jIGludGVycnVw
-dCBzdXBwb3J0LgorICogMC40IC0gVXNlIGFjcGkgdG8gZ2V0IHZiaW9zLgogICovCiAjZGVmaW5l
-IERSSVZFUl9NQUpPUiAwCi0jZGVmaW5lIERSSVZFUl9NSU5PUiAzCisjZGVmaW5lIERSSVZFUl9N
-SU5PUiA0Cgogc3RhdGljIGNvbnN0IHN0cnVjdCBkcm1fbW9kZV9jb25maWdfZnVuY3MgbG9vbmdz
-b25fbW9kZV9mdW5jcyA9IHsKIAkuZmJfY3JlYXRlID0gZHJtX2dlbV9mYl9jcmVhdGUsCkBAIC04
-OCw3ICsxMDIsMTAgQEAgc3RhdGljIGludCBsb29uZ3Nvbl9kZXZpY2VfaW5pdChzdHJ1Y3QgZHJt
-X2RldmljZSAqZGV2KQogCWlmICghbGRldi0+aW8pCiAJCXJldHVybiAtRU5PTUVNOwoKLQlsZGV2
-LT5udW1fY3J0YyA9IDI7CisJaWYgKCFsb29uZ3Nvbl92Ymlvc19pbml0KGxkZXYpKSB7CisJCURS
-TV9XQVJOKCJHZXQgdmJpb3MgZmFpbGVkLCBlbmFibGUgdHdvIGNydGNcbiIpOworCQlsZGV2LT5u
-dW1fY3J0YyA9IDI7CisJfQoKIAlyZXQgPSBsb29uZ3Nvbl9kY19ncGlvX2luaXQobGRldik7CiAJ
-aWYgKHJldCkKZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9sb29uZ3Nvbl9k
-cnYuaCBiL2RyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9sb29uZ3Nvbl9kcnYuaAppbmRleCBhZjQ3
-ZTY4NDg3ZmQuLjRlNWNiNTk3N2M5YSAxMDA2NDQKLS0tIGEvZHJpdmVycy9ncHUvZHJtL2xvb25n
-c29uL2xvb25nc29uX2Rydi5oCisrKyBiL2RyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9sb29uZ3Nv
-bl9kcnYuaApAQCAtMTA5LDYgKzEwOSw3IEBAIHN0cnVjdCBsb29uZ3Nvbl9kZXZpY2UgewogCXUz
-MiBudW1fY3J0YzsKIAlzdHJ1Y3QgbG9vbmdzb25fbW9kZV9pbmZvIG1vZGVfaW5mb1syXTsKIAlz
-dHJ1Y3QgcGNpX2RldiAqZ3B1X3BkZXY7IC8qIExTN0EgZ3B1IGRldmljZSBpbmZvICovCisJdm9p
-ZCAqdmJpb3M7CgogCXN0cnVjdCBsb29uZ3Nvbl9pMmMgaTJjX2J1c1tEQ19NQVhfSTJDX0JVU107
-CiB9OwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2xvb25nc29uL2xvb25nc29uX3ZiaW9z
-LmMgYi9kcml2ZXJzL2dwdS9kcm0vbG9vbmdzb24vbG9vbmdzb25fdmJpb3MuYwpuZXcgZmlsZSBt
-b2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwMDAuLjJiM2EyNzU3MTAyYQotLS0gL2Rldi9udWxs
-CisrKyBiL2RyaXZlcnMvZ3B1L2RybS9sb29uZ3Nvbi9sb29uZ3Nvbl92Ymlvcy5jCkBAIC0wLDAg
-KzEsNjIgQEAKKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9yLWxhdGVyCisv
-KgorICogQ29weXJpZ2h0IChDKSAyMDIwLTIwMjIgTG9vbmdzb24gVGVjaG5vbG9neSBDb3Jwb3Jh
-dGlvbiBMaW1pdGVkCisgKi8KKworI2luY2x1ZGUgImxvb25nc29uX2Rydi5oIgorI2luY2x1ZGUg
-Imxvb25nc29uX3ZiaW9zLmgiCisKKyNpZmRlZiBDT05GSUdfQUNQSQorc3RhdGljIGJvb2wgcmVh
-ZF9iaW9zX2Zyb21fYWNwaShzdHJ1Y3QgbG9vbmdzb25fZGV2aWNlICpsZGV2KQoreworCXZvaWQg
-KnZhZGRyOworCXN0cnVjdCBhY3BpX3RhYmxlX2hlYWRlciAqaGRyOworCXN0cnVjdCBhY3BpX3Zp
-YXRfdGFibGUgKnZpYXQ7CisJYWNwaV9zaXplIHRibF9zaXplOworCisJaWYgKCFBQ1BJX1NVQ0NF
-U1MoYWNwaV9nZXRfdGFibGUoIlZJQVQiLCAxLCAmaGRyKSkpCisJCXJldHVybiBmYWxzZTsKKwor
-CXRibF9zaXplID0gaGRyLT5sZW5ndGg7CisJaWYgKHRibF9zaXplICE9IHNpemVvZihzdHJ1Y3Qg
-YWNwaV92aWF0X3RhYmxlKSkgeworCQlEUk1fV0FSTigiQUNQSSB2aWF0IHRhYmxlIHByZXNlbnQg
-YnV0IGJyb2tlbih0b28gc2hvcnQgIzEpXG4iKTsKKwkJcmV0dXJuIGZhbHNlOworCX0KKworCXZp
-YXQgPSAoc3RydWN0IGFjcGlfdmlhdF90YWJsZSAqKWhkcjsKKwlsZGV2LT52YmlvcyA9IGttYWxs
-b2MoVkJJT1NfU0laRSwgR0ZQX0tFUk5FTCk7CisJaWYgKCFsZGV2LT52YmlvcykgeworCQlrZnJl
-ZShsZGV2LT52Ymlvcyk7CisJCXJldHVybiBmYWxzZTsKKwl9CisKKwl2YWRkciA9IHBoeXNfdG9f
-dmlydCh2aWF0LT52Ymlvc19hZGRyKTsKKwltZW1jcHkobGRldi0+dmJpb3MsIHZhZGRyLCBWQklP
-U19TSVpFKTsKKwlEUk1fSU5GTygiR2V0IHZiaW9zIGZyb20gQUNQSSBzdWNjZXNzIVxuIik7CisK
-KwlyZXR1cm4gdHJ1ZTsKK30KKyNlbHNlCitzdGF0aWMgYm9vbCByZWFkX2Jpb3NfZnJvbV9hY3Bp
-KHN0cnVjdCBsb29uZ3Nvbl9kZXZpY2UgKmxkZXYpCit7CisJcmV0dXJuIGZhbHNlOworfQorI2Vu
-ZGlmCisKK2Jvb2wgbG9vbmdzb25fdmJpb3NfaW5pdChzdHJ1Y3QgbG9vbmdzb25fZGV2aWNlICps
-ZGV2KQoreworCWludCByZXQ7CisJc3RydWN0IGxvb25nc29uX3ZiaW9zICpoZWFkZXI7CisKKwly
-ZXQgPSByZWFkX2Jpb3NfZnJvbV9hY3BpKGxkZXYpOworCWlmICghcmV0KQorCQlyZXR1cm4gcmV0
-OworCisJaGVhZGVyID0gbGRldi0+dmJpb3M7CisJbGRldi0+bnVtX2NydGMgPSBoZWFkZXItPmNy
-dGNfbnVtOworCisJRFJNX0lORk8oIkxvb25nc29uIHZiaW9zIHZlcnNpb24gJWQuJWQgY3J0YyBu
-dW0gJWQuXG4iLAorCQkgaGVhZGVyLT52ZXJzaW9uX21ham9yLCBoZWFkZXItPnZlcnNpb25fbWlu
-b3IsIGxkZXYtPm51bV9jcnRjKTsKKworCXJldHVybiByZXQ7Cit9CmRpZmYgLS1naXQgYS9kcml2
-ZXJzL2dwdS9kcm0vbG9vbmdzb24vbG9vbmdzb25fdmJpb3MuaCBiL2RyaXZlcnMvZ3B1L2RybS9s
-b29uZ3Nvbi9sb29uZ3Nvbl92Ymlvcy5oCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAw
-MDAwMDAwMC4uYjdkOGNlMTVjNmM1Ci0tLSAvZGV2L251bGwKKysrIGIvZHJpdmVycy9ncHUvZHJt
-L2xvb25nc29uL2xvb25nc29uX3ZiaW9zLmgKQEAgLTAsMCArMSwyOSBAQAorLyogU1BEWC1MaWNl
-bnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb25seSAqLworLyoKKyAqIENvcHlyaWdodCAoQykgMjAy
-MC0yMDIyIExvb25nc29uIFRlY2hub2xvZ3kgQ29ycG9yYXRpb24gTGltaXRlZAorICovCisKKyNp
-Zm5kZWYgX19MT09OR1NPTl9WQklPU19IX18KKyNkZWZpbmUgX19MT09OR1NPTl9WQklPU19IX18K
-KworI2luY2x1ZGUgPGxpbnV4L2FjcGkuaD4KKworI2RlZmluZSBWQklPU19TSVpFIDB4NDAwMDAK
-Kworc3RydWN0IGxvb25nc29uX3ZiaW9zIHsKKwl1aW50MzJfdCB2ZXJzaW9uX21ham9yOworCXVp
-bnQzMl90IHZlcnNpb25fbWlub3I7CisJdWludDMyX3QgY3J0Y19udW07Cit9IF9fcGFja2VkOwor
-CisjaWZkZWYgQ09ORklHX0FDUEkKKy8qIFZCT0lTIElORk8gQUREUkVTUyBUQUJMRSAqLworc3Ry
-dWN0IGFjcGlfdmlhdF90YWJsZSB7CisJc3RydWN0IGFjcGlfdGFibGVfaGVhZGVyIGhlYWRlcjsK
-Kwl1NjQgdmJpb3NfYWRkcjsKK30gX19wYWNrZWQ7CisjZW5kaWYKKworYm9vbCBsb29uZ3Nvbl92
-Ymlvc19pbml0KHN0cnVjdCBsb29uZ3Nvbl9kZXZpY2UgKmxkZXYpOworCisjZW5kaWYgLyogX19M
-T09OR1NPTl9WQklPU19IX18gKi8KLS0KMi4yNS4xCg0KDQrmnKzpgq7ku7blj4rlhbbpmYTku7bl
-kKvmnInpvpnoiq/kuK3np5HnmoTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5HpgIHn
-u5nkuIrpnaLlnLDlnYDkuK3liJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXl
-hbbku5bkurrku6Xku7vkvZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jm
-iJbpg6jliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbpmYTk
-u7bkuK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vljbPn
-lLXor53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIgDQpUaGlz
-IGVtYWlsIGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRp
-b24gZnJvbSBMb29uZ3NvbiBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5kZWQgb25seSBmb3Ig
-dGhlIHBlcnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcyBsaXN0ZWQgYWJvdmUuIEFueSB1
-c2Ugb2YgdGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdheSAoaW5jbHVk
-aW5nLCBidXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBhcnRpYWwgZGlzY2xvc3VyZSwgcmVw
-cm9kdWN0aW9uIG9yIGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIgdGhhbiB0aGUgaW50
-ZW5kZWQgcmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIHRoaXMgZW1h
-aWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBieSBwaG9uZSBvciBlbWFpbCBp
-bW1lZGlhdGVseSBhbmQgZGVsZXRlIGl0LiA=
+On Mon, 05 Sep 2022 18:58:25 +0200,
+Andy Shevchenko wrote:
+> 
+> When put_device() is called in another function it's hard to realize
+> that and easy to "fix" the code in a wrong way. Instead, move
+> put_device() to be in the same scope as get_device(), so we prevent
+> appearance of any attempts to "fix" the code.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Applied both patches now.  Thanks.
+
+
+Takashi

@@ -2,74 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047F75AEE3B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C354F5AED02
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234237AbiIFO4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
+        id S241245AbiIFODw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbiIFOzY (ORCPT
+        with ESMTP id S241253AbiIFOAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:55:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DC5A570E;
-        Tue,  6 Sep 2022 07:10:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE28FB816A0;
-        Tue,  6 Sep 2022 13:54:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D8FC433C1;
-        Tue,  6 Sep 2022 13:54:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662472443;
-        bh=vYYkxPfb2/GCDIjtBi6KVk15jMRzi+kITFp3Fbi8+lo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C7OaLKRVgNwYg1Lrwc1xEjGeeAP3Gx9aMA3ygbWwh4KVVz9dEZXJ2qlTcV5LUYlg1
-         8fec+4glb8RjW7ajIL4pqRlWyvenlPe30ShEtGxWPhow4oRtKzaEeHPrjRVUXASpTP
-         5p8VmokmQUVlVKiCotSua26cFunMhO9JS8plpv0g=
-Date:   Tue, 6 Sep 2022 15:41:49 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH stable-5.4 0/3] USB: stable backports to 5.4
-Message-ID: <YxdOHV2WUxKBIKWa@kroah.com>
-References: <20220906133435.26452-1-johan@kernel.org>
+        Tue, 6 Sep 2022 10:00:14 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0393483BE1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662471850; x=1694007850;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1u8OGEVRRnz2sJkebIyb/m4gWyjRqqV3cKCIjIyr6EM=;
+  b=GV+FF9Yl1PALnOYFNXkAgs6LAbJReXbIt1Z+cGC3a+D885senWMbX7pZ
+   vTt94xOxqkgUJtp3LDi05zG60azX5sJE3lRL3y/L1POMOp4mppJj93CPM
+   xIUIGVC9J39L60mxd00+Q050KUmdNNJ1iCNuLhlZc3zudoAvdOPUz4rRV
+   IYeTTRWs4tQHW4vYGGJSIXs3Bi/Om7ngLf9nype8WvIHoqRn5+SwngN8z
+   JcVD5zfNIuWv+U7fhhuU5K4PUOltyhyaj/2jK8Tmbz+0RTcHHJM2FRKUW
+   FcpglZEtFggZ1fMDUQLqW9GUtXttXPYnqi7OWajKG6FoUF1R+2S/7qReR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="276332580"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="276332580"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 06:42:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="942459444"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Sep 2022 06:42:46 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id B29EF235; Tue,  6 Sep 2022 16:43:01 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>, Lee Jones <lee@kernel.org>
+Subject: [RESEND][PATCH v1 1/1] mfd: intel_soc_pmic_chtdc_ti: Switch from __maybe_unused to pm_sleep_ptr() etc
+Date:   Tue,  6 Sep 2022 16:42:56 +0300
+Message-Id: <20220906134256.14293-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906133435.26452-1-johan@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:34:32PM +0200, Johan Hovold wrote:
-> Here are backports of the three patches that didn't apply to 5.4.
-> 
-> Johan
-> 
-> 
-> Johan Hovold (3):
->   usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup
->   USB: serial: ch341: fix lost character on LCR updates
->   USB: serial: ch341: fix disabled rx timer on older devices
-> 
->  drivers/usb/dwc3/dwc3-qcom.c | 14 +++++++++++++-
->  drivers/usb/dwc3/host.c      |  1 +
->  drivers/usb/serial/ch341.c   | 15 +++++++++++++--
->  3 files changed, 27 insertions(+), 3 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
+Letting the compiler remove these functions when the kernel is built
+without CONFIG_PM_SLEEP support is simpler and less heavier for builds
+than the use of __maybe_unused attributes.
 
-All now queued up, thanks!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/mfd/intel_soc_pmic_chtdc_ti.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-greg k-h
+diff --git a/drivers/mfd/intel_soc_pmic_chtdc_ti.c b/drivers/mfd/intel_soc_pmic_chtdc_ti.c
+index 1c7577b881ff..282b8fd08009 100644
+--- a/drivers/mfd/intel_soc_pmic_chtdc_ti.c
++++ b/drivers/mfd/intel_soc_pmic_chtdc_ti.c
+@@ -140,7 +140,7 @@ static void chtdc_ti_shutdown(struct i2c_client *i2c)
+ 	disable_irq(pmic->irq);
+ }
+ 
+-static int __maybe_unused chtdc_ti_suspend(struct device *dev)
++static int chtdc_ti_suspend(struct device *dev)
+ {
+ 	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
+ 
+@@ -149,7 +149,7 @@ static int __maybe_unused chtdc_ti_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused chtdc_ti_resume(struct device *dev)
++static int chtdc_ti_resume(struct device *dev)
+ {
+ 	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
+ 
+@@ -158,7 +158,7 @@ static int __maybe_unused chtdc_ti_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static SIMPLE_DEV_PM_OPS(chtdc_ti_pm_ops, chtdc_ti_suspend, chtdc_ti_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(chtdc_ti_pm_ops, chtdc_ti_suspend, chtdc_ti_resume);
+ 
+ static const struct acpi_device_id chtdc_ti_acpi_ids[] = {
+ 	{ "INT33F5" },
+@@ -169,7 +169,7 @@ MODULE_DEVICE_TABLE(acpi, chtdc_ti_acpi_ids);
+ static struct i2c_driver chtdc_ti_i2c_driver = {
+ 	.driver = {
+ 		.name = "intel_soc_pmic_chtdc_ti",
+-		.pm = &chtdc_ti_pm_ops,
++		.pm = pm_sleep_ptr(&chtdc_ti_pm_ops),
+ 		.acpi_match_table = chtdc_ti_acpi_ids,
+ 	},
+ 	.probe_new = chtdc_ti_probe,
+-- 
+2.35.1
+

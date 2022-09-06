@@ -2,156 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D77A5ADED9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 07:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCFF5ADED6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 07:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbiIFFRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 01:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S232467AbiIFFR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 01:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiIFFRn (ORCPT
+        with ESMTP id S232469AbiIFFRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 01:17:43 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539226745D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 22:17:42 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso5378808pjd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 22:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=8BL6o4IX1wUUdMQMOvYouiU2H1/IxMVvREYC6zLqjSM=;
-        b=TWVCL/xy2HDW+mX4jbgIhLGwdV/WxyPA4RoAN/5cH9gLWKElDmudiSt+BLgWyygYUL
-         auKw1A2QkYSevImuO2n+o1XgSBLll2Nco8q4XhnA187HbOc+U5Cp2i67rR50rs/ELzDy
-         NOtzxC8RjpPfc87jCp8e46Po/HF2L2I6nSSJbvvD4JIfQX74pWpHmEYRtB4vJrLGTYca
-         4ujNx+OlzLtM/0sqxh9DgCzOQT2n5EXHKZTz1lQZ/Fd6ziMtNu6WBBgU06Oqa3MTPYnl
-         hX27qfDSveO7p6PQRACejLid/fnq8hfCpPvh9G5VqGJjnxXq7xfwCNID6B7qc2jqgHMK
-         vsAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8BL6o4IX1wUUdMQMOvYouiU2H1/IxMVvREYC6zLqjSM=;
-        b=GDW+90J6JY7Q35qR4UbWVhLH42dSazJGIfQguNTEERWg06CNaPgVRb1e8b031edHuw
-         HLav8dmBaEYElV2qdNDGcU8kaJyLlUEGmCcJgzdMVQ7IC8Bl1FElgzneQGeAgb0kP+R3
-         1+UAdWzsybCDBTzJzct8H/dnir0VkSMs1sHKlLSCEMH/9APxOJyx0F5PwF7XPXbnoEag
-         3s7dO6a5FTrIz4KBtRM1goIatfaeJvGvJEyJ1nNYXa6IWYb5LiAWv66K0/KDVX1aBSNy
-         acuZpIVITCY5xeWcacXe6DL2gwYGV1E5UaPtgN367nNaSTqDqK2OZHjxyR35enIYyGHG
-         T5Jg==
-X-Gm-Message-State: ACgBeo2xoXZhvhKtPgDeXIRLw7tIVScM9JfeSm/0rbdrovx28nTthiq2
-        H1geiSCV54jG5uPjy2qhdDMrmw==
-X-Google-Smtp-Source: AA6agR4vigj/R654EMDF6SU1v26ypc66waj+AKqfllO/bMw5BRTXkx05tlGvD43pNns3B2wikjG6YA==
-X-Received: by 2002:a17:902:9007:b0:176:9f9d:463 with SMTP id a7-20020a170902900700b001769f9d0463mr10844798plp.32.1662441461799;
-        Mon, 05 Sep 2022 22:17:41 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id cp15-20020a170902e78f00b00176ae5c0f38sm3276959plb.178.2022.09.05.22.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 22:17:40 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 10:47:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the recommended
- one to configure and enable regulator
-Message-ID: <20220906051738.doyrdfcas7f5avkp@vireshk-i7>
-References: <20220905171601.79284-1-peron.clem@gmail.com>
- <20220905171601.79284-5-peron.clem@gmail.com>
+        Tue, 6 Sep 2022 01:17:52 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3386BCD7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 22:17:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1662441468;
+        bh=NsoOFwFx0AaCpoovCG8Ki6hZzXU3jxwvWcd2PK9PRqU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=hp7IQRiDpU6Bbdl1RyNiTcuOZCsE3I/D4feOVWr+fTnOOcwVUaG6ugNw9L0PSYpDA
+         xGCIEEBIMc4/efYr4wG+whO2rrSX3FZEAaDSuXJV1gfoTjjQyFdhm4UgnA4y99Tx0y
+         1PViNCnZGTL9hCxrmuonolCKIVEM67AbU4Cetfbo=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 1889965C56;
+        Tue,  6 Sep 2022 01:17:46 -0400 (EDT)
+Message-ID: <a218373f773ef193903daa528291ec8bb384ddd2.camel@xry111.site>
+Subject: Re: [PATCH 1/3] LoongArch: tools: Add relocs tool support
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date:   Tue, 06 Sep 2022 13:17:45 +0800
+In-Reply-To: <29cd929b-185b-1c4b-f200-08f2a724b59d@loongson.cn>
+References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
+         <1662113335-14282-2-git-send-email-tangyouling@loongson.cn>
+         <c9880165f0355fc3be3ec23153b43ad33e558b5d.camel@xry111.site>
+         <4df8a26c49a35c1fce36d80c370f738fa71a2bef.camel@xry111.site>
+         <f0e77716-9533-724a-2ea9-86bc5b52066c@loongson.cn>
+         <78a4a6b0970c309daa336a2329e69d28df486552.camel@xry111.site>
+         <fffdd2ac-4ba6-8eb3-f269-b22a3d9c32f6@loongson.cn>
+         <0b2d115c42ff6cb9b8c65d852ec2f0746ca6e8d9.camel@xry111.site>
+         <d852f590-95b4-3fd1-924a-68c0a6bb1b1b@loongson.cn>
+         <29cd929b-185b-1c4b-f200-08f2a724b59d@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.45.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220905171601.79284-5-peron.clem@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Your subject is 87 columns long, better to squeeze it a bit.
+On Tue, 2022-09-06 at 10:16 +0800, Youling Tang wrote:
 
-On 05-09-22, 19:16, Clément Péron wrote:
-> devm_pm_opp_set_regulators() doesn't enable regulator, which make
-> regulator framework switching it off during regulator_late_cleanup().
+> Switch to relative exception tables:
+>=20
+> https://github.com/tangyouling/linux/commit/6525b8da
+> https://github.com/tangyouling/linux/commit/b6ac0827
+>=20
+> Will switch to the relative exception tables after applying the above
+> two patches. So there is no need to relocate the exception table
+> (remove relocate_exception_table).
+>=20
+> Now we can remove the relocation of la.abs , got and ex_table, but
+> still need to relocate LARCH_64. Is there anything else that needs to
+> be modified to eliminate this relocation?
 
-This isn't the normal behavior as it works for everyone at the moment.
-You need to explain what special you are doing here, because of which
-you are reaching such a situation.
+You may see the RISC-V patch as a reference:
 
-i.e. you are disabling some code that uses GPU ? Please specify exact
-code so others can reproduce it as well.
+https://lore.kernel.org/all/20211009171259.2515351-2-alexandre.ghiti@canoni=
+cal.com/
 
-> Call dev_pm_opp_set_opp() with the recommend OPP in
-> panfrost_devfreq_init() to enable the regulator and avoid any switch off
-> by regulator_late_cleanup().
+Basically, make the linker to generate R_*_RELATIVE instead of R_*_64
+for pointers.  And, perform R_*_RELATIVE relocation loading the kernel.
 
-The regulator is already enabled I think at this point by the
-bootloader. What you are doing here is syncing the state of the
-hardware with the software, which would disallow disabling of the
-resource unnecessarily.
+Something problematic IMO: RISC-V uses "-shared" to trick the linker to
+generate R_*_RELATIVE but I consider it ugly (if the kernel is a shared
+library, my grandma will be a wagon!)  I prefer "-pie -static", but our
+Glibc does not have static-pie support for now.  It won't really affect
+the kernel (we are -nostdlib), but we cannot learn how to handle
+R_*_RELATIVE in static pie from Glibc then.
 
-> Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Clément Péron <peron.clem@gmail.com>
-> ---
->  drivers/gpu/drm/panfrost/panfrost_devfreq.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> index 5110cd9b2425..67b242407156 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> @@ -131,6 +131,14 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->  		return PTR_ERR(opp);
->  
->  	panfrost_devfreq_profile.initial_freq = cur_freq;
-> +
-> +	/* Setup and enable regulator */
-
-Similarly here, explain why this is required to be done.
-
-> +	ret = dev_pm_opp_set_opp(dev, opp);
-> +	if (ret) {
-> +		DRM_DEV_ERROR(dev, "Couldn't set recommended OPP\n");
-> +		return ret;
-> +	}
-> +
->  	dev_pm_opp_put(opp);
-
-Do this before checking if (ret), so the resource can be freed all the
-time.
-
->  
->  	/*
-> -- 
-> 2.34.1
-
--- 
-viresh
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

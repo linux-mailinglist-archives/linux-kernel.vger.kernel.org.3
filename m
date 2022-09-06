@@ -2,168 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D8A5AE68A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C025AE690
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbiIFLYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 07:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
+        id S231377AbiIFL0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 07:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbiIFLYR (ORCPT
+        with ESMTP id S230111AbiIFL0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 07:24:17 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35C571BFB;
-        Tue,  6 Sep 2022 04:24:14 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id a67so4625614ybb.3;
-        Tue, 06 Sep 2022 04:24:14 -0700 (PDT)
+        Tue, 6 Sep 2022 07:26:47 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E09B4F645
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:26:45 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id cu2so22580731ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 04:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=5JSwL2Nl/QbXtnQEsfoWIEd7UkyZ22GYris54Ibm6bw=;
-        b=SYekG2KcDIseinOxSiMnO0m/HZIT4wwSvDuh6GU+jYSKKutBbrAdF3V0Xa/nuN4xPk
-         FtTzy6+bC1AQVolJ7mmqi0vF6I9oICS+l46+fTIVBpg76+eRlU7MffXYve7+4Km5Bv0U
-         /2GKhOnC/aI9U7YOSL8yrxLfVoUYjl168TVnhGdL1B1S/qpxfHDO06a0trrHFCJPTeUy
-         7i6Q8T+hr55izVFY9iWW6YuPEt4P46SjR3Qkwna0VykqwJdBM4OhL+Y/A77XGzbx+fAW
-         8Rg5YzXXz3dCZyfZLHFtAyOeY2rhikdWqxzMey15ZYfqSnglME7D5XBekEruOHdWLfHX
-         /kmg==
+        d=melexis.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=XyJKVGE0cD/925orO/HXak99UYJgYNpKUPooDkzvfhg=;
+        b=YNaLRjPAI6HE/oMyHjRmptBtO0czvRuRep/SybAqxLi3sij+gq+SpkrrYJyfT0c9Vs
+         oIpm8H9JSRvaS7soQue2jz38q3KxMszb++YocStDax3w7KvRD2/xVB4zUTJ8s+MIpYnP
+         5530UTobZsnos0Y/ybyG77PEK1ZxnxZYI2SOsiXkdtF4popIQ/1hO6SwqZaAaqFkg2eu
+         RNDYrteHXE9DOAHLDObRTFvStb4kZ7c8Bex/YxEyx8yCTM3Ja+sN3+fMNjTyBDFPepOn
+         qJ4Qbl9xpxjLI+rVBkXUpuAV5HxzJQjruGSfmJaQRHG6QESxRGnBfSrq7Otk9hz33B5Q
+         H7uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=5JSwL2Nl/QbXtnQEsfoWIEd7UkyZ22GYris54Ibm6bw=;
-        b=yjjmKbyP6+h8o8gDujDsBt9kR8T/fFt0BZnSxAnrn1/+6b77tS72OVW6ZbRBg7fD+E
-         MKNHXLXhYLW/fnGjy4LeG+u357Fpl4pNHfuWH6g/yfU51CxhG0dvZ/8KzBXULhD/vMM2
-         PnBuubAE072ftfBHbSyHI6UsZRYNNw440ssAkJ7qsbRm+GRLGMQjGqweMpuIreH1+9Sa
-         O1kIe0YA9NcO77R+fWngfjv3sLHryNMMecHjekDwO4mChhT4yYdXKnHDtlrc6JG1JOkq
-         VOZgRJvh7WL3xa8vea2ax5mLRpdNhR+I9ir81AHqMC4oKUlviLirRODMp/W67i6u/aPy
-         PCog==
-X-Gm-Message-State: ACgBeo2fSqWiPDLYcyd7hBwq7CAPT5QEXXBEYuTTB1cO5DXbL8/oLBpI
-        77SeV/e7+80XB5yOVGxddcxLdHBGjZ9YZogwZc8=
-X-Google-Smtp-Source: AA6agR4z2iFehGd8W6rUIWt6hj7Kye1wZrCP7PzbK7xgVbz/0ZAyX3m53ll0X2dNbN0gcYPcCzdzSyW/8zp6eCbd0xg=
-X-Received: by 2002:a25:6c09:0:b0:6a6:5b85:1e53 with SMTP id
- h9-20020a256c09000000b006a65b851e53mr14579153ybc.299.1662463454003; Tue, 06
- Sep 2022 04:24:14 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=XyJKVGE0cD/925orO/HXak99UYJgYNpKUPooDkzvfhg=;
+        b=kp+oR843ZT9/hZ9V+GaZ/93Z++X/WINN2s24UAVH5lZYtSC9pO87Nel0eaU6k9dNin
+         rCqEDe8ioEvCGfOxtlHbKRJeK2qpg7RboZGenuTwRO4u/wcGDgWeEGa6IKz07MKOn3B8
+         fikbj0amUWndiaPwRjPNjdBcclaLpv9n6DMcDHNCx6CvS5bt7R3wOUyhGZDnCQXmO+Jo
+         Rvs1XmdSlftNf6za+TBfpW5Lpmv8y4m13Cflo7X4EkIRW84HtQbng/iVsIgYN5Nu2qCK
+         3obMK7jHYRUN1UawdKCPXJkzC4PrOUPz7uU/FHeM+STUqekVWtlxGODcYI5DxOPGKYPv
+         8i4w==
+X-Gm-Message-State: ACgBeo3lVB4lrQQTsJx6stqd+OU7A2CHHOclEX2NC+vnMgKw9m9x9zJG
+        gO5ydwsPkJoItjTxgi5QVDfYug==
+X-Google-Smtp-Source: AA6agR4ZyeXLSEhMi1dcy3MJJxfdhL/tgUBQixZK3GdCiGoHRrYPA2/r6QQn1Arm6OJyHPsEG5YVMQ==
+X-Received: by 2002:a17:907:781a:b0:730:ccea:7c29 with SMTP id la26-20020a170907781a00b00730ccea7c29mr39108019ejc.85.1662463603472;
+        Tue, 06 Sep 2022 04:26:43 -0700 (PDT)
+Received: from cmo-ThinkPad-T495.telenet.be ([194.150.35.21])
+        by smtp.gmail.com with ESMTPSA id 9-20020a170906210900b0074136cac2e7sm6395669ejt.81.2022.09.06.04.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 04:26:42 -0700 (PDT)
+From:   cmo@melexis.com
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Crt Mori <cmo@melexis.com>
+Subject: [PATCH] iio: temperature: mlx90614 Refactoring available filter attributes
+Date:   Tue,  6 Sep 2022 13:26:32 +0200
+Message-Id: <20220906112632.244453-1-cmo@melexis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220906102154.32526-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220906102154.32526-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <8ecb62b7-53c4-1c43-65b3-567d8c12e131@microchip.com>
-In-Reply-To: <8ecb62b7-53c4-1c43-65b3-567d8c12e131@microchip.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 6 Sep 2022 12:23:47 +0100
-Message-ID: <CA+V-a8tyeufNqbLqPuKGgedXXJPxMRc2N6MjO9nCh=zvswu9NQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] riscv: vendors: andes: Add support to configure
- the PMA regions
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, atishp@rivosinc.com,
-        apatel@ventanamicro.com,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+From: Crt Mori <cmo@melexis.com>
 
-Thanks for the quick glance!
+Change/refactor to the new way of defining available attribute values.
 
-On Tue, Sep 6, 2022 at 11:39 AM <Conor.Dooley@microchip.com> wrote:
->
-> On 06/09/2022 11:21, Lad Prabhakar wrote:
->
-> > diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.=
-h
-> > index 2a0ef738695e..10a7c855d125 100644
-> > --- a/arch/riscv/include/asm/sbi.h
-> > +++ b/arch/riscv/include/asm/sbi.h
-> > @@ -37,6 +37,7 @@ enum sbi_ext_id {
-> >
-> >          /* Vendor extensions must lie within this range */
-> >          SBI_EXT_VENDOR_START =3D 0x09000000,
-> > +       SBI_EXT_ANDES =3D 0x0900031E,
-> >          SBI_EXT_VENDOR_END =3D 0x09FFFFFF,
-> >   };
->
-> Everything else aside, I am very interested in what's happening
-> here. I'll take a proper look through things later, but for now:
->
-> For PolarFire SoC we have an InterHart Communication SBI EXT that
-> would would like to upstream support for. We are not aiming to put
-> the driver itself in arch/riscv - it's just a mailbox driver, but
-> I would like to use sbi.h for defining the vendor id etc.
->
-sbi.h seems appropriate for now, unless the maintainers have other ideas.
+Signed-off-by: Crt Mori <cmo@melexis.com>
+---
+ drivers/iio/temperature/mlx90614.c | 41 ++++++++++++++++++++++--------
+ 1 file changed, 30 insertions(+), 11 deletions(-)
 
-> I am not sure how this all aligns with:
-> > We=E2=80=99ll only accept patches for new modules or extensions if the
-> > specifications for those modules or extensions are listed as being
-> > =E2=80=9CFrozen=E2=80=9D or =E2=80=9CRatified=E2=80=9D by the RISC-V Fo=
-undation. (Developers may, of
-> > course, maintain their own Linux kernel trees that contain code for
-> > any draft extensions that they wish.)
-> >
-> > Additionally, the RISC-V specification allows implementors to create
-> > their own custom extensions. These custom extensions aren=E2=80=99t req=
-uired
-> > to go through any review or ratification process by the RISC-V
-> > Foundation. To avoid the maintenance complexity and potential
-> > performance impact of adding kernel code for implementor-specific
-> > RISC-V extensions, we=E2=80=99ll only to accept patches for extensions =
-that
-> > have been officially frozen or ratified by the RISC-V Foundation.
-> > (Implementors, may, of course, maintain their own Linux kernel trees
-> > containing code for any custom extensions that they wish.)
->
-> Which is in: https://docs.kernel.org/riscv/patch-acceptance.html
->
-I had completely missed this, thanks for pointing it out.
+diff --git a/drivers/iio/temperature/mlx90614.c b/drivers/iio/temperature/mlx90614.c
+index c253a5315988..3157416be912 100644
+--- a/drivers/iio/temperature/mlx90614.c
++++ b/drivers/iio/temperature/mlx90614.c
+@@ -79,16 +79,15 @@ struct mlx90614_data {
+ 
+ /* Bandwidth values for IIR filtering */
+ static const int mlx90614_iir_values[] = {77, 31, 20, 15, 723, 153, 110, 86};
+-static IIO_CONST_ATTR(in_temp_object_filter_low_pass_3db_frequency_available,
+-		      "0.15 0.20 0.31 0.77 0.86 1.10 1.53 7.23");
+-
+-static struct attribute *mlx90614_attributes[] = {
+-	&iio_const_attr_in_temp_object_filter_low_pass_3db_frequency_available.dev_attr.attr,
+-	NULL,
+-};
+-
+-static const struct attribute_group mlx90614_attr_group = {
+-	.attrs = mlx90614_attributes,
++static const int mlx90614_freqs[][2] = {
++	{0, 150000},
++	{0, 200000},
++	{0, 310000},
++	{0, 770000},
++	{0, 860000},
++	{1, 100000},
++	{1, 530000},
++	{7, 230000}
+ };
+ 
+ /*
+@@ -373,6 +372,22 @@ static int mlx90614_write_raw_get_fmt(struct iio_dev *indio_dev,
+ 	}
+ }
+ 
++static int mlx90614_read_avail(struct iio_dev *indio_dev,
++			       struct iio_chan_spec const *chan,
++			       const int **vals, int *type, int *length,
++			       long mask)
++{
++	switch (mask) {
++	case IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY:
++		*vals = (int *)mlx90614_freqs;
++		*type = IIO_VAL_INT_PLUS_MICRO;
++		*length = 2 * ARRAY_SIZE(mlx90614_freqs);
++		return IIO_AVAIL_LIST;
++	default:
++		return -EINVAL;
++	}
++}
++
+ static const struct iio_chan_spec mlx90614_channels[] = {
+ 	{
+ 		.type = IIO_TEMP,
+@@ -389,6 +404,8 @@ static const struct iio_chan_spec mlx90614_channels[] = {
+ 		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
+ 		    BIT(IIO_CHAN_INFO_CALIBEMISSIVITY) |
+ 			BIT(IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY),
++		.info_mask_separate_available =
++			BIT(IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY),
+ 		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_OFFSET) |
+ 		    BIT(IIO_CHAN_INFO_SCALE),
+ 	},
+@@ -401,6 +418,8 @@ static const struct iio_chan_spec mlx90614_channels[] = {
+ 		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
+ 		    BIT(IIO_CHAN_INFO_CALIBEMISSIVITY) |
+ 			BIT(IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY),
++		.info_mask_separate_available =
++			BIT(IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY),
+ 		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_OFFSET) |
+ 		    BIT(IIO_CHAN_INFO_SCALE),
+ 	},
+@@ -410,7 +429,7 @@ static const struct iio_info mlx90614_info = {
+ 	.read_raw = mlx90614_read_raw,
+ 	.write_raw = mlx90614_write_raw,
+ 	.write_raw_get_fmt = mlx90614_write_raw_get_fmt,
+-	.attrs = &mlx90614_attr_group,
++	.read_avail = mlx90614_read_avail,
+ };
+ 
+ #ifdef CONFIG_PM
+-- 
+2.34.1
 
-> It is unclear to me whether that is just for ISA extensions or if that
-> covers SBI extensions too. At least for us, since we don't touch arch
-> code there is relatively little friction & there's no concerns about
-> reducing the portability of a kernel since it is just a regular old
-> driver.
->
-> I was planning on cornering some people *cough* Palmer *cough* at
-> LPC and asking him what his thoughts were there.
->
-I too will be attending the LPC (virtually though) and would like to
-attend/chat on this topic. Please keep me posted.
-
-> FWIW this is what we have been doing:
-> https://github.com/linux4microchip/linux/blob/linux-5.15-mchp/drivers/mai=
-lbox/mailbox-miv-ihc.c#L27
->
-From the looks of it it's on similar lines ;)
-
-> The IP itself has not stabilised yet, so we have not sent any patches
-> yet, but we do intend doing so...
->
-I see..
-
-> But yea, I'll take a properly look at what you're doing here soonTM,
-> although at this point it may be the other side of LPC.
->
-Thanks.
-
-> btw, where can I get my hands on your hardware?
->
-I shall share the link as soon as it's available.
-
-Cheers,
-Prabhakar

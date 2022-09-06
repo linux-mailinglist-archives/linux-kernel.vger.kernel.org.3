@@ -2,177 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DBE5AE1BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CB55AE1CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbiIFH7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S233793AbiIFIB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233120AbiIFH7N (ORCPT
+        with ESMTP id S238666AbiIFIBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:59:13 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on20625.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e83::625])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086B271704;
-        Tue,  6 Sep 2022 00:59:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XaLmTY2o6ftnbJ/27vPewOhblwlOVwJOX1P0gzpp0IOPYfiZCZ4fLAhmKtYQb2vHP1HANaqgkjPGvZSCMEYJiTJEvGlfVdJqKBuGva3zlAPJlaMIkJ0WlvI2w1/mVP7WHdzTz696aWqcTkudqq0kNjzJIxjft9JnDrwN3zg7/iuAfGjq+VO9BNAv1AFydqESyfUhZpVgHt1Tu0+KX9QmYAWma0SF1/5TgTZfj9sGDR3jZGeQkJxhE7wajDYFVGrGbIGPNbZEDj1n+AF0D3v0w+rsy+ZW+7amPbaLI71gnXG0MFU8vhV5ColymkMImVMTE0jqdb76/ar7UpAA+FSJHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wNvOLQzdymwbkQafamtSqqFEIWTZYQwKnN+RaXcYcJI=;
- b=nHFmRGzcv5emiG2YvFAhU6+1mjke7lGDW9VLvoofbi+1n5xYujxqsxv0Niyd6nf1oz5O+yXtYDc2+30HYCQ8YXEaPRSWECX3bAwDIL8X+VVuoL46qFqnSbwzDLRNydrao80yqwDzBka9xlJ4RrYUej7NzLizUprOV6JXVTLssOWhIxGUOtbgvAPnZS9mfzcFubHHIV8nsBqvoqm2hpg5jq+XQGRFBHWttwRcnwJMwQa+ooyusivCJLW4FMU7NfEJvNOUC609O4X8M4X/1BCfh2iEfm6BfeeO6l/mFr+lFnawvHnKmcDWentKB6CxliP9APnaCAF49oWDJXAACKuO7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wNvOLQzdymwbkQafamtSqqFEIWTZYQwKnN+RaXcYcJI=;
- b=K4PKvLVJ2VrF65GFHZvFHk5Rxg94xZ8tjBqQvI/G6YZlp80D40h0tBLtLrQbHoEEM9SsevIzSRB2Ttmz8umeGdxIILL0qdtxNOYJ4MLUWqwdo5OPDBDWTbploFcZhYupsPW6Ezv6XsKTzUG3yZVyqeGchDM0hGGkohe5OirFjWwXoLCl0t369eQH7lzQdl26LE9GvKP1WeR5h2Di+7REStm3Hwm6odd7YZJKrZ7LNwuMWvy1ZW4FrJ91O/PhcZzLriTAUMwnamP3oJT7v9FMlVRHMIQiN6GcbdFlaswC6nU4pczuisb+ZL8tH2p+ie+DzWmKw67s3tAHWU78WclzCg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB4140.namprd12.prod.outlook.com (2603:10b6:5:221::13)
- by SJ0PR12MB5609.namprd12.prod.outlook.com (2603:10b6:a03:42c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Tue, 6 Sep
- 2022 07:59:09 +0000
-Received: from DM6PR12MB4140.namprd12.prod.outlook.com
- ([fe80::e0c5:bb15:a743:7ddb]) by DM6PR12MB4140.namprd12.prod.outlook.com
- ([fe80::e0c5:bb15:a743:7ddb%3]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
- 07:59:09 +0000
-Message-ID: <d1535f25-b252-ee38-8eb8-94af9367d5f1@nvidia.com>
-Date:   Tue, 6 Sep 2022 00:58:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-References: <20220831041843.973026-1-jhubbard@nvidia.com>
- <20220831041843.973026-5-jhubbard@nvidia.com>
- <YxbtF1O8+kXhTNaj@infradead.org>
- <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
- <Yxb7YQWgjHkZet4u@infradead.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <Yxb7YQWgjHkZet4u@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR20CA0007.namprd20.prod.outlook.com
- (2603:10b6:a03:1f4::20) To DM6PR12MB4140.namprd12.prod.outlook.com
- (2603:10b6:5:221::13)
+        Tue, 6 Sep 2022 04:01:23 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF526D9EC;
+        Tue,  6 Sep 2022 01:01:16 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MMHkP10Lcz9v7N7;
+        Tue,  6 Sep 2022 15:55:41 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwD3n5Mh_hZjjTgnAA--.65018S2;
+        Tue, 06 Sep 2022 09:00:47 +0100 (CET)
+Message-ID: <663480e6bdfd9809c9e367bfc8df95d7a1323723.camel@huaweicloud.com>
+Subject: Re: [PATCH v16 06/12] bpf: Add bpf_lookup_*_key() and bpf_key_put()
+ kfuncs
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 06 Sep 2022 10:00:30 +0200
+In-Reply-To: <CAP01T74HKXuf9Aig4v3zsL1rwQAGRpUtTiaN2djWsMiJmaqF_A@mail.gmail.com>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+         <20220905143318.1592015-7-roberto.sassu@huaweicloud.com>
+         <CAP01T74HKXuf9Aig4v3zsL1rwQAGRpUtTiaN2djWsMiJmaqF_A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 854f191e-6af1-4505-9918-08da8fddad86
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5609:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W7Pqvo2CuFIX9TiyH/FdgxlrodWFD6UDMeedtFgFLpJ3Q6lcDB7odHxJzuLTsWZJPLT4EmKxl0C1NCRGLnIEv91KVnd9EWYA0PDWt7b+5lakx9o7llPvh6ClcGUeUUMc+E5J4oT74/LQ92nsLOglGRnPoY0jKl1j1MmVeM00fL+CLauDapaUwOx9rS56mjgoQKJs7/Y4upicS5w3q9XoTLf9hHMix9fhw3EZEzz2B0mLjkjGqaegsskLVRRwIiBSbtYqpCwj+by+aHf3fmGt9Ro/XJGas7z8VYtfjsO185ALtltz36NzoFfagN1m1K9rmPcKjE1BpU8W1DJHDHDCyt6iDtcjS9VjCNoZrIwSwNur4jJ/+R9GKGPPuFfPwRWT4Qopk81OcvmM/1Y82yPy93Kkg1ulPk9+Hfdl6Wy+LB6EcVbMplNBAqcAsdFXDrb543rEV1lqfcCpevC+ZxP8LyBFIjbMHgh/5pyC3+3VowTnLrW7/JzTKQ8NXOInZ1bFV6Q9yPWnRpbiccusbNlmhKfbheThAYXp708cAVYg3SKsjHPH/NKNgKipIdJqN/o7AbEw49ou1XicWmHaCBJoQmsml1axC2wKIPjkhGFaDs/kZohAjlO0XAL5W+zRdFsKlvphC9tovW/aLeJrSz6xVQuSXO5yuvCZCihBTHVlBln7cuFNZHnTec4F7ofd9DwRUmDWEI5iOe5niYYXxnDqGTX6NmUEg1fz86BoLeUxbx5xX7Rwje0gTZ0277xAuk/dVhJPPYLCTeBNDIaos6uHWv+Ry3UE7ORz+Xu6YcSOtp4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4140.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(366004)(39860400002)(396003)(136003)(7416002)(8936002)(4326008)(8676002)(5660300002)(66556008)(66946007)(6486002)(6506007)(26005)(6512007)(38100700002)(478600001)(6666004)(66476007)(41300700001)(316002)(186003)(6916009)(2616005)(53546011)(54906003)(83380400001)(31686004)(86362001)(31696002)(2906002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bXFCM1FZSnpYWUNkbk5ybi82ZTlRUkNBOFBqeHY4VWZpcEpXVGNrVEFlaDFZ?=
- =?utf-8?B?R1pISzBqM3hRdEZFWU9uclpZNCtCYWVkZzQzY0RRRzc2bmJhWGVRdkFZVjVN?=
- =?utf-8?B?UmpCZmNtT3NEN2R0bTRtbUtUSmUxU0RMa0xFcFY5bFRaTVhvczFtL0JjeWxN?=
- =?utf-8?B?VWk2QTQ4Mi8vNkl1azRRekVicjVsUysxMTB5aVFtRXlLL084bUQyZ0dvVzA2?=
- =?utf-8?B?MlBTT0NreU8zOWZJS21DeGhnY2QwZjYveW1XalMvenludmsxTG1aODRyTFJq?=
- =?utf-8?B?a2liMG9vSzlnVUNob3J1c1prK0FZaWh2aXhyOVh2NFpDYUdUajlvaW1NSm11?=
- =?utf-8?B?VmtpUkt3NExKblovOVFVU09XTmdRRHdKNVJvQ2h5TSswc3ZDMGhsOEFSLzMw?=
- =?utf-8?B?cE1hSUNWRXRtd0VvSzZwU3NlVVVpTUYyVjU0WGtORnVZVERxTkZ6dXMrLzJa?=
- =?utf-8?B?dDl3d283bUtUazVsM1NYTG9GdnNXbHdUaER5U3A0S29TOFg5Nm82enkyZGha?=
- =?utf-8?B?SkFPZXVnSTZ2SVhNdEROVXBIK2czQjg3UnJCb2hXYWRRTXljSjhlKytEKzFV?=
- =?utf-8?B?c2pGVkhpL0VycHRtRFcwWE4vM1dTcDlEbkpRSStlTGNjeHBFdlBqeUNQUmNH?=
- =?utf-8?B?dXo1ckkvV3RxVlV0TDBQVzMyNFFIazJpTmZ4alNmMk5zNmxFQ0FFOW1mVGpN?=
- =?utf-8?B?UjZQRzhmMHQ3UnU1Uldka044NEpBWlFNYWIzT2phQy8yeHNreGYvcjZ2eWVX?=
- =?utf-8?B?UVpucG1WeWU1a09OeGNsbFQ2QnAwdXZId1o3V3pVa000STkrZGtkV3JvYVZR?=
- =?utf-8?B?RFYveWY0K0pqNVVGZzdtUzVtL1ZwNWxaWTBvVWtSMzVOb0NlQzRoRzFvVXFp?=
- =?utf-8?B?ZjBmVXhTTWJ2YUNGNnRQMWE0NHZvUXJmNnZRb2w4cGdPK3VOa0JieWxGQmNC?=
- =?utf-8?B?QVJzaDFGNkFreWdRdTQrZTE4Y0dRdXpPdEpzdDJTNnBDaytGejZ4bk5CWFBO?=
- =?utf-8?B?dmhIaFRpaG5DU2dPZUFwYVoveWJOOTRwd0RMZGRQVlRKRk5Zdk5ZeHpVU1Bv?=
- =?utf-8?B?c3NWOXJhb0tERkpUV1BwSXZ3YkM1bkV2Y0ZEZUliMkE3NlEzMWY0OEE3TnQ4?=
- =?utf-8?B?UUhPMVdHWnZvWUdjNHlwK01WRFhFWjlqVFhVbUNyR2hVeUVOQkczS0VVdUdq?=
- =?utf-8?B?ZnhOQ2tGQnJqa2NORThCdElUT2NzNSt4NlptWWE4Um1ZSzA5cldRZlFMVW9I?=
- =?utf-8?B?TXpuK29GbklTVWYzTmV3NXovTUl2Q0dkMjE4dXJkVU9XbHNkWTFjSjZmK0xC?=
- =?utf-8?B?dXR4bzF1a3Y3NnBtbUlUb0pVRFZlOUJMc01vbnBVV0VVMTBSaVJVbHo1K2dq?=
- =?utf-8?B?cXZINHJFcGtjY3lLUE1vaG9WUldkOVFiQzJWOU0yYUJGc3hqTlNWc2lsYmFK?=
- =?utf-8?B?eXd3dkNRdlJwc2M3QXRaQ3ZJaGR1NlJGN1BMM29CWHA3RzRWM0N4U2dQcHVo?=
- =?utf-8?B?SloxTTFmYmtFa2ZrZVM1WHljaFV5d2NKZm1VTTB4MWxHWGlXc095YStzZVl0?=
- =?utf-8?B?ancrV0x6a1kzOU05Qkd1M21tSjZOMXBxK0h1NTJtN094SmxKWG5KcjRaREph?=
- =?utf-8?B?SmJkLzJmYlNYQktMRXc2WXlFZUY0bW9COEg4MFltdkZrVG5GN2ZaZmVmRlcr?=
- =?utf-8?B?a01vS21jelk3dXZYa09TSnB0aFg5bjJHTDZpZmhzc3l6UG05aEYxd0J6bkw4?=
- =?utf-8?B?cVdndzZOeEF6ekx1YzduTW93Vm1JbDlnbldyaG10RG1OUmx5UVRwS21od1Yw?=
- =?utf-8?B?R3Y1aGFSbTNQLzZaN25laDYzZ2FXNkpyeU5HZHhCdStGTE8yaVp5TWNuME9N?=
- =?utf-8?B?WEZBMCtOZ0VIL2lsazlqc2s0WUduVDdBbml3MEJJSTErRm4yTWg2VkdNalVI?=
- =?utf-8?B?MmllYUkwZUdsN2FhbHlNU2U0TDlQZjhaaG01aEZYTUxUc3BOUGtPSnZYV0xE?=
- =?utf-8?B?RHFNeVA5RXVPdVpoWDArNVVhY2JzZzRCSGQ0SExITXREdEI2MUlNTEpaaGhK?=
- =?utf-8?B?VE8yMFRhZC92bFJweFUwSDlQOVJkYTgrVURveEVINTFLUFpXY1MwUjNqdmhv?=
- =?utf-8?Q?LkvOAWaVg/d6BhQJAuKv1k1BJ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 854f191e-6af1-4505-9918-08da8fddad86
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4140.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 07:59:09.0201
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2T6Isx3z1j2v+FzSuBMhCL66JGYL55tiirQ7tm1RRQLq8fPEKt8e5FroKRm9UMmEwJPkZRuM7NA2j+efPviR9g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5609
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwD3n5Mh_hZjjTgnAA--.65018S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF15ArWrAryUWr4UXF47Jwb_yoWrtw4xpF
+        W8CF4rCFWDJFy7Gr93Zw1avF9a9w4vgr17K3srG34kAr9a9rn7Gr4fWF4a93s5Ar4xur1I
+        vF1jgw43Cr15ZrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj4KmdgAAsh
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/6/22 00:48, Christoph Hellwig wrote:
-> On Tue, Sep 06, 2022 at 12:44:28AM -0700, John Hubbard wrote:
->> OK, that part is clear.
->>
->>>  - for the pin case don't use the existing bvec helper at all, but
->>>    copy the logic for the block layer for not pinning.
->>
->> I'm almost, but not quite sure I get the idea above. Overall, what
->> happens to bvec pages? Leave the get_page() pin in place for FOLL_GET
->> (or USE_FOLL_GET), I suppose, but do...what, for FOLL_PIN callers?
+On Tue, 2022-09-06 at 04:43 +0200, Kumar Kartikeya Dwivedi wrote:
+> On Mon, 5 Sept 2022 at 16:35, Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Add the bpf_lookup_user_key(), bpf_lookup_system_key() and
+> > bpf_key_put()
+> > kfuncs, to respectively search a key with a given key handle serial
+> > number
+> > and flags, obtain a key from a pre-determined ID defined in
+> > include/linux/verification.h, and cleanup.
+> > 
+> > Introduce system_keyring_id_check() to validate the keyring ID
+> > parameter of
+> > bpf_lookup_system_key().
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
 > 
-> Do not change anyhing for FOLL_GET callers, as they are on the way out
-> anyway.
+> With a small nit below,
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > 
+> >  include/linux/bpf.h          |   8 +++
+> >  include/linux/verification.h |   8 +++
+> >  kernel/trace/bpf_trace.c     | 135
+> > +++++++++++++++++++++++++++++++++++
+> >  3 files changed, 151 insertions(+)
+> > 
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 9dbd7c3f8929..f3db614aece6 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -2595,4 +2595,12 @@ static inline void bpf_cgroup_atype_get(u32
+> > attach_btf_id, int cgroup_atype) {}
+> >  static inline void bpf_cgroup_atype_put(int cgroup_atype) {}
+> >  #endif /* CONFIG_BPF_LSM */
+> > 
+> > +struct key;
+> > +
+> > +#ifdef CONFIG_KEYS
+> > +struct bpf_key {
+> > +       struct key *key;
+> > +       bool has_ref;
+> > +};
+> > +#endif /* CONFIG_KEYS */
+> >  #endif /* _LINUX_BPF_H */
+> > diff --git a/include/linux/verification.h
+> > b/include/linux/verification.h
+> > index a655923335ae..f34e50ebcf60 100644
+> > --- a/include/linux/verification.h
+> > +++ b/include/linux/verification.h
+> > @@ -17,6 +17,14 @@
+> >  #define VERIFY_USE_SECONDARY_KEYRING ((struct key *)1UL)
+> >  #define VERIFY_USE_PLATFORM_KEYRING  ((struct key *)2UL)
+> > 
+> > +static inline int system_keyring_id_check(u64 id)
+> > +{
+> > +       if (id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
+> > +               return -EINVAL;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  /*
+> >   * The use to which an asymmetric key is being put.
+> >   */
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 68e5cdd24cef..7a7023704ac2 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -20,6 +20,8 @@
+> >  #include <linux/fprobe.h>
+> >  #include <linux/bsearch.h>
+> >  #include <linux/sort.h>
+> > +#include <linux/key.h>
+> > +#include <linux/verification.h>
+> > 
+> >  #include <net/bpf_sk_storage.h>
+> > 
+> > @@ -1181,6 +1183,139 @@ static const struct bpf_func_proto
+> > bpf_get_func_arg_cnt_proto = {
+> >         .arg1_type      = ARG_PTR_TO_CTX,
+> >  };
+> > 
+> > +#ifdef CONFIG_KEYS
+> > +__diag_push();
+> > +__diag_ignore_all("-Wmissing-prototypes",
+> > +                 "kfuncs which will be used in BPF programs");
+> > +
+> > +/**
+> > + * bpf_lookup_user_key - lookup a key by its serial
+> > + * @serial: key handle serial number
+> > + * @flags: lookup-specific flags
+> > + *
+> > + * Search a key with a given *serial* and the provided *flags*.
+> > + * If found, increment the reference count of the key by one, and
+> > + * return it in the bpf_key structure.
+> > + *
+> > + * The bpf_key structure must be passed to bpf_key_put() when done
+> > + * with it, so that the key reference count is decremented and the
+> > + * bpf_key structure is freed.
+> > + *
+> > + * Permission checks are deferred to the time the key is used by
+> > + * one of the available key-specific kfuncs.
+> > + *
+> > + * Set *flags* with KEY_LOOKUP_CREATE, to attempt creating a
+> > requested
+> > + * special keyring (e.g. session keyring), if it doesn't yet
+> > exist.
+> > + * Set *flags* with KEY_LOOKUP_PARTIAL, to lookup a key without
+> > waiting
+> > + * for the key construction, and to retrieve uninstantiated keys
+> > (keys
+> > + * without data attached to them).
+> > + *
+> > + * Return: a bpf_key pointer with a valid key pointer if the key
+> > is found, a
+> > + *         NULL pointer otherwise.
+> > + */
+> > +struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags)
+> > +{
+> > +       key_ref_t key_ref;
+> > +       struct bpf_key *bkey;
+> > +
+> > +       if (flags & ~KEY_LOOKUP_ALL)
+> > +               return NULL;
+> > +
+> > +       /*
+> > +        * Permission check is deferred until the key is used, as
+> > the
+> > +        * intent of the caller is unknown here.
+> > +        */
+> > +       key_ref = lookup_user_key(serial, flags,
+> > KEY_DEFER_PERM_CHECK);
+> > +       if (IS_ERR(key_ref))
+> > +               return NULL;
+> > +
+> > +       bkey = kmalloc(sizeof(*bkey), GFP_ATOMIC);
+> 
+> Since this function (due to lookup_user_key) is sleepable, do we
+> really need GFP_ATOMIC here?
 
-OK, got it.
+Daniel suggested it for bpf_lookup_system_key(), so that the kfunc does
+not have to be sleepable. For symmetry, I did the same to
+bpf_lookup_user_key(). Will switch back to GFP_KERNEL.
 
-> For FOLL_PIN callers, never pin bvec and kvec pages:  For file systems
-> not acquiring a reference is obviously safe, and the other callers will
-> need an audit, but I can't think of why it woul  ever be unsafe.
+Thanks
 
-In order to do that, one would need to be confident that such bvec and kvec
-pages do not get passed down to bio_release_pages() (or the new
-bio_unpin_pages()). Also, I'm missing a key point, because today bvec pages get
-a get_page() reference from __iov_iter_get_pages_alloc(). If I just skip
-that, then the get/put calls are unbalanced...
-
-I can just hear Al Viro repeating his points about splice() and vmsplice(),
-heh. :)
-
-
-thanks,
-
--- 
-John Hubbard
-NVIDIA
+Roberto
 

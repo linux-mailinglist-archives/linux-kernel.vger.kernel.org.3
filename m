@@ -2,55 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954955AE89C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3D95AE89F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239968AbiIFMnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S239200AbiIFMor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbiIFMnQ (ORCPT
+        with ESMTP id S239732AbiIFMon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:43:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD7C2E6AE;
-        Tue,  6 Sep 2022 05:43:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 45E2CCE173B;
-        Tue,  6 Sep 2022 12:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EC27C433D6;
-        Tue,  6 Sep 2022 12:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662468191;
-        bh=K1By8u+CDbblwN0y0TTXazWMEbqs/OvrwXrnQXuktpk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DO363IeC6gTuoRQBOOEynysmtFUPQYOjwurjDT+zeYYU/AjYgyJYzHTro2BbznpqA
-         BIvxeX4Y0C+wA8/8UTQL1T04BNYEK62pLwY0sVYUNPSgPVxlCmbX9FOLItd8Z4kPX6
-         diOhocnouB+ju3ljWiMZ9sct4jLkgca1UhxdVOM4Xo5kMtLIxuYdhA4jcTV2dAmiGd
-         mSY/5tT9W6i+VW+crHwmyJ4yM3RAvJ8sK1XnzyirYjst1Zk69m6tIEYl0OMeX+Q5+J
-         NFBFf0vHbIEaNyUu3QjMh/IrpHe9sjRdnupKLLFqNKuKur3s2UrHVAMxCG3P7YP+M7
-         352ZljpjJ3DKQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BE919404A1; Tue,  6 Sep 2022 09:43:08 -0300 (-03)
-Date:   Tue, 6 Sep 2022 09:43:08 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Shang XiaoJing <shangxiaojing@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] perf: Clean up and fix potential mem leak
-Message-ID: <YxdAXFowH/JbPV78@kernel.org>
-References: <20220906032906.21395-1-shangxiaojing@huawei.com>
+        Tue, 6 Sep 2022 08:44:43 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB9514080
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:44:41 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286CbCEn020000;
+        Tue, 6 Sep 2022 12:44:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=aLiia9cv/H9VO0A3fCfKoChq6jsxospxMgsJGtmhiGA=;
+ b=YzDfTpvOMPj4NLw/OUobNTG8N/rijW5GTwgfHL+Gqe0S18AmuvBfuqoCbQMPf+V+Q5ER
+ wMf7J3I/Ry6ceMtuHXxnzIeBngzGQBYxv8JmgQM3J0S7tLnhi6UgZ5DjbHhgPMXZzyPo
+ C/JPsXM+s6O+NwLXp8vdnMqJTV5m+zY12kLNg93c5qbPlfWjKP2hDme1nhm/KxT68Rpl
+ Y7jvspAcytUTOyUrEe6KeP/4gNNqXTbr75PkKN6+hSkbl6g4PCtB49hEPE8Z0/HFIq11
+ sIcMj8G5t0JxvC5cw+Gw0VGThzSaXniue34+iGWnbNoB4EmB6g+9vDcOnNjrgFf5Hms+ 5Q== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jdufwj5vw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 12:44:23 +0000
+Received: from pps.filterd (NASANPPMTA03.qualcomm.com [127.0.0.1])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 286CiMXD023148;
+        Tue, 6 Sep 2022 12:44:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NASANPPMTA03.qualcomm.com (PPS) with ESMTPS id 3jdckj5uj8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 12:44:22 +0000
+Received: from NASANPPMTA03.qualcomm.com (NASANPPMTA03.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 286CiMbJ023145;
+        Tue, 6 Sep 2022 12:44:22 GMT
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (PPS) with ESMTPS id 286CiMQE023144
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 12:44:22 +0000
+Received: from [10.216.31.204] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 6 Sep 2022
+ 05:44:07 -0700
+Message-ID: <423dee31-a7e8-34ee-1a99-6780a1a07c35@quicinc.com>
+Date:   Tue, 6 Sep 2022 18:13:14 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906032906.21395-1-shangxiaojing@huawei.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] locking/rwsem: Disable preemption while trying for rwsem
+ lock
+Content-Language: en-US
+To:     Waiman Long <longman@redhat.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <will@kernel.org>, <boqun.feng@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+References: <1662028090-26495-1-git-send-email-quic_mojha@quicinc.com>
+ <8c33f989-8870-08c6-db12-521de634b34e@redhat.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <8c33f989-8870-08c6-db12-521de634b34e@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: iSHZm8a3EARX3dqIHGA8VPzPUqRxz_1o
+X-Proofpoint-GUID: iSHZm8a3EARX3dqIHGA8VPzPUqRxz_1o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_07,2022-09-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 mlxlogscore=560 bulkscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209060060
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,29 +94,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Sep 06, 2022 at 11:29:03AM +0800, Shang XiaoJing escreveu:
-> Some clean up in perf.c and builtin-c2c.c.
+Hi,
+
+On 9/3/2022 2:25 AM, Waiman Long wrote:
 > 
-> changes from v2:
-> - clear omissible free label in c2c_he_zalloc.
-
-Thanks, applied [12]/3 to perf/core for Linux v6.1.
-
-- Arnaldo
-
- 
-> Shang XiaoJing (3):
->   perf clean: Add same_cmd_with_prefix helper
->   perf c2c: Add helpers to get counts of loads or stores
->   perf c2c: Prevent potential memory leak in c2c_he_zalloc
+> On 9/1/22 06:28, Mukesh Ojha wrote:
+>> From: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+>>
+>> Make the region inside the rwsem_write_trylock non preemptible.
+>>
+>> We observe RT task is hogging CPU when trying to acquire rwsem lock
+>> which was acquired by a kworker task but before the rwsem owner was set.
+>>
+>> Here is the scenario:
+>> 1. CFS task (affined to a particular CPU) takes rwsem lock.
+>>
+>> 2. CFS task gets preempted by a RT task before setting owner.
+>>
+>> 3. RT task (FIFO) is trying to acquire the lock, but spinning until
+>> RT throttling happens for the lock as the lock was taken by CFS task.
 > 
->  tools/perf/builtin-c2c.c | 77 +++++++++++++++++++---------------------
->  tools/perf/perf.c        | 12 +++++--
->  2 files changed, 46 insertions(+), 43 deletions(-)
+> Note that the spinning is likely caused by the following code in 
+> rwsem_down_write_slowpath():
 > 
-> -- 
-> 2.17.1
+> 1163                 /*
+> 1164                  * After setting the handoff bit and failing to 
+> acquire
+> 1165                  * the lock, attempt to spin on owner to accelerate 
+> lock
+> 1166                  * transfer. If the previous owner is a on-cpu 
+> writer and it
+> 1167                  * has just released the lock, OWNER_NULL will be 
+> returned.
+> 1168                  * In this case, we attempt to acquire the lock again
+> 1169                  * without sleeping.
+> 1170                  */
+> 1171                 if (waiter.handoff_set) {
+> 1172                         enum owner_state owner_state;
+> 1173
+> 1174                         preempt_disable();
+> 1175                         owner_state = rwsem_spin_on_owner(sem);
+> 1176                         preempt_enable();
+> 1177
+> 1178                         if (owner_state == OWNER_NULL)
+> 1179                                 goto trylock_again;
+> 1180                 }
+> 
+> rwsem_optimistic_spin() limits RT task one additional attempt if 
+> OWNER_NULL is returned. There is no such limitation in this loop. So an 
+> alternative will be to put a limit on the number of times an OWNER_NULL 
+> return values will be allowed to continue spinning without sleeping. 
+> That put the burden on the slowpath instead of in the fastpath.
+> 
+> Other than the slight overhead in the fastpath, the patch should work too.
+> 
+> Acked-by: Waiman Long <longman@redhat.com>
 
--- 
+Thanks Waiman for your time and suggestion.
+Would like to take others opinion as well.
 
-- Arnaldo
+-Mukesh
+
+> 
+> Cheers,
+> Longman
+> 

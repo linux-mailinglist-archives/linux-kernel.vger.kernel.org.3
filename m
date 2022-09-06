@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A4B5AE981
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7250A5AE994
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbiIFN1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S240445AbiIFN3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiIFN1h (ORCPT
+        with ESMTP id S240167AbiIFN3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:27:37 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0C174344;
-        Tue,  6 Sep 2022 06:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662470857; x=1694006857;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=sF3J0DvAFmf+1chUjcEM/OKumVw8TQqkjuzmkV8fGV4=;
-  b=f/Y9ViGb+sYCHbDO10/2hYyLlbq9NAMMZ0R/UjVO3WYGXNLqOy0JYGX6
-   m7jMrRgqssWgNWgKcktGCSd6uXmRr1xl9g2wqaXkChptnDCN2dR7Uz5XY
-   emKB9YMrsEJ/+GdLzLyWqwNVcRWEiwa8zK8IWJjVjCadRe3pe3avu+wxa
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.93,294,1654560000"; 
-   d="scan'208";a="223732076"
-Subject: Re: [PATCH v4 05/21] hwmon: (mr75203) fix voltage equation for negative
- source input
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 13:27:21 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com (Postfix) with ESMTPS id 963E144F98;
-        Tue,  6 Sep 2022 13:27:19 +0000 (UTC)
-Received: from EX19D013UWB002.ant.amazon.com (10.13.138.21) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 6 Sep 2022 13:27:18 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX19D013UWB002.ant.amazon.com (10.13.138.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 6 Sep 2022 13:27:18 +0000
-Received: from [192.168.154.114] (10.85.143.177) by mail-relay.amazon.com
- (10.43.62.224) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Tue, 6 Sep 2022 13:27:14 +0000
-Message-ID: <29fa5c01-aad0-04ff-e1a9-1510858eff7e@amazon.com>
-Date:   Tue, 6 Sep 2022 16:27:13 +0300
+        Tue, 6 Sep 2022 09:29:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35214BC05;
+        Tue,  6 Sep 2022 06:29:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D44BAB818C2;
+        Tue,  6 Sep 2022 13:29:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791BCC433D6;
+        Tue,  6 Sep 2022 13:29:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662470972;
+        bh=eT4U+WivGyOotiGD0LRV2zLl7flGTzXZdjdWMcvNt7E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XwovBfCAI5xmw0RPdItCdZLjQ7bhW5v9Eu/vggCoju8MpsiPBXQ9MB2FAMttCv+DJ
+         nNFf4HHdz4g+SXNSMUeZuf3erv08qXCs76NUClj77fMxrGkpexrIX0KiBJSs6U6lea
+         9T5yCH9BS4KEJiwDQv3CKt0Iaxtygw8eFvyYON+QXJ0tmYGToCCggQFH3M6U/QMCdL
+         io2MN9GWbXvJuhHMWUHnhg4WzOz8GYzvsNHs65QkYDYqt+Za12C1yUaIdLNRr/jD5M
+         cS9+EXliVqd5LDrc34V0Nrx1sGR8zzIZtyqalLz/D+OAPa/mnX5D5iR0PCCL/LqEvE
+         BvVSERciktYmA==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-man@vger.kernel.org
+Cc:     linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: [man-pages RFC PATCH v3] statx, inode: document the STATX_INO_VERSION field
+Date:   Tue,  6 Sep 2022 09:29:28 -0400
+Message-Id: <20220906132928.106134-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <hhhawa@amazon.com>,
-        <jonnyc@amazon.com>, "Farber, Eliav" <farbere@amazon.com>
-References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-6-farbere@amazon.com>
- <Yxc3GeFc5gDKrYyP@smile.fi.intel.com>
-Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <Yxc3GeFc5gDKrYyP@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-13.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,60 +59,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/6/2022 3:03 PM, Andy Shevchenko wrote:
-> On Tue, Sep 06, 2022 at 08:33:40AM +0000, Eliav Farber wrote:
->> According to Moortec Embedded Voltage Monitor (MEVM) series 3 data
->> sheet, the minimum input signal is -100mv and maximum input signal
->> is +1000mv.
->>
->> The equation used to convert the digital word to voltage uses mixed
->> types (*val signed and n unsigned), and on 64 bit machines also has
->> different size, since sizeof(u32) = 4 and sizeof(long) = 8.
->>
->> So when measuring a negative input, n will be small enough, such that
->> PVT_N_CONST * n < PVT_R_CONST, and the result of
->> (PVT_N_CONST * n - PVT_R_CONST) will overflow to a very big positive
->> 32 bit number. Then when storing the result in *val it will be the same
->> value just in 64 bit (instead of it representing a negative number which
->> will what happen when sizeof(long) = 4).
->>
->> When -1023 <= (PVT_N_CONST * n - PVT_R_CONST) <= -1
->> dividing the number by 1024 should result of in 0, but because ">> 10"
->> is used it results in -1 (0xf...fffff).
->>
->> This change fixes the sign problem and supports negative values by
->> casting n to long and replacing the shift right with div operation.
->
-> This is really downside of C...
->
-> ...
->
->> -             *val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
->> +             *val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 << 
->> PVT_CONV_BITS);
->
-> Wondering if we can use BIT(PVT_CONV_BITS) for two (quite unlikely to 
-> happen,
-> I hope) purposes:
->
-> 1) Somebody copies such code where PVT_CONV_BITS analogue can be 31,
->   which is according to C standard is UB (undefined behaviour).
->
-> 2) It makes shorter the line and also drops the pattern where some
->   dumb robot may propose a patch to basically revert the division
->   change. 
-I originally tried to use BIT(PVT_CONV_BITS) but it gave a different
-result.
-e.g.
-If n = 2720
-*val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 << PVT_CONV_BITS) = 0
-*val = (PVT_N_CONST * (long)n - PVT_R_CONST) / BIT(PVT_CONV_BITS) = 
-18014398509481983
+I'm proposing to expose the inode change attribute via statx [1]. Document
+what this value means and what an observer can infer from a change in
+its value.
 
-I can try fitting it in one line, either by adding a define for
-(1 << PVT_CONV_BITS) or exceeding 80 characters, but keep in mind that
-in a later patch (#15) it gets even longer (and I must use more than
-one line) since it is multiplied by a pre-scaler factor.
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
---
-Regards, Eliav
+[1]: https://lore.kernel.org/linux-nfs/20220826214703.134870-1-jlayton@kernel.org/T/#t
+---
+ man2/statx.2 |  8 ++++++++
+ man7/inode.7 | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+
+v3: Move most verbiage to inode(7)
+    Clarify that this must be monotonically increasing
+    Flesh out usage discussion
+    Mention issues with value moving backward and how to combat them
+
+diff --git a/man2/statx.2 b/man2/statx.2
+index 0d1b4591f74c..d98d5148a442 100644
+--- a/man2/statx.2
++++ b/man2/statx.2
+@@ -62,6 +62,7 @@ struct statx {
+     __u32 stx_dev_major;   /* Major ID */
+     __u32 stx_dev_minor;   /* Minor ID */
+     __u64 stx_mnt_id;      /* Mount ID */
++    __u64 stx_ino_version; /* Inode change attribute */
+ };
+ .EE
+ .in
+@@ -247,6 +248,7 @@ STATX_BTIME	Want stx_btime
+ STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
+ 	It is deprecated and should not be used.
+ STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
++STATX_INO_VERSION	Want stx_ino_version (DRAFT)
+ .TE
+ .in
+ .PP
+@@ -407,10 +409,16 @@ This is the same number reported by
+ .BR name_to_handle_at (2)
+ and corresponds to the number in the first field in one of the records in
+ .IR /proc/self/mountinfo .
++.TP
++.I stx_ino_version
++The inode version, also known as the inode change attribute. See
++.BR inode (7)
++for details.
+ .PP
+ For further information on the above fields, see
+ .BR inode (7).
+ .\"
++.TP
+ .SS File attributes
+ The
+ .I stx_attributes
+diff --git a/man7/inode.7 b/man7/inode.7
+index 9b255a890720..80c2ed4acccd 100644
+--- a/man7/inode.7
++++ b/man7/inode.7
+@@ -184,6 +184,12 @@ Last status change timestamp (ctime)
+ This is the file's last status change timestamp.
+ It is changed by writing or by setting inode information
+ (i.e., owner, group, link count, mode, etc.).
++.TP
++Inode version (i_version)
++(not returned in the \fIstat\fP structure); \fIstatx.stx_ino_version\fP
++.IP
++This is the inode change counter. See the discussion of
++\fBthe inode version counter\fP, below.
+ .PP
+ The timestamp fields report time measured with a zero point at the
+ .IR Epoch ,
+@@ -424,6 +430,34 @@ on a directory means that a file
+ in that directory can be renamed or deleted only by the owner
+ of the file, by the owner of the directory, and by a privileged
+ process.
++.SS The inode version counter
++.PP
++The
++.I statx.stx_ino_version
++field is the inode change counter. Any operation that would result in a
++change to \fIstatx.stx_ctime\fP must result in an increase to this value.
++The value must increase even in the case where the ctime change is not
++evident due to coarse timestamp granularity.
++.PP
++An observer cannot infer anything from amount of increase about the
++nature or magnitude of the change. If the returned value is different
++from the last time it was checked, then something has made an explicit
++data and/or metadata change to the inode.
++.PP
++In the event of a system crash, this value can appear to go backward,
++if it were queried before ever being written to the backing store. If
++the value were then incremented again after restart, then an observer
++could miss noticing a change.
++.PP
++In order to guard against this, it is recommended to also watch the
++\fIstatx.stx_ctime\fP for changes when watching this value. As long as the
++system clock doesn't jump backward during the crash, an observer can be
++reasonably sure that the i_version and ctime together represent a unique inode
++state.
++.PP
++The i_version is a Linux extension and is not supported by all filesystems.
++The application must verify that the \fISTATX_INO_VERSION\fP bit is set in the
++returned \fIstatx.stx_mask\fP before relying on this field.
+ .SH STANDARDS
+ If you need to obtain the definition of the
+ .I blkcnt_t
+-- 
+2.37.3
+

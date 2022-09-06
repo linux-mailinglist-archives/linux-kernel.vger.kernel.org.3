@@ -2,305 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89425AF2E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11B85AF240
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiIFRlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
+        id S233819AbiIFRQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiIFRlG (ORCPT
+        with ESMTP id S233884AbiIFRQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:41:06 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41BA5F8B;
-        Tue,  6 Sep 2022 10:41:03 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MMWqZ2rtLz9xHMX;
-        Wed,  7 Sep 2022 01:00:58 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwA34JNSfRdjftYoAA--.8234S9;
-        Tue, 06 Sep 2022 18:04:42 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jakub@cloudflare.com
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, houtao1@huawei.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 7/7] selftests/bpf: Add tests for _opts variants of libbpf
-Date:   Tue,  6 Sep 2022 19:03:01 +0200
-Message-Id: <20220906170301.256206-8-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220906170301.256206-1-roberto.sassu@huaweicloud.com>
-References: <20220906170301.256206-1-roberto.sassu@huaweicloud.com>
+        Tue, 6 Sep 2022 13:16:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265A88B2CC;
+        Tue,  6 Sep 2022 10:05:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26041615D2;
+        Tue,  6 Sep 2022 17:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74117C433C1;
+        Tue,  6 Sep 2022 17:04:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662483848;
+        bh=rAhCSLOrTwfGo2FpGcX0U4IJWpbmLaG/6c1iUIC7dnU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=FahQDDB0rwfzhSId2osRUDWnjY1U/m4yS41gsexD+LH5bYuPvvbXT2rQHvJxPVG8o
+         sP1SnsnrkzsknF0uE2iEtswCyPJ2OREbPEjzx9ccrZgiqEy9bly9FpuaZf2gaa5lIb
+         QzwG8rP5vGj4NEM1Wqd2fKJVRF8f5LiOGulqn2lvnHkUuDvH0MmfROv5vLDuqU0+H2
+         /U8hTSYQY6duVo+0w85ViCBO7YwgQRNalVB4J4Uk0Htx7TzcNilHDpUcb6HRQQXkJb
+         PU1eh7g9weTpHUxz8Z3Mwlh2Woi+sPLcLKmJF2wQgsdf64nhdHGRDVdIHvO7nk0pnZ
+         mG9ZmRFQ2WmcA==
+Message-ID: <b8b0c5adc6598c57fb109447e3bc54492b54c36a.camel@kernel.org>
+Subject: Re: [RFC PATCH v2] statx, inode: document the new STATX_INO_VERSION
+ field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org,
+        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Date:   Tue, 06 Sep 2022 13:04:05 -0400
+In-Reply-To: <d1ee62062c3f805460b7bdf2776e759be4dba43f.camel@kernel.org>
+References: <20220901121714.20051-1-jlayton@kernel.org>
+         <874jxrqdji.fsf@oldenburg.str.redhat.com>
+         <81e57e81e4570d1659098f2bbc7c9049a605c5e8.camel@kernel.org>
+         <87ilm066jh.fsf@oldenburg.str.redhat.com>
+         <d1ee62062c3f805460b7bdf2776e759be4dba43f.camel@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwA34JNSfRdjftYoAA--.8234S9
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF48KFW3ZryfGw4UJw15CFg_yoW3Xw4Dpa
-        9Ygryjkr1FqrW8u398Ja13Gr4xKF18W3WUt397WF15Zr18X3Z7W34xGF13tF9xZFZ5Cw4f
-        Cw4ayrW8GrW7uFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4
-        kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
-        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZV
-        WrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY
-        1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-        AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuY
-        vjxUsS_MDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAHBF1jj36uiQAAsp
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Tue, 2022-09-06 at 12:41 -0400, Jeff Layton wrote:
+> On Tue, 2022-09-06 at 14:17 +0200, Florian Weimer wrote:
+> > * Jeff Layton:
+> >=20
+> > > All of the existing implementations use all 64 bits. If you were to
+> > > increment a 64 bit value every nanosecond, it will take >500 years fo=
+r
+> > > it to wrap. I'm hoping that's good enough. ;)
+> > >=20
+> > > The implementation that all of the local Linux filesystems use track
+> > > whether the value has been queried using one bit, so there you only g=
+et
+> > > 63 bits of counter.
+> > >=20
+> > > My original thinking here was that we should leave the spec "loose" t=
+o
+> > > allow for implementations that may not be based on a counter. E.g. co=
+uld
+> > > some filesystem do this instead by hashing certain metadata?
+> >=20
+> > Hashing might have collisions that could be triggered deliberately, so
+> > probably not a good idea.  It's also hard to argue that random
+> > collisions are unlikely.
+> >=20
+>=20
+> In principle, if a filesystem could guarantee enough timestamp
+> resolution, it's possible collisions could be hard to achieve. It's also
+> possible you could factor in other metadata that wasn't necessarily
+> visible to userland to try and ensure uniqueness in the counter.
+>=20
+> Still...
+>=20
 
-Introduce the data_input map, write-protected with a small eBPF program
-implementing the lsm/bpf_map hook.
+Actually, Bruce brought up a good point on IRC. The main danger here is
+that we might do this:
 
-Then, ensure that bpf_map_get_fd_by_id() and bpf_map_get_fd_by_id_opts()
-with NULL opts don't succeed due to requesting read-write access to the
-write-protected map. Also, ensure that bpf_map_get_fd_by_id_opts() with
-flags in opts set to BPF_F_RDONLY instead succeeds.
+Start (i_version is at 1)
+write data (i_version goes to 2)
+statx+read data (observer associates data with i_version of 2)
+Crash, but before new i_version made it to disk
+Machine comes back up (i_version back at 1)
+write data (i_version goes to 2)
+statx (observer assumes his cache is valid)
 
-After obtaining a read-only fd, ensure that only map lookup succeeds and
-not update. Ensure that update works only with the read-write fd obtained
-at program loading time, when the write protection was not yet enabled.
+We can mitigate this by factoring in the ctime when we do the statx.
+Another option though would be to factor in the ctime when we generate
+the new value and store it.
 
-Finally, ensure that other _opts variants of libbpf don't work if the
-BPF_F_RDONLY flag is set in opts (due to the kernel not handling the
-open_flags member of bpf_attr).
+Here's what nfsd does today:
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- .../bpf/prog_tests/libbpf_get_fd_opts.c       | 145 ++++++++++++++++++
- .../bpf/progs/test_libbpf_get_fd_opts.c       |  49 ++++++
- 2 files changed, 194 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
+      chattr =3D  stat->ctime.tv_sec;
+      chattr <<=3D 30;
+      chattr +=3D stat->ctime.tv_nsec;
+      chattr +=3D inode_query_iversion(inode);
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
-new file mode 100644
-index 000000000000..8ea1c44f979e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
-@@ -0,0 +1,145 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include <test_progs.h>
-+
-+#include "test_libbpf_get_fd_opts.skel.h"
-+
-+void test_libbpf_get_fd_opts(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_libbpf_get_fd_opts *skel;
-+	struct bpf_map_info info_m = { 0 };
-+	__u32 len = sizeof(info_m), value;
-+	union bpf_iter_link_info linfo;
-+	struct bpf_link *link;
-+	struct bpf_map *map;
-+	char buf[16];
-+	int ret, zero = 0, fd = -1, iter_fd;
-+
-+	DECLARE_LIBBPF_OPTS(bpf_get_fd_opts, fd_opts_rdonly,
-+		.open_flags = BPF_F_RDONLY,
-+	);
-+
-+	skel = test_libbpf_get_fd_opts__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_libbpf_get_fd_opts__open_and_load"))
-+		return;
-+
-+	bpf_program__set_autoattach(skel->progs.write_bpf_array_map, false);
-+
-+	ret = test_libbpf_get_fd_opts__attach(skel);
-+	if (!ASSERT_OK(ret, "test_libbpf_get_fd_opts__attach"))
-+		goto close_prog;
-+
-+	map = bpf_object__find_map_by_name(skel->obj, "data_input");
-+	if (!ASSERT_OK_PTR(map, "bpf_object__find_map_by_name"))
-+		goto close_prog;
-+
-+	ret = bpf_obj_get_info_by_fd(bpf_map__fd(map), &info_m, &len);
-+	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id(info_m.id);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, NULL);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, &fd_opts_rdonly);
-+	if (!ASSERT_GE(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* Map lookup should work with read-only fd. */
-+	ret = bpf_map_lookup_elem(fd, &zero, &value);
-+	if (!ASSERT_OK(ret, "bpf_map_lookup_elem"))
-+		goto close_prog;
-+
-+	if (!ASSERT_EQ(value, 0, "map value mismatch"))
-+		goto close_prog;
-+
-+	/* Map update should not work with read-only fd. */
-+	ret = bpf_map_update_elem(fd, &zero, &len, BPF_ANY);
-+	if (!ASSERT_LT(ret, 0, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	/* Map update through map iterator should not work with read-only fd. */
-+	memset(&linfo, 0, sizeof(linfo));
-+	linfo.map.map_fd = fd;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.write_bpf_array_map, &opts);
-+	if (!ASSERT_ERR_PTR(link, "bpf_program__attach_iter")) {
-+		/*
-+		 * Faulty path, this should never happen if fd modes check is
-+		 * added for map iterators.
-+		 */
-+		iter_fd = bpf_iter_create(bpf_link__fd(link));
-+		bpf_link__destroy(link);
-+
-+		if (!ASSERT_GE(iter_fd, 0, "bpf_iter_create (faulty path)"))
-+			goto close_prog;
-+
-+		read(iter_fd, buf, sizeof(buf));
-+		close(iter_fd);
-+
-+		ret = bpf_map_lookup_elem(fd, &zero, &value);
-+		if (!ASSERT_OK(ret, "bpf_map_lookup_elem (faulty path)"))
-+			goto close_prog;
-+
-+		if (!ASSERT_EQ(value, 5,
-+			       "unauthorized map update (faulty path)"))
-+			goto close_prog;
-+	}
-+
-+	/* Map update should work with read-write fd. */
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &len, BPF_ANY);
-+	if (!ASSERT_OK(ret, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	/* Map update through map iterator should work with read-write fd. */
-+	linfo.map.map_fd = bpf_map__fd(map);
-+	link = bpf_program__attach_iter(skel->progs.write_bpf_array_map, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto close_prog;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(link));
-+	bpf_link__destroy(link);
-+
-+	if (!ASSERT_GE(iter_fd, 0, "bpf_iter_create"))
-+		goto close_prog;
-+
-+	read(iter_fd, buf, sizeof(buf));
-+	close(iter_fd);
-+
-+	ret = bpf_map_lookup_elem(fd, &zero, &value);
-+	if (!ASSERT_OK(ret, "bpf_map_lookup_elem"))
-+		goto close_prog;
-+
-+	if (!ASSERT_EQ(value, 5, "map value mismatch"))
-+		goto close_prog;
-+
-+	/* Prog get fd with opts set should not work (no kernel support). */
-+	ret = bpf_prog_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	if (!ASSERT_EQ(ret, -EINVAL, "bpf_prog_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* Link get fd with opts set should not work (no kernel support). */
-+	ret = bpf_link_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	if (!ASSERT_EQ(ret, -EINVAL, "bpf_link_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* BTF get fd with opts set should not work (no kernel support). */
-+	ret = bpf_btf_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	ASSERT_EQ(ret, -EINVAL, "bpf_btf_get_fd_by_id_opts");
-+
-+close_prog:
-+	close(fd);
-+	test_libbpf_get_fd_opts__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
-new file mode 100644
-index 000000000000..83366024023f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+/* From include/linux/mm.h. */
-+#define FMODE_WRITE	0x2
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} data_input SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("lsm/bpf_map")
-+int BPF_PROG(check_access, struct bpf_map *map, fmode_t fmode)
-+{
-+	if (map != (struct bpf_map *)&data_input)
-+		return 0;
-+
-+	if (fmode & FMODE_WRITE)
-+		return -EACCES;
-+
-+	return 0;
-+}
-+
-+SEC("iter/bpf_map_elem")
-+int write_bpf_array_map(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	u32 *key = ctx->key;
-+	u32 *val = ctx->value;
-+
-+	if (key == NULL || val == NULL)
-+		return 0;
-+
-+	*val = 5;
-+	return 0;
-+}
--- 
-2.25.1
+Instead of doing this after we query it, we could do that before storing
+it. After a crash, we might see the value go backward, but if a new
+write later happens, the new value would be very unlikely to match the
+one that got lost.
 
+That seems quite doable, and might be better for userland consumers
+overall.
+
+> > > It's arguable though that the NFSv4 spec requires that this be based =
+on
+> > > a counter, as the client is required to increment it in the case of
+> > > write delegations.
+> >=20
+> > Yeah, I think it has to be monotonic.
+> >=20
+>=20
+> I think so too. NFSv4 sort of needs that anyway.
+>=20
+> > > > If the system crashes without flushing disks, is it possible to obs=
+erve
+> > > > new file contents without a change of i_version?
+> > >=20
+> > > Yes, I think that's possible given the current implementations.
+> > >=20
+> > > We don't have a great scheme to combat that at the moment, other than
+> > > looking at this in conjunction with the ctime. As long as the clock
+> > > doesn't jump backward after the crash and it takes more than one jiff=
+y
+> > > to get the host back up, then you can be reasonably sure that
+> > > i_version+ctime should never repeat.
+> > >=20
+> > > Maybe that's worth adding to the NOTES section of the manpage?
+> >=20
+> > I'd appreciate that.
+>=20
+> Ok! New version of the manpage patch sent. If no one has strong
+> objections to the proposed docs, I'll send out new kernel patches in the
+> next day or two.
+>=20
+> Thanks!
+
+--=20
+Jeff Layton <jlayton@kernel.org>

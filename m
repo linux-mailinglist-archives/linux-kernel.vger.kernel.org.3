@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9645AF534
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92D55AF3FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiIFUBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
+        id S229599AbiIFS4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 14:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiIFUAa (ORCPT
+        with ESMTP id S229482AbiIFS4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:00:30 -0400
+        Tue, 6 Sep 2022 14:56:47 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A8AB8F14
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:56:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD5157E23;
+        Tue,  6 Sep 2022 11:56:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662494197; x=1694030197;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XJySH71IN31M6NVQ6cXy0CSzgJev/B9IC3dLWlVkEf0=;
-  b=enqz+EZeldwIiLgiqRUyxEHdTK/rUk/z7OCvW+UwLIzMD+aZIxw+zIwV
-   n5NPtJzAy9UFPA7NtwGoGUlxlsDEz5dHwbcmfGVU2BJn9BLlWbU5B74Xy
-   0mlMlrcs+kykymaJKEAntdM1X6k5h+kP7b6U2pwvNf9yeuioiDLaX6R14
-   lV9ssLwALPkBhqw5CQXNRPclO/4arWzoPcUuG6HrYUuu/6XsbwLaRSLIa
-   TCRE6PJnuM1U+ftKydHmBvFCHYB4usC4wNeJFT9SNZU4jn8fnb0LqUk4j
-   fwcxAoRna9jlc5833QAro8Rj3+MOrH6hhXyYfsU5CqtDpdlZlR5+3yDxQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="322869846"
+  t=1662490606; x=1694026606;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I+yR3QnqLjEEz/g9/0QnG1nuOdcAFPEcD/F6QGk29us=;
+  b=dM3MuAhwMRqpvItHJrS2rsWHmj0BTLngDwOodLGnYFKKtytfMNQAzJS+
+   5Uhq7Un1bRcPyP2Du6cMSHYoiNvTq7RNI4CuNpsAR3sgzzTjqm/Q3Zb46
+   TacUeNcJUtHntqdADkH5zKUrx/4KjE8O0m4SuSzwhc0DYfW78EtvKUdt+
+   z3e1bbOZKaTpPQKdra3oWiFsGFa0Z2v/cVikm4JRVIvTRh0yalAFZVbOp
+   EPDc27TDdfp84TE0uQGS3fNPOUYzYJMjlctwywIFhsFOq8lZcHT396JV2
+   RnMygmLPA5QLrTXiim4zYxOJvkxs80X0dRXS6ADSaziQfNPdg2WomCWFV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="322857906"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="322869846"
+   d="scan'208";a="322857906"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 12:52:28 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 11:56:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="756494906"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 12:52:28 -0700
-Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.44.186])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 71401580583;
-        Tue,  6 Sep 2022 12:52:26 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 20:53:11 +0200
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH v2 15/39] drm/i915:
- intel_dp_link_training.c: fix kernel-doc markup
-Message-ID: <20220906171716.15bdc72b@maurocar-mobl2>
-In-Reply-To: <YvIuKw8KY6xMi0Fj@intel.com>
-References: <cover.1657699522.git.mchehab@kernel.org>
-        <0fac471eb7f6d365e9a7544071114292e08aa5ad.1657699522.git.mchehab@kernel.org>
-        <YvIuKw8KY6xMi0Fj@intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+   d="scan'208";a="756479251"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 11:56:40 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVdkW-0005Uz-0v;
+        Tue, 06 Sep 2022 18:56:40 +0000
+Date:   Wed, 7 Sep 2022 02:55:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused
+ variable 'mmpcam_of_match'
+Message-ID: <202209070248.Y9XjeXY7-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,62 +62,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 Aug 2022 05:51:39 -0400
-Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
+Hi Mauro,
 
-> On Wed, Jul 13, 2022 at 09:12:03AM +0100, Mauro Carvalho Chehab wrote:
-> > The return code table is not properly marked, causing warnings
-> > and being badly parsed by Sphinx:
-> > 
-> >     Documentation/gpu/i915:130: ./drivers/gpu/drm/i915/display/intel_dp_link_training.c:183: WARNING: Block quote ends without a blank line; unexpected unindent.
-> >     Documentation/gpu/i915:130: ./drivers/gpu/drm/i915/display/intel_dp_link_training.c:186: WARNING: Definition list ends without a blank line; unexpected unindent.
-> > 
-> > Use table markups to fix it.  
-> 
-> cool, I didn't know that
+First bad commit (maybe != root cause):
 
-Yeah, you can use almost all Sphinx tags inside a kernel-doc markup,
-taking some care with indents and not conflicting with the things
-that kernel-doc itself parses. 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
+commit: dc7bbea90075b57772e9a28043061bf71d96f06f media: platform: rename marvell-ccic/ to marvell/
+date:   6 months ago
+config: s390-randconfig-r003-20220906 (https://download.01.org/0day-ci/archive/20220907/202209070248.Y9XjeXY7-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dc7bbea90075b57772e9a28043061bf71d96f06f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dc7bbea90075b57772e9a28043061bf71d96f06f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
 
-The same is also valid for uAPI stuff inside Documentation/ABI.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regards,
-Mauro
+All warnings (new ones prefixed by >>):
 
-> 
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> 
-> 
-> > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > ---
-> > 
-> > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> > See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
-> > 
-> >  drivers/gpu/drm/i915/display/intel_dp_link_training.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/display/intel_dp_link_training.c b/drivers/gpu/drm/i915/display/intel_dp_link_training.c
-> > index 9feaf1a589f3..23a269fcf6ca 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_dp_link_training.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_dp_link_training.c
-> > @@ -177,12 +177,14 @@ static int intel_dp_init_lttpr(struct intel_dp *intel_dp, const u8 dpcd[DP_RECEI
-> >   * transparent mode link training mode.
-> >   *
-> >   * Returns:
-> > + * ====  =====================================================================
-> >   *   >0  if LTTPRs were detected and the non-transparent LT mode was set. The
-> >   *       DPRX capabilities are read out.
-> >   *    0  if no LTTPRs or more than 8 LTTPRs were detected or in case of a
-> >   *       detection failure and the transparent LT mode was set. The DPRX
-> >   *       capabilities are read out.
-> >   *   <0  Reading out the DPRX capabilities failed.
-> > + * ====  =====================================================================
-> >   */
-> >  int intel_dp_init_lttpr_and_dprx_caps(struct intel_dp *intel_dp)
-> >  {
-> > -- 
-> > 2.36.1
-> >   
+   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
+   In file included from include/media/v4l2-device.h:13:
+   In file included from include/media/v4l2-subdev.h:15:
+   In file included from include/media/v4l2-common.h:270:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
+   In file included from include/media/v4l2-device.h:13:
+   In file included from include/media/v4l2-subdev.h:15:
+   In file included from include/media/v4l2-common.h:270:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
+   In file included from include/media/v4l2-device.h:13:
+   In file included from include/media/v4l2-subdev.h:15:
+   In file included from include/media/v4l2-common.h:270:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused variable 'mmpcam_of_match' [-Wunused-const-variable]
+   static const struct of_device_id mmpcam_of_match[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/mmpcam_of_match +364 drivers/media/platform/marvell/mmp-driver.c
+
+bb0a896e3d5083 drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-12-30  363  
+83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28 @364  static const struct of_device_id mmpcam_of_match[] = {
+83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  365  	{ .compatible = "marvell,mmp2-ccic", },
+83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  366  	{},
+83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  367  };
+08aac0e32fe44b drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-07-22  368  MODULE_DEVICE_TABLE(of, mmpcam_of_match);
+67a8dbbc4e04cd drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-06-11  369  
+
+:::::: The code at line 364 was first introduced by commit
+:::::: 83c40e6611ec1e548ece34f6940f516333abc16a media: marvell-ccic/mmp: add devicetree support
+
+:::::: TO: Lubomir Rintel <lkundrak@v3.sk>
+:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

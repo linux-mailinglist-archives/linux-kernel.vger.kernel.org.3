@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A89E5AE99F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B075AEB0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239242AbiIFNc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S233939AbiIFNp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239380AbiIFNcP (ORCPT
+        with ESMTP id S238526AbiIFNnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:32:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4878C75CFE;
-        Tue,  6 Sep 2022 06:32:14 -0700 (PDT)
+        Tue, 6 Sep 2022 09:43:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E4660F3;
+        Tue,  6 Sep 2022 06:37:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D766B61545;
-        Tue,  6 Sep 2022 13:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34F9FC433D6;
-        Tue,  6 Sep 2022 13:32:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C05B6154B;
+        Tue,  6 Sep 2022 13:37:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C47CC433D6;
+        Tue,  6 Sep 2022 13:37:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471133;
-        bh=Ge6nj5tnABmzL+BDKM1UPJO/z89ACMeuKjn/TZ5Y7Tc=;
+        s=korg; t=1662471465;
+        bh=9vvFlZtsacrHKW25KGKWCZuST/dBdCnE1ltXoEoFvo4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=REpDvSem/sJZwoSCtaxjHk3/x2mB+RlaG01CY0DYvVCDBS0o6SmQmr9VSX3o+V7lX
-         6A2Z9lJpeOq3Kuq6cNF771mGZnnV3pkhKQQzkLR/M/w/Xn1qYzIaiudHmL56aFZOSq
-         cI9et4f0MCnzr+NdcOTBmja2vUxap2yBL/uZOnvI=
+        b=p6hvMVaz3AsD/gs9GtE4bs1V/T0zFD3/2MTrZS6/bMA+Rx602K1Rxg7gEOglAmvQE
+         eLcxmB07S+yHyBYpWweX/Nfme6eytrn5L0eM8R+qEC3wwfUjkBADBsaRoE1C7GAorK
+         GMYtxQRIpsoEQMM8esDAUxI6jcgy2w1PF72nlfNc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 12/80] Revert "xhci: turn off port power in shutdown"
+Subject: [PATCH 5.15 028/107] Revert "sch_cake: Return __NET_XMIT_STOLEN when consuming enqueued skb"
 Date:   Tue,  6 Sep 2022 15:30:09 +0200
-Message-Id: <20220906132817.442457181@linuxfoundation.org>
+Message-Id: <20220906132822.983603350@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
-References: <20220906132816.936069583@linuxfoundation.org>
+In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
+References: <20220906132821.713989422@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,92 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit 8531aa1659f7278d4f2ec7408cc000eaa8d85217 ]
+[ Upstream commit 0b4f688d53fdc2a731b9d9cdf0c96255bc024ea6 ]
 
-This reverts commit 83810f84ecf11dfc5a9414a8b762c3501b328185.
+This reverts commit 90fabae8a2c225c4e4936723c38857887edde5cc.
 
-Turning off port power in shutdown did cause issues such as a laptop not
-proprly powering off, and some specific usb devies failing to enumerate the
-subsequent boot after a warm reset.
+Patch was applied hastily, revert and let the v2 be reviewed.
 
-So revert this.
-
-Fixes: 83810f84ecf1 ("xhci: turn off port power in shutdown")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220825150840.132216-4-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 90fabae8a2c2 ("sch_cake: Return __NET_XMIT_STOLEN when consuming enqueued skb")
+Link: https://lore.kernel.org/all/87wnao2ha3.fsf@toke.dk/
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-hub.c |  2 +-
- drivers/usb/host/xhci.c     | 15 ++-------------
- drivers/usb/host/xhci.h     |  2 --
- 3 files changed, 3 insertions(+), 16 deletions(-)
+ net/sched/sch_cake.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 94adae8b19f00..1eb3b5deb940e 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -566,7 +566,7 @@ struct xhci_hub *xhci_get_rhub(struct usb_hcd *hcd)
-  * It will release and re-aquire the lock while calling ACPI
-  * method.
-  */
--void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd,
-+static void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd,
- 				u16 index, bool on, unsigned long *flags)
- 	__must_hold(&xhci->lock)
- {
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 997de5f294f15..a1ed5e0d06128 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -775,8 +775,6 @@ static void xhci_stop(struct usb_hcd *hcd)
- void xhci_shutdown(struct usb_hcd *hcd)
- {
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
--	unsigned long flags;
--	int i;
- 
- 	if (xhci->quirks & XHCI_SPURIOUS_REBOOT)
- 		usb_disable_xhci_ports(to_pci_dev(hcd->self.sysdev));
-@@ -792,21 +790,12 @@ void xhci_shutdown(struct usb_hcd *hcd)
- 		del_timer_sync(&xhci->shared_hcd->rh_timer);
+diff --git a/net/sched/sch_cake.c b/net/sched/sch_cake.c
+index 6944c669731c4..857aaebd49f43 100644
+--- a/net/sched/sch_cake.c
++++ b/net/sched/sch_cake.c
+@@ -1713,7 +1713,6 @@ static s32 cake_enqueue(struct sk_buff *skb, struct Qdisc *sch,
  	}
+ 	idx--;
+ 	flow = &b->flows[idx];
+-	ret = NET_XMIT_SUCCESS;
  
--	spin_lock_irqsave(&xhci->lock, flags);
-+	spin_lock_irq(&xhci->lock);
- 	xhci_halt(xhci);
--
--	/* Power off USB2 ports*/
--	for (i = 0; i < xhci->usb2_rhub.num_ports; i++)
--		xhci_set_port_power(xhci, xhci->main_hcd, i, false, &flags);
--
--	/* Power off USB3 ports*/
--	for (i = 0; i < xhci->usb3_rhub.num_ports; i++)
--		xhci_set_port_power(xhci, xhci->shared_hcd, i, false, &flags);
--
- 	/* Workaround for spurious wakeups at shutdown with HSW */
- 	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
- 		xhci_reset(xhci, XHCI_RESET_SHORT_USEC);
--	spin_unlock_irqrestore(&xhci->lock, flags);
-+	spin_unlock_irq(&xhci->lock);
+ 	/* ensure shaper state isn't stale */
+ 	if (!b->tin_backlog) {
+@@ -1772,7 +1771,6 @@ static s32 cake_enqueue(struct sk_buff *skb, struct Qdisc *sch,
  
- 	xhci_cleanup_msix(xhci);
+ 		qdisc_tree_reduce_backlog(sch, 1-numsegs, len-slen);
+ 		consume_skb(skb);
+-		ret |= __NET_XMIT_STOLEN;
+ 	} else {
+ 		/* not splitting */
+ 		cobalt_set_enqueue_time(skb, now);
+@@ -1906,7 +1904,7 @@ static s32 cake_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ 		}
+ 		b->drop_overlimit += dropped;
+ 	}
+-	return ret;
++	return NET_XMIT_SUCCESS;
+ }
  
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index f87e5fe57f225..3fd150ef8fca9 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2162,8 +2162,6 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue, u16 wIndex,
- int xhci_hub_status_data(struct usb_hcd *hcd, char *buf);
- int xhci_find_raw_port_number(struct usb_hcd *hcd, int port1);
- struct xhci_hub *xhci_get_rhub(struct usb_hcd *hcd);
--void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd, u16 index,
--			 bool on, unsigned long *flags);
- 
- void xhci_hc_died(struct xhci_hcd *xhci);
- 
+ static struct sk_buff *cake_dequeue_one(struct Qdisc *sch)
 -- 
 2.35.1
 

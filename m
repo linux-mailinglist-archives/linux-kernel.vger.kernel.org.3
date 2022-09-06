@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803565ADFCF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA8B5ADFD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238398AbiIFGcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 02:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
+        id S238407AbiIFGd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 02:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238389AbiIFGcp (ORCPT
+        with ESMTP id S231901AbiIFGdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 02:32:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB036BD7B
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 23:32:43 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oVS8N-0006wF-KZ; Tue, 06 Sep 2022 08:32:31 +0200
-Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:a3ba:d49d:1749:550])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E6C53DB57C;
-        Tue,  6 Sep 2022 06:32:29 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 08:32:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] docs: networking: device drivers: flexcan: fix invalid
- email
-Message-ID: <20220906063228.evruouqqbeh737f5@pengutronix.de>
-References: <20220828134442.794990-1-dario.binacchi@amarulasolutions.com>
+        Tue, 6 Sep 2022 02:33:24 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D0C6B16F;
+        Mon,  5 Sep 2022 23:33:23 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id v4so9749691pgi.10;
+        Mon, 05 Sep 2022 23:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=zvrfH4l9+LLpmGb/+NWA6GwTCCQXPsaauZkSnlCapaY=;
+        b=hZ/dzDRq5G4WmUz1ONKN7zmYqZYMPaxMQgd8xuWpa3E7uVveuvbej0gFljqv+AODSn
+         M4JDCwOHfhdI6b/OcXIUZVxDutfW6ymVfmdUOYG7y9EC+gdl6ht6I2ZSXJPoGa4KG2aW
+         Qjr5DPHyDbY8YBVsVZJRFYATPDaj/CET7g8qOjaXSEHSHN8I9YoLCDTkVPl3xLGNNobR
+         0QMByO/L0tHlUlqR92EhFZH8EuPf4VBd/j3XwQmRwLX+nL8wGSoJMzfuv7STJ+neo1yE
+         bIkfbd2+n6OJU7Zg3i64MZNK5zsWIZiavOA1Tm4K5B/em5U3b/PG/y5hQzgghC0sdLmV
+         PF7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=zvrfH4l9+LLpmGb/+NWA6GwTCCQXPsaauZkSnlCapaY=;
+        b=bIQeD82rer8ju/OQpnuw/YOW/lM+ERKQh60ol8J7vOIe2vhBzMtUCz/RUzXGmIgTar
+         ryAcPUDHJvRlX2Bb3pSOP/vCLshG0AqeyZEK1M3qdL6vTK4mRNoBSJkz0oqmjHge71fQ
+         Yz9jKiZz+VvWE5VtaH+bNXUXBhmG+zHE4ZKyhns3egKyq9wSPvrwTD17DabsnYyw6m9P
+         2y1YPlv8myXddyDVN/1/UnPdqdLLgZc/SFn5CvbqmrTXh6ZdxUTLRkuYj2H5kY8lmfoH
+         be9YmUm7Sdkt3xx2qxdLO3nkpPEBh0pWTz/cFmDv3HXvt5SF1BqNIxxWukgBlNzSKdEx
+         w8uw==
+X-Gm-Message-State: ACgBeo0RnXlYLaeHRnwbRFYgh/g4WSeHuOd+5splpenhMKIlcj4cl9Yx
+        X4ajfsUcxnB50E1UjRziqeI=
+X-Google-Smtp-Source: AA6agR4wQ6WwNUX/EghUykxH9pNTjoTZRnLxanZrz1SMxSv/1T5qMVxyCJC4tElWoD9sJo7X0fmCLg==
+X-Received: by 2002:a63:6d0f:0:b0:434:a752:8389 with SMTP id i15-20020a636d0f000000b00434a7528389mr1776782pgc.210.1662446003223;
+        Mon, 05 Sep 2022 23:33:23 -0700 (PDT)
+Received: from localhost ([166.111.139.139])
+        by smtp.gmail.com with ESMTPSA id e19-20020aa79813000000b0052dce4edceesm9090702pfl.169.2022.09.05.23.33.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 23:33:22 -0700 (PDT)
+From:   Zixuan Fu <r33s3n6@gmail.com>
+To:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: [BUG] scsi: megaraid_sas: possible use-after-free caused by bad error handling in megasas_probe_one()
+Date:   Tue,  6 Sep 2022 14:33:18 +0800
+Message-Id: <20220906063318.2745858-1-r33s3n6@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="agwluqgtxlz3sxir"
-Content-Disposition: inline
-In-Reply-To: <20220828134442.794990-1-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---agwluqgtxlz3sxir
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Our fault injection tool finds a possible use-after-free in the 
+megaraid_sas driver in Linux 5.10.0:
 
-On 28.08.2022 15:44:42, Dario Binacchi wrote:
-> The Amarula contact info email address is wrong, so fix it up to use the
-> correct one.
->=20
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+In the file drivers/scsi/megaraid/megaraid_sas_base.c:
+In megasas_io_attach(), the call to scsi_add_host() may fail: 
+6814:	if (scsi_add_host(host, &instance->pdev->dev)) {
+            ...
+6818:		return -ENODEV;
+6819:	}
 
-Applied to linux-can-next.
+This error is then propagated to its caller megasas_probe_one().
+7414:	if (megasas_io_attach(instance))
+7415:   	goto fail_io_attach;
 
-Thanks,
-Marc
+In error handling code of megasas_probe_one(), it calls scsi_host_put():
+7457:   scsi_host_put(host);
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+The function scsi_host_put() calls scsi_host_dev_release() to free `host`,
+which contains a variable `instance`.
 
---agwluqgtxlz3sxir
-Content-Type: application/pgp-signature; name="signature.asc"
+But megasas_probe_one() calls megasas_init_fw() before:
+7372: 	if (megasas_init_fw(instance))
 
------BEGIN PGP SIGNATURE-----
+In megasas_init_fw(), it starts a timer:
+6369:   megasas_start_timer(instance);
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMW6XkACgkQrX5LkNig
-011CewgAh/0isgB9H3tAaQXwXufKklY44Xo0Cy/VlLJYRvIpiEJPVSk9KtB51rOE
-I4mzbxTuj1nA/+CfsOmXcgS4unNPQYpOpSrFxEUf1eJDZuwhh0Xq8g5eWKCIpylN
-fepOmCadyLUQkgtpDZMnCWcF3LPL2w3OYrV9CCfR/POEDGo6+gUBuUEy9AmvGGL0
-ELQM25x9qNNEhWHP88G+DcWxgPyGTa10fxU6zK2Yd9a0bwt2tg465ow+XpAP0hFB
-d9aq4vzaSs/dbIMV6Xiu40azJ1j1Q8uLt8Vm+sUy3q+kb2jexzcnHW0YArV87Jmu
-flosg9GTXLlmY26J83+vFBeAe2fslg==
-=QnEP
------END PGP SIGNATURE-----
+And megasas_probe_one() does nothing about it in error handling code. When
+the timer expires, it accesses `instance`, causing a use-after-free bug.
 
---agwluqgtxlz3sxir--
+I am not quite sure how to fix this possible bug. Any feedback would be
+appreciated, thanks!
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+
+Best wishes,
+Zixuan Fu

@@ -2,179 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231EA5AE93F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD495AE947
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240394AbiIFNR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
+        id S240397AbiIFNTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240210AbiIFNRx (ORCPT
+        with ESMTP id S233500AbiIFNTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:17:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2220C6DACB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662470270;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GjwOR0IwFj7/RGmX3t8tdGBhDDX1U7Y1rtGQK453L9s=;
-        b=CGKn6PODg0oQQ2L16NP2IM+glRznswsVPVUq7J/c5OE98k0AUeW0JdMtzzmsCFIbsTYSB6
-        zPoaoSJYCpVy/D5Adtihx1550YxfgYwPW5Brox2eVpJYIMd61ZzVS9saxxP2zsiU9q8pRy
-        CYO4llNxrcXnIoCXw4Y+QtwTZMKWl48=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-488-bcm_OnQSPXq2zmTLsf01BQ-1; Tue, 06 Sep 2022 09:17:49 -0400
-X-MC-Unique: bcm_OnQSPXq2zmTLsf01BQ-1
-Received: by mail-wr1-f69.google.com with SMTP id d11-20020adfc08b000000b002207555c1f6so2337115wrf.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 06:17:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=GjwOR0IwFj7/RGmX3t8tdGBhDDX1U7Y1rtGQK453L9s=;
-        b=KgNNSzoBs7Z3PSuhpJPHf3xzZXJwdMc21jQW3V2ychyLY4vz5J+ie4w+/RzFjQBUy6
-         CpJkvyOPLS1qdqMlninPeVtZrp/kAvHqdhbsa16X3szuCv3kaNGTQZ1uG8RUGkK+576Z
-         IIHlLXPc6C+lt3HKnGEapUYqqGSuNEkw4NyMrE652SKojKujcdM0uNAsBFiE70mQYU1P
-         eILL//kfpOoHCAC4kUyErcciA5t5CckiSEjTwqO/byusOime+R/4zospGwg8/G13twKk
-         9MTAlb5bf7852DL8YL9ODOU0hddCxE4N3h72ZO8flCYb9ttJQ+BHSEsnSzfuNlYoOglK
-         G2cw==
-X-Gm-Message-State: ACgBeo0ptjEyfPRuHJeRKk5dWdsUXfqadfuZXvhtkGDp4itEcW0lI96D
-        2I5uvg7vOv1FoPm+G34fuMfjDh85t3NL2sOF/3bskbNyP3v9OSd/ndmaFF55qk2cgZ58eMPpb5E
-        I1t6jo8JNEEQErlShHeo94hDE
-X-Received: by 2002:a5d:62d0:0:b0:228:d6ee:9bf4 with SMTP id o16-20020a5d62d0000000b00228d6ee9bf4mr2376976wrv.34.1662470267893;
-        Tue, 06 Sep 2022 06:17:47 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR60faROv7NXDWQZSAZ3esquhwyEQlDW0rmfE16kWqyRI1dSjiveaH/zBuliIdeF9eC3CgbQVw==
-X-Received: by 2002:a5d:62d0:0:b0:228:d6ee:9bf4 with SMTP id o16-20020a5d62d0000000b00228d6ee9bf4mr2376951wrv.34.1662470267511;
-        Tue, 06 Sep 2022 06:17:47 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
-        by smtp.gmail.com with ESMTPSA id j17-20020a05600c411100b003a6896feef7sm14104782wmi.39.2022.09.06.06.17.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 06:17:46 -0700 (PDT)
-Message-ID: <d57009d3-fd40-5061-31ae-203dff1e0ef7@redhat.com>
-Date:   Tue, 6 Sep 2022 15:17:46 +0200
+        Tue, 6 Sep 2022 09:19:07 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640666E2EB;
+        Tue,  6 Sep 2022 06:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662470347; x=1694006347;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=vT9HrR6f3nlqd7aqU/8hmOdyRMfanjqeG0o3KxMWu8I=;
+  b=Qjz2ocjInrBl4QITA7pEEplUWUn01tmxLcTOgLMl0UumMvcCEVUbTDV7
+   z5HkZapYVyAc9oJ8zun+M2Lqzugenby/MZe15gSBpOs9nLfxGVlmKuShb
+   ZQUuwG0KymJwryU5X5BzLpYYFd5PZ8Me9MYoQKGG0AkxqBwa1/rmbkHYn
+   X7uAj+JsS+XQ6vGjdbK/RFDZTyNm4b8U8GPb+lMEow11Icm+zwNcrZFQM
+   sTIyAaqTSrNYnPXzgqwVCQUhBbMQQvsTgOeiECeC6z7vl3Tl811JXqeUf
+   fNn+eWTNVGcsaz/F9DqfFNpMDa/Q/AtWXLDX0oW+NWvDABfqOHjP2C6pi
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="172585203"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 06:19:06 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 6 Sep 2022 06:19:05 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Tue, 6 Sep 2022 06:19:04 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oDCFlIyXJk8hicJ+fknbvmVQGeiMmSMjp3LjSuBP6+YPekTmc8jAEHV9JR3syZ15QfqStu57D65NAd+ydGjEE5A05JCY5SBz+lquy7hCiEUzFA9+bL6yJwPmMQDYcJzbjjbLvkaXdPUuFqS3gW8BegQw4imhfylDi2vwak8mr+jPNnj8MqIZpgD0d7+ugjNzbDPB9bKDwjQdaei/56s9zPYKwdK4/SKucKYRb90P89IWiolMzsHKseQ0AO7A95cZk0hIRxVpe6sdNRlvW+JEY+pwZT1I4J73U1C5ddTKBRHIoX+kN9mtcRu4rxRaQMfR2k5gBHzBtX357jkNgMYLcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vT9HrR6f3nlqd7aqU/8hmOdyRMfanjqeG0o3KxMWu8I=;
+ b=G3oIOUWsDvQ0ntdrTjkXvrUPexqeh7Ix6PQDIkiRbTorqwEMiqYEPaQXa/CELuhJpvVf2cZcfS3MnwkG1sjPAkN13r9katu9fXMv3Y89jWbn43u7uw0xfQahDrcuBbZKLJydvqAyLbRMhyaNTdwQjMTjaSybW3gUa9rvMHua/GOJ0eDJ8du5lWQ8goyZ2qMHSfcC0fFEEj0TnIQQ0Dvq0BgRbAnlw1RU/EjLeP74UC3Hxm43NsBz2VMVMxbCkd0xO9xkWmabPlADmEAuRpYFP2BNEWsSy76gIGPLmwzI8zZUbsJMctFOCNo/9TSJ+obDX0YnaryTHkAeNgGiZhoY2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vT9HrR6f3nlqd7aqU/8hmOdyRMfanjqeG0o3KxMWu8I=;
+ b=D6rOQNPodM5j/yRaTTzFjUmE8KUwr2Da1ADs9cqG5Bu2UuVb8f7vbo3/OY/+CsPLddjUOD1XRyE8CBbcajTMTSPJUuihzY4t6pBE/9SX03ZYuWyGkpWgVjuQeU4bzMIGolVRlfxfvGtyqnL1bszrzjLpH/TkX3lJWU/O5+yzQUU=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by SJ0PR11MB4877.namprd11.prod.outlook.com (2603:10b6:a03:2d9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Tue, 6 Sep
+ 2022 13:19:03 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009%3]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 13:19:02 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <krzysztof.kozlowski@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <Daire.McNamara@microchip.com>
+CC:     <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 3/3] riscv: dts: microchip: add a devicetree for the
+ Aldec TySoM
+Thread-Topic: [PATCH v1 3/3] riscv: dts: microchip: add a devicetree for the
+ Aldec TySoM
+Thread-Index: AQHYwep2/OhY7h1hMU6Rq5t8qhTyJ63SYKUAgAAB54A=
+Date:   Tue, 6 Sep 2022 13:19:02 +0000
+Message-ID: <796f7dd4-8a72-e621-1c3a-e242f8b54631@microchip.com>
+References: <20220906121525.3212705-1-conor.dooley@microchip.com>
+ <20220906121525.3212705-4-conor.dooley@microchip.com>
+ <71dad0f0-db66-e79e-5e01-d5fc66b0cb3e@linaro.org>
+In-Reply-To: <71dad0f0-db66-e79e-5e01-d5fc66b0cb3e@linaro.org>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 894b8f57-b729-4939-d26a-08da900a5e12
+x-ms-traffictypediagnostic: SJ0PR11MB4877:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QFh0Sm2bDW9xSV0q/hFDAgEut9CMpHO44vjntbtQwydvGTWAZAuovggBaO87eswSnawhzcLiNe+ScjVjAAqUVczx8v7dP1nFNn+FkqE3mT4N7ZnGutHKpimK8rQYjJ9yodj1D9uyZmWx+3DbFzn0WAkRayjGDzBTg5amY6LwQC3DRZ7TmHdqmS66iU6SlHgjKcI3owYdxmeYZ9R2WktP3ZXbU17n+IKjyAi1iSbMxdS7sH6SH9+KnOtDGnma6Yt+B54dWzUWN5ti/IixXbRB2cNLXimHdHxmse/MklqhFmUl0j0+gj1EysJxSyevN+zPDV/4dubL+0iLgSBIQio/P8QuA5nGVkjRmCAcQd56fn99drCyB/P16ganVaxJ8HHUpdlY5vQurabm4tmtTNaFaNlgOK7feJ/XMlgWMTuO5/KcjXnK5dQwsh0R3/cDgbfcDzkdDT0kiulcg1j/RUimXrFWd34mN9a0iHXFLkR182e3gnmvlQCyCTCRfh/dLenJq8AXI0Q0MOlCCZS1pi2A71g0/6Hp+7AHiZA+YItF4hN2G3cqJUhdG44NX+8OwYa1MzqmEpi0Tzt/UVyHoxCAA/PmpqRntcjGN1jDa67jEneR93/jXE30AVSNkb39JzFgZ8IbXR4DYeE1H6fA6y2lXPrZ+u04y6DPV33Ebz2uWF3dbofZC1O4y+0vMoxrTPKuXvatTAncrlA0dvLOtBCu54m4daDgh78vX+6FHSIAdNzZmxjBLAG0nst9Pd8IP8O+UKXOxlwv7IP/bObhsQDUpLuvX/NxlLkvejvhca+ITwfgF7i3SkExJcQ6oPj5h9h8
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(6029001)(376002)(39860400002)(346002)(136003)(366004)(396003)(478600001)(36756003)(6512007)(5660300002)(41300700001)(6486002)(26005)(122000001)(8936002)(2906002)(38100700002)(66446008)(66556008)(66476007)(66946007)(76116006)(86362001)(64756008)(91956017)(8676002)(4326008)(53546011)(31696002)(6506007)(110136005)(38070700005)(31686004)(186003)(54906003)(71200400001)(316002)(2616005)(6636002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eTRmeWVvd2dZUXJEZkxHR0dJc2hnOGNURExnQnVjd3c0NXp3clFCcWFLVGRT?=
+ =?utf-8?B?eStKUlpzWTQ5d0ZGOTEzV3IvWU9jUDQzeXBtZFJ4UFVnNi9QMTRrYlJUbk05?=
+ =?utf-8?B?alFYSTlyd3JReVFKWDkrMkcrNmdUVVpRR0pOUVk3RE5vcGRLbGg2SncwSG9k?=
+ =?utf-8?B?eEhVZ2hIUkdGeDhNZ2V5Tk9uaDVsQ0d2eDRXVmlDRkF4Q3AzWi9ndE9YYk1a?=
+ =?utf-8?B?bXNVSXN5L01IeTJRdnFTaGlxdVRqYXMyd0NVbGFpYW5jMzZ4THdEZ0xVTFpJ?=
+ =?utf-8?B?cEI0dzkxS2NUc1B0dEVJRENwR1FLeGVCRXhGQ2w4cXRKU3hsYVIzd3VlSldV?=
+ =?utf-8?B?dm5taFNaMitxd3ZDSXZRYVc4NGxmYU1ETVlzblZrZXNoVlcwV3UxL0p5eW5H?=
+ =?utf-8?B?SHB4KzJ5L1ZIaGh1WmdUOGRDK3BVeFlrTTkxRnBEWFVlZnBMTWJNRStFNHdK?=
+ =?utf-8?B?bmRVcTh3L3Q3aExDOHZ6dUcycHFjbzltUDd5OHVmYTFhK0FQTERHMGhOMkd2?=
+ =?utf-8?B?elB1Mk5sR2FwN1V5L0J3Nllwbm93c0twYWdrTmYzM0R5NUZ2aU1QQnU1N241?=
+ =?utf-8?B?QXk1SWg2Q3JndnNRNmtQbVNFaXU1ODJBVFVYdHNocXpaZUJVcVpoUHltNEpO?=
+ =?utf-8?B?anhqSmRGT1R1UmpDUzEzL1QxWFd5WEJOL3NBR1BqcjhaU1pnODcyWndNWi94?=
+ =?utf-8?B?enMxNXBEQ0tuNXVIRDQ1S3M0YTZnaGlUcncxMlZFU3JFb1dWM1JxUVBtUUNO?=
+ =?utf-8?B?bHNGRWowYm5kemFkcEVaVFNyWU9odEI1cVlVdGpTa05vQkprTFU1cWhRUm1B?=
+ =?utf-8?B?YnpHSHFKRk1LTlNYLzBUblRWYmFFT2RLU2dPT1dsa09xQWdGZW4vaUQ5NHBs?=
+ =?utf-8?B?UjhnZzl0NkQ1bU5pWWtjK0FWMURoZWRIRWJUamxEQzV0b1JKUE5FSzM5WjR5?=
+ =?utf-8?B?SEUxSFdNak9qZFFRbmZqZVdsVndZSThQRGRzTy9tYmgwejFnRVJZUGpDZ01C?=
+ =?utf-8?B?di82bWRTejZzdE91TGNIT1pNWW9Ec0ZWeDRQRTIxeUFjN2ROQW1UMnIyOTJx?=
+ =?utf-8?B?V2ZSWGJWNW5EbldNbmhHSjBKQTZDS0pYb0dYNEV2TFh6eGVNZjAwdnZVMjRE?=
+ =?utf-8?B?ZXhDRFdmblpzN21acnk2S2FmYy9EaTVESEY5ZVZKQndycDJueUZKQ01TUFRW?=
+ =?utf-8?B?Y01BQXdPZVQ1ZHl6RHZYejVWVGFmNHMxT0hnV3ZOT2tGaE8vcC96azg2Z0k3?=
+ =?utf-8?B?dVJ6SUhESmVtTGF4SjFoL3l6bXFsLzk5clorNXA5eVVNRlQyaHY2YS9oUkxs?=
+ =?utf-8?B?U3VJdERnQVNseGFJMXNsYlZldytQSS9ETmZOZFo4WlNHb1U5VXkwQmowMXo5?=
+ =?utf-8?B?UVFteC94Z2Q2Y1F0Nk5PeGZrVllKcTdwMU1MQ08xWjdrZ3pKeWoxWU42YzRM?=
+ =?utf-8?B?YW1MQTVLeFBUYmxVb3RNNEtDeXdnczZDdW9yZUZ1Zkxmakx6VEZjcmMxcXMz?=
+ =?utf-8?B?MHd4d3gyVGxKeVI5WStnOWNlMk9na0V5bTBvQlZ6cmEwbnM1cDJoRkJJZlVz?=
+ =?utf-8?B?eXpaWFJsbTR5ZGNzRlgzRXZLclhLZGFBbkRJa2pFRm1iRWM0bWxSRmRGa29v?=
+ =?utf-8?B?Q1hPVmtuWVdESDdGQnp1QSsvZUtZV2pudTdVcThvSXpCMlNncno4dFJZSHNh?=
+ =?utf-8?B?SnZaR1NJZkNQSjg3dGZwWHpNa0d0R2F5S054RUx1YUVrdVR2V2h6MjZpb0Y0?=
+ =?utf-8?B?QUJjVjFodk5yMVdLUG5SQWJPTkFuOGhmSTBZZmtaaDNRUG1JZTFFMVdDRm43?=
+ =?utf-8?B?TmYrNlNOWjA0NWZjdlhXL2l3NEF4bnR4dkxwMWswc3llYnpSNGs5c1dJcGdk?=
+ =?utf-8?B?VjVnSmx3WlIzelNTVWN4WDZEdVJ4eTE5NlA3aTk2WWZhNU5QVHFJb04yR3E2?=
+ =?utf-8?B?eEI5ZWRXUjlmSlRuUjFsZVY1aWRYTmlXSS8zVGFYVmpiVDg5NFpwTWdsa0Qx?=
+ =?utf-8?B?TmdWWWc0MWtNazdWWktrUDhmZVY1RjZpdWtubUUxYUhMTkRNemtmUHJHR1A0?=
+ =?utf-8?B?ZGMySTk0TkhndXdiWWZHQUk3S3l0UlRYMlo4aFh3RkJSbkxNVm9sU1BTOTN0?=
+ =?utf-8?Q?WwLL3U1TG2RNSLd1zfI5drhuB?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <147EE5DE56F3E14EB646976614A74CB7@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1662264560.git.remckee0@gmail.com>
- <49b96ce88dece5b394d5dd4332c1572da917b30a.1662264560.git.remckee0@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v4 1/4] memblock tests: add simulation of physical memory
- with multiple NUMA nodes
-In-Reply-To: <49b96ce88dece5b394d5dd4332c1572da917b30a.1662264560.git.remckee0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 894b8f57-b729-4939-d26a-08da900a5e12
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2022 13:19:02.8398
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /OeXz8b1q6sVqiPSjQJSIIi2FX8eARh31idW/tYFQXX75zlW6mN4HtQORSfGxz6p7XAssTR94PdVFCvCXL/K3Be/lJlW1J/rBY9xqgwK2kk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4877
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.09.22 06:21, Rebecca Mckeever wrote:
-> Add function setup_numa_memblock() for setting up a memory layout with
-> multiple NUMA nodes in a previously allocated dummy physical memory.
-> This function can be used in place of setup_memblock() in tests that need
-> to simulate a NUMA system.
-> 
-> setup_numa_memblock():
-> - allows for setting up a memory layout by specifying the fraction of
->    MEM_SIZE in each node
-> 
-> Set CONFIG_NODES_SHIFT to 4 when building with NUMA=1 to allow for up to
-> 16 NUMA nodes.
-> 
-> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> ---
->   .../testing/memblock/scripts/Makefile.include |  2 +-
->   tools/testing/memblock/tests/common.c         | 29 +++++++++++++++++++
->   tools/testing/memblock/tests/common.h         |  4 ++-
->   3 files changed, 33 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/memblock/scripts/Makefile.include b/tools/testing/memblock/scripts/Makefile.include
-> index aa6d82d56a23..998281723590 100644
-> --- a/tools/testing/memblock/scripts/Makefile.include
-> +++ b/tools/testing/memblock/scripts/Makefile.include
-> @@ -3,7 +3,7 @@
->   
->   # Simulate CONFIG_NUMA=y
->   ifeq ($(NUMA), 1)
-> -	CFLAGS += -D CONFIG_NUMA
-> +	CFLAGS += -D CONFIG_NUMA -D CONFIG_NODES_SHIFT=4
->   endif
->   
->   # Use 32 bit physical addresses.
-> diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
-> index eec6901081af..b6110df21b2a 100644
-> --- a/tools/testing/memblock/tests/common.c
-> +++ b/tools/testing/memblock/tests/common.c
-> @@ -72,6 +72,35 @@ void setup_memblock(void)
->   	fill_memblock();
->   }
->   
-> +/**
-> + * setup_numa_memblock:
-> + * Set up a memory layout with multiple NUMA nodes in a previously allocated
-> + * dummy physical memory.
-> + * @nodes: an array containing the denominators of the fractions of MEM_SIZE
-> + *         contained in each node (e.g., if nodes[0] = SZ_8, node 0 will
-> + *         contain 1/8th of MEM_SIZE)
-> + *
-> + * The nids will be set to 0 through NUMA_NODES - 1.
-> + */
-> +void setup_numa_memblock(const phys_addr_t nodes[])
-> +{
-> +	phys_addr_t base;
-> +	int flags;
-> +
-> +	reset_memblock_regions();
-> +	base = (phys_addr_t)memory_block.base;
-> +	flags = (movable_node_is_enabled()) ? MEMBLOCK_NONE : MEMBLOCK_HOTPLUG;
-> +
-> +	for (int i = 0; i < NUMA_NODES; i++) {
-> +		assert(nodes[i] <= MEM_SIZE && nodes[i] > 0);
-
-I think it would be even easier to get if this would just be a fraction.
-E.g., instead of "1/8 * MEM_SIZE" just "1/8". All values have to add up 
-to 1.
-
-... but then we'd have to mess with floats eventually, so I guess this 
-makes it easier to handle these fractions.
-
-
-We could use "int" and simply specify the fraction in percent, like
-
-nodes[0] = 50;
-nodes[1] = 25;
-nodes[2] = 25;
-
-and everything has to add up to 100.
-
-
-> +		phys_addr_t size = MEM_SIZE / nodes[i];
-
-
-Hmmm, assuming a single node with "MEM_SIZE", we would get size=1.
-
-Shouldn't this be "size = nodes[i]"
-
-?
-
--- 
-Thanks,
-
-David / dhildenb
-
+T24gMDYvMDkvMjAyMiAxNDoxMSwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gRVhURVJO
+QUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5
+b3Uga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiAwNi8wOS8yMDIyIDE0OjE1LCBD
+b25vciBEb29sZXkgd3JvdGU6DQo+PiBUaGUgVHlTT00tTS1NUEZTMjUwIGlzIGEgY29tcGFjdCBT
+b0MgcHJvdG90eXBpbmcgYm9hcmQgZmVhdHVyaW5nDQo+PiBhIE1pY3JvY2hpcCBQb2xhckZpcmUg
+U29DIE1QRlMyNTBULUZDRzExNTIuIEZlYXR1cmVzIGluY2x1ZGU6DQo+PiAtIDE2IEdCIEZQR0Eg
+RERSNA0KPj4gLSAxNiBHQiBNU1MgRERSNCB3aXRoIEVDQw0KPj4gLSBlTU1DDQo+PiAtIFNQSSBm
+bGFzaCBtZW1vcnkNCj4+IC0gMnggRXRoZXJuZXQgMTAvMTAwLzEwMDANCj4+IC0gVVNCIDIuMA0K
+Pj4gLSBQQ0llIHg0IEdlbjINCj4+IC0gSERNSSBPVVQNCj4+IC0gMnggRk1DIGNvbm5lY3RvciAo
+SFBDIGFuZCBMUEMpDQoNCj4+ICsNCj4+ICsmc3BpMSB7DQo+PiArICAgICBzdGF0dXMgPSAib2th
+eSI7DQo+PiArICAgICBmbGFzaEAwIHsNCj4+ICsgICAgICAgICAgICAgI2FkZHJlc3MtY2VsbHMg
+PSA8MT47DQo+PiArICAgICAgICAgICAgICNzaXplLWNlbGxzID0gPDE+Ow0KPiANCj4gQXJlIHRo
+ZXNlIG5lZWRlZD8gRG9lcyBpdCBwYXNzIGR0YnNfY2hlY2s/DQoNCkl0IGRpZCwgeWVhLiBCdXQg
+eW91J3JlIHJpZ2h0IGluIHRoYXQgdGhleSdyZSBub3QgbmVlZGVkLCBJIGRlbGV0ZWQgc29tZQ0K
+ZHVtbXkgZmxhc2ggcGFydGl0aW9ucyB0aGF0IHdlcmUgaW4gdGhlIGR0cyBJIHJlY2VpdmVkIGFu
+ZCBJIGRpZG4ndCBzZWUNCnRoZSBjZWxscyB0b28uDQoNCkknbSBsaWtlbHkgZ29pbmcgdG8gc2l0
+IG9uIHRoaXMgcGF0Y2ggZm9yIHF1aXRlIGEgd2hpbGUsIGJ1dCB0aGUgdmFyaW91cw0KdGhpbmdz
+IHlvdSBwb2ludGVkIG91dCBhbGwgYXJlIHZhbGlkLCBzbyB0aGV5J2xsIGJlIHNvcnRlZCBieSB0
+aGUNCmV2ZW50dWFsIHYyLi4uDQoNCkFzIGFsd2F5cywgdGhhbmtzIQ0KDQo+IA0KPj4gKyAgICAg
+ICAgICAgICBjb21wYXRpYmxlID0gIm1pY3JvbixuMjVxMTI4YTExIiwgImplZGVjLHNwaS1ub3Ii
+Ow0KPj4gKyAgICAgICAgICAgICBzdGF0dXMgPSAib2theSI7DQo+IA0KPiBObyBuZWVkIGZvciBz
+dGF0dXMuDQoNCg0K

@@ -2,252 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CA35AE1D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613E25AE1E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbiIFIGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 04:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
+        id S233478AbiIFII2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiIFIGg (ORCPT
+        with ESMTP id S238465AbiIFII0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:06:36 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2139.outbound.protection.outlook.com [40.107.113.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92C44330E;
-        Tue,  6 Sep 2022 01:06:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GsFaXWURYdnqVSg2xreX0nm/TNHwfJWrwkrvcRIBMExhohOEk23kZrA0G2FJ/o5voit0Rfd0Fws6ZcyHpmLIYqTTnziUaKWZGOJQwgXvyHBzCxihm2ZZtCDCu3Y22aqJHHwBOEvl+Jn07HjLW9mcnJgTIWYrJS6mztqaf90OQMRUcZcjRDeDNdHQPe5zdHfgh3oCHki06SMq6569IhH6+A4ueoMXnEprlVRajNxqsbDi3rGuDh28/fh+g4mJg/yfZ/8QDkTXryegjQqsHWZ+cAEjdPAy+JWacZqI39qVDw11uk1IO094M1ig743PJFvLk6ip7dTm7S4qJnxjkxcjxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2nXC9NEHy9Tr49N+q8p0w6YjIUhLNvlnb1KETfSxdOI=;
- b=Zz+d9w5sQeiiNTDB94LRp6EcFNLYNfIeldpgkbmcl3aRFcYBpJE9PZfngJCGmimRULc2YeFRLjcAnAqpZqfZQ++E6eF16cN0KFhVK/OOVE2o2QQ2ww8kTdUSuXT8BmpPlihHSlN/xht/vIe+s9eXBFN33oK7pF74LrR5hfzTD1Uavafg0BIHEyC91PFd07mb3oroOWlKUc14SGZWRSS/ONJtzG6PzVUuykxtbRPypjtQH97gdcGlsAx6bNWnuZN5VS4ZDfoS6B7SelQmcbbBbCpp6TTLWaX87WHvoUQAoGQnvW8dHbKDJH9PLgMeP1xo8RevuYwP2rF4qtMnBnCMKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2nXC9NEHy9Tr49N+q8p0w6YjIUhLNvlnb1KETfSxdOI=;
- b=sq1ujscrO9NRttICbhH79RDASi7JMj9G3XvcC0XZa13kBuJzggfp0uhGdnpDbfdlWLv4UJgMAJeF7NU0cxURmWqY1fBGK2qFmnbyNWnLmVvGPf4Lrl8jBl4lFRamSDWeTdX9IJ76NbyW96ziGUF3kXrcm9s7FPAQX9V3hjGt4R4=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OS0PR01MB5972.jpnprd01.prod.outlook.com (2603:1096:604:cf::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Tue, 6 Sep
- 2022 08:06:30 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::14d3:5079:9de1:ceaf]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::14d3:5079:9de1:ceaf%4]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
- 08:06:30 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: RE: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the recommended
- one to configure and enable regulator
-Thread-Topic: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the recommended
- one to configure and enable regulator
-Thread-Index: AQHYwUs0AungGCQLKE+37Dc5lKmkg63RIy3AgAAYqYCAALEdsIAAHXCAgAAAUgA=
-Date:   Tue, 6 Sep 2022 08:06:30 +0000
-Message-ID: <OS0PR01MB5922240073630A409D67ED03867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20220905171601.79284-1-peron.clem@gmail.com>
- <20220905171601.79284-5-peron.clem@gmail.com>
- <OS0PR01MB5922142861E78A1DD81AD1C9867F9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAJiuCceGZJr24hVjpP0ptOkG8bMFKr=QLj0LcyDX4fUy7Rr2xA@mail.gmail.com>
- <OS0PR01MB5922EE3F6CDD827919A7763E867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAJiuCcd7upgT6vQWHos-X1-89+Z-5xxDe2SMCdC2=_LgZaVMiw@mail.gmail.com>
-In-Reply-To: <CAJiuCcd7upgT6vQWHos-X1-89+Z-5xxDe2SMCdC2=_LgZaVMiw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0c064fbc-08c3-42a2-46e7-08da8fdeb4a8
-x-ms-traffictypediagnostic: OS0PR01MB5972:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: peoR1MHcvl5xL9stDxGoXkqYx9y4Hur4YXrE3F21imDYHPcB+yJ17E4eqk+YfWZDDc9/fiNjNzxXaY0rd/eFNxjhfyjl3KXOR6aT5A0KqGXgJ5TG0t82l23F32J2Yj/tlZq+kLM9HZKQhBMNriNKIa1e/Yv6GvNOjQlZDViV9WYQdnh3fYl2IEZUtdDmiCZHpiyDOD4FxZ+t0gzOhxojo5NldUrx305zhiKlBv26bGdLL7vbUCSz+lFCCIU2cSMdNPB1357EE9ilP9KvcTolb1+wDlYEPyPJNkSsZSHlRk5mmEKlnusZHuLddE2kKIxJfCPI9uQDaZbeqBg9Yqi2KoUrjf0Eeu6VtLGBzKd1FN/XWPOh9H926ufOJ1rqi5Gp8GM2HLAGXsmMZXFh/tW88dNTLASQ0W/iAE31xA/l0zk5ESfogH9Tg8btezc66RdjPfL3JTj8awo0xJLqzJYqGzJwYcMewqC7TxTOBYl5Jfg0+pQFvGBAp7R/kECIBODcqyEBUnXCwgdRCoc5ks5tZgCDfThcHXzxF466F5Mkmsl6znOi+CbQqNijmjxMyl/PDYFmcKQOOA5eGrIos5HPkgmRveBp44Sd06VHPk0TdBTmTtYHpezm06l1RORhm38SQlYzDgzYPh5uk4fH+a5GU3GaCC5qxfam03Q/PjCQzblLvbX6JvX+rIcU9zTGeVawVTYxwSGDhfR1waKSaeYdQZ8r+kbIQL/D1+KO5zq+f4/6rxfrnUp0r1lcka4Xl1Z9bY8TZLqY9qSMdjbXVZ3cpw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(346002)(39860400002)(366004)(376002)(64756008)(52536014)(76116006)(8676002)(66946007)(478600001)(66446008)(4326008)(66574015)(5660300002)(66476007)(8936002)(6506007)(7696005)(83380400001)(66556008)(7416002)(41300700001)(26005)(9686003)(2906002)(86362001)(33656002)(38070700005)(122000001)(38100700002)(316002)(55016003)(71200400001)(54906003)(6916009)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TUxvOFBPYW1iV0IxZWtLUFNoRk13WW4ycWszdXc4dXhydlVYa0lsQURhbzM3?=
- =?utf-8?B?alFrQmdnOEc2b2t3ZkRkZWtKYXA1ZWhhL0VocDljY3dRZTlUUktFQjlQZnpB?=
- =?utf-8?B?WHlERHFyU2loZ3JIdW9OcEY4czE4b3lCdTNvR2pJZUs3WWEraFJjTjNicVd1?=
- =?utf-8?B?M3ovSDdWWEZHVzcyMVBsYnR6bmlubzFQd1pxcFRlVkIxMG1SR1VOWVI0dGcv?=
- =?utf-8?B?UUVOS0NnckFzQWI0WVphaVdBQ1REanI5T2VjZlNSdnByZEwwRThhemVGRnhl?=
- =?utf-8?B?VDJHZ1N5bEdBTVlRQ0dwZTJ0WkY5REJLelFsVVZOOWNRVDg4aE1ZTTBLdFhL?=
- =?utf-8?B?TDdNTnQ0Z2FtQmFkUVVOSVFtRDd5ZmVnSjEyM2lKelV5OHVQNmNLSjFUbGRr?=
- =?utf-8?B?T09RbTVLdHpiK1B6N0pmYUxKc3lWaFB2SXprdklIUTZueDlyOFBFWjNGUHUz?=
- =?utf-8?B?L0tTN1NpMjBpcjFiU2U0SUdBYmw3a1dKL0lBMSthUng1NUN6RTlFcXduSkg3?=
- =?utf-8?B?elh6UVhNZDFjeTZOanlUcHJxdHFNK1NUUlhLWTlETFlYMHNkS21vajU4MmVB?=
- =?utf-8?B?YTRXNm9ZNmJuUTR6eGpGMjNmZDA4clVzL1dYaTJ2c2lVbnA4U2ZWRTI1VVc2?=
- =?utf-8?B?UFNxMTlkYks2cmxBNVlrWlJjZFBCOWRpZllzWFN1RjFQd1gzUUo1V0pDckI2?=
- =?utf-8?B?ay9CVnZ2azdvQmVEaWJuK1htRjA1cDlESDlJaHdQZ3lscER2cWtESklNM0FL?=
- =?utf-8?B?dGxKLyt5cHNyWjU5ZzNRMHkxejh0NkxnRThVUHBHYVNTeWFvTldjVlpxL1dN?=
- =?utf-8?B?dVc4VlN3UitaTGhFaFhJZGluRG9GdEpnNDBaNEp5RDBPS2pndldUcGozR1Fr?=
- =?utf-8?B?OTdKVWxlMmJwem9rSDVFSU55bEVYM0kvWE0zdHlTZWVTdTJ5TXhWRGZjYXBl?=
- =?utf-8?B?NWl6S0FSZUlNTjdCa2JzY1BKSURyOXJRaEhXeWM3WE1FNWYrQ1ZiSk1KWUE3?=
- =?utf-8?B?VUhlSW96S0pCd1VHU2VIUjVkVCszRWFMbnp3SXpiT0dlMm05cGFjK0s0U3lB?=
- =?utf-8?B?WkR0d1l6V2taYXh6d2VQc2UrR0cwZXdjUEQzakJxNkpEcm12ckFqUFQxMXZI?=
- =?utf-8?B?UEpmU0tpUVVPWDdSOUxWVFFlVWY5SGFhUUFMSXQrU1NmNjFhVURNMFBHVTNh?=
- =?utf-8?B?SDFLVFNqNjFFSmV3SDZyZDZKdDVnWTVVTEU4dXZTS0lUREcvR3ZkZVNUUVc2?=
- =?utf-8?B?dkhWWE5VYWJRL1Z4RTBhQUR1Rk1LK1dvK3d3NkI1bjRXVDArZmIreHh0azhE?=
- =?utf-8?B?bXlNblhjK0hjRWs3UW8waGNDWitZMXRTL296clI1bWcvZDd1OWFjaGhHZ01w?=
- =?utf-8?B?SkRuc0tOV29ZRjEyRkVLZFQ5Y3E4eHREalE2RFhyL0NyV3ViZG1QenpXempI?=
- =?utf-8?B?TEtYeDdpalFLMlRZUU02ZjFDSkZ5UGVIZHVmZ1dmNUNGaXM4cVFyaUtjWmR0?=
- =?utf-8?B?SXBpNlI1K2RDdjR4MXU1OTE0NHZQU245ZkVvSHI1OGJvOENQT2VPTmwyU1pN?=
- =?utf-8?B?Yk55bURSQnlQQldvYTNYbUdWakNadG5TbjU4NEZvaEpvVllyTnBmRktYVlpE?=
- =?utf-8?B?MkZ6YWhvdm9PRkxSaExFcDY0NG9kRVRuTHllRUJxOEMzQktXWklpd01SQVRM?=
- =?utf-8?B?UG1xRmdoTTVKa2pNWVNvZmswSXhnc3JRYTZuY09DR3pVSTFDWFNNWDdrWFZQ?=
- =?utf-8?B?OFg2ZEMwVXBqbUkra0d2Y1VqRnBJM2sxaWllem5WMW1EUXY5NE93c2hIMEIv?=
- =?utf-8?B?MmxzTEExME40QmlYamRyYm5kcUpWMzBjYTQ4UUlncHQyTTlITWpWOWZqNU5Z?=
- =?utf-8?B?L2c5M2k1dzI4VVIwWnB2aG5aMVBvai94WkpqYldRRWx4elF5VmVuTTNtWjF4?=
- =?utf-8?B?VmY2MEFuVGlYUnRXS2JTVFdsYUpwQ2pTaUFqVFBzNW5NcW5WTXJPNHYrZ3py?=
- =?utf-8?B?N3A0K3hiTU1zR0FrT2ZMN0ZvbWNLWTlsYTJQRFJ5Y1o3b0dGU2NxTnk2YmhX?=
- =?utf-8?B?cjFNN2hVWU9sQjdDZElJZnpDalhLaW9OdTUrQzVvdW5QdEtFWUFBN2I0ZVNi?=
- =?utf-8?Q?UdQ0eokmnMMHoflr1dL86p1YL?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 6 Sep 2022 04:08:26 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC02652E7E;
+        Tue,  6 Sep 2022 01:08:24 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MMHwJ5hqLz9xqvl;
+        Tue,  6 Sep 2022 16:04:16 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDnYl3P_xZj3EYnAA--.22559S2;
+        Tue, 06 Sep 2022 09:07:55 +0100 (CET)
+Message-ID: <3d32decb1fda80e261d9ed08decfdca45614c4af.camel@huaweicloud.com>
+Subject: Re: [PATCH v16 07/12] bpf: Add bpf_verify_pkcs7_signature() kfunc
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, joannelkoong@gmail.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 06 Sep 2022 10:07:41 +0200
+In-Reply-To: <CAP01T77F-A7igW+vp5RhzcqzRJymO6YRvNR2cfsh+2fKNy56YA@mail.gmail.com>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+         <20220905143318.1592015-8-roberto.sassu@huaweicloud.com>
+         <CAP01T77F-A7igW+vp5RhzcqzRJymO6YRvNR2cfsh+2fKNy56YA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c064fbc-08c3-42a2-46e7-08da8fdeb4a8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2022 08:06:30.2160
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ded9HofjWpJ+ATY2zYwOjStYb5DgJHSYv9jfvyDwwKvwGQ9Blqga4ZL3Z1gZTTHumC+jWXUUP8NBuECF9DbPVBoRhsJXiL9xg9mnwEAGKr8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5972
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwDnYl3P_xZj3EYnAA--.22559S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw1rWF4fWw17ZrWftry7Jrb_yoW5ZF1DpF
+        W8KF4Y9ry8JF12yF13Za1fua4Sk3yvqw17W3sxt3s3ZrnY9r1xuF18tF45W3sYkry8try2
+        vFyIqrya9wn8Za7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj4KmiQAAse
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQ2xlbWVudCwNCg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYzIDQvNV0gZHJtL3BhbmZyb3N0
-OiBkZXZmcmVxOiBzZXQgb3BwIHRvIHRoZQ0KPiByZWNvbW1lbmRlZCBvbmUgdG8gY29uZmlndXJl
-IGFuZCBlbmFibGUgcmVndWxhdG9yDQo+IA0KPiBIaSBCaWp1LA0KPiANCj4gT24gVHVlLCA2IFNl
-cHQgMjAyMiBhdCAwODo0MiwgQmlqdSBEYXMgPGJpanUuZGFzLmp6QGJwLnJlbmVzYXMuY29tPg0K
-PiB3cm90ZToNCj4gPg0KPiA+IEhpIENsZW1lbnQsDQo+ID4NCj4gPiA+DQo+ID4gPiBIaSwNCj4g
-PiA+DQo+ID4gPiBPbiBNb24sIDUgU2VwdCAyMDIyIGF0IDIwOjE3LCBCaWp1IERhcyA8YmlqdS5k
-YXMuanpAYnAucmVuZXNhcy5jb20+DQo+ID4gPiB3cm90ZToNCj4gPiA+ID4NCj4gPiA+ID4gSGks
-DQo+ID4gPiA+DQo+ID4gPiA+IFRoYW5rcyBmb3IgdGhlIHBhdGNoLg0KPiA+ID4gPg0KPiA+ID4g
-PiA+IFN1YmplY3Q6IFtQQVRDSCB2MyA0LzVdIGRybS9wYW5mcm9zdDogZGV2ZnJlcTogc2V0IG9w
-cCB0byB0aGUNCj4gPiA+ID4gPiByZWNvbW1lbmRlZCBvbmUgdG8gY29uZmlndXJlIGFuZCBlbmFi
-bGUgcmVndWxhdG9yDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBkZXZtX3BtX29wcF9zZXRfcmVndWxh
-dG9ycygpIGRvZXNuJ3QgZW5hYmxlIHJlZ3VsYXRvciwgd2hpY2gNCj4gPiA+ID4gPiBtYWtlIHJl
-Z3VsYXRvciBmcmFtZXdvcmsgc3dpdGNoaW5nIGl0IG9mZiBkdXJpbmcNCj4gcmVndWxhdG9yX2xh
-dGVfY2xlYW51cCgpLg0KPiA+ID4gPg0KPiA+ID4gPiBJbiB0aGF0IGNhc2UsIHdoeSBub3QgcmVn
-dWxhdG9yX2dldCgpZm9yIER5bmFtaWMgcmVndWxhdG9yKG5vbg0KPiA+ID4gPiBmaXhlZCByZWd1
-bGF0b3IpPz8NCj4gPiA+DQo+ID4gPiBTb3JyeSBJIGRvbid0IHVuZGVyc3RhbmQsIHdoYXQgZG8g
-eW91IG1lYW4/DQo+ID4NCj4gPiBOb3JtYWxseSB3ZSBuZWVkIHRvIHR1cm4gb24gcmVndWxhdG9y
-IGFuZCBjbG9jayBvbmx5IHdoZW4gbmVlZGVkLg0KPiA+IEkgYW0gbm90IHN1cmUgd2l0aCB5b3Vy
-IG5ldyBjb2RlLCB3aWxsIG1ha2UgaXQgYWx3YXlzIG9uIGFuZCBkcmFpbnMNCj4gPiB0aGUgcG93
-ZXIgdW5uZWNlc3NhcmlseSBhbmQgZG9lcyBpdCBzZXQgbG93ZXIgb3BwIG9yIGhpZ2hlciBvcHAg
-YXQgdGhlDQo+ID4gc3RhcnQ/Pw0KPiANCj4gVGhlIGNvZGUgZG9lc24ndCBtYWtlIGl0IGFsd2F5
-cyBvbiwgaXQgbWFrZXMgaXQgaG93IGl0IHNob3VsZCBiZSBhdCB0aGUNCj4gcmVjb21tZW5kZWQg
-T1BQIHdoaWNoIGlzIHRoZSAic3RhcnQgcG9pbnQiLg0KPiANCj4gSWYgdGhlIHJlY29tbWVuZGVk
-IE9QUCBzYXlzIHRvIHN3aXRjaCBvZmYgdGhlIHJlZ3VsYXRvciB0aGVuIGl0IHdpbGwuDQo+IA0K
-PiA+DQo+ID4gQ29tcGFyZWQgdG8gdGhlIGZpeGVkIHJlZ3VsYXRvciwgeW91IGhhdmUgdm9sdGFn
-ZSByZWd1bGF0b3IgdG8gY29udHJvbA0KPiA+IHRoYXQgaXMgdGhlIGRpZmZlcmVuY2UgYmV0d2Vl
-biBteSBlbnZpcm9ubWVudCBhbmQgWW91ciBlbnZpcm9ubWVudC4NCj4gPg0KPiA+IEkgYW0gbm90
-IHN1cmUgYW55IG90aGVyIFNvQyBpcyB1c2luZyB2b2x0YWdlIHJlZ3VsYXRvcj8/DQo+ID4gSWYg
-eWVzLCB0aGVudGhlcmUgc2hvdWxkIGJlIHNvbWUgYnVnIG9yIHNvbWUgZGlmZmVyZW5jZSBpbiBI
-VyB3aGljaCBpcw0KPiA+IGdpdmluZyBkaWZmZXJlbnQgYmVoYXZpb3VyPz8NCj4gPg0KPiA+IElm
-IHlvdSBhcmUgdGhlIGZpcnN0IG9uZSB1c2luZyB2b2x0YWdlIHJlZ3VsYXRvciB3aXRoIG1hbGkg
-Z3B1LCBUaGVuDQo+ID4gWW91ciBpbXBsZW1lbnRhdGlvbiBtYXkgYmUgY29ycmVjdCwgYXMgeW91
-IGhhdmUgcHJvcGVyIEhXIHRvIGNoZWNrLg0KPiANCj4gVGhlIGlzc3VlIGlzIHRoYXQgbXkgcmVn
-dWxhdG9yIGlzIG5vdCBtYXJrZWQgYXMgImFsd2F5cy1vbiIsIGlmIG5vIE9QUCBpcw0KPiBjYWxs
-ZWQgYmVmb3JlIHJlZ3VsYXRvcl9sYXRlX2NsZWFudXAoKSB0aGVuIG5vYm9keSBzZXRzIHRoZQ0K
-PiByZWd1bGF0b3JfZW5hYmxlKCkgYW5kIHRoZSByZWd1bGF0b3IgaXMgc3dpdGNoZWQgb2ZmLCB3
-aGljaCBtYWtlcyBteQ0KPiBib2FyZCBoYW5nLg0KDQpDb29sLCBGcm9tIHlvdXIgdGVzdGluZyBs
-b29rcyBsaWtlIG5vIG9uZSB0ZXN0ZWQgdGhpcyBmZWF0dXJlIHdpdGgNCm1hbGkgR1BVIG9uIG1h
-aW5saW5lPz8NCg0KQ2hlZXJzLA0KQmlqdQ0KDQoNCj4gDQo+IExpa2UgVmlyZXNoIHJlY29tbWVu
-ZHMgSSB3aWxsIHNlbmQgYW4gdXBkYXRlIHdpdGggbW9yZSBkZXRhaWxzIGluIHRoZQ0KPiBjb21t
-aXQgbG9nLg0KPiANCj4gUmVnYXJkcywNCj4gQ2xlbWVudA0KPiANCj4gDQo+ID4NCj4gPiA+DQo+
-ID4gPiA+DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBDYWxsIGRldl9wbV9vcHBfc2V0X29wcCgpIHdp
-dGggdGhlIHJlY29tbWVuZCBPUFAgaW4NCj4gPiA+ID4gPiBwYW5mcm9zdF9kZXZmcmVxX2luaXQo
-KSB0byBlbmFibGUgdGhlIHJlZ3VsYXRvciBhbmQgYXZvaWQgYW55DQo+ID4gPiA+ID4gc3dpdGNo
-IG9mZiBieSByZWd1bGF0b3JfbGF0ZV9jbGVhbnVwKCkuDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBT
-dWdnZXN0ZWQtYnk6IFZpcmVzaCBLdW1hciA8dmlyZXNoLmt1bWFyQGxpbmFyby5vcmc+DQo+ID4g
-PiA+ID4gU2lnbmVkLW9mZi1ieTogQ2zDqW1lbnQgUMOpcm9uIDxwZXJvbi5jbGVtQGdtYWlsLmNv
-bT4NCj4gPiA+ID4gPiAtLS0NCj4gPiA+ID4gPiAgZHJpdmVycy9ncHUvZHJtL3BhbmZyb3N0L3Bh
-bmZyb3N0X2RldmZyZXEuYyB8IDggKysrKysrKysNCj4gPiA+ID4gPiAgMSBmaWxlIGNoYW5nZWQs
-IDggaW5zZXJ0aW9ucygrKQ0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvZ3B1L2RybS9wYW5mcm9zdC9wYW5mcm9zdF9kZXZmcmVxLmMNCj4gPiA+ID4gPiBiL2RyaXZl
-cnMvZ3B1L2RybS9wYW5mcm9zdC9wYW5mcm9zdF9kZXZmcmVxLmMNCj4gPiA+ID4gPiBpbmRleCA1
-MTEwY2Q5YjI0MjUuLjY3YjI0MjQwNzE1NiAxMDA2NDQNCj4gPiA+ID4gPiAtLS0gYS9kcml2ZXJz
-L2dwdS9kcm0vcGFuZnJvc3QvcGFuZnJvc3RfZGV2ZnJlcS5jDQo+ID4gPiA+ID4gKysrIGIvZHJp
-dmVycy9ncHUvZHJtL3BhbmZyb3N0L3BhbmZyb3N0X2RldmZyZXEuYw0KPiA+ID4gPiA+IEBAIC0x
-MzEsNiArMTMxLDE0IEBAIGludCBwYW5mcm9zdF9kZXZmcmVxX2luaXQoc3RydWN0DQo+ID4gPiA+
-ID4gcGFuZnJvc3RfZGV2aWNlDQo+ID4gPiA+ID4gKnBmZGV2KQ0KPiA+ID4gPiA+ICAgICAgICAg
-ICAgICAgcmV0dXJuIFBUUl9FUlIob3BwKTsNCj4gPiA+ID4gPg0KPiA+ID4gPiA+ICAgICAgIHBh
-bmZyb3N0X2RldmZyZXFfcHJvZmlsZS5pbml0aWFsX2ZyZXEgPSBjdXJfZnJlcTsNCj4gPiA+ID4g
-PiArDQo+ID4gPiA+ID4gKyAgICAgLyogU2V0dXAgYW5kIGVuYWJsZSByZWd1bGF0b3IgKi8NCj4g
-PiA+ID4gPiArICAgICByZXQgPSBkZXZfcG1fb3BwX3NldF9vcHAoZGV2LCBvcHApOw0KPiA+ID4g
-PiA+ICsgICAgIGlmIChyZXQpIHsNCj4gPiA+ID4gPiArICAgICAgICAgICAgIERSTV9ERVZfRVJS
-T1IoZGV2LCAiQ291bGRuJ3Qgc2V0IHJlY29tbWVuZGVkDQo+IE9QUFxuIik7DQo+ID4gPiA+ID4g
-KyAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiA+ID4gPiA+ICsgICAgIH0NCj4gPiA+ID4NCj4g
-PiA+ID4NCj4gPiA+ID4gRllJLA0KPiA+ID4gPiBPbiBSWi9HMkwgbWFsaSBncHUsIHdlIGhhdmUg
-Zml4ZWQgcmVndWxhdG9yIGFuZCBJIHdhcyBhYmxlIHRvIGRvDQo+ID4gPiA+IEdQVSBPUFAgdHJh
-bnNpdGlvbiB3aXRob3V0IGFueSBpc3N1ZXMgcHJldmlvdXNseS4NCj4gPiA+DQo+ID4gPiByemcy
-bC1zbWFyYy1zb20uZHRzaSB1c2VzIHJlZ3VsYXRvciByZWdfMXAxdjsgd2hpY2ggaXMgbWFya2Vk
-IGFzDQo+ID4gPiByZWd1bGF0b3ItYWx3YXlzLW9uOyB0aGF0J3Mgd2h5DQo+ID4gPiByZWd1bGF0
-b3JfbGF0ZV9jbGVhbnVwKCkgZG9lc24ndCBzd2l0Y2ggaXQgb2ZmLg0KPiA+DQo+ID4gWWVzIHRo
-YXQgaXMgY29ycmVjdC4gSXQgaXMgZml4ZWQgcmVndWxhdG9yIGFuZCBhbHdheXMgb24uDQo+ID4g
-V2UgY29udHJvbCBvbmx5IGZyZXF1ZW5jeS4NCj4gPg0KPiA+IENoZWVycywNCj4gPiBCaWp1DQo+
-ID4NCj4gPiA+DQo+ID4gPiA+DQo+ID4gPiA+IHJvb3RAc21hcmMtcnpnMmw6fiMgY2F0IC9zeXMv
-Y2xhc3MvZGV2ZnJlcS8xMTg0MDAwMC5ncHUvdHJhbnNfc3RhdA0KPiA+ID4gPiAgICAgIEZyb20g
-IDogICBUbw0KPiA+ID4gPiAgICAgICAgICAgIDogIDUwMDAwMDAwICA2MjUwMDAwMCAxMDAwMDAw
-MDAgMTI1MDAwMDAwIDIwMDAwMDAwMA0KPiA+ID4gMjUwMDAwMDAwIDQwMDAwMDAwMCA1MDAwMDAw
-MDAgICB0aW1lKG1zKQ0KPiA+ID4gPiAqICA1MDAwMDAwMDogICAgICAgICAwICAgICAgICAgMCAg
-ICAgICAgIDAgICAgICAgICAwICAgICAgICAgMA0KPiA+ID4gMCAgICAgICAgIDAgICAgICAgICAx
-ICAgICAgIDE0NA0KPiA+ID4gPiAgICA2MjUwMDAwMDogICAgICAgICAwICAgICAgICAgMCAgICAg
-ICAgIDAgICAgICAgICAwICAgICAgICAgMA0KPiA+ID4gMCAgICAgICAgIDAgICAgICAgICAwICAg
-ICAgICAgMA0KPiA+ID4gPiAgIDEwMDAwMDAwMDogICAgICAgICAwICAgICAgICAgMCAgICAgICAg
-IDAgICAgICAgICAwICAgICAgICAgMA0KPiA+ID4gMCAgICAgICAgIDAgICAgICAgICA5ICAgICAg
-IDUyNA0KPiA+ID4gPiAgIDEyNTAwMDAwMDogICAgICAgICAwICAgICAgICAgMCAgICAgICAgIDkg
-ICAgICAgICAwICAgICAgICAgMA0KPiA+ID4gMCAgICAgICAgIDAgICAgICAgICAzICAgICAgMjU0
-NA0KPiA+ID4gPiAgIDIwMDAwMDAwMDogICAgICAgICAwICAgICAgICAgMCAgICAgICAgIDAgICAg
-ICAgIDExICAgICAgICAgMA0KPiA+ID4gMCAgICAgICAgIDAgICAgICAgIDQ2ICAgICAgMzMwNA0K
-PiA+ID4gPiAgIDI1MDAwMDAwMDogICAgICAgICAxICAgICAgICAgMCAgICAgICAgIDAgICAgICAg
-ICAwICAgICAgICAzMw0KPiA+ID4gMCAgICAgICAgIDAgICAgICAgICAwICAgICAgNzQ5Ng0KPiA+
-ID4gPiAgIDQwMDAwMDAwMDogICAgICAgICAwICAgICAgICAgMCAgICAgICAgIDAgICAgICAgICAw
-ICAgICAgICAxNg0KPiA+ID4gMTkgICAgICAgICAwICAgICAgICAgMCAgICAgIDIwMjQNCj4gPiA+
-ID4gICA1MDAwMDAwMDA6ICAgICAgICAgMSAgICAgICAgIDAgICAgICAgICAwICAgICAgICAgMSAg
-ICAgICAgIDgNCj4gPiA+IDE1ICAgICAgICAzNSAgICAgICAgIDAgICAgICA0MDMyDQo+ID4gPiA+
-IFRvdGFsIHRyYW5zaXRpb24gOiAyMDgNCj4gPiA+ID4NCj4gPiA+ID4gQ2hlZXJzLA0KPiA+ID4g
-PiBCaWp1DQo+ID4gPiA+DQo=
+On Tue, 2022-09-06 at 04:57 +0200, Kumar Kartikeya Dwivedi wrote:
+> On Mon, 5 Sept 2022 at 16:35, Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security
+> > modules
+> > the ability to check the validity of a signature against supplied
+> > data, by
+> > using user-provided or system-provided keys as trust anchor.
+> > 
+> > The new kfunc makes it possible to enforce mandatory policies, as
+> > eBPF
+> > programs might be allowed to make security decisions only based on
+> > data
+> > sources the system administrator approves.
+> > 
+> > The caller should provide the data to be verified and the signature
+> > as eBPF
+> > dynamic pointers (to minimize the number of parameters) and a
+> > bpf_key
+> > structure containing a reference to the keyring with keys trusted
+> > for
+> > signature verification, obtained from bpf_lookup_user_key() or
+> > bpf_lookup_system_key().
+> > 
+> > For bpf_key structures obtained from the former lookup function,
+> > bpf_verify_pkcs7_signature() completes the permission check
+> > deferred by
+> > that function by calling key_validate(). key_task_permission() is
+> > already
+> > called by the PKCS#7 code.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > Acked-by: KP Singh <kpsingh@kernel.org>
+> > ---
+> >  kernel/trace/bpf_trace.c | 45
+> > ++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 45 insertions(+)
+> > 
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 7a7023704ac2..8e2c026b0a58 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -1294,12 +1294,57 @@ void bpf_key_put(struct bpf_key *bkey)
+> >         kfree(bkey);
+> >  }
+> > 
+> > +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> > +/**
+> > + * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
+> > + * @data_ptr: data to verify
+> > + * @sig_ptr: signature of the data
+> > + * @trusted_keyring: keyring with keys trusted for signature
+> > verification
+> > + *
+> > + * Verify the PKCS#7 signature *sig_ptr* against the supplied
+> > *data_ptr*
+> > + * with keys in a keyring referenced by *trusted_keyring*.
+> > + *
+> > + * Return: 0 on success, a negative value on error.
+> > + */
+> > +int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
+> > +                              struct bpf_dynptr_kern *sig_ptr,
+> > +                              struct bpf_key *trusted_keyring)
+> > +{
+> > +       int ret;
+> > +
+> > +       if (trusted_keyring->has_ref) {
+> > +               /*
+> > +                * Do the permission check deferred in
+> > bpf_lookup_user_key().
+> > +                * See bpf_lookup_user_key() for more details.
+> > +                *
+> > +                * A call to key_task_permission() here would be
+> > redundant, as
+> > +                * it is already done by keyring_search() called by
+> > +                * find_asymmetric_key().
+> > +                */
+> > +               ret = key_validate(trusted_keyring->key);
+> > +               if (ret < 0)
+> > +                       return ret;
+> > +       }
+> > +
+> > +       return verify_pkcs7_signature(data_ptr->data,
+> > +                                     bpf_dynptr_get_size(data_ptr)
+> > ,
+> > +                                     sig_ptr->data,
+> > +                                     bpf_dynptr_get_size(sig_ptr),
+> 
+> MIssing check for data_ptr->data == NULL before making this call?
+> Same
+> for sig_ptr.
+
+Patch 3 requires the dynptrs to be initialized. Isn't enough?
+
+Thanks
+
+Roberto
+

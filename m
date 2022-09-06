@@ -2,192 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7CA5ADF42
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 07:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B9E5ADF51
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbiIFF6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 01:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S238237AbiIFGBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 02:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237446AbiIFF6e (ORCPT
+        with ESMTP id S238230AbiIFGBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 01:58:34 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927816B177
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 22:58:33 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1274ec87ad5so10927929fac.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 22:58:33 -0700 (PDT)
+        Tue, 6 Sep 2022 02:01:03 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71EE6DF8C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 23:00:52 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id c9so15362934ybf.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 23:00:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=HeBedukbKOmji1l3x9C67ZTQwt1/+R7TK0HpgBZO8/g=;
-        b=HLIu1aXjSCJPfMxnLO1BIP4TKN/g1wfnjLoKixX2gL4+L64N5Uu4KM0fZTVYrin9Ys
-         vizhDJhYPpx2MvJWWve2g3dp42cXMwNfJPe2/C88HUM8TX8Pvr7cZ9f66foqApzMEYF3
-         DfYd89k5VyejFB/5CBMjZVxwaYWhirtWWpfScaWlUlGgg3zLrS3ukHrYR4wriDIwkJGU
-         wrMlLf5w+t3zSQ/3dxRDaKq/JRvvg82QmYuWnyClKfLU5jaXHJsmp1QrnyOxG77oGYNB
-         d9e74nckdLpi/xbJ5n01NJSfGH0JEAa7W/dR6mtDUOmJ3YMFsU7qcht375GUO3DoF3Ha
-         x8cw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=dVgxTZ8rakP42g8vhCO3njeR/uRGYZNUUx4gShIILwI=;
+        b=d5kvgH2al2OzGC3Spb+XGYBBgJ8Mm3xF808v2cmMFnU1xLOoRQA1O8WMwDdihc92M5
+         pUEv0pk58+n2FJOnauWMMiUVOLfTQFcXt3C0p9xdRDWTV2oc7VmLJtkJP6ltuwHFAjWa
+         k7Mce8yApzVuKrgcPGcGlJKVzv+L7kp83eUQzZV39wsCezAUJMlTUkLS/x5MCJlI0xfm
+         KyMb3YRNyUpuo2gDRdUWW2bo3Op/mmCtFoHp/xWm6hu8ZtI9/eRx4ByXrC68Kqo2O0LI
+         7g5gOwSlPWos1y5l9tI4FKYGDrcjXP9vGElk7Sk5h7awDPHdIHLtRpqx32YcUapuOioQ
+         gO6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=HeBedukbKOmji1l3x9C67ZTQwt1/+R7TK0HpgBZO8/g=;
-        b=cfbjVO9Kig9L6LshmlRyz7unbvI4YIWP+8rQ/fFXF+ZHYqcSztqXwkplFmsIZRKHCQ
-         yFfne/HN+8bGdC6XX2c1qPfWqGrQqT/qLdxSiDmCKGj7ggy5QsXTrEEkCkvnBYp480mj
-         8mriqffwKS4wphqZ6p93gEeaYhuwvGWlQVBPM5RJ+fi3X/9VVMWfhhRb/KVY6tujcltW
-         3eJa8W3oUwsHSSV7P/Yj0ffie3kbLmu5D+z5kh0eJUJdd/J9Ql8j9Uow0xkb1gWJIBrS
-         KhewAm5/+0J6BUHRg2YMRHXZqiGVyHVXcHRAdrwltiPurZrXgXNfDg5WGwtKEk1F+zN6
-         J1Eg==
-X-Gm-Message-State: ACgBeo3nzUm2mQt+FdiLQ6VIu4H/ldvgODKS/L9b1e1xUX00QaDGOlGB
-        3R5gMik6rcAXewDvqs47EfE=
-X-Google-Smtp-Source: AA6agR6UIO+DAi1rk00dnO76SUp4Kxzb0yyf2H5r74kvqrcAK6nSeGW2Pnz/BGviH0mf18GJirvSUQ==
-X-Received: by 2002:a05:6870:f219:b0:122:4182:94 with SMTP id t25-20020a056870f21900b0012241820094mr10781626oao.264.1662443912202;
-        Mon, 05 Sep 2022 22:58:32 -0700 (PDT)
-Received: from localhost ([104.183.150.195])
-        by smtp.gmail.com with UTF8SMTPSA id r1-20020a9d7cc1000000b006369d5d6372sm5508968otn.50.2022.09.05.22.58.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 22:58:31 -0700 (PDT)
-From:   Fangfei Yang <yangff1@gmail.com>
-To:     luto@kernel.org
-Cc:     dave.hansen@intel.com, dave.hansen@linux.intel.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        sroettger@google.com, x86@kernel.org, yangff1@gmail.com
-Subject: Re: PKU usage improvements for threads
-Date:   Tue,  6 Sep 2022 00:58:28 -0500
-Message-Id: <20220906055828.10451-1-yangff1@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <e1c67217-1143-4643-a7a3-ca3f34f28d30@www.fastmail.com>
-References: <e1c67217-1143-4643-a7a3-ca3f34f28d30@www.fastmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=dVgxTZ8rakP42g8vhCO3njeR/uRGYZNUUx4gShIILwI=;
+        b=Q+hC7FXd4b5/4U9xDOiwIMo8SJVR5+0xSmVKFGzGOiTmfmeCvnt0Vypo2XlSB0LFU3
+         wMW3yj1cPYs+HBa1aQGrxI88HKfiLsQfcDIb9QBNULVTs+ZEi8i8rO4RggO1527KHBq2
+         CDcWEo5xhRElqLIoXuemiNg6pPTGm0yZmtuxC6iJOW6qR78mFcuHrSes4aDWF/1guqMc
+         hb/QB8bugVo2gE798b5Gr5xGaxj5+/BFhY7czAas5FNPSa/0AXn+XA+dEV/oR4RDDW+L
+         DZiKA+GXMqmIIw/uveJDVLpVNtLksr6VgxjrJ/k0aDrL3oHEOYbh7cvP8vTbP+Md7ovu
+         jaPg==
+X-Gm-Message-State: ACgBeo0LvoltRqSjEaYNKq6Gu+SXGzdG3Ydwzq3Z85TeobSSDTleIa/s
+        Kc8QzDw+6UZEVq4gRORuGcf/mfuKW5dpCuGFkZyRFw==
+X-Google-Smtp-Source: AA6agR6H7ZaNY+warUhZhyAV9xv4cf03bKqoY92Ggt4rv/7N5rkwicu6vEp+repqTe/aMzeM+7QruB3NXr28ULn5MCY=
+X-Received: by 2002:a25:b983:0:b0:695:d8b4:a5a3 with SMTP id
+ r3-20020a25b983000000b00695d8b4a5a3mr36413414ybg.553.1662444051930; Mon, 05
+ Sep 2022 23:00:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <676398f0aeecd47d2f8e3369ea0e95563f641a36.1662416260.git.andreyknvl@google.com>
+In-Reply-To: <676398f0aeecd47d2f8e3369ea0e95563f641a36.1662416260.git.andreyknvl@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 6 Sep 2022 08:00:00 +0200
+Message-ID: <CANpmjNN2T=uufbrj3ghr7S6k5E=YxvNpkq2Qa8qCY9NfPeeRsg@mail.gmail.com>
+Subject: Re: [PATCH] kasan: move tests to mm/kasan/
+To:     andrey.konovalov@linux.dev
+Cc:     Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> How is PKRU a “privilege” and what do you mean my “immediately”?  I can’t follow this.
+On Tue, 6 Sept 2022 at 00:18, <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Move KASAN tests to mm/kasan/ to keep the test code alongside the
+> implementation.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-If you use PKRU, then you add a layer of permissions controlled by the user 
-to the existing memory management to determine whether a particular PKEY's 
-memory can be read or written by the current context. 
-Then, we don't want this PKRU to be accidentally modified. 
+Reviewed-by: Marco Elver <elver@google.com>
 
-From this perspective, PKRU is a privilege in user space.
+Thanks - this is overdue, and follows what newer KUnit tests do.
 
-In addition to the restrictions on the user program itself, 
-some system calls can also cause the PKRU to be modified. 
-For the kernel, this user space is designed to be agnostic 
-(and can be anything, having all kinds of guarantees), 
-and only a few policies can be sent to the kernel via seccomp-bpf or other security apporches.
-
-Examples of "immediately", e.g., sigreturn-oriented programming, 
-can change the current PKRU value while achieving the effect of ROP, 
-thus allowing an attacker to access memory that was not read or written in the original context.
-This compared to attacks that takes time to work, sigaltstack once, and then wait the signal get triggered.
-
-> Why would the entry point check a source?  Or change PKRU?  What would its PKRU logic be and why?
-
-> As I see it, the handler can (awkwardly, perhaps) manage PKRU just fine for all purposes except kernel access to the signal stack.
-
-Yes, it can be correct and safe, but it'd be better if kernel can just provide 
-the PKRU desired by the user when sending signal to the user.
-
-> Can you elaborate?  Of course WRPKRU can be abused to fully bypass PKRU protection. 
-
-This is determined by the characteristics of MPK and signal.
-First, currently, the kernel uses a default PKRU value of 0x55555554 when it signals, 
-which means that only PKEY=0 is writable. 
-However, the program that actually handles the signal may need other permissions, 
-for example it may need to access PKEY=0,1,2 at the same time.
-Then, I would need to write the following assembly code in the preamble of the handling function.
-```
-mov eax, 0x55555540
-xor ecx, ecx
-xor edx, edx
-wrpkru
-cmp eax, 0x55555540
-jne fail
-```
-However, this leads to another problem, if, for example, 
-I am an attacker (assuming you have gone through some method that prevents sigreturn-oriented programming), 
-I can modify the RSP to jump to this signal handling function. 
-Then, you will see that in the code afterwards, 
-you have no way to tell if there is actually a signal currently being sent by the kernel to our handler function, 
-or if this was jumped over by the attacker since the previous PKRU has gone.
-
-Of course this is not insurmountable. 
-For example, we can save a token to the memory that PKEY=0 before the very first `mov eax, 0x55555540`, 
-thus ensuring that PKEY=0 is writable before executing wrpkru 
-(assuming here that PKEY=0 indicates some higher privilege). 
-However, in a multi-threaded environment, saving such a token also becomes more complicated.
-
-If the kernel can give a correct PKRU according to the user's specific design needs, 
-then there is no need for additional token here. 
-Then, even if the attacker jumps here, its PKRU unchanged, 
-and thus its privileges can be restricted by other methods 
-(e.g., it has been proposed to add a function to read pkru in seccomp-bpf[1]).
-
-> This isn’t logical at all to me. It makes some sense as an API simplification to avoid a new syscall, and it makes sense in a bizarre (to me) world in which user code can control access to PKRU but not to sigaltstack(), but why do we live in that world?
-
-If we can control WRPKRU, of course sigaltstack can also be controlled, 
-whether by seccomp or something else. 
-My point is that doing so would reduce the exposure of risky syscalls 
-by ensuring that no matter how the syscall is used, 
-it does not expand the privileges of the caller. 
-There is always a way to make the these system calls secure, 
-as long as the availability of the signal is addressed.
-
-> Do you mean in current kernels?
-
-No, what I mean is that if you save the current PKRU, 
-rather than allowing the caller to specify one at will. 
-Then, in the future, when doing a signal deliver, 
-if it tries to write to a stack address that is not allowed to be accessed by this saved PKRU, 
-it will segfault. 
-This is not necessary, as you can restrict access to sigaltstack, 
-I'm just saying that it makes sigaltstack itself a little more secure.
-(Because PKRU is also in effect in the kernel, in the vast majority of cases, system calls 
-still follow the restrictions of the current context's PKRU when accessing user pointers. 
-This assumption is not absolute, but it is not a bad thing 
-if syscalls can satisfy this requirement)
-
-> What do you mean “accurate”?
-
-If the accessibility of the memory itself is only checked at the time of the system call, 
-then there is a possibility that this address is unmap and mapped again, 
-at which point the PKEY check based on is inaccurate.
-
-> Sorry, what code does XSAVE here?
-
-I simplified the process of signal delivery a bit.
-
-For xsave here the process is: handle_signal->setup_rt_frame -> __setup_rt_frame->get_sigframe->copy_fpstate_to_sigframe->copy_fpregs_to_sigframe-> copy_xregs_to_user->xsave
-
-It will be slightly different if other instructions are used.
-
-Because this xsave will use the user's stack address directly, 
-the PKRU must be changed to the PKRU value obtained 
-by any of the methods discussed here before the xsave is made.
-
-However, this results in the xsave saving the fpu registers with the new PKRU value,
-but the xsave should save the old PKRU value (before the siganl).
-
-So, we must backup the before write to it, and then after xsave, 
-the old value is used to replace the value in the signal frame.
-
-Something similar needs to be done at `rt_sigreturn`, 
-because the restore_sigcontext will modify the PKRU register 
-to the PKRU value in the frame, but the `restore_altstack` that 
-follows will immediately access `&frame->uc.uc_stack`. 
-If, however, the restored PKRU does not have access to the `&frame->uc.uc_stack`, 
-it will cause a kernel panic. 
-
-[1] https://lore.kernel.org/linux-api/20181029112343.27454-1-msammler@mpi-sws.org/
+> ---
+>  MAINTAINERS                                             | 1 -
+>  lib/Makefile                                            | 5 -----
+>  mm/kasan/Makefile                                       | 8 ++++++++
+>  lib/test_kasan.c => mm/kasan/kasan_test.c               | 2 +-
+>  lib/test_kasan_module.c => mm/kasan/kasan_test_module.c | 2 +-
+>  5 files changed, 10 insertions(+), 8 deletions(-)
+>  rename lib/test_kasan.c => mm/kasan/kasan_test.c (99%)
+>  rename lib/test_kasan_module.c => mm/kasan/kasan_test_module.c (99%)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 589517372408..31b3e4b11e01 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10938,7 +10938,6 @@ F:      arch/*/include/asm/*kasan.h
+>  F:     arch/*/mm/kasan_init*
+>  F:     include/linux/kasan*.h
+>  F:     lib/Kconfig.kasan
+> -F:     lib/test_kasan*.c
+>  F:     mm/kasan/
+>  F:     scripts/Makefile.kasan
+>
+> diff --git a/lib/Makefile b/lib/Makefile
+> index ffabc30a27d4..928d7605c35c 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -65,11 +65,6 @@ obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
+>  obj-$(CONFIG_TEST_SIPHASH) += test_siphash.o
+>  obj-$(CONFIG_HASH_KUNIT_TEST) += test_hash.o
+>  obj-$(CONFIG_TEST_IDA) += test_ida.o
+> -obj-$(CONFIG_KASAN_KUNIT_TEST) += test_kasan.o
+> -CFLAGS_test_kasan.o += -fno-builtin
+> -CFLAGS_test_kasan.o += $(call cc-disable-warning, vla)
+> -obj-$(CONFIG_KASAN_MODULE_TEST) += test_kasan_module.o
+> -CFLAGS_test_kasan_module.o += -fno-builtin
+>  obj-$(CONFIG_TEST_UBSAN) += test_ubsan.o
+>  CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
+>  UBSAN_SANITIZE_test_ubsan.o := y
+> diff --git a/mm/kasan/Makefile b/mm/kasan/Makefile
+> index 1f84df9c302e..d4837bff3b60 100644
+> --- a/mm/kasan/Makefile
+> +++ b/mm/kasan/Makefile
+> @@ -35,7 +35,15 @@ CFLAGS_shadow.o := $(CC_FLAGS_KASAN_RUNTIME)
+>  CFLAGS_hw_tags.o := $(CC_FLAGS_KASAN_RUNTIME)
+>  CFLAGS_sw_tags.o := $(CC_FLAGS_KASAN_RUNTIME)
+>
+> +CFLAGS_KASAN_TEST := $(CFLAGS_KASAN) -fno-builtin $(call cc-disable-warning, vla)
+> +
+> +CFLAGS_kasan_test.o := $(CFLAGS_KASAN_TEST)
+> +CFLAGS_kasan_test_module.o := $(CFLAGS_KASAN_TEST)
+> +
+>  obj-y := common.o report.o
+>  obj-$(CONFIG_KASAN_GENERIC) += init.o generic.o report_generic.o shadow.o quarantine.o
+>  obj-$(CONFIG_KASAN_HW_TAGS) += hw_tags.o report_hw_tags.o tags.o report_tags.o
+>  obj-$(CONFIG_KASAN_SW_TAGS) += init.o report_sw_tags.o shadow.o sw_tags.o tags.o report_tags.o
+> +
+> +obj-$(CONFIG_KASAN_KUNIT_TEST) += kasan_test.o
+> +obj-$(CONFIG_KASAN_MODULE_TEST) += kasan_test_module.o
+> diff --git a/lib/test_kasan.c b/mm/kasan/kasan_test.c
+> similarity index 99%
+> rename from lib/test_kasan.c
+> rename to mm/kasan/kasan_test.c
+> index 505f77ffad27..f25692def781 100644
+> --- a/lib/test_kasan.c
+> +++ b/mm/kasan/kasan_test.c
+> @@ -25,7 +25,7 @@
+>
+>  #include <kunit/test.h>
+>
+> -#include "../mm/kasan/kasan.h"
+> +#include "kasan.h"
+>
+>  #define OOB_TAG_OFF (IS_ENABLED(CONFIG_KASAN_GENERIC) ? 0 : KASAN_GRANULE_SIZE)
+>
+> diff --git a/lib/test_kasan_module.c b/mm/kasan/kasan_test_module.c
+> similarity index 99%
+> rename from lib/test_kasan_module.c
+> rename to mm/kasan/kasan_test_module.c
+> index b112cbc835e9..e4ca82dc2c16 100644
+> --- a/lib/test_kasan_module.c
+> +++ b/mm/kasan/kasan_test_module.c
+> @@ -13,7 +13,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/uaccess.h>
+>
+> -#include "../mm/kasan/kasan.h"
+> +#include "kasan.h"
+>
+>  static noinline void __init copy_user_test(void)
+>  {
+> --
+> 2.25.1
+>

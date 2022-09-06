@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CD25AECB6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340065AEBC9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241739AbiIFOVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
+        id S240588AbiIFN5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241914AbiIFOS7 (ORCPT
+        with ESMTP id S240326AbiIFNyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:18:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797F52A41B;
-        Tue,  6 Sep 2022 06:49:59 -0700 (PDT)
+        Tue, 6 Sep 2022 09:54:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5E880F41;
+        Tue,  6 Sep 2022 06:41:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 978B5B818DF;
-        Tue,  6 Sep 2022 13:48:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02C86C433D7;
-        Tue,  6 Sep 2022 13:48:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50CBF61539;
+        Tue,  6 Sep 2022 13:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B817C433D7;
+        Tue,  6 Sep 2022 13:41:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662472110;
-        bh=g4OSy4eiWzd4GXoIulDPPUyvFbwo6gtuf8PChh14Lrc=;
+        s=korg; t=1662471688;
+        bh=Zhjxdo+O3YDSRG51bQSs5A+7FtpAQPLDxhfGV13A5s8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LB1q0GDrEdcgIeqgJjHsNCFI5nzwwKjkhOxtSJgp1L8qlFykTM6I2LHoPaD+Mfz7R
-         +UwK2QKpyRmSjCbpNDf+fTGfxAd2TmAO/X4DpyLVGXs3TUkqvPBchQTLLPePmaxsdQ
-         mEnL5zPC4LobsGwevqOvGEODCW6MIGSQZpzT96rk=
+        b=GAQ71TXZFq4KEFXeHYwIY5eYZnesqPwTLWWDh/Ch1pwijbbw2VZ74RGAOkYTI1j3N
+         KZXAHO1C0Yupjh5oTC4xPQUojft9EjdABRqJqOaipUEUkv9xF+ujNZaHvn6WRHwEoO
+         uewr7sMsaRKJiuAsePgRWKzw7b3pF4YTPP/Y6dA8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH 5.19 134/155] usb: gadget: mass_storage: Fix cdrom data transfers on MAC-OS
-Date:   Tue,  6 Sep 2022 15:31:22 +0200
-Message-Id: <20220906132835.131878343@linuxfoundation.org>
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH 5.15 102/107] kbuild: Add skip_encoding_btf_enum64 option to pahole
+Date:   Tue,  6 Sep 2022 15:31:23 +0200
+Message-Id: <20220906132826.180891759@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
-References: <20220906132829.417117002@linuxfoundation.org>
+In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
+References: <20220906132821.713989422@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
+From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
 
-commit 9d4dc16ec71bd6368548e9743223e449b4377fc7 upstream.
+New pahole (version 1.24) generates by default new BTF_KIND_ENUM64 BTF tag,
+which is not supported by stable kernel.
 
-During cdrom emulation, the response to read_toc command must contain
-the cdrom address as the number of sectors (2048 byte sized blocks)
-represented either as an absolute value (when MSF bit is '0') or in
-terms of PMin/PSec/PFrame (when MSF bit is set to '1'). Incase of
-cdrom, the fsg_lun_open call sets the sector size to 2048 bytes.
+As a result the kernel with CONFIG_DEBUG_INFO_BTF option will fail to
+compile with following error:
 
-When MAC OS sends a read_toc request with MSF set to '1', the
-store_cdrom_address assumes that the address being provided is the
-LUN size represented in 512 byte sized blocks instead of 2048. It
-tries to modify the address further to convert it to 2048 byte sized
-blocks and store it in MSF format. This results in data transfer
-failures as the cdrom address being provided in the read_toc response
-is incorrect.
+  BTFIDS  vmlinux
+FAILED: load BTF from vmlinux: Invalid argument
 
-Fixes: 3f565a363cee ("usb: gadget: storage: adapt logic block size to bound block devices")
-Cc: stable@vger.kernel.org
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Link: https://lore.kernel.org/r/1661570110-19127-1-git-send-email-quic_kriskura@quicinc.com
+New pahole provides --skip_encoding_btf_enum64 option to skip BTF_KIND_ENUM64
+generation and produce BTF supported by stable kernel.
+
+Adding this option to scripts/pahole-flags.sh.
+
+This change does not have equivalent commit in linus tree, because linus tree
+has support for BTF_KIND_ENUM64 tag, so it does not need to be disabled.
+
+Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/function/storage_common.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ scripts/pahole-flags.sh |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/usb/gadget/function/storage_common.c
-+++ b/drivers/usb/gadget/function/storage_common.c
-@@ -294,8 +294,10 @@ EXPORT_SYMBOL_GPL(fsg_lun_fsync_sub);
- void store_cdrom_address(u8 *dest, int msf, u32 addr)
- {
- 	if (msf) {
--		/* Convert to Minutes-Seconds-Frames */
--		addr >>= 2;		/* Convert to 2048-byte frames */
-+		/*
-+		 * Convert to Minutes-Seconds-Frames.
-+		 * Sector size is already set to 2048 bytes.
-+		 */
- 		addr += 2*75;		/* Lead-in occupies 2 seconds */
- 		dest[3] = addr % 75;	/* Frames */
- 		addr /= 75;
+--- a/scripts/pahole-flags.sh
++++ b/scripts/pahole-flags.sh
+@@ -17,4 +17,8 @@ if [ "${pahole_ver}" -ge "121" ]; then
+ 	extra_paholeopt="${extra_paholeopt} --btf_gen_floats"
+ fi
+ 
++if [ "${pahole_ver}" -ge "124" ]; then
++	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_enum64"
++fi
++
+ echo ${extra_paholeopt}
 
 

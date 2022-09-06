@@ -2,73 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702E15AF071
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727305AF074
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbiIFQcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S238363AbiIFQde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234323AbiIFQcY (ORCPT
+        with ESMTP id S234303AbiIFQdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:32:24 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBE8205F9;
-        Tue,  6 Sep 2022 09:05:46 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286BDcRG017117;
-        Tue, 6 Sep 2022 09:05:42 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=pfpt0220; bh=SSD21BThDpWyFFFZ+RKCG44aWKEMIrCsNdZUKfNCaJg=;
- b=YZj7cRJ3nGxwFJsOYKY5XH0ZA80qXtyivaGaxrRo32t77s0FSZ1ir0lTXZSl2+HyOT9g
- NWXRzRyTOq6hksJ1fpYNl7lTpk4nDEHt0HqZCtpj0ck2PBPPySfvx8/pqceNgcf7dtOy
- bGg4iic8+Dw3KVtT829KqJMlDuD108CnI1kbdfwnNmlqsTRW/q5kEEaigz9XNfGyxVxI
- f2+r5I9C9o7iMzQ7CrvMyrgQubGENmMxaG5M/uZggLSMD1kLB1702M9ZgyLt/KfB8OOp
- oazfsM/ynOFKvW+B9sgAoz6FX/VPTltdGLDQfxYPx3JSq88JNHBZpIW1C4g5ZI+svLyP oA== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3jc6ept2k9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 09:05:42 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 6 Sep
- 2022 09:05:40 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Tue, 6 Sep 2022 09:05:40 -0700
-Received: from mvluser05.qlc.com (unknown [10.112.10.135])
-        by maili.marvell.com (Postfix) with ESMTP id A26203F704F;
-        Tue,  6 Sep 2022 09:05:40 -0700 (PDT)
-Received: from localhost (aeasi@localhost)
-        by mvluser05.qlc.com (8.14.4/8.14.4/Submit) with ESMTP id 286G5cU0016719;
-        Tue, 6 Sep 2022 09:05:38 -0700
-X-Authentication-Warning: mvluser05.qlc.com: aeasi owned process doing -bs
-Date:   Tue, 6 Sep 2022 09:05:38 -0700
-From:   Arun Easi <aeasi@marvell.com>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-CC:     Steven Rostedt <rostedt@goodmis.org>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-next@vger.kernel.org>
-Subject: Re: [EXT] build failure of next-20220906 due to 8bfc149ba24c ("scsi:
- qla2xxx: Enhance driver tracing with separate tunable and more")
-In-Reply-To: <YxdZ/9XOsWilvVSd@debian>
-Message-ID: <44fe9ca0-e1d7-1e4f-9fd8-0f48a84dca72@marvell.com>
-References: <YxdZ/9XOsWilvVSd@debian>
+        Tue, 6 Sep 2022 12:33:11 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617E183070
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662480495; x=1694016495;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=Ca6NbBdrQ2L5RUxbgTGH7PYWraiBQvfG7Q9aL1w9Jf8=;
+  b=bwFQrAiLRp2s5T3+Hgpbzjxyol4DZX5GcixEsHeoQ5dJUzPwRSH5B9GZ
+   fB8YLYE6t/x1unZ8NmIFEf3ObnubNNaVsC2Wqufabzx8Gk3byssOiEJiC
+   ayMKM5dOtjybeFboFCKp82bapbAGpI55Vsf+fz85E+06znKK2a+2xsWED
+   Yvmp4xFqorKPmksjZ094oRI9bhrKNznok5GIydiqLPJ13i6sc3StGvC3u
+   INTvsKOmH0hGECvP46bK4vwvVo7Xt2fdSS8299VLcglqGQjT5VhLruwBs
+   namn+tPNfvPLiZ1pKgEGv9SSKVx9srgHd8DNEj+tzwHJjB2CjBcX9RrC4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="294220646"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="294220646"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 09:08:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="644226846"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga008.jf.intel.com with ESMTP; 06 Sep 2022 09:08:14 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Sep 2022 09:08:12 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Sep 2022 09:08:12 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 6 Sep 2022 09:08:12 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 6 Sep 2022 09:08:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L5cIrf2wHWs9btFobxnbVJMm+6s9gKDwuwoNyrMct40ehWmmI1GywOZKscYL8UX11y+pBfKsTGr6BFG1XwdCMKnPCBCwnaDMypqv88THyTWvSQM/I7nnoaE7siM3PK+Ktk/KWITxUCNsFYWyuRm/RgiKbnOkEGOJq4IxzGAyzr9JpfNDFEpfTkrF186JHZLgu/+Vu/OhKNMguHLOmT4m/FLpW7QStKatEUG0BvRHRn9gZ5v1+/yXdZ/05DBESKnIJStWR0LFjE89XYmn09H9yad59FRC6dsc6OLkJTHOhdUs2KXopuGmCB7xt/viJNb44S3NBpN78KWIVlRo/rQ1FQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=umtLwiF/qcULQ4Ls3394A0vLY3M2r4LkHCAlaohXunY=;
+ b=MOUp9nI2c7qZpgsP/T97q0kWP3FoEa5SoZ+iTrSU8jktGUa7YsMDjF6WWxGiexzGYjwirHTQOGBrCBftwhbB9+QKydBewty0y0qWc0OlJ/Nt9JEPMueYm3B7e3NpmNATIPrBkz4u0o8O5uxUoKV1OPD0trou4DzrhaTWRqXq0cA8x6n9P21JX7kzHPaq5rinFRk3V+gVp2f5bZ3xMCaORy+FKLFtHM5Sq0oif6JP9caA3H2ZYdxK5UR36Tc7usGWOLKpVWVvsdQeDGlJR7CcdNM9jdX5CzBLLVUqFEV5kiP5uaXgG/JFZp81k/7kSyomQmO6hDpuqjHFy2V5Khh/Yg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
+ DM5PR11MB1820.namprd11.prod.outlook.com (2603:10b6:3:111::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.16; Tue, 6 Sep 2022 16:08:11 +0000
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::b04c:807c:4ea0:c62e]) by DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::b04c:807c:4ea0:c62e%9]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 16:08:10 +0000
+Date:   Tue, 6 Sep 2022 18:08:04 +0200
+From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Simon Ser <contact@emersion.fr>
+Subject: Re: [PATCH v3 0/4] drm: Use full allocated minor range for DRM
+Message-ID: <20220906160804.wvuioiya33df7jnj@nostramo>
+References: <20220906140117.409852-1-michal.winiarski@intel.com>
+ <YxdXZbFBHIevYwRz@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YxdXZbFBHIevYwRz@casper.infradead.org>
+X-ClientProxiedBy: FR3P281CA0135.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::19) To DM4PR11MB5373.namprd11.prod.outlook.com
+ (2603:10b6:5:394::7)
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-        boundary="1879738122-875352785-1662480340=:17437"
-X-Proofpoint-ORIG-GUID: 5JcVUa3x1en7KPTB0xq_e_loM5Aka06J
-X-Proofpoint-GUID: 5JcVUa3x1en7KPTB0xq_e_loM5Aka06J
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7d5f3b5c-cf6c-4046-a2b8-08da9021feab
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1820:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nTPaUARwacFqd+usJo2jHkQAvunk28Us6q4EbvkeyTbOtvDeZEgB3Oj8oS7GxRZNH9wCAIhsK0SRXJUC0MK2QrFJegGgDbnzYy4j2dZl5Glgez/x1htgu+BlIaPLsmLumA9Z07iNkAnFU14Zwm/DsOvf9Dn5dzDljlkTcPADa5AdJGwdZSh03Ez3y2gtQkdT/CEQhjn84Bbwn2YVFMzaST3uafiIWMm9aSJSlL60aG0uCUf0gdHekXNHH6fJmdXAoWl7tZXM4uC1DFsv6jEnzrJX8W8Ed97fuJn51KoyrU/yiG8kEgXcMs3MxMhUX+LMsjlSjo2AlWdXA3HtyrCgbx4AmBIOKY9WwtdmJUrA9lH8eW52QfHwm7fSOQCwGwpgk/HrRgSkNgJLgQqZRoguU9KGHQk26sudiV01Nvj5IDnp9vrQJMNlsSVE1ly1m9ZKM8GYADtLuIQ6NNU/LsfpUxer6ig5D5rUKtxulxpnafJj68ubs6n6Az4ZI835tomGeY+b1GXs+YZI4/95BThMeEQKRR2LvDOTeyZc1W4apGohb/YQRJ0hBWsNG7bp/vBo6m7cbr86apQjhBdJtj1HAIOCvCkfUgMFZRQn+AnLjsac9K1bdxbw85lXqM8YCmDCWxhUgHrHT4xbvtSjvAPdPmu2pAhqk8hqyq8/eJpUplPfBqk9x9SmwirKtFTYBMPkpwk3BFJ/DwkRHxzE+nmUjQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(376002)(366004)(39860400002)(346002)(136003)(186003)(38100700002)(82960400001)(8936002)(83380400001)(5660300002)(1076003)(66476007)(66556008)(66946007)(4744005)(33716001)(2906002)(6666004)(8676002)(478600001)(6512007)(6506007)(9686003)(26005)(6916009)(41300700001)(54906003)(6486002)(316002)(4326008)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dnl3Z1EveWdsZ2ZHU040SW12K2dJRk1nOXRockk4cUcvMStpcnNqczZ3N0U2?=
+ =?utf-8?B?U3FoZ2I2KzNaWnRaSFNUY29GWXJpQml4OTBMTTVaTURVeWNtb0puL1Z0Q1Qr?=
+ =?utf-8?B?cW5jTDJaZ25Ua0dncGVIeCsxRzAxMWx2ODBWUzFka0VxWFN0bWhneTlaSmZP?=
+ =?utf-8?B?dWRkcnRlb3pkQXRzT29uZTdMUzY0YWRCdEpFVlhjV1N1dW0xV0ZVSTc1YTVx?=
+ =?utf-8?B?b1hIcjdMQUVrdDlWY0QveVRWUVpwSlc4RGZZbGZhVzlLa2UwZlFmYUNKdS94?=
+ =?utf-8?B?WUZwMVZMU1pLdW1nZFVTMVR6Y1U3L2VLWnFBOXVYYWdSMFZlZWlNZ2JsekRa?=
+ =?utf-8?B?Z094WjAwekxUc0haTE15TDUzcEJXZUJkMmlSbXpOMTEybXdnUDkxTHByOHl0?=
+ =?utf-8?B?ckN2STB5VktBS1lkbGg5Ly9rSWc1eEtHVi9pd0ViVFRJZ3RFMWhtaEtwT1NK?=
+ =?utf-8?B?RTU4M21hQUwrN3c3R1B4RXZMT1QyZi9Oc2hjMXlYdjhjU3lkbjd5QjRBVWJM?=
+ =?utf-8?B?SDNMbUxuYlpXUlhSR1ZuY2NZb0x1R2dwaCszU0gvRitrNVNFWjlmUTE3cmYr?=
+ =?utf-8?B?ZkZrOTA1TDNOa2ZxQkJFcmNlK3VnM0lYRlNUTzlxWHdmazNHd1lYdEVwU0Er?=
+ =?utf-8?B?WDYwWVphTzh6NTJnQ2xVdldmNjNsdXJQUnJZT05pUllLN3Nzb0Q4Wjk1QUpa?=
+ =?utf-8?B?UkZWMHZUa05qWTNzTGpqQnp0b05PaGF0VmJlV2FURjk5MnhQL3VQd1puZlNs?=
+ =?utf-8?B?SVpNSXRTSTB1RHY0SmFxdGpFRWsxMEZLMHRMSTBST2RzTkZzYlcwZFJHNkhJ?=
+ =?utf-8?B?TUVQL04vd3VTYzJXNFV4MXNib3c0SzJVNGxzYXByMVE2L0NqcjFjWS9uTjdC?=
+ =?utf-8?B?VmlVWE5IWnFmeHdOYm43ckErWVg1UmRqMnBzalBLN3pWRVVkdzFGL1JsTWNq?=
+ =?utf-8?B?WkVjYWhsOXZIRTE2UUVQYXcvdCtXT2s0V1RFbDh3TWc1ZXFlTFN0N2ZneGV5?=
+ =?utf-8?B?QW4xd0dZMHRZRnVneDB0Zm1kQk9VTDdGVnl0MUJYUFpEYThNdHMyVGRIUGlL?=
+ =?utf-8?B?bzdNQ285TGYyc2s3NnE5MHVDOEJiWlh2SlVud1Y0c0xrV2tPUSsxR1VZdFRm?=
+ =?utf-8?B?T2M1bUhaRExHVlZUeVlCK2p5SmlqN1RvQi9XQjFVazlvMWpkTnFlaXBnL29E?=
+ =?utf-8?B?TVBkUkdMSVpVc0JDb2xDVEw2anAxV0J5aVJINU1vSTJKdGMranhjZmJGcjBO?=
+ =?utf-8?B?R3BQUlZnTi93T05lcXYwWUJHcHhXWkVaaDluNzV1dFlUa3BuWnN4Zk02N3Bx?=
+ =?utf-8?B?eGlPUjROLzI0OWYwWFBoYWJpOWtPZXQ1WW1ScDVBNkdmamxIWGNRc0JoeFR3?=
+ =?utf-8?B?MWVhU00wOWFOWlQyZFFNa2JuaFVhM2gyN25teDZWNFd4NHE3bzdZM0NNRWRr?=
+ =?utf-8?B?ZnpuUWgwSU1qSVM0UDQrMWorUk93SnRmUzArbkw5dWNjQ1VRNmR1TXRWZVIr?=
+ =?utf-8?B?MUQ0aGNBNjVRTWRHSHZJZ1p3VDBDaWlhSFM0SFkrSXV2SmFXeDdrTkZDdlU1?=
+ =?utf-8?B?bUJoTWRORGJmaE9SUTJLRGNXdkpMRzRZQmN6eWs2QzNjZnUxbENPNFBJOWds?=
+ =?utf-8?B?QVh2bEtSUU54cks1WWtCbU5sbjZOKzFydFJ0Qi9LbGhMRjN5Si90SE1nMWxh?=
+ =?utf-8?B?MjBvamcvWGVtK2JBRmJiR2NlSy82RkhiT1c1NDRIOEhscjJzOTJkWVMrTnE4?=
+ =?utf-8?B?MDJrVTFLaURCTERsUkxVeG5MSUg2L0xvZHQ2N3hvR0Rra3ZVdjE4R1M4alVW?=
+ =?utf-8?B?aUY1dmZGTVdjRi9PajVlRE4wQ3l0L1lKSUZmSjRtVzllT2l3YTRsWWc3MEhh?=
+ =?utf-8?B?cGFLZXJOVFA5TUtSOTloR3VrdEtBYW9hYXB4eHp5cFhCRXlqelZnRmFlaHlh?=
+ =?utf-8?B?Qm1qQ3NXUnUzYmphWDBmdDRjanpYYjFZQ3dYM1FqMzh6TFhVRFZmbHdjWkE3?=
+ =?utf-8?B?bXBZQ1poVkpYMHhSLzZHWjlRZ01GZ2xDS1RRMlRqcDJURlBkQ21kck5Handl?=
+ =?utf-8?B?Y1diRnRrZnQzS3pGY0xZWlZFNi96bTNIMXlZZ0RONUtHY2hYaE56cS9GT002?=
+ =?utf-8?B?d0tIT3k3Nk50ajJhY2puYk81bjdVdGpYWmVlTmM1UXEyOEVzNCs0b0JFbERE?=
+ =?utf-8?B?YlE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d5f3b5c-cf6c-4046-a2b8-08da9021feab
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 16:08:10.8734
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DTJdjz5fNfhXXWg20OQn4cmMEmgTQ1qmc/twScgKnQ8BZeHq8V1qiPNnY3MsLhzp9WqRh0Svtx/osBpJJfGO+INp/V6LNQ7mFEmfsIO6SLA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1820
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,95 +162,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---1879738122-875352785-1662480340=:17437
-Content-Type: text/plain; charset="US-ASCII"
+On Tue, Sep 06, 2022 at 03:21:25PM +0100, Matthew Wilcox wrote:
+> On Tue, Sep 06, 2022 at 04:01:13PM +0200, Michał Winiarski wrote:
+> > 64 DRM device nodes is not enough for everyone.
+> > Upgrade it to ~512K (which definitely is more than enough).
+> > 
+> > To allow testing userspace support for >64 devices, add additional DRM
+> > modparam (skip_legacy_minors) which causes DRM to skip allocating minors
+> > in 0-192 range.
+> > Additionally - one minor tweak around minor DRM IDR locking and IDR lockdep
+> > annotations.
+> 
+> The IDR is deprecated; rather than making all these changes around
+> the IDR, could you convert it to use the XArray instead?  I did it
+> once before, but those patches bounced off the submissions process.
 
-Hi Sudip,
+Sure. The IDR annotation can still be useful for existing users though,
+are you saying I should drop it as well?
 
-On Tue, 6 Sep 2022, 7:32am, Sudip Mukherjee (Codethink) wrote:
-
-> External Email
-> 
-> ----------------------------------------------------------------------
-> Hi All,
-> 
-> The builds of loongarch loongson3_defconfig have failed to build
-> next-20220906 with the error:
-> 
-> drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_init':
-> drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'? [-Werror=implicit-function-declaration]
->  2854 |         qla_trc_array = trace_array_get_by_name("qla2xxx");
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~
->       |                         trace_array_set_clr_event
-> 
-> drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_uninit':
-> drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function 'trace_array_put' [-Werror=implicit-function-declaration]
->  2869 |         trace_array_put(qla_trc_array);
->       |         ^~~~~~~~~~~~~~~
-> 
-> 
-> git bisect pointed to 8bfc149ba24c ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more").
-> 
-> I will be happy to test any patch or provide any extra log if needed.
-> 
-> 
-
-This looks like is happening due to CONFIG_TRACING not being enabled (same 
-as what kernel test bot reported). Could you try out the fix attached?
-
-@Steven, please see the patch attached. Do you think the fix belongs 
-better in linux/trace.h ?
-
-Regards,
--Arun
---1879738122-875352785-1662480340=:17437
-Content-Type: text/plain; charset="US-ASCII";
-	name="0001-fixup-qla2xxx-Enhance-driver-tracing-with-separate-t.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <ca92e75f-12ed-0867-418f-7fdbb4702c48@marvell.com>
-Content-Description: 
-Content-Disposition: attachment;
-	filename="0001-fixup-qla2xxx-Enhance-driver-tracing-with-separate-t.patch"
-
-RnJvbSBhZTQ2MDM3MTJjOWYzYTQ5ZDY3MDE1ZjYzODZjNTIwYTc3MzE5ZmZh
-IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KRnJvbTogQXJ1biBFYXNpIDxh
-ZWFzaUBtYXJ2ZWxsLmNvbT4NCkRhdGU6IEZyaSwgMiBTZXAgMjAyMiAxNzo1
-MzozMCAtMDcwMA0KU3ViamVjdDogW1BBVENIXSBmaXh1cCEgcWxhMnh4eDog
-RW5oYW5jZSBkcml2ZXIgdHJhY2luZyB3aXRoIHNlcGFyYXRlIHR1bmFibGUN
-CiBhbmQgbW9yZQ0KDQpGaXggdGhpcyBjb21waWxhdGlvbiBlcnJvciBzZWVu
-IHdoZW4gQ09ORklHX1RSQUNJTkcgaXMgbm90IGVuYWJsZWQ6DQoNCmRyaXZl
-cnMvc2NzaS9xbGEyeHh4L3FsYV9vcy5jOiBJbiBmdW5jdGlvbiAncWxhX3Ry
-YWNlX2luaXQnOg0KZHJpdmVycy9zY3NpL3FsYTJ4eHgvcWxhX29zLmM6Mjg1
-NDoyNTogZXJyb3I6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9u
-DQondHJhY2VfYXJyYXlfZ2V0X2J5X25hbWUnOyBkaWQgeW91IG1lYW4gJ3Ry
-YWNlX2FycmF5X3NldF9jbHJfZXZlbnQnPw0KWy1XZXJyb3I9aW1wbGljaXQt
-ZnVuY3Rpb24tZGVjbGFyYXRpb25dDQogMjg1NCB8ICAgICAgICAgcWxhX3Ry
-Y19hcnJheSA9IHRyYWNlX2FycmF5X2dldF9ieV9uYW1lKCJxbGEyeHh4Iik7
-DQogICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+DQogICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAg
-IHRyYWNlX2FycmF5X3NldF9jbHJfZXZlbnQNCg0KZHJpdmVycy9zY3NpL3Fs
-YTJ4eHgvcWxhX29zLmM6IEluIGZ1bmN0aW9uICdxbGFfdHJhY2VfdW5pbml0
-JzoNCmRyaXZlcnMvc2NzaS9xbGEyeHh4L3FsYV9vcy5jOjI4Njk6OTogZXJy
-b3I6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9uDQondHJhY2Vf
-YXJyYXlfcHV0JyBbLVdlcnJvcj1pbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJh
-dGlvbl0NCiAyODY5IHwgICAgICAgICB0cmFjZV9hcnJheV9wdXQocWxhX3Ry
-Y19hcnJheSk7DQogICAgICB8ICAgICAgICAgXn5+fn5+fn5+fn5+fn5+DQoN
-ClJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNv
-bT4NCi0tLQ0KIGRyaXZlcnMvc2NzaS9xbGEyeHh4L3FsYV9kZWYuaCB8IDcg
-KysrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKykNCg0K
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS9xbGEyeHh4L3FsYV9kZWYuaCBi
-L2RyaXZlcnMvc2NzaS9xbGEyeHh4L3FsYV9kZWYuaA0KaW5kZXggM2VjNmEy
-MDA5NDJlLi5kMGRhNzM3ZTUxZTIgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Nj
-c2kvcWxhMnh4eC9xbGFfZGVmLmgNCisrKyBiL2RyaXZlcnMvc2NzaS9xbGEy
-eHh4L3FsYV9kZWYuaA0KQEAgLTM1LDYgKzM1LDEzIEBADQogDQogI2luY2x1
-ZGUgPHVhcGkvc2NzaS9mYy9mY19lbHMuaD4NCiANCisjaWZuZGVmIENPTkZJ
-R19UUkFDSU5HDQorI2lmbmRlZiB0cmFjZV9hcnJheV9nZXRfYnlfbmFtZQ0K
-KyNkZWZpbmUgdHJhY2VfYXJyYXlfZ2V0X2J5X25hbWUoX3RyY19hcnIpCU5V
-TEwNCisjZGVmaW5lIHRyYWNlX2FycmF5X3B1dChfdHJjX2FycikNCisjZW5k
-aWYgLyogdHJhY2VfYXJyYXlfZ2V0X2J5X25hbWUgKi8NCisjZW5kaWYgLyog
-Q09ORklHX1RSQUNJTkcgKi8NCisNCiAvKiBCaWcgZW5kaWFuIEZpYnJlIENo
-YW5uZWwgU19JRCAoc291cmNlIElEKSBvciBEX0lEIChkZXN0aW5hdGlvbiBJ
-RCkuICovDQogdHlwZWRlZiBzdHJ1Y3Qgew0KIAl1aW50OF90IGRvbWFpbjsN
-Ci0tIA0KMi4yNy4wDQoNCg==
-
---1879738122-875352785-1662480340=:17437--
+-Michał

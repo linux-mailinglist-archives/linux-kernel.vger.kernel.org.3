@@ -2,121 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65A85AE608
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1465AE61D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239418AbiIFK42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
+        id S239745AbiIFLAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 07:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239681AbiIFK4E (ORCPT
+        with ESMTP id S239828AbiIFLAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:56:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2019913EB2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662461760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TWFTmiu/F1naD+YA2QN797Qhc0+oXAueZY77zxu/bOc=;
-        b=VedJouYeT4C/RsTWW1+ht1gmktvy2aPfniEfrEw5co5lvrdt3GIEgw8MHdgrbQe5e9NAq4
-        uzDp0HrtjT9mNI7CKbMoYTRlQ5p/EF9SENWppLErIKniX//aZL9aj+uN3Nj3Q6lTtYdUm2
-        8i9DCSAH75YuWgPFSEtUKSJXAjVmzbA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-326-C3HuPP8YPWOHUcLqKvKuOg-1; Tue, 06 Sep 2022 06:55:57 -0400
-X-MC-Unique: C3HuPP8YPWOHUcLqKvKuOg-1
-Received: by mail-wm1-f72.google.com with SMTP id i7-20020a1c3b07000000b003a534ec2570so8619158wma.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 03:55:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=TWFTmiu/F1naD+YA2QN797Qhc0+oXAueZY77zxu/bOc=;
-        b=ccf44BDpl5Xo92aPTbZp4GKkBnmUoEBHelZsz0Rpxuz97ALA3iC5vg5jF2TMrLnxIn
-         10LldIbOw73iytUlZtkb9mg5EEzG+C13PT9M4Hj/dsOrQDxFhNso1RMzw6fPrlsZ1Ug9
-         02NZihBDRcUrNBBf2lBYXqiFUUbVsqjTwgvzLHi3yOw1xwi1f5I5GBiIPtRdfD2FYGVh
-         2smid/JbHwxYXno45kr6bTwfC53kNChO5nl4tJb6v6J229+QzHxkIw9HdQ7QEsBNVXxW
-         ePBZZNNrKFD+FWFHz3uXUqq2qj/GySJKF4NHVttL1SD4v/FYCXszH0SqnSrX8h3+vng1
-         Gg7w==
-X-Gm-Message-State: ACgBeo3jWWXhjt/6kl1zf+XWMZ53n3VFd0mxLiKA4Ehsz4EeuEehV7B1
-        CbpEP1uo1O9a7+KgLLAk7N3r/xg5UtEpJIzy0IO1tCdWlGxqBFnuHIMLPZDTozn0cnKlkvt7Y+6
-        PW1LXDns2JGNs17yL88hsAqFH
-X-Received: by 2002:a05:600c:3541:b0:3a6:28e4:c458 with SMTP id i1-20020a05600c354100b003a628e4c458mr13486801wmq.188.1662461756591;
-        Tue, 06 Sep 2022 03:55:56 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4TTTKsUXeNjIwHC9u3J8/4vqYFGhNuEr/0Tvd/A8eYqEBmE6zDfGSyJavnhzHHsWabol3izA==
-X-Received: by 2002:a05:600c:3541:b0:3a6:28e4:c458 with SMTP id i1-20020a05600c354100b003a628e4c458mr13486792wmq.188.1662461756355;
-        Tue, 06 Sep 2022 03:55:56 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-112-72.dyn.eolo.it. [146.241.112.72])
-        by smtp.gmail.com with ESMTPSA id e5-20020adfe7c5000000b0022862e037e3sm8611142wrn.38.2022.09.06.03.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 03:55:55 -0700 (PDT)
-Message-ID: <056ba905a2579903a372258383afdf6579767ad0.camel@redhat.com>
-Subject: Re: [PATCH net] virtio-net: add cond_resched() to the command
- waiting loop
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        davem <davem@davemloft.net>
-Date:   Tue, 06 Sep 2022 12:55:54 +0200
-In-Reply-To: <CACGkMEtjQ0Jfok-gcRW+kuinsua2X0TscyTNfBJoXHny0Yob+g@mail.gmail.com>
-References: <20220905045341.66191-1-jasowang@redhat.com>
-         <20220905031405-mutt-send-email-mst@kernel.org>
-         <CACGkMEtjQ0Jfok-gcRW+kuinsua2X0TscyTNfBJoXHny0Yob+g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 6 Sep 2022 07:00:19 -0400
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48C6576752
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2O36e
+        ECB5BuZ0d6JGjlpKqyVLf4hom/1qxnJ/phFFe0=; b=ZB6xj1t0TxGh5nWoee937
+        +fav66yp0tyaoIrGTHB9CKScYrTssJdZDzLnApzGZcXQtwQ5y+mQ30l1CSckvV+E
+        X9QuGtvIy9Juw486axkOZqU+ZRIDR0lLvZMcxRTJdNputQxvgyqe+2YdBnqPMDZD
+        c2Ti2wRf07qvzTQPP0b3Y8=
+Received: from whoami-VirtualBox.. (unknown [223.72.91.155])
+        by smtp11 (Coremail) with SMTP id D8CowAAngYjFJxdjoZMDAQ--.5323S2;
+        Tue, 06 Sep 2022 18:58:13 +0800 (CST)
+From:   Jinyu Tang <tjytimi@163.com>
+To:     conor.dooley@microchip.com
+Cc:     akpm@linux-foundation.org, alexandre.ghiti@canonical.com,
+        anshuman.khandual@arm.com, anup@brainfault.org,
+        aou@eecs.berkeley.edu, atishp@rivosinc.com, falcon@tinylab.org,
+        guoren@kernel.org, heiko@sntech.de, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        panqinglin2020@iscas.ac.cn, paul.walmsley@sifive.com,
+        sunnanyong@huawei.com, tjytimi@163.com, tongtiangen@huawei.com
+Subject: Re:Re: [PATCH v2] riscv: make update_mmu_cache to support asid
+Date:   Tue,  6 Sep 2022 18:57:56 +0800
+Message-Id: <20220906105756.6082-1-tjytimi@163.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <7e17ceaf-6648-e099-d526-8b698eaa5a04@microchip.com>
+References: <7e17ceaf-6648-e099-d526-8b698eaa5a04@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: D8CowAAngYjFJxdjoZMDAQ--.5323S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZF48Gr4fXrWUKFyUXrWUArb_yoWrJrW7pF
+        srGan5KayfGr97Gry2qrnI9r17Xw4kK3WayrWSvrW5twsIgF1UKF9xKry09r1rJFy8WrWI
+        kayjyr13u3yYywUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRRwZrUUUUU=
+X-Originating-IP: [223.72.91.155]
+X-CM-SenderInfo: xwm13xlpl6il2tof0z/1tbiTgV0eFUDRgewlQAAs1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-09-05 at 15:49 +0800, Jason Wang wrote:
-> On Mon, Sep 5, 2022 at 3:15 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > 
-> > On Mon, Sep 05, 2022 at 12:53:41PM +0800, Jason Wang wrote:
-> > > Adding cond_resched() to the command waiting loop for a better
-> > > co-operation with the scheduler. This allows to give CPU a breath to
-> > > run other task(workqueue) instead of busy looping when preemption is
-> > > not allowed.
-> > > 
-> > > What's more important. This is a must for some vDPA parent to work
-> > > since control virtqueue is emulated via a workqueue for those parents.
-> > > 
-> > > Fixes: bda324fd037a ("vdpasim: control virtqueue support")
-> > 
-> > That's a weird commit to fix. so it fixes the simulator?
-> 
-> Yes, since the simulator is using a workqueue to handle control virtueue.
+Thanks for your guidance.^ ^
 
-Uhmm... touching a driver for a simulator's sake looks a little weird. 
+Sincerely yours,
+Jinyu
 
-Additionally, if the bug is vdpasim, I think it's better to try to
-solve it there, if possible.
-
-Looking at vdpasim_net_work() and vdpasim_blk_work() it looks like
-neither needs a process context, so perhaps you could rework it to run
-the work_fn() directly from vdpasim_kick_vq(), at least for the control
-virtqueue?
-
-Thanks!
-
-Paolo
+At 2022-09-04 21:49:31, Conor.Dooley@microchip.com wrote:
+>On 04/09/2022 14:37, Jinyu Tang wrote:
+>> The `update_mmu_cache` function in riscv flush tlb cache without asid
+>
+>FWIW, when referring to functions please put the () at the end.
+>Makes the changelog more natural to read. You do not need to make
+>a v3 for that though.
+>
+>Thanks,
+>Conor.
+>
+>> information now, which will flush tlbs in other tasks' address space
+>> even if processor supports asid. So add a new function
+>> `flush_tlb_local_one_page` to flush local one page whether processor
+>> supports asid or not,for cases that need to flush local one page like
+>> function `update_mmu_cache`.
+>> 
+>> Signed-off-by: Jinyu Tang <tjytimi@163.com>
+>> ---
+>> RFC V1 -> V2 : 
+>> 1.Rebased on PATCH9 of IPI imporvement series as Anup Patel
+>> suggestion. 
+>> 2.Make commit log more clear.
+>> 
+>>  arch/riscv/include/asm/pgtable.h  |  2 +-
+>>  arch/riscv/include/asm/tlbflush.h |  2 ++
+>>  arch/riscv/mm/tlbflush.c          | 11 +++++++++++
+>>  3 files changed, 14 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+>> index 7ec936910a96..09ccefa6b6c7 100644
+>> --- a/arch/riscv/include/asm/pgtable.h
+>> +++ b/arch/riscv/include/asm/pgtable.h
+>> @@ -415,7 +415,7 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+>>  	 * Relying on flush_tlb_fix_spurious_fault would suffice, but
+>>  	 * the extra traps reduce performance.  So, eagerly SFENCE.VMA.
+>>  	 */
+>> -	local_flush_tlb_page(address);
+>> +	flush_tlb_local_one_page(vma, address);
+>>  }
+>>  
+>>  static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+>> diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/asm/tlbflush.h
+>> index 801019381dea..120aeb1c6ecf 100644
+>> --- a/arch/riscv/include/asm/tlbflush.h
+>> +++ b/arch/riscv/include/asm/tlbflush.h
+>> @@ -30,6 +30,7 @@ static inline void local_flush_tlb_page(unsigned long addr)
+>>  #if defined(CONFIG_SMP) && defined(CONFIG_MMU)
+>>  void flush_tlb_all(void);
+>>  void flush_tlb_mm(struct mm_struct *mm);
+>> +void flush_tlb_local_one_page(struct vm_area_struct *vma, unsigned long addr);
+>>  void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr);
+>>  void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
+>>  		     unsigned long end);
+>> @@ -42,6 +43,7 @@ void flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long start,
+>>  
+>>  #define flush_tlb_all() local_flush_tlb_all()
+>>  #define flush_tlb_page(vma, addr) local_flush_tlb_page(addr)
+>> +#define flush_tlb_local_one_page(vma, addr) local_flush_tlb_page(addr)
+>>  
+>>  static inline void flush_tlb_range(struct vm_area_struct *vma,
+>>  		unsigned long start, unsigned long end)
+>> diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+>> index 27a7db8eb2c4..0843e1baaf34 100644
+>> --- a/arch/riscv/mm/tlbflush.c
+>> +++ b/arch/riscv/mm/tlbflush.c
+>> @@ -41,6 +41,17 @@ static inline void local_flush_tlb_range_asid(unsigned long start,
+>>  		local_flush_tlb_all_asid(asid);
+>>  }
+>>  
+>> +void flush_tlb_local_one_page(struct vm_area_struct *vma, unsigned long addr)
+>> +{
+>> +	if (static_branch_unlikely(&use_asid_allocator)) {
+>> +		unsigned long asid = atomic_long_read(&vma->vm_mm->context.id);
+>> +
+>> +		local_flush_tlb_page_asid(addr, asid);
+>> +	} else {
+>> +		local_flush_tlb_page(addr);
+>> +	}
+>> +}
+>> +
+>>  static void __ipi_flush_tlb_all(void *info)
+>>  {
+>>  	local_flush_tlb_all();
 

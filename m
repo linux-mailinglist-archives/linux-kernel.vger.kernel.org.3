@@ -2,125 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3645A5AEFB1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9075AEF76
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiIFP6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
+        id S238379AbiIFPyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233964AbiIFPzs (ORCPT
+        with ESMTP id S233915AbiIFPyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:55:48 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8493F1FF;
-        Tue,  6 Sep 2022 08:14:56 -0700 (PDT)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MMTSM5Tptz67y8S;
-        Tue,  6 Sep 2022 23:14:11 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Sep 2022 17:14:54 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Sep 2022 16:14:51 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>, <hare@suse.de>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v3 6/6] scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
-Date:   Tue, 6 Sep 2022 23:08:10 +0800
-Message-ID: <1662476890-15467-7-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1662476890-15467-1-git-send-email-john.garry@huawei.com>
-References: <1662476890-15467-1-git-send-email-john.garry@huawei.com>
+        Tue, 6 Sep 2022 11:54:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7C92DA9A;
+        Tue,  6 Sep 2022 08:11:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79285B8191A;
+        Tue,  6 Sep 2022 15:11:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 443B5C433D7;
+        Tue,  6 Sep 2022 15:11:36 +0000 (UTC)
+Date:   Tue, 6 Sep 2022 11:12:14 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jianlin Lv <iecedge@gmail.com>
+Cc:     corbet@lwn.net, mingo@redhat.com, jianlv@ebay.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH v2] tracing/kprobes: Add method to display private
+ kprobes in tracefs
+Message-ID: <20220906111214.0dd113cd@gandalf.local.home>
+In-Reply-To: <20220725062334.1778-1-iecedge@gmail.com>
+References: <20220725062334.1778-1-iecedge@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have no users outside libsas any longer, so make sas_alloc_task(),
-sas_alloc_slow_task(), and sas_free_task() private.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/libsas/sas_init.c     | 3 ---
- drivers/scsi/libsas/sas_internal.h | 4 ++++
- include/scsi/libsas.h              | 4 ----
- 3 files changed, 4 insertions(+), 7 deletions(-)
+[ Adding Masami and Tom ]
 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index e4f77072a58d..f2c05ebeb72f 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -35,7 +35,6 @@ struct sas_task *sas_alloc_task(gfp_t flags)
- 
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_task);
- 
- struct sas_task *sas_alloc_slow_task(gfp_t flags)
- {
-@@ -56,7 +55,6 @@ struct sas_task *sas_alloc_slow_task(gfp_t flags)
- 
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_slow_task);
- 
- void sas_free_task(struct sas_task *task)
- {
-@@ -65,7 +63,6 @@ void sas_free_task(struct sas_task *task)
- 		kmem_cache_free(sas_task_cache, task);
- 	}
- }
--EXPORT_SYMBOL_GPL(sas_free_task);
- 
- /*------------ SAS addr hash -----------*/
- void sas_hash_addr(u8 *hashed, const u8 *sas_addr)
-diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
-index 8d0ad3abc7b5..b54bcf3c9a9d 100644
---- a/drivers/scsi/libsas/sas_internal.h
-+++ b/drivers/scsi/libsas/sas_internal.h
-@@ -52,6 +52,10 @@ void sas_unregister_phys(struct sas_ha_struct *sas_ha);
- struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy, gfp_t gfp_flags);
- void sas_free_event(struct asd_sas_event *event);
- 
-+struct sas_task *sas_alloc_task(gfp_t flags);
-+struct sas_task *sas_alloc_slow_task(gfp_t flags);
-+void sas_free_task(struct sas_task *task);
-+
- int  sas_register_ports(struct sas_ha_struct *sas_ha);
- void sas_unregister_ports(struct sas_ha_struct *sas_ha);
- 
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 2dbead74a2af..f86b56bf7833 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -639,10 +639,6 @@ struct sas_task_slow {
- #define SAS_TASK_STATE_ABORTED      4
- #define SAS_TASK_NEED_DEV_RESET     8
- 
--extern struct sas_task *sas_alloc_task(gfp_t flags);
--extern struct sas_task *sas_alloc_slow_task(gfp_t flags);
--extern void sas_free_task(struct sas_task *task);
--
- static inline bool sas_is_internal_abort(struct sas_task *task)
- {
- 	return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
--- 
-2.35.3
+On Mon, 25 Jul 2022 06:23:34 +0000
+Jianlin Lv <iecedge@gmail.com> wrote:
+
+> The private kprobes are not added to the global list dyn_event_list,
+> so there is a missing interface to show probe hit and probe miss.
+> This patch adds a profiling interface to check the number of hits or
+> misses for private kprobes.
+
+Masami, what do you think of this patch?
+
+-- Steve
+
+> 
+> Signed-off-by: Jianlin Lv <iecedge@gmail.com>
+> ---
+> v2: update commit message
+> ---
+>  Documentation/trace/kprobetrace.rst |  6 +++-
+>  kernel/trace/trace_dynevent.c       | 20 +++++++++++
+>  kernel/trace/trace_dynevent.h       | 37 ++++++++++++++++++++
+>  kernel/trace/trace_kprobe.c         | 54 +++++++++++++++++++++++++++++
+>  4 files changed, 116 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
+> index b175d88f31eb..8815d64dd8a6 100644
+> --- a/Documentation/trace/kprobetrace.rst
+> +++ b/Documentation/trace/kprobetrace.rst
+> @@ -146,7 +146,11 @@ trigger:
+>  Event Profiling
+>  ---------------
+>  You can check the total number of probe hits and probe miss-hits via
+> -/sys/kernel/debug/tracing/kprobe_profile.
+> +/sys/kernel/debug/tracing/kprobe_profile or
+> +/sys/kernel/debug/tracing/kprobe_local_profile.
+> +All kprobe events created by kprobe_events will be added to the global
+> +list, you can get their profiling via kprobe_profile; kprobe_local_profile
+> +shows profiling for private kprobe events created by perf_kprobe pmu.
+>  The first column is event name, the second is the number of probe hits,
+>  the third is the number of probe miss-hits.
+>  
+> diff --git a/kernel/trace/trace_dynevent.c b/kernel/trace/trace_dynevent.c
+> index 076b447a1b88..70ec99cd9c53 100644
+> --- a/kernel/trace/trace_dynevent.c
+> +++ b/kernel/trace/trace_dynevent.c
+> @@ -181,6 +181,26 @@ static const struct seq_operations dyn_event_seq_op = {
+>  	.show	= dyn_event_seq_show
+>  };
+>  
+> +#ifdef CONFIG_KPROBE_EVENTS
+> +LIST_HEAD(local_event_list);
+> +
+> +void *local_event_seq_start(struct seq_file *m, loff_t *pos)
+> +{
+> +	mutex_lock(&event_mutex);
+> +	return seq_list_start(&local_event_list, *pos);
+> +}
+> +
+> +void *local_event_seq_next(struct seq_file *m, void *v, loff_t *pos)
+> +{
+> +	return seq_list_next(v, &local_event_list, pos);
+> +}
+> +
+> +void local_event_seq_stop(struct seq_file *m, void *v)
+> +{
+> +	mutex_unlock(&event_mutex);
+> +}
+> +#endif /* CONFIG_KPROBE_EVENTS */
+> +
+>  /*
+>   * dyn_events_release_all - Release all specific events
+>   * @type:	the dyn_event_operations * which filters releasing events
+> diff --git a/kernel/trace/trace_dynevent.h b/kernel/trace/trace_dynevent.h
+> index 936477a111d3..e30193470295 100644
+> --- a/kernel/trace/trace_dynevent.h
+> +++ b/kernel/trace/trace_dynevent.h
+> @@ -101,6 +101,43 @@ void dyn_event_seq_stop(struct seq_file *m, void *v);
+>  int dyn_events_release_all(struct dyn_event_operations *type);
+>  int dyn_event_release(const char *raw_command, struct dyn_event_operations *type);
+>  
+> +#ifdef CONFIG_KPROBE_EVENTS
+> +extern struct list_head local_event_list;
+> +
+> +static inline
+> +int local_event_init(struct dyn_event *ev, struct dyn_event_operations *ops)
+> +{
+> +	if (!ev || !ops)
+> +		return -EINVAL;
+> +
+> +	INIT_LIST_HEAD(&ev->list);
+> +	ev->ops = ops;
+> +	return 0;
+> +}
+> +
+> +static inline int local_event_add(struct dyn_event *ev)
+> +{
+> +	lockdep_assert_held(&event_mutex);
+> +
+> +	if (!ev || !ev->ops)
+> +		return -EINVAL;
+> +
+> +	list_add_tail(&ev->list, &local_event_list);
+> +	return 0;
+> +}
+> +
+> +static inline void local_event_remove(struct dyn_event *ev)
+> +{
+> +	lockdep_assert_held(&event_mutex);
+> +	list_del_init(&ev->list);
+> +}
+> +
+> +void *local_event_seq_start(struct seq_file *m, loff_t *pos);
+> +void *local_event_seq_next(struct seq_file *m, void *v, loff_t *pos);
+> +void local_event_seq_stop(struct seq_file *m, void *v);
+> +
+> +#endif /* CONFIG_KPROBE_EVENTS */
+> +
+>  /*
+>   * for_each_dyn_event	-	iterate over the dyn_event list
+>   * @pos:	the struct dyn_event * to use as a loop cursor
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index a245ea673715..76f500b17b46 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -1213,6 +1213,52 @@ static const struct file_operations kprobe_profile_ops = {
+>  	.release        = seq_release,
+>  };
+>  
+> +#ifdef CONFIG_KPROBE_EVENTS
+> +/* kprobe Local profile  */
+> +static int local_probes_profile_seq_show(struct seq_file *m, void *v)
+> +{
+> +	struct dyn_event *ev = v;
+> +	struct trace_kprobe *tk;
+> +
+> +	if (!is_trace_kprobe(ev))
+> +		return 0;
+> +
+> +	tk = to_trace_kprobe(ev);
+> +	seq_printf(m, "  %-44s %15lu %15lu\n",
+> +		trace_probe_name(&tk->tp),
+> +		trace_kprobe_nhit(tk),
+> +		tk->rp.kp.nmissed);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct seq_operations local_profile_seq_op = {
+> +	.start  = local_event_seq_start,
+> +	.next   = local_event_seq_next,
+> +	.stop   = local_event_seq_stop,
+> +	.show   = local_probes_profile_seq_show
+> +};
+> +
+> +static int local_profile_open(struct inode *inode, struct file *file)
+> +{
+> +	int ret;
+> +
+> +	ret = security_locked_down(LOCKDOWN_TRACEFS);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return seq_open(file, &local_profile_seq_op);
+> +}
+> +
+> +static const struct file_operations kprobe_local_profile_ops = {
+> +	.owner          = THIS_MODULE,
+> +	.open           = local_profile_open,
+> +	.read           = seq_read,
+> +	.llseek         = seq_lseek,
+> +	.release        = seq_release,
+> +};
+> +#endif /* CONFIG_KPROBE_EVENTS */
+> +
+>  /* Kprobe specific fetch functions */
+>  
+>  /* Return the length of string -- including null terminal byte */
+> @@ -1830,6 +1876,7 @@ create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
+>  	if (ret < 0)
+>  		goto error;
+>  
+> +	local_event_add(&tk->devent);
+>  	return trace_probe_event_call(&tk->tp);
+>  error:
+>  	free_trace_kprobe(tk);
+> @@ -1849,6 +1896,7 @@ void destroy_local_trace_kprobe(struct trace_event_call *event_call)
+>  		return;
+>  	}
+>  
+> +	local_event_remove(&tk->devent);
+>  	__unregister_trace_kprobe(tk);
+>  
+>  	free_trace_kprobe(tk);
+> @@ -1929,6 +1977,12 @@ static __init int init_kprobe_trace(void)
+>  	trace_create_file("kprobe_profile", TRACE_MODE_READ,
+>  			  NULL, NULL, &kprobe_profile_ops);
+>  
+> +#ifdef CONFIG_KPROBE_EVENTS
+> +	/* kprobe Local profile */
+> +	tracefs_create_file("kprobe_local_profile", TRACE_MODE_READ,
+> +			  NULL, NULL, &kprobe_local_profile_ops);
+> +#endif /* CONFIG_KPROBE_EVENTS */
+> +
+>  	setup_boot_kprobe_events();
+>  
+>  	return 0;
 

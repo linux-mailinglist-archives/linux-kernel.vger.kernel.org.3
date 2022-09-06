@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874665AEC0F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E6B5AEC7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237199AbiIFOSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S241018AbiIFOLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241720AbiIFOPa (ORCPT
+        with ESMTP id S241237AbiIFOJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:15:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B63589CE0;
-        Tue,  6 Sep 2022 06:49:16 -0700 (PDT)
+        Tue, 6 Sep 2022 10:09:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7406D868B0;
+        Tue,  6 Sep 2022 06:46:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C3AF6153F;
-        Tue,  6 Sep 2022 13:47:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB7BC433D6;
-        Tue,  6 Sep 2022 13:47:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 833F1B818C9;
+        Tue,  6 Sep 2022 13:35:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39F1C433C1;
+        Tue,  6 Sep 2022 13:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662472039;
-        bh=KUA5BviElOlwqJdSr6J9VHAUb9IQtTM44MZGAn649LA=;
+        s=korg; t=1662471348;
+        bh=hu6botTHiQm8Tl+D3CgsImgm+NidKmwEjsE9sSec0lo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nz4pTrEYwUqrxg+medrPQHHKCWv8hS42JowJrsLGrXskDjIs0IY/U8m2lm1RqnRnH
-         9Zxh0DzqaRYAwSl5l1lRFr7Z9ltmlOsqRbchQwHzlrxQdQGwG/MZfFnGS+ITFrNmdN
-         RiYhiTB3nf/6ivBcBDb1BNmCKPnVV1uGKEu0epHY=
+        b=Gr26nBEbzUPcUzZaxTMIea6Z7nZ49D2TkLTGil6M4herzdiqlX8ti2xDibRDcq4px
+         iooceIze4ekHHw8lRCRlLg7tLmgC7/M9mRQz2QFn5KX1704H9MaRrXIcRUwwYD/Ikd
+         UYq6ZF8DS9FOkwGP9stfdxgyLL2EUSDw8h6ghfhM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Thierry GUIBERT <thierry.guibert@croix-rouge.fr>,
-        stable <stable@kernel.org>
-Subject: [PATCH 5.19 126/155] USB: cdc-acm: Add Icom PMR F3400 support (0c26:0020)
-Date:   Tue,  6 Sep 2022 15:31:14 +0200
-Message-Id: <20220906132834.778536664@linuxfoundation.org>
+        stable@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        stable <stable@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 5.10 78/80] usb: dwc3: disable USB core PHY management
+Date:   Tue,  6 Sep 2022 15:31:15 +0200
+Message-Id: <20220906132820.377911816@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
-References: <20220906132829.417117002@linuxfoundation.org>
+In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
+References: <20220906132816.936069583@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,113 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-commit a10bc71729b236fe36de0d8e4d35c959fd8dec3a upstream.
+commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
 
-Supports for ICOM F3400 and ICOM F4400 PMR radios in CDC-ACM driver
-enabling the AT serial port.
-The Vendor Id is 0x0C26
-The Product ID is 0x0020
+The dwc3 driver manages its PHYs itself so the USB core PHY management
+needs to be disabled.
 
-Output of lsusb :
-Bus 001 Device 009: ID 0c26:0020 Prolific Technology Inc. ICOM Radio
-Couldn't open device, some information will be missing
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            2 Communications
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x0c26 Prolific Technology Inc.
-  idProduct          0x0020
-  bcdDevice            0.00
-  iManufacturer           1 ICOM Inc.
-  iProduct                2 ICOM Radio
-  iSerial                 3 *obfuscated*
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0030
-    bNumInterfaces          2
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0xc0
-      Self Powered
-    MaxPower                0mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      2 Abstract (modem)
-      bInterfaceProtocol      1 AT-commands (v.25ter)
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval              12
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
+Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
+host: xhci-plat: add platform data support") and f768e718911e ("usb:
+host: xhci-plat: add priv quirk for skip PHY initialization") to
+propagate the setting for now.
 
-Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+Fixes: 4e88d4c08301 ("usb: add a flag to skip PHY initialization to struct usb_hcd")
+Fixes: 178a0bce05cb ("usb: core: hcd: integrate the PHY wrapper into the HCD core")
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
 Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/r/20220819081702.84118-1-thierry.guibert@croix-rouge.fr
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20220825131836.19769-1-johan+linaro@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[ johan: adjust context to 5.15 ]
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/class/cdc-acm.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/dwc3/host.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1810,6 +1810,9 @@ static const struct usb_device_id acm_id
- 	{ USB_DEVICE(0x09d8, 0x0320), /* Elatec GmbH TWN3 */
- 	.driver_info = NO_UNION_NORMAL, /* has misplaced union descriptor */
- 	},
-+	{ USB_DEVICE(0x0c26, 0x0020), /* Icom ICF3400 Serie */
-+	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
-+	},
- 	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles VEGA3000 */
- 	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
- 	},
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -10,8 +10,13 @@
+ #include <linux/acpi.h>
+ #include <linux/platform_device.h>
+ 
++#include "../host/xhci-plat.h"
+ #include "core.h"
+ 
++static const struct xhci_plat_priv dwc3_xhci_plat_priv = {
++	.quirks = XHCI_SKIP_PHY_INIT,
++};
++
+ static int dwc3_host_get_irq(struct dwc3 *dwc)
+ {
+ 	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
+@@ -87,6 +92,11 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 		goto err;
+ 	}
+ 
++	ret = platform_device_add_data(xhci, &dwc3_xhci_plat_priv,
++					sizeof(dwc3_xhci_plat_priv));
++	if (ret)
++		goto err;
++
+ 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
+ 
+ 	if (dwc->usb3_lpm_capable)
 
 

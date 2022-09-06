@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5F55AEFEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03415AEFEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238783AbiIFQHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
+        id S234689AbiIFQHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbiIFQHX (ORCPT
+        with ESMTP id S233384AbiIFQHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:07:23 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBED98D3C;
-        Tue,  6 Sep 2022 08:30:38 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id d12-20020a05600c34cc00b003a83d20812fso7684352wmq.1;
-        Tue, 06 Sep 2022 08:30:38 -0700 (PDT)
+        Tue, 6 Sep 2022 12:07:24 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360A798D13;
+        Tue,  6 Sep 2022 08:30:40 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id az27so16025643wrb.6;
+        Tue, 06 Sep 2022 08:30:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=NW5MbJ9oB/CKkA2uVQGgD3qEK3k/FiXePuny+oDqcy4=;
-        b=od9qULTexRVgJTef8J4V+LaNVdUZgsqXUCA7ADevHkDIFUNi/UoNZnBNjyp6BsZb9R
-         JDNEe2dNcV72YeBEEi3YHSs0ygvkEdhlqHMyiJxfyZbQtRLVBgknwl6VDbyTBJMewa1q
-         YpuCtQpKPI79clSoysJJPrF1aC/rofgxM4AVo/DsHoSGIAAX+zjFGSKam+atpJdSQFOT
-         hSA7vu6IUhhql/4Mdvn6n6r3IPvcVZ9RsLkgnGhPcxj3q4n19uY22IhwesEmqSeTu8wB
-         a0c9VyEDre/6DXydgGrvQ21J9nzcSUAXF1tzkv1pkXEAhM40XPnLRbuhdsUwUzzEqpLc
-         bWMA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=TzfY9hsKE+/NMaAr86KQtgckRDntIH8+oY7tsTfeowI=;
+        b=G1z6RtYS4iEJ22psOaMaQE8+oWOg2j5Y9DvwtqNGc2mxRnXdrnKjzbDDwsi1XOqs3u
+         xCA7f0i1vFUdiwAvNJBs7vOW3OzYBYcLQ3zdvjSq+fCAzXd6xHLCWep5vEPfapdH6yoR
+         dZRiKmgypproeCw3VicU1D9DM3CP7n6xjPU2X05/OM6wgAnkJaiO3wib1Lx5gKI6YJ2P
+         Q/xn34rJW5DgahH0BbGkfPfjGhGhhS4mpDPBnjBRwXq0RIckXs9eiHxxbusCVKMteVlv
+         OO2qhBR1hXqVWzp9LYAtzMJrco4RupWBfPsHprVLdUpq6zB5idOiwd6QsB3i4OliAcJZ
+         Nd7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=NW5MbJ9oB/CKkA2uVQGgD3qEK3k/FiXePuny+oDqcy4=;
-        b=eJeJq4YoQFMssa6vD4BWXt2L9qSXWsP8qWRQAeKlE2+55qbUOvQWt0GRYWqSTQpsTz
-         oCrTrkoM8CVhudDsYQw4H7oqz+Z8XpfaAAa4R27X7i0mmLhWdnhooli/o6STBFS3qOlG
-         vm/fbonbLs3NGrocBYvy6/1Bqw2mkQVkao0CCbrAqbspWWwEDL4vi7Zvwn55nfD5O3eS
-         grJr1ISwViBQVStWaULOImBOzrDFL3eoBjDul3O5lu56+ZrEYPPODCO4wFZiXfRE4R4+
-         vdyTjck/vaqbaaVZWrmITkWQDYxze6+dZ/rHCpPN38YunQ97pEd6YiKm/nhL0yQ0inNb
-         oUew==
-X-Gm-Message-State: ACgBeo0K904iyj9uEtuhcbLmW2Wv/Nt2xiEgfm9CJ/JSsCM4FO48tdwP
-        RULvdVQD6o8JU+ZsB/R0ilU=
-X-Google-Smtp-Source: AA6agR7Xp8vqGGwqNGcb09DGgwhi3xKkb+Aoi7Ihjymn/0Fa1D/5dd1OIycy1XIwV/wusOVvCHIBtw==
-X-Received: by 2002:a05:600c:4a09:b0:3a6:9a22:3979 with SMTP id c9-20020a05600c4a0900b003a69a223979mr14303510wmp.57.1662478236817;
-        Tue, 06 Sep 2022 08:30:36 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=TzfY9hsKE+/NMaAr86KQtgckRDntIH8+oY7tsTfeowI=;
+        b=udf4Xd4Z5cLLt/0BkdqTk3XpkpBXCdugKMaJiem4ccaXk8SBl7U8lhaGnlUgk8oeOF
+         /6KrAPvKyO1c+bUVaEcEKk+N45Q06ASfhelGp7gZlCGWogKVrVXvdg2LR5mIz99BfR9J
+         85IiQl8dbqtUTsaa5Yr4zi6UQzaJKw7J7PF2s4GsqlZnpi8RfehVjcod38toSrY1wJ5K
+         m+5yBcM4Q3jMAH/YS4GIUeUJfe19B0RvqLpzJSVNyAPgu9LTl9nG2UkyM0FiW3RdSyAJ
+         RgK6QOObejUz+ILWPcSrMNvRevTebAacqRRe3fDTeWOxnGvzurdK1InB4dPMXP+ozjAq
+         yQKA==
+X-Gm-Message-State: ACgBeo0FmEz+ZQ769//nQ6722xKoOa0uxEhVz1we6La5xWHt57a3MAUz
+        Aowsn5sISfhsmirb+Vhs09E=
+X-Google-Smtp-Source: AA6agR4fDTUAPj150MWqbk6q/AO0tVAXOO+fiKS6HJfjSQzIqcMzESayHrNPSB2h99kexJGm0WHKrA==
+X-Received: by 2002:adf:e706:0:b0:228:61dc:3dfa with SMTP id c6-20020adfe706000000b0022861dc3dfamr8410720wrm.265.1662478238552;
+        Tue, 06 Sep 2022 08:30:38 -0700 (PDT)
 Received: from Clement-Blade14.outsight.local (lputeaux-656-1-11-33.w82-127.abo.wanadoo.fr. [82.127.142.33])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003a6125562e1sm14922731wmg.46.2022.09.06.08.30.35
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003a6125562e1sm14922731wmg.46.2022.09.06.08.30.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 08:30:35 -0700 (PDT)
+        Tue, 06 Sep 2022 08:30:37 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
+        Samuel Holland <samuel@sholland.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org,
         =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Subject: [PATCH v4 0/5] Allwinner H6 GPU devfreq
-Date:   Tue,  6 Sep 2022 17:30:29 +0200
-Message-Id: <20220906153034.153321-1-peron.clem@gmail.com>
+Subject: [PATCH v4 1/5] arm64: defconfig: Enable devfreq cooling device
+Date:   Tue,  6 Sep 2022 17:30:30 +0200
+Message-Id: <20220906153034.153321-2-peron.clem@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220906153034.153321-1-peron.clem@gmail.com>
+References: <20220906153034.153321-1-peron.clem@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -73,47 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Devfreq cooling device framework is used in Panfrost
+to throttle GPU in order to regulate its temperature.
 
-This is a refresh of previous patches sent to enable GPU Devfreq on H6
-Beelink GS1 but that wasn't stable at that time[0].
+Enable this driver for ARM64 SoC.
 
-With the recent fix on GPU PLL from Roman Stratiienko I have retested
-and everything seems stable and works as expected[1].
+Signed-off-by: Clément Péron <peron.clem@gmail.com>
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Clement
-
-0: https://lore.kernel.org/lkml/CAJiuCce58Gaxf_Qg2cnMwvOgUqYU__eKb3MDX1Fe_+47htg2bA@mail.gmail.com/
-1: https://lore.kernel.org/linux-arm-kernel/2562485.k3LOHGUjKi@kista/T/
-
-Changes since v3:
- - Try to be more explicit for panfrost OPP patch
- - Fix typo
-
-Changes since v2:
- - Fixes device-tree warnings
- - Add panfrost fix to enable regulator
- - Remove always-on regulator from device-tree
- - Update cooling map from vendor kernel
-
-
-Clément Péron (5):
-  arm64: defconfig: Enable devfreq cooling device
-  arm64: dts: allwinner: h6: Add cooling map for GPU
-  arm64: dts: allwinner: h6: Add GPU OPP table
-  drm/panfrost: devfreq: set opp to the recommended one to configure
-    regulator
-  arm64: dts: allwinner: beelink-gs1: Enable GPU OPP
-
- .../dts/allwinner/sun50i-h6-beelink-gs1.dts   |  1 +
- .../boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi | 87 +++++++++++++++++++
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 51 ++++++++++-
- arch/arm64/configs/defconfig                  |  1 +
- drivers/gpu/drm/panfrost/panfrost_devfreq.c   | 11 +++
- 5 files changed, 149 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
-
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 91e58cf59c99..e557ccac8d9c 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -582,6 +582,7 @@ CONFIG_SENSORS_INA2XX=m
+ CONFIG_SENSORS_INA3221=m
+ CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
+ CONFIG_CPU_THERMAL=y
++CONFIG_DEVFREQ_THERMAL=y
+ CONFIG_THERMAL_EMULATION=y
+ CONFIG_IMX_SC_THERMAL=m
+ CONFIG_IMX8MM_THERMAL=m
 -- 
 2.34.1
 

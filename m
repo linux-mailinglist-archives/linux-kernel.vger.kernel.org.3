@@ -2,259 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342915AF766
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6885F5AF767
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiIFVxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S229811AbiIFVxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiIFVxF (ORCPT
+        with ESMTP id S229627AbiIFVxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:53:05 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38079F1AB;
-        Tue,  6 Sep 2022 14:52:46 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id b144so7931961pfb.7;
-        Tue, 06 Sep 2022 14:52:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=+Et9MmweN+DC1/7aGd3iRv+9KNgQJ+BWA4HEwqHAlqs=;
-        b=QiBHtOUjW2RTg2Za00jxPBq984muY/XaqcNLY79InU3y4wb6ro84s4QynOClg0f0QP
-         qiucL1QFYCItSpaBPTmQFZSU4nd6YA1EvBQB532srC72tLuKzNRRL4jXInPsXWDHcscl
-         hljEDaUEKRTeug/zZ6OkPE9VCElJQ9x8e++sKK/KGFF1NNH5UyoXNDnD1n+paICY12c4
-         d05ujw2OGU7E5SI1/PSvvkaZpw2HSPbA23BtSwWa4YPa3Z9ZfP1mMvd4O9iVoT3f9FbC
-         9vbt8+IziM/gU9oYG6996eyvmzvTlgOqjjo6XlM26gQfPi7HcQ+Wo0TlEGWczRHlLmVJ
-         j3Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=+Et9MmweN+DC1/7aGd3iRv+9KNgQJ+BWA4HEwqHAlqs=;
-        b=M+8N/Ds8Vi5ZIe/3n62aJh51txxl+bLlVVQgL+YoqIVvxiBRrRTvEb6RBg83Z0h4en
-         pIORKKM5i1Jl2F8gDf2r7lxVM3mgr+fLWBvVh28WCUht9g3go9InQ22GF8UasQVD6oDS
-         Di52mtt/TbP7SYe+qcFoeRbrQFWhddMHj4KI35nihkFVLH9Wek5NsI4QpzT2GOCtLyuS
-         woSf0FF9bTo74TILJ+FXjZGzBwPb6DeBCe57QJY70am+nn2QK1VUwYwTyRVHk5EuIFbS
-         CXZBar8QcwBzklgSs2qevKnz4dWdJ83clKkco6mrwCM2/3f8xLYPdCV43VEWCiB3lvtE
-         LTjA==
-X-Gm-Message-State: ACgBeo3+sSksqdoBQiKnTkAZtlOCViEoxYvDG6QIL2X6eNoHx7kpaRio
-        nO6EStQ8bIeNCZVNP4/XJpc=
-X-Google-Smtp-Source: AA6agR7wW3UJiwvQm/A/eztJY3H9HhhJrV2IFYlG1jU5x1vWymhq6I9q/rFbRPfR+VKTMIhsp5yuIA==
-X-Received: by 2002:a63:d607:0:b0:427:bc0c:55c8 with SMTP id q7-20020a63d607000000b00427bc0c55c8mr615802pgg.402.1662501165814;
-        Tue, 06 Sep 2022 14:52:45 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:abc4:5d24:5a73:a96b])
-        by smtp.gmail.com with ESMTPSA id 205-20020a6217d6000000b00537b8deef41sm10734197pfx.136.2022.09.06.14.52.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 14:52:45 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 14:52:42 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Shawn Guo <shawn.guo@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
-Message-ID: <YxfBKkqce/IQQLk9@google.com>
-References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
- <20220906204301.3736813-2-dmitry.torokhov@gmail.com>
- <20220906211628.6u4hbpn4shjcvqel@pali>
- <Yxe7CJnIT5AiUilL@google.com>
- <20220906214114.vj3v32dzwxz6uqik@pali>
+        Tue, 6 Sep 2022 17:53:32 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2060.outbound.protection.outlook.com [40.107.95.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C03BADAD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:53:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bjE1Lpy7qsKRwj/rPHQvDZ4wRmQBDiRyEOuxniKnDM4nf5VGDxUkhYYRPhGfKf2ZAZX/DLVP9G6gLOC2FuIdHuMPdvXEk4Egf6deFqyLzVd2SQPUNRmCCEAgBiZRhTlCc8uuGxxkXsS4vdWWlbauzTwjhA4CpSSHjxfinJO7GJqs6bYLetW2Tt/ckB6jiy81lfM7LectvqRK5S6ZKqFDVaHDJC7RnDyMludEGnTpVKlvZqLxJvK13yJUabZ6fUi9fL+vsrlIlIkgxn9xNK6C7VfEo7Bovq9+XsNTuUPfGpGaF0K/SC3BWH24Dwd613C7tmRcvw0fGKMYaTX2nrB9tA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4emhNmPXgRWdNXq9SFjC54dKE3W+gKD8Hk4s/jsmXLs=;
+ b=kyqM1hLXDeX49wWrhSlN78TuFGQBXOh5dnnj+hpNKby4gQE15V9CeqfJxYbWNR+w21JFebuZv2qpZTzV+OaZK7QIdQ+JTfhJ43bo46UI4By1HspZjAI+xByKiqP5LvdAZ+7zTu0rplbSJXc0fooY99OCGlQrdR/nvCRwSHnUcyNTSyIYMAZx3LbTGFOnnYmxNVaA19vLgxZlXL4k8//Zk3TOVNK41gvZoODQ85sndczBS6JClJi1nzT/klR/g8wRCRFFWAuCj3/WiI/4Sgw5q9u2250OHPPa/AeBXIv7PejPZGmRBSzEvEZOZqQyvywPu9RQ7lsLAkPHoXvVgC8WIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4emhNmPXgRWdNXq9SFjC54dKE3W+gKD8Hk4s/jsmXLs=;
+ b=Lw7WCnBwKxg61QfGQwUOZRV6513Zp2oJyek1a84t+eUmgp5jZCRfBnleDuBrZ6TcV579iDGF+jO76crwn+JffoVBv/qzrY8Jmj0sqDSgHVZsSv/HPIJHlTKo6BEq1/mGB49u97YH+Aba8g/b1TR43Y0x9NT5mp0H1sfGElp8nXHlgbv4Brb19N39nTeF4Y5Yp8tayrUHy+IVlxb7VccTmv0xUoey1KA6stjQPi1MHoxZINqAExr3zUM5AvRqm9JhLsxq9wJx8NBI6dwUGmPvEUZAU7ENyM5BbhoOinwv+OkH3KmfiS5fm9KYNUyVPXFeTMzNTFxCNV8zEb5+FH3jLg==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by DS7PR12MB6215.namprd12.prod.outlook.com (2603:10b6:8:95::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.10; Tue, 6 Sep 2022 21:53:18 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::c04:1bde:6484:efd2]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::c04:1bde:6484:efd2%4]) with mapi id 15.20.5588.017; Tue, 6 Sep 2022
+ 21:53:18 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Dennis Maisenbacher <Dennis.Maisenbacher@wdc.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
+CC:     Niklas Cassel <niklas.cassel@wdc.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] nvmet: fix mar and mor off-by-one errors
+Thread-Topic: [PATCH v2] nvmet: fix mar and mor off-by-one errors
+Thread-Index: AQHYwcPRcm6CrzlLu0+cYsV2b6mBrq3S8p0A
+Date:   Tue, 6 Sep 2022 21:53:18 +0000
+Message-ID: <d3b4ef13-62fc-1bf4-3a5d-3cc740df82b8@nvidia.com>
+References: <20220906073929.3292899-1-Dennis.Maisenbacher@wdc.com>
+In-Reply-To: <20220906073929.3292899-1-Dennis.Maisenbacher@wdc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 764ba18b-4ff0-40d7-c4d0-08da905235ab
+x-ms-traffictypediagnostic: DS7PR12MB6215:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0kbLljYZu7aRQzCHS/h0IAnH6+/zXfieF+AdFKt5tYpoxShzwE/8PrcBdqIv+4XSUE/MIk1HABogLZh4ATo9z/vIYw51xHUpVRTH6EDotq16HAvxTwB1VkitLUZbp/hFj1hUXcEYEO86dDTsTurnkbqPsHqkFFkXzx3ticYfdenAJ5G9cc+Vb+n4AQg20QY7su9pm2eolakkoN8TH++jaMKdoEsb/gvo8aSVRndqVt1XpuXfegwbuMB4iepL3DF3I6K/puQf2FErkbHG7PN3QLvns/R9WoGaOl5kMUbL/tjnSDZse7cLV3QnARYqhLI6EQLCFda/Y2AwiDpGzi7Ai3SjBQIPV68vlBZ6nBG+P5HOFDYk7ljCpPJepRODqh6sk0sY3sSIiEbhBXKdb+5+nfQLeQXjwdhTVWtwFTFsDfx6Fc2lJmotiXvlY6g2EivggoU9S5KSRs56uovELed1pk0MumA90hwHaTYnHioKxLvneiH9mCQY20xkgVEYBt8TDhIAVChQPtvIwDIj+w1wvoRfpNzyT1UjBAN6KYDDZAoIQ4XFmDM9UXn2XlchiKIn3bba6O4WSKjWx156Sl/GNkq5h9ZsRGDAS5lhMukfebGfEAikqh6JsBOysDaKQ0dHClw88vd5hwp4VsKCMQn+bbaC931u+e+0FW9bWBCW8CLiVMyXhElR/UQ9fbkMUHkwjZQk6cyG9OyNL/YuB8frx+N5rhFIk/9eWHI1NBU4kc73WFeFO/iC4PMxdW9mhzsK02RjgjjDKvPspwOU7qwHI+Ie20l6F94/hV7kpr35tg9eUFMC3upGRvm6T3SfBL/YRPQn/kGQv44ruvRk1Ie55g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(366004)(376002)(136003)(83380400001)(36756003)(66946007)(2906002)(186003)(2616005)(31686004)(5660300002)(53546011)(64756008)(316002)(76116006)(4326008)(6512007)(71200400001)(6506007)(8936002)(66476007)(86362001)(66556008)(66446008)(38070700005)(8676002)(122000001)(91956017)(38100700002)(31696002)(41300700001)(54906003)(110136005)(478600001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dW84K0JTQzZCTzFNaHQ1TW8vMDdrSEdnMS9ObmJUam5nVkJoeXloczhGaHpS?=
+ =?utf-8?B?NnlhRFNkL1UxZDRKSTlrYUd3RENIMjRMSHgxT1BZRVFZTm5MbnFqNmM2dHN3?=
+ =?utf-8?B?ajJuMWo3YVEzMmFmYmVURUNBNkhHT3Azald1aDVrSlZ4ZmthUU5IcFhsVXhT?=
+ =?utf-8?B?Zis1R1AwQlpyeXlvUHpLaWhmNW9MbmdFTlRPR2FhZmt4ODJoYzNPKzNOZmdi?=
+ =?utf-8?B?KzJHS0VrWUc5VlBhcjFUR1FkUkliVTdyMzV6ckgzQkJLckx4c0ZsSXhGRVN3?=
+ =?utf-8?B?ZmVBZWZlY0ZnekF4anNVWDlwYkxVdFlnL0txODdxYy9VajV1RFQ4N3NvL3gx?=
+ =?utf-8?B?amswd1RoVzZKM0J6RTZiTnRTZDRDK1FzcFRNSXFyeEJTMk9haHdON21SMG0r?=
+ =?utf-8?B?WlEzTUhUdFI2T0c3U1RHVzJqYjRuRW1aOUo1cndVRk1MT1VuUWtFNHpoSmVW?=
+ =?utf-8?B?TmxsUVc0TlNVOEJDU1VQSmRWUkNGaWhNYWxNdDgyRjRGdzNHUHY0S21SaHVp?=
+ =?utf-8?B?VW5mT2J5cm1kV24yZGZUWmdrMm4yMExuY1RsL2RPZXk0RE81aTMxaUNWQWUy?=
+ =?utf-8?B?b2UxWFJPa09oSzcxM1BUYnlpUkl2NEJwR2htekdxMWNya054T0pYYUZnUFkv?=
+ =?utf-8?B?OFZRamJyd0tzQ2wxTFJoWWFVTDVGNkV1QmgvdXlSRHZjbW9GSVpRYzRWdWc5?=
+ =?utf-8?B?NEUvWkdCdU9sZHRzVE51UE5EbnhLbWFjcG50SkNidHlvaTdNN2VuZXA5eU1Z?=
+ =?utf-8?B?QWJzN2dXSEs3d00yOUxzUXJ6V0tzeDhMMFlkOXpHbWdvTHF4MmJveXlCK3Fp?=
+ =?utf-8?B?WnpHRm1McWlteEZuUXFvVnk0TWdHSkpPeWRaRmdQanpSd1dCR29wQmZNWWFl?=
+ =?utf-8?B?Y2lRdFVtcTVtWTZPSktWdStoRXBmT01rK3B4ZkErTHhZVFZScllpM0drSjVK?=
+ =?utf-8?B?UGhaS09telNjbUwxbVUwbTNRdVc5d0dBbVNVUXlnWmlTMS9sQW5iTW9Pd3Zr?=
+ =?utf-8?B?Q0JQVk5MMi9KRTN0RzRoVVpMTzVmanJsSkxld0ZnNkZqZ1U3dS96cGM2NXYr?=
+ =?utf-8?B?cHN2dnZBYnRIMUlxNWp5ZkxtSk9Fb2h1STd1cGFXV0RQLzUyRUFKWDd5NEEz?=
+ =?utf-8?B?dE1ULy9udCtOaEozcklwc0xieDlrYzA1a2cwTjR4RnRrQmJXWGV2QVlZU3dl?=
+ =?utf-8?B?NEg3MWVrdGltNG5sUlJwTVVPd0tDQjJQQng3RkpncGxIRGFJWGtBMVFBK1Bl?=
+ =?utf-8?B?Y0o0S1ZuTWxtYnB4T2ZEb3RXa0xGbHNnQk13bDJKaktPZGt3cHVheXZFVysr?=
+ =?utf-8?B?RmdZeDBBQkxZNHBrbTFlNGtSUVNHc09iWlZVUmhOaTQ2VU95TUtHbWREMlFH?=
+ =?utf-8?B?eXhCaHBQYVlzbGk4OTBzbXFaekFnbDJEWEJqN2lFTXA0OEJvTEJ2SlI2YWRH?=
+ =?utf-8?B?RXlvVEN2S2EzTVpidGh5UnNWZkVTYU5RYk9NYjd6MkdWaUhVTFM3d2I3bnBn?=
+ =?utf-8?B?SzBCUU5IaitvRlBPa3VadHB0Nml1U1p1WXpxYlpoSTNZMmZwekErbHBDTmtm?=
+ =?utf-8?B?QXpLSmlpQjcwOGpEQnVrSnFjajNTVzR5ZTBabnRQOGpibWpSYkNGRzVTa3Mz?=
+ =?utf-8?B?dlc2TzArT2VGQU1NOUU0MEdFN3crL3lHZFcyaHpKSVk2a0JkU3hnb0dHVDk0?=
+ =?utf-8?B?anpsQTA2NFRMTjUwcS91N3ljbnpKcFhBTGV1RnF4bDJmVjB6MlZpeXJNWW5v?=
+ =?utf-8?B?cVU4Q1Uxd1FVNnZteXBCaDI4NWdMVWZaN3VENmdpaUd0YngxUHc1NGthWW9V?=
+ =?utf-8?B?UDg4eGRuc1dQSUJyMlEvWTd2TFJZenVBT28xcmo0V2tWNE1vZGtRcFZ5ZDVR?=
+ =?utf-8?B?WG1idGlrNkJCQkFnMHJJR0pnRXk5QW55TFVPT3ZMa1JRbDc5cmZ2RnNBUnFZ?=
+ =?utf-8?B?d3d6cGREMGo3Rno0VWZwS0QrdTJGMnAxSmRXVW9vNTFxSXhLSU9XMFRlQ2lU?=
+ =?utf-8?B?RFZCZk5DbmZCVWFoOGdjdFBRUHM1QzdTcjdoS1FhaThpSWxCTkk2Nk5QTHJ0?=
+ =?utf-8?B?Nmt0dm1KWXZpSm5PVFZpYklPUG1QSnFVVDdHd1paZTNSY2RYZy83TExXc0ky?=
+ =?utf-8?B?b3J1cjVHY0F5aWU5VTRWQ0ZTSWpjYWttazNhZGg0R09QamF1bjJER0E5RlBF?=
+ =?utf-8?B?eWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1D8E037758596743A02F37530E51D3FC@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220906214114.vj3v32dzwxz6uqik@pali>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 764ba18b-4ff0-40d7-c4d0-08da905235ab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2022 21:53:18.8357
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2NL19gc4jch9BtF5A3ZXNT7zbqaScA1geAafrK+Xuzc2CysUhk4sBvEDsJ9Yrx/nKZt8BKjjlkg9LqPIZr6vwA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6215
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 11:41:14PM +0200, Pali Rohár wrote:
-> On Tuesday 06 September 2022 14:26:32 Dmitry Torokhov wrote:
-> > Hi Pali,
-> > 
-> > On Tue, Sep 06, 2022 at 11:16:28PM +0200, Pali Rohár wrote:
-> > > Hello!
-> > > 
-> > > On Tuesday 06 September 2022 13:43:01 Dmitry Torokhov wrote:
-> > > > This patch switches the driver away from legacy gpio/of_gpio API to
-> > > > gpiod API, and removes use of of_get_named_gpio_flags() which I want to
-> > > > make private to gpiolib.
-> > > 
-> > > There are many pending pci-mvebu.c patches waiting for review and merge,
-> > > so I would suggest to wait until all other mvebu patches are processed
-> > > and then process this one... longer waiting period :-(
-> > 
-> > OK, it is not super urgent. OTOH it is a very simple patch :)
-> 
-> In the worst case, I will take it into my pending list of pci-mvebu.c
-> patches, so it would not be lost. Just yesterday I collected patches and
-> created pending list:
-> https://git.kernel.org/pub/scm/linux/kernel/git/pali/linux.git/log/?h=pci-mvebu-pending
-> 
-> > > 
-> > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > > ---
-> > > >  drivers/pci/controller/pci-mvebu.c | 48 +++++++++---------------------
-> > > >  1 file changed, 14 insertions(+), 34 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> > > > index 1ced73726a26..a54beb8f611c 100644
-> > > > --- a/drivers/pci/controller/pci-mvebu.c
-> > > > +++ b/drivers/pci/controller/pci-mvebu.c
-> > > > @@ -11,14 +11,13 @@
-> > > >  #include <linux/bitfield.h>
-> > > >  #include <linux/clk.h>
-> > > >  #include <linux/delay.h>
-> > > > -#include <linux/gpio.h>
-> > > > +#include <linux/gpio/consumer.h>
-> > > >  #include <linux/init.h>
-> > > >  #include <linux/mbus.h>
-> > > >  #include <linux/slab.h>
-> > > >  #include <linux/platform_device.h>
-> > > >  #include <linux/of_address.h>
-> > > >  #include <linux/of_irq.h>
-> > > > -#include <linux/of_gpio.h>
-> > > >  #include <linux/of_pci.h>
-> > > >  #include <linux/of_platform.h>
-> > > >  
-> > > > @@ -1261,9 +1260,8 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
-> > > >  	struct mvebu_pcie_port *port, struct device_node *child)
-> > > >  {
-> > > >  	struct device *dev = &pcie->pdev->dev;
-> > > > -	enum of_gpio_flags flags;
-> > > >  	u32 slot_power_limit;
-> > > > -	int reset_gpio, ret;
-> > > > +	int ret;
-> > > >  	u32 num_lanes;
-> > > >  
-> > > >  	port->pcie = pcie;
-> > > > @@ -1327,40 +1325,22 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
-> > > >  			 port->name, child);
-> > > >  	}
-> > > >  
-> > > > -	reset_gpio = of_get_named_gpio_flags(child, "reset-gpios", 0, &flags);
-> > > > -	if (reset_gpio == -EPROBE_DEFER) {
-> > > > -		ret = reset_gpio;
-> > > > +	port->reset_name = devm_kasprintf(dev, GFP_KERNEL, "%s-reset",
-> > > > +					  port->name);
-> > > > +	if (!port->reset_name) {
-> > > > +		ret = -ENOMEM;
-> > > >  		goto err;
-> > > >  	}
-> > > >  
-> > > > -	if (gpio_is_valid(reset_gpio)) {
-> > > > -		unsigned long gpio_flags;
-> > > > -
-> > > > -		port->reset_name = devm_kasprintf(dev, GFP_KERNEL, "%s-reset",
-> > > > -						  port->name);
-> > > > -		if (!port->reset_name) {
-> > > > -			ret = -ENOMEM;
-> > > > +	port->reset_gpio = devm_fwnode_gpiod_get(dev, of_fwnode_handle(child),
-> > > > +						 "reset", GPIOD_OUT_HIGH,
-> > > 
-> > > What does it mean that there is a new GPIOD_OUT_HIGH flag passed to the
-> > > devm_fwnode_gpiod_get() function?
-> > 
-> > This means that we drive the line as "active" as soon as we successfully
-> > grab GPIO. This is the same as we had with devm_gpio_request_one(), but
-> 
-> Ah :-( Another thing to fix. Driver should not change the signal line at
-> this stage, but only when it is explicitly asked - at later stage. Some
-> PCIe card do not like flipping reset line too quick. I see this fix
-
-As far as I can see the driver has a delay of 100 usec before releasing
-reset line, plus additional delay for post-reset. Is this really not
-sufficient?
-
-> would not be such easy as during startup we need to reset endpoint card.
-> Normally just putting it from reset, but if card was not reset state
-> prior probing driver then it is needed to first put it into reset...
-> 
-> I would fix it this issue after your patch is merged to prevent any
-> other merge conflicts.
-> 
-> How to tell devm_fwnode_gpiod_get() function that caller is not
-> interested in changing signal line? Just by changing GPIOD_OUT_HIGH to 0?
-
-I think there are 2 options:
-
-1. Start with GPIOD_OUT_LOW (i.e. reset is explicitly deasserted), and
-then in powerup/powerdown you do explicit on/off transitions with proper
-timings.
-
-2. Start with GPIOD_ASIS (i.e. do not configure line at all), and then
-when powering up you need
-
-	gpiod_direction_output(port->reset_gpio, GPIOD_OUT_HIGH);
-
-on the first invocation (and you can skip call to
-gpiod_set_value_cansleep(port->reset_gpio, 1) in that case).
-
-> 
-> > we do not need to figure out actual polarity.
-> > 
-> > > 
-> > > > +						 port->name);
-> > > > +	ret = PTR_ERR_OR_ZERO(port->reset_gpio);
-> > > > +	if (ret) {
-> > > > +		if (ret	!= -ENOENT)
-> 
-> Just one check, I think that between "ret" and "!=" is TAB instead of
-> space. But I'm not sure if it was mangled by email client or of there is
-> really TAB.
-
-Ah, indeed, sorry about that.
-
-> 
-> > > >  			goto err;
-> > > > -		}
-> > > > -
-> > > > -		if (flags & OF_GPIO_ACTIVE_LOW) {
-> > > > -			dev_info(dev, "%pOF: reset gpio is active low\n",
-> > > > -				 child);
-> > > > -			gpio_flags = GPIOF_ACTIVE_LOW |
-> > > > -				     GPIOF_OUT_INIT_LOW;
-> > > > -		} else {
-> > > > -			gpio_flags = GPIOF_OUT_INIT_HIGH;
-> > > > -		}
-> > > > -
-> > > > -		ret = devm_gpio_request_one(dev, reset_gpio, gpio_flags,
-> > > > -					    port->reset_name);
-> > > > -		if (ret) {
-> > > > -			if (ret == -EPROBE_DEFER)
-> > > > -				goto err;
-> > > > -			goto skip;
-> > > > -		}
-> > > > -
-> > > > -		port->reset_gpio = gpio_to_desc(reset_gpio);
-> > > > +		/* reset gpio is optional */
-> > > > +		port->reset_gpio = NULL;
-> > > 
-> > > Maybe you can also release port->reset_name as it is not used at this
-> > > stage?
-> > 
-> > OK, I figured it was just a few bytes, but sure, I'll add devm_kfree().
-> > 
-> > Thanks for the review.
-> > 
-> > -- 
-> > Dmitry
-
--- 
-Dmitry
+T24gOS82LzIyIDAwOjM5LCBEZW5uaXMgTWFpc2VuYmFjaGVyIHdyb3RlOg0KPiBGcm9tOiBEZW5u
+aXMgTWFpc2VuYmFjaGVyIDxkZW5uaXMubWFpc2VuYmFjaGVyQHdkYy5jb20+DQo+IA0KPiBNYXhp
+bXVtIEFjdGl2ZSBSZXNvdXJjZXMgKE1BUikgYW5kIE1heGltdW0gT3BlbiBSZXNvdXJjZXMgKE1P
+UikgYXJlIDAncw0KPiBiYXNlZCB2YWxlcyB3aGVyZSBhIHZhbHVlIG9mIDB4ZmZmZmZmZmYgaW5k
+aWNhdGVzIHRoYXQgdGhlcmUgaXMgbm8gbGltaXQuDQo+IA0KPiBEZWNyZW1lbnQgdGhlIHZhbHVl
+cyB0aGF0IGFyZSByZXR1cm5lZCBieSBiZGV2X21heF9vcGVuX3pvbmVzIGFuZA0KPiBiZGV2X21h
+eF9hY3RpdmVfem9uZXMgYXMgdGhlIGJsb2NrIGxheWVyIGhlbHBlcnMgYXJlIG5vdCAwJ3MgYmFz
+ZWQuDQo+IEEgMCByZXR1cm5lZCBieSB0aGUgYmxvY2sgbGF5ZXIgaGVscGVycyBpbmRpY2F0ZXMg
+bm8gbGltaXQsIHRodXMgY29udmVydA0KPiBpdCB0byAweGZmZmZmZmZmIChVMzJfTUFYKS4NCj4g
+DQo+IEZpeGVzOiBhYWYyZTA0OGFmMjcgKCJudm1ldDogYWRkIFpCRCBvdmVyIFpOUyBiYWNrZW5k
+IHN1cHBvcnQiKQ0KPiBTdWdnZXN0ZWQtYnk6IE5pa2xhcyBDYXNzZWwgPG5pa2xhcy5jYXNzZWxA
+d2RjLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogRGVubmlzIE1haXNlbmJhY2hlciA8ZGVubmlzLm1h
+aXNlbmJhY2hlckB3ZGMuY29tPg0KPiAtLS0NCj4gQ2hhbmdlcyBpbiB2MjoNCj4gICAgICAtIEFk
+ZCBleHBsaWNpdCBjaGVjayBpZiBibG9jayBsYXllciBoZWxwZXJzIHJldHVybiBhIDAgYW5kIGlm
+IHNvDQo+ICAgICAgY29udmVydCBpdCB0byBVMzJfTUFYLg0KPiAgICAgIC0gQWRkIEZpeGVzIHRh
+Zy4NCj4gDQo+ICAgZHJpdmVycy9udm1lL3RhcmdldC96bnMuYyB8IDE3ICsrKysrKysrKysrKysr
+Ky0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDE1IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0p
+DQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9udm1lL3RhcmdldC96bnMuYyBiL2RyaXZlcnMv
+bnZtZS90YXJnZXQvem5zLmMNCj4gaW5kZXggYzdlZjY5ZjI5ZmU0Li5lYWU4MWY5MzkwNjcgMTAw
+NjQ0DQo+IC0tLSBhL2RyaXZlcnMvbnZtZS90YXJnZXQvem5zLmMNCj4gKysrIGIvZHJpdmVycy9u
+dm1lL3RhcmdldC96bnMuYw0KPiBAQCAtMTAwLDYgKzEwMCw3IEBAIHZvaWQgbnZtZXRfZXhlY3V0
+ZV9pZGVudGlmeV9jbnNfY3NfbnMoc3RydWN0IG52bWV0X3JlcSAqcmVxKQ0KPiAgIAlzdHJ1Y3Qg
+bnZtZV9pZF9uc196bnMgKmlkX3puczsNCj4gICAJdTY0IHpzemU7DQo+ICAgCXUxNiBzdGF0dXM7
+DQo+ICsJdTMyIG1hciwgbW9yOw0KDQpjb25zaWRlciA6LQ0KICArCXUzMiBtYXIsIG1vcjsNCiAg
+ICAJdTY0IHpzemU7DQogICAgCXUxNiBzdGF0dXM7DQoNCj4gICANCj4gICAJaWYgKGxlMzJfdG9f
+Y3B1KHJlcS0+Y21kLT5pZGVudGlmeS5uc2lkKSA9PSBOVk1FX05TSURfQUxMKSB7DQo+ICAgCQly
+ZXEtPmVycm9yX2xvYyA9IG9mZnNldG9mKHN0cnVjdCBudm1lX2lkZW50aWZ5LCBuc2lkKTsNCj4g
+QEAgLTEzMCw4ICsxMzEsMjAgQEAgdm9pZCBudm1ldF9leGVjdXRlX2lkZW50aWZ5X2Nuc19jc19u
+cyhzdHJ1Y3QgbnZtZXRfcmVxICpyZXEpDQo+ICAgCXpzemUgPSAoYmRldl96b25lX3NlY3RvcnMo
+cmVxLT5ucy0+YmRldikgPDwgOSkgPj4NCj4gICAJCQkJCXJlcS0+bnMtPmJsa3NpemVfc2hpZnQ7
+DQo+ICAgCWlkX3pucy0+bGJhZmVbMF0uenN6ZSA9IGNwdV90b19sZTY0KHpzemUpOw0KPiAtCWlk
+X3pucy0+bW9yID0gY3B1X3RvX2xlMzIoYmRldl9tYXhfb3Blbl96b25lcyhyZXEtPm5zLT5iZGV2
+KSk7DQo+IC0JaWRfem5zLT5tYXIgPSBjcHVfdG9fbGUzMihiZGV2X21heF9hY3RpdmVfem9uZXMo
+cmVxLT5ucy0+YmRldikpOw0KPiArDQo+ICsJbW9yID0gYmRldl9tYXhfb3Blbl96b25lcyhyZXEt
+Pm5zLT5iZGV2KTsNCj4gKwlpZiAoIW1vcikNCj4gKwkJbW9yID0gVTMyX01BWDsNCj4gKwllbHNl
+DQo+ICsJCS0tbW9yOw0KPiArCWlkX3pucy0+bW9yID0gY3B1X3RvX2xlMzIobW9yKTsNCj4gKw0K
+PiArCW1hciA9IGJkZXZfbWF4X2FjdGl2ZV96b25lcyhyZXEtPm5zLT5iZGV2KTsNCj4gKwlpZiAo
+IW1hcikNCj4gKwkJbWFyID0gVTMyX01BWDsNCj4gKwllbHNlDQo+ICsJCS0tbWFyOw0KPiArCWlk
+X3pucy0+bWFyID0gY3B1X3RvX2xlMzIobWFyKTsNCj4gICANCg0KYWJvdmUgMTQgbGluZXMgb2Yg
+Y29kZSBjYW4gYmUgc2ltcGxpZmllZCBhcyBpbiA0LTUgbGluZXMgOi0NCg0KbW9yID0gYmRldl9t
+YXhfb3Blbl96b25lcyhyZXEtPm5zLT5iZGV2KTsNCmlkLT56bnMtPm1vciA9IGNwdV90cF9sZTMy
+KG1vciA/IG1vciAtIDEgOiBVMzJfTUFYKTsNCg0KbWFyID0gYmRldl9tYXhfYWN0aXZlX3pvbmVz
+KHJlcS0+bnMtPmJkZXYpOw0KaWQtPnpucy0+bWFyID0gY3B1X3RwX2xlMzIobWFyID8gbWFyIC0g
+MSA6IFUzMl9NQVgpOw0KDQo+ICAgZG9uZToNCj4gICAJc3RhdHVzID0gbnZtZXRfY29weV90b19z
+Z2wocmVxLCAwLCBpZF96bnMsIHNpemVvZigqaWRfem5zKSk7DQoNCg0KZWl0aGVyIHdheSwNCg0K
+UmV2aWV3ZWQtYnk6IENoYWl0YW55YSBLdWxrYXJuaSA8a2NoQG52aWRpYS5jb20+DQoNCg==

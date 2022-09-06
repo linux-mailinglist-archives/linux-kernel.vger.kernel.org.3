@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAE75AEB10
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E9C5AEB33
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239125AbiIFNvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S239205AbiIFNxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239142AbiIFNtF (ORCPT
+        with ESMTP id S239930AbiIFNuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:49:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579EE237D4;
-        Tue,  6 Sep 2022 06:39:37 -0700 (PDT)
+        Tue, 6 Sep 2022 09:50:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FCE7D1E3;
+        Tue,  6 Sep 2022 06:40:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C69D7B818CB;
-        Tue,  6 Sep 2022 13:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A5B1C433D6;
-        Tue,  6 Sep 2022 13:39:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C040EB818DC;
+        Tue,  6 Sep 2022 13:39:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C446C433C1;
+        Tue,  6 Sep 2022 13:39:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471575;
-        bh=P5KZ4SEKenppi05pZNL2xcmJ5xEzMJ2gickfOv9JeA8=;
+        s=korg; t=1662471578;
+        bh=4i5sYG49tf9dNz8KHpFIUCVSBk6MKdxITrMG9BQRhAw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e8kGsjix19QvD2vnWd98CkVQX59RmZ8xGwbt6uZKtBa8tG8rZZ5rlnDOZYdHCxXAG
-         igcthcOq1ynq/SpAlmRgbBiYEGTZn295nlpVUlqXBb4Xv3wpZ3v/SEaf0R8qBEJEmW
-         KQGbothhG6VoLEKIt6nP+ZYjm+xTg/HUtVLCUGVE=
+        b=ylcLrrw7sxYgP98OAmT8ACg2Z1QpDUOqe7hgNKFv+Wyd0eCJtGicj844iG2rOD94g
+         yHBvm5nJjrb0AXx4Dbt2UjLqr9uOxC32lT8tCPObTRUqcBHOX2DdYC1BF8LnN4+ian
+         21aA+4MGyd6CyWNaD74KMlpuU3sOG8JFQkaBFmCw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.15 074/107] USB: serial: option: add support for Cinterion MV32-WA/WB RmNet mode
-Date:   Tue,  6 Sep 2022 15:30:55 +0200
-Message-Id: <20220906132824.930619154@linuxfoundation.org>
+        stable@vger.kernel.org, Guillaume Ranquet <granquet@baylibre.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Pablo Sun <pablo.sun@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: [PATCH 5.15 075/107] usb: typec: altmodes/displayport: correct pin assignment for UFP receptacles
+Date:   Tue,  6 Sep 2022 15:30:56 +0200
+Message-Id: <20220906132824.980232602@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
 References: <20220906132821.713989422@linuxfoundation.org>
@@ -54,70 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slark Xiao <slark_xiao@163.com>
+From: Pablo Sun <pablo.sun@mediatek.com>
 
-commit 8ffe20d08f2c95d702c453020d03a4c568a988f0 upstream.
+commit c1e5c2f0cb8a22ec2e14af92afc7006491bebabb upstream.
 
-We added PIDs for MV32-WA/WB MBIM mode before, now we need to add
-support for RmNet mode.
+Fix incorrect pin assignment values when connecting to a monitor with
+Type-C receptacle instead of a plug.
 
-Test evidence as below:
-T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=03 Dev#=  3 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1e2d ProdID=00f3 Rev=05.04
-S:  Manufacturer=Cinterion
-S:  Product=Cinterion PID 0x00F3 USB Mobile Broadband
-S:  SerialNumber=d7b4be8d
-C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+According to specification, an UFP_D receptacle's pin assignment
+should came from the UFP_D pin assignments field (bit 23:16), while
+an UFP_D plug's assignments are described in the DFP_D pin assignments
+(bit 15:8) during Mode Discovery.
 
-T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=03 Dev#= 10 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1e2d ProdID=00f4 Rev=05.04
-S:  Manufacturer=Cinterion
-S:  Product=Cinterion PID 0x00F4 USB Mobile Broadband
-S:  SerialNumber=d095087d
-C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+For example the LG 27 UL850-W is a monitor with Type-C receptacle.
+The monitor responds to MODE DISCOVERY command with following
+DisplayPort Capability flag:
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
-[ johan: sort entries ]
+        dp->alt->vdo=0x140045
+
+The existing logic only take cares of UPF_D plug case,
+and would take the bit 15:8 for this 0x140045 case.
+
+This results in an non-existing pin assignment 0x0 in
+dp_altmode_configure.
+
+To fix this problem a new set of macros are introduced
+to take plug/receptacle differences into consideration.
+
+Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
 Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Co-developed-by: Pablo Sun <pablo.sun@mediatek.com>
+Co-developed-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Reviewed-by: Guillaume Ranquet <granquet@baylibre.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Link: https://lore.kernel.org/r/20220804034803.19486-1-macpaul.lin@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/option.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/typec/altmodes/displayport.c |    4 ++--
+ include/linux/usb/typec_dp.h             |    5 +++++
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -439,6 +439,8 @@ static void option_instat_callback(struc
- #define CINTERION_PRODUCT_MV31_2_RMNET		0x00b9
- #define CINTERION_PRODUCT_MV32_WA		0x00f1
- #define CINTERION_PRODUCT_MV32_WB		0x00f2
-+#define CINTERION_PRODUCT_MV32_WA_RMNET		0x00f3
-+#define CINTERION_PRODUCT_MV32_WB_RMNET		0x00f4
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -88,8 +88,8 @@ static int dp_altmode_configure(struct d
+ 	case DP_STATUS_CON_UFP_D:
+ 	case DP_STATUS_CON_BOTH: /* NOTE: First acting as DP source */
+ 		conf |= DP_CONF_UFP_U_AS_UFP_D;
+-		pin_assign = DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo) &
+-			     DP_CAP_UFP_D_PIN_ASSIGN(dp->port->vdo);
++		pin_assign = DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo) &
++				 DP_CAP_PIN_ASSIGN_DFP_D(dp->port->vdo);
+ 		break;
+ 	default:
+ 		break;
+--- a/include/linux/usb/typec_dp.h
++++ b/include/linux/usb/typec_dp.h
+@@ -73,6 +73,11 @@ enum {
+ #define DP_CAP_USB			BIT(7)
+ #define DP_CAP_DFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(15, 8)) >> 8)
+ #define DP_CAP_UFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(23, 16)) >> 16)
++/* Get pin assignment taking plug & receptacle into consideration */
++#define DP_CAP_PIN_ASSIGN_UFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
++			DP_CAP_UFP_D_PIN_ASSIGN(_cap_) : DP_CAP_DFP_D_PIN_ASSIGN(_cap_))
++#define DP_CAP_PIN_ASSIGN_DFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
++			DP_CAP_DFP_D_PIN_ASSIGN(_cap_) : DP_CAP_UFP_D_PIN_ASSIGN(_cap_))
  
- /* Olivetti products */
- #define OLIVETTI_VENDOR_ID			0x0b3c
-@@ -2001,8 +2003,12 @@ static const struct usb_device_id option
- 	  .driver_info = RSVD(0)},
- 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA, 0xff),
- 	  .driver_info = RSVD(3)},
-+	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA_RMNET, 0xff),
-+	  .driver_info = RSVD(0) },
- 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
- 	  .driver_info = RSVD(3)},
-+	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB_RMNET, 0xff),
-+	  .driver_info = RSVD(0) },
- 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
+ /* DisplayPort Status Update VDO bits */
+ #define DP_STATUS_CONNECTION(_status_)	((_status_) & 3)
 
 

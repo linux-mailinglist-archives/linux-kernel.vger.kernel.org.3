@@ -2,146 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85315AE51F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C965AE520
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239027AbiIFKQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S239084AbiIFKQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238678AbiIFKQJ (ORCPT
+        with ESMTP id S238753AbiIFKQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:16:09 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA28303CA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:16:05 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so4188307pjh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 03:16:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=PSI0JSTR6ajvpst5Ao0UXAh2Ubf3cYvnj2IZbT0+W3o=;
-        b=B+HLStzWZ6dE78OhNa1sVeVMpWXI2SUo4JcT6k+etTosGiY2l88gWyRinw8ehugasC
-         zMJR28eNOmTO6G72ZWpla5T1aB5sNqfM+89g/WczZptoWCCUQCaZpYWzrii9Irvkp1ev
-         WgIiD2CHBWiXuS/1x8nGvTIgTkKb3hYdYL5tlyxP1geqHaGK5SoWDVktgf/wo5bymYoZ
-         DUPEgMixavBC+jRDIKXl/vqgMWRdmJOV19zqXsFZWRljYlF4lKsh/xYCpeav+PP+BkzB
-         85vxCL+aOy3w6kj9PyGCLcJp3XoGwXLqoz+dRH4kbYdfhJ9rp0YwGhi5fU5N5HBgt+3D
-         EvRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=PSI0JSTR6ajvpst5Ao0UXAh2Ubf3cYvnj2IZbT0+W3o=;
-        b=ulxRARlTc5bG8ElufIL3MfE0I2zbi/yL8W46cxu5QyJQ8Az8W5pCYIgS1Prx4dJSlO
-         p7aExO2vwIbf728aLJQGex91Tw+FHKY/FjcL4FPUF6XhjTuPymIVOt6Agojl+jOyRiyO
-         npswZ/NPbmFbELGsU38tfQdUJwVwrSovI1uVhuIIlAAUYD63s17C8exfh/xr5778onE7
-         2MNtWiiZwOgrINtgrF8SwoQpYkaKHWQcWcoxZIykoLbeAXj3ZVIm54+umzH16rH4lu+8
-         SmMdq/rvcOwCs5TdvABVLEgkl5TJ/6mGcXjNrF3CMTX5luSddVct+TGTnW9vnsxboq0N
-         GkYg==
-X-Gm-Message-State: ACgBeo3Ve2BD/suM1+8Vz5r8tzSEV77dS1Esr1sNZASZrZde8KQuyv2t
-        UXnhtvToWaf1QitTZfqPb7vo2g==
-X-Google-Smtp-Source: AA6agR7l9hMxw2a+fj6VjmlhPXMJGnrDQPYbitZUj+wR5dmA04lAOaePB2o9KHfDwD8n1wpXl3Uv9g==
-X-Received: by 2002:a17:902:ec90:b0:16d:d156:2c01 with SMTP id x16-20020a170902ec9000b0016dd1562c01mr55140422plg.114.1662459365393;
-        Tue, 06 Sep 2022 03:16:05 -0700 (PDT)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id f62-20020a625141000000b0053b723a74f7sm7914151pfb.90.2022.09.06.03.16.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 03:16:04 -0700 (PDT)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shunsuke Mie <mie@igel.co.jp>
-Subject: [RFC PATCH v2 2/2] misc: pci_endpoint_test: Fix pci_endpoint_test_{copy,write,read}() panic
-Date:   Tue,  6 Sep 2022 19:15:55 +0900
-Message-Id: <20220906101555.106033-2-mie@igel.co.jp>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220906101555.106033-1-mie@igel.co.jp>
-References: <20220906101555.106033-1-mie@igel.co.jp>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 06:16:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA35939B9D
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:16:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32ADFB81729
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:16:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0187C433B5
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662459400;
+        bh=9/OqEY1AdGlYqFrskuBnDyzAXAsqqGEVaUN/RRhe4Ck=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WymsisIaz3vz6LLmtOOC+6uvrRVt/GXWVbZSpnpZSoDmvyfqWsVxCkdE31gaYzac9
+         o2EEnu+x5hVNwqHY1f6wcX80IUKdyDUYFZFnuH1dafiI2RkqRYLWsXlXiySwnErflw
+         saNrVf+hNX6PoZFNlDw8+lpqVYr1S/S9XCf9k84sT7ya7GWmXH/kUynUiPdiewtQ1W
+         biHvU9MKULbLxegUO22LJ1Y90ZJIxxLv4Mjev+7dEirObDHpyEBELbaqUBXNT/m2cH
+         mnRp/BPuFoDFJzqSN8MqeChSdC+5ppDIAfTlZZOLtk/0tBDCQGttx8kqefBjg5n6Mr
+         9kPzLAsp5eBeg==
+Received: by mail-lj1-f170.google.com with SMTP id k18so11688671lji.13
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 03:16:40 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1EsiNXHgnm3ZBRTAFQDOWRfVHh3EOOGa3k5FQsls1waig45FVq
+        ThyBCAdnESHbNhqdd71U84B3ebrGGo0bDJ0MmdE=
+X-Google-Smtp-Source: AA6agR7bCqtA9wfF/56sHk4Ok8Qx0P49OGcib8dcCcQP+4sW8tVKtZCBaiELe69/YxRifVz8zNZDbFKCayASELZEYKw=
+X-Received: by 2002:a2e:9b0e:0:b0:268:cb68:575b with SMTP id
+ u14-20020a2e9b0e000000b00268cb68575bmr7059563lji.152.1662459398847; Tue, 06
+ Sep 2022 03:16:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220830104806.128365-1-xry111@xry111.site> <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
+ <c0ba2e23-5be3-924d-554a-2f10272c05bc@xen0n.name> <CAAhV-H7Dz21qRgwkMcJ0SnA9FNDN19E6mpa7C25LUitrO9LGeA@mail.gmail.com>
+ <5b87173faeef587a2ffaaa6f58d34e0940231067.camel@xry111.site>
+ <c53303bf-a5d2-098f-8975-efadbe0b2f2e@loongson.cn> <bc323d8578d2f6ec580066bab181788b305ae3c3.camel@xry111.site>
+ <CAAhV-H4N_XvmP9KA1M5crU44kHr33MZUVSsMY4Ugu5wQSv_LOQ@mail.gmail.com>
+ <97291c0fe5a660c844475ff019c8db6af77ecf86.camel@xry111.site>
+ <CAAhV-H6wzw-MV+h225rM4PfK_HY0tAdSXcUG-2Hx+_gfhzQ4_g@mail.gmail.com>
+ <ae2652c5e140d407d523d7f35bee672cebe1b7a2.camel@xry111.site>
+ <CAAhV-H56TQeU54JjvNQg2qZ6L1aSbzbaM2a=VQr9ZcAn4uthyg@mail.gmail.com>
+ <8d0f96e2977c5c78f17bb410087f2aad986ef5a4.camel@xry111.site>
+ <CAAhV-H7LjkY+XAzGs2K3544+CGOztCd4V8BuSjMJwZCgfBLDow@mail.gmail.com>
+ <CAMj1kXE6YHCVj9DDbxLEZnS-ceZT__xe1XAcUcpXcd6eYb=UEw@mail.gmail.com>
+ <CAAhV-H5NT-bq2jb3Kh-5wyCwVeG6t6pkLkPSRRC5XKrC33j1Nw@mail.gmail.com> <CAAhV-H6RqKT0OiVhZqJr9Tts-4JuH-oPNAc66q6fTcqdi7jAQw@mail.gmail.com>
+In-Reply-To: <CAAhV-H6RqKT0OiVhZqJr9Tts-4JuH-oPNAc66q6fTcqdi7jAQw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 6 Sep 2022 12:16:27 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGBevDYDxyb9_gDHLaQneydnXvGkAsPXD3o9kf0-BrNMQ@mail.gmail.com>
+Message-ID: <CAMj1kXGBevDYDxyb9_gDHLaQneydnXvGkAsPXD3o9kf0-BrNMQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation types
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dma_map_single() doesn't permit zero length mapping. It causes a follow
-panic.
+On Tue, 6 Sept 2022 at 10:59, Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> On Tue, Sep 6, 2022 at 4:20 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> >
+> > On Tue, Sep 6, 2022 at 3:18 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > >
+> > > On Tue, 6 Sept 2022 at 06:43, Huacai Chen <chenhuacai@kernel.org> wrote:
+> > > >
+> > > > Hi, Ruoyao,
+> > > >
+> > > > On Tue, Sep 6, 2022 at 12:27 PM Xi Ruoyao <xry111@xry111.site> wrote:
+> > > > >
+> > > > > On Tue, 2022-09-06 at 09:52 +0800, Huacai Chen wrote:
+> > > > > > >   cflags-$(CONFIG_LOONGARCH)     := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> > > > > > > -                                  -fpic
+> > > > > > > +                                  -fpie
+> > > > > > >
+> > > > > > >   cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+> > > > > > >
+> > > > > > > (Some explanation: -fpic does not only mean "generate position-
+> > > > > > > independent code", but "generate position-independent code *suitable for
+> > > > > > > use in a shared library*".  On LoongArch -mdirect-extern-access cannot
+> > > > > > > work for a shared library so the "-fpic -mdirect-extern-access"
+> > > > > > > combination is rejected deliberately.)
+> > > > > > >
+> > > > > > > Not sure how to submit these changes properly...  Do you prefer me to
+> > > > > > > send V8 of this series or a single patch on top of your tree on GitHub?
+> > > > >
+> > > > > > Don't need V8, I will squash it into the previous patch myself. But
+> > > > > > can we keep efistub as is?
+> > > > >
+> > > > > No, we can't allow -mdirect-extern-access -fpic on LoongArch because
+> > > > > without copy relocation such a combination just does not make sense (i.
+> > > > > e. we cannot find a sensible way to handle such a combination in GCC).
+> > > > > So such a combination will cause GCC refuse to run.
+> > > > >
+> > > > > Note that -fpic/-fPIC is "position-independent code *suitable for
+> > > > > use in a shared library*", while -fpie/-fPIE is more like just
+> > > > > "position-independent code".  The names of those options are confusing.
+> > > > > (When -fpic was invented first time, people mostly believed "PIC had
+> > > > > been only for shared libraries", so it's named -fpic instead of -shlib
+> > > > > or something.)  IMO in the EFI stub for other ports, -fpie should be
+> > > > > used instead of -fpic as well because the EFI stub is not similar to a
+> > > > > shared library in any means.
+> > > > You are right, but I guess that Ard doesn't want to squash the efistub
+> > > > change into the LoongArch efistub support patch. :)
+> > > >
+> > >
+> > > I don't mind changing the stable tag at this point - I don't have
+> > > anything queued up on top of it at the moment.
+> > >
+> > > But I don't see the actual patch: please send me the delta patch that
+> > > you want to apply, and I will update it. Then, you can rebase your
+> > > v6.1 tree on top of it.
+> > OK, Ruoyao, please send a patch to change the efistub cflags. Thank you.
+> Oh, I think you needn't send, just showing the diff to Ard is OK. :)
+>
+> diff --git a/drivers/firmware/efi/libstub/Makefile
+> b/drivers/firmware/efi/libstub/Makefile
+> index 8931ed24379e..8c1225b92492 100644
+> --- a/drivers/firmware/efi/libstub/Makefile
+> +++ b/drivers/firmware/efi/libstub/Makefile
+> @@ -27,7 +27,7 @@ cflags-$(CONFIG_ARM)          := $(subst
+> $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+>  cflags-$(CONFIG_RISCV)         := $(subst
+> $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+>                                    -fpic
+>  cflags-$(CONFIG_LOONGARCH)     := $(subst
+> $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> -                                  -fpic
+> +                                  -fpie
+>
+>  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+>
 
-A panic was reported on arm64:
+I have merged this into the patch, and updated the tag
 
-[   60.137988] ------------[ cut here ]------------
-[   60.142630] kernel BUG at kernel/dma/swiotlb.c:624!
-[   60.147508] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-[   60.152992] Modules linked in: dw_hdmi_cec crct10dif_ce simple_bridge rcar_fdp1 vsp1 rcar_vin videobuf2_vmalloc rcar_csi2 v4l
-2_mem2mem videobuf2_dma_contig videobuf2_memops pci_endpoint_test videobuf2_v4l2 videobuf2_common rcar_fcp v4l2_fwnode v4l2_asyn
-c videodev mc gpio_bd9571mwv max9611 pwm_rcar ccree at24 authenc libdes phy_rcar_gen3_usb3 usb_dmac display_connector pwm_bl
-[   60.186252] CPU: 0 PID: 508 Comm: pcitest Not tainted 6.0.0-rc1rpci-dev+ #237
-[   60.193387] Hardware name: Renesas Salvator-X 2nd version board based on r8a77951 (DT)
-[   60.201302] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   60.208263] pc : swiotlb_tbl_map_single+0x2c0/0x590
-[   60.213149] lr : swiotlb_map+0x88/0x1f0
-[   60.216982] sp : ffff80000a883bc0
-[   60.220292] x29: ffff80000a883bc0 x28: 0000000000000000 x27: 0000000000000000
-[   60.227430] x26: 0000000000000000 x25: ffff0004c0da20d0 x24: ffff80000a1f77c0
-[   60.234567] x23: 0000000000000002 x22: 0001000040000010 x21: 000000007a000000
-[   60.241703] x20: 0000000000200000 x19: 0000000000000000 x18: 0000000000000000
-[   60.248840] x17: 0000000000000000 x16: 0000000000000000 x15: ffff0006ff7b9180
-[   60.255977] x14: ffff0006ff7b9180 x13: 0000000000000000 x12: 0000000000000000
-[   60.263113] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-[   60.270249] x8 : 0001000000000010 x7 : ffff0004c6754b20 x6 : 0000000000000000
-[   60.277385] x5 : ffff0004c0da2090 x4 : 0000000000000000 x3 : 0000000000000001
-[   60.284521] x2 : 0000000040000000 x1 : 0000000000000000 x0 : 0000000040000010
-[   60.291658] Call trace:
-[   60.294100]  swiotlb_tbl_map_single+0x2c0/0x590
-[   60.298629]  swiotlb_map+0x88/0x1f0
-[   60.302115]  dma_map_page_attrs+0x188/0x230
-[   60.306299]  pci_endpoint_test_ioctl+0x5e4/0xd90 [pci_endpoint_test]
-[   60.312660]  __arm64_sys_ioctl+0xa8/0xf0
-[   60.316583]  invoke_syscall+0x44/0x108
-[   60.320334]  el0_svc_common.constprop.0+0xcc/0xf0
-[   60.325038]  do_el0_svc+0x2c/0xb8
-[   60.328351]  el0_svc+0x2c/0x88
-[   60.331406]  el0t_64_sync_handler+0xb8/0xc0
-[   60.335587]  el0t_64_sync+0x18c/0x190
-[   60.339251] Code: 52800013 d2e00414 35fff45c d503201f (d4210000)
-[   60.345344] ---[ end trace 0000000000000000 ]---
+efi-loongarch-for-v6.1
+ead384d956345681e1ddf97890d5e15ded015f07
 
-To fix it, this patch adds a checking the payload length if it is zero.
-
-Fixes: 343dc693f7b7 ("misc: pci_endpoint_test: Prevent some integer overflows")
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
-Changes in v2:
-* Move a checking code to an introduced function in previous patch
----
----
- drivers/misc/pci_endpoint_test.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index 3bd9f135cdac..a7193bf6a49f 100644
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -335,6 +335,11 @@ static bool pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
- static int pci_endpoint_test_validate_xfer_params(struct device *dev,
- 		struct pci_endpoint_test_xfer_param *param, size_t alignment)
- {
-+	if (!param->size) {
-+		dev_err(dev, "Data size is zero\n");
-+		return -EINVAL;
-+	}
-+
- 	if (param->size > SIZE_MAX - alignment) {
- 		dev_err(dev, "Maximum transfer data size exceeded\n");
- 		return -EINVAL;
--- 
-2.17.1
-
+It should be in linux-next tomorrow, you can merge the tag now from
+git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git

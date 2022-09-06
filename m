@@ -2,63 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958615AF2B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA625AF2AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234849AbiIFRbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S239786AbiIFRcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239699AbiIFRaw (ORCPT
+        with ESMTP id S239117AbiIFRcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:30:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AF92A978
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662485092;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8jj5ltO1LOk0SlLaaEAJAylbk3vvryd3UX57GATziA8=;
-        b=Sk6nvU8wLsypWDHKKSdH51AhS8XNEaPZ7kdwQiNNLZHlh7cqD1PGVjUrIgZr9CH/ccwF0U
-        aHY0pt//zo9iacCdeeYdr7w20gzvVh+ayRhjvcMAg3cZ3kZ7I6guckT/NW4kBhDsjlKo8W
-        15X3u/v3gtt7tchQo9Bx3dvPSkakxCg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-x_4o4RaGNtOjYIbWvCLvmQ-1; Tue, 06 Sep 2022 13:24:46 -0400
-X-MC-Unique: x_4o4RaGNtOjYIbWvCLvmQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2BDD7382ECC1;
-        Tue,  6 Sep 2022 17:24:46 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.32.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BF4D32166B26;
-        Tue,  6 Sep 2022 17:24:45 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 13:24:44 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        feng xiangjun <fengxj325@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] drivers/base: Fix unsigned comparison to -1 in
- CPUMAP_FILE_MAX_BYTES
-Message-ID: <YxeCXALgsIGxiSlG@lorien.usersys.redhat.com>
-References: <20220906160430.1169837-1-pauld@redhat.com>
- <Yxd9LRH+3wkM0fot@kroah.com>
+        Tue, 6 Sep 2022 13:32:24 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11010010.outbound.protection.outlook.com [40.93.198.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C711178;
+        Tue,  6 Sep 2022 10:28:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GF9wvze+O9dtUsEwCpFnrEIzy77euHXpeNUbw4ZLENzRzX1MB+S2ZQxurPiv1GKEkLK8l2BH92Z7/2hTg+45L+qzJ7YzQMhzMHtc5AvrPQQKrJZLl/TYmVVFYtRPYuIdikTcUXXjlKktQzTo3bWtoIo90Um2BTGQfXujBP2kW6iOZHtjm8Z73NSzT0NCAvKAZUlJwhoc8M3DFmTcfUVXjFl1bOY7wSMz7C33FW7hmdR9Gxui0RaV5PzR8iEIcvQbq03smJC24jkGQb5E3FeV6cgpq+o03/5wyhJS0OrJApya/CqQiQewd8o4CTIVnRIZ7RvrOBrnfKQjOb7wa4ZQRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OTIMLrTHM7cQ6b2tvRYYqq04m8+aq3ZwOku6Sv3UwIs=;
+ b=ctny9mo0YAxTll+jUD7UgDVJie0zulFmnwv0V7ktgfDcP2C6/ulpQvFis699+kVXxPUnbm2a35NuUWzlp0QDReWxbKEoyTWmvyazoiR4yLRDThKxfY8ZJkjQghErfBXxe46rPcgNz1GH+hSMOMYajHL558QGO8X3lD/XIwBKYOoDPw0d8xYwp8BOGc0lkt9ahw6Dxqq0F33Gucer2GMt+h3MwAm1m7Wz3Zwrf8Xgw6ij3wpnf4W3qnfMaiSG77WIckvpza1nzis5O4qFqWgVzZQlQeZZFEzulcvhCPYk+7JcFTGsQVwvrrTWh9mOvTOrxakG/eWIjzRfcOT8W/3uIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OTIMLrTHM7cQ6b2tvRYYqq04m8+aq3ZwOku6Sv3UwIs=;
+ b=R65+CZX5wrgS10zjOm8ogBT4GmKr6L7VdhfWxOZKtbjGW+sKLzEFi6po4sp1oNwSVDrByBzsZDhI0tbC88cIYt29zAM7xXtnKzHSahIMF38/kpwAs+PSIcWZ07ZlzAOHJ3oicFjJZ7Yh66AZUC3xN+Qp+2SHpUhmZjgaH19Rkr4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+Received: from BYAPR05MB3960.namprd05.prod.outlook.com (2603:10b6:a02:88::12)
+ by BN7PR05MB4276.namprd05.prod.outlook.com (2603:10b6:406:f1::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.5; Tue, 6 Sep
+ 2022 17:28:19 +0000
+Received: from BYAPR05MB3960.namprd05.prod.outlook.com
+ ([fe80::a8ee:57cf:b2f1:b818]) by BYAPR05MB3960.namprd05.prod.outlook.com
+ ([fe80::a8ee:57cf:b2f1:b818%5]) with mapi id 15.20.5612.011; Tue, 6 Sep 2022
+ 17:28:19 +0000
+From:   vdasa@vmware.com
+To:     vbhakta@vmware.com, namit@vmware.com, bryantan@vmware.com,
+        zackr@vmware.com, linux-graphics-maintainer@vmware.com,
+        doshir@vmware.com, sgarzare@redhat.com, gregkh@linuxfoundation.org,
+        davem@davemloft.net
+Cc:     pv-drivers@vmware.com, joe@perches.com, netdev@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Vishnu Dasa <vdasa@vmware.com>
+Subject: [PATCH 0/3] MAINTAINERS: Update entries for some VMware drivers
+Date:   Tue,  6 Sep 2022 10:27:19 -0700
+Message-Id: <20220906172722.19862-1-vdasa@vmware.com>
+X-Mailer: git-send-email 2.35.1
+Reply-To: vdasa@vmware.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR21CA0009.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::19) To BYAPR05MB3960.namprd05.prod.outlook.com
+ (2603:10b6:a02:88::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxd9LRH+3wkM0fot@kroah.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR05MB3960:EE_|BN7PR05MB4276:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ad3eab3-91cd-447a-2222-08da902d30ce
+X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JfMliaX6DPU8FQu773Otj1WeqImdq3pPcmK2kG5hv1rqiOuvKIl93DxSjG5A/YztNvmTR33uiiHUSeCg03TaZdUThUzX2SnI5YAHoVsHWCFhYZ7/o+u7BsrUXiK7GiKzlW8kxD7hUDBst7HBfMaZ/folwSda2SxQgy6MDGoQckJHAxm8An4rofKSvDIFJD8XPDxP10Dk0YoHQ3xRWKZboCpwHxqULumW+hiGyTFwPtb9aXmi1K0Dt640cn/z9dQ4ktIgizoIEwykQMixL49Leq1FK7DZ824kRx4X9X1Pv2IPFa9uk4XdMmTaqdCge9aYSpBWbuHlPI9b65ba60HETRsecqMvHsuz5SgqLb8p6hxoFxg01CPAuzBckxBzDgVilI3LSd/ug8ReIlFGnDVMgrYT+WUPsQ9TGqIZDRRAdx2cNMtm3sQ7MrtlfeC/pKDarXG5pbD9goVDbP0CZ+vJg2O5qgcNXh0v+jJrJoqQZq/58o6FfOG191Vk2JsyDFf8DFYCI1443xcf23XRKYQWbYKnTaxRXa0kTFGFH2or4FIB0R417nTH1pyttFFrYR7KC1rcNkQW3maQ39xrsOmw3HWvRubrPizYgaKHP1gul9pEENROCkb/GzaZ6XukObl7f3ktMDy24N6KW9hSOGfGDoSFgMcKNu/PPLAXT+GGpYoT3zR/f9IEfLTLt7hlzFUKB+T1iCUYWTSIBu1+HpajeKF8e5jPlW3p/zKC5pMov1vFn3M6l2NcEs9JnipvBYIHJQTUqwzzb5KELIG29/HQsOOULm4ONi7tpzg4dixpiNesD/aH/JPdvpdqgXUYqr4h
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR05MB3960.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(366004)(136003)(39860400002)(346002)(38350700002)(38100700002)(66946007)(66556008)(66476007)(8676002)(4326008)(316002)(2906002)(15650500001)(4744005)(7416002)(5660300002)(8936002)(186003)(1076003)(2616005)(9686003)(6512007)(83380400001)(41300700001)(6486002)(478600001)(6506007)(86362001)(26005)(52116002)(36756003)(107886003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hYj43R9O0TghiJd9nboflVv4qN3knBMKIHsbeG7Zf+uTRiKEcaRNzx/g+W4q?=
+ =?us-ascii?Q?bAPZGEfvNROxe91Zw28bayxSLDz8FILMzb/K25k2Ggkg0EWCLa+h9Vywz00k?=
+ =?us-ascii?Q?j6amF4JCLQY4XppiNbpmQB75OYLcZ2baJuUNB1FlGBE5jmWDLWPNSk8UcN//?=
+ =?us-ascii?Q?9EhWmSG7+lCCmr891jlXXM9HbsHMyrkWNW+HJpZRuaEU7xDOM3CxNQrEtnKH?=
+ =?us-ascii?Q?j7PgBwHBPz0aF4BjAyKEFuEkC97EVMy/h/Y8uzy+6yRyg9RfzMsFmr5ca42g?=
+ =?us-ascii?Q?zogUmCY5foBJjXeYW0CliwkD6/4l/vEN0FUKP/Rif1E4CUfd38YZBiSVo3KA?=
+ =?us-ascii?Q?tI22GOYkIz32QeGIWRH4yfHbNj+sQi6AnTdzId3aPdBG2Ew4hlV4t1iO3mhl?=
+ =?us-ascii?Q?qazlQmm7UQWNhl6KsDU3dgg8X14ojLN9Q71MYG+/TLo1vk2WHw+h/vC1ZpaH?=
+ =?us-ascii?Q?iOzkT72fJTR4NDjHVOsaZeWhsTGIQdpdpvdCimAy812W7UXjqj+eCxJmE9Z4?=
+ =?us-ascii?Q?NZtU5AAKVOQ4fCKiZ0NnGWNl/RRYs6V4TnfDEiJXlRqNv6p80J2WkyL743TO?=
+ =?us-ascii?Q?B+AFtt/SQGIZas9g7lNmYhn6kfSiJUAh6ji92fIcv3zai4CQY4fxi0LkSvSb?=
+ =?us-ascii?Q?OVFafRpTcOv+ZR+hY/yj1HAH/5eSkJGcxHjyq2q6NiDRZaXq8Nl9oIOHwdPk?=
+ =?us-ascii?Q?HS0t5MGbqZg4SqZHWGOh3hKpZyKYGX9AQDiw7ScZC0TQgJ4/ChxmqM+liIMY?=
+ =?us-ascii?Q?Xr/wfFFm5XhZ+pqj80ldZLlOf6d9Qh0/TNzdQB6YWsPu7rldvVKXeDFxd6J5?=
+ =?us-ascii?Q?D7R9nVMn1YfOcgQMMQSXqb64kZqXB6sdFmkvUrscRGOnyqF1tV9bOepVkF2T?=
+ =?us-ascii?Q?cPIik5mffOCtUNqjb/zzptV5NZafbzLCbzaipSIp9IAIMdnO+fb+ttGDEv+Z?=
+ =?us-ascii?Q?Lv/swXrT3it2nJ12G6w6zp4W9IGYI6Uq/Au2nw5qFqt/FpXXkn9UpH9AITrD?=
+ =?us-ascii?Q?cKkAxJ85DKeZ/ohdxJQqSi8+XyvSlIXKmB3E+ttgzARha74ekTNGB89oYkXS?=
+ =?us-ascii?Q?m9kguJ/yE4uq+OW4AlN4qeQtqKXUuTMAZ8s83q2rFwVb0tiPLRAc4585gRVg?=
+ =?us-ascii?Q?dqe8nhex+SShhBybWaUiRR/85bM8d2xsvEdOO8U/y/5Ru0FlKB+bu6FXV3tY?=
+ =?us-ascii?Q?vjKkHWGNU1PqU35ovXselNsaqx1SiZYvP+Pj7AU6huLNzf8m8aM5eJNwb9Em?=
+ =?us-ascii?Q?JJjuhFPKKziuKmaxbljFyngGKzLWfaDnXUiBgG24TxQa7wFgQfTbdDWqoLNg?=
+ =?us-ascii?Q?AxayBSi4pmNIwqIxFRmy+CKvpwAHF6JfJJaUHrvIdGdqbKiwBoVRXLm7DfV/?=
+ =?us-ascii?Q?Bs0BiPv3Oa+5hAaWRo64GEEDBJT4EiqhY/qrfE4XfJcEpwJyKSZGq2eBkQeu?=
+ =?us-ascii?Q?36tyZV1KWMMRlY+wAHgkFEkYvzq3JHWQU12WpSNqTqbY1zwiXQ1h3ssJJujN?=
+ =?us-ascii?Q?sCCBKPKEec+6qyr3vZZg85YWgbKgynVkTiLwii+cZKdXWdyVEQRI4KuMhofA?=
+ =?us-ascii?Q?7/+c/vSGBhYaL2hwM4Q=3D?=
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR05MB4276
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,105 +111,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 07:02:37PM +0200 Greg Kroah-Hartman wrote:
-> On Tue, Sep 06, 2022 at 12:04:30PM -0400, Phil Auld wrote:
-> > As PAGE_SIZE is unsigned long, -1 > PAGE_SIZE when NR_CPUS <= 3.
-> > This leads to very large file sizes:
-> > 
-> > topology$ ls -l
-> > total 0
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 core_cpus
-> 
-> Yeah, lots of CPUs!  :)
->
+From: Vishnu Dasa <vdasa@vmware.com>
 
-Yep, apparently things like lscpu fail with this size. 
+This series updates a few existing maintainer entries for VMware
+supported drivers and adds a new entry for vsock vmci transport
+driver.
 
+Vishnu Dasa (3):
+  MAINTAINERS: Change VMware PVSCSI driver entry to upper case
+  MAINTAINERS: Change status of some VMware drivers
+  MAINTAINERS: Add a new entry for VMWARE VSOCK VMCI TRANSPORT DRIVER
 
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 core_cpus_list
-> > -r--r--r-- 1 root root                 4096 Sep  5 10:58 core_id
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 core_siblings
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 core_siblings_list
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 die_cpus
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 die_cpus_list
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 die_id
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 package_cpus
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 package_cpus_list
-> > -r--r--r-- 1 root root                 4096 Sep  5 10:58 physical_package_id
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 thread_siblings
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 thread_siblings_list
-> > 
-> > Adjust the inequality to catch the case when NR_CPUS is configured
-> > to a small value.
-> > 
-> > Fixes: 7ee951acd31a ("drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist")
-> > Reported-by: feng xiangjun <fengxj325@gmail.com>
-> > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Yury Norov <yury.norov@gmail.com>
-> > Cc: stable@vger.kernel.org
-> > Cc: feng xiangjun <fengxj325@gmail.com>
-> > ---
-> >  include/linux/cpumask.h | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > index bd047864c7ac..7b1349612d6d 100644
-> > --- a/include/linux/cpumask.h
-> > +++ b/include/linux/cpumask.h
-> > @@ -1127,9 +1127,10 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-> >   * cover a worst-case of every other cpu being on one of two nodes for a
-> >   * very large NR_CPUS.
-> >   *
-> > - *  Use PAGE_SIZE as a minimum for smaller configurations.
-> > + *  Use PAGE_SIZE as a minimum for smaller configurations while avoiding
-> > + *  unsigned comparison to -1.
-> >   */
-> > -#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32 - 1) > PAGE_SIZE) \
-> > +#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32) > PAGE_SIZE + 1) \
-> >  					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
-> >  #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
-> >  
-> > -- 
-> > 2.31.1
-> > 
-> 
-> Nice catch.  What type of systems did you run this on to verify it will
-> work?
->
-
-Feng ran it on his 2 cpu laptop.  I ran it on my usual test bed (80 cpus) but
-configured both with NR_CPUS at 8192 and at 2.
-
-It's not really dependent on the actual system. It's a compile time config
-option.  I failed to set it small when testing the first one.
-
-The fix here is just maths :) 
-
-With NR_CPUS == 2:
-
-# ls -l /sys/devices/system/cpu/cpu0/topology/
-total 0
--r--r--r--. 1 root root 4096 Sep  6 11:40 cluster_cpus
--r--r--r--. 1 root root 4096 Sep  6 11:40 cluster_cpus_list
--r--r--r--. 1 root root 4096 Sep  6 11:40 cluster_id
--r--r--r--. 1 root root 4096 Sep  6 11:40 core_cpus
--r--r--r--. 1 root root 4096 Sep  6 11:40 core_cpus_list
--r--r--r--. 1 root root 4096 Sep  6 11:40 core_id
--r--r--r--. 1 root root 4096 Sep  6 11:29 core_siblings
--r--r--r--. 1 root root 4096 Sep  6 11:40 core_siblings_list
-...
-
-
-
-Cheers,
-Phil
-
-> thanks,
-> 
-> greg k-h
-> 
+ MAINTAINERS | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
 -- 
+2.35.1
 

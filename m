@@ -2,114 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1585AF6E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7C25AF6E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiIFVeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        id S229731AbiIFVf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiIFVeE (ORCPT
+        with ESMTP id S229511AbiIFVfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:34:04 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DD5BA178
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:34:03 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d12so12556873plr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 14:34:03 -0700 (PDT)
+        Tue, 6 Sep 2022 17:35:54 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E949E0FA
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:35:53 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id h204-20020a1c21d5000000b003a5b467c3abso10439156wmh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 14:35:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date;
-        bh=IKhYcRnVpBMUy44Ky+OSn3unUvUJA/cx1qEki2e9zns=;
-        b=aFdBWucaLdZEwZJ6WLrXWIoc4kVWR2vkVsDGZVeMbOQBPDDaWTB4yceHuwQB5jAOMK
-         wIC+hC8xCsXUQzYyMl45qUbevm+f+Qvn3EsykPGsVUKT8mtYSe2d74FHpskmHtO4abe6
-         SYd0EZuFi6TyVjTE+JCmqLeDq7cVweTo2/xc+4+rl6Esl5btQ8cgLy2avwdOgQ9u6783
-         +MTl7act3MHNDxnAGjrQsjl+TZAyzM8D8xrbnjqBqkdKlHmd0b6K1OgohrNJCVFl17f6
-         uwRNHdxkmdu5h4g8WbNh5QUfNVddLoPT3MAVaKjelVBHASDU1mbvSpoUXgp4ePr1Z6Cl
-         dQjg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=sR4MT10eKHhIVG2U6bD+uIMSzEVSnVDpJcLJ+SBSU/s=;
+        b=cxvtWAjBYoEpUJxSiWS7AfLsCwWfpK9imxeDR5nZIU4ZjuYzLiAFHS0+9TzGEeojwQ
+         mWIG427aEoJvB6gsed1m7r4hK7snMG+QKCME1m2v3wBIncorbHbPcEPVvEtJ/3VRdXP+
+         QJJy7gT0s7piwIcKO7SGxr8TJJpEwFwDaQLv66iclbQaRsjgT2mkhOKrhjVD0QE9ZSyb
+         YYTRrktm6/WG2mvL3CtFmF+0JzFAwT2GZP0kEeysbF4u90L5GIwES8KzvTEt84EhdoHu
+         gNXtGIGoY0XT4UXgnwNRy1blbH52lZSoBol+rjZJR2r+EXzuOs2LvRQc26To5kkCqeED
+         9asw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=IKhYcRnVpBMUy44Ky+OSn3unUvUJA/cx1qEki2e9zns=;
-        b=R9pmX39xb6lZZEQgwOCJmxLn9heidZvbqcwRFllNh7UZjubmPOX88IUt/TiliA2tIq
-         FN5Yslf44jHvyvrQKXOVvHUm1iW+wZMVeJM6h0WeySmqgkML06fTXomoIwJHZ8CaSNt1
-         XxDctKQkVoGVhHCfv0a3E/nXFyjqVrRy63o+Ah23sbu9INTwVkUJaphkDF/OzOydDMxR
-         tNvztbiTtpovxNK7FWhyqMbAatoLM2hjj8cYjupBaUURkiWWs21rEX9KmWwO3h6KjmHs
-         KCh1IldwmAItwQnauTYMUbhN6vOQn7/9T6Ht/OOEvCriR8wvngfgPmpO6Ae70pSc+BY0
-         CMjg==
-X-Gm-Message-State: ACgBeo0EJFAl2fEFE4A94pTb1SygG9MN5kFQFAs8gaJYIvE1frfUf4PA
-        j++aX+2xmuVM8wXxN9Ti84jeezjaAzY4SQ==
-X-Google-Smtp-Source: AA6agR6wn83aAjSf0Y1qQOvYqA6bFaDA4t15O18lyRUAhJZFqVIuzshuuA2LhtTdC7TFKV2qwRz9lw==
-X-Received: by 2002:a17:902:8f8a:b0:16f:975e:7c6e with SMTP id z10-20020a1709028f8a00b0016f975e7c6emr486509plo.136.1662500042888;
-        Tue, 06 Sep 2022 14:34:02 -0700 (PDT)
-Received: from [2620:15c:29:203:9177:d472:6043:99cf] ([2620:15c:29:203:9177:d472:6043:99cf])
-        by smtp.gmail.com with ESMTPSA id x12-20020a170902ec8c00b0017543086eb3sm10510787plg.274.2022.09.06.14.34.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 14:34:01 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 14:34:01 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Chao Yu <chao@kernel.org>
-cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, jaegeuk@kernel.org,
-        Chao Yu <chao.yu@oppo.com>, stable@kernel.org,
-        syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: Re: [PATCH v2] mm/slub: fix to return errno if kmalloc() fails
-In-Reply-To: <20220831145454.858200-1-chao@kernel.org>
-Message-ID: <996c5407-711e-18e5-79e1-995afbd6c151@google.com>
-References: <20220831145454.858200-1-chao@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=sR4MT10eKHhIVG2U6bD+uIMSzEVSnVDpJcLJ+SBSU/s=;
+        b=wMX1MN1bkDuC3QI3fzjKKCKCpIFk7ea2wGE0jtVG5Tr5KeWbPgyDLSQ+H+9/7LsaK5
+         KWj1jea+2P2xjqpcMzWnMaFKiBjiXT42IF2UksevmkEOX2gQb6zVf290kwmMUHz5DY/D
+         MULs/OWBOLqx2PET4sGllnwYinJkfkN4DLFaiN11ZCC6G5imXZ8SYBifRnG0vbcxr4R2
+         GBsPRDneDh44WqlaOvhWzhJ/MyjWJMjB8ivMstzv6VSRkf+MfMqcywxRCoZ1iCBoiy9D
+         eo3gf8eypypuslUdy17ysZiJEhoL9aLdluTJPJRhst8JN2feGk+MMFjiiMtJTEI4ntT1
+         v7yg==
+X-Gm-Message-State: ACgBeo3uyLwEgnTpnRrkFXcO2JevS+9haTp5/zxni0PI6sOVWdeLcQYa
+        wQzg5nDovE2FUDL08XysUiO2TFkH7T4QniO4UDzkVw==
+X-Google-Smtp-Source: AA6agR4MXJa4fD8c9dto8Q/b/Ndb9B4dxTB/k0UBO0uHkojX2yRN4+4P8O1AicE75lbXkISbrKXhEhntE+5vsYia2mo=
+X-Received: by 2002:a1c:3b04:0:b0:3a5:487c:6240 with SMTP id
+ i4-20020a1c3b04000000b003a5487c6240mr14808609wma.152.1662500151465; Tue, 06
+ Sep 2022 14:35:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20220826230639.1249436-1-yosryahmed@google.com>
+ <CA+khW7iN6hyyBBR+4ey+9pNmEyKPZS82-C9kZ2NRXKMEOXHrng@mail.gmail.com>
+ <CAJD7tkYKYv+SKhCJs2281==55sALTX_DXifaWPv1w5=xrJjqQA@mail.gmail.com>
+ <CAJD7tkZg2jzDDR6vn5=-TS93Tm3P-YEQ+06KDsjg=Mzkt5LqsA@mail.gmail.com>
+ <CA+khW7g-jeiXMM-K+KK7L3tzG0catFSM+x5vHKMs=PF=s+=Pag@mail.gmail.com> <CAJD7tkZ77JDt62CMw2AmpvTJ5fpVs0mkPdVqMJm8X8zCBq=LhA@mail.gmail.com>
+In-Reply-To: <CAJD7tkZ77JDt62CMw2AmpvTJ5fpVs0mkPdVqMJm8X8zCBq=LhA@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 6 Sep 2022 14:35:15 -0700
+Message-ID: <CAJD7tkZz52GkTr+TuZnArEOsyxxMPnE5A1AKZfY-gjx0tUW6dQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: simplify cgroup_hierarchical_stats selftest
+To:     Hao Luo <haoluo@google.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 Aug 2022, Chao Yu wrote:
+On Mon, Aug 29, 2022 at 6:50 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> On Mon, Aug 29, 2022 at 6:42 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > On Mon, Aug 29, 2022 at 6:07 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > >
+> > > On Mon, Aug 29, 2022 at 3:15 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > > >
+> > > > On Mon, Aug 29, 2022 at 1:08 PM Hao Luo <haoluo@google.com> wrote:
+> > > > >
+> > > > > On Fri, Aug 26, 2022 at 4:06 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > > > > >
+> > [...]
+> > > > > >
+> > > > > > -SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
+> > > > > > -int BPF_PROG(vmscan_start, int order, gfp_t gfp_flags)
+> > > > > > +SEC("fentry/cgroup_attach_task")
+> > > > >
+> > > > > Can we select an attachpoint that is more stable? It seems
+> > > > > 'cgroup_attach_task' is an internal helper function in cgroup, and its
+> > > > > signature can change. I'd prefer using those commonly used tracepoints
+> > > > > and EXPORT'ed functions. IMHO their interfaces are more stable.
+> > > > >
+> > > >
+> > > > Will try to find a more stable attach point. Thanks!
+> > >
+> > > Hey Hao,
+> > >
+> > > I couldn't find any suitable stable attach points under kernel/cgroup.
+> > > Most tracepoints are created using TRACE_CGROUP_PATH which only
+> > > invokes the tracepoint if the trace event is enabled, which I assume
+> > > is not something we can rely on. Otherwise, there is only
+> >
+> > Can we explicitly enable the cgroup_attach_task event, just for this
+> > test? If it's not easy, I am fine with using fentry.
+>
+> I see a couple of tests that read from /sys/kernel/debug/tracing, but
+> they are mostly reading event ids, I don't see any tests enabling or
+> disabling a tracing event, so I am not sure if that's an accepted
+> pattern. Also I am not sure if we can rely on tracefs being in that
+> path. Andrii, is this considered acceptable?
+>
 
-> From: Chao Yu <chao.yu@oppo.com>
-> 
-> In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
-> out-of-memory, if it fails, return errno correctly rather than
-> triggering panic via BUG_ON();
-> 
-> kernel BUG at mm/slub.c:5893!
-> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-> 
-> Call trace:
->  sysfs_slab_add+0x258/0x260 mm/slub.c:5973
->  __kmem_cache_create+0x60/0x118 mm/slub.c:4899
->  create_cache mm/slab_common.c:229 [inline]
->  kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
->  kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
->  f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
->  f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
->  f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
->  mount_bdev+0x1b8/0x210 fs/super.c:1400
->  f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
->  legacy_get_tree+0x30/0x74 fs/fs_context.c:610
->  vfs_get_tree+0x40/0x140 fs/super.c:1530
->  do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
->  path_mount+0x358/0x914 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
-> 
-> Cc: <stable@kernel.org>
-> Fixes: 81819f0fc8285 ("SLUB core")
-> Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
-> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-> Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Anyone with thoughts here? Is it acceptable to explicitly enable a
+trace event in a BPF selftest to attach to a tracepoint that is only
+invoked if the trace event is enabled (e.g. cgroup_attach_task) ?
+Otherwise the test program would attach to the fentry of an internal
+function, which is more vulnerable to being changed and breaking the
+test (until someone updates the test with the new signature).
 
-Acked-by: David Rientjes <rientjes@google.com>
+> >
+> > > trace_cgroup_setup_root() and trace_cgroup_destroy_root() which are
+> > > irrelevant here. A lot of EXPORT'ed functions are not called in the
+> > > kernel, or cannot be invoked from userspace (the test) in a
+> > > straightforward way. Even if they did, future changes to such code
+> > > paths can also change in the future, so I don't think there is really
+> > > a way to guarantee that future changes don't break the test.
+> > >
+> > > Let me know what you think.
+> > >

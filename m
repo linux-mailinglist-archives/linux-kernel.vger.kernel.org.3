@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521E35AE156
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7250E5AE152
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238960AbiIFHkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
+        id S238920AbiIFHkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbiIFHj5 (ORCPT
+        with ESMTP id S233543AbiIFHj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Sep 2022 03:39:57 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E291EAC2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C0E1F622
         for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:39:56 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C1E4E3375A;
-        Tue,  6 Sep 2022 07:39:54 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 04F243377F;
+        Tue,  6 Sep 2022 07:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662449994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1662449995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eS3+J1xXqrlEflC4+69MJ2yPUC0hDCX6aposgxx7isU=;
-        b=Yx1STeYUddnCrG7wMg1F1b+Yf73pNNRMpuYBknnP+GDsPWB8VKhLhgbyx+l4ua5C7seP+m
-        fs4MrTWz+yYrG4C9EHi0xJA/WT3XcEIAe7zJrWKJfQakyOsUEANXmQqpvyXJMefr5EAP9X
-        tdgrNNR6vTkJW9UpJGh6sP4nDt6VqFc=
+        bh=gNfCdwnnFn6WP3zSQvQR767pRHdkMgh+nnbzkBNqUUA=;
+        b=iTxlH9VVsAqbAANWh7+bHsBy38XFBkJdp/d48WBUKIRb9qBB1qzdieN71OwBUlJbA7jO10
+        CHE8xaxEsr8q/uCY1PyXFF+mamFGUb4HQ2NASXfHxa6sl5u1/iZw6DmL2ojekm36WuF4X2
+        tk37hRXMI+CQOG+46qtf27LvZMn/mT8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662449994;
+        s=susede2_ed25519; t=1662449995;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eS3+J1xXqrlEflC4+69MJ2yPUC0hDCX6aposgxx7isU=;
-        b=S6dAmmctM41KE05AZc5z0xmpNGUCWTjBUJaR35cg2132H5l0lAu39z7k0Sn3QMWzrTnzEk
-        hTeWhzI5EZ21B7DA==
+        bh=gNfCdwnnFn6WP3zSQvQR767pRHdkMgh+nnbzkBNqUUA=;
+        b=QHw9qUnZZr4TJNNMeyEioK4ybxccXXTx/0qj1wRPE7zK5Bef6iZa82CvEaWmpukyGjzaJC
+        E8Bs9MzPTOaNquAg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9982213A7A;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDBF813A7A;
         Tue,  6 Sep 2022 07:39:54 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id QO3iIUr5FmPeOgAAMHmgww
+        id eFkqMUr5FmPeOgAAMHmgww
         (envelope-from <tiwai@suse.de>); Tue, 06 Sep 2022 07:39:54 +0000
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Thomas Zimmermann <tzimmermann@suse.de>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 02/11] drm/udl: Add reset_resume
-Date:   Tue,  6 Sep 2022 09:39:42 +0200
-Message-Id: <20220906073951.2085-3-tiwai@suse.de>
+Subject: [PATCH v2 03/11] drm/udl: Enable damage clipping
+Date:   Tue,  6 Sep 2022 09:39:43 +0200
+Message-Id: <20220906073951.2085-4-tiwai@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220906073951.2085-1-tiwai@suse.de>
 References: <20220906073951.2085-1-tiwai@suse.de>
@@ -72,71 +72,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Zimmermann <tzimmermann@suse.de>
 
-Implement the reset_resume callback of struct usb_driver. Set the
-standard channel when called.
+Call drm_plane_enable_fb_damage_clips() and give userspace a chance
+of minimizing the updated display area.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/gpu/drm/udl/udl_drv.c  | 11 +++++++++++
- drivers/gpu/drm/udl/udl_drv.h  |  1 +
- drivers/gpu/drm/udl/udl_main.c |  2 +-
- 3 files changed, 13 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/udl/udl_modeset.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/udl/udl_drv.c b/drivers/gpu/drm/udl/udl_drv.c
-index 5703277c6f52..0ba88e5472a9 100644
---- a/drivers/gpu/drm/udl/udl_drv.c
-+++ b/drivers/gpu/drm/udl/udl_drv.c
-@@ -32,6 +32,16 @@ static int udl_usb_resume(struct usb_interface *interface)
- 	return drm_mode_config_helper_resume(dev);
- }
+diff --git a/drivers/gpu/drm/udl/udl_modeset.c b/drivers/gpu/drm/udl/udl_modeset.c
+index df987644fb5d..187aba2d7825 100644
+--- a/drivers/gpu/drm/udl/udl_modeset.c
++++ b/drivers/gpu/drm/udl/udl_modeset.c
+@@ -484,6 +484,7 @@ int udl_modeset_init(struct drm_device *dev)
+ 					   format_count, NULL, connector);
+ 	if (ret)
+ 		return ret;
++	drm_plane_enable_fb_damage_clips(&udl->display_pipe.plane);
  
-+static int udl_usb_reset_resume(struct usb_interface *interface)
-+{
-+	struct drm_device *dev = usb_get_intfdata(interface);
-+	struct udl_device *udl = to_udl(dev);
-+
-+	udl_select_std_channel(udl);
-+
-+	return drm_mode_config_helper_resume(dev);
-+}
-+
- /*
-  * FIXME: Dma-buf sharing requires DMA support by the importing device.
-  *        This function is a workaround to make USB devices work as well.
-@@ -140,6 +150,7 @@ static struct usb_driver udl_driver = {
- 	.disconnect = udl_usb_disconnect,
- 	.suspend = udl_usb_suspend,
- 	.resume = udl_usb_resume,
-+	.reset_resume = udl_usb_reset_resume,
- 	.id_table = id_table,
- };
- module_usb_driver(udl_driver);
-diff --git a/drivers/gpu/drm/udl/udl_drv.h b/drivers/gpu/drm/udl/udl_drv.h
-index 28aaf75d71cf..37c14b0ff1fc 100644
---- a/drivers/gpu/drm/udl/udl_drv.h
-+++ b/drivers/gpu/drm/udl/udl_drv.h
-@@ -95,6 +95,7 @@ int udl_render_hline(struct drm_device *dev, int log_bpp, struct urb **urb_ptr,
- 		     u32 byte_offset, u32 device_byte_offset, u32 byte_width);
+ 	drm_mode_config_reset(dev);
  
- int udl_drop_usb(struct drm_device *dev);
-+int udl_select_std_channel(struct udl_device *udl);
- 
- #define CMD_WRITE_RAW8   "\xAF\x60" /**< 8 bit raw write command. */
- #define CMD_WRITE_RL8    "\xAF\x61" /**< 8 bit run length command. */
-diff --git a/drivers/gpu/drm/udl/udl_main.c b/drivers/gpu/drm/udl/udl_main.c
-index fdafbf8f3c3c..7d1e6bbc165c 100644
---- a/drivers/gpu/drm/udl/udl_main.c
-+++ b/drivers/gpu/drm/udl/udl_main.c
-@@ -92,7 +92,7 @@ static int udl_parse_vendor_descriptor(struct udl_device *udl)
- /*
-  * Need to ensure a channel is selected before submitting URBs
-  */
--static int udl_select_std_channel(struct udl_device *udl)
-+int udl_select_std_channel(struct udl_device *udl)
- {
- 	static const u8 set_def_chn[] = {0x57, 0xCD, 0xDC, 0xA7,
- 					 0x1C, 0x88, 0x5E, 0x15,
 -- 
 2.35.3
 

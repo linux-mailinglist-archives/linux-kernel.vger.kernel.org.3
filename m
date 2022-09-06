@@ -1,158 +1,226 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03D25AE3B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:01:27 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEB65AE3B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239273AbiIFJBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 05:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S239402AbiIFJBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 05:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239017AbiIFJBO (ORCPT
+        with ESMTP id S233089AbiIFJBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 05:01:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65061BEAF
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662454867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uEYw8dkEXgcUOX7V93X65x+uXJi/wlkI4CEWgXjX+U8=;
-        b=f4WDrH2yCHdNf4gcYT4cyG1sO3xIORq+jNXNmuWeFra6DDVUVJL9QKPKKGSM+Nws1rkVd/
-        DvgYKOzgNkeVFeReq6Dl6oqgTuGCK60KMweGNi92maVlkIB65eYRqiiiU8l+23kHLDj+HU
-        rzj8oMvsbknp60BUxkl1A+TZmXKd1SY=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-347-KYX-yibRNJeR13XULlG9bg-1; Tue, 06 Sep 2022 05:01:06 -0400
-X-MC-Unique: KYX-yibRNJeR13XULlG9bg-1
-Received: by mail-qk1-f199.google.com with SMTP id bs43-20020a05620a472b00b006bb56276c94so8588083qkb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 02:01:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=uEYw8dkEXgcUOX7V93X65x+uXJi/wlkI4CEWgXjX+U8=;
-        b=2EZ+pWzyVJS9XaIsZmY3kB3aT/nSLxoELToCBvKxjjD/ZjWs83cwPdsEmt4iD/mcPa
-         2e8xSRC5FntJrdmMfDRed0qjk3/ERXiWjfYCIlyQlvq0kzrO8IDc5qeoIR9tpMBHFQNm
-         VTMQLRPUp4JrP285G524HOIAcFSgGaoscGKxFNvTCP42AynvWd8ktCM23DyReqD/mwn6
-         e8CFIQ76bz3ZiavjvHmJCBdLt3N2gi4frJPVqSnK2YiSmeEtdsc3wD7k92qi5GoodaZY
-         2tEY3eFTCoTTFrZVPt578qbBfcgwrKG8z4wcXs5bHdX0i1hp2vgskYm14WaS80YfkiwQ
-         KiVQ==
-X-Gm-Message-State: ACgBeo3mBhdP7livo29UPdylU4Gck7q5dRAYXu+zVQWlcgBzuFfo4IuG
-        ++8NXshAZ9cajGRpjb7P0CBHGnlCB/31NKVS+zyJDcQfp4JbFWzZCFLCVhdffMmzypI+5uudJkT
-        2HlYdBORdX+hJ/ix0r2tdY9Ze
-X-Received: by 2002:a05:620a:4711:b0:6bb:7e1b:5f0b with SMTP id bs17-20020a05620a471100b006bb7e1b5f0bmr33657203qkb.127.1662454866189;
-        Tue, 06 Sep 2022 02:01:06 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR54SeftazVhGuQR9Denza8esCRyPUSRNGJRsOYWXZ1aLyu1Zb25CEzZerEVP/BwXWQhYQ8KcQ==
-X-Received: by 2002:a05:620a:4711:b0:6bb:7e1b:5f0b with SMTP id bs17-20020a05620a471100b006bb7e1b5f0bmr33657178qkb.127.1662454865958;
-        Tue, 06 Sep 2022 02:01:05 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-11-6-69.retail.telecomitalia.it. [87.11.6.69])
-        by smtp.gmail.com with ESMTPSA id z20-20020ac87cb4000000b0031f36cd1958sm8888786qtv.81.2022.09.06.02.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 02:01:04 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 11:00:48 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH 0/6] virtio/vsock: introduce dgrams, sk_buff, and qdisc
-Message-ID: <20220906090048.xdwdnxy3dvuos36x@sgarzare-redhat>
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
- <20220817025250-mutt-send-email-mst@kernel.org>
- <3abb1be9-b12c-e658-0391-8461e28f1b33@redhat.com>
+        Tue, 6 Sep 2022 05:01:48 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF6E45044;
+        Tue,  6 Sep 2022 02:01:46 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMKBb1MBsz4x1T;
+        Tue,  6 Sep 2022 19:01:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662454904;
+        bh=iI2eBQeHX1Eqpqtj1syy0uYEcdBPTnaFFBp24yMDkxw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EtmfPgzuXB2jstB/KEGx9WHSljd1sMh3rEp9dTcmt+MVCvyzIjVzPr+LZjCmHyygV
+         nf6pigK+4Ke81ikJOoOy3x36QWBezuiDAJdNM9mBdum51Ban+DgTkQ7xrmwdfIKpmj
+         YW02BnULVzOgPJPgc4Ps+5+Fz0RTudeWL+GfTV8ERSjGxdoeyX/GAuHSCHONHIO+QZ
+         ifVXMxP+vvAu/0FptNxeymz8rFXkJJXRLuVdFikpbNo1KvLYIbPr3M9Afveecxd3sa
+         4/Kgyb5C20lCrMBpe1V2wyaKgbRGbhRD1/oq2fElsxhUADIRkLG4HAuicbQx9Jwaai
+         MYXEpvBw5XbxA==
+Date:   Tue, 6 Sep 2022 19:01:41 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rolf Eike Beer <eb@emlix.com>,
+        Steven Price <steven.price@arm.com>
+Subject: linux-next: manual merge of the mm tree with Linus' tree
+Message-ID: <20220906190141.028ea19a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3abb1be9-b12c-e658-0391-8461e28f1b33@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/kg6XIbV3ufFgDa2yrs7qfxv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 12:28:48PM +0800, Jason Wang wrote:
->
->在 2022/8/17 14:54, Michael S. Tsirkin 写道:
->>On Mon, Aug 15, 2022 at 10:56:03AM -0700, Bobby Eshleman wrote:
->>>Hey everybody,
->>>
->>>This series introduces datagrams, packet scheduling, and sk_buff usage
->>>to virtio vsock.
->>>
->>>The usage of struct sk_buff benefits users by a) preparing vsock to use
->>>other related systems that require sk_buff, such as sockmap and qdisc,
->>>b) supporting basic congestion control via sock_alloc_send_skb, and c)
->>>reducing copying when delivering packets to TAP.
->>>
->>>The socket layer no longer forces errors to be -ENOMEM, as typically
->>>userspace expects -EAGAIN when the sk_sndbuf threshold is reached and
->>>messages are being sent with option MSG_DONTWAIT.
->>>
->>>The datagram work is based off previous patches by Jiang Wang[1].
->>>
->>>The introduction of datagrams creates a transport layer fairness issue
->>>where datagrams may freely starve streams of queue access. This happens
->>>because, unlike streams, datagrams lack the transactions necessary for
->>>calculating credits and throttling.
->>>
->>>Previous proposals introduce changes to the spec to add an additional
->>>virtqueue pair for datagrams[1]. Although this solution works, using
->>>Linux's qdisc for packet scheduling leverages already existing systems,
->>>avoids the need to change the virtio specification, and gives additional
->>>capabilities. The usage of SFQ or fq_codel, for example, may solve the
->>>transport layer starvation problem. It is easy to imagine other use
->>>cases as well. For example, services of varying importance may be
->>>assigned different priorities, and qdisc will apply appropriate
->>>priority-based scheduling. By default, the system default pfifo qdisc is
->>>used. The qdisc may be bypassed and legacy queuing is resumed by simply
->>>setting the virtio-vsock%d network device to state DOWN. This technique
->>>still allows vsock to work with zero-configuration.
->>The basic question to answer then is this: with a net device qdisc
->>etc in the picture, how is this different from virtio net then?
->>Why do you still want to use vsock?
->
->
->Or maybe it's time to revisit an old idea[1] to unify at least the 
->driver part (e.g using virtio-net driver for vsock then we can all 
->features that vsock is lacking now)?
+--Sig_/kg6XIbV3ufFgDa2yrs7qfxv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry for coming late to the discussion!
+Hi all,
 
-This would be great, though, last time I had looked at it, I had found 
-it quite complicated. The main problem is trying to avoid all the 
-net-specific stuff (MTU, ethernet header, HW offloading, etc.).
+Today's linux-next merge of the mm tree got a conflict in:
 
-Maybe we could start thinking about this idea by adding a new transport 
-to vsock (e.g. virtio-net-vsock) completely separate from what we have 
-now.
+  mm/pagewalk.c
 
-Thanks,
-Stefano
+between commit:
 
+  8782fb61cc84 ("mm: pagewalk: Fix race between unmap and page walker")
+
+from Linus' tree and commits:
+
+  fa02fb928200 ("mm: pagewalk: make error checks more obvious")
+  66c217081bd0 ("mm: pagewalk: allow walk_page_range_novma() without mm")
+
+from the mm tree.
+
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc mm/pagewalk.c
+index fa7a3d21a751,418717eec09e..000000000000
+--- a/mm/pagewalk.c
++++ b/mm/pagewalk.c
+@@@ -108,13 -104,16 +104,16 @@@ static int walk_pmd_range(pud_t *pud, u
+ =20
+  	pmd =3D pmd_offset(pud, addr);
+  	do {
+- again:
++ 		int err;
++=20
++  again:
+  		next =3D pmd_addr_end(addr, end);
+ -		if (pmd_none(*pmd) || (!walk->vma && !walk->no_vma)) {
+ +		if (pmd_none(*pmd)) {
+- 			if (ops->pte_hole)
++ 			if (ops->pte_hole) {
+  				err =3D ops->pte_hole(addr, next, depth, walk);
+- 			if (err)
+- 				break;
++ 				if (err)
++ 					return err;
++ 			}
+  			continue;
+  		}
+ =20
+@@@ -169,13 -168,16 +168,16 @@@ static int walk_pud_range(p4d_t *p4d, u
+ =20
+  	pud =3D pud_offset(p4d, addr);
+  	do {
++ 		int err;
++=20
+   again:
+  		next =3D pud_addr_end(addr, end);
+ -		if (pud_none(*pud) || (!walk->vma && !walk->no_vma)) {
+ +		if (pud_none(*pud)) {
+- 			if (ops->pte_hole)
++ 			if (ops->pte_hole) {
+  				err =3D ops->pte_hole(addr, next, depth, walk);
+- 			if (err)
+- 				break;
++ 				if (err)
++ 					return err;
++ 			}
+  			continue;
+  		}
+ =20
+@@@ -447,20 -456,17 +456,21 @@@ int walk_page_range(struct mm_struct *m
+ =20
+  	vma =3D find_vma(walk.mm, start);
+  	do {
++ 		int err;
++=20
++ 		walk.vma =3D vma;
+  		if (!vma) { /* after the last vma */
+- 			walk.vma =3D NULL;
+  			next =3D end;
+ +			if (ops->pte_hole)
+ +				err =3D ops->pte_hole(start, next, -1, &walk);
+  		} else if (start < vma->vm_start) { /* outside vma */
+  			walk.vma =3D NULL;
+  			next =3D min(end, vma->vm_start);
+ +			if (ops->pte_hole)
+ +				err =3D ops->pte_hole(start, next, -1, &walk);
+  		} else { /* inside vma */
+- 			walk.vma =3D vma;
+  			next =3D min(end, vma->vm_end);
+- 			vma =3D vma->vm_next;
++ 			vma =3D find_vma(mm, vma->vm_end);
+ =20
+  			err =3D walk_page_test(start, next, &walk);
+  			if (err > 0) {
+@@@ -472,17 -478,26 +482,24 @@@
+  				continue;
+  			}
+  			if (err < 0)
+- 				break;
++ 				return err;
+ -		}
+ -		if (walk.vma || walk.ops->pte_hole) {
+  			err =3D __walk_page_range(start, next, &walk);
++ 			if (err)
++ 				return err;
+  		}
+- 		if (err)
+- 			break;
+  	} while (start =3D next, start < end);
+- 	return err;
++ 	return 0;
+  }
+ =20
+- /*
++ /**
++  * walk_page_range_novma - walk a range of pagetables not backed by a vma
++  * @mm:		mm_struct representing the target process of page table walk
++  * @start:	start address of the virtual address range
++  * @end:	end address of the virtual address range
++  * @ops:	operation to call during the walk
++  * @pgd:	pgd to walk if different from mm->pgd
++  * @private:	private data for callbacks' usage
++  *
+   * Similar to walk_page_range() but can walk any page tables even if they=
+ are
+   * not backed by VMAs. Because 'unusual' entries may be walked this funct=
+ion
+   * will also not lock the PTEs for the pte_entry() callback. This is usef=
+ul for
+@@@ -501,10 -518,11 +520,11 @@@ int walk_page_range_novma(struct mm_str
+  		.no_vma		=3D true
+  	};
+ =20
+- 	if (start >=3D end || !walk.mm)
++ 	if (start >=3D end || (!walk.mm && !walk.pgd))
+  		return -EINVAL;
+ =20
+- 	mmap_assert_write_locked(walk.mm);
++ 	if (walk.mm)
+ -		mmap_assert_locked(walk.mm);
+++		mmap_assert_write_locked(walk.mm);
+ =20
+  	return walk_pgd_range(start, end, &walk);
+  }
+
+--Sig_/kg6XIbV3ufFgDa2yrs7qfxv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMXDHUACgkQAVBC80lX
+0GwGLAgAk6oj6Wx6VpMwQRHHxiRD4cfu8kvx8dmiP7JM0Im0s5F8lvX479WuY04B
+J5avBEhDbfXevmZpLN+TvU62Kr5UpJxcs2uso4CAAfFI9H6a+Se23vmEhJEu06aY
+imnQEPbSRgbOgYfbmsAi7vup5G4BVfdJImvJJCon5+X2U8oaq/Pc8H40dhC67bB8
+vSx11gMsgy+bOVwBeoSBnIvvkm4PUsG5yg1yyw6z4R+1CSzSl8CPk9RjWAVN0L89
+wilG/0CoxH0pdoWnwl+30ZahOwLMIehyTf/nh7ykZIIm1GCu1G0J1QKFipc9iIP9
+4mQ0L7HFSNdEncbPlWbiLzFVL3yBFg==
+=6QMP
+-----END PGP SIGNATURE-----
+
+--Sig_/kg6XIbV3ufFgDa2yrs7qfxv--

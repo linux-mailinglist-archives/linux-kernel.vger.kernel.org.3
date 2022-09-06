@@ -2,34 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA4A5AF9BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BAD5AF9C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiIGCNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
+        id S229748AbiIGCPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 22:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiIGCNP (ORCPT
+        with ESMTP id S229509AbiIGCPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:13:15 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E188A6CA;
-        Tue,  6 Sep 2022 19:13:14 -0700 (PDT)
+        Tue, 6 Sep 2022 22:15:15 -0400
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1CC0E7C748
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 19:15:13 -0700 (PDT)
 Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id BBU00010;
-        Wed, 07 Sep 2022 10:13:10 +0800
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id BBV00010;
+        Wed, 07 Sep 2022 10:14:10 +0800
 Received: from localhost.localdomain (10.200.104.82) by
  jtjnmail201619.home.langchao.com (10.100.2.19) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 7 Sep 2022 10:13:11 +0800
+ 15.1.2507.12; Wed, 7 Sep 2022 10:14:09 +0800
 From:   Deming Wang <wangdeming@inspur.com>
-To:     <david@lechnology.com>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <nsekhar@ti.com>
-CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] clk: davinci: Fix spelling typo in comment.
-Date:   Tue, 6 Sep 2022 09:27:30 -0400
-Message-ID: <20220906132730.3977-1-wangdeming@inspur.com>
+To:     <shaggy@kernel.org>
+CC:     <jfs-discussion@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
+Subject: [PATCH] jfs: Fix spelling typo in comment.
+Date:   Tue, 6 Sep 2022 09:28:29 -0400
+Message-ID: <20220906132829.4028-1-wangdeming@inspur.com>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -37,14 +36,14 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.200.104.82]
 X-ClientProxiedBy: Jtjnmail201613.home.langchao.com (10.100.2.13) To
  jtjnmail201619.home.langchao.com (10.100.2.19)
-tUid:   2022907101310cd91f230c681606fd029c6306301c4e5
+tUid:   20229071014103d860835a9885e491b19db54d3284683
 X-Abuse-Reports-To: service@corp-email.com
 Abuse-Reports-To: service@corp-email.com
 X-Complaints-To: service@corp-email.com
 X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,22 +54,22 @@ Modify the maxiumum to maximum.
 
 Signed-off-by: Deming Wang <wangdeming@inspur.com>
 ---
- drivers/clk/davinci/pll.c | 2 +-
+ fs/jfs/jfs_xattr.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/davinci/pll.c b/drivers/clk/davinci/pll.c
-index 082206676e73..f862f5e2b3fc 100644
---- a/drivers/clk/davinci/pll.c
-+++ b/drivers/clk/davinci/pll.c
-@@ -98,7 +98,7 @@
-  * @hw: clk_hw for the pll
-  * @base: Base memory address
-  * @pllm_min: The minimum allowable PLLM[PLLM] value
-- * @pllm_max: The maxiumum allowable PLLM[PLLM] value
-+ * @pllm_max: The maximum allowable PLLM[PLLM] value
-  * @pllm_mask: Bitmask for PLLM[PLLM] value
-  */
- struct davinci_pll_clk {
+diff --git a/fs/jfs/jfs_xattr.h b/fs/jfs/jfs_xattr.h
+index c50167a7bc50..0d33816d251d 100644
+--- a/fs/jfs/jfs_xattr.h
++++ b/fs/jfs/jfs_xattr.h
+@@ -25,7 +25,7 @@ struct jfs_ea_list {
+ 	struct jfs_ea ea[];	/* Variable length list */
+ };
+ 
+-/* Macros for defining maxiumum number of bytes supported for EAs */
++/* Macros for defining maximum number of bytes supported for EAs */
+ #define MAXEASIZE	65535
+ #define MAXEALISTSIZE	MAXEASIZE
+ 
 
 base-commit: 840126e36e8ff272cb63158646433fa1324533d9
 -- 

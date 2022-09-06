@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7175ADE87
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 06:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D41DC5ADE84
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 06:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbiIFEZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 00:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S232671AbiIFE10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 00:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiIFEZm (ORCPT
+        with ESMTP id S231441AbiIFE1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 00:25:42 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E6A28E0C;
-        Mon,  5 Sep 2022 21:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=KjGpnaOCoiegcftfzU0dj0F2Me4aFhhK3DZjFApXZm8=; b=zb+LxBkfN6fMtDfzMz18/kuVNr
-        IQPwEBNu0xJKIj4at/oCNSMojQGn8qRP1p2xw67S1SQlArvCNhLnuL0nb3s2R1USbaKdgkOiv8dw2
-        +nFlRQHDUB8dW/kgm3sOzjJ/BBsE54SIaE3w99cAkBkceRrYyHaS/uh2CcYSJDqdf7P/0ro+V2bIK
-        jPsoJmiuoYk8DI+TWhZelI9NZ6XqE+rjxG9SEOGFEp2nIZe/tdelTXE67E3SywxdlMB27IzrT1npY
-        vowQYKNIPnF1kzmFkFwxBXq1sIl8a5CSVgZAaQL21lxwGujANqWN0IXy+sQiYb76Usavm9t/CaOAt
-        3qI3RwsA==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVQ9T-005wFF-F0; Tue, 06 Sep 2022 04:25:31 +0000
-Message-ID: <5c2049f2-8bb8-8626-0ed0-433c202227fd@infradead.org>
-Date:   Mon, 5 Sep 2022 21:25:29 -0700
+        Tue, 6 Sep 2022 00:27:13 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FEF58DE2
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 21:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1662438428;
+        bh=0cI1Rk0Un9o1Oj+XrrEKadSkkh9tk38OEijCtoyUORY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=L3SS+6vzjxpAfuWaGy8T+L2LY/1t3nD6hbtrRRl0JyDEwty7AROoGIZCQunSQanUF
+         6d8QrqDI9jG93ZX0E9CwwDGIKfktQqEokFCabb8YggjAWAzAZ0UNeonF0LLOEc0vrQ
+         t6CoVqBp6DkGZs5nMYA3K2A8Ka4bj25oDCXK6AD0=
+Received: from [IPv6:240e:358:116c:5200:dc73:854d:832e:4] (unknown [IPv6:240e:358:116c:5200:dc73:854d:832e:4])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 53EE466857;
+        Tue,  6 Sep 2022 00:27:03 -0400 (EDT)
+Message-ID: <8d0f96e2977c5c78f17bb410087f2aad986ef5a4.camel@xry111.site>
+Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation
+ types
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>
+Date:   Tue, 06 Sep 2022 12:26:56 +0800
+In-Reply-To: <CAAhV-H56TQeU54JjvNQg2qZ6L1aSbzbaM2a=VQr9ZcAn4uthyg@mail.gmail.com>
+References: <20220830104806.128365-1-xry111@xry111.site>
+         <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
+         <c0ba2e23-5be3-924d-554a-2f10272c05bc@xen0n.name>
+         <CAAhV-H7Dz21qRgwkMcJ0SnA9FNDN19E6mpa7C25LUitrO9LGeA@mail.gmail.com>
+         <5b87173faeef587a2ffaaa6f58d34e0940231067.camel@xry111.site>
+         <c53303bf-a5d2-098f-8975-efadbe0b2f2e@loongson.cn>
+         <bc323d8578d2f6ec580066bab181788b305ae3c3.camel@xry111.site>
+         <CAAhV-H4N_XvmP9KA1M5crU44kHr33MZUVSsMY4Ugu5wQSv_LOQ@mail.gmail.com>
+         <97291c0fe5a660c844475ff019c8db6af77ecf86.camel@xry111.site>
+         <CAAhV-H6wzw-MV+h225rM4PfK_HY0tAdSXcUG-2Hx+_gfhzQ4_g@mail.gmail.com>
+         <ae2652c5e140d407d523d7f35bee672cebe1b7a2.camel@xry111.site>
+         <CAAhV-H56TQeU54JjvNQg2qZ6L1aSbzbaM2a=VQr9ZcAn4uthyg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.45.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2] fs/nfs/pnfs_nfs.c: fix spelling typo and syntax error
- in comment
-Content-Language: en-US
-To:     Jiangshan Yi <13667453960@163.com>,
-        trond.myklebust@hammerspace.com, anna@kernel.org
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-References: <20220906024119.424210-1-13667453960@163.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220906024119.424210-1-13667453960@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-09-06 at 09:52 +0800, Huacai Chen wrote:
+> > =C2=A0 cflags-$(CONFIG_LOONGARCH)=C2=A0=C2=A0=C2=A0=C2=A0 :=3D $(subst =
+$(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -fpic
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -fpie
+> >=20
+> > =C2=A0 cflags-$(CONFIG_EFI_GENERIC_STUB) +=3D -I$(srctree)/scripts/dtc/=
+libfdt
+> >=20
+> > (Some explanation: -fpic does not only mean "generate position-
+> > independent code", but "generate position-independent code *suitable fo=
+r
+> > use in a shared library*".=C2=A0 On LoongArch -mdirect-extern-access ca=
+nnot
+> > work for a shared library so the "-fpic -mdirect-extern-access"
+> > combination is rejected deliberately.)
+> >=20
+> > Not sure how to submit these changes properly...=C2=A0 Do you prefer me=
+ to
+> > send V8 of this series or a single patch on top of your tree on GitHub?
 
+> Don't need V8, I will squash it into the previous patch myself. But
+> can we keep efistub as is?
 
-On 9/5/22 19:41, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
-> 
-> Fix spelling typo and syntax error in comment.
-> 
-> Suggested-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+No, we can't allow -mdirect-extern-access -fpic on LoongArch because
+without copy relocation such a combination just does not make sense (i.
+e. we cannot find a sensible way to handle such a combination in GCC).=20
+So such a combination will cause GCC refuse to run.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Note that -fpic/-fPIC is "position-independent code *suitable for
+use in a shared library*", while -fpie/-fPIE is more like just
+"position-independent code".  The names of those options are confusing.
+(When -fpic was invented first time, people mostly believed "PIC had
+been only for shared libraries", so it's named -fpic instead of -shlib
+or something.)  IMO in the EFI stub for other ports, -fpie should be
+used instead of -fpic as well because the EFI stub is not similar to a
+shared library in any means.
 
-Thanks.
-
-> ---
->  fs/nfs/pnfs_nfs.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/nfs/pnfs_nfs.c b/fs/nfs/pnfs_nfs.c
-> index 657c242a18ff..987c88ddeaf0 100644
-> --- a/fs/nfs/pnfs_nfs.c
-> +++ b/fs/nfs/pnfs_nfs.c
-> @@ -374,12 +374,12 @@ pnfs_bucket_search_commit_reqs(struct pnfs_commit_bucket *buckets,
->  	return NULL;
->  }
->  
-> -/* pnfs_generic_search_commit_reqs - Search lists in @cinfo for the head reqest
-> +/* pnfs_generic_search_commit_reqs - Search lists in @cinfo for the head request
->   *				   for @page
->   * @cinfo - commit info for current inode
->   * @page - page to search for matching head request
->   *
-> - * Returns a the head request if one is found, otherwise returns NULL.
-> + * Return: the head request if one is found, otherwise %NULL.
->   */
->  struct nfs_page *
->  pnfs_generic_search_commit_reqs(struct nfs_commit_info *cinfo, struct page *page)
-
--- 
-~Randy
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

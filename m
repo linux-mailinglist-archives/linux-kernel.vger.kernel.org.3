@@ -2,64 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380745AEE72
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1835AEF0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbiIFPQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S233621AbiIFPj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiIFPPt (ORCPT
+        with ESMTP id S238153AbiIFPim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:15:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71B74DB6C;
-        Tue,  6 Sep 2022 07:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662474546; x=1694010546;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ybgSo2BkoIeNrG9pnEwHuQd0zdtCaKmVHLLWorPRU10=;
-  b=fWWJtozf+jgh+pAEhkuFZw0bj1pHoIa70kXfVAOpA4fstDTl+7TVGPXB
-   0jqRZrP91dwqaKikkAan1wDsoPZx2O9TFH7d5yHHd85PXc3d1Q7WL+KVc
-   ihKELM9zLhwjYVjrXS/R7hqvRPIp456ZzamocEm5M0kaB4yt4e6bE0jHN
-   pJAHfPEIxkCrZ3cLMHDbalwTu18EljJaLQNll1y+vzYhqp3GzceimE/P4
-   svSjhva5LsN59nN5fbcc6Ts13PHjoV/aJlYyjOXbls/IUmHik0VNf/fUV
-   x4b5uX8r1rFOqK7/QCDN5LBYRSPH2jgPzaSA/dCVHrfTunGxs+/G6aKpj
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="276344870"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="276344870"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:26:27 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="756383261"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:26:24 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oVZWv-0099cw-3D;
-        Tue, 06 Sep 2022 17:26:22 +0300
-Date:   Tue, 6 Sep 2022 17:26:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
-Subject: Re: [PATCH v4 00/21] Variety of fixes and new features for mr75203
- driver
-Message-ID: <YxdYjWYCR7YCodTX@smile.fi.intel.com>
-References: <20220906083356.21067-1-farbere@amazon.com>
+        Tue, 6 Sep 2022 11:38:42 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02068C6FE0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 07:48:21 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286EKQs8031075;
+        Tue, 6 Sep 2022 14:27:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=mOKMGbj0h+IoItTPXGITUaX6+BxdUTBobKe1JTaSnpU=;
+ b=mqr+CLhLxBtoZkbFNOpyD8ZfgMACYYYIcPHk3oR2WScnQYOkTbNYapKbWcGuuUvx7EDj
+ aAjPwgveYuPGTyLUM69DOMiw0aPCptXxxKvnxiOJpH1wjDn1ZOscujgLjqZL0tKBK3ik
+ AEiYGOdr0lBFLFDdWA7lIOxd4rqW7Lenv6ufz5lSHv3o+Db1TxPJJ7jsCTIemuEUE0w4
+ +XvA0zYXi+lj+DI7b0NpoWAnNQKVlghvUdZcvZlWQaq5ObT1JiijmA/Ew73KZQwL/NVB
+ AMwRZpj7b+r2asLhGxmKybbIZ5MVnvkGxuziCjbzoZSbp+KkRjuIwiS4FasIvHqzVF0M Bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je7vs86w3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 14:27:01 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 286ELGRq001209;
+        Tue, 6 Sep 2022 14:27:00 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je7vs86ur-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 14:27:00 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 286EM2l5032470;
+        Tue, 6 Sep 2022 14:26:58 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3jbxj8uven-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 14:26:58 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 286ENRMu38011302
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Sep 2022 14:23:27 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 236A5A405F;
+        Tue,  6 Sep 2022 14:26:56 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2BF6A4054;
+        Tue,  6 Sep 2022 14:26:54 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Sep 2022 14:26:54 +0000 (GMT)
+Message-ID: <1624be86-4c17-46e5-fafc-eb8afb7b9b4a@linux.ibm.com>
+Date:   Tue, 6 Sep 2022 16:26:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906083356.21067-1-farbere@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.0
+Subject: Re: [RFC PATCH RESEND 06/28] mm: mark VMA as locked whenever
+ vma->vm_flags are modified
+Content-Language: fr
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        rientjes@google.com, axelrasmussen@google.com, joelaf@google.com,
+        minchan@google.com, kernel-team@android.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220901173516.702122-1-surenb@google.com>
+ <20220901173516.702122-7-surenb@google.com>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <20220901173516.702122-7-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6dJbI8DKo_nJ9KArZv3m8trGfj4Z_S3o
+X-Proofpoint-ORIG-GUID: NqUqfyaWz9LmhuH8uw3FRePI3DXiS3ka
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_07,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 impostorscore=0 bulkscore=0
+ spamscore=0 mlxlogscore=994 suspectscore=0 lowpriorityscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209060067
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,102 +106,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:33:35AM +0000, Eliav Farber wrote:
-> List of fixes:
->  - Fix "intel,vm-map" property to be optional.
->  - Fix VM sensor allocation when "intel,vm-map" not defined.
->  - Fix multi-channel voltage reading.
->  - Fix voltage equation for negative source input.
->  - Modify the temperature equation according to series 5 datasheet.
->  - Fix coding style issue.
+Le 01/09/2022 à 19:34, Suren Baghdasaryan a écrit :
+> VMA flag modifications should be done under VMA lock to prevent concurrent
+> page fault handling in that area.
 > 
-> List of new features:
->  - Modify "reset" property to be optional.
->  - Add optional "moortec,vm-active-channels" property to define the number
->    of active channels per VM.
->  - Add support for mr76006 pre-scaler to multiply the voltage result by 2.
->  - Add support for series 6 temperature equation.
->  - Add coefficient properties to fine tune the temperature equation.
->  - Add debugfs to read and write temperature coefficients
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  fs/proc/task_mmu.c | 1 +
+>  fs/userfaultfd.c   | 6 ++++++
+>  mm/madvise.c       | 1 +
+>  mm/mlock.c         | 2 ++
+>  mm/mmap.c          | 1 +
+>  mm/mprotect.c      | 1 +
+>  6 files changed, 12 insertions(+)
 
-For all code patches (means no DT ones)
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+There are few changes also done in the driver's space, for instance:
 
-> ---------
-> 
-> Changes between v3 and v4:
-> *) Provide a Fixes tag for all fixes in the series.
-> *) Start series with fixes.
-> *) New patch to add description in moortec,mr75203.yaml.
-> *) New patch to add moortec to vendor-prefixes.
-> *) Fix moortec,mr75203.yaml checker errors.
-> *) Remove validation of device-tree parameters.
-> *) Fix per patch specific comments (detailed in each patch).
-> 
-> Changes between v2 and v3:
-> *) Add "moortec" prefix to all new device-tree properties.
-> *) Change order of patches.
-> *) Add explanations to better understand the changes.
-> *) Change "reset" property to be optional and remove the
->   "reset-control-skip" property.
-> *) Split the patch for "fix multi-channel voltage reading" to two
->    patches.
-> *) Change pre-scaler property format and fix typo (scalar --> scaler).
-> *) Fix voltage equation to support negative values instead of limiting
->    value to zero.
-> *) Temperature equation - protect from overflow and add clamping.
-> *) Add new "moortec,ts-series" property to select between temperature
->    equation of series 5 or series 6.
-> 
-> Changes between v1 and v2:
->  *) Fix compilation error for patch 08/16:
->     "warning: ISO C90 forbids variable length array"
-> 
-> ---------
-> 
-> Eliav Farber (21):
->   hwmon: (mr75203) fix coding style space errors
->   dt-bindings: hwmon: (mr75203) fix "intel,vm-map" property to be
->     optional
->   hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not
->     defined
->   hwmon: (mr75203) update pvt->v_num and vm_num to the actual number of
->     used sensors
->   hwmon: (mr75203) fix voltage equation for negative source input
->   hwmon: (mr75203) fix multi-channel voltage reading
->   hwmon: (mr75203) enable polling for all VM channels
->   dt-bindings: hwmon: (mr75203) add description for Moortec's PVT
->     controller
->   dt-bindings: hwmon: (mr75203) change "resets" property to be optional
->   hwmon: (mr75203) skip reset-control deassert for SOCs that don't
->     support it
->   dt-bindings: vendor-prefixes: add vendor prefix for Moortec
->   dt-bindings: hwmon: (mr75203) add "moortec,vm-active-channels"
->     property
->   hwmon: (mr75203) add VM active channel support
->   dt-bindings: hwmon: (mr75203) add "moortec,vm-pre-scaler-x2" property
->   hwmon: (mr75203) add VM pre-scaler x2 support
->   hwmon: (mr75203) modify the temperature equation according to series 5
->     datasheet
->   dt-bindings: hwmon: (mr75203) add "moortec,ts-series" property
->   hwmon: (mr75203) add support for series 6 temperature equation
->   dt-bindings: hwmon: (mr75203) add coefficient properties for the
->     thermal equation
->   hwmon: (mr75203) parse temperature coefficients from device-tree
->   hwmon: (mr75203) add debugfs to read and write temperature
->     coefficients
-> 
->  .../bindings/hwmon/moortec,mr75203.yaml       |  97 ++++-
->  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->  drivers/hwmon/mr75203.c                       | 387 +++++++++++++++---
->  3 files changed, 421 insertions(+), 65 deletions(-)
-> 
-> -- 
-> 2.37.1
-> 
+*** arch/x86/kernel/cpu/sgx/driver.c:
+sgx_mmap[98]                   vma->vm_flags |= VM_PFNMAP | VM_DONTEXPAND |
+VM_DONTDUMP | VM_IO;
+*** arch/x86/kernel/cpu/sgx/virt.c:
+sgx_vepc_mmap[108]             vma->vm_flags |= VM_PFNMAP | VM_IO |
+VM_DONTDUMP | VM_DONTCOPY;
+*** drivers/dax/device.c:
+dax_mmap[311]                  vma->vm_flags |= VM_HUGEPAGE;
 
--- 
-With Best Regards,
-Andy Shevchenko
+I guess these changes to vm_flags should be protected as well, or to be
+checked one by one.
 
+> 
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 4e0023643f8b..ceffa5c2c650 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1285,6 +1285,7 @@ static ssize_t clear_refs_write(struct file *file, const char __user *buf,
+>  			for (vma = mm->mmap; vma; vma = vma->vm_next) {
+>  				if (!(vma->vm_flags & VM_SOFTDIRTY))
+>  					continue;
+> +				vma_mark_locked(vma);
+>  				vma->vm_flags &= ~VM_SOFTDIRTY;
+>  				vma_set_page_prot(vma);
+>  			}
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 175de70e3adf..fe557b3d1c07 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -620,6 +620,7 @@ static void userfaultfd_event_wait_completion(struct userfaultfd_ctx *ctx,
+>  		mmap_write_lock(mm);
+>  		for (vma = mm->mmap; vma; vma = vma->vm_next)
+>  			if (vma->vm_userfaultfd_ctx.ctx == release_new_ctx) {
+> +				vma_mark_locked(vma);
+>  				vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
+>  				vma->vm_flags &= ~__VM_UFFD_FLAGS;
+>  			}
+> @@ -653,6 +654,7 @@ int dup_userfaultfd(struct vm_area_struct *vma, struct list_head *fcs)
+>  
+>  	octx = vma->vm_userfaultfd_ctx.ctx;
+>  	if (!octx || !(octx->features & UFFD_FEATURE_EVENT_FORK)) {
+> +		vma_mark_locked(vma);
+>  		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
+>  		vma->vm_flags &= ~__VM_UFFD_FLAGS;
+>  		return 0;
+> @@ -734,6 +736,7 @@ void mremap_userfaultfd_prep(struct vm_area_struct *vma,
+>  		atomic_inc(&ctx->mmap_changing);
+>  	} else {
+>  		/* Drop uffd context if remap feature not enabled */
+> +		vma_mark_locked(vma);
+>  		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
+>  		vma->vm_flags &= ~__VM_UFFD_FLAGS;
+>  	}
+> @@ -891,6 +894,7 @@ static int userfaultfd_release(struct inode *inode, struct file *file)
+>  			vma = prev;
+>  		else
+>  			prev = vma;
+> +		vma_mark_locked(vma);
+>  		vma->vm_flags = new_flags;
+>  		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
+>  	}
+> @@ -1449,6 +1453,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  		 * the next vma was merged into the current one and
+>  		 * the current one has not been updated yet.
+>  		 */
+> +		vma_mark_locked(vma);
+>  		vma->vm_flags = new_flags;
+>  		vma->vm_userfaultfd_ctx.ctx = ctx;
+>  
+> @@ -1630,6 +1635,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  		 * the next vma was merged into the current one and
+>  		 * the current one has not been updated yet.
+>  		 */
+> +		vma_mark_locked(vma);
+>  		vma->vm_flags = new_flags;
+>  		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
+>  
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 5f0f0948a50e..a173f0025abd 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -181,6 +181,7 @@ static int madvise_update_vma(struct vm_area_struct *vma,
+>  	/*
+>  	 * vm_flags is protected by the mmap_lock held in write mode.
+>  	 */
+> +	vma_mark_locked(vma);
+>  	vma->vm_flags = new_flags;
+>  	if (!vma->vm_file) {
+>  		error = replace_anon_vma_name(vma, anon_name);
+> diff --git a/mm/mlock.c b/mm/mlock.c
+> index b14e929084cc..f62e1a4d05f2 100644
+> --- a/mm/mlock.c
+> +++ b/mm/mlock.c
+> @@ -380,6 +380,7 @@ static void mlock_vma_pages_range(struct vm_area_struct *vma,
+>  	 */
+>  	if (newflags & VM_LOCKED)
+>  		newflags |= VM_IO;
+> +	vma_mark_locked(vma);
+>  	WRITE_ONCE(vma->vm_flags, newflags);
+>  
+>  	lru_add_drain();
+> @@ -456,6 +457,7 @@ static int mlock_fixup(struct vm_area_struct *vma, struct vm_area_struct **prev,
+>  
+>  	if ((newflags & VM_LOCKED) && (oldflags & VM_LOCKED)) {
+>  		/* No work to do, and mlocking twice would be wrong */
+> +		vma_mark_locked(vma);
+>  		vma->vm_flags = newflags;
+>  	} else {
+>  		mlock_vma_pages_range(vma, start, end, newflags);
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 693e6776be39..f89c9b058105 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1818,6 +1818,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+>  out:
+>  	perf_event_mmap(vma);
+>  
+> +	vma_mark_locked(vma);
+>  	vm_stat_account(mm, vm_flags, len >> PAGE_SHIFT);
+>  	if (vm_flags & VM_LOCKED) {
+>  		if ((vm_flags & VM_SPECIAL) || vma_is_dax(vma) ||
+
+I guess, this doesn't really impact, but the call to vma_mark_locked(vma)
+may be done only in the case the vm_flags field is touched.
+Something like this:
+
+	vm_stat_account(mm, vm_flags, len >> PAGE_SHIFT);
+	if (vm_flags & VM_LOCKED) {
+		if ((vm_flags & VM_SPECIAL) || vma_is_dax(vma) ||
+					is_vm_hugetlb_page(vma) ||
+-					vma == get_gate_vma(current->mm))
++					vma == get_gate_vma(current->mm)) {
++			vma_mark_locked(vma);
+			vma->vm_flags &= VM_LOCKED_CLEAR_MASK;
+-		else
++		} else
+			mm->locked_vm += (len >> PAGE_SHIFT);
+	}
+
+
+> diff --git a/mm/mprotect.c b/mm/mprotect.c
+> index bc6bddd156ca..df47fc21b0e4 100644
+> --- a/mm/mprotect.c
+> +++ b/mm/mprotect.c
+> @@ -621,6 +621,7 @@ mprotect_fixup(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>  	 * vm_flags and vm_page_prot are protected by the mmap_lock
+>  	 * held in write mode.
+>  	 */
+> +	vma_mark_locked(vma);
+>  	vma->vm_flags = newflags;
+>  	/*
+>  	 * We want to check manually if we can change individual PTEs writable
 

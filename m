@@ -2,78 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0745AEDA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C805AEDA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237615AbiIFOi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
+        id S239640AbiIFOkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiIFOiB (ORCPT
+        with ESMTP id S242338AbiIFOjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:38:01 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82DD81B0C;
-        Tue,  6 Sep 2022 07:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662472813; x=1694008813;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jgV2lWWjq/uG5FoAvxLpsU0/ppNVg7RQVY9CZ4CndCM=;
-  b=QWsTLFVxvCrEHGn/8G/cudWmai0MRXrAoPO4oM78wCo8l/T7De7eXIQ3
-   Nghz1yCicOk1AMt3hbjBfNF2JQH+8IQzW5yahhwWKtflQpFVCeIT7x0dw
-   jauZd+d1Gg7b50aayw4qVOHIWWo8cbo2crFXDHIouHyyDlmTBmkrxsz0s
-   vcCrRoH9vMrtID2rsvTXAAkS9VVlS4s/DPT088H5rCHY+An6RQpZWHTLS
-   9TGkjcT89Ra3QU8JnV0mki0GAX+iQdX3PDiqUiRaGerFgRDE5I8VNc3Ds
-   iNNTGIJl5fOnE2Ty0b7hc/mRCtNww1EJeb5W3HK0vBLLKzWSNa24adv0O
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="279612176"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="279612176"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 06:57:35 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="565100120"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 06:57:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oVZ51-009909-1d;
-        Tue, 06 Sep 2022 16:57:31 +0300
-Date:   Tue, 6 Sep 2022 16:57:31 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH v2 1/4] pwm: sysfs: Switch to DEFINE_SIMPLE_DEV_PM_OPS()
- and pm_sleep_ptr()
-Message-ID: <YxdRy5NRRUkXU156@smile.fi.intel.com>
-References: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 10:39:08 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8609A9E3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 07:01:10 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id h12-20020a170902f54c00b0016f8858ce9bso7812550plf.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 07:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date;
+        bh=Lq7riar+uQ6X+8Gvp5Fg5gDGB/Hhk+iwQZcEdky3g/c=;
+        b=OY34NkbflE4C0bujvyFI1q5sEh4NBLhkhXVGmh455fMAcD2cS3JvWWpv1A1L03vlp5
+         l8GuIovmdSzJRowa7Vae9B+hzH5mr14KsiM+wg94715AhRO0a6uciIiekIrJdqUKmuhe
+         30UnwznzPoIo5tYVatPhLIhChyBQjYmSjK2MLoB82z0/j6gOZhTyw2aDGyqcVDvNbFRN
+         9jr/1M1tIVq0jyJXBHFzIQkHrGae17nQD/gEgDF7mvqZLbr+xYtJGElMogVDBT8YMOC6
+         3PqUiTdXANzwA69b6ncSWXW9SZYrkdegsWFP/abITp6c/vQPD9+XHZGF7hb0CwpCQMLn
+         4IJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Lq7riar+uQ6X+8Gvp5Fg5gDGB/Hhk+iwQZcEdky3g/c=;
+        b=rtJruG7z/Cf7MA6/8dh5iYf/GvbGhTsgBy7h/8qMbGmSHT3itV3O2WouO/z+chjI7o
+         l/Cx/o4sAfa8QeO4qMZ/qsZ66c4Nz6i29GWNoyM2EGECQK4oJKgyo80iTwZ9IEpWWny8
+         ZGmWipnl0u5/EBPWk3keZrs569BMPsSOv7SDEQr89nEey14o3CNTZpnJSyziebWI5QN6
+         BjQPFSgirEzAzWLRY/XWvoyWDOubYtdAL4JVoSN0rumpuE+J7ObQtPqYUxKtkP7/KC7s
+         u/c7028XCVmNxb8TbQWjW5/66WSETKPJTRb+XzWTglYRfm68QJsqF1GR4X26zv6zA4Mj
+         3KgQ==
+X-Gm-Message-State: ACgBeo02B264na2LELi1VdDD1z/SswDep4HgwwWLFD3vjeaYha6sxlIQ
+        6J5zT8yT5TiGVjRAvbgbgat8d8UVkU25cg==
+X-Google-Smtp-Source: AA6agR4AOXnEJ0/4hCB4m20xugoN0ph9ftdVhDv4bwb/GGvYsT//uszeEW9chiXzk/HwkZxEhumLNSXANorVww==
+X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
+ (user=cmllamas job=sendgmr) by 2002:a17:902:b484:b0:170:a2d8:80f6 with SMTP
+ id y4-20020a170902b48400b00170a2d880f6mr53978078plr.97.1662472796815; Tue, 06
+ Sep 2022 06:59:56 -0700 (PDT)
+Date:   Tue,  6 Sep 2022 13:59:44 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220906135948.3048225-1-cmllamas@google.com>
+Subject: [PATCH RESEND 0/3] binder: rebase remaining alloc->vma patches
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel-team@android.com, Carlos Llamas <cmllamas@google.com>,
+        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 08:07:13PM +0300, Andy Shevchenko wrote:
-> Using these newer macros allows the compiler to remove the unused
-> structure and functions when !CONFIG_PM_SLEEP + removes the need to
-> mark pm functions __maybe_unused.
+This is a rebase of the remaining patches previously sent in [1], which
+depended on commit 1da52815d5f1 ("binder: fix alloc->vma_vm_mm null-ptr
+dereference") being merged into mainline. Now we can proceed with these
+remaining patches rebased against the char-misc-next branch.
 
-Anything I should have done for this to be applied?
+[1] https://lore.kernel.org/all/20220829201254.1814484-1-cmllamas@google.co=
+m/
 
--- 
-With Best Regards,
-Andy Shevchenko
+--
+Carlos Llamas
 
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Arve Hj=C3=B8nnev=C3=A5g" <arve@android.com>
+Cc: Todd Kjos <tkjos@android.com>
+Cc: Martijn Coenen <maco@android.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Liam Howlett <liam.howlett@oracle.com>
+Cc: kernel-team@android.com
+Cc: linux-kernel@vger.kernel.org
+
+Carlos Llamas (3):
+  binder: rename alloc->vma_vm_mm to alloc->mm
+  binder: remove binder_alloc_set_vma()
+  binder: fix binder_alloc kernel-doc warnings
+
+ drivers/android/binder_alloc.c | 55 +++++++++++-----------------------
+ drivers/android/binder_alloc.h |  9 +++---
+ 2 files changed, 21 insertions(+), 43 deletions(-)
+
+--=20
+2.37.2.789.g6183377224-goog
 

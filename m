@@ -2,80 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CED5AF71A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CB95AF72C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiIFVlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
+        id S229781AbiIFVm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIFVlD (ORCPT
+        with ESMTP id S229491AbiIFVmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:41:03 -0400
+        Tue, 6 Sep 2022 17:42:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454BA8671E;
-        Tue,  6 Sep 2022 14:41:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC518670C;
+        Tue,  6 Sep 2022 14:42:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D56F06132D;
-        Tue,  6 Sep 2022 21:41:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EEFCC433C1;
-        Tue,  6 Sep 2022 21:41:01 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 17:41:40 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Arun Easi <aeasi@marvell.com>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: [EXT] build failure of next-20220906 due to 8bfc149ba24c
- ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more")
-Message-ID: <20220906174140.41b46a5f@gandalf.local.home>
-In-Reply-To: <e9f5eb5e-3830-d19b-dcb0-05f7a36fcb2d@marvell.com>
-References: <YxdZ/9XOsWilvVSd@debian>
-        <44fe9ca0-e1d7-1e4f-9fd8-0f48a84dca72@marvell.com>
-        <CADVatmMsYk+tgJDASx2uoskLzY=b4m7SNo+3R6SXT=0vEnu+vA@mail.gmail.com>
-        <20220906170346.52c3f592@gandalf.local.home>
-        <e9f5eb5e-3830-d19b-dcb0-05f7a36fcb2d@marvell.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7029A616ED;
+        Tue,  6 Sep 2022 21:42:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DB0C433C1;
+        Tue,  6 Sep 2022 21:42:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662500537;
+        bh=c+ClokW/ttPFEFYMhrFMsQpYEe0Gv0ApefG2N4w/Hcw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BWmyNKH/Z14CW9MBaCiaJSG+K6d/MCOjbRYB22GWuqMAWn3PCMnkem/+ob+S9QpQ9
+         LBbeMJhQ06JkIGtghTu7Kk9jV/4c0rRw0o669UZV4SSe5aRBl1VrpAq8hRPcwdoUqI
+         77zHmUSPpiKizfzZ8yFT4DbRZv2J0M7PyRgd/CQFxcPbFMn9AQONClMLVihax09RMp
+         RVHM6YGJAd4gtLKQY39bAZ651bv+DVxtYo8AqOhs9mj70amQaOsCrgrVL3Jytyf8gE
+         IiIRw8i6ooiAmA3biX+agc/zSMfAa/NFPO/k3t+K1Bj+nw6+Wy8Y5HehqU/2Xy7WgB
+         wZ0JlQwQ1Xa8g==
+Received: by pali.im (Postfix)
+        id 819C6742; Tue,  6 Sep 2022 23:42:15 +0200 (CEST)
+Date:   Tue, 6 Sep 2022 23:42:15 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
+Message-ID: <20220906214215.7hmt5vpk2yzxdm2e@pali>
+References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+ <20220906204301.3736813-2-dmitry.torokhov@gmail.com>
+ <20220906211628.6u4hbpn4shjcvqel@pali>
+ <Yxe7CJnIT5AiUilL@google.com>
+ <Yxe+P27mwZQMZK+5@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yxe+P27mwZQMZK+5@google.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sep 2022 14:26:31 -0700
-Arun Easi <aeasi@marvell.com> wrote:
-
-> Steve, I was thinking both the fixes stay at least for a short 
-> term the one in qla2xxx to avoid tree dependencies.
+On Tuesday 06 September 2022 14:40:15 Dmitry Torokhov wrote:
+> On Tue, Sep 06, 2022 at 02:26:32PM -0700, Dmitry Torokhov wrote:
+> > Hi Pali,
+> > 
+> > On Tue, Sep 06, 2022 at 11:16:28PM +0200, Pali Rohár wrote:
+> > > Hello!
+> > > 
+> > > On Tuesday 06 September 2022 13:43:01 Dmitry Torokhov wrote:
+> > > > This patch switches the driver away from legacy gpio/of_gpio API to
+> > > > gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+> > > > make private to gpiolib.
+> > > 
+> > > There are many pending pci-mvebu.c patches waiting for review and merge,
+> > > so I would suggest to wait until all other mvebu patches are processed
+> > > and then process this one... longer waiting period :-(
+> > 
+> > OK, it is not super urgent. OTOH it is a very simple patch :)
 > 
-> Since, the qla_def.h change goes as:
-> 
-> +#ifndef CONFIG_TRACING
-> +#ifndef trace_array_get_by_name
-> 
-> ..it should co-exist when the "#define trace_array_get_by_name" gets 
-> merged in include/linux/trace.h. BTW, I will send out the changes to 
-> trace.h today.
-> 
-> Other alternatives/suggestions welcome.
+> By the way, do the pending patches address soft-leaking of reset GPIO
+> when the driver fails to acquire clock for a port (I called it
+> soft-leaking since devm will free it on unbind)?
 
-I doubt I'll have anything that conflicts with an update to
-include/linux/trace.h, as it is seldom modified.
-
-Just sent a patch out that updates that file and I'll review it, and then
-you can push it through your tree.
-
--- Steve
+I think no, because there is not any patch related to GPIO reset.

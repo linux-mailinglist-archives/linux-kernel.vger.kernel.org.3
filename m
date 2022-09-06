@@ -2,233 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC00B5AEBE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312F15AEC1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235392AbiIFOUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
+        id S241938AbiIFOX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241665AbiIFOR2 (ORCPT
+        with ESMTP id S242095AbiIFOTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:17:28 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2042.outbound.protection.outlook.com [40.107.220.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CA3DEF7;
-        Tue,  6 Sep 2022 06:49:34 -0700 (PDT)
+        Tue, 6 Sep 2022 10:19:34 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2051.outbound.protection.outlook.com [40.107.220.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEA68B2C2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:50:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XemBOO3nC6WNAP+aI+9SSmsvwLFQuoEHbTqjUQN+JiHjEoO2k7aLdUwYo9zQ8rQaAAy76QTdB+OpASnLZ83qVgAc7TAEtW3pcJJgmZEWxmVPhuQQIu7YvD5vI4UVntHiS2WI3GD4Fm0lu825S0i1Q/+doGjQVb8LrWa4Mcc+EMGxzr637jaVeFeGCF6zaLuDLizWYW+0qG7A0ZmW4hr5BnNJlVyIbCxTYEHh/IpeQaCNCMo0ie1kR7HNgoNABy5QfreUoDDntMONvJvAWS51dFotaXxa45d8+5jIJX0lwl8iF2psmgdX12O3odV0QiePW4bsMDD5XRc954PcqUHpRQ==
+ b=APQ0BhmP2F7mR5b6ivlbrokZklOYpU3tLz3HuJuh6dRS3Fwsg8NQsbdyOfD6/tif90BwfLU4bUdcDsot1HjsPUHfSanKAxNElSN10MGQdeDMqv3gHvlscF/XtnOe7JeoibkM+/JnZX20K78NvMc4ZsJhwWrJBH5RiCrqsq07EoLP2GoIa+AMw+uxW4Raxk7mq43hvC7vEmeqI7cTxCn6aZsB+UcGGPmYHmAK3X9rNCZP20OJRfWEMudawZ3eVWTJePMyiprL9+0XctlZhQSutRQCLCPAh6eQyVrCcoKmZyZrG0/sXjrANLMtrtpuQ2EOAlOFEcviw58CXWfHRbKVGQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uCJIG/W6utr64/ZhPwmV6hiUCVl91LQmkAFBIzF02+s=;
- b=n6qUfxojKz/a+43tjPHftgay9mJJBXUu2lissSOQ7B9r2YSszs7AbnBy2h5FHixp+iH6p7PE+HpdmHI4r2+gUu6UwNfqSxfWr6zCF2U0jFWlvuskEc9pjbrseOALBgjtwMTbi5GuWTIXeszEeji4uGZaX36YEmZn4R9DVxAUYF3JSwT8c+sFkm+/gQuFdChMypIqXjhGE6oRr6Nf1iLwUPtFEk5nq4nKbfnccAm3ON09AzzwUfk9JJmpBe6O+T3x8Ycite1m0M1xQq2H+xRokOvfq5M06yML+wddKxg2eHPxVdV86mgsgkHLWBu3keTW7i4dCAp9gBsGKOhwXVvOJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=g8WLS+0t68SPpYIgQHSHh28l70oKiOmkTpfACCmHc4I=;
+ b=SAgK2/4dlju56YGOY12bthjhBeAXmT5v5d9Kl/fFNmJkF8UJyHRzx65Q1PjgSS6m1jVjcVM8pRKrPQye+OwcRG6/iS+yLNb6AbaIywvyPklmdeqHktkttf7iTKDeZWheBCgUYo9rWy8DreTEe7AMA/Y3xU/kIxzKfE88IaDzEPPDQcjPRZ0SY14CBwp9cGwP/mZUhV49dQns2cCGuj2xcVUNlOQbTq43YDX5nNDJ3OeKRilLsRRR5bToErueq9bX7cj7Drg65Xp8pNxrOEZhp5EnOKJs1iXvLYbdcsXHxAp6EKJ9Wod0wrUghu1hj17XdURo7lMqG0RNu5hXzbfJAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uCJIG/W6utr64/ZhPwmV6hiUCVl91LQmkAFBIzF02+s=;
- b=otFUDPNyUSc4xTmscwM7i2gMEHFRi2Y0g8bXOWGmziKYGmoXdCIn+txcZe/fFw6lyltUKdibSZbcCQqLHhuk/1oVOSS1qgiHmj9E/GQXOnXZvmCTIvqXrnLgPKKiWQqTcK3Q4r5wCBfAeZ7LK6ujuy3gxmH1+0xyZRYi1zS/d60=
-Received: from CY5PR22CA0004.namprd22.prod.outlook.com (2603:10b6:930:16::29)
- by DM4PR12MB7573.namprd12.prod.outlook.com (2603:10b6:8:10f::22) with
+ bh=g8WLS+0t68SPpYIgQHSHh28l70oKiOmkTpfACCmHc4I=;
+ b=Jk/1px/chDg3KZ0Zil1FtVp6i5kIg5Gzk0vin8zFlQTZf5NuotONxvo3OPtRy3ZxkIIFFK8uD2gB5ej0B/ou2mTEl4oIx9zDQOBBuoCUM7ILKgVLAjBB0vXuYSfpIiAbcgp1/O4ByxOoO4seb9ceGfpRHgVhFGrE6k5LN/C1qUzoBaZYKMpcZHtGuBXbWJP6IIi0frMk79dgyC72rDiExv0AxUxnGvK8ZoJ0AKXvqUpSU7SRRmdV9Me5paHoVLn7l7BlII+ERwoxwopxDvLGaXsIx3dcoZJ23qPE+6PEPOhyYniquk2yRb/pyeapqIQBR+N4aAWa0i8sNIwuh3nEqg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM4PR12MB7599.namprd12.prod.outlook.com (2603:10b6:8:109::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Tue, 6 Sep
- 2022 13:48:29 +0000
-Received: from CY4PEPF0000B8ED.namprd05.prod.outlook.com
- (2603:10b6:930:16:cafe::d7) by CY5PR22CA0004.outlook.office365.com
- (2603:10b6:930:16::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12 via Frontend
- Transport; Tue, 6 Sep 2022 13:48:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CY4PEPF0000B8ED.mail.protection.outlook.com (10.167.241.9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5612.10 via Frontend Transport; Tue, 6 Sep 2022 13:48:29 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 6 Sep
- 2022 08:48:23 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 6 Sep
- 2022 06:48:22 -0700
-Received: from xhdipdslab49.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Tue, 6 Sep 2022 08:48:12 -0500
-From:   Nipun Gupta <nipun.gupta@amd.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <eric.auger@redhat.com>, <alex.williamson@redhat.com>,
-        <cohuck@redhat.com>, <puneet.gupta@amd.com>,
-        <song.bao.hua@hisilicon.com>, <mchehab+huawei@kernel.org>,
-        <maz@kernel.org>, <f.fainelli@gmail.com>,
-        <jeffrey.l.hugo@gmail.com>, <saravanak@google.com>,
-        <Michael.Srba@seznam.cz>, <mani@kernel.org>, <yishaih@nvidia.com>,
-        <jgg@ziepe.ca>, <jgg@nvidia.com>, <robin.murphy@arm.com>,
-        <will@kernel.org>, <joro@8bytes.org>, <masahiroy@kernel.org>,
-        <ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <kvm@vger.kernel.org>
-CC:     <okaya@kernel.org>, <harpreet.anand@amd.com>,
-        <nikhil.agarwal@amd.com>, <michal.simek@amd.com>,
-        <aleksandar.radovanovic@amd.com>, <git@amd.com>,
-        Nipun Gupta <nipun.gupta@amd.com>
-Subject: [RFC PATCH v3 1/7] dt-bindings: bus: add CDX bus device tree bindings
-Date:   Tue, 6 Sep 2022 19:17:55 +0530
-Message-ID: <20220906134801.4079497-2-nipun.gupta@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220906134801.4079497-1-nipun.gupta@amd.com>
-References: <20220803122655.100254-1-nipun.gupta@amd.com>
- <20220906134801.4079497-1-nipun.gupta@amd.com>
+ 2022 13:47:56 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 13:47:56 +0000
+Date:   Tue, 6 Sep 2022 10:47:55 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        peterx@redhat.com, kirill.shutemov@linux.intel.com,
+        hughd@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
+Message-ID: <YxdPi2E63aO0Dgyd@nvidia.com>
+References: <20220901222707.477402-1-shy828301@gmail.com>
+ <e6ad1084-c301-9f11-1fa7-7614bf859aaf@nvidia.com>
+ <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com>
+X-ClientProxiedBy: BL1PR13CA0384.namprd13.prod.outlook.com
+ (2603:10b6:208:2c0::29) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000B8ED:EE_|DM4PR12MB7573:EE_
-X-MS-Office365-Filtering-Correlation-Id: c70549d4-1204-48dc-1f19-08da900e7b09
+X-MS-Office365-Filtering-Correlation-Id: 64d92e9c-27e4-42a7-5982-08da900e671c
+X-MS-TrafficTypeDiagnostic: DM4PR12MB7599:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0C4YTxBp6+Y0di6IdLA3qW++l/vhqi7kx5E5zz2EoLsqUPAcKHDC3Zlrc3NwxOhq2kO5ZIoWj0EMnDE45WyD3R17se5u6eehQnOxtEBNmkkTY5Qv9DD7RddGrcl13lZ+C5mXT5ubOOWzPfAYIUG0cX9T2eLGmz2jFA4Cm87ntsABLvBcFM7z/SIH6JAnPAmzGg3HMxSZzv8UdssAMSHkF0+RXzjcHAXEAJTRaG1jCgek5sk3G+Ey2cTUq2p1pDOM9KwD8AE0mFKdjSkVOkyjdsvqcaB7Rt8edZDZqfhi8S/FS3Dwyl14pTLnACf0k5fIX9SGjZduB6aVao4lycprnL/AGTMXl4QyF7SiW4qzAxV6fqPJV+lVvKVuDiGeyILAFwKSD6e3XCuk6HigA9esPezeSGFGq7eqJDTWJ/FP0v3R9aEai8L2Rr7Ae615a4CDM7SCsuEmKGK9TUf0ORsEBb6HV65ipdfi5mRqnlIrPswPQ2qjJDG03Is9tTKl0eMv0H8xqZvsiJNei/8f3PTi4u6vtq7OZaRVqmwhiKQOyKX2zpOFeW9+OD0YGwtIiKOfBpT/r33hkjo+H1mmIrImyAymCZmmnPGfF/4AtO35NdRprbERYCFtXtYrB1+QArtH9OsLdMfVU9fdp1iEEH+J9GnoBx1mUfeKS5w2ayf+v/QPaqfY3jfTtRKtpfAjjXfeX5obLiiZN8bdQvm7Ubb6oFAWRmdq/ZW0LCpRGbzFm6VRhjKH7QwRynVqBap8Jp5gt8gSQmaropna5psX1lWLvdXcnB2YF/sW4LiEUc22HHkW5zJ8VrQ42WpUka174FUvfL/LX6URnm4xSydSkOlKMgAL1LHgE4TKfDhXasq3eCaTGfx69hQZqeWIvGYjzi5NJAk4RVvRNTBXgFmFIHKr73jJlI3XDF4XJXg2IX9y9OOVq6U8bsBhu8U0B5flWDOm
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(396003)(39860400002)(40470700004)(36840700001)(46966006)(8936002)(7416002)(5660300002)(36860700001)(44832011)(2906002)(83380400001)(36756003)(8676002)(40460700003)(82740400003)(40480700001)(70586007)(4326008)(70206006)(110136005)(316002)(54906003)(6666004)(86362001)(82310400005)(47076005)(426003)(336012)(81166007)(2616005)(26005)(1076003)(186003)(356005)(921005)(41300700001)(478600001)(966005)(36900700001)(2101003)(83996005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 13:48:29.1983
+X-Microsoft-Antispam-Message-Info: 89cHDKWSUAxqRdzCFffipxFr3hFJe7AbcM80ezPns7Amj5PzKQuYyShx/W4mD9awCWeugAhqsSVYog03W5dzhKnZhpRCXQ43qUbT/LxSxY0SboORWcscSP2FembDLtQ/doE+zqMUpwe6r+6avpnUZcHnWU14pHNx4d78UNpQ1FhV6y9WPcsCtvROCjO0X+Y/Ag6D1LnHvXf6PDP1MtSvtvvKvzI9OhykqFMRESCVbkdL3Ap62xLjkDpZkaE6REHInXQu4F3cGuEw/whLmVjn0XkbgQUGQqIXcML0gMqAV64SmkX6LpqEEnuQdpQjA6HCaJ5PCXqn7eX3cLMDXWxrL9FWDTnvWq6r6XUl7DaU/nAEdu69k+3/NRTqzdZly/Op6TgdfMXf58UOxBa8T2vYEmlpRB9i1Gq7K4TLu9AfdHqybN24V+Zecf9wy8RYR5C7Edq6IHm8z+2socoqoob0DEH6DJTPb/1nn/eJqLYy7j6u+nKTzSkDrpYwmHWz4q/Nbm1KWwnpwXR+n+dFBFyd/vsq5lV5un1W/2wsg9u3H10sKMwnGqjdOTZWTJ4MhWFUGzvTiOTiV/nKuMjkpAhZdvac8jYcIblGyNx5LR4FibWt9JL3qgSeoz2w57tW7oqZAJzNyxnolTir8eIO59Fgg4+1O+aVm/LY+gAcXr8L/JkvJw1Fe+Zm30Sr9zh5uuTz9OxkE601xqzB0RXMs0JH5g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(366004)(346002)(396003)(39860400002)(8936002)(5660300002)(2906002)(83380400001)(66476007)(36756003)(8676002)(38100700002)(66946007)(4326008)(66556008)(316002)(6916009)(54906003)(86362001)(2616005)(6506007)(26005)(186003)(6486002)(41300700001)(478600001)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8TbrYuYMRBJqpyvTydTCoJpdiq1Tw8OmakQ4h6cP65SidncPdbj8SfWM0rbM?=
+ =?us-ascii?Q?VrXowe44HBUcBwDNoXgZTBRRTMa4K4vYIXXqDnOUxUb4KQqT42hdXgz59315?=
+ =?us-ascii?Q?pwrLf44nsHYZMW35OmGZiVO1lqaTk9CwdVtHyTud7v5htzGy6iQdFG9Ae4sk?=
+ =?us-ascii?Q?iNVte2b4JSBQ69NvOPZIEwygspRn3ddzmOMXCDQX1Q8WPLWNtvspBqO9lmn6?=
+ =?us-ascii?Q?mvmzcf55AjYr/6BHyp2yzdbwiEHP0P+2uUTRlon4kLpEuidY8a6H6KQ/Xvjo?=
+ =?us-ascii?Q?cc7A/nyjtr4AhuDNJK5mcehheh8HrBJqY4I8TxiRcm0T1zM2AbZXcMaH3J5S?=
+ =?us-ascii?Q?iPytgeJEMx8qqVsYY//d69bEJ7t0UCaP26Hm4kyAcldP3OHl7i0OTZh4UImt?=
+ =?us-ascii?Q?r1kuxMcEcG1fKt38QmVkE9xLXqeaEGV0UCwDGvTfuDN6UnrtuiT2wZDivGfi?=
+ =?us-ascii?Q?CxU4XoYu3QseOiWHKvo2C0IB9qWL+KjDLPYC94fvk7MxoODHrNhbgvvPsbAy?=
+ =?us-ascii?Q?GpINb74UEGCdxdfOViQrAjF5DogtT1jtUEbtRTzRb1f6x75cQjgM0iRwCE1O?=
+ =?us-ascii?Q?kddWqzTsIcctMUceXXjN/Uqt6JqDbN6MQmZhPb3+bju95mw5prsYrCehjU3E?=
+ =?us-ascii?Q?KhChT6Pb6vgoIrbBRXQgaFfRPZacr68UEBZscqL+m01ZC9q3rSbtgwnW5DB5?=
+ =?us-ascii?Q?ahuDE2tOfNGrfftthcZv6bOrm2hQXtJCnY5Zez4mtDQLMVdPDvVk1I0DRFnj?=
+ =?us-ascii?Q?QImaqxzEOfIZ3LMBL+tDDLm+arMxuuehGuHPAJGFsIiQU7967LY61teuZQUK?=
+ =?us-ascii?Q?mD6cS6xwsLlY6ns3uQaMNIF+Wl/Aa5Nk6mu8fwRQY+LpuSuZbTotod2U3pDp?=
+ =?us-ascii?Q?HyBTD5wyXZxw1FkphiIPPD17mYXvZkQ9DSAhYv9kmfbkg3rteeY9udV6aJx5?=
+ =?us-ascii?Q?ytHXH7VXg8nyodcM1tdTFUf1z6B0ZQU/zSuIOZdHwVhoLUMH89XQ8dZWeq/I?=
+ =?us-ascii?Q?U1T1gB9XRLAtG8xZDPYhGweluT08OydMEqkcwehCZgmD9Kb50s9xQvqLeqnv?=
+ =?us-ascii?Q?nsDnltTvu9NXXhMvPA4NDftgbeEXPe6W3KhvldSm/MKjytYuQrwIM4G9caxU?=
+ =?us-ascii?Q?DItMDs7LQCkPUO/WDeFqfIM3sITmt2ij8XQFuv9Imyd23GcJ252Brd40uLKu?=
+ =?us-ascii?Q?8lnf9rIcbbMEmenx5YldqAQNIFH9MrNYrM+Md20NvXdMX9A0oQm/FIK1Aelp?=
+ =?us-ascii?Q?tN/XVTnYkYTip4XCUmo/hO7TBnq9z/KkQ6o+AOhDkvWsCcxgMEXgaW5vOS8y?=
+ =?us-ascii?Q?7PLvNT1h9o2b+1A/6JwlqxZRYAHI4OKCsfyEYUXqCTC7KCKsGLXNkQK++wsk?=
+ =?us-ascii?Q?ZlfNOBH8Xz7zYNLiWzX8011+XbHeTu27cgCq0UoZg59FLGW/cs70EpOVQPJ9?=
+ =?us-ascii?Q?0iqBnn6aEEtIKHh0p6eok3nDN5+T1zE2PvRY06VQOmj7JSQGFLCCu/ONSyw8?=
+ =?us-ascii?Q?6kNIkjJ2cawkNa8I4NIvfZUEMUIZhrP4FN2AfC8hpGPOYKW8YEVS5o1nz3MD?=
+ =?us-ascii?Q?80qXSXevkXtgt20+lnMvVu99XnEKNgnwrIzq880D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64d92e9c-27e4-42a7-5982-08da900e671c
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 13:47:56.2531
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c70549d4-1204-48dc-1f19-08da900e7b09
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000B8ED.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7573
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WYuTupaiSVYUwQ353usSzrF8ybBYLvIiKBtuBNdg7AIAGxY4In0CnqYj6tAqZkeh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7599
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a devicetree binding documentation for CDX
-bus.
+On Mon, Sep 05, 2022 at 09:59:47AM +0200, David Hildenbrand wrote:
 
-CDX bus controller dynamically detects CDX bus and the
-devices on these bus using CDX firmware.
+> > That should be READ_ONCE() for the *pmdp and *ptep reads. Because this
+> > whole lockless house of cards may fall apart if we try reading the
+> > page table values without READ_ONCE().
+> 
+> I came to the conclusion that the implicit memory barrier when grabbing a
+> reference on the page is sufficient such that we don't need READ_ONCE here.
 
-Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
----
- .../devicetree/bindings/bus/xlnx,cdx.yaml     | 75 +++++++++++++++++++
- MAINTAINERS                                   |  6 ++
- 2 files changed, 81 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
+READ_ONCE is not about barriers or ordering, you still need the
+acquire inside the atomic to make the algorithm work.
 
-diff --git a/Documentation/devicetree/bindings/bus/xlnx,cdx.yaml b/Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
-new file mode 100644
-index 000000000000..0aa5599ada8e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
-@@ -0,0 +1,75 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/bus/xlnx,cdx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: AMD CDX bus controller
-+
-+description: |
-+  CDX bus controller for AMD devices is implemented to dynamically
-+  detect CDX bus and devices on these bus using the firmware.
-+  The CDX bus manages multiple FPGA based hardware devices, which
-+  can support network, crypto or any other specialized type of
-+  devices. These FPGA based devices can be added/modified dynamically
-+  on run-time.
-+
-+  All devices on the CDX bus will have a unique streamid (for IOMMU)
-+  and a unique device ID (for MSI) corresponding to a requestor ID
-+  (one to one associated with the device). The streamid and deviceid
-+  are used to configure SMMU and GIC-ITS respectively.
-+
-+  iommu-map property is used to define the set of stream ids
-+  corresponding to each device and the associated IOMMU.
-+
-+  The MSI writes are accompanied by sideband data (Device ID).
-+  The msi-map property is used to associate the devices with the
-+  device ID as well as the associated ITS controller.
-+
-+maintainers:
-+  - Nipun Gupta <nipun.gupta@amd.com>
-+  - Nikhil Agarwal <nikhil.agarwal@amd.com>
-+
-+properties:
-+  compatible:
-+    const: xlnx,cdxbus-controller-1.0
-+
-+  reg:
-+    maxItems: 1
-+
-+  iommu-map: true
-+
-+  msi-map: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - iommu-map
-+  - msi-map
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    smmu@ec000000 {
-+        compatible = "arm,smmu-v3";
-+        #iommu-cells = <1>;
-+    };
-+
-+    gic@e2000000 {
-+        compatible = "arm,gic-v3";
-+        interrupt-controller;
-+        its: gic-its@e2040000 {
-+            compatible = "arm,gic-v3-its";
-+            msi-controller;
-+        };
-+    };
-+
-+    cdx: cdx@4000000 {
-+        compatible = "xlnx,cdxbus-controller-1.0";
-+        reg = <0x00000000 0x04000000 0 0x1000>;
-+        /* define map for RIDs 250-259 */
-+        iommu-map = <250 &smmu 250 10>;
-+        /* define msi map for RIDs 250-259 */
-+        msi-map = <250 &its 250 10>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9d7f64dc0efe..f0598b3d731c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -934,6 +934,12 @@ S:	Supported
- F:	drivers/crypto/ccp/
- F:	include/linux/ccp.h
- 
-+AMD CDX BUS DRIVER
-+M:	Nipun Gupta <nipun.gupta@amd.com>
-+M:	Nikhil Agarwal <nikhil.agarwal@amd.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
-+
- AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - SEV SUPPORT
- M:	Brijesh Singh <brijesh.singh@amd.com>
- M:	Tom Lendacky <thomas.lendacky@amd.com>
--- 
-2.25.1
+READ_ONCE primarily is a marker that the data being read is unstable
+and that the compiler must avoid all instability when reading it. eg
+in this case the compiler could insanely double read the value, even
+though the 'if' requires only a single read. This would result in
+corrupt calculation.
 
+> If we still intend to change that code, we should fixup all GUP-fast
+> functions in a similar way.
+
+This is correct, IMHO we have been slowly modernizing the mm approach
+to the memory model to include things like this. While it would be
+nice to do everything I think small bits are welcomed as the are
+discovered.
+
+Jason

@@ -2,179 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136BD5ADEFF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 07:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71535ADF08
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 07:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbiIFFi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 01:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
+        id S229921AbiIFFtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 01:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiIFFi4 (ORCPT
+        with ESMTP id S232570AbiIFFtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 01:38:56 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDE543316;
-        Mon,  5 Sep 2022 22:38:54 -0700 (PDT)
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 2865cQbG025453;
-        Tue, 6 Sep 2022 14:38:26 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2865cQbG025453
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662442707;
-        bh=xDCM2ELtfWbaxIghoVdhy/grpBGllqEuV+LeUEWP1Ds=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=zTF21be2xWgdhSjv2TwodKVjuJGi0Wtzia5qTmbRXgAZiY1NJgXaqumwLiQWGOvTs
-         qK5OXstgKtY3Kjbn3LhNap4WDeuK0XzG6PY+prV/fZYHlWBbNvj8G2sgZudazw+mIF
-         0sBQ2ALD5TwCz4zOWBf6pVFV4N3M/6xp/OjbPJd2HlbeN2H/eCgAVeNi0Rzs5l6r9v
-         rKZ/+oUT9qX0f0PcJvSqlnQet7+eZzDLjlY6X9CVe/oy3TtkI00bCo8gCrRqx+f326
-         a+Dlwj9QZ92KHr6J/0AM5Ncu90Mpku8Mp9HiZ5dMPiB7wYU/iHfBwHJEuE+dOzIcMq
-         TgNkHpGHajx7g==
-X-Nifty-SrcIP: [209.85.160.41]
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-11f34610d4aso25719977fac.9;
-        Mon, 05 Sep 2022 22:38:26 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3JWKYv4ai0i/5RWYv7aDXtu/mOTAuGre4inY7oZwO0wvwBHi28
-        6GDW6ym2hUz+yAniXkh3Lx3gjfNIU53AlB/qldw=
-X-Google-Smtp-Source: AA6agR67ml6xVcQPsgWC4IEh9NlgKqQkUD+yzlEWC3f8vVi+rYODcebxIPaYwAMPI4GuNHLB0RRnghEbe5QkXQxURhM=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr10425730oab.287.1662442705835; Mon, 05
- Sep 2022 22:38:25 -0700 (PDT)
+        Tue, 6 Sep 2022 01:49:40 -0400
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB721A066;
+        Mon,  5 Sep 2022 22:49:37 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id AED00132;
+        Tue, 06 Sep 2022 13:49:32 +0800
+Received: from localhost.localdomain (10.200.104.82) by
+ jtjnmail201619.home.langchao.com (10.100.2.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 6 Sep 2022 13:49:33 +0800
+From:   Deming Wang <wangdeming@inspur.com>
+To:     <vgoyal@redhat.com>, <stefanha@redhat.com>, <miklos@szeredi.hu>
+CC:     <virtualization@lists.linux-foundation.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Deming Wang <wangdeming@inspur.com>
+Subject: [PATCH] virtiofs: Drop unnecessary initialization in send_forget_request and virtio_fs_get_tree
+Date:   Tue, 6 Sep 2022 01:38:48 -0400
+Message-ID: <20220906053848.2503-1-wangdeming@inspur.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220828024003.28873-1-masahiroy@kernel.org>
-In-Reply-To: <20220828024003.28873-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 6 Sep 2022 14:37:49 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQNVA0eVEZ_BEKVaVNq0J2iQnyPVJRCPwsXepnm_4UcfQ@mail.gmail.com>
-Message-ID: <CAK7LNAQNVA0eVEZ_BEKVaVNq0J2iQnyPVJRCPwsXepnm_4UcfQ@mail.gmail.com>
-Subject: Re: [PATCH 00/15] kbuild: various cleanups
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.200.104.82]
+X-ClientProxiedBy: Jtjnmail201614.home.langchao.com (10.100.2.14) To
+ jtjnmail201619.home.langchao.com (10.100.2.19)
+tUid:   2022906134932b38d0b2abf1131d443f55694c3b78f63
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 11:40 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
->   - Avoid updating init/built-in.a twice
->   - Run modpost just once instead of twice
->   - Link vmlinux and modules in parallel
->   - Remove head-y syntax
->
-> These are ground works to make the further refactoring possible.
->
-> This patch set is applicable after the following series:
->   https://patchwork.kernel.org/project/linux-kbuild/list/?series=669437
->
->
-> Masahiro Yamada (15):
->   kbuild: remove duplicated dependency between modules and modules_check
->   kbuild: refactor single builds of *.ko
->   kbuild: move 'PHONY += modules_prepare' to the common part
->   init/version.c: remove #include <linux/version.h>
->   kbuild: build init/built-in.a just once
->   kbuild: generate include/generated/compile.h in top Makefile
->   scripts/mkcompile_h: move LC_ALL=C to '$LD -v'
->   Revert "kbuild: Make scripts/compile.h when sh != bash"
->   kbuild: rename modules.order in sub-directories to .modules.order
->   kbuild: move core-y in top Makefile to ./Kbuild
->   kbuild: move .vmlinux.objs rule to Makefile.modpost
->   kbuild: move vmlinux.o rule to the top Makefile
->   kbuild: unify two modpost invocations
->   kbuild: use obj-y instead extra-y for objects placed at the head
->   kbuild: remove head-y syntax
+The variable is initialized but it is only used after its assignment.
 
+Signed-off-by: Deming Wang <wangdeming@inspur.com>
+---
+ fs/fuse/virtio_fs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-I moved 01-08 to for-next.
-
-10 broke single target builds.
-
-I will send v2 for the rest.
-
-
-
-
-
-
->  Documentation/kbuild/makefiles.rst          |  27 +----
->  Kbuild                                      |  16 +++
->  Makefile                                    | 120 ++++++++++++--------
->  arch/alpha/Makefile                         |   2 -
->  arch/alpha/kernel/Makefile                  |   4 +-
->  arch/arc/Makefile                           |   2 -
->  arch/arc/kernel/Makefile                    |   4 +-
->  arch/arm/Makefile                           |   3 -
->  arch/arm/kernel/Makefile                    |   4 +-
->  arch/arm64/Makefile                         |   3 -
->  arch/arm64/kernel/Makefile                  |   4 +-
->  arch/csky/Makefile                          |   2 -
->  arch/csky/kernel/Makefile                   |   4 +-
->  arch/hexagon/Makefile                       |   2 -
->  arch/hexagon/kernel/Makefile                |   3 +-
->  arch/ia64/Makefile                          |   1 -
->  arch/ia64/kernel/Makefile                   |   4 +-
->  arch/loongarch/Makefile                     |   2 -
->  arch/loongarch/kernel/Makefile              |   4 +-
->  arch/m68k/68000/Makefile                    |   2 +-
->  arch/m68k/Makefile                          |   9 --
->  arch/m68k/coldfire/Makefile                 |   2 +-
->  arch/m68k/kernel/Makefile                   |  21 ++--
->  arch/microblaze/Makefile                    |   1 -
->  arch/microblaze/kernel/Makefile             |   4 +-
->  arch/mips/Makefile                          |   2 -
->  arch/mips/kernel/Makefile                   |   4 +-
->  arch/nios2/Makefile                         |   1 -
->  arch/nios2/kernel/Makefile                  |   2 +-
->  arch/openrisc/Makefile                      |   2 -
->  arch/openrisc/kernel/Makefile               |   4 +-
->  arch/parisc/Makefile                        |   2 -
->  arch/parisc/kernel/Makefile                 |   4 +-
->  arch/powerpc/Makefile                       |  12 --
->  arch/powerpc/kernel/Makefile                |  22 ++--
->  arch/riscv/Makefile                         |   2 -
->  arch/riscv/kernel/Makefile                  |   2 +-
->  arch/s390/Makefile                          |   2 -
->  arch/s390/boot/version.c                    |   1 +
->  arch/s390/kernel/Makefile                   |   4 +-
->  arch/sh/Makefile                            |   2 -
->  arch/sh/kernel/Makefile                     |   4 +-
->  arch/sparc/Makefile                         |   2 -
->  arch/sparc/kernel/Makefile                  |   3 +-
->  arch/x86/Makefile                           |   5 -
->  arch/x86/boot/compressed/kaslr.c            |   1 +
->  arch/x86/boot/version.c                     |   1 +
->  arch/x86/kernel/Makefile                    |  10 +-
->  arch/xtensa/Makefile                        |   2 -
->  arch/xtensa/kernel/Makefile                 |   4 +-
->  init/Makefile                               |  55 ++++++---
->  init/build-version                          |  10 ++
->  init/version-timestamp.c                    |  31 +++++
->  init/version.c                              |  37 +++---
->  scripts/Makefile.build                      |  20 ++--
->  scripts/Makefile.lib                        |   8 +-
->  scripts/Makefile.modfinal                   |   2 +-
->  scripts/Makefile.modpost                    | 112 ++++++++----------
->  scripts/Makefile.vmlinux_o                  |   6 +-
->  scripts/clang-tools/gen_compile_commands.py |  19 +---
->  scripts/head-object-list.txt                |  53 +++++++++
->  scripts/link-vmlinux.sh                     |  51 ++-------
->  scripts/mkcompile_h                         |  96 ++--------------
->  63 files changed, 393 insertions(+), 457 deletions(-)
->  create mode 100755 init/build-version
->  create mode 100644 init/version-timestamp.c
->  create mode 100644 scripts/head-object-list.txt
->
-> --
-> 2.34.1
->
-
-
+diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
+index 4d8d4f16c..bffe74d44 100644
+--- a/fs/fuse/virtio_fs.c
++++ b/fs/fuse/virtio_fs.c
+@@ -414,7 +414,7 @@ static int send_forget_request(struct virtio_fs_vq *fsvq,
+ {
+ 	struct scatterlist sg;
+ 	struct virtqueue *vq;
+-	int ret = 0;
++	int ret;
+ 	bool notify;
+ 	struct virtio_fs_forget_req *req = &forget->req;
+ 
+@@ -1414,10 +1414,10 @@ static int virtio_fs_get_tree(struct fs_context *fsc)
+ {
+ 	struct virtio_fs *fs;
+ 	struct super_block *sb;
+-	struct fuse_conn *fc = NULL;
++	struct fuse_conn *fc;
+ 	struct fuse_mount *fm;
+ 	unsigned int virtqueue_size;
+-	int err = -EIO;
++	int err;
+ 
+ 	/* This gets a reference on virtio_fs object. This ptr gets installed
+ 	 * in fc->iq->priv. Once fuse_conn is going away, it calls ->put()
 -- 
-Best Regards
-Masahiro Yamada
+2.27.0
+

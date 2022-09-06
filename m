@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6EC5AE421
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0D15AE41F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233896AbiIFJ1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 05:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        id S238153AbiIFJ1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 05:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiIFJ1k (ORCPT
+        with ESMTP id S232975AbiIFJ1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 05:27:40 -0400
+        Tue, 6 Sep 2022 05:27:41 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D01CB7E7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:27:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA21CD9
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:27:40 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 68B55660037F;
-        Tue,  6 Sep 2022 10:27:36 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 363D46601EB2;
+        Tue,  6 Sep 2022 10:27:38 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662456458;
-        bh=vXQl6sWYH3s9nZcdEQtm9bzb3mf6vHvob18mX522u5Q=;
+        s=mail; t=1662456459;
+        bh=WyVYZj+c9maI28dTmRLQ5XLV8nr4NB4/PmV9sY12Gmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gaP7CzHIWz3oofHqZpF1nJ/2SBzJ0tEF/o0JbZuWbZzz0jtYTgk1OjQ9MhHoPbYte
-         +InfDwR1jByO1iziZY8SbfOS2imRGasoF9EQVvm5lxVaaVdciPurOQ9vV7njksGjgZ
-         Ms628sECmg3Lk39rxRRyEMz98uT8B/xAtkNukUqWKmCOhFn6HaqVmmlfIfOr6zmUBa
-         y9BZ6HipY9RZyh1ADzEmgq5bFBl0Q/ZD1EwwkufgDQV0JtHsAGDu3OfBVC1/0PkChw
-         VjXWrMQauz4mC7iw6B+VCQUvq9nSWNNrJz5SGheCGz0if30q5Fj6NrbRTWIf28rLmK
-         Jhcg30Re66o5g==
+        b=YvL7hcmYNk/2CwJ3pZ9ZoLT98cjdp69vFL19MlIdv+b7lziyVountzzH4vlXnc+OW
+         ZTh6WDE0KOWl2orEeVlPnAn/FoTp89rCJcgn2Vpe/cDljqQ1xRznKoc7ZYK8cniwN0
+         oJHCPQFf/HvsWwA8hz7UHDIyTlINe1FLJIbh3GOKC5BODT2+k0UE27D5qFz2nsXsBb
+         HjWhFFGg4O4ItFmN6/wKmHnXBw10ndrFevUobUu9h7fUP4TFpVz2mWYvfXa6e/ey2g
+         J7Ef/JeNGkzLlWg2byJkSY0xCD5IQRHpbQPRs7/ogKE7A7NCgHzZASY5PMPtOxELof
+         zDGl05rTg4iwQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     broonie@kernel.org
@@ -47,9 +47,9 @@ Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         sound-open-firmware@alsa-project.org, kernel@collabora.com
-Subject: [PATCH 1/5] ASoC: mediatek: mt8195-mt6359: Properly register sound card for SOF
-Date:   Tue,  6 Sep 2022 11:27:23 +0200
-Message-Id: <20220906092727.37324-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 2/5] ASoC: SOF: mediatek: mt8195: Import namespace SND_SOC_SOF_MTK_COMMON
+Date:   Tue,  6 Sep 2022 11:27:24 +0200
+Message-Id: <20220906092727.37324-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220906092727.37324-1-angelogioacchino.delregno@collabora.com>
 References: <20220906092727.37324-1-angelogioacchino.delregno@collabora.com>
@@ -64,37 +64,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding a probe callback on this snd_soc_card is required when
-Sound Open Firmware support is desired, as we need to appropriately
-populate the stream_name for SOF to be able to bind widgets.
-Failing to do so will produce errors when applying the SOF topology
-leading to card registration failure (so, no sound).
-While at it, also make sure to fill the topology_shortname as required.
+Here we're using function mtk_adsp_dump() from mtk-adsp-common:
+explicitly import its namespace.
 
-Fixes: 0caf1120c583 ("ASoC: mediatek: mt8195: extract SOF common code")
+Fixes: 3a054f90e955 ("ASoC: SOF: mediatek: Add mt8195 debug dump")
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- sound/soc/mediatek/mt8195/mt8195-mt6359.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ sound/soc/sof/mediatek/mt8195/mt8195.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/mediatek/mt8195/mt8195-mt6359.c b/sound/soc/mediatek/mt8195/mt8195-mt6359.c
-index c530e3fc27e4..961e769602d6 100644
---- a/sound/soc/mediatek/mt8195/mt8195-mt6359.c
-+++ b/sound/soc/mediatek/mt8195/mt8195-mt6359.c
-@@ -1383,7 +1383,13 @@ static int mt8195_mt6359_dev_probe(struct platform_device *pdev)
- 		sof_priv->num_streams = ARRAY_SIZE(g_sof_conn_streams);
- 		sof_priv->sof_dai_link_fixup = mt8195_dai_link_fixup;
- 		soc_card_data->sof_priv = sof_priv;
-+		card->probe = mtk_sof_card_probe;
- 		card->late_probe = mtk_sof_card_late_probe;
-+		if (!card->topology_shortname_created) {
-+			snprintf(card->topology_shortname, 32, "sof-%s", card->name);
-+			card->topology_shortname_created = true;
-+		}
-+		card->name = card->topology_shortname;
- 		sof_on = 1;
- 	}
+diff --git a/sound/soc/sof/mediatek/mt8195/mt8195.c b/sound/soc/sof/mediatek/mt8195/mt8195.c
+index 9c146015cd1b..ff575de7e46a 100644
+--- a/sound/soc/sof/mediatek/mt8195/mt8195.c
++++ b/sound/soc/sof/mediatek/mt8195/mt8195.c
+@@ -652,4 +652,5 @@ static struct platform_driver snd_sof_of_mt8195_driver = {
+ module_platform_driver(snd_sof_of_mt8195_driver);
  
+ MODULE_IMPORT_NS(SND_SOC_SOF_XTENSA);
++MODULE_IMPORT_NS(SND_SOC_SOF_MTK_COMMON);
+ MODULE_LICENSE("Dual BSD/GPL");
 -- 
 2.37.2
 

@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5375AEDE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437EE5AEE9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbiIFOoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
+        id S234128AbiIFPWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234892AbiIFOnH (ORCPT
+        with ESMTP id S233895AbiIFPWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:43:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCC69DB56;
-        Tue,  6 Sep 2022 07:03:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60C4561512;
-        Tue,  6 Sep 2022 14:01:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C50EBC433C1;
-        Tue,  6 Sep 2022 14:01:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662472907;
-        bh=j0TAG9++VbQQ9LCoxQPoMsJoaNjyXs8pLQwddrq7nqw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b2xu3kBJoVhoAGHdoExQLF+ehMPzTjB5NEfB9W1RXL2q7wKBTdGgO0lTqJIK1mmkJ
-         NM5jmOxvdIxnoEi6ZXyZyP+2TsiaRzEPrCvZ7+rGKwUFGzLuzLq/zHvqxn9K+CimlH
-         MYTUT5eDMnqXIXjIvNuHsA8Q96VgobgHvls8597JYsqMV8CDLf52H3MU3Dr+Ze4AI0
-         K4pqUWuhny8HbD+dTond12F817hP8Y77QMrVlGcCePOB37P50CGmksXEy94eLs9zLe
-         pnQ/j2djtcQgeugf8599QkK/2x5u6VT7Q1jK34pVR8kOXKdAm5/+2d3H29bBpkyec8
-         hF9Glur61qCYw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oVZ9E-0007wk-8H; Tue, 06 Sep 2022 16:01:52 +0200
-Date:   Tue, 6 Sep 2022 16:01:52 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH stable-4.19 0/4] USB: backports to 4.19
-Message-ID: <YxdS0EXyZrTiHdLL@hovoldconsulting.com>
-References: <20220906134915.19225-1-johan@kernel.org>
+        Tue, 6 Sep 2022 11:22:11 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5423898A48;
+        Tue,  6 Sep 2022 07:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=J0NhJH5uZ6ImJboTNtETOb2QJKe50Xb1SZoumQrYpAc=; b=bVjnnm9aOCGgcqyrqhufk45CuH
+        IxlGndctEZVp/Z0fdL8vu0QA/FO/ecRCE+TbIoPpB8z5bf6BdqbAv3IUUBWB5+plsff8mGg7xGEm0
+        jlld63GhsJFrMJH1O3H8/ximTLCTF6ckgszLFu4X9gOG2ArYqtomtMETE6mVqlLYaX9k=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oVZ9f-00Fl1O-IP; Tue, 06 Sep 2022 16:02:19 +0200
+Date:   Tue, 6 Sep 2022 16:02:19 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Divya.Koppera@microchip.com
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v2 net-next] net: phy: micrel: Adding SQI support for
+ lan8814 phy
+Message-ID: <YxdS6ygF7EdS/fy/@lunn.ch>
+References: <20220905101730.29951-1-Divya.Koppera@microchip.com>
+ <YxX1I6wBFjzID2Ls@lunn.ch>
+ <CO1PR11MB47712E1FAE109EEF5E502C5FE27E9@CO1PR11MB4771.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906134915.19225-1-johan@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CO1PR11MB47712E1FAE109EEF5E502C5FE27E9@CO1PR11MB4771.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:49:11PM +0200, Johan Hovold wrote:
-> And here are the corresponding backports to 4.19.
-> 
-> Johan
-> 
-> 
-> Johan Hovold (4):
->   usb: dwc3: fix PHY disable sequence
+> We do have SQI support for 100Mbps to pair 0 only. For other pairs
+> SQI values are invalid values.
 
-This one needs another spin for 4.14...
+And you have tested this with auto-cross over, so that the pairs get
+swapped?
 
->   usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup
-
->   USB: serial: ch341: fix lost character on LCR updates
->   USB: serial: ch341: fix disabled rx timer on older devices
-
-But these two should hopefully apply to the older trees too now.
-
-Johan
+	Andrew

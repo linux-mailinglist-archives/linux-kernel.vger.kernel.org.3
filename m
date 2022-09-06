@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11735AE80D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3295AE804
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239790AbiIFM0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
+        id S240199AbiIFMZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240074AbiIFMZ7 (ORCPT
+        with ESMTP id S239790AbiIFMYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:25:59 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8B47C32E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:22:18 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id b5so15193590wrr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 05:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date;
-        bh=etRB1TES3HElT9FZpWWrbjBF4Hgq+Rpw7WzQMwgRKNE=;
-        b=kVixT+G6sAyrpaX+Jd8i/qmqWAcqP2A3HuzTN1EChZncqgmuKzSTWSFrblBcz5EAiM
-         X2IPpyBmI5kXEr8xKlGZOTxMWGyzwC+hfNtVSNpBYqNniW26uQbY8zwFEFkMKLWrEsCu
-         TZMJ7w0BXNIDIa453ocHAw1KTaoAcyvxFwZvE6Dnzr0o+kBE0C9mN8pZzOfGAm3vmfHZ
-         4uMDGOnoS9liSq0upmAI6Of8riDPaOq3l1rN3o/nj2CBSSx79jH49JzB7XAVSvcAeJjx
-         CseJy7IlPQ8siNDKZ6CasGBV4kcRhH+iosul04RbdS5Y0PEsEDagKQabqCQ13Sqe938P
-         XoAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date;
-        bh=etRB1TES3HElT9FZpWWrbjBF4Hgq+Rpw7WzQMwgRKNE=;
-        b=keyDaYqQyUqDDzUXRrP0ifFDSXfIqPPAnAruUftJlZwEF4cMLyPt5fUDIcKzs3VG3F
-         Jd+DT56o24dkRD//9tD7SCpkuKI/5v4OaPLd1Yu5bqlXokWG5sRrM92dIbu4bNFOPSXu
-         uQfS1x5o90uWjnHV0hiSjaXryiJVSvvhpJngmXPWuTrxIDsikHN5TpkWIlLcyLJw/FaS
-         kUwHe4sTMBoQQPoENtlrPViLsrWusWlCo7ZLFXMzIYXb9NNmmczSQ+7bY/I1yBQDTnTX
-         HbFqS0HP1BYhQTFoJ3d//mbFJgvLY9wYFRe3QsKJh+zv2m6i+jAsJcErUJA0tEcFTiut
-         v9CQ==
-X-Gm-Message-State: ACgBeo1Tk+1ovmEhy8l/QCM0vGfGeeivQn+KMT+PX3DCx+rJ/CjiUznu
-        Ukanv3qGurefYwXPasrklLQQUw==
-X-Google-Smtp-Source: AA6agR7cXoWdXaVb+PdspVN/tctRjn4oDvh3CI43TFmWbSs0DrYVCD8dkd/BVjD6tQpyPJhgsAmjjA==
-X-Received: by 2002:a5d:5143:0:b0:226:de76:be7b with SMTP id u3-20020a5d5143000000b00226de76be7bmr22345327wrt.308.1662466935841;
-        Tue, 06 Sep 2022 05:22:15 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003a3170a7af9sm15588545wmq.4.2022.09.06.05.22.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 05:22:15 -0700 (PDT)
-References: <20220801092150.4449-1-pboos@baylibre.com>
-User-agent: mu4e 1.8.7; emacs 28.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Philippe Boos <pboos@baylibre.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
-        "moderated list:ARM/Amlogic Meson SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson SoC support" 
-        <linux-amlogic@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] watchdog: meson: keep running if already active
-Date:   Tue, 06 Sep 2022 14:21:26 +0200
-In-reply-to: <20220801092150.4449-1-pboos@baylibre.com>
-Message-ID: <1jsfl4wv4a.fsf@starbuckisacylon.baylibre.com>
+        Tue, 6 Sep 2022 08:24:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6E27F0A5;
+        Tue,  6 Sep 2022 05:21:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F201B818B3;
+        Tue,  6 Sep 2022 12:21:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12500C43140;
+        Tue,  6 Sep 2022 12:21:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662466890;
+        bh=UazPhnVpTJHRjiUmKc2QQMoFoLORH7z85kfQ7iHso9w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FhZR3ffNhItupbQPCx9kPqPygsVPhMlg2qGnK/tDU/WUo+1TMyTbeGOO4cQBHTuGo
+         KiKZM8IU1Zf5p4HflNlMteVCXYVJSzx4NxYioQDW7EG8MfBpEQmiUo5so1JMqV91e4
+         5n7gZhO+xXUo3JSvcDXOxCsOggghEpPdSUfMq057HKIF2MzPlqF+TPFI4UHyGfPFA+
+         tpL8EFCzeIPZ4AZUFBXpP2ChS30jST3iRqTYK9NopBJwpDaWq0PJDYFpJpMTaQbDsW
+         Xz11wIETYbgnL5YRClTQiz/tEu+5Ie10prnp6gGhPR9FmAA22YVsJ//pMq7RYHvQM9
+         UNNcXMycafeEQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oVXaA-00089W-Cq; Tue, 06 Sep 2022 14:21:34 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        Jonathan Woithe <jwoithe@just42.net>
+Subject: [PATCH stable-5.15 2/2] USB: serial: ch341: fix disabled rx timer on older devices
+Date:   Tue,  6 Sep 2022 14:21:27 +0200
+Message-Id: <20220906122127.31321-3-johan@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220906122127.31321-1-johan@kernel.org>
+References: <20220906122127.31321-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+commit 41ca302a697b64a3dab4676e01d0d11bb184737d upstream.
 
-On Mon 01 Aug 2022 at 11:21, Philippe Boos <pboos@baylibre.com> wrote:
+At least one older CH341 appears to have the RX timer enable bit
+inverted so that setting it disables the RX timer and prevents the FIFO
+from emptying until it is full.
 
-> If the watchdog is already running (e.g.: started by bootloader) then
-> the kernel driver should keep the watchdog active but the amlogic driver
-> turns it off.
->
-> Let the driver fix the clock rate if already active because we do not
-> know the previous timebase value. To avoid unintentional resetting we
-> temporarily set it to its maximum value.
->
-> Then keep the enable bit if is was previously active.
->
-> Signed-off-by: Philippe Boos <pboos@baylibre.com>
+Only set the RX timer enable bit for devices with version newer than
+0x27 (even though this probably affects all pre-0x30 devices).
 
-Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Reported-by: Jonathan Woithe <jwoithe@just42.net>
+Tested-by: Jonathan Woithe <jwoithe@just42.net>
+Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
+Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
+Cc: stable@vger.kernel.org      # 4.10
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/ch341.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+index b787533aec64..752daa952abd 100644
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -259,8 +259,12 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+ 	/*
+ 	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
+ 	 * has been received unless bit 7 is set.
++	 *
++	 * At least one device with version 0x27 appears to have this bit
++	 * inverted.
+ 	 */
+-	val |= BIT(7);
++	if (priv->version > 0x27)
++		val |= BIT(7);
+ 
+ 	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
+ 			      CH341_REG_DIVISOR << 8 | CH341_REG_PRESCALER,
+-- 
+2.35.1
+

@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181BF5AF301
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78675AF31C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiIFRqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S229717AbiIFRuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIFRqv (ORCPT
+        with ESMTP id S229554AbiIFRuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:46:51 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D176EF1C;
-        Tue,  6 Sep 2022 10:46:45 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-11ee4649dfcso30087966fac.1;
-        Tue, 06 Sep 2022 10:46:44 -0700 (PDT)
+        Tue, 6 Sep 2022 13:50:09 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40EB13CF3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:50:07 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bt10so18561798lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 10:50:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=PlneHbhh81xts+BhwSSO/bVYfamT6d9aGmPbAoBs+Vc=;
+        b=oU8zne1PuAsGYTK92vBce5Sl3SAp4gnqtlqz7Dnz5qyx2mq6rB1Acs2o9mrdyalbyo
+         jdFajEVxePigd0oL58M2dpQ1B5CQvLRnDTOgjhXY4GNLRBSNuKDVaR20EluRS2JVviNt
+         WgHpCuo6EMnyZb3UzD2wCPkw9xngn5Ena7wTzvWr/pkScoO2VdASwDZqc5OiSeJ9t7kQ
+         yehgAdUkhNUNcT1/rhE5RL6xv4WCtfPs/oHdegVKj2sdbTLqnOqiiX9/kZ1EXA2UhrA4
+         J9QW3ud3vgKmcGnqqjgzxBQpHYE66ejwuoI3s5+KWnWsHnwoxUZ5AUCLKc0uFtiavzqs
+         wK/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=HzG5COCo19lT3oBLgm1nvDwcIQQgyJlzuG7SNbHTaDU=;
-        b=EfqvCJv4EJGQHW2EngMd2R2Spen4DloQpQ/TVy3FXX+OcC4HEH/9A0TD01GIZVq9iE
-         FdA9FrMSRcdFJkTgMVTXbJLQheTBNdNTq0l5pPKyk/J06QcUHHBDrLLZoIsuScKx/KLZ
-         5qelH67uJdEjIBWm5Rtwgbw3SHA/SrIFf8x+Mo0AxcGLVcgsT0oytuOSRKMZcf4hZsKn
-         Rx9umggsKQyxNSBYLQUz2aqh7Osp+fNHzzpiuM931VIC9cs0P/+KTZjg9Cx4Ux773RSW
-         DP+4eBBmvl62FZ7B519rTgm1kTpNjrNLEcBlp0FAC9n7xXJ4ufFZLIK1xjOP/WQjj2gT
-         13XQ==
-X-Gm-Message-State: ACgBeo1GnHzqDaHPUzUiyIFH5P66Mg0/fyanwbiVfW50mBSncs2DznOy
-        4WJnM9KH+lZeG/hnCcLhx+oMuoLYWw==
-X-Google-Smtp-Source: AA6agR6RDLZuCPdeXtZwiyPUodQixHiTacheiSfTh+HaN2WJ01ett6hG3ahw/odd+L270KgcOrJkyA==
-X-Received: by 2002:a05:6870:430b:b0:101:3d98:ba41 with SMTP id w11-20020a056870430b00b001013d98ba41mr12501688oah.46.1662486404036;
-        Tue, 06 Sep 2022 10:46:44 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 22-20020aca0916000000b00344adbc3492sm5583872oij.24.2022.09.06.10.46.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 10:46:43 -0700 (PDT)
-Received: (nullmailer pid 780017 invoked by uid 1000);
-        Tue, 06 Sep 2022 17:46:42 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Andy Gross <agross@kernel.org>, alsa-devel@alsa-project.org,
+        bh=PlneHbhh81xts+BhwSSO/bVYfamT6d9aGmPbAoBs+Vc=;
+        b=Cxw8BCsYBj47zv4fMPEMSWgXcxG2q3+IN50/NfJQZVn3aJ2+XM4boSF0F2PHaHcc8n
+         b5WC+9AyuOI2ffWXMmMbhNrhakErEeJ3La5bx8i/FD3ouiMKkBHMAnsNb+y52j8SU8qq
+         HWlAQ/626KP9DuV+4ZCKnkSQN8zdu0Yt4gOWoKu1MvMiVYIzL7y2cfKv+ouURimtDYAv
+         Wm/wjTZ4C6PZt7Mrrq3aNKX9/6ZsisWOjX6HOKbUeNNbV9+rfdAp+YvBw/X6ub38mOvS
+         HXePIYPJEhzEErMJ7UX+P+2fmO8CUEEFAyQ5VHII9OCcyPpaq9Xkko3NBy17VoPFZeKu
+         Yu3g==
+X-Gm-Message-State: ACgBeo37RKpaz/W/Ntu9mghln30jWX+CBd4C68yrN5w5fmWenwi6u3Jl
+        K1v65uA9Pc53dsnVLnnfimLS0g==
+X-Google-Smtp-Source: AA6agR4eNuH4iEsDzOrIOC2WXOhHLUljsfP8KbsWI1cXvuZNk0fYC7d8Jv8zbKtdt4PMuM4bIeaD5g==
+X-Received: by 2002:a05:6512:1507:b0:492:b9ae:5d51 with SMTP id bq7-20020a056512150700b00492b9ae5d51mr17554595lfb.14.1662486605258;
+        Tue, 06 Sep 2022 10:50:05 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id p1-20020a05651238c100b00492cfecf1c0sm1873604lft.245.2022.09.06.10.50.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 10:50:04 -0700 (PDT)
+Message-ID: <68ff1b7e-51e1-f1e5-dac7-5419472e396a@linaro.org>
+Date:   Tue, 6 Sep 2022 19:50:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 0/8] Support for NVDEC on Tegra234
+Content-Language: en-US
+To:     Mikko Perttunen <cyndis@kapsi.fi>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-In-Reply-To: <20220906121655.303693-10-krzysztof.kozlowski@linaro.org>
-References: <20220906121655.303693-1-krzysztof.kozlowski@linaro.org> <20220906121655.303693-10-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 09/12] dt-bindings: soc: qcom: apr: correct service children
-Date:   Tue, 06 Sep 2022 12:46:42 -0500
-Message-Id: <1662486402.667876.780014.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220906132823.2390953-1-cyndis@kapsi.fi>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220906132823.2390953-1-cyndis@kapsi.fi>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Sep 2022 14:16:52 +0200, Krzysztof Kozlowski wrote:
-> The APR bindings were not describing properly children nodes for DAIs.
-> None of the DTSes use unit addresses for the children, so correct the
-> nodes and reference their schema: clock-controller, dais and routing.
+On 06/09/2022 15:28, Mikko Perttunen wrote:
+> From: Mikko Perttunen <mperttunen@nvidia.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/soc/qcom/qcom,apr.yaml           | 38 +++++++++++++------
->  .../sound/qcom,q6dsp-lpass-clocks.yaml        | 16 ++------
->  .../sound/qcom,q6dsp-lpass-ports.yaml         | 16 ++------
->  3 files changed, 35 insertions(+), 35 deletions(-)
+> Hi all,
 > 
+> this series adds support for the HW video decoder, NVDEC,
+> on Tegra234 (Orin). The main change is a switch from Falcon
+> to RISC-V for the internal microcontroller, which brings along
+> a change in how the engine is booted. Otherwise it is backwards
+> compatible with earlier versions.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+You need to describe the dependencies, otherwise I would be free to go
+with applying memory controllers part.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,q6apm-dai.example.dtb: gpr: service@1: '#address-cells', '#size-cells', 'apm-dai@1' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Best regards,
+Krzysztof
